@@ -59,6 +59,19 @@ TEST_CASE("ArtifactReader validates ID range before narrowing signed and unsigne
     }
 }
 
+TEST_CASE("ArtifactReader rejects rarity values outside its storage type")
+{
+    for (const auto value : { -1, 256 }) {
+        CAPTURE(value);
+        test::ScopedReaderState reader_state;
+        test::ArtifactListTestAccess artifact_state;
+        auto data = make_artifact();
+        data["rarity"] = value;
+        CHECK(ArtifactReader(data).read() == PARSE_ERROR_INVALID_FLAG);
+        CHECK(ArtifactList::get_instance().empty());
+    }
+}
+
 TEST_CASE("ArtifactReader preserves missing and non-integer ID errors")
 {
     for (const auto &id : { nlohmann::json(), nlohmann::json("1"), nlohmann::json(1.0), nlohmann::json(true), nlohmann::json::array(), nlohmann::json::object() }) {

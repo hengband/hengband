@@ -70,6 +70,10 @@ enum class TestKind : int {
     LAST = 10,
 };
 
+enum class TestNarrowKind : std::uint8_t {
+    FIRST = 1,
+};
+
 //! 実行中のビルドで info_set_string が読むキーと、読まない方のキー
 #ifdef JP
 constexpr auto LANG_KEY = "ja";
@@ -176,13 +180,25 @@ TEST_CASE("info_set_integer stores the value")
         CHECK(kind == TestKind::FIRST);
     }
 
-    SUBCASE("no range preserves conversion to the destination type")
+    SUBCASE("enum underlying type is checked before conversion")
     {
-        // Rangeを省略した場合は、格納先の表現範囲も検証しない。
+        auto kind = TestNarrowKind::FIRST;
+        CHECK(info_set_integer(nlohmann::json(257), kind, true) == PARSE_ERROR_INVALID_FLAG);
+        CHECK(kind == TestNarrowKind::FIRST);
+        CHECK(info_set_integer(nlohmann::json(-1), kind, true) == PARSE_ERROR_INVALID_FLAG);
+        CHECK(kind == TestNarrowKind::FIRST);
+    }
+
+    SUBCASE("no range still checks the destination type")
+    {
         std::uint8_t narrow_data = 123;
-        CHECK(info_set_integer(nlohmann::json(300), narrow_data, true) == PARSE_ERROR_NONE);
-        CHECK(narrow_data == 44);
-        CHECK(info_set_integer(nlohmann::json(-1), narrow_data, false) == PARSE_ERROR_NONE);
+        CHECK(info_set_integer(nlohmann::json(300), narrow_data, true) == PARSE_ERROR_INVALID_FLAG);
+        CHECK(narrow_data == 123);
+        CHECK(info_set_integer(nlohmann::json(-1), narrow_data, false) == PARSE_ERROR_INVALID_FLAG);
+        CHECK(narrow_data == 123);
+        CHECK(info_set_integer(nlohmann::json(255), narrow_data, true) == PARSE_ERROR_NONE);
+        CHECK(narrow_data == 255);
+        CHECK(info_set_integer(nlohmann::json(256), narrow_data, true, Range(0, 9999)) == PARSE_ERROR_INVALID_FLAG);
         CHECK(narrow_data == 255);
     }
 }

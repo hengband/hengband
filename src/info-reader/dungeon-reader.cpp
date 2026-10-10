@@ -430,12 +430,20 @@ int DungeonReader::set_dungeon_flags(DungeonDefinition &dungeon) const
 template <typename Enum, typename Validator>
 static errr info_set_enum_from_integer_checked(const nlohmann::json &json, Enum &data, std::string_view label, Validator validator)
 {
-    int value{};
-    if (auto err = info_set_integer(json, value, true)) {
+    Enum enum_value{};
+    if (auto err = info_set_integer(json, enum_value, true)) {
+        if (err == PARSE_ERROR_INVALID_FLAG) {
+            msg_print(_("{} ID '{}' は範囲外です。", "{} ID '{}' is out of range."), label, json.dump());
+            return PARSE_ERROR_OUT_OF_BOUNDS;
+        }
         return err;
     }
 
-    const auto enum_value = i2enum<Enum>(value);
+    const auto value = enum2i(enum_value);
+    if (value < 0) {
+        msg_print(_("{} ID '{}' は範囲外です。", "{} ID '{}' is out of range."), label, value);
+        return PARSE_ERROR_OUT_OF_BOUNDS;
+    }
     if (!validator(enum_value)) {
         msg_print(_("不正な{} ID '{}'。", "Invalid {} ID '{}'."), label, value);
         return PARSE_ERROR_INVALID_VALUE;
