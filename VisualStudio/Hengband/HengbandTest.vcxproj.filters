@@ -7,11 +7,11 @@
     <Filter Include="cmd-io">
       <UniqueIdentifier>{050a79fd-58ab-48f3-a881-f83ff7a488b7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="floor">
-      <UniqueIdentifier>{b7056edf-72e4-40d6-8463-4d0699a4a6a5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="flavor">
       <UniqueIdentifier>{740c8771-89d8-44fe-bd2c-adcff9c2cfea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="floor">
+      <UniqueIdentifier>{b7056edf-72e4-40d6-8463-4d0699a4a6a5}</UniqueIdentifier>
     </Filter>
     <Filter Include="game-option">
       <UniqueIdentifier>{ce56653b-fbe2-4e12-af06-489721a95644}</UniqueIdentifier>
@@ -40,32 +40,20 @@
     <Filter Include="mutation">
       <UniqueIdentifier>{e71c27bf-0eb8-4347-a040-6bc021a1c19b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="object">
+      <UniqueIdentifier>{893f44ae-aadd-499b-83e0-f8353fbd0e28}</UniqueIdentifier>
+    </Filter>
     <Filter Include="player">
       <UniqueIdentifier>{9d3e0b2a-7c41-4f58-b6ad-2e1c5f80a4d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="save">
+      <UniqueIdentifier>{b7ab78fa-803b-4608-89f7-b8892080ca5a}</UniqueIdentifier>
     </Filter>
     <Filter Include="store">
       <UniqueIdentifier>{2f858fe4-6c1a-425e-8310-085e4dcf1f4c}</UniqueIdentifier>
     </Filter>
     <Filter Include="system">
       <UniqueIdentifier>{c0fc151d-cfac-4d51-9420-fc3298e34e90}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="term">
-      <UniqueIdentifier>{b6d3f0a2-4e8c-4b71-9a5d-3c2e7f1d8a94}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="timed-effect">
-      <UniqueIdentifier>{713ac6ea-8881-48d4-beac-cf75e9e6b037}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="util">
-      <UniqueIdentifier>{88a7a349-31ae-4d18-a09a-c749dff85ef9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="wizard">
-      <UniqueIdentifier>{61ff756d-6483-4529-9a1a-b27930a91886}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="object">
-      <UniqueIdentifier>{893f44ae-aadd-499b-83e0-f8353fbd0e28}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="save">
-      <UniqueIdentifier>{b7ab78fa-803b-4608-89f7-b8892080ca5a}</UniqueIdentifier>
     </Filter>
     <Filter Include="system\baseitem">
       <UniqueIdentifier>{6ce44dc8-8e7a-4f40-97f9-e80e901d684c}</UniqueIdentifier>
@@ -76,28 +64,27 @@
     <Filter Include="system\monrace">
       <UniqueIdentifier>{26389b38-dfb3-4ce9-9f29-e4204b51087d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="term">
+      <UniqueIdentifier>{b6d3f0a2-4e8c-4b71-9a5d-3c2e7f1d8a94}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="timed-effect">
+      <UniqueIdentifier>{713ac6ea-8881-48d4-beac-cf75e9e6b037}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="util">
+      <UniqueIdentifier>{88a7a349-31ae-4d18-a09a-c749dff85ef9}</UniqueIdentifier>
+    </Filter>
     <Filter Include="view">
       <UniqueIdentifier>{e3b30137-314d-4aad-9d46-d7173ceae157}</UniqueIdentifier>
     </Filter>
     <Filter Include="window">
       <UniqueIdentifier>{1aac5dfe-2577-4a73-8df1-1f73519e82bd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="wizard">
+      <UniqueIdentifier>{61ff756d-6483-4529-9a1a-b27930a91886}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\stdafx.cpp" />
-    <ClCompile Include="..\..\src\test\test-main.cpp" />
-    <ClCompile Include="..\..\src\test\view\test-map-terrain-visibility.cpp">
-      <Filter>view</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\test\view\test-screen-parity-helpers.cpp">
-      <Filter>view</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\test\window\test-overview-map-cache.cpp">
-      <Filter>window</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\test\wizard\test-spoiler-util.cpp">
-      <Filter>wizard</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\test\autopick\test-autopick-editor-util.cpp">
       <Filter>autopick</Filter>
     </ClCompile>
@@ -106,6 +93,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\test\flavor\test-flavor-util.cpp">
       <Filter>flavor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\floor\test-fixed-map-generator.cpp">
+      <Filter>floor</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\test\game-option\test-runtime-arguments.cpp">
       <Filter>game-option</Filter>
@@ -128,21 +118,6 @@
     <ClCompile Include="..\..\src\test\info-reader\test-general-parser.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\test\info-reader\test-wilderness-reader.cpp">
-      <Filter>info-reader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\test\info-reader\test-town-definition-list-reader.cpp">
-      <Filter>info-reader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\test\floor\test-fixed-map-generator.cpp">
-      <Filter>floor</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\test\info-reader\test-town-map-reader.cpp">
-      <Filter>info-reader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\test\info-reader\test-town-preferences-reader.cpp">
-      <Filter>info-reader</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\test\info-reader\test-info-reader-util.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>
@@ -152,10 +127,10 @@
     <ClCompile Include="..\..\src\test\info-reader\test-jsonc-document-loader.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\test\info-reader\test-message-reader.cpp">
+    <ClCompile Include="..\..\src\test\info-reader\test-magic-reader.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\test\info-reader\test-magic-reader.cpp">
+    <ClCompile Include="..\..\src\test\info-reader\test-message-reader.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\test\info-reader\test-quest-reader.cpp">
@@ -173,7 +148,19 @@
     <ClCompile Include="..\..\src\test\info-reader\test-terrain-reader.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\test\info-reader\test-town-definition-list-reader.cpp">
+      <Filter>info-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\info-reader\test-town-map-reader.cpp">
+      <Filter>info-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\info-reader\test-town-preferences-reader.cpp">
+      <Filter>info-reader</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\test\info-reader\test-vault-reader.cpp">
+      <Filter>info-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\info-reader\test-wilderness-reader.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\test\io\test-condition-expression.cpp">
@@ -209,8 +196,14 @@
     <ClCompile Include="..\..\src\test\mutation\test-mutation-roll-table.cpp">
       <Filter>mutation</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\test\object\test-object-info.cpp">
+      <Filter>object</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\test\player\test-process-name.cpp">
       <Filter>player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\save\test-item-writer.cpp">
+      <Filter>save</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\test\store\test-pricing.cpp">
       <Filter>store</Filter>
@@ -221,16 +214,13 @@
     <ClCompile Include="..\..\src\test\store\test-store-util.cpp">
       <Filter>store</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\test\save\test-item-writer.cpp">
-      <Filter>save</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\test\system\baseitem\test-baseitem-allocation.cpp">
       <Filter>system\baseitem</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\test\system\baseitem\test-baseitem-list.cpp">
+    <ClCompile Include="..\..\src\test\system\baseitem\test-baseitem-definition.cpp">
       <Filter>system\baseitem</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\test\system\baseitem\test-baseitem-definition.cpp">
+    <ClCompile Include="..\..\src\test\system\baseitem\test-baseitem-list.cpp">
       <Filter>system\baseitem</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\test\system\floor\test-floor-info.cpp">
@@ -239,10 +229,10 @@
     <ClCompile Include="..\..\src\test\system\monrace\test-monrace-definition.cpp">
       <Filter>system\monrace</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\test\system\test-quest-list.cpp">
+    <ClCompile Include="..\..\src\test\system\test-dungeon-record.cpp">
       <Filter>system</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\test\system\test-dungeon-record.cpp">
+    <ClCompile Include="..\..\src\test\system\test-quest-list.cpp">
       <Filter>system</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\test\term\test-z-form.cpp">
@@ -251,6 +241,7 @@
     <ClCompile Include="..\..\src\test\term\test-z-rand.cpp">
       <Filter>term</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\test\test-main.cpp" />
     <ClCompile Include="..\..\src\test\timed-effect\test-player-cut.cpp">
       <Filter>timed-effect</Filter>
     </ClCompile>
@@ -259,6 +250,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\test\timed-effect\test-timed-effect.cpp">
       <Filter>timed-effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\util\test-angband-files.cpp">
+      <Filter>util</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\test\util\test-buffer-shaper.cpp">
       <Filter>util</Filter>
@@ -284,11 +278,17 @@
     <ClCompile Include="..\..\src\test\util\test-temporary-json-files.cpp">
       <Filter>util</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\test\util\test-angband-files.cpp">
-      <Filter>util</Filter>
+    <ClCompile Include="..\..\src\test\view\test-map-terrain-visibility.cpp">
+      <Filter>view</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\test\object\test-object-info.cpp">
-      <Filter>object</Filter>
+    <ClCompile Include="..\..\src\test\view\test-screen-parity-helpers.cpp">
+      <Filter>view</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\window\test-overview-map-cache.cpp">
+      <Filter>window</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\wizard\test-spoiler-util.cpp">
+      <Filter>wizard</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -299,18 +299,11 @@
     <ClInclude Include="..\..\src\test\save\scoped-save-io.h">
       <Filter>save</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\test\scoped-vector-wrapper.h" />
     <ClInclude Include="..\..\src\test\scoped-restore.h" />
     <ClInclude Include="..\..\src\test\scoped-rng.h" />
+    <ClInclude Include="..\..\src\test\scoped-vector-wrapper.h" />
     <ClInclude Include="..\..\src\test\string-helpers.h" />
-    <ClInclude Include="..\..\src\test\temporary-json-files.h" />
     <ClInclude Include="..\..\src\test\system\artifact-list-test-access.h">
-      <Filter>system</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\test\system\terrain-list-test-access.h">
-      <Filter>system</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\test\system\quest-list-test-access.h">
       <Filter>system</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\test\system\dungeon-list-test-access.h">
@@ -325,5 +318,12 @@
     <ClInclude Include="..\..\src\test\system\monrace-records-test-access.h">
       <Filter>system</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\test\system\quest-list-test-access.h">
+      <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\test\system\terrain-list-test-access.h">
+      <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\test\temporary-json-files.h" />
   </ItemGroup>
 </Project>
