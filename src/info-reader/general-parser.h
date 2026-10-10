@@ -2,10 +2,7 @@
 
 #include "object-enchant/object-ego.h"
 #include "system/angband.h"
-#include <string>
-#include <string_view>
 
-enum parse_error_type : int;
 enum class FixedArtifactId : short;
 enum class TerrainTag;
 struct dungeon_grid {
@@ -33,8 +30,3 @@ constexpr bool is_fixed_map_symbol(unsigned char symbol)
 
 /*! @brief 検証済みの固定マップ記号で letter[] を参照する。 */
 dungeon_grid &fixed_map_letter_at(unsigned char symbol);
-
-class FloorType;
-
-parse_error_type parse_line_feature(const FloorType &floor, std::string_view buf);
-parse_error_type parse_line_building(std::string_view buf);

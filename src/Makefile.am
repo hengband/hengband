@@ -1526,7 +1526,6 @@ hengband_test_SOURCES = \
 	test/object/test-object-value.cpp \
 	test/racial/test-racial-android.cpp \
 	test/system/item/test-item-entity.cpp \
-	test/info-reader/test-general-parser.cpp \
 	test/info-reader/test-wilderness-reader.cpp \
 	test/info-reader/test-info-reader-util.cpp \
 	test/info-reader/test-json-reader-util.cpp \

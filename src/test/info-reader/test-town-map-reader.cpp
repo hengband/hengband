@@ -847,46 +847,83 @@ TEST_CASE("TownMapReader rejects nonprintable terrain and trap tokens")
     }
 }
 
-TEST_CASE("TownMapReader typed building application matches legacy N A C R M Z in both locales")
+TEST_CASE("TownMapReader typed building application preserves N A C R M Z contracts in both locales")
 {
     const ScopedTownBuildings state;
     const auto initial = buildings[1];
+    const auto names = [&initial](std::string_view name, std::string_view owner, std::string_view race) {
+        auto expected = initial;
+        std::copy(name.begin(), name.end(), expected.name);
+        std::copy(owner.begin(), owner.end(), expected.owner_name);
+        std::copy(race.begin(), race.end(), expected.owner_race);
+        return expected;
+    };
+    const auto town = std::string("\xE7\x94\xBA");
+    const auto short_name = utf8_to_sys("\xE7\x94\xBA\xE3\x81\xAE\xE5\xBB\xBA\xE7\x89\xA9");
+    REQUIRE(short_name.has_value());
+    std::string repeated_name;
+    for (int i = 0; i < 10; ++i) {
+        repeated_name += town;
+    }
+    // 日本語版は2バイト文字を分断せず9文字で止め、英語版はUTF-8の19バイトを保持する。
+#ifdef JP
+    const auto truncated_name = utf8_to_sys(repeated_name.substr(0, 27));
+#else
+    const auto truncated_name = utf8_to_sys(repeated_name.substr(0, 19));
+#endif
+    REQUIRE(truncated_name.has_value());
+    auto action = initial;
+    const std::string action_name = "Action name that is longer th";
+    std::copy(action_name.begin(), action_name.end(), action.act_names[7]);
+    action.member_costs[7] = std::numeric_limits<int>::max();
+    action.other_costs[7] = std::numeric_limits<int>::min();
+    action.letters[7] = 'a';
+    action.actions[7] = -1;
+    action.action_restr[7] = 32767;
+    auto classes = initial;
+    std::fill(classes.member_class.begin(), classes.member_class.end(), short{ 1 });
+    classes.member_class[0] = 2;
+    classes.member_class[1] = 0;
+    auto races = initial;
+    std::fill(races.member_race.begin(), races.member_race.end(), short{ 1 });
+    races.member_race[0] = 0;
+    races.member_race[1] = -1;
+    auto realms = initial;
+    std::fill(realms.member_realm.begin() + 1, realms.member_realm.end(), short{ 1 });
+    realms.member_realm[1] = 3;
+    realms.member_realm[2] = -1;
+    struct BuildingCase {
+        const char *command;
+        std::vector<std::string> fields;
+        building_type expected;
+    };
+    const std::vector<BuildingCase> cases{
+        { "N", { "Building name that is longer than nineteen bytes", "Owner", "Race" }, names("Building name that ", "Owner", "Race") },
+        { "N", { "", "", "" }, initial },
+        { "N", { "\xE7\x94\xBA\xE3\x81\xAE\xE5\xBB\xBA\xE7\x89\xA9", "Owner", "Race" }, names(*short_name, "Owner", "Race") },
+        { "N", { repeated_name, "Owner", "Race" }, names(*truncated_name, "Owner", "Race") },
+        { "A", { "7", "Action name that is longer than twenty nine bytes", "2147483647", "-2147483648", "abc", "65535", "-32769" }, action },
+        { "A", { "0", "", "0", "0", "", "0", "0" }, initial },
+        { "C", { "2", "0" }, classes },
+        { "R", { "0", "65535" }, races },
+        { "M", { "3", "-1" }, realms },
+        { "Z", { "Ignored", "\xE7\x94\xBA" }, initial },
+        { "Z", {}, initial },
+    };
     for (const auto *locale : { "en", "ja" }) {
         CAPTURE(std::string(locale));
-        for (const auto &[command, fields] : {
-                 std::pair{ "N", std::vector<std::string>{ "Building name that is longer than nineteen bytes", "Owner", "Race" } },
-                 std::pair{ "N", std::vector<std::string>{ "", "", "" } },
-                 std::pair{ "N", std::vector<std::string>{ "\xE7\x94\xBA\xE3\x81\xAE\xE5\xBB\xBA\xE7\x89\xA9", "Owner", "Race" } },
-                 std::pair{ "N", std::vector<std::string>{ "\xE7\x94\xBA\xE7\x94\xBA\xE7\x94\xBA\xE7\x94\xBA\xE7\x94\xBA\xE7\x94\xBA\xE7\x94\xBA\xE7\x94\xBA\xE7\x94\xBA\xE7\x94\xBA", "Owner", "Race" } },
-                 std::pair{ "A", std::vector<std::string>{ "7", "Action name that is longer than twenty nine bytes", "2147483647", "-2147483648", "abc", "65535", "-32769" } },
-                 std::pair{ "A", std::vector<std::string>{ "0", "", "0", "0", "", "0", "0" } },
-                 std::pair{ "C", std::vector<std::string>{ "2", "0" } },
-                 std::pair{ "R", std::vector<std::string>{ "0", "65535" } },
-                 std::pair{ "M", std::vector<std::string>{ "3", "-1" } },
-                 std::pair{ "Z", std::vector<std::string>{ "Ignored", "\xE7\x94\xBA" } },
-                 std::pair{ "Z", std::vector<std::string>{} },
-             }) {
-            CAPTURE(std::string(command));
+        for (const auto &test_case : cases) {
+            CAPTURE(std::string(test_case.command));
             auto data = make_town_map();
             data["buildingRules"][0]["locale"] = locale;
-            data["buildingRules"][0]["command"] = command;
-            data["buildingRules"][0]["fields"] = fields;
+            data["buildingRules"][0]["command"] = test_case.command;
+            data["buildingRules"][0]["fields"] = test_case.fields;
             TownMapDefinition definition;
             REQUIRE(TownMapReader(data).read(definition, 3, 3) == PARSE_ERROR_NONE);
             REQUIRE(definition.buildings.size() == 1);
-            std::string line = std::string(locale) == "en" ? "B:$1:" : "B:1:";
-            line += command;
-            for (const auto &field : fields) {
-                line += ":" + field;
-            }
-            const auto encoded = utf8_to_sys(line);
-            REQUIRE(encoded.has_value());
-            buildings[1] = initial;
-            REQUIRE(parse_line_building(*encoded) == PARSE_ERROR_NONE);
-            const auto expected = buildings[1];
             buildings[1] = initial;
             REQUIRE(apply_town_building_rule(definition.buildings[0]) == PARSE_ERROR_NONE);
-            check_building(buildings[1], expected);
+            check_building(buildings[1], std::string_view(locale) == _("ja", "en") ? test_case.expected : initial);
             check_building(buildings[2], initial);
         }
     }
@@ -997,20 +1034,22 @@ TEST_CASE("TownMapReader typed building application rejects embedded NUL before 
             check_building(buildings[1], initial);
         }
     }
-#ifndef JP
-    // 旧dispatcherのchar*から作られるviewはNULの位置で切れ、Nの残り2引数を失う。
-    const auto legacy_line = std::string("B:$1:N:") + embedded_nul + ":Owner:Race";
-    CHECK(parse_line_building(std::string_view(legacy_line.c_str())) == PARSE_ERROR_TOO_FEW_ARGUMENTS);
-    check_building(buildings[1], initial);
-#endif
 }
 
-TEST_CASE("TownMapReader applies typed feature tokens with legacy F semantics")
+TEST_CASE("TownMapReader applies typed feature token values and random flags")
 {
     TownFeatureStateGuard state;
     FloorType floor;
     floor.quest_number = QuestId::NONE;
-    for (const auto *token : { "0", "-1", "*", "*32767", "32767" }) {
+    struct TokenCase {
+        const char *token;
+        short value;
+        int random;
+    };
+    const auto random_tokens = RANDOM_MONSTER | RANDOM_OBJECT | RANDOM_EGO | RANDOM_ARTIFACT;
+    for (const auto &[token, value, random] : { TokenCase{ "0", 0, 0 }, TokenCase{ "-1", -1, 0 },
+             TokenCase{ "*", 0, random_tokens }, TokenCase{ "*32767", 32767, random_tokens }, TokenCase{ "32767", 32767, 0 } }) {
+        CAPTURE(std::string(token));
         auto data = make_town_map();
         auto &fields = data["featureRules"][0]["definition"];
         fields["terrain"] = "TOWN_FEATURE_TEST_FLOOR";
@@ -1022,9 +1061,8 @@ TEST_CASE("TownMapReader applies typed feature tokens with legacy F semantics")
         }
         TownMapDefinition definition;
         REQUIRE(TownMapReader(data).read(definition, 3, 3) == PARSE_ERROR_NONE);
-        const auto legacy = std::string("F:#:TOWN_FEATURE_TEST_FLOOR:2147483647:") + token + ":" + token + ":" + token + ":" + token + ":TOWN_FEATURE_TEST_TRAP:-32768";
-        REQUIRE(parse_line_feature(floor, legacy) == PARSE_ERROR_NONE);
-        const auto expected = letter['#'];
+        const dungeon_grid expected{ state.floor_id(), value, value, i2enum<EgoType>(value), i2enum<FixedArtifactId>(value),
+            state.trap_id(), std::numeric_limits<int>::max(), -32768, random };
         letter['#'] = {};
         REQUIRE(apply_town_map_feature(floor, definition.features.front()) == PARSE_ERROR_NONE);
         check_same_grid(letter['#'], expected);
@@ -1033,7 +1071,7 @@ TEST_CASE("TownMapReader applies typed feature tokens with legacy F semantics")
     }
 }
 
-TEST_CASE("TownMapReader typed and legacy features reject unsafe bytes before touching letters")
+TEST_CASE("TownMapReader typed features reject unsafe bytes before touching letters")
 {
     const TownFeatureStateGuard state;
     const FloorType floor;
@@ -1049,41 +1087,19 @@ TEST_CASE("TownMapReader typed and legacy features reject unsafe bytes before to
             return result;
         }();
         CHECK(apply_town_map_feature(floor, feature) == PARSE_ERROR_INVALID_VALUE);
-        const auto line = "F:" + std::string(1, feature.symbol) + ":TOWN_FEATURE_TEST_FLOOR";
-        CHECK(parse_line_feature(floor, line) == PARSE_ERROR_INVALID_VALUE);
         for (size_t i = 0; i < original.size(); ++i) {
             check_same_grid(letter[i], original[i]);
         }
         init_flags = INIT_ONLY_BUILDINGS;
         CHECK(apply_town_map_feature(floor, feature) == PARSE_ERROR_NONE);
-        CHECK(parse_line_feature(floor, line) == PARSE_ERROR_NONE);
+        for (size_t i = 0; i < original.size(); ++i) {
+            check_same_grid(letter[i], original[i]);
+        }
         init_flags = static_cast<init_flags_type>(0);
     }
 }
 
-TEST_CASE("TownMapReader legacy feature rejects empty and multi character symbols without writes")
-{
-    const TownFeatureStateGuard state;
-    const FloorType floor;
-    for (const auto *symbol : { "", "AB" }) {
-        CAPTURE(symbol);
-        letter['A'].special = 73;
-        letter['B'].special = 91;
-        const auto first = letter['A'];
-        const auto second = letter['B'];
-        const auto line = std::string("F:") + symbol + ":TOWN_FEATURE_TEST_FLOOR";
-        CHECK(parse_line_feature(floor, line) == PARSE_ERROR_INVALID_VALUE);
-        check_same_grid(letter['A'], first);
-        check_same_grid(letter['B'], second);
-        init_flags = INIT_ONLY_BUILDINGS;
-        CHECK(parse_line_feature(floor, line) == PARSE_ERROR_NONE);
-        check_same_grid(letter['A'], first);
-        check_same_grid(letter['B'], second);
-        init_flags = static_cast<init_flags_type>(0);
-    }
-}
-
-TEST_CASE("TownMapReader typed and legacy features retain printable ASCII boundaries")
+TEST_CASE("TownMapReader typed features retain printable ASCII boundaries")
 {
     const TownFeatureStateGuard state;
     const FloorType floor;
@@ -1096,9 +1112,6 @@ TEST_CASE("TownMapReader typed and legacy features retain printable ASCII bounda
         REQUIRE(apply_town_map_feature(floor, feature) == PARSE_ERROR_NONE);
         CHECK(letter[static_cast<unsigned char>(symbol)].feature == state.floor_id());
         CHECK(letter[static_cast<unsigned char>(symbol)].trap == state.trap_id());
-        letter[static_cast<unsigned char>(symbol)].feature = 0;
-        REQUIRE(parse_line_feature(floor, "F:" + std::string(1, symbol) + ":TOWN_FEATURE_TEST_FLOOR") == PARSE_ERROR_NONE);
-        CHECK(letter[static_cast<unsigned char>(symbol)].feature == state.floor_id());
     }
 }
 
@@ -1118,8 +1131,8 @@ TEST_CASE("TownMapReader applies random terrain trap clones and reward placehold
     fields["special"] = 32767;
     TownMapDefinition definition;
     REQUIRE(TownMapReader(data).read(definition, 3, 3) == PARSE_ERROR_NONE);
-    REQUIRE(parse_line_feature(floor, "F:#:*:0:c32767:!:-2147483648:!:*:32767") == PARSE_ERROR_NONE);
-    const auto expected = letter['#'];
+    const dungeon_grid expected{ 0, -32767, 0, i2enum<EgoType>(std::numeric_limits<int>::min()), FixedArtifactId::NONE,
+        0, 0, 32767, RANDOM_FEATURE | RANDOM_TRAP };
     letter['#'] = {};
     REQUIRE(apply_town_map_feature(floor, definition.features.front()) == PARSE_ERROR_NONE);
     check_same_grid(letter['#'], expected);
@@ -1169,8 +1182,8 @@ TEST_CASE("TownMapReader resolves quest rewards at feature application time")
     CHECK(letter['#'].object == 0);
     CHECK(letter['#'].artifact == FixedArtifactId::NONE);
     test::QuestFeatureTestAccess::set_resolved_reward(FixedArtifactId::GALADRIEL_PHIAL);
-    REQUIRE(parse_line_feature(floor, "F:#:TOWN_FEATURE_TEST_FLOOR:0:0:!:0:!:TOWN_FEATURE_TEST_TRAP:0") == PARSE_ERROR_NONE);
-    const auto expected = letter['#'];
+    const dungeon_grid expected{ state.floor_id(), 0, 0, EgoType::NONE, FixedArtifactId::GALADRIEL_PHIAL,
+        state.trap_id(), 0, 0, 0 };
     letter['#'] = {};
     REQUIRE(apply_town_map_feature(floor, definition.features.front()) == PARSE_ERROR_NONE);
     check_same_grid(letter['#'], expected);

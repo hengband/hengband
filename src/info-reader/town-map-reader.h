@@ -8,6 +8,8 @@
 #include <variant>
 #include <vector>
 
+class FloorType;
+
 struct TownMapFeatureRule {
     char symbol = '\0';
     std::string terrain; //!< 条件が成立したときにのみ地形タグを解決する。
