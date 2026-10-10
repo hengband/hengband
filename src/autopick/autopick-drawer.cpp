@@ -28,7 +28,7 @@ constexpr std::string_view AUTOREGISTER_DIRECTIVE = "$AUTOREGISTER";
 /*!
  * @brief 条件式の評価結果と、読込エラーによって無効になる後続行の状態を更新する
  */
-void update_autopick_expression_states(PlayerType *player_ptr, text_body_type *tb)
+void update_autopick_expression_states(PlayerType *player_ptr, AutopickTextBody *tb)
 {
     const auto edited_line = tb->dirty_line;
     const auto include_edited = (edited_line >= 0) && (static_cast<size_t>(edited_line) < tb->lines_list.size()) &&
@@ -79,7 +79,7 @@ void update_autopick_expression_states(PlayerType *player_ptr, text_body_type *t
 /*!
  * @brief Draw text
  */
-void draw_text_editor(PlayerType *player_ptr, text_body_type *tb)
+void draw_text_editor(PlayerType *player_ptr, AutopickTextBody *tb)
 {
     int by1 = 0, by2 = 0;
 

@@ -24,7 +24,7 @@
 #include "world/world.h"
 #include <set>
 
-text_body_type::text_body_type(int cx, int cy)
+AutopickTextBody::AutopickTextBody(int cx, int cy)
     : cx(cx)
     , cy(cy)
 {
@@ -33,7 +33,7 @@ text_body_type::text_body_type(int cx, int cy)
 /*
  * Check special key code and get a movement command id
  */
-static EditorCommandId analyze_move_key(text_body_type *tb, uint32_t skey)
+static EditorCommandId analyze_move_key(AutopickTextBody *tb, uint32_t skey)
 {
     EditorCommandId com_id;
     if (!(skey & SKEY_MASK)) {
@@ -108,7 +108,7 @@ static EditorCommandId analyze_move_key(text_body_type *tb, uint32_t skey)
  * @details キーワードの切り替え等はマークを残したまま行を短くするため、マーク中はマーク列も補正する。
  * マークを外した後の my / mx は存在しない行を指していることがあるため触らない。
  */
-void text_body_type::adjust_cursor_column()
+void AutopickTextBody::adjust_cursor_column()
 {
     this->cx = std::max(this->cx, this->rec_cx);
     this->cx = std::min<int>(this->lines_list[this->cy]->length(), this->cx);
@@ -117,7 +117,7 @@ void text_body_type::adjust_cursor_column()
     }
 }
 
-void text_body_type::update_cursor_column_record(EditorCommandId com_id)
+void AutopickTextBody::update_cursor_column_record(EditorCommandId com_id)
 {
     static const std::set<EditorCommandId> record_cursor_column_commands = { EditorCommandId::UP, EditorCommandId::DOWN, EditorCommandId::PGUP, EditorCommandId::PGDOWN, EditorCommandId::TOP, EditorCommandId::BOTTOM };
     const auto should_record = record_cursor_column_commands.contains(com_id);
@@ -128,7 +128,7 @@ void text_body_type::update_cursor_column_record(EditorCommandId com_id)
  * @brief カーソルが2バイト文字の2バイト目にあるかどうかを判定する
  * @return カーソルのある行で、カーソルの位置が2バイト文字の2バイト目であれば true
  */
-bool text_body_type::is_cursor_on_second_byte_of_kanji() const
+bool AutopickTextBody::is_cursor_on_second_byte_of_kanji() const
 {
     return is_second_byte_of_kanji(*this->lines_list[this->cy], this->cx);
 }
@@ -147,8 +147,8 @@ void do_cmd_edit_autopick(PlayerType *player_ptr)
     static int32_t old_autosave_turn = 0L;
     ape_quittance quit = APE_QUIT;
 
-    text_body_type text_body(cx_save, cy_save);
-    text_body_type *tb = &text_body;
+    AutopickTextBody text_body(cx_save, cy_save);
+    AutopickTextBody *tb = &text_body;
     tb->dirty_flags = DIRTY_ALL | DIRTY_MODE | DIRTY_EXPRESSION;
     tb->filename_mode = PT_DEFAULT;
     auto &world = AngbandWorld::get_instance();

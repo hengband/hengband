@@ -29,9 +29,9 @@ constexpr auto MAX_EDITABLE_LINES = MAX_LINES - 2;
  * @param num_lines 行数
  * @return エディタの状態
  */
-text_body_type make_text_body(int num_lines)
+AutopickTextBody make_text_body(int num_lines)
 {
-    text_body_type tb(0, 0);
+    AutopickTextBody tb(0, 0);
     tb.lines_list.resize(MAX_LINES);
     for (auto y = 0; y < num_lines; y++) {
         tb.lines_list[y] = std::make_unique<std::string>("a");
@@ -46,7 +46,7 @@ text_body_type make_text_body(int num_lines)
  * @param cx カーソルの位置 (バイト)
  * @return エディタの状態
  */
-text_body_type make_text_body_with_line(std::string_view line, int cx)
+AutopickTextBody make_text_body_with_line(std::string_view line, int cx)
 {
     auto tb = make_text_body(1);
     *tb.lines_list[0] = line;

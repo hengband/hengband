@@ -42,7 +42,7 @@
  * @return
  * @details Execute a single editor command
  */
-ape_quittance do_editor_command(PlayerType *player_ptr, text_body_type *tb, EditorCommandId com_id)
+ape_quittance do_editor_command(PlayerType *player_ptr, AutopickTextBody *tb, EditorCommandId com_id)
 {
     switch (com_id) {
     case EditorCommandId::QUIT: {

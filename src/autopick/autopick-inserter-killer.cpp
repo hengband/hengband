@@ -18,7 +18,7 @@
 /*!
  * @brief Check if this line is expression or not. And update it if it is.
  */
-void check_expression_line(text_body_type *tb, int y)
+void check_expression_line(AutopickTextBody *tb, int y)
 {
     const auto &s = *tb->lines_list[y];
     if ((s[0] == '?' && s[1] == ':') || (tb->states[y] & LSTAT_BYPASS)) {
@@ -28,12 +28,12 @@ void check_expression_line(text_body_type *tb, int y)
 
 /*!
  * @brief 行を追加可能かチェックする
- * @param tb text_body_type
+ * @param tb 自動拾いテキストへの参照ポインタ
  * @param add_num 追加する行数
  * @retval true 追加可能
  * @retval false 最大行数を超えるため追加不可
  */
-bool can_insert_line(text_body_type *tb, int add_num)
+bool can_insert_line(AutopickTextBody *tb, int add_num)
 {
     const int count = count_line(tb);
     return !is_greater_autopick_max_line(count + add_num);
@@ -42,7 +42,7 @@ bool can_insert_line(text_body_type *tb, int add_num)
 /*!
  * @brief Insert return code and split the line
  */
-bool insert_return_code(text_body_type *tb)
+bool insert_return_code(AutopickTextBody *tb)
 {
     auto num_lines = count_line(tb);
     if (is_greater_autopick_max_line(num_lines)) {
@@ -73,7 +73,7 @@ bool insert_return_code(text_body_type *tb)
 /*!
  * @brief Get a trigger key and insert ASCII string for the trigger
  */
-bool insert_macro_line(text_body_type *tb)
+bool insert_macro_line(AutopickTextBody *tb)
 {
     if (!can_insert_line(tb, 2)) {
         return false;
@@ -105,7 +105,7 @@ bool insert_macro_line(text_body_type *tb)
 /*!
  * @brief Get a command key and insert ASCII string for the key
  */
-bool insert_keymap_line(text_body_type *tb)
+bool insert_keymap_line(AutopickTextBody *tb)
 {
     if (!can_insert_line(tb, 2)) {
         return false;
@@ -141,7 +141,7 @@ bool insert_keymap_line(text_body_type *tb)
 /*!
  * @brief Insert single letter at cursor position.
  */
-void insert_single_letter(text_body_type *tb, int key)
+void insert_single_letter(AutopickTextBody *tb, int key)
 {
     const auto &line = *tb->lines_list[tb->cy];
     const auto head_len = std::min<size_t>(tb->cx, line.length());
@@ -183,7 +183,7 @@ void insert_single_letter(text_body_type *tb, int key)
 /*!
  * @brief Kill segment of a line
  */
-void kill_line_segment(text_body_type *tb, int y, int x0, int x1, bool whole)
+void kill_line_segment(AutopickTextBody *tb, int y, int x0, int x1, bool whole)
 {
     auto &s = *tb->lines_list[y];
     if (whole && (x0 == 0) && (s[x1] == '\0') && tb->lines_list[y + 1]) {

@@ -66,7 +66,7 @@ void auto_inscribe_item(ItemEntity *o_ptr, int idx)
  * @param tb text_body_type
  * @return 行数
  */
-int count_line(text_body_type *tb)
+int count_line(AutopickTextBody *tb)
 {
     const auto begin = tb->lines_list.begin();
     const auto it = std::find_if(begin, tb->lines_list.end(), [](const auto &line) {

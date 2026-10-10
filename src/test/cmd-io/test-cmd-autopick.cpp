@@ -15,9 +15,9 @@
 namespace {
 
 //! 指定の行を持つエディタの状態を、実際のエディタと同じく MAX_LINES 要素の行バッファで作る
-text_body_type make_text_body(std::initializer_list<std::string> lines)
+AutopickTextBody make_text_body(std::initializer_list<std::string> lines)
 {
-    text_body_type tb(0, 0);
+    AutopickTextBody tb(0, 0);
     tb.lines_list.resize(MAX_LINES);
     auto y = 0;
     for (const auto &line : lines) {
