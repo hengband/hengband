@@ -76,8 +76,8 @@ $msbuild = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere
 
 - 英語版は `Configuration=English-Debug` などにする。特定のプロジェクトだけなら `/t:HengbandTest` などを足す
   （依存する `HengbandCore` も合わせてビルドされる）。
-- CI（`.github/workflows/build-test-with-msvc.yml`）は `-warnAsError /t:Rebuild` で `Debug` と
-  `English-Release` をビルドする。差分ビルドでは変更のないファイルがコンパイルされず、前回の警告が出ないので、
+- CI（`.github/workflows/build-test-with-msvc.yml`）は `-warnAsError /t:Rebuild` で `Release` と
+  `English-Debug` をビルドする。差分ビルドでは変更のないファイルがコンパイルされず、前回の警告が出ないので、
   プッシュ前の最終確認は CI と同じく `-warnAsError /t:Rebuild` で行う。
 - `Hengband.exe` は全構成で同じパス（リポジトリのトップ）に出力されるため、構成を切り替えると差分ビルドで
   リンクされず、前の構成の exe が残ることがある。構成を切り替えたら `Hengband.exe` を削除してからビルドする。

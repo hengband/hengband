@@ -14,9 +14,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        # 日英と Debug / Release を互い違いに組み合わせる。日本語版は配布する Release を試す
         configuration:
-          - Debug
-          - English-Release
+          - Release
+          - English-Debug
 
     steps:
       - uses: actions/checkout@v7

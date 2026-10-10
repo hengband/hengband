@@ -71,6 +71,7 @@ jobs:
           # キーの書式は .github/scripts/cleanup-ccache-caches.sh が前提にしている
           echo "prefix=ccache-$key-" >> "$GITHUB_OUTPUT"
 
+      # --disable-net では、ネットワークの機能の外から curl のヘッダを読んでいないことを確かめるため、libcurl を入れない
       - name: Install required packages (Ubuntu)
         if: ${{ steps.os.outputs.family == 'linux' }}
         shell: bash
@@ -81,7 +82,7 @@ jobs:
             automake \
             pkg-config \
             libncurses-dev \
-            libcurl4-openssl-dev \
+            ${{ !contains(format(' {0} ', inputs.configure-opts), ' --disable-net ') && 'libcurl4-openssl-dev' || '' }} \
             libx11-dev \
             libxext-dev \
             libxft-dev \

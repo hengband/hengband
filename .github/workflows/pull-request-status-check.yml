@@ -74,13 +74,13 @@ jobs:
       use-ccache: true
 
   build_test_clang_without_pch:
-    name: Build Japanese version with clang 21 (without using pre-compiled headers, with XFT)
+    name: Build Japanese version with clang 21 (without using pre-compiled headers, with XFT, without networking)
     uses: ./.github/workflows/build-with-autotools.yml
     with:
       runner: ubuntu-26.04
       cxx: clang++-21
       cxx-flags: "-pipe -O3 -Werror -Wall -Wextra"
-      configure-opts: "--disable-pch --enable-xft"
+      configure-opts: "--disable-pch --enable-xft --disable-net"
       use-ccache: true
 
   build_test_clang_with_pch_english:
@@ -94,17 +94,18 @@ jobs:
       use-ccache: true
 
   build_test_gcc_japanese:
-    name: Build Japanese version with gcc 16 (with XFT)
+    name: Build Japanese version with gcc 16 (with using pre-compiled headers, with XFT)
     uses: ./.github/workflows/build-with-autotools.yml
     with:
       runner: ubuntu-26.04
       cxx: g++-16
-      cxx-flags: "-pipe -O3 -Werror -Wall -Wextra"
-      configure-opts: "--disable-pch --enable-xft"
+      # gcc は使えないプリコンパイル済みヘッダを黙って無視するので、警告 (エラー) にして使われていることを確かめる
+      cxx-flags: "-pipe -O3 -Werror -Wall -Wextra -Winvalid-pch"
+      configure-opts: "--enable-xft"
       use-ccache: true
 
   build_test_gcc_english:
-    name: Build English version with gcc 16 (without XFT)
+    name: Build English version with gcc 16 (without using pre-compiled headers, without XFT)
     uses: ./.github/workflows/build-with-autotools.yml
     with:
       runner: ubuntu-26.04
