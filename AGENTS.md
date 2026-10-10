@@ -102,8 +102,12 @@ autotools も MSBuild もソースを自動収集しないため、**`.cpp` / `.
 - `VisualStudio/Hengband/HengbandCore.vcxproj`（`<ClCompile>` / `<ClInclude>`）と `.filters`（フォルダ分けの表示用）
 
 テストのソースは、`src/Makefile.am` の `hengband_test_SOURCES` と `VisualStudio/Hengband/HengbandTest.vcxproj`
-（と `.filters`）に登録する。CI の `check-test-registration.sh` が検出するのはテストの登録漏れだけで、`HengbandCore` の登録漏れは
-MSVC のビルドの失敗で初めて分かる。vcxproj は CRLF・パス区切りは `\`（`..\..\src\...`）なので、既存の行に揃える。
+（と `.filters`）に登録する。vcxproj は CRLF・パス区切りは `\`（`..\..\src\...`）で、HengbandCore と HengbandTest の
+`<ClCompile>` / `<ClInclude>` はパスの昇順（大文字小文字を区別せず、MSBuild と同じく大文字に寄せて比べる）に並べる。
+
+登録したら `python3 .github/scripts/check-vcxproj.py` で確かめる（CI でも実行される）。vcxproj と `src/Makefile.am` の
+食い違い、並び順、`.filters` の不整合を検出する。`--fix` を付けると、vcxproj の並び順を直し、`.filters` を vcxproj の
+登録内容とディレクトリから作り直す。vcxproj への登録そのものは手で行う。
 
 ## テスト
 
@@ -153,7 +157,7 @@ Windows でビルドできない環境で作業するときは特に注意する
 ## コミット
 
 コミット前に、`.github/scripts/` にある CI のチェックのうち変更に関係するものを手元で流す
-（Windows では Git Bash で実行できる）。
+（Windows では Git Bash で実行できる。`python3` が使えなければ `py` で実行する）。
 
 ```bash
 # upstream は本家 (hengband/hengband) を指すリモート名に読み替える。
@@ -162,6 +166,7 @@ Windows でビルドできない環境で作業するときは特に注意する
 clang-format-18 -i $(git diff --name-only --diff-filter=d --merge-base upstream/develop -- 'src/*.cpp' 'src/*.h' ':!src/external-lib')
 python3 .github/scripts/check-include-style.py
 sh .github/scripts/check-test-registration.sh
+python3 .github/scripts/check-vcxproj.py
 # lib/ の JSON を変えたとき（check-json-format.sh は prettier を npm install -g して lib/ 全体にかける）
 npx prettier --check $(git diff --name-only --diff-filter=d --merge-base upstream/develop -- 'lib/*.json' 'lib/*.jsonc')
 ```

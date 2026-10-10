@@ -112,7 +112,7 @@ Visual Studio の IDE から実行する場合は、`HengbandTest` を右クリ�
        ...
    ```
 
-   `VisualStudio/Hengband/HengbandTest.vcxproj` の `<ClCompile>`:
+   `VisualStudio/Hengband/HengbandTest.vcxproj` の `<ClCompile>`（パスの昇順に並べる）:
 
    ```xml
    <ItemGroup>
@@ -123,8 +123,10 @@ Visual Studio の IDE から実行する場合は、`HengbandTest` を右クリ�
    </ItemGroup>
    ```
 
-   Visual Studio 上での表示を整えるため、`HengbandTest.vcxproj.filters` にも
-   同じファイルを追加しておくとよいです（こちらは登録しなくてもビルド・実行はできます）。
+   Visual Studio 上でのフォルダ分けの表示に使う `HengbandTest.vcxproj.filters` は、
+   `python3 .github/scripts/check-vcxproj.py --fix` で vcxproj の登録内容から作り直します
+   （vcxproj の並び順もあわせて直ります）。CI の `check_vcxproj` は、vcxproj と `hengband_test_SOURCES` の
+   食い違いや、並び順・filters が `--fix` の結果と違うことを検出します。
 
 4. **ビルドして確認する**
 

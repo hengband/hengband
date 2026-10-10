@@ -62,16 +62,10 @@
     <ClCompile Include="..\..\src\stdafx.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="..\..\src\test\test-main.cpp" />
-    <ClCompile Include="..\..\src\test\util\test-angband-files.cpp" />
-    <ClCompile Include="..\..\src\test\object\test-object-info.cpp" />
-    <ClCompile Include="..\..\src\test\view\test-map-terrain-visibility.cpp" />
-    <ClCompile Include="..\..\src\test\view\test-screen-parity-helpers.cpp" />
-    <ClCompile Include="..\..\src\test\window\test-overview-map-cache.cpp" />
-    <ClCompile Include="..\..\src\test\wizard\test-spoiler-util.cpp" />
     <ClCompile Include="..\..\src\test\autopick\test-autopick-editor-util.cpp" />
     <ClCompile Include="..\..\src\test\cmd-io\test-cmd-autopick.cpp" />
     <ClCompile Include="..\..\src\test\flavor\test-flavor-util.cpp" />
+    <ClCompile Include="..\..\src\test\floor\test-fixed-map-generator.cpp" />
     <ClCompile Include="..\..\src\test\game-option\test-runtime-arguments.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-activation-reader.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-artifact-reader.cpp" />
@@ -79,11 +73,6 @@
     <ClCompile Include="..\..\src\test\info-reader\test-dungeon-reader.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-ego-reader.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-general-parser.cpp" />
-    <ClCompile Include="..\..\src\test\info-reader\test-wilderness-reader.cpp" />
-    <ClCompile Include="..\..\src\test\info-reader\test-town-definition-list-reader.cpp" />
-    <ClCompile Include="..\..\src\test\info-reader\test-town-map-reader.cpp" />
-    <ClCompile Include="..\..\src\test\floor\test-fixed-map-generator.cpp" />
-    <ClCompile Include="..\..\src\test\info-reader\test-town-preferences-reader.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-info-reader-util.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-json-reader-util.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-jsonc-document-loader.cpp" />
@@ -94,7 +83,11 @@
     <ClCompile Include="..\..\src\test\info-reader\test-skill-reader.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-spell-reader.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-terrain-reader.cpp" />
+    <ClCompile Include="..\..\src\test\info-reader\test-town-definition-list-reader.cpp" />
+    <ClCompile Include="..\..\src\test\info-reader\test-town-map-reader.cpp" />
+    <ClCompile Include="..\..\src\test\info-reader\test-town-preferences-reader.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-vault-reader.cpp" />
+    <ClCompile Include="..\..\src\test\info-reader\test-wilderness-reader.cpp" />
     <ClCompile Include="..\..\src\test\io\test-condition-expression.cpp" />
     <ClCompile Include="..\..\src\test\io\test-interpret-pref-file.cpp" />
     <ClCompile Include="..\..\src\test\io\test-macro-configurations-store.cpp" />
@@ -106,23 +99,26 @@
     <ClCompile Include="..\..\src\test\monster-race\test-race-ability-mask.cpp" />
     <ClCompile Include="..\..\src\test\mspell\test-mspell-projection-table.cpp" />
     <ClCompile Include="..\..\src\test\mutation\test-mutation-roll-table.cpp" />
+    <ClCompile Include="..\..\src\test\object\test-object-info.cpp" />
     <ClCompile Include="..\..\src\test\player\test-process-name.cpp" />
+    <ClCompile Include="..\..\src\test\save\test-item-writer.cpp" />
     <ClCompile Include="..\..\src\test\store\test-pricing.cpp" />
     <ClCompile Include="..\..\src\test\store\test-store-screen.cpp" />
     <ClCompile Include="..\..\src\test\store\test-store-util.cpp" />
-    <ClCompile Include="..\..\src\test\save\test-item-writer.cpp" />
     <ClCompile Include="..\..\src\test\system\baseitem\test-baseitem-allocation.cpp" />
-    <ClCompile Include="..\..\src\test\system\baseitem\test-baseitem-list.cpp" />
     <ClCompile Include="..\..\src\test\system\baseitem\test-baseitem-definition.cpp" />
+    <ClCompile Include="..\..\src\test\system\baseitem\test-baseitem-list.cpp" />
     <ClCompile Include="..\..\src\test\system\floor\test-floor-info.cpp" />
     <ClCompile Include="..\..\src\test\system\monrace\test-monrace-definition.cpp" />
-    <ClCompile Include="..\..\src\test\system\test-quest-list.cpp" />
     <ClCompile Include="..\..\src\test\system\test-dungeon-record.cpp" />
+    <ClCompile Include="..\..\src\test\system\test-quest-list.cpp" />
     <ClCompile Include="..\..\src\test\term\test-z-form.cpp" />
     <ClCompile Include="..\..\src\test\term\test-z-rand.cpp" />
+    <ClCompile Include="..\..\src\test\test-main.cpp" />
     <ClCompile Include="..\..\src\test\timed-effect\test-player-cut.cpp" />
     <ClCompile Include="..\..\src\test\timed-effect\test-player-stun.cpp" />
     <ClCompile Include="..\..\src\test\timed-effect\test-timed-effect.cpp" />
+    <ClCompile Include="..\..\src\test\util\test-angband-files.cpp" />
     <ClCompile Include="..\..\src\test\util\test-buffer-shaper.cpp" />
     <ClCompile Include="..\..\src\test\util\test-dice.cpp" />
     <ClCompile Include="..\..\src\test\util\test-finalizer.cpp" />
@@ -131,23 +127,27 @@
     <ClCompile Include="..\..\src\test\util\test-sha256.cpp" />
     <ClCompile Include="..\..\src\test\util\test-string-processor.cpp" />
     <ClCompile Include="..\..\src\test\util\test-temporary-json-files.cpp" />
+    <ClCompile Include="..\..\src\test\view\test-map-terrain-visibility.cpp" />
+    <ClCompile Include="..\..\src\test\view\test-screen-parity-helpers.cpp" />
+    <ClCompile Include="..\..\src\test\window\test-overview-map-cache.cpp" />
+    <ClCompile Include="..\..\src\test\wizard\test-spoiler-util.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\stdafx.h" />
     <ClInclude Include="..\..\src\test\info-reader\scoped-reader-state.h" />
     <ClInclude Include="..\..\src\test\save\scoped-save-io.h" />
-    <ClInclude Include="..\..\src\test\scoped-vector-wrapper.h" />
     <ClInclude Include="..\..\src\test\scoped-restore.h" />
     <ClInclude Include="..\..\src\test\scoped-rng.h" />
+    <ClInclude Include="..\..\src\test\scoped-vector-wrapper.h" />
     <ClInclude Include="..\..\src\test\string-helpers.h" />
-    <ClInclude Include="..\..\src\test\temporary-json-files.h" />
     <ClInclude Include="..\..\src\test\system\artifact-list-test-access.h" />
-    <ClInclude Include="..\..\src\test\system\terrain-list-test-access.h" />
-    <ClInclude Include="..\..\src\test\system\quest-list-test-access.h" />
     <ClInclude Include="..\..\src\test\system\dungeon-list-test-access.h" />
     <ClInclude Include="..\..\src\test\system\monrace-list-test-access.h" />
     <ClInclude Include="..\..\src\test\system\monrace-message-list-test-access.h" />
     <ClInclude Include="..\..\src\test\system\monrace-records-test-access.h" />
+    <ClInclude Include="..\..\src\test\system\quest-list-test-access.h" />
+    <ClInclude Include="..\..\src\test\system\terrain-list-test-access.h" />
+    <ClInclude Include="..\..\src\test\temporary-json-files.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="HengbandCore.vcxproj">
