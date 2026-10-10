@@ -1518,6 +1518,7 @@ hengband_test_SOURCES = \
 	test/info-reader/test-baseitem-reader.cpp \
 	test/info-reader/test-dungeon-reader.cpp \
 	test/info-reader/test-ego-reader.cpp \
+	test/object-enchant/test-object-ego.cpp \
 	test/info-reader/test-general-parser.cpp \
 	test/info-reader/test-wilderness-reader.cpp \
 	test/info-reader/test-info-reader-util.cpp \

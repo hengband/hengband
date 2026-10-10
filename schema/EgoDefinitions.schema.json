@@ -2,10 +2,13 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
   "additionalProperties": false,
-  "required": ["version", "egos"],
+  "required": [
+    "version",
+    "egos"
+  ],
   "properties": {
     "version": {
-      "const": 1
+      "const": 2
     },
     "egos": {
       "type": "array",
@@ -19,7 +22,10 @@
     "localized_name": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["ja", "en"],
+      "required": [
+        "ja",
+        "en"
+      ],
       "properties": {
         "ja": {
           "type": "string",
@@ -34,7 +40,11 @@
     "bonuses": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["to_hit", "to_damage", "to_ac"],
+      "required": [
+        "to_hit",
+        "to_damage",
+        "to_ac"
+      ],
       "properties": {
         "to_hit": {
           "type": "integer",
@@ -56,7 +66,12 @@
     "maximum_bonuses": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["to_hit", "to_damage", "to_ac", "pval"],
+      "required": [
+        "to_hit",
+        "to_damage",
+        "to_ac",
+        "pval"
+      ],
       "properties": {
         "to_hit": {
           "type": "integer",
@@ -88,17 +103,16 @@
     "extra_flags": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["numerator", "denominator", "flags"],
+      "required": [
+        "chance",
+        "flags"
+      ],
       "properties": {
-        "numerator": {
+        "chance": {
           "type": "integer",
-          "minimum": 1,
-          "maximum": 32767
-        },
-        "denominator": {
-          "type": "integer",
-          "minimum": 1,
-          "maximum": 32767
+          "minimum": 0,
+          "maximum": 100,
+          "description": "追加能力の発生確率（整数百分率）。0は発生なし、100は必ず発生。"
         },
         "flags": {
           "type": "array",
@@ -113,7 +127,15 @@
     "ego": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["id", "name", "slot", "rating", "level", "rarity", "cost"],
+      "required": [
+        "id",
+        "name",
+        "slot",
+        "rating",
+        "level",
+        "rarity",
+        "cost"
+      ],
       "properties": {
         "id": {
           "type": "integer",
@@ -141,7 +163,8 @@
         "rarity": {
           "type": "integer",
           "minimum": 0,
-          "maximum": 255
+          "maximum": 255,
+          "description": "0は通常抽選から除外。1～255は255/rarityを抽選の重みにする。百分率ではない。"
         },
         "cost": {
           "type": "integer",

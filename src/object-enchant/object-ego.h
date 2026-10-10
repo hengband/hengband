@@ -229,8 +229,7 @@ enum class EgoType {
 };
 
 struct ego_generate_type {
-    int mul{}; //<! 確率分子
-    int dev{}; //<! 確率分母
+    PERCENTAGE chance{}; //!< 発生確率（整数0～100%、0は発生なし、100は必ず発生）
     std::vector<tr_type> tr_flags{};
     std::vector<ItemGenerationTraitType> trg_flags{};
 };

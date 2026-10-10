@@ -129,17 +129,17 @@ def load_cpp_tokens(path: Path) -> set[str]:
 
 
 def validate_ego_semantics(data: dict, schema_path: Path) -> None:
-    """Check unique IDs and strict integer types expected by EgoReader."""
+    """Check unique IDs, strict integers and integer-percent probabilities."""
     repository_root = schema_path.resolve().parent.parent
     valid_flags = load_cpp_tokens(repository_root / "src/info-reader/baseitem-tokens-table.cpp")
     valid_activations = load_cpp_tokens(repository_root / "src/object-enchant/activation-info-table.cpp")
+    require_integer(data["version"], ["version"])
     ids = set()
     integer_fields = ("id", "slot", "rating", "level", "rarity", "cost")
     for index, ego in enumerate(data["egos"]):
         path = ["egos", index]
         for field in integer_fields:
-            if type(ego[field]) is not int:
-                raise ValidationError("expected an integer JSON value", path=path + [field])
+            require_integer(ego[field], path + [field])
         if ego["id"] in ids:
             raise ValidationError("IDs must be unique", path=path + ["id"])
         ids.add(ego["id"])
@@ -150,8 +150,7 @@ def validate_ego_semantics(data: dict, schema_path: Path) -> None:
                 raise ValidationError("unknown ego flag token", path=path + ["flags", flag_index])
         for group in ("base_bonuses", "maximum_bonuses"):
             for field, value in ego.get(group, {}).items():
-                if type(value) is not int:
-                    raise ValidationError("expected an integer JSON value", path=path + [group, field])
+                require_integer(value, path + [group, field])
         for extra_index, extra in enumerate(ego.get("extra_flags", [])):
             for flag_index, flag in enumerate(extra["flags"]):
                 if flag not in valid_flags:
@@ -159,12 +158,7 @@ def validate_ego_semantics(data: dict, schema_path: Path) -> None:
                         "unknown ego flag token",
                         path=path + ["extra_flags", extra_index, "flags", flag_index],
                     )
-            for field in ("numerator", "denominator"):
-                if type(extra[field]) is not int:
-                    raise ValidationError(
-                        "expected an integer JSON value",
-                        path=path + ["extra_flags", extra_index, field],
-                    )
+            require_integer(extra["chance"], path + ["extra_flags", extra_index, "chance"])
 
 
 def validate_wilderness_semantics(data: dict) -> None:

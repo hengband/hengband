@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "egos": [
     // Body Armor
     {
@@ -37,33 +37,27 @@
       ],
       "extra_flags": [
         {
-          "numerator": 1,
-          "denominator": 3,
+          "chance": 33,
           "flags": ["HEAVY_CURSE"],
         },
         {
-          "numerator": 1,
-          "denominator": 9,
+          "chance": 11,
           "flags": ["TY_CURSE"],
         },
         {
-          "numerator": 1,
-          "denominator": 3,
+          "chance": 33,
           "flags": ["ADD_H_CURSE"],
         },
         {
-          "numerator": 1,
-          "denominator": 6,
+          "chance": 17,
           "flags": ["AGGRAVATE"],
         },
         {
-          "numerator": 1,
-          "denominator": 9,
+          "chance": 11,
           "flags": ["NO_MAGIC"],
         },
         {
-          "numerator": 1,
-          "denominator": 9,
+          "chance": 11,
           "flags": ["NO_TELE"],
         },
       ],
@@ -101,38 +95,31 @@
       ],
       "extra_flags": [
         {
-          "numerator": 1,
-          "denominator": 1,
+          "chance": 100,
           "flags": ["DRAIN_EXP", "DRAIN_MANA", "DRAIN_HP"],
         },
         {
-          "numerator": 1,
-          "denominator": 3,
+          "chance": 33,
           "flags": ["HEAVY_CURSE"],
         },
         {
-          "numerator": 1,
-          "denominator": 3,
+          "chance": 33,
           "flags": ["AGGRAVATE"],
         },
         {
-          "numerator": 1,
-          "denominator": 3,
+          "chance": 33,
           "flags": ["ADD_L_CURSE"],
         },
         {
-          "numerator": 1,
-          "denominator": 5,
+          "chance": 20,
           "flags": ["ADD_H_CURSE"],
         },
         {
-          "numerator": 1,
-          "denominator": 5,
+          "chance": 20,
           "flags": ["TY_CURSE"],
         },
         {
-          "numerator": 1,
-          "denominator": 5,
+          "chance": 20,
           "flags": ["CALL_DEMON"],
         },
       ],
@@ -205,8 +192,7 @@
       ],
       "extra_flags": [
         {
-          "numerator": 1,
-          "denominator": 4,
+          "chance": 25,
           "flags": ["RES_POIS"],
         },
       ],
@@ -477,13 +463,11 @@
       ],
       "extra_flags": [
         {
-          "numerator": 2,
-          "denominator": 3,
+          "chance": 67,
           "flags": ["XTRA_H_RES"],
         },
         {
-          "numerator": 1,
-          "denominator": 4,
+          "chance": 25,
           "flags": ["RES_POIS"],
         },
       ],
@@ -546,8 +530,7 @@
       "flags": ["IGNORE_ACID", "IGNORE_ELEC", "IGNORE_FIRE", "IGNORE_COLD"],
       "extra_flags": [
         {
-          "numerator": 1,
-          "denominator": 3,
+          "chance": 33,
           "flags": ["RES_CURSE"],
         },
       ],
@@ -633,8 +616,7 @@
       "flags": ["IGNORE_ACID", "IGNORE_ELEC", "IGNORE_FIRE", "IGNORE_COLD"],
       "extra_flags": [
         {
-          "numerator": 1,
-          "denominator": 3,
+          "chance": 33,
           "flags": ["RES_CURSE"],
         },
       ],
@@ -671,38 +653,31 @@
       ],
       "extra_flags": [
         {
-          "numerator": 1,
-          "denominator": 1,
+          "chance": 100,
           "flags": ["DRAIN_EXP", "DRAIN_MANA", "DRAIN_HP"],
         },
         {
-          "numerator": 1,
-          "denominator": 3,
+          "chance": 33,
           "flags": ["HEAVY_CURSE"],
         },
         {
-          "numerator": 1,
-          "denominator": 3,
+          "chance": 33,
           "flags": ["AGGRAVATE"],
         },
         {
-          "numerator": 1,
-          "denominator": 3,
+          "chance": 33,
           "flags": ["ADD_L_CURSE"],
         },
         {
-          "numerator": 1,
-          "denominator": 3,
+          "chance": 33,
           "flags": ["ADD_H_CURSE"],
         },
         {
-          "numerator": 1,
-          "denominator": 5,
+          "chance": 20,
           "flags": ["TY_CURSE"],
         },
         {
-          "numerator": 1,
-          "denominator": 5,
+          "chance": 20,
           "flags": ["CALL_DEMON"],
         },
       ],
@@ -830,13 +805,11 @@
       "activation": "LIGHT",
       "extra_flags": [
         {
-          "numerator": 1,
-          "denominator": 3,
+          "chance": 33,
           "flags": ["LITE"],
         },
         {
-          "numerator": 1,
-          "denominator": 3,
+          "chance": 33,
           "flags": ["LITE_2"],
         },
       ],
@@ -854,8 +827,7 @@
       "cost": 15000,
       "extra_flags": [
         {
-          "numerator": 1,
-          "denominator": 1,
+          "chance": 100,
           "flags": ["HIGH_TELEPATHY"],
         },
       ],
@@ -987,33 +959,27 @@
       ],
       "extra_flags": [
         {
-          "numerator": 1,
-          "denominator": 3,
+          "chance": 33,
           "flags": ["NO_MAGIC"],
         },
         {
-          "numerator": 1,
-          "denominator": 3,
+          "chance": 33,
           "flags": ["NO_TELE"],
         },
         {
-          "numerator": 1,
-          "denominator": 3,
+          "chance": 33,
           "flags": ["TY_CURSE"],
         },
         {
-          "numerator": 1,
-          "denominator": 3,
+          "chance": 33,
           "flags": ["DRAIN_EXP"],
         },
         {
-          "numerator": 1,
-          "denominator": 3,
+          "chance": 33,
           "flags": ["DRAIN_MANA"],
         },
         {
-          "numerator": 1,
-          "denominator": 3,
+          "chance": 33,
           "flags": ["DRAIN_HP"],
         },
       ],
@@ -1058,8 +1024,7 @@
       "flags": ["IGNORE_ACID", "IGNORE_ELEC", "IGNORE_FIRE", "IGNORE_COLD"],
       "extra_flags": [
         {
-          "numerator": 1,
-          "denominator": 3,
+          "chance": 33,
           "flags": ["RES_CURSE"],
         },
       ],
@@ -1250,28 +1215,23 @@
       "activation": "WRAITH",
       "extra_flags": [
         {
-          "numerator": 1,
-          "denominator": 3,
+          "chance": 33,
           "flags": ["COWARDICE"],
         },
         {
-          "numerator": 1,
-          "denominator": 3,
+          "chance": 33,
           "flags": ["CALL_UNDEAD"],
         },
         {
-          "numerator": 1,
-          "denominator": 3,
+          "chance": 33,
           "flags": ["SLOW_REGEN"],
         },
         {
-          "numerator": 1,
-          "denominator": 3,
+          "chance": 33,
           "flags": ["DRAIN_EXP"],
         },
         {
-          "numerator": 1,
-          "denominator": 5,
+          "chance": 20,
           "flags": ["VUL_LITE"],
         },
       ],
@@ -1447,8 +1407,7 @@
       "flags": ["LEVITATION"],
       "extra_flags": [
         {
-          "numerator": 1,
-          "denominator": 2,
+          "chance": 50,
           "flags": ["XTRA_H_RES"],
         },
       ],
@@ -1599,8 +1558,7 @@
       ],
       "extra_flags": [
         {
-          "numerator": 1,
-          "denominator": 4,
+          "chance": 25,
           "flags": ["BLOWS"],
         },
       ],
@@ -1641,18 +1599,15 @@
       ],
       "extra_flags": [
         {
-          "numerator": 1,
-          "denominator": 3,
+          "chance": 33,
           "flags": ["RES_POIS"],
         },
         {
-          "numerator": 1,
-          "denominator": 3,
+          "chance": 33,
           "flags": ["WARNING"],
         },
         {
-          "numerator": 1,
-          "denominator": 7,
+          "chance": 14,
           "flags": ["RES_CURSE"],
         },
       ],
@@ -1686,8 +1641,7 @@
       ],
       "extra_flags": [
         {
-          "numerator": 1,
-          "denominator": 4,
+          "chance": 25,
           "flags": ["RES_CURSE"],
         },
       ],
@@ -1725,8 +1679,7 @@
       ],
       "extra_flags": [
         {
-          "numerator": 1,
-          "denominator": 3,
+          "chance": 33,
           "flags": ["RES_FEAR"],
         },
       ],
@@ -1769,28 +1722,23 @@
       },
       "extra_flags": [
         {
-          "numerator": 1,
-          "denominator": 5,
+          "chance": 20,
           "flags": ["BRAND_POIS"],
         },
         {
-          "numerator": 1,
-          "denominator": 3,
+          "chance": 33,
           "flags": ["VORPAL"],
         },
         {
-          "numerator": 1,
-          "denominator": 3,
+          "chance": 33,
           "flags": ["DOUBLED_DICE"],
         },
         {
-          "numerator": 1,
-          "denominator": 1,
+          "chance": 100,
           "flags": ["XTRA_DICE"],
         },
         {
-          "numerator": 1,
-          "denominator": 1,
+          "chance": 100,
           "flags": ["XTRA_DICE_SIDE"],
         },
       ],
@@ -1978,38 +1926,31 @@
       ],
       "extra_flags": [
         {
-          "numerator": 1,
-          "denominator": 1,
+          "chance": 100,
           "flags": ["DOUBLED_DICE", "XTRA_DICE"],
         },
         {
-          "numerator": 1,
-          "denominator": 1,
+          "chance": 100,
           "flags": ["BRAND_POIS", "CHAOTIC", "EARTHQUAKE"],
         },
         {
-          "numerator": 1,
-          "denominator": 1,
+          "chance": 100,
           "flags": ["VUL_ACID", "VUL_COLD", "VUL_ELEC", "VUL_FIRE", "VUL_LITE"],
         },
         {
-          "numerator": 1,
-          "denominator": 1,
+          "chance": 100,
           "flags": ["LITE_M1", "LITE_M2", "LITE_M3"],
         },
         {
-          "numerator": 1,
-          "denominator": 3,
+          "chance": 33,
           "flags": ["HEAVY_CURSE", "TY_CURSE"],
         },
         {
-          "numerator": 1,
-          "denominator": 3,
+          "chance": 33,
           "flags": ["NO_MAGIC", "NO_TELE", "PERMA_CURSE"],
         },
         {
-          "numerator": 1,
-          "denominator": 3,
+          "chance": 33,
           "flags": ["LOW_MELEE", "LOW_AC", "DOWN_SAVING"],
         },
       ],
@@ -2044,8 +1985,7 @@
       ],
       "extra_flags": [
         {
-          "numerator": 1,
-          "denominator": 3,
+          "chance": 33,
           "flags": ["SPEED"],
         },
       ],
@@ -2086,63 +2026,51 @@
       ],
       "extra_flags": [
         {
-          "numerator": 1,
-          "denominator": 1,
+          "chance": 100,
           "flags": ["SLAY_HUMAN", "SLAY_ORC", "SLAY_GIANT", "SLAY_TROLL"],
         },
         {
-          "numerator": 1,
-          "denominator": 1,
+          "chance": 100,
           "flags": ["DRAIN_EXP", "DRAIN_MANA", "DRAIN_HP"],
         },
         {
-          "numerator": 1,
-          "denominator": 5,
+          "chance": 20,
           "flags": ["IM_ACID"],
         },
         {
-          "numerator": 1,
-          "denominator": 3,
+          "chance": 33,
           "flags": ["RES_POIS"],
         },
         {
-          "numerator": 1,
-          "denominator": 4,
+          "chance": 25,
           "flags": ["BLOWS"],
         },
         {
-          "numerator": 1,
-          "denominator": 7,
+          "chance": 14,
           "flags": ["VAMPIRIC"],
         },
         {
-          "numerator": 1,
-          "denominator": 4,
+          "chance": 25,
           "flags": ["VUL_COLD", "VUL_ELEC", "VUL_FIRE"],
         },
         {
-          "numerator": 1,
-          "denominator": 5,
+          "chance": 20,
           "flags": ["HARD_SPELL"],
         },
         {
-          "numerator": 1,
-          "denominator": 5,
+          "chance": 20,
           "flags": ["DOWN_SAVING"],
         },
         {
-          "numerator": 1,
-          "denominator": 3,
+          "chance": 33,
           "flags": ["ADD_L_CURSE", "ADD_H_CURSE"],
         },
         {
-          "numerator": 1,
-          "denominator": 4,
+          "chance": 25,
           "flags": ["NO_MAGIC", "NO_TELE"],
         },
         {
-          "numerator": 1,
-          "denominator": 10,
+          "chance": 10,
           "flags": ["PERMA_CURSE"],
         },
       ],
@@ -2185,38 +2113,31 @@
       "activation": "BERSERK",
       "extra_flags": [
         {
-          "numerator": 1,
-          "denominator": 1,
+          "chance": 100,
           "flags": ["SLAY_HUMAN", "SLAY_DRAGON", "SLAY_DEMON"],
         },
         {
-          "numerator": 1,
-          "denominator": 1,
+          "chance": 100,
           "flags": ["DRAIN_EXP", "DRAIN_MANA", "DRAIN_HP"],
         },
         {
-          "numerator": 1,
-          "denominator": 1,
+          "chance": 100,
           "flags": ["ADD_L_CURSE", "ADD_H_CURSE"],
         },
         {
-          "numerator": 1,
-          "denominator": 4,
+          "chance": 25,
           "flags": ["BLOWS"],
         },
         {
-          "numerator": 1,
-          "denominator": 5,
+          "chance": 20,
           "flags": ["DOWN_SAVING"],
         },
         {
-          "numerator": 1,
-          "denominator": 5,
+          "chance": 20,
           "flags": ["NO_MAGIC", "NO_TELE"],
         },
         {
-          "numerator": 1,
-          "denominator": 7,
+          "chance": 14,
           "flags": ["VUL_LITE"],
         },
       ],
@@ -2279,8 +2200,7 @@
       ],
       "extra_flags": [
         {
-          "numerator": 1,
-          "denominator": 1,
+          "chance": 100,
           "flags": [
             "KILL_DRAGON",
             "KILL_ANIMAL",
@@ -2292,23 +2212,19 @@
           ],
         },
         {
-          "numerator": 1,
-          "denominator": 3,
+          "chance": 33,
           "flags": ["HARD_SPELL"],
         },
         {
-          "numerator": 1,
-          "denominator": 4,
+          "chance": 25,
           "flags": ["BRAND_POIS"],
         },
         {
-          "numerator": 1,
-          "denominator": 4,
+          "chance": 25,
           "flags": ["RES_NETHER"],
         },
         {
-          "numerator": 1,
-          "denominator": 6,
+          "chance": 17,
           "flags": ["ADD_L_CURSE", "ADD_H_CURSE"],
         },
       ],
@@ -2466,8 +2382,7 @@
       "flags": ["CON", "SLAY_DRAGON", "KILL_DRAGON", "XTRA_E_RES", "XTRA_D_RES", "ESP_DRAGON"],
       "extra_flags": [
         {
-          "numerator": 1,
-          "denominator": 3,
+          "chance": 33,
           "flags": ["RES_POIS"],
         },
       ],
@@ -2486,8 +2401,7 @@
       "flags": ["VAMPIRIC", "HOLD_EXP"],
       "extra_flags": [
         {
-          "numerator": 1,
-          "denominator": 5,
+          "chance": 20,
           "flags": ["SLAY_HUMAN"],
         },
       ],
@@ -2544,13 +2458,11 @@
       "activation": "TELEPORT",
       "extra_flags": [
         {
-          "numerator": 1,
-          "denominator": 5,
+          "chance": 20,
           "flags": ["SLAY_DEMON"],
         },
         {
-          "numerator": 1,
-          "denominator": 7,
+          "chance": 14,
           "flags": ["XTRA_POWER"],
         },
       ],
@@ -2584,18 +2496,15 @@
       ],
       "extra_flags": [
         {
-          "numerator": 1,
-          "denominator": 3,
+          "chance": 33,
           "flags": ["HOLD_EXP"],
         },
         {
-          "numerator": 1,
-          "denominator": 3,
+          "chance": 33,
           "flags": ["DEX"],
         },
         {
-          "numerator": 1,
-          "denominator": 5,
+          "chance": 20,
           "flags": ["RES_FEAR"],
         },
       ],
@@ -2649,33 +2558,27 @@
       ],
       "extra_flags": [
         {
-          "numerator": 1,
-          "denominator": 1,
+          "chance": 100,
           "flags": ["DRAIN_EXP", "DRAIN_MANA", "DRAIN_HP"],
         },
         {
-          "numerator": 1,
-          "denominator": 3,
+          "chance": 33,
           "flags": ["HEAVY_CURSE"],
         },
         {
-          "numerator": 1,
-          "denominator": 3,
+          "chance": 33,
           "flags": ["CHAOTIC"],
         },
         {
-          "numerator": 1,
-          "denominator": 4,
+          "chance": 25,
           "flags": ["BLOWS"],
         },
         {
-          "numerator": 1,
-          "denominator": 5,
+          "chance": 20,
           "flags": ["ADD_L_CURSE", "ADD_H_CURSE"],
         },
         {
-          "numerator": 1,
-          "denominator": 5,
+          "chance": 20,
           "flags": ["CALL_DEMON"],
         },
       ],
@@ -2716,33 +2619,27 @@
       ],
       "extra_flags": [
         {
-          "numerator": 1,
-          "denominator": 1,
+          "chance": 100,
           "flags": ["DRAIN_EXP", "DRAIN_MANA", "DRAIN_HP"],
         },
         {
-          "numerator": 1,
-          "denominator": 3,
+          "chance": 33,
           "flags": ["HEAVY_CURSE"],
         },
         {
-          "numerator": 1,
-          "denominator": 6,
+          "chance": 17,
           "flags": ["TY_CURSE"],
         },
         {
-          "numerator": 1,
-          "denominator": 4,
+          "chance": 25,
           "flags": ["BLOWS"],
         },
         {
-          "numerator": 1,
-          "denominator": 5,
+          "chance": 20,
           "flags": ["ADD_L_CURSE", "ADD_H_CURSE"],
         },
         {
-          "numerator": 1,
-          "denominator": 5,
+          "chance": 20,
           "flags": ["CALL_UNDEAD"],
         },
       ],
@@ -2786,8 +2683,7 @@
       },
       "extra_flags": [
         {
-          "numerator": 1,
-          "denominator": 1,
+          "chance": 100,
           "flags": ["MOD_ACCURACY"],
         },
       ],
@@ -2811,8 +2707,7 @@
       },
       "extra_flags": [
         {
-          "numerator": 1,
-          "denominator": 1,
+          "chance": 100,
           "flags": ["MOD_VELOCITY"],
         },
       ],
@@ -2944,8 +2839,7 @@
       },
       "extra_flags": [
         {
-          "numerator": 1,
-          "denominator": 1,
+          "chance": 100,
           "flags": ["ADD_DICE"],
         },
       ],
@@ -4288,8 +4182,7 @@
       "flags": ["STEALTH", "LEVITATION", "REGEN", "FREE_ACT", "SEE_INVIS"],
       "extra_flags": [
         {
-          "numerator": 1,
-          "denominator": 4,
+          "chance": 25,
           "flags": ["RES_CURSE"],
         },
       ],
@@ -4548,13 +4441,11 @@
       "flags": ["BLOWS", "SHOW_MODS", "HIDE_TYPE", "MOD_VELOCITY", "IMPACT", "MIGHTY_THROW"],
       "extra_flags": [
         {
-          "numerator": 1,
-          "denominator": 3,
+          "chance": 33,
           "flags": ["FREE_ACT"],
         },
         {
-          "numerator": 1,
-          "denominator": 3,
+          "chance": 33,
           "flags": ["RES_SOUND", "RES_SHARDS"],
         },
       ],

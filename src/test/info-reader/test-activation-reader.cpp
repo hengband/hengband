@@ -35,6 +35,10 @@ constexpr auto unused_activation_ranges = std::array{
     std::pair{ 146, 243 },
 };
 
+/*!
+ * @brief 各readerの発動検証に必要な最小限の正常なアイテム定義を作る
+ * @return エゴ用の装備slotを含むテスト用JSON
+ */
 nlohmann::json make_item()
 {
     return {
@@ -47,7 +51,7 @@ nlohmann::json make_item()
         { "rarity", 1 },
         { "weight", 1 },
         { "cost", 1 },
-        { "slot", 1 },
+        { "slot", 31 },
         { "rating", 1 },
     };
 }
@@ -66,6 +70,9 @@ nlohmann::json make_item_with_activation(const nlohmann::json &activation)
 
 class ActivationStateGuard {
 public:
+    /*!
+     * @brief 基本アイテムとエゴを退避し、発動を検証する各readerの読込先を初期化する
+     */
     ActivationStateGuard()
     {
         auto &baseitems = BaseitemList::get_instance();
@@ -79,6 +86,9 @@ public:
     ActivationStateGuard(const ActivationStateGuard &) = delete;
     ActivationStateGuard &operator=(const ActivationStateGuard &) = delete;
 
+    /*!
+     * @brief 一時的な定義を置き換え、検証前の基本アイテムとエゴを復元する
+     */
     ~ActivationStateGuard()
     {
         auto &baseitems = BaseitemList::get_instance();

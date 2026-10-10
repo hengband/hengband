@@ -216,6 +216,7 @@ class VaultValidationTest(unittest.TestCase):
 
 class EgoValidationTest(unittest.TestCase):
     def setUp(self):
+        """整数百分率形式の正常なエゴと実際のスキーマを各テスト用に用意する。"""
         self.schema_path = Path(__file__).resolve().parents[2] / "schema/EgoDefinitions.schema.json"
         self.schema = load_jsonc(self.schema_path)
         self.record = {
@@ -228,62 +229,71 @@ class EgoValidationTest(unittest.TestCase):
             "cost": 1000,
             "maximum_bonuses": {"to_hit": 1, "to_damage": 2, "to_ac": 3, "pval": 4},
             "flags": ["STR"],
-            "extra_flags": [{"numerator": 1, "denominator": 3, "flags": ["RES_FIRE"]}],
+            "extra_flags": [{"chance": 33, "flags": ["RES_FIRE"]}],
         }
 
     def validate(self, data):
+        """同梱スキーマとエゴ用の意味検証を同じ入口から実行する。"""
         return validate_document(data, self.schema_path, self.schema, filename="EgoDefinitions.jsonc")
 
     def test_valid_sparse_ids(self):
+        """保存範囲内の飛び飛びのIDを受理することを確認する。"""
         second = {**self.record, "id": 8}
-        ok, message = self.validate({"version": 1, "egos": [self.record, second]})
+        ok, message = self.validate({"version": 2, "egos": [self.record, second]})
         self.assertTrue(ok, message)
 
     def test_duplicate_ids(self):
+        """同じIDが複数回定義された文書を拒否することを確認する。"""
         records = [self.record, {**self.record}]
-        ok, message = self.validate({"version": 1, "egos": records})
+        ok, message = self.validate({"version": 2, "egos": records})
         self.assertFalse(ok)
         self.assertIn("unique", message)
 
     def test_descending_ids_are_supported(self):
+        """IDの順序は昇順に限定しないことを確認する。"""
         records = [{**self.record, "id": ego_id} for ego_id in (8, 4)]
-        ok, message = self.validate({"version": 1, "egos": records})
+        ok, message = self.validate({"version": 2, "egos": records})
         self.assertTrue(ok, message)
 
     def test_integer_representation_matches_reader(self):
+        """整数値に見える浮動小数点もreaderと同様に拒否する。"""
         for field in ("id", "slot", "rating", "level", "rarity", "cost"):
             with self.subTest(field=field):
                 record = copy.deepcopy(self.record)
                 record[field] = float(record[field])
-                ok, message = self.validate({"version": 1, "egos": [record]})
+                ok, message = self.validate({"version": 2, "egos": [record]})
                 self.assertFalse(ok)
                 self.assertIn("integer JSON value", message)
 
     def test_rarity_matches_byte_storage(self):
+        """rarityのbyte上限を受理し、その直外を拒否する。"""
         record = {**self.record, "rarity": 255}
-        ok, message = self.validate({"version": 1, "egos": [record]})
+        ok, message = self.validate({"version": 2, "egos": [record]})
         self.assertTrue(ok, message)
         record["rarity"] = 256
-        ok, message = self.validate({"version": 1, "egos": [record]})
+        ok, message = self.validate({"version": 2, "egos": [record]})
         self.assertFalse(ok)
 
     def test_level_matches_depth_storage(self):
+        """levelは16bitを超えて受理し、DEPTHの上限を超える値は拒否する。"""
         record = {**self.record, "level": 32768}
-        ok, message = self.validate({"version": 1, "egos": [record]})
+        ok, message = self.validate({"version": 2, "egos": [record]})
         self.assertTrue(ok, message)
         record["level"] = 2147483648
-        ok, message = self.validate({"version": 1, "egos": [record]})
+        ok, message = self.validate({"version": 2, "egos": [record]})
         self.assertFalse(ok)
 
     def test_known_runtime_tokens_are_accepted_by_ci(self):
+        """製品が解釈できる発動・能力・生成フラグをCIでも受理する。"""
         record = copy.deepcopy(self.record)
         record["activation"] = "SUNLIGHT"
         record["flags"] = ["RES_FIRE", "CURSED"]
         record["extra_flags"][0]["flags"] = ["RES_COLD", "HEAVY_CURSE"]
-        ok, message = self.validate({"version": 1, "egos": [record]})
+        ok, message = self.validate({"version": 2, "egos": [record]})
         self.assertTrue(ok, message)
 
     def test_duplicate_flags_are_rejected_by_ci(self):
+        """通常能力と追加能力のそれぞれで重複フラグを拒否する。"""
         for path in (("flags",), ("extra_flags", 0, "flags")):
             with self.subTest(path=path):
                 record = copy.deepcopy(self.record)
@@ -291,11 +301,12 @@ class EgoValidationTest(unittest.TestCase):
                 for part in path[:-1]:
                     target = target[part]
                 target[path[-1]] = ["RES_FIRE", "RES_FIRE"]
-                ok, message = self.validate({"version": 1, "egos": [record]})
+                ok, message = self.validate({"version": 2, "egos": [record]})
                 self.assertFalse(ok)
                 self.assertIn("non-unique", message)
 
     def test_unknown_runtime_tokens_are_rejected_by_ci(self):
+        """発動・通常能力・追加能力の未知のトークンを拒否する。"""
         for path, value in (
             (("activation",), "UNKNOWN"),
             (("flags", 0), "UNKNOWN"),
@@ -307,16 +318,16 @@ class EgoValidationTest(unittest.TestCase):
                 for part in path[:-1]:
                     target = target[part]
                 target[path[-1]] = value
-                ok, message = self.validate({"version": 1, "egos": [record]})
+                ok, message = self.validate({"version": 2, "egos": [record]})
                 self.assertFalse(ok)
                 self.assertIn("unknown", message)
 
     def test_nested_integer_representation_matches_reader(self):
+        """ボーナスと確率にも厳密な整数表現を要求する。"""
         for path in (
             ("base_bonuses", "to_hit"),
             ("maximum_bonuses", "pval"),
-            ("extra_flags", 0, "numerator"),
-            ("extra_flags", 0, "denominator"),
+            ("extra_flags", 0, "chance"),
         ):
             with self.subTest(path=path):
                 record = copy.deepcopy(self.record)
@@ -325,8 +336,39 @@ class EgoValidationTest(unittest.TestCase):
                 for part in path[:-1]:
                     target = target[part]
                 target[path[-1]] = float(target[path[-1]])
-                ok, message = self.validate({"version": 1, "egos": [record]})
+                ok, message = self.validate({"version": 2, "egos": [record]})
                 self.assertFalse(ok)
+
+    def test_extra_percentage_endpoints(self):
+        """0%・100%と中間の整数百分率を受理する。"""
+        for chance in (0, 1, 33, 99, 100):
+            with self.subTest(chance=chance):
+                record = copy.deepcopy(self.record)
+                record["extra_flags"][0]["chance"] = chance
+                ok, message = self.validate({"version": 2, "egos": [record]})
+                self.assertTrue(ok, message)
+
+    def test_extra_percentage_rejects_invalid_values_and_legacy_formats(self):
+        """範囲外・非整数・欠落と、旧分数形式・新旧混在を拒否する。"""
+        extras = [{"chance": chance, "flags": ["RES_FIRE"]}
+                  for chance in (-1, 101, 2**64 - 1, 33.0, False, None)]
+        extras += [{"flags": ["RES_FIRE"]},
+                   {"numerator": 1, "denominator": 3, "flags": ["RES_FIRE"]},
+                   {"chance": 33, "numerator": 1, "denominator": 3, "flags": ["RES_FIRE"]}]
+        for extra in extras:
+            with self.subTest(extra=extra):
+                record = {**self.record, "extra_flags": [extra]}
+                ok, message = self.validate({"version": 2, "egos": [record]})
+                self.assertFalse(ok, message)
+
+    def test_percent_format_requires_integer_version_two(self):
+        """versionは整数2のみとし、欠落や別の型・値を拒否する。"""
+        for version in (1, 3, 2.0, True, None, "2"):
+            with self.subTest(version=version):
+                self.assertFalse(self.validate({"version": version, "egos": [self.record]})[0])
+        self.assertFalse(self.validate({"egos": [self.record]})[0])
+
+
 
 
 class WildernessValidationTest(unittest.TestCase):
