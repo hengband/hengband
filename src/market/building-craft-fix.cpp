@@ -26,6 +26,7 @@
 #include "term/screen-processor.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
+#include <fmt/format.h>
 #include <tl/optional.hpp>
 #include <utility>
 #include <vector>
@@ -166,17 +167,18 @@ static PRICE repair_broken_weapon_aux(PlayerType *player_ptr, PRICE bcost)
 
     const auto item_name = describe_flavor(player_ptr, *item_material, OD_NAME_ONLY);
     prt(format(_("材料とする武器： %s", "Material : %s"), item_name.data()), row + 4, 2);
-    const auto cost = bcost + object_value_real(item_broken.get()) * 2;
-    if (!input_check(format(_("＄%dかかりますがよろしいですか？ ", "Costs %d gold, okay? "), cost))) {
+    const auto total_cost = int64_t{ bcost } + int64_t{ object_value_real(item_broken.get()) } * 2;
+    if (!input_check(fmt::format(_("＄{}かかりますがよろしいですか？ ", "Costs {} gold, okay? "), total_cost))) {
         return 0;
     }
 
-    if (player_ptr->au < cost) {
+    if (player_ptr->au < total_cost) {
         msg_format(_("%sを修復するだけのゴールドがありません！", "You do not have the gold to repair %s!"), item_name.data());
         msg_erase();
         return 0;
     }
 
+    const auto cost = static_cast<PRICE>(total_cost);
     short bi_id;
     const auto &baseitems = BaseitemList::get_instance();
     if (item_broken->bi_key.sval() == SV_BROKEN_DAGGER) {

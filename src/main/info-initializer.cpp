@@ -71,9 +71,10 @@ concept HasShrinkToFit = requires(T t) {
  * @param json_parser 各定義要素を解析して格納する関数
  * @param retouch 読み込み後に実行する追加処理 (省略可)
  * @param allow_empty 定義配列が空であることを許可するか
+ * @param validate_root 追加のルート検証（指定した定義形式だけに適用）
  */
 template <typename DefinitionList>
-void init_json(std::string_view filename, std::string_view keyname, DefinitionHashDataType dhdt, DefinitionList &definition_list, std::function<int(nlohmann::json &)> json_parser, std::function<void()> retouch = nullptr, bool allow_empty = true)
+void init_json(std::string_view filename, std::string_view keyname, DefinitionHashDataType dhdt, DefinitionList &definition_list, std::function<int(nlohmann::json &)> json_parser, std::function<void()> retouch = nullptr, bool allow_empty = true, std::function<int(const nlohmann::json &)> validate_root = nullptr)
 {
     const auto path = path_build(ANGBAND_DIR_EDIT, filename);
     JsoncDocumentLoader loader(path);
@@ -88,6 +89,10 @@ void init_json(std::string_view filename, std::string_view keyname, DefinitionHa
             quit(fmt::format(_("{}: $.{}: 空配列は許可されません", "{}: $.{}: empty array is not allowed"), filename, keyname));
         }
         quit(fmt::format(_("{}: ルートオブジェクトに配列 '{}' が必要です", "{}: expected a root object containing array '{}'"), filename, keyname));
+    }
+
+    if (validate_root && validate_root(json_object) != PARSE_ERROR_NONE) {
+        quit(fmt::format(_("{}: 定義形式のversionが不正です", "{}: invalid definition version"), filename));
     }
 
     error_idx = -1;
@@ -118,10 +123,10 @@ void init_json(std::string_view filename, std::string_view keyname, DefinitionHa
  * @details init_jsonのjson_parserに「JSON要素からReaderを構築してread()する」定型ラムダを与える処理を共通化したもの。
  */
 template <typename Reader, typename DefinitionList>
-void init_json_reader(std::string_view filename, std::string_view keyname, DefinitionHashDataType dhdt, DefinitionList &definition_list, std::function<void()> retouch = nullptr, bool allow_empty = true)
+void init_json_reader(std::string_view filename, std::string_view keyname, DefinitionHashDataType dhdt, DefinitionList &definition_list, std::function<void()> retouch = nullptr, bool allow_empty = true, std::function<int(const nlohmann::json &)> validate_root = nullptr)
 {
     auto parser = [](nlohmann::json &element) { return Reader(element).read(); };
-    init_json(filename, keyname, dhdt, definition_list, parser, retouch, allow_empty);
+    init_json(filename, keyname, dhdt, definition_list, parser, retouch, allow_empty, validate_root);
 }
 }
 
@@ -188,7 +193,7 @@ void init_dungeons_info()
  */
 void init_egos_info()
 {
-    init_json_reader<EgoReader>("EgoDefinitions.jsonc", "egos", DefinitionHashDataType::EGOS, egos_info, nullptr, false);
+    init_json_reader<EgoReader>("EgoDefinitions.jsonc", "egos", DefinitionHashDataType::EGOS, egos_info, nullptr, false, EgoReader::validate_root);
 }
 
 /*!

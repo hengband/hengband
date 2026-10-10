@@ -78,6 +78,12 @@
     <ClCompile Include="..\..\src\test\info-reader\test-baseitem-reader.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-dungeon-reader.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-ego-reader.cpp" />
+    <ClCompile Include="..\..\src\test\floor\test-floor-events.cpp" />
+    <ClCompile Include="..\..\src\test\object-activation\test-activation-util.cpp" />
+    <ClCompile Include="..\..\src\test\object-enchant\test-object-ego.cpp" />
+    <ClCompile Include="..\..\src\test\object\test-object-value.cpp" />
+    <ClCompile Include="..\..\src\test\racial\test-racial-android.cpp" />
+    <ClCompile Include="..\..\src\test\system\item\test-item-entity.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-general-parser.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-wilderness-reader.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-town-definition-list-reader.cpp" />

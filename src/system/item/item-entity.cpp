@@ -641,7 +641,7 @@ int ItemEntity::calc_price() const
     }
 
     if (this->discount) {
-        value -= (value * this->discount / 100L);
+        value = clamp_price(int64_t{ value } - int64_t{ value } * this->discount / 100);
     }
 
     return value;
