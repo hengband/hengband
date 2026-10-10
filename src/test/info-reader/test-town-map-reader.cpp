@@ -31,6 +31,7 @@
 #include <limits>
 #include <map>
 #include <nlohmann/json.hpp>
+#include <stdexcept>
 #include <string>
 #include <string_view>
 #include <utility>
@@ -1207,7 +1208,7 @@ TEST_CASE("TownMapReader applies resolved ordinary quest reward baseitem and art
     CHECK(letter['#'].trap == state.trap_id());
 }
 
-TEST_CASE("TownMapReader returns an error and preserves the feature when ordinary reward baseitem lookup fails")
+TEST_CASE("TownMapReader returns an error and preserves the feature when quest reward reference lookup fails")
 {
     const TownFeatureStateGuard state;
     const test::QuestFeatureTestAccess quest_state;
@@ -1218,8 +1219,47 @@ TEST_CASE("TownMapReader returns an error and preserves the feature when ordinar
     artifact.bi_key = { ItemKindType::SWORD, 37 };
     REQUIRE_FALSE(artifact.is_instant_artifact());
     FloorType floor;
-    const auto definition = read_reward_town_map(floor, std::move(artifact));
+    auto definition = read_reward_town_map(floor, std::move(artifact));
     test::QuestFeatureTestAccess::set_resolved_reward(FixedArtifactId::GALADRIEL_PHIAL);
+
+    SUBCASE("missing reward baseitem") {}
+    SUBCASE("missing reward baseitem subtype")
+    {
+        auto &reward = *ArtifactList::get_instance().begin();
+        REQUIRE(reward.first == FixedArtifactId::GALADRIEL_PHIAL);
+        reward.second.bi_key = BaseitemKey{ ItemKindType::SWORD };
+        REQUIRE_THROWS_AS(QuestList::get_instance().get_quest(floor.quest_number).get_reward_bi_id(), std::logic_error);
+    }
+    SUBCASE("missing quest")
+    {
+        floor.quest_number = QuestId::SEWER;
+        REQUIRE_FALSE(QuestList::get_instance().contains(floor.quest_number));
+        SUBCASE("both placeholders") {}
+        SUBCASE("only object placeholder")
+        {
+            definition.features.front().cell.artifact_is_quest_reward = false;
+        }
+        SUBCASE("only artifact placeholder")
+        {
+            definition.features.front().cell.object_is_quest_reward = false;
+        }
+    }
+    SUBCASE("missing reward artifact")
+    {
+        constexpr auto undefined_reward = static_cast<FixedArtifactId>(32767);
+        REQUIRE_FALSE(ArtifactList::get_instance().contains(undefined_reward));
+        test::QuestFeatureTestAccess::set_resolved_reward(undefined_reward);
+        SUBCASE("both placeholders") {}
+        SUBCASE("only object placeholder")
+        {
+            definition.features.front().cell.artifact_is_quest_reward = false;
+        }
+        SUBCASE("only artifact placeholder")
+        {
+            definition.features.front().cell.object_is_quest_reward = false;
+        }
+    }
+
     letter['#'].feature = 123;
     letter['#'].trap = 45;
     letter['#'].monster = 67;
@@ -1230,6 +1270,34 @@ TEST_CASE("TownMapReader returns an error and preserves the feature when ordinar
     letter['#'].random = RANDOM_EGO;
     letter['#'].cave_info = CAVE_GLOW;
     const auto original = letter['#'];
-    CHECK(apply_town_map_feature(floor, definition.features.front()) == PARSE_ERROR_INVALID_FLAG);
+    CHECK(apply_town_map_feature(floor, definition.features.front()) == PARSE_ERROR_INVALID_VALUE);
     check_same_grid(letter['#'], original);
+}
+
+TEST_CASE("TownMapReader applies an artifact-only reward without resolving its baseitem")
+{
+    const TownFeatureStateGuard state;
+    const test::QuestFeatureTestAccess quest_state;
+    const test::ArtifactListTestAccess artifact_state;
+    const test::ScopedVectorWrapper items_state(BaseitemList::get_instance());
+    ArtifactDefinition artifact;
+    artifact.bi_key = { ItemKindType::SWORD, 37 };
+    REQUIRE_FALSE(artifact.is_instant_artifact());
+    FloorType floor;
+    auto definition = read_reward_town_map(floor, std::move(artifact));
+    auto &cell = definition.features.front().cell;
+    cell.object_is_quest_reward = false;
+    cell.grid.object = 19;
+
+    SUBCASE("unresolved reward") {}
+    SUBCASE("resolved reward")
+    {
+        test::QuestFeatureTestAccess::set_resolved_reward(FixedArtifactId::GALADRIEL_PHIAL);
+    }
+    const auto reward = QuestList::get_instance().get_quest(floor.quest_number).get_reward();
+    REQUIRE(apply_town_map_feature(floor, definition.features.front()) == PARSE_ERROR_NONE);
+    CHECK(letter['#'].object == 19);
+    CHECK(letter['#'].artifact == reward.value_or(FixedArtifactId::NONE));
+    CHECK(letter['#'].feature == state.floor_id());
+    CHECK(letter['#'].trap == state.trap_id());
 }
