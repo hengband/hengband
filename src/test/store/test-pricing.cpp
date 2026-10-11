@@ -9,6 +9,7 @@
 #include "store/pricing.h"
 
 #include <doctest/doctest.h>
+#include <limits>
 
 namespace {
 constexpr auto NEUTRAL_MARKUP = 300; //!< 補正が 100% になる markup
@@ -74,4 +75,17 @@ TEST_CASE("get_black_market_multiplier grows by 1 percent per level up to the li
 
         CHECK(get_black_market_multiplier(level) == expected);
     }
+}
+
+TEST_CASE("calc_store_price keeps large ego values representable")
+{
+    constexpr auto maximum = std::numeric_limits<int>::max();
+    CHECK(calc_store_price(maximum, NEUTRAL_MARKUP, tl::nullopt, PLAYER_SELLS) == 1932735283);
+    CHECK(calc_store_price(maximum, NEUTRAL_MARKUP, 1, PLAYER_SELLS) == 966367641);
+    CHECK(calc_store_price(1000000000, NEUTRAL_MARKUP, tl::nullopt, PLAYER_BUYS) == 1100000000);
+    CHECK(calc_store_price(maximum, NEUTRAL_MARKUP, tl::nullopt, PLAYER_BUYS) == maximum);
+    CHECK(calc_store_price(maximum, NEUTRAL_MARKUP, 500, PLAYER_BUYS) == maximum);
+    CHECK(calc_store_price(maximum, maximum, 500, PLAYER_BUYS) == maximum);
+    CHECK(calc_store_price(maximum, std::numeric_limits<int>::min(), tl::nullopt, PLAYER_SELLS) == 1932735283);
+    CHECK(calc_store_price(maximum, maximum, tl::nullopt, PLAYER_SELLS) == 1);
 }

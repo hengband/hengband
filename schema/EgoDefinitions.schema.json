@@ -2,10 +2,13 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
   "additionalProperties": false,
-  "required": ["version", "egos"],
+  "required": [
+    "version",
+    "egos"
+  ],
   "properties": {
     "version": {
-      "const": 1
+      "const": 2
     },
     "egos": {
       "type": "array",
@@ -19,7 +22,10 @@
     "localized_name": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["ja", "en"],
+      "required": [
+        "ja",
+        "en"
+      ],
       "properties": {
         "ja": {
           "type": "string",
@@ -34,49 +40,65 @@
     "bonuses": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["to_hit", "to_damage", "to_ac"],
+      "required": [
+        "to_hit",
+        "to_damage",
+        "to_ac"
+      ],
       "properties": {
         "to_hit": {
           "type": "integer",
           "minimum": -32768,
-          "maximum": 32767
+          "maximum": 32767,
+          "description": "符号付き修正値。負値も有効。合成後はセーブデータの符号付き16ビット範囲へ飽和する。"
         },
         "to_damage": {
           "type": "integer",
           "minimum": -32768,
-          "maximum": 32767
+          "maximum": 32767,
+          "description": "符号付き修正値。負値も有効。合成後はセーブデータの符号付き16ビット範囲へ飽和する。"
         },
         "to_ac": {
           "type": "integer",
           "minimum": -32768,
-          "maximum": 32767
+          "maximum": 32767,
+          "description": "符号付き修正値。負値も有効。合成後はセーブデータの符号付き16ビット範囲へ飽和する。"
         }
       }
     },
     "maximum_bonuses": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["to_hit", "to_damage", "to_ac", "pval"],
+      "required": [
+        "to_hit",
+        "to_damage",
+        "to_ac",
+        "pval"
+      ],
       "properties": {
         "to_hit": {
           "type": "integer",
           "minimum": -32768,
-          "maximum": 32767
+          "maximum": 32767,
+          "description": "符号付き修正値。負値も有効。合成後はセーブデータの符号付き16ビット範囲へ飽和する。"
         },
         "to_damage": {
           "type": "integer",
           "minimum": -32768,
-          "maximum": 32767
+          "maximum": 32767,
+          "description": "符号付き修正値。負値も有効。合成後はセーブデータの符号付き16ビット範囲へ飽和する。"
         },
         "to_ac": {
           "type": "integer",
           "minimum": -32768,
-          "maximum": 32767
+          "maximum": 32767,
+          "description": "符号付き修正値。負値も有効。合成後はセーブデータの符号付き16ビット範囲へ飽和する。"
         },
         "pval": {
           "type": "integer",
           "minimum": -32768,
-          "maximum": 32767
+          "maximum": 32767,
+          "description": "符号付き修正値。負値も有効。合成後はセーブデータの符号付き16ビット範囲へ飽和する。"
         }
       }
     },
@@ -88,17 +110,16 @@
     "extra_flags": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["numerator", "denominator", "flags"],
+      "required": [
+        "chance",
+        "flags"
+      ],
       "properties": {
-        "numerator": {
+        "chance": {
           "type": "integer",
-          "minimum": 1,
-          "maximum": 32767
-        },
-        "denominator": {
-          "type": "integer",
-          "minimum": 1,
-          "maximum": 32767
+          "minimum": 0,
+          "maximum": 100,
+          "description": "追加能力の発生確率（整数百分率）。0は発生なし、100は必ず発生。"
         },
         "flags": {
           "type": "array",
@@ -113,40 +134,54 @@
     "ego": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["id", "name", "slot", "rating", "level", "rarity", "cost"],
+      "required": [
+        "id",
+        "name",
+        "slot",
+        "rating",
+        "level",
+        "rarity",
+        "cost"
+      ],
       "properties": {
         "id": {
           "type": "integer",
           "minimum": 1,
-          "maximum": 32767
+          "maximum": 255,
+          "description": "エゴID。0はエゴなしとして予約。現行セーブデータが1バイトで保存するため1～255。"
         },
         "name": {
           "$ref": "#/definitions/localized_name"
         },
         "slot": {
           "type": "integer",
-          "minimum": 0,
-          "maximum": 255
+          "minimum": 23,
+          "maximum": 35,
+          "description": "弾薬23、装備部位24～35。副指28も装備部位として有効。"
         },
         "rating": {
           "type": "integer",
           "minimum": 0,
-          "maximum": 2147483647
+          "maximum": 100,
+          "description": "雰囲気とアンドロイド装備経験値への重み。0は悪いエゴの判定にも使用。通常雰囲気の最大比較閾値に対応する100をゲーム上の上限とする。百分率ではない。"
         },
         "level": {
           "type": "integer",
           "minimum": 0,
-          "maximum": 2147483647
+          "maximum": 128,
+          "description": "指輪・アミュレットの発動の基本難易度。生成階の制限ではない。同じ発動難易度計算で使うBaseitem・Artifactのlevelと上限128を揃える。"
         },
         "rarity": {
           "type": "integer",
           "minimum": 0,
-          "maximum": 255
+          "maximum": 255,
+          "description": "0は通常抽選から除外。1～255は255/rarityを抽選の重みにする。百分率ではない。"
         },
         "cost": {
           "type": "integer",
           "minimum": 0,
-          "maximum": 2147483647
+          "maximum": 67108863,
+          "description": "基本価格への非負の固定加算額。入力上限はINT_MAX/32の67108863。0は壊れた無価値のエゴ。基本価格や能力補正の加算後、割引・数量等の計算には広い型を使う。"
         },
         "base_bonuses": {
           "$ref": "#/definitions/bonuses"

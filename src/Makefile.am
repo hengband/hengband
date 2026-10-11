@@ -1519,6 +1519,12 @@ hengband_test_SOURCES = \
 	test/info-reader/test-baseitem-reader.cpp \
 	test/info-reader/test-dungeon-reader.cpp \
 	test/info-reader/test-ego-reader.cpp \
+	test/floor/test-floor-events.cpp \
+	test/object-activation/test-activation-util.cpp \
+	test/object-enchant/test-object-ego.cpp \
+	test/object/test-object-value.cpp \
+	test/racial/test-racial-android.cpp \
+	test/system/item/test-item-entity.cpp \
 	test/info-reader/test-general-parser.cpp \
 	test/info-reader/test-wilderness-reader.cpp \
 	test/info-reader/test-info-reader-util.cpp \

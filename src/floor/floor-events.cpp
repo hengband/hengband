@@ -38,6 +38,8 @@
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#include <algorithm>
+#include <cstdint>
 
 static void update_sun_light(PlayerType *player_ptr)
 {
@@ -110,10 +112,16 @@ void night_falls(PlayerType *player_ptr)
 }
 
 /*!
- * ダンジョンの雰囲気を計算するための非線形基準値 / Dungeon rating is no longer linear
+ * @brief 評価差をダンジョンの雰囲気判定に使う非線形の寄与値へ変換する
+ * @param delta アイテムやモンスターの評価差
+ * @return 0～1001へ補正した評価差から求めた寄与値
+ * @details 1000を超える評価差は最上位の通常雰囲気に十分なので、二乗前に1001へ抑える。
  */
-static int rating_boost(int delta)
+int64_t floor_rating_boost(int64_t delta)
 {
+    // 最高の通常雰囲気の閾値1000を超える値同士は区別しない。
+    // 特別な雰囲気1の判定は全アイテムの走査を続けて行う。
+    delta = std::clamp<int64_t>(delta, 0, 1001);
     return delta * delta + 50 * delta;
 }
 
@@ -129,10 +137,10 @@ static int get_dungeon_feeling(const auto &floor)
     }
 
     const auto base = 10;
-    auto rating = 0;
+    int64_t rating = 0;
     for (short i = 1; i < floor.m_max; i++) {
         const auto &monster = floor.m_list[i];
-        auto delta = 0;
+        int64_t delta = 0;
         if (!monster.is_valid() || monster.is_pet()) {
             continue;
         }
@@ -154,18 +162,18 @@ static int get_dungeon_feeling(const auto &floor)
             delta += 1;
         }
 
-        rating += rating_boost(delta);
+        rating += floor_rating_boost(delta);
     }
 
     for (const auto &item_ptr : floor.o_list) {
-        auto delta = 0;
+        int64_t delta = 0;
         if (!item_ptr->is_valid() || (item_ptr->is_known() && item_ptr->marked.has(OmType::TOUCHED)) || item_ptr->has_identification_flag(IdentificationFlag::SENSE)) {
             continue;
         }
 
         if (item_ptr->is_ego()) {
             const auto &ego = item_ptr->get_ego();
-            delta += ego.rating * base;
+            delta += int64_t{ ego.rating } * base;
         }
 
         if (item_ptr->is_fixed_or_random_artifact()) {
@@ -222,41 +230,41 @@ static int get_dungeon_feeling(const auto &floor)
 
         const auto item_level = item_ptr->get_baseitem_level();
         if (!item_ptr->is_cursed() && !item_ptr->is_broken() && item_level > floor.dun_level) {
-            delta += (item_level - floor.dun_level) * base;
+            delta += (int64_t{ item_level } - floor.dun_level) * base;
         }
 
-        rating += rating_boost(delta);
+        rating += floor_rating_boost(delta);
     }
 
-    if (rating > rating_boost(1000)) {
+    if (rating > floor_rating_boost(1000)) {
         return 2;
     }
 
-    if (rating > rating_boost(800)) {
+    if (rating > floor_rating_boost(800)) {
         return 3;
     }
 
-    if (rating > rating_boost(600)) {
+    if (rating > floor_rating_boost(600)) {
         return 4;
     }
 
-    if (rating > rating_boost(400)) {
+    if (rating > floor_rating_boost(400)) {
         return 5;
     }
 
-    if (rating > rating_boost(300)) {
+    if (rating > floor_rating_boost(300)) {
         return 6;
     }
 
-    if (rating > rating_boost(200)) {
+    if (rating > floor_rating_boost(200)) {
         return 7;
     }
 
-    if (rating > rating_boost(100)) {
+    if (rating > floor_rating_boost(100)) {
         return 8;
     }
 
-    if (rating > rating_boost(0)) {
+    if (rating > floor_rating_boost(0)) {
         return 9;
     }
 

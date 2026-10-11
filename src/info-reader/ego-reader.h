@@ -14,6 +14,8 @@ public:
     EgoReader &operator=(const EgoReader &) = delete;
     EgoReader &operator=(EgoReader &&) = delete;
 
+    static constexpr int FORMAT_VERSION = 2;
+    static int validate_root(const nlohmann::json &root);
     int read() const;
 
 private:
