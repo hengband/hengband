@@ -126,7 +126,8 @@ public:
     void request_inventory_arrangement();
 
     void fill_up_sub_flags();
-    EnumClassFlagGroup<SubWindowRedrawingFlag> get_sub_intersection(const EnumClassFlagGroup<SubWindowRedrawingFlag> &flags);
+    void request_autopick_inscription();
+    EnumClassFlagGroup<SubWindowRedrawingFlag> get_sub_intersection(const EnumClassFlagGroup<SubWindowRedrawingFlag> &flags) const;
 
 private:
     RedrawingFlagsUpdater() = default;

@@ -23,6 +23,7 @@
 #include "store/store-screen.h"
 #include "store/store.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
 #include "util/int-char-converter.h"
 #include "util/string-processor.h"
@@ -283,7 +284,9 @@ void store_purchase(PlayerType *player_ptr, StoreScreen &screen)
     item.reset_identification_flag(IdentificationFlag::STORE);
 
     const auto idx = find_autopick_list(player_ptr, &item);
-    auto_inscribe_item(item, idx);
+    if (auto_inscribe_item(item, idx)) {
+        RedrawingFlagsUpdater::get_instance().request_autopick_inscription();
+    }
 
     item_new = store_item_to_inventory(player_ptr, &item);
     handle_stuff(player_ptr);

@@ -99,7 +99,7 @@ public:
 extern std::vector<autopick_type> autopick_list;
 extern ItemEntity autopick_last_destroyed_object;
 
-void auto_inscribe_item(ItemEntity &item, int idx);
+bool auto_inscribe_item(ItemEntity &item, int idx);
 
 /*!
  * @brief 最大行数を超えるかチェックする

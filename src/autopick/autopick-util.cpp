@@ -7,7 +7,6 @@
 #include "system/enums/monrace/monrace-id.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "util/bit-flags-calculator.h"
 #include <algorithm>
 
@@ -42,24 +41,14 @@ void autopick_type::remove(int flag)
 /*!
  * @brief Auto inscription
  */
-void auto_inscribe_item(ItemEntity &item, int idx)
+bool auto_inscribe_item(ItemEntity &item, int idx)
 {
-    if (idx < 0 || autopick_list[idx].insc.empty()) {
-        return;
+    if (idx < 0 || autopick_list[idx].insc.empty() || item.is_inscribed()) {
+        return false;
     }
 
-    if (!item.is_inscribed()) {
-        item.inscription = autopick_list[idx].insc;
-    }
-
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    static constexpr auto flags_swrf = {
-        SubWindowRedrawingFlag::INVENTORY,
-        SubWindowRedrawingFlag::EQUIPMENT,
-    };
-    rfu.set_flags(flags_swrf);
-    rfu.set_flag(StatusRecalculatingFlag::BONUS);
-    rfu.set_flag(InventoryArrangementFlag::COMBINATION);
+    item.inscription = autopick_list[idx].insc;
+    return true;
 }
 
 /*!

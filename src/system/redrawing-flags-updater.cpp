@@ -163,7 +163,18 @@ void RedrawingFlagsUpdater::fill_up_sub_flags()
     this->sub_window_flags.set(all_sub_window_flags);
 }
 
-EnumClassFlagGroup<SubWindowRedrawingFlag> RedrawingFlagsUpdater::get_sub_intersection(const EnumClassFlagGroup<SubWindowRedrawingFlag> &flags)
+void RedrawingFlagsUpdater::request_autopick_inscription()
+{
+    static constexpr auto flags_swrf = {
+        SubWindowRedrawingFlag::INVENTORY,
+        SubWindowRedrawingFlag::EQUIPMENT,
+    };
+    this->set_flags(flags_swrf);
+    this->set_flag(StatusRecalculatingFlag::BONUS);
+    this->set_flag(InventoryArrangementFlag::COMBINATION);
+}
+
+EnumClassFlagGroup<SubWindowRedrawingFlag> RedrawingFlagsUpdater::get_sub_intersection(const EnumClassFlagGroup<SubWindowRedrawingFlag> &flags) const
 {
     return this->sub_window_flags & flags;
 }
