@@ -107,7 +107,7 @@ bool melee_arena_comm(PlayerType *player_ptr)
     msg_erase();
     melee_arena.set_wager(*wager);
     player_ptr->au -= *wager;
-    reset_tim_flags(player_ptr);
+    reset_arena_buffs(player_ptr);
 
     FloorChangeModesStore::get_instace()->set(FloorChangeMode::SAVE_FLOORS);
     AngbandSystem::get_instance().set_phase_out(true);
