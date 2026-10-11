@@ -112,18 +112,13 @@ void ObjectZapWandEntity::execute(INVENTORY_IDX i_idx)
     }
 
     static constexpr auto flags_swrf = {
-        SubWindowRedrawingFlag::INVENTORY,
         SubWindowRedrawingFlag::EQUIPMENT,
         SubWindowRedrawingFlag::PLAYER,
         SubWindowRedrawingFlag::FLOOR_ITEMS,
         SubWindowRedrawingFlag::FOUND_ITEMS,
     };
     rfu.set_flags(flags_swrf);
-    static constexpr auto flags_iaf = {
-        InventoryArrangementFlag::COMBINATION,
-        InventoryArrangementFlag::REORDER,
-    };
-    rfu.set_flags(flags_iaf);
+    rfu.request_inventory_arrangement();
     item->pval--;
 
     describe_item_charges(this->player_ptr, i_idx >= 0, item);

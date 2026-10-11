@@ -118,16 +118,8 @@ static void sense_inventory_aux(PlayerType *player_ptr, INVENTORY_IDX slot, bool
 
     autopick_alter_item(player_ptr, slot, destroy_feeling);
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    static constexpr auto flags_iaf = {
-        InventoryArrangementFlag::COMBINATION,
-        InventoryArrangementFlag::REORDER,
-    };
-    rfu.set_flags(flags_iaf);
-    static constexpr auto flags_swrf = {
-        SubWindowRedrawingFlag::INVENTORY,
-        SubWindowRedrawingFlag::EQUIPMENT,
-    };
-    rfu.set_flags(flags_swrf);
+    rfu.request_inventory_arrangement();
+    rfu.set_flag(SubWindowRedrawingFlag::EQUIPMENT);
 }
 
 /*!

@@ -346,11 +346,7 @@ int16_t store_item_to_inventory(PlayerType *player_ptr, ItemEntity *o_ptr)
 
     player_ptr->inven_cnt++;
     rfu.set_flag(StatusRecalculatingFlag::BONUS);
-    static constexpr auto flags_iaf = {
-        InventoryArrangementFlag::COMBINATION,
-        InventoryArrangementFlag::REORDER,
-    };
-    rfu.set_flags(flags_iaf);
+    rfu.request_inventory_arrangement();
     rfu.set_flags(flags_swrf);
     return i;
 }
