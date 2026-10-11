@@ -7,7 +7,6 @@
 #include "flavor/object-flavor-types.h"
 #include "floor/floor-object.h"
 #include "game-option/text-display-options.h"
-#include "inventory/inventory-object.h"
 #include "io/command-repeater.h"
 #include "io/input-key-acceptor.h"
 #include "io/input-key-requester.h"
@@ -20,6 +19,7 @@
 #include "smith/smith-types.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "term/z-form.h"
@@ -142,7 +142,7 @@ static void drain_essence(PlayerType *player_ptr)
 
     /* Apply autodestroy/inscription to the drained item */
     autopick_alter_item(player_ptr, i_idx, true);
-    request_inventory_arrangement();
+    RedrawingFlagsUpdater::get_instance().request_inventory_arrangement();
 }
 
 /*!
@@ -495,7 +495,7 @@ static void add_essence(PlayerType *player_ptr, SmithCategoryType mode)
     auto effect_name = Smith::get_effect_name(effect);
 
     _(msg_format("%sに%sの能力を付加しました。", item_name.data(), effect_name), msg_format("You have added ability of %s to %s.", effect_name, item_name.data()));
-    request_inventory_arrangement();
+    RedrawingFlagsUpdater::get_instance().request_inventory_arrangement();
 }
 
 /*!
@@ -520,7 +520,7 @@ static void erase_essence(PlayerType *player_ptr)
     Smith(player_ptr).erase_essence(item.get());
 
     msg_print(_("エッセンスを取り去った。", "You removed all essence you have added."));
-    request_inventory_arrangement();
+    RedrawingFlagsUpdater::get_instance().request_inventory_arrangement();
 }
 
 /*!
