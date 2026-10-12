@@ -5,6 +5,8 @@
 enum class MimicKindType;
 class PlayerType;
 void reset_tim_flags(PlayerType *player_ptr);
+void reset_ki_and_kawarimi(PlayerType *player_ptr, bool notify);
+void reset_arena_buffs(PlayerType *player_ptr);
 bool set_acceleration(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec);
 bool mod_acceleration(PlayerType *player_ptr, const TIME_EFFECT v, const bool do_dec);
 bool set_shield(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec);

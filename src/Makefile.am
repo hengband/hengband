@@ -1599,11 +1599,24 @@ check-main-window-wipe: main-window-wipe-probe$(EXEEXT)
 	./main-window-wipe-probe$(EXEEXT) deferred
 	./main-window-wipe-probe$(EXEEXT) reenter
 
-CLEANFILES = main-window-wipe-probe$(EXEEXT)
+## 状態解除の終了処理・入力待ちを実際の端末で確認する独立プローブ。
+arena-status-probe$(EXEEXT): $(top_srcdir)/tools/tests/arena-status-probe.cpp libhengband.a
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) $(LDFLAGS) -o $@ $(top_srcdir)/tools/tests/arena-status-probe.cpp libhengband.a $(LIBS)
+
+.PHONY: check-arena-status
+check-arena-status: arena-status-probe$(EXEEXT)
+	@set -e; scratch=$$(mktemp -d); \
+	trap 'rm -rf "$$scratch"' EXIT HUP INT TERM; \
+	for mode in timed-force arena-force dispel-force timed-ninja arena-ninja dispel-ninja hex-active hex-interrupted hex-stop hex-dispel dispel-invuln song-active song-interrupted ordinary tsuyoshi arena-normal arena-silent arena-metal arena-cancel arena-watch; do \
+		./arena-status-probe$(EXEEXT) "$(top_srcdir)/lib" "$$scratch" "$$mode"; \
+	done
+
+CLEANFILES = main-window-wipe-probe$(EXEEXT) arena-status-probe$(EXEEXT)
 
 TESTS = $(check_PROGRAMS)
 
 EXTRA_DIST = \
+	$(top_srcdir)/tools/tests/arena-status-probe.cpp \
 	gcc-wrap \
 	test/README.md
 

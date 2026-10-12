@@ -37,6 +37,8 @@
  */
 static void dispel_player(PlayerType *player_ptr)
 {
+    reset_ki_and_kawarimi(player_ptr, true);
+
     (void)set_acceleration(player_ptr, 0, true);
     set_lightspeed(player_ptr, 0, true);
     (void)BadStatusSetter(player_ptr).set_deceleration(0, true);

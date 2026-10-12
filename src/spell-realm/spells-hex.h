@@ -22,6 +22,8 @@ public:
     bool stop_spells_with_selection();
     void decrease_mana();
     void stop_all_spells();
+    void discard_interrupted_spells();
+    void clear_revenge();
     bool is_casting_full_capacity() const;
     void continue_revenge();
     void store_vengeful_damage(int dam);

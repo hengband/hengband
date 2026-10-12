@@ -8,14 +8,19 @@
 #include "game-option/disturbance-options.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
+#include "mind/mind-force-trainer.h"
+#include "mind/mind-sniper.h"
 #include "monster/monster-status-setter.h"
 #include "player-base/player-class.h"
 #include "player-info/class-info.h"
+#include "player-info/ninja-data-type.h"
 #include "player-info/race-info.h"
 #include "player/attack-defense-types.h"
 #include "player/player-status.h"
 #include "realm/realm-song-numbers.h"
+#include "spell-realm/spells-hex.h"
 #include "spell-realm/spells-song.h"
+#include "status/action-setter.h"
 #include "status/base-status.h"
 #include "status/buff-setter.h"
 #include "status/element-resistance.h"
@@ -63,6 +68,7 @@ void reset_tim_flags(PlayerType *player_ptr)
     player_ptr->magicdef = 0;
     player_ptr->resist_magic = 0;
     player_ptr->tsuyoshi = 0;
+    player_ptr->tsubureru = 0;
     player_ptr->tim_pass_wall = 0;
     player_ptr->tim_res_nether = 0;
     player_ptr->tim_res_lite = 0;
@@ -110,6 +116,59 @@ void reset_tim_flags(PlayerType *player_ptr)
         set_singing_song_effect(player_ptr, MUSIC_NONE);
         set_singing_song_id(player_ptr, 0);
     }
+}
+
+/*!
+ * @brief 時限効果ではない練気と変わり身の備えを解除する。
+ * @param notify 魔力消去時は解除メッセージを表示する。
+ */
+void reset_ki_and_kawarimi(PlayerType *player_ptr, bool notify)
+{
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    if (get_current_ki(player_ptr) > 0) {
+        set_current_ki(player_ptr, true, 0);
+        rfu.set_flag(StatusRecalculatingFlag::BONUS);
+        if (notify) {
+            msg_print(_("練気が消えた。", "Your stored Force dissipates."));
+        }
+    }
+
+    auto ninja_data = PlayerClass(player_ptr).get_specific_data<ninja_data_type>();
+    if (ninja_data && ninja_data->kawarimi) {
+        ninja_data->kawarimi = false;
+        rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
+        if (notify) {
+            msg_print(_("変わり身の備えが消えた。", "You are no longer prepared to evade attacks."));
+        }
+    }
+}
+
+/*!
+ * @brief アリーナ入場・敗北時に持ち越せない状態を解除する。
+ * @details 通常の時限効果は無言で一括解除し、終了処理が必要な状態だけ先に終了する。
+ */
+void reset_arena_buffs(PlayerType *player_ptr)
+{
+    // 現在の行動に対応する歌・呪術・構えは set_action が終了する。
+    set_action(player_ptr, ACTION_NONE);
+    if (music_singing_any(player_ptr) || (get_interrupting_song_effect(player_ptr) != MUSIC_NONE)) {
+        stop_singing(player_ptr);
+    }
+
+    auto spell_hex = SpellHex(player_ptr);
+    if (spell_hex.is_spelling_any()) {
+        spell_hex.stop_all_spells();
+    }
+    spell_hex.discard_interrupted_spells();
+    spell_hex.clear_revenge();
+    reset_concentration(player_ptr, true);
+    // つよしの終了ペナルティを、一括リセットで踏み倒せないようにする。
+    set_tsuyoshi(player_ptr, 0, true);
+    reset_ki_and_kawarimi(player_ptr, false);
+    reset_tim_flags(player_ptr);
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    rfu.set_flag(StatusRecalculatingFlag::BONUS);
+    rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
 }
 
 /*!
