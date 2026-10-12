@@ -438,13 +438,8 @@ bool enchant_equipment(ItemEntity &item, int n, int eflag)
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.set_flag(StatusRecalculatingFlag::BONUS);
-    static constexpr auto flags_iaf = {
-        InventoryArrangementFlag::COMBINATION,
-        InventoryArrangementFlag::REORDER,
-    };
-    rfu.set_flags(flags_iaf);
+    rfu.request_inventory_arrangement();
     static constexpr auto flags_swrf = {
-        SubWindowRedrawingFlag::INVENTORY,
         SubWindowRedrawingFlag::EQUIPMENT,
         SubWindowRedrawingFlag::PLAYER,
         SubWindowRedrawingFlag::FLOOR_ITEMS,

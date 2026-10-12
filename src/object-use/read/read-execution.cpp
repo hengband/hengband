@@ -66,16 +66,11 @@ void ObjectReadEntity::execute(bool known)
     item->mark_as_tried();
     this->gain_exp_from_item_use(item.get(), executor->is_identified());
     static constexpr auto flags_swrf = {
-        SubWindowRedrawingFlag::INVENTORY,
         SubWindowRedrawingFlag::EQUIPMENT,
         SubWindowRedrawingFlag::PLAYER,
     };
     rfu.set_flags(flags_swrf);
-    static constexpr auto flags_iaf = {
-        InventoryArrangementFlag::COMBINATION,
-        InventoryArrangementFlag::REORDER,
-    };
-    rfu.set_flags(flags_iaf);
+    rfu.request_inventory_arrangement();
     if (!used_up) {
         return;
     }

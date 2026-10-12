@@ -22,6 +22,7 @@
 #include "system/angband-exceptions.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "view/display-messages.h"
 
 /*!
@@ -110,7 +111,7 @@ bool recharge(PlayerType *player_ptr, int power)
     }
 
     if (is_recharge_successful) {
-        request_inventory_arrangement();
+        RedrawingFlagsUpdater::get_instance().request_inventory_arrangement();
         return true;
     }
 
@@ -122,7 +123,7 @@ bool recharge(PlayerType *player_ptr, int power)
         } else if (item->is_wand_staff()) {
             item->pval = 0;
         }
-        request_inventory_arrangement();
+        RedrawingFlagsUpdater::get_instance().request_inventory_arrangement();
         return true;
     }
 
@@ -222,6 +223,6 @@ bool recharge(PlayerType *player_ptr, int power)
         THROW_EXCEPTION(std::logic_error, "Invalid fail type!");
     }
 
-    request_inventory_arrangement();
+    RedrawingFlagsUpdater::get_instance().request_inventory_arrangement();
     return true;
 }

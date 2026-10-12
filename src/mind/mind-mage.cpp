@@ -27,8 +27,9 @@ static void finish_eating_magic(PlayerType *player_ptr)
         player_ptr->csp = player_ptr->msp;
     }
 
-    RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::MP);
-    request_inventory_arrangement();
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    rfu.set_flag(MainWindowRedrawingFlag::MP);
+    rfu.request_inventory_arrangement();
 }
 
 /*!
