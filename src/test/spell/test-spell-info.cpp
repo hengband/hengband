@@ -44,3 +44,39 @@ TEST_CASE("mod_need_mana handles configured maximum and signed saved proficiency
     CHECK(mod_need_mana(&player, 150, 0, RealmType::LIFE) == 238);
 }
 
+/*!
+ * @brief 麻痺はintで抽選してから状態異常の上限へ丸め、乱数消費も維持する
+ */
+TEST_CASE("spell over exertion clamps after rolling without short wraparound")
+{
+    const auto restore_rng = test::scoped_rng(20261011);
+    for (const auto mana : { 0, 999, 2047, 3242, 31190 }) {
+        CAPTURE(mana);
+        bool saw_capped = false;
+        xso::rng32 expected_rng = get_game_rng();
+        for (int i = 0; i < 64; ++i) {
+            const auto rolled = randint1(expected_rng, 5 * mana + 1);
+            const auto actual = roll_spell_over_exertion_duration(mana);
+            CHECK(actual == std::min(rolled, 10000));
+            CHECK(actual >= 1);
+            saw_capped |= actual == 10000;
+        }
+        if (mana >= 3242) {
+            CHECK(saw_capped);
+        }
+    }
+}
+
+TEST_CASE("spell over exertion protects the full input type and preserves RNG draws")
+{
+    const auto restore_rng = test::scoped_rng(20261013);
+    for (const auto mana : { std::numeric_limits<int>::min(), -1, std::numeric_limits<int>::max() }) {
+        CAPTURE(mana);
+        xso::rng32 expected_rng = get_game_rng();
+        const auto maximum = mana < 0 ? 1 : std::numeric_limits<int>::max();
+        const auto expected = std::min(randint1(expected_rng, maximum), 10000);
+        CHECK(roll_spell_over_exertion_duration(mana) == expected);
+        const auto next = randint1(1000);
+        CHECK(next == randint1(expected_rng, 1000));
+    }
+}

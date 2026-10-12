@@ -7,6 +7,7 @@
 #include "specific-object/stone-of-lore.h"
 #include "player/player-damage.h"
 #include "spell-kind/spells-perception.h"
+#include "spell/spell-info.h"
 #include "status/bad-status-setter.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
@@ -65,7 +66,7 @@ void StoneOfLore::consume_mp()
     this->player_ptr->csp_frac = 0;
     msg_print(_("石を制御できない！", "You are too weak to control the stone!"));
     BadStatusSetter bss(this->player_ptr);
-    (void)bss.mod_paralysis(randnum1<short>(5 * oops + 1));
-    (void)bss.mod_confusion(randnum1<short>(5 * oops + 1));
+    (void)bss.mod_paralysis(roll_spell_over_exertion_duration(oops));
+    (void)bss.mod_confusion(roll_spell_over_exertion_duration(oops));
     rfu.set_flag(MainWindowRedrawingFlag::MP);
 }
