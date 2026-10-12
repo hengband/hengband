@@ -79,11 +79,6 @@ static void generate_artifact(PlayerType *player_ptr, qtwg_type *qtwg_ptr, const
     drop_here(*player_ptr->current_floor_ptr, std::move(item), *qtwg_ptr->y, *qtwg_ptr->x);
 }
 
-static std::string_view fixed_map_row_prefix(std::string_view row)
-{
-    return row.substr(0, row.find('\0'));
-}
-
 static void parse_qtw_D(PlayerType *player_ptr, qtwg_type *qtwg_ptr, std::string_view row)
 {
     *qtwg_ptr->x = qtwg_ptr->xmin;
@@ -184,13 +179,13 @@ static void parse_qtw_D(PlayerType *player_ptr, qtwg_type *qtwg_ptr, std::string
     }
 }
 
+/*! @brief 印字可能なASCII行を適用し、行カーソルを進める。不正な記号やNULがある行は変更せずエラーを返す。 */
 parse_error_type apply_fixed_map_row(PlayerType *player_ptr, qtwg_type *qtwg_ptr, std::string_view row)
 {
     if (init_flags & INIT_ONLY_BUILDINGS) {
         return PARSE_ERROR_NONE;
     }
 
-    row = fixed_map_row_prefix(row);
     if (!std::all_of(row.begin(), row.end(), is_fixed_map_symbol)) {
         return PARSE_ERROR_INVALID_VALUE;
     }
@@ -218,12 +213,16 @@ static void apply_fixed_map_size(PlayerType *player_ptr, qtwg_type *qtwg_ptr)
     panel_col_min = floor.width;
 }
 
-static void apply_fixed_map_position(PlayerType *player_ptr, int start_y, int start_x)
+void apply_fixed_map_start(PlayerType *player_ptr, qtwg_type *qtwg_ptr, int start_y, int start_x)
 {
+    if ((init_flags & INIT_CREATE_DUNGEON) == 0) {
+        return;
+    }
+
+    apply_fixed_map_size(player_ptr, qtwg_ptr);
     auto &floor = *player_ptr->current_floor_ptr;
     if (floor.is_in_quest()) {
-        Pos2D p_pos(start_y, start_x);
-        player_ptr->set_position(p_pos);
+        player_ptr->set_position(Pos2D(start_y, start_x));
         delete_monster(player_ptr, player_ptr->get_position());
         return;
     }
@@ -232,16 +231,6 @@ static void apply_fixed_map_position(PlayerType *player_ptr, int start_y, int st
         player_ptr->oldpy = start_y;
         player_ptr->oldpx = start_x;
     }
-}
-
-void apply_fixed_map_start(PlayerType *player_ptr, qtwg_type *qtwg_ptr, int start_y, int start_x)
-{
-    if ((init_flags & INIT_CREATE_DUNGEON) == 0) {
-        return;
-    }
-
-    apply_fixed_map_size(player_ptr, qtwg_ptr);
-    apply_fixed_map_position(player_ptr, start_y, start_x);
 }
 
 /*!
@@ -286,8 +275,7 @@ parse_error_type generate_quest_floor_from_json(PlayerType *player_ptr, QuestTyp
     const auto variant_index = (variant_count <= 1) ? 0 : (AngbandSystem::get_instance().get_seed_town() % variant_count);
     if (fixed_map.has_map()) {
         for (const auto &row : fixed_map.maps[variant_index]) {
-            const auto prefix = fixed_map_row_prefix(row);
-            if (!std::all_of(prefix.begin(), prefix.end(), is_fixed_map_symbol)) {
+            if (!std::all_of(row.begin(), row.end(), is_fixed_map_symbol)) {
                 return PARSE_ERROR_INVALID_VALUE;
             }
         }
@@ -324,7 +312,7 @@ parse_error_type generate_quest_floor_from_json(PlayerType *player_ptr, QuestTyp
     qtwg_type qg;
     initialize_quest_generator_type(&qg, 0, 0, MAX_HGT, MAX_WID, &y, &x);
     for (const auto &row : rows) {
-        parse_qtw_D(player_ptr, &qg, fixed_map_row_prefix(row));
+        parse_qtw_D(player_ptr, &qg, row);
         (*qg.y)++;
     }
 

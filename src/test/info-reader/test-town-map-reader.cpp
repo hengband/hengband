@@ -853,6 +853,9 @@ TEST_CASE("TownMapReader typed building application preserves N A C R M Z contra
     const auto initial = buildings[1];
     const auto names = [&initial](std::string_view name, std::string_view owner, std::string_view race) {
         auto expected = initial;
+        REQUIRE(name.size() < sizeof(expected.name));
+        REQUIRE(owner.size() < sizeof(expected.owner_name));
+        REQUIRE(race.size() < sizeof(expected.owner_race));
         std::copy(name.begin(), name.end(), expected.name);
         std::copy(owner.begin(), owner.end(), expected.owner_name);
         std::copy(race.begin(), race.end(), expected.owner_race);
@@ -1061,8 +1064,7 @@ TEST_CASE("TownMapReader applies typed feature token values and random flags")
         }
         TownMapDefinition definition;
         REQUIRE(TownMapReader(data).read(definition, 3, 3) == PARSE_ERROR_NONE);
-        const dungeon_grid expected{ state.floor_id(), value, value, i2enum<EgoType>(value), i2enum<FixedArtifactId>(value),
-            state.trap_id(), std::numeric_limits<int>::max(), -32768, random };
+        const dungeon_grid expected{ .feature = state.floor_id(), .monster = value, .object = value, .ego = i2enum<EgoType>(value), .artifact = i2enum<FixedArtifactId>(value), .trap = state.trap_id(), .cave_info = std::numeric_limits<int>::max(), .special = -32768, .random = random };
         letter['#'] = {};
         REQUIRE(apply_town_map_feature(floor, definition.features.front()) == PARSE_ERROR_NONE);
         check_same_grid(letter['#'], expected);
@@ -1131,8 +1133,7 @@ TEST_CASE("TownMapReader applies random terrain trap clones and reward placehold
     fields["special"] = 32767;
     TownMapDefinition definition;
     REQUIRE(TownMapReader(data).read(definition, 3, 3) == PARSE_ERROR_NONE);
-    const dungeon_grid expected{ 0, -32767, 0, i2enum<EgoType>(std::numeric_limits<int>::min()), FixedArtifactId::NONE,
-        0, 0, 32767, RANDOM_FEATURE | RANDOM_TRAP };
+    const dungeon_grid expected{ .feature = 0, .monster = -32767, .object = 0, .ego = i2enum<EgoType>(std::numeric_limits<int>::min()), .artifact = FixedArtifactId::NONE, .trap = 0, .cave_info = 0, .special = 32767, .random = RANDOM_FEATURE | RANDOM_TRAP };
     letter['#'] = {};
     REQUIRE(apply_town_map_feature(floor, definition.features.front()) == PARSE_ERROR_NONE);
     check_same_grid(letter['#'], expected);
@@ -1182,8 +1183,7 @@ TEST_CASE("TownMapReader resolves quest rewards at feature application time")
     CHECK(letter['#'].object == 0);
     CHECK(letter['#'].artifact == FixedArtifactId::NONE);
     test::QuestFeatureTestAccess::set_resolved_reward(FixedArtifactId::GALADRIEL_PHIAL);
-    const dungeon_grid expected{ state.floor_id(), 0, 0, EgoType::NONE, FixedArtifactId::GALADRIEL_PHIAL,
-        state.trap_id(), 0, 0, 0 };
+    const dungeon_grid expected{ .feature = state.floor_id(), .monster = 0, .object = 0, .ego = EgoType::NONE, .artifact = FixedArtifactId::GALADRIEL_PHIAL, .trap = state.trap_id(), .cave_info = 0, .special = 0, .random = 0 };
     letter['#'] = {};
     REQUIRE(apply_town_map_feature(floor, definition.features.front()) == PARSE_ERROR_NONE);
     check_same_grid(letter['#'], expected);

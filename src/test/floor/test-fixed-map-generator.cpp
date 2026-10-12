@@ -202,13 +202,13 @@ void write_application_town(const TownFiles &files, const nlohmann::json &town)
 }
 }
 
-TEST_CASE("QuestFixedMap JSON rows preserve origin empty rows null termination and final row width")
+TEST_CASE("QuestFixedMap JSON rows preserve origin empty rows and final row width")
 {
     FixedMapFixture fixture;
     const auto restore = scoped_quest_layout_state();
     QuestType quest;
     QuestFixedMap map;
-    map.maps = { { "AB", "", std::string("A\0B", 3), "B" } };
+    map.maps = { { "AB", "", "A", "B" } };
     map.starts = { { tl::nullopt, 2, 0 } };
     fixture.floor.quest_number = QuestId::THIEF;
     fixture.player.oldpy = 9;
@@ -231,7 +231,7 @@ TEST_CASE("QuestFixedMap JSON rows preserve origin empty rows null termination a
     CHECK(fixture.floor.width == SCREEN_WID);
     CHECK(panel_row_min == SCREEN_HGT);
     CHECK(panel_col_min == SCREEN_WID);
-    CHECK(map.maps[0][2] == std::string("A\0B", 3));
+    CHECK(map.maps[0][2] == "A");
 
     map.maps = { { std::string(SCREEN_WID + 1, 'A'), "" } };
     REQUIRE(generate_quest_floor_from_json(&fixture.player, quest, map) == PARSE_ERROR_NONE);
@@ -481,19 +481,9 @@ TEST_CASE("FixedMapPD row handles full border empty width and bounded view")
     CHECK(fixture.x == MAX_WID);
 }
 
-TEST_CASE("FixedMapPD row stops at an embedded null")
-{
-    FixedMapFixture fixture;
-    const std::string row("A\0B", 3);
-    REQUIRE(apply_fixed_map_row(&fixture.player, &fixture.generator, row) == PARSE_ERROR_NONE);
-    CHECK(fixture.x == 5);
-    CHECK(fixture.floor.grid_array[3][4].feat == 1);
-    CHECK(fixture.floor.grid_array[3][5].feat == 0);
-}
-
 TEST_CASE("FixedMapPD rejects unsafe row bytes before modifying grids or cursors")
 {
-    for (const auto byte : { 0x1f, 0x7f, 0x80, 0xfe, 0xff }) {
+    for (const auto byte : { 0x00, 0x1f, 0x7f, 0x80, 0xfe, 0xff }) {
         CAPTURE(byte);
         FixedMapFixture fixture;
         fixture.x = 6;
@@ -515,23 +505,16 @@ TEST_CASE("FixedMapPD rejects unsafe row bytes before modifying grids or cursors
     }
 }
 
-TEST_CASE("FixedMapPD ignores bytes after null and accepts printable ASCII boundaries")
+TEST_CASE("FixedMapPD accepts printable ASCII boundaries")
 {
     FixedMapFixture fixture;
-    const std::string row("A\0\xff", 3);
-    REQUIRE(apply_fixed_map_row(&fixture.player, &fixture.generator, row) == PARSE_ERROR_NONE);
-    CHECK(fixture.y == 4);
-    CHECK(fixture.x == 5);
-    CHECK(fixture.floor.grid_array[3][4].feat == 1);
-    CHECK(fixture.floor.grid_array[3][5].feat == 0);
     letter[' '] = letter['A'];
     letter['~'] = letter['B'];
     REQUIRE(apply_fixed_map_row(&fixture.player, &fixture.generator, " ~") == PARSE_ERROR_NONE);
-    CHECK(fixture.floor.grid_array[4][4].feat == 1);
-    CHECK(fixture.floor.grid_array[4][5].feat == 2);
-    REQUIRE(apply_fixed_map_row(&fixture.player, &fixture.generator, std::string_view(row).substr(1)) == PARSE_ERROR_NONE);
-    CHECK(fixture.y == 6);
-    CHECK(fixture.x == 4);
+    CHECK(fixture.y == 4);
+    CHECK(fixture.x == 6);
+    CHECK(fixture.floor.grid_array[3][4].feat == 1);
+    CHECK(fixture.floor.grid_array[3][5].feat == 2);
 }
 
 TEST_CASE("FixedMap letter accessor rejects bytes outside printable ASCII")
@@ -550,9 +533,6 @@ TEST_CASE("QuestFixedMap rejects unsafe typed symbols before writing any output"
         for (const auto *source : { "base", "legend", "map" }) {
             CAPTURE(byte);
             CAPTURE(source);
-            if (byte == 0 && std::string_view(source) == "map") {
-                continue; // 直接適用するAPIはNUL終端の互換動作を維持する。
-            }
             FixedMapFixture fixture;
             const auto restore = scoped_quest_layout_state();
             QuestType quest;
