@@ -1,12 +1,17 @@
 #include "system/dungeon/quest-list.h"
+#include "artifact/fixed-art-types.h"
 #include "info-reader/json-reader-util.h"
 #include "info-reader/jsonc-document-loader.h"
 #include "info-reader/parse-error-types.h"
 #include "info-reader/quest-reader.h"
+#include "info-reader/random-grid-effect-types.h"
 #include "io/files-util.h"
+#include "object-enchant/object-ego.h"
 #include "system/angband-exceptions.h"
 #include "system/artifact/artifact-definition.h"
 #include "system/artifact/artifact-list.h"
+#include "system/baseitem/baseitem-definition.h"
+#include "system/baseitem/baseitem-list.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/dungeon/dungeon-list.h"
 #include "system/dungeon/dungeon-record.h"
@@ -15,6 +20,8 @@
 #include "system/enums/dungeon/dungeon-id.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
+#include "system/terrain/terrain-definition.h"
+#include "system/terrain/terrain-list.h"
 #include "util/angband-files.h"
 #include "util/enum-converter.h"
 #include <algorithm>
@@ -26,6 +33,69 @@
 #include <string_view>
 #include <utility>
 #include <vector>
+
+namespace {
+void require_quest_reference(bool valid, const std::filesystem::path &file, std::string_view field, int id)
+{
+    if (!valid) {
+        constexpr auto fmt = _("クエストの参照が未定義です ({}): {} {}", "Undefined quest reference ({}): {} {}");
+        THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, file.string(), field, id));
+    }
+}
+
+/*!
+ * @brief 宣言された凡例の固定参照を、共通凡例も含めて全ストア公開前に照合する
+ * @details ランダム生成の深さ補正と受託時の報酬指定は固定IDではない。
+ * 負のmonsterはクローンとして絶対値のIDを照合する。負のobject/artifactには
+ * 特殊な配置処理がなく、未定義の固定IDとして拒否する。
+ */
+void validate_quest_legend_references(const std::map<char, QuestLegendCell> &legend, const std::filesystem::path &file,
+    const std::map<QuestId, QuestType> &quests, bool fixed_quest)
+{
+    const auto &monraces = MonraceList::get_instance();
+    const auto &baseitems = BaseitemList::get_instance();
+    const auto &artifacts = ArtifactList::get_instance();
+    const auto &dungeons = DungeonList::get_instance();
+    const auto &terrains = TerrainList::get_instance();
+    for (const auto &[symbol, cell] : legend) {
+        const auto &grid = cell.grid;
+        const auto prefix = fmt::format("legend['{}']", symbol);
+        const auto require_reference = [&file, &prefix](bool valid, std::string_view field, int id) {
+            require_quest_reference(valid, file, fmt::format("{}.{}", prefix, field), id);
+        };
+        if (!(grid.random & RANDOM_MONSTER) && grid.monster != 0) {
+            const auto monster_id = grid.monster < 0 ? -static_cast<int>(grid.monster) : grid.monster;
+            require_reference(monraces.contains(i2enum<MonraceId>(monster_id)), "monster", grid.monster);
+        }
+        if (!(grid.random & RANDOM_OBJECT) && !cell.object_is_quest_reward && grid.object != 0) {
+            require_reference(baseitems.is_valid(grid.object), "object", grid.object);
+        }
+        // 配置側ではegoを未使用だが、明示された固定Egoの宣言は存在を保証する。
+        if (!(grid.random & RANDOM_EGO) && grid.ego != EgoType::NONE) {
+            require_reference(egos_info.contains(grid.ego), "ego", enum2i(grid.ego));
+        }
+        // 配置側はRANDOM_ARTIFACTでもidを固定Artifactとして参照する。
+        if (!cell.artifact_is_quest_reward && grid.artifact != FixedArtifactId::NONE) {
+            require_reference(artifacts.contains(grid.artifact), "artifact", enum2i(grid.artifact));
+        }
+        if (grid.special == 0) {
+            continue;
+        }
+
+        // specialは地形ごとに用途が違う。Questの階段・出入口だけをQuest参照として扱う。
+        // 通常の上り階段も、固定Quest内ではdo_cmd_go_upが退出先Questとして使う。
+        // 配置側で固定trapが最終地形になる条件に揃え、specialの用途も同じ地形で判定する。
+        const auto special_feature = (grid.trap != 0 && !(grid.random & (RANDOM_OBJECT | RANDOM_TRAP))) ? grid.trap : grid.feature;
+        const auto &flags = terrains.get_terrain(special_feature).flags;
+        if (flags.has_any_of({ TerrainCharacteristics::QUEST, TerrainCharacteristics::QUEST_ENTER, TerrainCharacteristics::QUEST_EXIT }) || (fixed_quest && flags.has(TerrainCharacteristics::UP_STAIRS))) {
+            const auto valid = grid.special > 0 && grid.special <= MAX_RANDOM_QUEST && quests.contains(i2enum<QuestId>(grid.special));
+            require_reference(valid, "special (QuestId)", grid.special);
+        } else if (flags.has(TerrainCharacteristics::ENTRANCE)) {
+            require_reference(dungeons.contains(i2enum<DungeonId>(grid.special)), "special (DungeonId)", grid.special);
+        }
+    }
+}
+}
 
 QuestList QuestList::instance{};
 
@@ -49,7 +119,7 @@ void QuestList::initialize()
 
     // 全クエスト共通のベース凡例を先に読み込む (各クエスト legend がこれを letter[] 上で上書きする)
     auto parsed_legend = this->load_base_legend();
-    this->load_json_quests(path_build(ANGBAND_DIR_EDIT, "quests"), parsed_quests, parsed_maps);
+    this->load_json_quests(path_build(ANGBAND_DIR_EDIT, "quests"), parsed_quests, parsed_maps, parsed_legend);
 
     // 通常の入力エラーをすべて検証してから、NONE・凡例を含む全ストアを公開する。
     // 資源障害まで含む完全な巻き戻しや、プレイ中の再読込は保証しない。
@@ -123,7 +193,7 @@ void QuestList::load_json_quests(const std::filesystem::path &quests_dir)
     auto &fixed_maps = QuestFixedMapList::get_instance();
     auto parsed_quests = this->quests;
     auto parsed_maps = fixed_maps.maps;
-    this->load_json_quests(quests_dir, parsed_quests, parsed_maps);
+    this->load_json_quests(quests_dir, parsed_quests, parsed_maps, fixed_maps.get_base_legend());
     this->publish(parsed_quests, parsed_maps);
 }
 
@@ -136,7 +206,7 @@ void QuestList::publish(std::map<QuestId, QuestType> &parsed_quests, std::map<Qu
     QuestFixedMapList::get_instance().maps.swap(parsed_maps);
 }
 
-void QuestList::load_json_quests(const std::filesystem::path &quests_dir, std::map<QuestId, QuestType> &parsed_quests, std::map<QuestId, QuestFixedMap> &parsed_maps)
+void QuestList::load_json_quests(const std::filesystem::path &quests_dir, std::map<QuestId, QuestType> &parsed_quests, std::map<QuestId, QuestFixedMap> &parsed_maps, const std::map<char, QuestLegendCell> &base_legend)
 {
     std::error_code ec;
     if (!std::filesystem::is_directory(quests_dir, ec)) {
@@ -221,10 +291,7 @@ void QuestList::load_json_quests(const std::filesystem::path &quests_dir, std::m
     for (const auto &[quest_id, file] : loaded_quests) {
         const auto &fixed_map = parsed_maps.at(quest_id);
         const auto require_reference = [&file](bool valid, std::string_view field, int id) {
-            if (!valid) {
-                constexpr auto fmt = _("クエストの参照が未定義です ({}): {} {}", "Undefined quest reference ({}): {} {}");
-                THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, file.string(), field, id));
-            }
+            require_quest_reference(valid, file, field, id);
         };
         const auto &meta = fixed_map.metadata;
         require_reference(meta.dungeon == 0 || dungeons.contains(i2enum<DungeonId>(meta.dungeon)), "definition.dungeon", meta.dungeon);
@@ -244,6 +311,15 @@ void QuestList::load_json_quests(const std::filesystem::path &quests_dir, std::m
             const auto valid = *leaving_id > 0 && *leaving_id <= MAX_RANDOM_QUEST && parsed_quests.contains(i2enum<QuestId>(*leaving_id));
             require_reference(valid, fmt::format("startVariants[{}].leavingQuest", i), *leaving_id);
         }
+    }
+    // 共通凡例はQuestごとに上書きされるが、使われない宣言も固定参照の検証対象とする。
+    // 共通凡例のspecialも全Questが揃ってから調べ、失敗時にQUESTORを残さない。
+    const auto base_legend_file = path_build(ANGBAND_DIR_EDIT, "QuestPreferences.jsonc");
+    for (const auto &[quest_id, file] : loaded_quests) {
+        const auto &fixed_map = parsed_maps.at(quest_id);
+        const auto fixed_quest = fixed_map.metadata.type != enum2i(QuestKindType::RANDOM);
+        validate_quest_legend_references(base_legend, base_legend_file, parsed_quests, fixed_quest);
+        validate_quest_legend_references(fixed_map.legend, file, parsed_quests, fixed_quest);
     }
     for (const auto &loaded_quest : loaded_quests) {
         const auto quest_id = loaded_quest.first;
