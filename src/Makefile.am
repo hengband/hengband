@@ -1432,6 +1432,7 @@ libhengband_a_SOURCES = \
 	view/display-store.cpp view/display-store.h \
 	view/display-symbol.h \
 	view/display-util.cpp view/display-util.h \
+	view/map-info-cache.cpp view/map-info-cache.h \
 	view/object-describer.cpp view/object-describer.h \
 	view/status-first-page.cpp view/status-first-page.h \
 	view/status-bars-table.cpp view/status-bars-table.h \
@@ -1579,6 +1580,7 @@ hengband_test_SOURCES = \
 	test/util/test-sha256.cpp \
 	test/util/test-string-processor.cpp \
 	test/util/test-temporary-json-files.cpp \
+	test/view/test-map-info-cache.cpp \
 	test/view/test-map-terrain-visibility.cpp \
 	test/view/test-screen-parity-helpers.cpp \
 	test/window/test-overview-map-cache.cpp \

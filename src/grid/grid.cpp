@@ -42,6 +42,7 @@
 #include "util/enum-converter.h"
 #include "view/display-map.h"
 #include "view/display-messages.h"
+#include "view/map-info-cache.h"
 #include "window/main-window-util.h"
 #include "window/overview-map-cache.h"
 #include "world/world.h"
@@ -458,17 +459,27 @@ void lite_spot(PlayerType *player_ptr, const Pos2D &pos)
     }
 
     OverviewMapCache::get_instance().mark_dirty(pos);
+    auto &map_info_cache = MapInfoCache::get_instance();
     if (panel_contains(pos)) {
+        // メイン画面の表示が変わらなくても、覚える結果は変わることがある (単色表示で色だけ変わったときなど) ので、必ず覚える
         auto symbol_pair = map_info(player_ptr, pos);
+        const auto is_cache_changed = map_info_cache.store(pos, symbol_pair);
         symbol_pair.symbol_foreground.color = get_monochrome_display_color(player_ptr).value_or(symbol_pair.symbol_foreground.color);
 
-        // 表示が変わらなければ、地図のサブウィンドウを描き直す必要も無い
+        // メイン画面の表示が変わらなければ、全体図を描き直す必要は無い。
+        // 自分の周囲は、覚えていた結果 (表示しているかもしれない) と違うときだけ描き直す
         if (!term_queue_bigchar(panel_col_of(pos.x), pos.y - panel_row_prt, symbol_pair)) {
+            if (is_cache_changed) {
+                RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::DUNGEON);
+            }
+
             return;
         }
+    } else {
+        map_info_cache.invalidate(pos);
     }
 
-    // メイン画面の外のグリッドは表示が変わったか分からないので、地図のサブウィンドウを描き直す
+    // メイン画面の表示が変わったグリッドと、表示が変わったか分からないメイン画面の外のグリッドは、地図のサブウィンドウを描き直す
     static constexpr auto flags = {
         SubWindowRedrawingFlag::OVERHEAD,
         SubWindowRedrawingFlag::DUNGEON,
