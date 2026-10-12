@@ -5,6 +5,10 @@
 #include "info-reader/quest-reader.h"
 #include "io/files-util.h"
 #include "system/angband-exceptions.h"
+#include "system/artifact/artifact-definition.h"
+#include "system/artifact/artifact-list.h"
+#include "system/dungeon/dungeon-definition.h"
+#include "system/dungeon/dungeon-list.h"
 #include "system/dungeon/dungeon-record.h"
 #include "system/dungeon/quest-definition.h"
 #include "system/dungeon/quest-fixed-map.h"
@@ -208,6 +212,37 @@ void QuestList::load_json_quests(const std::filesystem::path &quests_dir, std::m
         if (!monraces.contains(i2enum<MonraceId>(monster_id))) {
             constexpr auto fmt = _("クエストの対象モンスターが未定義です ({}): monster {}", "Undefined quest target monster ({}): monster {}");
             THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, file.string(), monster_id));
+        }
+    }
+    // 全ファイルの解析後に照合し、ファイル順に依存する前方参照の拒否を避ける。
+    // 0 は「指定なし」または通常フロアからの退出を表すため、定義表を要求しない。
+    const auto &dungeons = DungeonList::get_instance();
+    const auto &artifacts = ArtifactList::get_instance();
+    for (const auto &[quest_id, file] : loaded_quests) {
+        const auto &fixed_map = parsed_maps.at(quest_id);
+        const auto require_reference = [&file](bool valid, std::string_view field, int id) {
+            if (!valid) {
+                constexpr auto fmt = _("クエストの参照が未定義です ({}): {} {}", "Undefined quest reference ({}): {} {}");
+                THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, file.string(), field, id));
+            }
+        };
+        const auto &meta = fixed_map.metadata;
+        require_reference(meta.dungeon == 0 || dungeons.contains(i2enum<DungeonId>(meta.dungeon)), "definition.dungeon", meta.dungeon);
+        require_reference(meta.reward_artifact == 0 || artifacts.contains(i2enum<FixedArtifactId>(meta.reward_artifact)),
+            "definition.reward.artifact", meta.reward_artifact);
+        for (size_t i = 0; i < fixed_map.reward_artifact_candidates.size(); ++i) {
+            const auto candidate = fixed_map.reward_artifact_candidates[i];
+            require_reference(candidate == 0 || artifacts.contains(i2enum<FixedArtifactId>(candidate)),
+                fmt::format("definition.reward.artifacts[{}]", i), candidate);
+        }
+        for (size_t i = 0; i < fixed_map.starts.size(); ++i) {
+            const auto leaving_id = fixed_map.starts[i].leaving_quest;
+            if (!leaving_id || *leaving_id == 0) {
+                continue;
+            }
+            // leavingQuest は int で読み込む。QuestId(short) への変換前に範囲を確認する。
+            const auto valid = *leaving_id > 0 && *leaving_id <= MAX_RANDOM_QUEST && parsed_quests.contains(i2enum<QuestId>(*leaving_id));
+            require_reference(valid, fmt::format("startVariants[{}].leavingQuest", i), *leaving_id);
         }
     }
     for (const auto &loaded_quest : loaded_quests) {

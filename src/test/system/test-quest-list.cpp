@@ -1,14 +1,22 @@
+#include "artifact/fixed-art-types.h"
 #include "info-reader/parse-error-types.h"
 #include "io/files-util.h"
 #include "monster-race/race-kind-flags.h"
 #include "monster-race/race-misc-flags.h"
+#include "system/artifact/artifact-definition.h"
+#include "system/artifact/artifact-list.h"
+#include "system/dungeon/dungeon-definition.h"
+#include "system/dungeon/dungeon-list.h"
 #include "system/dungeon/quest-definition.h"
 #include "system/dungeon/quest-fixed-map.h"
 #include "system/dungeon/quest-list.h"
+#include "system/enums/dungeon/dungeon-id.h"
 #include "system/enums/terrain/terrain-tag.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
 #include "test/scoped-restore.h"
+#include "test/system/artifact-list-test-access.h"
+#include "test/system/dungeon-list-test-access.h"
 #include "test/system/monrace-list-test-access.h"
 #include "test/system/quest-list-test-access.h"
 #include "test/system/terrain-list-test-access.h"
@@ -247,11 +255,13 @@ TEST_CASE("QuestList leaves all records unpublished when a later file fails")
 TEST_CASE("QuestList initialization preserves every store on late input errors")
 {
     for (const auto seeded : { false, true }) {
-        for (const auto *failure : { "syntax", "root", "id", "duplicate", "type", "range", "start", "start bounds", "start no map", "start variant", "monster" }) {
+        for (const auto *failure : { "syntax", "root", "id", "duplicate", "type", "range", "start", "start bounds", "start no map", "start variant", "monster", "dungeon", "reward", "reward candidate", "leaving quest", "leaving wrap" }) {
             CAPTURE(seeded);
-            CAPTURE(failure);
+            CAPTURE(std::string(failure));
             test::QuestListTestAccess quests;
             test::MonraceListTestAccess monraces;
+            test::ArtifactListTestAccess artifacts;
+            test::DungeonListTestAccess dungeons;
             const test::TerrainListTestAccess none_tag(TerrainTag::NONE, 0);
             auto &list = QuestList::get_instance();
             auto &maps = QuestFixedMapList::get_instance();
@@ -318,6 +328,14 @@ TEST_CASE("QuestList initialization preserves every store on late input errors")
                 bad["startVariants"] = { { { "y", 0 }, { "x", 0 } }, { { "leavingQuest", 49 }, { "y", 0 }, { "x", 3 } } };
             } else if (kind == "monster") {
                 bad["definition"]["monster"] = 123;
+            } else if (kind == "dungeon") {
+                bad["definition"]["dungeon"] = 123;
+            } else if (kind == "reward") {
+                bad["definition"]["reward"] = { { "artifact", 123 } };
+            } else if (kind == "reward candidate") {
+                bad["definition"]["reward"] = { { "artifacts", { 0, 123 } } };
+            } else if (kind == "leaving quest" || kind == "leaving wrap") {
+                bad["startVariants"] = { { { "leavingQuest", kind == "leaving wrap" ? 65537 : 48 }, { "y", 0 }, { "x", 0 } } };
             }
             if (kind == "syntax") {
                 files.write_raw("quests/02.jsonc", "{\"id\":2,");
@@ -333,6 +351,15 @@ TEST_CASE("QuestList initialization preserves every store on late input errors")
                     const std::string diagnostic(error.what());
                     CHECK(diagnostic.find("02.jsonc") != std::string::npos);
                     CHECK(diagnostic.find("monster 123") != std::string::npos);
+                } else if (kind == "dungeon" || kind == "reward" || kind == "reward candidate" || kind.starts_with("leaving ")) {
+                    const std::string diagnostic(error.what());
+                    CHECK(diagnostic.find("02.jsonc") != std::string::npos);
+                    const auto field = kind == "dungeon" ? "definition.dungeon" : kind == "reward"         ? "definition.reward.artifact"
+                                                                              : kind == "reward candidate" ? "definition.reward.artifacts[1]"
+                                                                                                           : "startVariants[0].leavingQuest";
+                    CHECK(diagnostic.find(field) != std::string::npos);
+                    CHECK(diagnostic.find(kind == "leaving wrap" ? "65537" : kind == "leaving quest" ? "48"
+                                                                                                     : "123") != std::string::npos);
                 } else if (kind.starts_with("start ")) {
                     const std::string diagnostic(error.what());
                     CHECK(diagnostic.find("02.jsonc") != std::string::npos);
@@ -433,6 +460,9 @@ TEST_CASE("QuestList preserves valid rectangular starts and optional start seman
         data.erase("map");
         data.update(input);
         files.write("quest.jsonc", data);
+        if (!input.contains("start") && input.contains("startVariants")) {
+            files.write("referenced.jsonc", make_quest(49));
+        }
         REQUIRE_NOTHROW(quests.load(files.directory));
         const auto map = QuestFixedMapList::get_instance().find(QuestId::THIEF);
         REQUIRE(map);
@@ -453,7 +483,7 @@ TEST_CASE("QuestList preserves valid rectangular starts and optional start seman
 TEST_CASE("QuestList initialization leaves NONE and base legend unpublished on early errors")
 {
     for (const auto *failure : { "missing legend", "malformed legend", "invalid legend", "missing directory", "empty directory" }) {
-        CAPTURE(failure);
+        CAPTURE(std::string(failure));
         test::QuestListTestAccess quests;
         const test::TerrainListTestAccess none_tag(TerrainTag::NONE, 0);
         QuestFiles files;
@@ -480,6 +510,10 @@ TEST_CASE("QuestList initialization publishes complete metadata and flags after 
 {
     test::QuestListTestAccess quests;
     test::MonraceListTestAccess monraces;
+    test::ArtifactListTestAccess artifacts;
+    for (const auto id : { 7, 8, 9 }) {
+        ArtifactList::get_instance().emplace(static_cast<FixedArtifactId>(id), ArtifactDefinition{});
+    }
     const test::TerrainListTestAccess none_tag(TerrainTag::NONE, 0);
     auto &list = QuestList::get_instance();
     auto &maps = QuestFixedMapList::get_instance();
@@ -564,4 +598,74 @@ TEST_CASE("QuestList test access restores quest and monrace identity after excep
     CHECK(MonraceList::get_instance().get_monrace_shared(static_cast<MonraceId>(0)) == saved_monrace);
     CHECK(&MonraceList::get_instance().get_monrace(static_cast<MonraceId>(0)) == &monrace);
     CHECK(QuestFixedMapList::get_instance().find(QuestId::THIEF));
+}
+
+TEST_CASE("QuestList resolves metadata and leaving quests after loading every file")
+{
+    test::QuestListTestAccess quests;
+    test::MonraceListTestAccess monraces;
+    test::ArtifactListTestAccess artifacts;
+    test::DungeonListTestAccess dungeons;
+    MonraceList::get_instance().emplace(static_cast<MonraceId>(0));
+    ArtifactList::get_instance().emplace(static_cast<FixedArtifactId>(1), ArtifactDefinition{});
+    ArtifactList::get_instance().emplace(static_cast<FixedArtifactId>(2), ArtifactDefinition{});
+    DungeonList::get_instance().emplace(static_cast<DungeonId>(1), DungeonDefinition{});
+    QuestFiles files;
+    auto first = make_quest(1);
+    first["definition"]["dungeon"] = 1;
+    first["definition"]["reward"] = { { "artifact", 1 }, { "artifacts", { 0, 2 } } };
+    first["startVariants"] = { { { "leavingQuest", 2 }, { "y", 0 }, { "x", 0 } } };
+    auto second = make_quest(2);
+    second["definition"]["dungeon"] = 0;
+    second["definition"]["reward"] = { { "artifact", 0 }, { "artifacts", { 0 } } };
+    second["startVariants"] = { { { "leavingQuest", 1 }, { "y", 0 }, { "x", 0 } }, { { "leavingQuest", 0 }, { "y", 0 }, { "x", 1 } } };
+    files.write("01.jsonc", first);
+    files.write("02.jsonc", second);
+    REQUIRE_NOTHROW(quests.load(files.directory));
+    const auto &list = QuestList::get_instance();
+    CHECK(list.size() == 2);
+    CHECK_FALSE(list.contains(QuestId::NONE));
+    CHECK(list.get_quest(QuestId::THIEF).dungeon == static_cast<DungeonId>(1));
+    CHECK_FALSE(list.get_quest(QuestId::THIEF).has_reward());
+    const auto map = QuestFixedMapList::get_instance().find(QuestId::THIEF);
+    REQUIRE(map);
+    CHECK(map->metadata.reward_artifact == 1);
+    CHECK(map->reward_artifact_candidates == std::vector<int>{ 0, 2 });
+    REQUIRE(map->starts.size() == 1);
+    CHECK(map->starts[0].leaving_quest == 2);
+    const auto second_map = QuestFixedMapList::get_instance().find(QuestId::SEWER);
+    REQUIRE(second_map);
+    REQUIRE(second_map->starts.size() == 2);
+    CHECK(second_map->starts[0].leaving_quest == 1);
+    CHECK(second_map->starts[1].leaving_quest == 0);
+}
+
+TEST_CASE("QuestList rejects negative metadata references and wide leaving quest IDs")
+{
+    test::QuestListTestAccess quests;
+    test::MonraceListTestAccess monraces;
+    test::ArtifactListTestAccess artifacts;
+    test::DungeonListTestAccess dungeons;
+    MonraceList::get_instance().emplace(static_cast<MonraceId>(0));
+    QuestFiles files;
+    for (const auto &field : { "dungeon", "artifact", "artifacts", "leavingQuest" }) {
+        for (const auto id : { -1, -32768, 32767 }) {
+            CAPTURE(field);
+            CAPTURE(id);
+            auto data = make_quest(1);
+            const std::string key(field);
+            if (key == "dungeon") {
+                data["definition"][key] = id;
+            } else if (key == "artifact") {
+                data["definition"]["reward"][key] = id;
+            } else if (key == "artifacts") {
+                data["definition"]["reward"][key] = { 0, id };
+            } else {
+                data["startVariants"] = { { { key, id }, { "y", 0 }, { "x", 0 } } };
+            }
+            files.write("quest.jsonc", data);
+            CHECK_THROWS_AS(quests.load(files.directory), std::runtime_error);
+            check_unpublished(QuestId::THIEF);
+        }
+    }
 }
