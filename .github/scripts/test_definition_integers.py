@@ -187,11 +187,11 @@ class DefinitionIntegerValidationTest(unittest.TestCase):
     def test_integer_boundaries_still_follow_schema(self):
         fields = (
             ("ClassMagicDefinitions", ["classes", 0, "first_spell_level"], 99),
-            ("ClassMagicDefinitions", ["classes", 0, "armour_weight_limit"], 999),
+            ("ClassMagicDefinitions", ["classes", 0, "armour_weight_limit"], 2047),
             ("ClassMagicDefinitions", ["classes", 0, "realms", 0, "spells_info", 0, "learn_level"], 99),
-            ("ClassMagicDefinitions", ["classes", 0, "realms", 0, "spells_info", 0, "mana_cost"], 999),
-            ("ClassMagicDefinitions", ["classes", 0, "realms", 0, "spells_info", 0, "difficulty"], 999),
-            ("ClassMagicDefinitions", ["classes", 0, "realms", 0, "spells_info", 0, "first_cast_exp_rate"], 999),
+            ("ClassMagicDefinitions", ["classes", 0, "realms", 0, "spells_info", 0, "mana_cost"], 2047),
+            ("ClassMagicDefinitions", ["classes", 0, "realms", 0, "spells_info", 0, "difficulty"], 100),
+            ("ClassMagicDefinitions", ["classes", 0, "realms", 0, "spells_info", 0, "first_cast_exp_rate"], 2047),
             ("SpellDefinitions", ["realms", 0, "books", 0, "spells", 0, "spell_id"], 31),
         )
         for name, path, maximum in fields:

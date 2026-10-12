@@ -39,6 +39,10 @@ public:
     std::string tag; /*!< 呪文タグ() */
 };
 
+namespace test {
+class SpellInfoListTestAccess;
+}
+
 class SpellInfoList {
 public:
     SpellInfoList(SpellInfoList &&) = delete;
@@ -56,6 +60,8 @@ public:
     const SpellInfo &get_spell_info(RealmType realm, int spell_id) const;
 
 private:
+    friend class test::SpellInfoListTestAccess;
+
     SpellInfoList() = default;
 
     static SpellInfoList instance;

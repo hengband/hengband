@@ -1509,6 +1509,7 @@ hengband_test_SOURCES = \
 	test/system/monrace-records-test-access.h \
 	test/system/terrain-list-test-access.h \
 	test/system/quest-list-test-access.h \
+	test/system/spell-info-list-test-access.h \
 	\
 	test/autopick/test-autopick-editor-util.cpp \
 	test/cmd-io/test-cmd-autopick.cpp \
@@ -1555,6 +1556,7 @@ hengband_test_SOURCES = \
 	test/mutation/test-mutation-roll-table.cpp \
 	test/object/test-object-info.cpp \
 	test/player/test-process-name.cpp \
+	test/spell/test-spell-info.cpp \
 	test/store/test-pricing.cpp \
 	test/store/test-store-screen.cpp \
 	test/store/test-store-util.cpp \
