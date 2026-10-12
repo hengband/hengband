@@ -51,14 +51,7 @@ static void redraw_character_xtra(PlayerType *player_ptr)
         SubWindowRedrawingFlag::DUNGEON,
     };
     rfu.set_flags(flags_swrf);
-    static constexpr auto flags_mwrf = {
-        MainWindowRedrawingFlag::WIPE,
-        MainWindowRedrawingFlag::BASIC,
-        MainWindowRedrawingFlag::EXTRA,
-        MainWindowRedrawingFlag::EQUIPPY,
-        MainWindowRedrawingFlag::MAP,
-    };
-    rfu.set_flags(flags_mwrf);
+    rfu.request_whole_main_window_redrawing();
     auto flags_srf = {
         StatusRecalculatingFlag::BONUS,
         StatusRecalculatingFlag::HP,

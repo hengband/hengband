@@ -354,14 +354,7 @@ static bool update_use_graphics(PlayerType *player_ptr)
 
     use_graphics = false;
     reset_visuals(player_ptr);
-    static constexpr auto flags = {
-        MainWindowRedrawingFlag::WIPE,
-        MainWindowRedrawingFlag::BASIC,
-        MainWindowRedrawingFlag::EXTRA,
-        MainWindowRedrawingFlag::MAP,
-        MainWindowRedrawingFlag::EQUIPPY,
-    };
-    RedrawingFlagsUpdater::get_instance().set_flags(flags);
+    RedrawingFlagsUpdater::get_instance().request_whole_main_window_redrawing();
     redraw_stuff(player_ptr);
     return false;
 }
@@ -394,14 +387,7 @@ void do_cmd_save_screen(PlayerType *player_ptr)
 
     use_graphics = true;
     reset_visuals(player_ptr);
-    static constexpr auto flags = {
-        MainWindowRedrawingFlag::WIPE,
-        MainWindowRedrawingFlag::BASIC,
-        MainWindowRedrawingFlag::EXTRA,
-        MainWindowRedrawingFlag::MAP,
-        MainWindowRedrawingFlag::EQUIPPY,
-    };
-    RedrawingFlagsUpdater::get_instance().set_flags(flags);
+    RedrawingFlagsUpdater::get_instance().request_whole_main_window_redrawing();
     redraw_stuff(player_ptr);
 }
 

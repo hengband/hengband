@@ -3,25 +3,36 @@
  */
 
 #include "system/redrawing-flags-updater.h"
+#include "util/enum-converter.h"
 #include "util/finalizer.h"
+#include "util/flag-group.h"
 #include <doctest/doctest.h>
+#include <initializer_list>
 
 namespace {
 
 /*!
- * @brief フラグを元の状態に戻す
+ * @brief フラグの今の状態を覚えておき、スコープを抜けるときに元の状態に戻す
+ * @tparam Flag フラグの列挙型。1 回の呼び出しで戻せるのは同じ列挙型のフラグだけ
  * @param rfu 更新フラグ
- * @param flag 戻すフラグ
- * @param was_set 元の状態でフラグが立っていたか
+ * @param flags 戻すフラグ
+ * @return スコープを抜けるときにフラグを戻すファイナライザ
  */
 template <typename Flag>
-void restore_flag(RedrawingFlagsUpdater &rfu, Flag flag, bool was_set)
+auto scoped_restore_flags(RedrawingFlagsUpdater &rfu, std::initializer_list<Flag> flags)
 {
-    if (was_set) {
-        rfu.set_flag(flag);
-    } else {
-        rfu.reset_flag(flag);
+    const EnumClassFlagGroup<Flag> targets(flags);
+    EnumClassFlagGroup<Flag> was_set;
+    for (const auto flag : flags) {
+        if (rfu.has(flag)) {
+            was_set.set(flag);
+        }
     }
+
+    return util::make_finalizer([&rfu, targets, was_set] {
+        rfu.reset_flags(targets);
+        rfu.set_flags(was_set);
+    });
 }
 
 }
@@ -29,21 +40,13 @@ void restore_flag(RedrawingFlagsUpdater &rfu, Flag flag, bool was_set)
 TEST_CASE("RedrawingFlagsUpdater::request_inventory_arrangement requests combining, reordering and redrawing the inventory")
 {
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    const auto restore = util::make_finalizer([&rfu,
-                                                  auto_destruction = rfu.has(InventoryArrangementFlag::AUTO_DESTRUCTION),
-                                                  combination = rfu.has(InventoryArrangementFlag::COMBINATION),
-                                                  reorder = rfu.has(InventoryArrangementFlag::REORDER),
-                                                  inventory = rfu.has(SubWindowRedrawingFlag::INVENTORY)] {
-        restore_flag(rfu, InventoryArrangementFlag::AUTO_DESTRUCTION, auto_destruction);
-        restore_flag(rfu, InventoryArrangementFlag::COMBINATION, combination);
-        restore_flag(rfu, InventoryArrangementFlag::REORDER, reorder);
-        restore_flag(rfu, SubWindowRedrawingFlag::INVENTORY, inventory);
-    });
     static constexpr auto flags_iaf = {
         InventoryArrangementFlag::AUTO_DESTRUCTION,
         InventoryArrangementFlag::COMBINATION,
         InventoryArrangementFlag::REORDER,
     };
+    const auto restore_iaf = scoped_restore_flags(rfu, flags_iaf);
+    const auto restore_swrf = scoped_restore_flags(rfu, { SubWindowRedrawingFlag::INVENTORY });
     rfu.reset_flags(flags_iaf);
     rfu.reset_flag(SubWindowRedrawingFlag::INVENTORY);
 
@@ -53,4 +56,25 @@ TEST_CASE("RedrawingFlagsUpdater::request_inventory_arrangement requests combini
     CHECK(rfu.has(InventoryArrangementFlag::REORDER));
     CHECK(rfu.has(SubWindowRedrawingFlag::INVENTORY));
     CHECK_FALSE(rfu.has(InventoryArrangementFlag::AUTO_DESTRUCTION));
+}
+
+TEST_CASE("RedrawingFlagsUpdater::request_whole_main_window_redrawing requests wiping and redrawing the whole main window")
+{
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    static constexpr auto flags_mwrf = {
+        MainWindowRedrawingFlag::WIPE,
+        MainWindowRedrawingFlag::BASIC,
+        MainWindowRedrawingFlag::EXTRA,
+        MainWindowRedrawingFlag::EQUIPPY,
+        MainWindowRedrawingFlag::MAP,
+    };
+    const auto restore = scoped_restore_flags(rfu, flags_mwrf);
+    rfu.reset_flags(flags_mwrf);
+
+    rfu.request_whole_main_window_redrawing();
+
+    for (const auto flag : flags_mwrf) {
+        CAPTURE(enum2i(flag));
+        CHECK(rfu.has(flag));
+    }
 }

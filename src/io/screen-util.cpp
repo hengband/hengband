@@ -67,14 +67,7 @@ void resize_map()
         StatusRecalculatingFlag::MONSTER_STATUSES,
     };
     rfu.set_flags(flags_srf);
-    static constexpr auto flags_mwrf = {
-        MainWindowRedrawingFlag::WIPE,
-        MainWindowRedrawingFlag::BASIC,
-        MainWindowRedrawingFlag::EXTRA,
-        MainWindowRedrawingFlag::MAP,
-        MainWindowRedrawingFlag::EQUIPPY,
-    };
-    rfu.set_flags(flags_mwrf);
+    rfu.request_whole_main_window_redrawing();
 
     // -続く- の待ちの最中に描き直すと、メッセージの消去から -続く- がもう一度表示されて
     // 入力待ちが入れ子になる。フラグだけを立てておき、-続く- が明けた後の handle_stuff() で描き直す。

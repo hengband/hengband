@@ -124,6 +124,7 @@ public:
     void reset_flags(const EnumClassFlagGroup<InventoryArrangementFlag> &flags);
 
     void request_inventory_arrangement();
+    void request_whole_main_window_redrawing();
 
     void fill_up_sub_flags();
     EnumClassFlagGroup<SubWindowRedrawingFlag> get_sub_intersection(const EnumClassFlagGroup<SubWindowRedrawingFlag> &flags);
