@@ -157,6 +157,22 @@ void RedrawingFlagsUpdater::request_inventory_arrangement()
     this->sub_window_flags.set(SubWindowRedrawingFlag::INVENTORY);
 }
 
+/*!
+ * @brief メインウィンドウの消去と全体の描き直しを予約する
+ * @details 画面を消去してから、マップ・基本ステータス・拡張ステータス・装備のシンボルをすべて描き直す。
+ */
+void RedrawingFlagsUpdater::request_whole_main_window_redrawing()
+{
+    static constexpr auto flags_mwrf = {
+        MainWindowRedrawingFlag::WIPE,
+        MainWindowRedrawingFlag::BASIC,
+        MainWindowRedrawingFlag::EXTRA,
+        MainWindowRedrawingFlag::EQUIPPY,
+        MainWindowRedrawingFlag::MAP,
+    };
+    this->main_window_flags.set(flags_mwrf);
+}
+
 void RedrawingFlagsUpdater::fill_up_sub_flags()
 {
     constexpr auto all_sub_window_flags = EnumRange(SubWindowRedrawingFlag::INVENTORY, SubWindowRedrawingFlag::MAX);

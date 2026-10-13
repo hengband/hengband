@@ -159,14 +159,7 @@ std::string make_screen_dump(PlayerType *player_ptr)
         use_graphics = false;
         reset_visuals(player_ptr);
 
-        static constexpr auto flags = {
-            MainWindowRedrawingFlag::WIPE,
-            MainWindowRedrawingFlag::BASIC,
-            MainWindowRedrawingFlag::EXTRA,
-            MainWindowRedrawingFlag::MAP,
-            MainWindowRedrawingFlag::EQUIPPY,
-        };
-        rfu.set_flags(flags);
+        rfu.request_whole_main_window_redrawing();
         redraw_stuff(player_ptr);
     }
 
@@ -246,14 +239,7 @@ std::string make_screen_dump(PlayerType *player_ptr)
 
     use_graphics = true;
     reset_visuals(player_ptr);
-    static constexpr auto flags = {
-        MainWindowRedrawingFlag::WIPE,
-        MainWindowRedrawingFlag::BASIC,
-        MainWindowRedrawingFlag::EXTRA,
-        MainWindowRedrawingFlag::MAP,
-        MainWindowRedrawingFlag::EQUIPPY,
-    };
-    rfu.set_flags(flags);
+    rfu.request_whole_main_window_redrawing();
     redraw_stuff(player_ptr);
     return ret;
 }

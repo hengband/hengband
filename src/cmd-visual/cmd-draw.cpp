@@ -63,14 +63,7 @@ void do_cmd_redraw(PlayerType *player_ptr)
         InventoryArrangementFlag::REORDER,
     };
     rfu.set_flags(flags_iaf);
-    static constexpr auto flags_mwrf = {
-        MainWindowRedrawingFlag::WIPE,
-        MainWindowRedrawingFlag::BASIC,
-        MainWindowRedrawingFlag::EXTRA,
-        MainWindowRedrawingFlag::EQUIPPY,
-        MainWindowRedrawingFlag::MAP,
-    };
-    rfu.set_flags(flags_mwrf);
+    rfu.request_whole_main_window_redrawing();
     static constexpr auto flags_swrf = {
         SubWindowRedrawingFlag::INVENTORY,
         SubWindowRedrawingFlag::EQUIPMENT,
@@ -166,15 +159,7 @@ void do_cmd_player_status(PlayerType *player_ptr)
     }
 
     screen_load();
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    static constexpr auto flags_mwrf = {
-        MainWindowRedrawingFlag::WIPE,
-        MainWindowRedrawingFlag::BASIC,
-        MainWindowRedrawingFlag::EXTRA,
-        MainWindowRedrawingFlag::EQUIPPY,
-        MainWindowRedrawingFlag::MAP,
-    };
-    rfu.set_flags(flags_mwrf);
+    RedrawingFlagsUpdater::get_instance().request_whole_main_window_redrawing();
     redraw_stuff(player_ptr);
 }
 
