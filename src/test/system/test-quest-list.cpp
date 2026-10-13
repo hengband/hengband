@@ -39,12 +39,29 @@
 namespace {
 using QuestFiles = test::TemporaryJsonFiles;
 
+// 他のfixtureメンバや初期化本体が例外を投げても、元のEgo表をノードごと復元する。
+class ScopedEgoDefinitions {
+public:
+    ScopedEgoDefinitions()
+    {
+        egos_info.swap(saved);
+    }
+    ScopedEgoDefinitions(const ScopedEgoDefinitions &) = delete;
+    ScopedEgoDefinitions &operator=(const ScopedEgoDefinitions &) = delete;
+    ~ScopedEgoDefinitions()
+    {
+        egos_info.swap(saved);
+    }
+
+private:
+    std::map<EgoType, EgoItemDefinition> saved;
+};
+
 // 実際のロード順どおり、参照先の定義を先に用意する。各storeとタグは終了時に復元する。
 class LegendReferenceState {
 public:
     LegendReferenceState()
     {
-        egos_info.swap(saved_egos);
         egos_info.emplace(static_cast<EgoType>(1), EgoItemDefinition{});
         MonraceList::get_instance().emplace(static_cast<MonraceId>(0));
         auto &target = MonraceList::get_instance().emplace(static_cast<MonraceId>(1));
@@ -70,21 +87,16 @@ public:
     LegendReferenceState(const LegendReferenceState &) = delete;
     LegendReferenceState &operator=(const LegendReferenceState &) = delete;
 
-    ~LegendReferenceState()
-    {
-        egos_info.swap(saved_egos);
-    }
-
     test::QuestListTestAccess quests;
 
 private:
+    ScopedEgoDefinitions ego_definitions;
     test::MonraceListTestAccess monraces;
     test::ArtifactListTestAccess artifacts;
     test::DungeonListTestAccess dungeons;
     test::ScopedVectorWrapper<BaseitemList> baseitems{ BaseitemList::get_instance() };
     test::ScopedVectorWrapper<TerrainList> terrain_definitions{ TerrainList::get_instance() };
     test::TerrainListTestAccess none_tag{ TerrainTag::NONE, 0 };
-    std::map<EgoType, EgoItemDefinition> saved_egos;
 };
 
 nlohmann::json make_quest(int id)
@@ -413,9 +425,9 @@ TEST_CASE("QuestList initialization preserves every store on late input errors")
                     const auto field = kind == "dungeon" ? "definition.dungeon" : kind == "reward"         ? "definition.reward.artifact"
                                                                               : kind == "reward candidate" ? "definition.reward.artifacts[1]"
                                                                                                            : "startVariants[0].leavingQuest";
-                    CHECK(diagnostic.find(field) != std::string::npos);
-                    CHECK(diagnostic.find(kind == "leaving wrap" ? "65537" : kind == "leaving quest" ? "48"
-                                                                                                     : "123") != std::string::npos);
+                    const auto id = kind == "leaving wrap" ? "65537" : kind == "leaving quest" ? "48"
+                                                                                               : "123";
+                    CHECK(diagnostic.find(std::string(field) + " " + id) != std::string::npos);
                 } else if (kind.starts_with("start ")) {
                     const std::string diagnostic(error.what());
                     CHECK(diagnostic.find("02.jsonc") != std::string::npos);
@@ -747,16 +759,16 @@ TEST_CASE("QuestList rejects missing local and base legend references before pub
         { { { "artifact", 123 } }, "artifact", 123 },
         { { { "artifact", -1 } }, "artifact", -1 },
         { { { "artifact", { { "random", true }, { "id", 123 } } } }, "artifact", 123 },
-        { { { "terrain", "QUEST_UP" }, { "special", 48 } }, "special", 48 },
-        { { { "terrain", "QUEST_ENTER" }, { "special", 48 } }, "special", 48 },
-        { { { "terrain", "QUEST_EXIT" }, { "special", -1 } }, "special", -1 },
-        { { { "terrain", "UP_STAIR" }, { "special", 48 } }, "special", 48 },
-        { { { "terrain", "ENTRANCE" }, { "special", 48 } }, "special", 48 },
-        { { { "terrain", "OTHER" }, { "trap", "QUEST_UP" }, { "special", 48 } }, "special", 48 },
-        { { { "terrain", "OTHER" }, { "trap", "QUEST_ENTER" }, { "special", 48 } }, "special", 48 },
-        { { { "terrain", "OTHER" }, { "trap", "QUEST_EXIT" }, { "special", -1 } }, "special", -1 },
-        { { { "terrain", "OTHER" }, { "trap", "UP_STAIR" }, { "special", 48 } }, "special", 48 },
-        { { { "terrain", "OTHER" }, { "trap", "ENTRANCE" }, { "special", 48 } }, "special", 48 },
+        { { { "terrain", "QUEST_UP" }, { "special", 48 } }, "special (QuestId)", 48 },
+        { { { "terrain", "QUEST_ENTER" }, { "special", 48 } }, "special (QuestId)", 48 },
+        { { { "terrain", "QUEST_EXIT" }, { "special", -1 } }, "special (QuestId)", -1 },
+        { { { "terrain", "UP_STAIR" }, { "special", 48 } }, "special (QuestId)", 48 },
+        { { { "terrain", "ENTRANCE" }, { "special", 48 } }, "special (DungeonId)", 48 },
+        { { { "terrain", "OTHER" }, { "trap", "QUEST_UP" }, { "special", 48 } }, "special (QuestId)", 48 },
+        { { { "terrain", "OTHER" }, { "trap", "QUEST_ENTER" }, { "special", 48 } }, "special (QuestId)", 48 },
+        { { { "terrain", "OTHER" }, { "trap", "QUEST_EXIT" }, { "special", -1 } }, "special (QuestId)", -1 },
+        { { { "terrain", "OTHER" }, { "trap", "UP_STAIR" }, { "special", 48 } }, "special (QuestId)", 48 },
+        { { { "terrain", "OTHER" }, { "trap", "ENTRANCE" }, { "special", 48 } }, "special (DungeonId)", 48 },
     };
     for (const auto base : { false, true }) {
         for (const auto seeded : { false, true }) {
@@ -800,8 +812,7 @@ TEST_CASE("QuestList rejects missing local and base legend references before pub
                 } catch (const std::runtime_error &error) {
                     const std::string diagnostic(error.what());
                     CHECK(diagnostic.find(base ? "QuestPreferences.jsonc" : "02.jsonc") != std::string::npos);
-                    CHECK(diagnostic.find("legend['!']." + input.field) != std::string::npos);
-                    CHECK(diagnostic.find(std::to_string(input.id)) != std::string::npos);
+                    CHECK(diagnostic.find("legend['!']." + input.field + " " + std::to_string(input.id)) != std::string::npos);
                 }
                 CHECK(list.size() == (seeded ? 2 : 0));
                 CHECK_FALSE(list.contains(QuestId::THIEF));
@@ -872,9 +883,13 @@ TEST_CASE("QuestList preserves legend fixed references and generation parameters
             REQUIRE(map);
             const auto &parsed = base ? QuestFixedMapList::get_instance().get_base_legend().at('!') : map->legend.at('!');
             if (cell.contains("object") && cell["object"].is_object() && cell["object"].contains("oodLevel")) {
-                CHECK(parsed.grid.object == 32767);
-                CHECK(parsed.grid.monster == -32768);
-                CHECK(parsed.grid.ego == static_cast<EgoType>(123));
+                CHECK(parsed.grid.object == cell["object"]["oodLevel"].get<int>());
+            }
+            if (cell.contains("monster") && cell["monster"].is_object() && cell["monster"].contains("oodLevel")) {
+                CHECK(parsed.grid.monster == cell["monster"]["oodLevel"].get<int>());
+            }
+            if (cell.contains("ego") && cell["ego"].is_object() && cell["ego"].contains("id")) {
+                CHECK(enum2i(parsed.grid.ego) == cell["ego"]["id"].get<int>());
             }
             if (cell.contains("object") && cell["object"].is_object() && cell["object"].contains("questReward")) {
                 CHECK(parsed.object_is_quest_reward);
@@ -900,4 +915,23 @@ TEST_CASE("QuestList treats ordinary upstairs special as floor metadata in rando
     const auto map = QuestFixedMapList::get_instance().find(QuestId::THIEF);
     REQUIRE(map);
     CHECK(map->legend.at('<').grid.special == 48);
+}
+
+TEST_CASE("QuestList reward diagnostics retain original JSON array positions")
+{
+    test::QuestListTestAccess quests;
+    test::MonraceListTestAccess monraces;
+    test::ArtifactListTestAccess artifacts;
+    MonraceList::get_instance().emplace(static_cast<MonraceId>(0));
+    QuestFiles files;
+    auto data = make_quest(1);
+    data["definition"]["reward"] = { { "artifacts", { "ignored", 0, 123 } } };
+    files.write("quest.jsonc", data);
+    try {
+        quests.load(files.directory);
+        FAIL("Expected an undefined reward reference");
+    } catch (const std::runtime_error &error) {
+        CHECK(std::string(error.what()).find("definition.reward.artifacts[2] 123") != std::string::npos);
+    }
+    check_unpublished(QuestId::THIEF);
 }

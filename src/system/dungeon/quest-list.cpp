@@ -229,6 +229,7 @@ void QuestList::load_json_quests(const std::filesystem::path &quests_dir, std::m
 
     std::vector<std::pair<QuestId, std::filesystem::path>> loaded_quests;
     loaded_quests.reserve(files.size());
+    std::map<QuestId, std::vector<size_t>> reward_candidate_indices;
     for (const auto &file : files) {
         JsoncDocumentLoader loader(file);
         if (!loader.is_open()) {
@@ -269,6 +270,15 @@ void QuestList::load_json_quests(const std::filesystem::path &quests_dir, std::m
             THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, file.string(), static_cast<int>(err)));
         }
 
+        // readerが非整数要素を読み飛ばしても、診断は元のJSON配列の添字を使う。
+        const auto &candidates = get_json_value(get_json_value(get_json_value(quest_data, "definition"), "reward"), "artifacts");
+        auto &candidate_indices = reward_candidate_indices[quest_id];
+        for (size_t i = 0; i < candidates.size(); ++i) {
+            if (candidates[i].is_number_integer()) {
+                candidate_indices.push_back(i);
+            }
+        }
+
         parsed_quests.emplace(quest_id, std::move(quest));
         parsed_maps.insert_or_assign(quest_id, std::move(fixed_map));
         loaded_quests.emplace_back(quest_id, file);
@@ -300,7 +310,7 @@ void QuestList::load_json_quests(const std::filesystem::path &quests_dir, std::m
         for (size_t i = 0; i < fixed_map.reward_artifact_candidates.size(); ++i) {
             const auto candidate = fixed_map.reward_artifact_candidates[i];
             require_reference(candidate == 0 || artifacts.contains(i2enum<FixedArtifactId>(candidate)),
-                fmt::format("definition.reward.artifacts[{}]", i), candidate);
+                fmt::format("definition.reward.artifacts[{}]", reward_candidate_indices.at(quest_id).at(i)), candidate);
         }
         for (size_t i = 0; i < fixed_map.starts.size(); ++i) {
             const auto leaving_id = fixed_map.starts[i].leaving_quest;
