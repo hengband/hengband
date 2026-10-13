@@ -9,6 +9,7 @@
 #include "system/redrawing-flags-updater.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
+#include "window/display-sub-windows.h"
 #include "world/world.h"
 
 bool inkey_base; /* See the "inkey()" function */
@@ -52,6 +53,11 @@ static void all_term_fresh()
     auto [x, y] = term_locate();
 
     RedrawingFlagsUpdater::get_instance().fill_up_sub_flags();
+    // コマンドの入力を待つとき (inkey_flag) だけ比べる。M コマンドの中の入力待ちなどで比べると、
+    // 前のメッセージがいったん灰色で描かれ、コマンドの終わりに白に戻ってちらつく
+    if (inkey_flag) {
+        request_message_redraw_if_color_changed();
+    }
     redraw_stuff(p_ptr);
     window_stuff_including_deferred(p_ptr);
 
