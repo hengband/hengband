@@ -23,6 +23,9 @@
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#include <algorithm>
+#include <cstdint>
+#include <limits>
 #include <vector>
 
 /*!
@@ -57,6 +60,20 @@ MANA_POINT mod_need_mana(PlayerType *player_ptr, MANA_POINT need_mana, SPELL_IDX
 #undef MANA_CONST
 
     return need_mana;
+}
+
+/*!
+ * @brief MP不足の詠唱・技能で発生する状態異常の時間を抽選する
+ * @param need_mana 呼び出し側が用いる消費MPまたは不足MP
+ * @return 状態異常の上限10000を超えない時間
+ * @details 職業魔法以外の技能と保存済みMPも入力元になるため、入力型intの範囲で乗算を保護する。
+ * 現在のClassMagic上限2047と正常な保存値だけでは、この抽選上限の保護には到達しない。
+ */
+TIME_EFFECT roll_spell_over_exertion_duration(MANA_POINT need_mana)
+{
+    const auto maximum = std::clamp<int64_t>(5LL * need_mana + 1, 1, std::numeric_limits<int>::max());
+    // 抽選後に上限へ丸め、shortへの変換で負の麻痺時間にならないようにする。
+    return static_cast<TIME_EFFECT>(std::min(randint1(static_cast<int>(maximum)), 10000));
 }
 
 /*!

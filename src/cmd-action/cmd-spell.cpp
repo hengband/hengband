@@ -1274,11 +1274,10 @@ bool do_cmd_cast(PlayerType *player_ptr)
 
     /* Over-exert the player */
     if (over_exerted) {
-        int oops = need_mana;
         player_ptr->csp = 0;
         player_ptr->csp_frac = 0;
         msg_print(_("精神を集中しすぎて気を失ってしまった！", "You faint from the effort!"));
-        (void)BadStatusSetter(player_ptr).mod_paralysis(randnum1<short>(5 * oops + 1));
+        (void)BadStatusSetter(player_ptr).mod_paralysis(roll_spell_over_exertion_duration(need_mana));
         switch (use_realm) {
         case RealmType::LIFE:
             chg_virtue(player_ptr, Virtue::VITALITY, -10);

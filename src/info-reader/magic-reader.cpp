@@ -7,10 +7,14 @@
 #include "system/spell-info-list.h"
 #include "util/enum-converter.h"
 #include "view/display-messages.h"
+#include <limits>
 #include <nlohmann/json.hpp>
 #include <utility>
 
 namespace {
+//! 消費MP・初回経験値倍率・装備重量閾値の上限。
+constexpr auto MAX_CLASS_MAGIC_VALUE = std::numeric_limits<short>::max() / 16;
+
 /*!
  * @brief 魔法タイプ名とtvalの対応表
  */
@@ -122,7 +126,7 @@ int MagicReader::read() const
         msg_format(_("呪文行使開始レベル読込失敗。ID: '%d'。", "Failed to load spell-first level. ID: '%d'."), error_idx);
         return err;
     }
-    if (auto err = info_set_integer(get_json_value(this->class_data, "armour_weight_limit"), magics_info.spell_weight, true, Range(0, 999))) {
+    if (auto err = info_set_integer(get_json_value(this->class_data, "armour_weight_limit"), magics_info.spell_weight, true, Range(0, MAX_CLASS_MAGIC_VALUE))) {
         msg_format(_("MP重量制限値読込失敗。ID: '%d'。", "Failed to load spell-weight value. ID: '%d'."), error_idx);
         return err;
     }
@@ -218,15 +222,15 @@ int MagicReader::set_spell_data(const nlohmann::json &spell_data, player_magic &
         msg_format(_("呪文学習レベル読込失敗。ID: '%d'。", "Failed to load spell learn_level. ID: '%d'."), error_idx);
         return err;
     }
-    if (auto err = info_set_integer(get_json_value(spell_data, "mana_cost"), info.smana, true, Range(0, 999))) {
+    if (auto err = info_set_integer(get_json_value(spell_data, "mana_cost"), info.smana, true, Range(0, MAX_CLASS_MAGIC_VALUE))) {
         msg_format(_("呪文コスト読込失敗。ID: '%d'。", "Failed to load spell mana_cost. ID: '%d'."), error_idx);
         return err;
     }
-    if (auto err = info_set_integer(get_json_value(spell_data, "difficulty"), info.sfail, true, Range(0, 999))) {
+    if (auto err = info_set_integer(get_json_value(spell_data, "difficulty"), info.sfail, true, Range(0, 100))) {
         msg_format(_("呪文難易度読込失敗。ID: '%d'。", "Failed to load spell difficulty. ID: '%d'."), error_idx);
         return err;
     }
-    if (auto err = info_set_integer(get_json_value(spell_data, "first_cast_exp_rate"), info.sexp, true, Range(0, 999))) {
+    if (auto err = info_set_integer(get_json_value(spell_data, "first_cast_exp_rate"), info.sexp, true, Range(0, MAX_CLASS_MAGIC_VALUE))) {
         msg_format(_("呪文詠唱ボーナスEXP読込失敗。ID: '%d'。", "Failed to load spell first_cast_exp_rate. ID: '%d'."), error_idx);
         return err;
     }

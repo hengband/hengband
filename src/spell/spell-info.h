@@ -5,6 +5,7 @@
 class PlayerType;
 enum class RealmType;
 MANA_POINT mod_need_mana(PlayerType *player_ptr, MANA_POINT need_mana, SPELL_IDX spell_id, RealmType realm);
+TIME_EFFECT roll_spell_over_exertion_duration(MANA_POINT need_mana);
 PERCENTAGE mod_spell_chance_1(PlayerType *player_ptr, PERCENTAGE chance);
 PERCENTAGE mod_spell_chance_2(PlayerType *player_ptr, PERCENTAGE chance);
 PERCENTAGE spell_chance(PlayerType *player_ptr, SPELL_IDX spell_id, RealmType realm);

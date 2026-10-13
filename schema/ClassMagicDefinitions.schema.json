@@ -106,9 +106,9 @@
                     },
                     "armour_weight_limit": {
                         "type": "integer",
-                        "description": "装備重量によるMP減少が開始する値",
+                        "description": "装備重量によるMP減少が開始する値。整数0～2047",
                         "minimum": 0,
-                        "maximum": 999
+                        "maximum": 2047
                     },
                     "realms": {
                         "type": "array",
@@ -165,21 +165,21 @@
                                             },
                                             "mana_cost": {
                                                 "type": "integer",
-                                                "description": "消費MP",
+                                                "description": "補正前の消費MP。整数0～2047",
                                                 "minimum": 0,
-                                                "maximum": 999
+                                                "maximum": 2047
                                             },
                                             "difficulty": {
                                                 "type": "integer",
-                                                "description": "呪文難易度",
+                                                "description": "レベル・能力値等の補正前の呪文難易度。整数0～100。最終失敗率の上限とは異なる",
                                                 "minimum": 0,
-                                                "maximum": 999
+                                                "maximum": 100
                                             },
                                             "first_cast_exp_rate": {
                                                 "type": "integer",
-                                                "description": "初回詠唱成功時に獲得する経験値レート",
+                                                "description": "初回詠唱成功時の経験値は、この倍率×呪文習得レベル。倍率は整数0～2047",
                                                 "minimum": 0,
-                                                "maximum": 999
+                                                "maximum": 2047
                                             }
                                         }
                                     }
