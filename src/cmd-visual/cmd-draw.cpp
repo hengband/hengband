@@ -64,19 +64,14 @@ void do_cmd_redraw(PlayerType *player_ptr)
     };
     rfu.set_flags(flags_iaf);
     rfu.request_whole_main_window_redrawing();
-    static constexpr auto flags_swrf = {
-        SubWindowRedrawingFlag::INVENTORY,
-        SubWindowRedrawingFlag::EQUIPMENT,
-        SubWindowRedrawingFlag::SPELL,
-        SubWindowRedrawingFlag::PLAYER,
-        SubWindowRedrawingFlag::MESSAGE,
-        SubWindowRedrawingFlag::OVERHEAD,
-        SubWindowRedrawingFlag::DUNGEON,
-        SubWindowRedrawingFlag::MONSTER_LORE,
-        SubWindowRedrawingFlag::ITEM_KNOWLEDGE,
-    };
-    rfu.set_flags(flags_swrf);
-    AngbandWorld::get_instance().play_time.update();
+    auto &world = AngbandWorld::get_instance();
+    // フロアが無いとき (新しいキャラクターの作成中に Windows 版のメニューから記号を切り替えたときなど) は、
+    // フロアに入るときに全てのサブウィンドウを描き直す
+    if (world.character_dungeon) {
+        rfu.fill_up_sub_flags();
+    }
+
+    world.play_time.update();
     handle_stuff(player_ptr);
     if (PlayerRace(player_ptr).equals(PlayerRaceType::ANDROID)) {
         calc_android_exp(player_ptr);
