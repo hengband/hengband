@@ -122,7 +122,7 @@ TEST_CASE("preference file readers stop and return an error for an invalid condi
 
 TEST_CASE("autopick editor keeps lines after a condition error inactive until it is fixed")
 {
-    text_body_type body(0, 0);
+    AutopickTextBody body(0, 0);
     for (const auto line : { "?:[FOO a]", "apple", "?:1", "banana" }) {
         body.lines_list.push_back(std::make_unique<std::string>(line));
     }
@@ -154,7 +154,7 @@ TEST_CASE("autopick editor checks included conditions without changing settings"
     histpref_buf = "before";
     files.write_raw("child.prf", "%:nested.prf\nH:side effect\n");
     files.write_raw("nested.prf", "?:[FOO a]\n");
-    text_body_type body(0, 0);
+    AutopickTextBody body(0, 0);
     for (const auto line : { "%:child.prf", "apple", "?:1", "banana" }) {
         body.lines_list.push_back(std::make_unique<std::string>(line));
     }

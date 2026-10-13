@@ -11,7 +11,7 @@
 /*!
  * @brief Delete or insert string
  */
-void toggle_keyword(text_body_type *tb, BIT_FLAGS flg)
+void toggle_keyword(AutopickTextBody *tb, BIT_FLAGS flg)
 {
     int by1, by2;
     bool add = true;
@@ -77,7 +77,7 @@ void toggle_keyword(text_body_type *tb, BIT_FLAGS flg)
 /*!
  * @brief Change command letter
  */
-void toggle_command_letter(text_body_type *tb, AutopickMethod am)
+void toggle_command_letter(AutopickTextBody *tb, AutopickMethod am)
 {
     autopick_type an_entry;
     autopick_type *entry = &an_entry;
@@ -156,7 +156,7 @@ void toggle_command_letter(text_body_type *tb, AutopickMethod am)
 /*!
  * @brief Delete or insert string
  */
-void add_keyword(text_body_type *tb, BIT_FLAGS flg)
+void add_keyword(AutopickTextBody *tb, BIT_FLAGS flg)
 {
     int by1, by2;
     if (tb->mark) {
@@ -197,9 +197,9 @@ void add_keyword(text_body_type *tb, BIT_FLAGS flg)
  * @details 行バッファは使用中の行の直後に nullptr の番兵があることを前提に走査されるため、
  * insert_return_code() と同じく最大行数を超えて行を増やしてはならない。
  */
-bool add_empty_line(text_body_type *tb)
+bool add_empty_line(AutopickTextBody *tb)
 {
-    const auto num_lines = count_line(tb);
+    const auto num_lines = tb->count_line();
     if (is_greater_autopick_max_line(num_lines)) {
         return false;
     }
@@ -214,13 +214,13 @@ bool add_empty_line(text_body_type *tb)
     return true;
 }
 
-void kill_yank_chain(text_body_type *tb)
+void kill_yank_chain(AutopickTextBody *tb)
 {
     tb->yank.clear();
     tb->yank_eol = true;
 }
 
-void add_str_to_yank(text_body_type *tb, std::string_view str)
+void add_str_to_yank(AutopickTextBody *tb, std::string_view str)
 {
     tb->yank_eol = false;
     tb->yank.emplace_back(str);
@@ -229,7 +229,7 @@ void add_str_to_yank(text_body_type *tb, std::string_view str)
 /*!
  * @brief Do work for the copy editor-command
  */
-void copy_text_to_yank(text_body_type *tb)
+void copy_text_to_yank(AutopickTextBody *tb)
 {
     const int len = tb->lines_list[tb->cy]->length();
     if (tb->cx > len) {

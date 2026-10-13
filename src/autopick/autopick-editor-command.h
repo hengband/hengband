@@ -9,5 +9,5 @@ enum ape_quittance {
 
 enum class EditorCommandId;
 class PlayerType;
-struct text_body_type;
-ape_quittance do_editor_command(PlayerType *player_ptr, text_body_type *tb, EditorCommandId com_id);
+class AutopickTextBody;
+ape_quittance do_editor_command(PlayerType *player_ptr, AutopickTextBody *tb, EditorCommandId com_id);

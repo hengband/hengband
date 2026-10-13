@@ -40,13 +40,18 @@ struct autopick_type {
     void remove(int flag);
 };
 
-/*
- * Data struct for text editor
- */
 enum class EditorCommandId;
 class ItemEntity;
-struct text_body_type {
-    text_body_type(int cx, int cy); //!< @details 画面表示はX→Yの順番であることが多いので一応揃える.
+
+/*!
+ * @brief 自動拾い設定ファイル用テキストエディタの状態を保持するクラス
+ *
+ * 編集中の行データ・各行の状態・カーソル位置・画面スクロール位置・選択範囲・検索条件・ヤンクバッファ・再描画用ダーティ情報・変更フラグなどをまとめて管理する。
+ * ユーザがエディタを操作する度に、このクラスのインスタンスを通じて状態が更新される。
+ */
+class AutopickTextBody {
+public:
+    AutopickTextBody(int cx, int cy); // 画面表示はX→Yの順番であることが多いので一応揃える.
 
     void adjust_cursor_column();
     void update_cursor_column_record(EditorCommandId com_id);
@@ -84,6 +89,8 @@ struct text_body_type {
     EditorCommandId old_com_id{};
 
     bool changed = false;
+
+    int count_line() const;
 };
 
 /*
@@ -92,8 +99,7 @@ struct text_body_type {
 extern std::vector<autopick_type> autopick_list;
 extern ItemEntity autopick_last_destroyed_object;
 
-void auto_inscribe_item(ItemEntity *o_ptr, int idx);
-int count_line(text_body_type *tb);
+bool auto_inscribe_item(ItemEntity &item, int idx);
 
 /*!
  * @brief 最大行数を超えるかチェックする

@@ -9,10 +9,12 @@
 #include "autopick/autopick-editor-command.h"
 #include "autopick/autopick-inserter-killer.h"
 #include "autopick/autopick-util.h"
+#include "system/item/item-entity.h"
+
+#include "test/scoped-restore.h"
 #include "test/string-helpers.h"
 
 #include <doctest/doctest.h>
-
 #include <memory>
 #include <string>
 #include <string_view>
@@ -29,9 +31,9 @@ constexpr auto MAX_EDITABLE_LINES = MAX_LINES - 2;
  * @param num_lines 行数
  * @return エディタの状態
  */
-text_body_type make_text_body(int num_lines)
+AutopickTextBody make_text_body(int num_lines)
 {
-    text_body_type tb(0, 0);
+    AutopickTextBody tb(0, 0);
     tb.lines_list.resize(MAX_LINES);
     for (auto y = 0; y < num_lines; y++) {
         tb.lines_list[y] = std::make_unique<std::string>("a");
@@ -46,7 +48,7 @@ text_body_type make_text_body(int num_lines)
  * @param cx カーソルの位置 (バイト)
  * @return エディタの状態
  */
-text_body_type make_text_body_with_line(std::string_view line, int cx)
+AutopickTextBody make_text_body_with_line(std::string_view line, int cx)
 {
     auto tb = make_text_body(1);
     *tb.lines_list[0] = line;
@@ -66,7 +68,7 @@ TEST_CASE("add_empty_line appends an empty line below the line limit")
     auto tb = make_text_body(MAX_EDITABLE_LINES - 1);
 
     CHECK(add_empty_line(&tb));
-    CHECK(count_line(&tb) == MAX_EDITABLE_LINES);
+    CHECK(tb.count_line() == MAX_EDITABLE_LINES);
     REQUIRE(tb.lines_list[MAX_EDITABLE_LINES - 1] != nullptr);
     CHECK(tb.lines_list[MAX_EDITABLE_LINES - 1]->empty());
     CHECK((tb.dirty_flags & DIRTY_EXPRESSION) != 0);
@@ -78,7 +80,7 @@ TEST_CASE("add_empty_line does not append a line at the line limit")
     auto tb = make_text_body(MAX_EDITABLE_LINES);
 
     CHECK_FALSE(add_empty_line(&tb));
-    CHECK(count_line(&tb) == MAX_EDITABLE_LINES);
+    CHECK(tb.count_line() == MAX_EDITABLE_LINES);
     CHECK(tb.lines_list[MAX_EDITABLE_LINES] == nullptr);
     CHECK(tb.dirty_flags == 0);
     CHECK_FALSE(tb.changed);
@@ -90,7 +92,7 @@ TEST_CASE("add_empty_line does not append a line when the last line is empty")
     *tb.lines_list[0] = "";
 
     CHECK_FALSE(add_empty_line(&tb));
-    CHECK(count_line(&tb) == 1);
+    CHECK(tb.count_line() == 1);
     CHECK_FALSE(tb.changed);
 }
 
@@ -110,6 +112,53 @@ TEST_CASE("insert_return_code splits the line at the cursor")
     CHECK(*tb.lines_list[0] == "ab");
     REQUIRE(tb.lines_list[1] != nullptr);
     CHECK(*tb.lines_list[1] == "cd");
+}
+
+TEST_CASE("auto_inscribe_item returns false for invalid index or empty insc")
+{
+    const auto restore = test::scoped_restore(autopick_list);
+    autopick_list.clear();
+    autopick_list.emplace_back(); // insc空のエントリを用意
+
+    ItemEntity item;
+    // idx < 0
+    CHECK_FALSE(auto_inscribe_item(item, -1));
+    CHECK_FALSE(item.is_inscribed());
+
+    // insc空
+    CHECK_FALSE(auto_inscribe_item(item, 0));
+    CHECK_FALSE(item.is_inscribed());
+}
+
+TEST_CASE("auto_inscribe_item does not overwrite existing inscription and returns false")
+{
+    const auto restore = test::scoped_restore(autopick_list);
+    autopick_list.clear();
+    autopick_type entry;
+    entry.insc = "test-insc";
+    autopick_list.push_back(entry);
+
+    ItemEntity item;
+    item.inscription = "existing";
+    REQUIRE(item.is_inscribed());
+
+    CHECK_FALSE(auto_inscribe_item(item, 0));
+    CHECK(item.inscription == "existing"); // 上書きされない
+}
+
+TEST_CASE("auto_inscribe_item sets inscription when empty and returns true")
+{
+    const auto restore = test::scoped_restore(autopick_list);
+    autopick_list.clear();
+    autopick_type entry;
+    entry.insc = "new-insc";
+    autopick_list.push_back(entry);
+
+    ItemEntity item;
+    REQUIRE_FALSE(item.is_inscribed());
+
+    CHECK(auto_inscribe_item(item, 0));
+    CHECK(item.inscription == "new-insc");
 }
 
 #ifdef JP
