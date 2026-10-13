@@ -34,6 +34,7 @@
 #include "system/item/item-entity.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
+#include "system/redrawing-flags-updater.h"
 #include "system/terrain/terrain-definition.h"
 #include "system/terrain/terrain-list.h"
 #include "target/target-preparation.h"
@@ -72,6 +73,13 @@ FixItemTesterSetter::FixItemTesterSetter(const ItemTester &item_tester)
 FixItemTesterSetter::~FixItemTesterSetter()
 {
     fix_item_tester = std::make_unique<AllMatchItemTester>();
+
+    // 選べるアイテムだけに記号を付けていた表示を元に戻す
+    static constexpr auto flags = {
+        SubWindowRedrawingFlag::INVENTORY,
+        SubWindowRedrawingFlag::EQUIPMENT,
+    };
+    RedrawingFlagsUpdater::get_instance().set_flags(flags);
 }
 
 /*!
