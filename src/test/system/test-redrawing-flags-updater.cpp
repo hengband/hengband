@@ -78,3 +78,44 @@ TEST_CASE("RedrawingFlagsUpdater::request_whole_main_window_redrawing requests w
         CHECK(rfu.has(flag));
     }
 }
+
+TEST_CASE("RedrawingFlagsUpdater::request_map_redrawing requests redrawing the maps")
+{
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    static constexpr auto flags_swrf = {
+        SubWindowRedrawingFlag::OVERHEAD,
+        SubWindowRedrawingFlag::DUNGEON,
+    };
+    const auto restore_mwrf = scoped_restore_flags(rfu, { MainWindowRedrawingFlag::MAP });
+    const auto restore_swrf = scoped_restore_flags(rfu, flags_swrf);
+    rfu.reset_flag(MainWindowRedrawingFlag::MAP);
+    rfu.reset_flags(flags_swrf);
+
+    rfu.request_map_redrawing();
+
+    CHECK(rfu.has(MainWindowRedrawingFlag::MAP));
+    CHECK(rfu.has(SubWindowRedrawingFlag::OVERHEAD));
+    CHECK(rfu.has(SubWindowRedrawingFlag::DUNGEON));
+}
+
+TEST_CASE("RedrawingFlagsUpdater::request_monster_update_and_map_redrawing requests updating the monsters and redrawing the maps")
+{
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    static constexpr auto flags_swrf = {
+        SubWindowRedrawingFlag::OVERHEAD,
+        SubWindowRedrawingFlag::DUNGEON,
+    };
+    const auto restore_srf = scoped_restore_flags(rfu, { StatusRecalculatingFlag::MONSTER_STATUSES });
+    const auto restore_mwrf = scoped_restore_flags(rfu, { MainWindowRedrawingFlag::MAP });
+    const auto restore_swrf = scoped_restore_flags(rfu, flags_swrf);
+    rfu.reset_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
+    rfu.reset_flag(MainWindowRedrawingFlag::MAP);
+    rfu.reset_flags(flags_swrf);
+
+    rfu.request_monster_update_and_map_redrawing();
+
+    CHECK(rfu.has(StatusRecalculatingFlag::MONSTER_STATUSES));
+    CHECK(rfu.has(MainWindowRedrawingFlag::MAP));
+    CHECK(rfu.has(SubWindowRedrawingFlag::OVERHEAD));
+    CHECK(rfu.has(SubWindowRedrawingFlag::DUNGEON));
+}

@@ -403,9 +403,9 @@ void do_cmd_building(PlayerType *player_ptr)
     term_clear();
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
+    rfu.request_monster_update_and_map_redrawing();
     static constexpr auto flags_srf = {
         StatusRecalculatingFlag::VIEW,
-        StatusRecalculatingFlag::MONSTER_STATUSES,
         StatusRecalculatingFlag::BONUS,
         StatusRecalculatingFlag::LITE,
         StatusRecalculatingFlag::MONSTER_LITE,
@@ -415,12 +415,6 @@ void do_cmd_building(PlayerType *player_ptr)
         MainWindowRedrawingFlag::BASIC,
         MainWindowRedrawingFlag::EXTRA,
         MainWindowRedrawingFlag::EQUIPPY,
-        MainWindowRedrawingFlag::MAP,
     };
     rfu.set_flags(flags_mwrf);
-    static constexpr auto flags_swrf = {
-        SubWindowRedrawingFlag::OVERHEAD,
-        SubWindowRedrawingFlag::DUNGEON,
-    };
-    rfu.set_flags(flags_swrf);
 }

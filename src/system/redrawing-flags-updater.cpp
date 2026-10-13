@@ -173,6 +173,31 @@ void RedrawingFlagsUpdater::request_whole_main_window_redrawing()
     this->main_window_flags.set(flags_mwrf);
 }
 
+/*!
+ * @brief マップの描き直しを予約する
+ * @details メインウィンドウのマップに加え、マップを表示するサブウィンドウ (周辺の光景・ダンジョンの地形) も描き直す。
+ */
+void RedrawingFlagsUpdater::request_map_redrawing()
+{
+    this->main_window_flags.set(MainWindowRedrawingFlag::MAP);
+    static constexpr auto flags_swrf = {
+        SubWindowRedrawingFlag::OVERHEAD,
+        SubWindowRedrawingFlag::DUNGEON,
+    };
+    this->sub_window_flags.set(flags_swrf);
+}
+
+/*!
+ * @brief モンスターの表示状態の更新と、マップの描き直しを予約する
+ * @details モンスターの見え方が変わり得るとき (時間停止・無敵・画面のスクロールなど) に使う。
+ * 描き直す範囲は request_map_redrawing() と同じ。
+ */
+void RedrawingFlagsUpdater::request_monster_update_and_map_redrawing()
+{
+    this->status_flags.set(StatusRecalculatingFlag::MONSTER_STATUSES);
+    this->request_map_redrawing();
+}
+
 void RedrawingFlagsUpdater::fill_up_sub_flags()
 {
     constexpr auto all_sub_window_flags = EnumRange(SubWindowRedrawingFlag::INVENTORY, SubWindowRedrawingFlag::MAX);

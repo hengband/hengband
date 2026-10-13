@@ -622,12 +622,6 @@ int interpret_pref_file(PlayerType *player_ptr, std::string_view buf)
     }
 
     // 記号や表示のオプションが変わると、マップの表示も変わりうる
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.set_flag(MainWindowRedrawingFlag::MAP);
-    static constexpr auto flags = {
-        SubWindowRedrawingFlag::OVERHEAD,
-        SubWindowRedrawingFlag::DUNGEON,
-    };
-    rfu.set_flags(flags);
+    RedrawingFlagsUpdater::get_instance().request_map_redrawing();
     return 0;
 }

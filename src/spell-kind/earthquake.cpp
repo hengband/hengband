@@ -297,6 +297,7 @@ void glow_earthquake_area(auto &floor, std::span<const Pos2D> area)
 void set_redrawing_flags()
 {
     auto &rfu = RedrawingFlagsUpdater::get_instance();
+    rfu.request_monster_update_and_map_redrawing();
     static constexpr auto flags_srf = {
         StatusRecalculatingFlag::UN_VIEW,
         StatusRecalculatingFlag::UN_LITE,
@@ -304,20 +305,13 @@ void set_redrawing_flags()
         StatusRecalculatingFlag::LITE,
         StatusRecalculatingFlag::FLOW,
         StatusRecalculatingFlag::MONSTER_LITE,
-        StatusRecalculatingFlag::MONSTER_STATUSES,
     };
     rfu.set_flags(flags_srf);
     static constexpr auto flags_mwrf = {
         MainWindowRedrawingFlag::HEALTH,
         MainWindowRedrawingFlag::UHEALTH,
-        MainWindowRedrawingFlag::MAP,
     };
     rfu.set_flags(flags_mwrf);
-    static constexpr auto flags_swrf = {
-        SubWindowRedrawingFlag::OVERHEAD,
-        SubWindowRedrawingFlag::DUNGEON,
-    };
-    rfu.set_flags(flags_swrf);
 }
 } // namespace
 

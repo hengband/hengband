@@ -106,23 +106,17 @@ static void dispel_player(PlayerType *player_ptr)
 
         player_ptr->action = ACTION_NONE;
         auto &rfu = RedrawingFlagsUpdater::get_instance();
+        rfu.request_monster_update_and_map_redrawing();
         static constexpr auto flags_srf = {
             StatusRecalculatingFlag::BONUS,
             StatusRecalculatingFlag::HP,
-            StatusRecalculatingFlag::MONSTER_STATUSES,
         };
         rfu.set_flags(flags_srf);
         static constexpr auto flags_mwrf = {
-            MainWindowRedrawingFlag::MAP,
             MainWindowRedrawingFlag::TIMED_EFFECT,
             MainWindowRedrawingFlag::ACTION,
         };
         rfu.set_flags(flags_mwrf);
-        static constexpr auto flags_swrf = {
-            SubWindowRedrawingFlag::OVERHEAD,
-            SubWindowRedrawingFlag::DUNGEON,
-        };
-        rfu.set_flags(flags_swrf);
         player_ptr->energy_need += ENERGY_NEED();
     }
 }
