@@ -621,7 +621,13 @@ int interpret_pref_file(PlayerType *player_ptr, std::string_view buf)
         return result;
     }
 
-    // 記号や表示のオプションが変わると、マップの表示も変わりうる
-    RedrawingFlagsUpdater::get_instance().request_map_redrawing();
+    // 記号や表示のオプションが変わると、マップやサブウィンドウの表示も変わりうる。
+    // フロアが無いとき (新しいキャラクターの作成中など) は、フロアに入るときに全てのサブウィンドウを描き直す
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    rfu.request_map_redrawing();
+    if (AngbandWorld::get_instance().character_dungeon) {
+        rfu.fill_up_sub_flags();
+    }
+
     return 0;
 }
