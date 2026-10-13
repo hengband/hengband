@@ -6,7 +6,6 @@
 #include "info-reader/quest-reader.h"
 #include "info-reader/random-grid-effect-types.h"
 #include "io/files-util.h"
-#include "object-enchant/object-ego.h"
 #include "system/angband-exceptions.h"
 #include "system/artifact/artifact-definition.h"
 #include "system/artifact/artifact-list.h"
@@ -18,6 +17,8 @@
 #include "system/dungeon/quest-definition.h"
 #include "system/dungeon/quest-fixed-map.h"
 #include "system/enums/dungeon/dungeon-id.h"
+#include "system/enums/terrain/terrain-conversion-type.h"
+#include "system/grid-type-definition.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
 #include "system/terrain/terrain-definition.h"
@@ -29,6 +30,7 @@
 #include <fmt/format.h>
 #include <iterator>
 #include <nlohmann/json.hpp>
+#include <set>
 #include <string>
 #include <string_view>
 #include <utility>
@@ -44,19 +46,103 @@ void require_quest_reference(bool valid, const std::filesystem::path &file, std:
 }
 
 /*!
+ * @brief 配置時の地形変換の全候補を、乱数とダンジョン状態を変更せずに列挙する
+ * @details Quest進入時は現在のダンジョンIDを引き継ぐため、Questのdungeonだけでは絞らない。
+ * convert_terrain_id()と同じく一段の変換とし、正の重みの床・壁候補をすべて照合する。
+ */
+std::set<short> quest_converted_terrain_candidates(short terrain_id, const DungeonDefinition *dungeon)
+{
+    const auto &terrain = TerrainList::get_instance().get_terrain(terrain_id);
+    if (terrain.flags.has_not(TerrainCharacteristics::CONVERT)) {
+        return { terrain_id };
+    }
+    if (!dungeon) {
+        return {};
+    }
+
+    std::set<short> candidates;
+    switch (terrain.conversion_type) {
+    case TerrainConversionType::FLOOR:
+        for (const auto &[feature, weight] : dungeon->prob_table_floor.entries()) {
+            static_cast<void>(weight);
+            candidates.insert(feature);
+        }
+        break;
+    case TerrainConversionType::WALL:
+        for (const auto &[feature, weight] : dungeon->prob_table_wall.entries()) {
+            static_cast<void>(weight);
+            candidates.insert(feature);
+        }
+        break;
+    case TerrainConversionType::INNER:
+        candidates.insert(dungeon->inner_wall);
+        break;
+    case TerrainConversionType::OUTER:
+    case TerrainConversionType::SOLID:
+        candidates.insert(dungeon->outer_wall);
+        break;
+    case TerrainConversionType::STREAM:
+        candidates.insert(dungeon->select_stream_terrain_id(terrain_id, terrain.stream_index));
+        break;
+    default:
+        candidates.insert(terrain_id);
+        break;
+    }
+    return candidates;
+}
+
+/*!
+ * @brief 配置時の一段のCONVERTと、その後の一段の生成時変化の全候補を列挙する
+ * @details generate_floor()の固定Quest生成後にも生成時変化が適用される。
+ * 確率合計が100未満の場合だけ元地形が残り、変化先の再変換は行わない。
+ */
+std::set<short> quest_special_terrain_candidates(short terrain_id, const DungeonDefinition *dungeon)
+{
+    std::set<short> candidates;
+    for (const auto feature : quest_converted_terrain_candidates(terrain_id, dungeon)) {
+        auto remaining_probability = 100;
+        const auto &terrain = TerrainList::get_instance().get_terrain(feature);
+        for (const auto &change : terrain.generation_changes) {
+            if (remaining_probability == 0) {
+                break;
+            }
+            if (change.probability <= 0) {
+                continue;
+            }
+            candidates.insert(change.result);
+            remaining_probability -= std::min(remaining_probability, change.probability);
+        }
+        if (remaining_probability > 0) {
+            candidates.insert(feature);
+        }
+    }
+    return candidates;
+}
+
+/*!
  * @brief 宣言された凡例の固定参照を、共通凡例も含めて全ストア公開前に照合する
  * @details ランダム生成の深さ補正と受託時の報酬指定は固定IDではない。
  * 負のmonsterはクローンとして絶対値のIDを照合する。負のobject/artifactには
  * 特殊な配置処理がなく、未定義の固定IDとして拒否する。
+ * specialは宣言地形ではなく配置後の地形で解釈されるため、CONVERT・生成時変化・
+ * 罠の下地・発見後の表示まで照合する。配置側の処理を変更するときは対応テストも更新する。
  */
 void validate_quest_legend_references(const std::map<char, QuestLegendCell> &legend, const std::filesystem::path &file,
-    const std::map<QuestId, QuestType> &quests, bool fixed_quest)
+    const std::map<QuestId, QuestType> &quests, bool fixed_quest, bool surface_quest)
 {
     const auto &monraces = MonraceList::get_instance();
     const auto &baseitems = BaseitemList::get_instance();
     const auto &artifacts = ArtifactList::get_instance();
     const auto &dungeons = DungeonList::get_instance();
     const auto &terrains = TerrainList::get_instance();
+    std::vector<const DungeonDefinition *> contexts;
+    for (const auto &[id, dungeon] : dungeons) {
+        static_cast<void>(id);
+        contexts.push_back(dungeon.get());
+    }
+    if (contexts.empty()) {
+        contexts.push_back(nullptr);
+    }
     for (const auto &[symbol, cell] : legend) {
         const auto &grid = cell.grid;
         const auto prefix = fmt::format("legend['{}']", symbol);
@@ -70,10 +156,7 @@ void validate_quest_legend_references(const std::map<char, QuestLegendCell> &leg
         if (!(grid.random & RANDOM_OBJECT) && !cell.object_is_quest_reward && grid.object != 0) {
             require_reference(baseitems.is_valid(grid.object), "object", grid.object);
         }
-        // 配置側ではegoを未使用だが、明示された固定Egoの宣言は存在を保証する。
-        if (!(grid.random & RANDOM_EGO) && grid.ego != EgoType::NONE) {
-            require_reference(egos_info.contains(grid.ego), "ego", enum2i(grid.ego));
-        }
+        // 配置側で使わないegoは、凡例の保持値として存在を照合しない。
         // 配置側はRANDOM_ARTIFACTでもidを固定Artifactとして参照する。
         if (!cell.artifact_is_quest_reward && grid.artifact != FixedArtifactId::NONE) {
             require_reference(artifacts.contains(grid.artifact), "artifact", enum2i(grid.artifact));
@@ -82,16 +165,65 @@ void validate_quest_legend_references(const std::map<char, QuestLegendCell> &leg
             continue;
         }
 
-        // specialは地形ごとに用途が違う。Questの階段・出入口だけをQuest参照として扱う。
-        // 通常の上り階段も、固定Quest内ではdo_cmd_go_upが退出先Questとして使う。
-        // 配置側で固定trapが最終地形になる条件に揃え、specialの用途も同じ地形で判定する。
-        const auto special_feature = (grid.trap != 0 && !(grid.random & (RANDOM_OBJECT | RANDOM_TRAP))) ? grid.trap : grid.feature;
-        const auto &flags = terrains.get_terrain(special_feature).flags;
-        if (flags.has_any_of({ TerrainCharacteristics::QUEST, TerrainCharacteristics::QUEST_ENTER, TerrainCharacteristics::QUEST_EXIT }) || (fixed_quest && flags.has(TerrainCharacteristics::UP_STAIRS))) {
+        const auto require_quest = [&] {
             const auto valid = grid.special > 0 && grid.special <= MAX_RANDOM_QUEST && quests.contains(i2enum<QuestId>(grid.special));
             require_reference(valid, "special (QuestId)", grid.special);
-        } else if (flags.has(TerrainCharacteristics::ENTRANCE)) {
+        };
+        const auto require_dungeon = [&] {
             require_reference(dungeons.contains(i2enum<DungeonId>(grid.special)), "special (DungeonId)", grid.special);
+        };
+        // 表示は一段のTerrainType::mimicを使い、QUEST_ENTER・BLDG・ENTRANCEの順に分岐する。
+        const auto validate_description = [&](short feature) {
+            const auto &flags = terrains.get_terrain(terrains.get_terrain(feature).mimic).flags;
+            if (flags.has(TerrainCharacteristics::QUEST_ENTER)) {
+                require_quest();
+            } else if (flags.has(TerrainCharacteristics::ENTRANCE) && flags.has_not(TerrainCharacteristics::BLDG)) {
+                require_dungeon();
+            }
+        };
+        const auto fixed_trap = grid.trap != 0 && !(grid.random & (RANDOM_OBJECT | RANDOM_TRAP));
+        for (const auto *dungeon : contexts) {
+            const auto physical = quest_special_terrain_candidates(fixed_trap ? grid.trap : grid.feature, dungeon);
+            for (const auto feature : physical) {
+                const auto &terrain = terrains.get_terrain(feature);
+                const auto &flags = terrain.flags;
+                // 移動時の出口処理は、店舗・施設・Quest入口の後に実行される。
+                const auto movement_exit = flags.has(TerrainCharacteristics::QUEST_EXIT) && flags.has_none_of({ TerrainCharacteristics::STORE, TerrainCharacteristics::BLDG, TerrainCharacteristics::QUEST_ENTER });
+                const auto quest_stairs = flags.has(TerrainCharacteristics::QUEST) && flags.has_any_of({ TerrainCharacteristics::UP_STAIRS, TerrainCharacteristics::DOWN_STAIRS });
+                if (flags.has(TerrainCharacteristics::QUEST_ENTER) || movement_exit || quest_stairs || (fixed_quest && flags.has(TerrainCharacteristics::UP_STAIRS))) {
+                    require_quest();
+                }
+                // 地上で下りを使う場合のみDungeonへ入る。QUEST_ENTERとQUESTは先に処理される。
+                if (surface_quest && flags.has_all_of({ TerrainCharacteristics::ENTRANCE, TerrainCharacteristics::DOWN_STAIRS }) && flags.has_none_of({ TerrainCharacteristics::QUEST_ENTER, TerrainCharacteristics::QUEST })) {
+                    require_dungeon();
+                }
+                // 発見でfeatを変えずmimicだけ解除できる固定罠・隠し扉は、自身の表示も照合する。
+                // SECRETは地形変化の別経路で、ここでは元featのmimic解除とは扱わない。
+                const auto detected = flags.has_any_of({ TerrainCharacteristics::TRAP, TerrainCharacteristics::DOOR, TerrainCharacteristics::STAIRS, TerrainCharacteristics::HAS_GOLD });
+                const auto hit_trap = flags.has(TerrainCharacteristics::HIT_TRAP) && flags.has_none_of({ TerrainCharacteristics::STORE, TerrainCharacteristics::BLDG, TerrainCharacteristics::QUEST_ENTER, TerrainCharacteristics::QUEST_EXIT });
+                const auto can_disclose = flags.has_not(TerrainCharacteristics::SECRET) && (detected || hit_trap || terrain.is_closed_door());
+                if (!fixed_trap || can_disclose) {
+                    validate_description(feature);
+                }
+            }
+            if (!fixed_trap && !(grid.random & RANDOM_TRAP)) {
+                continue;
+            }
+            // 罠の下にはCONVERT後の元地形がmimicとして残り、生成時変化は掛からない。
+            // 同じDungeon内で候補を組み合わせ、0はGrid::mimicの未指定として実地形へ戻す。
+            for (const auto feature : quest_converted_terrain_candidates(grid.feature, dungeon)) {
+                const auto &flags = terrains.get_terrain(feature).flags;
+                if (!fixed_trap && (flags.has_not(TerrainCharacteristics::FLOOR) || (grid.cave_info & CAVE_OBJECT) != 0)) {
+                    continue;
+                }
+                if (feature != 0) {
+                    validate_description(feature);
+                } else {
+                    for (const auto fallback : physical) {
+                        validate_description(fallback);
+                    }
+                }
+            }
         }
     }
 }
@@ -278,6 +410,11 @@ void QuestList::load_json_quests(const std::filesystem::path &quests_dir, std::m
                 candidate_indices.push_back(i);
             }
         }
+        // readerの受理形式が変わったとき、at()の例外ではなくこのファイルの不整合として通知する。
+        if (candidate_indices.size() != fixed_map.reward_artifact_candidates.size()) {
+            constexpr auto fmt = _("候補報酬の添字対応が不整合です ({})", "Reward candidate index mapping is inconsistent ({})");
+            THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, file.string()));
+        }
 
         parsed_quests.emplace(quest_id, std::move(quest));
         parsed_maps.insert_or_assign(quest_id, std::move(fixed_map));
@@ -325,11 +462,16 @@ void QuestList::load_json_quests(const std::filesystem::path &quests_dir, std::m
     // 共通凡例はQuestごとに上書きされるが、使われない宣言も固定参照の検証対象とする。
     // 共通凡例のspecialも全Questが揃ってから調べ、失敗時にQUESTORを残さない。
     const auto base_legend_file = path_build(ANGBAND_DIR_EDIT, "QuestPreferences.jsonc");
+    std::set<std::pair<bool, bool>> validated_base_contexts;
     for (const auto &[quest_id, file] : loaded_quests) {
         const auto &fixed_map = parsed_maps.at(quest_id);
-        const auto fixed_quest = fixed_map.metadata.type != enum2i(QuestKindType::RANDOM);
-        validate_quest_legend_references(base_legend, base_legend_file, parsed_quests, fixed_quest);
-        validate_quest_legend_references(fixed_map.legend, file, parsed_quests, fixed_quest);
+        // 候補報酬が尽きるとRANDOMもKILL_ALLになり、通常の上り階段がQuest参照になる。
+        const auto fixed_quest = fixed_map.metadata.type != enum2i(QuestKindType::RANDOM) || !fixed_map.reward_artifact_candidates.empty();
+        const auto surface_quest = fixed_map.metadata.level <= 0;
+        if (validated_base_contexts.emplace(fixed_quest, surface_quest).second) {
+            validate_quest_legend_references(base_legend, base_legend_file, parsed_quests, fixed_quest, surface_quest);
+        }
+        validate_quest_legend_references(fixed_map.legend, file, parsed_quests, fixed_quest, surface_quest);
     }
     for (const auto &loaded_quest : loaded_quests) {
         const auto quest_id = loaded_quest.first;
