@@ -3711,6 +3711,9 @@
     <ClInclude Include="..\..\src\info-reader\town-definition-list-reader.h">
       <Filter>info-reader</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\info-reader\town-map-condition.h">
+      <Filter>info-reader</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\src\info-reader\town-map-reader.h">
       <Filter>info-reader</Filter>
     </ClInclude>

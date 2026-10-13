@@ -639,6 +639,7 @@ libhengband_a_SOURCES = \
 	info-reader/spell-reader.cpp info-reader/spell-reader.h \
 	info-reader/terrain-reader.cpp info-reader/terrain-reader.h \
 	info-reader/town-definition-list-reader.cpp info-reader/town-definition-list-reader.h \
+	info-reader/town-map-condition.h \
 	info-reader/town-map-reader.cpp info-reader/town-map-reader.h \
 	info-reader/town-preferences-reader.cpp info-reader/town-preferences-reader.h \
 	info-reader/vault-reader.cpp info-reader/vault-reader.h \
@@ -1539,6 +1540,7 @@ hengband_test_SOURCES = \
 	test/info-reader/test-spell-reader.cpp \
 	test/info-reader/test-terrain-reader.cpp \
 	test/info-reader/test-town-definition-list-reader.cpp \
+	test/info-reader/test-fixed-map-parser.cpp \
 	test/info-reader/test-town-map-reader.cpp \
 	test/info-reader/test-town-preferences-reader.cpp \
 	test/info-reader/test-vault-reader.cpp \

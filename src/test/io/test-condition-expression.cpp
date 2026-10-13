@@ -343,3 +343,36 @@ TEST_CASE("evaluate_condition_expression reads a two-byte character whose trail 
     CHECK(evaluate(cat("a", DAME_KANA_ZO, "b")) == cat("a", DAME_KANA_ZO, "b"));
 }
 #endif
+
+TEST_CASE("condition integer grammar is shared by expressions and variable suffixes")
+{
+    for (const auto *text : { "0", "0001", "+0001", "-1", "2147483647", "-2147483648" }) {
+        CAPTURE(text);
+        CHECK(parse_condition_expression_integer(text));
+    }
+    for (const auto *text : { "", "+", "++1", "+-1", " 1", "1 ", "1x", "2147483648", "-2147483649" }) {
+        CAPTURE(text);
+        CHECK_FALSE(parse_condition_expression_integer(text));
+    }
+}
+
+TEST_CASE("condition resolver reports invalid known variables without an error side channel")
+{
+    const auto resolve = [](std::string_view name) -> ExpressionVariableResult {
+        if (name == "BAD") {
+            return tl::make_unexpected(ConditionExpressionError::INVALID_VARIABLE);
+        }
+        return tl::optional<std::string>{};
+    };
+    for (const auto *expression : { "$BAD", "[NOT $BAD]", "[AND 0 $BAD]", "[IOR 1 $BAD]", "[AND $UNKNOWN $BAD]", "[FOO $BAD]" }) {
+        const auto result = evaluate_condition_expression_detailed(expression, resolve);
+        REQUIRE_FALSE(result);
+        CHECK(result.error().cause == ConditionExpressionError::INVALID_VARIABLE);
+        CHECK(result.error().variable == "BAD");
+        CHECK(evaluate_condition_expression(expression, resolve) == "0");
+    }
+    const auto unknown = evaluate_condition_expression_detailed("$UNKNOWN", resolve);
+    REQUIRE_FALSE(unknown);
+    CHECK(unknown.error().cause == ConditionExpressionError::UNKNOWN_VARIABLE);
+    CHECK(unknown.error().variable == "UNKNOWN");
+}

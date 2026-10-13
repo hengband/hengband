@@ -42,15 +42,15 @@ public:
     ConditionExpressionEvaluator &operator=(const ConditionExpressionEvaluator &) = delete;
     ConditionExpressionEvaluator &operator=(ConditionExpressionEvaluator &&) = delete;
 
-    tl::expected<std::string, ConditionExpressionError> evaluate();
+    tl::expected<std::string, ConditionExpressionFailure> evaluate();
 
 private:
     std::string_view rest; //!< まだ読んでいない部分
     char terminator = '\0'; //!< 直前に読んだ式の区切りの文字。入力の終わりなら '\0'
     const ExpressionVariableResolver &resolve;
-    tl::optional<ConditionExpressionError> error; //!< 最初に検出した評価エラー
+    tl::optional<ConditionExpressionFailure> error; //!< 最初に検出した評価エラー
 
-    void record_error(ConditionExpressionError cause);
+    void record_error(ConditionExpressionError cause, std::string_view variable = {});
     std::string evaluate_next();
     int parse_number(std::string_view arg);
     bool has_next_argument() const;
@@ -108,7 +108,7 @@ std::string ConditionExpressionEvaluator::evaluate_next()
  * @brief 最初の条件式の評価結果か、検出したエラーを返す
  * @details 内側の式のエラーも NOT や IOR で真に変換せず呼び出し側へ返す
  */
-tl::expected<std::string, ConditionExpressionError> ConditionExpressionEvaluator::evaluate()
+tl::expected<std::string, ConditionExpressionFailure> ConditionExpressionEvaluator::evaluate()
 {
     auto result = this->evaluate_next();
     if (this->error) {
@@ -117,10 +117,11 @@ tl::expected<std::string, ConditionExpressionError> ConditionExpressionEvaluator
     return result;
 }
 
-void ConditionExpressionEvaluator::record_error(ConditionExpressionError cause)
+void ConditionExpressionEvaluator::record_error(ConditionExpressionError cause, std::string_view variable)
 {
-    if (!this->error) {
-        this->error = cause;
+    // 既知の変数の不正値はロード不能を示す。他の評価エラーが先行しても失わない。
+    if (!this->error || (cause == ConditionExpressionError::INVALID_VARIABLE && this->error->cause != cause)) {
+        this->error = ConditionExpressionFailure{ cause, std::string(variable) };
     }
 }
 
@@ -134,14 +135,7 @@ int ConditionExpressionEvaluator::parse_number(std::string_view arg)
         return 0;
     }
 
-    if (arg.starts_with('+')) {
-        arg.remove_prefix(1);
-        if (arg.empty() || arg.starts_with('-') || arg.starts_with('+')) {
-            this->record_error(ConditionExpressionError::INVALID_NUMBER);
-            return 0;
-        }
-    }
-    const auto number = str_to_num<int>(arg);
+    const auto number = parse_condition_expression_integer(arg);
     if (!number) {
         this->record_error(ConditionExpressionError::INVALID_NUMBER);
     }
@@ -233,11 +227,16 @@ std::string ConditionExpressionEvaluator::evaluate_word()
         return std::string(word);
     }
 
-    const auto value = this->resolve(word.substr(1));
+    const auto name = word.substr(1);
+    const auto value = this->resolve(name);
     if (!value) {
-        this->record_error(ConditionExpressionError::UNKNOWN_VARIABLE);
+        this->record_error(value.error(), name);
+        return "";
     }
-    return value.value_or("");
+    if (!*value) {
+        this->record_error(ConditionExpressionError::UNKNOWN_VARIABLE, name);
+    }
+    return value->value_or("");
 }
 
 }
@@ -246,7 +245,7 @@ std::string ConditionExpressionEvaluator::evaluate_word()
  * @brief 条件式を評価し、評価結果とエラーを区別して返す
  * @param expr 条件式。途中に NUL があれば、そこまでを条件式とする
  * @param resolve 「$」で始まる変数の値を返す関数
- * @return 評価の結果、または最初に検出した ConditionExpressionError。最初の式の後ろは読まない
+ * @return 評価の結果、またはエラー分類と変数名。最初の式の後ろは読まない
  * @details
  * 書式は「[演算子 引数...]」か語で、引数にも式を書ける。演算子は次のとおり。
  * - IOR・AND・NOT: 空でない引数が "0" でないものがあるか・"0" のものがないか・"1" のものがないか
@@ -257,10 +256,21 @@ std::string ConditionExpressionEvaluator::evaluate_word()
  * 引数が無ければ真、空の先頭引数は0、空の後続引数は比較しない。
  * 不正な数値・未知の演算子・未知の変数・閉じ括弧不足は、演算子や入れ子の位置によらず式全体のエラーとする。
  * LEQ/GEQ に渡る未知変数も UNKNOWN_VARIABLE として返し、数値不正と区別する。
+ * resolverのINVALID_VARIABLEは他の評価エラーより優先し、不成立・未知変数の後でもロードエラーを保持する。
  */
-tl::expected<std::string, ConditionExpressionError> evaluate_condition_expression_checked(std::string_view expr, const ExpressionVariableResolver &resolve)
+tl::expected<std::string, ConditionExpressionFailure> evaluate_condition_expression_detailed(std::string_view expr, const ExpressionVariableResolver &resolve)
 {
     return ConditionExpressionEvaluator(expr.substr(0, expr.find('\0')), resolve).evaluate();
+}
+
+/*! @brief 変数名を必要としない呼び出し側へ、従来のエラー分類を返す。 */
+tl::expected<std::string, ConditionExpressionError> evaluate_condition_expression_checked(std::string_view expr, const ExpressionVariableResolver &resolve)
+{
+    const auto result = evaluate_condition_expression_detailed(expr, resolve);
+    if (!result) {
+        return tl::make_unexpected(result.error().cause);
+    }
+    return *result;
 }
 
 /*!
@@ -270,4 +280,20 @@ tl::expected<std::string, ConditionExpressionError> evaluate_condition_expressio
 std::string evaluate_condition_expression(std::string_view expr, const ExpressionVariableResolver &resolve)
 {
     return evaluate_condition_expression_checked(expr, resolve).value_or("0");
+}
+
+/*!
+ * @brief 条件式と変数の数値部分で共有する10進整数の文法
+ * @details intの範囲・文字列全体を要求する。先頭の0・負数・単独の先頭+を許す。
+ * 空文字列、空白、余分な符号や末尾の文字は拒否する。
+ */
+tl::optional<int> parse_condition_expression_integer(std::string_view text)
+{
+    if (text.starts_with('+')) {
+        text.remove_prefix(1);
+        if (text.starts_with('-') || text.starts_with('+')) {
+            return tl::nullopt;
+        }
+    }
+    return str_to_num<int>(text);
 }
