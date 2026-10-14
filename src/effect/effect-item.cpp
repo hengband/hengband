@@ -21,6 +21,7 @@
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include <set>
@@ -209,6 +210,7 @@ bool affect_item(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POSITI
 
             item.pval = (0 - item.pval);
             item.mark_as_known();
+            RedrawingFlagsUpdater::get_instance().request_floor_item_lists_redrawing();
             if (known && item.marked.has(OmType::FOUND)) {
                 msg_print(_("カチッと音がした！", "Click!"));
                 is_item_affected = true;

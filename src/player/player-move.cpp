@@ -88,6 +88,7 @@ static void discover_hidden_things(PlayerType *player_ptr, const Pos2D &pos)
         if (!item.is_known()) {
             msg_print(_("箱に仕掛けられたトラップを発見した！", "You have discovered a trap on the chest!"));
             item.mark_as_known();
+            RedrawingFlagsUpdater::get_instance().request_floor_item_lists_redrawing();
             disturb(player_ptr, false, false);
         }
     }
