@@ -14,14 +14,13 @@
 
 namespace {
 
-//! 指定の行を持つエディタの状態を、実際のエディタと同じく MAX_LINES 要素の行バッファで作る
+//! 先頭からlines.size() の行数だけ文字列を埋めたAutopickTextBody を作る.
 AutopickTextBody make_text_body(std::initializer_list<std::string> lines)
 {
     AutopickTextBody tb(0, 0);
-    tb.lines_list.resize(MAX_AUTOPICK_ENTRIES);
     auto y = 0;
     for (const auto &line : lines) {
-        tb.lines_list[y++] = std::make_unique<std::string>(line);
+        tb.lines[y++] = { line, EnumClassFlagGroup<AutopickEntryStatus>() };
     }
 
     return tb;
@@ -62,7 +61,7 @@ TEST_CASE("adjust_cursor_column keeps the mark column within the line shortened 
     tb.marks.set(AutopickMark::MARK);
     tb.mx = 5;
     toggle_command_letter(&tb, AutopickMethod::AUTOPICK);
-    REQUIRE(*tb.lines_list[0] == "aaaa");
+    REQUIRE(*tb.lines[0].line == "aaaa");
 
     tb.adjust_cursor_column();
 

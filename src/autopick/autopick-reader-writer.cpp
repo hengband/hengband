@@ -186,7 +186,7 @@ std::vector<std::unique_ptr<std::string>> read_pickpref_text_lines(std::string_v
 /*!
  * @brief Write whole lines of memory to a file.
  */
-bool write_text_lines(std::string_view filename, const std::vector<std::unique_ptr<std::string>> &lines)
+bool write_text_lines(std::string_view filename, const std::vector<std::string> &lines)
 {
     const auto path = path_build(ANGBAND_DIR_USER, filename);
     auto ofs = std::ofstream(path);
@@ -195,11 +195,7 @@ bool write_text_lines(std::string_view filename, const std::vector<std::unique_p
     }
 
     for (const auto &line : lines) {
-        if (!line) {
-            break;
-        }
-
-        ofs << *line << '\n';
+        ofs << line << '\n';
     }
 
     return true;
