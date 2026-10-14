@@ -78,13 +78,7 @@ bool identify_item(PlayerType *player_ptr, ItemEntity *o_ptr)
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.set_flag(StatusRecalculatingFlag::BONUS);
     rfu.request_inventory_arrangement();
-    static constexpr auto flags_swrf = {
-        SubWindowRedrawingFlag::EQUIPMENT,
-        SubWindowRedrawingFlag::PLAYER,
-        SubWindowRedrawingFlag::FLOOR_ITEMS,
-        SubWindowRedrawingFlag::FOUND_ITEMS,
-    };
-    rfu.set_flags(flags_swrf);
+    rfu.request_item_lists_redrawing();
     record_item_name = known_item_name;
     record_turn = AngbandWorld::get_instance().game_turn;
 

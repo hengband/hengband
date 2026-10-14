@@ -59,12 +59,7 @@ bool bless_weapon(PlayerType *player_ptr)
         item->set_identification_flag(IdentificationFlag::SENSE);
         item->feeling = FEEL_NONE;
         rfu.set_flag(StatusRecalculatingFlag::BONUS);
-        static constexpr auto flags = {
-            SubWindowRedrawingFlag::EQUIPMENT,
-            SubWindowRedrawingFlag::FLOOR_ITEMS,
-            SubWindowRedrawingFlag::FOUND_ITEMS,
-        };
-        rfu.set_flags(flags);
+        rfu.request_item_lists_redrawing();
     }
 
     /*
@@ -138,13 +133,7 @@ bool bless_weapon(PlayerType *player_ptr)
     }
 
     rfu.set_flag(StatusRecalculatingFlag::BONUS);
-    static constexpr auto flags_swrf = {
-        SubWindowRedrawingFlag::EQUIPMENT,
-        SubWindowRedrawingFlag::PLAYER,
-        SubWindowRedrawingFlag::FLOOR_ITEMS,
-        SubWindowRedrawingFlag::FOUND_ITEMS,
-    };
-    rfu.set_flags(flags_swrf);
+    rfu.request_item_lists_redrawing();
     calc_android_exp(player_ptr);
     return true;
 }

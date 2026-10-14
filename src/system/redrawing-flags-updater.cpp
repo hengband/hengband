@@ -198,6 +198,22 @@ void RedrawingFlagsUpdater::request_monster_update_and_map_redrawing()
     this->request_map_redrawing();
 }
 
+/*!
+ * @brief アイテムの情報 (鑑定やアイテムの使用など) が変わったときの、アイテムを表示するサブウィンドウの描き直しを予約する
+ * @details 所持品・装備品・足元のアイテム・発見済みのアイテムの一覧と、プレイヤーのステータスを描き直す。
+ */
+void RedrawingFlagsUpdater::request_item_lists_redrawing()
+{
+    static constexpr auto flags_swrf = {
+        SubWindowRedrawingFlag::INVENTORY,
+        SubWindowRedrawingFlag::EQUIPMENT,
+        SubWindowRedrawingFlag::FLOOR_ITEMS,
+        SubWindowRedrawingFlag::FOUND_ITEMS,
+        SubWindowRedrawingFlag::PLAYER,
+    };
+    this->sub_window_flags.set(flags_swrf);
+}
+
 void RedrawingFlagsUpdater::fill_up_sub_flags()
 {
     constexpr auto all_sub_window_flags = EnumRange(SubWindowRedrawingFlag::INVENTORY, SubWindowRedrawingFlag::MAX);
