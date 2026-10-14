@@ -1,5 +1,6 @@
 import re
 import sys
+from collections.abc import Callable
 from pathlib import Path
 from urllib.parse import urljoin
 import pyjson5
@@ -362,6 +363,74 @@ def require_integer(value, path: list) -> None:
         raise ValidationError("expected an integer JSON value", path=path)
 
 
+def load_validated_companion(schema_path: Path, data_path: Path, registry: Registry,
+                             name: str, label: str, semantic_validator: Callable[[dict], None]) -> dict:
+    """隣接する候補定義を優先し、schemaと意味検証を終えた付随データを返す。"""
+    companion_path = data_path.parent / f"{name}.jsonc"
+    if not companion_path.exists():
+        companion_path = schema_path.resolve().parent.parent / "lib/edit" / f"{name}.jsonc"
+    companion = load_jsonc(companion_path)
+    companion_schema_path = schema_path.parent / f"{name}.schema.json"
+    companion_schema = load_jsonc(companion_schema_path)
+    schema_uri = companion_schema_path.resolve().as_uri()
+    absolute_schema = {**companion_schema, "$id": urljoin(schema_uri, companion_schema.get("$id", schema_uri))}
+    try:
+        validate(instance=companion, schema=absolute_schema, registry=registry)
+        semantic_validator(companion)
+    except ValidationError as e:
+        raise ValueError(f"Invalid {label} definitions in {companion_path}: {e.message}; Location: {list(e.path)}") from e
+    return companion
+
+
+def load_dungeon_wilderness_dimensions(schema_path: Path, data_path: Path, registry: Registry) -> tuple[int, int]:
+    """入口の検証には隣の候補荒野定義を優先し、なければ同梱定義を使う。"""
+    wilderness = load_validated_companion(schema_path, data_path, registry,
+                                          "WildernessDefinition", "wilderness", validate_wilderness_semantics)
+    return wilderness["height"], wilderness["width"]
+
+
+def validate_dungeon_semantics(data: dict, schema_path: Path, data_path: Path, registry: Registry) -> None:
+    """DungeonReaderの整数型・ID順序・地形抽選の合計を検証する。"""
+    dimensions = None
+    if any(dungeon["id"] != 0 for dungeon in data["dungeons"]):
+        dimensions = load_dungeon_wilderness_dimensions(schema_path, data_path, registry)
+    previous_id = -1
+    for index, dungeon in enumerate(data["dungeons"]):
+        path = ["dungeons", index]
+        require_integer(dungeon["id"], path + ["id"])
+        if dungeon["id"] <= previous_id:
+            raise ValidationError("dungeon IDs must be strictly increasing", path=path + ["id"])
+        previous_id = dungeon["id"]
+        fields = {"position": ("wild_y", "wild_x"),
+                  "generation": ("minDepth", "maxDepth", "minPlayerLevel", "objGood", "objGreat"),
+                  "monsters": ("minCount", "additionalSpawnProbability", "normalMonsterRate"),
+                  "floor": ("tunnelRate",)}
+        for group, names in fields.items():
+            for name in names:
+                require_integer(dungeon[group][name], path + [group, name])
+        if dungeon["id"] != 0 and dimensions is not None:
+            for field, extent in zip(("wild_y", "wild_x"), dimensions):
+                if dungeon["position"][field] >= extent:
+                    raise ValidationError("dungeon entrance must be within the wilderness map", path=path + ["position", field])
+        if dungeon["generation"]["minDepth"] > dungeon["generation"]["maxDepth"]:
+            raise ValidationError("minDepth must not exceed maxDepth", path=path + ["generation", "minDepth"])
+        for group in ("floor", "wall"):
+            total = 0
+            for tile_index, tile in enumerate(dungeon[group]["tiles"]):
+                weight_path = path + [group, "tiles", tile_index, "rate"]
+                require_integer(tile["rate"], weight_path)
+                total += tile["rate"]
+                if total > 2147483647:
+                    raise ValidationError("total weight exceeds the reader's integer range", path=weight_path)
+            if total == 0:
+                raise ValidationError("tiles require a positive total weight", path=path + [group, "tiles"])
+        for stream_index, stream in enumerate(dungeon["wall"]["streams"]):
+            for name in ("count", "chance", "priority"):
+                require_integer(stream[name], path + ["wall", "streams", stream_index, name])
+        for name, value in dungeon.get("final_floor", {}).items():
+            require_integer(value, path + ["final_floor", name])
+
+
 def load_cpp_map_keys(path: Path, table: str) -> set[str]:
     """指定したC++辞書のキーだけを読む。隣の辞書やコメントは含めない。"""
     source = path.read_text(encoding="utf-8")
@@ -481,20 +550,8 @@ def load_class_ids(repository_root: Path) -> dict[str, int]:
 
 def load_spell_tags(schema_path: Path, data_path: Path, registry: Registry) -> dict[str, set[str]]:
     """Use adjacent candidate definitions, or the schema repository's bundled data."""
-    repository_root = schema_path.resolve().parent.parent
-    spell_path = data_path.parent / "SpellDefinitions.jsonc"
-    if not spell_path.exists():
-        spell_path = repository_root / "lib/edit/SpellDefinitions.jsonc"
-    spells = load_jsonc(spell_path)
-    spell_schema_path = schema_path.parent / "SpellDefinitions.schema.json"
-    spell_schema = load_jsonc(spell_schema_path)
-    schema_uri = spell_schema_path.resolve().as_uri()
-    absolute_schema = {**spell_schema, "$id": urljoin(schema_uri, spell_schema.get("$id", schema_uri))}
-    try:
-        validate(instance=spells, schema=absolute_schema, registry=registry)
-        validate_spell_semantics(spells)
-    except ValidationError as e:
-        raise ValueError(f"Invalid spell definitions in {spell_path}: {e.message}; Location: {list(e.path)}") from e
+    spells = load_validated_companion(schema_path, data_path, registry,
+                                     "SpellDefinitions", "spell", validate_spell_semantics)
     tag_ids = {}
     for realm in spells["realms"]:
         realm_tag_ids = tag_ids.setdefault(realm["name"], {})
@@ -615,6 +672,7 @@ def validate_one(pair: tuple[Path, Path, dict], registry: Registry | None = None
         absolute_schema = schema if isinstance(schema, bool) else {**schema, "$id": urljoin(schema_uri, schema.get("$id", schema_uri))}
         validate(instance=data, schema=absolute_schema, registry=registry)
         semantic_validators = {
+            "DungeonDefinitions.schema.json": lambda: validate_dungeon_semantics(data, schema_path, data_path, registry),
             "TerrainDefinitions.schema.json": lambda: validate_terrain_semantics(data, schema_path),
             "VaultDefinitions.schema.json": lambda: validate_vault_semantics(data),
             "EgoDefinitions.schema.json": lambda: validate_ego_semantics(data, schema_path),

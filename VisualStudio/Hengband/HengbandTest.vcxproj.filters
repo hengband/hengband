@@ -112,6 +112,9 @@
     <ClCompile Include="..\..\src\test\floor\test-fixed-map-generator.cpp">
       <Filter>floor</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\test\floor\test-floor-changer.cpp">
+      <Filter>floor</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\test\floor\test-floor-events.cpp">
       <Filter>floor</Filter>
     </ClCompile>

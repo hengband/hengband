@@ -3,6 +3,8 @@
 #include "info-reader/parse-error-types.h"
 #include "system/artifact/artifact-definition.h"
 #include "system/artifact/artifact-list.h"
+#include "system/baseitem/baseitem-definition.h"
+#include "system/baseitem/baseitem-list.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/dungeon/dungeon-list.h"
 #include "system/enums/dungeon/dungeon-id.h"
@@ -12,6 +14,7 @@
 #include "system/terrain/terrain-definition.h"
 #include "system/terrain/terrain-list.h"
 #include "test/info-reader/scoped-reader-state.h"
+#include "test/scoped-vector-wrapper.h"
 #include "test/system/artifact-list-test-access.h"
 #include "test/system/dungeon-list-test-access.h"
 #include "test/system/monrace-list-test-access.h"
@@ -114,6 +117,185 @@ TEST_CASE("DungeonReader rejects player levels outside their storage type")
         CHECK(DungeonReader(data).read() == PARSE_ERROR_INVALID_FLAG);
         CHECK(DungeonList::get_instance().empty());
     }
+}
+
+TEST_CASE("DungeonReader preserves item chance cap boundaries")
+{
+    for (const auto *field : { "objGood", "objGreat" }) {
+        for (const auto number : { 0, 100 }) {
+            CAPTURE(std::string(field));
+            CAPTURE(number);
+            DungeonReaderStateGuard guard;
+            auto data = make_dungeon();
+            data["generation"][field] = number;
+            REQUIRE(DungeonReader(data).read() == PARSE_ERROR_NONE);
+            const auto &dungeon = DungeonList::get_instance().get_dungeon(DungeonId::WILDERNESS);
+            CHECK(dungeon.obj_good == (std::string(field) == "objGood" ? number : 0));
+            CHECK(dungeon.obj_great == (std::string(field) == "objGreat" ? number : 0));
+        }
+    }
+}
+
+TEST_CASE("DungeonReader rejects item chance caps outside zero to one hundred before publishing")
+{
+    for (const auto *field : { "objGood", "objGreat" }) {
+        for (const auto number : { -1, 101, std::numeric_limits<int>::min(), std::numeric_limits<int>::max() }) {
+            CAPTURE(std::string(field));
+            CAPTURE(number);
+            DungeonReaderStateGuard guard;
+            const auto original = make_dungeon();
+            REQUIRE(DungeonReader(original).read() == PARSE_ERROR_NONE);
+            auto data = make_dungeon(1);
+            data["name"] = { { "ja", "changed" }, { "en", "changed" } };
+            data["generation"][field] = number;
+            CHECK(DungeonReader(data).read() == PARSE_ERROR_INVALID_FLAG);
+            REQUIRE(DungeonList::get_instance().size() == 1);
+            const auto &previous = DungeonList::get_instance().get_dungeon(DungeonId::WILDERNESS);
+            CHECK(previous.name == "test dungeon");
+            CHECK(previous.obj_good == 0);
+            CHECK(previous.obj_great == 0);
+        }
+    }
+}
+
+TEST_CASE("DungeonReader preserves monster count boundaries")
+{
+    for (const auto number : { 0, 100 }) {
+        CAPTURE(number);
+        DungeonReaderStateGuard guard;
+        auto data = make_dungeon();
+        data["monsters"]["minCount"] = number;
+        REQUIRE(DungeonReader(data).read() == PARSE_ERROR_NONE);
+        CHECK(DungeonList::get_instance().get_dungeon(DungeonId::WILDERNESS).min_monster_count_on_floor == number);
+    }
+}
+
+TEST_CASE("DungeonReader rejects monster counts outside zero to one hundred before publishing")
+{
+    for (const auto number : { -1, 101, std::numeric_limits<int>::min(), std::numeric_limits<int>::max() }) {
+        CAPTURE(number);
+        DungeonReaderStateGuard guard;
+        const auto original = make_dungeon();
+        REQUIRE(DungeonReader(original).read() == PARSE_ERROR_NONE);
+        auto data = make_dungeon(1);
+        data["monsters"]["minCount"] = number;
+        CHECK(DungeonReader(data).read() == PARSE_ERROR_INVALID_FLAG);
+        REQUIRE(DungeonList::get_instance().size() == 1);
+        CHECK(DungeonList::get_instance().get_dungeon(DungeonId::WILDERNESS).min_monster_count_on_floor == 14);
+    }
+}
+
+TEST_CASE("DungeonReader preserves signed short depth bounds and deep dungeons")
+{
+    for (const auto depth : { 0, 696, 32767 }) {
+        CAPTURE(depth);
+        DungeonReaderStateGuard guard;
+        auto data = make_dungeon();
+        data["generation"]["minDepth"] = depth;
+        data["generation"]["maxDepth"] = depth;
+        REQUIRE(DungeonReader(data).read() == PARSE_ERROR_NONE);
+        const auto &dungeon = DungeonList::get_instance().get_dungeon(DungeonId::WILDERNESS);
+        CHECK(dungeon.mindepth == depth);
+        CHECK(dungeon.maxdepth == depth);
+    }
+}
+
+TEST_CASE("DungeonReader rejects depths outside save range and inverted depths")
+{
+    for (const auto *field : { "minDepth", "maxDepth" }) {
+        for (const auto depth : { -1, 32768, std::numeric_limits<int>::max() }) {
+            CAPTURE(std::string(field));
+            CAPTURE(depth);
+            DungeonReaderStateGuard guard;
+            auto data = make_dungeon();
+            data["generation"][field] = depth;
+            CHECK(DungeonReader(data).read() == PARSE_ERROR_INVALID_FLAG);
+            CHECK(DungeonList::get_instance().empty());
+        }
+    }
+    DungeonReaderStateGuard guard;
+    auto data = make_dungeon();
+    data["generation"]["minDepth"] = 100;
+    data["generation"]["maxDepth"] = 99;
+    CHECK(DungeonReader(data).read() == PARSE_ERROR_INVALID_VALUE);
+    CHECK(DungeonList::get_instance().empty());
+}
+
+TEST_CASE("DungeonReader restricts required player level to playable levels")
+{
+    for (const auto level : { -1, 0, 50, 51, 32767 }) {
+        CAPTURE(level);
+        DungeonReaderStateGuard guard;
+        auto data = make_dungeon();
+        data["generation"]["minPlayerLevel"] = level;
+        if (level >= 0 && level <= 50) {
+            REQUIRE(DungeonReader(data).read() == PARSE_ERROR_NONE);
+            CHECK(DungeonList::get_instance().get_dungeon(DungeonId::WILDERNESS).min_plev == level);
+        } else {
+            CHECK(DungeonReader(data).read() == PARSE_ERROR_INVALID_FLAG);
+            CHECK(DungeonList::get_instance().empty());
+        }
+    }
+}
+
+TEST_CASE("DungeonReader rejects coordinates outside wilderness storage and IDs outside the dungeon enum")
+{
+    for (const auto *field : { "wild_y", "wild_x" }) {
+        for (const auto coordinate : { -1, 32767, std::numeric_limits<int>::max() }) {
+            CAPTURE(std::string(field));
+            CAPTURE(coordinate);
+            DungeonReaderStateGuard guard;
+            auto data = make_dungeon();
+            data["position"][field] = coordinate;
+            CHECK(DungeonReader(data).read() == PARSE_ERROR_INVALID_FLAG);
+            CHECK(DungeonList::get_instance().empty());
+        }
+    }
+    for (const auto id : { -1, 21, 9999 }) {
+        CAPTURE(id);
+        DungeonReaderStateGuard guard;
+        const auto data = make_dungeon(id);
+        CHECK(DungeonReader(data).read() == PARSE_ERROR_INVALID_FLAG);
+        CHECK(DungeonList::get_instance().empty());
+    }
+}
+
+TEST_CASE("DungeonReader preserves nonpercentage tunnel thresholds within the depth range")
+{
+    for (const auto threshold : { -1, 0, 1000, 32767, 32768 }) {
+        CAPTURE(threshold);
+        DungeonReaderStateGuard guard;
+        auto data = make_dungeon();
+        data["floor"]["tunnelRate"] = threshold;
+        if (threshold >= 0 && threshold <= 32767) {
+            REQUIRE(DungeonReader(data).read() == PARSE_ERROR_NONE);
+            CHECK(DungeonList::get_instance().get_dungeon(DungeonId::WILDERNESS).tunnel_percent == threshold);
+        } else {
+            CHECK(DungeonReader(data).read() == PARSE_ERROR_INVALID_FLAG);
+            CHECK(DungeonList::get_instance().empty());
+        }
+    }
+}
+
+TEST_CASE("DungeonReader validates entrances against actual wilderness dimensions without changing definitions")
+{
+    for (const auto &[y, x] : { std::pair{ 0, 0 }, std::pair{ 2, 3 }, std::pair{ 3, 0 }, std::pair{ 0, 4 } }) {
+        CAPTURE(y);
+        CAPTURE(x);
+        DungeonReaderStateGuard guard;
+        auto data = make_dungeon(1);
+        data["position"] = { { "wild_y", y }, { "wild_x", x } };
+        REQUIRE(DungeonReader(data).read() == PARSE_ERROR_NONE);
+        const auto previous = DungeonList::get_instance().get_dungeon_shared(DungeonId::ANGBAND);
+        CHECK(DungeonReader::validate_wilderness_positions(3, 4) == (y < 3 && x < 4 ? PARSE_ERROR_NONE : PARSE_ERROR_OUT_OF_BOUNDS));
+        CHECK(DungeonList::get_instance().get_dungeon_shared(DungeonId::ANGBAND) == previous);
+        CHECK(previous->get_position() == Pos2D(y, x));
+    }
+    DungeonReaderStateGuard guard;
+    auto data = make_dungeon();
+    data["position"] = { { "wild_y", 32766 }, { "wild_x", 32766 } };
+    REQUIRE(DungeonReader(data).read() == PARSE_ERROR_NONE);
+    CHECK(DungeonReader::validate_wilderness_positions(3, 4) == PARSE_ERROR_NONE);
 }
 
 TEST_CASE("DungeonReader accepts bounded weights and excludes zero weight entries")
@@ -236,6 +418,8 @@ TEST_CASE("DungeonReader rejects final-floor ID narrowing before reference looku
     const std::vector<nlohmann::json> invalid_ids{
         -1,
         -32768,
+        10000,
+        32767,
         32768,
         -32769,
         65536,
@@ -272,7 +456,7 @@ TEST_CASE("DungeonReader rejects final-floor ID narrowing before reference looku
 
 TEST_CASE("DungeonReader preserves representable final-floor IDs and the no-artifact sentinel")
 {
-    for (const auto &[guardian, artifact] : { std::pair{ 1, 0 }, std::pair{ 1, 1 }, std::pair{ 1, 32767 } }) {
+    for (const auto &[guardian, artifact] : { std::pair{ 1, 0 }, std::pair{ 1, 1 }, std::pair{ 1, 9999 } }) {
         CAPTURE(guardian);
         CAPTURE(artifact);
         const FinalFloorStateGuard state;
@@ -301,4 +485,45 @@ TEST_CASE("DungeonReader still rejects undefined representable final-floor IDs")
         CHECK(DungeonReader(data).read() == PARSE_ERROR_INVALID_VALUE);
         CHECK(DungeonList::get_instance().empty());
     }
+}
+
+TEST_CASE("DungeonReader accepts final object IDs through the Baseitem reader limit")
+{
+    DungeonReaderStateGuard guard;
+    auto &items = BaseitemList::get_instance();
+    const test::ScopedVectorWrapper saved_items(items);
+    items.resize(32768);
+    for (const auto id : { 1, 9999, 10000, 32767 }) {
+        CAPTURE(id);
+        auto data = make_dungeon(id == 1 ? 0 : id == 9999 ? 1
+                                           : id == 10000  ? 2
+                                                          : 3);
+        data["final_floor"] = { { "object", id } };
+        REQUIRE(DungeonReader(data).read() == PARSE_ERROR_NONE);
+        const auto dungeon_id = static_cast<DungeonId>(data["id"].get<int>());
+        CHECK(DungeonList::get_instance().get_dungeon(dungeon_id).final_object == id);
+    }
+}
+
+TEST_CASE("DungeonReader rejects final objects outside the Baseitem limit and missing IDs")
+{
+    for (const auto id : { -1, 0, 1, 32768, std::numeric_limits<int>::max() }) {
+        CAPTURE(id);
+        DungeonReaderStateGuard guard;
+        auto &items = BaseitemList::get_instance();
+        const test::ScopedVectorWrapper saved_items(items);
+        auto data = make_dungeon();
+        data["final_floor"] = { { "object", id } };
+        CHECK(DungeonReader(data).read() == (id == 1 ? PARSE_ERROR_INVALID_VALUE : PARSE_ERROR_INVALID_FLAG));
+        CHECK(DungeonList::get_instance().empty());
+    }
+}
+
+TEST_CASE("DungeonReader rejects guardian zero as below the schema minimum before publication")
+{
+    const FinalFloorStateGuard state;
+    auto data = make_dungeon();
+    data["final_floor"] = { { "guardian", 0 } };
+    CHECK(DungeonReader(data).read() == PARSE_ERROR_OUT_OF_BOUNDS);
+    CHECK(DungeonList::get_instance().empty());
 }

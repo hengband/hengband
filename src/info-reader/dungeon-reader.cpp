@@ -15,10 +15,12 @@
 #include "system/enums/monrace/monrace-id.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
+#include "system/system-variables.h"
 #include "system/terrain/terrain-definition.h"
 #include "system/terrain/terrain-list.h"
 #include "util/enum-converter.h"
 #include "view/display-messages.h"
+#include <cstdint>
 #include <exception>
 #include <limits>
 #include <memory>
@@ -38,7 +40,7 @@ int DungeonReader::read() const
     }
 
     int id = 0;
-    if (auto err = info_set_integer(get_json_value(element, "id"), id, true, Range(0, 9999))) {
+    if (auto err = info_set_integer(get_json_value(element, "id"), id, true, Range(0, enum2i(DungeonId::MAX) - 1))) {
         return err;
     }
     if (id <= error_idx) {
@@ -60,10 +62,10 @@ int DungeonReader::read() const
     }
     int wild_y = 0;
     int wild_x = 0;
-    if (auto err = info_set_integer(get_json_value(position_obj, "wild_y"), wild_y, true)) {
+    if (auto err = info_set_integer(get_json_value(position_obj, "wild_y"), wild_y, true, Range(0, 32766))) {
         return err;
     }
-    if (auto err = info_set_integer(get_json_value(position_obj, "wild_x"), wild_x, true)) {
+    if (auto err = info_set_integer(get_json_value(position_obj, "wild_x"), wild_x, true, Range(0, 32766))) {
         return err;
     }
     dungeon.initialize_position({ wild_y, wild_x });
@@ -89,6 +91,28 @@ int DungeonReader::read() const
 
     auto &dungeons = DungeonList::get_instance();
     dungeons.emplace(i2enum<DungeonId>(id), std::move(dungeon));
+    return PARSE_ERROR_NONE;
+}
+
+/*!
+ * @brief 読み込み済みダンジョンの入口が荒野の実サイズに収まるか確認する。
+ * @details ダンジョン定義の後に荒野定義を読むため、荒野の初期化前に呼ぶ。
+ * @return 荒野外の入口があれば範囲外エラー。
+ */
+int DungeonReader::validate_wilderness_positions(int height, int width)
+{
+    for (const auto &[id, dungeon] : DungeonList::get_instance()) {
+        if (id == DungeonId::WILDERNESS) {
+            continue;
+        }
+        const auto &pos = dungeon->get_position();
+        if (pos.y < 0 || pos.y >= height || pos.x < 0 || pos.x >= width) {
+            msg_print(_("DungeonDefinitions.jsonc: ダンジョンID '{}' の入口 ({}, {}) は荒野サイズ ({}, {}) の範囲外です。",
+                          "DungeonDefinitions.jsonc: dungeon ID '{}' entrance ({}, {}) is outside wilderness size ({}, {})."),
+                enum2i(id), pos.y, pos.x, height, width);
+            return PARSE_ERROR_OUT_OF_BOUNDS;
+        }
+    }
     return PARSE_ERROR_NONE;
 }
 
@@ -281,6 +305,10 @@ int DungeonReader::set_dungeon_description(DungeonDefinition &dungeon) const
     return info_set_string(get_json_value(this->dungeon_data, "description"), dungeon.text, false);
 }
 
+/*!
+ * @brief ダンジョンの生成条件を読み込む。
+ * @details objGood・objGreatは幸運補正前の生成率の上限で、0～100に限定する。
+ */
 int DungeonReader::set_dungeon_generation(DungeonDefinition &dungeon) const
 {
     const auto &generation_obj = get_json_value(this->dungeon_data, "generation");
@@ -288,19 +316,26 @@ int DungeonReader::set_dungeon_generation(DungeonDefinition &dungeon) const
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
 
-    if (auto err = info_set_integer(get_json_value(generation_obj, "minDepth"), dungeon.mindepth, true)) {
+    if (auto err = info_set_integer(get_json_value(generation_obj, "minDepth"), dungeon.mindepth, true, Range(0, std::numeric_limits<int16_t>::max()))) {
         return err;
     }
-    if (auto err = info_set_integer(get_json_value(generation_obj, "maxDepth"), dungeon.maxdepth, true)) {
+    if (auto err = info_set_integer(get_json_value(generation_obj, "maxDepth"), dungeon.maxdepth, true, Range(0, std::numeric_limits<int16_t>::max()))) {
         return err;
     }
-    if (auto err = info_set_integer(get_json_value(generation_obj, "minPlayerLevel"), dungeon.min_plev, true)) {
+    // 保存形式は符号付き16bit。最浅階が最深階を超える定義も拒否する。
+    if (dungeon.mindepth > dungeon.maxdepth) {
+        msg_print(_("DungeonDefinitions.jsonc: ダンジョンID '{}' のminDepth '{}' がmaxDepth '{}' を超えています。",
+                      "DungeonDefinitions.jsonc: dungeon ID '{}' minDepth '{}' exceeds maxDepth '{}'."),
+            error_idx, dungeon.mindepth, dungeon.maxdepth);
+        return PARSE_ERROR_INVALID_VALUE;
+    }
+    if (auto err = info_set_integer(get_json_value(generation_obj, "minPlayerLevel"), dungeon.min_plev, true, Range(0, PY_MAX_LEVEL))) {
         return err;
     }
-    if (auto err = info_set_integer(get_json_value(generation_obj, "objGood"), dungeon.obj_good, true)) {
+    if (auto err = info_set_integer(get_json_value(generation_obj, "objGood"), dungeon.obj_good, true, Range(0, 100))) {
         return err;
     }
-    if (auto err = info_set_integer(get_json_value(generation_obj, "objGreat"), dungeon.obj_great, true)) {
+    if (auto err = info_set_integer(get_json_value(generation_obj, "objGreat"), dungeon.obj_great, true, Range(0, 100))) {
         return err;
     }
 
@@ -328,7 +363,7 @@ int DungeonReader::set_dungeon_floor(DungeonDefinition &dungeon) const
     }
     dungeon.prob_table_floor = std::move(*prob_table);
 
-    return info_set_integer(get_json_value(floor_obj, "tunnelRate"), dungeon.tunnel_percent, true);
+    return info_set_integer(get_json_value(floor_obj, "tunnelRate"), dungeon.tunnel_percent, true, Range(0, std::numeric_limits<int16_t>::max()));
 }
 
 int DungeonReader::set_dungeon_streams(const nlohmann::json &streams_obj, DungeonDefinition &dungeon) const
@@ -428,10 +463,10 @@ int DungeonReader::set_dungeon_flags(DungeonDefinition &dungeon) const
 }
 
 template <typename Enum, typename Validator>
-static errr info_set_enum_from_integer_checked(const nlohmann::json &json, Enum &data, std::string_view label, Validator validator)
+static errr info_set_enum_from_integer_checked(const nlohmann::json &json, Enum &data, std::string_view label, int minimum, Validator validator)
 {
     Enum enum_value{};
-    if (auto err = info_set_integer(json, enum_value, true)) {
+    if (auto err = info_set_integer(json, enum_value, true, Range(minimum, 9999))) {
         if (err == PARSE_ERROR_INVALID_FLAG) {
             msg_print(_("{} ID '{}' は範囲外です。", "{} ID '{}' is out of range."), label, json.dump());
             return PARSE_ERROR_OUT_OF_BOUNDS;
@@ -456,7 +491,7 @@ static errr info_set_enum_from_integer_checked(const nlohmann::json &json, Enum 
 static errr info_set_baseitem_id_checked(const nlohmann::json &json, DungeonDefinition &dungeon)
 {
     int value{};
-    if (auto err = info_set_integer(json, value, true, Range(1, 9999))) {
+    if (auto err = info_set_integer(json, value, true, Range(1, std::numeric_limits<short>::max()))) {
         return err;
     }
 
@@ -489,7 +524,7 @@ int DungeonReader::set_dungeon_final_floor(DungeonDefinition &dungeon) const
     }
 
     if (final_floor_obj.contains("guardian")) {
-        if (auto err = info_set_enum_from_integer_checked(get_json_value(final_floor_obj, "guardian"), dungeon.final_guardian, "final_floor.guardian", [](MonraceId monrace_id) {
+        if (auto err = info_set_enum_from_integer_checked(get_json_value(final_floor_obj, "guardian"), dungeon.final_guardian, "final_floor.guardian", 1, [](MonraceId monrace_id) {
                 const auto &monraces = MonraceList::get_instance();
                 return MonraceList::is_valid(monrace_id) && monraces.contains(monrace_id);
             })) {
@@ -502,7 +537,7 @@ int DungeonReader::set_dungeon_final_floor(DungeonDefinition &dungeon) const
         }
     }
     if (final_floor_obj.contains("artifact")) {
-        if (auto err = info_set_enum_from_integer_checked(get_json_value(final_floor_obj, "artifact"), dungeon.final_artifact, "final_floor.artifact", [](FixedArtifactId artifact_id) {
+        if (auto err = info_set_enum_from_integer_checked(get_json_value(final_floor_obj, "artifact"), dungeon.final_artifact, "final_floor.artifact", 0, [](FixedArtifactId artifact_id) {
                 const auto &artifacts = ArtifactList::get_instance();
                 return (artifact_id == FixedArtifactId::NONE) || artifacts.contains(artifact_id);
             })) {
@@ -595,6 +630,10 @@ int DungeonReader::set_dungeon_monster_spells(const nlohmann::json &spells_obj, 
     return PARSE_ERROR_NONE;
 }
 
+/*!
+ * @brief ダンジョンのモンスター生成条件を読み込む。
+ * @details minCountは基本生成試行数で、追加試行とは別に0～100へ限定する。同梱最大80を含み、集団配置用の空きを残す。
+ */
 int DungeonReader::set_dungeon_monsters(DungeonDefinition &dungeon) const
 {
     const auto &monsters_obj = get_json_value(this->dungeon_data, "monsters");
@@ -602,7 +641,7 @@ int DungeonReader::set_dungeon_monsters(DungeonDefinition &dungeon) const
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
 
-    if (auto err = info_set_integer(get_json_value(monsters_obj, "minCount"), dungeon.min_monster_count_on_floor, true)) {
+    if (auto err = info_set_integer(get_json_value(monsters_obj, "minCount"), dungeon.min_monster_count_on_floor, true, Range(0, 100))) {
         return err;
     }
     auto additionalSpawnProbability = 1;
