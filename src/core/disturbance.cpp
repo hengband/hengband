@@ -10,6 +10,29 @@
 #include "target/target-checker.h"
 #include "term/screen-processor.h"
 
+/*!
+ * @brief 走っていれば走るのをやめる
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @details 走っている間は画面をプレイヤーに合わせない (center_running がオフのとき) ので、合わせ直す
+ */
+void stop_running(PlayerType *player_ptr)
+{
+    if (!player_ptr->running) {
+        return;
+    }
+
+    player_ptr->running = 0;
+    if (center_player && !center_running) {
+        verify_panel(player_ptr);
+    }
+
+    static constexpr auto flags = {
+        StatusRecalculatingFlag::TORCH,
+        StatusRecalculatingFlag::FLOW,
+    };
+    RedrawingFlagsUpdater::get_instance().set_flags(flags);
+}
+
 /*
  * Something has happened to disturb the player.
  * The first arg indicates a major disturbance, which affects search.
@@ -28,18 +51,7 @@ void disturb(PlayerType *player_ptr, bool stop_search, bool stop_travel)
         set_action(player_ptr, ACTION_NONE);
     }
 
-    if (player_ptr->running) {
-        player_ptr->running = 0;
-        if (center_player && !center_running) {
-            verify_panel(player_ptr);
-        }
-
-        static constexpr auto flags = {
-            StatusRecalculatingFlag::TORCH,
-            StatusRecalculatingFlag::FLOW,
-        };
-        rfu.set_flags(flags);
-    }
+    stop_running(player_ptr);
 
     if (stop_travel) {
         Travel::get_instance().stop();
