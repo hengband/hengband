@@ -263,6 +263,9 @@ void wiz_modify_item_activation(PlayerType *player_ptr)
     auto act_idx = *act_id;
     item->art_flags.set(TR_ACTIVATE);
     item->activation_id = act_idx;
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    rfu.request_inventory_arrangement();
+    rfu.request_item_lists_redrawing();
 }
 
 /*!

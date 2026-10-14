@@ -324,6 +324,9 @@ void brand_bolts(PlayerType *player_ptr)
         msg_print(_("クロスボウの矢が炎のオーラに包まれた！", "Your bolts are covered in a fiery aura!"));
         item.ego_idx = EgoType::FLAME;
         enchant_equipment(item, randint0(3) + 4, ENCH_TOHIT | ENCH_TODAM);
+
+        // 修正値の強化に失敗しても、エゴは付いている
+        RedrawingFlagsUpdater::get_instance().request_inventory_arrangement();
         return;
     }
 
