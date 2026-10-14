@@ -119,3 +119,24 @@ TEST_CASE("RedrawingFlagsUpdater::request_monster_update_and_map_redrawing reque
     CHECK(rfu.has(SubWindowRedrawingFlag::OVERHEAD));
     CHECK(rfu.has(SubWindowRedrawingFlag::DUNGEON));
 }
+
+TEST_CASE("RedrawingFlagsUpdater::request_item_lists_redrawing requests redrawing the windows showing items")
+{
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    static constexpr auto flags_swrf = {
+        SubWindowRedrawingFlag::INVENTORY,
+        SubWindowRedrawingFlag::EQUIPMENT,
+        SubWindowRedrawingFlag::FLOOR_ITEMS,
+        SubWindowRedrawingFlag::FOUND_ITEMS,
+        SubWindowRedrawingFlag::PLAYER,
+    };
+    const auto restore = scoped_restore_flags(rfu, flags_swrf);
+    rfu.reset_flags(flags_swrf);
+
+    rfu.request_item_lists_redrawing();
+
+    for (const auto flag : flags_swrf) {
+        CAPTURE(enum2i(flag));
+        CHECK(rfu.has(flag));
+    }
+}

@@ -127,11 +127,7 @@ void ObjectZapRodEntity::execute(INVENTORY_IDX i_idx)
     }
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    static constexpr auto flags_iaf = {
-        InventoryArrangementFlag::COMBINATION,
-        InventoryArrangementFlag::REORDER,
-    };
-    rfu.set_flags(flags_iaf);
+    rfu.request_inventory_arrangement();
     if (!(item->is_aware())) {
         chg_virtue(this->player_ptr, Virtue::PATIENCE, -1);
         chg_virtue(this->player_ptr, Virtue::CHANCE, 1);
@@ -144,14 +140,7 @@ void ObjectZapRodEntity::execute(INVENTORY_IDX i_idx)
         gain_exp(this->player_ptr, (item_level + (this->player_ptr->lev >> 1)) / this->player_ptr->lev);
     }
 
-    static constexpr auto flags_swrf = {
-        SubWindowRedrawingFlag::INVENTORY,
-        SubWindowRedrawingFlag::EQUIPMENT,
-        SubWindowRedrawingFlag::PLAYER,
-        SubWindowRedrawingFlag::FLOOR_ITEMS,
-        SubWindowRedrawingFlag::FOUND_ITEMS,
-    };
-    rfu.set_flags(flags_swrf);
+    rfu.request_item_lists_redrawing();
 }
 
 bool ObjectZapRodEntity::check_can_zap()

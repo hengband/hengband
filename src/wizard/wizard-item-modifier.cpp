@@ -642,14 +642,8 @@ static void wiz_reroll_item(PlayerType *player_ptr, ItemEntity *o_ptr)
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.set_flag(StatusRecalculatingFlag::BONUS);
     rfu.request_inventory_arrangement();
-    static constexpr auto flags_swrf = {
-        SubWindowRedrawingFlag::EQUIPMENT,
-        SubWindowRedrawingFlag::SPELL,
-        SubWindowRedrawingFlag::PLAYER,
-        SubWindowRedrawingFlag::FLOOR_ITEMS,
-        SubWindowRedrawingFlag::FOUND_ITEMS,
-    };
-    rfu.set_flags(flags_swrf);
+    rfu.request_item_lists_redrawing();
+    rfu.set_flag(SubWindowRedrawingFlag::SPELL);
 }
 
 /*!
@@ -775,14 +769,8 @@ void wiz_modify_item(PlayerType *player_ptr)
         auto &rfu = RedrawingFlagsUpdater::get_instance();
         rfu.set_flag(StatusRecalculatingFlag::BONUS);
         rfu.request_inventory_arrangement();
-        static constexpr auto flags_swrf = {
-            SubWindowRedrawingFlag::EQUIPMENT,
-            SubWindowRedrawingFlag::SPELL,
-            SubWindowRedrawingFlag::PLAYER,
-            SubWindowRedrawingFlag::FLOOR_ITEMS,
-            SubWindowRedrawingFlag::FOUND_ITEMS,
-        };
-        rfu.set_flags(flags_swrf);
+        rfu.request_item_lists_redrawing();
+        rfu.set_flag(SubWindowRedrawingFlag::SPELL);
     } else {
         msg_print("Changes ignored.");
     }

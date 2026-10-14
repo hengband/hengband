@@ -107,14 +107,8 @@ void ObjectUseEntity::execute()
         gain_exp(this->player_ptr, (item_level + (this->player_ptr->lev >> 1)) / this->player_ptr->lev);
     }
 
-    static constexpr auto flags_swrf = {
-        SubWindowRedrawingFlag::EQUIPMENT,
-        SubWindowRedrawingFlag::PLAYER,
-        SubWindowRedrawingFlag::FLOOR_ITEMS,
-        SubWindowRedrawingFlag::FOUND_ITEMS,
-    };
-    rfu.set_flags(flags_swrf);
     rfu.request_inventory_arrangement();
+    rfu.request_item_lists_redrawing();
     if (!use_charge) {
         return;
     }
