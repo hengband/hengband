@@ -128,6 +128,7 @@ public:
     void request_map_redrawing();
     void request_monster_update_and_map_redrawing();
     void request_item_lists_redrawing();
+    void request_spell_info_redrawing();
 
     void fill_up_sub_flags();
     void request_autopick_inscription();

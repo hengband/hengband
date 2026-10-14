@@ -39,9 +39,14 @@
 bool exchange_cash(PlayerType *player_ptr)
 {
     auto change = false;
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
     constexpr auto fmt_convert = _("%s を換金しますか？", "Convert %s into money? ");
-    constexpr auto fmt_reward = _("賞金 %d＄を手に入れた。", "You get %dgp.");
+    const auto receive_reward = [player_ptr](int reward_money) {
+        player_ptr->au += reward_money;
+        auto &rfu = RedrawingFlagsUpdater::get_instance();
+        rfu.set_flag(MainWindowRedrawingFlag::GOLD);
+        rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
+        msg_format(_("賞金 %d＄を手に入れた。", "You get %dgp."), reward_money);
+    };
     for (INVENTORY_IDX i = 0; i <= INVEN_SUB_HAND; i++) {
         const auto &item = *player_ptr->inventory[i];
         if (item.bi_key.tval() != ItemKindType::CAPTURE) {
@@ -58,10 +63,7 @@ bool exchange_cash(PlayerType *player_ptr)
             continue;
         }
 
-        const auto reward_money = 1000000 * item.number;
-        msg_format(fmt_reward, reward_money);
-        player_ptr->au += reward_money;
-        rfu.set_flag(MainWindowRedrawingFlag::GOLD);
+        receive_reward(1000000 * item.number);
         vary_item(player_ptr, i, -item.number);
     }
 
@@ -81,10 +83,7 @@ bool exchange_cash(PlayerType *player_ptr)
             continue;
         }
 
-        const auto reward_money = 200000 * item.number;
-        msg_format(fmt_reward, reward_money);
-        player_ptr->au += reward_money;
-        rfu.set_flag(MainWindowRedrawingFlag::GOLD);
+        receive_reward(200000 * item.number);
         vary_item(player_ptr, i_idx, -item.number);
     }
 
@@ -104,10 +103,7 @@ bool exchange_cash(PlayerType *player_ptr)
             continue;
         }
 
-        const auto reward_money = 100000 * item.number;
-        msg_format(fmt_reward, reward_money);
-        player_ptr->au += reward_money;
-        rfu.set_flag(MainWindowRedrawingFlag::GOLD);
+        receive_reward(100000 * item.number);
         vary_item(player_ptr, i_idx, -item.number);
     }
 
@@ -125,10 +121,7 @@ bool exchange_cash(PlayerType *player_ptr)
             continue;
         }
 
-        const auto reward_money = (monrace.level * 50 + 100) * item.number;
-        msg_format(fmt_reward, reward_money);
-        player_ptr->au += reward_money;
-        rfu.set_flag(MainWindowRedrawingFlag::GOLD);
+        receive_reward((monrace.level * 50 + 100) * item.number);
         vary_item(player_ptr, i_idx, -item.number);
     }
 
@@ -145,10 +138,7 @@ bool exchange_cash(PlayerType *player_ptr)
             continue;
         }
 
-        const auto reward_money = (monrace.level * 30 + 60) * item.number;
-        msg_format(fmt_reward, reward_money);
-        player_ptr->au += reward_money;
-        rfu.set_flag(MainWindowRedrawingFlag::GOLD);
+        receive_reward((monrace.level * 30 + 60) * item.number);
         vary_item(player_ptr, i_idx, -item.number);
     }
 

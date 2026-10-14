@@ -104,6 +104,19 @@ void redraw_stuff(PlayerType *player_ptr)
         term_clear();
     }
 
+    // 呪文の失敗率は今の MP で変わり、職業によっては技の失敗率や効果の表示が今の HP でも変わる。
+    // BASIC は HP・MP も描き直すので同じに扱う。WIPE の消去で入力を待つ間に立った要求も拾うよう、その後で判定する
+    // (領域の魔法の呪文の一覧は名前だけを表示するが、職業で分けずにまとめて要求する)
+    static constexpr auto flags_basic_mp = {
+        MainWindowRedrawingFlag::BASIC,
+        MainWindowRedrawingFlag::MP,
+    };
+    if (rfu.has_any_of(flags_basic_mp)) {
+        rfu.request_spell_info_redrawing();
+    } else if (rfu.has(MainWindowRedrawingFlag::HP)) {
+        rfu.set_flag(SubWindowRedrawingFlag::SPELL);
+    }
+
     if (rfu.has(MainWindowRedrawingFlag::MAP)) {
         rfu.reset_flag(MainWindowRedrawingFlag::MAP);
         print_map(player_ptr);
