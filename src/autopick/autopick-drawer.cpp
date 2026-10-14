@@ -136,7 +136,7 @@ void draw_text_editor(PlayerType *player_ptr, AutopickTextBody *tb)
     }
 
     update_autopick_expression_states(player_ptr, tb);
-    if (tb->mark) {
+    if (tb->marks.any()) {
         tb->dirty_flags |= DIRTY_ALL;
 
         by1 = std::min(tb->my, tb->cy);
@@ -185,7 +185,7 @@ void draw_text_editor(PlayerType *player_ptr, AutopickTextBody *tb)
             }
         }
 
-        if (!tb->mark || (y < by1 || by2 < y)) {
+        if (tb->marks.none() || (y < by1 || by2 < y)) {
             term_putstr(leftcol, i + 1, tb->wid - 1, color, msg);
         } else if (by1 != by2) {
             term_putstr(leftcol, i + 1, tb->wid - 1, TERM_YELLOW, msg);

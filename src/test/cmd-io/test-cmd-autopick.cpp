@@ -33,7 +33,7 @@ TEST_CASE("adjust_cursor_column clamps the mark column by the line the mark is o
 {
     auto tb = make_text_body({ "aaaaaaaa", "aa" });
     tb.cx = 8;
-    tb.mark = MARK_MARK;
+    tb.marks.set(AutopickMark::MARK);
     tb.my = 1;
     tb.mx = 5;
 
@@ -59,7 +59,7 @@ TEST_CASE("adjust_cursor_column keeps the mark column within the line shortened 
     // 行末にマークを置いたまま、破壊の指定を外して行を短くする
     auto tb = make_text_body({ "!aaaa" });
     tb.cx = 5;
-    tb.mark = MARK_MARK;
+    tb.marks.set(AutopickMark::MARK);
     tb.mx = 5;
     toggle_command_letter(&tb, AutopickMethod::AUTOPICK);
     REQUIRE(*tb.lines_list[0] == "aaaa");

@@ -75,20 +75,21 @@ static EditorCommandId analyze_move_key(AutopickTextBody *tb, uint32_t skey)
          * Un-shifted cursor keys cancells
          * selection created by shift+cursor.
          */
-        if (tb->mark & MARK_BY_SHIFT) {
-            tb->mark = 0;
+        if (tb->marks.has(AutopickMark::BY_SHIFT)) {
+            tb->marks.clear();
             tb->dirty_flags |= DIRTY_ALL;
         }
 
         return com_id;
     }
 
-    if (tb->mark) {
+    if (tb->marks.any()) {
         return com_id;
     }
 
     const int len = tb->lines_list[tb->cy]->length();
-    tb->mark = MARK_MARK | MARK_BY_SHIFT;
+    tb->marks.set(AutopickMark::MARK);
+    tb->marks.set(AutopickMark::BY_SHIFT);
     tb->my = tb->cy;
     tb->mx = tb->cx;
     if (tb->cx > len) {
@@ -113,7 +114,7 @@ void AutopickTextBody::adjust_cursor_column()
 {
     this->cx = std::max(this->cx, this->rec_cx);
     this->cx = std::min<int>(this->lines_list[this->cy]->length(), this->cx);
-    if (this->mark) {
+    if (this->marks.any()) {
         this->mx = std::min<int>(this->lines_list[this->my]->length(), this->mx);
     }
 }
@@ -190,7 +191,7 @@ void do_cmd_edit_autopick(PlayerType *player_ptr)
         prt(_("(^Q:終了 ^W:セーブして終了, ESC:メニュー, その他:入力)",
                 "(^Q:Quit, ^W:Save&Quit, ESC:Menu, Other:Input text)"),
             0, 0);
-        if (!tb->mark) {
+        if (tb->marks.none()) {
             prt(fmt::format("({},{})", tb->cx, tb->cy), 0, 60);
         } else {
             prt(fmt::format("({},{})-({},{})", tb->mx, tb->my, tb->cx, tb->cy), 0, 60);
@@ -213,8 +214,8 @@ void do_cmd_edit_autopick(PlayerType *player_ptr)
             com_id = do_command_menu(0, 0);
             tb->dirty_flags |= DIRTY_SCREEN;
         } else if (!iscntrl((unsigned char)key)) {
-            if (tb->mark) {
-                tb->mark = 0;
+            if (tb->marks.any()) {
+                tb->marks.clear();
                 tb->dirty_flags |= DIRTY_ALL;
             }
 

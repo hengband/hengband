@@ -16,11 +16,10 @@ void toggle_keyword(AutopickTextBody *tb, BIT_FLAGS flg)
     int by1, by2;
     bool add = true;
     bool fixed = false;
-    if (tb->mark) {
+    if (tb->marks.any()) {
         by1 = std::min(tb->my, tb->cy);
         by2 = std::max(tb->my, tb->cy);
-    } else /* if (!tb->mark) */
-    {
+    } else {
         by1 = by2 = tb->cy;
     }
 
@@ -84,11 +83,10 @@ void toggle_command_letter(AutopickTextBody *tb, AutopickMethod am)
     int by1, by2;
     bool add = true;
     bool fixed = false;
-    if (tb->mark) {
+    if (tb->marks.any()) {
         by1 = std::min(tb->my, tb->cy);
         by2 = std::max(tb->my, tb->cy);
-    } else /* if (!tb->mark) */
-    {
+    } else {
         by1 = by2 = tb->cy;
     }
 
@@ -159,7 +157,7 @@ void toggle_command_letter(AutopickTextBody *tb, AutopickMethod am)
 void add_keyword(AutopickTextBody *tb, BIT_FLAGS flg)
 {
     int by1, by2;
-    if (tb->mark) {
+    if (tb->marks.any()) {
         by1 = std::min(tb->my, tb->cy);
         by2 = std::max(tb->my, tb->cy);
     } else {
@@ -236,7 +234,7 @@ void copy_text_to_yank(AutopickTextBody *tb)
         tb->cx = len;
     }
 
-    if (!tb->mark) {
+    if (tb->marks.none()) {
         tb->cx = 0;
         tb->my = tb->cy;
         tb->mx = len;
@@ -252,7 +250,7 @@ void copy_text_to_yank(AutopickTextBody *tb)
         }
 
         add_str_to_yank(tb, "");
-        tb->mark = 0;
+        tb->marks.clear();
         tb->dirty_flags |= DIRTY_ALL;
         return;
     }
@@ -271,7 +269,7 @@ void copy_text_to_yank(AutopickTextBody *tb)
         add_str_to_yank(tb, buf.substr(bx1, bx2 - bx1));
     }
 
-    tb->mark = 0;
+    tb->marks.clear();
     tb->dirty_flags |= DIRTY_ALL;
 }
 
