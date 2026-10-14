@@ -13,7 +13,8 @@
 /*!
  * @brief 走っていれば走るのをやめる
  * @param player_ptr プレイヤーへの参照ポインタ
- * @details 走っている間は画面をプレイヤーに合わせない (center_running がオフのとき) ので、合わせ直す
+ * @details 走っている間は画面をプレイヤーに合わせない (center_running がオフのとき) ので、合わせ直す。
+ * 足元・発見済みのアイテムの一覧も描き直していないので、描き直しを要求する
  */
 void stop_running(PlayerType *player_ptr)
 {
@@ -30,7 +31,9 @@ void stop_running(PlayerType *player_ptr)
         StatusRecalculatingFlag::TORCH,
         StatusRecalculatingFlag::FLOW,
     };
-    RedrawingFlagsUpdater::get_instance().set_flags(flags);
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    rfu.set_flags(flags);
+    rfu.request_floor_item_lists_redrawing();
 }
 
 /*
