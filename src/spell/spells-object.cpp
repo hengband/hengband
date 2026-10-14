@@ -627,4 +627,12 @@ void brand_weapon(PlayerType *player_ptr, int brand_type)
     item->discount = 99;
     chg_virtue(player_ptr, Virtue::ENCHANT, 2);
     calc_android_exp(player_ptr);
+
+    // 修正値の強化に失敗しても、エゴの能力 (焼棄の光源の明るさなども) は付いている
+    static constexpr auto flags_srf = {
+        StatusRecalculatingFlag::BONUS,
+        StatusRecalculatingFlag::TORCH,
+        StatusRecalculatingFlag::MP,
+    };
+    RedrawingFlagsUpdater::get_instance().set_flags(flags_srf);
 }

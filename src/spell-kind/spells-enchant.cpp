@@ -95,6 +95,14 @@ bool artifact_scroll(PlayerType *player_ptr)
         return true;
     }
 
+    // 装備品なら、アーティファクトの能力 (光源の明るさなども) が付く
+    static constexpr auto flags_srf = {
+        StatusRecalculatingFlag::BONUS,
+        StatusRecalculatingFlag::TORCH,
+        StatusRecalculatingFlag::MP,
+    };
+    RedrawingFlagsUpdater::get_instance().set_flags(flags_srf);
+
     if (record_rand_art) {
         const auto diary_item_name = describe_flavor(player_ptr, *item, OD_NAME_ONLY);
         exe_write_diary(*player_ptr->current_floor_ptr, DiaryKind::ART_SCROLL, 0, diary_item_name);
@@ -139,7 +147,16 @@ bool mundane_spell(PlayerType *player_ptr, bool only_equip)
     item->set_position(pos);
     item->marked = marked;
     item->inscription = std::move(inscription);
-    RedrawingFlagsUpdater::get_instance().request_item_lists_redrawing();
+
+    // 装備品なら、修正値・エゴ・アーティファクトの能力 (光源の明るさなども) が無くなる
+    static constexpr auto flags_srf = {
+        StatusRecalculatingFlag::BONUS,
+        StatusRecalculatingFlag::TORCH,
+        StatusRecalculatingFlag::MP,
+    };
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    rfu.set_flags(flags_srf);
+    rfu.request_item_lists_redrawing();
     calc_android_exp(player_ptr);
     return true;
 }
