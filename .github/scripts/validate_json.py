@@ -315,7 +315,8 @@ def validate_town_map_semantics(data: dict, schema_path: Path) -> None:
             if len(fields) != 7 or any(re.fullmatch(r"-?[0-9]+", fields[index]) is None for index in (0, 2, 3, 5, 6)):
                 raise ValidationError("building action command requires seven valid fields", path=["buildingRules", rule_index, "fields"])
             for field_index in (0, 2, 3, 5, 6):
-                if not -2147483648 <= int(fields[field_index]) <= 2147483647:
+                minimum, maximum = (-32768, 32767) if field_index in (5, 6) else (-2147483648, 2147483647)
+                if not minimum <= int(fields[field_index]) <= maximum:
                     raise ValidationError("building field exceeds the reader's integer range", path=["buildingRules", rule_index, "fields", field_index])
             if not 0 <= int(fields[0]) < 8:
                 raise ValidationError("building action index is outside the reader's range", path=["buildingRules", rule_index, "fields", 0])
@@ -328,7 +329,7 @@ def validate_town_map_semantics(data: dict, schema_path: Path) -> None:
             if len(fields) > max_fields:
                 raise ValidationError("too many fields for building membership command", path=["buildingRules", rule_index, "fields"])
             for field_index, value in enumerate(fields):
-                if not -2147483648 <= int(value) <= 2147483647:
+                if not -32768 <= int(value) <= 32767:
                     raise ValidationError("building field exceeds the reader's integer range", path=["buildingRules", rule_index, "fields", field_index])
 
     map_dimensions = []

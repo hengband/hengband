@@ -749,6 +749,49 @@ class TownMapValidationTest(unittest.TestCase):
                 self.assertFalse(ok)
                 self.assertIn("building field exceeds the reader's integer range", message)
 
+    def test_building_short_fields_reject_overflow_for_inactive_rules_and_all_locales(self):
+        cases = (
+            ("A", ["0", "Action", "0", "0", "a", "0", "0"], 5),
+            ("A", ["0", "Action", "0", "0", "a", "0", "0"], 6),
+        ) + tuple((command, ["1", "2"], index) for command in ("C", "R", "M") for index in (0, 1))
+        for locale in ("en", "ja"):
+            for command, fields, index in cases:
+                for number in (-32769, 32768, 65535, -2147483648, 2147483647):
+                    with self.subTest(locale=locale, command=command, index=index, number=number):
+                        invalid = copy.deepcopy(self.data)
+                        rule = invalid["buildingRules"][0]
+                        rule.update(command=command, fields=list(fields), locale=locale, when="0")
+                        rule["fields"][index] = str(number)
+                        ok, message = self.validate(invalid)
+                        self.assertFalse(ok, message)
+                        self.assertIn("building field exceeds the reader's integer range", message)
+                        self.assertIn(f"Location: ['buildingRules', 0, 'fields', {index}]", message)
+
+    def test_building_short_fields_accept_boundaries_and_negative_values(self):
+        for locale in ("en", "ja"):
+            for command in ("A", "C", "R", "M"):
+                for number in ("-32768", "-1", "0", "32767", "-00032768", "00032767"):
+                    with self.subTest(locale=locale, command=command, number=number):
+                        valid = copy.deepcopy(self.data)
+                        fields = ["7", "Action", "-2147483648", "2147483647", "a", number, number] if command == "A" else [number, number]
+                        valid["buildingRules"][0].update(command=command, fields=fields, locale=locale, when="0")
+                        ok, message = self.validate(valid)
+                        self.assertTrue(ok, message)
+
+    def test_building_costs_keep_the_full_signed_integer_range(self):
+        for index in (2, 3):
+            for number, accepted in ((-2147483648, True), (-1, True), (0, True), (2147483647, True),
+                                     (-2147483649, False), (2147483648, False)):
+                with self.subTest(index=index, number=number):
+                    data = copy.deepcopy(self.data)
+                    fields = ["0", "Action", "0", "0", "a", "-32768", "32767"]
+                    fields[index] = str(number)
+                    data["buildingRules"][0].update(command="A", fields=fields)
+                    ok, message = self.validate(data)
+                    self.assertEqual(ok, accepted, message)
+                    if not accepted:
+                        self.assertIn(f"Location: ['buildingRules', 0, 'fields', {index}]", message)
+
     def test_numeric_tokens_require_ascii_digits(self):
         invalid = copy.deepcopy(self.data)
         invalid["featureRules"][0]["definition"]["monster"] = "١"

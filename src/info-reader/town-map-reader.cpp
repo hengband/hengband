@@ -170,7 +170,7 @@ parse_error_type apply_town_building_rule(const TownMapBuildingRule &rule)
             angband_strcpy(building.owner_name, value.owner_name, sizeof(building.owner_name));
             angband_strcpy(building.owner_race, value.owner_race, sizeof(building.owner_race));
         } else if constexpr (std::is_same_v<T, TownMapBuildingAction>) {
-            if (value.index < 0 || value.index >= 8) {
+            if (value.index < 0 || value.index >= 8 || !std::in_range<int16_t>(value.action) || !std::in_range<int16_t>(value.restriction)) {
                 return PARSE_ERROR_INVALID_VALUE;
             }
             angband_strcpy(building.act_names[value.index], value.name, sizeof(building.act_names[value.index]));
@@ -185,6 +185,10 @@ parse_error_type apply_town_building_rule(const TownMapBuildingRule &rule)
             const auto count = value.kind == TownMapBuildingMembershipKind::CLASS ? static_cast<size_t>(PLAYER_CLASS_TYPE_MAX) : (is_realm ? static_cast<size_t>(MAX_MAGIC) : static_cast<size_t>(MAX_RACES));
             const auto offset = is_realm ? 1U : 0U;
             if (value.values.empty() || value.values.size() > count || members.size() < count + offset) {
+                return PARSE_ERROR_INVALID_VALUE;
+            }
+            // 最後の値が不正でも、先頭の会員フラグを部分的に書き換えない。
+            if (!std::all_of(value.values.begin(), value.values.end(), [](int number) { return std::in_range<int16_t>(number); })) {
                 return PARSE_ERROR_INVALID_VALUE;
             }
             for (size_t i = 0; i < count; ++i) {
@@ -325,6 +329,11 @@ parse_error_type TownMapReader::read_features(TownMapDefinition &definition) con
     return PARSE_ERROR_NONE;
 }
 
+/*!
+ * @brief 建物宣言を型付きデータへ解析する。
+ * @details action・restriction・会員フラグは保存先のsigned16範囲に限定する。
+ * 費用はint範囲を維持し、対象言語や条件の成立にかかわらず宣言全体を検証する。
+ */
 parse_error_type TownMapReader::read_buildings(TownMapDefinition &definition) const
 {
     for (const auto &rule : this->data["buildingRules"]) {
@@ -376,8 +385,13 @@ parse_error_type TownMapReader::read_buildings(TownMapDefinition &definition) co
             }
             const auto is_numeric_field = (command == "A" && (field_index == 0 || field_index == 2 || field_index == 3 || field_index == 5 || field_index == 6)) ||
                                           command == "C" || command == "M" || command == "R";
-            if (is_numeric_field && !is_integer_in_range(value, std::numeric_limits<int>::min(), std::numeric_limits<int>::max())) {
-                return PARSE_ERROR_INVALID_VALUE;
+            if (is_numeric_field) {
+                const auto short_field = command != "A" || field_index == 5 || field_index == 6;
+                const auto minimum = short_field ? std::numeric_limits<int16_t>::min() : std::numeric_limits<int>::min();
+                const auto maximum = short_field ? std::numeric_limits<int16_t>::max() : std::numeric_limits<int>::max();
+                if (!is_integer_in_range(value, minimum, maximum)) {
+                    return PARSE_ERROR_INVALID_VALUE;
+                }
             }
             parsed_fields.push_back(value);
             ++field_index;
