@@ -379,6 +379,9 @@ bool BadStatusSetter::hallucination(const TIME_EFFECT tmp_v)
         MainWindowRedrawingFlag::UHEALTH,
     };
     rfu.set_flags(flags_mwrf);
+
+    // 足元のアイテムの一覧は、幻覚の間は全て「何か奇妙な物」と表示する
+    rfu.set_flag(SubWindowRedrawingFlag::FLOOR_ITEMS);
     handle_stuff(this->player_ptr);
     return true;
 }
