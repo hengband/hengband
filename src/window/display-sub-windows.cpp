@@ -51,6 +51,7 @@
 #include "view/object-describer.h"
 #include "window/main-window-equipments.h"
 #include "window/main-window-util.h"
+#include "window/overview-map-cache.h"
 #include "world/world.h"
 #include <algorithm>
 #include <concepts>
@@ -479,6 +480,7 @@ void fix_overhead(PlayerType *player_ptr)
                 display_map(player_ptr, &cy, &cx);
             }
         });
+    OverviewMapCache::get_instance().reset_changed();
 }
 
 /*!
