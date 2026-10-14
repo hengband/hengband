@@ -323,6 +323,7 @@ bool pulish_shield(PlayerType *player_ptr)
         item->ego_idx = EgoType::REFLECTION;
         enchant_equipment(*item, randint0(3) + 4, ENCH_TOAC);
         item->discount = 99;
+        RedrawingFlagsUpdater::get_instance().request_item_lists_redrawing();
         chg_virtue(player_ptr, Virtue::ENCHANT, 2);
         return true;
     }

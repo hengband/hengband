@@ -142,7 +142,9 @@ static void drain_essence(PlayerType *player_ptr)
 
     /* Apply autodestroy/inscription to the drained item */
     autopick_alter_item(player_ptr, i_idx, true);
-    RedrawingFlagsUpdater::get_instance().request_inventory_arrangement();
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    rfu.request_inventory_arrangement();
+    rfu.request_item_lists_redrawing();
 }
 
 /*!
@@ -495,7 +497,9 @@ static void add_essence(PlayerType *player_ptr, SmithCategoryType mode)
     auto effect_name = Smith::get_effect_name(effect);
 
     _(msg_format("%sに%sの能力を付加しました。", item_name.data(), effect_name), msg_format("You have added ability of %s to %s.", effect_name, item_name.data()));
-    RedrawingFlagsUpdater::get_instance().request_inventory_arrangement();
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    rfu.request_inventory_arrangement();
+    rfu.request_item_lists_redrawing();
 }
 
 /*!
@@ -520,7 +524,9 @@ static void erase_essence(PlayerType *player_ptr)
     Smith(player_ptr).erase_essence(item.get());
 
     msg_print(_("エッセンスを取り去った。", "You removed all essence you have added."));
-    RedrawingFlagsUpdater::get_instance().request_inventory_arrangement();
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    rfu.request_inventory_arrangement();
+    rfu.request_item_lists_redrawing();
 }
 
 /*!

@@ -15,6 +15,7 @@
 #include "racial/racial-android.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
 #include "view/display-messages.h"
 #include <memory>
@@ -138,6 +139,7 @@ bool mundane_spell(PlayerType *player_ptr, bool only_equip)
     item->set_position(pos);
     item->marked = marked;
     item->inscription = std::move(inscription);
+    RedrawingFlagsUpdater::get_instance().request_item_lists_redrawing();
     calc_android_exp(player_ptr);
     return true;
 }
