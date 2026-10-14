@@ -285,7 +285,7 @@ void wiz_identify_full_inventory(PlayerType *player_ptr)
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.request_inventory_arrangement();
-    rfu.set_flag(SubWindowRedrawingFlag::EQUIPMENT);
+    rfu.request_item_lists_redrawing();
 }
 
 /*!

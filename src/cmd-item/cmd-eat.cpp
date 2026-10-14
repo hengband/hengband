@@ -248,11 +248,7 @@ void exe_eat_food(PlayerType *player_ptr, INVENTORY_IDX i_idx)
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.request_inventory_arrangement();
-    static constexpr auto flags_swrf = {
-        SubWindowRedrawingFlag::EQUIPMENT,
-        SubWindowRedrawingFlag::PLAYER,
-    };
-    rfu.set_flags(flags_swrf);
+    rfu.request_item_lists_redrawing();
 
     /* Undeads drain recharge of magic device */
     if (exe_eat_charge_of_magic_device(player_ptr, item.get(), i_idx)) {
