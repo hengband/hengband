@@ -41,16 +41,8 @@ static void redraw_character_xtra(PlayerType *player_ptr)
     auto &world = AngbandWorld::get_instance();
     world.character_xtra = true;
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    static constexpr auto flags_swrf = {
-        SubWindowRedrawingFlag::INVENTORY,
-        SubWindowRedrawingFlag::EQUIPMENT,
-        SubWindowRedrawingFlag::SPELL,
-        SubWindowRedrawingFlag::PLAYER,
-        SubWindowRedrawingFlag::MONSTER_LORE,
-        SubWindowRedrawingFlag::OVERHEAD,
-        SubWindowRedrawingFlag::DUNGEON,
-    };
-    rfu.set_flags(flags_swrf);
+    // フロアが変わったので、足元や発見済みのアイテムの一覧なども含め、すべてのサブウィンドウを描き直す
+    rfu.fill_up_sub_flags();
     rfu.request_whole_main_window_redrawing();
     auto flags_srf = {
         StatusRecalculatingFlag::BONUS,

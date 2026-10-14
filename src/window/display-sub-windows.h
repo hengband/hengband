@@ -14,6 +14,7 @@ void fix_pet_list(PlayerType *player_ptr);
 void fix_equip(PlayerType *player_ptr);
 void fix_player(PlayerType *player_ptr);
 void fix_message();
+void request_message_redraw_if_color_changed();
 void fix_overhead(PlayerType *player_ptr);
 void fix_dungeon(PlayerType *player_ptr);
 void fix_monster(PlayerType *player_ptr);

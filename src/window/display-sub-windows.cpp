@@ -402,6 +402,14 @@ void fix_player(PlayerType *player_ptr)
         });
 }
 
+namespace {
+/*!
+ * @brief メッセージのサブウィンドウを描いたときの、今のコマンドのメッセージの数
+ * @details この数より新しいメッセージを白、それより前のメッセージを灰色で描く
+ */
+COMMAND_CODE displayed_now_message = 0;
+}
+
 /*!
  * @brief ゲームメッセージ履歴をサブウィンドウに表示する /
  * Hack -- display recent messages in sub-windows
@@ -409,6 +417,7 @@ void fix_player(PlayerType *player_ptr)
  */
 void fix_message(void)
 {
+    displayed_now_message = now_message;
     display_sub_windows(SubWindowRedrawingFlag::MESSAGE,
         [] {
             const auto &[wid, hgt] = term_get_size();
@@ -436,6 +445,20 @@ void fix_message(void)
                 }
             }
         });
+}
+
+/*!
+ * @brief メッセージのサブウィンドウを描いたときから、白と灰色の境目が変わっていたら描き直しを要求する
+ * @details 新しいコマンドを始めると、前のコマンドのメッセージが灰色に変わる。コマンドの途中で描き直したときなど、
+ * 描いたときと今とで境目が違う経路が多いので、描いたときの境目と比べる。
+ * now_message を書き換えるたびに要求すると、コマンドの途中の入力待ちで前のメッセージがいったん灰色で描かれ、
+ * 取り消すと白に戻ってちらつくので、コマンドの入力を待つときにだけ比べる
+ */
+void request_message_redraw_if_color_changed()
+{
+    if (displayed_now_message != now_message) {
+        RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::MESSAGE);
+    }
 }
 
 /*!
