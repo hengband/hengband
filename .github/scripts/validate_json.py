@@ -361,11 +361,39 @@ def require_integer(value, path: list) -> None:
         raise ValidationError("expected an integer JSON value", path=path)
 
 
-def validate_terrain_semantics(data: dict) -> None:
-    """TerrainReaderの整数型と地形ごとの生成確率合計を確認する。"""
+def load_cpp_map_keys(path: Path, table: str) -> set[str]:
+    """指定したC++辞書のキーだけを読む。隣の辞書やコメントは含めない。"""
+    source = path.read_text(encoding="utf-8")
+    match = re.search(r'\b' + re.escape(table) + r'\s*=\s*\{(.*?)^\};', source, re.DOTALL | re.MULTILINE)
+    if not match:
+        raise ValueError(f"Definition table {table} not found in {path}")
+    keys = set(re.findall(r'^\s*\{\s*"([^"\\]+)"\s*,', match[1], re.MULTILINE))
+    if not keys:
+        raise ValueError(f"No definition tokens found in {table}: {path}")
+    return keys
+
+
+def validate_terrain_semantics(data: dict, schema_path: Path) -> None:
+    """地形の整数・表示・参照・状態数を確認する。重複定義はCIで拒否する。"""
+    repository_root = schema_path.resolve().parent.parent
+    flags = load_cpp_map_keys(repository_root / "src/info-reader/feature-info-tokens-table.cpp", "f_info_flags")
+    colors = load_cpp_map_keys(repository_root / "src/term/gameterm.cpp", "color_list")
+    ids = set()
+    tags = set()
     for terrain_index, terrain in enumerate(data["terrains"]):
         path = ["terrains", terrain_index]
         require_integer(terrain["id"], path + ["id"])
+        if terrain["id"] in ids:
+            raise ValidationError("terrain IDs must be unique; duplicate IDs overwrite definitions", path=path + ["id"])
+        ids.add(terrain["id"])
+        if terrain["key"] in tags:
+            raise ValidationError("terrain tags must be unique; references would be ambiguous", path=path + ["key"])
+        tags.add(terrain["key"])
+        if terrain["symbol"]["color"] not in colors:
+            raise ValidationError("unknown terrain color token", path=path + ["symbol", "color"])
+        for flag_index, flag in enumerate(terrain["flags"]):
+            if flag and flag not in flags:
+                raise ValidationError("unknown terrain flag token", path=path + ["flags", flag_index])
         if terrain.get("map_priority") is not None:
             require_integer(terrain["map_priority"], path + ["map_priority"])
         for field in ("trap", "door", "tunnel"):
@@ -384,6 +412,41 @@ def validate_terrain_semantics(data: dict) -> None:
             probability_sum += change["probability"]
             if probability_sum > 100:
                 raise ValidationError("generation probability sum must not exceed 100", path=probability_path)
+
+    # 候補文書内の全タグを集めてから参照を確認し、前方参照を許可する。
+    def require_tag(tag, reference_path):
+        if tag not in tags:
+            raise ValidationError("undefined terrain tag", path=reference_path)
+
+    for terrain_index, terrain in enumerate(data["terrains"]):
+        path = ["terrains", terrain_index]
+        mimic = terrain.get("mimic")
+        if mimic:
+            require_tag(mimic, path + ["mimic"])
+        for change_index, change in enumerate((terrain.get("generation") or {}).get("changes", [])):
+            require_tag(change["terrain"], path + ["generation", "changes", change_index, "terrain"])
+        state_count = 0
+        # nlohmann::jsonのobjectと同じキー順で、9番目の状態を診断する。
+        for action, value in sorted((terrain.get("interactions") or {}).items()):
+            action_path = path + ["interactions", action]
+            if action == "DROP_GOLD":
+                if re.fullmatch(r'[0-9]+d[0-9]+', value) is None:
+                    raise ValidationError("invalid dice string", path=action_path)
+                # schemaは正のNdMを保証。巨大な文字列もint()の桁数制限に任せず診断する。
+                for token in value.split("d"):
+                    digits = token.lstrip("0") or "0"
+                    if len(digits) > 10 or int(digits) > 2147483647:
+                        raise ValidationError("dice component exceeds the reader's int range", path=action_path)
+                continue
+            if action == "DESTROYED":
+                require_tag(value, action_path)
+                continue
+            if state_count >= 8:
+                raise ValidationError("terrain interactions must not exceed eight states", path=action_path)
+            if action not in flags:
+                raise ValidationError("unknown terrain action token", path=action_path)
+            require_tag(value, action_path)
+            state_count += 1
 
 
 def load_class_ids(repository_root: Path) -> dict[str, int]:
@@ -551,7 +614,7 @@ def validate_one(pair: tuple[Path, Path, dict], registry: Registry | None = None
         absolute_schema = schema if isinstance(schema, bool) else {**schema, "$id": urljoin(schema_uri, schema.get("$id", schema_uri))}
         validate(instance=data, schema=absolute_schema, registry=registry)
         semantic_validators = {
-            "TerrainDefinitions.schema.json": lambda: validate_terrain_semantics(data),
+            "TerrainDefinitions.schema.json": lambda: validate_terrain_semantics(data, schema_path),
             "VaultDefinitions.schema.json": lambda: validate_vault_semantics(data),
             "EgoDefinitions.schema.json": lambda: validate_ego_semantics(data, schema_path),
             "WildernessDefinition.schema.json": lambda: validate_wilderness_semantics(data),

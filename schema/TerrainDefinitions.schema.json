@@ -45,7 +45,8 @@
               "character": {
                 "type": "string",
                 "minLength": 1,
-                "maxLength": 1
+                "maxLength": 1,
+                "pattern": "^[\\u0000-\\u007f]$"
               },
               "color": {
                 "type": "string"
@@ -71,64 +72,8 @@
             "type": "array",
             "items": {
               "type": "string",
-              "enum": [
-                "ACID_PUDDLE",
-                "AVOID_RUN",
-                "BASH",
-                "BLDG",
-                "CAN_DIG",
-                "CAN_FLY",
-                "CAN_PASS",
-                "CAN_SWIM",
-                "CLOSE",
-                "COLD_PUDDLE",
-                "DEEP",
-                "DISARM",
-                "DROP",
-                "ELEC_PUDDLE",
-                "ENTRANCE",
-                "FLOOR",
-                "GLASS",
-                "GLOW",
-                "HAS_ITEM",
-                "HIT_TRAP",
-                "CAN_DISINTEGRATE",
-                "STONE",
-                "LAVA",
-                "UP_STAIRS",
-                "LOS",
-                "MIRROR",
-                "DOWN_STAIRS",
-                "MOUNTAIN",
-                "MOVE",
-                "NOTICE",
-                "OPEN",
-                "PATTERN",
-                "PERMANENT",
-                "PLACE",
-                "PLANT",
-                "POISON_PUDDLE",
-                "PROJECTION",
-                "QUEST",
-                "QUEST_ENTER",
-                "QUEST_EXIT",
-                "REMEMBER",
-                "RUNE_EXPLOSION",
-                "RUNE_PROTECTION",
-                "SECRET",
-                "SHAFT",
-                "SHALLOW",
-                "SPECIAL",
-                "SPIKE",
-                "STAIRS",
-                "STORE",
-                "TELEPORTABLE",
-                "TOWN",
-                "TRAP",
-                "TREE",
-                "WALL",
-                "WATER"
-              ]
+              "description": "語彙はvalidate_json.pyでC++のトークン辞書と照合する。空文字列はreaderと同じく無視する。",
+              "pattern": "^(?:[A-Z][A-Z0-9_]*)?(?![\\s\\S])"
             }
           },
           "trap": {
@@ -285,7 +230,9 @@
             "required": ["type"],
             "if": {
               "properties": {
-                "type": { "const": "STREAM" }
+                "type": {
+                  "const": "STREAM"
+                }
               }
             },
             "then": {
@@ -331,51 +278,22 @@
             "additionalProperties": false
           },
           "interactions": {
-            "type": "object",
-            "description": "特定行動後の地形変化定義",
+            "type": ["object", "null"],
+            "description": "特定行動後の地形変化定義。状態は最大8件、DESTROYEDとDROP_GOLDは別枠。",
+            "propertyNames": {
+              "description": "行動の語彙はvalidate_json.pyでC++のトークン辞書と照合する。DESTROYEDとDROP_GOLDは専用指定。",
+              "pattern": "^[A-Z][A-Z0-9_]*(?![\\s\\S])"
+            },
             "properties": {
-              "BASH": {
-                "type": "string"
-              },
-              "CLOSE": {
-                "type": "string"
-              },
-              "DESTROYED": {
-                "type": "string"
-              },
-              "DISARM": {
-                "type": "string"
-              },
               "DROP_GOLD": {
                 "type": "string",
-                "pattern": "^[1-9][0-9]*d[1-9][0-9]*$"
-              },
-              "ENSECRET": {
-                "type": "string"
-              },
-              "HIT_TRAP": {
-                "type": "string"
-              },
-              "MAY_HAVE_GOLD": {
-                "type": "string"
-              },
-              "OPEN": {
-                "type": "string"
-              },
-              "SECRET": {
-                "type": "string"
-              },
-              "SHAFT": {
-                "type": "string"
-              },
-              "SPIKE": {
-                "type": "string"
-              },
-              "UNPERM": {
-                "type": "string"
+                "pattern": "^0*[1-9][0-9]*d0*[1-9][0-9]*(?![\\s\\S])"
               }
             },
-            "additionalProperties": false
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            }
           }
         },
         "additionalProperties": false
