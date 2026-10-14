@@ -262,23 +262,17 @@ bool SpellHex::process_mana_cost(const bool need_restart)
 
     msg_print(_("詠唱を再開した。", "You restart casting."));
     this->player_ptr->action = ACTION_SPELL;
+    rfu.request_monster_update_and_map_redrawing();
     static constexpr auto flags_srf = {
         StatusRecalculatingFlag::BONUS,
         StatusRecalculatingFlag::HP,
-        StatusRecalculatingFlag::MONSTER_STATUSES,
     };
     rfu.set_flags(flags_srf);
     static constexpr auto flags_mwrf = {
-        MainWindowRedrawingFlag::MAP,
         MainWindowRedrawingFlag::TIMED_EFFECT,
         MainWindowRedrawingFlag::ACTION,
     };
     rfu.set_flags(flags_mwrf);
-    static constexpr auto flags_swrf = {
-        SubWindowRedrawingFlag::OVERHEAD,
-        SubWindowRedrawingFlag::DUNGEON,
-    };
-    rfu.set_flags(flags_swrf);
     return true;
 }
 

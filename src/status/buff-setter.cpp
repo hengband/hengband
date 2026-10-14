@@ -570,10 +570,6 @@ bool set_wraith_form(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     }
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    static constexpr auto flags_swrf = {
-        SubWindowRedrawingFlag::OVERHEAD,
-        SubWindowRedrawingFlag::DUNGEON,
-    };
     if (v) {
         if (player_ptr->wraith_form && !do_dec) {
             if (player_ptr->wraith_form > v) {
@@ -586,18 +582,14 @@ bool set_wraith_form(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
             chg_virtue(player_ptr, Virtue::HONOUR, -2);
             chg_virtue(player_ptr, Virtue::SACRIFICE, -2);
             chg_virtue(player_ptr, Virtue::VALOUR, -5);
-            rfu.set_flag(MainWindowRedrawingFlag::MAP);
-            rfu.set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
-            rfu.set_flags(flags_swrf);
+            rfu.request_monster_update_and_map_redrawing();
         }
     } else {
         if (player_ptr->wraith_form) {
             msg_print(_("不透明になった感じがする。", "You feel opaque."));
             sound(SoundKind::BUFF_EXPIRE);
             notice = true;
-            rfu.set_flag(MainWindowRedrawingFlag::MAP);
-            rfu.set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
-            rfu.set_flags(flags_swrf);
+            rfu.request_monster_update_and_map_redrawing();
         }
     }
 

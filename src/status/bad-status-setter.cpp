@@ -83,21 +83,15 @@ bool BadStatusSetter::set_blindness(const TIME_EFFECT tmp_v)
         disturb(this->player_ptr, false, false);
     }
 
+    rfu.request_monster_update_and_map_redrawing();
     static constexpr auto flags_srf = {
         StatusRecalculatingFlag::UN_VIEW,
         StatusRecalculatingFlag::UN_LITE,
         StatusRecalculatingFlag::VIEW,
         StatusRecalculatingFlag::LITE,
-        StatusRecalculatingFlag::MONSTER_STATUSES,
         StatusRecalculatingFlag::MONSTER_LITE,
     };
     rfu.set_flags(flags_srf);
-    rfu.set_flag(MainWindowRedrawingFlag::MAP);
-    static constexpr auto flags_swrf = {
-        SubWindowRedrawingFlag::OVERHEAD,
-        SubWindowRedrawingFlag::DUNGEON,
-    };
-    rfu.set_flags(flags_swrf);
     handle_stuff(this->player_ptr);
     return true;
 }
@@ -379,18 +373,12 @@ bool BadStatusSetter::hallucination(const TIME_EFFECT tmp_v)
         disturb(this->player_ptr, false, true);
     }
 
+    rfu.request_monster_update_and_map_redrawing();
     static constexpr auto flags_mwrf = {
-        MainWindowRedrawingFlag::MAP,
         MainWindowRedrawingFlag::HEALTH,
         MainWindowRedrawingFlag::UHEALTH,
     };
     rfu.set_flags(flags_mwrf);
-    rfu.set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
-    static constexpr auto flags_swrf = {
-        SubWindowRedrawingFlag::OVERHEAD,
-        SubWindowRedrawingFlag::DUNGEON,
-    };
-    rfu.set_flags(flags_swrf);
     handle_stuff(this->player_ptr);
     return true;
 }

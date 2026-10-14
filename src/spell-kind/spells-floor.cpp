@@ -97,14 +97,8 @@ void wiz_lite(PlayerType *player_ptr, bool ninja)
     }
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
-    rfu.set_flag(MainWindowRedrawingFlag::MAP);
-    static constexpr auto flags_swrf = {
-        SubWindowRedrawingFlag::OVERHEAD,
-        SubWindowRedrawingFlag::DUNGEON,
-        SubWindowRedrawingFlag::FOUND_ITEMS,
-    };
-    rfu.set_flags(flags_swrf);
+    rfu.request_monster_update_and_map_redrawing();
+    rfu.set_flag(SubWindowRedrawingFlag::FOUND_ITEMS);
     if (floor.grid_array[player_ptr->y][player_ptr->x].info & CAVE_GLOW) {
         set_superstealth(player_ptr, false);
     }
@@ -148,22 +142,16 @@ void wiz_dark(PlayerType *player_ptr)
     Travel::get_instance().reset_goal();
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
+    rfu.request_monster_update_and_map_redrawing();
     static constexpr auto flags_srf = {
         StatusRecalculatingFlag::UN_VIEW,
         StatusRecalculatingFlag::UN_LITE,
         StatusRecalculatingFlag::VIEW,
         StatusRecalculatingFlag::LITE,
         StatusRecalculatingFlag::MONSTER_LITE,
-        StatusRecalculatingFlag::MONSTER_STATUSES,
     };
     rfu.set_flags(flags_srf);
-    rfu.set_flag(MainWindowRedrawingFlag::MAP);
-    static constexpr auto flags_swrf = {
-        SubWindowRedrawingFlag::OVERHEAD,
-        SubWindowRedrawingFlag::DUNGEON,
-        SubWindowRedrawingFlag::FOUND_ITEMS,
-    };
-    rfu.set_flags(flags_swrf);
+    rfu.set_flag(SubWindowRedrawingFlag::FOUND_ITEMS);
 }
 
 /*
@@ -214,13 +202,7 @@ void map_area(PlayerType *player_ptr, POSITION range)
         }
     }
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.set_flag(MainWindowRedrawingFlag::MAP);
-    static constexpr auto flags_swrf = {
-        SubWindowRedrawingFlag::OVERHEAD,
-        SubWindowRedrawingFlag::DUNGEON,
-    };
-    rfu.set_flags(flags_swrf);
+    RedrawingFlagsUpdater::get_instance().request_map_redrawing();
 }
 
 /*!
@@ -445,6 +427,7 @@ bool destroy_area(PlayerType *player_ptr, const POSITION y1, const POSITION x1, 
 
     forget_flow(floor);
     auto &rfu = RedrawingFlagsUpdater::get_instance();
+    rfu.request_monster_update_and_map_redrawing();
     static constexpr auto flags_srf = {
         StatusRecalculatingFlag::UN_VIEW,
         StatusRecalculatingFlag::UN_LITE,
@@ -452,15 +435,8 @@ bool destroy_area(PlayerType *player_ptr, const POSITION y1, const POSITION x1, 
         StatusRecalculatingFlag::LITE,
         StatusRecalculatingFlag::FLOW,
         StatusRecalculatingFlag::MONSTER_LITE,
-        StatusRecalculatingFlag::MONSTER_STATUSES,
     };
     rfu.set_flags(flags_srf);
-    rfu.set_flag(MainWindowRedrawingFlag::MAP);
-    static constexpr auto flags_swrf = {
-        SubWindowRedrawingFlag::OVERHEAD,
-        SubWindowRedrawingFlag::DUNGEON,
-    };
-    rfu.set_flags(flags_swrf);
     if (floor.grid_array[player_ptr->y][player_ptr->x].info & CAVE_GLOW) {
         set_superstealth(player_ptr, false);
     }

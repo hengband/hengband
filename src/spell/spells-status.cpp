@@ -210,14 +210,7 @@ bool time_walk(PlayerType *player_ptr)
     msg_erase();
 
     player_ptr->energy_need -= 1000 + (100 + player_ptr->csp - 50) * TURNS_PER_TICK / 10;
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.set_flag(MainWindowRedrawingFlag::MAP);
-    rfu.set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
-    static constexpr auto flags = {
-        SubWindowRedrawingFlag::OVERHEAD,
-        SubWindowRedrawingFlag::DUNGEON,
-    };
-    rfu.set_flags(flags);
+    RedrawingFlagsUpdater::get_instance().request_monster_update_and_map_redrawing();
     handle_stuff(player_ptr);
     return true;
 }
