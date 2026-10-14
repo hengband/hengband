@@ -2,7 +2,6 @@
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/geometry.h"
-#include "game-option/map-screen-options.h"
 #include "game-option/special-options.h"
 #include "grid/grid.h"
 #include "player/player-status.h"
@@ -246,14 +245,9 @@ void display_map(PlayerType *player_ptr, int *cy, int *cx)
         return;
     }
 
-    const auto old_view_special_lite = view_special_lite;
-    const auto old_view_granite_lite = view_granite_lite;
-
     const auto &floor = *player_ptr->current_floor_ptr;
     const auto yrat = (floor.height + hgt - 1) / hgt;
     const auto xrat = (floor.width + wid - 1) / wid;
-    view_special_lite = false;
-    view_granite_lite = false;
 
     FlatArray2D<MapCell> small_map(hgt + 2, wid + 2);
     FlatArray2D<tl::optional<OverviewMapAutopick>> autopicks(hgt + 2, wid + 2);
@@ -356,9 +350,6 @@ void display_map(PlayerType *player_ptr, int *cy, int *cx)
     } else {
         (*cx) = (player_ptr->x / xrat + 1) * 2 + COL_MAP;
     }
-
-    view_special_lite = old_view_special_lite;
-    view_granite_lite = old_view_granite_lite;
 }
 
 DisplaySymbol set_term_color(PlayerType *player_ptr, const Pos2D &pos, const DisplaySymbol &symbol_orig)
