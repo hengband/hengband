@@ -98,7 +98,7 @@ void wiz_lite(PlayerType *player_ptr, bool ninja)
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.request_monster_update_and_map_redrawing();
-    rfu.set_flag(SubWindowRedrawingFlag::FOUND_ITEMS);
+    rfu.request_floor_item_lists_redrawing();
     if (floor.grid_array[player_ptr->y][player_ptr->x].info & CAVE_GLOW) {
         set_superstealth(player_ptr, false);
     }
@@ -151,7 +151,7 @@ void wiz_dark(PlayerType *player_ptr)
         StatusRecalculatingFlag::MONSTER_LITE,
     };
     rfu.set_flags(flags_srf);
-    rfu.set_flag(SubWindowRedrawingFlag::FOUND_ITEMS);
+    rfu.request_floor_item_lists_redrawing();
 }
 
 /*
