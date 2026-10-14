@@ -7,6 +7,7 @@
 #include "inventory/inventory-slot-types.h"
 #include "inventory/inventory-util.h"
 #include "locale/japanese.h"
+#include "lore/monster-lore-snapshot.h"
 #include "main/sound-of-music.h"
 #include "mind/mind-elementalist.h"
 #include "mind/mind-explanations-table.h"
@@ -58,6 +59,7 @@
 #include <mutex>
 #include <sstream>
 #include <string>
+#include <tl/optional.hpp>
 
 /*! サブウィンドウ表示用の ItemTester オブジェクト */
 static std::unique_ptr<ItemTester> fix_item_tester = std::make_unique<AllMatchItemTester>();
@@ -409,6 +411,11 @@ namespace {
  * @details この数より新しいメッセージを白、それより前のメッセージを灰色で描く
  */
 COMMAND_CODE displayed_now_message = 0;
+
+/*!
+ * @brief 思い出のサブウィンドウを描いたときの、表示した思い出の値
+ */
+tl::optional<MonsterLoreSnapshot> displayed_monster_lore;
 }
 
 /*!
@@ -531,7 +538,8 @@ void fix_dungeon(PlayerType *player_ptr)
  */
 void fix_monster(PlayerType *player_ptr)
 {
-    if (!LoreTracker::get_instance().is_tracking()) {
+    const auto &tracker = LoreTracker::get_instance();
+    if (!tracker.is_tracking()) {
         return;
     }
 
@@ -539,6 +547,25 @@ void fix_monster(PlayerType *player_ptr)
         [player_ptr] {
             display_roff(player_ptr);
         });
+    displayed_monster_lore = MonsterLoreSnapshot(*player_ptr, tracker.get_tracking_monrace());
+}
+
+/*!
+ * @brief 思い出のサブウィンドウを描いたときから、表示する思い出が変わっていたら描き直しを要求する
+ * @param player プレイヤーへの参照
+ * @details 描いたときの表示を決める値と比べる (MonsterLoreSnapshot を参照)
+ */
+void request_monster_lore_redraw_if_changed(const PlayerType &player)
+{
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    const auto &tracker = LoreTracker::get_instance();
+    if (rfu.has(SubWindowRedrawingFlag::MONSTER_LORE) || !displayed_monster_lore || !tracker.is_tracking()) {
+        return;
+    }
+
+    if (*displayed_monster_lore != MonsterLoreSnapshot(player, tracker.get_tracking_monrace())) {
+        rfu.set_flag(SubWindowRedrawingFlag::MONSTER_LORE);
+    }
 }
 
 /*!

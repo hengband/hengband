@@ -748,6 +748,7 @@ libhengband_a_SOURCES = \
 	lore/lore-calculator.cpp lore/lore-calculator.h \
 	lore/lore-util.cpp lore/lore-util.h \
 	lore/magic-types-setter.cpp lore/magic-types-setter.h \
+	lore/monster-lore-snapshot.cpp lore/monster-lore-snapshot.h \
 	lore/monster-lore.cpp lore/monster-lore.h \
 	\
 	main-x11.cpp main-gcu.cpp \
@@ -1551,6 +1552,7 @@ hengband_test_SOURCES = \
 	test/io/test-tokenizer.cpp \
 	test/load/test-angband-version-comparer.cpp \
 	test/locale/test-character-encoding.cpp \
+	test/lore/test-monster-lore-snapshot.cpp \
 	test/main/test-init-error-messages-table.cpp \
 	test/monster-race/test-race-ability-mask.cpp \
 	test/mspell/test-mspell-projection-table.cpp \

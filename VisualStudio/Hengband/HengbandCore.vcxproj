@@ -365,6 +365,7 @@
     <ClCompile Include="..\..\src\lore\lore-calculator.cpp" />
     <ClCompile Include="..\..\src\lore\lore-util.cpp" />
     <ClCompile Include="..\..\src\lore\magic-types-setter.cpp" />
+    <ClCompile Include="..\..\src\lore\monster-lore-snapshot.cpp" />
     <ClCompile Include="..\..\src\lore\monster-lore.cpp" />
     <ClCompile Include="..\..\src\main-win\commandline-win.cpp" />
     <ClCompile Include="..\..\src\main-win\graphics-win.cpp" />
@@ -1278,6 +1279,7 @@
     <ClInclude Include="..\..\src\lore\lore-calculator.h" />
     <ClInclude Include="..\..\src\lore\lore-util.h" />
     <ClInclude Include="..\..\src\lore\magic-types-setter.h" />
+    <ClInclude Include="..\..\src\lore\monster-lore-snapshot.h" />
     <ClInclude Include="..\..\src\lore\monster-lore.h" />
     <ClInclude Include="..\..\src\main-win\commandline-win.h" />
     <ClInclude Include="..\..\src\main-win\graphics-win.h" />
