@@ -141,6 +141,24 @@ TEST_CASE("RedrawingFlagsUpdater::request_item_lists_redrawing requests redrawin
     }
 }
 
+TEST_CASE("RedrawingFlagsUpdater::request_floor_item_lists_redrawing requests redrawing the windows showing floor items")
+{
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    static constexpr auto flags_swrf = {
+        SubWindowRedrawingFlag::FLOOR_ITEMS,
+        SubWindowRedrawingFlag::FOUND_ITEMS,
+    };
+    const auto restore = scoped_restore_flags(rfu, flags_swrf);
+    rfu.reset_flags(flags_swrf);
+
+    rfu.request_floor_item_lists_redrawing();
+
+    for (const auto flag : flags_swrf) {
+        CAPTURE(enum2i(flag));
+        CHECK(rfu.has(flag));
+    }
+}
+
 TEST_CASE("RedrawingFlagsUpdater::request_spell_info_redrawing requests redrawing the spell list and the item knowledge")
 {
     auto &rfu = RedrawingFlagsUpdater::get_instance();

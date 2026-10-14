@@ -236,11 +236,7 @@ bool move_player_effect(PlayerType *player_ptr, POSITION ny, POSITION nx, BIT_FL
 
     // 自動拾い/自動破壊により床上のアイテムリストが変化した可能性があるので表示を更新
     if (!player_ptr->running) {
-        static constexpr auto flags_swrf = {
-            SubWindowRedrawingFlag::FLOOR_ITEMS,
-            SubWindowRedrawingFlag::FOUND_ITEMS,
-        };
-        rfu.set_flags(flags_swrf);
+        rfu.request_floor_item_lists_redrawing();
         window_stuff(player_ptr);
     }
 

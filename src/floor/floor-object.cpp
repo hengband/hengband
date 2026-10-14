@@ -202,11 +202,7 @@ void floor_item_increase(PlayerType *player_ptr, INVENTORY_IDX i_idx, ITEM_NUMBE
 
     num -= o_ptr->number;
     o_ptr->number += num;
-    static constexpr auto flags = {
-        SubWindowRedrawingFlag::FLOOR_ITEMS,
-        SubWindowRedrawingFlag::FOUND_ITEMS,
-    };
-    RedrawingFlagsUpdater::get_instance().set_flags(flags);
+    RedrawingFlagsUpdater::get_instance().request_floor_item_lists_redrawing();
 }
 
 /*!
@@ -226,11 +222,7 @@ void floor_item_optimize(PlayerType *player_ptr, INVENTORY_IDX i_idx)
     }
 
     delete_object_idx(player_ptr, i_idx);
-    static constexpr auto flags = {
-        SubWindowRedrawingFlag::FLOOR_ITEMS,
-        SubWindowRedrawingFlag::FOUND_ITEMS,
-    };
-    RedrawingFlagsUpdater::get_instance().set_flags(flags);
+    RedrawingFlagsUpdater::get_instance().request_floor_item_lists_redrawing();
 }
 
 /*!
@@ -259,11 +251,7 @@ void delete_object_idx(PlayerType *player_ptr, OBJECT_IDX o_idx)
 
     floor.prevent_repeat_floor_item_idx = true;
 
-    static constexpr auto flags = {
-        SubWindowRedrawingFlag::FLOOR_ITEMS,
-        SubWindowRedrawingFlag::FOUND_ITEMS,
-    };
-    RedrawingFlagsUpdater::get_instance().set_flags(flags);
+    RedrawingFlagsUpdater::get_instance().request_floor_item_lists_redrawing();
 }
 
 /*!
@@ -463,11 +451,7 @@ short drop_near(PlayerType *player_ptr, ItemEntity &drop_item, const Pos2D &pos,
 
     const auto is_located = player_ptr->is_located_at(pos_drop);
     if (is_located) {
-        static constexpr auto flags = {
-            SubWindowRedrawingFlag::FLOOR_ITEMS,
-            SubWindowRedrawingFlag::FOUND_ITEMS,
-        };
-        RedrawingFlagsUpdater::get_instance().set_flags(flags);
+        RedrawingFlagsUpdater::get_instance().request_floor_item_lists_redrawing();
     }
 
     if (show_drop_message && is_located) {
