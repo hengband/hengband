@@ -28,14 +28,13 @@ void reduce_lite_life(PlayerType *player_ptr)
         return;
     }
 
-    if (o_ptr->ego_idx == EgoType::LITE_LONG) {
-        if (AngbandWorld::get_instance().game_turn % (TURNS_PER_TICK * 2)) {
-            o_ptr->fuel--;
-        }
-    } else {
-        o_ptr->fuel--;
+    // 長寿命の光源は 2 tick に 1 回だけ燃料を減らす
+    const auto skips_burning = (o_ptr->ego_idx == EgoType::LITE_LONG) && !(AngbandWorld::get_instance().game_turn % (TURNS_PER_TICK * 2));
+    if (skips_burning) {
+        return;
     }
 
+    o_ptr->fuel--;
     notice_lite_change(player_ptr, o_ptr);
 }
 
@@ -46,10 +45,9 @@ void reduce_lite_life(PlayerType *player_ptr)
  */
 void notice_lite_change(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
+    // 装備の一覧に残りターン数を表示している
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    if ((o_ptr->fuel < 100) || (!(o_ptr->fuel % 100))) {
-        rfu.set_flag(SubWindowRedrawingFlag::EQUIPMENT);
-    }
+    rfu.set_flag(SubWindowRedrawingFlag::EQUIPMENT);
 
     if (player_ptr->effects()->blindness().is_active()) {
         if (o_ptr->fuel == 0) {
@@ -64,7 +62,7 @@ void notice_lite_change(PlayerType *player_ptr, ItemEntity *o_ptr)
         };
         rfu.set_flags(flags);
     } else if (o_ptr->ego_idx == EgoType::LITE_LONG) {
-        if ((o_ptr->fuel < 50) && (!(o_ptr->fuel % 5)) && (AngbandWorld::get_instance().game_turn % (TURNS_PER_TICK * 2))) {
+        if ((o_ptr->fuel < 50) && (!(o_ptr->fuel % 5))) {
             if (disturb_minor) {
                 disturb(player_ptr, false, true);
             }
