@@ -92,7 +92,7 @@ static std::vector<std::unique_ptr<std::string>> read_text_lines(std::string_vie
     }
 
     auto num_lines = 0;
-    std::vector<std::unique_ptr<std::string>> lines(MAX_LINES);
+    std::vector<std::unique_ptr<std::string>> lines(MAX_AUTOPICK_ENTRIES);
     std::string line;
     while (std::getline(ifs, line)) {
         lines[num_lines++] = std::make_unique<std::string>(std::move(line));
@@ -176,7 +176,7 @@ std::vector<std::unique_ptr<std::string>> read_pickpref_text_lines(std::string_v
     }
 
     if (lines_list.empty()) {
-        lines_list.resize(MAX_LINES);
+        lines_list.resize(MAX_AUTOPICK_ENTRIES);
         lines_list[0] = std::make_unique<std::string>();
     }
 

@@ -8,16 +8,10 @@
 #include <vector>
 
 constexpr auto MAX_LINELEN = 1024;
-constexpr auto MAX_LINES = 6000;
+constexpr auto MAX_AUTOPICK_ENTRIES = 6000;
 
 constexpr auto PT_DEFAULT = 0;
 constexpr auto PT_WITH_PNAME = 1;
-
-constexpr auto LSTAT_BYPASS = 0x01;
-constexpr auto LSTAT_EXPRESSION = 0x02;
-constexpr auto LSTAT_AUTOREGISTER = 0x04;
-constexpr auto LSTAT_EXPRESSION_ERROR = 0x08;
-constexpr auto LSTAT_INCLUDE = 0x10;
 
 /*!
  * @struct autopick_type
@@ -40,6 +34,15 @@ class ItemEntity;
 enum class AutopickMark {
     MARK = 0,
     BY_SHIFT = 1,
+    MAX,
+};
+
+enum class AutopickEntryStatus {
+    BYPASS = 0,
+    EXPRESSION = 1,
+    AUTOREGISTER = 2,
+    EXPRESSION_ERROR = 3,
+    INCLUDE = 4,
     MAX,
 };
 
@@ -81,7 +84,7 @@ public:
     bool yank_eol = false;
 
     std::vector<std::unique_ptr<std::string>> lines_list;
-    byte states[MAX_LINES]{};
+    std::vector<EnumClassFlagGroup<AutopickEntryStatus>> states;
 
     uint16_t dirty_flags = 0;
     int dirty_line = -1;
@@ -109,5 +112,5 @@ bool auto_inscribe_item(ItemEntity &item, int idx);
  */
 inline bool is_greater_autopick_max_line(int count)
 {
-    return count > MAX_LINES - 3;
+    return count > MAX_AUTOPICK_ENTRIES - 3;
 }

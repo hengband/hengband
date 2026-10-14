@@ -24,7 +24,7 @@ using namespace test;
 namespace {
 
 //! is_greater_autopick_max_line() が偽になる最大の行数
-constexpr auto MAX_EDITABLE_LINES = MAX_LINES - 2;
+constexpr auto MAX_EDITABLE_LINES = MAX_AUTOPICK_ENTRIES - 2;
 
 /*!
  * @brief 空でない行を指定の行数だけ持つエディタの状態を作る
@@ -34,7 +34,7 @@ constexpr auto MAX_EDITABLE_LINES = MAX_LINES - 2;
 AutopickTextBody make_text_body(int num_lines)
 {
     AutopickTextBody tb(0, 0);
-    tb.lines_list.resize(MAX_LINES);
+    tb.lines_list.resize(MAX_AUTOPICK_ENTRIES);
     for (auto y = 0; y < num_lines; y++) {
         tb.lines_list[y] = std::make_unique<std::string>("a");
     }

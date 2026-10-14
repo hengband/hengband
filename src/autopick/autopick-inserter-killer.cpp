@@ -21,7 +21,7 @@
 void check_expression_line(AutopickTextBody *tb, int y)
 {
     const auto &s = *tb->lines_list[y];
-    if ((s[0] == '?' && s[1] == ':') || (tb->states[y] & LSTAT_BYPASS)) {
+    if ((s[0] == '?' && s[1] == ':') || (tb->states[y].has(AutopickEntryStatus::BYPASS))) {
         tb->dirty_flags |= DIRTY_EXPRESSION;
     }
 }

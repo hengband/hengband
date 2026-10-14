@@ -131,15 +131,15 @@ TEST_CASE("autopick editor keeps lines after a condition error inactive until it
     update_autopick_expression_states(nullptr, &body);
     for (auto line = 0; line < 4; ++line) {
         CAPTURE(line);
-        CHECK((body.states[line] & LSTAT_BYPASS) != 0);
-        CHECK((body.states[line] & LSTAT_EXPRESSION_ERROR) != 0);
+        CHECK((body.states[line].has(AutopickEntryStatus::BYPASS)));
+        CHECK((body.states[line].has(AutopickEntryStatus::EXPRESSION_ERROR)));
     }
     *body.lines_list[0] = "?:0";
     update_autopick_expression_states(nullptr, &body);
-    CHECK((body.states[1] & LSTAT_BYPASS) != 0);
-    CHECK((body.states[3] & LSTAT_BYPASS) == 0);
+    CHECK((body.states[1].has(AutopickEntryStatus::BYPASS)));
+    CHECK((body.states[3].has(AutopickEntryStatus::BYPASS)) == false);
     for (auto line = 0; line < 4; ++line) {
-        CHECK((body.states[line] & LSTAT_EXPRESSION_ERROR) == 0);
+        CHECK((body.states[line].has(AutopickEntryStatus::EXPRESSION_ERROR)) == false);
     }
 }
 
@@ -162,19 +162,21 @@ TEST_CASE("autopick editor checks included conditions without changing settings"
     body.dirty_flags = DIRTY_EXPRESSION;
     update_autopick_expression_states(nullptr, &body);
     for (auto line = 0; line < 4; ++line) {
-        CHECK((body.states[line] & LSTAT_EXPRESSION_ERROR) != 0);
-        CHECK((body.states[line] & LSTAT_BYPASS) != 0);
+        CHECK((body.states[line].has(AutopickEntryStatus::EXPRESSION_ERROR)));
+        CHECK((body.states[line].has(AutopickEntryStatus::BYPASS)));
     }
     files.write_raw("nested.prf", "?:1\n");
     update_autopick_expression_states(nullptr, &body);
     for (auto line = 0; line < 4; ++line) {
-        CHECK((body.states[line] & (LSTAT_EXPRESSION_ERROR | LSTAT_BYPASS)) == 0);
+        CHECK((body.states[line].has(AutopickEntryStatus::EXPRESSION_ERROR)) == false);
+        CHECK((body.states[line].has(AutopickEntryStatus::BYPASS)) == false);
     }
     REQUIRE(histpref_buf.has_value());
     CHECK(*histpref_buf == "before");
     *body.lines_list[0] = "%:missing.prf";
     update_autopick_expression_states(nullptr, &body);
-    CHECK((body.states[3] & (LSTAT_EXPRESSION_ERROR | LSTAT_BYPASS)) == 0);
+    CHECK((body.states[3].has(AutopickEntryStatus::EXPRESSION_ERROR)) == false);
+    CHECK((body.states[3].has(AutopickEntryStatus::BYPASS)) == false);
     files.write_raw("child.prf", "?:0\n%:bad.prf\n");
     files.write_raw("bad.prf", "?:[FOO a]\n");
     CHECK(check_autopick_file_conditions(nullptr, "child.prf") == 0);
@@ -183,25 +185,25 @@ TEST_CASE("autopick editor checks included conditions without changing settings"
     *body.lines_list[0] = "%:bad.pr";
     body.dirty_flags = DIRTY_EXPRESSION;
     update_autopick_expression_states(nullptr, &body);
-    CHECK((body.states[3] & LSTAT_BYPASS) == 0);
+    CHECK((body.states[3].has(AutopickEntryStatus::BYPASS)) == false);
     body.dirty_flags = 0;
     body.dirty_line = -1;
     body.cx = static_cast<int>(body.lines_list[0]->size());
     insert_single_letter(&body, 'f');
     update_autopick_expression_states(nullptr, &body);
-    CHECK((body.states[3] & LSTAT_EXPRESSION_ERROR) != 0);
-    CHECK((body.states[3] & LSTAT_BYPASS) != 0);
+    CHECK((body.states[3].has(AutopickEntryStatus::EXPRESSION_ERROR)));
+    CHECK((body.states[3].has(AutopickEntryStatus::BYPASS)));
     *body.lines_list[0] = "!%:bad.prf";
     body.dirty_flags = DIRTY_EXPRESSION;
     update_autopick_expression_states(nullptr, &body);
-    CHECK((body.states[3] & LSTAT_BYPASS) == 0);
+    CHECK((body.states[3].has(AutopickEntryStatus::BYPASS)) == false);
     body.dirty_flags = 0;
     body.dirty_line = -1;
     toggle_command_letter(&body, AutopickMethod::AUTOPICK);
     REQUIRE(*body.lines_list[0] == "%:bad.prf");
     update_autopick_expression_states(nullptr, &body);
-    CHECK((body.states[3] & LSTAT_EXPRESSION_ERROR) != 0);
-    CHECK((body.states[3] & LSTAT_BYPASS) != 0);
+    CHECK((body.states[3].has(AutopickEntryStatus::EXPRESSION_ERROR)));
+    CHECK((body.states[3].has(AutopickEntryStatus::BYPASS)));
     // 入れ子の読めないパスがあっても、親ファイルの後続の条件式を検証する。
     for (const auto length : { 300, 2000 }) {
         files.write_raw("child.prf", "%:" + std::string(length, 'x') + "\n?:[FOO a]\n");
@@ -209,7 +211,7 @@ TEST_CASE("autopick editor checks included conditions without changing settings"
         *body.lines_list[0] = "%:child.prf";
         body.dirty_flags = DIRTY_EXPRESSION;
         update_autopick_expression_states(nullptr, &body);
-        CHECK((body.states[3] & LSTAT_EXPRESSION_ERROR) != 0);
+        CHECK((body.states[3].has(AutopickEntryStatus::EXPRESSION_ERROR)));
     }
 #ifdef SET_UID
     // ログイン名が実行ユーザーと異なるCIでも、アクセス可能なホームからチルダ展開を確認する。
@@ -229,7 +231,7 @@ TEST_CASE("autopick editor checks included conditions without changing settings"
     *body.lines_list[0] = "%:" + include;
     body.dirty_flags = DIRTY_EXPRESSION;
     update_autopick_expression_states(nullptr, &body);
-    CHECK((body.states[3] & LSTAT_EXPRESSION_ERROR) != 0);
+    CHECK((body.states[3].has(AutopickEntryStatus::EXPRESSION_ERROR)));
 #endif
     CHECK(check_autopick_file_conditions(nullptr, std::string(2000, 'x')) < 0);
     std::filesystem::create_directory(files.directory / "directory.prf");

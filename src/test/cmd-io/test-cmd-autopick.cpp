@@ -18,7 +18,7 @@ namespace {
 AutopickTextBody make_text_body(std::initializer_list<std::string> lines)
 {
     AutopickTextBody tb(0, 0);
-    tb.lines_list.resize(MAX_LINES);
+    tb.lines_list.resize(MAX_AUTOPICK_ENTRIES);
     auto y = 0;
     for (const auto &line : lines) {
         tb.lines_list[y++] = std::make_unique<std::string>(line);

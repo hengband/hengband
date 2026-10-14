@@ -28,6 +28,7 @@
 AutopickTextBody::AutopickTextBody(int cx, int cy)
     : cx(cx)
     , cy(cy)
+    , states(MAX_AUTOPICK_ENTRIES)
 {
 }
 

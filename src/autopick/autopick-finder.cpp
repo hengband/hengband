@@ -268,7 +268,7 @@ void search_for_object(PlayerType *player_ptr, AutopickTextBody *tb, const ItemE
             continue;
         }
 
-        if (tb->states[i] & LSTAT_BYPASS) {
+        if (tb->states[i].has(AutopickEntryStatus::BYPASS)) {
             if (bypassed_cy == -1) {
                 bypassed_cy = i;
             }
@@ -320,7 +320,7 @@ void search_for_string(AutopickTextBody *tb, std::string_view search_str, bool f
             continue;
         }
 
-        if ((tb->states[i] & LSTAT_BYPASS) && !(tb->states[i] & LSTAT_EXPRESSION)) {
+        if ((tb->states[i].has(AutopickEntryStatus::BYPASS)) && tb->states[i].has_not(AutopickEntryStatus::EXPRESSION)) {
             if (bypassed_cy == -1) {
                 bypassed_cy = i;
                 bypassed_cx = (int)(pos - line_data);
