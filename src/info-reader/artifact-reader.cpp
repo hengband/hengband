@@ -51,9 +51,9 @@ int ArtifactReader::read() const
         msg_format(_("アーティファクトの名称読込失敗。ID: '%d'。", "Failed to load artifact name. ID: '%d'."), error_idx);
         return err;
     }
-    if (auto err = this->set_art_baseitem(artifact)) {
+    if (const auto result = this->set_art_baseitem(artifact); !result) {
         msg_format(_("アーティファクトのベースアイテム読込失敗。ID: '%d'。", "Failed to load base item of artifact. ID: '%d'."), error_idx);
-        return err;
+        return result.error();
     }
     if (auto err = info_set_integer(get_json_value(this->art_data, "parameter_value"), artifact.pval, false, Range(-128, 128))) {
         msg_format(_("アーティファクトのパラメータ値読込失敗。ID: '%d'。", "Failed to load parameter value of artifact. ID: '%d'."), error_idx);
@@ -95,13 +95,13 @@ int ArtifactReader::read() const
         msg_format(_("アーティファクトのAC補正値読込失敗。ID: '%d'。", "Failed to load AC bonus of artifact. ID: '%d'."), error_idx);
         return err;
     }
-    if (auto err = this->set_art_activate(artifact)) {
+    if (const auto result = this->set_art_activate(artifact); !result) {
         msg_format(_("アーティファクトの発動能力読込失敗。ID: '%d'。", "Failed to load activate ability of artifact. ID: '%d'."), error_idx);
-        return err;
+        return result.error();
     }
-    if (auto err = this->set_art_flags(artifact)) {
+    if (const auto result = this->set_art_flags(artifact); !result) {
         msg_format(_("アーティファクトの能力フラグ読込失敗。ID: '%d'。", "Failed to load ability flags of artifact. ID: '%d'."), error_idx);
-        return err;
+        return result.error();
     }
     if (auto err = info_set_string(get_json_value(this->art_data, "flavor"), artifact.text, false)) {
         msg_format(_("アーティファクトのフレーバーテキスト読込失敗。ID: '%d'。", "Failed to load flavor text of artifact. ID: '%d'."), error_idx);
@@ -135,87 +135,84 @@ bool ArtifactReader::grab_one_artifact_flag(ArtifactDefinition &artifact, std::s
 
 /*!
  * @brief JSON Objectから固定アーティファクトのベースアイテムをセットする
- * @param baseitem_data ベースアイテム情報の格納されたJSON Object
  * @param artifact 保管先のアーティファクト
- * @return エラーコード
+ * @return 成功時は値なし、失敗時は解析エラー。
  */
-int ArtifactReader::set_art_baseitem(ArtifactDefinition &artifact) const
+tl::expected<void, parse_error_type> ArtifactReader::set_art_baseitem(ArtifactDefinition &artifact) const
 {
     const auto &baseitem_data = get_json_value(this->art_data, "base_item");
     if (baseitem_data.is_null()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+        return tl::unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
     }
 
     ItemKindType type_value;
     if (auto err = info_set_integer(get_json_value(baseitem_data, "type_value"), type_value, true, Range(0, 128))) {
-        return err;
+        return tl::unexpected(static_cast<parse_error_type>(err));
     }
 
     int subtype_value;
     if (auto err = info_set_integer(get_json_value(baseitem_data, "subtype_value"), subtype_value, true, Range(0, 128))) {
-        return err;
+        return tl::unexpected(static_cast<parse_error_type>(err));
     }
 
     artifact.bi_key = { type_value, subtype_value };
-    return PARSE_ERROR_NONE;
+    return {};
 }
 
 /*!
  * @brief JSON Objectから固定アーティファクトの発動能力をセットする
- * @param act_data 発動能力情報の格納されたJSON Object
  * @param artifact 保管先のアーティファクト
- * @return エラーコード
+ * @return 成功時は値なし、失敗時は解析エラー。
  */
-int ArtifactReader::set_art_activate(ArtifactDefinition &artifact) const
+tl::expected<void, parse_error_type> ArtifactReader::set_art_activate(ArtifactDefinition &artifact) const
 {
     const auto &act_data = get_json_value(this->art_data, "activate");
     if (act_data.is_null()) {
-        return PARSE_ERROR_NONE;
+        return {};
     }
     if (!act_data.is_string()) {
-        return PARSE_ERROR_INVALID_TYPE;
+        return tl::unexpected(PARSE_ERROR_INVALID_TYPE);
     }
 
     RandomArtActType activation;
     try {
         activation = grab_one_activation_flag(act_data.get<std::string>());
     } catch (const std::invalid_argument &) {
-        return PARSE_ERROR_INVALID_FLAG;
+        return tl::unexpected(PARSE_ERROR_INVALID_FLAG);
     } catch (const std::out_of_range &) {
-        return PARSE_ERROR_INVALID_FLAG;
+        return tl::unexpected(PARSE_ERROR_INVALID_FLAG);
     }
     if (activation <= RandomArtActType::NONE) {
-        return PARSE_ERROR_INVALID_FLAG;
+        return tl::unexpected(PARSE_ERROR_INVALID_FLAG);
     }
 
     artifact.act_idx = activation;
     artifact.flags.set(tr_type::TR_ACTIVATE);
-    return PARSE_ERROR_NONE;
+    return {};
 }
 
 /*!
- * @brief JSON Objectからモンスターフラグをセットする
- * @param flag_data モンスターフラグ情報の格納されたJSON Object
+ * @brief JSON Objectから固定アーティファクトのフラグをセットする
  * @param artifact 保管先のアーティファクト
- * @return エラーコード
+ * @return 成功時は値なし、失敗時は解析エラー。
  */
-int ArtifactReader::set_art_flags(ArtifactDefinition &artifact) const
+tl::expected<void, parse_error_type> ArtifactReader::set_art_flags(ArtifactDefinition &artifact) const
 {
     const auto &flag_data = get_json_value(this->art_data, "flags");
     if (flag_data.is_null()) {
-        return PARSE_ERROR_NONE;
+        return {};
     }
     if (!flag_data.is_array()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+        return tl::unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
     }
 
     for (auto &flag : flag_data) {
         if (!flag.is_string()) {
-            return PARSE_ERROR_INVALID_FLAG;
+            return tl::unexpected(PARSE_ERROR_INVALID_FLAG);
         }
         if (!this->grab_one_artifact_flag(artifact, flag.get<std::string>())) {
-            return PARSE_ERROR_INVALID_FLAG;
+            return tl::unexpected(PARSE_ERROR_INVALID_FLAG);
         }
     }
-    return PARSE_ERROR_NONE;
+    return {};
 }
