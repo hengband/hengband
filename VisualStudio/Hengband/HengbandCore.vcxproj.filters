@@ -1281,6 +1281,9 @@
     <ClCompile Include="..\..\src\lore\magic-types-setter.cpp">
       <Filter>lore</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\lore\monster-lore-snapshot.cpp">
+      <Filter>lore</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\lore\monster-lore.cpp">
       <Filter>lore</Filter>
     </ClCompile>
@@ -4006,6 +4009,9 @@
       <Filter>lore</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\lore\magic-types-setter.h">
+      <Filter>lore</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\lore\monster-lore-snapshot.h">
       <Filter>lore</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\lore\monster-lore.h">

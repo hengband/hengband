@@ -18,6 +18,7 @@ void request_message_redraw_if_color_changed();
 void fix_overhead(PlayerType *player_ptr);
 void fix_dungeon(PlayerType *player_ptr);
 void fix_monster(PlayerType *player_ptr);
+void request_monster_lore_redraw_if_changed(const PlayerType &player);
 void fix_object(PlayerType *player_ptr);
 void fix_floor_item_list(PlayerType *player_ptr, const Pos2D &pos);
 void fix_found_item_list(PlayerType *player_ptr);

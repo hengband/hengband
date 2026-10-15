@@ -334,6 +334,10 @@ static void update_sub_windows(PlayerType *player_ptr, bool include_deferred)
         request_overhead_redrawing_if_changed(player_ptr);
     }
 
+    if (target_flags.has(SubWindowRedrawingFlag::MONSTER_LORE)) {
+        request_monster_lore_redraw_if_changed(*player_ptr);
+    }
+
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     if (!rfu.any_sub()) {
         return;

@@ -28,6 +28,9 @@
     <Filter Include="locale">
       <UniqueIdentifier>{76b459ee-5ecd-44a7-b71a-ed5acafc02f6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="lore">
+      <UniqueIdentifier>{8ca43536-f921-5018-9314-5ef95d1231f2}</UniqueIdentifier>
+    </Filter>
     <Filter Include="main">
       <UniqueIdentifier>{3e3bfbaf-32fc-46d7-a1fc-51c277aaa757}</UniqueIdentifier>
     </Filter>
@@ -201,6 +204,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\test\locale\test-character-encoding.cpp">
       <Filter>locale</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\lore\test-monster-lore-snapshot.cpp">
+      <Filter>lore</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\test\main\test-init-error-messages-table.cpp">
       <Filter>main</Filter>
