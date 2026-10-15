@@ -11,9 +11,12 @@
 #include "test/system/monrace-records-test-access.h"
 #include <cstdint>
 #include <doctest/doctest.h>
+#include <initializer_list>
 #include <limits>
 #include <nlohmann/json.hpp>
 #include <string>
+#include <string_view>
+#include <tuple>
 #include <type_traits>
 
 static_assert(!std::is_copy_constructible_v<MonraceDefinition>);
@@ -404,4 +407,98 @@ TEST_CASE("RaceReader rejects duplicate and descending IDs within a file")
     CHECK(list.get_monrace(static_cast<MonraceId>(2)).resistance_flags.none());
     data["id"] = 3;
     CHECK(RaceReader(data).read() == PARSE_ERROR_NONE);
+}
+
+TEST_CASE("RaceReader validates level rarity and starting HP ranges")
+{
+    test::MonraceListTestAccess races;
+    auto data = make_monrace();
+    for (const auto &[field, value, expected] : std::initializer_list<std::tuple<const char *, int, int>>{
+             { "level", 0, PARSE_ERROR_NONE },
+             { "level", 127, PARSE_ERROR_NONE },
+             { "level", 128, PARSE_ERROR_INVALID_FLAG },
+             { "rarity", 1, PARSE_ERROR_NONE },
+             { "rarity", 255, PARSE_ERROR_NONE },
+             { "rarity", 0, PARSE_ERROR_INVALID_FLAG },
+             { "start_hp_percentage", 1, PARSE_ERROR_NONE },
+             { "start_hp_percentage", 99, PARSE_ERROR_NONE },
+             { "start_hp_percentage", 0, PARSE_ERROR_INVALID_FLAG },
+         }) {
+        CAPTURE(field);
+        CAPTURE(value);
+        auto monrace = data;
+        monrace[field] = value;
+        CHECK(read_as_first_record(monrace) == expected);
+    }
+}
+
+TEST_CASE("RaceReader validates referenced ID ranges")
+{
+    test::MonraceListTestAccess races;
+    auto data = make_monrace();
+    const auto with_evolve = [&data](int to) {
+        auto monrace = data;
+        monrace["evolve"] = { { "need_exp", 10 }, { "to", to } };
+        return monrace;
+    };
+    const auto with_escort = [&data](int id) {
+        auto monrace = data;
+        monrace["escorts"] = nlohmann::json::array({ { { "escorts_id", id }, { "escort_num", "1d2" } } });
+        return monrace;
+    };
+    const auto with_artifact = [&data](int id) {
+        auto monrace = data;
+        monrace["artifacts"] = nlohmann::json::array({ { { "drop_artifact_id", id }, { "drop_probability", 50 } } });
+        return monrace;
+    };
+    for (const auto id : { 1, 9999 }) {
+        CAPTURE(id);
+        CHECK(read_as_first_record(with_evolve(id)) == PARSE_ERROR_NONE);
+        CHECK(read_as_first_record(with_escort(id)) == PARSE_ERROR_NONE);
+    }
+    for (const auto id : { 0, 10000 }) {
+        CAPTURE(id);
+        CHECK(read_as_first_record(with_evolve(id)) == PARSE_ERROR_INVALID_FLAG);
+        CHECK(read_as_first_record(with_escort(id)) == PARSE_ERROR_INVALID_FLAG);
+    }
+    CHECK(read_as_first_record(with_artifact(999)) == PARSE_ERROR_NONE);
+    for (const auto id : { 0, 1000 }) {
+        CAPTURE(id);
+        CHECK(read_as_first_record(with_artifact(id)) == PARSE_ERROR_INVALID_FLAG);
+    }
+}
+
+TEST_CASE("RaceReader limits every monster dice to positive values and a short maximum roll")
+{
+    test::MonraceListTestAccess races;
+    const auto base = make_monrace();
+    const auto set_dice = [&base](std::string_view kind, std::string_view dice) {
+        auto monrace = base;
+        if (kind == "hit_point") {
+            monrace["hit_point"] = dice;
+        } else if (kind == "escort_num") {
+            monrace["escorts"] = nlohmann::json::array({ { { "escorts_id", 1 }, { "escort_num", dice } } });
+        } else if (kind == "damage_dice") {
+            monrace["blows"] = nlohmann::json::array({ { { "method", "HIT" }, { "effect", "HURT" }, { "damage_dice", dice } } });
+        } else {
+            monrace["skill"] = { { "probability", "1_IN_2" }, { "shoot", dice } };
+        }
+        return monrace;
+    };
+    for (const auto *kind : { "hit_point", "escort_num", "damage_dice", "shoot" }) {
+        CAPTURE(kind);
+        for (const auto *dice : { "1d1", "1d32767", "32767d1", "181d181" }) {
+            CAPTURE(dice);
+            CHECK(read_as_first_record(set_dice(kind, dice)) == PARSE_ERROR_NONE);
+        }
+        for (const auto *dice : { "1d32768", "32768d1", "182d181", "0d5", "5d0", "-1d5", "1d-5", "2147483647d2147483647" }) {
+            CAPTURE(dice);
+            CHECK(read_as_first_record(set_dice(kind, dice)) == PARSE_ERROR_OUT_OF_BOUNDS);
+        }
+        for (const auto *dice : { "01d5", "1d05", "00001d1" }) {
+            CAPTURE(dice);
+            CHECK(read_as_first_record(set_dice(kind, dice)) == PARSE_ERROR_INVALID_VALUE);
+        }
+        CHECK(read_as_first_record(set_dice(kind, "1d5\n")) == PARSE_ERROR_TOO_FEW_ARGUMENTS);
+    }
 }

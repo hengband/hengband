@@ -1,5 +1,6 @@
 #include "info-reader/race-reader.h"
 #include "artifact/fixed-art-types.h"
+#include "floor/floor-base-definitions.h"
 #include "info-reader/info-reader-util.h"
 #include "info-reader/json-reader-util.h"
 #include "info-reader/parse-error-types.h"
@@ -14,10 +15,48 @@
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 #include <charconv>
+#include <cstdint>
+#include <limits>
 #include <nlohmann/json.hpp>
 #include <string>
 #include <system_error>
 #include <utility>
+
+namespace {
+//! モンスター定義のダイスの最大の出目(個数×面数)の上限。捕獲したモンスターのHPを保持するshortに収める。
+constexpr int64_t MAX_MONRACE_DICE_ROLL = std::numeric_limits<short>::max();
+
+/*!
+ * @brief JSON Objectからモンスター定義のダイスを読み、値の範囲を検証する
+ * @param json ダイスを表す文字列が格納されたJSON Object
+ * @param dice 保管先のダイス
+ * @param is_required 必須かどうか
+ * @return エラーコード
+ * @details 個数と面数は1以上、最大の出目は MAX_MONRACE_DICE_ROLL 以下とする。
+ * 範囲外の値は PARSE_ERROR_OUT_OF_BOUNDS、"01d5" のような先頭に0の付いた表記は PARSE_ERROR_INVALID_VALUE を返し、保管先を変更しない。
+ */
+errr info_set_monrace_dice(const nlohmann::json &json, Dice &dice, bool is_required)
+{
+    if (json.is_null()) {
+        return is_required ? PARSE_ERROR_TOO_FEW_ARGUMENTS : PARSE_ERROR_NONE;
+    }
+
+    Dice parsed;
+    if (const auto err = info_set_dice(json, parsed, true)) {
+        return err;
+    }
+    if (!parsed.is_valid() || static_cast<int64_t>(parsed.num) * parsed.sides > MAX_MONRACE_DICE_ROLL) {
+        return PARSE_ERROR_OUT_OF_BOUNDS;
+    }
+    // CI の pattern と同じく、先頭に0の付いた個数や面数を拒否する。
+    if (parsed.to_string() != json.get<std::string>()) {
+        return PARSE_ERROR_INVALID_VALUE;
+    }
+
+    dice = parsed;
+    return PARSE_ERROR_NONE;
+}
+}
 
 RaceReader::RaceReader(const nlohmann::json &monrace_data)
     : monrace_data(monrace_data)
@@ -70,7 +109,7 @@ int RaceReader::read() const
         msg_format(_("モンスター速度読込失敗。ID: '%d'。", "Failed to load monster speed. ID: '%d'."), error_idx);
         return err;
     }
-    err = info_set_dice(get_json_value(this->monrace_data, "hit_point"), monrace.hit_dice, true);
+    err = info_set_monrace_dice(get_json_value(this->monrace_data, "hit_point"), monrace.hit_dice, true);
     if (err) {
         msg_format(_("モンスターHP読込失敗。ID: '%d'。", "Failed to load monster HP. ID: '%d'."), error_idx);
         return err;
@@ -90,12 +129,12 @@ int RaceReader::read() const
         msg_format(_("モンスター警戒度読込失敗。ID: '%d'。", "Failed to load monster alertness. ID: '%d'."), error_idx);
         return err;
     }
-    err = info_set_integer(get_json_value(this->monrace_data, "level"), monrace.level, true, Range(0, 255));
+    err = info_set_integer(get_json_value(this->monrace_data, "level"), monrace.level, true, Range(0, MAX_DEPTH - 1));
     if (err) {
         msg_format(_("モンスターレベル読込失敗。ID: '%d'。", "Failed to load monster level. ID: '%d'."), error_idx);
         return err;
     }
-    err = info_set_integer(get_json_value(this->monrace_data, "rarity"), monrace.rarity, true, Range(0, 255));
+    err = info_set_integer(get_json_value(this->monrace_data, "rarity"), monrace.rarity, true, Range(1, 255));
     if (err) {
         msg_format(_("モンスター希少度読込失敗。ID: '%d'。", "Failed to load monster rarity. ID: '%d'."), error_idx);
         return err;
@@ -120,7 +159,7 @@ int RaceReader::read() const
         msg_format(_("モンスター賭け倍率読込失敗。ID: '%d'。", "Failed to load monster odds for arena. ID: '%d'."), error_idx);
         return err;
     }
-    err = info_set_integer(get_json_value(this->monrace_data, "start_hp_percentage"), monrace.cur_hp_per, false, Range(0, 99));
+    err = info_set_integer(get_json_value(this->monrace_data, "start_hp_percentage"), monrace.cur_hp_per, false, Range(1, 99));
     if (err) {
         msg_format(_("モンスター初期体力読込失敗。ID: '%d'。", "Failed to load monster starting HP. ID: '%d'."), error_idx);
         return err;
@@ -365,7 +404,7 @@ int RaceReader::set_mon_evolve(MonraceDefinition &monrace) const
     if (auto err = info_set_integer(get_json_value(evolve_data, "need_exp"), monrace.next_exp, true, Range(0, 9999999))) {
         return err;
     }
-    if (auto err = info_set_integer(get_json_value(evolve_data, "to"), monrace.next_r_idx, true, Range(0, 9999))) {
+    if (auto err = info_set_integer(get_json_value(evolve_data, "to"), monrace.next_r_idx, true, Range(1, 9999))) {
         return err;
     }
 
@@ -412,7 +451,7 @@ int RaceReader::set_mon_artifacts(MonraceDefinition &monrace) const
 
     for (const auto &artifact : artifact_data) {
         FixedArtifactId fa_id;
-        if (auto err = info_set_integer(get_json_value(artifact, "drop_artifact_id"), fa_id, true, Range(0, 1024))) {
+        if (auto err = info_set_integer(get_json_value(artifact, "drop_artifact_id"), fa_id, true, Range(1, 999))) {
             return err;
         }
         int chance;
@@ -442,12 +481,12 @@ int RaceReader::set_mon_escorts(MonraceDefinition &monrace) const
 
     for (const auto &escort : escort_data) {
         MonraceId monrace_id;
-        if (auto err = info_set_integer(get_json_value(escort, "escorts_id"), monrace_id, true, Range(0, 8192))) {
+        if (auto err = info_set_integer(get_json_value(escort, "escorts_id"), monrace_id, true, Range(1, 9999))) {
             return err;
         }
 
         Dice dice;
-        if (auto err = info_set_dice(get_json_value(escort, "escort_num"), dice, true)) {
+        if (auto err = info_set_monrace_dice(get_json_value(escort, "escort_num"), dice, true)) {
             return err;
         }
 
@@ -496,7 +535,7 @@ int RaceReader::set_mon_blows(MonraceDefinition &monrace) const
         mon_blow.method = rbm->second;
         mon_blow.effect = rbe->second;
 
-        if (auto err = info_set_dice(get_json_value(blow, "damage_dice"), mon_blow.damage_dice, false)) {
+        if (auto err = info_set_monrace_dice(get_json_value(blow, "damage_dice"), mon_blow.damage_dice, false)) {
             return err;
         }
 
@@ -563,7 +602,7 @@ int RaceReader::set_mon_skills(MonraceDefinition &monrace) const
     const auto &shoot_dice = skill_data.find("shoot");
     const auto shoot = (shoot_dice != skill_data.end());
     if (shoot) {
-        if (auto ret = info_set_dice(*shoot_dice, monrace.shoot_damage_dice, true)) {
+        if (auto ret = info_set_monrace_dice(*shoot_dice, monrace.shoot_damage_dice, true)) {
             return ret;
         }
         monrace.ability_flags.set(MonsterAbilityType::SHOOT);
