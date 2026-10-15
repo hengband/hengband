@@ -256,7 +256,6 @@ static void update_bonuses(PlayerType *player_ptr)
     BIT_FLAGS old_esp_nonliving = player_ptr->esp_nonliving;
     BIT_FLAGS old_esp_unique = player_ptr->esp_unique;
     BIT_FLAGS old_see_inv = player_ptr->see_inv;
-    BIT_FLAGS old_mighty_throw = player_ptr->mighty_throw;
     int16_t old_speed = player_ptr->pspeed;
 
     ARMOUR_CLASS old_dis_ac = player_ptr->dis_ac;
@@ -356,12 +355,8 @@ static void update_bonuses(PlayerType *player_ptr)
     player_ptr->dis_to_a = calc_to_ac(player_ptr, false);
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    if (old_mighty_throw != player_ptr->mighty_throw) {
-        rfu.set_flag(SubWindowRedrawingFlag::INVENTORY);
-    }
-
     if (player_ptr->telepathy != old_telepathy) {
-        RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
+        rfu.set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
     }
 
     auto is_esp_updated = player_ptr->esp_animal != old_esp_animal;
@@ -2607,6 +2602,14 @@ void update_creature(PlayerType *player_ptr)
     auto &floor = *player_ptr->current_floor_ptr;
     if (rfu.has(StatusRecalculatingFlag::BONUS)) {
         rfu.reset_flag(StatusRecalculatingFlag::BONUS);
+
+        // 矢弾・投擲の威力、運搬中・両手持ちの表示、騎乗中のランスのダイスは、能力の修正 (能力値・射撃・騎乗・集中度など) で変わる
+        static constexpr auto flags_swrf = {
+            SubWindowRedrawingFlag::INVENTORY,
+            SubWindowRedrawingFlag::EQUIPMENT,
+        };
+        rfu.set_flags(flags_swrf);
+
         PlayerAlignment(player_ptr).update_alignment();
         PlayerSkill ps(player_ptr);
         ps.apply_special_weapon_skill_max_values();

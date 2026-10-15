@@ -324,6 +324,9 @@ void brand_bolts(PlayerType *player_ptr)
         msg_print(_("クロスボウの矢が炎のオーラに包まれた！", "Your bolts are covered in a fiery aura!"));
         item.ego_idx = EgoType::FLAME;
         enchant_equipment(item, randint0(3) + 4, ENCH_TOHIT | ENCH_TODAM);
+
+        // 修正値の強化に失敗しても、エゴは付いている
+        RedrawingFlagsUpdater::get_instance().request_inventory_arrangement();
         return;
     }
 
@@ -627,4 +630,12 @@ void brand_weapon(PlayerType *player_ptr, int brand_type)
     item->discount = 99;
     chg_virtue(player_ptr, Virtue::ENCHANT, 2);
     calc_android_exp(player_ptr);
+
+    // 修正値の強化に失敗しても、エゴの能力 (焼棄の光源の明るさなども) は付いている
+    static constexpr auto flags_srf = {
+        StatusRecalculatingFlag::BONUS,
+        StatusRecalculatingFlag::TORCH,
+        StatusRecalculatingFlag::MP,
+    };
+    RedrawingFlagsUpdater::get_instance().set_flags(flags_srf);
 }
