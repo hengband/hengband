@@ -29,6 +29,7 @@
 #include "view/display-messages.h"
 #include "view/display-symbol.h"
 #include "world/world.h"
+#include <cstdint>
 
 /*!
  * @brief モンスター情報のヘッダを記述する
@@ -468,12 +469,13 @@ void display_monster_exp(PlayerType *player_ptr, lore_type *lore_ptr)
     hooked_roff("を倒すことは");
 #endif
 
-    // 最も経験値の多い金無垢の指輪(level 110、mexp 5000000)でも符号付き32bit整数に収まる
-    const auto base_exp = lore_ptr->monrace->mexp * lore_ptr->monrace->level * 3 / 2;
+    // 定義域の上限(経験値9999999、レベル127)では3/2倍が符号付き32bit整数に収まらないため、64bitで計算する
+    const auto base_exp = static_cast<int64_t>(lore_ptr->monrace->mexp) * lore_ptr->monrace->level * 3 / 2;
     const auto player_factor = player_ptr->max_plv + 2;
 
-    const auto exp_integer = base_exp / player_factor;
-    const auto exp_decimal = ((base_exp % player_factor * 1000 / player_factor) + 5) / 10;
+    // 割った結果は上限でも約6億で、intに収まる
+    const auto exp_integer = static_cast<int>(base_exp / player_factor);
+    const auto exp_decimal = static_cast<int>(((base_exp % player_factor * 1000 / player_factor) + 5) / 10);
 
 #ifdef JP
     hooked_roff(format(" %d レベルのキャラクタにとって 約%d.%02d ポイントの経験となる。", player_ptr->lev, exp_integer, exp_decimal));
