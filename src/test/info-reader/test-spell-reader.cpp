@@ -3,8 +3,8 @@
 #include "info-reader/spell-reader.h"
 #include "system/spell-info-list.h"
 #include "test/info-reader/scoped-reader-state.h"
+#include "test/system/spell-info-list-test-access.h"
 #include "util/enum-converter.h"
-#include "util/finalizer.h"
 #include <doctest/doctest.h>
 #include <nlohmann/json.hpp>
 #include <string>
@@ -46,8 +46,7 @@ TEST_CASE("SpellReader commits all books only after the whole realm succeeds")
 {
     auto &spells = SpellInfoList::get_instance();
     const test::ScopedReaderState reader_state;
-    const auto reset_spells = util::make_finalizer([&spells] { spells.initialize(); });
-    spells.initialize();
+    const test::SpellInfoListTestAccess spell_state;
 
     nlohmann::json data = {
         { "name", "LIFE" },
@@ -127,4 +126,74 @@ TEST_CASE("SpellReader commits all books only after the whole realm succeeds")
         CHECK(SpellReader(data, spells).read() == PARSE_ERROR_NONE);
         CHECK(spells.get_spell_id(RealmType::LIFE, "last-zero") == 0);
     }
+}
+
+/*!
+ * @brief 内部の各解析エラーを伝播し、先行する呪文書を含む既存定義の部分更新を防ぐ
+ */
+TEST_CASE("SpellReader propagates helper errors without publishing staged spells")
+{
+    const test::ScopedReaderState reader_state;
+    const test::SpellInfoListTestAccess spell_state;
+    auto &spells = SpellInfoList::get_instance();
+    nlohmann::json original = {
+        { "name", "LIFE" },
+        { "books", nlohmann::json::array({
+                       { { "spells", nlohmann::json::array({ make_spell(0, "old-zero") }) } },
+                       { { "spells", nlohmann::json::array({ make_spell(8, "old-eight") }) } },
+                   }) },
+    };
+    REQUIRE(SpellReader(original, spells).read() == PARSE_ERROR_NONE);
+    auto other = SpellInfo();
+    other.idx = 3;
+    other.tag = "other-realm";
+    spells.set_spell_info(RealmType::SORCERY, 3, std::move(other));
+    auto replacement = original;
+    replacement["books"][0]["spells"][0] = make_spell(0, "new-zero");
+    replacement["books"][1]["spells"][0] = make_spell(8, "new-eight");
+
+    struct InvalidField {
+        const char *path;
+        nlohmann::json value;
+        parse_error_type error;
+    };
+    const std::vector<InvalidField> invalid_fields = {
+        { "", nullptr, PARSE_ERROR_TOO_FEW_ARGUMENTS },
+        { "/name", nullptr, PARSE_ERROR_TOO_FEW_ARGUMENTS },
+        { "/name", "UNKNOWN_REALM", PARSE_ERROR_OUT_OF_BOUNDS },
+        { "/books", nullptr, PARSE_ERROR_TOO_FEW_ARGUMENTS },
+        { "/books", nlohmann::json::object(), PARSE_ERROR_INVALID_TYPE },
+        { "/books/1/spells", nullptr, PARSE_ERROR_TOO_FEW_ARGUMENTS },
+        { "/books/1/spells", nlohmann::json::object(), PARSE_ERROR_INVALID_TYPE },
+        { "/books/1/spells/0", nullptr, PARSE_ERROR_TOO_FEW_ARGUMENTS },
+        { "/books/1/spells/0/spell_id", nullptr, PARSE_ERROR_TOO_FEW_ARGUMENTS },
+        { "/books/1/spells/0/spell_id", 32, PARSE_ERROR_INVALID_FLAG },
+        { "/books/1/spells/0/spell_id", true, PARSE_ERROR_INVALID_TYPE },
+        { "/books/1/spells/0/spell_tag", nullptr, PARSE_ERROR_TOO_FEW_ARGUMENTS },
+        { "/books/1/spells/0/name", nullptr, PARSE_ERROR_TOO_FEW_ARGUMENTS },
+        { "/books/1/spells/0/name", 7, PARSE_ERROR_INVALID_TYPE },
+        { "/books/1/spells/0/description", nullptr, PARSE_ERROR_TOO_FEW_ARGUMENTS },
+        { "/books/1/spells/0/description", 7, PARSE_ERROR_INVALID_TYPE },
+    };
+    for (const auto &invalid : invalid_fields) {
+        CAPTURE(invalid.path);
+        CAPTURE(invalid.value.dump());
+        auto candidate = replacement;
+        candidate[nlohmann::json::json_pointer(invalid.path)] = invalid.value;
+        error_idx = 4;
+        CHECK(SpellReader(candidate, spells).read() == invalid.error);
+        CHECK(error_idx == 5);
+        CHECK(spells.get_spell_id(RealmType::LIFE, "old-zero") == 0);
+        CHECK(spells.get_spell_id(RealmType::LIFE, "old-eight") == 8);
+        CHECK_FALSE(spells.get_spell_id(RealmType::LIFE, "new-zero"));
+        CHECK_FALSE(spells.get_spell_id(RealmType::LIFE, "new-eight"));
+        CHECK(spells.get_spell_info(RealmType::LIFE, 0).name == "old-zero");
+        CHECK(spells.get_spell_info(RealmType::LIFE, 8).description == "old-eight description");
+        CHECK(spells.get_spell_id(RealmType::SORCERY, "other-realm") == 3);
+    }
+    REQUIRE(SpellReader(replacement, spells).read() == PARSE_ERROR_NONE);
+    CHECK(error_idx == 6);
+    CHECK(spells.get_spell_id(RealmType::LIFE, "new-zero") == 0);
+    CHECK(spells.get_spell_id(RealmType::LIFE, "new-eight") == 8);
+    CHECK(spells.get_spell_id(RealmType::SORCERY, "other-realm") == 3);
 }
