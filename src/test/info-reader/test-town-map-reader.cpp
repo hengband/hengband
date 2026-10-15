@@ -1,4 +1,5 @@
 #include "artifact/fixed-art-types.h"
+#include "info-reader/fixed-map-parser.h"
 #include "info-reader/general-parser.h"
 #include "info-reader/random-grid-effect-types.h"
 #include "info-reader/town-map-reader.h"
