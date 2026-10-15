@@ -401,7 +401,10 @@ void note_spot(PlayerType *player_ptr, const Pos2D &pos)
     for (const auto this_o_idx : grid.o_idx_list) {
         auto &item = *floor.o_list[this_o_idx];
         item.marked.set(OmType::FOUND);
-        RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::FOUND_ITEMS);
+
+        // 足元のアイテムの一覧も、見つけたアイテムだけを出す。
+        // 見つけていたアイテムでも、置かれたアイテムが重なって数が変わったときなどに描き直す
+        RedrawingFlagsUpdater::get_instance().request_floor_item_lists_redrawing();
     }
 
     /* Hack -- memorize grids */

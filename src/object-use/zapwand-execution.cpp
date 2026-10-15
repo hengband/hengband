@@ -94,6 +94,7 @@ void ObjectZapWandEntity::execute(INVENTORY_IDX i_idx)
         msg_print(_("この魔法棒にはもう魔力が残っていない。", "The wand has no charges left."));
         item->set_identification_flag(IdentificationFlag::EMPTY);
         rfu.request_inventory_arrangement();
+        rfu.request_item_lists_redrawing();
         return;
     }
 

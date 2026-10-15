@@ -30,6 +30,7 @@ static void finish_eating_magic(PlayerType *player_ptr)
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.set_flag(MainWindowRedrawingFlag::MP);
     rfu.request_inventory_arrangement();
+    rfu.request_item_lists_redrawing();
 }
 
 /*!
