@@ -4,7 +4,10 @@
 #include "info-reader/parse-error-types.h"
 #include "info-reader/race-info-tokens-table.h"
 #include "locale/character-encoding.h"
+#include "system/enums/monrace/monrace-id.h"
+#include "system/monrace/monrace-list.h"
 #include "system/monrace/monrace-message.h"
+#include "util/enum-converter.h"
 #include "view/display-messages.h"
 #include <nlohmann/json.hpp>
 #include <string>
@@ -35,6 +38,7 @@ int MessageReader::read() const
  * @param id_list_data id群情報の格納されたJSON Object
  * @param id_list id群情報を保管するvector
  * @return エラーコード
+ * @details モンスター種族の定義を読み込んだ後に呼ぶ。未定義の種族IDは PARSE_ERROR_INVALID_VALUE を返す。
  */
 static errr set_id_list(const nlohmann::json &id_list_data, std::vector<int> &id_list)
 {
@@ -49,6 +53,11 @@ static errr set_id_list(const nlohmann::json &id_list_data, std::vector<int> &id
         int id;
         if (auto err = info_set_integer(id_data, id, true, Range(1, 9999))) {
             return err;
+        }
+        // 未定義の種族IDに登録したメッセージは使われないため、定義の誤記として拒否する。
+        const auto monrace_id = i2enum<MonraceId>(id);
+        if (!MonraceList::is_valid(monrace_id) || !MonraceList::get_instance().contains(monrace_id)) {
+            return PARSE_ERROR_INVALID_VALUE;
         }
         id_list.push_back(id);
     }

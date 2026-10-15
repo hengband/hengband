@@ -1,5 +1,7 @@
+import hashlib
 import re
 import sys
+from collections import OrderedDict
 from collections.abc import Callable
 from pathlib import Path
 from urllib.parse import urljoin
@@ -363,12 +365,19 @@ def require_integer(value, path: list) -> None:
         raise ValidationError("expected an integer JSON value", path=path)
 
 
-def load_validated_companion(schema_path: Path, data_path: Path, registry: Registry,
-                             name: str, label: str, semantic_validator: Callable[[dict], None]) -> dict:
-    """隣接する候補定義を優先し、schemaと意味検証を終えた付随データを返す。"""
+def find_companion_path(schema_path: Path, data_path: Path, name: str) -> Path:
+    """隣接する候補定義を優先し、なければ同梱定義のパスを返す。"""
     companion_path = data_path.parent / f"{name}.jsonc"
     if not companion_path.exists():
         companion_path = schema_path.resolve().parent.parent / "lib/edit" / f"{name}.jsonc"
+    return companion_path
+
+
+def load_validated_companion(schema_path: Path, data_path: Path, registry: Registry,
+                             name: str, label: str, semantic_validator: Callable[[dict], None],
+                             *, selected_path: Path | None = None) -> dict:
+    """隣接する候補定義を優先し、schemaと意味検証を終えた付随データを返す。"""
+    companion_path = selected_path if selected_path is not None else find_companion_path(schema_path, data_path, name)
     companion = load_jsonc(companion_path)
     companion_schema_path = schema_path.parent / f"{name}.schema.json"
     companion_schema = load_jsonc(companion_schema_path)
@@ -635,12 +644,60 @@ def validate_spell_semantics(data: dict) -> None:
                 tags.add(spell["spell_tag"])
 
 
-def validate_monster_message_semantics(data: dict) -> None:
+# 小さなID集合だけを保持し、一時候補の検証を繰り返しても保持件数を制限する。
+_monster_id_cache = OrderedDict()
+MAX_MONSTER_ID_CACHE_ENTRIES = 8
+
+
+def companion_digest(path: Path) -> bytes:
+    """時刻・サイズが同じ書換えも検出し、大きな参照定義は分割してハッシュする。"""
+    digest = hashlib.sha256()
+    with path.open("rb") as stream:
+        for block in iter(lambda: stream.read(65536), b""):
+            digest.update(block)
+    return digest.digest()
+
+
+def validate_monster_id_types(data: dict) -> None:
+    """schemaの整数判定を通る小数も、ID集合を作る前に拒否する。"""
+    for index, monster in enumerate(data["monsters"]):
+        require_integer(monster["id"], ["monsters", index, "id"])
+
+
+def load_defined_monster_ids(schema_path: Path, data_path: Path, registry: Registry) -> frozenset[int]:
+    """同じ内容・schema・検証コンテキストの種族ID集合を再利用する。"""
+    companion_path = find_companion_path(schema_path, data_path, "MonraceDefinitions").resolve()
+    companion_schema_path = (schema_path.parent / "MonraceDefinitions.schema.json").resolve()
+    key = (companion_path, companion_schema_path)
+    fingerprint = (companion_digest(companion_path), companion_digest(companion_schema_path))
+    cached = _monster_id_cache.get(key)
+    if cached is not None and cached[0] is registry and cached[1] == fingerprint:
+        _monster_id_cache.move_to_end(key)
+        return cached[2]
+
+    monraces = load_validated_companion(schema_path, data_path, registry,
+                                       "MonraceDefinitions", "monster", validate_monster_id_types,
+                                       selected_path=companion_path)
+    ids = frozenset(monrace["id"] for monrace in monraces["monsters"])
+    # 読込中に更新された場合は、異なる内容のキーでキャッシュしない。
+    if fingerprint == (companion_digest(companion_path), companion_digest(companion_schema_path)):
+        _monster_id_cache[key] = (registry, fingerprint, ids)
+        _monster_id_cache.move_to_end(key)
+        if len(_monster_id_cache) > MAX_MONSTER_ID_CACHE_ENTRIES:
+            _monster_id_cache.popitem(last=False)
+    return ids
+
+
+def validate_monster_message_semantics(data: dict, schema_path: Path, data_path: Path, registry: Registry) -> None:
+    defined_monrace_ids = load_defined_monster_ids(schema_path, data_path, registry)
     for group_index, group in enumerate(data["groups"]):
         group_path = ["groups", group_index]
         if "id_list" in group:
             for id_index, monster_id in enumerate(group["id_list"]):
                 require_integer(monster_id, group_path + ["id_list", id_index])
+                # MessageReaderはモンスター種族の定義に無いIDを拒否する。
+                if monster_id not in defined_monrace_ids:
+                    raise ValidationError("unknown monster ID", path=group_path + ["id_list", id_index])
         # 実行時の到達可否によらず、全メッセージの入力を検証する。
         for message_index, message in enumerate(group["message"]):
             message_path = group_path + ["message", message_index]
@@ -683,7 +740,7 @@ def validate_one(pair: tuple[Path, Path, dict], registry: Registry | None = None
             "ClassMagicDefinitions.schema.json": lambda: validate_class_magic_semantics(data, schema_path, data_path, registry),
             "ClassSkillDefinitions.schema.json": lambda: validate_class_skill_semantics(data),
             "SpellDefinitions.schema.json": lambda: validate_spell_semantics(data),
-            "MonsterMessages.schema.json": lambda: validate_monster_message_semantics(data),
+            "MonsterMessages.schema.json": lambda: validate_monster_message_semantics(data, schema_path, data_path, registry),
         }
         semantic_validator = semantic_validators.get(schema_path.name)
         if semantic_validator is not None:

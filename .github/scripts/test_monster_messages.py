@@ -1,10 +1,15 @@
 """JSONCのCI検証入口でモンスターメッセージ読込規則を確認する。"""
 import copy
+import json
+import os
 from pathlib import Path
+import tempfile
 import unittest
+from unittest.mock import patch
 
 from json_validation_test_helper import validate_document
-from validate_json import build_schema_registry, load_all_schemas, load_jsonc
+from validate_json import (build_schema_registry, load_all_schemas, load_jsonc,
+                           load_validated_companion, validate_one, validate_monster_message_semantics)
 
 
 class MonsterMessageValidationTest(unittest.TestCase):
@@ -14,13 +19,135 @@ class MonsterMessageValidationTest(unittest.TestCase):
         cls.loaded, schema_map = load_all_schemas(cls.root / "schema")
         cls.schema_path = schema_map["MonsterMessages"]
         cls.registry = build_schema_registry(cls.loaded)
+        monrace_document = load_jsonc(cls.root / "lib/edit/MonraceDefinitions.jsonc")
+        monraces = monrace_document["monsters"]
+        cls.monrace_version = monrace_document["versions"]
+        cls.monrace_template = copy.deepcopy(monraces[1])
+        cls.other_monrace_id = monraces[2]["id"]
+        cls.max_monrace_id = max(monrace["id"] for monrace in monraces)
+
+
+    def test_malformed_monster_definitions_are_reported(self):
+        # 参照先の欠落・型不正を例外のままにせず、対象ファイルの診断として返す。
+        for companion in ([], {}, {"monsters": None}, {"monsters": [{}]}):
+            with self.subTest(companion=companion):
+                ok, diagnostic = self.validate([], companions={"MonraceDefinitions.jsonc": companion})
+                self.assertFalse(ok, diagnostic)
+                self.assertIn("Invalid monster definitions", diagnostic)
+                self.assertIn("MonraceDefinitions.jsonc", diagnostic)
+
+    def test_adjacent_monster_definitions_take_precedence(self):
+        monster = dict(self.monrace_template, id=self.max_monrace_id + 1)
+        companion = {"versions": self.monrace_version, "monsters": [monster]}
+        ok, diagnostic = self.validate([{"id_list": [monster["id"]], "message": []}],
+                                       companions={"MonraceDefinitions.jsonc": companion})
+        self.assertTrue(ok, diagnostic)
+        ok, diagnostic = self.validate([{"id_list": [1], "message": []}],
+                                       companions={"MonraceDefinitions.jsonc": companion})
+        self.assertFalse(ok, diagnostic)
+        self.assertIn("unknown monster ID", diagnostic)
+
+    def test_monster_id_cache_reuses_validation_and_observes_same_path_updates(self):
+        with tempfile.TemporaryDirectory() as folder:
+            directory = Path(folder)
+            target = directory / "MonsterMessages.jsonc"
+            companion = directory / "MonraceDefinitions.jsonc"
+            message = {"versions": 1, "groups": [{"id_list": [1], "message": []}]}
+            target.write_text(json.dumps(message), encoding="utf-8")
+            document = {"versions": self.monrace_version, "monsters": [dict(self.monrace_template, id=1)]}
+            original = json.dumps(document)
+            companion.write_text(original, encoding="utf-8")
+            pair = (target, self.schema_path, self.loaded[self.schema_path])
+            # 実際のschema検証を実行し、その呼出し回数だけを数える。
+            with patch("validate_json.load_validated_companion", wraps=load_validated_companion) as loader:
+                self.assertTrue(validate_one(pair, self.registry)[0])
+                self.assertTrue(validate_one(pair, self.registry)[0])
+                self.assertEqual(loader.call_count, 1)
+                timestamp = companion.stat()
+                document["monsters"][0]["id"] = 2
+                updated = json.dumps(document)
+                self.assertEqual(len(updated), len(original))
+                companion.write_text(updated, encoding="utf-8")
+                os.utime(companion, ns=(timestamp.st_atime_ns, timestamp.st_mtime_ns))
+                ok, diagnostic = validate_one(pair, self.registry)
+                self.assertFalse(ok, diagnostic)
+                self.assertIn("unknown monster ID", diagnostic)
+                self.assertEqual(loader.call_count, 2)
+                message["groups"][0]["id_list"] = [2]
+                target.write_text(json.dumps(message), encoding="utf-8")
+                self.assertTrue(validate_one(pair, self.registry)[0])
+                self.assertEqual(loader.call_count, 2)
+                # 別のRegistryへ渡した結果を同じコンテキストの検証済みと扱わない。
+                other_registry = build_schema_registry(self.loaded)
+                self.assertTrue(validate_one(pair, other_registry)[0])
+                self.assertEqual(loader.call_count, 3)
+                companion.write_text("[]", encoding="utf-8")
+                ok, diagnostic = validate_one(pair, other_registry)
+                self.assertFalse(ok, diagnostic)
+                self.assertIn("Invalid monster definitions", diagnostic)
+
+    def test_monster_id_cache_rejects_float_definition_ids(self):
+        with tempfile.TemporaryDirectory() as folder:
+            directory = Path(folder)
+            target = directory / "MonsterMessages.jsonc"
+            target.write_text(json.dumps({"versions": 1, "groups": [{"id_list": [1], "message": []}]}), encoding="utf-8")
+            document = {"versions": self.monrace_version, "monsters": [dict(self.monrace_template, id=1.0)]}
+            (directory / "MonraceDefinitions.jsonc").write_text(json.dumps(document), encoding="utf-8")
+            for _ in range(2):
+                ok, diagnostic = validate_one((target, self.schema_path, self.loaded[self.schema_path]), self.registry)
+                self.assertFalse(ok, diagnostic)
+                self.assertIn("integer JSON value", diagnostic)
+                self.assertIn("['monsters', 0, 'id']", diagnostic)
+
+    def test_monster_id_cache_keeps_selected_source_when_adjacent_file_appears(self):
+        with tempfile.TemporaryDirectory() as folder:
+            directory = Path(folder)
+            target = directory / "MonsterMessages.jsonc"
+            target.write_text(json.dumps({"versions": 1, "groups": [{"id_list": [self.other_monrace_id], "message": []}]}), encoding="utf-8")
+            pair = (target, self.schema_path, self.loaded[self.schema_path])
+            registry = build_schema_registry(self.loaded)
+            companion = {"versions": self.monrace_version, "monsters": [dict(self.monrace_template, id=1)]}
+
+            def load_after_appearance(*args, **kwargs):
+                (directory / "MonraceDefinitions.jsonc").write_text(json.dumps(companion), encoding="utf-8")
+                return load_validated_companion(*args, **kwargs)
+
+            # 選択済みの同梱表を読み、新たに現れた候補のIDでキャッシュを汚染しない。
+            with patch("validate_json.load_validated_companion", side_effect=load_after_appearance):
+                ok, diagnostic = validate_one(pair, registry)
+                self.assertTrue(ok, diagnostic)
+            with tempfile.TemporaryDirectory() as other_folder:
+                other_target = Path(other_folder) / target.name
+                other_target.write_bytes(target.read_bytes())
+                ok, diagnostic = validate_one((other_target, self.schema_path, self.loaded[self.schema_path]), registry)
+                self.assertTrue(ok, diagnostic)
+            # 次の検証では隣接候補を優先し、候補に無いIDを拒否する。
+            ok, diagnostic = validate_one(pair, registry)
+            self.assertFalse(ok, diagnostic)
+            self.assertIn("unknown monster ID", diagnostic)
+
+    def test_monster_id_cache_observes_companion_schema_updates(self):
+        with tempfile.TemporaryDirectory() as folder:
+            directory = Path(folder)
+            target = directory / "MonsterMessages.jsonc"
+            companion = directory / "MonraceDefinitions.jsonc"
+            schema_path = directory / "MonraceDefinitions.schema.json"
+            schema = {"properties": {"monsters": {"items": {"properties": {"id": {"enum": [1]}}}}}}
+            companion.write_text(json.dumps({"monsters": [{"id": 1}]}), encoding="utf-8")
+            schema_path.write_text(json.dumps(schema), encoding="utf-8")
+            data = {"groups": [{"id_list": [1], "message": []}]}
+            validate_monster_message_semantics(data, directory / "MonsterMessages.schema.json", target, self.registry)
+            schema["properties"]["monsters"]["items"]["properties"]["id"]["enum"] = [2]
+            schema_path.write_text(json.dumps(schema), encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "Invalid monster definitions"):
+                validate_monster_message_semantics(data, directory / "MonsterMessages.schema.json", target, self.registry)
 
     def message(self, languages=("ja", "en"), chance=1):
         return {"action": "SPEAK_ALL", "chance": chance, "message": {language: ["Hello"] for language in languages}}
 
-    def validate(self, groups):
+    def validate(self, groups, *, companions=None):
         document = {"versions": 1, "groups": groups}
-        return validate_document(document, self.schema_path, self.loaded[self.schema_path], self.registry)
+        return validate_document(document, self.schema_path, self.loaded[self.schema_path], self.registry, companions=companions)
 
     def assert_valid(self, groups):
         ok, diagnostic = self.validate(groups)
@@ -38,7 +165,12 @@ class MonsterMessageValidationTest(unittest.TestCase):
         self.assert_valid(document["groups"])
 
     def test_integer_boundaries(self):
-        self.assert_valid([{"id_list": [1, 9999], "message": [self.message(chance=1), self.message(chance=100)]}])
+        self.assert_valid([{"id_list": [1, self.max_monrace_id], "message": [self.message(chance=1), self.message(chance=100)]}])
+
+    def test_undefined_monster_ids_are_rejected(self):
+        for value in (self.max_monrace_id + 1, 9999):
+            with self.subTest(value=value):
+                self.assert_invalid([{"id_list": [1, value], "message": []}], ["groups", 0, "id_list", 1], "unknown monster ID")
 
     def test_float_id_is_rejected(self):
         self.assert_invalid([{"id_list": [1.0], "message": []}], ["groups", 0, "id_list", 0], "integer JSON value")
@@ -70,7 +202,7 @@ class MonsterMessageValidationTest(unittest.TestCase):
                 self.assert_invalid([group], ["groups", 0] if name is None else ["groups", 0, "name"])
 
     def test_id_list_takes_precedence_over_name(self):
-        for ids in ([], [9999]):
+        for ids in ([], [self.max_monrace_id]):
             with self.subTest(ids=ids):
                 self.assert_valid([{"id_list": ids, "name": "OTHER", "message": [self.message()]}])
 
