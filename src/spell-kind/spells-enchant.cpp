@@ -156,6 +156,9 @@ bool mundane_spell(PlayerType *player_ptr, bool only_equip)
     };
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.set_flags(flags_srf);
+
+    // 鑑定の状態・エゴ・修正値が変わるので、並び順や束をまとめられるかも変わる
+    rfu.request_inventory_arrangement();
     rfu.request_item_lists_redrawing();
     calc_android_exp(player_ptr);
     return true;

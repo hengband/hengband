@@ -327,6 +327,7 @@ bool pulish_shield(PlayerType *player_ptr)
         // 修正値の強化に失敗しても、エゴの能力は付いている
         auto &rfu = RedrawingFlagsUpdater::get_instance();
         rfu.set_flag(StatusRecalculatingFlag::BONUS);
+        rfu.request_inventory_arrangement();
         rfu.request_item_lists_redrawing();
         chg_virtue(player_ptr, Virtue::ENCHANT, 2);
         return true;
