@@ -1,11 +1,13 @@
 #include "info-reader/info-reader-util.h"
 #include "info-reader/parse-error-types.h"
 #include "info-reader/race-reader.h"
+#include "system/enums/monrace/monrace-id.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
 #include "system/monrace/monrace-record.h"
 #include "system/monrace/monrace-records.h"
 #include "test/scoped-rng.h"
+#include "test/system/artifact-list-test-access.h"
 #include "test/system/monrace-list-test-access.h"
 #include "test/system/monrace-message-list-test-access.h"
 #include "test/system/monrace-records-test-access.h"
@@ -501,4 +503,46 @@ TEST_CASE("RaceReader limits every monster dice to positive values and a short m
         }
         CHECK(read_as_first_record(set_dice(kind, "1d5\n")) == PARSE_ERROR_TOO_FEW_ARGUMENTS);
     }
+}
+
+TEST_CASE("RaceReader validates references after every definition is read")
+{
+    test::MonraceListTestAccess races;
+    test::ArtifactListTestAccess artifacts;
+    auto &list = MonraceList::get_instance();
+    auto &monrace = list.emplace(static_cast<MonraceId>(1));
+    list.emplace(static_cast<MonraceId>(2));
+    ArtifactList::get_instance().emplace(static_cast<FixedArtifactId>(3), {});
+    monrace.next_r_idx = static_cast<MonraceId>(2);
+    monrace.emplace_reinforce(static_cast<MonraceId>(2), Dice(1, 2));
+    monrace.emplace_final_summon(static_cast<MonraceId>(2), 100, 1, 1, 1);
+    monrace.emplace_drop_artifact(static_cast<FixedArtifactId>(3), 50);
+    CHECK_FALSE(RaceReader::validate_references().has_value());
+
+    // 定義済みの参照は2と3だけなので、報告された参照のIDで原因を確かめる。
+    std::string reported_id = " 4 ";
+    SUBCASE("undefined evolution target")
+    {
+        monrace.next_r_idx = static_cast<MonraceId>(4);
+    }
+    SUBCASE("undefined escort")
+    {
+        monrace.emplace_reinforce(static_cast<MonraceId>(4), Dice(1, 2));
+    }
+    SUBCASE("player escort")
+    {
+        monrace.emplace_reinforce(MonraceId::PLAYER, Dice(1, 2));
+        reported_id = " 0 ";
+    }
+    SUBCASE("undefined final summon")
+    {
+        monrace.emplace_final_summon(static_cast<MonraceId>(4), 100, 1, 1, 1);
+    }
+    SUBCASE("undefined artifact")
+    {
+        monrace.emplace_drop_artifact(static_cast<FixedArtifactId>(4), 50);
+    }
+    const auto error = RaceReader::validate_references();
+    REQUIRE(error.has_value());
+    CHECK(error->find(reported_id) != std::string::npos);
 }

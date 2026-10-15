@@ -664,9 +664,13 @@ def validate_monster_message_semantics(data: dict) -> None:
 MAX_MONRACE_DICE_ROLL = 32767
 
 
-def validate_monrace_semantics(data: dict) -> None:
-    """Check RaceReader's strict integers, ID order and dice limits."""
+def validate_monrace_semantics(data: dict, schema_path: Path, data_path: Path, registry: Registry) -> None:
+    """Check RaceReader's strict integers, ID order, dice limits and references."""
+    artifact_data = load_validated_companion(schema_path, data_path, registry,
+                                             "ArtifactDefinitions", "artifact", lambda _: None)
+    defined_artifact_ids = {artifact["id"] for artifact in artifact_data["artifacts"]}
     monraces = data["monsters"]
+    defined_monrace_ids = {monrace["id"] for monrace in monraces if type(monrace["id"]) is int}
 
     def check_dice(value, path):
         # pattern の $ は末尾の改行の前にも一致するため、文字列全体で確かめる。
@@ -676,6 +680,11 @@ def validate_monrace_semantics(data: dict) -> None:
         num, sides = (int(token) for token in value.split("d"))
         if num * sides > MAX_MONRACE_DICE_ROLL:
             raise ValidationError(f"dice maximum roll must not exceed {MAX_MONRACE_DICE_ROLL}", path=path)
+
+    def check_monrace_reference(value, path):
+        # ID 0 はプレイヤーを表し、モンスター種族として参照できない。
+        if value == 0 or value not in defined_monrace_ids:
+            raise ValidationError("unknown monster ID", path=path)
 
     previous_id = -1
     for index, monrace in enumerate(monraces):
@@ -695,13 +704,17 @@ def validate_monrace_semantics(data: dict) -> None:
         if "evolve" in monrace:
             for field in ("need_exp", "to"):
                 require_integer(monrace["evolve"][field], path + ["evolve", field])
+            check_monrace_reference(monrace["evolve"]["to"], path + ["evolve", "to"])
         for artifact_index, artifact in enumerate(monrace.get("artifacts", [])):
             artifact_path = path + ["artifacts", artifact_index]
             for field in ("drop_artifact_id", "drop_probability"):
                 require_integer(artifact[field], artifact_path + [field])
+            if artifact["drop_artifact_id"] not in defined_artifact_ids:
+                raise ValidationError("unknown artifact ID", path=artifact_path + ["drop_artifact_id"])
         for escort_index, escort in enumerate(monrace.get("escorts", [])):
             escort_path = path + ["escorts", escort_index]
             require_integer(escort["escorts_id"], escort_path + ["escorts_id"])
+            check_monrace_reference(escort["escorts_id"], escort_path + ["escorts_id"])
             check_dice(escort["escort_num"], escort_path + ["escort_num"])
         for blow_index, blow in enumerate(monrace.get("blows", [])):
             if "damage_dice" in blow:
@@ -716,6 +729,7 @@ def validate_monrace_semantics(data: dict) -> None:
             summon_path = path + ["final_summon", summon_index]
             for field in ("id", "probability", "min_num", "max_num", "radius"):
                 require_integer(summon[field], summon_path + [field])
+            check_monrace_reference(summon["id"], summon_path + ["id"])
             if summon["min_num"] > summon["max_num"]:
                 raise ValidationError("min_num must not exceed max_num", path=summon_path + ["min_num"])
         for message_index, message in enumerate(monrace.get("message", [])):
@@ -741,7 +755,7 @@ def validate_one(pair: tuple[Path, Path, dict], registry: Registry | None = None
             "TownPreferences.schema.json": lambda: validate_town_preferences_semantics(data, schema_path),
             "TownDefinitionList.schema.json": lambda: validate_town_definition_list_semantics(data, schema_path),
             "TownMap.schema.json": lambda: validate_town_map_semantics(data, schema_path),
-            "MonraceDefinitions.schema.json": lambda: validate_monrace_semantics(data),
+            "MonraceDefinitions.schema.json": lambda: validate_monrace_semantics(data, schema_path, data_path, registry),
             "ClassMagicDefinitions.schema.json": lambda: validate_class_magic_semantics(data, schema_path, data_path, registry),
             "ClassSkillDefinitions.schema.json": lambda: validate_class_skill_semantics(data),
             "SpellDefinitions.schema.json": lambda: validate_spell_semantics(data),

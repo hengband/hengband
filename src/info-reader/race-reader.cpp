@@ -7,6 +7,9 @@
 #include "info-reader/race-info-tokens-table.h"
 #include "locale/character-encoding.h"
 #include "player-ability/player-ability-types.h"
+#include "system/artifact/artifact-definition.h"
+#include "system/artifact/artifact-list.h"
+#include "system/enums/monrace/monrace-id.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
 #include "system/monrace/monrace-message.h"
@@ -16,6 +19,7 @@
 #include "view/display-messages.h"
 #include <charconv>
 #include <cstdint>
+#include <fmt/format.h>
 #include <limits>
 #include <nlohmann/json.hpp>
 #include <string>
@@ -717,4 +721,42 @@ int RaceReader::set_mon_message(MonraceMessage &messages) const
         messages.emplace(action->second, chance, use_name, str);
     }
     return PARSE_ERROR_NONE;
+}
+
+/*!
+ * @brief 読み込んだ全モンスター種族の参照先が定義されているかを検証する
+ * @return 未定義の参照があればその説明、無ければ std::nullopt
+ * @details 進化先・護衛・死亡時召喚は後ろのIDも参照できるため、全種族を読み込んだ後に呼ぶ。
+ * 固定アーティファクトはモンスター種族より先に読み込まれている。
+ */
+std::optional<std::string> RaceReader::validate_references()
+{
+    const auto &monraces = MonraceList::get_instance();
+    const auto &artifacts = ArtifactList::get_instance();
+    const auto is_defined = [&monraces](MonraceId monrace_id) {
+        return MonraceList::is_valid(monrace_id) && monraces.contains(monrace_id);
+    };
+    for (const auto &[monrace_id, monrace] : monraces) {
+        const auto id = enum2i(monrace_id);
+        if (monrace->next_r_idx != MonraceId::PLAYER && !is_defined(monrace->next_r_idx)) {
+            return fmt::format(_("モンスターID {}の進化先 {} が定義されていません", "monster ID {}: evolution target {} is not defined"), id, enum2i(monrace->next_r_idx));
+        }
+        for (const auto &reinforce : monrace->get_reinforces()) {
+            if (!is_defined(reinforce.get_monrace_id())) {
+                return fmt::format(_("モンスターID {}の護衛 {} が定義されていません", "monster ID {}: escort {} is not defined"), id, enum2i(reinforce.get_monrace_id()));
+            }
+        }
+        for (const auto &summon : monrace->get_final_summons()) {
+            if (!is_defined(summon.id)) {
+                return fmt::format(_("モンスターID {}の死亡時召喚 {} が定義されていません", "monster ID {}: final summon {} is not defined"), id, enum2i(summon.id));
+            }
+        }
+        for (const auto &drop : monrace->get_drop_artifacts()) {
+            if ((drop.fa_id == FixedArtifactId::NONE) || !artifacts.contains(drop.fa_id)) {
+                return fmt::format(_("モンスターID {}の固定アーティファクト {} が定義されていません", "monster ID {}: fixed artifact {} is not defined"), id, enum2i(drop.fa_id));
+            }
+        }
+    }
+
+    return std::nullopt;
 }
