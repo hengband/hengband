@@ -661,6 +661,17 @@ def validate_monster_message_semantics(data: dict) -> None:
                     raise ValidationError(f"{language} messages after a missing locale would be discarded", path=path)
 
 
+def validate_monrace_semantics(data: dict) -> None:
+    """Check RaceReader's strictly increasing IDs."""
+    previous_id = -1
+    for index, monrace in enumerate(data["monsters"]):
+        path = ["monsters", index, "id"]
+        require_integer(monrace["id"], path)
+        if monrace["id"] <= previous_id:
+            raise ValidationError("monster IDs must be strictly increasing", path=path)
+        previous_id = monrace["id"]
+
+
 def validate_one(pair: tuple[Path, Path, dict], registry: Registry | None = None) -> tuple[bool, str]:
     data_path, schema_path, schema = pair
     try:
@@ -680,6 +691,7 @@ def validate_one(pair: tuple[Path, Path, dict], registry: Registry | None = None
             "TownPreferences.schema.json": lambda: validate_town_preferences_semantics(data, schema_path),
             "TownDefinitionList.schema.json": lambda: validate_town_definition_list_semantics(data, schema_path),
             "TownMap.schema.json": lambda: validate_town_map_semantics(data, schema_path),
+            "MonraceDefinitions.schema.json": lambda: validate_monrace_semantics(data),
             "ClassMagicDefinitions.schema.json": lambda: validate_class_magic_semantics(data, schema_path, data_path, registry),
             "ClassSkillDefinitions.schema.json": lambda: validate_class_skill_semantics(data),
             "SpellDefinitions.schema.json": lambda: validate_spell_semantics(data),

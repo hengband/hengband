@@ -43,7 +43,8 @@ int RaceReader::read() const
     if (const auto err = info_set_integer(id_obj, monrace_id_int, true, Range(0, 9999))) {
         return err;
     }
-    if (monrace_id_int < error_idx) {
+    // 同じIDの定義が重なると後の定義が前の定義に混ざるため、IDは昇順で重複なしとする。
+    if (monrace_id_int <= error_idx) {
         return PARSE_ERROR_NON_SEQUENTIAL_RECORDS;
     }
 

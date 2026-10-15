@@ -42,6 +42,17 @@ MonraceDefinition &test_monrace()
 {
     return MonraceList::get_instance().get_monrace(static_cast<MonraceId>(0));
 }
+
+/*!
+ * @brief ファイルの先頭の定義として読む
+ * @details IDは1つのファイルの中で昇順・重複なしとするため、同じ定義を繰り返し読むテストでは
+ * 読み込みのたびにファイルの読み直しと同じく error_idx を戻す。
+ */
+int read_as_first_record(const nlohmann::json &data)
+{
+    error_idx = -1;
+    return RaceReader(data).read();
+}
 }
 
 TEST_CASE("RaceReader accepts schema boundary IDs")
@@ -51,7 +62,7 @@ TEST_CASE("RaceReader accepts schema boundary IDs")
     for (const auto id : { 0, 9999 }) {
         CAPTURE(id);
         data["id"] = id;
-        REQUIRE(RaceReader(data).read() == PARSE_ERROR_NONE);
+        REQUIRE(read_as_first_record(data) == PARSE_ERROR_NONE);
         CHECK(MonraceList::get_instance().get_monrace(static_cast<MonraceId>(id)).idx == static_cast<MonraceId>(id));
         CHECK(error_idx == id);
     }
@@ -67,9 +78,9 @@ TEST_CASE("RaceReader rejects out-of-range IDs before conversion or registration
              nlohmann::json(std::numeric_limits<int64_t>::min()), nlohmann::json(std::numeric_limits<uint64_t>::max()) }) {
         CAPTURE(id);
         data["id"] = id;
-        CHECK(RaceReader(data).read() == PARSE_ERROR_INVALID_FLAG);
+        CHECK(read_as_first_record(data) == PARSE_ERROR_INVALID_FLAG);
         CHECK(MonraceList::get_instance().empty());
-        CHECK(error_idx == 0);
+        CHECK(error_idx == -1);
     }
 }
 
@@ -78,10 +89,10 @@ TEST_CASE("RaceReader preserves ID type and missing-value errors")
     test::MonraceListTestAccess guard;
     auto data = make_monrace();
     data.erase("id");
-    CHECK(RaceReader(data).read() == PARSE_ERROR_TOO_FEW_ARGUMENTS);
+    CHECK(read_as_first_record(data) == PARSE_ERROR_TOO_FEW_ARGUMENTS);
     for (const auto &id : { nlohmann::json(), nlohmann::json(true), nlohmann::json("1"), nlohmann::json(1.0), nlohmann::json::array(), nlohmann::json::object() }) {
         data["id"] = id;
-        CHECK(RaceReader(data).read() == PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        CHECK(read_as_first_record(data) == PARSE_ERROR_TOO_FEW_ARGUMENTS);
         CHECK(MonraceList::get_instance().empty());
     }
 }
@@ -93,7 +104,7 @@ TEST_CASE("RaceReader accepts single-byte symbol characters")
     for (const auto *character : { "p", " ", "\\" }) {
         CAPTURE(character);
         data["symbol"]["character"] = character;
-        REQUIRE(RaceReader(data).read() == PARSE_ERROR_NONE);
+        REQUIRE(read_as_first_record(data) == PARSE_ERROR_NONE);
         CHECK(test_monrace().symbol_definition.character == character[0]);
     }
 }
@@ -103,11 +114,11 @@ TEST_CASE("RaceReader rejects empty and multibyte symbol characters")
     test::MonraceListTestAccess guard;
     auto data = make_monrace();
     data["symbol"]["character"] = "";
-    CHECK(RaceReader(data).read() == PARSE_ERROR_GENERIC);
+    CHECK(read_as_first_record(data) == PARSE_ERROR_GENERIC);
     for (const auto *character : { "pp", "\xc3\xa9", "\xf0\x9f\x8c\xb2" }) {
         CAPTURE(character);
         data["symbol"]["character"] = character;
-        CHECK(RaceReader(data).read() == PARSE_ERROR_INVALID_VALUE);
+        CHECK(read_as_first_record(data) == PARSE_ERROR_INVALID_VALUE);
     }
 }
 
@@ -119,7 +130,7 @@ TEST_CASE("RaceReader accepts exactly the supported number of blows")
     for (int i = 0; i < MAX_NUM_BLOWS; ++i) {
         data["blows"].push_back({ { "method", "HIT" }, { "effect", "HURT" }, { "damage_dice", std::to_string(i + 1) + "d6" } });
     }
-    REQUIRE(RaceReader(data).read() == PARSE_ERROR_NONE);
+    REQUIRE(read_as_first_record(data) == PARSE_ERROR_NONE);
     for (int i = 0; i < MAX_NUM_BLOWS; ++i) {
         CHECK(test_monrace().blows[i].damage_dice == Dice(i + 1, 6));
     }
@@ -135,7 +146,7 @@ TEST_CASE("RaceReader rejects excess blows before accessing beyond their storage
         for (int i = 0; i < count; ++i) {
             data["blows"].push_back({ { "method", "HIT" }, { "effect", "HURT" }, { "damage_dice", "1d6" } });
         }
-        CHECK(RaceReader(data).read() == PARSE_ERROR_GENERIC);
+        CHECK(read_as_first_record(data) == PARSE_ERROR_GENERIC);
     }
 }
 
@@ -146,7 +157,7 @@ TEST_CASE("RaceReader accepts every schema-valid skill probability")
     for (int denominator = 1; denominator <= 100; ++denominator) {
         CAPTURE(denominator);
         data["skill"]["probability"] = "1_IN_" + std::to_string(denominator);
-        REQUIRE(RaceReader(data).read() == PARSE_ERROR_NONE);
+        REQUIRE(read_as_first_record(data) == PARSE_ERROR_NONE);
         CHECK(test_monrace().freq_spell == 100 / denominator);
         CHECK(test_monrace().ability_flags.has(MonsterAbilityType::SHRIEK));
     }
@@ -159,12 +170,12 @@ TEST_CASE("RaceReader rejects invalid skill probability denominators without thr
     for (const auto *probability : { "1_IN_0", "1_IN_101", "1_IN_255", "1_IN_256", "1_IN_-1", "1_IN_x", "1_IN_3x", "1_IN_99999999999999999999", "1_IN_01", "1_IN_+3", "1_IN_ 3", "1_IN_3 ", "1_IN_" }) {
         CAPTURE(probability);
         data["skill"]["probability"] = probability;
-        CHECK(RaceReader(data).read() == PARSE_ERROR_INVALID_VALUE);
+        CHECK(read_as_first_record(data) == PARSE_ERROR_INVALID_VALUE);
     }
     for (const auto *probability : { "", "bad", "1_IN", "2_IN_3", "1_OF_3", "1_IN_3_extra" }) {
         CAPTURE(probability);
         data["skill"]["probability"] = probability;
-        CHECK(RaceReader(data).read() == PARSE_ERROR_GENERIC);
+        CHECK(read_as_first_record(data) == PARSE_ERROR_GENERIC);
     }
 }
 
@@ -173,10 +184,10 @@ TEST_CASE("RaceReader reports missing and nonstring skill probabilities")
     test::MonraceListTestAccess guard;
     auto data = make_monrace();
     data["skill"].erase("probability");
-    CHECK(RaceReader(data).read() == PARSE_ERROR_TOO_FEW_ARGUMENTS);
+    CHECK(read_as_first_record(data) == PARSE_ERROR_TOO_FEW_ARGUMENTS);
     for (const auto &value : { nlohmann::json(), nlohmann::json(42), nlohmann::json(true), nlohmann::json::array(), nlohmann::json::object() }) {
         data["skill"]["probability"] = value;
-        CHECK(RaceReader(data).read() == PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        CHECK(read_as_first_record(data) == PARSE_ERROR_TOO_FEW_ARGUMENTS);
     }
 }
 
@@ -185,15 +196,15 @@ TEST_CASE("RaceReader reads shoot dice with and without a skill list")
     test::MonraceListTestAccess guard;
     auto data = make_monrace();
     data["skill"]["shoot"] = "2d6";
-    REQUIRE(RaceReader(data).read() == PARSE_ERROR_NONE);
+    REQUIRE(read_as_first_record(data) == PARSE_ERROR_NONE);
     CHECK(test_monrace().shoot_damage_dice == Dice(2, 6));
     CHECK(test_monrace().ability_flags.has(MonsterAbilityType::SHOOT));
     CHECK(test_monrace().ability_flags.has(MonsterAbilityType::SHRIEK));
     data["skill"].erase("list");
-    REQUIRE(RaceReader(data).read() == PARSE_ERROR_NONE);
+    REQUIRE(read_as_first_record(data) == PARSE_ERROR_NONE);
     CHECK(test_monrace().shoot_damage_dice == Dice(2, 6));
     data["skill"].erase("shoot");
-    CHECK(RaceReader(data).read() == PARSE_ERROR_TOO_FEW_ARGUMENTS);
+    CHECK(read_as_first_record(data) == PARSE_ERROR_TOO_FEW_ARGUMENTS);
 }
 
 TEST_CASE("RaceReader rejects nonstring shoot dice and skill list entries")
@@ -202,19 +213,19 @@ TEST_CASE("RaceReader rejects nonstring shoot dice and skill list entries")
     auto data = make_monrace();
     for (const auto &value : { nlohmann::json(42), nlohmann::json(true), nlohmann::json::array(), nlohmann::json::object() }) {
         data["skill"]["shoot"] = value;
-        CHECK(RaceReader(data).read() == PARSE_ERROR_INVALID_TYPE);
+        CHECK(read_as_first_record(data) == PARSE_ERROR_INVALID_TYPE);
     }
     data["skill"]["shoot"] = nullptr;
-    CHECK(RaceReader(data).read() == PARSE_ERROR_TOO_FEW_ARGUMENTS);
+    CHECK(read_as_first_record(data) == PARSE_ERROR_TOO_FEW_ARGUMENTS);
     data["skill"]["shoot"] = "bad";
-    CHECK(RaceReader(data).read() == PARSE_ERROR_TOO_FEW_ARGUMENTS);
+    CHECK(read_as_first_record(data) == PARSE_ERROR_TOO_FEW_ARGUMENTS);
     data["skill"].erase("shoot");
     for (const auto &value : { nlohmann::json(), nlohmann::json(42), nlohmann::json(true), nlohmann::json::array(), nlohmann::json::object() }) {
         data["skill"]["list"] = nlohmann::json::array({ "SHRIEK", value });
-        CHECK(RaceReader(data).read() == PARSE_ERROR_INVALID_TYPE);
+        CHECK(read_as_first_record(data) == PARSE_ERROR_INVALID_TYPE);
     }
     data["skill"]["list"] = { "UNKNOWN" };
-    CHECK(RaceReader(data).read() == PARSE_ERROR_INVALID_FLAG);
+    CHECK(read_as_first_record(data) == PARSE_ERROR_INVALID_FLAG);
 }
 
 TEST_CASE("RaceReader rejects nonstring message actions before message insertion")
@@ -222,15 +233,15 @@ TEST_CASE("RaceReader rejects nonstring message actions before message insertion
     test::MonraceListTestAccess guard;
     auto data = make_monrace();
     data["message"] = nlohmann::json::array({ { { "chance", 100 } } });
-    CHECK(RaceReader(data).read() == PARSE_ERROR_TOO_FEW_ARGUMENTS);
+    CHECK(read_as_first_record(data) == PARSE_ERROR_TOO_FEW_ARGUMENTS);
     data["message"][0]["action"] = nullptr;
-    CHECK(RaceReader(data).read() == PARSE_ERROR_TOO_FEW_ARGUMENTS);
+    CHECK(read_as_first_record(data) == PARSE_ERROR_TOO_FEW_ARGUMENTS);
     for (const auto &value : { nlohmann::json(42), nlohmann::json(true), nlohmann::json::array(), nlohmann::json::object() }) {
         data["message"][0]["action"] = value;
-        CHECK(RaceReader(data).read() == PARSE_ERROR_INVALID_TYPE);
+        CHECK(read_as_first_record(data) == PARSE_ERROR_INVALID_TYPE);
     }
     data["message"][0]["action"] = "UNKNOWN";
-    CHECK(RaceReader(data).read() == PARSE_ERROR_INVALID_FLAG);
+    CHECK(read_as_first_record(data) == PARSE_ERROR_INVALID_FLAG);
 }
 
 TEST_CASE("RaceReader preserves existing definition messages and record after late failure")
@@ -270,7 +281,7 @@ TEST_CASE("RaceReader preserves existing definition messages and record after la
     {
         data["flags"] = { "RES_FIRE", "UNKNOWN" };
     }
-    CHECK(RaceReader(data).read() == expected);
+    CHECK(read_as_first_record(data) == expected);
     CHECK(list.get_monrace_shared(static_cast<MonraceId>(1)) == identity);
     CHECK(original.name.en_string() == "original");
     CHECK(original.level == 42);
@@ -300,14 +311,14 @@ TEST_CASE("RaceReader does not publish a new ID or messages after a late failure
     {
         data["flags"] = { "RES_FIRE", "UNKNOWN" };
     }
-    CHECK(RaceReader(data).read() == PARSE_ERROR_INVALID_FLAG);
+    CHECK(read_as_first_record(data) == PARSE_ERROR_INVALID_FLAG);
     CHECK(MonraceList::get_instance().empty());
     CHECK(messages.message_count(2, MonsterMessageType::SPEAK_ALL) == 0);
     CHECK(messages.message_count(2, MonsterMessageType::SPEAK_BATTLE) == 0);
     CHECK(error_idx == 2);
 }
 
-TEST_CASE("RaceReader successful repeated ID keeps identity and appends optional collections")
+TEST_CASE("RaceReader rereading a file keeps identity and appends optional collections")
 {
     test::MonraceListTestAccess races;
     test::MonraceMessageListTestAccess messages;
@@ -316,14 +327,14 @@ TEST_CASE("RaceReader successful repeated ID keeps identity and appends optional
     data["id"] = 1;
     data["escorts"] = nlohmann::json::array({ { { "escorts_id", 2 }, { "escort_num", "1d2" } } });
     data["message"] = nlohmann::json::array({ { { "action", "SPEAK_ALL" }, { "chance", 1 }, { "message", { { "ja", "text" }, { "en", "text" } } } } });
-    REQUIRE(RaceReader(data).read() == PARSE_ERROR_NONE);
+    REQUIRE(read_as_first_record(data) == PARSE_ERROR_NONE);
     auto &list = MonraceList::get_instance();
     const auto identity = list.get_monrace_shared(static_cast<MonraceId>(1));
     identity->r_pkills = 19;
     const auto record = MonraceRecords::get_instance().get_record(static_cast<MonraceId>(1));
     record->set_seen_count(31);
     data["level"] = 50;
-    REQUIRE(RaceReader(data).read() == PARSE_ERROR_NONE);
+    REQUIRE(read_as_first_record(data) == PARSE_ERROR_NONE);
     CHECK(list.get_monrace_shared(static_cast<MonraceId>(1)) == identity);
     CHECK(identity->level == 50);
     CHECK(identity->r_pkills == 19);
@@ -342,7 +353,7 @@ TEST_CASE("RaceReader successful repeated ID keeps identity and appends optional
     {
         data["message"] = nlohmann::json::array();
     }
-    REQUIRE(RaceReader(data).read() == PARSE_ERROR_NONE);
+    REQUIRE(read_as_first_record(data) == PARSE_ERROR_NONE);
     CHECK(identity->get_reinforces().size() == 2);
     CHECK(messages.message_count(1, MonsterMessageType::SPEAK_ALL) == 2);
     CHECK(MonraceRecords::get_instance().get_record(static_cast<MonraceId>(1)) == record);
@@ -367,7 +378,30 @@ TEST_CASE("RaceReader keeps absent message groups absent for missing null and em
     {
         data["message"] = nlohmann::json::array();
     }
-    REQUIRE(RaceReader(data).read() == PARSE_ERROR_NONE);
+    REQUIRE(read_as_first_record(data) == PARSE_ERROR_NONE);
     CHECK(list.get_message(0, "", MonsterMessageType::SPEAK_BATTLE) == "battle");
     CHECK(messages.message_count(0, MonsterMessageType::SPEAK_ALL) == 0);
+}
+
+TEST_CASE("RaceReader rejects duplicate and descending IDs within a file")
+{
+    test::MonraceListTestAccess races;
+    auto data = make_monrace();
+    data["id"] = 2;
+    data["level"] = 10;
+    REQUIRE(read_as_first_record(data) == PARSE_ERROR_NONE);
+    for (const auto id : { 2, 1 }) {
+        CAPTURE(id);
+        data["id"] = id;
+        data["level"] = 20;
+        data["flags"] = { "RES_FIRE" };
+        CHECK(RaceReader(data).read() == PARSE_ERROR_NON_SEQUENTIAL_RECORDS);
+        CHECK(error_idx == 2);
+    }
+    auto &list = MonraceList::get_instance();
+    CHECK_FALSE(list.contains(static_cast<MonraceId>(1)));
+    CHECK(list.get_monrace(static_cast<MonraceId>(2)).level == 10);
+    CHECK(list.get_monrace(static_cast<MonraceId>(2)).resistance_flags.none());
+    data["id"] = 3;
+    CHECK(RaceReader(data).read() == PARSE_ERROR_NONE);
 }
