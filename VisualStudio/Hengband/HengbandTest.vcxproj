@@ -66,6 +66,7 @@
     <ClCompile Include="..\..\src\test\cmd-io\test-cmd-autopick.cpp" />
     <ClCompile Include="..\..\src\test\flavor\test-flavor-util.cpp" />
     <ClCompile Include="..\..\src\test\floor\test-fixed-map-generator.cpp" />
+    <ClCompile Include="..\..\src\test\floor\test-floor-changer.cpp" />
     <ClCompile Include="..\..\src\test\floor\test-floor-events.cpp" />
     <ClCompile Include="..\..\src\test\game-option\test-runtime-arguments.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-activation-reader.cpp" />

@@ -1,5 +1,6 @@
 #include "info-reader/wilderness-reader.h"
 #include "game-option/birth-options.h"
+#include "info-reader/dungeon-reader.h"
 #include "info-reader/info-reader-util.h"
 #include "info-reader/json-reader-util.h"
 #include "info-reader/jsonc-document-loader.h"
@@ -12,6 +13,7 @@
 #include "system/gamevalue.h"
 #include "util/angband-files.h"
 #include "util/enum-converter.h"
+#include "view/display-messages.h"
 #include <algorithm>
 #include <array>
 #include <limits>
@@ -245,6 +247,12 @@ bool initialize_wilderness_definition()
         return false;
     }
 
+    if (DungeonReader::validate_wilderness_positions(definition->height, definition->width) != PARSE_ERROR_NONE) {
+        // 起動時の終了より先に、入口のID・座標・寸法を含む診断を表示する。
+        msg_erase();
+        return false;
+    }
+
     auto &towns = TownList::get_instance();
     for (const auto &town : definition->towns) {
         if (town.id >= static_cast<int>(towns.size())) {
@@ -273,6 +281,9 @@ parse_error_type apply_wilderness_definition()
     const auto definition = load_wilderness_definition();
     if (!definition) {
         return PARSE_ERROR_GENERIC;
+    }
+    if (const auto err = DungeonReader::validate_wilderness_positions(definition->height, definition->width)) {
+        return static_cast<parse_error_type>(err);
     }
     const auto &map = (vanilla_town || lite_town) ? definition->compact : definition->normal;
 

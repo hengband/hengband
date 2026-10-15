@@ -38,11 +38,13 @@
       "properties": {
         "wild_y": {
           "type": "integer",
-          "minimum": 0
+          "minimum": 0,
+          "maximum": 32766
         },
         "wild_x": {
           "type": "integer",
-          "minimum": 0
+          "minimum": 0,
+          "maximum": 32766
         }
       }
     },
@@ -53,23 +55,28 @@
       "properties": {
         "minDepth": {
           "type": "integer",
-          "minimum": 0
+          "minimum": 0,
+          "maximum": 32767
         },
         "maxDepth": {
           "type": "integer",
-          "minimum": 0
+          "minimum": 0,
+          "maximum": 32767
         },
         "minPlayerLevel": {
           "type": "integer",
-          "minimum": 0
+          "minimum": 0,
+          "maximum": 50
         },
         "objGood": {
           "type": "integer",
-          "minimum": 0
+          "minimum": 0,
+          "maximum": 100
         },
         "objGreat": {
           "type": "integer",
-          "minimum": 0
+          "minimum": 0,
+          "maximum": 100
         },
         "pit": {
           "type": "array",
@@ -94,7 +101,8 @@
       "properties": {
         "minCount": {
           "type": "integer",
-          "minimum": 0
+          "minimum": 0,
+          "maximum": 100
         },
         "additionalSpawnProbability": {
           "type": "integer",
@@ -146,13 +154,15 @@
         },
         "tunnelRate": {
           "type": "integer",
-          "minimum": 0
+          "minimum": 0,
+          "maximum": 32767
         }
       }
     },
     "final_floor": {
       "type": "object",
       "additionalProperties": false,
+      "dependentRequired": { "artifact": ["guardian"] },
       "minProperties": 1,
       "properties": {
         "guardian": {
@@ -163,12 +173,12 @@
         "object": {
           "type": "integer",
           "minimum": 1,
-          "maximum": 9999
+          "maximum": 32767
         },
         "artifact": {
           "type": "integer",
-          "minimum": 1,
-          "maximum": 999
+          "minimum": 0,
+          "maximum": 9999
         }
       }
     },
@@ -365,7 +375,8 @@
       "properties": {
         "id": {
           "type": "integer",
-          "minimum": 0
+          "minimum": 0,
+          "maximum": 20
         },
         "name": {
           "$ref": "#/$defs/localizedText"
