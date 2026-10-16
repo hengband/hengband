@@ -667,7 +667,6 @@ static void update_num_of_spells(PlayerType *player_ptr)
     player_ptr->old_spells = player_ptr->new_spells;
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.set_flag(MainWindowRedrawingFlag::STUDY);
-    rfu.set_flag(SubWindowRedrawingFlag::ITEM_KNOWLEDGE);
 }
 
 /*!
@@ -899,11 +898,7 @@ static void update_max_mana(PlayerType *player_ptr)
         player_ptr->msp = msp;
         auto &rfu = RedrawingFlagsUpdater::get_instance();
         rfu.set_flag(MainWindowRedrawingFlag::MP);
-        static constexpr auto flags = {
-            SubWindowRedrawingFlag::PLAYER,
-            SubWindowRedrawingFlag::SPELL,
-        };
-        rfu.set_flags(flags);
+        rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
     }
 
     if (AngbandWorld::get_instance().character_xtra) {
@@ -2603,7 +2598,10 @@ void update_creature(PlayerType *player_ptr)
     if (rfu.has(StatusRecalculatingFlag::BONUS)) {
         rfu.reset_flag(StatusRecalculatingFlag::BONUS);
 
-        // 矢弾・投擲の威力、運搬中・両手持ちの表示、騎乗中のランスのダイスは、能力の修正 (能力値・射撃・騎乗・集中度など) で変わる
+        // 矢弾・投擲の威力、運搬中・両手持ちの表示、騎乗中のランスのダイスは、能力の修正 (能力値・射撃・騎乗・集中度など) で変わる。
+        // また、持ち物・装備の中身の変化のうち能力の再計算を伴うもの (重さが変わる個数の増減・装備の出し入れ、
+        // 装備の修正値・呪い、$ や . の銘) は、表示の変化もここでまとめて描き直す。
+        // 能力の再計算を伴わない変化 (充填・感触・燃料など) は、それぞれの箇所で持ち物・装備の描き直しを要求する
         static constexpr auto flags_swrf = {
             SubWindowRedrawingFlag::INVENTORY,
             SubWindowRedrawingFlag::EQUIPMENT,
@@ -2829,12 +2827,7 @@ void check_experience(PlayerType *player_ptr)
             MainWindowRedrawingFlag::EXP,
         };
         rfu.set_flags(flags_mwrf_levelup);
-        const auto &flags_swrf_levelup = {
-            SubWindowRedrawingFlag::PLAYER,
-            SubWindowRedrawingFlag::SPELL,
-            SubWindowRedrawingFlag::INVENTORY,
-        };
-        rfu.set_flags(flags_swrf_levelup);
+        rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
         player_ptr->level_up_message = true;
         handle_stuff(player_ptr);
 
@@ -2899,11 +2892,7 @@ void check_experience(PlayerType *player_ptr)
             MainWindowRedrawingFlag::TITLE,
         };
         rfu.set_flags(flags_mwrf);
-        static constexpr auto flags_swrf = {
-            SubWindowRedrawingFlag::PLAYER,
-            SubWindowRedrawingFlag::SPELL,
-        };
-        rfu.set_flags(flags_swrf);
+        rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
         handle_stuff(player_ptr);
     }
 

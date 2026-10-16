@@ -63,11 +63,6 @@ void inven_item_increase(PlayerType *player_ptr, INVENTORY_IDX i_idx, ITEM_NUMBE
     };
     rfu.set_flags(flags_srf);
     rfu.set_flag(InventoryArrangementFlag::COMBINATION);
-    static constexpr auto flags_swrf = {
-        SubWindowRedrawingFlag::INVENTORY,
-        SubWindowRedrawingFlag::EQUIPMENT,
-    };
-    rfu.set_flags(flags_swrf);
     if (o_ptr->number || !player_ptr->ele_attack) {
         return;
     }
@@ -109,11 +104,6 @@ void inven_item_optimize(PlayerType *player_ptr, INVENTORY_IDX i_idx)
             StatusRecalculatingFlag::MP,
         };
         rfu.set_flags(flags_srf);
-        static constexpr auto flags_swrf = {
-            SubWindowRedrawingFlag::EQUIPMENT,
-            SubWindowRedrawingFlag::SPELL,
-        };
-        rfu.set_flags(flags_swrf);
         return;
     }
 
@@ -124,6 +114,7 @@ void inven_item_optimize(PlayerType *player_ptr, INVENTORY_IDX i_idx)
     std::rotate(first, first + 1, last + 1);
     (*last)->wipe();
 
+    // 装備の側と違い、ここでは能力の再計算を要求しないので、持ち物の並びと (魔法書が無くなったときの) 呪文の一覧も要求する
     static constexpr auto flags = {
         SubWindowRedrawingFlag::INVENTORY,
         SubWindowRedrawingFlag::SPELL,
@@ -297,10 +288,6 @@ int16_t store_item_to_inventory(PlayerType *player_ptr, ItemEntity *o_ptr)
 
     ItemEntity *j_ptr;
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    static constexpr auto flags_swrf = {
-        SubWindowRedrawingFlag::INVENTORY,
-        SubWindowRedrawingFlag::PLAYER,
-    };
     for (const auto i_idx : INVEN_PACK_SLOTS) {
         j_ptr = player_ptr->inventory[i_idx].get();
         if (!j_ptr->is_valid()) {
@@ -311,7 +298,7 @@ int16_t store_item_to_inventory(PlayerType *player_ptr, ItemEntity *o_ptr)
         if (j_ptr->is_similar(*o_ptr)) {
             j_ptr->absorb(*o_ptr);
             rfu.set_flag(StatusRecalculatingFlag::BONUS);
-            rfu.set_flags(flags_swrf);
+            rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
             return enum2i(i_idx);
         }
     }
@@ -347,7 +334,7 @@ int16_t store_item_to_inventory(PlayerType *player_ptr, ItemEntity *o_ptr)
     player_ptr->inven_cnt++;
     rfu.set_flag(StatusRecalculatingFlag::BONUS);
     rfu.request_inventory_arrangement();
-    rfu.set_flags(flags_swrf);
+    rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
     return i;
 }
 

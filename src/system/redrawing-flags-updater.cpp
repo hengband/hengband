@@ -248,11 +248,6 @@ void RedrawingFlagsUpdater::fill_up_sub_flags()
 
 void RedrawingFlagsUpdater::request_autopick_inscription()
 {
-    static constexpr auto flags_swrf = {
-        SubWindowRedrawingFlag::INVENTORY,
-        SubWindowRedrawingFlag::EQUIPMENT,
-    };
-    this->set_flags(flags_swrf);
     this->set_flag(StatusRecalculatingFlag::BONUS);
     this->set_flag(InventoryArrangementFlag::COMBINATION);
 }
