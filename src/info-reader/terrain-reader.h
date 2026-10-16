@@ -1,7 +1,9 @@
 #pragma once
 
+#include "info-reader/parse-error-types.h"
 #include <nlohmann/json_fwd.hpp>
 #include <string_view>
+#include <tl/expected.hpp>
 
 class TerrainType;
 
@@ -18,16 +20,16 @@ public:
 
 private:
     bool grab_one_feat_flag(TerrainType &terrain, std::string_view what) const;
-    int set_terrain_symbol(TerrainType &terrain) const;
-    int set_terrain_conversion(TerrainType &terrain) const;
-    int set_terrain_generation(TerrainType &terrain) const;
-    int set_terrain_trap(TerrainType &terrain) const;
-    int set_terrain_door(TerrainType &terrain) const;
-    int set_terrain_tunnel(TerrainType &terrain) const;
-    int set_terrain_pattern(TerrainType &terrain) const;
-    int set_terrain_store(TerrainType &terrain) const;
-    int set_terrain_building(TerrainType &terrain) const;
-    int set_terrain_interactions(TerrainType &terrain) const;
+    tl::expected<void, parse_error_type> set_terrain_symbol(TerrainType &terrain) const;
+    tl::expected<void, parse_error_type> set_terrain_conversion(TerrainType &terrain) const;
+    tl::expected<void, parse_error_type> set_terrain_generation(TerrainType &terrain) const;
+    tl::expected<void, parse_error_type> set_terrain_trap(TerrainType &terrain) const;
+    tl::expected<void, parse_error_type> set_terrain_door(TerrainType &terrain) const;
+    tl::expected<void, parse_error_type> set_terrain_tunnel(TerrainType &terrain) const;
+    tl::expected<void, parse_error_type> set_terrain_pattern(TerrainType &terrain) const;
+    tl::expected<void, parse_error_type> set_terrain_store(TerrainType &terrain) const;
+    tl::expected<void, parse_error_type> set_terrain_building(TerrainType &terrain) const;
+    tl::expected<void, parse_error_type> set_terrain_interactions(TerrainType &terrain) const;
 
     const nlohmann::json &terrain_data;
 };
