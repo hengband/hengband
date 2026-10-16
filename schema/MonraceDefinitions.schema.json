@@ -62,7 +62,7 @@
                             "character": {
                                 "type": "string",
                                 "description": "表示される文字",
-                                "pattern": "[a-zA-Z0-9!\/.!?#$%&()@,|*'`<>+{}=~\\[\\]]|\\\\"
+                                "pattern": "^([a-zA-Z0-9!\/.!?#$%&()@,|*'`<>+{}=~\\[\\]]|\\\\)$"
                             },
                             "color": {
                                 "type": "string",
@@ -97,7 +97,7 @@
                     "hit_point": {
                         "type": "string",
                         "description": "体力。XdY形式",
-                        "pattern": "[1-9][0-9]*d[1-9][0-9]*"
+                        "pattern": "^[1-9][0-9]*d[1-9][0-9]*$"
                     },
                     "vision": {
                         "type": "integer",
@@ -121,12 +121,12 @@
                         "type": "integer",
                         "description": "出現階層",
                         "minimum": 0,
-                        "maximum": 128
+                        "maximum": 127
                     },
                     "rarity": {
                         "type": "integer",
                         "description": "出現頻度。高いほど出にくい",
-                        "minimum": 0,
+                        "minimum": 1,
                         "maximum": 255
                     },
                     "exp": {
@@ -224,7 +224,7 @@
                                 "escort_num": {
                                     "type": "string",
                                     "description": "護衛生成数 XdY形式",
-                                    "pattern": "[1-9][0-9]*d[1-9][0-9]*"
+                                    "pattern": "^[1-9][0-9]*d[1-9][0-9]*$"
                                 }
                             }
                         }
@@ -317,7 +317,7 @@
                                 "damage_dice": {
                                     "type": "string",
                                     "description": "ダメージダイス。XdY形式",
-                                    "pattern": "[1-9][0-9]*d[1-9][0-9]*"
+                                    "pattern": "^[1-9][0-9]*d[1-9][0-9]*$"
                                 }
                             }
                         }
@@ -559,7 +559,7 @@
                             "shoot": {
                                 "type": "string",
                                 "description": "射撃威力。XdY方式",
-                                "pattern": "[1-9][0-9]*d[1-9][0-9]*"
+                                "pattern": "^[1-9][0-9]*d[1-9][0-9]*$"
                             },
                             "list": {
                                 "type": "array",

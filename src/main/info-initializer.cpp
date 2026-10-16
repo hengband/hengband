@@ -219,7 +219,11 @@ void init_feat_variables()
  */
 void init_monrace_definitions()
 {
-    init_json_reader<RaceReader>("MonraceDefinitions.jsonc", "monsters", DefinitionHashDataType::MONRACES, MonraceList::get_instance());
+    init_json_reader<RaceReader>("MonraceDefinitions.jsonc", "monsters", DefinitionHashDataType::MONRACES, MonraceList::get_instance(), [] {
+        if (const auto error = RaceReader::validate_references()) {
+            quit(fmt::format("MonraceDefinitions.jsonc: {}", *error));
+        }
+    });
 }
 
 /*!

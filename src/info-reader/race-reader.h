@@ -1,6 +1,8 @@
 #pragma once
 
 #include <nlohmann/json_fwd.hpp>
+#include <optional>
+#include <string>
 #include <string_view>
 
 class MonraceDefinition;
@@ -16,6 +18,7 @@ public:
     RaceReader &operator=(RaceReader &&) = delete;
 
     int read() const;
+    static std::optional<std::string> validate_references();
 
 private:
     bool grab_one_basic_flag(MonraceDefinition &monrace, std::string_view what) const;
