@@ -1,8 +1,11 @@
 #include "info-reader/message-reader.h"
 #include "info-reader/parse-error-types.h"
+#include "system/enums/monrace/monrace-id.h"
+#include "system/monrace/monrace-list.h"
 #include "system/monrace/monrace-message.h"
 #include "test/info-reader/scoped-reader-state.h"
 #include "test/scoped-rng.h"
+#include "test/system/monrace-list-test-access.h"
 #include "test/system/monrace-message-list-test-access.h"
 #include <doctest/doctest.h>
 #include <nlohmann/json.hpp>
@@ -14,10 +17,29 @@ nlohmann::json make_message(std::string_view action, const nlohmann::json &texts
     return { { "action", action }, { "chance", 1 }, { "use_name", false }, { "message", { { "ja", texts }, { "en", texts } } } };
 }
 
+/*!
+ * @brief id_list から参照する種族ID 4 と 5 だけを定義した状態にする
+ */
+struct DefinedMonracesGuard {
+    // Monraceのfixtureはerror_idxも変更するため、他のreaderの状態より先に置く。
+    test::MonraceListTestAccess monraces;
+
+    DefinedMonracesGuard()
+    {
+        MonraceList::get_instance().emplace(static_cast<MonraceId>(4));
+        MonraceList::get_instance().emplace(static_cast<MonraceId>(5));
+    }
+
+    DefinedMonracesGuard(const DefinedMonracesGuard &) = delete;
+    DefinedMonracesGuard(DefinedMonracesGuard &&) = delete;
+    DefinedMonracesGuard &operator=(const DefinedMonracesGuard &) = delete;
+    DefinedMonracesGuard &operator=(DefinedMonracesGuard &&) = delete;
+};
 }
 
 TEST_CASE("MessageReader preserves existing messages after a late parse error")
 {
+    const DefinedMonracesGuard monraces;
     test::MonraceMessageListTestAccess state;
     const auto rng = test::scoped_rng();
     const test::ScopedReaderState reader_state;
@@ -61,6 +83,7 @@ TEST_CASE("MessageReader preserves existing messages after a late parse error")
 
 TEST_CASE("MessageReader publishes successful groups and preserves missing-language early success")
 {
+    const DefinedMonracesGuard monraces;
     test::MonraceMessageListTestAccess state;
     const auto rng = test::scoped_rng();
     const test::ScopedReaderState reader_state;
@@ -95,6 +118,27 @@ TEST_CASE("MessageReader publishes successful groups and preserves missing-langu
         CHECK(state.default_message_count(MonsterMessageType::SPEAK_ALL) == 1);
     }
     CHECK(state.message_count(4, MonsterMessageType::SPEAK_BATTLE) == 0);
+}
+
+TEST_CASE("MessageReader rejects monster IDs without monster definitions")
+{
+    const DefinedMonracesGuard monraces;
+    test::MonraceMessageListTestAccess state;
+    const test::ScopedReaderState reader_state;
+    const auto message = make_message("SPEAK_ALL", nlohmann::json::array({ "unused" }));
+    // 範囲内でも定義の無い種族ID。既知のIDの後ろに置いても、どのIDにも登録しない。
+    for (const auto undefined_id : { 6, 9999 }) {
+        CAPTURE(undefined_id);
+        const nlohmann::json data = { { "id_list", { 4, undefined_id } }, { "message", { message } } };
+        CHECK(MessageReader(data).read() == PARSE_ERROR_INVALID_VALUE);
+        CHECK(state.message_count(4, MonsterMessageType::SPEAK_ALL) == 0);
+        CHECK(state.message_count(undefined_id, MonsterMessageType::SPEAK_ALL) == 0);
+    }
+
+    const nlohmann::json defined = { { "id_list", { 4, 5 } }, { "message", { message } } };
+    REQUIRE(MessageReader(defined).read() == PARSE_ERROR_NONE);
+    CHECK(state.message_count(4, MonsterMessageType::SPEAK_ALL) == 1);
+    CHECK(state.message_count(5, MonsterMessageType::SPEAK_ALL) == 1);
 }
 
 TEST_CASE("MessageReader requires arrays for localized message lists")
