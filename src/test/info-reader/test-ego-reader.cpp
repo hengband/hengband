@@ -5,6 +5,7 @@
 #include "locale/character-encoding.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/tr-types.h"
+#include "test/info-reader/scoped-reader-state.h"
 #include "util/enum-converter.h"
 #include <array>
 #include <cstdint>
@@ -12,6 +13,7 @@
 #include <limits>
 #include <nlohmann/json.hpp>
 #include <utility>
+#include <vector>
 
 namespace {
 const std::string EGO_NAME_JA_UTF8 = "\xe8\xa9\xa6\xe9\xa8\x93\xe3\x81\xae";
@@ -22,11 +24,12 @@ public:
      * @brief 既存のエゴ定義とエラー位置を退避し、空の読込先で検証を始める
      */
     EgoStateGuard()
-        : saved_error_idx(error_idx)
     {
         this->saved_egos.swap(egos_info);
-        error_idx = -1;
     }
+
+    EgoStateGuard(const EgoStateGuard &) = delete;
+    EgoStateGuard &operator=(const EgoStateGuard &) = delete;
 
     /*!
      * @brief 検証中に公開された定義を破棄し、退避した定義とエラー位置を復元する
@@ -35,12 +38,11 @@ public:
     {
         egos_info.clear();
         egos_info.swap(this->saved_egos);
-        error_idx = this->saved_error_idx;
     }
 
 private:
+    test::ScopedReaderState reader_state;
     std::map<EgoType, EgoItemDefinition> saved_egos;
-    int saved_error_idx;
 };
 
 /*!
@@ -127,25 +129,7 @@ TEST_CASE("EgoReader rejects malformed records atomically")
     data["base_bonuses"]["to_hit"] = 32768;
     check_invalid(data);
     data = original;
-    data["activation"] = "UNKNOWN";
-    check_invalid(data);
-    data = original;
-    data["flags"] = { "UNKNOWN" };
-    check_invalid(data);
-    data = original;
-    data["flags"] = { 1 };
-    check_invalid(data);
-    data = original;
     data["maximum_bonuses"].erase("pval");
-    check_invalid(data);
-    data = original;
-    data["extra_flags"] = { 1 };
-    check_invalid(data);
-    data = original;
-    data["extra_flags"][0]["chance"] = 101;
-    check_invalid(data);
-    data = original;
-    data["extra_flags"][0]["flags"] = nlohmann::json::array();
     check_invalid(data);
 }
 
@@ -199,18 +183,13 @@ TEST_CASE("EgoReader rejects invalid percentages and preserves published records
         CHECK(published->xtra_flags.at(0).chance == 33);
         CHECK(error_idx == 4);
     };
-    for (const auto &chance : std::array<nlohmann::json, 7>{ { -1, 101, uint64_t{ 2147483648 }, std::numeric_limits<uint64_t>::max(), 33.0, false, nullptr } }) {
+    for (const auto &chance : std::array<nlohmann::json, 4>{ { -1, uint64_t{ 2147483648 }, std::numeric_limits<uint64_t>::max(), 33.0 } }) {
         auto extra = original["extra_flags"][0];
         extra["chance"] = chance;
         check_invalid(extra);
     }
     auto extra = original["extra_flags"][0];
     extra.erase("chance");
-    check_invalid(extra);
-    extra["numerator"] = 1;
-    extra["denominator"] = 3;
-    check_invalid(extra);
-    extra["chance"] = 33;
     check_invalid(extra);
 }
 
@@ -271,5 +250,103 @@ TEST_CASE("EgoReader checks every scalar and signed bonus boundary")
             const auto result = EgoReader(data).read();
             CHECK((result == PARSE_ERROR_NONE) == (value >= low && value <= high));
         }
+    }
+}
+
+/*!
+ * @brief 内部ヘルパーの各エラーと優先順位を維持し、既存定義と読込位置を保持する
+ */
+TEST_CASE("EgoReader propagates helper errors without publishing partial records")
+{
+    EgoStateGuard guard;
+    const auto original = make_ego();
+    REQUIRE(EgoReader(original).read() == PARSE_ERROR_NONE);
+    const auto *published = &egos_info.at(i2enum<EgoType>(4));
+    const auto check_invalid = [&](const nlohmann::json &data, parse_error_type expected) {
+        CHECK(EgoReader(data).read() == expected);
+        REQUIRE(egos_info.size() == 1);
+        CHECK_FALSE(egos_info.contains(i2enum<EgoType>(5)));
+        CHECK(&egos_info.at(i2enum<EgoType>(4)) == published);
+        CHECK(published->cost == 12345);
+        CHECK(published->act_idx == RandomArtActType::BA_FIRE_4);
+        CHECK(published->flags.has(TR_STR));
+        CHECK(published->gen_flags.has(ItemGenerationTraitType::XTRA_H_RES));
+        REQUIRE(published->xtra_flags.size() == 1);
+        CHECK(published->xtra_flags[0].chance == 33);
+        CHECK(error_idx == 4);
+    };
+    struct InvalidField {
+        const char *path;
+        nlohmann::json value;
+        parse_error_type error;
+    };
+    const std::vector<InvalidField> invalid_fields = {
+        { "/activation", 1, PARSE_ERROR_INVALID_TYPE },
+        { "/activation", "UNKNOWN", PARSE_ERROR_INVALID_FLAG },
+        { "/activation", "999999999999999999999999999999", PARSE_ERROR_INVALID_FLAG },
+        { "/activation", "0", PARSE_ERROR_INVALID_FLAG },
+        { "/flags", 1, PARSE_ERROR_INVALID_TYPE },
+        { "/flags", nlohmann::json::array({ "STR", 1 }), PARSE_ERROR_INVALID_TYPE },
+        { "/flags", nlohmann::json::array({ "STR", "UNKNOWN" }), PARSE_ERROR_INVALID_FLAG },
+        { "/extra_flags", nlohmann::json::object(), PARSE_ERROR_INVALID_TYPE },
+        { "/extra_flags/0", 1, PARSE_ERROR_INVALID_TYPE },
+        { "/extra_flags/1", 1, PARSE_ERROR_INVALID_TYPE },
+        { "/extra_flags/0/numerator", 1, PARSE_ERROR_INVALID_VALUE },
+        { "/extra_flags/0/denominator", 3, PARSE_ERROR_INVALID_VALUE },
+        { "/extra_flags/0", { { "numerator", 1 }, { "denominator", 3 }, { "flags", { "RES_FIRE" } } }, PARSE_ERROR_INVALID_VALUE },
+        { "/extra_flags/0/chance", nullptr, PARSE_ERROR_TOO_FEW_ARGUMENTS },
+        { "/extra_flags/0/chance", false, PARSE_ERROR_INVALID_TYPE },
+        { "/extra_flags/0/chance", 101, PARSE_ERROR_INVALID_FLAG },
+        { "/extra_flags/0/flags", nullptr, PARSE_ERROR_TOO_FEW_ARGUMENTS },
+        { "/extra_flags/0/flags", nlohmann::json::object(), PARSE_ERROR_INVALID_TYPE },
+        { "/extra_flags/0/flags", nlohmann::json::array(), PARSE_ERROR_TOO_FEW_ARGUMENTS },
+        { "/extra_flags/0/flags", nlohmann::json::array({ "RES_FIRE", 1 }), PARSE_ERROR_INVALID_TYPE },
+        { "/extra_flags/0/flags", nlohmann::json::array({ "RES_FIRE", "UNKNOWN" }), PARSE_ERROR_INVALID_FLAG },
+    };
+    for (const auto &invalid : invalid_fields) {
+        CAPTURE(invalid.path);
+        CAPTURE(invalid.value.dump());
+        auto data = original;
+        data["id"] = 5;
+        data[nlohmann::json::json_pointer(invalid.path)] = invalid.value;
+        check_invalid(data, invalid.error);
+    }
+
+    auto data = original;
+    data["id"] = 5;
+    data["activation"] = "UNKNOWN";
+    data["flags"] = 1;
+    data["extra_flags"][0]["numerator"] = 1;
+    check_invalid(data, PARSE_ERROR_INVALID_FLAG);
+    data["activation"] = "BA_FIRE_4";
+    check_invalid(data, PARSE_ERROR_INVALID_TYPE);
+    data["flags"] = original["flags"];
+    check_invalid(data, PARSE_ERROR_INVALID_VALUE);
+}
+
+/*!
+ * @brief 任意の発動・フラグ・追加能力を省略またはnullにしたときの正常値を維持する
+ */
+TEST_CASE("EgoReader accepts absent optional activation and flag groups")
+{
+    for (const auto use_null : { false, true }) {
+        CAPTURE(use_null);
+        EgoStateGuard guard;
+        auto data = make_ego();
+        for (const auto *key : { "activation", "flags", "extra_flags" }) {
+            if (use_null) {
+                data[key] = nullptr;
+            } else {
+                data.erase(key);
+            }
+        }
+        REQUIRE(EgoReader(data).read() == PARSE_ERROR_NONE);
+        REQUIRE(egos_info.size() == 1);
+        const auto &ego = egos_info.at(i2enum<EgoType>(4));
+        CHECK(ego.act_idx == RandomArtActType::NONE);
+        CHECK_FALSE(ego.flags.has(TR_STR));
+        CHECK_FALSE(ego.gen_flags.has(ItemGenerationTraitType::XTRA_H_RES));
+        CHECK(ego.xtra_flags.empty());
+        CHECK(error_idx == 4);
     }
 }
