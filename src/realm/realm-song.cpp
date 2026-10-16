@@ -58,6 +58,7 @@ constexpr int32_t DETECTION_SONG_STAGE_MONSTERS = 3; //!< モンスター
 constexpr int32_t DETECTION_SONG_STAGE_OBJECTS = 6; //!< 財宝・アイテム
 constexpr int32_t DETECTION_SONG_STAGE_MAP = 11; //!< 周辺の地形
 constexpr int32_t DETECTION_SONG_STAGE_WIZ_LITE = 19; //!< フロア全体
+constexpr auto DETECTION_SONG_RADIUS = DETECT_RAD_DEFAULT; //!< 感知の歌の範囲
 }
 
 /*!
@@ -99,6 +100,27 @@ static bool can_advance_detection_song(int32_t count, PLAYER_LEVEL plev)
     }
 
     return false;
+}
+
+/*!
+ * @brief 感知の歌で感知したモンスターの印を、次の歌の感知まで保つ
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @details
+ * 感知したモンスターの印 (MARK) は行動ごとに外れる。歌の感知は歌の MP の消費と同じ周期で行うので、
+ * その間に印が外れないよう、行動ごとに範囲内のモンスターの印を保つ。新しくは感知しない。
+ */
+void keep_detection_song_marks(PlayerType *player_ptr)
+{
+    if (!music_singing(player_ptr, MUSIC_DETECT) || player_ptr->anti_magic) {
+        return;
+    }
+
+    // モンスターの感知が始まった回は歌の感知で行うので、その後から保つ
+    if (get_singing_count(player_ptr) <= DETECTION_SONG_STAGE_MONSTERS) {
+        return;
+    }
+
+    keep_detected_monsters(player_ptr, DETECTION_SONG_RADIUS);
 }
 
 /*!
@@ -322,7 +344,7 @@ tl::optional<std::string> do_music_spell(PlayerType *player_ptr, SPELL_IDX spell
         }
 
         {
-            POSITION rad = DETECT_RAD_DEFAULT;
+            constexpr auto rad = DETECTION_SONG_RADIUS;
 
             if (info) {
                 return info_radius(rad);

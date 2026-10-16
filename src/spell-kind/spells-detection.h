@@ -27,3 +27,4 @@ bool detect_monsters_string(PlayerType *player_ptr, POSITION range, concptr, Det
 bool detect_monsters_nonliving(PlayerType *player_ptr, POSITION range);
 bool detect_monsters_mind(PlayerType *player_ptr, POSITION range);
 bool detect_all(PlayerType *player_ptr, POSITION range);
+void keep_detected_monsters(PlayerType *player_ptr, POSITION range);

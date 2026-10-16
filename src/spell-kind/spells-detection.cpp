@@ -675,3 +675,33 @@ bool detect_all(PlayerType *player_ptr, POSITION range)
     }
     return detect;
 }
+
+/*!
+ * @brief 感知の印が付いている範囲内のモンスターの印を、次の行動まで保つ
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param range 効果範囲
+ * @details
+ * 感知の印 (MARK) は、SHOW が付いていなければ行動ごとに外れる。感知し続ける効果で、感知し直すまでの間に
+ * 印が外れないよう SHOW を付け直す。新しくは感知しない。
+ */
+void keep_detected_monsters(PlayerType *player_ptr, POSITION range)
+{
+    auto &floor = *player_ptr->current_floor_ptr;
+    if (floor.get_dungeon_definition().flags.has(DungeonFeatureType::DARKNESS)) {
+        range /= 3;
+    }
+
+    const auto p_pos = player_ptr->get_position();
+    for (MONSTER_IDX i = 1; i < floor.m_max; i++) {
+        auto &monster = floor.m_list[i];
+        if (!monster.is_valid() || monster.mflag2.has_not(MonsterConstantFlagType::MARK)) {
+            continue;
+        }
+
+        if (Grid::calc_distance(p_pos, monster.get_position()) > range) {
+            continue;
+        }
+
+        monster.mflag2.set(MonsterConstantFlagType::SHOW);
+    }
+}
