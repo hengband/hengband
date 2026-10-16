@@ -329,6 +329,8 @@ void process_player(PlayerType *player_ptr)
                 rfu.set_flag(MainWindowRedrawingFlag::MAP);
             }
 
+            // 感知の印は下で行動ごとに外すので、途切れないよう外す前に感知し直す
+            check_emission(player_ptr);
             for (MONSTER_IDX m_idx = 1; m_idx < player_ptr->current_floor_ptr->m_max; m_idx++) {
                 auto &monster = player_ptr->current_floor_ptr->m_list[m_idx];
                 if (!monster.is_valid()) {
@@ -433,10 +435,6 @@ void process_upkeep_with_speed(PlayerType *player_ptr)
     while (player_ptr->enchant_energy_need <= 0) {
         if (!load) {
             check_music(player_ptr);
-        }
-
-        if (!load) {
-            check_emission(player_ptr);
         }
 
         if (!load) {
