@@ -140,10 +140,19 @@ bool mundane_spell(PlayerType *player_ptr, bool only_equip)
     }
 
     msg_print(_("まばゆい閃光が走った！", "There is a bright flash of light!"));
+    // 束の数・位置・印・銘は、ベースアイテムから作り直した後も引き継ぐ
+    const auto number = item->number;
+    const auto pval = item->pval;
     auto pos = item->get_position();
     auto marked = item->marked;
     auto inscription = std::move(item->inscription);
     item->generate(item->bi_id);
+    item->number = number;
+    // ロッドの束の pval は 1 本分の充填時間 × 個数なので、個数と合わせて引き継ぐ
+    if (item->bi_key.tval() == ItemKindType::ROD) {
+        item->pval = pval;
+    }
+
     item->set_position(pos);
     item->marked = marked;
     item->inscription = std::move(inscription);
