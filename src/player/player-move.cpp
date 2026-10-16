@@ -6,6 +6,7 @@
  */
 
 #include "player/player-move.h"
+#include "action/travel-execution.h"
 #include "core/disturbance.h"
 #include "core/special-internal-keys.h"
 #include "core/stuff-handler.h"
@@ -236,8 +237,8 @@ bool move_player_effect(PlayerType *player_ptr, POSITION ny, POSITION nx, BIT_FL
     }
 
     // 自動拾い/自動破壊により床上のアイテムリストが変化した可能性があるので表示を更新。
-    // 走っている間は描き直すと重いので、止まったとき (stop_running()) に要求する
-    if (!player_ptr->running) {
+    // 走っている間やトラベル中は描き直すと重いので、止まったとき (stop_running()・Travel::stop()) に要求する
+    if (!player_ptr->running && !Travel::get_instance().is_ongoing()) {
         rfu.request_floor_item_lists_redrawing();
         window_stuff(player_ptr);
     }
