@@ -330,6 +330,7 @@ bool pulish_shield(PlayerType *player_ptr)
         rfu.request_inventory_arrangement();
         rfu.request_item_lists_redrawing();
         chg_virtue(player_ptr, Virtue::ENCHANT, 2);
+        calc_android_exp(player_ptr);
         return true;
     }
 
