@@ -425,11 +425,7 @@ void do_cmd_mind(PlayerType *player_ptr)
     process_hard_concentration(player_ptr, cm_ptr);
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.set_flag(MainWindowRedrawingFlag::MP);
-    static constexpr auto flags = {
-        SubWindowRedrawingFlag::PLAYER,
-        SubWindowRedrawingFlag::SPELL,
-    };
-    rfu.set_flags(flags);
+    rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
 }
 
 static MindKindType decide_use_mind_browse(PlayerType *player_ptr)

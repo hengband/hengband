@@ -104,7 +104,6 @@ void inven_item_optimize(PlayerType *player_ptr, INVENTORY_IDX i_idx)
             StatusRecalculatingFlag::MP,
         };
         rfu.set_flags(flags_srf);
-        rfu.set_flag(SubWindowRedrawingFlag::SPELL);
         return;
     }
 
@@ -115,6 +114,7 @@ void inven_item_optimize(PlayerType *player_ptr, INVENTORY_IDX i_idx)
     std::rotate(first, first + 1, last + 1);
     (*last)->wipe();
 
+    // 装備の側と違い、ここでは能力の再計算を要求しないので、持ち物の並びと (魔法書が無くなったときの) 呪文の一覧も要求する
     static constexpr auto flags = {
         SubWindowRedrawingFlag::INVENTORY,
         SubWindowRedrawingFlag::SPELL,

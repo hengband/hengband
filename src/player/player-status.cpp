@@ -667,7 +667,6 @@ static void update_num_of_spells(PlayerType *player_ptr)
     player_ptr->old_spells = player_ptr->new_spells;
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.set_flag(MainWindowRedrawingFlag::STUDY);
-    rfu.set_flag(SubWindowRedrawingFlag::ITEM_KNOWLEDGE);
 }
 
 /*!
@@ -899,11 +898,7 @@ static void update_max_mana(PlayerType *player_ptr)
         player_ptr->msp = msp;
         auto &rfu = RedrawingFlagsUpdater::get_instance();
         rfu.set_flag(MainWindowRedrawingFlag::MP);
-        static constexpr auto flags = {
-            SubWindowRedrawingFlag::PLAYER,
-            SubWindowRedrawingFlag::SPELL,
-        };
-        rfu.set_flags(flags);
+        rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
     }
 
     if (AngbandWorld::get_instance().character_xtra) {
@@ -2832,11 +2827,7 @@ void check_experience(PlayerType *player_ptr)
             MainWindowRedrawingFlag::EXP,
         };
         rfu.set_flags(flags_mwrf_levelup);
-        const auto &flags_swrf_levelup = {
-            SubWindowRedrawingFlag::PLAYER,
-            SubWindowRedrawingFlag::SPELL,
-        };
-        rfu.set_flags(flags_swrf_levelup);
+        rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
         player_ptr->level_up_message = true;
         handle_stuff(player_ptr);
 
@@ -2901,11 +2892,7 @@ void check_experience(PlayerType *player_ptr)
             MainWindowRedrawingFlag::TITLE,
         };
         rfu.set_flags(flags_mwrf);
-        static constexpr auto flags_swrf = {
-            SubWindowRedrawingFlag::PLAYER,
-            SubWindowRedrawingFlag::SPELL,
-        };
-        rfu.set_flags(flags_swrf);
+        rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
         handle_stuff(player_ptr);
     }
 

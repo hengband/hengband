@@ -646,7 +646,6 @@ static void wiz_reroll_item(PlayerType *player_ptr, ItemEntity *o_ptr)
     rfu.set_flag(StatusRecalculatingFlag::BONUS);
     rfu.request_inventory_arrangement();
     rfu.request_item_lists_redrawing();
-    rfu.set_flag(SubWindowRedrawingFlag::SPELL);
 }
 
 /*!
@@ -773,7 +772,6 @@ void wiz_modify_item(PlayerType *player_ptr)
         rfu.set_flag(StatusRecalculatingFlag::BONUS);
         rfu.request_inventory_arrangement();
         rfu.request_item_lists_redrawing();
-        rfu.set_flag(SubWindowRedrawingFlag::SPELL);
     } else {
         msg_print("Changes ignored.");
     }
