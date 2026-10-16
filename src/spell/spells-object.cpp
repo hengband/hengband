@@ -234,12 +234,7 @@ bool curse_armor(PlayerType *player_ptr)
         StatusRecalculatingFlag::MP,
     };
     rfu.set_flags(flags_srf);
-    static constexpr auto flags_swrf = {
-        SubWindowRedrawingFlag::INVENTORY,
-        SubWindowRedrawingFlag::EQUIPMENT,
-        SubWindowRedrawingFlag::PLAYER,
-    };
-    rfu.set_flags(flags_swrf);
+    rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
     return true;
 }
 
@@ -288,12 +283,7 @@ bool curse_weapon_object(PlayerType *player_ptr, bool force, ItemEntity &item)
         StatusRecalculatingFlag::MP,
     };
     rfu.set_flags(flags_srf);
-    static constexpr auto flags_swrf = {
-        SubWindowRedrawingFlag::INVENTORY,
-        SubWindowRedrawingFlag::EQUIPMENT,
-        SubWindowRedrawingFlag::PLAYER,
-    };
-    rfu.set_flags(flags_swrf);
+    rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
     return true;
 }
 

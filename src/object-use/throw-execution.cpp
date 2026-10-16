@@ -306,7 +306,6 @@ void ObjectThrowEntity::process_boomerang_back()
             StatusRecalculatingFlag::MP,
         };
         rfu.set_flags(flags);
-        rfu.set_flag(SubWindowRedrawingFlag::EQUIPMENT);
         this->do_drop = false;
         return;
     }
