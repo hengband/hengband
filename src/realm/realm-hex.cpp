@@ -18,6 +18,7 @@
 #include "floor/geometry.h"
 #include "inventory/inventory-slot-types.h"
 #include "io/input-key-requester.h"
+#include "object-enchant/item-feeling.h"
 #include "object-enchant/object-curse.h"
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trc-types.h"
@@ -585,17 +586,24 @@ tl::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type sp
                 player_ptr->csp = player_ptr->msp;
             }
 
+            auto is_drained = false;
             if (item->curse_flags.has(CurseTraitType::PERMA_CURSE)) {
                 /* Nothing */
             } else if (item->curse_flags.has(CurseTraitType::HEAVY_CURSE)) {
                 if (one_in_(7)) {
                     msg_print(_("呪いを全て吸い取った。", "A heavy curse vanished."));
-                    item->curse_flags.clear();
-                    RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
+                    is_drained = true;
                 }
             } else if (item->curse_flags.has(CurseTraitType::CURSED) && one_in_(3)) {
                 msg_print(_("呪いを全て吸い取った。", "A curse vanished."));
+                is_drained = true;
+            }
+
+            // 解呪と同じく、呪われているという感触も消す
+            if (is_drained) {
                 item->curse_flags.clear();
+                item->set_identification_flag(IdentificationFlag::SENSE);
+                item->feeling = FEEL_NONE;
                 RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
             }
 
