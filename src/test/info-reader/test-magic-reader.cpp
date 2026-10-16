@@ -213,3 +213,54 @@ TEST_CASE("MagicReader numeric fixture restores existing spell definitions")
     CHECK(spells.get_spell_info(RealmType::SORCERY, 7).description == "Existing description");
     CHECK(spells.get_spell_id(RealmType::SORCERY, "existing-tag") == 7);
 }
+
+/*!
+ * @brief 内部解析の各エラーを公開APIへ伝播し、後続解析で変更した既存定義を保持する
+ */
+TEST_CASE("MagicReader propagates helper errors without publishing partial data")
+{
+    const MagicNumericState state;
+    auto data = make_magic_numeric_data(SpellInfoList::get_instance());
+    REQUIRE(MagicReader(data).read() == PARSE_ERROR_NONE);
+
+    struct InvalidField {
+        const char *path;
+        nlohmann::json value;
+        parse_error_type error;
+    };
+    const std::vector<InvalidField> invalid_fields = {
+        { "/name", nullptr, PARSE_ERROR_TOO_FEW_ARGUMENTS },
+        { "/name", "UNKNOWN_CLASS", PARSE_ERROR_OUT_OF_BOUNDS },
+        { "/spell_type", nullptr, PARSE_ERROR_TOO_FEW_ARGUMENTS },
+        { "/spell_type", "UNKNOWN_BOOK", PARSE_ERROR_INVALID_FLAG },
+        { "/magic_status", nullptr, PARSE_ERROR_TOO_FEW_ARGUMENTS },
+        { "/magic_status", "UNKNOWN_STAT", PARSE_ERROR_INVALID_FLAG },
+        { "/realms", nullptr, PARSE_ERROR_TOO_FEW_ARGUMENTS },
+        { "/realms", nlohmann::json::object(), PARSE_ERROR_INVALID_TYPE },
+        { "/realms/0", 1, PARSE_ERROR_TOO_FEW_ARGUMENTS },
+        { "/realms/0/name", nullptr, PARSE_ERROR_TOO_FEW_ARGUMENTS },
+        { "/realms/0/name", "UNKNOWN_REALM", PARSE_ERROR_INVALID_FLAG },
+        { "/realms/0/spells_info", nullptr, PARSE_ERROR_TOO_FEW_ARGUMENTS },
+        { "/realms/0/spells_info", nlohmann::json::object(), PARSE_ERROR_INVALID_TYPE },
+        { "/realms/0/spells_info/1", 1, PARSE_ERROR_TOO_FEW_ARGUMENTS },
+        { "/realms/0/spells_info/1/spell_tag", nullptr, PARSE_ERROR_TOO_FEW_ARGUMENTS },
+        { "/realms/0/spells_info/1/spell_tag", "unknown-tag", PARSE_ERROR_INVALID_FLAG },
+        { "/realms/0/spells_info/1/learn_level", 100, PARSE_ERROR_INVALID_FLAG },
+    };
+    for (const auto &invalid : invalid_fields) {
+        CAPTURE(invalid.path);
+        CAPTURE(invalid.value.dump());
+        auto candidate = data;
+        candidate["spell_type"] = "LIFE";
+        candidate["first_spell_level"] = 5;
+        candidate["realms"][0]["spells_info"][0]["mana_cost"] = 100;
+        candidate[nlohmann::json::json_pointer(invalid.path)] = invalid.value;
+        error_idx = -1;
+        CHECK(MagicReader(candidate).read() == invalid.error);
+        CHECK(error_idx == (std::string_view(invalid.path) == "/name" ? -1 : 0));
+        CHECK(class_magics_info[0].spell_book == ItemKindType::SORCERY_BOOK);
+        CHECK(class_magics_info[0].spell_first == 1);
+        CHECK(class_magics_info[0].info[enum2i(RealmType::LIFE)][0].smana == 2);
+        CHECK(class_magics_info[0].info[enum2i(RealmType::LIFE)][1].slevel == 3);
+    }
+}

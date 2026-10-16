@@ -89,26 +89,27 @@ int MagicReader::read() const
         return PARSE_ERROR_INVALID_TYPE;
     }
 
-    int class_id;
-    if (auto err = this->set_class_id(class_id)) {
+    const auto class_id_result = this->read_class_id();
+    if (!class_id_result) {
         msg_format(_("職業ID読込失敗。ID: '%d'。", "Failed to load class id. ID: '%d'."), error_idx);
-        return err;
+        return class_id_result.error();
     }
 
+    const auto class_id = *class_id_result;
     if (class_id < error_idx) {
         return PARSE_ERROR_NON_SEQUENTIAL_RECORDS;
     }
     error_idx = class_id;
-    // Keep the previous class definition intact until the entire record is valid.
+    // レコード全体が有効と確定するまで、既存の職業定義を維持する。
     player_magic magics_info = class_magics_info[class_id];
 
-    if (auto err = this->set_spell_type(magics_info)) {
+    if (const auto result = this->set_spell_type(magics_info); !result) {
         msg_format(_("呪文タイプ読込失敗。ID: '%d'。", "Failed to load spell type. ID: '%d'."), error_idx);
-        return err;
+        return result.error();
     }
-    if (auto err = this->set_magic_status(magics_info)) {
+    if (const auto result = this->set_magic_status(magics_info); !result) {
         msg_format(_("呪文行使に使用する能力値読込失敗。ID: '%d'。", "Failed to load magic status. ID: '%d'."), error_idx);
-        return err;
+        return result.error();
     }
     if (auto err = info_set_bool(get_json_value(this->class_data, "has_glove_mp_penalty"), magics_info.has_glove_mp_penalty, true)) {
         msg_format(_("籠手によるMPペナルティ読込失敗。ID: '%d'。", "Failed to load glove_mp_penalty. ID: '%d'."), error_idx);
@@ -130,9 +131,9 @@ int MagicReader::read() const
         msg_format(_("MP重量制限値読込失敗。ID: '%d'。", "Failed to load spell-weight value. ID: '%d'."), error_idx);
         return err;
     }
-    if (auto err = this->set_realm_data(magics_info)) {
+    if (const auto result = this->set_realm_data(magics_info); !result) {
         msg_format(_("呪文データ読込失敗。ID: '%d'。", "Failed to load spell data. ID: '%d'."), error_idx);
-        return err;
+        return result.error();
     }
 
     class_magics_info[class_id] = std::move(magics_info);
@@ -141,62 +142,60 @@ int MagicReader::read() const
 
 /*!
  * @brief JSON Objectから職業IDを取得する
- * @param class_id 職業ID
- * @return エラーコード
+ * @return 職業ID、失敗時はエラーコード
  */
-int MagicReader::set_class_id(int &class_id) const
+tl::expected<int, parse_error_type> MagicReader::read_class_id() const
 {
     const auto &classname_obj = get_json_value(this->class_data, "name");
     if (!classname_obj.is_string()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+        return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
     }
 
     const auto player_class = class_list.find(classname_obj.get<std::string>());
     if (player_class == class_list.end()) {
-        return PARSE_ERROR_OUT_OF_BOUNDS;
+        return tl::make_unexpected(PARSE_ERROR_OUT_OF_BOUNDS);
     }
-    class_id = enum2i(player_class->second);
-    return PARSE_ERROR_NONE;
+    return enum2i(player_class->second);
 }
 
 /*!
  * @brief JSON Objectから職業で使用する呪文タイプを取得する
  * @param magics_info 保存先の魔法情報構造体
- * @return エラーコード
+ * @return 成功時は空の値、失敗時はエラーコード
  */
-int MagicReader::set_spell_type(player_magic &magics_info) const
+tl::expected<void, parse_error_type> MagicReader::set_spell_type(player_magic &magics_info) const
 {
     const auto &spell_book = get_json_value(this->class_data, "spell_type");
     if (!spell_book.is_string()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+        return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
     }
 
     const auto tval = spelltype_to_tval.find(spell_book.get<std::string>());
     if (tval == spelltype_to_tval.end()) {
-        return PARSE_ERROR_INVALID_FLAG;
+        return tl::make_unexpected(PARSE_ERROR_INVALID_FLAG);
     }
     magics_info.spell_book = tval->second;
-    return PARSE_ERROR_NONE;
+    return {};
 }
 
 /*!
  * @brief JSON Objectから職業で呪文行使に使用する能力値を取得する
  * @param magics_info 保存先の魔法情報構造体
- * @return エラーコード
+ * @return 成功時は空の値、失敗時はエラーコード
  */
-int MagicReader::set_magic_status(player_magic &magics_info) const
+tl::expected<void, parse_error_type> MagicReader::set_magic_status(player_magic &magics_info) const
 {
     const auto &magic_status = get_json_value(this->class_data, "magic_status");
     if (!magic_status.is_string()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+        return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
     }
 
     const auto status = name_to_stat.find(magic_status.get<std::string>());
     if (status == name_to_stat.end()) {
-        return PARSE_ERROR_INVALID_FLAG;
+        return tl::make_unexpected(PARSE_ERROR_INVALID_FLAG);
     }
     magics_info.spell_stat = status->second;
-    return PARSE_ERROR_NONE;
+    return {};
 }
 
 /*!
@@ -204,82 +203,81 @@ int MagicReader::set_magic_status(player_magic &magics_info) const
  * @param spell_data 各呪文情報の格納されたJSON Object
  * @param magics_info 保存先の魔法情報構造体
  * @param realm 呪文の領域
- * @return エラーコード
+ * @return 成功時は空の値、失敗時はエラーコード
  */
-int MagicReader::set_spell_data(const nlohmann::json &spell_data, player_magic &magics_info, RealmType realm) const
+tl::expected<void, parse_error_type> MagicReader::set_spell_data(const nlohmann::json &spell_data, player_magic &magics_info, RealmType realm) const
 {
     const auto &spell_tag_obj = get_json_value(spell_data, "spell_tag");
     if (!spell_tag_obj.is_string()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+        return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
     }
     const auto spell_id = SpellInfoList::get_instance().get_spell_id(realm, spell_tag_obj.get<std::string>());
     if (!spell_id) {
-        return PARSE_ERROR_INVALID_FLAG;
+        return tl::make_unexpected(PARSE_ERROR_INVALID_FLAG);
     }
     auto &info = magics_info.info[enum2i(realm)][*spell_id];
 
-    if (auto err = info_set_integer(get_json_value(spell_data, "learn_level"), info.slevel, true, Range(0, 99))) {
+    if (const auto err = info_set_integer(get_json_value(spell_data, "learn_level"), info.slevel, true, Range(0, 99)); err != PARSE_ERROR_NONE) {
         msg_format(_("呪文学習レベル読込失敗。ID: '%d'。", "Failed to load spell learn_level. ID: '%d'."), error_idx);
-        return err;
+        return tl::make_unexpected(static_cast<parse_error_type>(err));
     }
-    if (auto err = info_set_integer(get_json_value(spell_data, "mana_cost"), info.smana, true, Range(0, MAX_CLASS_MAGIC_VALUE))) {
+    if (const auto err = info_set_integer(get_json_value(spell_data, "mana_cost"), info.smana, true, Range(0, MAX_CLASS_MAGIC_VALUE)); err != PARSE_ERROR_NONE) {
         msg_format(_("呪文コスト読込失敗。ID: '%d'。", "Failed to load spell mana_cost. ID: '%d'."), error_idx);
-        return err;
+        return tl::make_unexpected(static_cast<parse_error_type>(err));
     }
-    if (auto err = info_set_integer(get_json_value(spell_data, "difficulty"), info.sfail, true, Range(0, 100))) {
+    if (const auto err = info_set_integer(get_json_value(spell_data, "difficulty"), info.sfail, true, Range(0, 100)); err != PARSE_ERROR_NONE) {
         msg_format(_("呪文難易度読込失敗。ID: '%d'。", "Failed to load spell difficulty. ID: '%d'."), error_idx);
-        return err;
+        return tl::make_unexpected(static_cast<parse_error_type>(err));
     }
-    if (auto err = info_set_integer(get_json_value(spell_data, "first_cast_exp_rate"), info.sexp, true, Range(0, MAX_CLASS_MAGIC_VALUE))) {
+    if (const auto err = info_set_integer(get_json_value(spell_data, "first_cast_exp_rate"), info.sexp, true, Range(0, MAX_CLASS_MAGIC_VALUE)); err != PARSE_ERROR_NONE) {
         msg_format(_("呪文詠唱ボーナスEXP読込失敗。ID: '%d'。", "Failed to load spell first_cast_exp_rate. ID: '%d'."), error_idx);
-        return err;
+        return tl::make_unexpected(static_cast<parse_error_type>(err));
     }
 
-    return PARSE_ERROR_NONE;
+    return {};
 }
 
 /*!
  * @brief JSON Objectから職業毎に定義された各呪文の詳細を取得する
  * @param magics_info 保存先の魔法情報構造体
- * @return エラーコード
+ * @return 成功時は空の値、失敗時はエラーコード
  */
-int MagicReader::set_realm_data(player_magic &magics_info) const
+tl::expected<void, parse_error_type> MagicReader::set_realm_data(player_magic &magics_info) const
 {
     const auto &realms_data = get_json_value(this->class_data, "realms");
     if (realms_data.is_null()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+        return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
     }
     if (!realms_data.is_array()) {
-        return PARSE_ERROR_INVALID_TYPE;
+        return tl::make_unexpected(PARSE_ERROR_INVALID_TYPE);
     }
 
     for (const auto &realm : realms_data) {
         const auto &realm_name_obj = get_json_value(realm, "name");
         if (!realm_name_obj.is_string()) {
-            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+            return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
         }
 
         const auto realm_name = realms_list.find(realm_name_obj.get<std::string>());
         if (realm_name == realms_list.end()) {
-            return PARSE_ERROR_INVALID_FLAG;
+            return tl::make_unexpected(PARSE_ERROR_INVALID_FLAG);
         }
 
         const auto realm_id = realm_name->second;
         const auto &spells_info_obj = get_json_value(realm, "spells_info");
         if (spells_info_obj.is_null()) {
-            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+            return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
         }
         if (!spells_info_obj.is_array()) {
-            return PARSE_ERROR_INVALID_TYPE;
+            return tl::make_unexpected(PARSE_ERROR_INVALID_TYPE);
         }
 
         for (const auto &spell : spells_info_obj) {
-            if (auto err = this->set_spell_data(spell, magics_info, realm_id)) {
-                msg_format(_("呪文データ読込失敗。ID: '%d'。", "Failed to load spell data. ID: '%d'."), error_idx);
-                return err;
+            if (const auto result = this->set_spell_data(spell, magics_info, realm_id); !result) {
+                return tl::make_unexpected(result.error());
             }
         }
     }
 
-    return PARSE_ERROR_NONE;
+    return {};
 }

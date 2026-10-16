@@ -1,6 +1,8 @@
 #pragma once
 
+#include "info-reader/parse-error-types.h"
 #include <nlohmann/json_fwd.hpp>
+#include <tl/expected.hpp>
 
 enum class RealmType;
 struct player_magic;
@@ -17,11 +19,11 @@ public:
     int read() const;
 
 private:
-    int set_class_id(int &class_id) const;
-    int set_spell_type(player_magic &magics_info) const;
-    int set_magic_status(player_magic &magics_info) const;
-    int set_spell_data(const nlohmann::json &spell_data, player_magic &magics_info, RealmType realm) const;
-    int set_realm_data(player_magic &magics_info) const;
+    tl::expected<int, parse_error_type> read_class_id() const;
+    tl::expected<void, parse_error_type> set_spell_type(player_magic &magics_info) const;
+    tl::expected<void, parse_error_type> set_magic_status(player_magic &magics_info) const;
+    tl::expected<void, parse_error_type> set_spell_data(const nlohmann::json &spell_data, player_magic &magics_info, RealmType realm) const;
+    tl::expected<void, parse_error_type> set_realm_data(player_magic &magics_info) const;
 
     const nlohmann::json &class_data;
 };
