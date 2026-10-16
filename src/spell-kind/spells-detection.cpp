@@ -18,22 +18,32 @@
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 
+namespace {
+/*!
+ * @brief 地形の感知の結果
+ */
+struct FeatDetectionResult {
+    bool detected = false; //!< 対象の地形が 1 つでもあったか
+    bool has_disclosed = false; //!< ほかの地形に見せかけていたものを暴いたか
+};
+}
+
 /*!
  * @brief プレイヤー周辺の地形を感知する
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param range 効果範囲
  * @param flag 特定地形ID
  * @param known 地形から危険フラグを外すならTRUE
- * @return 効力があった場合TRUEを返す
+ * @return 感知の結果
  */
-static bool detect_feat_flag(PlayerType *player_ptr, POSITION range, TerrainCharacteristics flag, bool known)
+static FeatDetectionResult detect_feat_flag(PlayerType *player_ptr, POSITION range, TerrainCharacteristics flag, bool known)
 {
     auto &floor = *player_ptr->current_floor_ptr;
     if (floor.get_dungeon_definition().flags.has(DungeonFeatureType::DARKNESS)) {
         range /= 3;
     }
 
-    auto detect = false;
+    FeatDetectionResult result;
     for (const auto &pos : floor.get_area(FloorBoundary::OUTER_WALL_EXCLUSIVE)) {
         auto dist = Grid::calc_distance(player_ptr->get_position(), pos);
         if (dist > range) {
@@ -55,14 +65,18 @@ static bool detect_feat_flag(PlayerType *player_ptr, POSITION range, TerrainChar
         }
 
         if (grid.has(flag)) {
+            if (grid.is_hidden()) {
+                result.has_disclosed = true;
+            }
+
             disclose_grid(player_ptr, pos);
             grid.info |= (CAVE_MARK);
             lite_spot(player_ptr, pos);
-            detect = true;
+            result.detected = true;
         }
     }
 
-    return detect;
+    return result;
 }
 
 /*!
@@ -70,13 +84,15 @@ static bool detect_feat_flag(PlayerType *player_ptr, POSITION range, TerrainChar
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param range 効果範囲
  * @param known 感知外範囲を超える警告フラグを立てる場合TRUEを返す
+ * @param notice メッセージを出す条件
  * @return 効力があった場合TRUEを返す
  * @details
  * 吟遊詩人による感知についてはFALSEを返す
  */
-bool detect_traps(PlayerType *player_ptr, POSITION range, bool known)
+bool detect_traps(PlayerType *player_ptr, POSITION range, bool known, DetectionNotice notice)
 {
-    bool detect = detect_feat_flag(player_ptr, range, TerrainCharacteristics::TRAP, known);
+    const auto result = detect_feat_flag(player_ptr, range, TerrainCharacteristics::TRAP, known);
+    auto detect = result.detected;
     if (!known && detect) {
         detect_feat_flag(player_ptr, range, TerrainCharacteristics::TRAP, true);
     }
@@ -89,7 +105,7 @@ bool detect_traps(PlayerType *player_ptr, POSITION range, bool known)
         detect = false;
     }
 
-    if (detect) {
+    if (detect && ((notice == DetectionNotice::ALWAYS) || result.has_disclosed)) {
         msg_print(_("トラップの存在を感じとった！", "You sense the presence of traps!"));
     }
 
@@ -104,7 +120,7 @@ bool detect_traps(PlayerType *player_ptr, POSITION range, bool known)
  */
 bool detect_doors(PlayerType *player_ptr, POSITION range)
 {
-    bool detect = detect_feat_flag(player_ptr, range, TerrainCharacteristics::DOOR, true);
+    auto detect = detect_feat_flag(player_ptr, range, TerrainCharacteristics::DOOR, true).detected;
 
     if (music_singing(player_ptr, MUSIC_DETECT) && get_singing_count(player_ptr) > 0) {
         detect = false;
@@ -124,7 +140,7 @@ bool detect_doors(PlayerType *player_ptr, POSITION range)
  */
 bool detect_stairs(PlayerType *player_ptr, POSITION range)
 {
-    bool detect = detect_feat_flag(player_ptr, range, TerrainCharacteristics::STAIRS, true);
+    auto detect = detect_feat_flag(player_ptr, range, TerrainCharacteristics::STAIRS, true).detected;
 
     if (music_singing(player_ptr, MUSIC_DETECT) && get_singing_count(player_ptr) > 0) {
         detect = false;
@@ -144,7 +160,7 @@ bool detect_stairs(PlayerType *player_ptr, POSITION range)
  */
 bool detect_treasure(PlayerType *player_ptr, POSITION range)
 {
-    bool detect = detect_feat_flag(player_ptr, range, TerrainCharacteristics::HAS_GOLD, true);
+    auto detect = detect_feat_flag(player_ptr, range, TerrainCharacteristics::HAS_GOLD, true).detected;
 
     if (music_singing(player_ptr, MUSIC_DETECT) && get_singing_count(player_ptr) > 6) {
         detect = false;
@@ -426,9 +442,10 @@ bool detect_monsters_invis(PlayerType *player_ptr, POSITION range)
  * @brief 邪悪なモンスターを感知する / Detect all "evil" monsters on current panel
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param range 効果範囲
+ * @param notice メッセージを出す条件
  * @return 効力があった場合TRUEを返す
  */
-bool detect_monsters_evil(PlayerType *player_ptr, POSITION range)
+bool detect_monsters_evil(PlayerType *player_ptr, POSITION range, DetectionNotice notice)
 {
     auto &floor = *player_ptr->current_floor_ptr;
     if (floor.get_dungeon_definition().flags.has(DungeonFeatureType::DARKNESS)) {
@@ -438,6 +455,7 @@ bool detect_monsters_evil(PlayerType *player_ptr, POSITION range)
     const auto &tracker = LoreTracker::get_instance();
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     auto flag = false;
+    auto has_new = false;
     for (MONSTER_IDX i = 1; i < floor.m_max; i++) {
         auto &monster = floor.m_list[i];
         auto &monrace = monster.get_monrace();
@@ -460,13 +478,17 @@ bool detect_monsters_evil(PlayerType *player_ptr, POSITION range)
                 }
             }
 
+            if (monster.mflag2.has_not(MonsterConstantFlagType::MARK)) {
+                has_new = true;
+            }
+
             monster.mflag2.set({ MonsterConstantFlagType::MARK, MonsterConstantFlagType::SHOW });
             update_monster(player_ptr, i, false);
             flag = true;
         }
     }
 
-    if (flag) {
+    if (flag && ((notice == DetectionNotice::ALWAYS) || has_new)) {
         msg_print(_("邪悪なる生物の存在を感じとった！", "You sense the presence of evil creatures!"));
     }
 

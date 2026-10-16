@@ -136,10 +136,10 @@ void check_emission(PlayerType *player_ptr)
             map_area(player_ptr, player_ptr->cur_lite);
         }
         if (player_ptr->lev > 24) {
-            detect_traps(player_ptr, player_ptr->cur_lite, true);
+            detect_traps(player_ptr, player_ptr->cur_lite, true, DetectionNotice::NEW_ONLY);
         }
         if (player_ptr->lev > 19) {
-            detect_monsters_evil(player_ptr, player_ptr->cur_lite);
+            detect_monsters_evil(player_ptr, player_ptr->cur_lite, DetectionNotice::NEW_ONLY);
         }
     }
 }
