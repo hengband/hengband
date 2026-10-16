@@ -4,8 +4,6 @@
 #include "grid/trap.h"
 #include "monster/monster-flag-types.h"
 #include "monster/monster-update.h"
-#include "realm/realm-song-numbers.h"
-#include "spell-realm/spells-song.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
@@ -19,6 +17,27 @@
 #include "view/display-messages.h"
 
 namespace {
+/*!
+ * @brief 感知のメッセージを出すかを返す
+ * @param notice メッセージを出す条件
+ * @param detected 対象を 1 つでも感知したか
+ * @param has_new 新しく感知した対象があったか
+ * @return メッセージを出すならtrue
+ */
+bool should_notify(DetectionNotice notice, bool detected, bool has_new)
+{
+    switch (notice) {
+    case DetectionNotice::ALWAYS:
+        return detected;
+    case DetectionNotice::NEW_ONLY:
+        return has_new;
+    case DetectionNotice::NEVER:
+        return false;
+    }
+
+    return false;
+}
+
 /*!
  * @brief 地形の感知の結果
  */
@@ -86,13 +105,11 @@ static FeatDetectionResult detect_feat_flag(PlayerType *player_ptr, POSITION ran
  * @param known 感知外範囲を超える警告フラグを立てる場合TRUEを返す
  * @param notice メッセージを出す条件
  * @return 効力があった場合TRUEを返す
- * @details
- * 吟遊詩人による感知についてはFALSEを返す
  */
 bool detect_traps(PlayerType *player_ptr, POSITION range, bool known, DetectionNotice notice)
 {
     const auto result = detect_feat_flag(player_ptr, range, TerrainCharacteristics::TRAP, known);
-    auto detect = result.detected;
+    const auto detect = result.detected;
     if (!known && detect) {
         detect_feat_flag(player_ptr, range, TerrainCharacteristics::TRAP, true);
     }
@@ -101,11 +118,7 @@ bool detect_traps(PlayerType *player_ptr, POSITION range, bool known, DetectionN
         player_ptr->dtrap = true;
     }
 
-    if (music_singing(player_ptr, MUSIC_DETECT) && get_singing_count(player_ptr) > 0) {
-        detect = false;
-    }
-
-    if (detect && ((notice == DetectionNotice::ALWAYS) || result.has_disclosed)) {
+    if (should_notify(notice, detect, result.has_disclosed)) {
         msg_print(_("トラップの存在を感じとった！", "You sense the presence of traps!"));
     }
 
@@ -116,16 +129,14 @@ bool detect_traps(PlayerType *player_ptr, POSITION range, bool known, DetectionN
  * @brief プレイヤー周辺のドアを感知する / Detect all doors on current panel
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param range 効果範囲
+ * @param notice メッセージを出す条件
  * @return 効力があった場合TRUEを返す
  */
-bool detect_doors(PlayerType *player_ptr, POSITION range)
+bool detect_doors(PlayerType *player_ptr, POSITION range, DetectionNotice notice)
 {
-    auto detect = detect_feat_flag(player_ptr, range, TerrainCharacteristics::DOOR, true).detected;
-
-    if (music_singing(player_ptr, MUSIC_DETECT) && get_singing_count(player_ptr) > 0) {
-        detect = false;
-    }
-    if (detect) {
+    const auto result = detect_feat_flag(player_ptr, range, TerrainCharacteristics::DOOR, true);
+    const auto detect = result.detected;
+    if (should_notify(notice, detect, result.has_disclosed)) {
         msg_print(_("ドアの存在を感じとった！", "You sense the presence of doors!"));
     }
 
@@ -136,16 +147,14 @@ bool detect_doors(PlayerType *player_ptr, POSITION range)
  * @brief プレイヤー周辺の階段を感知する / Detect all stairs on current panel
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param range 効果範囲
+ * @param notice メッセージを出す条件
  * @return 効力があった場合TRUEを返す
  */
-bool detect_stairs(PlayerType *player_ptr, POSITION range)
+bool detect_stairs(PlayerType *player_ptr, POSITION range, DetectionNotice notice)
 {
-    auto detect = detect_feat_flag(player_ptr, range, TerrainCharacteristics::STAIRS, true).detected;
-
-    if (music_singing(player_ptr, MUSIC_DETECT) && get_singing_count(player_ptr) > 0) {
-        detect = false;
-    }
-    if (detect) {
+    const auto result = detect_feat_flag(player_ptr, range, TerrainCharacteristics::STAIRS, true);
+    const auto detect = result.detected;
+    if (should_notify(notice, detect, result.has_disclosed)) {
         msg_print(_("階段の存在を感じとった！", "You sense the presence of stairs!"));
     }
 
@@ -160,11 +169,7 @@ bool detect_stairs(PlayerType *player_ptr, POSITION range)
  */
 bool detect_treasure(PlayerType *player_ptr, POSITION range)
 {
-    auto detect = detect_feat_flag(player_ptr, range, TerrainCharacteristics::HAS_GOLD, true).detected;
-
-    if (music_singing(player_ptr, MUSIC_DETECT) && get_singing_count(player_ptr) > 6) {
-        detect = false;
-    }
+    const auto detect = detect_feat_flag(player_ptr, range, TerrainCharacteristics::HAS_GOLD, true).detected;
     if (detect) {
         msg_print(_("埋蔵された財宝の存在を感じとった！", "You sense the presence of buried treasure!"));
     }
@@ -175,9 +180,10 @@ bool detect_treasure(PlayerType *player_ptr, POSITION range)
  * @brief プレイヤー周辺のアイテム財宝を感知する / Detect all "gold" objects on the current panel
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param range 効果範囲
+ * @param notice メッセージを出す条件
  * @return 効力があった場合TRUEを返す
  */
-bool detect_objects_gold(PlayerType *player_ptr, POSITION range)
+bool detect_objects_gold(PlayerType *player_ptr, POSITION range, DetectionNotice notice)
 {
     auto &floor = *player_ptr->current_floor_ptr;
     POSITION range2 = range;
@@ -187,6 +193,7 @@ bool detect_objects_gold(PlayerType *player_ptr, POSITION range)
 
     /* Scan objects */
     auto detect = false;
+    auto is_newly_found = false;
     for (const auto &item_ptr : floor.o_list) {
         if (!item_ptr->is_valid()) {
             continue;
@@ -202,20 +209,18 @@ bool detect_objects_gold(PlayerType *player_ptr, POSITION range)
         }
 
         if (item_ptr->bi_key.tval() == ItemKindType::GOLD) {
+            is_newly_found |= item_ptr->marked.has_not(OmType::FOUND);
             item_ptr->marked.set(OmType::FOUND);
             lite_spot(player_ptr, i_pos);
             detect = true;
         }
     }
 
-    if (music_singing(player_ptr, MUSIC_DETECT) && get_singing_count(player_ptr) > 6) {
-        detect = false;
-    }
-    if (detect) {
+    if (should_notify(notice, detect, is_newly_found)) {
         msg_print(_("財宝の存在を感じとった！", "You sense the presence of treasure!"));
     }
 
-    if (detect_monsters_string(player_ptr, range, "$")) {
+    if (detect_monsters_string(player_ptr, range, "$", notice)) {
         detect = true;
     }
 
@@ -226,9 +231,10 @@ bool detect_objects_gold(PlayerType *player_ptr, POSITION range)
  * @brief 通常のアイテムオブジェクトを感知する / Detect all "normal" objects on the current panel
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param range 効果範囲
+ * @param notice メッセージを出す条件
  * @return 効力があった場合TRUEを返す
  */
-bool detect_objects_normal(PlayerType *player_ptr, POSITION range)
+bool detect_objects_normal(PlayerType *player_ptr, POSITION range, DetectionNotice notice)
 {
     auto &floor = *player_ptr->current_floor_ptr;
     POSITION range2 = range;
@@ -264,15 +270,11 @@ bool detect_objects_normal(PlayerType *player_ptr, POSITION range)
         RedrawingFlagsUpdater::get_instance().request_floor_item_lists_redrawing();
     }
 
-    // 歌い続けている間は、メッセージを最初の数回だけ出す
-    if (music_singing(player_ptr, MUSIC_DETECT) && get_singing_count(player_ptr) > 6) {
-        detect = false;
-    }
-    if (detect) {
+    if (should_notify(notice, detect, is_newly_found)) {
         msg_print(_("アイテムの存在を感じとった！", "You sense the presence of objects!"));
     }
 
-    if (detect_monsters_string(player_ptr, range, "!=?|/`")) {
+    if (detect_monsters_string(player_ptr, range, "!=?|/`", notice)) {
         detect = true;
     }
 
@@ -346,9 +348,10 @@ bool detect_objects_magic(PlayerType *player_ptr, POSITION range)
  * @brief 一般のモンスターを感知する / Detect all "normal" monsters on the current panel
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param range 効果範囲
+ * @param notice メッセージを出す条件
  * @return 効力があった場合TRUEを返す
  */
-bool detect_monsters_normal(PlayerType *player_ptr, POSITION range)
+bool detect_monsters_normal(PlayerType *player_ptr, POSITION range, DetectionNotice notice)
 {
     auto &floor = *player_ptr->current_floor_ptr;
     if (floor.get_dungeon_definition().flags.has(DungeonFeatureType::DARKNESS)) {
@@ -356,6 +359,7 @@ bool detect_monsters_normal(PlayerType *player_ptr, POSITION range)
     }
 
     bool flag = false;
+    auto has_new = false;
     for (MONSTER_IDX i = 1; i < floor.m_max; i++) {
         auto &monster = floor.m_list[i];
         const auto &monrace = monster.get_monrace();
@@ -370,16 +374,14 @@ bool detect_monsters_normal(PlayerType *player_ptr, POSITION range)
         }
 
         if (monrace.misc_flags.has_not(MonsterMiscType::INVISIBLE) || player_ptr->see_inv) {
+            has_new |= monster.mflag2.has_not(MonsterConstantFlagType::MARK);
             monster.mflag2.set({ MonsterConstantFlagType::MARK, MonsterConstantFlagType::SHOW });
             update_monster(player_ptr, i, false);
             flag = true;
         }
     }
 
-    if (music_singing(player_ptr, MUSIC_DETECT) && get_singing_count(player_ptr) > 3) {
-        flag = false;
-    }
-    if (flag) {
+    if (should_notify(notice, flag, has_new)) {
         msg_print(_("モンスターの存在を感じとった！", "You sense the presence of monsters!"));
     }
 
@@ -390,9 +392,10 @@ bool detect_monsters_normal(PlayerType *player_ptr, POSITION range)
  * @brief 不可視のモンスターを感知する / Detect all "invisible" monsters around the player
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param range 効果範囲
+ * @param notice メッセージを出す条件
  * @return 効力があった場合TRUEを返す
  */
-bool detect_monsters_invis(PlayerType *player_ptr, POSITION range)
+bool detect_monsters_invis(PlayerType *player_ptr, POSITION range, DetectionNotice notice)
 {
     auto &floor = *player_ptr->current_floor_ptr;
     if (floor.get_dungeon_definition().flags.has(DungeonFeatureType::DARKNESS)) {
@@ -402,6 +405,7 @@ bool detect_monsters_invis(PlayerType *player_ptr, POSITION range)
     const auto &tracker = LoreTracker::get_instance();
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     auto flag = false;
+    auto has_new = false;
     for (MONSTER_IDX i = 1; i < floor.m_max; i++) {
         auto &monster = floor.m_list[i];
         const auto &monrace = monster.get_monrace();
@@ -422,16 +426,14 @@ bool detect_monsters_invis(PlayerType *player_ptr, POSITION range)
                 rfu.set_flag(SubWindowRedrawingFlag::MONSTER_LORE);
             }
 
+            has_new |= monster.mflag2.has_not(MonsterConstantFlagType::MARK);
             monster.mflag2.set({ MonsterConstantFlagType::MARK, MonsterConstantFlagType::SHOW });
             update_monster(player_ptr, i, false);
             flag = true;
         }
     }
 
-    if (music_singing(player_ptr, MUSIC_DETECT) && get_singing_count(player_ptr) > 3) {
-        flag = false;
-    }
-    if (flag) {
+    if (should_notify(notice, flag, has_new)) {
         msg_print(_("透明な生物の存在を感じとった！", "You sense the presence of invisible creatures!"));
     }
 
@@ -488,7 +490,7 @@ bool detect_monsters_evil(PlayerType *player_ptr, POSITION range, DetectionNotic
         }
     }
 
-    if (flag && ((notice == DetectionNotice::ALWAYS) || has_new)) {
+    if (should_notify(notice, flag, has_new)) {
         msg_print(_("邪悪なる生物の存在を感じとった！", "You sense the presence of evil creatures!"));
     }
 
@@ -594,9 +596,10 @@ bool detect_monsters_mind(PlayerType *player_ptr, POSITION range)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param range 効果範囲
  * @param Match 対応シンボルの混じったモンスター文字列(複数指定化)
+ * @param notice メッセージを出す条件
  * @return 効力があった場合TRUEを返す
  */
-bool detect_monsters_string(PlayerType *player_ptr, POSITION range, concptr Match)
+bool detect_monsters_string(PlayerType *player_ptr, POSITION range, concptr Match, DetectionNotice notice)
 {
     auto &floor = *player_ptr->current_floor_ptr;
     if (floor.get_dungeon_definition().flags.has(DungeonFeatureType::DARKNESS)) {
@@ -606,6 +609,7 @@ bool detect_monsters_string(PlayerType *player_ptr, POSITION range, concptr Matc
     const auto &tracker = LoreTracker::get_instance();
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     auto flag = false;
+    auto has_new = false;
     for (MONSTER_IDX i = 1; i < floor.m_max; i++) {
         auto &monster = floor.m_list[i];
         const auto &monrace = monster.get_monrace();
@@ -625,16 +629,14 @@ bool detect_monsters_string(PlayerType *player_ptr, POSITION range, concptr Matc
                 rfu.set_flag(SubWindowRedrawingFlag::MONSTER_LORE);
             }
 
+            has_new |= monster.mflag2.has_not(MonsterConstantFlagType::MARK);
             monster.mflag2.set({ MonsterConstantFlagType::MARK, MonsterConstantFlagType::SHOW });
             update_monster(player_ptr, i, false);
             flag = true;
         }
     }
 
-    if (music_singing(player_ptr, MUSIC_DETECT) && get_singing_count(player_ptr) > 3) {
-        flag = false;
-    }
-    if (flag) {
+    if (should_notify(notice, flag, has_new)) {
         msg_print(_("モンスターの存在を感じとった！", "You sense the presence of monsters!"));
     }
 

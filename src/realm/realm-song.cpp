@@ -330,6 +330,9 @@ tl::optional<std::string> do_music_spell(PlayerType *player_ptr, SPELL_IDX spell
 
             if (cont) {
                 const auto count = get_singing_count(player_ptr);
+                const auto notice_from = [count](int32_t start) {
+                    return (count == start) ? DetectionNotice::ALWAYS : DetectionNotice::NEVER;
+                };
 
                 if (count >= DETECTION_SONG_STAGE_WIZ_LITE) {
                     wiz_lite(player_ptr, false);
@@ -340,16 +343,16 @@ tl::optional<std::string> do_music_spell(PlayerType *player_ptr, SPELL_IDX spell
                 if (count >= DETECTION_SONG_STAGE_OBJECTS) {
                     /* There are too many hidden treasure.  So... */
                     /* detect_treasure(rad); */
-                    detect_objects_gold(player_ptr, rad);
-                    detect_objects_normal(player_ptr, rad);
+                    detect_objects_gold(player_ptr, rad, notice_from(DETECTION_SONG_STAGE_OBJECTS));
+                    detect_objects_normal(player_ptr, rad, notice_from(DETECTION_SONG_STAGE_OBJECTS));
                 }
                 if (count >= DETECTION_SONG_STAGE_MONSTERS) {
-                    detect_monsters_invis(player_ptr, rad);
-                    detect_monsters_normal(player_ptr, rad);
+                    detect_monsters_invis(player_ptr, rad, notice_from(DETECTION_SONG_STAGE_MONSTERS));
+                    detect_monsters_normal(player_ptr, rad, notice_from(DETECTION_SONG_STAGE_MONSTERS));
                 }
-                detect_traps(player_ptr, rad, true);
-                detect_doors(player_ptr, rad);
-                detect_stairs(player_ptr, rad);
+                detect_traps(player_ptr, rad, true, notice_from(DETECTION_SONG_STAGE_TERRAIN));
+                detect_doors(player_ptr, rad, notice_from(DETECTION_SONG_STAGE_TERRAIN));
+                detect_stairs(player_ptr, rad, notice_from(DETECTION_SONG_STAGE_TERRAIN));
 
                 if (can_advance_detection_song(count, plev)) {
                     set_singing_count(player_ptr, count + 1);
