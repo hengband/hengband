@@ -68,8 +68,20 @@ void delete_monster_idx(PlayerType *player_ptr, short m_idx)
     if (player_ptr->riding_t_m_idx == m_idx) {
         player_ptr->riding_t_m_idx = 0;
     }
-    if (monster.is_riding()) { // player_ptr->riding == m_idx のままの方がいい？
+    // ふつうは落馬の処理 (process_fall_off_horse()) で先に降りているが、それを通らずに消える経路
+    // (召喚主が倒れて消える・ペット爆破で逃げ帰るなど) ではここで降ろす。
+    // 階を移るときもここを通って新しい階で乗り直すので、両手持ちの設定などは戻さない (ほかの経路でも残る)
+    if (monster.is_riding()) {
         player_ptr->ride_monster(0);
+
+        // 乗っているモンスターの速度などで決まる能力と、乗馬中の表示・乗っているモンスターの体力の表示が変わる
+        auto &rfu = RedrawingFlagsUpdater::get_instance();
+        rfu.set_flag(StatusRecalculatingFlag::BONUS);
+        static constexpr auto flags_mwrf = {
+            MainWindowRedrawingFlag::EXTRA,
+            MainWindowRedrawingFlag::UHEALTH,
+        };
+        rfu.set_flags(flags_mwrf);
     }
 
     floor.get_grid(m_pos).m_idx = 0;
