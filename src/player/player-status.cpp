@@ -2779,11 +2779,13 @@ void check_experience(PlayerType *player_ptr)
     PlayerRace pr(player_ptr);
     bool android = pr.equals(PlayerRaceType::ANDROID);
     PLAYER_LEVEL old_lev = player_ptr->lev;
+    // 一時的な発光の明るさもレベルで決まる
     static constexpr auto flags_srf = {
         StatusRecalculatingFlag::BONUS,
         StatusRecalculatingFlag::HP,
         StatusRecalculatingFlag::MP,
         StatusRecalculatingFlag::SPELLS,
+        StatusRecalculatingFlag::TORCH,
     };
     while ((player_ptr->lev > 1) && (player_ptr->exp < ((android ? player_exp_a : player_exp)[player_ptr->lev - 2] * player_ptr->expfact / 100L))) {
         player_ptr->lev--;
