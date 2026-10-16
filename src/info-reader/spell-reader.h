@@ -1,6 +1,8 @@
 #pragma once
 
+#include "info-reader/parse-error-types.h"
 #include <nlohmann/json_fwd.hpp>
+#include <tl/expected.hpp>
 #include <vector>
 
 enum class RealmType;
@@ -19,9 +21,9 @@ public:
     int read() const;
 
 private:
-    int set_realm(RealmType &realm) const;
-    int set_spell_data(const nlohmann::json &spell_data, std::vector<SpellInfo> &spells) const;
-    int set_book_data(std::vector<SpellInfo> &spells) const;
+    tl::expected<RealmType, parse_error_type> read_realm() const;
+    tl::expected<void, parse_error_type> set_spell_data(const nlohmann::json &spell_data, std::vector<SpellInfo> &spells) const;
+    tl::expected<void, parse_error_type> set_book_data(std::vector<SpellInfo> &spells) const;
 
     const nlohmann::json &realm_data;
     SpellInfoList &spell_info_list;
