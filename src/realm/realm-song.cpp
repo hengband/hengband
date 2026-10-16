@@ -51,6 +51,56 @@ static void start_singing(PlayerType *player_ptr, SPELL_IDX spell, int32_t song)
     rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
 }
 
+namespace {
+// 感知の歌は、歌い続けた回数 (段階) がそれぞれの値に達すると、感知する対象が増える
+constexpr int32_t DETECTION_SONG_STAGE_TERRAIN = 0; //!< トラップ・ドア・階段
+constexpr int32_t DETECTION_SONG_STAGE_MONSTERS = 3; //!< モンスター
+constexpr int32_t DETECTION_SONG_STAGE_OBJECTS = 6; //!< 財宝・アイテム
+constexpr int32_t DETECTION_SONG_STAGE_MAP = 11; //!< 周辺の地形
+constexpr int32_t DETECTION_SONG_STAGE_WIZ_LITE = 19; //!< フロア全体
+}
+
+/*!
+ * @brief 感知の歌で、トラップ・ドア・階段、モンスター、財宝・アイテムの感知が始まる回かを返す
+ * @param count 歌い続けた回数 (感知の歌の段階)
+ * @return 感知が始まる回ならtrue
+ */
+static bool is_detection_song_stage_start(int32_t count)
+{
+    return (count == DETECTION_SONG_STAGE_TERRAIN) || (count == DETECTION_SONG_STAGE_MONSTERS) || (count == DETECTION_SONG_STAGE_OBJECTS);
+}
+
+/*!
+ * @brief 感知の歌の段階を進められるかを返す
+ * @param count 歌い続けた回数 (感知の歌の段階)
+ * @param plev プレイヤーのレベル
+ * @return 段階を進められるならtrue
+ * @details
+ * トラップ・ドア・階段、モンスター、財宝・アイテムの感知のメッセージは、それぞれの感知が始まった回だけ出す。
+ * 次の感知へ進むにはレベルが要るが、感知が始まった回は、レベルが足りなくても段階を 1 つ進めて、
+ * 次の回からはメッセージを出さないようにする。
+ */
+static bool can_advance_detection_song(int32_t count, PLAYER_LEVEL plev)
+{
+    if (is_detection_song_stage_start(count)) {
+        return true;
+    }
+    if (count < DETECTION_SONG_STAGE_MONSTERS) {
+        return plev > 14;
+    }
+    if (count < DETECTION_SONG_STAGE_OBJECTS) {
+        return plev > 19;
+    }
+    if (count < DETECTION_SONG_STAGE_MAP) {
+        return plev > 24;
+    }
+    if (count < DETECTION_SONG_STAGE_WIZ_LITE) {
+        return plev > 39;
+    }
+
+    return false;
+}
+
 /*!
  * @brief 歌の各処理を行う
  * @param player_ptr プレイヤーへの参照ポインタ
@@ -279,40 +329,29 @@ tl::optional<std::string> do_music_spell(PlayerType *player_ptr, SPELL_IDX spell
             }
 
             if (cont) {
-                int count = get_singing_count(player_ptr);
+                const auto count = get_singing_count(player_ptr);
 
-                if (count >= 19) {
+                if (count >= DETECTION_SONG_STAGE_WIZ_LITE) {
                     wiz_lite(player_ptr, false);
                 }
-                if (count >= 11) {
+                if (count >= DETECTION_SONG_STAGE_MAP) {
                     map_area(player_ptr, rad);
-                    if (plev > 39 && count < 19) {
-                        set_singing_count(player_ptr, count + 1);
-                    }
                 }
-                if (count >= 6) {
+                if (count >= DETECTION_SONG_STAGE_OBJECTS) {
                     /* There are too many hidden treasure.  So... */
                     /* detect_treasure(rad); */
                     detect_objects_gold(player_ptr, rad);
                     detect_objects_normal(player_ptr, rad);
-
-                    if (plev > 24 && count < 11) {
-                        set_singing_count(player_ptr, count + 1);
-                    }
                 }
-                if (count >= 3) {
+                if (count >= DETECTION_SONG_STAGE_MONSTERS) {
                     detect_monsters_invis(player_ptr, rad);
                     detect_monsters_normal(player_ptr, rad);
-
-                    if (plev > 19 && count < A_MAX) {
-                        set_singing_count(player_ptr, count + 1);
-                    }
                 }
                 detect_traps(player_ptr, rad, true);
                 detect_doors(player_ptr, rad);
                 detect_stairs(player_ptr, rad);
 
-                if (plev > 14 && count < 3) {
+                if (can_advance_detection_song(count, plev)) {
                     set_singing_count(player_ptr, count + 1);
                 }
             }
