@@ -237,6 +237,7 @@ bool curse_armor(PlayerType *player_ptr)
     };
     rfu.set_flags(flags_srf);
     rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
+    calc_android_exp(player_ptr);
     return true;
 }
 
@@ -288,6 +289,7 @@ bool curse_weapon_object(PlayerType *player_ptr, bool force, ItemEntity &item)
     };
     rfu.set_flags(flags_srf);
     rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
+    calc_android_exp(player_ptr);
     return true;
 }
 
