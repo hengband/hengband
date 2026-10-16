@@ -140,13 +140,30 @@ bool mundane_spell(PlayerType *player_ptr, bool only_equip)
     }
 
     msg_print(_("まばゆい閃光が走った！", "There is a bright flash of light!"));
+    // 束の数・位置・印・銘は、ベースアイテムから作り直した後も引き継ぐ (ロッドの pval と充填の残り時間は、後の条件に合うときだけ)
+    const auto number = item->number;
+    const auto pval = item->pval;
+    const auto timeout = item->timeout;
+    const auto activation = item->find_activation_info();
     auto pos = item->get_position();
     auto marked = item->marked;
-    auto &&inscription = std::move(item->inscription);
+    auto inscription = std::move(item->inscription);
     item->generate(item->bi_id);
+    item->number = number;
+    // ロッドの束の pval は 1 本分の充填時間 × 個数なので、個数と合わせて引き継ぐ
+    if (item->bi_key.tval() == ItemKindType::ROD) {
+        item->pval = pval;
+    }
+
     item->set_position(pos);
     item->marked = marked;
     item->inscription = std::move(inscription);
+
+    // 充填中のロッドや発動は、凡庸化しても充填が終わらない。
+    // 発動が無くなったもの・エゴやアーティファクトの発動からベースアイテムの発動に変わったものは、前の充填を引き継がない
+    if ((item->bi_key.tval() == ItemKindType::ROD) || (item->has_activation() && (item->find_activation_info() == activation))) {
+        item->timeout = timeout;
+    }
 
     // 装備品なら、修正値・エゴ・アーティファクトの能力 (光源の明るさなども) が無くなる
     static constexpr auto flags_srf = {
