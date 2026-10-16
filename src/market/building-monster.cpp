@@ -147,7 +147,7 @@ bool research_mon(PlayerType *player_ptr)
         term_addstr(-1, TERM_WHITE, _(" ['r'思い出, ' 'で続行, ESC]", " [(r)ecall, ESC, space to continue]"));
         while (true) {
             if (recall) {
-                const auto mes = monraces.probe_lore(monrace_id);
+                const auto mes = monraces.get_monrace(monrace_id).probe_lore();
                 if (mes) {
                     msg_print(*mes);
                     msg_erase();

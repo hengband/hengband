@@ -67,7 +67,6 @@
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "target/projection-path-calculator.h"
-#include "tracking/lore-tracker.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 
@@ -634,23 +633,11 @@ bool process_monster_fear(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MO
  *\n
  * Note the special "PREVENT_MAGIC" flag, which allows the player to get one\n
  * move before any "nasty" monsters get to use their spell attacks.\n
- *\n
- * Note that when the "knowledge" about the currently tracked monster\n
- * changes (flags, attacks, spells), we induce a redraw of the monster\n
- * recall window.\n
  */
 void process_monsters(PlayerType *player_ptr)
 {
-    const auto &tracker = LoreTracker::get_instance();
-    const auto old_monrace_id = tracker.get_trackee();
-    OldRaceFlags flags(old_monrace_id);
     player_ptr->current_floor_ptr->monster_noise = false;
     sweep_monster_process(player_ptr);
-    if (!tracker.is_tracking() || !tracker.is_tracking(old_monrace_id)) {
-        return;
-    }
-
-    flags.update_lore_window_flag(tracker.get_tracking_monrace());
 }
 
 /*!

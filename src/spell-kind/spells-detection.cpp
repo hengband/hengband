@@ -12,7 +12,6 @@
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "system/terrain/terrain-definition.h"
-#include "tracking/lore-tracker.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 
@@ -402,8 +401,6 @@ bool detect_monsters_invis(PlayerType *player_ptr, POSITION range, DetectionNoti
         range /= 3;
     }
 
-    const auto &tracker = LoreTracker::get_instance();
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
     auto flag = false;
     auto has_new = false;
     for (MONSTER_IDX i = 1; i < floor.m_max; i++) {
@@ -422,10 +419,6 @@ bool detect_monsters_invis(PlayerType *player_ptr, POSITION range, DetectionNoti
         }
 
         if (monrace.misc_flags.has(MonsterMiscType::INVISIBLE)) {
-            if (tracker.is_tracking(monster.r_idx)) {
-                rfu.set_flag(SubWindowRedrawingFlag::MONSTER_LORE);
-            }
-
             has_new |= monster.mflag2.has_not(MonsterConstantFlagType::MARK);
             monster.mflag2.set({ MonsterConstantFlagType::MARK, MonsterConstantFlagType::SHOW });
             update_monster(player_ptr, i, false);
@@ -454,8 +447,6 @@ bool detect_monsters_evil(PlayerType *player_ptr, POSITION range, DetectionNotic
         range /= 3;
     }
 
-    const auto &tracker = LoreTracker::get_instance();
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
     auto flag = false;
     auto has_new = false;
     for (MONSTER_IDX i = 1; i < floor.m_max; i++) {
@@ -475,9 +466,6 @@ bool detect_monsters_evil(PlayerType *player_ptr, POSITION range, DetectionNotic
         if (monrace.kind_flags.has(MonsterKindType::EVIL)) {
             if (monster.is_original_ap()) {
                 monrace.r_kind_flags.set(MonsterKindType::EVIL);
-                if (tracker.is_tracking(monster.r_idx)) {
-                    rfu.set_flag(SubWindowRedrawingFlag::MONSTER_LORE);
-                }
             }
 
             if (monster.mflag2.has_not(MonsterConstantFlagType::MARK)) {
@@ -510,8 +498,6 @@ bool detect_monsters_nonliving(PlayerType *player_ptr, POSITION range)
         range /= 3;
     }
 
-    const auto &tracker = LoreTracker::get_instance();
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
     auto flag = false;
     for (MONSTER_IDX i = 1; i < floor.m_max; i++) {
         auto &monster = floor.m_list[i];
@@ -526,10 +512,6 @@ bool detect_monsters_nonliving(PlayerType *player_ptr, POSITION range)
         }
 
         if (!monster.has_living_flag()) {
-            if (tracker.is_tracking(monster.r_idx)) {
-                rfu.set_flag(SubWindowRedrawingFlag::MONSTER_LORE);
-            }
-
             monster.mflag2.set({ MonsterConstantFlagType::MARK, MonsterConstantFlagType::SHOW });
             update_monster(player_ptr, i, false);
             flag = true;
@@ -556,8 +538,6 @@ bool detect_monsters_mind(PlayerType *player_ptr, POSITION range)
         range /= 3;
     }
 
-    const auto &tracker = LoreTracker::get_instance();
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
     auto flag = false;
     for (MONSTER_IDX i = 1; i < floor.m_max; i++) {
         auto &monster = floor.m_list[i];
@@ -574,10 +554,6 @@ bool detect_monsters_mind(PlayerType *player_ptr, POSITION range)
         }
 
         if (monrace.misc_flags.has_not(MonsterMiscType::EMPTY_MIND)) {
-            if (tracker.is_tracking(monster.r_idx)) {
-                rfu.set_flag(SubWindowRedrawingFlag::MONSTER_LORE);
-            }
-
             monster.mflag2.set({ MonsterConstantFlagType::MARK, MonsterConstantFlagType::SHOW });
             update_monster(player_ptr, i, false);
             flag = true;
@@ -606,8 +582,6 @@ bool detect_monsters_string(PlayerType *player_ptr, POSITION range, concptr Matc
         range /= 3;
     }
 
-    const auto &tracker = LoreTracker::get_instance();
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
     auto flag = false;
     auto has_new = false;
     for (MONSTER_IDX i = 1; i < floor.m_max; i++) {
@@ -625,10 +599,6 @@ bool detect_monsters_string(PlayerType *player_ptr, POSITION range, concptr Matc
         }
 
         if (angband_strchr(Match, monrace.symbol_definition.character)) {
-            if (tracker.is_tracking(monster.r_idx)) {
-                rfu.set_flag(SubWindowRedrawingFlag::MONSTER_LORE);
-            }
-
             has_new |= monster.mflag2.has_not(MonsterConstantFlagType::MARK);
             monster.mflag2.set({ MonsterConstantFlagType::MARK, MonsterConstantFlagType::SHOW });
             update_monster(player_ptr, i, false);

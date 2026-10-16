@@ -10,10 +10,7 @@
 #include "monster/monster-processor-util.h"
 #include "floor/geometry.h"
 #include "monster/monster-status.h"
-#include "system/monrace/monrace-definition.h"
-#include "system/monrace/monrace-list.h"
 #include "system/monster-entity.h"
-#include "system/redrawing-flags-updater.h"
 
 /*!
  * @brief ターン経過フラグ構造体の初期化
@@ -164,48 +161,4 @@ tl::optional<MonsterMovementDirectionList> get_moves_val(MONSTER_IDX m_idx, cons
     mmdl.add_movement_direction(dir.rotated_45degree(is_left_first ? -2 : 2));
 
     return mmdl;
-}
-
-/*!
- * @brief 古いモンスター情報の保存
- * @param monrace_id モンスター種族ID
- */
-OldRaceFlags::OldRaceFlags(MonraceId monrace_id)
-{
-    if (!MonraceList::is_valid(monrace_id)) {
-        return;
-    }
-
-    const auto &monrace = MonraceList::get_instance().get_monrace(monrace_id);
-    this->old_r_ability_flags = monrace.r_ability_flags;
-    this->old_r_behavior_flags = monrace.r_behavior_flags;
-    this->old_r_kind_flags = monrace.r_kind_flags;
-    this->old_r_resistance_flags = monrace.r_resistance_flags;
-    this->old_r_drop_flags = monrace.r_drop_flags;
-    this->old_r_feature_flags = monrace.r_feature_flags;
-    this->old_r_special_flags = monrace.r_special_flags;
-
-    this->old_r_blows0 = monrace.r_blows[0];
-    this->old_r_blows1 = monrace.r_blows[1];
-    this->old_r_blows2 = monrace.r_blows[2];
-    this->old_r_blows3 = monrace.r_blows[3];
-
-    this->old_r_cast_spell = monrace.r_cast_spell;
-}
-
-/*!
- * @brief モンスターフラグの更新に基づき、モンスター表示を更新する
- * @param monrace 表示対象のモンスター種族定義
- */
-void OldRaceFlags::update_lore_window_flag(const MonraceDefinition &monrace) const
-{
-    if ((this->old_r_ability_flags != monrace.r_ability_flags) ||
-        (this->old_r_resistance_flags != monrace.r_resistance_flags) || (this->old_r_blows0 != monrace.r_blows[0]) ||
-        (this->old_r_blows1 != monrace.r_blows[1]) || (this->old_r_blows2 != monrace.r_blows[2]) ||
-        (this->old_r_blows3 != monrace.r_blows[3]) || (this->old_r_cast_spell != monrace.r_cast_spell) ||
-        (this->old_r_behavior_flags != monrace.r_behavior_flags) || (this->old_r_kind_flags != monrace.r_kind_flags) ||
-        (this->old_r_drop_flags != monrace.r_drop_flags) || (this->old_r_feature_flags != monrace.r_feature_flags) ||
-        (this->old_r_special_flags != monrace.r_special_flags)) {
-        RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::MONSTER_LORE);
-    }
 }

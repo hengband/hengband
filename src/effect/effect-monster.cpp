@@ -46,7 +46,6 @@
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "tracking/health-bar-tracker.h"
-#include "tracking/lore-tracker.h"
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
@@ -749,16 +748,11 @@ bool affect_monster(
     exe_affect_monster_by_damage(player_ptr, em_ptr);
 
     update_phase_out_stat(player_ptr, em_ptr);
-    const auto monster_is_valid = em_ptr->m_ptr->is_valid();
-    if (monster_is_valid) {
+    if (em_ptr->m_ptr->is_valid()) {
         update_monster(player_ptr, target_m_idx, false);
     }
 
     lite_spot(player_ptr, em_ptr->get_position());
-    if (LoreTracker::get_instance().is_tracking(em_ptr->m_ptr->r_idx) && (em_ptr->seen || !monster_is_valid)) {
-        RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::MONSTER_LORE);
-    }
-
     exe_affect_monster_postprocess(player_ptr, em_ptr, fall_off_horse_effect);
     return em_ptr->obvious;
 }

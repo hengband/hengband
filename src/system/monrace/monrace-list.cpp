@@ -7,8 +7,6 @@
 #include "system/monrace/monrace-list.h"
 #include "system/enums/monrace/monrace-id.h"
 #include "system/monrace/monrace-definition.h"
-#include "system/redrawing-flags-updater.h"
-#include "tracking/lore-tracker.h"
 #include "util/enum-converter.h"
 #include "util/probability-table.h"
 #include <algorithm>
@@ -521,15 +519,6 @@ void MonraceList::add_to_index(MonraceId monrace_id, const std::shared_ptr<Monra
     }
 
     this->monraces_by_id[index] = monrace;
-}
-
-tl::optional<std::string> MonraceList::probe_lore(MonraceId monrace_id)
-{
-    if (LoreTracker::get_instance().is_tracking(monrace_id)) {
-        RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::MONSTER_LORE);
-    }
-
-    return this->get_monrace(monrace_id).probe_lore();
 }
 
 /*
