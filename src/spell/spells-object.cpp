@@ -229,8 +229,10 @@ bool curse_armor(PlayerType *player_ptr)
     item.curse_flags.set(CurseTraitType::CURSED);
     item.set_identification_flag(IdentificationFlag::BROKEN);
     auto &rfu = RedrawingFlagsUpdater::get_instance();
+    // エゴ・アーティファクトの能力 (光源の明るさなども) が無くなる
     static constexpr auto flags_srf = {
         StatusRecalculatingFlag::BONUS,
+        StatusRecalculatingFlag::TORCH,
         StatusRecalculatingFlag::MP,
     };
     rfu.set_flags(flags_srf);
@@ -278,8 +280,10 @@ bool curse_weapon_object(PlayerType *player_ptr, bool force, ItemEntity &item)
     item.curse_flags.set(CurseTraitType::CURSED);
     item.set_identification_flag(IdentificationFlag::BROKEN);
     auto &rfu = RedrawingFlagsUpdater::get_instance();
+    // エゴ・アーティファクトの能力 (光源の明るさなども) が無くなる
     static constexpr auto flags_srf = {
         StatusRecalculatingFlag::BONUS,
+        StatusRecalculatingFlag::TORCH,
         StatusRecalculatingFlag::MP,
     };
     rfu.set_flags(flags_srf);
