@@ -186,8 +186,7 @@ void do_cmd_uninscribe(PlayerType *player_ptr)
     msg_print(_("銘を消した。", "Inscription removed."));
     item->inscription.reset();
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.set_flag(StatusRecalculatingFlag::BONUS);
-    rfu.set_flag(InventoryArrangementFlag::COMBINATION);
+    rfu.request_inscription_change_updates();
     rfu.request_floor_item_lists_redrawing();
 }
 
@@ -215,8 +214,7 @@ void do_cmd_inscribe(PlayerType *player_ptr)
 
     item->inscription.emplace(*input_inscription);
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.set_flag(StatusRecalculatingFlag::BONUS);
-    rfu.set_flag(InventoryArrangementFlag::COMBINATION);
+    rfu.request_inscription_change_updates();
     rfu.request_floor_item_lists_redrawing();
 }
 
