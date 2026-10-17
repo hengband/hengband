@@ -313,25 +313,40 @@ static void request_overhead_redrawing_if_changed(PlayerType *player_ptr)
 }
 
 /*!
+ * @brief 表示しているサブウィンドウの種類を得る
+ * @return 使っている端末に割り当てたサブウィンドウの種類
+ */
+static EnumClassFlagGroup<SubWindowRedrawingFlag> get_shown_sub_window_flags()
+{
+    EnumClassFlagGroup<SubWindowRedrawingFlag> shown_flags{};
+    for (auto i = 0U; i < angband_terms.size(); ++i) {
+        if ((angband_terms[i] == nullptr) || angband_terms[i]->never_fresh) {
+            continue;
+        }
+
+        shown_flags.set(g_window_flags[i]);
+    }
+
+    return shown_flags;
+}
+
+/*!
  * @brief SubWindowRedrawingFlag のフラグに応じた更新をまとめて行う
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param include_deferred defer_map_subwindows で遅らせている地図のサブウィンドウも更新するならtrue
  */
 static void update_sub_windows(PlayerType *player_ptr, bool include_deferred)
 {
-    EnumClassFlagGroup<SubWindowRedrawingFlag> target_flags{};
-    for (auto i = 0U; i < angband_terms.size(); ++i) {
-        if ((angband_terms[i] == nullptr) || angband_terms[i]->never_fresh) {
-            continue;
-        }
-
-        target_flags.set(g_window_flags[i]);
-    }
+    const auto target_flags = get_shown_sub_window_flags();
 
     // 地図はフロア全体を描き直すため重い。フラグは残し、ターンの区切りか入力待ちでまとめて描く
     const auto is_map_deferred = defer_map_subwindows && !include_deferred;
     if (!is_map_deferred && target_flags.has(SubWindowRedrawingFlag::OVERHEAD)) {
         request_overhead_redrawing_if_changed(player_ptr);
+    }
+
+    if (target_flags.has(SubWindowRedrawingFlag::PLAYER)) {
+        request_player_redraw_if_points_changed(*player_ptr);
     }
 
     if (target_flags.has(SubWindowRedrawingFlag::MONSTER_LORE)) {
@@ -413,6 +428,25 @@ static void update_sub_windows(PlayerType *player_ptr, bool include_deferred)
     if (window_flags.has(SubWindowRedrawingFlag::FOUND_ITEMS)) {
         rfu.reset_flag(SubWindowRedrawingFlag::FOUND_ITEMS);
         fix_found_item_list(player_ptr);
+    }
+}
+
+/*!
+ * @brief サブウィンドウの描き直しが要るときだけ描き直す
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @details HP・MP は描き直しを要求せずに変える箇所が多いので、描き直しの要求が無くても、
+ * プレイヤー情報に描いた HP・MP と比べてから描き直すかを決める (window_stuff() を直接呼ぶ経路のために
+ * update_sub_windows() でも比べる)。思い出や全体図の比較は写しを作るのが重いので、ここでは行わず
+ * 入力待ちやメッセージの表示で window_stuff() を呼ぶときに任せる。
+ */
+void window_stuff_if_needed(PlayerType *player_ptr)
+{
+    if (get_shown_sub_window_flags().has(SubWindowRedrawingFlag::PLAYER)) {
+        request_player_redraw_if_points_changed(*player_ptr);
+    }
+
+    if (RedrawingFlagsUpdater::get_instance().any_sub()) {
+        window_stuff(player_ptr);
     }
 }
 

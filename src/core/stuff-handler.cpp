@@ -24,9 +24,7 @@ void handle_stuff(PlayerType *player_ptr)
         redraw_stuff(player_ptr);
     }
 
-    if (rfu.any_sub()) {
-        window_stuff(player_ptr);
-    }
+    window_stuff_if_needed(player_ptr);
 }
 
 /*!
