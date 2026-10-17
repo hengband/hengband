@@ -175,11 +175,11 @@ static tl::optional<std::string> get_fake_monster_name(const PlayerType &player,
     }
 
     if (monster.mflag2.has(MonsterConstantFlagType::CHAMELEON) && none_bits(mode, MD_TRUE_NAME)) {
-        return _(replace_monster_name_undefined(name), format("%s?", name.data()));
+        return _(replace_monster_name_undefined(name), fmt::format("{}?", name));
     }
 
     if (AngbandSystem::get_instance().is_phase_out() && !monster.is_riding()) {
-        return format(_("%sもどき", "fake %s"), name.data());
+        return fmt::format(_("{}もどき", "fake {}"), name);
     }
 
     return name;
@@ -252,7 +252,7 @@ std::string monster_desc(PlayerType *player_ptr, const MonsterEntity &monster, B
     const auto name = get_describing_monster_name(monster, is_hallucinated, mode);
     std::stringstream ss;
     if (monster.is_pet() && !monster.is_original_ap()) {
-        ss << _(replace_monster_name_undefined(name), format("%s?", name.data()));
+        ss << _(replace_monster_name_undefined(name), fmt::format("{}?", name));
     } else {
         ss << describe_non_pet(*player_ptr, monster, name, mode);
     }

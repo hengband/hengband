@@ -156,7 +156,7 @@ static void activate_artifact(PlayerType *player_ptr, std::shared_ptr<ItemEntity
     case RandomArtActType::MURAMASA:
         return;
     default:
-        msg_format("Special timeout is not implemented: %d.", enum2i(it_activation->index));
+        msg_print("Special timeout is not implemented: {}.", enum2i(it_activation->index));
         return;
     }
 }

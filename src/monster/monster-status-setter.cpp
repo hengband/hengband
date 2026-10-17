@@ -21,6 +21,7 @@
 #include "system/redrawing-flags-updater.h"
 #include "target/projection-path-calculator.h"
 #include "tracking/health-bar-tracker.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 #include <string>
@@ -51,7 +52,7 @@ void anger_monster(PlayerType *player_ptr, MonsterEntity &monster)
     }
 
     const auto m_name = monster_desc(player_ptr, monster, 0);
-    msg_format(_("%s^は怒った！", "%s^ gets angry!"), m_name.data());
+    msg_print(_("{}は怒った！", "{} gets angry!"), str_upcase_first(m_name));
     monster.set_hostile();
     chg_virtue(player_ptr, Virtue::INDIVIDUALISM, 1);
     chg_virtue(player_ptr, Virtue::HONOUR, -1);

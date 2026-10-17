@@ -36,39 +36,39 @@ bool artifact_scroll(PlayerType *player_ptr)
 
     const auto item_name = describe_flavor(player_ptr, *item, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 #ifdef JP
-    msg_format("%s は眩い光を発した！", item_name.data());
+    msg_print("{} は眩い光を発した！", item_name);
 #else
-    msg_format("%s %s radiate%s a blinding light!", ((i_idx >= 0) ? "Your" : "The"), item_name.data(), ((item->number > 1) ? "" : "s"));
+    msg_print("{} {} radiate{} a blinding light!", ((i_idx >= 0) ? "Your" : "The"), item_name, ((item->number > 1) ? "" : "s"));
 #endif
 
     bool okay = false;
     if (item->is_fixed_or_random_artifact()) {
 #ifdef JP
-        msg_format("%sは既に伝説のアイテムです！", item_name.data());
+        msg_print("{}は既に伝説のアイテムです！", item_name);
 #else
-        msg_format("The %s %s already %s!", item_name.data(), ((item->number > 1) ? "are" : "is"), ((item->number > 1) ? "artifacts" : "an artifact"));
+        msg_print("The {} {} already {}!", item_name, ((item->number > 1) ? "are" : "is"), ((item->number > 1) ? "artifacts" : "an artifact"));
 #endif
         okay = false;
     } else if (item->is_ego()) {
 #ifdef JP
-        msg_format("%sは既に名のあるアイテムです！", item_name.data());
+        msg_print("{}は既に名のあるアイテムです！", item_name);
 #else
-        msg_format("The %s %s already %s!", item_name.data(), ((item->number > 1) ? "are" : "is"), ((item->number > 1) ? "ego items" : "an ego item"));
+        msg_print("The {} {} already {}!", item_name, ((item->number > 1) ? "are" : "is"), ((item->number > 1) ? "ego items" : "an ego item"));
 #endif
         okay = false;
     } else if (item->is_smith()) {
 #ifdef JP
-        msg_format("%sは既に強化されています！", item_name.data());
+        msg_print("{}は既に強化されています！", item_name);
 #else
-        msg_format("The %s %s already %s!", item_name.data(), ((item->number > 1) ? "are" : "is"), ((item->number > 1) ? "customized items" : "a customized item"));
+        msg_print("The {} {} already {}!", item_name, ((item->number > 1) ? "are" : "is"), ((item->number > 1) ? "customized items" : "a customized item"));
 #endif
     } else {
         if (item->number > 1) {
             msg_print(_("複数のアイテムに魔法をかけるだけのエネルギーはありません！", "Not enough energy to enchant more than one object!"));
 #ifdef JP
-            msg_format("%d 個の%sが壊れた！", (item->number) - 1, item_name.data());
+            msg_print("{} 個の{}が壊れた！", (item->number) - 1, item_name);
 #else
-            msg_format("%d of your %s %s destroyed!", (item->number) - 1, item_name.data(), (item->number > 2 ? "were" : "was"));
+            msg_print("{} of your {} {} destroyed!", (item->number) - 1, item_name, (item->number > 2 ? "were" : "was"));
 #endif
 
             if (i_idx >= 0) {

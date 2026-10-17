@@ -367,7 +367,7 @@ bool teleport_player_aux(PlayerType *player_ptr, POSITION dis, bool is_quantum_e
     sound(SoundKind::TELEPORT);
 #ifdef JP
     if (is_echizen(player_ptr)) {
-        msg_format("『こっちだぁ、%s』", player_ptr->name);
+        msg_print("『こっちだぁ、{}』", player_ptr->name);
     }
 #endif
     (void)move_player_effect(player_ptr, pos.y, pos.x, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP);

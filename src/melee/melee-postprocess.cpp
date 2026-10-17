@@ -28,6 +28,7 @@
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "tracking/health-bar-tracker.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
 #include <string>
 
@@ -84,7 +85,7 @@ static bool process_invulnerability(mam_pp_type *mam_pp_ptr)
     }
 
     if (mam_pp_ptr->seen) {
-        msg_format(_("%s^はダメージを受けない。", "%s^ is unharmed."), mam_pp_ptr->m_name.data());
+        msg_print(_("{}はダメージを受けない。", "{} is unharmed."), str_upcase_first(mam_pp_ptr->m_name));
     }
 
     return true;
@@ -114,7 +115,7 @@ static bool process_all_resistances(mam_pp_type *mam_pp_ptr)
     }
 
     if (mam_pp_ptr->seen) {
-        msg_format(_("%s^はダメージを受けない。", "%s^ is unharmed."), mam_pp_ptr->m_name.data());
+        msg_print(_("{}はダメージを受けない。", "{} is unharmed."), str_upcase_first(mam_pp_ptr->m_name));
     }
 
     return true;
@@ -143,18 +144,18 @@ static void print_monster_dead_by_monster(PlayerType *player_ptr, mam_pp_type *m
     if (!mam_pp_ptr->note.empty()) {
         const auto kill_sound = mam_pp_ptr->m_ptr->has_living_flag() ? SoundKind::KILL : SoundKind::N_KILL;
         sound(kill_sound);
-        msg_format(_("%s^%s", "%s^%s"), mam_pp_ptr->m_name.data(), mam_pp_ptr->note.data());
+        msg_print("{}{}", str_upcase_first(mam_pp_ptr->m_name), mam_pp_ptr->note);
         return;
     }
 
     if (!mam_pp_ptr->m_ptr->has_living_flag()) {
         sound(SoundKind::N_KILL);
-        msg_format(_("%s^は破壊された。", "%s^ is destroyed."), mam_pp_ptr->m_name.data());
+        msg_print(_("{}は破壊された。", "{} is destroyed."), str_upcase_first(mam_pp_ptr->m_name));
         return;
     }
 
     sound(SoundKind::KILL);
-    msg_format(_("%s^は殺された。", "%s^ is killed."), mam_pp_ptr->m_name.data());
+    msg_print(_("{}は殺された。", "{} is killed."), str_upcase_first(mam_pp_ptr->m_name));
 }
 
 /*!
@@ -243,7 +244,7 @@ static void fall_off_horse_by_melee(PlayerType *player_ptr, mam_pp_type *mam_pp_
     }
 
     if (process_fall_off_horse(player_ptr, (mam_pp_ptr->dam > 200) ? 200 : mam_pp_ptr->dam, false)) {
-        msg_format(_("%s^に振り落とされた！", "You have been thrown off from %s!"), mam_pp_ptr->m_name.data());
+        msg_print(_("{}に振り落とされた！", "You have been thrown off from {}!"), mam_pp_ptr->m_name);
     }
 }
 

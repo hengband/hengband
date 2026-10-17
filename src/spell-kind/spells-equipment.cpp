@@ -50,9 +50,9 @@ bool apply_disenchant(PlayerType *player_ptr, BIT_FLAGS mode)
     const auto item_name = describe_flavor(player_ptr, item, (OD_OMIT_PREFIX | OD_NAME_ONLY));
     if (item.is_fixed_or_random_artifact() && evaluate_percent(71)) {
 #ifdef JP
-        msg_format("%s(%c)は劣化を跳ね返した！", item_name.data(), index_to_label(t));
+        msg_print("{}({:c})は劣化を跳ね返した！", item_name, index_to_label(t));
 #else
-        msg_format("Your %s (%c) resist%s disenchantment!", item_name.data(), index_to_label(t), (item.number != 1) ? "" : "s");
+        msg_print("Your {} ({:c}) resist{} disenchantment!", item_name, index_to_label(t), (item.number != 1) ? "" : "s");
 #endif
         return true;
     }
@@ -96,9 +96,9 @@ bool apply_disenchant(PlayerType *player_ptr, BIT_FLAGS mode)
     }
 
 #ifdef JP
-    msg_format("%s(%c)は劣化してしまった！", item_name.data(), index_to_label(t));
+    msg_print("{}({:c})は劣化してしまった！", item_name, index_to_label(t));
 #else
-    msg_format("Your %s (%c) %s disenchanted!", item_name.data(), index_to_label(t), (item.number != 1) ? "were" : "was");
+    msg_print("Your {} ({:c}) {} disenchanted!", item_name, index_to_label(t), (item.number != 1) ? "were" : "was");
 #endif
     chg_virtue(player_ptr, Virtue::HARMONY, 1);
     chg_virtue(player_ptr, Virtue::ENCHANT, -2);

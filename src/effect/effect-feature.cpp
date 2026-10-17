@@ -108,7 +108,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
         }
 
         if (message) {
-            msg_format(_("木は%s。", "A tree %s"), message);
+            msg_print(_("木は{}。", "A tree {}"), message);
             set_terrain_id_to_grid(player_ptr, pos, one_in_(3) ? TerrainTag::BRAKE : TerrainTag::GRASS);
 
             /* Observe */
@@ -225,7 +225,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
             break;
         }
 
-        msg_format(_("%sに何かがつっかえて開かなくなった。", "The %s seems stuck."), terrain_mimic.name.data());
+        msg_print(_("{}に何かがつっかえて開かなくなった。", "The {} seems stuck."), terrain_mimic.name);
         obvious = true;
         break;
     }
@@ -235,7 +235,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
         }
 
         if (known && grid.is_mark()) {
-            msg_format(_("%sが溶けて泥になった！", "The %s turns into mud!"), grid.get_terrain(TerrainKind::MIMIC).name.data());
+            msg_print(_("{}が溶けて泥になった！", "The {} turns into mud!"), grid.get_terrain(TerrainKind::MIMIC).name);
             obvious = true;
         }
 
@@ -403,7 +403,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
         }
 
         if (known && (grid.is_mark())) {
-            msg_format(_("%sが割れた！", "The %s crumbled!"), grid.get_terrain(TerrainKind::MIMIC).name.data());
+            msg_print(_("{}が割れた！", "The {} crumbled!"), grid.get_terrain(TerrainKind::MIMIC).name);
             sound(SoundKind::GLASS);
         }
 
@@ -425,7 +425,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
         }
 
         if (known && (grid.is_mark())) {
-            msg_format(_("%sが割れた！", "The %s crumbled!"), grid.get_terrain(TerrainKind::MIMIC).name.data());
+            msg_print(_("{}が割れた！", "The {} crumbled!"), grid.get_terrain(TerrainKind::MIMIC).name);
             sound(SoundKind::GLASS);
         }
 

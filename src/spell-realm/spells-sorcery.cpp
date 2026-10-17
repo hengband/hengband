@@ -14,6 +14,7 @@
 #include "system/redrawing-flags-updater.h"
 #include "term/z-form.h"
 #include "view/display-messages.h"
+#include <fmt/format.h>
 
 /*!
  * @brief アイテムの価値に応じた錬金術処理 /
@@ -50,7 +51,7 @@ bool alchemy(PlayerType *player_ptr)
 
     if (!force) {
         if (confirm_destroy || (item->calc_price() > 0)) {
-            const auto out_val = format(_("本当に%sを金に変えますか？", "Really turn %s to gold? "), item_name.data());
+            const auto out_val = fmt::format(_("本当に{}を金に変えますか？", "Really turn {} to gold? "), item_name);
             if (!input_check(out_val)) {
                 return false;
             }
@@ -58,13 +59,13 @@ bool alchemy(PlayerType *player_ptr)
     }
 
     if (!can_player_destroy_object(item.get())) {
-        msg_format(_("%sを金に変えることに失敗した。", "You fail to turn %s to gold!"), item_name.data());
+        msg_print(_("{}を金に変えることに失敗した。", "You fail to turn {} to gold!"), item_name);
         return false;
     }
 
     auto price = int64_t{ object_value_real(item.get()) };
     if (price <= 0) {
-        msg_format(_("%sをニセの金に変えた。", "You turn %s to fool's gold."), item_name.data());
+        msg_print(_("{}をニセの金に変えた。", "You turn {} to fool's gold."), item_name);
         vary_item(player_ptr, i_idx, -amt);
         return true;
     }
@@ -80,7 +81,7 @@ bool alchemy(PlayerType *player_ptr)
     }
 
     const auto gold = static_cast<PRICE>(price);
-    msg_format(_("%sを＄%d の金に変えた。", "You turn %s to %d coins worth of gold."), item_name.data(), gold);
+    msg_print(_("{}を＄{} の金に変えた。", "You turn {} to {} coins worth of gold."), item_name, gold);
     player_ptr->au = clamp_price(int64_t{ player_ptr->au } + gold);
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.set_flag(MainWindowRedrawingFlag::GOLD);

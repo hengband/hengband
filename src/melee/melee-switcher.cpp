@@ -23,6 +23,7 @@
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
 
 /*!
@@ -305,15 +306,15 @@ void decide_monster_attack_effect(PlayerType *player_ptr, mam_type *mam_ptr)
         if (!has_resist) {
             if (one_in_(2)) {
                 if (mam_ptr->t_ptr->is_riding()) {
-                    msg_format(_("%s^はテレポートした！", "%s^ teleports away!"), mam_ptr->t_name);
+                    msg_print(_("{}はテレポートした！", "{} teleports away!"), str_upcase_first(mam_ptr->t_name));
                     teleport_player_away(mam_ptr->m_idx, player_ptr, 50, false);
                 } else {
-                    msg_format(_("%s^はどこかへ消えていった！", "%s^ disappears!"), mam_ptr->t_name);
+                    msg_print(_("{}はどこかへ消えていった！", "{} disappears!"), str_upcase_first(mam_ptr->t_name));
                     teleport_away(player_ptr, mam_ptr->t_idx, 50, TELEPORT_PASSIVE);
                 }
             } else {
                 if (polymorph_monster(player_ptr, mam_ptr->t_ptr->fy, mam_ptr->t_ptr->fx)) {
-                    msg_format(_("%s^は変化した！", "%s^ changes!"), mam_ptr->t_name);
+                    msg_print(_("{}は変化した！", "{} changes!"), str_upcase_first(mam_ptr->t_name));
                 }
             }
         }
@@ -346,9 +347,9 @@ void describe_monster_missed_monster(FloorType &floor, mam_type *mam_ptr)
         (void)set_monster_csleep(floor, mam_ptr->t_idx, 0);
         if (mam_ptr->see_m) {
 #ifdef JP
-            msg_format("%sは%s^の攻撃をかわした。", mam_ptr->t_name, mam_ptr->m_name);
+            msg_print("{}は{}の攻撃をかわした。", mam_ptr->t_name, str_upcase_first(mam_ptr->m_name));
 #else
-            msg_format("%s^ misses %s.", mam_ptr->m_name, mam_ptr->t_name);
+            msg_print("{} misses {}.", str_upcase_first(mam_ptr->m_name), mam_ptr->t_name);
 #endif
         }
 

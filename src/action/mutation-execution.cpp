@@ -317,7 +317,7 @@ bool exe_mutation_power(PlayerType *player_ptr, PlayerMutationType power)
         return ThrowCommand(player_ptr).do_cmd_throw(2 + lvl / 40, false, -1);
     default:
         PlayerEnergy(player_ptr).reset_player_turn();
-        msg_format(_("能力 PlayerMutationType::%d は実装されていません。", "Power PlayerMutationType::%d not implemented. Oops."), enum2i(power));
+        msg_print(_("能力 PlayerMutationType::{} は実装されていません。", "Power PlayerMutationType::{} not implemented. Oops."), enum2i(power));
         return true;
     }
 }
