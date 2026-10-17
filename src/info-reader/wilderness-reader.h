@@ -6,6 +6,7 @@
 #include <nlohmann/json_fwd.hpp>
 #include <optional>
 #include <string>
+#include <tl/expected.hpp>
 #include <vector>
 
 struct WildernessTownDefinition {
@@ -49,7 +50,7 @@ public:
     int read(WildernessDefinition &definition) const;
 
 private:
-    int read_map(const nlohmann::json &data, int width, int height, WildernessMapDefinition &map) const;
+    tl::expected<void, parse_error_type> read_map(const nlohmann::json &data, int width, int height, WildernessMapDefinition &map) const;
 
     const nlohmann::json &data;
 };
