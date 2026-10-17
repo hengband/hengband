@@ -14,6 +14,16 @@
 #include <variant>
 
 /*!
+ * @brief 待っている入力の種類
+ */
+enum class InputKind {
+    CONFIRM, //!< [y/n] などの確認
+    COMMAND_CHAR, //!< 1文字の入力
+    STRING, //!< 文字列の入力
+    QUANTITY, //!< 数量の入力
+};
+
+/*!
  * @brief 文字列の入力の詳細
  */
 struct StringInputDetails {
@@ -36,7 +46,7 @@ using InputDetails = std::variant<std::monostate, StringInputDetails, QuantityIn
  * @brief 現在待っている入力の種類と、画面に表示したプロンプト
  */
 struct InputContext {
-    std::string kind; //!< 入力の種類
+    InputKind kind; //!< 入力の種類
     std::string prompt; //!< 画面に表示したプロンプト
     InputDetails details; //!< 入力の種類ごとの詳細
 };
@@ -46,7 +56,7 @@ struct InputContext {
  */
 class InputContextScope {
 public:
-    InputContextScope(std::string_view kind, std::string_view prompt);
+    InputContextScope(InputKind kind, std::string_view prompt);
     explicit InputContextScope(InputContext input_context);
     ~InputContextScope();
 

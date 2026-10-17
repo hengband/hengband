@@ -17,8 +17,8 @@ tl::optional<InputContext> current_input_context;
  * @brief 新しい入力文脈を保持し、以前の文脈をスコープへ退避する
  * @details 新しい値の構築が失敗した場合は、現在の文脈を変更しない。
  */
-InputContextScope::InputContextScope(std::string_view kind, std::string_view prompt)
-    : InputContextScope(InputContext{ std::string(kind), std::string(prompt), {} })
+InputContextScope::InputContextScope(InputKind kind, std::string_view prompt)
+    : InputContextScope(InputContext{ kind, std::string(prompt), {} })
 {
 }
 

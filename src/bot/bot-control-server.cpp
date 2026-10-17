@@ -22,6 +22,7 @@
 #include "game-option/runtime-arguments.h"
 #include "io/input-context.h"
 #include "io/macro-configurations-store.h"
+#include "system/angband-exceptions.h"
 #include "system/angband-system.h"
 #include "system/angband-version.h"
 #include "system/player-type-definition.h"
@@ -36,6 +37,7 @@
 #include <iterator>
 #include <memory>
 #include <nlohmann/json.hpp>
+#include <stdexcept>
 #include <string>
 #include <string_view>
 #include <tl/expected.hpp>
@@ -134,6 +136,27 @@ nlohmann::json make_ok_response(const nlohmann::json &id, nlohmann::json result 
 }
 
 /*!
+ * @brief 入力の種類を応答で使う名前へ変換する
+ * @param kind 入力の種類
+ * @return 応答の input_context.kind に入れる名前
+ */
+std::string_view input_kind_name(InputKind kind)
+{
+    switch (kind) {
+    case InputKind::CONFIRM:
+        return "confirm";
+    case InputKind::COMMAND_CHAR:
+        return "command_char";
+    case InputKind::STRING:
+        return "string";
+    case InputKind::QUANTITY:
+        return "quantity";
+    }
+
+    THROW_EXCEPTION(std::logic_error, "Invalid InputKind was specified!");
+}
+
+/*!
  * @brief 現在の入力待ちの文脈をJSONへ変換する
  */
 nlohmann::json make_input_context_json()
@@ -143,7 +166,7 @@ nlohmann::json make_input_context_json()
         return nullptr;
     }
 
-    auto result = nlohmann::json{ { "kind", context->kind }, { "prompt", to_json_utf8(context->prompt) } };
+    auto result = nlohmann::json{ { "kind", input_kind_name(context->kind) }, { "prompt", to_json_utf8(context->prompt) } };
     if (const auto *string_details = std::get_if<StringInputDetails>(&context->details)) {
         result["max_length"] = string_details->max_length;
         result["initial"] = to_json_utf8(string_details->initial);

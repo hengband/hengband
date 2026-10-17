@@ -205,7 +205,7 @@ static tl::optional<std::string> input_string_with_context(InputContext input_co
  */
 tl::optional<std::string> input_string(std::string_view prompt, int len, std::string_view initial_value, bool numpad_cursor)
 {
-    InputContext input_context{ "string", std::string(prompt), StringInputDetails{ len, std::string(initial_value) } };
+    InputContext input_context{ InputKind::STRING, std::string(prompt), StringInputDetails{ len, std::string(initial_value) } };
     return input_string_with_context(std::move(input_context), len, initial_value, numpad_cursor);
 }
 
@@ -272,7 +272,7 @@ bool input_check_strict(PlayerType *player_ptr, std::string_view prompt, EnumCla
     }
 
     bool flag = false;
-    const InputContextScope input_context("confirm", buf);
+    const InputContextScope input_context(InputKind::CONFIRM, buf);
     while (true) {
         int i = inkey();
 
@@ -326,7 +326,7 @@ tl::optional<char> input_command(std::string_view prompt)
     prt(prompt, 0, 0);
     char command;
     {
-        const InputContextScope input_context("command_char", prompt);
+        const InputContextScope input_context(InputKind::COMMAND_CHAR, prompt);
         if (get_com_no_macros) {
             command = static_cast<char>(inkey_special(false));
         } else {
@@ -373,7 +373,7 @@ int input_quantity(int max, std::string_view initial_prompt)
     }
 
     msg_erase();
-    InputContext input_context{ "quantity", prompt, QuantityInputDetails{ max, 1 } };
+    InputContext input_context{ InputKind::QUANTITY, prompt, QuantityInputDetails{ max, 1 } };
     const auto input_amount = input_string_with_context(std::move(input_context), 6, "1", false);
     if (!input_amount) {
         return 0;
