@@ -207,3 +207,30 @@ TEST_CASE("RedrawingFlagsUpdater::request_inscription_change_updates requests re
         CHECK_FALSE(rfu.has(flag));
     }
 }
+
+TEST_CASE("RedrawingFlagsUpdater::request_equipment_change_updates requests recalculating the bonuses, the light radius and the max MP")
+{
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    static constexpr auto flags_srf = {
+        StatusRecalculatingFlag::BONUS,
+        StatusRecalculatingFlag::TORCH,
+        StatusRecalculatingFlag::MP,
+        StatusRecalculatingFlag::HP,
+    };
+    const auto restore = scoped_restore_flags(rfu, flags_srf);
+    const auto restore_mwrf = scoped_restore_flags(rfu, { MainWindowRedrawingFlag::EQUIPPY });
+    const auto restore_swrf = scoped_restore_flags(rfu, { SubWindowRedrawingFlag::PLAYER });
+    rfu.reset_flags(flags_srf);
+    rfu.reset_flag(MainWindowRedrawingFlag::EQUIPPY);
+    rfu.reset_flag(SubWindowRedrawingFlag::PLAYER);
+
+    rfu.request_equipment_change_updates();
+
+    CHECK(rfu.has(StatusRecalculatingFlag::BONUS));
+    CHECK(rfu.has(StatusRecalculatingFlag::TORCH));
+    CHECK(rfu.has(StatusRecalculatingFlag::MP));
+    CHECK_FALSE(rfu.has(StatusRecalculatingFlag::HP));
+    // 装備の記号やプレイヤー情報の描き直しは、装備する・外すコマンドの側で要求する
+    CHECK_FALSE(rfu.has(MainWindowRedrawingFlag::EQUIPPY));
+    CHECK_FALSE(rfu.has(SubWindowRedrawingFlag::PLAYER));
+}

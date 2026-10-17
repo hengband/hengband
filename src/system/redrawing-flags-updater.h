@@ -131,6 +131,7 @@ public:
     void request_floor_item_lists_redrawing();
     void request_spell_info_redrawing();
     void request_inscription_change_updates();
+    void request_equipment_change_updates();
 
     void fill_up_sub_flags();
     EnumClassFlagGroup<SubWindowRedrawingFlag> get_sub_intersection(const EnumClassFlagGroup<SubWindowRedrawingFlag> &flags) const;

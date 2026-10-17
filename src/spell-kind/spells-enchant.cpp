@@ -95,13 +95,8 @@ bool artifact_scroll(PlayerType *player_ptr)
         return true;
     }
 
-    // 装備品なら、アーティファクトの能力 (光源の明るさなども) が付く
-    static constexpr auto flags_srf = {
-        StatusRecalculatingFlag::BONUS,
-        StatusRecalculatingFlag::TORCH,
-        StatusRecalculatingFlag::MP,
-    };
-    RedrawingFlagsUpdater::get_instance().set_flags(flags_srf);
+    // 装備品なら、アーティファクトの能力が付く
+    RedrawingFlagsUpdater::get_instance().request_equipment_change_updates();
 
     if (record_rand_art) {
         const auto diary_item_name = describe_flavor(player_ptr, *item, OD_NAME_ONLY);
@@ -165,14 +160,9 @@ bool mundane_spell(PlayerType *player_ptr, bool only_equip)
         item->timeout = timeout;
     }
 
-    // 装備品なら、修正値・エゴ・アーティファクトの能力 (光源の明るさなども) が無くなる
-    static constexpr auto flags_srf = {
-        StatusRecalculatingFlag::BONUS,
-        StatusRecalculatingFlag::TORCH,
-        StatusRecalculatingFlag::MP,
-    };
+    // 装備品なら、修正値・エゴ・アーティファクトの能力が無くなる
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.set_flags(flags_srf);
+    rfu.request_equipment_change_updates();
 
     // 鑑定の状態・エゴ・修正値が変わるので、並び順や束をまとめられるかも変わる
     rfu.request_inventory_arrangement();

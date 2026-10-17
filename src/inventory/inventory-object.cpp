@@ -98,12 +98,7 @@ void inven_item_optimize(PlayerType *player_ptr, INVENTORY_IDX i_idx)
     if (i_idx >= INVEN_MAIN_HAND) {
         player_ptr->equip_cnt--;
         player_ptr->inventory[i_idx]->wipe();
-        static constexpr auto flags_srf = {
-            StatusRecalculatingFlag::BONUS,
-            StatusRecalculatingFlag::TORCH,
-            StatusRecalculatingFlag::MP,
-        };
-        rfu.set_flags(flags_srf);
+        rfu.request_equipment_change_updates();
         return;
     }
 
