@@ -527,3 +527,175 @@ TEST_CASE("DungeonReader rejects guardian zero as below the schema minimum befor
     CHECK(DungeonReader(data).read() == PARSE_ERROR_OUT_OF_BOUNDS);
     CHECK(DungeonList::get_instance().empty());
 }
+
+TEST_CASE("DungeonReader propagates nested parse errors without publishing partial definitions")
+{
+    struct InvalidField {
+        const char *path;
+        nlohmann::json value;
+        parse_error_type error;
+    };
+    const std::vector<InvalidField> invalid_fields = {
+        { "/description", 1, PARSE_ERROR_INVALID_TYPE },
+        { "/generation", nullptr, PARSE_ERROR_TOO_FEW_ARGUMENTS },
+        { "/generation/minDepth", "depth", PARSE_ERROR_INVALID_TYPE },
+        { "/generation/pit", nullptr, PARSE_ERROR_TOO_FEW_ARGUMENTS },
+        { "/generation/pit", { "ORC", "UNKNOWN" }, PARSE_ERROR_INVALID_FLAG },
+        { "/generation/nest", { "UNDEAD", 1 }, PARSE_ERROR_TOO_FEW_ARGUMENTS },
+        { "/generation/nest", { "UNKNOWN" }, PARSE_ERROR_INVALID_FLAG },
+        { "/floor", nullptr, PARSE_ERROR_TOO_FEW_ARGUMENTS },
+        { "/floor/tunnelRate", "rate", PARSE_ERROR_INVALID_TYPE },
+        { "/wall", nullptr, PARSE_ERROR_TOO_FEW_ARGUMENTS },
+        { "/wall/inner", "UNKNOWN", PARSE_ERROR_UNDEFINED_TERRAIN_TAG },
+        { "/wall/streams", 1, PARSE_ERROR_TOO_FEW_ARGUMENTS },
+        { "/wall/streams/1/type", "UNKNOWN", PARSE_ERROR_UNDEFINED_TERRAIN_TAG },
+        { "/wall/streams/1/count", 0, PARSE_ERROR_INVALID_FLAG },
+        { "/wall/streams/1/chance", "chance", PARSE_ERROR_INVALID_TYPE },
+        { "/wall/streams/1/priority", nullptr, PARSE_ERROR_TOO_FEW_ARGUMENTS },
+        { "/final_floor", 1, PARSE_ERROR_TOO_FEW_ARGUMENTS },
+        { "/final_floor/guardian", 65537, PARSE_ERROR_OUT_OF_BOUNDS },
+        { "/final_floor/guardian", 2, PARSE_ERROR_INVALID_VALUE },
+        { "/final_floor/object", 0, PARSE_ERROR_INVALID_FLAG },
+        { "/final_floor/artifact", 2, PARSE_ERROR_INVALID_VALUE },
+        { "/flags", 1, PARSE_ERROR_TOO_FEW_ARGUMENTS },
+        { "/flags", { "MAZE", "UNKNOWN" }, PARSE_ERROR_INVALID_FLAG },
+        { "/monsters", nullptr, PARSE_ERROR_TOO_FEW_ARGUMENTS },
+        { "/monsters/additionalSpawnProbability", 0, PARSE_ERROR_INVALID_FLAG },
+        { "/monsters/flagsMode", 1, PARSE_ERROR_TOO_FEW_ARGUMENTS },
+        { "/monsters/flagsMode", "UNKNOWN", PARSE_ERROR_INVALID_FLAG },
+        { "/monsters/flags", { "UNIQUE", "UNKNOWN" }, PARSE_ERROR_INVALID_FLAG },
+        { "/monsters/symbols", { "D", "XX" }, PARSE_ERROR_INVALID_FLAG },
+        { "/monsters/symbols", { "D", 1 }, PARSE_ERROR_TOO_FEW_ARGUMENTS },
+        { "/monsters/spells", { "HASTE", "UNKNOWN" }, PARSE_ERROR_INVALID_FLAG },
+        { "/monsters/spells", { "HASTE", 1 }, PARSE_ERROR_TOO_FEW_ARGUMENTS },
+    };
+    for (const auto &field : invalid_fields) {
+        CAPTURE(field.path);
+        CAPTURE(field.value);
+        FinalFloorStateGuard guard;
+        const auto original = make_dungeon();
+        REQUIRE(DungeonReader(original).read() == PARSE_ERROR_NONE);
+        const auto &dungeons = DungeonList::get_instance();
+        const auto before = dungeons.get_dungeon_shared(DungeonId::WILDERNESS);
+        auto data = make_dungeon(1);
+        data["wall"]["streams"] = {
+            { { "type", "FLOOR" }, { "count", 1 }, { "chance", 1 }, { "priority", 0 } },
+            { { "type", "GRANITE" }, { "count", 2 }, { "chance", 2 }, { "priority", 1 } },
+        };
+        data["final_floor"] = { { "guardian", 1 }, { "artifact", 0 } };
+        data[nlohmann::json::json_pointer(field.path)] = field.value;
+
+        CHECK(DungeonReader(data).read() == field.error);
+        CHECK(error_idx == 1);
+        CHECK(dungeons.size() == 1);
+        CHECK_FALSE(dungeons.contains(DungeonId::ANGBAND));
+        CHECK(dungeons.get_dungeon_shared(DungeonId::WILDERNESS) == before);
+        CHECK(before->name == "test dungeon");
+        CHECK(before->streams.empty());
+        CHECK(before->prob_table_floor.total_prob() == 1);
+        CHECK(before->prob_table_wall.total_prob() == 1);
+    }
+}
+
+TEST_CASE("DungeonReader preserves error priority and the diagnostic record ID")
+{
+    DungeonReaderStateGuard guard;
+    auto data = make_dungeon(1);
+    data["generation"]["pit"] = { "UNKNOWN" };
+    data["wall"]["inner"] = "UNKNOWN";
+    data["monsters"]["symbols"] = { "XX" };
+    SUBCASE("an invalid ID does not update the diagnostic ID")
+    {
+        data["id"] = "id";
+        CHECK(DungeonReader(data).read() == PARSE_ERROR_INVALID_TYPE);
+        CHECK(error_idx == -1);
+    }
+    SUBCASE("a nonsequential ID precedes field parsing")
+    {
+        error_idx = 1;
+        CHECK(DungeonReader(data).read() == PARSE_ERROR_NON_SEQUENTIAL_RECORDS);
+        CHECK(error_idx == 1);
+    }
+    SUBCASE("the valid ID is selected before name parsing")
+    {
+        data["name"] = 1;
+        CHECK(DungeonReader(data).read() == PARSE_ERROR_INVALID_TYPE);
+        CHECK(error_idx == 1);
+    }
+    SUBCASE("generation errors precede later field errors")
+    {
+        CHECK(DungeonReader(data).read() == PARSE_ERROR_INVALID_FLAG);
+        CHECK(error_idx == 1);
+    }
+    CHECK(DungeonList::get_instance().empty());
+}
+
+TEST_CASE("DungeonReader publishes complete nested definitions and accepts optional nulls")
+{
+    FinalFloorStateGuard guard;
+    auto &baseitems = BaseitemList::get_instance();
+    const auto restore_baseitems = test::ScopedVectorWrapper(baseitems);
+    baseitems.resize(2);
+    auto data = make_dungeon();
+    SUBCASE("populated helpers preserve values and sort streams")
+    {
+        data["description"] = { { "ja", "description" }, { "en", "description" } };
+        data["generation"]["pit"] = { "", "ORC" };
+        data["generation"]["nest"] = { "", "UNDEAD" };
+        data["wall"]["streams"] = {
+            { { "type", "GRANITE" }, { "count", 255 }, { "chance", 65535 }, { "priority", 255 } },
+            { { "type", "FLOOR" }, { "count", 1 }, { "chance", 1 }, { "priority", 0 } },
+        };
+        data["final_floor"] = { { "guardian", 1 }, { "artifact", 1 }, { "object", 1 } };
+        data["flags"] = { "", "MAZE" };
+        data["monsters"]["flagsMode"] = "AND";
+        data["monsters"]["flags"] = { "", "UNIQUE", "IM_ACID" };
+        data["monsters"]["symbols"] = { "", "D" };
+        data["monsters"]["spells"] = { "", "HASTE" };
+        REQUIRE(DungeonReader(data).read() == PARSE_ERROR_NONE);
+        const auto &dungeon = DungeonList::get_instance().get_dungeon(DungeonId::WILDERNESS);
+        CHECK(dungeon.text == "description");
+        CHECK(dungeon.pit.has(PitKind::ORC));
+        CHECK(dungeon.nest.has(NestKind::UNDEAD));
+        REQUIRE(dungeon.streams.size() == 2);
+        CHECK(dungeon.streams[0].terrain_id == 0);
+        CHECK(dungeon.streams[0].count == 1);
+        CHECK(dungeon.streams[0].chance == 1);
+        CHECK(dungeon.streams[0].priority == 0);
+        CHECK(dungeon.streams[1].terrain_id == 1);
+        CHECK(dungeon.streams[1].count == 255);
+        CHECK(dungeon.streams[1].chance == 65535);
+        CHECK(dungeon.streams[1].priority == 255);
+        CHECK(dungeon.final_guardian == MonraceId::FILTHY_URCHIN);
+        CHECK(dungeon.final_artifact == FixedArtifactId::GALADRIEL_PHIAL);
+        CHECK(dungeon.final_object == 1);
+        CHECK(dungeon.flags.has(DungeonFeatureType::MAZE));
+        CHECK(dungeon.mode == DungeonMode::AND);
+        CHECK(dungeon.mon_kind_flags.has(MonsterKindType::UNIQUE));
+        CHECK(dungeon.mon_resistance_flags.has(MonsterResistanceType::IMMUNE_ACID));
+        CHECK(dungeon.mon_ability_flags.has(MonsterAbilityType::HASTE));
+        CHECK(dungeon.r_chars == std::vector<char>{ 'D' });
+    }
+    SUBCASE("optional null fields keep defaults")
+    {
+        data["description"] = nullptr;
+        data["wall"]["streams"] = nullptr;
+        data["final_floor"] = nullptr;
+        data["flags"] = nullptr;
+        for (const auto *key : { "flags", "symbols", "spells" }) {
+            data["monsters"][key] = nullptr;
+        }
+        REQUIRE(DungeonReader(data).read() == PARSE_ERROR_NONE);
+        const auto &dungeon = DungeonList::get_instance().get_dungeon(DungeonId::WILDERNESS);
+        CHECK(dungeon.text.empty());
+        CHECK(dungeon.streams.empty());
+        CHECK(dungeon.flags.none());
+        CHECK(dungeon.r_chars.empty());
+        CHECK(dungeon.mon_kind_flags.none());
+        CHECK(dungeon.mon_ability_flags.none());
+        CHECK(dungeon.final_guardian == MonraceId{});
+        CHECK(dungeon.final_artifact == FixedArtifactId::NONE);
+    }
+    CHECK(error_idx == 0);
+    CHECK(DungeonList::get_instance().size() == 1);
+}
