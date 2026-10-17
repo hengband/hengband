@@ -1,6 +1,9 @@
 #include "info-reader/info-reader-util.h"
 #include "info-reader/parse-error-types.h"
 #include "info-reader/race-reader.h"
+#include "monster-attack/monster-attack-effect.h"
+#include "monster-attack/monster-attack-table.h"
+#include "player-ability/player-ability-types.h"
 #include "system/enums/monrace/monrace-id.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
@@ -249,7 +252,7 @@ TEST_CASE("RaceReader rejects nonstring message actions before message insertion
     CHECK(read_as_first_record(data) == PARSE_ERROR_INVALID_FLAG);
 }
 
-TEST_CASE("RaceReader preserves existing definition messages and record after late failure")
+TEST_CASE("RaceReader preserves existing definition messages and record after helper failures")
 {
     test::MonraceListTestAccess races;
     test::MonraceMessageListTestAccess messages;
@@ -286,6 +289,71 @@ TEST_CASE("RaceReader preserves existing definition messages and record after la
     {
         data["flags"] = { "RES_FIRE", "UNKNOWN" };
     }
+    SUBCASE("name before symbol")
+    {
+        data["name"] = 42;
+        data["symbol"]["character"] = "pp";
+        expected = PARSE_ERROR_TOO_FEW_ARGUMENTS;
+    }
+    SUBCASE("symbol before speed")
+    {
+        data["symbol"]["character"] = "pp";
+        data["speed"] = 100;
+        expected = PARSE_ERROR_INVALID_VALUE;
+    }
+    SUBCASE("speed before hit dice")
+    {
+        data["speed"] = "bad";
+        data["hit_point"] = "0d1";
+        expected = PARSE_ERROR_INVALID_TYPE;
+    }
+    SUBCASE("hit dice before vision")
+    {
+        data["hit_point"] = "1d32768";
+        data["vision"] = "bad";
+        expected = PARSE_ERROR_OUT_OF_BOUNDS;
+    }
+    SUBCASE("evolution before sex")
+    {
+        data["evolve"] = { { "need_exp", "bad" }, { "to", 2 } };
+        data["sex"] = "UNKNOWN";
+        expected = PARSE_ERROR_INVALID_TYPE;
+    }
+    SUBCASE("sex before artifact drops")
+    {
+        data["sex"] = 42;
+        data["artifacts"] = nlohmann::json::array({ { { "drop_artifact_id", 0 }, { "drop_probability", 50 } } });
+        expected = PARSE_ERROR_TOO_FEW_ARGUMENTS;
+    }
+    SUBCASE("artifact probability before escort dice")
+    {
+        data["artifacts"] = nlohmann::json::array({ { { "drop_artifact_id", 3 }, { "drop_probability", "bad" } } });
+        data["escorts"][0]["escort_num"] = "1d32768";
+        expected = PARSE_ERROR_INVALID_TYPE;
+    }
+    SUBCASE("escort dice before blows")
+    {
+        data["escorts"][0]["escort_num"] = "01d2";
+        data["blows"] = "bad";
+        expected = PARSE_ERROR_INVALID_VALUE;
+    }
+    SUBCASE("blow dice before flags")
+    {
+        data["blows"] = nlohmann::json::array({ { { "method", "HIT" }, { "effect", "HURT" }, { "damage_dice", "0d2" } } });
+        data["flags"] = { "UNKNOWN" };
+        expected = PARSE_ERROR_OUT_OF_BOUNDS;
+    }
+    SUBCASE("shoot dice before final summons")
+    {
+        data["skill"]["shoot"] = "01d2";
+        data["final_summon"] = "bad";
+        expected = PARSE_ERROR_INVALID_VALUE;
+    }
+    SUBCASE("final summon count relation before messages")
+    {
+        data["final_summon"] = nlohmann::json::array({ { { "id", 2 }, { "probability", 100 }, { "min_num", 2 }, { "max_num", 1 }, { "radius", 1 } } });
+        expected = PARSE_ERROR_INVALID_VALUE;
+    }
     CHECK(read_as_first_record(data) == expected);
     CHECK(list.get_monrace_shared(static_cast<MonraceId>(1)) == identity);
     CHECK(original.name.en_string() == "original");
@@ -298,6 +366,62 @@ TEST_CASE("RaceReader preserves existing definition messages and record after la
     CHECK(messages.message_count(1, MonsterMessageType::SPEAK_ALL) == 1);
     CHECK(MonraceRecords::get_instance().get_record(static_cast<MonraceId>(1)) == record);
     CHECK(record->get_seen_count() == 23);
+    CHECK(error_idx == 1);
+}
+
+TEST_CASE("RaceReader publishes complete nested helper values and messages on success")
+{
+    test::MonraceListTestAccess races;
+    test::MonraceMessageListTestAccess messages;
+    test::ArtifactListTestAccess artifacts;
+    const auto rng = test::scoped_rng();
+    MonraceList::get_instance().emplace(static_cast<MonraceId>(2));
+    ArtifactList::get_instance().emplace(static_cast<FixedArtifactId>(3), {});
+    auto data = make_monrace();
+    data["id"] = 1;
+    data["speed"] = 5;
+    data["hit_point"] = "2d5";
+    data["evolve"] = { { "need_exp", 10 }, { "to", 2 } };
+    data["sex"] = "MALE";
+    data["artifacts"] = nlohmann::json::array({ { { "drop_artifact_id", 3 }, { "drop_probability", 50 } } });
+    data["escorts"] = nlohmann::json::array({ { { "escorts_id", 2 }, { "escort_num", "3d2" } } });
+    data["blows"] = nlohmann::json::array({ { { "method", "HIT" }, { "effect", "HURT" }, { "damage_dice", "1d4" } } });
+    data["flags"] = { "RES_FIRE" };
+    data["skill"] = { { "probability", "1_IN_2" }, { "shoot", "2d3" }, { "list", { "SHRIEK" } } };
+    data["final_summon"] = nlohmann::json::array({ { { "id", 2 }, { "probability", 100 }, { "min_num", 1 }, { "max_num", 2 }, { "radius", 3 } } });
+    data["message"] = nlohmann::json::array({ { { "action", "SPEAK_ALL" }, { "chance", 1 }, { "use_name", false }, { "message", { { "ja", "hello" }, { "en", "hello" } } } } });
+    REQUIRE(read_as_first_record(data) == PARSE_ERROR_NONE);
+    const auto &monrace = MonraceList::get_instance().get_monrace(static_cast<MonraceId>(1));
+    CHECK(monrace.name.en_string() == "test");
+    CHECK(monrace.symbol_definition.character == 'p');
+    CHECK(monrace.speed == STANDARD_SPEED + 5);
+    CHECK(monrace.hit_dice == Dice(2, 5));
+    CHECK(monrace.next_exp == 10);
+    CHECK(monrace.next_r_idx == static_cast<MonraceId>(2));
+    CHECK(monrace.is_male());
+    CHECK_FALSE(monrace.is_female());
+    REQUIRE(monrace.get_drop_artifacts().size() == 1);
+    CHECK(monrace.get_drop_artifacts()[0].fa_id == static_cast<FixedArtifactId>(3));
+    CHECK(monrace.get_drop_artifacts()[0].chance == 50);
+    REQUIRE(monrace.get_reinforces().size() == 1);
+    CHECK(monrace.get_reinforces()[0].get_monrace_id() == static_cast<MonraceId>(2));
+    CHECK(monrace.get_reinforces()[0].get_dice_as_string() == "3d2");
+    CHECK(monrace.blows[0].method == RaceBlowMethodType::HIT);
+    CHECK(monrace.blows[0].effect == RaceBlowEffectType::HURT);
+    CHECK(monrace.blows[0].damage_dice == Dice(1, 4));
+    CHECK(monrace.resistance_flags.has(MonsterResistanceType::RESIST_FIRE));
+    CHECK(monrace.freq_spell == 50);
+    CHECK(monrace.shoot_damage_dice == Dice(2, 3));
+    CHECK(monrace.ability_flags.has(MonsterAbilityType::SHOOT));
+    CHECK(monrace.ability_flags.has(MonsterAbilityType::SHRIEK));
+    REQUIRE(monrace.get_final_summons().size() == 1);
+    CHECK(monrace.get_final_summons()[0].id == static_cast<MonraceId>(2));
+    CHECK(monrace.get_final_summons()[0].min_num == 1);
+    CHECK(monrace.get_final_summons()[0].max_num == 2);
+    CHECK(monrace.get_final_summons()[0].radius == 3);
+    CHECK(messages.message_count(1, MonsterMessageType::SPEAK_ALL) == 1);
+    CHECK(MonraceMessageList::get_instance().get_message(1, "", MonsterMessageType::SPEAK_ALL) == "hello");
+    CHECK_FALSE(RaceReader::validate_references().has_value());
     CHECK(error_idx == 1);
 }
 

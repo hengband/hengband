@@ -35,30 +35,33 @@ constexpr int64_t MAX_MONRACE_DICE_ROLL = std::numeric_limits<short>::max();
  * @param json ダイスを表す文字列が格納されたJSON Object
  * @param dice 保管先のダイス
  * @param is_required 必須かどうか
- * @return エラーコード
+ * @return 成功、またはパースエラー
  * @details 個数と面数は1以上、最大の出目は MAX_MONRACE_DICE_ROLL 以下とする。
  * 範囲外の値は PARSE_ERROR_OUT_OF_BOUNDS、"01d5" のような先頭に0の付いた表記は PARSE_ERROR_INVALID_VALUE を返し、保管先を変更しない。
  */
-errr info_set_monrace_dice(const nlohmann::json &json, Dice &dice, bool is_required)
+tl::expected<void, parse_error_type> info_set_monrace_dice(const nlohmann::json &json, Dice &dice, bool is_required)
 {
     if (json.is_null()) {
-        return is_required ? PARSE_ERROR_TOO_FEW_ARGUMENTS : PARSE_ERROR_NONE;
+        if (is_required) {
+            return tl::unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        }
+        return {};
     }
 
     Dice parsed;
     if (const auto err = info_set_dice(json, parsed, true)) {
-        return err;
+        return tl::unexpected(static_cast<parse_error_type>(err));
     }
     if (!parsed.is_valid() || static_cast<int64_t>(parsed.num) * parsed.sides > MAX_MONRACE_DICE_ROLL) {
-        return PARSE_ERROR_OUT_OF_BOUNDS;
+        return tl::unexpected(PARSE_ERROR_OUT_OF_BOUNDS);
     }
     // CI の pattern と同じく、先頭に0の付いた個数や面数を拒否する。
     if (parsed.to_string() != json.get<std::string>()) {
-        return PARSE_ERROR_INVALID_VALUE;
+        return tl::unexpected(PARSE_ERROR_INVALID_VALUE);
     }
 
     dice = parsed;
-    return PARSE_ERROR_NONE;
+    return {};
 }
 }
 
@@ -98,25 +101,21 @@ int RaceReader::read() const
     monrace.idx = monrace_id;
 
     errr err;
-    err = this->set_mon_name(monrace);
-    if (err) {
+    if (const auto result = this->set_mon_name(monrace); !result) {
         msg_format(_("モンスター名読込失敗。ID: '%d'。", "Failed to load monster name. ID: '%d'."), error_idx);
-        return err;
+        return result.error();
     }
-    err = this->set_mon_symbol(monrace);
-    if (err) {
+    if (const auto result = this->set_mon_symbol(monrace); !result) {
         msg_format(_("モンスターシンボル読込失敗。ID: '%d'。", "Failed to load monster symbol. ID: '%d'."), error_idx);
-        return err;
+        return result.error();
     }
-    err = this->set_mon_speed(monrace);
-    if (err) {
+    if (const auto result = this->set_mon_speed(monrace); !result) {
         msg_format(_("モンスター速度読込失敗。ID: '%d'。", "Failed to load monster speed. ID: '%d'."), error_idx);
-        return err;
+        return result.error();
     }
-    err = info_set_monrace_dice(get_json_value(this->monrace_data, "hit_point"), monrace.hit_dice, true);
-    if (err) {
+    if (const auto result = info_set_monrace_dice(get_json_value(this->monrace_data, "hit_point"), monrace.hit_dice, true); !result) {
         msg_format(_("モンスターHP読込失敗。ID: '%d'。", "Failed to load monster HP. ID: '%d'."), error_idx);
-        return err;
+        return result.error();
     }
     err = info_set_integer(get_json_value(this->monrace_data, "vision"), monrace.aaf, true, Range(0, 999));
     if (err) {
@@ -148,15 +147,13 @@ int RaceReader::read() const
         msg_format(_("モンスター経験値読込失敗。ID: '%d'。", "Failed to load monster exp. ID: '%d'."), error_idx);
         return err;
     }
-    err = this->set_mon_evolve(monrace);
-    if (err) {
+    if (const auto result = this->set_mon_evolve(monrace); !result) {
         msg_format(_("モンスター進化情報読込失敗。ID: '%d'。", "Failed to load monster evolve data. ID: '%d'."), error_idx);
-        return err;
+        return result.error();
     }
-    err = this->set_mon_sex(monrace);
-    if (err) {
+    if (const auto result = this->set_mon_sex(monrace); !result) {
         msg_format(_("モンスター性別読込失敗。ID: '%d'。", "Failed to load monster sex. ID: '%d'."), error_idx);
-        return err;
+        return result.error();
     }
     err = info_set_integer(get_json_value(this->monrace_data, "odds_correction_ratio"), monrace.arena_ratio, false, Range(1, 9999));
     if (err) {
@@ -168,35 +165,29 @@ int RaceReader::read() const
         msg_format(_("モンスター初期体力読込失敗。ID: '%d'。", "Failed to load monster starting HP. ID: '%d'."), error_idx);
         return err;
     }
-    err = this->set_mon_artifacts(monrace);
-    if (err) {
+    if (const auto result = this->set_mon_artifacts(monrace); !result) {
         msg_format(_("モンスター固定アーティファクトドロップ情報読込失敗。ID: '%d'。", "Failed to load monster artifact drop data. ID: '%d'."), error_idx);
-        return err;
+        return result.error();
     }
-    err = this->set_mon_escorts(monrace);
-    if (err) {
+    if (const auto result = this->set_mon_escorts(monrace); !result) {
         msg_format(_("モンスター護衛情報読込失敗。ID: '%d'。", "Failed to load monster escorts. ID: '%d'."), error_idx);
-        return err;
+        return result.error();
     }
-    err = this->set_mon_blows(monrace);
-    if (err) {
+    if (const auto result = this->set_mon_blows(monrace); !result) {
         msg_format(_("モンスター打撃情報読込失敗。ID: '%d'。", "Failed to load monster blow data. ID: '%d'."), error_idx);
-        return err;
+        return result.error();
     }
-    err = this->set_mon_flags(monrace);
-    if (err) {
+    if (const auto result = this->set_mon_flags(monrace); !result) {
         msg_format(_("モンスターフラグ読込失敗。ID: '%d'。", "Failed to load monster flag data. ID: '%d'."), error_idx);
-        return err;
+        return result.error();
     }
-    err = this->set_mon_skills(monrace);
-    if (err) {
+    if (const auto result = this->set_mon_skills(monrace); !result) {
         msg_format(_("モンスター発動能力情報読込失敗。ID: '%d'。", "Failed to load monster skill data. ID: '%d'."), error_idx);
-        return err;
+        return result.error();
     }
-    err = this->set_mon_final_summons(monrace);
-    if (err) {
+    if (const auto result = this->set_mon_final_summons(monrace); !result) {
         msg_format(_("モンスター死亡時召喚情報読込失敗。ID: '%d'。", "Failed to load final summon data. ID: '%d'."), error_idx);
-        return err;
+        return result.error();
     }
     err = info_set_string(get_json_value(this->monrace_data, "flavor"), monrace.text, false);
     if (err) {
@@ -206,10 +197,9 @@ int RaceReader::read() const
     auto &message_list = MonraceMessageList::get_instance();
     const auto message_it = message_list.messages.find(monrace_id_int);
     auto messages = message_it != message_list.messages.end() ? message_it->second : MonraceMessage();
-    err = this->set_mon_message(messages);
-    if (err) {
+    if (const auto result = this->set_mon_message(messages); !result) {
         msg_format(_("モンスターメッセージ読込失敗。ID: '%d'。", "Failed to load monster message. ID: '%d'."), error_idx);
-        return err;
+        return result.error();
     }
 
     // Parse failures do not publish either definition fields or partial message groups.
@@ -307,18 +297,18 @@ bool RaceReader::grab_one_spell_flag(MonraceDefinition &monrace, std::string_vie
 /*!
  * @brief JSON Objectからモンスター名をセットする
  * @param monrace 保管先のモンスター種族構造体
- * @return エラーコード
+ * @return 成功、またはパースエラー
  */
-int RaceReader::set_mon_name(MonraceDefinition &monrace) const
+tl::expected<void, parse_error_type> RaceReader::set_mon_name(MonraceDefinition &monrace) const
 {
     const auto &name_data = get_json_value(this->monrace_data, "name");
     if (name_data.is_null()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+        return tl::unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
     }
     const auto &ja_obj = get_json_value(name_data, "ja");
     const auto &en_obj = get_json_value(name_data, "en");
     if (!ja_obj.is_string() || !en_obj.is_string()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+        return tl::unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
     }
 
     const auto ja_name = ja_obj.get<std::string>();
@@ -327,287 +317,287 @@ int RaceReader::set_mon_name(MonraceDefinition &monrace) const
 #ifdef JP
     auto ja_name_sys = utf8_to_sys(ja_name);
     if (!ja_name_sys) {
-        return PARSE_ERROR_INVALID_FLAG;
+        return tl::unexpected(PARSE_ERROR_INVALID_FLAG);
     }
     monrace.name = { *ja_name_sys, en_name };
 #else
     monrace.name = { "", en_name };
 #endif
-    return PARSE_ERROR_NONE;
+    return {};
 }
 
 /*!
  * @brief JSON Objectからモンスターシンボルをセットする
  * @param monrace 保管先のモンスター種族構造体
- * @return エラーコード
+ * @return 成功、またはパースエラー
  */
-int RaceReader::set_mon_symbol(MonraceDefinition &monrace) const
+tl::expected<void, parse_error_type> RaceReader::set_mon_symbol(MonraceDefinition &monrace) const
 {
     const auto &symbol_data = get_json_value(this->monrace_data, "symbol");
     if (symbol_data.is_null()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+        return tl::unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
     }
 
     const auto &character_obj = get_json_value(symbol_data, "character");
     if (!character_obj.is_string()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+        return tl::unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
     }
 
     const auto &color_obj = get_json_value(symbol_data, "color");
     if (!color_obj.is_string()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+        return tl::unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
     }
 
     const auto color = color_list.find(color_obj.get<std::string>());
     if (color == color_list.end()) {
-        return PARSE_ERROR_INVALID_FLAG;
+        return tl::unexpected(PARSE_ERROR_INVALID_FLAG);
     }
     if (color->second > 127) {
-        return PARSE_ERROR_GENERIC;
+        return tl::unexpected(PARSE_ERROR_GENERIC);
     }
 
     const auto character = character_obj.get<std::string>();
     if (character.empty()) {
-        return PARSE_ERROR_GENERIC;
+        return tl::unexpected(PARSE_ERROR_GENERIC);
     }
     if (character.size() != 1) {
-        return PARSE_ERROR_INVALID_VALUE;
+        return tl::unexpected(PARSE_ERROR_INVALID_VALUE);
     }
 
     monrace.symbol_definition = { color->second, character.front() };
-    return PARSE_ERROR_NONE;
+    return {};
 }
 
 /*!
  * @brief JSON Objectからモンスター速度をセットする
  * @param monrace 保管先のモンスター種族構造体
- * @return エラーコード
+ * @return 成功、またはパースエラー
  */
-int RaceReader::set_mon_speed(MonraceDefinition &monrace) const
+tl::expected<void, parse_error_type> RaceReader::set_mon_speed(MonraceDefinition &monrace) const
 {
     int speed;
     if (auto err = info_set_integer(get_json_value(this->monrace_data, "speed"), speed, true, Range(-50, 99))) {
-        return err;
+        return tl::unexpected(static_cast<parse_error_type>(err));
     }
     monrace.speed = speed + STANDARD_SPEED;
-    return PARSE_ERROR_NONE;
+    return {};
 }
 
 /*!
  * @brief JSON Objectからモンスターの進化をセットする
  * @param monrace 保管先のモンスター種族構造体
- * @return エラーコード
+ * @return 成功、またはパースエラー
  */
-int RaceReader::set_mon_evolve(MonraceDefinition &monrace) const
+tl::expected<void, parse_error_type> RaceReader::set_mon_evolve(MonraceDefinition &monrace) const
 {
     const auto &evolve_data = get_json_value(this->monrace_data, "evolve");
     if (evolve_data.is_null()) {
-        return PARSE_ERROR_NONE;
+        return {};
     }
 
     if (auto err = info_set_integer(get_json_value(evolve_data, "need_exp"), monrace.next_exp, true, Range(0, 9999999))) {
-        return err;
+        return tl::unexpected(static_cast<parse_error_type>(err));
     }
     if (auto err = info_set_integer(get_json_value(evolve_data, "to"), monrace.next_r_idx, true, Range(1, 9999))) {
-        return err;
+        return tl::unexpected(static_cast<parse_error_type>(err));
     }
 
-    return PARSE_ERROR_NONE;
+    return {};
 }
 
 /*!
  * @brief JSON Objectからモンスターの性別をセットする
  * @param monrace 保管先のモンスター種族構造体
- * @return エラーコード
+ * @return 成功、またはパースエラー
  */
-int RaceReader::set_mon_sex(MonraceDefinition &monrace) const
+tl::expected<void, parse_error_type> RaceReader::set_mon_sex(MonraceDefinition &monrace) const
 {
     const auto &sex_data = get_json_value(this->monrace_data, "sex");
     if (sex_data.is_null()) {
-        return PARSE_ERROR_NONE;
+        return {};
     }
     if (!sex_data.is_string()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+        return tl::unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
     }
 
     uint32_t sex;
     if (!info_grab_one_const(sex, r_info_sex, sex_data.get<std::string>())) {
-        return PARSE_ERROR_INVALID_FLAG;
+        return tl::unexpected(PARSE_ERROR_INVALID_FLAG);
     }
     monrace.init_sex(sex);
-    return PARSE_ERROR_NONE;
+    return {};
 }
 
 /*!
  * @brief JSON Objectからモンスターの固定アーティファクトドロップ情報をセットする
  * @param monrace 保管先のモンスター種族構造体
- * @return エラーコード
+ * @return 成功、またはパースエラー
  */
-int RaceReader::set_mon_artifacts(MonraceDefinition &monrace) const
+tl::expected<void, parse_error_type> RaceReader::set_mon_artifacts(MonraceDefinition &monrace) const
 {
     const auto &artifact_data = get_json_value(this->monrace_data, "artifacts");
     if (artifact_data.is_null()) {
-        return PARSE_ERROR_NONE;
+        return {};
     }
     if (!artifact_data.is_array()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+        return tl::unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
     }
 
     for (const auto &artifact : artifact_data) {
         FixedArtifactId fa_id;
         if (auto err = info_set_integer(get_json_value(artifact, "drop_artifact_id"), fa_id, true, Range(1, 999))) {
-            return err;
+            return tl::unexpected(static_cast<parse_error_type>(err));
         }
         int chance;
         if (auto err = info_set_integer(get_json_value(artifact, "drop_probability"), chance, true, Range(1, 100))) {
-            return err;
+            return tl::unexpected(static_cast<parse_error_type>(err));
         }
 
         monrace.emplace_drop_artifact(fa_id, chance);
     }
-    return PARSE_ERROR_NONE;
+    return {};
 }
 
 /*!
  * @brief JSON Objectからモンスターの護衛情報をセットする
  * @param monrace 保管先のモンスター種族構造体
- * @return エラーコード
+ * @return 成功、またはパースエラー
  */
-int RaceReader::set_mon_escorts(MonraceDefinition &monrace) const
+tl::expected<void, parse_error_type> RaceReader::set_mon_escorts(MonraceDefinition &monrace) const
 {
     const auto &escort_data = get_json_value(this->monrace_data, "escorts");
     if (escort_data.is_null()) {
-        return PARSE_ERROR_NONE;
+        return {};
     }
     if (!escort_data.is_array()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+        return tl::unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
     }
 
     for (const auto &escort : escort_data) {
         MonraceId monrace_id;
         if (auto err = info_set_integer(get_json_value(escort, "escorts_id"), monrace_id, true, Range(1, 9999))) {
-            return err;
+            return tl::unexpected(static_cast<parse_error_type>(err));
         }
 
         Dice dice;
-        if (auto err = info_set_monrace_dice(get_json_value(escort, "escort_num"), dice, true)) {
-            return err;
+        if (const auto result = info_set_monrace_dice(get_json_value(escort, "escort_num"), dice, true); !result) {
+            return result;
         }
 
         monrace.emplace_reinforce(monrace_id, dice);
     }
-    return PARSE_ERROR_NONE;
+    return {};
 }
 
 /*!
  * @brief JSON Objectからモンスターの打撃攻撃をセットする
  * @param monrace 保管先のモンスター種族構造体
- * @return エラーコード
+ * @return 成功、またはパースエラー
  */
-int RaceReader::set_mon_blows(MonraceDefinition &monrace) const
+tl::expected<void, parse_error_type> RaceReader::set_mon_blows(MonraceDefinition &monrace) const
 {
     const auto &blow_data = get_json_value(this->monrace_data, "blows");
     if (blow_data.is_null()) {
         monrace.behavior_flags.set(MonsterBehaviorType::NEVER_BLOW);
-        return PARSE_ERROR_NONE;
+        return {};
     }
     if (!blow_data.is_array()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+        return tl::unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
     }
 
     for (auto blow_num = 0; const auto &blow : blow_data) {
         if (blow_num >= MAX_NUM_BLOWS) {
-            return PARSE_ERROR_GENERIC;
+            return tl::unexpected(PARSE_ERROR_GENERIC);
         }
 
         const auto &blow_method = get_json_value(blow, "method");
         const auto &blow_effect = get_json_value(blow, "effect");
         if (blow_method.is_null() || blow_effect.is_null()) {
-            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+            return tl::unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
         }
 
         const auto rbm = r_info_blow_method.find(blow_method.get<std::string>());
         if (rbm == r_info_blow_method.end()) {
-            return PARSE_ERROR_INVALID_FLAG;
+            return tl::unexpected(PARSE_ERROR_INVALID_FLAG);
         }
 
         const auto rbe = r_info_blow_effect.find(blow_effect.get<std::string>());
         if (rbe == r_info_blow_effect.end()) {
-            return PARSE_ERROR_INVALID_FLAG;
+            return tl::unexpected(PARSE_ERROR_INVALID_FLAG);
         }
         auto &mon_blow = monrace.blows[blow_num];
         mon_blow.method = rbm->second;
         mon_blow.effect = rbe->second;
 
-        if (auto err = info_set_monrace_dice(get_json_value(blow, "damage_dice"), mon_blow.damage_dice, false)) {
-            return err;
+        if (const auto result = info_set_monrace_dice(get_json_value(blow, "damage_dice"), mon_blow.damage_dice, false); !result) {
+            return result;
         }
 
         blow_num++;
     }
-    return PARSE_ERROR_NONE;
+    return {};
 }
 
 /*!
  * @brief JSON Objectからモンスターフラグをセットする
  * @param monrace 保管先のモンスター種族構造体
- * @return エラーコード
+ * @return 成功、またはパースエラー
  */
-int RaceReader::set_mon_flags(MonraceDefinition &monrace) const
+tl::expected<void, parse_error_type> RaceReader::set_mon_flags(MonraceDefinition &monrace) const
 {
     const auto &flag_data = get_json_value(this->monrace_data, "flags");
     if (flag_data.is_null()) {
-        return PARSE_ERROR_NONE;
+        return {};
     }
     if (!flag_data.is_array()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+        return tl::unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
     }
 
     for (const auto &flag : flag_data) {
         if (!this->grab_one_basic_flag(monrace, flag.get<std::string>())) {
-            return PARSE_ERROR_INVALID_FLAG;
+            return tl::unexpected(PARSE_ERROR_INVALID_FLAG);
         }
     }
-    return PARSE_ERROR_NONE;
+    return {};
 }
 
 /*!
  * @brief JSON Objectからモンスターの発動能力をセットする
  * @param monrace 保管先のモンスター種族構造体
- * @return エラーコード
+ * @return 成功、またはパースエラー
  */
-int RaceReader::set_mon_skills(MonraceDefinition &monrace) const
+tl::expected<void, parse_error_type> RaceReader::set_mon_skills(MonraceDefinition &monrace) const
 {
     const auto &skill_data = get_json_value(this->monrace_data, "skill");
     if (skill_data.is_null()) {
-        return PARSE_ERROR_NONE;
+        return {};
     }
     if (!skill_data.is_object()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+        return tl::unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
     }
 
     const auto &prob = get_json_value(skill_data, "probability");
     if (!prob.is_string()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+        return tl::unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
     }
 
     const auto &prob_token = str_split(prob.get<std::string>(), '_', false, 2);
     if (prob_token.size() != 3 || prob_token[0] != "1" || prob_token[1] != "IN") {
-        return PARSE_ERROR_GENERIC;
+        return tl::unexpected(PARSE_ERROR_GENERIC);
     }
     const auto &denominator_token = prob_token[2];
     int denominator;
     const auto [end, ec] = std::from_chars(denominator_token.data(), denominator_token.data() + denominator_token.size(), denominator);
     if (ec != std::errc{} || end != denominator_token.data() + denominator_token.size() || denominator_token.front() == '0' || denominator < 1 || denominator > 100) {
-        return PARSE_ERROR_INVALID_VALUE;
+        return tl::unexpected(PARSE_ERROR_INVALID_VALUE);
     }
     monrace.freq_spell = 100 / denominator;
 
     const auto &shoot_dice = skill_data.find("shoot");
     const auto shoot = (shoot_dice != skill_data.end());
     if (shoot) {
-        if (auto ret = info_set_monrace_dice(*shoot_dice, monrace.shoot_damage_dice, true)) {
-            return ret;
+        if (const auto result = info_set_monrace_dice(*shoot_dice, monrace.shoot_damage_dice, true); !result) {
+            return result;
         }
         monrace.ability_flags.set(MonsterAbilityType::SHOOT);
     }
@@ -615,93 +605,93 @@ int RaceReader::set_mon_skills(MonraceDefinition &monrace) const
     const auto &skill_list = skill_data.find("list");
     if (skill_list == skill_data.end()) {
         if (!shoot) {
-            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+            return tl::unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
         }
-        return PARSE_ERROR_NONE;
+        return {};
     }
 
     for (auto &skill : skill_list->items()) {
         if (!skill.value().is_string()) {
-            return PARSE_ERROR_INVALID_TYPE;
+            return tl::unexpected(PARSE_ERROR_INVALID_TYPE);
         }
         if (!this->grab_one_spell_flag(monrace, skill.value().get<std::string>())) {
-            return PARSE_ERROR_INVALID_FLAG;
+            return tl::unexpected(PARSE_ERROR_INVALID_FLAG);
         }
     }
-    return PARSE_ERROR_NONE;
+    return {};
 }
 
 /*!
  * @brief JSON Objectからモンスターの死亡時召喚情報をセットする
  * @param monrace 保管先のモンスター種族構造体
- * @return エラーコード
+ * @return 成功、またはパースエラー
  */
-int RaceReader::set_mon_final_summons(MonraceDefinition &monrace) const
+tl::expected<void, parse_error_type> RaceReader::set_mon_final_summons(MonraceDefinition &monrace) const
 {
     const auto &summon_data = get_json_value(this->monrace_data, "final_summon");
     if (summon_data.is_null()) {
-        return PARSE_ERROR_NONE;
+        return {};
     }
     if (!summon_data.is_array()) {
-        return PARSE_ERROR_INVALID_TYPE;
+        return tl::unexpected(PARSE_ERROR_INVALID_TYPE);
     }
 
     for (auto &summon_item : summon_data) {
         int id, probability, min_num, max_num, radius;
         if (auto err = info_set_integer(get_json_value(summon_item, "id"), id, true, Range(1, 9999))) {
-            return err;
+            return tl::unexpected(static_cast<parse_error_type>(err));
         }
         if (auto err = info_set_integer(get_json_value(summon_item, "probability"), probability, true, Range(1, 100))) {
-            return err;
+            return tl::unexpected(static_cast<parse_error_type>(err));
         }
         if (auto err = info_set_integer(get_json_value(summon_item, "min_num"), min_num, true, Range(0, 99))) {
-            return err;
+            return tl::unexpected(static_cast<parse_error_type>(err));
         }
         if (auto err = info_set_integer(get_json_value(summon_item, "max_num"), max_num, true, Range(1, 99))) {
-            return err;
+            return tl::unexpected(static_cast<parse_error_type>(err));
         }
         if (min_num > max_num) {
-            return PARSE_ERROR_INVALID_VALUE;
+            return tl::unexpected(PARSE_ERROR_INVALID_VALUE);
         }
         if (auto err = info_set_integer(get_json_value(summon_item, "radius"), radius, true, Range(1, 20))) {
-            return err;
+            return tl::unexpected(static_cast<parse_error_type>(err));
         }
         monrace.emplace_final_summon(i2enum<MonraceId>(id), probability, min_num, max_num, radius);
     }
-    return PARSE_ERROR_NONE;
+    return {};
 }
 
 /*!
  * @brief JSON Objectからモンスターのメッセージをセットする
  * @param messages 保管先の未公開メッセージ群
- * @return エラーコード
+ * @return 成功、またはパースエラー
  */
-int RaceReader::set_mon_message(MonraceMessage &messages) const
+tl::expected<void, parse_error_type> RaceReader::set_mon_message(MonraceMessage &messages) const
 {
     const auto &message_data = get_json_value(this->monrace_data, "message");
     if (message_data.is_null()) {
-        return PARSE_ERROR_NONE;
+        return {};
     }
     if (!message_data.is_array()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+        return tl::unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
     }
 
     for (const auto &message : message_data) {
         const auto &action_str = get_json_value(message, "action");
         if (action_str.is_null()) {
-            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+            return tl::unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
         }
         if (!action_str.is_string()) {
-            return PARSE_ERROR_INVALID_TYPE;
+            return tl::unexpected(PARSE_ERROR_INVALID_TYPE);
         }
         const auto action = r_info_message_flags.find(action_str.get<std::string>());
         if (action == r_info_message_flags.end()) {
-            return PARSE_ERROR_INVALID_FLAG;
+            return tl::unexpected(PARSE_ERROR_INVALID_FLAG);
         }
 
         int chance;
         if (auto err = info_set_integer(get_json_value(message, "chance"), chance, true, Range(1, 100))) {
-            return err;
+            return tl::unexpected(static_cast<parse_error_type>(err));
         }
 
         bool use_name = true;
@@ -709,18 +699,18 @@ int RaceReader::set_mon_message(MonraceMessage &messages) const
         if (use_name_iter != message.end()) {
             const auto &use_name_data = use_name_iter.value();
             if (auto err = info_set_bool(use_name_data, use_name, false)) {
-                return err;
+                return tl::unexpected(static_cast<parse_error_type>(err));
             }
         }
 
         std::string str;
         if (auto err = info_set_string(get_json_value(message, "message"), str, false)) {
-            return err;
+            return tl::unexpected(static_cast<parse_error_type>(err));
         }
 
         messages.emplace(action->second, chance, use_name, str);
     }
-    return PARSE_ERROR_NONE;
+    return {};
 }
 
 /*!
