@@ -176,3 +176,34 @@ TEST_CASE("RedrawingFlagsUpdater::request_spell_info_redrawing requests redrawin
         CHECK(rfu.has(flag));
     }
 }
+
+TEST_CASE("RedrawingFlagsUpdater::request_inscription_change_updates requests recalculating the bonuses and combining the inventory")
+{
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    const auto restore_srf = scoped_restore_flags(rfu, { StatusRecalculatingFlag::BONUS });
+    static constexpr auto flags_iaf = {
+        InventoryArrangementFlag::COMBINATION,
+        InventoryArrangementFlag::REORDER,
+    };
+    const auto restore_iaf = scoped_restore_flags(rfu, flags_iaf);
+    static constexpr auto flags_swrf = {
+        SubWindowRedrawingFlag::INVENTORY,
+        SubWindowRedrawingFlag::EQUIPMENT,
+        SubWindowRedrawingFlag::FLOOR_ITEMS,
+    };
+    const auto restore_swrf = scoped_restore_flags(rfu, flags_swrf);
+    rfu.reset_flag(StatusRecalculatingFlag::BONUS);
+    rfu.reset_flags(flags_iaf);
+    rfu.reset_flags(flags_swrf);
+
+    rfu.request_inscription_change_updates();
+
+    CHECK(rfu.has(StatusRecalculatingFlag::BONUS));
+    CHECK(rfu.has(InventoryArrangementFlag::COMBINATION));
+    CHECK_FALSE(rfu.has(InventoryArrangementFlag::REORDER));
+    // 一覧の描き直しは能力の再計算が要求し、床の一覧は呼び出し側が要求するので、ここでは要求しない
+    for (const auto flag : flags_swrf) {
+        CAPTURE(enum2i(flag));
+        CHECK_FALSE(rfu.has(flag));
+    }
+}
