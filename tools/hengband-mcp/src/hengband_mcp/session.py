@@ -81,12 +81,16 @@ class KeysResult:
     :param consumed: ゲームに送ったキー (LLM が書いた表記)。timeout の場合、最後のキーは処理されたか分からない
     :param remaining: 送らなかったキー
     :param more_dismissed: 自動で閉じた -more- の数
+    :param game_turns: キーを送る間に進んだゲームターン数 (通常の速度の 1 行動で平均 10)。
+        0 ならゲームの時間は進んでいない (メニューやプロンプトの操作、ゲームが受け付けなかったコマンド)。
+        分からない場合 (timeout や、game_turn を返さない古いゲーム) は None
     """
 
     outcome: str
     consumed: str
     remaining: str
     more_dismissed: int
+    game_turns: int | None = None
 
 
 class GameSession:
@@ -172,8 +176,10 @@ class GameSession:
         outcome = "done"
         sent = 0
         dismissed = 0
+        start_turn = None
         try:
             dismissed += self.dismiss_more(deadline)
+            start_turn = self._current_state().game_turn
             for key in keys:
                 state = self._current_state()
                 if state.dead:
@@ -206,11 +212,17 @@ class GameSession:
         if outcome == "done" and self._current_state().dead:
             outcome = "game_over"
 
+        game_turns = None
+        end_turn = self.state.game_turn if self.state is not None else None
+        if start_turn is not None and end_turn is not None:
+            game_turns = end_turn - start_turn
+
         return KeysResult(
             outcome=outcome,
             consumed=join_text(keys[:sent]),
             remaining=join_text(keys[sent:]),
             more_dismissed=dismissed,
+            game_turns=game_turns,
         )
 
     def check_refused(self, keys: list[Key]) -> None:

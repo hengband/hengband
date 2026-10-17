@@ -79,7 +79,7 @@ claude mcp add hengband -- uv run --directory /path/to/hengband/tools/hengband-m
 ツールの結果は 2 つのブロックから成ります。1 つ目は JSON の要約、2 つ目は画面のテキストです。
 
 ```json
-{"outcome":"disturbed","consumed":".6","remaining":"R<ENTER>","input":"command","messages":[],
+{"outcome":"disturbed","consumed":".6","remaining":"R<ENTER>","game_turns":40,"input":"command","messages":[],
  "player":{"level":1,"hp":[43,43],"mp":[0,0],"exp":1,"exp_to_advance":10,"gold":100,"ac":14,"speed":0,
   "food":"normal","light":1,"place":"イークの洞穴","depth":1,"pos":{"x":52,"y":20},"clock":"day 1 06:08"},
  "monsters":[{"name":"ジャッカル","dir":"E(6)","dist":4,"dx":4,"dy":0,"health":"unhurt"}],"view":"map"}
@@ -90,6 +90,7 @@ claude mcp add hengband -- uv run --directory /path/to/hengband/tools/hengband-m
 | `outcome` | `send_keys` の結果。`done`（すべて送った）、`disturbed`（途中で中断された。[キーの送り方](#キーの送り方)）、`timeout`（ゲームがまだ処理している）、`game_over`（キャラクターが死んだ） |
 | `consumed` / `remaining` | 送ったキーと、送らなかったキー |
 | `more_dismissed` | 自動で閉じた `-more-` の数 |
+| `game_turns` | キーを送る間に進んだゲームターン数（[キーの送り方](#キーの送り方)）。`timeout` のときは無い |
 | `input` | ゲームが待っている入力（制御サーバの [`input`](../bot/README.md#入力待ちの種類-input) の `kind`） |
 | `prompt` | コマンド以外の入力を待っているときの、画面の 1 行目（問いかけ） |
 | `messages` | 前回の呼び出しより後のメッセージ（古い順で最大 50 件。超えた分の数は `messages_omitted`）。`start_game` では直前の 10 件 |
@@ -120,6 +121,9 @@ claude mcp add hengband -- uv run --directory /path/to/hengband/tools/hengband-m
 - `stop_on_disturb`（既定 true）: コマンドの入力待ちに戻ったとき、ゲームがプレイヤーの行動を中断させていた（`disturb()`）なら、
   残りのキーがあってもそれを送らずに `outcome: "disturbed"` を返します。モンスターが現れた、ダメージを受けた、壁にぶつかったときのほか、
   **走る・休むが終わったときもゲームは中断として扱う**ため、`.6.4` のように走るコマンドを続けると 1 つ目の後で止まります。
+- 結果の `game_turns` は、キーを送る間に進んだゲームターン数です（通常の速度の 1 行動で平均 10。行動ごとに揺らぐ）。0 ならゲームの時間は進んでいません。
+  休憩がすぐに終わった（モンスターが見えているなど）、射線上に敵がいなくて `*t` が何もしなかった、
+  メニューを開いて閉じただけ、といった「何も起きなかった」ことが分かります。
 - 1 回の `send_keys` は 60 秒で打ち切り、`outcome: "timeout"` を返します。ゲームはそのまま動いているので、`observe` で確かめます。
   制御サーバはゲームがキー入力を待っている間しか応答しないため、時間のかかる処理（条件の厳しいオートローラーなど）の途中でも
   `timeout` になります。

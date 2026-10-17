@@ -301,7 +301,7 @@ terrain_bits:
 `input` は、ゲームがいま何のキー入力を待っているかを返します。キャラクターの生成前でも使えます。
 
 ```json
-{"kind": "command", "message_sequence": 152, "disturb_sequence": 37,
+{"kind": "command", "message_sequence": 152, "disturb_sequence": 37, "game_turn": 102450,
  "character_generated": true, "playing": true, "dead": false}
 ```
 
@@ -310,6 +310,7 @@ terrain_bits:
 | `kind` | 待っている入力の種類（下表） |
 | `message_sequence` | メッセージ履歴に追加された行の累計。前回の値との差が新しいメッセージの数（同じ行の繰り返しは `<xN>` に数えられ増えない） |
 | `disturb_sequence` | ゲームがプレイヤーの行動を中断させた (`disturb()`) 回数の累計。モンスターの出現・被弾などで増える |
+| `game_turn` | ゲームターン数（`state` の `turn` と同じ）。通常の速度の 1 行動で平均 10 進む（行動ごとに揺らぎがある）。キーを送る前の値と比べると、コマンドが実行されたか（休憩を断られた、射線上に敵がいない、などで何も起きなかったか）が分かる |
 | `character_generated` | キャラクターが生成済みか |
 | `playing` / `dead` | プレイ中か、死亡したか |
 

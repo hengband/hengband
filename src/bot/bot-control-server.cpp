@@ -509,6 +509,8 @@ std::string_view input_kind_name()
  * 送ったキーが処理されて次の入力待ちに入った時点の情報が得られる。
  * message_sequenceとdisturb_sequenceは単調に増える値で、前回の値と比べると
  * 新しいメッセージや邪魔 (モンスターの出現や被弾等) があったかが分かる。
+ * game_turnはゲームターン数で、前回の値と比べるとゲームの時間が進んだか
+ * (コマンドが実行されたか、休憩を断られた等で何も起きなかったか) が分かる。
  */
 nlohmann::json make_input_response()
 {
@@ -517,6 +519,7 @@ nlohmann::json make_input_response()
         { "kind", std::string(input_kind_name()) },
         { "message_sequence", message_sequence() },
         { "disturb_sequence", disturb_sequence() },
+        { "game_turn", AngbandWorld::get_instance().game_turn },
         { "character_generated", AngbandWorld::get_instance().character_generated },
         { "playing", has_player && p_ptr->playing },
         { "dead", has_player && p_ptr->is_dead },

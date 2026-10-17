@@ -71,6 +71,7 @@ class InputState:
     character_generated: bool
     playing: bool
     dead: bool
+    game_turn: int | None = None
 
     @classmethod
     def from_result(cls, result: dict[str, Any]) -> "InputState":
@@ -79,6 +80,7 @@ class InputState:
         :param result: input op の result
         :return: 入力待ちの情報
         """
+        game_turn = result.get("game_turn")
         return cls(
             kind=str(result.get("kind", "unknown")),
             message_sequence=int(result.get("message_sequence", 0)),
@@ -86,6 +88,7 @@ class InputState:
             character_generated=bool(result.get("character_generated", False)),
             playing=bool(result.get("playing", False)),
             dead=bool(result.get("dead", False)),
+            game_turn=None if game_turn is None else int(game_turn),
         )
 
 

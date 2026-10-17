@@ -24,7 +24,7 @@ def test_send_keys_waits_for_each_key_to_be_processed() -> None:
     game = FakeGame()
     result = make_session(game).send_keys("66")
 
-    assert result == KeysResult("done", "66", "", 0)
+    assert result == KeysResult("done", "66", "", 0, 0)
     assert game.keys == ["6", "6"]
     assert game.ops == ["input", "keys", "input", "keys", "input"]
 
@@ -48,7 +48,7 @@ def test_send_keys_dismisses_more_prompts() -> None:
     game = FakeGame(on_key)
     result = make_session(game).send_keys("66")
 
-    assert result == KeysResult("done", "66", "", 4)
+    assert result == KeysResult("done", "66", "", 4, 0)
     assert game.keys == ["6", ESCAPE, ESCAPE, "6", ESCAPE, ESCAPE]
 
 
@@ -61,6 +61,19 @@ def test_send_keys_dismisses_a_pending_more_before_the_first_key() -> None:
     assert game.keys == [ESCAPE, "6"]
 
 
+def test_send_keys_reports_the_game_turns_that_passed() -> None:
+    def on_key(game: FakeGame, key: str) -> None:
+        if key == "6":
+            game.game_turn += 10
+
+    game = FakeGame(on_key)
+    session = make_session(game)
+
+    assert session.send_keys("66").game_turns == 20
+    # ゲームの時間が進まなかったコマンド (休憩を断られた等) は 0
+    assert session.send_keys("R").game_turns == 0
+
+
 def test_send_keys_stops_when_disturbed_at_the_command_prompt() -> None:
     def on_key(game: FakeGame, key: str) -> None:
         if key == "6":
@@ -69,7 +82,7 @@ def test_send_keys_stops_when_disturbed_at_the_command_prompt() -> None:
     game = FakeGame(on_key)
     result = make_session(game).send_keys("666")
 
-    assert result == KeysResult("disturbed", "6", "66", 0)
+    assert result == KeysResult("disturbed", "6", "66", 0, 0)
     assert game.keys == ["6"]
 
 
@@ -90,7 +103,7 @@ def test_send_keys_keeps_going_without_stop_on_disturb() -> None:
     game = FakeGame(on_key)
     result = make_session(game).send_keys("666", stop_on_disturb=False)
 
-    assert result == KeysResult("done", "666", "", 0)
+    assert result == KeysResult("done", "666", "", 0, 0)
 
 
 def test_send_keys_does_not_stop_on_a_disturbance_inside_a_prompt() -> None:
@@ -119,7 +132,7 @@ def test_send_keys_stops_when_the_character_dies() -> None:
     result = make_session(game).send_keys("66")
 
     # 死亡時の -more- は最後のメッセージを残すため閉じない
-    assert result == KeysResult("game_over", "6", "6", 0)
+    assert result == KeysResult("game_over", "6", "6", 0, 0)
     assert game.keys == ["6"]
 
 
@@ -140,7 +153,7 @@ def test_send_keys_reports_a_timeout_after_the_deadline() -> None:
     game = FakeGame()
     result = make_session(game).send_keys("66", timeout=-1)
 
-    assert result == KeysResult("timeout", "", "66", 0)
+    assert result == KeysResult("timeout", "", "66", 0, 0)
     assert game.keys == []
 
 

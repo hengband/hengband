@@ -33,6 +33,7 @@ class FakeGame:
         self.character_generated = character_generated
         self.message_sequence = 0
         self.disturb_sequence = 0
+        self.game_turn = 1000
         self.closes = 0
         self.dead = False
         self.running = True
@@ -82,6 +83,7 @@ class FakeGame:
                 "kind": self.kind,
                 "message_sequence": self.message_sequence,
                 "disturb_sequence": self.disturb_sequence,
+                "game_turn": self.game_turn,
                 "character_generated": self.character_generated,
                 "playing": self.character_generated and not self.dead,
                 "dead": self.dead,

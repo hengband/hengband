@@ -84,6 +84,10 @@ messages.
 back at the command prompt (a monster comes into view, you take damage, a run or rest stops, you bump \
 into a wall). outcome is then "disturbed" and remaining shows the keys not sent: look again before \
 continuing.
+- game_turns is the game time that passed while the keys were sent (one action at normal speed \
+takes about 10; it varies). 0 means nothing happened in the game: the command was refused or did \
+nothing (a rest that stopped at once because a monster is in view, *t with no monster in line of \
+fire), or you only opened and closed a menu.
 - <ESC> cancels any prompt or menu. Japanese builds accept Japanese text (names, inscriptions) as typed.
 
 Commands (original keyset)
@@ -374,9 +378,11 @@ def create_server(manager: GameManager) -> MCPServer:
             "Keys are sent one at a time, each processed before the next; -more- prompts are "
             "dismissed automatically. outcome is done, disturbed (stopped early, see stop_on_disturb), "
             "timeout (the game is still busy), or game_over (the character died; call stop_game). "
-            "consumed lists the keys sent and remaining the keys not sent. Notation: plain characters "
-            "as typed, plus <ESC> <ENTER> <TAB> <BS> <SPACE> <C-x>. Examples: '6' steps east, '.4' runs "
-            "west, 'R<ENTER>' rests as needed, 'qa' quaffs the potion in slot a, '<ESC>' cancels."
+            "consumed lists the keys sent and remaining the keys not sent. game_turns is the game time "
+            "that passed (about 10 per action at normal speed; 0 = nothing happened). Notation: plain "
+            "characters as typed, plus <ESC> <ENTER> <TAB> <BS> <SPACE> <C-x>. Examples: '6' steps "
+            "east, '.4' runs west, 'R<ENTER>' rests as needed, 'qa' quaffs the potion in slot a, "
+            "'<ESC>' cancels."
         ),
         annotations=ToolAnnotations(
             destructive_hint=True, idempotent_hint=False, open_world_hint=False
@@ -411,6 +417,9 @@ def create_server(manager: GameManager) -> MCPServer:
 
             if result.more_dismissed:
                 head["more_dismissed"] = result.more_dismissed
+
+            if result.game_turns is not None:
+                head["game_turns"] = result.game_turns
 
             if result.outcome == "timeout":
                 head["note"] = "the game is still processing; call observe to see the result"

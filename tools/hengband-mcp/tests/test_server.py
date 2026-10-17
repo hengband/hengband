@@ -44,6 +44,7 @@ class Harness:
         standard_keys(game, key)
         if key == "6":
             game.add_message("You walk.")
+            game.game_turn += 10
         elif key == "R":
             game.input_timeouts = 1
         elif key == SAVE_AND_QUIT:
@@ -88,6 +89,7 @@ def test_a_game_from_start_to_stop(harness: Harness) -> None:
         assert summary["consumed"] == "66"
         assert "remaining" not in summary
         assert summary["messages"] == ["You walk.", "You walk."]
+        assert summary["game_turns"] == 20
         assert summary["view"] == "map"
         # ツールを呼び終えたら、ほかのクライアントが使えるよう制御サーバとの接続を閉じる
         assert harness.game.closes > 0
