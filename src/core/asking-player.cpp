@@ -1,10 +1,10 @@
 #include "core/asking-player.h"
-#include "bot/bot-control-server.h"
 #include "cmd-io/macro-util.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "game-option/input-options.h"
 #include "io/command-repeater.h"
+#include "io/input-context.h"
 #include "io/input-key-acceptor.h"
 #include "io/input-key-requester.h" //!< @todo 相互依存している、後で何とかする.
 #include "main/sound-of-music.h"
@@ -25,6 +25,7 @@
 #include <stdexcept>
 #include <string>
 #include <utility>
+#include <variant>
 
 /*!
  * @brief 入力欄の開始位置と画面幅に合わせて文字列のバイト上限を求める
@@ -178,15 +179,15 @@ tl::optional<std::string> askfor(int len, std::string_view initial_value, bool n
  * @brief 指定した文脈で文字列の入力を待つ
  * @details 数量入力も同じ編集処理を利用するが、公開する文脈は数量のまま保つ。
  */
-static tl::optional<std::string> input_string_with_context(BotInputContext input_context, int len, std::string_view initial_value, bool numpad_cursor)
+static tl::optional<std::string> input_string_with_context(InputContext input_context, int len, std::string_view initial_value, bool numpad_cursor)
 {
     msg_erase();
     prt(input_context.prompt, 0, 0);
-    if (auto *details = std::get_if<BotStringInputDetails>(&input_context.details)) {
+    if (auto *details = std::get_if<StringInputDetails>(&input_context.details)) {
         details->max_length = get_input_length(len, term_locate().first);
     }
 
-    const BotInputContextScope context_scope(std::move(input_context));
+    const InputContextScope context_scope(std::move(input_context));
     const auto ask_result = askfor(len, initial_value, numpad_cursor);
     prt("", 0, 0);
     return ask_result;
@@ -204,7 +205,7 @@ static tl::optional<std::string> input_string_with_context(BotInputContext input
  */
 tl::optional<std::string> input_string(std::string_view prompt, int len, std::string_view initial_value, bool numpad_cursor)
 {
-    BotInputContext input_context{ "string", std::string(prompt), BotStringInputDetails{ len, std::string(initial_value) } };
+    InputContext input_context{ InputKind::STRING, std::string(prompt), StringInputDetails{ len, std::string(initial_value) } };
     return input_string_with_context(std::move(input_context), len, initial_value, numpad_cursor);
 }
 
@@ -271,7 +272,7 @@ bool input_check_strict(PlayerType *player_ptr, std::string_view prompt, EnumCla
     }
 
     bool flag = false;
-    const BotInputContextScope input_context("confirm", buf);
+    const InputContextScope input_context(InputKind::CONFIRM, buf);
     while (true) {
         int i = inkey();
 
@@ -325,7 +326,7 @@ tl::optional<char> input_command(std::string_view prompt)
     prt(prompt, 0, 0);
     char command;
     {
-        const BotInputContextScope input_context("command_char", prompt);
+        const InputContextScope input_context(InputKind::COMMAND_CHAR, prompt);
         if (get_com_no_macros) {
             command = static_cast<char>(inkey_special(false));
         } else {
@@ -372,7 +373,7 @@ int input_quantity(int max, std::string_view initial_prompt)
     }
 
     msg_erase();
-    BotInputContext input_context{ "quantity", prompt, BotQuantityInputDetails{ max, 1 } };
+    InputContext input_context{ InputKind::QUANTITY, prompt, QuantityInputDetails{ max, 1 } };
     const auto input_amount = input_string_with_context(std::move(input_context), 6, "1", false);
     if (!input_amount) {
         return 0;

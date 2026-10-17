@@ -63,7 +63,6 @@
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\..\src\test\autopick\test-autopick-editor-util.cpp" />
-    <ClCompile Include="..\..\src\test\bot\test-bot-input-context.cpp" />
     <ClCompile Include="..\..\src\test\cmd-io\test-cmd-autopick.cpp" />
     <ClCompile Include="..\..\src\test\flavor\test-flavor-util.cpp" />
     <ClCompile Include="..\..\src\test\floor\test-fixed-map-generator.cpp" />
@@ -92,6 +91,7 @@
     <ClCompile Include="..\..\src\test\info-reader\test-vault-reader.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-wilderness-reader.cpp" />
     <ClCompile Include="..\..\src\test\io\test-condition-expression.cpp" />
+    <ClCompile Include="..\..\src\test\io\test-input-context.cpp" />
     <ClCompile Include="..\..\src\test\io\test-interpret-pref-file.cpp" />
     <ClCompile Include="..\..\src\test\io\test-macro-configurations-store.cpp" />
     <ClCompile Include="..\..\src\test\io\test-pref-file-expressor.cpp" />

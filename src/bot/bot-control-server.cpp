@@ -20,7 +20,9 @@
 #include "bot/bot-screen.h"
 #include "bot/bot-socket-server.h"
 #include "game-option/runtime-arguments.h"
+#include "io/input-context.h"
 #include "io/macro-configurations-store.h"
+#include "system/angband-exceptions.h"
 #include "system/angband-system.h"
 #include "system/angband-version.h"
 #include "system/player-type-definition.h"
@@ -35,12 +37,14 @@
 #include <iterator>
 #include <memory>
 #include <nlohmann/json.hpp>
+#include <stdexcept>
 #include <string>
 #include <string_view>
 #include <tl/expected.hpp>
 #include <tl/optional.hpp>
 #include <type_traits>
 #include <utility>
+#include <variant>
 
 namespace {
 
@@ -77,7 +81,6 @@ constexpr auto BOT_CONTROL_POLL_INTERVAL = std::chrono::milliseconds(15);
 constexpr auto BOT_CONTROL_IDLE_POLL_INTERVAL = std::chrono::seconds(1);
 
 std::unique_ptr<BotSocketServer> bot_control_server;
-tl::optional<BotInputContext> current_input_context;
 
 //! フロントエンドが登録した端末の大きさを変える関数 (登録されていなければ大きさを変えられない)
 BotTermResizer bot_term_resizer = nullptr;
@@ -133,20 +136,41 @@ nlohmann::json make_ok_response(const nlohmann::json &id, nlohmann::json result 
 }
 
 /*!
+ * @brief 入力の種類を応答で使う名前へ変換する
+ * @param kind 入力の種類
+ * @return 応答の input_context.kind に入れる名前
+ */
+std::string_view input_kind_name(InputKind kind)
+{
+    switch (kind) {
+    case InputKind::CONFIRM:
+        return "confirm";
+    case InputKind::COMMAND_CHAR:
+        return "command_char";
+    case InputKind::STRING:
+        return "string";
+    case InputKind::QUANTITY:
+        return "quantity";
+    }
+
+    THROW_EXCEPTION(std::logic_error, "Invalid InputKind was specified!");
+}
+
+/*!
  * @brief 現在の入力待ちの文脈をJSONへ変換する
  */
 nlohmann::json make_input_context_json()
 {
-    const auto &context = get_bot_input_context();
+    const auto &context = get_input_context();
     if (!context) {
         return nullptr;
     }
 
-    auto result = nlohmann::json{ { "kind", context->kind }, { "prompt", to_json_utf8(context->prompt) } };
-    if (const auto *string_details = std::get_if<BotStringInputDetails>(&context->details)) {
+    auto result = nlohmann::json{ { "kind", input_kind_name(context->kind) }, { "prompt", to_json_utf8(context->prompt) } };
+    if (const auto *string_details = std::get_if<StringInputDetails>(&context->details)) {
         result["max_length"] = string_details->max_length;
         result["initial"] = to_json_utf8(string_details->initial);
-    } else if (const auto *quantity_details = std::get_if<BotQuantityInputDetails>(&context->details)) {
+    } else if (const auto *quantity_details = std::get_if<QuantityInputDetails>(&context->details)) {
         result["max"] = quantity_details->max;
         result["initial"] = quantity_details->initial;
     }
@@ -627,41 +651,6 @@ void serve_pending_requests()
     serve_request(deadline);
 }
 
-}
-
-/*!
- * @brief 新しい入力文脈を保持し、以前の文脈をスコープへ退避する
- * @details 新しい値の構築が失敗した場合は、現在の文脈を変更しない。
- */
-BotInputContextScope::BotInputContextScope(std::string_view kind, std::string_view prompt)
-    : BotInputContextScope(BotInputContext{ std::string(kind), std::string(prompt), {} })
-{
-}
-
-/*!
- * @brief 詳細情報を含む入力文脈を保持し、以前の文脈を退避する
- * @details 新しい値の構築が失敗した場合は、現在の文脈を変更しない。
- */
-BotInputContextScope::BotInputContextScope(BotInputContext input_context)
-    : previous(std::move(input_context))
-{
-    current_input_context.swap(this->previous);
-}
-
-/*!
- * @brief 退避していた入力文脈を復元する
- */
-BotInputContextScope::~BotInputContextScope()
-{
-    current_input_context.swap(this->previous);
-}
-
-/*!
- * @brief 現在の入力文脈を返す。入力文脈がなければ空のoptionalを返す。
- */
-const tl::optional<BotInputContext> &get_bot_input_context()
-{
-    return current_input_context;
 }
 
 /*!
