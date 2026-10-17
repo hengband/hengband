@@ -154,6 +154,32 @@ TEST_CASE("RedrawingFlagsUpdater::request_monster_update_and_map_redrawing reque
     CHECK(rfu.has(SubWindowRedrawingFlag::DUNGEON));
 }
 
+TEST_CASE("RedrawingFlagsUpdater::request_sight_recalculation requests forgetting and recalculating the view and the lights")
+{
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    static constexpr auto flags_srf = {
+        StatusRecalculatingFlag::UN_VIEW,
+        StatusRecalculatingFlag::UN_LITE,
+        StatusRecalculatingFlag::VIEW,
+        StatusRecalculatingFlag::LITE,
+        StatusRecalculatingFlag::MONSTER_LITE,
+    };
+    const auto restore = scoped_restore_flags(rfu, flags_srf);
+    const auto restore_flow = scoped_restore_flags(rfu, { StatusRecalculatingFlag::FLOW });
+    rfu.reset_flags(flags_srf);
+    rfu.reset_flag(StatusRecalculatingFlag::FLOW);
+
+    rfu.request_sight_recalculation();
+
+    for (const auto flag : flags_srf) {
+        CAPTURE(enum2i(flag));
+        CHECK(rfu.has(flag));
+    }
+
+    // モンスターの経路は、地形が変わるときだけ呼び出し側で要求する
+    CHECK_FALSE(rfu.has(StatusRecalculatingFlag::FLOW));
+}
+
 TEST_CASE("RedrawingFlagsUpdater::request_item_lists_redrawing requests redrawing the windows showing items")
 {
     auto &rfu = RedrawingFlagsUpdater::get_instance();

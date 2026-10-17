@@ -33,10 +33,9 @@ BadStatusSetter::BadStatusSetter(PlayerType *player_ptr)
  * @param v 継続時間
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  * @details
- * Note the use of "PU_UN_LITE" and "PU_UN_VIEW", which is needed to\n
- * memorize any terrain features which suddenly become "visible".\n
- * Note that blindness is currently the only thing which can affect\n
- * "player_can_see_bold()".\n
+ * 目が見えなくなる・見えるようになると見える範囲が変わり、急に見えるようになった地形は覚える必要もあるので、
+ * 視界と明るさの印をいったん消して計算し直す (request_sight_recalculation())。
+ * 今のところ player_can_see_bold() に影響するのは盲目だけである。
  */
 bool BadStatusSetter::set_blindness(const TIME_EFFECT tmp_v)
 {
@@ -84,14 +83,7 @@ bool BadStatusSetter::set_blindness(const TIME_EFFECT tmp_v)
     }
 
     rfu.request_monster_update_and_map_redrawing();
-    static constexpr auto flags_srf = {
-        StatusRecalculatingFlag::UN_VIEW,
-        StatusRecalculatingFlag::UN_LITE,
-        StatusRecalculatingFlag::VIEW,
-        StatusRecalculatingFlag::LITE,
-        StatusRecalculatingFlag::MONSTER_LITE,
-    };
-    rfu.set_flags(flags_srf);
+    rfu.request_sight_recalculation();
     handle_stuff(this->player_ptr);
     return true;
 }
