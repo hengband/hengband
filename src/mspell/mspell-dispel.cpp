@@ -135,8 +135,8 @@ MonsterSpellResult spell_RF4_DISPEL(MONSTER_IDX m_idx, PlayerType *player_ptr, M
     auto res = MonsterSpellResult::make_valid();
     res.learnable = target_type == MONSTER_TO_PLAYER;
 
-    mspell_cast_msg_blind msg(_("%s^が何かを力強くつぶやいた。", "%s^ mumbles powerfully."),
-        _("%s^が魔力消去の呪文を念じた。", "%s^ invokes a dispel magic."), _("%s^が%sに対して魔力消去の呪文を念じた。", "%s^ invokes a dispel magic at %s."));
+    mspell_cast_msg_blind msg(_("{}が何かを力強くつぶやいた。", "{} mumbles powerfully."),
+        _("{}が魔力消去の呪文を念じた。", "{} invokes a dispel magic."), _("{}が{}に対して魔力消去の呪文を念じた。", "{} invokes a dispel magic at {}."));
 
     monspell_message(player_ptr, m_idx, t_idx, msg, target_type);
 
