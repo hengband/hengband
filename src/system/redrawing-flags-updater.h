@@ -125,6 +125,7 @@ public:
 
     void request_inventory_arrangement();
     void request_whole_main_window_redrawing();
+    void request_whole_status_recalculation();
     void request_map_redrawing();
     void request_monster_update_and_map_redrawing();
     void request_item_lists_redrawing();

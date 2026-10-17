@@ -44,20 +44,7 @@ void do_cmd_redraw(PlayerType *player_ptr)
     term_xtra(TERM_XTRA_REACT, 0);
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    static constexpr auto flags_srf = {
-        StatusRecalculatingFlag::TORCH,
-        StatusRecalculatingFlag::BONUS,
-        StatusRecalculatingFlag::HP,
-        StatusRecalculatingFlag::MP,
-        StatusRecalculatingFlag::SPELLS,
-        StatusRecalculatingFlag::UN_VIEW,
-        StatusRecalculatingFlag::UN_LITE,
-        StatusRecalculatingFlag::VIEW,
-        StatusRecalculatingFlag::LITE,
-        StatusRecalculatingFlag::MONSTER_LITE,
-        StatusRecalculatingFlag::MONSTER_STATUSES,
-    };
-    rfu.set_flags(flags_srf);
+    rfu.request_whole_status_recalculation();
     static constexpr auto flags_iaf = {
         InventoryArrangementFlag::COMBINATION,
         InventoryArrangementFlag::REORDER,
