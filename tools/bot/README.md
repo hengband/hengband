@@ -214,6 +214,12 @@ python3 tools/bot/hbctl.py quit            # ゲームを終了
 | `resize`   | `term` (既定 0), `width`, `height`    | 端末の大きさを変える（ヘッドレス実行のみ） |
 | `quit`     | —                                     | ゲームを終了する（**セーブしません**）     |
 
+`screen` と `state` の `result.input_context` は、制御サーバが応答した時点で待っている
+入力の文脈です。対応する入力待ちでは `{ "kind": "confirm", "prompt": "...[y/n]" }` や
+`{ "kind": "command_char", "prompt": "..." }` を返し、それ以外は `null` です。
+`prompt` は画面に表示した文字列を UTF-8 に変換したものです。`confirm` には確認の選択肢も含みます。
+キャラクター生成前は `state` がエラーになるため、`screen` で確認してください。
+
 `keys` には `\e`（ESC）、`^X`（Ctrl+X）、`\xNN` といったマクロ表記を使えます。
 マクロトリガ表記 `\[～]` は受け付けません。
 
