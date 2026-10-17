@@ -451,7 +451,6 @@ bool hp_player(PlayerType *player_ptr, int num)
 
         auto &rfu = RedrawingFlagsUpdater::get_instance();
         rfu.set_flag(MainWindowRedrawingFlag::HP);
-        rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
         if (num < 5) {
             msg_print(_("少し気分が良くなった。", "You feel a little better."));
         } else if (num < 15) {

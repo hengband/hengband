@@ -491,7 +491,6 @@ bool restore_mana(PlayerType *player_ptr, bool magic_eater)
     player_ptr->csp_frac = 0;
     msg_print(_("頭がハッキリとした。", "You feel your head clear."));
     rfu.set_flag(MainWindowRedrawingFlag::MP);
-    rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
     return true;
 }
 

@@ -34,6 +34,7 @@
 #include "system/item/item-entity.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
+#include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "system/terrain/terrain-definition.h"
 #include "system/terrain/terrain-list.h"
@@ -399,6 +400,31 @@ void fix_equip(PlayerType *player_ptr)
         });
 }
 
+namespace {
+/*!
+ * @brief プレイヤー情報のサブウィンドウに表示した HP・MP
+ * @details HP・MP は多くの箇所で変わり、変えるたびに描き直しを要求すると漏れやすいので、描いたときの値と比べる
+ */
+struct DisplayedPlayerPoints {
+    decltype(PlayerType::chp) chp;
+    decltype(PlayerType::mhp) mhp;
+    decltype(PlayerType::csp) csp;
+    decltype(PlayerType::msp) msp;
+
+    explicit DisplayedPlayerPoints(const PlayerType &player)
+        : chp(player.chp)
+        , mhp(player.mhp)
+        , csp(player.csp)
+        , msp(player.msp)
+    {
+    }
+
+    bool operator==(const DisplayedPlayerPoints &other) const = default;
+};
+
+tl::optional<DisplayedPlayerPoints> displayed_player_points;
+}
+
 /*!
  * @brief 現在のプレイヤーステータスをサブウィンドウに表示する /
  * @param player_ptr プレイヤーへの参照ポインタ
@@ -411,6 +437,23 @@ void fix_player(PlayerType *player_ptr)
         [player_ptr] {
             display_player(player_ptr, 0);
         });
+    displayed_player_points = DisplayedPlayerPoints(*player_ptr);
+}
+
+/*!
+ * @brief プレイヤー情報のサブウィンドウを描いたときから HP・MP が変わっていたら描き直しを要求する
+ * @param player プレイヤーへの参照
+ */
+void request_player_redraw_if_points_changed(const PlayerType &player)
+{
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    if (rfu.has(SubWindowRedrawingFlag::PLAYER) || !displayed_player_points) {
+        return;
+    }
+
+    if (*displayed_player_points != DisplayedPlayerPoints(player)) {
+        rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
+    }
 }
 
 namespace {
