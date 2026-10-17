@@ -1,6 +1,8 @@
 #pragma once
 
+#include "info-reader/parse-error-types.h"
 #include <nlohmann/json_fwd.hpp>
+#include <tl/expected.hpp>
 
 class EgoItemDefinition;
 struct ego_generate_type;
@@ -21,9 +23,9 @@ public:
 private:
     bool grab_one_flag(EgoItemDefinition &ego, const nlohmann::json &flag) const;
     bool grab_one_extra_flag(ego_generate_type &extra, const nlohmann::json &flag) const;
-    int set_flags(EgoItemDefinition &ego) const;
-    int set_extra_flags(EgoItemDefinition &ego) const;
-    int set_activation(EgoItemDefinition &ego) const;
+    tl::expected<void, parse_error_type> set_flags(EgoItemDefinition &ego) const;
+    tl::expected<void, parse_error_type> set_extra_flags(EgoItemDefinition &ego) const;
+    tl::expected<void, parse_error_type> set_activation(EgoItemDefinition &ego) const;
 
     const nlohmann::json &ego_data;
 };
