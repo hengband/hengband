@@ -662,6 +662,7 @@ libhengband_a_SOURCES = \
 	io/exit-panic.cpp io/exit-panic.h \
 	io/files-util.cpp io/files-util.h \
 	io/gf-descriptions.cpp io/gf-descriptions.h \
+	io/input-context.cpp io/input-context.h \
 	io/input-key-acceptor.cpp io/input-key-acceptor.h \
 	io/input-key-processor.cpp io/input-key-processor.h \
 	io/input-key-requester.cpp io/input-key-requester.h \
@@ -1514,7 +1515,6 @@ hengband_test_SOURCES = \
 	test/system/spell-info-list-test-access.h \
 	\
 	test/autopick/test-autopick-editor-util.cpp \
-	test/bot/test-bot-input-context.cpp \
 	test/cmd-io/test-cmd-autopick.cpp \
 	test/flavor/test-flavor-util.cpp \
 	test/floor/test-fixed-map-generator.cpp \
@@ -1548,6 +1548,7 @@ hengband_test_SOURCES = \
 	test/info-reader/test-town-preferences-reader.cpp \
 	test/info-reader/test-vault-reader.cpp \
 	test/io/test-condition-expression.cpp \
+	test/io/test-input-context.cpp \
 	test/io/test-interpret-pref-file.cpp \
 	test/io/test-macro-configurations-store.cpp \
 	test/io/test-pref-file-expressor.cpp \

@@ -20,6 +20,7 @@
 #include "bot/bot-screen.h"
 #include "bot/bot-socket-server.h"
 #include "game-option/runtime-arguments.h"
+#include "io/input-context.h"
 #include "io/macro-configurations-store.h"
 #include "system/angband-system.h"
 #include "system/angband-version.h"
@@ -41,6 +42,7 @@
 #include <tl/optional.hpp>
 #include <type_traits>
 #include <utility>
+#include <variant>
 
 namespace {
 
@@ -77,7 +79,6 @@ constexpr auto BOT_CONTROL_POLL_INTERVAL = std::chrono::milliseconds(15);
 constexpr auto BOT_CONTROL_IDLE_POLL_INTERVAL = std::chrono::seconds(1);
 
 std::unique_ptr<BotSocketServer> bot_control_server;
-tl::optional<BotInputContext> current_input_context;
 
 //! フロントエンドが登録した端末の大きさを変える関数 (登録されていなければ大きさを変えられない)
 BotTermResizer bot_term_resizer = nullptr;
@@ -137,16 +138,16 @@ nlohmann::json make_ok_response(const nlohmann::json &id, nlohmann::json result 
  */
 nlohmann::json make_input_context_json()
 {
-    const auto &context = get_bot_input_context();
+    const auto &context = get_input_context();
     if (!context) {
         return nullptr;
     }
 
     auto result = nlohmann::json{ { "kind", context->kind }, { "prompt", to_json_utf8(context->prompt) } };
-    if (const auto *string_details = std::get_if<BotStringInputDetails>(&context->details)) {
+    if (const auto *string_details = std::get_if<StringInputDetails>(&context->details)) {
         result["max_length"] = string_details->max_length;
         result["initial"] = to_json_utf8(string_details->initial);
-    } else if (const auto *quantity_details = std::get_if<BotQuantityInputDetails>(&context->details)) {
+    } else if (const auto *quantity_details = std::get_if<QuantityInputDetails>(&context->details)) {
         result["max"] = quantity_details->max;
         result["initial"] = quantity_details->initial;
     }
@@ -627,41 +628,6 @@ void serve_pending_requests()
     serve_request(deadline);
 }
 
-}
-
-/*!
- * @brief 新しい入力文脈を保持し、以前の文脈をスコープへ退避する
- * @details 新しい値の構築が失敗した場合は、現在の文脈を変更しない。
- */
-BotInputContextScope::BotInputContextScope(std::string_view kind, std::string_view prompt)
-    : BotInputContextScope(BotInputContext{ std::string(kind), std::string(prompt), {} })
-{
-}
-
-/*!
- * @brief 詳細情報を含む入力文脈を保持し、以前の文脈を退避する
- * @details 新しい値の構築が失敗した場合は、現在の文脈を変更しない。
- */
-BotInputContextScope::BotInputContextScope(BotInputContext input_context)
-    : previous(std::move(input_context))
-{
-    current_input_context.swap(this->previous);
-}
-
-/*!
- * @brief 退避していた入力文脈を復元する
- */
-BotInputContextScope::~BotInputContextScope()
-{
-    current_input_context.swap(this->previous);
-}
-
-/*!
- * @brief 現在の入力文脈を返す。入力文脈がなければ空のoptionalを返す。
- */
-const tl::optional<BotInputContext> &get_bot_input_context()
-{
-    return current_input_context;
 }
 
 /*!
