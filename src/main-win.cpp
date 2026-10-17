@@ -2767,6 +2767,12 @@ static void prepare_game_start(bool shows_file_menu_prompt)
     initialized = true;
 
     check_for_save_file(command_line.get_savefile_option());
+    if (command_line.is_new_game_requested() && !game_in_progress) {
+        // [ファイル]メニューの[新規]と同じく、iniファイルから読んだ前回のセーブファイルは使わない
+        savefile = "";
+        game_in_progress = true;
+    }
+
     if (shows_file_menu_prompt) {
         prt(_("[ファイル] メニューの [新規] または [開く] を選択してください。", "[Choose 'New' or 'Open' from the 'File' menu]"), 23, _(8, 17));
         term_fresh();

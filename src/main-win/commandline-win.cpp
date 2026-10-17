@@ -21,6 +21,9 @@ namespace {
 // セーブファイル名
 std::string savefile_option;
 
+// 新しいゲームを始めるか (-n)
+bool new_game_option = false;
+
 /*!
  * @brief プラットフォームに依存しない長いコマンドライン引数を解釈する
  * @param option コマンドライン引数
@@ -88,6 +91,9 @@ void CommandLine::handle(void)
             } else if (wcscmp(argv[i], L"-r") == 0) {
                 arg_force_roguelike = true;
                 continue;
+            } else if (wcscmp(argv[i], L"-n") == 0) {
+                new_game_option = true;
+                continue;
             } else if (wcscmp(argv[i], L"--debug-console") == 0) {
                 create_console();
                 continue;
@@ -116,4 +122,14 @@ void CommandLine::handle(void)
 const std::string &CommandLine::get_savefile_option(void)
 {
     return savefile_option;
+}
+
+/*!
+ * @brief 新しいゲームを始めるよう指定されたか調べる
+ * @return -nが指定されている場合TRUE
+ * @details 事前にhandle()を呼び出していること。
+ */
+bool CommandLine::is_new_game_requested() const
+{
+    return new_game_option;
 }
