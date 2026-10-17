@@ -77,6 +77,7 @@ constexpr auto BOT_CONTROL_POLL_INTERVAL = std::chrono::milliseconds(15);
 constexpr auto BOT_CONTROL_IDLE_POLL_INTERVAL = std::chrono::seconds(1);
 
 std::unique_ptr<BotSocketServer> bot_control_server;
+tl::optional<BotInputContext> current_input_context;
 
 //! フロントエンドが登録した端末の大きさを変える関数 (登録されていなければ大きさを変えられない)
 BotTermResizer bot_term_resizer = nullptr;
@@ -129,6 +130,19 @@ nlohmann::json make_ok_response(const nlohmann::json &id, nlohmann::json result 
         { "ok", true },
         { "result", std::move(result) },
     };
+}
+
+/*!
+ * @brief 現在の入力待ちの文脈をJSONへ変換する
+ */
+nlohmann::json make_input_context_json()
+{
+    const auto &context = get_bot_input_context();
+    if (!context) {
+        return nullptr;
+    }
+
+    return { { "kind", context->kind }, { "prompt", to_json_utf8(context->prompt) } };
 }
 
 /*!
@@ -395,6 +409,7 @@ nlohmann::json handle_screen_request(const nlohmann::json &id, const nlohmann::j
 
     auto screen = make_bot_screen_json(*angband_terms[*index], *with_attrs);
     screen["term"] = *index;
+    screen["input_context"] = make_input_context_json();
     return make_ok_response(id, std::move(screen));
 }
 
@@ -454,7 +469,9 @@ nlohmann::json handle_state_request(const nlohmann::json &id, const nlohmann::js
         return make_error_response(id, "\"map\" must be a boolean");
     }
 
-    return make_ok_response(id, make_bot_json_snapshot(p_ptr, *include_map));
+    auto state = make_bot_json_snapshot(p_ptr, *include_map);
+    state["input_context"] = make_input_context_json();
+    return make_ok_response(id, std::move(state));
 }
 
 /*!
@@ -601,6 +618,32 @@ void serve_pending_requests()
     serve_request(deadline);
 }
 
+}
+
+/*!
+ * @brief 新しい入力文脈を保持し、以前の文脈をスコープへ退避する
+ * @details 新しい値の構築が失敗した場合は、現在の文脈を変更しない。
+ */
+BotInputContextScope::BotInputContextScope(std::string_view kind, std::string_view prompt)
+    : previous(BotInputContext{ std::string(kind), std::string(prompt) })
+{
+    current_input_context.swap(this->previous);
+}
+
+/*!
+ * @brief 退避していた入力文脈を復元する
+ */
+BotInputContextScope::~BotInputContextScope()
+{
+    current_input_context.swap(this->previous);
+}
+
+/*!
+ * @brief 現在の入力文脈を返す。入力文脈がなければ空のoptionalを返す。
+ */
+const tl::optional<BotInputContext> &get_bot_input_context()
+{
+    return current_input_context;
 }
 
 /*!

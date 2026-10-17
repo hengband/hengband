@@ -1514,6 +1514,7 @@ hengband_test_SOURCES = \
 	test/system/spell-info-list-test-access.h \
 	\
 	test/autopick/test-autopick-editor-util.cpp \
+	test/bot/test-bot-input-context.cpp \
 	test/cmd-io/test-cmd-autopick.cpp \
 	test/flavor/test-flavor-util.cpp \
 	test/floor/test-fixed-map-generator.cpp \

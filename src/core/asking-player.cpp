@@ -1,4 +1,5 @@
 #include "core/asking-player.h"
+#include "bot/bot-control-server.h"
 #include "cmd-io/macro-util.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
@@ -251,6 +252,7 @@ bool input_check_strict(PlayerType *player_ptr, std::string_view prompt, EnumCla
     }
 
     bool flag = false;
+    const BotInputContextScope input_context("confirm", buf);
     while (true) {
         int i = inkey();
 
@@ -303,10 +305,13 @@ tl::optional<char> input_command(std::string_view prompt)
     msg_erase();
     prt(prompt, 0, 0);
     char command;
-    if (get_com_no_macros) {
-        command = static_cast<char>(inkey_special(false));
-    } else {
-        command = inkey();
+    {
+        const BotInputContextScope input_context("command_char", prompt);
+        if (get_com_no_macros) {
+            command = static_cast<char>(inkey_special(false));
+        } else {
+            command = inkey();
+        }
     }
 
     prt("", 0, 0);
