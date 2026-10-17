@@ -159,11 +159,11 @@ static void send_waiting_record(PlayerType *player_ptr)
 static void init_random_seed(PlayerType *player_ptr, bool new_game)
 {
     auto &world = AngbandWorld::get_instance();
-    auto init_random_seed = false;
+    auto init_game_rng = false;
     if (!world.character_loaded) {
         new_game = true;
         world.character_dungeon = false;
-        init_random_seed = true;
+        init_game_rng = true;
         init_saved_floors(false);
     } else if (new_game) {
         init_saved_floors(true);
@@ -175,8 +175,14 @@ static void init_random_seed(PlayerType *player_ptr, bool new_game)
 
     // 既存のセーブデータから新規ゲームを始める場合、乱数生成器の状態はセーブデータのものが
     // 読み込まれている。固定シードを指定した時はこれを上書きしないと再現性が得られない
-    if (init_random_seed || (new_game && arg_fixed_seed)) {
+    if (init_game_rng || (new_game && arg_fixed_seed)) {
         Rand_state_init(arg_fixed_seed);
+    }
+
+    // ゲームの進行に影響しない乱数生成器はセーブデータに記録されないため、固定シードを指定した時は
+    // 既存のセーブデータを読み込んだ場合も初期化する。タイトル画面での乱数の消費に左右されないよう、ゲームの開始時に行う
+    if (arg_fixed_seed) {
+        Rand_external_state_init(arg_fixed_seed);
     }
 }
 
