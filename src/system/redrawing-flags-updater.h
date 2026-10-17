@@ -130,9 +130,9 @@ public:
     void request_item_lists_redrawing();
     void request_floor_item_lists_redrawing();
     void request_spell_info_redrawing();
+    void request_inscription_change_updates();
 
     void fill_up_sub_flags();
-    void request_autopick_inscription();
     EnumClassFlagGroup<SubWindowRedrawingFlag> get_sub_intersection(const EnumClassFlagGroup<SubWindowRedrawingFlag> &flags) const;
 
 private:

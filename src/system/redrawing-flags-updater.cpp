@@ -240,16 +240,21 @@ void RedrawingFlagsUpdater::request_spell_info_redrawing()
     this->sub_window_flags.set(flags_swrf);
 }
 
+/*!
+ * @brief アイテムの銘を変えたときの更新を予約する
+ * @details 銘によって能力が変わる ({$} で警告を止める、{.} でランダムテレポートを止める) ので能力を計算し直す
+ * (持ち物・装備の一覧の描き直しも、能力の再計算が要求する)。銘が揃うと束にまとめられるので、持ち物をまとめ直す。
+ */
+void RedrawingFlagsUpdater::request_inscription_change_updates()
+{
+    this->set_flag(StatusRecalculatingFlag::BONUS);
+    this->set_flag(InventoryArrangementFlag::COMBINATION);
+}
+
 void RedrawingFlagsUpdater::fill_up_sub_flags()
 {
     constexpr auto all_sub_window_flags = EnumRange(SubWindowRedrawingFlag::INVENTORY, SubWindowRedrawingFlag::MAX);
     this->sub_window_flags.set(all_sub_window_flags);
-}
-
-void RedrawingFlagsUpdater::request_autopick_inscription()
-{
-    this->set_flag(StatusRecalculatingFlag::BONUS);
-    this->set_flag(InventoryArrangementFlag::COMBINATION);
 }
 
 EnumClassFlagGroup<SubWindowRedrawingFlag> RedrawingFlagsUpdater::get_sub_intersection(const EnumClassFlagGroup<SubWindowRedrawingFlag> &flags) const

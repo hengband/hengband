@@ -92,7 +92,7 @@ void autopick_alter_item(PlayerType *player_ptr, INVENTORY_IDX i_idx, bool destr
     auto item = ref_item(player_ptr, i_idx);
     int idx = find_autopick_list(player_ptr, item.get());
     if (auto_inscribe_item(*item, idx)) {
-        RedrawingFlagsUpdater::get_instance().request_autopick_inscription();
+        RedrawingFlagsUpdater::get_instance().request_inscription_change_updates();
     }
 
     if (destroy && i_idx <= INVEN_PACK) {
@@ -110,7 +110,7 @@ void autopick_pickup_items(PlayerType *player_ptr, const Grid &grid)
         auto &item = *player_ptr->current_floor_ptr->o_list[this_o_idx];
         int idx = find_autopick_list(player_ptr, &item);
         if (auto_inscribe_item(item, idx)) {
-            RedrawingFlagsUpdater::get_instance().request_autopick_inscription();
+            RedrawingFlagsUpdater::get_instance().request_inscription_change_updates();
         }
 
         if ((idx < 0) || (autopick_list[idx].action.has_none_of({ AutopickMethod::AUTOPICK, AutopickMethod::QUERY_AUTOPICK }))) {

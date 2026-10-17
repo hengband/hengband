@@ -285,7 +285,7 @@ void store_purchase(PlayerType *player_ptr, StoreScreen &screen)
 
     const auto idx = find_autopick_list(player_ptr, &item);
     if (auto_inscribe_item(item, idx)) {
-        RedrawingFlagsUpdater::get_instance().request_autopick_inscription();
+        RedrawingFlagsUpdater::get_instance().request_inscription_change_updates();
     }
 
     item_new = store_item_to_inventory(player_ptr, &item);
