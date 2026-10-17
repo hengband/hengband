@@ -1,6 +1,7 @@
 """Regression tests for the actual JSONC validation entry point used in CI."""
 import copy
 import json
+import re
 from pathlib import Path
 import tempfile
 import unittest
@@ -442,6 +443,15 @@ class WildernessValidationTest(unittest.TestCase):
     def validate(self, data):
         return validate_document(data, self.schema_path, self.schema, filename="WildernessDefinition.jsonc")
 
+    def sized(self, width, height):
+        data = copy.deepcopy(self.data)
+        data["width"] = width
+        data["height"] = height
+        rows = ["#" * width for _ in range(height)]
+        rows[1] = "#1" + "#" * (width - 2)
+        data["maps"]["normal"]["layout"] = rows
+        return data
+
     def test_valid_localized_level_and_compact_map(self):
         ok, message = self.validate(self.data)
         self.assertTrue(ok, message)
@@ -474,9 +484,41 @@ class WildernessValidationTest(unittest.TestCase):
         self.assertFalse(self.validate(undefined_symbol)[0])
 
     def test_starting_position_is_inside_layout(self):
+        # 配置図を1列にし、端を除いた内側の範囲のまま配置図の外になる開始位置を与える。
+        # 通常の地図は配置図の幅が荒野の幅と一致する必要があるため、縮小の地図で確かめる。
         outside = copy.deepcopy(self.data)
-        outside["maps"]["compact"]["starting_position"] = {"x": 3, "y": 1}
-        self.assertFalse(self.validate(outside)[0])
+        outside["maps"]["compact"]["layout"] = ["#", "#", "#"]
+        outside["maps"]["compact"]["starting_position"] = {"x": 1, "y": 1}
+        ok, message = self.validate(outside)
+        self.assertFalse(ok, message)
+        self.assertIn("starting position must be within the map layout", message)
+
+    def test_starting_position_is_not_on_the_edge(self):
+        for map_name in ("normal", "compact"):
+            for axis in ("x", "y"):
+                with self.subTest(map_name=map_name, axis=axis):
+                    data = copy.deepcopy(self.data)
+                    data["maps"][map_name]["starting_position"][axis] = 2
+                    ok, message = self.validate(data)
+                    self.assertFalse(ok, message)
+                    self.assertIn("must not be on the wilderness edge", message)
+
+    def test_dimension_limits_match_floor_size(self):
+        header = (Path(__file__).resolve().parents[2] / "src/floor/floor-base-definitions.h").read_text(encoding="utf-8")
+        limits = {name: int(value) for name, value in re.findall(r"constexpr int (MAX_HGT|MAX_WID) = (\d+);", header)}
+        self.assertEqual(self.schema["properties"]["width"]["maximum"], limits["MAX_WID"])
+        self.assertEqual(self.schema["properties"]["height"]["maximum"], limits["MAX_HGT"])
+
+    def test_dimensions_fit_the_floor(self):
+        for width, height in ((3, 3), (198, 66)):
+            with self.subTest(width=width, height=height):
+                ok, message = self.validate(self.sized(width, height))
+                self.assertTrue(ok, message)
+        for width, height, field in ((199, 66, "width"), (198, 67, "height"), (2, 3, "width"), (3, 2, "height")):
+            with self.subTest(width=width, height=height):
+                ok, message = self.validate(self.sized(width, height))
+                self.assertFalse(ok, message)
+                self.assertIn(f"Location: ['{field}']", message)
 
     def test_integer_representation_matches_reader(self):
         for field in ("width", "height"):

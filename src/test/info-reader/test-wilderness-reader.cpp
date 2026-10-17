@@ -1,3 +1,4 @@
+#include "floor/floor-base-definitions.h"
 #include "info-reader/parse-error-types.h"
 #include "info-reader/wilderness-reader.h"
 #include "locale/language-switcher.h"
@@ -8,6 +9,7 @@
 #include <nlohmann/json.hpp>
 #include <string>
 #include <string_view>
+#include <utility>
 #include <vector>
 
 namespace {
@@ -232,8 +234,8 @@ TEST_CASE("WildernessReader propagates map helper errors without replacing outpu
     for (const auto *map_name : { "normal", "compact" }) {
         CAPTURE(map_name);
         auto data = make_definition();
-        data["maps"][map_name]["layout"] = { "##", "##", "##" };
-        data["maps"][map_name]["starting_position"]["x"] = 2;
+        data["maps"][map_name]["layout"] = { "#", "#", "#" };
+        data["maps"][map_name]["starting_position"]["x"] = 1;
         auto definition = make_existing_definition();
         CHECK(WildernessReader(data).read(definition) == PARSE_ERROR_OUT_OF_BOUNDS);
         check_existing_definition(definition);
@@ -284,4 +286,73 @@ TEST_CASE("WildernessReader preserves direct and localized level boundaries")
             CHECK(map.starting_position == Pos2D(1, 1));
         }
     }
+}
+
+/*!
+ * @brief 荒野の幅と高さをフロアの大きさの範囲に限ることを確かめる
+ */
+TEST_CASE("WildernessReader limits dimensions to the floor size")
+{
+    const auto make_sized = [](int width, int height) {
+        auto data = make_definition();
+        data["width"] = width;
+        data["height"] = height;
+        const std::string edge_row(width, '#');
+        auto middle_row = edge_row;
+        middle_row[1] = '1';
+        auto layout = nlohmann::json::array();
+        for (auto y = 0; y < height; ++y) {
+            layout.push_back(y == 1 ? middle_row : edge_row);
+        }
+        data["maps"]["normal"]["layout"] = layout;
+        return data;
+    };
+    for (const auto &[width, height] : { std::pair{ 3, 3 }, std::pair{ MAX_WID, MAX_HGT } }) {
+        CAPTURE(width);
+        CAPTURE(height);
+        const auto data = make_sized(width, height);
+        WildernessDefinition definition;
+        CHECK(WildernessReader(data).read(definition) == PARSE_ERROR_NONE);
+        CHECK(definition.width == width);
+        CHECK(definition.height == height);
+    }
+    for (const auto &[width, height] : { std::pair{ 2, 3 }, std::pair{ 3, 2 }, std::pair{ MAX_WID + 1, MAX_HGT }, std::pair{ MAX_WID, MAX_HGT + 1 } }) {
+        CAPTURE(width);
+        CAPTURE(height);
+        const auto data = make_sized(width, height);
+        auto definition = make_existing_definition();
+        CHECK(WildernessReader(data).read(definition) == PARSE_ERROR_INVALID_FLAG);
+        check_existing_definition(definition);
+    }
+}
+
+/*!
+ * @brief 開始位置を、周囲8マスを生成できる荒野の内側に限ることを確かめる
+ */
+TEST_CASE("WildernessReader rejects starting positions on the wilderness edge")
+{
+    for (const auto *map_name : { "normal", "compact" }) {
+        CAPTURE(map_name);
+        for (const auto *axis : { "x", "y" }) {
+            CAPTURE(axis);
+            auto data = make_definition();
+            data["maps"][map_name]["starting_position"][axis] = 2;
+            auto definition = make_existing_definition();
+            CHECK(WildernessReader(data).read(definition) == PARSE_ERROR_INVALID_FLAG);
+            check_existing_definition(definition);
+        }
+    }
+
+    // 4×4の荒野では、内側の(2, 2)まで開始位置にできる。
+    auto data = make_definition();
+    data["width"] = 4;
+    data["height"] = 4;
+    data["maps"]["normal"]["layout"] = { "####", "#1##", "####", "####" };
+    data["maps"]["compact"]["layout"] = { "####", "####", "####", "####" };
+    data["maps"]["normal"]["starting_position"] = { { "x", 2 }, { "y", 2 } };
+    data["maps"]["compact"]["starting_position"] = { { "x", 2 }, { "y", 2 } };
+    WildernessDefinition definition;
+    REQUIRE(WildernessReader(data).read(definition) == PARSE_ERROR_NONE);
+    CHECK(definition.normal.starting_position == Pos2D(2, 2));
+    CHECK(definition.compact.starting_position == Pos2D(2, 2));
 }
