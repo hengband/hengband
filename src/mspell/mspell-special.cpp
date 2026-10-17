@@ -77,7 +77,7 @@ static MonsterSpellResult spell_RF6_SPECIAL_UNIFICATION(PlayerType *player_ptr, 
         }
 
         const auto &m_name = monraces.get_monrace(it_unified->first).name;
-        msg_format(_("%sが分離した！", "%s splits!"), m_name.data());
+        msg_print(_("{}が分離した！", "{} splits!"), m_name);
         return MonsterSpellResult::make_valid();
     }
 
@@ -120,8 +120,7 @@ static MonsterSpellResult spell_RF6_SPECIAL_UNIFICATION(PlayerType *player_ptr, 
             ranges::views::transform(monrace_id_to_name) |
             ranges::views::join(_("と"sv, " and "sv)) |
             ranges::to<std::string>;
-        const auto fmt = _("%sが合体した！", "%s combine into one!");
-        msg_format(fmt, separates_names.data());
+        msg_print(_("{}が合体した！", "{} combine into one!"), separates_names);
         return MonsterSpellResult::make_valid();
     }
 
@@ -234,7 +233,7 @@ static MonsterSpellResult spell_RF6_SPECIAL_B(PlayerType *player_ptr, POSITION y
         int get_damage = take_hit(player_ptr, DAMAGE_NOESCAPE, dam, m_name);
         if (player_ptr->tim_eyeeye && get_damage > 0 && !player_ptr->is_dead) {
             const auto m_name_self = monster_desc(player_ptr, monster, MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE);
-            msg_print(_(format("攻撃が%s自身を傷つけた！", m_name.data()), format("The attack of %s has wounded %s!", m_name.data(), m_name_self.data())));
+            msg_print(_("攻撃が{}自身を傷つけた！", "The attack of {} has wounded {}!"), m_name, m_name_self);
             project(player_ptr, 0, 0, monster.fy, monster.fx, get_damage, AttributeType::MISSILE, PROJECT_KILL);
             set_tim_eyeeye(player_ptr, player_ptr->tim_eyeeye - 5, true);
         }

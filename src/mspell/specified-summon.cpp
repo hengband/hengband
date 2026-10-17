@@ -20,6 +20,7 @@
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
 #include "timed-effect/timed-effects.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
 
 /*!
@@ -193,9 +194,9 @@ MONSTER_NUMBER summon_NAZGUL(PlayerType *player_ptr, POSITION y, POSITION x, MON
     const auto m_name = monster_name(player_ptr, m_idx);
 
     if (player_ptr->effects()->blindness().is_active()) {
-        msg_format(_("%s^が何かをつぶやいた。", "%s^ mumbles."), m_name.data());
+        msg_print(_("{}が何かをつぶやいた。", "{} mumbles."), str_upcase_first(m_name));
     } else {
-        msg_format(_("%s^が魔法で幽鬼戦隊を召喚した！", "%s^ magically summons rangers of Nazgul!"), m_name.data());
+        msg_print(_("{}が魔法で幽鬼戦隊を召喚した！", "{} magically summons rangers of Nazgul!"), str_upcase_first(m_name));
     }
 
     msg_erase();
@@ -228,15 +229,15 @@ MONSTER_NUMBER summon_NAZGUL(PlayerType *player_ptr, POSITION y, POSITION x, MON
         pos = pos_scat;
         count++;
         if (count == 1) {
-            msg_format(_("「幽鬼戦隊%d号、ナズグル・ブラック！」", "A Nazgul says 'Nazgul-Rangers Number %d, Nazgul-Black!'"), count);
+            msg_print(_("「幽鬼戦隊{}号、ナズグル・ブラック！」", "A Nazgul says 'Nazgul-Rangers Number {}, Nazgul-Black!'"), count);
         } else {
-            msg_format(_("「同じく%d号、ナズグル・ブラック！」", "Another one says 'Number %d, Nazgul-Black!'"), count);
+            msg_print(_("「同じく{}号、ナズグル・ブラック！」", "Another one says 'Number {}, Nazgul-Black!'"), count);
         }
 
         msg_erase();
     }
 
-    msg_format(_("「%d人そろって、リングレンジャー！」", "They say 'The %d meets! We are the Ring-Ranger!'."), count);
+    msg_print(_("「{}人そろって、リングレンジャー！」", "They say 'The {} meets! We are the Ring-Ranger!'."), count);
     msg_erase();
     return count;
 }

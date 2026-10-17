@@ -24,6 +24,7 @@
 #include "target/projection-path-calculator.h"
 #include "util/bit-flags-calculator.h"
 #include "util/point-2d.h"
+#include <fmt/format.h>
 #include <tl/optional.hpp>
 
 /*!
@@ -74,7 +75,7 @@ static tl::optional<Pos2D> adjacent_grid_check(PlayerType *player_ptr, const Mon
             check_result = los(floor, m_pos, pos_next);
             break;
         default:
-            THROW_EXCEPTION(std::logic_error, format("Invalid PathChecker is specified! %d", enum2i(tc)));
+            THROW_EXCEPTION(std::logic_error, fmt::format("Invalid PathChecker is specified! {}", enum2i(tc)));
         }
 
         if (check_result) {

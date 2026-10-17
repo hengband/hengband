@@ -23,6 +23,7 @@
 #include "system/player-type-definition.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
 
 /* summoning number */
@@ -82,7 +83,7 @@ static MONSTER_NUMBER summon_Kin(PlayerType *player_ptr, POSITION y, POSITION x,
 }
 
 static void decide_summon_kin_caster(
-    PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int target_type, concptr m_name, concptr m_poss, const bool known)
+    PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int target_type, std::string_view m_name, const bool known)
 {
     auto &floor = *player_ptr->current_floor_ptr;
     const auto &monster = floor.m_list[m_idx];
@@ -112,14 +113,15 @@ static void decide_summon_kin_caster(
 
     if (player_ptr->effects()->blindness().is_active()) {
         if (mon_to_player) {
-            msg_format(_("%s^が何かをつぶやいた。", "%s^ mumbles."), m_name);
+            msg_print(_("{}が何かをつぶやいた。", "{} mumbles."), str_upcase_first(m_name));
         }
     } else if (mon_to_player || (mon_to_mon && known && see_either)) {
 #ifdef JP
-        (void)m_poss;
+        msg_print("{}が魔法で{}を召喚した。", m_name, monster.get_pronoun_of_summoned_kin());
+#else
+        const auto m_poss = monster_desc(player_ptr, monster, MD_PRON_VISIBLE | MD_POSSESSIVE);
+        msg_print("{} magically summons {} {}.", str_upcase_first(m_name), m_poss, monster.get_pronoun_of_summoned_kin());
 #endif
-        _(msg_format("%sが魔法で%sを召喚した。", m_name, monster.get_pronoun_of_summoned_kin().data()),
-            msg_format("%s^ magically summons %s %s.", m_name, m_poss, monster.get_pronoun_of_summoned_kin().data()));
     }
 
     if (mon_to_mon && known && !see_either) {
@@ -144,14 +146,13 @@ MonsterSpellResult spell_RF6_S_KIN(PlayerType *player_ptr, POSITION y, POSITION 
     const auto &monster = floor.m_list[m_idx];
     DEPTH rlev = monster_level_idx(floor, m_idx);
     const auto m_name = monster_name(player_ptr, m_idx);
-    const auto m_poss = monster_desc(player_ptr, monster, MD_PRON_VISIBLE | MD_POSSESSIVE);
 
     bool see_either = see_monster(player_ptr, m_idx) || see_monster(player_ptr, t_idx);
     bool known = monster_near_player(floor, m_idx, t_idx);
 
     summon_disturb(player_ptr, target_type, known, see_either);
 
-    decide_summon_kin_caster(player_ptr, m_idx, t_idx, target_type, m_name.data(), m_poss.data(), known);
+    decide_summon_kin_caster(player_ptr, m_idx, t_idx, target_type, m_name, known);
     int count = 0;
     switch (monster.r_idx) {
     case MonraceId::MENELDOR:
@@ -969,8 +970,7 @@ MonsterSpellResult spell_RF6_S_UNIQUE(PlayerType *player_ptr, POSITION y, POSITI
     }
 
     if (player_ptr->effects()->blindness().is_active() && count && mon_to_player) {
-        msg_format(_("多くの%sが間近に現れた音が聞こえる。", "You hear many %s appear nearby."),
-            uniques_are_summoned ? _("力強いもの", "powerful things") : _("もの", "things"));
+        msg_print(_("多くの{}が間近に現れた音が聞こえる。", "You hear many {} appear nearby."), uniques_are_summoned ? _("力強いもの", "powerful things") : _("もの", "things"));
     }
 
     if (monster_near_player(floor, m_idx, t_idx) && !see_monster(player_ptr, t_idx) && count && mon_to_mon) {
@@ -1016,7 +1016,7 @@ MonsterSpellResult spell_RF6_S_DEAD_UNIQUE(PlayerType *player_ptr, POSITION y, P
     }
 
     if (player_ptr->effects()->blindness().is_active() && count && mon_to_player) {
-        msg_format(_("多くの力強いものが間近に蘇った音が聞こえる。", "You hear many powerful things animate nearby."));
+        msg_print(_("多くの力強いものが間近に蘇った音が聞こえる。", "You hear many powerful things animate nearby."));
     }
 
     if (monster_near_player(floor, m_idx, t_idx) && !see_monster(player_ptr, t_idx) && count && mon_to_mon) {
