@@ -40,10 +40,9 @@ void do_cmd_knowledge_autopick(PlayerType *player_ptr)
     }
 
     if (autopick_list.empty()) {
-        fprintf(fff, _("自動破壊/拾いには何も登録されていません。", "No preference for auto picker/destroyer."));
+        fmt::print(fff, _("自動破壊/拾いには何も登録されていません。", "No preference for auto picker/destroyer."));
     } else {
-        fprintf(fff, _("   自動拾い/破壊には現在 %d行登録されています。\n\n", "   There are %d registered lines for auto picker/destroyer.\n\n"),
-            static_cast<int>(autopick_list.size()));
+        fmt::println(fff, _("   自動拾い/破壊には現在 {}行登録されています。\n", "   There are {} registered lines for auto picker/destroyer.\n"), static_cast<int>(autopick_list.size()));
     }
 
     for (const auto &entry : autopick_list) {
@@ -59,10 +58,9 @@ void do_cmd_knowledge_autopick(PlayerType *player_ptr)
         }
 
         const auto fmt = entry.action.has(AutopickMethod::DISPLAY) ? "[%s]" : "(%s)";
-        fprintf(fff, "%11s", format(fmt, command.data()).data());
+        fmt::print(fff, "{:>11}", fmt::bytes(format(fmt, command.data())));
         const auto line = autopick_line_from_entry(entry);
-        fprintf(fff, " %s", line.data());
-        fprintf(fff, "\n");
+        fmt::println(fff, " {}", line);
     }
 
     angband_fclose(fff);

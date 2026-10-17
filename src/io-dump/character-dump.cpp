@@ -195,7 +195,7 @@ static void dump_aux_recall(FILE *fff)
  */
 static void dump_aux_options(FILE *fff)
 {
-    fprintf(fff, _("\n  [オプション設定]\n", "\n  [Option Settings]\n"));
+    fmt::println(fff, _("\n  [オプション設定]", "\n  [Option Settings]"));
     if (preserve_mode) {
         fmt::print(fff, _("\n 保存モード:         ON", "\n Preserve Mode:      ON"));
     } else {
@@ -292,9 +292,9 @@ static void dump_aux_arena(FILE *fff)
 
     const auto victory_count = current_entry > max_entries ? max_entries : current_entry;
 #ifdef JP
-    fprintf(fff, "\n 闘技場: %2d勝\n", victory_count);
+    fmt::println(fff, "\n 闘技場: {:2}勝", victory_count);
 #else
-    fprintf(fff, "\n Arena: %2d %s\n", victory_count, (current_entry > 1) ? "Victories" : "Victory");
+    fmt::println(fff, "\n Arena: {:2} {}", victory_count, (current_entry > 1) ? "Victories" : "Victory");
 #endif
     fmt::print(fff, "\n");
 }
@@ -378,7 +378,7 @@ static void dump_aux_monsters(FILE *fff)
         }
 
         const auto names = str_separate(monrace.name, 40);
-        fprintf(fff, _("  %-40s (レベル%3d)%s\n", "  %-40s (level %3d)%s\n"), names.front().data(), monrace.level, defeat_info.data());
+        fmt::println(fff, _("  {:<40} (レベル{:3}){}", "  {:<40} (level {:3}){}"), fmt::bytes(names.front()), monrace.level, defeat_info);
         for (const auto &name : names | ranges::views::drop(1)) {
             fmt::println(fff, "  {}", name);
         }

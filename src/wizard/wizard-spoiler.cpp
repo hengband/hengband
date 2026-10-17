@@ -92,7 +92,7 @@ static auto get_mon_evol_roots()
 /*!
  * @brief 進化ツリーをスポイラー出力するメインルーチン
  *
- * fprintf() に'%' (壁)を渡すとフォーマット指定子扱いされるので、関数の外でフォーマットしてはいけない.
+ * モンスターのシンボル ('{' など) を書式に埋め込むと書式の指定として扱われるので、シンボルは書式の引数で渡すこと.
  */
 static SpoilerOutputResultType spoil_mon_evol()
 {
@@ -109,19 +109,19 @@ static SpoilerOutputResultType spoil_mon_evol()
     const auto &monraces = MonraceList::get_instance();
     for (auto monrace_id : get_mon_evol_roots()) {
         auto monrace = monraces.get_monrace_shared(monrace_id);
-        constexpr auto fmt_before = _("[%d]: %s (レベル%d, '%c')\n", "[%d]: %s (Level %d, '%c')\n");
-        fprintf(spoiler_file, fmt_before, enum2i(monrace_id), monrace->name.data(), monrace->level, monrace->symbol_definition.character);
+        constexpr auto fmt_before = _("[{}]: {} (レベル{}, '{:c}')\n", "[{}]: {} (Level {}, '{:c}')\n");
+        fmt::print(spoiler_file, fmt_before, enum2i(monrace_id), monrace->name, monrace->level, monrace->symbol_definition.character);
         for (auto n = 1;; n++) {
             const auto monrace_next = monrace->get_next_shared();
             if (!monrace_next->is_valid()) {
                 break;
             }
 
-            fprintf(spoiler_file, "%*s-(%d)-> ", n * 2, "", monrace->next_exp);
+            fmt::print(spoiler_file, "{}-({})-> ", std::string(n * 2, ' '), monrace->next_exp);
             monrace = monrace_next;
-            fprintf(spoiler_file, "[%d]: ", enum2i(monrace->idx));
-            constexpr auto fmt_after = _("%s (レベル%d, '%c')\n", "%s (Level %d, '%c')\n");
-            fprintf(spoiler_file, fmt_after, monrace->name.data(), monrace->level, monrace->symbol_definition.character);
+            fmt::print(spoiler_file, "[{}]: ", enum2i(monrace->idx));
+            constexpr auto fmt_after = _("{} (レベル{}, '{:c}')\n", "{} (Level {}, '{:c}')\n");
+            fmt::print(spoiler_file, fmt_after, monrace->name, monrace->level, monrace->symbol_definition.character);
         }
 
         fputc('\n', spoiler_file);

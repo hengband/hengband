@@ -55,7 +55,7 @@ void remove_auto_dump(const std::filesystem::path &orig_file, std::string_view a
                 between_mark = true;
                 changed = true;
             } else {
-                fprintf(tmp_fff, "%s\n", buf->data());
+                fmt::println(tmp_fff, "{}", *buf);
             }
 
             continue;
@@ -88,7 +88,7 @@ void remove_auto_dump(const std::filesystem::path &orig_file, std::string_view a
                 if (!buf) {
                     break;
                 }
-                fprintf(orig_fff, "%s\n", buf->data());
+                fmt::println(orig_fff, "{}", *buf);
             }
         }
 

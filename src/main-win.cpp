@@ -115,6 +115,7 @@
 #include "world/world.h"
 #include <algorithm>
 #include <commdlg.h>
+#include <cstdio>
 #include <cstdlib>
 #include <direct.h>
 #include <locale>
@@ -2703,15 +2704,16 @@ void create_debug_spoiler()
     init_stuff();
     init_angband(p_ptr, true);
 
+    // GUI アプリはコンソールを持たないことがあり、fmt::print() は書き込みに失敗すると例外を投げるので、std::fputs() で出力する
     switch (output_all_spoilers()) {
     case SpoilerOutputResultType::SUCCESSFUL:
-        fprintf(stdout, "Successfully created a spoiler file.");
+        std::fputs("Successfully created a spoiler file.", stdout);
         break;
     case SpoilerOutputResultType::FILE_OPEN_FAILED:
-        fprintf(stderr, "Cannot create spoiler file.");
+        std::fputs("Cannot create spoiler file.", stderr);
         break;
     case SpoilerOutputResultType::FILE_CLOSE_FAILED:
-        fprintf(stderr, "Cannot close spoiler file.");
+        std::fputs("Cannot close spoiler file.", stderr);
         break;
     default:
         break;

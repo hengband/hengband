@@ -265,7 +265,7 @@ void auto_dump_printf(FILE *auto_dump_stream, const char *fmt, ...)
     // '\n'はSJISのマルチバイト文字のコードに含まれないため、ダメ文字を考慮する必要はない
     auto_dump_line_num += std::count(buf.begin(), buf.end(), '\n');
 
-    fprintf(auto_dump_stream, "%s", buf.data());
+    fmt::print(auto_dump_stream, "{}", buf);
 }
 
 /*!
@@ -287,7 +287,7 @@ bool open_auto_dump(FILE **fpp, const std::filesystem::path &path, std::string_v
         return false;
     }
 
-    fprintf(*fpp, "%s\n", header_mark_str.data());
+    fmt::println(*fpp, "{}", header_mark_str);
     auto_dump_line_num = 0;
     auto_dump_printf(*fpp, _("# *警告!!* 以降の行は自動生成されたものです。\n", "# *Warning!*  The lines below are an automatic dump.\n"));
     auto_dump_printf(
@@ -306,7 +306,7 @@ void close_auto_dump(FILE **fpp, std::string_view mark)
     auto_dump_printf(*fpp, _("# *警告!!* 以降の行は自動生成されたものです。\n", "# *Warning!*  The lines below are an automatic dump.\n"));
     auto_dump_printf(
         *fpp, _("# *警告!!* 後で自動的に削除されるので編集しないでください。\n", "# Don't edit them; changes will be deleted and replaced automatically.\n"));
-    fprintf(*fpp, "%s (%d)\n", footer_mark_str.data(), auto_dump_line_num);
+    fmt::println(*fpp, "{} ({})", footer_mark_str, auto_dump_line_num);
     angband_fclose(*fpp);
 }
 

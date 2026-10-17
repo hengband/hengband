@@ -568,6 +568,6 @@ void dump_virtues(PlayerType *player_ptr, FILE *out_file)
     }
 
     for (int v_nr = 0; v_nr < 8; v_nr++) {
-        fprintf(out_file, "%s\n", describe_virtue(player_ptr, v_nr).data());
+        fmt::println(out_file, "{}", describe_virtue(player_ptr, v_nr));
     }
 }

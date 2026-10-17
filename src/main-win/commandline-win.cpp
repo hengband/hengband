@@ -7,6 +7,7 @@
 #include "game-option/runtime-arguments.h"
 #include "main-win/main-win-utils.h"
 #include "term/z-util.h"
+#include <cstdio>
 #include <fmt/format.h>
 #include <iostream>
 #include <string>
@@ -108,7 +109,8 @@ void CommandLine::handle(void)
 
         ::LocalFree(argv);
     } else {
-        fprintf(stdout, "CommandLineToArgvW failed.");
+        // GUI アプリはコンソールを持たないことがあり、fmt::print() は書き込みに失敗すると例外を投げるので、std::fputs() で出力する
+        std::fputs("CommandLineToArgvW failed.", stdout);
         quit("");
     }
 }
