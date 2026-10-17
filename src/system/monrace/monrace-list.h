@@ -67,7 +67,6 @@ public:
 
     void reset_current_numbers();
     void reset_all_visuals();
-    tl::optional<std::string> probe_lore(MonraceId monrace_id);
     void kill_unique_monster(MonraceId monrace_id);
 
 private:

@@ -20,11 +20,6 @@ bool LoreTracker::is_tracking() const
     return MonraceList::is_valid(this->monrace_id);
 }
 
-bool LoreTracker::is_tracking(MonraceId trackee) const
-{
-    return this->monrace_id == trackee;
-}
-
 MonraceId LoreTracker::get_trackee() const
 {
     return this->monrace_id;
@@ -39,6 +34,13 @@ const MonraceDefinition &LoreTracker::get_tracking_monrace() const
     return MonraceList::get_instance().get_monrace(this->monrace_id);
 }
 
+/*!
+ * @brief 思い出を表示するモンスター種族を変える
+ * @param new_monrace_id 新しく表示するモンスター種族ID
+ * @details 思い出の値の変化は表示した思い出との比較 (MonsterLoreSnapshot) で拾うが、
+ * 同じ端末にほかのサブウィンドウも割り当てられていると、思い出の値が変わらなくても上書きされていることがある。
+ * 種族を指定したときは表示し直したいので、同じ種族でも描き直しを要求する。
+ */
 void LoreTracker::set_trackee(MonraceId new_monrace_id)
 {
     this->monrace_id = new_monrace_id;

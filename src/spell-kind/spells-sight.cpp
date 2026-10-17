@@ -25,7 +25,6 @@
 #include "system/redrawing-flags-updater.h"
 #include "target/projection-path-calculator.h"
 #include "term/screen-processor.h"
-#include "tracking/lore-tracker.h"
 #include "view/display-messages.h"
 
 /*!
@@ -470,9 +469,6 @@ bool probing(PlayerType *player_ptr)
         if (mes) {
             msg_print(*mes);
             msg_erase();
-            if (LoreTracker::get_instance().is_tracking(monster.r_idx)) {
-                RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::MONSTER_LORE);
-            }
         }
 
         probe = true;

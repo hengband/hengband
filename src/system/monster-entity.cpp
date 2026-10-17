@@ -9,9 +9,7 @@
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
 #include "system/monrace/monrace-records.h"
-#include "system/redrawing-flags-updater.h"
 #include "term/term-color-types.h"
-#include "tracking/lore-tracker.h"
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
 #include <algorithm>
@@ -521,9 +519,6 @@ void MonsterEntity::make_lore_treasure(int num_item, int num_gold) const
     }
 
     monrace.make_lore_treasure(num_item, num_gold);
-    if (LoreTracker::get_instance().is_tracking(this->r_idx)) {
-        RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::MONSTER_LORE);
-    }
 }
 
 tl::optional<bool> MonsterEntity::order_pet_named(const MonsterEntity &other) const
