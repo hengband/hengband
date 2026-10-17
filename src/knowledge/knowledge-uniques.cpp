@@ -8,6 +8,7 @@
 #include "core/show-file.h"
 #include "game-option/cheat-options.h"
 #include "io-dump/dump-util.h"
+#include "io/temp-file.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
 #include "system/monrace/monrace-records.h"
@@ -70,81 +71,88 @@ void UniqueList::sweep()
     }
 }
 
-static void display_uniques(UniqueList *unique_list_ptr, FILE *fff)
+static std::vector<std::string> build_unique_names(UniqueList &unique_list)
 {
-    if (unique_list_ptr->num_uniques_surface) {
-        const auto surface_desc = unique_list_ptr->is_alive
-                                      ? _("     地上  生存: {:3}体\n", "      Surface  alive: {:3}\n")
-                                      : _("     地上  撃破: {:3}体\n", "      Surface  dead: {:3}\n");
-        fmt::print(fff, fmt::runtime(surface_desc), unique_list_ptr->num_uniques_surface);
-        unique_list_ptr->num_uniques_total += unique_list_ptr->num_uniques_surface;
+    std::vector<std::string> output_lines;
+    if (unique_list.num_uniques_surface) {
+        const auto surface_desc = unique_list.is_alive
+                                      ? format(_("     地上  生存: %3d体", "      Surface  alive: %3d"), unique_list.num_uniques_surface)
+                                      : format(_("     地上  撃破: %3d体", "      Surface  dead: %3d"), unique_list.num_uniques_surface);
+        output_lines.push_back(surface_desc);
+        unique_list.num_uniques_total += unique_list.num_uniques_surface;
     }
 
-    for (IDX i = 0; i <= unique_list_ptr->max_lev; i++) {
-        const auto dungeon_desc = unique_list_ptr->is_alive
-                                      ? _("{:3}-{:3}階  生存: {:3}体\n", "Level {:3}-{:3}  alive: {:3}\n")
-                                      : _("{:3}-{:3}階  撃破: {:3}体\n", "Level {:3}-{:3}  dead: {:3}\n");
-        fmt::print(fff, fmt::runtime(dungeon_desc), 1 + i * 10, 10 + i * 10, unique_list_ptr->num_uniques[i]);
-        unique_list_ptr->num_uniques_total += unique_list_ptr->num_uniques[i];
+    for (auto i = 0; i <= unique_list.max_lev; i++) {
+        const auto dungeon_desc = unique_list.is_alive
+                                      ? format(_("%3d-%3d階  生存: %3d体", "Level %3d-%3d  alive: %3d"), 1 + i * 10, 10 + i * 10, unique_list.num_uniques[i])
+                                      : format(_("%3d-%3d階  撃破: %3d体", "Level %3d-%3d  dead: %3d"), 1 + i * 10, 10 + i * 10, unique_list.num_uniques[i]);
+        output_lines.push_back(dungeon_desc);
+        unique_list.num_uniques_total += unique_list.num_uniques[i];
     }
 
-    if (unique_list_ptr->num_uniques_over100) {
-        const auto deep_desc = unique_list_ptr->is_alive
-                                   ? _("101-   階  生存: {:3}体\n", "Level 101-     alive: {:3}\n")
-                                   : _("101-   階  撃破: {:3}体\n", "Level 101-     dead: {:3}\n");
-        fmt::print(fff, fmt::runtime(deep_desc), unique_list_ptr->num_uniques_over100);
-        unique_list_ptr->num_uniques_total += unique_list_ptr->num_uniques_over100;
+    if (unique_list.num_uniques_over100) {
+        const auto deep_desc = unique_list.is_alive
+                                   ? format(_("101-   階  生存: %3d体", "Level 101-     alive: %3d"), unique_list.num_uniques_over100)
+                                   : format(_("101-   階  撃破: %3d体", "Level 101-     dead: %3d"), unique_list.num_uniques_over100);
+        output_lines.push_back(deep_desc);
+        unique_list.num_uniques_total += unique_list.num_uniques_over100;
     }
 
-    if (unique_list_ptr->num_uniques_total) {
-        fmt::print(fff, "{}", _("---------  -----------\n", "-------------  ----------\n"));
-        const auto total_desc = unique_list_ptr->is_alive
-                                    ? _("     合計  生存: {:3}体\n\n", "        Total  alive: {:3}\n\n")
-                                    : _("     合計  撃破: {:3}体\n\n", "        Total  dead: {:3}\n\n");
-        fmt::print(fff, fmt::runtime(total_desc), unique_list_ptr->num_uniques_total);
+    if (unique_list.num_uniques_total) {
+        output_lines.emplace_back(_("---------  -----------", "-------------  ----------"));
+        const auto total_desc = unique_list.is_alive
+                                    ? format(_("     合計  生存: %3d体", "        Total  alive: %3d"), unique_list.num_uniques_total)
+                                    : format(_("     合計  撃破: %3d体", "        Total  dead: %3d"), unique_list.num_uniques_total);
+        output_lines.push_back(total_desc);
+        output_lines.emplace_back("");
     } else {
-        const auto no_unique_desc = unique_list_ptr->is_alive ? _("現在は既知の生存ユニークはいません。\n", "No known uniques alive.\n")
-                                                              : _("現在は既知の撃破ユニークはいません。\n", "No known uniques dead.\n");
-        fputs(no_unique_desc, fff);
+        output_lines.emplace_back(unique_list.is_alive ? _("現在は既知の生存ユニークはいません。", "No known uniques alive.")
+                                                       : _("現在は既知の撃破ユニークはいません。", "No known uniques dead."));
     }
 
     const auto &monraces = MonraceList::get_instance();
-    for (auto monrace_id : unique_list_ptr->monrace_ids) {
+    for (auto monrace_id : unique_list.monrace_ids) {
         const auto &monrace = monraces.get_monrace(monrace_id);
         std::string details;
-        if (!unique_list_ptr->is_alive && monrace.defeat_level && monrace.defeat_time) {
+        if (!unique_list.is_alive && (monrace.defeat_level > 0) && (monrace.defeat_time > 0)) {
             details = format(_(" - レベル%2d - %d:%02d:%02d", " - level %2d - %d:%02d:%02d"), monrace.defeat_level, monrace.defeat_time / (60 * 60),
                 (monrace.defeat_time / 60) % 60, monrace.defeat_time % 60);
         }
 
         const auto name = str_separate(monrace.name, 40);
-        fprintf(fff, _("     %-40s (レベル%3d)%s\n", "     %-40s (level %3d)%s\n"), name.front().data(), (int)monrace.level, details.data());
+        output_lines.push_back(format(_("     %-40s (レベル%3d)%s", "     %-40s (level %3d)%s"), name.front().data(), static_cast<int>(monrace.level), details.data()));
         for (auto i = 1U; i < name.size(); ++i) {
-            fprintf(fff, "     %s\n", name[i].data());
+            output_lines.push_back(format("     %s", name[i].data()));
         }
     }
+
+    return output_lines;
 }
 
 /*!
  * @brief 既知の生きているユニークまたは撃破済ユニークの一覧を表示させる
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param is_alive 生きているユニークのリストならばTRUE、撃破したユニークのリストならばFALSE
+ * @return エラーが発生した場合はエラーメッセージ、正常終了時はtl::nullopt
  */
-void do_cmd_knowledge_uniques(PlayerType *player_ptr, bool is_alive)
+tl::optional<std::string> do_cmd_knowledge_uniques(PlayerType *player_ptr, bool is_alive)
 {
-    UniqueList unique_list(is_alive);
-    FILE *fff = nullptr;
-    GAME_TEXT file_name[FILE_NAME_SIZE];
-    if (!open_temporary_file(&fff, file_name)) {
-        return;
+    TempFile tf;
+    if (const auto &error_message = tf.get_error_message(); error_message) {
+        return *error_message;
     }
 
+    UniqueList unique_list(is_alive);
     unique_list.sweep();
     const auto &monraces = MonraceList::get_instance();
     std::stable_sort(unique_list.monrace_ids.begin(), unique_list.monrace_ids.end(), [&monraces](auto x, auto y) { return monraces.order(x, y); });
-    display_uniques(&unique_list, fff);
-    angband_fclose(fff);
-    concptr title_desc = unique_list.is_alive ? _("まだ生きているユニーク・モンスター", "Alive Uniques") : _("もう撃破したユニーク・モンスター", "Dead Uniques");
-    FileDisplayer(player_ptr->name).display(true, file_name, 0, 0, title_desc);
-    fd_kill(file_name);
+    const auto output_lines = build_unique_names(unique_list);
+    tf.write_lines(output_lines);
+    if (const auto &error_message = tf.get_error_message(); error_message) {
+        return *error_message;
+    }
+
+    const auto title_desc = unique_list.is_alive ? _("まだ生きているユニーク・モンスター", "Alive Uniques") : _("もう撃破したユニーク・モンスター", "Dead Uniques");
+    FileDisplayer(player_ptr->name).display(true, tf.get_path().string(), 0, 0, title_desc);
+    return tl::nullopt;
 }
