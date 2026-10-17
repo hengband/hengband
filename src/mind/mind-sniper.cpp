@@ -628,7 +628,6 @@ void do_cmd_snipe(PlayerType *player_ptr)
         MainWindowRedrawingFlag::MP,
     };
     rfu.set_flags(flags_mwrf);
-    rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
 }
 
 /*!

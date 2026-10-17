@@ -52,7 +52,6 @@ void regenhp(PlayerType *player_ptr, int percent)
     if (old_chp != player_ptr->chp) {
         auto &rfu = RedrawingFlagsUpdater::get_instance();
         rfu.set_flag(MainWindowRedrawingFlag::HP);
-        rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
         wild_regen = 20;
     }
 }
@@ -109,7 +108,6 @@ void regenmana(PlayerType *player_ptr, MANA_POINT upkeep_factor, MANA_POINT rege
     if (old_csp != player_ptr->csp) {
         auto &rfu = RedrawingFlagsUpdater::get_instance();
         rfu.set_flag(MainWindowRedrawingFlag::MP);
-        rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
         wild_regen = 20;
     }
 }

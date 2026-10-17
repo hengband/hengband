@@ -466,7 +466,6 @@ static void update_max_hitpoints(PlayerType *player_ptr)
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.set_flag(MainWindowRedrawingFlag::HP);
-    rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
 }
 
 /*!
@@ -898,7 +897,6 @@ static void update_max_mana(PlayerType *player_ptr)
         player_ptr->msp = msp;
         auto &rfu = RedrawingFlagsUpdater::get_instance();
         rfu.set_flag(MainWindowRedrawingFlag::MP);
-        rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
     }
 
     if (AngbandWorld::get_instance().character_xtra) {

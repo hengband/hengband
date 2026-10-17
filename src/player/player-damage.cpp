@@ -362,7 +362,6 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.set_flag(MainWindowRedrawingFlag::HP);
-    rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
     if (damage_type != DAMAGE_GENO && player_ptr->chp == 0) {
         chg_virtue(player_ptr, Virtue::SACRIFICE, 1);
         chg_virtue(player_ptr, Virtue::CHANCE, 2);
