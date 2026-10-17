@@ -1,0 +1,20 @@
+[project]
+name = "hengband-mcp"
+version = "0.1.0"
+description = "MCP server that lets LLM agents play Hengband through its control server"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = ["mcp>=2.3,<3"]
+
+[project.scripts]
+hengband-mcp = "hengband_mcp.server:main"
+
+[dependency-groups]
+dev = ["pytest>=8"]
+
+[build-system]
+requires = ["uv_build>=0.10.9,<0.11.0"]
+build-backend = "uv_build"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
