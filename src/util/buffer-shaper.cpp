@@ -1,7 +1,33 @@
 #include "util/buffer-shaper.h"
 #include "locale/japanese.h"
+#include "util/string-processor.h"
 #include <algorithm>
 #include <array>
+
+namespace {
+/*!
+ * @brief 文字列を分割せずにそのまま 1 行にできるか
+ * @param sv 調べる文字列
+ * @return 改行も表示できない文字 (空白に置き換える文字) も無ければ true
+ * @details shape_buffer() と同じく全角文字は 2 バイトをまとめて見る。前半バイトで終わっている文字列は、
+ * その前半バイトを 1 バイトの文字として表示できるかで判断する (shape_buffer() と同じ)
+ */
+bool is_printable_as_is(std::string_view sv)
+{
+    for (auto i = 0U; i < sv.length(); i++) {
+        if (is_multibyte_char_at(sv, i)) {
+            i++;
+            continue;
+        }
+
+        if (!isprint(sv[i])) {
+            return false;
+        }
+    }
+
+    return true;
+}
+}
 
 /*!
  * @brief 文字列を指定した最大長を目安として分割する
@@ -26,6 +52,13 @@
  */
 std::vector<std::string> shape_buffer(std::string_view sv, size_t maxlen)
 {
+    // 1 行に収まる文字列 (メッセージの多く) は、1 文字ずつ組み立てずにそのまま返す
+    if (!sv.empty() && (sv.length() < maxlen) && is_printable_as_is(sv)) {
+        std::vector<std::string> one_line;
+        one_line.emplace_back(sv);
+        return one_line;
+    }
+
     std::vector<std::string> result;
     std::string line;
     auto separate_pos = 0U;
