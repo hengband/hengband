@@ -299,13 +299,7 @@ void ObjectThrowEntity::process_boomerang_back()
         this->item = player_ptr->inventory[this->i_idx];
         *this->item = this->q_ptr->clone();
         this->player_ptr->equip_cnt++;
-        auto &rfu = RedrawingFlagsUpdater::get_instance();
-        static constexpr auto flags = {
-            StatusRecalculatingFlag::BONUS,
-            StatusRecalculatingFlag::TORCH,
-            StatusRecalculatingFlag::MP,
-        };
-        rfu.set_flags(flags);
+        RedrawingFlagsUpdater::get_instance().request_equipment_change_updates();
         this->do_drop = false;
         return;
     }

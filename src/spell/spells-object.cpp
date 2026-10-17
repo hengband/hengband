@@ -229,13 +229,8 @@ bool curse_armor(PlayerType *player_ptr)
     item.curse_flags.set(CurseTraitType::CURSED);
     item.set_identification_flag(IdentificationFlag::BROKEN);
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    // エゴ・アーティファクトの能力 (光源の明るさなども) が無くなる
-    static constexpr auto flags_srf = {
-        StatusRecalculatingFlag::BONUS,
-        StatusRecalculatingFlag::TORCH,
-        StatusRecalculatingFlag::MP,
-    };
-    rfu.set_flags(flags_srf);
+    // エゴ・アーティファクトの能力が無くなる
+    rfu.request_equipment_change_updates();
     rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
     calc_android_exp(player_ptr);
     return true;
@@ -281,13 +276,8 @@ bool curse_weapon_object(PlayerType *player_ptr, bool force, ItemEntity &item)
     item.curse_flags.set(CurseTraitType::CURSED);
     item.set_identification_flag(IdentificationFlag::BROKEN);
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    // エゴ・アーティファクトの能力 (光源の明るさなども) が無くなる
-    static constexpr auto flags_srf = {
-        StatusRecalculatingFlag::BONUS,
-        StatusRecalculatingFlag::TORCH,
-        StatusRecalculatingFlag::MP,
-    };
-    rfu.set_flags(flags_srf);
+    // エゴ・アーティファクトの能力が無くなる
+    rfu.request_equipment_change_updates();
     rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
     calc_android_exp(player_ptr);
     return true;
@@ -627,11 +617,6 @@ void brand_weapon(PlayerType *player_ptr, int brand_type)
     chg_virtue(player_ptr, Virtue::ENCHANT, 2);
     calc_android_exp(player_ptr);
 
-    // 修正値の強化に失敗しても、エゴの能力 (焼棄の光源の明るさなども) は付いている
-    static constexpr auto flags_srf = {
-        StatusRecalculatingFlag::BONUS,
-        StatusRecalculatingFlag::TORCH,
-        StatusRecalculatingFlag::MP,
-    };
-    RedrawingFlagsUpdater::get_instance().set_flags(flags_srf);
+    // 修正値の強化に失敗しても、エゴの能力は付いている
+    RedrawingFlagsUpdater::get_instance().request_equipment_change_updates();
 }

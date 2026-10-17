@@ -347,13 +347,8 @@ void do_cmd_wield(PlayerType *player_ptr)
     }
 
     calc_android_exp(player_ptr);
-    static constexpr auto flags_srf = {
-        StatusRecalculatingFlag::BONUS,
-        StatusRecalculatingFlag::TORCH,
-        StatusRecalculatingFlag::MP,
-    };
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.set_flags(flags_srf);
+    rfu.request_equipment_change_updates();
     rfu.set_flag(MainWindowRedrawingFlag::EQUIPPY);
     rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
 }
@@ -400,12 +395,7 @@ void do_cmd_takeoff(PlayerType *player_ptr)
     (void)inven_takeoff(player_ptr, i_idx, 255);
     verify_equip_slot(player_ptr, i_idx);
     calc_android_exp(player_ptr);
-    static constexpr auto flags_srf = {
-        StatusRecalculatingFlag::BONUS,
-        StatusRecalculatingFlag::TORCH,
-        StatusRecalculatingFlag::MP,
-    };
-    rfu.set_flags(flags_srf);
+    rfu.request_equipment_change_updates();
     rfu.set_flag(MainWindowRedrawingFlag::EQUIPPY);
     rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
 }

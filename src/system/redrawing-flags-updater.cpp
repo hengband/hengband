@@ -274,6 +274,21 @@ void RedrawingFlagsUpdater::request_inscription_change_updates()
     this->set_flag(InventoryArrangementFlag::COMBINATION);
 }
 
+/*!
+ * @brief 装備 (または装備の能力) が変わったときの更新を予約する
+ * @details 装備の修正値や能力でプレイヤーの能力を、光源の能力で光源の明るさを、装備の重さや籠手 (能力や修正値によっては最大 MP が減らない) で最大 MP を計算し直す。
+ * 装備の品が入れ替わったとき (装備する・外す・無くなるなど) と、装備品の能力が変わったとき (アーティファクト生成・凡庸化・呪縛など) に呼ぶ。
+ */
+void RedrawingFlagsUpdater::request_equipment_change_updates()
+{
+    static constexpr auto flags_srf = {
+        StatusRecalculatingFlag::BONUS,
+        StatusRecalculatingFlag::TORCH,
+        StatusRecalculatingFlag::MP,
+    };
+    this->status_flags.set(flags_srf);
+}
+
 void RedrawingFlagsUpdater::fill_up_sub_flags()
 {
     constexpr auto all_sub_window_flags = EnumRange(SubWindowRedrawingFlag::INVENTORY, SubWindowRedrawingFlag::MAX);
