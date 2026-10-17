@@ -212,7 +212,12 @@ void do_cmd_inscribe(PlayerType *player_ptr)
         return;
     }
 
-    item->inscription.emplace(*input_inscription);
+    // 銘を空にしたら、銘を消したことにする
+    if (input_inscription->empty()) {
+        item->inscription.reset();
+    } else {
+        item->inscription.emplace(*input_inscription);
+    }
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.request_inscription_change_updates();
     rfu.request_floor_item_lists_redrawing();
