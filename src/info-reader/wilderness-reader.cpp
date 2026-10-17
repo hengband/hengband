@@ -1,4 +1,5 @@
 #include "info-reader/wilderness-reader.h"
+#include "floor/floor-base-definitions.h"
 #include "game-option/birth-options.h"
 #include "info-reader/dungeon-reader.h"
 #include "info-reader/info-reader-util.h"
@@ -81,10 +82,12 @@ int WildernessReader::read(WildernessDefinition &definition) const
     if (const auto err = info_set_integer(get_json_value(this->data, "version"), version, true, Range(1, 1))) {
         return err;
     }
-    if (const auto err = info_set_integer(get_json_value(this->data, "width"), parsed.width, true, Range(2, 32767))) {
+    // 荒野全体図は荒野の1マスをフロアの1マスへ描くため、フロアの最大の大きさに収める。
+    // 周囲8マスを生成できる内側のマスが要るため、幅・高さとも3以上とする。
+    if (const auto err = info_set_integer(get_json_value(this->data, "width"), parsed.width, true, Range(3, MAX_WID))) {
         return err;
     }
-    if (const auto err = info_set_integer(get_json_value(this->data, "height"), parsed.height, true, Range(2, 32767))) {
+    if (const auto err = info_set_integer(get_json_value(this->data, "height"), parsed.height, true, Range(3, MAX_HGT))) {
         return err;
     }
 
@@ -240,10 +243,11 @@ tl::expected<void, parse_error_type> WildernessReader::read_map(const nlohmann::
     if (!position_data.is_object()) {
         return tl::make_unexpected(position_data.is_null() ? PARSE_ERROR_TOO_FEW_ARGUMENTS : PARSE_ERROR_INVALID_TYPE);
     }
-    if (const auto err = info_set_integer(get_json_value(position_data, "x"), map.starting_position.x, true, Range(1, width - 1)); err != PARSE_ERROR_NONE) {
+    // 地上の生成では現在地の周囲8マスを生成するため、開始位置は荒野の端を除いた内側に限る。
+    if (const auto err = info_set_integer(get_json_value(position_data, "x"), map.starting_position.x, true, Range(1, width - 2)); err != PARSE_ERROR_NONE) {
         return tl::make_unexpected(static_cast<parse_error_type>(err));
     }
-    if (const auto err = info_set_integer(get_json_value(position_data, "y"), map.starting_position.y, true, Range(1, height - 1)); err != PARSE_ERROR_NONE) {
+    if (const auto err = info_set_integer(get_json_value(position_data, "y"), map.starting_position.y, true, Range(1, height - 2)); err != PARSE_ERROR_NONE) {
         return tl::make_unexpected(static_cast<parse_error_type>(err));
     }
     if (map.starting_position.y >= static_cast<int>(map.layout.size()) || map.starting_position.x >= static_cast<int>(map.layout[map.starting_position.y].size())) {
