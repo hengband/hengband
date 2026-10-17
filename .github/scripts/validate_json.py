@@ -418,9 +418,10 @@ def validate_dungeon_semantics(data: dict, schema_path: Path, data_path: Path, r
             for name in names:
                 require_integer(dungeon[group][name], path + [group, name])
         if dungeon["id"] != 0 and dimensions is not None:
+            # ダンジョンを出ると荒野の現在地が入口になるため、DungeonReaderは荒野の端を拒否する。
             for field, extent in zip(("wild_y", "wild_x"), dimensions):
-                if dungeon["position"][field] >= extent:
-                    raise ValidationError("dungeon entrance must be within the wilderness map", path=path + ["position", field])
+                if not 1 <= dungeon["position"][field] <= extent - 2:
+                    raise ValidationError("dungeon entrance must be inside the wilderness map excluding the edges", path=path + ["position", field])
         if dungeon["generation"]["minDepth"] > dungeon["generation"]["maxDepth"]:
             raise ValidationError("minDepth must not exceed maxDepth", path=path + ["generation", "minDepth"])
         for group in ("floor", "wall"):

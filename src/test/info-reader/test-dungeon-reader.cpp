@@ -279,7 +279,8 @@ TEST_CASE("DungeonReader preserves nonpercentage tunnel thresholds within the de
 
 TEST_CASE("DungeonReader validates entrances against actual wilderness dimensions without changing definitions")
 {
-    for (const auto &[y, x] : { std::pair{ 0, 0 }, std::pair{ 2, 3 }, std::pair{ 3, 0 }, std::pair{ 0, 4 } }) {
+    // 3×4の荒野で端を除いた内側は y=1・x=1〜2 だけ。
+    for (const auto &[y, x] : { std::pair{ 1, 1 }, std::pair{ 1, 2 }, std::pair{ 0, 1 }, std::pair{ 2, 1 }, std::pair{ 1, 0 }, std::pair{ 1, 3 }, std::pair{ 3, 0 }, std::pair{ 0, 4 } }) {
         CAPTURE(y);
         CAPTURE(x);
         DungeonReaderStateGuard guard;
@@ -287,7 +288,8 @@ TEST_CASE("DungeonReader validates entrances against actual wilderness dimension
         data["position"] = { { "wild_y", y }, { "wild_x", x } };
         REQUIRE(DungeonReader(data).read() == PARSE_ERROR_NONE);
         const auto previous = DungeonList::get_instance().get_dungeon_shared(DungeonId::ANGBAND);
-        CHECK(DungeonReader::validate_wilderness_positions(3, 4) == (y < 3 && x < 4 ? PARSE_ERROR_NONE : PARSE_ERROR_OUT_OF_BOUNDS));
+        const auto inside = (y == 1) && (x == 1 || x == 2);
+        CHECK(DungeonReader::validate_wilderness_positions(3, 4) == (inside ? PARSE_ERROR_NONE : PARSE_ERROR_OUT_OF_BOUNDS));
         CHECK(DungeonList::get_instance().get_dungeon_shared(DungeonId::ANGBAND) == previous);
         CHECK(previous->get_position() == Pos2D(y, x));
     }
