@@ -152,7 +152,8 @@ CfgData CfgReader::read_sections(std::initializer_list<cfg_section> sections) co
             if (value.empty()) {
                 continue;
             }
-            snprintf(buf, sizeof(buf), "%s", value.data());
+            // value は UTF-8 なので、2 バイト文字を考慮する angband_strcpy() ではなくバイト単位でコピーする (buf はゼロ初期化済み)
+            value.copy(buf, sizeof(buf) - 1);
 #ifdef JP
             // .cfg (UTF-8) to Shift-JIS
             guess_convert_to_system_encoding(buf, MAIN_WIN_MAX_PATH);

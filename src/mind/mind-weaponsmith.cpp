@@ -280,15 +280,15 @@ static void display_smith_effect_list(const Smith &smith, const std::vector<Smit
         title << Smith::get_effect_name(effect);
         title << "(" << Smith::get_need_essences_desc(effect) << ")";
 
-        char str[160];
+        std::string str;
         auto consumption = Smith::get_essence_consumption(effect);
         auto need_essences = Smith::get_need_essences(effect);
         if (need_essences.size() == 1) {
             auto essence = need_essences.front();
             auto amount = smith.get_essence_num_of_posessions(essence);
-            snprintf(str, sizeof(str), "%-49s %5d/%d", title.str().data(), amount, consumption);
+            str = fmt::format("{:<49} {:5}/{}", fmt::bytes(title.str()), amount, consumption);
         } else {
-            snprintf(str, sizeof(str), "%-49s  (\?\?)/%d", title.str().data(), consumption);
+            str = fmt::format("{:<49}  (\?\?)/{}", fmt::bytes(title.str()), consumption);
         }
 
         auto col = (smith.get_addable_count(effect) > 0) ? TERM_WHITE : TERM_RED;
