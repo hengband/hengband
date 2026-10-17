@@ -184,10 +184,12 @@ void ItemLoader50::rd_item(ItemEntity *o_ptr)
         }
     }
 
+    o_ptr->inscription.reset();
     if (any_bits(flags, SaveDataItemFlagType::INSCRIPTION)) {
-        o_ptr->inscription = rd_string();
-    } else {
-        o_ptr->inscription.reset();
+        // 以前は銘を刻むコマンドで銘を空にすると空の銘が残ったので、空の銘は銘の無い品として読む
+        if (auto insc = rd_string(); !insc.empty()) {
+            o_ptr->inscription = std::move(insc);
+        }
     }
 
     if (any_bits(flags, SaveDataItemFlagType::ART_NAME)) {
