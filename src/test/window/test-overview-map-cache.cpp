@@ -15,6 +15,7 @@
 #include "world/world.h"
 #include <doctest/doctest.h>
 #include <memory>
+#include <vector>
 
 TEST_CASE("OverviewMapCache recomputes only the grids marked dirty")
 {
@@ -182,6 +183,52 @@ TEST_CASE("OverviewMapCache recomputes only the grids marked dirty")
         cache.update(player_ptr.get());
         CHECK(cache.get_grid({ 5, 6 }).symbol.character == '#');
         CHECK(cache.get_grid({ 1, 2 }).symbol.character == '.');
+    }
+
+    SUBCASE("Changed grids are recorded in the current generation")
+    {
+        const auto generation = cache.get_generation();
+        CHECK(cache.get_changed_positions().empty());
+
+        // 求め直しても表示が変わらなければ記録しない
+        cache.mark_dirty({ 1, 2 });
+        cache.update(player_ptr.get());
+        CHECK(cache.get_changed_positions().empty());
+
+        floor.get_grid({ 1, 2 }).feat = wall_id;
+        floor.get_grid({ 2, 3 }).feat = wall_id;
+        cache.mark_dirty({ 2, 3 });
+        cache.mark_dirty({ 1, 2 });
+        cache.update(player_ptr.get());
+        CHECK(cache.get_generation() == generation);
+        const std::vector<Pos2D> expected{ { 2, 3 }, { 1, 2 } };
+        CHECK(cache.get_changed_positions() == expected);
+
+        // 全グリッドを求め直すと、記録に無いグリッドも変わったかもしれないので世代を変える
+        cache.mark_all_dirty();
+        cache.update(player_ptr.get());
+        CHECK(cache.get_generation() != generation);
+        CHECK(cache.get_changed_positions().empty());
+    }
+
+    SUBCASE("A long record of changes starts a new generation")
+    {
+        const auto generation = cache.get_generation();
+        const auto grid_count = floor.width * floor.height;
+        for (auto i = 0; i < grid_count; i++) {
+            floor.get_grid({ 1, 2 }).feat = (i % 2 == 0) ? wall_id : floor_id;
+            cache.mark_dirty({ 1, 2 });
+            cache.update(player_ptr.get());
+        }
+
+        CHECK(cache.get_generation() == generation);
+        CHECK(cache.get_changed_positions().size() == static_cast<size_t>(grid_count));
+
+        floor.get_grid({ 1, 2 }).feat = wall_id;
+        cache.mark_dirty({ 1, 2 });
+        cache.update(player_ptr.get());
+        CHECK(cache.get_generation() != generation);
+        CHECK(cache.get_changed_positions().empty());
     }
 
     SUBCASE("Marking a grid outside the floor is ignored")

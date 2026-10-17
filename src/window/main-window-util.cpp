@@ -1,7 +1,6 @@
 #include "window/main-window-util.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
-#include "floor/geometry.h"
 #include "game-option/special-options.h"
 #include "grid/grid.h"
 #include "player/player-status.h"
@@ -20,9 +19,8 @@
 #include "view/display-symbol.h"
 #include "view/map-info-cache.h"
 #include "window/overview-map-cache.h"
+#include "window/shrunk-overview-map.h"
 #include "world/world.h"
-#include <array>
-#include <range/v3/algorithm.hpp>
 #include <string>
 #include <string_view>
 #include <utility>
@@ -125,58 +123,6 @@ void print_map(PlayerType *player_ptr)
     term_set_cursor(v != 0);
 }
 
-namespace {
-/*!
- * @brief 縮小マップの作業領域に使う、1 次元の配列に詰めた 2 次元の配列
- */
-template <typename T>
-class FlatArray2D {
-public:
-    FlatArray2D(int height, int width)
-        : width(width)
-        , cells(static_cast<size_t>(height * width))
-    {
-    }
-
-    int index_of(int y, int x) const
-    {
-        return y * this->width + x;
-    }
-
-    T &operator()(int y, int x)
-    {
-        return this->cells[this->index_of(y, x)];
-    }
-
-    const T &operator()(int y, int x) const
-    {
-        return this->cells[this->index_of(y, x)];
-    }
-
-    T &operator[](int index)
-    {
-        return this->cells[index];
-    }
-
-    const T &operator[](int index) const
-    {
-        return this->cells[index];
-    }
-
-private:
-    int width;
-    std::vector<T> cells;
-};
-
-/*!
- * @brief 縮小マップの 1 マス分の記号と、縮めるときの優先度
- */
-struct MapCell {
-    DisplaySymbol symbol = { TERM_WHITE, ' ' };
-    byte priority = 0;
-};
-}
-
 /*!
  * @brief 短縮マップにおける自動拾い対象のアイテムを短縮表記する
  * @param player_ptr プレイヤーへの参照ポインタ
@@ -226,10 +172,6 @@ static void display_shortened_item_name(PlayerType *player_ptr, const ItemEntity
  */
 void display_map(PlayerType *player_ptr, int *cy, int *cx)
 {
-    int i, j, x, y;
-
-    byte tp;
-
     auto border_width = use_bigtile ? 2 : 1; //!< @note 枠線幅
     auto [wid, hgt] = term_get_size();
     hgt -= 2;
@@ -246,101 +188,49 @@ void display_map(PlayerType *player_ptr, int *cy, int *cx)
     }
 
     const auto &floor = *player_ptr->current_floor_ptr;
-    const auto yrat = (floor.height + hgt - 1) / hgt;
-    const auto xrat = (floor.width + wid - 1) / wid;
-
-    FlatArray2D<MapCell> small_map(hgt + 2, wid + 2);
-    FlatArray2D<tl::optional<OverviewMapAutopick>> autopicks(hgt + 2, wid + 2);
-    FlatArray2D<MapCell> big_map(floor.height + 2, floor.width + 2);
     auto &overview_map_cache = OverviewMapCache::get_instance();
     overview_map_cache.update(player_ptr);
-    for (i = 0; i < floor.width; ++i) {
-        for (j = 0; j < floor.height; ++j) {
-            x = i / xrat + 1;
-            y = j / yrat + 1;
-
-            const auto &grid = overview_map_cache.get_grid({ j, i });
-            tp = static_cast<byte>(grid.priority);
-            auto &autopick = autopicks(y, x);
-            if (grid.autopick && (!autopick || (autopick->rule_index > grid.autopick->rule_index))) {
-                autopick = grid.autopick;
-                tp = 0x7f;
-            }
-
-            big_map(j + 1, i + 1) = { grid.symbol, tp };
-        }
-    }
-
-    std::array<int, 8> neighbor_offsets{};
-    ranges::transform(Direction::directions_8(), neighbor_offsets.begin(), [&big_map](const auto &d) {
-        const auto vec = d.vec();
-        return big_map.index_of(vec.y, vec.x);
-    });
-
-    for (j = 0; j < floor.height; ++j) {
-        for (i = 0; i < floor.width; ++i) {
-            x = i / xrat + 1;
-            y = j / yrat + 1;
-
-            const auto index = big_map.index_of(j + 1, i + 1);
-            const auto &symbol_foreground = big_map[index].symbol;
-            tp = big_map[index].priority;
-            auto &cell = small_map(y, x);
-            if (cell.priority == tp) {
-                // 周りの 8 マスのうち同じ記号が 4 つ以下なら優先する。5 つ目が見つかった時点で結論が出る
-                auto cnt = 0;
-                for (const auto offset : neighbor_offsets) {
-                    if ((big_map[index + offset].symbol == symbol_foreground) && (++cnt > 4)) {
-                        break;
-                    }
-                }
-
-                if (cnt <= 4) {
-                    tp++;
-                }
-            }
-
-            if (cell.priority < tp) {
-                cell = { symbol_foreground, tp };
-            }
-        }
-    }
-
-    x = wid + 1;
-    y = hgt + 1;
-
-    small_map(0, 0).symbol.character = small_map(0, x).symbol.character = small_map(y, 0).symbol.character = small_map(y, x).symbol.character = '+';
-    for (x = 1; x <= wid; x++) {
-        small_map(0, x).symbol.character = small_map(y, x).symbol.character = '-';
-    }
-
-    for (y = 1; y <= hgt; y++) {
-        small_map(y, 0).symbol.character = small_map(y, x).symbol.character = '|';
-    }
+    auto &shrunk_map = get_shrunk_overview_map(floor.height, floor.width, hgt, wid);
+    shrunk_map.update(overview_map_cache);
+    const auto yrat = shrunk_map.get_yrat();
+    const auto xrat = shrunk_map.get_xrat();
 
     const auto monochrome_color = get_monochrome_display_color(player_ptr);
-    for (y = 0; y < hgt + 2; ++y) {
+    for (auto y = 0; y < hgt + 2; ++y) {
         term_gotoxy(COL_MAP, y);
-        for (x = 0; x < wid + 2; ++x) {
-            auto symbol_foreground = small_map(y, x).symbol;
-            symbol_foreground.color = monochrome_color.value_or(symbol_foreground.color);
+        for (auto x = 0; x < wid + 2; ++x) {
+            // 縮小マップの周りに枠を描く
+            const auto is_top_or_bottom = (y == 0) || (y == hgt + 1);
+            const auto is_left_or_right = (x == 0) || (x == wid + 1);
+            DisplaySymbol symbol_foreground;
+            if (is_top_or_bottom && is_left_or_right) {
+                symbol_foreground = { TERM_WHITE, '+' };
+            } else if (is_top_or_bottom) {
+                symbol_foreground = { TERM_WHITE, '-' };
+            } else if (is_left_or_right) {
+                symbol_foreground = { TERM_WHITE, '|' };
+            } else {
+                symbol_foreground = shrunk_map.get_cell(y - 1, x - 1).symbol;
+            }
 
+            symbol_foreground.color = monochrome_color.value_or(symbol_foreground.color);
             term_add_bigch(symbol_foreground);
         }
     }
 
-    for (y = 1; y < hgt + 1; ++y) {
+    for (auto y = 0; y < hgt; ++y) {
         tl::optional<OverviewMapAutopick> row_autopick;
-        for (x = 1; x <= wid; x++) {
-            const auto &autopick = autopicks(y, x);
+        for (auto x = 0; x < wid; x++) {
+            const auto &autopick = shrunk_map.get_autopick(y, x);
             if (autopick && (!row_autopick || (row_autopick->rule_index > autopick->rule_index))) {
                 row_autopick = autopick;
             }
         }
 
-        term_putstr(0, y, 12, 0, "            ");
+        // 枠の分だけ 1 行下に描く
+        term_putstr(0, y + 1, 12, 0, "            ");
         if (row_autopick) {
-            display_shortened_item_name(player_ptr, *row_autopick->item, y);
+            display_shortened_item_name(player_ptr, *row_autopick->item, y + 1);
         }
     }
 
