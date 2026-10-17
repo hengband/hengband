@@ -3,6 +3,7 @@
 #include "info-reader/info-reader-util.h"
 #include "info-reader/parse-error-types.h"
 #include "object-enchant/tr-types.h"
+#include "object/tval-types.h"
 #include "system/baseitem/baseitem-definition.h"
 #include "system/baseitem/baseitem-list.h"
 #include "test/info-reader/scoped-reader-state.h"
@@ -64,7 +65,7 @@ TEST_CASE("BaseitemReader does not grow the list after a parse error")
     CHECK(error_idx == 7);
 }
 
-TEST_CASE("BaseitemReader preserves existing slots after a late parse error")
+TEST_CASE("BaseitemReader preserves helper error precedence without replacing existing records")
 {
     BaseitemStateGuard guard;
     auto &items = BaseitemList::get_instance();
@@ -73,34 +74,72 @@ TEST_CASE("BaseitemReader preserves existing slots after a late parse error")
     auto &existing = items.get_baseitem(1);
     existing.name = "Existing";
     existing.cost = 91;
+    existing.pval = 23;
     existing.alloc_tables[0] = { 12, 13 };
     existing.act_idx = RandomArtActType::BA_FIRE_4;
     existing.flags.set(TR_ACTIVATE);
+    existing.flags.set(TR_STR);
+    const auto previous_ids = items.collect_valid_bi_ids();
     auto data = make_baseitem();
-    data["allocations"] = { { { "depth", 4 }, { "rarity", 5 } }, { { "depth", 6 }, { "rarity", "bad" } } };
-    SUBCASE("partially parsed allocations")
+    data["name"] = { { "ja", "Changed" }, { "en", "Changed" } };
+    auto expected = PARSE_ERROR_INVALID_TYPE;
+    SUBCASE("symbol before item kind")
     {
-        error_idx = -1;
-        CHECK(BaseitemReader(data).read() == PARSE_ERROR_INVALID_TYPE);
+        data["symbol"]["character"] = "!!";
+        data["itemkind"] = 42;
+        expected = PARSE_ERROR_INVALID_VALUE;
+    }
+    SUBCASE("item kind before parameter value")
+    {
+        data["itemkind"].erase("subtype_value");
+        data["parameter_value"] = "bad";
+        expected = PARSE_ERROR_TOO_FEW_ARGUMENTS;
+    }
+    SUBCASE("rod parameter value before level")
+    {
+        data["itemkind"]["type_value"] = static_cast<int>(ItemKindType::ROD);
+        data["parameter_value"] = 0;
+        data["level"] = "bad";
+        expected = PARSE_ERROR_INVALID_PVAL;
+    }
+    SUBCASE("allocation entries before activation")
+    {
+        data["allocations"] = { { { "depth", 4 }, { "rarity", 5 } }, { { "depth", 6 }, { "rarity", "bad" } } };
+        data["activate"] = "UNKNOWN_ACTIVATION";
+    }
+    SUBCASE("activation before flags")
+    {
+        data["activate"] = "UNKNOWN_ACTIVATION";
+        data["flags"] = 42;
+        expected = PARSE_ERROR_INVALID_FLAG;
+    }
+    SUBCASE("invalid flag element after valid activation and flag")
+    {
+        data["activate"] = "LIGHT";
+        data["flags"] = { "DEX", 42 };
     }
     SUBCASE("flags after allocations and activation")
     {
         data["allocations"] = { { { "depth", 4 }, { "rarity", 5 } } };
         data["activate"] = "LIGHT";
-        data["flags"] = { "STR", "UNKNOWN_FLAG" };
-        error_idx = -1;
-        CHECK(BaseitemReader(data).read() == PARSE_ERROR_INVALID_FLAG);
+        data["flags"] = { "STR", "DEX", "UNKNOWN_FLAG" };
+        expected = PARSE_ERROR_INVALID_FLAG;
     }
+    error_idx = -1;
+    CHECK(BaseitemReader(data).read() == expected);
+    CHECK(error_idx == 1);
     REQUIRE(items.size() == 2);
-    CHECK(&items.get_baseitem(1) == &existing);
+    CHECK(std::addressof(items.get_baseitem(1)) == std::addressof(existing));
     CHECK(existing.name == "Existing");
     CHECK(existing.cost == 91);
+    CHECK(existing.pval == 23);
     CHECK(existing.alloc_tables[0].level == 12);
     CHECK(existing.alloc_tables[0].chance == 13);
     CHECK(existing.act_idx == RandomArtActType::BA_FIRE_4);
+    CHECK(existing.flags.has(TR_STR));
+    CHECK_FALSE(existing.flags.has(TR_DEX));
     CHECK(existing.flags.has(TR_ACTIVATE));
-    CHECK_FALSE(existing.flags.has(TR_STR));
-    CHECK(error_idx == 1);
+    CHECK(items.collect_valid_bi_ids() == previous_ids);
 }
 
 TEST_CASE("BaseitemReader publishes complete records and preserves omitted optional fields")
@@ -292,4 +331,34 @@ TEST_CASE("BaseitemReader preserves ordering precedence and rejects negative ind
     CHECK(BaseitemReader(data).read() == expected);
     CHECK(error_idx == previous);
     CHECK(BaseitemList::get_instance().empty());
+}
+
+TEST_CASE("BaseitemReader publishes nested helper values only after successful parsing")
+{
+    BaseitemStateGuard guard;
+    auto &items = BaseitemList::get_instance();
+    auto data = make_baseitem(4);
+    data["symbol"] = { { "character", "-" }, { "color", "Red" } };
+    data["itemkind"] = { { "type_value", static_cast<int>(ItemKindType::ROD) }, { "subtype_value", 2 } };
+    data["parameter_value"] = 9;
+    data["allocations"] = { { { "depth", 4 }, { "rarity", 5 } }, { { "depth", 6 }, { "rarity", 7 } } };
+    data["activate"] = "LIGHT";
+    data["flags"] = { "STR", "DEX" };
+    REQUIRE(BaseitemReader(data).read() == PARSE_ERROR_NONE);
+    REQUIRE(items.size() == 5);
+    const auto &item = items.get_baseitem(4);
+    CHECK(item.name == "Test");
+    CHECK(item.get_symbol().character == '-');
+    CHECK(item.bi_key.tval() == ItemKindType::ROD);
+    CHECK(item.bi_key.sval() == 2);
+    CHECK(item.pval == 9);
+    CHECK(item.alloc_tables[0].level == 4);
+    CHECK(item.alloc_tables[0].chance == 5);
+    CHECK(item.alloc_tables[1].level == 6);
+    CHECK(item.alloc_tables[1].chance == 7);
+    CHECK(item.act_idx == RandomArtActType::LIGHT);
+    CHECK(item.flags.has(TR_STR));
+    CHECK(item.flags.has(TR_DEX));
+    CHECK(item.flags.has(TR_ACTIVATE));
+    CHECK(error_idx == 4);
 }

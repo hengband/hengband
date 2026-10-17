@@ -1,7 +1,9 @@
 #pragma once
 
+#include "info-reader/parse-error-types.h"
 #include <nlohmann/json_fwd.hpp>
 #include <string_view>
+#include <tl/expected.hpp>
 
 class BaseitemDefinition;
 
@@ -18,12 +20,12 @@ public:
 
 private:
     bool grab_one_baseitem_flag(BaseitemDefinition &baseitem, std::string_view what) const;
-    int set_baseitem_symbol(BaseitemDefinition &baseitem) const;
-    int set_baseitem_kind(BaseitemDefinition &baseitem) const;
-    int set_baseitem_parameter_value(BaseitemDefinition &baseitem) const;
-    int set_baseitem_allocations(BaseitemDefinition &baseitem) const;
-    int set_baseitem_activate(BaseitemDefinition &baseitem) const;
-    int set_baseitem_flags(BaseitemDefinition &baseitem) const;
+    tl::expected<void, parse_error_type> set_baseitem_symbol(BaseitemDefinition &baseitem) const;
+    tl::expected<void, parse_error_type> set_baseitem_kind(BaseitemDefinition &baseitem) const;
+    tl::expected<void, parse_error_type> set_baseitem_parameter_value(BaseitemDefinition &baseitem) const;
+    tl::expected<void, parse_error_type> set_baseitem_allocations(BaseitemDefinition &baseitem) const;
+    tl::expected<void, parse_error_type> set_baseitem_activate(BaseitemDefinition &baseitem) const;
+    tl::expected<void, parse_error_type> set_baseitem_flags(BaseitemDefinition &baseitem) const;
 
     const nlohmann::json &baseitem_data;
 };
