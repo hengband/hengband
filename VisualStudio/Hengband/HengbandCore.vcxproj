@@ -301,6 +301,7 @@
     <ClCompile Include="..\..\src\io\cursor.cpp" />
     <ClCompile Include="..\..\src\io\files-util.cpp" />
     <ClCompile Include="..\..\src\io\gf-descriptions.cpp" />
+    <ClCompile Include="..\..\src\io\input-context.cpp" />
     <ClCompile Include="..\..\src\io\input-key-acceptor.cpp" />
     <ClCompile Include="..\..\src\io\input-key-processor.cpp" />
     <ClCompile Include="..\..\src\io\input-key-requester.cpp" />
@@ -1208,6 +1209,7 @@
     <ClInclude Include="..\..\src\io\cursor.h" />
     <ClInclude Include="..\..\src\io\files-util.h" />
     <ClInclude Include="..\..\src\io\gf-descriptions.h" />
+    <ClInclude Include="..\..\src\io\input-context.h" />
     <ClInclude Include="..\..\src\io\input-key-acceptor.h" />
     <ClInclude Include="..\..\src\io\input-key-processor.h" />
     <ClInclude Include="..\..\src\io\input-key-requester.h" />
