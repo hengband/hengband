@@ -887,9 +887,9 @@ static void Infofnt_init_data(concptr name)
 
     XFontSet info = XCreateFontSet(Metadpy->dpy, name, &missing_list, &missing_count, &default_font);
     if (missing_count > 0) {
-        printf("missing font(s): \n");
+        fmt::println("missing font(s): ");
         while (missing_count-- > 0) {
-            printf("\t%s\n", missing_list[missing_count]);
+            fmt::println("\t{}", missing_list[missing_count]);
         }
         XFreeStringList(missing_list);
     }
@@ -1124,7 +1124,7 @@ static void react_keypress(XKeyEvent *xev)
         Status status;
         n = XmbLookupString(Focuswin->xic, ev, buf, 125, &ks, &status);
         if (status == XBufferOverflow) {
-            printf("Input is too long, and dropped\n");
+            fmt::println("Input is too long, and dropped");
             return;
         }
         if (status != XLookupKeySym && status != XLookupBoth) {
@@ -2221,7 +2221,7 @@ static void IMInstantiateCallback(Display *display, XPointer unused1, XPointer u
 
     xim = XOpenIM(display, nullptr, nullptr, nullptr);
     if (!xim) {
-        printf("can't open IM\n");
+        fmt::println("can't open IM");
         return;
     }
 
@@ -2235,7 +2235,7 @@ static void IMInstantiateCallback(Display *display, XPointer unused1, XPointer u
         }
     }
     if (i >= xim_styles->count_styles) {
-        printf("Sorry, your IM does not support 'Root' preedit style...\n");
+        fmt::println("Sorry, your IM does not support 'Root' preedit style...");
         XCloseIM(xim);
         return;
     }
@@ -2250,7 +2250,7 @@ static void IMInstantiateCallback(Display *display, XPointer unused1, XPointer u
         }
         iwin->xic = XCreateIC(xim, XNInputStyle, (XIMPreeditNothing | XIMStatusNothing), XNClientWindow, iwin->win, XNFocusWindow, iwin->win, nullptr);
         if (!iwin->xic) {
-            printf("Can't create input context for Term%d\n", i);
+            fmt::println("Can't create input context for Term{}", i);
             continue;
         }
 
@@ -2631,17 +2631,17 @@ errr init_x11(int argc, char *argv[])
 
 #ifdef DEFAULT_LOCALE
     if (!strcmp(setlocale(LC_ALL, nullptr), "C")) {
-        printf("try default locale \"%s\"\n", DEFAULT_LOCALE);
+        fmt::println("try default locale \"{}\"", DEFAULT_LOCALE);
         setlocale(LC_ALL, DEFAULT_LOCALE);
     }
 #endif
 
     if (!strcmp(setlocale(LC_ALL, nullptr), "C")) {
-        printf("WARNING: Locale is not supported. Non-english font may be displayed incorrectly.\n");
+        fmt::println("WARNING: Locale is not supported. Non-english font may be displayed incorrectly.");
     }
 
     if (!XSupportsLocale()) {
-        printf("can't support locale in X\n");
+        fmt::println("can't support locale in X");
         setlocale(LC_ALL, "C");
     }
 #else
