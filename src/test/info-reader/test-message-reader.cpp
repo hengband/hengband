@@ -1,3 +1,4 @@
+#include "info-reader/info-reader-util.h"
 #include "info-reader/message-reader.h"
 #include "info-reader/parse-error-types.h"
 #include "system/enums/monrace/monrace-id.h"
@@ -7,9 +8,13 @@
 #include "test/scoped-rng.h"
 #include "test/system/monrace-list-test-access.h"
 #include "test/system/monrace-message-list-test-access.h"
+#include <cstdint>
 #include <doctest/doctest.h>
+#include <limits>
 #include <nlohmann/json.hpp>
+#include <string_view>
 #include <utility>
+#include <vector>
 
 namespace {
 nlohmann::json make_message(std::string_view action, const nlohmann::json &texts)
@@ -107,7 +112,15 @@ TEST_CASE("MessageReader publishes successful groups and preserves missing-langu
         data.erase("id_list");
         data["name"] = "DEFAULT";
     }
+    SUBCASE("default early success")
+    {
+        data.erase("id_list");
+        data["name"] = "DEFAULT";
+        data["message"].push_back(skipped);
+        data["message"].push_back(later);
+    }
     REQUIRE(MessageReader(data).read() == PARSE_ERROR_NONE);
+    CHECK(error_idx == -1);
     auto &messages = MonraceMessageList::get_instance();
     CHECK(messages.get_message(4, "", MonsterMessageType::SPEAK_ALL) == "accepted");
     CHECK(messages.get_message(5, "", MonsterMessageType::SPEAK_ALL) == "accepted");
@@ -118,6 +131,7 @@ TEST_CASE("MessageReader publishes successful groups and preserves missing-langu
         CHECK(state.default_message_count(MonsterMessageType::SPEAK_ALL) == 1);
     }
     CHECK(state.message_count(4, MonsterMessageType::SPEAK_BATTLE) == 0);
+    CHECK(state.default_message_count(MonsterMessageType::SPEAK_BATTLE) == 0);
 }
 
 TEST_CASE("MessageReader rejects monster IDs without monster definitions")
@@ -159,4 +173,135 @@ TEST_CASE("MessageReader requires arrays for localized message lists")
     data["message"][0]["message"]["ja"] = nullptr;
     data["message"][0]["message"]["en"] = nullptr;
     CHECK(MessageReader(data).read() == PARSE_ERROR_TOO_FEW_ARGUMENTS);
+}
+
+/*!
+ * @brief ID解決の各エラーを伝播し、先行IDを含むグループ全体を公開しない
+ */
+TEST_CASE("MessageReader propagates ID helper errors without publishing messages")
+{
+    const DefinedMonracesGuard monraces;
+    test::MonraceMessageListTestAccess state;
+    const auto rng = test::scoped_rng();
+    const test::ScopedReaderState reader_state(73);
+    auto &messages = MonraceMessageList::get_instance();
+    messages.emplace(4, MonsterMessageType::SPEAK_ALL, 1, false, "original");
+    messages.emplace_default(MonsterMessageType::SPEAK_ALL, 1, false, "default");
+    struct InvalidIds {
+        nlohmann::json value;
+        parse_error_type error;
+    };
+    const std::vector<InvalidIds> invalid_ids = {
+        { nullptr, PARSE_ERROR_TOO_FEW_ARGUMENTS },
+        { 1, PARSE_ERROR_TOO_FEW_ARGUMENTS },
+        { nlohmann::json::object(), PARSE_ERROR_TOO_FEW_ARGUMENTS },
+        { nlohmann::json::array({ nullptr }), PARSE_ERROR_INVALID_FLAG },
+        { nlohmann::json::array({ true }), PARSE_ERROR_INVALID_FLAG },
+        { nlohmann::json::array({ 4.0 }), PARSE_ERROR_INVALID_TYPE },
+        { nlohmann::json::array({ 0 }), PARSE_ERROR_INVALID_FLAG },
+        { nlohmann::json::array({ 10000 }), PARSE_ERROR_INVALID_FLAG },
+        { nlohmann::json::array({ std::numeric_limits<uint64_t>::max() }), PARSE_ERROR_INVALID_FLAG },
+        { nlohmann::json::array({ 4, 6 }), PARSE_ERROR_INVALID_VALUE },
+        { nlohmann::json::array({ 4, 5, 10000 }), PARSE_ERROR_INVALID_FLAG },
+    };
+    for (const auto &invalid : invalid_ids) {
+        CAPTURE(invalid.value.dump());
+        const nlohmann::json data = { { "id_list", invalid.value }, { "message", { make_message("SPEAK_ALL", nlohmann::json::array({ "new" })) } } };
+        CHECK(MessageReader(data).read() == invalid.error);
+        CHECK(error_idx == 73);
+        CHECK(state.message_count(4, MonsterMessageType::SPEAK_ALL) == 1);
+        CHECK(state.message_count(5, MonsterMessageType::SPEAK_ALL) == 0);
+        CHECK(state.default_message_count(MonsterMessageType::SPEAK_ALL) == 1);
+        CHECK(messages.get_message(4, "", MonsterMessageType::SPEAK_ALL) == "original");
+        CHECK(messages.get_message(6, "", MonsterMessageType::SPEAK_ALL) == "default");
+    }
+}
+
+/*!
+ * @brief メッセージ解析の各エラーと優先順位を、個別グループと既定グループで維持する
+ */
+TEST_CASE("MessageReader propagates message helper errors and keeps validation order")
+{
+    const DefinedMonracesGuard monraces;
+    test::MonraceMessageListTestAccess state;
+    const auto rng = test::scoped_rng();
+    const test::ScopedReaderState reader_state(73);
+    auto &messages = MonraceMessageList::get_instance();
+    messages.emplace(4, MonsterMessageType::SPEAK_ALL, 1, false, "original");
+    messages.emplace_default(MonsterMessageType::SPEAK_ALL, 1, false, "default");
+    const auto valid = make_message("SPEAK_ALL", nlohmann::json::array({ "new" }));
+    const auto later = make_message("SPEAK_BATTLE", nlohmann::json::array({ "staged" }));
+    const nlohmann::json original = { { "id_list", { 4, 5 } }, { "message", { valid, later } } };
+    struct InvalidField {
+        const char *path;
+        nlohmann::json value;
+        parse_error_type error;
+    };
+    const std::vector<InvalidField> invalid_fields = {
+        { "/message", nullptr, PARSE_ERROR_TOO_FEW_ARGUMENTS },
+        { "/message", nlohmann::json::object(), PARSE_ERROR_TOO_FEW_ARGUMENTS },
+        { "/message/1", nullptr, PARSE_ERROR_TOO_FEW_ARGUMENTS },
+        { "/message/1/action", nullptr, PARSE_ERROR_TOO_FEW_ARGUMENTS },
+        { "/message/1/action", 1, PARSE_ERROR_TOO_FEW_ARGUMENTS },
+        { "/message/1/action", "UNKNOWN", PARSE_ERROR_INVALID_FLAG },
+        { "/message/1/chance", nullptr, PARSE_ERROR_TOO_FEW_ARGUMENTS },
+        { "/message/1/chance", true, PARSE_ERROR_TOO_FEW_ARGUMENTS },
+        { "/message/1/chance", 0.5, PARSE_ERROR_INVALID_TYPE },
+        { "/message/1/chance", 0, PARSE_ERROR_INVALID_FLAG },
+        { "/message/1/chance", 101, PARSE_ERROR_INVALID_FLAG },
+        { "/message/1/message", nullptr, PARSE_ERROR_TOO_FEW_ARGUMENTS },
+        { "/message/1/message", nlohmann::json::object(), PARSE_ERROR_TOO_FEW_ARGUMENTS },
+        { "/message/1/message", { { "ja", "text" }, { "en", "text" } }, PARSE_ERROR_INVALID_TYPE },
+        { "/message/1/message", { { "ja", nlohmann::json::array({ nullptr }) }, { "en", nlohmann::json::array({ nullptr }) } }, PARSE_ERROR_TOO_FEW_ARGUMENTS },
+        { "/message/1/message", { { "ja", nlohmann::json::array({ 7 }) }, { "en", nlohmann::json::array({ 7 }) } }, PARSE_ERROR_INVALID_FLAG },
+    };
+    const auto check_unchanged = [&](const nlohmann::json &data, parse_error_type expected) {
+        CHECK(MessageReader(data).read() == expected);
+        CHECK(error_idx == 73);
+        CHECK(state.message_count(4, MonsterMessageType::SPEAK_ALL) == 1);
+        CHECK(state.message_count(5, MonsterMessageType::SPEAK_ALL) == 0);
+        CHECK(state.message_count(4, MonsterMessageType::SPEAK_BATTLE) == 0);
+        CHECK(state.default_message_count(MonsterMessageType::SPEAK_ALL) == 1);
+        CHECK(state.default_message_count(MonsterMessageType::SPEAK_BATTLE) == 0);
+        CHECK(messages.get_message(4, "", MonsterMessageType::SPEAK_ALL) == "original");
+        CHECK(messages.get_message(6, "", MonsterMessageType::SPEAK_ALL) == "default");
+    };
+    for (const auto use_default : { false, true }) {
+        CAPTURE(use_default);
+        for (const auto &invalid : invalid_fields) {
+            CAPTURE(invalid.path);
+            auto data = original;
+            if (use_default) {
+                data.erase("id_list");
+                data["name"] = "DEFAULT";
+            }
+            data[nlohmann::json::json_pointer(invalid.path)] = invalid.value;
+            check_unchanged(data, invalid.error);
+        }
+    }
+    auto data = original;
+    data["message"][0]["action"] = "UNKNOWN";
+    data["id_list"] = { 6 };
+    check_unchanged(data, PARSE_ERROR_INVALID_VALUE);
+    data["message"] = nullptr;
+    check_unchanged(data, PARSE_ERROR_TOO_FEW_ARGUMENTS);
+    data = original;
+    data.erase("id_list");
+    data["name"] = "UNKNOWN";
+    data["message"][0]["action"] = "UNKNOWN";
+    check_unchanged(data, PARSE_ERROR_TOO_FEW_ARGUMENTS);
+
+    data = original;
+    data["id_list"] = nlohmann::json::array();
+    CHECK(MessageReader(data).read() == PARSE_ERROR_NONE);
+    CHECK(error_idx == 73);
+    CHECK(state.message_count(4, MonsterMessageType::SPEAK_ALL) == 1);
+    CHECK(state.message_count(5, MonsterMessageType::SPEAK_ALL) == 0);
+    CHECK(state.default_message_count(MonsterMessageType::SPEAK_ALL) == 1);
+    data["id_list"] = { 4, 5 };
+    data["message"] = nlohmann::json::array();
+    CHECK(MessageReader(data).read() == PARSE_ERROR_NONE);
+    CHECK(error_idx == 73);
+    CHECK(state.message_count(4, MonsterMessageType::SPEAK_ALL) == 1);
+    CHECK(state.message_count(5, MonsterMessageType::SPEAK_ALL) == 0);
 }
