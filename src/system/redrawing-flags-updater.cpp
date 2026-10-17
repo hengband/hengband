@@ -175,7 +175,7 @@ void RedrawingFlagsUpdater::request_whole_main_window_redrawing()
 
 /*!
  * @brief 画面全体を描き直すときの、表示の元になる値の再計算を予約する
- * @details 能力・光源の明るさ・HP・MP・呪文と、視界・明るさ (一度消してから計算し直す)、モンスターの光と見え方を計算し直す。
+ * @details 能力・光源の明るさ・HP・MP・呪文、モンスターの見え方と、視界と明るさ (request_sight_recalculation()) を計算し直す。
  * 画面の描き直しのコマンドや、画面の大きさを変えたときに、メインウィンドウの全体の描き直し (request_whole_main_window_redrawing()) と合わせて呼ぶ。
  */
 void RedrawingFlagsUpdater::request_whole_status_recalculation()
@@ -186,14 +186,10 @@ void RedrawingFlagsUpdater::request_whole_status_recalculation()
         StatusRecalculatingFlag::HP,
         StatusRecalculatingFlag::MP,
         StatusRecalculatingFlag::SPELLS,
-        StatusRecalculatingFlag::UN_VIEW,
-        StatusRecalculatingFlag::UN_LITE,
-        StatusRecalculatingFlag::VIEW,
-        StatusRecalculatingFlag::LITE,
-        StatusRecalculatingFlag::MONSTER_LITE,
         StatusRecalculatingFlag::MONSTER_STATUSES,
     };
     this->status_flags.set(flags_srf);
+    this->request_sight_recalculation();
 }
 
 /*!
@@ -219,6 +215,24 @@ void RedrawingFlagsUpdater::request_monster_update_and_map_redrawing()
 {
     this->status_flags.set(StatusRecalculatingFlag::MONSTER_STATUSES);
     this->request_map_redrawing();
+}
+
+/*!
+ * @brief 視界と明るさの計算し直しを予約する
+ * @details 視界と明るさの印をいったん全て消してから計算し直し (前の視界や明るさの印が残らないように)、モンスターの光も計算し直す。
+ * 目が見えなくなる・見えるようになる、地図を忘れる、地形が大きく変わる (地震・破壊・壁の消滅) ときに呼ぶ。
+ * 地形が変わるときは、モンスターの経路 (FLOW) の計算し直しを別に要求する。
+ */
+void RedrawingFlagsUpdater::request_sight_recalculation()
+{
+    static constexpr auto flags_srf = {
+        StatusRecalculatingFlag::UN_VIEW,
+        StatusRecalculatingFlag::UN_LITE,
+        StatusRecalculatingFlag::VIEW,
+        StatusRecalculatingFlag::LITE,
+        StatusRecalculatingFlag::MONSTER_LITE,
+    };
+    this->status_flags.set(flags_srf);
 }
 
 /*!

@@ -156,15 +156,8 @@ bool vanish_dungeon(PlayerType *player_ptr)
     erase_all_walls(floor);
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.request_monster_update_and_map_redrawing();
-    static constexpr auto flags_srf = {
-        StatusRecalculatingFlag::UN_VIEW,
-        StatusRecalculatingFlag::UN_LITE,
-        StatusRecalculatingFlag::VIEW,
-        StatusRecalculatingFlag::LITE,
-        StatusRecalculatingFlag::FLOW,
-        StatusRecalculatingFlag::MONSTER_LITE,
-    };
-    rfu.set_flags(flags_srf);
+    rfu.request_sight_recalculation();
+    rfu.set_flag(StatusRecalculatingFlag::FLOW);
     return true;
 }
 
