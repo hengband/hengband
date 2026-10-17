@@ -8,6 +8,7 @@
 #include "util/flag-group.h"
 #include <doctest/doctest.h>
 #include <initializer_list>
+#include <vector>
 
 namespace {
 
@@ -18,7 +19,7 @@ namespace {
  * @param flags 戻すフラグ
  * @return スコープを抜けるときにフラグを戻すファイナライザ
  */
-template <typename Flag>
+template <RedrawingFlagType Flag>
 auto scoped_restore_flags(RedrawingFlagsUpdater &rfu, std::initializer_list<Flag> flags)
 {
     const EnumClassFlagGroup<Flag> targets(flags);
@@ -35,6 +36,72 @@ auto scoped_restore_flags(RedrawingFlagsUpdater &rfu, std::initializer_list<Flag
     });
 }
 
+}
+
+static_assert(RedrawingFlagType<MainWindowRedrawingFlag>);
+static_assert(RedrawingFlagType<SubWindowRedrawingFlag>);
+static_assert(RedrawingFlagType<StatusRecalculatingFlag>);
+static_assert(RedrawingFlagType<InventoryArrangementFlag>);
+static_assert(!RedrawingFlagType<int>);
+
+TEST_CASE("RedrawingFlagsUpdater operates only on the flag group of the given flag type")
+{
+    // 4 種類のフラグで、同じ値 (0) の列挙子を使う
+    const auto for_each_flag = [](auto func) {
+        func(MainWindowRedrawingFlag::TITLE);
+        func(SubWindowRedrawingFlag::INVENTORY);
+        func(StatusRecalculatingFlag::BONUS);
+        func(InventoryArrangementFlag::AUTO_DESTRUCTION);
+    };
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    const auto restore_mwrf = scoped_restore_flags(rfu, { MainWindowRedrawingFlag::TITLE });
+    const auto restore_swrf = scoped_restore_flags(rfu, { SubWindowRedrawingFlag::INVENTORY });
+    const auto restore_srf = scoped_restore_flags(rfu, { StatusRecalculatingFlag::BONUS });
+    const auto restore_iaf = scoped_restore_flags(rfu, { InventoryArrangementFlag::AUTO_DESTRUCTION });
+    const auto states = [&] {
+        std::vector<bool> result;
+        for_each_flag([&](auto flag) { result.push_back(rfu.has(flag)); });
+        return result;
+    };
+
+    // set で指定したフラグだけが立ち、ほかの型のフラグを全て立てたまま reset で指定したフラグだけが消えることを確かめる
+    const auto check_each_type = [&](auto set, auto reset) {
+        size_t index = 0;
+        for_each_flag([&](auto flag) {
+            CAPTURE(index);
+            for_each_flag([&](auto f) { rfu.reset_flag(f); });
+            set(flag);
+            std::vector<bool> expected(4, false);
+            expected[index] = true;
+            CHECK(states() == expected);
+            CHECK(rfu.has_any_of({ flag }));
+            CHECK(rfu.has_any_of(EnumClassFlagGroup<decltype(flag)>{ flag }));
+
+            for_each_flag([&](auto f) { rfu.set_flag(f); });
+            reset(flag);
+            expected.assign(4, true);
+            expected[index] = false;
+            CHECK(states() == expected);
+            CHECK_FALSE(rfu.has_any_of({ flag }));
+            CHECK_FALSE(rfu.has_any_of(EnumClassFlagGroup<decltype(flag)>{ flag }));
+            ++index;
+        });
+    };
+
+    SUBCASE("set_flag and reset_flag")
+    {
+        check_each_type([&rfu](auto flag) { rfu.set_flag(flag); }, [&rfu](auto flag) { rfu.reset_flag(flag); });
+    }
+
+    SUBCASE("set_flags and reset_flags with an initializer list")
+    {
+        check_each_type([&rfu](auto flag) { rfu.set_flags({ flag }); }, [&rfu](auto flag) { rfu.reset_flags({ flag }); });
+    }
+
+    SUBCASE("set_flags and reset_flags with a flag group")
+    {
+        check_each_type([&rfu](auto flag) { rfu.set_flags(EnumClassFlagGroup<decltype(flag)>{ flag }); }, [&rfu](auto flag) { rfu.reset_flags(EnumClassFlagGroup<decltype(flag)>{ flag }); });
+    }
 }
 
 TEST_CASE("RedrawingFlagsUpdater::request_inventory_arrangement requests combining, reordering and redrawing the inventory")

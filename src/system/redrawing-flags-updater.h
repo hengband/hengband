@@ -1,6 +1,8 @@
 #pragma once
 
 #include "util/flag-group.h"
+#include <concepts>
+#include <initializer_list>
 
 enum class MainWindowRedrawingFlag {
     TITLE, /*!< 称号 */
@@ -79,6 +81,13 @@ enum class InventoryArrangementFlag {
     MAX,
 };
 
+/*!
+ * @brief RedrawingFlagsUpdater が扱う更新フラグの型
+ */
+template <typename T>
+concept RedrawingFlagType = std::same_as<T, MainWindowRedrawingFlag> || std::same_as<T, SubWindowRedrawingFlag> ||
+                            std::same_as<T, StatusRecalculatingFlag> || std::same_as<T, InventoryArrangementFlag>;
+
 class RedrawingFlagsUpdater {
 public:
     RedrawingFlagsUpdater(const RedrawingFlagsUpdater &) = delete;
@@ -93,35 +102,59 @@ public:
     bool any_sub() const;
     bool any_stats() const;
 
-    bool has(MainWindowRedrawingFlag flag) const;
-    bool has(SubWindowRedrawingFlag flag) const;
-    bool has(StatusRecalculatingFlag flag) const;
-    bool has(InventoryArrangementFlag flag) const;
+    template <RedrawingFlagType Flag>
+    bool has(Flag flag) const
+    {
+        return flags_of<Flag>(*this).has(flag);
+    }
 
-    bool has_any_of(const EnumClassFlagGroup<MainWindowRedrawingFlag> &flags) const;
-    bool has_any_of(const EnumClassFlagGroup<SubWindowRedrawingFlag> &flags) const;
-    bool has_any_of(const EnumClassFlagGroup<StatusRecalculatingFlag> &flags) const;
-    bool has_any_of(const EnumClassFlagGroup<InventoryArrangementFlag> &flags) const;
+    template <RedrawingFlagType Flag>
+    bool has_any_of(const EnumClassFlagGroup<Flag> &flags) const
+    {
+        return flags_of<Flag>(*this).has_any_of(flags);
+    }
 
-    void set_flag(MainWindowRedrawingFlag flag);
-    void set_flag(SubWindowRedrawingFlag flag);
-    void set_flag(StatusRecalculatingFlag flag);
-    void set_flag(InventoryArrangementFlag flag);
+    template <RedrawingFlagType Flag>
+    bool has_any_of(std::initializer_list<Flag> flags) const
+    {
+        return this->has_any_of(EnumClassFlagGroup<Flag>(flags));
+    }
 
-    void set_flags(const EnumClassFlagGroup<MainWindowRedrawingFlag> &flags);
-    void set_flags(const EnumClassFlagGroup<SubWindowRedrawingFlag> &flags);
-    void set_flags(const EnumClassFlagGroup<StatusRecalculatingFlag> &flags);
-    void set_flags(const EnumClassFlagGroup<InventoryArrangementFlag> &flags);
+    template <RedrawingFlagType Flag>
+    void set_flag(Flag flag)
+    {
+        flags_of<Flag>(*this).set(flag);
+    }
 
-    void reset_flag(MainWindowRedrawingFlag flag);
-    void reset_flag(SubWindowRedrawingFlag flag);
-    void reset_flag(StatusRecalculatingFlag flag);
-    void reset_flag(InventoryArrangementFlag flag);
+    template <RedrawingFlagType Flag>
+    void set_flags(const EnumClassFlagGroup<Flag> &flags)
+    {
+        flags_of<Flag>(*this).set(flags);
+    }
 
-    void reset_flags(const EnumClassFlagGroup<MainWindowRedrawingFlag> &flags);
-    void reset_flags(const EnumClassFlagGroup<SubWindowRedrawingFlag> &flags);
-    void reset_flags(const EnumClassFlagGroup<StatusRecalculatingFlag> &flags);
-    void reset_flags(const EnumClassFlagGroup<InventoryArrangementFlag> &flags);
+    template <RedrawingFlagType Flag>
+    void set_flags(std::initializer_list<Flag> flags)
+    {
+        this->set_flags(EnumClassFlagGroup<Flag>(flags));
+    }
+
+    template <RedrawingFlagType Flag>
+    void reset_flag(Flag flag)
+    {
+        flags_of<Flag>(*this).reset(flag);
+    }
+
+    template <RedrawingFlagType Flag>
+    void reset_flags(const EnumClassFlagGroup<Flag> &flags)
+    {
+        flags_of<Flag>(*this).reset(flags);
+    }
+
+    template <RedrawingFlagType Flag>
+    void reset_flags(std::initializer_list<Flag> flags)
+    {
+        this->reset_flags(EnumClassFlagGroup<Flag>(flags));
+    }
 
     void request_inventory_arrangement();
     void request_whole_main_window_redrawing();
@@ -147,4 +180,28 @@ private:
     EnumClassFlagGroup<SubWindowRedrawingFlag> sub_window_flags{};
     EnumClassFlagGroup<StatusRecalculatingFlag> status_flags{};
     EnumClassFlagGroup<InventoryArrangementFlag> inventory_arrangement_flags{};
+
+    /*!
+     * @brief フラグの型に対応するフラグの集合を得る
+     * @tparam Flag フラグの型
+     * @tparam Self RedrawingFlagsUpdater (const の有無を問わない)
+     * @param self 更新フラグ
+     * @return フラグの集合への参照 (self が const なら const 参照)
+     */
+    template <RedrawingFlagType Flag, typename Self>
+    static auto &flags_of(Self &self)
+    {
+        if constexpr (std::same_as<Flag, MainWindowRedrawingFlag>) {
+            return self.main_window_flags;
+        } else if constexpr (std::same_as<Flag, SubWindowRedrawingFlag>) {
+            return self.sub_window_flags;
+        } else if constexpr (std::same_as<Flag, StatusRecalculatingFlag>) {
+            return self.status_flags;
+        } else if constexpr (std::same_as<Flag, InventoryArrangementFlag>) {
+            return self.inventory_arrangement_flags;
+        } else {
+            // static_assert(false) を受け付けないコンパイラのため、テンプレート引数に依存する偽の式にする
+            static_assert(!std::same_as<Flag, Flag>, "RedrawingFlagType に足したフラグの型を flags_of() にも足すこと");
+        }
+    }
 };
