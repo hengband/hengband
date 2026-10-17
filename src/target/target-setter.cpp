@@ -8,6 +8,7 @@
 #include "game-option/game-play-options.h"
 #include "game-option/input-options.h"
 #include "io/cursor.h"
+#include "io/input-context.h"
 #include "io/input-key-requester.h"
 #include "io/screen-util.h"
 #include "main/sound-of-music.h"
@@ -552,6 +553,7 @@ void TargetSetter::sweep_target_grids()
  */
 Target target_set(PlayerType *player_ptr, target_type mode)
 {
+    InputContextGuard icg(InputContextKind::TARGET);
     TargetSetter ts(player_ptr, mode);
     ts.sweep_target_grids();
     prt("", 0, 0);

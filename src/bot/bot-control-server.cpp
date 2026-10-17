@@ -19,7 +19,9 @@
 #include "bot/bot-report.h"
 #include "bot/bot-screen.h"
 #include "bot/bot-socket-server.h"
+#include "core/disturbance.h"
 #include "game-option/runtime-arguments.h"
+#include "io/input-context.h"
 #include "io/macro-configurations-store.h"
 #include "system/angband-system.h"
 #include "system/angband-version.h"
@@ -28,6 +30,7 @@
 #include "term/gameterm.h"
 #include "term/z-term.h"
 #include "term/z-util.h"
+#include "view/display-messages.h"
 #include "world/world.h"
 #include <algorithm>
 #include <array>
@@ -458,6 +461,69 @@ nlohmann::json handle_state_request(const nlohmann::json &id, const nlohmann::js
 }
 
 /*!
+ * @brief ゲームが待っているキー入力の種類を表す名前を返す
+ * @return 種類の名前。-more-の表示中は"more"、種類が設定されていない入力待ちでは"unknown"
+ * @details -more-はどの入力待ちの最中にも割り込んで表示され得るため、設定された種類より優先する。
+ */
+std::string_view input_kind_name()
+{
+    if (is_waiting_for_more()) {
+        return "more";
+    }
+
+    const auto context = get_input_context();
+    if (!context) {
+        return "unknown";
+    }
+
+    switch (*context) {
+    case InputContextKind::COMMAND:
+        return "command";
+    case InputContextKind::STORE_COMMAND:
+        return "store_command";
+    case InputContextKind::YES_NO:
+        return "yes_no";
+    case InputContextKind::STRING:
+        return "string";
+    case InputContextKind::DIRECTION:
+        return "direction";
+    case InputContextKind::TARGET:
+        return "target";
+    case InputContextKind::ITEM:
+        return "item";
+    case InputContextKind::ANY_KEY:
+        return "any_key";
+    case InputContextKind::BIRTH:
+        return "birth";
+    }
+
+    return "unknown";
+}
+
+/*!
+ * @brief inputリクエストに対する、ゲームが待っているキー入力の情報を生成する
+ * @return レスポンスのJSONオブジェクト
+ * @details
+ * キーを1つずつ送るクライアントが、次に何を送るべきかを判断するためのもの。
+ * リクエストはキー入力待ちの間にしか処理されないため、keysの次にこれを送ると、
+ * 送ったキーが処理されて次の入力待ちに入った時点の情報が得られる。
+ * message_sequenceとdisturb_sequenceは単調に増える値で、前回の値と比べると
+ * 新しいメッセージや邪魔 (モンスターの出現や被弾等) があったかが分かる。
+ */
+nlohmann::json make_input_response()
+{
+    const auto has_player = p_ptr != nullptr;
+    return {
+        { "kind", std::string(input_kind_name()) },
+        { "message_sequence", message_sequence() },
+        { "disturb_sequence", disturb_sequence() },
+        { "character_generated", AngbandWorld::get_instance().character_generated },
+        { "playing", has_player && p_ptr->playing },
+        { "dead", has_player && p_ptr->is_dead },
+    };
+}
+
+/*!
  * @brief リクエストのJSONオブジェクトを解釈して処理する
  * @param request リクエストのJSONオブジェクト
  * @return リクエストの処理結果
@@ -508,6 +574,10 @@ RequestResult dispatch_request(const nlohmann::json &request)
 
     if (*op == "state") {
         return handle_state_request(id, request);
+    }
+
+    if (*op == "input") {
+        return make_ok_response(id, make_input_response());
     }
 
     if (*op == "messages") {

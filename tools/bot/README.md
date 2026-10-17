@@ -192,6 +192,7 @@ python3 tools/bot/hbctl.py screen --attrs --json  # 色属性込みの生JSON
 python3 tools/bot/hbctl.py keys 'jjj'      # キーを送り、処理後の画面を表示
 python3 tools/bot/hbctl.py keys '\e' --quiet      # 画面を表示しない
 python3 tools/bot/hbctl.py state           # ゲームの内部状態 (JSON)
+python3 tools/bot/hbctl.py input           # 待っているキー入力の種類
 python3 tools/bot/hbctl.py messages 30     # 直近のメッセージ履歴
 python3 tools/bot/hbctl.py resize 120 40   # 端末の大きさを変える (ヘッドレス実行のみ)
 python3 tools/bot/hbctl.py --term 1 resize 60 20  # 副端末の大きさを変える
@@ -222,6 +223,7 @@ python3 tools/bot/hbctl.py quit            # ゲームを終了
 | `screen`   | `term` (既定 0), `attrs` (既定 true)  | 画面内容                                   |
 | `keys`     | `keys`                                | キー列を注入する。積めたキー数を返す       |
 | `state`    | `map` (既定 true)                     | ゲームの内部状態のスナップショット         |
+| `input`    | —                                     | ゲームが待っているキー入力の種類           |
 | `messages` | `count` (既定 20)                     | 直近のメッセージ履歴を古い順に返す         |
 | `resize`   | `term` (既定 0), `width`, `height`    | 端末の大きさを変える（ヘッドレス実行のみ） |
 | `quit`     | —                                     | ゲームを終了する（**セーブしません**）     |
@@ -293,6 +295,44 @@ terrain_bits:
 `player.can_see_own_grid` と `light_radius` は視認性と光源半径、`floor.feeling` は公開済みの階の雰囲気です。
 
 `keys` に `term` はありません。キーを消費するのは常に現在の端末のため、副端末を指定する意味がないからです。
+
+### 入力待ちの種類 (input)
+
+`input` は、ゲームがいま何のキー入力を待っているかを返します。キャラクターの生成前でも使えます。
+
+```json
+{"kind": "command", "message_sequence": 152, "disturb_sequence": 37,
+ "character_generated": true, "playing": true, "dead": false}
+```
+
+| キー | 内容 |
+| --- | --- |
+| `kind` | 待っている入力の種類（下表） |
+| `message_sequence` | メッセージ履歴に追加された行の累計。前回の値との差が新しいメッセージの数（同じ行の繰り返しは `<xN>` に数えられ増えない） |
+| `disturb_sequence` | ゲームがプレイヤーの行動を中断させた (`disturb()`) 回数の累計。モンスターの出現・被弾などで増える |
+| `character_generated` | キャラクターが生成済みか |
+| `playing` / `dead` | プレイ中か、死亡したか |
+
+| `kind` | 待っている入力 |
+| --- | --- |
+| `more` | `-more-` の確認。どの入力待ちの最中にも割り込むため、他の種類より優先する |
+| `command` | 次のコマンド |
+| `store_command` | 店内での次のコマンド |
+| `yes_no` | y/n の確認 |
+| `string` | 文字列・数量の入力（Enter で確定、ESC で取り消し） |
+| `direction` | 方向（ターゲットを選べるものを含む） |
+| `target` | ターゲットの選択と見回し（`l`・`*`） |
+| `item` | アイテムの選択（店の商品を含む） |
+| `any_key` | 「何かキーを押して下さい」の一時停止 |
+| `birth` | キャラクター作成中の各画面 |
+| `unknown` | 上記以外（メニュー・一覧表示・魔法の選択など）。画面を読んで判断する |
+
+種類は入れ子の最も内側のものです。例えば `q`（飲む）の後は `item`、キャラクター作成中の名前の入力は `string` になります。
+
+キーを 1 つ送るごとに `input` を送ると、そのキーが処理されて次の入力待ちに入った時点の種類が得られます
+（[応答されるタイミング](#応答されるタイミング)）。複数のキーを一度に積むとこの途中経過は見えず、
+`-more-` や中断によって後続のキーが意図しない入力として消費されることがあります。
+`command` に戻った時点で `disturb_sequence` が増えていれば、残りのキーを送らずに状況を確かめるのが安全です。
 
 ### 版3での変更
 

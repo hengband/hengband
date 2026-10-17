@@ -4,6 +4,7 @@
 #include "core/window-redrawer.h"
 #include "game-option/input-options.h"
 #include "io/command-repeater.h"
+#include "io/input-context.h"
 #include "io/input-key-acceptor.h"
 #include "io/input-key-requester.h" //!< @todo 相互依存している、後で何とかする.
 #include "main/sound-of-music.h"
@@ -43,6 +44,8 @@
  */
 tl::optional<std::string> askfor(int len, std::string_view initial_value, bool numpad_cursor)
 {
+    InputContextGuard icg(InputContextKind::STRING);
+
     /*
      * Text color
      * TERM_YELLOW : Overwrite mode
@@ -219,6 +222,7 @@ bool input_check_strict(PlayerType *player_ptr, std::string_view prompt, UserChe
  */
 bool input_check_strict(PlayerType *player_ptr, std::string_view prompt, EnumClassFlagGroup<UserCheck> mode)
 {
+    InputContextGuard icg(InputContextKind::YES_NO);
     if (!rogue_like_commands) {
         mode.reset(UserCheck::OKAY_CANCEL);
     }
@@ -376,6 +380,7 @@ int input_quantity(int max, std::string_view initial_prompt)
  */
 void pause_line(int row)
 {
+    InputContextGuard icg(InputContextKind::ANY_KEY);
     prt("", row, 0);
     put_str(_("[ 何かキーを押して下さい ]", "[Press any key to continue]"), row, _(26, 23));
 

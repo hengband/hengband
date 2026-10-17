@@ -10,6 +10,7 @@
 #include "game-option/birth-options.h"
 #include "game-option/game-play-options.h"
 #include "io/command-repeater.h"
+#include "io/input-context.h"
 #include "locale/japanese.h"
 #include "main/sound-of-music.h"
 #include "object-enchant/item-apply-magic.h"
@@ -156,6 +157,7 @@ int store_level(StoreSaleType store_num)
  */
 tl::optional<short> input_stock(std::string_view fmt, int min, int max, [[maybe_unused]] StoreSaleType store_num)
 {
+    InputContextGuard icg(InputContextKind::ITEM);
     const auto code = repeat_pull();
     if ((code >= min) && (code <= max)) {
         return code;

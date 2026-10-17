@@ -16,6 +16,7 @@
 #include "inventory/inventory-util.h"
 #include "inventory/item-selection-util.h"
 #include "io/command-repeater.h"
+#include "io/input-context.h"
 #include "io/input-key-acceptor.h"
 #include "io/input-key-requester.h"
 #include "main/sound-of-music.h"
@@ -218,6 +219,7 @@ static void test_equipment_floor(PlayerType *player_ptr, FloorItemSelection *fis
  */
 tl::optional<short> get_item_floor(PlayerType *player_ptr, std::string_view pmt, std::string_view str, BIT_FLAGS mode, const ItemTester &item_tester)
 {
+    InputContextGuard icg(InputContextKind::ITEM);
     FloorItemSelection fis(mode);
     static char prev_tag = '\0';
     const auto &[i_idx, tag] = check_floor_item_tag(player_ptr, fis, prev_tag, item_tester);

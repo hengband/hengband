@@ -18,6 +18,7 @@
 #include "birth/quick-start.h"
 #include "core/window-redrawer.h"
 #include "game-option/option-flags.h"
+#include "io/input-context.h"
 #include "io/write-diary.h"
 #include "main/music-definitions-table.h"
 #include "main/sound-of-music.h"
@@ -96,6 +97,7 @@ static void write_birth_diary(PlayerType *player_ptr)
 void player_birth(PlayerType *player_ptr)
 {
     TermCenteredOffsetSetter tcos(MAIN_TERM_MIN_COLS, MAIN_TERM_MIN_ROWS);
+    InputContextGuard icg(InputContextKind::BIRTH);
 
     AngbandWorld::get_instance().play_time.reset();
     wipe_monsters_list(player_ptr);

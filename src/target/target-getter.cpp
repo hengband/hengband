@@ -4,6 +4,7 @@
 #include "floor/geometry.h"
 #include "game-option/input-options.h"
 #include "io/command-repeater.h"
+#include "io/input-context.h"
 #include "io/input-key-requester.h"
 #include "main/sound-of-music.h"
 #include "monster/monster-describer.h"
@@ -31,6 +32,7 @@
  */
 Direction get_aim_dir(PlayerType *player_ptr, bool enable_repeat)
 {
+    InputContextGuard icg(InputContextKind::DIRECTION);
     auto dir = Direction::none();
     auto target = Target::get_last_target();
     if (enable_repeat) {
@@ -109,6 +111,7 @@ Direction get_aim_dir(PlayerType *player_ptr, bool enable_repeat)
  */
 Direction get_direction(PlayerType *player_ptr)
 {
+    InputContextGuard icg(InputContextKind::DIRECTION);
     Direction dir = command_dir;
     const auto code = repeat_pull();
     if (code && Direction::is_valid_dir(*code)) {
@@ -167,6 +170,7 @@ Direction get_direction(PlayerType *player_ptr)
  */
 Direction get_rep_dir(PlayerType *player_ptr, bool under)
 {
+    InputContextGuard icg(InputContextKind::DIRECTION);
     Direction dir = command_dir;
     const auto code = repeat_pull();
     if (code && Direction::is_valid_dir(*code)) {

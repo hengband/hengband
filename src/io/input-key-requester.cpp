@@ -11,6 +11,7 @@
 #include "game-option/map-screen-options.h"
 #include "inventory/inventory-slot-types.h"
 #include "io/cursor.h"
+#include "io/input-context.h"
 #include "io/input-key-acceptor.h"
 #include "io/macro-configurations-store.h"
 #include "main/sound-of-music.h"
@@ -53,6 +54,7 @@ InputKeyRequestor::InputKeyRequestor(PlayerType *player_ptr, bool shopping)
  */
 void InputKeyRequestor::request_command()
 {
+    InputContextGuard icg(this->shopping ? InputContextKind::STORE_COMMAND : InputContextKind::COMMAND);
     command_cmd = 0;
     command_arg = 0;
     command_dir = Direction::none();

@@ -204,6 +204,12 @@ def command_state(args: argparse.Namespace) -> int:
     return 0
 
 
+def command_input(args: argparse.Namespace) -> int:
+    """ゲームが待っているキー入力の種類を表示する。"""
+    print_json(request(args, {"op": "input"}))
+    return 0
+
+
 def command_messages(args: argparse.Namespace) -> int:
     """直近のメッセージ履歴を古い順に表示する。"""
     response = request(args, {"op": "messages", "count": args.count})
@@ -345,6 +351,10 @@ def build_parser() -> argparse.ArgumentParser:
         help="grid_map を省く (地図の生成・転送を省略して応答を軽くする)",
     )
     state_parser.set_defaults(func=command_state)
+
+    subparsers.add_parser(
+        "input", help="待っているキー入力の種類を表示する"
+    ).set_defaults(func=command_input)
 
     messages_parser = subparsers.add_parser("messages", help="メッセージ履歴を表示する")
     messages_parser.add_argument(

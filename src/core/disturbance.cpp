@@ -10,6 +10,10 @@
 #include "target/target-checker.h"
 #include "term/screen-processor.h"
 
+namespace {
+uint64_t disturb_count = 0; //!< disturb()が呼ばれた回数
+}
+
 /*!
  * @brief 走っていれば走るのをやめる
  * @param player_ptr プレイヤーへの参照ポインタ
@@ -44,6 +48,7 @@ void stop_running(PlayerType *player_ptr)
  */
 void disturb(PlayerType *player_ptr, bool stop_search, bool stop_travel)
 {
+    disturb_count++;
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     if (command_rep) {
         command_rep = 0;
@@ -68,4 +73,14 @@ void disturb(PlayerType *player_ptr, bool stop_search, bool stop_travel)
     if (flush_disturb) {
         flush();
     }
+}
+
+/*!
+ * @brief disturb()が呼ばれた回数を返す
+ * @return ゲームの起動から数えた回数
+ * @details 制御サーバのクライアントが、複数のキーを送る間に邪魔が入ったかを知るためのもの
+ */
+uint64_t disturb_sequence()
+{
+    return disturb_count;
 }
