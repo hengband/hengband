@@ -89,6 +89,8 @@ def test_a_game_from_start_to_stop(harness: Harness) -> None:
         assert "remaining" not in summary
         assert summary["messages"] == ["You walk.", "You walk."]
         assert summary["view"] == "map"
+        # ツールを呼び終えたら、ほかのクライアントが使えるよう制御サーバとの接続を閉じる
+        assert harness.game.closes > 0
 
         result = await client.call_tool("observe", {"view": "none", "inventory": True})
         summary = json.loads(texts(result)[0])

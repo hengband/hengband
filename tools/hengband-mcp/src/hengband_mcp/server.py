@@ -285,9 +285,15 @@ class GameManager:
             ) from error
         except ControlError as error:
             raise ToolError(str(error)) from error
+        finally:
+            # ツールを呼ぶ間はほかのクライアント (hbctl.py など) も制御サーバに接続できるようにする
+            session.client.close()
 
     def _forget(self) -> None:
         """終了したゲームを手放す。"""
+        if self._session is not None:
+            self._session.client.close()
+
         if self._process is not None:
             self._process.close()
 

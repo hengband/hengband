@@ -33,6 +33,7 @@ class FakeGame:
         self.character_generated = character_generated
         self.message_sequence = 0
         self.disturb_sequence = 0
+        self.closes = 0
         self.dead = False
         self.running = True
         self.saved = False
@@ -124,6 +125,10 @@ class FakeGame:
             }
 
         raise ControlRequestError(f"{op} failed: unknown op")
+
+    def close(self) -> None:
+        """ControlClient.close() と同じく接続を閉じる (回数を数えるだけ)。"""
+        self.closes += 1
 
 
 def standard_keys(game: FakeGame, key: str) -> None:
