@@ -79,6 +79,40 @@ TEST_CASE("RedrawingFlagsUpdater::request_whole_main_window_redrawing requests w
     }
 }
 
+TEST_CASE("RedrawingFlagsUpdater::request_whole_status_recalculation requests recalculating the status, the view and the lights for redrawing the whole screen")
+{
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    static constexpr auto flags_srf = {
+        StatusRecalculatingFlag::TORCH,
+        StatusRecalculatingFlag::BONUS,
+        StatusRecalculatingFlag::HP,
+        StatusRecalculatingFlag::MP,
+        StatusRecalculatingFlag::SPELLS,
+        StatusRecalculatingFlag::UN_VIEW,
+        StatusRecalculatingFlag::UN_LITE,
+        StatusRecalculatingFlag::VIEW,
+        StatusRecalculatingFlag::LITE,
+        StatusRecalculatingFlag::MONSTER_LITE,
+        StatusRecalculatingFlag::MONSTER_STATUSES,
+    };
+    const auto restore = scoped_restore_flags(rfu, flags_srf);
+    const auto restore_flow = scoped_restore_flags(rfu, { StatusRecalculatingFlag::FLOW, StatusRecalculatingFlag::DISTANCE });
+    rfu.reset_flags(flags_srf);
+    rfu.reset_flag(StatusRecalculatingFlag::FLOW);
+    rfu.reset_flag(StatusRecalculatingFlag::DISTANCE);
+
+    rfu.request_whole_status_recalculation();
+
+    for (const auto flag : flags_srf) {
+        CAPTURE(enum2i(flag));
+        CHECK(rfu.has(flag));
+    }
+
+    // モンスターの経路と距離は、フロアに入ったときなどに別に計算する
+    CHECK_FALSE(rfu.has(StatusRecalculatingFlag::FLOW));
+    CHECK_FALSE(rfu.has(StatusRecalculatingFlag::DISTANCE));
+}
+
 TEST_CASE("RedrawingFlagsUpdater::request_map_redrawing requests redrawing the maps")
 {
     auto &rfu = RedrawingFlagsUpdater::get_instance();
