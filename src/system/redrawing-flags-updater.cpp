@@ -175,7 +175,7 @@ void RedrawingFlagsUpdater::request_whole_main_window_redrawing()
 
 /*!
  * @brief 画面全体を描き直すときの、表示の元になる値の再計算を予約する
- * @details 能力・光源の明るさ・HP・MP・呪文と、視界・明るさ (一度消してから計算し直す)、モンスターの光と見え方を計算し直す。
+ * @details 能力・光源の明るさ・HP・MP・呪文、モンスターの見え方と、視界と明るさ (request_sight_recalculation()) を計算し直す。
  * 画面の描き直しのコマンドや、画面の大きさを変えたときに、メインウィンドウの全体の描き直し (request_whole_main_window_redrawing()) と合わせて呼ぶ。
  */
 void RedrawingFlagsUpdater::request_whole_status_recalculation()
@@ -186,14 +186,10 @@ void RedrawingFlagsUpdater::request_whole_status_recalculation()
         StatusRecalculatingFlag::HP,
         StatusRecalculatingFlag::MP,
         StatusRecalculatingFlag::SPELLS,
-        StatusRecalculatingFlag::UN_VIEW,
-        StatusRecalculatingFlag::UN_LITE,
-        StatusRecalculatingFlag::VIEW,
-        StatusRecalculatingFlag::LITE,
-        StatusRecalculatingFlag::MONSTER_LITE,
         StatusRecalculatingFlag::MONSTER_STATUSES,
     };
     this->status_flags.set(flags_srf);
+    this->request_sight_recalculation();
 }
 
 /*!
