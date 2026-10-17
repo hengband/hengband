@@ -24,6 +24,16 @@
 #include <sstream>
 #include <stdexcept>
 #include <string>
+#include <utility>
+
+/*!
+ * @brief 入力欄の開始位置と画面幅に合わせて文字列のバイト上限を求める
+ */
+static int get_input_length(int len, int x)
+{
+    const auto start = ((x < 0) || (x >= MAIN_TERM_MIN_COLS)) ? 0 : x;
+    return std::clamp(len, 1, MAIN_TERM_MIN_COLS - start);
+}
 
 /*
  * Get some string input at the cursor location.
@@ -52,17 +62,11 @@ tl::optional<std::string> askfor(int len, std::string_view initial_value, bool n
     auto color = TERM_YELLOW;
 
     auto [x, y] = term_locate();
-    if (len < 1) {
-        len = 1;
-    }
-
     if ((x < 0) || (x >= MAIN_TERM_MIN_COLS)) {
         x = 0;
     }
 
-    if (x + len > MAIN_TERM_MIN_COLS) {
-        len = MAIN_TERM_MIN_COLS - x;
-    }
+    len = get_input_length(len, x);
 
     std::string buf(initial_value);
     auto pos = 0;
@@ -170,6 +174,24 @@ tl::optional<std::string> askfor(int len, std::string_view initial_value, bool n
     }
 }
 
+/*!
+ * @brief 指定した文脈で文字列の入力を待つ
+ * @details 数量入力も同じ編集処理を利用するが、公開する文脈は数量のまま保つ。
+ */
+static tl::optional<std::string> input_string_with_context(BotInputContext input_context, int len, std::string_view initial_value, bool numpad_cursor)
+{
+    msg_erase();
+    prt(input_context.prompt, 0, 0);
+    if (auto *details = std::get_if<BotStringInputDetails>(&input_context.details)) {
+        details->max_length = get_input_length(len, term_locate().first);
+    }
+
+    const BotInputContextScope context_scope(std::move(input_context));
+    const auto ask_result = askfor(len, initial_value, numpad_cursor);
+    prt("", 0, 0);
+    return ask_result;
+}
+
 /*
  * Get a string from the user
  *
@@ -182,11 +204,8 @@ tl::optional<std::string> askfor(int len, std::string_view initial_value, bool n
  */
 tl::optional<std::string> input_string(std::string_view prompt, int len, std::string_view initial_value, bool numpad_cursor)
 {
-    msg_erase();
-    prt(prompt, 0, 0);
-    const auto ask_result = askfor(len, initial_value, numpad_cursor);
-    prt("", 0, 0);
-    return ask_result;
+    BotInputContext input_context{ "string", std::string(prompt), BotStringInputDetails{ len, std::string(initial_value) } };
+    return input_string_with_context(std::move(input_context), len, initial_value, numpad_cursor);
 }
 
 /*
@@ -353,7 +372,8 @@ int input_quantity(int max, std::string_view initial_prompt)
     }
 
     msg_erase();
-    const auto input_amount = input_string(prompt, 6, "1", false);
+    BotInputContext input_context{ "quantity", prompt, BotQuantityInputDetails{ max, 1 } };
+    const auto input_amount = input_string_with_context(std::move(input_context), 6, "1", false);
     if (!input_amount) {
         return 0;
     }

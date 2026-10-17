@@ -215,9 +215,23 @@ python3 tools/bot/hbctl.py quit            # ゲームを終了
 | `quit`     | —                                     | ゲームを終了する（**セーブしません**）     |
 
 `screen` と `state` の `result.input_context` は、制御サーバが応答した時点で待っている
-入力の文脈です。対応する入力待ちでは `{ "kind": "confirm", "prompt": "...[y/n]" }` や
-`{ "kind": "command_char", "prompt": "..." }` を返し、それ以外は `null` です。
+入力の文脈です。対応する入力待ちでは次のオブジェクトを返し、それ以外は `null` です。
+`askfor()` を直接呼ぶ入力（ファイル名・マクロ編集・文字列検索・死亡時のメモなど）は、
+まだ文脈を公開しません。`null` は入力待ちがないことを意味しません。
+
+| `kind` | 内容 |
+| --- | --- |
+| `confirm` | `prompt`: `[y/n]` などの選択肢を含む確認文 |
+| `command_char` | `prompt`: 1文字入力のプロンプト |
+| `string` | `prompt`, `max_length`: 入力欄に合わせて調整した内部文字コードでのバイト上限, `initial`: 初期文字列 |
+| `quantity` | `prompt`, `max`: 入力後の数量の上限, `initial`: 初期数量（1） |
+
+例: `{ "kind": "string", "prompt": "名前: ", "max_length": 20, "initial": "PLAYER" }` /
+`{ "kind": "quantity", "prompt": "いくつですか (1-5): ", "max": 5, "initial": 1 }`
+
 `prompt` は画面に表示した文字列を UTF-8 に変換したものです。`confirm` には確認の選択肢も含みます。
+`string.initial` も UTF-8 です。初期文字列は呼び出し元の指定を保持し、`max_length` に合わせた切り詰めは行いません。
+数量がコマンドの引数や繰り返しから決まって入力を待たない場合、`quantity` の文脈は公開しません。
 キャラクター生成前は `state` がエラーになるため、`screen` で確認してください。
 
 `keys` には `\e`（ESC）、`^X`（Ctrl+X）、`\xNN` といったマクロ表記を使えます。

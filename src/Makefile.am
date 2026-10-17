@@ -1618,12 +1618,22 @@ check-arena-status: arena-status-probe$(EXEEXT)
 		./arena-status-probe$(EXEEXT) "$(top_srcdir)/lib" "$$scratch" "$$mode"; \
 	done
 
-CLEANFILES = main-window-wipe-probe$(EXEEXT) arena-status-probe$(EXEEXT)
+## 文字列・数量の文脈を、本体の入力待ちと編集結果を通して確認する。
+input-context-probe$(EXEEXT): $(top_srcdir)/tools/tests/input-context-probe.cpp libhengband.a
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) $(LDFLAGS) -o $@ $(top_srcdir)/tools/tests/input-context-probe.cpp libhengband.a $(LIBS)
+
+.PHONY: check-input-context
+check-input-context: input-context-probe$(EXEEXT)
+	./input-context-probe$(EXEEXT)
+
+CLEANFILES = main-window-wipe-probe$(EXEEXT) arena-status-probe$(EXEEXT) input-context-probe$(EXEEXT)
 
 TESTS = $(check_PROGRAMS)
 
 EXTRA_DIST = \
+	$(top_srcdir)/tools/tests/input-context-probe.cpp \
 	$(top_srcdir)/tools/tests/arena-status-probe.cpp \
+	$(top_srcdir)/tools/tests/main-window-wipe-probe.cpp \
 	gcc-wrap \
 	test/README.md
 

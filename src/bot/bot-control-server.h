@@ -9,8 +9,21 @@
 #include <string_view>
 #include <tl/expected.hpp>
 #include <tl/optional.hpp>
+#include <variant>
 
 struct TermSize;
+
+struct BotStringInputDetails {
+    int max_length;
+    std::string initial;
+};
+
+struct BotQuantityInputDetails {
+    int max;
+    int initial;
+};
+
+using BotInputDetails = std::variant<std::monostate, BotStringInputDetails, BotQuantityInputDetails>;
 
 /*!
  * @brief 現在待っている入力の種類と、画面に表示したプロンプト
@@ -18,6 +31,7 @@ struct TermSize;
 struct BotInputContext {
     std::string kind;
     std::string prompt;
+    BotInputDetails details;
 };
 
 /*!
@@ -26,6 +40,7 @@ struct BotInputContext {
 class BotInputContextScope {
 public:
     BotInputContextScope(std::string_view kind, std::string_view prompt);
+    explicit BotInputContextScope(BotInputContext input_context);
     ~BotInputContextScope();
 
     BotInputContextScope(const BotInputContextScope &) = delete;
