@@ -50,76 +50,76 @@ void describe_melee_method(PlayerType *player_ptr, mam_type *mam_ptr)
 {
     switch (mam_ptr->method) {
     case RaceBlowMethodType::HIT: {
-        mam_ptr->act = _("%sを殴った。", "hits %s.");
+        mam_ptr->act = MonsterBlowFormat(_("{}を殴った。", "hits {}."));
         mam_ptr->touched = true;
         break;
     }
     case RaceBlowMethodType::TOUCH: {
-        mam_ptr->act = _("%sを触った。", "touches %s.");
+        mam_ptr->act = MonsterBlowFormat(_("{}を触った。", "touches {}."));
         mam_ptr->touched = true;
         break;
     }
     case RaceBlowMethodType::PUNCH: {
-        mam_ptr->act = _("%sをパンチした。", "punches %s.");
+        mam_ptr->act = MonsterBlowFormat(_("{}をパンチした。", "punches {}."));
         mam_ptr->touched = true;
         break;
     }
     case RaceBlowMethodType::KICK: {
-        mam_ptr->act = _("%sを蹴った。", "kicks %s.");
+        mam_ptr->act = MonsterBlowFormat(_("{}を蹴った。", "kicks {}."));
         mam_ptr->touched = true;
         break;
     }
     case RaceBlowMethodType::CLAW: {
-        mam_ptr->act = _("%sをひっかいた。", "claws %s.");
+        mam_ptr->act = MonsterBlowFormat(_("{}をひっかいた。", "claws {}."));
         mam_ptr->touched = true;
         break;
     }
     case RaceBlowMethodType::BITE: {
-        mam_ptr->act = _("%sを噛んだ。", "bites %s.");
+        mam_ptr->act = MonsterBlowFormat(_("{}を噛んだ。", "bites {}."));
         mam_ptr->touched = true;
         break;
     }
     case RaceBlowMethodType::STING: {
-        mam_ptr->act = _("%sを刺した。", "stings %s.");
+        mam_ptr->act = MonsterBlowFormat(_("{}を刺した。", "stings {}."));
         mam_ptr->touched = true;
         break;
     }
     case RaceBlowMethodType::SLASH: {
-        mam_ptr->act = _("%sを斬った。", "slashes %s.");
+        mam_ptr->act = MonsterBlowFormat(_("{}を斬った。", "slashes {}."));
         break;
     }
     case RaceBlowMethodType::BUTT: {
-        mam_ptr->act = _("%sを角で突いた。", "butts %s.");
+        mam_ptr->act = MonsterBlowFormat(_("{}を角で突いた。", "butts {}."));
         mam_ptr->touched = true;
         break;
     }
     case RaceBlowMethodType::CRUSH: {
-        mam_ptr->act = _("%sを押し潰した", "crushes %s.");
+        mam_ptr->act = MonsterBlowFormat(_("{}を押し潰した", "crushes {}."));
         mam_ptr->touched = true;
         break;
     }
     case RaceBlowMethodType::ENGULF: {
-        mam_ptr->act = _("%sを飲み込んだ。", "engulfs %s.");
+        mam_ptr->act = MonsterBlowFormat(_("{}を飲み込んだ。", "engulfs {}."));
         mam_ptr->touched = true;
         break;
     }
     case RaceBlowMethodType::CHARGE: {
-        mam_ptr->act = _("%sに請求書をよこした。", "charges %s.");
+        mam_ptr->act = MonsterBlowFormat(_("{}に請求書をよこした。", "charges {}."));
         mam_ptr->touched = true;
         break;
     }
     case RaceBlowMethodType::CRAWL: {
-        mam_ptr->act = _("%sの体の上を這い回った。", "crawls on %s.");
+        mam_ptr->act = MonsterBlowFormat(_("{}の体の上を這い回った。", "crawls on {}."));
         mam_ptr->touched = true;
         break;
     }
     case RaceBlowMethodType::DROOL: {
-        mam_ptr->act = _("%sによだれをたらした。", "drools on %s.");
+        mam_ptr->act = MonsterBlowFormat(_("{}によだれをたらした。", "drools on {}."));
         mam_ptr->touched = false;
         break;
     }
     case RaceBlowMethodType::SPIT: {
-        mam_ptr->act = _("%sに唾を吐いた。", "spits on %s.");
+        mam_ptr->act = MonsterBlowFormat(_("{}に唾を吐いた。", "spits on {}."));
         mam_ptr->touched = false;
         break;
     }
@@ -128,48 +128,48 @@ void describe_melee_method(PlayerType *player_ptr, mam_type *mam_ptr)
             disturb(player_ptr, true, true);
         }
 
-        mam_ptr->act = _("爆発した。", "explodes.");
+        mam_ptr->act = MonsterBlowFormat(_("爆発した。", "explodes."));
         mam_ptr->explode = true;
         mam_ptr->touched = false;
         break;
     }
     case RaceBlowMethodType::GAZE: {
-        mam_ptr->act = _("%sをにらんだ。", "gazes at %s.");
+        mam_ptr->act = MonsterBlowFormat(_("{}をにらんだ。", "gazes at {}."));
         mam_ptr->touched = false;
         break;
     }
     case RaceBlowMethodType::WAIL: {
-        mam_ptr->act = _("%sに泣きついた。", "wails at %s.");
+        mam_ptr->act = MonsterBlowFormat(_("{}に泣きついた。", "wails at {}."));
         mam_ptr->touched = false;
         break;
     }
     case RaceBlowMethodType::SPORE: {
-        mam_ptr->act = _("%sに胞子を飛ばした。", "releases spores at %s.");
+        mam_ptr->act = MonsterBlowFormat(_("{}に胞子を飛ばした。", "releases spores at {}."));
         mam_ptr->touched = false;
         break;
     }
     case RaceBlowMethodType::XXX4: {
-        mam_ptr->act = _("%sにXXX4を飛ばした。", "projects XXX4's at %s.");
+        mam_ptr->act = MonsterBlowFormat(_("{}にXXX4を飛ばした。", "projects XXX4's at {}."));
         mam_ptr->touched = false;
         break;
     }
     case RaceBlowMethodType::BEG: {
-        mam_ptr->act = _("%sに金をせがんだ。", "begs %s for money.");
+        mam_ptr->act = MonsterBlowFormat(_("{}に金をせがんだ。", "begs {} for money."));
         mam_ptr->touched = false;
         break;
     }
     case RaceBlowMethodType::INSULT: {
-        mam_ptr->act = _("%sを侮辱した。", "insults %s.");
+        mam_ptr->act = MonsterBlowFormat(_("{}を侮辱した。", "insults {}."));
         mam_ptr->touched = false;
         break;
     }
     case RaceBlowMethodType::MOAN: {
-        mam_ptr->act = _("%sにむかってうめいた。", "moans at %s.");
+        mam_ptr->act = MonsterBlowFormat(_("{}にむかってうめいた。", "moans at {}."));
         mam_ptr->touched = false;
         break;
     }
     case RaceBlowMethodType::SHOW: {
-        mam_ptr->act = _("%sにむかって歌った。", "sings to %s.");
+        mam_ptr->act = MonsterBlowFormat(_("{}にむかって歌った。", "sings to {}."));
         mam_ptr->touched = false;
         break;
     }

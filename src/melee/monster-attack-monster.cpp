@@ -196,7 +196,7 @@ static void redraw_health_bar(mam_type *mam_ptr)
 
 static void describe_silly_melee(mam_type *mam_ptr)
 {
-    if ((mam_ptr->act == nullptr) || !mam_ptr->see_either) {
+    if (!mam_ptr->act || !mam_ptr->see_either) {
         return;
     }
 
@@ -205,18 +205,14 @@ static void describe_silly_melee(mam_type *mam_ptr)
         mam_ptr->act = rand_choice(silly_attacks2);
     }
 
-    const auto temp = format(mam_ptr->act, mam_ptr->t_name);
-    msg_print("{}は{}", str_upcase_first(mam_ptr->m_name), temp);
+    msg_print("{}は{}", str_upcase_first(mam_ptr->m_name), fmt::format(*mam_ptr->act, std::string_view(mam_ptr->t_name)));
 #else
-    std::string temp;
     if (mam_ptr->do_silly_attack) {
-        mam_ptr->act = rand_choice(silly_attacks);
-        temp = fmt::format("{} {}.", mam_ptr->act, mam_ptr->t_name);
+        // 英語版の幻覚時の説明は書式でない文なので、対象の名前を後ろに付ける
+        msg_print("{} {} {}.", str_upcase_first(mam_ptr->m_name), rand_choice(silly_attacks), mam_ptr->t_name);
     } else {
-        temp = format(mam_ptr->act, mam_ptr->t_name);
+        msg_print("{} {}", str_upcase_first(mam_ptr->m_name), fmt::format(*mam_ptr->act, std::string_view(mam_ptr->t_name)));
     }
-
-    msg_print("{} {}", str_upcase_first(mam_ptr->m_name), temp);
 #endif
 }
 
