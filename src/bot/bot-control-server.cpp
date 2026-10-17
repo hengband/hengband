@@ -142,7 +142,16 @@ nlohmann::json make_input_context_json()
         return nullptr;
     }
 
-    return { { "kind", context->kind }, { "prompt", to_json_utf8(context->prompt) } };
+    auto result = nlohmann::json{ { "kind", context->kind }, { "prompt", to_json_utf8(context->prompt) } };
+    if (const auto *string_details = std::get_if<BotStringInputDetails>(&context->details)) {
+        result["max_length"] = string_details->max_length;
+        result["initial"] = to_json_utf8(string_details->initial);
+    } else if (const auto *quantity_details = std::get_if<BotQuantityInputDetails>(&context->details)) {
+        result["max"] = quantity_details->max;
+        result["initial"] = quantity_details->initial;
+    }
+
+    return result;
 }
 
 /*!
@@ -625,7 +634,16 @@ void serve_pending_requests()
  * @details 新しい値の構築が失敗した場合は、現在の文脈を変更しない。
  */
 BotInputContextScope::BotInputContextScope(std::string_view kind, std::string_view prompt)
-    : previous(BotInputContext{ std::string(kind), std::string(prompt) })
+    : BotInputContextScope(BotInputContext{ std::string(kind), std::string(prompt), {} })
+{
+}
+
+/*!
+ * @brief 詳細情報を含む入力文脈を保持し、以前の文脈を退避する
+ * @details 新しい値の構築が失敗した場合は、現在の文脈を変更しない。
+ */
+BotInputContextScope::BotInputContextScope(BotInputContext input_context)
+    : previous(std::move(input_context))
 {
     current_input_context.swap(this->previous);
 }
