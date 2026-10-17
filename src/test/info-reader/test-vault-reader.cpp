@@ -1,7 +1,10 @@
+#include "floor/floor-base-definitions.h"
 #include "info-reader/info-reader-util.h"
 #include "info-reader/parse-error-types.h"
 #include "info-reader/vault-reader.h"
+#include "locale/language-switcher.h"
 #include "room/rooms-vault.h"
+#include "test/info-reader/scoped-reader-state.h"
 #include "test/scoped-restore.h"
 #include <doctest/doctest.h>
 #include <limits>
@@ -123,4 +126,126 @@ TEST_CASE("VaultReader rejects duplicate and descending IDs and permits retry")
     CHECK(reader.read() == PARSE_ERROR_NONE);
     CHECK_FALSE(reader.error().has_value());
     CHECK(error_idx == 3);
+    data["id"] = 4;
+    data["rating"] = "bad";
+    CHECK(reader.read() == PARSE_ERROR_INVALID_TYPE);
+    REQUIRE(reader.error().has_value());
+    CHECK(reader.error()->id == "4");
+    CHECK(reader.error()->path == "$.rating");
+    REQUIRE(vaults_info.size() == 4);
+    CHECK(vaults_info[3].text == "good\\\"# ");
+    CHECK(error_idx == 3);
+    data["rating"] = 8;
+    CHECK(reader.read() == PARSE_ERROR_NONE);
+    CHECK_FALSE(reader.error().has_value());
+    REQUIRE(vaults_info.size() == 5);
+    CHECK(vaults_info[4].rat == 8);
+    CHECK(error_idx == 4);
+}
+
+TEST_CASE("VaultReader preserves exact error precedence and every existing record field")
+{
+    const auto restore = test::scoped_restore(vaults_info);
+    const test::ScopedReaderState reader_state;
+    vaults_info.clear();
+    auto data = make_vault();
+    data["id"] = 2;
+    REQUIRE(VaultReader(data).read() == PARSE_ERROR_NONE);
+    const auto previous = vaults_info;
+    data["id"] = 5;
+    data["name"] = "Changed vault";
+    auto expected = PARSE_ERROR_TOO_FEW_ARGUMENTS;
+    std::string id = "5";
+    std::string path;
+    std::string reason;
+    SUBCASE("required root keys before unknown keys")
+    {
+        data.erase("rating");
+        data["typo"] = 42;
+        path = "$.rating";
+        reason = _("必須項目がありません", "missing required field");
+    }
+    SUBCASE("unknown root keys before id conversion")
+    {
+        data["typo"] = 42;
+        data["id"] = "bad";
+        expected = PARSE_ERROR_UNDEFINED_DIRECTIVE;
+        id = "\"bad\"";
+        path = "$.typo";
+        reason = _("未知の項目です", "unknown field");
+    }
+    SUBCASE("id conversion before name validation")
+    {
+        data["id"] = "bad";
+        data["name"] = 42;
+        expected = PARSE_ERROR_INVALID_TYPE;
+        id = "\"bad\"";
+        path = "$.id";
+        reason = _("0以上32767以下の整数が必要です", "expected an integer in [0, 32767]");
+    }
+    SUBCASE("id order before name validation")
+    {
+        data["id"] = 2;
+        data["name"] = 42;
+        expected = PARSE_ERROR_NON_SEQUENTIAL_RECORDS;
+        id = "2";
+        path = "$.id";
+        reason = _("IDは重複せず昇順に並べてください", "IDs must be unique and in increasing order");
+    }
+    SUBCASE("vault kind before rating")
+    {
+        data["type"] = 9;
+        data["rating"] = nullptr;
+        expected = PARSE_ERROR_INVALID_VALUE;
+        path = "$.type";
+        reason = _("Vault種別は7、8、17のいずれかです", "vault type must be 7, 8 or 17");
+    }
+    SUBCASE("rating before dimensions")
+    {
+        data["rating"] = nullptr;
+        data["height"] = 0;
+        path = "$.rating";
+        reason = _("0以上2147483647以下の整数が必要です", "expected an integer in [0, 2147483647]");
+    }
+    SUBCASE("height before width")
+    {
+        data["height"] = 0;
+        data["width"] = 0;
+        expected = PARSE_ERROR_INVALID_FLAG;
+        path = "$.height";
+        reason = _("1以上66以下の整数が必要です", "expected an integer in [1, 66]");
+    }
+    SUBCASE("width before layout")
+    {
+        data["width"] = MAX_WID + 1;
+        data["layout"] = nullptr;
+        expected = PARSE_ERROR_INVALID_FLAG;
+        path = "$.width";
+        reason = _("1以上198以下の整数が必要です", "expected an integer in [1, 198]");
+    }
+    SUBCASE("second layout row after successfully parsed metadata and first row")
+    {
+        data["layout"][1] = 42;
+        expected = PARSE_ERROR_INVALID_TYPE;
+        path = "$.layout[1]";
+        reason = _("文字列が必要です", "expected a string");
+    }
+    VaultReader reader(data);
+    CHECK(reader.read() == expected);
+    REQUIRE(reader.error().has_value());
+    CHECK(reader.error()->id == id);
+    CHECK(reader.error()->path == path);
+    CHECK(reader.error()->reason == reason);
+    CHECK(error_idx == 2);
+    REQUIRE(vaults_info.size() == previous.size());
+    for (size_t i = 0; i < previous.size(); ++i) {
+        CAPTURE(i);
+        CHECK(vaults_info[i].idx == previous[i].idx);
+        CHECK(vaults_info[i].typ == previous[i].typ);
+        CHECK(vaults_info[i].rat == previous[i].rat);
+        CHECK(vaults_info[i].hgt == previous[i].hgt);
+        CHECK(vaults_info[i].wid == previous[i].wid);
+        CHECK(vaults_info[i].name == previous[i].name);
+        CHECK(vaults_info[i].text == previous[i].text);
+    }
 }
