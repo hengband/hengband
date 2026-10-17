@@ -5,8 +5,8 @@
   "required": ["version", "width", "height", "towns", "maps"],
   "properties": {
     "version": { "const": 1 },
-    "width": { "type": "integer", "minimum": 2, "maximum": 32767 },
-    "height": { "type": "integer", "minimum": 2, "maximum": 32767 },
+    "width": { "$comment": "maximum = MAX_WID in src/floor/floor-base-definitions.h", "type": "integer", "minimum": 3, "maximum": 198 },
+    "height": { "$comment": "maximum = MAX_HGT in src/floor/floor-base-definitions.h", "type": "integer", "minimum": 3, "maximum": 66 },
     "towns": {
       "type": "array",
       "minItems": 1,
