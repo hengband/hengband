@@ -115,6 +115,7 @@ void OverviewMapCache::update(PlayerType *player_ptr)
         this->dirty_positions.clear();
         this->is_all_dirty = is_autopick_displayed;
         this->is_changed = true;
+        this->start_new_generation();
         return;
     }
 
@@ -123,12 +124,21 @@ void OverviewMapCache::update(PlayerType *player_ptr)
         // 縮小するときは優先度で記号を選ぶので、記号が同じでも優先度が変われば全体図の表示が変わることがある
         const auto grid = make_grid(player_ptr, pos);
         auto &cached_grid = this->grids[index];
-        this->is_changed |= cached_grid != grid;
+        if (cached_grid != grid) {
+            this->is_changed = true;
+            this->changed_positions.push_back(pos);
+        }
+
         cached_grid = grid;
         this->is_dirty[index] = false;
     }
 
     this->dirty_positions.clear();
+
+    // 変わったグリッドの一覧が長くなりすぎたら、縮小した全体図も全部作り直してもらう
+    if (this->changed_positions.size() > this->grids.size()) {
+        this->start_new_generation();
+    }
 }
 
 /*!
@@ -166,6 +176,37 @@ void OverviewMapCache::reset_changed()
 const OverviewMapGrid &OverviewMapCache::get_grid(const Pos2D &pos) const
 {
     return this->grids[this->index_of(pos)];
+}
+
+/*!
+ * @brief 表示が変わったグリッドの記録の世代を返す
+ * @return 世代の番号
+ * @details 全グリッドを求め直したときなど、get_changed_positions() に無いグリッドも変わったかもしれないときに変わる。
+ * 世代が変わっていたら、縮小した全体図は全部作り直す
+ */
+int OverviewMapCache::get_generation() const
+{
+    return this->generation;
+}
+
+/*!
+ * @brief 今の世代で表示が変わったグリッドの一覧を返す
+ * @return 変わった順のグリッドの座標 (同じグリッドが何度も入ることがある)
+ * @details 一覧は世代が変わるまで伸び続けるので、使う側は前回どこまで読んだかを覚えておき、その続きだけを読む
+ */
+const std::vector<Pos2D> &OverviewMapCache::get_changed_positions() const
+{
+    return this->changed_positions;
+}
+
+/*!
+ * @brief 表示が変わったグリッドの記録を捨てて、世代を変える
+ * @details 縮小した全体図は世代が変わったことを見て全部作り直すので、記録に無い変化も反映される
+ */
+void OverviewMapCache::start_new_generation()
+{
+    this->generation++;
+    this->changed_positions.clear();
 }
 
 int OverviewMapCache::index_of(const Pos2D &pos) const
