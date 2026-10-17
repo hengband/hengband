@@ -3,12 +3,16 @@
  * @details メモリ上の端末を使う独立プロセス。通常のユニットテストとは別に実行する。
  */
 #include "core/asking-player.h"
+#include "game-option/input-options.h"
 #include "io/command-repeater.h"
 #include "io/input-context.h"
+#include "io/input-key-acceptor.h"
 #include "io/input-key-requester.h"
+#include "locale/language-switcher.h"
 #include "system/player-type-definition.h"
 #include "term/gameterm.h"
 #include "term/z-term.h"
+#include "view/display-messages.h"
 #include <cstdlib>
 #include <iostream>
 #include <string>
@@ -76,6 +80,7 @@ void prepare(InputContext context, std::string input)
     keys = std::move(input);
     key_index = 0;
     waits = 0;
+    num_more = 0;
     term_flush();
     command_arg = 0;
     command_cmd = '.';
@@ -131,6 +136,30 @@ int main()
     prepare({ InputKind::QUANTITY, "Quantity: ", QuantityInputDetails{ 8, 1 } }, "a\r");
     check(input_quantity(8, "Quantity: ") == 8, "alphabetic quantity selects maximum");
     check_finished();
+
+    // プレイ中でない間は、必ず -続く- を待つ
+    player.playing = false;
+    msg_print("Message");
+    prepare({ InputKind::MORE, _("-続く-", "-more-"), {} }, " ");
+    msg_erase();
+    check_finished();
+
+    // プレイ中の通常の経路で、外側の文脈の中で -続く- を待ち、終わったら外側の文脈へ戻す
+    // (auto_more・skip_more が無効なら、num_more >= 0 のとき -続く- を待つ)
+    auto_more = false;
+    skip_more = false;
+    player.playing = true;
+    {
+        const InputContextScope outer(InputKind::CONFIRM, "Outer");
+        msg_print("Nested message");
+        prepare({ InputKind::MORE, _("-続く-", "-more-"), {} }, " ");
+        msg_erase();
+        check(waits > 0, "nested -more- actually waited");
+        check(key_index == keys.size(), "nested -more- consumed all keys");
+        const auto &restored = get_input_context();
+        check(restored && (restored->kind == InputKind::CONFIRM), "outer context restored after -more-");
+    }
+    player.playing = false;
 
     check(!get_input_context(), "no context before outer scope");
     {
