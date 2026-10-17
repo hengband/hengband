@@ -4,6 +4,7 @@
 #include "game-option/input-options.h"
 #include "game-option/keymap-directory-getter.h"
 #include "io/cursor.h"
+#include "io/input-context.h"
 #include "io/input-key-acceptor.h"
 #include "io/screen-util.h"
 #include "system/building-type-definition.h"
@@ -200,6 +201,7 @@ void tgt_pt_info::move_to_symbol(PlayerType *player_ptr)
  */
 tl::optional<Pos2D> point_target(PlayerType *player_ptr)
 {
+    InputContextGuard icg(InputContextKind::TARGET);
     tgt_pt_info info;
     info.pos = player_ptr->get_position();
     if (expand_list) {

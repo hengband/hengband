@@ -8,7 +8,7 @@ from hengband_mcp.client import (
     ControlRequestError,
     ControlTimeoutError,
 )
-from hengband_mcp.session import ESCAPE, SAVE_AND_QUIT
+from hengband_mcp.session import ESCAPE, SAVE_AND_LEAVE_EDITOR, SAVE_AND_QUIT
 
 SCREEN_WIDTH = 80
 SCREEN_HEIGHT = 24
@@ -148,8 +148,11 @@ def standard_keys(game: FakeGame, key: str) -> None:
         elif game.quitting:
             # 「リターンキーか ESC キーを押して下さい」に ESC で答えると終了する
             game.running = False
-        else:
+        elif game.kind != "editor":
+            # 自動拾いエディタは ESC ではメニューが開くだけで抜けられない
             game.kind = "command"
+    elif key == SAVE_AND_LEAVE_EDITOR and game.kind == "editor":
+        game.kind = "command"
     elif key == SAVE_AND_QUIT and game.kind == "command":
         game.saved = True
         game.quitting = True

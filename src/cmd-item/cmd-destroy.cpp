@@ -11,6 +11,7 @@
 #include "game-option/input-options.h"
 #include "inventory/inventory-object.h"
 #include "inventory/inventory-slot-types.h"
+#include "io/input-context.h"
 #include "io/input-key-acceptor.h"
 #include "io/input-key-requester.h"
 #include "main/sound-definitions-table.h"
@@ -56,6 +57,7 @@ static bool check_destory_item(PlayerType *player_ptr, const ItemEntity &destroy
     message_add(msg);
     RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::MESSAGE);
     window_stuff(player_ptr);
+    InputContextGuard icg(InputContextKind::YES_NO);
     while (true) {
         prt(msg, 0, 0);
         char i = inkey();

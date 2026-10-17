@@ -7,6 +7,7 @@
 
 #include "autopick/autopick-command-menu.h"
 #include "autopick/autopick-menu-data-table.h"
+#include "io/input-context.h"
 #include "io/input-key-acceptor.h"
 #include "system/angband.h"
 #include "term/screen-processor.h"
@@ -70,6 +71,7 @@ static uint8_t redraw_edit_command_menu(bool redraw, size_t menu_depth, size_t s
  */
 EditorCommandId do_command_menu(size_t menu_depth, size_t start)
 {
+    InputContextGuard icg(InputContextKind::MENU);
     const auto &menu_data = CommandMenuData::get_instance();
     size_t max_length = 0;
     std::vector<int> menu_ids;

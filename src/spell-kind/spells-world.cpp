@@ -13,6 +13,7 @@
 #include "game-option/birth-options.h"
 #include "game-option/play-record-options.h"
 #include "game-option/special-options.h"
+#include "io/input-context.h"
 #include "io/input-key-acceptor.h"
 #include "io/write-diary.h"
 #include "main/sound-definitions-table.h"
@@ -386,6 +387,7 @@ static tl::optional<DungeonId> choose_dungeon(std::string_view note, int row, in
         return tl::nullopt;
     }
 
+    InputContextGuard icg(InputContextKind::MENU);
     screen_save();
     const auto dungeon_messages = DungeonService::build_known_dungeons(DungeonMessageFormat::RECALL);
     const int num_messages = dungeon_messages.size();

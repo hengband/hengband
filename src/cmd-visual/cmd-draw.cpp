@@ -4,6 +4,7 @@
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "io/files-util.h"
+#include "io/input-context.h"
 #include "io/input-key-acceptor.h"
 #include "main/sound-of-music.h"
 #include "player-base/player-race.h"
@@ -286,6 +287,7 @@ static int display_message_history(int base_msg_num, int num_now, int num_lines,
  */
 void do_cmd_messages(int num_now)
 {
+    InputContextGuard icg(InputContextKind::MENU);
     std::string shower_str("");
     std::string finder_str("");
     std::string shower("");

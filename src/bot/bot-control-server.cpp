@@ -495,6 +495,10 @@ std::string_view input_kind_name()
         return "any_key";
     case InputContextKind::BIRTH:
         return "birth";
+    case InputContextKind::MENU:
+        return "menu";
+    case InputContextKind::EDITOR:
+        return "editor";
     }
 
     return "unknown";

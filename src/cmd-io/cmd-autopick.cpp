@@ -13,6 +13,7 @@
 #include "autopick/autopick-reader-writer.h"
 #include "autopick/autopick-util.h"
 #include "cmd-io/cmd-save.h"
+#include "io/input-context.h"
 #include "io/input-key-acceptor.h"
 #include "io/read-pref-file.h"
 #include "system/item/item-entity.h"
@@ -181,6 +182,7 @@ void do_cmd_edit_autopick(PlayerType *player_ptr)
 
     TermCenteredOffsetSetter tcos(tl::nullopt, tl::nullopt);
 
+    InputContextGuard icg(InputContextKind::EDITOR);
     screen_save();
     while (quit == APE_QUIT) {
         auto com_id = EditorCommandId::NONE;

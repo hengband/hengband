@@ -58,9 +58,12 @@ background, and a last <ENTER> starts the game in town.
 
 Observation (first content block, JSON)
 - input: what the game waits for: command (ready for a command), more, yes_no, string, direction, \
-target, item, store_command, any_key, birth (character creation), unknown (another screen or menu, \
-e.g. the inventory list or the character sheet: read the screen; <ESC> leaves it). prompt: the \
-question on the top line when the game is asking something.
+target (also picking a spot, e.g. the travel destination), item, store_command, any_key (also the \
+M map), birth (character creation), menu (pick from the choices on screen, or browse a list such as \
+the message history; <ESC> leaves most menus), editor (the auto-pickup editor: typed characters are \
+inserted as text, <ESC> opens its command menu, <C-w> saves and leaves, <C-q> leaves without saving), \
+unknown (another screen, e.g. the inventory list or the character sheet: read the screen; <ESC> \
+leaves it). prompt: the question on the top line when the game is asking something.
 - messages: game messages since your previous call, oldest first.
 - player: level, hp/mp as [current, max], depth (0 = town; 1 level = 50 ft), pos {x, y}, status \
 (blind, confused, ...), effects (status bar), food, light, speed.

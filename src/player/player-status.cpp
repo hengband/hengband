@@ -18,6 +18,7 @@
 #include "game-option/birth-options.h"
 #include "grid/grid.h"
 #include "inventory/inventory-slot-types.h"
+#include "io/input-context.h"
 #include "io/input-key-acceptor.h"
 #include "io/write-diary.h"
 #include "main/sound-definitions-table.h"
@@ -2841,6 +2842,7 @@ void check_experience(PlayerType *player_ptr)
         player_ptr->level_up_message = false;
         if (level_inc_stat) {
             if (!(player_ptr->max_plv % 10)) {
+                InputContextGuard icg(InputContextKind::MENU);
                 int choice;
                 screen_save();
                 while (true) {

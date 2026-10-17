@@ -6,6 +6,7 @@ from hengband_mcp.session import (
     ESCAPE,
     MAX_ESCAPES,
     MAX_MESSAGES,
+    SAVE_AND_LEAVE_EDITOR,
     SAVE_AND_QUIT,
     GameSession,
     KeyRefusedError,
@@ -315,6 +316,14 @@ def test_stop_saves_after_leaving_a_prompt() -> None:
     assert game.saved
     assert not game.running
     assert not process.killed
+
+
+def test_stop_saves_after_leaving_the_autopick_editor() -> None:
+    game = FakeGame(kind="editor")
+    result = make_session(game).stop(save=True)
+
+    assert result == {"saved": True}
+    assert game.keys == [SAVE_AND_LEAVE_EDITOR, SAVE_AND_QUIT, ESCAPE]
 
 
 def test_stop_keeps_the_game_running_when_it_cannot_save() -> None:

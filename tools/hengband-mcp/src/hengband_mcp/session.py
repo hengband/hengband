@@ -24,6 +24,9 @@ ESCAPE = encode_byte(0x1B)
 #: セーブして終了するコマンド (^X)
 SAVE_AND_QUIT = encode_byte(0x18)
 
+#: 自動拾いエディタの編集内容をセーブして抜けるキー (^W)。エディタは ESC ではメニューを開くだけで抜けられない
+SAVE_AND_LEAVE_EDITOR = encode_byte(0x17)
+
 #: キー 1 つの後に閉じる -more- の上限 (閉じても閉じても現れる場合に止まらなくなるのを防ぐ)
 MAX_MORE_PER_KEY = 100
 
@@ -340,6 +343,7 @@ class GameSession:
         """ゲームを終了させる。
 
         セーブする場合は、プロンプトを抜けてコマンド入力待ちに戻してから ^X (セーブして終了) を送り、
+        自動拾いエディタは ^W (編集内容をセーブして終了) で抜ける。
         最後の「リターンキーか ESC キーを押して下さい」に ESC で答える (ほかのキーではスコアを表示する)。
         死亡している場合は、死亡後の画面を ESC で抜ける。それでも終わらない場合は quit op で終了させ、
         最後はプロセスを強制終了する。
@@ -387,7 +391,8 @@ class GameSession:
         state = self._current_state()
         escapes = 0
         while state.kind != "command" and escapes < MAX_ESCAPES:
-            self.client.request("keys", keys=ESCAPE)
+            key = SAVE_AND_LEAVE_EDITOR if state.kind == "editor" else ESCAPE
+            self.client.request("keys", keys=key)
             escapes += 1
             self.dismiss_more(deadline)
             state = self._current_state()

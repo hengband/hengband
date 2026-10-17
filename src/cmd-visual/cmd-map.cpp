@@ -1,6 +1,7 @@
 #include "cmd-visual/cmd-map.h"
 #include "autopick/autopick-methods-table.h"
 #include "autopick/autopick-util.h"
+#include "io/input-context.h"
 #include "io/input-key-acceptor.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
@@ -17,6 +18,7 @@
  */
 void do_cmd_view_map(PlayerType *player_ptr)
 {
+    InputContextGuard icg(InputContextKind::ANY_KEY);
     screen_save();
     prt(_("お待ち下さい...", "Please wait..."), 0, 0);
     term_fresh();
