@@ -142,6 +142,7 @@
     <ClCompile Include="..\..\src\test\view\test-map-terrain-visibility.cpp" />
     <ClCompile Include="..\..\src\test\view\test-screen-parity-helpers.cpp" />
     <ClCompile Include="..\..\src\test\window\test-overview-map-cache.cpp" />
+    <ClCompile Include="..\..\src\test\window\test-shrunk-overview-map.cpp" />
     <ClCompile Include="..\..\src\test\wizard\test-spoiler-util.cpp" />
   </ItemGroup>
   <ItemGroup>
