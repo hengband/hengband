@@ -136,7 +136,7 @@ std::shared_ptr<const std::string> message_str(int age)
 
     const auto &[msg, repeat_count] = message_history[age];
     if (repeat_count > 1) {
-        return std::make_shared<const std::string>(*msg + format(" <x%d>", repeat_count));
+        return std::make_shared<const std::string>(fmt::format("{} <x{}>", *msg, repeat_count));
     }
 
     return msg;
