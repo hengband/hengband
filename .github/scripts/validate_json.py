@@ -222,6 +222,23 @@ def validate_baseitem_semantics(data: dict, schema_path: Path) -> None:
                 require_integer(allocation[field], path + ["allocations", allocation_index, field])
 
 
+def validate_artifact_semantics(data: dict) -> None:
+    """ArtifactReaderの整数型・ID順序・ダイスを検証する。"""
+    previous_id = -1
+    for index, artifact in enumerate(data["artifacts"]):
+        path = ["artifacts", index]
+        for field in ("id", "parameter_value", "level", "rarity", "weight", "cost", "base_ac", "hit_bonus", "damage_bonus", "ac_bonus"):
+            if field in artifact:
+                require_integer(artifact[field], path + [field])
+        for field in ("type_value", "subtype_value"):
+            require_integer(artifact["base_item"][field], path + ["base_item", field])
+        if artifact["id"] <= previous_id:
+            raise ValidationError("artifact IDs must be strictly increasing", path=path + ["id"])
+        previous_id = artifact["id"]
+        if "base_dice" in artifact:
+            require_reader_dice(artifact["base_dice"], path + ["base_dice"])
+
+
 def validate_wilderness_semantics(data: dict) -> None:
     """Check cross-field constraints used by WildernessReader."""
     for field in ("version", "width", "height"):
@@ -791,7 +808,7 @@ MAX_MONRACE_DICE_ROLL = 32767
 def validate_monrace_semantics(data: dict, schema_path: Path, data_path: Path, registry: Registry) -> None:
     """Check RaceReader's strict integers, ID order, dice limits and references."""
     artifact_data = load_validated_companion(schema_path, data_path, registry,
-                                             "ArtifactDefinitions", "artifact", lambda _: None)
+                                             "ArtifactDefinitions", "artifact", validate_artifact_semantics)
     defined_artifact_ids = {artifact["id"] for artifact in artifact_data["artifacts"]}
     monraces = data["monsters"]
     defined_monrace_ids = {monrace["id"] for monrace in monraces if type(monrace["id"]) is int}
@@ -876,6 +893,7 @@ def validate_one(pair: tuple[Path, Path, dict], registry: Registry | None = None
             "VaultDefinitions.schema.json": lambda: validate_vault_semantics(data),
             "EgoDefinitions.schema.json": lambda: validate_ego_semantics(data, schema_path),
             "BaseitemDefinitions.schema.json": lambda: validate_baseitem_semantics(data, schema_path),
+            "ArtifactDefinitions.schema.json": lambda: validate_artifact_semantics(data),
             "WildernessDefinition.schema.json": lambda: validate_wilderness_semantics(data),
             "TownPreferences.schema.json": lambda: validate_town_preferences_semantics(data, schema_path),
             "TownDefinitionList.schema.json": lambda: validate_town_definition_list_semantics(data, schema_path),

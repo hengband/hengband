@@ -1,4 +1,4 @@
-"""ベースアイテム定義の schema と意味検証が BaseitemReader の受理範囲と一致することを確かめる。"""
+"""ベースアイテム・アーティファクト定義の schema と意味検証が reader の受理範囲と一致することを確かめる。"""
 import copy
 from pathlib import Path
 import unittest
@@ -107,6 +107,71 @@ class BaseitemDefinitionValidationTest(unittest.TestCase):
         self.check(self.changed(self.sample, ["allocations"], [allocation] * 4), True)
         self.check(self.changed(self.sample, ["allocations"], [allocation] * 5), False, ["baseitems", 0, "allocations"])
         self.check(self.changed(self.sample, ["allocations"], [1]), False, ["baseitems", 0, "allocations", 0])
+
+
+class ArtifactDefinitionValidationTest(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        root = Path(__file__).resolve().parents[2]
+        cls.loaded, cls.schema_map = load_all_schemas(root / "schema")
+        cls.registry = build_schema_registry(cls.loaded)
+        cls.document = load_jsonc(root / "lib/edit/ArtifactDefinitions.jsonc")
+        cls.sample = next(artifact for artifact in cls.document["artifacts"]
+                          if {"parameter_value", "base_ac", "base_dice", "hit_bonus", "damage_bonus", "ac_bonus"} <= artifact.keys())
+        cls.monraces = load_jsonc(root / "lib/edit/MonraceDefinitions.jsonc")
+
+    def validate(self, *artifacts):
+        schema_path = self.schema_map["ArtifactDefinitions"]
+        document = {"version": self.document["version"], "artifacts": list(artifacts)}
+        return validate_document(document, schema_path, self.loaded[schema_path], self.registry)
+
+    def check(self, record, accepted, location=None, reason=None):
+        ok, message = self.validate(record)
+        self.assertEqual(ok, accepted, message)
+        if location is not None:
+            self.assertIn(f"Location: {location}", message)
+        if reason is not None:
+            self.assertIn(reason, message)
+
+    def test_bundled_definitions(self):
+        ok, message = self.validate(*self.document["artifacts"])
+        self.assertTrue(ok, message)
+
+    def test_integer_representation_matches_reader(self):
+        for field in ("id", "parameter_value", "level", "rarity", "weight", "cost", "base_ac", "hit_bonus", "damage_bonus", "ac_bonus"):
+            with self.subTest(field=field):
+                self.check({**self.sample, field: float(self.sample[field])}, False, ["artifacts", 0, field], "integer JSON value")
+        for field in ("type_value", "subtype_value"):
+            with self.subTest(field=field):
+                base_item = {**self.sample["base_item"], field: float(self.sample["base_item"][field])}
+                self.check({**self.sample, "base_item": base_item}, False, ["artifacts", 0, "base_item", field], "integer JSON value")
+
+    def test_ids_must_be_strictly_increasing(self):
+        for second_id in (self.sample["id"], self.sample["id"] - 1):
+            with self.subTest(second_id=second_id):
+                ok, message = self.validate(self.sample, {**self.sample, "id": second_id})
+                self.assertFalse(ok, message)
+                self.assertIn("Location: ['artifacts', 1, 'id']", message)
+        ok, message = self.validate(self.sample, {**self.sample, "id": self.sample["id"] + 1})
+        self.assertTrue(ok, message)
+
+    def test_dice_matches_reader(self):
+        for dice in ("1d4", "0d0", "-1d-2", "2147483647d1", "0" * 5000 + "1d4"):
+            with self.subTest(dice=dice[-8:]):
+                self.check({**self.sample, "base_dice": dice}, True)
+        for dice in ("d", "1d", "1d4\n", "1d2d3", "+1d4", "2147483648d1"):
+            with self.subTest(dice=dice):
+                self.check({**self.sample, "base_dice": dice}, False, ["artifacts", 0, "base_dice"])
+
+    def test_monrace_validation_checks_artifact_companion(self):
+        # モンスター定義の検証は、参照先のアーティファクト定義にも同じ意味検証をかける。
+        schema_path = self.schema_map["MonraceDefinitions"]
+        companion = {"version": self.document["version"], "artifacts": [{**self.sample, "level": float(self.sample["level"])}]}
+        ok, message = validate_document(self.monraces, schema_path, self.loaded[schema_path], self.registry,
+                                        companions={"ArtifactDefinitions.jsonc": companion})
+        self.assertFalse(ok, message)
+        self.assertIn("Invalid artifact definitions", message)
+        self.assertIn("integer JSON value", message)
 
 
 if __name__ == "__main__":
