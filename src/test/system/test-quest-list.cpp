@@ -907,15 +907,15 @@ TEST_CASE("QuestList treats ordinary upstairs special as floor metadata in rando
     CHECK(map->legend.at('<').grid.special == 48);
 }
 
-TEST_CASE("QuestList reward diagnostics retain original JSON array positions")
+TEST_CASE("QuestList reward diagnostics report the JSON array position of an undefined candidate")
 {
     test::QuestListTestAccess quests;
     test::MonraceListTestAccess monraces;
     test::ArtifactListTestAccess artifacts;
     MonraceList::get_instance().emplace(static_cast<MonraceId>(0));
     QuestFiles files;
-    for (const auto &candidates : { nlohmann::json::array({ "ignored", 0, 123 }),
-             nlohmann::json::array({ "ignored", nullptr, true, 1.5, 0, 123 }) }) {
+    // 整数でない候補は読み込み時に解析エラーになるため、候補の添字はそのままJSON配列の添字になる。
+    for (const auto &candidates : { nlohmann::json::array({ 0, 123 }), nlohmann::json::array({ 0, 0, 0, 123 }) }) {
         auto data = make_quest(1);
         data["definition"]["reward"] = { { "artifacts", candidates } };
         files.write("quest.jsonc", data);
@@ -1338,8 +1338,7 @@ TEST_CASE("QuestList validates fixed terrain mimic after discovery without terra
 
 TEST_CASE("QuestList validates plain up references when reward fallback can change type")
 {
-    for (const auto &candidates : { nlohmann::json::array(), nlohmann::json::array({ "ignored" }),
-             nlohmann::json::array({ 0 }), nlohmann::json::array({ 1 }) }) {
+    for (const auto &candidates : { nlohmann::json::array(), nlohmann::json::array({ 0 }), nlohmann::json::array({ 1 }) }) {
         for (const auto valid : { false, true }) {
             LegendReferenceState state;
             QuestFiles files;
