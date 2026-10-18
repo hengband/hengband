@@ -121,6 +121,7 @@ class ArtifactDefinitionValidationTest(unittest.TestCase):
         # 単独の定義として検証するため、ID は先頭の 1 にする。
         cls.sample = {**sample, "id": 1}
         cls.monraces = load_jsonc(root / "lib/edit/MonraceDefinitions.jsonc")
+        cls.baseitem_document = load_jsonc(root / "lib/edit/BaseitemDefinitions.jsonc")
 
     def validate(self, *artifacts):
         schema_path = self.schema_map["ArtifactDefinitions"]
@@ -169,6 +170,43 @@ class ArtifactDefinitionValidationTest(unittest.TestCase):
         for dice in ("d", "1d", "1d4\n", "1d2d3", "+1d4", "2147483648d1"):
             with self.subTest(dice=dice):
                 self.check({**self.sample, "base_dice": dice}, False, ["artifacts", 0, "base_dice"])
+
+    def validate_with_baseitems(self, artifact, baseitems):
+        schema_path = self.schema_map["ArtifactDefinitions"]
+        document = {"version": self.document["version"], "artifacts": [artifact]}
+        companion = {"version": self.baseitem_document["version"], "baseitems": baseitems}
+        return validate_document(document, schema_path, self.loaded[schema_path], self.registry,
+                                 companions={"BaseitemDefinitions.jsonc": companion})
+
+    def test_base_item_must_be_a_valid_baseitem(self):
+        # 生成・鑑定では元のベースアイテムを種別・副種別から引き、無ければ例外で落ちる。
+        for field, value in (("type_value", 128), ("subtype_value", 128)):
+            with self.subTest(field=field):
+                base_item = {**self.sample["base_item"], field: value}
+                self.check({**self.sample, "base_item": base_item}, False, ["artifacts", 0, "base_item"], "Reason: base item must be a valid baseitem")
+
+        key = self.sample["base_item"]
+        baseitem = next(item for item in self.baseitem_document["baseitems"]
+                        if (item["itemkind"]["type_value"], item["itemkind"]["subtype_value"]) == (key["type_value"], key["subtype_value"]))
+        ok, message = self.validate_with_baseitems(self.sample, [{**baseitem, "id": 1}])
+        self.assertTrue(ok, message)
+        # 隣の候補のベースアイテム定義を優先し、同梱定義にあっても候補に無ければ拒否する。
+        other = {**baseitem, "id": 1, "itemkind": {"type_value": 127, "subtype_value": 0}}
+        ok, message = self.validate_with_baseitems(self.sample, [other])
+        self.assertFalse(ok, message)
+        self.assertIn("Reason: base item must be a valid baseitem", message)
+        # どちらかの言語の名前が無効なベースアイテムは、そのビルドで実在しない扱いになる。
+        for language, invalid in (("ja", "異常アイテム"), ("en", "Invalid item"), ("ja", ""), ("en", "")):
+            with self.subTest(language=language, name=invalid):
+                renamed = {**baseitem, "id": 1, "name": {**baseitem["name"], language: invalid}}
+                ok, message = self.validate_with_baseitems(self.sample, [renamed])
+                self.assertFalse(ok, message)
+                self.assertIn("Reason: base item must be a valid baseitem", message)
+        # 同じ種別の別の項目が、それぞれの言語で有効なら、どちらのビルドでも実在する。
+        japanese_only = {**baseitem, "id": 1, "name": {**baseitem["name"], "en": "Invalid item"}}
+        english_only = {**baseitem, "id": 2, "name": {**baseitem["name"], "ja": "異常アイテム"}}
+        ok, message = self.validate_with_baseitems(self.sample, [japanese_only, english_only])
+        self.assertTrue(ok, message)
 
     def test_monrace_validation_checks_artifact_companion(self):
         # モンスター定義の検証は、参照先のアーティファクト定義にも同じ意味検証をかける。

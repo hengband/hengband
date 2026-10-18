@@ -269,6 +269,9 @@ TEST_CASE("Activation reader guard restores existing artifact definitions")
         CHECK(artifacts.empty());
         auto data = make_item();
         data["activate"] = "BA_FIRE_4";
+        // アーティファクトの元のベースアイテムは、先に読み込まれていなければならない。
+        REQUIRE(BaseitemReader(data).read() == PARSE_ERROR_NONE);
+        error_idx = -1;
         REQUIRE(ArtifactReader(data).read() == PARSE_ERROR_NONE);
         CHECK(artifacts.size() == 1);
     }

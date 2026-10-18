@@ -9,6 +9,8 @@
 #include "object-enchant/tr-types.h"
 #include "system/artifact/artifact-definition.h"
 #include "system/artifact/artifact-list.h"
+#include "system/baseitem/baseitem-definition.h"
+#include "system/baseitem/baseitem-list.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
 #include "view/display-messages.h"
@@ -110,6 +112,16 @@ int ArtifactReader::read() const
     if (auto err = info_set_string(get_json_value(this->art_data, "flavor"), artifact.text, false)) {
         msg_print(_("アーティファクトのフレーバーテキスト読込失敗。ID: '{}'。", "Failed to load flavor text of artifact. ID: '{}'."), error_idx);
         return err;
+    }
+    // 生成・鑑定では元のベースアイテムを種別・副種別から引き、無ければ例外で落ちるため、読み込み時に確かめる。
+    // ベースアイテムはアーティファクトより先に読み込まれる。種別・副種別の検索表は使わず、一覧を直接調べる。
+    const auto &baseitems = BaseitemList::get_instance();
+    const auto has_baseitem = std::any_of(baseitems.begin(), baseitems.end(), [&artifact](const BaseitemDefinition &baseitem) {
+        return baseitem.is_valid() && (baseitem.bi_key == artifact.bi_key);
+    });
+    if (!has_baseitem) {
+        msg_print(_("アーティファクトのベースアイテムが存在しない。ID: '{}'。", "Base item of artifact does not exist. ID: '{}'."), error_idx);
+        return PARSE_ERROR_INVALID_VALUE;
     }
 
     ArtifactList::get_instance().emplace(artifact_id, std::move(artifact));

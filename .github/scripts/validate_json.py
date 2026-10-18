@@ -222,8 +222,33 @@ def validate_baseitem_semantics(data: dict, schema_path: Path) -> None:
                 require_integer(allocation[field], path + ["allocations", allocation_index, field])
 
 
-def validate_artifact_semantics(data: dict) -> None:
-    """ArtifactReaderの整数型・ID順序・ダイスを検証する。"""
+INVALID_BASEITEM_NAMES = {"ja": "異常アイテム", "en": "Invalid item"}
+
+
+def collect_valid_baseitem_keys(baseitem_data: dict) -> set[tuple[int, int]]:
+    """日英どちらのビルドでも、有効なベースアイテムがある (種別, 副種別) を集める。"""
+    # BaseitemDefinition::is_valid() は、ビルドの言語の名前が空でも「異常アイテム」でもないものを有効とする。
+    # 言語ごとに有効な種別を集めて両方にあるものを返す（同じ種別の別の項目が、それぞれの言語で有効でもよい）。
+    keys_by_language = [
+        {
+            (baseitem["itemkind"]["type_value"], baseitem["itemkind"]["subtype_value"])
+            for baseitem in baseitem_data["baseitems"]
+            if baseitem["name"][language] not in ("", invalid)
+        }
+        for language, invalid in INVALID_BASEITEM_NAMES.items()
+    ]
+    return set.intersection(*keys_by_language)
+
+
+def load_valid_baseitem_keys(schema_path: Path, data_path: Path, registry: Registry) -> set[tuple[int, int]]:
+    """アーティファクトの検証には隣の候補ベースアイテム定義を優先し、なければ同梱定義を使う。"""
+    baseitem_data = load_validated_companion(schema_path, data_path, registry, "BaseitemDefinitions", "baseitem",
+                                             lambda data: validate_baseitem_semantics(data, schema_path))
+    return collect_valid_baseitem_keys(baseitem_data)
+
+
+def validate_artifact_semantics(data: dict, valid_baseitem_keys: set[tuple[int, int]] | None = None) -> None:
+    """ArtifactReaderの整数型・ID順序・ダイス・元のベースアイテムを検証する。"""
     for index, artifact in enumerate(data["artifacts"]):
         path = ["artifacts", index]
         for field in ("id", "parameter_value", "level", "rarity", "weight", "cost", "base_ac", "hit_bonus", "damage_bonus", "ac_bonus"):
@@ -236,6 +261,10 @@ def validate_artifact_semantics(data: dict) -> None:
             raise ValidationError("artifact IDs must start at 1 and continue without gaps", path=path + ["id"])
         if "base_dice" in artifact:
             require_reader_dice(artifact["base_dice"], path + ["base_dice"])
+        # ArtifactReaderは、元のベースアイテムが有効なベースアイテムに無ければ拒否する。
+        key = (artifact["base_item"]["type_value"], artifact["base_item"]["subtype_value"])
+        if valid_baseitem_keys is not None and key not in valid_baseitem_keys:
+            raise ValidationError("base item must be a valid baseitem", path=path + ["base_item"])
 
 
 # TownList::is_all_initialized() が名前を求める町（1〜VALID_TOWNS-1）。町1には別名も要る。
@@ -1090,6 +1119,8 @@ MAX_MONRACE_DICE_ROLL = 32767
 
 def validate_monrace_semantics(data: dict, schema_path: Path, data_path: Path, registry: Registry) -> None:
     """Check RaceReader's strict integers, ID order, dice limits and references."""
+    # 参照先として読むアーティファクト定義は、元のベースアイテムの実在までは確かめない。
+    # アーティファクト定義そのものの検証で確かめるため、ここではIDを集めるのに必要な検証にとどめる。
     artifact_data = load_validated_companion(schema_path, data_path, registry,
                                              "ArtifactDefinitions", "artifact", validate_artifact_semantics)
     defined_artifact_ids = {artifact["id"] for artifact in artifact_data["artifacts"]}
@@ -1176,7 +1207,7 @@ def validate_one(pair: tuple[Path, Path, dict], registry: Registry | None = None
             "VaultDefinitions.schema.json": lambda: validate_vault_semantics(data),
             "EgoDefinitions.schema.json": lambda: validate_ego_semantics(data, schema_path),
             "BaseitemDefinitions.schema.json": lambda: validate_baseitem_semantics(data, schema_path),
-            "ArtifactDefinitions.schema.json": lambda: validate_artifact_semantics(data),
+            "ArtifactDefinitions.schema.json": lambda: validate_artifact_semantics(data, load_valid_baseitem_keys(schema_path, data_path, registry)),
             "WildernessDefinition.schema.json": lambda: validate_wilderness_semantics(data, schema_path),
             "TownPreferences.schema.json": lambda: validate_town_preferences_semantics(data, schema_path),
             "TownDefinitionList.schema.json": lambda: validate_town_definition_list_semantics(data, schema_path, data_path, registry),
