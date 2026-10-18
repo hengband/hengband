@@ -405,10 +405,11 @@ std::map<AttributeType, std::string> gf_colors;
 /*!
  * @brief 万色表現用にランダムな色を選択する関数 /
  * Get a legal "multi-hued" color for drawing "spells"
+ * @param rng 乱数生成器
  * @param max 色IDの最大値
  * @return 選択した色ID
  */
-static TERM_COLOR mh_attr(int max)
+static TERM_COLOR mh_attr(xso::rng32 &rng, int max)
 {
     constexpr static auto colors = {
         TERM_RED,
@@ -429,16 +430,17 @@ static TERM_COLOR mh_attr(int max)
     };
 
     auto candidates = std::span(colors).first(max);
-    return rand_choice(get_external_rng(), candidates);
+    return rand_choice(rng, candidates);
 }
 
 /*!
  * @brief 魔法属性に応じたエフェクトの色を返す /
  * Return a color to use for the bolt/ball spells
+ * @param rng 乱数生成器
  * @param type 魔法属性
  * @return 対応する色ID
  */
-static TERM_COLOR spell_color(AttributeType type)
+static TERM_COLOR spell_color(xso::rng32 &rng, AttributeType type)
 {
     /* Check if A.B.'s new graphics should be used (rr9) */
     if ((ANGBAND_GRAF == "new") || (ANGBAND_GRAF == "ne2")) {
@@ -477,13 +479,13 @@ static TERM_COLOR spell_color(AttributeType type)
         case AttributeType::NETHER:
             return 0x07;
         case AttributeType::CHAOS:
-            return mh_attr(15);
+            return mh_attr(rng, 15);
         case AttributeType::DISENCHANT:
             return 0x05;
         case AttributeType::NEXUS:
             return 0x0C;
         case AttributeType::CONFUSION:
-            return mh_attr(4);
+            return mh_attr(rng, 4);
         case AttributeType::SOUND:
             return 0x09;
         case AttributeType::SHARDS:
@@ -515,7 +517,7 @@ static TERM_COLOR spell_color(AttributeType type)
         case AttributeType::DEATH_RAY:
             return 0x07;
         case AttributeType::NUKE:
-            return mh_attr(2);
+            return mh_attr(rng, 2);
         case AttributeType::DISINTEGRATE:
             return 0x05;
         case AttributeType::PSI:
@@ -557,7 +559,7 @@ static TERM_COLOR spell_color(AttributeType type)
         }
 
         /* Pick a random color */
-        auto c = rand_choice(get_external_rng(), color);
+        auto c = rand_choice(rng, color);
 
         /* Lookup this color */
         a = angband_strchr(color_char, c) - color_char;
@@ -578,12 +580,13 @@ static TERM_COLOR spell_color(AttributeType type)
 
 /*!
  * @brief 始点から終点にかけた方向毎にボルトのキャラクタを返す
+ * @param rng 色を選ぶ乱数生成器
  * @param pos_src 始点座標
  * @param pos_dst 終点座標
  * @param typ 魔法の効果属性
  * @return 方向キャラID
  */
-const DisplaySymbol &bolt_pict(const Pos2D &pos_src, const Pos2D &pos_dst, AttributeType typ)
+const DisplaySymbol &bolt_pict(xso::rng32 &rng, const Pos2D &pos_src, const Pos2D &pos_dst, AttributeType typ)
 {
     int base;
     if (pos_dst == pos_src) {
@@ -600,7 +603,7 @@ const DisplaySymbol &bolt_pict(const Pos2D &pos_src, const Pos2D &pos_dst, Attri
         base = 0x30; // Weird (*)
     }
 
-    const auto k = spell_color(typ);
+    const auto k = spell_color(rng, typ);
     return ds_bolt[base + k];
 }
 
