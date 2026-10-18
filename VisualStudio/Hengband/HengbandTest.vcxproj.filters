@@ -7,6 +7,9 @@
     <Filter Include="cmd-io">
       <UniqueIdentifier>{050a79fd-58ab-48f3-a881-f83ff7a488b7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="core">
+      <UniqueIdentifier>{4d7c328f-7398-52cb-9b9c-78920b0c1e67}</UniqueIdentifier>
+    </Filter>
     <Filter Include="flavor">
       <UniqueIdentifier>{740c8771-89d8-44fe-bd2c-adcff9c2cfea}</UniqueIdentifier>
     </Filter>
@@ -109,6 +112,9 @@
     <ClCompile Include="..\..\src\test\cmd-io\test-cmd-autopick.cpp">
       <Filter>cmd-io</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\test\core\test-asking-player.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\test\flavor\test-flavor-util.cpp">
       <Filter>flavor</Filter>
     </ClCompile>
@@ -191,6 +197,9 @@
       <Filter>io</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\test\io\test-input-context.cpp">
+      <Filter>io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\io\test-input-key-requester.cpp">
       <Filter>io</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\test\io\test-interpret-pref-file.cpp">
@@ -329,6 +338,9 @@
     <ClCompile Include="..\..\src\test\util\test-temporary-json-files.cpp">
       <Filter>util</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\test\view\test-display-messages.cpp">
+      <Filter>view</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\test\view\test-map-info-cache.cpp">
       <Filter>view</Filter>
     </ClCompile>
@@ -356,6 +368,7 @@
     <ClInclude Include="..\..\src\test\save\scoped-save-io.h">
       <Filter>save</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\test\scoped-input-term.h" />
     <ClInclude Include="..\..\src\test\scoped-restore.h" />
     <ClInclude Include="..\..\src\test\scoped-rng.h" />
     <ClInclude Include="..\..\src\test\scoped-vector-wrapper.h" />

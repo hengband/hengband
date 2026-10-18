@@ -17,6 +17,9 @@ autotools（Unix 系）では `make check`、Windows では Visual Studio の `H
 - 不要 → ユニットテストを書く
 - 必要 → [シナリオテスト](#テストしにくいコードをどう確かめるか)で確かめる。可能なら純粋関数として切り出してユニットテスト化する
 
+ただし、キー入力を待つ処理のうち、メモリ上の端末と `PlayerType` を用意するだけで呼べ、フロアやゲームデータを使わないものは、
+`test::ScopedInputTerm` を使ってユニットテストにできます（[入力を待つ処理をテストする](#入力を待つ処理をテストする)）。
+
 ---
 
 ## 実行方法
@@ -316,6 +319,34 @@ TEST_CASE("VaultReader keeps the existing vaults on a parse error")
 そのうえで、**必要な前提は各テストケースの中で自分で設定してください。**
 テストの実行順序や `--test-case=` での絞り込み実行に依存しないようにするためです。
 
+### 入力を待つ処理をテストする
+
+`input_string()` やメッセージの `-続く-`（`msg_print()`・`msg_erase()`）のようにキー入力を待つ処理は、`test/scoped-input-term.h` の `test::ScopedInputTerm` を使うと
+テストできます。メモリ上の端末と `PlayerType` を用意してゲームの端末として登録し、端末が入力を待つたびに、
+`expect()` で指定した入力待ちの文脈（`io/input-context.h`）が公開されているかを確かめて、指定したキーを 1 つずつ渡します。
+キーを使い切った後にさらに入力を待つと、例外でテストが失敗します（入力を待たないことは、`expect()` を呼ばずに処理を呼べば確かめられます）。
+スコープを抜けるときに、キーをすべて渡したことと、入力待ちの文脈が残っていないことを確かめます。
+キーは端末が入力を待つたびに 1 つずつ渡すので、待たずに後続のキーを読む処理（マクロのトリガーの照合など）は確かめられません。
+入力の処理が触るグローバル変数（`p_ptr`、`angband_terms`、入力のオプションなど）は、スコープを抜けるときに元へ戻します。
+ただし、コマンドの繰り返しの記録（`io/command-repeater.cpp`）とメッセージ行の表示位置など `view/display-messages.cpp` の内部の状態は
+外から戻せないため、戻しません。繰り返しの記録は `test::ScopedInputTerm` を作るたびに書き換わります。
+メッセージの表示を途中で終えるテストは、後のテストに影響することがあります。
+
+```cpp
+#include "core/asking-player.h"
+#include "test/scoped-input-term.h"
+
+TEST_CASE("example: input_string waits for a string")
+{
+    test::ScopedInputTerm term;
+    term.expect({ InputKind::STRING, "Text: ", StringInputDetails{ 20, "seed" } }, "\r");
+    CHECK(input_string("Text: ", 20, "seed", false) == "seed");
+}
+```
+
+テストケースごとに作り、同時に 2 つ作らないでください。フロアやゲームデータ（`lib/`）が要る処理は対象外で、
+シナリオテストで確かめてください。
+
 ## リンクについて
 
 テストは、ゲーム本体のソースをエントリポイントだけ除いてすべてまとめた静的ライブラリに
@@ -416,6 +447,7 @@ doctest や MSVC のユニットテストには登録しません。
 
 - **`PlayerType` やフロア、`term` を必要とするコードはユニットテストにできません。**
   冒頭の判断基準のとおり、シナリオテストで確かめてください。
+  例外は、メモリ上の端末で入力を待つ処理です（[入力を待つ処理をテストする](#入力を待つ処理をテストする)）。
 - **シナリオテストを自動実行する仕組みはありません。** `make check` と MSVC の CI が
   対象とするのは doctest によるユニットテストのみです。
 - **MSVC の CI がテストを実行するのは Debug 構成だけです。** 手元では 4 構成すべてで

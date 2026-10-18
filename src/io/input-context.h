@@ -31,6 +31,8 @@ enum class InputKind {
 struct StringInputDetails {
     int max_length; //!< 入力欄の位置と画面幅に合わせて調整した、内部文字コードでのバイト上限
     std::string initial; //!< 初期文字列 (max_length に合わせた切り詰めはしない)
+
+    bool operator==(const StringInputDetails &) const = default;
 };
 
 /*!
@@ -39,6 +41,8 @@ struct StringInputDetails {
 struct QuantityInputDetails {
     int max; //!< 数量の上限
     int initial; //!< 初期数量
+
+    bool operator==(const QuantityInputDetails &) const = default;
 };
 
 /*!
@@ -46,6 +50,8 @@ struct QuantityInputDetails {
  */
 struct CommandInputDetails {
     bool shopping; //!< 店のコマンドの入力か
+
+    bool operator==(const CommandInputDetails &) const = default;
 };
 
 //! 入力の種類ごとの詳細。詳細を持たない入力では std::monostate
