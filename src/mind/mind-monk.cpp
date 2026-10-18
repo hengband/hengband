@@ -13,6 +13,7 @@
 #include "term/z-form.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
+#include <fmt/format.h>
 
 static void set_stance(PlayerType *player_ptr, const MonkStanceType new_stance)
 {
@@ -26,7 +27,7 @@ static void set_stance(PlayerType *player_ptr, const MonkStanceType new_stance)
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.set_flag(StatusRecalculatingFlag::BONUS);
     rfu.set_flag(MainWindowRedrawingFlag::ACTION);
-    msg_format(_("%sの構えをとった。", "You assume the %s stance."), monk_stances[enum2i(new_stance) - 1].desc);
+    msg_print(_("{}の構えをとった。", "You assume the {} stance."), monk_stances[enum2i(new_stance) - 1].desc);
     pc.set_monk_stance(new_stance);
 }
 
@@ -44,7 +45,7 @@ bool choose_monk_stance(PlayerType *player_ptr)
     prt(_(" a) 構えをとく", " a) No form"), 2, 20);
     for (auto i = 0U; i < monk_stances.size(); i++) {
         if (player_ptr->lev >= monk_stances[i].min_level) {
-            const auto buf = format(" %c) %-12s  %s", I2A(i + 1), monk_stances[i].desc, monk_stances[i].info);
+            const auto buf = fmt::format(" {:c}) {:<12}  {}", I2A(i + 1), fmt::bytes(monk_stances[i].desc), monk_stances[i].info);
             prt(buf, 3 + i, 20);
         }
     }

@@ -108,7 +108,7 @@ bool draconian_breath(PlayerType *player_ptr)
     }
 
     stop_mouth(player_ptr);
-    msg_format(_("あなたは%sのブレスを吐いた。", "You breathe %s."), breath_type_description.data());
+    msg_print(_("あなたは{}のブレスを吐いた。", "You breathe {}."), breath_type_description);
     fire_breath(player_ptr, breath_type, dir, player_ptr->lev * 2, (player_ptr->lev / 15) + 1);
     return true;
 }

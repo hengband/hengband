@@ -312,7 +312,7 @@ void do_cmd_go_down(PlayerType *player_ptr)
         }
     } else {
         if (dungeon_id > DungeonId::WILDERNESS) {
-            msg_format(_("%sへ入った。", "You entered %s."), dungeon.text.data());
+            msg_print(_("{}へ入った。", "You entered {}."), dungeon.text);
         } else {
             if (is_echizen(player_ptr)) {
                 msg_print(_("なんだこの階段は！", "What's this STAIRWAY!"));

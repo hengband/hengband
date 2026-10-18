@@ -42,18 +42,18 @@ bool bless_weapon(PlayerType *player_ptr)
         can_disturb_blessing |= item->curse_flags.has(CurseTraitType::PERMA_CURSE);
         if (can_disturb_blessing) {
 #ifdef JP
-            msg_format("%sを覆う黒いオーラは祝福を跳ね返した！", item_name.data());
+            msg_print("{}を覆う黒いオーラは祝福を跳ね返した！", item_name);
 #else
-            msg_format("The black aura on %s %s disrupts the blessing!", ((i_idx >= 0) ? "your" : "the"), item_name.data());
+            msg_print("The black aura on {} {} disrupts the blessing!", ((i_idx >= 0) ? "your" : "the"), item_name);
 #endif
 
             return true;
         }
 
 #ifdef JP
-        msg_format("%s から邪悪なオーラが消えた。", item_name.data());
+        msg_print("{} から邪悪なオーラが消えた。", item_name);
 #else
-        msg_format("A malignant aura leaves %s %s.", ((i_idx >= 0) ? "your" : "the"), item_name.data());
+        msg_print("A malignant aura leaves {} {}.", ((i_idx >= 0) ? "your" : "the"), item_name);
 #endif
         item->curse_flags.clear();
         item->set_identification_flag(IdentificationFlag::SENSE);
@@ -72,18 +72,18 @@ bool bless_weapon(PlayerType *player_ptr)
      */
     if (item_flags.has(TR_BLESSED)) {
 #ifdef JP
-        msg_format("%s は既に祝福されている。", item_name.data());
+        msg_print("{} は既に祝福されている。", item_name);
 #else
-        msg_format("%s %s %s blessed already.", ((i_idx >= 0) ? "Your" : "The"), item_name.data(), ((item->number > 1) ? "were" : "was"));
+        msg_print("{} {} {} blessed already.", ((i_idx >= 0) ? "Your" : "The"), item_name, ((item->number > 1) ? "were" : "was"));
 #endif
         return true;
     }
 
     if (!(item->is_fixed_or_random_artifact() || item->is_ego()) || one_in_(3)) {
 #ifdef JP
-        msg_format("%sは輝いた！", item_name.data());
+        msg_print("{}は輝いた！", item_name);
 #else
-        msg_format("%s %s shine%s!", ((i_idx >= 0) ? "Your" : "The"), item_name.data(), ((item->number > 1) ? "" : "s"));
+        msg_print("{} {} shine{}!", ((i_idx >= 0) ? "Your" : "The"), item_name, ((item->number > 1) ? "" : "s"));
 #endif
         item->art_flags.set(TR_BLESSED);
         item->discount = 99;
@@ -125,9 +125,9 @@ bool bless_weapon(PlayerType *player_ptr)
             msg_print(_("周囲が凡庸な雰囲気で満ちた...", "There is a static feeling in the air..."));
 
 #ifdef JP
-            msg_format("%s は劣化した！", item_name.data());
+            msg_print("{} は劣化した！", item_name);
 #else
-            msg_format("%s %s %s disenchanted!", ((i_idx >= 0) ? "Your" : "The"), item_name.data(), ((item->number > 1) ? "were" : "was"));
+            msg_print("{} {} {} disenchanted!", ((i_idx >= 0) ? "Your" : "The"), item_name, ((item->number > 1) ? "were" : "was"));
 #endif
         }
     }

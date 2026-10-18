@@ -66,14 +66,14 @@ bool psychometry(PlayerType *player_ptr)
     item_feel_type feel = pseudo_value_check_heavy(item.get());
     const auto item_name = describe_flavor(player_ptr, *item, (OD_OMIT_PREFIX | OD_NAME_ONLY));
     if (!feel) {
-        msg_format(_("%sからは特に変わった事は感じとれなかった。", "You do not perceive anything unusual about the %s."), item_name.data());
+        msg_print(_("{}からは特に変わった事は感じとれなかった。", "You do not perceive anything unusual about the {}."), item_name);
         return true;
     }
 
 #ifdef JP
-    msg_format("%sは%sという感じがする...", item_name.data(), game_inscriptions[feel]);
+    msg_print("{}は{}という感じがする...", item_name, game_inscriptions[feel]);
 #else
-    msg_format("You feel that the %s %s %s...", item_name.data(), ((item->number == 1) ? "is" : "are"), game_inscriptions[feel]);
+    msg_print("You feel that the {} {} {}...", item_name, ((item->number == 1) ? "is" : "are"), game_inscriptions[feel]);
 #endif
 
     item->set_identification_flag(IdentificationFlag::SENSE);

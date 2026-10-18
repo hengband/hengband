@@ -21,6 +21,8 @@
 #include "timed-effect/timed-effects.h"
 #include "util/enum-converter.h"
 #include "util/int-char-converter.h"
+#include "util/string-processor.h"
+#include <fmt/format.h>
 
 MindPowerGetter::MindPowerGetter(PlayerType *player_ptr)
     : player_ptr(player_ptr)
@@ -60,14 +62,12 @@ bool MindPowerGetter::get_mind_power(SPELL_IDX *sn, bool only_browse)
         }
     }
 
-    std::string prompt;
-    if (only_browse) {
-        constexpr auto fmt = _("(%s^ %c-%c, '*'で一覧, ESC) どの%sについて知りますか？", "(%s^s %c-%c, *=List, ESC=exit) Use which %s? ");
-        prompt = format(fmt, this->mind_description, I2A(0), I2A(this->num - 1), this->mind_description);
-    } else {
-        constexpr auto fmt = _("(%s^ %c-%c, '*'で一覧, ESC) どの%sを使いますか？", "(%s^s %c-%c, *=List, ESC=exit) Use which %s? ");
-        prompt = format(fmt, this->mind_description, I2A(0), I2A(this->num - 1), this->mind_description);
-    }
+    constexpr auto fmt_browse = _("({} {:c}-{:c}, '*'で一覧, ESC) どの{}について知りますか？", "({}s {:c}-{:c}, *=List, ESC=exit) Use which {}? ");
+    constexpr auto fmt_use = _("({} {:c}-{:c}, '*'で一覧, ESC) どの{}を使いますか？", "({}s {:c}-{:c}, *=List, ESC=exit) Use which {}? ");
+    const auto desc_upcased = str_upcase_first(this->mind_description);
+    const auto first_letter = I2A(0);
+    const auto last_letter = I2A(this->num - 1);
+    const auto prompt = only_browse ? fmt::format(fmt_browse, desc_upcased, first_letter, last_letter, this->mind_description) : fmt::format(fmt_use, desc_upcased, first_letter, last_letter, this->mind_description);
 
     if (use_menu && !only_browse) {
         screen_save();
@@ -234,8 +234,7 @@ bool MindPowerGetter::display_minds_chance(const bool only_browse)
 
         prt("", y, x);
         put_str(_("名前", "Name"), y, x + 5);
-        put_str(format(_("Lv   %s   失率 効果", "Lv   %s   Fail Info"),
-                    ((this->use_mind == MindKindType::BERSERKER) || (this->use_mind == MindKindType::NINJUTSU)) ? "HP" : "MP"),
+        put_str(fmt::format(_("Lv   {}   失率 効果", "Lv   {}   Fail Info"), ((this->use_mind == MindKindType::BERSERKER) || (this->use_mind == MindKindType::NINJUTSU)) ? "HP" : "MP"),
             y, x + 35);
         display_each_mind_chance(only_browse);
         prt("", y + this->index + 1, x);
@@ -272,11 +271,10 @@ void MindPowerGetter::display_each_mind_chance(bool only_browse)
                 psi_desc = "     ";
             }
         } else {
-            psi_desc = format("  %c) ", I2A(this->index));
+            psi_desc = fmt::format("  {:c}) ", I2A(this->index));
         }
 
-        psi_desc.append(format("%-30s%2d %4d%s %3d%%%s", this->spell->name, this->spell->min_lev, mana_cost,
-            (((this->use_mind == MindKindType::MINDCRAFTER) && (this->index == 13)) ? _("～", "~ ") : "  "), chance, comment.data()));
+        psi_desc.append(fmt::format("{:<30}{:2} {:4}{} {:3}%{}", fmt::bytes(this->spell->name), this->spell->min_lev, mana_cost, (((this->use_mind == MindKindType::MINDCRAFTER) && (this->index == 13)) ? _("～", "~ ") : "  "), chance, comment));
         prt(psi_desc, y + this->index + 1, x);
         bot_rows.push_back({ I2A(this->index), 0, this->spell->name, this->spell->min_lev, mana_cost, chance, comment });
     }

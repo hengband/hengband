@@ -68,6 +68,7 @@
 #include "util/enum-converter.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
+#include <fmt/format.h>
 #include <iterator>
 #include <unordered_set>
 
@@ -107,23 +108,23 @@ static std::string mane_info(PlayerType *player_ptr, MonsterAbilityType power, i
     PLAYER_LEVEL plev = player_ptr->lev;
 
     if (RF_ABILITY_DAMAGE_MASK.has(power)) {
-        return format(" %s%d", KWD_DAM, (int)dam);
+        return fmt::format(" {}{}", KWD_DAM, dam);
     }
     switch (power) {
     case MonsterAbilityType::DRAIN_MANA:
-        return format(" %sd%d+%d", KWD_HEAL, plev * 3, plev);
+        return fmt::format(" {}d{}+{}", KWD_HEAL, plev * 3, plev);
     case MonsterAbilityType::HASTE:
-        return format(" %sd%d+%d", KWD_DURATION, 20 + plev, plev);
+        return fmt::format(" {}d{}+{}", KWD_DURATION, 20 + plev, plev);
     case MonsterAbilityType::HEAL:
-        return format(" %s%d", KWD_HEAL, plev * 6);
+        return fmt::format(" {}{}", KWD_HEAL, plev * 6);
     case MonsterAbilityType::INVULNER:
-        return format(" %sd7+7", KWD_DURATION);
+        return fmt::format(" {}d7+7", KWD_DURATION);
     case MonsterAbilityType::BLINK:
-        return format(" %s10", KWD_SPHERE);
+        return fmt::format(" {}10", KWD_SPHERE);
     case MonsterAbilityType::TPORT:
-        return format(" %s%d", KWD_SPHERE, plev * 5);
+        return fmt::format(" {}{}", KWD_SPHERE, plev * 5);
     case MonsterAbilityType::RAISE_DEAD:
-        return format(" %s5", KWD_SPHERE);
+        return fmt::format(" {}5", KWD_SPHERE);
     default:
         return std::string();
     }
@@ -172,8 +173,8 @@ static int get_mane_power(PlayerType *player_ptr, int *sn, bool baigaesi)
     num = mane_data->mane_list.size();
 
     /* Build a prompt (accept all spells) */
-    constexpr auto fmt = _("(%c-%c, '*'で一覧, ESC) どの%sをまねますか？", "(%c-%c, *=List, ESC=exit) Use which %s? ");
-    const auto prompt = format(fmt, I2A(0), I2A(num - 1), p);
+    constexpr auto fmt = _("({:c}-{:c}, '*'で一覧, ESC) どの{}をまねますか？", "({:c}-{:c}, *=List, ESC=exit) Use which {}? ");
+    const auto prompt = fmt::format(fmt, I2A(0), I2A(num - 1), p);
 
     char choice = always_show_list ? ESCAPE : '\1';
     while (!flag) {
@@ -471,19 +472,19 @@ static bool use_mane(PlayerType *player_ptr, MonsterAbilityType spell)
                 if (is_original_ap_and_seen(player_ptr, monster)) {
                     monrace.r_resistance_flags.set(MonsterResistanceType::RESIST_TELEPORT);
                 }
-                msg_format(_("%sには効果がなかった！", "%s is unaffected!"), m_name.data());
+                msg_print(_("{}には効果がなかった！", "{} is unaffected!"), m_name);
 
                 break;
             } else if (monrace.level > randint1(100)) {
                 if (is_original_ap_and_seen(player_ptr, monster)) {
                     monrace.r_resistance_flags.set(MonsterResistanceType::RESIST_TELEPORT);
                 }
-                msg_format(_("%sには耐性がある！", "%s resists!"), m_name.data());
+                msg_print(_("{}には耐性がある！", "{} resists!"), m_name);
 
                 break;
             }
         }
-        msg_format(_("%sを引き戻した。", "You command %s to return."), m_name.data());
+        msg_print(_("{}を引き戻した。", "You command {} to return."), m_name);
 
         teleport_monster_to(player_ptr, grid_target.m_idx, player_ptr->y, player_ptr->x, 100, TELEPORT_PASSIVE);
         break;

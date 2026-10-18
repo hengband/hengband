@@ -49,8 +49,10 @@
 #include "term/screen-processor.h"
 #include "util/bit-flags-calculator.h"
 #include "util/dice.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#include <fmt/format.h>
 #ifdef JP
 #else
 #include "player-info/equipment-info.h"
@@ -134,12 +136,12 @@ tl::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type sp
             }
 
             const auto item_name = describe_flavor(player_ptr, *item, OD_NAME_ONLY);
-            if (!input_check(format(_("本当に %s を呪いますか？", "Do you curse %s, really?"), item_name.data()))) {
+            if (!input_check(fmt::format(_("本当に {} を呪いますか？", "Do you curse {}, really?"), item_name))) {
                 return "";
             }
 
             if (!one_in_(3) && (item->is_fixed_or_random_artifact() || item->get_flags().has(TR_BLESSED))) {
-                msg_format(_("%s は呪いを跳ね返した。", "%s resists the effect."), item_name.data());
+                msg_print(_("{} は呪いを跳ね返した。", "{} resists the effect."), item_name);
                 if (one_in_(3)) {
                     if (item->to_d > 0) {
                         item->to_d -= randint1(3) % 2;
@@ -159,11 +161,11 @@ tl::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type sp
                             item->to_a = 0;
                         }
                     }
-                    msg_format(_("%s は劣化してしまった。", "Your %s was disenchanted!"), item_name.data());
+                    msg_print(_("{} は劣化してしまった。", "Your {} was disenchanted!"), item_name);
                 }
             } else {
                 int curse_rank = 0;
-                msg_format(_("恐怖の暗黒オーラがあなたの%sを包み込んだ！", "A terrible black aura blasts your %s!"), item_name.data());
+                msg_print(_("恐怖の暗黒オーラがあなたの{}を包み込んだ！", "A terrible black aura blasts your {}!"), item_name);
                 item->curse_flags.set(CurseTraitType::CURSED);
 
                 if (item->is_fixed_or_random_artifact() || item->is_ego()) {
@@ -235,7 +237,7 @@ tl::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type sp
                 }
 
                 if (AngbandWorld::get_instance().wizard) {
-                    msg_format(_("%d点のダメージを返した。", "You return %d damage."), power);
+                    msg_print(_("{}点のダメージを返した。", "You return {} damage."), power);
                 }
 
                 spell_hex.set_revenge_type(SpellHexRevengeType::NONE);
@@ -306,7 +308,7 @@ tl::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type sp
 #ifdef JP
             msg_print("武器の輝きが消え去った。");
 #else
-            msg_format("Your weapon%s.", (empty_hands(player_ptr, false)) ? " no longer glows" : "s no longer glow");
+            msg_print("Your weapon{}.", (empty_hands(player_ptr, false)) ? " no longer glows" : "s no longer glow");
 #endif
         }
         break;
@@ -392,12 +394,12 @@ tl::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type sp
 
             item = player_ptr->inventory[i_idx];
             const auto item_name = describe_flavor(player_ptr, *item, OD_NAME_ONLY);
-            if (!input_check(format(_("本当に %s を呪いますか？", "Do you curse %s, really?"), item_name.data()))) {
+            if (!input_check(fmt::format(_("本当に {} を呪いますか？", "Do you curse {}, really?"), item_name))) {
                 return "";
             }
 
             if (!one_in_(3) && (item->is_fixed_or_random_artifact() || item->get_flags().has(TR_BLESSED))) {
-                msg_format(_("%s は呪いを跳ね返した。", "%s resists the effect."), item_name.data());
+                msg_print(_("{} は呪いを跳ね返した。", "{} resists the effect."), item_name);
                 if (one_in_(3)) {
                     if (item->to_d > 0) {
                         item->to_d -= randint1(3) % 2;
@@ -417,11 +419,11 @@ tl::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type sp
                             item->to_a = 0;
                         }
                     }
-                    msg_format(_("%s は劣化してしまった。", "Your %s was disenchanted!"), item_name.data());
+                    msg_print(_("{} は劣化してしまった。", "Your {} was disenchanted!"), item_name);
                 }
             } else {
                 int curse_rank = 0;
-                msg_format(_("恐怖の暗黒オーラがあなたの%sを包み込んだ！", "A terrible black aura blasts your %s!"), item_name.data());
+                msg_print(_("恐怖の暗黒オーラがあなたの{}を包み込んだ！", "A terrible black aura blasts your {}!"), item_name);
                 item->curse_flags.set(CurseTraitType::CURSED);
 
                 if (item->is_fixed_or_random_artifact() || item->is_ego()) {
@@ -549,7 +551,7 @@ tl::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type sp
 
             if (!flag) {
                 const auto &spell_name = PlayerRealm::get_spell_name(RealmType::HEX, HEX_RESTORE);
-                msg_format(_("%sの呪文の詠唱をやめた。", "Finish casting '%s^'."), spell_name.data());
+                msg_print(_("{}の呪文の詠唱をやめた。", "Finish casting '{}'."), str_upcase_first(spell_name));
                 SpellHex spell_hex(player_ptr);
                 spell_hex.reset_casting_flag(HEX_RESTORE);
                 if (!spell_hex.is_spelling_any()) {
@@ -627,7 +629,7 @@ tl::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type sp
 #ifdef JP
             msg_print("武器の渇望が消え去った。");
 #else
-            msg_format("Your weapon%s less thirsty now.", (empty_hands(player_ptr, false)) ? " is" : "s are");
+            msg_print("Your weapon{} less thirsty now.", (empty_hands(player_ptr, false)) ? " is" : "s are");
 #endif
         }
         break;
@@ -711,7 +713,7 @@ tl::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type sp
 
             spell_hex.set_revenge_type(SpellHexRevengeType::REVENGE);
             spell_hex.set_revenge_turn(r, true);
-            msg_format(_("あなたは復讐を宣告した。あと %d ターン。", "You declare your revenge. %d turns left."), r);
+            msg_print(_("あなたは復讐を宣告した。あと {} ターン。", "You declare your revenge. {} turns left."), r);
             should_continue = false;
         }
 
@@ -730,7 +732,7 @@ tl::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type sp
                     fire_ball(player_ptr, AttributeType::HELL_FIRE, dir, power, 1);
 
                     if (AngbandWorld::get_instance().wizard) {
-                        msg_format(_("%d点のダメージを返した。", "You return %d damage."), power);
+                        msg_print(_("{}点のダメージを返した。", "You return {} damage."), power);
                     }
                 } else {
                     msg_print(_("復讐する気が失せた。", "You are not in the mood for revenge."));

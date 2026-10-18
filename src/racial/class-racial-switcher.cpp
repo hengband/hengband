@@ -5,6 +5,7 @@
 #include "racial/racial-util.h"
 #include "realm/realm-types.h"
 #include "system/player-type-definition.h"
+#include <fmt/format.h>
 
 void switch_class_racial(PlayerType *player_ptr, rc_type *rc_ptr)
 {
@@ -34,7 +35,7 @@ void switch_class_racial(PlayerType *player_ptr, rc_type *rc_ptr)
     case PlayerClassType::MAGE:
     case PlayerClassType::SORCERER:
         rpi = rpi_type(_("魔力食い", "Eat Magic"));
-        rpi.info = format("%s%d", KWD_POWER, rc_ptr->lvl * 2);
+        rpi.info = fmt::format("{}{}", KWD_POWER, rc_ptr->lvl * 2);
         rpi.text = _("魔法道具から魔力を吸収してMPを回復する。", "Absorbs mana from a magic device to heal your SP.");
         rpi.min_level = 25;
         rpi.cost = 1;
@@ -53,7 +54,7 @@ void switch_class_racial(PlayerType *player_ptr, rc_type *rc_ptr)
             rc_ptr->add_power(rpi, RC_IDX_CLASS_0);
         } else {
             rpi = rpi_type(_("召魂", "Evocation"));
-            rpi.info = format("%s%d", KWD_POWER, rc_ptr->lvl * 4);
+            rpi.info = fmt::format("{}{}", KWD_POWER, rc_ptr->lvl * 4);
             rpi.text = _("視界内の全てのモンスターにダメージを与え、恐怖させ、遠くへ飛ばす。", "Deals damage to all monster in your sight, makes them scared and tereports then away.");
             rpi.min_level = 42;
             rpi.cost = 40;
@@ -65,7 +66,7 @@ void switch_class_racial(PlayerType *player_ptr, rc_type *rc_ptr)
         break;
     case PlayerClassType::ROGUE:
         rpi = rpi_type(_("ヒット＆アウェイ", "Hit and Away"));
-        rpi.info = format("%s%d", KWD_SPHERE, 30);
+        rpi.info = fmt::format("{}{}", KWD_SPHERE, 30);
         rpi.text = _("対象のモンスターを攻撃したあと短距離テレポートする。", "Attacks a monster then tereports you a short range.");
         rpi.min_level = 8;
         rpi.cost = 12;
@@ -86,7 +87,7 @@ void switch_class_racial(PlayerType *player_ptr, rc_type *rc_ptr)
     case PlayerClassType::PALADIN:
         if (PlayerRealm(player_ptr).realm1().is_good_attribute()) {
             rpi = rpi_type(_("ホーリー・ランス", "Holy Lance"));
-            rpi.info = format("%s%d", KWD_DAM, rc_ptr->lvl * 3);
+            rpi.info = fmt::format("{}{}", KWD_DAM, rc_ptr->lvl * 3);
             rpi.text = _("聖なる炎のビームを放つ。", "Fires a beam of holy fire.");
             rpi.min_level = 30;
             rpi.cost = 30;
@@ -95,7 +96,7 @@ void switch_class_racial(PlayerType *player_ptr, rc_type *rc_ptr)
             rc_ptr->add_power(rpi, RC_IDX_CLASS_0);
         } else {
             rpi = rpi_type(_("ヘル・ランス", "Hell Lance"));
-            rpi.info = format("%s%d", KWD_DAM, rc_ptr->lvl * 3);
+            rpi.info = fmt::format("{}{}", KWD_DAM, rc_ptr->lvl * 3);
             rpi.text = _("地獄の業火のビームを放つ。", "Fires a beam of hell fire.");
             rpi.min_level = 30;
             rpi.cost = 30;
@@ -124,7 +125,7 @@ void switch_class_racial(PlayerType *player_ptr, rc_type *rc_ptr)
         break;
     case PlayerClassType::CHAOS_WARRIOR:
         rpi = rpi_type(_("幻惑の光", "Confusing Light"));
-        rpi.info = format("%s%d", KWD_POWER, rc_ptr->lvl * 4);
+        rpi.info = fmt::format("{}{}", KWD_POWER, rc_ptr->lvl * 4);
         rpi.text = _("周辺のモンスターを減速・朦朧・混乱・朦朧・恐怖・睡眠させようとする。抵抗されると無効。",
             "Tries to make all monsters in your sight slowed, stunned, confused, scared, sleeped.");
         rpi.min_level = 40;
@@ -153,7 +154,7 @@ void switch_class_racial(PlayerType *player_ptr, rc_type *rc_ptr)
     case PlayerClassType::MINDCRAFTER:
     case PlayerClassType::FORCETRAINER:
         rpi = rpi_type(_("明鏡止水", "Clear Mind"));
-        rpi.info = format("%s%d", KWD_MANA, 3 + rc_ptr->lvl / 20);
+        rpi.info = fmt::format("{}{}", KWD_MANA, 3 + rc_ptr->lvl / 20);
         rpi.text = _("精神を集中してMPを少し回復する。", "Concentrates deeply to heal your SP a little.");
         rpi.min_level = 15;
         rpi.cost = 0;
@@ -189,7 +190,7 @@ void switch_class_racial(PlayerType *player_ptr, rc_type *rc_ptr)
         break;
     case PlayerClassType::BEASTMASTER:
         rpi = rpi_type(_("生物支配", "Dominate a Living Thing"));
-        rpi.info = format("%s%d", KWD_POWER, rc_ptr->lvl);
+        rpi.info = fmt::format("{}{}", KWD_POWER, rc_ptr->lvl);
         rpi.text = _("1体のモンスターをペットにする。抵抗されると無効。", "Attempts to charm a monster.");
         rpi.min_level = 1;
         rpi.cost = (player_ptr->lev + 3) / 4;
@@ -198,7 +199,7 @@ void switch_class_racial(PlayerType *player_ptr, rc_type *rc_ptr)
         rc_ptr->add_power(rpi, RC_IDX_CLASS_0);
 
         rpi = rpi_type(_("真・生物支配", "Dominate Living Things"));
-        rpi.info = format("%s%d", KWD_POWER, rc_ptr->lvl);
+        rpi.info = fmt::format("{}{}", KWD_POWER, rc_ptr->lvl);
         rpi.text = _("周辺のモンスターをペットにする。抵抗されると無効。", "Attempts to charm a monsters in your sight.");
         rpi.min_level = 30;
         rpi.cost = (player_ptr->lev + 20) / 2;
@@ -306,7 +307,7 @@ void switch_class_racial(PlayerType *player_ptr, rc_type *rc_ptr)
         rc_ptr->add_power(rpi, RC_IDX_CLASS_0);
 
         rpi = rpi_type(_("静水", "Mirror Concentration"));
-        rpi.info = format("%s%d", KWD_MANA, 5 + rc_ptr->lvl * rc_ptr->lvl / 100);
+        rpi.info = fmt::format("{}{}", KWD_MANA, 5 + rc_ptr->lvl * rc_ptr->lvl / 100);
         rpi.text = _("精神を集中してMPを少し回復する。", "Concentrates deeply to heal your SP a little.");
         rpi.min_level = 30;
         rpi.cost = 0;
@@ -334,7 +335,7 @@ void switch_class_racial(PlayerType *player_ptr, rc_type *rc_ptr)
         break;
     case PlayerClassType::ELEMENTALIST:
         rpi = rpi_type(_("明鏡止水", "Clear Mind"));
-        rpi.info = format("%s%d", KWD_MANA, 3 + rc_ptr->lvl / 20);
+        rpi.info = fmt::format("{}{}", KWD_MANA, 3 + rc_ptr->lvl / 20);
         rpi.text = _("精神を集中してMPを少し回復する。", "Concentrates deeply to heal your SP a little.");
         rpi.min_level = 15;
         rpi.cost = 0;

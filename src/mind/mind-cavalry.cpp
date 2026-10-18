@@ -38,7 +38,7 @@ bool rodeo(PlayerType *player_ptr)
     auto &monster = player_ptr->current_floor_ptr->m_list[player_ptr->riding];
     const auto &monrace = monster.get_monrace();
     const auto m_name = monster_desc(player_ptr, monster, 0);
-    msg_format(_("%sに乗った。", "You ride on %s."), m_name.data());
+    msg_print(_("{}に乗った。", "You ride on {}."), m_name);
 
     if (monster.is_pet()) {
         return true;
@@ -55,10 +55,10 @@ bool rodeo(PlayerType *player_ptr)
     if ((randint1(player_ptr->skill_exp[PlayerSkillKindType::RIDING] / 120 + player_ptr->lev * 2 / 3) > rlev) && one_in_(2) &&
         !player_ptr->current_floor_ptr->inside_arena && !AngbandSystem::get_instance().is_phase_out() && monrace.misc_flags.has_not(MonsterMiscType::GUARDIAN) && monrace.misc_flags.has_not(MonsterMiscType::QUESTOR) &&
         (rlev < player_ptr->lev * 3 / 2 + randint0(player_ptr->lev / 5))) {
-        msg_format(_("%sを手なずけた。", "You tame %s."), m_name.data());
+        msg_print(_("{}を手なずけた。", "You tame {}."), m_name);
         set_pet(player_ptr, monster);
     } else {
-        msg_format(_("%sに振り落とされた！", "You have been thrown off by %s."), m_name.data());
+        msg_print(_("{}に振り落とされた！", "You have been thrown off by {}."), m_name);
         process_fall_off_horse(player_ptr, 1, true);
 
         /* 落馬処理に失敗してもとにかく乗馬解除 */

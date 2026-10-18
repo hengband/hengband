@@ -26,6 +26,7 @@
 #include "target/target-getter.h"
 #include "util/dice.h"
 #include "view/display-messages.h"
+#include <fmt/format.h>
 
 /*!
  * @brief カオス領域魔法の各処理を行う
@@ -447,7 +448,7 @@ tl::optional<std::string> do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spell
 
     case 27: {
         if (info) {
-            return format("%s150 / 250", KWD_DAM);
+            return fmt::format("{}150 / 250", KWD_DAM);
         }
 
         if (cast) {
@@ -501,7 +502,7 @@ tl::optional<std::string> do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spell
 
     case 31: {
         if (info) {
-            return format("%s3 * 175", KWD_DAM);
+            return fmt::format("{}3 * 175", KWD_DAM);
         }
 
         if (cast) {
