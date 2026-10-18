@@ -63,8 +63,9 @@ static void print_monspell_message(PlayerType *player_ptr, MONSTER_IDX m_idx, MO
     const auto m_name = monster_name(player_ptr, m_idx);
     const auto m_name_upcased = str_upcase_first(m_name);
     const auto t_name = monster_name(player_ptr, t_idx);
+    const auto t_name_upcased = str_upcase_first(t_name);
     const auto m_poss = monster_desc(player_ptr, monster, MD_PRON_VISIBLE | MD_POSSESSIVE);
-    msg_print(fmt::vformat(fmt.get(), fmt::make_format_args(m_name_upcased, t_name, m_name, m_poss)));
+    msg_print(fmt::vformat(fmt.get(), fmt::make_format_args(m_name_upcased, t_name, m_name, m_poss, t_name_upcased)));
 }
 
 /*!
