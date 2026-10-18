@@ -289,11 +289,10 @@ static void dump_aux_arena(FILE *fff)
         return;
     }
 
-    const auto victory_count = current_entry > max_entries ? max_entries : current_entry;
 #ifdef JP
-    fmt::println(fff, "\n 闘技場: {:2}勝", victory_count);
+    fmt::println(fff, "\n 闘技場: {:2}勝", current_entry);
 #else
-    fmt::println(fff, "\n Arena: {:2} {}", victory_count, (current_entry > 1) ? "Victories" : "Victory");
+    fmt::println(fff, "\n Arena: {:2} {}", current_entry, (current_entry == 1) ? "Victory" : "Victories");
 #endif
     fmt::print(fff, "\n");
 }

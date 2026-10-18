@@ -104,8 +104,11 @@ static void dump_winner_classes(FILE *fff)
 {
     const auto &igd = InnerGameData::get_instance();
     const int n = igd.get_won_classes_count();
-    std::string ss = n > 1 ? _("", "s") : "";
-    fmt::println(fff, _("*勝利*済みの職業{} : {}", "Class of *Winner{}* : {}"), ss, n);
+#ifdef JP
+    fmt::println(fff, "*勝利*済みの職業 : {}", n);
+#else
+    fmt::println(fff, "Class{} of *Winner* : {}", (n == 1) ? "" : "es", n);
+#endif
     if (n == 0) {
         return;
     }
