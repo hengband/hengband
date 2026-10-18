@@ -7,6 +7,7 @@
 #include <string>
 #include <unordered_map>
 #include <utility>
+#include <xoshiro.h>
 
 constexpr auto MAX_TERM_DATA = 8; //!< Maximum number of terminals
 constexpr auto TERM_DEFAULT_COLS = 80;
@@ -48,4 +49,4 @@ extern TERM_COLOR color_char_to_attr(char c);
 extern const std::unordered_map<std::string_view, TERM_COLOR> color_list;
 
 class DisplaySymbol;
-const DisplaySymbol &bolt_pict(const Pos2D &pos_src, const Pos2D &pos_dst, AttributeType typ);
+const DisplaySymbol &bolt_pict(xso::rng32 &rng, const Pos2D &pos_src, const Pos2D &pos_dst, AttributeType typ);

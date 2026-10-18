@@ -413,3 +413,55 @@ TEST_CASE("Rand_external_state_init with a seed reproduces the external RNG sequ
     Rand_external_state_init();
     CHECK(get_rng_state(get_external_rng()) != seeded_state);
 }
+
+TEST_CASE("make_keyed_rng returns the same sequence for the same seed, purpose and keys")
+{
+    const auto restore_rng = test::scoped_rng();
+    const auto external_rng_backup = get_external_rng();
+    // make_keyed_rng() のシードは実行毎に異なる値に戻し、外部の乱数生成器は元の状態に戻す
+    const auto restore_external_rng = util::make_finalizer([external_rng_backup] {
+        Rand_external_state_init();
+        get_external_rng() = external_rng_backup;
+    });
+
+    const auto draw_sequence = [](KeyedRngPurpose purpose, std::initializer_list<int> keys) {
+        auto rng = make_keyed_rng(purpose, keys);
+        return generate(16, [&rng] { return rng(); });
+    };
+
+    constexpr uint32_t seed = 12345;
+    Rand_external_state_init(seed);
+    const auto first = draw_sequence(KeyedRngPurpose::MAP_SYMBOL, { 100, 5, 7 });
+
+    SUBCASE("the same seed, purpose and keys give the same sequence")
+    {
+        CHECK(draw_sequence(KeyedRngPurpose::MAP_SYMBOL, { 100, 5, 7 }) == first);
+        Rand_external_state_init(seed);
+        CHECK(draw_sequence(KeyedRngPurpose::MAP_SYMBOL, { 100, 5, 7 }) == first);
+    }
+
+    SUBCASE("a different key, order of keys, purpose or seed gives a different sequence")
+    {
+        CHECK(draw_sequence(KeyedRngPurpose::MAP_SYMBOL, { 101, 5, 7 }) != first);
+        CHECK(draw_sequence(KeyedRngPurpose::MAP_SYMBOL, { 100, 7, 5 }) != first);
+        CHECK(draw_sequence(KeyedRngPurpose::BOLT_COLOR, { 100, 5, 7 }) != first);
+        Rand_external_state_init(seed + 1);
+        CHECK(draw_sequence(KeyedRngPurpose::MAP_SYMBOL, { 100, 5, 7 }) != first);
+    }
+
+    SUBCASE("the sequence is platform-independent")
+    {
+        auto rng = make_keyed_rng(KeyedRngPurpose::MAP_SYMBOL, { 100, 5, 7 });
+        const std::vector<int> expected{ 66, 53, 1, 24, 37, 23, 62, 56, 88, 67, 100, 49, 56, 92, 27, 30, 90, 68, 26, 89 };
+        CHECK(generate(20, [&rng] { return rand_range(rng, 1, 100); }) == expected);
+    }
+
+    SUBCASE("neither the game RNG nor the external RNG is consumed")
+    {
+        const auto game_rng_state = get_rng_state();
+        const auto external_rng_state = get_rng_state(get_external_rng());
+        std::ignore = draw_sequence(KeyedRngPurpose::MAP_SYMBOL, { 100, 5, 7 });
+        CHECK(get_rng_state() == game_rng_state);
+        CHECK(get_rng_state(get_external_rng()) == external_rng_state);
+    }
+}
