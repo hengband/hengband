@@ -8,7 +8,9 @@ import unittest
 from unittest.mock import patch
 
 from json_validation_test_helper import validate_document
-from validate_json import build_schema_registry, build_validation_pairs, load_all_schemas, load_jsonc, validate_one
+from jsonschema import ValidationError
+from validate_json import (build_schema_registry, build_validation_pairs, load_all_schemas, load_jsonc, validate_one,
+                           validate_town_map_semantics, validate_town_preferences_semantics)
 
 
 class QuestGridValidationTest(unittest.TestCase):
@@ -551,6 +553,15 @@ class TownPreferencesValidationTest(unittest.TestCase):
                 self.assertFalse(ok)
                 self.assertIn("integer JSON value", message)
 
+    def test_legend_symbol_rejects_trailing_newline(self):
+        data = {"version": 1, "legend": {"a\n": {"terrain": "ENTRANCE", "caveInfo": ["MARK"]}}}
+        ok, message = self.validate(data)
+        self.assertFalse(ok, message)
+        self.assertIn("['legend']", message)
+        # schema の長さの制約が弾く。意味検証も同じ値を保険として拒否する。
+        with self.assertRaisesRegex(ValidationError, "legend symbol must be exactly one printable ASCII character"):
+            validate_town_preferences_semantics(data, self.schema_path)
+
     def test_terrain_tags_match_runtime_definitions(self):
         for terrain, valid in (("ENTRANCE", True), ("*", True), ("NOT_A_TERRAIN", False)):
             with self.subTest(terrain=terrain):
@@ -678,6 +689,32 @@ class TownMapValidationTest(unittest.TestCase):
         invalid = copy.deepcopy(self.data)
         invalid["buildingRules"][0]["command"] = "UNKNOWN"
         self.assertFalse(self.validate(invalid)[0])
+
+    def test_feature_symbol_rejects_trailing_newline(self):
+        invalid = copy.deepcopy(self.data)
+        invalid["featureRules"][0]["symbol"] = "#\n"
+        ok, message = self.validate(invalid)
+        self.assertFalse(ok, message)
+        self.assertIn("['featureRules', 0, 'symbol']", message)
+        # schema の長さの制約が弾く。意味検証も同じ値を保険として拒否する。
+        with self.assertRaisesRegex(ValidationError, "feature symbol must be exactly one printable ASCII character"):
+            validate_town_map_semantics(invalid, self.schema_path)
+
+    def test_rows_reject_trailing_newline(self):
+        invalid = copy.deepcopy(self.data)
+        invalid["mapVariants"][0]["rows"] = ["###\n", "#.#\n", "###\n"]
+        ok, message = self.validate(invalid)
+        self.assertFalse(ok, message)
+        self.assertIn("map rows must contain printable ASCII characters", message)
+        self.assertIn("['mapVariants', 0, 'rows', 0]", message)
+
+    def test_trailing_newline_in_a_later_row_is_reported_as_unprintable(self):
+        invalid = copy.deepcopy(self.data)
+        invalid["mapVariants"][0]["rows"] = ["###", "#.#\n", "###"]
+        ok, message = self.validate(invalid)
+        self.assertFalse(ok, message)
+        self.assertIn("map rows must contain printable ASCII characters", message)
+        self.assertIn("['mapVariants', 0, 'rows', 1]", message)
 
     def test_colon_in_feature_symbol_is_rejected(self):
         invalid = copy.deepcopy(self.data)
