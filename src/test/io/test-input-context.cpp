@@ -70,3 +70,24 @@ TEST_CASE("Input context details are restored after a nested quantity scope")
     }
     CHECK_FALSE(get_input_context());
 }
+
+TEST_CASE("Command input details are restored after a nested confirm scope")
+{
+    CHECK_FALSE(get_input_context());
+    {
+        const InputContextScope outer({ InputKind::COMMAND, "", CommandInputDetails{ true } });
+        {
+            const InputContextScope inner(InputKind::CONFIRM, "Continue? [y/n]");
+            REQUIRE(get_input_context());
+            CHECK(get_input_context()->kind == InputKind::CONFIRM);
+            CHECK(std::holds_alternative<std::monostate>(get_input_context()->details));
+        }
+
+        REQUIRE(get_input_context());
+        CHECK(get_input_context()->kind == InputKind::COMMAND);
+        const auto *details = std::get_if<CommandInputDetails>(&get_input_context()->details);
+        REQUIRE(details != nullptr);
+        CHECK(details->shopping);
+    }
+    CHECK_FALSE(get_input_context());
+}

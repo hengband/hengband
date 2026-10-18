@@ -8,6 +8,7 @@
 #include "io/input-context.h"
 #include "io/input-key-acceptor.h"
 #include "io/input-key-requester.h"
+#include "io/macro-configurations-store.h"
 #include "locale/language-switcher.h"
 #include "system/player-type-definition.h"
 #include "term/gameterm.h"
@@ -60,6 +61,12 @@ errr event_hook(int action, int)
             if (actual != nullptr) {
                 check(actual->max == quantity->max, "quantity limit");
                 check(actual->initial == quantity->initial, "initial quantity");
+            }
+        } else if (const auto *command = std::get_if<CommandInputDetails>(&expected.details)) {
+            const auto *actual = std::get_if<CommandInputDetails>(&context->details);
+            check(actual != nullptr, "command details exist");
+            if (actual != nullptr) {
+                check(actual->shopping == command->shopping, "shopping flag");
             }
         }
     }
@@ -160,6 +167,24 @@ int main()
         check(restored && (restored->kind == InputKind::CONFIRM), "outer context restored after -more-");
     }
     player.playing = false;
+
+    // 自分のターンと店のコマンドの入力を待つ (キーマップは空にしておく)
+    keymap_actions_map[KeymapMode::ORIGINAL].assign(256, tl::nullopt);
+    // 店の中では、p (買う) が g に読み替えられる
+    for (const auto shopping : { false, true }) {
+        prepare({ InputKind::COMMAND, "", CommandInputDetails{ shopping } }, "p");
+        InputKeyRequestor(&player, shopping).request_command();
+        check(command_cmd == (shopping ? 'g' : 'p'), "command key accepted");
+        check_finished();
+    }
+
+    // 持ち物の一覧などから続くコマンドがあれば、入力を待たない
+    prepare({ InputKind::COMMAND, "", CommandInputDetails{ false } }, "");
+    command_new = 'g';
+    InputKeyRequestor(&player, false).request_command();
+    check(command_cmd == 'g', "pending command accepted");
+    check(command_new == 0, "pending command consumed");
+    check(waits == 0, "pending command does not wait");
 
     check(!get_input_context(), "no context before outer scope");
     {

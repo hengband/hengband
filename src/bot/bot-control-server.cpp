@@ -153,6 +153,8 @@ std::string_view input_kind_name(InputKind kind)
         return "quantity";
     case InputKind::MORE:
         return "more";
+    case InputKind::COMMAND:
+        return "command";
     }
 
     THROW_EXCEPTION(std::logic_error, "Invalid InputKind was specified!");
@@ -175,6 +177,8 @@ nlohmann::json make_input_context_json()
     } else if (const auto *quantity_details = std::get_if<QuantityInputDetails>(&context->details)) {
         result["max"] = quantity_details->max;
         result["initial"] = quantity_details->initial;
+    } else if (const auto *command_details = std::get_if<CommandInputDetails>(&context->details)) {
+        result["shopping"] = command_details->shopping;
     }
 
     return result;

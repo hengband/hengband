@@ -11,6 +11,7 @@
 #include "game-option/map-screen-options.h"
 #include "inventory/inventory-slot-types.h"
 #include "io/cursor.h"
+#include "io/input-context.h"
 #include "io/input-key-acceptor.h"
 #include "io/macro-configurations-store.h"
 #include "main/sound-of-music.h"
@@ -113,7 +114,12 @@ short InputKeyRequestor::get_command()
     num_more = 0;
     inkey_flag = true;
     term_fresh();
-    short cmd = inkey(true);
+    short cmd;
+    {
+        const InputContextScope input_context({ InputKind::COMMAND, "", CommandInputDetails{ this->shopping } });
+        cmd = inkey(true);
+    }
+
     if (!this->shopping && command_menu && ((cmd == '\r') || (cmd == '\n') || (cmd == 'x') || (cmd == 'X')) && !keymap_actions_map[this->mode][(byte)(cmd)]) {
         cmd = this->inkey_from_menu();
     }
