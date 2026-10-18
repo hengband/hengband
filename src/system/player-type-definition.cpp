@@ -2,6 +2,7 @@
 #include "floor/geometry.h"
 #include "inventory/inventory-slot-types.h"
 #include "monster/monster-util.h"
+#include "pet/pet-util.h"
 #include "system/angband-exceptions.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
@@ -31,7 +32,9 @@ PlayerType::PlayerType()
 
 /*!
  * @brief モンスターに乗る
- * @param m_idx 乗るモンスターのID（0で降りる）
+ * @param m_idx 乗るモンスターのID (0 なら乗っていない状態にする)
+ * @details 乗っている状態を設定するだけで、乗馬中の両手持ちの設定は変えない。
+ * 降りた後の後始末も行うときは dismount() を使う。
  */
 void PlayerType::ride_monster(MONSTER_IDX m_idx)
 {
@@ -44,6 +47,19 @@ void PlayerType::ride_monster(MONSTER_IDX m_idx)
     if (is_monster(m_idx)) {
         this->current_floor_ptr->m_list[m_idx].mflag2.set(MonsterConstantFlagType::RIDING);
     }
+}
+
+/*!
+ * @brief モンスターから降り、乗馬中の両手持ちの設定を戻す
+ * @details 能力の再計算や乗馬中の表示の描き直しは要求しないので、必要なら呼び出し元で要求する。
+ * 騎乗・下馬の判定 (can_player_ride_pet()) は、ここで変える状態を覚えておいて一時的に降り、後で戻す。
+ * ここで変える状態を増やしたら、そちらでも戻すこと。
+ */
+void PlayerType::dismount()
+{
+    this->ride_monster(0);
+    this->pet_extra_flags &= ~(PF_TWO_HANDS);
+    this->riding_ryoute = this->old_riding_ryoute = false;
 }
 
 std::shared_ptr<TimedEffects> PlayerType::effects() const
