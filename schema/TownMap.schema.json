@@ -40,7 +40,7 @@
       "properties": {
         "when": { "type": "string", "minLength": 1 },
         "comments": { "$ref": "#/$defs/commentLines" },
-        "symbol": { "type": "string", "pattern": "^(?![:/\\\\])[ -~]$" },
+        "symbol": { "type": "string", "minLength": 1, "maxLength": 1, "pattern": "^(?![:/\\\\])[ -~]$" },
         "definition": { "$ref": "#/$defs/featureDefinition" }
       }
     },

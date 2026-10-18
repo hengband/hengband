@@ -232,6 +232,9 @@ def validate_town_preferences_semantics(data: dict, schema_path: Path) -> None:
     if type(data["version"]) is not int:
         raise ValidationError("expected an integer JSON value", path=["version"])
     for symbol, cell in data["legend"].items():
+        # propertyNames の $ は末尾の改行の前にも一致するため、TownPreferencesReaderと同じく1文字ちょうどを確かめる。
+        if len(symbol) != 1:
+            raise ValidationError("legend symbol must be exactly one printable ASCII character", path=["legend", symbol])
         terrain_tag = cell["terrain"]
         if terrain_tag != "*" and terrain_tag not in valid_terrain_tags:
             raise ValidationError("unknown terrain tag", path=["legend", symbol, "terrain"])
@@ -274,6 +277,9 @@ def validate_town_map_semantics(data: dict, schema_path: Path) -> None:
         "artifact": r"(?:-?[0-9]+|\*[0-9]*|!)",
     }
     for rule_index, rule in enumerate(data["featureRules"]):
+        # pattern の $ は末尾の改行の前にも一致するため、TownMapReaderと同じく1文字ちょうどを確かめる。
+        if len(rule["symbol"]) != 1:
+            raise ValidationError("feature symbol must be exactly one printable ASCII character", path=["featureRules", rule_index, "symbol"])
         definition = rule["definition"]
         for field in ("terrain", "monster", "object", "ego", "artifact", "trap"):
             if any(not (" " <= character <= "~") for character in definition[field]):
@@ -350,6 +356,10 @@ def validate_town_map_semantics(data: dict, schema_path: Path) -> None:
         if width > max_width:
             raise ValidationError("map width exceeds the reader's maximum", path=["mapVariants", map_index, "rows", 0])
         for row_index, row in enumerate(rows):
+            # pattern の $ は末尾の改行の前にも一致するため、TownMapReaderと同じく行全体を確かめる。
+            # 末尾の改行で幅が食い違ったときに原因を指すよう、幅より先に確かめる。
+            if any(not " " <= character <= "~" for character in row):
+                raise ValidationError("map rows must contain printable ASCII characters", path=["mapVariants", map_index, "rows", row_index])
             if len(row) != width:
                 raise ValidationError("map rows must have equal widths", path=["mapVariants", map_index, "rows", row_index])
         map_dimensions.append((len(rows), width))

@@ -10,7 +10,7 @@
     "legend": {
       "type": "object",
       "minProperties": 1,
-      "propertyNames": { "pattern": "^[!-~]$" },
+      "propertyNames": { "minLength": 1, "maxLength": 1, "pattern": "^[!-~]$" },
       "additionalProperties": {
         "type": "object",
         "additionalProperties": false,
