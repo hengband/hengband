@@ -164,6 +164,81 @@ def validate_ego_semantics(data: dict, schema_path: Path) -> None:
             require_integer(extra["chance"], path + ["extra_flags", extra_index, "chance"])
 
 
+INT_MIN = -2147483648
+INT_MAX = 2147483647
+
+
+def require_reader_dice(value: str, path: list) -> None:
+    # Dice::parse は「個数d面数」の両方をintの10進数として読み、符号は - だけを受け付ける。
+    # pattern の $ は末尾の改行の前にも一致するため、文字列全体で確かめる。
+    match = re.fullmatch(r"(-?)([0-9]+)d(-?)([0-9]+)", value)
+    if not match:
+        raise ValidationError("dice must be written as XdY", path=path)
+    for sign, digits in (match.group(1, 2), match.group(3, 4)):
+        # 先頭の0を除いてから桁数を見て、Pythonの整数変換の桁数の上限に当たらないようにする。
+        digits = digits.lstrip("0") or "0"
+        if len(digits) > len(str(INT_MAX)) or not INT_MIN <= int(sign + digits) <= INT_MAX:
+            raise ValidationError("dice values must fit in int", path=path)
+
+
+def load_rod_type_value(repository_root: Path) -> int:
+    """ItemKindType::ROD の値を読む。"""
+    path = repository_root / "src/object/tval-types.h"
+    match = re.search(r'^\s*ROD\s*=\s*(\d+)\s*,', path.read_text(encoding="utf-8"), re.MULTILINE)
+    if not match:
+        raise ValueError(f"ItemKindType::ROD not found in {path}")
+    return int(match[1])
+
+
+def validate_baseitem_semantics(data: dict, schema_path: Path) -> None:
+    """BaseitemReaderの整数型・ID順序・表示・ロッドのpval・ダイスを検証する。"""
+    repository_root = schema_path.resolve().parent.parent
+    valid_colors = load_cpp_map_keys(repository_root / "src/term/gameterm.cpp", "color_list")
+    rod_type_value = load_rod_type_value(repository_root)
+    previous_id = -1
+    for index, baseitem in enumerate(data["baseitems"]):
+        path = ["baseitems", index]
+        for field in ("id", "parameter_value", "level", "weight", "cost", "base_ac", "hit_bonus", "damage_bonus", "ac_bonus"):
+            if field in baseitem:
+                require_integer(baseitem[field], path + [field])
+        for field in ("type_value", "subtype_value"):
+            require_integer(baseitem["itemkind"][field], path + ["itemkind", field])
+        if baseitem["id"] <= previous_id:
+            raise ValidationError("baseitem IDs must be strictly increasing", path=path + ["id"])
+        previous_id = baseitem["id"]
+
+        # BaseitemReaderは表示文字を1バイトちょうどに限る。
+        if len(baseitem["symbol"]["character"].encode("utf-8")) != 1:
+            raise ValidationError("symbol character must be a single byte", path=path + ["symbol", "character"])
+        if baseitem["symbol"]["color"] not in valid_colors:
+            raise ValidationError("unknown color", path=path + ["symbol", "color"])
+        # BaseitemReaderはロッドのpval(省略時は0)が正でなければ拒否する。
+        if baseitem["itemkind"]["type_value"] == rod_type_value and baseitem.get("parameter_value", 0) <= 0:
+            raise ValidationError("rod parameter_value must be positive", path=path + ["parameter_value"])
+        if "base_dice" in baseitem:
+            require_reader_dice(baseitem["base_dice"], path + ["base_dice"])
+        for allocation_index, allocation in enumerate(baseitem.get("allocations", [])):
+            for field in ("depth", "rarity"):
+                require_integer(allocation[field], path + ["allocations", allocation_index, field])
+
+
+def validate_artifact_semantics(data: dict) -> None:
+    """ArtifactReaderの整数型・ID順序・ダイスを検証する。"""
+    previous_id = -1
+    for index, artifact in enumerate(data["artifacts"]):
+        path = ["artifacts", index]
+        for field in ("id", "parameter_value", "level", "rarity", "weight", "cost", "base_ac", "hit_bonus", "damage_bonus", "ac_bonus"):
+            if field in artifact:
+                require_integer(artifact[field], path + [field])
+        for field in ("type_value", "subtype_value"):
+            require_integer(artifact["base_item"][field], path + ["base_item", field])
+        if artifact["id"] <= previous_id:
+            raise ValidationError("artifact IDs must be strictly increasing", path=path + ["id"])
+        previous_id = artifact["id"]
+        if "base_dice" in artifact:
+            require_reader_dice(artifact["base_dice"], path + ["base_dice"])
+
+
 def validate_wilderness_semantics(data: dict) -> None:
     """Check cross-field constraints used by WildernessReader."""
     for field in ("version", "width", "height"):
@@ -539,13 +614,8 @@ def validate_terrain_semantics(data: dict, schema_path: Path) -> None:
         for action, value in sorted((terrain.get("interactions") or {}).items()):
             action_path = path + ["interactions", action]
             if action == "DROP_GOLD":
-                if re.fullmatch(r'[0-9]+d[0-9]+', value) is None:
-                    raise ValidationError("invalid dice string", path=action_path)
-                # schemaは正のNdMを保証。巨大な文字列もint()の桁数制限に任せず診断する。
-                for token in value.split("d"):
-                    digits = token.lstrip("0") or "0"
-                    if len(digits) > 10 or int(digits) > 2147483647:
-                        raise ValidationError("dice component exceeds the reader's int range", path=action_path)
+                # schemaは正のNdMを保証する。書式とintの範囲はアイテムのダイスと同じ規則で確かめる。
+                require_reader_dice(value, action_path)
                 continue
             if action == "DESTROYED":
                 require_tag(value, action_path)
@@ -754,7 +824,7 @@ MAX_MONRACE_DICE_ROLL = 32767
 def validate_monrace_semantics(data: dict, schema_path: Path, data_path: Path, registry: Registry) -> None:
     """Check RaceReader's strict integers, ID order, dice limits and references."""
     artifact_data = load_validated_companion(schema_path, data_path, registry,
-                                             "ArtifactDefinitions", "artifact", lambda _: None)
+                                             "ArtifactDefinitions", "artifact", validate_artifact_semantics)
     defined_artifact_ids = {artifact["id"] for artifact in artifact_data["artifacts"]}
     monraces = data["monsters"]
     defined_monrace_ids = {monrace["id"] for monrace in monraces if type(monrace["id"]) is int}
@@ -838,6 +908,8 @@ def validate_one(pair: tuple[Path, Path, dict], registry: Registry | None = None
             "TerrainDefinitions.schema.json": lambda: validate_terrain_semantics(data, schema_path),
             "VaultDefinitions.schema.json": lambda: validate_vault_semantics(data),
             "EgoDefinitions.schema.json": lambda: validate_ego_semantics(data, schema_path),
+            "BaseitemDefinitions.schema.json": lambda: validate_baseitem_semantics(data, schema_path),
+            "ArtifactDefinitions.schema.json": lambda: validate_artifact_semantics(data),
             "WildernessDefinition.schema.json": lambda: validate_wilderness_semantics(data),
             "TownPreferences.schema.json": lambda: validate_town_preferences_semantics(data, schema_path),
             "TownDefinitionList.schema.json": lambda: validate_town_definition_list_semantics(data, schema_path),

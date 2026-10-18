@@ -16,7 +16,9 @@
                 "required": [
                     "id",
                     "name",
+                    "symbol",
                     "itemkind",
+                    "level",
                     "weight",
                     "cost"
                 ],
@@ -61,6 +63,25 @@
                             "en": {
                                 "type": "string",
                                 "description": "English Unidentified Item Name"
+                            }
+                        }
+                    },
+                    "symbol": {
+                        "type": "object",
+                        "description": "表示される文字と色",
+                        "additionalProperties": false,
+                        "required": [
+                            "character",
+                            "color"
+                        ],
+                        "properties": {
+                            "character": {
+                                "type": "string",
+                                "description": "表示される文字"
+                            },
+                            "color": {
+                                "type": "string",
+                                "description": "表示される色"
                             }
                         }
                     },
@@ -143,7 +164,9 @@
                     "allocations": {
                         "type": "array",
                         "description": "アイテム出現階層と希少度の定義",
+                        "maxItems": 4,
                         "items": {
+                            "type": "object",
                             "description": "出現階層と希少度の組",
                             "additionalProperties": false,
                             "required": [
