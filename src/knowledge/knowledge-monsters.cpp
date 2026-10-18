@@ -461,7 +461,7 @@ void do_cmd_knowledge_bounty(std::string_view player_name)
     }
 
     if (!listed) {
-        fmt::println(fff, "\n{}", _("賞金首はもう残っていません。", "There are no more wanted monster."));
+        fmt::println(fff, "\n{}", _("賞金首はもう残っていません。", "There are no more wanted monsters."));
     }
 
     angband_fclose(fff);

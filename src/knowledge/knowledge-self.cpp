@@ -79,7 +79,7 @@ static void dump_yourself(PlayerType *player_ptr, FILE *fff)
     dump_explanation(class_explanations[short_pclass], fff);
 
     fmt::print(fff, "\n");
-    fmt::println(fff, _("性格: {}", "Pesonality: {}"), personality_info[player_ptr->ppersonality].title);
+    fmt::println(fff, _("性格: {}", "Personality: {}"), personality_info[player_ptr->ppersonality].title);
     dump_explanation(personality_explanations[player_ptr->ppersonality], fff);
 
     fmt::print(fff, "\n");
