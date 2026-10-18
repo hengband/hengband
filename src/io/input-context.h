@@ -22,6 +22,7 @@ enum class InputKind {
     STRING, //!< 文字列の入力
     QUANTITY, //!< 数量の入力
     MORE, //!< メッセージの -続く- (-more-)
+    COMMAND, //!< 次のコマンドの入力 (自分のターン、店のコマンド)
 };
 
 /*!
@@ -40,8 +41,15 @@ struct QuantityInputDetails {
     int initial; //!< 初期数量
 };
 
+/*!
+ * @brief コマンドの入力の詳細
+ */
+struct CommandInputDetails {
+    bool shopping; //!< 店のコマンドの入力か
+};
+
 //! 入力の種類ごとの詳細。詳細を持たない入力では std::monostate
-using InputDetails = std::variant<std::monostate, StringInputDetails, QuantityInputDetails>;
+using InputDetails = std::variant<std::monostate, StringInputDetails, QuantityInputDetails, CommandInputDetails>;
 
 /*!
  * @brief 現在待っている入力の種類と、画面に表示したプロンプト
