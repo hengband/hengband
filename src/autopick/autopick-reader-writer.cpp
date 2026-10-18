@@ -128,12 +128,12 @@ static void prepare_default_pickpref(std::string_view player_base_name)
         return;
     }
 
-    fprintf(user_fp, "#***\n");
+    fmt::println(user_fp, "#***");
     for (const auto &message : messages) {
-        fprintf(user_fp, "#***  %s\n", message.data());
+        fmt::println(user_fp, "#***  {}", message);
     }
 
-    fprintf(user_fp, "#***\n\n\n");
+    fmt::println(user_fp, "#***\n\n");
     const auto path_pref = path_build(ANGBAND_DIR_PREF, filename);
     auto *pref_fp = angband_fopen(path_pref, FileOpenMode::READ);
     if (!pref_fp) {
@@ -146,7 +146,7 @@ static void prepare_default_pickpref(std::string_view player_base_name)
         if (!line_str) {
             break;
         }
-        fprintf(user_fp, "%s\n", line_str->data());
+        fmt::println(user_fp, "{}", *line_str);
     }
 
     angband_fclose(user_fp);

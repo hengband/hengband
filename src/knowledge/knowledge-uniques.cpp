@@ -118,9 +118,9 @@ static void display_uniques(UniqueList *unique_list_ptr, FILE *fff)
         }
 
         const auto name = str_separate(monrace.name, 40);
-        fprintf(fff, _("     %-40s (レベル%3d)%s\n", "     %-40s (level %3d)%s\n"), name.front().data(), (int)monrace.level, details.data());
+        fmt::println(fff, _("     {:<40} (レベル{:3}){}", "     {:<40} (level {:3}){}"), fmt::bytes(name.front()), (int)monrace.level, details);
         for (auto i = 1U; i < name.size(); ++i) {
-            fprintf(fff, "     %s\n", name[i].data());
+            fmt::println(fff, "     {}", name[i]);
         }
     }
 }

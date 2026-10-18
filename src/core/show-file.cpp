@@ -516,7 +516,7 @@ bool FileDisplayer::try_display(bool show_version, std::string_view name_with_ta
                     break;
                 }
 
-                fprintf(ffp, "%s\n", line_str->data());
+                fmt::println(ffp, "{}", *line_str);
             }
             angband_fclose(fff);
             angband_fclose(ffp);

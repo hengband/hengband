@@ -362,7 +362,7 @@ void do_cmd_knowledge_dungeon(PlayerType *player_ptr)
 
     const auto known_dungeons = DungeonService::build_known_dungeons(DungeonMessageFormat::KNOWLEDGE);
     for (const auto &known_dungeon : known_dungeons) {
-        fprintf(fff, "%s", known_dungeon.data());
+        fmt::print(fff, "{}", known_dungeon);
     }
 
     angband_fclose(fff);

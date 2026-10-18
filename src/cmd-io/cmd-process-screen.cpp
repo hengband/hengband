@@ -73,7 +73,7 @@ static void read_temporary_file(FILE *fff, FILE *tmpfff, int num_tag)
             break;
         }
 
-        fprintf(fff, "%s\n", buf->data());
+        fmt::println(fff, "{}", *buf);
     }
 }
 
@@ -115,15 +115,14 @@ static void screen_dump_one_line(int wid, int y, FILE *fff)
             int rv = angband_color_table[ds.color][1];
             int gv = angband_color_table[ds.color][2];
             int bv = angband_color_table[ds.color][3];
-            fprintf(fff, "%s<font color=\"#%02x%02x%02x\">",
-                ((y == 0 && x == 0) ? "" : "</font>"), rv, gv, bv);
+            fmt::print(fff, "{}<font color=\"#{:02x}{:02x}{:02x}\">", ((y == 0 && x == 0) ? "" : "</font>"), rv, gv, bv);
             old_a = ds.color;
         }
 
         if (cc) {
-            fprintf(fff, "%s", cc);
+            fmt::print(fff, "{}", cc);
         } else {
-            fprintf(fff, "%c", ds.character);
+            fmt::print(fff, "{:c}", ds.character);
         }
     }
 }
@@ -138,7 +137,7 @@ static void screen_dump_lines(int wid, int hgt, FILE *fff)
 {
     for (TERM_LEN y = 0; y < hgt; y++) {
         if (y != 0) {
-            fprintf(fff, "\n");
+            fmt::print(fff, "\n");
         }
 
         screen_dump_one_line(wid, y, fff);
@@ -191,7 +190,7 @@ static void write_html_header(FILE *tmpfff, FILE *fff)
  */
 static void write_html_footer(FILE *tmpfff, FILE *fff)
 {
-    fprintf(fff, "</font>");
+    fmt::print(fff, "</font>");
     if (!tmpfff) {
         for (int i = 0; html_foot[i]; i++) {
             fputs(html_foot[i], fff);
@@ -202,7 +201,7 @@ static void write_html_footer(FILE *tmpfff, FILE *fff)
         angband_fclose(tmpfff);
     }
 
-    fprintf(fff, "\n");
+    fmt::print(fff, "\n");
 }
 
 void exe_cmd_save_screen_html(const std::filesystem::path &path, bool need_message)
@@ -317,10 +316,10 @@ static bool do_cmd_save_screen_text(int wid, int hgt)
         }
 
         buf[x] = '\0';
-        fprintf(fff, "%s\n", buf);
+        fmt::println(fff, "{}", buf);
     }
 
-    fprintf(fff, "\n");
+    fmt::print(fff, "\n");
     for (TERM_LEN y = 0; y < hgt; y++) {
         TERM_LEN x;
         char buf[1024]{};
@@ -330,10 +329,10 @@ static bool do_cmd_save_screen_text(int wid, int hgt)
         }
 
         buf[x] = '\0';
-        fprintf(fff, "%s\n", buf);
+        fmt::println(fff, "{}", buf);
     }
 
-    fprintf(fff, "\n");
+    fmt::print(fff, "\n");
     angband_fclose(fff);
     msg_print(_("画面(記念撮影)をファイルに書き出しました。", "Screen dump saved."));
     msg_erase();
