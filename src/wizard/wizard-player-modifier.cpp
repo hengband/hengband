@@ -72,7 +72,7 @@ void wizard_player_modifier(PlayerType *player_ptr)
     case '\r':
         break;
     case 'a':
-        msg_format("Your alignment is %d.", player_ptr->alignment);
+        msg_print("Your alignment is {}.", player_ptr->alignment);
         break;
     case 'c':
         wiz_reset_class(player_ptr);

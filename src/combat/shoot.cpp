@@ -800,8 +800,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
                         tdam = mon_damage_mod(player_ptr, monster, tdam, false);
                     }
 
-                    msg_format_wizard(player_ptr, CHEAT_MONSTER, _("%dのダメージを与えた。(残りHP %d/%d(%d))", "You do %d damage. (left HP %d/%d(%d))"), tdam,
-                        monster.hp - tdam, monster.maxhp, monster.max_maxhp);
+                    msg_print_wizard(player_ptr, CHEAT_MONSTER, _("{}のダメージを与えた。(残りHP {}/{}({}))", "You do {} damage. (left HP {}/{}({}))"), tdam, monster.hp - tdam, monster.maxhp, monster.max_maxhp);
 
                     /* Sniper */
                     if (snipe_type == SP_EXPLODE) {

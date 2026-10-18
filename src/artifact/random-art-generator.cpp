@@ -414,9 +414,7 @@ static void generate_unnatural_random_artifact(
     PlayerType *player_ptr, ItemEntity *o_ptr, const bool a_scroll, const int power_level, const int max_powers, const int total_flags)
 {
     o_ptr->randart_name = name_unnatural_random_artifact(player_ptr, o_ptr, a_scroll, power_level);
-    msg_format_wizard(player_ptr, CHEAT_OBJECT,
-        _("パワー %d で 価値 %d のランダムアーティファクト生成 バイアスは「%s」", "Random artifact generated - Power:%d Value:%d Bias:%s."), max_powers,
-        total_flags, ARTIFACT_BIAS_NAMES.at(o_ptr->artifact_bias).data());
+    msg_print_wizard(player_ptr, CHEAT_OBJECT, _("パワー {} で 価値 {} のランダムアーティファクト生成 バイアスは「{}」", "Random artifact generated - Power:{} Value:{} Bias:{}."), max_powers, total_flags, ARTIFACT_BIAS_NAMES.at(o_ptr->artifact_bias));
     static constexpr auto flags = {
         SubWindowRedrawingFlag::INVENTORY,
         SubWindowRedrawingFlag::EQUIPMENT,

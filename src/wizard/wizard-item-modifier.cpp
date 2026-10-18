@@ -10,6 +10,7 @@
 #include "flavor/object-flavor-types.h"
 #include "floor/floor-object.h"
 #include "game-option/cheat-options.h"
+#include "game-option/cheat-types.h"
 #include "inventory/inventory-slot-types.h"
 #include "io/input-key-acceptor.h"
 #include "io/input-key-requester.h"
@@ -45,6 +46,7 @@
 #include "wizard/wizard-special-process.h"
 #include "world/world.h"
 #include <algorithm>
+#include <fmt/format.h>
 #include <limits>
 #include <sstream>
 #include <string>
@@ -136,7 +138,7 @@ static void wiz_item_drop(PlayerType *player_ptr, const int num_items, const Enu
         }
 
         if (!drop_near(player_ptr, *item, player_ptr->get_position())) {
-            msg_print_wizard(player_ptr, 0, "No item dropping space!");
+            msg_print_wizard(player_ptr, CHEAT_OBJECT, "No item dropping space!");
             return;
         }
     }
@@ -339,11 +341,11 @@ static void prt_alloc(const BaseitemKey &bi_key, TERM_LEN row, TERM_LEN col)
 
     for (auto i = 0; i < 22; i++) {
         term_putch(col, row + i + 1, { TERM_WHITE, '|' });
-        prt(format("%2dF", (i * 5)), row + i + 1, col);
+        prt(fmt::format("{:2}F", (i * 5)), row + i + 1, col);
         if ((i * BASEITEM_MAX_DEPTH / 22 <= home) && (home < (i + 1) * BASEITEM_MAX_DEPTH / 22)) {
-            c_prt(TERM_RED, format("%3d.%04d%%", display[i] / 1000, display[i] % 1000), row + i + 1, col + 3);
+            c_prt(TERM_RED, fmt::format("{:3}.{:04}%", display[i] / 1000, display[i] % 1000), row + i + 1, col + 3);
         } else {
-            c_prt(TERM_WHITE, format("%3d.%04d%%", display[i] / 1000, display[i] % 1000), row + i + 1, col + 3);
+            c_prt(TERM_WHITE, fmt::format("{:3}.{:04}%", display[i] / 1000, display[i] % 1000), row + i + 1, col + 3);
         }
     }
 
@@ -395,15 +397,15 @@ static void wiz_display_item(PlayerType *player_ptr, ItemEntity *o_ptr)
     auto line = 4;
     const auto &bi_key = o_ptr->bi_key;
     const auto item_level = o_ptr->get_baseitem_level();
-    prt(format("kind = %-5d  level = %-4d  tval = %-5d  sval = %-5d", o_ptr->bi_id, item_level, enum2i(bi_key.tval()), *bi_key.sval()), line, j);
-    prt(format("number = %-3d  wgt = %-6d  ac = %-5d    damage = %s", o_ptr->number, o_ptr->weight, o_ptr->ac, o_ptr->damage_dice.to_string().data()), ++line, j);
-    prt(format("pval = %-5d  toac = %-5d  tohit = %-4d  todam = %-4d", o_ptr->pval, o_ptr->to_a, o_ptr->to_h, o_ptr->to_d), ++line, j);
-    prt(format("fixed_artifact_id = %-4d  ego_idx = %-4d  cost = %d", enum2i(o_ptr->fa_id), enum2i(o_ptr->ego_idx), object_value_real(o_ptr)), ++line, j);
-    prt(format("special flags = %02x  activation_id = %-4d  timeout = %-d", static_cast<uint8_t>(o_ptr->get_identification_flags().to_ulong()), enum2i(o_ptr->activation_id), o_ptr->timeout), ++line, j);
-    prt(format("chest_level = %-4d  fuel = %-d", o_ptr->chest_level, o_ptr->fuel), ++line, j);
-    prt(format("smith_hit = %-4d  smith_damage = %-4d", o_ptr->smith_hit, o_ptr->smith_damage), ++line, j);
-    prt(format("cursed  = %-4lX  captured_monster_speed = %-4d", o_ptr->curse_flags.to_ulong(), o_ptr->captured_monster_speed), ++line, j);
-    prt(format("captured_monster_max_hp = %-4d  captured_monster_max_hp = %-4d", o_ptr->captured_monster_current_hp, o_ptr->captured_monster_max_hp), ++line, j);
+    prt(fmt::format("kind = {:<5}  level = {:<4}  tval = {:<5}  sval = {:<5}", o_ptr->bi_id, item_level, enum2i(bi_key.tval()), *bi_key.sval()), line, j);
+    prt(fmt::format("number = {:<3}  wgt = {:<6}  ac = {:<5}    damage = {}", o_ptr->number, o_ptr->weight, o_ptr->ac, o_ptr->damage_dice.to_string()), ++line, j);
+    prt(fmt::format("pval = {:<5}  toac = {:<5}  tohit = {:<4}  todam = {:<4}", o_ptr->pval, o_ptr->to_a, o_ptr->to_h, o_ptr->to_d), ++line, j);
+    prt(fmt::format("fixed_artifact_id = {:<4}  ego_idx = {:<4}  cost = {}", enum2i(o_ptr->fa_id), enum2i(o_ptr->ego_idx), object_value_real(o_ptr)), ++line, j);
+    prt(fmt::format("special flags = {:02x}  activation_id = {:<4}  timeout = {}", static_cast<uint8_t>(o_ptr->get_identification_flags().to_ulong()), enum2i(o_ptr->activation_id), o_ptr->timeout), ++line, j);
+    prt(fmt::format("chest_level = {:<4}  fuel = {}", o_ptr->chest_level, o_ptr->fuel), ++line, j);
+    prt(fmt::format("smith_hit = {:<4}  smith_damage = {:<4}", o_ptr->smith_hit, o_ptr->smith_damage), ++line, j);
+    prt(fmt::format("cursed  = {:<4X}  captured_monster_speed = {:<4}", o_ptr->curse_flags.to_ulong(), o_ptr->captured_monster_speed), ++line, j);
+    prt(fmt::format("captured_monster_max_hp = {:<4}  captured_monster_max_hp = {:<4}", o_ptr->captured_monster_current_hp, o_ptr->captured_monster_max_hp), ++line, j);
 
     const auto flags = o_ptr->get_flags();
     prt("+------------FLAGS1------------+", ++line, j);
@@ -487,8 +489,8 @@ static void wiz_statistics(PlayerType *player_ptr, ItemEntity *o_ptr)
             rolls = *rolls_opt;
         }
 
-        constexpr auto q = "Rolls: %d  Correct: %d  Matches: %d  Better: %d  Worse: %d  Other: %d";
-        msg_format("Creating a lot of %s items. Base level = %d.", quality.data(), player_ptr->current_floor_ptr->dun_level);
+        constexpr auto q = "Rolls: {}  Correct: {}  Matches: {}  Better: {}  Worse: {}  Other: {}";
+        msg_print("Creating a lot of {} items. Base level = {}.", quality, player_ptr->current_floor_ptr->dun_level);
         msg_erase();
         auto correct = 0;
         auto matches = 0;
@@ -508,7 +510,7 @@ static void wiz_statistics(PlayerType *player_ptr, ItemEntity *o_ptr)
                     break; // stop rolling
                 }
 
-                prt(format(q, count, correct, matches, better, worse, other), 0, 0);
+                prt(fmt::format(q, count, correct, matches, better, worse, other), 0, 0);
                 term_fresh();
             }
 
@@ -538,7 +540,7 @@ static void wiz_statistics(PlayerType *player_ptr, ItemEntity *o_ptr)
             }
         }
 
-        msg_format(q, count, correct, matches, better, worse, other);
+        msg_print(q, count, correct, matches, better, worse, other);
         msg_erase();
     }
 
@@ -968,7 +970,8 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
     }
 
     if (cheat_xtra) {
-        msg_format("Wishing %s....", pray.data());
+        // rtrim() が pray の末尾の空白を NUL に書き換えているので、NUL の手前までを出す
+        msg_print("Wishing {}....", pray.data());
     }
 
     std::vector<short> baseitem_ids;
@@ -986,7 +989,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
             const auto item_name = str_tolower(describe_flavor(player_ptr, item, mode));
 #endif
             if (cheat_xtra) {
-                msg_format("Matching object No.%d %s", bi_id, item_name.data());
+                msg_print("Matching object No.{} {}", bi_id, item_name);
             }
 
             const int len = item_name.length();
@@ -1015,7 +1018,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
                 const auto item_name = str_tolower(ego.name);
 #endif
                 if (cheat_xtra) {
-                    msg_format("matching ego no.%d %s...", enum2i(ego.idx), item_name.data());
+                    msg_print("matching ego no.{} {}...", enum2i(ego.idx), item_name);
                 }
 
                 if (std::string(pray_chars).find(item_name) != std::string::npos) {

@@ -229,6 +229,6 @@ bool generate_rooms(PlayerType *player_ptr, DungeonData *dd_ptr)
         return false;
     }
 
-    msg_format_wizard(player_ptr, CHEAT_DUNGEON, _("このダンジョンの部屋数は %d です。", "Number of Rooms: %d"), rooms_built);
+    msg_print_wizard(player_ptr, CHEAT_DUNGEON, _("このダンジョンの部屋数は {} です。", "Number of Rooms: {}"), rooms_built);
     return true;
 }

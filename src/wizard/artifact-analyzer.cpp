@@ -14,6 +14,7 @@
 #include "util/enum-range.h"
 #include "util/string-processor.h"
 #include "wizard/spoiler-util.h"
+#include <fmt/format.h>
 #include <sstream>
 
 /*!
@@ -119,13 +120,13 @@ static std::vector<std::string> analyze_misc_magic(const ItemEntity &item)
     std::string desc;
     if (radius > 0) {
         if (flags.has(TR_LITE_FUEL)) {
-            desc = format(_("それは燃料補給によって明かり(半径 %d)を授ける。", "It provides light (radius %d) when fueled."), radius);
+            desc = fmt::format(_("それは燃料補給によって明かり(半径 {})を授ける。", "It provides light (radius {}) when fueled."), radius);
         } else {
-            desc = format(_("永久光源(半径 %d)", "Permanent Light(radius %d)"), radius);
+            desc = fmt::format(_("永久光源(半径 {})", "Permanent Light(radius {})"), radius);
         }
         descriptions.push_back(std::move(desc));
     } else if (radius < 0) {
-        desc = format(_("永久光源(半径-%d)。", "Permanent Light(radius -%d)"), radius);
+        desc = fmt::format(_("永久光源(半径-{})。", "Permanent Light(radius -{})"), radius);
         descriptions.push_back(std::move(desc));
     }
 
@@ -197,10 +198,10 @@ static std::string analyze_addition(const ItemEntity &item)
 static std::string analyze_misc(const ItemEntity &item)
 {
     const auto &artifact = item.get_fixed_artifact();
-    constexpr auto fmt = _("レベル %d, 希少度 %u, %d.%d kg, ＄%d", "Level %d, Rarity %u, %d.%d lbs, %d Gold");
+    constexpr auto fmt = _("レベル {}, 希少度 {}, {}.{} kg, ＄{}", "Level {}, Rarity {}, {}.{} lbs, {} Gold");
     const auto weight_integer = _(lb_to_kg_integer(artifact.weight), artifact.weight / 10);
     const auto weight_fraction = _(lb_to_kg_fraction(artifact.weight), artifact.weight % 10);
-    return format(fmt, artifact.level, artifact.rarity, weight_integer, weight_fraction, artifact.cost);
+    return fmt::format(fmt, artifact.level, artifact.rarity, weight_integer, weight_fraction, artifact.cost);
 }
 
 /*!
@@ -246,9 +247,9 @@ ArtifactsDumpInfo random_artifact_analyze(PlayerType *player_ptr, const ItemEnti
     info.sustenances = analyze_sustains(item);
     info.misc_magic = analyze_misc_magic(item);
     info.activation = item.explain_activation();
-    constexpr auto weight_mes = _("重さ %d.%d kg", "Weight %d.%d lbs");
+    constexpr auto weight_mes = _("重さ {}.{} kg", "Weight {}.{} lbs");
     const auto weight_integer = _(lb_to_kg_integer(item.weight), item.weight / 10);
     const auto weight_fraction = _(lb_to_kg_fraction(item.weight), item.weight % 10);
-    info.misc_desc = format(weight_mes, weight_integer, weight_fraction);
+    info.misc_desc = fmt::format(weight_mes, weight_integer, weight_fraction);
     return info;
 }

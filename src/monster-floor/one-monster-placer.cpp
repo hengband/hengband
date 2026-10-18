@@ -233,7 +233,7 @@ tl::optional<MONSTER_IDX> place_monster_one(PlayerType *player_ptr, POSITION y, 
         return tl::nullopt;
     }
 
-    msg_format_wizard(player_ptr, CHEAT_MONSTER, _("%s(Lv%d)を生成しました。", "%s(Lv%d) was generated."), monrace.name.data(), monrace.level);
+    msg_print_wizard(player_ptr, CHEAT_MONSTER, _("{}(Lv{})を生成しました。", "{}(Lv{}) was generated."), monrace.name, monrace.level);
     if (monrace.kind_flags.has(MonsterKindType::UNIQUE) || monrace.population_flags.has(MonsterPopulationType::NAZGUL) || (monrace.level < 10)) {
         reset_bits(mode, PM_KAGE);
     }

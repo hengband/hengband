@@ -7,9 +7,37 @@
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
 #include <array>
-#include <sstream>
 #include <string>
+#include <string_view>
 
+/*!
+ * @brief 詐欺オプションの種類のメッセージを表示するかを返す
+ * @param cheat_type 詐欺オプションの種類 (CHEAT_OBJECT など)
+ * @return 対応する詐欺オプションが有効なら true
+ * @details 範囲外の種類には true を返す。範囲の確認は msg_print_wizard() で行う。
+ */
+bool is_wizard_message_enabled(int cheat_type)
+{
+    switch (cheat_type) {
+    case CHEAT_DUNGEON:
+        return cheat_room;
+    case CHEAT_OBJECT:
+        return cheat_peek;
+    case CHEAT_MONSTER:
+        return cheat_hear;
+    case CHEAT_MISC:
+        return cheat_xtra;
+    default:
+        return true;
+    }
+}
+
+/*!
+ * @brief 詐欺オプションが有効なときにウィザードのメッセージを表示する
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param cheat_type 詐欺オプションの種類 (CHEAT_OBJECT など)
+ * @param msg メッセージ
+ */
 void msg_print_wizard(PlayerType *player_ptr, int cheat_type, std::string_view msg)
 {
     constexpr auto max_type = 4;
@@ -17,53 +45,14 @@ void msg_print_wizard(PlayerType *player_ptr, int cheat_type, std::string_view m
         THROW_EXCEPTION(std::logic_error, "Invalid cheat type is specified!");
     }
 
-    if (!cheat_room && cheat_type == CHEAT_DUNGEON) {
+    if (!is_wizard_message_enabled(cheat_type)) {
         return;
     }
 
-    if (!cheat_peek && cheat_type == CHEAT_OBJECT) {
-        return;
-    }
-
-    if (!cheat_hear && cheat_type == CHEAT_MONSTER) {
-        return;
-    }
-
-    if (!cheat_xtra && cheat_type == CHEAT_MISC) {
-        return;
-    }
-
-    static const std::array<std::string, max_type> cheat_mes = { { "ITEM:", "MONS:", "DUNG:", "MISC:" } };
-    std::stringstream ss;
-    ss << "WIZ-" << cheat_mes[cheat_type] << msg;
-    const auto mes = ss.str();
+    static constexpr std::array<std::string_view, max_type> cheat_mes = { { "ITEM:", "MONS:", "DUNG:", "MISC:" } };
+    const auto mes = fmt::format("WIZ-{}{}", cheat_mes[cheat_type], msg);
     msg_print(mes);
     if (cheat_diary_output) {
         exe_write_diary(*player_ptr->current_floor_ptr, DiaryKind::WIZARD_LOG, 0, mes);
     }
-}
-
-/*
- * Display a formatted message, using "vstrnfmt()" and "msg_print()".
- */
-void msg_format_wizard(PlayerType *player_ptr, int cheat_type, const char *fmt, ...)
-{
-    if (!cheat_room && cheat_type == CHEAT_DUNGEON) {
-        return;
-    }
-    if (!cheat_peek && cheat_type == CHEAT_OBJECT) {
-        return;
-    }
-    if (!cheat_hear && cheat_type == CHEAT_MONSTER) {
-        return;
-    }
-    if (!cheat_xtra && cheat_type == CHEAT_MISC) {
-        return;
-    }
-
-    va_list vp;
-    va_start(vp, fmt);
-    const auto buf = vformat(fmt, vp);
-    va_end(vp);
-    msg_print_wizard(player_ptr, cheat_type, buf);
 }

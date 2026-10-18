@@ -189,8 +189,8 @@ static int calc_arm_avgdamage(PlayerType *player_ptr, ItemEntity *o_ptr)
     }
 
     dam = dam + o_ptr->to_d;
-    constexpr auto fmt = _("素:%d> 対邪:%d> 理力:%d> 切:%d> 最終:%d", "Normal:%d> Evil:%d> Force:%d> Vorpal:%d> Total:%d");
-    msg_format_wizard(player_ptr, CHEAT_OBJECT, fmt, base, s_evil, forced, vorpal, dam);
+    constexpr auto fmt = _("素:{}> 対邪:{}> 理力:{}> 切:{}> 最終:{}", "Normal:{}> Evil:{}> Force:{}> Vorpal:{}> Total:{}");
+    msg_print_wizard(player_ptr, CHEAT_OBJECT, fmt, base, s_evil, forced, vorpal, dam);
     return dam;
 }
 

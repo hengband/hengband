@@ -226,15 +226,15 @@ bool build_type6(PlayerType *player_ptr, DungeonData *dd_ptr)
     std::stable_sort(whats->begin(), whats->end(), [&monraces](const auto monrace_id1, const auto monrace_id2) {
         return monraces.order_level(monrace_id2, monrace_id1);
     });
-    constexpr auto fmt_generate = _("モンスター部屋(pit)(%s%s)を生成します。", "Monster pit (%s%s)");
+    constexpr auto fmt_generate = _("モンスター部屋(pit)({}{})を生成します。", "Monster pit ({}{})");
     const auto pit_subtype = PitNestFilter::get_instance().pit_subtype(*pit_type);
-    msg_format_wizard(player_ptr, CHEAT_DUNGEON, fmt_generate, pit.name.data(), pit_subtype.data());
+    msg_print_wizard(player_ptr, CHEAT_DUNGEON, fmt_generate, pit.name, pit_subtype);
 
     for (auto i = 0; i < NUM_PIT_MONRACES / 2; i++) {
         (*whats)[i] = (*whats)[i * 2];
-        constexpr auto fmt_pit_num = _("Pit構成モンスター選択No.%d:%s", "Pit Monster Select No.%d:%s");
+        constexpr auto fmt_pit_num = _("Pit構成モンスター選択No.{}:{}", "Pit Monster Select No.{}:{}");
         const auto &monrace = monraces.get_monrace((*whats)[i]);
-        msg_format_wizard(player_ptr, CHEAT_DUNGEON, fmt_pit_num, i, monrace.name.data());
+        msg_print_wizard(player_ptr, CHEAT_DUNGEON, fmt_pit_num, i, monrace.name);
     }
 
     /* Top and bottom rows */
@@ -441,9 +441,9 @@ bool build_type13(PlayerType *player_ptr, DungeonData *dd_ptr)
     std::stable_sort(whats->begin(), whats->end(), [&monraces](const auto monrace_id1, const auto monrace_id2) {
         return monraces.order_level(monrace_id2, monrace_id1);
     });
-    constexpr auto fmt = _("%s%sの罠ピットが生成されました。", "Trapped monster pit (%s%s)");
+    constexpr auto fmt = _("{}{}の罠ピットが生成されました。", "Trapped monster pit ({}{})");
     const auto pit_subtype = PitNestFilter::get_instance().pit_subtype(*pit_type);
-    msg_format_wizard(player_ptr, CHEAT_DUNGEON, fmt, pit.name.data(), pit_subtype.data());
+    msg_print_wizard(player_ptr, CHEAT_DUNGEON, fmt, pit.name, pit_subtype);
 
     for (auto i = 0; i < NUM_PIT_MONRACES / 2; i++) {
         (*whats)[i] = (*whats)[i * 2];
