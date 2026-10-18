@@ -163,11 +163,7 @@ bool process_fall_off_horse(PlayerType *player_ptr, int dam, bool force)
         SubWindowRedrawingFlag::DUNGEON,
     };
     rfu.set_flags(flags_swrf);
-    static constexpr auto flags_mwrf = {
-        MainWindowRedrawingFlag::EXTRA,
-        MainWindowRedrawingFlag::UHEALTH,
-    };
-    rfu.set_flags(flags_mwrf);
+    rfu.request_riding_status_redrawing();
     auto fall_dam = false;
     if (player_ptr->levitation && !force) {
         const auto m_name = monster_desc(player_ptr, monster, 0);

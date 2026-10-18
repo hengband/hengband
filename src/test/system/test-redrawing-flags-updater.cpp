@@ -361,3 +361,37 @@ TEST_CASE("RedrawingFlagsUpdater::request_equipment_change_updates requests reca
     CHECK_FALSE(rfu.has(MainWindowRedrawingFlag::EQUIPPY));
     CHECK_FALSE(rfu.has(SubWindowRedrawingFlag::PLAYER));
 }
+
+TEST_CASE("RedrawingFlagsUpdater::request_riding_status_redrawing requests redrawing the riding status and the mount's health")
+{
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    static constexpr auto flags_mwrf = {
+        MainWindowRedrawingFlag::EXTRA,
+        MainWindowRedrawingFlag::UHEALTH,
+        MainWindowRedrawingFlag::HEALTH,
+        MainWindowRedrawingFlag::MAP,
+    };
+    const auto restore_mwrf = scoped_restore_flags(rfu, flags_mwrf);
+    const auto restore_srf = scoped_restore_flags(rfu, { StatusRecalculatingFlag::BONUS });
+    static constexpr auto flags_swrf = {
+        SubWindowRedrawingFlag::OVERHEAD,
+        SubWindowRedrawingFlag::DUNGEON,
+    };
+    const auto restore_swrf = scoped_restore_flags(rfu, flags_swrf);
+    rfu.reset_flags(flags_mwrf);
+    rfu.reset_flag(StatusRecalculatingFlag::BONUS);
+    rfu.reset_flags(flags_swrf);
+
+    rfu.request_riding_status_redrawing();
+
+    CHECK(rfu.has(MainWindowRedrawingFlag::EXTRA));
+    CHECK(rfu.has(MainWindowRedrawingFlag::UHEALTH));
+    // 追跡しているモンスターの体力や、乗っているモンスターで変わる能力の再計算は、それぞれの箇所で要求する
+    CHECK_FALSE(rfu.has(MainWindowRedrawingFlag::HEALTH));
+    CHECK_FALSE(rfu.has(StatusRecalculatingFlag::BONUS));
+    // 乗り降りのコマンドで一緒に要求するメイン画面の地図 (MAP) と、落馬で一緒に要求するサブウィンドウの地図
+    // (OVERHEAD・DUNGEON) の描き直しも、それぞれの箇所で要求する
+    CHECK_FALSE(rfu.has(MainWindowRedrawingFlag::MAP));
+    CHECK_FALSE(rfu.has(SubWindowRedrawingFlag::OVERHEAD));
+    CHECK_FALSE(rfu.has(SubWindowRedrawingFlag::DUNGEON));
+}
