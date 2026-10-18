@@ -2,7 +2,9 @@
 
 #include "system/angband.h"
 #include <filesystem>
+#include <fmt/format.h>
 #include <string_view>
+#include <utility>
 
 constexpr std::string_view auto_dump_header = "# vvvvvvv== {} ==vvvvvvv";
 constexpr std::string_view auto_dump_footer = "# ^^^^^^^== {} ==^^^^^^^";
@@ -15,8 +17,14 @@ errr process_autopick_file(PlayerType *player_ptr, std::string_view name);
 errr process_histpref_file(PlayerType *player_ptr, std::string_view name);
 bool read_histpref(PlayerType *player_ptr);
 
-void auto_dump_printf(FILE *auto_dump_stream, const char *fmt, ...) __attribute__((format(printf, 2, 3)));
+void auto_dump_print(FILE *auto_dump_stream, std::string_view str);
 bool open_auto_dump(FILE **fpp, const std::filesystem::path &path, std::string_view mark);
 void close_auto_dump(FILE **fpp, std::string_view mark);
 
 void load_all_pref_files(PlayerType *player_ptr);
+
+template <typename... Args>
+void auto_dump_print(FILE *auto_dump_stream, fmt::format_string<Args...> fmt, Args &&...args)
+{
+    auto_dump_print(auto_dump_stream, fmt::format(fmt, std::forward<Args>(args)...));
+}

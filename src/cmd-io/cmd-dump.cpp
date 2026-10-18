@@ -107,7 +107,7 @@ void do_cmd_colors(PlayerType *player_ptr)
                 continue;
             }
 
-            auto_dump_printf(auto_dump_stream, _("\n# カラーの設定\n\n", "\n# Color redefinitions\n\n"));
+            auto_dump_print(auto_dump_stream, _("\n# カラーの設定\n\n", "\n# Color redefinitions\n\n"));
             for (auto i = 0; i < 256; i++) {
                 int kv = angband_color_table[i][0];
                 int rv = angband_color_table[i][1];
@@ -123,8 +123,8 @@ void do_cmd_colors(PlayerType *player_ptr)
                     name = color_names[i];
                 }
 
-                auto_dump_printf(auto_dump_stream, _("# カラー '%s'\n", "# Color '%s'\n"), name);
-                auto_dump_printf(auto_dump_stream, "V:%d:0x%02X:0x%02X:0x%02X:0x%02X\n\n", i, kv, rv, gv, bv);
+                auto_dump_print(auto_dump_stream, _("# カラー '{}'\n", "# Color '{}'\n"), name);
+                auto_dump_print(auto_dump_stream, "V:{}:0x{:02X}:0x{:02X}:0x{:02X}:0x{:02X}\n\n", i, kv, rv, gv, bv);
             }
 
             close_auto_dump(&auto_dump_stream, mark);

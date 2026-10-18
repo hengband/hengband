@@ -129,11 +129,11 @@ void do_cmd_visuals(PlayerType *player_ptr)
                 continue;
             }
 
-            auto_dump_printf(auto_dump_stream, _("\n# モンスターの[色/文字]の設定\n\n", "\n# Monster attr/char definitions\n\n"));
+            auto_dump_print(auto_dump_stream, _("\n# モンスターの[色/文字]の設定\n\n", "\n# Monster attr/char definitions\n\n"));
             for (const auto &[monrace_id, monrace] : MonraceList::get_instance()) {
-                auto_dump_printf(auto_dump_stream, "# %s\n", monrace->name.data());
+                auto_dump_print(auto_dump_stream, "# {}\n", monrace->name);
                 const auto &symbol_config = monrace->symbol_config;
-                auto_dump_printf(auto_dump_stream, "R:%d:0x%02X/0x%02X\n\n", enum2i(monrace_id), symbol_config.color, static_cast<uint8_t>(symbol_config.character));
+                auto_dump_print(auto_dump_stream, "R:{}:0x{:02X}/0x{:02X}\n\n", enum2i(monrace_id), symbol_config.color, static_cast<uint8_t>(symbol_config.character));
             }
 
             close_auto_dump(&auto_dump_stream, mark);
@@ -154,7 +154,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                 continue;
             }
 
-            auto_dump_printf(auto_dump_stream, _("\n# アイテムの[色/文字]の設定\n\n", "\n# Object attr/char definitions\n\n"));
+            auto_dump_print(auto_dump_stream, _("\n# アイテムの[色/文字]の設定\n\n", "\n# Object attr/char definitions\n\n"));
             const auto &baseitems = BaseitemList::get_instance();
             const auto &baseitem_configs = BaseitemConfigs::get_instance();
             const auto &baseitem_records = BaseitemRecords::get_instance();
@@ -169,8 +169,8 @@ void do_cmd_visuals(PlayerType *player_ptr)
                 }
 
                 const auto &baseitem_config = baseitem_configs.get_config(bi_id);
-                auto_dump_printf(auto_dump_stream, "# %s\n", item_name.data());
-                auto_dump_printf(auto_dump_stream, "K:%d:0x%02X/0x%02X\n\n", bi_id, baseitem_config.get_color(), static_cast<uint8_t>(baseitem_config.get_character()));
+                auto_dump_print(auto_dump_stream, "# {}\n", item_name);
+                auto_dump_print(auto_dump_stream, "K:{}:0x{:02X}/0x{:02X}\n\n", bi_id, baseitem_config.get_color(), static_cast<uint8_t>(baseitem_config.get_character()));
             }
 
             close_auto_dump(&auto_dump_stream, mark);
@@ -191,7 +191,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                 continue;
             }
 
-            auto_dump_printf(auto_dump_stream, _("\n# 地形の[色/文字]の設定\n\n", "\n# Feature attr/char definitions\n\n"));
+            auto_dump_print(auto_dump_stream, _("\n# 地形の[色/文字]の設定\n\n", "\n# Feature attr/char definitions\n\n"));
             for (const auto &terrain : TerrainList::get_instance()) {
                 if (terrain.name.empty()) {
                     continue;
@@ -200,13 +200,11 @@ void do_cmd_visuals(PlayerType *player_ptr)
                     continue;
                 }
 
-                auto_dump_printf(auto_dump_stream, "# %s\n", (terrain.name.data()));
+                auto_dump_print(auto_dump_stream, "# {}\n", terrain.name);
                 const auto &symbol_standard = terrain.symbol_configs.at(F_LIT_STANDARD);
                 const auto &symbol_lite = terrain.symbol_configs.at(F_LIT_LITE);
                 const auto &symbol_dark = terrain.symbol_configs.at(F_LIT_DARK);
-                auto_dump_printf(auto_dump_stream, "F:%d:0x%02X/0x%02X:0x%02X/0x%02X:0x%02X/0x%02X\n\n", terrain.idx, symbol_standard.color,
-                    static_cast<uint8_t>(symbol_standard.character), symbol_lite.color, static_cast<uint8_t>(symbol_lite.character),
-                    symbol_dark.color, static_cast<uint8_t>(symbol_dark.character));
+                auto_dump_print(auto_dump_stream, "F:{}:0x{:02X}/0x{:02X}:0x{:02X}/0x{:02X}:0x{:02X}/0x{:02X}\n\n", terrain.idx, symbol_standard.color, static_cast<uint8_t>(symbol_standard.character), symbol_lite.color, static_cast<uint8_t>(symbol_lite.character), symbol_dark.color, static_cast<uint8_t>(symbol_dark.character));
             }
 
             close_auto_dump(&auto_dump_stream, mark);

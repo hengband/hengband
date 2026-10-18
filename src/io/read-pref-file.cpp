@@ -253,19 +253,15 @@ errr process_histpref_file(PlayerType *player_ptr, std::string_view name)
 
 /*!
  * @brief prfファイルのフォーマットに従った内容を出力する
- * @param fmt 出力内容
+ * @param auto_dump_stream 出力先のファイル
+ * @param str 出力内容
  */
-void auto_dump_printf(FILE *auto_dump_stream, const char *fmt, ...)
+void auto_dump_print(FILE *auto_dump_stream, std::string_view str)
 {
-    va_list vp;
-    va_start(vp, fmt);
-    const auto buf = vformat(fmt, vp);
-    va_end(vp);
-
     // '\n'はSJISのマルチバイト文字のコードに含まれないため、ダメ文字を考慮する必要はない
-    auto_dump_line_num += std::count(buf.begin(), buf.end(), '\n');
+    auto_dump_line_num += std::count(str.begin(), str.end(), '\n');
 
-    fmt::print(auto_dump_stream, "{}", buf);
+    fmt::print(auto_dump_stream, "{}", str);
 }
 
 /*!
@@ -289,9 +285,8 @@ bool open_auto_dump(FILE **fpp, const std::filesystem::path &path, std::string_v
 
     fmt::println(*fpp, "{}", header_mark_str);
     auto_dump_line_num = 0;
-    auto_dump_printf(*fpp, _("# *警告!!* 以降の行は自動生成されたものです。\n", "# *Warning!*  The lines below are an automatic dump.\n"));
-    auto_dump_printf(
-        *fpp, _("# *警告!!* 後で自動的に削除されるので編集しないでください。\n", "# Don't edit them; changes will be deleted and replaced automatically.\n"));
+    auto_dump_print(*fpp, _("# *警告!!* 以降の行は自動生成されたものです。\n", "# *Warning!*  The lines below are an automatic dump.\n"));
+    auto_dump_print(*fpp, _("# *警告!!* 後で自動的に削除されるので編集しないでください。\n", "# Don't edit them; changes will be deleted and replaced automatically.\n"));
     return true;
 }
 
@@ -303,9 +298,8 @@ bool open_auto_dump(FILE **fpp, const std::filesystem::path &path, std::string_v
 void close_auto_dump(FILE **fpp, std::string_view mark)
 {
     const auto footer_mark_str = fmt::format(auto_dump_footer, mark);
-    auto_dump_printf(*fpp, _("# *警告!!* 以降の行は自動生成されたものです。\n", "# *Warning!*  The lines below are an automatic dump.\n"));
-    auto_dump_printf(
-        *fpp, _("# *警告!!* 後で自動的に削除されるので編集しないでください。\n", "# Don't edit them; changes will be deleted and replaced automatically.\n"));
+    auto_dump_print(*fpp, _("# *警告!!* 以降の行は自動生成されたものです。\n", "# *Warning!*  The lines below are an automatic dump.\n"));
+    auto_dump_print(*fpp, _("# *警告!!* 後で自動的に削除されるので編集しないでください。\n", "# Don't edit them; changes will be deleted and replaced automatically.\n"));
     fmt::println(*fpp, "{} ({})", footer_mark_str, auto_dump_line_num);
     angband_fclose(*fpp);
 }

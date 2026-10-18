@@ -32,15 +32,15 @@ static bool macro_dump(std::string_view filename)
         return false;
     }
 
-    auto_dump_printf(auto_dump_stream, _("\n# 自動マクロセーブ\n\n", "\n# Automatic macro dump\n\n"));
+    auto_dump_print(auto_dump_stream, _("\n# 自動マクロセーブ\n\n", "\n# Automatic macro dump\n\n"));
 
     for (auto i = 0; i < active_macros; i++) {
         char buf[1024]{};
         ascii_to_text(buf, macro_actions[i], sizeof(buf));
-        auto_dump_printf(auto_dump_stream, "A:%s\n", buf);
+        auto_dump_print(auto_dump_stream, "A:{}\n", buf);
         ascii_to_text(buf, macro_patterns[i], sizeof(buf));
-        auto_dump_printf(auto_dump_stream, "P:%s\n", buf);
-        auto_dump_printf(auto_dump_stream, "\n");
+        auto_dump_print(auto_dump_stream, "P:{}\n", buf);
+        auto_dump_print(auto_dump_stream, "\n");
     }
 
     close_auto_dump(&auto_dump_stream, mark);
@@ -97,7 +97,7 @@ static bool keymap_dump(std::string_view filename)
         return false;
     }
 
-    auto_dump_printf(auto_dump_stream, _("\n# 自動キー配置セーブ\n\n", "\n# Automatic keymap dump\n\n"));
+    auto_dump_print(auto_dump_stream, _("\n# 自動キー配置セーブ\n\n", "\n# Automatic keymap dump\n\n"));
     for (auto i = 0; i < 256; i++) {
         const auto &act = keymap_actions_map.at(mode).at(i);
         if (!act) {
@@ -108,8 +108,8 @@ static bool keymap_dump(std::string_view filename)
         buf[0] = (char)i;
         ascii_to_text(key, buf, sizeof(key));
         ascii_to_text(buf, *act, sizeof(buf));
-        auto_dump_printf(auto_dump_stream, "A:%s\n", buf);
-        auto_dump_printf(auto_dump_stream, "C:%d:%s\n", enum2i(mode), key);
+        auto_dump_print(auto_dump_stream, "A:{}\n", buf);
+        auto_dump_print(auto_dump_stream, "C:{}:{}\n", enum2i(mode), key);
     }
 
     close_auto_dump(&auto_dump_stream, mark);
