@@ -56,6 +56,7 @@ constexpr auto RAND_DEG = 63;
 enum class KeyedRngPurpose : uint32_t {
     MAP_SYMBOL = 1, //!< マップの表示 (幻覚・万色・シェイプチェンジャー)
     BOLT_COLOR = 2, //!< ボルト・ボールの色
+    MONSTER_NAME = 3, //!< 幻覚中のモンスターの名前
 };
 
 void Rand_state_init(tl::optional<uint32_t> seed = tl::nullopt);
