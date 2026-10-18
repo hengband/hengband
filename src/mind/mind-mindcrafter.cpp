@@ -10,7 +10,7 @@
 #include "floor/floor-object.h"
 #include "hpmp/hp-mp-processor.h"
 #include "mind/mind-numbers.h"
-#include "object-enchant/item-feeling.h"
+#include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
 #include "object/object-mark-types.h"
 #include "perception/object-perception.h"
@@ -36,20 +36,13 @@
 /*!
  * @brief 超能力者のサイコメトリー処理/ Forcibly pseudo-identify an object in the inventory (or on the floor)
  * @param player_ptr プレイヤーへの参照ポインタ
- * @note
- * currently this function allows pseudo-id of any object,
- * including silly ones like potions & scrolls, which always
- * get '{average}'. This should be changed, either to stop such
- * items from being pseudo-id'd, or to allow psychometry to
- * detect whether the unidentified potion/scroll/etc is
- * good (Cure Light Wounds, Restore Strength, etc) or
- * bad (Poison, Weakness etc) or 'useless' (Slime Mold Juice, etc).
+ * @details 定期の擬似鑑定と同じく、感触を得られる種類 (武器・防具・矢弾・装飾品など) だけを調べられる。
  */
 bool psychometry(PlayerType *player_ptr)
 {
     constexpr auto q = _("どのアイテムを調べますか？", "Meditate on which item? ");
     constexpr auto s = _("調べるアイテムがありません。", "You have nothing appropriate.");
-    const auto &[item, i_idx] = choose_item(player_ptr, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT));
+    const auto &[item, i_idx] = choose_item(player_ptr, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), FuncItemTester(&ItemEntity::can_be_sensed));
     if (!item) {
         return false;
     }
@@ -59,7 +52,7 @@ bool psychometry(PlayerType *player_ptr)
         return true;
     }
 
-    item_feel_type feel = pseudo_value_check_heavy(item.get());
+    const auto feel = pseudo_value_check_heavy(item.get());
     const auto item_name = describe_flavor(player_ptr, *item, (OD_OMIT_PREFIX | OD_NAME_ONLY));
     if (!feel) {
         msg_print(_("{}からは特に変わった事は感じとれなかった。", "You do not perceive anything unusual about the {}."), item_name);
