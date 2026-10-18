@@ -27,6 +27,7 @@
 #include "view/display-messages.h"
 #include "wizard/monrace-filter-debug-info.h"
 #include <algorithm>
+#include <fmt/format.h>
 #include <iterator>
 
 /**
@@ -236,7 +237,7 @@ static bool do_hook(PlayerType *player_ptr, MonraceHook hook, MonraceId monrace_
     case MonraceHook::DARK_ELF:
         return is_suitable_for_dungeon && MonraceList::is_dark_elf(monrace_id) && monrace.is_suitable_for_special_room();
     default:
-        THROW_EXCEPTION(std::logic_error, format("Invalid monrace hook type is specified! %d", enum2i(hook)));
+        THROW_EXCEPTION(std::logic_error, fmt::format("Invalid monrace hook type is specified! {}", enum2i(hook)));
     }
 }
 

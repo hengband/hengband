@@ -27,6 +27,7 @@
 #include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
+#include <fmt/format.h>
 
 /*!< 呪術の最大詠唱数 */
 constexpr int MAX_KEEP = 4;
@@ -122,8 +123,8 @@ bool SpellHex::stop_spells_with_selection()
         return true;
     }
 
-    constexpr auto fmt = _("どの呪文の詠唱を中断しますか？(呪文 %c-%c, 'l'全て, ESC)", "Which spell do you stop casting? (Spell %c-%c, 'l' to all, ESC)");
-    const auto prompt = format(fmt, I2A(0), I2A(casting_num - 1));
+    constexpr auto fmt = _("どの呪文の詠唱を中断しますか？(呪文 {:c}-{:c}, 'l'全て, ESC)", "Which spell do you stop casting? (Spell {:c}-{:c}, 'l' to all, ESC)");
+    const auto prompt = fmt::format(fmt, I2A(0), I2A(casting_num - 1));
     screen_save();
     const auto &[is_all, choice] = select_spell_stopping(prompt);
     if (is_all) {
@@ -200,7 +201,7 @@ void SpellHex::display_casting_spells_list()
     for (auto spell : this->casting_spells) {
         term_erase(x, y + n + 1);
         const auto &spell_name = PlayerRealm::get_spell_name(RealmType::HEX, spell);
-        put_str(format("%c)  %s", I2A(n), spell_name.data()), y + n + 1, x + 2);
+        put_str(fmt::format("{:c})  {}", I2A(n), spell_name), y + n + 1, x + 2);
         n++;
     }
 }
@@ -399,10 +400,10 @@ void SpellHex::eyes_on_eyes(MONSTER_IDX m_idx, int dam)
     const auto &monster = this->player_ptr->current_floor_ptr->m_list[m_idx];
     const auto m_name = monster_desc(this->player_ptr, monster, 0);
 #ifdef JP
-    msg_format("攻撃が%s自身を傷つけた！", m_name.data());
+    msg_print("攻撃が{}自身を傷つけた！", m_name);
 #else
     const auto m_name_self = monster_desc(this->player_ptr, monster, MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE);
-    msg_format("The attack of %s has wounded %s!", m_name.data(), m_name_self.data());
+    msg_print("The attack of {} has wounded {}!", m_name, m_name_self);
 #endif
     const auto y = monster.fy;
     const auto x = monster.fx;

@@ -93,7 +93,7 @@ static void ninja_critical(PlayerType *player_ptr, player_attack_type *pa_ptr)
                                                                                           : 27)) {
         pa_ptr->attack_damage *= 5;
         pa_ptr->drain_result *= 2;
-        msg_format(_("刃が%sに深々と突き刺さった！", "You critically injured %s!"), pa_ptr->m_name);
+        msg_print(_("刃が{}に深々と突き刺さった！", "You critically injured {}!"), pa_ptr->m_name);
         sound(SoundKind::NINJA_CRITICAL_HIT);
         return;
     }
@@ -112,11 +112,11 @@ static void ninja_critical(PlayerType *player_ptr, player_attack_type *pa_ptr)
         }
         pa_ptr->attack_damage = std::max(pa_ptr->attack_damage * 5, pa_ptr->m_ptr->hp / 2);
         pa_ptr->drain_result *= 2;
-        msg_format(_("%sに致命傷を負わせた！", "You fatally injured %s!"), pa_ptr->m_name);
+        msg_print(_("{}に致命傷を負わせた！", "You fatally injured {}!"), pa_ptr->m_name);
         sound(SoundKind::NINJA_FATAL_HIT);
     } else {
         pa_ptr->attack_damage = pa_ptr->m_ptr->hp + 1;
-        msg_format(_("刃が%sの急所を貫いた！", "You hit %s on a fatal spot!"), pa_ptr->m_name);
+        msg_print(_("刃が{}の急所を貫いた！", "You hit {} on a fatal spot!"), pa_ptr->m_name);
         sound(SoundKind::FATAL_SPOT);
     }
 }
@@ -134,7 +134,7 @@ void critical_attack(PlayerType *player_ptr, player_attack_type *pa_ptr)
     if ((o_ptr->bi_key == BaseitemKey(ItemKindType::SWORD, SV_POISON_NEEDLE)) || (pa_ptr->mode == HISSATSU_KYUSHO)) {
         if ((randint1(randint1(monrace.level / 7) + 5) == 1) && monrace.kind_flags.has_not(MonsterKindType::UNIQUE) && !no_instantly_death) {
             pa_ptr->attack_damage = pa_ptr->m_ptr->hp + 1;
-            msg_format(_("%sの急所を突き刺した！", "You hit %s on a fatal spot!"), pa_ptr->m_name);
+            msg_print(_("{}の急所を突き刺した！", "You hit {} on a fatal spot!"), pa_ptr->m_name);
             sound(SoundKind::FATAL_SPOT);
         } else {
             if (no_instantly_death) {

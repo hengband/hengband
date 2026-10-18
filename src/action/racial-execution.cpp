@@ -135,7 +135,7 @@ racial_level_check_result check_racial_level(PlayerType *player_ptr, rpi_type *r
 
     PlayerEnergy energy(player_ptr);
     if (player_ptr->lev < min_level) {
-        msg_format(_("この能力を使用するにはレベル %d に達していなければなりません。", "You need to attain level %d to use this power."), min_level);
+        msg_print(_("この能力を使用するにはレベル {} に達していなければなりません。", "You need to attain level {} to use this power."), min_level);
         energy.reset_player_turn();
         return RACIAL_CANCEL;
     }

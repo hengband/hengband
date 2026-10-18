@@ -28,6 +28,7 @@
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
+#include <fmt/format.h>
 
 /*!
  * @brief モンスターへの単体抹殺処理サブルーチン / Delete a non-unique/non-quest monster
@@ -74,19 +75,19 @@ bool genocide_aux(PlayerType *player_ptr, MONSTER_IDX m_idx, int power, bool pla
         const auto see_m = is_seen(player_ptr, monster);
         const auto m_name = monster_desc(player_ptr, monster, 0);
         if (see_m) {
-            msg_format(_("%s^には効果がなかった。", "%s^ is unaffected."), m_name.data());
+            msg_print(_("{}には効果がなかった。", "{} is unaffected."), str_upcase_first(m_name));
         }
 
         if (monster.is_asleep()) {
             (void)set_monster_csleep(*player_ptr->current_floor_ptr, m_idx, 0);
             if (monster.ml) {
-                msg_format(_("%s^が目を覚ました。", "%s^ wakes up."), m_name.data());
+                msg_print(_("{}が目を覚ました。", "{} wakes up."), str_upcase_first(m_name));
             }
         }
 
         if (monster.is_friendly() && !monster.is_pet()) {
             if (see_m) {
-                msg_format(_("%sは怒った！", "%s^ gets angry!"), m_name.data());
+                msg_print(_("{}は怒った！", "{} gets angry!"), str_upcase_first(m_name));
             }
 
             monster.set_hostile();

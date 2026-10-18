@@ -264,14 +264,18 @@ bool affect_item(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POSITI
 
         if ((is_fixed_or_random_artifact || ignore)) {
             if (known && item.marked.has(OmType::FOUND)) {
-                msg_format(_("%sは影響を受けない！", (plural ? "The %s are unaffected!" : "The %s is unaffected!")), item_name.data());
+#ifdef JP
+                msg_print("{}は影響を受けない！", item_name);
+#else
+                msg_print("The {} {} unaffected!", item_name, plural ? "are" : "is");
+#endif
             }
 
             continue;
         }
 
         if (known && item.marked.has(OmType::FOUND) && note_kill) {
-            msg_format(_("%sは%s", "The %s%s"), item_name.data(), note_kill);
+            msg_print(_("{}は{}", "The {}{}"), item_name, note_kill);
         }
 
         delete_i_idx_list.push_back(this_o_idx);

@@ -14,6 +14,7 @@
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
 
 /*!
@@ -48,7 +49,7 @@ void discharge_minion(PlayerType *player_ptr)
         const auto &monrace = monster.get_monrace();
         if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
             const auto m_name = monster_desc(player_ptr, monster, 0x00);
-            msg_format(_("%sは爆破されるのを嫌がり、勝手に自分の世界へと帰った。", "%s^ resists being blasted and runs away."), m_name.data());
+            msg_print(_("{}は爆破されるのを嫌がり、勝手に自分の世界へと帰った。", "{} resists being blasted and runs away."), str_upcase_first(m_name));
             delete_monster_idx(player_ptr, i);
             continue;
         }

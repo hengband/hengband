@@ -62,6 +62,7 @@
 #include "timed-effect/timed-effects.h"
 #include "tracking/lore-tracker.h"
 #include "util/bit-flags-calculator.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "wizard/wizard-messages.h"
 
@@ -745,7 +746,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
                     /* Handle unseen monster */
                     if (!visible) {
                         /* Invisible monster */
-                        msg_format(_("%sが敵を捕捉した。", "The %s finds a mark."), item_name.data());
+                        msg_print(_("{}が敵を捕捉した。", "The {} finds a mark."), item_name);
                     }
 
                     /* Handle visible monster */
@@ -753,7 +754,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
                         /* Get "the monster" or "it" */
                         const auto m_name = monster_desc(player_ptr, monster, 0);
 
-                        msg_format(_("%sが%sに命中した。", "The %s hits %s."), item_name.data(), m_name.data());
+                        msg_print(_("{}が{}に命中した。", "The {} hits {}."), item_name, m_name);
 
                         if (monster.ml) {
                             if (!player_ptr->effects()->hallucination().is_active()) {
@@ -774,7 +775,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
 
                             tdam = monster.hp + 1;
                             base_dam = tdam;
-                            msg_format(_("%sの急所に突き刺さった！", "Your shot hit a fatal spot of %s!"), m_name.data());
+                            msg_print(_("{}の急所に突き刺さった！", "Your shot hit a fatal spot of {}!"), m_name);
                         } else {
                             if (no_instantly_death) {
                                 monrace.r_resistance_flags.set(MonsterResistanceType::NO_INSTANTLY_DEATH);
@@ -830,7 +831,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
                         /* STICK TO */
                         if (fire_item.is_fixed_artifact() && (sniper_concent == 0)) {
                             stick_to = true;
-                            msg_format(_("%sは%sに突き刺さった！", "%s^ is stuck in %s!"), item_name.data(), m_name.data());
+                            msg_print(_("{}は{}に突き刺さった！", "{} is stuck in {}!"), str_upcase_first(item_name), m_name);
                         }
 
                         const auto pain_message = monster.get_pain_message(m_name, tdam);
@@ -845,7 +846,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
 
                         if (fear && monster.ml) {
                             sound(SoundKind::FLEE);
-                            msg_format(_("%s^は恐怖して逃げ出した！", "%s^ flees in terror!"), m_name.data());
+                            msg_print(_("{}は恐怖して逃げ出した！", "{} flees in terror!"), str_upcase_first(m_name));
                         }
 
                         monster.set_target(player_ptr->get_position());
@@ -912,7 +913,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
             const auto m_idx = floor.get_grid(pos_impact).m_idx;
             const auto item_idx = floor.pop_empty_index_item();
             if (item_idx == 0) {
-                msg_format(_("%sはどこかへ行った。", "The %s went somewhere."), item_name.data());
+                msg_print(_("{}はどこかへ行った。", "The {} went somewhere."), item_name);
                 if (fire_item.is_fixed_artifact()) {
                     ArtifactRecords::get_instance().set_generated(j_ptr->fa_id, false);
                 }

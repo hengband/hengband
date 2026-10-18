@@ -77,11 +77,11 @@ bool exe_tunnel(PlayerType *player_ptr, POSITION y, POSITION x)
     } else if (terrain.flags.has(TerrainCharacteristics::CAN_DIG)) {
         if (player_ptr->skill_dig > randint0(20 * power)) {
             sound(SoundKind::DIG_THROUGH);
-            msg_format(_("%sをくずした。", "You have removed the %s."), name.data());
+            msg_print(_("{}をくずした。", "You have removed the {}."), name);
             cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::TUNNEL);
             RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::FLOW);
         } else {
-            msg_format(_("%sをくずしている。", "You dig into the %s."), name.data());
+            msg_print(_("{}をくずしている。", "You dig into the {}."), name);
             more = true;
         }
     } else {
@@ -89,7 +89,7 @@ bool exe_tunnel(PlayerType *player_ptr, POSITION y, POSITION x)
         if (player_ptr->skill_dig > power + randint0(40 * power)) {
             sound(SoundKind::DIG_THROUGH);
             if (tree) {
-                msg_format(_("%sを切り払った。", "You have cleared away the %s."), name.data());
+                msg_print(_("{}を切り払った。", "You have cleared away the {}."), name);
             } else {
                 msg_print(_("穴を掘り終えた。", "You have finished the tunnel."));
                 RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::FLOW);
@@ -104,12 +104,12 @@ bool exe_tunnel(PlayerType *player_ptr, POSITION y, POSITION x)
             chg_virtue(player_ptr, Virtue::NATURE, -1);
         } else {
             if (tree) {
-                msg_format(_("%sを切っている。", "You chop away at the %s."), name.data());
+                msg_print(_("{}を切っている。", "You chop away at the {}."), name);
                 if (one_in_(4)) {
                     search(player_ptr);
                 }
             } else {
-                msg_format(_("%sに穴を掘っている。", "You tunnel into the %s."), name.data());
+                msg_print(_("{}に穴を掘っている。", "You tunnel into the {}."), name);
             }
 
             more = true;

@@ -6,6 +6,8 @@
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
 #include "term/z-form.h"
+#include "util/string-processor.h"
+#include <fmt/format.h>
 #include <functional>
 #include <string>
 #include <string_view>
@@ -194,7 +196,7 @@ tl::optional<std::string> MonsterPainDescriber::describe(int now_hp, int took_da
 {
     if (took_damage == 0) {
         if (visible) {
-            return format(_("%s^はダメージを受けていない。", "%s^ is unharmed."), this->m_name.data());
+            return fmt::format(_("{}はダメージを受けていない。", "{} is unharmed."), str_upcase_first(this->m_name));
         }
         return tl::nullopt;
     }
@@ -208,7 +210,7 @@ tl::optional<std::string> MonsterPainDescriber::describe(int now_hp, int took_da
         }
 
         const auto &msg = table.lower_bound(percentage)->second;
-        return format("%s^%s", this->m_name.data(), msg.data());
+        return fmt::format("{}{}", str_upcase_first(this->m_name), msg);
     }
 
     return tl::nullopt;

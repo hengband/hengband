@@ -26,6 +26,7 @@
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
 
 ProcessResult effect_monster_hypodynamia(PlayerType *player_ptr, EffectMonster *em_ptr)
@@ -263,7 +264,7 @@ ProcessResult effect_monster_genocide(PlayerType *player_ptr, EffectMonster *em_
     std::string_view spell_name(_("モンスター消滅", "Genocide One"));
     if (genocide_aux(player_ptr, em_ptr->g_ptr->m_idx, em_ptr->dam, em_ptr->is_player(), (em_ptr->monrace->level + 1) / 2, spell_name)) {
         if (em_ptr->seen_msg) {
-            msg_format(_("%sは消滅した！", "%s^ disappeared!"), em_ptr->m_name);
+            msg_print(_("{}は消滅した！", "{} disappeared!"), str_upcase_first(em_ptr->m_name));
         }
         chg_virtue(player_ptr, Virtue::VITALITY, -1);
         return ProcessResult::PROCESS_TRUE;
@@ -276,7 +277,7 @@ ProcessResult effect_monster_genocide(PlayerType *player_ptr, EffectMonster *em_
 ProcessResult effect_monster_photo(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
     if (em_ptr->is_player()) {
-        msg_format(_("%sを写真に撮った。", "You take a photograph of %s."), em_ptr->m_name);
+        msg_print(_("{}を写真に撮った。", "You take a photograph of {}."), em_ptr->m_name);
     }
 
     if (em_ptr->monrace->resistance_flags.has(MonsterResistanceType::HURT_LITE)) {
