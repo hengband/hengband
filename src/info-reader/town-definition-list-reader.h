@@ -23,10 +23,6 @@ public:
     TownDefinitionListReader &operator=(const TownDefinitionListReader &) = delete;
     TownDefinitionListReader &operator=(TownDefinitionListReader &&) = delete;
 
-    /*!
-     * @brief 有効な町が見つかった場合のみmap_fileを書き換える。
-     * 町が存在しない場合は成功として出力を保持する。
-     */
     parse_error_type read(int town_index, TownMapMode mode, std::string &map_file) const;
 
 private:

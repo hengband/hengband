@@ -38,15 +38,22 @@ TEST_CASE("TownDefinitionListReader selects each mode and a direct map file")
     }
 }
 
-TEST_CASE("TownDefinitionListReader leaves output unchanged when a town is absent")
+/*!
+ * @brief 一覧に無い町は、町の外（町番号が1未満）なら成功、町なら失敗として、どちらも出力を保持する
+ * @details 町が一覧に無いまま成功すると、店の無い町が黙ってできる。
+ */
+TEST_CASE("TownDefinitionListReader rejects an absent town but not the outside of towns")
 {
     const auto data = make_town_definition_list();
     std::string map_file = "previous";
     TownDefinitionListReader reader(data);
-    CHECK(reader.read(3, TownMapMode::NORMAL, map_file) == PARSE_ERROR_NONE);
+    CHECK(reader.read(3, TownMapMode::NORMAL, map_file) == PARSE_ERROR_INVALID_VALUE);
     CHECK(map_file == "previous");
-    CHECK(reader.read(-1, TownMapMode::LITE, map_file) == PARSE_ERROR_NONE);
-    CHECK(map_file == "previous");
+    for (const auto town_index : { 0, -1 }) {
+        CAPTURE(town_index);
+        CHECK(reader.read(town_index, TownMapMode::LITE, map_file) == PARSE_ERROR_NONE);
+        CHECK(map_file == "previous");
+    }
 }
 
 TEST_CASE("TownDefinitionListReader validates the root and preserves output")
@@ -121,6 +128,6 @@ TEST_CASE("TownDefinitionListReader only checks the selected entry as before")
     CHECK(TownDefinitionListReader(data).read(1, TownMapMode::NORMAL, map_file) == PARSE_ERROR_NONE);
     CHECK(map_file == "towns/Normal.jsonc");
     map_file = "previous";
-    CHECK(TownDefinitionListReader(data).read(3, TownMapMode::NORMAL, map_file) == PARSE_ERROR_NONE);
+    CHECK(TownDefinitionListReader(data).read(3, TownMapMode::NORMAL, map_file) == PARSE_ERROR_INVALID_VALUE);
     CHECK(map_file == "previous");
 }

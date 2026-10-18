@@ -7,6 +7,14 @@ TownDefinitionListReader::TownDefinitionListReader(const nlohmann::json &data)
 {
 }
 
+/*!
+ * @brief 町番号と街モードに対応する町マップのファイル名を選ぶ
+ * @param town_index 町番号（町の外は0）
+ * @param mode 街モード
+ * @param map_file 有効な町が見つかった場合のみ書き換える町マップのファイル名
+ * @return エラーコード。町の外（町番号が1未満）は成功として出力を保持する。町番号が1以上で一覧に無い場合は、
+ * 店の無い町が黙ってできないよう PARSE_ERROR_INVALID_VALUE を返し、出力を保持する。
+ */
 parse_error_type TownDefinitionListReader::read(int town_index, TownMapMode mode, std::string &map_file) const
 {
     if (!this->data.is_object() || !this->data.contains("version") || !this->data["version"].is_number_integer() || this->data["version"] != 1 ||
@@ -17,7 +25,7 @@ parse_error_type TownDefinitionListReader::read(int town_index, TownMapMode mode
     const auto &towns = this->data["towns"];
     const auto town = towns.find(std::to_string(town_index));
     if (town == towns.end()) {
-        return PARSE_ERROR_NONE;
+        return town_index > 0 ? PARSE_ERROR_INVALID_VALUE : PARSE_ERROR_NONE;
     }
 
     const nlohmann::json *selected = &*town;

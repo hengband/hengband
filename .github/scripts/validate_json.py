@@ -359,10 +359,30 @@ def validate_town_preferences_semantics(data: dict, schema_path: Path) -> None:
             raise ValidationError("expected an integer JSON value", path=["legend", symbol, "special"])
 
 
-def validate_town_definition_list_semantics(data: dict, schema_path: Path) -> None:
-    """Check town map references against the distributed map files."""
+# 荒野の地図に置かない旧海底都市（TownId::RLYEH）の番号。町の定義の一覧には書いてよい。
+# C++ の SECRET_TOWN（町の番号5）とは別の町なので、値を揃えない。
+RLYEH_TOWN_NUMBER = 6
+
+
+def validate_town_definition_list_semantics(data: dict, schema_path: Path, data_path: Path | None = None,
+                                            registry: Registry | None = None) -> None:
+    """Check town map references against the distributed map files and the wilderness towns."""
     if type(data["version"]) is not int:
         raise ValidationError("expected an integer JSON value", path=["version"])
+
+    if data_path is not None:
+        # TownDefinitionListReaderは今いる町が一覧に無いと読み込みを失敗させるため、荒野の町はすべて一覧に要る。
+        # 一覧のキーは、荒野の町か旧海底都市に限る（ほかのキーは使われない）。
+        wilderness = load_validated_companion(schema_path, data_path, registry, "WildernessDefinition", "wilderness",
+                                              lambda companion: validate_wilderness_semantics(companion, schema_path))
+        town_ids = {town["id"] for town in wilderness["towns"]}
+        listed = {int(town) for town in data["towns"]}
+        missing = sorted(town_ids - listed)
+        if missing:
+            raise ValidationError(f"wilderness towns {missing} must have a town map", path=["towns"])
+        for town in data["towns"]:
+            if int(town) not in town_ids | {RLYEH_TOWN_NUMBER}:
+                raise ValidationError("town must be a wilderness town or the obsoleted R'lyeh town", path=["towns", town])
 
     edit_dir = schema_path.resolve().parent.parent / "lib/edit"
     for town, entry in data["towns"].items():
@@ -938,7 +958,7 @@ def validate_one(pair: tuple[Path, Path, dict], registry: Registry | None = None
             "ArtifactDefinitions.schema.json": lambda: validate_artifact_semantics(data),
             "WildernessDefinition.schema.json": lambda: validate_wilderness_semantics(data, schema_path),
             "TownPreferences.schema.json": lambda: validate_town_preferences_semantics(data, schema_path),
-            "TownDefinitionList.schema.json": lambda: validate_town_definition_list_semantics(data, schema_path),
+            "TownDefinitionList.schema.json": lambda: validate_town_definition_list_semantics(data, schema_path, data_path, registry),
             "TownMap.schema.json": lambda: validate_town_map_semantics(data, schema_path),
             "MonraceDefinitions.schema.json": lambda: validate_monrace_semantics(data, schema_path, data_path, registry),
             "ClassMagicDefinitions.schema.json": lambda: validate_class_magic_semantics(data, schema_path, data_path, registry),

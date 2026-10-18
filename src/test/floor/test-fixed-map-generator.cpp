@@ -728,7 +728,8 @@ TEST_CASE("FixedMapPD town JSONC rejects ambiguous maps and missing selected sta
 
 /*!
  * @brief 町の共通凡例と町の定義の一覧の読み込みに失敗したら、町のマップを読まずに終了する
- * @details 一覧に現在の町が無いときは、町のマップを読まずに成功する。
+ * @details 町の外（町番号0）で一覧に無いときは、町のマップを読まずに成功する。町にいて一覧に無いときは、
+ * 店の無い町が黙ってできないよう終了する。
  */
 TEST_CASE("FixedMapPD town JSONC stops at invalid preference and definition list files")
 {
@@ -760,11 +761,17 @@ TEST_CASE("FixedMapPD town JSONC stops at invalid preference and definition list
     CHECK_THROWS_AS(load_town_map(&fixture.player), TownMapLoadFailure);
     CHECK(grid.feat == 0);
 
-    const auto other_town = std::to_string(AngbandWorld::get_instance().get_town_index() + 1);
-    files.write("TownDefinitionList.jsonc", { { "version", 1 }, { "towns", { { other_town, "towns/fixture.jsonc" } } } });
+    auto &world = AngbandWorld::get_instance();
+    const auto previous_town_index = world.get_town_index();
+    const auto restore_town_index = util::make_finalizer([&world, previous_town_index] { world.set_town_index(previous_town_index); });
+    files.write("TownDefinitionList.jsonc", { { "version", 1 }, { "towns", { { "1", "towns/fixture.jsonc" } } } });
+    world.set_town_index(0);
     REQUIRE_NOTHROW(load_town_map(&fixture.player));
     CHECK(grid.feat == 0);
     CHECK(fixture.player.oldpy == 0);
+    world.set_town_index(2);
+    CHECK_THROWS_AS(load_town_map(&fixture.player), TownMapLoadFailure);
+    CHECK(grid.feat == 0);
 }
 
 /*!

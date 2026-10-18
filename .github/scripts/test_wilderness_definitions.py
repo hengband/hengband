@@ -158,5 +158,57 @@ class WildernessTownValidationTest(unittest.TestCase):
             self.assertIn("town definition file", raised.exception.message)
 
 
+
+class TownDefinitionListCrossReferenceTest(unittest.TestCase):
+    def setUp(self):
+        self.schema_path = Path(__file__).resolve().parents[2] / "schema/TownDefinitionList.schema.json"
+        self.schema = load_jsonc(self.schema_path)
+        self.data = load_jsonc(Path(__file__).resolve().parents[2] / "lib/edit/TownDefinitionList.jsonc")
+
+    def validate(self, data, wilderness=None):
+        companions = {"WildernessDefinition.jsonc": wilderness} if wilderness is not None else None
+        return validate_document(data, self.schema_path, self.schema, filename="TownDefinitionList.jsonc", companions=companions)
+
+    def test_bundled_list_matches_the_wilderness(self):
+        ok, message = self.validate(self.data)
+        self.assertTrue(ok, message)
+
+    def test_every_wilderness_town_needs_a_town_map(self):
+        # 今いる町が一覧に無いと、TownDefinitionListReaderは読み込みを失敗させる。
+        data = copy.deepcopy(self.data)
+        del data["towns"]["3"]
+        ok, message = self.validate(data)
+        self.assertFalse(ok, message)
+        self.assertIn("wilderness towns [3] must have a town map", message)
+        # 足りない町はまとめて報告する。
+        del data["towns"]["5"]
+        ok, message = self.validate(data)
+        self.assertFalse(ok, message)
+        self.assertIn("wilderness towns [3, 5] must have a town map", message)
+
+    def test_keys_must_be_wilderness_towns_or_the_obsoleted_rlyeh_town(self):
+        data = copy.deepcopy(self.data)
+        data["towns"]["7"] = "towns/02_Telmora.jsonc"
+        ok, message = self.validate(data)
+        self.assertFalse(ok, message)
+        self.assertIn("Location: ['towns', '7']", message)
+        # 旧海底都市（6）は荒野に無くても書いてよく、無くてもよい。
+        data = copy.deepcopy(self.data)
+        del data["towns"]["6"]
+        ok, message = self.validate(data)
+        self.assertTrue(ok, message)
+
+    def test_adjacent_wilderness_definition_takes_precedence(self):
+        # 隣の候補の荒野に町6があれば、町6の地図も荒野の町として要る。
+        wilderness = make_wilderness()
+        wilderness["towns"].append({"id": 6, "name": {"ja": "街", "en": "Town"}})
+        data = copy.deepcopy(self.data)
+        ok, message = self.validate(data, wilderness)
+        self.assertTrue(ok, message)
+        del data["towns"]["6"]
+        ok, message = self.validate(data, wilderness)
+        self.assertFalse(ok, message)
+        self.assertIn("wilderness towns [6] must have a town map", message)
+
 if __name__ == "__main__":
     unittest.main()

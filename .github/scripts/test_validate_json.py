@@ -611,6 +611,10 @@ class TownDefinitionListValidationTest(unittest.TestCase):
                     "none": "towns/01_Outpost_OnlyAngband.jsonc",
                 },
                 "2": "towns/02_Telmora.jsonc",
+                # 同梱の荒野の町（1〜5）はすべて一覧に要る。
+                "3": "towns/03_Morivant.jsonc",
+                "4": "towns/04_Angwil.jsonc",
+                "5": "towns/05_Zul.jsonc",
             },
         }
 
