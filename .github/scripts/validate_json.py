@@ -224,7 +224,6 @@ def validate_baseitem_semantics(data: dict, schema_path: Path) -> None:
 
 def validate_artifact_semantics(data: dict) -> None:
     """ArtifactReaderの整数型・ID順序・ダイスを検証する。"""
-    previous_id = -1
     for index, artifact in enumerate(data["artifacts"]):
         path = ["artifacts", index]
         for field in ("id", "parameter_value", "level", "rarity", "weight", "cost", "base_ac", "hit_bonus", "damage_bonus", "ac_bonus"):
@@ -232,9 +231,9 @@ def validate_artifact_semantics(data: dict) -> None:
                 require_integer(artifact[field], path + [field])
         for field in ("type_value", "subtype_value"):
             require_integer(artifact["base_item"][field], path + ["base_item", field])
-        if artifact["id"] <= previous_id:
-            raise ValidationError("artifact IDs must be strictly increasing", path=path + ["id"])
-        previous_id = artifact["id"]
+        # 実行時の記録は 1〜件数の ID だけを作るため、ArtifactReaderは 1 から欠番なく並ぶことを求める。
+        if artifact["id"] != index + 1:
+            raise ValidationError("artifact IDs must start at 1 and continue without gaps", path=path + ["id"])
         if "base_dice" in artifact:
             require_reader_dice(artifact["base_dice"], path + ["base_dice"])
 

@@ -12,6 +12,7 @@
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
 #include "view/display-messages.h"
+#include <algorithm>
 #include <fmt/format.h>
 #include <nlohmann/json.hpp>
 #include <stdexcept>
@@ -36,7 +37,9 @@ int ArtifactReader::read() const
     if (auto err = info_set_integer(get_json_value(this->art_data, "id"), int_id, true, Range(0, 9999))) {
         return err;
     }
-    if (int_id <= error_idx) {
+    // 実行時の記録は 1〜件数の ID だけを作るため、1 から欠番なく並んでいることを求める。
+    if (const auto previous_id = std::max(error_idx, 0); int_id != previous_id + 1) {
+        msg_print(_("アーティファクトIDが連番ではありません。ID: '{}'、直前ID: '{}'。", "Artifact ID is not sequential. ID: '{}', previous ID: '{}'."), int_id, previous_id);
         return PARSE_ERROR_NON_SEQUENTIAL_RECORDS;
     }
     const auto artifact_id = i2enum<FixedArtifactId>(int_id);

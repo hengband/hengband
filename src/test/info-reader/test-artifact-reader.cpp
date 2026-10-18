@@ -95,34 +95,61 @@ TEST_CASE("ArtifactReader preserves missing and non-integer ID errors")
     CHECK(ArtifactList::get_instance().empty());
 }
 
-TEST_CASE("ArtifactReader accepts schema ID boundaries without changing the ordering check")
+/*!
+ * @brief ID は 1 から始まり、欠番なく並んでいなければならない
+ * @details 実行時の記録は 1〜件数の ID だけを作るため、0・欠番・重複・逆順を拒否する。
+ */
+TEST_CASE("ArtifactReader requires IDs to start at 1 and continue without gaps")
 {
-    for (const auto &id : { nlohmann::json(0), nlohmann::json(9999), nlohmann::json(nlohmann::json::number_unsigned_t{ 0 }), nlohmann::json(nlohmann::json::number_unsigned_t{ 9999 }) }) {
+    for (const auto &id : { nlohmann::json(0), nlohmann::json(2), nlohmann::json(nlohmann::json::number_unsigned_t{ 0 }), nlohmann::json(9999) }) {
         CAPTURE(id);
         test::ScopedReaderState reader_state;
         test::ArtifactListTestAccess artifact_state;
         auto data = make_artifact();
         data["id"] = id;
+        CHECK(ArtifactReader(data).read() == PARSE_ERROR_NON_SEQUENTIAL_RECORDS);
+        CHECK(ArtifactList::get_instance().empty());
+        CHECK(error_idx == -1);
+    }
+
+    test::ScopedReaderState reader_state;
+    test::ArtifactListTestAccess artifact_state;
+    auto &artifacts = ArtifactList::get_instance();
+    const auto read_id = [](int id) {
+        const auto data = make_artifact(id);
+        return ArtifactReader(data).read();
+    };
+    REQUIRE(read_id(1) == PARSE_ERROR_NONE);
+    for (const auto id : { 1, 3, 0 }) {
+        CAPTURE(id);
+        CHECK(read_id(id) == PARSE_ERROR_NON_SEQUENTIAL_RECORDS);
+        CHECK(artifacts.size() == 1);
+        CHECK(error_idx == 1);
+    }
+    REQUIRE(read_id(2) == PARSE_ERROR_NONE);
+    CHECK(artifacts.size() == 2);
+    CHECK(error_idx == 2);
+}
+
+/*!
+ * @brief 直前の ID が 9998 なら、ID の範囲の上限 9999 を受け付ける
+ * @details 診断のための ID を直接進めて、範囲の検査だけを確かめる（一覧に 9999 だけがある状態は実行時には起きない）。
+ */
+TEST_CASE("ArtifactReader accepts the largest schema ID after its predecessor")
+{
+    for (const auto &id : { nlohmann::json(9999), nlohmann::json(nlohmann::json::number_unsigned_t{ 9999 }) }) {
+        CAPTURE(id);
+        test::ScopedReaderState reader_state;
+        test::ArtifactListTestAccess artifact_state;
+        error_idx = 9998;
+        auto data = make_artifact();
+        data["id"] = id;
         REQUIRE(ArtifactReader(data).read() == PARSE_ERROR_NONE);
         auto &artifacts = ArtifactList::get_instance();
         REQUIRE(artifacts.size() == 1);
-        CHECK(enum2i(artifacts.begin()->first) == id.get<int>());
-        CHECK(error_idx == id.get<int>());
-        CHECK(ArtifactReader(data).read() == PARSE_ERROR_NON_SEQUENTIAL_RECORDS);
-        CHECK(artifacts.size() == 1);
+        CHECK(enum2i(artifacts.begin()->first) == 9999);
+        CHECK(error_idx == 9999);
     }
-}
-
-TEST_CASE("ArtifactReader rejects descending IDs without publishing another record")
-{
-    test::ScopedReaderState reader_state;
-    test::ArtifactListTestAccess artifact_state;
-    const auto original = make_artifact(4);
-    const auto descending = make_artifact(3);
-    REQUIRE(ArtifactReader(original).read() == PARSE_ERROR_NONE);
-    CHECK(ArtifactReader(descending).read() == PARSE_ERROR_NON_SEQUENTIAL_RECORDS);
-    CHECK(ArtifactList::get_instance().size() == 1);
-    CHECK(error_idx == 4);
 }
 
 TEST_CASE("ArtifactReader publishes complete records with localized text and optional fields")
@@ -214,7 +241,7 @@ TEST_CASE("ArtifactReader preserves existing definitions after early and late pa
     }
     for (const auto id : { 1, 2 }) {
         CAPTURE(id);
-        error_idx = -1;
+        error_idx = id - 1;
         data["id"] = id;
         CHECK(ArtifactReader(data).read() == expected_error);
         REQUIRE(artifacts.size() == 1);

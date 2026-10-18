@@ -116,8 +116,10 @@ class ArtifactDefinitionValidationTest(unittest.TestCase):
         cls.loaded, cls.schema_map = load_all_schemas(root / "schema")
         cls.registry = build_schema_registry(cls.loaded)
         cls.document = load_jsonc(root / "lib/edit/ArtifactDefinitions.jsonc")
-        cls.sample = next(artifact for artifact in cls.document["artifacts"]
-                          if {"parameter_value", "base_ac", "base_dice", "hit_bonus", "damage_bonus", "ac_bonus"} <= artifact.keys())
+        sample = next(artifact for artifact in cls.document["artifacts"]
+                      if {"parameter_value", "base_ac", "base_dice", "hit_bonus", "damage_bonus", "ac_bonus"} <= artifact.keys())
+        # 単独の定義として検証するため、ID は先頭の 1 にする。
+        cls.sample = {**sample, "id": 1}
         cls.monraces = load_jsonc(root / "lib/edit/MonraceDefinitions.jsonc")
 
     def validate(self, *artifacts):
@@ -146,13 +148,18 @@ class ArtifactDefinitionValidationTest(unittest.TestCase):
                 base_item = {**self.sample["base_item"], field: float(self.sample["base_item"][field])}
                 self.check({**self.sample, "base_item": base_item}, False, ["artifacts", 0, "base_item", field], "integer JSON value")
 
-    def test_ids_must_be_strictly_increasing(self):
-        for second_id in (self.sample["id"], self.sample["id"] - 1):
+    def test_ids_must_start_at_one_without_gaps(self):
+        # 実行時の記録は 1〜件数の ID だけを作るため、0・欠番・重複・逆順を拒否する。
+        for first_id in (2, 9999):
+            with self.subTest(first_id=first_id):
+                self.check({**self.sample, "id": first_id}, False, ["artifacts", 0, "id"], "start at 1")
+        self.check({**self.sample, "id": 0}, False, ["artifacts", 0, "id"])
+        for second_id in (1, 3, 0):
             with self.subTest(second_id=second_id):
                 ok, message = self.validate(self.sample, {**self.sample, "id": second_id})
                 self.assertFalse(ok, message)
                 self.assertIn("Location: ['artifacts', 1, 'id']", message)
-        ok, message = self.validate(self.sample, {**self.sample, "id": self.sample["id"] + 1})
+        ok, message = self.validate(self.sample, {**self.sample, "id": 2})
         self.assertTrue(ok, message)
 
     def test_dice_matches_reader(self):

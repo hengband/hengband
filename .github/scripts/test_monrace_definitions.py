@@ -20,6 +20,7 @@ class MonraceValidationTest(unittest.TestCase):
         cls.artifact_version = artifact_document["version"]
         cls.max_artifact_id = max(artifact["id"] for artifact in artifacts)
         cls.artifact_template = copy.deepcopy(artifacts[0])
+        cls.artifacts = artifacts
 
     def validate(self, monsters, *, companions=None):
         document = {"versions": self.document["versions"], "monsters": monsters}
@@ -36,13 +37,15 @@ class MonraceValidationTest(unittest.TestCase):
                 self.assertIn("ArtifactDefinitions.jsonc", diagnostic)
 
     def test_adjacent_artifact_definitions_take_precedence(self):
-        # 同梱表にないIDも隣接候補に定義されていれば参照でき、その逆は拒否する。
+        # 同梱表にないIDも隣接候補に定義されていれば参照でき、隣接候補に無ければ同梱表にあっても拒否する。
+        # アーティファクトのIDは 1 から欠番なく並ぶため、隣接候補は同梱表の続きか先頭の一部にする。
         artifact = dict(self.artifact_template, id=self.max_artifact_id + 1)
-        companion = {"version": self.artifact_version, "artifacts": [artifact]}
+        companion = {"version": self.artifact_version, "artifacts": self.artifacts + [artifact]}
         drop = {"drop_artifact_id": artifact["id"], "drop_probability": 50}
         ok, diagnostic = self.validate([self.monster(artifacts=[drop])],
                                        companions={"ArtifactDefinitions.jsonc": companion})
         self.assertTrue(ok, diagnostic)
+        companion = {"version": self.artifact_version, "artifacts": self.artifacts[:2]}
         drop = dict(drop, drop_artifact_id=self.max_artifact_id)
         ok, diagnostic = self.validate([self.monster(artifacts=[drop])],
                                        companions={"ArtifactDefinitions.jsonc": companion})
