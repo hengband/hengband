@@ -10,7 +10,6 @@
 #include "system/baseitem/baseitem-key.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
-#include "term/z-form.h"
 #include "util/enum-converter.h"
 #include <fmt/format.h>
 #include <map>

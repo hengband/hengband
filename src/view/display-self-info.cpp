@@ -8,7 +8,6 @@
 #include "system/player-type-definition.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
-#include "term/z-form.h"
 #include "util/enum-converter.h"
 #include "util/string-processor.h"
 #include <fmt/format.h>

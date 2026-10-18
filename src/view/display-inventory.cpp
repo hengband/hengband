@@ -15,7 +15,6 @@
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
-#include "term/z-form.h"
 #include "util/string-processor.h"
 #include <fmt/format.h>
 

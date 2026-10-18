@@ -16,7 +16,6 @@
 #include "player-info/race-info.h"
 #include "player/player-realm.h"
 #include "system/player-type-definition.h"
-#include "term/z-form.h"
 #include "util/angband-files.h"
 #include "util/buffer-shaper.h"
 #include "util/finalizer.h"

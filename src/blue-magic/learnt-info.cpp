@@ -10,7 +10,6 @@
 #include "monster-race/race-ability-mask.h"
 #include "mspell/mspell-damage-calculator.h"
 #include "system/player-type-definition.h"
-#include "term/z-form.h"
 #include <fmt/format.h>
 
 /*!

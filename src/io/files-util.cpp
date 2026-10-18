@@ -21,7 +21,6 @@
 #include "system/monrace/monrace-list.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
-#include "term/z-form.h"
 #include "util/angband-files.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"

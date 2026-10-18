@@ -7,7 +7,6 @@
 #include "player/process-name.h"
 #include "system/player-type-definition.h"
 #include "system/system-variables.h"
-#include "term/z-form.h"
 #include <fmt/format.h>
 
 /*!

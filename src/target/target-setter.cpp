@@ -21,7 +21,6 @@
 #include "target/target-preparation.h"
 #include "target/target-types.h"
 #include "term/screen-processor.h"
-#include "term/z-form.h"
 #include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"
 #include "util/string-processor.h"

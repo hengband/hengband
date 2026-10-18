@@ -27,7 +27,6 @@
 #include "system/item/item-entity.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/player-type-definition.h"
-#include "term/z-form.h"
 #include "util/angband-files.h"
 #include "util/finalizer.h"
 #include <fmt/format.h>
