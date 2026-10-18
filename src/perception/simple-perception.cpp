@@ -95,21 +95,20 @@ static void sense_inventory_aux(PlayerType *player_ptr, INVENTORY_IDX slot, bool
     const auto item_name = describe_flavor(player_ptr, item, (OD_OMIT_PREFIX | OD_NAME_ONLY));
     if (slot >= INVEN_MAIN_HAND) {
 #ifdef JP
-        constexpr auto mes = "%s%s(%c)は%sという感じがする...";
-        msg_format(mes, describe_use(player_ptr, slot), item_name.data(), index_to_label(slot), game_inscriptions[feel]);
+        constexpr auto mes = "{}{}({:c})は{}という感じがする...";
+        msg_print(mes, describe_use(player_ptr, slot), item_name, index_to_label(slot), game_inscriptions[feel]);
 #else
-        constexpr auto mes = "You feel the %s (%c) you are %s %s %s...";
-        msg_format(mes, item_name.data(), index_to_label(slot), describe_use(player_ptr, slot),
-            ((item.number == 1) ? "is" : "are"), game_inscriptions[feel]);
+        constexpr auto mes = "You feel the {} ({:c}) you are {} {} {}...";
+        msg_print(mes, item_name, index_to_label(slot), describe_use(player_ptr, slot), ((item.number == 1) ? "is" : "are"), game_inscriptions[feel]);
 #endif
 
     } else {
 #ifdef JP
-        constexpr auto mes = "ザックの中の%s(%c)は%sという感じがする...";
-        msg_format(mes, item_name.data(), index_to_label(slot), game_inscriptions[feel]);
+        constexpr auto mes = "ザックの中の{}({:c})は{}という感じがする...";
+        msg_print(mes, item_name, index_to_label(slot), game_inscriptions[feel]);
 #else
-        constexpr auto mes = "You feel the %s (%c) in your pack %s %s...";
-        msg_format(mes, item_name.data(), index_to_label(slot), ((item.number == 1) ? "is" : "are"), game_inscriptions[feel]);
+        constexpr auto mes = "You feel the {} ({:c}) in your pack {} {}...";
+        msg_print(mes, item_name, index_to_label(slot), ((item.number == 1) ? "is" : "are"), game_inscriptions[feel]);
 #endif
     }
 

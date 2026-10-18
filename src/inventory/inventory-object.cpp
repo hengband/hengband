@@ -144,7 +144,7 @@ void drop_from_inventory(PlayerType *player_ptr, INVENTORY_IDX i_idx, ITEM_NUMBE
 
     item.number = amt;
     const auto item_name = describe_flavor(player_ptr, item, 0);
-    msg_format(_("%s(%c)を落とした。", "You drop %s (%c)."), item_name.data(), index_to_label(i_idx));
+    msg_print(_("{}({:c})を落とした。", "You drop {} ({:c})."), item_name, index_to_label(i_idx));
     (void)drop_near(player_ptr, item, player_ptr->get_position(), false);
     vary_item(player_ptr, i_idx, -amt);
 }
@@ -397,9 +397,9 @@ INVENTORY_IDX inven_takeoff(PlayerType *player_ptr, INVENTORY_IDX i_idx, ITEM_NU
 
     const auto slot = store_item_to_inventory(player_ptr, &item);
 #ifdef JP
-    msg_format("%s(%c)%s。", item_name.data(), index_to_label(slot), act.data());
+    msg_print("{}({:c}){}。", item_name, index_to_label(slot), act);
 #else
-    msg_format("%s %s (%c).", act.data(), item_name.data(), index_to_label(slot));
+    msg_print("{} {} ({:c}).", act, item_name, index_to_label(slot));
 #endif
 
     return slot;

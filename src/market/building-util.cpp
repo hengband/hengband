@@ -1,6 +1,7 @@
 #include "market/building-util.h"
 #include "term/screen-processor.h"
 #include "term/z-form.h"
+#include <fmt/format.h>
 
 /*!
  * @brief コンソールに表示された施設に関する情報を消去する / Clear the building information
@@ -22,5 +23,5 @@ void clear_bldg(int min_row, int max_row)
 void building_prt_gold(int num_golds)
 {
     prt(_("手持ちのお金: ", "Gold Remaining: "), 23, 53);
-    prt(format("%9d", num_golds), 23, 68);
+    prt(fmt::format("{:9}", num_golds), 23, 68);
 }

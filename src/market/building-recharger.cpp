@@ -12,7 +12,9 @@
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
+#include <fmt/format.h>
 
 /*!
  * @brief 魔道具の使用回数を回復させる施設のメインルーチン / Recharge rods, wands and staffs
@@ -42,13 +44,13 @@ void building_recharge(PlayerType *player_ptr)
      * the level of the item or the number of charges.
      */
     if (!item->is_known()) {
-        msg_format(_("充填する前に鑑定されている必要があります！", "The item must be identified first!"));
+        msg_print(_("充填する前に鑑定されている必要があります！", "The item must be identified first!"));
         msg_erase();
         if ((player_ptr->au >= 50) && input_check(_("＄50で鑑定しますか？ ", "Identify for 50 gold? "))) {
             player_ptr->au -= 50;
             identify_item(player_ptr, item.get());
             const auto item_name = describe_flavor(player_ptr, *item, 0);
-            msg_format(_("%s です。", "You have: %s."), item_name.data());
+            msg_print(_("{} です。", "You have: {}."), item_name);
             autopick_alter_item(player_ptr, i_idx, false);
             building_prt_gold(player_ptr->au);
         }
@@ -69,7 +71,7 @@ void building_recharge(PlayerType *player_ptr)
         }
 
         price = 0;
-        msg_format(_("それは再充填する必要はありません。", "That doesn't need to be recharged."));
+        msg_print(_("それは再充填する必要はありません。", "That doesn't need to be recharged."));
         return;
     case ItemKindType::STAFF:
         price = (base_cost / 10) * item->number;
@@ -102,18 +104,18 @@ void building_recharge(PlayerType *player_ptr)
     if (player_ptr->au < price) {
         const auto item_name = describe_flavor(player_ptr, *item, OD_NAME_ONLY);
 #ifdef JP
-        msg_format("%sを再充填するには＄%d 必要です！", item_name.data(), price);
+        msg_print("{}を再充填するには＄{} 必要です！", item_name, price);
 #else
-        msg_format("You need %d gold to recharge %s!", price, item_name.data());
+        msg_print("You need {} gold to recharge {}!", price, item_name);
 #endif
         return;
     }
 
     if (tval == ItemKindType::ROD) {
 #ifdef JP
-        if (input_check(format("そのロッドを＄%d で再充填しますか？", price)))
+        if (input_check(fmt::format("そのロッドを＄{} で再充填しますか？", price)))
 #else
-        if (input_check(format("Recharge the %s for %d gold? ", ((item->number > 1) ? "rods" : "rod"), price)))
+        if (input_check(fmt::format("Recharge the {} for {} gold? ", ((item->number > 1) ? "rods" : "rod"), price)))
 #endif
 
         {
@@ -129,8 +131,8 @@ void building_recharge(PlayerType *player_ptr)
             max_charges = item->number * base_pval - item->pval;
         }
 
-        const auto mes = _("一回分＄%d で何回分充填しますか？", "Add how many charges for %d gold apiece? ");
-        const auto charges = input_quantity(std::min(player_ptr->au / price, max_charges), format(mes, price));
+        constexpr auto fmt = _("一回分＄{} で何回分充填しますか？", "Add how many charges for {} gold apiece? ");
+        const auto charges = input_quantity(std::min(player_ptr->au / price, max_charges), fmt::format(fmt, price));
         if (charges < 1) {
             return;
         }
@@ -142,9 +144,9 @@ void building_recharge(PlayerType *player_ptr)
 
     const auto item_name = describe_flavor(player_ptr, *item, 0);
 #ifdef JP
-    msg_format("%sを＄%d で再充填しました。", item_name.data(), price);
+    msg_print("{}を＄{} で再充填しました。", item_name, price);
 #else
-    msg_format("%s^ %s recharged for %d gold.", item_name.data(), ((item->number > 1) ? "were" : "was"), price);
+    msg_print("{} {} recharged for {} gold.", str_upcase_first(item_name), ((item->number > 1) ? "were" : "was"), price);
 #endif
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.request_inventory_arrangement();
@@ -214,12 +216,12 @@ void building_recharge_all(PlayerType *player_ptr)
     }
 
     if (player_ptr->au < total_cost) {
-        msg_format(_("すべてのアイテムを再充填するには＄%d 必要です！", "You need %d gold to recharge all items!"), total_cost);
+        msg_print(_("すべてのアイテムを再充填するには＄{} 必要です！", "You need {} gold to recharge all items!"), total_cost);
         msg_erase();
         return;
     }
 
-    if (!input_check(format(_("すべてのアイテムを ＄%d で再充填しますか？", "Recharge all items for %d gold? "), total_cost))) {
+    if (!input_check(fmt::format(_("すべてのアイテムを ＄{} で再充填しますか？", "Recharge all items for {} gold? "), total_cost))) {
         return;
     }
 
@@ -258,7 +260,7 @@ void building_recharge_all(PlayerType *player_ptr)
         }
     }
 
-    msg_format(_("＄%d で再充填しました。", "You pay %d gold."), total_cost);
+    msg_print(_("＄{} で再充填しました。", "You pay {} gold."), total_cost);
     msg_erase();
     RedrawingFlagsUpdater::get_instance().request_inventory_arrangement();
     player_ptr->au -= total_cost;

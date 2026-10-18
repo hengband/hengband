@@ -19,6 +19,7 @@
 #include "util/enum-converter.h"
 #include "util/string-processor.h"
 #include <array>
+#include <fmt/format.h>
 #ifdef JP
 #else
 #include "player-info/class-info.h"
@@ -61,13 +62,13 @@ static std::pair<std::string, std::string> describe_monster_ball(const ItemEntit
     }
 
 #ifdef JP
-    const auto monrace_name = format(" (%s)", monrace.name.data());
+    const auto monrace_name = fmt::format(" ({})", monrace.name);
 #else
     std::string monrace_name;
     if (monrace.kind_flags.has_not(MonsterKindType::UNIQUE)) {
-        monrace_name = format(" (%s%s)", (is_a_vowel(monrace.name.data()[0]) ? "an " : "a "), monrace.name.data());
+        monrace_name = fmt::format(" ({}{})", (is_a_vowel(monrace.name.data()[0]) ? "an " : "a "), monrace.name);
     } else {
-        monrace_name = format(" (%s)", monrace.name.data());
+        monrace_name = fmt::format(" ({})", monrace.name);
     }
 #endif
     return { basename, monrace_name };
@@ -90,7 +91,7 @@ static std::pair<std::string, std::string> describe_statue(const ItemEntity &ite
 #else
     std::string monrace_name;
     if (monrace.kind_flags.has_not(MonsterKindType::UNIQUE)) {
-        monrace_name = format("%s%s", (is_a_vowel(monrace.name.data()[0]) ? "an " : "a "), monrace.name.data());
+        monrace_name = fmt::format("{}{}", (is_a_vowel(monrace.name.data()[0]) ? "an " : "a "), monrace.name);
     } else {
         monrace_name = monrace.name;
     }

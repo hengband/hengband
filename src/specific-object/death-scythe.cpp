@@ -128,7 +128,7 @@ static void death_scythe_reflection_critial_hit(player_attack_type *pa_ptr)
     }
 
     int more_magnification = 2;
-    msg_format(_("グッサリ切り裂かれた！", "Your weapon cuts deep into yourself!"));
+    msg_print(_("グッサリ切り裂かれた！", "Your weapon cuts deep into yourself!"));
     while (one_in_(4)) {
         more_magnification++;
     }
@@ -144,7 +144,7 @@ static void death_scythe_reflection_critial_hit(player_attack_type *pa_ptr)
 void process_death_scythe_reflection(PlayerType *player_ptr, player_attack_type *pa_ptr)
 {
     sound(SoundKind::HIT);
-    msg_format(_("ミス！ %sにかわされた。", "You miss %s."), pa_ptr->m_name);
+    msg_print(_("ミス！ {}にかわされた。", "You miss {}."), pa_ptr->m_name);
     msg_print(_("振り回した大鎌が自分自身に返ってきた！", "Your scythe returns to you!"));
 
     auto *o_ptr = player_ptr->inventory[INVEN_MAIN_HAND + pa_ptr->hand].get();

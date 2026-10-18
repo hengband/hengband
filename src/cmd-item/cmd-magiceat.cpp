@@ -80,9 +80,11 @@
 #include "term/z-form.h"
 #include "timed-effect/timed-effects.h"
 #include "util/int-char-converter.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "view/display-util.h"
 #include <algorithm>
+#include <fmt/format.h>
 #include <tl/optional.hpp>
 
 /*!
@@ -107,13 +109,13 @@ static tl::optional<BaseitemKey> select_magic_eater(PlayerType *player_ptr, bool
 
         while (tval == ItemKindType::NONE) {
 #ifdef JP
-            prt(format(" %s 杖", (menu_line == 1) ? "》" : "  "), 2, 14);
-            prt(format(" %s 魔法棒", (menu_line == 2) ? "》" : "  "), 3, 14);
-            prt(format(" %s ロッド", (menu_line == 3) ? "》" : "  "), 4, 14);
+            prt(fmt::format(" {} 杖", (menu_line == 1) ? "》" : "  "), 2, 14);
+            prt(fmt::format(" {} 魔法棒", (menu_line == 2) ? "》" : "  "), 3, 14);
+            prt(fmt::format(" {} ロッド", (menu_line == 3) ? "》" : "  "), 4, 14);
 #else
-            prt(format(" %s staff", (menu_line == 1) ? "> " : "  "), 2, 14);
-            prt(format(" %s wand", (menu_line == 2) ? "> " : "  "), 3, 14);
-            prt(format(" %s rod", (menu_line == 3) ? "> " : "  "), 4, 14);
+            prt(fmt::format(" {} staff", (menu_line == 1) ? "> " : "  "), 2, 14);
+            prt(fmt::format(" {} wand", (menu_line == 2) ? "> " : "  "), 3, 14);
+            prt(fmt::format(" {} rod", (menu_line == 3) ? "> " : "  "), 4, 14);
 #endif
 
             if (only_browse) {
@@ -226,12 +228,10 @@ static tl::optional<BaseitemKey> select_magic_eater(PlayerType *player_ptr, bool
 
             /* Print header(s) */
 #ifdef JP
-            prt(format("                           %s 失率                           %s 失率", (tval == ItemKindType::ROD ? "  状態  " : "使用回数"),
-                    (tval == ItemKindType::ROD ? "  状態  " : "使用回数")),
+            prt(fmt::format("                           {0} 失率                           {0} 失率", (tval == ItemKindType::ROD ? "  状態  " : "使用回数")),
                 y++, x);
 #else
-            prt(format("                           %s Fail                           %s Fail", (tval == ItemKindType::ROD ? "  Stat  " : " Charges"),
-                    (tval == ItemKindType::ROD ? "  Stat  " : " Charges")),
+            prt(fmt::format("                           {0} Fail                           {0} Fail", (tval == ItemKindType::ROD ? "  Stat  " : " Charges")),
                 y++, x);
 #endif
 
@@ -258,7 +258,7 @@ static tl::optional<BaseitemKey> select_magic_eater(PlayerType *player_ptr, bool
                     } else {
                         letter = '0' + sval_ctr - 26;
                     }
-                    dummy = format("%c)", letter);
+                    dummy = fmt::format("{:c})", letter);
                 }
                 x1 = ((sval_ctr < item_group_size / 2) ? x : x + 40);
                 y1 = ((sval_ctr < item_group_size / 2) ? y + sval_ctr : y + sval_ctr - item_group_size / 2);
@@ -288,15 +288,15 @@ static tl::optional<BaseitemKey> select_magic_eater(PlayerType *player_ptr, bool
                 }
 
                 if (tval == ItemKindType::ROD) {
-                    constexpr auto fmt = _(" %-22.22s 充填:%2d/%2d%3d%%", " %-22.22s   (%2d/%2d) %3d%%");
+                    constexpr auto fmt = _(" {:<22} 充填:{:2}/{:2}{:3}%", " {:<22}   ({:2}/{:2}) {:3}%");
                     const auto charge = item.charge > 0 ? (item.charge - 1) / (EATER_ROD_CHARGE * baseitem.pval) + 1 : 0;
-                    dummy.append(format(fmt, baseitem.name.data(), charge, item.count, chance));
+                    dummy.append(fmt::format(fmt, fmt::bytes(str_substr(baseitem.name, 0, 22)), charge, item.count, chance));
                     if (item.charge > baseitem.pval * (item.count - 1) * EATER_ROD_CHARGE) {
                         col = TERM_RED;
                     }
                 } else {
-                    constexpr auto fmt = " %-22.22s    %2d/%2d %3d%%";
-                    dummy.append(format(fmt, baseitem.name.data(), (int16_t)(item.charge / EATER_CHARGE), item.count, chance));
+                    constexpr auto fmt = " {:<22}    {:2}/{:2} {:3}%";
+                    dummy.append(fmt::format(fmt, fmt::bytes(str_substr(baseitem.name, 0, 22)), static_cast<int16_t>(item.charge / EATER_CHARGE), item.count, chance));
                     if (item.charge < EATER_CHARGE) {
                         col = TERM_RED;
                     }

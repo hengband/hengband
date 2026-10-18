@@ -21,6 +21,7 @@
 #include "system/artifact/artifact-list.h"
 #include "system/monrace/monrace-definition.h"
 #endif
+#include <fmt/format.h>
 #include <sstream>
 
 static std::string get_fullname_if_set(const ItemEntity &item, const describe_option_type &opt)
@@ -153,7 +154,7 @@ static std::string describe_fake_artifact_name_after_body_ja(const ItemEntity &i
         return "";
     }
 
-    return format("『%s』", str + 1);
+    return fmt::format("『{}』", str + 1);
 }
 
 /*!
@@ -398,14 +399,14 @@ std::string describe_named_item(PlayerType *player_ptr, const ItemEntity &item, 
 
 #ifdef JP
     if (item.is_smith() && none_bits(opt.mode, OD_BASE_NAME)) {
-        ss << format("鍛冶師%sの", player_ptr->name);
+        ss << fmt::format("鍛冶師{}の", player_ptr->name);
     }
 
     ss << describe_unique_name_before_body_ja(item, opt);
 #endif
     if (item.is_spell_book()) {
         // svalは0から数えているので表示用に+1している
-        ss << format("Lv%d ", *item.bi_key.sval() + 1);
+        ss << fmt::format("Lv{} ", *item.bi_key.sval() + 1);
     }
 
     ss << describe_body(item, opt, basename_sv, modstr);
@@ -414,7 +415,7 @@ std::string describe_named_item(PlayerType *player_ptr, const ItemEntity &item, 
     ss << describe_unique_name_after_body_ja(item, opt);
 #else
     if (item.is_smith() && none_bits(opt.mode, OD_BASE_NAME)) {
-        ss << format(" of %s the Smith", player_ptr->name);
+        ss << fmt::format(" of {} the Smith", player_ptr->name);
     }
 
     ss << describe_unique_name_after_body_en(item, opt);

@@ -37,6 +37,7 @@
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#include <fmt/format.h>
 #include <tl/optional.hpp>
 
 /*!
@@ -237,7 +238,7 @@ void store_examine(PlayerType *player_ptr, const StoreScreen &screen)
     }
 
     const auto item_name = describe_flavor(player_ptr, item, 0);
-    msg_format(_("%sを調べている...", "Examining %s..."), item_name.data());
+    msg_print(_("{}を調べている...", "Examining {}..."), item_name);
     if (!screen_object(player_ptr, item, SCROBJ_FORCE_DETAIL)) {
         msg_print(_("特に変わったところはないようだ。", "You see nothing special."));
     }
