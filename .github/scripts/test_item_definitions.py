@@ -4,7 +4,7 @@ from pathlib import Path
 import unittest
 
 from json_validation_test_helper import validate_document
-from validate_json import build_schema_registry, load_all_schemas, load_jsonc, load_rod_type_value
+from validate_json import build_schema_registry, load_all_schemas, load_cpp_tokens, load_jsonc, load_rod_type_value
 
 
 class BaseitemDefinitionValidationTest(unittest.TestCase):
@@ -109,6 +109,15 @@ class BaseitemDefinitionValidationTest(unittest.TestCase):
         self.check(self.changed(self.sample, ["allocations"], [allocation] * 4), True)
         self.check(self.changed(self.sample, ["allocations"], [allocation] * 5), False, ["baseitems", 0, "allocations"])
         self.check(self.changed(self.sample, ["allocations"], [1]), False, ["baseitems", 0, "allocations", 0])
+
+    def test_reader_tokens_and_rarity_boundary_are_accepted(self):
+        for flag in ("ACTIVATE", "IM_LITE"):
+            with self.subTest(flag=flag):
+                self.check(self.changed(self.sample, ["flags"], [flag]), True)
+        self.check(self.changed(self.sample, ["activate"], "DARKNESS"), True)
+        # 出現率は 100÷希少度なので 101 以上はどれも 0 になるが、BaseitemReader は 256 まで受け付ける。
+        self.check(self.changed(self.sample, ["allocations"], [{"depth": 1, "rarity": 256}]), True)
+        self.check(self.changed(self.sample, ["allocations"], [{"depth": 1, "rarity": 257}]), False, ["baseitems", 0, "allocations", 0, "rarity"])
 
     def test_kinds_of_valid_baseitems_must_be_unique(self):
         # 種別・副種別から ID を引く表では後の ID が先の ID を隠すため、有効なベースアイテムどうしの重複を拒否する。
@@ -240,6 +249,19 @@ class ArtifactDefinitionValidationTest(unittest.TestCase):
         self.assertFalse(ok, message)
         self.assertIn("Invalid artifact definitions", message)
         self.assertIn("integer JSON value", message)
+
+
+class ItemTokenListTest(unittest.TestCase):
+    def test_schema_token_lists_match_reader_tables(self):
+        # フラグと発動の一覧は、BaseitemReader・ArtifactReader が使う C++ の表と同じにする。
+        root = Path(__file__).resolve().parents[2]
+        flags = load_cpp_tokens(root / "src/info-reader/baseitem-tokens-table.cpp")
+        activations = load_cpp_tokens(root / "src/object-enchant/activation-info-table.cpp")
+        for name, array in (("BaseitemDefinitions", "baseitems"), ("ArtifactDefinitions", "artifacts")):
+            with self.subTest(name=name):
+                item = load_jsonc(root / "schema" / f"{name}.schema.json")["properties"][array]["items"]["properties"]
+                self.assertEqual(set(item["flags"]["items"]["enum"]), flags)
+                self.assertEqual(set(item["activate"]["enum"]), activations)
 
 
 if __name__ == "__main__":
