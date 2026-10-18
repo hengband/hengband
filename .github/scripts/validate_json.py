@@ -216,6 +216,9 @@ def validate_wilderness_semantics(data: dict) -> None:
         for field in ("x", "y"):
             if type(position[field]) is not int:
                 raise ValidationError("expected an integer JSON value", path=map_path + ["starting_position", field])
+        # 地上の生成では現在地の周囲8マスを生成するため、WildernessReaderは荒野の端を拒否する。
+        if position["x"] > width - 2 or position["y"] > height - 2:
+            raise ValidationError("starting position must not be on the wilderness edge", path=map_path + ["starting_position"])
         if position["y"] >= len(layout) or position["x"] >= len(layout[position["y"]]):
             raise ValidationError("starting position must be within the map layout", path=map_path + ["starting_position"])
 
