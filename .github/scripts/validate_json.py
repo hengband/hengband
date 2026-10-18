@@ -298,12 +298,20 @@ def validate_wilderness_semantics(data: dict, schema_path: Path | None = None) -
             raise ValidationError("row count must not exceed height", path=map_path + ["layout"])
         if map_name == "normal" and len(layout) != height:
             raise ValidationError("normal row count must equal height", path=map_path + ["layout"])
+        letters_by_symbol = {letter["symbol"]: letter for letter in wilderness_map["letters"]}
         for row_index, row in enumerate(layout):
             if len(row) > width or (map_name == "normal" and len(row) != width):
                 raise ValidationError("normal row width must equal width" if map_name == "normal" else "row width must not exceed width", path=map_path + ["layout", row_index])
             for column, symbol in enumerate(row):
                 if symbol not in symbols:
                     raise ValidationError("layout contains an undefined symbol", path=map_path + ["layout", row_index, column])
+                # 外周が通れると、荒野の端の区画に入ったときに範囲外を引いて落ちるため、WildernessReaderは
+                # 外周を外周の地形（terrain 0）で町も道も無いマスに限る。レイアウトに無いマスは外周の地形になる。
+                if row_index in (0, height - 1) or column in (0, width - 1):
+                    letter = letters_by_symbol[symbol]
+                    if letter["terrain"] != 0 or letter.get("town", 0) != 0 or letter.get("road", 0) != 0:
+                        raise ValidationError("wilderness edge must be impassable edge terrain without town or road",
+                                              path=map_path + ["layout", row_index, column])
 
         position = wilderness_map["starting_position"]
         for field in ("x", "y"):

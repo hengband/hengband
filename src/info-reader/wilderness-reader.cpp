@@ -26,6 +26,35 @@
 
 namespace {
 /*!
+ * @brief 荒野の外周のマスが、外周の地形で町も道も無いものだけかを確かめる
+ * @param map 荒野マップ
+ * @param width 荒野全体の幅
+ * @param height 荒野全体の高さ
+ * @return 外周がすべて通れないなら true
+ * @details 外周が通れると、荒野の端の区画に入ったときに外側の区画を作ろうとして荒野の範囲外を引き、例外で落ちる。
+ * レイアウトに無いマスは外周の地形になるので確かめない。
+ */
+bool is_edge_closed(const WildernessMapDefinition &map, int width, int height)
+{
+    for (auto y = 0; y < std::min(height, static_cast<int>(map.layout.size())); ++y) {
+        const auto &row = map.layout[y];
+        for (auto x = 0; x < std::min(width, static_cast<int>(row.size())); ++x) {
+            if ((y != 0) && (y != height - 1) && (x != 0) && (x != width - 1)) {
+                continue;
+            }
+            const auto letter = std::find_if(map.letters.begin(), map.letters.end(), [symbol = row[x]](const auto &candidate) {
+                return candidate.symbol == symbol;
+            });
+            if ((letter == map.letters.end()) || (letter->terrain != WildernessTerrain::EDGE) || (letter->town != 0) || (letter->road != 0)) {
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
+/*!
  * @brief 整数または選択言語の整数を、既存の範囲で検証して格納する
  * @param value 整数または言語別の値
  * @param destination 保存先
@@ -151,6 +180,9 @@ int WildernessReader::read(WildernessDefinition &definition) const
         });
     };
     if (has_undefined_town(parsed.normal) || has_undefined_town(parsed.compact)) {
+        return PARSE_ERROR_INVALID_VALUE;
+    }
+    if (!is_edge_closed(parsed.normal, parsed.width, parsed.height) || !is_edge_closed(parsed.compact, parsed.width, parsed.height)) {
         return PARSE_ERROR_INVALID_VALUE;
     }
 

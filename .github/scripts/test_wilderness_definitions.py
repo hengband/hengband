@@ -95,6 +95,41 @@ class WildernessTownValidationTest(unittest.TestCase):
         self.assertFalse(ok, message)
         self.assertIn("town 1 must have an alias", message)
 
+    def test_wilderness_edge_must_be_closed(self):
+        # 外周が通れると、荒野の端の区画に入ったときに範囲外を引いて落ちる。
+        edge_letters = (
+            {"symbol": "x", "terrain": 5},
+            {"symbol": "x", "terrain": 0, "town": 1},
+            {"symbol": "x", "terrain": 0, "road": 1},
+        )
+        for map_name in ("normal", "compact"):
+            for letter in edge_letters:
+                for row_index, row, column in ((1, "x##", 0), (1, "##x", 2), (0, "#x#", 1), (2, "#x#", 1)):
+                    with self.subTest(map_name=map_name, letter=letter, row=row):
+                        data = copy.deepcopy(self.data)
+                        data["maps"][map_name]["letters"].append(letter)
+                        data["maps"][map_name]["layout"][row_index] = row
+                        ok, message = self.validate(data)
+                        self.assertFalse(ok, message)
+                        self.assertIn(f"Location: ['maps', '{map_name}', 'layout', {row_index}, {column}]", message)
+        data = copy.deepcopy(self.data)
+        data["maps"]["compact"]["letters"].append({"symbol": "x", "terrain": 5, "road": 1})
+        data["maps"]["compact"]["layout"][1] = "#x#"
+        ok, message = self.validate(data)
+        self.assertTrue(ok, message)
+        # 簡易版の短い行でも、荒野の幅で決まる外周（右の列）にあるマスは確かめる。
+        data = copy.deepcopy(self.data)
+        data["width"] = 4
+        data["maps"]["normal"]["layout"] = ["####", "#1##", "####"]
+        data["maps"]["compact"]["letters"].append({"symbol": "x", "terrain": 5})
+        data["maps"]["compact"]["layout"] = ["####", "##x", "###"]
+        ok, message = self.validate(data)
+        self.assertTrue(ok, message)
+        data["maps"]["compact"]["layout"] = ["####", "###x", "###"]
+        ok, message = self.validate(data)
+        self.assertFalse(ok, message)
+        self.assertIn("Location: ['maps', 'compact', 'layout', 1, 3]", message)
+
     def test_town_ids_must_have_town_definition_files(self):
         # 初期化は、町の定義ファイル名の先頭2文字の種類の数を超える番号の町を拒否する。
         with tempfile.TemporaryDirectory() as folder:
