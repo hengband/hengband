@@ -445,15 +445,6 @@ void redisplay_more_prompt()
     put_more_prompt(more_prompt_x);
 }
 
-void msg_format(const char *fmt, ...)
-{
-    va_list vp;
-    va_start(vp, fmt);
-    const auto buf = vformat(fmt, vp);
-    va_end(vp);
-    msg_print(buf);
-}
-
 /*!
  * @brief セーブファイルにメッセージ履歴を保存する
  */
