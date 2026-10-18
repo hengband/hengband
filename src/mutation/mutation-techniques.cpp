@@ -20,6 +20,7 @@
 #include "target/target-getter.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
+#include <fmt/format.h>
 
 /*!
  * 岩石食い
@@ -42,7 +43,7 @@ bool eat_rock(PlayerType *player_ptr)
     if (terrain_mimic.flags.has_not(TerrainCharacteristics::STONE)) {
         msg_print(_("この地形は食べられない。", "You cannot eat this feature."));
     } else if (terrain.flags.has(TerrainCharacteristics::PERMANENT)) {
-        msg_format(_("いてっ！この%sはあなたの歯より硬い！", "Ouch!  This %s is harder than your teeth!"), terrain_mimic.name.data());
+        msg_print(_("いてっ！この{}はあなたの歯より硬い！", "Ouch!  This {} is harder than your teeth!"), terrain_mimic.name);
     } else if (grid.has_monster()) {
         const auto &monster = player_ptr->current_floor_ptr->m_list[grid.m_idx];
         msg_print(_("何かが邪魔しています！", "There's something in the way!"));
@@ -58,7 +59,7 @@ bool eat_rock(PlayerType *player_ptr)
     } else if (terrain.flags.has(TerrainCharacteristics::MAY_HAVE_GOLD) || terrain.flags.has(TerrainCharacteristics::HAS_GOLD)) {
         (void)set_food(player_ptr, player_ptr->food + 5000);
     } else {
-        msg_format(_("この%sはとてもおいしい！", "This %s is very filling!"), terrain_mimic.name.data());
+        msg_print(_("この{}はとてもおいしい！", "This {} is very filling!"), terrain_mimic.name);
         (void)set_food(player_ptr, player_ptr->food + 10000);
     }
 

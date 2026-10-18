@@ -48,6 +48,7 @@
 #include "system/player-type-definition.h"
 #include "system/terrain/terrain-definition.h"
 #include "view/display-messages.h"
+#include <fmt/format.h>
 
 /*!
  * @brief 1マスだけの部屋を作成し、上下左右いずれか一つに隠しドアを配置する。
@@ -116,7 +117,7 @@ void build_cavern(PlayerType *player_ptr)
 void build_lake(PlayerType *player_ptr, int type)
 {
     if ((type < LAKE_T_LAVA) || (type > LAKE_T_FIRE_VAULT)) {
-        msg_format("Invalid lake type (%d)", type);
+        msg_print("Invalid lake type ({})", type);
         return;
     }
 

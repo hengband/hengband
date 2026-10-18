@@ -30,7 +30,9 @@
 #include "term/z-form.h"
 #include "util/angband-files.h"
 #include "util/int-char-converter.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
+#include <fmt/format.h>
 #include <tl/optional.hpp>
 
 /*!
@@ -77,7 +79,7 @@ static void print_visuals_menu(concptr choice_msg)
     prt(_("(8) アイテムの   色/文字 を変更する (シンボルエディタ)", "(8) Change object attr/chars (visual mode)"), 11, 5);
     prt(_("(9) 地形の       色/文字 を変更する (シンボルエディタ)", "(9) Change feature attr/chars (visual mode)"), 12, 5);
     prt(_("(R) 画面表示方法の初期化", "(R) Reset visuals"), 13, 5);
-    prt(format(_("コマンド: %s", "Command: %s"), choice_msg ? choice_msg : _("", "")), 15, 0);
+    prt(fmt::format(_("コマンド: {}", "Command: {}"), choice_msg ? choice_msg : _("", "")), 15, 0);
 }
 
 /*
@@ -93,7 +95,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
     }
 
     screen_save();
-    const auto initial_filename = format("%s.prf", player_ptr->base_name);
+    const auto initial_filename = fmt::format("{}.prf", player_ptr->base_name);
     while (true) {
         term_clear();
         print_visuals_menu(nullptr);
@@ -216,17 +218,17 @@ void do_cmd_visuals(PlayerType *player_ptr)
             auto &monraces = MonraceList::get_instance();
             static auto choice_msg = _("モンスターの[色/文字]を変更します", "Change monster attr/chars");
             static auto monrace_id = monraces.begin()->second->idx;
-            prt(format(_("コマンド: %s", "Command: %s"), choice_msg), 15, 0);
+            prt(fmt::format(_("コマンド: {}", "Command: {}"), choice_msg), 15, 0);
             while (true) {
                 auto &monrace = monraces.get_monrace(monrace_id);
                 int c;
                 const auto &symbol_definition = monrace.symbol_definition;
                 auto &symbol_config = monrace.symbol_config;
-                term_putstr(5, 17, -1, TERM_WHITE, format(_("モンスター = %d, 名前 = %-40.40s", "Monster = %d, Name = %-40.40s"), enum2i(monrace_id), monrace.name.data()));
-                term_putstr(10, 19, -1, TERM_WHITE, format(_("初期値  色 / 文字 = %3u / %3u", "Default attr/char = %3u / %3u"), symbol_definition.color, static_cast<uint8_t>(symbol_definition.character)));
+                term_putstr(5, 17, -1, TERM_WHITE, fmt::format(_("モンスター = {}, 名前 = {:<40}", "Monster = {}, Name = {:<40}"), enum2i(monrace_id), fmt::bytes(str_substr(monrace.name, 0, 40))));
+                term_putstr(10, 19, -1, TERM_WHITE, fmt::format(_("初期値  色 / 文字 = {:3} / {:3}", "Default attr/char = {:3} / {:3}"), symbol_definition.color, static_cast<uint8_t>(symbol_definition.character)));
                 term_putstr(40, 19, -1, TERM_WHITE, empty_symbol);
                 term_queue_bigchar(43, 19, { symbol_definition, {} });
-                term_putstr(10, 20, -1, TERM_WHITE, format(_("現在値  色 / 文字 = %3u / %3u", "Current attr/char = %3u / %3u"), symbol_config.color, static_cast<uint8_t>(symbol_config.character)));
+                term_putstr(10, 20, -1, TERM_WHITE, fmt::format(_("現在値  色 / 文字 = {:3} / {:3}", "Current attr/char = {:3} / {:3}"), symbol_config.color, static_cast<uint8_t>(symbol_config.character)));
                 term_putstr(40, 20, -1, TERM_WHITE, empty_symbol);
                 term_queue_bigchar(43, 20, { symbol_config, {} });
                 term_putstr(0, 22, -1, TERM_WHITE, _("コマンド (n/N/^N/a/A/^A/c/C/^C/v/V/^V): ", "Command (n/N/^N/a/A/^A/c/C/^C/v/V/^V): "));
@@ -288,7 +290,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
         case '5': {
             static auto choice_msg = _("アイテムの[色/文字]を変更します", "Change object attr/chars");
             static short bi_id = 0;
-            prt(format(_("コマンド: %s", "Command: %s"), choice_msg), 15, 0);
+            prt(fmt::format(_("コマンド: {}", "Command: {}"), choice_msg), 15, 0);
             const auto &baseitems = BaseitemList::get_instance();
             const auto &baseitem_records = BaseitemRecords::get_instance();
             auto &baseitem_configs = BaseitemConfigs::get_instance();
@@ -298,14 +300,14 @@ void do_cmd_visuals(PlayerType *player_ptr)
                 const auto &symbol_definition = baseitem.get_symbol();
                 auto &baseitem_record = baseitem_records.get_record(bi_id);
                 auto &baseitem_config = baseitem_configs.get_config(bi_id);
-                constexpr auto fmt_title = _("アイテム = %d, 名前 = %-40.40s", "Object = %d, Name = %-40.40s");
+                constexpr auto fmt_title = _("アイテム = {}, 名前 = {:<40}", "Object = {}, Name = {:<40}");
                 const auto &baseitem_name = baseitem_record.is_apparent() ? baseitem.flavor_name : baseitem.name;
-                const auto title = format(fmt_title, bi_id, baseitem_name.data());
+                const auto title = fmt::format(fmt_title, bi_id, fmt::bytes(str_substr(baseitem_name, 0, 40)));
                 term_putstr(5, 17, -1, TERM_WHITE, title);
-                term_putstr(10, 19, -1, TERM_WHITE, format(_("初期値  色 / 文字 = %3d / %3d", "Default attr/char = %3d / %3d"), symbol_definition.color, symbol_definition.character));
+                term_putstr(10, 19, -1, TERM_WHITE, fmt::format(_("初期値  色 / 文字 = {:3} / {:3}", "Default attr/char = {:3} / {:3}"), symbol_definition.color, static_cast<int>(symbol_definition.character)));
                 term_putstr(40, 19, -1, TERM_WHITE, empty_symbol);
                 term_queue_bigchar(43, 19, { symbol_definition, {} });
-                term_putstr(10, 20, -1, TERM_WHITE, format(_("現在値  色 / 文字 = %3d / %3d", "Current attr/char = %3d / %3d"), baseitem_config.get_color(), baseitem_config.get_character()));
+                term_putstr(10, 20, -1, TERM_WHITE, fmt::format(_("現在値  色 / 文字 = {:3} / {:3}", "Current attr/char = {:3} / {:3}"), baseitem_config.get_color(), static_cast<int>(baseitem_config.get_character())));
                 term_putstr(40, 20, -1, TERM_WHITE, empty_symbol);
                 term_queue_bigchar(43, 20, { baseitem_config.get_symbol(), {} });
                 term_putstr(0, 22, -1, TERM_WHITE, _("コマンド (n/N/^N/a/A/^A/c/C/^C/v/V/^V): ", "Command (n/N/^N/a/A/^A/c/C/^C/v/V/^V): "));
@@ -376,7 +378,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
             static auto choice_msg = _("地形の[色/文字]を変更します", "Change feature attr/chars");
             static short terrain_id = 0;
             static short lighting_level = F_LIT_STANDARD;
-            prt(format(_("コマンド: %s", "Command: %s"), choice_msg), 15, 0);
+            prt(fmt::format(_("コマンド: {}", "Command: {}"), choice_msg), 15, 0);
             auto &terrains = TerrainList::get_instance();
             while (true) {
                 auto &terrain = terrains.get_terrain(terrain_id);
@@ -385,12 +387,11 @@ void do_cmd_visuals(PlayerType *player_ptr)
                 const auto &symbol_config = terrain.symbol_configs[lighting_level];
                 prt("", 17, 5);
                 term_putstr(5, 17, -1, TERM_WHITE,
-                    format(_("地形 = %d, 名前 = %s, 明度 = %s", "Terrain = %d, Name = %s, Lighting = %s"), terrain_id, (terrain.name.data()),
-                        lighting_level_str[lighting_level]));
-                term_putstr(10, 19, -1, TERM_WHITE, format(_("初期値  色 / 文字 = %3d / %3d", "Default attr/char = %3d / %3d"), symbol_definition.color, symbol_definition.character));
+                    fmt::format(_("地形 = {}, 名前 = {}, 明度 = {}", "Terrain = {}, Name = {}, Lighting = {}"), terrain_id, terrain.name, lighting_level_str[lighting_level]));
+                term_putstr(10, 19, -1, TERM_WHITE, fmt::format(_("初期値  色 / 文字 = {:3} / {:3}", "Default attr/char = {:3} / {:3}"), symbol_definition.color, static_cast<int>(symbol_definition.character)));
                 term_putstr(40, 19, -1, TERM_WHITE, empty_symbol);
                 term_queue_bigchar(43, 19, { symbol_definition, {} });
-                term_putstr(10, 20, -1, TERM_WHITE, format(_("現在値  色 / 文字 = %3d / %3d", "Current attr/char = %3d / %3d"), symbol_config.color, symbol_config.character));
+                term_putstr(10, 20, -1, TERM_WHITE, fmt::format(_("現在値  色 / 文字 = {:3} / {:3}", "Current attr/char = {:3} / {:3}"), symbol_config.color, static_cast<int>(symbol_config.character)));
                 term_putstr(40, 20, -1, TERM_WHITE, empty_symbol);
                 term_queue_bigchar(43, 20, { symbol_config, {} });
                 term_putstr(0, 22, -1, TERM_WHITE,

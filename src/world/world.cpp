@@ -6,6 +6,7 @@
 #include "system/monrace/monrace-list.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
+#include <fmt/format.h>
 
 AngbandWorld AngbandWorld::instance{};
 
@@ -122,7 +123,7 @@ std::string AngbandWorld::format_real_playtime() const
     const auto hour = playtime / (60 * 60);
     const auto min = (playtime / 60) % 60;
     const auto sec = playtime % 60;
-    return format("%.2u:%.2u:%.2u", hour, min, sec);
+    return fmt::format("{:02}:{:02}:{:02}", hour, min, sec);
 }
 
 bool AngbandWorld::is_in_any_town() const

@@ -38,6 +38,7 @@
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#include <fmt/format.h>
 
 static void write_pet_death(PlayerType *player_ptr, MonsterDeath *md_ptr)
 {
@@ -207,7 +208,7 @@ static void drop_artifacts(PlayerType *player_ptr, MonsterDeath *md_ptr)
         (void)drop_near(player_ptr, item, md_ptr->get_position());
     }
 
-    msg_format(_("あなたは%sを制覇した！", "You have conquered %s!"), dungeon.name.data());
+    msg_print(_("あなたは{}を制覇した！", "You have conquered {}!"), dungeon.name);
 }
 
 static void decide_drop_quality(MonsterDeath *md_ptr)

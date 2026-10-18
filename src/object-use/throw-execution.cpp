@@ -53,9 +53,11 @@
 #include "term/screen-processor.h"
 #include "timed-effect/timed-effects.h"
 #include "tracking/lore-tracker.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "view/object-describer.h"
 #include "wizard/wizard-messages.h"
+#include <fmt/format.h>
 
 ObjectThrowHitMonster::ObjectThrowHitMonster(PlayerType *player_ptr, POSITION y, POSITION x)
 {
@@ -246,7 +248,7 @@ void ObjectThrowEntity::display_potion_throw()
         return;
     }
 
-    msg_format(_("%sは砕け散った！", "The %s shatters!"), this->o_name.data());
+    msg_print(_("{}は砕け散った！", "The {} shatters!"), this->o_name);
     this->do_drop = false;
     if (!potion_smash_effect(this->player_ptr, 0, this->y, this->x, this->q_ptr->bi_id)) {
         return;
@@ -262,7 +264,7 @@ void ObjectThrowEntity::display_potion_throw()
     }
 
     const auto angry_m_name = monster_desc(this->player_ptr, monster, 0);
-    msg_format(_("%sは怒った！", "%s^ gets angry!"), angry_m_name.data());
+    msg_print(_("{}は怒った！", "{} gets angry!"), str_upcase_first(angry_m_name));
     monster.set_hostile();
 }
 
@@ -458,7 +460,7 @@ void ObjectThrowEntity::attack_racial_power()
 
     if (fear && monster.ml) {
         sound(SoundKind::FLEE);
-        msg_format(_("%s^は恐怖して逃げ出した！", "%s^ flees in terror!"), this->hit_monster->m_name.data());
+        msg_print(_("{}は恐怖して逃げ出した！", "{} flees in terror!"), str_upcase_first(this->hit_monster->m_name));
     }
 }
 
@@ -469,11 +471,11 @@ void ObjectThrowEntity::display_attack_racial_power()
     }
 
     if (!this->hit_monster->m_ptr->ml) {
-        msg_format(_("%sが敵を捕捉した。", "The %s finds a mark."), this->o_name.data());
+        msg_print(_("{}が敵を捕捉した。", "The {} finds a mark."), this->o_name);
         return;
     }
 
-    msg_format(_("%sが%sに命中した。", "The %s hits %s."), this->o_name.data(), this->hit_monster->m_name.data());
+    msg_print(_("{}が{}に命中した。", "The {} hits {}."), this->o_name, this->hit_monster->m_name);
 
     if (!this->player_ptr->effects()->hallucination().is_active()) {
         LoreTracker::get_instance().set_trackee(this->hit_monster->m_ptr->ap_r_idx);
@@ -517,7 +519,7 @@ void ObjectThrowEntity::calc_racial_power_damage()
 void ObjectThrowEntity::process_boomerang_throw()
 {
     if ((this->back_chance <= 30) || (one_in_(100) && !this->super_boomerang)) {
-        msg_format(_("%sが返ってこなかった！", "%s doesn't come back!"), this->o2_name.data());
+        msg_print(_("{}が返ってこなかった！", "{} doesn't come back!"), this->o2_name);
         return;
     }
 
@@ -547,13 +549,17 @@ void ObjectThrowEntity::display_boomerang_throw()
 {
     const auto is_blind = this->player_ptr->effects()->blindness().is_active();
     if ((this->back_chance > 37) && !is_blind && (this->i_idx >= 0)) {
-        msg_format(_("%sが手元に返ってきた。", "%s comes back to you."), this->o2_name.data());
+        msg_print(_("{}が手元に返ってきた。", "{} comes back to you."), this->o2_name);
         this->come_back = true;
         return;
     }
 
-    auto back_message = this->i_idx >= 0 ? _("%sを受け損ねた！", "%s comes back, but you can't catch!") : _("%sが返ってきた。", "%s comes back.");
-    msg_format(back_message, this->o2_name.data());
+    if (this->i_idx >= 0) {
+        msg_print(_("{}を受け損ねた！", "{} comes back, but you can't catch!"), this->o2_name);
+    } else {
+        msg_print(_("{}が返ってきた。", "{} comes back."), this->o2_name);
+    }
+
     this->y = this->player_ptr->y;
     this->x = this->player_ptr->x;
 }

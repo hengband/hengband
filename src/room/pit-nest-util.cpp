@@ -9,6 +9,7 @@
 #include "system/monrace/monrace-list.h"
 #include "system/player-type-definition.h"
 #include "util/probability-table.h"
+#include <fmt/format.h>
 
 void nest_pit_type::prepare_filter(PlayerType *player_ptr) const
 {
@@ -35,7 +36,7 @@ void nest_pit_type::prepare_filter(PlayerType *player_ptr) const
         filter.set_dragon_breaths();
         break;
     default:
-        THROW_EXCEPTION(std::logic_error, format("Invalid hook! %d", enum2i(this->pn_hook)));
+        THROW_EXCEPTION(std::logic_error, fmt::format("Invalid hook! {}", enum2i(this->pn_hook)));
     }
 }
 

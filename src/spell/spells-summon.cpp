@@ -35,6 +35,7 @@
 #include "target/projection-path-calculator.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
+#include <fmt/format.h>
 
 /*!
  * @brief トランプ魔法独自の召喚処理を行う / Handle summoning and failure of trump spells
@@ -282,7 +283,7 @@ int summon_cyber(PlayerType *player_ptr, POSITION y, POSITION x, tl::optional<MO
 void mitokohmon(PlayerType *player_ptr)
 {
     int count = 0;
-    [[maybe_unused]] concptr sukekakusan = "";
+    concptr sukekakusan = "";
     if (summon_named_creature(player_ptr, 0, player_ptr->y, player_ptr->x, MonraceId::SUKE, PM_FORCE_PET)) {
         msg_print(_("『助さん』が現れた。", "Suke-san apperars."));
         sukekakusan = "Suke-san";
@@ -324,9 +325,7 @@ void mitokohmon(PlayerType *player_ptr)
         return;
     }
 
-    msg_print(_(
-        "「者ども、ひかえおろう！！！このお方をどなたとこころえる。」",
-        format("%s^ says 'WHO do you think this person is! Bow your head, down to your knees!'", sukekakusan)));
+    msg_print(_("「者ども、ひかえおろう！！！このお方をどなたとこころえる。」", "{} says 'WHO do you think this person is! Bow your head, down to your knees!'"), str_upcase_first(sukekakusan));
     sukekaku = true;
     stun_monsters(player_ptr, 120);
     confuse_monsters(player_ptr, 120);

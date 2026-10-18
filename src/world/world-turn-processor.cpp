@@ -46,6 +46,7 @@
 #include "window/main-window-row-column.h"
 #include "world/world-movement-processor.h"
 #include "world/world.h"
+#include <fmt/format.h>
 #include <range/v3/view.hpp>
 
 WorldTurnProcessor::WorldTurnProcessor(PlayerType *player_ptr)
@@ -114,12 +115,12 @@ void WorldTurnProcessor::print_time()
     auto day = 0;
     std::tie(day, this->hour, this->min) = AngbandWorld::get_instance().extract_date_time(InnerGameData::get_instance().get_start_race());
     if (day < 1000) {
-        c_put_str(TERM_WHITE, format(_("%2d日目", "Day%3d"), day), row, COL_DAY);
+        c_put_str(TERM_WHITE, fmt::format(_("{:2}日目", "Day{:3}"), day), row, COL_DAY);
     } else {
         c_put_str(TERM_WHITE, _("***日目", "Day***"), row, COL_DAY);
     }
 
-    c_put_str(TERM_WHITE, format("%2d:%02d", this->hour, this->min), row, COL_DAY + 7);
+    c_put_str(TERM_WHITE, fmt::format("{:2}:{:02}", this->hour, this->min), row, COL_DAY + 7);
 }
 
 void WorldTurnProcessor::process_downward()
@@ -176,14 +177,14 @@ void WorldTurnProcessor::process_monster_arena_winner(int win_m_idx)
 {
     const auto &monster = this->player_ptr->current_floor_ptr->m_list[win_m_idx];
     const auto m_name = monster_desc(this->player_ptr, monster, 0);
-    msg_format(_("%sが勝利した！", "%s won!"), m_name.data());
+    msg_print(_("{}が勝利した！", "{} won!"), m_name);
     msg_erase();
 
     auto &melee_arena = MeleeArena::get_instance();
     if (melee_arena.matches_bet_number(win_m_idx - 1)) {
         msg_print(_("おめでとうございます。", "Congratulations."));
         const auto payback = melee_arena.get_payback();
-        msg_format(_("%d＄を受け取った。", "You received %d gold."), payback);
+        msg_print(_("{}＄を受け取った。", "You received {} gold."), payback);
         this->player_ptr->au += payback;
     } else {
         msg_print(_("残念でした。", "You lost gold."));
@@ -301,7 +302,7 @@ void WorldTurnProcessor::shuffle_shopkeeper()
         }
 
         if (cheat_xtra) {
-            msg_format(_("%sの店主をシャッフルします。", "Shuffle a Shopkeeper of %s."), terrain.name.data());
+            msg_print(_("{}の店主をシャッフルします。", "Shuffle a Shopkeeper of {}."), terrain.name);
         }
 
         store_shuffle(AngbandWorld::get_instance().get_town_index(), store_sale_type);

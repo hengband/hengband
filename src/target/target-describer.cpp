@@ -180,9 +180,9 @@ static ProcessResult describe_hallucinated_target(PlayerType *player_ptr, GridEx
 
     concptr name = _("何か奇妙な物", "something strange");
 #ifdef JP
-    const auto out_val = format("%s%s%s%s [%s]", ge_ptr->s1, name, ge_ptr->s2, ge_ptr->s3, ge_ptr->info);
+    const auto out_val = fmt::format("{}{}{}{} [{}]", ge_ptr->s1, name, ge_ptr->s2, ge_ptr->s3, ge_ptr->info);
 #else
-    const auto out_val = format("%s%s%s%s [%s]", ge_ptr->s1, ge_ptr->s2, ge_ptr->s3, name, ge_ptr->info);
+    const auto out_val = fmt::format("{}{}{}{} [{}]", ge_ptr->s1, ge_ptr->s2, ge_ptr->s3, name, ge_ptr->info);
 #endif
     prt(out_val, 0, 0);
     move_cursor_relative(ge_ptr->y, ge_ptr->x);
@@ -198,7 +198,7 @@ static bool describe_grid_lore(PlayerType *player_ptr, GridExamination *ge_ptr)
 {
     screen_save();
     screen_roff(player_ptr, ge_ptr->m_ptr->ap_r_idx, MONSTER_LORE_NORMAL);
-    term_addstr(-1, TERM_WHITE, format(_("  [r思 %s%s]", "  [r,%s%s]"), ge_ptr->x_info, ge_ptr->info));
+    term_addstr(-1, TERM_WHITE, fmt::format(_("  [r思 {}{}]", "  [r,{}{}]"), ge_ptr->x_info, ge_ptr->info));
     ge_ptr->query = inkey();
     screen_load();
     return ge_ptr->query != 'r';
@@ -221,11 +221,9 @@ static void describe_grid_monster(PlayerType *player_ptr, GridExamination *ge_pt
         std::string acount = evaluate_monster_exp(player_ptr, *ge_ptr->m_ptr);
         const auto mon_desc = ge_ptr->m_ptr->build_looking_description(true);
 #ifdef JP
-        const auto out_val = format("[%s]%s%s(%s)%s%s [r思 %s%s]", acount.data(), ge_ptr->s1, m_name.data(), mon_desc.data(), ge_ptr->s2, ge_ptr->s3,
-            ge_ptr->x_info, ge_ptr->info);
+        const auto out_val = fmt::format("[{}]{}{}({}){}{} [r思 {}{}]", acount, ge_ptr->s1, m_name, mon_desc, ge_ptr->s2, ge_ptr->s3, ge_ptr->x_info, ge_ptr->info);
 #else
-        const auto out_val = format("[%s]%s%s%s%s(%s) [r, %s%s]", acount.data(), ge_ptr->s1, ge_ptr->s2, ge_ptr->s3, m_name.data(), mon_desc.data(),
-            ge_ptr->x_info, ge_ptr->info);
+        const auto out_val = fmt::format("[{}]{}{}{}{}({}) [r, {}{}]", acount, ge_ptr->s1, ge_ptr->s2, ge_ptr->s3, m_name, mon_desc, ge_ptr->x_info, ge_ptr->info);
 #endif
         prt(out_val, 0, 0);
         move_cursor_relative(ge_ptr->y, ge_ptr->x);
@@ -262,9 +260,9 @@ static short describe_monster_item(PlayerType *player_ptr, GridExamination *ge_p
         const auto &item = *player_ptr->current_floor_ptr->o_list[this_o_idx];
         const auto item_name = describe_flavor(player_ptr, item, 0);
 #ifdef JP
-        const auto out_val = format("%s%s%s%s[%s]", ge_ptr->s1, item_name.data(), ge_ptr->s2, ge_ptr->s3, ge_ptr->info);
+        const auto out_val = fmt::format("{}{}{}{}[{}]", ge_ptr->s1, item_name, ge_ptr->s2, ge_ptr->s3, ge_ptr->info);
 #else
-        const auto out_val = format("%s%s%s%s [%s]", ge_ptr->s1, ge_ptr->s2, ge_ptr->s3, item_name.data(), ge_ptr->info);
+        const auto out_val = fmt::format("{}{}{}{} [{}]", ge_ptr->s1, ge_ptr->s2, ge_ptr->s3, item_name, ge_ptr->info);
 #endif
         prt(out_val, 0, 0);
         move_cursor_relative(ge_ptr->y, ge_ptr->x);
@@ -332,9 +330,9 @@ static short describe_footing(PlayerType *player_ptr, GridExamination *ge_ptr)
     const auto &item = *player_ptr->current_floor_ptr->o_list[ge_ptr->floor_item_index[0]];
     const auto item_name = describe_flavor(player_ptr, item, 0);
 #ifdef JP
-    const auto out_val = format("%s%s%s%s[%s]", ge_ptr->s1, item_name.data(), ge_ptr->s2, ge_ptr->s3, ge_ptr->info);
+    const auto out_val = fmt::format("{}{}{}{}[{}]", ge_ptr->s1, item_name, ge_ptr->s2, ge_ptr->s3, ge_ptr->info);
 #else
-    const auto out_val = format("%s%s%s%s [%s]", ge_ptr->s1, ge_ptr->s2, ge_ptr->s3, item_name.data(), ge_ptr->info);
+    const auto out_val = fmt::format("{}{}{}{} [{}]", ge_ptr->s1, ge_ptr->s2, ge_ptr->s3, item_name, ge_ptr->info);
 #endif
     prt(out_val, 0, 0);
     move_cursor_relative(ge_ptr->y, ge_ptr->x);
@@ -424,9 +422,9 @@ static short describe_footing_sight(PlayerType *player_ptr, GridExamination *ge_
     ge_ptr->boring = false;
     const auto item_name = describe_flavor(player_ptr, item, 0);
 #ifdef JP
-    const auto out_val = format("%s%s%s%s[%s]", ge_ptr->s1, item_name.data(), ge_ptr->s2, ge_ptr->s3, ge_ptr->info);
+    const auto out_val = fmt::format("{}{}{}{}[{}]", ge_ptr->s1, item_name, ge_ptr->s2, ge_ptr->s3, ge_ptr->info);
 #else
-    const auto out_val = format("%s%s%s%s [%s]", ge_ptr->s1, ge_ptr->s2, ge_ptr->s3, item_name.data(), ge_ptr->info);
+    const auto out_val = fmt::format("{}{}{}{} [{}]", ge_ptr->s1, ge_ptr->s2, ge_ptr->s3, item_name, ge_ptr->info);
 #endif
     prt(out_val, 0, 0);
     move_cursor_relative(ge_ptr->y, ge_ptr->x);
@@ -469,9 +467,9 @@ static std::string decide_target_floor(PlayerType *player_ptr, GridExamination *
         const auto &quests = QuestList::get_instance();
         const auto quest_id = i2enum<QuestId>(ge_ptr->g_ptr->special);
         const auto &quest = quests.get_quest(quest_id);
-        constexpr auto fmt = _("クエスト「%s」(%d階相当)", "the entrance to the quest '%s'(level %d)");
+        constexpr auto fmt = _("クエスト「{}」({}階相当)", "the entrance to the quest '{}'(level {})");
 
-        return format(fmt, quest.name.data(), quest.level);
+        return fmt::format(fmt, quest.name, quest.level);
     }
 
     if (ge_ptr->terrain_ptr->flags.has(TerrainCharacteristics::BLDG) && !floor.inside_arena) {
@@ -499,26 +497,23 @@ static std::string describe_grid_monster_all(GridExamination *ge_ptr)
 {
     if (!AngbandWorld::get_instance().wizard) {
 #ifdef JP
-        return format("%s%s%s%s[%s]", ge_ptr->s1, ge_ptr->name.data(), ge_ptr->s2, ge_ptr->s3, ge_ptr->info);
+        return fmt::format("{}{}{}{}[{}]", ge_ptr->s1, ge_ptr->name, ge_ptr->s2, ge_ptr->s3, ge_ptr->info);
 #else
-        return format("%s%s%s%s [%s]", ge_ptr->s1, ge_ptr->s2, ge_ptr->s3, ge_ptr->name.data(), ge_ptr->info);
+        return fmt::format("{}{}{}{} [{}]", ge_ptr->s1, ge_ptr->s2, ge_ptr->s3, ge_ptr->name, ge_ptr->info);
 #endif
     }
 
     std::string f_idx_str;
     if (ge_ptr->g_ptr->mimic) {
-        f_idx_str = format("%d/%d", ge_ptr->g_ptr->feat, ge_ptr->g_ptr->mimic);
+        f_idx_str = fmt::format("{}/{}", ge_ptr->g_ptr->feat, ge_ptr->g_ptr->mimic);
     } else {
         f_idx_str = std::to_string(ge_ptr->g_ptr->feat);
     }
 
 #ifdef JP
-    return format("%s%s%s%s[%s] %x %s %d %d %d (%d,%d) %d", ge_ptr->s1, ge_ptr->name.data(), ge_ptr->s2, ge_ptr->s3, ge_ptr->info,
-        (uint)ge_ptr->g_ptr->info, f_idx_str.data(), ge_ptr->g_ptr->get_distance(GridFlow::NORMAL), ge_ptr->g_ptr->get_cost(GridFlow::NORMAL), ge_ptr->g_ptr->when,
-        ge_ptr->y, ge_ptr->x, Travel::get_instance().get_cost({ ge_ptr->y, ge_ptr->x }));
+    return fmt::format("{}{}{}{}[{}] {:x} {} {} {} {} ({},{}) {}", ge_ptr->s1, ge_ptr->name, ge_ptr->s2, ge_ptr->s3, ge_ptr->info, ge_ptr->g_ptr->info, f_idx_str, ge_ptr->g_ptr->get_distance(GridFlow::NORMAL), ge_ptr->g_ptr->get_cost(GridFlow::NORMAL), ge_ptr->g_ptr->when, ge_ptr->y, ge_ptr->x, Travel::get_instance().get_cost({ ge_ptr->y, ge_ptr->x }));
 #else
-    return format("%s%s%s%s [%s] %x %s %d %d %d (%d,%d)", ge_ptr->s1, ge_ptr->s2, ge_ptr->s3, ge_ptr->name.data(), ge_ptr->info, ge_ptr->g_ptr->info,
-        f_idx_str.data(), ge_ptr->g_ptr->get_distance(GridFlow::NORMAL), ge_ptr->g_ptr->get_cost(GridFlow::NORMAL), ge_ptr->g_ptr->when, ge_ptr->y, ge_ptr->x);
+    return fmt::format("{}{}{}{} [{}] {:x} {} {} {} {} ({},{})", ge_ptr->s1, ge_ptr->s2, ge_ptr->s3, ge_ptr->name, ge_ptr->info, ge_ptr->g_ptr->info, f_idx_str, ge_ptr->g_ptr->get_distance(GridFlow::NORMAL), ge_ptr->g_ptr->get_cost(GridFlow::NORMAL), ge_ptr->g_ptr->when, ge_ptr->y, ge_ptr->x);
 #endif
 }
 

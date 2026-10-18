@@ -35,6 +35,7 @@
 #include "window/display-sub-windows.h"
 #include "wizard/wizard-messages.h"
 #include "world/world.h"
+#include <fmt/format.h>
 #include <range/v3/algorithm.hpp>
 #include <range/v3/functional.hpp>
 #include <range/v3/range/conversion.hpp>
@@ -492,13 +493,13 @@ void floor_item_charges(const ItemEntity &item)
     if (item.pval <= 0) {
         msg_print("この床上のアイテムは、もう魔力が残っていない。");
     } else {
-        msg_format("この床上のアイテムは、あと %d 回分の魔力が残っている。", item.pval);
+        msg_print("この床上のアイテムは、あと {} 回分の魔力が残っている。", item.pval);
     }
 #else
     if (item.pval != 1) {
-        msg_format("There are %d charges remaining.", item.pval);
+        msg_print("There are {} charges remaining.", item.pval);
     } else {
-        msg_format("There is %d charge remaining.", item.pval);
+        msg_print("There is {} charge remaining.", item.pval);
     }
 #endif
 }
@@ -515,12 +516,12 @@ void floor_item_describe(PlayerType *player_ptr, INVENTORY_IDX i_idx)
     const auto item_name = describe_flavor(player_ptr, item, 0);
 #ifdef JP
     if (item.number <= 0) {
-        msg_format("床上には、もう%sはない。", item_name.data());
+        msg_print("床上には、もう{}はない。", item_name);
     } else {
-        msg_format("床上には、まだ %sがある。", item_name.data());
+        msg_print("床上には、まだ {}がある。", item_name);
     }
 #else
-    msg_format("You see %s.", item_name.data());
+    msg_print("You see {}.", item_name);
 #endif
 }
 

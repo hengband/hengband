@@ -14,7 +14,9 @@
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
+#include <fmt/format.h>
 
 /*!
  * @brief ユニークでない量子生物を消滅させる
@@ -27,7 +29,7 @@ static void vanish_nonunique(PlayerType *player_ptr, MONSTER_IDX m_idx, bool see
     const auto &monster = player_ptr->current_floor_ptr->m_list[m_idx];
     if (see_m) {
         const auto m_name = monster_desc(player_ptr, monster, 0);
-        msg_format(_("%sは消え去った！", "%s^ disappears!"), m_name.data());
+        msg_print(_("{}は消え去った！", "{} disappears!"), str_upcase_first(m_name));
     }
 
     const auto sad = monster.is_pet() && !monster.ml;
@@ -61,7 +63,7 @@ static void produce_quantum_effect(PlayerType *player_ptr, MONSTER_IDX m_idx, bo
 
     if (see_m) {
         const auto m_name = monster_desc(player_ptr, monster, MD_NONE);
-        msg_format(_("%sは量子的効果を起こした！", "%s^ produced a decoherence!"), m_name.data());
+        msg_print(_("{}は量子的効果を起こした！", "{} produced a decoherence!"), str_upcase_first(m_name));
     } else {
         msg_print(_("量子的効果が起こった！", "A decoherence was produced!"));
     }
