@@ -16,6 +16,7 @@
 
 #include "test/scoped-rng.h"
 #include "util/enum-range.h"
+#include "util/finalizer.h"
 #include "util/probability-table.h"
 
 #include <doctest/doctest.h>
@@ -378,4 +379,37 @@ TEST_CASE("Rand_external does not consume the game RNG")
     CHECK(Rand_external(0) == 0);
     CHECK(Rand_external(-1) == 0);
     CHECK(get_rng_state() == state);
+}
+
+TEST_CASE("Rand_external_state_init with a seed reproduces the external RNG sequence")
+{
+    const auto restore_rng = test::scoped_rng();
+    const auto external_rng_backup = get_external_rng();
+    const auto restore_external_rng = util::make_finalizer([external_rng_backup] { get_external_rng() = external_rng_backup; });
+
+    constexpr uint32_t seed = 12345;
+    const auto draw_sequence = [] {
+        std::array<int32_t, 16> values{};
+        for (auto &value : values) {
+            value = Rand_external(1000000);
+        }
+
+        return values;
+    };
+
+    Rand_external_state_init(seed);
+    const auto first = draw_sequence();
+    Rand_external_state_init(seed);
+    CHECK(draw_sequence() == first);
+
+    // 同じシードを指定しても、ゲームの乱数生成器とは別の乱数列になる
+    Rand_state_init(seed);
+    Rand_external_state_init(seed);
+    CHECK(get_rng_state(get_external_rng()) != get_rng_state());
+
+    // シードを省くと、固定シードの状態から実行毎に異なる状態に初期化し直す
+    Rand_external_state_init(seed);
+    const auto seeded_state = get_rng_state(get_external_rng());
+    Rand_external_state_init();
+    CHECK(get_rng_state(get_external_rng()) != seeded_state);
 }

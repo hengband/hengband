@@ -75,6 +75,25 @@ void Rand_state_init(tl::optional<uint32_t> seed)
 }
 
 /*!
+ * @brief ゲームの進行に影響しない乱数生成器の状態を初期化する
+ * @param seed 初期シード。指定しない場合は実行毎に異なる乱数で初期化する
+ * @details ゲームの乱数生成器と同じ初期シードを指定しても同じ乱数列にならないよう、シードを変えて初期化する。
+ * シードを指定すると、同じキー入力に対して幻覚の表示などゲームの進行に影響しない乱数も再現できる。
+ * ただし描画で使う乱数は再描画の回数によって消費量が変わるため、同じバイナリ・同じ端末の構成で動かした場合に限る。
+ */
+void Rand_external_state_init(tl::optional<uint32_t> seed)
+{
+    auto &rng = get_external_rng();
+    if (seed) {
+        constexpr uint32_t salt = 0x45585452; // "EXTR"
+        rng.seed(*seed ^ salt);
+        return;
+    }
+
+    rng.seed();
+}
+
+/*!
  * @brief ゲームの乱数生成器を返す
  * @return ゲームの乱数生成器 (AngbandSystem::get_rng())
  * @details 乱数生成器を引数に取らない乱数関数はこれを使う。
@@ -87,8 +106,9 @@ xso::rng32 &get_game_rng()
 /*!
  * @brief ゲームの進行に影響しない乱数生成器を返す
  * @return ゲームの乱数生成器とは独立した乱数生成器
- * @details 描画やBGMの選択など、呼び出される回数が環境によって変わる処理で使う。
- * 実行毎に異なるシードで初期化され、セーブファイルにも記録されない。
+ * @details 描画など呼び出される回数が環境によって変わる処理や、ゲームの時間が経過しない操作で使う。
+ * Rand_external_state_init() で初期シードを指定しない限り実行毎に異なるシードで初期化され、
+ * セーブファイルにも記録されない。
  */
 xso::rng32 &get_external_rng()
 {
@@ -186,7 +206,7 @@ int32_t div_round(int32_t n, int32_t d)
  * @brief ゲームの乱数生成器を使わずに0以上m未満の一様乱数を返す
  * @param m 値域の幅
  * @return 乱数値 (m <= 0 の場合は0)
- * @details get_external_rng() を使う。BGMの選択などゲームの進行に影響しない場面で使う。
+ * @details get_external_rng() を使う。日記の副題の選択などゲームの進行に影響しない場面で使う。
  * ゲームの乱数生成器の状態を変えないため、固定シードでのゲームの再現性に影響しない。
  */
 int32_t Rand_external(int32_t m)

@@ -49,6 +49,7 @@
 constexpr auto RAND_DEG = 63;
 
 void Rand_state_init(tl::optional<uint32_t> seed = tl::nullopt);
+void Rand_external_state_init(tl::optional<uint32_t> seed = tl::nullopt);
 xso::rng32 &get_game_rng();
 xso::rng32 &get_external_rng();
 int rand_range(xso::rng32 &rng, int a, int b);
