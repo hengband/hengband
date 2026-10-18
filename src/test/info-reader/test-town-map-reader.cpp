@@ -835,6 +835,31 @@ TEST_CASE("TownMapReader preserves output on root errors and value errors at eve
     }
 }
 
+/*!
+ * @brief 複数の段階に誤りがあるとき、凡例・建物・マップ・開始位置の順で最初の段階のエラーを返す
+ * @details 隣り合う段階で異なるエラーコードになる誤りを選び、順序の入れ替わりを検出する。
+ */
+TEST_CASE("TownMapReader reports the first failing stage in declaration order")
+{
+    auto data = make_town_map();
+    data["featureRules"][0]["when"] = "";
+    data["buildingRules"][0]["locale"] = "other";
+    data["mapVariants"][0]["when"] = "";
+    data["startingPositions"][0]["x"] = 3;
+    TownMapDefinition definition;
+    CHECK(TownMapReader(data).read(definition, 3, 3) == PARSE_ERROR_INVALID_TYPE);
+    data["featureRules"][0].erase("when");
+    CHECK(TownMapReader(data).read(definition, 3, 3) == PARSE_ERROR_INVALID_VALUE);
+    data["buildingRules"][0]["locale"] = "en";
+    CHECK(TownMapReader(data).read(definition, 3, 3, true) == PARSE_ERROR_NONE);
+    CHECK(TownMapReader(data).read(definition, 3, 3) == PARSE_ERROR_INVALID_TYPE);
+    data["mapVariants"][0].erase("when");
+    CHECK(TownMapReader(data).read(definition, 3, 3) == PARSE_ERROR_INVALID_VALUE);
+    data["startingPositions"][0]["x"] = 1;
+    REQUIRE(TownMapReader(data).read(definition, 3, 3) == PARSE_ERROR_NONE);
+    CHECK(definition.starts.size() == 1);
+}
+
 TEST_CASE("TownMapReader rejects nonprintable terrain and trap tokens")
 {
     for (const auto *field : { "terrain", "trap" }) {
