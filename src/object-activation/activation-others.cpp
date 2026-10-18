@@ -173,7 +173,7 @@ bool activate_unique_detection(PlayerType *player_ptr)
 
         const auto &monrace = monster.get_monrace();
         if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
-            msg_format(_("%s． ", "%s. "), monrace.name.data());
+            msg_print(_("{}． ", "{}. "), monrace.name);
         }
 
         const auto message = monrace.get_message(monrace.name, MonsterMessageType::MESSAGE_DETECT_UNIQUE);

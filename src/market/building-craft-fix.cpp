@@ -121,16 +121,16 @@ static tl::optional<std::pair<std::shared_ptr<ItemEntity>, short>> select_repair
 static void display_reparing_weapon(PlayerType *player_ptr, const ItemEntity &item, const int row)
 {
     const auto item_name = describe_flavor(player_ptr, item, OD_NAME_ONLY);
-    prt(format(_("修復する武器　： %s", "Repairing: %s"), item_name.data()), row + 3, 2);
+    prt(fmt::format(_("修復する武器　： {}", "Repairing: {}"), item_name), row + 3, 2);
 }
 
 static void display_repair_success_message(PlayerType *player_ptr, const ItemEntity &item, const int cost)
 {
     const auto item_name = describe_flavor(player_ptr, item, OD_NAME_ONLY);
 #ifdef JP
-    msg_format("＄%dで%sに修復しました。", cost, item_name.data());
+    msg_print("＄{}で{}に修復しました。", cost, item_name);
 #else
-    msg_format("Repaired into %s for %d gold.", item_name.data(), cost);
+    msg_print("Repaired into {} for {} gold.", item_name, cost);
 #endif
     msg_erase();
 }
@@ -166,14 +166,14 @@ static PRICE repair_broken_weapon_aux(PlayerType *player_ptr, PRICE bcost)
     }
 
     const auto item_name = describe_flavor(player_ptr, *item_material, OD_NAME_ONLY);
-    prt(format(_("材料とする武器： %s", "Material : %s"), item_name.data()), row + 4, 2);
+    prt(fmt::format(_("材料とする武器： {}", "Material : {}"), item_name), row + 4, 2);
     const auto total_cost = int64_t{ bcost } + int64_t{ object_value_real(item_broken.get()) } * 2;
     if (!input_check(fmt::format(_("＄{}かかりますがよろしいですか？ ", "Costs {} gold, okay? "), total_cost))) {
         return 0;
     }
 
     if (player_ptr->au < total_cost) {
-        msg_format(_("%sを修復するだけのゴールドがありません！", "You do not have the gold to repair %s!"), item_name.data());
+        msg_print(_("{}を修復するだけのゴールドがありません！", "You do not have the gold to repair {}!"), item_name);
         msg_erase();
         return 0;
     }

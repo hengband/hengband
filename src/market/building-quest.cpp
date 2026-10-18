@@ -13,6 +13,7 @@
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "view/display-messages.h"
+#include <fmt/format.h>
 
 /*!
  * @brief クエスト情報を処理しつつ取得する。/ Process and get quest information
@@ -42,7 +43,7 @@ static void print_questinfo(PlayerType *player_ptr, QuestId quest_id, bool do_in
 
     const auto &quests = QuestList::get_instance();
     const auto &quest = quests.get_quest(quest_id);
-    prt(format(_("クエスト情報 (危険度: %d 階相当)", "Quest Information (Danger level: %d)"), quest.level), 5, 0);
+    prt(fmt::format(_("クエスト情報 (危険度: {} 階相当)", "Quest Information (Danger level: {})"), quest.level), 5, 0);
     prt(quest.name, 7, 0);
 
     for (auto i = 0; i < std::ssize(quest_text_lines); i++) {
@@ -79,7 +80,7 @@ void castle_quest(PlayerType *player_ptr)
         put_str(_("CTRL-Qを使えばクエストの状態がチェックできます。", "Use CTRL-Q to check the status of your quest."), 9, 0);
 
         get_questinfo(player_ptr, quest_id, false);
-        put_str(format(_("現在のクエスト「%s」", "Current quest is '%s'."), quest.name.data()), 11, 0);
+        put_str(fmt::format(_("現在のクエスト「{}」", "Current quest is '{}'."), quest.name), 11, 0);
 
         if (quest.type != QuestKindType::KILL_LEVEL || quest.dungeon == DungeonId::WILDERNESS) {
             put_str(_("クエストを終わらせたら戻って来て下さい。", "Return when you have completed your quest."), 12, 0);

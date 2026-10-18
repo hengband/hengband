@@ -80,9 +80,9 @@ void curse_equipment(PlayerType *player_ptr, PERCENTAGE chance, PERCENTAGE heavy
     /* Extra, biased saving throw for blessed items */
     if (oflags.has(TR_BLESSED)) {
 #ifdef JP
-        msg_format("祝福された%sは呪いを跳ね返した！", item_name.data());
+        msg_print("祝福された{}は呪いを跳ね返した！", item_name);
 #else
-        msg_format("Your blessed %s resist%s cursing!", item_name.data(), ((item.number > 1) ? "" : "s"));
+        msg_print("Your blessed {} resist{} cursing!", item_name, ((item.number > 1) ? "" : "s"));
 #endif
         /* Hmmm -- can we wear multiple items? If not, this is unnecessary */
         return;
@@ -115,7 +115,7 @@ void curse_equipment(PlayerType *player_ptr, PERCENTAGE chance, PERCENTAGE heavy
     }
 
     if (changed) {
-        msg_format(_("悪意に満ちた黒いオーラが%sをとりまいた...", "There is a malignant black aura surrounding %s..."), item_name.data());
+        msg_print(_("悪意に満ちた黒いオーラが{}をとりまいた...", "There is a malignant black aura surrounding {}..."), item_name);
         item.feeling = FEEL_NONE;
     }
 

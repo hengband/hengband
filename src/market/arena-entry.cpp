@@ -12,6 +12,7 @@
 #include "system/enums/monrace/monrace-id.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
+#include <fmt/format.h>
 #ifndef JP
 #include <sstream>
 #endif
@@ -164,7 +165,7 @@ std::string ArenaEntryList::get_poster_message() const
         return _("あなたはすべての敵に勝利した。", "You have won against all foes.");
     }
 
-    return format(_("%s に挑戦するものはいないか？", "Do I hear any challenges against: %s"), this->get_monrace().name.data());
+    return fmt::format(_("{} に挑戦するものはいないか？", "Do I hear any challenges against: {}"), this->get_monrace().name);
 }
 
 std::string ArenaEntryList::get_fight_number(bool is_current) const
@@ -175,7 +176,7 @@ std::string ArenaEntryList::get_fight_number(bool is_current) const
 
     const auto num = is_current ? this->current_entry : *this->defeated_entry + 1;
 #ifdef JP
-    return format("%d回戦", num);
+    return fmt::format("{}回戦", num);
 #else
     std::stringstream ss;
     std::string particle;

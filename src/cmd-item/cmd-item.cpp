@@ -69,6 +69,7 @@
 #include "view/display-inventory.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#include <fmt/format.h>
 
 /*!
  * @brief 持ち物一覧を表示するコマンドのメインルーチン / Display inventory_list
@@ -86,9 +87,9 @@ void do_cmd_inven(PlayerType *player_ptr)
     const auto weight_lim = calc_weight_limit(player_ptr);
     const auto percentage = weight * 100 / weight_lim;
 #ifdef JP
-    const auto mes = format("持ち物： 合計 %3d.%1d kg (限界の%d%%) コマンド: ", lb_to_kg_integer(weight), lb_to_kg_fraction(weight), percentage);
+    const auto mes = fmt::format("持ち物： 合計 {:3}.{} kg (限界の{}%) コマンド: ", lb_to_kg_integer(weight), lb_to_kg_fraction(weight), percentage);
 #else
-    const auto mes = format("Inventory: carrying %d.%d pounds (%d%% of capacity). Command: ", weight / 10, weight % 10, percentage);
+    const auto mes = fmt::format("Inventory: carrying {}.{} pounds ({}% of capacity). Command: ", weight / 10, weight % 10, percentage);
 #endif
 
     prt(mes, 0, 0);
@@ -159,7 +160,7 @@ void do_cmd_observe(PlayerType *player_ptr)
     }
 
     const auto item_name = describe_flavor(player_ptr, *item, 0);
-    msg_format(_("%sを調べている...", "Examining %s..."), item_name.data());
+    msg_print(_("{}を調べている...", "Examining {}..."), item_name);
     if (!screen_object(player_ptr, *item, SCROBJ_FORCE_DETAIL)) {
         msg_print(_("特に変わったところはないようだ。", "You see nothing special."));
     }
@@ -204,7 +205,7 @@ void do_cmd_inscribe(PlayerType *player_ptr)
     }
 
     const auto item_name = describe_flavor(player_ptr, *item, OD_OMIT_INSCRIPTION);
-    msg_format(_("%sに銘を刻む。", "Inscribing %s."), item_name.data());
+    msg_print(_("{}に銘を刻む。", "Inscribing {}."), item_name);
     msg_erase();
     const auto initial_inscription = item->is_inscribed() ? *item->inscription : "";
     const auto input_inscription = input_string(_("銘: ", "Inscription: "), MAX_INSCRIPTION, initial_inscription);

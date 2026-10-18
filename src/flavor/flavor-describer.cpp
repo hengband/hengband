@@ -34,6 +34,7 @@
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
+#include <fmt/format.h>
 #include <sstream>
 
 static std::string describe_chest_trap(const ItemEntity &item)
@@ -148,7 +149,7 @@ static std::string describe_weapon_dice(PlayerType *player_ptr, const ItemEntity
     if (is_bonus) {
         bonused_dice.num += 2;
     }
-    return format(" (%s)", bonused_dice.to_string().data());
+    return fmt::format(" ({})", bonused_dice.to_string());
 }
 
 static std::string describe_bow_power(PlayerType *player_ptr, const ItemEntity &item, const describe_option_type &opt)
@@ -160,7 +161,7 @@ static std::string describe_bow_power(PlayerType *player_ptr, const ItemEntity &
     }
 
     std::stringstream ss;
-    ss << format(" (x%d)", power);
+    ss << fmt::format(" (x{})", power);
 
     auto num_fire = 100;
     if (none_bits(opt.mode, OD_DEBUG)) {
@@ -176,7 +177,7 @@ static std::string describe_bow_power(PlayerType *player_ptr, const ItemEntity &
     }
 
     const auto fire_rate = item.get_bow_energy() / num_fire;
-    ss << format(" (%d.%dturn)", fire_rate / 100, fire_rate % 100);
+    ss << fmt::format(" ({}.{}turn)", fire_rate / 100, fire_rate % 100);
 
     return ss.str();
 }
@@ -206,15 +207,15 @@ static std::string describe_accuracy_and_damage_bonus(const ItemEntity &item, co
     }
 
     if (should_show_slaying_bonus(item)) {
-        return format(" (%+d,%+d)", item.to_h, item.to_d);
+        return fmt::format(" ({:+},{:+})", item.to_h, item.to_d);
     }
 
     if (item.to_h != 0) {
-        return format(" (%+d)", item.to_h);
+        return fmt::format(" ({:+})", item.to_h);
     }
 
     if (item.to_d != 0) {
-        return format(" (%+d)", item.to_d);
+        return fmt::format(" ({:+})", item.to_d);
     }
 
     return "";
@@ -240,7 +241,7 @@ static std::string describe_fire_energy(PlayerType *player_ptr, const ItemEntity
     const auto bow_bonus = bow.is_known() ? bow.to_h : 0;
     const auto percent = calc_crit_ratio_shot(player_ptr, ammo_bonus, bow_bonus);
 
-    ss << format("/%d.%02d%s", percent / 100, percent % 100, show_ammo_detail ? "% crit" : "%");
+    ss << fmt::format("/{}.{:02}{}", percent / 100, percent % 100, show_ammo_detail ? "% crit" : "%");
 
     return ss.str();
 }
@@ -294,20 +295,20 @@ static std::string describe_spike_detail(PlayerType *player_ptr)
     const auto energy_fire = 100 - player_ptr->lev;
     const auto avgdam_per_turn = 100 * avgdam / energy_fire;
 
-    return format(" (%d/%d)", avgdam, avgdam_per_turn);
+    return fmt::format(" ({}/{})", avgdam, avgdam_per_turn);
 }
 
 static std::string describe_known_item_ac(const ItemEntity &item)
 {
     if (should_show_ac_bonus(item)) {
-        return format(" [%d,%+d]", item.ac, item.to_a);
+        return fmt::format(" [{},{:+}]", item.ac, item.to_a);
     }
 
     if (item.to_a == 0) {
         return "";
     }
 
-    return format(" [%+d]", item.to_a);
+    return fmt::format(" [{:+}]", item.to_a);
 }
 
 static std::string describe_ac(const ItemEntity &item, const describe_option_type &opt)
@@ -320,18 +321,18 @@ static std::string describe_ac(const ItemEntity &item, const describe_option_typ
         return "";
     }
 
-    return format(" [%d]", item.ac);
+    return fmt::format(" [{}]", item.ac);
 }
 
 static std::string describe_charges_staff_wand(const ItemEntity &item)
 {
     std::string staff_num;
     if ((item.bi_key.tval() == ItemKindType::STAFF) && (item.number > 1)) {
-        staff_num = format("%dx ", item.number);
+        staff_num = fmt::format("{}x ", item.number);
     }
 
     const auto charge_str = _("回分", (item.pval != 1 ? " charge" : " charges"));
-    return format(" (%s%d%s)", staff_num.data(), item.pval, charge_str);
+    return fmt::format(" ({}{}{})", staff_num, item.pval, charge_str);
 }
 
 /*!
@@ -374,7 +375,7 @@ static std::string describe_charges_rod(const ItemEntity &item)
         return _("(充填中)", " (charging)");
     }
 
-    return format(" (%d%s)", num_of_charging, _("本 充填中", " charging"));
+    return fmt::format(" ({}{})", num_of_charging, _("本 充填中", " charging"));
 }
 
 static std::string describe_pval_type(const ItemEntity &item)
@@ -415,7 +416,7 @@ static std::string describe_pval(const ItemEntity &item)
     }
 
     const auto pval_type = describe_pval_type(item);
-    return format(" (%+d%s)", item.pval, pval_type.data());
+    return fmt::format(" ({:+}{})", item.pval, pval_type);
 }
 
 /*!
@@ -535,7 +536,7 @@ static std::string describe_item_discount(const ItemEntity &item, bool hide_disc
         return "";
     }
 
-    return format("%d%s", item.discount, _("%引き", "% off"));
+    return fmt::format("{}{}", item.discount, _("%引き", "% off"));
 }
 
 /*!
@@ -573,7 +574,7 @@ static std::string describe_inscription(const ItemEntity &item, const describe_o
     }
 
     const auto insc = ss.str();
-    return insc.empty() ? "" : format(" {%s}", insc.data());
+    return insc.empty() ? "" : fmt::format(" {{{}}}", insc);
 }
 
 static describe_option_type decide_describe_option(const ItemEntity &item, BIT_FLAGS mode)

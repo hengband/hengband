@@ -3,6 +3,7 @@
 #include "market/building-util.h"
 #include "term/screen-processor.h"
 #include "view/display-util.h"
+#include <fmt/format.h>
 
 /*!
  * @brief ACから回避率、ダメージ減少率を計算し表示する。 / Evaluate AC
@@ -42,8 +43,8 @@ bool eval_ac(short ac)
     clear_bldg(0, 22);
 
     auto row = 2;
-    put_str(format(_("あなたの現在のAC: %3d", "Your current AC : %3d"), ac), row++, 0);
-    put_str(format(_("ダメージ軽減率  : %3d%%", "Protection rate : %3d%%"), protection), row++, 0);
+    put_str(fmt::format(_("あなたの現在のAC: {:3}", "Your current AC : {:3}"), ac), row++, 0);
+    put_str(fmt::format(_("ダメージ軽減率  : {:3}%", "Protection rate : {:3}%"), protection), row++, 0);
     row++;
 
     put_str(_("敵のレベル      :", "Level of Monster:"), row + 0, 0);
@@ -52,15 +53,15 @@ bool eval_ac(short ac)
 
     for (auto col = 17 + 1, lvl = 0; lvl <= 100; lvl += 10, col += 5) {
         auto quality = 60 + lvl * 3; /* attack quality with power 60 */
-        put_str(format("%3d", lvl), row + 0, col);
+        put_str(fmt::format("{:3}", lvl), row + 0, col);
 
         /* 回避率を計算 */
         auto dodge = 5 + (std::min(100, 100 * (ac * 3 / 4) / quality) * 9 + 5) / 10;
-        put_str(format("%3d%%", dodge), row + 1, col);
+        put_str(fmt::format("{:3}%", dodge), row + 1, col);
 
         /* 100点の攻撃に対してのダメージ期待値を計算 */
         auto average = (100 - dodge) * (100 - protection) / 100;
-        put_str(format("%3d", average), row + 2, col);
+        put_str(fmt::format("{:3}", average), row + 2, col);
     }
 
     display_wrap_around(memo, 70, row + 4, 4);

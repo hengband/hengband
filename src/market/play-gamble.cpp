@@ -14,6 +14,7 @@
 #include "util/string-processor.h"
 #include "view/display-fruit.h"
 #include "view/display-messages.h"
+#include <fmt/format.h>
 
 /*!
  * @brief カジノ1プレイごとのメインルーチン / gamble_comm
@@ -58,8 +59,8 @@ void gamble_comm(PlayerType *player_ptr, int cmd)
     auto win = 0;
     auto odds = 0;
     auto oldgold = player_ptr->au;
-    prt(format(_("ゲーム前の所持金: %9d", "Gold before game: %9d"), oldgold), 20, 2);
-    prt(format(_("現在の掛け金:     %9d", "Current Wager:    %9d"), *wager), 21, 2);
+    prt(fmt::format(_("ゲーム前の所持金: {:9}", "Gold before game: {:9}"), oldgold), 20, 2);
+    prt(fmt::format(_("現在の掛け金:     {:9}", "Current Wager:    {:9}"), *wager), 21, 2);
     // 所持金を変えたらプレイヤーの情報のサブウィンドウの描き直しを要求する。
     // 次の入力待ち (inkey()) が残っている要求を処理して描き直す
     auto &rfu = RedrawingFlagsUpdater::get_instance();
@@ -74,8 +75,8 @@ void gamble_comm(PlayerType *player_ptr, int cmd)
             auto roll1 = randint1(10);
             auto roll2 = randint1(10);
             auto choice = randint1(10);
-            prt(format(_("黒ダイス: %d        黒ダイス: %d", "Black die: %d       Black Die: %d"), roll1, roll2), 8, 3);
-            prt(format(_("赤ダイス: %d", "Red die: %d"), choice), 11, 14);
+            prt(fmt::format(_("黒ダイス: {}        黒ダイス: {}", "Black die: {}       Black Die: {}"), roll1, roll2), 8, 3);
+            prt(fmt::format(_("赤ダイス: {}", "Red die: {}"), choice), 11, 14);
             if (((choice > roll1) && (choice < roll2)) || ((choice < roll1) && (choice > roll2))) {
                 win = 1;
             }
@@ -90,7 +91,7 @@ void gamble_comm(PlayerType *player_ptr, int cmd)
             auto roll2 = randint1(6);
             auto roll3 = roll1 + roll2;
             auto choice = roll3;
-            prt(format(_("１振りめ: %d %d      Total: %d", "First roll: %d %d    Total: %d"), roll1, roll2, roll3), 7, 5);
+            prt(fmt::format(_("１振りめ: {} {}      Total: {}", "First roll: {} {}    Total: {}"), roll1, roll2, roll3), 7, 5);
             if ((roll3 == 7) || (roll3 == 11)) {
                 win = 1;
                 break;
@@ -108,7 +109,7 @@ void gamble_comm(PlayerType *player_ptr, int cmd)
                 roll1 = randint1(6);
                 roll2 = randint1(6);
                 roll3 = roll1 + roll2;
-                prt(format(_("出目: %d %d          合計:      %d", "Roll result: %d %d   Total:     %d"), roll1, roll2, roll3), 8, 5);
+                prt(fmt::format(_("出目: {} {}          合計:      {}", "Roll result: {} {}   Total:     {}"), roll1, roll2, roll3), 8, 5);
                 if (roll3 == choice) {
                     win = 1;
                 } else if (roll3 == 7) {
@@ -131,7 +132,7 @@ void gamble_comm(PlayerType *player_ptr, int cmd)
 
                 msg_erase();
                 auto roll1 = randint0(10);
-                prt(format(_("ルーレットは回り、止まった。勝者は %d番だ。", "The wheel spins to a stop and the winner is %d"), roll1), 13, 3);
+                prt(fmt::format(_("ルーレットは回り、止まった。勝者は {}番だ。", "The wheel spins to a stop and the winner is {}"), roll1), 13, 3);
                 prt("", 9, 0);
                 prt("*", 9, (3 * roll1 + 5));
                 if (roll1 == choice) {
@@ -233,13 +234,13 @@ void gamble_comm(PlayerType *player_ptr, int cmd)
             prt(_("あなたの勝ち", "YOU WON"), 16, 37);
             player_ptr->au += odds * *wager;
             rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
-            prt(format(_("倍率: %d", "Payoff: %d"), odds), 17, 37);
+            prt(fmt::format(_("倍率: {}", "Payoff: {}"), odds), 17, 37);
         } else {
             prt(_("あなたの負け", "You Lost"), 16, 37);
             prt("", 17, 37);
         }
 
-        prt(format(_("現在の所持金:     %9d", "Current Gold:     %9d"), player_ptr->au), 22, 2);
+        prt(fmt::format(_("現在の所持金:     {:9}", "Current Gold:     {:9}"), player_ptr->au), 22, 2);
         prt(_("もう一度(Y/N)？", "Again(Y/N)?"), 18, 37);
         move_cursor(18, 52);
         auto again = inkey();

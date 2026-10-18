@@ -20,6 +20,7 @@
 #include "view/display-messages.h"
 #include "world/world.h"
 #include <algorithm>
+#include <fmt/format.h>
 #include <sstream>
 #include <string>
 
@@ -30,9 +31,9 @@ void display_gladiators()
     const auto &melee_arena = MeleeArena::get_instance();
     const auto names = melee_arena.build_gladiators_names();
     for (auto i = 0; i < NUM_GLADIATORS; i++) {
-        constexpr auto fmt = _("%d) %-58s  %4d.%02d倍", "%d) %-58s  %4d.%02d");
+        constexpr auto fmt = _("{}) {:<58}  {:4}.{:02}倍", "{}) {:<58}  {:4}.{:02}");
         const auto &gladiator = melee_arena.get_gladiator(i);
-        prt(format(fmt, i + 1, names[i].data(), gladiator.odds / 100, gladiator.odds % 100), 5 + i, 1);
+        prt(fmt::format(fmt, i + 1, fmt::bytes(names[i]), gladiator.odds / 100, gladiator.odds % 100), 5 + i, 1);
     }
 
     prt(_("どれに賭けますか:", "Which monster: "), 0, 0);

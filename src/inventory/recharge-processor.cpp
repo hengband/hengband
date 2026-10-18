@@ -31,12 +31,12 @@ static void recharged_notice(PlayerType *player_ptr, const ItemEntity &item)
         if (s[1] == '!') {
             const auto item_name = describe_flavor(player_ptr, item, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 #ifdef JP
-            msg_format("%sは再充填された。", item_name.data());
+            msg_print("{}は再充填された。", item_name);
 #else
             if (item.number > 1) {
-                msg_format("Your %s are recharged.", item_name.data());
+                msg_print("Your {} are recharged.", item_name);
             } else {
-                msg_format("Your %s is recharged.", item_name.data());
+                msg_print("Your {} is recharged.", item_name);
             }
 #endif
             disturb(player_ptr, false, false);

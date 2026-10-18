@@ -126,7 +126,7 @@ void store_sell(PlayerType *player_ptr, StoreScreen &screen)
     auto placed = false;
     if ((store_num != StoreSaleType::HOME) && (store_num != StoreSaleType::MUSEUM)) {
         const auto item_name = describe_flavor(player_ptr, selling_item, 0);
-        msg_format(_("%s(%c)を売却する。", "Selling %s (%c)."), item_name.data(), index_to_label(i_idx));
+        msg_print(_("{}({:c})を売却する。", "Selling {} ({:c})."), item_name, index_to_label(i_idx));
         msg_erase();
 
         auto res = prompt_to_sell(player_ptr, store, &selling_item);
@@ -160,7 +160,7 @@ void store_sell(PlayerType *player_ptr, StoreScreen &screen)
 
             const auto value = int64_t{ sold_item.calc_price() } * sold_item.number;
             const auto sold_item_name = describe_flavor(player_ptr, sold_item, 0);
-            msg_format(_("%sを $%dで売却しました。", "You sold %s for %d gold."), sold_item_name.data(), price);
+            msg_print(_("{}を ${}で売却しました。", "You sold {} for {} gold."), sold_item_name, price);
 
             if (record_sell) {
                 exe_write_diary(*player_ptr->current_floor_ptr, DiaryKind::SELL, 0, sold_item_name);
@@ -193,7 +193,7 @@ void store_sell(PlayerType *player_ptr, StoreScreen &screen)
             msg_print(_("博物館に寄贈したものは取り出すことができません！！", "You cannot take back items which have been donated to the Museum!!"));
         }
 
-        if (!input_check(format(_("本当に%sを寄贈しますか？", "Really give %s to the Museum? "), museum_item_name.data()))) {
+        if (!input_check(fmt::format(_("本当に{}を寄贈しますか？", "Really give {} to the Museum? "), museum_item_name))) {
             return;
         }
 
@@ -201,7 +201,7 @@ void store_sell(PlayerType *player_ptr, StoreScreen &screen)
         selling_item.set_identification_flag(IdentificationFlag::FULL_KNOWN);
 
         distribute_charges(item.get(), &selling_item, amt);
-        msg_format(_("%sを置いた。(%c)", "You drop %s (%c)."), museum_item_name.data(), index_to_label(i_idx));
+        msg_print(_("{}を置いた。({:c})", "You drop {} ({:c})."), museum_item_name, index_to_label(i_idx));
         placed = true;
 
         vary_item(player_ptr, i_idx, -amt);
@@ -214,7 +214,7 @@ void store_sell(PlayerType *player_ptr, StoreScreen &screen)
     } else {
         distribute_charges(item.get(), &selling_item, amt);
         const auto item_name = describe_flavor(player_ptr, selling_item, 0);
-        msg_format(_("%sを置いた。(%c)", "You drop %s (%c)."), item_name.data(), index_to_label(i_idx));
+        msg_print(_("{}を置いた。({:c})", "You drop {} ({:c})."), item_name, index_to_label(i_idx));
         placed = true;
         vary_item(player_ptr, i_idx, -amt);
         int item_pos = home_carry(player_ptr, store, &selling_item);

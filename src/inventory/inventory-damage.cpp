@@ -66,11 +66,10 @@ void inventory_damage(PlayerType *player_ptr, const ObjectBreaker &breaker, int 
 
         const auto item_name = describe_flavor(player_ptr, item, OD_OMIT_PREFIX);
 
-        msg_format(_("%s(%c)が%s壊れてしまった！", "%sour %s (%c) %s destroyed!"),
 #ifdef JP
-            item_name.data(), index_to_label(i_idx), ((item.number > 1) ? ((amt == item.number) ? "全部" : (amt > 1 ? "何個か" : "一個")) : ""));
+        msg_print("{}({:c})が{}壊れてしまった！", item_name, index_to_label(i_idx), ((item.number > 1) ? ((amt == item.number) ? "全部" : (amt > 1 ? "何個か" : "一個")) : ""));
 #else
-            ((item.number > 1) ? ((amt == item.number) ? "All of y" : (amt > 1 ? "Some of y" : "One of y")) : "Y"), item_name.data(), index_to_label(i_idx),
+        msg_print("{}our {} ({:c}) {} destroyed!", ((item.number > 1) ? ((amt == item.number) ? "All of y" : (amt > 1 ? "Some of y" : "One of y")) : "Y"), item_name, index_to_label(i_idx),
             ((amt > 1) ? "were" : "was"));
 #endif
 
