@@ -16,6 +16,7 @@
 #include "util/int-char-converter.h"
 #include "view/display-symbol.h"
 #include <algorithm>
+#include <fmt/format.h>
 
 /*!
  * @brief プレイヤーの所持金を表示する
@@ -26,7 +27,7 @@ void store_prt_gold(const StoreScreen &screen, int num_golds)
 {
     const auto row = screen.get_status_row();
     prt(_("手持ちのお金: ", "Gold Remaining: "), row, 53);
-    prt(format("%9d", num_golds), row, 68);
+    prt(fmt::format("{:9}", num_golds), row, 68);
 }
 
 /*!
@@ -43,7 +44,7 @@ void display_entry(PlayerType *player_ptr, const StoreScreen &screen, int pos)
     const auto i = screen.get_page_position(pos);
 
     /* Label it, clear the line --(-- */
-    prt(format("%c) ", ((i > 25) ? toupper(I2A(i - 26)) : I2A(i))), i + 6, 0);
+    prt(fmt::format("{:c}) ", ((i > 25) ? toupper(I2A(i - 26)) : I2A(i))), i + 6, 0);
 
     int cur_col = 3;
     if (show_item_graph) {
@@ -68,7 +69,7 @@ void display_entry(PlayerType *player_ptr, const StoreScreen &screen, int pos)
 
         if (show_weights) {
             const auto wgt = item.weight;
-            put_str(format(_("%3d.%1d kg", "%3d.%d lb"), _(lb_to_kg_integer(wgt), wgt / 10), _(lb_to_kg_fraction(wgt), wgt % 10)), i + 6, _(67, 68));
+            put_str(fmt::format(_("{:3}.{:1} kg", "{:3}.{} lb"), _(lb_to_kg_integer(wgt), wgt / 10), _(lb_to_kg_fraction(wgt), wgt % 10)), i + 6, _(67, 68));
         }
 
         return;
@@ -84,11 +85,11 @@ void display_entry(PlayerType *player_ptr, const StoreScreen &screen, int pos)
 
     if (show_weights) {
         const auto wgt = item.weight;
-        put_str(format("%3d.%1d", _(lb_to_kg_integer(wgt), wgt / 10), _(lb_to_kg_fraction(wgt), wgt % 10)), i + 6, _(60, 61));
+        put_str(fmt::format("{:3}.{:1}", _(lb_to_kg_integer(wgt), wgt / 10), _(lb_to_kg_fraction(wgt), wgt % 10)), i + 6, _(60, 61));
     }
 
     const auto price = price_item(player_ptr, item.calc_price(), store, StoreTradeType::PLAYER_BUYS);
-    put_str(format("%9d  ", price), i + 6, 68);
+    put_str(fmt::format("{:9}  ", price), i + 6, 68);
 }
 
 /*!
@@ -117,7 +118,7 @@ void display_store_inventory(PlayerType *player_ptr, const StoreScreen &screen)
     put_str(_("          ", "        "), 5, _(20, 22));
     if (screen.has_multiple_pages()) {
         prt(_("-続く-", "-more-"), page_item_count + 6, 3);
-        put_str(format(_("(%dページ)  ", "(Page %d)  "), page_top / page_size + 1), 5, _(20, 22));
+        put_str(fmt::format(_("({}ページ)  ", "(Page {})  "), page_top / page_size + 1), 5, _(20, 22));
     }
 
     if (store_num == StoreSaleType::HOME || store_num == StoreSaleType::MUSEUM) {
@@ -126,7 +127,7 @@ void display_store_inventory(PlayerType *player_ptr, const StoreScreen &screen)
             stock_limit /= 10;
         }
 
-        put_str(format(_("アイテム数:  %4d/%4d", "Objects:  %4d/%4d"), store.stock_num, stock_limit), screen.get_status_row(), _(27, 30));
+        put_str(fmt::format(_("アイテム数:  {:4}/{:4}", "Objects:  {:4}/{:4}"), store.stock_num, stock_limit), screen.get_status_row(), _(27, 30));
     }
 }
 
@@ -168,7 +169,7 @@ void display_store(PlayerType *player_ptr, const StoreScreen &screen)
 
     const auto &owner = store.get_owner();
     const auto race_name = race_info[enum2i(owner.owner_race)].title.data();
-    put_str(format("%s (%s)", owner.owner_name, race_name), 3, 10);
+    put_str(fmt::format("{} ({})", owner.owner_name, race_name), 3, 10);
 
     prt(fmt::format("{} ({})", screen.get_name(), owner.max_cost), 3, 50);
 

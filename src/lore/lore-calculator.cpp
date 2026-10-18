@@ -6,6 +6,7 @@
 #include "system/monrace/monrace-definition.h"
 #include "system/player-type-definition.h"
 #include "util/string-processor.h"
+#include <fmt/format.h>
 #include <sstream>
 
 /*!
@@ -62,14 +63,14 @@ std::string get_skill_damage(PlayerType *player_ptr, lore_type *lore_ptr, Monste
  * @brief lore_ptrにダメージを与えるスキルの情報を追加する
  * @param lore_ptr 知識情報
  * @param ms_type スキル
- * @param msg スキルを表す文字列
+ * @param msg スキルを表す文字列の書式 ({} にダメージの情報が入る)
  * @param color 表示する文字色
  */
-void add_lore_of_damage_skill(PlayerType *player_ptr, lore_type *lore_ptr, MonsterAbilityType ms_type, concptr msg, byte color)
+void add_lore_of_damage_skill(PlayerType *player_ptr, lore_type *lore_ptr, MonsterAbilityType ms_type, fmt::format_string<std::string_view> msg, byte color)
 {
     if (!lore_ptr->is_details_known() && !lore_ptr->know_everything) {
         // ダメージ量の情報なし
-        lore_ptr->lore_msgs.emplace_back(format(msg, ""), color);
+        lore_ptr->lore_msgs.emplace_back(fmt::format(msg, std::string_view()), color);
         return;
     }
 
@@ -81,7 +82,7 @@ void add_lore_of_damage_skill(PlayerType *player_ptr, lore_type *lore_ptr, Monst
     const auto dice_div = monspell_race_damage(player_ptr, ms_type, monrace_id, DICE_DIV);
     std::stringstream dam_info;
     dam_info << '(' << dice_to_string(base_damage, dice_num, dice_side, dice_mult, dice_div) << ')';
-    lore_ptr->lore_msgs.emplace_back(format(msg, get_skill_damage(player_ptr, lore_ptr, ms_type).data()), color);
+    lore_ptr->lore_msgs.emplace_back(fmt::format(msg, std::string_view(get_skill_damage(player_ptr, lore_ptr, ms_type))), color);
 }
 
 void set_flags_for_full_knowledge(lore_type *lore_ptr)

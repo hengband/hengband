@@ -21,6 +21,7 @@
 #include "util/angband-files.h"
 #include "util/int-char-converter.h"
 #include "world/world.h"
+#include <fmt/format.h>
 
 /*
  * Build a list of feature indexes in the given group. Return the number
@@ -73,13 +74,13 @@ static void display_feature_list(int col, int row, int per_page, FEAT_IDX *feat_
         attr = ((i + feat_top == feat_cur) ? TERM_L_BLUE : TERM_WHITE);
         c_prt(attr, terrain.name.data(), row_i, col);
         if (per_page == 1) {
-            c_prt(attr, format("(%s)", lighting_level_str[lighting_level]), row_i, col + 1 + terrain.name.size());
+            c_prt(attr, fmt::format("({})", lighting_level_str[lighting_level]), row_i, col + 1 + terrain.name.size());
             const auto &symbol_config = terrain.symbol_configs.at(lighting_level);
-            c_prt(attr, format("%02x/%02x", symbol_config.color, static_cast<uint8_t>(symbol_config.character)), row_i,
+            c_prt(attr, fmt::format("{:02x}/{:02x}", symbol_config.color, static_cast<uint8_t>(symbol_config.character)), row_i,
                 f_idx_col - ((is_wizard || visual_only) ? 6 : 2));
         }
         if (is_wizard || visual_only) {
-            c_prt(attr, format("%d", terrain_id), row_i, f_idx_col);
+            c_prt(attr, fmt::format("{}", terrain_id), row_i, f_idx_col);
         }
 
         const auto &symbol_standard = terrain.symbol_configs.at(F_LIT_STANDARD);
@@ -216,10 +217,7 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
             display_visual_list(max_length + 3, 7, browser_rows - 1, wid - max_length + 3, attr_top, char_left);
         }
 
-        prt(format(_("<方向>%s, 'd'で標準光源効果%s, ESC", "<dir>%s, 'd' for default lighting%s, ESC"),
-                visual_list ? _(", ENTERで決定, 'a'で対象明度変更", ", ENTER to accept, 'a' for lighting level")
-                            : _(", 'v'でシンボル変更", ", 'v' for visuals"),
-                (symbols_cb.symbol != DisplaySymbol()) ? _(", 'c', 'p'でペースト", ", 'c', 'p' to paste") : _(", 'c'でコピー", ", 'c' to copy")),
+        prt(fmt::format(_("<方向>{}, 'd'で標準光源効果{}, ESC", "<dir>{}, 'd' for default lighting{}, ESC"), visual_list ? _(", ENTERで決定, 'a'で対象明度変更", ", ENTER to accept, 'a' for lighting level") : _(", 'v'でシンボル変更", ", 'v' for visuals"), (symbols_cb.symbol != DisplaySymbol()) ? _(", 'c', 'p'でペースト", ", 'c', 'p' to paste") : _(", 'c'でコピー", ", 'c' to copy")),
             hgt - 1, 0);
 
         auto &terrain = terrains.get_terrain(feat_idx[feat_cur]);

@@ -44,6 +44,7 @@
 #include "view/display-util.h"
 #include "view/status-first-page.h"
 #include "world/world.h"
+#include <fmt/format.h>
 #include <sstream>
 #include <string>
 #include <tl/optional.hpp>
@@ -127,18 +128,18 @@ static void display_magic_realms(PlayerType *player_ptr)
 static void display_phisique(PlayerType *player_ptr)
 {
 #ifdef JP
-    display_player_one_line(ENTRY_AGE, format("%d才", (int)player_ptr->age), TERM_L_BLUE);
-    display_player_one_line(ENTRY_HEIGHT, format("%dcm", inch_to_cm(player_ptr->ht)), TERM_L_BLUE);
-    display_player_one_line(ENTRY_WEIGHT, format("%dkg", lb_to_kg(player_ptr->wt)), TERM_L_BLUE);
-    display_player_one_line(ENTRY_SOCIAL, format("%d  ", (int)player_ptr->sc), TERM_L_BLUE);
+    display_player_one_line(ENTRY_AGE, fmt::format("{}才", player_ptr->age), TERM_L_BLUE);
+    display_player_one_line(ENTRY_HEIGHT, fmt::format("{}cm", inch_to_cm(player_ptr->ht)), TERM_L_BLUE);
+    display_player_one_line(ENTRY_WEIGHT, fmt::format("{}kg", lb_to_kg(player_ptr->wt)), TERM_L_BLUE);
+    display_player_one_line(ENTRY_SOCIAL, fmt::format("{}  ", player_ptr->sc), TERM_L_BLUE);
 #else
-    display_player_one_line(ENTRY_AGE, format("%d", (int)player_ptr->age), TERM_L_BLUE);
-    display_player_one_line(ENTRY_HEIGHT, format("%d", (int)player_ptr->ht), TERM_L_BLUE);
-    display_player_one_line(ENTRY_WEIGHT, format("%d", (int)player_ptr->wt), TERM_L_BLUE);
-    display_player_one_line(ENTRY_SOCIAL, format("%d", (int)player_ptr->sc), TERM_L_BLUE);
+    display_player_one_line(ENTRY_AGE, fmt::format("{}", player_ptr->age), TERM_L_BLUE);
+    display_player_one_line(ENTRY_HEIGHT, fmt::format("{}", player_ptr->ht), TERM_L_BLUE);
+    display_player_one_line(ENTRY_WEIGHT, fmt::format("{}", player_ptr->wt), TERM_L_BLUE);
+    display_player_one_line(ENTRY_SOCIAL, fmt::format("{}", player_ptr->sc), TERM_L_BLUE);
 #endif
     std::string alg = PlayerAlignment(player_ptr).get_alignment_description();
-    display_player_one_line(ENTRY_ALIGN, format("%s", alg.data()), TERM_L_BLUE);
+    display_player_one_line(ENTRY_ALIGN, alg, TERM_L_BLUE);
 }
 
 /*!
@@ -179,36 +180,23 @@ static tl::optional<std::string> search_death_cause(PlayerType *player_ptr)
     }
 
     if (AngbandWorld::get_instance().total_winner) {
-        return format(_("…あなたは勝利の後%sした。", "...You %s after winning."),
-            streq(player_ptr->died_from, "Seppuku") ? _("切腹", "committed seppuku") : _("引退", "retired from the adventure"));
+        return fmt::format(_("…あなたは勝利の後{}した。", "...You {} after winning."), streq(player_ptr->died_from, "Seppuku") ? _("切腹", "committed seppuku") : _("引退", "retired from the adventure"));
     }
 
     if (!floor.is_underground()) {
-        constexpr auto killed_monster = _("…あなたは%sで%sに殺された。", "...You were killed by %s in %s.");
-#ifdef JP
-        return format(killed_monster, map_name(player_ptr).data(), player_ptr->died_from.data());
-#else
-        return format(killed_monster, player_ptr->died_from.data(), map_name(player_ptr).data());
-#endif
+        constexpr auto killed_monster = _("…あなたは{1}で{0}に殺された。", "...You were killed by {0} in {1}.");
+        return fmt::format(killed_monster, player_ptr->died_from, map_name(player_ptr));
     }
 
     if (floor.is_in_quest() && QuestType::is_fixed(floor.quest_number)) {
         const auto &quests = QuestList::get_instance();
         const auto &quest = quests.get_quest(floor.quest_number);
-        constexpr auto killed_quest = _("…あなたは、クエスト「%s」で%sに殺された。", "...You were killed by %s in the quest '%s'.");
-#ifdef JP
-        return format(killed_quest, quest.name.data(), player_ptr->died_from.data());
-#else
-        return format(killed_quest, player_ptr->died_from.data(), quest.name.data());
-#endif
+        constexpr auto killed_quest = _("…あなたは、クエスト「{1}」で{0}に殺された。", "...You were killed by {0} in the quest '{1}'.");
+        return fmt::format(killed_quest, player_ptr->died_from, quest.name);
     }
 
-    constexpr auto killed_floor = _("…あなたは、%sの%d階で%sに殺された。", "...You were killed by %s on level %d of %s.");
-#ifdef JP
-    return format(killed_floor, map_name(player_ptr).data(), floor.dun_level, player_ptr->died_from.data());
-#else
-    return format(killed_floor, player_ptr->died_from.data(), floor.dun_level, map_name(player_ptr).data());
-#endif
+    constexpr auto killed_floor = _("…あなたは、{2}の{1}階で{0}に殺された。", "...You were killed by {0} on level {1} of {2}.");
+    return fmt::format(killed_floor, player_ptr->died_from, floor.dun_level, map_name(player_ptr));
 }
 
 /*!
@@ -225,7 +213,7 @@ static tl::optional<std::string> decide_death_in_quest(PlayerType *player_ptr)
     }
 
     const auto &quests = QuestList::get_instance();
-    return format(_("…あなたは現在、 クエスト「%s」を遂行中だ。", "...Now, you are in the quest '%s'."), quests.get_quest(floor.quest_number).name.data());
+    return fmt::format(_("…あなたは現在、 クエスト「{}」を遂行中だ。", "...Now, you are in the quest '{}'."), quests.get_quest(floor.quest_number).name);
 }
 
 /*!
@@ -242,19 +230,15 @@ static std::string decide_current_floor(PlayerType *player_ptr)
 
     const auto &floor = *player_ptr->current_floor_ptr;
     if (!floor.is_underground()) {
-        return format(_("…あなたは現在、 %s にいる。", "...Now, you are in %s."), map_name(player_ptr).data());
+        return fmt::format(_("…あなたは現在、 {} にいる。", "...Now, you are in {}."), map_name(player_ptr));
     }
 
     if (auto decision = decide_death_in_quest(player_ptr); decision) {
         return *decision;
     }
 
-    constexpr auto mes = _("…あなたは現在、 %s の %d 階で探索している。", "...Now, you are exploring level %d of %s.");
-#ifdef JP
-    return format(mes, map_name(player_ptr).data(), floor.dun_level);
-#else
-    return format(mes, floor.dun_level, map_name(player_ptr).data());
-#endif
+    constexpr auto fmt = _("…あなたは現在、 {0} の {1} 階で探索している。", "...Now, you are exploring level {1} of {0}.");
+    return fmt::format(fmt, map_name(player_ptr), floor.dun_level);
 }
 
 /*!

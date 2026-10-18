@@ -14,6 +14,7 @@
 #include "io-dump/dump-util.h"
 #include "system/player-type-definition.h"
 #include "util/angband-files.h"
+#include <fmt/format.h>
 
 /*!
  * @brief 自動拾い設定ファイルをロードするコマンドのメインルーチン /
@@ -57,8 +58,8 @@ void do_cmd_knowledge_autopick(PlayerType *player_ptr)
             command = _("確認", "Query");
         }
 
-        const auto fmt = entry.action.has(AutopickMethod::DISPLAY) ? "[%s]" : "(%s)";
-        fmt::print(fff, "{:>11}", fmt::bytes(format(fmt, command.data())));
+        const auto command_str = entry.action.has(AutopickMethod::DISPLAY) ? fmt::format("[{}]", command) : fmt::format("({})", command);
+        fmt::print(fff, "{:>11}", fmt::bytes(command_str));
         const auto line = autopick_line_from_entry(entry);
         fmt::println(fff, " {}", line);
     }

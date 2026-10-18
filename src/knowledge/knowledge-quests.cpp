@@ -26,6 +26,7 @@
 #include "util/enum-converter.h"
 #include "util/string-processor.h"
 #include "world/world.h"
+#include <fmt/format.h>
 #include <numeric>
 
 /*!
@@ -78,13 +79,13 @@ static void do_cmd_knowledge_quests_current(PlayerType *player_ptr, FILE *fff)
                     const auto &monrace = quest.get_bounty();
                     if (quest.max_num > 1) {
 #ifdef JP
-                        note = format(" - %d 体の%sを倒す。(あと %d 体)", (int)quest.max_num, monrace.name.data(), (int)(quest.max_num - quest.cur_num));
+                        note = fmt::format(" - {} 体の{}を倒す。(あと {} 体)", quest.max_num, monrace.name, quest.max_num - quest.cur_num);
 #else
                         const auto monster_name = pluralize(monrace.name);
-                        note = format(" - kill %d %s, have killed %d.", (int)quest.max_num, monster_name.data(), (int)quest.cur_num);
+                        note = fmt::format(" - kill {} {}, have killed {}.", quest.max_num, monster_name, quest.cur_num);
 #endif
                     } else {
-                        note = format(_(" - %sを倒す。", " - kill %s."), monrace.name.data());
+                        note = fmt::format(_(" - {}を倒す。", " - kill {}."), monrace.name);
                     }
 
                     break;
@@ -98,7 +99,7 @@ static void do_cmd_knowledge_quests_current(PlayerType *player_ptr, FILE *fff)
                         item_name = describe_flavor(player_ptr, item, OD_NAME_ONLY);
                     }
 
-                    note = format(_("\n   - %sを見つけ出す。", "\n   - Find %s."), item_name.data());
+                    note = fmt::format(_("\n   - {}を見つけ出す。", "\n   - Find {}."), item_name);
                     break;
                 }
                 case QuestKindType::FIND_EXIT:
@@ -106,9 +107,9 @@ static void do_cmd_knowledge_quests_current(PlayerType *player_ptr, FILE *fff)
                     break;
                 case QuestKindType::KILL_NUMBER:
 #ifdef JP
-                    note = format(" - %d 体のモンスターを倒す。(あと %d 体)", (int)quest.max_num, (int)(quest.max_num - quest.cur_num));
+                    note = fmt::format(" - {} 体のモンスターを倒す。(あと {} 体)", quest.max_num, quest.max_num - quest.cur_num);
 #else
-                    note = format(" - Kill %d monsters, have killed %d.", (int)quest.max_num, (int)quest.cur_num);
+                    note = fmt::format(" - Kill {} monsters, have killed {}.", quest.max_num, quest.cur_num);
 #endif
                     break;
 
@@ -139,8 +140,8 @@ static void do_cmd_knowledge_quests_current(PlayerType *player_ptr, FILE *fff)
         }
 
         const auto &monrace = quest.get_bounty();
-        constexpr auto mes = _("  %s (%d 階) - %sを倒す。\n", "  %s (Dungeon level: %d)\n  Kill %s.\n");
-        rand_tmp_str = format(mes, quest.name.data(), (int)quest.level, monrace.name.data());
+        constexpr auto mes = _("  {} ({} 階) - {}を倒す。\n", "  {} (Dungeon level: {})\n  Kill {}.\n");
+        rand_tmp_str = fmt::format(mes, quest.name, quest.level, monrace.name);
     }
 
     if (!rand_tmp_str.empty()) {
@@ -164,7 +165,7 @@ static bool do_cmd_knowledge_quests_aux(PlayerType *, FILE *fff, QuestId q_idx)
         }
     }
 
-    const auto playtime_str = format("%02d:%02d:%02d", quest.comptime / (60 * 60), (quest.comptime / 60) % 60, quest.comptime % 60);
+    const auto playtime_str = fmt::format("{:02}:{:02}:{:02}", quest.comptime / (60 * 60), (quest.comptime / 60) % 60, quest.comptime % 60);
     auto fputs_name_remain = [fff](const auto &name) {
         for (auto i = 1U; i < name.size(); ++i) {
             fmt::println(fff, "  {}", name[i]);

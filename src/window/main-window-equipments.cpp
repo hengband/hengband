@@ -22,6 +22,7 @@
 #include "util/string-processor.h"
 #include "view/display-symbol.h"
 #include <array>
+#include <fmt/format.h>
 #include <vector>
 
 /*!
@@ -102,9 +103,9 @@ COMMAND_CODE show_equipment(PlayerType *player_ptr, int target_item, BIT_FLAGS m
                 head = "  ";
             }
         } else if (i >= INVEN_MAIN_HAND) {
-            head = format("%c)", equip_label[i - INVEN_MAIN_HAND]);
+            head = fmt::format("{:c})", equip_label[i - INVEN_MAIN_HAND]);
         } else {
-            head = format("%c)", index_to_label(i));
+            head = fmt::format("{:c})", index_to_label(i));
         }
 
         put_str(head, j + 1, col);
@@ -120,7 +121,7 @@ COMMAND_CODE show_equipment(PlayerType *player_ptr, int target_item, BIT_FLAGS m
         }
 
         if (show_labels) {
-            const auto label = format(_("%-7s: ", "%-14s: "), mention_use(player_ptr, i));
+            const auto label = fmt::format(_("{:<7}: ", "{:<14}: "), fmt::bytes(mention_use(player_ptr, i)));
             put_str(label, j + 1, cur_col);
             c_put_str(out_color[j], out_desc[j], j + 1, _(cur_col + 9, cur_col + 16));
         } else {
@@ -132,7 +133,7 @@ COMMAND_CODE show_equipment(PlayerType *player_ptr, int target_item, BIT_FLAGS m
         }
 
         auto wgt = item.weight * item.number;
-        const auto weight = format(_("%3d.%1d kg", "%3d.%d lb"), _(lb_to_kg_integer(wgt), wgt / 10), _(lb_to_kg_fraction(wgt), wgt % 10));
+        const auto weight = fmt::format(_("{:3}.{:1} kg", "{:3}.{} lb"), _(lb_to_kg_integer(wgt), wgt / 10), _(lb_to_kg_fraction(wgt), wgt % 10));
         prt(weight, j + 1, wid - 9);
     }
 
