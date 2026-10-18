@@ -101,7 +101,7 @@ static void decide_summon_kin_caster(
     }
 
     if (monster.r_idx == MonraceId::PERORODZILLA) {
-        mspell_cast_msg_blind msg(_("{}が何かを吐き出す音がした。", "You hear {} vomit something."),
+        mspell_cast_msg_blind msg(_("{}が何かを吐き出す音がした。", "You hear {2} vomit something."),
             _("{}が小さなペロロを吐き出した！", "{} vomits minion Peroros!"),
             _("{}が小さなペロロを吐き出した！", "{} vomits minion Peroros!"));
 

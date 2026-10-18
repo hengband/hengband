@@ -654,7 +654,7 @@ MonsterSpellResult spell_RF6_INVULNER(PlayerType *player_ptr, MONSTER_IDX m_idx,
             msg_print(_("『読める』………動きの『軌跡』が読める……", "'Read'......... I can read the 'trajectory' of movement..."));
             break;
         default:
-            msg_print(_("{}の身体がまばゆく輝き始めた！", "The body of {} began to shine dazzlingly!"), str_upcase_first(m_name));
+            msg_print(_("{}の身体がまばゆく輝き始めた！", "The body of {} began to shine dazzlingly!"), m_name);
             break;
         }
     }
