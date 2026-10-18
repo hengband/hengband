@@ -372,6 +372,45 @@ TEST_CASE("QuestReader preserves previous output on parse errors at every stage"
     check_existing_output(quest, fixed_map);
 }
 
+/*!
+ * @brief 複数の段階に誤りがあるとき、名前・定義・説明・凡例・マップ・開始位置の順で最初の段階のエラーを返す
+ * @details 隣り合う段階で異なるエラーコードになる誤りを選び、1段ずつ直して順序の入れ替わりを検出する。
+ */
+TEST_CASE("QuestReader reports the first failing stage in declaration order")
+{
+    auto data = make_quest_with_description("New description");
+    const auto name = data["name"];
+    data.erase("name");
+    data["definition"]["type"] = "UNKNOWN";
+    const auto descriptions = data["descriptions"];
+    data["descriptions"] = 5;
+    data["legend"] = { { "##", nlohmann::json::object() } };
+    data["map"] = 5;
+    data["start"] = { { "y", 99 }, { "x", 0 } };
+    const auto read = [&data] {
+        QuestType quest;
+        QuestFixedMap fixed_map;
+        return QuestReader(data, quest, fixed_map).read();
+    };
+
+    CHECK(read() == PARSE_ERROR_TOO_FEW_ARGUMENTS);
+    data["name"] = name;
+    CHECK(read() == PARSE_ERROR_INVALID_FLAG);
+    data["definition"]["type"] = "KILL_ALL";
+    CHECK(read() == PARSE_ERROR_INVALID_TYPE);
+    data["descriptions"] = descriptions;
+    CHECK(read() == PARSE_ERROR_GENERIC);
+    data["legend"] = nlohmann::json::object();
+    CHECK(read() == PARSE_ERROR_INVALID_TYPE);
+    data["map"] = { "..." };
+    CHECK(read() == PARSE_ERROR_OUT_OF_BOUNDS);
+    data["start"]["y"] = 0;
+    QuestType quest;
+    QuestFixedMap fixed_map;
+    REQUIRE(QuestReader(data, quest, fixed_map).read() == PARSE_ERROR_NONE);
+    CHECK(fixed_map.starts.size() == 1);
+}
+
 TEST_CASE("QuestReader rejects non-string flags without changing previous output")
 {
     auto data = make_quest_with_description("New description");
