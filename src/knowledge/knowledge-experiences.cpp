@@ -123,7 +123,7 @@ void do_cmd_knowledge_spell_exp(PlayerType *player_ptr)
     }
 
     if (pr.realm2().is_available()) {
-        fmt::println(fff, _("{}の魔法書", "\n{} Spellbook"), pr.realm2().get_name());
+        fmt::println(fff, _("\n{}の魔法書", "\n{} Spellbook"), pr.realm2().get_name());
         for (SPELL_IDX i = 0; i < 32; i++) {
             const auto &spell = pr.realm2().get_spell_info(i);
 
