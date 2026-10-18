@@ -151,6 +151,8 @@ std::string_view input_kind_name(InputKind kind)
         return "string";
     case InputKind::QUANTITY:
         return "quantity";
+    case InputKind::MORE:
+        return "more";
     }
 
     THROW_EXCEPTION(std::logic_error, "Invalid InputKind was specified!");

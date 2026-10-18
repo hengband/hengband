@@ -21,6 +21,7 @@ enum class InputKind {
     COMMAND_CHAR, //!< 1文字の入力
     STRING, //!< 文字列の入力
     QUANTITY, //!< 数量の入力
+    MORE, //!< メッセージの -続く- (-more-)
 };
 
 /*!
