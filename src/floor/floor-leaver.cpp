@@ -27,8 +27,10 @@
 #include "system/player-type-definition.h"
 #include "system/terrain/terrain-definition.h"
 #include "target/projection-path-calculator.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#include <fmt/format.h>
 
 static void check_riding_preservation(PlayerType *player_ptr)
 {
@@ -130,7 +132,7 @@ static void preserve_pet(PlayerType *player_ptr)
 
         if (is_seen(player_ptr, monster)) {
             const auto m_name = monster_desc(player_ptr, monster, 0);
-            msg_format(_("%sは消え去った！", "%s^ disappears!"), m_name.data());
+            msg_print(_("{}は消え去った！", "{} disappears!"), str_upcase_first(m_name));
         }
 
         delete_monster_idx(player_ptr, i);

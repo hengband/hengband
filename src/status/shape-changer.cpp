@@ -26,6 +26,7 @@
 #include "timed-effect/timed-effects.h"
 #include "util/enum-converter.h"
 #include "view/display-messages.h"
+#include <fmt/format.h>
 
 void do_poly_wounds(PlayerType *player_ptr)
 {
@@ -58,9 +59,9 @@ void change_race(PlayerType *player_ptr, PlayerRaceType new_race, concptr effect
     auto title = race_info[enum2i(new_race)].title.data();
     PlayerRaceType old_race = player_ptr->prace;
 #ifdef JP
-    msg_format("あなたは%s%sに変化した！", effect_msg, title);
+    msg_print("あなたは{}{}に変化した！", effect_msg, title);
 #else
-    msg_format("You turn into %s %s%s!", (is_a_vowel((effect_msg[0]) ? effect_msg[0] : title[0]) ? "an" : "a"), effect_msg, title);
+    msg_print("You turn into {} {}{}!", (is_a_vowel((effect_msg[0]) ? effect_msg[0] : title[0]) ? "an" : "a"), effect_msg, title);
 #endif
 
     chg_virtue(player_ptr, Virtue::CHANCE, 2);
@@ -170,7 +171,7 @@ void do_poly_self(PlayerType *player_ptr)
     if ((power > randint0(30)) && one_in_(6)) {
         int tmp = 0;
         power -= 20;
-        msg_print(_(format("%sの構成が変化した！", pr.equals(PlayerRaceType::ANDROID) ? "機械" : "内臓"), "Your internal organs are rearranged!"));
+        msg_print(_("{}の構成が変化した！", "Your internal organs are rearranged!"), pr.equals(PlayerRaceType::ANDROID) ? "機械" : "内臓");
 
         while (tmp < A_MAX) {
             const auto amount = randint1(6) + 6;

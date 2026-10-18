@@ -32,9 +32,11 @@
 #include "system/monrace/monrace-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "target/target-checker.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "world/world-turn-processor.h"
 #include "world/world.h"
+#include <fmt/format.h>
 
 static void redraw_character_xtra(PlayerType *player_ptr)
 {
@@ -178,9 +180,9 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
         const auto &monrace = dungeon.get_guardian();
         if (!monrace.is_dead_unique()) {
 #ifdef JP
-            msg_format("この階には%sの主である%sが棲んでいる。", dungeon.name.data(), monrace.name.data());
+            msg_print("この階には{}の主である{}が棲んでいる。", dungeon.name, monrace.name);
 #else
-            msg_format("%s^ lives in this level as the keeper of %s.", monrace.name.data(), dungeon.name.data());
+            msg_print("{} lives in this level as the keeper of {}.", str_upcase_first(monrace.name), dungeon.name);
 #endif
         }
     }

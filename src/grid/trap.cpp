@@ -33,6 +33,7 @@
 #include "system/terrain/terrain-definition.h"
 #include "target/projection-path-calculator.h"
 #include "view/display-messages.h"
+#include <fmt/format.h>
 
 /*!
  * @brief 箱のトラップテーブル
@@ -205,18 +206,18 @@ static void hit_trap_pit(PlayerType *player_ptr, TrapType trap_feat_type)
     }
 
     if (player_ptr->levitation) {
-        msg_format(_("%sを飛び越えた。", "You fly over %s."), trap_name);
+        msg_print(_("{}を飛び越えた。", "You fly over {}."), trap_name);
         return;
     }
 
-    msg_format(_("%sに落ちてしまった！", "You have fallen into %s!"), trap_name);
+    msg_print(_("{}に落ちてしまった！", "You have fallen into {}!"), trap_name);
     dam = Dice::roll(2, 6);
     if (((trap_feat_type != TrapType::SPIKED_PIT) && (trap_feat_type != TrapType::POISON_PIT)) || one_in_(2)) {
         take_hit(player_ptr, DAMAGE_NOESCAPE, dam, trap_name);
         return;
     }
 
-    msg_format(_("%sが刺さった！", "You are impaled on %s!"), spike_name);
+    msg_print(_("{}が刺さった！", "You are impaled on {}!"), spike_name);
     dam = dam * 2;
     BadStatusSetter bss(player_ptr);
     (void)bss.mod_cut(randnum1<short>(dam));

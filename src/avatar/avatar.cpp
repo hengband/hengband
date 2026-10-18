@@ -21,6 +21,7 @@
 #include "system/redrawing-flags-updater.h"
 #include "util/enum-converter.h"
 #include "util/probability-table.h"
+#include <fmt/format.h>
 
 /*!
  * 徳の名称 / The names of the virtues
@@ -493,68 +494,67 @@ std::string describe_virtue(PlayerType *player_ptr, int v_nr)
 {
     const auto vir_type = player_ptr->vir_types[v_nr];
     if ((vir_type <= Virtue::NONE) || (vir_type >= Virtue::MAX)) {
-        return format(_("おっと。%sの情報なし。", "Oops. No info about %s."), "");
+        return _("おっと。の情報なし。", "Oops. No info about .");
     }
 
     const auto name_it = virtue_names.find(vir_type);
     if (name_it == virtue_names.end()) {
-        return format(_("おっと。%sの情報なし。", "Oops. No info about %s."), "");
+        return _("おっと。の情報なし。", "Oops. No info about .");
     }
 
     const auto &vir_name = name_it->second;
     const auto tester = player_ptr->virtues[v_nr];
-    const auto vir_val_str = format(" (%d)", tester);
-    const auto vir_val = show_actual_value ? vir_val_str.data() : "";
+    const auto vir_val = show_actual_value ? fmt::format(" ({})", tester) : std::string();
 
     if (tester < -100) {
-        return format(_("[%s]の対極%s", "You are the polar opposite of %s.%s"), vir_name.data(), vir_val);
+        return fmt::format(_("[{}]の対極{}", "You are the polar opposite of {}.{}"), vir_name, vir_val);
     }
 
     if (tester < -80) {
-        return format(_("[%s]の大敵%s", "You are an arch-enemy of %s.%s"), vir_name.data(), vir_val);
+        return fmt::format(_("[{}]の大敵{}", "You are an arch-enemy of {}.{}"), vir_name, vir_val);
     }
 
     if (tester < -60) {
-        return format(_("[%s]の強敵%s", "You are a bitter enemy of %s.%s"), vir_name.data(), vir_val);
+        return fmt::format(_("[{}]の強敵{}", "You are a bitter enemy of {}.{}"), vir_name, vir_val);
     }
 
     if (tester < -40) {
-        return format(_("[%s]の敵%s", "You are an enemy of %s.%s"), vir_name.data(), vir_val);
+        return fmt::format(_("[{}]の敵{}", "You are an enemy of {}.{}"), vir_name, vir_val);
     }
 
     if (tester < -20) {
-        return format(_("[%s]の罪者%s", "You have sinned against %s.%s"), vir_name.data(), vir_val);
+        return fmt::format(_("[{}]の罪者{}", "You have sinned against {}.{}"), vir_name, vir_val);
     }
 
     if (tester < 0) {
-        return format(_("[%s]の迷道者%s", "You have strayed from the path of %s.%s"), vir_name.data(), vir_val);
+        return fmt::format(_("[{}]の迷道者{}", "You have strayed from the path of {}.{}"), vir_name, vir_val);
     }
 
     if (tester == 0) {
-        return format(_("[%s]の中立者%s", "You are neutral to %s.%s"), vir_name.data(), vir_val);
+        return fmt::format(_("[{}]の中立者{}", "You are neutral to {}.{}"), vir_name, vir_val);
     }
 
     if (tester < 20) {
-        return format(_("[%s]の小徳者%s", "You are somewhat virtuous in %s.%s"), vir_name.data(), vir_val);
+        return fmt::format(_("[{}]の小徳者{}", "You are somewhat virtuous in {}.{}"), vir_name, vir_val);
     }
 
     if (tester < 40) {
-        return format(_("[%s]の中徳者%s", "You are virtuous in %s.%s"), vir_name.data(), vir_val);
+        return fmt::format(_("[{}]の中徳者{}", "You are virtuous in {}.{}"), vir_name, vir_val);
     }
 
     if (tester < 60) {
-        return format(_("[%s]の高徳者%s", "You are very virtuous in %s.%s"), vir_name.data(), vir_val);
+        return fmt::format(_("[{}]の高徳者{}", "You are very virtuous in {}.{}"), vir_name, vir_val);
     }
 
     if (tester < 80) {
-        return format(_("[%s]の覇者%s", "You are a champion of %s.%s"), vir_name.data(), vir_val);
+        return fmt::format(_("[{}]の覇者{}", "You are a champion of {}.{}"), vir_name, vir_val);
     }
 
     if (tester < 100) {
-        return format(_("[%s]の偉大な覇者%s", "You are a great champion of %s.%s"), vir_name.data(), vir_val);
+        return fmt::format(_("[{}]の偉大な覇者{}", "You are a great champion of {}.{}"), vir_name, vir_val);
     }
 
-    return format(_("[%s]の具現者%s", "You are the living embodiment of %s.%s"), vir_name.data(), vir_val);
+    return fmt::format(_("[{}]の具現者{}", "You are the living embodiment of {}.{}"), vir_name, vir_val);
 }
 
 /*!

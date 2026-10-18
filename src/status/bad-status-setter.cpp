@@ -22,6 +22,7 @@
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 #include <algorithm>
+#include <fmt/format.h>
 
 BadStatusSetter::BadStatusSetter(PlayerType *player_ptr)
     : player_ptr(player_ptr)
@@ -644,7 +645,7 @@ void BadStatusSetter::stop_blooding(const PlayerCutRank new_rank)
     auto blood_stop_mes = PlayerRace(this->player_ptr).equals(PlayerRaceType::ANDROID)
                               ? _("怪我が直った", "leaking fluid")
                               : _("出血が止まった", "bleeding");
-    msg_format(_("やっと%s。", "You are no longer %s."), blood_stop_mes);
+    msg_print(_("やっと{}。", "You are no longer {}."), blood_stop_mes);
     if (disturb_state) {
         disturb(this->player_ptr, false, false);
     }

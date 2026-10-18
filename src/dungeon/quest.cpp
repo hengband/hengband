@@ -23,6 +23,7 @@
 #include "system/terrain/terrain-definition.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#include <fmt/format.h>
 #ifdef JP
 #else
 #include "locale/english.h"
@@ -213,12 +214,12 @@ void quest_discovery(QuestId quest_id)
     msg_print(rand_choice(quest_entered_messages));
     msg_erase();
     if (num_subjugation != 1) {
-        msg_format(_("注意しろ！この階は%d体の%sによって守られている！", "Be warned, this level is guarded by %d %s!"), num_subjugation, name.data());
+        msg_print(_("注意しろ！この階は{}体の{}によって守られている！", "Be warned, this level is guarded by {} {}!"), num_subjugation, name);
         return;
     }
 
     if (!monrace.is_dead_unique()) {
-        msg_format(_("注意せよ！この階は%sによって守られている！", "Beware, this level is protected by %s!"), name.data());
+        msg_print(_("注意せよ！この階は{}によって守られている！", "Beware, this level is protected by {}!"), name);
         return;
     }
 

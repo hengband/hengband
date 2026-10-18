@@ -44,6 +44,7 @@
 #include "util/dice.h"
 #include "util/probability-table.h"
 #include "view/display-messages.h"
+#include <fmt/format.h>
 #include <variant>
 
 /*!
@@ -209,14 +210,14 @@ bool curse_armor(PlayerType *player_ptr)
 
     if (item.is_fixed_or_random_artifact() && one_in_(2)) {
 #ifdef JP
-        msg_format("%sが%sを包み込もうとしたが、%sはそれを跳ね返した！", "恐怖の暗黒オーラ", "防具", item_name.data());
+        msg_print("恐怖の暗黒オーラが防具を包み込もうとしたが、{}はそれを跳ね返した！", item_name);
 #else
-        msg_format("A %s tries to %s, but your %s resists the effects!", "terrible black aura", "surround your armor", item_name.data());
+        msg_print("A terrible black aura tries to surround your armor, but your {} resists the effects!", item_name);
 #endif
         return true;
     }
 
-    msg_format(_("恐怖の暗黒オーラがあなたの%sを包み込んだ！", "A terrible black aura blasts your %s!"), item_name.data());
+    msg_print(_("恐怖の暗黒オーラがあなたの{}を包み込んだ！", "A terrible black aura blasts your {}!"), item_name);
     chg_virtue(player_ptr, Virtue::ENCHANT, -5);
     item.fa_id = FixedArtifactId::NONE;
     item.ego_idx = EgoType::BLASTED;
@@ -253,15 +254,15 @@ bool curse_weapon_object(PlayerType *player_ptr, bool force, ItemEntity &item)
     const auto item_name = describe_flavor(player_ptr, item, OD_OMIT_PREFIX);
     if (item.is_fixed_or_random_artifact() && one_in_(2) && !force) {
 #ifdef JP
-        msg_format("%sが%sを包み込もうとしたが、%sはそれを跳ね返した！", "恐怖の暗黒オーラ", "武器", item_name.data());
+        msg_print("恐怖の暗黒オーラが武器を包み込もうとしたが、{}はそれを跳ね返した！", item_name);
 #else
-        msg_format("A %s tries to %s, but your %s resists the effects!", "terrible black aura", "surround your weapon", item_name.data());
+        msg_print("A terrible black aura tries to surround your weapon, but your {} resists the effects!", item_name);
 #endif
         return true;
     }
 
     if (!force) {
-        msg_format(_("恐怖の暗黒オーラがあなたの%sを包み込んだ！", "A terrible black aura blasts your %s!"), item_name.data());
+        msg_print(_("恐怖の暗黒オーラがあなたの{}を包み込んだ！", "A terrible black aura blasts your {}!"), item_name);
     }
 
     chg_virtue(player_ptr, Virtue::ENCHANT, -5);
@@ -457,9 +458,9 @@ bool enchant_spell(PlayerType *player_ptr, HIT_PROB num_hit, int num_dam, ARMOUR
 
     const auto item_name = describe_flavor(player_ptr, *item, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 #ifdef JP
-    msg_format("%s は明るく輝いた！", item_name.data());
+    msg_print("{} は明るく輝いた！", item_name);
 #else
-    msg_format("%s %s glow%s brightly!", ((i_idx >= 0) ? "Your" : "The"), item_name.data(), ((item->number > 1) ? "" : "s"));
+    msg_print("{} {} glow{} brightly!", ((i_idx >= 0) ? "Your" : "The"), item_name, ((item->number > 1) ? "" : "s"));
 #endif
 
     auto is_enchant_successful = false;
@@ -611,7 +612,7 @@ void brand_weapon(PlayerType *player_ptr, int brand_type)
         break;
     }
 
-    msg_format(_("あなたの%s%s", "Your %s %s"), item_name.data(), act);
+    msg_print(_("あなたの{}{}", "Your {} {}"), item_name, act);
     enchant_equipment(*item, randint0(3) + 4, ENCH_TOHIT | ENCH_TODAM);
     item->discount = 99;
     chg_virtue(player_ptr, Virtue::ENCHANT, 2);
