@@ -36,9 +36,11 @@
 #include "term/z-form.h"
 #include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "view/display-util.h"
 #include "world/world.h"
+#include <fmt/format.h>
 #include <string>
 
 constexpr auto RC_PAGE_SIZE = 18;
@@ -82,14 +84,11 @@ static void racial_power_display_list(PlayerType *player_ptr, rc_type *rc_ptr)
                 letter = '0' + ctr - 26;
             }
 
-            dummy = format(" %c) ", letter);
+            dummy = fmt::format(" {:c}) ", letter);
         }
 
         auto &rpi = rc_ptr->power_desc[ctr];
-        dummy.append(
-            format("%-30.30s %2d %4d %3d%% %s", rpi.racial_name.data(), rpi.min_level, rpi.cost, 100 - racial_chance(player_ptr, &rc_ptr->power_desc[ctr]),
-                rpi.info.data())
-                .data());
+        dummy.append(fmt::format("{:<30} {:2} {:4} {:3}% {}", fmt::bytes(str_substr(rpi.racial_name, 0, 30)), rpi.min_level, rpi.cost, 100 - racial_chance(player_ptr, &rc_ptr->power_desc[ctr]), rpi.info));
 
         prt(dummy, 2 + y, x);
     }
@@ -115,16 +114,10 @@ static void racial_power_display_list(PlayerType *player_ptr, rc_type *rc_ptr)
  */
 static void racial_power_make_prompt(rc_type *rc_ptr)
 {
-    concptr fmt;
-
-    if (rc_ptr->browse_mode) {
-        fmt = _(
-            "(特殊能力 %c-%c, '*':一覧, '/'で使用, ESCで中断) どの能力について知りますか？", "(Powers %c-%c, *=List. /=Use, ESC=exit) Browse which power? ");
-    } else {
-        fmt = _("(特殊能力 %c-%c, '*'で一覧, '/'で閲覧, ESCで中断) どの能力を使いますか？", "(Powers %c-%c, *=List, /=Browse, ESC=exit) Use which power? ");
-    }
-
-    rc_ptr->out_val = format(fmt, I2A(0), (rc_ptr->power_count() <= 26) ? I2A(rc_ptr->power_count() - 1) : '0' + rc_ptr->power_count() - 27);
+    constexpr auto fmt_browse = _("(特殊能力 {:c}-{:c}, '*':一覧, '/'で使用, ESCで中断) どの能力について知りますか？", "(Powers {:c}-{:c}, *=List. /=Use, ESC=exit) Browse which power? ");
+    constexpr auto fmt_use = _("(特殊能力 {:c}-{:c}, '*'で一覧, '/'で閲覧, ESCで中断) どの能力を使いますか？", "(Powers {:c}-{:c}, *=List, /=Browse, ESC=exit) Use which power? ");
+    const auto last = (rc_ptr->power_count() <= 26) ? I2A(rc_ptr->power_count() - 1) : static_cast<char>('0' + rc_ptr->power_count() - 27);
+    rc_ptr->out_val = rc_ptr->browse_mode ? fmt::format(fmt_browse, I2A(0), last) : fmt::format(fmt_use, I2A(0), last);
 }
 
 /*!
@@ -304,7 +297,7 @@ static bool ask_invoke_racial_power(rc_type *rc_ptr)
         return true;
     }
 
-    const auto prompt = format(_("%sを使いますか？ ", "Use %s? "), rc_ptr->power_desc[rc_ptr->command_code].racial_name.data());
+    const auto prompt = fmt::format(_("{}を使いますか？ ", "Use {}? "), rc_ptr->power_desc[rc_ptr->command_code].racial_name);
     return input_check(prompt);
 }
 

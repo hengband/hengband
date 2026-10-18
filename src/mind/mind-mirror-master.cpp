@@ -392,7 +392,7 @@ bool cast_mirror_spell(PlayerType *player_ptr, MindMirrorMasterType spell)
                 msg_print(*error);
             }
         } else {
-            msg_format(_("これ以上鏡は制御できない！", "There are too many mirrors to control!"));
+            msg_print(_("これ以上鏡は制御できない！", "There are too many mirrors to control!"));
         }
 
         break;

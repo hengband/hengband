@@ -29,6 +29,7 @@
 #include "target/target-getter.h"
 #include "util/dice.h"
 #include "view/display-messages.h"
+#include <fmt/format.h>
 
 /*!
  * @brief 悪魔領域魔法の各処理を行う
@@ -232,7 +233,7 @@ tl::optional<std::string> do_daemon_spell(PlayerType *player_ptr, SPELL_IDX spel
         int sides2 = plev * 2;
 
         if (info) {
-            return format("%sd%d+d%d", KWD_DAM, sides1, sides2);
+            return fmt::format("{}d{}+d{}", KWD_DAM, sides1, sides2);
         }
 
         if (cast) {
@@ -405,7 +406,7 @@ tl::optional<std::string> do_daemon_spell(PlayerType *player_ptr, SPELL_IDX spel
         POSITION rad = 3 + plev / 20;
 
         if (info) {
-            return format("%s%d+%d", KWD_DAM, dam / 2, dam / 2);
+            return fmt::format("{}{}+{}", KWD_DAM, dam / 2, dam / 2);
         }
 
         if (cast) {

@@ -31,6 +31,7 @@
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 #include <algorithm>
+#include <fmt/format.h>
 #include <iterator>
 #include <range/v3/range/conversion.hpp>
 #include <range/v3/view.hpp>
@@ -79,11 +80,11 @@ static tl::optional<BlueMagicType> select_blue_magic_type_by_menu()
     screen_save();
 
     while (!type) {
-        prt(format(_(" %s ボルト", " %s bolt"), (menu_line == 1) ? _("》", "> ") : "  "), 2, 14);
-        prt(format(_(" %s ボール", " %s ball"), (menu_line == 2) ? _("》", "> ") : "  "), 3, 14);
-        prt(format(_(" %s ブレス", " %s breath"), (menu_line == 3) ? _("》", "> ") : "  "), 4, 14);
-        prt(format(_(" %s 召喚", " %s sommoning"), (menu_line == 4) ? _("》", "> ") : "  "), 5, 14);
-        prt(format(_(" %s その他", " %s others"), (menu_line == 5) ? _("》", "> ") : "  "), 6, 14);
+        prt(fmt::format(_(" {} ボルト", " {} bolt"), (menu_line == 1) ? _("》", "> ") : "  "), 2, 14);
+        prt(fmt::format(_(" {} ボール", " {} ball"), (menu_line == 2) ? _("》", "> ") : "  "), 3, 14);
+        prt(fmt::format(_(" {} ブレス", " {} breath"), (menu_line == 3) ? _("》", "> ") : "  "), 4, 14);
+        prt(fmt::format(_(" {} 召喚", " {} sommoning"), (menu_line == 4) ? _("》", "> ") : "  "), 5, 14);
+        prt(fmt::format(_(" {} その他", " {} others"), (menu_line == 5) ? _("》", "> ") : "  "), 6, 14);
         prt(_("どの種類の魔法を使いますか？", "use which type of magic? "), 0, 0);
 
         auto choice = inkey();

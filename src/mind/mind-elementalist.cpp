@@ -58,9 +58,11 @@
 #include "term/screen-processor.h"
 #include "timed-effect/timed-effects.h"
 #include "util/int-char-converter.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "view/display-util.h"
 #include <array>
+#include <fmt/format.h>
 #include <string>
 #include <unordered_map>
 
@@ -400,34 +402,34 @@ static std::string get_element_effect_info(PlayerType *player_ptr, int spell_idx
 
     switch (spell) {
     case ElementSpells::BOLT_1ST:
-        return format(" %s%dd%d", KWD_DAM, 3 + ((plev - 1) / 5), 4);
+        return fmt::format(" {}{}d{}", KWD_DAM, 3 + ((plev - 1) / 5), 4);
     case ElementSpells::CURE:
-        return format(" %s%dd%d", KWD_HEAL, 2, 8);
+        return fmt::format(" {}{}d{}", KWD_HEAL, 2, 8);
     case ElementSpells::BOLT_2ND:
-        return format(" %s%dd%d", KWD_DAM, 8 + ((plev - 5) / 4), 8);
+        return fmt::format(" {}{}d{}", KWD_DAM, 8 + ((plev - 5) / 4), 8);
     case ElementSpells::BALL_3RD:
-        return format(" %s%d", KWD_DAM, (50 + plev * 2));
+        return fmt::format(" {}{}", KWD_DAM, (50 + plev * 2));
     case ElementSpells::BALL_1ST:
-        return format(" %s%d", KWD_DAM, 55 + plev);
+        return fmt::format(" {}{}", KWD_DAM, 55 + plev);
     case ElementSpells::BREATH_2ND:
         dam = p_ptr->chp / 2;
-        return format(" %s%d", KWD_DAM, (dam > 150) ? 150 : dam);
+        return fmt::format(" {}{}", KWD_DAM, (dam > 150) ? 150 : dam);
     case ElementSpells::ANNIHILATE:
-        return format(" %s%d", _("効力:", "pow "), 50 + plev);
+        return fmt::format(" {}{}", _("効力:", "pow "), 50 + plev);
     case ElementSpells::BOLT_3RD:
-        return format(" %s%dd%d", KWD_DAM, 12 + ((plev - 5) / 4), 8);
+        return fmt::format(" {}{}d{}", KWD_DAM, 12 + ((plev - 5) / 4), 8);
     case ElementSpells::WAVE_1ST:
-        return format(" %s50+d%d", KWD_DAM, plev * 3);
+        return fmt::format(" {}50+d{}", KWD_DAM, plev * 3);
     case ElementSpells::BALL_2ND:
-        return format(" %s%d", KWD_DAM, 75 + plev * 3 / 2);
+        return fmt::format(" {}{}", KWD_DAM, 75 + plev * 3 / 2);
     case ElementSpells::BURST_1ST:
-        return format(" %s%dd%d", KWD_DAM, 6 + plev / 8, 7);
+        return fmt::format(" {}{}d{}", KWD_DAM, 6 + plev / 8, 7);
     case ElementSpells::STORM_2ND:
-        return format(" %s%d", KWD_DAM, 115 + plev * 5 / 2);
+        return fmt::format(" {}{}", KWD_DAM, 115 + plev * 5 / 2);
     case ElementSpells::BREATH_1ST:
-        return format(" %s%d", KWD_DAM, p_ptr->chp * 2 / 3);
+        return fmt::format(" {}{}", KWD_DAM, p_ptr->chp * 2 / 3);
     case ElementSpells::STORM_3ND:
-        return format(" %s%d", KWD_DAM, 300 + plev * 5);
+        return fmt::format(" {}{}", KWD_DAM, 300 + plev * 5);
     default:
         return std::string();
     }
@@ -721,14 +723,12 @@ static bool get_element_power(PlayerType *player_ptr, SPELL_IDX *sn, bool only_b
         }
     }
 
-    std::string fmt;
-    if (only_browse) {
-        fmt = _("(%s^ %c-%c, '*'で一覧, ESC) どの%sについて知りますか？", "(%s^s %c-%c, *=List, ESC=exit) Use which %s? ");
-    } else {
-        fmt = _("(%s^ %c-%c, '*'で一覧, ESC) どの%sを使いますか？", "(%s^s %c-%c, *=List, ESC=exit) Use which %s? ");
-    }
-
-    const auto prompt = format(fmt.data(), p, I2A(0), I2A(num - 1), p);
+    constexpr auto fmt_browse = _("({} {:c}-{:c}, '*'で一覧, ESC) どの{}について知りますか？", "({}s {:c}-{:c}, *=List, ESC=exit) Use which {}? ");
+    constexpr auto fmt_use = _("({} {:c}-{:c}, '*'で一覧, ESC) どの{}を使いますか？", "({}s {:c}-{:c}, *=List, ESC=exit) Use which {}? ");
+    const auto desc_upcased = str_upcase_first(p);
+    const auto first_letter = I2A(0);
+    const auto last_letter = I2A(num - 1);
+    const auto prompt = only_browse ? fmt::format(fmt_browse, desc_upcased, first_letter, last_letter, p) : fmt::format(fmt_use, desc_upcased, first_letter, last_letter, p);
     if (use_menu && !only_browse) {
         screen_save();
     }
@@ -869,7 +869,7 @@ static bool try_cast_element_spell(PlayerType *player_ptr, SPELL_IDX spell_idx, 
         flush();
     }
 
-    msg_format(_("魔力の集中に失敗した！", "You failed to focus the elemental power!"));
+    msg_print(_("魔力の集中に失敗した！", "You failed to focus the elemental power!"));
     sound(SoundKind::FAIL);
 
     if (randint1(100) < chance / 2) {
@@ -985,8 +985,8 @@ void display_element_spell_list(PlayerType *player_ptr, int y, int x)
         const auto chance = decide_element_chance(player_ptr, spell);
         const auto comment = get_element_effect_info(player_ptr, i);
 
-        constexpr auto fmt = "  %c) %-30s%2d %4d %3d%%%s";
-        const auto info_str = format(fmt, I2A(i), name.data(), spell.min_lev, mana_cost, chance, comment.data());
+        constexpr auto fmt = "  {:c}) {:<30}{:2} {:4} {:3}%{}";
+        const auto info_str = fmt::format(fmt, I2A(i), fmt::bytes(name), spell.min_lev, mana_cost, chance, comment);
         const auto color = mana_cost > player_ptr->csp ? TERM_ORANGE : TERM_WHITE;
         c_prt(color, info_str, y + i + 1, x);
     }
@@ -1059,7 +1059,7 @@ ProcessResult effect_monster_elemental_genocide(PlayerType *player_ptr, EffectMo
 {
     const auto &name = get_element_name(player_ptr->element_realm, 0);
     if (em_ptr->seen_msg) {
-        msg_format(_("%sが%sを包み込んだ。", "The %s surrounds %s."), name.data(), em_ptr->m_name);
+        msg_print(_("{}が{}を包み込んだ。", "The {} surrounds {}."), name, em_ptr->m_name);
     }
 
     if (em_ptr->seen) {
@@ -1070,7 +1070,7 @@ ProcessResult effect_monster_elemental_genocide(PlayerType *player_ptr, EffectMo
     const auto is_effective = is_elemental_genocide_effective(*em_ptr->monrace, type);
     if (!is_effective) {
         if (em_ptr->seen_msg) {
-            msg_format(_("%sには効果がなかった。", "%s^ is unaffected."), em_ptr->m_name);
+            msg_print(_("{}には効果がなかった。", "{} is unaffected."), str_upcase_first(em_ptr->m_name));
         }
         em_ptr->dam = 0;
         return ProcessResult::PROCESS_TRUE;
@@ -1078,7 +1078,7 @@ ProcessResult effect_monster_elemental_genocide(PlayerType *player_ptr, EffectMo
 
     if (genocide_aux(player_ptr, em_ptr->g_ptr->m_idx, em_ptr->dam, em_ptr->is_player(), (em_ptr->monrace->level + 1) / 2, _("モンスター消滅", "Genocide One"))) {
         if (em_ptr->seen_msg) {
-            msg_format(_("%sは消滅した！", "%s^ disappeared!"), em_ptr->m_name);
+            msg_print(_("{}は消滅した！", "{} disappeared!"), str_upcase_first(em_ptr->m_name));
         }
         em_ptr->dam = 0;
         chg_virtue(player_ptr, Virtue::VITALITY, -1);
@@ -1125,7 +1125,7 @@ static void display_realm_cursor(int i, int n, term_color_type color)
         name = element_types.at(i2enum<ElementRealmType>(i + 1)).title.data();
     }
 
-    c_put_str(color, format("%c) %s", sym, name.data()), 12 + (i / 5), 2 + 15 * (i % 5));
+    c_put_str(color, fmt::format("{:c}) {}", sym, name), 12 + (i / 5), 2 + 15 * (i % 5));
 }
 
 /*!
@@ -1181,7 +1181,7 @@ static tl::optional<ElementRealmType> get_element_realm(PlayerType *player_ptr, 
     int os = cs;
     int k;
 
-    const auto buf = format(_("領域を選んで下さい(%c-%c) ('='初期オプション設定): ", "Choose a realm (%c-%c) ('=' for options): "), I2A(0), I2A(n - 1));
+    const auto buf = fmt::format(_("領域を選んで下さい({:c}-{:c}) ('='初期オプション設定): ", "Choose a realm ({:c}-{:c}) ('=' for options): "), I2A(0), I2A(n - 1));
 
     while (true) {
         display_realm_cursor(os, n, TERM_WHITE);
@@ -1297,7 +1297,7 @@ void switch_element_racial(PlayerType *player_ptr, rc_type *rc_ptr)
         break;
     case ElementRealmType::ICE:
         rpi = rpi_type(_("周辺フリーズ", "Sleep monsters"));
-        rpi.info = format("%s%d", KWD_POWER, 20 + plev * 3 / 2);
+        rpi.info = fmt::format("{}{}", KWD_POWER, 20 + plev * 3 / 2);
         rpi.text = _("視界内の全てのモンスターを眠らせる。抵抗されると無効。", "Attempts to put all monsters in sight to sleep.");
         rpi.min_level = 10;
         rpi.cost = 15;
@@ -1307,7 +1307,7 @@ void switch_element_racial(PlayerType *player_ptr, rc_type *rc_ptr)
         break;
     case ElementRealmType::SKY:
         rpi = rpi_type(_("魔力充填", "Recharging"));
-        rpi.info = format("%s%d", KWD_POWER, 120);
+        rpi.info = fmt::format("{}{}", KWD_POWER, 120);
         rpi.text = _("杖/魔法棒の充填回数を増やすか、充填中のロッドの充填時間を減らす。", "Recharges staffs, wands or rods.");
         rpi.min_level = 20;
         rpi.cost = 15;
@@ -1326,7 +1326,7 @@ void switch_element_racial(PlayerType *player_ptr, rc_type *rc_ptr)
         break;
     case ElementRealmType::DARKNESS:
         rpi = rpi_type(_("闇の扉", "Door to darkness"));
-        rpi.info = format("%s%d", KWD_SPHERE, 15 + plev / 2);
+        rpi.info = fmt::format("{}{}", KWD_SPHERE, 15 + plev / 2);
         rpi.min_level = 5;
         rpi.cost = 5 + plev / 7;
         rpi.stat = A_WIS;
@@ -1344,7 +1344,7 @@ void switch_element_racial(PlayerType *player_ptr, rc_type *rc_ptr)
         break;
     case ElementRealmType::EARTH:
         rpi = rpi_type(_("地震", "Earthquake"));
-        rpi.info = format("%s%d", KWD_SPHERE, 10);
+        rpi.info = fmt::format("{}{}", KWD_SPHERE, 10);
         rpi.text = _("周囲のダンジョンを揺らし、壁と床をランダムに入れ変える。", "Shakes dungeon structure, and results in random swapping of floors and walls.");
         rpi.min_level = 25;
         rpi.cost = 15;
