@@ -8,6 +8,7 @@
 #include "system/player-type-definition.h"
 #include "system/spell-info-list.h"
 #include "util/enum-converter.h"
+#include <fmt/format.h>
 
 namespace {
 
@@ -87,7 +88,7 @@ const LocalizedString &PlayerRealm::get_name(RealmType realm)
 {
     const auto it = realm_names.find(realm);
     if (it == realm_names.end()) {
-        THROW_EXCEPTION(std::invalid_argument, format("Invalid realm: %d", enum2i(realm)));
+        THROW_EXCEPTION(std::invalid_argument, fmt::format("Invalid realm: {}", enum2i(realm)));
     }
     return it->second;
 }
@@ -101,7 +102,7 @@ std::string_view PlayerRealm::get_explanation(RealmType realm)
         return technic_explanations[enum2i(realm) - MIN_TECHNIC];
     }
 
-    THROW_EXCEPTION(std::invalid_argument, format("Invalid realm: %d", enum2i(realm)));
+    THROW_EXCEPTION(std::invalid_argument, fmt::format("Invalid realm: {}", enum2i(realm)));
 }
 
 std::string_view PlayerRealm::get_subinfo(RealmType realm)
@@ -113,13 +114,13 @@ std::string_view PlayerRealm::get_subinfo(RealmType realm)
         return technic_subinfo[enum2i(realm) - MIN_TECHNIC];
     }
 
-    THROW_EXCEPTION(std::invalid_argument, format("Invalid realm: %d", enum2i(realm)));
+    THROW_EXCEPTION(std::invalid_argument, fmt::format("Invalid realm: {}", enum2i(realm)));
 }
 
 const magic_type &PlayerRealm::get_spell_info(RealmType realm, int spell_id, tl::optional<PlayerClassType> pclass)
 {
     if (spell_id < 0 || 32 <= spell_id) {
-        THROW_EXCEPTION(std::invalid_argument, format("Invalid spell id: %d", spell_id));
+        THROW_EXCEPTION(std::invalid_argument, fmt::format("Invalid spell id: {}", spell_id));
     }
 
     if (is_magic(realm)) {
@@ -132,17 +133,17 @@ const magic_type &PlayerRealm::get_spell_info(RealmType realm, int spell_id, tl:
         return technic_info[enum2i(realm) - MIN_TECHNIC][spell_id];
     }
 
-    THROW_EXCEPTION(std::invalid_argument, format("Invalid realm: %d", enum2i(realm)));
+    THROW_EXCEPTION(std::invalid_argument, fmt::format("Invalid realm: {}", enum2i(realm)));
 }
 
 const std::string &PlayerRealm::get_spell_name(RealmType realm, int spell_id)
 {
     if (spell_id < 0 || 32 <= spell_id) {
-        THROW_EXCEPTION(std::invalid_argument, format("Invalid spell id: %d", spell_id));
+        THROW_EXCEPTION(std::invalid_argument, fmt::format("Invalid spell id: {}", spell_id));
     }
 
     if (!is_magic(realm) && !is_technic(realm)) {
-        THROW_EXCEPTION(std::invalid_argument, format("Invalid realm: %d", enum2i(realm)));
+        THROW_EXCEPTION(std::invalid_argument, fmt::format("Invalid realm: {}", enum2i(realm)));
     }
 
     const auto &spell_info = SpellInfoList::get_instance().get_spell_info(realm, spell_id);
@@ -152,11 +153,11 @@ const std::string &PlayerRealm::get_spell_name(RealmType realm, int spell_id)
 const std::string &PlayerRealm::get_spell_description(RealmType realm, int spell_id)
 {
     if (spell_id < 0 || 32 <= spell_id) {
-        THROW_EXCEPTION(std::invalid_argument, format("Invalid spell id: %d", spell_id));
+        THROW_EXCEPTION(std::invalid_argument, fmt::format("Invalid spell id: {}", spell_id));
     }
 
     if (!is_magic(realm) && !is_technic(realm)) {
-        THROW_EXCEPTION(std::invalid_argument, format("Invalid realm: %d", enum2i(realm)));
+        THROW_EXCEPTION(std::invalid_argument, fmt::format("Invalid realm: {}", enum2i(realm)));
     }
 
     const auto &spell_info = SpellInfoList::get_instance().get_spell_info(realm, spell_id);
@@ -167,7 +168,7 @@ ItemKindType PlayerRealm::get_book(RealmType realm)
 {
     const auto it = realm_books.find(realm);
     if (it == realm_books.end()) {
-        THROW_EXCEPTION(std::invalid_argument, format("Invalid realm: %d", enum2i(realm)));
+        THROW_EXCEPTION(std::invalid_argument, fmt::format("Invalid realm: {}", enum2i(realm)));
     }
     return it->second;
 }
@@ -229,10 +230,10 @@ void PlayerRealm::reset()
 void PlayerRealm::set(RealmType realm1, RealmType realm2)
 {
     if (!is_magic(realm1) && !is_technic(realm1)) {
-        THROW_EXCEPTION(std::invalid_argument, format("Invalid realm1: %d", enum2i(realm1)));
+        THROW_EXCEPTION(std::invalid_argument, fmt::format("Invalid realm1: {}", enum2i(realm1)));
     }
     if (realm2 != RealmType::NONE && !is_magic(realm2) && !is_technic(realm2)) {
-        THROW_EXCEPTION(std::invalid_argument, format("Invalid realm2: %d", enum2i(realm2)));
+        THROW_EXCEPTION(std::invalid_argument, fmt::format("Invalid realm2: {}", enum2i(realm2)));
     }
 
     this->set_(realm1, realm2);

@@ -8,6 +8,7 @@
 #include "term/z-form.h"
 #include "util/int-char-converter.h"
 #include "view/display-player-misc-info.h"
+#include <fmt/format.h>
 #include <sstream>
 
 static std::string birth_personality_label(int cs, concptr sym)
@@ -59,15 +60,15 @@ static std::string display_personality_stat(int cs, int *os, const std::string &
         c_put_str(TERM_L_BLUE, ap_ptr->title, 3, 40);
         put_str(_("の性格修正", ": Personality modification"), 3, 40 + ap_ptr->title->length());
         put_str(_("腕力 知能 賢さ 器用 耐久 魅力      ", "Str  Int  Wis  Dex  Con  Chr       "), 4, 40);
-        const auto stats = format("%+3d  %+3d  %+3d  %+3d  %+3d  %+3d       ", ap_ptr->a_adj[0], ap_ptr->a_adj[1], ap_ptr->a_adj[2], ap_ptr->a_adj[3], ap_ptr->a_adj[4], ap_ptr->a_adj[5]);
+        const auto stats = fmt::format("{:+3}  {:+3}  {:+3}  {:+3}  {:+3}  {:+3}       ", ap_ptr->a_adj[0], ap_ptr->a_adj[1], ap_ptr->a_adj[2], ap_ptr->a_adj[3], ap_ptr->a_adj[4], ap_ptr->a_adj[5]);
         c_put_str(TERM_L_BLUE, stats, 5, 40);
 
         put_str("HD", 6, 40);
-        const auto hd = format("%+3d", ap_ptr->a_mhp);
+        const auto hd = fmt::format("{:+3}", ap_ptr->a_mhp);
         c_put_str(TERM_L_BLUE, hd, 6, 42);
 
         put_str(_("隠密", "Stealth"), 6, 47);
-        const auto stealth = format("%+3d", ap_ptr->a_stl);
+        const auto stealth = fmt::format("{:+3}", ap_ptr->a_stl);
         c_put_str(TERM_L_BLUE, stealth, 6, _(51, 54));
     }
 
@@ -166,7 +167,7 @@ static bool select_personality(PlayerType *player_ptr, int *k, concptr sym)
             break;
         }
 
-        const auto buf = format(_("性格を選んで下さい (%c-%c) ('='初期オプション設定): ", "Choose a personality (%c-%c) ('=' for options): "), sym[0], sym[MAX_PERSONALITIES - 1]);
+        const auto buf = fmt::format(_("性格を選んで下さい ({:c}-{:c}) ('='初期オプション設定): ", "Choose a personality ({:c}-{:c}) ('=' for options): "), sym[0], sym[MAX_PERSONALITIES - 1]);
         put_str(buf, 10, 10);
         char c = inkey();
         if (c == 'Q') {

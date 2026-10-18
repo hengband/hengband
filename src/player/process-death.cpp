@@ -182,9 +182,9 @@ static void show_tomb_detail(PlayerType *player_ptr)
  */
 static void show_tomb_detail(PlayerType *player_ptr)
 {
-    show_tomb_line(format("Killed on Level %d", player_ptr->current_floor_ptr->dun_level), GRAVE_DEAD_PLACE_ROW);
+    show_tomb_line(fmt::format("Killed on Level {}", player_ptr->current_floor_ptr->dun_level), GRAVE_DEAD_PLACE_ROW);
 
-    auto lines = shape_buffer(format("by %s.", player_ptr->died_from.data()).data(), GRAVE_LINE_WIDTH + 1);
+    auto lines = shape_buffer(fmt::format("by {}.", player_ptr->died_from), GRAVE_LINE_WIDTH + 1);
     show_tomb_line(lines[0], GRAVE_KILLER_NAME_ROW);
     if (lines.size() == 1) {
         return;
@@ -227,8 +227,9 @@ void print_tomb(PlayerType *player_ptr)
     show_tomb_detail(player_ptr);
 
     time_t ct = time((time_t *)0);
-    show_tomb_line(format("%-.24s", ctime(&ct)), GRAVE_DEAD_DATETIME_ROW);
-    msg_format(_("さようなら、%s!", "Goodbye, %s!"), player_ptr->name);
+    const auto *datetime_str = ctime(&ct);
+    show_tomb_line(datetime_str ? std::string_view(datetime_str).substr(0, 24) : std::string_view(), GRAVE_DEAD_DATETIME_ROW);
+    msg_print(_("さようなら、{}!", "Goodbye, {}!"), player_ptr->name);
 }
 
 /*!
@@ -316,12 +317,12 @@ static void show_dead_home_items(PlayerType *player_ptr)
             term_clear();
             for (int j = 0; (j < 12) && (i < store.stock_num); j++, i++) {
                 const auto &item = *store.stock[i];
-                prt(format("%c) ", I2A(j)), j + 2, 4);
+                prt(fmt::format("{:c}) ", I2A(j)), j + 2, 4);
                 const auto item_name = describe_flavor(player_ptr, item, 0);
                 c_put_str(tval_to_attr[enum2i(item.bi_key.tval())], item_name, j + 2, 7);
             }
 
-            prt(format(_("我が家に置いてあったアイテム ( %d ページ): -続く-", "Your home contains (page %d): -more-"), k + 1), 0, 0);
+            prt(fmt::format(_("我が家に置いてあったアイテム ( {} ページ): -続く-", "Your home contains (page {}): -more-"), k + 1), 0, 0);
             if (inkey() == ESCAPE) {
                 return;
             }
@@ -362,7 +363,7 @@ static void file_character_auto(PlayerType *player_ptr)
     char datetime[32];
     strftime(datetime, sizeof(datetime), "%Y-%m-%d_%H%M%S", now_tm);
     screen_save();
-    const auto filename = format("%s_Autodump_%s.txt", player_ptr->name, datetime);
+    const auto filename = fmt::format("{}_Autodump_{}.txt", player_ptr->name, datetime);
     file_character(player_ptr, filename);
     screen_load();
 }
