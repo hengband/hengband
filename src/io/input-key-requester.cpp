@@ -200,6 +200,12 @@ char InputKeyRequestor::input_repeat_num()
     }
 }
 
+/*!
+ * @brief 回数の入力 (0 に続けて数字) を処理する
+ * @param cmd 入力したキー。回数の入力を終えたキーに置き換え、「コマンド:」でコマンドを入力したときはさらにそのコマンドに置き換える
+ * @return コマンドの入力をやり直すなら true、cmd をコマンドとして処理するなら false
+ * @details 回数をスペースや Enter で終えたときは「コマンド:」でコマンドを尋ね、取り消したときだけ回数を消してやり直す。
+ */
 bool InputKeyRequestor::process_repeat_num(short &cmd)
 {
     if (cmd != '0') {
@@ -224,8 +230,11 @@ bool InputKeyRequestor::process_repeat_num(short &cmd)
         return false;
     }
 
-    const auto ret_cmd = input_command(_("コマンド: ", "Command: "));
-    cmd = ret_cmd.value_or(ESCAPE);
+    if (const auto ret_cmd = input_command(_("コマンド: ", "Command: "))) {
+        cmd = *ret_cmd;
+        return false;
+    }
+
     command_arg = 0;
     return true;
 }
