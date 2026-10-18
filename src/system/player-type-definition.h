@@ -383,6 +383,7 @@ public:
     char base_name[32]{}; /*!< Stripped version of "player_name" */
 
     void ride_monster(MONSTER_IDX m_idx);
+    void dismount();
     std::shared_ptr<TimedEffects> effects() const;
     bool is_fully_healthy() const;
     bool is_wielding(FixedArtifactId fa_id) const;

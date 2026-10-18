@@ -183,6 +183,22 @@ void RedrawingFlagsUpdater::request_equipment_change_updates()
     this->status_flags.set(flags_srf);
 }
 
+/*!
+ * @brief 乗馬の状態が変わったときの描き直しを予約する
+ * @details 乗馬中の表示 (EXTRA の行の「乗馬」) と、乗っているモンスターの体力の表示を描き直す。
+ * モンスターに乗ったとき・降りたとき (落馬・乗っているモンスターが消えたときを含む) に呼ぶ。
+ * 階を移るときは画面全体を描き直すので、呼んでも呼ばなくてもよい。
+ * 乗っているモンスターの速度などで決まる能力の再計算 (BONUS) は、それぞれの箇所で要求する。
+ */
+void RedrawingFlagsUpdater::request_riding_status_redrawing()
+{
+    static constexpr auto flags_mwrf = {
+        MainWindowRedrawingFlag::EXTRA,
+        MainWindowRedrawingFlag::UHEALTH,
+    };
+    this->main_window_flags.set(flags_mwrf);
+}
+
 void RedrawingFlagsUpdater::fill_up_sub_flags()
 {
     constexpr auto all_sub_window_flags = EnumRange(SubWindowRedrawingFlag::INVENTORY, SubWindowRedrawingFlag::MAX);

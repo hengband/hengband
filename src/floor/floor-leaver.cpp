@@ -11,7 +11,6 @@
 #include "monster-floor/monster-remover.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
-#include "pet/pet-util.h"
 #include "save/floor-writer.h"
 #include "spell-class/spells-mirror-master.h"
 #include "system/dungeon/dungeon-definition.h"
@@ -40,9 +39,7 @@ static void check_riding_preservation(PlayerType *player_ptr)
 
     const auto &monster = player_ptr->current_floor_ptr->m_list[player_ptr->riding];
     if (monster.has_parent()) {
-        player_ptr->ride_monster(0);
-        player_ptr->pet_extra_flags &= ~(PF_TWO_HANDS);
-        player_ptr->riding_ryoute = player_ptr->old_riding_ryoute = false;
+        player_ptr->dismount();
     } else {
         party_mon[0] = monster.clone();
         delete_monster_idx(player_ptr, player_ptr->riding);

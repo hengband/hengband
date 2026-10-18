@@ -146,9 +146,7 @@ bool process_fall_off_horse(PlayerType *player_ptr, int dam, bool force)
         verify_panel(player_ptr);
     }
 
-    player_ptr->ride_monster(0);
-    player_ptr->pet_extra_flags &= ~(PF_TWO_HANDS);
-    player_ptr->riding_ryoute = player_ptr->old_riding_ryoute = false;
+    player_ptr->dismount();
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     static constexpr auto flags_srf = {
@@ -166,11 +164,7 @@ bool process_fall_off_horse(PlayerType *player_ptr, int dam, bool force)
         SubWindowRedrawingFlag::DUNGEON,
     };
     rfu.set_flags(flags_swrf);
-    static constexpr auto flags_mwrf = {
-        MainWindowRedrawingFlag::EXTRA,
-        MainWindowRedrawingFlag::UHEALTH,
-    };
-    rfu.set_flags(flags_mwrf);
+    rfu.request_riding_status_redrawing();
     auto fall_dam = false;
     if (player_ptr->levitation && !force) {
         const auto m_name = monster_desc(player_ptr, monster, 0);

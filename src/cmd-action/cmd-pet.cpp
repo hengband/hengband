@@ -146,11 +146,7 @@ void do_cmd_pet_dismiss(PlayerType *player_ptr)
                 msg_print(_("{}から降りた。", "You dismount from {}. "), friend_name);
                 player_ptr->ride_monster(0);
                 rfu.set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
-                static constexpr auto flags = {
-                    MainWindowRedrawingFlag::EXTRA,
-                    MainWindowRedrawingFlag::UHEALTH,
-                };
-                rfu.set_flags(flags);
+                rfu.request_riding_status_redrawing();
             }
 
             msg_print(_("{} を放した。", "Dismissed {}."), friend_name);
@@ -214,9 +210,7 @@ bool do_cmd_riding(PlayerType *player_ptr, bool force)
             return false;
         }
 
-        player_ptr->ride_monster(0);
-        player_ptr->pet_extra_flags &= ~(PF_TWO_HANDS);
-        player_ptr->riding_ryoute = player_ptr->old_riding_ryoute = false;
+        player_ptr->dismount();
     } else {
         if (cmd_limit_confused(player_ptr)) {
             return false;
@@ -284,12 +278,8 @@ bool do_cmd_riding(PlayerType *player_ptr, bool force)
         StatusRecalculatingFlag::BONUS,
     };
     rfu.set_flags(flags_srf);
-    static constexpr auto flags_mwrf = {
-        MainWindowRedrawingFlag::MAP,
-        MainWindowRedrawingFlag::EXTRA,
-        MainWindowRedrawingFlag::UHEALTH,
-    };
-    rfu.set_flags(flags_mwrf);
+    rfu.set_flag(MainWindowRedrawingFlag::MAP);
+    rfu.request_riding_status_redrawing();
     (void)move_player_effect(player_ptr, pos.y, pos.x, MPE_HANDLE_STUFF | MPE_ENERGY_USE | MPE_DONT_PICKUP | MPE_DONT_SWAP_MON);
     return true;
 }

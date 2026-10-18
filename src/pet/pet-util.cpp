@@ -17,8 +17,9 @@ int total_friends = 0;
 
 /*!
  * @brief プレイヤーの騎乗/下馬処理判定
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param grid プレイヤーの移動先グリッドへの参照
- * @param now_riding trueなら下馬処理、falseならば騎乗処理
+ * @param now_riding trueなら乗った状態、falseなら降りた状態で判定する
  * @return 可能ならばtrueを返す
  */
 bool can_player_ride_pet(PlayerType *player_ptr, const Grid &grid, bool now_riding)
@@ -34,9 +35,7 @@ bool can_player_ride_pet(PlayerType *player_ptr, const Grid &grid, bool now_ridi
     if (now_riding) {
         player_ptr->ride_monster(grid.m_idx);
     } else {
-        player_ptr->ride_monster(0);
-        player_ptr->pet_extra_flags &= ~(PF_TWO_HANDS);
-        player_ptr->riding_ryoute = player_ptr->old_riding_ryoute = false;
+        player_ptr->dismount();
     }
 
     // 騎乗状態を仮に変えた能力値で判定する。仮の状態を画面に描かないよう、再計算だけを行う。
