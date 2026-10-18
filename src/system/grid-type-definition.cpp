@@ -8,6 +8,7 @@
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
 #include "world/world.h"
+#include <fmt/format.h>
 
 /*!
  * @brief 2点間の距離をニュートン・ラプソン法で算出する / Distance between two points via Newton-Raphson technique
@@ -46,7 +47,7 @@ short Grid::get_terrain_id(TerrainKind tk) const
     case TerrainKind::MIMIC_RAW:
         return this->mimic;
     default:
-        THROW_EXCEPTION(std::logic_error, format("Invalid terrain kind is specified! %d", enum2i(tk)));
+        THROW_EXCEPTION(std::logic_error, fmt::format("Invalid terrain kind is specified! {}", enum2i(tk)));
     }
 }
 
@@ -261,7 +262,7 @@ TerrainType &Grid::get_terrain(TerrainKind tk)
     case TerrainKind::MIMIC_RAW:
         return terrains.get_terrain(this->mimic);
     default:
-        THROW_EXCEPTION(std::logic_error, format("Invalid terrain kind is specified! %d", enum2i(tk)));
+        THROW_EXCEPTION(std::logic_error, fmt::format("Invalid terrain kind is specified! {}", enum2i(tk)));
     }
 }
 
@@ -276,7 +277,7 @@ const TerrainType &Grid::get_terrain(TerrainKind tk) const
     case TerrainKind::MIMIC_RAW:
         return terrains.get_terrain(this->mimic);
     default:
-        THROW_EXCEPTION(std::logic_error, format("Invalid terrain kind is specified! %d", enum2i(tk)));
+        THROW_EXCEPTION(std::logic_error, fmt::format("Invalid terrain kind is specified! {}", enum2i(tk)));
     }
 }
 
@@ -307,7 +308,7 @@ void Grid::set_terrain_id(short terrain_id, TerrainKind tk)
         this->mimic = terrain_id;
         break;
     default:
-        THROW_EXCEPTION(std::logic_error, format("Invalid terrain kind is specified! %d", enum2i(tk)));
+        THROW_EXCEPTION(std::logic_error, fmt::format("Invalid terrain kind is specified! {}", enum2i(tk)));
     }
 }
 

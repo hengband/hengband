@@ -5,6 +5,8 @@
 #include "util/angband-files.h"
 #include "util/string-processor.h"
 #include <algorithm>
+#include <fmt/format.h>
+#include <string_view>
 #ifdef SET_UID
 #include "main-unix/unix-user-ids.h"
 #endif
@@ -36,7 +38,12 @@ errr highscore_read(high_score *score)
 
 void high_score::copy_info(const PlayerType &player)
 {
-    const auto name = format("%-.15s", player.name);
+    // 15 バイトで切ると 2 バイト文字が途中で切れるときは、前半の 1 バイトの代わりに空白を置く (z-form の「%-.15s」と同じ)
+    auto name = str_substr(player.name, 0, 15);
+    if (name.length() < std::min<size_t>(std::string_view(player.name).length(), 15)) {
+        name.push_back(' ');
+    }
+
     std::copy_n(name.begin(), name.length(), this->who);
 
 #ifdef SET_UID
@@ -44,22 +51,22 @@ void high_score::copy_info(const PlayerType &player)
 #else
     const auto tmp_uid = 0;
 #endif
-    const auto uid_str = format("%7u", tmp_uid);
+    const auto uid_str = fmt::format("{:7}", static_cast<unsigned int>(tmp_uid));
     std::copy_n(uid_str.begin(), uid_str.length(), this->uid);
     this->sex[0] = player.psex ? 'm' : 'f';
-    const auto prace = format("%2d", std::min(enum2i(player.prace), MAX_RACES));
+    const auto prace = fmt::format("{:2}", std::min(enum2i(player.prace), MAX_RACES));
     std::copy_n(prace.begin(), prace.length(), this->p_r);
-    const auto pclass = format("%2d", enum2i(std::min(player.pclass, PlayerClassType::MAX)));
+    const auto pclass = fmt::format("{:2}", enum2i(std::min(player.pclass, PlayerClassType::MAX)));
     std::copy_n(pclass.begin(), pclass.length(), this->p_c);
-    const auto ppersonality = format("%2d", std::min(player.ppersonality, MAX_PERSONALITIES));
+    const auto ppersonality = fmt::format("{:2}", static_cast<int>(std::min(player.ppersonality, MAX_PERSONALITIES)));
     std::copy_n(ppersonality.begin(), ppersonality.length(), this->p_a);
-    const auto current_level = format("%3d", std::min<ushort>(player.lev, 999));
+    const auto current_level = fmt::format("{:3}", std::min<ushort>(player.lev, 999));
     std::copy_n(current_level.begin(), current_level.length(), this->cur_lev);
     const auto &floor = *player.current_floor_ptr;
-    const auto current_dungeon = format("%3d", floor.dun_level);
+    const auto current_dungeon = fmt::format("{:3}", floor.dun_level);
     std::copy_n(current_dungeon.begin(), current_dungeon.length(), this->cur_dun);
-    const auto max_level = format("%3d", std::min<ushort>(player.max_plv, 999));
+    const auto max_level = fmt::format("{:3}", std::min<ushort>(player.max_plv, 999));
     std::copy_n(max_level.begin(), max_level.length(), this->max_lev);
-    const auto max_dungeon = format("%3d", DungeonRecords::get_instance().get_record(floor.dungeon_id).get_max_level());
+    const auto max_dungeon = fmt::format("{:3}", DungeonRecords::get_instance().get_record(floor.dungeon_id).get_max_level());
     std::copy_n(max_dungeon.begin(), max_dungeon.length(), this->max_dun);
 }

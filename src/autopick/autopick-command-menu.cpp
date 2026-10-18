@@ -110,7 +110,7 @@ EditorCommandId do_command_menu(size_t menu_depth, size_t start)
     while (true) {
         menu_key = redraw_edit_command_menu(redraw, menu_depth, start, line, menu_key, max_length);
         redraw = false;
-        prt(format(_("(a-%c) コマンド:", "(a-%c) Command:"), menu_key + 'a' - 1), 0, 0);
+        prt(fmt::format(_("(a-{:c}) コマンド:", "(a-{:c}) Command:"), menu_key + 'a' - 1), 0, 0);
         const auto key = inkey();
         if (key == ESCAPE) {
             return EditorCommandId::NONE;

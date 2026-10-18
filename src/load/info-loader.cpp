@@ -10,6 +10,7 @@
 #include "util/enum-converter.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#include <fmt/format.h>
 
 /*!
  * @brief セーブファイルからバージョン情報及びセーブ情報を取得する
@@ -67,8 +68,8 @@ bool rd_version_info()
         }
     }
 
-    constexpr auto fmt = _("バージョン %s のセーブデータ(SAVE%u形式)をロード中...", "Loading a version %s savefile (SAVE%u format)...");
-    load_note(format(fmt, system.build_version_expression(VersionExpression::WITHOUT_EXTRA).data(), loading_savefile_version));
+    constexpr auto fmt = _("バージョン {} のセーブデータ(SAVE{}形式)をロード中...", "Loading a version {} savefile (SAVE{} format)...");
+    load_note(fmt::format(fmt, system.build_version_expression(VersionExpression::WITHOUT_EXTRA), loading_savefile_version));
     return true;
 }
 

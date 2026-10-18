@@ -118,8 +118,8 @@ short BaseitemList::lookup_baseitem_id(const BaseitemKey &bi_key) const
     const auto &cache = this->create_baseitem_subtypes_cache();
     const auto it = cache.find(bi_key.tval());
     if (it == cache.end()) {
-        constexpr auto fmt = "Specified ItemKindType has no subtype! %d";
-        THROW_EXCEPTION(std::logic_error, format(fmt, enum2i(bi_key.tval())));
+        constexpr auto fmt = "Specified ItemKindType has no subtype! {}";
+        THROW_EXCEPTION(std::logic_error, fmt::format(fmt, enum2i(bi_key.tval())));
     }
 
     const auto &svals = it->second;

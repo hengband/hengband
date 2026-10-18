@@ -415,7 +415,7 @@ static void save_prefs()
     const auto savefile_str = savefile.string();
     const auto savefile_dir_str = savefile_str.substr(0, path_length);
     if (angband_dir_str == savefile_dir_str) {
-        const auto relative_path = format(".\\%s", (savefile_str.data() + path_length));
+        const auto relative_path = fmt::format(".\\{}", std::string_view(savefile_str).substr(path_length));
         WritePrivateProfileStringA("Angband", "SaveFile", relative_path.data(), ini_file);
     } else {
         WritePrivateProfileStringA("Angband", "SaveFile", savefile_str.data(), ini_file);

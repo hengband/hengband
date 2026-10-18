@@ -16,6 +16,7 @@
 #include "system/inner-game-data.h"
 #include "system/player-type-definition.h"
 #include "world/world.h"
+#include <fmt/format.h>
 
 static void rd_hengband_dungeons()
 {
@@ -217,7 +218,7 @@ errr analyze_wilderness(void)
     auto &wilderness = WildernessGrids::get_instance();
     const auto &area = wilderness.get_area();
     if ((wild_y_size > area.height()) || (wild_x_size > area.width())) {
-        load_note(format(_("荒野が大きすぎる(%d/%d)！", "Wilderness is too big (%d/%d)!"), wild_x_size, wild_y_size));
+        load_note(fmt::format(_("荒野が大きすぎる({}/{})！", "Wilderness is too big ({}/{})!"), wild_x_size, wild_y_size));
         return 23;
     }
 

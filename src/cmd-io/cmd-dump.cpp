@@ -41,6 +41,7 @@
 #include "view/display-messages.h"
 #include "view/display-player.h" // 暫定。後で消す.
 #include "world/world.h"
+#include <fmt/format.h>
 
 /*!
  * @brief 画面を再描画するコマンドのメインルーチン
@@ -66,7 +67,7 @@ void do_cmd_colors(PlayerType *player_ptr)
 {
     FILE *auto_dump_stream;
     screen_save();
-    const auto initial_filename = format("%s.prf", player_ptr->base_name);
+    const auto initial_filename = fmt::format("{}.prf", player_ptr->base_name);
     while (true) {
         term_clear();
         prt(_("[ カラーの設定 ]", "Interact with Colors"), 2, 0);
@@ -141,14 +142,13 @@ void do_cmd_colors(PlayerType *player_ptr)
                 clear_from(10);
                 for (byte i = 0; i < num_colors; i++) {
                     term_putstr(i * 4, 20, -1, a, "###");
-                    term_putstr(i * 4, 22, -1, i, format("%3d", i));
+                    term_putstr(i * 4, 22, -1, i, fmt::format("{:3}", i));
                 }
 
                 const auto name = color_names[a];
-                term_putstr(5, 10, -1, TERM_WHITE, format(_("カラー = %d, 名前 = %s", "Color = %d, Name = %s"), a, name));
+                term_putstr(5, 10, -1, TERM_WHITE, fmt::format(_("カラー = {}, 名前 = {}", "Color = {}, Name = {}"), a, name));
                 term_putstr(5, 12, -1, TERM_WHITE,
-                    format("K = 0x%02x / R,G,B = 0x%02x,0x%02x,0x%02x", angband_color_table[a][0], angband_color_table[a][1], angband_color_table[a][2],
-                        angband_color_table[a][3]));
+                    fmt::format("K = 0x{:02x} / R,G,B = 0x{:02x},0x{:02x},0x{:02x}", angband_color_table[a][0], angband_color_table[a][1], angband_color_table[a][2], angband_color_table[a][3]));
                 term_putstr(0, 14, -1, TERM_WHITE, _("コマンド (n/N/k/K/r/R/g/G/b/B): ", "Command (n/N/k/K/r/R/g/G/b/B): "));
                 auto ch = inkey();
                 if (ch == ESCAPE) {
@@ -217,7 +217,7 @@ void do_cmd_note()
         return;
     }
 
-    msg_format(_("メモ: %s", "Note: %s"), (*note).data());
+    msg_print(_("メモ: {}", "Note: {}"), *note);
 }
 
 /*
@@ -281,8 +281,8 @@ void do_cmd_time(PlayerType *player_ptr)
 {
     const auto &[day, hour, min] = AngbandWorld::get_instance().extract_date_time(InnerGameData::get_instance().get_start_race());
     std::string day_buf = (day < MAX_DAYS) ? std::to_string(day) : "*****";
-    constexpr auto mes = _("%s日目, 時刻は%d:%02d %sです。", "This is day %s. The time is %d:%02d %s.");
-    msg_format(mes, day_buf.data(), (hour % 12 == 0) ? 12 : (hour % 12), min, (hour < 12) ? "AM" : "PM");
+    constexpr auto mes = _("{}日目, 時刻は{}:{:02} {}です。", "This is day {}. The time is {}:{:02} {}.");
+    msg_print(mes, day_buf, (hour % 12 == 0) ? 12 : (hour % 12), min, (hour < 12) ? "AM" : "PM");
     // ゲームの時間が経過しない操作なので、ゲームの乱数生成器は使わない
     auto &rng = get_external_rng();
     std::filesystem::path path;

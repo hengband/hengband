@@ -60,6 +60,7 @@
 #include "util/enum-converter.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#include <fmt/format.h>
 #include <set>
 #include <sstream>
 #include <string>
@@ -204,7 +205,7 @@ static errr load_hp(PlayerType *player_ptr)
 {
     auto tmp16u = rd_u16b();
     if (tmp16u > PY_MAX_LEVEL) {
-        load_note(format(_("ヒットポイント配列が大きすぎる(%u)！", "Too many (%u) hitpoint entries!"), tmp16u));
+        load_note(fmt::format(_("ヒットポイント配列が大きすぎる({})！", "Too many ({}) hitpoint entries!"), tmp16u));
         return 25;
     }
 
@@ -490,8 +491,8 @@ static tl::expected<void, std::string> verify_savefile_header()
 static std::string make_reading_error_message(const std::string &what)
 {
     const auto &system = AngbandSystem::get_instance();
-    constexpr auto fmt = _("エラー(%s)がバージョン %s 用セーブファイル読み込み中に発生。", "Error (%s) reading %s savefile.");
-    return format(fmt, what.data(), system.build_version_expression(VersionExpression::WITH_EXTRA).data());
+    constexpr auto fmt = _("エラー({})がバージョン {} 用セーブファイル読み込み中に発生。", "Error ({}) reading {} savefile.");
+    return fmt::format(fmt, what, system.build_version_expression(VersionExpression::WITH_EXTRA));
 }
 
 /*!
@@ -521,7 +522,7 @@ tl::expected<void, std::string> load_savedata(PlayerType *player_ptr, bool *new_
 #endif
 
     if (const auto result = verify_savefile_header(); !result) {
-        return tl::unexpected(format("%s: %s", result.error().data(), savefile_str.data()));
+        return tl::unexpected(fmt::format("{}: {}", result.error(), savefile_str));
     }
 
     term_clear();

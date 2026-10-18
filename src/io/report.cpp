@@ -73,7 +73,7 @@ static constexpr auto get_score_content_type()
 static bool post_score_to_score_server(PlayerType *player_ptr, const std::string &score_data)
 {
     http::Client client;
-    client.user_agent = format("Hengband %d.%d.%d", H_VER_MAJOR, H_VER_MINOR, H_VER_PATCH);
+    client.user_agent = fmt::format("Hengband {}.{}.{}", H_VER_MAJOR, H_VER_MINOR, H_VER_PATCH);
 
     term_clear();
 
@@ -110,9 +110,9 @@ static errr make_dump(PlayerType *player_ptr, std::ostream &stream)
     fff = angband_fopen_temp(file_name, 1024);
     if (!fff) {
 #ifdef JP
-        msg_format("一時ファイル %s を作成できませんでした。", file_name);
+        msg_print("一時ファイル {} を作成できませんでした。", file_name);
 #else
-        msg_format("Failed to create temporary file %s.", file_name);
+        msg_print("Failed to create temporary file {}.", file_name);
 #endif
         msg_erase();
         return 1;
@@ -211,7 +211,7 @@ std::string make_screen_dump(PlayerType *player_ptr)
                 rv = angband_color_table[ds.color][1];
                 gv = angband_color_table[ds.color][2];
                 bv = angband_color_table[ds.color][3];
-                screen_ss << format("%s<font color=\"#%02x%02x%02x\">", ((y == 0 && x == 0) ? "" : "</font>"), rv, gv, bv);
+                screen_ss << fmt::format("{}<font color=\"#{:02x}{:02x}{:02x}\">", ((y == 0 && x == 0) ? "" : "</font>"), rv, gv, bv);
                 old_a = ds.color;
             }
 

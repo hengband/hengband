@@ -18,6 +18,7 @@
 #include "util/string-processor.h"
 #include "view/display-util.h"
 #include <algorithm>
+#include <fmt/format.h>
 #include <string_view>
 #include <tuple>
 
@@ -228,11 +229,11 @@ void draw_text_editor(PlayerType *player_ptr, AutopickTextBody *tb)
     }
 
     if (tb->dirty_flags & DIRTY_NOT_FOUND) {
-        str1 = format(_("パターンが見つかりません: %s", "Pattern not found: %s"), tb->search_str.data());
+        str1 = fmt::format(_("パターンが見つかりません: {}", "Pattern not found: {}"), tb->search_str);
     } else if (tb->dirty_flags & DIRTY_SKIP_INACTIVE) {
-        str1 = format(_("無効状態の行をスキップしました。(%sを検索中)", "Some inactive lines are skipped. (Searching %s)"), tb->search_str.data());
+        str1 = fmt::format(_("無効状態の行をスキップしました。({}を検索中)", "Some inactive lines are skipped. (Searching {})"), tb->search_str);
     } else if (tb->dirty_flags & DIRTY_INACTIVE) {
-        str1 = format(_("無効状態の行だけが見付かりました。(%sを検索中)", "Found only an inactive line. (Searching %s)"), tb->search_str.data());
+        str1 = fmt::format(_("無効状態の行だけが見付かりました。({}を検索中)", "Found only an inactive line. (Searching {})"), tb->search_str);
     } else if (tb->dirty_flags & DIRTY_NO_SEARCH) {
         str1 = _("検索するパターンがありません(^S で検索)。", "No pattern to search. (Press ^S to search.)");
     } else if (tb->states[tb->cy] & LSTAT_EXPRESSION_ERROR) {

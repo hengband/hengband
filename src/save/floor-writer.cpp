@@ -18,6 +18,7 @@
 #include "system/redrawing-flags-updater.h"
 #include "term/z-form.h"
 #include "util/angband-files.h"
+#include <fmt/format.h>
 #include <range/v3/view.hpp>
 
 namespace {
@@ -257,7 +258,7 @@ bool save_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mode
     }
 
     auto floor_savefile = savefile.string();
-    const auto ext = format(".F%02d", (int)sf_ptr->savefile_id);
+    const auto ext = fmt::format(".F{:02}", sf_ptr->savefile_id);
     floor_savefile.append(ext);
     safe_setuid_grab();
     fd_kill(floor_savefile);

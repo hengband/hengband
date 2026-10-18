@@ -93,6 +93,7 @@
 #include "wizard/wizard-special-process.h"
 #include "world/town-info-service.h"
 #include "world/world.h"
+#include <fmt/format.h>
 
 static void restore_windows(PlayerType *player_ptr)
 {
@@ -299,7 +300,7 @@ static void generate_world(PlayerType *player_ptr, bool new_game)
         return;
     }
 
-    const auto mes = format(_("%sに降り立った。", "arrived in %s."), map_name(player_ptr).data());
+    const auto mes = fmt::format(_("{}に降り立った。", "arrived in {}."), map_name(player_ptr));
     exe_write_diary(floor, DiaryKind::DESCRIPTION, 0, mes);
 }
 

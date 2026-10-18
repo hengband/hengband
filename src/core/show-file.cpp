@@ -15,6 +15,7 @@
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 #include <algorithm>
+#include <fmt/format.h>
 #include <sstream>
 #include <string>
 #include <string_view>
@@ -105,7 +106,7 @@ static void show_file_aux_line(std::string_view str, int cy, std::string_view sh
 static std::string make_open_error_message(std::string_view name_with_tag)
 {
     const auto name = str_split(name_with_tag, '#')[0];
-    return format(_("'%s'をオープンできません。", "Cannot open '%s'."), name.data());
+    return fmt::format(_("'{}'をオープンできません。", "Cannot open '{}'."), name);
 }
 
 /*!
@@ -307,12 +308,12 @@ bool FileDisplayer::try_display(bool show_version, std::string_view name_with_ta
         }
 
         if (show_version) {
-            constexpr auto title = _("[%s, %s, %d/%d]", "[%s, %s, Line %d/%d]");
+            constexpr auto title = _("[{}, {}, {}/{}]", "[{}, {}, Line {}/{}]");
             const auto version = AngbandSystem::get_instance().build_version_expression(VersionExpression::FULL);
-            prt(format(title, version.data(), caption_str.data(), line, size), 0, 0);
+            prt(fmt::format(title, version, caption_str, line, size), 0, 0);
         } else {
-            constexpr auto title = _("[%s, %d/%d]", "[%s, Line %d/%d]");
-            prt(format(title, caption_str.data(), line, size), 0, 0);
+            constexpr auto title = _("[{}, {}/{}]", "[{}, Line {}/{}]");
+            prt(fmt::format(title, caption_str, line, size), 0, 0);
         }
 
         if (size <= rows) {

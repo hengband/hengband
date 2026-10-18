@@ -24,6 +24,7 @@
 #include "world/world.h"
 #include <algorithm>
 #include <digitalv.h>
+#include <fmt/format.h>
 #include <limits>
 #include <string>
 
@@ -72,7 +73,7 @@ static tl::optional<std::string> dungeon_key_at(int index)
         return tl::nullopt;
     }
 
-    return format("dungeon%03d", index);
+    return fmt::format("dungeon{:03}", index);
 }
 
 /*!
@@ -88,7 +89,7 @@ static tl::optional<std::string> quest_key_at(int index)
         return tl::nullopt;
     }
 
-    return format("quest%03d", index);
+    return fmt::format("quest{:03}", index);
 }
 
 /*!
@@ -103,7 +104,7 @@ static tl::optional<std::string> town_key_at(int index)
         return tl::nullopt;
     }
 
-    return format("town%03d", index);
+    return fmt::format("town{:03}", index);
 }
 
 /*!
@@ -118,7 +119,7 @@ static tl::optional<std::string> monster_key_at(int index)
         return tl::nullopt;
     }
 
-    return format("monster%04d", index);
+    return fmt::format("monster{:04}", index);
 }
 
 /*!

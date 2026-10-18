@@ -1196,9 +1196,9 @@ static void react_keypress(XKeyEvent *xev)
 
     std::string msg;
     if (ks) {
-        msg = format("%c%s%s%s%s_%lX%c", 31, mc ? "N" : "", ms ? "S" : "", mo ? "O" : "", mx ? "M" : "", (unsigned long)(ks), 13);
+        msg = fmt::format("{:c}{}{}{}{}_{:X}{:c}", 31, mc ? "N" : "", ms ? "S" : "", mo ? "O" : "", mx ? "M" : "", ks, 13);
     } else {
-        msg = format("%c%s%s%s%sK_%X%c", 31, mc ? "N" : "", ms ? "S" : "", mo ? "O" : "", mx ? "M" : "", ev->keycode, 13);
+        msg = fmt::format("{:c}{}{}{}{}K_{:X}{:c}", 31, mc ? "N" : "", ms ? "S" : "", mo ? "O" : "", mx ? "M" : "", ev->keycode, 13);
     }
 
     send_keys(msg.data());
@@ -2421,7 +2421,7 @@ term_data_init(term_data *td, int i)
     XWMHints *wh;
 #endif
 
-    font = getenv(format("ANGBAND_X11_FONT_%d", i).data());
+    font = getenv(fmt::format("ANGBAND_X11_FONT_{}", i).data());
     if (!font) {
         font = getenv("ANGBAND_X11_FONT");
     }

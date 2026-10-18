@@ -162,8 +162,8 @@ static errr process_pref_file_aux(PlayerType *player_ptr, const std::filesystem:
         /* Print error message */
         /* ToDo: Add better error messages */
         const auto &name_str = name.string();
-        msg_format(_("ファイル'%s'の%d行でエラー番号%dのエラー。", "Error %d in line %d of file '%s'."), _(name_str.data(), err), line, _(err, name_str.data()));
-        msg_format(_("('%s'を解析中)", "Parsing '%s'"), error_line.data());
+        msg_print(_("ファイル'{0}'の{1}行でエラー番号{2}のエラー。", "Error {2} in line {1} of file '{0}'."), name_str, line, err);
+        msg_print(_("('{}'を解析中)", "Parsing '{}'"), error_line);
         msg_erase();
     }
 
@@ -278,7 +278,7 @@ bool open_auto_dump(FILE **fpp, const std::filesystem::path &path, std::string_v
     *fpp = angband_fopen(path, FileOpenMode::APPEND);
     if (!*fpp) {
         const auto &path_str = path.string();
-        msg_format(_("%s を開くことができませんでした。", "Failed to open %s."), path_str.data());
+        msg_print(_("{} を開くことができませんでした。", "Failed to open {}."), path_str);
         msg_erase();
         return false;
     }

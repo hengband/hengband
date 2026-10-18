@@ -5,6 +5,7 @@
 #include "system/spell-info-list.h"
 #include "util/enum-converter.h"
 #include "view/display-messages.h"
+#include <fmt/format.h>
 #include <nlohmann/json.hpp>
 #include <utility>
 #include <vector>
@@ -25,14 +26,14 @@ int SpellReader::read() const
 
     const auto realm_result = this->read_realm();
     if (!realm_result) {
-        msg_format(_("領域名読込失敗。ID: '%d'。", "Failed to load realm name. ID: '%d'."), error_idx);
+        msg_print(_("領域名読込失敗。ID: '{}'。", "Failed to load realm name. ID: '{}'."), error_idx);
         return realm_result.error();
     }
 
     const auto realm_id = *realm_result;
     std::vector<SpellInfo> spells;
     if (const auto result = this->set_book_data(spells); !result) {
-        msg_format(_("呪文詳細読込失敗。ID: '%d'。", "Failed to load spell data. ID: '%d'."), error_idx);
+        msg_print(_("呪文詳細読込失敗。ID: '{}'。", "Failed to load spell data. ID: '{}'."), error_idx);
         return result.error();
     }
 
@@ -79,7 +80,7 @@ tl::expected<void, parse_error_type> SpellReader::set_spell_data(const nlohmann:
 
     int spell_id;
     if (const auto err = info_set_integer(get_json_value(spell_data, "spell_id"), spell_id, true, Range(0, 31)); err != PARSE_ERROR_NONE) {
-        msg_format(_("呪文ID読込失敗。ID: '%d'。", "Failed to load spell ID. ID: '%d'."), error_idx);
+        msg_print(_("呪文ID読込失敗。ID: '{}'。", "Failed to load spell ID. ID: '{}'."), error_idx);
         return tl::make_unexpected(static_cast<parse_error_type>(err));
     }
     auto info = SpellInfo();
@@ -87,17 +88,17 @@ tl::expected<void, parse_error_type> SpellReader::set_spell_data(const nlohmann:
 
     const auto &tag_obj = get_json_value(spell_data, "spell_tag");
     if (!tag_obj.is_string()) {
-        msg_format(_("呪文タグ読込失敗。ID: '%d'。", "Failed to load spell tag. ID: '%d'."), error_idx);
+        msg_print(_("呪文タグ読込失敗。ID: '{}'。", "Failed to load spell tag. ID: '{}'."), error_idx);
         return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
     }
     info.tag = tag_obj.get<std::string>();
 
     if (const auto err = info_set_string(get_json_value(spell_data, "name"), info.name, true); err != PARSE_ERROR_NONE) {
-        msg_format(_("呪文名読込失敗。ID: '%d'。", "Failed to load spell name. ID: '%d'."), error_idx);
+        msg_print(_("呪文名読込失敗。ID: '{}'。", "Failed to load spell name. ID: '{}'."), error_idx);
         return tl::make_unexpected(static_cast<parse_error_type>(err));
     }
     if (const auto err = info_set_string(get_json_value(spell_data, "description"), info.description, true); err != PARSE_ERROR_NONE) {
-        msg_format(_("呪文説明読込失敗。ID: '%d'。", "Failed to load spell description. ID: '%d'."), error_idx);
+        msg_print(_("呪文説明読込失敗。ID: '{}'。", "Failed to load spell description. ID: '{}'."), error_idx);
         return tl::make_unexpected(static_cast<parse_error_type>(err));
     }
     spells.push_back(std::move(info));

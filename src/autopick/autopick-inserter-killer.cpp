@@ -87,7 +87,7 @@ bool insert_macro_line(AutopickTextBody *tb)
 
     tb->cx = 0;
     insert_return_code(tb);
-    tb->lines_list[tb->cy] = std::make_unique<std::string>(format("P:%s", tmp));
+    tb->lines_list[tb->cy] = std::make_unique<std::string>(fmt::format("P:{}", tmp));
 
     const auto i = macro_find_exact(trigger.data());
     if (i == -1) {
@@ -97,7 +97,7 @@ bool insert_macro_line(AutopickTextBody *tb)
     }
 
     insert_return_code(tb);
-    tb->lines_list[tb->cy] = std::make_unique<std::string>(format("A:%s", tmp));
+    tb->lines_list[tb->cy] = std::make_unique<std::string>(fmt::format("A:{}", tmp));
 
     return true;
 }

@@ -12,6 +12,7 @@
 #include "system/monrace/monrace-list.h"
 #include "term/z-form.h"
 #include "util/enum-converter.h"
+#include <fmt/format.h>
 #include <map>
 #include <set>
 
@@ -68,9 +69,8 @@ tl::optional<std::string> BaseitemMonraceService::check_specific_drop_gold_flags
         const auto monrace_specific_gold_drop_flags = specific_gold_drop_flags & monrace->drop_flags;
 
         if (monrace_specific_gold_drop_flags.count() > 1) {
-            constexpr auto fmt = _("財宝種別は同時に2つ以上指定できません。 ID: %d",
-                "You cannot specify more than one treasure type at the same time. ID: %d");
-            return format(fmt, enum2i(monrace_id));
+            constexpr auto fmt = _("財宝種別は同時に2つ以上指定できません。 ID: {}", "You cannot specify more than one treasure type at the same time. ID: {}");
+            return fmt::format(fmt, enum2i(monrace_id));
         }
     }
 
