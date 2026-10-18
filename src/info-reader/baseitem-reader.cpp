@@ -19,6 +19,8 @@
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
 #include "view/display-messages.h"
+#include <algorithm>
+#include <iterator>
 #include <limits>
 #include <memory>
 #include <nlohmann/json.hpp>
@@ -139,6 +141,20 @@ int BaseitemReader::read() const
     if (const auto result = this->set_baseitem_flags(baseitem); !result) {
         msg_print(_("アイテムのフラグ読込失敗。ID: '{}'。", "Failed to load flags of item. ID: '{}'."), error_idx);
         return result.error();
+    }
+
+    // 種別・副種別から ID を引く表では後の ID が先の ID を隠し、先のベースアイテムが店の品揃えや
+    // 初期の持ち物などで使われなくなるため、有効なベースアイテムどうしの重複は拒否する。
+    const auto previous_end = baseitems.begin() + std::min(static_cast<size_t>(item_id), baseitems.size());
+    if (baseitem.is_valid()) {
+        const auto duplicated = std::find_if(baseitems.begin(), previous_end, [&baseitem](const BaseitemDefinition &previous) {
+            return previous.is_valid() && (previous.bi_key == baseitem.bi_key);
+        });
+        if (duplicated != previous_end) {
+            const auto duplicated_id = std::distance(baseitems.begin(), duplicated);
+            msg_print(_("ベースアイテムの種別・副種別が重複している。ID: '{}'、重複先ID: '{}'。", "Duplicated kind of baseitem. ID: '{}', duplicated ID: '{}'."), error_idx, duplicated_id);
+            return PARSE_ERROR_INVALID_VALUE;
+        }
     }
 
     if (item_id >= static_cast<int>(baseitems.size())) {

@@ -64,7 +64,9 @@ class BaseitemDefinitionValidationTest(unittest.TestCase):
                 ok, message = self.validate(self.sample, {**self.sample, "id": second_id})
                 self.assertFalse(ok, message)
                 self.assertIn("Location: ['baseitems', 1, 'id']", message)
-        ok, message = self.validate(self.sample, {**self.sample, "id": self.sample["id"] + 2})
+        # 種別・副種別の重複は別の規則で拒否するため、2件目は副種別を変える。
+        later = self.changed({**self.sample, "id": self.sample["id"] + 2}, ["itemkind", "subtype_value"], self.sample["itemkind"]["subtype_value"] + 1)
+        ok, message = self.validate(self.sample, later)
         self.assertTrue(ok, message)
 
     def test_symbol_and_level_are_required(self):
@@ -107,6 +109,27 @@ class BaseitemDefinitionValidationTest(unittest.TestCase):
         self.check(self.changed(self.sample, ["allocations"], [allocation] * 4), True)
         self.check(self.changed(self.sample, ["allocations"], [allocation] * 5), False, ["baseitems", 0, "allocations"])
         self.check(self.changed(self.sample, ["allocations"], [1]), False, ["baseitems", 0, "allocations", 0])
+
+    def test_kinds_of_valid_baseitems_must_be_unique(self):
+        # 種別・副種別から ID を引く表では後の ID が先の ID を隠すため、有効なベースアイテムどうしの重複を拒否する。
+        second = {**self.sample, "id": self.sample["id"] + 1}
+        ok, message = self.validate(self.sample, second)
+        self.assertFalse(ok, message)
+        self.assertIn("Location: ['baseitems', 1, 'itemkind']", message)
+        other = self.changed(second, ["itemkind", "subtype_value"], self.sample["itemkind"]["subtype_value"] + 1)
+        ok, message = self.validate(self.sample, other)
+        self.assertTrue(ok, message)
+        # 名前が空か「異常アイテム」のベースアイテムは、その言語のビルドで表に載らないので重なってもよい。
+        for names in ({"ja": "異常アイテム", "en": "Invalid item"}, {"ja": "", "en": ""}):
+            with self.subTest(names=names):
+                ok, message = self.validate(self.sample, {**second, "name": names})
+                self.assertTrue(ok, message)
+        # 片方の言語だけ無効なら、もう片方の言語のビルドでは重なる。
+        for language, invalid in (("ja", "異常アイテム"), ("en", "Invalid item")):
+            with self.subTest(language=language):
+                ok, message = self.validate(self.sample, {**second, "name": {**second["name"], language: invalid}})
+                self.assertFalse(ok, message)
+                self.assertIn("Location: ['baseitems', 1, 'itemkind']", message)
 
 
 class ArtifactDefinitionValidationTest(unittest.TestCase):

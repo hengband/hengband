@@ -2,6 +2,7 @@
 #include "info-reader/baseitem-reader.h"
 #include "info-reader/info-reader-util.h"
 #include "info-reader/parse-error-types.h"
+#include "locale/language-switcher.h"
 #include "object-enchant/tr-types.h"
 #include "object/tval-types.h"
 #include "system/baseitem/baseitem-definition.h"
@@ -361,4 +362,38 @@ TEST_CASE("BaseitemReader publishes nested helper values only after successful p
     CHECK(item.flags.has(TR_DEX));
     CHECK(item.flags.has(TR_ACTIVATE));
     CHECK(error_idx == 4);
+}
+
+/*!
+ * @brief 有効なベースアイテムどうしで種別・副種別が重なると拒否する
+ * @details 種別・副種別から ID を引く表では後の ID が先の ID を隠すため。名前が空か「異常アイテム」の
+ * 無効なベースアイテムは表に載らないので、重なってもよい。
+ */
+TEST_CASE("BaseitemReader rejects duplicated kinds of valid baseitems")
+{
+    BaseitemStateGuard guard;
+    auto &items = BaseitemList::get_instance();
+    const auto read = [](const nlohmann::json &data) { return BaseitemReader(data).read(); };
+    REQUIRE(read(make_baseitem(1)) == PARSE_ERROR_NONE);
+
+    auto duplicated = make_baseitem(2);
+    CHECK(read(duplicated) == PARSE_ERROR_INVALID_VALUE);
+    CHECK(items.size() == 2);
+
+    // 失敗した読み込みでも診断のための ID は進むため、同じ ID を読み直す前に戻す。
+    error_idx = 1;
+    auto invalid = make_baseitem(2);
+    // JSON の文字列は UTF-8 で与える（「異常アイテム」）。
+    invalid["name"] = { { "ja", "\xe7\x95\xb0\xe5\xb8\xb8\xe3\x82\xa2\xe3\x82\xa4\xe3\x83\x86\xe3\x83\xa0" }, { "en", "Invalid item" } };
+    REQUIRE(read(invalid) == PARSE_ERROR_NONE);
+    CHECK_FALSE(items.get_baseitem(2).is_valid());
+
+    auto other_subtype = make_baseitem(3);
+    other_subtype["itemkind"]["subtype_value"] = 2;
+    REQUIRE(read(other_subtype) == PARSE_ERROR_NONE);
+    auto other_type = make_baseitem(4);
+    other_type["itemkind"]["type_value"] = 2;
+    REQUIRE(read(other_type) == PARSE_ERROR_NONE);
+    CHECK(read(make_baseitem(5)) == PARSE_ERROR_INVALID_VALUE);
+    CHECK(items.size() == 5);
 }

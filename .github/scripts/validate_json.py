@@ -181,6 +181,9 @@ def require_reader_dice(value: str, path: list) -> None:
             raise ValidationError("dice values must fit in int", path=path)
 
 
+INVALID_BASEITEM_NAMES = {"ja": "異常アイテム", "en": "Invalid item"}
+
+
 def load_rod_type_value(repository_root: Path) -> int:
     """ItemKindType::ROD の値を読む。"""
     path = repository_root / "src/object/tval-types.h"
@@ -195,6 +198,7 @@ def validate_baseitem_semantics(data: dict, schema_path: Path) -> None:
     repository_root = schema_path.resolve().parent.parent
     valid_colors = load_cpp_map_keys(repository_root / "src/term/gameterm.cpp", "color_list")
     rod_type_value = load_rod_type_value(repository_root)
+    valid_keys = {language: set() for language in INVALID_BASEITEM_NAMES}
     previous_id = -1
     for index, baseitem in enumerate(data["baseitems"]):
         path = ["baseitems", index]
@@ -220,9 +224,15 @@ def validate_baseitem_semantics(data: dict, schema_path: Path) -> None:
         for allocation_index, allocation in enumerate(baseitem.get("allocations", [])):
             for field in ("depth", "rarity"):
                 require_integer(allocation[field], path + ["allocations", allocation_index, field])
-
-
-INVALID_BASEITEM_NAMES = {"ja": "異常アイテム", "en": "Invalid item"}
+        # 種別・副種別から ID を引く表では後の ID が先の ID を隠すため、BaseitemReaderは
+        # 有効なベースアイテムどうしの重複を拒否する。有効かどうかはビルドの言語の名前で決まる。
+        key = (baseitem["itemkind"]["type_value"], baseitem["itemkind"]["subtype_value"])
+        for language, invalid in INVALID_BASEITEM_NAMES.items():
+            if baseitem["name"][language] in ("", invalid):
+                continue
+            if key in valid_keys[language]:
+                raise ValidationError("kind of a valid baseitem must be unique", path=path + ["itemkind"])
+            valid_keys[language].add(key)
 
 
 def collect_valid_baseitem_keys(baseitem_data: dict) -> set[tuple[int, int]]:
