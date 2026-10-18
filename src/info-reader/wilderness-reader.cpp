@@ -11,6 +11,7 @@
 #include "system/dungeon/dungeon-list.h"
 #include "system/enums/dungeon/dungeon-id.h"
 #include "system/floor/town-list.h"
+#include "system/floor/town-records.h"
 #include "system/floor/wilderness-grid.h"
 #include "system/gamevalue.h"
 #include "util/angband-files.h"
@@ -103,7 +104,8 @@ int WildernessReader::read(WildernessDefinition &definition) const
         }
 
         WildernessTownDefinition town;
-        if (const auto err = info_set_integer(get_json_value(town_data, "id"), town.id, true, Range(1, 32767))) {
+        // 町の訪問記録は TownId::MAX までの町しか持たず、それより後の町に入ると例外で落ちるため、番号を限る。
+        if (const auto err = info_set_integer(get_json_value(town_data, "id"), town.id, true, Range(1, enum2i(TownId::MAX)))) {
             return err;
         }
         if (!town_ids.insert(town.id).second) {
@@ -206,7 +208,7 @@ tl::expected<void, parse_error_type> WildernessReader::read_map(const nlohmann::
         }
         const auto &town_data = get_json_value(letter_data, "town");
         if (!town_data.is_null()) {
-            if (const auto err = info_set_integer(town_data, letter.town, true, Range(0, std::numeric_limits<short>::max())); err != PARSE_ERROR_NONE) {
+            if (const auto err = info_set_integer(town_data, letter.town, true, Range(0, enum2i(TownId::MAX))); err != PARSE_ERROR_NONE) {
                 return tl::make_unexpected(static_cast<parse_error_type>(err));
             }
         }

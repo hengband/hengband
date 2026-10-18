@@ -148,7 +148,8 @@ class DungeonValidationTest(unittest.TestCase):
 
     def test_entrances_follow_candidate_wilderness_dimensions(self):
         wilderness = {"version": 1, "width": 4, "height": 3,
-                      "towns": [{"id": 1, "name": {"ja": "Town", "en": "Town"}}],
+                      "towns": [{"id": 1, "name": {"ja": "Town", "en": "Town"}, "alias": {"ja": "Town", "en": "Town"}}]
+                      + [{"id": town_id, "name": {"ja": "Town", "en": "Town"}} for town_id in range(2, 6)],
                       "maps": {name: {"letters": [{"symbol": "#", "terrain": 0}],
                                       "layout": ["####", "####", "####"],
                                       "starting_position": {"y": 1, "x": 1}}

@@ -119,6 +119,31 @@ TEST_CASE("WildernessReader rejects undefined town references")
     }
 }
 
+/*!
+ * @brief 町の番号は、町の訪問記録が持つ TownId::MAX（6）までに限る
+ * @details それより後の番号の町に入ると、町の訪問記録の更新が例外で落ちる。
+ */
+TEST_CASE("WildernessReader limits town IDs to the town records")
+{
+    auto data = make_definition();
+    data["towns"][0]["id"] = 6;
+    data["maps"]["normal"]["letters"][1]["town"] = 6;
+    WildernessDefinition definition;
+    REQUIRE(WildernessReader(data).read(definition) == PARSE_ERROR_NONE);
+    CHECK(definition.towns[0].id == 6);
+
+    data["towns"][0]["id"] = 7;
+    data["maps"]["normal"]["letters"][1]["town"] = 1;
+    auto existing = make_existing_definition();
+    CHECK(WildernessReader(data).read(existing) == PARSE_ERROR_INVALID_FLAG);
+    check_existing_definition(existing);
+
+    data = make_definition();
+    data["maps"]["normal"]["letters"][1]["town"] = 7;
+    CHECK(WildernessReader(data).read(existing) == PARSE_ERROR_INVALID_FLAG);
+    check_existing_definition(existing);
+}
+
 TEST_CASE("WildernessReader validates layout dimensions and symbols")
 {
     auto data = make_definition();

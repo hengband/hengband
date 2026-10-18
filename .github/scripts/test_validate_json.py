@@ -446,7 +446,9 @@ class WildernessValidationTest(unittest.TestCase):
             "version": 1,
             "width": 3,
             "height": 3,
-            "towns": [{"id": 1, "name": {"ja": "街", "en": "Town"}}],
+            # 初期化は町1〜5の名前と町1の別名を求める。
+            "towns": [{"id": 1, "name": {"ja": "街", "en": "Town"}, "alias": {"ja": "街", "en": "Town"}}]
+            + [{"id": town_id, "name": {"ja": "街", "en": "Town"}} for town_id in range(2, 6)],
             "maps": {
                 "normal": {
                     "letters": [
@@ -493,7 +495,8 @@ class WildernessValidationTest(unittest.TestCase):
         for map_name in ("normal", "compact"):
             with self.subTest(map_name=map_name):
                 data = copy.deepcopy(self.data)
-                data["maps"][map_name]["letters"][0]["town"] = 2
+                # 町1〜5は定義済みなので、上限内で未定義の町6を参照する。
+                data["maps"][map_name]["letters"][0]["town"] = 6
                 ok, message = self.validate(data)
                 self.assertFalse(ok)
                 self.assertIn("undefined town ID", message)
