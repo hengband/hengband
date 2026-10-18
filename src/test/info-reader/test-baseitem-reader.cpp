@@ -397,3 +397,23 @@ TEST_CASE("BaseitemReader rejects duplicated kinds of valid baseitems")
     CHECK(read(make_baseitem(5)) == PARSE_ERROR_INVALID_VALUE);
     CHECK(items.size() == 5);
 }
+
+/*!
+ * @brief ダイスの個数と面数は、セーブの1バイトに収まる 0〜255 に限る
+ */
+TEST_CASE("BaseitemReader limits base dice to the save format range")
+{
+    for (const auto *dice : { "256d1", "1d256", "-1d2" }) {
+        CAPTURE(dice);
+        BaseitemStateGuard guard;
+        auto data = make_baseitem();
+        data["base_dice"] = dice;
+        CHECK(BaseitemReader(data).read() == PARSE_ERROR_INVALID_FLAG);
+        CHECK(BaseitemList::get_instance().empty());
+    }
+    BaseitemStateGuard guard;
+    auto data = make_baseitem();
+    data["base_dice"] = "255d255";
+    REQUIRE(BaseitemReader(data).read() == PARSE_ERROR_NONE);
+    CHECK(BaseitemList::get_instance().get_baseitem(1).damage_dice == Dice(255, 255));
+}

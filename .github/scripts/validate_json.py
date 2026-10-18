@@ -168,7 +168,7 @@ INT_MIN = -2147483648
 INT_MAX = 2147483647
 
 
-def require_reader_dice(value: str, path: list) -> None:
+def require_reader_dice(value: str, path: list, minimum: int = INT_MIN, maximum: int = INT_MAX) -> None:
     # Dice::parse は「個数d面数」の両方をintの10進数として読み、符号は - だけを受け付ける。
     # pattern の $ は末尾の改行の前にも一致するため、文字列全体で確かめる。
     match = re.fullmatch(r"(-?)([0-9]+)d(-?)([0-9]+)", value)
@@ -179,6 +179,12 @@ def require_reader_dice(value: str, path: list) -> None:
         digits = digits.lstrip("0") or "0"
         if len(digits) > len(str(INT_MAX)) or not INT_MIN <= int(sign + digits) <= INT_MAX:
             raise ValidationError("dice values must fit in int", path=path)
+        if not minimum <= int(sign + digits) <= maximum:
+            raise ValidationError(f"dice values must be between {minimum} and {maximum}", path=path)
+
+
+# セーブではアイテムのダイスの個数・面数をそれぞれ1バイトで書くため、BaseitemReader・ArtifactReaderは0〜255に限る。
+ITEM_DICE_RANGE = (0, 255)
 
 
 INVALID_BASEITEM_NAMES = {"ja": "異常アイテム", "en": "Invalid item"}
@@ -220,7 +226,7 @@ def validate_baseitem_semantics(data: dict, schema_path: Path) -> None:
         if baseitem["itemkind"]["type_value"] == rod_type_value and baseitem.get("parameter_value", 0) <= 0:
             raise ValidationError("rod parameter_value must be positive", path=path + ["parameter_value"])
         if "base_dice" in baseitem:
-            require_reader_dice(baseitem["base_dice"], path + ["base_dice"])
+            require_reader_dice(baseitem["base_dice"], path + ["base_dice"], *ITEM_DICE_RANGE)
         for allocation_index, allocation in enumerate(baseitem.get("allocations", [])):
             for field in ("depth", "rarity"):
                 require_integer(allocation[field], path + ["allocations", allocation_index, field])
@@ -270,7 +276,7 @@ def validate_artifact_semantics(data: dict, valid_baseitem_keys: set[tuple[int, 
         if artifact["id"] != index + 1:
             raise ValidationError("artifact IDs must start at 1 and continue without gaps", path=path + ["id"])
         if "base_dice" in artifact:
-            require_reader_dice(artifact["base_dice"], path + ["base_dice"])
+            require_reader_dice(artifact["base_dice"], path + ["base_dice"], *ITEM_DICE_RANGE)
         # ArtifactReaderは、元のベースアイテムが有効なベースアイテムに無ければ拒否する。
         key = (artifact["base_item"]["type_value"], artifact["base_item"]["subtype_value"])
         if valid_baseitem_keys is not None and key not in valid_baseitem_keys:

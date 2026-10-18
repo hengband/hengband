@@ -85,7 +85,8 @@ int ArtifactReader::read() const
         msg_print(_("アーティファクトのベースAC読込失敗。ID: '{}'。", "Failed to load base AC of artifact. ID: '{}'."), error_idx);
         return err;
     }
-    if (auto err = info_set_dice(get_json_value(this->art_data, "base_dice"), artifact.damage_dice, false)) {
+    // セーブではダイスの個数・面数をそれぞれ1バイトで書くため、0〜255に限る。
+    if (auto err = info_set_dice(get_json_value(this->art_data, "base_dice"), artifact.damage_dice, false, Range(0, 255))) {
         msg_print(_("アーティファクトのベースダイス読込失敗。ID: '{}'。", "Failed to load base dice of artifact. ID: '{}'."), error_idx);
         return err;
     }

@@ -234,6 +234,30 @@ TEST_CASE("ArtifactReader rejects a base item which is not a valid baseitem")
     CHECK(error_idx == 1);
 }
 
+/*!
+ * @brief ダイスの個数と面数は、セーブの1バイトに収まる 0〜255 に限る
+ */
+TEST_CASE("ArtifactReader limits base dice to the save format range")
+{
+    for (const auto *dice : { "256d1", "1d256", "-1d2" }) {
+        CAPTURE(dice);
+        test::ScopedReaderState reader_state;
+        test::ArtifactListTestAccess artifact_state;
+        ScopedArtifactBaseitem baseitem;
+        auto data = make_artifact();
+        data["base_dice"] = dice;
+        CHECK(ArtifactReader(data).read() == PARSE_ERROR_INVALID_FLAG);
+        CHECK(ArtifactList::get_instance().empty());
+    }
+    test::ScopedReaderState reader_state;
+    test::ArtifactListTestAccess artifact_state;
+    ScopedArtifactBaseitem baseitem;
+    auto data = make_artifact();
+    data["base_dice"] = "255d255";
+    REQUIRE(ArtifactReader(data).read() == PARSE_ERROR_NONE);
+    CHECK(ArtifactList::get_instance().get_artifact(i2enum<FixedArtifactId>(1)).damage_dice == Dice(255, 255));
+}
+
 TEST_CASE("ArtifactReader publishes complete records with localized text and optional fields")
 {
     test::ScopedReaderState reader_state;

@@ -95,12 +95,12 @@ class BaseitemDefinitionValidationTest(unittest.TestCase):
         self.check(self.changed(self.sample, ["parameter_value"], 0), True)
 
     def test_dice_matches_reader(self):
-        # from_chars は先頭の0をいくつでも読み飛ばす。
-        for dice in ("1d4", "0d0", "-1d-2", "007d08", "2147483647d-2147483648", "0" * 5000 + "1d4"):
+        # from_chars は先頭の0をいくつでも読み飛ばす。セーブでは個数・面数を1バイトで書くため0〜255に限る。
+        for dice in ("1d4", "0d0", "007d08", "255d255", "0" * 5000 + "1d4"):
             with self.subTest(dice=dice[-8:]):
                 self.check(self.changed(self.sample, ["base_dice"], dice), True)
         for dice in ("d", "1d", "d4", "1d4\n", "1d2d3", "+1d4", "1D4", " 1d4", "xd5y", "2147483648d1", "1d-2147483649",
-                     "1" + "0" * 5000 + "d4"):
+                     "1" + "0" * 5000 + "d4", "-1d2", "1d-1", "256d1", "1d256", "2147483647d1"):
             with self.subTest(dice=dice[:16]):
                 self.check(self.changed(self.sample, ["base_dice"], dice), False, ["baseitems", 0, "base_dice"])
 
@@ -187,10 +187,10 @@ class ArtifactDefinitionValidationTest(unittest.TestCase):
         self.assertTrue(ok, message)
 
     def test_dice_matches_reader(self):
-        for dice in ("1d4", "0d0", "-1d-2", "2147483647d1", "0" * 5000 + "1d4"):
+        for dice in ("1d4", "0d0", "255d255", "0" * 5000 + "1d4"):
             with self.subTest(dice=dice[-8:]):
                 self.check({**self.sample, "base_dice": dice}, True)
-        for dice in ("d", "1d", "1d4\n", "1d2d3", "+1d4", "2147483648d1"):
+        for dice in ("d", "1d", "1d4\n", "1d2d3", "+1d4", "2147483648d1", "-1d2", "1d-1", "256d1", "1d256"):
             with self.subTest(dice=dice):
                 self.check({**self.sample, "base_dice": dice}, False, ["artifacts", 0, "base_dice"])
 

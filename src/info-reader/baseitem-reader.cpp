@@ -114,7 +114,8 @@ int BaseitemReader::read() const
         msg_print(_("アイテムのベースAC読込失敗。ID: '{}'。", "Failed to load base AC of item. ID: '{}'."), error_idx);
         return err;
     }
-    if (auto err = info_set_dice(get_json_value(this->baseitem_data, "base_dice"), baseitem.damage_dice, false)) {
+    // セーブではダイスの個数・面数をそれぞれ1バイトで書くため、0〜255に限る。
+    if (auto err = info_set_dice(get_json_value(this->baseitem_data, "base_dice"), baseitem.damage_dice, false, Range(0, 255))) {
         msg_print(_("アイテムのベースダイス読込失敗。ID: '{}'。", "Failed to load base dice of item. ID: '{}'."), error_idx);
         return err;
     }
