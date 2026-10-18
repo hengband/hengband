@@ -237,7 +237,7 @@ void do_cmd_wield(PlayerType *player_ptr)
     }
 
     auto should_equip_cursed = item_chosen->is_cursed() && item_chosen->is_known();
-    should_equip_cursed |= item_chosen->has_identification_flag(IdentificationFlag::SENSE) && (FEEL_BROKEN <= item_chosen->feeling) && (item_chosen->feeling <= FEEL_CURSED);
+    should_equip_cursed |= item_chosen->has_identification_flag(IdentificationFlag::SENSE) && is_cursed_feeling(item_chosen->feeling);
     should_equip_cursed &= confirm_wear;
     if (should_equip_cursed) {
         const auto item_name = describe_flavor(player_ptr, *item_chosen, (OD_OMIT_PREFIX | OD_NAME_ONLY));

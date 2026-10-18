@@ -17,3 +17,16 @@ enum item_feel_type {
     FEEL_SPECIAL = 9, /*!< 簡易鑑定: 特別 */
     FEEL_MAX = 9, /*!< 簡易鑑定の種別数 */
 };
+
+/*!
+ * @brief 呪われていることを表す感触か
+ * @param feel 感触
+ * @return 恐ろしい・無価値・呪われているなら true
+ * @details 恐ろしい (アーティファクト)・無価値 (エゴ) は、呪われているか壊れているときに付くので、呪われているかもしれないことを表す。
+ * 擬似鑑定は呪いを壊れより先に判定するので、壊れているの感触は、付けた時点で呪われていない品にしか付かない
+ * (後から呪いが付いたときは感触を消す扱いにそろえる、#5889)。
+ */
+constexpr bool is_cursed_feeling(int feel)
+{
+    return (feel == FEEL_TERRIBLE) || (feel == FEEL_WORTHLESS) || (feel == FEEL_CURSED);
+}
