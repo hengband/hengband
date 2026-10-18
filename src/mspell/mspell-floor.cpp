@@ -356,8 +356,10 @@ MonsterSpellResult spell_RF6_TELE_LEVEL(PlayerType *player_ptr, MONSTER_IDX m_id
     resist = monrace_target.resistance_flags.has_any_of(RFR_EFF_RESIST_NEXUS_MASK) || monrace_target.resistance_flags.has(MonsterResistanceType::RESIST_TELEPORT);
     saving_throw = (monrace_target.misc_flags.has(MonsterMiscType::QUESTOR)) || (monrace_target.level > randint1((rlev - 10) < 1 ? 1 : (rlev - 10)) + 10);
 
-    mspell_cast_msg_bad_status_to_monster msg(_("{}が{}の足を指さした。", "{} gestures at {}'s feet."),
-        _("{}には効果がなかった。", "{} is unaffected!"), _("{}は効力を跳ね返した！", "{} resist the effects!"), "");
+    using DefaultFormat = mspell_cast_msg_bad_status_to_monster::DefaultFormat;
+    const auto t_name = monster_name(player_ptr, t_idx);
+    const auto msg_default = (t_name == "it") ? DefaultFormat(_("{}が{}の足を指さした。", "{} gestures at {}s feet.")) : DefaultFormat(_("{}が{}の足を指さした。", "{} gestures at {}'s feet."));
+    mspell_cast_msg_bad_status_to_monster msg(msg_default, _("{}には効果がなかった。", "{} is unaffected!"), _("{}は効力を跳ね返した！", "{} resists the effects!"), "");
 
     spell_badstatus_message_to_mons(player_ptr, m_idx, t_idx, msg, resist, saving_throw);
 
