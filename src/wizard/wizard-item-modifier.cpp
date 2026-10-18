@@ -773,6 +773,12 @@ void wiz_modify_item(PlayerType *player_ptr)
         rfu.request_inventory_arrangement();
         rfu.request_item_lists_redrawing();
     } else {
+        // 作り直しで作った固定アーティファクトは捨てるので、生成していないことにする。
+        // 元の品と同じアーティファクトなら、印は元の品のものなので残す
+        if (modified_item.is_fixed_artifact() && !item->is_specific_artifact(modified_item.fa_id)) {
+            modified_item.set_fixed_artifact_generated(false);
+        }
+
         msg_print("Changes ignored.");
     }
 }
