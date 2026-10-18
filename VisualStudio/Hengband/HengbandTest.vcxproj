@@ -123,7 +123,6 @@
     <ClCompile Include="..\..\src\test\system\test-dungeon-record.cpp" />
     <ClCompile Include="..\..\src\test\system\test-quest-list.cpp" />
     <ClCompile Include="..\..\src\test\system\test-redrawing-flags-updater.cpp" />
-    <ClCompile Include="..\..\src\test\term\test-z-form.cpp" />
     <ClCompile Include="..\..\src\test\term\test-z-rand.cpp" />
     <ClCompile Include="..\..\src\test\test-main.cpp" />
     <ClCompile Include="..\..\src\test\timed-effect\test-player-cut.cpp" />

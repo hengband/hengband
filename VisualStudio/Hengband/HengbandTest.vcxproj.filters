@@ -286,9 +286,6 @@
     <ClCompile Include="..\..\src\test\system\test-redrawing-flags-updater.cpp">
       <Filter>system</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\test\term\test-z-form.cpp">
-      <Filter>term</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\test\term\test-z-rand.cpp">
       <Filter>term</Filter>
     </ClCompile>

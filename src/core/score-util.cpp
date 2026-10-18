@@ -38,7 +38,7 @@ errr highscore_read(high_score *score)
 
 void high_score::copy_info(const PlayerType &player)
 {
-    // 15 バイトで切ると 2 バイト文字が途中で切れるときは、前半の 1 バイトの代わりに空白を置く (z-form の「%-.15s」と同じ)
+    // 15 バイトで切ると 2 バイト文字が途中で切れるときは、前半の 1 バイトの代わりに空白を置く
     auto name = str_substr(player.name, 0, 15);
     if (name.length() < std::min<size_t>(std::string_view(player.name).length(), 15)) {
         name.push_back(' ');

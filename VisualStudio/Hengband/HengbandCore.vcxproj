@@ -856,7 +856,6 @@
     <ClCompile Include="..\..\src\target\target.cpp" />
     <ClCompile Include="..\..\src\term\gameterm.cpp" />
     <ClCompile Include="..\..\src\term\screen-processor.cpp" />
-    <ClCompile Include="..\..\src\term\z-form.cpp" />
     <ClCompile Include="..\..\src\term\z-rand.cpp" />
     <ClCompile Include="..\..\src\term\z-term.cpp" />
     <ClCompile Include="..\..\src\term\z-util.cpp" />
@@ -1876,7 +1875,6 @@
     <ClInclude Include="..\..\src\term\gameterm.h" />
     <ClInclude Include="..\..\src\term\screen-processor.h" />
     <ClInclude Include="..\..\src\term\term-color-types.h" />
-    <ClInclude Include="..\..\src\term\z-form.h" />
     <ClInclude Include="..\..\src\term\z-rand.h" />
     <ClInclude Include="..\..\src\term\z-term.h" />
     <ClInclude Include="..\..\src\term\z-util.h" />

@@ -2746,9 +2746,6 @@
     <ClCompile Include="..\..\src\term\screen-processor.cpp">
       <Filter>term</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\term\z-form.cpp">
-      <Filter>term</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\term\z-rand.cpp">
       <Filter>term</Filter>
     </ClCompile>
@@ -5798,9 +5795,6 @@
       <Filter>term</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\term\term-color-types.h">
-      <Filter>term</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\term\z-form.h">
       <Filter>term</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\term\z-rand.h">
