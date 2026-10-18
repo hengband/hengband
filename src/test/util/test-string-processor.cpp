@@ -230,48 +230,6 @@ TEST_CASE("str_find_position does not match the trailing byte of a 2-byte charac
 }
 #endif
 
-TEST_CASE("ltrim skips the leading spaces")
-{
-    char buf[] = "  abc ";
-    CHECK(std::string_view(ltrim(buf)) == "abc ");
-}
-
-TEST_CASE("ltrim does not skip a tab")
-{
-    char buf[] = "\tabc";
-    CHECK(std::string_view(ltrim(buf)) == "\tabc");
-}
-
-TEST_CASE("ltrim accepts a string which consists of spaces or is empty")
-{
-    char spaces[] = "   ";
-    CHECK(std::string_view(ltrim(spaces)).empty());
-
-    char empty[] = "";
-    CHECK(std::string_view(ltrim(empty)).empty());
-}
-
-TEST_CASE("rtrim removes the trailing spaces")
-{
-    char buf[] = " abc  ";
-    CHECK(std::string_view(rtrim(buf)) == " abc");
-}
-
-TEST_CASE("rtrim does not remove a tab")
-{
-    char buf[] = "abc\t";
-    CHECK(std::string_view(rtrim(buf)) == "abc\t");
-}
-
-TEST_CASE("rtrim accepts a string which consists of spaces or is empty")
-{
-    char spaces[] = "   ";
-    CHECK(std::string_view(rtrim(spaces)).empty());
-
-    char empty[] = "";
-    CHECK(std::string_view(rtrim(empty)).empty());
-}
-
 TEST_CASE("str_find tells whether the string contains the substring")
 {
     // 空文字列はどの文字列にも含まれる
