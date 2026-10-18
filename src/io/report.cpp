@@ -8,7 +8,6 @@
 #include "io/report.h"
 #include "core/asking-player.h"
 #include "core/visuals-reseter.h"
-#include "core/window-redrawer.h"
 #include "game-option/special-options.h"
 #include "io-dump/character-dump.h"
 #include "io/input-key-acceptor.h"
@@ -27,7 +26,6 @@
 #include "system/floor/floor-info.h"
 #include "system/inner-game-data.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "system/system-variables.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
@@ -150,18 +148,12 @@ std::string make_screen_dump(PlayerType *player_ptr)
     const auto &[wid, hgt] = term_get_size();
     std::stringstream screen_ss;
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    bool old_use_graphics = use_graphics;
-    if (old_use_graphics) {
+    if (use_graphics) {
         /* Clear -more- prompt first */
         msg_erase();
-
-        use_graphics = false;
-        reset_visuals(player_ptr);
-
-        rfu.request_whole_main_window_redrawing();
-        redraw_stuff(player_ptr);
     }
+
+    const GraphicsSuspender graphics_suspender(player_ptr);
 
     screen_ss << html_head;
 
@@ -227,21 +219,12 @@ std::string make_screen_dump(PlayerType *player_ptr)
 
     screen_ss << html_foot;
 
-    std::string ret;
     if (const auto screen_dump_size = screen_ss.tellp();
         (0 <= screen_dump_size) && (screen_dump_size < SCREEN_BUF_MAX_SIZE)) {
-        ret = screen_ss.str();
+        return screen_ss.str();
     }
 
-    if (!old_use_graphics) {
-        return ret;
-    }
-
-    use_graphics = true;
-    reset_visuals(player_ptr);
-    rfu.request_whole_main_window_redrawing();
-    redraw_stuff(player_ptr);
-    return ret;
+    return {};
 }
 
 /*!
