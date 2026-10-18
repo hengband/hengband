@@ -642,10 +642,6 @@ static void wiz_reroll_item(PlayerType *player_ptr, ItemEntity *o_ptr)
     }
 
     *o_ptr = std::move(item);
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.set_flag(StatusRecalculatingFlag::BONUS);
-    rfu.request_inventory_arrangement();
-    rfu.request_item_lists_redrawing();
 }
 
 /*!
@@ -769,7 +765,8 @@ void wiz_modify_item(PlayerType *player_ptr)
 
         *item = std::move(modified_item);
         auto &rfu = RedrawingFlagsUpdater::get_instance();
-        rfu.set_flag(StatusRecalculatingFlag::BONUS);
+        // 装備品なら、修正値・エゴ・アーティファクトの能力が変わる
+        rfu.request_equipment_change_updates();
         rfu.request_inventory_arrangement();
         rfu.request_item_lists_redrawing();
     } else {
