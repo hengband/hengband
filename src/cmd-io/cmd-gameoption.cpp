@@ -28,6 +28,7 @@
 #include "view/display-messages.h"
 #include "view/display-symbol.h"
 #include "world/world.h"
+#include <fmt/format.h>
 #include <string>
 
 namespace {
@@ -107,10 +108,10 @@ static void do_cmd_options_autosave(PlayerType *player_ptr, std::string_view inf
             }
 
             const auto &autosave = autosave_info[i];
-            c_prt(a, format("%-48s: %s (%s)", autosave.description.data(), (*autosave.value ? _("はい  ", "yes") : _("いいえ", "no ")), autosave.text.data()), i + 2, 0);
+            c_prt(a, fmt::format("{:<48}: {} ({})", fmt::bytes(autosave.description), (*autosave.value ? _("はい  ", "yes") : _("いいえ", "no ")), autosave.text), i + 2, 0);
         }
 
-        prt(format(_("自動セーブの頻度： %d ターン毎", "Timed autosave frequency: every %d turns"), autosave_freq), 5, 0);
+        prt(fmt::format(_("自動セーブの頻度： {} ターン毎", "Timed autosave frequency: every {} turns"), autosave_freq), 5, 0);
         move_cursor(k + 2, 50);
         auto ch = inkey();
         auto &autosave = autosave_info[k];
@@ -142,7 +143,7 @@ static void do_cmd_options_autosave(PlayerType *player_ptr, std::string_view inf
         case 'f':
         case 'F':
             autosave_freq = toggle_frequency(autosave_freq);
-            prt(format(_("自動セーブの頻度： %d ターン毎", "Timed autosave frequency: every %d turns"), autosave_freq), 5, 0);
+            prt(fmt::format(_("自動セーブの頻度： {} ターン毎", "Timed autosave frequency: every {} turns"), autosave_freq), 5, 0);
             break;
         case '?':
             FileDisplayer(player_ptr->name).display(true, _("joption.txt#Autosave", "option.txt#Autosave"), 0, 0);
@@ -345,7 +346,7 @@ static void do_cmd_options_cheat(const FloorType &floor, std::string_view player
 
             const auto &cheat = cheat_info[i];
             const auto yesno = *cheat.value ? _("はい  ", "yes") : _("いいえ", "no ");
-            c_prt(enum2i(a), format("%-48s: %s (%s)", cheat.description.data(), yesno, cheat.text.data()), i + 2, 0);
+            c_prt(enum2i(a), fmt::format("{:<48}: {} ({})", fmt::bytes(cheat.description), yesno, cheat.text), i + 2, 0);
         }
 
         move_cursor(k + 2, 50);
@@ -448,7 +449,7 @@ void do_cmd_options(PlayerType *player_ptr)
                 if (i == y) {
                     a = TERM_L_BLUE;
                 }
-                term_putstr(5, option_fields[i].row, -1, a, format("(%c) %s", toupper(option_fields[i].key), option_fields[i].name.data()));
+                term_putstr(5, option_fields[i].row, -1, a, fmt::format("({:c}) {}", toupper(option_fields[i].key), option_fields[i].name));
             }
 
             prt(_("<方向>で移動, Enterで決定, ESCでキャンセル, ?でヘルプ: ", "Move to <dir>, Select to Enter, Cancel to ESC, ? to help: "), 21, 0);
@@ -565,7 +566,7 @@ void do_cmd_options(PlayerType *player_ptr)
         case 'D':
         case 'd': {
             clear_from(18);
-            prt(format(_("現在ウェイト量(msec): %d", "Current Delay Factor(msec): %d"), delay_factor), 19, 0);
+            prt(fmt::format(_("現在ウェイト量(msec): {}", "Current Delay Factor(msec): {}"), delay_factor), 19, 0);
             constexpr auto prompt = _("コマンド: ウェイト量(msec)", "Command: Delay Factor(msec)");
             const auto new_delay_factor = input_integer(prompt, 0, 1000, delay_factor);
             if (new_delay_factor) {
@@ -580,7 +581,7 @@ void do_cmd_options(PlayerType *player_ptr)
             clear_from(18);
             prt(_("コマンド: 低ヒットポイント警告", "Command: Hitpoint Warning"), 19, 0);
             while (true) {
-                prt(format(_("現在の低ヒットポイント警告: %d0%%", "Current hitpoint warning: %d0%%"), hitpoint_warn), 22, 0);
+                prt(fmt::format(_("現在の低ヒットポイント警告: {}0%", "Current hitpoint warning: {}0%"), hitpoint_warn), 22, 0);
                 prt(_("低ヒットポイント警告 (0-9) ESCで決定: ", "Hitpoint Warning (0-9 or ESC to accept): "), 20, 0);
                 k = inkey();
                 if (k == ESCAPE) {
@@ -602,7 +603,7 @@ void do_cmd_options(PlayerType *player_ptr)
             clear_from(18);
             prt(_("コマンド: 低魔力色閾値", "Command: Mana Color Threshold"), 19, 0);
             while (true) {
-                prt(format(_("現在の低魔力色閾値: %d0%%", "Current mana color threshold: %d0%%"), mana_warn), 22, 0);
+                prt(fmt::format(_("現在の低魔力色閾値: {}0%", "Current mana color threshold: {}0%"), mana_warn), 22, 0);
                 prt(_("低魔力閾値 (0-9) ESCで決定: ", "Mana color Threshold (0-9 or ESC to accept): "), 20, 0);
                 k = inkey();
                 if (k == ESCAPE) {
@@ -678,7 +679,7 @@ void do_cmd_options_aux(PlayerType *player_ptr, GameOptionPage page, std::string
 
             const auto &option = option_info[opt[i]];
             const auto reply = *option.value ? _("はい  ", "yes") : _("いいえ", "no ");
-            const auto label = format("%-48s: %s (%.19s)", option.description.data(), reply, option.text.data());
+            const auto label = fmt::format("{:<48}: {} ({})", fmt::bytes(option.description), reply, str_substr(option.text, 0, 19));
             if ((page == GameOptionPage::AUTODESTROY) && i > 2) {
                 c_prt(a, label, i + 5, 0);
             } else {

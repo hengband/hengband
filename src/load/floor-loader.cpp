@@ -30,6 +30,7 @@
 #include "term/z-form.h"
 #include "util/angband-files.h"
 #include "util/finalizer.h"
+#include <fmt/format.h>
 
 /*!
  * @brief 保存されたフロアを読み込む / Read the saved floor
@@ -282,7 +283,7 @@ bool load_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mode
     }
 
     auto floor_savefile = savefile.string();
-    const auto ext = format(".F%02d", (int)sf_ptr->savefile_id);
+    const auto ext = fmt::format(".F{:02}", sf_ptr->savefile_id);
     floor_savefile.append(ext);
 
     safe_setuid_grab();

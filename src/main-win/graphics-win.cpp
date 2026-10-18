@@ -8,6 +8,7 @@
 #include "main-win/main-win-utils.h"
 #include "system/system-variables.h"
 #include "util/angband-files.h"
+#include <fmt/format.h>
 #include <gdiplus.h>
 
 // Flag set once "GDI+" has been initialized
@@ -116,7 +117,7 @@ graphics_mode change_graphics(graphics_mode arg)
     const auto path = path_build(ANGBAND_DIR_XTRA_GRAF, name);
     infGraph.hBitmap = read_graphic(path);
     if (!infGraph.hBitmap) {
-        plog_fmt(_("ビットマップ '%s' を読み込めません。", "Cannot read bitmap file '%s'"), name.data());
+        plog(fmt::format(_("ビットマップ '{}' を読み込めません。", "Cannot read bitmap file '{}'"), name));
         ANGBAND_GRAF = "ascii";
         current_graphics_mode = graphics_mode::GRAPHICS_NONE;
         return current_graphics_mode;
@@ -141,7 +142,7 @@ graphics_mode change_graphics(graphics_mode arg)
         return arg;
     }
 
-    plog_fmt(_("ビットマップ '%s' を読み込めません。", "Cannot read bitmap file '%s'"), name_mask.data());
+    plog(fmt::format(_("ビットマップ '{}' を読み込めません。", "Cannot read bitmap file '{}'"), name_mask));
     ANGBAND_GRAF = "ascii";
     current_graphics_mode = graphics_mode::GRAPHICS_NONE;
     return current_graphics_mode;

@@ -34,6 +34,7 @@
 #include "view/display-player.h"
 #include "view/display-scores.h"
 #include "world/world.h"
+#include <fmt/format.h>
 
 static void clear_floor(PlayerType *player_ptr)
 {
@@ -118,11 +119,11 @@ static void kingly(PlayerType *player_ptr)
 #ifdef JP
     put_str("Veni, Vidi, Vici!", 15, 31);
     put_str("来た、見た、勝った！", 16, 30);
-    put_str(format("偉大なる%s万歳！", sp_ptr->winner.data()), 17, 29);
+    put_str(fmt::format("偉大なる{}万歳！", sp_ptr->winner), 17, 29);
 #else
     put_str("Veni, Vidi, Vici!", 15, 31);
     put_str("I came, I saw, I conquered!", 16, 26);
-    put_str(format("All Hail the Mighty %s!", sp_ptr->winner.data()), 17, 27);
+    put_str(fmt::format("All Hail the Mighty {}!", sp_ptr->winner), 17, 27);
 #endif
 
     if (!seppuku) {

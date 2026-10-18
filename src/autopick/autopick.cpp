@@ -34,6 +34,7 @@
 #include "term/screen-processor.h"
 #include "view/display-messages.h"
 #include "window/display-sub-windows.h"
+#include <fmt/format.h>
 #include <range/v3/view.hpp>
 #include <sstream>
 
@@ -55,7 +56,7 @@ static void autopick_delayed_alter_aux(PlayerType *player_ptr, INVENTORY_IDX i_i
         delete_object_idx(player_ptr, 0 - i_idx);
     }
 
-    msg_format(_("%sを自動破壊します。", "Auto-destroying %s."), item_name.data());
+    msg_print(_("{}を自動破壊します。", "Auto-destroying {}."), item_name);
 }
 
 /*!
@@ -121,7 +122,7 @@ void autopick_pickup_items(PlayerType *player_ptr, const Grid &grid)
         disturb(player_ptr, false, false);
         if (!check_store_item_to_inventory(player_ptr, &item)) {
             const auto item_name = describe_flavor(player_ptr, item, 0);
-            msg_format(_("ザックには%sを入れる隙間がない。", "You have no room for %s."), item_name.data());
+            msg_print(_("ザックには{}を入れる隙間がない。", "You have no room for {}."), item_name);
             item.marked.set(OmType::SUPRESS_MESSAGE);
             continue;
         }

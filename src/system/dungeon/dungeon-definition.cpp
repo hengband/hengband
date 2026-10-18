@@ -13,6 +13,7 @@
 #include "term/z-form.h"
 #include "term/z-rand.h"
 #include <algorithm>
+#include <fmt/format.h>
 
 bool DungeonDefinition::has_river_flag() const
 {
@@ -120,13 +121,13 @@ bool DungeonDefinition::is_conquered() const
 
 std::string DungeonDefinition::build_entrance_message() const
 {
-    constexpr auto fmt = _("ここには%sの入り口(%d階相当)があります", "There is the entrance of %s (Danger level: %d)");
-    return format(fmt, this->name.data(), this->mindepth);
+    constexpr auto fmt = _("ここには{}の入り口({}階相当)があります", "There is the entrance of {} (Danger level: {})");
+    return fmt::format(fmt, this->name, this->mindepth);
 }
 
 std::string DungeonDefinition::describe_depth() const
 {
-    return format(_("%s(%d階相当)", "%s(level %d)"), this->text.data(), this->mindepth);
+    return fmt::format(_("{}({}階相当)", "{}(level {})"), this->text, this->mindepth);
 }
 
 /*

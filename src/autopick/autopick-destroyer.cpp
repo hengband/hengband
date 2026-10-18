@@ -29,6 +29,7 @@
 #include "system/redrawing-flags-updater.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
+#include <fmt/format.h>
 
 /*!
  * @brief クラス依存のアイテム破壊を調べる
@@ -150,7 +151,7 @@ void auto_destroy_item(PlayerType *player_ptr, ItemEntity *o_ptr, int autopick_i
     disturb(player_ptr, false, false);
     if (!can_player_destroy_object(o_ptr)) {
         const auto item_name = describe_flavor(player_ptr, *o_ptr, 0);
-        msg_format(_("%sは破壊不能だ。", "You cannot auto-destroy %s."), item_name.data());
+        msg_print(_("{}は破壊不能だ。", "You cannot auto-destroy {}."), item_name);
         return;
     }
 

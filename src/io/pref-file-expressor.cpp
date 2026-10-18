@@ -8,6 +8,7 @@
 #include "system/player-type-definition.h"
 #include "system/system-variables.h"
 #include "term/z-form.h"
+#include <fmt/format.h>
 
 /*!
  * @brief 設定ファイルと町のマップの条件式に共通の変数の値を返す
@@ -57,13 +58,13 @@ static tl::optional<std::string> resolve_pref_file_variable(PlayerType *player_p
         return std::string(ANGBAND_KEYBOARD);
     }
     if (name == "LEVEL") {
-        return format("%02d", player_ptr->lev);
+        return fmt::format("{:02}", player_ptr->lev);
     }
     if (name == "AUTOREGISTER") {
         return player_ptr->autopick_autoregister ? "1" : "0";
     }
     if (name == "MONEY") {
-        return format("%09ld", (long int)player_ptr->au);
+        return fmt::format("{:09}", player_ptr->au);
     }
 
     return resolve_common_expression_variable(player_ptr, name);

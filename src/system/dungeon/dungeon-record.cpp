@@ -42,7 +42,7 @@ int DungeonRecord::get_max_max_level() const
 void DungeonRecord::set_max_level(int level)
 {
     if (level <= 0) {
-        THROW_EXCEPTION(std::logic_error, format("Invalid dungeon level: %d", level));
+        THROW_EXCEPTION(std::logic_error, fmt::format("Invalid dungeon level: {}", level));
     }
 
     this->max_level = level;

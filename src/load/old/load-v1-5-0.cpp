@@ -49,6 +49,7 @@
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
 #include "world/world.h"
+#include <fmt/format.h>
 
 /* Old hidden trap flag */
 static const BIT_FLAGS CAVE_TRAP = 0x8000;
@@ -711,7 +712,7 @@ errr rd_dungeon_old(PlayerType *player_ptr)
 
     uint16_t limit = rd_u16b();
     if (limit > MAX_FLOOR_ITEMS) {
-        load_note(format(_("アイテムの配列が大きすぎる(%d)！", "Too many (%d) object entries!"), limit));
+        load_note(fmt::format(_("アイテムの配列が大きすぎる({})！", "Too many ({}) object entries!"), limit));
         return 151;
     }
 
@@ -719,7 +720,7 @@ errr rd_dungeon_old(PlayerType *player_ptr)
     for (int i = 1; i < limit; i++) {
         const auto item_idx = floor.pop_empty_index_item();
         if (i != item_idx) {
-            load_note(format(_("アイテム配置エラー (%d <> %d)", "Object allocation error (%d <> %d)"), i, item_idx));
+            load_note(fmt::format(_("アイテム配置エラー ({} <> {})", "Object allocation error ({} <> {})"), i, item_idx));
             return 152;
         }
 
@@ -731,7 +732,7 @@ errr rd_dungeon_old(PlayerType *player_ptr)
 
     limit = rd_u16b();
     if (limit > MAX_FLOOR_MONSTERS) {
-        load_note(format(_("モンスターの配列が大きすぎる(%d)！", "Too many (%d) monster entries!"), limit));
+        load_note(fmt::format(_("モンスターの配列が大きすぎる({})！", "Too many ({}) monster entries!"), limit));
         return 161;
     }
 
@@ -739,7 +740,7 @@ errr rd_dungeon_old(PlayerType *player_ptr)
     for (int i = 1; i < limit; i++) {
         const auto m_idx = floor.pop_empty_index_monster();
         if (i != m_idx) {
-            load_note(format(_("モンスター配置エラー (%d <> %d)", "Monster allocation error (%d <> %d)"), i, m_idx));
+            load_note(fmt::format(_("モンスター配置エラー ({} <> {})", "Monster allocation error ({} <> {})"), i, m_idx));
             return 162;
         }
 

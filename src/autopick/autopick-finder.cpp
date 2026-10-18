@@ -22,6 +22,7 @@
 #include "term/term-color-types.h"
 #include "util/int-char-converter.h"
 #include "util/string-processor.h"
+#include <fmt/format.h>
 
 /*!
  * @brief 与えられたアイテムが自動拾いのリストに登録されているかどうかを検索する
@@ -63,7 +64,7 @@ bool get_object_for_search(PlayerType *player_ptr, AutopickSearch &as)
 
     as.item = item;
     const auto item_name = describe_flavor(player_ptr, *as.item, (OD_NO_FLAVOR | OD_OMIT_PREFIX | OD_NO_PLURAL));
-    as.search_str = format("<%s>", item_name.data());
+    as.search_str = fmt::format("<{}>", item_name);
     return true;
 }
 
@@ -78,7 +79,7 @@ bool get_destroyed_object_for_search(PlayerType *player_ptr, AutopickSearch &as)
 
     as.item = std::shared_ptr<ItemEntity>(&autopick_last_destroyed_object, [](ItemEntity *) {});
     const auto item_name = describe_flavor(player_ptr, *as.item, (OD_NO_FLAVOR | OD_OMIT_PREFIX | OD_NO_PLURAL));
-    as.search_str = format("<%s>", item_name.data());
+    as.search_str = fmt::format("<{}>", item_name);
     return true;
 }
 

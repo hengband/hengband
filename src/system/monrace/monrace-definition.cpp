@@ -12,6 +12,7 @@
 #include "util/enum-converter.h"
 #include "world/world.h"
 #include <algorithm>
+#include <fmt/format.h>
 #ifdef JP
 #else
 #include "locale/english.h"
@@ -786,14 +787,14 @@ tl::optional<std::string> MonraceDefinition::probe_lore()
     }
 
 #ifdef JP
-    return format("%sについてさらに詳しくなった気がする。", this->name.data());
+    return fmt::format("{}についてさらに詳しくなった気がする。", this->name);
 #else
     const char *preamble = "You now know more about ";
     if (this->kind_flags.has(MonsterKindType::UNIQUE)) {
-        return format("%s%s.", preamble, this->name.data());
+        return fmt::format("{}{}.", preamble, this->name);
     }
     const auto nm = pluralize(this->name);
-    return format("%s%s.", preamble, nm.data());
+    return fmt::format("{}{}.", preamble, nm);
 #endif
 }
 

@@ -31,9 +31,9 @@ static void display_diary(PlayerType *player_ptr)
     const auto choice = Rand_external(subtitle_candidates.size());
     const auto &subtitle = subtitle_candidates[choice];
 #ifdef JP
-    const auto diary_title = format("「%s%s%sの伝説 -%s-」", ap_ptr->title.data(), ap_ptr->no ? "の" : "", player_ptr->name, subtitle.data());
+    const auto diary_title = fmt::format("「{}{}{}の伝説 -{}-」", ap_ptr->title, ap_ptr->no ? "の" : "", player_ptr->name, subtitle);
 #else
-    const auto diary_title = format("Legend of %s %s '%s'", ap_ptr->title.data(), player_ptr->name, subtitle.data());
+    const auto diary_title = fmt::format("Legend of {} {} '{}'", ap_ptr->title, player_ptr->name, subtitle);
 #endif
 
     std::stringstream ss;
@@ -92,10 +92,10 @@ static void do_cmd_erase_diary()
     auto *fff = angband_fopen(path, FileOpenMode::WRITE);
     if (fff) {
         angband_fclose(fff);
-        msg_format(_("記録を消去しました。", "deleted record."));
+        msg_print(_("記録を消去しました。", "deleted record."));
     } else {
         const auto &filename = path.string();
-        msg_format(_("%s の消去に失敗しました。", "failed to delete %s."), filename.data());
+        msg_print(_("{} の消去に失敗しました。", "failed to delete {}."), filename);
     }
 
     msg_erase();

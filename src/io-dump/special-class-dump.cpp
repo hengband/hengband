@@ -55,7 +55,7 @@ static void dump_magic_eater(PlayerType *player_ptr, FILE *fff)
             }
 
             const auto &baseitem = baseitems.lookup_baseitem({ tval, i });
-            const auto buf = format("%23s (%2d)", baseitem.name.data(), item.count);
+            const auto buf = fmt::format("{:>23} ({:2})", fmt::bytes(baseitem.name), item.count);
             desc_list.emplace_back(buf);
         }
 

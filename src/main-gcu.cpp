@@ -176,6 +176,7 @@
 #include "util/enum-range.h"
 #include "view/display-map.h"
 #include <filesystem>
+#include <fmt/format.h>
 #include <map>
 #include <string>
 #include <string_view>
@@ -1293,7 +1294,7 @@ errr init_gcu(int argc, char *argv[])
     quit_aux = hook_quit;
     core_aux = hook_quit;
     if ((curses::LINES < MAIN_TERM_MIN_ROWS) || (curses::COLS < MAIN_TERM_MIN_COLS)) {
-        quit_fmt("%s needs an %dx%d 'curses' screen", std::string(VARIANT_NAME).data(), MAIN_TERM_MIN_COLS, MAIN_TERM_MIN_ROWS);
+        quit(fmt::format("{} needs an {}x{} 'curses' screen", VARIANT_NAME, MAIN_TERM_MIN_COLS, MAIN_TERM_MIN_ROWS));
     }
 
 #ifdef A_COLOR
@@ -1503,13 +1504,13 @@ errr init_gcu(int argc, char *argv[])
 
                 i++;
                 if (i >= argc) {
-                    quit_fmt("Missing size specifier for -%s", left ? "left" : "right");
+                    quit(fmt::format("Missing size specifier for -{}", left ? "left" : "right"));
                 }
 
                 arg = argv[i];
                 tmp = strchr(arg, 'x');
                 if (!tmp) {
-                    quit_fmt("Expected something like -%s 60x27,* for two %s hand terminals of 60 columns, the first 27 lines and the second whatever is left.", left ? "left" : "right", left ? "left" : "right");
+                    quit(fmt::format("Expected something like -{0} 60x27,* for two {0} hand terminals of 60 columns, the first 27 lines and the second whatever is left.", left ? "left" : "right"));
                 }
                 cx = atoi(arg);
                 remaining.cx -= cx;
@@ -1534,11 +1535,10 @@ errr init_gcu(int argc, char *argv[])
                         cy = remaining.y + remaining.cy - y;
                     }
                     if (next_term >= MAX_TERM_DATA) {
-                        quit_fmt("Too many terminals. Only %d are allowed.", MAX_TERM_DATA);
+                        quit(fmt::format("Too many terminals. Only {} are allowed.", MAX_TERM_DATA));
                     }
                     if (cy <= 0) {
-                        quit_fmt("Out of bounds in -%s: %d is too large (%d rows max for this strip)",
-                            left ? "left" : "right", cys[j], remaining.cy);
+                        quit(fmt::format("Out of bounds in -{}: {} is too large ({} rows max for this strip)", left ? "left" : "right", cys[j], remaining.cy));
                     }
                     data[next_term++].r = rect(x, y, cx, cy);
                     y += cy + spacer_cy;
@@ -1551,13 +1551,13 @@ errr init_gcu(int argc, char *argv[])
 
                 i++;
                 if (i >= argc) {
-                    quit_fmt("Missing size specifier for -%s", top ? "top" : "bottom");
+                    quit(fmt::format("Missing size specifier for -{}", top ? "top" : "bottom"));
                 }
 
                 arg = argv[i];
                 tmp = strchr(arg, 'x');
                 if (!tmp) {
-                    quit_fmt("Expected something like -%s *x7 for a single %s terminal of 7 lines using as many columns as are available.", top ? "top" : "bottom", top ? "top" : "bottom");
+                    quit(fmt::format("Expected something like -{0} *x7 for a single {0} terminal of 7 lines using as many columns as are available.", top ? "top" : "bottom"));
                 }
                 tmp++;
                 cy = atoi(tmp);
@@ -1584,11 +1584,10 @@ errr init_gcu(int argc, char *argv[])
                         cx = remaining.x + remaining.cx - x;
                     }
                     if (next_term >= MAX_TERM_DATA) {
-                        quit_fmt("Too many terminals. Only %d are allowed.", MAX_TERM_DATA);
+                        quit(fmt::format("Too many terminals. Only {} are allowed.", MAX_TERM_DATA));
                     }
                     if (cx <= 0) {
-                        quit_fmt("Out of bounds in -%s: %d is too large (%d cols max for this strip)",
-                            top ? "top" : "bottom", cxs[j], remaining.cx);
+                        quit(fmt::format("Out of bounds in -{}: {} is too large ({} cols max for this strip)", top ? "top" : "bottom", cxs[j], remaining.cx));
                     }
                     data[next_term++].r = rect(x, y, cx, cy);
                     x += cx + spacer_cx;
@@ -1599,7 +1598,7 @@ errr init_gcu(int argc, char *argv[])
 
         /* Map Terminal */
         if (remaining.cx < MAIN_TERM_MIN_COLS || remaining.cy < MAIN_TERM_MIN_ROWS) {
-            quit_fmt("Failed: %s needs an %dx%d map screen, not %dx%d", std::string(VARIANT_NAME).data(), MAIN_TERM_MIN_COLS, MAIN_TERM_MIN_ROWS, remaining.cx, remaining.cy);
+            quit(fmt::format("Failed: {} needs an {}x{} map screen, not {}x{}", VARIANT_NAME, MAIN_TERM_MIN_COLS, MAIN_TERM_MIN_ROWS, remaining.cx, remaining.cy));
         }
         data[0].r = remaining;
         term_data_init(&data[0]);

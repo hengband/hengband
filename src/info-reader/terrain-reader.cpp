@@ -10,6 +10,7 @@
 #include "view/display-messages.h"
 #include <algorithm>
 #include <cstdint>
+#include <fmt/format.h>
 #include <nlohmann/json.hpp>
 #include <optional>
 #include <string>
@@ -207,7 +208,7 @@ tl::expected<void, parse_error_type> TerrainReader::set_terrain_symbol(TerrainTy
     const auto color_name = color_obj.get<std::string>();
     const auto it = color_list.find(color_name);
     if (it == color_list.end()) {
-        msg_format(_("未知の色 '%s'。", "Unknown color '%s'."), color_name.c_str());
+        msg_print(_("未知の色 '{}'。", "Unknown color '{}'."), color_name);
         return tl::make_unexpected(PARSE_ERROR_INVALID_FLAG);
     }
     if (it->second > 127) {
@@ -657,7 +658,7 @@ tl::expected<void, parse_error_type> TerrainReader::set_terrain_interactions(Ter
                 terrain.flags.set(TerrainCharacteristics::MAY_HAVE_GOLD);
             }
         } else {
-            msg_format(_("未知の地形アクション '%s'。", "Unknown feature action '%s'."), action.data());
+            msg_print(_("未知の地形アクション '{}'。", "Unknown feature action '{}'."), action);
             return tl::make_unexpected(PARSE_ERROR_INVALID_FLAG);
         }
         terrain.state[idx_state].result_tag = result_tag;

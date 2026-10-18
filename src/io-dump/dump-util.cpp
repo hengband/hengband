@@ -8,6 +8,7 @@
 #include "util/angband-files.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
+#include <fmt/format.h>
 
 DisplaySymbolsClipboard DisplaySymbolsClipboard::instance{};
 
@@ -173,7 +174,7 @@ bool open_temporary_file(FILE **fff, char *file_name)
         return true;
     }
 
-    msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), file_name);
+    msg_print(_("一時ファイル {} を作成できませんでした。", "Failed to create temporary file {}."), file_name);
     msg_erase();
     return false;
 }

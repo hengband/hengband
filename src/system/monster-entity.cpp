@@ -13,6 +13,7 @@
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
 #include <algorithm>
+#include <fmt/format.h>
 
 MonsterEntity::MonsterEntity()
 {
@@ -610,12 +611,12 @@ std::string MonsterEntity::build_looking_description(bool needs_attitude) const
     const std::string clone(this->mflag2.has(MonsterConstantFlagType::CLONED) ? ", clone" : "");
     const auto &apparent_monrace = this->get_apparent_monrace();
     if ((apparent_monrace.r_tkills > 0) && this->mflag2.has_not(MonsterConstantFlagType::KAGE)) {
-        constexpr auto fmt = _("レベル%d, %s%s%s", "Level %d, %s%s%s");
-        return format(fmt, apparent_monrace.level, description.data(), attitude.data(), clone.data());
+        constexpr auto fmt = _("レベル{}, {}{}{}", "Level {}, {}{}{}");
+        return fmt::format(fmt, apparent_monrace.level, description, attitude, clone);
     }
 
-    constexpr auto fmt = _("レベル???, %s%s%s", "Level ???, %s%s%s");
-    return format(fmt, description.data(), attitude.data(), clone.data());
+    constexpr auto fmt = _("レベル???, {}{}{}", "Level ???, {}{}{}");
+    return fmt::format(fmt, description, attitude, clone);
 }
 
 std::string MonsterEntity::build_damage_description() const

@@ -20,6 +20,7 @@
 #include <algorithm>
 #include <charconv>
 #include <climits>
+#include <fmt/format.h>
 #include <iostream>
 #include <sstream>
 #include <stdexcept>
@@ -369,7 +370,7 @@ int input_quantity(int max, std::string_view initial_prompt)
     if (!initial_prompt.empty()) {
         prompt = initial_prompt;
     } else {
-        prompt = format(_("いくつですか (1-%d): ", "Quantity (1-%d): "), max);
+        prompt = fmt::format(_("いくつですか (1-{}): ", "Quantity (1-{}): "), max);
     }
 
     msg_erase();
@@ -423,7 +424,7 @@ tl::optional<int> input_integer(std::string_view prompt, int min, int max, int i
         try {
             auto val = std::stoi(*input_str);
             if ((val < min) || (val > max)) {
-                msg_format(_("%dから%dの間で指定して下さい。", "It must be between %d to %d."), min, max);
+                msg_print(_("{}から{}の間で指定して下さい。", "It must be between {} to {}."), min, max);
                 continue;
             }
 

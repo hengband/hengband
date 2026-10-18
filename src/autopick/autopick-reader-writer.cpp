@@ -9,6 +9,7 @@
 #include "util/angband-files.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
+#include <fmt/format.h>
 #include <fstream>
 #include <string>
 #include <string_view>
@@ -26,7 +27,7 @@ void autopick_load_pref(PlayerType *player_ptr, bool disp_mes)
         const auto pickpref_filename = path.filename().string();
         if (process_autopick_file(player_ptr, pickpref_filename) == 0) {
             if (disp_mes) {
-                msg_format(_("%sを読み込みました。", "Loaded '%s'."), pickpref_filename.data());
+                msg_print(_("{}を読み込みました。", "Loaded '{}'."), pickpref_filename);
             }
             return;
         }
@@ -67,13 +68,13 @@ std::string pickpref_filename(std::string_view player_base_name, int filename_mo
 
     switch (filename_mode) {
     case PT_DEFAULT:
-        return format("%s.prf", namebase);
+        return fmt::format("{}.prf", namebase);
 
     case PT_WITH_PNAME:
         return fmt::format("{}-{}.prf", namebase, player_base_name);
 
     default: {
-        const auto msg = format("The value of argument 'filename_mode' is invalid: %d", filename_mode);
+        const auto msg = fmt::format("The value of argument 'filename_mode' is invalid: {}", filename_mode);
         THROW_EXCEPTION(std::invalid_argument, msg);
     }
     }
