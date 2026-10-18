@@ -33,6 +33,7 @@
 #include "wizard/wizard-spoiler.h"
 #include <cstring>
 #include <filesystem>
+#include <fmt/format.h>
 #include <string>
 #include <string_view>
 
@@ -128,7 +129,7 @@ static void change_path(concptr info)
 
     /* Verify equal sign */
     if (!s) {
-        quit_fmt("Try '-d<what>=<path>' not '-d%s'", info);
+        quit(fmt::format("Try '-d<what>=<path>' not '-d{}'", info));
     }
 
     switch (tolower(info[0])) {
@@ -166,7 +167,7 @@ static void change_path(concptr info)
         ANGBAND_DIR_SCRIPT = s + 1;
         break;
     default:
-        quit_fmt("Bad semantics in '-d%s'", info);
+        quit(fmt::format("Bad semantics in '-d{}'", info));
     }
 }
 
@@ -437,7 +438,7 @@ int main(int argc, char *argv[])
     // ユーザーディレクトリを -du で指定せず、既定の場所 (~/.angband) のホームディレクトリも決められない場合は、
     // 設定やダンプの読み書きがすべて失敗するため、指定を促して終了する
     if (path_parse(ANGBAND_DIR_USER).empty()) {
-        quit_fmt("Unable to locate the user directory '%s'. Please specify it with the -du option.", ANGBAND_DIR_USER.string().data());
+        quit(fmt::format("Unable to locate the user directory '{}'. Please specify it with the -du option.", ANGBAND_DIR_USER.string()));
     }
 #endif
 

@@ -543,7 +543,7 @@ static errr Infowin_prepare(Window xid)
 #ifdef USE_XFT
     Visual *vis = DefaultVisual(Metadpy->dpy, 0);
     if (vis->c_class != TrueColor) {
-        quit_fmt("Display does not support truecolor.\n");
+        quit("Display does not support truecolor.\n");
     }
     iwin->draw = XftDrawCreate(Metadpy->dpy, iwin->win, vis, Metadpy->cmap);
 #endif
@@ -872,7 +872,7 @@ static void Infofnt_init_data(concptr name)
     if (use_xft_runtime) {
         XftFont *info = XftFontOpenName(Metadpy->dpy, 0, name);
         if (!info) {
-            quit_fmt("Failed to find font:\"%s\"", name);
+            quit(fmt::format("Failed to find font:\"{}\"", name));
         }
         Infofnt_prepare_xft(info);
         Infofnt_prepare_tile_width();
@@ -894,11 +894,11 @@ static void Infofnt_init_data(concptr name)
         XFreeStringList(missing_list);
     }
     if (!info) {
-        quit_fmt("Failed to find font:\"%s\"", name);
+        quit(fmt::format("Failed to find font:\"{}\"", name));
     }
     if (Infofnt_prepare_fontset(info) < 0) {
         XFreeFontSet(Metadpy->dpy, info);
-        quit_fmt("Failed to prepare font:\"%s\"", name);
+        quit(fmt::format("Failed to prepare font:\"{}\"", name));
     }
     Infofnt_prepare_tile_width();
 }
@@ -1088,7 +1088,7 @@ static void send_key(const char key)
     // キーバッファが一杯なら入力を捨てる
     const int head_nxt = game_term->key_head + 1 == game_term->key_size ? 0 : game_term->key_head + 1;
     if (head_nxt == game_term->key_tail) {
-        plog_fmt("key buffer overflow, ignoring key 0x%02X", key);
+        plog(fmt::format("key buffer overflow, ignoring key 0x{:02X}", static_cast<unsigned int>(key)));
         return;
     }
 
@@ -2621,7 +2621,7 @@ errr init_x11(int argc, char *argv[])
             continue;
         }
 
-        plog_fmt("Ignoring option: %s", argv[i]);
+        plog(fmt::format("Ignoring option: {}", argv[i]));
     }
 
 #ifdef USE_LOCALE

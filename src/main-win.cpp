@@ -118,6 +118,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <direct.h>
+#include <fmt/format.h>
 #include <locale>
 #include <string>
 #include <string_view>
@@ -247,7 +248,7 @@ static void validate_file(const std::filesystem::path &s)
     }
 
     const auto &file = s.string();
-    quit_fmt(_("必要なファイル[%s]が見あたりません。", "Cannot find required file:\n%s"), file.data());
+    quit(fmt::format(_("必要なファイル[{}]が見あたりません。", "Cannot find required file:\n{}"), file));
 }
 
 /*!
@@ -261,9 +262,9 @@ static void validate_dir(const std::filesystem::path &s, bool vital)
 
     const auto &dir = s.string();
     if (vital) {
-        quit_fmt(_("必要なディレクトリ[%s]が見あたりません。", "Cannot find required directory:\n%s"), dir.data());
+        quit(fmt::format(_("必要なディレクトリ[{}]が見あたりません。", "Cannot find required directory:\n{}"), dir));
     } else if (mkdir(dir.data())) {
-        quit_fmt("Unable to create directory:\n%s", dir.data());
+        quit(fmt::format("Unable to create directory:\n{}", dir));
     }
 }
 
@@ -598,7 +599,7 @@ static bool change_bg_mode(bg_mode new_mode, bool show_error = false, bool force
             current_bg_mode = bg_mode::BG_NONE;
             if (show_error) {
                 const auto &wallaper_filename = wallpaper_path.string();
-                plog_fmt(_("壁紙用ファイル '%s' を読み込めません。", "Can't load the image file '%s'."), wallaper_filename.data());
+                plog(fmt::format(_("壁紙用ファイル '{}' を読み込めません。", "Can't load the image file '{}'."), wallaper_filename));
             }
         }
     } else {
