@@ -34,7 +34,9 @@
           "$ref": "#/$defs/trapSpec"
         },
         "special": {
-          "type": "integer"
+          "type": "integer",
+          "minimum": -32768,
+          "maximum": 32767
         }
       }
     },
@@ -43,6 +45,7 @@
         {
           "type": "integer",
           "minimum": 1,
+          "maximum": 32767,
           "description": "MonraceId."
         },
         {
@@ -56,6 +59,7 @@
             "oodLevel": {
               "type": "integer",
               "minimum": 0,
+              "maximum": 32767,
               "description": "Out-of-depth level boost (legacy *N)."
             }
           }
@@ -68,6 +72,7 @@
             "cloneOf": {
               "type": "integer",
               "minimum": 1,
+              "maximum": 32767,
               "description": "Place a clone of this MonraceId (legacy cN)."
             }
           }
@@ -79,6 +84,7 @@
         {
           "type": "integer",
           "minimum": 1,
+          "maximum": 32767,
           "description": "BaseitemId."
         },
         {
@@ -92,6 +98,7 @@
             "oodLevel": {
               "type": "integer",
               "minimum": 0,
+              "maximum": 32767,
               "description": "Out-of-depth object level boost (legacy *N)."
             }
           }
@@ -137,6 +144,7 @@
         {
           "type": "integer",
           "minimum": 1,
+          "maximum": 32767,
           "description": "FixedArtifactId."
         },
         {
@@ -149,7 +157,8 @@
             },
             "id": {
               "type": "integer",
-              "minimum": 1
+              "minimum": 1,
+              "maximum": 32767
             }
           }
         },
