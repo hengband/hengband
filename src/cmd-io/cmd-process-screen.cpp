@@ -376,8 +376,9 @@ void do_cmd_save_screen(PlayerType *player_ptr)
     if (html_dump) {
         exe_cmd_save_screen_html_with_naming();
         do_cmd_redraw(player_ptr);
-    } else if (!do_cmd_save_screen_text(wid, hgt)) {
-        return;
+    } else {
+        // ファイルを開けなかったときも、外したグラフィックを元に戻す
+        (void)do_cmd_save_screen_text(wid, hgt);
     }
 
     if (old_use_graphics) {
