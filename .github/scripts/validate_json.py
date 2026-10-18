@@ -223,6 +223,22 @@ def validate_wilderness_semantics(data: dict) -> None:
             raise ValidationError("starting position must be within the map layout", path=map_path + ["starting_position"])
 
 
+def validate_quest_semantics(data: dict) -> None:
+    """Reject integral floats such as 5.0, which JSON Schema accepts as integers but QuestReader rejects."""
+    # Quest・QuestPreferences の schema に number 型の項目は無く、数値はすべて整数として読む。
+    def walk(value, path):
+        if isinstance(value, float):
+            raise ValidationError("expected an integer JSON value", path=path)
+        if isinstance(value, dict):
+            for key, child in value.items():
+                walk(child, path + [key])
+        elif isinstance(value, list):
+            for index, child in enumerate(value):
+                walk(child, path + [index])
+
+    walk(data, [])
+
+
 def validate_town_preferences_semantics(data: dict, schema_path: Path) -> None:
     """Check town legend values against the terrain definitions and reader types."""
     repository_root = schema_path.resolve().parent.parent
@@ -821,6 +837,8 @@ def validate_one(pair: tuple[Path, Path, dict], registry: Registry | None = None
             "ClassSkillDefinitions.schema.json": lambda: validate_class_skill_semantics(data),
             "SpellDefinitions.schema.json": lambda: validate_spell_semantics(data),
             "MonsterMessages.schema.json": lambda: validate_monster_message_semantics(data, schema_path, data_path, registry),
+            "Quest.schema.json": lambda: validate_quest_semantics(data),
+            "QuestPreferences.schema.json": lambda: validate_quest_semantics(data),
         }
         semantic_validator = semantic_validators.get(schema_path.name)
         if semantic_validator is not None:

@@ -238,12 +238,17 @@ TEST_CASE("QuestReader rejects metadata reward and start integer overflow withou
     }
 }
 
-TEST_CASE("QuestReader metadata reward and start integers retain null and type behavior")
+/*!
+ * @brief 整数の項目は null を省略として扱い、整数でない値（5.0 などの整数でない数を含む）を解析エラーにする
+ * @details 報酬や開始位置の分岐の項目も、整数でない値を黙って無視しない。
+ */
+TEST_CASE("QuestReader metadata reward and start integers reject non-integer values")
 {
     for (const auto &path : QUEST_INTEGER_PATHS) {
-        const auto ignored_non_integer = path.starts_with("/definition/reward/") || path.ends_with("/leavingQuest");
-        const auto required = path == "/definition/level" || (path.starts_with("/start") && !path.ends_with("/leavingQuest"));
-        const std::vector<nlohmann::json> values = { nullptr, "ignored", 1.5, true, nlohmann::json::array(), nlohmann::json::object() };
+        // 報酬の候補の配列の要素は省略できないため、null も不足として拒否する。
+        const auto required = path == "/definition/level" || path == "/definition/reward/artifacts/1" ||
+                              (path.starts_with("/start") && !path.ends_with("/leavingQuest"));
+        const std::vector<nlohmann::json> values = { nullptr, "ignored", 1.5, 5.0, true, nlohmann::json::array(), nlohmann::json::object() };
         for (const auto &value : values) {
             CAPTURE(path);
             CAPTURE(value);
@@ -251,20 +256,49 @@ TEST_CASE("QuestReader metadata reward and start integers retain null and type b
             QuestType quest;
             QuestFixedMap fixed_map;
             set_existing_output(quest, fixed_map);
-            const auto expected_error = ignored_non_integer || (value.is_null() && !required) ? PARSE_ERROR_NONE
-                                        : value.is_null()                                     ? PARSE_ERROR_TOO_FEW_ARGUMENTS
-                                                                                              : PARSE_ERROR_INVALID_TYPE;
+            const auto expected_error = !value.is_null() ? PARSE_ERROR_INVALID_TYPE
+                                        : required       ? PARSE_ERROR_TOO_FEW_ARGUMENTS
+                                                         : PARSE_ERROR_NONE;
             REQUIRE(QuestReader(data, quest, fixed_map).read() == expected_error);
             if (expected_error != PARSE_ERROR_NONE) {
                 check_existing_output(quest, fixed_map);
             } else if (path.ends_with("/leavingQuest")) {
                 CHECK_FALSE(fixed_map.starts.at(1).leaving_quest);
-            } else if (path == "/definition/reward/artifacts/1") {
-                CHECK(fixed_map.reward_artifact_candidates == std::vector<int>{ 1 });
             } else {
                 CHECK(get_quest_integer(fixed_map, path) == 0);
             }
         }
+    }
+}
+
+/*!
+ * @brief 報酬がオブジェクトでない値なら、報酬無しとして黙って成功せず解析エラーにする
+ * @details null（省略）と空のオブジェクトは、これまでどおり報酬無しとして受け付ける。
+ */
+TEST_CASE("QuestReader rejects non-object rewards")
+{
+    const std::vector<nlohmann::json> invalid_rewards = { 5, "x", 5.0, true, nlohmann::json::array() };
+    for (const auto &reward : invalid_rewards) {
+        CAPTURE(reward);
+        auto data = make_quest_with_description("New description");
+        data["definition"]["reward"] = reward;
+        QuestType quest;
+        QuestFixedMap fixed_map;
+        set_existing_output(quest, fixed_map);
+        REQUIRE(QuestReader(data, quest, fixed_map).read() == PARSE_ERROR_INVALID_TYPE);
+        check_existing_output(quest, fixed_map);
+    }
+
+    const std::vector<nlohmann::json> empty_rewards = { nullptr, nlohmann::json::object() };
+    for (const auto &reward : empty_rewards) {
+        CAPTURE(reward);
+        auto data = make_quest_with_description("New description");
+        data["definition"]["reward"] = reward;
+        QuestType quest;
+        QuestFixedMap fixed_map;
+        REQUIRE(QuestReader(data, quest, fixed_map).read() == PARSE_ERROR_NONE);
+        CHECK(fixed_map.metadata.reward_artifact == 0);
+        CHECK(fixed_map.reward_artifact_candidates.empty());
     }
 }
 
@@ -492,7 +526,10 @@ TEST_CASE("QuestReader rejects legend integer overflow without publishing output
     }
 }
 
-TEST_CASE("Quest legend preserves optional non-integer defaults and reward markers")
+/*!
+ * @brief 凡例の整数の項目は null を省略として扱い、整数でない値（5.0 などの整数でない数を含む）を解析エラーにする
+ */
+TEST_CASE("Quest legend treats null as omitted and rejects non-integer values")
 {
     test::TerrainListTestAccess terrain_tag(TerrainTag::NONE, 0);
     const std::vector<std::string> paths = {
@@ -507,12 +544,16 @@ TEST_CASE("Quest legend preserves optional non-integer defaults and reward marke
         "/artifact/id",
     };
     for (const auto &path : paths) {
-        const std::vector<nlohmann::json> values = { nullptr, "ignored", 1.5, true };
+        const std::vector<nlohmann::json> values = { nullptr, "ignored", 1.5, 5.0, true };
         for (const auto &value : values) {
             CAPTURE(path);
             CAPTURE(value);
             const auto data = make_legend_integer_cell(path, value);
             QuestLegendCell cell;
+            if (!value.is_null()) {
+                CHECK(parse_quest_legend_cell(data, cell) == PARSE_ERROR_INVALID_TYPE);
+                continue;
+            }
             REQUIRE(parse_quest_legend_cell(data, cell) == PARSE_ERROR_NONE);
             CHECK(cell.grid.monster == 0);
             CHECK(cell.grid.object == 0);

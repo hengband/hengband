@@ -39,6 +39,28 @@ class QuestGridValidationTest(unittest.TestCase):
                     ok, message = self.validate({}, "Quest", data_updates={field: value, **maps})
                     self.assertEqual(ok, expected, message)
 
+    def test_integral_floats_are_rejected(self):
+        cases = (
+            ("QuestPreferences", {"monster": 5.0}, None, ["legend", "#", "monster"]),
+            ("Quest", {"monster": {"random": True, "oodLevel": 2.0}}, None, ["legend", "#", "monster", "oodLevel"]),
+            ("Quest", {"special": 1.0}, None, ["legend", "#", "special"]),
+            ("Quest", {}, {"definition": {"type": "KILL_ALL", "level": 5.0}}, ["definition", "level"]),
+            ("Quest", {}, {"definition": {"type": "KILL_ALL", "level": 1, "reward": {"artifacts": [1, 2.0]}}},
+             ["definition", "reward", "artifacts", 1]),
+            ("Quest", {}, {"map": ["..."], "startVariants": [{"leavingQuest": 6.0, "y": 0, "x": 0}, {"y": 0, "x": 1}]},
+             ["startVariants", 0, "leavingQuest"]),
+        )
+        for schema_name, cell, updates, path in cases:
+            with self.subTest(schema=schema_name, path=path):
+                ok, message = self.validate(cell, schema_name, data_updates=updates)
+                self.assertFalse(ok, message)
+                self.assertIn("expected an integer JSON value", message)
+                self.assertIn(f"Location: {path}", message)
+        for schema_name in ("Quest", "QuestPreferences"):
+            with self.subTest(schema=schema_name, value="integer"):
+                ok, message = self.validate({"monster": 5, "special": 1}, schema_name)
+                self.assertTrue(ok, message)
+
     def test_shared_schema_is_not_a_data_schema(self):
         shared_path = self.schema_dir / "common/QuestGrid.schema.json"
         self.assertIn(shared_path, self.loaded)
