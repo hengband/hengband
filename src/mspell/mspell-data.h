@@ -1,13 +1,13 @@
 #pragma once
 
 #include "mind/drs-types.h"
+#include "mspell/mspell-util.h"
 #include "system/angband.h"
 #include <functional>
 #include <type_traits>
 #include <unordered_map>
 
 enum class AttributeType;
-struct mspell_cast_msg_blind;
 class PlayerType;
 
 class MSpellMessageData {
@@ -20,7 +20,7 @@ public:
         static_assert(std::is_invocable_r<bool, decltype(output), PlayerType *, MONSTER_IDX, MONSTER_IDX, int>::value);
     }
     MSpellMessageData(const mspell_cast_msg_blind &msg_string);
-    MSpellMessageData(const std::string_view &blind, const std::string_view &to_player, const std::string_view &to_monster);
+    MSpellMessageData(MSpellMessageFormat blind, MSpellMessageFormat to_player, MSpellMessageFormat to_monster);
     std::function<bool(PlayerType *, MONSTER_IDX, MONSTER_IDX, int)> output;
 };
 
