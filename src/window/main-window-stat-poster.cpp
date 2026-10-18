@@ -25,9 +25,11 @@
 #include "term/term-color-types.h"
 #include "term/z-form.h"
 #include "timed-effect/timed-effects.h"
+#include "util/string-processor.h"
 #include "view/status-bars-table.h"
 #include "window/main-window-row-column.h"
 #include "world/world.h"
+#include <fmt/format.h>
 
 /*!
  * @brief プレイヤー能力値を描画する / Print character stat in given row, column
@@ -149,12 +151,13 @@ std::pair<std::string, TERM_COLOR> describe_player_state(PlayerType *player_ptr)
     std::string text;
     if (command_rep) {
         if (command_rep > 999) {
-            text = format("%2d00", command_rep / 100);
+            text = fmt::format("{:2}00", command_rep / 100);
         } else {
-            text = format("  %2d", command_rep);
+            text = fmt::format("  {:2}", command_rep);
         }
 
-        return { format("%5.5s", text.data()), attr };
+        auto state = fmt::format("{:>5}", fmt::bytes(str_substr(text, 0, 5)));
+        return { std::move(state), attr };
     }
 
     switch (player_ptr->action) {
@@ -164,7 +167,7 @@ std::pair<std::string, TERM_COLOR> describe_player_state(PlayerType *player_ptr)
     }
     case ACTION_REST:
         if (player_ptr->resting > 0) {
-            text = format("%4d", player_ptr->resting);
+            text = fmt::format("{:4}", player_ptr->resting);
         } else if (player_ptr->resting == COMMAND_ARG_REST_FULL_HEALING) {
             text = "****";
         } else if (player_ptr->resting == COMMAND_ARG_REST_UNTIL_DONE) {
@@ -235,7 +238,8 @@ std::pair<std::string, TERM_COLOR> describe_player_state(PlayerType *player_ptr)
     }
     }
 
-    return { format("%5.5s", text.data()), attr };
+    auto state = fmt::format("{:>5}", fmt::bytes(str_substr(text, 0, 5)));
+    return { std::move(state), attr };
 }
 
 /*!
@@ -248,7 +252,7 @@ void print_speed(PlayerType *player_ptr)
     auto col_speed = wid + COL_SPEED;
     auto row_speed = hgt + ROW_SPEED;
     const auto &[buf, attr] = describe_player_speed(player_ptr);
-    c_put_str(attr, format("%-9s", buf.data()), row_speed, col_speed);
+    c_put_str(attr, fmt::format("{:<9}", fmt::bytes(buf)), row_speed, col_speed);
 }
 
 /*!
@@ -281,7 +285,7 @@ std::pair<std::string, TERM_COLOR> describe_player_speed(PlayerType *player_ptr)
         } else {
             attr = TERM_L_GREEN;
         }
-        buf = format("%s(+%d)", (player_ptr->riding ? _("乗馬", "Ride") : _("加速", "Fast")), speed);
+        buf = fmt::format("{}(+{})", (player_ptr->riding ? _("乗馬", "Ride") : _("加速", "Fast")), speed);
     } else if (speed < 0) {
         if (player_ptr->riding) {
             const auto &monster = floor.m_list[player_ptr->riding];
@@ -299,7 +303,7 @@ std::pair<std::string, TERM_COLOR> describe_player_speed(PlayerType *player_ptr)
         } else {
             attr = TERM_L_UMBER;
         }
-        buf = format("%s(%d)", (player_ptr->riding ? _("乗馬", "Ride") : _("減速", "Slow")), speed);
+        buf = fmt::format("{}({})", (player_ptr->riding ? _("乗馬", "Ride") : _("減速", "Slow")), speed);
     } else if (player_ptr->riding) {
         attr = TERM_GREEN;
         buf = _("乗馬中", "Riding");

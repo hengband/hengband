@@ -7,6 +7,8 @@
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
 #include "term/term-color-types.h"
+#include "util/string-processor.h"
+#include <fmt/format.h>
 #include <tl/optional.hpp>
 #include <vector>
 
@@ -16,17 +18,16 @@ void display_monster_hp_ac(lore_type *lore_ptr)
         return;
     }
 
-    hooked_roff(format(_("%s^は AC%d の防御力と", "%s^ has an armor rating of %d"), Who::who(lore_ptr->msex).data(), lore_ptr->monrace->ac));
+    hooked_roff(fmt::format(_("{}は AC{} の防御力と", "{} has an armor rating of {}"), str_upcase_first(Who::who(lore_ptr->msex)), lore_ptr->monrace->ac));
     if (lore_ptr->misc_flags.has(MonsterMiscType::FORCE_MAXHP) || (lore_ptr->monrace->hit_dice.sides == 1)) {
         auto hp = lore_ptr->monrace->hit_dice.maxroll() * (lore_ptr->nightmare ? 2 : 1);
-        hooked_roff(format(_(" %d の体力がある。", " and a life rating of %d.  "), std::min(MONSTER_MAXHP, hp)));
+        hooked_roff(fmt::format(_(" {} の体力がある。", " and a life rating of {}.  "), std::min(MONSTER_MAXHP, hp)));
     } else {
         auto hit_dice = lore_ptr->monrace->hit_dice;
         if (lore_ptr->nightmare) {
             hit_dice.num *= 2;
         }
-        hooked_roff(format(
-            _(" %s の体力がある。", " and a life rating of %s.  "), hit_dice.to_string().data()));
+        hooked_roff(fmt::format(_(" {} の体力がある。", " and a life rating of {}.  "), hit_dice.to_string()));
     }
 }
 
@@ -41,7 +42,7 @@ void display_monster_hp_ac_summary(lore_type *lore_ptr)
     std::string hp_text;
     if (lore_ptr->misc_flags.has(MonsterMiscType::FORCE_MAXHP) || (lore_ptr->monrace->hit_dice.sides == 1)) {
         auto hp = lore_ptr->monrace->hit_dice.maxroll() * (lore_ptr->nightmare ? 2 : 1);
-        hp_text = format("%d", std::min(MONSTER_MAXHP, hp));
+        hp_text = fmt::format("{}", std::min(MONSTER_MAXHP, hp));
     } else {
         auto hit_dice = lore_ptr->monrace->hit_dice;
         if (lore_ptr->nightmare) {
@@ -52,7 +53,7 @@ void display_monster_hp_ac_summary(lore_type *lore_ptr)
 
     const auto ac = lore_ptr->monrace->ac;
 
-    hooked_roff(format(_("最大HP:%s AC:%d ", "MaxHP:%s AC:%d "), hp_text.data(), ac));
+    hooked_roff(fmt::format(_("最大HP:{} AC:{} ", "MaxHP:{} AC:{} "), hp_text, ac));
 }
 
 void display_monster_concrete_abilities(lore_type *lore_ptr)
@@ -112,7 +113,7 @@ void display_monster_abilities(lore_type *lore_ptr)
         return;
     }
 
-    hooked_roff(format(_("%s^は", "%s^"), Who::who(lore_ptr->msex).data()));
+    hooked_roff(fmt::format(_("{}は", "{}"), str_upcase_first(Who::who(lore_ptr->msex))));
     for (int n = 0; const auto &[msg, color] : lore_ptr->lore_msgs) {
 #ifdef JP
         if (n != std::ssize(lore_ptr->lore_msgs) - 1) {
@@ -142,45 +143,45 @@ void display_monster_abilities(lore_type *lore_ptr)
 void display_monster_constitutions(lore_type *lore_ptr)
 {
     if (lore_ptr->monrace->feature_flags.has(MonsterFeatureType::AQUATIC)) {
-        hooked_roff(format(_("%s^は水中に棲んでいる。", "%s^ lives in water.  "), Who::who(lore_ptr->msex).data()));
+        hooked_roff(fmt::format(_("{}は水中に棲んでいる。", "{} lives in water.  "), str_upcase_first(Who::who(lore_ptr->msex))));
     }
 
     if (lore_ptr->brightness_flags.has_any_of({ MonsterBrightnessType::SELF_LITE_1, MonsterBrightnessType::SELF_LITE_2 })) {
-        hooked_roff(format(_("%s^は光っている。", "%s^ is shining.  "), Who::who(lore_ptr->msex).data()));
+        hooked_roff(fmt::format(_("{}は光っている。", "{} is shining.  "), str_upcase_first(Who::who(lore_ptr->msex))));
     }
 
     if (lore_ptr->brightness_flags.has_any_of({ MonsterBrightnessType::SELF_DARK_1, MonsterBrightnessType::SELF_DARK_2 })) {
-        hook_c_roff(TERM_L_DARK, format(_("%s^は暗黒に包まれている。", "%s^ is surrounded by darkness.  "), Who::who(lore_ptr->msex).data()));
+        hook_c_roff(TERM_L_DARK, fmt::format(_("{}は暗黒に包まれている。", "{} is surrounded by darkness.  "), str_upcase_first(Who::who(lore_ptr->msex))));
     }
 
     if (lore_ptr->misc_flags.has(MonsterMiscType::INVISIBLE)) {
-        hooked_roff(format(_("%s^は透明で目に見えない。", "%s^ is invisible.  "), Who::who(lore_ptr->msex).data()));
+        hooked_roff(fmt::format(_("{}は透明で目に見えない。", "{} is invisible.  "), str_upcase_first(Who::who(lore_ptr->msex))));
     }
 
     if (lore_ptr->misc_flags.has(MonsterMiscType::COLD_BLOOD)) {
-        hooked_roff(format(_("%s^は冷血動物である。", "%s^ is cold blooded.  "), Who::who(lore_ptr->msex).data()));
+        hooked_roff(fmt::format(_("{}は冷血動物である。", "{} is cold blooded.  "), str_upcase_first(Who::who(lore_ptr->msex))));
     }
 
     if (lore_ptr->misc_flags.has(MonsterMiscType::EMPTY_MIND)) {
-        hooked_roff(format(_("%s^はテレパシーでは感知できない。", "%s^ is not detected by telepathy.  "), Who::who(lore_ptr->msex).data()));
+        hooked_roff(fmt::format(_("{}はテレパシーでは感知できない。", "{} is not detected by telepathy.  "), str_upcase_first(Who::who(lore_ptr->msex))));
     } else if (lore_ptr->misc_flags.has(MonsterMiscType::WEIRD_MIND)) {
-        hooked_roff(format(_("%s^はまれにテレパシーで感知できる。", "%s^ is rarely detected by telepathy.  "), Who::who(lore_ptr->msex).data()));
+        hooked_roff(fmt::format(_("{}はまれにテレパシーで感知できる。", "{} is rarely detected by telepathy.  "), str_upcase_first(Who::who(lore_ptr->msex))));
     }
 
     if (lore_ptr->misc_flags.has(MonsterMiscType::MULTIPLY)) {
-        hook_c_roff(TERM_L_UMBER, format(_("%s^は爆発的に増殖する。", "%s^ breeds explosively.  "), Who::who(lore_ptr->msex).data()));
+        hook_c_roff(TERM_L_UMBER, fmt::format(_("{}は爆発的に増殖する。", "{} breeds explosively.  "), str_upcase_first(Who::who(lore_ptr->msex))));
     }
 
     if (lore_ptr->misc_flags.has(MonsterMiscType::REGENERATE)) {
-        hook_c_roff(TERM_L_WHITE, format(_("%s^は素早く体力を回復する。", "%s^ regenerates quickly.  "), Who::who(lore_ptr->msex).data()));
+        hook_c_roff(TERM_L_WHITE, fmt::format(_("{}は素早く体力を回復する。", "{} regenerates quickly.  "), str_upcase_first(Who::who(lore_ptr->msex))));
     }
 
     if (lore_ptr->misc_flags.has(MonsterMiscType::RIDING)) {
-        hook_c_roff(TERM_SLATE, format(_("%s^に乗ることができる。", "%s^ is suitable for riding.  "), Who::who(lore_ptr->msex).data()));
+        hook_c_roff(TERM_SLATE, fmt::format(_("{}に乗ることができる。", "{} is suitable for riding.  "), str_upcase_first(Who::who(lore_ptr->msex))));
     }
 
     if (lore_ptr->misc_flags.has(MonsterMiscType::STALKER)) {
-        hook_c_roff(TERM_L_RED, format(_("%s^はプレイヤーの背後に忍び寄ることがある。", "%s^ stalks the player.  "), Who::who(lore_ptr->msex).data()));
+        hook_c_roff(TERM_L_RED, fmt::format(_("{}はプレイヤーの背後に忍び寄ることがある。", "{} stalks the player.  "), str_upcase_first(Who::who(lore_ptr->msex))));
     }
 }
 
@@ -209,7 +210,7 @@ void display_monster_weakness(lore_type *lore_ptr)
         return;
     }
 
-    hooked_roff(format(_("%s^には", "%s^"), Who::who(lore_ptr->msex).data()));
+    hooked_roff(fmt::format(_("{}には", "{}"), str_upcase_first(Who::who(lore_ptr->msex))));
     for (int n = 0; const auto &[msg, color] : lore_ptr->lore_msgs) {
 #ifdef JP
         if (n != 0) {
@@ -328,7 +329,7 @@ void display_monster_resistances(lore_type *lore_ptr)
         return;
     }
 
-    hooked_roff(format(_("%s^は", "%s^"), Who::who(lore_ptr->msex).data()));
+    hooked_roff(fmt::format(_("{}は", "{}"), str_upcase_first(Who::who(lore_ptr->msex))));
     for (int n = 0; const auto &[msg, color] : lore_ptr->lore_msgs) {
 #ifdef JP
         if (n != 0) {
@@ -358,7 +359,7 @@ void display_monster_evolution_summary(lore_type *lore_ptr)
 
     const auto &monrace_next = lore_ptr->monrace->get_next();
     if (monrace_next.is_valid()) {
-        hooked_roff(format(_("進化:%s ", "evolve:%s "), monrace_next.name.data()));
+        hooked_roff(fmt::format(_("進化:{} ", "evolve:{} "), monrace_next.name));
     } else if (lore_ptr->monrace->kind_flags.has_not(MonsterKindType::UNIQUE)) {
         hooked_roff(_("進化:なし ", "evolve:none "));
     }
@@ -372,11 +373,11 @@ void display_monster_evolution(lore_type *lore_ptr)
 
     const auto &monrace_next = lore_ptr->monrace->get_next();
     if (monrace_next.is_valid()) {
-        hooked_roff(format(_("%s^は経験を積むと、", "%s^ will evolve into "), Who::who(lore_ptr->msex).data()));
-        hook_c_roff(TERM_YELLOW, format("%s", monrace_next.name.data()));
-        hooked_roff(_(format("に進化する。"), format(" when %s gets enough experience.  ", Who::who(lore_ptr->msex).data())));
+        hooked_roff(fmt::format(_("{}は経験を積むと、", "{} will evolve into "), str_upcase_first(Who::who(lore_ptr->msex))));
+        hook_c_roff(TERM_YELLOW, monrace_next.name);
+        hooked_roff(fmt::format(_("に進化する。", " when {} gets enough experience.  "), Who::who(lore_ptr->msex)));
     } else if (lore_ptr->monrace->kind_flags.has_not(MonsterKindType::UNIQUE)) {
-        hooked_roff(format(_("%sは進化しない。", "%s won't evolve.  "), Who::who(lore_ptr->msex).data()));
+        hooked_roff(fmt::format(_("{}は進化しない。", "{} won't evolve.  "), Who::who(lore_ptr->msex)));
     }
 }
 
@@ -413,7 +414,7 @@ void display_monster_immunities(lore_type *lore_ptr)
         return;
     }
 
-    hooked_roff(format(_("%s^は", "%s^"), Who::who(lore_ptr->msex).data()));
+    hooked_roff(fmt::format(_("{}は", "{}"), str_upcase_first(Who::who(lore_ptr->msex))));
     for (int n = 0; const auto &[msg, color] : lore_ptr->lore_msgs) {
 #ifdef JP
         if (n != 0) {
@@ -444,7 +445,7 @@ void display_monster_alert_summary(lore_type *lore_ptr)
     if (!alert) {
         return;
     }
-    hooked_roff(format(_("警戒度:%d/255 感知範囲:%dft ", "alertness:%d notice:%dft"), 255 - lore_ptr->monrace->sleep, 10 * lore_ptr->monrace->aaf));
+    hooked_roff(fmt::format(_("警戒度:{}/255 感知範囲:{}ft ", "alertness:{} notice:{}ft"), 255 - lore_ptr->monrace->sleep, 10 * lore_ptr->monrace->aaf));
 }
 
 void display_monster_alert(lore_type *lore_ptr)
@@ -482,10 +483,9 @@ void display_monster_alert(lore_type *lore_ptr)
         action = _("をかなり警戒しており", "is ever vigilant for");
     }
 
-    constexpr auto fmt = _("%s^は侵入者%s、 %d フィート先から侵入者に気付くことがある。", "%s^ %s intruders, which %s may notice from %d feet.  ");
+    constexpr auto fmt = _("{0}は侵入者{1}、 {3} フィート先から侵入者に気付くことがある。", "{0} {1} intruders, which {2} may notice from {3} feet.  ");
     const auto who = Who::who(lore_ptr->msex);
-    hooked_roff(_(format(fmt, who.data(), action.data(), 10 * lore_ptr->monrace->aaf),
-        format(fmt, who.data(), action.data(), who.data(), 10 * lore_ptr->monrace->aaf)));
+    hooked_roff(fmt::format(fmt, str_upcase_first(who), action, who, 10 * lore_ptr->monrace->aaf));
 }
 
 static void push_tag(std::vector<std::string> &tags, const char *msg)

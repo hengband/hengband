@@ -29,13 +29,13 @@ void inven_item_charges(const ItemEntity &item)
     if (item.pval <= 0) {
         msg_print("もう魔力が残っていない。");
     } else {
-        msg_format("あと %d 回分の魔力が残っている。", item.pval);
+        msg_print("あと {} 回分の魔力が残っている。", item.pval);
     }
 #else
     if (item.pval != 1) {
-        msg_format("You have %d charges remaining.", item.pval);
+        msg_print("You have {} charges remaining.", item.pval);
     } else {
-        msg_format("You have %d charge remaining.", item.pval);
+        msg_print("You have {} charge remaining.", item.pval);
     }
 #endif
 }
@@ -73,12 +73,12 @@ void inven_item_describe(PlayerType *player_ptr, short i_idx)
     const auto item_name = describe_flavor(player_ptr, item, 0);
 #ifdef JP
     if (item.number <= 0) {
-        msg_format("もう%sを持っていない。", item_name.data());
+        msg_print("もう{}を持っていない。", item_name);
     } else {
-        msg_format("まだ %sを持っている。", item_name.data());
+        msg_print("まだ {}を持っている。", item_name);
     }
 #else
-    msg_format("You have %s.", item_name.data());
+    msg_print("You have {}.", item_name);
 #endif
 }
 

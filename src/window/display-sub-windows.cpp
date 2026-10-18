@@ -46,6 +46,7 @@
 #include "util/buffer-shaper.h"
 #include "util/int-char-converter.h"
 #include "util/object-sort.h"
+#include "util/string-processor.h"
 #include "view/display-lore.h"
 #include "view/display-map.h"
 #include "view/display-messages.h"
@@ -58,6 +59,7 @@
 #include "world/world.h"
 #include <algorithm>
 #include <concepts>
+#include <fmt/format.h>
 #include <mutex>
 #include <sstream>
 #include <string>
@@ -153,9 +155,9 @@ static void print_monster_line(TERM_LEN x, TERM_LEN y, const MonsterEntity &mons
 
     std::string buf;
     if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
-        buf = format(_("%3s(覚%2d)", "%3s(%2d)"), monrace.is_bounty(true) ? "  W" : "  U", n_awake);
+        buf = fmt::format(_("{:>3}(覚{:2})", "{:>3}({:2})"), fmt::bytes(monrace.is_bounty(true) ? "  W" : "  U"), n_awake);
     } else {
-        buf = format(_("%3d(覚%2d)", "%3d(%2d)"), n_same, n_awake);
+        buf = fmt::format(_("{:3}(覚{:2})", "{:3}({:2})"), n_same, n_awake);
     }
 
     term_addstr(-1, TERM_WHITE, buf);
@@ -163,13 +165,13 @@ static void print_monster_line(TERM_LEN x, TERM_LEN y, const MonsterEntity &mons
     term_add_bigch(monrace.symbol_config);
 
     if (monrace.r_tkills && monster.mflag2.has_not(MonsterConstantFlagType::KAGE)) {
-        buf = format(" %2d", monrace.level);
+        buf = fmt::format(" {:2}", monrace.level);
     } else {
         buf = " ??";
     }
 
     term_addstr(-1, TERM_WHITE, buf);
-    term_addstr(-1, TERM_WHITE, format(" %s ", monrace.name.data()));
+    term_addstr(-1, TERM_WHITE, fmt::format(" {} ", monrace.name));
 }
 
 /*!
@@ -251,7 +253,7 @@ static void print_pet_list_oneline(PlayerType *player_ptr, const MonsterEntity &
     term_addstr(-1, TERM_WHITE, name);
 
     if (width >= 50) {
-        const auto location = format(" (X:%3d Y:%3d)", monster.fx, monster.fy);
+        const auto location = fmt::format(" (X:{:3} Y:{:3})", monster.fx, monster.fy);
         prt(is_visible ? location : "", y, width - location.length());
     }
 }
@@ -372,7 +374,7 @@ static void display_equipment(PlayerType *player_ptr, const ItemTester &item_tes
         term_putstr(cur_col, cur_row, n, attr, item_name);
         if (show_weights) {
             int wgt = item.weight * item.number;
-            tmp_val = format(_("%3d.%1d kg", "%3d.%1d lb"), _(lb_to_kg_integer(wgt), wgt / 10), _(lb_to_kg_fraction(wgt), wgt % 10));
+            tmp_val = fmt::format(_("{:3}.{:1} kg", "{:3}.{:1} lb"), _(lb_to_kg_integer(wgt), wgt / 10), _(lb_to_kg_fraction(wgt), wgt % 10));
             prt(tmp_val, cur_row, wid - (show_labels ? 28 : 9));
         }
 
@@ -673,28 +675,28 @@ static void display_floor_item_list(PlayerType *player_ptr, const Pos2D &pos)
     // 先頭行を書く。
     const auto is_hallucinated = player_ptr->effects()->hallucination().is_active();
     if (player_ptr->is_located_at(pos)) {
-        line = format(_("(X:%03d Y:%03d) あなたの足元のアイテム一覧", "Items at (%03d,%03d) under you"), pos.x, pos.y);
+        line = fmt::format(_("(X:{:03} Y:{:03}) あなたの足元のアイテム一覧", "Items at ({:03},{:03}) under you"), pos.x, pos.y);
     } else if (is_seeing_monster_on(floor, grid)) {
         if (is_hallucinated) {
-            line = format(_("(X:%03d Y:%03d) 何か奇妙な物の足元の発見済みアイテム一覧", "Found items at (%03d,%03d) under something strange"), pos.x, pos.y);
+            line = fmt::format(_("(X:{:03} Y:{:03}) 何か奇妙な物の足元の発見済みアイテム一覧", "Found items at ({:03},{:03}) under something strange"), pos.x, pos.y);
         } else {
             const auto &monster = floor.m_list[grid.m_idx];
             const auto &monrace = monster.get_apparent_monrace();
-            line = format(_("(X:%03d Y:%03d) %sの足元の発見済みアイテム一覧", "Found items at (%03d,%03d) under %s"), pos.x, pos.y, monrace.name.data());
+            line = fmt::format(_("(X:{:03} Y:{:03}) {}の足元の発見済みアイテム一覧", "Found items at ({:03},{:03}) under {}"), pos.x, pos.y, monrace.name);
         }
     } else {
         const auto &terrain = grid.get_terrain();
         const auto fn = terrain.name.data();
         std::string buf;
         if (terrain.flags.has(TerrainCharacteristics::STORE) || (terrain.flags.has(TerrainCharacteristics::BLDG) && !floor.inside_arena)) {
-            buf = format(_("%sの入口", "on the entrance of %s"), fn);
+            buf = fmt::format(_("{}の入口", "on the entrance of {}"), fn);
         } else if (terrain.flags.has(TerrainCharacteristics::WALL)) {
-            buf = format(_("%sの中", "in %s"), fn);
+            buf = fmt::format(_("{}の中", "in {}"), fn);
         } else {
-            buf = format(_("%s", "on %s"), fn);
+            buf = fmt::format(_("{}", "on {}"), fn);
         }
 
-        line = format(_("(X:%03d Y:%03d) %sの上の発見済みアイテム一覧", "Found items at (X:%03d Y:%03d) %s"), pos.x, pos.y, buf.data());
+        line = fmt::format(_("(X:{:03} Y:{:03}) {}の上の発見済みアイテム一覧", "Found items at (X:{:03} Y:{:03}) {}"), pos.x, pos.y, buf);
     }
     term_addstr(-1, TERM_WHITE, line);
 
@@ -791,7 +793,7 @@ static void display_found_item_list(PlayerType *player_ptr)
 
         // アイテムシンボル表示
         const auto symbol = item_ptr->get_symbol();
-        const auto symbol_str = format(" %c ", symbol.character);
+        const auto symbol_str = fmt::format(" {:c} ", symbol.character);
         term_addstr(-1, symbol.color, symbol_str);
 
         const auto item_name = describe_flavor(player_ptr, *item_ptr, 0);
@@ -799,7 +801,7 @@ static void display_found_item_list(PlayerType *player_ptr)
         term_addstr(-1, color_code_for_item, item_name);
 
         // アイテム座標表示
-        const auto item_location = format("(X:%3d Y:%3d)", item_ptr->ix, item_ptr->iy);
+        const auto item_location = fmt::format("(X:{:3} Y:{:3})", item_ptr->ix, item_ptr->iy);
         prt(item_location, term_y, wid - item_location.length() - 1);
 
         ++term_y;
@@ -917,8 +919,8 @@ static void display_spell_list(PlayerType *player_ptr)
             }
 
             const auto comment = mindcraft_info(player_ptr, use_mind, i);
-            constexpr auto fmt = "  %c) %-30s%2d %4d %3d%%%s";
-            term_putstr(x, y + i + 1, -1, a, format(fmt, I2A(i), spell.name, spell.min_lev, spell.mana_cost, chance, comment.data()));
+            constexpr auto fmt = "  {:c}) {:<30}{:2} {:4} {:3}%{}";
+            term_putstr(x, y + i + 1, -1, a, fmt::format(fmt, I2A(i), fmt::bytes(spell.name), spell.min_lev, spell.mana_cost, chance, comment));
         }
 
         return;
@@ -958,7 +960,7 @@ static void display_spell_list(PlayerType *player_ptr)
             }
 
             m[j] = y + n;
-            term_putstr(x, m[j], -1, a, format("%c/%c) %-20.20s", I2A(n / 8), I2A(n % 8), name));
+            term_putstr(x, m[j], -1, a, fmt::format("{:c}/{:c}) {:<20}", I2A(n / 8), I2A(n % 8), fmt::bytes(str_substr(name, 0, 20))));
             n++;
         }
     }

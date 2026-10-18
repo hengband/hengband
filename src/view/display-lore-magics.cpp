@@ -4,6 +4,8 @@
 #include "monster-race/race-ability-flags.h"
 #include "system/monrace/monrace-definition.h"
 #include "term/term-color-types.h"
+#include "util/string-processor.h"
+#include <fmt/format.h>
 
 void display_monster_breath(lore_type *lore_ptr)
 {
@@ -13,7 +15,7 @@ void display_monster_breath(lore_type *lore_ptr)
     }
 
     lore_ptr->breath = true;
-    hooked_roff(format(_("%s^は", "%s^"), Who::who(lore_ptr->msex).data()));
+    hooked_roff(fmt::format(_("{}は", "{}"), str_upcase_first(Who::who(lore_ptr->msex))));
     for (int n = 0; const auto &[msg, color] : lore_ptr->lore_msgs) {
 #ifdef JP
         if (n != 0) {
@@ -48,7 +50,7 @@ void display_monster_magic_types(lore_type *lore_ptr)
     if (lore_ptr->breath) {
         hooked_roff(_("、なおかつ", ", and is also"));
     } else {
-        hooked_roff(format(_("%s^は", "%s^ is"), Who::who(lore_ptr->msex).data()));
+        hooked_roff(fmt::format(_("{}は", "{} is"), str_upcase_first(Who::who(lore_ptr->msex))));
     }
 
 #ifdef JP
@@ -96,10 +98,10 @@ void display_mosnter_magic_possibility(lore_type *lore_ptr)
     int m = lore_ptr->monrace->r_cast_spell;
     int n = lore_ptr->monrace->freq_spell;
     if (m > 100 || lore_ptr->know_everything) {
-        hooked_roff(format(_("(確率:1/%d)", "; 1 time in %d"), 100 / n));
+        hooked_roff(fmt::format(_("(確率:1/{})", "; 1 time in {}"), 100 / n));
     } else if (m) {
         n = ((n + 9) / 10) * 10;
-        hooked_roff(format(_("(確率:約1/%d)", "; about 1 time in %d"), 100 / n));
+        hooked_roff(fmt::format(_("(確率:約1/{})", "; about 1 time in {}"), 100 / n));
     }
 
     hooked_roff(_("。", ".  "));
@@ -177,11 +179,11 @@ static std::string rate_tag(const lore_type *lore_ptr)
     }
 
     if (m > 100 || lore_ptr->know_everything) {
-        return format(_("1/%d", "1/%d"), 100 / n);
+        return fmt::format("1/{}", 100 / n);
     }
     if (m) {
         n = ((n + 9) / 10) * 10;
-        return format(_("約1/%d", "about 1/%d"), 100 / n);
+        return fmt::format(_("約1/{}", "about 1/{}"), 100 / n);
     }
     return "???";
 }
@@ -372,8 +374,8 @@ void display_monster_magic_rate(lore_type *lore_ptr)
         return;
     }
 
-    hooked_roff(format(_("特技使用率:%s ", "AbilityRate:%s "), rate_tag(lore_ptr).c_str()));
-    hooked_roff(format(_("%s", "%s"), mind_tag(lore_ptr).c_str()));
+    hooked_roff(fmt::format(_("特技使用率:{} ", "AbilityRate:{} "), rate_tag(lore_ptr)));
+    hooked_roff(mind_tag(lore_ptr));
     hooked_roff("\n");
 }
 

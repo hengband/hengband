@@ -121,11 +121,11 @@ static void display_object_list(int col, int row, int per_page, const std::vecto
         const auto item_name = is_flavor_only ? flavor_baseitem.flavor_name : baseitem.stripped_name();
         c_prt(attr, item_name.data(), row + i, col);
         if (per_page == 1) {
-            c_prt(attr, format("%02x/%02x", flavor_config.get_color(), flavor_config.get_character()), row + i, (is_wizard || visual_only) ? 64 : 68);
+            c_prt(attr, fmt::format("{:02x}/{:02x}", flavor_config.get_color(), static_cast<unsigned int>(flavor_config.get_character())), row + i, (is_wizard || visual_only) ? 64 : 68);
         }
 
         if (is_wizard || visual_only) {
-            c_prt(attr, format("%d", bi_id), row + i, 70);
+            c_prt(attr, fmt::format("{}", bi_id), row + i, 70);
         }
 
         const auto ds = flavor_baseitem.is_valid() ? flavor_config.get_symbol() : empty_symbol;
@@ -217,7 +217,7 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
             clear_from(0);
 
 #ifdef JP
-            prt(format("%s - アイテム", !visual_only ? "知識" : "表示"), 2, 0);
+            prt(fmt::format("{} - アイテム", !visual_only ? "知識" : "表示"), 2, 0);
             if (bi_id < 0) {
                 prt("グループ", 4, 0);
             }
@@ -227,7 +227,7 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
             }
             prt("文字", 4, 74);
 #else
-            prt(format("%s - objects", !visual_only ? "Knowledge" : "Visuals"), 2, 0);
+            prt(fmt::format("{} - objects", !visual_only ? "Knowledge" : "Visuals"), 2, 0);
             if (bi_id < 0) {
                 prt("Group", 4, 0);
             }
@@ -289,12 +289,10 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
         }
 
 #ifdef JP
-        prt(format("<方向>%s%s%s, ESC", (!visual_list && !visual_only) ? ", 'r'で詳細を見る" : "", visual_list ? ", ENTERで決定" : ", 'v'でシンボル変更",
-                (symbols_cb.symbol != DisplaySymbol()) ? ", 'c', 'p'でペースト" : ", 'c'でコピー"),
+        prt(fmt::format("<方向>{}{}{}, ESC", (!visual_list && !visual_only) ? ", 'r'で詳細を見る" : "", visual_list ? ", ENTERで決定" : ", 'v'でシンボル変更", (symbols_cb.symbol != DisplaySymbol()) ? ", 'c', 'p'でペースト" : ", 'c'でコピー"),
             hgt - 1, 0);
 #else
-        prt(format("<dir>%s%s%s, ESC", (!visual_list && !visual_only) ? ", 'r' to recall" : "", visual_list ? ", ENTER to accept" : ", 'v' for visuals",
-                (symbols_cb.symbol != DisplaySymbol()) ? ", 'c', 'p' to paste" : ", 'c' to copy"),
+        prt(fmt::format("<dir>{}{}{}, ESC", (!visual_list && !visual_only) ? ", 'r' to recall" : "", visual_list ? ", ENTER to accept" : ", 'v' for visuals", (symbols_cb.symbol != DisplaySymbol()) ? ", 'c', 'p' to paste" : ", 'c' to copy"),
             hgt - 1, 0);
 #endif
 

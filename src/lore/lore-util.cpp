@@ -8,6 +8,8 @@
 #include "system/monrace/monrace-records.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "util/string-processor.h"
+#include <fmt/format.h>
 
 const who_word_definition Who::words = {
     { WHO_WORD_TYPE::WHO,
@@ -186,8 +188,8 @@ tl::optional<std::vector<lore_msg>> lore_type::build_kill_unique_description() c
     std::vector<lore_msg> texts;
     const auto is_dead = this->monrace->is_dead_unique();
     if (this->monrace->r_deaths > 0) {
-        constexpr auto fmt = _("%s^はあなたの先祖を %d 人葬っている", "%s^ has slain %d of your ancestors");
-        texts.emplace_back(format(fmt, Who::who(this->msex).data(), this->monrace->r_deaths));
+        constexpr auto fmt = _("{}はあなたの先祖を {} 人葬っている", "{} has slain {} of your ancestors");
+        texts.emplace_back(fmt::format(fmt, str_upcase_first(Who::who(this->msex)), this->monrace->r_deaths));
         texts.emplace_back(this->build_revenge_description(is_dead));
         texts.emplace_back("\n");
     } else {
@@ -209,7 +211,7 @@ std::string lore_type::build_revenge_description(bool has_defeated) const
     return has_defeated ? "が、すでに仇討ちは果たしている！" : "のに、まだ仇討ちを果たしていない。";
 #else
     if (has_defeated) {
-        return format(", but you have avenged %s!  ", Who::whom(this->msex, this->monrace->r_deaths == 1).data());
+        return fmt::format(", but you have avenged {}!  ", Who::whom(this->msex, this->monrace->r_deaths == 1));
     }
 
     std::stringstream ss;

@@ -6,6 +6,8 @@
 #include "monster-attack/monster-attack-table.h"
 #include "system/monrace/monrace-definition.h"
 #include "term/term-color-types.h"
+#include "util/string-processor.h"
+#include <fmt/format.h>
 #include <string>
 #include <vector>
 
@@ -235,11 +237,11 @@ void display_monster_melee_summary_line(lore_type *lore_ptr)
 static void display_monster_blow_jp(lore_type *lore_ptr, int attack_numbers, const Dice &damage_dice, int m)
 {
     if (attack_numbers == 0) {
-        hooked_roff(format("%s^は", Who::who(lore_ptr->msex).data()));
+        hooked_roff(fmt::format("{}は", str_upcase_first(Who::who(lore_ptr->msex))));
     }
 
     if (damage_dice.is_valid() && (lore_ptr->know_everything || lore_ptr->is_blow_damage_known(m))) {
-        hook_c_roff(TERM_L_WHITE, format(" %s ", damage_dice.to_string().data()));
+        hook_c_roff(TERM_L_WHITE, fmt::format(" {} ", damage_dice.to_string()));
         hooked_roff("のダメージで");
     }
 
@@ -283,7 +285,7 @@ static void display_monster_blow_jp(lore_type *lore_ptr, int attack_numbers, con
 static void display_monster_blow_en(lore_type *lore_ptr, int attack_numbers, const Dice &damage_dice, int m)
 {
     if (attack_numbers == 0) {
-        hooked_roff(format("%s^ can ", Who::who(lore_ptr->msex).data()));
+        hooked_roff(fmt::format("{} can ", str_upcase_first(Who::who(lore_ptr->msex))));
     } else if (attack_numbers < lore_ptr->count - 1) {
         hooked_roff(", ");
     } else {
@@ -301,7 +303,7 @@ static void display_monster_blow_en(lore_type *lore_ptr, int attack_numbers, con
         hook_c_roff(lore_ptr->qc, lore_ptr->q);
         if (damage_dice.is_valid() && (lore_ptr->know_everything || lore_ptr->is_blow_damage_known(m))) {
             hooked_roff(" with damage");
-            hook_c_roff(TERM_L_WHITE, format(" %s", damage_dice.to_string().data()));
+            hook_c_roff(TERM_L_WHITE, fmt::format(" {}", damage_dice.to_string()));
         }
     }
 }
@@ -351,8 +353,8 @@ void display_monster_blows(lore_type *lore_ptr)
     if (attack_numbers > 0) {
         hooked_roff(_("。", ".  "));
     } else if (lore_ptr->behavior_flags.has(MonsterBehaviorType::NEVER_BLOW)) {
-        hooked_roff(format(_("%s^は物理的な攻撃方法を持たない。", "%s^ has no physical attacks.  "), Who::who(lore_ptr->msex).data()));
+        hooked_roff(fmt::format(_("{}は物理的な攻撃方法を持たない。", "{} has no physical attacks.  "), str_upcase_first(Who::who(lore_ptr->msex))));
     } else {
-        hooked_roff(format(_("%s攻撃については何も知らない。", "Nothing is known about %s attack.  "), Who::whose(lore_ptr->msex).data()));
+        hooked_roff(fmt::format(_("{}攻撃については何も知らない。", "Nothing is known about {} attack.  "), Who::whose(lore_ptr->msex)));
     }
 }

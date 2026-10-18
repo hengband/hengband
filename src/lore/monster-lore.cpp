@@ -17,12 +17,14 @@
 #include "system/enums/monrace/monrace-id.h"
 #include "system/monrace/monrace-definition.h"
 #include "term/term-color-types.h"
+#include "util/string-processor.h"
 #include "view/display-lore-attacks.h"
 #include "view/display-lore-drops.h"
 #include "view/display-lore-magics.h"
 #include "view/display-lore-status.h"
 #include "view/display-lore.h"
 #include <algorithm>
+#include <fmt/format.h>
 
 static void set_msex_flags(lore_type *lore_ptr)
 {
@@ -197,12 +199,12 @@ void process_monster_lore(PlayerType *player_ptr, MonraceId r_idx, monster_lore_
 
     display_lore_this(player_ptr, lore_ptr);
     if (lore_ptr->special_flags.has(MonsterSpecialType::DIMINISH_MAX_DAMAGE)) {
-        hooked_roff(format(_("%s^は", "%s^ "), Who::who(lore_ptr->msex).data()));
+        hooked_roff(fmt::format(_("{}は", "{} "), str_upcase_first(Who::who(lore_ptr->msex))));
         hook_c_roff(TERM_RED, _("致命的な威力の攻撃に対して大きな耐性を持っている。", "has the strong resistance for a critical damage.  "));
     }
     display_monster_aura(lore_ptr);
     if (lore_ptr->misc_flags.has(MonsterMiscType::REFLECTING)) {
-        hooked_roff(format(_("%s^は矢の呪文を跳ね返す。", "%s^ reflects bolt spells.  "), Who::who(lore_ptr->msex).data()));
+        hooked_roff(fmt::format(_("{}は矢の呪文を跳ね返す。", "{} reflects bolt spells.  "), str_upcase_first(Who::who(lore_ptr->msex))));
     }
 
     display_monster_collective(lore_ptr);
