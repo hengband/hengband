@@ -726,6 +726,80 @@ TEST_CASE("FixedMapPD town JSONC rejects ambiguous maps and missing selected sta
     CHECK(fixture.player.oldpx == 0);
 }
 
+/*!
+ * @brief 町の共通凡例と町の定義の一覧の読み込みに失敗したら、町のマップを読まずに終了する
+ * @details 一覧に現在の町が無いときは、町のマップを読まずに成功する。
+ */
+TEST_CASE("FixedMapPD town JSONC stops at invalid preference and definition list files")
+{
+    FixedMapFixture fixture;
+    test::ScopedReaderState reader_state;
+    test::TerrainListTestAccess floor_tag(TerrainTag::FLOOR, 1);
+    test::TerrainListTestAccess wall_tag(TerrainTag::GRANITE_WALL, 2);
+    test::TerrainListTestAccess none_tag(TerrainTag::NONE, 0);
+    const auto restore = test::scoped_restore(ANGBAND_DIR_EDIT, vanilla_town, lite_town, quit_aux);
+    TownFiles files;
+    write_application_town(files, make_application_town());
+    ANGBAND_DIR_EDIT = files.directory;
+    vanilla_town = lite_town = false;
+    quit_aux = throw_town_load_failure;
+    fixture.player.lev = 7;
+    init_flags = INIT_CREATE_DUNGEON;
+    const auto &grid = fixture.floor.grid_array[0][0];
+
+    files.write("TownPreferences.jsonc", { { "version", 2 } });
+    CHECK_THROWS_AS(load_town_map(&fixture.player), TownMapLoadFailure);
+    std::filesystem::remove(files.directory / "TownPreferences.jsonc");
+    CHECK_THROWS_AS(load_town_map(&fixture.player), TownMapLoadFailure);
+    CHECK(grid.feat == 0);
+
+    write_application_town(files, make_application_town());
+    files.write("TownDefinitionList.jsonc", { { "version", 1 }, { "towns", nlohmann::json::object() } });
+    CHECK_THROWS_AS(load_town_map(&fixture.player), TownMapLoadFailure);
+    std::filesystem::remove(files.directory / "TownDefinitionList.jsonc");
+    CHECK_THROWS_AS(load_town_map(&fixture.player), TownMapLoadFailure);
+    CHECK(grid.feat == 0);
+
+    const auto other_town = std::to_string(AngbandWorld::get_instance().get_town_index() + 1);
+    files.write("TownDefinitionList.jsonc", { { "version", 1 }, { "towns", { { other_town, "towns/fixture.jsonc" } } } });
+    REQUIRE_NOTHROW(load_town_map(&fixture.player));
+    CHECK(grid.feat == 0);
+    CHECK(fixture.player.oldpy == 0);
+}
+
+/*!
+ * @brief 町のマップのファイルが無いときや、JSONC として読めないファイルがあるときは、町のマップを読まずに終了する
+ */
+TEST_CASE("FixedMapPD town JSONC stops at a missing town map and unparsable files")
+{
+    FixedMapFixture fixture;
+    test::ScopedReaderState reader_state;
+    test::TerrainListTestAccess floor_tag(TerrainTag::FLOOR, 1);
+    test::TerrainListTestAccess wall_tag(TerrainTag::GRANITE_WALL, 2);
+    test::TerrainListTestAccess none_tag(TerrainTag::NONE, 0);
+    const auto restore = test::scoped_restore(ANGBAND_DIR_EDIT, vanilla_town, lite_town, quit_aux);
+    TownFiles files;
+    write_application_town(files, make_application_town());
+    ANGBAND_DIR_EDIT = files.directory;
+    vanilla_town = lite_town = false;
+    quit_aux = throw_town_load_failure;
+    fixture.player.lev = 7;
+    init_flags = INIT_CREATE_DUNGEON;
+    const auto &grid = fixture.floor.grid_array[0][0];
+
+    std::filesystem::remove(files.directory / "towns/fixture.jsonc");
+    CHECK_THROWS_AS(load_town_map(&fixture.player), TownMapLoadFailure);
+    CHECK(grid.feat == 0);
+
+    for (const auto *name : { "TownPreferences.jsonc", "TownDefinitionList.jsonc", "towns/fixture.jsonc" }) {
+        CAPTURE(name);
+        write_application_town(files, make_application_town());
+        files.write_raw(name, "{ \"version\": 1,");
+        CHECK_THROWS_AS(load_town_map(&fixture.player), TownMapLoadFailure);
+        CHECK(grid.feat == 0);
+    }
+}
+
 TEST_CASE("FixedMapPD quest start deletes an occupying monster and decrements its population")
 {
     FixedMapFixture fixture;

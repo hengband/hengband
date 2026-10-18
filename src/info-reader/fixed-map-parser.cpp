@@ -53,6 +53,7 @@
 #include <fmt/format.h>
 #include <nlohmann/json.hpp>
 #include <string>
+#include <tl/expected.hpp>
 #include <type_traits>
 #include <utility>
 #include <variant>
@@ -212,46 +213,54 @@ parse_error_type apply_town_map_feature(const FloorType &floor, const TownMapFea
     return PARSE_ERROR_NONE;
 }
 
-static parse_error_type load_town_preferences()
+static tl::expected<void, parse_error_type> load_town_preferences()
 {
     if (init_flags & INIT_ONLY_BUILDINGS) {
-        return PARSE_ERROR_NONE;
+        return {};
     }
 
     JsoncDocumentLoader loader(path_build(ANGBAND_DIR_EDIT, TOWN_PREFERENCES));
     if (!loader.is_open()) {
-        return PARSE_ERROR_GENERIC;
+        return tl::make_unexpected(PARSE_ERROR_GENERIC);
     }
 
     try {
         const auto data = loader.parse();
         TownPreferencesLegend legend;
         if (const auto err = TownPreferencesReader(data).read(legend, parse_quest_legend_cell); err != PARSE_ERROR_NONE) {
-            return err;
+            return tl::make_unexpected(err);
         }
 
         for (const auto &[symbol, grid] : legend) {
             fixed_map_letter_at(symbol) = grid;
         }
-        return PARSE_ERROR_NONE;
+        return {};
     } catch (const nlohmann::json::exception &) {
-        return PARSE_ERROR_INVALID_VALUE;
+        return tl::make_unexpected(PARSE_ERROR_INVALID_VALUE);
     }
 }
 
-static parse_error_type load_town_definition_file(std::string &map_file)
+/*!
+ * @brief 町の定義の一覧から、現在の町のマップのファイル名を読む
+ * @return マップのファイル名（一覧に現在の町が無ければ空文字列）、またはエラーコード
+ */
+static tl::expected<std::string, parse_error_type> load_town_definition_file()
 {
     JsoncDocumentLoader loader(path_build(ANGBAND_DIR_EDIT, TOWN_DEFINITION_LIST));
     if (!loader.is_open()) {
-        return PARSE_ERROR_GENERIC;
+        return tl::make_unexpected(PARSE_ERROR_GENERIC);
     }
 
     try {
         const auto data = loader.parse();
         const auto mode = vanilla_town ? TownMapMode::NONE : (lite_town ? TownMapMode::LITE : TownMapMode::NORMAL);
-        return TownDefinitionListReader(data).read(AngbandWorld::get_instance().get_town_index(), mode, map_file);
+        std::string map_file;
+        if (const auto err = TownDefinitionListReader(data).read(AngbandWorld::get_instance().get_town_index(), mode, map_file); err != PARSE_ERROR_NONE) {
+            return tl::make_unexpected(err);
+        }
+        return map_file;
     } catch (const nlohmann::json::exception &) {
-        return PARSE_ERROR_INVALID_VALUE;
+        return tl::make_unexpected(PARSE_ERROR_INVALID_VALUE);
     }
 }
 
@@ -361,51 +370,51 @@ std::string format_town_map_condition_error(std::string_view filename, std::stri
 
 /*! @brief 町の各規則の条件を評価し、不正な変数は位置を示して解析エラーにする。 */
 template <typename Rules, typename Apply>
-static parse_error_type apply_town_rules(PlayerType *player_ptr, std::string_view filename, std::string_view array_name, const Rules &rules, Apply apply)
+static tl::expected<void, parse_error_type> apply_town_rules(PlayerType *player_ptr, std::string_view filename, std::string_view array_name, const Rules &rules, Apply apply)
 {
     for (size_t i = 0; i < rules.size(); ++i) {
         const auto &rule = rules[i];
         const auto condition = is_town_map_condition_met(player_ptr, rule.condition);
         if (!condition) {
             msg_print(format_town_map_condition_error(filename, fmt::format("{}[{}].when", array_name, i), *rule.condition, condition.error().variable));
-            return PARSE_ERROR_INVALID_VALUE;
+            return tl::make_unexpected(PARSE_ERROR_INVALID_VALUE);
         }
         if (!*condition) {
             continue;
         }
         if (const auto err = apply(rule); err != PARSE_ERROR_NONE) {
-            return err;
+            return tl::make_unexpected(err);
         }
     }
-    return PARSE_ERROR_NONE;
+    return {};
 }
 
-static parse_error_type parse_town_map_jsonc(PlayerType *player_ptr, std::string_view name)
+static tl::expected<void, parse_error_type> parse_town_map_jsonc(PlayerType *player_ptr, std::string_view name)
 {
     JsoncDocumentLoader loader(path_build(ANGBAND_DIR_EDIT, name));
     if (!loader.is_open()) {
-        return PARSE_ERROR_GENERIC;
+        return tl::make_unexpected(PARSE_ERROR_GENERIC);
     }
     try {
         const auto data = loader.parse();
         TownMapDefinition definition;
         const bool only_buildings = (init_flags & INIT_ONLY_BUILDINGS) != 0;
         if (const auto err = TownMapReader(data).read(definition, MAX_HGT, MAX_WID, only_buildings); err != PARSE_ERROR_NONE) {
-            return err;
+            return tl::make_unexpected(err);
         }
         auto y = 0;
         auto x = 0;
         qtwg_type qg;
         auto *qg_ptr = initialize_quest_generator_type(&qg, 0, 0, MAX_HGT, MAX_WID, &y, &x);
         const auto apply_features = [player_ptr](const auto &feature) { return apply_town_map_feature(*player_ptr->current_floor_ptr, feature); };
-        if (const auto err = apply_town_rules(player_ptr, name, "featureRules", definition.features, apply_features); err != PARSE_ERROR_NONE) {
-            return err;
+        if (const auto result = apply_town_rules(player_ptr, name, "featureRules", definition.features, apply_features); !result) {
+            return result;
         }
-        if (const auto err = apply_town_rules(player_ptr, name, "buildingRules", definition.buildings, apply_town_building_rule); err != PARSE_ERROR_NONE) {
-            return err;
+        if (const auto result = apply_town_rules(player_ptr, name, "buildingRules", definition.buildings, apply_town_building_rule); !result) {
+            return result;
         }
         if (only_buildings) {
-            return PARSE_ERROR_NONE;
+            return {};
         }
         const TownMapVariant *selected_map = nullptr;
         const auto select_map = [&selected_map](const auto &map) {
@@ -415,13 +424,13 @@ static parse_error_type parse_town_map_jsonc(PlayerType *player_ptr, std::string
             selected_map = &map;
             return PARSE_ERROR_NONE;
         };
-        if (const auto err = apply_town_rules(player_ptr, name, "mapVariants", definition.maps, select_map); err != PARSE_ERROR_NONE) {
-            return err;
+        if (const auto result = apply_town_rules(player_ptr, name, "mapVariants", definition.maps, select_map); !result) {
+            return result;
         }
         if (selected_map != nullptr) {
             for (const auto &row : selected_map->rows) {
                 if (const auto err = apply_fixed_map_row(player_ptr, qg_ptr, row); err != PARSE_ERROR_NONE) {
-                    return err;
+                    return tl::make_unexpected(err);
                 }
             }
         }
@@ -434,7 +443,7 @@ static parse_error_type parse_town_map_jsonc(PlayerType *player_ptr, std::string
         };
         return apply_town_rules(player_ptr, name, "startingPositions", definition.starts, apply_start);
     } catch (const nlohmann::json::exception &) {
-        return PARSE_ERROR_INVALID_VALUE;
+        return tl::make_unexpected(PARSE_ERROR_INVALID_VALUE);
     }
 }
 
@@ -451,30 +460,30 @@ static void report_load_error(parse_error_type err, std::string_view filename)
 }
 
 /*!
- * @brief 町の定義から現在の町の固定マップを読み込んで生成し、エラーコードを返す (load_town_map() の本体)
+ * @brief 町の定義から現在の町の固定マップを読み込んで生成し、失敗はエラーコードで返す (load_town_map() の本体)
  * @param player_ptr プレイヤーへの参照ポインタ
- * @return エラーコード。失敗した場合はエラーを表示済み
+ * @return 成功、またはエラーコード。失敗した場合はエラーを表示済み
  */
-static parse_error_type generate_town_map(PlayerType *player_ptr)
+static tl::expected<void, parse_error_type> generate_town_map(PlayerType *player_ptr)
 {
-    if (const auto err = load_town_preferences(); err != PARSE_ERROR_NONE) {
-        report_load_error(err, TOWN_PREFERENCES);
-        return err;
+    if (const auto result = load_town_preferences(); !result) {
+        report_load_error(result.error(), TOWN_PREFERENCES);
+        return result;
     }
 
-    std::string map_file;
-    if (const auto err = load_town_definition_file(map_file); err != PARSE_ERROR_NONE) {
-        report_load_error(err, TOWN_DEFINITION_LIST);
-        return err;
+    const auto map_file = load_town_definition_file();
+    if (!map_file) {
+        report_load_error(map_file.error(), TOWN_DEFINITION_LIST);
+        return tl::make_unexpected(map_file.error());
     }
-    if (map_file.empty()) {
-        return PARSE_ERROR_NONE;
+    if (map_file->empty()) {
+        return {};
     }
-    const auto err = parse_town_map_jsonc(player_ptr, map_file);
-    if (err != PARSE_ERROR_NONE) {
-        report_load_error(err, map_file);
+    const auto result = parse_town_map_jsonc(player_ptr, *map_file);
+    if (!result) {
+        report_load_error(result.error(), *map_file);
     }
-    return err;
+    return result;
 }
 
 /*!
@@ -484,7 +493,7 @@ static parse_error_type generate_town_map(PlayerType *player_ptr)
  */
 void load_town_map(PlayerType *player_ptr)
 {
-    if (generate_town_map(player_ptr) != PARSE_ERROR_NONE) {
+    if (!generate_town_map(player_ptr)) {
         quit(_("町の定義の読み込みに失敗しました", "Failed to load the town definition"));
     }
 }
