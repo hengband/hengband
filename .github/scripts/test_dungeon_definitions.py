@@ -153,16 +153,18 @@ class DungeonValidationTest(unittest.TestCase):
                                       "layout": ["####", "####", "####"],
                                       "starting_position": {"y": 1, "x": 1}}
                                for name in ("normal", "compact")}}
-        for y, x, accepted in ((0, 0, True), (2, 3, True), (3, 0, False), (0, 4, False)):
+        # 3×4の荒野で端を除いた内側は y=1・x=1〜2 だけ。
+        cases = ((1, 1, None), (1, 2, None), (0, 1, "wild_y"), (2, 1, "wild_y"), (3, 1, "wild_y"),
+                 (1, 0, "wild_x"), (1, 3, "wild_x"), (1, 4, "wild_x"))
+        for y, x, rejected_field in cases:
             with self.subTest(y=y, x=x):
                 document = self.sample()
                 document["dungeons"][0]["position"].update(wild_y=y, wild_x=x)
                 ok, diagnostic = self.validate(document, companions={"WildernessDefinition.jsonc": wilderness})
-                self.assertEqual(ok, accepted, diagnostic)
-                if not accepted:
-                    field = "wild_y" if y == 3 else "wild_x"
-                    self.assertIn("dungeon entrance must be within the wilderness map", diagnostic)
-                    self.assertIn(f"Location: {['dungeons', 0, 'position', field]}", diagnostic)
+                self.assertEqual(ok, rejected_field is None, diagnostic)
+                if rejected_field:
+                    self.assertIn("dungeon entrance must be inside the wilderness map excluding the edges", diagnostic)
+                    self.assertIn(f"Location: {['dungeons', 0, 'position', rejected_field]}", diagnostic)
         wilderness["height"] = 3.0
         ok, diagnostic = self.validate(self.sample(), companions={"WildernessDefinition.jsonc": wilderness})
         self.assertFalse(ok, diagnostic)

@@ -95,9 +95,11 @@ int DungeonReader::read() const
 }
 
 /*!
- * @brief 読み込み済みダンジョンの入口が荒野の実サイズに収まるか確認する。
- * @details ダンジョン定義の後に荒野定義を読むため、荒野の初期化前に呼ぶ。
- * @return 荒野外の入口があれば範囲外エラー。
+ * @brief 読み込み済みダンジョンの入口が、荒野の実サイズの端を除いた内側（1〜高さ−2、1〜幅−2）にあるか確認する。
+ * @param height 荒野の高さ
+ * @param width 荒野の幅
+ * @details ダンジョン定義の後に荒野定義を読むため、荒野の初期化前に呼ぶ。荒野自体（ID 0）は対象外。
+ * @return 端または範囲外の入口があれば範囲外エラー。
  */
 int DungeonReader::validate_wilderness_positions(int height, int width)
 {
@@ -105,10 +107,12 @@ int DungeonReader::validate_wilderness_positions(int height, int width)
         if (id == DungeonId::WILDERNESS) {
             continue;
         }
+        // ダンジョンを出ると荒野の現在地が入口になり、地上の生成では現在地の周囲8マスを生成するため、
+        // 入口は荒野の端を除いた内側に限る。
         const auto &pos = dungeon->get_position();
-        if (pos.y < 0 || pos.y >= height || pos.x < 0 || pos.x >= width) {
-            msg_print(_("DungeonDefinitions.jsonc: ダンジョンID '{}' の入口 ({}, {}) は荒野サイズ ({}, {}) の範囲外です。",
-                          "DungeonDefinitions.jsonc: dungeon ID '{}' entrance ({}, {}) is outside wilderness size ({}, {})."),
+        if (pos.y < 1 || pos.y > height - 2 || pos.x < 1 || pos.x > width - 2) {
+            msg_print(_("DungeonDefinitions.jsonc: ダンジョンID '{}' の入口 ({}, {}) は荒野サイズ ({}, {}) の端を除いた内側にありません。",
+                          "DungeonDefinitions.jsonc: dungeon ID '{}' entrance ({}, {}) must be inside wilderness size ({}, {}) excluding the edges."),
                 enum2i(id), pos.y, pos.x, height, width);
             return PARSE_ERROR_OUT_OF_BOUNDS;
         }
