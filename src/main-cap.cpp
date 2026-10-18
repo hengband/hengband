@@ -5,7 +5,7 @@
 #include "io/exit-panic.h"
 #include "system/angband.h"
 #include "term/gameterm.h"
-#include "term/z-form.h"
+#include <fmt/format.h>
 
 #ifdef USE_CAP
 
@@ -256,7 +256,7 @@ static void do_cs(int y1, int y2)
 #endif
 
 #ifdef USE_HARDCODE
-    auto temp = format(cs, y1, y2);
+    auto temp = fmt::format("\033[{};{}r", y1, y2); /* --]-- */
     tp(temp.data());
 #endif
 }
@@ -274,7 +274,7 @@ static void do_cm(int x, int y)
 #endif
 
 #ifdef USE_HARDCODE
-    auto temp = format(cm, y + 1, x + 1);
+    auto temp = fmt::format("\033[{};{}H", y + 1, x + 1); /* --]-- */
     tp(temp.data());
 #endif
 }
@@ -410,12 +410,6 @@ errr init_cap_aux(void)
     /* Hilite on/off */
     so = "\033[7m"; /* --]-- */
     se = "\033[m"; /* --]-- */
-
-    /* Scroll region */
-    cs = "\033[%d;%dr"; /* --]-- */
-
-    /* Move cursor */
-    cm = "\033[%d;%dH"; /* --]-- */
 
 #endif
 
