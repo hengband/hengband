@@ -271,12 +271,14 @@ TEST_CASE("WildernessReader propagates map helper errors without replacing outpu
         { "/letters/0/level", false, PARSE_ERROR_INVALID_TYPE },
         { "/letters/0/level", 0.5, PARSE_ERROR_INVALID_TYPE },
         { "/letters/0/level", -1, PARSE_ERROR_INVALID_FLAG },
+        { "/letters/0/level", MAX_DEPTH, PARSE_ERROR_INVALID_FLAG },
         { "/letters/0/level", uint64_t{ std::numeric_limits<int>::max() } + 1, PARSE_ERROR_INVALID_FLAG },
         { "/letters/0/level", nlohmann::json::object(), PARSE_ERROR_TOO_FEW_ARGUMENTS },
         { "/letters/0/level", { { other, 0 } }, PARSE_ERROR_TOO_FEW_ARGUMENTS },
         { "/letters/0/level", { { selected, nullptr }, { other, 0 } }, PARSE_ERROR_TOO_FEW_ARGUMENTS },
         { "/letters/0/level", { { selected, false }, { other, 0 } }, PARSE_ERROR_INVALID_TYPE },
         { "/letters/0/level", { { selected, -1 }, { other, 0 } }, PARSE_ERROR_INVALID_FLAG },
+        { "/letters/0/level", { { selected, MAX_DEPTH }, { other, 0 } }, PARSE_ERROR_INVALID_FLAG },
         { "/letters/0/town", false, PARSE_ERROR_INVALID_TYPE },
         { "/letters/0/town", 32768, PARSE_ERROR_INVALID_FLAG },
         { "/letters/0/road", 16, PARSE_ERROR_INVALID_FLAG },
@@ -331,7 +333,7 @@ TEST_CASE("WildernessReader propagates map helper errors without replacing outpu
 }
 
 /*!
- * @brief 整数0・上限値・任意の省略値と、選択言語だけを読む既存の契約を維持する
+ * @brief 整数0・上限値（MAX_DEPTH - 1）・任意の省略値と、選択言語だけを読む既存の契約を維持する
  */
 TEST_CASE("WildernessReader preserves direct and localized level boundaries")
 {
@@ -340,9 +342,9 @@ TEST_CASE("WildernessReader preserves direct and localized level boundaries")
     const std::vector<nlohmann::json> levels = {
         nullptr,
         0,
-        std::numeric_limits<int>::max(),
+        MAX_DEPTH - 1,
         { { selected, 0 }, { other, "unused" } },
-        { { selected, std::numeric_limits<int>::max() }, { other, false } },
+        { { selected, MAX_DEPTH - 1 }, { other, false } },
     };
     for (const auto *map_name : { "normal", "compact" }) {
         CAPTURE(map_name);

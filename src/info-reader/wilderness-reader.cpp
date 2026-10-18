@@ -19,7 +19,6 @@
 #include "view/display-messages.h"
 #include <algorithm>
 #include <array>
-#include <limits>
 #include <nlohmann/json.hpp>
 #include <set>
 #include <utility>
@@ -234,7 +233,8 @@ tl::expected<void, parse_error_type> WildernessReader::read_map(const nlohmann::
         }
         const auto &level_data = get_json_value(letter_data, "level");
         if (!level_data.is_null()) {
-            if (const auto result = read_localized_integer(level_data, letter.level, Range(0, std::numeric_limits<int>::max())); !result) {
+            // 生成は階層を MAX_DEPTH - 1 で頭打ちにし、地上の階層はセーブで16ビットになるため、それより深い値は受け付けない。
+            if (const auto result = read_localized_integer(level_data, letter.level, Range(0, MAX_DEPTH - 1)); !result) {
                 return result;
             }
         }

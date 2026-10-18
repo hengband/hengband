@@ -37,8 +37,8 @@
       "additionalProperties": false,
       "required": ["ja", "en"],
       "properties": {
-        "ja": { "type": "integer", "minimum": 0, "maximum": 2147483647 },
-        "en": { "type": "integer", "minimum": 0, "maximum": 2147483647 }
+        "ja": { "type": "integer", "minimum": 0, "maximum": 127 },
+        "en": { "type": "integer", "minimum": 0, "maximum": 127 }
       }
     },
     "town": {
@@ -60,7 +60,7 @@
         "terrain": { "type": "integer", "minimum": 0, "maximum": 11 },
         "level": {
           "oneOf": [
-            { "type": "integer", "minimum": 0, "maximum": 2147483647 },
+            { "type": "integer", "minimum": 0, "maximum": 127 },
             { "$ref": "#/definitions/localized_integer" }
           ]
         },

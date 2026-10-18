@@ -130,6 +130,15 @@ class WildernessTownValidationTest(unittest.TestCase):
         self.assertFalse(ok, message)
         self.assertIn("Location: ['maps', 'compact', 'layout', 1, 3]", message)
 
+    def test_letter_level_follows_the_maximum_depth(self):
+        # 生成は階層を 127（MAX_DEPTH - 1）で頭打ちにし、地上の階層はセーブで16ビットになる。
+        for level, accepted in ((127, True), (128, False), ({"ja": 127, "en": 127}, True), ({"ja": 128, "en": 1}, False), ({"ja": 1, "en": 128}, False)):
+            with self.subTest(level=level):
+                data = copy.deepcopy(self.data)
+                data["maps"]["normal"]["letters"][1]["level"] = level
+                ok, message = self.validate(data)
+                self.assertEqual(ok, accepted, message)
+
     def test_town_ids_must_have_town_definition_files(self):
         # 初期化は、町の定義ファイル名の先頭2文字の種類の数を超える番号の町を拒否する。
         with tempfile.TemporaryDirectory() as folder:
