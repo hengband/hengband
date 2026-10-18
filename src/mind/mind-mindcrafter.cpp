@@ -1,5 +1,4 @@
 #include "mind/mind-mindcrafter.h"
-#include "autopick/autopick.h"
 #include "avatar/avatar.h"
 #include "core/window-redrawer.h"
 #include "effect/attribute-types.h"
@@ -9,7 +8,6 @@
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/floor-object.h"
-#include "game-option/auto-destruction-options.h"
 #include "hpmp/hp-mp-processor.h"
 #include "mind/mind-numbers.h"
 #include "object-enchant/item-feeling.h"
@@ -32,9 +30,7 @@
 #include "status/sight-setter.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "target/target-getter.h"
-#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
 /*!
@@ -76,46 +72,8 @@ bool psychometry(PlayerType *player_ptr)
     msg_print("You feel that the {} {} {}...", item_name, ((item->number == 1) ? "is" : "are"), game_inscriptions[feel]);
 #endif
 
-    item->set_identification_flag(IdentificationFlag::SENSE);
-    item->feeling = feel;
     item->marked.set(OmType::TOUCHED);
-
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.request_inventory_arrangement();
-    rfu.request_item_lists_redrawing();
-
-    bool okay = false;
-    switch (item->bi_key.tval()) {
-    case ItemKindType::SHOT:
-    case ItemKindType::ARROW:
-    case ItemKindType::BOLT:
-    case ItemKindType::BOW:
-    case ItemKindType::DIGGING:
-    case ItemKindType::HAFTED:
-    case ItemKindType::POLEARM:
-    case ItemKindType::SWORD:
-    case ItemKindType::BOOTS:
-    case ItemKindType::GLOVES:
-    case ItemKindType::HELM:
-    case ItemKindType::CROWN:
-    case ItemKindType::SHIELD:
-    case ItemKindType::CLOAK:
-    case ItemKindType::SOFT_ARMOR:
-    case ItemKindType::HARD_ARMOR:
-    case ItemKindType::DRAG_ARMOR:
-    case ItemKindType::CARD:
-    case ItemKindType::RING:
-    case ItemKindType::AMULET:
-    case ItemKindType::LITE:
-    case ItemKindType::FIGURINE:
-        okay = true;
-        break;
-
-    default:
-        break;
-    }
-
-    autopick_alter_item(player_ptr, i_idx, (bool)(okay && destroy_feeling));
+    apply_item_feeling(player_ptr, i_idx, feel);
     return true;
 }
 

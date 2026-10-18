@@ -7,6 +7,7 @@
  * @date 2021/05/02
  */
 
+#include "object-enchant/item-feeling.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/tr-flags.h"
 #include "object-enchant/trc-types.h"
@@ -93,6 +94,7 @@ public:
     bool is_weapon() const;
     bool is_weapon_ammo() const;
     bool is_weapon_armour_ammo() const;
+    bool can_be_sensed() const;
     bool is_melee_weapon() const;
     bool is_melee_ammo() const;
     bool is_wearable() const;
@@ -182,6 +184,7 @@ public:
     std::string get_fixed_artifact_name() const;
 
     void mark_as_known();
+    void sense(item_feel_type feel);
     void mark_as_tried() const;
 
     void set_position(const Pos2D &pos);

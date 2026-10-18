@@ -46,3 +46,33 @@ TEST_CASE("ItemEntity calc_price discounts large prices without multiplication o
     item.discount = 50;
     CHECK(item.calc_price() == 75);
 }
+
+TEST_CASE("ItemEntity can_be_sensed accepts only the kinds that pseudo-identification handles")
+{
+    // 定期の擬似鑑定が扱う、武器・防具・矢弾・カード・装飾品の種類
+    for (const auto tval : { ItemKindType::SHOT, ItemKindType::ARROW, ItemKindType::BOLT, ItemKindType::BOW, ItemKindType::DIGGING, ItemKindType::HAFTED,
+             ItemKindType::POLEARM, ItemKindType::SWORD, ItemKindType::BOOTS, ItemKindType::GLOVES, ItemKindType::HELM, ItemKindType::CROWN,
+             ItemKindType::SHIELD, ItemKindType::CLOAK, ItemKindType::SOFT_ARMOR, ItemKindType::HARD_ARMOR, ItemKindType::DRAG_ARMOR, ItemKindType::CARD,
+             ItemKindType::RING, ItemKindType::AMULET, ItemKindType::LITE, ItemKindType::FIGURINE }) {
+        ItemEntity item;
+        item.bi_key = BaseitemKey(tval, 0);
+        CAPTURE(static_cast<int>(tval));
+        CHECK(item.can_be_sensed());
+    }
+
+    for (const auto tval : { ItemKindType::POTION, ItemKindType::SCROLL, ItemKindType::FOOD, ItemKindType::WAND, ItemKindType::STAFF, ItemKindType::ROD, ItemKindType::FLASK }) {
+        ItemEntity item;
+        item.bi_key = BaseitemKey(tval, 0);
+        CAPTURE(static_cast<int>(tval));
+        CHECK_FALSE(item.can_be_sensed());
+    }
+}
+
+TEST_CASE("ItemEntity sense sets the feeling and the sensed flag")
+{
+    ItemEntity item;
+    item.sense(FEEL_EXCELLENT);
+
+    CHECK(item.feeling == FEEL_EXCELLENT);
+    CHECK(item.has_identification_flag(IdentificationFlag::SENSE));
+}
