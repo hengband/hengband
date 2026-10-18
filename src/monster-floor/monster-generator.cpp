@@ -242,7 +242,7 @@ tl::optional<MONSTER_IDX> place_specific_monster(PlayerType *player_ptr, POSITIO
                 }
             }
             if (d > scatter_max) {
-                msg_format_wizard(player_ptr, CHEAT_MONSTER, _("護衛の指定生成に失敗しました。", "Failed fixed escorts."));
+                msg_print_wizard(player_ptr, CHEAT_MONSTER, _("護衛の指定生成に失敗しました。", "Failed fixed escorts."));
             }
         }
     }

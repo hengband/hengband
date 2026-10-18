@@ -123,8 +123,7 @@ static void natural_attack(PlayerType *player_ptr, MONSTER_IDX m_idx, PlayerMuta
     }
 
     k = mon_damage_mod(player_ptr, monster, k, false);
-    msg_format_wizard(player_ptr, CHEAT_MONSTER, _("%dのダメージを与えた。(残りHP %d/%d(%d))", "You do %d damage. (left HP %d/%d(%d))"), k, monster.hp - k,
-        monster.maxhp, monster.max_maxhp);
+    msg_print_wizard(player_ptr, CHEAT_MONSTER, _("{}のダメージを与えた。(残りHP {}/{}({}))", "You do {} damage. (left HP {}/{}({}))"), k, monster.hp - k, monster.maxhp, monster.max_maxhp);
     if (k > 0) {
         anger_monster(player_ptr, monster);
     }
