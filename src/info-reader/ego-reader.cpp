@@ -11,7 +11,6 @@
 #include "util/enum-converter.h"
 #include <limits>
 #include <nlohmann/json.hpp>
-#include <stdexcept>
 
 EgoReader::EgoReader(const nlohmann::json &ego_data)
     : ego_data(ego_data)
@@ -226,13 +225,7 @@ tl::expected<void, parse_error_type> EgoReader::set_activation(EgoItemDefinition
     if (!activation.is_string()) {
         return tl::make_unexpected(PARSE_ERROR_INVALID_TYPE);
     }
-    try {
-        ego.act_idx = grab_one_activation_flag(activation.get<std::string>());
-    } catch (const std::invalid_argument &) {
-        return tl::make_unexpected(PARSE_ERROR_INVALID_FLAG);
-    } catch (const std::out_of_range &) {
-        return tl::make_unexpected(PARSE_ERROR_INVALID_FLAG);
-    }
+    ego.act_idx = grab_one_activation_flag(activation.get<std::string>());
     if (ego.act_idx <= RandomArtActType::NONE) {
         return tl::make_unexpected(PARSE_ERROR_INVALID_FLAG);
     }

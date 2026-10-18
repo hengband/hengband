@@ -24,7 +24,6 @@
 #include <limits>
 #include <memory>
 #include <nlohmann/json.hpp>
-#include <stdexcept>
 #include <utility>
 
 BaseitemReader::BaseitemReader(const nlohmann::json &baseitem_data)
@@ -328,14 +327,7 @@ tl::expected<void, parse_error_type> BaseitemReader::set_baseitem_activate(Basei
         return tl::unexpected(PARSE_ERROR_INVALID_TYPE);
     }
 
-    RandomArtActType activation;
-    try {
-        activation = grab_one_activation_flag(act_data.get<std::string>());
-    } catch (const std::invalid_argument &) {
-        return tl::unexpected(PARSE_ERROR_INVALID_FLAG);
-    } catch (const std::out_of_range &) {
-        return tl::unexpected(PARSE_ERROR_INVALID_FLAG);
-    }
+    const auto activation = grab_one_activation_flag(act_data.get<std::string>());
     if (activation <= RandomArtActType::NONE) {
         return tl::unexpected(PARSE_ERROR_INVALID_FLAG);
     }

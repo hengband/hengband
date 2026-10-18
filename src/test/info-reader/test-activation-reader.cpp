@@ -112,15 +112,12 @@ private:
 /*!
  * @brief ベースアイテム・アーティファクト・エゴの読み込み処理が、いずれも発動の指定を不正なフラグとして拒否することを確かめる
  * @param token 発動の指定
- * @param also_check_grab grab_one_activation_flag() でも発動なしになることを確かめるか
- * (数値でない指定は std::stoi() が例外を投げるため、読み込み処理を通してだけ確かめる)
+ * @details grab_one_activation_flag() でも発動なしになることを確かめる。
  */
-void check_rejected_by_all_readers(const std::string &token, bool also_check_grab)
+void check_rejected_by_all_readers(const std::string &token)
 {
     ActivationStateGuard guard;
-    if (also_check_grab) {
-        CHECK(grab_one_activation_flag(token) == RandomArtActType::NONE);
-    }
+    CHECK(grab_one_activation_flag(token) == RandomArtActType::NONE);
 
     const auto data = make_item_with_activation(token);
     CHECK(BaseitemReader(data).read() == PARSE_ERROR_INVALID_FLAG);
@@ -160,7 +157,7 @@ TEST_CASE("Activation readers reject unknown and out-of-range strings as invalid
 {
     for (const auto *token : { "UNKNOWN_ACTIVATION", "", "999999999999999999999", "-999999999999999999999", "0", "-1" }) {
         CAPTURE(token);
-        check_rejected_by_all_readers(token, false);
+        check_rejected_by_all_readers(token);
     }
 }
 
@@ -169,7 +166,7 @@ TEST_CASE("Activation readers reject numeric IDs before narrowing")
     const int max = enum2i(RandomArtActType::MAX);
     for (const auto id : { max, max + 1, 9999, 32767, 32768, 65536, 65536 + enum2i(RandomArtActType::BA_FIRE_4), 70000, std::numeric_limits<int>::max() }) {
         CAPTURE(id);
-        check_rejected_by_all_readers(std::to_string(id), true);
+        check_rejected_by_all_readers(std::to_string(id));
     }
 }
 
@@ -180,19 +177,22 @@ TEST_CASE("Activation readers reject unused numeric IDs")
             const auto numeric = std::to_string(id);
             for (const auto &token : { numeric, " +" + numeric, numeric + "suffix" }) {
                 CAPTURE(token);
-                check_rejected_by_all_readers(token, true);
+                check_rejected_by_all_readers(token);
             }
         }
     }
 }
 
-TEST_CASE("Activation readers accept every registered activation")
+TEST_CASE("Activation readers accept every registered activation by name only")
 {
+    // 番号は効果を足すとずれるため、登録された発動でも番号での指定は受け付けない。
     for (const auto &activation : activation_info) {
+        CAPTURE(activation.flag);
+        check_accepted_by_all_readers(activation.flag, activation.index);
         const auto numeric = std::to_string(enum2i(activation.index));
-        for (const auto &token : { activation.flag, numeric, " +" + numeric, numeric + "suffix" }) {
+        for (const auto &token : { numeric, " +" + numeric, numeric + "suffix" }) {
             CAPTURE(token);
-            check_accepted_by_all_readers(token, activation.index);
+            check_rejected_by_all_readers(token);
         }
     }
 }
@@ -219,23 +219,6 @@ TEST_CASE("Activation registry covers all non-reserved IDs with unique names")
             is_unused |= (id >= first) && (id <= last);
         }
         CHECK(ids.contains(id) == !is_unused);
-    }
-}
-
-TEST_CASE("Activation readers accept numeric ID boundaries")
-{
-    for (const auto expected : { RandomArtActType::SUNLIGHT, RandomArtActType::CRIMSON }) {
-        CAPTURE(expected);
-        check_accepted_by_all_readers(std::to_string(enum2i(expected)), expected);
-    }
-}
-
-TEST_CASE("Activation readers preserve named and legacy numeric string conversion")
-{
-    const auto numeric = std::to_string(enum2i(RandomArtActType::BA_FIRE_4));
-    for (const auto &token : { std::string("BA_FIRE_4"), numeric, " +" + numeric, numeric + "suffix" }) {
-        CAPTURE(token);
-        check_accepted_by_all_readers(token, RandomArtActType::BA_FIRE_4);
     }
 }
 
