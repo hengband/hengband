@@ -145,7 +145,7 @@ static int process_monk_additional_effect(player_attack_type *pa_ptr, int *stun_
             sound(SoundKind::PAIN);
             special_effect = MA_KNEE;
         } else {
-            msg_format(pa_ptr->ma_ptr->desc, pa_ptr->m_name);
+            msg_print(pa_ptr->ma_ptr->desc, std::string_view(pa_ptr->m_name));
         }
     }
 
@@ -154,14 +154,14 @@ static int process_monk_additional_effect(player_attack_type *pa_ptr, int *stun_
             msg_print(_("{}の足首に関節蹴りをくらわした！", "You kick {} in the ankle."), pa_ptr->m_name);
             special_effect = MA_SLOW;
         } else {
-            msg_format(pa_ptr->ma_ptr->desc, pa_ptr->m_name);
+            msg_print(pa_ptr->ma_ptr->desc, std::string_view(pa_ptr->m_name));
         }
     } else {
         if (pa_ptr->ma_ptr->effect) {
             *stun_effect = (pa_ptr->ma_ptr->effect / 2) + randint1(pa_ptr->ma_ptr->effect / 2);
         }
 
-        msg_format(pa_ptr->ma_ptr->desc, pa_ptr->m_name);
+        msg_print(pa_ptr->ma_ptr->desc, std::string_view(pa_ptr->m_name));
     }
 
     return special_effect;
