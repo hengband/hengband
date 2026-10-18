@@ -102,6 +102,7 @@ libhengband_a_SOURCES = \
 	bot/bot-report.cpp bot/bot-report.h \
 	bot/bot-screen.cpp bot/bot-screen.h \
 	bot/bot-socket-server.cpp bot/bot-socket-server.h \
+	bot/bot-subwindow-verifier.cpp bot/bot-subwindow-verifier.h \
 	\
 	cmd-action/cmd-attack.cpp cmd-action/cmd-attack.h \
 	cmd-action/cmd-hissatsu.cpp cmd-action/cmd-hissatsu.h \

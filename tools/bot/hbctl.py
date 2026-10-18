@@ -213,6 +213,55 @@ def command_messages(args: argparse.Namespace) -> int:
     return 0
 
 
+# verify_subwindows の行の違い (difference) の表示名
+DIFFERENCE_NAMES = {
+    "text": "",
+    "color": " (色だけ)",
+    "tile": " (タイルの下地だけ)",
+}
+
+
+def difference_name(difference: str) -> str:
+    """行の違いの表示名を返す。知らない種類はそのまま括弧に入れる。"""
+    return DIFFERENCE_NAMES.get(difference, f" ({difference})")
+
+
+def command_verify_subwindows(args: argparse.Namespace) -> int:
+    """サブウィンドウの描き直しの漏れを調べて表示する。
+
+    食い違いが無ければ 0、あれば 2、調べたサブウィンドウが無ければ 3 を返す (通信などのエラーは 1)。
+    調べるために全てのサブウィンドウを描き直すため、検証のためだけに使う。
+    """
+    response = request(args, {"op": "verify_subwindows"})
+    if args.json:
+        print_json(response)
+    else:
+        count = 0
+        for term in response["terms"]:
+            requested = ", 要求済み" if term.get("was_requested") else ""
+            header = f"term {term['term']} (flag {term['window_flag']}{requested})"
+            for rows_key, label, keys in (
+                ("unflushed_rows", "画面に出ていない", ("shown", "drawn")),
+                ("stale_rows", "古い", ("before", "after")),
+            ):
+                for row in term[rows_key]:
+                    count += 1
+                    print(f"{header} row {row['row']}: {label}{difference_name(row['difference'])}")
+                    for key in keys:
+                        print(f"  {key:<6}: {row[key]}")
+        if not response["terms"]:
+            print("調べたサブウィンドウがない")
+        elif response["consistent"]:
+            print("食い違いなし")
+        else:
+            print(f"食い違いあり ({count} 行)")
+
+    if not response["terms"]:
+        return 3
+
+    return 0 if response["consistent"] else 2
+
+
 def command_raw(args: argparse.Namespace) -> int:
     """任意のJSONリクエストを送信して結果をそのまま表示する。"""
     try:
@@ -351,6 +400,15 @@ def build_parser() -> argparse.ArgumentParser:
         "count", type=int, nargs="?", default=20, help="取得する件数 (既定: 20)"
     )
     messages_parser.set_defaults(func=command_messages)
+
+    verify_parser = subparsers.add_parser(
+        "verify-subwindows",
+        help="サブウィンドウの描き直しの漏れを調べる (全て描き直すので検証のためだけに使う)",
+    )
+    verify_parser.add_argument(
+        "--json", action="store_true", help="整形せずJSONのまま表示する"
+    )
+    verify_parser.set_defaults(func=command_verify_subwindows)
 
     raw_parser = subparsers.add_parser("raw", help="任意のJSONリクエストを送信する")
     raw_parser.add_argument("payload", help="送信するJSON")

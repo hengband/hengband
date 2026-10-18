@@ -19,6 +19,7 @@
 #include "bot/bot-report.h"
 #include "bot/bot-screen.h"
 #include "bot/bot-socket-server.h"
+#include "bot/bot-subwindow-verifier.h"
 #include "game-option/runtime-arguments.h"
 #include "io/input-context.h"
 #include "io/macro-configurations-store.h"
@@ -514,6 +515,35 @@ nlohmann::json handle_state_request(const nlohmann::json &id, const nlohmann::js
 }
 
 /*!
+ * @brief verify_subwindowsリクエストを処理する
+ * @param id リクエストのid
+ * @return レスポンスのJSONオブジェクト
+ * @details
+ * サブウィンドウの描き直しの漏れを調べる (verify_bot_subwindows())。
+ * 調べるために全てのサブウィンドウを描き直すので、検証のためだけに使う。
+ * 描き直すサブウィンドウ (全体図など) はフロアを要するため、ダンジョン (町を含む) に入る前はエラーを返す。
+ * コマンドの入力待ち (入力の文脈が COMMAND) でなければエラーを返す。コマンドの途中の入力待ち (ターゲットの選択や
+ * 「見る」など) では、サブウィンドウがカーソルの位置などに合わせた内容を描いていることがあり、
+ * 描き直すと食い違いが出たうえに表示も変わってしまうため。
+ */
+nlohmann::json handle_verify_subwindows_request(const nlohmann::json &id)
+{
+    const auto &world = AngbandWorld::get_instance();
+    const auto is_ready = world.character_dungeon && (p_ptr != nullptr) && (p_ptr->current_floor_ptr != nullptr);
+    if (!is_ready) {
+        return make_error_response(id, "the game is not in a dungeon yet");
+    }
+
+    // 入力の文脈は入れ子の入力待ち (-続く- など) で上書きされるので、コマンドの入力そのものを待っているときだけ COMMAND になる
+    const auto &context = get_input_context();
+    if (!context || (context->kind != InputKind::COMMAND)) {
+        return make_error_response(id, "the game is not waiting for a command");
+    }
+
+    return make_ok_response(id, verify_bot_subwindows(p_ptr));
+}
+
+/*!
  * @brief リクエストのJSONオブジェクトを解釈して処理する
  * @param request リクエストのJSONオブジェクト
  * @return リクエストの処理結果
@@ -573,6 +603,10 @@ RequestResult dispatch_request(const nlohmann::json &request)
         }
 
         return make_ok_response(id, { { "messages", make_message_history_json(*count) } });
+    }
+
+    if (*op == "verify_subwindows") {
+        return handle_verify_subwindows_request(id);
     }
 
     if (*op == "quit") {
