@@ -10,6 +10,7 @@
 #include "object/item-tester-hooker.h"
 #include "player-base/player-class.h"
 #include "player-info/race-info.h"
+#include "system/angband-system.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "term/gameterm.h"
@@ -331,9 +332,29 @@ static EnumClassFlagGroup<SubWindowRedrawingFlag> get_shown_sub_window_flags()
 }
 
 /*!
+ * @brief メッセージのサブウィンドウの描き直しを、ターンの区切りか入力待ちまで遅らせてよいか
+ * @return 遅らせてよいか
+ * @details
+ * メッセージは 1 件出るたびに全体を描き直すので、モンスターの攻撃などで続けて出ると重い。
+ * フラグは残し、ターンの区切りか入力待ち (-続く- を含む) で window_stuff_including_deferred() からまとめて描く。
+ * 次のときは遅らせると描かれないか、画面だけが先に進むので、今まで通りメッセージのたびに描く。
+ * - ダンジョンに入る前 (フロアの生成中など): 入力待ちでサブウィンドウを描かない
+ * - 闘技場の観戦中: プレイヤーのターンが来ず、ターンの区切りで描かない
+ * - fresh_message・fresh_after が有効: メッセージやモンスターの行動のたびに画面へ出すオプション
+ */
+static bool can_defer_message_window()
+{
+    if (!AngbandWorld::get_instance().character_dungeon || AngbandSystem::get_instance().is_phase_out()) {
+        return false;
+    }
+
+    return !fresh_message && !fresh_after;
+}
+
+/*!
  * @brief SubWindowRedrawingFlag のフラグに応じた更新をまとめて行う
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param include_deferred defer_map_subwindows で遅らせている地図のサブウィンドウも更新するならtrue
+ * @param include_deferred 遅らせている地図 (defer_map_subwindows が有効なとき) とメッセージのサブウィンドウも更新するならtrue
  */
 static void update_sub_windows(PlayerType *player_ptr, bool include_deferred)
 {
@@ -358,10 +379,18 @@ static void update_sub_windows(PlayerType *player_ptr, bool include_deferred)
         return;
     }
 
-    auto window_flags = rfu.get_sub_intersection(target_flags);
+    const auto is_message_deferred = !include_deferred && can_defer_message_window();
+    EnumClassFlagGroup<SubWindowRedrawingFlag> deferred_flags;
     if (is_map_deferred) {
-        window_flags.reset(SubWindowRedrawingFlag::OVERHEAD).reset(SubWindowRedrawingFlag::DUNGEON);
+        deferred_flags.set({ SubWindowRedrawingFlag::OVERHEAD, SubWindowRedrawingFlag::DUNGEON });
     }
+
+    if (is_message_deferred) {
+        deferred_flags.set(SubWindowRedrawingFlag::MESSAGE);
+    }
+
+    auto window_flags = rfu.get_sub_intersection(target_flags);
+    window_flags.reset(deferred_flags);
 
     if (window_flags.has(SubWindowRedrawingFlag::INVENTORY)) {
         rfu.reset_flag(SubWindowRedrawingFlag::INVENTORY);
@@ -453,8 +482,8 @@ void window_stuff_if_needed(PlayerType *player_ptr)
 /*!
  * @brief SubWindowRedrawingFlag のフラグに応じてサブウィンドウを更新する
  * @param player_ptr プレイヤーへの参照ポインタ
- * @details defer_map_subwindows が有効なら、地図のサブウィンドウ (ダンジョン全体図・自分の周囲) は
- * フラグを残したまま描き直さない。それらは window_stuff_including_deferred() で描く。
+ * @details メッセージのサブウィンドウ (can_defer_message_window() のとき) と、defer_map_subwindows が有効なときの地図のサブウィンドウ
+ * (ダンジョン全体図・自分の周囲) は、フラグを残したまま描き直さない。それらは window_stuff_including_deferred() で描く。
  */
 void window_stuff(PlayerType *player_ptr)
 {
@@ -462,7 +491,7 @@ void window_stuff(PlayerType *player_ptr)
 }
 
 /*!
- * @brief 遅らせている地図のサブウィンドウも含めて、サブウィンドウを更新する
+ * @brief 遅らせている地図とメッセージのサブウィンドウも含めて、サブウィンドウを更新する
  * @param player_ptr プレイヤーへの参照ポインタ
  * @details プレイヤーのターンの区切りと、キー入力を待つ前に呼ぶ
  */

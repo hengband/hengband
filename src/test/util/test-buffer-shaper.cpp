@@ -31,6 +31,18 @@ TEST_CASE("shape_buffer returns a short string as is")
     CHECK(shape_buffer("abc", 10) == Lines{ "abc" });
 }
 
+TEST_CASE("shape_buffer keeps a string shorter than the width by one in one line")
+{
+    // 終端文字の分を残すので、1 行は最大 maxlen - 1 バイト
+    CHECK(shape_buffer("abcd", 5) == Lines{ "abcd" });
+    CHECK(shape_buffer("abcde", 5) == Lines{ "abcd", "e" });
+}
+
+TEST_CASE("shape_buffer replaces an unprintable character with a space")
+{
+    CHECK(shape_buffer("a\tb", 10) == Lines{ "a b" });
+}
+
 TEST_CASE("shape_buffer returns no lines for an empty string")
 {
     CHECK(shape_buffer("", 10).empty());
@@ -76,6 +88,17 @@ TEST_CASE("shape_buffer puts at least one multibyte character in each line even 
     CHECK(shape_buffer(repeat(KANJI_KAN, 2), 2) == Lines{ std::string(KANJI_KAN), std::string(KANJI_KAN) });
     CHECK(shape_buffer(repeat(KANJI_KAN, 2), 1) == Lines{ std::string(KANJI_KAN), std::string(KANJI_KAN) });
     CHECK(shape_buffer(cat("a", KANJI_KAN), 2) == Lines{ "a", std::string(KANJI_KAN) });
+}
+
+TEST_CASE("shape_buffer returns a short multibyte string as is")
+{
+    CHECK(shape_buffer(repeat(KANJI_KAN, 2), 10) == Lines{ repeat(KANJI_KAN, 2) });
+}
+
+TEST_CASE("shape_buffer replaces a lead byte at the end with a space")
+{
+    // 全角文字の前半バイトだけで終わっていたら、表示できない文字として空白にする
+    CHECK(shape_buffer(cat("ab", KANJI_KAN.substr(0, 1)), 10) == Lines{ "ab " });
 }
 
 TEST_CASE("shape_buffer splits multibyte characters so that each line fits in the width")
