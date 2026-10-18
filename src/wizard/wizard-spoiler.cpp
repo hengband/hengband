@@ -38,6 +38,7 @@
 #include "wizard/spoiler-util.h"
 #include <algorithm>
 #include <array>
+#include <fmt/format.h>
 #include <iterator>
 #include <set>
 #include <sstream>
@@ -185,13 +186,13 @@ static SpoilerOutputResultType spoil_player_spell()
         return SpoilerOutputResultType::FILE_OPEN_FAILED;
     }
 
-    spoil_out(format("Player spells for %s\n", AngbandSystem::get_instance().build_version_expression(VersionExpression::FULL).data()));
+    spoil_out(fmt::format("Player spells for {}\n", AngbandSystem::get_instance().build_version_expression(VersionExpression::FULL)));
     spoil_out("------------------------------------------\n\n");
 
     PlayerType dummy_p;
     dummy_p.lev = 1;
     for (const auto pclass : EnumRange(PlayerClassType::WARRIOR, PlayerClassType::MAX)) {
-        spoil_out(format("[[Class: %s]]\n", class_info.at(pclass).title.data()));
+        spoil_out(fmt::format("[[Class: {}]]\n", class_info.at(pclass).title));
 
         const auto *magic_ptr = &class_magics_info[enum2i(pclass)];
         std::string book_name = _("なし", "None");
@@ -223,12 +224,12 @@ static SpoilerOutputResultType spoil_player_spell()
                 continue;
             }
 
-            spoil_out(format("[Realm: %s]\n", PlayerRealm::get_name(realm).data()));
+            spoil_out(fmt::format("[Realm: {}]\n", PlayerRealm::get_name(realm)));
             spoil_out("Name                     Lv  Cst Dif  Exp\n");
             for (SPELL_IDX i = 0; i < 32; i++) {
                 const auto &spell = PlayerRealm::get_spell_info(realm, i, pclass);
                 const auto &spell_name = PlayerRealm::get_spell_name(realm, i);
-                spoil_out(format("%-24s %2d %4d %3d %4d\n", spell_name.data(), spell.slevel, spell.smana, spell.sfail, spell.sexp));
+                spoil_out(fmt::format("{:<24} {:2} {:4} {:3} {:4}\n", fmt::bytes(spell_name), spell.slevel, spell.smana, spell.sfail, spell.sexp));
             }
             spoil_out("\n");
         }

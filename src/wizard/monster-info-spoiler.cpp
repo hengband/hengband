@@ -77,15 +77,12 @@ SpoilerOutputResultType spoil_mon_desc(std::string_view filename, std::function<
         return SpoilerOutputResultType::FILE_OPEN_FAILED;
     }
 
-    constexpr auto fmt_version = "Monster Spoilers for %s\n";
-    ofs << format(fmt_version, AngbandSystem::get_instance().build_version_expression(VersionExpression::FULL).data());
+    constexpr auto fmt_version = "Monster Spoilers for {}\n";
+    ofs << fmt::format(fmt_version, AngbandSystem::get_instance().build_version_expression(VersionExpression::FULL));
     ofs << "------------------------------------------\n\n";
-    ofs << format("%-45.45s%4s %4s %4s %7s %7s  %19.19s\n", "Name", "Lev", "Rar", "Spd", "Hp", "Ac", "Visual Info");
-    ofs << format("%-45.45s%4s %4s %4s %7s %7s  %4.19s\n",
-        "---------------------------------------------"
-        "----"
-        "----------",
-        "---", "---", "---", "-----", "-----", "-------------------");
+    constexpr auto fmt_line = "{:<45}{:>4} {:>4} {:>4} {:>7} {:>7}  {:>19}\n";
+    ofs << fmt::format(fmt_line, "Name", "Lev", "Rar", "Spd", "Hp", "Ac", "Visual Info");
+    ofs << fmt::format(fmt_line, std::string(45, '-'), "---", "---", "---", "-----", "-----", "-------------------");
 
     const auto &monraces = MonraceList::get_instance();
     std::vector<MonraceId> monrace_ids = monraces.get_valid_monrace_ids();
@@ -111,24 +108,23 @@ SpoilerOutputResultType spoil_mon_desc(std::string_view filename, std::function<
         }
         nam.append(name.front());
 
-        const auto lev = format("%d", monrace.level);
-        const auto rar = format("%d", (int)monrace.rarity);
-        const auto spd = format("%+d", monrace.speed - STANDARD_SPEED);
-        const auto ac = format("%d", monrace.ac);
+        const auto lev = fmt::format("{}", monrace.level);
+        const auto rar = fmt::format("{}", monrace.rarity);
+        const auto spd = fmt::format("{:+}", monrace.speed - STANDARD_SPEED);
+        const auto ac = fmt::format("{}", monrace.ac);
         std::string hp;
         if (monrace.misc_flags.has(MonsterMiscType::FORCE_MAXHP) || (monrace.hit_dice.sides == 1)) {
-            hp = format("%d", monrace.hit_dice.maxroll());
+            hp = fmt::format("{}", monrace.hit_dice.maxroll());
         } else {
             hp = monrace.hit_dice.to_string();
         }
 
-        const auto symbol = format("%s '%c'", attr_to_text(monrace).data(), monrace.symbol_definition.character);
-        ofs << format("%-45.45s%4s %4s %4s %7s %7s  %19.19s\n",
-            nam.data(), lev.data(), rar.data(), spd.data(), hp.data(),
-            ac.data(), symbol.data());
+        const auto symbol = fmt::format("{} '{:c}'", attr_to_text(monrace), monrace.symbol_definition.character);
+        const auto line = fmt::format(fmt_line, fmt::bytes(str_substr(nam, 0, 45)), lev, rar, spd, hp, ac, fmt::bytes(str_substr(symbol, 0, 19)));
+        ofs << line;
 
         for (auto i = 1U; i < name.size(); ++i) {
-            ofs << format("    %s\n", name[i].data());
+            ofs << fmt::format("    {}\n", name[i]);
         }
     }
 
@@ -161,8 +157,8 @@ SpoilerOutputResultType spoil_mon_info()
         return SpoilerOutputResultType::FILE_OPEN_FAILED;
     }
 
-    constexpr auto fmt_version = "Monster Spoilers for %s\n";
-    spoil_out(format(fmt_version, AngbandSystem::get_instance().build_version_expression(VersionExpression::FULL).data()));
+    constexpr auto fmt_version = "Monster Spoilers for {}\n";
+    spoil_out(fmt::format(fmt_version, AngbandSystem::get_instance().build_version_expression(VersionExpression::FULL)));
     spoil_out("------------------------------------------\n\n");
 
     const auto &monraces = MonraceList::get_instance();
@@ -183,7 +179,7 @@ SpoilerOutputResultType spoil_mon_info()
         spoil_out(fmt::format("Num:{}  ", enum2i(monrace_id)));
         spoil_out(fmt::format("Lev:{}  ", monrace.level));
         spoil_out(fmt::format("Rar:{}  ", monrace.rarity));
-        spoil_out(format("Spd:%+d  ", monrace.speed - STANDARD_SPEED));
+        spoil_out(fmt::format("Spd:{:+}  ", monrace.speed - STANDARD_SPEED));
         if (monrace.misc_flags.has(MonsterMiscType::FORCE_MAXHP) || (monrace.hit_dice.sides == 1)) {
             spoil_out(fmt::format("Hp:{}  ", monrace.hit_dice.maxroll()));
         } else {

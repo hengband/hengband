@@ -11,6 +11,7 @@
 #include "effect/effect-processor.h"
 #include "floor/floor-util.h"
 #include "floor/pattern-walk.h"
+#include "game-option/cheat-types.h"
 #include "grid/grid.h"
 #include "io/gf-descriptions.h"
 #include "io/input-key-acceptor.h"
@@ -48,6 +49,7 @@
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "wizard/wizard-messages.h"
+#include <fmt/format.h>
 #include <string_view>
 #include <vector>
 
@@ -128,7 +130,7 @@ void wiz_summon_specific_monster_common(PlayerType *player_ptr, MonraceId monrac
         summon_named_creature(player_ptr, 0, player_ptr->y, player_ptr->x, *summon_monrace_id, mode)
             .transform(index_to_monster);
     if (!monster) {
-        msg_print_wizard(player_ptr, 1, "Monster isn't summoned correctly...");
+        msg_print_wizard(player_ptr, CHEAT_MONSTER, "Monster isn't summoned correctly...");
         return;
     }
 
@@ -178,7 +180,7 @@ void wiz_debug_spell(PlayerType *player_ptr)
             (d.command_function.spell5.spell_function)(player_ptr);
             return;
         default:
-            msg_format("Command not found.");
+            msg_print("Command not found.");
             return;
         }
     }
@@ -276,7 +278,7 @@ void wiz_generate_random_monster(PlayerType *player_ptr, int num)
     constexpr auto flags = PM_ALLOW_SLEEP | PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_QUEST;
     for (auto i = 0; i < num; i++) {
         if (!alloc_monster(player_ptr, 0, flags, summon_specific, 5)) {
-            msg_print_wizard(player_ptr, 1, "Monster isn't generated correctly...");
+            msg_print_wizard(player_ptr, CHEAT_MONSTER, "Monster isn't generated correctly...");
             return;
         }
     }
@@ -296,7 +298,7 @@ void wiz_summon_random_monster(PlayerType *player_ptr, int num)
     const auto x = player_ptr->x;
     for (auto i = 0; i < num; i++) {
         if (!summon_specific(player_ptr, y, x, level, SUMMON_NONE, flags)) {
-            msg_print_wizard(player_ptr, 1, "Monster isn't summoned correctly...");
+            msg_print_wizard(player_ptr, CHEAT_MONSTER, "Monster isn't summoned correctly...");
             return;
         }
     }
