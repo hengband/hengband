@@ -83,6 +83,34 @@ class QuestInt16RangeTest(unittest.TestCase):
                     if not accepted:
                         self.assertIn(f"Location: {['definition', field]}", message)
 
+    def test_other_integers_follow_reader_ranges(self):
+        # QuestReader は int に収まらない値を拒否し、開始位置は地図（最大 66 行 198 列）の中に限る。
+        int_max = 2147483647
+        full_map = ["#" * 198] * 66
+        cases = (
+            ("numMon", int_max, lambda value: self.quest(definition={"numMon": value}), ["definition", "numMon"]),
+            ("dungeon", int_max, lambda value: self.quest(definition={"dungeon": value}), ["definition", "dungeon"]),
+            ("start.y", 65, lambda value: {**self.quest(), "map": full_map, "start": {"y": value, "x": 0}}, ["start", "y"]),
+            ("start.x", 197, lambda value: {**self.quest(), "map": full_map, "start": {"y": 0, "x": value}}, ["start", "x"]),
+            ("leavingQuest", int_max,
+             lambda value: {**self.quest(), "map": full_map, "startVariants": [{"leavingQuest": value, "y": 0, "x": 0}]},
+             ["startVariants", 0, "leavingQuest"]),
+            ("startVariants.y", 65, lambda value: {**self.quest(), "map": full_map, "startVariants": [{"y": value, "x": 0}]},
+             ["startVariants", 0, "y"]),
+            ("startVariants.x", 197, lambda value: {**self.quest(), "map": full_map, "startVariants": [{"y": 0, "x": value}]},
+             ["startVariants", 0, "x"]),
+        )
+        for name, maximum, make, location in cases:
+            with self.subTest(field=name):
+                ok, message = self.validate("Quest", make(maximum))
+                # leavingQuest の上限は参照先が無いため、範囲の検査だけを確かめる。
+                if name != "leavingQuest":
+                    self.assertTrue(ok, message)
+                ok, message = self.validate("Quest", make(maximum + 1))
+                self.assertFalse(ok, message)
+                self.assertIn(f"{maximum + 1} is greater than the maximum of {maximum}", message)
+                self.assertIn(f"Location: {location}", message)
+
     def test_quest_preferences_share_the_legend_ranges(self):
         document = {"version": 1, "legend": {"#": {"monster": 32767, "special": -32768}}}
         ok, message = self.validate("QuestPreferences", document)
