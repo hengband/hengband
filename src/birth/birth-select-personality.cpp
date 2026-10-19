@@ -5,7 +5,6 @@
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
-#include "term/z-form.h"
 #include "util/int-char-converter.h"
 #include "view/display-player-misc-info.h"
 #include <fmt/format.h>

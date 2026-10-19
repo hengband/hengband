@@ -105,7 +105,6 @@
 #include "system/system-variables.h"
 #include "term/gameterm.h"
 #include "term/term-color-types.h"
-#include "term/z-form.h"
 #include "util/angband-files.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"

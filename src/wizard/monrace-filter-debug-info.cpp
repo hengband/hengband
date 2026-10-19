@@ -7,7 +7,6 @@
 #include "wizard/monrace-filter-debug-info.h"
 #include "floor/floor-base-definitions.h"
 #include "locale/language-switcher.h"
-#include "term/z-form.h"
 #include <fmt/format.h>
 
 MonraceFilterDebugInfo::MonraceFilterDebugInfo()

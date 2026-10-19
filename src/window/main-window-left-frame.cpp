@@ -12,7 +12,6 @@
 #include "system/player-type-definition.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
-#include "term/z-form.h"
 #include "timed-effect/timed-effects.h"
 #include "tracking/health-bar-tracker.h"
 #include "util/string-processor.h"

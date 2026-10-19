@@ -8,7 +8,6 @@
 #include "locale/language-switcher.h"
 #include "system/angband-exceptions.h"
 #include "system/enums/dungeon/dungeon-id.h"
-#include "term/z-form.h"
 #include "term/z-rand.h"
 #include "util/enum-converter.h"
 #include "util/enum-range.h"

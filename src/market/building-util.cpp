@@ -1,6 +1,5 @@
 #include "market/building-util.h"
 #include "term/screen-processor.h"
-#include "term/z-form.h"
 #include <fmt/format.h>
 
 /*!

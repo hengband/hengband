@@ -39,7 +39,6 @@
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "term/gameterm.h"
-#include "term/z-form.h"
 #include "util/enum-converter.h"
 #include "view/display-messages.h"
 #include "world/world.h"

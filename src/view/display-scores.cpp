@@ -10,7 +10,6 @@
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
-#include "term/z-form.h"
 #include "util/angband-files.h"
 #include "util/int-char-converter.h"
 #include <fmt/format.h>
@@ -127,7 +126,6 @@ void display_scores(int from, int to, int note, high_score *score)
             std::string out_val;
             const auto pclass = i2enum<PlayerClassType>(pc);
 #ifdef JP
-            /* out_val = format("%3d.%9s  %s%s%sという名の%sの%s (レベル %d)", */
             out_val = fmt::format("{:3}.{:>9}  {}{}{} - {}{} (レベル {})", place, fmt::bytes(the_score.pts), personality_info[pa].title, (personality_info[pa].no ? "の" : ""), the_score.who, race_info[pr].title, class_info.at(pclass).title, clev);
 
 #else

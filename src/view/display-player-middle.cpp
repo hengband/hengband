@@ -25,7 +25,6 @@
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
 #include "term/term-color-types.h"
-#include "term/z-form.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-util.h"
 #include "view/status-first-page.h"

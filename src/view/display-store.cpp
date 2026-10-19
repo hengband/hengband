@@ -12,7 +12,6 @@
 #include "system/player-type-definition.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
-#include "term/z-form.h"
 #include "util/int-char-converter.h"
 #include "view/display-symbol.h"
 #include <algorithm>

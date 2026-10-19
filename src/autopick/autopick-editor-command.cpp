@@ -27,7 +27,6 @@
 #include "player-info/race-info.h"
 #include "system/player-type-definition.h"
 #include "term/term-color-types.h"
-#include "term/z-form.h"
 #include "util/string-processor.h"
 #include <fmt/format.h>
 #include <sstream>

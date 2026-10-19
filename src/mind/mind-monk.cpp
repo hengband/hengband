@@ -10,7 +10,6 @@
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
-#include "term/z-form.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
 #include <fmt/format.h>

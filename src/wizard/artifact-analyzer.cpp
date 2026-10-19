@@ -8,7 +8,6 @@
 #include "object/object-info.h"
 #include "system/artifact/artifact-definition.h"
 #include "system/item/item-entity.h"
-#include "term/z-form.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
 #include "util/enum-range.h"

@@ -12,7 +12,6 @@
 #include "system/monrace/monrace-list.h"
 #include "system/monrace/monrace-records.h"
 #include "system/player-type-definition.h"
-#include "term/z-form.h"
 #include "util/angband-files.h"
 #include "util/string-processor.h"
 #include <fmt/format.h>

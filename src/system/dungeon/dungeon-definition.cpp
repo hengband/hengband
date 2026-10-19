@@ -10,7 +10,6 @@
 #include "system/monrace/monrace-list.h"
 #include "system/terrain/terrain-definition.h"
 #include "system/terrain/terrain-list.h"
-#include "term/z-form.h"
 #include "term/z-rand.h"
 #include <algorithm>
 #include <fmt/format.h>
