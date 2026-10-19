@@ -1087,7 +1087,7 @@ static void send_key(const char key)
     // キーバッファが一杯なら入力を捨てる
     const int head_nxt = game_term->key_head + 1 == game_term->key_size ? 0 : game_term->key_head + 1;
     if (head_nxt == game_term->key_tail) {
-        plog(fmt::format("key buffer overflow, ignoring key 0x{:02X}", static_cast<unsigned int>(key)));
+        plog(fmt::format("key buffer overflow, ignoring key 0x{:02X}", static_cast<uint8_t>(key)));
         return;
     }
 

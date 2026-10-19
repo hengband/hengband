@@ -61,6 +61,23 @@ static tl::optional<T> input_new_visual_id(int i, T initial_visual_id, int max)
 }
 
 /*!
+ * @brief シンボルの文字を変更する際の対象指定
+ * @param i 指定対象となるキャラクタコード
+ * @param initial_character 現在の文字
+ * @return 新しい文字
+ * @details 0x80 以上の文字は char では負になるので、0〜255 の値として指定させる
+ */
+static tl::optional<char> input_new_visual_character(int i, char initial_character)
+{
+    const auto new_character = input_new_visual_id(i, static_cast<uint8_t>(initial_character), 256);
+    if (!new_character) {
+        return tl::nullopt;
+    }
+
+    return static_cast<char>(*new_character);
+}
+
+/*!
  * @brief キャラクタの変更メニュー表示
  * @param choice_msg 選択メッセージ
  */
@@ -267,7 +284,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                     break;
                 }
                 case 'c': {
-                    const auto visual_id = input_new_visual_id(ch, symbol_config.character, 256);
+                    const auto visual_id = input_new_visual_character(ch, symbol_config.character);
                     if (!visual_id) {
                         break;
                     }
@@ -303,10 +320,10 @@ void do_cmd_visuals(PlayerType *player_ptr)
                 const auto &baseitem_name = baseitem_record.is_apparent() ? baseitem.flavor_name : baseitem.name;
                 const auto title = fmt::format(fmt_title, bi_id, fmt::bytes(str_substr(baseitem_name, 0, 40)));
                 term_putstr(5, 17, -1, TERM_WHITE, title);
-                term_putstr(10, 19, -1, TERM_WHITE, fmt::format(_("初期値  色 / 文字 = {:3} / {:3}", "Default attr/char = {:3} / {:3}"), symbol_definition.color, static_cast<int>(symbol_definition.character)));
+                term_putstr(10, 19, -1, TERM_WHITE, fmt::format(_("初期値  色 / 文字 = {:3} / {:3}", "Default attr/char = {:3} / {:3}"), symbol_definition.color, static_cast<uint8_t>(symbol_definition.character)));
                 term_putstr(40, 19, -1, TERM_WHITE, empty_symbol);
                 term_queue_bigchar(43, 19, { symbol_definition, {} });
-                term_putstr(10, 20, -1, TERM_WHITE, fmt::format(_("現在値  色 / 文字 = {:3} / {:3}", "Current attr/char = {:3} / {:3}"), baseitem_config.get_color(), static_cast<int>(baseitem_config.get_character())));
+                term_putstr(10, 20, -1, TERM_WHITE, fmt::format(_("現在値  色 / 文字 = {:3} / {:3}", "Current attr/char = {:3} / {:3}"), baseitem_config.get_color(), static_cast<uint8_t>(baseitem_config.get_character())));
                 term_putstr(40, 20, -1, TERM_WHITE, empty_symbol);
                 term_queue_bigchar(43, 20, { baseitem_config.get_symbol(), {} });
                 term_putstr(0, 22, -1, TERM_WHITE, _("コマンド (n/N/^N/a/A/^A/c/C/^C/v/V/^V): ", "Command (n/N/^N/a/A/^A/c/C/^C/v/V/^V): "));
@@ -354,7 +371,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                     break;
                 }
                 case 'c': {
-                    const auto visual_id = input_new_visual_id(ch, baseitem_config.get_character(), 256);
+                    const auto visual_id = input_new_visual_character(ch, baseitem_config.get_character());
                     if (!visual_id) {
                         break;
                     }
@@ -387,10 +404,10 @@ void do_cmd_visuals(PlayerType *player_ptr)
                 prt("", 17, 5);
                 term_putstr(5, 17, -1, TERM_WHITE,
                     fmt::format(_("地形 = {}, 名前 = {}, 明度 = {}", "Terrain = {}, Name = {}, Lighting = {}"), terrain_id, terrain.name, lighting_level_str[lighting_level]));
-                term_putstr(10, 19, -1, TERM_WHITE, fmt::format(_("初期値  色 / 文字 = {:3} / {:3}", "Default attr/char = {:3} / {:3}"), symbol_definition.color, static_cast<int>(symbol_definition.character)));
+                term_putstr(10, 19, -1, TERM_WHITE, fmt::format(_("初期値  色 / 文字 = {:3} / {:3}", "Default attr/char = {:3} / {:3}"), symbol_definition.color, static_cast<uint8_t>(symbol_definition.character)));
                 term_putstr(40, 19, -1, TERM_WHITE, empty_symbol);
                 term_queue_bigchar(43, 19, { symbol_definition, {} });
-                term_putstr(10, 20, -1, TERM_WHITE, fmt::format(_("現在値  色 / 文字 = {:3} / {:3}", "Current attr/char = {:3} / {:3}"), symbol_config.color, static_cast<int>(symbol_config.character)));
+                term_putstr(10, 20, -1, TERM_WHITE, fmt::format(_("現在値  色 / 文字 = {:3} / {:3}", "Current attr/char = {:3} / {:3}"), symbol_config.color, static_cast<uint8_t>(symbol_config.character)));
                 term_putstr(40, 20, -1, TERM_WHITE, empty_symbol);
                 term_queue_bigchar(43, 20, { symbol_config, {} });
                 term_putstr(0, 22, -1, TERM_WHITE,
@@ -442,7 +459,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                 }
                 case 'c': {
                     auto &character_config = terrain.symbol_configs[lighting_level].character;
-                    const auto visual_id = input_new_visual_id(ch, character_config, 256);
+                    const auto visual_id = input_new_visual_character(ch, character_config);
                     if (!visual_id) {
                         break;
                     }

@@ -121,7 +121,7 @@ static void display_object_list(int col, int row, int per_page, const std::vecto
         const auto item_name = is_flavor_only ? flavor_baseitem.flavor_name : baseitem.stripped_name();
         c_prt(attr, item_name.data(), row + i, col);
         if (per_page == 1) {
-            c_prt(attr, fmt::format("{:02x}/{:02x}", flavor_config.get_color(), static_cast<unsigned int>(flavor_config.get_character())), row + i, (is_wizard || visual_only) ? 64 : 68);
+            c_prt(attr, fmt::format("{:02x}/{:02x}", flavor_config.get_color(), static_cast<uint8_t>(flavor_config.get_character())), row + i, (is_wizard || visual_only) ? 64 : 68);
         }
 
         if (is_wizard || visual_only) {
