@@ -341,11 +341,8 @@ static void prt_alloc(const BaseitemKey &bi_key, TERM_LEN row, TERM_LEN col)
     for (auto i = 0; i < 22; i++) {
         term_putch(col, row + i + 1, { TERM_WHITE, '|' });
         prt(fmt::format("{:2}F", (i * 5)), row + i + 1, col);
-        if ((i * BASEITEM_MAX_DEPTH / 22 <= home) && (home < (i + 1) * BASEITEM_MAX_DEPTH / 22)) {
-            c_prt(TERM_RED, fmt::format("{:3}.{:04}%", display[i] / 1000, display[i] % 1000), row + i + 1, col + 3);
-        } else {
-            c_prt(TERM_WHITE, fmt::format("{:3}.{:04}%", display[i] / 1000, display[i] % 1000), row + i + 1, col + 3);
-        }
+        const auto is_home = (i * BASEITEM_MAX_DEPTH / 22 <= home) && (home < (i + 1) * BASEITEM_MAX_DEPTH / 22);
+        c_prt(is_home ? TERM_RED : TERM_WHITE, fmt::format("{:3}.{:03}%", display[i] / 1000, display[i] % 1000), row + i + 1, col + 3);
     }
 
     concptr r = "+---Rate---+";
