@@ -299,7 +299,7 @@ def validate_wilderness_semantics(data: dict) -> None:
 
 
 def validate_quest_semantics(data: dict) -> None:
-    """Reject integral floats such as 5.0, which JSON Schema accepts as integers but QuestReader rejects."""
+    """Reject integral floats such as 5.0 and legend symbols which QuestReader rejects."""
     # Quest・QuestPreferences の schema に number 型の項目は無く、数値はすべて整数として読む。
     def walk(value, path):
         if isinstance(value, float):
@@ -312,6 +312,52 @@ def validate_quest_semantics(data: dict) -> None:
                 walk(child, path + [index])
 
     walk(data, [])
+    for symbol in data.get("legend", {}):
+        # propertyNames の maxLength は文字数で数えるため、QuestReaderと同じく印字可能なASCIIの1文字ちょうどを確かめる。
+        if len(symbol) != 1 or not is_fixed_map_symbol(symbol):
+            raise ValidationError("legend symbol must be exactly one printable ASCII character", path=["legend", symbol])
+
+
+def is_fixed_map_symbol(character: str) -> bool:
+    """固定マップの記号（印字可能なASCII）か。general-parser.h の is_fixed_map_symbol と揃える。"""
+    return " " <= character <= "~"
+
+
+def select_quest_maps(data: dict) -> list[tuple[list, list[str]]]:
+    """QuestReaderが使う地図を、診断用の位置と組で返す。map があれば mapVariants は読まない。"""
+    if "map" in data:
+        return [(["map"], data["map"])]
+    return [(["mapVariants", index], rows) for index, rows in enumerate(data.get("mapVariants", []))]
+
+
+def select_quest_starts(data: dict) -> list[tuple[list, dict]]:
+    """QuestReaderが使う開始位置を、診断用の位置と組で返す。start があれば startVariants は読まない。"""
+    if "start" in data:
+        return [(["start"], data["start"])]
+    return [(["startVariants", index], start) for index, start in enumerate(data.get("startVariants", []))]
+
+
+def validate_quest_layout_semantics(data: dict) -> None:
+    """QuestReaderと同じく、地図の行と開始位置を検証する。"""
+    maps = select_quest_maps(data)
+    for map_path, rows in maps:
+        # 行数と行の長さの上限は schema が持つ。行の長さは文字数で数えるため、印字可能なASCIIに限ってバイト数と揃える。
+        for row_index, row in enumerate(rows):
+            for column, character in enumerate(row):
+                if not is_fixed_map_symbol(character):
+                    raise ValidationError("map rows must contain printable ASCII characters", path=map_path + [row_index, column])
+            # 生成側は最終行の長さからフロア幅を決めるため、QuestReaderは行幅が揃わない地図を拒否する。
+            if len(row) != len(rows[0]):
+                raise ValidationError("map rows must have the same width", path=map_path + [row_index])
+    for start_path, start in select_quest_starts(data):
+        # 開始位置は条件に関係なく、すべての地図の候補の中に収まる必要がある。
+        if not maps or not all(start["y"] < len(rows) and start["x"] < len(rows[0]) for _, rows in maps):
+            raise ValidationError("start position must be within every map variant", path=start_path)
+
+
+def validate_quest_file_semantics(data: dict) -> None:
+    validate_quest_semantics(data)
+    validate_quest_layout_semantics(data)
 
 
 def validate_town_preferences_semantics(data: dict, schema_path: Path) -> None:
@@ -919,7 +965,7 @@ def validate_one(pair: tuple[Path, Path, dict], registry: Registry | None = None
             "ClassSkillDefinitions.schema.json": lambda: validate_class_skill_semantics(data),
             "SpellDefinitions.schema.json": lambda: validate_spell_semantics(data),
             "MonsterMessages.schema.json": lambda: validate_monster_message_semantics(data, schema_path, data_path, registry),
-            "Quest.schema.json": lambda: validate_quest_semantics(data),
+            "Quest.schema.json": lambda: validate_quest_file_semantics(data),
             "QuestPreferences.schema.json": lambda: validate_quest_semantics(data),
         }
         semantic_validator = semantic_validators.get(schema_path.name)

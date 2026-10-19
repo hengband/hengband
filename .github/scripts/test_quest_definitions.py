@@ -126,5 +126,108 @@ class QuestInt16RangeTest(unittest.TestCase):
                     self.assertIn(f"Location: {location}", message)
 
 
+class QuestLayoutTest(unittest.TestCase):
+    """CI が QuestReader と同じく地図・凡例・開始位置を拒否することを確かめる。"""
+
+    @classmethod
+    def setUpClass(cls):
+        schema_dir = Path(__file__).resolve().parents[2] / "schema"
+        cls.loaded, cls.schema_map = load_all_schemas(schema_dir)
+        cls.registry = build_schema_registry(cls.loaded)
+
+    def validate(self, schema_name, document):
+        schema_path = self.schema_map[schema_name]
+        return validate_document(document, schema_path, self.loaded[schema_path], self.registry, filename="Test.jsonc")
+
+    def quest(self, **fields):
+        document = {
+            "version": 1,
+            "id": 1,
+            "name": {"ja": "試験", "en": "Test"},
+            "definition": {"type": "KILL_ALL", "level": 1},
+            "legend": {"#": {}, "+": {}},
+            "map": ["###", "#+#", "###"],
+        }
+        document.update(fields)
+        return document
+
+    def variants(self, variants, **fields):
+        """map の代わりに mapVariants を持つクエストを作る。"""
+        document = self.quest(mapVariants=variants, **fields)
+        del document["map"]
+        return document
+
+    def assert_rejected(self, document, reason, location, schema_name="Quest"):
+        ok, message = self.validate(schema_name, document)
+        self.assertFalse(ok, message)
+        self.assertIn(reason, message)
+        self.assertIn(f"Location: {location}", message)
+
+    def test_valid_layout_is_accepted(self):
+        document = self.quest(start={"y": 2, "x": 2})
+        ok, message = self.validate("Quest", document)
+        self.assertTrue(ok, message)
+
+    def test_legend_symbols_must_be_one_printable_ascii_character(self):
+        for symbol in ("\u00e9", "\x7f", "\x1f", "\n"):
+            for schema_name in ("Quest", "QuestPreferences"):
+                with self.subTest(symbol=repr(symbol), schema=schema_name):
+                    document = self.quest() if schema_name == "Quest" else {"version": 1, "legend": {}}
+                    document["legend"][symbol] = {}
+                    self.assert_rejected(document, "legend symbol must be exactly one printable ASCII character",
+                                         ["legend", symbol], schema_name)
+        for symbol in (" ", "~"):
+            with self.subTest(symbol=symbol):
+                document = self.quest()
+                document["legend"][symbol] = {}
+                ok, message = self.validate("Quest", document)
+                self.assertTrue(ok, message)
+
+    def test_map_rows_must_be_printable_ascii(self):
+        for character in ("\u00e9", "\x7f", "\t", "\x00"):
+            with self.subTest(character=repr(character)):
+                self.assert_rejected(self.quest(map=["###", "#" + character + "#"]),
+                                     "map rows must contain printable ASCII characters", ["map", 1, 1])
+        self.assert_rejected(self.variants([["###"], ["##\u00e9"]]),
+                             "map rows must contain printable ASCII characters", ["mapVariants", 1, 0, 2])
+
+    def test_map_rows_must_have_the_same_width_within_each_variant(self):
+        self.assert_rejected(self.quest(map=["###", "##", "###"]), "map rows must have the same width", ["map", 1])
+        # 生成側は最終行の長さから幅を決めるため、最終行だけ短い地図も拒否する。
+        self.assert_rejected(self.quest(map=["###", "###", "##"]), "map rows must have the same width", ["map", 2])
+        variants = self.variants([["##", "##"], ["###", "##"]])
+        self.assert_rejected(variants, "map rows must have the same width", ["mapVariants", 1, 1])
+        # 候補ごとに幅が違うのはよい。
+        variants = self.variants([["##", "##"], ["###"]])
+        ok, message = self.validate("Quest", variants)
+        self.assertTrue(ok, message)
+
+    def test_map_takes_precedence_over_unused_variants(self):
+        # QuestReader は map があれば mapVariants を読まない。
+        ok, message = self.validate("Quest", self.quest(mapVariants=[["#"], ["##", "#"]], start={"y": 2, "x": 2}))
+        self.assertTrue(ok, message)
+
+    def test_start_must_be_within_every_map_variant(self):
+        variants = self.variants([["###", "###"], ["##", "##", "##"]])
+        for start, accepted in (({"y": 1, "x": 1}, True), ({"y": 1, "x": 2}, False), ({"y": 2, "x": 0}, False)):
+            with self.subTest(start=start):
+                document = variants | {"start": start}
+                ok, message = self.validate("Quest", document)
+                self.assertEqual(ok, accepted, message)
+                if not accepted:
+                    self.assertIn("start position must be within every map variant", message)
+                    self.assertIn("Location: ['start']", message)
+        # 条件付きの開始位置も、条件に関係なくすべての候補で確かめる。
+        document = variants | {"startVariants": [{"y": 0, "x": 0}, {"leavingQuest": 1, "y": 0, "x": 2}]}
+        self.assert_rejected(document, "start position must be within every map variant", ["startVariants", 1])
+        # 空の行しか無い地図には開始位置を置けない。
+        self.assert_rejected(self.quest(map=[""], start={"y": 0, "x": 0}), "start position must be within every map variant", ["start"])
+
+    def test_start_takes_precedence_over_unused_start_variants(self):
+        document = self.quest(start={"y": 0, "x": 0}, startVariants=[{"y": 9, "x": 9}])
+        ok, message = self.validate("Quest", document)
+        self.assertTrue(ok, message)
+
+
 if __name__ == "__main__":
     unittest.main()
