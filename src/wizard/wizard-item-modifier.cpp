@@ -813,13 +813,18 @@ static std::vector<FixedArtifactId> find_wishing_fixed_artifact(std::string_view
                 art_description = art_description.substr(0, find_pos);
             }
         } else {
-            const std::string of_space("of ");
+            constexpr std::string_view of_space = "of ";
             if (art_description.starts_with(of_space)) {
                 art_description = art_description.substr(of_space.length());
             }
         }
 
+        // 願いの先頭の「the 」は取り除いてから照合するので、「of the Rohirrim」などの「the 」も除く
         art_description = str_tolower(art_description);
+        constexpr std::string_view the_space = "the ";
+        if (art_description.starts_with(the_space)) {
+            art_description = art_description.substr(the_space.length());
+        }
 #endif
         //!< 先頭の「★」(日本語)、「The 」(英語)を除去する.
         const auto match_name = item_name.substr(_(2, 4));
@@ -960,7 +965,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
     } else
 #endif
 
-        if (consume_prefix(_("☆", "The "))) {
+        if (consume_prefix(_("☆", "the "))) {
         wish_art = true;
         wish_randart = true;
     }
