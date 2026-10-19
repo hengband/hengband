@@ -48,8 +48,6 @@ size_t str_find_position(std::string_view haystack, std::string_view needle);
 size_t str_find_position(std::string_view str, char ch);
 char *angband_strstr(const char *haystack, std::string_view needle);
 char *angband_strchr(const char *ptr, char ch);
-char *ltrim(char *p);
-char *rtrim(char *p);
 bool str_find(std::string_view src, std::string_view find);
 std::string str_trim(std::string_view str);
 std::string str_rtrim(std::string_view str);

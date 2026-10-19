@@ -246,40 +246,6 @@ char *angband_strchr(const char *ptr, char ch)
 }
 
 /*!
- * @brief 文字列の左端の半角スペースを読み飛ばす
- * @param p NUL終端された文字列
- * @return 左端の半角スペースを読み飛ばした位置へのポインタ
- * @details
- * 元の文字列は書き換えない。タブや全角スペースは対象外。
- * タブも含めて取り除きたい場合や新しい文字列が欲しい場合は str_ltrim() を使う。
- */
-char *ltrim(char *p)
-{
-    while (p[0] == ' ') {
-        p++;
-    }
-    return p;
-}
-
-/*!
- * @brief 文字列の右端の半角スペースをNUL文字で潰す
- * @param p NUL終端された文字列。この文字列自体が書き換えられる
- * @return p と同じポインタ
- * @details
- * 2バイト文字の後半バイトが 0x20 になる文字コードは無いため、2バイト文字を壊すことはない。
- * タブや全角スペースは対象外。
- * 元の文字列を書き換えたくない場合は str_rtrim() を使う。
- */
-char *rtrim(char *p)
-{
-    for (auto i = strlen(p); (i > 0) && (p[i - 1] == ' '); --i) {
-        p[i - 1] = '\0';
-    }
-
-    return p;
-}
-
-/*!
  * @brief 2バイト文字を考慮しつつ文字列が含まれるかどうかを調べる
  * @param src 検索対象の文字列
  * @param find 検索する文字列

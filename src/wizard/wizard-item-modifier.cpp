@@ -918,59 +918,59 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
         return WishResultType::NOTHING;
     }
 
-#ifdef JP
-    auto *pray_chars = pray.data();
-#else
+#ifndef JP
     pray = str_tolower(pray);
-    auto *pray_chars = pray.data();
-    const std::string article_single("a ");
-    const std::string article_multi("an ");
-    if (pray.starts_with("a ")) {
-        pray_chars += article_single.length();
-    } else if (pray.starts_with("an ")) {
-        pray_chars += article_multi.length();
-    }
-
-    pray_chars = ltrim(pray_chars);
 #endif
 
-    pray_chars = rtrim(pray_chars);
+    std::string pray_chars = pray;
 
-    if (!strncmp(pray_chars, _("祝福された", "blessed"), _(10, 7))) {
-        pray_chars = ltrim(pray_chars + _(10, 7));
+    // 先頭が prefix なら取り除いて、続く空白も読み飛ばす
+    const auto consume_prefix = [&pray_chars](std::string_view prefix) {
+        if (!pray_chars.starts_with(prefix)) {
+            return false;
+        }
+
+        pray_chars = str_ltrim(std::string_view(pray_chars).substr(prefix.length()));
+        return true;
+    };
+
+#ifndef JP
+    if (!consume_prefix("a ") && !consume_prefix("an ")) {
+        pray_chars = str_ltrim(pray_chars);
+    }
+#endif
+
+    pray_chars = str_rtrim(pray_chars);
+
+    if (consume_prefix(_("祝福された", "blessed"))) {
         blessed = true;
     }
 
     for (const auto &expression : fixed_expressions) {
-        auto len = expression.length();
-        if (std::string_view(pray_chars).starts_with(expression)) {
-            pray_chars = ltrim(pray_chars + len);
+        if (consume_prefix(expression)) {
             fixed = true;
             break;
         }
     }
 
 #ifdef JP
-    if (!strncmp(pray_chars, "★", 2)) {
-        pray_chars = ltrim(pray_chars + 2);
+    if (consume_prefix("★")) {
         wish_art = true;
         exam_base = false;
     } else
 #endif
 
-        if (!strncmp(pray_chars, _("☆", "The "), _(2, 4))) {
-        pray_chars = ltrim(pray_chars + _(2, 4));
+        if (consume_prefix(_("☆", "The "))) {
         wish_art = true;
         wish_randart = true;
     }
 
     /* wishing random ego ? */
-    else if (!strncmp(pray_chars, _("高級な", "excellent "), _(6, 9))) {
-        pray_chars = ltrim(pray_chars + _(6, 9));
+    else if (consume_prefix(_("高級な", "excellent"))) {
         wish_ego = true;
     }
 
-    if (strlen(pray_chars) < 1) {
+    if (pray_chars.empty()) {
         msg_print(_("名前がない！", "What?"));
         return WishResultType::NOTHING;
     }
@@ -981,8 +981,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
     }
 
     if (cheat_xtra) {
-        // rtrim() が pray の末尾の空白を NUL に書き換えているので、NUL の手前までを出す
-        msg_print("Wishing {}....", pray.data());
+        msg_print("Wishing {}....", str_rtrim(pray));
     }
 
     std::vector<short> baseitem_ids;
@@ -1004,7 +1003,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
             }
 
             const int len = item_name.length();
-            if (std::string(pray_chars).find(item_name) != std::string::npos) {
+            if (pray_chars.find(item_name) != std::string::npos) {
                 if (len > max_len) {
                     baseitem_ids.clear();
                     max_len = len;
@@ -1032,7 +1031,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
                     msg_print("matching ego no.{} {}...", enum2i(ego.idx), item_name);
                 }
 
-                if (std::string(pray_chars).find(item_name) != std::string::npos) {
+                if (pray_chars.find(item_name) != std::string::npos) {
                     if (is_slot_able_to_be_ego(player_ptr, &item) != ego.slot) {
                         continue;
                     }
