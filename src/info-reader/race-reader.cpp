@@ -698,8 +698,8 @@ tl::expected<void, parse_error_type> RaceReader::set_mon_message(MonraceMessage 
         const auto use_name_iter = message.find("use_name");
         if (use_name_iter != message.end()) {
             const auto &use_name_data = use_name_iter.value();
-            if (auto err = info_set_bool(use_name_data, use_name, false)) {
-                return tl::unexpected(static_cast<parse_error_type>(err));
+            if (const auto result = info_set_bool(use_name_data, use_name, false); !result) {
+                return result;
             }
         }
 

@@ -112,17 +112,17 @@ int MagicReader::read() const
         msg_print(_("呪文行使に使用する能力値読込失敗。ID: '{}'。", "Failed to load magic status. ID: '{}'."), error_idx);
         return result.error();
     }
-    if (auto err = info_set_bool(get_json_value(this->class_data, "has_glove_mp_penalty"), magics_info.has_glove_mp_penalty, true)) {
+    if (const auto result = info_set_bool(get_json_value(this->class_data, "has_glove_mp_penalty"), magics_info.has_glove_mp_penalty, true); !result) {
         msg_print(_("籠手によるMPペナルティ読込失敗。ID: '{}'。", "Failed to load glove_mp_penalty. ID: '{}'."), error_idx);
-        return err;
+        return result.error();
     }
-    if (auto err = info_set_bool(get_json_value(this->class_data, "has_magic_fail_rate_cap"), magics_info.has_magic_fail_rate_cap, true)) {
+    if (const auto result = info_set_bool(get_json_value(this->class_data, "has_magic_fail_rate_cap"), magics_info.has_magic_fail_rate_cap, true); !result) {
         msg_print(_("最低呪文失率情報読込失敗。ID: '{}'。", "Failed to load magic_fail_rate_cap. ID: '{}'."), error_idx);
-        return err;
+        return result.error();
     }
-    if (auto err = info_set_bool(get_json_value(this->class_data, "is_spell_trainable"), magics_info.is_spell_trainable, true)) {
+    if (const auto result = info_set_bool(get_json_value(this->class_data, "is_spell_trainable"), magics_info.is_spell_trainable, true); !result) {
         msg_print(_("呪文訓練可能性読込失敗。ID: '{}'。", "Failed to load spell_trainability. ID: '{}'."), error_idx);
-        return err;
+        return result.error();
     }
     if (auto err = info_set_integer(get_json_value(this->class_data, "first_spell_level"), magics_info.spell_first, true, Range(0, 99))) {
         msg_print(_("呪文行使開始レベル読込失敗。ID: '{}'。", "Failed to load spell-first level. ID: '{}'."), error_idx);

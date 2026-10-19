@@ -17,7 +17,7 @@ using Range = std::pair<int, int>;
 
 errr info_set_string(const nlohmann::json &json, std::string &data, bool is_required);
 errr info_set_dice(const nlohmann::json &json, Dice &dice, bool is_required, tl::optional<Range> range = tl::nullopt);
-errr info_set_bool(const nlohmann::json &json, bool &bool_value, bool is_required);
+tl::expected<void, parse_error_type> info_set_bool(const nlohmann::json &json, bool &bool_value, bool is_required);
 const nlohmann::json &get_json_value(const nlohmann::json &json, std::string_view key);
 tl::expected<void, parse_error_type> info_validate_json_array(const nlohmann::json &root, std::string_view key, bool allow_empty = true);
 

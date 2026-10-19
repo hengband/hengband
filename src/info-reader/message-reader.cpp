@@ -142,8 +142,8 @@ tl::expected<void, parse_error_type> MessageReader::set_mon_message() const
         const auto use_name_iter = message.find("use_name");
         if (use_name_iter != message.end()) {
             const auto &use_name_data = use_name_iter.value();
-            if (const auto err = info_set_bool(use_name_data, use_name, false); err != PARSE_ERROR_NONE) {
-                return tl::make_unexpected(static_cast<parse_error_type>(err));
+            if (const auto result = info_set_bool(use_name_data, use_name, false); !result) {
+                return result;
             }
         }
 

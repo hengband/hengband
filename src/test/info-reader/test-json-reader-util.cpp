@@ -703,10 +703,10 @@ TEST_CASE("info_set_bool stores the value")
     for (const auto is_required : { false, true }) {
         auto data = false;
 
-        CHECK(info_set_bool(nlohmann::json(true), data, is_required) == PARSE_ERROR_NONE);
+        CHECK(info_set_bool(nlohmann::json(true), data, is_required).has_value());
         CHECK(data);
 
-        CHECK(info_set_bool(nlohmann::json(false), data, is_required) == PARSE_ERROR_NONE);
+        CHECK(info_set_bool(nlohmann::json(false), data, is_required).has_value());
         CHECK_FALSE(data);
     }
 }
@@ -721,8 +721,8 @@ TEST_CASE("info_set_bool treats a non-boolean JSON as an unwritten key")
     {
         const nlohmann::json null_json;
 
-        CHECK(info_set_bool(null_json, data, true) == PARSE_ERROR_TOO_FEW_ARGUMENTS);
-        CHECK(info_set_bool(null_json, data, false) == PARSE_ERROR_NONE);
+        CHECK(to_error_code(info_set_bool(null_json, data, true)) == PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        CHECK(info_set_bool(null_json, data, false).has_value());
     }
 
     SUBCASE("JSON of another type")
@@ -739,9 +739,9 @@ TEST_CASE("info_set_bool treats a non-boolean JSON as an unwritten key")
         for (const auto &json : invalid_values) {
             CAPTURE(json.type_name());
 
-            CHECK(info_set_bool(json, data, true) == PARSE_ERROR_TOO_FEW_ARGUMENTS);
+            CHECK(to_error_code(info_set_bool(json, data, true)) == PARSE_ERROR_TOO_FEW_ARGUMENTS);
             CHECK(data);
-            CHECK(info_set_bool(json, data, false) == PARSE_ERROR_NONE);
+            CHECK(info_set_bool(json, data, false).has_value());
             CHECK(data);
         }
     }

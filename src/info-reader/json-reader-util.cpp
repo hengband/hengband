@@ -137,14 +137,17 @@ errr info_set_dice(const nlohmann::json &json, Dice &dice, bool is_required, tl:
  * nullおよび非bool値は、必須ならPARSE_ERROR_TOO_FEW_ARGUMENTSを返し、任意なら何もせずに成功する。
  * 型不一致でもPARSE_ERROR_INVALID_TYPEにはしない、他のinfo_set_*とは異なる契約を持つ。
  * bool値が入力された場合のみbool_valueを変更する。
- * @return エラーコード
+ * @return 成功時は空の値、失敗時は解析エラーコード（必須の値がnullか非bool値ならPARSE_ERROR_TOO_FEW_ARGUMENTS）
  */
-errr info_set_bool(const nlohmann::json &json, bool &bool_value, bool is_required)
+tl::expected<void, parse_error_type> info_set_bool(const nlohmann::json &json, bool &bool_value, bool is_required)
 {
     if (json.is_null() || !json.is_boolean()) {
-        return is_required ? PARSE_ERROR_TOO_FEW_ARGUMENTS : PARSE_ERROR_NONE;
+        if (is_required) {
+            return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        }
+        return {};
     }
 
     bool_value = json.get<bool>();
-    return PARSE_ERROR_NONE;
+    return {};
 }
