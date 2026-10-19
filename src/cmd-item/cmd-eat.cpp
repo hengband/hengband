@@ -166,7 +166,7 @@ static bool exe_eat_charge_of_magic_device(PlayerType *player_ptr, ItemEntity *o
     if (o_ptr->pval == 0) {
         msg_print(_("この{}にはもう魔力が残っていない。", "The {} has no charges left."), staff);
         o_ptr->set_identification_flag(IdentificationFlag::EMPTY);
-        rfu.set_flag(SubWindowRedrawingFlag::INVENTORY);
+        rfu.request_item_lists_redrawing();
         return true;
     }
 
@@ -194,7 +194,9 @@ static bool exe_eat_charge_of_magic_device(PlayerType *player_ptr, ItemEntity *o
 
     describe_item_charges(player_ptr, i_idx >= 0, ref_item(player_ptr, i_idx));
 
-    rfu.request_carried_item_lists_redrawing();
+    // 充填が変わったので、足元の品も含めてアイテムの一覧の描き直しを予約する。
+    // 呼び出し元での予約は、充填を変える前のメッセージの表示で使われることがあるので当てにしない
+    rfu.request_item_lists_redrawing();
     return true;
 }
 
