@@ -14,7 +14,6 @@
 #include "system/dungeon/quest-list.h"
 #include "system/enums/dungeon/dungeon-id.h"
 #include "system/enums/terrain/terrain-conversion-type.h"
-#include "system/enums/terrain/terrain-tag.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
 #include "system/terrain/terrain-definition.h"
@@ -26,7 +25,6 @@
 #include "test/system/dungeon-list-test-access.h"
 #include "test/system/monrace-list-test-access.h"
 #include "test/system/quest-list-test-access.h"
-#include "test/system/terrain-list-test-access.h"
 #include "test/temporary-json-files.h"
 #include <array>
 #include <cstdint>
@@ -79,7 +77,6 @@ private:
     test::DungeonListTestAccess dungeons;
     test::ScopedVectorWrapper<BaseitemList> baseitems{ BaseitemList::get_instance() };
     test::ScopedVectorWrapper<TerrainList> terrain_definitions{ TerrainList::get_instance() };
-    test::TerrainListTestAccess none_tag{ TerrainTag::NONE, 0 };
 };
 
 nlohmann::json make_quest(int id)
@@ -88,6 +85,8 @@ nlohmann::json make_quest(int id)
         { "id", id },
         { "name", { { "ja", "Test" }, { "en", "Test" } } },
         { "definition", { { "type", "KILL_ALL" }, { "level", 5 } } },
+        // 地図の記号は凡例で定義する必要がある。
+        { "legend", { { ".", nlohmann::json::object() } } },
         { "map", { "..." } },
     };
 }
@@ -102,7 +101,6 @@ void check_unpublished(QuestId id)
 TEST_CASE("QuestList base legend rejects unsafe symbol bytes without publication")
 {
     test::QuestListTestAccess quests;
-    const test::TerrainListTestAccess none_tag(TerrainTag::NONE, 0);
     QuestFiles files;
     const auto restore_path = test::scoped_restore(ANGBAND_DIR_EDIT);
     auto &maps = QuestFixedMapList::get_instance();
@@ -129,7 +127,6 @@ TEST_CASE("QuestList base legend rejects unsafe symbol bytes without publication
 TEST_CASE("QuestList base legend accepts printable ASCII boundaries")
 {
     test::QuestListTestAccess quests;
-    const test::TerrainListTestAccess none_tag(TerrainTag::NONE, 0);
     QuestFiles files;
     const auto restore_path = test::scoped_restore(ANGBAND_DIR_EDIT);
     auto &maps = QuestFixedMapList::get_instance();
@@ -281,8 +278,17 @@ TEST_CASE("QuestList leaves all records unpublished when a duplicate follows")
     auto duplicate = make_quest(1);
     duplicate["name"] = { { "ja", "Duplicate" }, { "en", "Duplicate" } };
     duplicate["map"] = { "bad" };
+    // 地図の記号は凡例に定義し、重複した ID の検出で拒否されることを確かめる。
+    for (const auto *symbol : { "b", "a", "d" }) {
+        duplicate["legend"][symbol] = nlohmann::json::object();
+    }
     files.write("02.jsonc", duplicate);
-    CHECK_THROWS_AS(quests.load(files.directory), std::runtime_error);
+    try {
+        quests.load(files.directory);
+        FAIL("Expected a runtime_error for the duplicated ID");
+    } catch (const std::runtime_error &error) {
+        CHECK(std::string(error.what()).find("id 1") != std::string::npos);
+    }
     check_unpublished(QuestId::THIEF);
 }
 
@@ -313,7 +319,6 @@ TEST_CASE("QuestList initialization preserves every store on late input errors")
             test::DungeonListTestAccess dungeons;
             test::ScopedVectorWrapper<TerrainList> terrain_definitions(TerrainList::get_instance());
             TerrainList::get_instance().resize(1);
-            const test::TerrainListTestAccess none_tag(TerrainTag::NONE, 0);
             auto &list = QuestList::get_instance();
             auto &maps = QuestFixedMapList::get_instance();
             MonraceList::get_instance().emplace(static_cast<MonraceId>(0));
@@ -531,12 +536,70 @@ TEST_CASE("QuestList preserves valid rectangular starts and optional start seman
     }
 }
 
+TEST_CASE("QuestList rejects map symbols defined in neither legend before publishing")
+{
+    struct Input {
+        nlohmann::json maps;
+        bool base_defines;
+        bool quest_defines;
+        bool valid;
+    };
+    const std::vector<Input> inputs{
+        { { { "map", { ".?." } } }, false, false, false },
+        // 使われない候補も、キャラクタによっては選ばれるため確かめる。
+        { { { "mapVariants", { { "..." }, { ".?." } } } }, false, false, false },
+        { { { "map", { ".?." } } }, true, false, true },
+        { { { "map", { ".?." } } }, false, true, true },
+        // map があれば mapVariants は読まれない。
+        { { { "map", { "..." } }, { "mapVariants", { { "?" }, { "?" } } } }, false, false, true },
+    };
+    for (const auto &input : inputs) {
+        CAPTURE(input.maps);
+        CAPTURE(input.base_defines);
+        CAPTURE(input.quest_defines);
+        test::QuestListTestAccess quests;
+        test::MonraceListTestAccess monraces;
+        MonraceList::get_instance().emplace(static_cast<MonraceId>(0));
+        auto &target = MonraceList::get_instance().emplace(static_cast<MonraceId>(1));
+        target.kind_flags.set(MonsterKindType::UNIQUE);
+        const auto target_flags = target.misc_flags;
+        if (input.base_defines) {
+            QuestFixedMapList::get_instance().set_base_legend({ { '?', QuestLegendCell{} } });
+        }
+        QuestFiles files;
+        auto first = make_quest(1);
+        first["definition"]["monster"] = 1;
+        files.write("01.jsonc", first);
+        auto data = make_quest(2);
+        data.erase("map");
+        data.update(input.maps);
+        if (input.quest_defines) {
+            data["legend"]["?"] = nlohmann::json::object();
+        }
+        files.write("02.jsonc", data);
+        if (input.valid) {
+            REQUIRE_NOTHROW(quests.load(files.directory));
+            CHECK(QuestFixedMapList::get_instance().find(QuestId::SEWER));
+            continue;
+        }
+        try {
+            quests.load(files.directory);
+            FAIL("Expected a runtime_error for the undefined symbol");
+        } catch (const std::runtime_error &error) {
+            const std::string diagnostic(error.what());
+            CHECK(diagnostic.find("02.jsonc") != std::string::npos);
+            CHECK(diagnostic.find("'?'") != std::string::npos);
+        }
+        check_unpublished(QuestId::THIEF);
+        CHECK(target.misc_flags == target_flags);
+    }
+}
+
 TEST_CASE("QuestList initialization leaves NONE and base legend unpublished on early errors")
 {
     for (const auto *failure : { "missing legend", "malformed legend", "invalid legend", "missing directory", "empty directory" }) {
         CAPTURE(std::string(failure));
         test::QuestListTestAccess quests;
-        const test::TerrainListTestAccess none_tag(TerrainTag::NONE, 0);
         QuestFiles files;
         const auto restore_path = test::scoped_restore(ANGBAND_DIR_EDIT);
         ANGBAND_DIR_EDIT = files.directory;
@@ -567,7 +630,6 @@ TEST_CASE("QuestList initialization publishes complete metadata and flags after 
     }
     test::ScopedVectorWrapper<TerrainList> terrain_definitions(TerrainList::get_instance());
     TerrainList::get_instance().resize(1);
-    const test::TerrainListTestAccess none_tag(TerrainTag::NONE, 0);
     auto &list = QuestList::get_instance();
     auto &maps = QuestFixedMapList::get_instance();
     auto &ordinary = MonraceList::get_instance().emplace(static_cast<MonraceId>(0));
@@ -585,7 +647,7 @@ TEST_CASE("QuestList initialization publishes complete metadata and flags after 
     first["definition"]["maxNum"] = 8;
     first["definition"]["flags"] = { "SILENT" };
     first["definition"]["reward"] = { { "artifact", 7 }, { "artifacts", { 8, 9 } } };
-    first["legend"] = { { "?", { { "special", 17 } } } };
+    first["legend"]["?"] = { { "special", 17 } };
     first["start"] = { { "y", 0 }, { "x", 1 } };
     first["descriptions"] = { { { "text", { { "ja", { "Description" } }, { "en", { "Description" } } } } } };
     files.write("quests/01.jsonc", first);
@@ -593,6 +655,7 @@ TEST_CASE("QuestList initialization publishes complete metadata and flags after 
     second["name"] = { { "ja", "Second" }, { "en", "Second" } };
     second.erase("map");
     second["mapVariants"] = { { "..." }, { "???", "..." } };
+    second["legend"]["?"] = nlohmann::json::object();
     files.write("quests/02.jsonc", second);
 
     REQUIRE_NOTHROW(list.initialize());
@@ -788,7 +851,7 @@ TEST_CASE("QuestList rejects missing local and base legend references before pub
                 auto second = make_quest(2);
                 second["definition"]["level"] = 0;
                 if (!base) {
-                    second["legend"] = { { "!", input.data } };
+                    second["legend"]["!"] = input.data;
                 }
                 files.write("quests/02.jsonc", second);
                 try {
@@ -857,11 +920,11 @@ TEST_CASE("QuestList preserves legend fixed references and generation parameters
             auto first = make_quest(1);
             first["definition"]["monster"] = 1;
             if (!base) {
-                first["legend"] = { { "!", cell } };
+                first["legend"]["!"] = cell;
             }
             files.write("quests/01.jsonc", first);
             auto second = make_quest(2);
-            second["legend"] = { { "<", { { "terrain", "QUEST_UP" }, { "special", 1 } } } };
+            second["legend"]["<"] = { { "terrain", "QUEST_UP" }, { "special", 1 } };
             files.write("quests/02.jsonc", second);
             REQUIRE_NOTHROW(QuestList::get_instance().initialize());
             CHECK(QuestList::get_instance().size() == 3);
@@ -899,7 +962,7 @@ TEST_CASE("QuestList treats ordinary upstairs special as floor metadata in rando
     QuestFiles files;
     auto data = make_quest(1);
     data["definition"]["type"] = "RANDOM";
-    data["legend"] = { { "<", { { "terrain", "UP_STAIR" }, { "special", 48 } } } };
+    data["legend"]["<"] = { { "terrain", "UP_STAIR" }, { "special", 48 } };
     files.write("quest.jsonc", data);
     REQUIRE_NOTHROW(state.quests.load(files.directory));
     const auto map = QuestFixedMapList::get_instance().find(QuestId::THIEF);
@@ -1007,7 +1070,7 @@ TEST_CASE("QuestList validates every converted terrain candidate without consumi
                     first["definition"]["monster"] = 1;
                     first["map"] = { "!" };
                     if (!base) {
-                        first["legend"] = { { "!", cell } };
+                        first["legend"]["!"] = cell;
                     }
                     files.write("quests/01.jsonc", first);
                     files.write("quests/02.jsonc", make_quest(2));
@@ -1047,7 +1110,7 @@ TEST_CASE("QuestList preserves converted stream fallback special values")
         DungeonList::get_instance().emplace(static_cast<DungeonId>(2), std::move(dungeon));
         QuestFiles files;
         auto data = make_quest(1);
-        data["legend"] = { { "!", { { "terrain", "CONVERTED" }, { "special", 48 } } } };
+        data["legend"]["!"] = { { "terrain", "CONVERTED" }, { "special", 48 } };
         files.write("quest.jsonc", data);
         REQUIRE_NOTHROW(state.quests.load(files.directory));
     }
@@ -1065,7 +1128,7 @@ TEST_CASE("QuestList validates both reference roles of compound stairs")
         QuestFiles files;
         auto data = make_quest(1);
         data["definition"]["level"] = 0;
-        data["legend"] = { { "!", { { "terrain", "OTHER" }, { "special", 2 } } } };
+        data["legend"]["!"] = { { "terrain", "OTHER" }, { "special", 2 } };
         files.write("01.jsonc", data);
         files.write("02.jsonc", make_quest(2));
         if (dungeon_exists) {
@@ -1085,7 +1148,7 @@ TEST_CASE("QuestList validates both reference roles of compound stairs")
     TerrainList::get_instance().get_terrain(2).flags.set(TerrainCharacteristics::ENTRANCE);
     QuestFiles files;
     auto data = make_quest(1);
-    data["legend"] = { { "!", { { "terrain", "QUEST_ENTER" }, { "special", 2 } } } };
+    data["legend"]["!"] = { { "terrain", "QUEST_ENTER" }, { "special", 2 } };
     files.write("01.jsonc", data);
     files.write("02.jsonc", make_quest(2));
     REQUIRE_NOTHROW(state.quests.load(files.directory));
@@ -1140,7 +1203,7 @@ TEST_CASE("QuestList validates generation change outcomes and remaining probabil
                 QuestFiles files;
                 auto data = make_quest(1);
                 data["definition"]["level"] = 0;
-                data["legend"] = { { "!", cell } };
+                data["legend"]["!"] = cell;
                 files.write("01.jsonc", data);
                 files.write("02.jsonc", make_quest(2));
                 if (input.valid) {
@@ -1189,7 +1252,7 @@ TEST_CASE("QuestList follows physical and visible special consumer priorities")
         if (input.random_quest) {
             data["definition"]["type"] = "RANDOM";
         }
-        data["legend"] = { { "!", { { "terrain", "OTHER" }, { "special", 48 } } } };
+        data["legend"]["!"] = { { "terrain", "OTHER" }, { "special", 48 } };
         files.write("quest.jsonc", data);
         if (input.valid) {
             REQUIRE_NOTHROW(state.quests.load(files.directory));
@@ -1215,7 +1278,7 @@ TEST_CASE("QuestList validates one visible mimic step and fixed trap underlay")
                     // trapの実地形は同じOTHERでも、表示は元地形のmimicへ進む。
                     cell["trap"] = "OTHER";
                 }
-                data["legend"] = { { "!", cell } };
+                data["legend"]["!"] = cell;
                 files.write("quest.jsonc", data);
                 if (valid) {
                     REQUIRE_NOTHROW(state.quests.load(files.directory));
@@ -1232,7 +1295,7 @@ TEST_CASE("QuestList validates one visible mimic step and fixed trap underlay")
     terrains.get_terrain(2).mimic = 4;
     QuestFiles files;
     auto first = make_quest(1);
-    first["legend"] = { { "!", { { "terrain", "OTHER" }, { "special", 2 } } } };
+    first["legend"]["!"] = { { "terrain", "OTHER" }, { "special", 2 } };
     files.write("01.jsonc", first);
     files.write("02.jsonc", make_quest(2));
     // 表示はOTHER->QUEST_ENTERまで。QUEST_ENTER->ENTRANCEは再帰的に辿らない。
@@ -1254,7 +1317,7 @@ TEST_CASE("QuestList validates random trap underlay only on clean floor terrain"
         terrain.generation_changes.push_back(change);
         QuestFiles files;
         auto data = make_quest(1);
-        data["legend"] = { { "!", { { "terrain", "OTHER" }, { "trap", { { "random", true } } }, { "special", 48 } } } };
+        data["legend"]["!"] = { { "terrain", "OTHER" }, { "trap", { { "random", true } } }, { "special", 48 } };
         files.write("quest.jsonc", data);
         if (floor) {
             CHECK_THROWS_AS(state.quests.load(files.directory), std::runtime_error);
@@ -1289,7 +1352,7 @@ TEST_CASE("QuestList keeps zero mimic fallback within the same dungeon")
     DungeonList::get_instance().emplace(static_cast<DungeonId>(3), std::move(second));
     QuestFiles files;
     auto data = make_quest(1);
-    data["legend"] = { { "!", { { "terrain", "CONVERTED_FLOOR" }, { "trap", "CONVERTED_WALL" }, { "special", 48 } } } };
+    data["legend"]["!"] = { { "terrain", "CONVERTED_FLOOR" }, { "trap", "CONVERTED_WALL" }, { "special", 48 } };
     files.write("quest.jsonc", data);
     // Dungeon2ではmimic=0から実地形OTHERへ、Dungeon3では元地形OTHERへ表示する。
     // 別DungeonのENTRANCEや、mimic未指定を表す0のmimicは表示されない。
@@ -1324,7 +1387,7 @@ TEST_CASE("QuestList validates fixed terrain mimic after discovery without terra
             }
             QuestFiles files;
             auto data = make_quest(1);
-            data["legend"] = { { "!", { { "terrain", "OTHER" }, { "trap", "VISIBLE_TRAP" }, { "special", valid ? 1 : 48 } } } };
+            data["legend"]["!"] = { { "terrain", "OTHER" }, { "trap", "VISIBLE_TRAP" }, { "special", valid ? 1 : 48 } };
             files.write("quest.jsonc", data);
             if (valid || !input.disclosed) {
                 REQUIRE_NOTHROW(state.quests.load(files.directory));
@@ -1345,7 +1408,7 @@ TEST_CASE("QuestList validates plain up references when reward fallback can chan
             auto data = make_quest(1);
             data["definition"]["type"] = "RANDOM";
             data["definition"]["reward"] = { { "artifacts", candidates } };
-            data["legend"] = { { "!", { { "terrain", "UP_STAIR" }, { "special", valid ? 1 : 48 } } } };
+            data["legend"]["!"] = { { "terrain", "UP_STAIR" }, { "special", valid ? 1 : 48 } };
             files.write("quest.jsonc", data);
             const auto can_fallback = candidates == nlohmann::json::array({ 0 }) || candidates == nlohmann::json::array({ 1 });
             if (valid || !can_fallback) {

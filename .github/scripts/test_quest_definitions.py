@@ -233,8 +233,8 @@ class QuestLayoutTest(unittest.TestCase):
         self.assertTrue(ok, message)
 
 
-class QuestReferenceTest(unittest.TestCase):
-    """CI が QuestList と同じくクエストの参照を照合することを確かめる。"""
+class QuestEditDirTestCase(unittest.TestCase):
+    """lib/edit と同じ形の一時ディレクトリでクエストを検証するテストの共通処理。"""
 
     @classmethod
     def setUpClass(cls):
@@ -259,13 +259,15 @@ class QuestReferenceTest(unittest.TestCase):
         document.update(fields)
         return document
 
-    def validate_in_edit_dir(self, quests, target, edit_files=None, schema_name="Quest"):
+    def validate_in_edit_dir(self, quests, target, edit_files=None, schema_name="Quest", raw_quests=None):
         """lib/edit と同じ形の一時ディレクトリ（クエストは quests/ の下）に置いて検証する。"""
         with tempfile.TemporaryDirectory() as folder:
             edit_dir = Path(folder)
             (edit_dir / "quests").mkdir()
             for name, document in quests.items():
                 (edit_dir / "quests" / name).write_text(json.dumps(document), encoding="utf-8")
+            for name, text in (raw_quests or {}).items():
+                (edit_dir / "quests" / name).write_text(text, encoding="utf-8")
             for name, document in (edit_files or {}).items():
                 (edit_dir / name).write_text(json.dumps(document), encoding="utf-8")
             schema_path = self.schema_map[schema_name]
@@ -280,6 +282,10 @@ class QuestReferenceTest(unittest.TestCase):
         self.assertFalse(ok, message)
         self.assertIn(f"Reason: {reason}", message)
         self.assertIn(f"Location: {location}", message)
+
+
+class QuestReferenceTest(QuestEditDirTestCase):
+    """CI が QuestList と同じくクエストの参照を照合することを確かめる。"""
 
     def test_defined_references_are_accepted(self):
         ok, message = self.validate_in_edit_dir({"001.jsonc": self.quest()}, "001.jsonc")
@@ -362,6 +368,58 @@ class QuestReferenceTest(unittest.TestCase):
         legend["#"]["artifact"] = 32767
         result = self.validate_in_edit_dir({}, "QuestPreferences.jsonc", files, schema_name="QuestPreferences")
         self.assert_rejected(result, "unknown artifact ID", ["legend", "#", "artifact"])
+
+
+class QuestMapSymbolTest(QuestEditDirTestCase):
+    """CI が QuestList と同じく、どちらの凡例にも無い地図の記号を拒否することを確かめる。"""
+
+    reason = "map symbol is defined neither in the quest legend nor in the shared legend"
+
+    def test_symbols_must_be_in_the_quest_or_shared_legend(self):
+        # "." は同梱の共通凡例にあり、"?" はどちらにも無い。
+        ok, message = self.validate_in_edit_dir({"001.jsonc": self.quest(map=["#.r"])}, "001.jsonc")
+        self.assertTrue(ok, message)
+        result = self.validate_in_edit_dir({"001.jsonc": self.quest(map=["#.?"])}, "001.jsonc")
+        self.assert_rejected(result, self.reason, ["map", 0, 2])
+
+    def test_unused_variants_are_checked_but_ignored_variants_are_not(self):
+        # どの候補が選ばれるかはキャラクタごとに決まるため、使われる候補はすべて確かめる。
+        document = self.quest(mapVariants=[["#"], ["#?"]])
+        del document["map"]
+        self.assert_rejected(self.validate_in_edit_dir({"001.jsonc": document}, "001.jsonc"), self.reason, ["mapVariants", 1, 0, 1])
+        # map があれば mapVariants は読まれない。
+        ok, message = self.validate_in_edit_dir({"001.jsonc": self.quest(mapVariants=[["?"], ["?"]])}, "001.jsonc")
+        self.assertTrue(ok, message)
+
+    def test_shared_legend_next_to_the_quest_directory_takes_precedence(self):
+        preferences = {"version": 1, "legend": {"?": {}}}
+        files = {"QuestPreferences.jsonc": preferences}
+        ok, message = self.validate_in_edit_dir({"001.jsonc": self.quest(map=["#?"])}, "001.jsonc", files)
+        self.assertTrue(ok, message)
+        result = self.validate_in_edit_dir({"001.jsonc": self.quest(map=["#."])}, "001.jsonc", files)
+        self.assert_rejected(result, self.reason, ["map", 0, 1])
+
+    def test_shared_legend_must_keep_symbols_used_by_quests(self):
+        quests = {"001.jsonc": self.quest(map=["#."]), "002.jsonc": self.quest(2)}
+        files = {"QuestPreferences.jsonc": {"version": 1, "legend": {".": {}}}}
+        ok, message = self.validate_in_edit_dir(quests, "QuestPreferences.jsonc", files, schema_name="QuestPreferences")
+        self.assertTrue(ok, message)
+        files = {"QuestPreferences.jsonc": {"version": 1, "legend": {"X": {}}}}
+        ok, message = self.validate_in_edit_dir(quests, "QuestPreferences.jsonc", files, schema_name="QuestPreferences")
+        self.assertFalse(ok, message)
+        self.assertIn("map symbol '.' at ['map', 0, 1] in 001.jsonc is defined neither in its legend nor in the shared legend", message)
+        self.assertIn("Location: ['legend']", message)
+
+    def test_broken_sibling_quests_do_not_stop_other_files(self):
+        # 読めない・形の壊れたクエストはそのファイル自身の検証で拒否され、ほかのファイルの検証を例外で止めない。
+        broken = {"000.jsonc": [], "003.jsonc": {"id": 3, "mapVariants": 5}}
+        files = {"QuestPreferences.jsonc": {"version": 1, "legend": {".": {}}}}
+        ok, message = self.validate_in_edit_dir(broken, "QuestPreferences.jsonc", files, schema_name="QuestPreferences",
+                                                raw_quests={"004.jsonc": "{\"id\": 4,"})
+        self.assertTrue(ok, message)
+        quests = broken | {"001.jsonc": self.quest(startVariants=[{"leavingQuest": 3, "y": 0, "x": 0}])}
+        ok, message = self.validate_in_edit_dir(quests, "001.jsonc", raw_quests={"004.jsonc": "{\"id\": 4,"})
+        self.assertTrue(ok, message)
 
 
 if __name__ == "__main__":

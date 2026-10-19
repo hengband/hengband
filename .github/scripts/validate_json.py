@@ -399,6 +399,53 @@ def load_quest_references(schema_path: Path, data_path: Path, registry: Registry
     }
 
 
+def extract_quest_preference_symbols(data: dict) -> frozenset[str]:
+    validate_quest_semantics(data)
+    return frozenset(data["legend"])
+
+
+def find_undefined_map_symbol(maps: list[tuple[list, list[str]]], *legends) -> tuple[list, str] | None:
+    """どの凡例にも無い最初の記号を、診断用の位置と組で返す。"""
+    for map_path, rows in maps:
+        for row_index, row in enumerate(rows):
+            for column, symbol in enumerate(row):
+                if not any(symbol in legend for legend in legends):
+                    return map_path + [row_index, column], symbol
+    return None
+
+
+def validate_quest_map_symbols(data: dict, schema_path: Path, data_path: Path, registry: Registry) -> None:
+    """QuestListと同じく、地図の記号がクエストの凡例か共通凡例にあることを確かめる。"""
+    # 生成時はどちらにも無い記号の凡例を上書きしないため、前に生成した町やクエストの凡例がそのまま使われる。
+    base_symbols = load_companion_ids(schema_path, quest_companion_anchor(data_path), registry,
+                                      "QuestPreferences", "quest preference",
+                                      extract_quest_preference_symbols)
+    undefined = find_undefined_map_symbol(select_quest_maps(data), data.get("legend", {}), base_symbols)
+    if undefined is not None:
+        raise ValidationError("map symbol is defined neither in the quest legend nor in the shared legend", path=undefined[0])
+
+
+def validate_quest_preference_map_symbols(data: dict, data_path: Path) -> None:
+    """共通凡例から記号を消しても、それを使うクエストの地図が CI で分かるようにする。"""
+    # 共通凡例を使うのは同じ lib/edit の quests/ のクエストだけなので、隣に quests/ が無ければ照合しない。
+    quests_dir = data_path.parent / "quests"
+    if not quests_dir.is_dir():
+        return
+    for quest_path in sorted(quests_dir.glob("*.jsonc")):
+        quest = load_sibling_quest(quest_path)
+        # 読めない・形の壊れたクエストは、そのファイル自身の検証で拒否される。
+        if not isinstance(quest, dict) or not isinstance(quest.get("legend", {}), dict):
+            continue
+        if not isinstance(quest.get("map", []), list) or not isinstance(quest.get("mapVariants", []), list):
+            continue
+        maps = [(path, rows) for path, rows in select_quest_maps(quest)
+                if isinstance(rows, list) and all(isinstance(row, str) for row in rows)]
+        undefined = find_undefined_map_symbol(maps, quest.get("legend", {}), data["legend"])
+        if undefined is not None:
+            raise ValidationError(f"map symbol {undefined[1]!r} at {undefined[0]} in {quest_path.name} "
+                                  "is defined neither in its legend nor in the shared legend", path=["legend"])
+
+
 def load_sibling_quest(quest_path: Path):
     """隣のクエストを読む。読めないファイルは None を返し、そのファイル自身の検証で拒否させる。"""
     try:
@@ -473,11 +520,13 @@ def validate_quest_file_semantics(data: dict, schema_path: Path, data_path: Path
     validate_quest_semantics(data)
     validate_quest_layout_semantics(data)
     validate_quest_references(data, schema_path, data_path, registry)
+    validate_quest_map_symbols(data, schema_path, data_path, registry)
 
 
 def validate_quest_preferences_semantics(data: dict, schema_path: Path, data_path: Path, registry: Registry) -> None:
     validate_quest_semantics(data)
     validate_quest_legend_references(data["legend"], load_quest_references(schema_path, data_path, registry))
+    validate_quest_preference_map_symbols(data, data_path)
 
 
 def validate_town_preferences_semantics(data: dict, schema_path: Path) -> None:
