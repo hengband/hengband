@@ -124,7 +124,9 @@
         },
         "level": {
           "type": "integer",
-          "minimum": 0
+          "minimum": 0,
+          "maximum": 127,
+          "description": "Dungeon level; at most MAX_DEPTH - 1, the deepest reachable level."
         },
         "dungeon": {
           "type": "integer",
@@ -144,7 +146,8 @@
         "maxNum": {
           "type": "integer",
           "minimum": 0,
-          "description": "Required kill count (KILL_NUMBER)."
+          "maximum": 32767,
+          "description": "Required kill count (KILL_NUMBER); saved as a 16-bit value."
         },
         "flags": {
           "type": "array",

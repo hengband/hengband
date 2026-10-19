@@ -73,6 +73,16 @@ class QuestInt16RangeTest(unittest.TestCase):
             with self.subTest(definition=make_definition(32768)):
                 self.assert_boundary(lambda value: self.quest(definition=make_definition(value)), 32767, 32768, location)
 
+    def test_level_and_kill_count_follow_reader_ranges(self):
+        # 階層は MAX_DEPTH - 1 まで、撃破数はセーブの16ビットまでしか読み込まない。
+        for field, maximum in (("level", 127), ("maxNum", 32767)):
+            for value, accepted in ((0, True), (maximum, True), (maximum + 1, False), (-1, False)):
+                with self.subTest(field=field, value=value):
+                    ok, message = self.validate("Quest", self.quest(definition={field: value}))
+                    self.assertEqual(ok, accepted, message)
+                    if not accepted:
+                        self.assertIn(f"Location: {['definition', field]}", message)
+
     def test_quest_preferences_share_the_legend_ranges(self):
         document = {"version": 1, "legend": {"#": {"monster": 32767, "special": -32768}}}
         ok, message = self.validate("QuestPreferences", document)

@@ -65,6 +65,23 @@ bool is_quest_short_id(const std::string &path)
     return path == "/definition/monster" || path.starts_with("/definition/reward/");
 }
 
+/*!
+ * @brief 整数の項目ごとに QuestReader が受け付ける範囲を返す
+ */
+std::pair<int64_t, int64_t> get_quest_integer_range(const std::string &path)
+{
+    if (path == "/definition/level") {
+        return { 0, MAX_DEPTH - 1 };
+    }
+    if (path == "/definition/maxNum") {
+        return { 0, std::numeric_limits<int16_t>::max() };
+    }
+    if (is_quest_short_id(path)) {
+        return { std::numeric_limits<int16_t>::min(), std::numeric_limits<int16_t>::max() };
+    }
+    return { std::numeric_limits<int>::min(), std::numeric_limits<int>::max() };
+}
+
 nlohmann::json make_quest_with_integer(const std::string &path, const nlohmann::json &value)
 {
     auto data = make_quest_with_description("New description");
@@ -194,8 +211,7 @@ TEST_CASE("QuestReader reads description lines")
 TEST_CASE("QuestReader metadata reward and start integers retain representable boundaries")
 {
     for (const auto &path : QUEST_INTEGER_PATHS) {
-        const auto minimum = is_quest_short_id(path) ? std::numeric_limits<int16_t>::min() : std::numeric_limits<int>::min();
-        const auto maximum = is_quest_short_id(path) ? std::numeric_limits<int16_t>::max() : std::numeric_limits<int>::max();
+        const auto [minimum, maximum] = get_quest_integer_range(path);
         const std::vector<nlohmann::json> values = path.starts_with("/start") && !path.ends_with("/leavingQuest")
                                                        ? std::vector<nlohmann::json>{ 0, 4 }
                                                        : std::vector<nlohmann::json>{ minimum, 0, maximum, static_cast<uint64_t>(maximum) };
@@ -214,8 +230,7 @@ TEST_CASE("QuestReader metadata reward and start integers retain representable b
 TEST_CASE("QuestReader rejects metadata reward and start integer overflow without publishing output")
 {
     for (const auto &path : QUEST_INTEGER_PATHS) {
-        const int64_t minimum = is_quest_short_id(path) ? std::numeric_limits<int16_t>::min() : std::numeric_limits<int>::min();
-        const int64_t maximum = is_quest_short_id(path) ? std::numeric_limits<int16_t>::max() : std::numeric_limits<int>::max();
+        const auto [minimum, maximum] = get_quest_integer_range(path);
         const std::vector<nlohmann::json> values = {
             minimum - 1,
             maximum + 1,
