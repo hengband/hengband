@@ -27,6 +27,25 @@
 #include "view/display-messages.h"
 
 /*!
+ * @brief 持ち物・床のアイテムに擬似鑑定の感触を付ける
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param i_idx 持ち物の番号 (床のアイテムは負の値)
+ * @param feel 感触
+ * @details 簡易鑑定済みにし、感触による自動の銘・自動破壊 (destroy_feeling) を適用する。
+ * 呼び出し元は、感触を得られる種類 (ItemEntity::can_be_sensed()) の品だけを渡す。
+ * 感触が変わると持ち物の束をまとめられるかも変わるので、整理と一覧の描き直しを要求する。
+ */
+void apply_item_feeling(PlayerType *player_ptr, INVENTORY_IDX i_idx, item_feel_type feel)
+{
+    auto item = ref_item(player_ptr, i_idx);
+    item->sense(feel);
+    autopick_alter_item(player_ptr, i_idx, destroy_feeling);
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    rfu.request_inventory_arrangement();
+    rfu.request_item_lists_redrawing();
+}
+
+/*!
  * @brief 擬似鑑定を実際に行い判定を反映する
  * @param slot 擬似鑑定を行うプレイヤーの所持リストID
  * @param player_ptr プレイヤーへの参照ポインタ
@@ -112,13 +131,7 @@ static void sense_inventory_aux(PlayerType *player_ptr, INVENTORY_IDX slot, bool
 #endif
     }
 
-    item.set_identification_flag(IdentificationFlag::SENSE);
-    item.feeling = feel;
-
-    autopick_alter_item(player_ptr, slot, destroy_feeling);
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.request_inventory_arrangement();
-    rfu.set_flag(SubWindowRedrawingFlag::EQUIPMENT);
+    apply_item_feeling(player_ptr, slot, feel);
 }
 
 /*!

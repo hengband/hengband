@@ -175,6 +175,15 @@ bool ItemEntity::is_weapon_armour_ammo() const
 }
 
 /*!
+ * @brief 擬似鑑定で感触を得られる種類かを判定する
+ * @return 武器・防具・矢弾・カード・指輪・アミュレット・光源・人形なら true
+ */
+bool ItemEntity::can_be_sensed() const
+{
+    return this->is_equipment() || (this->bi_key.tval() == ItemKindType::FIGURINE);
+}
+
+/*!
  * @brief 近接武器として装備できるかを判定する
  * @return 近接武器として使えるか否か
  */
@@ -1366,6 +1375,16 @@ void ItemEntity::mark_as_known()
     this->identification_flags.reset(IdentificationFlag::SENSE);
     this->identification_flags.reset(IdentificationFlag::EMPTY);
     this->identification_flags.set(IdentificationFlag::KNOWN);
+}
+
+/*!
+ * @brief 擬似鑑定で得た感触を付け、簡易鑑定済みにする
+ * @param feel 感触
+ */
+void ItemEntity::sense(item_feel_type feel)
+{
+    this->feeling = feel;
+    this->identification_flags.set(IdentificationFlag::SENSE);
 }
 
 /*!

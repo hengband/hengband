@@ -1531,6 +1531,7 @@ hengband_test_SOURCES = \
 	test/info-reader/test-ego-reader.cpp \
 	test/floor/test-floor-events.cpp \
 	test/object-activation/test-activation-util.cpp \
+	test/object-enchant/test-item-feeling.cpp \
 	test/object-enchant/test-object-ego.cpp \
 	test/object/test-object-value.cpp \
 	test/racial/test-racial-android.cpp \

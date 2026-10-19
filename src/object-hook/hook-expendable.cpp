@@ -71,20 +71,17 @@ bool can_player_destroy_object(ItemEntity *o_ptr)
     }
 
     if (!o_ptr->is_known()) {
-        byte feel = FEEL_SPECIAL;
+        auto feel = FEEL_SPECIAL;
         if (o_ptr->is_cursed() || o_ptr->is_broken()) {
             feel = FEEL_TERRIBLE;
         }
 
-        o_ptr->feeling = feel;
-        o_ptr->set_identification_flag(IdentificationFlag::SENSE);
+        o_ptr->sense(feel);
+
+        // 感触を付ける処理 (apply_item_feeling()) と同じく、束の整理と一覧の描き直しを要求する。床の品のこともある
         auto &rfu = RedrawingFlagsUpdater::get_instance();
-        rfu.set_flag(InventoryArrangementFlag::COMBINATION);
-        static constexpr auto flags = {
-            SubWindowRedrawingFlag::INVENTORY,
-            SubWindowRedrawingFlag::EQUIPMENT,
-        };
-        rfu.set_flags(flags);
+        rfu.request_inventory_arrangement();
+        rfu.request_item_lists_redrawing();
         return false;
     }
 

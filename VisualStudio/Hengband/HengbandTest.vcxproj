@@ -106,6 +106,7 @@
     <ClCompile Include="..\..\src\test\mspell\test-mspell-projection-table.cpp" />
     <ClCompile Include="..\..\src\test\mutation\test-mutation-roll-table.cpp" />
     <ClCompile Include="..\..\src\test\object-activation\test-activation-util.cpp" />
+    <ClCompile Include="..\..\src\test\object-enchant\test-item-feeling.cpp" />
     <ClCompile Include="..\..\src\test\object-enchant\test-object-ego.cpp" />
     <ClCompile Include="..\..\src\test\object\test-object-info.cpp" />
     <ClCompile Include="..\..\src\test\object\test-object-value.cpp" />
