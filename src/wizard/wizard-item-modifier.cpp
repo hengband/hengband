@@ -927,7 +927,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
     pray = str_tolower(pray);
 #endif
 
-    std::string pray_chars = pray;
+    auto pray_chars = str_ltrim(pray);
 
     // 先頭が prefix なら取り除いて、続く空白も読み飛ばす
     const auto consume_prefix = [&pray_chars](std::string_view prefix) {
@@ -940,11 +940,12 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
     };
 
 #ifndef JP
-    if (!consume_prefix("a ") && !consume_prefix("an ")) {
-        pray_chars = str_ltrim(pray_chars);
+    if (!consume_prefix("a ")) {
+        consume_prefix("an ");
     }
 #endif
 
+    // 末尾の空白は冠詞を調べた後に取る (先に取ると「a  」が冠詞でなく「a」という名前になる)
     pray_chars = str_rtrim(pray_chars);
 
     if (consume_prefix(_("祝福された", "blessed"))) {
@@ -986,7 +987,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
     }
 
     if (cheat_xtra) {
-        msg_print("Wishing {}....", str_rtrim(pray));
+        msg_print("Wishing {}....", str_trim(pray));
     }
 
     std::vector<short> baseitem_ids;
