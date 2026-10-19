@@ -74,8 +74,8 @@ int TerrainReader::read() const
         terrain.state[j].result_tag.clear();
     }
 
-    if (auto err = info_set_string(get_json_value(element, "name"), terrain.name, true)) {
-        return err;
+    if (const auto result = info_set_string(get_json_value(element, "name"), terrain.name, true); !result) {
+        return result.error();
     }
 
     if (const auto result = this->set_terrain_symbol(terrain); !result) {

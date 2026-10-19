@@ -189,10 +189,9 @@ int RaceReader::read() const
         msg_print(_("モンスター死亡時召喚情報読込失敗。ID: '{}'。", "Failed to load final summon data. ID: '{}'."), error_idx);
         return result.error();
     }
-    err = info_set_string(get_json_value(this->monrace_data, "flavor"), monrace.text, false);
-    if (err) {
+    if (const auto result = info_set_string(get_json_value(this->monrace_data, "flavor"), monrace.text, false); !result) {
         msg_print(_("モンスター説明文読込失敗。ID: '{}'。", "Failed to load monster flavor text. ID: '{}'."), error_idx);
-        return err;
+        return result.error();
     }
     auto &message_list = MonraceMessageList::get_instance();
     const auto message_it = message_list.messages.find(monrace_id_int);
@@ -704,8 +703,8 @@ tl::expected<void, parse_error_type> RaceReader::set_mon_message(MonraceMessage 
         }
 
         std::string str;
-        if (auto err = info_set_string(get_json_value(message, "message"), str, false)) {
-            return tl::unexpected(static_cast<parse_error_type>(err));
+        if (const auto result = info_set_string(get_json_value(message, "message"), str, false); !result) {
+            return result;
         }
 
         messages.emplace(action->second, chance, use_name, str);

@@ -49,8 +49,8 @@ int EgoReader::read() const
 
     EgoItemDefinition ego;
     ego.idx = i2enum<EgoType>(id);
-    if (auto err = info_set_string(get_json_value(this->ego_data, "name"), ego.name, true)) {
-        return err;
+    if (const auto result = info_set_string(get_json_value(this->ego_data, "name"), ego.name, true); !result) {
+        return result.error();
     }
     if (auto err = info_set_integer(get_json_value(this->ego_data, "slot"), ego.slot, true, Range(INVEN_AMMO, INVEN_FEET))) {
         return err;

@@ -93,13 +93,13 @@ tl::expected<void, parse_error_type> SpellReader::set_spell_data(const nlohmann:
     }
     info.tag = tag_obj.get<std::string>();
 
-    if (const auto err = info_set_string(get_json_value(spell_data, "name"), info.name, true); err != PARSE_ERROR_NONE) {
+    if (const auto result = info_set_string(get_json_value(spell_data, "name"), info.name, true); !result) {
         msg_print(_("呪文名読込失敗。ID: '{}'。", "Failed to load spell name. ID: '{}'."), error_idx);
-        return tl::make_unexpected(static_cast<parse_error_type>(err));
+        return result;
     }
-    if (const auto err = info_set_string(get_json_value(spell_data, "description"), info.description, true); err != PARSE_ERROR_NONE) {
+    if (const auto result = info_set_string(get_json_value(spell_data, "description"), info.description, true); !result) {
         msg_print(_("呪文説明読込失敗。ID: '{}'。", "Failed to load spell description. ID: '{}'."), error_idx);
-        return tl::make_unexpected(static_cast<parse_error_type>(err));
+        return result;
     }
     spells.push_back(std::move(info));
 

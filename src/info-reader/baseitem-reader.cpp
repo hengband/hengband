@@ -73,17 +73,17 @@ int BaseitemReader::read() const
     error_idx = item_id;
     const short short_id = static_cast<short>(item_id);
     auto baseitem = item_id < static_cast<int>(baseitems.size()) ? baseitems.get_baseitem(short_id).clone_without_required_fields() : BaseitemDefinition{};
-    if (auto err = info_set_string(get_json_value(this->baseitem_data, "name"), baseitem.name, true)) {
+    if (const auto result = info_set_string(get_json_value(this->baseitem_data, "name"), baseitem.name, true); !result) {
         msg_print(_("アイテムの名称読込失敗。ID: '{}'。", "Failed to load item name. ID: '{}'."), error_idx);
-        return err;
+        return result.error();
     }
-    if (auto err = info_set_string(get_json_value(this->baseitem_data, "flavor_name"), baseitem.flavor_name, false)) {
+    if (const auto result = info_set_string(get_json_value(this->baseitem_data, "flavor_name"), baseitem.flavor_name, false); !result) {
         msg_print(_("アイテム未識別名の読込失敗。ID: '{}'。", "Failed to load item unidentified name. ID: '{}'."), error_idx);
-        return err;
+        return result.error();
     }
-    if (auto err = info_set_string(get_json_value(this->baseitem_data, "flavor"), baseitem.text, false)) {
+    if (const auto result = info_set_string(get_json_value(this->baseitem_data, "flavor"), baseitem.text, false); !result) {
         msg_print(_("アイテムのフレーバーテキスト読込失敗。ID: '{}'。", "Failed to load flavor text of item. ID: '{}'."), error_idx);
-        return err;
+        return result.error();
     }
     if (const auto result = this->set_baseitem_symbol(baseitem); !result) {
         msg_print(_("アイテムのシンボル読込失敗。ID: '{}'。", "Failed to load symbol of item. ID: '{}'."), error_idx);

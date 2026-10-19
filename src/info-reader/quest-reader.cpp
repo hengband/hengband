@@ -342,8 +342,8 @@ int QuestReader::read() const
 tl::expected<void, parse_error_type> QuestReader::set_name(std::string &name) const
 {
     // info_set_string は {ja, en} オブジェクトを受け取り、ビルド言語に応じた文字列を格納する
-    if (const auto err = info_set_string(get_json_value(this->quest_data, "name"), name, true); err != PARSE_ERROR_NONE) {
-        return tl::make_unexpected(static_cast<parse_error_type>(err));
+    if (const auto result = info_set_string(get_json_value(this->quest_data, "name"), name, true); !result) {
+        return result;
     }
     return {};
 }

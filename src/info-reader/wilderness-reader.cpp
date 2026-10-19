@@ -139,14 +139,14 @@ int WildernessReader::read(WildernessDefinition &definition) const
         if (!town_ids.insert(town.id).second) {
             return PARSE_ERROR_NON_SEQUENTIAL_RECORDS;
         }
-        if (const auto err = info_set_string(get_json_value(town_data, "name"), town.name, true)) {
-            return err;
+        if (const auto result = info_set_string(get_json_value(town_data, "name"), town.name, true); !result) {
+            return result.error();
         }
         const auto &alias_data = get_json_value(town_data, "alias");
         if (!alias_data.is_null()) {
             std::string alias;
-            if (const auto err = info_set_string(alias_data, alias, true)) {
-                return err;
+            if (const auto result = info_set_string(alias_data, alias, true); !result) {
+                return result.error();
             }
             town.alias = std::move(alias);
         }

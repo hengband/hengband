@@ -49,8 +49,8 @@ int DungeonReader::read() const
     error_idx = id;
 
     DungeonDefinition dungeon;
-    if (auto err = info_set_string(get_json_value(element, "name"), dungeon.name, true)) {
-        return err;
+    if (const auto result = info_set_string(get_json_value(element, "name"), dungeon.name, true); !result) {
+        return result.error();
     }
     if (const auto result = this->set_dungeon_description(dungeon); !result) {
         return result.error();
@@ -306,8 +306,8 @@ static tl::optional<ProbabilityTable<short>> parse_terrain_probability(const nlo
 
 tl::expected<void, parse_error_type> DungeonReader::set_dungeon_description(DungeonDefinition &dungeon) const
 {
-    if (auto err = info_set_string(get_json_value(this->dungeon_data, "description"), dungeon.text, false)) {
-        return tl::unexpected(static_cast<parse_error_type>(err));
+    if (const auto result = info_set_string(get_json_value(this->dungeon_data, "description"), dungeon.text, false); !result) {
+        return result;
     }
     return {};
 }

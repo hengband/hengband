@@ -52,9 +52,9 @@ int ArtifactReader::read() const
     artifact.flags.set(TR_IGNORE_FIRE);
     artifact.flags.set(TR_IGNORE_COLD);
 
-    if (auto err = info_set_string(get_json_value(this->art_data, "name"), artifact.name, true)) {
+    if (const auto result = info_set_string(get_json_value(this->art_data, "name"), artifact.name, true); !result) {
         msg_print(_("アーティファクトの名称読込失敗。ID: '{}'。", "Failed to load artifact name. ID: '{}'."), error_idx);
-        return err;
+        return result.error();
     }
     if (const auto result = this->set_art_baseitem(artifact); !result) {
         msg_print(_("アーティファクトのベースアイテム読込失敗。ID: '{}'。", "Failed to load base item of artifact. ID: '{}'."), error_idx);
@@ -109,9 +109,9 @@ int ArtifactReader::read() const
         msg_print(_("アーティファクトの能力フラグ読込失敗。ID: '{}'。", "Failed to load ability flags of artifact. ID: '{}'."), error_idx);
         return result.error();
     }
-    if (auto err = info_set_string(get_json_value(this->art_data, "flavor"), artifact.text, false)) {
+    if (const auto result = info_set_string(get_json_value(this->art_data, "flavor"), artifact.text, false); !result) {
         msg_print(_("アーティファクトのフレーバーテキスト読込失敗。ID: '{}'。", "Failed to load flavor text of artifact. ID: '{}'."), error_idx);
-        return err;
+        return result.error();
     }
     // 生成・鑑定では元のベースアイテムを種別・副種別から引き、無ければ例外で落ちるため、読み込み時に確かめる。
     // ベースアイテムはアーティファクトより先に読み込まれる。種別・副種別の検索表は使わず、一覧を直接調べる。

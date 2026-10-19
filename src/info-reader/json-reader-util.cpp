@@ -58,39 +58,45 @@ const nlohmann::json &get_json_value(const nlohmann::json &json, std::string_vie
  * @param json 文字列の格納されたJSON Object
  * @param data 文字列を格納する変数への参照
  * @param is_required 必須かどうか
- * @return エラーコード
+ * @return 成功時は空の値、失敗時は解析エラーコード（必須の文字列が無ければPARSE_ERROR_TOO_FEW_ARGUMENTS、
+ * 型が誤っていればPARSE_ERROR_INVALID_TYPE、日本語版で文字コードの変換に失敗すればPARSE_ERROR_INVALID_FLAG）
  */
-errr info_set_string(const nlohmann::json &json, std::string &data, bool is_required)
+tl::expected<void, parse_error_type> info_set_string(const nlohmann::json &json, std::string &data, bool is_required)
 {
-    const auto unexist_result = is_required ? PARSE_ERROR_TOO_FEW_ARGUMENTS : PARSE_ERROR_NONE;
+    const auto unexist_result = [is_required]() -> tl::expected<void, parse_error_type> {
+        if (is_required) {
+            return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        }
+        return {};
+    };
 
     if (json.is_null()) {
-        return unexist_result;
+        return unexist_result();
     }
 
     if (!json.is_object()) {
-        return PARSE_ERROR_INVALID_TYPE;
+        return tl::make_unexpected(PARSE_ERROR_INVALID_TYPE);
     }
 
     const auto str = json.find(_("ja", "en"));
     if (str == json.end()) {
-        return unexist_result;
+        return unexist_result();
     }
     if (!str->is_string()) {
-        return PARSE_ERROR_INVALID_TYPE;
+        return tl::make_unexpected(PARSE_ERROR_INVALID_TYPE);
     }
 
 #ifdef JP
     auto str_sys = utf8_to_sys(str->get<std::string>());
     if (!str_sys) {
-        return PARSE_ERROR_INVALID_FLAG;
+        return tl::make_unexpected(PARSE_ERROR_INVALID_FLAG);
     }
     data = std::move(*str_sys);
 #else
     data = str->get<std::string>();
 #endif
 
-    return PARSE_ERROR_NONE;
+    return {};
 }
 
 /*!

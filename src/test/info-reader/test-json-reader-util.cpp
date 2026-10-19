@@ -413,7 +413,7 @@ TEST_CASE("info_set_string picks the string of the language of the build")
     json[OTHER_LANG_KEY] = "name-of-the-other-build";
 
     std::string data;
-    CHECK(info_set_string(json, data, true) == PARSE_ERROR_NONE);
+    CHECK(info_set_string(json, data, true).has_value());
     CHECK(data == "name-of-this-build");
 }
 
@@ -432,12 +432,12 @@ TEST_CASE("info_set_string ignores malformed values of the other language")
         for (const auto is_required : { false, true }) {
             nlohmann::json json = { { LANG_KEY, "selected" }, { OTHER_LANG_KEY, ignored } };
             std::string data = "unchanged";
-            CHECK(info_set_string(json, data, is_required) == PARSE_ERROR_NONE);
+            CHECK(info_set_string(json, data, is_required).has_value());
             CHECK(data == "selected");
 
             json.erase(LANG_KEY);
             data = "unchanged";
-            CHECK(info_set_string(json, data, is_required) == (is_required ? PARSE_ERROR_TOO_FEW_ARGUMENTS : PARSE_ERROR_NONE));
+            CHECK(to_error_code(info_set_string(json, data, is_required)) == (is_required ? PARSE_ERROR_TOO_FEW_ARGUMENTS : PARSE_ERROR_NONE));
             CHECK(data == "unchanged");
         }
     }
@@ -448,7 +448,7 @@ TEST_CASE("info_set_string stores an empty selected string")
     for (const auto is_required : { false, true }) {
         const nlohmann::json json = { { LANG_KEY, "" }, { OTHER_LANG_KEY, nullptr } };
         std::string data = "unchanged";
-        CHECK(info_set_string(json, data, is_required) == PARSE_ERROR_NONE);
+        CHECK(info_set_string(json, data, is_required).has_value());
         CHECK(data.empty());
     }
 }
@@ -460,10 +460,10 @@ TEST_CASE("info_set_string preserves the language-specific embedded NUL behavior
     for (const auto is_required : { false, true }) {
         std::string data = "unchanged";
 #ifdef JP
-        CHECK(info_set_string(json, data, is_required) == PARSE_ERROR_INVALID_FLAG);
+        CHECK(to_error_code(info_set_string(json, data, is_required)) == PARSE_ERROR_INVALID_FLAG);
         CHECK(data == "unchanged");
 #else
-        CHECK(info_set_string(json, data, is_required) == PARSE_ERROR_NONE);
+        CHECK(info_set_string(json, data, is_required).has_value());
         CHECK(data == value);
 #endif
     }
@@ -478,10 +478,10 @@ TEST_CASE("info_set_string leaves malformed UTF-8 handling to the existing conve
 #ifdef JP
         // Windows may replace invalid UTF-8, while iconv can reject it. Do not add a stricter policy here.
         const auto converted = utf8_to_sys(value);
-        CHECK(info_set_string(json, data, is_required) == (converted ? PARSE_ERROR_NONE : PARSE_ERROR_INVALID_FLAG));
+        CHECK(to_error_code(info_set_string(json, data, is_required)) == (converted ? PARSE_ERROR_NONE : PARSE_ERROR_INVALID_FLAG));
         CHECK(data == (converted ? *converted : "unchanged"));
 #else
-        CHECK(info_set_string(json, data, is_required) == PARSE_ERROR_NONE);
+        CHECK(info_set_string(json, data, is_required).has_value());
         CHECK(data == value);
 #endif
     }
@@ -501,7 +501,7 @@ TEST_CASE("info_set_string rejects all non-string selected values without changi
         for (const auto is_required : { false, true }) {
             const nlohmann::json json = { { LANG_KEY, value }, { OTHER_LANG_KEY, "other" } };
             std::string data = "unchanged";
-            CHECK(info_set_string(json, data, is_required) == PARSE_ERROR_INVALID_TYPE);
+            CHECK(to_error_code(info_set_string(json, data, is_required)) == PARSE_ERROR_INVALID_TYPE);
             CHECK(data == "unchanged");
         }
     }
@@ -514,7 +514,7 @@ TEST_CASE("info_set_string converts the UTF-8 string into the system encoding")
     json["ja"] = UTF8_TEST_STRING;
 
     std::string data;
-    REQUIRE(info_set_string(json, data, true) == PARSE_ERROR_NONE);
+    REQUIRE(info_set_string(json, data, true).has_value());
 
     // 日本語版のシステム文字コード(EUC-JP/Shift_JIS)はUTF-8と異なるので、
     // 変換されていれば元のバイト列とは一致しない
@@ -543,8 +543,8 @@ TEST_CASE("info_set_string cannot convert a character missing from EUC-JP")
     std::string data = "unchanged";
 
     // 変換失敗は必須かどうかによらずエラーになり、格納先は書き換えない
-    CHECK(info_set_string(json, data, true) == PARSE_ERROR_INVALID_FLAG);
-    CHECK(info_set_string(json, data, false) == PARSE_ERROR_INVALID_FLAG);
+    CHECK(to_error_code(info_set_string(json, data, true)) == PARSE_ERROR_INVALID_FLAG);
+    CHECK(to_error_code(info_set_string(json, data, false)) == PARSE_ERROR_INVALID_FLAG);
 
     CHECK(data == "unchanged");
 
@@ -553,7 +553,7 @@ TEST_CASE("info_set_string cannot convert a character missing from EUC-JP")
     nlohmann::json valid_json;
     valid_json["ja"] = UTF8_TEST_STRING;
 
-    REQUIRE(info_set_string(valid_json, data, true) == PARSE_ERROR_NONE);
+    REQUIRE(info_set_string(valid_json, data, true).has_value());
     const auto restored = sys_to_utf8(data);
     REQUIRE(restored.has_value());
     CHECK(*restored == UTF8_TEST_STRING);
@@ -568,8 +568,8 @@ TEST_CASE("info_set_string treats a missing string as an unwritten key")
     {
         const nlohmann::json null_json;
 
-        CHECK(info_set_string(null_json, data, true) == PARSE_ERROR_TOO_FEW_ARGUMENTS);
-        CHECK(info_set_string(null_json, data, false) == PARSE_ERROR_NONE);
+        CHECK(to_error_code(info_set_string(null_json, data, true)) == PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        CHECK(info_set_string(null_json, data, false).has_value());
     }
 
     SUBCASE("object which has only the key of the other language")
@@ -577,8 +577,8 @@ TEST_CASE("info_set_string treats a missing string as an unwritten key")
         nlohmann::json json;
         json[OTHER_LANG_KEY] = "name-of-the-other-build";
 
-        CHECK(info_set_string(json, data, true) == PARSE_ERROR_TOO_FEW_ARGUMENTS);
-        CHECK(info_set_string(json, data, false) == PARSE_ERROR_NONE);
+        CHECK(to_error_code(info_set_string(json, data, true)) == PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        CHECK(info_set_string(json, data, false).has_value());
     }
 
     CHECK(data == "unchanged");
@@ -591,8 +591,8 @@ TEST_CASE("info_set_string rejects a JSON of an invalid type")
     SUBCASE("string written directly instead of an object")
     {
         // 言語別のオブジェクトではなく文字列が直接書かれている場合
-        CHECK(info_set_string(nlohmann::json("name"), data, true) == PARSE_ERROR_INVALID_TYPE);
-        CHECK(info_set_string(nlohmann::json("name"), data, false) == PARSE_ERROR_INVALID_TYPE);
+        CHECK(to_error_code(info_set_string(nlohmann::json("name"), data, true)) == PARSE_ERROR_INVALID_TYPE);
+        CHECK(to_error_code(info_set_string(nlohmann::json("name"), data, false)) == PARSE_ERROR_INVALID_TYPE);
     }
 
     SUBCASE("the value of the language key is not a string")
@@ -600,8 +600,8 @@ TEST_CASE("info_set_string rejects a JSON of an invalid type")
         nlohmann::json json;
         json[LANG_KEY] = 100;
 
-        CHECK(info_set_string(json, data, true) == PARSE_ERROR_INVALID_TYPE);
-        CHECK(info_set_string(json, data, false) == PARSE_ERROR_INVALID_TYPE);
+        CHECK(to_error_code(info_set_string(json, data, true)) == PARSE_ERROR_INVALID_TYPE);
+        CHECK(to_error_code(info_set_string(json, data, false)) == PARSE_ERROR_INVALID_TYPE);
     }
 
     CHECK(data == "unchanged");
