@@ -64,6 +64,7 @@
     </ClCompile>
     <ClCompile Include="..\..\src\test\autopick\test-autopick-editor-util.cpp" />
     <ClCompile Include="..\..\src\test\cmd-io\test-cmd-autopick.cpp" />
+    <ClCompile Include="..\..\src\test\core\test-asking-player.cpp" />
     <ClCompile Include="..\..\src\test\flavor\test-flavor-util.cpp" />
     <ClCompile Include="..\..\src\test\floor\test-fixed-map-generator.cpp" />
     <ClCompile Include="..\..\src\test\floor\test-floor-changer.cpp" />
@@ -92,6 +93,7 @@
     <ClCompile Include="..\..\src\test\info-reader\test-wilderness-reader.cpp" />
     <ClCompile Include="..\..\src\test\io\test-condition-expression.cpp" />
     <ClCompile Include="..\..\src\test\io\test-input-context.cpp" />
+    <ClCompile Include="..\..\src\test\io\test-input-key-requester.cpp" />
     <ClCompile Include="..\..\src\test\io\test-interpret-pref-file.cpp" />
     <ClCompile Include="..\..\src\test\io\test-macro-configurations-store.cpp" />
     <ClCompile Include="..\..\src\test\io\test-pref-file-expressor.cpp" />
@@ -137,6 +139,7 @@
     <ClCompile Include="..\..\src\test\util\test-sha256.cpp" />
     <ClCompile Include="..\..\src\test\util\test-string-processor.cpp" />
     <ClCompile Include="..\..\src\test\util\test-temporary-json-files.cpp" />
+    <ClCompile Include="..\..\src\test\view\test-display-messages.cpp" />
     <ClCompile Include="..\..\src\test\view\test-map-info-cache.cpp" />
     <ClCompile Include="..\..\src\test\view\test-map-terrain-visibility.cpp" />
     <ClCompile Include="..\..\src\test\view\test-screen-parity-helpers.cpp" />
@@ -148,6 +151,7 @@
     <ClInclude Include="..\..\src\stdafx.h" />
     <ClInclude Include="..\..\src\test\info-reader\scoped-reader-state.h" />
     <ClInclude Include="..\..\src\test\save\scoped-save-io.h" />
+    <ClInclude Include="..\..\src\test\scoped-input-term.h" />
     <ClInclude Include="..\..\src\test\scoped-restore.h" />
     <ClInclude Include="..\..\src\test\scoped-rng.h" />
     <ClInclude Include="..\..\src\test\scoped-vector-wrapper.h" />

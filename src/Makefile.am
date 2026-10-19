@@ -1501,6 +1501,7 @@ check_PROGRAMS = hengband-test
 hengband_test_SOURCES = \
 	test/test-main.cpp \
 	test/scoped-restore.h \
+	test/scoped-input-term.h \
 	test/save/scoped-save-io.h \
 	test/scoped-vector-wrapper.h \
 	test/scoped-rng.h \
@@ -1518,6 +1519,7 @@ hengband_test_SOURCES = \
 	\
 	test/autopick/test-autopick-editor-util.cpp \
 	test/cmd-io/test-cmd-autopick.cpp \
+	test/core/test-asking-player.cpp \
 	test/flavor/test-flavor-util.cpp \
 	test/floor/test-fixed-map-generator.cpp \
 	test/floor/test-floor-changer.cpp \
@@ -1551,6 +1553,7 @@ hengband_test_SOURCES = \
 	test/info-reader/test-vault-reader.cpp \
 	test/io/test-condition-expression.cpp \
 	test/io/test-input-context.cpp \
+	test/io/test-input-key-requester.cpp \
 	test/io/test-interpret-pref-file.cpp \
 	test/io/test-macro-configurations-store.cpp \
 	test/io/test-pref-file-expressor.cpp \
@@ -1590,6 +1593,7 @@ hengband_test_SOURCES = \
 	test/util/test-sha256.cpp \
 	test/util/test-string-processor.cpp \
 	test/util/test-temporary-json-files.cpp \
+	test/view/test-display-messages.cpp \
 	test/view/test-map-info-cache.cpp \
 	test/view/test-map-terrain-visibility.cpp \
 	test/view/test-screen-parity-helpers.cpp \
@@ -1621,20 +1625,11 @@ check-arena-status: arena-status-probe$(EXEEXT)
 		./arena-status-probe$(EXEEXT) "$(top_srcdir)/lib" "$$scratch" "$$mode"; \
 	done
 
-## 文字列・数量の文脈を、本体の入力待ちと編集結果を通して確認する。
-input-context-probe$(EXEEXT): $(top_srcdir)/tools/tests/input-context-probe.cpp libhengband.a
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) $(LDFLAGS) -o $@ $(top_srcdir)/tools/tests/input-context-probe.cpp libhengband.a $(LIBS)
-
-.PHONY: check-input-context
-check-input-context: input-context-probe$(EXEEXT)
-	./input-context-probe$(EXEEXT)
-
-CLEANFILES = main-window-wipe-probe$(EXEEXT) arena-status-probe$(EXEEXT) input-context-probe$(EXEEXT)
+CLEANFILES = main-window-wipe-probe$(EXEEXT) arena-status-probe$(EXEEXT)
 
 TESTS = $(check_PROGRAMS)
 
 EXTRA_DIST = \
-	$(top_srcdir)/tools/tests/input-context-probe.cpp \
 	$(top_srcdir)/tools/tests/arena-status-probe.cpp \
 	$(top_srcdir)/tools/tests/main-window-wipe-probe.cpp \
 	gcc-wrap \
