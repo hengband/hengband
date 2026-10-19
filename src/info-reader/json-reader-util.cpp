@@ -9,24 +9,25 @@
  * @param root JSON文書のルート
  * @param key 必須のレコード配列キー
  * @param allow_empty 空配列を許容するか（Vaultではfalse）
- * @return エラーコード
+ * @return 成功時は空の値、失敗時は解析エラーコード（ルートがオブジェクトでないか、キーの値が配列でなければ
+ * PARSE_ERROR_INVALID_TYPE、キーが無ければPARSE_ERROR_TOO_FEW_ARGUMENTS、許容しない空配列ならPARSE_ERROR_INVALID_VALUE）
  */
-errr info_validate_json_array(const nlohmann::json &root, std::string_view key, bool allow_empty)
+tl::expected<void, parse_error_type> info_validate_json_array(const nlohmann::json &root, std::string_view key, bool allow_empty)
 {
     if (!root.is_object()) {
-        return PARSE_ERROR_INVALID_TYPE;
+        return tl::make_unexpected(PARSE_ERROR_INVALID_TYPE);
     }
     const auto records = root.find(key);
     if (records == root.end()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+        return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
     }
     if (!records->is_array()) {
-        return PARSE_ERROR_INVALID_TYPE;
+        return tl::make_unexpected(PARSE_ERROR_INVALID_TYPE);
     }
     if (!allow_empty && records->empty()) {
-        return PARSE_ERROR_INVALID_VALUE;
+        return tl::make_unexpected(PARSE_ERROR_INVALID_VALUE);
     }
-    return PARSE_ERROR_NONE;
+    return {};
 }
 
 /*!

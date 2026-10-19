@@ -18,11 +18,26 @@
 
 #include <doctest/doctest.h>
 #include <nlohmann/json.hpp>
+#include <tl/expected.hpp>
 
 #include <cstdint>
 #include <limits>
 #include <string>
 #include <vector>
+
+namespace {
+
+/*!
+ * @brief 解析結果をエラーコードとして比べられるようにする
+ * @param result info_set_* などの解析結果
+ * @return 成功時はPARSE_ERROR_NONE、失敗時は解析エラーコード
+ */
+parse_error_type to_error_code(const tl::expected<void, parse_error_type> &result)
+{
+    return result ? PARSE_ERROR_NONE : result.error();
+}
+
+}
 
 TEST_CASE("JSON definition roots require an object containing the named array")
 {
@@ -41,7 +56,7 @@ TEST_CASE("JSON definition roots require an object containing the named array")
     };
     for (const auto &root : invalid_roots) {
         const auto saved = root;
-        CHECK(info_validate_json_array(root, "vaults") != PARSE_ERROR_NONE);
+        CHECK(to_error_code(info_validate_json_array(root, "vaults")) != PARSE_ERROR_NONE);
         CHECK(root == saved);
     }
 }
@@ -49,11 +64,11 @@ TEST_CASE("JSON definition roots require an object containing the named array")
 TEST_CASE("Empty definition arrays are rejected only when requested")
 {
     const nlohmann::json empty = { { "vaults", nlohmann::json::array() } };
-    CHECK(info_validate_json_array(empty, "vaults") == PARSE_ERROR_NONE);
-    CHECK(info_validate_json_array(empty, "vaults", false) == PARSE_ERROR_INVALID_VALUE);
+    CHECK(info_validate_json_array(empty, "vaults").has_value());
+    CHECK(to_error_code(info_validate_json_array(empty, "vaults", false)) == PARSE_ERROR_INVALID_VALUE);
     const nlohmann::json nonempty = { { "vaults", { { { "id", 0 } } } } };
-    CHECK(info_validate_json_array(nonempty, "vaults", false) == PARSE_ERROR_NONE);
-    CHECK(info_validate_json_array(nonempty, "missing", false) == PARSE_ERROR_TOO_FEW_ARGUMENTS);
+    CHECK(info_validate_json_array(nonempty, "vaults", false).has_value());
+    CHECK(to_error_code(info_validate_json_array(nonempty, "missing", false)) == PARSE_ERROR_TOO_FEW_ARGUMENTS);
 }
 
 #if defined(JP) && defined(EUC)

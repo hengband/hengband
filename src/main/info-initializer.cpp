@@ -84,8 +84,8 @@ void init_json(std::string_view filename, std::string_view keyname, DefinitionHa
 
     auto json_object = loader.parse();
 
-    if (const auto err = info_validate_json_array(json_object, keyname, allow_empty); err != PARSE_ERROR_NONE) {
-        if (err == PARSE_ERROR_INVALID_VALUE) {
+    if (const auto result = info_validate_json_array(json_object, keyname, allow_empty); !result) {
+        if (result.error() == PARSE_ERROR_INVALID_VALUE) {
             quit(fmt::format(_("{}: $.{}: 空配列は許可されません", "{}: $.{}: empty array is not allowed"), filename, keyname));
         }
         quit(fmt::format(_("{}: ルートオブジェクトに配列 '{}' が必要です", "{}: expected a root object containing array '{}'"), filename, keyname));
