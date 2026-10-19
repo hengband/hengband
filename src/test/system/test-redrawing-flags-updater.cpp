@@ -268,6 +268,37 @@ TEST_CASE("RedrawingFlagsUpdater::request_item_lists_redrawing requests redrawin
     }
 }
 
+TEST_CASE("RedrawingFlagsUpdater::request_carried_item_lists_redrawing requests redrawing the inventory and the equipment")
+{
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    static constexpr auto flags_swrf = {
+        SubWindowRedrawingFlag::INVENTORY,
+        SubWindowRedrawingFlag::EQUIPMENT,
+    };
+    const auto restore = scoped_restore_flags(rfu, flags_swrf);
+    static constexpr auto flags_swrf_others = {
+        SubWindowRedrawingFlag::FLOOR_ITEMS,
+        SubWindowRedrawingFlag::FOUND_ITEMS,
+        SubWindowRedrawingFlag::PLAYER,
+    };
+    const auto restore_others = scoped_restore_flags(rfu, flags_swrf_others);
+    rfu.reset_flags(flags_swrf);
+    rfu.reset_flags(flags_swrf_others);
+
+    rfu.request_carried_item_lists_redrawing();
+
+    for (const auto flag : flags_swrf) {
+        CAPTURE(enum2i(flag));
+        CHECK(rfu.has(flag));
+    }
+
+    // 床のアイテムの一覧とプレイヤーの情報は request_item_lists_redrawing() が要求する
+    for (const auto flag : flags_swrf_others) {
+        CAPTURE(enum2i(flag));
+        CHECK_FALSE(rfu.has(flag));
+    }
+}
+
 TEST_CASE("RedrawingFlagsUpdater::request_floor_item_lists_redrawing requests redrawing the windows showing floor items")
 {
     auto &rfu = RedrawingFlagsUpdater::get_instance();

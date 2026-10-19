@@ -194,11 +194,7 @@ static bool exe_eat_charge_of_magic_device(PlayerType *player_ptr, ItemEntity *o
 
     describe_item_charges(player_ptr, i_idx >= 0, ref_item(player_ptr, i_idx));
 
-    static constexpr auto flags = {
-        SubWindowRedrawingFlag::INVENTORY,
-        SubWindowRedrawingFlag::EQUIPMENT,
-    };
-    rfu.set_flags(flags);
+    rfu.request_carried_item_lists_redrawing();
     return true;
 }
 

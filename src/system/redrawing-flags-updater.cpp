@@ -121,13 +121,23 @@ void RedrawingFlagsUpdater::request_sight_recalculation()
  */
 void RedrawingFlagsUpdater::request_item_lists_redrawing()
 {
+    this->request_carried_item_lists_redrawing();
+    this->request_floor_item_lists_redrawing();
+    this->sub_window_flags.set(SubWindowRedrawingFlag::PLAYER);
+}
+
+/*!
+ * @brief 所持品・装備品の一覧の描き直しを予約する
+ * @details 持ち物だけの表示が変わったとき (能力の再計算・装備品の発動・選べるアイテムの印など) に呼ぶ。
+ * 足元の品の表示も変わりうるとき (充填・使用回数・鑑定など) は request_item_lists_redrawing() を使う。
+ */
+void RedrawingFlagsUpdater::request_carried_item_lists_redrawing()
+{
     static constexpr auto flags_swrf = {
         SubWindowRedrawingFlag::INVENTORY,
         SubWindowRedrawingFlag::EQUIPMENT,
-        SubWindowRedrawingFlag::PLAYER,
     };
     this->sub_window_flags.set(flags_swrf);
-    this->request_floor_item_lists_redrawing();
 }
 
 /*!
