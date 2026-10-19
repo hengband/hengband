@@ -220,10 +220,10 @@ static MonsterSpellResult spell_RF6_SPECIAL_B(PlayerType *player_ptr, POSITION y
 
     if ((monster_to_player && player_ptr->levitation) || (monster_to_monster && monrace_target.feature_flags.has(MonsterFeatureType::CAN_FLY))) {
         msg.to_player = _("あなたは静かに着地した。", "You float gently down to the ground.");
-        msg.to_mons = _("{}は静かに着地した。", "{} floats gently down to the ground.");
+        msg.to_mons = _("{4}は静かに着地した。", "{4} floats gently down to the ground.");
     } else {
         msg.to_player = _("あなたは地面に叩きつけられた。", "You crashed into the ground.");
-        msg.to_mons = _("{}は地面に叩きつけられた。", "{} crashed into the ground.");
+        msg.to_mons = _("{4}は地面に叩きつけられた。", "{4} crashed into the ground.");
     }
 
     simple_monspell_message(player_ptr, m_idx, t_idx, msg, target_type);

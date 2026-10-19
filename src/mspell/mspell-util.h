@@ -23,8 +23,9 @@ class PlayerType;
  * - {1}: 対象のモンスターの名前
  * - {2}: 唱えたモンスターの名前 (先頭を大文字にしない)
  * - {3}: 唱えたモンスターの所有格 (英語版の "his" など)
+ * - {4}: 対象のモンスターの名前 (先頭を大文字にする)
  */
-using MSpellMessageFormat = fmt::format_string<std::string_view, std::string_view, std::string_view, std::string_view>;
+using MSpellMessageFormat = fmt::format_string<std::string_view, std::string_view, std::string_view, std::string_view, std::string_view>;
 
 struct mspell_cast_msg {
     mspell_cast_msg(MSpellMessageFormat to_player_true, MSpellMessageFormat to_mons_true, MSpellMessageFormat to_player_false, MSpellMessageFormat to_mons_false);

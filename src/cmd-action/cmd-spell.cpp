@@ -1015,8 +1015,8 @@ bool do_cmd_cast(PlayerType *player_ptr)
 
         /* Warning */
 #ifdef JP
-        const auto verb = (mp_ptr->spell_book == ItemKindType::LIFE_BOOK) ? "詠唱する" : (mp_ptr->spell_book == ItemKindType::LIFE_BOOK) ? "歌う"
-                                                                                                                                         : "唱える";
+        const auto verb = (mp_ptr->spell_book == ItemKindType::LIFE_BOOK) ? "詠唱する" : (mp_ptr->spell_book == ItemKindType::MUSIC_BOOK) ? "歌う"
+                                                                                                                                          : "唱える";
         msg_print("その{}を{}のに十分なマジックポイントがない。", prayer, verb);
 #else
         msg_print("You do not have enough mana to {} this {}.", ((mp_ptr->spell_book == ItemKindType::LIFE_BOOK) ? "recite" : "cast"), prayer);
