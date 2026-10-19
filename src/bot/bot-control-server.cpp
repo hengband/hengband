@@ -162,6 +162,33 @@ std::string_view input_kind_name(InputKind kind)
 }
 
 /*!
+ * @brief 入力の種類ごとの詳細を、入力の文脈のJSONに足すキーへ変換する
+ * @details 詳細の型ごとに関数を分けてstd::visitで呼び分ける。詳細の型を足したときに変換を書き漏らすと、コンパイルが通らない。
+ */
+class InputDetailsJsonConverter {
+public:
+    nlohmann::json operator()(std::monostate) const
+    {
+        return nlohmann::json::object();
+    }
+
+    nlohmann::json operator()(const StringInputDetails &details) const
+    {
+        return { { "max_length", details.max_length }, { "initial", to_json_utf8(details.initial) } };
+    }
+
+    nlohmann::json operator()(const QuantityInputDetails &details) const
+    {
+        return { { "max", details.max }, { "initial", details.initial } };
+    }
+
+    nlohmann::json operator()(const CommandInputDetails &details) const
+    {
+        return { { "shopping", details.shopping } };
+    }
+};
+
+/*!
  * @brief 現在の入力待ちの文脈をJSONへ変換する
  */
 nlohmann::json make_input_context_json()
@@ -172,16 +199,7 @@ nlohmann::json make_input_context_json()
     }
 
     auto result = nlohmann::json{ { "kind", input_kind_name(context->kind) }, { "prompt", to_json_utf8(context->prompt) } };
-    if (const auto *string_details = std::get_if<StringInputDetails>(&context->details)) {
-        result["max_length"] = string_details->max_length;
-        result["initial"] = to_json_utf8(string_details->initial);
-    } else if (const auto *quantity_details = std::get_if<QuantityInputDetails>(&context->details)) {
-        result["max"] = quantity_details->max;
-        result["initial"] = quantity_details->initial;
-    } else if (const auto *command_details = std::get_if<CommandInputDetails>(&context->details)) {
-        result["shopping"] = command_details->shopping;
-    }
-
+    result.update(std::visit(InputDetailsJsonConverter(), context->details));
     return result;
 }
 
