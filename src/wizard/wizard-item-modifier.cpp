@@ -401,7 +401,7 @@ static void wiz_display_item(PlayerType *player_ptr, ItemEntity *o_ptr)
     prt(fmt::format("chest_level = {:<4}  fuel = {}", o_ptr->chest_level, o_ptr->fuel), ++line, j);
     prt(fmt::format("smith_hit = {:<4}  smith_damage = {:<4}", o_ptr->smith_hit, o_ptr->smith_damage), ++line, j);
     prt(fmt::format("cursed  = {:<4X}  captured_monster_speed = {:<4}", o_ptr->curse_flags.to_ulong(), o_ptr->captured_monster_speed), ++line, j);
-    prt(fmt::format("captured_monster_max_hp = {:<4}  captured_monster_max_hp = {:<4}", o_ptr->captured_monster_current_hp, o_ptr->captured_monster_max_hp), ++line, j);
+    prt(fmt::format("captured_monster_cur_hp = {:<4}  captured_monster_max_hp = {:<4}", o_ptr->captured_monster_current_hp, o_ptr->captured_monster_max_hp), ++line, j);
 
     const auto flags = o_ptr->get_flags();
     prt("+------------FLAGS1------------+", ++line, j);
