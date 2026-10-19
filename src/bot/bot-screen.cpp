@@ -16,26 +16,6 @@
 namespace {
 
 /*!
- * @brief 画面バッファの1行分の文字を取り出してUTF-8文字列に変換する
- * @param win 対象の画面バッファ
- * @param y 行番号
- * @param width 桁数
- * @return UTF-8に変換した1行分の文字列
- */
-std::string make_line_text(const term_win &win, int y, int width)
-{
-    std::string line;
-    line.reserve(static_cast<size_t>(width));
-    for (auto x = 0; x < width; x++) {
-        const auto ch = win.c[y][x];
-        // 未描画セルにNULが残っている場合があるため空白に読み替える
-        line.push_back((ch == '\0') ? ' ' : ch);
-    }
-
-    return to_json_utf8(line);
-}
-
-/*!
  * @brief 画面バッファの1行分の属性を16進文字列に変換する
  * @param win 対象の画面バッファ
  * @param y 行番号
@@ -62,6 +42,26 @@ std::string make_line_attrs(const term_win &win, int y, int width)
 }
 
 /*!
+ * @brief 画面バッファの1行分の文字を取り出してUTF-8文字列に変換する
+ * @param win 対象の画面バッファ
+ * @param y 行番号
+ * @param width 桁数
+ * @return UTF-8に変換した1行分の文字列
+ */
+std::string make_bot_screen_line_text(const term_win &win, int y, int width)
+{
+    std::string line;
+    line.reserve(static_cast<size_t>(width));
+    for (auto x = 0; x < width; x++) {
+        const auto ch = win.c[y][x];
+        // 未描画セルにNULが残っている場合があるため空白に読み替える
+        line.push_back((ch == '\0') ? ' ' : ch);
+    }
+
+    return to_json_utf8(line);
+}
+
+/*!
  * @brief 端末の画面バッファをJSONオブジェクトに変換する
  * @param t 対象の端末 (画面バッファを持つ、すなわちterm_init()済みでterm_nuke()前であること)
  * @param with_attrs 色属性を含めるか否か
@@ -82,7 +82,7 @@ nlohmann::json make_bot_screen_json(const term_type &t, bool with_attrs)
     auto lines = nlohmann::json::array();
     auto attrs = nlohmann::json::array();
     for (auto y = 0; y < height; y++) {
-        lines.push_back(make_line_text(win, y, width));
+        lines.push_back(make_bot_screen_line_text(win, y, width));
         if (with_attrs) {
             attrs.push_back(make_line_attrs(win, y, width));
         }

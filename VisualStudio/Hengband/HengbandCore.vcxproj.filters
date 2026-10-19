@@ -519,6 +519,9 @@
     <ClCompile Include="..\..\src\bot\bot-socket-server.cpp">
       <Filter>bot</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\bot\bot-subwindow-verifier.cpp">
+      <Filter>bot</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\cmd-action\cmd-attack.cpp">
       <Filter>cmd-action</Filter>
     </ClCompile>
@@ -3181,6 +3184,9 @@
       <Filter>bot</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\bot\bot-socket-server.h">
+      <Filter>bot</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\bot\bot-subwindow-verifier.h">
       <Filter>bot</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\cmd-action\cmd-attack.h">

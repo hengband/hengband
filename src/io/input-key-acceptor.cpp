@@ -49,7 +49,7 @@ bool parse_under = false;
  * まだ一度も使っていないサブウィンドウは、有効にする (init_hook を呼ぶ) ことになるので外す。
  * curses 版ではカーソルが最後に反映した端末に置かれるので、メイン画面を最後に反映し、メイン画面を有効にして戻る。
  */
-static void fresh_all_terms()
+void fresh_all_terms()
 {
     for (auto i = 1U; i < angband_terms.size(); ++i) {
         if ((angband_terms[i] != nullptr) && angband_terms[i]->active_flag) {

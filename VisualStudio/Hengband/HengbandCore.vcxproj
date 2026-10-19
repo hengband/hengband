@@ -111,6 +111,7 @@
     <ClCompile Include="..\..\src\bot\bot-report.cpp" />
     <ClCompile Include="..\..\src\bot\bot-screen.cpp" />
     <ClCompile Include="..\..\src\bot\bot-socket-server.cpp" />
+    <ClCompile Include="..\..\src\bot\bot-subwindow-verifier.cpp" />
     <ClCompile Include="..\..\src\cmd-action\cmd-attack.cpp" />
     <ClCompile Include="..\..\src\cmd-action\cmd-hissatsu.cpp" />
     <ClCompile Include="..\..\src\cmd-action\cmd-mane.cpp" />
@@ -1003,6 +1004,7 @@
     <ClInclude Include="..\..\src\bot\bot-report.h" />
     <ClInclude Include="..\..\src\bot\bot-screen.h" />
     <ClInclude Include="..\..\src\bot\bot-socket-server.h" />
+    <ClInclude Include="..\..\src\bot\bot-subwindow-verifier.h" />
     <ClInclude Include="..\..\src\cmd-action\cmd-attack.h" />
     <ClInclude Include="..\..\src\cmd-action\cmd-hissatsu.h" />
     <ClInclude Include="..\..\src\cmd-action\cmd-mane.h" />

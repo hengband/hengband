@@ -34,6 +34,7 @@ extern concptr inkey_next;
 char inkey(bool do_all_term_refresh = false);
 int inkey_special(bool numpad_cursor);
 std::string inkey_macro_trigger();
+void fresh_all_terms();
 void start_term_fresh();
 void stop_term_fresh();
 bool macro_running();
