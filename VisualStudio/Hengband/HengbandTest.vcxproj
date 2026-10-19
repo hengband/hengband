@@ -91,6 +91,7 @@
     <ClCompile Include="..\..\src\test\info-reader\test-town-preferences-reader.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-vault-reader.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-wilderness-reader.cpp" />
+    <ClCompile Include="..\..\src\test\inventory\test-floor-item-getter.cpp" />
     <ClCompile Include="..\..\src\test\io\test-condition-expression.cpp" />
     <ClCompile Include="..\..\src\test\io\test-input-context.cpp" />
     <ClCompile Include="..\..\src\test\io\test-input-key-requester.cpp" />

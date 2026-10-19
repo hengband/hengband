@@ -22,6 +22,9 @@
     <Filter Include="info-reader">
       <UniqueIdentifier>{5a5d0f27-6c1e-4c8b-9f34-2b7d8e1a6c40}</UniqueIdentifier>
     </Filter>
+    <Filter Include="inventory">
+      <UniqueIdentifier>{de11ae39-4fd8-50a4-bd7a-b91bb4e6e009}</UniqueIdentifier>
+    </Filter>
     <Filter Include="io">
       <UniqueIdentifier>{1bffe338-7a9b-482c-b4ea-71f5f4815fff}</UniqueIdentifier>
     </Filter>
@@ -192,6 +195,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\test\info-reader\test-wilderness-reader.cpp">
       <Filter>info-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\inventory\test-floor-item-getter.cpp">
+      <Filter>inventory</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\test\io\test-condition-expression.cpp">
       <Filter>io</Filter>

@@ -156,9 +156,30 @@ std::string_view input_kind_name(InputKind kind)
         return "more";
     case InputKind::COMMAND:
         return "command";
+    case InputKind::ITEM:
+        return "item";
     }
 
     THROW_EXCEPTION(std::logic_error, "Invalid InputKind was specified!");
+}
+
+/*!
+ * @brief アイテムを選ぶ区分を応答で使う名前へ変換する
+ * @param area アイテムを選ぶ区分
+ * @return 応答の input_context.area・areas に入れる名前
+ */
+std::string_view item_selection_area_name(ItemSelectionArea area)
+{
+    switch (area) {
+    case ItemSelectionArea::INVENTORY:
+        return "inventory";
+    case ItemSelectionArea::EQUIPMENT:
+        return "equipment";
+    case ItemSelectionArea::FLOOR:
+        return "floor";
+    }
+
+    THROW_EXCEPTION(std::logic_error, "Invalid ItemSelectionArea was specified!");
 }
 
 /*!
@@ -185,6 +206,31 @@ public:
     nlohmann::json operator()(const CommandInputDetails &details) const
     {
         return { { "shopping", details.shopping } };
+    }
+
+    nlohmann::json operator()(const ItemInputDetails &details) const
+    {
+        auto areas = nlohmann::json::array();
+        if (details.inventory) {
+            areas.push_back(item_selection_area_name(ItemSelectionArea::INVENTORY));
+        }
+
+        if (details.equipment) {
+            areas.push_back(item_selection_area_name(ItemSelectionArea::EQUIPMENT));
+        }
+
+        if (details.floor) {
+            areas.push_back(item_selection_area_name(ItemSelectionArea::FLOOR));
+        }
+
+        return {
+            { "area", item_selection_area_name(details.area) },
+            { "areas", std::move(areas) },
+            { "first_label", std::string(1, details.first_label) },
+            { "last_label", std::string(1, details.last_label) },
+            { "force", details.force },
+            { "menu", details.menu },
+        };
     }
 };
 
