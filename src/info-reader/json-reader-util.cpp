@@ -105,7 +105,8 @@ tl::expected<void, parse_error_type> info_set_string(const nlohmann::json &json,
  * @param dice ダイスの値を格納する変数への参照
  * @param is_required 必須かどうか
  * @param range ダイスの個数と面数それぞれの範囲（両端を含む）
- * @return エラーコード
+ * @return 成功時は空の値、失敗時は解析エラーコード（PARSE_ERROR_TOO_FEW_ARGUMENTS、PARSE_ERROR_INVALID_TYPE、
+ * PARSE_ERROR_INVALID_FLAGのいずれか。条件は下記のとおり）
  * @details
  * JSON値がnullの場合、必須ならPARSE_ERROR_TOO_FEW_ARGUMENTSを返し、任意なら何もせずに成功する。
  * null以外の非文字列値は、必須かどうかによらずPARSE_ERROR_INVALID_TYPEを返す。
@@ -113,25 +114,28 @@ tl::expected<void, parse_error_type> info_set_string(const nlohmann::json &json,
  * 個数か面数がrangeの範囲外ならPARSE_ERROR_INVALID_FLAGを返す。
  * エラーまたは任意のnullの場合、diceは変更しない。
  */
-errr info_set_dice(const nlohmann::json &json, Dice &dice, bool is_required, tl::optional<Range> range)
+tl::expected<void, parse_error_type> info_set_dice(const nlohmann::json &json, Dice &dice, bool is_required, tl::optional<Range> range)
 {
     if (json.is_null()) {
-        return is_required ? PARSE_ERROR_TOO_FEW_ARGUMENTS : PARSE_ERROR_NONE;
+        if (is_required) {
+            return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        }
+        return {};
     }
     if (!json.is_string()) {
-        return PARSE_ERROR_INVALID_TYPE;
+        return tl::make_unexpected(PARSE_ERROR_INVALID_TYPE);
     }
 
     try {
         const auto parsed = Dice::parse(json.get<std::string>());
         const auto is_in_range = [&range](int value) { return !range || ((range->first <= value) && (value <= range->second)); };
         if (!is_in_range(parsed.num) || !is_in_range(parsed.sides)) {
-            return PARSE_ERROR_INVALID_FLAG;
+            return tl::make_unexpected(PARSE_ERROR_INVALID_FLAG);
         }
         dice = parsed;
-        return PARSE_ERROR_NONE;
+        return {};
     } catch (const std::runtime_error &) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+        return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
     }
 }
 

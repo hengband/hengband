@@ -629,8 +629,8 @@ tl::expected<void, parse_error_type> TerrainReader::set_terrain_interactions(Ter
 
         if (action == "DROP_GOLD") {
             Dice dice;
-            if (const auto err = info_set_dice(value_obj, dice, true); err != PARSE_ERROR_NONE) {
-                return tl::make_unexpected(static_cast<parse_error_type>(err));
+            if (const auto result = info_set_dice(value_obj, dice, true); !result) {
+                return result;
             }
             if (dice.is_valid()) {
                 terrain.gold_drop = dice;

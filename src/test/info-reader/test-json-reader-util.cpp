@@ -613,19 +613,19 @@ TEST_CASE("info_set_dice parses the dice string")
 
     SUBCASE("single digit")
     {
-        CHECK(info_set_dice(nlohmann::json("3d5"), dice, true) == PARSE_ERROR_NONE);
+        CHECK(info_set_dice(nlohmann::json("3d5"), dice, true).has_value());
         CHECK(dice == Dice(3, 5));
     }
 
     SUBCASE("multiple digits")
     {
-        CHECK(info_set_dice(nlohmann::json("10d100"), dice, true) == PARSE_ERROR_NONE);
+        CHECK(info_set_dice(nlohmann::json("10d100"), dice, true).has_value());
         CHECK(dice == Dice(10, 100));
     }
 
     SUBCASE("optional string is parsed as well")
     {
-        CHECK(info_set_dice(nlohmann::json("3d5"), dice, false) == PARSE_ERROR_NONE);
+        CHECK(info_set_dice(nlohmann::json("3d5"), dice, false).has_value());
         CHECK(dice == Dice(3, 5));
     }
 }
@@ -639,15 +639,15 @@ TEST_CASE("info_set_dice applies the optional range to both the count and the si
     for (const auto *text : { "0d0", "255d255", "1d255" }) {
         CAPTURE(text);
         Dice dice(1, 1);
-        CHECK(info_set_dice(nlohmann::json(text), dice, false, Range(0, 255)) == PARSE_ERROR_NONE);
+        CHECK(info_set_dice(nlohmann::json(text), dice, false, Range(0, 255)).has_value());
         CHECK(dice == Dice::parse(text));
     }
     for (const auto *text : { "256d1", "1d256", "-1d2", "2d-1" }) {
         CAPTURE(text);
         Dice dice(1, 1);
-        CHECK(info_set_dice(nlohmann::json(text), dice, false, Range(0, 255)) == PARSE_ERROR_INVALID_FLAG);
+        CHECK(to_error_code(info_set_dice(nlohmann::json(text), dice, false, Range(0, 255))) == PARSE_ERROR_INVALID_FLAG);
         CHECK(dice == Dice(1, 1));
-        CHECK(info_set_dice(nlohmann::json(text), dice, false) == PARSE_ERROR_NONE);
+        CHECK(info_set_dice(nlohmann::json(text), dice, false).has_value());
         CHECK(dice == Dice::parse(text));
     }
 }
@@ -657,8 +657,8 @@ TEST_CASE("info_set_dice treats a null JSON as an unwritten key")
     Dice dice(1, 1);
     const nlohmann::json null_json;
 
-    CHECK(info_set_dice(null_json, dice, true) == PARSE_ERROR_TOO_FEW_ARGUMENTS);
-    CHECK(info_set_dice(null_json, dice, false) == PARSE_ERROR_NONE);
+    CHECK(to_error_code(info_set_dice(null_json, dice, true)) == PARSE_ERROR_TOO_FEW_ARGUMENTS);
+    CHECK(info_set_dice(null_json, dice, false).has_value());
 
     CHECK(dice == Dice(1, 1));
 }
@@ -678,7 +678,7 @@ TEST_CASE("info_set_dice rejects an invalid dice notation")
         };
         for (const auto &json : invalid_values) {
             for (const auto is_required : { false, true }) {
-                CHECK(info_set_dice(json, dice, is_required) == PARSE_ERROR_INVALID_TYPE);
+                CHECK(to_error_code(info_set_dice(json, dice, is_required)) == PARSE_ERROR_INVALID_TYPE);
                 CHECK(dice == Dice(1, 1));
             }
         }
@@ -690,8 +690,8 @@ TEST_CASE("info_set_dice rejects an invalid dice notation")
         for (const auto *const dice_str : { "3", "3d", "dice", "" }) {
             CAPTURE(dice_str);
 
-            CHECK(info_set_dice(nlohmann::json(dice_str), dice, true) == PARSE_ERROR_TOO_FEW_ARGUMENTS);
-            CHECK(info_set_dice(nlohmann::json(dice_str), dice, false) == PARSE_ERROR_TOO_FEW_ARGUMENTS);
+            CHECK(to_error_code(info_set_dice(nlohmann::json(dice_str), dice, true)) == PARSE_ERROR_TOO_FEW_ARGUMENTS);
+            CHECK(to_error_code(info_set_dice(nlohmann::json(dice_str), dice, false)) == PARSE_ERROR_TOO_FEW_ARGUMENTS);
         }
     }
 

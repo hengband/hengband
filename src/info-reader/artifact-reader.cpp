@@ -85,9 +85,9 @@ int ArtifactReader::read() const
         return err;
     }
     // セーブではダイスの個数・面数をそれぞれ1バイトで書くため、0〜255に限る。
-    if (auto err = info_set_dice(get_json_value(this->art_data, "base_dice"), artifact.damage_dice, false, Range(0, 255))) {
+    if (const auto result = info_set_dice(get_json_value(this->art_data, "base_dice"), artifact.damage_dice, false, Range(0, 255)); !result) {
         msg_print(_("アーティファクトのベースダイス読込失敗。ID: '{}'。", "Failed to load base dice of artifact. ID: '{}'."), error_idx);
-        return err;
+        return result.error();
     }
     if (auto err = info_set_integer(get_json_value(this->art_data, "hit_bonus"), artifact.to_h, false, Range(-99, 99))) {
         msg_print(_("アーティファクトの命中補正値読込失敗。ID: '{}'。", "Failed to load hit bonus of artifact. ID: '{}'."), error_idx);

@@ -49,8 +49,8 @@ tl::expected<void, parse_error_type> info_set_monrace_dice(const nlohmann::json 
     }
 
     Dice parsed;
-    if (const auto err = info_set_dice(json, parsed, true)) {
-        return tl::unexpected(static_cast<parse_error_type>(err));
+    if (const auto result = info_set_dice(json, parsed, true); !result) {
+        return result;
     }
     if (!parsed.is_valid() || static_cast<int64_t>(parsed.num) * parsed.sides > MAX_MONRACE_DICE_ROLL) {
         return tl::unexpected(PARSE_ERROR_OUT_OF_BOUNDS);
