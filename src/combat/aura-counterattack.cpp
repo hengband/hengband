@@ -221,7 +221,7 @@ static void aura_shadow_by_monster_attack(PlayerType *player_ptr, MonsterAttackP
     }
 
     dam = mon_damage_mod(player_ptr, *monap_ptr->m_ptr, dam, false);
-    msg_print(_("影のオーラが{}に反撃した！", "Enveloping shadows attack {}."), str_upcase_first(monap_ptr->m_name));
+    msg_print(_("影のオーラが{}に反撃した！", "Enveloping shadows attack {}."), monap_ptr->m_name);
     MonsterDamageProcessor mdp(player_ptr, monap_ptr->m_idx, dam, &monap_ptr->fear, AttributeType::DARK);
     if (mdp.mon_take_hit(_("は倒れた。", " is destroyed."))) {
         monap_ptr->blinked = false;
