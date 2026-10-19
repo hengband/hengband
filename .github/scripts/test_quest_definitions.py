@@ -1,10 +1,12 @@
-"""クエスト定義の schema が QuestReader の int16 の範囲と一致することを確かめる。"""
+"""クエスト定義の CI の検証が QuestReader・QuestList と一致することを確かめる。"""
 import copy
+import json
 from pathlib import Path
+import tempfile
 import unittest
 
 from json_validation_test_helper import validate_document
-from validate_json import build_schema_registry, load_all_schemas
+from validate_json import build_schema_registry, load_all_schemas, load_jsonc, validate_one
 
 
 class QuestInt16RangeTest(unittest.TestCase):
@@ -34,9 +36,13 @@ class QuestInt16RangeTest(unittest.TestCase):
         reason = "is greater than the maximum of 32767" if rejected > 0 else "is less than the minimum of -32768"
         self.assertIn(f"{rejected} {reason}", message)
 
+    def assert_schema_accepted(self, ok, message):
+        # 上限の ID は同梱の定義に無いため、schema を通った後の参照の照合で拒否されてよい。
+        self.assertTrue(ok or "Reason: unknown" in message, message)
+
     def assert_boundary(self, make, accepted, rejected, location=None):
         ok, message = self.validate("Quest", make(accepted))
-        self.assertTrue(ok, message)
+        self.assert_schema_accepted(ok, message)
         ok, message = self.validate("Quest", make(rejected))
         self.assertFalse(ok, message)
         self.assert_rejected_by_range(message, rejected)
@@ -103,9 +109,7 @@ class QuestInt16RangeTest(unittest.TestCase):
         for name, maximum, make, location in cases:
             with self.subTest(field=name):
                 ok, message = self.validate("Quest", make(maximum))
-                # leavingQuest の上限は参照先が無いため、範囲の検査だけを確かめる。
-                if name != "leavingQuest":
-                    self.assertTrue(ok, message)
+                self.assert_schema_accepted(ok, message)
                 ok, message = self.validate("Quest", make(maximum + 1))
                 self.assertFalse(ok, message)
                 self.assertIn(f"{maximum + 1} is greater than the maximum of {maximum}", message)
@@ -114,7 +118,7 @@ class QuestInt16RangeTest(unittest.TestCase):
     def test_quest_preferences_share_the_legend_ranges(self):
         document = {"version": 1, "legend": {"#": {"monster": 32767, "special": -32768}}}
         ok, message = self.validate("QuestPreferences", document)
-        self.assertTrue(ok, message)
+        self.assert_schema_accepted(ok, message)
         for cell, rejected, location in (({"monster": 32768}, 32768, None), ({"special": -32769}, -32769, ["legend", "#", "special"])):
             with self.subTest(cell=cell):
                 invalid = copy.deepcopy(document)
@@ -227,6 +231,137 @@ class QuestLayoutTest(unittest.TestCase):
         document = self.quest(start={"y": 0, "x": 0}, startVariants=[{"y": 9, "x": 9}])
         ok, message = self.validate("Quest", document)
         self.assertTrue(ok, message)
+
+
+class QuestReferenceTest(unittest.TestCase):
+    """CI が QuestList と同じくクエストの参照を照合することを確かめる。"""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.repository = Path(__file__).resolve().parents[2]
+        cls.loaded, cls.schema_map = load_all_schemas(cls.repository / "schema")
+        cls.registry = build_schema_registry(cls.loaded)
+
+    def quest(self, quest_id=1, **fields):
+        document = {
+            "version": 1,
+            "id": quest_id,
+            "name": {"ja": "試験", "en": "Test"},
+            "definition": {"type": "KILL_ALL", "level": 1, "monster": 1, "dungeon": 1, "reward": {"artifact": 1}},
+            "legend": {
+                "#": {"terrain": "FLOOR", "trap": "CLOSED_DOOR", "monster": 1, "object": 1, "artifact": 1},
+                "c": {"monster": {"cloneOf": 1}, "artifact": {"random": True, "id": 1}},
+                "r": {"terrain": "*", "trap": {"random": True}, "monster": {"random": True, "oodLevel": 32767},
+                      "object": {"random": True, "oodLevel": 32767}, "artifact": {"questReward": True}, "ego": 32767},
+            },
+            "map": ["#cr"],
+        }
+        document.update(fields)
+        return document
+
+    def validate_in_edit_dir(self, quests, target, edit_files=None, schema_name="Quest"):
+        """lib/edit と同じ形の一時ディレクトリ（クエストは quests/ の下）に置いて検証する。"""
+        with tempfile.TemporaryDirectory() as folder:
+            edit_dir = Path(folder)
+            (edit_dir / "quests").mkdir()
+            for name, document in quests.items():
+                (edit_dir / "quests" / name).write_text(json.dumps(document), encoding="utf-8")
+            for name, document in (edit_files or {}).items():
+                (edit_dir / name).write_text(json.dumps(document), encoding="utf-8")
+            schema_path = self.schema_map[schema_name]
+            data_path = edit_dir / target if schema_name == "QuestPreferences" else edit_dir / "quests" / target
+            return validate_one((data_path, schema_path, self.loaded[schema_path]), self.registry)
+
+    def bundled(self, name):
+        return load_jsonc(self.repository / "lib/edit" / f"{name}.jsonc")
+
+    def assert_rejected(self, result, reason, location):
+        ok, message = result
+        self.assertFalse(ok, message)
+        self.assertIn(f"Reason: {reason}", message)
+        self.assertIn(f"Location: {location}", message)
+
+    def test_defined_references_are_accepted(self):
+        ok, message = self.validate_in_edit_dir({"001.jsonc": self.quest()}, "001.jsonc")
+        self.assertTrue(ok, message)
+
+    def test_undefined_references_are_rejected(self):
+        def mutate(change):
+            document = self.quest()
+            change(document)
+            return document
+
+        cases = (
+            (lambda d: d["definition"].update(monster=32767), "unknown monster ID", ["definition", "monster"]),
+            (lambda d: d["definition"].update(dungeon=999), "unknown dungeon ID", ["definition", "dungeon"]),
+            (lambda d: d["definition"].update(reward={"artifact": 32767}), "unknown artifact ID", ["definition", "reward", "artifact"]),
+            (lambda d: d["definition"].update(reward={"artifacts": [1, 32767]}), "unknown artifact ID",
+             ["definition", "reward", "artifacts", 1]),
+            (lambda d: d["legend"]["#"].update(terrain="NO_SUCH_TERRAIN"), "unknown terrain tag", ["legend", "#", "terrain"]),
+            (lambda d: d["legend"]["#"].update(trap="NO_SUCH_TERRAIN"), "unknown terrain tag", ["legend", "#", "trap"]),
+            (lambda d: d["legend"]["#"].update(monster=32767), "unknown monster ID", ["legend", "#", "monster"]),
+            (lambda d: d["legend"]["c"].update(monster={"cloneOf": 32767}), "unknown monster ID", ["legend", "c", "monster", "cloneOf"]),
+            (lambda d: d["legend"]["#"].update(object=32767), "unknown or invalid baseitem ID", ["legend", "#", "object"]),
+            (lambda d: d["legend"]["#"].update(artifact=32767), "unknown artifact ID", ["legend", "#", "artifact"]),
+            # ランダムなアーティファクトの id も、配置では固定のアーティファクトとして使われる。
+            (lambda d: d["legend"]["c"].update(artifact={"random": True, "id": 32767}), "unknown artifact ID",
+             ["legend", "c", "artifact", "id"]),
+        )
+        for change, reason, location in cases:
+            with self.subTest(location=location):
+                self.assert_rejected(self.validate_in_edit_dir({"001.jsonc": mutate(change)}, "001.jsonc"), reason, location)
+
+    def test_omitted_monster_and_zero_dungeon_follow_the_reader(self):
+        # 対象モンスターは省略すると 0 として照合され、dungeon の 0 は指定なしとして照合しない。
+        document = self.quest()
+        del document["definition"]["monster"]
+        document["definition"]["dungeon"] = 0
+        ok, message = self.validate_in_edit_dir({"001.jsonc": document}, "001.jsonc")
+        self.assertTrue(ok, message)
+        # 省略した対象モンスターも、ID 0 が定義に無ければ拒否する。
+        monsters = self.bundled("MonraceDefinitions")
+        monsters["monsters"] = [monster for monster in monsters["monsters"] if monster["id"] != 0]
+        result = self.validate_in_edit_dir({"001.jsonc": document}, "001.jsonc", {"MonraceDefinitions.jsonc": monsters})
+        self.assert_rejected(result, "unknown monster ID", ["definition", "monster"])
+
+    def test_leaving_quest_must_name_a_quest_in_the_directory(self):
+        quests = {"002.jsonc": self.quest(2)}
+        for leaving, accepted in ((2, True), (1, True), (0, True), (3, False)):
+            with self.subTest(leaving=leaving):
+                quests["001.jsonc"] = self.quest(startVariants=[{"y": 0, "x": 0}, {"leavingQuest": leaving, "y": 0, "x": 1}])
+                result = self.validate_in_edit_dir(quests, "001.jsonc")
+                if accepted:
+                    self.assertTrue(result[0], result[1])
+                else:
+                    self.assert_rejected(result, "unknown quest ID", ["startVariants", 1, "leavingQuest"])
+        # start があれば startVariants は読まれないため、照合しない。
+        quests["001.jsonc"] = self.quest(start={"y": 0, "x": 0}, startVariants=[{"leavingQuest": 3, "y": 0, "x": 0}])
+        ok, message = self.validate_in_edit_dir(quests, "001.jsonc")
+        self.assertTrue(ok, message)
+
+    def test_baseitem_must_be_valid_in_both_languages(self):
+        for language, name in (("ja", ""), ("ja", "異常アイテム"), ("en", ""), ("en", "Invalid item")):
+            with self.subTest(language=language, name=name):
+                baseitems = self.bundled("BaseitemDefinitions")
+                target = next(baseitem for baseitem in baseitems["baseitems"] if baseitem["id"] == 1)
+                target["name"][language] = name
+                result = self.validate_in_edit_dir({"001.jsonc": self.quest()}, "001.jsonc", {"BaseitemDefinitions.jsonc": baseitems})
+                self.assert_rejected(result, "unknown or invalid baseitem ID", ["legend", "#", "object"])
+
+    def test_definitions_next_to_the_quest_directory_take_precedence(self):
+        monsters = self.bundled("MonraceDefinitions")
+        monsters["monsters"] = [monster for monster in monsters["monsters"] if monster["id"] != 1]
+        result = self.validate_in_edit_dir({"001.jsonc": self.quest()}, "001.jsonc", {"MonraceDefinitions.jsonc": monsters})
+        self.assert_rejected(result, "unknown monster ID", ["definition", "monster"])
+
+    def test_quest_preferences_legend_references_are_checked(self):
+        legend = self.quest()["legend"]
+        files = {"QuestPreferences.jsonc": {"version": 1, "legend": legend}}
+        ok, message = self.validate_in_edit_dir({}, "QuestPreferences.jsonc", files, schema_name="QuestPreferences")
+        self.assertTrue(ok, message)
+        legend["#"]["artifact"] = 32767
+        result = self.validate_in_edit_dir({}, "QuestPreferences.jsonc", files, schema_name="QuestPreferences")
+        self.assert_rejected(result, "unknown artifact ID", ["legend", "#", "artifact"])
 
 
 if __name__ == "__main__":

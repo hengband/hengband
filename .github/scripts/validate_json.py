@@ -355,9 +355,129 @@ def validate_quest_layout_semantics(data: dict) -> None:
             raise ValidationError("start position must be within every map variant", path=start_path)
 
 
-def validate_quest_file_semantics(data: dict) -> None:
+def extract_artifact_ids(data: dict) -> frozenset[int]:
+    for index, artifact in enumerate(data["artifacts"]):
+        require_integer(artifact["id"], ["artifacts", index, "id"])
+    return frozenset(artifact["id"] for artifact in data["artifacts"])
+
+
+def extract_dungeon_ids(data: dict) -> frozenset[int]:
+    for index, dungeon in enumerate(data["dungeons"]):
+        require_integer(dungeon["id"], ["dungeons", index, "id"])
+    return frozenset(dungeon["id"] for dungeon in data["dungeons"])
+
+
+def extract_valid_baseitem_ids(data: dict) -> frozenset[int]:
+    """日英どちらのビルドでも BaseitemDefinition::is_valid() が真になるベースアイテムのIDを集める。"""
+    # is_valid() は、ビルドの言語の名前が空でも「異常アイテム」でもないものを有効とする。
+    invalid_names = {"ja": "異常アイテム", "en": "Invalid item"}
+    for index, baseitem in enumerate(data["baseitems"]):
+        require_integer(baseitem["id"], ["baseitems", index, "id"])
+    return frozenset(baseitem["id"] for baseitem in data["baseitems"]
+                     if all(baseitem["name"][language] not in ("", invalid) for language, invalid in invalid_names.items()))
+
+
+def extract_terrain_tags(data: dict) -> frozenset[str]:
+    return frozenset(terrain["key"] for terrain in data["terrains"])
+
+
+def quest_companion_anchor(data_path: Path) -> Path:
+    """付随定義を探す基準のパスを返す（find_companion_path はこのパスと同じディレクトリを探す）。"""
+    # クエストは lib/edit/quests/ に置かれるため、付随定義は親の lib/edit の候補を優先し、なければ同梱定義を使う。
+    return data_path.parent if data_path.parent.name == "quests" else data_path
+
+
+def load_quest_references(schema_path: Path, data_path: Path, registry: Registry) -> dict[str, frozenset]:
+    """QuestListが照合する定義のID集合を返す。"""
+    anchor = quest_companion_anchor(data_path)
+    return {
+        "monster": load_companion_ids(schema_path, anchor, registry, "MonraceDefinitions", "monster", extract_monster_ids),
+        "object": load_companion_ids(schema_path, anchor, registry, "BaseitemDefinitions", "baseitem", extract_valid_baseitem_ids),
+        "artifact": load_companion_ids(schema_path, anchor, registry, "ArtifactDefinitions", "artifact", extract_artifact_ids),
+        "dungeon": load_companion_ids(schema_path, anchor, registry, "DungeonDefinitions", "dungeon", extract_dungeon_ids),
+        "terrain": load_companion_ids(schema_path, anchor, registry, "TerrainDefinitions", "terrain", extract_terrain_tags),
+    }
+
+
+def load_sibling_quest(quest_path: Path):
+    """隣のクエストを読む。読めないファイルは None を返し、そのファイル自身の検証で拒否させる。"""
+    try:
+        return load_jsonc(quest_path)
+    except (OSError, ValueError, Json5Exception):
+        return None
+
+
+def load_quest_ids(quests_dir: Path) -> frozenset[int]:
+    """QuestListと同じく、クエストのディレクトリにある全 .jsonc のIDを集める。"""
+    ids = set()
+    for quest_path in sorted(quests_dir.glob("*.jsonc")):
+        quest = load_sibling_quest(quest_path)
+        # 読めない・形の壊れたクエストは、そのファイル自身の検証で拒否される。
+        if isinstance(quest, dict) and type(quest.get("id")) is int:
+            ids.add(quest["id"])
+    return frozenset(ids)
+
+
+def validate_quest_legend_references(legend: dict, references: dict[str, frozenset]) -> None:
+    """QuestListと同じく、凡例の地形と固定の参照を照合する。"""
+    # ランダム生成の深さ補正と受託時の報酬指定は固定IDではない。ランダムなアーティファクトの id は固定の参照として使われる。
+    # ego は配置で使われないため照合しない。special は配置後の地形で意味が決まるため、起動時の照合に任せる。
+    for symbol, cell in legend.items():
+        path = ["legend", symbol]
+        if cell.get("terrain", "*") != "*" and cell["terrain"] not in references["terrain"]:
+            raise ValidationError("unknown terrain tag", path=path + ["terrain"])
+        if isinstance(cell.get("trap"), str) and cell["trap"] not in references["terrain"]:
+            raise ValidationError("unknown terrain tag", path=path + ["trap"])
+        # 整数で書いた固定IDと、オブジェクトの中のIDを (位置, 種類, 値, 理由) で並べる。
+        fixed_references = []
+        for field, kind, nested, reason in (("monster", "monster", "cloneOf", "unknown monster ID"),
+                                            ("object", "object", None, "unknown or invalid baseitem ID"),
+                                            ("artifact", "artifact", "id", "unknown artifact ID")):
+            value = cell.get(field)
+            if type(value) is int:
+                fixed_references.append((path + [field], kind, value, reason))
+            elif isinstance(value, dict) and nested is not None and nested in value:
+                fixed_references.append((path + [field, nested], kind, value[nested], reason))
+        for reference_path, kind, value, reason in fixed_references:
+            if value not in references[kind]:
+                raise ValidationError(reason, path=reference_path)
+
+
+def validate_quest_references(data: dict, schema_path: Path, data_path: Path, registry: Registry) -> None:
+    """QuestListと同じく、対象モンスター・ダンジョン・報酬・退出元のクエスト・凡例の参照を照合する。"""
+    references = load_quest_references(schema_path, data_path, registry)
+    definition = data["definition"]
+    # 対象モンスターは省略時も 0 として照合される。0 以外の dungeon だけを照合する（0 は指定なし）。
+    if definition.get("monster", 0) not in references["monster"]:
+        raise ValidationError("unknown monster ID", path=["definition", "monster"])
+    if definition.get("dungeon", 0) != 0 and definition["dungeon"] not in references["dungeon"]:
+        raise ValidationError("unknown dungeon ID", path=["definition", "dungeon"])
+    reward = definition.get("reward", {})
+    if "artifact" in reward and reward["artifact"] not in references["artifact"]:
+        raise ValidationError("unknown artifact ID", path=["definition", "reward", "artifact"])
+    for index, candidate in enumerate(reward.get("artifacts", [])):
+        if candidate not in references["artifact"]:
+            raise ValidationError("unknown artifact ID", path=["definition", "reward", "artifacts", index])
+    quest_ids = None
+    for start_path, start in select_quest_starts(data):
+        if start.get("leavingQuest", 0) == 0:
+            continue
+        if quest_ids is None:
+            quest_ids = load_quest_ids(data_path.parent)
+        if start["leavingQuest"] not in quest_ids:
+            raise ValidationError("unknown quest ID", path=start_path + ["leavingQuest"])
+    validate_quest_legend_references(data.get("legend", {}), references)
+
+
+def validate_quest_file_semantics(data: dict, schema_path: Path, data_path: Path, registry: Registry) -> None:
     validate_quest_semantics(data)
     validate_quest_layout_semantics(data)
+    validate_quest_references(data, schema_path, data_path, registry)
+
+
+def validate_quest_preferences_semantics(data: dict, schema_path: Path, data_path: Path, registry: Registry) -> None:
+    validate_quest_semantics(data)
+    validate_quest_legend_references(data["legend"], load_quest_references(schema_path, data_path, registry))
 
 
 def validate_town_preferences_semantics(data: dict, schema_path: Path) -> None:
@@ -791,8 +911,8 @@ def validate_spell_semantics(data: dict) -> None:
 
 
 # 小さなID集合だけを保持し、一時候補の検証を繰り返しても保持件数を制限する。
-_monster_id_cache = OrderedDict()
-MAX_MONSTER_ID_CACHE_ENTRIES = 8
+_companion_id_cache = OrderedDict()
+MAX_COMPANION_ID_CACHE_ENTRIES = 16
 
 
 def companion_digest(path: Path) -> bytes:
@@ -804,34 +924,41 @@ def companion_digest(path: Path) -> bytes:
     return digest.digest()
 
 
-def validate_monster_id_types(data: dict) -> None:
+def extract_monster_ids(data: dict) -> frozenset[int]:
     """schemaの整数判定を通る小数も、ID集合を作る前に拒否する。"""
     for index, monster in enumerate(data["monsters"]):
         require_integer(monster["id"], ["monsters", index, "id"])
+    return frozenset(monster["id"] for monster in data["monsters"])
+
+
+def load_companion_ids(schema_path: Path, data_path: Path, registry: Registry, name: str, label: str,
+                       extract: Callable[[dict], frozenset]) -> frozenset:
+    """同じ内容・schema・検証コンテキストの付随定義から作ったID集合を再利用する。"""
+    companion_path = find_companion_path(schema_path, data_path, name).resolve()
+    companion_schema_path = (schema_path.parent / f"{name}.schema.json").resolve()
+    key = (companion_path, companion_schema_path)
+    fingerprint = (companion_digest(companion_path), companion_digest(companion_schema_path))
+    cached = _companion_id_cache.get(key)
+    if cached is not None and cached[0] is registry and cached[1] == fingerprint:
+        _companion_id_cache.move_to_end(key)
+        return cached[2]
+
+    # 検証と集合作りを1回で済ませるため、検証関数として渡した extract の結果を受け取る。
+    extracted = []
+    load_validated_companion(schema_path, data_path, registry, name, label, lambda data: extracted.append(extract(data)),
+                             selected_path=companion_path)
+    ids = extracted[0]
+    # 読込中に更新された場合は、異なる内容のキーでキャッシュしない。
+    if fingerprint == (companion_digest(companion_path), companion_digest(companion_schema_path)):
+        _companion_id_cache[key] = (registry, fingerprint, ids)
+        _companion_id_cache.move_to_end(key)
+        if len(_companion_id_cache) > MAX_COMPANION_ID_CACHE_ENTRIES:
+            _companion_id_cache.popitem(last=False)
+    return ids
 
 
 def load_defined_monster_ids(schema_path: Path, data_path: Path, registry: Registry) -> frozenset[int]:
-    """同じ内容・schema・検証コンテキストの種族ID集合を再利用する。"""
-    companion_path = find_companion_path(schema_path, data_path, "MonraceDefinitions").resolve()
-    companion_schema_path = (schema_path.parent / "MonraceDefinitions.schema.json").resolve()
-    key = (companion_path, companion_schema_path)
-    fingerprint = (companion_digest(companion_path), companion_digest(companion_schema_path))
-    cached = _monster_id_cache.get(key)
-    if cached is not None and cached[0] is registry and cached[1] == fingerprint:
-        _monster_id_cache.move_to_end(key)
-        return cached[2]
-
-    monraces = load_validated_companion(schema_path, data_path, registry,
-                                       "MonraceDefinitions", "monster", validate_monster_id_types,
-                                       selected_path=companion_path)
-    ids = frozenset(monrace["id"] for monrace in monraces["monsters"])
-    # 読込中に更新された場合は、異なる内容のキーでキャッシュしない。
-    if fingerprint == (companion_digest(companion_path), companion_digest(companion_schema_path)):
-        _monster_id_cache[key] = (registry, fingerprint, ids)
-        _monster_id_cache.move_to_end(key)
-        if len(_monster_id_cache) > MAX_MONSTER_ID_CACHE_ENTRIES:
-            _monster_id_cache.popitem(last=False)
-    return ids
+    return load_companion_ids(schema_path, data_path, registry, "MonraceDefinitions", "monster", extract_monster_ids)
 
 
 def validate_monster_message_semantics(data: dict, schema_path: Path, data_path: Path, registry: Registry) -> None:
@@ -965,8 +1092,8 @@ def validate_one(pair: tuple[Path, Path, dict], registry: Registry | None = None
             "ClassSkillDefinitions.schema.json": lambda: validate_class_skill_semantics(data),
             "SpellDefinitions.schema.json": lambda: validate_spell_semantics(data),
             "MonsterMessages.schema.json": lambda: validate_monster_message_semantics(data, schema_path, data_path, registry),
-            "Quest.schema.json": lambda: validate_quest_file_semantics(data),
-            "QuestPreferences.schema.json": lambda: validate_quest_semantics(data),
+            "Quest.schema.json": lambda: validate_quest_file_semantics(data, schema_path, data_path, registry),
+            "QuestPreferences.schema.json": lambda: validate_quest_preferences_semantics(data, schema_path, data_path, registry),
         }
         semantic_validator = semantic_validators.get(schema_path.name)
         if semantic_validator is not None:

@@ -84,7 +84,7 @@ class QuestGridValidationTest(unittest.TestCase):
         cases = (
             ({}, True),
             ({"terrain": "*", "caveInfo": ["GLOW", "MARK"], "special": -1}, True),
-            ({"monster": 1, "object": 1, "ego": 1, "artifact": 1, "trap": "TRAP"}, True),
+            ({"monster": 1, "object": 1, "ego": 1, "artifact": 1, "trap": "TRAP_PIT"}, True),
             ({"monster": {"random": True, "oodLevel": 0}, "object": {"random": True, "oodLevel": 0},
               "ego": {"random": True, "id": 1}, "artifact": {"random": True, "id": 1}, "trap": {"random": True}}, True),
             ({"monster": {"cloneOf": 1}, "object": {"questReward": True}, "artifact": {"questReward": True}}, True),
