@@ -51,9 +51,9 @@ static tl::expected<void, parse_error_type> set_id_list(const nlohmann::json &id
         if (!id_data.is_number()) {
             return tl::make_unexpected(PARSE_ERROR_INVALID_FLAG);
         }
-        int id;
-        if (const auto err = info_set_integer(id_data, id, true, Range(1, 9999)); err != PARSE_ERROR_NONE) {
-            return tl::make_unexpected(static_cast<parse_error_type>(err));
+        int id = 0;
+        if (const auto result = info_set_integer(id_data, id, true, Range(1, 9999)); !result) {
+            return result;
         }
         // 未定義の種族IDに登録したメッセージは使われないため、定義の誤記として拒否する。
         const auto monrace_id = i2enum<MonraceId>(id);
@@ -81,7 +81,7 @@ tl::expected<void, parse_error_type> MessageReader::set_mon_message() const
     auto id_list = std::vector<int>();
     struct PendingMessage {
         MonsterMessageType action;
-        int chance;
+        int chance = 0;
         bool use_name;
         std::string text;
     };
@@ -133,9 +133,9 @@ tl::expected<void, parse_error_type> MessageReader::set_mon_message() const
             return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
         }
         const auto &chance_data = chance_iter.value();
-        int chance;
-        if (const auto err = info_set_integer(chance_data, chance, true, Range(1, 100)); err != PARSE_ERROR_NONE) {
-            return tl::make_unexpected(static_cast<parse_error_type>(err));
+        int chance = 0;
+        if (const auto result = info_set_integer(chance_data, chance, true, Range(1, 100)); !result) {
+            return result;
         }
 
         bool use_name = true;

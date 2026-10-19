@@ -164,56 +164,56 @@ TEST_CASE("info_set_integer stores the value")
 
     SUBCASE("positive value")
     {
-        CHECK(info_set_integer(nlohmann::json(100), data, true) == PARSE_ERROR_NONE);
+        CHECK(info_set_integer(nlohmann::json(100), data, true).has_value());
         CHECK(data == 100);
     }
 
     SUBCASE("negative value")
     {
-        CHECK(info_set_integer(nlohmann::json(-100), data, true) == PARSE_ERROR_NONE);
+        CHECK(info_set_integer(nlohmann::json(-100), data, true).has_value());
         CHECK(data == -100);
     }
 
     SUBCASE("optional key is stored as well")
     {
         // 必須でないキーでも、値が書かれていれば格納する
-        CHECK(info_set_integer(nlohmann::json(100), data, false) == PARSE_ERROR_NONE);
+        CHECK(info_set_integer(nlohmann::json(100), data, false).has_value());
         CHECK(data == 100);
     }
 
     SUBCASE("value stored into a short")
     {
         short short_data = 0;
-        CHECK(info_set_integer(nlohmann::json(30000), short_data, true) == PARSE_ERROR_NONE);
+        CHECK(info_set_integer(nlohmann::json(30000), short_data, true).has_value());
         CHECK(short_data == 30000);
     }
 
     SUBCASE("enum value")
     {
         auto kind = TestKind::NONE;
-        CHECK(info_set_integer(nlohmann::json(1), kind, true) == PARSE_ERROR_NONE);
+        CHECK(info_set_integer(nlohmann::json(1), kind, true).has_value());
         CHECK(kind == TestKind::FIRST);
     }
 
     SUBCASE("enum underlying type is checked before conversion")
     {
         auto kind = TestNarrowKind::FIRST;
-        CHECK(info_set_integer(nlohmann::json(257), kind, true) == PARSE_ERROR_INVALID_FLAG);
+        CHECK(to_error_code(info_set_integer(nlohmann::json(257), kind, true)) == PARSE_ERROR_INVALID_FLAG);
         CHECK(kind == TestNarrowKind::FIRST);
-        CHECK(info_set_integer(nlohmann::json(-1), kind, true) == PARSE_ERROR_INVALID_FLAG);
+        CHECK(to_error_code(info_set_integer(nlohmann::json(-1), kind, true)) == PARSE_ERROR_INVALID_FLAG);
         CHECK(kind == TestNarrowKind::FIRST);
     }
 
     SUBCASE("no range still checks the destination type")
     {
         std::uint8_t narrow_data = 123;
-        CHECK(info_set_integer(nlohmann::json(300), narrow_data, true) == PARSE_ERROR_INVALID_FLAG);
+        CHECK(to_error_code(info_set_integer(nlohmann::json(300), narrow_data, true)) == PARSE_ERROR_INVALID_FLAG);
         CHECK(narrow_data == 123);
-        CHECK(info_set_integer(nlohmann::json(-1), narrow_data, false) == PARSE_ERROR_INVALID_FLAG);
+        CHECK(to_error_code(info_set_integer(nlohmann::json(-1), narrow_data, false)) == PARSE_ERROR_INVALID_FLAG);
         CHECK(narrow_data == 123);
-        CHECK(info_set_integer(nlohmann::json(255), narrow_data, true) == PARSE_ERROR_NONE);
+        CHECK(info_set_integer(nlohmann::json(255), narrow_data, true).has_value());
         CHECK(narrow_data == 255);
-        CHECK(info_set_integer(nlohmann::json(256), narrow_data, true, Range(0, 9999)) == PARSE_ERROR_INVALID_FLAG);
+        CHECK(to_error_code(info_set_integer(nlohmann::json(256), narrow_data, true, Range(0, 9999))) == PARSE_ERROR_INVALID_FLAG);
         CHECK(narrow_data == 255);
     }
 }
@@ -225,12 +225,12 @@ TEST_CASE("info_set_integer treats a null JSON as an unwritten key")
 
     SUBCASE("required key is an error")
     {
-        CHECK(info_set_integer(null_json, data, true) == PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        CHECK(to_error_code(info_set_integer(null_json, data, true)) == PARSE_ERROR_TOO_FEW_ARGUMENTS);
     }
 
     SUBCASE("optional key is not an error")
     {
-        CHECK(info_set_integer(null_json, data, false) == PARSE_ERROR_NONE);
+        CHECK(info_set_integer(null_json, data, false).has_value());
     }
 
     // どちらの場合も格納先は元の値のままにしておく必要がある
@@ -243,30 +243,30 @@ TEST_CASE("info_set_integer rejects a non-integer JSON")
 
     SUBCASE("string")
     {
-        CHECK(info_set_integer(nlohmann::json("100"), data, true) == PARSE_ERROR_INVALID_TYPE);
+        CHECK(to_error_code(info_set_integer(nlohmann::json("100"), data, true)) == PARSE_ERROR_INVALID_TYPE);
     }
 
     SUBCASE("floating point number")
     {
-        CHECK(info_set_integer(nlohmann::json(1.5), data, true) == PARSE_ERROR_INVALID_TYPE);
+        CHECK(to_error_code(info_set_integer(nlohmann::json(1.5), data, true)) == PARSE_ERROR_INVALID_TYPE);
     }
 
     SUBCASE("boolean")
     {
-        CHECK(info_set_integer(nlohmann::json(true), data, true) == PARSE_ERROR_INVALID_TYPE);
+        CHECK(to_error_code(info_set_integer(nlohmann::json(true), data, true)) == PARSE_ERROR_INVALID_TYPE);
     }
 
     SUBCASE("optional key is an error too")
     {
         // 必須でなくても、書かれている値の型が誤っていれば見逃さない
-        CHECK(info_set_integer(nlohmann::json("100"), data, false) == PARSE_ERROR_INVALID_TYPE);
+        CHECK(to_error_code(info_set_integer(nlohmann::json("100"), data, false)) == PARSE_ERROR_INVALID_TYPE);
     }
 
     SUBCASE("containers are not integers")
     {
         for (const auto &json : { nlohmann::json::array(), nlohmann::json::object() }) {
             for (const auto is_required : { false, true }) {
-                CHECK(info_set_integer(json, data, is_required) == PARSE_ERROR_INVALID_TYPE);
+                CHECK(to_error_code(info_set_integer(json, data, is_required)) == PARSE_ERROR_INVALID_TYPE);
                 CHECK(data == SENTINEL);
             }
         }
@@ -281,41 +281,41 @@ TEST_CASE("info_set_integer checks the value range")
 
     SUBCASE("both ends of the range are valid")
     {
-        CHECK(info_set_integer(nlohmann::json(0), data, true, Range(0, 128)) == PARSE_ERROR_NONE);
+        CHECK(info_set_integer(nlohmann::json(0), data, true, Range(0, 128)).has_value());
         CHECK(data == 0);
 
-        CHECK(info_set_integer(nlohmann::json(128), data, true, Range(0, 128)) == PARSE_ERROR_NONE);
+        CHECK(info_set_integer(nlohmann::json(128), data, true, Range(0, 128)).has_value());
         CHECK(data == 128);
     }
 
     SUBCASE("below the range")
     {
-        CHECK(info_set_integer(nlohmann::json(-1), data, true, Range(0, 128)) == PARSE_ERROR_INVALID_FLAG);
+        CHECK(to_error_code(info_set_integer(nlohmann::json(-1), data, true, Range(0, 128))) == PARSE_ERROR_INVALID_FLAG);
         CHECK(data == SENTINEL);
     }
 
     SUBCASE("above the range")
     {
-        CHECK(info_set_integer(nlohmann::json(129), data, true, Range(0, 128)) == PARSE_ERROR_INVALID_FLAG);
+        CHECK(to_error_code(info_set_integer(nlohmann::json(129), data, true, Range(0, 128))) == PARSE_ERROR_INVALID_FLAG);
         CHECK(data == SENTINEL);
     }
 
     SUBCASE("range containing negative numbers")
     {
-        CHECK(info_set_integer(nlohmann::json(-99), data, true, Range(-99, 99)) == PARSE_ERROR_NONE);
+        CHECK(info_set_integer(nlohmann::json(-99), data, true, Range(-99, 99)).has_value());
         CHECK(data == -99);
 
-        CHECK(info_set_integer(nlohmann::json(-100), data, true, Range(-99, 99)) == PARSE_ERROR_INVALID_FLAG);
+        CHECK(to_error_code(info_set_integer(nlohmann::json(-100), data, true, Range(-99, 99))) == PARSE_ERROR_INVALID_FLAG);
         CHECK(data == -99);
     }
 
     SUBCASE("enum value out of the range")
     {
         auto kind = TestKind::NONE;
-        CHECK(info_set_integer(nlohmann::json(11), kind, true, Range(0, 10)) == PARSE_ERROR_INVALID_FLAG);
+        CHECK(to_error_code(info_set_integer(nlohmann::json(11), kind, true, Range(0, 10))) == PARSE_ERROR_INVALID_FLAG);
         CHECK(kind == TestKind::NONE);
 
-        CHECK(info_set_integer(nlohmann::json(10), kind, true, Range(0, 10)) == PARSE_ERROR_NONE);
+        CHECK(info_set_integer(nlohmann::json(10), kind, true, Range(0, 10)).has_value());
         CHECK(kind == TestKind::LAST);
     }
 
@@ -328,13 +328,13 @@ TEST_CASE("info_set_integer checks the value range")
         constexpr uint8_t uint8_sentinel = 123;
         auto uint8_data = uint8_sentinel;
 
-        CHECK(info_set_integer(nlohmann::json(300), uint8_data, true, Range(0, 255)) == PARSE_ERROR_INVALID_FLAG);
+        CHECK(to_error_code(info_set_integer(nlohmann::json(300), uint8_data, true, Range(0, 255))) == PARSE_ERROR_INVALID_FLAG);
         CHECK(uint8_data == uint8_sentinel);
 
-        CHECK(info_set_integer(nlohmann::json(-1), uint8_data, true, Range(0, 255)) == PARSE_ERROR_INVALID_FLAG);
+        CHECK(to_error_code(info_set_integer(nlohmann::json(-1), uint8_data, true, Range(0, 255))) == PARSE_ERROR_INVALID_FLAG);
         CHECK(uint8_data == uint8_sentinel);
 
-        CHECK(info_set_integer(nlohmann::json(255), uint8_data, true, Range(0, 255)) == PARSE_ERROR_NONE);
+        CHECK(info_set_integer(nlohmann::json(255), uint8_data, true, Range(0, 255)).has_value());
         CHECK(uint8_data == 255);
     }
 }
@@ -345,16 +345,16 @@ TEST_CASE("info_set_integer checks signed int boundaries before conversion")
     constexpr auto maximum = std::numeric_limits<int>::max();
     auto data = SENTINEL;
 
-    CHECK(info_set_integer(nlohmann::json(minimum), data, true, Range(minimum, maximum)) == PARSE_ERROR_NONE);
+    CHECK(info_set_integer(nlohmann::json(minimum), data, true, Range(minimum, maximum)).has_value());
     CHECK(data == minimum);
-    CHECK(info_set_integer(nlohmann::json(maximum), data, true, Range(minimum, maximum)) == PARSE_ERROR_NONE);
+    CHECK(info_set_integer(nlohmann::json(maximum), data, true, Range(minimum, maximum)).has_value());
     CHECK(data == maximum);
 
     const auto below = static_cast<std::int64_t>(minimum) - 1;
     const auto above = static_cast<std::int64_t>(maximum) + 1;
-    CHECK(info_set_integer(nlohmann::json(below), data, true, Range(minimum, maximum)) == PARSE_ERROR_INVALID_FLAG);
+    CHECK(to_error_code(info_set_integer(nlohmann::json(below), data, true, Range(minimum, maximum))) == PARSE_ERROR_INVALID_FLAG);
     CHECK(data == maximum);
-    CHECK(info_set_integer(nlohmann::json(above), data, true, Range(minimum, maximum)) == PARSE_ERROR_INVALID_FLAG);
+    CHECK(to_error_code(info_set_integer(nlohmann::json(above), data, true, Range(minimum, maximum))) == PARSE_ERROR_INVALID_FLAG);
     CHECK(data == maximum);
 }
 
@@ -365,11 +365,11 @@ TEST_CASE("info_set_integer checks unsigned JSON values and numeric types")
     const auto unsigned_maximum = nlohmann::json(static_cast<std::uint64_t>(maximum));
     const auto unsigned_above = nlohmann::json(static_cast<std::uint64_t>(maximum) + 1);
 
-    CHECK(info_set_integer(unsigned_maximum, data, true, Range(0, maximum)) == PARSE_ERROR_NONE);
+    CHECK(info_set_integer(unsigned_maximum, data, true, Range(0, maximum)).has_value());
     CHECK(data == maximum);
-    CHECK(info_set_integer(unsigned_above, data, true, Range(0, maximum)) == PARSE_ERROR_INVALID_FLAG);
+    CHECK(to_error_code(info_set_integer(unsigned_above, data, true, Range(0, maximum))) == PARSE_ERROR_INVALID_FLAG);
     CHECK(data == maximum);
-    CHECK(info_set_integer(nlohmann::json(1.0), data, true, Range(0, maximum)) == PARSE_ERROR_INVALID_TYPE);
+    CHECK(to_error_code(info_set_integer(nlohmann::json(1.0), data, true, Range(0, maximum))) == PARSE_ERROR_INVALID_TYPE);
     CHECK(data == maximum);
 }
 
@@ -380,13 +380,13 @@ TEST_CASE("info_set_integer checks large unsigned JSON range and storage")
     REQUIRE(json.is_number_unsigned());
     auto data = SENTINEL;
 
-    CHECK(info_set_integer(json, data, true, Range(-1, 1)) == PARSE_ERROR_INVALID_FLAG);
+    CHECK(to_error_code(info_set_integer(json, data, true, Range(-1, 1))) == PARSE_ERROR_INVALID_FLAG);
     CHECK(data == SENTINEL);
-    CHECK(info_set_integer(json, data, false, Range(std::numeric_limits<int>::min(), std::numeric_limits<int>::max())) == PARSE_ERROR_INVALID_FLAG);
+    CHECK(to_error_code(info_set_integer(json, data, false, Range(std::numeric_limits<int>::min(), std::numeric_limits<int>::max()))) == PARSE_ERROR_INVALID_FLAG);
     CHECK(data == SENTINEL);
 
     std::uint64_t unsigned_data = 0;
-    CHECK(info_set_integer(json, unsigned_data, true) == PARSE_ERROR_NONE);
+    CHECK(info_set_integer(json, unsigned_data, true).has_value());
     CHECK(unsigned_data == largest);
 }
 
@@ -397,11 +397,11 @@ TEST_CASE("info_set_integer compares unsigned JSON values with signed range boun
         REQUIRE(zero.is_number_unsigned());
         auto data = SENTINEL;
 
-        CHECK(info_set_integer(zero, data, is_required, Range(-1, 1)) == PARSE_ERROR_NONE);
+        CHECK(info_set_integer(zero, data, is_required, Range(-1, 1)).has_value());
         CHECK(data == 0);
-        CHECK(info_set_integer(zero, data, is_required, Range(-3, -1)) == PARSE_ERROR_INVALID_FLAG);
+        CHECK(to_error_code(info_set_integer(zero, data, is_required, Range(-3, -1))) == PARSE_ERROR_INVALID_FLAG);
         CHECK(data == 0);
-        CHECK(info_set_integer(zero, data, is_required, Range(1, 3)) == PARSE_ERROR_INVALID_FLAG);
+        CHECK(to_error_code(info_set_integer(zero, data, is_required, Range(1, 3))) == PARSE_ERROR_INVALID_FLAG);
         CHECK(data == 0);
     }
 }

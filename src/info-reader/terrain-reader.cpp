@@ -36,8 +36,8 @@ int TerrainReader::read() const
     }
 
     int id = 0;
-    if (auto err = info_set_integer(get_json_value(element, "id"), id, true, Range(0, 9999))) {
-        return err;
+    if (const auto result = info_set_integer(get_json_value(element, "id"), id, true, Range(0, 9999)); !result) {
+        return result.error();
     }
 
     const auto &key_obj = get_json_value(element, "key");
@@ -92,8 +92,8 @@ int TerrainReader::read() const
 
     const auto &prio_obj = get_json_value(element, "map_priority");
     if (!prio_obj.is_null()) {
-        if (auto err = info_set_integer(prio_obj, terrain.priority, true, Range(-9999, 9999))) {
-            return err;
+        if (const auto result = info_set_integer(prio_obj, terrain.priority, true, Range(-9999, 9999)); !result) {
+            return result.error();
         }
     }
 
@@ -269,8 +269,8 @@ tl::expected<void, parse_error_type> TerrainReader::set_terrain_conversion(Terra
 
     auto stream_index = -1;
     if (it->second == TerrainConversionType::STREAM) {
-        if (const auto err = info_set_integer(get_json_value(convert_obj, "stream_index"), stream_index, true, Range(0, 254)); err != PARSE_ERROR_NONE) {
-            return tl::make_unexpected(static_cast<parse_error_type>(err));
+        if (const auto result = info_set_integer(get_json_value(convert_obj, "stream_index"), stream_index, true, Range(0, 254)); !result) {
+            return result;
         }
     }
 
@@ -318,8 +318,8 @@ tl::expected<void, parse_error_type> TerrainReader::set_terrain_generation(Terra
             return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
         }
 
-        if (const auto err = info_set_integer(get_json_value(change_obj, "probability"), change.probability, true, Range(1, 100)); err != PARSE_ERROR_NONE) {
-            return tl::make_unexpected(static_cast<parse_error_type>(err));
+        if (const auto result = info_set_integer(get_json_value(change_obj, "probability"), change.probability, true, Range(1, 100)); !result) {
+            return result;
         }
 
         probability_sum += change.probability;
@@ -342,8 +342,8 @@ tl::expected<void, parse_error_type> TerrainReader::set_terrain_generation(Terra
  */
 static tl::expected<void, parse_error_type> set_terrain_power(const nlohmann::json &power_obj, uint8_t &power, bool is_required = false)
 {
-    if (const auto err = info_set_integer(power_obj, power, is_required, Range(0, 255)); err != PARSE_ERROR_NONE) {
-        return tl::make_unexpected(static_cast<parse_error_type>(err));
+    if (const auto result = info_set_integer(power_obj, power, is_required, Range(0, 255)); !result) {
+        return result;
     }
     return {};
 }

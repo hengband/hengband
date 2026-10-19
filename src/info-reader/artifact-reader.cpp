@@ -34,9 +34,9 @@ int ArtifactReader::read() const
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
 
-    int int_id;
-    if (auto err = info_set_integer(get_json_value(this->art_data, "id"), int_id, true, Range(0, 9999))) {
-        return err;
+    int int_id = 0;
+    if (const auto result = info_set_integer(get_json_value(this->art_data, "id"), int_id, true, Range(0, 9999)); !result) {
+        return result.error();
     }
     // 実行時の記録は 1〜件数の ID だけを作るため、1 から欠番なく並んでいることを求める。
     if (const auto previous_id = std::max(error_idx, 0); int_id != previous_id + 1) {
@@ -60,46 +60,46 @@ int ArtifactReader::read() const
         msg_print(_("アーティファクトのベースアイテム読込失敗。ID: '{}'。", "Failed to load base item of artifact. ID: '{}'."), error_idx);
         return result.error();
     }
-    if (auto err = info_set_integer(get_json_value(this->art_data, "parameter_value"), artifact.pval, false, Range(-128, 128))) {
+    if (const auto result = info_set_integer(get_json_value(this->art_data, "parameter_value"), artifact.pval, false, Range(-128, 128)); !result) {
         msg_print(_("アーティファクトのパラメータ値読込失敗。ID: '{}'。", "Failed to load parameter value of artifact. ID: '{}'."), error_idx);
-        return err;
+        return result.error();
     }
-    if (auto err = info_set_integer(get_json_value(this->art_data, "level"), artifact.level, true, Range(0, 128))) {
+    if (const auto result = info_set_integer(get_json_value(this->art_data, "level"), artifact.level, true, Range(0, 128)); !result) {
         msg_print(_("アーティファクトのレベル読込失敗。ID: '{}'。", "Failed to load level of artifact. ID: '{}'."), error_idx);
-        return err;
+        return result.error();
     }
-    if (auto err = info_set_integer(get_json_value(this->art_data, "rarity"), artifact.rarity, true)) {
+    if (const auto result = info_set_integer(get_json_value(this->art_data, "rarity"), artifact.rarity, true); !result) {
         msg_print(_("アーティファクトの希少度読込失敗。ID: '{}'。", "Failed to load rarity of artifact. ID: '{}'."), error_idx);
-        return err;
+        return result.error();
     }
-    if (auto err = info_set_integer(get_json_value(this->art_data, "weight"), artifact.weight, true, Range(0, 9999))) {
+    if (const auto result = info_set_integer(get_json_value(this->art_data, "weight"), artifact.weight, true, Range(0, 9999)); !result) {
         msg_print(_("アーティファクトの重量読込失敗。ID: '{}'。", "Failed to load weight of artifact. ID: '{}'."), error_idx);
-        return err;
+        return result.error();
     }
-    if (auto err = info_set_integer(get_json_value(this->art_data, "cost"), artifact.cost, true, Range(0, 99999999))) {
+    if (const auto result = info_set_integer(get_json_value(this->art_data, "cost"), artifact.cost, true, Range(0, 99999999)); !result) {
         msg_print(_("アーティファクトの売値読込失敗。ID: '{}'。", "Failed to load cost of artifact. ID: '{}'."), error_idx);
-        return err;
+        return result.error();
     }
-    if (auto err = info_set_integer(get_json_value(this->art_data, "base_ac"), artifact.ac, false, Range(-99, 99))) {
+    if (const auto result = info_set_integer(get_json_value(this->art_data, "base_ac"), artifact.ac, false, Range(-99, 99)); !result) {
         msg_print(_("アーティファクトのベースAC読込失敗。ID: '{}'。", "Failed to load base AC of artifact. ID: '{}'."), error_idx);
-        return err;
+        return result.error();
     }
     // セーブではダイスの個数・面数をそれぞれ1バイトで書くため、0〜255に限る。
     if (const auto result = info_set_dice(get_json_value(this->art_data, "base_dice"), artifact.damage_dice, false, Range(0, 255)); !result) {
         msg_print(_("アーティファクトのベースダイス読込失敗。ID: '{}'。", "Failed to load base dice of artifact. ID: '{}'."), error_idx);
         return result.error();
     }
-    if (auto err = info_set_integer(get_json_value(this->art_data, "hit_bonus"), artifact.to_h, false, Range(-99, 99))) {
+    if (const auto result = info_set_integer(get_json_value(this->art_data, "hit_bonus"), artifact.to_h, false, Range(-99, 99)); !result) {
         msg_print(_("アーティファクトの命中補正値読込失敗。ID: '{}'。", "Failed to load hit bonus of artifact. ID: '{}'."), error_idx);
-        return err;
+        return result.error();
     }
-    if (auto err = info_set_integer(get_json_value(this->art_data, "damage_bonus"), artifact.to_d, false, Range(-99, 99))) {
+    if (const auto result = info_set_integer(get_json_value(this->art_data, "damage_bonus"), artifact.to_d, false, Range(-99, 99)); !result) {
         msg_print(_("アーティファクトのダメージ補正値読込失敗。ID: '{}'。", "Failed to load damage bonus of artifact. ID: '{}'."), error_idx);
-        return err;
+        return result.error();
     }
-    if (auto err = info_set_integer(get_json_value(this->art_data, "ac_bonus"), artifact.to_a, false, Range(-99, 99))) {
+    if (const auto result = info_set_integer(get_json_value(this->art_data, "ac_bonus"), artifact.to_a, false, Range(-99, 99)); !result) {
         msg_print(_("アーティファクトのAC補正値読込失敗。ID: '{}'。", "Failed to load AC bonus of artifact. ID: '{}'."), error_idx);
-        return err;
+        return result.error();
     }
     if (const auto result = this->set_art_activate(artifact); !result) {
         msg_print(_("アーティファクトの発動能力読込失敗。ID: '{}'。", "Failed to load activate ability of artifact. ID: '{}'."), error_idx);
@@ -161,14 +161,15 @@ tl::expected<void, parse_error_type> ArtifactReader::set_art_baseitem(ArtifactDe
         return tl::unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
     }
 
-    ItemKindType type_value;
-    if (auto err = info_set_integer(get_json_value(baseitem_data, "type_value"), type_value, true, Range(0, 128))) {
-        return tl::unexpected(static_cast<parse_error_type>(err));
+    // 失敗時は直後に返るが、gcc の最適化で未初期化と誤検出されないよう初期化しておく。
+    ItemKindType type_value{};
+    if (const auto result = info_set_integer(get_json_value(baseitem_data, "type_value"), type_value, true, Range(0, 128)); !result) {
+        return result;
     }
 
-    int subtype_value;
-    if (auto err = info_set_integer(get_json_value(baseitem_data, "subtype_value"), subtype_value, true, Range(0, 128))) {
-        return tl::unexpected(static_cast<parse_error_type>(err));
+    int subtype_value = 0;
+    if (const auto result = info_set_integer(get_json_value(baseitem_data, "subtype_value"), subtype_value, true, Range(0, 128)); !result) {
+        return result;
     }
 
     artifact.bi_key = { type_value, subtype_value };

@@ -35,16 +35,20 @@ tl::expected<void, parse_error_type> info_validate_json_array(const nlohmann::js
  * 格納先の型へ変換する前に検証し、範囲外ならPARSE_ERROR_INVALID_FLAGを返す。
  * range の指定にかかわらず格納先の型 (enum は基底型) の表現範囲も検証する。
  * エラーまたは任意のnullの場合、dataは変更しない。
- * @return エラーコード
+ * @return 成功時は空の値、失敗時は解析エラーコード（PARSE_ERROR_TOO_FEW_ARGUMENTS、PARSE_ERROR_INVALID_TYPE、
+ * PARSE_ERROR_INVALID_FLAGのいずれか。条件は上記のとおり）
  */
 template <IntegralOrEnum T>
-errr info_set_integer(const nlohmann::json &json, T &data, bool is_required, tl::optional<Range> range = tl::nullopt)
+tl::expected<void, parse_error_type> info_set_integer(const nlohmann::json &json, T &data, bool is_required, tl::optional<Range> range = tl::nullopt)
 {
     if (json.is_null()) {
-        return is_required ? PARSE_ERROR_TOO_FEW_ARGUMENTS : PARSE_ERROR_NONE;
+        if (is_required) {
+            return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        }
+        return {};
     }
     if (!json.is_number_integer()) {
-        return PARSE_ERROR_INVALID_TYPE;
+        return tl::make_unexpected(PARSE_ERROR_INVALID_TYPE);
     }
 
     // 範囲チェックは格納先の型へ変換する前に行う。変換してから比べると、
@@ -60,18 +64,18 @@ errr info_set_integer(const nlohmann::json &json, T &data, bool is_required, tl:
     if (json.is_number_unsigned()) {
         const auto value = json.get<nlohmann::json::number_unsigned_t>();
         if (!fits_destination(value) || (range && (std::cmp_less(value, range->first) || std::cmp_greater(value, range->second)))) {
-            return PARSE_ERROR_INVALID_FLAG;
+            return tl::make_unexpected(PARSE_ERROR_INVALID_FLAG);
         }
 
         data = static_cast<T>(value);
-        return PARSE_ERROR_NONE;
+        return {};
     }
 
     const auto value = json.get<nlohmann::json::number_integer_t>();
     if (!fits_destination(value) || (range && (value < range->first || value > range->second))) {
-        return PARSE_ERROR_INVALID_FLAG;
+        return tl::make_unexpected(PARSE_ERROR_INVALID_FLAG);
     }
 
     data = static_cast<T>(value);
-    return PARSE_ERROR_NONE;
+    return {};
 }

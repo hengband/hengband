@@ -52,7 +52,7 @@ bool is_feature_token(std::string_view field, std::string_view token)
 bool is_json_integer_in_range(const nlohmann::json &value, int minimum, int maximum)
 {
     int parsed = 0;
-    return info_set_integer(value, parsed, true, Range(minimum, maximum)) == PARSE_ERROR_NONE;
+    return info_set_integer(value, parsed, true, Range(minimum, maximum)).has_value();
 }
 
 // 数値トークンの文法と範囲はis_feature_tokenで検証済み。

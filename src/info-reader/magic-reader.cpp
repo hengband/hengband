@@ -124,13 +124,13 @@ int MagicReader::read() const
         msg_print(_("呪文訓練可能性読込失敗。ID: '{}'。", "Failed to load spell_trainability. ID: '{}'."), error_idx);
         return result.error();
     }
-    if (auto err = info_set_integer(get_json_value(this->class_data, "first_spell_level"), magics_info.spell_first, true, Range(0, 99))) {
+    if (const auto result = info_set_integer(get_json_value(this->class_data, "first_spell_level"), magics_info.spell_first, true, Range(0, 99)); !result) {
         msg_print(_("呪文行使開始レベル読込失敗。ID: '{}'。", "Failed to load spell-first level. ID: '{}'."), error_idx);
-        return err;
+        return result.error();
     }
-    if (auto err = info_set_integer(get_json_value(this->class_data, "armour_weight_limit"), magics_info.spell_weight, true, Range(0, MAX_CLASS_MAGIC_VALUE))) {
+    if (const auto result = info_set_integer(get_json_value(this->class_data, "armour_weight_limit"), magics_info.spell_weight, true, Range(0, MAX_CLASS_MAGIC_VALUE)); !result) {
         msg_print(_("MP重量制限値読込失敗。ID: '{}'。", "Failed to load spell-weight value. ID: '{}'."), error_idx);
-        return err;
+        return result.error();
     }
     if (const auto result = this->set_realm_data(magics_info); !result) {
         msg_print(_("呪文データ読込失敗。ID: '{}'。", "Failed to load spell data. ID: '{}'."), error_idx);
@@ -218,21 +218,21 @@ tl::expected<void, parse_error_type> MagicReader::set_spell_data(const nlohmann:
     }
     auto &info = magics_info.info[enum2i(realm)][*spell_id];
 
-    if (const auto err = info_set_integer(get_json_value(spell_data, "learn_level"), info.slevel, true, Range(0, 99)); err != PARSE_ERROR_NONE) {
+    if (const auto result = info_set_integer(get_json_value(spell_data, "learn_level"), info.slevel, true, Range(0, 99)); !result) {
         msg_print(_("呪文学習レベル読込失敗。ID: '{}'。", "Failed to load spell learn_level. ID: '{}'."), error_idx);
-        return tl::make_unexpected(static_cast<parse_error_type>(err));
+        return result;
     }
-    if (const auto err = info_set_integer(get_json_value(spell_data, "mana_cost"), info.smana, true, Range(0, MAX_CLASS_MAGIC_VALUE)); err != PARSE_ERROR_NONE) {
+    if (const auto result = info_set_integer(get_json_value(spell_data, "mana_cost"), info.smana, true, Range(0, MAX_CLASS_MAGIC_VALUE)); !result) {
         msg_print(_("呪文コスト読込失敗。ID: '{}'。", "Failed to load spell mana_cost. ID: '{}'."), error_idx);
-        return tl::make_unexpected(static_cast<parse_error_type>(err));
+        return result;
     }
-    if (const auto err = info_set_integer(get_json_value(spell_data, "difficulty"), info.sfail, true, Range(0, 100)); err != PARSE_ERROR_NONE) {
+    if (const auto result = info_set_integer(get_json_value(spell_data, "difficulty"), info.sfail, true, Range(0, 100)); !result) {
         msg_print(_("呪文難易度読込失敗。ID: '{}'。", "Failed to load spell difficulty. ID: '{}'."), error_idx);
-        return tl::make_unexpected(static_cast<parse_error_type>(err));
+        return result;
     }
-    if (const auto err = info_set_integer(get_json_value(spell_data, "first_cast_exp_rate"), info.sexp, true, Range(0, MAX_CLASS_MAGIC_VALUE)); err != PARSE_ERROR_NONE) {
+    if (const auto result = info_set_integer(get_json_value(spell_data, "first_cast_exp_rate"), info.sexp, true, Range(0, MAX_CLASS_MAGIC_VALUE)); !result) {
         msg_print(_("呪文詠唱ボーナスEXP読込失敗。ID: '{}'。", "Failed to load spell first_cast_exp_rate. ID: '{}'."), error_idx);
-        return tl::make_unexpected(static_cast<parse_error_type>(err));
+        return result;
     }
 
     return {};

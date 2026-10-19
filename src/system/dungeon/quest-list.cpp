@@ -403,7 +403,7 @@ void QuestList::load_json_quests(const std::filesystem::path &quests_dir, std::m
         }
 
         QuestId quest_id{};
-        if (info_set_integer(*id_it, quest_id, true, Range(1, MAX_RANDOM_QUEST)) != PARSE_ERROR_NONE) {
+        if (!info_set_integer(*id_it, quest_id, true, Range(1, MAX_RANDOM_QUEST))) {
             constexpr auto fmt = _("クエストIDが範囲外です ({}): id {}", "Quest id is out of range ({}): id {}");
             THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, file.string(), id_it->dump()));
         }

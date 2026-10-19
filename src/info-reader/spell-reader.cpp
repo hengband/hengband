@@ -78,10 +78,10 @@ tl::expected<void, parse_error_type> SpellReader::set_spell_data(const nlohmann:
         return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
     }
 
-    int spell_id;
-    if (const auto err = info_set_integer(get_json_value(spell_data, "spell_id"), spell_id, true, Range(0, 31)); err != PARSE_ERROR_NONE) {
+    int spell_id = 0;
+    if (const auto result = info_set_integer(get_json_value(spell_data, "spell_id"), spell_id, true, Range(0, 31)); !result) {
         msg_print(_("呪文ID読込失敗。ID: '{}'。", "Failed to load spell ID. ID: '{}'."), error_idx);
-        return tl::make_unexpected(static_cast<parse_error_type>(err));
+        return result;
     }
     auto info = SpellInfo();
     info.idx = static_cast<short>(spell_id);
