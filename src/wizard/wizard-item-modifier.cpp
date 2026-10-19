@@ -1093,15 +1093,25 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
 
         if (wish_randart) {
             if (must || ok_art) {
+                // 毎回ランダムアーティファクトを作る強さで作り、呪われたものだけ作り直す。
+                // 薬などランダムアーティファクトにならない種類もあるので、回数を限って試す
+                constexpr auto max_roll = 1000;
                 ItemEntity item;
-                do {
+                auto i = 0;
+                for (; i < max_roll; i++) {
                     item.generate(bi_id);
-                    ItemMagicApplier(player_ptr, &item, baseitem.level, AM_SPECIAL | AM_NO_FIXED_ART).execute();
-                } while (!item.is_random_artifact() || item.is_ego() || item.is_cursed());
-
-                if (item.is_random_artifact()) {
-                    drop_near(player_ptr, item, player_ptr->get_position());
+                    ItemMagicApplier(player_ptr, &item, baseitem.level, AM_GOOD | AM_GREAT | AM_SPECIAL | AM_NO_FIXED_ART).execute();
+                    if (item.is_random_artifact() && !item.is_ego() && !item.is_cursed()) {
+                        break;
+                    }
                 }
+
+                if (i == max_roll) {
+                    msg_print(_("それはランダムアーティファクトにできない！", "You can not make it a random artifact!"));
+                    return WishResultType::FAIL;
+                }
+
+                drop_near(player_ptr, item, player_ptr->get_position());
             } else {
                 wishing_puff_of_smoke();
             }
