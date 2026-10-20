@@ -12,6 +12,7 @@
 #include "system/enums/terrain/terrain-tag.h"
 #include "system/grid-type-definition.h"
 #include "system/terrain/terrain-list.h"
+#include "test/info-reader/parse-result-helpers.h"
 #include "test/system/terrain-list-test-access.h"
 #include <doctest/doctest.h>
 #include <limits>
@@ -202,7 +203,7 @@ TEST_CASE("QuestReader reads description lines")
     const auto data = make_quest_with_description("Kill them all.");
     QuestType quest;
     QuestFixedMap fixed_map;
-    REQUIRE(QuestReader(data, quest, fixed_map).read() == PARSE_ERROR_NONE);
+    REQUIRE(QuestReader(data, quest, fixed_map).read().has_value());
     REQUIRE(fixed_map.descriptions.size() == 1);
     CHECK(fixed_map.descriptions[0].lines_ja == std::vector<std::string>{ "Kill them all." });
     CHECK(fixed_map.descriptions[0].lines_en == std::vector<std::string>{ "Kill them all." });
@@ -221,7 +222,7 @@ TEST_CASE("QuestReader metadata reward and start integers retain representable b
             const auto data = make_quest_with_integer(path, value);
             QuestType quest;
             QuestFixedMap fixed_map;
-            REQUIRE(QuestReader(data, quest, fixed_map).read() == PARSE_ERROR_NONE);
+            REQUIRE(QuestReader(data, quest, fixed_map).read().has_value());
             CHECK(get_quest_integer(fixed_map, path) == value.get<int>());
         }
     }
@@ -247,7 +248,7 @@ TEST_CASE("QuestReader rejects metadata reward and start integer overflow withou
             QuestType quest;
             QuestFixedMap fixed_map;
             set_existing_output(quest, fixed_map);
-            CHECK(QuestReader(data, quest, fixed_map).read() == PARSE_ERROR_INVALID_FLAG);
+            CHECK(test::to_error_code(QuestReader(data, quest, fixed_map).read()) == PARSE_ERROR_INVALID_FLAG);
             check_existing_output(quest, fixed_map);
         }
     }
@@ -274,7 +275,7 @@ TEST_CASE("QuestReader metadata reward and start integers reject non-integer val
             const auto expected_error = !value.is_null() ? PARSE_ERROR_INVALID_TYPE
                                         : required       ? PARSE_ERROR_TOO_FEW_ARGUMENTS
                                                          : PARSE_ERROR_NONE;
-            REQUIRE(QuestReader(data, quest, fixed_map).read() == expected_error);
+            REQUIRE(test::to_error_code(QuestReader(data, quest, fixed_map).read()) == expected_error);
             if (expected_error != PARSE_ERROR_NONE) {
                 check_existing_output(quest, fixed_map);
             } else if (path.ends_with("/leavingQuest")) {
@@ -300,7 +301,7 @@ TEST_CASE("QuestReader rejects non-object rewards")
         QuestType quest;
         QuestFixedMap fixed_map;
         set_existing_output(quest, fixed_map);
-        REQUIRE(QuestReader(data, quest, fixed_map).read() == PARSE_ERROR_INVALID_TYPE);
+        REQUIRE(test::to_error_code(QuestReader(data, quest, fixed_map).read()) == PARSE_ERROR_INVALID_TYPE);
         check_existing_output(quest, fixed_map);
     }
 
@@ -311,7 +312,7 @@ TEST_CASE("QuestReader rejects non-object rewards")
         data["definition"]["reward"] = reward;
         QuestType quest;
         QuestFixedMap fixed_map;
-        REQUIRE(QuestReader(data, quest, fixed_map).read() == PARSE_ERROR_NONE);
+        REQUIRE(QuestReader(data, quest, fixed_map).read().has_value());
         CHECK(fixed_map.metadata.reward_artifact == 0);
         CHECK(fixed_map.reward_artifact_candidates.empty());
     }
@@ -324,7 +325,7 @@ TEST_CASE("QuestReader start retains precedence over unused start variants")
     data["start"] = { { "y", 3 }, { "x", 4 } };
     QuestType quest;
     QuestFixedMap fixed_map;
-    REQUIRE(QuestReader(data, quest, fixed_map).read() == PARSE_ERROR_NONE);
+    REQUIRE(QuestReader(data, quest, fixed_map).read().has_value());
     REQUIRE(fixed_map.starts.size() == 1);
     CHECK(fixed_map.starts[0].y == 3);
     CHECK(fixed_map.starts[0].x == 4);
@@ -383,7 +384,7 @@ TEST_CASE("QuestReader preserves previous output on parse errors at every stage"
     QuestType quest;
     QuestFixedMap fixed_map;
     set_existing_output(quest, fixed_map);
-    CHECK(QuestReader(data, quest, fixed_map).read() == expected_error);
+    CHECK(test::to_error_code(QuestReader(data, quest, fixed_map).read()) == expected_error);
     check_existing_output(quest, fixed_map);
 }
 
@@ -408,21 +409,21 @@ TEST_CASE("QuestReader reports the first failing stage in declaration order")
         return QuestReader(data, quest, fixed_map).read();
     };
 
-    CHECK(read() == PARSE_ERROR_TOO_FEW_ARGUMENTS);
+    CHECK(test::to_error_code(read()) == PARSE_ERROR_TOO_FEW_ARGUMENTS);
     data["name"] = name;
-    CHECK(read() == PARSE_ERROR_INVALID_FLAG);
+    CHECK(test::to_error_code(read()) == PARSE_ERROR_INVALID_FLAG);
     data["definition"]["type"] = "KILL_ALL";
-    CHECK(read() == PARSE_ERROR_INVALID_TYPE);
+    CHECK(test::to_error_code(read()) == PARSE_ERROR_INVALID_TYPE);
     data["descriptions"] = descriptions;
-    CHECK(read() == PARSE_ERROR_GENERIC);
+    CHECK(test::to_error_code(read()) == PARSE_ERROR_GENERIC);
     data["legend"] = nlohmann::json::object();
-    CHECK(read() == PARSE_ERROR_INVALID_TYPE);
+    CHECK(test::to_error_code(read()) == PARSE_ERROR_INVALID_TYPE);
     data["map"] = { "..." };
-    CHECK(read() == PARSE_ERROR_OUT_OF_BOUNDS);
+    CHECK(test::to_error_code(read()) == PARSE_ERROR_OUT_OF_BOUNDS);
     data["start"]["y"] = 0;
     QuestType quest;
     QuestFixedMap fixed_map;
-    REQUIRE(QuestReader(data, quest, fixed_map).read() == PARSE_ERROR_NONE);
+    REQUIRE(QuestReader(data, quest, fixed_map).read().has_value());
     CHECK(fixed_map.starts.size() == 1);
 }
 
@@ -441,7 +442,7 @@ TEST_CASE("QuestReader rejects non-string flags without changing previous output
     QuestType quest;
     QuestFixedMap fixed_map;
     set_existing_output(quest, fixed_map);
-    CHECK(QuestReader(data, quest, fixed_map).read() == PARSE_ERROR_INVALID_TYPE);
+    CHECK(test::to_error_code(QuestReader(data, quest, fixed_map).read()) == PARSE_ERROR_INVALID_TYPE);
     check_existing_output(quest, fixed_map);
 }
 
@@ -459,7 +460,7 @@ TEST_CASE("QuestReader copies valid caveInfo flags into legend grids")
     QuestType quest;
     QuestFixedMap fixed_map;
     set_existing_output(quest, fixed_map);
-    REQUIRE(QuestReader(data, quest, fixed_map).read() == PARSE_ERROR_NONE);
+    REQUIRE(QuestReader(data, quest, fixed_map).read().has_value());
     REQUIRE(fixed_map.legend.size() == 2);
     CHECK(fixed_map.legend.at('.').grid.cave_info == (CAVE_GLOW | CAVE_ROOM));
     CHECK(fixed_map.legend.at('#').grid.cave_info == CAVE_MARK);
@@ -574,7 +575,7 @@ TEST_CASE("QuestReader rejects legend integer overflow without publishing output
             QuestType quest;
             QuestFixedMap fixed_map;
             set_existing_output(quest, fixed_map);
-            CHECK(QuestReader(data, quest, fixed_map).read() == PARSE_ERROR_INVALID_FLAG);
+            CHECK(test::to_error_code(QuestReader(data, quest, fixed_map).read()) == PARSE_ERROR_INVALID_FLAG);
             check_existing_output(quest, fixed_map);
         }
     }
@@ -669,7 +670,7 @@ TEST_CASE("QuestReader replaces output on success without duplicating collection
     const QuestReader reader(data, quest, fixed_map);
     for (int attempt = 0; attempt < 2; ++attempt) {
         CAPTURE(attempt);
-        REQUIRE(reader.read() == PARSE_ERROR_NONE);
+        REQUIRE(reader.read().has_value());
         CHECK(quest.name == "Test");
         CHECK(quest.status == QuestStatusType::TAKEN);
         CHECK(quest.type == QuestKindType::KILL_NUMBER);
@@ -697,7 +698,7 @@ TEST_CASE("QuestReader replaces output on success without duplicating collection
     data["definition"]["level"] = 17;
     data["definition"]["reward"]["artifact"] = 7;
     data.erase("descriptions");
-    REQUIRE(reader.read() == PARSE_ERROR_NONE);
+    REQUIRE(reader.read().has_value());
     CHECK(quest.name == "Another quest");
     CHECK(quest.status == QuestStatusType::TAKEN);
     CHECK(quest.type == QuestKindType::KILL_NUMBER);
@@ -751,7 +752,7 @@ TEST_CASE("QuestReader rejects map extent overflow without publishing output")
         QuestType quest;
         QuestFixedMap fixed_map;
         set_existing_output(quest, fixed_map);
-        CHECK(QuestReader(data, quest, fixed_map).read() == PARSE_ERROR_OUT_OF_BOUNDS);
+        CHECK(test::to_error_code(QuestReader(data, quest, fixed_map).read()) == PARSE_ERROR_OUT_OF_BOUNDS);
         check_existing_output(quest, fixed_map);
     }
 }
@@ -765,7 +766,7 @@ TEST_CASE("QuestReader rejects non ASCII legend symbols without publishing outpu
         QuestType quest;
         QuestFixedMap fixed_map;
         set_existing_output(quest, fixed_map);
-        CHECK(QuestReader(data, quest, fixed_map).read() == PARSE_ERROR_INVALID_VALUE);
+        CHECK(test::to_error_code(QuestReader(data, quest, fixed_map).read()) == PARSE_ERROR_INVALID_VALUE);
         check_existing_output(quest, fixed_map);
     }
 }
@@ -786,7 +787,7 @@ TEST_CASE("QuestReader rejects non ASCII map bytes including embedded null witho
             QuestType quest;
             QuestFixedMap fixed_map;
             set_existing_output(quest, fixed_map);
-            CHECK(QuestReader(data, quest, fixed_map).read() == PARSE_ERROR_INVALID_VALUE);
+            CHECK(test::to_error_code(QuestReader(data, quest, fixed_map).read()) == PARSE_ERROR_INVALID_VALUE);
             check_existing_output(quest, fixed_map);
         }
     }
@@ -805,7 +806,7 @@ TEST_CASE("QuestReader accepts every printable ASCII legend and map symbol")
     data["map"] = { row };
     QuestType quest;
     QuestFixedMap fixed_map;
-    REQUIRE(QuestReader(data, quest, fixed_map).read() == PARSE_ERROR_NONE);
+    REQUIRE(QuestReader(data, quest, fixed_map).read().has_value());
     CHECK(fixed_map.legend.size() == 95);
     CHECK(fixed_map.maps == std::vector<std::vector<std::string>>{ { row } });
 }
@@ -823,7 +824,7 @@ TEST_CASE("QuestReader accepts map extents at the floor boundary")
         }
         QuestType quest;
         QuestFixedMap fixed_map;
-        REQUIRE(QuestReader(data, quest, fixed_map).read() == PARSE_ERROR_NONE);
+        REQUIRE(QuestReader(data, quest, fixed_map).read().has_value());
         REQUIRE(fixed_map.maps.size() == (use_variants ? 2 : 1));
         CHECK(fixed_map.maps.back() == rows);
     }
@@ -835,23 +836,23 @@ TEST_CASE("QuestReader rejects ragged maps and preserves empty and skipped map r
     data["mapVariants"] = { nlohmann::json::array(), { "...", nullptr, ".", 7 } };
     QuestType quest;
     QuestFixedMap fixed_map;
-    CHECK(QuestReader(data, quest, fixed_map).read() == PARSE_ERROR_INVALID_VALUE);
+    CHECK(test::to_error_code(QuestReader(data, quest, fixed_map).read()) == PARSE_ERROR_INVALID_VALUE);
     CHECK(fixed_map.maps.empty());
 
     data["mapVariants"] = { nlohmann::json::array(), { "...", nullptr, "...", 7 } };
-    REQUIRE(QuestReader(data, quest, fixed_map).read() == PARSE_ERROR_NONE);
+    REQUIRE(QuestReader(data, quest, fixed_map).read().has_value());
     CHECK(fixed_map.maps == std::vector<std::vector<std::string>>{ {}, { "...", "..." } });
 
     // map が存在すれば mapVariants は読まない。空の map も従来どおり保持する。
     data["map"] = nlohmann::json::array();
     data["mapVariants"] = { { std::string(MAX_WID + 1, '.') } };
-    REQUIRE(QuestReader(data, quest, fixed_map).read() == PARSE_ERROR_NONE);
+    REQUIRE(QuestReader(data, quest, fixed_map).read().has_value());
     CHECK(fixed_map.maps == std::vector<std::vector<std::string>>{ {} });
 
     // 非文字列行は配置されないため、行数の上限に含めない。
     data["map"] = std::vector<std::string>(MAX_HGT, ".");
     data["map"].push_back(nullptr);
-    REQUIRE(QuestReader(data, quest, fixed_map).read() == PARSE_ERROR_NONE);
+    REQUIRE(QuestReader(data, quest, fixed_map).read().has_value());
     CHECK(fixed_map.maps[0].size() == MAX_HGT);
 }
 
@@ -871,7 +872,7 @@ TEST_CASE("QuestReader checks every declared start against every map before publ
         QuestType quest;
         QuestFixedMap fixed_map;
         set_existing_output(quest, fixed_map);
-        CHECK(QuestReader(data, quest, fixed_map).read() == PARSE_ERROR_OUT_OF_BOUNDS);
+        CHECK(test::to_error_code(QuestReader(data, quest, fixed_map).read()) == PARSE_ERROR_OUT_OF_BOUNDS);
         check_existing_output(quest, fixed_map);
     }
 }
@@ -884,7 +885,7 @@ TEST_CASE("QuestReader rejects a long first row with a short final row")
     QuestType quest;
     QuestFixedMap fixed_map;
     set_existing_output(quest, fixed_map);
-    CHECK(QuestReader(data, quest, fixed_map).read() == PARSE_ERROR_INVALID_VALUE);
+    CHECK(test::to_error_code(QuestReader(data, quest, fixed_map).read()) == PARSE_ERROR_INVALID_VALUE);
     check_existing_output(quest, fixed_map);
 }
 
@@ -896,7 +897,7 @@ TEST_CASE("QuestReader rejects a description line which cannot be converted to t
     QuestType quest;
     QuestFixedMap fixed_map;
     set_existing_output(quest, fixed_map);
-    CHECK(QuestReader(data, quest, fixed_map).read() == PARSE_ERROR_INVALID_VALUE);
+    CHECK(test::to_error_code(QuestReader(data, quest, fixed_map).read()) == PARSE_ERROR_INVALID_VALUE);
     check_existing_output(quest, fixed_map);
 }
 #endif

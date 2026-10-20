@@ -307,36 +307,41 @@ QuestReader::QuestReader(const nlohmann::json &quest_data, QuestType &quest, Que
 {
 }
 
-int QuestReader::read() const
+/*!
+ * @brief クエスト定義(JSON Object)のパース関数
+ * @return 成功時は空の値、失敗時は解析エラーコード
+ * @details 全件成功時のみ名前と固定マップを置き換える。失敗・例外時は既存の出力を保持する。
+ */
+tl::expected<void, parse_error_type> QuestReader::read() const
 {
     if (!this->quest_data.is_object()) {
-        return PARSE_ERROR_INVALID_TYPE;
+        return tl::make_unexpected(PARSE_ERROR_INVALID_TYPE);
     }
 
     std::string name;
     QuestFixedMap parsed;
     if (const auto result = this->set_name(name); !result) {
-        return result.error();
+        return result;
     }
     if (const auto result = this->set_definition(parsed); !result) {
-        return result.error();
+        return result;
     }
     if (const auto result = this->set_descriptions(parsed); !result) {
-        return result.error();
+        return result;
     }
     if (const auto result = this->set_legend(parsed); !result) {
-        return result.error();
+        return result;
     }
     if (const auto result = this->set_maps(parsed); !result) {
-        return result.error();
+        return result;
     }
     if (const auto result = this->set_starts(parsed); !result) {
-        return result.error();
+        return result;
     }
 
     this->quest.name = std::move(name);
     this->fixed_map = std::move(parsed);
-    return PARSE_ERROR_NONE;
+    return {};
 }
 
 tl::expected<void, parse_error_type> QuestReader::set_name(std::string &name) const

@@ -30,8 +30,7 @@ public:
     QuestReader &operator=(const QuestReader &) = delete;
     QuestReader &operator=(QuestReader &&) = delete;
 
-    /*! @brief 全件成功時のみ名前と固定マップを置き換える。失敗・例外時は既存の出力を保持する。 */
-    int read() const;
+    tl::expected<void, parse_error_type> read() const;
 
 private:
     tl::expected<void, parse_error_type> set_name(std::string &name) const;
