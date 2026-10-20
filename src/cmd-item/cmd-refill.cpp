@@ -52,9 +52,7 @@ static void do_cmd_refill_lamp(PlayerType *player_ptr)
     }
 
     vary_item(player_ptr, i_idx, -1);
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.set_flag(StatusRecalculatingFlag::TORCH);
-    rfu.set_flag(SubWindowRedrawingFlag::EQUIPMENT);
+    RedrawingFlagsUpdater::get_instance().request_light_fuel_change_updates();
 }
 
 /*!
@@ -91,9 +89,7 @@ static void do_cmd_refill_torch(PlayerType *player_ptr)
     }
 
     vary_item(player_ptr, i_idx, -1);
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.set_flag(StatusRecalculatingFlag::TORCH);
-    rfu.set_flag(SubWindowRedrawingFlag::EQUIPMENT);
+    RedrawingFlagsUpdater::get_instance().request_light_fuel_change_updates();
 }
 
 /*!

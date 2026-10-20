@@ -231,6 +231,18 @@ void RedrawingFlagsUpdater::request_gold_redrawing()
     this->sub_window_flags.set(SubWindowRedrawingFlag::PLAYER);
 }
 
+/*!
+ * @brief 光源の燃料を補充したときの更新を予約する
+ * @details 光源の明るさを計算し直し (燃料が切れていた光源が再び灯ることも、暗黒の光源の燃料で消えることもある)、
+ * 残りのターンを表示する装備品の一覧を描き直す。
+ * 燃料が燃えて減るとき・燃え尽きたときは、notice_lite_change() で別に要求する。
+ */
+void RedrawingFlagsUpdater::request_light_fuel_change_updates()
+{
+    this->status_flags.set(StatusRecalculatingFlag::TORCH);
+    this->sub_window_flags.set(SubWindowRedrawingFlag::EQUIPMENT);
+}
+
 void RedrawingFlagsUpdater::fill_up_sub_flags()
 {
     constexpr auto all_sub_window_flags = EnumRange(SubWindowRedrawingFlag::INVENTORY, SubWindowRedrawingFlag::MAX);

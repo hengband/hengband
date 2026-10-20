@@ -487,3 +487,22 @@ TEST_CASE("RedrawingFlagsUpdater::request_gold_redrawing requests redrawing the 
     // 所持金のほかの基本ステータスは描き直さない
     CHECK_FALSE(rfu.has(MainWindowRedrawingFlag::BASIC));
 }
+
+TEST_CASE("RedrawingFlagsUpdater::request_light_fuel_change_updates requests recalculating the light and redrawing the equipment")
+{
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    const auto restore_srf = scoped_restore_flags(rfu, { StatusRecalculatingFlag::TORCH, StatusRecalculatingFlag::BONUS });
+    const auto restore_swrf = scoped_restore_flags(rfu, { SubWindowRedrawingFlag::EQUIPMENT, SubWindowRedrawingFlag::INVENTORY });
+    rfu.reset_flag(StatusRecalculatingFlag::TORCH);
+    rfu.reset_flag(StatusRecalculatingFlag::BONUS);
+    rfu.reset_flag(SubWindowRedrawingFlag::EQUIPMENT);
+    rfu.reset_flag(SubWindowRedrawingFlag::INVENTORY);
+
+    rfu.request_light_fuel_change_updates();
+
+    CHECK(rfu.has(StatusRecalculatingFlag::TORCH));
+    CHECK(rfu.has(SubWindowRedrawingFlag::EQUIPMENT));
+    // 能力 (燃料には依らない) の再計算や、所持品の一覧の描き直しは要求しない
+    CHECK_FALSE(rfu.has(StatusRecalculatingFlag::BONUS));
+    CHECK_FALSE(rfu.has(SubWindowRedrawingFlag::INVENTORY));
+}
