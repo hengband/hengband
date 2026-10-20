@@ -16,7 +16,7 @@ public:
     TerrainReader &operator=(const TerrainReader &) = delete;
     TerrainReader &operator=(TerrainReader &&) = delete;
 
-    int read() const;
+    tl::expected<void, parse_error_type> read() const;
 
 private:
     bool grab_one_feat_flag(TerrainType &terrain, std::string_view what) const;
