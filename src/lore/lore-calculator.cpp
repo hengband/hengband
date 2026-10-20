@@ -15,13 +15,7 @@
  */
 std::string get_skill_damage(PlayerType *player_ptr, lore_type *lore_ptr, MonsterAbilityType ms_type)
 {
-    const auto monrace_id = lore_ptr->monrace_id;
-    const auto base_damage = monspell_race_damage(player_ptr, ms_type, monrace_id, BASE_DAM);
-    const auto dice_num = monspell_race_damage(player_ptr, ms_type, monrace_id, DICE_NUM);
-    const auto dice_side = monspell_race_damage(player_ptr, ms_type, monrace_id, DICE_SIDE);
-    const auto dice_mult = monspell_race_damage(player_ptr, ms_type, monrace_id, DICE_MULT);
-    const auto dice_div = monspell_race_damage(player_ptr, ms_type, monrace_id, DICE_DIV);
-    return fmt::format("({})", dice_to_string(base_damage, dice_num, dice_side, dice_mult, dice_div));
+    return fmt::format("({})", describe_monspell_race_damage(player_ptr, ms_type, lore_ptr->monrace_id));
 }
 
 /*!
