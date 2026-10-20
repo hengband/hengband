@@ -162,6 +162,8 @@ std::string_view input_kind_name(InputKind kind)
         return "direction";
     case InputKind::TARGET:
         return "target";
+    case InputKind::POINT:
+        return "point";
     }
 
     THROW_EXCEPTION(std::logic_error, "Invalid InputKind was specified!");
@@ -251,6 +253,11 @@ public:
             { "y", details.pos.y },
             { "x", details.pos.x },
         };
+    }
+
+    nlohmann::json operator()(const PointInputDetails &details) const
+    {
+        return { { "y", details.pos.y }, { "x", details.pos.x } };
     }
 };
 

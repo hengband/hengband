@@ -27,6 +27,7 @@ enum class InputKind {
     ITEM, //!< アイテムの選択
     DIRECTION, //!< 方向の入力
     TARGET, //!< ターゲットの選択と、見るコマンドのカーソル
+    POINT, //!< 場所の指定 (テレポートの行き先など)
 };
 
 /*!
@@ -106,8 +107,17 @@ struct TargetInputDetails {
     bool operator==(const TargetInputDetails &) const = default;
 };
 
+/*!
+ * @brief 場所の指定の詳細
+ */
+struct PointInputDetails {
+    Pos2D pos; //!< カーソルのマスのフロアでの座標
+
+    bool operator==(const PointInputDetails &) const = default;
+};
+
 //! 入力の種類ごとの詳細。詳細を持たない入力では std::monostate
-using InputDetails = std::variant<std::monostate, StringInputDetails, QuantityInputDetails, CommandInputDetails, ItemInputDetails, DirectionInputDetails, TargetInputDetails>;
+using InputDetails = std::variant<std::monostate, StringInputDetails, QuantityInputDetails, CommandInputDetails, ItemInputDetails, DirectionInputDetails, TargetInputDetails, PointInputDetails>;
 
 /*!
  * @brief 現在待っている入力の種類と、画面に表示したプロンプト
