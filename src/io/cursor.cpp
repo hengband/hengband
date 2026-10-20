@@ -119,9 +119,7 @@ bool change_panel(PlayerType *player_ptr, POSITION dy, POSITION dx)
     panel_row_min = y;
     panel_col_min = x;
     panel_bounds_center();
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
-    rfu.set_flag(MainWindowRedrawingFlag::MAP);
+    RedrawingFlagsUpdater::get_instance().request_monster_update_and_map_redrawing();
     handle_stuff(player_ptr);
     return true;
 }

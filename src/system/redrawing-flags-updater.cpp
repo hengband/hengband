@@ -74,16 +74,13 @@ void RedrawingFlagsUpdater::request_whole_status_recalculation()
 
 /*!
  * @brief マップの描き直しを予約する
- * @details メインウィンドウのマップに加え、マップを表示するサブウィンドウ (周辺の光景・ダンジョンの地形) も描き直す。
+ * @details 地図のサブウィンドウ (ダンジョン全体図 OVERHEAD・自分の周囲 DUNGEON) は、メインウィンドウのマップを描き直すとき (print_map()) に
+ * 描き直しが要求されるので、ここでは要求しない。画面の保存中などでマップを描き直すまでの間は、
+ * 全体図だけが表示の変化を調べて描き直され (request_overhead_redrawing_if_changed())、自分の周囲はマップを描き直すときまで待つ。
  */
 void RedrawingFlagsUpdater::request_map_redrawing()
 {
     this->main_window_flags.set(MainWindowRedrawingFlag::MAP);
-    static constexpr auto flags_swrf = {
-        SubWindowRedrawingFlag::OVERHEAD,
-        SubWindowRedrawingFlag::DUNGEON,
-    };
-    this->sub_window_flags.set(flags_swrf);
 }
 
 /*!

@@ -180,7 +180,7 @@ TEST_CASE("RedrawingFlagsUpdater::request_whole_status_recalculation requests re
     CHECK_FALSE(rfu.has(StatusRecalculatingFlag::DISTANCE));
 }
 
-TEST_CASE("RedrawingFlagsUpdater::request_map_redrawing requests redrawing the maps")
+TEST_CASE("RedrawingFlagsUpdater::request_map_redrawing requests redrawing the map of the main window")
 {
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     static constexpr auto flags_swrf = {
@@ -195,11 +195,12 @@ TEST_CASE("RedrawingFlagsUpdater::request_map_redrawing requests redrawing the m
     rfu.request_map_redrawing();
 
     CHECK(rfu.has(MainWindowRedrawingFlag::MAP));
-    CHECK(rfu.has(SubWindowRedrawingFlag::OVERHEAD));
-    CHECK(rfu.has(SubWindowRedrawingFlag::DUNGEON));
+    // 地図のサブウィンドウは、マップを描き直すとき (print_map()) に要求される
+    CHECK_FALSE(rfu.has(SubWindowRedrawingFlag::OVERHEAD));
+    CHECK_FALSE(rfu.has(SubWindowRedrawingFlag::DUNGEON));
 }
 
-TEST_CASE("RedrawingFlagsUpdater::request_monster_update_and_map_redrawing requests updating the monsters and redrawing the maps")
+TEST_CASE("RedrawingFlagsUpdater::request_monster_update_and_map_redrawing requests updating the monsters and redrawing the map of the main window")
 {
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     static constexpr auto flags_swrf = {
@@ -217,8 +218,8 @@ TEST_CASE("RedrawingFlagsUpdater::request_monster_update_and_map_redrawing reque
 
     CHECK(rfu.has(StatusRecalculatingFlag::MONSTER_STATUSES));
     CHECK(rfu.has(MainWindowRedrawingFlag::MAP));
-    CHECK(rfu.has(SubWindowRedrawingFlag::OVERHEAD));
-    CHECK(rfu.has(SubWindowRedrawingFlag::DUNGEON));
+    CHECK_FALSE(rfu.has(SubWindowRedrawingFlag::OVERHEAD));
+    CHECK_FALSE(rfu.has(SubWindowRedrawingFlag::DUNGEON));
 }
 
 TEST_CASE("RedrawingFlagsUpdater::request_sight_recalculation requests forgetting and recalculating the view and the lights")
