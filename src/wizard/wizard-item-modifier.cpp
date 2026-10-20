@@ -810,13 +810,18 @@ static std::vector<FixedArtifactId> find_wishing_fixed_artifact(std::string_view
                 art_description = art_description.substr(0, find_pos);
             }
         } else {
-            const std::string of_space("of ");
+            constexpr std::string_view of_space = "of ";
             if (art_description.starts_with(of_space)) {
                 art_description = art_description.substr(of_space.length());
             }
         }
 
+        // 願いの先頭の「the 」は取り除いてから照合するので、「of the Rohirrim」などの「the 」も除く
         art_description = str_tolower(art_description);
+        constexpr std::string_view the_space = "the ";
+        if (art_description.starts_with(the_space)) {
+            art_description = art_description.substr(the_space.length());
+        }
 #endif
         //!< 先頭の「★」(日本語)、「The 」(英語)を除去する.
         const auto match_name = item_name.substr(_(2, 4));
@@ -919,7 +924,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
     pray = str_tolower(pray);
 #endif
 
-    std::string pray_chars = pray;
+    auto pray_chars = str_ltrim(pray);
 
     // 先頭が prefix なら取り除いて、続く空白も読み飛ばす
     const auto consume_prefix = [&pray_chars](std::string_view prefix) {
@@ -932,11 +937,12 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
     };
 
 #ifndef JP
-    if (!consume_prefix("a ") && !consume_prefix("an ")) {
-        pray_chars = str_ltrim(pray_chars);
+    if (!consume_prefix("a ")) {
+        consume_prefix("an ");
     }
 #endif
 
+    // 末尾の空白は冠詞を調べた後に取る (先に取ると「a  」が冠詞でなく「a」という名前になる)
     pray_chars = str_rtrim(pray_chars);
 
     if (consume_prefix(_("祝福された", "blessed"))) {
@@ -957,7 +963,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
     } else
 #endif
 
-        if (consume_prefix(_("☆", "The "))) {
+        if (consume_prefix(_("☆", "the "))) {
         wish_art = true;
         wish_randart = true;
     }
@@ -978,7 +984,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
     }
 
     if (cheat_xtra) {
-        msg_print("Wishing {}....", str_rtrim(pray));
+        msg_print("Wishing {}....", str_trim(pray));
     }
 
     std::vector<short> baseitem_ids;
@@ -1090,15 +1096,25 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
 
         if (wish_randart) {
             if (must || ok_art) {
+                // 毎回ランダムアーティファクトを作る強さで作り、呪われたものだけ作り直す。
+                // 薬などランダムアーティファクトにならない種類もあるので、回数を限って試す
+                constexpr auto max_roll = 1000;
                 ItemEntity item;
-                do {
+                auto i = 0;
+                for (; i < max_roll; i++) {
                     item.generate(bi_id);
-                    ItemMagicApplier(player_ptr, &item, baseitem.level, AM_SPECIAL | AM_NO_FIXED_ART).execute();
-                } while (!item.is_random_artifact() || item.is_ego() || item.is_cursed());
-
-                if (item.is_random_artifact()) {
-                    drop_near(player_ptr, item, player_ptr->get_position());
+                    ItemMagicApplier(player_ptr, &item, baseitem.level, AM_GOOD | AM_GREAT | AM_SPECIAL | AM_NO_FIXED_ART).execute();
+                    if (item.is_random_artifact() && !item.is_ego() && !item.is_cursed()) {
+                        break;
+                    }
                 }
+
+                if (i == max_roll) {
+                    msg_print(_("それはランダムアーティファクトにできない！", "You can not make it a random artifact!"));
+                    return WishResultType::FAIL;
+                }
+
+                drop_near(player_ptr, item, player_ptr->get_position());
             } else {
                 wishing_puff_of_smoke();
             }
