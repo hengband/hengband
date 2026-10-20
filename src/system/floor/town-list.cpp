@@ -4,6 +4,7 @@
 #include "store/store.h"
 #include "system/angband-exceptions.h"
 #include "system/baseitem/baseitem-list.h"
+#include "system/floor/town-records.h"
 #include "util/angband-files.h"
 #include <filesystem>
 #include <fmt/format.h>
@@ -78,7 +79,7 @@ bool TownList::is_all_initialized() const
         }
     }
 
-    return this->towns[1].is_alias_initialized();
+    return this->get_town(TownId::OUTPOST).is_alias_initialized();
 }
 
 /*!
@@ -119,5 +120,5 @@ void TownList::initialize()
 
 void TownList::overwrite_town_name()
 {
-    this->towns[1].overwrite_town_name();
+    this->get_town(TownId::OUTPOST).overwrite_town_name();
 }
