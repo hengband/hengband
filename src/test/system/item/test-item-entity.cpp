@@ -77,7 +77,7 @@ TEST_CASE("ItemEntity sense sets the feeling and the sensed flag")
     CHECK(item.has_identification_flag(IdentificationFlag::SENSE));
 }
 
-TEST_CASE("ItemEntity remove_curses clears the curses and the feeling")
+TEST_CASE("ItemEntity remove_curses clears the curses, the feeling and the sensed flag")
 {
     ItemEntity item;
     item.curse_flags.set({ CurseTraitType::CURSED, CurseTraitType::HEAVY_CURSE });
@@ -86,7 +86,7 @@ TEST_CASE("ItemEntity remove_curses clears the curses and the feeling")
 
     CHECK_FALSE(item.is_cursed());
     CHECK(item.feeling == FEEL_NONE);
-    CHECK(item.has_identification_flag(IdentificationFlag::SENSE));
+    CHECK_FALSE(item.has_identification_flag(IdentificationFlag::SENSE));
 }
 
 TEST_CASE("ItemEntity remove_curses keeps an identified item identified")
