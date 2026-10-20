@@ -1401,11 +1401,9 @@ void ItemEntity::remove_curses()
 }
 
 /*!
- * @brief 呪いを付け、新しく付いた呪いがあれば擬似鑑定の感触を消す
+ * @brief 呪いを付け、新しく付いた呪いがあれば擬似鑑定の感触を呪いに合わせる
  * @param curses 付ける呪い
  * @return 新しく付いた呪いがあれば true
- * @details 新しく呪われると感触が実際の品と合わなくなるので消す。簡易鑑定済みの印 (SENSE) は残すので、
- * 感じていた品の表示は実際の呪いから {呪われている} になる。
  */
 bool ItemEntity::add_curses(const EnumClassFlagGroup<CurseTraitType> &curses)
 {
@@ -1414,8 +1412,31 @@ bool ItemEntity::add_curses(const EnumClassFlagGroup<CurseTraitType> &curses)
     }
 
     this->curse_flags.set(curses);
-    this->feeling = FEEL_NONE;
+    this->match_feeling_to_curses();
     return true;
+}
+
+/*!
+ * @brief 呪われた品の擬似鑑定の感触を、呪いに合わせる
+ * @details 新しく呪われると {高級品} などの感触は実際の品と合わなくなる。感じていた品 (簡易鑑定済みの印 SENSE の
+ * ある品) は、前の感触から求めた呪われた品の感触 ({恐ろしい}・{無価値}・{呪われている}、to_cursed_feeling()) に
+ * 感じ直したことにする。感じていない品は、呪いを表す感触のほかは付けずに後の擬似鑑定に任せる。
+ */
+void ItemEntity::match_feeling_to_curses()
+{
+    // 鑑定済みの品は呪いが表示されるので、感触を持たせない (鑑定すると感触は消える)
+    if (this->has_identification_flag(IdentificationFlag::KNOWN)) {
+        return;
+    }
+
+    if (this->has_identification_flag(IdentificationFlag::SENSE)) {
+        this->feeling = to_cursed_feeling(this->feeling);
+        return;
+    }
+
+    if (!is_cursed_feeling(this->feeling)) {
+        this->feeling = FEEL_NONE;
+    }
 }
 
 /*!
