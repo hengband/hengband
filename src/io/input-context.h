@@ -24,6 +24,7 @@ enum class InputKind {
     MORE, //!< メッセージの -続く- (-more-)
     COMMAND, //!< 次のコマンドの入力 (自分のターン、店のコマンド)
     ITEM, //!< アイテムの選択
+    DIRECTION, //!< 方向の入力
 };
 
 /*!
@@ -80,8 +81,19 @@ struct ItemInputDetails {
     bool operator==(const ItemInputDetails &) const = default;
 };
 
+/*!
+ * @brief 方向の入力の詳細
+ */
+struct DirectionInputDetails {
+    bool can_choose_target; //!< '*' などでターゲットを選び直せるか
+    bool has_target; //!< '5' などで今のターゲットへ向けられるか
+    bool at_feet; //!< '.' などで足元を選べるか
+
+    bool operator==(const DirectionInputDetails &) const = default;
+};
+
 //! 入力の種類ごとの詳細。詳細を持たない入力では std::monostate
-using InputDetails = std::variant<std::monostate, StringInputDetails, QuantityInputDetails, CommandInputDetails, ItemInputDetails>;
+using InputDetails = std::variant<std::monostate, StringInputDetails, QuantityInputDetails, CommandInputDetails, ItemInputDetails, DirectionInputDetails>;
 
 /*!
  * @brief 現在待っている入力の種類と、画面に表示したプロンプト

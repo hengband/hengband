@@ -88,6 +88,9 @@
     <Filter Include="system\monrace">
       <UniqueIdentifier>{26389b38-dfb3-4ce9-9f29-e4204b51087d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="target">
+      <UniqueIdentifier>{d36158db-2d9b-550a-923f-1bdc855a5bbf}</UniqueIdentifier>
+    </Filter>
     <Filter Include="term">
       <UniqueIdentifier>{b6d3f0a2-4e8c-4b71-9a5d-3c2e7f1d8a94}</UniqueIdentifier>
     </Filter>
@@ -303,6 +306,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\test\system\test-redrawing-flags-updater.cpp">
       <Filter>system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\target\test-target-getter.cpp">
+      <Filter>target</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\test\term\test-z-rand.cpp">
       <Filter>term</Filter>

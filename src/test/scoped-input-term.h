@@ -6,6 +6,7 @@
 #pragma once
 
 #include "cmd-io/macro-util.h"
+#include "effect/spells-effect-util.h"
 #include "game-option/cheat-options.h"
 #include "game-option/input-options.h"
 #include "game-option/map-screen-options.h"
@@ -18,6 +19,7 @@
 #include "io/signal-handlers.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
+#include "target/target.h"
 #include "term/gameterm.h"
 #include "term/z-term.h"
 #include "test/scoped-restore.h"
@@ -65,7 +67,7 @@ template <RedrawingFlagType Flag>
 [[nodiscard]] inline auto scoped_restore_input_globals()
 {
     return test::scoped_restore(p_ptr, angband_terms, game_term, term_inkey_wait_hook, msg_flag, num_more, command_arg, command_cmd, command_new,
-        command_dir, command_see, command_wrk, use_menu, inkey_base, inkey_xtra, inkey_scan, inkey_flag, inkey_next, signal_count);
+        command_dir, command_see, command_wrk, use_menu, project_length, inkey_base, inkey_xtra, inkey_scan, inkey_flag, inkey_next, signal_count);
 }
 
 /*!
@@ -74,7 +76,15 @@ template <RedrawingFlagType Flag>
 [[nodiscard]] inline auto scoped_restore_input_options()
 {
     return test::scoped_restore(auto_more, skip_more, quick_messages, command_menu, rogue_like_commands, always_repeat, cheat_turn, fresh_once, fresh_message,
-        hilite_player, always_show_list, carry_query_flag, keymap_actions_map, macro_patterns, macro_actions, active_macros);
+        hilite_player, always_show_list, carry_query_flag, use_old_target, keymap_actions_map, macro_patterns, macro_actions, active_macros);
+}
+
+/*!
+ * @brief 方向の入力が参照する、最後に選んだターゲットを覚えておき、スコープを抜けるときに元へ戻す
+ */
+[[nodiscard]] inline auto scoped_restore_last_target()
+{
+    return util::make_finalizer([target = Target::get_last_target()] { Target::set_last_target(target); });
 }
 
 /*!
@@ -122,6 +132,7 @@ public:
         command_see = 0;
         command_wrk = 0;
         use_menu = false;
+        project_length = 0;
         inkey_base = false;
         inkey_xtra = false;
         inkey_scan = false;
@@ -140,6 +151,8 @@ public:
         hilite_player = false;
         always_show_list = false;
         carry_query_flag = false;
+        use_old_target = false;
+        Target::clear_last_target();
         keymap_actions_map[KeymapMode::ORIGINAL].assign(256, tl::nullopt);
         keymap_actions_map[KeymapMode::ROGUE].assign(256, tl::nullopt);
         macro_patterns.clear();
@@ -221,6 +234,7 @@ private:
     decltype(scoped_restore_input_globals()) restore_globals = scoped_restore_input_globals();
     decltype(scoped_restore_input_options()) restore_options = scoped_restore_input_options();
     decltype(scoped_restore_world_state()) restore_world = scoped_restore_world_state();
+    decltype(scoped_restore_last_target()) restore_last_target = scoped_restore_last_target();
     decltype(scoped_restore_redrawing_flags<MainWindowRedrawingFlag>()) restore_main_flags = scoped_restore_redrawing_flags<MainWindowRedrawingFlag>();
     decltype(scoped_restore_redrawing_flags<SubWindowRedrawingFlag>()) restore_sub_flags = scoped_restore_redrawing_flags<SubWindowRedrawingFlag>();
     decltype(scoped_restore_redrawing_flags<StatusRecalculatingFlag>()) restore_status_flags = scoped_restore_redrawing_flags<StatusRecalculatingFlag>();
