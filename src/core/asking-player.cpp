@@ -313,20 +313,29 @@ bool input_check_strict(PlayerType *player_ptr, std::string_view prompt, EnumCla
     return flag;
 }
 
-/*
- * Prompts for a keypress
- *
- * The "prompt" should take the form "Command: "
- *
- * Returns TRUE unless the character is "Escape"
+/*!
+ * @brief 1文字の入力を受け付ける
+ * @param prompt プロンプト ("Command: " などの形)
+ * @return 入力した文字。ESCで中断したらnullopt
  */
 tl::optional<char> input_command(std::string_view prompt)
 {
+    return input_command_with_context({ InputKind::COMMAND_CHAR, std::string(prompt), {} });
+}
+
+/*!
+ * @brief 入力待ちの文脈を指定して、1文字の入力を受け付ける
+ * @param input_context 入力待ちの間に公開する文脈。プロンプトは文脈のものを表示する
+ * @return 入力した文字。ESCで中断したらnullopt
+ * @details 1文字の入力のうち、方向の入力のように種類と詳細を公開したいものに使う。
+ */
+tl::optional<char> input_command_with_context(InputContext input_context)
+{
     msg_erase();
-    prt(prompt, 0, 0);
+    prt(input_context.prompt, 0, 0);
     char command;
     {
-        const InputContextScope input_context(InputKind::COMMAND_CHAR, prompt);
+        const InputContextScope context_scope(std::move(input_context));
         if (get_com_no_macros) {
             command = static_cast<char>(inkey_special(false));
         } else {

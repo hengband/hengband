@@ -4,6 +4,7 @@
 #include "floor/geometry.h"
 #include "game-option/input-options.h"
 #include "io/command-repeater.h"
+#include "io/input-context.h"
 #include "io/input-key-requester.h"
 #include "main/sound-of-music.h"
 #include "monster/monster-describer.h"
@@ -22,7 +23,19 @@
 #include <fmt/format.h>
 #include <string>
 #include <string_view>
+#include <tl/optional.hpp>
 #include <unordered_set>
+
+/*!
+ * @brief 方向の入力の文脈を公開して、1文字の入力を受け付ける
+ * @param prompt プロンプト
+ * @param details 方向の入力の詳細
+ * @return 入力した文字。ESCで中断したらnullopt
+ */
+static tl::optional<char> input_direction(std::string_view prompt, const DirectionInputDetails &details)
+{
+    return input_command_with_context({ InputKind::DIRECTION, std::string(prompt), details });
+}
 
 /*!
  * @brief 上下左右および斜め方向、またはターゲットを指定する
@@ -55,12 +68,14 @@ Direction get_aim_dir(PlayerType *player_ptr, bool enable_repeat)
     }
 
     while (!dir) {
+        const auto has_target = target.is_okay();
         const auto prompt =
-            target.is_okay()
+            has_target
                 ? _("方向 ('5'でターゲットへ, '*'でターゲット再選択, ESCで中断)? ", "Direction ('5' for target, '*' to re-target, Escape to cancel)? ")
                 : _("方向 ('*'でターゲット選択, ESCで中断)? ", "Direction ('*' to choose a target, Escape to cancel)? ");
 
-        const auto command_opt = input_command(prompt);
+        const DirectionInputDetails details{ .can_choose_target = true, .has_target = has_target, .at_feet = false };
+        const auto command_opt = input_direction(prompt, details);
         if (!command_opt) {
             project_length = 0;
             return Direction::none();
@@ -118,8 +133,9 @@ Direction get_direction(PlayerType *player_ptr)
     }
 
     constexpr auto prompt = _("方向 (ESCで中断)? ", "Direction (Escape to cancel)? ");
+    constexpr DirectionInputDetails details{ .can_choose_target = false, .has_target = false, .at_feet = false };
     while (!dir) {
-        const auto command = input_command(prompt);
+        const auto command = input_direction(prompt, details);
         if (!command) {
             return Direction::none();
         }
@@ -179,8 +195,9 @@ Direction get_rep_dir(PlayerType *player_ptr, bool under)
 
     const auto prompt = under ? _("方向 ('.'足元, ESCで中断)? ", "Direction ('.' at feet, Escape to cancel)? ")
                               : _("方向 (ESCで中断)? ", "Direction (Escape to cancel)? ");
+    const DirectionInputDetails details{ .can_choose_target = false, .has_target = false, .at_feet = under };
     while (!dir) {
-        const auto command = input_command(prompt);
+        const auto command = input_direction(prompt, details);
         if (!command) {
             return Direction::none();
         }

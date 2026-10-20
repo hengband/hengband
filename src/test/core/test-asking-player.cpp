@@ -28,6 +28,23 @@ TEST_CASE("input_string clears the context when cancelled")
     CHECK_FALSE(input_string("Cancel: ", 20, "seed", false));
 }
 
+TEST_CASE("input_command publishes the command character context")
+{
+    test::ScopedInputTerm term;
+
+    SUBCASE("accept a key")
+    {
+        term.expect({ InputKind::COMMAND_CHAR, "Command: ", {} }, "x");
+        CHECK(input_command("Command: ") == 'x');
+    }
+
+    SUBCASE("cancel")
+    {
+        term.expect({ InputKind::COMMAND_CHAR, "Command: ", {} }, "\033");
+        CHECK_FALSE(input_command("Command: "));
+    }
+}
+
 TEST_CASE("input_quantity publishes the quantity context")
 {
     test::ScopedInputTerm term;
