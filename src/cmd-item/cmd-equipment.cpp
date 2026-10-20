@@ -63,28 +63,21 @@ static void do_curse_on_equip(OBJECT_IDX slot, ItemEntity &item, PlayerType *pla
         ItemEntity *anubis = player_ptr->inventory[INVEN_MAIN_HAND].get();
         ItemEntity *chariot = player_ptr->inventory[INVEN_SUB_HAND].get();
 
-        anubis->curse_flags.set(CurseTraitType::PERSISTENT_CURSE);
-        anubis->curse_flags.set(CurseTraitType::HEAVY_CURSE);
-        chariot->curse_flags.set(CurseTraitType::PERSISTENT_CURSE);
-        chariot->curse_flags.set(CurseTraitType::HEAVY_CURSE);
-        chariot->curse_flags.set(CurseTraitType::BERS_RAGE);
-        chariot->curse_flags.set(CurseTraitType::VUL_CURSE);
+        anubis->add_curses({ CurseTraitType::PERSISTENT_CURSE, CurseTraitType::HEAVY_CURSE });
+        chariot->add_curses({ CurseTraitType::PERSISTENT_CURSE, CurseTraitType::HEAVY_CURSE, CurseTraitType::BERS_RAGE, CurseTraitType::VUL_CURSE });
 
         msg_print(_("『銀の戦車』プラス『アヌビス神』二刀流ッ！", "*Silver Chariot* plus *Anubis God* Two Swords!"));
         rfu.set_flag(StatusRecalculatingFlag::BONUS);
         return;
     }
 
-    auto should_curse = item.get_flags().has(TR_PERSISTENT_CURSE) || item.curse_flags.has(CurseTraitType::PERSISTENT_CURSE);
-    should_curse &= item.curse_flags.has_not(CurseTraitType::HEAVY_CURSE);
-    if (!should_curse) {
+    const auto should_curse = item.get_flags().has(TR_PERSISTENT_CURSE) || item.curse_flags.has(CurseTraitType::PERSISTENT_CURSE);
+    if (!should_curse || !item.add_curses({ CurseTraitType::HEAVY_CURSE })) {
         return;
     }
 
     const auto item_name = describe_flavor(player_ptr, item, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-    item.curse_flags.set(CurseTraitType::HEAVY_CURSE);
     msg_print(_("悪意に満ちた黒いオーラが{}をとりまいた...", "There is a malignant black aura surrounding your {}..."), item_name);
-    item.feeling = FEEL_NONE;
     rfu.set_flag(StatusRecalculatingFlag::BONUS);
 }
 

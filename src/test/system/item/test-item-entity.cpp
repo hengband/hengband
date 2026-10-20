@@ -99,3 +99,80 @@ TEST_CASE("ItemEntity remove_curses keeps an identified item identified")
     CHECK_FALSE(item.is_cursed());
     CHECK(item.has_identification_flag(IdentificationFlag::KNOWN));
 }
+
+TEST_CASE("ItemEntity add_curses turns the feeling of a sensed item into a cursed one")
+{
+    ItemEntity item;
+    item.sense(FEEL_EXCELLENT);
+
+    CHECK(item.add_curses({ CurseTraitType::CURSED, CurseTraitType::HEAVY_CURSE }));
+    CHECK(item.curse_flags.has_all_of({ CurseTraitType::CURSED, CurseTraitType::HEAVY_CURSE }));
+    CHECK(item.feeling == FEEL_WORTHLESS);
+    CHECK(item.has_identification_flag(IdentificationFlag::SENSE));
+}
+
+TEST_CASE("ItemEntity add_curses leaves an unsensed item without a feeling")
+{
+    ItemEntity item;
+
+    CHECK(item.add_curses({ CurseTraitType::CURSED }));
+    CHECK(item.feeling == FEEL_NONE);
+    CHECK_FALSE(item.has_identification_flag(IdentificationFlag::SENSE));
+}
+
+TEST_CASE("ItemEntity add_curses keeps the feeling when no curse is added")
+{
+    ItemEntity item;
+    item.curse_flags.set(CurseTraitType::CURSED);
+    item.sense(FEEL_CURSED);
+
+    CHECK_FALSE(item.add_curses({ CurseTraitType::CURSED }));
+    CHECK(item.feeling == FEEL_CURSED);
+}
+
+TEST_CASE("ItemEntity add_curses adds the curses when only some of them are new")
+{
+    ItemEntity item;
+    item.curse_flags.set(CurseTraitType::CURSED);
+    item.sense(FEEL_AVERAGE);
+
+    CHECK(item.add_curses({ CurseTraitType::CURSED, CurseTraitType::HEAVY_CURSE }));
+    CHECK(item.curse_flags.has(CurseTraitType::HEAVY_CURSE));
+    CHECK(item.feeling == FEEL_CURSED);
+}
+
+TEST_CASE("ItemEntity add_curses keeps a sensed feeling that already shows the curse")
+{
+    for (const auto feel : { FEEL_TERRIBLE, FEEL_WORTHLESS, FEEL_CURSED }) {
+        ItemEntity item;
+        item.curse_flags.set(CurseTraitType::CURSED);
+        item.sense(feel);
+        CAPTURE(static_cast<int>(feel));
+
+        CHECK(item.add_curses({ CurseTraitType::HEAVY_CURSE }));
+        CHECK(item.feeling == feel);
+    }
+}
+
+TEST_CASE("ItemEntity match_feeling_to_curses keeps only a curse feeling on an unsensed item")
+{
+    ItemEntity cursed_feeling_item;
+    cursed_feeling_item.feeling = FEEL_CURSED;
+    cursed_feeling_item.match_feeling_to_curses();
+    CHECK(cursed_feeling_item.feeling == FEEL_CURSED);
+
+    ItemEntity average_feeling_item;
+    average_feeling_item.feeling = FEEL_AVERAGE;
+    average_feeling_item.match_feeling_to_curses();
+    CHECK(average_feeling_item.feeling == FEEL_NONE);
+}
+
+TEST_CASE("ItemEntity match_feeling_to_curses leaves an identified item without a feeling")
+{
+    ItemEntity item;
+    item.mark_as_known();
+    item.set_identification_flag(IdentificationFlag::SENSE); // 呪われた品を装備すると鑑定済みでも付く
+    item.match_feeling_to_curses();
+
+    CHECK(item.feeling == FEEL_NONE);
+}
