@@ -227,8 +227,8 @@ static tl::expected<void, parse_error_type> load_town_preferences()
     try {
         const auto data = loader.parse();
         TownPreferencesLegend legend;
-        if (const auto err = TownPreferencesReader(data).read(legend, parse_quest_legend_cell); err != PARSE_ERROR_NONE) {
-            return tl::make_unexpected(err);
+        if (const auto result = TownPreferencesReader(data).read(legend, parse_quest_legend_cell); !result) {
+            return result;
         }
 
         for (const auto &[symbol, grid] : legend) {

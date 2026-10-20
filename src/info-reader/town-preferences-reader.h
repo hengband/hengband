@@ -26,7 +26,7 @@ public:
     TownPreferencesReader &operator=(TownPreferencesReader &&) = delete;
 
     /*! @brief 全件成功した場合に限り出力を置き換える。 */
-    parse_error_type read(TownPreferencesLegend &legend, TownPreferencesCellParser parse_cell) const;
+    tl::expected<void, parse_error_type> read(TownPreferencesLegend &legend, TownPreferencesCellParser parse_cell) const;
 
 private:
     const nlohmann::json &data;
