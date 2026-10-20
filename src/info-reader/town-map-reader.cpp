@@ -114,37 +114,37 @@ TownMapReader::TownMapReader(const nlohmann::json &data)
  * 地形・建物への適用はfixed-map-parser側で行う。建物専用モードでも凡例と建物は
  * 全件検証し、マップと開始位置の読み取りだけを省略する。
  */
-parse_error_type TownMapReader::read(TownMapDefinition &definition, int maximum_height, int maximum_width, bool only_buildings) const
+tl::expected<void, parse_error_type> TownMapReader::read(TownMapDefinition &definition, int maximum_height, int maximum_width, bool only_buildings) const
 {
     if (!this->data.is_object() || !this->data.contains("version") || !this->data["version"].is_number_integer() || this->data["version"] != 2) {
-        return PARSE_ERROR_INVALID_TYPE;
+        return tl::make_unexpected(PARSE_ERROR_INVALID_TYPE);
     }
     for (const auto *field : { "featureRules", "mapVariants", "buildingRules", "startingPositions" }) {
         if (!this->data.contains(field) || !this->data[field].is_array()) {
-            return PARSE_ERROR_INVALID_TYPE;
+            return tl::make_unexpected(PARSE_ERROR_INVALID_TYPE);
         }
     }
     if (this->data["mapVariants"].empty() || this->data["startingPositions"].empty()) {
-        return PARSE_ERROR_INVALID_VALUE;
+        return tl::make_unexpected(PARSE_ERROR_INVALID_VALUE);
     }
 
     TownMapDefinition parsed;
     if (const auto result = this->read_features(parsed); !result) {
-        return result.error();
+        return result;
     }
     if (const auto result = this->read_buildings(parsed); !result) {
-        return result.error();
+        return result;
     }
     if (!only_buildings) {
         if (const auto result = this->read_maps(parsed, maximum_height, maximum_width); !result) {
-            return result.error();
+            return result;
         }
         if (const auto result = this->read_starts(parsed); !result) {
-            return result.error();
+            return result;
         }
     }
     definition = std::move(parsed);
-    return PARSE_ERROR_NONE;
+    return {};
 }
 
 tl::expected<void, parse_error_type> TownMapReader::read_features(TownMapDefinition &definition) const

@@ -399,8 +399,8 @@ static tl::expected<void, parse_error_type> parse_town_map_jsonc(PlayerType *pla
         const auto data = loader.parse();
         TownMapDefinition definition;
         const bool only_buildings = (init_flags & INIT_ONLY_BUILDINGS) != 0;
-        if (const auto err = TownMapReader(data).read(definition, MAX_HGT, MAX_WID, only_buildings); err != PARSE_ERROR_NONE) {
-            return tl::make_unexpected(err);
+        if (const auto result = TownMapReader(data).read(definition, MAX_HGT, MAX_WID, only_buildings); !result) {
+            return result;
         }
         auto y = 0;
         auto x = 0;

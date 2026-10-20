@@ -85,7 +85,7 @@ public:
     TownMapReader &operator=(const TownMapReader &) = delete;
     TownMapReader &operator=(TownMapReader &&) = delete;
 
-    parse_error_type read(TownMapDefinition &definition, int maximum_height, int maximum_width, bool only_buildings = false) const;
+    tl::expected<void, parse_error_type> read(TownMapDefinition &definition, int maximum_height, int maximum_width, bool only_buildings = false) const;
 
 private:
     tl::expected<void, parse_error_type> read_features(TownMapDefinition &definition) const;

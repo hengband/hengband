@@ -21,6 +21,7 @@
 #include "system/system-variables.h"
 #include "system/terrain/terrain-definition.h"
 #include "system/terrain/terrain-list.h"
+#include "test/info-reader/parse-result-helpers.h"
 #include "test/info-reader/scoped-reader-state.h"
 #include "test/scoped-vector-wrapper.h"
 #include "test/system/artifact-list-test-access.h"
@@ -35,6 +36,7 @@
 #include <stdexcept>
 #include <string>
 #include <string_view>
+#include <tl/expected.hpp>
 #include <utility>
 
 namespace test {
@@ -203,11 +205,11 @@ TownMapDefinition read_reward_town_map(FloorType &floor, ArtifactDefinition arti
     fields["object"] = "!";
     fields["artifact"] = "!";
     TownMapDefinition definition;
-    REQUIRE(TownMapReader(data).read(definition, 3, 3) == PARSE_ERROR_NONE);
+    REQUIRE(TownMapReader(data).read(definition, 3, 3).has_value());
     return definition;
 }
 
-parse_error_type read_town(const nlohmann::json &data, bool only_buildings = false)
+tl::expected<void, parse_error_type> read_town(const nlohmann::json &data, bool only_buildings = false)
 {
     TownMapDefinition definition;
     return TownMapReader(data).read(definition, 3, 3, only_buildings);
@@ -235,7 +237,7 @@ TEST_CASE("TownMapReader retains ordered definitions, conditions and UTF-8 text"
     data["buildingRules"][0]["locale"] = "ja";
     data["buildingRules"][0]["fields"][0] = utf8_name;
     TownMapDefinition definition;
-    REQUIRE(TownMapReader(data).read(definition, 3, 3) == PARSE_ERROR_NONE);
+    REQUIRE(TownMapReader(data).read(definition, 3, 3).has_value());
     REQUIRE(definition.features.size() == 2);
     CHECK(definition.features[0].symbol == '#');
     CHECK(definition.features[0].terrain == "WALL");
@@ -281,7 +283,7 @@ TEST_CASE("TownMapReader keeps percent and M as map payload and realm membership
     }
 
     TownMapDefinition definition;
-    REQUIRE(TownMapReader(data).read(definition, 3, 3) == PARSE_ERROR_NONE);
+    REQUIRE(TownMapReader(data).read(definition, 3, 3).has_value());
     REQUIRE(definition.features.size() == 2);
     CHECK(definition.features[0].symbol == '%');
     CHECK(definition.features[1].symbol == 'M');
@@ -306,14 +308,14 @@ TEST_CASE("TownMapReader replaces output only after complete validation")
 {
     auto data = make_town_map();
     TownMapDefinition definition;
-    REQUIRE(TownMapReader(data).read(definition, 3, 3) == PARSE_ERROR_NONE);
+    REQUIRE(TownMapReader(data).read(definition, 3, 3).has_value());
     data["featureRules"][0]["symbol"] = ".";
     data["startingPositions"][0]["x"] = 3;
-    CHECK(TownMapReader(data).read(definition, 3, 3) == PARSE_ERROR_INVALID_VALUE);
+    CHECK(test::to_error_code(TownMapReader(data).read(definition, 3, 3)) == PARSE_ERROR_INVALID_VALUE);
     CHECK(definition.features[0].symbol == '#');
     CHECK(definition.starts[0].x == 1);
     data["startingPositions"][0]["x"] = 2;
-    REQUIRE(TownMapReader(data).read(definition, 3, 3) == PARSE_ERROR_NONE);
+    REQUIRE(TownMapReader(data).read(definition, 3, 3).has_value());
     CHECK(definition.features.size() == 1);
     CHECK(definition.features[0].symbol == '.');
     CHECK(definition.starts[0].x == 2);
@@ -324,25 +326,25 @@ TEST_CASE("TownMapReader validates root and conditions on every rule")
     for (const auto *field : { "featureRules", "buildingRules", "mapVariants", "startingPositions" }) {
         auto data = make_town_map();
         data.erase(field);
-        CHECK(read_town(data) == PARSE_ERROR_INVALID_TYPE);
+        CHECK(test::to_error_code(read_town(data)) == PARSE_ERROR_INVALID_TYPE);
         data = make_town_map();
         data[field] = nullptr;
-        CHECK(read_town(data) == PARSE_ERROR_INVALID_TYPE);
+        CHECK(test::to_error_code(read_town(data)) == PARSE_ERROR_INVALID_TYPE);
         for (const auto &condition : { nlohmann::json(nullptr), nlohmann::json(false), nlohmann::json("") }) {
             data = make_town_map();
             data[field][0]["when"] = condition;
-            CHECK(read_town(data) == PARSE_ERROR_INVALID_TYPE);
+            CHECK(test::to_error_code(read_town(data)) == PARSE_ERROR_INVALID_TYPE);
         }
     }
     for (const auto &version : { nlohmann::json(1), nlohmann::json(2.0), nlohmann::json("2") }) {
         auto data = make_town_map();
         data["version"] = version;
-        CHECK(read_town(data) == PARSE_ERROR_INVALID_TYPE);
+        CHECK(test::to_error_code(read_town(data)) == PARSE_ERROR_INVALID_TYPE);
     }
     for (const auto *field : { "mapVariants", "startingPositions" }) {
         auto data = make_town_map();
         data[field] = nlohmann::json::array();
-        CHECK(read_town(data) == PARSE_ERROR_INVALID_VALUE);
+        CHECK(test::to_error_code(read_town(data)) == PARSE_ERROR_INVALID_VALUE);
     }
 }
 
@@ -352,20 +354,20 @@ TEST_CASE("TownMapReader validates feature token grammar and narrowing bounds")
         for (const auto *token : { "0", "-1", "*", "*32767", "32767" }) {
             auto data = make_town_map();
             data["featureRules"][0]["definition"][field] = token;
-            CHECK(read_town(data) == PARSE_ERROR_NONE);
+            CHECK(read_town(data).has_value());
         }
         for (const auto *token : { "", "1x", "+1", "*-1", "2147483648", "0:1", "0/1", "0\\1" }) {
             auto data = make_town_map();
             data["featureRules"][0]["when"] = "0"; // Inactive rules must still be validated.
             data["featureRules"][0]["definition"][field] = token;
-            CHECK(read_town(data) == PARSE_ERROR_INVALID_VALUE);
+            CHECK(test::to_error_code(read_town(data)) == PARSE_ERROR_INVALID_VALUE);
         }
     }
     for (const auto *field : { "monster", "object", "artifact" }) {
         auto data = make_town_map();
         for (const auto *token : { "32768", "*32768", "-32769" }) {
             data["featureRules"][0]["definition"][field] = token;
-            CHECK(read_town(data) == PARSE_ERROR_INVALID_VALUE);
+            CHECK(test::to_error_code(read_town(data)) == PARSE_ERROR_INVALID_VALUE);
         }
     }
     auto data = make_town_map();
@@ -373,10 +375,10 @@ TEST_CASE("TownMapReader validates feature token grammar and narrowing bounds")
     data["featureRules"][0]["definition"]["object"] = "!";
     data["featureRules"][0]["definition"]["artifact"] = "!";
     data["featureRules"][0]["definition"]["ego"] = "-2147483648";
-    CHECK(read_town(data) == PARSE_ERROR_NONE);
+    CHECK(read_town(data).has_value());
     for (const auto *token : { "c", "c-1", "c32768", "-32768", "!" }) {
         data["featureRules"][0]["definition"]["monster"] = token;
-        CHECK(read_town(data) == PARSE_ERROR_INVALID_VALUE);
+        CHECK(test::to_error_code(read_town(data)) == PARSE_ERROR_INVALID_VALUE);
     }
 }
 
@@ -386,28 +388,28 @@ TEST_CASE("TownMapReader rejects out of range JSON integers before conversion")
         for (const auto &value : { nlohmann::json(0.0), nlohmann::json(std::numeric_limits<uint64_t>::max()), nlohmann::json("0") }) {
             auto data = make_town_map();
             data["featureRules"][0]["definition"][field] = value;
-            CHECK(read_town(data) == PARSE_ERROR_INVALID_TYPE);
+            CHECK(test::to_error_code(read_town(data)) == PARSE_ERROR_INVALID_TYPE);
         }
     }
     auto data = make_town_map();
     data["featureRules"][0]["definition"]["caveInfo"] = std::numeric_limits<int>::max();
     for (const int value : { -32768, 32767 }) {
         data["featureRules"][0]["definition"]["special"] = value;
-        CHECK(read_town(data) == PARSE_ERROR_NONE);
+        CHECK(read_town(data).has_value());
     }
     for (const int value : { -32769, 32768 }) {
         CAPTURE(value);
         data["featureRules"][0]["definition"]["special"] = value;
-        CHECK(read_town(data) == PARSE_ERROR_INVALID_TYPE);
+        CHECK(test::to_error_code(read_town(data)) == PARSE_ERROR_INVALID_TYPE);
     }
     data = make_town_map();
     data["featureRules"][0]["definition"]["caveInfo"] = -1;
-    CHECK(read_town(data) == PARSE_ERROR_INVALID_TYPE);
+    CHECK(test::to_error_code(read_town(data)) == PARSE_ERROR_INVALID_TYPE);
     for (const auto *coordinate : { "x", "y" }) {
         for (const auto &value : { nlohmann::json(-1), nlohmann::json(3), nlohmann::json(std::numeric_limits<uint64_t>::max()) }) {
             data = make_town_map();
             data["startingPositions"][0][coordinate] = value;
-            CHECK(read_town(data) == PARSE_ERROR_INVALID_VALUE);
+            CHECK(test::to_error_code(read_town(data)) == PARSE_ERROR_INVALID_VALUE);
         }
     }
 }
@@ -418,30 +420,30 @@ TEST_CASE("TownMapReader validates building commands and numeric fields")
     auto &rule = data["buildingRules"][0];
     for (const auto &index : { nlohmann::json(-1), nlohmann::json(MAX_BUILDINGS), nlohmann::json(std::numeric_limits<uint64_t>::max()) }) {
         rule["index"] = index;
-        CHECK(read_town(data) == PARSE_ERROR_INVALID_VALUE);
+        CHECK(test::to_error_code(read_town(data)) == PARSE_ERROR_INVALID_VALUE);
     }
     rule["index"] = MAX_BUILDINGS - 1;
     rule["command"] = "A";
     rule["fields"] = { "7", "Action", "0", "-1", "a", "0", "0" };
-    CHECK(read_town(data) == PARSE_ERROR_NONE);
+    CHECK(read_town(data).has_value());
     for (const auto *index : { "-1", "8", "2147483648" }) {
         rule["fields"][0] = index;
-        CHECK(read_town(data) == PARSE_ERROR_INVALID_VALUE);
+        CHECK(test::to_error_code(read_town(data)) == PARSE_ERROR_INVALID_VALUE);
     }
     rule["fields"][0] = "0";
     for (const int index : { 2, 3, 5, 6 }) {
         rule["fields"][index] = "2147483648";
-        CHECK(read_town(data) == PARSE_ERROR_INVALID_VALUE);
+        CHECK(test::to_error_code(read_town(data)) == PARSE_ERROR_INVALID_VALUE);
         rule["fields"][index] = "0";
     }
     for (const auto &[command, count] : { std::pair{ "C", static_cast<int>(PLAYER_CLASS_TYPE_MAX) }, std::pair{ "M", static_cast<int>(MAX_MAGIC) }, std::pair{ "R", MAX_RACES } }) {
         rule["command"] = command;
         rule["fields"] = std::vector<std::string>(count, "0");
-        CHECK(read_town(data) == PARSE_ERROR_NONE);
+        CHECK(read_town(data).has_value());
         rule["fields"].push_back("0");
-        CHECK(read_town(data) == PARSE_ERROR_INVALID_VALUE);
+        CHECK(test::to_error_code(read_town(data)) == PARSE_ERROR_INVALID_VALUE);
         rule["fields"] = nlohmann::json::array();
-        CHECK(read_town(data) == PARSE_ERROR_INVALID_VALUE);
+        CHECK(test::to_error_code(read_town(data)) == PARSE_ERROR_INVALID_VALUE);
     }
 }
 
@@ -454,7 +456,7 @@ TEST_CASE("TownMapReader preserves JSON integer error categories and output on f
     };
     const auto original = make_town_map();
     TownMapDefinition definition;
-    REQUIRE(TownMapReader(original).read(definition, 3, 3) == PARSE_ERROR_NONE);
+    REQUIRE(TownMapReader(original).read(definition, 3, 3).has_value());
     for (const auto &field : {
              Field{ "featureRules", "caveInfo", PARSE_ERROR_INVALID_TYPE },
              Field{ "featureRules", "special", PARSE_ERROR_INVALID_TYPE },
@@ -490,7 +492,7 @@ TEST_CASE("TownMapReader preserves JSON integer error categories and output on f
                 if (missing) {
                     fields.erase(field.name);
                 }
-                CHECK(TownMapReader(data).read(definition, 3, 3) == (missing ? PARSE_ERROR_INVALID_TYPE : expected));
+                CHECK(test::to_error_code(TownMapReader(data).read(definition, 3, 3)) == (missing ? PARSE_ERROR_INVALID_TYPE : expected));
                 REQUIRE(definition.features.size() == 1);
                 REQUIRE(definition.buildings.size() == 1);
                 REQUIRE(definition.maps.size() == 1);
@@ -509,17 +511,17 @@ TEST_CASE("TownMapReader rejects legacy delimiters in building text")
     for (const auto *text : { "A:B", "A/B", "A\\B", "A\nB", "A\rB" }) {
         auto data = make_town_map();
         data["buildingRules"][0]["fields"][0] = text;
-        CHECK(read_town(data) == PARSE_ERROR_INVALID_VALUE);
+        CHECK(test::to_error_code(read_town(data)) == PARSE_ERROR_INVALID_VALUE);
     }
     auto data = make_town_map();
     data["buildingRules"][0]["fields"] = { "Building", "Owner" };
-    CHECK(read_town(data) == PARSE_ERROR_INVALID_VALUE);
+    CHECK(test::to_error_code(read_town(data)) == PARSE_ERROR_INVALID_VALUE);
     data = make_town_map();
     data["buildingRules"][0]["locale"] = "other";
-    CHECK(read_town(data) == PARSE_ERROR_INVALID_VALUE);
+    CHECK(test::to_error_code(read_town(data)) == PARSE_ERROR_INVALID_VALUE);
     data["buildingRules"][0]["locale"] = "en";
     data["buildingRules"][0]["command"] = "Unknown";
-    CHECK(read_town(data) == PARSE_ERROR_INVALID_VALUE);
+    CHECK(test::to_error_code(read_town(data)) == PARSE_ERROR_INVALID_VALUE);
 }
 
 TEST_CASE("TownMapReader validates rectangular printable maps and all start bounds")
@@ -529,17 +531,17 @@ TEST_CASE("TownMapReader validates rectangular printable maps and all start boun
         auto data = make_town_map();
         data["mapVariants"][0]["when"] = "0";
         data["mapVariants"][0]["rows"] = rows;
-        CHECK(read_town(data) == PARSE_ERROR_INVALID_VALUE);
+        CHECK(test::to_error_code(read_town(data)) == PARSE_ERROR_INVALID_VALUE);
     }
     auto data = make_town_map();
     data["mapVariants"].push_back({ { "when", "0" }, { "rows", { "#" } } });
-    CHECK(read_town(data) == PARSE_ERROR_INVALID_VALUE);
+    CHECK(test::to_error_code(read_town(data)) == PARSE_ERROR_INVALID_VALUE);
     data["startingPositions"][0]["x"] = 0;
     data["startingPositions"][0]["y"] = 0;
-    CHECK(read_town(data) == PARSE_ERROR_NONE);
+    CHECK(read_town(data).has_value());
     TownMapDefinition definition;
-    CHECK(TownMapReader(data).read(definition, 0, 3) == PARSE_ERROR_INVALID_VALUE);
-    CHECK(TownMapReader(data).read(definition, 3, 0) == PARSE_ERROR_INVALID_VALUE);
+    CHECK(test::to_error_code(TownMapReader(data).read(definition, 0, 3)) == PARSE_ERROR_INVALID_VALUE);
+    CHECK(test::to_error_code(TownMapReader(data).read(definition, 3, 0)) == PARSE_ERROR_INVALID_VALUE);
 }
 
 TEST_CASE("TownMapReader building-only mode skips map and start contents, not root requirements")
@@ -548,22 +550,22 @@ TEST_CASE("TownMapReader building-only mode skips map and start contents, not ro
     data["mapVariants"] = { nullptr };
     data["startingPositions"] = { false };
     TownMapDefinition definition;
-    REQUIRE(TownMapReader(data).read(definition, 0, 0, true) == PARSE_ERROR_NONE);
+    REQUIRE(TownMapReader(data).read(definition, 0, 0, true).has_value());
     CHECK(definition.features.size() == 1);
     CHECK(definition.buildings.size() == 1);
     CHECK(definition.maps.empty());
     CHECK(definition.starts.empty());
     data["featureRules"][0]["symbol"] = ":";
-    CHECK(read_town(data, true) == PARSE_ERROR_INVALID_VALUE);
+    CHECK(test::to_error_code(read_town(data, true)) == PARSE_ERROR_INVALID_VALUE);
     data = make_town_map();
     data["buildingRules"][0]["command"] = "?";
-    CHECK(read_town(data, true) == PARSE_ERROR_INVALID_VALUE);
+    CHECK(test::to_error_code(read_town(data, true)) == PARSE_ERROR_INVALID_VALUE);
     data = make_town_map();
     data["mapVariants"] = nlohmann::json::array();
-    CHECK(read_town(data, true) == PARSE_ERROR_INVALID_VALUE);
+    CHECK(test::to_error_code(read_town(data, true)) == PARSE_ERROR_INVALID_VALUE);
     data = make_town_map();
     data.erase("startingPositions");
-    CHECK(read_town(data, true) == PARSE_ERROR_INVALID_TYPE);
+    CHECK(test::to_error_code(read_town(data, true)) == PARSE_ERROR_INVALID_TYPE);
 }
 
 TEST_CASE("TownMapReader accepts unsigned integers produced by JSON parsing")
@@ -582,7 +584,7 @@ TEST_CASE("TownMapReader accepts unsigned integers produced by JSON parsing")
     REQUIRE(data["startingPositions"][0]["x"].is_number_unsigned());
     REQUIRE(data["startingPositions"][0]["y"].is_number_unsigned());
     TownMapDefinition definition;
-    REQUIRE(TownMapReader(data).read(definition, 3, 3) == PARSE_ERROR_NONE);
+    REQUIRE(TownMapReader(data).read(definition, 3, 3).has_value());
     CHECK(definition.features[0].cell.grid.cave_info == std::numeric_limits<int>::max());
     CHECK(definition.features[0].cell.grid.special == 32767);
     CHECK(definition.buildings[0].index == MAX_BUILDINGS - 1);
@@ -595,7 +597,7 @@ TEST_CASE("TownMapReader accepts unsigned integers produced by JSON parsing")
     input["startingPositions"][0]["x"] = 0;
     input["startingPositions"][0]["y"] = 0;
     data = nlohmann::json::parse(input.dump());
-    REQUIRE(TownMapReader(data).read(definition, 3, 3) == PARSE_ERROR_NONE);
+    REQUIRE(TownMapReader(data).read(definition, 3, 3).has_value());
     CHECK(definition.features[0].cell.grid.cave_info == 0);
     CHECK(definition.features[0].cell.grid.special == 0);
     CHECK(definition.buildings[0].index == 0);
@@ -612,12 +614,12 @@ TEST_CASE("TownMapReader preserves building action field error categories")
         rule["command"] = "A";
         rule["fields"] = { "0", "Action", "0", "0", "a", "0", "0" };
         rule["fields"][0] = value;
-        CHECK(read_town(data) == PARSE_ERROR_INVALID_VALUE);
+        CHECK(test::to_error_code(read_town(data)) == PARSE_ERROR_INVALID_VALUE);
         rule["fields"][0] = "0";
         for (const int index : { 1, 2, 3, 4, 5, 6 }) {
             CAPTURE(index);
             rule["fields"][index] = value;
-            CHECK(read_town(data) == PARSE_ERROR_INVALID_TYPE);
+            CHECK(test::to_error_code(read_town(data)) == PARSE_ERROR_INVALID_TYPE);
             rule["fields"][index] = "0";
         }
     }
@@ -627,7 +629,7 @@ TEST_CASE("TownMapReader leaves all output intact on failure at every validation
 {
     const auto original = make_town_map();
     TownMapDefinition definition;
-    REQUIRE(TownMapReader(original).read(definition, 3, 3) == PARSE_ERROR_NONE);
+    REQUIRE(TownMapReader(original).read(definition, 3, 3).has_value());
     for (const auto *stage : { "featureRules", "buildingRules", "mapVariants", "startingPositions" }) {
         CAPTURE(std::string(stage));
         auto data = original;
@@ -636,7 +638,7 @@ TEST_CASE("TownMapReader leaves all output intact on failure at every validation
         data["mapVariants"][0]["rows"][0] = "...";
         data["startingPositions"][0]["x"] = 2;
         data[stage].push_back(nullptr);
-        CHECK(TownMapReader(data).read(definition, 3, 3) == PARSE_ERROR_INVALID_TYPE);
+        CHECK(test::to_error_code(TownMapReader(data).read(definition, 3, 3)) == PARSE_ERROR_INVALID_TYPE);
         REQUIRE(definition.features.size() == 1);
         REQUIRE(definition.buildings.size() == 1);
         REQUIRE(definition.maps.size() == 1);
@@ -652,7 +654,7 @@ TEST_CASE("TownMapReader building-only reread preserves output on failure and re
 {
     auto data = make_town_map();
     TownMapDefinition definition;
-    REQUIRE(TownMapReader(data).read(definition, 3, 3) == PARSE_ERROR_NONE);
+    REQUIRE(TownMapReader(data).read(definition, 3, 3).has_value());
     REQUIRE_FALSE(definition.maps.empty());
     REQUIRE_FALSE(definition.starts.empty());
     data["featureRules"][0]["symbol"] = ".";
@@ -662,7 +664,7 @@ TEST_CASE("TownMapReader building-only reread preserves output on failure and re
         CAPTURE(invalid);
         auto bad = data;
         bad["buildingRules"].push_back(invalid);
-        CHECK(TownMapReader(bad).read(definition, 0, 0, true) == expected);
+        CHECK(test::to_error_code(TownMapReader(bad).read(definition, 0, 0, true)) == expected);
         REQUIRE(definition.features.size() == 1);
         REQUIRE(definition.buildings.size() == 1);
         REQUIRE(definition.maps.size() == 1);
@@ -672,7 +674,7 @@ TEST_CASE("TownMapReader building-only reread preserves output on failure and re
         CHECK(definition.maps[0].rows[0] == "###");
         CHECK(definition.starts[0].x == 1);
     }
-    REQUIRE(TownMapReader(data).read(definition, 0, 0, true) == PARSE_ERROR_NONE);
+    REQUIRE(TownMapReader(data).read(definition, 0, 0, true).has_value());
     REQUIRE(definition.features.size() == 1);
     REQUIRE(definition.buildings.size() == 1);
     CHECK(definition.features[0].symbol == '.');
@@ -695,7 +697,7 @@ TEST_CASE("TownMapReader rejects non ASCII feature and row bytes without publish
             }
             TownMapDefinition definition;
             definition.features.emplace_back().symbol = '?';
-            CHECK(TownMapReader(data).read(definition, 10, 10) == PARSE_ERROR_INVALID_VALUE);
+            CHECK(test::to_error_code(TownMapReader(data).read(definition, 10, 10)) == PARSE_ERROR_INVALID_VALUE);
             REQUIRE(definition.features.size() == 1);
             CHECK(definition.features.front().symbol == '?');
             CHECK(definition.maps.empty());
@@ -709,25 +711,25 @@ TEST_CASE("TownMapReader validates feature symbols and token types")
         CAPTURE(hex_bytes(symbol));
         auto data = make_town_map();
         data["featureRules"][0]["symbol"] = symbol;
-        CHECK(read_town(data) == PARSE_ERROR_INVALID_VALUE);
+        CHECK(test::to_error_code(read_town(data)) == PARSE_ERROR_INVALID_VALUE);
     }
     for (const auto *symbol : { " ", "~" }) {
         CAPTURE(hex_bytes(symbol));
         auto data = make_town_map();
         data["featureRules"][0]["symbol"] = symbol;
-        CHECK(read_town(data) == PARSE_ERROR_NONE);
+        CHECK(read_town(data).has_value());
     }
     for (const auto *field : { "terrain", "monster", "object", "ego", "artifact", "trap" }) {
         CAPTURE(std::string(field));
         auto data = make_town_map();
         data["featureRules"][0]["definition"][field] = nullptr;
-        CHECK(read_town(data) == PARSE_ERROR_INVALID_TYPE);
+        CHECK(test::to_error_code(read_town(data)) == PARSE_ERROR_INVALID_TYPE);
         data["featureRules"][0]["definition"][field] = "bad/field";
-        CHECK(read_town(data) == PARSE_ERROR_INVALID_VALUE);
+        CHECK(test::to_error_code(read_town(data)) == PARSE_ERROR_INVALID_VALUE);
         data["featureRules"][0]["definition"][field] = 0;
-        CHECK(read_town(data) == PARSE_ERROR_INVALID_TYPE);
+        CHECK(test::to_error_code(read_town(data)) == PARSE_ERROR_INVALID_TYPE);
         data["featureRules"][0]["definition"].erase(field);
-        CHECK(read_town(data) == PARSE_ERROR_INVALID_TYPE);
+        CHECK(test::to_error_code(read_town(data)) == PARSE_ERROR_INVALID_TYPE);
     }
 }
 
@@ -754,7 +756,7 @@ TEST_CASE("TownMapReader rejects parsed unsigned integers immediately above each
         auto &value = std::string_view(boundary.section) == "featureRules" ? record["definition"][boundary.field] : record[boundary.field];
         value = nlohmann::json::parse(std::to_string(boundary.value));
         REQUIRE(value.is_number_unsigned());
-        CHECK(read_town(data) == boundary.error);
+        CHECK(test::to_error_code(read_town(data)) == boundary.error);
     }
 }
 
@@ -765,7 +767,7 @@ TEST_CASE("TownMapReader rejects wrong action field counts and malformed numeric
         auto data = make_town_map();
         data["buildingRules"][0]["command"] = "A";
         data["buildingRules"][0]["fields"] = std::vector<std::string>(count, "0");
-        CHECK(read_town(data) == PARSE_ERROR_INVALID_VALUE);
+        CHECK(test::to_error_code(read_town(data)) == PARSE_ERROR_INVALID_VALUE);
     }
     for (const int index : { 0, 2, 3, 5, 6 }) {
         CAPTURE(index);
@@ -775,7 +777,7 @@ TEST_CASE("TownMapReader rejects wrong action field counts and malformed numeric
             data["buildingRules"][0]["command"] = "A";
             data["buildingRules"][0]["fields"] = { "0", "Action", "0", "0", "a", "0", "0" };
             data["buildingRules"][0]["fields"][index] = value;
-            CHECK(read_town(data) == PARSE_ERROR_INVALID_VALUE);
+            CHECK(test::to_error_code(read_town(data)) == PARSE_ERROR_INVALID_VALUE);
         }
     }
     for (const auto *command : { "N", "C", "M", "R", "Z" }) {
@@ -787,7 +789,7 @@ TEST_CASE("TownMapReader rejects wrong action field counts and malformed numeric
             rule["command"] = command;
             rule["fields"] = std::vector<std::string>(std::string_view(command) == "N" ? 3 : 1, "0");
             rule["fields"][0] = value;
-            CHECK(read_town(data) == PARSE_ERROR_INVALID_TYPE);
+            CHECK(test::to_error_code(read_town(data)) == PARSE_ERROR_INVALID_TYPE);
         }
     }
 }
@@ -796,7 +798,7 @@ TEST_CASE("TownMapReader preserves output on root errors and value errors at eve
 {
     const auto original = make_town_map();
     TownMapDefinition definition;
-    REQUIRE(TownMapReader(original).read(definition, 3, 3) == PARSE_ERROR_NONE);
+    REQUIRE(TownMapReader(original).read(definition, 3, 3).has_value());
     for (const auto *failure : { "version", "emptyMaps", "missingFeatures", "symbol", "locale", "row", "coordinate" }) {
         CAPTURE(std::string(failure));
         auto data = original;
@@ -823,7 +825,7 @@ TEST_CASE("TownMapReader preserves output on root errors and value errors at eve
         } else {
             data["startingPositions"][0]["x"] = 3;
         }
-        CHECK(TownMapReader(data).read(definition, 3, 3) == expected);
+        CHECK(test::to_error_code(TownMapReader(data).read(definition, 3, 3)) == expected);
         REQUIRE(definition.features.size() == 1);
         REQUIRE(definition.buildings.size() == 1);
         REQUIRE(definition.maps.size() == 1);
@@ -847,16 +849,16 @@ TEST_CASE("TownMapReader reports the first failing stage in declaration order")
     data["mapVariants"][0]["when"] = "";
     data["startingPositions"][0]["x"] = 3;
     TownMapDefinition definition;
-    CHECK(TownMapReader(data).read(definition, 3, 3) == PARSE_ERROR_INVALID_TYPE);
+    CHECK(test::to_error_code(TownMapReader(data).read(definition, 3, 3)) == PARSE_ERROR_INVALID_TYPE);
     data["featureRules"][0].erase("when");
-    CHECK(TownMapReader(data).read(definition, 3, 3) == PARSE_ERROR_INVALID_VALUE);
+    CHECK(test::to_error_code(TownMapReader(data).read(definition, 3, 3)) == PARSE_ERROR_INVALID_VALUE);
     data["buildingRules"][0]["locale"] = "en";
-    CHECK(TownMapReader(data).read(definition, 3, 3, true) == PARSE_ERROR_NONE);
-    CHECK(TownMapReader(data).read(definition, 3, 3) == PARSE_ERROR_INVALID_TYPE);
+    CHECK(TownMapReader(data).read(definition, 3, 3, true).has_value());
+    CHECK(test::to_error_code(TownMapReader(data).read(definition, 3, 3)) == PARSE_ERROR_INVALID_TYPE);
     data["mapVariants"][0].erase("when");
-    CHECK(TownMapReader(data).read(definition, 3, 3) == PARSE_ERROR_INVALID_VALUE);
+    CHECK(test::to_error_code(TownMapReader(data).read(definition, 3, 3)) == PARSE_ERROR_INVALID_VALUE);
     data["startingPositions"][0]["x"] = 1;
-    REQUIRE(TownMapReader(data).read(definition, 3, 3) == PARSE_ERROR_NONE);
+    REQUIRE(TownMapReader(data).read(definition, 3, 3).has_value());
     CHECK(definition.starts.size() == 1);
 }
 
@@ -868,7 +870,7 @@ TEST_CASE("TownMapReader rejects nonprintable terrain and trap tokens")
             CAPTURE(hex_bytes(value));
             auto data = make_town_map();
             data["featureRules"][0]["definition"][field] = value;
-            CHECK(read_town(data) == PARSE_ERROR_INVALID_VALUE);
+            CHECK(test::to_error_code(read_town(data)) == PARSE_ERROR_INVALID_VALUE);
         }
     }
 }
@@ -948,7 +950,7 @@ TEST_CASE("TownMapReader typed building application preserves N A C R M Z contra
             data["buildingRules"][0]["command"] = test_case.command;
             data["buildingRules"][0]["fields"] = test_case.fields;
             TownMapDefinition definition;
-            REQUIRE(TownMapReader(data).read(definition, 3, 3) == PARSE_ERROR_NONE);
+            REQUIRE(TownMapReader(data).read(definition, 3, 3).has_value());
             REQUIRE(definition.buildings.size() == 1);
             buildings[1] = initial;
             REQUIRE(apply_town_building_rule(definition.buildings[0]) == PARSE_ERROR_NONE);
@@ -962,7 +964,7 @@ TEST_CASE("TownMapReader rejects building fields outside their storage range bef
 {
     const auto original = make_town_map();
     TownMapDefinition definition;
-    REQUIRE(TownMapReader(original).read(definition, 3, 3) == PARSE_ERROR_NONE);
+    REQUIRE(TownMapReader(original).read(definition, 3, 3).has_value());
     for (const auto *locale : { "en", "ja" }) {
         for (const auto number : { -32769, 32768, 65535, std::numeric_limits<int>::min(), std::numeric_limits<int>::max() }) {
             for (const auto *command : { "A", "C", "R", "M" }) {
@@ -983,7 +985,7 @@ TEST_CASE("TownMapReader rejects building fields outside their storage range bef
                     } else {
                         rule["fields"] = { "2", std::to_string(number) };
                     }
-                    CHECK(TownMapReader(data).read(definition, 3, 3) == PARSE_ERROR_INVALID_VALUE);
+                    CHECK(test::to_error_code(TownMapReader(data).read(definition, 3, 3)) == PARSE_ERROR_INVALID_VALUE);
                     REQUIRE(definition.buildings.size() == 1);
                     REQUIRE(std::holds_alternative<TownMapBuildingNames>(definition.buildings[0].directive));
                     CHECK(std::get<TownMapBuildingNames>(definition.buildings[0].directive).name == "Building");
@@ -1018,7 +1020,7 @@ TEST_CASE("TownMapReader preserves building signed sixteen bit boundaries and in
                 rule["fields"] = { std::to_string(number) };
             }
             TownMapDefinition definition;
-            REQUIRE(TownMapReader(data).read(definition, 3, 3) == PARSE_ERROR_NONE);
+            REQUIRE(TownMapReader(data).read(definition, 3, 3).has_value());
             buildings[1] = initial;
             REQUIRE(apply_town_building_rule(definition.buildings[0]) == PARSE_ERROR_NONE);
             const auto &building = buildings[1];
@@ -1046,7 +1048,7 @@ TEST_CASE("TownMapReader typed building application rejects narrowing before any
     auto data = make_town_map();
     data["buildingRules"][0]["locale"] = _("ja", "en");
     TownMapDefinition definition;
-    REQUIRE(TownMapReader(data).read(definition, 3, 3) == PARSE_ERROR_NONE);
+    REQUIRE(TownMapReader(data).read(definition, 3, 3).has_value());
     auto rule = definition.buildings[0];
     for (const auto number : { -32769, 32768, 65535, std::numeric_limits<int>::min(), std::numeric_limits<int>::max() }) {
         for (const auto restriction : { false, true }) {
@@ -1078,7 +1080,7 @@ TEST_CASE("TownMapReader typed building memberships default omitted entries and 
         data["buildingRules"][0]["command"] = command;
         data["buildingRules"][0]["fields"] = { "2" };
         TownMapDefinition definition;
-        REQUIRE(TownMapReader(data).read(definition, 3, 3) == PARSE_ERROR_NONE);
+        REQUIRE(TownMapReader(data).read(definition, 3, 3).has_value());
         REQUIRE(apply_town_building_rule(definition.buildings[0]) == PARSE_ERROR_NONE);
         const auto is_realm = std::string_view(command) == "M";
         const auto &members = std::string_view(command) == "C" ? buildings[1].member_class : (is_realm ? buildings[1].member_realm : buildings[1].member_race);
@@ -1110,7 +1112,7 @@ TEST_CASE("TownMapReader typed building application validates conversion before 
                 rule["fields"] = { invalid_utf8 };
             }
             TownMapDefinition definition;
-            REQUIRE(TownMapReader(data).read(definition, 3, 3) == PARSE_ERROR_NONE);
+            REQUIRE(TownMapReader(data).read(definition, 3, 3).has_value());
             const auto expected = utf8_to_sys(invalid_utf8) ? PARSE_ERROR_NONE : PARSE_ERROR_INVALID_VALUE;
             CHECK(apply_town_building_rule(definition.buildings[0]) == expected);
             // 英語版は文字コード変換が恒等変換のため、対象言語のN/Aは適用される。
@@ -1129,7 +1131,7 @@ TEST_CASE("TownMapReader typed building failures leave the target unchanged")
     auto data = make_town_map();
     data["buildingRules"][0]["locale"] = _("ja", "en");
     TownMapDefinition definition;
-    REQUIRE(TownMapReader(data).read(definition, 3, 3) == PARSE_ERROR_NONE);
+    REQUIRE(TownMapReader(data).read(definition, 3, 3).has_value());
     auto rule = definition.buildings[0];
     rule.index = MAX_BUILDINGS;
     CHECK(apply_town_building_rule(rule) == PARSE_ERROR_INVALID_VALUE);
@@ -1142,7 +1144,7 @@ TEST_CASE("TownMapReader typed building failures leave the target unchanged")
     data["buildingRules"].push_back(data["buildingRules"][0]);
     data["buildingRules"][1]["command"] = "A";
     data["buildingRules"][1]["fields"] = { "0", "Action", "0", "0", "a", "overflow", "0" };
-    CHECK(TownMapReader(data).read(definition, 3, 3) == PARSE_ERROR_INVALID_VALUE);
+    CHECK(test::to_error_code(TownMapReader(data).read(definition, 3, 3)) == PARSE_ERROR_INVALID_VALUE);
     REQUIRE(definition.buildings.size() == 1);
     CHECK(std::get<TownMapBuildingNames>(definition.buildings[0].directive).name == "Building");
     check_building(buildings[1], initial);
@@ -1168,7 +1170,7 @@ TEST_CASE("TownMapReader typed building application rejects embedded NUL before 
             }
             TownMapDefinition definition;
             // 区切り文字の検証とは別に、適用側でC文字列にできない文字を拒否する。
-            REQUIRE(TownMapReader(data).read(definition, 3, 3) == PARSE_ERROR_NONE);
+            REQUIRE(TownMapReader(data).read(definition, 3, 3).has_value());
             CHECK(apply_town_building_rule(definition.buildings[0]) == PARSE_ERROR_INVALID_VALUE);
             check_building(buildings[1], initial);
         }
@@ -1199,7 +1201,7 @@ TEST_CASE("TownMapReader applies typed feature token values and random flags")
             fields[field] = token;
         }
         TownMapDefinition definition;
-        REQUIRE(TownMapReader(data).read(definition, 3, 3) == PARSE_ERROR_NONE);
+        REQUIRE(TownMapReader(data).read(definition, 3, 3).has_value());
         const dungeon_grid expected{ .feature = state.floor_id(), .monster = value, .object = value, .ego = i2enum<EgoType>(value), .artifact = i2enum<FixedArtifactId>(value), .trap = state.trap_id(), .cave_info = std::numeric_limits<int>::max(), .special = -32768, .random = random };
         letter['#'] = {};
         REQUIRE(apply_town_map_feature(floor, definition.features.front()) == PARSE_ERROR_NONE);
@@ -1268,7 +1270,7 @@ TEST_CASE("TownMapReader applies random terrain trap clones and reward placehold
     fields["ego"] = "-2147483648";
     fields["special"] = 32767;
     TownMapDefinition definition;
-    REQUIRE(TownMapReader(data).read(definition, 3, 3) == PARSE_ERROR_NONE);
+    REQUIRE(TownMapReader(data).read(definition, 3, 3).has_value());
     const dungeon_grid expected{ .feature = 0, .monster = -32767, .object = 0, .ego = i2enum<EgoType>(std::numeric_limits<int>::min()), .artifact = FixedArtifactId::NONE, .trap = 0, .cave_info = 0, .special = 32767, .random = RANDOM_FEATURE | RANDOM_TRAP };
     letter['#'] = {};
     REQUIRE(apply_town_map_feature(floor, definition.features.front()) == PARSE_ERROR_NONE);
@@ -1291,7 +1293,7 @@ TEST_CASE("TownMapReader defers terrain resolution and publishes feature only on
         data["featureRules"][0]["definition"][field] = "TOWN_FEATURE_TEST_UNDEFINED";
         data["featureRules"][0]["when"] = "0";
         TownMapDefinition definition;
-        REQUIRE(TownMapReader(data).read(definition, 3, 3) == PARSE_ERROR_NONE);
+        REQUIRE(TownMapReader(data).read(definition, 3, 3).has_value());
         CHECK(definition.features.front().condition == "0");
         letter['#'].feature = 123;
         letter['#'].monster = 456;
