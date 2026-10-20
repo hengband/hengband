@@ -437,12 +437,8 @@ static bool display_auto_roller_result(PlayerType *player_ptr, bool prev, char *
 {
     BIT_FLAGS mode = 0;
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    static constexpr auto flags = {
-        StatusRecalculatingFlag::BONUS,
-        StatusRecalculatingFlag::HP,
-    };
     while (true) {
-        rfu.set_flags(flags);
+        rfu.request_bonus_and_max_hp_recalculation();
         update_creature(player_ptr);
         player_ptr->chp = player_ptr->mhp;
         player_ptr->csp = player_ptr->msp;

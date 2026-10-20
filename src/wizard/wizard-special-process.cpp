@@ -540,14 +540,8 @@ void wiz_learn_items_all(PlayerType *player_ptr)
 static void change_birth_flags()
 {
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    static constexpr auto flags_srf = {
-        StatusRecalculatingFlag::BONUS,
-        StatusRecalculatingFlag::HP,
-        StatusRecalculatingFlag::MP,
-        StatusRecalculatingFlag::SPELLS,
-    };
     rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
-    rfu.set_flags(flags_srf);
+    rfu.request_player_status_recalculation();
     static constexpr auto flags_mwrf = {
         MainWindowRedrawingFlag::BASIC,
         MainWindowRedrawingFlag::ABILITY_SCORE,

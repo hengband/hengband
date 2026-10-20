@@ -420,11 +420,7 @@ bool set_hero(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
         disturb(player_ptr, false, true);
     }
 
-    static constexpr auto flags = {
-        StatusRecalculatingFlag::BONUS,
-        StatusRecalculatingFlag::HP,
-    };
-    RedrawingFlagsUpdater::get_instance().set_flags(flags);
+    RedrawingFlagsUpdater::get_instance().request_bonus_and_max_hp_recalculation();
     handle_stuff(player_ptr);
     return true;
 }
@@ -486,11 +482,7 @@ bool set_mimic(PlayerType *player_ptr, TIME_EFFECT v, MimicKindType mimic_race_i
         MainWindowRedrawingFlag::TIMED_EFFECT,
     };
     rfu.set_flags(flags_mwrf);
-    static constexpr auto flags_srf = {
-        StatusRecalculatingFlag::BONUS,
-        StatusRecalculatingFlag::HP,
-    };
-    rfu.set_flags(flags_srf);
+    rfu.request_bonus_and_max_hp_recalculation();
     handle_stuff(player_ptr);
     return true;
 }
@@ -544,11 +536,7 @@ bool set_berserk(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
         disturb(player_ptr, false, true);
     }
 
-    static constexpr auto flags = {
-        StatusRecalculatingFlag::BONUS,
-        StatusRecalculatingFlag::HP,
-    };
-    RedrawingFlagsUpdater::get_instance().set_flags(flags);
+    RedrawingFlagsUpdater::get_instance().request_bonus_and_max_hp_recalculation();
     handle_stuff(player_ptr);
     return true;
 }
@@ -658,11 +646,7 @@ bool set_tsuyoshi(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
         disturb(player_ptr, false, true);
     }
 
-    static constexpr auto flags = {
-        StatusRecalculatingFlag::BONUS,
-        StatusRecalculatingFlag::HP,
-    };
-    rfu.set_flags(flags);
+    rfu.request_bonus_and_max_hp_recalculation();
     handle_stuff(player_ptr);
     return true;
 }

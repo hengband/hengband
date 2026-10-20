@@ -557,13 +557,7 @@ tl::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type sp
                     set_action(player_ptr, ACTION_NONE);
                 }
 
-                static constexpr auto flags = {
-                    StatusRecalculatingFlag::BONUS,
-                    StatusRecalculatingFlag::HP,
-                    StatusRecalculatingFlag::MP,
-                    StatusRecalculatingFlag::SPELLS,
-                };
-                rfu.set_flags(flags);
+                rfu.request_player_status_recalculation();
                 rfu.set_flag(MainWindowRedrawingFlag::EXTRA);
                 return "";
             }
@@ -754,13 +748,7 @@ tl::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type sp
 
     if (!info) {
         auto &rfu = RedrawingFlagsUpdater::get_instance();
-        static constexpr auto flags_srf = {
-            StatusRecalculatingFlag::BONUS,
-            StatusRecalculatingFlag::HP,
-            StatusRecalculatingFlag::MP,
-            StatusRecalculatingFlag::SPELLS,
-        };
-        rfu.set_flags(flags_srf);
+        rfu.request_player_status_recalculation();
         rfu.set_flag(MainWindowRedrawingFlag::EXTRA);
         rfu.request_hp_mp_redrawing();
     }

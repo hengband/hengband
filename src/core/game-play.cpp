@@ -120,13 +120,7 @@ static void send_waiting_record(PlayerType *player_ptr)
         quit("");
     }
 
-    static constexpr auto flags = {
-        StatusRecalculatingFlag::BONUS,
-        StatusRecalculatingFlag::HP,
-        StatusRecalculatingFlag::MP,
-        StatusRecalculatingFlag::SPELLS,
-    };
-    RedrawingFlagsUpdater::get_instance().set_flags(flags);
+    RedrawingFlagsUpdater::get_instance().request_player_status_recalculation();
     update_creature(player_ptr);
     player_ptr->is_dead = true;
     auto &world = AngbandWorld::get_instance();

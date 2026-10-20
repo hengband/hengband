@@ -66,13 +66,7 @@ void SpellHex::stop_all_spells()
     }
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    static constexpr auto flags_srf = {
-        StatusRecalculatingFlag::BONUS,
-        StatusRecalculatingFlag::HP,
-        StatusRecalculatingFlag::MP,
-        StatusRecalculatingFlag::SPELLS,
-    };
-    rfu.set_flags(flags_srf);
+    rfu.request_player_status_recalculation();
     rfu.set_flag(MainWindowRedrawingFlag::EXTRA);
     rfu.request_hp_mp_redrawing();
 }
@@ -135,13 +129,7 @@ bool SpellHex::stop_spells_with_selection()
     }
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    static constexpr auto flags_srf = {
-        StatusRecalculatingFlag::BONUS,
-        StatusRecalculatingFlag::HP,
-        StatusRecalculatingFlag::MP,
-        StatusRecalculatingFlag::SPELLS,
-    };
-    rfu.set_flags(flags_srf);
+    rfu.request_player_status_recalculation();
     rfu.set_flag(MainWindowRedrawingFlag::EXTRA);
     rfu.request_hp_mp_redrawing();
     return choice.has_value();
@@ -256,11 +244,7 @@ bool SpellHex::process_mana_cost(const bool need_restart)
     msg_print(_("詠唱を再開した。", "You restart casting."));
     this->player_ptr->action = ACTION_SPELL;
     rfu.request_monster_update_and_map_redrawing();
-    static constexpr auto flags_srf = {
-        StatusRecalculatingFlag::BONUS,
-        StatusRecalculatingFlag::HP,
-    };
-    rfu.set_flags(flags_srf);
+    rfu.request_bonus_and_max_hp_recalculation();
     static constexpr auto flags_mwrf = {
         MainWindowRedrawingFlag::TIMED_EFFECT,
         MainWindowRedrawingFlag::ACTION,

@@ -63,11 +63,7 @@ void check_music(PlayerType *player_ptr)
         msg_print(_("歌を再開した。", "You resume singing."));
         player_ptr->action = ACTION_SING;
         rfu.request_monster_update_and_map_redrawing();
-        static constexpr auto flags_srf = {
-            StatusRecalculatingFlag::BONUS,
-            StatusRecalculatingFlag::HP,
-        };
-        rfu.set_flags(flags_srf);
+        rfu.request_bonus_and_max_hp_recalculation();
         static constexpr auto flags_mwrf = {
             MainWindowRedrawingFlag::TIMED_EFFECT,
             MainWindowRedrawingFlag::ACTION,
