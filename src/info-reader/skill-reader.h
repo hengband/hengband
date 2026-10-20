@@ -25,7 +25,7 @@ public:
     SkillReader &operator=(const SkillReader &) = delete;
     SkillReader &operator=(SkillReader &&) = delete;
 
-    int read();
+    tl::expected<void, parse_error_type> read();
     const std::optional<SkillReadError> &error() const;
 
 private:

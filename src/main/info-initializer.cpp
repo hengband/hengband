@@ -188,12 +188,12 @@ void init_class_skills_info()
     class_skills_info.assign(PLAYER_CLASS_TYPE_MAX, {});
     auto parser = [](nlohmann::json &element) {
         SkillReader reader(element);
-        const auto err = reader.read();
-        if (err != PARSE_ERROR_NONE) {
+        const auto result = reader.read();
+        if (!result) {
             const auto &diagnostic = reader.error().value();
             quit(fmt::format(_("ClassSkillDefinitions.jsonc: 職業{}の{}: {}", "ClassSkillDefinitions.jsonc: class {} at {}: {}"), diagnostic.class_id, diagnostic.path, diagnostic.reason));
         }
-        return to_parse_result(err);
+        return result;
     };
     init_json("ClassSkillDefinitions.jsonc", "classes", DefinitionHashDataType::CLASS_SKILLS, class_skills_info, parser, [] {
         if (error_idx != PLAYER_CLASS_TYPE_MAX - 1) {

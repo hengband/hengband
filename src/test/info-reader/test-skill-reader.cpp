@@ -7,6 +7,7 @@
 #include "locale/language-switcher.h"
 #include "object/tval-types.h"
 #include "player/player-skill.h"
+#include "test/info-reader/parse-result-helpers.h"
 #include "test/info-reader/scoped-reader-state.h"
 #include "test/scoped-restore.h"
 #include <doctest/doctest.h>
@@ -37,8 +38,8 @@ TEST_CASE("SkillReader converts all weapon ranks and preserves raw skill experie
         data["weapons"]["BOW"]["max_ranks"][rank] = rank;
     }
     data["skills"]["RIDING"] = { { "start_exp", 500 }, { "max_exp", 5000 } };
-    const auto err = SkillReader(data).read();
-    REQUIRE(err == PARSE_ERROR_NONE);
+    const auto result = SkillReader(data).read();
+    REQUIRE(result.has_value());
     CHECK(error_idx == 0);
     constexpr int expected[] = { 0, 4000, 6000, 7000, 8000 };
     for (size_t rank = 0; rank < 5; ++rank) {
@@ -166,8 +167,8 @@ TEST_CASE("SkillReader rejects malformed records without modifying the destinati
         data["skills"]["SHIELD"] = { { "start_exp", 500 }, { "max_exp", 499 } };
     }
     SkillReader reader(data);
-    const auto err = reader.read();
-    CHECK(err != PARSE_ERROR_NONE);
+    const auto result = reader.read();
+    CHECK_FALSE(result.has_value());
     REQUIRE(reader.error().has_value());
     CHECK_FALSE(reader.error()->path.empty());
     CHECK_FALSE(reader.error()->reason.empty());
@@ -185,25 +186,25 @@ TEST_CASE("SkillReader rejects duplicate and missing class ids and can be reused
     class_skills_info.assign(29, {});
     error_idx = -1;
     auto data = make_class();
-    auto err = SkillReader(data).read();
-    REQUIRE(err == PARSE_ERROR_NONE);
-    err = SkillReader(data).read();
-    CHECK(err == PARSE_ERROR_NON_SEQUENTIAL_RECORDS);
+    auto result = SkillReader(data).read();
+    REQUIRE(result.has_value());
+    result = SkillReader(data).read();
+    CHECK(test::to_error_code(result) == PARSE_ERROR_NON_SEQUENTIAL_RECORDS);
     data["id"] = 2;
-    err = SkillReader(data).read();
-    CHECK(err == PARSE_ERROR_NON_SEQUENTIAL_RECORDS);
+    result = SkillReader(data).read();
+    CHECK(test::to_error_code(result) == PARSE_ERROR_NON_SEQUENTIAL_RECORDS);
     CHECK(error_idx == 0);
     for (int id = 1; id < 29; ++id) {
         data["id"] = id;
-        err = SkillReader(data).read();
-        CHECK(err == PARSE_ERROR_NONE);
+        result = SkillReader(data).read();
+        CHECK(result.has_value());
     }
     CHECK(error_idx == 28);
     class_skills_info.assign(29, {});
     error_idx = -1;
     data["id"] = 0;
-    err = SkillReader(data).read();
-    CHECK(err == PARSE_ERROR_NONE);
+    result = SkillReader(data).read();
+    CHECK(result.has_value());
 }
 
 TEST_CASE("SkillReader diagnostics identify the class field and cause")
@@ -363,8 +364,8 @@ TEST_CASE("SkillReader diagnostics identify the class field and cause")
         reason = _("初期ランク4が上限3を超えています", "start rank 4 exceeds maximum 3");
     }
     SkillReader reader(data);
-    const auto err = reader.read();
-    CHECK(err == expected);
+    const auto result = reader.read();
+    CHECK(test::to_error_code(result) == expected);
     REQUIRE(reader.error().has_value());
     CHECK(reader.error()->class_id == class_id);
     CHECK(reader.error()->path == path);
@@ -389,17 +390,17 @@ TEST_CASE("SkillReader clears stale diagnostics before another read")
     SkillReader reader(data);
     CHECK_FALSE(reader.error().has_value());
     data["skills"]["RIDING"]["max_exp"] = 8001;
-    auto err = reader.read();
-    REQUIRE(err != PARSE_ERROR_NONE);
+    auto result = reader.read();
+    REQUIRE(!result.has_value());
     REQUIRE(reader.error().has_value());
     CHECK(reader.error()->path == "$.skills.RIDING.max_exp");
     data["skills"]["RIDING"]["max_exp"] = 8000;
-    err = reader.read();
-    CHECK(err == PARSE_ERROR_NONE);
+    result = reader.read();
+    CHECK(result.has_value());
     CHECK_FALSE(reader.error().has_value());
     // 再度失敗した際も前回の技能エラーを残さない。
-    err = reader.read();
-    REQUIRE(err != PARSE_ERROR_NONE);
+    result = reader.read();
+    REQUIRE(!result.has_value());
     REQUIRE(reader.error().has_value());
     CHECK(reader.error()->path == "$.id");
 }
