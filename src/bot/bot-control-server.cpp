@@ -160,6 +160,8 @@ std::string_view input_kind_name(InputKind kind)
         return "item";
     case InputKind::DIRECTION:
         return "direction";
+    case InputKind::TARGET:
+        return "target";
     }
 
     THROW_EXCEPTION(std::logic_error, "Invalid InputKind was specified!");
@@ -238,6 +240,17 @@ public:
     nlohmann::json operator()(const DirectionInputDetails &details) const
     {
         return { { "can_choose_target", details.can_choose_target }, { "has_target", details.has_target }, { "at_feet", details.at_feet } };
+    }
+
+    nlohmann::json operator()(const TargetInputDetails &details) const
+    {
+        return {
+            { "look", details.look },
+            { "free", details.free_mode },
+            { "can_target", details.can_target },
+            { "y", details.pos.y },
+            { "x", details.pos.x },
+        };
     }
 };
 

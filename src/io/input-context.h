@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "util/point-2d.h"
 #include <string>
 #include <string_view>
 #include <tl/optional.hpp>
@@ -25,6 +26,7 @@ enum class InputKind {
     COMMAND, //!< 次のコマンドの入力 (自分のターン、店のコマンド)
     ITEM, //!< アイテムの選択
     DIRECTION, //!< 方向の入力
+    TARGET, //!< ターゲットの選択と、見るコマンドのカーソル
 };
 
 /*!
@@ -92,8 +94,20 @@ struct DirectionInputDetails {
     bool operator==(const DirectionInputDetails &) const = default;
 };
 
+/*!
+ * @brief ターゲットの選択の詳細
+ */
+struct TargetInputDetails {
+    bool look; //!< 見るコマンドか (false ならターゲットの選択)
+    bool free_mode; //!< カーソルを任意のマスへ動かすモードか (false なら興味のあるものを順に選ぶモード)
+    bool can_target; //!< 't' などでカーソルのマスをターゲットにできるか
+    Pos2D pos; //!< カーソルのマスのフロアでの座標
+
+    bool operator==(const TargetInputDetails &) const = default;
+};
+
 //! 入力の種類ごとの詳細。詳細を持たない入力では std::monostate
-using InputDetails = std::variant<std::monostate, StringInputDetails, QuantityInputDetails, CommandInputDetails, ItemInputDetails, DirectionInputDetails>;
+using InputDetails = std::variant<std::monostate, StringInputDetails, QuantityInputDetails, CommandInputDetails, ItemInputDetails, DirectionInputDetails, TargetInputDetails>;
 
 /*!
  * @brief 現在待っている入力の種類と、画面に表示したプロンプト
