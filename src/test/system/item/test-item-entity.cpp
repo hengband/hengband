@@ -99,3 +99,35 @@ TEST_CASE("ItemEntity remove_curses keeps an identified item identified")
     CHECK_FALSE(item.is_cursed());
     CHECK(item.has_identification_flag(IdentificationFlag::KNOWN));
 }
+
+TEST_CASE("ItemEntity add_curses clears the feeling and keeps the sensed flag when a curse is added")
+{
+    ItemEntity item;
+    item.sense(FEEL_EXCELLENT);
+
+    CHECK(item.add_curses({ CurseTraitType::CURSED, CurseTraitType::HEAVY_CURSE }));
+    CHECK(item.curse_flags.has_all_of({ CurseTraitType::CURSED, CurseTraitType::HEAVY_CURSE }));
+    CHECK(item.feeling == FEEL_NONE);
+    CHECK(item.has_identification_flag(IdentificationFlag::SENSE));
+}
+
+TEST_CASE("ItemEntity add_curses keeps the feeling when no curse is added")
+{
+    ItemEntity item;
+    item.curse_flags.set(CurseTraitType::CURSED);
+    item.sense(FEEL_CURSED);
+
+    CHECK_FALSE(item.add_curses({ CurseTraitType::CURSED }));
+    CHECK(item.feeling == FEEL_CURSED);
+}
+
+TEST_CASE("ItemEntity add_curses clears the feeling when only some of the curses are new")
+{
+    ItemEntity item;
+    item.curse_flags.set(CurseTraitType::CURSED);
+    item.sense(FEEL_CURSED);
+
+    CHECK(item.add_curses({ CurseTraitType::CURSED, CurseTraitType::HEAVY_CURSE }));
+    CHECK(item.curse_flags.has(CurseTraitType::HEAVY_CURSE));
+    CHECK(item.feeling == FEEL_NONE);
+}

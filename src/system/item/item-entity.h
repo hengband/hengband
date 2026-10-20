@@ -186,6 +186,7 @@ public:
     void mark_as_known();
     void sense(item_feel_type feel);
     void remove_curses();
+    bool add_curses(const EnumClassFlagGroup<CurseTraitType> &curses);
     void mark_as_tried() const;
 
     void set_position(const Pos2D &pos);

@@ -1401,6 +1401,24 @@ void ItemEntity::remove_curses()
 }
 
 /*!
+ * @brief 呪いを付け、新しく付いた呪いがあれば擬似鑑定の感触を消す
+ * @param curses 付ける呪い
+ * @return 新しく付いた呪いがあれば true
+ * @details 新しく呪われると感触が実際の品と合わなくなるので消す。簡易鑑定済みの印 (SENSE) は残すので、
+ * 感じていた品の表示は実際の呪いから {呪われている} になる。
+ */
+bool ItemEntity::add_curses(const EnumClassFlagGroup<CurseTraitType> &curses)
+{
+    if (this->curse_flags.has_all_of(curses)) {
+        return false;
+    }
+
+    this->curse_flags.set(curses);
+    this->feeling = FEEL_NONE;
+    return true;
+}
+
+/*!
  * @brief 試行済にする
  */
 void ItemEntity::mark_as_tried() const
