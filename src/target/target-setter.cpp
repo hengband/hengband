@@ -590,9 +590,9 @@ Target target_set(PlayerType *player_ptr, target_type mode)
     ts.sweep_target_grids();
     prt("", 0, 0);
     verify_panel(player_ptr);
-    auto &rfu = DeferredUpdateRequests::get_instance();
-    rfu.request_monster_update_and_map_redrawing();
-    rfu.set_flag(SubWindowRedrawingFlag::FLOOR_ITEMS);
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.request_monster_update_and_map_redrawing();
+    dur.set_flag(SubWindowRedrawingFlag::FLOOR_ITEMS);
     handle_stuff(player_ptr);
     Target::set_last_target(ts.get_target());
     return ts.get_target();

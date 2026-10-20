@@ -314,7 +314,7 @@ PRICE compare_weapons(PlayerType *player_ptr, PRICE bcost)
 
     int n = 1;
     total = bcost;
-    auto &rfu = DeferredUpdateRequests::get_instance();
+    auto &dur = DeferredUpdateRequests::get_instance();
     while (true) {
         clear_bldg(0, 22);
         world.character_xtra = true;
@@ -324,7 +324,7 @@ PRICE compare_weapons(PlayerType *player_ptr, PRICE bcost)
                 *item_main_hand = items[i]->clone();
             }
 
-            rfu.set_flag(StatusRecalculatingFlag::BONUS);
+            dur.set_flag(StatusRecalculatingFlag::BONUS);
             handle_stuff(player_ptr);
 
             list_weapon(player_ptr, *items[i], row, col);
@@ -332,7 +332,7 @@ PRICE compare_weapons(PlayerType *player_ptr, PRICE bcost)
             *item_main_hand = orig_weapon.clone();
         }
 
-        rfu.set_flag(StatusRecalculatingFlag::BONUS);
+        dur.set_flag(StatusRecalculatingFlag::BONUS);
         handle_stuff(player_ptr);
 
         world.character_xtra = old_character_xtra;

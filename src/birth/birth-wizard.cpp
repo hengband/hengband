@@ -436,9 +436,9 @@ static void exe_auto_roller(PlayerType *player_ptr, chara_limit_type chara_limit
 static bool display_auto_roller_result(PlayerType *player_ptr, bool prev, char *c)
 {
     BIT_FLAGS mode = 0;
-    auto &rfu = DeferredUpdateRequests::get_instance();
+    auto &dur = DeferredUpdateRequests::get_instance();
     while (true) {
-        rfu.request_bonus_and_max_hp_recalculation();
+        dur.request_bonus_and_max_hp_recalculation();
         update_creature(player_ptr);
         player_ptr->chp = player_ptr->mhp;
         player_ptr->csp = player_ptr->msp;

@@ -341,7 +341,7 @@ tl::optional<short> get_item_floor(PlayerType *player_ptr, std::string_view pmt,
         screen_save();
     }
 
-    auto &rfu = DeferredUpdateRequests::get_instance();
+    auto &dur = DeferredUpdateRequests::get_instance();
     while (!fis.done) {
         int ni = 0;
         int ne = 0;
@@ -364,7 +364,7 @@ tl::optional<short> get_item_floor(PlayerType *player_ptr, std::string_view pmt,
             fis.toggle = !fis.toggle;
         }
 
-        rfu.request_carried_item_lists_redrawing();
+        dur.request_carried_item_lists_redrawing();
         window_stuff(player_ptr);
         COMMAND_CODE get_item_label = 0;
         if (command_wrk == USE_INVEN) {
@@ -701,7 +701,7 @@ tl::optional<short> get_item_floor(PlayerType *player_ptr, std::string_view pmt,
                 grid.o_idx_list.rotate(*player_ptr->current_floor_ptr);
             }
 
-            rfu.set_flag(SubWindowRedrawingFlag::FLOOR_ITEMS);
+            dur.set_flag(SubWindowRedrawingFlag::FLOOR_ITEMS);
             window_stuff(player_ptr);
             const auto &floor = *player_ptr->current_floor_ptr;
             fis.floor_item_index = scan_floor_items(floor, player_ptr->get_position(), { ScanFloorMode::ITEM_TESTER, ScanFloorMode::ONLY_MARKED }, item_tester);
@@ -926,7 +926,7 @@ tl::optional<short> get_item_floor(PlayerType *player_ptr, std::string_view pmt,
         toggle_inventory_equipment();
     }
 
-    rfu.request_carried_item_lists_redrawing();
+    dur.request_carried_item_lists_redrawing();
     window_stuff(player_ptr);
     prt("", 0, 0);
     if (fis.oops && !str.empty()) {

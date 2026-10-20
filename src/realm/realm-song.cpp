@@ -47,9 +47,9 @@ static void start_singing(PlayerType *player_ptr, SPELL_IDX spell, int32_t song)
     /* Now the player is singing */
     set_action(player_ptr, ACTION_SING);
 
-    auto &rfu = DeferredUpdateRequests::get_instance();
-    rfu.set_flag(StatusRecalculatingFlag::BONUS);
-    rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.set_flag(StatusRecalculatingFlag::BONUS);
+    dur.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
 }
 
 namespace {

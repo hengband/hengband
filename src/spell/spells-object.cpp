@@ -250,10 +250,10 @@ bool curse_armor(PlayerType *player_ptr)
     item.curse_flags.set(CurseTraitType::CURSED);
     item.set_identification_flag(IdentificationFlag::BROKEN);
     update_feeling_on_blasting(item);
-    auto &rfu = DeferredUpdateRequests::get_instance();
+    auto &dur = DeferredUpdateRequests::get_instance();
     // エゴ・アーティファクトの能力が無くなる
-    rfu.request_equipment_change_updates();
-    rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
+    dur.request_equipment_change_updates();
+    dur.set_flag(SubWindowRedrawingFlag::PLAYER);
     calc_android_exp(player_ptr);
     return true;
 }
@@ -298,10 +298,10 @@ bool curse_weapon_object(PlayerType *player_ptr, bool force, ItemEntity &item)
     item.curse_flags.set(CurseTraitType::CURSED);
     item.set_identification_flag(IdentificationFlag::BROKEN);
     update_feeling_on_blasting(item);
-    auto &rfu = DeferredUpdateRequests::get_instance();
+    auto &dur = DeferredUpdateRequests::get_instance();
     // エゴ・アーティファクトの能力が無くなる
-    rfu.request_equipment_change_updates();
-    rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
+    dur.request_equipment_change_updates();
+    dur.set_flag(SubWindowRedrawingFlag::PLAYER);
     calc_android_exp(player_ptr);
     return true;
 }
@@ -446,10 +446,10 @@ bool enchant_equipment(ItemEntity &item, int n, int eflag)
         return false;
     }
 
-    auto &rfu = DeferredUpdateRequests::get_instance();
-    rfu.set_flag(StatusRecalculatingFlag::BONUS);
-    rfu.request_inventory_arrangement();
-    rfu.request_item_lists_redrawing();
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.set_flag(StatusRecalculatingFlag::BONUS);
+    dur.request_inventory_arrangement();
+    dur.request_item_lists_redrawing();
     return true;
 }
 

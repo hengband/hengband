@@ -213,12 +213,12 @@ nlohmann::json verify_bot_subwindows(PlayerType *player_ptr)
     const auto cursor = term_locate();
 
     // 割り当てのない種類まで要求すると、描かれないまま要求が残ってしまう
-    auto &rfu = DeferredUpdateRequests::get_instance();
+    auto &dur = DeferredUpdateRequests::get_instance();
     auto requested_flags = shown_flags;
-    requested_flags.reset(rfu.get_sub_intersection(shown_flags));
-    const auto restore = [&rfu, requested_flags, old_term, cursor] {
+    requested_flags.reset(dur.get_sub_intersection(shown_flags));
+    const auto restore = [&dur, requested_flags, old_term, cursor] {
         // 描く処理の無い種類 (記念写真など) の要求は残るので、ここで要求したものは下ろしておく
-        rfu.reset_flags(requested_flags);
+        dur.reset_flags(requested_flags);
 
         // 描いた端末は描くたびに画面に出しているが、画面に出していない内容が残っていても、調べた後は画面に出しておく。
         // 入力待ちと同じく、カーソルを戻すためにメイン画面を最後に出す
@@ -230,7 +230,7 @@ nlohmann::json verify_bot_subwindows(PlayerType *player_ptr)
 
     // 描き直しの途中で例外が出ても (制御サーバは応答をエラーにしてゲームを続ける)、要求・端末・カーソルを元に戻す。
     // デストラクタで戻すと、戻す処理の例外で終了してしまうので、ここで捕まえて戻してから投げ直す
-    rfu.set_flags(requested_flags);
+    dur.set_flags(requested_flags);
     try {
         window_stuff_including_deferred(player_ptr);
     } catch (...) {

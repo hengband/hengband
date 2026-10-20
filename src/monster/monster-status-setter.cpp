@@ -90,16 +90,16 @@ bool set_monster_csleep(FloorType &floor, MONSTER_IDX m_idx, int v)
         return false;
     }
 
-    auto &rfu = DeferredUpdateRequests::get_instance();
+    auto &dur = DeferredUpdateRequests::get_instance();
     if (monster.ml) {
         HealthBarTracker::get_instance().set_flag_if_tracking(m_idx);
         if (monster.is_riding()) {
-            rfu.set_flag(MainWindowRedrawingFlag::UHEALTH);
+            dur.set_flag(MainWindowRedrawingFlag::UHEALTH);
         }
     }
 
     if (monster.get_monrace().brightness_flags.has_any_of(has_ld_mask)) {
-        rfu.set_flag(StatusRecalculatingFlag::MONSTER_LITE);
+        dur.set_flag(StatusRecalculatingFlag::MONSTER_LITE);
     }
 
     return true;

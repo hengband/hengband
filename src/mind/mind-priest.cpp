@@ -32,7 +32,7 @@ bool bless_weapon(PlayerType *player_ptr)
 
     const auto item_name = describe_flavor(player_ptr, *item, OD_OMIT_PREFIX | OD_NAME_ONLY);
     const auto item_flags = item->get_flags();
-    auto &rfu = DeferredUpdateRequests::get_instance();
+    auto &dur = DeferredUpdateRequests::get_instance();
     if (item->is_cursed()) {
         auto can_disturb_blessing = item->curse_flags.has(CurseTraitType::HEAVY_CURSE) && (randint1(100) < 33);
         can_disturb_blessing |= item_flags.has(TR_ADD_L_CURSE);
@@ -55,8 +55,8 @@ bool bless_weapon(PlayerType *player_ptr)
         msg_print("A malignant aura leaves {} {}.", ((i_idx >= 0) ? "your" : "the"), item_name);
 #endif
         item->remove_curses();
-        rfu.set_flag(StatusRecalculatingFlag::BONUS);
-        rfu.request_item_lists_redrawing();
+        dur.set_flag(StatusRecalculatingFlag::BONUS);
+        dur.request_item_lists_redrawing();
     }
 
     /*
@@ -129,8 +129,8 @@ bool bless_weapon(PlayerType *player_ptr)
         }
     }
 
-    rfu.set_flag(StatusRecalculatingFlag::BONUS);
-    rfu.request_item_lists_redrawing();
+    dur.set_flag(StatusRecalculatingFlag::BONUS);
+    dur.request_item_lists_redrawing();
     calc_android_exp(player_ptr);
     return true;
 }

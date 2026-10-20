@@ -161,12 +161,12 @@ bool mundane_spell(PlayerType *player_ptr, bool only_equip)
     }
 
     // 装備品なら、修正値・エゴ・アーティファクトの能力が無くなる
-    auto &rfu = DeferredUpdateRequests::get_instance();
-    rfu.request_equipment_change_updates();
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.request_equipment_change_updates();
 
     // 鑑定の状態・エゴ・修正値が変わるので、並び順や束をまとめられるかも変わる
-    rfu.request_inventory_arrangement();
-    rfu.request_item_lists_redrawing();
+    dur.request_inventory_arrangement();
+    dur.request_item_lists_redrawing();
     calc_android_exp(player_ptr);
     return true;
 }

@@ -148,9 +148,9 @@ void building_recharge(PlayerType *player_ptr)
 #else
     msg_print("{} {} recharged for {} gold.", str_upcase_first(item_name), ((item->number > 1) ? "were" : "was"), price);
 #endif
-    auto &rfu = DeferredUpdateRequests::get_instance();
-    rfu.request_inventory_arrangement();
-    rfu.request_item_lists_redrawing();
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.request_inventory_arrangement();
+    dur.request_item_lists_redrawing();
     player_ptr->au -= price;
 }
 

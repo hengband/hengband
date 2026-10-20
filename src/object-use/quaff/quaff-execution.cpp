@@ -64,8 +64,8 @@ void ObjectQuaffEntity::execute(INVENTORY_IDX i_idx)
         InventoryArrangementFlag::COMBINATION,
         InventoryArrangementFlag::REORDER,
     };
-    auto &rfu = DeferredUpdateRequests::get_instance();
-    rfu.set_flags(flags_iaf);
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.set_flags(flags_iaf);
     this->change_virtue_as_quaff(item);
     item.mark_as_tried();
     if (ident && !item.is_aware()) {
@@ -73,7 +73,7 @@ void ObjectQuaffEntity::execute(INVENTORY_IDX i_idx)
         gain_exp(this->player_ptr, (item.get_baseitem_level() + (this->player_ptr->lev >> 1)) / this->player_ptr->lev);
     }
 
-    rfu.request_item_lists_redrawing();
+    dur.request_item_lists_redrawing();
     if (PlayerRace(this->player_ptr).equals(PlayerRaceType::SKELETON)) {
         return;
     }

@@ -345,8 +345,8 @@ void do_cmd_hissatsu(PlayerType *player_ptr)
         player_ptr->csp = 0;
     }
 
-    auto &rfu = DeferredUpdateRequests::get_instance();
-    rfu.set_flag(MainWindowRedrawingFlag::MP);
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.set_flag(MainWindowRedrawingFlag::MP);
 }
 
 /*!

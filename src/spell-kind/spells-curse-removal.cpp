@@ -17,7 +17,7 @@
 static int exe_curse_removal(PlayerType *player_ptr, int all)
 {
     auto count = 0;
-    auto &rfu = DeferredUpdateRequests::get_instance();
+    auto &dur = DeferredUpdateRequests::get_instance();
     for (const auto i_idx : INVEN_WIELDING_SLOTS) {
         auto *o_ptr = player_ptr->inventory[i_idx].get();
         if (!o_ptr->is_valid() || !o_ptr->is_cursed()) {
@@ -34,7 +34,7 @@ static int exe_curse_removal(PlayerType *player_ptr, int all)
         }
 
         o_ptr->remove_curses();
-        rfu.set_flag(StatusRecalculatingFlag::BONUS);
+        dur.set_flag(StatusRecalculatingFlag::BONUS);
         count++;
     }
 

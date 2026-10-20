@@ -45,19 +45,19 @@ namespace test {
 template <RedrawingFlagType Flag>
 [[nodiscard]] auto scoped_restore_redrawing_flags()
 {
-    auto &rfu = DeferredUpdateRequests::get_instance();
+    auto &dur = DeferredUpdateRequests::get_instance();
     constexpr EnumRange range(static_cast<Flag>(0), Flag::MAX);
     const EnumClassFlagGroup<Flag> all_flags(range);
     EnumClassFlagGroup<Flag> was_set;
     for (const auto flag : range) {
-        if (rfu.has(flag)) {
+        if (dur.has(flag)) {
             was_set.set(flag);
         }
     }
 
-    return util::make_finalizer([&rfu, all_flags, was_set] {
-        rfu.reset_flags(all_flags);
-        rfu.set_flags(was_set);
+    return util::make_finalizer([&dur, all_flags, was_set] {
+        dur.reset_flags(all_flags);
+        dur.set_flags(was_set);
     });
 }
 

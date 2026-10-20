@@ -817,12 +817,12 @@ bool do_cmd_mane(PlayerType *player_ptr, bool baigaesi)
 
     mane_data->mane_list.erase(std::next(mane_data->mane_list.begin(), n));
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
-    auto &rfu = DeferredUpdateRequests::get_instance();
-    rfu.set_flag(MainWindowRedrawingFlag::IMITATION);
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.set_flag(MainWindowRedrawingFlag::IMITATION);
     static constexpr auto flags = {
         SubWindowRedrawingFlag::PLAYER,
         SubWindowRedrawingFlag::SPELL,
     };
-    rfu.set_flags(flags);
+    dur.set_flags(flags);
     return true;
 }

@@ -23,9 +23,9 @@ static void set_stance(PlayerType *player_ptr, const MonkStanceType new_stance)
         return;
     }
 
-    auto &rfu = DeferredUpdateRequests::get_instance();
-    rfu.set_flag(StatusRecalculatingFlag::BONUS);
-    rfu.set_flag(MainWindowRedrawingFlag::ACTION);
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.set_flag(StatusRecalculatingFlag::BONUS);
+    dur.set_flag(MainWindowRedrawingFlag::ACTION);
     msg_print(_("{}の構えをとった。", "You assume the {} stance."), monk_stances[enum2i(new_stance) - 1].desc);
     pc.set_monk_stance(new_stance);
 }

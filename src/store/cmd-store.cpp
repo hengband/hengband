@@ -111,7 +111,7 @@ void do_cmd_store(PlayerType *player_ptr)
     play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_BUILD);
     display_store(player_ptr, screen);
     auto should_leave = false;
-    auto &rfu = DeferredUpdateRequests::get_instance();
+    auto &dur = DeferredUpdateRequests::get_instance();
     while (!should_leave) {
         prt("", 1, 0);
         clear_from(screen.get_command_row(0));
@@ -147,7 +147,7 @@ void do_cmd_store(PlayerType *player_ptr)
         InputKeyRequestor(player_ptr, true).request_command();
         should_leave = store_process_command(player_ptr, screen);
 
-        const auto should_redraw_store_inventory = rfu.has(StatusRecalculatingFlag::BONUS);
+        const auto should_redraw_store_inventory = dur.has(StatusRecalculatingFlag::BONUS);
         world.character_icky_depth = 1;
         handle_stuff_with_inventory_arrangement(player_ptr);
         if (player_ptr->inventory[INVEN_PACK]->bi_id) {
@@ -198,17 +198,17 @@ void do_cmd_store(PlayerType *player_ptr)
     msg_erase();
     term_clear();
 
-    rfu.request_monster_update_and_map_redrawing();
+    dur.request_monster_update_and_map_redrawing();
     static constexpr auto flags_srf = {
         StatusRecalculatingFlag::VIEW,
         StatusRecalculatingFlag::LITE,
         StatusRecalculatingFlag::MONSTER_LITE,
     };
-    rfu.set_flags(flags_srf);
+    dur.set_flags(flags_srf);
     static constexpr auto flags_mwrf = {
         MainWindowRedrawingFlag::BASIC,
         MainWindowRedrawingFlag::EXTRA,
         MainWindowRedrawingFlag::EQUIPPY,
     };
-    rfu.set_flags(flags_mwrf);
+    dur.set_flags(flags_mwrf);
 }

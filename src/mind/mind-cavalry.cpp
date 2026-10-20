@@ -83,13 +83,13 @@ bool rodeo(PlayerType *player_ptr)
         }
     }
 
-    auto &rfu = DeferredUpdateRequests::get_instance();
+    auto &dur = DeferredUpdateRequests::get_instance();
     static constexpr auto flags = {
         StatusRecalculatingFlag::BONUS,
         StatusRecalculatingFlag::MONSTER_STATUSES,
     };
-    rfu.set_flags(flags);
-    rfu.request_riding_status_redrawing();
+    dur.set_flags(flags);
+    dur.request_riding_status_redrawing();
 
     return true;
 }

@@ -54,10 +54,10 @@ void StoneOfLore::consume_mp()
         return;
     }
 
-    auto &rfu = DeferredUpdateRequests::get_instance();
+    auto &dur = DeferredUpdateRequests::get_instance();
     if (this->player_ptr->csp >= 20) {
         this->player_ptr->csp -= 20;
-        rfu.set_flag(MainWindowRedrawingFlag::MP);
+        dur.set_flag(MainWindowRedrawingFlag::MP);
         return;
     }
 
@@ -68,5 +68,5 @@ void StoneOfLore::consume_mp()
     BadStatusSetter bss(this->player_ptr);
     (void)bss.mod_paralysis(roll_spell_over_exertion_duration(oops));
     (void)bss.mod_confusion(roll_spell_over_exertion_duration(oops));
-    rfu.set_flag(MainWindowRedrawingFlag::MP);
+    dur.set_flag(MainWindowRedrawingFlag::MP);
 }

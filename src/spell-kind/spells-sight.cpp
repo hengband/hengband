@@ -437,7 +437,7 @@ bool probing(PlayerType *player_ptr)
     game_term->scr->cv = 1;
 
     auto &floor = *player_ptr->current_floor_ptr;
-    auto &rfu = DeferredUpdateRequests::get_instance();
+    auto &dur = DeferredUpdateRequests::get_instance();
     auto probe = false;
     for (short i = 1; i < floor.m_max; i++) {
         auto &monster = floor.m_list[i];
@@ -461,7 +461,7 @@ bool probing(PlayerType *player_ptr)
         prt(probe_result, 0, 0);
 
         message_add(probe_result);
-        rfu.set_flag(SubWindowRedrawingFlag::MESSAGE);
+        dur.set_flag(SubWindowRedrawingFlag::MESSAGE);
         window_stuff(player_ptr);
         move_cursor_relative(monster.fy, monster.fx);
         inkey();

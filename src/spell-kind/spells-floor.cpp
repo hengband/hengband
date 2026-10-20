@@ -96,9 +96,9 @@ void wiz_lite(PlayerType *player_ptr, bool ninja)
         }
     }
 
-    auto &rfu = DeferredUpdateRequests::get_instance();
-    rfu.request_monster_update_and_map_redrawing();
-    rfu.request_floor_item_lists_redrawing();
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.request_monster_update_and_map_redrawing();
+    dur.request_floor_item_lists_redrawing();
     if (floor.grid_array[player_ptr->y][player_ptr->x].info & CAVE_GLOW) {
         set_superstealth(player_ptr, false);
     }
@@ -141,10 +141,10 @@ void wiz_dark(PlayerType *player_ptr)
     /* Forget travel route when we have forgotten map */
     Travel::get_instance().reset_goal();
 
-    auto &rfu = DeferredUpdateRequests::get_instance();
-    rfu.request_monster_update_and_map_redrawing();
-    rfu.request_sight_recalculation();
-    rfu.request_floor_item_lists_redrawing();
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.request_monster_update_and_map_redrawing();
+    dur.request_sight_recalculation();
+    dur.request_floor_item_lists_redrawing();
 }
 
 /*
@@ -419,10 +419,10 @@ bool destroy_area(PlayerType *player_ptr, const POSITION y1, const POSITION x1, 
     }
 
     forget_flow(floor);
-    auto &rfu = DeferredUpdateRequests::get_instance();
-    rfu.request_monster_update_and_map_redrawing();
-    rfu.request_sight_recalculation();
-    rfu.set_flag(StatusRecalculatingFlag::FLOW);
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.request_monster_update_and_map_redrawing();
+    dur.request_sight_recalculation();
+    dur.set_flag(StatusRecalculatingFlag::FLOW);
     if (floor.grid_array[player_ptr->y][player_ptr->x].info & CAVE_GLOW) {
         set_superstealth(player_ptr, false);
     }

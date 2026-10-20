@@ -75,10 +75,10 @@ bool identify_item(PlayerType *player_ptr, ItemEntity *o_ptr)
         records.set_identified(o_ptr->fa_id);
     }
 
-    auto &rfu = DeferredUpdateRequests::get_instance();
-    rfu.set_flag(StatusRecalculatingFlag::BONUS);
-    rfu.request_inventory_arrangement();
-    rfu.request_item_lists_redrawing();
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.set_flag(StatusRecalculatingFlag::BONUS);
+    dur.request_inventory_arrangement();
+    dur.request_item_lists_redrawing();
     record_item_name = known_item_name;
     record_turn = AngbandWorld::get_instance().game_turn;
 

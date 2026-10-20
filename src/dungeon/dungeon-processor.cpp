@@ -42,11 +42,11 @@ static void redraw_character_xtra(PlayerType *player_ptr)
 {
     auto &world = AngbandWorld::get_instance();
     world.character_xtra = true;
-    auto &rfu = DeferredUpdateRequests::get_instance();
+    auto &dur = DeferredUpdateRequests::get_instance();
     // フロアが変わったので、足元や発見済みのアイテムの一覧なども含め、すべてのサブウィンドウを描き直す
-    rfu.fill_up_sub_flags();
-    rfu.request_whole_main_window_redrawing();
-    rfu.request_player_status_recalculation();
+    dur.fill_up_sub_flags();
+    dur.request_whole_main_window_redrawing();
+    dur.request_player_status_recalculation();
     static constexpr auto flags_srf = {
         StatusRecalculatingFlag::VIEW,
         StatusRecalculatingFlag::LITE,
@@ -56,7 +56,7 @@ static void redraw_character_xtra(PlayerType *player_ptr)
         StatusRecalculatingFlag::DISTANCE,
         StatusRecalculatingFlag::FLOW,
     };
-    rfu.set_flags(flags_srf);
+    dur.set_flags(flags_srf);
     handle_stuff(player_ptr);
     world.character_xtra = false;
 }
@@ -123,13 +123,13 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
     msg_erase();
 
     redraw_character_xtra(player_ptr);
-    auto &rfu = DeferredUpdateRequests::get_instance();
-    rfu.request_player_status_recalculation();
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.request_player_status_recalculation();
     static constexpr auto flags_iaf = {
         InventoryArrangementFlag::COMBINATION,
         InventoryArrangementFlag::REORDER,
     };
-    rfu.set_flags(flags_iaf);
+    dur.set_flags(flags_iaf);
     handle_stuff_with_inventory_arrangement(player_ptr);
     term_fresh();
 

@@ -623,10 +623,10 @@ int interpret_pref_file(PlayerType *player_ptr, std::string_view buf)
 
     // 記号や表示のオプションが変わると、マップやサブウィンドウの表示も変わりうる。
     // フロアが無いとき (新しいキャラクターの作成中など) は、フロアに入るときに全てのサブウィンドウを描き直す
-    auto &rfu = DeferredUpdateRequests::get_instance();
-    rfu.request_map_redrawing();
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.request_map_redrawing();
     if (AngbandWorld::get_instance().character_dungeon) {
-        rfu.fill_up_sub_flags();
+        dur.fill_up_sub_flags();
     }
 
     return 0;

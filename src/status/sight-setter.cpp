@@ -13,8 +13,8 @@
 
 static bool update_sight(PlayerType *player_ptr, const bool notice)
 {
-    auto &rfu = DeferredUpdateRequests::get_instance();
-    rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     if (!notice) {
         return false;
     }
@@ -27,7 +27,7 @@ static bool update_sight(PlayerType *player_ptr, const bool notice)
         StatusRecalculatingFlag::BONUS,
         StatusRecalculatingFlag::MONSTER_STATUSES,
     };
-    rfu.set_flags(flags);
+    dur.set_flags(flags);
     handle_stuff(player_ptr);
     return true;
 }

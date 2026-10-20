@@ -155,10 +155,10 @@ bool vanish_dungeon(PlayerType *player_ptr)
     }
 
     erase_all_walls(floor);
-    auto &rfu = DeferredUpdateRequests::get_instance();
-    rfu.request_monster_update_and_map_redrawing();
-    rfu.request_sight_recalculation();
-    rfu.set_flag(StatusRecalculatingFlag::FLOW);
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.request_monster_update_and_map_redrawing();
+    dur.request_sight_recalculation();
+    dur.set_flag(StatusRecalculatingFlag::FLOW);
     return true;
 }
 

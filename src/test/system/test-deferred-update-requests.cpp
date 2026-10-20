@@ -15,24 +15,24 @@ namespace {
 /*!
  * @brief フラグの今の状態を覚えておき、スコープを抜けるときに元の状態に戻す
  * @tparam Flag フラグの列挙型。1 回の呼び出しで戻せるのは同じ列挙型のフラグだけ
- * @param rfu 更新フラグ
+ * @param dur 更新フラグ
  * @param flags 戻すフラグ
  * @return スコープを抜けるときにフラグを戻すファイナライザ
  */
 template <RedrawingFlagType Flag>
-auto scoped_restore_flags(DeferredUpdateRequests &rfu, std::initializer_list<Flag> flags)
+auto scoped_restore_flags(DeferredUpdateRequests &dur, std::initializer_list<Flag> flags)
 {
     const EnumClassFlagGroup<Flag> targets(flags);
     EnumClassFlagGroup<Flag> was_set;
     for (const auto flag : flags) {
-        if (rfu.has(flag)) {
+        if (dur.has(flag)) {
             was_set.set(flag);
         }
     }
 
-    return util::make_finalizer([&rfu, targets, was_set] {
-        rfu.reset_flags(targets);
-        rfu.set_flags(was_set);
+    return util::make_finalizer([&dur, targets, was_set] {
+        dur.reset_flags(targets);
+        dur.set_flags(was_set);
     });
 }
 
@@ -53,14 +53,14 @@ TEST_CASE("DeferredUpdateRequests operates only on the flag group of the given f
         func(StatusRecalculatingFlag::BONUS);
         func(InventoryArrangementFlag::AUTO_DESTRUCTION);
     };
-    auto &rfu = DeferredUpdateRequests::get_instance();
-    const auto restore_mwrf = scoped_restore_flags(rfu, { MainWindowRedrawingFlag::TITLE });
-    const auto restore_swrf = scoped_restore_flags(rfu, { SubWindowRedrawingFlag::INVENTORY });
-    const auto restore_srf = scoped_restore_flags(rfu, { StatusRecalculatingFlag::BONUS });
-    const auto restore_iaf = scoped_restore_flags(rfu, { InventoryArrangementFlag::AUTO_DESTRUCTION });
+    auto &dur = DeferredUpdateRequests::get_instance();
+    const auto restore_mwrf = scoped_restore_flags(dur, { MainWindowRedrawingFlag::TITLE });
+    const auto restore_swrf = scoped_restore_flags(dur, { SubWindowRedrawingFlag::INVENTORY });
+    const auto restore_srf = scoped_restore_flags(dur, { StatusRecalculatingFlag::BONUS });
+    const auto restore_iaf = scoped_restore_flags(dur, { InventoryArrangementFlag::AUTO_DESTRUCTION });
     const auto states = [&] {
         std::vector<bool> result;
-        for_each_flag([&](auto flag) { result.push_back(rfu.has(flag)); });
+        for_each_flag([&](auto flag) { result.push_back(dur.has(flag)); });
         return result;
     };
 
@@ -69,65 +69,65 @@ TEST_CASE("DeferredUpdateRequests operates only on the flag group of the given f
         size_t index = 0;
         for_each_flag([&](auto flag) {
             CAPTURE(index);
-            for_each_flag([&](auto f) { rfu.reset_flag(f); });
+            for_each_flag([&](auto f) { dur.reset_flag(f); });
             set(flag);
             std::vector<bool> expected(4, false);
             expected[index] = true;
             CHECK(states() == expected);
-            CHECK(rfu.has_any_of({ flag }));
-            CHECK(rfu.has_any_of(EnumClassFlagGroup<decltype(flag)>{ flag }));
+            CHECK(dur.has_any_of({ flag }));
+            CHECK(dur.has_any_of(EnumClassFlagGroup<decltype(flag)>{ flag }));
 
-            for_each_flag([&](auto f) { rfu.set_flag(f); });
+            for_each_flag([&](auto f) { dur.set_flag(f); });
             reset(flag);
             expected.assign(4, true);
             expected[index] = false;
             CHECK(states() == expected);
-            CHECK_FALSE(rfu.has_any_of({ flag }));
-            CHECK_FALSE(rfu.has_any_of(EnumClassFlagGroup<decltype(flag)>{ flag }));
+            CHECK_FALSE(dur.has_any_of({ flag }));
+            CHECK_FALSE(dur.has_any_of(EnumClassFlagGroup<decltype(flag)>{ flag }));
             ++index;
         });
     };
 
     SUBCASE("set_flag and reset_flag")
     {
-        check_each_type([&rfu](auto flag) { rfu.set_flag(flag); }, [&rfu](auto flag) { rfu.reset_flag(flag); });
+        check_each_type([&dur](auto flag) { dur.set_flag(flag); }, [&dur](auto flag) { dur.reset_flag(flag); });
     }
 
     SUBCASE("set_flags and reset_flags with an initializer list")
     {
-        check_each_type([&rfu](auto flag) { rfu.set_flags({ flag }); }, [&rfu](auto flag) { rfu.reset_flags({ flag }); });
+        check_each_type([&dur](auto flag) { dur.set_flags({ flag }); }, [&dur](auto flag) { dur.reset_flags({ flag }); });
     }
 
     SUBCASE("set_flags and reset_flags with a flag group")
     {
-        check_each_type([&rfu](auto flag) { rfu.set_flags(EnumClassFlagGroup<decltype(flag)>{ flag }); }, [&rfu](auto flag) { rfu.reset_flags(EnumClassFlagGroup<decltype(flag)>{ flag }); });
+        check_each_type([&dur](auto flag) { dur.set_flags(EnumClassFlagGroup<decltype(flag)>{ flag }); }, [&dur](auto flag) { dur.reset_flags(EnumClassFlagGroup<decltype(flag)>{ flag }); });
     }
 }
 
 TEST_CASE("DeferredUpdateRequests::request_inventory_arrangement requests combining, reordering and redrawing the inventory")
 {
-    auto &rfu = DeferredUpdateRequests::get_instance();
+    auto &dur = DeferredUpdateRequests::get_instance();
     static constexpr auto flags_iaf = {
         InventoryArrangementFlag::AUTO_DESTRUCTION,
         InventoryArrangementFlag::COMBINATION,
         InventoryArrangementFlag::REORDER,
     };
-    const auto restore_iaf = scoped_restore_flags(rfu, flags_iaf);
-    const auto restore_swrf = scoped_restore_flags(rfu, { SubWindowRedrawingFlag::INVENTORY });
-    rfu.reset_flags(flags_iaf);
-    rfu.reset_flag(SubWindowRedrawingFlag::INVENTORY);
+    const auto restore_iaf = scoped_restore_flags(dur, flags_iaf);
+    const auto restore_swrf = scoped_restore_flags(dur, { SubWindowRedrawingFlag::INVENTORY });
+    dur.reset_flags(flags_iaf);
+    dur.reset_flag(SubWindowRedrawingFlag::INVENTORY);
 
-    rfu.request_inventory_arrangement();
+    dur.request_inventory_arrangement();
 
-    CHECK(rfu.has(InventoryArrangementFlag::COMBINATION));
-    CHECK(rfu.has(InventoryArrangementFlag::REORDER));
-    CHECK(rfu.has(SubWindowRedrawingFlag::INVENTORY));
-    CHECK_FALSE(rfu.has(InventoryArrangementFlag::AUTO_DESTRUCTION));
+    CHECK(dur.has(InventoryArrangementFlag::COMBINATION));
+    CHECK(dur.has(InventoryArrangementFlag::REORDER));
+    CHECK(dur.has(SubWindowRedrawingFlag::INVENTORY));
+    CHECK_FALSE(dur.has(InventoryArrangementFlag::AUTO_DESTRUCTION));
 }
 
 TEST_CASE("DeferredUpdateRequests::request_whole_main_window_redrawing requests wiping and redrawing the whole main window")
 {
-    auto &rfu = DeferredUpdateRequests::get_instance();
+    auto &dur = DeferredUpdateRequests::get_instance();
     static constexpr auto flags_mwrf = {
         MainWindowRedrawingFlag::WIPE,
         MainWindowRedrawingFlag::BASIC,
@@ -135,20 +135,20 @@ TEST_CASE("DeferredUpdateRequests::request_whole_main_window_redrawing requests 
         MainWindowRedrawingFlag::EQUIPPY,
         MainWindowRedrawingFlag::MAP,
     };
-    const auto restore = scoped_restore_flags(rfu, flags_mwrf);
-    rfu.reset_flags(flags_mwrf);
+    const auto restore = scoped_restore_flags(dur, flags_mwrf);
+    dur.reset_flags(flags_mwrf);
 
-    rfu.request_whole_main_window_redrawing();
+    dur.request_whole_main_window_redrawing();
 
     for (const auto flag : flags_mwrf) {
         CAPTURE(enum2i(flag));
-        CHECK(rfu.has(flag));
+        CHECK(dur.has(flag));
     }
 }
 
 TEST_CASE("DeferredUpdateRequests::request_whole_status_recalculation requests recalculating the status, the view and the lights for redrawing the whole screen")
 {
-    auto &rfu = DeferredUpdateRequests::get_instance();
+    auto &dur = DeferredUpdateRequests::get_instance();
     static constexpr auto flags_srf = {
         StatusRecalculatingFlag::TORCH,
         StatusRecalculatingFlag::BONUS,
@@ -162,69 +162,69 @@ TEST_CASE("DeferredUpdateRequests::request_whole_status_recalculation requests r
         StatusRecalculatingFlag::MONSTER_LITE,
         StatusRecalculatingFlag::MONSTER_STATUSES,
     };
-    const auto restore = scoped_restore_flags(rfu, flags_srf);
-    const auto restore_flow = scoped_restore_flags(rfu, { StatusRecalculatingFlag::FLOW, StatusRecalculatingFlag::DISTANCE });
-    rfu.reset_flags(flags_srf);
-    rfu.reset_flag(StatusRecalculatingFlag::FLOW);
-    rfu.reset_flag(StatusRecalculatingFlag::DISTANCE);
+    const auto restore = scoped_restore_flags(dur, flags_srf);
+    const auto restore_flow = scoped_restore_flags(dur, { StatusRecalculatingFlag::FLOW, StatusRecalculatingFlag::DISTANCE });
+    dur.reset_flags(flags_srf);
+    dur.reset_flag(StatusRecalculatingFlag::FLOW);
+    dur.reset_flag(StatusRecalculatingFlag::DISTANCE);
 
-    rfu.request_whole_status_recalculation();
+    dur.request_whole_status_recalculation();
 
     for (const auto flag : flags_srf) {
         CAPTURE(enum2i(flag));
-        CHECK(rfu.has(flag));
+        CHECK(dur.has(flag));
     }
 
     // モンスターの経路と距離は、フロアに入ったときなどに別に計算する
-    CHECK_FALSE(rfu.has(StatusRecalculatingFlag::FLOW));
-    CHECK_FALSE(rfu.has(StatusRecalculatingFlag::DISTANCE));
+    CHECK_FALSE(dur.has(StatusRecalculatingFlag::FLOW));
+    CHECK_FALSE(dur.has(StatusRecalculatingFlag::DISTANCE));
 }
 
 TEST_CASE("DeferredUpdateRequests::request_map_redrawing requests redrawing the map of the main window")
 {
-    auto &rfu = DeferredUpdateRequests::get_instance();
+    auto &dur = DeferredUpdateRequests::get_instance();
     static constexpr auto flags_swrf = {
         SubWindowRedrawingFlag::OVERHEAD,
         SubWindowRedrawingFlag::DUNGEON,
     };
-    const auto restore_mwrf = scoped_restore_flags(rfu, { MainWindowRedrawingFlag::MAP });
-    const auto restore_swrf = scoped_restore_flags(rfu, flags_swrf);
-    rfu.reset_flag(MainWindowRedrawingFlag::MAP);
-    rfu.reset_flags(flags_swrf);
+    const auto restore_mwrf = scoped_restore_flags(dur, { MainWindowRedrawingFlag::MAP });
+    const auto restore_swrf = scoped_restore_flags(dur, flags_swrf);
+    dur.reset_flag(MainWindowRedrawingFlag::MAP);
+    dur.reset_flags(flags_swrf);
 
-    rfu.request_map_redrawing();
+    dur.request_map_redrawing();
 
-    CHECK(rfu.has(MainWindowRedrawingFlag::MAP));
+    CHECK(dur.has(MainWindowRedrawingFlag::MAP));
     // 地図のサブウィンドウは、マップを描き直すとき (print_map()) に要求される
-    CHECK_FALSE(rfu.has(SubWindowRedrawingFlag::OVERHEAD));
-    CHECK_FALSE(rfu.has(SubWindowRedrawingFlag::DUNGEON));
+    CHECK_FALSE(dur.has(SubWindowRedrawingFlag::OVERHEAD));
+    CHECK_FALSE(dur.has(SubWindowRedrawingFlag::DUNGEON));
 }
 
 TEST_CASE("DeferredUpdateRequests::request_monster_update_and_map_redrawing requests updating the monsters and redrawing the map of the main window")
 {
-    auto &rfu = DeferredUpdateRequests::get_instance();
+    auto &dur = DeferredUpdateRequests::get_instance();
     static constexpr auto flags_swrf = {
         SubWindowRedrawingFlag::OVERHEAD,
         SubWindowRedrawingFlag::DUNGEON,
     };
-    const auto restore_srf = scoped_restore_flags(rfu, { StatusRecalculatingFlag::MONSTER_STATUSES });
-    const auto restore_mwrf = scoped_restore_flags(rfu, { MainWindowRedrawingFlag::MAP });
-    const auto restore_swrf = scoped_restore_flags(rfu, flags_swrf);
-    rfu.reset_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
-    rfu.reset_flag(MainWindowRedrawingFlag::MAP);
-    rfu.reset_flags(flags_swrf);
+    const auto restore_srf = scoped_restore_flags(dur, { StatusRecalculatingFlag::MONSTER_STATUSES });
+    const auto restore_mwrf = scoped_restore_flags(dur, { MainWindowRedrawingFlag::MAP });
+    const auto restore_swrf = scoped_restore_flags(dur, flags_swrf);
+    dur.reset_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
+    dur.reset_flag(MainWindowRedrawingFlag::MAP);
+    dur.reset_flags(flags_swrf);
 
-    rfu.request_monster_update_and_map_redrawing();
+    dur.request_monster_update_and_map_redrawing();
 
-    CHECK(rfu.has(StatusRecalculatingFlag::MONSTER_STATUSES));
-    CHECK(rfu.has(MainWindowRedrawingFlag::MAP));
-    CHECK_FALSE(rfu.has(SubWindowRedrawingFlag::OVERHEAD));
-    CHECK_FALSE(rfu.has(SubWindowRedrawingFlag::DUNGEON));
+    CHECK(dur.has(StatusRecalculatingFlag::MONSTER_STATUSES));
+    CHECK(dur.has(MainWindowRedrawingFlag::MAP));
+    CHECK_FALSE(dur.has(SubWindowRedrawingFlag::OVERHEAD));
+    CHECK_FALSE(dur.has(SubWindowRedrawingFlag::DUNGEON));
 }
 
 TEST_CASE("DeferredUpdateRequests::request_sight_recalculation requests forgetting and recalculating the view and the lights")
 {
-    auto &rfu = DeferredUpdateRequests::get_instance();
+    auto &dur = DeferredUpdateRequests::get_instance();
     static constexpr auto flags_srf = {
         StatusRecalculatingFlag::UN_VIEW,
         StatusRecalculatingFlag::UN_LITE,
@@ -232,25 +232,25 @@ TEST_CASE("DeferredUpdateRequests::request_sight_recalculation requests forgetti
         StatusRecalculatingFlag::LITE,
         StatusRecalculatingFlag::MONSTER_LITE,
     };
-    const auto restore = scoped_restore_flags(rfu, flags_srf);
-    const auto restore_flow = scoped_restore_flags(rfu, { StatusRecalculatingFlag::FLOW });
-    rfu.reset_flags(flags_srf);
-    rfu.reset_flag(StatusRecalculatingFlag::FLOW);
+    const auto restore = scoped_restore_flags(dur, flags_srf);
+    const auto restore_flow = scoped_restore_flags(dur, { StatusRecalculatingFlag::FLOW });
+    dur.reset_flags(flags_srf);
+    dur.reset_flag(StatusRecalculatingFlag::FLOW);
 
-    rfu.request_sight_recalculation();
+    dur.request_sight_recalculation();
 
     for (const auto flag : flags_srf) {
         CAPTURE(enum2i(flag));
-        CHECK(rfu.has(flag));
+        CHECK(dur.has(flag));
     }
 
     // モンスターの経路は、地形が変わるときだけ呼び出し側で要求する
-    CHECK_FALSE(rfu.has(StatusRecalculatingFlag::FLOW));
+    CHECK_FALSE(dur.has(StatusRecalculatingFlag::FLOW));
 }
 
 TEST_CASE("DeferredUpdateRequests::request_item_lists_redrawing requests redrawing the windows showing items")
 {
-    auto &rfu = DeferredUpdateRequests::get_instance();
+    auto &dur = DeferredUpdateRequests::get_instance();
     static constexpr auto flags_swrf = {
         SubWindowRedrawingFlag::INVENTORY,
         SubWindowRedrawingFlag::EQUIPMENT,
@@ -258,179 +258,179 @@ TEST_CASE("DeferredUpdateRequests::request_item_lists_redrawing requests redrawi
         SubWindowRedrawingFlag::FOUND_ITEMS,
         SubWindowRedrawingFlag::PLAYER,
     };
-    const auto restore = scoped_restore_flags(rfu, flags_swrf);
-    rfu.reset_flags(flags_swrf);
+    const auto restore = scoped_restore_flags(dur, flags_swrf);
+    dur.reset_flags(flags_swrf);
 
-    rfu.request_item_lists_redrawing();
+    dur.request_item_lists_redrawing();
 
     for (const auto flag : flags_swrf) {
         CAPTURE(enum2i(flag));
-        CHECK(rfu.has(flag));
+        CHECK(dur.has(flag));
     }
 }
 
 TEST_CASE("DeferredUpdateRequests::request_carried_item_lists_redrawing requests redrawing the inventory and the equipment")
 {
-    auto &rfu = DeferredUpdateRequests::get_instance();
+    auto &dur = DeferredUpdateRequests::get_instance();
     static constexpr auto flags_swrf = {
         SubWindowRedrawingFlag::INVENTORY,
         SubWindowRedrawingFlag::EQUIPMENT,
     };
-    const auto restore = scoped_restore_flags(rfu, flags_swrf);
+    const auto restore = scoped_restore_flags(dur, flags_swrf);
     static constexpr auto flags_swrf_others = {
         SubWindowRedrawingFlag::FLOOR_ITEMS,
         SubWindowRedrawingFlag::FOUND_ITEMS,
         SubWindowRedrawingFlag::PLAYER,
     };
-    const auto restore_others = scoped_restore_flags(rfu, flags_swrf_others);
-    rfu.reset_flags(flags_swrf);
-    rfu.reset_flags(flags_swrf_others);
+    const auto restore_others = scoped_restore_flags(dur, flags_swrf_others);
+    dur.reset_flags(flags_swrf);
+    dur.reset_flags(flags_swrf_others);
 
-    rfu.request_carried_item_lists_redrawing();
+    dur.request_carried_item_lists_redrawing();
 
     for (const auto flag : flags_swrf) {
         CAPTURE(enum2i(flag));
-        CHECK(rfu.has(flag));
+        CHECK(dur.has(flag));
     }
 
     // 床のアイテムの一覧とプレイヤーの情報は request_item_lists_redrawing() が要求する
     for (const auto flag : flags_swrf_others) {
         CAPTURE(enum2i(flag));
-        CHECK_FALSE(rfu.has(flag));
+        CHECK_FALSE(dur.has(flag));
     }
 }
 
 TEST_CASE("DeferredUpdateRequests::request_floor_item_lists_redrawing requests redrawing the windows showing floor items")
 {
-    auto &rfu = DeferredUpdateRequests::get_instance();
+    auto &dur = DeferredUpdateRequests::get_instance();
     static constexpr auto flags_swrf = {
         SubWindowRedrawingFlag::FLOOR_ITEMS,
         SubWindowRedrawingFlag::FOUND_ITEMS,
     };
-    const auto restore = scoped_restore_flags(rfu, flags_swrf);
-    rfu.reset_flags(flags_swrf);
+    const auto restore = scoped_restore_flags(dur, flags_swrf);
+    dur.reset_flags(flags_swrf);
 
-    rfu.request_floor_item_lists_redrawing();
+    dur.request_floor_item_lists_redrawing();
 
     for (const auto flag : flags_swrf) {
         CAPTURE(enum2i(flag));
-        CHECK(rfu.has(flag));
+        CHECK(dur.has(flag));
     }
 }
 
 TEST_CASE("DeferredUpdateRequests::request_spell_info_redrawing requests redrawing the spell list and the item knowledge")
 {
-    auto &rfu = DeferredUpdateRequests::get_instance();
+    auto &dur = DeferredUpdateRequests::get_instance();
     static constexpr auto flags_swrf = {
         SubWindowRedrawingFlag::SPELL,
         SubWindowRedrawingFlag::ITEM_KNOWLEDGE,
     };
-    const auto restore = scoped_restore_flags(rfu, flags_swrf);
-    rfu.reset_flags(flags_swrf);
+    const auto restore = scoped_restore_flags(dur, flags_swrf);
+    dur.reset_flags(flags_swrf);
 
-    rfu.request_spell_info_redrawing();
+    dur.request_spell_info_redrawing();
 
     for (const auto flag : flags_swrf) {
         CAPTURE(enum2i(flag));
-        CHECK(rfu.has(flag));
+        CHECK(dur.has(flag));
     }
 }
 
 TEST_CASE("DeferredUpdateRequests::request_inscription_change_updates requests recalculating the bonuses and combining the inventory")
 {
-    auto &rfu = DeferredUpdateRequests::get_instance();
-    const auto restore_srf = scoped_restore_flags(rfu, { StatusRecalculatingFlag::BONUS });
+    auto &dur = DeferredUpdateRequests::get_instance();
+    const auto restore_srf = scoped_restore_flags(dur, { StatusRecalculatingFlag::BONUS });
     static constexpr auto flags_iaf = {
         InventoryArrangementFlag::COMBINATION,
         InventoryArrangementFlag::REORDER,
     };
-    const auto restore_iaf = scoped_restore_flags(rfu, flags_iaf);
+    const auto restore_iaf = scoped_restore_flags(dur, flags_iaf);
     static constexpr auto flags_swrf = {
         SubWindowRedrawingFlag::INVENTORY,
         SubWindowRedrawingFlag::EQUIPMENT,
         SubWindowRedrawingFlag::FLOOR_ITEMS,
     };
-    const auto restore_swrf = scoped_restore_flags(rfu, flags_swrf);
-    rfu.reset_flag(StatusRecalculatingFlag::BONUS);
-    rfu.reset_flags(flags_iaf);
-    rfu.reset_flags(flags_swrf);
+    const auto restore_swrf = scoped_restore_flags(dur, flags_swrf);
+    dur.reset_flag(StatusRecalculatingFlag::BONUS);
+    dur.reset_flags(flags_iaf);
+    dur.reset_flags(flags_swrf);
 
-    rfu.request_inscription_change_updates();
+    dur.request_inscription_change_updates();
 
-    CHECK(rfu.has(StatusRecalculatingFlag::BONUS));
-    CHECK(rfu.has(InventoryArrangementFlag::COMBINATION));
-    CHECK_FALSE(rfu.has(InventoryArrangementFlag::REORDER));
+    CHECK(dur.has(StatusRecalculatingFlag::BONUS));
+    CHECK(dur.has(InventoryArrangementFlag::COMBINATION));
+    CHECK_FALSE(dur.has(InventoryArrangementFlag::REORDER));
     // 一覧の描き直しは能力の再計算が要求し、床の一覧は呼び出し側が要求するので、ここでは要求しない
     for (const auto flag : flags_swrf) {
         CAPTURE(enum2i(flag));
-        CHECK_FALSE(rfu.has(flag));
+        CHECK_FALSE(dur.has(flag));
     }
 }
 
 TEST_CASE("DeferredUpdateRequests::request_equipment_change_updates requests recalculating the bonuses, the light radius and the max MP")
 {
-    auto &rfu = DeferredUpdateRequests::get_instance();
+    auto &dur = DeferredUpdateRequests::get_instance();
     static constexpr auto flags_srf = {
         StatusRecalculatingFlag::BONUS,
         StatusRecalculatingFlag::TORCH,
         StatusRecalculatingFlag::MP,
         StatusRecalculatingFlag::HP,
     };
-    const auto restore = scoped_restore_flags(rfu, flags_srf);
-    const auto restore_mwrf = scoped_restore_flags(rfu, { MainWindowRedrawingFlag::EQUIPPY });
-    const auto restore_swrf = scoped_restore_flags(rfu, { SubWindowRedrawingFlag::PLAYER });
-    rfu.reset_flags(flags_srf);
-    rfu.reset_flag(MainWindowRedrawingFlag::EQUIPPY);
-    rfu.reset_flag(SubWindowRedrawingFlag::PLAYER);
+    const auto restore = scoped_restore_flags(dur, flags_srf);
+    const auto restore_mwrf = scoped_restore_flags(dur, { MainWindowRedrawingFlag::EQUIPPY });
+    const auto restore_swrf = scoped_restore_flags(dur, { SubWindowRedrawingFlag::PLAYER });
+    dur.reset_flags(flags_srf);
+    dur.reset_flag(MainWindowRedrawingFlag::EQUIPPY);
+    dur.reset_flag(SubWindowRedrawingFlag::PLAYER);
 
-    rfu.request_equipment_change_updates();
+    dur.request_equipment_change_updates();
 
-    CHECK(rfu.has(StatusRecalculatingFlag::BONUS));
-    CHECK(rfu.has(StatusRecalculatingFlag::TORCH));
-    CHECK(rfu.has(StatusRecalculatingFlag::MP));
-    CHECK_FALSE(rfu.has(StatusRecalculatingFlag::HP));
+    CHECK(dur.has(StatusRecalculatingFlag::BONUS));
+    CHECK(dur.has(StatusRecalculatingFlag::TORCH));
+    CHECK(dur.has(StatusRecalculatingFlag::MP));
+    CHECK_FALSE(dur.has(StatusRecalculatingFlag::HP));
     // 装備の記号やプレイヤー情報の描き直しは、装備する・外すコマンドの側で要求する
-    CHECK_FALSE(rfu.has(MainWindowRedrawingFlag::EQUIPPY));
-    CHECK_FALSE(rfu.has(SubWindowRedrawingFlag::PLAYER));
+    CHECK_FALSE(dur.has(MainWindowRedrawingFlag::EQUIPPY));
+    CHECK_FALSE(dur.has(SubWindowRedrawingFlag::PLAYER));
 }
 
 TEST_CASE("DeferredUpdateRequests::request_riding_status_redrawing requests redrawing the riding status and the mount's health")
 {
-    auto &rfu = DeferredUpdateRequests::get_instance();
+    auto &dur = DeferredUpdateRequests::get_instance();
     static constexpr auto flags_mwrf = {
         MainWindowRedrawingFlag::EXTRA,
         MainWindowRedrawingFlag::UHEALTH,
         MainWindowRedrawingFlag::HEALTH,
         MainWindowRedrawingFlag::MAP,
     };
-    const auto restore_mwrf = scoped_restore_flags(rfu, flags_mwrf);
-    const auto restore_srf = scoped_restore_flags(rfu, { StatusRecalculatingFlag::BONUS });
+    const auto restore_mwrf = scoped_restore_flags(dur, flags_mwrf);
+    const auto restore_srf = scoped_restore_flags(dur, { StatusRecalculatingFlag::BONUS });
     static constexpr auto flags_swrf = {
         SubWindowRedrawingFlag::OVERHEAD,
         SubWindowRedrawingFlag::DUNGEON,
     };
-    const auto restore_swrf = scoped_restore_flags(rfu, flags_swrf);
-    rfu.reset_flags(flags_mwrf);
-    rfu.reset_flag(StatusRecalculatingFlag::BONUS);
-    rfu.reset_flags(flags_swrf);
+    const auto restore_swrf = scoped_restore_flags(dur, flags_swrf);
+    dur.reset_flags(flags_mwrf);
+    dur.reset_flag(StatusRecalculatingFlag::BONUS);
+    dur.reset_flags(flags_swrf);
 
-    rfu.request_riding_status_redrawing();
+    dur.request_riding_status_redrawing();
 
-    CHECK(rfu.has(MainWindowRedrawingFlag::EXTRA));
-    CHECK(rfu.has(MainWindowRedrawingFlag::UHEALTH));
+    CHECK(dur.has(MainWindowRedrawingFlag::EXTRA));
+    CHECK(dur.has(MainWindowRedrawingFlag::UHEALTH));
     // 追跡しているモンスターの体力や、乗っているモンスターで変わる能力の再計算は、それぞれの箇所で要求する
-    CHECK_FALSE(rfu.has(MainWindowRedrawingFlag::HEALTH));
-    CHECK_FALSE(rfu.has(StatusRecalculatingFlag::BONUS));
+    CHECK_FALSE(dur.has(MainWindowRedrawingFlag::HEALTH));
+    CHECK_FALSE(dur.has(StatusRecalculatingFlag::BONUS));
     // 乗り降りのコマンドで一緒に要求するメイン画面の地図 (MAP) と、落馬で一緒に要求するサブウィンドウの地図
     // (OVERHEAD・DUNGEON) の描き直しも、それぞれの箇所で要求する
-    CHECK_FALSE(rfu.has(MainWindowRedrawingFlag::MAP));
-    CHECK_FALSE(rfu.has(SubWindowRedrawingFlag::OVERHEAD));
-    CHECK_FALSE(rfu.has(SubWindowRedrawingFlag::DUNGEON));
+    CHECK_FALSE(dur.has(MainWindowRedrawingFlag::MAP));
+    CHECK_FALSE(dur.has(SubWindowRedrawingFlag::OVERHEAD));
+    CHECK_FALSE(dur.has(SubWindowRedrawingFlag::DUNGEON));
 }
 
 TEST_CASE("DeferredUpdateRequests::request_hp_mp_redrawing requests redrawing the HP and the MP")
 {
-    auto &rfu = DeferredUpdateRequests::get_instance();
+    auto &dur = DeferredUpdateRequests::get_instance();
     static constexpr auto flags_mwrf = {
         MainWindowRedrawingFlag::HP,
         MainWindowRedrawingFlag::MP,
@@ -444,72 +444,72 @@ TEST_CASE("DeferredUpdateRequests::request_hp_mp_redrawing requests redrawing th
         SubWindowRedrawingFlag::ITEM_KNOWLEDGE,
         SubWindowRedrawingFlag::PLAYER,
     };
-    const auto restore_mwrf = scoped_restore_flags(rfu, flags_mwrf);
-    const auto restore_mwrf_others = scoped_restore_flags(rfu, flags_mwrf_others);
-    const auto restore_swrf = scoped_restore_flags(rfu, flags_swrf);
-    rfu.reset_flags(flags_mwrf);
-    rfu.reset_flags(flags_mwrf_others);
-    rfu.reset_flags(flags_swrf);
+    const auto restore_mwrf = scoped_restore_flags(dur, flags_mwrf);
+    const auto restore_mwrf_others = scoped_restore_flags(dur, flags_mwrf_others);
+    const auto restore_swrf = scoped_restore_flags(dur, flags_swrf);
+    dur.reset_flags(flags_mwrf);
+    dur.reset_flags(flags_mwrf_others);
+    dur.reset_flags(flags_swrf);
 
-    rfu.request_hp_mp_redrawing();
+    dur.request_hp_mp_redrawing();
 
     for (const auto flag : flags_mwrf) {
         CAPTURE(enum2i(flag));
-        CHECK(rfu.has(flag));
+        CHECK(dur.has(flag));
     }
 
     // 基本ステータスの全体や拡張ステータスは描き直さない
     for (const auto flag : flags_mwrf_others) {
         CAPTURE(enum2i(flag));
-        CHECK_FALSE(rfu.has(flag));
+        CHECK_FALSE(dur.has(flag));
     }
 
     // 呪文の情報は HP・MP を描き直すときに、プレイヤーの情報は前に描いた HP・MP と比べて要求される
     for (const auto flag : flags_swrf) {
         CAPTURE(enum2i(flag));
-        CHECK_FALSE(rfu.has(flag));
+        CHECK_FALSE(dur.has(flag));
     }
 }
 
 TEST_CASE("DeferredUpdateRequests::request_gold_redrawing requests redrawing the gold and the player window")
 {
-    auto &rfu = DeferredUpdateRequests::get_instance();
-    const auto restore_mwrf = scoped_restore_flags(rfu, { MainWindowRedrawingFlag::GOLD, MainWindowRedrawingFlag::BASIC });
-    const auto restore_swrf = scoped_restore_flags(rfu, { SubWindowRedrawingFlag::PLAYER });
-    rfu.reset_flag(MainWindowRedrawingFlag::GOLD);
-    rfu.reset_flag(MainWindowRedrawingFlag::BASIC);
-    rfu.reset_flag(SubWindowRedrawingFlag::PLAYER);
+    auto &dur = DeferredUpdateRequests::get_instance();
+    const auto restore_mwrf = scoped_restore_flags(dur, { MainWindowRedrawingFlag::GOLD, MainWindowRedrawingFlag::BASIC });
+    const auto restore_swrf = scoped_restore_flags(dur, { SubWindowRedrawingFlag::PLAYER });
+    dur.reset_flag(MainWindowRedrawingFlag::GOLD);
+    dur.reset_flag(MainWindowRedrawingFlag::BASIC);
+    dur.reset_flag(SubWindowRedrawingFlag::PLAYER);
 
-    rfu.request_gold_redrawing();
+    dur.request_gold_redrawing();
 
-    CHECK(rfu.has(MainWindowRedrawingFlag::GOLD));
-    CHECK(rfu.has(SubWindowRedrawingFlag::PLAYER));
+    CHECK(dur.has(MainWindowRedrawingFlag::GOLD));
+    CHECK(dur.has(SubWindowRedrawingFlag::PLAYER));
     // 所持金のほかの基本ステータスは描き直さない
-    CHECK_FALSE(rfu.has(MainWindowRedrawingFlag::BASIC));
+    CHECK_FALSE(dur.has(MainWindowRedrawingFlag::BASIC));
 }
 
 TEST_CASE("DeferredUpdateRequests::request_light_fuel_change_updates requests recalculating the light and redrawing the equipment")
 {
-    auto &rfu = DeferredUpdateRequests::get_instance();
-    const auto restore_srf = scoped_restore_flags(rfu, { StatusRecalculatingFlag::TORCH, StatusRecalculatingFlag::BONUS });
-    const auto restore_swrf = scoped_restore_flags(rfu, { SubWindowRedrawingFlag::EQUIPMENT, SubWindowRedrawingFlag::INVENTORY });
-    rfu.reset_flag(StatusRecalculatingFlag::TORCH);
-    rfu.reset_flag(StatusRecalculatingFlag::BONUS);
-    rfu.reset_flag(SubWindowRedrawingFlag::EQUIPMENT);
-    rfu.reset_flag(SubWindowRedrawingFlag::INVENTORY);
+    auto &dur = DeferredUpdateRequests::get_instance();
+    const auto restore_srf = scoped_restore_flags(dur, { StatusRecalculatingFlag::TORCH, StatusRecalculatingFlag::BONUS });
+    const auto restore_swrf = scoped_restore_flags(dur, { SubWindowRedrawingFlag::EQUIPMENT, SubWindowRedrawingFlag::INVENTORY });
+    dur.reset_flag(StatusRecalculatingFlag::TORCH);
+    dur.reset_flag(StatusRecalculatingFlag::BONUS);
+    dur.reset_flag(SubWindowRedrawingFlag::EQUIPMENT);
+    dur.reset_flag(SubWindowRedrawingFlag::INVENTORY);
 
-    rfu.request_light_fuel_change_updates();
+    dur.request_light_fuel_change_updates();
 
-    CHECK(rfu.has(StatusRecalculatingFlag::TORCH));
-    CHECK(rfu.has(SubWindowRedrawingFlag::EQUIPMENT));
+    CHECK(dur.has(StatusRecalculatingFlag::TORCH));
+    CHECK(dur.has(SubWindowRedrawingFlag::EQUIPMENT));
     // 能力 (燃料には依らない) の再計算や、所持品の一覧の描き直しは要求しない
-    CHECK_FALSE(rfu.has(StatusRecalculatingFlag::BONUS));
-    CHECK_FALSE(rfu.has(SubWindowRedrawingFlag::INVENTORY));
+    CHECK_FALSE(dur.has(StatusRecalculatingFlag::BONUS));
+    CHECK_FALSE(dur.has(SubWindowRedrawingFlag::INVENTORY));
 }
 
 TEST_CASE("DeferredUpdateRequests::request_bonus_and_max_hp_recalculation requests recalculating the bonuses and the max HP")
 {
-    auto &rfu = DeferredUpdateRequests::get_instance();
+    auto &dur = DeferredUpdateRequests::get_instance();
     static constexpr auto flags_srf = {
         StatusRecalculatingFlag::BONUS,
         StatusRecalculatingFlag::HP,
@@ -520,28 +520,28 @@ TEST_CASE("DeferredUpdateRequests::request_bonus_and_max_hp_recalculation reques
         StatusRecalculatingFlag::TORCH,
         StatusRecalculatingFlag::MONSTER_STATUSES,
     };
-    const auto restore_srf = scoped_restore_flags(rfu, flags_srf);
-    const auto restore_srf_others = scoped_restore_flags(rfu, flags_srf_others);
-    rfu.reset_flags(flags_srf);
-    rfu.reset_flags(flags_srf_others);
+    const auto restore_srf = scoped_restore_flags(dur, flags_srf);
+    const auto restore_srf_others = scoped_restore_flags(dur, flags_srf_others);
+    dur.reset_flags(flags_srf);
+    dur.reset_flags(flags_srf_others);
 
-    rfu.request_bonus_and_max_hp_recalculation();
+    dur.request_bonus_and_max_hp_recalculation();
 
     for (const auto flag : flags_srf) {
         CAPTURE(enum2i(flag));
-        CHECK(rfu.has(flag));
+        CHECK(dur.has(flag));
     }
 
     // 最大 MP・覚えられる呪文の数・光源の明るさ・モンスターのステータスは計算し直さない
     for (const auto flag : flags_srf_others) {
         CAPTURE(enum2i(flag));
-        CHECK_FALSE(rfu.has(flag));
+        CHECK_FALSE(dur.has(flag));
     }
 }
 
 TEST_CASE("DeferredUpdateRequests::request_max_mp_and_spells_recalculation requests recalculating the max MP and the spells")
 {
-    auto &rfu = DeferredUpdateRequests::get_instance();
+    auto &dur = DeferredUpdateRequests::get_instance();
     static constexpr auto flags_srf = {
         StatusRecalculatingFlag::MP,
         StatusRecalculatingFlag::SPELLS,
@@ -552,28 +552,28 @@ TEST_CASE("DeferredUpdateRequests::request_max_mp_and_spells_recalculation reque
         StatusRecalculatingFlag::TORCH,
         StatusRecalculatingFlag::MONSTER_STATUSES,
     };
-    const auto restore_srf = scoped_restore_flags(rfu, flags_srf);
-    const auto restore_srf_others = scoped_restore_flags(rfu, flags_srf_others);
-    rfu.reset_flags(flags_srf);
-    rfu.reset_flags(flags_srf_others);
+    const auto restore_srf = scoped_restore_flags(dur, flags_srf);
+    const auto restore_srf_others = scoped_restore_flags(dur, flags_srf_others);
+    dur.reset_flags(flags_srf);
+    dur.reset_flags(flags_srf_others);
 
-    rfu.request_max_mp_and_spells_recalculation();
+    dur.request_max_mp_and_spells_recalculation();
 
     for (const auto flag : flags_srf) {
         CAPTURE(enum2i(flag));
-        CHECK(rfu.has(flag));
+        CHECK(dur.has(flag));
     }
 
     // 能力・最大 HP・光源の明るさ・モンスターのステータスは計算し直さない
     for (const auto flag : flags_srf_others) {
         CAPTURE(enum2i(flag));
-        CHECK_FALSE(rfu.has(flag));
+        CHECK_FALSE(dur.has(flag));
     }
 }
 
 TEST_CASE("DeferredUpdateRequests::request_player_status_recalculation requests recalculating the bonuses, the max HP, the max MP and the spells")
 {
-    auto &rfu = DeferredUpdateRequests::get_instance();
+    auto &dur = DeferredUpdateRequests::get_instance();
     static constexpr auto flags_srf = {
         StatusRecalculatingFlag::BONUS,
         StatusRecalculatingFlag::HP,
@@ -584,21 +584,21 @@ TEST_CASE("DeferredUpdateRequests::request_player_status_recalculation requests 
         StatusRecalculatingFlag::TORCH,
         StatusRecalculatingFlag::MONSTER_STATUSES,
     };
-    const auto restore_srf = scoped_restore_flags(rfu, flags_srf);
-    const auto restore_srf_others = scoped_restore_flags(rfu, flags_srf_others);
-    rfu.reset_flags(flags_srf);
-    rfu.reset_flags(flags_srf_others);
+    const auto restore_srf = scoped_restore_flags(dur, flags_srf);
+    const auto restore_srf_others = scoped_restore_flags(dur, flags_srf_others);
+    dur.reset_flags(flags_srf);
+    dur.reset_flags(flags_srf_others);
 
-    rfu.request_player_status_recalculation();
+    dur.request_player_status_recalculation();
 
     for (const auto flag : flags_srf) {
         CAPTURE(enum2i(flag));
-        CHECK(rfu.has(flag));
+        CHECK(dur.has(flag));
     }
 
     // 光源の明るさとモンスターのステータスは、必要な箇所で別に要求する
     for (const auto flag : flags_srf_others) {
         CAPTURE(enum2i(flag));
-        CHECK_FALSE(rfu.has(flag));
+        CHECK_FALSE(dur.has(flag));
     }
 }

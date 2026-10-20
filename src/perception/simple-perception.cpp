@@ -40,9 +40,9 @@ void apply_item_feeling(PlayerType *player_ptr, INVENTORY_IDX i_idx, item_feel_t
     auto item = ref_item(player_ptr, i_idx);
     item->sense(feel);
     autopick_alter_item(player_ptr, i_idx, destroy_feeling);
-    auto &rfu = DeferredUpdateRequests::get_instance();
-    rfu.request_inventory_arrangement();
-    rfu.request_item_lists_redrawing();
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.request_inventory_arrangement();
+    dur.request_item_lists_redrawing();
 }
 
 /*!

@@ -85,7 +85,7 @@ void ObjectZapWandEntity::execute(INVENTORY_IDX i_idx)
         return;
     }
 
-    auto &rfu = DeferredUpdateRequests::get_instance();
+    auto &dur = DeferredUpdateRequests::get_instance();
     if (item->pval <= 0) {
         if (flush_failure) {
             flush();
@@ -93,8 +93,8 @@ void ObjectZapWandEntity::execute(INVENTORY_IDX i_idx)
 
         msg_print(_("この魔法棒にはもう魔力が残っていない。", "The wand has no charges left."));
         item->set_identification_flag(IdentificationFlag::EMPTY);
-        rfu.request_inventory_arrangement();
-        rfu.request_item_lists_redrawing();
+        dur.request_inventory_arrangement();
+        dur.request_item_lists_redrawing();
         return;
     }
 
@@ -112,8 +112,8 @@ void ObjectZapWandEntity::execute(INVENTORY_IDX i_idx)
         gain_exp(this->player_ptr, (item_level + (this->player_ptr->lev >> 1)) / this->player_ptr->lev);
     }
 
-    rfu.request_inventory_arrangement();
-    rfu.request_item_lists_redrawing();
+    dur.request_inventory_arrangement();
+    dur.request_item_lists_redrawing();
     item->pval--;
 
     describe_item_charges(this->player_ptr, i_idx >= 0, item);

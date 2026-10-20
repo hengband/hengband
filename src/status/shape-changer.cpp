@@ -93,9 +93,9 @@ void change_race(PlayerType *player_ptr, PlayerRaceType new_race, concptr effect
 
     roll_hitdice(player_ptr, SPOP_NONE);
     check_experience(player_ptr);
-    auto &rfu = DeferredUpdateRequests::get_instance();
-    rfu.set_flag(MainWindowRedrawingFlag::BASIC);
-    rfu.set_flag(StatusRecalculatingFlag::BONUS);
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.set_flag(MainWindowRedrawingFlag::BASIC);
+    dur.set_flag(StatusRecalculatingFlag::BONUS);
     handle_stuff(player_ptr);
 
     if (old_race != player_ptr->prace) {

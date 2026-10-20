@@ -255,9 +255,9 @@ bool input_check_strict(PlayerType *player_ptr, std::string_view prompt, EnumCla
     }
 
     const auto buf = ss.str();
-    auto &rfu = DeferredUpdateRequests::get_instance();
+    auto &dur = DeferredUpdateRequests::get_instance();
     if (auto_more) {
-        rfu.set_flag(SubWindowRedrawingFlag::MESSAGE);
+        dur.set_flag(SubWindowRedrawingFlag::MESSAGE);
         window_stuff(player_ptr);
         num_more = 0;
     }
@@ -267,7 +267,7 @@ bool input_check_strict(PlayerType *player_ptr, std::string_view prompt, EnumCla
     prt(buf, 0, 0);
     if (mode.has_not(UserCheck::NO_HISTORY) && player_ptr->playing) {
         message_add(buf);
-        rfu.set_flag(SubWindowRedrawingFlag::MESSAGE);
+        dur.set_flag(SubWindowRedrawingFlag::MESSAGE);
         window_stuff(player_ptr);
     }
 

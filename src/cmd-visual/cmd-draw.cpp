@@ -43,19 +43,19 @@ void do_cmd_redraw(PlayerType *player_ptr)
 {
     term_xtra(TERM_XTRA_REACT, 0);
 
-    auto &rfu = DeferredUpdateRequests::get_instance();
-    rfu.request_whole_status_recalculation();
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.request_whole_status_recalculation();
     static constexpr auto flags_iaf = {
         InventoryArrangementFlag::COMBINATION,
         InventoryArrangementFlag::REORDER,
     };
-    rfu.set_flags(flags_iaf);
-    rfu.request_whole_main_window_redrawing();
+    dur.set_flags(flags_iaf);
+    dur.request_whole_main_window_redrawing();
     auto &world = AngbandWorld::get_instance();
     // フロアが無いとき (新しいキャラクターの作成中に Windows 版のメニューから記号を切り替えたときなど) は、
     // フロアに入るときに全てのサブウィンドウを描き直す
     if (world.character_dungeon) {
-        rfu.fill_up_sub_flags();
+        dur.fill_up_sub_flags();
     }
 
     world.play_time.update();

@@ -105,9 +105,9 @@ void PlayerBasicStatistics::update_top_status()
 
     if (this->player_ptr->stat_top[status] != top) {
         this->player_ptr->stat_top[status] = (int16_t)top;
-        auto &rfu = DeferredUpdateRequests::get_instance();
-        rfu.set_flag(MainWindowRedrawingFlag::ABILITY_SCORE);
-        rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
+        auto &dur = DeferredUpdateRequests::get_instance();
+        dur.set_flag(MainWindowRedrawingFlag::ABILITY_SCORE);
+        dur.set_flag(SubWindowRedrawingFlag::PLAYER);
     }
 }
 
@@ -139,9 +139,9 @@ void PlayerBasicStatistics::update_use_status()
 
     if (this->player_ptr->stat_use[status] != use) {
         this->player_ptr->stat_use[status] = (int16_t)use;
-        auto &rfu = DeferredUpdateRequests::get_instance();
-        rfu.set_flag(MainWindowRedrawingFlag::ABILITY_SCORE);
-        rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
+        auto &dur = DeferredUpdateRequests::get_instance();
+        dur.set_flag(MainWindowRedrawingFlag::ABILITY_SCORE);
+        dur.set_flag(SubWindowRedrawingFlag::PLAYER);
     }
 }
 
@@ -169,22 +169,22 @@ void PlayerBasicStatistics::update_index_status()
     }
 
     this->player_ptr->stat_index[status] = (int16_t)index;
-    auto &rfu = DeferredUpdateRequests::get_instance();
+    auto &dur = DeferredUpdateRequests::get_instance();
     if (status == A_CON) {
-        rfu.set_flag(StatusRecalculatingFlag::HP);
+        dur.set_flag(StatusRecalculatingFlag::HP);
     } else if (status == A_INT) {
         if (mp_ptr->spell_stat == A_INT) {
-            rfu.request_max_mp_and_spells_recalculation();
+            dur.request_max_mp_and_spells_recalculation();
         }
     } else if (status == A_WIS) {
         if (mp_ptr->spell_stat == A_WIS) {
-            rfu.request_max_mp_and_spells_recalculation();
+            dur.request_max_mp_and_spells_recalculation();
         }
     } else if (status == A_CHR) {
         if (mp_ptr->spell_stat == A_CHR) {
-            rfu.request_max_mp_and_spells_recalculation();
+            dur.request_max_mp_and_spells_recalculation();
         }
     }
 
-    rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
+    dur.set_flag(SubWindowRedrawingFlag::PLAYER);
 }

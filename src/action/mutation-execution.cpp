@@ -173,9 +173,9 @@ bool exe_mutation_power(PlayerType *player_ptr, PlayerMutationType power)
         }
 
         // 感触が変わると、持ち物の束をまとめられるかも変わる
-        auto &rfu = DeferredUpdateRequests::get_instance();
-        rfu.request_inventory_arrangement();
-        rfu.set_flag(SubWindowRedrawingFlag::EQUIPMENT);
+        auto &dur = DeferredUpdateRequests::get_instance();
+        dur.request_inventory_arrangement();
+        dur.set_flag(SubWindowRedrawingFlag::EQUIPMENT);
         return true;
     }
     case PlayerMutationType::BERSERK:

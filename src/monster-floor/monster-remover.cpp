@@ -75,9 +75,9 @@ void delete_monster_idx(PlayerType *player_ptr, short m_idx)
         player_ptr->ride_monster(0);
 
         // 乗っているモンスターの速度などで決まる能力と、乗馬中の表示・乗っているモンスターの体力の表示が変わる
-        auto &rfu = DeferredUpdateRequests::get_instance();
-        rfu.set_flag(StatusRecalculatingFlag::BONUS);
-        rfu.request_riding_status_redrawing();
+        auto &dur = DeferredUpdateRequests::get_instance();
+        dur.set_flag(StatusRecalculatingFlag::BONUS);
+        dur.request_riding_status_redrawing();
     }
 
     floor.get_grid(m_pos).m_idx = 0;

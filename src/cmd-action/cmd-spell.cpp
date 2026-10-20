@@ -690,9 +690,9 @@ static void change_realm2(PlayerType *player_ptr, PlayerRealm &pr, RealmType nex
     player_ptr->old_realm |= 1U << (enum2i(pr.realm2().to_enum()) - 1);
     pr.set(pr.realm1().to_enum(), next_realm);
 
-    auto &rfu = DeferredUpdateRequests::get_instance();
-    rfu.set_flag(StatusRecalculatingFlag::SPELLS);
-    rfu.set_flag(InventoryArrangementFlag::REORDER);
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.set_flag(StatusRecalculatingFlag::SPELLS);
+    dur.set_flag(InventoryArrangementFlag::REORDER);
     handle_stuff(player_ptr);
 
     /* Load an autopick preference file */
@@ -883,8 +883,8 @@ void do_cmd_study(PlayerType *player_ptr)
     /* One less spell available */
     player_ptr->learned_spells++;
 
-    auto &rfu = DeferredUpdateRequests::get_instance();
-    rfu.set_flag(StatusRecalculatingFlag::SPELLS);
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.set_flag(StatusRecalculatingFlag::SPELLS);
     update_creature(player_ptr);
 }
 

@@ -21,14 +21,14 @@ TEST_CASE("OverviewMapCache recomputes only the grids marked dirty")
 {
     auto &terrains = TerrainList::get_instance();
     auto &world = AngbandWorld::get_instance();
-    auto &rfu = DeferredUpdateRequests::get_instance();
+    auto &dur = DeferredUpdateRequests::get_instance();
     const auto old_size = terrains.size();
     const auto restore_options = test::scoped_restore(view_hidden_walls, view_unsafe_walls, view_unsafe_grids, view_special_lite, view_granite_lite, view_bright_lite);
     auto &cache = OverviewMapCache::get_instance();
-    const auto restore = util::make_finalizer([&terrains, &world, &rfu, &cache, old_size, wild = world.is_wild_mode()] {
+    const auto restore = util::make_finalizer([&terrains, &world, &dur, &cache, old_size, wild = world.is_wild_mode()] {
         terrains.resize(old_size);
         world.set_wild_mode(wild);
-        rfu.reset_flag(MainWindowRedrawingFlag::MAP);
+        dur.reset_flag(MainWindowRedrawingFlag::MAP);
 
         // このテストのフロアから求めた結果や表示の変化を、ほかのテストで使わせない
         cache.mark_all_dirty();
@@ -59,7 +59,7 @@ TEST_CASE("OverviewMapCache recomputes only the grids marked dirty")
     view_special_lite = false;
     view_granite_lite = false;
     world.set_wild_mode(false);
-    rfu.reset_flag(MainWindowRedrawingFlag::MAP);
+    dur.reset_flag(MainWindowRedrawingFlag::MAP);
 
     auto floor_ptr = std::make_unique<FloorType>();
     auto &floor = *floor_ptr;
@@ -170,7 +170,7 @@ TEST_CASE("OverviewMapCache recomputes only the grids marked dirty")
     SUBCASE("A pending map redraw request recomputes all grids")
     {
         floor.get_grid({ 0, 4 }).feat = wall_id;
-        rfu.set_flag(MainWindowRedrawingFlag::MAP);
+        dur.set_flag(MainWindowRedrawingFlag::MAP);
         cache.update(player_ptr.get());
         CHECK(cache.get_grid({ 0, 4 }).symbol.character == '#');
     }

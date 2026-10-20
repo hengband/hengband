@@ -185,9 +185,9 @@ void do_cmd_uninscribe(PlayerType *player_ptr)
 
     msg_print(_("銘を消した。", "Inscription removed."));
     item->inscription.reset();
-    auto &rfu = DeferredUpdateRequests::get_instance();
-    rfu.request_inscription_change_updates();
-    rfu.request_floor_item_lists_redrawing();
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.request_inscription_change_updates();
+    dur.request_floor_item_lists_redrawing();
 }
 
 /*!
@@ -218,9 +218,9 @@ void do_cmd_inscribe(PlayerType *player_ptr)
     } else {
         item->inscription.emplace(*input_inscription);
     }
-    auto &rfu = DeferredUpdateRequests::get_instance();
-    rfu.request_inscription_change_updates();
-    rfu.request_floor_item_lists_redrawing();
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.request_inscription_change_updates();
+    dur.request_floor_item_lists_redrawing();
 }
 
 /*!

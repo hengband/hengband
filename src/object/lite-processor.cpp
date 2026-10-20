@@ -46,8 +46,8 @@ void reduce_lite_life(PlayerType *player_ptr)
 void notice_lite_change(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
     // 装備の一覧に残りターン数を表示している
-    auto &rfu = DeferredUpdateRequests::get_instance();
-    rfu.set_flag(SubWindowRedrawingFlag::EQUIPMENT);
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.set_flag(SubWindowRedrawingFlag::EQUIPMENT);
 
     if (player_ptr->effects()->blindness().is_active()) {
         if (o_ptr->fuel == 0) {
@@ -60,7 +60,7 @@ void notice_lite_change(PlayerType *player_ptr, ItemEntity *o_ptr)
             StatusRecalculatingFlag::TORCH,
             StatusRecalculatingFlag::BONUS,
         };
-        rfu.set_flags(flags);
+        dur.set_flags(flags);
     } else if (o_ptr->ego_idx == EgoType::LITE_LONG) {
         if ((o_ptr->fuel < 50) && (!(o_ptr->fuel % 5))) {
             if (disturb_minor) {

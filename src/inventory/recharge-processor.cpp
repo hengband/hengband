@@ -69,9 +69,9 @@ void recharge_magic_items(PlayerType *player_ptr)
         }
     }
 
-    auto &rfu = DeferredUpdateRequests::get_instance();
+    auto &dur = DeferredUpdateRequests::get_instance();
     if (changed) {
-        rfu.set_flag(SubWindowRedrawingFlag::EQUIPMENT);
+        dur.set_flag(SubWindowRedrawingFlag::EQUIPMENT);
         wild_regen = 20;
     }
 
@@ -111,7 +111,7 @@ void recharge_magic_items(PlayerType *player_ptr)
     }
 
     if (changed) {
-        rfu.set_flag(SubWindowRedrawingFlag::INVENTORY);
+        dur.set_flag(SubWindowRedrawingFlag::INVENTORY);
         wild_regen = 20;
     }
 
@@ -130,7 +130,7 @@ void recharge_magic_items(PlayerType *player_ptr)
             }
 
             if (is_listed && (calc_displayed_charging_count(*item_ptr) != old_charging_count)) {
-                rfu.request_floor_item_lists_redrawing();
+                dur.request_floor_item_lists_redrawing();
             }
         }
     }

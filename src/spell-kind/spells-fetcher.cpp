@@ -102,9 +102,9 @@ void fetch_item(PlayerType *player_ptr, const Direction &dir, WEIGHT wgt, bool r
     const auto item_name = describe_flavor(player_ptr, item, OD_NAME_ONLY);
     msg_print(_("{}があなたの足元に飛んできた。", "{} flies through the air to your feet."), str_upcase_first(item_name));
     note_spot(player_ptr, p_pos);
-    auto &rfu = DeferredUpdateRequests::get_instance();
-    rfu.request_map_redrawing();
-    rfu.request_floor_item_lists_redrawing();
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.request_map_redrawing();
+    dur.request_floor_item_lists_redrawing();
 }
 
 bool fetch_monster(PlayerType *player_ptr)

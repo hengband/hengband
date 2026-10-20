@@ -56,13 +56,13 @@ void inven_item_increase(PlayerType *player_ptr, INVENTORY_IDX i_idx, ITEM_NUMBE
     }
 
     o_ptr->number += num;
-    auto &rfu = DeferredUpdateRequests::get_instance();
+    auto &dur = DeferredUpdateRequests::get_instance();
     static constexpr auto flags_srf = {
         StatusRecalculatingFlag::BONUS,
         StatusRecalculatingFlag::MP,
     };
-    rfu.set_flags(flags_srf);
-    rfu.set_flag(InventoryArrangementFlag::COMBINATION);
+    dur.set_flags(flags_srf);
+    dur.set_flag(InventoryArrangementFlag::COMBINATION);
     if (o_ptr->number || !player_ptr->ele_attack) {
         return;
     }
@@ -94,11 +94,11 @@ void inven_item_optimize(PlayerType *player_ptr, INVENTORY_IDX i_idx)
         return;
     }
 
-    auto &rfu = DeferredUpdateRequests::get_instance();
+    auto &dur = DeferredUpdateRequests::get_instance();
     if (i_idx >= INVEN_MAIN_HAND) {
         player_ptr->equip_cnt--;
         player_ptr->inventory[i_idx]->wipe();
-        rfu.request_equipment_change_updates();
+        dur.request_equipment_change_updates();
         return;
     }
 
@@ -114,7 +114,7 @@ void inven_item_optimize(PlayerType *player_ptr, INVENTORY_IDX i_idx)
         SubWindowRedrawingFlag::INVENTORY,
         SubWindowRedrawingFlag::SPELL,
     };
-    rfu.set_flags(flags);
+    dur.set_flags(flags);
 }
 
 /*!
@@ -253,19 +253,19 @@ void reorder_pack(PlayerType *player_ptr)
  */
 void update_inventory_arrangement(PlayerType *player_ptr)
 {
-    auto &rfu = DeferredUpdateRequests::get_instance();
-    if (rfu.has(InventoryArrangementFlag::AUTO_DESTRUCTION)) {
-        rfu.reset_flag(InventoryArrangementFlag::AUTO_DESTRUCTION);
+    auto &dur = DeferredUpdateRequests::get_instance();
+    if (dur.has(InventoryArrangementFlag::AUTO_DESTRUCTION)) {
+        dur.reset_flag(InventoryArrangementFlag::AUTO_DESTRUCTION);
         autopick_delayed_alter(player_ptr);
     }
 
-    if (rfu.has(InventoryArrangementFlag::COMBINATION)) {
-        rfu.reset_flag(InventoryArrangementFlag::COMBINATION);
+    if (dur.has(InventoryArrangementFlag::COMBINATION)) {
+        dur.reset_flag(InventoryArrangementFlag::COMBINATION);
         combine_pack(player_ptr);
     }
 
-    if (rfu.has(InventoryArrangementFlag::REORDER)) {
-        rfu.reset_flag(InventoryArrangementFlag::REORDER);
+    if (dur.has(InventoryArrangementFlag::REORDER)) {
+        dur.reset_flag(InventoryArrangementFlag::REORDER);
         reorder_pack(player_ptr);
     }
 }
@@ -282,7 +282,7 @@ int16_t store_item_to_inventory(PlayerType *player_ptr, ItemEntity *o_ptr)
     INVENTORY_IDX n = -1;
 
     ItemEntity *j_ptr;
-    auto &rfu = DeferredUpdateRequests::get_instance();
+    auto &dur = DeferredUpdateRequests::get_instance();
     for (const auto i_idx : INVEN_PACK_SLOTS) {
         j_ptr = player_ptr->inventory[i_idx].get();
         if (!j_ptr->is_valid()) {
@@ -292,8 +292,8 @@ int16_t store_item_to_inventory(PlayerType *player_ptr, ItemEntity *o_ptr)
         n = enum2i(i_idx);
         if (j_ptr->is_similar(*o_ptr)) {
             j_ptr->absorb(*o_ptr);
-            rfu.set_flag(StatusRecalculatingFlag::BONUS);
-            rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
+            dur.set_flag(StatusRecalculatingFlag::BONUS);
+            dur.set_flag(SubWindowRedrawingFlag::PLAYER);
             return enum2i(i_idx);
         }
     }
@@ -327,9 +327,9 @@ int16_t store_item_to_inventory(PlayerType *player_ptr, ItemEntity *o_ptr)
     j_ptr->marked.clear().set(OmType::TOUCHED);
 
     player_ptr->inven_cnt++;
-    rfu.set_flag(StatusRecalculatingFlag::BONUS);
-    rfu.request_inventory_arrangement();
-    rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
+    dur.set_flag(StatusRecalculatingFlag::BONUS);
+    dur.request_inventory_arrangement();
+    dur.set_flag(SubWindowRedrawingFlag::PLAYER);
     return i;
 }
 

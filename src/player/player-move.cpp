@@ -135,7 +135,7 @@ bool move_player_effect(PlayerType *player_ptr, POSITION ny, POSITION nx, BIT_FL
     auto &grid_old = floor.get_grid(pos_old);
     const auto &terrain_new = grid_new.get_terrain();
     const auto &terrain_old = grid_old.get_terrain();
-    auto &rfu = DeferredUpdateRequests::get_instance();
+    auto &dur = DeferredUpdateRequests::get_instance();
     if (!(mpe_mode & MPE_STAYING)) {
         const auto om_idx = grid_old.m_idx;
         const auto nm_idx = grid_new.m_idx;
@@ -163,8 +163,8 @@ bool move_player_effect(PlayerType *player_ptr, POSITION ny, POSITION nx, BIT_FL
         verify_panel(player_ptr);
         if (mpe_mode & MPE_FORGET_FLOW) {
             forget_flow(floor);
-            rfu.set_flag(StatusRecalculatingFlag::UN_VIEW);
-            rfu.request_map_redrawing();
+            dur.set_flag(StatusRecalculatingFlag::UN_VIEW);
+            dur.request_map_redrawing();
         }
 
         static constexpr auto flags_srf = {
@@ -174,9 +174,9 @@ bool move_player_effect(PlayerType *player_ptr, POSITION ny, POSITION nx, BIT_FL
             StatusRecalculatingFlag::MONSTER_LITE,
             StatusRecalculatingFlag::DISTANCE,
         };
-        rfu.set_flags(flags_srf);
+        dur.set_flags(flags_srf);
         // 自分の周囲はプレイヤーを中心に描くので、プレイヤーが動いたら描き直す
-        rfu.set_flag(SubWindowRedrawingFlag::DUNGEON);
+        dur.set_flag(SubWindowRedrawingFlag::DUNGEON);
         if ((!player_ptr->effects()->blindness().is_active() && !no_lite(player_ptr)) || !floor.has_trap_at(pos_new)) {
             grid_new.info &= ~(CAVE_UNSAFE);
         }
@@ -205,7 +205,7 @@ bool move_player_effect(PlayerType *player_ptr, POSITION ny, POSITION nx, BIT_FL
 
         if (PlayerRace(player_ptr).equals(PlayerRaceType::MERFOLK)) {
             if (terrain_new.flags.has(Tc::WATER) ^ terrain_old.flags.has(Tc::WATER)) {
-                rfu.set_flag(StatusRecalculatingFlag::BONUS);
+                dur.set_flag(StatusRecalculatingFlag::BONUS);
                 update_creature(player_ptr);
             }
         }
@@ -236,7 +236,7 @@ bool move_player_effect(PlayerType *player_ptr, POSITION ny, POSITION nx, BIT_FL
     // 自動拾い/自動破壊により床上のアイテムリストが変化した可能性があるので表示を更新。
     // 走っている間やトラベル中は描き直すと重いので、止まったとき (stop_running()・Travel::stop()) に要求する
     if (!player_ptr->running && !Travel::get_instance().is_ongoing()) {
-        rfu.request_floor_item_lists_redrawing();
+        dur.request_floor_item_lists_redrawing();
         window_stuff(player_ptr);
     }
 

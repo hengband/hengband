@@ -430,9 +430,9 @@ void effect_player_lite(PlayerType *player_ptr, EffectPlayerType *ep_ptr)
     player_ptr->wraith_form = 0;
     msg_print(_("閃光のため非物質的な影の存在でいられなくなった。", "The light forces you out of your incorporeal shadow form."));
 
-    auto &rfu = DeferredUpdateRequests::get_instance();
-    rfu.request_monster_update_and_map_redrawing();
-    rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.request_monster_update_and_map_redrawing();
+    dur.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
 }
 
 void effect_player_dark(PlayerType *player_ptr, EffectPlayerType *ep_ptr)

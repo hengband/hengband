@@ -148,7 +148,7 @@ bool process_fall_off_horse(PlayerType *player_ptr, int dam, bool force)
 
     player_ptr->dismount();
 
-    auto &rfu = DeferredUpdateRequests::get_instance();
+    auto &dur = DeferredUpdateRequests::get_instance();
     static constexpr auto flags_srf = {
         StatusRecalculatingFlag::BONUS,
         StatusRecalculatingFlag::VIEW,
@@ -157,9 +157,9 @@ bool process_fall_off_horse(PlayerType *player_ptr, int dam, bool force)
         StatusRecalculatingFlag::MONSTER_LITE,
         StatusRecalculatingFlag::MONSTER_STATUSES,
     };
-    rfu.set_flags(flags_srf);
+    dur.set_flags(flags_srf);
     handle_stuff(player_ptr);
-    rfu.request_riding_status_redrawing();
+    dur.request_riding_status_redrawing();
     auto fall_dam = false;
     if (player_ptr->levitation && !force) {
         const auto m_name = monster_desc(player_ptr, monster, 0);

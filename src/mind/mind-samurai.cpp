@@ -422,7 +422,7 @@ bool choose_samurai_stance(PlayerType *player_ptr)
     }
 
     set_action(player_ptr, ACTION_SAMURAI_STANCE);
-    auto &rfu = DeferredUpdateRequests::get_instance();
+    auto &dur = DeferredUpdateRequests::get_instance();
     if (PlayerClass(player_ptr).samurai_stance_is(new_stance)) {
         msg_print(_("構え直した。", "You reassume a stance."));
     } else {
@@ -430,7 +430,7 @@ bool choose_samurai_stance(PlayerType *player_ptr)
             StatusRecalculatingFlag::BONUS,
             StatusRecalculatingFlag::MONSTER_STATUSES,
         };
-        rfu.set_flags(flags_srf);
+        dur.set_flags(flags_srf);
         msg_print(_("{}の型で構えた。", "You assume the {} stance."), samurai_stances[enum2i(new_stance) - 1].desc);
         PlayerClass(player_ptr).set_samurai_stance(new_stance);
     }
@@ -439,7 +439,7 @@ bool choose_samurai_stance(PlayerType *player_ptr)
         MainWindowRedrawingFlag::ACTION,
         MainWindowRedrawingFlag::TIMED_EFFECT,
     };
-    rfu.set_flags(flags);
+    dur.set_flags(flags);
     screen_load();
     return true;
 }

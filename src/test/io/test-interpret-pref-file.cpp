@@ -64,18 +64,18 @@ namespace {
  */
 [[nodiscard]] auto scoped_clear_redrawing_flags()
 {
-    auto &rfu = DeferredUpdateRequests::get_instance();
+    auto &dur = DeferredUpdateRequests::get_instance();
     const EnumClassFlagGroup<SubWindowRedrawingFlag> all_sub_flags(EnumRange(SubWindowRedrawingFlag::INVENTORY, SubWindowRedrawingFlag::MAX));
-    const auto old_sub_flags = rfu.get_sub_intersection(all_sub_flags);
-    const auto had_map = rfu.has(MainWindowRedrawingFlag::MAP);
-    rfu.reset_flags(all_sub_flags);
-    rfu.reset_flag(MainWindowRedrawingFlag::MAP);
-    return util::make_finalizer([&rfu, all_sub_flags, old_sub_flags, had_map] {
-        rfu.reset_flags(all_sub_flags);
-        rfu.set_flags(old_sub_flags);
-        rfu.reset_flag(MainWindowRedrawingFlag::MAP);
+    const auto old_sub_flags = dur.get_sub_intersection(all_sub_flags);
+    const auto had_map = dur.has(MainWindowRedrawingFlag::MAP);
+    dur.reset_flags(all_sub_flags);
+    dur.reset_flag(MainWindowRedrawingFlag::MAP);
+    return util::make_finalizer([&dur, all_sub_flags, old_sub_flags, had_map] {
+        dur.reset_flags(all_sub_flags);
+        dur.set_flags(old_sub_flags);
+        dur.reset_flag(MainWindowRedrawingFlag::MAP);
         if (had_map) {
-            rfu.set_flag(MainWindowRedrawingFlag::MAP);
+            dur.set_flag(MainWindowRedrawingFlag::MAP);
         }
     });
 }
@@ -238,13 +238,13 @@ TEST_CASE("interpret_pref_file requests redrawing the map but not the sub-window
 
     REQUIRE(interpret("V:255:1:2:3:0x10") == 0);
 
-    const auto &rfu = DeferredUpdateRequests::get_instance();
-    CHECK(rfu.has(MainWindowRedrawingFlag::MAP));
+    const auto &dur = DeferredUpdateRequests::get_instance();
+    CHECK(dur.has(MainWindowRedrawingFlag::MAP));
     // 地図のサブウィンドウはマップを描き直すときに、ほかのサブウィンドウはフロアに入るときに要求される
-    CHECK_FALSE(rfu.has(SubWindowRedrawingFlag::OVERHEAD));
-    CHECK_FALSE(rfu.has(SubWindowRedrawingFlag::DUNGEON));
-    CHECK_FALSE(rfu.has(SubWindowRedrawingFlag::INVENTORY));
-    CHECK_FALSE(rfu.has(SubWindowRedrawingFlag::FLOOR_ITEMS));
+    CHECK_FALSE(dur.has(SubWindowRedrawingFlag::OVERHEAD));
+    CHECK_FALSE(dur.has(SubWindowRedrawingFlag::DUNGEON));
+    CHECK_FALSE(dur.has(SubWindowRedrawingFlag::INVENTORY));
+    CHECK_FALSE(dur.has(SubWindowRedrawingFlag::FLOOR_ITEMS));
 }
 
 TEST_CASE("interpret_pref_file requests redrawing every sub-window after entering a floor")
@@ -257,10 +257,10 @@ TEST_CASE("interpret_pref_file requests redrawing every sub-window after enterin
 
     REQUIRE(interpret("V:255:1:2:3:0x10") == 0);
 
-    const auto &rfu = DeferredUpdateRequests::get_instance();
-    CHECK(rfu.has(MainWindowRedrawingFlag::MAP));
+    const auto &dur = DeferredUpdateRequests::get_instance();
+    CHECK(dur.has(MainWindowRedrawingFlag::MAP));
     for (const auto flag : EnumRange(SubWindowRedrawingFlag::INVENTORY, SubWindowRedrawingFlag::MAX)) {
         CAPTURE(enum2i(flag));
-        CHECK(rfu.has(flag));
+        CHECK(dur.has(flag));
     }
 }

@@ -105,14 +105,14 @@ static void dispel_player(PlayerType *player_ptr)
         }
 
         player_ptr->action = ACTION_NONE;
-        auto &rfu = DeferredUpdateRequests::get_instance();
-        rfu.request_monster_update_and_map_redrawing();
-        rfu.request_bonus_and_max_hp_recalculation();
+        auto &dur = DeferredUpdateRequests::get_instance();
+        dur.request_monster_update_and_map_redrawing();
+        dur.request_bonus_and_max_hp_recalculation();
         static constexpr auto flags_mwrf = {
             MainWindowRedrawingFlag::TIMED_EFFECT,
             MainWindowRedrawingFlag::ACTION,
         };
-        rfu.set_flags(flags_mwrf);
+        dur.set_flags(flags_mwrf);
         player_ptr->energy_need += ENERGY_NEED();
     }
 }

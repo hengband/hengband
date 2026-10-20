@@ -20,17 +20,17 @@ TEST_CASE("MapInfoCache recomputes only the grids invalidated")
 {
     auto &terrains = TerrainList::get_instance();
     auto &world = AngbandWorld::get_instance();
-    auto &rfu = DeferredUpdateRequests::get_instance();
+    auto &dur = DeferredUpdateRequests::get_instance();
     const auto old_size = terrains.size();
     const auto restore_options = test::scoped_restore(view_hidden_walls, view_unsafe_walls, view_unsafe_grids, view_special_lite, view_granite_lite, display_autopick);
     auto &cache = MapInfoCache::get_instance();
-    const auto restore = util::make_finalizer([&terrains, &world, &rfu, &cache, old_size, wild = world.is_wild_mode(), has_map = rfu.has(MainWindowRedrawingFlag::MAP)] {
+    const auto restore = util::make_finalizer([&terrains, &world, &dur, &cache, old_size, wild = world.is_wild_mode(), has_map = dur.has(MainWindowRedrawingFlag::MAP)] {
         terrains.resize(old_size);
         world.set_wild_mode(wild);
         if (has_map) {
-            rfu.set_flag(MainWindowRedrawingFlag::MAP);
+            dur.set_flag(MainWindowRedrawingFlag::MAP);
         } else {
-            rfu.reset_flag(MainWindowRedrawingFlag::MAP);
+            dur.reset_flag(MainWindowRedrawingFlag::MAP);
         }
 
         // このテストのフロアから求めた結果を、ほかのテストで使わせない
@@ -61,7 +61,7 @@ TEST_CASE("MapInfoCache recomputes only the grids invalidated")
     view_special_lite = false;
     view_granite_lite = false;
     world.set_wild_mode(false);
-    rfu.reset_flag(MainWindowRedrawingFlag::MAP);
+    dur.reset_flag(MainWindowRedrawingFlag::MAP);
     display_autopick.clear();
 
     auto floor_ptr = std::make_unique<FloorType>();
@@ -126,7 +126,7 @@ TEST_CASE("MapInfoCache recomputes only the grids invalidated")
     SUBCASE("A pending map redraw request recomputes all grids")
     {
         floor.get_grid({ 1, 2 }).feat = wall_id;
-        rfu.set_flag(MainWindowRedrawingFlag::MAP);
+        dur.set_flag(MainWindowRedrawingFlag::MAP);
         cache.prepare(*player_ptr);
         CHECK(character_at({ 1, 2 }) == '#');
     }

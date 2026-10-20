@@ -126,8 +126,8 @@ void ObjectZapRodEntity::execute(INVENTORY_IDX i_idx)
         item->timeout += base_pval;
     }
 
-    auto &rfu = DeferredUpdateRequests::get_instance();
-    rfu.request_inventory_arrangement();
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.request_inventory_arrangement();
     if (!(item->is_aware())) {
         chg_virtue(this->player_ptr, Virtue::PATIENCE, -1);
         chg_virtue(this->player_ptr, Virtue::CHANCE, 1);
@@ -140,7 +140,7 @@ void ObjectZapRodEntity::execute(INVENTORY_IDX i_idx)
         gain_exp(this->player_ptr, (item_level + (this->player_ptr->lev >> 1)) / this->player_ptr->lev);
     }
 
-    rfu.request_item_lists_redrawing();
+    dur.request_item_lists_redrawing();
 }
 
 bool ObjectZapRodEntity::check_can_zap()

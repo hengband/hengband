@@ -15,12 +15,12 @@
  */
 void handle_stuff(PlayerType *player_ptr)
 {
-    auto &rfu = DeferredUpdateRequests::get_instance();
-    if (rfu.any_stats()) {
+    auto &dur = DeferredUpdateRequests::get_instance();
+    if (dur.any_stats()) {
         update_creature(player_ptr);
     }
 
-    if (rfu.any_main()) {
+    if (dur.any_main()) {
         redraw_stuff(player_ptr);
     }
 

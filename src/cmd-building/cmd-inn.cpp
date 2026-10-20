@@ -192,12 +192,12 @@ static bool stay_inn(PlayerType *player_ptr)
 
     // 建物の中ではメイン画面の描き直しが後回しになり、そこからの要求も来ないので、ここでサブウィンドウの描き直しを要求する。
     // HP はプレイヤーの情報と呪文の一覧 (職業によっては技の失敗率や効果の表示) に表れる
-    auto &rfu = DeferredUpdateRequests::get_instance();
+    auto &dur = DeferredUpdateRequests::get_instance();
     static constexpr auto flags_swrf = {
         SubWindowRedrawingFlag::PLAYER,
         SubWindowRedrawingFlag::SPELL,
     };
-    rfu.set_flags(flags_swrf);
+    dur.set_flags(flags_swrf);
     if (has_a_nightmare(player_ptr)) {
         return true;
     }
@@ -205,7 +205,7 @@ static bool stay_inn(PlayerType *player_ptr)
     back_to_health(player_ptr);
 
     // MP・朦朧は、呪文の一覧に加えてアイテムの知識の失敗率にも表れる
-    rfu.request_spell_info_redrawing();
+    dur.request_spell_info_redrawing();
     charge_magic_eating_energy(player_ptr);
 
     display_stay_result(player_ptr, prev_hour);

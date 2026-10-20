@@ -444,13 +444,13 @@ void fix_player(PlayerType *player_ptr)
  */
 void request_player_redraw_if_points_changed(const PlayerType &player)
 {
-    auto &rfu = DeferredUpdateRequests::get_instance();
-    if (rfu.has(SubWindowRedrawingFlag::PLAYER) || !displayed_player_points) {
+    auto &dur = DeferredUpdateRequests::get_instance();
+    if (dur.has(SubWindowRedrawingFlag::PLAYER) || !displayed_player_points) {
         return;
     }
 
     if (*displayed_player_points != DisplayedPlayerPoints(player)) {
-        rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
+        dur.set_flag(SubWindowRedrawingFlag::PLAYER);
     }
 }
 
@@ -606,14 +606,14 @@ void fix_monster(PlayerType *player_ptr)
  */
 void request_monster_lore_redraw_if_changed(const PlayerType &player)
 {
-    auto &rfu = DeferredUpdateRequests::get_instance();
+    auto &dur = DeferredUpdateRequests::get_instance();
     const auto &tracker = LoreTracker::get_instance();
-    if (rfu.has(SubWindowRedrawingFlag::MONSTER_LORE) || !displayed_monster_lore || !tracker.is_tracking()) {
+    if (dur.has(SubWindowRedrawingFlag::MONSTER_LORE) || !displayed_monster_lore || !tracker.is_tracking()) {
         return;
     }
 
     if (*displayed_monster_lore != MonsterLoreSnapshot(player, tracker.get_tracking_monrace())) {
-        rfu.set_flag(SubWindowRedrawingFlag::MONSTER_LORE);
+        dur.set_flag(SubWindowRedrawingFlag::MONSTER_LORE);
     }
 }
 
@@ -980,7 +980,7 @@ void fix_spell(PlayerType *player_ptr)
  */
 void toggle_inventory_equipment()
 {
-    auto &rfu = DeferredUpdateRequests::get_instance();
+    auto &dur = DeferredUpdateRequests::get_instance();
     for (auto i = 0U; i < angband_terms.size(); ++i) {
         if (!angband_terms[i]) {
             continue;
@@ -989,14 +989,14 @@ void toggle_inventory_equipment()
         if (g_window_flags[i].has(SubWindowRedrawingFlag::INVENTORY)) {
             g_window_flags[i].reset(SubWindowRedrawingFlag::INVENTORY);
             g_window_flags[i].set(SubWindowRedrawingFlag::EQUIPMENT);
-            rfu.set_flag(SubWindowRedrawingFlag::EQUIPMENT);
+            dur.set_flag(SubWindowRedrawingFlag::EQUIPMENT);
             continue;
         }
 
         if (g_window_flags[i].has(SubWindowRedrawingFlag::EQUIPMENT)) {
             g_window_flags[i].reset(SubWindowRedrawingFlag::EQUIPMENT);
             g_window_flags[i].set(SubWindowRedrawingFlag::INVENTORY);
-            rfu.set_flag(SubWindowRedrawingFlag::INVENTORY);
+            dur.set_flag(SubWindowRedrawingFlag::INVENTORY);
         }
     }
 }

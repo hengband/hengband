@@ -530,7 +530,7 @@ tl::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type sp
                 flag = true;
             }
 
-            auto &rfu = DeferredUpdateRequests::get_instance();
+            auto &dur = DeferredUpdateRequests::get_instance();
             for (i = A_STR; i < A_MAX; i++) {
                 if (player_ptr->stat_cur[i] < player_ptr->stat_max[i]) {
                     if (player_ptr->stat_cur[i] < 18) {
@@ -543,7 +543,7 @@ tl::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type sp
                         player_ptr->stat_cur[i] = player_ptr->stat_max[i];
                     }
 
-                    rfu.set_flag(StatusRecalculatingFlag::BONUS);
+                    dur.set_flag(StatusRecalculatingFlag::BONUS);
                     flag = true;
                 }
             }
@@ -557,8 +557,8 @@ tl::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type sp
                     set_action(player_ptr, ACTION_NONE);
                 }
 
-                rfu.request_player_status_recalculation();
-                rfu.set_flag(MainWindowRedrawingFlag::EXTRA);
+                dur.request_player_status_recalculation();
+                dur.set_flag(MainWindowRedrawingFlag::EXTRA);
                 return "";
             }
         }
@@ -747,10 +747,10 @@ tl::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type sp
     }
 
     if (!info) {
-        auto &rfu = DeferredUpdateRequests::get_instance();
-        rfu.request_player_status_recalculation();
-        rfu.set_flag(MainWindowRedrawingFlag::EXTRA);
-        rfu.request_hp_mp_redrawing();
+        auto &dur = DeferredUpdateRequests::get_instance();
+        dur.request_player_status_recalculation();
+        dur.set_flag(MainWindowRedrawingFlag::EXTRA);
+        dur.request_hp_mp_redrawing();
     }
 
     return "";

@@ -79,9 +79,9 @@ bool can_player_destroy_object(ItemEntity *o_ptr)
         o_ptr->sense(feel);
 
         // 感触を付ける処理 (apply_item_feeling()) と同じく、束の整理と一覧の描き直しを要求する。床の品のこともある
-        auto &rfu = DeferredUpdateRequests::get_instance();
-        rfu.request_inventory_arrangement();
-        rfu.request_item_lists_redrawing();
+        auto &dur = DeferredUpdateRequests::get_instance();
+        dur.request_inventory_arrangement();
+        dur.request_item_lists_redrawing();
         return false;
     }
 

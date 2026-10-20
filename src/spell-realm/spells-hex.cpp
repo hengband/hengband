@@ -65,10 +65,10 @@ void SpellHex::stop_all_spells()
         set_action(this->player_ptr, ACTION_NONE);
     }
 
-    auto &rfu = DeferredUpdateRequests::get_instance();
-    rfu.request_player_status_recalculation();
-    rfu.set_flag(MainWindowRedrawingFlag::EXTRA);
-    rfu.request_hp_mp_redrawing();
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.request_player_status_recalculation();
+    dur.set_flag(MainWindowRedrawingFlag::EXTRA);
+    dur.request_hp_mp_redrawing();
 }
 
 /*!
@@ -128,10 +128,10 @@ bool SpellHex::stop_spells_with_selection()
         this->reset_casting_flag(i2enum<spell_hex_type>(n));
     }
 
-    auto &rfu = DeferredUpdateRequests::get_instance();
-    rfu.request_player_status_recalculation();
-    rfu.set_flag(MainWindowRedrawingFlag::EXTRA);
-    rfu.request_hp_mp_redrawing();
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.request_player_status_recalculation();
+    dur.set_flag(MainWindowRedrawingFlag::EXTRA);
+    dur.request_hp_mp_redrawing();
     return choice.has_value();
 }
 
@@ -235,21 +235,21 @@ bool SpellHex::process_mana_cost(const bool need_restart)
     }
 
     s64b_sub(&(this->player_ptr->csp), &(this->player_ptr->csp_frac), need_mana, need_mana_frac);
-    auto &rfu = DeferredUpdateRequests::get_instance();
-    rfu.set_flag(MainWindowRedrawingFlag::MP);
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.set_flag(MainWindowRedrawingFlag::MP);
     if (!need_restart) {
         return true;
     }
 
     msg_print(_("詠唱を再開した。", "You restart casting."));
     this->player_ptr->action = ACTION_SPELL;
-    rfu.request_monster_update_and_map_redrawing();
-    rfu.request_bonus_and_max_hp_recalculation();
+    dur.request_monster_update_and_map_redrawing();
+    dur.request_bonus_and_max_hp_recalculation();
     static constexpr auto flags_mwrf = {
         MainWindowRedrawingFlag::TIMED_EFFECT,
         MainWindowRedrawingFlag::ACTION,
     };
-    rfu.set_flags(flags_mwrf);
+    dur.set_flags(flags_mwrf);
     return true;
 }
 

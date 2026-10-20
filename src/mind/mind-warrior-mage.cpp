@@ -9,10 +9,10 @@ bool comvert_hp_to_mp(PlayerType *player_ptr)
 {
     constexpr auto mes = _("ＨＰからＭＰへの無謀な変換", "thoughtless conversion from HP to SP");
     auto gain_sp = take_hit(player_ptr, DAMAGE_USELIFE, player_ptr->lev, mes) / 5;
-    auto &rfu = DeferredUpdateRequests::get_instance();
+    auto &dur = DeferredUpdateRequests::get_instance();
     if (!gain_sp) {
         msg_print(_("変換に失敗した。", "You failed to convert."));
-        rfu.request_hp_mp_redrawing();
+        dur.request_hp_mp_redrawing();
         return true;
     }
 
@@ -22,7 +22,7 @@ bool comvert_hp_to_mp(PlayerType *player_ptr)
         player_ptr->csp_frac = 0;
     }
 
-    rfu.request_hp_mp_redrawing();
+    dur.request_hp_mp_redrawing();
     return true;
 }
 

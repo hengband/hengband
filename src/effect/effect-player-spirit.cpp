@@ -43,8 +43,8 @@ void effect_player_drain_mana(PlayerType *player_ptr, EffectPlayerType *ep_ptr)
         player_ptr->csp -= ep_ptr->dam;
     }
 
-    auto &rfu = DeferredUpdateRequests::get_instance();
-    rfu.set_flag(MainWindowRedrawingFlag::MP);
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.set_flag(MainWindowRedrawingFlag::MP);
 
     if (!ep_ptr->is_monster() || (ep_ptr->m_ptr->hp >= ep_ptr->m_ptr->maxhp)) {
         ep_ptr->dam = 0;
@@ -58,7 +58,7 @@ void effect_player_drain_mana(PlayerType *player_ptr, EffectPlayerType *ep_ptr)
 
     HealthBarTracker::get_instance().set_flag_if_tracking(ep_ptr->src_idx);
     if (ep_ptr->src_ptr && ep_ptr->src_ptr->is_riding()) {
-        rfu.set_flag(MainWindowRedrawingFlag::UHEALTH);
+        dur.set_flag(MainWindowRedrawingFlag::UHEALTH);
     }
 
     if (ep_ptr->m_ptr->ml) {

@@ -273,7 +273,7 @@ bool cast_force_spell(PlayerType *player_ptr, MindForceTrainerType spell)
         boost /= 2;
     }
 
-    auto &rfu = DeferredUpdateRequests::get_instance();
+    auto &dur = DeferredUpdateRequests::get_instance();
     switch (spell) {
     case MindForceTrainerType::SMALL_FORCE_BALL: {
         const auto dir = get_aim_dir(player_ptr);
@@ -306,7 +306,7 @@ bool cast_force_spell(PlayerType *player_ptr, MindForceTrainerType spell)
     case MindForceTrainerType::IMPROVE_FORCE:
         msg_print(_("気を練った。", "You improved the Force."));
         set_current_ki(player_ptr, false, 70 + plev);
-        rfu.set_flag(StatusRecalculatingFlag::BONUS);
+        dur.set_flag(StatusRecalculatingFlag::BONUS);
         if (randint1(get_current_ki(player_ptr)) > (plev * 4 + 120)) {
             msg_print(_("気が暴走した！", "The Force exploded!"));
             fire_ball(player_ptr, AttributeType::MANA, Direction::self(), get_current_ki(player_ptr) / 2, 10);
@@ -386,6 +386,6 @@ bool cast_force_spell(PlayerType *player_ptr, MindForceTrainerType spell)
     }
 
     set_current_ki(player_ptr, true, 0);
-    rfu.set_flag(StatusRecalculatingFlag::BONUS);
+    dur.set_flag(StatusRecalculatingFlag::BONUS);
     return true;
 }

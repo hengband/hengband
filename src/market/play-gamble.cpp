@@ -62,10 +62,10 @@ void gamble_comm(PlayerType *player_ptr, int cmd)
     prt(fmt::format(_("現在の掛け金:     {:9}", "Current Wager:    {:9}"), *wager), 21, 2);
     // 所持金を変えたらプレイヤーの情報のサブウィンドウの描き直しを要求する。
     // 次の入力待ち (inkey()) が残っている要求を処理して描き直す
-    auto &rfu = DeferredUpdateRequests::get_instance();
+    auto &dur = DeferredUpdateRequests::get_instance();
     while (true) {
         player_ptr->au -= *wager;
-        rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
+        dur.set_flag(SubWindowRedrawingFlag::PLAYER);
         switch (cmd) {
         case BACT_IN_BETWEEN: {
             c_put_str(TERM_GREEN, _("イン・ビトイーン", "In Between"), 5, 2);
@@ -232,7 +232,7 @@ void gamble_comm(PlayerType *player_ptr, int cmd)
         if (win) {
             prt(_("あなたの勝ち", "YOU WON"), 16, 37);
             player_ptr->au += odds * *wager;
-            rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
+            dur.set_flag(SubWindowRedrawingFlag::PLAYER);
             prt(fmt::format(_("倍率: {}", "Payoff: {}"), odds), 17, 37);
         } else {
             prt(_("あなたの負け", "You Lost"), 16, 37);

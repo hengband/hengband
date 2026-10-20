@@ -214,9 +214,9 @@ bool set_food(PlayerType *player_ptr, TIME_EFFECT v)
         disturb(player_ptr, false, false);
     }
 
-    auto &rfu = DeferredUpdateRequests::get_instance();
-    rfu.set_flag(StatusRecalculatingFlag::BONUS);
-    rfu.set_flag(MainWindowRedrawingFlag::HUNGER);
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.set_flag(StatusRecalculatingFlag::BONUS);
+    dur.set_flag(MainWindowRedrawingFlag::HUNGER);
     handle_stuff(player_ptr);
 
     return true;

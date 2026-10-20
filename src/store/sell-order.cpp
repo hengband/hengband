@@ -224,9 +224,9 @@ void store_sell(PlayerType *player_ptr, StoreScreen &screen)
         }
     }
 
-    auto &rfu = DeferredUpdateRequests::get_instance();
-    rfu.set_flag(StatusRecalculatingFlag::BONUS);
-    rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.set_flag(StatusRecalculatingFlag::BONUS);
+    dur.set_flag(SubWindowRedrawingFlag::PLAYER);
     handle_stuff(player_ptr);
 
     if (placed && (i_idx >= INVEN_MAIN_HAND)) {
