@@ -4,6 +4,7 @@
 #include "game-option/input-options.h"
 #include "game-option/keymap-directory-getter.h"
 #include "io/cursor.h"
+#include "io/input-context.h"
 #include "io/input-key-acceptor.h"
 #include "io/screen-util.h"
 #include "system/building-type-definition.h"
@@ -208,11 +209,17 @@ tl::optional<Pos2D> point_target(PlayerType *player_ptr)
     info.ch = 0;
     info.n = 0;
     tl::optional<Pos2D> pos_target;
+    constexpr auto prompt = _("場所を選んでスペースキーを押して下さい。", "Select a point and press space.");
     while ((info.ch != ESCAPE) && !pos_target) {
-        prt(_("場所を選んでスペースキーを押して下さい。", "Select a point and press space."), 0, 0);
+        prt(prompt, 0, 0);
         auto move_fast = false;
         move_cursor_relative(info.pos.y, info.pos.x);
-        info.ch = inkey();
+        {
+            const PointInputDetails details{ .pos = info.pos };
+            const InputContextScope input_context({ InputKind::POINT, prompt, details });
+            info.ch = inkey();
+        }
+
         switch (info.ch) {
         case ESCAPE:
             break;
