@@ -159,11 +159,6 @@ bool process_fall_off_horse(PlayerType *player_ptr, int dam, bool force)
     };
     rfu.set_flags(flags_srf);
     handle_stuff(player_ptr);
-    static constexpr auto flags_swrf = {
-        SubWindowRedrawingFlag::OVERHEAD,
-        SubWindowRedrawingFlag::DUNGEON,
-    };
-    rfu.set_flags(flags_swrf);
     rfu.request_riding_status_redrawing();
     auto fall_dam = false;
     if (player_ptr->levitation && !force) {

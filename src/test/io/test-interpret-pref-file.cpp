@@ -228,7 +228,7 @@ TEST_CASE("interpret_pref_file clears the macro template with an empty template"
     CHECK(macro_trigger_names.at(0).empty());
 }
 
-TEST_CASE("interpret_pref_file requests redrawing the maps but not every sub-window before entering a floor")
+TEST_CASE("interpret_pref_file requests redrawing the map but not the sub-windows before entering a floor")
 {
     const auto restore_tables = scoped_display_tables();
     const auto restore_flags = scoped_clear_redrawing_flags();
@@ -240,8 +240,9 @@ TEST_CASE("interpret_pref_file requests redrawing the maps but not every sub-win
 
     const auto &rfu = RedrawingFlagsUpdater::get_instance();
     CHECK(rfu.has(MainWindowRedrawingFlag::MAP));
-    CHECK(rfu.has(SubWindowRedrawingFlag::OVERHEAD));
-    CHECK(rfu.has(SubWindowRedrawingFlag::DUNGEON));
+    // 地図のサブウィンドウはマップを描き直すときに、ほかのサブウィンドウはフロアに入るときに要求される
+    CHECK_FALSE(rfu.has(SubWindowRedrawingFlag::OVERHEAD));
+    CHECK_FALSE(rfu.has(SubWindowRedrawingFlag::DUNGEON));
     CHECK_FALSE(rfu.has(SubWindowRedrawingFlag::INVENTORY));
     CHECK_FALSE(rfu.has(SubWindowRedrawingFlag::FLOOR_ITEMS));
 }

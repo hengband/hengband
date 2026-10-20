@@ -99,22 +99,18 @@ bool update_riding_monster(PlayerType *player_ptr, turn_flags *turn_flags_ptr, M
 }
 
 /*!
- * @brief マップ及びミニマップの更新フラグをセットする
+ * @brief モンスターが地形を変えたときに、モンスターの経路の計算し直しを要求する
  * @param turn_flags_ptr ターン経過処理フラグへの参照ポインタ
+ * @details 地図のサブウィンドウ (ダンジョン全体図・自分の周囲) は、地形を変えたグリッドで呼ぶ lite_spot() を通じて、
+ * 表示が変わったときに描き直される。
  */
-void update_map_flags(turn_flags *turn_flags_ptr)
+void update_flow_flags(turn_flags *turn_flags_ptr)
 {
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
     if (!turn_flags_ptr->do_view) {
         return;
     }
 
-    rfu.set_flag(StatusRecalculatingFlag::FLOW);
-    static constexpr auto flags = {
-        SubWindowRedrawingFlag::OVERHEAD,
-        SubWindowRedrawingFlag::DUNGEON,
-    };
-    rfu.set_flags(flags);
+    RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::FLOW);
 }
 
 /*!
