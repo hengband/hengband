@@ -62,13 +62,10 @@ void RedrawingFlagsUpdater::request_whole_status_recalculation()
 {
     static constexpr auto flags_srf = {
         StatusRecalculatingFlag::TORCH,
-        StatusRecalculatingFlag::BONUS,
-        StatusRecalculatingFlag::HP,
-        StatusRecalculatingFlag::MP,
-        StatusRecalculatingFlag::SPELLS,
         StatusRecalculatingFlag::MONSTER_STATUSES,
     };
     this->status_flags.set(flags_srf);
+    this->request_player_status_recalculation();
     this->request_sight_recalculation();
 }
 
@@ -248,6 +245,7 @@ void RedrawingFlagsUpdater::request_light_fuel_change_updates()
  * @details 最大 HP が変わりうるとき (士気高揚・狂戦士化・つよし・変身などの一時的な効果の始まりと終わり、
  * モンスターの魔力消去で歌・呪術が途切れたときと途切れていた歌・呪術を再開したとき、
  * ブラッディ・ムーンの能力の付け直し、キャラクターの作成) に呼ぶ。
+ * 最大 MP と覚えられる呪文の数も計算し直すなら request_player_status_recalculation() を使う。
  */
 void RedrawingFlagsUpdater::request_bonus_and_max_hp_recalculation()
 {
@@ -269,6 +267,18 @@ void RedrawingFlagsUpdater::request_max_mp_and_spells_recalculation()
         StatusRecalculatingFlag::SPELLS,
     };
     this->status_flags.set(flags_srf);
+}
+
+/*!
+ * @brief プレイヤーの能力・最大 HP・最大 MP・覚えられる呪文の数の再計算を予約する
+ * @details レベルや職業・種族が変わったとき、フロアを移ったとき、呪術の維持が変わったとき、待機していたスコアを登録するときなど、
+ * プレイヤーの能力をひととおり計算し直すときに呼ぶ (request_bonus_and_max_hp_recalculation() と
+ * request_max_mp_and_spells_recalculation() を合わせたもの)。
+ */
+void RedrawingFlagsUpdater::request_player_status_recalculation()
+{
+    this->request_bonus_and_max_hp_recalculation();
+    this->request_max_mp_and_spells_recalculation();
 }
 
 void RedrawingFlagsUpdater::fill_up_sub_flags()

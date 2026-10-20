@@ -570,3 +570,35 @@ TEST_CASE("RedrawingFlagsUpdater::request_max_mp_and_spells_recalculation reques
         CHECK_FALSE(rfu.has(flag));
     }
 }
+
+TEST_CASE("RedrawingFlagsUpdater::request_player_status_recalculation requests recalculating the bonuses, the max HP, the max MP and the spells")
+{
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    static constexpr auto flags_srf = {
+        StatusRecalculatingFlag::BONUS,
+        StatusRecalculatingFlag::HP,
+        StatusRecalculatingFlag::MP,
+        StatusRecalculatingFlag::SPELLS,
+    };
+    static constexpr auto flags_srf_others = {
+        StatusRecalculatingFlag::TORCH,
+        StatusRecalculatingFlag::MONSTER_STATUSES,
+    };
+    const auto restore_srf = scoped_restore_flags(rfu, flags_srf);
+    const auto restore_srf_others = scoped_restore_flags(rfu, flags_srf_others);
+    rfu.reset_flags(flags_srf);
+    rfu.reset_flags(flags_srf_others);
+
+    rfu.request_player_status_recalculation();
+
+    for (const auto flag : flags_srf) {
+        CAPTURE(enum2i(flag));
+        CHECK(rfu.has(flag));
+    }
+
+    // 光源の明るさとモンスターのステータスは、必要な箇所で別に要求する
+    for (const auto flag : flags_srf_others) {
+        CAPTURE(enum2i(flag));
+        CHECK_FALSE(rfu.has(flag));
+    }
+}

@@ -2762,17 +2762,13 @@ void check_experience(PlayerType *player_ptr)
     PlayerRace pr(player_ptr);
     bool android = pr.equals(PlayerRaceType::ANDROID);
     PLAYER_LEVEL old_lev = player_ptr->lev;
-    // 一時的な発光の明るさもレベルで決まる
-    static constexpr auto flags_srf = {
-        StatusRecalculatingFlag::BONUS,
-        StatusRecalculatingFlag::HP,
-        StatusRecalculatingFlag::MP,
-        StatusRecalculatingFlag::SPELLS,
-        StatusRecalculatingFlag::TORCH,
+    const auto request_level_change_recalculation = [&rfu] {
+        rfu.request_player_status_recalculation();
+        rfu.set_flag(StatusRecalculatingFlag::TORCH); // 一時的な発光の明るさもレベルで決まる
     };
     while ((player_ptr->lev > 1) && (player_ptr->exp < ((android ? player_exp_a : player_exp)[player_ptr->lev - 2] * player_ptr->expfact / 100L))) {
         player_ptr->lev--;
-        rfu.set_flags(flags_srf);
+        request_level_change_recalculation();
         static constexpr auto flags_mwrf = {
             MainWindowRedrawingFlag::LEVEL,
             MainWindowRedrawingFlag::TITLE,
@@ -2805,7 +2801,7 @@ void check_experience(PlayerType *player_ptr)
 
         sound(SoundKind::LEVEL);
         msg_print(_("レベル {} にようこそ。", "Welcome to level {}."), player_ptr->lev);
-        rfu.set_flags(flags_srf);
+        request_level_change_recalculation();
         const auto flags_mwrf_levelup = {
             MainWindowRedrawingFlag::LEVEL,
             MainWindowRedrawingFlag::TITLE,
@@ -2871,7 +2867,7 @@ void check_experience(PlayerType *player_ptr)
             level_reward = false;
         }
 
-        rfu.set_flags(flags_srf);
+        request_level_change_recalculation();
         static constexpr auto flags_mwrf = {
             MainWindowRedrawingFlag::LEVEL,
             MainWindowRedrawingFlag::TITLE,

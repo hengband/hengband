@@ -46,11 +46,8 @@ static void redraw_character_xtra(PlayerType *player_ptr)
     // フロアが変わったので、足元や発見済みのアイテムの一覧なども含め、すべてのサブウィンドウを描き直す
     rfu.fill_up_sub_flags();
     rfu.request_whole_main_window_redrawing();
-    auto flags_srf = {
-        StatusRecalculatingFlag::BONUS,
-        StatusRecalculatingFlag::HP,
-        StatusRecalculatingFlag::MP,
-        StatusRecalculatingFlag::SPELLS,
+    rfu.request_player_status_recalculation();
+    static constexpr auto flags_srf = {
         StatusRecalculatingFlag::VIEW,
         StatusRecalculatingFlag::LITE,
         StatusRecalculatingFlag::MONSTER_LITE,
@@ -127,13 +124,7 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
 
     redraw_character_xtra(player_ptr);
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    static constexpr auto flags_srf = {
-        StatusRecalculatingFlag::BONUS,
-        StatusRecalculatingFlag::HP,
-        StatusRecalculatingFlag::MP,
-        StatusRecalculatingFlag::SPELLS,
-    };
-    rfu.set_flags(flags_srf);
+    rfu.request_player_status_recalculation();
     static constexpr auto flags_iaf = {
         InventoryArrangementFlag::COMBINATION,
         InventoryArrangementFlag::REORDER,
