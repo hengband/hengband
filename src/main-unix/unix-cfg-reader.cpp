@@ -17,9 +17,9 @@
 #include <tl/optional.hpp>
 
 // 1つの項目に設定可能な最大ファイル数
-#define SAMPLE_MAX 16
+constexpr auto SAMPLE_MAX = 16;
 // max path length
-#define MAIN_WIN_MAX_PATH 1024
+constexpr auto MAIN_WIN_MAX_PATH = 1024;
 /*
  * - Taken from files.c.
  *

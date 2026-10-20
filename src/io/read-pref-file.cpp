@@ -28,10 +28,10 @@
 #include <stdexcept>
 #include <string>
 
-//!< @todo コールバック関数に変更するので、いずれ消す.
-#define PREF_TYPE_NORMAL 0
-#define PREF_TYPE_AUTOPICK 1
-#define PREF_TYPE_HISTPREF 2
+//! @todo コールバック関数に変更するので、いずれ消す.
+constexpr auto PREF_TYPE_NORMAL = 0;
+constexpr auto PREF_TYPE_AUTOPICK = 1;
+constexpr auto PREF_TYPE_HISTPREF = 2;
 
 // Mark strings for auto dump
 

@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 
-#define FILE_NAME_SIZE 1024
+constexpr auto FILE_NAME_SIZE = 1024;
 
 class DisplaySymbol;
 class DisplaySymbolsClipboard {

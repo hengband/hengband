@@ -3,8 +3,8 @@
 #include "system/angband.h"
 #include "system/monster-entity.h"
 
-#define MAX_SAVED_FLOORS 20 /*!< 保存フロアの最大数 / Maximum number of saved floors. */
-#define MAX_PARTY_MON 21 /*!< フロア移動時に先のフロアに連れて行けるペットの最大数 Maximum number of preservable pets */
+constexpr auto MAX_SAVED_FLOORS = 20; /*!< 保存フロアの最大数 / Maximum number of saved floors. */
+constexpr auto MAX_PARTY_MON = 21; /*!< フロア移動時に先のフロアに連れて行けるペットの最大数 Maximum number of preservable pets */
 
 struct saved_floor_type {
     FLOOR_IDX floor_id; /* No recycle until 65536 IDs are all used */
