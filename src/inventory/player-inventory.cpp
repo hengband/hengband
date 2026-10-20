@@ -94,9 +94,7 @@ static void py_pickup_all_golds_on_floor(PlayerType *player_ptr, const Grid &gri
 
         delete_object_idx(player_ptr, i_idx);
 
-        auto &rfu = RedrawingFlagsUpdater::get_instance();
-        rfu.set_flag(MainWindowRedrawingFlag::GOLD);
-        rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
+        RedrawingFlagsUpdater::get_instance().request_gold_redrawing();
     }
 }
 

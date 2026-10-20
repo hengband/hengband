@@ -206,6 +206,43 @@ void RedrawingFlagsUpdater::request_riding_status_redrawing()
     this->main_window_flags.set(flags_mwrf);
 }
 
+/*!
+ * @brief HP と MP の表示の描き直しを予約する
+ * @details メインウィンドウの HP と MP の両方を描き直す (HP と MP の変換や、呪術の表示を直すときなど)。
+ * 呪文の情報 (呪文の一覧・アイテムの知識) のサブウィンドウは HP・MP を描き直すときに要求され、プレイヤーの情報のサブウィンドウは
+ * 前に描いた HP・MP と比べて変わっていれば描き直される。
+ */
+void RedrawingFlagsUpdater::request_hp_mp_redrawing()
+{
+    static constexpr auto flags_mwrf = {
+        MainWindowRedrawingFlag::HP,
+        MainWindowRedrawingFlag::MP,
+    };
+    this->main_window_flags.set(flags_mwrf);
+}
+
+/*!
+ * @brief 所持金の表示の描き直しを予約する
+ * @details メインウィンドウの所持金と、プレイヤーの情報のサブウィンドウを描き直す。
+ */
+void RedrawingFlagsUpdater::request_gold_redrawing()
+{
+    this->main_window_flags.set(MainWindowRedrawingFlag::GOLD);
+    this->sub_window_flags.set(SubWindowRedrawingFlag::PLAYER);
+}
+
+/*!
+ * @brief 光源の燃料を補充したときの更新を予約する
+ * @details 光源の明るさを計算し直し (燃料が切れていた光源が再び灯ることも、暗黒の光源の燃料で消えることもある)、
+ * 残りのターンを表示する装備品の一覧を描き直す。
+ * 燃料が燃えて減るとき・燃え尽きたときは、notice_lite_change() で別に要求する。
+ */
+void RedrawingFlagsUpdater::request_light_fuel_change_updates()
+{
+    this->status_flags.set(StatusRecalculatingFlag::TORCH);
+    this->sub_window_flags.set(SubWindowRedrawingFlag::EQUIPMENT);
+}
+
 void RedrawingFlagsUpdater::fill_up_sub_flags()
 {
     constexpr auto all_sub_window_flags = EnumRange(SubWindowRedrawingFlag::INVENTORY, SubWindowRedrawingFlag::MAX);

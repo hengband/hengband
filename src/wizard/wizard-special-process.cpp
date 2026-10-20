@@ -550,11 +550,10 @@ static void change_birth_flags()
     rfu.set_flags(flags_srf);
     static constexpr auto flags_mwrf = {
         MainWindowRedrawingFlag::BASIC,
-        MainWindowRedrawingFlag::HP,
-        MainWindowRedrawingFlag::MP,
         MainWindowRedrawingFlag::ABILITY_SCORE,
     };
     rfu.set_flags(flags_mwrf);
+    rfu.request_hp_mp_redrawing();
 }
 
 static tl::optional<ElementRealmType> wiz_select_element_realm()

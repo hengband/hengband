@@ -37,7 +37,5 @@ void phlogiston(PlayerType *player_ptr)
         msg_print(_("照明用アイテムは満タンになった。", "Your light is full."));
     }
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.set_flag(StatusRecalculatingFlag::TORCH);
-    rfu.set_flag(SubWindowRedrawingFlag::EQUIPMENT);
+    RedrawingFlagsUpdater::get_instance().request_light_fuel_change_updates();
 }

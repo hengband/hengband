@@ -427,3 +427,82 @@ TEST_CASE("RedrawingFlagsUpdater::request_riding_status_redrawing requests redra
     CHECK_FALSE(rfu.has(SubWindowRedrawingFlag::OVERHEAD));
     CHECK_FALSE(rfu.has(SubWindowRedrawingFlag::DUNGEON));
 }
+
+TEST_CASE("RedrawingFlagsUpdater::request_hp_mp_redrawing requests redrawing the HP and the MP")
+{
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    static constexpr auto flags_mwrf = {
+        MainWindowRedrawingFlag::HP,
+        MainWindowRedrawingFlag::MP,
+    };
+    static constexpr auto flags_mwrf_others = {
+        MainWindowRedrawingFlag::BASIC,
+        MainWindowRedrawingFlag::EXTRA,
+    };
+    static constexpr auto flags_swrf = {
+        SubWindowRedrawingFlag::SPELL,
+        SubWindowRedrawingFlag::ITEM_KNOWLEDGE,
+        SubWindowRedrawingFlag::PLAYER,
+    };
+    const auto restore_mwrf = scoped_restore_flags(rfu, flags_mwrf);
+    const auto restore_mwrf_others = scoped_restore_flags(rfu, flags_mwrf_others);
+    const auto restore_swrf = scoped_restore_flags(rfu, flags_swrf);
+    rfu.reset_flags(flags_mwrf);
+    rfu.reset_flags(flags_mwrf_others);
+    rfu.reset_flags(flags_swrf);
+
+    rfu.request_hp_mp_redrawing();
+
+    for (const auto flag : flags_mwrf) {
+        CAPTURE(enum2i(flag));
+        CHECK(rfu.has(flag));
+    }
+
+    // 基本ステータスの全体や拡張ステータスは描き直さない
+    for (const auto flag : flags_mwrf_others) {
+        CAPTURE(enum2i(flag));
+        CHECK_FALSE(rfu.has(flag));
+    }
+
+    // 呪文の情報は HP・MP を描き直すときに、プレイヤーの情報は前に描いた HP・MP と比べて要求される
+    for (const auto flag : flags_swrf) {
+        CAPTURE(enum2i(flag));
+        CHECK_FALSE(rfu.has(flag));
+    }
+}
+
+TEST_CASE("RedrawingFlagsUpdater::request_gold_redrawing requests redrawing the gold and the player window")
+{
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    const auto restore_mwrf = scoped_restore_flags(rfu, { MainWindowRedrawingFlag::GOLD, MainWindowRedrawingFlag::BASIC });
+    const auto restore_swrf = scoped_restore_flags(rfu, { SubWindowRedrawingFlag::PLAYER });
+    rfu.reset_flag(MainWindowRedrawingFlag::GOLD);
+    rfu.reset_flag(MainWindowRedrawingFlag::BASIC);
+    rfu.reset_flag(SubWindowRedrawingFlag::PLAYER);
+
+    rfu.request_gold_redrawing();
+
+    CHECK(rfu.has(MainWindowRedrawingFlag::GOLD));
+    CHECK(rfu.has(SubWindowRedrawingFlag::PLAYER));
+    // 所持金のほかの基本ステータスは描き直さない
+    CHECK_FALSE(rfu.has(MainWindowRedrawingFlag::BASIC));
+}
+
+TEST_CASE("RedrawingFlagsUpdater::request_light_fuel_change_updates requests recalculating the light and redrawing the equipment")
+{
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    const auto restore_srf = scoped_restore_flags(rfu, { StatusRecalculatingFlag::TORCH, StatusRecalculatingFlag::BONUS });
+    const auto restore_swrf = scoped_restore_flags(rfu, { SubWindowRedrawingFlag::EQUIPMENT, SubWindowRedrawingFlag::INVENTORY });
+    rfu.reset_flag(StatusRecalculatingFlag::TORCH);
+    rfu.reset_flag(StatusRecalculatingFlag::BONUS);
+    rfu.reset_flag(SubWindowRedrawingFlag::EQUIPMENT);
+    rfu.reset_flag(SubWindowRedrawingFlag::INVENTORY);
+
+    rfu.request_light_fuel_change_updates();
+
+    CHECK(rfu.has(StatusRecalculatingFlag::TORCH));
+    CHECK(rfu.has(SubWindowRedrawingFlag::EQUIPMENT));
+    // 能力 (燃料には依らない) の再計算や、所持品の一覧の描き直しは要求しない
+    CHECK_FALSE(rfu.has(StatusRecalculatingFlag::BONUS));
+    CHECK_FALSE(rfu.has(SubWindowRedrawingFlag::INVENTORY));
+}

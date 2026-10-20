@@ -73,12 +73,8 @@ void SpellHex::stop_all_spells()
         StatusRecalculatingFlag::SPELLS,
     };
     rfu.set_flags(flags_srf);
-    static constexpr auto flags_mwrf = {
-        MainWindowRedrawingFlag::EXTRA,
-        MainWindowRedrawingFlag::HP,
-        MainWindowRedrawingFlag::MP,
-    };
-    rfu.set_flags(flags_mwrf);
+    rfu.set_flag(MainWindowRedrawingFlag::EXTRA);
+    rfu.request_hp_mp_redrawing();
 }
 
 /*!
@@ -146,12 +142,8 @@ bool SpellHex::stop_spells_with_selection()
         StatusRecalculatingFlag::SPELLS,
     };
     rfu.set_flags(flags_srf);
-    static constexpr auto flags_mwrf = {
-        MainWindowRedrawingFlag::EXTRA,
-        MainWindowRedrawingFlag::HP,
-        MainWindowRedrawingFlag::MP,
-    };
-    rfu.set_flags(flags_mwrf);
+    rfu.set_flag(MainWindowRedrawingFlag::EXTRA);
+    rfu.request_hp_mp_redrawing();
     return choice.has_value();
 }
 

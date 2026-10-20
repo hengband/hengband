@@ -499,10 +499,5 @@ void do_cmd_racial_power(PlayerType *player_ptr)
         return;
     }
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    const auto &flags_mwrf = {
-        MainWindowRedrawingFlag::HP,
-        MainWindowRedrawingFlag::MP,
-    };
-    rfu.set_flags(flags_mwrf);
+    RedrawingFlagsUpdater::get_instance().request_hp_mp_redrawing();
 }

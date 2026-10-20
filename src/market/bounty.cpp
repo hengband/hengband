@@ -43,9 +43,7 @@ bool exchange_cash(PlayerType *player_ptr)
     constexpr auto fmt_convert = _("{} を換金しますか？", "Convert {} into money? ");
     const auto receive_reward = [player_ptr](int reward_money) {
         player_ptr->au += reward_money;
-        auto &rfu = RedrawingFlagsUpdater::get_instance();
-        rfu.set_flag(MainWindowRedrawingFlag::GOLD);
-        rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
+        RedrawingFlagsUpdater::get_instance().request_gold_redrawing();
         msg_print(_("賞金 {}＄を手に入れた。", "You get {}gp."), reward_money);
     };
     for (INVENTORY_IDX i = 0; i <= INVEN_SUB_HAND; i++) {

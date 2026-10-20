@@ -169,6 +169,9 @@ public:
     void request_inscription_change_updates();
     void request_equipment_change_updates();
     void request_riding_status_redrawing();
+    void request_hp_mp_redrawing();
+    void request_gold_redrawing();
+    void request_light_fuel_change_updates();
 
     void fill_up_sub_flags();
     EnumClassFlagGroup<SubWindowRedrawingFlag> get_sub_intersection(const EnumClassFlagGroup<SubWindowRedrawingFlag> &flags) const;

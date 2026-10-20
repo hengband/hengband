@@ -761,12 +761,8 @@ tl::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type sp
             StatusRecalculatingFlag::SPELLS,
         };
         rfu.set_flags(flags_srf);
-        static constexpr auto flags_mwrf = {
-            MainWindowRedrawingFlag::EXTRA,
-            MainWindowRedrawingFlag::HP,
-            MainWindowRedrawingFlag::MP,
-        };
-        rfu.set_flags(flags_mwrf);
+        rfu.set_flag(MainWindowRedrawingFlag::EXTRA);
+        rfu.request_hp_mp_redrawing();
     }
 
     return "";
