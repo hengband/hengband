@@ -333,14 +333,14 @@ bool initialize_wilderness_definition()
     return true;
 }
 
-parse_error_type apply_wilderness_definition()
+tl::expected<void, parse_error_type> apply_wilderness_definition()
 {
     const auto definition = load_wilderness_definition();
     if (!definition) {
-        return PARSE_ERROR_GENERIC;
+        return tl::make_unexpected(PARSE_ERROR_GENERIC);
     }
     if (const auto result = DungeonReader::validate_wilderness_positions(definition->height, definition->width); !result) {
-        return result.error();
+        return result;
     }
     const auto &map = (vanilla_town || lite_town) ? definition->compact : definition->normal;
 
@@ -379,5 +379,5 @@ parse_error_type apply_wilderness_definition()
         }
     }
 
-    return PARSE_ERROR_NONE;
+    return {};
 }

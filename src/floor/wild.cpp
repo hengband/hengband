@@ -383,7 +383,7 @@ void wilderness_gen(PlayerType *player_ptr)
     panel_row_min = floor.height;
     panel_col_min = floor.width;
     auto &wilderness = WildernessGrids::get_instance();
-    apply_wilderness_definition();
+    (void)apply_wilderness_definition();
 
     const auto &pos_wilderness = wilderness.get_player_position();
     get_mon_num_prep_enum(player_ptr, floor.get_monrace_hook());
@@ -563,7 +563,7 @@ void wilderness_gen_small(PlayerType *player_ptr)
     auto &world = AngbandWorld::get_instance();
     const auto &wilderness = WildernessGrids::get_instance();
     const auto &area = wilderness.get_area();
-    apply_wilderness_definition();
+    (void)apply_wilderness_definition();
     for (const auto &pos : area) {
         auto &grid = floor.get_grid(pos);
         const auto &wg = wilderness.get_grid(pos);
