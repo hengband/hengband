@@ -12,20 +12,24 @@ TownDefinitionListReader::TownDefinitionListReader(const nlohmann::json &data)
  * @param town_index 町番号（町の外は0）
  * @param mode 街モード
  * @param map_file 有効な町が見つかった場合のみ書き換える町マップのファイル名
- * @return エラーコード。町の外（町番号が1未満）は成功として出力を保持する。町番号が1以上で一覧に無い場合は、
+ * @return 成功時は空の値、失敗時は解析エラーコード。
+ * 町の外（町番号が1未満）は成功として出力を保持する。町番号が1以上で一覧に無い場合は、
  * 店の無い町が黙ってできないよう PARSE_ERROR_INVALID_VALUE を返し、出力を保持する。
  */
-parse_error_type TownDefinitionListReader::read(int town_index, TownMapMode mode, std::string &map_file) const
+tl::expected<void, parse_error_type> TownDefinitionListReader::read(int town_index, TownMapMode mode, std::string &map_file) const
 {
     if (!this->data.is_object() || !this->data.contains("version") || !this->data["version"].is_number_integer() || this->data["version"] != 1 ||
         !this->data.contains("towns") || !this->data["towns"].is_object() || this->data["towns"].empty()) {
-        return PARSE_ERROR_INVALID_TYPE;
+        return tl::make_unexpected(PARSE_ERROR_INVALID_TYPE);
     }
 
     const auto &towns = this->data["towns"];
     const auto town = towns.find(std::to_string(town_index));
     if (town == towns.end()) {
-        return town_index > 0 ? PARSE_ERROR_INVALID_VALUE : PARSE_ERROR_NONE;
+        if (town_index > 0) {
+            return tl::make_unexpected(PARSE_ERROR_INVALID_VALUE);
+        }
+        return {};
     }
 
     const nlohmann::json *selected = &*town;
@@ -42,23 +46,23 @@ parse_error_type TownDefinitionListReader::read(int town_index, TownMapMode mode
             key = "none";
             break;
         default:
-            return PARSE_ERROR_INVALID_VALUE;
+            return tl::make_unexpected(PARSE_ERROR_INVALID_VALUE);
         }
         const auto file = selected->find(key);
         if (file == selected->end()) {
-            return PARSE_ERROR_INVALID_TYPE;
+            return tl::make_unexpected(PARSE_ERROR_INVALID_TYPE);
         }
         selected = &*file;
     }
 
     if (!selected->is_string()) {
-        return PARSE_ERROR_INVALID_TYPE;
+        return tl::make_unexpected(PARSE_ERROR_INVALID_TYPE);
     }
     const auto &candidate = selected->get_ref<const std::string &>();
     if (!candidate.starts_with("towns/") || !candidate.ends_with(".jsonc") || candidate.find("..") != std::string::npos ||
         candidate.find('\\') != std::string::npos) {
-        return PARSE_ERROR_INVALID_VALUE;
+        return tl::make_unexpected(PARSE_ERROR_INVALID_VALUE);
     }
     map_file = candidate;
-    return PARSE_ERROR_NONE;
+    return {};
 }

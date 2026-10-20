@@ -255,8 +255,8 @@ static tl::expected<std::string, parse_error_type> load_town_definition_file()
         const auto data = loader.parse();
         const auto mode = vanilla_town ? TownMapMode::NONE : (lite_town ? TownMapMode::LITE : TownMapMode::NORMAL);
         std::string map_file;
-        if (const auto err = TownDefinitionListReader(data).read(AngbandWorld::get_instance().get_town_index(), mode, map_file); err != PARSE_ERROR_NONE) {
-            return tl::make_unexpected(err);
+        if (const auto result = TownDefinitionListReader(data).read(AngbandWorld::get_instance().get_town_index(), mode, map_file); !result) {
+            return tl::make_unexpected(result.error());
         }
         return map_file;
     } catch (const nlohmann::json::exception &) {
