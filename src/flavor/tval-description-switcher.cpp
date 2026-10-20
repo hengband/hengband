@@ -8,8 +8,11 @@
 #include "flavor/flavor-util.h"
 #include "flavor/object-flavor-types.h"
 #include "locale/english.h"
+#include "locale/localized-string.h"
 #include "object-enchant/trg-types.h"
 #include "object/tval-types.h"
+#include "player/player-realm.h"
+#include "realm/realm-types.h"
 #include "system/baseitem/baseitem-definition.h"
 #include "system/baseitem/baseitem-list.h"
 #include "system/baseitem/baseitem-record.h"
@@ -262,146 +265,29 @@ static bool class_uses_life_book()
 }
 #endif
 
-static std::pair<std::string, std::string> describe_book_life()
+/*!
+ * @brief 魔法書の名前を得る
+ * @param tval 魔法書の種類
+ * @return std::pair<std::string, std::string> {basename, modstr} のペア
+ * @details 英語版は、生命の魔法書を使う職業なら "Book of ... Magic" の形 (仙術だけは "Book of Sorcery")、
+ * それ以外の職業なら "... Spellbook" の形で表す。
+ */
+static std::pair<std::string, std::string> describe_spellbook(ItemKindType tval)
 {
+    const auto realm = PlayerRealm::get_realm_of_book(tval);
+    const auto &realm_name = PlayerRealm::get_name(realm);
 #ifdef JP
-    return { "生命の魔法書%", "" };
+    return { fmt::format("{}の魔法書%", realm_name), "" };
 #else
-    if (class_uses_life_book()) {
-        return { "& Book~ of Life Magic %", "" };
-    } else {
-        return { "& Life Spellbook~ %", "" };
+    if (!class_uses_life_book()) {
+        return { fmt::format("& {} Spellbook~ %", realm_name), "" };
     }
-#endif
-}
 
-static std::pair<std::string, std::string> describe_book_sorcery()
-{
-#ifdef JP
-    return { "仙術の魔法書%", "" };
-#else
-    if (class_uses_life_book()) {
+    if (realm == RealmType::SORCERY) {
         return { "& Book~ of Sorcery %", "" };
-    } else {
-        return { "& Sorcery Spellbook~ %", "" };
     }
-#endif
-}
 
-static std::pair<std::string, std::string> describe_book_nature()
-{
-#ifdef JP
-    return { "自然の魔法書%", "" };
-#else
-    if (class_uses_life_book()) {
-        return { "& Book~ of Nature Magic %", "" };
-    } else {
-        return { "& Nature Spellbook~ %", "" };
-    }
-#endif
-}
-
-static std::pair<std::string, std::string> describe_book_chaos()
-{
-#ifdef JP
-    return { "カオスの魔法書%", "" };
-#else
-    if (class_uses_life_book()) {
-        return { "& Book~ of Chaos Magic %", "" };
-    } else {
-        return { "& Chaos Spellbook~ %", "" };
-    }
-#endif
-}
-
-static std::pair<std::string, std::string> describe_book_death()
-{
-#ifdef JP
-    return { "暗黒の魔法書%", "" };
-#else
-    if (class_uses_life_book()) {
-        return { "& Book~ of Death Magic %", "" };
-    } else {
-        return { "& Death Spellbook~ %", "" };
-    }
-#endif
-}
-
-static std::pair<std::string, std::string> describe_book_trump()
-{
-#ifdef JP
-    return { "トランプの魔法書%", "" };
-#else
-    if (class_uses_life_book()) {
-        return { "& Book~ of Trump Magic %", "" };
-    } else {
-        return { "& Trump Spellbook~ %", "" };
-    }
-#endif
-}
-
-static std::pair<std::string, std::string> describe_book_arcane()
-{
-#ifdef JP
-    return { "秘術の魔法書%", "" };
-#else
-    if (class_uses_life_book()) {
-        return { "& Book~ of Arcane Magic %", "" };
-    } else {
-        return { "& Arcane Spellbook~ %", "" };
-    }
-#endif
-}
-
-static std::pair<std::string, std::string> describe_book_craft()
-{
-#ifdef JP
-    return { "匠の魔法書%", "" };
-#else
-    if (class_uses_life_book()) {
-        return { "& Book~ of Craft Magic %", "" };
-    } else {
-        return { "& Craft Spellbook~ %", "" };
-    }
-#endif
-}
-
-static std::pair<std::string, std::string> describe_book_demon()
-{
-#ifdef JP
-    return { "悪魔の魔法書%", "" };
-#else
-    if (class_uses_life_book()) {
-        return { "& Book~ of Daemon Magic %", "" };
-    } else {
-        return { "& Daemon Spellbook~ %", "" };
-    }
-#endif
-}
-
-static std::pair<std::string, std::string> describe_book_crusade()
-{
-#ifdef JP
-    return { "破邪の魔法書%", "" };
-#else
-    if (class_uses_life_book()) {
-        return { "& Book~ of Crusade Magic %", "" };
-    } else {
-        return { "& Crusade Spellbook~ %", "" };
-    }
-#endif
-}
-
-static std::pair<std::string, std::string> describe_book_hex()
-{
-#ifdef JP
-    return { "呪術の魔法書%", "" };
-#else
-    if (class_uses_life_book()) {
-        return { "& Book~ of Hex Magic %", "" };
-    } else {
-        return { "& Hex Spellbook~ %", "" };
-    }
+    return { fmt::format("& Book~ of {} Magic %", realm_name), "" };
 #endif
 }
 
@@ -477,31 +363,21 @@ std::pair<std::string, std::string> switch_tval_description(const ItemEntity &it
     case ItemKindType::PARCHMENT:
         return { _("羊皮紙 - %", "& Parchment~ - %"), "" };
     case ItemKindType::LIFE_BOOK:
-        return describe_book_life();
     case ItemKindType::SORCERY_BOOK:
-        return describe_book_sorcery();
     case ItemKindType::NATURE_BOOK:
-        return describe_book_nature();
     case ItemKindType::CHAOS_BOOK:
-        return describe_book_chaos();
     case ItemKindType::DEATH_BOOK:
-        return describe_book_death();
     case ItemKindType::TRUMP_BOOK:
-        return describe_book_trump();
     case ItemKindType::ARCANE_BOOK:
-        return describe_book_arcane();
     case ItemKindType::CRAFT_BOOK:
-        return describe_book_craft();
     case ItemKindType::DEMON_BOOK:
-        return describe_book_demon();
     case ItemKindType::CRUSADE_BOOK:
-        return describe_book_crusade();
+    case ItemKindType::HEX_BOOK:
+        return describe_spellbook(item.bi_key.tval());
     case ItemKindType::MUSIC_BOOK:
         return { _("歌集%", "& Song Book~ %"), "" };
     case ItemKindType::HISSATSU_BOOK:
         return { _("& 武芸の書%", "Book~ of Kendo %"), "" };
-    case ItemKindType::HEX_BOOK:
-        return describe_book_hex();
     case ItemKindType::GOLD:
         return { basename, "" };
     default:
