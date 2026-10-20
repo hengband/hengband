@@ -3,7 +3,6 @@
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/floor-object.h"
-#include "object-enchant/item-feeling.h"
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trc-types.h"
 #include "object-hook/hook-weapon.h"
@@ -55,9 +54,7 @@ bool bless_weapon(PlayerType *player_ptr)
 #else
         msg_print("A malignant aura leaves {} {}.", ((i_idx >= 0) ? "your" : "the"), item_name);
 #endif
-        item->curse_flags.clear();
-        item->set_identification_flag(IdentificationFlag::SENSE);
-        item->feeling = FEEL_NONE;
+        item->remove_curses();
         rfu.set_flag(StatusRecalculatingFlag::BONUS);
         rfu.request_item_lists_redrawing();
     }

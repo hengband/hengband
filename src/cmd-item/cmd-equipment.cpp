@@ -380,9 +380,7 @@ void do_cmd_takeoff(PlayerType *player_ptr)
 
         if ((item->curse_flags.has(CurseTraitType::HEAVY_CURSE) && one_in_(7)) || one_in_(4)) {
             msg_print(_("呪われた装備を力づくで剥がした！", "You tore off a piece of cursed equipment by sheer strength!"));
-            item->set_identification_flag(IdentificationFlag::SENSE);
-            item->curse_flags.clear();
-            item->feeling = FEEL_NONE;
+            item->remove_curses();
             rfu.set_flag(StatusRecalculatingFlag::BONUS);
             msg_print(_("呪いを打ち破った。", "You break the curse."));
         } else {
