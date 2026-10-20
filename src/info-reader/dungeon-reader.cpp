@@ -40,8 +40,8 @@ int DungeonReader::read() const
     }
 
     int id = 0;
-    if (auto err = info_set_integer(get_json_value(element, "id"), id, true, Range(0, enum2i(DungeonId::MAX) - 1))) {
-        return err;
+    if (const auto result = info_set_integer(get_json_value(element, "id"), id, true, Range(0, enum2i(DungeonId::MAX) - 1)); !result) {
+        return result.error();
     }
     if (id <= error_idx) {
         return PARSE_ERROR_NON_SEQUENTIAL_RECORDS;
@@ -49,8 +49,8 @@ int DungeonReader::read() const
     error_idx = id;
 
     DungeonDefinition dungeon;
-    if (auto err = info_set_string(get_json_value(element, "name"), dungeon.name, true)) {
-        return err;
+    if (const auto result = info_set_string(get_json_value(element, "name"), dungeon.name, true); !result) {
+        return result.error();
     }
     if (const auto result = this->set_dungeon_description(dungeon); !result) {
         return result.error();
@@ -62,11 +62,11 @@ int DungeonReader::read() const
     }
     int wild_y = 0;
     int wild_x = 0;
-    if (auto err = info_set_integer(get_json_value(position_obj, "wild_y"), wild_y, true, Range(0, 32766))) {
-        return err;
+    if (const auto result = info_set_integer(get_json_value(position_obj, "wild_y"), wild_y, true, Range(0, 32766)); !result) {
+        return result.error();
     }
-    if (auto err = info_set_integer(get_json_value(position_obj, "wild_x"), wild_x, true, Range(0, 32766))) {
-        return err;
+    if (const auto result = info_set_integer(get_json_value(position_obj, "wild_x"), wild_x, true, Range(0, 32766)); !result) {
+        return result.error();
     }
     dungeon.initialize_position({ wild_y, wild_x });
 
@@ -284,7 +284,7 @@ static tl::optional<ProbabilityTable<short>> parse_terrain_probability(const nlo
         }
 
         int prob = 0;
-        if (info_set_integer(get_json_value(tile_obj, "rate"), prob, true, Range(0, 32767)) || prob > std::numeric_limits<int>::max() - total_probability) {
+        if (!info_set_integer(get_json_value(tile_obj, "rate"), prob, true, Range(0, 32767)) || prob > std::numeric_limits<int>::max() - total_probability) {
             return tl::nullopt;
         }
         total_probability += prob;
@@ -306,8 +306,8 @@ static tl::optional<ProbabilityTable<short>> parse_terrain_probability(const nlo
 
 tl::expected<void, parse_error_type> DungeonReader::set_dungeon_description(DungeonDefinition &dungeon) const
 {
-    if (auto err = info_set_string(get_json_value(this->dungeon_data, "description"), dungeon.text, false)) {
-        return tl::unexpected(static_cast<parse_error_type>(err));
+    if (const auto result = info_set_string(get_json_value(this->dungeon_data, "description"), dungeon.text, false); !result) {
+        return result;
     }
     return {};
 }
@@ -323,11 +323,11 @@ tl::expected<void, parse_error_type> DungeonReader::set_dungeon_generation(Dunge
         return tl::unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
     }
 
-    if (auto err = info_set_integer(get_json_value(generation_obj, "minDepth"), dungeon.mindepth, true, Range(0, std::numeric_limits<int16_t>::max()))) {
-        return tl::unexpected(static_cast<parse_error_type>(err));
+    if (const auto result = info_set_integer(get_json_value(generation_obj, "minDepth"), dungeon.mindepth, true, Range(0, std::numeric_limits<int16_t>::max())); !result) {
+        return result;
     }
-    if (auto err = info_set_integer(get_json_value(generation_obj, "maxDepth"), dungeon.maxdepth, true, Range(0, std::numeric_limits<int16_t>::max()))) {
-        return tl::unexpected(static_cast<parse_error_type>(err));
+    if (const auto result = info_set_integer(get_json_value(generation_obj, "maxDepth"), dungeon.maxdepth, true, Range(0, std::numeric_limits<int16_t>::max())); !result) {
+        return result;
     }
     // 保存形式は符号付き16bit。最浅階が最深階を超える定義も拒否する。
     if (dungeon.mindepth > dungeon.maxdepth) {
@@ -336,14 +336,14 @@ tl::expected<void, parse_error_type> DungeonReader::set_dungeon_generation(Dunge
             error_idx, dungeon.mindepth, dungeon.maxdepth);
         return tl::unexpected(PARSE_ERROR_INVALID_VALUE);
     }
-    if (auto err = info_set_integer(get_json_value(generation_obj, "minPlayerLevel"), dungeon.min_plev, true, Range(0, PY_MAX_LEVEL))) {
-        return tl::unexpected(static_cast<parse_error_type>(err));
+    if (const auto result = info_set_integer(get_json_value(generation_obj, "minPlayerLevel"), dungeon.min_plev, true, Range(0, PY_MAX_LEVEL)); !result) {
+        return result;
     }
-    if (auto err = info_set_integer(get_json_value(generation_obj, "objGood"), dungeon.obj_good, true, Range(0, 100))) {
-        return tl::unexpected(static_cast<parse_error_type>(err));
+    if (const auto result = info_set_integer(get_json_value(generation_obj, "objGood"), dungeon.obj_good, true, Range(0, 100)); !result) {
+        return result;
     }
-    if (auto err = info_set_integer(get_json_value(generation_obj, "objGreat"), dungeon.obj_great, true, Range(0, 100))) {
-        return tl::unexpected(static_cast<parse_error_type>(err));
+    if (const auto result = info_set_integer(get_json_value(generation_obj, "objGreat"), dungeon.obj_great, true, Range(0, 100)); !result) {
+        return result;
     }
 
     if (const auto result = info_set_enum_flag_group(generation_obj, "pit", dungeon.pit, dungeon_pit_kinds, "pit"); !result) {
@@ -370,8 +370,8 @@ tl::expected<void, parse_error_type> DungeonReader::set_dungeon_floor(DungeonDef
     }
     dungeon.prob_table_floor = std::move(*prob_table);
 
-    if (auto err = info_set_integer(get_json_value(floor_obj, "tunnelRate"), dungeon.tunnel_percent, true, Range(0, std::numeric_limits<int16_t>::max()))) {
-        return tl::unexpected(static_cast<parse_error_type>(err));
+    if (const auto result = info_set_integer(get_json_value(floor_obj, "tunnelRate"), dungeon.tunnel_percent, true, Range(0, std::numeric_limits<int16_t>::max())); !result) {
+        return result;
     }
     return {};
 }
@@ -398,14 +398,14 @@ tl::expected<void, parse_error_type> DungeonReader::set_dungeon_streams(const nl
             return tl::unexpected(PARSE_ERROR_UNDEFINED_TERRAIN_TAG);
         }
 
-        if (auto err = info_set_integer(get_json_value(stream_obj, "count"), stream.count, true, Range(1, 255))) {
-            return tl::unexpected(static_cast<parse_error_type>(err));
+        if (const auto result = info_set_integer(get_json_value(stream_obj, "count"), stream.count, true, Range(1, 255)); !result) {
+            return result;
         }
-        if (auto err = info_set_integer(get_json_value(stream_obj, "chance"), stream.chance, true, Range(1, 65535))) {
-            return tl::unexpected(static_cast<parse_error_type>(err));
+        if (const auto result = info_set_integer(get_json_value(stream_obj, "chance"), stream.chance, true, Range(1, 65535)); !result) {
+            return result;
         }
-        if (auto err = info_set_integer(get_json_value(stream_obj, "priority"), stream.priority, true, Range(0, 255))) {
-            return tl::unexpected(static_cast<parse_error_type>(err));
+        if (const auto result = info_set_integer(get_json_value(stream_obj, "priority"), stream.priority, true, Range(0, 255)); !result) {
+            return result;
         }
 
         dungeon.streams.emplace_back(stream);
@@ -472,12 +472,12 @@ template <typename Enum, typename Validator>
 static tl::expected<void, parse_error_type> info_set_enum_from_integer_checked(const nlohmann::json &json, Enum &data, std::string_view label, int minimum, Validator validator)
 {
     Enum enum_value{};
-    if (auto err = info_set_integer(json, enum_value, true, Range(minimum, 9999))) {
-        if (err == PARSE_ERROR_INVALID_FLAG) {
+    if (const auto result = info_set_integer(json, enum_value, true, Range(minimum, 9999)); !result) {
+        if (result.error() == PARSE_ERROR_INVALID_FLAG) {
             msg_print(_("{} ID '{}' は範囲外です。", "{} ID '{}' is out of range."), label, json.dump());
             return tl::unexpected(PARSE_ERROR_OUT_OF_BOUNDS);
         }
-        return tl::unexpected(static_cast<parse_error_type>(err));
+        return result;
     }
 
     const auto value = enum2i(enum_value);
@@ -497,8 +497,8 @@ static tl::expected<void, parse_error_type> info_set_enum_from_integer_checked(c
 static tl::expected<void, parse_error_type> info_set_baseitem_id_checked(const nlohmann::json &json, DungeonDefinition &dungeon)
 {
     int value{};
-    if (auto err = info_set_integer(json, value, true, Range(1, std::numeric_limits<short>::max()))) {
-        return tl::unexpected(static_cast<parse_error_type>(err));
+    if (const auto result = info_set_integer(json, value, true, Range(1, std::numeric_limits<short>::max())); !result) {
+        return result;
     }
 
     const auto value_short = static_cast<short>(value);
@@ -649,17 +649,17 @@ tl::expected<void, parse_error_type> DungeonReader::set_dungeon_monsters(Dungeon
         return tl::unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
     }
 
-    if (auto err = info_set_integer(get_json_value(monsters_obj, "minCount"), dungeon.min_monster_count_on_floor, true, Range(0, 100))) {
-        return tl::unexpected(static_cast<parse_error_type>(err));
+    if (const auto result = info_set_integer(get_json_value(monsters_obj, "minCount"), dungeon.min_monster_count_on_floor, true, Range(0, 100)); !result) {
+        return result;
     }
     auto additionalSpawnProbability = 1;
     constexpr auto conversion_rate = 1000000;
-    if (auto err = info_set_integer(get_json_value(monsters_obj, "additionalSpawnProbability"), additionalSpawnProbability, true, Range(1, conversion_rate))) {
-        return tl::unexpected(static_cast<parse_error_type>(err));
+    if (const auto result = info_set_integer(get_json_value(monsters_obj, "additionalSpawnProbability"), additionalSpawnProbability, true, Range(1, conversion_rate)); !result) {
+        return result;
     }
     dungeon.additional_monster_spawn_chance = conversion_rate / additionalSpawnProbability;
-    if (auto err = info_set_integer(get_json_value(monsters_obj, "normalMonsterRate"), dungeon.normal_monster_rate, true, Range(0, 100))) {
-        return tl::unexpected(static_cast<parse_error_type>(err));
+    if (const auto result = info_set_integer(get_json_value(monsters_obj, "normalMonsterRate"), dungeon.normal_monster_rate, true, Range(0, 100)); !result) {
+        return result;
     }
 
     const auto &flags_mode_obj = get_json_value(monsters_obj, "flagsMode");

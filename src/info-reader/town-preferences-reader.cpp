@@ -31,7 +31,7 @@ parse_error_type TownPreferencesReader::read(TownPreferencesLegend &legend, Town
         }
         int special = 0;
         if (cell_data.contains("special") &&
-            info_set_integer(cell_data["special"], special, true, Range(std::numeric_limits<int16_t>::min(), std::numeric_limits<int16_t>::max())) != PARSE_ERROR_NONE) {
+            !info_set_integer(cell_data["special"], special, true, Range(std::numeric_limits<int16_t>::min(), std::numeric_limits<int16_t>::max()))) {
             return PARSE_ERROR_INVALID_VALUE;
         }
 

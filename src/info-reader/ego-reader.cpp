@@ -24,8 +24,9 @@ EgoReader::EgoReader(const nlohmann::json &ego_data)
  */
 int EgoReader::validate_root(const nlohmann::json &root)
 {
-    int version;
-    return info_set_integer(get_json_value(root, "version"), version, true, Range(FORMAT_VERSION, FORMAT_VERSION));
+    int version = 0;
+    const auto result = info_set_integer(get_json_value(root, "version"), version, true, Range(FORMAT_VERSION, FORMAT_VERSION));
+    return result ? PARSE_ERROR_NONE : result.error();
 }
 
 /*!
@@ -39,9 +40,9 @@ int EgoReader::read() const
         return PARSE_ERROR_INVALID_TYPE;
     }
 
-    int id;
-    if (auto err = info_set_integer(get_json_value(this->ego_data, "id"), id, true, Range(1, std::numeric_limits<byte>::max()))) {
-        return err;
+    int id = 0;
+    if (const auto result = info_set_integer(get_json_value(this->ego_data, "id"), id, true, Range(1, std::numeric_limits<byte>::max())); !result) {
+        return result.error();
     }
     if (egos_info.contains(i2enum<EgoType>(id))) {
         return PARSE_ERROR_NON_SEQUENTIAL_RECORDS;
@@ -49,23 +50,23 @@ int EgoReader::read() const
 
     EgoItemDefinition ego;
     ego.idx = i2enum<EgoType>(id);
-    if (auto err = info_set_string(get_json_value(this->ego_data, "name"), ego.name, true)) {
-        return err;
+    if (const auto result = info_set_string(get_json_value(this->ego_data, "name"), ego.name, true); !result) {
+        return result.error();
     }
-    if (auto err = info_set_integer(get_json_value(this->ego_data, "slot"), ego.slot, true, Range(INVEN_AMMO, INVEN_FEET))) {
-        return err;
+    if (const auto result = info_set_integer(get_json_value(this->ego_data, "slot"), ego.slot, true, Range(INVEN_AMMO, INVEN_FEET)); !result) {
+        return result.error();
     }
-    if (auto err = info_set_integer(get_json_value(this->ego_data, "rating"), ego.rating, true, Range(0, 100))) {
-        return err;
+    if (const auto result = info_set_integer(get_json_value(this->ego_data, "rating"), ego.rating, true, Range(0, 100)); !result) {
+        return result.error();
     }
-    if (auto err = info_set_integer(get_json_value(this->ego_data, "level"), ego.level, true, Range(0, 128))) {
-        return err;
+    if (const auto result = info_set_integer(get_json_value(this->ego_data, "level"), ego.level, true, Range(0, 128)); !result) {
+        return result.error();
     }
-    if (auto err = info_set_integer(get_json_value(this->ego_data, "rarity"), ego.rarity, true, Range(0, 255))) {
-        return err;
+    if (const auto result = info_set_integer(get_json_value(this->ego_data, "rarity"), ego.rarity, true, Range(0, 255)); !result) {
+        return result.error();
     }
-    if (auto err = info_set_integer(get_json_value(this->ego_data, "cost"), ego.cost, true, Range(0, std::numeric_limits<PRICE>::max() / 32))) {
-        return err;
+    if (const auto result = info_set_integer(get_json_value(this->ego_data, "cost"), ego.cost, true, Range(0, std::numeric_limits<PRICE>::max() / 32)); !result) {
+        return result.error();
     }
 
     const auto &base = get_json_value(this->ego_data, "base_bonuses");
@@ -73,14 +74,14 @@ int EgoReader::read() const
         if (!base.is_object()) {
             return PARSE_ERROR_INVALID_TYPE;
         }
-        if (auto err = info_set_integer(get_json_value(base, "to_hit"), ego.base_to_h, true, Range(-32768, 32767))) {
-            return err;
+        if (const auto result = info_set_integer(get_json_value(base, "to_hit"), ego.base_to_h, true, Range(-32768, 32767)); !result) {
+            return result.error();
         }
-        if (auto err = info_set_integer(get_json_value(base, "to_damage"), ego.base_to_d, true, Range(-32768, 32767))) {
-            return err;
+        if (const auto result = info_set_integer(get_json_value(base, "to_damage"), ego.base_to_d, true, Range(-32768, 32767)); !result) {
+            return result.error();
         }
-        if (auto err = info_set_integer(get_json_value(base, "to_ac"), ego.base_to_a, true, Range(-32768, 32767))) {
-            return err;
+        if (const auto result = info_set_integer(get_json_value(base, "to_ac"), ego.base_to_a, true, Range(-32768, 32767)); !result) {
+            return result.error();
         }
     }
 
@@ -89,17 +90,17 @@ int EgoReader::read() const
         if (!maximum.is_object()) {
             return PARSE_ERROR_INVALID_TYPE;
         }
-        if (auto err = info_set_integer(get_json_value(maximum, "to_hit"), ego.max_to_h, true, Range(-32768, 32767))) {
-            return err;
+        if (const auto result = info_set_integer(get_json_value(maximum, "to_hit"), ego.max_to_h, true, Range(-32768, 32767)); !result) {
+            return result.error();
         }
-        if (auto err = info_set_integer(get_json_value(maximum, "to_damage"), ego.max_to_d, true, Range(-32768, 32767))) {
-            return err;
+        if (const auto result = info_set_integer(get_json_value(maximum, "to_damage"), ego.max_to_d, true, Range(-32768, 32767)); !result) {
+            return result.error();
         }
-        if (auto err = info_set_integer(get_json_value(maximum, "to_ac"), ego.max_to_a, true, Range(-32768, 32767))) {
-            return err;
+        if (const auto result = info_set_integer(get_json_value(maximum, "to_ac"), ego.max_to_a, true, Range(-32768, 32767)); !result) {
+            return result.error();
         }
-        if (auto err = info_set_integer(get_json_value(maximum, "pval"), ego.max_pval, true, Range(-32768, 32767))) {
-            return err;
+        if (const auto result = info_set_integer(get_json_value(maximum, "pval"), ego.max_pval, true, Range(-32768, 32767)); !result) {
+            return result.error();
         }
     }
 
@@ -191,8 +192,8 @@ tl::expected<void, parse_error_type> EgoReader::set_extra_flags(EgoItemDefinitio
         if (extra_data.contains("numerator") || extra_data.contains("denominator")) {
             return tl::make_unexpected(PARSE_ERROR_INVALID_VALUE);
         }
-        if (const auto err = info_set_integer(get_json_value(extra_data, "chance"), extra.chance, true, Range(0, 100)); err != PARSE_ERROR_NONE) {
-            return tl::make_unexpected(static_cast<parse_error_type>(err));
+        if (const auto result = info_set_integer(get_json_value(extra_data, "chance"), extra.chance, true, Range(0, 100)); !result) {
+            return result;
         }
         const auto &flags = get_json_value(extra_data, "flags");
         if (!flags.is_array()) {

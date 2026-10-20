@@ -209,21 +209,21 @@ parse_error_type parse_quest_legend_cell(const nlohmann::json &cell_data, QuestL
     // 整数・オブジェクト以外の値（5.0 などの整数でない数を含む）は黙って無視せず解析エラーにする。
     const auto &monster = get_json_value(cell_data, "monster");
     if (monster.is_number()) {
-        if (const auto err = info_set_integer(monster, grid.monster, true, LEGEND_MONSTER_RANGE); err != PARSE_ERROR_NONE) {
-            return i2enum<parse_error_type>(err);
+        if (const auto result = info_set_integer(monster, grid.monster, true, LEGEND_MONSTER_RANGE); !result) {
+            return result.error();
         }
     } else if (monster.is_object()) {
         if (json_is_true(get_json_value(monster, "random"))) {
             grid.random |= RANDOM_MONSTER;
-            if (const auto err = info_set_integer(get_json_value(monster, "oodLevel"), grid.monster, false, LEGEND_SHORT_RANGE); err != PARSE_ERROR_NONE) {
-                return i2enum<parse_error_type>(err);
+            if (const auto result = info_set_integer(get_json_value(monster, "oodLevel"), grid.monster, false, LEGEND_SHORT_RANGE); !result) {
+                return result.error();
             }
         } else {
             const auto &clone = get_json_value(monster, "cloneOf");
             if (!clone.is_null()) {
                 int clone_id = 0;
-                if (const auto err = info_set_integer(clone, clone_id, true, LEGEND_MONSTER_RANGE); err != PARSE_ERROR_NONE) {
-                    return i2enum<parse_error_type>(err);
+                if (const auto result = info_set_integer(clone, clone_id, true, LEGEND_MONSTER_RANGE); !result) {
+                    return result.error();
                 }
                 grid.monster = static_cast<MONSTER_IDX>(-clone_id);
             }
@@ -234,14 +234,14 @@ parse_error_type parse_quest_legend_cell(const nlohmann::json &cell_data, QuestL
 
     const auto &object = get_json_value(cell_data, "object");
     if (object.is_number()) {
-        if (const auto err = info_set_integer(object, grid.object, true, LEGEND_SHORT_RANGE); err != PARSE_ERROR_NONE) {
-            return i2enum<parse_error_type>(err);
+        if (const auto result = info_set_integer(object, grid.object, true, LEGEND_SHORT_RANGE); !result) {
+            return result.error();
         }
     } else if (object.is_object()) {
         if (json_is_true(get_json_value(object, "random"))) {
             grid.random |= RANDOM_OBJECT;
-            if (const auto err = info_set_integer(get_json_value(object, "oodLevel"), grid.object, false, LEGEND_SHORT_RANGE); err != PARSE_ERROR_NONE) {
-                return i2enum<parse_error_type>(err);
+            if (const auto result = info_set_integer(get_json_value(object, "oodLevel"), grid.object, false, LEGEND_SHORT_RANGE); !result) {
+                return result.error();
             }
         } else if (json_is_true(get_json_value(object, "questReward"))) {
             out.object_is_quest_reward = true;
@@ -252,13 +252,13 @@ parse_error_type parse_quest_legend_cell(const nlohmann::json &cell_data, QuestL
 
     const auto &ego = get_json_value(cell_data, "ego");
     if (ego.is_number()) {
-        if (const auto err = info_set_integer(ego, grid.ego, true, LEGEND_EGO_RANGE); err != PARSE_ERROR_NONE) {
-            return i2enum<parse_error_type>(err);
+        if (const auto result = info_set_integer(ego, grid.ego, true, LEGEND_EGO_RANGE); !result) {
+            return result.error();
         }
     } else if (ego.is_object() && json_is_true(get_json_value(ego, "random"))) {
         grid.random |= RANDOM_EGO;
-        if (const auto err = info_set_integer(get_json_value(ego, "id"), grid.ego, false, LEGEND_EGO_RANGE); err != PARSE_ERROR_NONE) {
-            return i2enum<parse_error_type>(err);
+        if (const auto result = info_set_integer(get_json_value(ego, "id"), grid.ego, false, LEGEND_EGO_RANGE); !result) {
+            return result.error();
         }
     } else if (!ego.is_null() && !ego.is_object()) {
         return PARSE_ERROR_INVALID_TYPE;
@@ -266,14 +266,14 @@ parse_error_type parse_quest_legend_cell(const nlohmann::json &cell_data, QuestL
 
     const auto &artifact = get_json_value(cell_data, "artifact");
     if (artifact.is_number()) {
-        if (const auto err = info_set_integer(artifact, grid.artifact, true, LEGEND_SHORT_RANGE); err != PARSE_ERROR_NONE) {
-            return i2enum<parse_error_type>(err);
+        if (const auto result = info_set_integer(artifact, grid.artifact, true, LEGEND_SHORT_RANGE); !result) {
+            return result.error();
         }
     } else if (artifact.is_object()) {
         if (json_is_true(get_json_value(artifact, "random"))) {
             grid.random |= RANDOM_ARTIFACT;
-            if (const auto err = info_set_integer(get_json_value(artifact, "id"), grid.artifact, false, LEGEND_SHORT_RANGE); err != PARSE_ERROR_NONE) {
-                return i2enum<parse_error_type>(err);
+            if (const auto result = info_set_integer(get_json_value(artifact, "id"), grid.artifact, false, LEGEND_SHORT_RANGE); !result) {
+                return result.error();
             }
         } else if (json_is_true(get_json_value(artifact, "questReward"))) {
             out.artifact_is_quest_reward = true;
@@ -293,8 +293,8 @@ parse_error_type parse_quest_legend_cell(const nlohmann::json &cell_data, QuestL
         grid.random |= RANDOM_TRAP;
     }
 
-    if (const auto err = info_set_integer(get_json_value(cell_data, "special"), grid.special, false, LEGEND_SHORT_RANGE); err != PARSE_ERROR_NONE) {
-        return i2enum<parse_error_type>(err);
+    if (const auto result = info_set_integer(get_json_value(cell_data, "special"), grid.special, false, LEGEND_SHORT_RANGE); !result) {
+        return result.error();
     }
 
     return PARSE_ERROR_NONE;
@@ -342,8 +342,8 @@ int QuestReader::read() const
 tl::expected<void, parse_error_type> QuestReader::set_name(std::string &name) const
 {
     // info_set_string は {ja, en} オブジェクトを受け取り、ビルド言語に応じた文字列を格納する
-    if (const auto err = info_set_string(get_json_value(this->quest_data, "name"), name, true); err != PARSE_ERROR_NONE) {
-        return tl::make_unexpected(static_cast<parse_error_type>(err));
+    if (const auto result = info_set_string(get_json_value(this->quest_data, "name"), name, true); !result) {
+        return result;
     }
     return {};
 }
@@ -368,20 +368,20 @@ tl::expected<void, parse_error_type> QuestReader::set_definition(QuestFixedMap &
     }
     meta.type = enum2i(kind_it->second);
 
-    if (const auto err = info_set_integer(get_json_value(definition, "level"), meta.level, true, QUEST_LEVEL_RANGE); err != PARSE_ERROR_NONE) {
-        return tl::make_unexpected(static_cast<parse_error_type>(err));
+    if (const auto result = info_set_integer(get_json_value(definition, "level"), meta.level, true, QUEST_LEVEL_RANGE); !result) {
+        return result;
     }
-    if (const auto err = info_set_integer(get_json_value(definition, "numMon"), meta.num_mon, false, QUEST_INTEGER_RANGE); err != PARSE_ERROR_NONE) {
-        return tl::make_unexpected(static_cast<parse_error_type>(err));
+    if (const auto result = info_set_integer(get_json_value(definition, "numMon"), meta.num_mon, false, QUEST_INTEGER_RANGE); !result) {
+        return result;
     }
-    if (const auto err = info_set_integer(get_json_value(definition, "maxNum"), meta.max_num, false, QUEST_MAX_NUM_RANGE); err != PARSE_ERROR_NONE) {
-        return tl::make_unexpected(static_cast<parse_error_type>(err));
+    if (const auto result = info_set_integer(get_json_value(definition, "maxNum"), meta.max_num, false, QUEST_MAX_NUM_RANGE); !result) {
+        return result;
     }
-    if (const auto err = info_set_integer(get_json_value(definition, "dungeon"), meta.dungeon, false, QUEST_INTEGER_RANGE); err != PARSE_ERROR_NONE) {
-        return tl::make_unexpected(static_cast<parse_error_type>(err));
+    if (const auto result = info_set_integer(get_json_value(definition, "dungeon"), meta.dungeon, false, QUEST_INTEGER_RANGE); !result) {
+        return result;
     }
-    if (const auto err = info_set_integer(get_json_value(definition, "monster"), meta.r_idx, false, QUEST_ID_RANGE); err != PARSE_ERROR_NONE) {
-        return tl::make_unexpected(static_cast<parse_error_type>(err));
+    if (const auto result = info_set_integer(get_json_value(definition, "monster"), meta.r_idx, false, QUEST_ID_RANGE); !result) {
+        return result;
     }
 
     const auto &flags = get_json_value(definition, "flags");
@@ -407,8 +407,8 @@ tl::expected<void, parse_error_type> QuestReader::set_definition(QuestFixedMap &
         if (!reward.is_object()) {
             return tl::make_unexpected(PARSE_ERROR_INVALID_TYPE);
         }
-        if (const auto err = info_set_integer(get_json_value(reward, "artifact"), meta.reward_artifact, false, QUEST_ID_RANGE); err != PARSE_ERROR_NONE) {
-            return tl::make_unexpected(static_cast<parse_error_type>(err));
+        if (const auto result = info_set_integer(get_json_value(reward, "artifact"), meta.reward_artifact, false, QUEST_ID_RANGE); !result) {
+            return result;
         }
 
         const auto &artifacts = get_json_value(reward, "artifacts");
@@ -418,8 +418,8 @@ tl::expected<void, parse_error_type> QuestReader::set_definition(QuestFixedMap &
             }
             for (const auto &candidate : artifacts) {
                 int candidate_id = 0;
-                if (const auto err = info_set_integer(candidate, candidate_id, true, QUEST_ID_RANGE); err != PARSE_ERROR_NONE) {
-                    return tl::make_unexpected(static_cast<parse_error_type>(err));
+                if (const auto result = info_set_integer(candidate, candidate_id, true, QUEST_ID_RANGE); !result) {
+                    return result;
                 }
                 parsed.reward_artifact_candidates.push_back(candidate_id);
             }
@@ -549,11 +549,11 @@ tl::expected<void, parse_error_type> QuestReader::set_starts(QuestFixedMap &pars
     const auto &start = get_json_value(this->quest_data, "start");
     if (!start.is_null()) {
         QuestStartPosition position;
-        if (const auto err = info_set_integer(get_json_value(start, "y"), position.y, true, QUEST_INTEGER_RANGE); err != PARSE_ERROR_NONE) {
-            return tl::make_unexpected(static_cast<parse_error_type>(err));
+        if (const auto result = info_set_integer(get_json_value(start, "y"), position.y, true, QUEST_INTEGER_RANGE); !result) {
+            return result;
         }
-        if (const auto err = info_set_integer(get_json_value(start, "x"), position.x, true, QUEST_INTEGER_RANGE); err != PARSE_ERROR_NONE) {
-            return tl::make_unexpected(static_cast<parse_error_type>(err));
+        if (const auto result = info_set_integer(get_json_value(start, "x"), position.x, true, QUEST_INTEGER_RANGE); !result) {
+            return result;
         }
         if (const auto result = validate_quest_start(parsed, position); !result) {
             return result;
@@ -573,16 +573,16 @@ tl::expected<void, parse_error_type> QuestReader::set_starts(QuestFixedMap &pars
             const auto &leaving_quest = get_json_value(variant, "leavingQuest");
             if (!leaving_quest.is_null()) {
                 int leaving_id = 0;
-                if (const auto err = info_set_integer(leaving_quest, leaving_id, true, QUEST_INTEGER_RANGE); err != PARSE_ERROR_NONE) {
-                    return tl::make_unexpected(static_cast<parse_error_type>(err));
+                if (const auto result = info_set_integer(leaving_quest, leaving_id, true, QUEST_INTEGER_RANGE); !result) {
+                    return result;
                 }
                 position.leaving_quest = leaving_id;
             }
-            if (const auto err = info_set_integer(get_json_value(variant, "y"), position.y, true, QUEST_INTEGER_RANGE); err != PARSE_ERROR_NONE) {
-                return tl::make_unexpected(static_cast<parse_error_type>(err));
+            if (const auto result = info_set_integer(get_json_value(variant, "y"), position.y, true, QUEST_INTEGER_RANGE); !result) {
+                return result;
             }
-            if (const auto err = info_set_integer(get_json_value(variant, "x"), position.x, true, QUEST_INTEGER_RANGE); err != PARSE_ERROR_NONE) {
-                return tl::make_unexpected(static_cast<parse_error_type>(err));
+            if (const auto result = info_set_integer(get_json_value(variant, "x"), position.x, true, QUEST_INTEGER_RANGE); !result) {
+                return result;
             }
             if (const auto result = validate_quest_start(parsed, position); !result) {
                 return result;

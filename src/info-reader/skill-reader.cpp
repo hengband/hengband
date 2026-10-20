@@ -51,9 +51,9 @@ tl::expected<void, parse_error_type> SkillReader::check_keys(const nlohmann::jso
 
 tl::expected<void, parse_error_type> SkillReader::read_integer(const nlohmann::json &data, int &value, int maximum, std::string_view path)
 {
-    if (const auto err = info_set_integer(data, value, true, Range(0, maximum))) {
+    if (const auto result = info_set_integer(data, value, true, Range(0, maximum)); !result) {
         const auto reason = data.is_number_integer() ? fmt::format(_("0以上{}以下の整数が必要です", "expected an integer in [0, {}]"), maximum) : _("整数が必要です", "expected an integer");
-        return this->fail(static_cast<parse_error_type>(err), path, reason);
+        return this->fail(result.error(), path, reason);
     }
     return {};
 }

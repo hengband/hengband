@@ -18,11 +18,26 @@
 
 #include <doctest/doctest.h>
 #include <nlohmann/json.hpp>
+#include <tl/expected.hpp>
 
 #include <cstdint>
 #include <limits>
 #include <string>
 #include <vector>
+
+namespace {
+
+/*!
+ * @brief 解析結果をエラーコードとして比べられるようにする
+ * @param result info_set_* などの解析結果
+ * @return 成功時はPARSE_ERROR_NONE、失敗時は解析エラーコード
+ */
+parse_error_type to_error_code(const tl::expected<void, parse_error_type> &result)
+{
+    return result ? PARSE_ERROR_NONE : result.error();
+}
+
+}
 
 TEST_CASE("JSON definition roots require an object containing the named array")
 {
@@ -41,7 +56,7 @@ TEST_CASE("JSON definition roots require an object containing the named array")
     };
     for (const auto &root : invalid_roots) {
         const auto saved = root;
-        CHECK(info_validate_json_array(root, "vaults") != PARSE_ERROR_NONE);
+        CHECK(to_error_code(info_validate_json_array(root, "vaults")) != PARSE_ERROR_NONE);
         CHECK(root == saved);
     }
 }
@@ -49,11 +64,11 @@ TEST_CASE("JSON definition roots require an object containing the named array")
 TEST_CASE("Empty definition arrays are rejected only when requested")
 {
     const nlohmann::json empty = { { "vaults", nlohmann::json::array() } };
-    CHECK(info_validate_json_array(empty, "vaults") == PARSE_ERROR_NONE);
-    CHECK(info_validate_json_array(empty, "vaults", false) == PARSE_ERROR_INVALID_VALUE);
+    CHECK(info_validate_json_array(empty, "vaults").has_value());
+    CHECK(to_error_code(info_validate_json_array(empty, "vaults", false)) == PARSE_ERROR_INVALID_VALUE);
     const nlohmann::json nonempty = { { "vaults", { { { "id", 0 } } } } };
-    CHECK(info_validate_json_array(nonempty, "vaults", false) == PARSE_ERROR_NONE);
-    CHECK(info_validate_json_array(nonempty, "missing", false) == PARSE_ERROR_TOO_FEW_ARGUMENTS);
+    CHECK(info_validate_json_array(nonempty, "vaults", false).has_value());
+    CHECK(to_error_code(info_validate_json_array(nonempty, "missing", false)) == PARSE_ERROR_TOO_FEW_ARGUMENTS);
 }
 
 #if defined(JP) && defined(EUC)
@@ -149,56 +164,56 @@ TEST_CASE("info_set_integer stores the value")
 
     SUBCASE("positive value")
     {
-        CHECK(info_set_integer(nlohmann::json(100), data, true) == PARSE_ERROR_NONE);
+        CHECK(info_set_integer(nlohmann::json(100), data, true).has_value());
         CHECK(data == 100);
     }
 
     SUBCASE("negative value")
     {
-        CHECK(info_set_integer(nlohmann::json(-100), data, true) == PARSE_ERROR_NONE);
+        CHECK(info_set_integer(nlohmann::json(-100), data, true).has_value());
         CHECK(data == -100);
     }
 
     SUBCASE("optional key is stored as well")
     {
         // 必須でないキーでも、値が書かれていれば格納する
-        CHECK(info_set_integer(nlohmann::json(100), data, false) == PARSE_ERROR_NONE);
+        CHECK(info_set_integer(nlohmann::json(100), data, false).has_value());
         CHECK(data == 100);
     }
 
     SUBCASE("value stored into a short")
     {
         short short_data = 0;
-        CHECK(info_set_integer(nlohmann::json(30000), short_data, true) == PARSE_ERROR_NONE);
+        CHECK(info_set_integer(nlohmann::json(30000), short_data, true).has_value());
         CHECK(short_data == 30000);
     }
 
     SUBCASE("enum value")
     {
         auto kind = TestKind::NONE;
-        CHECK(info_set_integer(nlohmann::json(1), kind, true) == PARSE_ERROR_NONE);
+        CHECK(info_set_integer(nlohmann::json(1), kind, true).has_value());
         CHECK(kind == TestKind::FIRST);
     }
 
     SUBCASE("enum underlying type is checked before conversion")
     {
         auto kind = TestNarrowKind::FIRST;
-        CHECK(info_set_integer(nlohmann::json(257), kind, true) == PARSE_ERROR_INVALID_FLAG);
+        CHECK(to_error_code(info_set_integer(nlohmann::json(257), kind, true)) == PARSE_ERROR_INVALID_FLAG);
         CHECK(kind == TestNarrowKind::FIRST);
-        CHECK(info_set_integer(nlohmann::json(-1), kind, true) == PARSE_ERROR_INVALID_FLAG);
+        CHECK(to_error_code(info_set_integer(nlohmann::json(-1), kind, true)) == PARSE_ERROR_INVALID_FLAG);
         CHECK(kind == TestNarrowKind::FIRST);
     }
 
     SUBCASE("no range still checks the destination type")
     {
         std::uint8_t narrow_data = 123;
-        CHECK(info_set_integer(nlohmann::json(300), narrow_data, true) == PARSE_ERROR_INVALID_FLAG);
+        CHECK(to_error_code(info_set_integer(nlohmann::json(300), narrow_data, true)) == PARSE_ERROR_INVALID_FLAG);
         CHECK(narrow_data == 123);
-        CHECK(info_set_integer(nlohmann::json(-1), narrow_data, false) == PARSE_ERROR_INVALID_FLAG);
+        CHECK(to_error_code(info_set_integer(nlohmann::json(-1), narrow_data, false)) == PARSE_ERROR_INVALID_FLAG);
         CHECK(narrow_data == 123);
-        CHECK(info_set_integer(nlohmann::json(255), narrow_data, true) == PARSE_ERROR_NONE);
+        CHECK(info_set_integer(nlohmann::json(255), narrow_data, true).has_value());
         CHECK(narrow_data == 255);
-        CHECK(info_set_integer(nlohmann::json(256), narrow_data, true, Range(0, 9999)) == PARSE_ERROR_INVALID_FLAG);
+        CHECK(to_error_code(info_set_integer(nlohmann::json(256), narrow_data, true, Range(0, 9999))) == PARSE_ERROR_INVALID_FLAG);
         CHECK(narrow_data == 255);
     }
 }
@@ -210,12 +225,12 @@ TEST_CASE("info_set_integer treats a null JSON as an unwritten key")
 
     SUBCASE("required key is an error")
     {
-        CHECK(info_set_integer(null_json, data, true) == PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        CHECK(to_error_code(info_set_integer(null_json, data, true)) == PARSE_ERROR_TOO_FEW_ARGUMENTS);
     }
 
     SUBCASE("optional key is not an error")
     {
-        CHECK(info_set_integer(null_json, data, false) == PARSE_ERROR_NONE);
+        CHECK(info_set_integer(null_json, data, false).has_value());
     }
 
     // どちらの場合も格納先は元の値のままにしておく必要がある
@@ -228,30 +243,30 @@ TEST_CASE("info_set_integer rejects a non-integer JSON")
 
     SUBCASE("string")
     {
-        CHECK(info_set_integer(nlohmann::json("100"), data, true) == PARSE_ERROR_INVALID_TYPE);
+        CHECK(to_error_code(info_set_integer(nlohmann::json("100"), data, true)) == PARSE_ERROR_INVALID_TYPE);
     }
 
     SUBCASE("floating point number")
     {
-        CHECK(info_set_integer(nlohmann::json(1.5), data, true) == PARSE_ERROR_INVALID_TYPE);
+        CHECK(to_error_code(info_set_integer(nlohmann::json(1.5), data, true)) == PARSE_ERROR_INVALID_TYPE);
     }
 
     SUBCASE("boolean")
     {
-        CHECK(info_set_integer(nlohmann::json(true), data, true) == PARSE_ERROR_INVALID_TYPE);
+        CHECK(to_error_code(info_set_integer(nlohmann::json(true), data, true)) == PARSE_ERROR_INVALID_TYPE);
     }
 
     SUBCASE("optional key is an error too")
     {
         // 必須でなくても、書かれている値の型が誤っていれば見逃さない
-        CHECK(info_set_integer(nlohmann::json("100"), data, false) == PARSE_ERROR_INVALID_TYPE);
+        CHECK(to_error_code(info_set_integer(nlohmann::json("100"), data, false)) == PARSE_ERROR_INVALID_TYPE);
     }
 
     SUBCASE("containers are not integers")
     {
         for (const auto &json : { nlohmann::json::array(), nlohmann::json::object() }) {
             for (const auto is_required : { false, true }) {
-                CHECK(info_set_integer(json, data, is_required) == PARSE_ERROR_INVALID_TYPE);
+                CHECK(to_error_code(info_set_integer(json, data, is_required)) == PARSE_ERROR_INVALID_TYPE);
                 CHECK(data == SENTINEL);
             }
         }
@@ -266,41 +281,41 @@ TEST_CASE("info_set_integer checks the value range")
 
     SUBCASE("both ends of the range are valid")
     {
-        CHECK(info_set_integer(nlohmann::json(0), data, true, Range(0, 128)) == PARSE_ERROR_NONE);
+        CHECK(info_set_integer(nlohmann::json(0), data, true, Range(0, 128)).has_value());
         CHECK(data == 0);
 
-        CHECK(info_set_integer(nlohmann::json(128), data, true, Range(0, 128)) == PARSE_ERROR_NONE);
+        CHECK(info_set_integer(nlohmann::json(128), data, true, Range(0, 128)).has_value());
         CHECK(data == 128);
     }
 
     SUBCASE("below the range")
     {
-        CHECK(info_set_integer(nlohmann::json(-1), data, true, Range(0, 128)) == PARSE_ERROR_INVALID_FLAG);
+        CHECK(to_error_code(info_set_integer(nlohmann::json(-1), data, true, Range(0, 128))) == PARSE_ERROR_INVALID_FLAG);
         CHECK(data == SENTINEL);
     }
 
     SUBCASE("above the range")
     {
-        CHECK(info_set_integer(nlohmann::json(129), data, true, Range(0, 128)) == PARSE_ERROR_INVALID_FLAG);
+        CHECK(to_error_code(info_set_integer(nlohmann::json(129), data, true, Range(0, 128))) == PARSE_ERROR_INVALID_FLAG);
         CHECK(data == SENTINEL);
     }
 
     SUBCASE("range containing negative numbers")
     {
-        CHECK(info_set_integer(nlohmann::json(-99), data, true, Range(-99, 99)) == PARSE_ERROR_NONE);
+        CHECK(info_set_integer(nlohmann::json(-99), data, true, Range(-99, 99)).has_value());
         CHECK(data == -99);
 
-        CHECK(info_set_integer(nlohmann::json(-100), data, true, Range(-99, 99)) == PARSE_ERROR_INVALID_FLAG);
+        CHECK(to_error_code(info_set_integer(nlohmann::json(-100), data, true, Range(-99, 99))) == PARSE_ERROR_INVALID_FLAG);
         CHECK(data == -99);
     }
 
     SUBCASE("enum value out of the range")
     {
         auto kind = TestKind::NONE;
-        CHECK(info_set_integer(nlohmann::json(11), kind, true, Range(0, 10)) == PARSE_ERROR_INVALID_FLAG);
+        CHECK(to_error_code(info_set_integer(nlohmann::json(11), kind, true, Range(0, 10))) == PARSE_ERROR_INVALID_FLAG);
         CHECK(kind == TestKind::NONE);
 
-        CHECK(info_set_integer(nlohmann::json(10), kind, true, Range(0, 10)) == PARSE_ERROR_NONE);
+        CHECK(info_set_integer(nlohmann::json(10), kind, true, Range(0, 10)).has_value());
         CHECK(kind == TestKind::LAST);
     }
 
@@ -313,13 +328,13 @@ TEST_CASE("info_set_integer checks the value range")
         constexpr uint8_t uint8_sentinel = 123;
         auto uint8_data = uint8_sentinel;
 
-        CHECK(info_set_integer(nlohmann::json(300), uint8_data, true, Range(0, 255)) == PARSE_ERROR_INVALID_FLAG);
+        CHECK(to_error_code(info_set_integer(nlohmann::json(300), uint8_data, true, Range(0, 255))) == PARSE_ERROR_INVALID_FLAG);
         CHECK(uint8_data == uint8_sentinel);
 
-        CHECK(info_set_integer(nlohmann::json(-1), uint8_data, true, Range(0, 255)) == PARSE_ERROR_INVALID_FLAG);
+        CHECK(to_error_code(info_set_integer(nlohmann::json(-1), uint8_data, true, Range(0, 255))) == PARSE_ERROR_INVALID_FLAG);
         CHECK(uint8_data == uint8_sentinel);
 
-        CHECK(info_set_integer(nlohmann::json(255), uint8_data, true, Range(0, 255)) == PARSE_ERROR_NONE);
+        CHECK(info_set_integer(nlohmann::json(255), uint8_data, true, Range(0, 255)).has_value());
         CHECK(uint8_data == 255);
     }
 }
@@ -330,16 +345,16 @@ TEST_CASE("info_set_integer checks signed int boundaries before conversion")
     constexpr auto maximum = std::numeric_limits<int>::max();
     auto data = SENTINEL;
 
-    CHECK(info_set_integer(nlohmann::json(minimum), data, true, Range(minimum, maximum)) == PARSE_ERROR_NONE);
+    CHECK(info_set_integer(nlohmann::json(minimum), data, true, Range(minimum, maximum)).has_value());
     CHECK(data == minimum);
-    CHECK(info_set_integer(nlohmann::json(maximum), data, true, Range(minimum, maximum)) == PARSE_ERROR_NONE);
+    CHECK(info_set_integer(nlohmann::json(maximum), data, true, Range(minimum, maximum)).has_value());
     CHECK(data == maximum);
 
     const auto below = static_cast<std::int64_t>(minimum) - 1;
     const auto above = static_cast<std::int64_t>(maximum) + 1;
-    CHECK(info_set_integer(nlohmann::json(below), data, true, Range(minimum, maximum)) == PARSE_ERROR_INVALID_FLAG);
+    CHECK(to_error_code(info_set_integer(nlohmann::json(below), data, true, Range(minimum, maximum))) == PARSE_ERROR_INVALID_FLAG);
     CHECK(data == maximum);
-    CHECK(info_set_integer(nlohmann::json(above), data, true, Range(minimum, maximum)) == PARSE_ERROR_INVALID_FLAG);
+    CHECK(to_error_code(info_set_integer(nlohmann::json(above), data, true, Range(minimum, maximum))) == PARSE_ERROR_INVALID_FLAG);
     CHECK(data == maximum);
 }
 
@@ -350,11 +365,11 @@ TEST_CASE("info_set_integer checks unsigned JSON values and numeric types")
     const auto unsigned_maximum = nlohmann::json(static_cast<std::uint64_t>(maximum));
     const auto unsigned_above = nlohmann::json(static_cast<std::uint64_t>(maximum) + 1);
 
-    CHECK(info_set_integer(unsigned_maximum, data, true, Range(0, maximum)) == PARSE_ERROR_NONE);
+    CHECK(info_set_integer(unsigned_maximum, data, true, Range(0, maximum)).has_value());
     CHECK(data == maximum);
-    CHECK(info_set_integer(unsigned_above, data, true, Range(0, maximum)) == PARSE_ERROR_INVALID_FLAG);
+    CHECK(to_error_code(info_set_integer(unsigned_above, data, true, Range(0, maximum))) == PARSE_ERROR_INVALID_FLAG);
     CHECK(data == maximum);
-    CHECK(info_set_integer(nlohmann::json(1.0), data, true, Range(0, maximum)) == PARSE_ERROR_INVALID_TYPE);
+    CHECK(to_error_code(info_set_integer(nlohmann::json(1.0), data, true, Range(0, maximum))) == PARSE_ERROR_INVALID_TYPE);
     CHECK(data == maximum);
 }
 
@@ -365,13 +380,13 @@ TEST_CASE("info_set_integer checks large unsigned JSON range and storage")
     REQUIRE(json.is_number_unsigned());
     auto data = SENTINEL;
 
-    CHECK(info_set_integer(json, data, true, Range(-1, 1)) == PARSE_ERROR_INVALID_FLAG);
+    CHECK(to_error_code(info_set_integer(json, data, true, Range(-1, 1))) == PARSE_ERROR_INVALID_FLAG);
     CHECK(data == SENTINEL);
-    CHECK(info_set_integer(json, data, false, Range(std::numeric_limits<int>::min(), std::numeric_limits<int>::max())) == PARSE_ERROR_INVALID_FLAG);
+    CHECK(to_error_code(info_set_integer(json, data, false, Range(std::numeric_limits<int>::min(), std::numeric_limits<int>::max()))) == PARSE_ERROR_INVALID_FLAG);
     CHECK(data == SENTINEL);
 
     std::uint64_t unsigned_data = 0;
-    CHECK(info_set_integer(json, unsigned_data, true) == PARSE_ERROR_NONE);
+    CHECK(info_set_integer(json, unsigned_data, true).has_value());
     CHECK(unsigned_data == largest);
 }
 
@@ -382,11 +397,11 @@ TEST_CASE("info_set_integer compares unsigned JSON values with signed range boun
         REQUIRE(zero.is_number_unsigned());
         auto data = SENTINEL;
 
-        CHECK(info_set_integer(zero, data, is_required, Range(-1, 1)) == PARSE_ERROR_NONE);
+        CHECK(info_set_integer(zero, data, is_required, Range(-1, 1)).has_value());
         CHECK(data == 0);
-        CHECK(info_set_integer(zero, data, is_required, Range(-3, -1)) == PARSE_ERROR_INVALID_FLAG);
+        CHECK(to_error_code(info_set_integer(zero, data, is_required, Range(-3, -1))) == PARSE_ERROR_INVALID_FLAG);
         CHECK(data == 0);
-        CHECK(info_set_integer(zero, data, is_required, Range(1, 3)) == PARSE_ERROR_INVALID_FLAG);
+        CHECK(to_error_code(info_set_integer(zero, data, is_required, Range(1, 3))) == PARSE_ERROR_INVALID_FLAG);
         CHECK(data == 0);
     }
 }
@@ -398,7 +413,7 @@ TEST_CASE("info_set_string picks the string of the language of the build")
     json[OTHER_LANG_KEY] = "name-of-the-other-build";
 
     std::string data;
-    CHECK(info_set_string(json, data, true) == PARSE_ERROR_NONE);
+    CHECK(info_set_string(json, data, true).has_value());
     CHECK(data == "name-of-this-build");
 }
 
@@ -417,12 +432,12 @@ TEST_CASE("info_set_string ignores malformed values of the other language")
         for (const auto is_required : { false, true }) {
             nlohmann::json json = { { LANG_KEY, "selected" }, { OTHER_LANG_KEY, ignored } };
             std::string data = "unchanged";
-            CHECK(info_set_string(json, data, is_required) == PARSE_ERROR_NONE);
+            CHECK(info_set_string(json, data, is_required).has_value());
             CHECK(data == "selected");
 
             json.erase(LANG_KEY);
             data = "unchanged";
-            CHECK(info_set_string(json, data, is_required) == (is_required ? PARSE_ERROR_TOO_FEW_ARGUMENTS : PARSE_ERROR_NONE));
+            CHECK(to_error_code(info_set_string(json, data, is_required)) == (is_required ? PARSE_ERROR_TOO_FEW_ARGUMENTS : PARSE_ERROR_NONE));
             CHECK(data == "unchanged");
         }
     }
@@ -433,7 +448,7 @@ TEST_CASE("info_set_string stores an empty selected string")
     for (const auto is_required : { false, true }) {
         const nlohmann::json json = { { LANG_KEY, "" }, { OTHER_LANG_KEY, nullptr } };
         std::string data = "unchanged";
-        CHECK(info_set_string(json, data, is_required) == PARSE_ERROR_NONE);
+        CHECK(info_set_string(json, data, is_required).has_value());
         CHECK(data.empty());
     }
 }
@@ -445,10 +460,10 @@ TEST_CASE("info_set_string preserves the language-specific embedded NUL behavior
     for (const auto is_required : { false, true }) {
         std::string data = "unchanged";
 #ifdef JP
-        CHECK(info_set_string(json, data, is_required) == PARSE_ERROR_INVALID_FLAG);
+        CHECK(to_error_code(info_set_string(json, data, is_required)) == PARSE_ERROR_INVALID_FLAG);
         CHECK(data == "unchanged");
 #else
-        CHECK(info_set_string(json, data, is_required) == PARSE_ERROR_NONE);
+        CHECK(info_set_string(json, data, is_required).has_value());
         CHECK(data == value);
 #endif
     }
@@ -463,10 +478,10 @@ TEST_CASE("info_set_string leaves malformed UTF-8 handling to the existing conve
 #ifdef JP
         // Windows may replace invalid UTF-8, while iconv can reject it. Do not add a stricter policy here.
         const auto converted = utf8_to_sys(value);
-        CHECK(info_set_string(json, data, is_required) == (converted ? PARSE_ERROR_NONE : PARSE_ERROR_INVALID_FLAG));
+        CHECK(to_error_code(info_set_string(json, data, is_required)) == (converted ? PARSE_ERROR_NONE : PARSE_ERROR_INVALID_FLAG));
         CHECK(data == (converted ? *converted : "unchanged"));
 #else
-        CHECK(info_set_string(json, data, is_required) == PARSE_ERROR_NONE);
+        CHECK(info_set_string(json, data, is_required).has_value());
         CHECK(data == value);
 #endif
     }
@@ -486,7 +501,7 @@ TEST_CASE("info_set_string rejects all non-string selected values without changi
         for (const auto is_required : { false, true }) {
             const nlohmann::json json = { { LANG_KEY, value }, { OTHER_LANG_KEY, "other" } };
             std::string data = "unchanged";
-            CHECK(info_set_string(json, data, is_required) == PARSE_ERROR_INVALID_TYPE);
+            CHECK(to_error_code(info_set_string(json, data, is_required)) == PARSE_ERROR_INVALID_TYPE);
             CHECK(data == "unchanged");
         }
     }
@@ -499,7 +514,7 @@ TEST_CASE("info_set_string converts the UTF-8 string into the system encoding")
     json["ja"] = UTF8_TEST_STRING;
 
     std::string data;
-    REQUIRE(info_set_string(json, data, true) == PARSE_ERROR_NONE);
+    REQUIRE(info_set_string(json, data, true).has_value());
 
     // 日本語版のシステム文字コード(EUC-JP/Shift_JIS)はUTF-8と異なるので、
     // 変換されていれば元のバイト列とは一致しない
@@ -528,8 +543,8 @@ TEST_CASE("info_set_string cannot convert a character missing from EUC-JP")
     std::string data = "unchanged";
 
     // 変換失敗は必須かどうかによらずエラーになり、格納先は書き換えない
-    CHECK(info_set_string(json, data, true) == PARSE_ERROR_INVALID_FLAG);
-    CHECK(info_set_string(json, data, false) == PARSE_ERROR_INVALID_FLAG);
+    CHECK(to_error_code(info_set_string(json, data, true)) == PARSE_ERROR_INVALID_FLAG);
+    CHECK(to_error_code(info_set_string(json, data, false)) == PARSE_ERROR_INVALID_FLAG);
 
     CHECK(data == "unchanged");
 
@@ -538,7 +553,7 @@ TEST_CASE("info_set_string cannot convert a character missing from EUC-JP")
     nlohmann::json valid_json;
     valid_json["ja"] = UTF8_TEST_STRING;
 
-    REQUIRE(info_set_string(valid_json, data, true) == PARSE_ERROR_NONE);
+    REQUIRE(info_set_string(valid_json, data, true).has_value());
     const auto restored = sys_to_utf8(data);
     REQUIRE(restored.has_value());
     CHECK(*restored == UTF8_TEST_STRING);
@@ -553,8 +568,8 @@ TEST_CASE("info_set_string treats a missing string as an unwritten key")
     {
         const nlohmann::json null_json;
 
-        CHECK(info_set_string(null_json, data, true) == PARSE_ERROR_TOO_FEW_ARGUMENTS);
-        CHECK(info_set_string(null_json, data, false) == PARSE_ERROR_NONE);
+        CHECK(to_error_code(info_set_string(null_json, data, true)) == PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        CHECK(info_set_string(null_json, data, false).has_value());
     }
 
     SUBCASE("object which has only the key of the other language")
@@ -562,8 +577,8 @@ TEST_CASE("info_set_string treats a missing string as an unwritten key")
         nlohmann::json json;
         json[OTHER_LANG_KEY] = "name-of-the-other-build";
 
-        CHECK(info_set_string(json, data, true) == PARSE_ERROR_TOO_FEW_ARGUMENTS);
-        CHECK(info_set_string(json, data, false) == PARSE_ERROR_NONE);
+        CHECK(to_error_code(info_set_string(json, data, true)) == PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        CHECK(info_set_string(json, data, false).has_value());
     }
 
     CHECK(data == "unchanged");
@@ -576,8 +591,8 @@ TEST_CASE("info_set_string rejects a JSON of an invalid type")
     SUBCASE("string written directly instead of an object")
     {
         // 言語別のオブジェクトではなく文字列が直接書かれている場合
-        CHECK(info_set_string(nlohmann::json("name"), data, true) == PARSE_ERROR_INVALID_TYPE);
-        CHECK(info_set_string(nlohmann::json("name"), data, false) == PARSE_ERROR_INVALID_TYPE);
+        CHECK(to_error_code(info_set_string(nlohmann::json("name"), data, true)) == PARSE_ERROR_INVALID_TYPE);
+        CHECK(to_error_code(info_set_string(nlohmann::json("name"), data, false)) == PARSE_ERROR_INVALID_TYPE);
     }
 
     SUBCASE("the value of the language key is not a string")
@@ -585,8 +600,8 @@ TEST_CASE("info_set_string rejects a JSON of an invalid type")
         nlohmann::json json;
         json[LANG_KEY] = 100;
 
-        CHECK(info_set_string(json, data, true) == PARSE_ERROR_INVALID_TYPE);
-        CHECK(info_set_string(json, data, false) == PARSE_ERROR_INVALID_TYPE);
+        CHECK(to_error_code(info_set_string(json, data, true)) == PARSE_ERROR_INVALID_TYPE);
+        CHECK(to_error_code(info_set_string(json, data, false)) == PARSE_ERROR_INVALID_TYPE);
     }
 
     CHECK(data == "unchanged");
@@ -598,19 +613,19 @@ TEST_CASE("info_set_dice parses the dice string")
 
     SUBCASE("single digit")
     {
-        CHECK(info_set_dice(nlohmann::json("3d5"), dice, true) == PARSE_ERROR_NONE);
+        CHECK(info_set_dice(nlohmann::json("3d5"), dice, true).has_value());
         CHECK(dice == Dice(3, 5));
     }
 
     SUBCASE("multiple digits")
     {
-        CHECK(info_set_dice(nlohmann::json("10d100"), dice, true) == PARSE_ERROR_NONE);
+        CHECK(info_set_dice(nlohmann::json("10d100"), dice, true).has_value());
         CHECK(dice == Dice(10, 100));
     }
 
     SUBCASE("optional string is parsed as well")
     {
-        CHECK(info_set_dice(nlohmann::json("3d5"), dice, false) == PARSE_ERROR_NONE);
+        CHECK(info_set_dice(nlohmann::json("3d5"), dice, false).has_value());
         CHECK(dice == Dice(3, 5));
     }
 }
@@ -624,15 +639,15 @@ TEST_CASE("info_set_dice applies the optional range to both the count and the si
     for (const auto *text : { "0d0", "255d255", "1d255" }) {
         CAPTURE(text);
         Dice dice(1, 1);
-        CHECK(info_set_dice(nlohmann::json(text), dice, false, Range(0, 255)) == PARSE_ERROR_NONE);
+        CHECK(info_set_dice(nlohmann::json(text), dice, false, Range(0, 255)).has_value());
         CHECK(dice == Dice::parse(text));
     }
     for (const auto *text : { "256d1", "1d256", "-1d2", "2d-1" }) {
         CAPTURE(text);
         Dice dice(1, 1);
-        CHECK(info_set_dice(nlohmann::json(text), dice, false, Range(0, 255)) == PARSE_ERROR_INVALID_FLAG);
+        CHECK(to_error_code(info_set_dice(nlohmann::json(text), dice, false, Range(0, 255))) == PARSE_ERROR_INVALID_FLAG);
         CHECK(dice == Dice(1, 1));
-        CHECK(info_set_dice(nlohmann::json(text), dice, false) == PARSE_ERROR_NONE);
+        CHECK(info_set_dice(nlohmann::json(text), dice, false).has_value());
         CHECK(dice == Dice::parse(text));
     }
 }
@@ -642,8 +657,8 @@ TEST_CASE("info_set_dice treats a null JSON as an unwritten key")
     Dice dice(1, 1);
     const nlohmann::json null_json;
 
-    CHECK(info_set_dice(null_json, dice, true) == PARSE_ERROR_TOO_FEW_ARGUMENTS);
-    CHECK(info_set_dice(null_json, dice, false) == PARSE_ERROR_NONE);
+    CHECK(to_error_code(info_set_dice(null_json, dice, true)) == PARSE_ERROR_TOO_FEW_ARGUMENTS);
+    CHECK(info_set_dice(null_json, dice, false).has_value());
 
     CHECK(dice == Dice(1, 1));
 }
@@ -663,7 +678,7 @@ TEST_CASE("info_set_dice rejects an invalid dice notation")
         };
         for (const auto &json : invalid_values) {
             for (const auto is_required : { false, true }) {
-                CHECK(info_set_dice(json, dice, is_required) == PARSE_ERROR_INVALID_TYPE);
+                CHECK(to_error_code(info_set_dice(json, dice, is_required)) == PARSE_ERROR_INVALID_TYPE);
                 CHECK(dice == Dice(1, 1));
             }
         }
@@ -675,8 +690,8 @@ TEST_CASE("info_set_dice rejects an invalid dice notation")
         for (const auto *const dice_str : { "3", "3d", "dice", "" }) {
             CAPTURE(dice_str);
 
-            CHECK(info_set_dice(nlohmann::json(dice_str), dice, true) == PARSE_ERROR_TOO_FEW_ARGUMENTS);
-            CHECK(info_set_dice(nlohmann::json(dice_str), dice, false) == PARSE_ERROR_TOO_FEW_ARGUMENTS);
+            CHECK(to_error_code(info_set_dice(nlohmann::json(dice_str), dice, true)) == PARSE_ERROR_TOO_FEW_ARGUMENTS);
+            CHECK(to_error_code(info_set_dice(nlohmann::json(dice_str), dice, false)) == PARSE_ERROR_TOO_FEW_ARGUMENTS);
         }
     }
 
@@ -688,10 +703,10 @@ TEST_CASE("info_set_bool stores the value")
     for (const auto is_required : { false, true }) {
         auto data = false;
 
-        CHECK(info_set_bool(nlohmann::json(true), data, is_required) == PARSE_ERROR_NONE);
+        CHECK(info_set_bool(nlohmann::json(true), data, is_required).has_value());
         CHECK(data);
 
-        CHECK(info_set_bool(nlohmann::json(false), data, is_required) == PARSE_ERROR_NONE);
+        CHECK(info_set_bool(nlohmann::json(false), data, is_required).has_value());
         CHECK_FALSE(data);
     }
 }
@@ -706,8 +721,8 @@ TEST_CASE("info_set_bool treats a non-boolean JSON as an unwritten key")
     {
         const nlohmann::json null_json;
 
-        CHECK(info_set_bool(null_json, data, true) == PARSE_ERROR_TOO_FEW_ARGUMENTS);
-        CHECK(info_set_bool(null_json, data, false) == PARSE_ERROR_NONE);
+        CHECK(to_error_code(info_set_bool(null_json, data, true)) == PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        CHECK(info_set_bool(null_json, data, false).has_value());
     }
 
     SUBCASE("JSON of another type")
@@ -724,9 +739,9 @@ TEST_CASE("info_set_bool treats a non-boolean JSON as an unwritten key")
         for (const auto &json : invalid_values) {
             CAPTURE(json.type_name());
 
-            CHECK(info_set_bool(json, data, true) == PARSE_ERROR_TOO_FEW_ARGUMENTS);
+            CHECK(to_error_code(info_set_bool(json, data, true)) == PARSE_ERROR_TOO_FEW_ARGUMENTS);
             CHECK(data);
-            CHECK(info_set_bool(json, data, false) == PARSE_ERROR_NONE);
+            CHECK(info_set_bool(json, data, false).has_value());
             CHECK(data);
         }
     }

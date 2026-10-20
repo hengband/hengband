@@ -30,8 +30,8 @@ tl::expected<void, parse_error_type> VaultReader::fail(parse_error_type code, st
 
 tl::expected<void, parse_error_type> VaultReader::read_integer(std::string_view key, int &value, int minimum, int maximum)
 {
-    if (const auto err = info_set_integer(this->data[key], value, true, Range(minimum, maximum))) {
-        return this->fail(static_cast<parse_error_type>(err), fmt::format("$.{}", key), fmt::format(_("{}以上{}以下の整数が必要です", "expected an integer in [{}, {}]"), minimum, maximum));
+    if (const auto result = info_set_integer(this->data[key], value, true, Range(minimum, maximum)); !result) {
+        return this->fail(result.error(), fmt::format("$.{}", key), fmt::format(_("{}以上{}以下の整数が必要です", "expected an integer in [{}, {}]"), minimum, maximum));
     }
     return {};
 }

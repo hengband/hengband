@@ -49,8 +49,8 @@ tl::expected<void, parse_error_type> info_set_monrace_dice(const nlohmann::json 
     }
 
     Dice parsed;
-    if (const auto err = info_set_dice(json, parsed, true)) {
-        return tl::unexpected(static_cast<parse_error_type>(err));
+    if (const auto result = info_set_dice(json, parsed, true); !result) {
+        return result;
     }
     if (!parsed.is_valid() || static_cast<int64_t>(parsed.num) * parsed.sides > MAX_MONRACE_DICE_ROLL) {
         return tl::unexpected(PARSE_ERROR_OUT_OF_BOUNDS);
@@ -85,9 +85,9 @@ int RaceReader::read() const
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
 
-    int monrace_id_int;
-    if (const auto err = info_set_integer(id_obj, monrace_id_int, true, Range(0, 9999))) {
-        return err;
+    int monrace_id_int = 0;
+    if (const auto result = info_set_integer(id_obj, monrace_id_int, true, Range(0, 9999)); !result) {
+        return result.error();
     }
     // 同じIDの定義が重なると後の定義が前の定義に混ざるため、IDは昇順で重複なしとする。
     if (monrace_id_int <= error_idx) {
@@ -100,7 +100,6 @@ int RaceReader::read() const
     auto monrace = monraces.contains(monrace_id) ? MonraceDefinition(monraces.get_monrace(monrace_id)) : MonraceDefinition();
     monrace.idx = monrace_id;
 
-    errr err;
     if (const auto result = this->set_mon_name(monrace); !result) {
         msg_print(_("モンスター名読込失敗。ID: '{}'。", "Failed to load monster name. ID: '{}'."), error_idx);
         return result.error();
@@ -117,35 +116,29 @@ int RaceReader::read() const
         msg_print(_("モンスターHP読込失敗。ID: '{}'。", "Failed to load monster HP. ID: '{}'."), error_idx);
         return result.error();
     }
-    err = info_set_integer(get_json_value(this->monrace_data, "vision"), monrace.aaf, true, Range(0, 999));
-    if (err) {
+    if (const auto result = info_set_integer(get_json_value(this->monrace_data, "vision"), monrace.aaf, true, Range(0, 999)); !result) {
         msg_print(_("モンスター感知範囲読込失敗。ID: '{}'。", "Failed to load monster vision. ID: '{}'."), error_idx);
-        return err;
+        return result.error();
     }
-    err = info_set_integer(get_json_value(this->monrace_data, "armor_class"), monrace.ac, true, Range(0, 10000));
-    if (err) {
+    if (const auto result = info_set_integer(get_json_value(this->monrace_data, "armor_class"), monrace.ac, true, Range(0, 10000)); !result) {
         msg_print(_("モンスターAC読込失敗。ID: '{}'。", "Failed to load monster AC. ID: '{}'."), error_idx);
-        return err;
+        return result.error();
     }
-    err = info_set_integer(get_json_value(this->monrace_data, "alertness"), monrace.sleep, true, Range(0, 255));
-    if (err) {
+    if (const auto result = info_set_integer(get_json_value(this->monrace_data, "alertness"), monrace.sleep, true, Range(0, 255)); !result) {
         msg_print(_("モンスター警戒度読込失敗。ID: '{}'。", "Failed to load monster alertness. ID: '{}'."), error_idx);
-        return err;
+        return result.error();
     }
-    err = info_set_integer(get_json_value(this->monrace_data, "level"), monrace.level, true, Range(0, MAX_DEPTH - 1));
-    if (err) {
+    if (const auto result = info_set_integer(get_json_value(this->monrace_data, "level"), monrace.level, true, Range(0, MAX_DEPTH - 1)); !result) {
         msg_print(_("モンスターレベル読込失敗。ID: '{}'。", "Failed to load monster level. ID: '{}'."), error_idx);
-        return err;
+        return result.error();
     }
-    err = info_set_integer(get_json_value(this->monrace_data, "rarity"), monrace.rarity, true, Range(1, 255));
-    if (err) {
+    if (const auto result = info_set_integer(get_json_value(this->monrace_data, "rarity"), monrace.rarity, true, Range(1, 255)); !result) {
         msg_print(_("モンスター希少度読込失敗。ID: '{}'。", "Failed to load monster rarity. ID: '{}'."), error_idx);
-        return err;
+        return result.error();
     }
-    err = info_set_integer(get_json_value(this->monrace_data, "exp"), monrace.mexp, true, Range(0, 9999999));
-    if (err) {
+    if (const auto result = info_set_integer(get_json_value(this->monrace_data, "exp"), monrace.mexp, true, Range(0, 9999999)); !result) {
         msg_print(_("モンスター経験値読込失敗。ID: '{}'。", "Failed to load monster exp. ID: '{}'."), error_idx);
-        return err;
+        return result.error();
     }
     if (const auto result = this->set_mon_evolve(monrace); !result) {
         msg_print(_("モンスター進化情報読込失敗。ID: '{}'。", "Failed to load monster evolve data. ID: '{}'."), error_idx);
@@ -155,15 +148,13 @@ int RaceReader::read() const
         msg_print(_("モンスター性別読込失敗。ID: '{}'。", "Failed to load monster sex. ID: '{}'."), error_idx);
         return result.error();
     }
-    err = info_set_integer(get_json_value(this->monrace_data, "odds_correction_ratio"), monrace.arena_ratio, false, Range(1, 9999));
-    if (err) {
+    if (const auto result = info_set_integer(get_json_value(this->monrace_data, "odds_correction_ratio"), monrace.arena_ratio, false, Range(1, 9999)); !result) {
         msg_print(_("モンスター賭け倍率読込失敗。ID: '{}'。", "Failed to load monster odds for arena. ID: '{}'."), error_idx);
-        return err;
+        return result.error();
     }
-    err = info_set_integer(get_json_value(this->monrace_data, "start_hp_percentage"), monrace.cur_hp_per, false, Range(1, 99));
-    if (err) {
+    if (const auto result = info_set_integer(get_json_value(this->monrace_data, "start_hp_percentage"), monrace.cur_hp_per, false, Range(1, 99)); !result) {
         msg_print(_("モンスター初期体力読込失敗。ID: '{}'。", "Failed to load monster starting HP. ID: '{}'."), error_idx);
-        return err;
+        return result.error();
     }
     if (const auto result = this->set_mon_artifacts(monrace); !result) {
         msg_print(_("モンスター固定アーティファクトドロップ情報読込失敗。ID: '{}'。", "Failed to load monster artifact drop data. ID: '{}'."), error_idx);
@@ -189,10 +180,9 @@ int RaceReader::read() const
         msg_print(_("モンスター死亡時召喚情報読込失敗。ID: '{}'。", "Failed to load final summon data. ID: '{}'."), error_idx);
         return result.error();
     }
-    err = info_set_string(get_json_value(this->monrace_data, "flavor"), monrace.text, false);
-    if (err) {
+    if (const auto result = info_set_string(get_json_value(this->monrace_data, "flavor"), monrace.text, false); !result) {
         msg_print(_("モンスター説明文読込失敗。ID: '{}'。", "Failed to load monster flavor text. ID: '{}'."), error_idx);
-        return err;
+        return result.error();
     }
     auto &message_list = MonraceMessageList::get_instance();
     const auto message_it = message_list.messages.find(monrace_id_int);
@@ -375,9 +365,9 @@ tl::expected<void, parse_error_type> RaceReader::set_mon_symbol(MonraceDefinitio
  */
 tl::expected<void, parse_error_type> RaceReader::set_mon_speed(MonraceDefinition &monrace) const
 {
-    int speed;
-    if (auto err = info_set_integer(get_json_value(this->monrace_data, "speed"), speed, true, Range(-50, 99))) {
-        return tl::unexpected(static_cast<parse_error_type>(err));
+    int speed = 0;
+    if (const auto result = info_set_integer(get_json_value(this->monrace_data, "speed"), speed, true, Range(-50, 99)); !result) {
+        return result;
     }
     monrace.speed = speed + STANDARD_SPEED;
     return {};
@@ -395,11 +385,11 @@ tl::expected<void, parse_error_type> RaceReader::set_mon_evolve(MonraceDefinitio
         return {};
     }
 
-    if (auto err = info_set_integer(get_json_value(evolve_data, "need_exp"), monrace.next_exp, true, Range(0, 9999999))) {
-        return tl::unexpected(static_cast<parse_error_type>(err));
+    if (const auto result = info_set_integer(get_json_value(evolve_data, "need_exp"), monrace.next_exp, true, Range(0, 9999999)); !result) {
+        return result;
     }
-    if (auto err = info_set_integer(get_json_value(evolve_data, "to"), monrace.next_r_idx, true, Range(1, 9999))) {
-        return tl::unexpected(static_cast<parse_error_type>(err));
+    if (const auto result = info_set_integer(get_json_value(evolve_data, "to"), monrace.next_r_idx, true, Range(1, 9999)); !result) {
+        return result;
     }
 
     return {};
@@ -444,13 +434,13 @@ tl::expected<void, parse_error_type> RaceReader::set_mon_artifacts(MonraceDefini
     }
 
     for (const auto &artifact : artifact_data) {
-        FixedArtifactId fa_id;
-        if (auto err = info_set_integer(get_json_value(artifact, "drop_artifact_id"), fa_id, true, Range(1, 999))) {
-            return tl::unexpected(static_cast<parse_error_type>(err));
+        FixedArtifactId fa_id{};
+        if (const auto result = info_set_integer(get_json_value(artifact, "drop_artifact_id"), fa_id, true, Range(1, 999)); !result) {
+            return result;
         }
-        int chance;
-        if (auto err = info_set_integer(get_json_value(artifact, "drop_probability"), chance, true, Range(1, 100))) {
-            return tl::unexpected(static_cast<parse_error_type>(err));
+        int chance = 0;
+        if (const auto result = info_set_integer(get_json_value(artifact, "drop_probability"), chance, true, Range(1, 100)); !result) {
+            return result;
         }
 
         monrace.emplace_drop_artifact(fa_id, chance);
@@ -474,9 +464,9 @@ tl::expected<void, parse_error_type> RaceReader::set_mon_escorts(MonraceDefiniti
     }
 
     for (const auto &escort : escort_data) {
-        MonraceId monrace_id;
-        if (auto err = info_set_integer(get_json_value(escort, "escorts_id"), monrace_id, true, Range(1, 9999))) {
-            return tl::unexpected(static_cast<parse_error_type>(err));
+        MonraceId monrace_id{};
+        if (const auto result = info_set_integer(get_json_value(escort, "escorts_id"), monrace_id, true, Range(1, 9999)); !result) {
+            return result;
         }
 
         Dice dice;
@@ -638,23 +628,23 @@ tl::expected<void, parse_error_type> RaceReader::set_mon_final_summons(MonraceDe
 
     for (auto &summon_item : summon_data) {
         int id, probability, min_num, max_num, radius;
-        if (auto err = info_set_integer(get_json_value(summon_item, "id"), id, true, Range(1, 9999))) {
-            return tl::unexpected(static_cast<parse_error_type>(err));
+        if (const auto result = info_set_integer(get_json_value(summon_item, "id"), id, true, Range(1, 9999)); !result) {
+            return result;
         }
-        if (auto err = info_set_integer(get_json_value(summon_item, "probability"), probability, true, Range(1, 100))) {
-            return tl::unexpected(static_cast<parse_error_type>(err));
+        if (const auto result = info_set_integer(get_json_value(summon_item, "probability"), probability, true, Range(1, 100)); !result) {
+            return result;
         }
-        if (auto err = info_set_integer(get_json_value(summon_item, "min_num"), min_num, true, Range(0, 99))) {
-            return tl::unexpected(static_cast<parse_error_type>(err));
+        if (const auto result = info_set_integer(get_json_value(summon_item, "min_num"), min_num, true, Range(0, 99)); !result) {
+            return result;
         }
-        if (auto err = info_set_integer(get_json_value(summon_item, "max_num"), max_num, true, Range(1, 99))) {
-            return tl::unexpected(static_cast<parse_error_type>(err));
+        if (const auto result = info_set_integer(get_json_value(summon_item, "max_num"), max_num, true, Range(1, 99)); !result) {
+            return result;
         }
         if (min_num > max_num) {
             return tl::unexpected(PARSE_ERROR_INVALID_VALUE);
         }
-        if (auto err = info_set_integer(get_json_value(summon_item, "radius"), radius, true, Range(1, 20))) {
-            return tl::unexpected(static_cast<parse_error_type>(err));
+        if (const auto result = info_set_integer(get_json_value(summon_item, "radius"), radius, true, Range(1, 20)); !result) {
+            return result;
         }
         monrace.emplace_final_summon(i2enum<MonraceId>(id), probability, min_num, max_num, radius);
     }
@@ -689,23 +679,23 @@ tl::expected<void, parse_error_type> RaceReader::set_mon_message(MonraceMessage 
             return tl::unexpected(PARSE_ERROR_INVALID_FLAG);
         }
 
-        int chance;
-        if (auto err = info_set_integer(get_json_value(message, "chance"), chance, true, Range(1, 100))) {
-            return tl::unexpected(static_cast<parse_error_type>(err));
+        int chance = 0;
+        if (const auto result = info_set_integer(get_json_value(message, "chance"), chance, true, Range(1, 100)); !result) {
+            return result;
         }
 
         bool use_name = true;
         const auto use_name_iter = message.find("use_name");
         if (use_name_iter != message.end()) {
             const auto &use_name_data = use_name_iter.value();
-            if (auto err = info_set_bool(use_name_data, use_name, false)) {
-                return tl::unexpected(static_cast<parse_error_type>(err));
+            if (const auto result = info_set_bool(use_name_data, use_name, false); !result) {
+                return result;
             }
         }
 
         std::string str;
-        if (auto err = info_set_string(get_json_value(message, "message"), str, false)) {
-            return tl::unexpected(static_cast<parse_error_type>(err));
+        if (const auto result = info_set_string(get_json_value(message, "message"), str, false); !result) {
+            return result;
         }
 
         messages.emplace(action->second, chance, use_name, str);
