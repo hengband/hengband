@@ -8,11 +8,6 @@
 #define MONSTER_TO_PLAYER 0x01
 #define MONSTER_TO_MONSTER 0x02
 
-/* monster spell number */
-#define RF4_SPELL_START 32 * 3
-#define RF5_SPELL_START 32 * 4
-#define RF6_SPELL_START 32 * 5
-
 class FloorType;
 class PlayerType;
 

@@ -8,8 +8,6 @@
 #include <vector>
 
 #define MAX_LINELEN 1024
-#define MAX_AUTOPICK_DEFAULT 200
-#define MAX_YANK MAX_LINELEN
 #define MAX_LINES 6000
 
 #define PT_DEFAULT 0
