@@ -3,6 +3,7 @@
 #include "info-reader/wilderness-reader.h"
 #include "locale/language-switcher.h"
 #include "system/enums/terrain/wilderness-terrain.h"
+#include "test/info-reader/parse-result-helpers.h"
 #include <cstdint>
 #include <doctest/doctest.h>
 #include <limits>
@@ -83,7 +84,7 @@ TEST_CASE("WildernessReader loads maps and localized levels")
 {
     const auto data = make_definition();
     WildernessDefinition definition;
-    REQUIRE(WildernessReader(data).read(definition) == PARSE_ERROR_NONE);
+    REQUIRE(WildernessReader(data).read(definition).has_value());
     CHECK(definition.width == 3);
     CHECK(definition.height == 3);
     REQUIRE(definition.towns.size() == 1);
@@ -100,12 +101,12 @@ TEST_CASE("WildernessReader rejects duplicate IDs and symbols")
     auto data = make_definition();
     data["towns"].push_back(data["towns"][0]);
     WildernessDefinition definition;
-    CHECK(WildernessReader(data).read(definition) == PARSE_ERROR_NON_SEQUENTIAL_RECORDS);
+    CHECK(test::to_error_code(WildernessReader(data).read(definition)) == PARSE_ERROR_NON_SEQUENTIAL_RECORDS);
 
     data = make_definition();
     data["maps"]["normal"]["letters"].push_back(data["maps"]["normal"]["letters"][0]);
     definition = {};
-    CHECK(WildernessReader(data).read(definition) == PARSE_ERROR_NON_SEQUENTIAL_RECORDS);
+    CHECK(test::to_error_code(WildernessReader(data).read(definition)) == PARSE_ERROR_NON_SEQUENTIAL_RECORDS);
 }
 
 TEST_CASE("WildernessReader rejects undefined town references")
@@ -115,7 +116,7 @@ TEST_CASE("WildernessReader rejects undefined town references")
         data["maps"][map_name]["letters"][0]["town"] = 2;
         WildernessDefinition definition;
         CAPTURE(map_name);
-        CHECK(WildernessReader(data).read(definition) == PARSE_ERROR_INVALID_VALUE);
+        CHECK(test::to_error_code(WildernessReader(data).read(definition)) == PARSE_ERROR_INVALID_VALUE);
     }
 }
 
@@ -129,18 +130,18 @@ TEST_CASE("WildernessReader limits town IDs to the town records")
     data["towns"][0]["id"] = 6;
     data["maps"]["normal"]["letters"][1]["town"] = 6;
     WildernessDefinition definition;
-    REQUIRE(WildernessReader(data).read(definition) == PARSE_ERROR_NONE);
+    REQUIRE(WildernessReader(data).read(definition).has_value());
     CHECK(definition.towns[0].id == 6);
 
     data["towns"][0]["id"] = 7;
     data["maps"]["normal"]["letters"][1]["town"] = 1;
     auto existing = make_existing_definition();
-    CHECK(WildernessReader(data).read(existing) == PARSE_ERROR_INVALID_FLAG);
+    CHECK(test::to_error_code(WildernessReader(data).read(existing)) == PARSE_ERROR_INVALID_FLAG);
     check_existing_definition(existing);
 
     data = make_definition();
     data["maps"]["normal"]["letters"][1]["town"] = 7;
-    CHECK(WildernessReader(data).read(existing) == PARSE_ERROR_INVALID_FLAG);
+    CHECK(test::to_error_code(WildernessReader(data).read(existing)) == PARSE_ERROR_INVALID_FLAG);
     check_existing_definition(existing);
 }
 
@@ -168,7 +169,7 @@ TEST_CASE("WildernessReader requires the wilderness edge to be closed")
                 data["maps"][map_name]["letters"].push_back(letter);
                 data["maps"][map_name]["layout"][row_index] = row;
                 auto definition = make_existing_definition();
-                CHECK(WildernessReader(data).read(definition) == PARSE_ERROR_INVALID_VALUE);
+                CHECK(test::to_error_code(WildernessReader(data).read(definition)) == PARSE_ERROR_INVALID_VALUE);
                 check_existing_definition(definition);
             }
         }
@@ -182,9 +183,9 @@ TEST_CASE("WildernessReader requires the wilderness edge to be closed")
         data["maps"]["compact"]["letters"].push_back({ { "symbol", "x" }, { "terrain", 5 } });
         data["maps"]["compact"]["layout"] = { "####", "##x", "###" };
         auto definition = make_existing_definition();
-        CHECK(WildernessReader(data).read(definition) == PARSE_ERROR_NONE);
+        CHECK(WildernessReader(data).read(definition).has_value());
         data["maps"]["compact"]["layout"] = { "####", "###x", "###" };
-        CHECK(WildernessReader(data).read(definition) == PARSE_ERROR_INVALID_VALUE);
+        CHECK(test::to_error_code(WildernessReader(data).read(definition)) == PARSE_ERROR_INVALID_VALUE);
     }
 
     // 内側のマスは外周の決まりに関わらない。
@@ -192,7 +193,7 @@ TEST_CASE("WildernessReader requires the wilderness edge to be closed")
     data["maps"]["compact"]["letters"].push_back({ { "symbol", "x" }, { "terrain", 5 }, { "road", 1 } });
     data["maps"]["compact"]["layout"][1] = "#x#";
     WildernessDefinition definition;
-    CHECK(WildernessReader(data).read(definition) == PARSE_ERROR_NONE);
+    CHECK(WildernessReader(data).read(definition).has_value());
 }
 
 TEST_CASE("WildernessReader validates layout dimensions and symbols")
@@ -200,17 +201,17 @@ TEST_CASE("WildernessReader validates layout dimensions and symbols")
     auto data = make_definition();
     data["maps"]["normal"]["layout"][1] = "##";
     WildernessDefinition definition;
-    CHECK(WildernessReader(data).read(definition) == PARSE_ERROR_INVALID_VALUE);
+    CHECK(test::to_error_code(WildernessReader(data).read(definition)) == PARSE_ERROR_INVALID_VALUE);
 
     data = make_definition();
     data["maps"]["normal"]["layout"][1] = "#.#";
     definition = {};
-    CHECK(WildernessReader(data).read(definition) == PARSE_ERROR_INVALID_VALUE);
+    CHECK(test::to_error_code(WildernessReader(data).read(definition)) == PARSE_ERROR_INVALID_VALUE);
 
     data = make_definition();
     data["maps"]["compact"]["starting_position"]["x"] = 3;
     definition = {};
-    CHECK(WildernessReader(data).read(definition) != PARSE_ERROR_NONE);
+    CHECK_FALSE(WildernessReader(data).read(definition).has_value());
 }
 
 TEST_CASE("WildernessReader keeps previous output on a late parse error")
@@ -219,7 +220,7 @@ TEST_CASE("WildernessReader keeps previous output on a late parse error")
     data["maps"]["compact"]["starting_position"]["x"] = 3;
     auto definition = make_existing_definition();
 
-    CHECK(WildernessReader(data).read(definition) != PARSE_ERROR_NONE);
+    CHECK_FALSE(WildernessReader(data).read(definition).has_value());
     check_existing_definition(definition);
 }
 
@@ -228,7 +229,7 @@ TEST_CASE("WildernessReader replaces previous output on success")
     const auto data = make_definition();
     auto definition = make_existing_definition();
 
-    REQUIRE(WildernessReader(data).read(definition) == PARSE_ERROR_NONE);
+    REQUIRE(WildernessReader(data).read(definition).has_value());
     CHECK(definition.width == 3);
     CHECK(definition.height == 3);
     REQUIRE(definition.towns.size() == 1);
@@ -304,7 +305,7 @@ TEST_CASE("WildernessReader propagates map helper errors without replacing outpu
             auto data = make_definition();
             data[nlohmann::json::json_pointer(std::string("/maps/") + map_name + invalid.path)] = invalid.value;
             auto definition = make_existing_definition();
-            CHECK(WildernessReader(data).read(definition) == invalid.error);
+            CHECK(test::to_error_code(WildernessReader(data).read(definition)) == invalid.error);
             check_existing_definition(definition);
         }
     }
@@ -315,7 +316,7 @@ TEST_CASE("WildernessReader propagates map helper errors without replacing outpu
         data["maps"][map_name]["layout"] = { "#", "#", "#" };
         data["maps"][map_name]["starting_position"]["x"] = 1;
         auto definition = make_existing_definition();
-        CHECK(WildernessReader(data).read(definition) == PARSE_ERROR_OUT_OF_BOUNDS);
+        CHECK(test::to_error_code(WildernessReader(data).read(definition)) == PARSE_ERROR_OUT_OF_BOUNDS);
         check_existing_definition(definition);
     }
 
@@ -323,12 +324,12 @@ TEST_CASE("WildernessReader propagates map helper errors without replacing outpu
     data["maps"]["normal"]["letters"][0]["terrain"] = false;
     data["maps"]["compact"]["layout"] = nlohmann::json::array();
     auto definition = make_existing_definition();
-    CHECK(WildernessReader(data).read(definition) == PARSE_ERROR_INVALID_TYPE);
+    CHECK(test::to_error_code(WildernessReader(data).read(definition)) == PARSE_ERROR_INVALID_TYPE);
     check_existing_definition(definition);
     data = make_definition();
     data["maps"]["normal"]["layout"].erase(2);
     data["maps"]["compact"]["starting_position"] = false;
-    CHECK(WildernessReader(data).read(definition) == PARSE_ERROR_INVALID_VALUE);
+    CHECK(test::to_error_code(WildernessReader(data).read(definition)) == PARSE_ERROR_INVALID_VALUE);
     check_existing_definition(definition);
 }
 
@@ -353,7 +354,7 @@ TEST_CASE("WildernessReader preserves direct and localized level boundaries")
             auto data = make_definition();
             data["maps"][map_name]["letters"][0]["level"] = level;
             WildernessDefinition definition;
-            REQUIRE(WildernessReader(data).read(definition) == PARSE_ERROR_NONE);
+            REQUIRE(WildernessReader(data).read(definition).has_value());
             const auto expected_level = level.is_null() ? 0 : level.is_object() ? level[selected].get<int>()
                                                                                 : level.get<int>();
             const auto &map = std::string_view(map_name) == "normal" ? definition.normal : definition.compact;
@@ -390,7 +391,7 @@ TEST_CASE("WildernessReader limits dimensions to the floor size")
         CAPTURE(height);
         const auto data = make_sized(width, height);
         WildernessDefinition definition;
-        CHECK(WildernessReader(data).read(definition) == PARSE_ERROR_NONE);
+        CHECK(WildernessReader(data).read(definition).has_value());
         CHECK(definition.width == width);
         CHECK(definition.height == height);
     }
@@ -399,7 +400,7 @@ TEST_CASE("WildernessReader limits dimensions to the floor size")
         CAPTURE(height);
         const auto data = make_sized(width, height);
         auto definition = make_existing_definition();
-        CHECK(WildernessReader(data).read(definition) == PARSE_ERROR_INVALID_FLAG);
+        CHECK(test::to_error_code(WildernessReader(data).read(definition)) == PARSE_ERROR_INVALID_FLAG);
         check_existing_definition(definition);
     }
 }
@@ -416,7 +417,7 @@ TEST_CASE("WildernessReader rejects starting positions on the wilderness edge")
             auto data = make_definition();
             data["maps"][map_name]["starting_position"][axis] = 2;
             auto definition = make_existing_definition();
-            CHECK(WildernessReader(data).read(definition) == PARSE_ERROR_INVALID_FLAG);
+            CHECK(test::to_error_code(WildernessReader(data).read(definition)) == PARSE_ERROR_INVALID_FLAG);
             check_existing_definition(definition);
         }
     }
@@ -430,7 +431,7 @@ TEST_CASE("WildernessReader rejects starting positions on the wilderness edge")
     data["maps"]["normal"]["starting_position"] = { { "x", 2 }, { "y", 2 } };
     data["maps"]["compact"]["starting_position"] = { { "x", 2 }, { "y", 2 } };
     WildernessDefinition definition;
-    REQUIRE(WildernessReader(data).read(definition) == PARSE_ERROR_NONE);
+    REQUIRE(WildernessReader(data).read(definition).has_value());
     CHECK(definition.normal.starting_position == Pos2D(2, 2));
     CHECK(definition.compact.starting_position == Pos2D(2, 2));
 }

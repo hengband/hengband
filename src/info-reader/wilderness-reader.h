@@ -46,8 +46,7 @@ public:
     WildernessReader &operator=(const WildernessReader &) = delete;
     WildernessReader &operator=(WildernessReader &&) = delete;
 
-    /*! @brief 全件の検証に成功した場合のみ出力を置き換える。 */
-    int read(WildernessDefinition &definition) const;
+    tl::expected<void, parse_error_type> read(WildernessDefinition &definition) const;
 
 private:
     tl::expected<void, parse_error_type> read_map(const nlohmann::json &data, int width, int height, WildernessMapDefinition &map) const;
