@@ -192,6 +192,8 @@ static SpoilerOutputResultType spoil_player_spell()
     dummy_p.lev = 1;
     for (const auto pclass : EnumRange(PlayerClassType::WARRIOR, PlayerClassType::MAX)) {
         spoil_out(fmt::format("[[Class: {}]]\n", class_info.at(pclass).title));
+        // 英語版の魔法書の名前の書式は職業で決まるので、出力する職業にする
+        dummy_p.pclass = pclass;
 
         const auto *magic_ptr = &class_magics_info[enum2i(pclass)];
         std::string book_name = _("なし", "None");

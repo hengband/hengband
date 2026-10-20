@@ -23,9 +23,9 @@
 #include "util/string-processor.h"
 #include <array>
 #include <fmt/format.h>
-#ifdef JP
-#else
+#ifndef JP
 #include "player-info/class-info.h"
+#include "system/player-type-definition.h"
 #endif
 
 /*!
@@ -254,32 +254,31 @@ static std::pair<std::string, std::string> describe_food(const ItemEntity &item,
 #ifndef JP
 /*!
  * @brief 職業が生命の魔法書を使うか否かを返す
+ * @param player プレイヤーへの参照
  * @return 生命の魔法書を使うなら true
- * @details 英語版の魔法書の名前は、生命の魔法書を使う職業なら "Book of ..." の形、それ以外は "... Spellbook" の形で表す。
- * 職業を決める前 (コマンドラインからのスポイラー出力など) は mp_ptr が設定されていないため、
- * 生命の魔法書を使わない職業と同じく扱う。
  */
-static bool class_uses_life_book()
+static bool class_uses_life_book(const PlayerType &player)
 {
-    return (mp_ptr != nullptr) && (mp_ptr->spell_book == ItemKindType::LIFE_BOOK);
+    return class_magics_info.at(enum2i(player.pclass)).spell_book == ItemKindType::LIFE_BOOK;
 }
 #endif
 
 /*!
  * @brief 魔法書の名前を得る
+ * @param player プレイヤーへの参照
  * @param tval 魔法書の種類
  * @return std::pair<std::string, std::string> {basename, modstr} のペア
  * @details 英語版は、生命の魔法書を使う職業なら "Book of ... Magic" の形 (仙術だけは "Book of Sorcery")、
  * それ以外の職業なら "... Spellbook" の形で表す。
  */
-static std::pair<std::string, std::string> describe_spellbook(ItemKindType tval)
+static std::pair<std::string, std::string> describe_spellbook([[maybe_unused]] const PlayerType &player, ItemKindType tval)
 {
     const auto realm = PlayerRealm::get_realm_of_book(tval);
     const auto &realm_name = PlayerRealm::get_name(realm);
 #ifdef JP
     return { fmt::format("{}の魔法書%", realm_name), "" };
 #else
-    if (!class_uses_life_book()) {
+    if (!class_uses_life_book(player)) {
         return { fmt::format("& {} Spellbook~ %", realm_name), "" };
     }
 
@@ -297,11 +296,12 @@ static std::pair<std::string, std::string> describe_spellbook(ItemKindType tval)
  * アイテムの tval に従いベース名称(basename)と修正文字列(modstr)を得る。
  * basename と modstr がどのような使われ方をするかは、describe_body() を参照。
  *
+ * @param player プレイヤーへの参照
  * @param item アイテムへの参照
  * @param opt 記述オプション
  * @return std::pair<std::string, std::string> {basename, modstr} のペア
  */
-std::pair<std::string, std::string> switch_tval_description(const ItemEntity &item, const describe_option_type &opt)
+std::pair<std::string, std::string> switch_tval_description(const PlayerType &player, const ItemEntity &item, const describe_option_type &opt)
 {
     const auto &basename = item.get_baseitem().name;
 
@@ -373,7 +373,7 @@ std::pair<std::string, std::string> switch_tval_description(const ItemEntity &it
     case ItemKindType::DEMON_BOOK:
     case ItemKindType::CRUSADE_BOOK:
     case ItemKindType::HEX_BOOK:
-        return describe_spellbook(item.bi_key.tval());
+        return describe_spellbook(player, item.bi_key.tval());
     case ItemKindType::MUSIC_BOOK:
         return { _("歌集%", "& Song Book~ %"), "" };
     case ItemKindType::HISSATSU_BOOK:
