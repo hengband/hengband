@@ -47,7 +47,7 @@ void print_path(PlayerType *player_ptr, POSITION y, POSITION x)
     const auto p_pos = player_ptr->get_position();
     const auto range = project_length != 0 ? project_length : AngbandSystem::get_instance().get_max_range();
     ProjectionPath path_g(floor, range, p_pos, p_pos, pos, PROJECT_PATH | PROJECT_THRU);
-    RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::MAP);
+    RedrawingFlagsUpdater::get_instance().request_map_redrawing();
     redraw_stuff(player_ptr);
     const auto monochrome_color = get_monochrome_display_color(player_ptr);
     for (const auto &pos_path : path_g) {

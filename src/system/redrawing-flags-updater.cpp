@@ -48,9 +48,9 @@ void RedrawingFlagsUpdater::request_whole_main_window_redrawing()
         MainWindowRedrawingFlag::BASIC,
         MainWindowRedrawingFlag::EXTRA,
         MainWindowRedrawingFlag::EQUIPPY,
-        MainWindowRedrawingFlag::MAP,
     };
     this->main_window_flags.set(flags_mwrf);
+    this->request_map_redrawing();
 }
 
 /*!

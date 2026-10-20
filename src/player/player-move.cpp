@@ -164,7 +164,7 @@ bool move_player_effect(PlayerType *player_ptr, POSITION ny, POSITION nx, BIT_FL
         if (mpe_mode & MPE_FORGET_FLOW) {
             forget_flow(floor);
             rfu.set_flag(StatusRecalculatingFlag::UN_VIEW);
-            rfu.set_flag(MainWindowRedrawingFlag::MAP);
+            rfu.request_map_redrawing();
         }
 
         static constexpr auto flags_srf = {
