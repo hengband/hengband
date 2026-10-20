@@ -506,3 +506,35 @@ TEST_CASE("RedrawingFlagsUpdater::request_light_fuel_change_updates requests rec
     CHECK_FALSE(rfu.has(StatusRecalculatingFlag::BONUS));
     CHECK_FALSE(rfu.has(SubWindowRedrawingFlag::INVENTORY));
 }
+
+TEST_CASE("RedrawingFlagsUpdater::request_bonus_and_max_hp_recalculation requests recalculating the bonuses and the max HP")
+{
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    static constexpr auto flags_srf = {
+        StatusRecalculatingFlag::BONUS,
+        StatusRecalculatingFlag::HP,
+    };
+    static constexpr auto flags_srf_others = {
+        StatusRecalculatingFlag::MP,
+        StatusRecalculatingFlag::SPELLS,
+        StatusRecalculatingFlag::TORCH,
+        StatusRecalculatingFlag::MONSTER_STATUSES,
+    };
+    const auto restore_srf = scoped_restore_flags(rfu, flags_srf);
+    const auto restore_srf_others = scoped_restore_flags(rfu, flags_srf_others);
+    rfu.reset_flags(flags_srf);
+    rfu.reset_flags(flags_srf_others);
+
+    rfu.request_bonus_and_max_hp_recalculation();
+
+    for (const auto flag : flags_srf) {
+        CAPTURE(enum2i(flag));
+        CHECK(rfu.has(flag));
+    }
+
+    // 最大 MP・覚えられる呪文の数・光源の明るさ・モンスターのステータスは計算し直さない
+    for (const auto flag : flags_srf_others) {
+        CAPTURE(enum2i(flag));
+        CHECK_FALSE(rfu.has(flag));
+    }
+}

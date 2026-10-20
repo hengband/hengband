@@ -243,6 +243,21 @@ void RedrawingFlagsUpdater::request_light_fuel_change_updates()
     this->sub_window_flags.set(SubWindowRedrawingFlag::EQUIPMENT);
 }
 
+/*!
+ * @brief 能力と最大 HP の再計算を予約する
+ * @details 最大 HP が変わりうるとき (士気高揚・狂戦士化・つよし・変身などの一時的な効果の始まりと終わり、
+ * モンスターの魔力消去で歌・呪術が途切れたときと途切れていた歌・呪術を再開したとき、
+ * ブラッディ・ムーンの能力の付け直し、キャラクターの作成) に呼ぶ。
+ */
+void RedrawingFlagsUpdater::request_bonus_and_max_hp_recalculation()
+{
+    static constexpr auto flags_srf = {
+        StatusRecalculatingFlag::BONUS,
+        StatusRecalculatingFlag::HP,
+    };
+    this->status_flags.set(flags_srf);
+}
+
 void RedrawingFlagsUpdater::fill_up_sub_flags()
 {
     constexpr auto all_sub_window_flags = EnumRange(SubWindowRedrawingFlag::INVENTORY, SubWindowRedrawingFlag::MAX);

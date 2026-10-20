@@ -172,6 +172,7 @@ public:
     void request_hp_mp_redrawing();
     void request_gold_redrawing();
     void request_light_fuel_change_updates();
+    void request_bonus_and_max_hp_recalculation();
 
     void fill_up_sub_flags();
     EnumClassFlagGroup<SubWindowRedrawingFlag> get_sub_intersection(const EnumClassFlagGroup<SubWindowRedrawingFlag> &flags) const;

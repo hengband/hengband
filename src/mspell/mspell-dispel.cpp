@@ -107,11 +107,7 @@ static void dispel_player(PlayerType *player_ptr)
         player_ptr->action = ACTION_NONE;
         auto &rfu = RedrawingFlagsUpdater::get_instance();
         rfu.request_monster_update_and_map_redrawing();
-        static constexpr auto flags_srf = {
-            StatusRecalculatingFlag::BONUS,
-            StatusRecalculatingFlag::HP,
-        };
-        rfu.set_flags(flags_srf);
+        rfu.request_bonus_and_max_hp_recalculation();
         static constexpr auto flags_mwrf = {
             MainWindowRedrawingFlag::TIMED_EFFECT,
             MainWindowRedrawingFlag::ACTION,
