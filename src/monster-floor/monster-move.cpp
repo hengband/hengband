@@ -206,13 +206,7 @@ static bool process_door(PlayerType *player_ptr, turn_flags *turn_flags_ptr, con
     if (turn_flags_ptr->did_bash_door && (one_in_(2) || is_open || terrain.flags.has(TerrainCharacteristics::GLASS))) {
         cave_alter_feat(player_ptr, pos.y, pos.x, TerrainCharacteristics::BASH);
         if (!monster.is_valid()) {
-            auto &rfu = RedrawingFlagsUpdater::get_instance();
-            rfu.set_flag(StatusRecalculatingFlag::FLOW);
-            static constexpr auto flags = {
-                SubWindowRedrawingFlag::OVERHEAD,
-                SubWindowRedrawingFlag::DUNGEON,
-            };
-            rfu.set_flags(flags);
+            RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::FLOW);
             if (is_original_ap_and_seen(player_ptr, monster)) {
                 monrace.r_behavior_flags.set(MonsterBehaviorType::BASH_DOOR);
             }
@@ -325,13 +319,7 @@ static bool process_post_dig_wall(PlayerType *player_ptr, turn_flags *turn_flags
     cave_alter_feat(player_ptr, pos.y, pos.x, TerrainCharacteristics::CAN_DISINTEGRATE);
 
     if (!monster.is_valid()) {
-        auto &rfu = RedrawingFlagsUpdater::get_instance();
-        rfu.set_flag(StatusRecalculatingFlag::FLOW);
-        static constexpr auto flags = {
-            SubWindowRedrawingFlag::OVERHEAD,
-            SubWindowRedrawingFlag::DUNGEON,
-        };
-        rfu.set_flags(flags);
+        RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::FLOW);
         if (is_original_ap_and_seen(player_ptr, monster)) {
             monrace.r_feature_flags.set(MonsterFeatureType::KILL_WALL);
         }

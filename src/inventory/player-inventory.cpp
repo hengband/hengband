@@ -265,9 +265,7 @@ void process_player_pickup_item(PlayerType *player_ptr, OBJECT_IDX o_idx)
 void carry(PlayerType *player_ptr, bool pickup)
 {
     verify_panel(player_ptr);
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
-    rfu.set_flag(SubWindowRedrawingFlag::OVERHEAD);
+    RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
     handle_stuff(player_ptr);
     const auto &grid = player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
     autopick_pickup_items(player_ptr, grid);

@@ -175,11 +175,8 @@ bool move_player_effect(PlayerType *player_ptr, POSITION ny, POSITION nx, BIT_FL
             StatusRecalculatingFlag::DISTANCE,
         };
         rfu.set_flags(flags_srf);
-        static constexpr auto flags_swrf = {
-            SubWindowRedrawingFlag::OVERHEAD,
-            SubWindowRedrawingFlag::DUNGEON,
-        };
-        rfu.set_flags(flags_swrf);
+        // 自分の周囲はプレイヤーを中心に描くので、プレイヤーが動いたら描き直す
+        rfu.set_flag(SubWindowRedrawingFlag::DUNGEON);
         if ((!player_ptr->effects()->blindness().is_active() && !no_lite(player_ptr)) || !floor.has_trap_at(pos_new)) {
             grid_new.info &= ~(CAVE_UNSAFE);
         }
