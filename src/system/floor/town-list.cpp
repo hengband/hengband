@@ -117,8 +117,3 @@ void TownList::initialize()
         }
     }
 }
-
-void TownList::overwrite_town_name()
-{
-    this->get_town(TownId::OUTPOST).overwrite_town_name();
-}
