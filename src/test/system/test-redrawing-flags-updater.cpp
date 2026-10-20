@@ -427,3 +427,46 @@ TEST_CASE("RedrawingFlagsUpdater::request_riding_status_redrawing requests redra
     CHECK_FALSE(rfu.has(SubWindowRedrawingFlag::OVERHEAD));
     CHECK_FALSE(rfu.has(SubWindowRedrawingFlag::DUNGEON));
 }
+
+TEST_CASE("RedrawingFlagsUpdater::request_hp_mp_redrawing requests redrawing the HP and the MP")
+{
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    static constexpr auto flags_mwrf = {
+        MainWindowRedrawingFlag::HP,
+        MainWindowRedrawingFlag::MP,
+    };
+    static constexpr auto flags_mwrf_others = {
+        MainWindowRedrawingFlag::BASIC,
+        MainWindowRedrawingFlag::EXTRA,
+    };
+    static constexpr auto flags_swrf = {
+        SubWindowRedrawingFlag::SPELL,
+        SubWindowRedrawingFlag::ITEM_KNOWLEDGE,
+        SubWindowRedrawingFlag::PLAYER,
+    };
+    const auto restore_mwrf = scoped_restore_flags(rfu, flags_mwrf);
+    const auto restore_mwrf_others = scoped_restore_flags(rfu, flags_mwrf_others);
+    const auto restore_swrf = scoped_restore_flags(rfu, flags_swrf);
+    rfu.reset_flags(flags_mwrf);
+    rfu.reset_flags(flags_mwrf_others);
+    rfu.reset_flags(flags_swrf);
+
+    rfu.request_hp_mp_redrawing();
+
+    for (const auto flag : flags_mwrf) {
+        CAPTURE(enum2i(flag));
+        CHECK(rfu.has(flag));
+    }
+
+    // 基本ステータスの全体や拡張ステータスは描き直さない
+    for (const auto flag : flags_mwrf_others) {
+        CAPTURE(enum2i(flag));
+        CHECK_FALSE(rfu.has(flag));
+    }
+
+    // 呪文の情報は HP・MP を描き直すときに、プレイヤーの情報は前に描いた HP・MP と比べて要求される
+    for (const auto flag : flags_swrf) {
+        CAPTURE(enum2i(flag));
+        CHECK_FALSE(rfu.has(flag));
+    }
+}

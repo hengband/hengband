@@ -206,6 +206,21 @@ void RedrawingFlagsUpdater::request_riding_status_redrawing()
     this->main_window_flags.set(flags_mwrf);
 }
 
+/*!
+ * @brief HP と MP の表示の描き直しを予約する
+ * @details メインウィンドウの HP と MP の両方を描き直す (HP と MP の変換や、呪術の表示を直すときなど)。
+ * 呪文の情報 (呪文の一覧・アイテムの知識) のサブウィンドウは HP・MP を描き直すときに要求され、プレイヤーの情報のサブウィンドウは
+ * 前に描いた HP・MP と比べて変わっていれば描き直される。
+ */
+void RedrawingFlagsUpdater::request_hp_mp_redrawing()
+{
+    static constexpr auto flags_mwrf = {
+        MainWindowRedrawingFlag::HP,
+        MainWindowRedrawingFlag::MP,
+    };
+    this->main_window_flags.set(flags_mwrf);
+}
+
 void RedrawingFlagsUpdater::fill_up_sub_flags()
 {
     constexpr auto all_sub_window_flags = EnumRange(SubWindowRedrawingFlag::INVENTORY, SubWindowRedrawingFlag::MAX);
