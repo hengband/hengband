@@ -4,13 +4,13 @@
 #include "grid/trap.h"
 #include "monster/monster-flag-types.h"
 #include "monster/monster-update.h"
+#include "system/deferred-update-requests.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/item/item-entity.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "system/terrain/terrain-definition.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
@@ -266,7 +266,7 @@ bool detect_objects_normal(PlayerType *player_ptr, POSITION range, DetectionNoti
 
     // 歌い続けている間は毎ターン感知するので、新しく見つけたときだけ描き直す
     if (is_newly_found) {
-        RedrawingFlagsUpdater::get_instance().request_floor_item_lists_redrawing();
+        DeferredUpdateRequests::get_instance().request_floor_item_lists_redrawing();
     }
 
     if (should_notify(notice, detect, is_newly_found)) {
@@ -333,7 +333,7 @@ bool detect_objects_magic(PlayerType *player_ptr, POSITION range)
     }
 
     if (is_newly_found) {
-        RedrawingFlagsUpdater::get_instance().request_floor_item_lists_redrawing();
+        DeferredUpdateRequests::get_instance().request_floor_item_lists_redrawing();
     }
 
     if (detect) {

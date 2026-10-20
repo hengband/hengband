@@ -46,13 +46,13 @@
 #include "spell/spell-info.h"
 #include "status/bad-status-setter.h"
 #include "status/base-status.h"
+#include "system/deferred-update-requests.h"
 #include "system/enums/terrain/terrain-characteristics.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "target/grid-selector.h"
 #include "target/target-getter.h"
 #include "term/screen-processor.h"
@@ -820,7 +820,7 @@ static bool get_element_power(PlayerType *player_ptr, SPELL_IDX *sn, bool only_b
         screen_load();
     }
 
-    RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::SPELL);
+    DeferredUpdateRequests::get_instance().set_flag(SubWindowRedrawingFlag::SPELL);
     window_stuff(player_ptr);
     if (!flag) {
         return false;
@@ -881,7 +881,7 @@ static bool try_cast_element_spell(PlayerType *player_ptr, SPELL_IDX spell_idx, 
         player_ptr->csp = std::max(0, player_ptr->csp - player_ptr->msp * 10 / (20 + randint1(10)));
 
         PlayerEnergy(player_ptr).set_player_turn_energy(100);
-        auto &rfu = RedrawingFlagsUpdater::get_instance();
+        auto &rfu = DeferredUpdateRequests::get_instance();
         rfu.set_flag(MainWindowRedrawingFlag::MP);
         return false;
     }
@@ -929,7 +929,7 @@ void do_cmd_element(PlayerType *player_ptr)
     }
 
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     rfu.set_flag(MainWindowRedrawingFlag::MP);
 }
 

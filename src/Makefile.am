@@ -1300,13 +1300,13 @@ libhengband_a_SOURCES = \
 	system/artifact/artifact-record.cpp system/artifact/artifact-record.h \
 	system/artifact/artifact-service.cpp system/artifact/artifact-service.h \
 	system/building-type-definition.cpp system/building-type-definition.h \
+	system/deferred-update-requests.cpp system/deferred-update-requests.h \
 	system/grid-type-definition.cpp system/grid-type-definition.h \
 	system/h-basic.h system/h-config.h \
 	system/h-system.h system/h-type.h \
 	system/inner-game-data.cpp system/inner-game-data.h \
 	system/monster-entity.cpp system/monster-entity.h \
 	system/player-type-definition.cpp system/player-type-definition.h \
-	system/redrawing-flags-updater.cpp system/redrawing-flags-updater.h \
 	system/spell-info-list.cpp system/spell-info-list.h \
 	system/system-variables.cpp system/system-variables.h \
 	system/gamevalue.h \
@@ -1581,7 +1581,7 @@ hengband_test_SOURCES = \
 	test/system/monrace/test-monrace-definition.cpp \
 	test/system/test-quest-list.cpp \
 	test/system/test-dungeon-record.cpp \
-	test/system/test-redrawing-flags-updater.cpp \
+	test/system/test-deferred-update-requests.cpp \
 	test/target/test-target-getter.cpp \
 	test/term/test-z-rand.cpp \
 	test/timed-effect/test-player-cut.cpp \

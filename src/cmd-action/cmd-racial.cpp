@@ -30,8 +30,8 @@
 #include "racial/racial-util.h"
 #include "status/action-setter.h"
 #include "system/angband-exceptions.h"
+#include "system/deferred-update-requests.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
 #include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"
@@ -499,5 +499,5 @@ void do_cmd_racial_power(PlayerType *player_ptr)
         return;
     }
 
-    RedrawingFlagsUpdater::get_instance().request_hp_mp_redrawing();
+    DeferredUpdateRequests::get_instance().request_hp_mp_redrawing();
 }

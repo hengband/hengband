@@ -40,10 +40,10 @@
 #include "status/experience.h"
 #include "sv-definition/sv-food-types.h"
 #include "sv-definition/sv-other-types.h"
+#include "system/deferred-update-requests.h"
 #include "system/item/item-entity.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "util/dice.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
@@ -162,7 +162,7 @@ static bool exe_eat_charge_of_magic_device(PlayerType *player_ptr, ItemEntity *o
 
     const auto staff = is_staff ? _("杖", "staff") : _("魔法棒", "wand");
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     if (o_ptr->pval == 0) {
         msg_print(_("この{}にはもう魔力が残っていない。", "The {} has no charges left."), staff);
         o_ptr->set_identification_flag(IdentificationFlag::EMPTY);
@@ -244,7 +244,7 @@ void exe_eat_food(PlayerType *player_ptr, INVENTORY_IDX i_idx)
         gain_exp(player_ptr, (level + (player_ptr->lev >> 1)) / player_ptr->lev);
     }
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     rfu.request_inventory_arrangement();
     rfu.request_item_lists_redrawing();
 

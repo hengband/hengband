@@ -298,13 +298,13 @@
     <ClCompile Include="..\..\src\test\system\monrace\test-monrace-definition.cpp">
       <Filter>system\monrace</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\test\system\test-deferred-update-requests.cpp">
+      <Filter>system</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\test\system\test-dungeon-record.cpp">
       <Filter>system</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\test\system\test-quest-list.cpp">
-      <Filter>system</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\test\system\test-redrawing-flags-updater.cpp">
       <Filter>system</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\test\target\test-target-getter.cpp">

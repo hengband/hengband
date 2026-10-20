@@ -1,10 +1,10 @@
 #include "game-option/map-screen-options.h"
+#include "system/deferred-update-requests.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/item/item-entity.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "system/terrain/terrain-definition.h"
 #include "system/terrain/terrain-list.h"
 #include "term/term-color-types.h"
@@ -21,7 +21,7 @@ TEST_CASE("OverviewMapCache recomputes only the grids marked dirty")
 {
     auto &terrains = TerrainList::get_instance();
     auto &world = AngbandWorld::get_instance();
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     const auto old_size = terrains.size();
     const auto restore_options = test::scoped_restore(view_hidden_walls, view_unsafe_walls, view_unsafe_grids, view_special_lite, view_granite_lite, view_bright_lite);
     auto &cache = OverviewMapCache::get_instance();

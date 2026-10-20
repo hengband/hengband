@@ -26,6 +26,7 @@
 #include "spell-kind/spells-teleport.h"
 #include "spell-realm/spells-crusade.h"
 #include "system/angband-system.h"
+#include "system/deferred-update-requests.h"
 #include "system/enums/monrace/monrace-id.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
@@ -33,7 +34,6 @@
 #include "system/monrace/monrace-list.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 #include <algorithm>
@@ -196,7 +196,7 @@ static MonsterSpellResult spell_RF6_SPECIAL_B(PlayerType *player_ptr, POSITION y
         simple_monspell_message(player_ptr, m_idx, t_idx, msg, target_type);
 
         teleport_away(player_ptr, m_idx, 10, TELEPORT_NONMAGICAL);
-        RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
+        DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
         return MonsterSpellResult::make_valid();
     }
 

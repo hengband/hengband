@@ -18,13 +18,13 @@
 #include "store/store-screen.h"
 #include "store/store-util.h"
 #include "store/store.h"
+#include "system/deferred-update-requests.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/floor/floor-info.h"
 #include "system/floor/town-list.h"
 #include "system/grid-type-definition.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "system/terrain/terrain-definition.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
@@ -111,7 +111,7 @@ void do_cmd_store(PlayerType *player_ptr)
     play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_BUILD);
     display_store(player_ptr, screen);
     auto should_leave = false;
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     while (!should_leave) {
         prt("", 1, 0);
         clear_from(screen.get_command_row(0));

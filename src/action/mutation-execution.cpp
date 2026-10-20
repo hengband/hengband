@@ -44,13 +44,13 @@
 #include "spell/summon-types.h"
 #include "status/element-resistance.h"
 #include "status/shape-changer.h"
+#include "system/deferred-update-requests.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/item/item-entity.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "target/target-getter.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -173,7 +173,7 @@ bool exe_mutation_power(PlayerType *player_ptr, PlayerMutationType power)
         }
 
         // 感触が変わると、持ち物の束をまとめられるかも変わる
-        auto &rfu = RedrawingFlagsUpdater::get_instance();
+        auto &rfu = DeferredUpdateRequests::get_instance();
         rfu.request_inventory_arrangement();
         rfu.set_flag(SubWindowRedrawingFlag::EQUIPMENT);
         return true;

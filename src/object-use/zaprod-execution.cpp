@@ -19,9 +19,9 @@
 #include "status/experience.h"
 #include "sv-definition/sv-other-types.h"
 #include "sv-definition/sv-rod-types.h"
+#include "system/deferred-update-requests.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "target/target-getter.h"
 #include "term/screen-processor.h"
 #include "timed-effect/timed-effects.h"
@@ -126,7 +126,7 @@ void ObjectZapRodEntity::execute(INVENTORY_IDX i_idx)
         item->timeout += base_pval;
     }
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     rfu.request_inventory_arrangement();
     if (!(item->is_aware())) {
         chg_virtue(this->player_ptr, Virtue::PATIENCE, -1);

@@ -32,12 +32,12 @@
 #include "spell-kind/spells-teleport.h"
 #include "spell-kind/spells-world.h"
 #include "spell-realm/spells-hex.h"
+#include "system/deferred-update-requests.h"
 #include "system/enums/monrace/monrace-id.h"
 #include "system/floor/floor-info.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
@@ -123,7 +123,7 @@ MonsterSpellResult spell_RF6_BLINK(PlayerType *player_ptr, MONSTER_IDX m_idx, in
     teleport_away(player_ptr, m_idx, 10, TELEPORT_SPONTANEOUS);
 
     if (target_type == MONSTER_TO_PLAYER) {
-        RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
+        DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
     }
 
     return res;

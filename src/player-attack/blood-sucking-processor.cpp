@@ -12,10 +12,10 @@
 #include "player-attack/player-attack.h"
 #include "player-info/equipment-info.h"
 #include "spell-realm/spells-hex.h"
+#include "system/deferred-update-requests.h"
 #include "system/item/item-entity.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "view/display-messages.h"
 
 /*!
@@ -110,7 +110,7 @@ static void drain_muramasa(PlayerType *player_ptr, player_attack_type *pa_ptr, c
     msg_print(_("妖刀は血を吸って強くなった！", "Muramasa sucked blood, and became more powerful!"));
     o_ptr->to_h = to_h;
     o_ptr->to_d = to_d;
-    RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
+    DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
 }
 
 /*!

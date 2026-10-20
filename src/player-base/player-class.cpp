@@ -27,9 +27,9 @@
 #include "player/special-defense-types.h"
 #include "realm/realm-types.h"
 #include "status/action-setter.h"
+#include "system/deferred-update-requests.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 
@@ -396,7 +396,7 @@ bool PlayerClass::lose_balance()
     }
 
     this->set_samurai_stance(SamuraiStanceType::NONE);
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     static constexpr auto flags_srf = {
         StatusRecalculatingFlag::BONUS,
         StatusRecalculatingFlag::MONSTER_STATUSES,

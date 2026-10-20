@@ -813,6 +813,7 @@
     <ClCompile Include="..\..\src\system\baseitem\baseitem-records.cpp" />
     <ClCompile Include="..\..\src\system\baseitem\baseitem-service.cpp" />
     <ClCompile Include="..\..\src\system\building-type-definition.cpp" />
+    <ClCompile Include="..\..\src\system\deferred-update-requests.cpp" />
     <ClCompile Include="..\..\src\system\dungeon\dungeon-data-definition.cpp" />
     <ClCompile Include="..\..\src\system\dungeon\dungeon-definition.cpp" />
     <ClCompile Include="..\..\src\system\dungeon\dungeon-list.cpp" />
@@ -838,7 +839,6 @@
     <ClCompile Include="..\..\src\system\monrace\monrace-service.cpp" />
     <ClCompile Include="..\..\src\system\monster-entity.cpp" />
     <ClCompile Include="..\..\src\system\player-type-definition.cpp" />
-    <ClCompile Include="..\..\src\system\redrawing-flags-updater.cpp" />
     <ClCompile Include="..\..\src\system\services\baseitem-monrace-service.cpp" />
     <ClCompile Include="..\..\src\system\services\dungeon-monrace-service.cpp" />
     <ClCompile Include="..\..\src\system\services\dungeon-service.cpp" />
@@ -1811,6 +1811,7 @@
     <ClInclude Include="..\..\src\system\baseitem\baseitem-records.h" />
     <ClInclude Include="..\..\src\system\baseitem\baseitem-service.h" />
     <ClInclude Include="..\..\src\system\building-type-definition.h" />
+    <ClInclude Include="..\..\src\system\deferred-update-requests.h" />
     <ClInclude Include="..\..\src\system\dungeon\dungeon-data-definition.h" />
     <ClInclude Include="..\..\src\system\dungeon\dungeon-definition.h" />
     <ClInclude Include="..\..\src\system\dungeon\dungeon-list.h" />
@@ -1856,7 +1857,6 @@
     <ClInclude Include="..\..\src\system\monrace\monrace-service.h" />
     <ClInclude Include="..\..\src\system\monster-entity.h" />
     <ClInclude Include="..\..\src\system\player-type-definition.h" />
-    <ClInclude Include="..\..\src\system\redrawing-flags-updater.h" />
     <ClInclude Include="..\..\src\system\services\baseitem-monrace-service.h" />
     <ClInclude Include="..\..\src\system\services\dungeon-monrace-service.h" />
     <ClInclude Include="..\..\src\system\services\dungeon-service.h" />

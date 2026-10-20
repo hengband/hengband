@@ -8,8 +8,8 @@
 #include "io/cursor.h"
 #include "io/screen-util.h"
 #include "main/sound-of-music.h"
+#include "system/deferred-update-requests.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "target/target-checker.h"
 #include "target/target-setter.h"
 #include "target/target-types.h"
@@ -46,7 +46,7 @@ void do_cmd_look(PlayerType *player_ptr)
         SubWindowRedrawingFlag::SIGHT_MONSTERS,
         SubWindowRedrawingFlag::FLOOR_ITEMS,
     };
-    RedrawingFlagsUpdater::get_instance().set_flags(flags);
+    DeferredUpdateRequests::get_instance().set_flags(flags);
     window_stuff(player_ptr);
     output_bot_json_look_snapshot(player_ptr);
     if (target_set(player_ptr, TARGET_LOOK).is_okay()) {
@@ -98,6 +98,6 @@ void do_cmd_locate(PlayerType *player_ptr)
     }
 
     verify_panel(player_ptr);
-    RedrawingFlagsUpdater::get_instance().request_monster_update_and_map_redrawing();
+    DeferredUpdateRequests::get_instance().request_monster_update_and_map_redrawing();
     handle_stuff(player_ptr);
 }

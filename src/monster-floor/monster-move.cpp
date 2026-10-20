@@ -27,6 +27,7 @@
 #include "pet/pet-util.h"
 #include "player/player-status-flags.h"
 #include "system/angband-system.h"
+#include "system/deferred-update-requests.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/enums/monrace/monrace-id.h"
 #include "system/floor/floor-info.h"
@@ -34,7 +35,6 @@
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "system/terrain/terrain-definition.h"
 #include "target/projection-path-calculator.h"
 #include "util/bit-flags-calculator.h"
@@ -206,7 +206,7 @@ static bool process_door(PlayerType *player_ptr, turn_flags *turn_flags_ptr, con
     if (turn_flags_ptr->did_bash_door && (one_in_(2) || is_open || terrain.flags.has(TerrainCharacteristics::GLASS))) {
         cave_alter_feat(player_ptr, pos.y, pos.x, TerrainCharacteristics::BASH);
         if (!monster.is_valid()) {
-            RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::FLOW);
+            DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::FLOW);
             if (is_original_ap_and_seen(player_ptr, monster)) {
                 monrace.r_behavior_flags.set(MonsterBehaviorType::BASH_DOOR);
             }
@@ -319,7 +319,7 @@ static bool process_post_dig_wall(PlayerType *player_ptr, turn_flags *turn_flags
     cave_alter_feat(player_ptr, pos.y, pos.x, TerrainCharacteristics::CAN_DISINTEGRATE);
 
     if (!monster.is_valid()) {
-        RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::FLOW);
+        DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::FLOW);
         if (is_original_ap_and_seen(player_ptr, monster)) {
             monrace.r_feature_flags.set(MonsterFeatureType::KILL_WALL);
         }

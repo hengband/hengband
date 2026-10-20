@@ -27,6 +27,7 @@
 #include "player/player-status.h"
 #include "spell/spells-execution.h"
 #include "system/baseitem/baseitem-service.h"
+#include "system/deferred-update-requests.h"
 #include "system/enums/monrace/monrace-id.h"
 #include "system/enums/terrain/terrain-tag.h"
 #include "system/floor/floor-info.h"
@@ -35,7 +36,6 @@
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "system/terrain/terrain-definition.h"
 #include "system/terrain/terrain-list.h"
 #include "target/target-preparation.h"
@@ -78,7 +78,7 @@ FixItemTesterSetter::~FixItemTesterSetter()
     fix_item_tester = std::make_unique<AllMatchItemTester>();
 
     // 選べるアイテムだけに記号を付けていた表示を元に戻す
-    RedrawingFlagsUpdater::get_instance().request_carried_item_lists_redrawing();
+    DeferredUpdateRequests::get_instance().request_carried_item_lists_redrawing();
 }
 
 /*!
@@ -444,7 +444,7 @@ void fix_player(PlayerType *player_ptr)
  */
 void request_player_redraw_if_points_changed(const PlayerType &player)
 {
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     if (rfu.has(SubWindowRedrawingFlag::PLAYER) || !displayed_player_points) {
         return;
     }
@@ -514,7 +514,7 @@ void fix_message(void)
 void request_message_redraw_if_color_changed()
 {
     if (displayed_now_message != now_message) {
-        RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::MESSAGE);
+        DeferredUpdateRequests::get_instance().set_flag(SubWindowRedrawingFlag::MESSAGE);
     }
 }
 
@@ -606,7 +606,7 @@ void fix_monster(PlayerType *player_ptr)
  */
 void request_monster_lore_redraw_if_changed(const PlayerType &player)
 {
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     const auto &tracker = LoreTracker::get_instance();
     if (rfu.has(SubWindowRedrawingFlag::MONSTER_LORE) || !displayed_monster_lore || !tracker.is_tracking()) {
         return;
@@ -980,7 +980,7 @@ void fix_spell(PlayerType *player_ptr)
  */
 void toggle_inventory_equipment()
 {
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     for (auto i = 0U; i < angband_terms.size(); ++i) {
         if (!angband_terms[i]) {
             continue;

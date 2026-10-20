@@ -17,8 +17,8 @@
 #include "spell/spell-info.h"
 #include "status/bad-status-setter.h"
 #include "status/base-status.h"
+#include "system/deferred-update-requests.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
@@ -88,7 +88,7 @@ bool do_cmd_cast_learned(PlayerType *player_ptr)
     }
 
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     rfu.set_flag(MainWindowRedrawingFlag::MP);
     return true;
 }

@@ -4,13 +4,13 @@
 #include "game-option/special-options.h"
 #include "grid/grid.h"
 #include "player/player-status.h"
+#include "system/deferred-update-requests.h"
 #include "system/enums/monrace/monrace-id.h"
 #include "system/floor/floor-info.h"
 #include "system/item/item-entity.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
@@ -117,7 +117,7 @@ void print_map(PlayerType *player_ptr)
         SubWindowRedrawingFlag::OVERHEAD,
         SubWindowRedrawingFlag::DUNGEON,
     };
-    RedrawingFlagsUpdater::get_instance().set_flags(flags);
+    DeferredUpdateRequests::get_instance().set_flags(flags);
 
     lite_spot(player_ptr, player_ptr->get_position());
     term_set_cursor(v != 0);

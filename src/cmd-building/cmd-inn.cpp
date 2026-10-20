@@ -17,9 +17,9 @@
 #include "rumor/rumor-service.h"
 #include "status/bad-status-setter.h"
 #include "store/rumor.h"
+#include "system/deferred-update-requests.h"
 #include "system/inner-game-data.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 #include "world/world.h"
@@ -192,7 +192,7 @@ static bool stay_inn(PlayerType *player_ptr)
 
     // 建物の中ではメイン画面の描き直しが後回しになり、そこからの要求も来ないので、ここでサブウィンドウの描き直しを要求する。
     // HP はプレイヤーの情報と呪文の一覧 (職業によっては技の失敗率や効果の表示) に表れる
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     static constexpr auto flags_swrf = {
         SubWindowRedrawingFlag::PLAYER,
         SubWindowRedrawingFlag::SPELL,

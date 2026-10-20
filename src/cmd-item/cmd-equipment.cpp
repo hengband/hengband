@@ -41,9 +41,9 @@
 #include "spell-kind/spells-perception.h"
 #include "status/action-setter.h"
 #include "status/shape-changer.h"
+#include "system/deferred-update-requests.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
 #include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"
@@ -57,7 +57,7 @@
  */
 static void do_curse_on_equip(OBJECT_IDX slot, ItemEntity &item, PlayerType *player_ptr)
 {
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     if (set_anubis_and_chariot(player_ptr) && ((slot == INVEN_MAIN_HAND) || (slot == INVEN_SUB_HAND))) {
 
         ItemEntity *anubis = player_ptr->inventory[INVEN_MAIN_HAND].get();
@@ -342,7 +342,7 @@ void do_cmd_wield(PlayerType *player_ptr)
     }
 
     calc_android_exp(player_ptr);
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     rfu.request_equipment_change_updates();
     rfu.set_flag(MainWindowRedrawingFlag::EQUIPPY);
     rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
@@ -364,7 +364,7 @@ void do_cmd_takeoff(PlayerType *player_ptr)
     }
 
     PlayerEnergy energy(player_ptr);
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     if (item->is_cursed()) {
         if (item->curse_flags.has(CurseTraitType::PERMA_CURSE) || !pc.equals(PlayerClassType::BERSERKER)) {
             msg_print(_("ふーむ、どうやら呪われているようだ。", "Hmmm, it seems to be cursed."));

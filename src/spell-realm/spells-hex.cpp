@@ -18,11 +18,11 @@
 #include "spell/technic-info-table.h"
 #include "status/action-setter.h"
 #include "system/angband-exceptions.h"
+#include "system/deferred-update-requests.h"
 #include "system/floor/floor-info.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
 #include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"
@@ -65,7 +65,7 @@ void SpellHex::stop_all_spells()
         set_action(this->player_ptr, ACTION_NONE);
     }
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     rfu.request_player_status_recalculation();
     rfu.set_flag(MainWindowRedrawingFlag::EXTRA);
     rfu.request_hp_mp_redrawing();
@@ -93,7 +93,7 @@ void SpellHex::clear_revenge()
     this->spell_hex_data->revenge_type = SpellHexRevengeType::NONE;
     this->spell_hex_data->revenge_power = 0;
     this->spell_hex_data->revenge_turn = 0;
-    RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
+    DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
 }
 
 /*!
@@ -128,7 +128,7 @@ bool SpellHex::stop_spells_with_selection()
         this->reset_casting_flag(i2enum<spell_hex_type>(n));
     }
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     rfu.request_player_status_recalculation();
     rfu.set_flag(MainWindowRedrawingFlag::EXTRA);
     rfu.request_hp_mp_redrawing();
@@ -235,7 +235,7 @@ bool SpellHex::process_mana_cost(const bool need_restart)
     }
 
     s64b_sub(&(this->player_ptr->csp), &(this->player_ptr->csp_frac), need_mana, need_mana_frac);
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     rfu.set_flag(MainWindowRedrawingFlag::MP);
     if (!need_restart) {
         return true;

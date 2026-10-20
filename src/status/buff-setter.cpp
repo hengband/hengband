@@ -24,8 +24,8 @@
 #include "status/base-status.h"
 #include "status/buff-setter.h"
 #include "status/element-resistance.h"
+#include "system/deferred-update-requests.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 
@@ -124,7 +124,7 @@ void reset_tim_flags(PlayerType *player_ptr)
  */
 void reset_ki_and_kawarimi(PlayerType *player_ptr, bool notify)
 {
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     if (get_current_ki(player_ptr) > 0) {
         set_current_ki(player_ptr, true, 0);
         rfu.set_flag(StatusRecalculatingFlag::BONUS);
@@ -166,7 +166,7 @@ void reset_arena_buffs(PlayerType *player_ptr)
     set_tsuyoshi(player_ptr, 0, true);
     reset_ki_and_kawarimi(player_ptr, false);
     reset_tim_flags(player_ptr);
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     rfu.set_flag(StatusRecalculatingFlag::BONUS);
     rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
 }
@@ -219,7 +219,7 @@ bool set_acceleration(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     if (disturb_state || Travel::get_instance().is_ongoing()) {
         disturb(player_ptr, false, true);
     }
-    RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
+    DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
     handle_stuff(player_ptr);
     return true;
 }
@@ -263,7 +263,7 @@ bool set_shield(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     }
 
     player_ptr->shield = v;
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     if (!notice) {
         return false;
@@ -312,7 +312,7 @@ bool set_magicdef(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     }
 
     player_ptr->magicdef = v;
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     if (!notice) {
         return false;
@@ -361,7 +361,7 @@ bool set_blessed(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     }
 
     player_ptr->blessed = v;
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     if (!notice) {
         return false;
@@ -410,7 +410,7 @@ bool set_hero(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     }
 
     player_ptr->hero = v;
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     if (!notice) {
         return false;
@@ -420,7 +420,7 @@ bool set_hero(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
         disturb(player_ptr, false, true);
     }
 
-    RedrawingFlagsUpdater::get_instance().request_bonus_and_max_hp_recalculation();
+    DeferredUpdateRequests::get_instance().request_bonus_and_max_hp_recalculation();
     handle_stuff(player_ptr);
     return true;
 }
@@ -476,7 +476,7 @@ bool set_mimic(PlayerType *player_ptr, TIME_EFFECT v, MimicKindType mimic_race_i
         disturb(player_ptr, false, true);
     }
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     static constexpr auto flags_mwrf = {
         MainWindowRedrawingFlag::BASIC,
         MainWindowRedrawingFlag::TIMED_EFFECT,
@@ -526,7 +526,7 @@ bool set_berserk(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     }
 
     player_ptr->berserk = v;
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     if (!notice) {
         return false;
@@ -536,7 +536,7 @@ bool set_berserk(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
         disturb(player_ptr, false, true);
     }
 
-    RedrawingFlagsUpdater::get_instance().request_bonus_and_max_hp_recalculation();
+    DeferredUpdateRequests::get_instance().request_bonus_and_max_hp_recalculation();
     handle_stuff(player_ptr);
     return true;
 }
@@ -557,7 +557,7 @@ bool set_wraith_form(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
         return false;
     }
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     if (v) {
         if (player_ptr->wraith_form && !do_dec) {
             if (player_ptr->wraith_form > v) {
@@ -636,7 +636,7 @@ bool set_tsuyoshi(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     }
 
     player_ptr->tsuyoshi = v;
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     if (!notice) {
         return false;

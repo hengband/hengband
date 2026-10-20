@@ -1,15 +1,15 @@
 #include "mind/mind-warrior-mage.h"
 #include "hpmp/hp-mp-processor.h"
 #include "player/player-damage.h"
+#include "system/deferred-update-requests.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "view/display-messages.h"
 
 bool comvert_hp_to_mp(PlayerType *player_ptr)
 {
     constexpr auto mes = _("ＨＰからＭＰへの無謀な変換", "thoughtless conversion from HP to SP");
     auto gain_sp = take_hit(player_ptr, DAMAGE_USELIFE, player_ptr->lev, mes) / 5;
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     if (!gain_sp) {
         msg_print(_("変換に失敗した。", "You failed to convert."));
         rfu.request_hp_mp_redrawing();
@@ -35,6 +35,6 @@ bool comvert_mp_to_hp(PlayerType *player_ptr)
         msg_print(_("変換に失敗した。", "You failed to convert."));
     }
 
-    RedrawingFlagsUpdater::get_instance().request_hp_mp_redrawing();
+    DeferredUpdateRequests::get_instance().request_hp_mp_redrawing();
     return true;
 }

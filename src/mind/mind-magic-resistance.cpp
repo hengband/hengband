@@ -5,8 +5,8 @@
 #include "game-option/disturbance-options.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
+#include "system/deferred-update-requests.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "view/display-messages.h"
 
 /*!
@@ -43,7 +43,7 @@ bool set_resist_magic(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     }
 
     player_ptr->resist_magic = v;
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     if (!notice) {
         return false;

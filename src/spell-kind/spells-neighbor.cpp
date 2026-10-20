@@ -5,10 +5,10 @@
 #include "floor/floor-util.h"
 #include "grid/grid.h"
 #include "spell-kind/earthquake.h"
+#include "system/deferred-update-requests.h"
 #include "system/enums/terrain/terrain-characteristics.h"
 #include "system/floor/floor-info.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "util/bit-flags-calculator.h"
 
 /*!
@@ -66,7 +66,7 @@ bool wall_stone(PlayerType *player_ptr)
 {
     BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_HIDE;
     bool dummy = project(player_ptr, 0, 1, player_ptr->y, player_ptr->x, 0, AttributeType::STONE_WALL, flg).notice;
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     rfu.set_flag(StatusRecalculatingFlag::FLOW);
     rfu.request_map_redrawing();
     return dummy;

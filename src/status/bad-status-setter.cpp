@@ -17,8 +17,8 @@
 #include "status/base-status.h"
 #include "status/buff-setter.h"
 #include "system/angband-exceptions.h"
+#include "system/deferred-update-requests.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 #include <algorithm>
@@ -73,7 +73,7 @@ bool BadStatusSetter::set_blindness(const TIME_EFFECT tmp_v)
     }
 
     blindness.set(v);
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     if (!notice) {
         return false;
@@ -107,7 +107,7 @@ bool BadStatusSetter::set_confusion(const TIME_EFFECT tmp_v)
         return false;
     }
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     const auto is_confused = this->player_ptr->effects()->confusion().is_active();
     if (v > 0) {
         if (!is_confused) {
@@ -197,7 +197,7 @@ bool BadStatusSetter::set_poison(const TIME_EFFECT tmp_v)
     }
 
     player_poison.set(v);
-    RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
+    DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     if (!notice) {
         return false;
     }
@@ -248,7 +248,7 @@ bool BadStatusSetter::set_fear(const TIME_EFFECT tmp_v)
     }
 
     fear.set(v);
-    RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
+    DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     if (!notice) {
         return false;
     }
@@ -301,7 +301,7 @@ bool BadStatusSetter::set_paralysis(const TIME_EFFECT tmp_v)
     }
 
     paralysis.set(v);
-    RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
+    DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     if (!notice) {
         return false;
     }
@@ -310,7 +310,7 @@ bool BadStatusSetter::set_paralysis(const TIME_EFFECT tmp_v)
         disturb(this->player_ptr, false, false);
     }
 
-    RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::ACTION);
+    DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::ACTION);
     handle_stuff(this->player_ptr);
     return true;
 }
@@ -356,7 +356,7 @@ bool BadStatusSetter::hallucination(const TIME_EFFECT tmp_v)
     }
 
     hallucination.set(v);
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     if (!notice) {
         return false;
@@ -425,7 +425,7 @@ bool BadStatusSetter::set_deceleration(const TIME_EFFECT tmp_v, bool do_dec)
         disturb(this->player_ptr, false, false);
     }
 
-    RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
+    DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
     handle_stuff(this->player_ptr);
     return true;
 }
@@ -463,7 +463,7 @@ bool BadStatusSetter::set_stun(const TIME_EFFECT tmp_v)
         disturb(this->player_ptr, false, false);
     }
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     rfu.set_flag(StatusRecalculatingFlag::BONUS);
     rfu.set_flag(MainWindowRedrawingFlag::STUN);
     handle_stuff(this->player_ptr);
@@ -503,7 +503,7 @@ bool BadStatusSetter::set_cut(const TIME_EFFECT tmp_v)
         disturb(this->player_ptr, false, false);
     }
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     rfu.set_flag(StatusRecalculatingFlag::BONUS);
     rfu.set_flag(MainWindowRedrawingFlag::CUT);
     handle_stuff(this->player_ptr);

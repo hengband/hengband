@@ -2,10 +2,10 @@
 #include "core/window-redrawer.h"
 #include "inventory/inventory-object.h"
 #include "player/player-status.h"
+#include "system/deferred-update-requests.h"
 #include "system/floor/floor-info.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "tracking/baseitem-tracker.h"
 #include "tracking/health-bar-tracker.h"
 
@@ -15,7 +15,7 @@
  */
 void handle_stuff(PlayerType *player_ptr)
 {
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     if (rfu.any_stats()) {
         update_creature(player_ptr);
     }

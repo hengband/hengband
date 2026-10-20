@@ -8,11 +8,11 @@
 #include "io/input-key-acceptor.h"
 #include "io/screen-util.h"
 #include "system/building-type-definition.h"
+#include "system/deferred-update-requests.h"
 #include "system/enums/terrain/terrain-characteristics.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "system/terrain/terrain-definition.h"
 #include "target/target-checker.h"
 #include "target/target-sorter.h"
@@ -178,7 +178,7 @@ void tgt_pt_info::move_to_symbol(PlayerType *player_ptr)
         this->n = 0;
         this->pos = player_ptr->get_position();
         verify_panel(player_ptr);
-        RedrawingFlagsUpdater::get_instance().request_monster_update_and_map_redrawing();
+        DeferredUpdateRequests::get_instance().request_monster_update_and_map_redrawing();
         handle_stuff(player_ptr);
     } else {
         const auto cx = (panel_col_min + panel_col_max) / 2;
@@ -322,7 +322,7 @@ tl::optional<Pos2D> point_target(PlayerType *player_ptr)
 
     prt("", 0, 0);
     verify_panel(player_ptr);
-    RedrawingFlagsUpdater::get_instance().request_monster_update_and_map_redrawing();
+    DeferredUpdateRequests::get_instance().request_monster_update_and_map_redrawing();
     handle_stuff(player_ptr);
     return pos_target;
 }

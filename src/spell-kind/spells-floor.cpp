@@ -24,6 +24,7 @@
 #include "spell-kind/spells-teleport.h"
 #include "status/bad-status-setter.h"
 #include "system/artifact/artifact-definition.h"
+#include "system/deferred-update-requests.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/dungeon/quest-definition.h"
 #include "system/enums/terrain/terrain-tag.h"
@@ -33,7 +34,6 @@
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "system/terrain/terrain-definition.h"
 #include "system/terrain/terrain-list.h"
 #include "view/display-messages.h"
@@ -96,7 +96,7 @@ void wiz_lite(PlayerType *player_ptr, bool ninja)
         }
     }
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     rfu.request_monster_update_and_map_redrawing();
     rfu.request_floor_item_lists_redrawing();
     if (floor.grid_array[player_ptr->y][player_ptr->x].info & CAVE_GLOW) {
@@ -141,7 +141,7 @@ void wiz_dark(PlayerType *player_ptr)
     /* Forget travel route when we have forgotten map */
     Travel::get_instance().reset_goal();
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     rfu.request_monster_update_and_map_redrawing();
     rfu.request_sight_recalculation();
     rfu.request_floor_item_lists_redrawing();
@@ -195,7 +195,7 @@ void map_area(PlayerType *player_ptr, POSITION range)
         }
     }
 
-    RedrawingFlagsUpdater::get_instance().request_map_redrawing();
+    DeferredUpdateRequests::get_instance().request_map_redrawing();
 }
 
 /*!
@@ -419,7 +419,7 @@ bool destroy_area(PlayerType *player_ptr, const POSITION y1, const POSITION x1, 
     }
 
     forget_flow(floor);
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     rfu.request_monster_update_and_map_redrawing();
     rfu.request_sight_recalculation();
     rfu.set_flag(StatusRecalculatingFlag::FLOW);

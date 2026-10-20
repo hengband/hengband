@@ -17,8 +17,8 @@
 #include "io/input-key-requester.h"
 #include "io/macro-configurations-store.h"
 #include "io/signal-handlers.h"
+#include "system/deferred-update-requests.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "target/target.h"
 #include "term/gameterm.h"
 #include "term/z-term.h"
@@ -45,7 +45,7 @@ namespace test {
 template <RedrawingFlagType Flag>
 [[nodiscard]] auto scoped_restore_redrawing_flags()
 {
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     constexpr EnumRange range(static_cast<Flag>(0), Flag::MAX);
     const EnumClassFlagGroup<Flag> all_flags(range);
     EnumClassFlagGroup<Flag> was_set;

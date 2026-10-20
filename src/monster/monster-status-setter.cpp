@@ -13,12 +13,12 @@
 #include "monster/monster-util.h"
 #include "monster/smart-learn-types.h"
 #include "system/angband-system.h"
+#include "system/deferred-update-requests.h"
 #include "system/enums/monrace/monrace-id.h"
 #include "system/floor/floor-info.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "target/projection-path-calculator.h"
 #include "tracking/health-bar-tracker.h"
 #include "util/string-processor.h"
@@ -90,7 +90,7 @@ bool set_monster_csleep(FloorType &floor, MONSTER_IDX m_idx, int v)
         return false;
     }
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     if (monster.ml) {
         HealthBarTracker::get_instance().set_flag_if_tracking(m_idx);
         if (monster.is_riding()) {
@@ -136,7 +136,7 @@ bool set_monster_fast(FloorType &floor, MONSTER_IDX m_idx, int v)
     }
 
     if (monster.is_riding()) {
-        RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
+        DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
     }
 
     return true;
@@ -173,7 +173,7 @@ bool set_monster_slow(FloorType &floor, MONSTER_IDX m_idx, int v)
     }
 
     if (monster.is_riding()) {
-        RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
+        DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
     }
 
     return true;
@@ -271,7 +271,7 @@ bool set_monster_monfear(FloorType &floor, MONSTER_IDX m_idx, int v)
     if (monster.ml) {
         HealthBarTracker::get_instance().set_flag_if_tracking(m_idx);
         if (monster.is_riding()) {
-            RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::UHEALTH);
+            DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::UHEALTH);
         }
     }
 
@@ -315,7 +315,7 @@ bool set_monster_invulner(FloorType &floor, MONSTER_IDX m_idx, int v, bool energ
     if (monster.ml) {
         HealthBarTracker::get_instance().set_flag_if_tracking(m_idx);
         if (monster.is_riding()) {
-            RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::UHEALTH);
+            DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::UHEALTH);
         }
     }
 
@@ -368,7 +368,7 @@ bool set_monster_timewalk(PlayerType *player_ptr, MONSTER_IDX m_idx, int num, bo
         }
     }
 
-    RedrawingFlagsUpdater::get_instance().request_monster_update_and_map_redrawing();
+    DeferredUpdateRequests::get_instance().request_monster_update_and_map_redrawing();
     world.timewalk_m_idx = 0;
     const auto p_pos = player_ptr->get_position();
     const auto m_pos = monster.get_position();

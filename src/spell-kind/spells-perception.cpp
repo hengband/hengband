@@ -21,9 +21,9 @@
 #include "perception/identification.h"
 #include "perception/object-perception.h"
 #include "system/artifact/artifact-record.h"
+#include "system/deferred-update-requests.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
@@ -75,7 +75,7 @@ bool identify_item(PlayerType *player_ptr, ItemEntity *o_ptr)
         records.set_identified(o_ptr->fa_id);
     }
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     rfu.set_flag(StatusRecalculatingFlag::BONUS);
     rfu.request_inventory_arrangement();
     rfu.request_item_lists_redrawing();

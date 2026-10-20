@@ -3,9 +3,9 @@
 #include "game-option/special-options.h"
 #include "io/read-pref-file.h"
 #include "system/baseitem/baseitem-service.h"
+#include "system/deferred-update-requests.h"
 #include "system/monrace/monrace-list.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "system/terrain/terrain-definition.h"
 #include "system/terrain/terrain-list.h"
 #include <exception>
@@ -40,7 +40,7 @@ static void switch_graphics(PlayerType *player_ptr, bool uses_graphics)
 {
     use_graphics = uses_graphics;
     reset_visuals(player_ptr);
-    RedrawingFlagsUpdater::get_instance().request_whole_main_window_redrawing();
+    DeferredUpdateRequests::get_instance().request_whole_main_window_redrawing();
     redraw_stuff(player_ptr);
 }
 

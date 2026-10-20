@@ -26,6 +26,7 @@
 #include "player/player-status.h"
 #include "spell-kind/spells-random.h"
 #include "status/experience.h"
+#include "system/deferred-update-requests.h"
 #include "system/enums/monrace/monrace-id.h"
 #include "system/floor/floor-info.h"
 #include "system/monrace/monrace-definition.h"
@@ -33,7 +34,6 @@
 #include "system/monrace/monrace-records.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "timed-effect/timed-effects.h"
 #include "tracking/health-bar-tracker.h"
 #include "tracking/lore-tracker.h"
@@ -410,7 +410,7 @@ void MonsterDamageProcessor::set_redraw()
     auto &monster = this->player_ptr->current_floor_ptr->m_list[this->m_idx];
     HealthBarTracker::get_instance().set_flag_if_tracking(this->m_idx);
     if (monster.is_riding()) {
-        RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::UHEALTH);
+        DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::UHEALTH);
     }
 }
 

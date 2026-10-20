@@ -43,13 +43,13 @@
 #include "player/player-status-flags.h"
 #include "player/special-defense-types.h"
 #include "status/action-setter.h"
+#include "system/deferred-update-requests.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/item/item-entity.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "system/terrain/terrain-definition.h"
 #include "target/target-checker.h"
 #include "target/target-getter.h"
@@ -91,7 +91,7 @@ void do_cmd_pet_dismiss(PlayerType *player_ptr)
     /* Process the monsters (backwards) */
     auto all_pets = false;
     auto num_dismissed = 0;
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     const int num_pet_index = std::ssize(pet_index);
     for (auto i = 0; i < num_pet_index; i++) {
         const auto pet_ctr = pet_index[i];
@@ -271,7 +271,7 @@ bool do_cmd_riding(PlayerType *player_ptr, bool force)
 
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     static constexpr auto flags_srf = {
         StatusRecalculatingFlag::UN_VIEW,
         StatusRecalculatingFlag::UN_LITE,
@@ -794,7 +794,7 @@ void do_cmd_pet(PlayerType *player_ptr)
             player_ptr->pet_extra_flags |= (PF_TWO_HANDS);
         }
 
-        RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
+        DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
         handle_stuff(player_ptr);
         break;
     }

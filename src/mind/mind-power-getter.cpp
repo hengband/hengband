@@ -14,8 +14,8 @@
 #include "player-info/class-info.h"
 #include "player-info/equipment-info.h"
 #include "player/player-status-table.h"
+#include "system/deferred-update-requests.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
 #include "timed-effect/timed-effects.h"
 #include "util/enum-converter.h"
@@ -78,7 +78,7 @@ bool MindPowerGetter::get_mind_power(SPELL_IDX *sn, bool only_browse)
         screen_load();
     }
 
-    RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::SPELL);
+    DeferredUpdateRequests::get_instance().set_flag(SubWindowRedrawingFlag::SPELL);
     window_stuff(this->player_ptr);
     if (!this->flag) {
         return false;

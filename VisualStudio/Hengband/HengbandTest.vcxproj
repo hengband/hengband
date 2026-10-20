@@ -124,9 +124,9 @@
     <ClCompile Include="..\..\src\test\system\floor\test-floor-info.cpp" />
     <ClCompile Include="..\..\src\test\system\item\test-item-entity.cpp" />
     <ClCompile Include="..\..\src\test\system\monrace\test-monrace-definition.cpp" />
+    <ClCompile Include="..\..\src\test\system\test-deferred-update-requests.cpp" />
     <ClCompile Include="..\..\src\test\system\test-dungeon-record.cpp" />
     <ClCompile Include="..\..\src\test\system\test-quest-list.cpp" />
-    <ClCompile Include="..\..\src\test\system\test-redrawing-flags-updater.cpp" />
     <ClCompile Include="..\..\src\test\target\test-target-getter.cpp" />
     <ClCompile Include="..\..\src\test\term\test-z-rand.cpp" />
     <ClCompile Include="..\..\src\test\test-main.cpp" />

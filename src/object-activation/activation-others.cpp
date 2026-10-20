@@ -41,6 +41,7 @@
 #include "status/bad-status-setter.h"
 #include "status/body-improvement.h"
 #include "status/buff-setter.h"
+#include "system/deferred-update-requests.h"
 #include "system/enums/monrace/monrace-id.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
@@ -48,7 +49,6 @@
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "target/projection-path-calculator.h"
 #include "target/target-checker.h"
 #include "target/target-getter.h"
@@ -374,7 +374,7 @@ bool activate_protection_elbereth(PlayerType *player_ptr)
     (void)bss.set_blindness(0);
     (void)bss.hallucination(0);
     set_blessed(player_ptr, randint0(25) + 25, true);
-    RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::ABILITY_SCORE);
+    DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::ABILITY_SCORE);
     return true;
 }
 

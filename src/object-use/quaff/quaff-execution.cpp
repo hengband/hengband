@@ -23,9 +23,9 @@
 #include "spell-realm/spells-hex.h"
 #include "spell-realm/spells-song.h"
 #include "status/experience.h"
+#include "system/deferred-update-requests.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
 #include "view/display-messages.h"
 
@@ -64,7 +64,7 @@ void ObjectQuaffEntity::execute(INVENTORY_IDX i_idx)
         InventoryArrangementFlag::COMBINATION,
         InventoryArrangementFlag::REORDER,
     };
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     rfu.set_flags(flags_iaf);
     this->change_virtue_as_quaff(item);
     item.mark_as_tried();

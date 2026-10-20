@@ -22,8 +22,8 @@
 #include "store/store-owners.h"
 #include "store/store-screen.h"
 #include "store/store.h"
+#include "system/deferred-update-requests.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
 #include "util/int-char-converter.h"
 #include "util/string-processor.h"
@@ -285,7 +285,7 @@ void store_purchase(PlayerType *player_ptr, StoreScreen &screen)
 
     const auto idx = find_autopick_list(player_ptr, &item);
     if (auto_inscribe_item(item, idx)) {
-        RedrawingFlagsUpdater::get_instance().request_inscription_change_updates();
+        DeferredUpdateRequests::get_instance().request_inscription_change_updates();
     }
 
     item_new = store_item_to_inventory(player_ptr, &item);

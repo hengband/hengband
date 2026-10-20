@@ -14,13 +14,13 @@
 #include "monster/monster-status-setter.h" //!< @todo 相互依存. 後で何とかする.
 #include "monster/monster-update.h"
 #include "system/angband-system.h"
+#include "system/deferred-update-requests.h"
 #include "system/floor/floor-info.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
 #include "system/monrace/monrace-service.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "timed-effect/timed-effects.h"
 #include "tracking/health-bar-tracker.h"
 #include "util/bit-flags-calculator.h"
@@ -369,7 +369,7 @@ void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MonraceId monra
         return;
     }
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     if (monster.exp < old_monrace.next_exp) {
         if (monster.is_riding()) {
             rfu.set_flag(StatusRecalculatingFlag::BONUS);

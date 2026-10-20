@@ -4,11 +4,11 @@
 #include "monster/monster-util.h"
 #include "pet/pet-util.h"
 #include "system/angband-exceptions.h"
+#include "system/deferred-update-requests.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/item/item-entity.h"
 #include "system/monster-entity.h"
-#include "system/redrawing-flags-updater.h"
 #include "timed-effect/timed-effects.h"
 #include "world/world.h"
 #include <range/v3/algorithm.hpp>
@@ -128,7 +128,7 @@ std::string PlayerType::decrease_ability_random()
         this->stat_cur[k] = 3;
     }
 
-    RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
+    DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
     return fmt::format(_("あなたは以前ほど{}なくなってしまった...。", "You're not as {} as you used to be..."), act);
 }
 
@@ -146,7 +146,7 @@ std::string PlayerType::decrease_ability_all()
         }
     }
 
-    RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
+    DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
     return _("あなたは以前ほど力強くなくなってしまった...。", "You're not as powerful as you used to be...");
 }
 

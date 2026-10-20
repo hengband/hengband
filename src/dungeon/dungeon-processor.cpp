@@ -22,6 +22,7 @@
 #include "realm/realm-song-numbers.h"
 #include "spell-realm/spells-song.h"
 #include "system/building-type-definition.h"
+#include "system/deferred-update-requests.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/dungeon/dungeon-record.h"
 #include "system/dungeon/quest-definition.h"
@@ -30,7 +31,6 @@
 #include "system/floor/floor-info.h"
 #include "system/floor/wilderness-grid.h"
 #include "system/monrace/monrace-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "target/target-checker.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
@@ -42,7 +42,7 @@ static void redraw_character_xtra(PlayerType *player_ptr)
 {
     auto &world = AngbandWorld::get_instance();
     world.character_xtra = true;
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     // フロアが変わったので、足元や発見済みのアイテムの一覧なども含め、すべてのサブウィンドウを描き直す
     rfu.fill_up_sub_flags();
     rfu.request_whole_main_window_redrawing();
@@ -123,7 +123,7 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
     msg_erase();
 
     redraw_character_xtra(player_ptr);
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     rfu.request_player_status_recalculation();
     static constexpr auto flags_iaf = {
         InventoryArrangementFlag::COMBINATION,

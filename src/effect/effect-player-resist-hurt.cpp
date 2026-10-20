@@ -25,10 +25,10 @@
 #include "status/element-resistance.h"
 #include "status/experience.h"
 #include "status/shape-changer.h"
+#include "system/deferred-update-requests.h"
 #include "system/enums/monrace/monrace-id.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 #include "world/world.h"
@@ -430,7 +430,7 @@ void effect_player_lite(PlayerType *player_ptr, EffectPlayerType *ep_ptr)
     player_ptr->wraith_form = 0;
     msg_print(_("閃光のため非物質的な影の存在でいられなくなった。", "The light forces you out of your incorporeal shadow form."));
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     rfu.request_monster_update_and_map_redrawing();
     rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
 }

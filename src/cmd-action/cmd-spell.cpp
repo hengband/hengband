@@ -57,10 +57,10 @@
 #include "status/base-status.h"
 #include "status/experience.h"
 #include "system/baseitem/baseitem-key.h"
+#include "system/deferred-update-requests.h"
 #include "system/floor/floor-info.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
@@ -379,7 +379,7 @@ static int get_spell(PlayerType *player_ptr, SPELL_IDX *sn, std::string_view pro
     auto flag = false;
     auto redraw = false;
 
-    RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::SPELL);
+    DeferredUpdateRequests::get_instance().set_flag(SubWindowRedrawingFlag::SPELL);
     window_stuff(player_ptr);
 
     const auto spell_category = spell_category_name(mp_ptr->spell_book);
@@ -502,7 +502,7 @@ static int get_spell(PlayerType *player_ptr, SPELL_IDX *sn, std::string_view pro
         screen_load();
     }
 
-    RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::SPELL);
+    DeferredUpdateRequests::get_instance().set_flag(SubWindowRedrawingFlag::SPELL);
     window_stuff(player_ptr);
 
     /* Abort if needed */
@@ -690,7 +690,7 @@ static void change_realm2(PlayerType *player_ptr, PlayerRealm &pr, RealmType nex
     player_ptr->old_realm |= 1U << (enum2i(pr.realm2().to_enum()) - 1);
     pr.set(pr.realm1().to_enum(), next_realm);
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     rfu.set_flag(StatusRecalculatingFlag::SPELLS);
     rfu.set_flag(InventoryArrangementFlag::REORDER);
     handle_stuff(player_ptr);
@@ -883,7 +883,7 @@ void do_cmd_study(PlayerType *player_ptr)
     /* One less spell available */
     player_ptr->learned_spells++;
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     rfu.set_flag(StatusRecalculatingFlag::SPELLS);
     update_creature(player_ptr);
 }
@@ -1267,7 +1267,7 @@ bool do_cmd_cast(PlayerType *player_ptr)
         over_exerted = true;
     }
 
-    RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::MP);
+    DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::MP);
 
     /* Over-exert the player */
     if (over_exerted) {
@@ -1307,6 +1307,6 @@ bool do_cmd_cast(PlayerType *player_ptr)
         }
     }
 
-    RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::PLAYER);
+    DeferredUpdateRequests::get_instance().set_flag(SubWindowRedrawingFlag::PLAYER);
     return true; //!< @note 詠唱した
 }

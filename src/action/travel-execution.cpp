@@ -12,11 +12,11 @@
 #include "player-status/player-energy.h"
 #include "player/player-move.h"
 #include "player/player-status-flags.h"
+#include "system/deferred-update-requests.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "system/terrain/terrain-definition.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
@@ -257,7 +257,7 @@ bool Travel::is_ongoing() const
 void Travel::stop()
 {
     if (this->is_ongoing()) {
-        RedrawingFlagsUpdater::get_instance().request_floor_item_lists_redrawing();
+        DeferredUpdateRequests::get_instance().request_floor_item_lists_redrawing();
     }
 
     this->state = TravelState::STOP;

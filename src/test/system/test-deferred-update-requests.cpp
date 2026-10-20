@@ -1,8 +1,8 @@
 /*!
- * @brief RedrawingFlagsUpdater のテスト
+ * @brief DeferredUpdateRequests のテスト
  */
 
-#include "system/redrawing-flags-updater.h"
+#include "system/deferred-update-requests.h"
 #include "util/enum-converter.h"
 #include "util/finalizer.h"
 #include "util/flag-group.h"
@@ -20,7 +20,7 @@ namespace {
  * @return スコープを抜けるときにフラグを戻すファイナライザ
  */
 template <RedrawingFlagType Flag>
-auto scoped_restore_flags(RedrawingFlagsUpdater &rfu, std::initializer_list<Flag> flags)
+auto scoped_restore_flags(DeferredUpdateRequests &rfu, std::initializer_list<Flag> flags)
 {
     const EnumClassFlagGroup<Flag> targets(flags);
     EnumClassFlagGroup<Flag> was_set;
@@ -44,7 +44,7 @@ static_assert(RedrawingFlagType<StatusRecalculatingFlag>);
 static_assert(RedrawingFlagType<InventoryArrangementFlag>);
 static_assert(!RedrawingFlagType<int>);
 
-TEST_CASE("RedrawingFlagsUpdater operates only on the flag group of the given flag type")
+TEST_CASE("DeferredUpdateRequests operates only on the flag group of the given flag type")
 {
     // 4 種類のフラグで、同じ値 (0) の列挙子を使う
     const auto for_each_flag = [](auto func) {
@@ -53,7 +53,7 @@ TEST_CASE("RedrawingFlagsUpdater operates only on the flag group of the given fl
         func(StatusRecalculatingFlag::BONUS);
         func(InventoryArrangementFlag::AUTO_DESTRUCTION);
     };
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     const auto restore_mwrf = scoped_restore_flags(rfu, { MainWindowRedrawingFlag::TITLE });
     const auto restore_swrf = scoped_restore_flags(rfu, { SubWindowRedrawingFlag::INVENTORY });
     const auto restore_srf = scoped_restore_flags(rfu, { StatusRecalculatingFlag::BONUS });
@@ -104,9 +104,9 @@ TEST_CASE("RedrawingFlagsUpdater operates only on the flag group of the given fl
     }
 }
 
-TEST_CASE("RedrawingFlagsUpdater::request_inventory_arrangement requests combining, reordering and redrawing the inventory")
+TEST_CASE("DeferredUpdateRequests::request_inventory_arrangement requests combining, reordering and redrawing the inventory")
 {
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     static constexpr auto flags_iaf = {
         InventoryArrangementFlag::AUTO_DESTRUCTION,
         InventoryArrangementFlag::COMBINATION,
@@ -125,9 +125,9 @@ TEST_CASE("RedrawingFlagsUpdater::request_inventory_arrangement requests combini
     CHECK_FALSE(rfu.has(InventoryArrangementFlag::AUTO_DESTRUCTION));
 }
 
-TEST_CASE("RedrawingFlagsUpdater::request_whole_main_window_redrawing requests wiping and redrawing the whole main window")
+TEST_CASE("DeferredUpdateRequests::request_whole_main_window_redrawing requests wiping and redrawing the whole main window")
 {
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     static constexpr auto flags_mwrf = {
         MainWindowRedrawingFlag::WIPE,
         MainWindowRedrawingFlag::BASIC,
@@ -146,9 +146,9 @@ TEST_CASE("RedrawingFlagsUpdater::request_whole_main_window_redrawing requests w
     }
 }
 
-TEST_CASE("RedrawingFlagsUpdater::request_whole_status_recalculation requests recalculating the status, the view and the lights for redrawing the whole screen")
+TEST_CASE("DeferredUpdateRequests::request_whole_status_recalculation requests recalculating the status, the view and the lights for redrawing the whole screen")
 {
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     static constexpr auto flags_srf = {
         StatusRecalculatingFlag::TORCH,
         StatusRecalculatingFlag::BONUS,
@@ -180,9 +180,9 @@ TEST_CASE("RedrawingFlagsUpdater::request_whole_status_recalculation requests re
     CHECK_FALSE(rfu.has(StatusRecalculatingFlag::DISTANCE));
 }
 
-TEST_CASE("RedrawingFlagsUpdater::request_map_redrawing requests redrawing the map of the main window")
+TEST_CASE("DeferredUpdateRequests::request_map_redrawing requests redrawing the map of the main window")
 {
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     static constexpr auto flags_swrf = {
         SubWindowRedrawingFlag::OVERHEAD,
         SubWindowRedrawingFlag::DUNGEON,
@@ -200,9 +200,9 @@ TEST_CASE("RedrawingFlagsUpdater::request_map_redrawing requests redrawing the m
     CHECK_FALSE(rfu.has(SubWindowRedrawingFlag::DUNGEON));
 }
 
-TEST_CASE("RedrawingFlagsUpdater::request_monster_update_and_map_redrawing requests updating the monsters and redrawing the map of the main window")
+TEST_CASE("DeferredUpdateRequests::request_monster_update_and_map_redrawing requests updating the monsters and redrawing the map of the main window")
 {
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     static constexpr auto flags_swrf = {
         SubWindowRedrawingFlag::OVERHEAD,
         SubWindowRedrawingFlag::DUNGEON,
@@ -222,9 +222,9 @@ TEST_CASE("RedrawingFlagsUpdater::request_monster_update_and_map_redrawing reque
     CHECK_FALSE(rfu.has(SubWindowRedrawingFlag::DUNGEON));
 }
 
-TEST_CASE("RedrawingFlagsUpdater::request_sight_recalculation requests forgetting and recalculating the view and the lights")
+TEST_CASE("DeferredUpdateRequests::request_sight_recalculation requests forgetting and recalculating the view and the lights")
 {
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     static constexpr auto flags_srf = {
         StatusRecalculatingFlag::UN_VIEW,
         StatusRecalculatingFlag::UN_LITE,
@@ -248,9 +248,9 @@ TEST_CASE("RedrawingFlagsUpdater::request_sight_recalculation requests forgettin
     CHECK_FALSE(rfu.has(StatusRecalculatingFlag::FLOW));
 }
 
-TEST_CASE("RedrawingFlagsUpdater::request_item_lists_redrawing requests redrawing the windows showing items")
+TEST_CASE("DeferredUpdateRequests::request_item_lists_redrawing requests redrawing the windows showing items")
 {
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     static constexpr auto flags_swrf = {
         SubWindowRedrawingFlag::INVENTORY,
         SubWindowRedrawingFlag::EQUIPMENT,
@@ -269,9 +269,9 @@ TEST_CASE("RedrawingFlagsUpdater::request_item_lists_redrawing requests redrawin
     }
 }
 
-TEST_CASE("RedrawingFlagsUpdater::request_carried_item_lists_redrawing requests redrawing the inventory and the equipment")
+TEST_CASE("DeferredUpdateRequests::request_carried_item_lists_redrawing requests redrawing the inventory and the equipment")
 {
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     static constexpr auto flags_swrf = {
         SubWindowRedrawingFlag::INVENTORY,
         SubWindowRedrawingFlag::EQUIPMENT,
@@ -300,9 +300,9 @@ TEST_CASE("RedrawingFlagsUpdater::request_carried_item_lists_redrawing requests 
     }
 }
 
-TEST_CASE("RedrawingFlagsUpdater::request_floor_item_lists_redrawing requests redrawing the windows showing floor items")
+TEST_CASE("DeferredUpdateRequests::request_floor_item_lists_redrawing requests redrawing the windows showing floor items")
 {
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     static constexpr auto flags_swrf = {
         SubWindowRedrawingFlag::FLOOR_ITEMS,
         SubWindowRedrawingFlag::FOUND_ITEMS,
@@ -318,9 +318,9 @@ TEST_CASE("RedrawingFlagsUpdater::request_floor_item_lists_redrawing requests re
     }
 }
 
-TEST_CASE("RedrawingFlagsUpdater::request_spell_info_redrawing requests redrawing the spell list and the item knowledge")
+TEST_CASE("DeferredUpdateRequests::request_spell_info_redrawing requests redrawing the spell list and the item knowledge")
 {
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     static constexpr auto flags_swrf = {
         SubWindowRedrawingFlag::SPELL,
         SubWindowRedrawingFlag::ITEM_KNOWLEDGE,
@@ -336,9 +336,9 @@ TEST_CASE("RedrawingFlagsUpdater::request_spell_info_redrawing requests redrawin
     }
 }
 
-TEST_CASE("RedrawingFlagsUpdater::request_inscription_change_updates requests recalculating the bonuses and combining the inventory")
+TEST_CASE("DeferredUpdateRequests::request_inscription_change_updates requests recalculating the bonuses and combining the inventory")
 {
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     const auto restore_srf = scoped_restore_flags(rfu, { StatusRecalculatingFlag::BONUS });
     static constexpr auto flags_iaf = {
         InventoryArrangementFlag::COMBINATION,
@@ -367,9 +367,9 @@ TEST_CASE("RedrawingFlagsUpdater::request_inscription_change_updates requests re
     }
 }
 
-TEST_CASE("RedrawingFlagsUpdater::request_equipment_change_updates requests recalculating the bonuses, the light radius and the max MP")
+TEST_CASE("DeferredUpdateRequests::request_equipment_change_updates requests recalculating the bonuses, the light radius and the max MP")
 {
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     static constexpr auto flags_srf = {
         StatusRecalculatingFlag::BONUS,
         StatusRecalculatingFlag::TORCH,
@@ -394,9 +394,9 @@ TEST_CASE("RedrawingFlagsUpdater::request_equipment_change_updates requests reca
     CHECK_FALSE(rfu.has(SubWindowRedrawingFlag::PLAYER));
 }
 
-TEST_CASE("RedrawingFlagsUpdater::request_riding_status_redrawing requests redrawing the riding status and the mount's health")
+TEST_CASE("DeferredUpdateRequests::request_riding_status_redrawing requests redrawing the riding status and the mount's health")
 {
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     static constexpr auto flags_mwrf = {
         MainWindowRedrawingFlag::EXTRA,
         MainWindowRedrawingFlag::UHEALTH,
@@ -428,9 +428,9 @@ TEST_CASE("RedrawingFlagsUpdater::request_riding_status_redrawing requests redra
     CHECK_FALSE(rfu.has(SubWindowRedrawingFlag::DUNGEON));
 }
 
-TEST_CASE("RedrawingFlagsUpdater::request_hp_mp_redrawing requests redrawing the HP and the MP")
+TEST_CASE("DeferredUpdateRequests::request_hp_mp_redrawing requests redrawing the HP and the MP")
 {
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     static constexpr auto flags_mwrf = {
         MainWindowRedrawingFlag::HP,
         MainWindowRedrawingFlag::MP,
@@ -471,9 +471,9 @@ TEST_CASE("RedrawingFlagsUpdater::request_hp_mp_redrawing requests redrawing the
     }
 }
 
-TEST_CASE("RedrawingFlagsUpdater::request_gold_redrawing requests redrawing the gold and the player window")
+TEST_CASE("DeferredUpdateRequests::request_gold_redrawing requests redrawing the gold and the player window")
 {
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     const auto restore_mwrf = scoped_restore_flags(rfu, { MainWindowRedrawingFlag::GOLD, MainWindowRedrawingFlag::BASIC });
     const auto restore_swrf = scoped_restore_flags(rfu, { SubWindowRedrawingFlag::PLAYER });
     rfu.reset_flag(MainWindowRedrawingFlag::GOLD);
@@ -488,9 +488,9 @@ TEST_CASE("RedrawingFlagsUpdater::request_gold_redrawing requests redrawing the 
     CHECK_FALSE(rfu.has(MainWindowRedrawingFlag::BASIC));
 }
 
-TEST_CASE("RedrawingFlagsUpdater::request_light_fuel_change_updates requests recalculating the light and redrawing the equipment")
+TEST_CASE("DeferredUpdateRequests::request_light_fuel_change_updates requests recalculating the light and redrawing the equipment")
 {
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     const auto restore_srf = scoped_restore_flags(rfu, { StatusRecalculatingFlag::TORCH, StatusRecalculatingFlag::BONUS });
     const auto restore_swrf = scoped_restore_flags(rfu, { SubWindowRedrawingFlag::EQUIPMENT, SubWindowRedrawingFlag::INVENTORY });
     rfu.reset_flag(StatusRecalculatingFlag::TORCH);
@@ -507,9 +507,9 @@ TEST_CASE("RedrawingFlagsUpdater::request_light_fuel_change_updates requests rec
     CHECK_FALSE(rfu.has(SubWindowRedrawingFlag::INVENTORY));
 }
 
-TEST_CASE("RedrawingFlagsUpdater::request_bonus_and_max_hp_recalculation requests recalculating the bonuses and the max HP")
+TEST_CASE("DeferredUpdateRequests::request_bonus_and_max_hp_recalculation requests recalculating the bonuses and the max HP")
 {
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     static constexpr auto flags_srf = {
         StatusRecalculatingFlag::BONUS,
         StatusRecalculatingFlag::HP,
@@ -539,9 +539,9 @@ TEST_CASE("RedrawingFlagsUpdater::request_bonus_and_max_hp_recalculation request
     }
 }
 
-TEST_CASE("RedrawingFlagsUpdater::request_max_mp_and_spells_recalculation requests recalculating the max MP and the spells")
+TEST_CASE("DeferredUpdateRequests::request_max_mp_and_spells_recalculation requests recalculating the max MP and the spells")
 {
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     static constexpr auto flags_srf = {
         StatusRecalculatingFlag::MP,
         StatusRecalculatingFlag::SPELLS,
@@ -571,9 +571,9 @@ TEST_CASE("RedrawingFlagsUpdater::request_max_mp_and_spells_recalculation reques
     }
 }
 
-TEST_CASE("RedrawingFlagsUpdater::request_player_status_recalculation requests recalculating the bonuses, the max HP, the max MP and the spells")
+TEST_CASE("DeferredUpdateRequests::request_player_status_recalculation requests recalculating the bonuses, the max HP, the max MP and the spells")
 {
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     static constexpr auto flags_srf = {
         StatusRecalculatingFlag::BONUS,
         StatusRecalculatingFlag::HP,

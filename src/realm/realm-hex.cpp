@@ -38,11 +38,11 @@
 #include "spell/spells-status.h"
 #include "spell/technic-info-table.h"
 #include "status/action-setter.h"
+#include "system/deferred-update-requests.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "target/grid-selector.h"
 #include "target/target-getter.h"
 #include "term/screen-processor.h"
@@ -189,7 +189,7 @@ tl::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type sp
                 item->add_curses(curses);
             }
 
-            RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
+            DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
             should_continue = false;
         }
         break;
@@ -448,7 +448,7 @@ tl::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type sp
                 item->add_curses(curses);
             }
 
-            RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
+            DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
             should_continue = false;
         }
         break;
@@ -530,7 +530,7 @@ tl::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type sp
                 flag = true;
             }
 
-            auto &rfu = RedrawingFlagsUpdater::get_instance();
+            auto &rfu = DeferredUpdateRequests::get_instance();
             for (i = A_STR; i < A_MAX; i++) {
                 if (player_ptr->stat_cur[i] < player_ptr->stat_max[i]) {
                     if (player_ptr->stat_cur[i] < 18) {
@@ -596,7 +596,7 @@ tl::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type sp
 
             if (is_drained) {
                 item->remove_curses();
-                RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
+                DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
             }
 
             should_continue = false;
@@ -747,7 +747,7 @@ tl::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type sp
     }
 
     if (!info) {
-        auto &rfu = RedrawingFlagsUpdater::get_instance();
+        auto &rfu = DeferredUpdateRequests::get_instance();
         rfu.request_player_status_recalculation();
         rfu.set_flag(MainWindowRedrawingFlag::EXTRA);
         rfu.request_hp_mp_redrawing();

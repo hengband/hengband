@@ -17,9 +17,9 @@
 #include "realm/realm-hex-numbers.h"
 #include "spell-realm/spells-hex.h"
 #include "sv-definition/sv-weapon-types.h"
+#include "system/deferred-update-requests.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/bit-flags-calculator.h"
@@ -314,7 +314,7 @@ PRICE compare_weapons(PlayerType *player_ptr, PRICE bcost)
 
     int n = 1;
     total = bcost;
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     while (true) {
         clear_bldg(0, 22);
         world.character_xtra = true;

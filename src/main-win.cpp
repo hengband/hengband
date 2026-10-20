@@ -99,9 +99,9 @@
 #include "save/save.h"
 #include "system/angband-version.h"
 #include "system/angband.h"
+#include "system/deferred-update-requests.h"
 #include "system/floor/floor-info.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
@@ -2142,7 +2142,7 @@ static void fit_term_size_to_window(term_data *td, bool recalc_window_size = fal
         rebuild_term(td, recalc_window_size);
 
         if (!is_main_term(td) && AngbandWorld::get_instance().character_dungeon) {
-            RedrawingFlagsUpdater::get_instance().fill_up_sub_flags();
+            DeferredUpdateRequests::get_instance().fill_up_sub_flags();
             handle_stuff(p_ptr);
         }
     }

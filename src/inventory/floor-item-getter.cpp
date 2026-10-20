@@ -24,11 +24,11 @@
 #include "object/item-use-flags.h"
 #include "object/object-info.h"
 #include "player/player-status-flags.h"
+#include "system/deferred-update-requests.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "util/int-char-converter.h"
@@ -341,7 +341,7 @@ tl::optional<short> get_item_floor(PlayerType *player_ptr, std::string_view pmt,
         screen_save();
     }
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     while (!fis.done) {
         int ni = 0;
         int ne = 0;

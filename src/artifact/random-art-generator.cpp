@@ -29,9 +29,9 @@
 #include "perception/object-perception.h"
 #include "sv-definition/sv-weapon-types.h"
 #include "system/baseitem/baseitem-definition.h"
+#include "system/deferred-update-requests.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "wizard/artifact-bias-table.h"
@@ -415,7 +415,7 @@ static void generate_unnatural_random_artifact(
 {
     o_ptr->randart_name = name_unnatural_random_artifact(player_ptr, o_ptr, a_scroll, power_level);
     msg_print_wizard(player_ptr, CHEAT_OBJECT, _("パワー {} で 価値 {} のランダムアーティファクト生成 バイアスは「{}」", "Random artifact generated - Power:{} Value:{} Bias:{}."), max_powers, total_flags, ARTIFACT_BIAS_NAMES.at(o_ptr->artifact_bias));
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     rfu.request_carried_item_lists_redrawing();
     rfu.request_floor_item_lists_redrawing();
 }

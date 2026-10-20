@@ -41,13 +41,13 @@
 #include "racial/racial-android.h"
 #include "specific-object/torch.h"
 #include "system/angband-exceptions.h"
+#include "system/deferred-update-requests.h"
 #include "system/enums/terrain/terrain-characteristics.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/item/item-entity.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "target/target-checker.h"
 #include "target/target-getter.h"
 #include "term/screen-processor.h"
@@ -301,7 +301,7 @@ void ObjectThrowEntity::process_boomerang_back()
         this->item = player_ptr->inventory[this->i_idx];
         *this->item = this->q_ptr->clone();
         this->player_ptr->equip_cnt++;
-        RedrawingFlagsUpdater::get_instance().request_equipment_change_updates();
+        DeferredUpdateRequests::get_instance().request_equipment_change_updates();
         this->do_drop = false;
         return;
     }

@@ -26,10 +26,10 @@
 #include "status/shape-changer.h"
 #include "status/sight-setter.h"
 #include "status/temporary-resistance.h"
+#include "system/deferred-update-requests.h"
 #include "system/floor/floor-info.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "view/display-messages.h"
 
 /*!
@@ -105,7 +105,7 @@ static void dispel_player(PlayerType *player_ptr)
         }
 
         player_ptr->action = ACTION_NONE;
-        auto &rfu = RedrawingFlagsUpdater::get_instance();
+        auto &rfu = DeferredUpdateRequests::get_instance();
         rfu.request_monster_update_and_map_redrawing();
         rfu.request_bonus_and_max_hp_recalculation();
         static constexpr auto flags_mwrf = {

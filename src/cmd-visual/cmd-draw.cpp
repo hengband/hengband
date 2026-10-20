@@ -10,8 +10,8 @@
 #include "player-info/race-types.h"
 #include "player/process-name.h"
 #include "racial/racial-android.h"
+#include "system/deferred-update-requests.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
@@ -43,7 +43,7 @@ void do_cmd_redraw(PlayerType *player_ptr)
 {
     term_xtra(TERM_XTRA_REACT, 0);
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     rfu.request_whole_status_recalculation();
     static constexpr auto flags_iaf = {
         InventoryArrangementFlag::COMBINATION,
@@ -141,7 +141,7 @@ void do_cmd_player_status(PlayerType *player_ptr)
     }
 
     screen_load();
-    RedrawingFlagsUpdater::get_instance().request_whole_main_window_redrawing();
+    DeferredUpdateRequests::get_instance().request_whole_main_window_redrawing();
     redraw_stuff(player_ptr);
 }
 

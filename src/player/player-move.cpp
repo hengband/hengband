@@ -36,6 +36,7 @@
 #include "spell-kind/spells-floor.h"
 #include "spell-realm/spells-song.h"
 #include "status/action-setter.h"
+#include "system/deferred-update-requests.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/dungeon/quest-definition.h"
 #include "system/dungeon/quest-list.h"
@@ -44,7 +45,6 @@
 #include "system/item/item-entity.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "system/terrain/terrain-definition.h"
 #include "system/terrain/terrain-list.h"
 #include "target/target-checker.h"
@@ -89,7 +89,7 @@ static void discover_hidden_things(PlayerType *player_ptr, const Pos2D &pos)
         if (!item.is_known()) {
             msg_print(_("箱に仕掛けられたトラップを発見した！", "You have discovered a trap on the chest!"));
             item.mark_as_known();
-            RedrawingFlagsUpdater::get_instance().request_floor_item_lists_redrawing();
+            DeferredUpdateRequests::get_instance().request_floor_item_lists_redrawing();
             disturb(player_ptr, false, false);
         }
     }
@@ -135,7 +135,7 @@ bool move_player_effect(PlayerType *player_ptr, POSITION ny, POSITION nx, BIT_FL
     auto &grid_old = floor.get_grid(pos_old);
     const auto &terrain_new = grid_new.get_terrain();
     const auto &terrain_old = grid_old.get_terrain();
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     if (!(mpe_mode & MPE_STAYING)) {
         const auto om_idx = grid_old.m_idx;
         const auto nm_idx = grid_new.m_idx;

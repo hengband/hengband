@@ -6,9 +6,9 @@
 #include "object-enchant/trc-types.h"
 #include "object-hook/hook-armor.h"
 #include "object-hook/hook-weapon.h"
+#include "system/deferred-update-requests.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
 #include "view/display-messages.h"
@@ -103,5 +103,5 @@ void curse_equipment(PlayerType *player_ptr, PERCENTAGE chance, PERCENTAGE heavy
         msg_print(_("悪意に満ちた黒いオーラが{}をとりまいた...", "There is a malignant black aura surrounding {}..."), item_name);
     }
 
-    RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
+    DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
 }

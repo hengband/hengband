@@ -22,10 +22,10 @@
 #include "io/input-key-acceptor.h"
 #include "monster/monster-update.h"
 #include "player-info/mimic-info-table.h"
+#include "system/deferred-update-requests.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/floor/floor-info.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "target/target-checker.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
@@ -52,7 +52,7 @@ void resize_map()
     panel_col_min = p_ptr->current_floor_ptr->width;
     verify_panel(p_ptr);
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     rfu.request_whole_status_recalculation();
     rfu.request_whole_main_window_redrawing();
 

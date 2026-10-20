@@ -44,11 +44,11 @@
 #include "spell-realm/spells-hex.h"
 #include "spell-realm/spells-song.h"
 #include "status/action-setter.h"
+#include "system/deferred-update-requests.h"
 #include "system/floor/floor-info.h"
 #include "system/floor/wilderness-grid.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
-#include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
 #include "timed-effect/timed-effects.h"
 #include "tracking/health-bar-tracker.h"
@@ -213,7 +213,7 @@ void process_player(PlayerType *player_ptr)
         set_lightspeed(player_ptr, player_ptr->lightspeed - 1, true);
     }
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     if (PlayerClass(player_ptr).equals(PlayerClassType::FORCETRAINER) && get_current_ki(player_ptr)) {
         if (get_current_ki(player_ptr) < 40) {
             set_current_ki(player_ptr, true, 0);

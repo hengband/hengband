@@ -7,9 +7,9 @@
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
 #include "racial/racial-android.h"
+#include "system/deferred-update-requests.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
@@ -44,7 +44,7 @@ bool rustproof(PlayerType *player_ptr)
 #else
     msg_print("{} {} {} now protected against corrosion.", ((i_idx >= 0) ? "Your" : "The"), item_name, ((item->number > 1) ? "are" : "is"));
 #endif
-    RedrawingFlagsUpdater::get_instance().request_item_lists_redrawing();
+    DeferredUpdateRequests::get_instance().request_item_lists_redrawing();
     calc_android_exp(player_ptr);
     return true;
 }

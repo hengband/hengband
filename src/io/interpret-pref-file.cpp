@@ -19,10 +19,10 @@
 #include "system/baseitem/baseitem-configs.h"
 #include "system/baseitem/baseitem-definition.h"
 #include "system/baseitem/baseitem-list.h"
+#include "system/deferred-update-requests.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "system/terrain/terrain-definition.h"
 #include "system/terrain/terrain-list.h"
 #include "term/gameterm.h"
@@ -623,7 +623,7 @@ int interpret_pref_file(PlayerType *player_ptr, std::string_view buf)
 
     // 記号や表示のオプションが変わると、マップやサブウィンドウの表示も変わりうる。
     // フロアが無いとき (新しいキャラクターの作成中など) は、フロアに入るときに全てのサブウィンドウを描き直す
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     rfu.request_map_redrawing();
     if (AngbandWorld::get_instance().character_dungeon) {
         rfu.fill_up_sub_flags();

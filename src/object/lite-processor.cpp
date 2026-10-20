@@ -6,9 +6,9 @@
 #include "object-enchant/object-ego.h"
 #include "object/tval-types.h"
 #include "sv-definition/sv-lite-types.h"
+#include "system/deferred-update-requests.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 #include "world/world.h"
@@ -46,7 +46,7 @@ void reduce_lite_life(PlayerType *player_ptr)
 void notice_lite_change(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
     // 装備の一覧に残りターン数を表示している
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     rfu.set_flag(SubWindowRedrawingFlag::EQUIPMENT);
 
     if (player_ptr->effects()->blindness().is_active()) {

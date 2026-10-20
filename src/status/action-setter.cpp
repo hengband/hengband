@@ -21,8 +21,8 @@
 #include "player/special-defense-types.h"
 #include "spell-realm/spells-hex.h"
 #include "spell-realm/spells-song.h"
+#include "system/deferred-update-requests.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "view/display-messages.h"
 
 /*!
@@ -38,7 +38,7 @@ void set_action(PlayerType *player_ptr, uint8_t typ)
         return;
     }
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     switch (prev_typ) {
     case ACTION_SEARCH:
         msg_print(_("探索をやめた。", "You no longer walk carefully."));

@@ -23,8 +23,8 @@
 #include "status/action-setter.h"
 #include "status/bad-status-setter.h"
 #include "status/experience.h"
+#include "system/deferred-update-requests.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "target/target-getter.h"
 #include "timed-effect/timed-effects.h"
 #include "util/dice.h"
@@ -47,7 +47,7 @@ static void start_singing(PlayerType *player_ptr, SPELL_IDX spell, int32_t song)
     /* Now the player is singing */
     set_action(player_ptr, ACTION_SING);
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     rfu.set_flag(StatusRecalculatingFlag::BONUS);
     rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
 }
@@ -318,7 +318,7 @@ tl::optional<std::string> do_music_spell(PlayerType *player_ptr, SPELL_IDX spell
 
             (void)hp_player(player_ptr, 10);
             (void)BadStatusSetter(player_ptr).set_fear(0);
-            RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::HP);
+            DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::HP);
             start_singing(player_ptr, spell, MUSIC_HERO);
         }
 
@@ -326,7 +326,7 @@ tl::optional<std::string> do_music_spell(PlayerType *player_ptr, SPELL_IDX spell
             if (!player_ptr->hero) {
                 msg_print(_("ヒーローの気分が消え失せた。", "The heroism wears off."));
                 sound(SoundKind::BUFF_EXPIRE);
-                RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::HP);
+                DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::HP);
             }
         }
 
@@ -825,7 +825,7 @@ tl::optional<std::string> do_music_spell(PlayerType *player_ptr, SPELL_IDX spell
             msg_print(_("英雄の歌を口ずさんだ．．．", "You chant a powerful, heroic call to arms..."));
             (void)hp_player(player_ptr, 10);
             (void)BadStatusSetter(player_ptr).set_fear(0);
-            RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::HP);
+            DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::HP);
             start_singing(player_ptr, spell, MUSIC_SHERO);
         }
 
@@ -835,7 +835,7 @@ tl::optional<std::string> do_music_spell(PlayerType *player_ptr, SPELL_IDX spell
                 msg_print(_("ヒーローの気分が消え失せた。", "The heroism wears off."));
                 sound(SoundKind::BUFF_EXPIRE);
                 sound_played = true;
-                RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::HP);
+                DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::HP);
             }
 
             if (!player_ptr->effects()->acceleration().is_active()) {
@@ -927,7 +927,7 @@ tl::optional<std::string> do_music_spell(PlayerType *player_ptr, SPELL_IDX spell
 
         if (cast) {
             msg_print(_("フィンゴルフィンの冥王への挑戦を歌った．．．", "You recall the valor of Fingolfin's challenge to the Dark Lord..."));
-            RedrawingFlagsUpdater::get_instance().request_monster_update_and_map_redrawing();
+            DeferredUpdateRequests::get_instance().request_monster_update_and_map_redrawing();
             start_singing(player_ptr, spell, MUSIC_INVULN);
         }
 
@@ -935,7 +935,7 @@ tl::optional<std::string> do_music_spell(PlayerType *player_ptr, SPELL_IDX spell
             if (!player_ptr->invuln) {
                 msg_print(_("無敵ではなくなった。", "The invulnerability wears off."));
                 sound(SoundKind::BUFF_EXPIRE);
-                RedrawingFlagsUpdater::get_instance().request_monster_update_and_map_redrawing();
+                DeferredUpdateRequests::get_instance().request_monster_update_and_map_redrawing();
             }
         }
 

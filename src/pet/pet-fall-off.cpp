@@ -16,12 +16,12 @@
 #include "player/player-damage.h"
 #include "player/player-move.h"
 #include "player/player-skill.h"
+#include "system/deferred-update-requests.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "system/terrain/terrain-definition.h"
 #include "target/target-checker.h"
 #include "view/display-messages.h"
@@ -148,7 +148,7 @@ bool process_fall_off_horse(PlayerType *player_ptr, int dam, bool force)
 
     player_ptr->dismount();
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     static constexpr auto flags_srf = {
         StatusRecalculatingFlag::BONUS,
         StatusRecalculatingFlag::VIEW,

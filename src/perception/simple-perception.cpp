@@ -20,9 +20,9 @@
 #include "object/object-info.h"
 #include "perception/object-perception.h"
 #include "player/player-status-flags.h"
+#include "system/deferred-update-requests.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 
@@ -40,7 +40,7 @@ void apply_item_feeling(PlayerType *player_ptr, INVENTORY_IDX i_idx, item_feel_t
     auto item = ref_item(player_ptr, i_idx);
     item->sense(feel);
     autopick_alter_item(player_ptr, i_idx, destroy_feeling);
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     rfu.request_inventory_arrangement();
     rfu.request_item_lists_redrawing();
 }

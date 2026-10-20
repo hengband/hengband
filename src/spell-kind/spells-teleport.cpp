@@ -24,13 +24,13 @@
 #include "player/player-move.h"
 #include "player/player-status.h"
 #include "spell-kind/spells-launcher.h"
+#include "system/deferred-update-requests.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/item/item-entity.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "target/grid-selector.h"
 #include "target/target-checker.h"
 #include "util/bit-flags-calculator.h"
@@ -173,7 +173,7 @@ bool teleport_away(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION dis, tele
     lite_spot(player_ptr, m_pos);
 
     if (monster.get_monrace().brightness_flags.has_any_of(ld_mask)) {
-        RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::MONSTER_LITE);
+        DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::MONSTER_LITE);
     }
 
     return true;
@@ -249,7 +249,7 @@ void teleport_monster_to(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION ty,
     lite_spot(player_ptr, m_pos);
 
     if (monster.get_monrace().brightness_flags.has_any_of(ld_mask)) {
-        RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::MONSTER_LITE);
+        DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::MONSTER_LITE);
     }
 }
 

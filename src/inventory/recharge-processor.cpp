@@ -7,10 +7,10 @@
 #include "inventory/inventory-slot-types.h"
 #include "object/object-mark-types.h"
 #include "object/tval-types.h"
+#include "system/deferred-update-requests.h"
 #include "system/floor/floor-info.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 
@@ -69,7 +69,7 @@ void recharge_magic_items(PlayerType *player_ptr)
         }
     }
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     if (changed) {
         rfu.set_flag(SubWindowRedrawingFlag::EQUIPMENT);
         wild_regen = 20;

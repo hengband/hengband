@@ -20,9 +20,9 @@
 #include "object/item-use-flags.h"
 #include "player-base/player-class.h"
 #include "system/angband-exceptions.h"
+#include "system/deferred-update-requests.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "view/display-messages.h"
 
 /*!
@@ -55,7 +55,7 @@ bool recharge(PlayerType *player_ptr, int power)
         return false;
     }
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     const auto item_level = item->get_baseitem_level();
 
     TIME_EFFECT recharge_amount;

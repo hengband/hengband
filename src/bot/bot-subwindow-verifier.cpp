@@ -12,7 +12,7 @@
 #include "core/window-redrawer.h"
 #include "game-option/option-flags.h"
 #include "io/input-key-acceptor.h"
-#include "system/redrawing-flags-updater.h"
+#include "system/deferred-update-requests.h"
 #include "term/gameterm.h"
 #include "term/z-term.h"
 #include "util/enum-converter.h"
@@ -213,7 +213,7 @@ nlohmann::json verify_bot_subwindows(PlayerType *player_ptr)
     const auto cursor = term_locate();
 
     // 割り当てのない種類まで要求すると、描かれないまま要求が残ってしまう
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     auto requested_flags = shown_flags;
     requested_flags.reset(rfu.get_sub_intersection(shown_flags));
     const auto restore = [&rfu, requested_flags, old_term, cursor] {

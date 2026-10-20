@@ -9,10 +9,10 @@
 #include "sv-definition/sv-lite-types.h"
 #include "sv-definition/sv-other-types.h"
 #include "system/baseitem/baseitem-key.h"
+#include "system/deferred-update-requests.h"
 #include "system/item/item-entity.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "util/string-processor.h"
 
 /*!
@@ -79,7 +79,7 @@ bool can_player_destroy_object(ItemEntity *o_ptr)
         o_ptr->sense(feel);
 
         // 感触を付ける処理 (apply_item_feeling()) と同じく、束の整理と一覧の描き直しを要求する。床の品のこともある
-        auto &rfu = RedrawingFlagsUpdater::get_instance();
+        auto &rfu = DeferredUpdateRequests::get_instance();
         rfu.request_inventory_arrangement();
         rfu.request_item_lists_redrawing();
         return false;

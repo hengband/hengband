@@ -1,8 +1,8 @@
 #include "window/overview-map-cache.h"
 #include "game-option/map-screen-options.h"
+#include "system/deferred-update-requests.h"
 #include "system/floor/floor-info.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "util/finalizer.h"
 #include "view/display-map.h"
 #include "window/main-window-util.h"
@@ -89,7 +89,7 @@ void OverviewMapCache::update(PlayerType *player_ptr)
     }
 
     const auto is_autopick_displayed = display_autopick.any();
-    if (RedrawingFlagsUpdater::get_instance().has(MainWindowRedrawingFlag::MAP) || is_autopick_displayed) {
+    if (DeferredUpdateRequests::get_instance().has(MainWindowRedrawingFlag::MAP) || is_autopick_displayed) {
         this->is_all_dirty = true;
     }
 

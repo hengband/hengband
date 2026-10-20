@@ -10,9 +10,9 @@
 #include "player/player-skill.h"
 #include "spell/spells-status.h"
 #include "sv-definition/sv-weapon-types.h"
+#include "system/deferred-update-requests.h"
 #include "system/inner-game-data.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include <array>
 
 namespace {
@@ -191,5 +191,5 @@ void get_max_stats(PlayerType *player_ptr)
     }
 
     player_ptr->knowledge &= ~(KNOW_STAT);
-    RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::ABILITY_SCORE);
+    DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::ABILITY_SCORE);
 }

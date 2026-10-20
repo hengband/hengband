@@ -1,24 +1,24 @@
-#include "system/redrawing-flags-updater.h"
+#include "system/deferred-update-requests.h"
 #include "util/enum-range.h"
 
-RedrawingFlagsUpdater RedrawingFlagsUpdater::instance{};
+DeferredUpdateRequests DeferredUpdateRequests::instance{};
 
-RedrawingFlagsUpdater &RedrawingFlagsUpdater::get_instance()
+DeferredUpdateRequests &DeferredUpdateRequests::get_instance()
 {
     return instance;
 }
 
-bool RedrawingFlagsUpdater::any_main() const
+bool DeferredUpdateRequests::any_main() const
 {
     return this->main_window_flags.any();
 }
 
-bool RedrawingFlagsUpdater::any_sub() const
+bool DeferredUpdateRequests::any_sub() const
 {
     return this->sub_window_flags.any();
 }
 
-bool RedrawingFlagsUpdater::any_stats() const
+bool DeferredUpdateRequests::any_stats() const
 {
     return this->status_flags.any();
 }
@@ -27,7 +27,7 @@ bool RedrawingFlagsUpdater::any_stats() const
  * @brief 所持品が変わったときに、所持品の結合・並べ替えと一覧の描き直しを予約する
  * @details 結合・並べ替えはコマンドの区切りで update_inventory_arrangement() が行う。
  */
-void RedrawingFlagsUpdater::request_inventory_arrangement()
+void DeferredUpdateRequests::request_inventory_arrangement()
 {
     static constexpr auto flags_iaf = {
         InventoryArrangementFlag::COMBINATION,
@@ -41,7 +41,7 @@ void RedrawingFlagsUpdater::request_inventory_arrangement()
  * @brief メインウィンドウの消去と全体の描き直しを予約する
  * @details 画面を消去してから、マップ・基本ステータス・拡張ステータス・装備のシンボルをすべて描き直す。
  */
-void RedrawingFlagsUpdater::request_whole_main_window_redrawing()
+void DeferredUpdateRequests::request_whole_main_window_redrawing()
 {
     static constexpr auto flags_mwrf = {
         MainWindowRedrawingFlag::WIPE,
@@ -58,7 +58,7 @@ void RedrawingFlagsUpdater::request_whole_main_window_redrawing()
  * @details 能力・光源の明るさ・HP・MP・呪文、モンスターの見え方と、視界と明るさ (request_sight_recalculation()) を計算し直す。
  * 画面の描き直しのコマンドや、画面の大きさを変えたときに、メインウィンドウの全体の描き直し (request_whole_main_window_redrawing()) と合わせて呼ぶ。
  */
-void RedrawingFlagsUpdater::request_whole_status_recalculation()
+void DeferredUpdateRequests::request_whole_status_recalculation()
 {
     static constexpr auto flags_srf = {
         StatusRecalculatingFlag::TORCH,
@@ -75,7 +75,7 @@ void RedrawingFlagsUpdater::request_whole_status_recalculation()
  * 描き直しが要求されるので、ここでは要求しない。画面の保存中などでマップを描き直すまでの間は、
  * 全体図だけが表示の変化を調べて描き直され (request_overhead_redrawing_if_changed())、自分の周囲はマップを描き直すときまで待つ。
  */
-void RedrawingFlagsUpdater::request_map_redrawing()
+void DeferredUpdateRequests::request_map_redrawing()
 {
     this->main_window_flags.set(MainWindowRedrawingFlag::MAP);
 }
@@ -85,7 +85,7 @@ void RedrawingFlagsUpdater::request_map_redrawing()
  * @details モンスターの見え方が変わり得るとき (時間停止・無敵・画面のスクロールなど) に使う。
  * 描き直す範囲は request_map_redrawing() と同じ。
  */
-void RedrawingFlagsUpdater::request_monster_update_and_map_redrawing()
+void DeferredUpdateRequests::request_monster_update_and_map_redrawing()
 {
     this->status_flags.set(StatusRecalculatingFlag::MONSTER_STATUSES);
     this->request_map_redrawing();
@@ -97,7 +97,7 @@ void RedrawingFlagsUpdater::request_monster_update_and_map_redrawing()
  * 目が見えなくなる・見えるようになる、地図を忘れる、地形が大きく変わる (地震・破壊・壁の消滅) ときに呼ぶ。
  * 地形が変わるときは、モンスターの経路 (FLOW) の計算し直しを別に要求する。
  */
-void RedrawingFlagsUpdater::request_sight_recalculation()
+void DeferredUpdateRequests::request_sight_recalculation()
 {
     static constexpr auto flags_srf = {
         StatusRecalculatingFlag::UN_VIEW,
@@ -113,7 +113,7 @@ void RedrawingFlagsUpdater::request_sight_recalculation()
  * @brief アイテムの情報 (鑑定やアイテムの使用など) が変わったときの、アイテムを表示するサブウィンドウの描き直しを予約する
  * @details 所持品・装備品・足元のアイテム・発見済みのアイテムの一覧と、プレイヤーのステータスを描き直す。
  */
-void RedrawingFlagsUpdater::request_item_lists_redrawing()
+void DeferredUpdateRequests::request_item_lists_redrawing()
 {
     this->request_carried_item_lists_redrawing();
     this->request_floor_item_lists_redrawing();
@@ -125,7 +125,7 @@ void RedrawingFlagsUpdater::request_item_lists_redrawing()
  * @details 持ち物だけの表示が変わったとき (能力の再計算・装備品の発動・選べるアイテムの印など) に呼ぶ。
  * 足元の品の表示も変わりうるとき (充填・使用回数・鑑定など) は request_item_lists_redrawing() を使う。
  */
-void RedrawingFlagsUpdater::request_carried_item_lists_redrawing()
+void DeferredUpdateRequests::request_carried_item_lists_redrawing()
 {
     static constexpr auto flags_swrf = {
         SubWindowRedrawingFlag::INVENTORY,
@@ -138,7 +138,7 @@ void RedrawingFlagsUpdater::request_carried_item_lists_redrawing()
  * @brief 床のアイテム (置いた・拾った・数が変わったなど) が変わったときの、床のアイテムを表示するサブウィンドウの描き直しを予約する
  * @details 足元のアイテムと発見済みのアイテムの一覧を描き直す。
  */
-void RedrawingFlagsUpdater::request_floor_item_lists_redrawing()
+void DeferredUpdateRequests::request_floor_item_lists_redrawing()
 {
     static constexpr auto flags_swrf = {
         SubWindowRedrawingFlag::FLOOR_ITEMS,
@@ -152,7 +152,7 @@ void RedrawingFlagsUpdater::request_floor_item_lists_redrawing()
  * @details 呪文の一覧と、アイテムの知識 (魔法書を見たときの呪文の消費 MP・失敗率など) を描き直す。
  * 失敗率や消費 MP は、MP・朦朧・能力値・装備・レベル・熟練度など多くの値で変わる。
  */
-void RedrawingFlagsUpdater::request_spell_info_redrawing()
+void DeferredUpdateRequests::request_spell_info_redrawing()
 {
     static constexpr auto flags_swrf = {
         SubWindowRedrawingFlag::SPELL,
@@ -166,7 +166,7 @@ void RedrawingFlagsUpdater::request_spell_info_redrawing()
  * @details 銘によって能力が変わる ({$} で警告を止める、{.} でランダムテレポートを止める) ので能力を計算し直す
  * (持ち物・装備の一覧の描き直しも、能力の再計算が要求する)。銘が揃うと束にまとめられるので、持ち物をまとめ直す。
  */
-void RedrawingFlagsUpdater::request_inscription_change_updates()
+void DeferredUpdateRequests::request_inscription_change_updates()
 {
     this->set_flag(StatusRecalculatingFlag::BONUS);
     this->set_flag(InventoryArrangementFlag::COMBINATION);
@@ -177,7 +177,7 @@ void RedrawingFlagsUpdater::request_inscription_change_updates()
  * @details 装備の修正値や能力でプレイヤーの能力を、光源の能力で光源の明るさを、装備の重さや籠手 (能力や修正値によっては最大 MP が減らない) で最大 MP を計算し直す。
  * 装備の品が入れ替わったとき (装備する・外す・無くなるなど) と、装備品の能力が変わったとき (アーティファクト生成・凡庸化・呪縛など) に呼ぶ。
  */
-void RedrawingFlagsUpdater::request_equipment_change_updates()
+void DeferredUpdateRequests::request_equipment_change_updates()
 {
     static constexpr auto flags_srf = {
         StatusRecalculatingFlag::BONUS,
@@ -194,7 +194,7 @@ void RedrawingFlagsUpdater::request_equipment_change_updates()
  * 階を移るときは画面全体を描き直すので、呼んでも呼ばなくてもよい。
  * 乗っているモンスターの速度などで決まる能力の再計算 (BONUS) は、それぞれの箇所で要求する。
  */
-void RedrawingFlagsUpdater::request_riding_status_redrawing()
+void DeferredUpdateRequests::request_riding_status_redrawing()
 {
     static constexpr auto flags_mwrf = {
         MainWindowRedrawingFlag::EXTRA,
@@ -209,7 +209,7 @@ void RedrawingFlagsUpdater::request_riding_status_redrawing()
  * 呪文の情報 (呪文の一覧・アイテムの知識) のサブウィンドウは HP・MP を描き直すときに要求され、プレイヤーの情報のサブウィンドウは
  * 前に描いた HP・MP と比べて変わっていれば描き直される。
  */
-void RedrawingFlagsUpdater::request_hp_mp_redrawing()
+void DeferredUpdateRequests::request_hp_mp_redrawing()
 {
     static constexpr auto flags_mwrf = {
         MainWindowRedrawingFlag::HP,
@@ -222,7 +222,7 @@ void RedrawingFlagsUpdater::request_hp_mp_redrawing()
  * @brief 所持金の表示の描き直しを予約する
  * @details メインウィンドウの所持金と、プレイヤーの情報のサブウィンドウを描き直す。
  */
-void RedrawingFlagsUpdater::request_gold_redrawing()
+void DeferredUpdateRequests::request_gold_redrawing()
 {
     this->main_window_flags.set(MainWindowRedrawingFlag::GOLD);
     this->sub_window_flags.set(SubWindowRedrawingFlag::PLAYER);
@@ -234,7 +234,7 @@ void RedrawingFlagsUpdater::request_gold_redrawing()
  * 残りのターンを表示する装備品の一覧を描き直す。
  * 燃料が燃えて減るとき・燃え尽きたときは、notice_lite_change() で別に要求する。
  */
-void RedrawingFlagsUpdater::request_light_fuel_change_updates()
+void DeferredUpdateRequests::request_light_fuel_change_updates()
 {
     this->status_flags.set(StatusRecalculatingFlag::TORCH);
     this->sub_window_flags.set(SubWindowRedrawingFlag::EQUIPMENT);
@@ -247,7 +247,7 @@ void RedrawingFlagsUpdater::request_light_fuel_change_updates()
  * ブラッディ・ムーンの能力の付け直し、キャラクターの作成) に呼ぶ。
  * 最大 MP と覚えられる呪文の数も計算し直すなら request_player_status_recalculation() を使う。
  */
-void RedrawingFlagsUpdater::request_bonus_and_max_hp_recalculation()
+void DeferredUpdateRequests::request_bonus_and_max_hp_recalculation()
 {
     static constexpr auto flags_srf = {
         StatusRecalculatingFlag::BONUS,
@@ -260,7 +260,7 @@ void RedrawingFlagsUpdater::request_bonus_and_max_hp_recalculation()
  * @brief 最大 MP と覚えられる呪文の数の再計算を予約する
  * @details 呪文に使う能力値 (知能・賢さ・魅力) の段階が変わったときに呼ぶ。
  */
-void RedrawingFlagsUpdater::request_max_mp_and_spells_recalculation()
+void DeferredUpdateRequests::request_max_mp_and_spells_recalculation()
 {
     static constexpr auto flags_srf = {
         StatusRecalculatingFlag::MP,
@@ -275,19 +275,19 @@ void RedrawingFlagsUpdater::request_max_mp_and_spells_recalculation()
  * プレイヤーの能力をひととおり計算し直すときに呼ぶ (request_bonus_and_max_hp_recalculation() と
  * request_max_mp_and_spells_recalculation() を合わせたもの)。
  */
-void RedrawingFlagsUpdater::request_player_status_recalculation()
+void DeferredUpdateRequests::request_player_status_recalculation()
 {
     this->request_bonus_and_max_hp_recalculation();
     this->request_max_mp_and_spells_recalculation();
 }
 
-void RedrawingFlagsUpdater::fill_up_sub_flags()
+void DeferredUpdateRequests::fill_up_sub_flags()
 {
     constexpr auto all_sub_window_flags = EnumRange(SubWindowRedrawingFlag::INVENTORY, SubWindowRedrawingFlag::MAX);
     this->sub_window_flags.set(all_sub_window_flags);
 }
 
-EnumClassFlagGroup<SubWindowRedrawingFlag> RedrawingFlagsUpdater::get_sub_intersection(const EnumClassFlagGroup<SubWindowRedrawingFlag> &flags) const
+EnumClassFlagGroup<SubWindowRedrawingFlag> DeferredUpdateRequests::get_sub_intersection(const EnumClassFlagGroup<SubWindowRedrawingFlag> &flags) const
 {
     return this->sub_window_flags & flags;
 }

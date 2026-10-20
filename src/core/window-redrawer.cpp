@@ -11,8 +11,8 @@
 #include "player-base/player-class.h"
 #include "player-info/race-info.h"
 #include "system/angband-system.h"
+#include "system/deferred-update-requests.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
@@ -48,7 +48,7 @@ void redraw_window()
         return;
     }
 
-    RedrawingFlagsUpdater::get_instance().fill_up_sub_flags();
+    DeferredUpdateRequests::get_instance().fill_up_sub_flags();
     window_stuff_including_deferred(p_ptr);
     term_redraw();
 }
@@ -83,7 +83,7 @@ void redraw_stuff(PlayerType *player_ptr)
         return;
     }
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     if (!rfu.any_main()) {
         return;
     }
@@ -293,7 +293,7 @@ static void request_overhead_redrawing_if_changed(PlayerType *player_ptr)
         return;
     }
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     if (rfu.has(SubWindowRedrawingFlag::OVERHEAD) || display_autopick.any()) {
         return;
     }
@@ -374,7 +374,7 @@ static void update_sub_windows(PlayerType *player_ptr, bool include_deferred)
         request_monster_lore_redraw_if_changed(*player_ptr);
     }
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     if (!rfu.any_sub()) {
         return;
     }
@@ -474,7 +474,7 @@ void window_stuff_if_needed(PlayerType *player_ptr)
         request_player_redraw_if_points_changed(*player_ptr);
     }
 
-    if (RedrawingFlagsUpdater::get_instance().any_sub()) {
+    if (DeferredUpdateRequests::get_instance().any_sub()) {
         window_stuff(player_ptr);
     }
 }

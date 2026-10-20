@@ -31,8 +31,8 @@
 #include "player/player-status-table.h"
 #include "player/player-status.h"
 #include "player/process-name.h"
+#include "system/deferred-update-requests.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/enum-converter.h"
@@ -436,7 +436,7 @@ static void exe_auto_roller(PlayerType *player_ptr, chara_limit_type chara_limit
 static bool display_auto_roller_result(PlayerType *player_ptr, bool prev, char *c)
 {
     BIT_FLAGS mode = 0;
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     while (true) {
         rfu.request_bonus_and_max_hp_recalculation();
         update_creature(player_ptr);

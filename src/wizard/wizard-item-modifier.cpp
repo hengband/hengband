@@ -28,10 +28,10 @@
 #include "system/artifact/artifact-list.h"
 #include "system/artifact/artifact-record.h"
 #include "system/baseitem/baseitem-record.h"
+#include "system/deferred-update-requests.h"
 #include "system/floor/floor-info.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "system/system-variables.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
@@ -264,7 +264,7 @@ void wiz_modify_item_activation(PlayerType *player_ptr)
     auto act_idx = *act_id;
     item->art_flags.set(TR_ACTIVATE);
     item->activation_id = act_idx;
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     rfu.request_inventory_arrangement();
     rfu.request_item_lists_redrawing();
 }
@@ -287,7 +287,7 @@ void wiz_identify_full_inventory(PlayerType *player_ptr)
         o_ptr->marked.set(OmType::TOUCHED);
     }
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     rfu.request_inventory_arrangement();
     rfu.request_item_lists_redrawing();
 }
@@ -768,7 +768,7 @@ void wiz_modify_item(PlayerType *player_ptr)
         msg_print("Changes accepted.");
 
         *item = std::move(modified_item);
-        auto &rfu = RedrawingFlagsUpdater::get_instance();
+        auto &rfu = DeferredUpdateRequests::get_instance();
         // 装備品なら、修正値・エゴ・アーティファクトの能力が変わる
         rfu.request_equipment_change_updates();
         rfu.request_inventory_arrangement();

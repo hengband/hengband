@@ -11,9 +11,9 @@
 #include "object/object-value.h"
 #include "player-info/equipment-info.h"
 #include "spell-realm/spells-craft.h"
+#include "system/deferred-update-requests.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "util/object-sort.h"
 #include "view/display-messages.h"
 #include "view/object-describer.h"
@@ -56,7 +56,7 @@ void inven_item_increase(PlayerType *player_ptr, INVENTORY_IDX i_idx, ITEM_NUMBE
     }
 
     o_ptr->number += num;
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     static constexpr auto flags_srf = {
         StatusRecalculatingFlag::BONUS,
         StatusRecalculatingFlag::MP,
@@ -94,7 +94,7 @@ void inven_item_optimize(PlayerType *player_ptr, INVENTORY_IDX i_idx)
         return;
     }
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     if (i_idx >= INVEN_MAIN_HAND) {
         player_ptr->equip_cnt--;
         player_ptr->inventory[i_idx]->wipe();
@@ -206,7 +206,7 @@ void combine_pack(PlayerType *player_ptr)
                     }
                 }
 
-                RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::INVENTORY);
+                DeferredUpdateRequests::get_instance().set_flag(SubWindowRedrawingFlag::INVENTORY);
                 combined = true;
                 break;
             }
@@ -241,7 +241,7 @@ void reorder_pack(PlayerType *player_ptr)
     }
 
     std::stable_sort(first, last, comp);
-    RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::INVENTORY);
+    DeferredUpdateRequests::get_instance().set_flag(SubWindowRedrawingFlag::INVENTORY);
 
     msg_print(_("ザックの中のアイテムを並べ直した。", "You reorder some items in your pack."));
 }
@@ -253,7 +253,7 @@ void reorder_pack(PlayerType *player_ptr)
  */
 void update_inventory_arrangement(PlayerType *player_ptr)
 {
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     if (rfu.has(InventoryArrangementFlag::AUTO_DESTRUCTION)) {
         rfu.reset_flag(InventoryArrangementFlag::AUTO_DESTRUCTION);
         autopick_delayed_alter(player_ptr);
@@ -282,7 +282,7 @@ int16_t store_item_to_inventory(PlayerType *player_ptr, ItemEntity *o_ptr)
     INVENTORY_IDX n = -1;
 
     ItemEntity *j_ptr;
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     for (const auto i_idx : INVEN_PACK_SLOTS) {
         j_ptr = player_ptr->inventory[i_idx].get();
         if (!j_ptr->is_valid()) {

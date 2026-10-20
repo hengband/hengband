@@ -22,12 +22,12 @@
 #include "player-info/samurai-data-type.h"
 #include "player/attack-defense-types.h"
 #include "status/action-setter.h"
+#include "system/deferred-update-requests.h"
 #include "system/grid-type-definition.h"
 #include "system/item/item-entity.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
 #include "system/monster-entity.h"
-#include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
 #include "timed-effect/timed-effects.h"
 #include "util/int-char-converter.h"
@@ -353,7 +353,7 @@ void concentration(PlayerType *player_ptr)
         player_ptr->csp_frac = 0;
     }
 
-    RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::MP);
+    DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::MP);
 }
 
 /*!
@@ -422,7 +422,7 @@ bool choose_samurai_stance(PlayerType *player_ptr)
     }
 
     set_action(player_ptr, ACTION_SAMURAI_STANCE);
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     if (PlayerClass(player_ptr).samurai_stance_is(new_stance)) {
         msg_print(_("構え直した。", "You reassume a stance."));
     } else {
@@ -523,5 +523,5 @@ void musou_counterattack(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
     msg_print(_("{}に反撃した！", "You counterattacked {}!"), m_target_name);
     do_cmd_attack(player_ptr, monap_ptr->m_ptr->fy, monap_ptr->m_ptr->fx, HISSATSU_COUNTER);
     monap_ptr->fear = false;
-    RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::MP);
+    DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::MP);
 }

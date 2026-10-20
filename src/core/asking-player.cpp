@@ -8,8 +8,8 @@
 #include "io/input-key-acceptor.h"
 #include "io/input-key-requester.h" //!< @todo 相互依存している、後で何とかする.
 #include "main/sound-of-music.h"
+#include "system/deferred-update-requests.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
@@ -255,7 +255,7 @@ bool input_check_strict(PlayerType *player_ptr, std::string_view prompt, EnumCla
     }
 
     const auto buf = ss.str();
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     if (auto_more) {
         rfu.set_flag(SubWindowRedrawingFlag::MESSAGE);
         window_stuff(player_ptr);

@@ -30,6 +30,7 @@
 #include "player/player-move.h"
 #include "player/player-status-flags.h"
 #include "player/player-status.h"
+#include "system/deferred-update-requests.h"
 #include "system/enums/monrace/monrace-id.h"
 #include "system/floor/floor-info.h"
 #include "system/floor/wilderness-grid.h"
@@ -38,7 +39,6 @@
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "system/terrain/terrain-definition.h"
 #include "timed-effect/timed-effects.h"
 #include "tracking/lore-tracker.h"
@@ -349,7 +349,7 @@ void exe_movement(PlayerType *player_ptr, const Direction &dir, bool do_pickup, 
 
     if (p_can_kill_walls) {
         cave_alter_feat(player_ptr, pos.y, pos.x, TerrainCharacteristics::CAN_DISINTEGRATE);
-        RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::FLOW);
+        DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::FLOW);
     }
 
     uint32_t mpe_mode = MPE_ENERGY_USE;

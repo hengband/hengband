@@ -89,6 +89,7 @@
 #include "status/base-status.h"
 #include "sv-definition/sv-lite-types.h"
 #include "sv-definition/sv-weapon-types.h"
+#include "system/deferred-update-requests.h"
 #include "system/enums/terrain/pattern-tile-type.h"
 #include "system/enums/terrain/terrain-tag.h"
 #include "system/floor/floor-info.h"
@@ -97,7 +98,6 @@
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "system/services/dungeon-service.h"
 #include "system/terrain/terrain-definition.h"
 #include "term/screen-processor.h"
@@ -355,7 +355,7 @@ static void update_bonuses(PlayerType *player_ptr)
     player_ptr->dis_ac = calc_base_ac(player_ptr);
     player_ptr->dis_to_a = calc_to_ac(player_ptr, false);
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     if (player_ptr->telepathy != old_telepathy) {
         rfu.set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
     }
@@ -465,7 +465,7 @@ static void update_max_hitpoints(PlayerType *player_ptr)
 #endif
     player_ptr->mhp = mhp;
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     rfu.set_flag(MainWindowRedrawingFlag::HP);
 }
 
@@ -653,7 +653,7 @@ static void update_num_of_spells(PlayerType *player_ptr)
     }
 
     player_ptr->old_spells = player_ptr->new_spells;
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     rfu.set_flag(MainWindowRedrawingFlag::STUDY);
 }
 
@@ -681,7 +681,7 @@ static void update_max_mana(PlayerType *player_ptr)
     } else {
         if (mp_ptr->spell_first > player_ptr->lev) {
             player_ptr->msp = 0;
-            RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::MP);
+            DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::MP);
             return;
         }
 
@@ -884,7 +884,7 @@ static void update_max_mana(PlayerType *player_ptr)
         }
 #endif
         player_ptr->msp = msp;
-        auto &rfu = RedrawingFlagsUpdater::get_instance();
+        auto &rfu = DeferredUpdateRequests::get_instance();
         rfu.set_flag(MainWindowRedrawingFlag::MP);
     }
 
@@ -2565,7 +2565,7 @@ int calc_weight_limit(PlayerType *player_ptr)
  */
 void update_creature(PlayerType *player_ptr)
 {
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     if (!rfu.any_stats()) {
         return;
     }
@@ -2755,7 +2755,7 @@ void check_experience(PlayerType *player_ptr)
         player_ptr->max_max_exp = player_ptr->max_exp;
     }
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     rfu.set_flag(MainWindowRedrawingFlag::EXP);
     handle_stuff(player_ptr);
 

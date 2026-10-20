@@ -37,6 +37,7 @@
 #include "status/body-improvement.h"
 #include "status/element-resistance.h"
 #include "status/temporary-resistance.h"
+#include "system/deferred-update-requests.h"
 #include "system/enums/monrace/monrace-id.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
@@ -44,7 +45,6 @@
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "system/terrain/terrain-definition.h"
 #include "target/projection-path-calculator.h"
 #include "target/target-checker.h"
@@ -83,7 +83,7 @@ bool kawarimi(PlayerType *player_ptr, bool success)
         return false;
     }
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     if (!success && one_in_(3)) {
         msg_print(_("変わり身失敗！逃げられなかった。", "Kawarimi failed! You couldn't run away."));
         ninja_data->kawarimi = false;
@@ -333,7 +333,7 @@ bool set_superstealth(PlayerType *player_ptr, bool set)
         return false;
     }
 
-    RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
+    DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     if (disturb_state) {
         disturb(player_ptr, false, false);
     }
@@ -380,7 +380,7 @@ bool cast_ninja_spell(PlayerType *player_ptr, MindNinjaType spell)
         if (ninja_data && !ninja_data->kawarimi) {
             msg_print(_("敵の攻撃に対して敏感になった。", "You are now prepared to evade any attacks."));
             ninja_data->kawarimi = true;
-            RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
+            DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
         }
 
         break;

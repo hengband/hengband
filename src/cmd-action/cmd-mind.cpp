@@ -44,10 +44,10 @@
 #include "spell/spell-info.h"
 #include "status/bad-status-setter.h"
 #include "status/base-status.h"
+#include "system/deferred-update-requests.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
 #include "timed-effect/timed-effects.h"
 #include "util/enum-converter.h"
@@ -373,7 +373,7 @@ static void process_hard_concentration(PlayerType *player_ptr, cm_type *cm_ptr)
 {
     if ((cm_ptr->use_mind == MindKindType::BERSERKER) || (cm_ptr->use_mind == MindKindType::NINJUTSU)) {
         take_hit(player_ptr, DAMAGE_USELIFE, cm_ptr->mana_cost, _("過度の集中", "concentrating too hard"));
-        RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::HP);
+        DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::HP);
         return;
     }
 
@@ -424,7 +424,7 @@ void do_cmd_mind(PlayerType *player_ptr)
 
     mind_turn_passing(player_ptr, cm_ptr);
     process_hard_concentration(player_ptr, cm_ptr);
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &rfu = DeferredUpdateRequests::get_instance();
     rfu.set_flag(MainWindowRedrawingFlag::MP);
 }
 

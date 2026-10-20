@@ -2,8 +2,8 @@
 #include "autopick/autopick-methods-table.h"
 #include "autopick/autopick-util.h"
 #include "io/input-key-acceptor.h"
+#include "system/deferred-update-requests.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
 #include "view/display-map.h"
 #include "window/main-window-util.h"
@@ -72,6 +72,6 @@ void do_cmd_view_map(PlayerType *player_ptr)
 
     // 表示中に自分の周囲のサブウィンドウが描き直されていたら、自動拾いの対象だけを強調した表示のまま残るので描き直す。
     // ダンジョン全体図は、表示中に求め直した結果を使わず全グリッドを求め直すので、変わったものとして描き直される
-    RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::DUNGEON);
+    DeferredUpdateRequests::get_instance().set_flag(SubWindowRedrawingFlag::DUNGEON);
     screen_load();
 }

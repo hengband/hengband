@@ -30,6 +30,7 @@
 #include "spell-kind/spells-teleport.h"
 #include "spell/technic-info-table.h"
 #include "status/bad-status-setter.h"
+#include "system/deferred-update-requests.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/enums/terrain/terrain-characteristics.h"
 #include "system/floor/floor-info.h"
@@ -38,7 +39,6 @@
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "target/grid-selector.h"
 #include "target/projection-path-calculator.h"
 #include "target/target-getter.h"
@@ -266,7 +266,7 @@ tl::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX sp
                     monster.set_target(player_ptr->get_position());
                     move_monster_to(player_ptr, monster, pos_target);
                     if (monster.get_monrace().brightness_flags.has_any_of(ld_mask)) {
-                        RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::MONSTER_LITE);
+                        DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::MONSTER_LITE);
                     }
                 }
             }
@@ -306,7 +306,7 @@ tl::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX sp
 
             /* Destroy the feature */
             cave_alter_feat(player_ptr, pos.y, pos.x, TerrainCharacteristics::STONE);
-            RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::FLOW);
+            DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::FLOW);
         }
         break;
 
@@ -620,7 +620,7 @@ tl::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX sp
                 }
                 command_dir = Direction::none();
 
-                RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::MP);
+                DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::MP);
                 handle_stuff(player_ptr);
             } while (player_ptr->csp > mana_cost_per_monster);
 

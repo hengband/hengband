@@ -10,8 +10,8 @@
 #include "load/load-util.h"
 #include "main/sound-of-music.h"
 #include "save/save-util.h"
+#include "system/deferred-update-requests.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "term/gameterm.h"
 #include "term/term-color-types.h"
 #include "util/finalizer.h"
@@ -385,7 +385,7 @@ void msg_print(std::string_view msg)
     }
 
     put_msg_line(msg_head_pos, msg);
-    RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::MESSAGE);
+    DeferredUpdateRequests::get_instance().set_flag(SubWindowRedrawingFlag::MESSAGE);
     window_stuff(p_ptr);
 
     msg_flag = true;
