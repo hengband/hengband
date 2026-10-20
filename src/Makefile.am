@@ -1507,6 +1507,7 @@ hengband_test_SOURCES = \
 	test/scoped-rng.h \
 	test/string-helpers.h \
 	test/temporary-json-files.h \
+	test/info-reader/parse-result-helpers.h \
 	test/info-reader/scoped-reader-state.h \
 	test/system/artifact-list-test-access.h \
 	test/system/dungeon-list-test-access.h \
