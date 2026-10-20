@@ -258,6 +258,19 @@ void RedrawingFlagsUpdater::request_bonus_and_max_hp_recalculation()
     this->status_flags.set(flags_srf);
 }
 
+/*!
+ * @brief 最大 MP と覚えられる呪文の数の再計算を予約する
+ * @details 呪文に使う能力値 (知能・賢さ・魅力) の段階が変わったときに呼ぶ。
+ */
+void RedrawingFlagsUpdater::request_max_mp_and_spells_recalculation()
+{
+    static constexpr auto flags_srf = {
+        StatusRecalculatingFlag::MP,
+        StatusRecalculatingFlag::SPELLS,
+    };
+    this->status_flags.set(flags_srf);
+}
+
 void RedrawingFlagsUpdater::fill_up_sub_flags()
 {
     constexpr auto all_sub_window_flags = EnumRange(SubWindowRedrawingFlag::INVENTORY, SubWindowRedrawingFlag::MAX);
