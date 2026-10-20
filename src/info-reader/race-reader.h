@@ -19,7 +19,7 @@ public:
     RaceReader &operator=(const RaceReader &) = delete;
     RaceReader &operator=(RaceReader &&) = delete;
 
-    int read() const;
+    tl::expected<void, parse_error_type> read() const;
     static std::optional<std::string> validate_references();
 
 private:
