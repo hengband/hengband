@@ -3,9 +3,9 @@
 #include "system/angband.h"
 
 /* Mode flags for displaying player flags */
-#define DP_WP 1 << 0L
-#define DP_CURSE 1 << 1L
-#define DP_LITE 1 << 2L
+constexpr auto DP_WP = 1 << 0;
+constexpr auto DP_CURSE = 1 << 1;
+constexpr auto DP_LITE = 1 << 2;
 
 class ItemEntity;
 class PlayerType;
