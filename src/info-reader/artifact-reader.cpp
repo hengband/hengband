@@ -9,12 +9,14 @@
 #include "object-enchant/tr-types.h"
 #include "system/artifact/artifact-definition.h"
 #include "system/artifact/artifact-list.h"
+#include "system/baseitem/baseitem-definition.h"
+#include "system/baseitem/baseitem-list.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
 #include "view/display-messages.h"
+#include <algorithm>
 #include <fmt/format.h>
 #include <nlohmann/json.hpp>
-#include <stdexcept>
 
 ArtifactReader::ArtifactReader(const nlohmann::json &art_data)
     : art_data(art_data)
@@ -36,7 +38,9 @@ int ArtifactReader::read() const
     if (auto err = info_set_integer(get_json_value(this->art_data, "id"), int_id, true, Range(0, 9999))) {
         return err;
     }
-    if (int_id <= error_idx) {
+    // 実行時の記録は 1〜件数の ID だけを作るため、1 から欠番なく並んでいることを求める。
+    if (const auto previous_id = std::max(error_idx, 0); int_id != previous_id + 1) {
+        msg_print(_("アーティファクトIDが連番ではありません。ID: '{}'、直前ID: '{}'。", "Artifact ID is not sequential. ID: '{}', previous ID: '{}'."), int_id, previous_id);
         return PARSE_ERROR_NON_SEQUENTIAL_RECORDS;
     }
     const auto artifact_id = i2enum<FixedArtifactId>(int_id);
@@ -80,7 +84,8 @@ int ArtifactReader::read() const
         msg_print(_("アーティファクトのベースAC読込失敗。ID: '{}'。", "Failed to load base AC of artifact. ID: '{}'."), error_idx);
         return err;
     }
-    if (auto err = info_set_dice(get_json_value(this->art_data, "base_dice"), artifact.damage_dice, false)) {
+    // セーブではダイスの個数・面数をそれぞれ1バイトで書くため、0〜255に限る。
+    if (auto err = info_set_dice(get_json_value(this->art_data, "base_dice"), artifact.damage_dice, false, Range(0, 255))) {
         msg_print(_("アーティファクトのベースダイス読込失敗。ID: '{}'。", "Failed to load base dice of artifact. ID: '{}'."), error_idx);
         return err;
     }
@@ -107,6 +112,16 @@ int ArtifactReader::read() const
     if (auto err = info_set_string(get_json_value(this->art_data, "flavor"), artifact.text, false)) {
         msg_print(_("アーティファクトのフレーバーテキスト読込失敗。ID: '{}'。", "Failed to load flavor text of artifact. ID: '{}'."), error_idx);
         return err;
+    }
+    // 生成・鑑定では元のベースアイテムを種別・副種別から引き、無ければ例外で落ちるため、読み込み時に確かめる。
+    // ベースアイテムはアーティファクトより先に読み込まれる。種別・副種別の検索表は使わず、一覧を直接調べる。
+    const auto &baseitems = BaseitemList::get_instance();
+    const auto has_baseitem = std::any_of(baseitems.begin(), baseitems.end(), [&artifact](const BaseitemDefinition &baseitem) {
+        return baseitem.is_valid() && (baseitem.bi_key == artifact.bi_key);
+    });
+    if (!has_baseitem) {
+        msg_print(_("アーティファクトのベースアイテムが存在しない。ID: '{}'。", "Base item of artifact does not exist. ID: '{}'."), error_idx);
+        return PARSE_ERROR_INVALID_VALUE;
     }
 
     ArtifactList::get_instance().emplace(artifact_id, std::move(artifact));
@@ -175,14 +190,7 @@ tl::expected<void, parse_error_type> ArtifactReader::set_art_activate(ArtifactDe
         return tl::unexpected(PARSE_ERROR_INVALID_TYPE);
     }
 
-    RandomArtActType activation;
-    try {
-        activation = grab_one_activation_flag(act_data.get<std::string>());
-    } catch (const std::invalid_argument &) {
-        return tl::unexpected(PARSE_ERROR_INVALID_FLAG);
-    } catch (const std::out_of_range &) {
-        return tl::unexpected(PARSE_ERROR_INVALID_FLAG);
-    }
+    const auto activation = grab_one_activation_flag(act_data.get<std::string>());
     if (activation <= RandomArtActType::NONE) {
         return tl::unexpected(PARSE_ERROR_INVALID_FLAG);
     }

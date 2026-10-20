@@ -615,6 +615,28 @@ TEST_CASE("info_set_dice parses the dice string")
     }
 }
 
+/*!
+ * @brief 範囲を指定すると、ダイスの個数と面数のどちらかが範囲外なら値を変えずに拒否する
+ * @details 範囲を指定しない呼び出し（地形・モンスター）は、これまでどおり int の範囲の値を受け付ける。
+ */
+TEST_CASE("info_set_dice applies the optional range to both the count and the sides")
+{
+    for (const auto *text : { "0d0", "255d255", "1d255" }) {
+        CAPTURE(text);
+        Dice dice(1, 1);
+        CHECK(info_set_dice(nlohmann::json(text), dice, false, Range(0, 255)) == PARSE_ERROR_NONE);
+        CHECK(dice == Dice::parse(text));
+    }
+    for (const auto *text : { "256d1", "1d256", "-1d2", "2d-1" }) {
+        CAPTURE(text);
+        Dice dice(1, 1);
+        CHECK(info_set_dice(nlohmann::json(text), dice, false, Range(0, 255)) == PARSE_ERROR_INVALID_FLAG);
+        CHECK(dice == Dice(1, 1));
+        CHECK(info_set_dice(nlohmann::json(text), dice, false) == PARSE_ERROR_NONE);
+        CHECK(dice == Dice::parse(text));
+    }
+}
+
 TEST_CASE("info_set_dice treats a null JSON as an unwritten key")
 {
     Dice dice(1, 1);

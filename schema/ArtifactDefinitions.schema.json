@@ -24,7 +24,7 @@
                 "properties": {
                     "id": {
                         "type": "integer",
-                        "minimum": 0,
+                        "minimum": 1,
                         "maximum": 9999
                     },
                     "name": {
@@ -372,6 +372,7 @@
                                 "IGNORE_ELEC",
                                 "IGNORE_FIRE",
                                 "IGNORE_COLD",
+                                "ACTIVATE",
                                 "DRAIN_EXP",
                                 "TELEPORT",
                                 "AGGRAVATE",
@@ -439,6 +440,7 @@
                                 "VUL_FIRE",
                                 "VUL_LITE",
                                 "IM_DARK",
+                                "IM_LITE",
                                 "SELF_FIRE",
                                 "SELF_COLD",
                                 "SELF_ELEC",

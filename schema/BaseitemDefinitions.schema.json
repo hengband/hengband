@@ -184,7 +184,7 @@
                                     "type": "integer",
                                     "description": "希少度",
                                     "minimum": 0,
-                                    "maximum": 255
+                                    "maximum": 256
                                 }
                             }
                         }
@@ -335,7 +335,8 @@
                             "CREATE_AMMO",
                             "DISPEL_MAGIC",
                             "WHISTLE",
-                            "CAPTURE_MONSTER"
+                            "CAPTURE_MONSTER",
+                            "DARKNESS"
                         ]
                     },
                     "flags": {
@@ -432,6 +433,7 @@
                                 "IGNORE_ELEC",
                                 "IGNORE_FIRE",
                                 "IGNORE_COLD",
+                                "ACTIVATE",
                                 "DRAIN_EXP",
                                 "TELEPORT",
                                 "AGGRAVATE",
@@ -499,6 +501,7 @@
                                 "VUL_FIRE",
                                 "VUL_LITE",
                                 "IM_DARK",
+                                "IM_LITE",
                                 "SELF_FIRE",
                                 "SELF_COLD",
                                 "SELF_ELEC",
