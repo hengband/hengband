@@ -82,9 +82,7 @@ bool alchemy(PlayerType *player_ptr)
     const auto gold = static_cast<PRICE>(price);
     msg_print(_("{}を＄{} の金に変えた。", "You turn {} to {} coins worth of gold."), item_name, gold);
     player_ptr->au = clamp_price(int64_t{ player_ptr->au } + gold);
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.set_flag(MainWindowRedrawingFlag::GOLD);
-    rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
+    RedrawingFlagsUpdater::get_instance().request_gold_redrawing();
     vary_item(player_ptr, i_idx, -amt);
     return true;
 }

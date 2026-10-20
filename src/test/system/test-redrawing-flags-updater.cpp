@@ -470,3 +470,20 @@ TEST_CASE("RedrawingFlagsUpdater::request_hp_mp_redrawing requests redrawing the
         CHECK_FALSE(rfu.has(flag));
     }
 }
+
+TEST_CASE("RedrawingFlagsUpdater::request_gold_redrawing requests redrawing the gold and the player window")
+{
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    const auto restore_mwrf = scoped_restore_flags(rfu, { MainWindowRedrawingFlag::GOLD, MainWindowRedrawingFlag::BASIC });
+    const auto restore_swrf = scoped_restore_flags(rfu, { SubWindowRedrawingFlag::PLAYER });
+    rfu.reset_flag(MainWindowRedrawingFlag::GOLD);
+    rfu.reset_flag(MainWindowRedrawingFlag::BASIC);
+    rfu.reset_flag(SubWindowRedrawingFlag::PLAYER);
+
+    rfu.request_gold_redrawing();
+
+    CHECK(rfu.has(MainWindowRedrawingFlag::GOLD));
+    CHECK(rfu.has(SubWindowRedrawingFlag::PLAYER));
+    // 所持金のほかの基本ステータスは描き直さない
+    CHECK_FALSE(rfu.has(MainWindowRedrawingFlag::BASIC));
+}

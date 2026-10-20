@@ -221,6 +221,16 @@ void RedrawingFlagsUpdater::request_hp_mp_redrawing()
     this->main_window_flags.set(flags_mwrf);
 }
 
+/*!
+ * @brief 所持金の表示の描き直しを予約する
+ * @details メインウィンドウの所持金と、プレイヤーの情報のサブウィンドウを描き直す。
+ */
+void RedrawingFlagsUpdater::request_gold_redrawing()
+{
+    this->main_window_flags.set(MainWindowRedrawingFlag::GOLD);
+    this->sub_window_flags.set(SubWindowRedrawingFlag::PLAYER);
+}
+
 void RedrawingFlagsUpdater::fill_up_sub_flags()
 {
     constexpr auto all_sub_window_flags = EnumRange(SubWindowRedrawingFlag::INVENTORY, SubWindowRedrawingFlag::MAX);
