@@ -953,7 +953,7 @@ TEST_CASE("TownMapReader typed building application preserves N A C R M Z contra
             REQUIRE(TownMapReader(data).read(definition, 3, 3).has_value());
             REQUIRE(definition.buildings.size() == 1);
             buildings[1] = initial;
-            REQUIRE(apply_town_building_rule(definition.buildings[0]) == PARSE_ERROR_NONE);
+            REQUIRE(apply_town_building_rule(definition.buildings[0]).has_value());
             check_building(buildings[1], std::string_view(locale) == _("ja", "en") ? test_case.expected : initial);
             check_building(buildings[2], initial);
         }
@@ -1022,7 +1022,7 @@ TEST_CASE("TownMapReader preserves building signed sixteen bit boundaries and in
             TownMapDefinition definition;
             REQUIRE(TownMapReader(data).read(definition, 3, 3).has_value());
             buildings[1] = initial;
-            REQUIRE(apply_town_building_rule(definition.buildings[0]) == PARSE_ERROR_NONE);
+            REQUIRE(apply_town_building_rule(definition.buildings[0]).has_value());
             const auto &building = buildings[1];
             if (std::string_view(command) == "A") {
                 CHECK(building.actions[0] == number);
@@ -1056,14 +1056,14 @@ TEST_CASE("TownMapReader typed building application rejects narrowing before any
             CAPTURE(restriction);
             buildings[1] = initial;
             rule.directive = TownMapBuildingAction{ 0, "Changed", 1, 2, "a", restriction ? 3 : number, restriction ? number : 4 };
-            CHECK(apply_town_building_rule(rule) == PARSE_ERROR_INVALID_VALUE);
+            CHECK(test::to_error_code(apply_town_building_rule(rule)) == PARSE_ERROR_INVALID_VALUE);
             check_building(buildings[1], initial);
             check_building(buildings[2], initial);
         }
         for (const auto kind : { TownMapBuildingMembershipKind::CLASS, TownMapBuildingMembershipKind::RACE, TownMapBuildingMembershipKind::REALM }) {
             buildings[1] = initial;
             rule.directive = TownMapBuildingMembership{ kind, { 2, number } };
-            CHECK(apply_town_building_rule(rule) == PARSE_ERROR_INVALID_VALUE);
+            CHECK(test::to_error_code(apply_town_building_rule(rule)) == PARSE_ERROR_INVALID_VALUE);
             check_building(buildings[1], initial);
             check_building(buildings[2], initial);
         }
@@ -1081,7 +1081,7 @@ TEST_CASE("TownMapReader typed building memberships default omitted entries and 
         data["buildingRules"][0]["fields"] = { "2" };
         TownMapDefinition definition;
         REQUIRE(TownMapReader(data).read(definition, 3, 3).has_value());
-        REQUIRE(apply_town_building_rule(definition.buildings[0]) == PARSE_ERROR_NONE);
+        REQUIRE(apply_town_building_rule(definition.buildings[0]).has_value());
         const auto is_realm = std::string_view(command) == "M";
         const auto &members = std::string_view(command) == "C" ? buildings[1].member_class : (is_realm ? buildings[1].member_realm : buildings[1].member_race);
         const auto offset = is_realm ? 1U : 0U;
@@ -1114,7 +1114,7 @@ TEST_CASE("TownMapReader typed building application validates conversion before 
             TownMapDefinition definition;
             REQUIRE(TownMapReader(data).read(definition, 3, 3).has_value());
             const auto expected = utf8_to_sys(invalid_utf8) ? PARSE_ERROR_NONE : PARSE_ERROR_INVALID_VALUE;
-            CHECK(apply_town_building_rule(definition.buildings[0]) == expected);
+            CHECK(test::to_error_code(apply_town_building_rule(definition.buildings[0])) == expected);
             // 英語版は文字コード変換が恒等変換のため、対象言語のN/Aは適用される。
             if (expected != PARSE_ERROR_NONE || std::string_view(locale) != _("ja", "en") || std::string_view(command) == "Z") {
                 check_building(buildings[1], initial);
@@ -1134,12 +1134,12 @@ TEST_CASE("TownMapReader typed building failures leave the target unchanged")
     REQUIRE(TownMapReader(data).read(definition, 3, 3).has_value());
     auto rule = definition.buildings[0];
     rule.index = MAX_BUILDINGS;
-    CHECK(apply_town_building_rule(rule) == PARSE_ERROR_INVALID_VALUE);
+    CHECK(test::to_error_code(apply_town_building_rule(rule)) == PARSE_ERROR_INVALID_VALUE);
     rule.index = 1;
     rule.directive = TownMapBuildingAction{ 8, "Name", 1, 2, "a", 3, 4 };
-    CHECK(apply_town_building_rule(rule) == PARSE_ERROR_INVALID_VALUE);
+    CHECK(test::to_error_code(apply_town_building_rule(rule)) == PARSE_ERROR_INVALID_VALUE);
     rule.directive = TownMapBuildingMembership{ TownMapBuildingMembershipKind::CLASS, {} };
-    CHECK(apply_town_building_rule(rule) == PARSE_ERROR_INVALID_VALUE);
+    CHECK(test::to_error_code(apply_town_building_rule(rule)) == PARSE_ERROR_INVALID_VALUE);
     check_building(buildings[1], initial);
     data["buildingRules"].push_back(data["buildingRules"][0]);
     data["buildingRules"][1]["command"] = "A";
@@ -1171,7 +1171,7 @@ TEST_CASE("TownMapReader typed building application rejects embedded NUL before 
             TownMapDefinition definition;
             // 区切り文字の検証とは別に、適用側でC文字列にできない文字を拒否する。
             REQUIRE(TownMapReader(data).read(definition, 3, 3).has_value());
-            CHECK(apply_town_building_rule(definition.buildings[0]) == PARSE_ERROR_INVALID_VALUE);
+            CHECK(test::to_error_code(apply_town_building_rule(definition.buildings[0])) == PARSE_ERROR_INVALID_VALUE);
             check_building(buildings[1], initial);
         }
     }
@@ -1204,7 +1204,7 @@ TEST_CASE("TownMapReader applies typed feature token values and random flags")
         REQUIRE(TownMapReader(data).read(definition, 3, 3).has_value());
         const dungeon_grid expected{ .feature = state.floor_id(), .monster = value, .object = value, .ego = i2enum<EgoType>(value), .artifact = i2enum<FixedArtifactId>(value), .trap = state.trap_id(), .cave_info = std::numeric_limits<int>::max(), .special = -32768, .random = random };
         letter['#'] = {};
-        REQUIRE(apply_town_map_feature(floor, definition.features.front()) == PARSE_ERROR_NONE);
+        REQUIRE(apply_town_map_feature(floor, definition.features.front()).has_value());
         check_same_grid(letter['#'], expected);
         CHECK(letter['#'].feature == state.floor_id());
         CHECK(letter['#'].trap == state.trap_id());
@@ -1226,12 +1226,12 @@ TEST_CASE("TownMapReader typed features reject unsafe bytes before touching lett
             std::copy(std::begin(letter), std::end(letter), result.begin());
             return result;
         }();
-        CHECK(apply_town_map_feature(floor, feature) == PARSE_ERROR_INVALID_VALUE);
+        CHECK(test::to_error_code(apply_town_map_feature(floor, feature)) == PARSE_ERROR_INVALID_VALUE);
         for (size_t i = 0; i < original.size(); ++i) {
             check_same_grid(letter[i], original[i]);
         }
         init_flags = INIT_ONLY_BUILDINGS;
-        CHECK(apply_town_map_feature(floor, feature) == PARSE_ERROR_NONE);
+        CHECK(apply_town_map_feature(floor, feature).has_value());
         for (size_t i = 0; i < original.size(); ++i) {
             check_same_grid(letter[i], original[i]);
         }
@@ -1249,7 +1249,7 @@ TEST_CASE("TownMapReader typed features retain printable ASCII boundaries")
         feature.symbol = symbol;
         feature.terrain = "TOWN_FEATURE_TEST_FLOOR";
         feature.trap = "TOWN_FEATURE_TEST_TRAP";
-        REQUIRE(apply_town_map_feature(floor, feature) == PARSE_ERROR_NONE);
+        REQUIRE(apply_town_map_feature(floor, feature).has_value());
         CHECK(letter[static_cast<unsigned char>(symbol)].feature == state.floor_id());
         CHECK(letter[static_cast<unsigned char>(symbol)].trap == state.trap_id());
     }
@@ -1273,7 +1273,7 @@ TEST_CASE("TownMapReader applies random terrain trap clones and reward placehold
     REQUIRE(TownMapReader(data).read(definition, 3, 3).has_value());
     const dungeon_grid expected{ .feature = 0, .monster = -32767, .object = 0, .ego = i2enum<EgoType>(std::numeric_limits<int>::min()), .artifact = FixedArtifactId::NONE, .trap = 0, .cave_info = 0, .special = 32767, .random = RANDOM_FEATURE | RANDOM_TRAP };
     letter['#'] = {};
-    REQUIRE(apply_town_map_feature(floor, definition.features.front()) == PARSE_ERROR_NONE);
+    REQUIRE(apply_town_map_feature(floor, definition.features.front()).has_value());
     check_same_grid(letter['#'], expected);
     CHECK(letter['#'].monster == -32767);
     CHECK(letter['#'].random == (RANDOM_FEATURE | RANDOM_TRAP));
@@ -1299,10 +1299,10 @@ TEST_CASE("TownMapReader defers terrain resolution and publishes feature only on
         letter['#'].monster = 456;
         letter['#'].random = RANDOM_EGO;
         const auto original = letter['#'];
-        CHECK(apply_town_map_feature(floor, definition.features.front()) == PARSE_ERROR_UNDEFINED_TERRAIN_TAG);
+        CHECK(test::to_error_code(apply_town_map_feature(floor, definition.features.front())) == PARSE_ERROR_UNDEFINED_TERRAIN_TAG);
         check_same_grid(letter['#'], original);
         init_flags = INIT_ONLY_BUILDINGS;
-        CHECK(apply_town_map_feature(floor, definition.features.front()) == PARSE_ERROR_NONE);
+        CHECK(apply_town_map_feature(floor, definition.features.front()).has_value());
         check_same_grid(letter['#'], original);
         init_flags = static_cast<init_flags_type>(0);
     }
@@ -1317,18 +1317,18 @@ TEST_CASE("TownMapReader resolves quest rewards at feature application time")
     artifact.gen_flags.set(ItemGenerationTraitType::INSTA_ART);
     FloorType floor;
     const auto definition = read_reward_town_map(floor, std::move(artifact));
-    REQUIRE(apply_town_map_feature(floor, definition.features.front()) == PARSE_ERROR_NONE);
+    REQUIRE(apply_town_map_feature(floor, definition.features.front()).has_value());
     CHECK(letter['#'].object == 0);
     CHECK(letter['#'].artifact == FixedArtifactId::NONE);
     test::QuestFeatureTestAccess::set_resolved_reward(FixedArtifactId::GALADRIEL_PHIAL);
     const dungeon_grid expected{ .feature = state.floor_id(), .monster = 0, .object = 0, .ego = EgoType::NONE, .artifact = FixedArtifactId::GALADRIEL_PHIAL, .trap = state.trap_id(), .cave_info = 0, .special = 0, .random = 0 };
     letter['#'] = {};
-    REQUIRE(apply_town_map_feature(floor, definition.features.front()) == PARSE_ERROR_NONE);
+    REQUIRE(apply_town_map_feature(floor, definition.features.front()).has_value());
     check_same_grid(letter['#'], expected);
     CHECK(letter['#'].object == 0); // Instant artifacts do not generate a base item.
     CHECK(letter['#'].artifact == FixedArtifactId::GALADRIEL_PHIAL);
     floor.quest_number = QuestId::NONE;
-    REQUIRE(apply_town_map_feature(floor, definition.features.front()) == PARSE_ERROR_NONE);
+    REQUIRE(apply_town_map_feature(floor, definition.features.front()).has_value());
     CHECK(letter['#'].artifact == FixedArtifactId::NONE);
 }
 
@@ -1352,7 +1352,7 @@ TEST_CASE("TownMapReader applies resolved ordinary quest reward baseitem and art
     original.name = "Town reward original";
     original.bi_key = reward_key;
     items.replace_baseitem(7, std::move(original));
-    REQUIRE(apply_town_map_feature(floor, definition.features.front()) == PARSE_ERROR_NONE);
+    REQUIRE(apply_town_map_feature(floor, definition.features.front()).has_value());
     CHECK(letter['#'].object == 7);
     CHECK(letter['#'].artifact == FixedArtifactId::GALADRIEL_PHIAL);
     CHECK(letter['#'].feature == state.floor_id());
@@ -1421,7 +1421,7 @@ TEST_CASE("TownMapReader returns an error and preserves the feature when quest r
     letter['#'].random = RANDOM_EGO;
     letter['#'].cave_info = CAVE_GLOW;
     const auto original = letter['#'];
-    CHECK(apply_town_map_feature(floor, definition.features.front()) == PARSE_ERROR_INVALID_VALUE);
+    CHECK(test::to_error_code(apply_town_map_feature(floor, definition.features.front())) == PARSE_ERROR_INVALID_VALUE);
     check_same_grid(letter['#'], original);
 }
 
@@ -1446,7 +1446,7 @@ TEST_CASE("TownMapReader applies an artifact-only reward without resolving its b
         test::QuestFeatureTestAccess::set_resolved_reward(FixedArtifactId::GALADRIEL_PHIAL);
     }
     const auto reward = QuestList::get_instance().get_quest(floor.quest_number).get_reward();
-    REQUIRE(apply_town_map_feature(floor, definition.features.front()) == PARSE_ERROR_NONE);
+    REQUIRE(apply_town_map_feature(floor, definition.features.front()).has_value());
     CHECK(letter['#'].object == 19);
     CHECK(letter['#'].artifact == reward.value_or(FixedArtifactId::NONE));
     CHECK(letter['#'].feature == state.floor_id());
