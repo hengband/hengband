@@ -513,7 +513,7 @@ TEST_CASE("Quest legend integers retain representable signed and unsigned bounda
             CAPTURE(value);
             const auto cell_data = make_legend_integer_cell(path, value);
             QuestLegendCell cell;
-            REQUIRE(parse_quest_legend_cell(cell_data, cell) == PARSE_ERROR_NONE);
+            REQUIRE(parse_quest_legend_cell(cell_data, cell).has_value());
             const auto expected_random = path.ends_with("/oodLevel") ? (path.starts_with("/monster") ? RANDOM_MONSTER : RANDOM_OBJECT)
                                          : path.ends_with("/id")     ? (is_ego ? RANDOM_EGO : RANDOM_ARTIFACT)
                                                                      : RANDOM_NONE;
@@ -606,10 +606,10 @@ TEST_CASE("Quest legend treats null as omitted and rejects non-integer values")
             const auto data = make_legend_integer_cell(path, value);
             QuestLegendCell cell;
             if (!value.is_null()) {
-                CHECK(parse_quest_legend_cell(data, cell) == PARSE_ERROR_INVALID_TYPE);
+                CHECK(test::to_error_code(parse_quest_legend_cell(data, cell)) == PARSE_ERROR_INVALID_TYPE);
                 continue;
             }
-            REQUIRE(parse_quest_legend_cell(data, cell) == PARSE_ERROR_NONE);
+            REQUIRE(parse_quest_legend_cell(data, cell).has_value());
             CHECK(cell.grid.monster == 0);
             CHECK(cell.grid.object == 0);
             CHECK(cell.grid.ego == EgoType::NONE);
@@ -621,7 +621,7 @@ TEST_CASE("Quest legend treats null as omitted and rejects non-integer values")
         { "artifact", { { "questReward", true } } },
     };
     QuestLegendCell cell;
-    REQUIRE(parse_quest_legend_cell(rewards, cell) == PARSE_ERROR_NONE);
+    REQUIRE(parse_quest_legend_cell(rewards, cell).has_value());
     CHECK(cell.object_is_quest_reward);
     CHECK(cell.artifact_is_quest_reward);
 }
@@ -636,7 +636,7 @@ TEST_CASE("Quest legend random forms preserve precedence over clone and reward m
         { "artifact", { { "random", true }, { "id", 10 }, { "questReward", true } } },
     };
     QuestLegendCell cell;
-    REQUIRE(parse_quest_legend_cell(data, cell) == PARSE_ERROR_NONE);
+    REQUIRE(parse_quest_legend_cell(data, cell).has_value());
     CHECK(cell.grid.random == (RANDOM_MONSTER | RANDOM_OBJECT | RANDOM_EGO | RANDOM_ARTIFACT));
     CHECK(cell.grid.monster == 7);
     CHECK(cell.grid.object == 8);
@@ -651,10 +651,10 @@ TEST_CASE("Quest legend special retains optional and invalid-type behavior")
     test::TerrainListTestAccess terrain_tag(TerrainTag::NONE, 0);
     const nlohmann::json null_special = { { "special", nullptr } };
     QuestLegendCell cell;
-    REQUIRE(parse_quest_legend_cell(null_special, cell) == PARSE_ERROR_NONE);
+    REQUIRE(parse_quest_legend_cell(null_special, cell).has_value());
     CHECK(cell.grid.special == 0);
     const nlohmann::json invalid_special = { { "special", "invalid" } };
-    CHECK(parse_quest_legend_cell(invalid_special, cell) == PARSE_ERROR_INVALID_TYPE);
+    CHECK(test::to_error_code(parse_quest_legend_cell(invalid_special, cell)) == PARSE_ERROR_INVALID_TYPE);
 }
 
 TEST_CASE("QuestReader replaces output on success without duplicating collections or resetting quest progress")

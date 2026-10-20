@@ -3,13 +3,14 @@
 #include "info-reader/general-parser.h"
 #include "info-reader/parse-error-types.h"
 #include <nlohmann/json_fwd.hpp>
+#include <tl/expected.hpp>
 #include <utility>
 #include <vector>
 
 struct QuestLegendCell;
 
 using TownPreferencesLegend = std::vector<std::pair<unsigned char, dungeon_grid>>;
-using TownPreferencesCellParser = parse_error_type (*)(const nlohmann::json &, QuestLegendCell &);
+using TownPreferencesCellParser = tl::expected<void, parse_error_type> (*)(const nlohmann::json &, QuestLegendCell &);
 
 /*!
  * @brief 町の共通凡例 JSONC を検証して読み込む。

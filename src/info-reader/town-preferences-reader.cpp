@@ -36,8 +36,8 @@ parse_error_type TownPreferencesReader::read(TownPreferencesLegend &legend, Town
         }
 
         QuestLegendCell cell;
-        if (const auto err = parse_cell(cell_data, cell); err != PARSE_ERROR_NONE) {
-            return err;
+        if (const auto result = parse_cell(cell_data, cell); !result) {
+            return result.error();
         }
         parsed.emplace_back(static_cast<unsigned char>(symbol.front()), cell.grid);
     }

@@ -5,6 +5,7 @@
 #include <limits>
 #include <nlohmann/json.hpp>
 #include <string>
+#include <tl/expected.hpp>
 
 namespace {
 nlohmann::json make_town_preferences()
@@ -18,21 +19,21 @@ nlohmann::json make_town_preferences()
     };
 }
 
-parse_error_type parse_test_cell(const nlohmann::json &data, QuestLegendCell &cell)
+tl::expected<void, parse_error_type> parse_test_cell(const nlohmann::json &data, QuestLegendCell &cell)
 {
     const auto &terrain = data["terrain"].get_ref<const std::string &>();
     if (terrain == "INVALID") {
-        return PARSE_ERROR_UNDEFINED_TERRAIN_TAG;
+        return tl::make_unexpected(PARSE_ERROR_UNDEFINED_TERRAIN_TAG);
     }
     for (const auto &flag : data["caveInfo"]) {
         if (flag == "INVALID_FLAG") {
-            return PARSE_ERROR_INVALID_FLAG;
+            return tl::make_unexpected(PARSE_ERROR_INVALID_FLAG);
         }
     }
     cell.grid.feature = terrain == "FLOOR" ? 10 : 20;
     cell.grid.cave_info = static_cast<BIT_FLAGS>(data["caveInfo"].size());
     cell.grid.special = static_cast<int16_t>(data.value("special", 0));
-    return PARSE_ERROR_NONE;
+    return {};
 }
 
 void check_rejected(const nlohmann::json &data, parse_error_type expected)
