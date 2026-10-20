@@ -20,103 +20,102 @@ EgoReader::EgoReader(const nlohmann::json &ego_data)
 /*!
  * @brief 百分率形式のエゴ定義のversionを、公開前に検証する
  * @param root JSON文書のルート
- * @return エラーコード。旧分数形式のversion 1は受理しない。
+ * @return 成功時は空の値、失敗時は解析エラーコード。旧分数形式のversion 1は受理しない。
  */
-int EgoReader::validate_root(const nlohmann::json &root)
+tl::expected<void, parse_error_type> EgoReader::validate_root(const nlohmann::json &root)
 {
     int version = 0;
-    const auto result = info_set_integer(get_json_value(root, "version"), version, true, Range(FORMAT_VERSION, FORMAT_VERSION));
-    return result ? PARSE_ERROR_NONE : result.error();
+    return info_set_integer(get_json_value(root, "version"), version, true, Range(FORMAT_VERSION, FORMAT_VERSION));
 }
 
 /*!
  * @brief エゴ1件の数値・参照を検証し、成功した場合にだけ定義とerror_idxを公開する
- * @return 成功時はPARSE_ERROR_NONE、失敗時は解析エラーコード
+ * @return 成功時は空の値、失敗時は解析エラーコード
  * @details 失敗時は既存のegos_infoとerror_idxを保持する。文書のversion検証は呼び出し側が先に行う。
  */
-int EgoReader::read() const
+tl::expected<void, parse_error_type> EgoReader::read() const
 {
     if (!this->ego_data.is_object()) {
-        return PARSE_ERROR_INVALID_TYPE;
+        return tl::make_unexpected(PARSE_ERROR_INVALID_TYPE);
     }
 
     int id = 0;
     if (const auto result = info_set_integer(get_json_value(this->ego_data, "id"), id, true, Range(1, std::numeric_limits<byte>::max())); !result) {
-        return result.error();
+        return result;
     }
     if (egos_info.contains(i2enum<EgoType>(id))) {
-        return PARSE_ERROR_NON_SEQUENTIAL_RECORDS;
+        return tl::make_unexpected(PARSE_ERROR_NON_SEQUENTIAL_RECORDS);
     }
 
     EgoItemDefinition ego;
     ego.idx = i2enum<EgoType>(id);
     if (const auto result = info_set_string(get_json_value(this->ego_data, "name"), ego.name, true); !result) {
-        return result.error();
+        return result;
     }
     if (const auto result = info_set_integer(get_json_value(this->ego_data, "slot"), ego.slot, true, Range(INVEN_AMMO, INVEN_FEET)); !result) {
-        return result.error();
+        return result;
     }
     if (const auto result = info_set_integer(get_json_value(this->ego_data, "rating"), ego.rating, true, Range(0, 100)); !result) {
-        return result.error();
+        return result;
     }
     if (const auto result = info_set_integer(get_json_value(this->ego_data, "level"), ego.level, true, Range(0, 128)); !result) {
-        return result.error();
+        return result;
     }
     if (const auto result = info_set_integer(get_json_value(this->ego_data, "rarity"), ego.rarity, true, Range(0, 255)); !result) {
-        return result.error();
+        return result;
     }
     if (const auto result = info_set_integer(get_json_value(this->ego_data, "cost"), ego.cost, true, Range(0, std::numeric_limits<PRICE>::max() / 32)); !result) {
-        return result.error();
+        return result;
     }
 
     const auto &base = get_json_value(this->ego_data, "base_bonuses");
     if (!base.is_null()) {
         if (!base.is_object()) {
-            return PARSE_ERROR_INVALID_TYPE;
+            return tl::make_unexpected(PARSE_ERROR_INVALID_TYPE);
         }
         if (const auto result = info_set_integer(get_json_value(base, "to_hit"), ego.base_to_h, true, Range(-32768, 32767)); !result) {
-            return result.error();
+            return result;
         }
         if (const auto result = info_set_integer(get_json_value(base, "to_damage"), ego.base_to_d, true, Range(-32768, 32767)); !result) {
-            return result.error();
+            return result;
         }
         if (const auto result = info_set_integer(get_json_value(base, "to_ac"), ego.base_to_a, true, Range(-32768, 32767)); !result) {
-            return result.error();
+            return result;
         }
     }
 
     const auto &maximum = get_json_value(this->ego_data, "maximum_bonuses");
     if (!maximum.is_null()) {
         if (!maximum.is_object()) {
-            return PARSE_ERROR_INVALID_TYPE;
+            return tl::make_unexpected(PARSE_ERROR_INVALID_TYPE);
         }
         if (const auto result = info_set_integer(get_json_value(maximum, "to_hit"), ego.max_to_h, true, Range(-32768, 32767)); !result) {
-            return result.error();
+            return result;
         }
         if (const auto result = info_set_integer(get_json_value(maximum, "to_damage"), ego.max_to_d, true, Range(-32768, 32767)); !result) {
-            return result.error();
+            return result;
         }
         if (const auto result = info_set_integer(get_json_value(maximum, "to_ac"), ego.max_to_a, true, Range(-32768, 32767)); !result) {
-            return result.error();
+            return result;
         }
         if (const auto result = info_set_integer(get_json_value(maximum, "pval"), ego.max_pval, true, Range(-32768, 32767)); !result) {
-            return result.error();
+            return result;
         }
     }
 
     if (const auto result = this->set_activation(ego); !result) {
-        return result.error();
+        return result;
     }
     if (const auto result = this->set_flags(ego); !result) {
-        return result.error();
+        return result;
     }
     if (const auto result = this->set_extra_flags(ego); !result) {
-        return result.error();
+        return result;
     }
 
     egos_info.emplace(ego.idx, std::move(ego));
     error_idx = id;
-    return PARSE_ERROR_NONE;
+    return {};
 }
 
 bool EgoReader::grab_one_flag(EgoItemDefinition &ego, const nlohmann::json &flag) const

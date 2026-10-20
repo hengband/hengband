@@ -17,8 +17,8 @@ public:
     EgoReader &operator=(EgoReader &&) = delete;
 
     static constexpr int FORMAT_VERSION = 2;
-    static int validate_root(const nlohmann::json &root);
-    int read() const;
+    static tl::expected<void, parse_error_type> validate_root(const nlohmann::json &root);
+    tl::expected<void, parse_error_type> read() const;
 
 private:
     bool grab_one_flag(EgoItemDefinition &ego, const nlohmann::json &flag) const;

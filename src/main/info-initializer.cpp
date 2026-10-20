@@ -216,7 +216,7 @@ void init_dungeons_info()
  */
 void init_egos_info()
 {
-    init_json_reader<EgoReader>("EgoDefinitions.jsonc", "egos", DefinitionHashDataType::EGOS, egos_info, nullptr, false, [](const nlohmann::json &root) { return to_parse_result(EgoReader::validate_root(root)); });
+    init_json_reader<EgoReader>("EgoDefinitions.jsonc", "egos", DefinitionHashDataType::EGOS, egos_info, nullptr, false, EgoReader::validate_root);
 }
 
 /*!

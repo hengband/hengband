@@ -125,7 +125,7 @@ void check_rejected_by_all_readers(const std::string &token)
     error_idx = -1;
     CHECK(test::to_error_code(ArtifactReader(data).read()) == PARSE_ERROR_INVALID_FLAG);
     error_idx = -1;
-    CHECK(EgoReader(data).read() == PARSE_ERROR_INVALID_FLAG);
+    CHECK(test::to_error_code(EgoReader(data).read()) == PARSE_ERROR_INVALID_FLAG);
     CHECK(egos_info.empty());
 }
 
@@ -149,7 +149,7 @@ void check_accepted_by_all_readers(const std::string &token, RandomArtActType ex
     CHECK(artifact.act_idx == expected);
     CHECK(artifact.flags.has(TR_ACTIVATE));
     error_idx = -1;
-    REQUIRE(EgoReader(data).read() == PARSE_ERROR_NONE);
+    REQUIRE(EgoReader(data).read().has_value());
     CHECK(egos_info.at(i2enum<EgoType>(1)).act_idx == expected);
 }
 }
@@ -233,7 +233,7 @@ TEST_CASE("Activation readers preserve missing activation and non-string errors"
         CHECK(test::to_error_code(BaseitemReader(data).read()) == expected);
         error_idx = -1;
         CHECK(test::to_error_code(ArtifactReader(data).read()) == expected);
-        CHECK(EgoReader(data).read() == expected);
+        CHECK(test::to_error_code(EgoReader(data).read()) == expected);
     }
 }
 
