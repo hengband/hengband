@@ -2129,7 +2129,7 @@ nlohmann::json make_knowledge_json(PlayerType *player_ptr, BotKnowledgeCategory 
         break;
     }
     case BotKnowledgeCategory::HOME: {
-        const auto &store = TownList::get_instance().get_town(1).get_store(StoreSaleType::HOME);
+        const auto &store = TownList::get_instance().get_town(TownId::OUTPOST).get_store(StoreSaleType::HOME);
         for (auto i = 0; i < store.stock_num; ++i) {
             auto item = make_item_json(player_ptr, *store.stock[i]);
             item["slot"] = i;
@@ -2154,7 +2154,7 @@ nlohmann::json make_knowledge_json(PlayerType *player_ptr, BotKnowledgeCategory 
         for (const auto slot : INVEN_PACK_SLOTS) {
             add_item(*player_ptr->inventory[slot], "inventory", slot);
         }
-        const auto &home = TownList::get_instance().get_town(1).get_store(StoreSaleType::HOME);
+        const auto &home = TownList::get_instance().get_town(TownId::OUTPOST).get_store(StoreSaleType::HOME);
         for (auto slot = 0; slot < home.stock_num; ++slot) {
             add_item(*home.stock[slot], "home", slot);
         }

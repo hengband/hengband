@@ -4,6 +4,7 @@
 #include "perception/object-perception.h"
 #include "store/store-util.h"
 #include "system/floor/town-list.h"
+#include "system/floor/town-records.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
 #include "util/angband-files.h"
@@ -79,7 +80,7 @@ void spoil_random_artifact(PlayerType *player_ptr)
     }
 
     spoiler_underline("Random artifacts list.\r", ofs);
-    const auto &outpost = TownList::get_instance().get_town(1);
+    const auto &outpost = TownList::get_instance().get_town(TownId::OUTPOST);
     for (const auto &[tval_list, name] : group_artifact_list) {
         for (auto tval : tval_list) {
             for (const auto i_idx : INVEN_WIELDING_SLOTS) {

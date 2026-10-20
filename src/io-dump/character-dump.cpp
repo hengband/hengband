@@ -33,6 +33,7 @@
 #include "system/dungeon/quest-list.h"
 #include "system/floor/floor-info.h"
 #include "system/floor/town-list.h"
+#include "system/floor/town-records.h"
 #include "system/inner-game-data.h"
 #include "system/item/item-entity.h"
 #include "system/monrace/monrace-definition.h"
@@ -531,7 +532,7 @@ static void dump_aux_equipment_inventory(PlayerType *player_ptr, FILE *fff)
  */
 static void dump_aux_home_museum(PlayerType *player_ptr, FILE *fff)
 {
-    const auto &outpost = TownList::get_instance().get_town(1);
+    const auto &outpost = TownList::get_instance().get_town(TownId::OUTPOST);
     const auto &home = outpost.get_store(StoreSaleType::HOME);
     if (home.stock_num) {
         fmt::println(fff, _("  [我が家のアイテム]", "  [Home Inventory]"));

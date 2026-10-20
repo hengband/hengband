@@ -2,6 +2,7 @@
 #include "game-option/birth-options.h"
 #include "system/floor/town-info.h"
 #include "system/floor/town-list.h"
+#include "system/floor/town-records.h"
 
 /*!
  * @brief 町名の上書きを行う
@@ -12,6 +13,6 @@
 void TownInfoService::overwrite_town_name()
 {
     if (vanilla_town || lite_town) {
-        TownList::get_instance().get_town(1).overwrite_town_name();
+        TownList::get_instance().get_town(TownId::OUTPOST).overwrite_town_name();
     }
 }
