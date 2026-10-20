@@ -51,7 +51,6 @@
 #include <string_view>
 #include <sys/stat.h>
 #include <tl/expected.hpp>
-#include <type_traits>
 #ifndef _WIN32
 #include <sys/types.h>
 #endif
@@ -62,28 +61,6 @@ template <typename T>
 concept HasShrinkToFit = requires(T t) {
     t.shrink_to_fit();
 };
-
-/*!
- * @brief Readerの解析結果をexpected型にそろえる
- * @details Readerの戻り値をexpected型へ移行し終えるまでの一時的な橋渡し。
- * 戻り値をまだexpected型にしていないReaderのエラーコードを変換し、移行済みのReaderの解析結果はそのまま返す。
- * 全てのReaderを移行したら削除する。
- * @param result Readerの解析結果 (エラーコードまたはexpected型)
- * @return 成功時は空の値、失敗時は解析エラーコード
- */
-template <typename Result>
-tl::expected<void, parse_error_type> to_parse_result(Result result)
-{
-    if constexpr (std::is_same_v<Result, int>) {
-        if (result != PARSE_ERROR_NONE) {
-            return tl::make_unexpected(static_cast<parse_error_type>(result));
-        }
-
-        return {};
-    } else {
-        return result;
-    }
-}
 
 /*!
  * @brief 各種設定データをlib/edit/.jsoncから読み込み
@@ -148,7 +125,7 @@ void init_json(std::string_view filename, std::string_view keyname, DefinitionHa
 template <typename Reader, typename DefinitionList>
 void init_json_reader(std::string_view filename, std::string_view keyname, DefinitionHashDataType dhdt, DefinitionList &definition_list, std::function<void()> retouch = nullptr, bool allow_empty = true, std::function<tl::expected<void, parse_error_type>(const nlohmann::json &)> validate_root = nullptr)
 {
-    auto parser = [](nlohmann::json &element) { return to_parse_result(Reader(element).read()); };
+    auto parser = [](nlohmann::json &element) { return Reader(element).read(); };
     init_json(filename, keyname, dhdt, definition_list, parser, retouch, allow_empty, validate_root);
 }
 }
