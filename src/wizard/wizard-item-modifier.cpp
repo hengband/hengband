@@ -341,11 +341,8 @@ static void prt_alloc(const BaseitemKey &bi_key, TERM_LEN row, TERM_LEN col)
     for (auto i = 0; i < 22; i++) {
         term_putch(col, row + i + 1, { TERM_WHITE, '|' });
         prt(fmt::format("{:2}F", (i * 5)), row + i + 1, col);
-        if ((i * BASEITEM_MAX_DEPTH / 22 <= home) && (home < (i + 1) * BASEITEM_MAX_DEPTH / 22)) {
-            c_prt(TERM_RED, fmt::format("{:3}.{:04}%", display[i] / 1000, display[i] % 1000), row + i + 1, col + 3);
-        } else {
-            c_prt(TERM_WHITE, fmt::format("{:3}.{:04}%", display[i] / 1000, display[i] % 1000), row + i + 1, col + 3);
-        }
+        const auto is_home = (i * BASEITEM_MAX_DEPTH / 22 <= home) && (home < (i + 1) * BASEITEM_MAX_DEPTH / 22);
+        c_prt(is_home ? TERM_RED : TERM_WHITE, fmt::format("{:3}.{:03}%", display[i] / 1000, display[i] % 1000), row + i + 1, col + 3);
     }
 
     concptr r = "+---Rate---+";
@@ -404,7 +401,7 @@ static void wiz_display_item(PlayerType *player_ptr, ItemEntity *o_ptr)
     prt(fmt::format("chest_level = {:<4}  fuel = {}", o_ptr->chest_level, o_ptr->fuel), ++line, j);
     prt(fmt::format("smith_hit = {:<4}  smith_damage = {:<4}", o_ptr->smith_hit, o_ptr->smith_damage), ++line, j);
     prt(fmt::format("cursed  = {:<4X}  captured_monster_speed = {:<4}", o_ptr->curse_flags.to_ulong(), o_ptr->captured_monster_speed), ++line, j);
-    prt(fmt::format("captured_monster_max_hp = {:<4}  captured_monster_max_hp = {:<4}", o_ptr->captured_monster_current_hp, o_ptr->captured_monster_max_hp), ++line, j);
+    prt(fmt::format("captured_monster_cur_hp = {:<4}  captured_monster_max_hp = {:<4}", o_ptr->captured_monster_current_hp, o_ptr->captured_monster_max_hp), ++line, j);
 
     const auto flags = o_ptr->get_flags();
     prt("+------------FLAGS1------------+", ++line, j);

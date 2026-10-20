@@ -125,7 +125,7 @@ static std::vector<std::string> analyze_misc_magic(const ItemEntity &item)
         }
         descriptions.push_back(std::move(desc));
     } else if (radius < 0) {
-        desc = fmt::format(_("永久光源(半径-{})。", "Permanent Light(radius -{})"), radius);
+        desc = fmt::format(_("永久光源(半径{})。", "Permanent Light(radius {})"), radius);
         descriptions.push_back(std::move(desc));
     }
 
