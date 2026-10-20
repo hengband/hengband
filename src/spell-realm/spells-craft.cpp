@@ -1,6 +1,7 @@
 #include "spell-realm/spells-craft.h"
 #include "action/travel-execution.h"
 #include "avatar/avatar.h"
+#include "core/asking-player.h"
 #include "core/disturbance.h"
 #include "core/stuff-handler.h"
 #include "flavor/flavor-describer.h"
@@ -8,7 +9,7 @@
 #include "floor/floor-object.h"
 #include "game-option/disturbance-options.h"
 #include "inventory/inventory-slot-types.h"
-#include "io/input-key-acceptor.h"
+#include "io/input-context.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "object-enchant/object-ego.h"
@@ -24,6 +25,7 @@
 #include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
 
 /*!
@@ -232,9 +234,10 @@ bool choose_ele_attack(PlayerType *player_ptr, TIME_EFFECT turn)
     prt("", 9, 14);
 
     prt("", 1, 0);
-    prt(_("        どの元素攻撃をしますか？", "        Choose a temporary elemental brand "), 1, 14);
+    constexpr auto brand_prompt = _("        どの元素攻撃をしますか？", "        Choose a temporary elemental brand ");
+    prt(brand_prompt, 1, 14);
 
-    char choice = inkey();
+    const auto choice = input_key_with_context(InputKind::COMMAND_CHAR, str_trim(brand_prompt));
 
     if ((choice == 'a') || (choice == 'A')) {
         set_ele_attack(player_ptr, ATTACK_FIRE, turn);
@@ -273,9 +276,10 @@ bool choose_ele_immune(PlayerType *player_ptr, TIME_EFFECT immune_turn)
     prt("", 9, 14);
 
     prt("", 1, 0);
-    prt(_("        どの元素の免疫をつけますか？", "        Choose a temporary elemental immunity "), 1, 14);
+    constexpr auto immunity_prompt = _("        どの元素の免疫をつけますか？", "        Choose a temporary elemental immunity ");
+    prt(immunity_prompt, 1, 14);
 
-    char choice = inkey();
+    const auto choice = input_key_with_context(InputKind::COMMAND_CHAR, str_trim(immunity_prompt));
 
     if ((choice == 'a') || (choice == 'A')) {
         set_ele_immune(player_ptr, DEFENSE_FIRE, immune_turn);

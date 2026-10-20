@@ -351,6 +351,19 @@ tl::optional<char> input_command_with_context(InputContext input_context)
     return command;
 }
 
+/*!
+ * @brief 入力待ちの文脈を公開して、キーを1つ待つ
+ * @param kind 入力の種類
+ * @param prompt 公開するプロンプト (表示は呼び出し元が行う)
+ * @return 入力したキー
+ * @details 独自に表示した選択肢や確認に答えるキーを、1つずつ読む処理に使う。
+ */
+char input_key_with_context(InputKind kind, std::string_view prompt)
+{
+    const InputContextScope input_context(kind, prompt);
+    return inkey();
+}
+
 /*
  * @brief 数量をユーザ入力する
  * @param max 最大値 (売出し商品の個数等)
