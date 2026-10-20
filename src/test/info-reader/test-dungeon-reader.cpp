@@ -13,6 +13,7 @@
 #include "system/monrace/monrace-list.h"
 #include "system/terrain/terrain-definition.h"
 #include "system/terrain/terrain-list.h"
+#include "test/info-reader/parse-result-helpers.h"
 #include "test/info-reader/scoped-reader-state.h"
 #include "test/scoped-vector-wrapper.h"
 #include "test/system/artifact-list-test-access.h"
@@ -96,7 +97,7 @@ TEST_CASE("DungeonReader reads floor and wall probabilities")
 {
     DungeonReaderStateGuard guard;
     const auto data = make_dungeon();
-    REQUIRE(DungeonReader(data).read() == PARSE_ERROR_NONE);
+    REQUIRE(DungeonReader(data).read().has_value());
     const auto &dungeons = DungeonList::get_instance();
     REQUIRE(dungeons.size() == 1);
     const auto &dungeon = dungeons.get_dungeon(DungeonId::WILDERNESS);
@@ -114,7 +115,7 @@ TEST_CASE("DungeonReader rejects player levels outside their storage type")
         DungeonReaderStateGuard guard;
         auto data = make_dungeon();
         data["generation"]["minPlayerLevel"] = value;
-        CHECK(DungeonReader(data).read() == PARSE_ERROR_INVALID_FLAG);
+        CHECK(test::to_error_code(DungeonReader(data).read()) == PARSE_ERROR_INVALID_FLAG);
         CHECK(DungeonList::get_instance().empty());
     }
 }
@@ -128,7 +129,7 @@ TEST_CASE("DungeonReader preserves item chance cap boundaries")
             DungeonReaderStateGuard guard;
             auto data = make_dungeon();
             data["generation"][field] = number;
-            REQUIRE(DungeonReader(data).read() == PARSE_ERROR_NONE);
+            REQUIRE(DungeonReader(data).read().has_value());
             const auto &dungeon = DungeonList::get_instance().get_dungeon(DungeonId::WILDERNESS);
             CHECK(dungeon.obj_good == (std::string(field) == "objGood" ? number : 0));
             CHECK(dungeon.obj_great == (std::string(field) == "objGreat" ? number : 0));
@@ -144,11 +145,11 @@ TEST_CASE("DungeonReader rejects item chance caps outside zero to one hundred be
             CAPTURE(number);
             DungeonReaderStateGuard guard;
             const auto original = make_dungeon();
-            REQUIRE(DungeonReader(original).read() == PARSE_ERROR_NONE);
+            REQUIRE(DungeonReader(original).read().has_value());
             auto data = make_dungeon(1);
             data["name"] = { { "ja", "changed" }, { "en", "changed" } };
             data["generation"][field] = number;
-            CHECK(DungeonReader(data).read() == PARSE_ERROR_INVALID_FLAG);
+            CHECK(test::to_error_code(DungeonReader(data).read()) == PARSE_ERROR_INVALID_FLAG);
             REQUIRE(DungeonList::get_instance().size() == 1);
             const auto &previous = DungeonList::get_instance().get_dungeon(DungeonId::WILDERNESS);
             CHECK(previous.name == "test dungeon");
@@ -165,7 +166,7 @@ TEST_CASE("DungeonReader preserves monster count boundaries")
         DungeonReaderStateGuard guard;
         auto data = make_dungeon();
         data["monsters"]["minCount"] = number;
-        REQUIRE(DungeonReader(data).read() == PARSE_ERROR_NONE);
+        REQUIRE(DungeonReader(data).read().has_value());
         CHECK(DungeonList::get_instance().get_dungeon(DungeonId::WILDERNESS).min_monster_count_on_floor == number);
     }
 }
@@ -176,10 +177,10 @@ TEST_CASE("DungeonReader rejects monster counts outside zero to one hundred befo
         CAPTURE(number);
         DungeonReaderStateGuard guard;
         const auto original = make_dungeon();
-        REQUIRE(DungeonReader(original).read() == PARSE_ERROR_NONE);
+        REQUIRE(DungeonReader(original).read().has_value());
         auto data = make_dungeon(1);
         data["monsters"]["minCount"] = number;
-        CHECK(DungeonReader(data).read() == PARSE_ERROR_INVALID_FLAG);
+        CHECK(test::to_error_code(DungeonReader(data).read()) == PARSE_ERROR_INVALID_FLAG);
         REQUIRE(DungeonList::get_instance().size() == 1);
         CHECK(DungeonList::get_instance().get_dungeon(DungeonId::WILDERNESS).min_monster_count_on_floor == 14);
     }
@@ -193,7 +194,7 @@ TEST_CASE("DungeonReader preserves signed short depth bounds and deep dungeons")
         auto data = make_dungeon();
         data["generation"]["minDepth"] = depth;
         data["generation"]["maxDepth"] = depth;
-        REQUIRE(DungeonReader(data).read() == PARSE_ERROR_NONE);
+        REQUIRE(DungeonReader(data).read().has_value());
         const auto &dungeon = DungeonList::get_instance().get_dungeon(DungeonId::WILDERNESS);
         CHECK(dungeon.mindepth == depth);
         CHECK(dungeon.maxdepth == depth);
@@ -209,7 +210,7 @@ TEST_CASE("DungeonReader rejects depths outside save range and inverted depths")
             DungeonReaderStateGuard guard;
             auto data = make_dungeon();
             data["generation"][field] = depth;
-            CHECK(DungeonReader(data).read() == PARSE_ERROR_INVALID_FLAG);
+            CHECK(test::to_error_code(DungeonReader(data).read()) == PARSE_ERROR_INVALID_FLAG);
             CHECK(DungeonList::get_instance().empty());
         }
     }
@@ -217,7 +218,7 @@ TEST_CASE("DungeonReader rejects depths outside save range and inverted depths")
     auto data = make_dungeon();
     data["generation"]["minDepth"] = 100;
     data["generation"]["maxDepth"] = 99;
-    CHECK(DungeonReader(data).read() == PARSE_ERROR_INVALID_VALUE);
+    CHECK(test::to_error_code(DungeonReader(data).read()) == PARSE_ERROR_INVALID_VALUE);
     CHECK(DungeonList::get_instance().empty());
 }
 
@@ -229,10 +230,10 @@ TEST_CASE("DungeonReader restricts required player level to playable levels")
         auto data = make_dungeon();
         data["generation"]["minPlayerLevel"] = level;
         if (level >= 0 && level <= 50) {
-            REQUIRE(DungeonReader(data).read() == PARSE_ERROR_NONE);
+            REQUIRE(DungeonReader(data).read().has_value());
             CHECK(DungeonList::get_instance().get_dungeon(DungeonId::WILDERNESS).min_plev == level);
         } else {
-            CHECK(DungeonReader(data).read() == PARSE_ERROR_INVALID_FLAG);
+            CHECK(test::to_error_code(DungeonReader(data).read()) == PARSE_ERROR_INVALID_FLAG);
             CHECK(DungeonList::get_instance().empty());
         }
     }
@@ -247,7 +248,7 @@ TEST_CASE("DungeonReader rejects coordinates outside wilderness storage and IDs 
             DungeonReaderStateGuard guard;
             auto data = make_dungeon();
             data["position"][field] = coordinate;
-            CHECK(DungeonReader(data).read() == PARSE_ERROR_INVALID_FLAG);
+            CHECK(test::to_error_code(DungeonReader(data).read()) == PARSE_ERROR_INVALID_FLAG);
             CHECK(DungeonList::get_instance().empty());
         }
     }
@@ -255,7 +256,7 @@ TEST_CASE("DungeonReader rejects coordinates outside wilderness storage and IDs 
         CAPTURE(id);
         DungeonReaderStateGuard guard;
         const auto data = make_dungeon(id);
-        CHECK(DungeonReader(data).read() == PARSE_ERROR_INVALID_FLAG);
+        CHECK(test::to_error_code(DungeonReader(data).read()) == PARSE_ERROR_INVALID_FLAG);
         CHECK(DungeonList::get_instance().empty());
     }
 }
@@ -268,10 +269,10 @@ TEST_CASE("DungeonReader preserves nonpercentage tunnel thresholds within the de
         auto data = make_dungeon();
         data["floor"]["tunnelRate"] = threshold;
         if (threshold >= 0 && threshold <= 32767) {
-            REQUIRE(DungeonReader(data).read() == PARSE_ERROR_NONE);
+            REQUIRE(DungeonReader(data).read().has_value());
             CHECK(DungeonList::get_instance().get_dungeon(DungeonId::WILDERNESS).tunnel_percent == threshold);
         } else {
-            CHECK(DungeonReader(data).read() == PARSE_ERROR_INVALID_FLAG);
+            CHECK(test::to_error_code(DungeonReader(data).read()) == PARSE_ERROR_INVALID_FLAG);
             CHECK(DungeonList::get_instance().empty());
         }
     }
@@ -286,18 +287,18 @@ TEST_CASE("DungeonReader validates entrances against actual wilderness dimension
         DungeonReaderStateGuard guard;
         auto data = make_dungeon(1);
         data["position"] = { { "wild_y", y }, { "wild_x", x } };
-        REQUIRE(DungeonReader(data).read() == PARSE_ERROR_NONE);
+        REQUIRE(DungeonReader(data).read().has_value());
         const auto previous = DungeonList::get_instance().get_dungeon_shared(DungeonId::ANGBAND);
         const auto inside = (y == 1) && (x == 1 || x == 2);
-        CHECK(DungeonReader::validate_wilderness_positions(3, 4) == (inside ? PARSE_ERROR_NONE : PARSE_ERROR_OUT_OF_BOUNDS));
+        CHECK(test::to_error_code(DungeonReader::validate_wilderness_positions(3, 4)) == (inside ? PARSE_ERROR_NONE : PARSE_ERROR_OUT_OF_BOUNDS));
         CHECK(DungeonList::get_instance().get_dungeon_shared(DungeonId::ANGBAND) == previous);
         CHECK(previous->get_position() == Pos2D(y, x));
     }
     DungeonReaderStateGuard guard;
     auto data = make_dungeon();
     data["position"] = { { "wild_y", 32766 }, { "wild_x", 32766 } };
-    REQUIRE(DungeonReader(data).read() == PARSE_ERROR_NONE);
-    CHECK(DungeonReader::validate_wilderness_positions(3, 4) == PARSE_ERROR_NONE);
+    REQUIRE(DungeonReader(data).read().has_value());
+    CHECK(DungeonReader::validate_wilderness_positions(3, 4).has_value());
 }
 
 TEST_CASE("DungeonReader accepts bounded weights and excludes zero weight entries")
@@ -307,7 +308,7 @@ TEST_CASE("DungeonReader accepts bounded weights and excludes zero weight entrie
         DungeonReaderStateGuard guard;
         auto data = make_dungeon();
         data[section]["tiles"] = { { { "type", "FLOOR" }, { "rate", 0 } }, { { "type", "GRANITE" }, { "rate", 32767 } } };
-        REQUIRE(DungeonReader(data).read() == PARSE_ERROR_NONE);
+        REQUIRE(DungeonReader(data).read().has_value());
         const auto &table = terrain_table(DungeonList::get_instance().get_dungeon(DungeonId::WILDERNESS), section);
         CHECK(table.item_count() == 1);
         CHECK(table.total_prob() == 32767);
@@ -335,7 +336,7 @@ TEST_CASE("DungeonReader rejects invalid weights without publishing a dungeon")
             DungeonReaderStateGuard guard;
             auto data = make_dungeon();
             data[section]["tiles"][0]["rate"] = rate;
-            CHECK(DungeonReader(data).read() == PARSE_ERROR_UNDEFINED_TERRAIN_TAG);
+            CHECK(test::to_error_code(DungeonReader(data).read()) == PARSE_ERROR_UNDEFINED_TERRAIN_TAG);
             CHECK(DungeonList::get_instance().empty());
         }
     }
@@ -362,7 +363,7 @@ TEST_CASE("DungeonReader rejects unusable or malformed terrain tables")
             DungeonReaderStateGuard guard;
             auto data = make_dungeon();
             data[section]["tiles"] = tiles;
-            CHECK(DungeonReader(data).read() == PARSE_ERROR_UNDEFINED_TERRAIN_TAG);
+            CHECK(test::to_error_code(DungeonReader(data).read()) == PARSE_ERROR_UNDEFINED_TERRAIN_TAG);
             CHECK(DungeonList::get_instance().empty());
         }
     }
@@ -375,13 +376,13 @@ TEST_CASE("DungeonReader does not change published dungeons after a terrain tabl
         DungeonReaderStateGuard guard;
         auto &dungeons = DungeonList::get_instance();
         const auto original = make_dungeon();
-        REQUIRE(DungeonReader(original).read() == PARSE_ERROR_NONE);
+        REQUIRE(DungeonReader(original).read().has_value());
         const auto before = dungeons.get_dungeon_shared(DungeonId::WILDERNESS);
         auto data = make_dungeon(1);
         data["name"]["ja"] = "replacement";
         data["name"]["en"] = "replacement";
         data[section]["tiles"][0]["rate"] = 65537;
-        CHECK(DungeonReader(data).read() == PARSE_ERROR_UNDEFINED_TERRAIN_TAG);
+        CHECK(test::to_error_code(DungeonReader(data).read()) == PARSE_ERROR_UNDEFINED_TERRAIN_TAG);
         CHECK(dungeons.size() == 1);
         CHECK_FALSE(dungeons.contains(DungeonId::ANGBAND));
         CHECK(dungeons.get_dungeon_shared(DungeonId::WILDERNESS) == before);
@@ -404,12 +405,12 @@ TEST_CASE("DungeonReader checks the total terrain weight before integer overflow
         }
         tiles.push_back({ { "type", "FLOOR" }, { "rate", 1 } });
         data[section]["tiles"] = tiles;
-        REQUIRE(DungeonReader(data).read() == PARSE_ERROR_NONE);
+        REQUIRE(DungeonReader(data).read().has_value());
         CHECK(terrain_table(DungeonList::get_instance().get_dungeon(DungeonId::WILDERNESS), section).total_prob() == std::numeric_limits<int>::max());
 
         data["id"] = 1;
         data[section]["tiles"].push_back({ { "type", "FLOOR" }, { "rate", 1 } });
-        CHECK(DungeonReader(data).read() == PARSE_ERROR_UNDEFINED_TERRAIN_TAG);
+        CHECK(test::to_error_code(DungeonReader(data).read()) == PARSE_ERROR_UNDEFINED_TERRAIN_TAG);
         CHECK(DungeonList::get_instance().size() == 1);
         CHECK_FALSE(DungeonList::get_instance().contains(DungeonId::ANGBAND));
     }
@@ -440,13 +441,13 @@ TEST_CASE("DungeonReader rejects final-floor ID narrowing before reference looku
             CAPTURE(value);
             const FinalFloorStateGuard state;
             const auto original_data = make_dungeon();
-            REQUIRE(DungeonReader(original_data).read() == PARSE_ERROR_NONE);
+            REQUIRE(DungeonReader(original_data).read().has_value());
             auto &dungeons = DungeonList::get_instance();
             const auto original = dungeons.get_dungeon_shared(DungeonId::WILDERNESS);
             auto data = make_dungeon(1);
             data["final_floor"] = { { "guardian", 1 }, { "artifact", 1 } };
             data["final_floor"][field] = value;
-            CHECK(DungeonReader(data).read() == PARSE_ERROR_OUT_OF_BOUNDS);
+            CHECK(test::to_error_code(DungeonReader(data).read()) == PARSE_ERROR_OUT_OF_BOUNDS);
             CHECK(dungeons.size() == 1);
             CHECK_FALSE(dungeons.contains(DungeonId::ANGBAND));
             CHECK(dungeons.get_dungeon_shared(DungeonId::WILDERNESS) == original);
@@ -469,7 +470,7 @@ TEST_CASE("DungeonReader preserves representable final-floor IDs and the no-arti
         }
         auto data = make_dungeon();
         data["final_floor"] = { { "guardian", guardian }, { "artifact", artifact } };
-        REQUIRE(DungeonReader(data).read() == PARSE_ERROR_NONE);
+        REQUIRE(DungeonReader(data).read().has_value());
         const auto &dungeon = DungeonList::get_instance().get_dungeon(DungeonId::WILDERNESS);
         CHECK(dungeon.final_guardian == guardian_id);
         CHECK(dungeon.final_artifact == artifact_id);
@@ -484,7 +485,7 @@ TEST_CASE("DungeonReader still rejects undefined representable final-floor IDs")
         auto data = make_dungeon();
         data["final_floor"] = { { "guardian", 1 }, { "artifact", 1 } };
         data["final_floor"][field] = 2;
-        CHECK(DungeonReader(data).read() == PARSE_ERROR_INVALID_VALUE);
+        CHECK(test::to_error_code(DungeonReader(data).read()) == PARSE_ERROR_INVALID_VALUE);
         CHECK(DungeonList::get_instance().empty());
     }
 }
@@ -501,7 +502,7 @@ TEST_CASE("DungeonReader accepts final object IDs through the Baseitem reader li
                                            : id == 10000  ? 2
                                                           : 3);
         data["final_floor"] = { { "object", id } };
-        REQUIRE(DungeonReader(data).read() == PARSE_ERROR_NONE);
+        REQUIRE(DungeonReader(data).read().has_value());
         const auto dungeon_id = static_cast<DungeonId>(data["id"].get<int>());
         CHECK(DungeonList::get_instance().get_dungeon(dungeon_id).final_object == id);
     }
@@ -516,7 +517,7 @@ TEST_CASE("DungeonReader rejects final objects outside the Baseitem limit and mi
         const test::ScopedVectorWrapper saved_items(items);
         auto data = make_dungeon();
         data["final_floor"] = { { "object", id } };
-        CHECK(DungeonReader(data).read() == (id == 1 ? PARSE_ERROR_INVALID_VALUE : PARSE_ERROR_INVALID_FLAG));
+        CHECK(test::to_error_code(DungeonReader(data).read()) == (id == 1 ? PARSE_ERROR_INVALID_VALUE : PARSE_ERROR_INVALID_FLAG));
         CHECK(DungeonList::get_instance().empty());
     }
 }
@@ -526,7 +527,7 @@ TEST_CASE("DungeonReader rejects guardian zero as below the schema minimum befor
     const FinalFloorStateGuard state;
     auto data = make_dungeon();
     data["final_floor"] = { { "guardian", 0 } };
-    CHECK(DungeonReader(data).read() == PARSE_ERROR_OUT_OF_BOUNDS);
+    CHECK(test::to_error_code(DungeonReader(data).read()) == PARSE_ERROR_OUT_OF_BOUNDS);
     CHECK(DungeonList::get_instance().empty());
 }
 
@@ -576,7 +577,7 @@ TEST_CASE("DungeonReader propagates nested parse errors without publishing parti
         CAPTURE(field.value);
         FinalFloorStateGuard guard;
         const auto original = make_dungeon();
-        REQUIRE(DungeonReader(original).read() == PARSE_ERROR_NONE);
+        REQUIRE(DungeonReader(original).read().has_value());
         const auto &dungeons = DungeonList::get_instance();
         const auto before = dungeons.get_dungeon_shared(DungeonId::WILDERNESS);
         auto data = make_dungeon(1);
@@ -587,7 +588,7 @@ TEST_CASE("DungeonReader propagates nested parse errors without publishing parti
         data["final_floor"] = { { "guardian", 1 }, { "artifact", 0 } };
         data[nlohmann::json::json_pointer(field.path)] = field.value;
 
-        CHECK(DungeonReader(data).read() == field.error);
+        CHECK(test::to_error_code(DungeonReader(data).read()) == field.error);
         CHECK(error_idx == 1);
         CHECK(dungeons.size() == 1);
         CHECK_FALSE(dungeons.contains(DungeonId::ANGBAND));
@@ -609,24 +610,24 @@ TEST_CASE("DungeonReader preserves error priority and the diagnostic record ID")
     SUBCASE("an invalid ID does not update the diagnostic ID")
     {
         data["id"] = "id";
-        CHECK(DungeonReader(data).read() == PARSE_ERROR_INVALID_TYPE);
+        CHECK(test::to_error_code(DungeonReader(data).read()) == PARSE_ERROR_INVALID_TYPE);
         CHECK(error_idx == -1);
     }
     SUBCASE("a nonsequential ID precedes field parsing")
     {
         error_idx = 1;
-        CHECK(DungeonReader(data).read() == PARSE_ERROR_NON_SEQUENTIAL_RECORDS);
+        CHECK(test::to_error_code(DungeonReader(data).read()) == PARSE_ERROR_NON_SEQUENTIAL_RECORDS);
         CHECK(error_idx == 1);
     }
     SUBCASE("the valid ID is selected before name parsing")
     {
         data["name"] = 1;
-        CHECK(DungeonReader(data).read() == PARSE_ERROR_INVALID_TYPE);
+        CHECK(test::to_error_code(DungeonReader(data).read()) == PARSE_ERROR_INVALID_TYPE);
         CHECK(error_idx == 1);
     }
     SUBCASE("generation errors precede later field errors")
     {
-        CHECK(DungeonReader(data).read() == PARSE_ERROR_INVALID_FLAG);
+        CHECK(test::to_error_code(DungeonReader(data).read()) == PARSE_ERROR_INVALID_FLAG);
         CHECK(error_idx == 1);
     }
     CHECK(DungeonList::get_instance().empty());
@@ -654,7 +655,7 @@ TEST_CASE("DungeonReader publishes complete nested definitions and accepts optio
         data["monsters"]["flags"] = { "", "UNIQUE", "IM_ACID" };
         data["monsters"]["symbols"] = { "", "D" };
         data["monsters"]["spells"] = { "", "HASTE" };
-        REQUIRE(DungeonReader(data).read() == PARSE_ERROR_NONE);
+        REQUIRE(DungeonReader(data).read().has_value());
         const auto &dungeon = DungeonList::get_instance().get_dungeon(DungeonId::WILDERNESS);
         CHECK(dungeon.text == "description");
         CHECK(dungeon.pit.has(PitKind::ORC));
@@ -687,7 +688,7 @@ TEST_CASE("DungeonReader publishes complete nested definitions and accepts optio
         for (const auto *key : { "flags", "symbols", "spells" }) {
             data["monsters"][key] = nullptr;
         }
-        REQUIRE(DungeonReader(data).read() == PARSE_ERROR_NONE);
+        REQUIRE(DungeonReader(data).read().has_value());
         const auto &dungeon = DungeonList::get_instance().get_dungeon(DungeonId::WILDERNESS);
         CHECK(dungeon.text.empty());
         CHECK(dungeon.streams.empty());

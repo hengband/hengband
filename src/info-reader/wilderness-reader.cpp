@@ -298,7 +298,7 @@ bool initialize_wilderness_definition()
         return false;
     }
 
-    if (DungeonReader::validate_wilderness_positions(definition->height, definition->width) != PARSE_ERROR_NONE) {
+    if (!DungeonReader::validate_wilderness_positions(definition->height, definition->width)) {
         // 起動時の終了より先に、入口のID・座標・寸法を含む診断を表示する。
         msg_erase();
         return false;
@@ -333,8 +333,8 @@ parse_error_type apply_wilderness_definition()
     if (!definition) {
         return PARSE_ERROR_GENERIC;
     }
-    if (const auto err = DungeonReader::validate_wilderness_positions(definition->height, definition->width)) {
-        return static_cast<parse_error_type>(err);
+    if (const auto result = DungeonReader::validate_wilderness_positions(definition->height, definition->width); !result) {
+        return result.error();
     }
     const auto &map = (vanilla_town || lite_town) ? definition->compact : definition->normal;
 

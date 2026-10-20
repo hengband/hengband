@@ -32,66 +32,70 @@ DungeonReader::DungeonReader(const nlohmann::json &dungeon_data)
 {
 }
 
-int DungeonReader::read() const
+/*!
+ * @brief ダンジョン定義(JSON Object)のパース関数
+ * @return 成功時は空の値、失敗時は解析エラーコード
+ */
+tl::expected<void, parse_error_type> DungeonReader::read() const
 {
     const auto &element = this->dungeon_data;
     if (element.is_null() || !element.is_object()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+        return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
     }
 
     int id = 0;
     if (const auto result = info_set_integer(get_json_value(element, "id"), id, true, Range(0, enum2i(DungeonId::MAX) - 1)); !result) {
-        return result.error();
+        return result;
     }
     if (id <= error_idx) {
-        return PARSE_ERROR_NON_SEQUENTIAL_RECORDS;
+        return tl::make_unexpected(PARSE_ERROR_NON_SEQUENTIAL_RECORDS);
     }
     error_idx = id;
 
     DungeonDefinition dungeon;
     if (const auto result = info_set_string(get_json_value(element, "name"), dungeon.name, true); !result) {
-        return result.error();
+        return result;
     }
     if (const auto result = this->set_dungeon_description(dungeon); !result) {
-        return result.error();
+        return result;
     }
 
     const auto &position_obj = get_json_value(element, "position");
     if (position_obj.is_null() || !position_obj.is_object()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+        return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
     }
     int wild_y = 0;
     int wild_x = 0;
     if (const auto result = info_set_integer(get_json_value(position_obj, "wild_y"), wild_y, true, Range(0, 32766)); !result) {
-        return result.error();
+        return result;
     }
     if (const auto result = info_set_integer(get_json_value(position_obj, "wild_x"), wild_x, true, Range(0, 32766)); !result) {
-        return result.error();
+        return result;
     }
     dungeon.initialize_position({ wild_y, wild_x });
 
     if (const auto result = this->set_dungeon_generation(dungeon); !result) {
-        return result.error();
+        return result;
     }
     if (const auto result = this->set_dungeon_floor(dungeon); !result) {
-        return result.error();
+        return result;
     }
     if (const auto result = this->set_dungeon_wall(dungeon); !result) {
-        return result.error();
+        return result;
     }
     if (const auto result = this->set_dungeon_final_floor(dungeon); !result) {
-        return result.error();
+        return result;
     }
     if (const auto result = this->set_dungeon_flags(dungeon); !result) {
-        return result.error();
+        return result;
     }
     if (const auto result = this->set_dungeon_monsters(dungeon); !result) {
-        return result.error();
+        return result;
     }
 
     auto &dungeons = DungeonList::get_instance();
     dungeons.emplace(i2enum<DungeonId>(id), std::move(dungeon));
-    return PARSE_ERROR_NONE;
+    return {};
 }
 
 /*!
@@ -99,9 +103,9 @@ int DungeonReader::read() const
  * @param height 荒野の高さ
  * @param width 荒野の幅
  * @details ダンジョン定義の後に荒野定義を読むため、荒野の初期化前に呼ぶ。荒野自体（ID 0）は対象外。
- * @return 端または範囲外の入口があれば範囲外エラー。
+ * @return 成功時は空の値、失敗時は解析エラーコード（端または範囲外の入口があれば範囲外エラー）
  */
-int DungeonReader::validate_wilderness_positions(int height, int width)
+tl::expected<void, parse_error_type> DungeonReader::validate_wilderness_positions(int height, int width)
 {
     for (const auto &[id, dungeon] : DungeonList::get_instance()) {
         if (id == DungeonId::WILDERNESS) {
@@ -114,10 +118,10 @@ int DungeonReader::validate_wilderness_positions(int height, int width)
             msg_print(_("DungeonDefinitions.jsonc: ダンジョンID '{}' の入口 ({}, {}) は荒野サイズ ({}, {}) の端を除いた内側にありません。",
                           "DungeonDefinitions.jsonc: dungeon ID '{}' entrance ({}, {}) must be inside wilderness size ({}, {}) excluding the edges."),
                 enum2i(id), pos.y, pos.x, height, width);
-            return PARSE_ERROR_OUT_OF_BOUNDS;
+            return tl::make_unexpected(PARSE_ERROR_OUT_OF_BOUNDS);
         }
     }
-    return PARSE_ERROR_NONE;
+    return {};
 }
 
 /*!

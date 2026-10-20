@@ -16,8 +16,8 @@ public:
     DungeonReader &operator=(const DungeonReader &) = delete;
     DungeonReader &operator=(DungeonReader &&) = delete;
 
-    int read() const;
-    static int validate_wilderness_positions(int height, int width);
+    tl::expected<void, parse_error_type> read() const;
+    static tl::expected<void, parse_error_type> validate_wilderness_positions(int height, int width);
 
 private:
     bool grab_one_dungeon_flag(DungeonDefinition &dungeon, std::string_view what) const;
