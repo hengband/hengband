@@ -278,7 +278,7 @@ bool do_cmd_riding(PlayerType *player_ptr, bool force)
         StatusRecalculatingFlag::BONUS,
     };
     rfu.set_flags(flags_srf);
-    rfu.set_flag(MainWindowRedrawingFlag::MAP);
+    rfu.request_map_redrawing();
     rfu.request_riding_status_redrawing();
     (void)move_player_effect(player_ptr, pos.y, pos.x, MPE_HANDLE_STUFF | MPE_ENERGY_USE | MPE_DONT_PICKUP | MPE_DONT_SWAP_MON);
     return true;

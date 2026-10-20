@@ -329,7 +329,7 @@ void process_player(PlayerType *player_ptr)
             }
 
             if (effects->hallucination().is_active()) {
-                rfu.set_flag(MainWindowRedrawingFlag::MAP);
+                rfu.request_map_redrawing();
             }
 
             // 感知の印は下で行動ごとに外すので、途切れないよう外す前に感知し直すか、印を保つ

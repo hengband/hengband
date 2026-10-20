@@ -346,5 +346,5 @@ void glow_deep_lava_and_bldg(PlayerType *player_ptr)
         StatusRecalculatingFlag::MONSTER_LITE,
     };
     rfu.set_flags(flags_srf);
-    rfu.set_flag(MainWindowRedrawingFlag::MAP);
+    rfu.request_map_redrawing();
 }

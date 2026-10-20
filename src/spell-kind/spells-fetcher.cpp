@@ -103,7 +103,7 @@ void fetch_item(PlayerType *player_ptr, const Direction &dir, WEIGHT wgt, bool r
     msg_print(_("{}があなたの足元に飛んできた。", "{} flies through the air to your feet."), str_upcase_first(item_name));
     note_spot(player_ptr, p_pos);
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.set_flag(MainWindowRedrawingFlag::MAP);
+    rfu.request_map_redrawing();
     rfu.request_floor_item_lists_redrawing();
 }
 
