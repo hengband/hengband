@@ -12,6 +12,7 @@
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include <algorithm>
+#include <sstream>
 
 /*!
  * @brief モンスターの使う呪文の威力を決定する /
@@ -467,4 +468,70 @@ int monspell_bluemage_damage(PlayerType *player_ptr, MonsterAbilityType ms_type,
     const auto shoot_dice = o_ptr ? o_ptr->damage_dice : Dice(1, 1);
 
     return monspell_damage_base(player_ptr, ms_type, player_ptr->chp, plev * 2, false, shoot_dice, shoot_base, type);
+}
+
+/*!
+ * @brief 呪文のダメージのダイスを文字列にする
+ * @tparam F ダメージの値の種類 (spell_flag_type の値) を int で受けて、その値を int で返す呼び出し可能な型
+ * @param damage_of ダメージの値の種類 (BASE_DAM・DICE_NUM など) を受けて、その値を返す関数
+ * @return std::string ダメージを表す文字列 (固定値か、ダイスを含む式。例: "50"、"10+2d6")
+ */
+template <typename F>
+static std::string describe_damage_dice(F damage_of)
+{
+    const auto base_damage = damage_of(BASE_DAM);
+    const auto dice_num = damage_of(DICE_NUM);
+    const auto dice_side = damage_of(DICE_SIDE);
+    const auto dice_mult = damage_of(DICE_MULT);
+    const auto dice_div = damage_of(DICE_DIV);
+    if (dice_num == 0) {
+        return std::to_string(base_damage);
+    }
+
+    std::stringstream ss;
+    if (base_damage != 0) {
+        ss << base_damage << '+';
+    }
+
+    if (dice_num != 1) {
+        ss << dice_num;
+    }
+    ss << 'd' << dice_side;
+
+    if (dice_mult != 1 || dice_div != 1) {
+        ss << '*';
+        if (dice_div == 1) {
+            ss << dice_mult;
+        } else {
+            ss << '(' << dice_mult << '/' << dice_div << ')';
+        }
+    }
+
+    return ss.str();
+}
+
+/*!
+ * @brief モンスターの種族が使う呪文のダメージを文字列にする
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param ms_type 呪文番号
+ * @param monrace_id 呪文を唱えるモンスターの種族ID
+ * @return std::string ダメージを表す文字列 (固定値か、ダイスを含む式)
+ * @details 威力の値を持つ呪文 (攻撃呪文と魔力吸収) にだけ使う。それ以外の呪文では値がどれも -1 になる
+ */
+std::string describe_monspell_race_damage(PlayerType *player_ptr, MonsterAbilityType ms_type, MonraceId monrace_id)
+{
+    return describe_damage_dice([&](int type) { return monspell_race_damage(player_ptr, ms_type, monrace_id, type); });
+}
+
+/*!
+ * @brief 青魔導師が使う呪文のダメージを文字列にする
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param ms_type 呪文番号
+ * @param plev 使用するレベル
+ * @return std::string ダメージを表す文字列 (固定値か、ダイスを含む式)
+ * @details 威力の値を持つ呪文 (攻撃呪文と魔力吸収) にだけ使う。それ以外の呪文では値がどれも -1 になる
+ */
+std::string describe_monspell_bluemage_damage(PlayerType *player_ptr, MonsterAbilityType ms_type, PLAYER_LEVEL plev)
+{
+    return describe_damage_dice([&](int type) { return monspell_bluemage_damage(player_ptr, ms_type, plev, type); });
 }

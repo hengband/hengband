@@ -5,7 +5,6 @@
 
 #include "blue-magic/learnt-info.h"
 #include "cmd-action/cmd-spell.h"
-#include "lore/lore-calculator.h" //!< @todo 少し違和感.
 #include "monster-race/race-ability-flags.h"
 #include "monster-race/race-ability-mask.h"
 #include "mspell/mspell-damage-calculator.h"
@@ -32,12 +31,7 @@ PLAYER_LEVEL get_pseudo_monstetr_level(PlayerType *player_ptr)
  */
 static std::string set_bluemage_damage(PlayerType *player_ptr, MonsterAbilityType ms_type, PLAYER_LEVEL plev, concptr msg)
 {
-    int base_damage = monspell_bluemage_damage(player_ptr, ms_type, plev, BASE_DAM);
-    int dice_num = monspell_bluemage_damage(player_ptr, ms_type, plev, DICE_NUM);
-    int dice_side = monspell_bluemage_damage(player_ptr, ms_type, plev, DICE_SIDE);
-    int dice_mult = monspell_bluemage_damage(player_ptr, ms_type, plev, DICE_MULT);
-    int dice_div = monspell_bluemage_damage(player_ptr, ms_type, plev, DICE_DIV);
-    return fmt::format(" {} {}", msg, dice_to_string(base_damage, dice_num, dice_side, dice_mult, dice_div));
+    return fmt::format(" {} {}", msg, describe_monspell_bluemage_damage(player_ptr, ms_type, plev));
 }
 
 /*!
