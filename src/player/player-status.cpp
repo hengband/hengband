@@ -2588,12 +2588,8 @@ void update_creature(PlayerType *player_ptr)
         // 矢弾・投擲の威力、運搬中・両手持ちの表示、騎乗中のランスのダイスは、能力の修正 (能力値・射撃・騎乗・集中度など) で変わる。
         // また、持ち物・装備の中身の変化のうち能力の再計算を伴うもの (重さが変わる個数の増減・装備の出し入れ、
         // 装備の修正値・呪い、$ や . の銘) は、表示の変化もここでまとめて描き直す。
-        // 能力の再計算を伴わない変化 (充填・感触・燃料など) は、それぞれの箇所で持ち物・装備の描き直しを要求する
-        static constexpr auto flags_swrf = {
-            SubWindowRedrawingFlag::INVENTORY,
-            SubWindowRedrawingFlag::EQUIPMENT,
-        };
-        rfu.set_flags(flags_swrf);
+        // 能力の再計算を伴わない変化 (充填・感触・燃料など) は、それぞれの箇所で描き直しを要求する (足元の品もありうるなら床のアイテムの一覧も)
+        rfu.request_carried_item_lists_redrawing();
 
         PlayerAlignment(player_ptr).update_alignment();
         PlayerSkill ps(player_ptr);

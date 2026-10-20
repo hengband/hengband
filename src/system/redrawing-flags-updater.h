@@ -163,6 +163,7 @@ public:
     void request_monster_update_and_map_redrawing();
     void request_sight_recalculation();
     void request_item_lists_redrawing();
+    void request_carried_item_lists_redrawing();
     void request_floor_item_lists_redrawing();
     void request_spell_info_redrawing();
     void request_inscription_change_updates();

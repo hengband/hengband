@@ -78,11 +78,7 @@ FixItemTesterSetter::~FixItemTesterSetter()
     fix_item_tester = std::make_unique<AllMatchItemTester>();
 
     // 選べるアイテムだけに記号を付けていた表示を元に戻す
-    static constexpr auto flags = {
-        SubWindowRedrawingFlag::INVENTORY,
-        SubWindowRedrawingFlag::EQUIPMENT,
-    };
-    RedrawingFlagsUpdater::get_instance().set_flags(flags);
+    RedrawingFlagsUpdater::get_instance().request_carried_item_lists_redrawing();
 }
 
 /*!
