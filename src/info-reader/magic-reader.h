@@ -16,7 +16,7 @@ public:
     MagicReader &operator=(const MagicReader &) = delete;
     MagicReader &operator=(MagicReader &&) = delete;
 
-    int read() const;
+    tl::expected<void, parse_error_type> read() const;
 
 private:
     tl::expected<int, parse_error_type> read_class_id() const;
