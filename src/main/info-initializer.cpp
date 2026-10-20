@@ -265,7 +265,7 @@ void init_spell_info()
     auto &spell_info_list = SpellInfoList::get_instance();
     spell_info_list.initialize();
     auto parser = [&spell_info_list](nlohmann::json &spell_data) {
-        return to_parse_result(SpellReader(spell_data, spell_info_list).read());
+        return SpellReader(spell_data, spell_info_list).read();
     };
     init_json("SpellDefinitions.jsonc", "realms", DefinitionHashDataType::SPELLS, spell_info_list, parser);
 }
