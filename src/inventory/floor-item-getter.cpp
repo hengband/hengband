@@ -16,6 +16,7 @@
 #include "inventory/inventory-util.h"
 #include "inventory/item-selection-util.h"
 #include "io/command-repeater.h"
+#include "io/input-context.h"
 #include "io/input-key-acceptor.h"
 #include "io/input-key-requester.h"
 #include "main/sound-of-music.h"
@@ -204,6 +205,34 @@ static void test_equipment_floor(PlayerType *player_ptr, FloorItemSelection *fis
             fis_ptr->max_equip++;
         }
     }
+}
+
+/*!
+ * @brief アイテムの選択の入力待ちの文脈を作る
+ * @param fis アイテムの選択の状態 (選べる区分・ラベルの範囲など)
+ * @param pmt 選択目的のメッセージ
+ * @return 入力待ちの文脈
+ */
+static InputContext make_item_input_context(const FloorItemSelection &fis, std::string_view pmt)
+{
+    auto area = ItemSelectionArea::INVENTORY;
+    if (command_wrk == USE_EQUIP) {
+        area = ItemSelectionArea::EQUIPMENT;
+    } else if (command_wrk == USE_FLOOR) {
+        area = ItemSelectionArea::FLOOR;
+    }
+
+    const ItemInputDetails details{
+        .area = area,
+        .inventory = fis.allow_inven,
+        .equipment = fis.allow_equip,
+        .floor = fis.allow_floor,
+        .first_label = fis.n1,
+        .last_label = fis.n2,
+        .force = fis.force,
+        .menu = use_menu,
+    };
+    return { InputKind::ITEM, std::string(pmt), details };
 }
 
 /*!
@@ -454,7 +483,11 @@ tl::optional<short> get_item_floor(PlayerType *player_ptr, std::string_view pmt,
 
         ss << " ESC";
         prt(fmt::format("({}) {}", ss.str(), pmt), 0, 0);
-        fis.which = inkey();
+        {
+            const InputContextScope input_context(make_item_input_context(fis, pmt));
+            fis.which = inkey();
+        }
+
         if (use_menu) {
             int max_line = 1;
             if (command_wrk == USE_INVEN) {

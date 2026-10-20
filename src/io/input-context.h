@@ -23,6 +23,7 @@ enum class InputKind {
     QUANTITY, //!< 数量の入力
     MORE, //!< メッセージの -続く- (-more-)
     COMMAND, //!< 次のコマンドの入力 (自分のターン、店のコマンド)
+    ITEM, //!< アイテムの選択
 };
 
 /*!
@@ -54,15 +55,40 @@ struct CommandInputDetails {
     bool operator==(const CommandInputDetails &) const = default;
 };
 
+/*!
+ * @brief アイテムを選ぶ区分
+ */
+enum class ItemSelectionArea {
+    INVENTORY, //!< 持ち物
+    EQUIPMENT, //!< 装備品
+    FLOOR, //!< 足元
+};
+
+/*!
+ * @brief アイテムの選択の詳細
+ */
+struct ItemInputDetails {
+    ItemSelectionArea area; //!< いま選んでいる区分
+    bool inventory; //!< 持ち物から選べるか
+    bool equipment; //!< 装備品から選べるか
+    bool floor; //!< 足元から選べるか
+    char first_label; //!< いま選んでいる区分のラベルの範囲の先頭 (範囲の中にも選べないアイテムがありうる。銘のタグと練気術の w はラベルより優先する)
+    char last_label; //!< いま選んでいる区分のラベルの範囲の末尾
+    bool force; //!< w で練気術を選べるか
+    bool menu; //!< コマンドメニューから選んだコマンドで、ラベルではなくカーソルで選ぶか
+
+    bool operator==(const ItemInputDetails &) const = default;
+};
+
 //! 入力の種類ごとの詳細。詳細を持たない入力では std::monostate
-using InputDetails = std::variant<std::monostate, StringInputDetails, QuantityInputDetails, CommandInputDetails>;
+using InputDetails = std::variant<std::monostate, StringInputDetails, QuantityInputDetails, CommandInputDetails, ItemInputDetails>;
 
 /*!
  * @brief 現在待っている入力の種類と、画面に表示したプロンプト
  */
 struct InputContext {
     InputKind kind; //!< 入力の種類
-    std::string prompt; //!< 画面に表示したプロンプト
+    std::string prompt; //!< 画面に表示したプロンプト (アイテムの選択では、画面の行のうち選ぶ目的の部分)
     InputDetails details; //!< 入力の種類ごとの詳細
 };
 
