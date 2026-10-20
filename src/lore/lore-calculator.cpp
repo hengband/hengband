@@ -1,11 +1,9 @@
 #include "lore/lore-calculator.h"
-#include "game-option/cheat-options.h"
 #include "lore/lore-util.h"
 #include "monster-race/race-ability-flags.h"
 #include "mspell/mspell-damage-calculator.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/player-type-definition.h"
-#include "util/string-processor.h"
 #include <fmt/format.h>
 #include <sstream>
 
@@ -46,6 +44,13 @@ std::string dice_to_string(int base_damage, int dice_num, int dice_side, int dic
     return ss.str();
 }
 
+/*!
+ * @brief モンスターのスキルのダメージを表す文字列を得る
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param lore_ptr 知識情報
+ * @param ms_type スキル
+ * @return 括弧で囲んだダメージ (固定値か、ダイスを含む式。例: "(50)"、"(10+2d6)")
+ */
 std::string get_skill_damage(PlayerType *player_ptr, lore_type *lore_ptr, MonsterAbilityType ms_type)
 {
     const auto monrace_id = lore_ptr->monrace_id;
@@ -54,13 +59,12 @@ std::string get_skill_damage(PlayerType *player_ptr, lore_type *lore_ptr, Monste
     const auto dice_side = monspell_race_damage(player_ptr, ms_type, monrace_id, DICE_SIDE);
     const auto dice_mult = monspell_race_damage(player_ptr, ms_type, monrace_id, DICE_MULT);
     const auto dice_div = monspell_race_damage(player_ptr, ms_type, monrace_id, DICE_DIV);
-    std::stringstream dam_info;
-    dam_info << '(' << dice_to_string(base_damage, dice_num, dice_side, dice_mult, dice_div) << ')';
-    return dam_info.str();
+    return fmt::format("({})", dice_to_string(base_damage, dice_num, dice_side, dice_mult, dice_div));
 }
 
 /*!
  * @brief lore_ptrにダメージを与えるスキルの情報を追加する
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param lore_ptr 知識情報
  * @param ms_type スキル
  * @param msg スキルを表す文字列の書式 ({} にダメージの情報が入る)
@@ -74,14 +78,6 @@ void add_lore_of_damage_skill(PlayerType *player_ptr, lore_type *lore_ptr, Monst
         return;
     }
 
-    const auto monrace_id = lore_ptr->monrace_id;
-    const auto base_damage = monspell_race_damage(player_ptr, ms_type, monrace_id, BASE_DAM);
-    const auto dice_num = monspell_race_damage(player_ptr, ms_type, monrace_id, DICE_NUM);
-    const auto dice_side = monspell_race_damage(player_ptr, ms_type, monrace_id, DICE_SIDE);
-    const auto dice_mult = monspell_race_damage(player_ptr, ms_type, monrace_id, DICE_MULT);
-    const auto dice_div = monspell_race_damage(player_ptr, ms_type, monrace_id, DICE_DIV);
-    std::stringstream dam_info;
-    dam_info << '(' << dice_to_string(base_damage, dice_num, dice_side, dice_mult, dice_div) << ')';
     lore_ptr->lore_msgs.emplace_back(fmt::format(msg, std::string_view(get_skill_damage(player_ptr, lore_ptr, ms_type))), color);
 }
 
