@@ -22,7 +22,7 @@ public:
     VaultReader &operator=(const VaultReader &) = delete;
     VaultReader &operator=(VaultReader &&) = delete;
 
-    int read();
+    tl::expected<void, parse_error_type> read();
     const std::optional<VaultReadError> &error() const;
 
 private:
