@@ -14,7 +14,6 @@
 #include "game-option/disturbance-options.h"
 #include "inventory/inventory-slot-types.h"
 #include "object-enchant/item-apply-magic.h"
-#include "object-enchant/item-feeling.h"
 #include "object-enchant/item-magic-applier.h"
 #include "object-enchant/object-boost.h"
 #include "object-enchant/object-ego.h"
@@ -337,9 +336,7 @@ static void break_curse(ItemEntity &item)
     }
 
     msg_print(_("かけられていた呪いが打ち破られた！", "The curse is broken!"));
-    item.curse_flags.clear();
-    item.set_identification_flag(IdentificationFlag::SENSE);
-    item.feeling = FEEL_NONE;
+    item.remove_curses();
 }
 
 /*!

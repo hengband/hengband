@@ -1388,6 +1388,19 @@ void ItemEntity::sense(item_feel_type feel)
 }
 
 /*!
+ * @brief 呪いを全て解き、擬似鑑定の感触を消す
+ * @details 呪いが解けると感触が実際の品と合わなくなるので、呪いと関係の無い感触 ({特別製} など) も消す。
+ * 永遠の呪いが解けない場合の扱いは呼び出し元が行う。
+ * 呪いの無くなった品をもう一度擬似鑑定で感じられるよう、簡易鑑定済みの印 (SENSE) も外す。
+ */
+void ItemEntity::remove_curses()
+{
+    this->curse_flags.clear();
+    this->identification_flags.reset(IdentificationFlag::SENSE);
+    this->feeling = FEEL_NONE;
+}
+
+/*!
  * @brief 試行済にする
  */
 void ItemEntity::mark_as_tried() const

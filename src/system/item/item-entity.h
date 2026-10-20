@@ -185,6 +185,7 @@ public:
 
     void mark_as_known();
     void sense(item_feel_type feel);
+    void remove_curses();
     void mark_as_tried() const;
 
     void set_position(const Pos2D &pos);

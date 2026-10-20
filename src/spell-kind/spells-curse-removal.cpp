@@ -1,7 +1,6 @@
 #include "spell-kind/spells-curse-removal.h"
 #include "core/window-redrawer.h"
 #include "inventory/inventory-slot-types.h"
-#include "object-enchant/item-feeling.h"
 #include "object-enchant/trc-types.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
@@ -34,9 +33,7 @@ static int exe_curse_removal(PlayerType *player_ptr, int all)
             continue;
         }
 
-        o_ptr->curse_flags.clear();
-        o_ptr->set_identification_flag(IdentificationFlag::SENSE);
-        o_ptr->feeling = FEEL_NONE;
+        o_ptr->remove_curses();
         rfu.set_flag(StatusRecalculatingFlag::BONUS);
         count++;
     }
