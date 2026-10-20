@@ -119,6 +119,82 @@ TEST_CASE("WildernessReader rejects undefined town references")
     }
 }
 
+/*!
+ * @brief 町の番号は、町の訪問記録が持つ TownId::MAX（6）までに限る
+ * @details それより後の番号の町に入ると、町の訪問記録の更新が例外で落ちる。
+ */
+TEST_CASE("WildernessReader limits town IDs to the town records")
+{
+    auto data = make_definition();
+    data["towns"][0]["id"] = 6;
+    data["maps"]["normal"]["letters"][1]["town"] = 6;
+    WildernessDefinition definition;
+    REQUIRE(WildernessReader(data).read(definition) == PARSE_ERROR_NONE);
+    CHECK(definition.towns[0].id == 6);
+
+    data["towns"][0]["id"] = 7;
+    data["maps"]["normal"]["letters"][1]["town"] = 1;
+    auto existing = make_existing_definition();
+    CHECK(WildernessReader(data).read(existing) == PARSE_ERROR_INVALID_FLAG);
+    check_existing_definition(existing);
+
+    data = make_definition();
+    data["maps"]["normal"]["letters"][1]["town"] = 7;
+    CHECK(WildernessReader(data).read(existing) == PARSE_ERROR_INVALID_FLAG);
+    check_existing_definition(existing);
+}
+
+/*!
+ * @brief 荒野の外周のマスは、外周の地形で町も道も無いものに限る
+ * @details 外周が通れると、荒野の端の区画に入ったときに外側の区画を作ろうとして荒野の範囲外を引き、例外で落ちる。
+ */
+TEST_CASE("WildernessReader requires the wilderness edge to be closed")
+{
+    const std::vector<nlohmann::json> edge_letters = {
+        { { "symbol", "x" }, { "terrain", 5 } },
+        { { "symbol", "x" }, { "terrain", 0 }, { "town", 1 } },
+        { { "symbol", "x" }, { "terrain", 0 }, { "road", 1 } },
+    };
+    for (const auto *map_name : { "normal", "compact" }) {
+        CAPTURE(map_name);
+        for (const auto &letter : edge_letters) {
+            CAPTURE(letter.dump());
+            // 左の列・右の列・上の行・下の行の外周のマス。
+            const std::vector<std::pair<int, std::string>> rows = { { 1, "x##" }, { 1, "##x" }, { 0, "#x#" }, { 2, "#x#" } };
+            for (const auto &[row_index, row] : rows) {
+                CAPTURE(row_index);
+                CAPTURE(row);
+                auto data = make_definition();
+                data["maps"][map_name]["letters"].push_back(letter);
+                data["maps"][map_name]["layout"][row_index] = row;
+                auto definition = make_existing_definition();
+                CHECK(WildernessReader(data).read(definition) == PARSE_ERROR_INVALID_VALUE);
+                check_existing_definition(definition);
+            }
+        }
+    }
+
+    // 簡易版の短い行でも、荒野の幅で決まる外周（右の列）にあるマスは確かめる。
+    {
+        auto data = make_definition();
+        data["width"] = 4;
+        data["maps"]["normal"]["layout"] = { "####", "#1##", "####" };
+        data["maps"]["compact"]["letters"].push_back({ { "symbol", "x" }, { "terrain", 5 } });
+        data["maps"]["compact"]["layout"] = { "####", "##x", "###" };
+        auto definition = make_existing_definition();
+        CHECK(WildernessReader(data).read(definition) == PARSE_ERROR_NONE);
+        data["maps"]["compact"]["layout"] = { "####", "###x", "###" };
+        CHECK(WildernessReader(data).read(definition) == PARSE_ERROR_INVALID_VALUE);
+    }
+
+    // 内側のマスは外周の決まりに関わらない。
+    auto data = make_definition();
+    data["maps"]["compact"]["letters"].push_back({ { "symbol", "x" }, { "terrain", 5 }, { "road", 1 } });
+    data["maps"]["compact"]["layout"][1] = "#x#";
+    WildernessDefinition definition;
+    CHECK(WildernessReader(data).read(definition) == PARSE_ERROR_NONE);
+}
+
 TEST_CASE("WildernessReader validates layout dimensions and symbols")
 {
     auto data = make_definition();
@@ -195,12 +271,14 @@ TEST_CASE("WildernessReader propagates map helper errors without replacing outpu
         { "/letters/0/level", false, PARSE_ERROR_INVALID_TYPE },
         { "/letters/0/level", 0.5, PARSE_ERROR_INVALID_TYPE },
         { "/letters/0/level", -1, PARSE_ERROR_INVALID_FLAG },
+        { "/letters/0/level", MAX_DEPTH, PARSE_ERROR_INVALID_FLAG },
         { "/letters/0/level", uint64_t{ std::numeric_limits<int>::max() } + 1, PARSE_ERROR_INVALID_FLAG },
         { "/letters/0/level", nlohmann::json::object(), PARSE_ERROR_TOO_FEW_ARGUMENTS },
         { "/letters/0/level", { { other, 0 } }, PARSE_ERROR_TOO_FEW_ARGUMENTS },
         { "/letters/0/level", { { selected, nullptr }, { other, 0 } }, PARSE_ERROR_TOO_FEW_ARGUMENTS },
         { "/letters/0/level", { { selected, false }, { other, 0 } }, PARSE_ERROR_INVALID_TYPE },
         { "/letters/0/level", { { selected, -1 }, { other, 0 } }, PARSE_ERROR_INVALID_FLAG },
+        { "/letters/0/level", { { selected, MAX_DEPTH }, { other, 0 } }, PARSE_ERROR_INVALID_FLAG },
         { "/letters/0/town", false, PARSE_ERROR_INVALID_TYPE },
         { "/letters/0/town", 32768, PARSE_ERROR_INVALID_FLAG },
         { "/letters/0/road", 16, PARSE_ERROR_INVALID_FLAG },
@@ -255,7 +333,7 @@ TEST_CASE("WildernessReader propagates map helper errors without replacing outpu
 }
 
 /*!
- * @brief 整数0・上限値・任意の省略値と、選択言語だけを読む既存の契約を維持する
+ * @brief 整数0・上限値（MAX_DEPTH - 1）・任意の省略値と、選択言語だけを読む既存の契約を維持する
  */
 TEST_CASE("WildernessReader preserves direct and localized level boundaries")
 {
@@ -264,9 +342,9 @@ TEST_CASE("WildernessReader preserves direct and localized level boundaries")
     const std::vector<nlohmann::json> levels = {
         nullptr,
         0,
-        std::numeric_limits<int>::max(),
+        MAX_DEPTH - 1,
         { { selected, 0 }, { other, "unused" } },
-        { { selected, std::numeric_limits<int>::max() }, { other, false } },
+        { { selected, MAX_DEPTH - 1 }, { other, false } },
     };
     for (const auto *map_name : { "normal", "compact" }) {
         CAPTURE(map_name);

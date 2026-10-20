@@ -37,8 +37,8 @@
       "additionalProperties": false,
       "required": ["ja", "en"],
       "properties": {
-        "ja": { "type": "integer", "minimum": 0, "maximum": 2147483647 },
-        "en": { "type": "integer", "minimum": 0, "maximum": 2147483647 }
+        "ja": { "type": "integer", "minimum": 0, "maximum": 127 },
+        "en": { "type": "integer", "minimum": 0, "maximum": 127 }
       }
     },
     "town": {
@@ -46,7 +46,7 @@
       "additionalProperties": false,
       "required": ["id", "name"],
       "properties": {
-        "id": { "type": "integer", "minimum": 1, "maximum": 32767 },
+        "id": { "type": "integer", "minimum": 1, "maximum": 6 },
         "name": { "$ref": "#/definitions/localized_string" },
         "alias": { "$ref": "#/definitions/localized_string" }
       }
@@ -60,11 +60,11 @@
         "terrain": { "type": "integer", "minimum": 0, "maximum": 11 },
         "level": {
           "oneOf": [
-            { "type": "integer", "minimum": 0, "maximum": 2147483647 },
+            { "type": "integer", "minimum": 0, "maximum": 127 },
             { "$ref": "#/definitions/localized_integer" }
           ]
         },
-        "town": { "type": "integer", "minimum": 0, "maximum": 32767 },
+        "town": { "type": "integer", "minimum": 0, "maximum": 6 },
         "road": { "type": "integer", "minimum": 0, "maximum": 15 }
       }
     },

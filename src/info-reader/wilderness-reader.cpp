@@ -11,6 +11,7 @@
 #include "system/dungeon/dungeon-list.h"
 #include "system/enums/dungeon/dungeon-id.h"
 #include "system/floor/town-list.h"
+#include "system/floor/town-records.h"
 #include "system/floor/wilderness-grid.h"
 #include "system/gamevalue.h"
 #include "util/angband-files.h"
@@ -18,12 +19,40 @@
 #include "view/display-messages.h"
 #include <algorithm>
 #include <array>
-#include <limits>
 #include <nlohmann/json.hpp>
 #include <set>
 #include <utility>
 
 namespace {
+/*!
+ * @brief 荒野の外周のマスが、外周の地形で町も道も無いものだけかを確かめる
+ * @param map 荒野マップ
+ * @param width 荒野全体の幅
+ * @param height 荒野全体の高さ
+ * @return 外周がすべて通れないなら true
+ * @details 外周が通れると、荒野の端の区画に入ったときに外側の区画を作ろうとして荒野の範囲外を引き、例外で落ちる。
+ * レイアウトに無いマスは外周の地形になるので確かめない。
+ */
+bool is_edge_closed(const WildernessMapDefinition &map, int width, int height)
+{
+    for (auto y = 0; y < std::min(height, static_cast<int>(map.layout.size())); ++y) {
+        const auto &row = map.layout[y];
+        for (auto x = 0; x < std::min(width, static_cast<int>(row.size())); ++x) {
+            if ((y != 0) && (y != height - 1) && (x != 0) && (x != width - 1)) {
+                continue;
+            }
+            const auto letter = std::find_if(map.letters.begin(), map.letters.end(), [symbol = row[x]](const auto &candidate) {
+                return candidate.symbol == symbol;
+            });
+            if ((letter == map.letters.end()) || (letter->terrain != WildernessTerrain::EDGE) || (letter->town != 0) || (letter->road != 0)) {
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
 /*!
  * @brief 整数または選択言語の整数を、既存の範囲で検証して格納する
  * @param value 整数または言語別の値
@@ -103,7 +132,8 @@ int WildernessReader::read(WildernessDefinition &definition) const
         }
 
         WildernessTownDefinition town;
-        if (const auto err = info_set_integer(get_json_value(town_data, "id"), town.id, true, Range(1, 32767))) {
+        // 町の訪問記録は TownId::MAX までの町しか持たず、それより後の町に入ると例外で落ちるため、番号を限る。
+        if (const auto err = info_set_integer(get_json_value(town_data, "id"), town.id, true, Range(1, enum2i(TownId::MAX)))) {
             return err;
         }
         if (!town_ids.insert(town.id).second) {
@@ -149,6 +179,9 @@ int WildernessReader::read(WildernessDefinition &definition) const
         });
     };
     if (has_undefined_town(parsed.normal) || has_undefined_town(parsed.compact)) {
+        return PARSE_ERROR_INVALID_VALUE;
+    }
+    if (!is_edge_closed(parsed.normal, parsed.width, parsed.height) || !is_edge_closed(parsed.compact, parsed.width, parsed.height)) {
         return PARSE_ERROR_INVALID_VALUE;
     }
 
@@ -200,13 +233,14 @@ tl::expected<void, parse_error_type> WildernessReader::read_map(const nlohmann::
         }
         const auto &level_data = get_json_value(letter_data, "level");
         if (!level_data.is_null()) {
-            if (const auto result = read_localized_integer(level_data, letter.level, Range(0, std::numeric_limits<int>::max())); !result) {
+            // 生成は階層を MAX_DEPTH - 1 で頭打ちにし、地上の階層はセーブで16ビットになるため、それより深い値は受け付けない。
+            if (const auto result = read_localized_integer(level_data, letter.level, Range(0, MAX_DEPTH - 1)); !result) {
                 return result;
             }
         }
         const auto &town_data = get_json_value(letter_data, "town");
         if (!town_data.is_null()) {
-            if (const auto err = info_set_integer(town_data, letter.town, true, Range(0, std::numeric_limits<short>::max())); err != PARSE_ERROR_NONE) {
+            if (const auto err = info_set_integer(town_data, letter.town, true, Range(0, enum2i(TownId::MAX))); err != PARSE_ERROR_NONE) {
                 return tl::make_unexpected(static_cast<parse_error_type>(err));
             }
         }

@@ -239,19 +239,37 @@ def validate_artifact_semantics(data: dict) -> None:
             require_reader_dice(artifact["base_dice"], path + ["base_dice"])
 
 
-def validate_wilderness_semantics(data: dict) -> None:
+# TownList::is_all_initialized() が名前を求める町（1〜VALID_TOWNS-1）。町1には別名も要る。
+REQUIRED_TOWN_IDS = range(1, 6)
+
+
+def count_town_files(repository_root: Path) -> int:
+    """TownList と同じく、町の定義ファイル名の先頭2文字（町の番号）の種類を数える。"""
+    return len({path.name[:2] for path in (repository_root / "lib/edit/towns").glob("*.jsonc")})
+
+
+def validate_wilderness_semantics(data: dict, schema_path: Path | None = None) -> None:
     """Check cross-field constraints used by WildernessReader."""
     for field in ("version", "width", "height"):
         if type(data[field]) is not int:
             raise ValidationError("expected an integer JSON value", path=[field])
 
     town_ids = set()
+    town_file_count = count_town_files(schema_path.resolve().parent.parent) if schema_path is not None else None
     for index, town in enumerate(data["towns"]):
         if type(town["id"]) is not int:
             raise ValidationError("expected an integer JSON value", path=["towns", index, "id"])
         if town["id"] in town_ids:
             raise ValidationError("town IDs must be unique", path=["towns", index, "id"])
         town_ids.add(town["id"])
+        # 初期化は町の定義ファイルより後の番号の町を拒否して終了する。
+        if town_file_count is not None and town["id"] > town_file_count:
+            raise ValidationError("town ID must have a town definition file", path=["towns", index, "id"])
+    for town_id in REQUIRED_TOWN_IDS:
+        if town_id not in town_ids:
+            raise ValidationError(f"town {town_id} must be defined", path=["towns"])
+    if not any(town["id"] == 1 and "alias" in town for town in data["towns"]):
+        raise ValidationError("town 1 must have an alias", path=["towns"])
 
     width = data["width"]
     height = data["height"]
@@ -280,12 +298,20 @@ def validate_wilderness_semantics(data: dict) -> None:
             raise ValidationError("row count must not exceed height", path=map_path + ["layout"])
         if map_name == "normal" and len(layout) != height:
             raise ValidationError("normal row count must equal height", path=map_path + ["layout"])
+        letters_by_symbol = {letter["symbol"]: letter for letter in wilderness_map["letters"]}
         for row_index, row in enumerate(layout):
             if len(row) > width or (map_name == "normal" and len(row) != width):
                 raise ValidationError("normal row width must equal width" if map_name == "normal" else "row width must not exceed width", path=map_path + ["layout", row_index])
             for column, symbol in enumerate(row):
                 if symbol not in symbols:
                     raise ValidationError("layout contains an undefined symbol", path=map_path + ["layout", row_index, column])
+                # 外周が通れると、荒野の端の区画に入ったときに範囲外を引いて落ちるため、WildernessReaderは
+                # 外周を外周の地形（terrain 0）で町も道も無いマスに限る。レイアウトに無いマスは外周の地形になる。
+                if row_index in (0, height - 1) or column in (0, width - 1):
+                    letter = letters_by_symbol[symbol]
+                    if letter["terrain"] != 0 or letter.get("town", 0) != 0 or letter.get("road", 0) != 0:
+                        raise ValidationError("wilderness edge must be impassable edge terrain without town or road",
+                                              path=map_path + ["layout", row_index, column])
 
         position = wilderness_map["starting_position"]
         for field in ("x", "y"):
@@ -333,10 +359,30 @@ def validate_town_preferences_semantics(data: dict, schema_path: Path) -> None:
             raise ValidationError("expected an integer JSON value", path=["legend", symbol, "special"])
 
 
-def validate_town_definition_list_semantics(data: dict, schema_path: Path) -> None:
-    """Check town map references against the distributed map files."""
+# 荒野の地図に置かない旧海底都市（TownId::RLYEH）の番号。町の定義の一覧には書いてよい。
+# C++ の SECRET_TOWN（町の番号5）とは別の町なので、値を揃えない。
+RLYEH_TOWN_NUMBER = 6
+
+
+def validate_town_definition_list_semantics(data: dict, schema_path: Path, data_path: Path | None = None,
+                                            registry: Registry | None = None) -> None:
+    """Check town map references against the distributed map files and the wilderness towns."""
     if type(data["version"]) is not int:
         raise ValidationError("expected an integer JSON value", path=["version"])
+
+    if data_path is not None:
+        # TownDefinitionListReaderは今いる町が一覧に無いと読み込みを失敗させるため、荒野の町はすべて一覧に要る。
+        # 一覧のキーは、荒野の町か旧海底都市に限る（ほかのキーは使われない）。
+        wilderness = load_validated_companion(schema_path, data_path, registry, "WildernessDefinition", "wilderness",
+                                              lambda companion: validate_wilderness_semantics(companion, schema_path))
+        town_ids = {town["id"] for town in wilderness["towns"]}
+        listed = {int(town) for town in data["towns"]}
+        missing = sorted(town_ids - listed)
+        if missing:
+            raise ValidationError(f"wilderness towns {missing} must have a town map", path=["towns"])
+        for town in data["towns"]:
+            if int(town) not in town_ids | {RLYEH_TOWN_NUMBER}:
+                raise ValidationError("town must be a wilderness town or the obsoleted R'lyeh town", path=["towns", town])
 
     edit_dir = schema_path.resolve().parent.parent / "lib/edit"
     for town, entry in data["towns"].items():
@@ -497,8 +543,8 @@ def load_validated_companion(schema_path: Path, data_path: Path, registry: Regis
 
 def load_dungeon_wilderness_dimensions(schema_path: Path, data_path: Path, registry: Registry) -> tuple[int, int]:
     """入口の検証には隣の候補荒野定義を優先し、なければ同梱定義を使う。"""
-    wilderness = load_validated_companion(schema_path, data_path, registry,
-                                          "WildernessDefinition", "wilderness", validate_wilderness_semantics)
+    wilderness = load_validated_companion(schema_path, data_path, registry, "WildernessDefinition", "wilderness",
+                                          lambda companion: validate_wilderness_semantics(companion, schema_path))
     return wilderness["height"], wilderness["width"]
 
 
@@ -910,9 +956,9 @@ def validate_one(pair: tuple[Path, Path, dict], registry: Registry | None = None
             "EgoDefinitions.schema.json": lambda: validate_ego_semantics(data, schema_path),
             "BaseitemDefinitions.schema.json": lambda: validate_baseitem_semantics(data, schema_path),
             "ArtifactDefinitions.schema.json": lambda: validate_artifact_semantics(data),
-            "WildernessDefinition.schema.json": lambda: validate_wilderness_semantics(data),
+            "WildernessDefinition.schema.json": lambda: validate_wilderness_semantics(data, schema_path),
             "TownPreferences.schema.json": lambda: validate_town_preferences_semantics(data, schema_path),
-            "TownDefinitionList.schema.json": lambda: validate_town_definition_list_semantics(data, schema_path),
+            "TownDefinitionList.schema.json": lambda: validate_town_definition_list_semantics(data, schema_path, data_path, registry),
             "TownMap.schema.json": lambda: validate_town_map_semantics(data, schema_path),
             "MonraceDefinitions.schema.json": lambda: validate_monrace_semantics(data, schema_path, data_path, registry),
             "ClassMagicDefinitions.schema.json": lambda: validate_class_magic_semantics(data, schema_path, data_path, registry),
