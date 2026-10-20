@@ -5,44 +5,6 @@
 #include "system/monrace/monrace-definition.h"
 #include "system/player-type-definition.h"
 #include <fmt/format.h>
-#include <sstream>
-
-/*!
- * @brief ダイス目を文字列に変換する
- * @param base_damage 固定値
- * @param dice_num ダイス数
- * @param dice_side ダイス面
- * @param dice_mult ダイス倍率
- * @param dice_div ダイス除数
- * @return std::string サイコロ式の印刷可能なバージョン
- */
-std::string dice_to_string(int base_damage, int dice_num, int dice_side, int dice_mult, int dice_div)
-{
-    if (dice_num == 0) {
-        return std::to_string(base_damage);
-    }
-
-    std::stringstream ss;
-    if (base_damage != 0) {
-        ss << base_damage << '+';
-    }
-
-    if (dice_num != 1) {
-        ss << dice_num;
-    }
-    ss << 'd' << dice_side;
-
-    if (dice_mult != 1 || dice_div != 1) {
-        ss << '*';
-        if (dice_div == 1) {
-            ss << dice_mult;
-        } else {
-            ss << '(' << dice_mult << '/' << dice_div << ')';
-        }
-    }
-
-    return ss.str();
-}
 
 /*!
  * @brief モンスターのスキルのダメージを表す文字列を得る

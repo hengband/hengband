@@ -1,6 +1,7 @@
 #pragma once
 
 #include "system/angband.h"
+#include <string>
 
 enum spell_flag_type {
     DAM_ROLL = 1,
@@ -19,3 +20,4 @@ class PlayerType;
 int monspell_damage(PlayerType *player_ptr, MonsterAbilityType ms_type, MONSTER_IDX m_idx, int TYPE);
 int monspell_race_damage(PlayerType *player_ptr, MonsterAbilityType ms_type, MonraceId monrace_id, int type);
 int monspell_bluemage_damage(PlayerType *player_ptr, MonsterAbilityType ms_type, PLAYER_LEVEL plev, int type);
+std::string dice_to_string(int base_damage, int dice_num, int dice_side, int dice_mult, int dice_div);

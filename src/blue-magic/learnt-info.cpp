@@ -5,7 +5,6 @@
 
 #include "blue-magic/learnt-info.h"
 #include "cmd-action/cmd-spell.h"
-#include "lore/lore-calculator.h" //!< @todo 少し違和感.
 #include "monster-race/race-ability-flags.h"
 #include "monster-race/race-ability-mask.h"
 #include "mspell/mspell-damage-calculator.h"
