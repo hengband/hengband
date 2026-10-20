@@ -28,6 +28,9 @@ constexpr Range LEGEND_EGO_RANGE(std::numeric_limits<int>::min(), std::numeric_l
 constexpr Range QUEST_INTEGER_RANGE(std::numeric_limits<int>::min(), std::numeric_limits<int>::max());
 // メタデータはintで保持するが、対象モンスターと報酬は実行時にshort基底のIDへ変換される。
 constexpr Range QUEST_ID_RANGE(std::numeric_limits<int16_t>::min(), std::numeric_limits<int16_t>::max());
+// 階層と撃破数はセーブで16ビットになる。階層はダンジョンの最深階 (MAX_DEPTH - 1) までしか移動できない。
+constexpr Range QUEST_LEVEL_RANGE(0, MAX_DEPTH - 1);
+constexpr Range QUEST_MAX_NUM_RANGE(0, std::numeric_limits<int16_t>::max());
 
 const std::unordered_map<std::string_view, QuestKindType> QUEST_KIND_TOKENS = {
     { "NONE", QuestKindType::NONE },
@@ -365,13 +368,13 @@ tl::expected<void, parse_error_type> QuestReader::set_definition(QuestFixedMap &
     }
     meta.type = enum2i(kind_it->second);
 
-    if (const auto err = info_set_integer(get_json_value(definition, "level"), meta.level, true, QUEST_INTEGER_RANGE); err != PARSE_ERROR_NONE) {
+    if (const auto err = info_set_integer(get_json_value(definition, "level"), meta.level, true, QUEST_LEVEL_RANGE); err != PARSE_ERROR_NONE) {
         return tl::make_unexpected(static_cast<parse_error_type>(err));
     }
     if (const auto err = info_set_integer(get_json_value(definition, "numMon"), meta.num_mon, false, QUEST_INTEGER_RANGE); err != PARSE_ERROR_NONE) {
         return tl::make_unexpected(static_cast<parse_error_type>(err));
     }
-    if (const auto err = info_set_integer(get_json_value(definition, "maxNum"), meta.max_num, false, QUEST_INTEGER_RANGE); err != PARSE_ERROR_NONE) {
+    if (const auto err = info_set_integer(get_json_value(definition, "maxNum"), meta.max_num, false, QUEST_MAX_NUM_RANGE); err != PARSE_ERROR_NONE) {
         return tl::make_unexpected(static_cast<parse_error_type>(err));
     }
     if (const auto err = info_set_integer(get_json_value(definition, "dungeon"), meta.dungeon, false, QUEST_INTEGER_RANGE); err != PARSE_ERROR_NONE) {

@@ -3,6 +3,8 @@
 #include "system/dungeon/quest-definition.h"
 #include "system/dungeon/quest-fixed-map.h"
 #include "system/dungeon/quest-list.h"
+#include "system/enums/terrain/terrain-tag.h"
+#include "test/system/terrain-list-test-access.h"
 #include <filesystem>
 #include <map>
 
@@ -50,5 +52,7 @@ private:
     std::map<QuestId, QuestType> saved_quests;
     std::map<QuestId, QuestFixedMap> saved_maps;
     std::map<char, QuestLegendCell> saved_legend;
+    // 凡例のセルは地形を TerrainTag::NONE で初期化するため、地図の記号を定義する凡例の読み込みに要る。
+    TerrainListTestAccess none_tag{ TerrainTag::NONE, 0 };
 };
 }

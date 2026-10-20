@@ -46,6 +46,26 @@ void require_quest_reference(bool valid, const std::filesystem::path &file, std:
 }
 
 /*!
+ * @brief 地図のすべての記号が、クエストの凡例か共通凡例で定義されているか確認する
+ * @details 生成時はどちらにも無い記号の凡例を上書きしないため、前に生成した町やクエストの凡例がそのまま使われる。
+ * 使われない地図の候補も、どれが選ばれるかはキャラクタごとに決まるため確認する。
+ */
+void require_defined_map_symbols(const QuestFixedMap &fixed_map, const std::map<char, QuestLegendCell> &base_legend, const std::filesystem::path &file)
+{
+    for (const auto &rows : fixed_map.maps) {
+        for (const auto &row : rows) {
+            for (const auto symbol : row) {
+                if (fixed_map.legend.contains(symbol) || base_legend.contains(symbol)) {
+                    continue;
+                }
+                constexpr auto fmt = _("クエストの地図に未定義の記号があります ({}): '{}'", "Undefined symbol in quest map ({}): '{}'");
+                THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, file.string(), symbol));
+            }
+        }
+    }
+}
+
+/*!
  * @brief 配置時の地形変換の全候補を、乱数とダンジョン状態を変更せずに列挙する
  * @details Quest進入時は現在のダンジョンIDを引き継ぐため、Questのdungeonだけでは絞らない。
  * convert_terrain_id()と同じく一段の変換とし、正の重みの床・壁候補をすべて照合する。
@@ -415,6 +435,7 @@ void QuestList::load_json_quests(const std::filesystem::path &quests_dir, std::m
             constexpr auto fmt = _("クエストの対象モンスターが未定義です ({}): monster {}", "Undefined quest target monster ({}): monster {}");
             THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, file.string(), monster_id));
         }
+        require_defined_map_symbols(parsed_maps.at(quest_id), base_legend, file);
     }
     // 全ファイルの解析後に照合し、ファイル順に依存する前方参照の拒否を避ける。
     // 0 は「指定なし」または通常フロアからの退出を表すため、定義表を要求しない。

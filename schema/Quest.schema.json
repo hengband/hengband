@@ -124,11 +124,14 @@
         },
         "level": {
           "type": "integer",
-          "minimum": 0
+          "minimum": 0,
+          "maximum": 127,
+          "description": "Dungeon level; at most MAX_DEPTH - 1, the deepest reachable level."
         },
         "dungeon": {
           "type": "integer",
           "minimum": 0,
+          "maximum": 2147483647,
           "description": "DungeonId; 0 = none/quest-local floor."
         },
         "monster": {
@@ -139,12 +142,14 @@
         },
         "numMon": {
           "type": "integer",
-          "minimum": 0
+          "minimum": 0,
+          "maximum": 2147483647
         },
         "maxNum": {
           "type": "integer",
           "minimum": 0,
-          "description": "Required kill count (KILL_NUMBER)."
+          "maximum": 32767,
+          "description": "Required kill count (KILL_NUMBER); saved as a 16-bit value."
         },
         "flags": {
           "type": "array",
@@ -256,11 +261,15 @@
       "properties": {
         "y": {
           "type": "integer",
-          "minimum": 0
+          "minimum": 0,
+          "maximum": 65,
+          "description": "Row in every map variant; at most MAX_HGT - 1."
         },
         "x": {
           "type": "integer",
-          "minimum": 0
+          "minimum": 0,
+          "maximum": 197,
+          "description": "Column in every map variant; at most MAX_WID - 1."
         }
       }
     },
@@ -272,15 +281,20 @@
         "leavingQuest": {
           "type": "integer",
           "minimum": 0,
+          "maximum": 2147483647,
           "description": "QuestId being left ($LEAVING_QUEST); omit for the default/fallback entry."
         },
         "y": {
           "type": "integer",
-          "minimum": 0
+          "minimum": 0,
+          "maximum": 65,
+          "description": "Row in every map variant; at most MAX_HGT - 1."
         },
         "x": {
           "type": "integer",
-          "minimum": 0
+          "minimum": 0,
+          "maximum": 197,
+          "description": "Column in every map variant; at most MAX_WID - 1."
         }
       }
     }
