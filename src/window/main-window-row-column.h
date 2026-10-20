@@ -30,9 +30,6 @@
 #define ROW_AC 13
 #define COL_AC 0 /* "Cur AC xxxxx" */
 
-#define ROW_HPMP 14
-#define COL_HPMP 0
-
 #define ROW_CURHP 14
 #define COL_CURHP 0 /* "Cur HP xxxxx" */
 
