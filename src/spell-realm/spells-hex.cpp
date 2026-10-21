@@ -50,8 +50,8 @@ SpellHex::SpellHex(PlayerType *player_ptr)
 /*!
  * @brief 維持している呪術が変わったときの更新を予約する
  * @details 呪術の効果で変わる能力 (最大 HP・最大 MP・覚えられる呪文の数を含む) を計算し直し、
- * 拡張ステータスと HP・MP の表示を描き直す。呪術を唱えたとき (途中で取りやめたときを除く)・失敗したとき・止めたときに呼ばれる。
- * 維持している間も、do_hex_spell() の CONTNUATION を通るたびに呼ばれる。
+ * 拡張ステータスと HP・MP の表示を描き直す。呪術を唱えたとき (途中で取りやめたときを除く)・止めたとき・中断していた呪術を再開したときに呼ばれる。
+ * 維持している間の毎ターンの処理 (CONTNUATION) では、維持している呪術の組は変わらないので呼ばない。
  */
 void SpellHex::request_casting_change_updates()
 {
@@ -94,6 +94,7 @@ void SpellHex::discard_interrupted_spells()
 
 /*!
  * @brief 詠唱フラグとは別に継続する我慢・復讐を解除する
+ * @details 状態の表示は、我慢・復讐を表示していたときだけ描き直しを要求する。
  */
 void SpellHex::clear_revenge()
 {
@@ -101,10 +102,9 @@ void SpellHex::clear_revenge()
         return;
     }
 
-    this->spell_hex_data->revenge_type = SpellHexRevengeType::NONE;
-    this->spell_hex_data->revenge_power = 0;
-    this->spell_hex_data->revenge_turn = 0;
-    DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
+    this->set_revenge_type(SpellHexRevengeType::NONE);
+    this->set_revenge_power(0, true);
+    this->set_revenge_turn(0, true);
 }
 
 /*!
@@ -252,12 +252,8 @@ bool SpellHex::process_mana_cost(const bool need_restart)
     msg_print(_("詠唱を再開した。", "You restart casting."));
     this->player_ptr->action = ACTION_SPELL;
     dur.request_monster_update_and_map_redrawing();
-    dur.request_bonus_and_max_hp_recalculation();
-    static constexpr auto flags_mwrf = {
-        MainWindowRedrawingFlag::TIMED_EFFECT,
-        MainWindowRedrawingFlag::ACTION,
-    };
-    dur.set_flags(flags_mwrf);
+    // 中断していた呪術が戻り、維持している呪術の組が変わる (状態の表示と行動の表示は拡張ステータスに含まれる)
+    request_casting_change_updates();
     return true;
 }
 
@@ -438,10 +434,15 @@ byte SpellHex::get_revenge_turn() const
  */
 void SpellHex::set_revenge_turn(byte turn, bool substitution)
 {
+    const auto shown_type = this->get_shown_revenge_type();
     if (substitution) {
         this->spell_hex_data->revenge_turn = turn;
     } else {
         this->spell_hex_data->revenge_turn -= turn;
+    }
+
+    if (shown_type != this->get_shown_revenge_type()) {
+        DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     }
 }
 
@@ -452,5 +453,19 @@ SpellHexRevengeType SpellHex::get_revenge_type() const
 
 void SpellHex::set_revenge_type(SpellHexRevengeType type)
 {
+    const auto shown_type = this->get_shown_revenge_type();
     this->spell_hex_data->revenge_type = type;
+    if (shown_type != this->get_shown_revenge_type()) {
+        DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
+    }
+}
+
+/*!
+ * @brief 状態の表示に出している我慢・復讐の種類を返す
+ * @return 残りターンがあれば我慢・復讐の種類、無ければ NONE
+ * @details 状態の表示 (main-window-stat-poster.cpp) はこの値で我慢・復讐を出すので、変わったら状態の表示を描き直す。
+ */
+SpellHexRevengeType SpellHex::get_shown_revenge_type() const
+{
+    return this->spell_hex_data->revenge_turn > 0 ? this->spell_hex_data->revenge_type : SpellHexRevengeType::NONE;
 }
