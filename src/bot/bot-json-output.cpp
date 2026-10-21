@@ -103,6 +103,7 @@
 #include "world/world.h"
 #include <algorithm>
 #include <array>
+#include <cassert>
 #include <chrono>
 #include <cstdint>
 #include <filesystem>
@@ -2592,10 +2593,14 @@ nlohmann::json make_bot_character_speed_json(int total, int temporary, bool ligh
     };
 }
 
+namespace {
+const BotScreen *current_bot_screen = nullptr; //!< 開いている画面 (BotScreenScope が登録する)
+}
+
 /*!
  * @brief ゲームの内部状態のスナップショットをJSONで生成する
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param include_map grid_mapを含めるか
+ * @param include_map grid_mapを含めるか (登録された画面が地図を省くときは含めない)
  * @pre player_ptrとplayer_ptr->current_floor_ptrがnullptrでないことを呼び出し側が保証すること
  * @return スナップショットのJSONオブジェクト
  * @details
@@ -2605,7 +2610,52 @@ nlohmann::json make_bot_character_speed_json(int total, int temporary, bool ligh
  */
 nlohmann::json make_bot_json_snapshot(PlayerType *player_ptr, bool include_map)
 {
-    return make_snapshot(player_ptr, include_map, BotSnapshotMessages::HISTORY);
+    const auto should_include_map = include_map && ((current_bot_screen == nullptr) || current_bot_screen->include_map);
+    auto snapshot = make_snapshot(player_ptr, should_include_map, BotSnapshotMessages::HISTORY);
+    if (current_bot_screen != nullptr) {
+        current_bot_screen->add_to_snapshot(snapshot, player_ptr);
+    }
+
+    return snapshot;
+}
+
+/*!
+ * @brief 画面を登録する
+ * @param screen 画面の情報を足す処理と、地図を載せてよいか
+ */
+BotScreenScope::BotScreenScope(BotScreen screen)
+    : registered(std::move(screen))
+    , previous(current_bot_screen)
+{
+    assert(this->registered.add_to_snapshot);
+    current_bot_screen = &this->registered;
+}
+
+/*!
+ * @brief 画面の登録を解除し、前の登録に戻す
+ * @details 登録とは逆の順に解除すること (後に登録したスコープより先に解除すると、解除した登録を指したままになる)
+ */
+BotScreenScope::~BotScreenScope()
+{
+    assert(current_bot_screen == &this->registered);
+    current_bot_screen = this->previous;
+}
+
+/*!
+ * @brief 店の画面を登録するための BotScreen を作る
+ * @param screen 店の画面 (登録するスコープより長く生きること)
+ * @return 店の画面の BotScreen
+ * @details 地図は載せない。店の中ではプレイヤーは動けずフロアも変わらないので、地図は店に入る前のスナップショットと
+ * 同じになる (店のスナップショットはキーを押すたびに出るので、そのたびに同じ地図を出すことになる)。
+ * また、店の画面ではフロアの視界と光源の情報を消しているので、地図の視界や照明の情報は実際と合わない。
+ */
+BotScreen make_bot_store_screen(const StoreScreen &screen)
+{
+    const auto add_store = [&screen](nlohmann::json &snapshot, PlayerType *player_ptr) {
+        snapshot["type"] = "store";
+        snapshot["store"] = make_store_json(player_ptr, screen);
+    };
+    return { add_store, false };
 }
 
 void output_bot_json_snapshot(PlayerType *player_ptr)
@@ -2627,18 +2677,11 @@ void output_bot_json_store_snapshot(PlayerType *player_ptr, const StoreScreen &s
 
     // Same base snapshot (player gold, inventory, equipment) plus the store's
     // stock, so the bot can decide what to buy while at the store prompt.
-    //
-    // The map is deliberately omitted here.  At the store prompt the player
-    // cannot move and the floor cannot change, so grid_map would repeat the
-    // surface snapshot's map verbatim. A store
-    // session emits one snapshot per processed key (see cmd-store.cpp), so
-    // paging through a large inventory multiplies that cost by the key count.
-    // This reveals nothing new to the bot; it only stops re-sending what the
-    // preceding surface snapshot already carried.
+    // 地図は載せない。理由は make_bot_store_screen() の説明を参照
     const auto build_started = BotJsonClock::now();
-    auto snapshot = make_snapshot(player_ptr, false);
-    snapshot["type"] = "store";
-    snapshot["store"] = make_store_json(player_ptr, screen);
+    const auto store_screen = make_bot_store_screen(screen);
+    auto snapshot = make_snapshot(player_ptr, store_screen.include_map);
+    store_screen.add_to_snapshot(snapshot, player_ptr);
     write_snapshot(snapshot, elapsed_microseconds(build_started));
 }
 
