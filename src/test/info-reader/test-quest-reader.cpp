@@ -14,6 +14,7 @@
 #include "system/terrain/terrain-list.h"
 #include "test/info-reader/parse-result-helpers.h"
 #include "test/system/terrain-list-test-access.h"
+#include <cstdint>
 #include <doctest/doctest.h>
 #include <limits>
 #include <nlohmann/json.hpp>
@@ -504,7 +505,8 @@ TEST_CASE("Quest legend integers retain representable signed and unsigned bounda
     for (const auto &path : paths) {
         const auto is_ego = path.starts_with("/ego");
         const auto is_monster_id = path == "/monster" || path == "/monster/cloneOf";
-        const auto maximum = is_ego ? std::numeric_limits<int>::max() : std::numeric_limits<int16_t>::max();
+        // エゴのIDはエゴ定義でもセーブでも1バイトに収まる範囲に限られる。
+        const auto maximum = is_ego ? int{ std::numeric_limits<uint8_t>::max() } : int{ std::numeric_limits<int16_t>::max() };
         const auto minimum = is_ego ? std::numeric_limits<int>::min() : is_monster_id ? -maximum
                                                                                       : std::numeric_limits<int16_t>::min();
         const std::vector<nlohmann::json> values = { minimum, 0, static_cast<uint64_t>(maximum) };
@@ -552,7 +554,7 @@ TEST_CASE("QuestReader rejects legend integer overflow without publishing output
     for (const auto &path : paths) {
         const auto is_ego = path.starts_with("/ego");
         const auto is_monster_id = path == "/monster" || path == "/monster/cloneOf";
-        const int64_t maximum = is_ego ? std::numeric_limits<int>::max() : std::numeric_limits<int16_t>::max();
+        const int64_t maximum = is_ego ? std::numeric_limits<uint8_t>::max() : std::numeric_limits<int16_t>::max();
         const int64_t minimum = is_ego ? std::numeric_limits<int>::min() : is_monster_id ? -maximum
                                                                                          : std::numeric_limits<int16_t>::min();
         std::vector<nlohmann::json> values = {

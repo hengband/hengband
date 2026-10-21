@@ -64,6 +64,20 @@ class QuestInt16RangeTest(unittest.TestCase):
             with self.subTest(cell=make_cell(32768)):
                 self.assert_boundary(lambda value: self.quest(make_cell(value)), 32767, 32768)
 
+    def test_legend_ego_follows_ego_id_range(self):
+        # エゴのIDはエゴ定義でもセーブでも1バイトに収まる 1〜255 に限られる。
+        cases = (
+            lambda value: {"ego": value},
+            lambda value: {"ego": {"random": True, "id": value}},
+        )
+        for make_cell in cases:
+            with self.subTest(cell=make_cell(256)):
+                ok, message = self.validate("Quest", self.quest(make_cell(255)))
+                self.assert_schema_accepted(ok, message)
+                ok, message = self.validate("Quest", self.quest(make_cell(256)))
+                self.assertFalse(ok, message)
+                self.assertIn("256 is greater than the maximum of 255", message)
+
     def test_special_follows_reader_signed_int16_range(self):
         for accepted, rejected in ((32767, 32768), (-32768, -32769)):
             with self.subTest(rejected=rejected):
@@ -252,7 +266,7 @@ class QuestEditDirTestCase(unittest.TestCase):
                 "#": {"terrain": "FLOOR", "trap": "CLOSED_DOOR", "monster": 1, "object": 1, "artifact": 1},
                 "c": {"monster": {"cloneOf": 1}, "artifact": {"random": True, "id": 1}},
                 "r": {"terrain": "*", "trap": {"random": True}, "monster": {"random": True, "oodLevel": 32767},
-                      "object": {"random": True, "oodLevel": 32767}, "artifact": {"questReward": True}, "ego": 32767},
+                      "object": {"random": True, "oodLevel": 32767}, "artifact": {"questReward": True}, "ego": 255},
             },
             "map": ["#cr"],
         }
