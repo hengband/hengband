@@ -16,7 +16,7 @@
 #include <windows.h>
 
 // 1つの項目に設定可能な最大ファイル数
-#define SAMPLE_MAX 16
+constexpr auto SAMPLE_MAX = 16;
 
 /*!
  * @brief マップのキーを生成する
