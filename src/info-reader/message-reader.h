@@ -13,7 +13,7 @@ public:
     MessageReader &operator=(const MessageReader &) = delete;
     MessageReader &operator=(MessageReader &&) = delete;
 
-    int read() const;
+    tl::expected<void, parse_error_type> read() const;
 
 private:
     tl::expected<void, parse_error_type> set_mon_message() const;

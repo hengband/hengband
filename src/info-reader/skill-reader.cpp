@@ -58,33 +58,38 @@ tl::expected<void, parse_error_type> SkillReader::read_integer(const nlohmann::j
     return {};
 }
 
-int SkillReader::read()
+/*!
+ * @brief 職業技能定義(JSON Object)のパース関数
+ * @return 成功時は空の値、失敗時は解析エラーコード
+ * @details 失敗時の診断は error() で取得できる。
+ */
+tl::expected<void, parse_error_type> SkillReader::read()
 {
     this->diagnostic.reset();
     this->class_id = this->class_data.is_object() && this->class_data.contains("id") ? this->class_data["id"].dump() : "<unknown>";
     if (const auto result = this->check_keys(this->class_data, "$", { "id", "weapons", "skills" }); !result) {
-        return result.error();
+        return result;
     }
 
     int id;
     if (const auto result = this->read_integer(this->class_data["id"], id, static_cast<int>(class_skills_info.size()) - 1, "$.id"); !result) {
-        return result.error();
+        return result;
     }
     // 職業IDは0から連続。重複と途中の欠落を拒否する。
     if (id != error_idx + 1) {
-        return this->fail(PARSE_ERROR_NON_SEQUENTIAL_RECORDS, "$.id", fmt::format(_("職業ID {}が必要です（職業の重複または欠落）", "expected class id {} (duplicate or missing class)"), error_idx + 1)).error();
+        return this->fail(PARSE_ERROR_NON_SEQUENTIAL_RECORDS, "$.id", fmt::format(_("職業ID {}が必要です（職業の重複または欠落）", "expected class id {} (duplicate or missing class)"), error_idx + 1));
     }
 
     skill_table skills{};
     if (const auto result = this->read_weapons(skills); !result) {
-        return result.error();
+        return result;
     }
     if (const auto result = this->read_skills(skills); !result) {
-        return result.error();
+        return result;
     }
     class_skills_info[id] = std::move(skills);
     error_idx = id;
-    return PARSE_ERROR_NONE;
+    return {};
 }
 
 tl::expected<void, parse_error_type> SkillReader::read_weapons(skill_table &skills)

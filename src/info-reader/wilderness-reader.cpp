@@ -84,7 +84,7 @@ std::optional<WildernessDefinition> load_wilderness_definition()
     try {
         const auto json_object = loader.parse();
         WildernessDefinition definition;
-        if (WildernessReader(json_object).read(definition) != PARSE_ERROR_NONE) {
+        if (!WildernessReader(json_object).read(definition)) {
             return std::nullopt;
         }
 
@@ -100,53 +100,59 @@ WildernessReader::WildernessReader(const nlohmann::json &data)
 {
 }
 
-int WildernessReader::read(WildernessDefinition &definition) const
+/*!
+ * @brief 荒野の定義(JSON Object)のパース関数
+ * @param definition 読み込んだ荒野の定義の出力先
+ * @return 成功時は空の値、失敗時は解析エラーコード
+ * @details 全件の検証に成功した場合のみ出力を置き換える。
+ */
+tl::expected<void, parse_error_type> WildernessReader::read(WildernessDefinition &definition) const
 {
     if (!this->data.is_object()) {
-        return PARSE_ERROR_INVALID_TYPE;
+        return tl::make_unexpected(PARSE_ERROR_INVALID_TYPE);
     }
 
     WildernessDefinition parsed;
     int version = 0;
     if (const auto result = info_set_integer(get_json_value(this->data, "version"), version, true, Range(1, 1)); !result) {
-        return result.error();
+        return result;
     }
     // 荒野全体図は荒野の1マスをフロアの1マスへ描くため、フロアの最大の大きさに収める。
     // 周囲8マスを生成できる内側のマスが要るため、幅・高さとも3以上とする。
     if (const auto result = info_set_integer(get_json_value(this->data, "width"), parsed.width, true, Range(3, MAX_WID)); !result) {
-        return result.error();
+        return result;
     }
     if (const auto result = info_set_integer(get_json_value(this->data, "height"), parsed.height, true, Range(3, MAX_HGT)); !result) {
-        return result.error();
+        return result;
     }
 
     const auto &towns_data = get_json_value(this->data, "towns");
     if (!towns_data.is_array() || towns_data.empty()) {
-        return towns_data.is_null() ? PARSE_ERROR_TOO_FEW_ARGUMENTS : PARSE_ERROR_INVALID_TYPE;
+        return tl::make_unexpected(towns_data.is_null() ? PARSE_ERROR_TOO_FEW_ARGUMENTS : PARSE_ERROR_INVALID_TYPE);
     }
 
     std::set<int> town_ids;
     for (const auto &town_data : towns_data) {
         if (!town_data.is_object()) {
-            return PARSE_ERROR_INVALID_TYPE;
+            return tl::make_unexpected(PARSE_ERROR_INVALID_TYPE);
         }
 
         WildernessTownDefinition town;
         // 町の訪問記録は TownId::MAX までの町しか持たず、それより後の町に入ると例外で落ちるため、番号を限る。
         if (const auto result = info_set_integer(get_json_value(town_data, "id"), town.id, true, Range(1, enum2i(TownId::MAX))); !result) {
-            return result.error();
+            return result;
         }
         if (!town_ids.insert(town.id).second) {
-            return PARSE_ERROR_NON_SEQUENTIAL_RECORDS;
+            return tl::make_unexpected(PARSE_ERROR_NON_SEQUENTIAL_RECORDS);
         }
         if (const auto result = info_set_string(get_json_value(town_data, "name"), town.name, true); !result) {
-            return result.error();
+            return result;
         }
         const auto &alias_data = get_json_value(town_data, "alias");
         if (!alias_data.is_null()) {
             std::string alias;
             if (const auto result = info_set_string(alias_data, alias, true); !result) {
-                return result.error();
+                return result;
             }
             town.alias = std::move(alias);
         }
@@ -155,22 +161,22 @@ int WildernessReader::read(WildernessDefinition &definition) const
 
     const auto &maps = get_json_value(this->data, "maps");
     if (!maps.is_object()) {
-        return maps.is_null() ? PARSE_ERROR_TOO_FEW_ARGUMENTS : PARSE_ERROR_INVALID_TYPE;
+        return tl::make_unexpected(maps.is_null() ? PARSE_ERROR_TOO_FEW_ARGUMENTS : PARSE_ERROR_INVALID_TYPE);
     }
     if (const auto result = this->read_map(get_json_value(maps, "normal"), parsed.width, parsed.height, parsed.normal); !result) {
-        return result.error();
+        return result;
     }
     if (parsed.normal.layout.size() != static_cast<size_t>(parsed.height)) {
-        return PARSE_ERROR_INVALID_VALUE;
+        return tl::make_unexpected(PARSE_ERROR_INVALID_VALUE);
     }
     for (const auto &row : parsed.normal.layout) {
         if (row.size() != static_cast<size_t>(parsed.width)) {
-            return PARSE_ERROR_INVALID_VALUE;
+            return tl::make_unexpected(PARSE_ERROR_INVALID_VALUE);
         }
     }
 
     if (const auto result = this->read_map(get_json_value(maps, "compact"), parsed.width, parsed.height, parsed.compact); !result) {
-        return result.error();
+        return result;
     }
 
     const auto has_undefined_town = [&town_ids](const WildernessMapDefinition &map) {
@@ -179,14 +185,14 @@ int WildernessReader::read(WildernessDefinition &definition) const
         });
     };
     if (has_undefined_town(parsed.normal) || has_undefined_town(parsed.compact)) {
-        return PARSE_ERROR_INVALID_VALUE;
+        return tl::make_unexpected(PARSE_ERROR_INVALID_VALUE);
     }
     if (!is_edge_closed(parsed.normal, parsed.width, parsed.height) || !is_edge_closed(parsed.compact, parsed.width, parsed.height)) {
-        return PARSE_ERROR_INVALID_VALUE;
+        return tl::make_unexpected(PARSE_ERROR_INVALID_VALUE);
     }
 
     definition = std::move(parsed);
-    return PARSE_ERROR_NONE;
+    return {};
 }
 
 /*!
@@ -298,7 +304,7 @@ bool initialize_wilderness_definition()
         return false;
     }
 
-    if (DungeonReader::validate_wilderness_positions(definition->height, definition->width) != PARSE_ERROR_NONE) {
+    if (!DungeonReader::validate_wilderness_positions(definition->height, definition->width)) {
         // 起動時の終了より先に、入口のID・座標・寸法を含む診断を表示する。
         msg_erase();
         return false;
@@ -333,8 +339,8 @@ parse_error_type apply_wilderness_definition()
     if (!definition) {
         return PARSE_ERROR_GENERIC;
     }
-    if (const auto err = DungeonReader::validate_wilderness_positions(definition->height, definition->width)) {
-        return static_cast<parse_error_type>(err);
+    if (const auto result = DungeonReader::validate_wilderness_positions(definition->height, definition->width); !result) {
+        return result.error();
     }
     const auto &map = (vanilla_town || lite_town) ? definition->compact : definition->normal;
 

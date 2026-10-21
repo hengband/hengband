@@ -16,7 +16,7 @@ public:
     BaseitemReader &operator=(const BaseitemReader &) = delete;
     BaseitemReader &operator=(BaseitemReader &&) = delete;
 
-    int read() const;
+    tl::expected<void, parse_error_type> read() const;
 
 private:
     bool grab_one_baseitem_flag(BaseitemDefinition &baseitem, std::string_view what) const;

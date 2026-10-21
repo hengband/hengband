@@ -3,6 +3,7 @@
 #include "info-reader/terrain-reader.h"
 #include "system/terrain/terrain-definition.h"
 #include "system/terrain/terrain-list.h"
+#include "test/info-reader/parse-result-helpers.h"
 #include "test/info-reader/scoped-reader-state.h"
 #include <algorithm>
 #include <doctest/doctest.h>
@@ -101,7 +102,7 @@ TEST_CASE("TerrainReader reads a valid terrain and replaces generation changes o
 {
     TerrainStateGuard guard;
     auto data = make_terrain();
-    REQUIRE(TerrainReader(data).read() == PARSE_ERROR_NONE);
+    REQUIRE(TerrainReader(data).read().has_value());
     const auto &terrain = TerrainList::get_instance().get_terrain(0);
     CHECK(error_idx == 0);
     CHECK(terrain.idx == 0);
@@ -116,7 +117,7 @@ TEST_CASE("TerrainReader reads a valid terrain and replaces generation changes o
     CHECK(terrain.generation_changes[1].probability == 40);
 
     data["generation"]["changes"] = { { { "terrain", "FLOOR" }, { "probability", 100 } } };
-    REQUIRE(TerrainReader(data).read() == PARSE_ERROR_NONE);
+    REQUIRE(TerrainReader(data).read().has_value());
     REQUIRE(terrain.generation_changes.size() == 1);
     CHECK(terrain.generation_changes[0].result_tag == "FLOOR");
     CHECK(terrain.generation_changes[0].probability == 100);
@@ -126,7 +127,7 @@ TEST_CASE("TerrainReader leaves an existing terrain unchanged after a late parse
 {
     TerrainStateGuard guard;
     auto data = make_terrain();
-    REQUIRE(TerrainReader(data).read() == PARSE_ERROR_NONE);
+    REQUIRE(TerrainReader(data).read().has_value());
     const auto before = TerrainList::get_instance().get_terrain(0);
     const auto size_before = TerrainList::get_instance().size();
 
@@ -136,7 +137,7 @@ TEST_CASE("TerrainReader leaves an existing terrain unchanged after a late parse
     data["map_priority"] = 19;
     data["generation"]["changes"] = { { { "terrain", "WALL" }, { "probability", 90 } } };
     data["interactions"] = { { "DESTROYED", 42 } };
-    CHECK(TerrainReader(data).read() == PARSE_ERROR_TOO_FEW_ARGUMENTS);
+    CHECK(test::to_error_code(TerrainReader(data).read()) == PARSE_ERROR_TOO_FEW_ARGUMENTS);
 
     const auto &after = TerrainList::get_instance().get_terrain(0);
     CHECK(TerrainList::get_instance().size() == size_before);
@@ -160,7 +161,7 @@ TEST_CASE("TerrainReader accepts single-byte symbol characters")
         character = " ";
     }
     data["symbol"]["character"] = character;
-    REQUIRE(TerrainReader(data).read() == PARSE_ERROR_NONE);
+    REQUIRE(TerrainReader(data).read().has_value());
     const auto &terrain = TerrainList::get_instance().get_terrain(0);
     for (int lighting = F_LIT_STANDARD; lighting < F_LIT_MAX; ++lighting) {
         CHECK(terrain.symbol_definitions.at(lighting).character == character.front());
@@ -171,7 +172,7 @@ TEST_CASE("TerrainReader rejects invalid symbol lengths without publishing a ter
 {
     TerrainStateGuard guard;
     auto data = make_terrain();
-    REQUIRE(TerrainReader(data).read() == PARSE_ERROR_NONE);
+    REQUIRE(TerrainReader(data).read().has_value());
     auto &terrains = TerrainList::get_instance();
     const auto before = terrains.get_terrain(0);
     const auto size_before = terrains.size();
@@ -195,7 +196,7 @@ TEST_CASE("TerrainReader rejects invalid symbol lengths without publishing a ter
     data["symbol"]["character"] = character;
     data["name"]["ja"] = "replacement";
     data["name"]["en"] = "replacement";
-    CHECK(TerrainReader(data).read() == expected);
+    CHECK(test::to_error_code(TerrainReader(data).read()) == expected);
     CHECK(terrains.size() == size_before);
     const auto &after = terrains.get_terrain(0);
     CHECK(after.name == before.name);
@@ -205,7 +206,7 @@ TEST_CASE("TerrainReader rejects invalid symbol lengths without publishing a ter
     }
 
     data["id"] = size_before + 1;
-    CHECK(TerrainReader(data).read() == expected);
+    CHECK(test::to_error_code(TerrainReader(data).read()) == expected);
     CHECK(terrains.size() == size_before);
     CHECK(terrains.get_terrain(0).name == before.name);
 }
@@ -217,7 +218,7 @@ TEST_CASE("TerrainReader does not grow the terrain list after a failed new entry
     const auto size_before = TerrainList::get_instance().size();
     data["id"] = size_before + 1;
     data["interactions"] = { { "DESTROYED", 42 } };
-    CHECK(TerrainReader(data).read() == PARSE_ERROR_TOO_FEW_ARGUMENTS);
+    CHECK(test::to_error_code(TerrainReader(data).read()) == PARSE_ERROR_TOO_FEW_ARGUMENTS);
     CHECK(TerrainList::get_instance().size() == size_before);
 }
 
@@ -230,7 +231,7 @@ TEST_CASE("TerrainReader propagates helper errors without publishing staged terr
     auto &terrains = TerrainList::get_instance();
     terrains.resize(0);
     const auto original = make_terrain();
-    REQUIRE(TerrainReader(original).read() == PARSE_ERROR_NONE);
+    REQUIRE(TerrainReader(original).read().has_value());
     const auto before = terrains.get_terrain(0);
     const auto size_before = terrains.size();
     struct InvalidField {
@@ -291,7 +292,7 @@ TEST_CASE("TerrainReader propagates helper errors without publishing staged terr
             data["name"]["ja"] = "replacement";
             data["name"]["en"] = "replacement";
             data[nlohmann::json::json_pointer(invalid.path)] = invalid.value;
-            CHECK(TerrainReader(data).read() == invalid.error);
+            CHECK(test::to_error_code(TerrainReader(data).read()) == invalid.error);
             CHECK(error_idx == id);
             CHECK(terrains.size() == size_before);
             check_existing_terrain(terrains.get_terrain(0), before);
@@ -309,17 +310,17 @@ TEST_CASE("TerrainReader keeps helper validation order and error index timing")
     terrains.resize(0);
     auto data = make_terrain();
     data["id"] = 10000;
-    CHECK(TerrainReader(data).read() == PARSE_ERROR_INVALID_FLAG);
+    CHECK(test::to_error_code(TerrainReader(data).read()) == PARSE_ERROR_INVALID_FLAG);
     CHECK(error_idx == 73);
     data["id"] = 0;
     data["key"] = "";
-    CHECK(TerrainReader(data).read() == PARSE_ERROR_GENERIC);
+    CHECK(test::to_error_code(TerrainReader(data).read()) == PARSE_ERROR_GENERIC);
     CHECK(error_idx == 73);
     data = make_terrain();
-    REQUIRE(TerrainReader(data).read() == PARSE_ERROR_NONE);
+    REQUIRE(TerrainReader(data).read().has_value());
     const auto before = terrains.get_terrain(0);
     const auto check_invalid = [&](parse_error_type expected) {
-        CHECK(TerrainReader(data).read() == expected);
+        CHECK(test::to_error_code(TerrainReader(data).read()) == expected);
         CHECK(error_idx == 0);
         CHECK(terrains.size() == 1);
         CHECK(terrains.get_terrain(0).flags == before.flags);
@@ -373,7 +374,7 @@ TEST_CASE("TerrainReader preserves optional helpers and successful endpoint valu
                 data[key] = nullptr;
             }
         }
-        REQUIRE(TerrainReader(data).read() == PARSE_ERROR_NONE);
+        REQUIRE(TerrainReader(data).read().has_value());
         CHECK(error_idx == 0);
         CHECK(terrains.get_terrain(0).flags.has(TerrainCharacteristics::LOS));
         CHECK(terrains.get_terrain(0).generation_changes.empty());
@@ -394,7 +395,7 @@ TEST_CASE("TerrainReader preserves optional helpers and successful endpoint valu
         const auto stream_index = power == 0 ? 0 : 254;
         data["convert"] = { { "type", "STREAM" }, { "stream_index", stream_index } };
         data["interactions"] = { { "DESTROYED", "WALL" }, { "DROP_GOLD", "1d2" }, { "OPEN", "FLOOR" } };
-        REQUIRE(TerrainReader(data).read() == PARSE_ERROR_NONE);
+        REQUIRE(TerrainReader(data).read().has_value());
         const auto &terrain = terrains.get_terrain(0);
         CHECK(error_idx == 0);
         CHECK(terrain.symbol_definitions[F_LIT_STANDARD].character == '.');

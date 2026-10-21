@@ -50,6 +50,7 @@
 #include <string>
 #include <string_view>
 #include <sys/stat.h>
+#include <tl/expected.hpp>
 #ifndef _WIN32
 #include <sys/types.h>
 #endif
@@ -74,7 +75,7 @@ concept HasShrinkToFit = requires(T t) {
  * @param validate_root 追加のルート検証（指定した定義形式だけに適用）
  */
 template <typename DefinitionList>
-void init_json(std::string_view filename, std::string_view keyname, DefinitionHashDataType dhdt, DefinitionList &definition_list, std::function<int(nlohmann::json &)> json_parser, std::function<void()> retouch = nullptr, bool allow_empty = true, std::function<int(const nlohmann::json &)> validate_root = nullptr)
+void init_json(std::string_view filename, std::string_view keyname, DefinitionHashDataType dhdt, DefinitionList &definition_list, std::function<tl::expected<void, parse_error_type>(nlohmann::json &)> json_parser, std::function<void()> retouch = nullptr, bool allow_empty = true, std::function<tl::expected<void, parse_error_type>(const nlohmann::json &)> validate_root = nullptr)
 {
     const auto path = path_build(ANGBAND_DIR_EDIT, filename);
     JsoncDocumentLoader loader(path);
@@ -91,15 +92,14 @@ void init_json(std::string_view filename, std::string_view keyname, DefinitionHa
         quit(fmt::format(_("{}: ルートオブジェクトに配列 '{}' が必要です", "{}: expected a root object containing array '{}'"), filename, keyname));
     }
 
-    if (validate_root && validate_root(json_object) != PARSE_ERROR_NONE) {
+    if (validate_root && !validate_root(json_object)) {
         quit(fmt::format(_("{}: 定義形式のversionが不正です", "{}: invalid definition version"), filename));
     }
 
     error_idx = -1;
 
     for (auto &element : json_object[keyname]) {
-        const auto error_code = json_parser(element);
-        if (error_code != PARSE_ERROR_NONE) {
+        if (!json_parser(element)) {
             msg_erase();
             quit(fmt::format(_("'{}'ファイルにエラー", "Error in '{}' file."), filename));
         }
@@ -123,7 +123,7 @@ void init_json(std::string_view filename, std::string_view keyname, DefinitionHa
  * @details init_jsonのjson_parserに「JSON要素からReaderを構築してread()する」定型ラムダを与える処理を共通化したもの。
  */
 template <typename Reader, typename DefinitionList>
-void init_json_reader(std::string_view filename, std::string_view keyname, DefinitionHashDataType dhdt, DefinitionList &definition_list, std::function<void()> retouch = nullptr, bool allow_empty = true, std::function<int(const nlohmann::json &)> validate_root = nullptr)
+void init_json_reader(std::string_view filename, std::string_view keyname, DefinitionHashDataType dhdt, DefinitionList &definition_list, std::function<void()> retouch = nullptr, bool allow_empty = true, std::function<tl::expected<void, parse_error_type>(const nlohmann::json &)> validate_root = nullptr)
 {
     auto parser = [](nlohmann::json &element) { return Reader(element).read(); };
     init_json(filename, keyname, dhdt, definition_list, parser, retouch, allow_empty, validate_root);
@@ -165,12 +165,12 @@ void init_class_skills_info()
     class_skills_info.assign(PLAYER_CLASS_TYPE_MAX, {});
     auto parser = [](nlohmann::json &element) {
         SkillReader reader(element);
-        const auto err = reader.read();
-        if (err != PARSE_ERROR_NONE) {
+        const auto result = reader.read();
+        if (!result) {
             const auto &diagnostic = reader.error().value();
             quit(fmt::format(_("ClassSkillDefinitions.jsonc: 職業{}の{}: {}", "ClassSkillDefinitions.jsonc: class {} at {}: {}"), diagnostic.class_id, diagnostic.path, diagnostic.reason));
         }
-        return err;
+        return result;
     };
     init_json("ClassSkillDefinitions.jsonc", "classes", DefinitionHashDataType::CLASS_SKILLS, class_skills_info, parser, [] {
         if (error_idx != PLAYER_CLASS_TYPE_MAX - 1) {
@@ -257,12 +257,12 @@ void init_vaults_info()
 {
     auto parser = [](nlohmann::json &element) {
         VaultReader reader(element);
-        const auto err = reader.read();
-        if (err != PARSE_ERROR_NONE) {
+        const auto result = reader.read();
+        if (!result) {
             const auto &diagnostic = reader.error().value();
             quit(fmt::format(_("VaultDefinitions.jsonc: Vault{}の{}: {}", "VaultDefinitions.jsonc: vault {} at {}: {}"), diagnostic.id, diagnostic.path, diagnostic.reason));
         }
-        return err;
+        return result;
     };
     init_json("VaultDefinitions.jsonc", "vaults", DefinitionHashDataType::VAULTS, vaults_info, parser, nullptr, false);
 }

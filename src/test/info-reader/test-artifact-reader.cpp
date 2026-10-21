@@ -10,6 +10,7 @@
 #include "system/artifact/artifact-list.h"
 #include "system/baseitem/baseitem-definition.h"
 #include "system/baseitem/baseitem-list.h"
+#include "test/info-reader/parse-result-helpers.h"
 #include "test/info-reader/scoped-reader-state.h"
 #include "test/scoped-vector-wrapper.h"
 #include "test/system/artifact-list-test-access.h"
@@ -91,7 +92,7 @@ TEST_CASE("ArtifactReader validates ID range before narrowing signed and unsigne
         ScopedArtifactBaseitem baseitem;
         auto data = make_artifact();
         data["id"] = id;
-        CHECK(ArtifactReader(data).read() == PARSE_ERROR_INVALID_FLAG);
+        CHECK(test::to_error_code(ArtifactReader(data).read()) == PARSE_ERROR_INVALID_FLAG);
         CHECK(ArtifactList::get_instance().empty());
         CHECK(error_idx == -1);
     }
@@ -106,7 +107,7 @@ TEST_CASE("ArtifactReader rejects rarity values outside its storage type")
         ScopedArtifactBaseitem baseitem;
         auto data = make_artifact();
         data["rarity"] = value;
-        CHECK(ArtifactReader(data).read() == PARSE_ERROR_INVALID_FLAG);
+        CHECK(test::to_error_code(ArtifactReader(data).read()) == PARSE_ERROR_INVALID_FLAG);
         CHECK(ArtifactList::get_instance().empty());
     }
 }
@@ -120,7 +121,7 @@ TEST_CASE("ArtifactReader preserves missing and non-integer ID errors")
         ScopedArtifactBaseitem baseitem;
         auto data = make_artifact();
         data["id"] = id;
-        CHECK(ArtifactReader(data).read() == PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        CHECK(test::to_error_code(ArtifactReader(data).read()) == PARSE_ERROR_TOO_FEW_ARGUMENTS);
         CHECK(error_idx == -1);
         CHECK(ArtifactList::get_instance().empty());
     }
@@ -129,9 +130,9 @@ TEST_CASE("ArtifactReader preserves missing and non-integer ID errors")
     ScopedArtifactBaseitem baseitem;
     auto data = make_artifact();
     data.erase("id");
-    CHECK(ArtifactReader(data).read() == PARSE_ERROR_TOO_FEW_ARGUMENTS);
+    CHECK(test::to_error_code(ArtifactReader(data).read()) == PARSE_ERROR_TOO_FEW_ARGUMENTS);
     const auto non_object = nlohmann::json::array();
-    CHECK(ArtifactReader(non_object).read() == PARSE_ERROR_TOO_FEW_ARGUMENTS);
+    CHECK(test::to_error_code(ArtifactReader(non_object).read()) == PARSE_ERROR_TOO_FEW_ARGUMENTS);
     CHECK(error_idx == -1);
     CHECK(ArtifactList::get_instance().empty());
 }
@@ -149,7 +150,7 @@ TEST_CASE("ArtifactReader requires IDs to start at 1 and continue without gaps")
         ScopedArtifactBaseitem baseitem;
         auto data = make_artifact();
         data["id"] = id;
-        CHECK(ArtifactReader(data).read() == PARSE_ERROR_NON_SEQUENTIAL_RECORDS);
+        CHECK(test::to_error_code(ArtifactReader(data).read()) == PARSE_ERROR_NON_SEQUENTIAL_RECORDS);
         CHECK(ArtifactList::get_instance().empty());
         CHECK(error_idx == -1);
     }
@@ -162,14 +163,14 @@ TEST_CASE("ArtifactReader requires IDs to start at 1 and continue without gaps")
         const auto data = make_artifact(id);
         return ArtifactReader(data).read();
     };
-    REQUIRE(read_id(1) == PARSE_ERROR_NONE);
+    REQUIRE(read_id(1).has_value());
     for (const auto id : { 1, 3, 0 }) {
         CAPTURE(id);
-        CHECK(read_id(id) == PARSE_ERROR_NON_SEQUENTIAL_RECORDS);
+        CHECK(test::to_error_code(read_id(id)) == PARSE_ERROR_NON_SEQUENTIAL_RECORDS);
         CHECK(artifacts.size() == 1);
         CHECK(error_idx == 1);
     }
-    REQUIRE(read_id(2) == PARSE_ERROR_NONE);
+    REQUIRE(read_id(2).has_value());
     CHECK(artifacts.size() == 2);
     CHECK(error_idx == 2);
 }
@@ -188,7 +189,7 @@ TEST_CASE("ArtifactReader accepts the largest schema ID after its predecessor")
         error_idx = 9998;
         auto data = make_artifact();
         data["id"] = id;
-        REQUIRE(ArtifactReader(data).read() == PARSE_ERROR_NONE);
+        REQUIRE(ArtifactReader(data).read().has_value());
         auto &artifacts = ArtifactList::get_instance();
         REQUIRE(artifacts.size() == 1);
         CHECK(enum2i(artifacts.begin()->first) == 9999);
@@ -228,7 +229,7 @@ TEST_CASE("ArtifactReader rejects a base item which is not a valid baseitem")
         unnamed.bi_key = { ItemKindType::FLAVOR_SKELETON, 2 };
         baseitems.replace_baseitem(1, std::move(unnamed));
     }
-    CHECK(ArtifactReader(data).read() == PARSE_ERROR_INVALID_VALUE);
+    CHECK(test::to_error_code(ArtifactReader(data).read()) == PARSE_ERROR_INVALID_VALUE);
     CHECK(ArtifactList::get_instance().empty());
     // ID の確認は済んでいるため、診断のための ID は進む。
     CHECK(error_idx == 1);
@@ -246,7 +247,7 @@ TEST_CASE("ArtifactReader limits base dice to the save format range")
         ScopedArtifactBaseitem baseitem;
         auto data = make_artifact();
         data["base_dice"] = dice;
-        CHECK(ArtifactReader(data).read() == PARSE_ERROR_INVALID_FLAG);
+        CHECK(test::to_error_code(ArtifactReader(data).read()) == PARSE_ERROR_INVALID_FLAG);
         CHECK(ArtifactList::get_instance().empty());
     }
     test::ScopedReaderState reader_state;
@@ -254,7 +255,7 @@ TEST_CASE("ArtifactReader limits base dice to the save format range")
     ScopedArtifactBaseitem baseitem;
     auto data = make_artifact();
     data["base_dice"] = "255d255";
-    REQUIRE(ArtifactReader(data).read() == PARSE_ERROR_NONE);
+    REQUIRE(ArtifactReader(data).read().has_value());
     CHECK(ArtifactList::get_instance().get_artifact(i2enum<FixedArtifactId>(1)).damage_dice == Dice(255, 255));
 }
 
@@ -273,7 +274,7 @@ TEST_CASE("ArtifactReader publishes complete records with localized text and opt
     data["activate"] = "BA_FIRE_4";
     data["flags"] = { "STR", "INSTA_ART" };
     data["flavor"] = { { "ja", "Flavor JA" }, { "en", "Flavor EN" } };
-    REQUIRE(ArtifactReader(data).read() == PARSE_ERROR_NONE);
+    REQUIRE(ArtifactReader(data).read().has_value());
     const auto &artifact = ArtifactList::get_instance().get_artifact(i2enum<FixedArtifactId>(1));
 #ifdef JP
     CHECK(artifact.name == "Test JA");
@@ -309,7 +310,7 @@ TEST_CASE("ArtifactReader preserves defaults when optional fields are omitted")
     test::ArtifactListTestAccess artifact_state;
     ScopedArtifactBaseitem baseitem;
     const auto data = make_artifact();
-    REQUIRE(ArtifactReader(data).read() == PARSE_ERROR_NONE);
+    REQUIRE(ArtifactReader(data).read().has_value());
     const auto &artifact = ArtifactList::get_instance().get_artifact(i2enum<FixedArtifactId>(1));
     CHECK(artifact.text.empty());
     CHECK(artifact.pval == 0);
@@ -329,7 +330,7 @@ TEST_CASE("ArtifactReader preserves existing definitions after early and late pa
     ScopedArtifactBaseitem baseitem;
     auto &artifacts = ArtifactList::get_instance();
     const auto original_data = make_artifact();
-    REQUIRE(ArtifactReader(original_data).read() == PARSE_ERROR_NONE);
+    REQUIRE(ArtifactReader(original_data).read().has_value());
     const auto *original = std::addressof(artifacts.get_artifact(i2enum<FixedArtifactId>(1)));
     auto data = make_artifact(2);
     data["activate"] = "BA_FIRE_4";
@@ -352,7 +353,7 @@ TEST_CASE("ArtifactReader preserves existing definitions after early and late pa
         CAPTURE(id);
         error_idx = id - 1;
         data["id"] = id;
-        CHECK(ArtifactReader(data).read() == expected_error);
+        CHECK(test::to_error_code(ArtifactReader(data).read()) == expected_error);
         REQUIRE(artifacts.size() == 1);
         CHECK(std::addressof(artifacts.get_artifact(i2enum<FixedArtifactId>(1))) == original);
 #ifdef JP

@@ -18,7 +18,7 @@ public:
     SpellReader &operator=(const SpellReader &) = delete;
     SpellReader &operator=(SpellReader &&) = delete;
 
-    int read() const;
+    tl::expected<void, parse_error_type> read() const;
 
 private:
     tl::expected<RealmType, parse_error_type> read_realm() const;

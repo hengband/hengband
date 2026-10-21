@@ -4,6 +4,7 @@
 #include "system/enums/monrace/monrace-id.h"
 #include "system/monrace/monrace-list.h"
 #include "system/monrace/monrace-message.h"
+#include "test/info-reader/parse-result-helpers.h"
 #include "test/info-reader/scoped-reader-state.h"
 #include "test/scoped-rng.h"
 #include "test/system/monrace-list-test-access.h"
@@ -73,14 +74,14 @@ TEST_CASE("MessageReader preserves existing messages after a late parse error")
         expected = PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
     nlohmann::json data = { { "id_list", { 4, 5 } }, { "message", { valid, invalid } } };
-    CHECK(MessageReader(data).read() == expected);
+    CHECK(test::to_error_code(MessageReader(data).read()) == expected);
     CHECK(messages.get_message(4, "", MonsterMessageType::SPEAK_ALL) == "original");
     CHECK(state.message_count(4, MonsterMessageType::SPEAK_ALL) == 1);
     CHECK(state.message_count(5, MonsterMessageType::SPEAK_ALL) == 0);
     CHECK(state.message_count(4, MonsterMessageType::SPEAK_BATTLE) == 0);
     data.erase("id_list");
     data["name"] = "DEFAULT";
-    CHECK(MessageReader(data).read() == expected);
+    CHECK(test::to_error_code(MessageReader(data).read()) == expected);
     CHECK(messages.get_message(6, "", MonsterMessageType::SPEAK_ALL) == "default");
     CHECK(state.default_message_count(MonsterMessageType::SPEAK_ALL) == 1);
     CHECK(state.default_message_count(MonsterMessageType::SPEAK_BATTLE) == 0);
@@ -119,7 +120,7 @@ TEST_CASE("MessageReader publishes successful groups and preserves missing-langu
         data["message"].push_back(skipped);
         data["message"].push_back(later);
     }
-    REQUIRE(MessageReader(data).read() == PARSE_ERROR_NONE);
+    REQUIRE(MessageReader(data).read().has_value());
     CHECK(error_idx == -1);
     auto &messages = MonraceMessageList::get_instance();
     CHECK(messages.get_message(4, "", MonsterMessageType::SPEAK_ALL) == "accepted");
@@ -144,13 +145,13 @@ TEST_CASE("MessageReader rejects monster IDs without monster definitions")
     for (const auto undefined_id : { 6, 9999 }) {
         CAPTURE(undefined_id);
         const nlohmann::json data = { { "id_list", { 4, undefined_id } }, { "message", { message } } };
-        CHECK(MessageReader(data).read() == PARSE_ERROR_INVALID_VALUE);
+        CHECK(test::to_error_code(MessageReader(data).read()) == PARSE_ERROR_INVALID_VALUE);
         CHECK(state.message_count(4, MonsterMessageType::SPEAK_ALL) == 0);
         CHECK(state.message_count(undefined_id, MonsterMessageType::SPEAK_ALL) == 0);
     }
 
     const nlohmann::json defined = { { "id_list", { 4, 5 } }, { "message", { message } } };
-    REQUIRE(MessageReader(defined).read() == PARSE_ERROR_NONE);
+    REQUIRE(MessageReader(defined).read().has_value());
     CHECK(state.message_count(4, MonsterMessageType::SPEAK_ALL) == 1);
     CHECK(state.message_count(5, MonsterMessageType::SPEAK_ALL) == 1);
 }
@@ -163,16 +164,16 @@ TEST_CASE("MessageReader requires arrays for localized message lists")
         { "name", "DEFAULT" },
         { "message", nlohmann::json::array({ { { "action", "SPEAK_ALL" }, { "chance", 1 }, { "message", { { "ja", nlohmann::json::array() }, { "en", nlohmann::json::array() } } } } }) },
     };
-    CHECK(MessageReader(data).read() == PARSE_ERROR_NONE);
+    CHECK(MessageReader(data).read().has_value());
 
     // JSON objects are iterable and their string values used to be accepted as messages.
     data["message"][0]["message"]["ja"] = { { "first", "hello" } };
     data["message"][0]["message"]["en"] = { { "first", "hello" } };
-    CHECK(MessageReader(data).read() == PARSE_ERROR_INVALID_TYPE);
+    CHECK(test::to_error_code(MessageReader(data).read()) == PARSE_ERROR_INVALID_TYPE);
 
     data["message"][0]["message"]["ja"] = nullptr;
     data["message"][0]["message"]["en"] = nullptr;
-    CHECK(MessageReader(data).read() == PARSE_ERROR_TOO_FEW_ARGUMENTS);
+    CHECK(test::to_error_code(MessageReader(data).read()) == PARSE_ERROR_TOO_FEW_ARGUMENTS);
 }
 
 /*!
@@ -207,7 +208,7 @@ TEST_CASE("MessageReader propagates ID helper errors without publishing messages
     for (const auto &invalid : invalid_ids) {
         CAPTURE(invalid.value.dump());
         const nlohmann::json data = { { "id_list", invalid.value }, { "message", { make_message("SPEAK_ALL", nlohmann::json::array({ "new" })) } } };
-        CHECK(MessageReader(data).read() == invalid.error);
+        CHECK(test::to_error_code(MessageReader(data).read()) == invalid.error);
         CHECK(error_idx == 73);
         CHECK(state.message_count(4, MonsterMessageType::SPEAK_ALL) == 1);
         CHECK(state.message_count(5, MonsterMessageType::SPEAK_ALL) == 0);
@@ -256,7 +257,7 @@ TEST_CASE("MessageReader propagates message helper errors and keeps validation o
         { "/message/1/message", { { "ja", nlohmann::json::array({ 7 }) }, { "en", nlohmann::json::array({ 7 }) } }, PARSE_ERROR_INVALID_FLAG },
     };
     const auto check_unchanged = [&](const nlohmann::json &data, parse_error_type expected) {
-        CHECK(MessageReader(data).read() == expected);
+        CHECK(test::to_error_code(MessageReader(data).read()) == expected);
         CHECK(error_idx == 73);
         CHECK(state.message_count(4, MonsterMessageType::SPEAK_ALL) == 1);
         CHECK(state.message_count(5, MonsterMessageType::SPEAK_ALL) == 0);
@@ -293,14 +294,14 @@ TEST_CASE("MessageReader propagates message helper errors and keeps validation o
 
     data = original;
     data["id_list"] = nlohmann::json::array();
-    CHECK(MessageReader(data).read() == PARSE_ERROR_NONE);
+    CHECK(MessageReader(data).read().has_value());
     CHECK(error_idx == 73);
     CHECK(state.message_count(4, MonsterMessageType::SPEAK_ALL) == 1);
     CHECK(state.message_count(5, MonsterMessageType::SPEAK_ALL) == 0);
     CHECK(state.default_message_count(MonsterMessageType::SPEAK_ALL) == 1);
     data["id_list"] = { 4, 5 };
     data["message"] = nlohmann::json::array();
-    CHECK(MessageReader(data).read() == PARSE_ERROR_NONE);
+    CHECK(MessageReader(data).read().has_value());
     CHECK(error_idx == 73);
     CHECK(state.message_count(4, MonsterMessageType::SPEAK_ALL) == 1);
     CHECK(state.message_count(5, MonsterMessageType::SPEAK_ALL) == 0);

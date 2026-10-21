@@ -416,9 +416,9 @@ void QuestList::load_json_quests(const std::filesystem::path &quests_dir, std::m
 
         QuestType quest;
         QuestFixedMap fixed_map;
-        if (const auto err = QuestReader(quest_data, quest, fixed_map).read(); err != PARSE_ERROR_NONE) {
+        if (const auto result = QuestReader(quest_data, quest, fixed_map).read(); !result) {
             constexpr auto fmt = _("クエストファイルにエラーがあります ({}): コード {}", "Error in quest file ({}): code {}");
-            THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, file.string(), static_cast<int>(err)));
+            THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, file.string(), static_cast<int>(result.error())));
         }
 
         parsed_quests.emplace(quest_id, std::move(quest));

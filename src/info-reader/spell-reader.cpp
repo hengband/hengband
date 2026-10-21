@@ -18,30 +18,30 @@ SpellReader::SpellReader(const nlohmann::json &realm_data, SpellInfoList &spell_
 
 /*!
  * @brief 呪文情報(SpellDefinitions)のパース関数
- * @return エラーコード
+ * @return 成功時は空の値、失敗時は解析エラーコード
  */
-int SpellReader::read() const
+tl::expected<void, parse_error_type> SpellReader::read() const
 {
     error_idx++; //!< @note 呪文領域は数値IDを持たないため、エラー表示用に要素の順序を用いる
 
     const auto realm_result = this->read_realm();
     if (!realm_result) {
         msg_print(_("領域名読込失敗。ID: '{}'。", "Failed to load realm name. ID: '{}'."), error_idx);
-        return realm_result.error();
+        return tl::make_unexpected(realm_result.error());
     }
 
     const auto realm_id = *realm_result;
     std::vector<SpellInfo> spells;
     if (const auto result = this->set_book_data(spells); !result) {
         msg_print(_("呪文詳細読込失敗。ID: '{}'。", "Failed to load spell data. ID: '{}'."), error_idx);
-        return result.error();
+        return result;
     }
 
     for (auto &info : spells) {
         this->spell_info_list.set_spell_info(realm_id, info.idx, std::move(info));
     }
 
-    return PARSE_ERROR_NONE;
+    return {};
 }
 
 /*!

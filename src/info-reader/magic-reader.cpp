@@ -82,23 +82,23 @@ MagicReader::MagicReader(const nlohmann::json &class_data)
 
 /*!
  * @brief 職業魔法情報(ClassMagicDefinitions)のパース関数
- * @return エラーコード
+ * @return 成功時は空の値、失敗時は解析エラーコード
  */
-int MagicReader::read() const
+tl::expected<void, parse_error_type> MagicReader::read() const
 {
     if (!this->class_data.is_object()) {
-        return PARSE_ERROR_INVALID_TYPE;
+        return tl::make_unexpected(PARSE_ERROR_INVALID_TYPE);
     }
 
     const auto class_id_result = this->read_class_id();
     if (!class_id_result) {
         msg_print(_("職業ID読込失敗。ID: '{}'。", "Failed to load class id. ID: '{}'."), error_idx);
-        return class_id_result.error();
+        return tl::make_unexpected(class_id_result.error());
     }
 
     const auto class_id = *class_id_result;
     if (class_id < error_idx) {
-        return PARSE_ERROR_NON_SEQUENTIAL_RECORDS;
+        return tl::make_unexpected(PARSE_ERROR_NON_SEQUENTIAL_RECORDS);
     }
     error_idx = class_id;
     // レコード全体が有効と確定するまで、既存の職業定義を維持する。
@@ -106,39 +106,39 @@ int MagicReader::read() const
 
     if (const auto result = this->set_spell_type(magics_info); !result) {
         msg_print(_("呪文タイプ読込失敗。ID: '{}'。", "Failed to load spell type. ID: '{}'."), error_idx);
-        return result.error();
+        return result;
     }
     if (const auto result = this->set_magic_status(magics_info); !result) {
         msg_print(_("呪文行使に使用する能力値読込失敗。ID: '{}'。", "Failed to load magic status. ID: '{}'."), error_idx);
-        return result.error();
+        return result;
     }
     if (const auto result = info_set_bool(get_json_value(this->class_data, "has_glove_mp_penalty"), magics_info.has_glove_mp_penalty, true); !result) {
         msg_print(_("籠手によるMPペナルティ読込失敗。ID: '{}'。", "Failed to load glove_mp_penalty. ID: '{}'."), error_idx);
-        return result.error();
+        return result;
     }
     if (const auto result = info_set_bool(get_json_value(this->class_data, "has_magic_fail_rate_cap"), magics_info.has_magic_fail_rate_cap, true); !result) {
         msg_print(_("最低呪文失率情報読込失敗。ID: '{}'。", "Failed to load magic_fail_rate_cap. ID: '{}'."), error_idx);
-        return result.error();
+        return result;
     }
     if (const auto result = info_set_bool(get_json_value(this->class_data, "is_spell_trainable"), magics_info.is_spell_trainable, true); !result) {
         msg_print(_("呪文訓練可能性読込失敗。ID: '{}'。", "Failed to load spell_trainability. ID: '{}'."), error_idx);
-        return result.error();
+        return result;
     }
     if (const auto result = info_set_integer(get_json_value(this->class_data, "first_spell_level"), magics_info.spell_first, true, Range(0, 99)); !result) {
         msg_print(_("呪文行使開始レベル読込失敗。ID: '{}'。", "Failed to load spell-first level. ID: '{}'."), error_idx);
-        return result.error();
+        return result;
     }
     if (const auto result = info_set_integer(get_json_value(this->class_data, "armour_weight_limit"), magics_info.spell_weight, true, Range(0, MAX_CLASS_MAGIC_VALUE)); !result) {
         msg_print(_("MP重量制限値読込失敗。ID: '{}'。", "Failed to load spell-weight value. ID: '{}'."), error_idx);
-        return result.error();
+        return result;
     }
     if (const auto result = this->set_realm_data(magics_info); !result) {
         msg_print(_("呪文データ読込失敗。ID: '{}'。", "Failed to load spell data. ID: '{}'."), error_idx);
-        return result.error();
+        return result;
     }
 
     class_magics_info[class_id] = std::move(magics_info);
-    return PARSE_ERROR_NONE;
+    return {};
 }
 
 /*!

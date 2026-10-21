@@ -2,6 +2,7 @@
 #include "info-reader/parse-error-types.h"
 #include "info-reader/spell-reader.h"
 #include "system/spell-info-list.h"
+#include "test/info-reader/parse-result-helpers.h"
 #include "test/info-reader/scoped-reader-state.h"
 #include "test/system/spell-info-list-test-access.h"
 #include "util/enum-converter.h"
@@ -17,17 +18,17 @@ TEST_CASE("SpellReader requires arrays for books and spells")
     auto &spells = SpellInfoList::get_instance();
     nlohmann::json data = { { "name", "LIFE" }, { "books", nlohmann::json::array() } };
 
-    CHECK(SpellReader(data, spells).read() == PARSE_ERROR_NONE);
+    CHECK(SpellReader(data, spells).read().has_value());
 
     data["books"] = nlohmann::json::array({ { { "spells", nlohmann::json::array() } } });
-    CHECK(SpellReader(data, spells).read() == PARSE_ERROR_NONE);
+    CHECK(SpellReader(data, spells).read().has_value());
 
     // A JSON object is iterable too, so these used to be accepted as record arrays.
     data["books"] = { { "first", { { "spells", nlohmann::json::array() } } } };
-    CHECK(SpellReader(data, spells).read() == PARSE_ERROR_INVALID_TYPE);
+    CHECK(test::to_error_code(SpellReader(data, spells).read()) == PARSE_ERROR_INVALID_TYPE);
 
     data["books"] = nlohmann::json::array({ { { "spells", nlohmann::json::object() } } });
-    CHECK(SpellReader(data, spells).read() == PARSE_ERROR_INVALID_TYPE);
+    CHECK(test::to_error_code(SpellReader(data, spells).read()) == PARSE_ERROR_INVALID_TYPE);
 }
 
 namespace {
@@ -55,7 +56,7 @@ TEST_CASE("SpellReader commits all books only after the whole realm succeeds")
                        { { "spells", nlohmann::json::array({ make_spell(8, "old-eight") }) } },
                    }) },
     };
-    REQUIRE(SpellReader(data, spells).read() == PARSE_ERROR_NONE);
+    REQUIRE(SpellReader(data, spells).read().has_value());
     auto other = SpellInfo();
     other.idx = 3;
     other.tag = "other-realm";
@@ -92,25 +93,25 @@ TEST_CASE("SpellReader commits all books only after the whole realm succeeds")
         auto invalid = make_spell(4, "invalid");
         invalid.erase("description");
         data["books"][0]["spells"].push_back(invalid);
-        CHECK(SpellReader(data, spells).read() == PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        CHECK(test::to_error_code(SpellReader(data, spells).read()) == PARSE_ERROR_TOO_FEW_ARGUMENTS);
         check_unchanged();
     }
     SUBCASE("a spell in a later book is invalid")
     {
         data["books"][1]["spells"][0]["spell_id"] = 32;
-        CHECK(SpellReader(data, spells).read() == PARSE_ERROR_INVALID_FLAG);
+        CHECK(test::to_error_code(SpellReader(data, spells).read()) == PARSE_ERROR_INVALID_FLAG);
         check_unchanged();
     }
     SUBCASE("a later book has an invalid spells container")
     {
         data["books"][1]["spells"] = nlohmann::json::object();
-        CHECK(SpellReader(data, spells).read() == PARSE_ERROR_INVALID_TYPE);
+        CHECK(test::to_error_code(SpellReader(data, spells).read()) == PARSE_ERROR_INVALID_TYPE);
         check_unchanged();
     }
     SUBCASE("successful reload preserves unspecified spells and other realms")
     {
         data["books"][1]["spells"] = nlohmann::json::array({ make_spell(8, "new-eight"), make_spell(0, "last-zero") });
-        REQUIRE(SpellReader(data, spells).read() == PARSE_ERROR_NONE);
+        REQUIRE(SpellReader(data, spells).read().has_value());
         CHECK(spells.get_spell_id(RealmType::LIFE, "last-zero") == 0);
         CHECK_FALSE(spells.get_spell_id(RealmType::LIFE, "old-zero"));
         CHECK_FALSE(spells.get_spell_id(RealmType::LIFE, "new-zero"));
@@ -123,7 +124,7 @@ TEST_CASE("SpellReader commits all books only after the whole realm succeeds")
         CHECK(spells.get_spell_info(RealmType::LIFE, 2).idx == 2);
         CHECK(spells.get_spell_info(RealmType::LIFE, 8).name == "new-eight");
         data["books"] = nlohmann::json::array();
-        CHECK(SpellReader(data, spells).read() == PARSE_ERROR_NONE);
+        CHECK(SpellReader(data, spells).read().has_value());
         CHECK(spells.get_spell_id(RealmType::LIFE, "last-zero") == 0);
     }
 }
@@ -143,7 +144,7 @@ TEST_CASE("SpellReader propagates helper errors without publishing staged spells
                        { { "spells", nlohmann::json::array({ make_spell(8, "old-eight") }) } },
                    }) },
     };
-    REQUIRE(SpellReader(original, spells).read() == PARSE_ERROR_NONE);
+    REQUIRE(SpellReader(original, spells).read().has_value());
     auto other = SpellInfo();
     other.idx = 3;
     other.tag = "other-realm";
@@ -181,7 +182,7 @@ TEST_CASE("SpellReader propagates helper errors without publishing staged spells
         auto candidate = replacement;
         candidate[nlohmann::json::json_pointer(invalid.path)] = invalid.value;
         error_idx = 4;
-        CHECK(SpellReader(candidate, spells).read() == invalid.error);
+        CHECK(test::to_error_code(SpellReader(candidate, spells).read()) == invalid.error);
         CHECK(error_idx == 5);
         CHECK(spells.get_spell_id(RealmType::LIFE, "old-zero") == 0);
         CHECK(spells.get_spell_id(RealmType::LIFE, "old-eight") == 8);
@@ -191,7 +192,7 @@ TEST_CASE("SpellReader propagates helper errors without publishing staged spells
         CHECK(spells.get_spell_info(RealmType::LIFE, 8).description == "old-eight description");
         CHECK(spells.get_spell_id(RealmType::SORCERY, "other-realm") == 3);
     }
-    REQUIRE(SpellReader(replacement, spells).read() == PARSE_ERROR_NONE);
+    REQUIRE(SpellReader(replacement, spells).read().has_value());
     CHECK(error_idx == 6);
     CHECK(spells.get_spell_id(RealmType::LIFE, "new-zero") == 0);
     CHECK(spells.get_spell_id(RealmType::LIFE, "new-eight") == 8);

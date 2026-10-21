@@ -16,7 +16,7 @@ public:
     ArtifactReader &operator=(const ArtifactReader &) = delete;
     ArtifactReader &operator=(ArtifactReader &&) = delete;
 
-    int read() const;
+    tl::expected<void, parse_error_type> read() const;
 
 private:
     bool grab_one_artifact_flag(ArtifactDefinition &artifact, std::string_view what) const;

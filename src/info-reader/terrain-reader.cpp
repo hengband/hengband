@@ -25,28 +25,27 @@ TerrainReader::TerrainReader(const nlohmann::json &terrain_data)
 
 /*!
  * @brief 地形定義(TerrainDefinitions)のパース関数
- * @param element 地形情報の格納されたJSON Object
- * @return エラーコード
+ * @return 成功時は空の値、失敗時は解析エラーコード
  */
-int TerrainReader::read() const
+tl::expected<void, parse_error_type> TerrainReader::read() const
 {
     const auto &element = this->terrain_data;
     if (element.is_null() || !element.is_object()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+        return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
     }
 
     int id = 0;
     if (const auto result = info_set_integer(get_json_value(element, "id"), id, true, Range(0, 9999)); !result) {
-        return result.error();
+        return result;
     }
 
     const auto &key_obj = get_json_value(element, "key");
     if (!key_obj.is_string()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+        return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
     }
     const auto key = key_obj.get<std::string>();
     if (key.empty()) {
-        return PARSE_ERROR_GENERIC;
+        return tl::make_unexpected(PARSE_ERROR_GENERIC);
     }
 
     auto &terrains = TerrainList::get_instance();
@@ -75,17 +74,17 @@ int TerrainReader::read() const
     }
 
     if (const auto result = info_set_string(get_json_value(element, "name"), terrain.name, true); !result) {
-        return result.error();
+        return result;
     }
 
     if (const auto result = this->set_terrain_symbol(terrain); !result) {
-        return result.error();
+        return result;
     }
 
     const auto &mimic_obj = get_json_value(element, "mimic");
     if (!mimic_obj.is_null()) {
         if (!mimic_obj.is_string()) {
-            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+            return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
         }
         terrain.mimic_tag = mimic_obj.get<std::string>();
     }
@@ -93,18 +92,18 @@ int TerrainReader::read() const
     const auto &prio_obj = get_json_value(element, "map_priority");
     if (!prio_obj.is_null()) {
         if (const auto result = info_set_integer(prio_obj, terrain.priority, true, Range(-9999, 9999)); !result) {
-            return result.error();
+            return result;
         }
     }
 
     const auto &flags_obj = get_json_value(element, "flags");
     if (flags_obj.is_null() || !flags_obj.is_array()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+        return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
     }
 
     for (const auto &f_obj : flags_obj) {
         if (!f_obj.is_string()) {
-            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+            return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
         }
 
         const auto f = f_obj.get<std::string>();
@@ -113,35 +112,35 @@ int TerrainReader::read() const
         }
 
         if (!this->grab_one_feat_flag(terrain, f)) {
-            return PARSE_ERROR_INVALID_FLAG;
+            return tl::make_unexpected(PARSE_ERROR_INVALID_FLAG);
         }
     }
     if (const auto result = this->set_terrain_door(terrain); !result) {
-        return result.error();
+        return result;
     }
     if (const auto result = this->set_terrain_tunnel(terrain); !result) {
-        return result.error();
+        return result;
     }
     if (const auto result = this->set_terrain_trap(terrain); !result) {
-        return result.error();
+        return result;
     }
     if (const auto result = this->set_terrain_pattern(terrain); !result) {
-        return result.error();
+        return result;
     }
     if (const auto result = this->set_terrain_store(terrain); !result) {
-        return result.error();
+        return result;
     }
     if (const auto result = this->set_terrain_building(terrain); !result) {
-        return result.error();
+        return result;
     }
     if (const auto result = this->set_terrain_conversion(terrain); !result) {
-        return result.error();
+        return result;
     }
     if (const auto result = this->set_terrain_generation(terrain); !result) {
-        return result.error();
+        return result;
     }
     if (const auto result = this->set_terrain_interactions(terrain); !result) {
-        return result.error();
+        return result;
     }
 
     if (id >= static_cast<int>(terrains.size())) {
@@ -149,7 +148,7 @@ int TerrainReader::read() const
     }
     terrains.get_terrain(s) = std::move(terrain);
 
-    return PARSE_ERROR_NONE;
+    return {};
 }
 
 /*!

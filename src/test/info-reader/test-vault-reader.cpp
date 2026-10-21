@@ -4,6 +4,7 @@
 #include "info-reader/vault-reader.h"
 #include "locale/language-switcher.h"
 #include "room/rooms-vault.h"
+#include "test/info-reader/parse-result-helpers.h"
 #include "test/info-reader/scoped-reader-state.h"
 #include "test/scoped-restore.h"
 #include <doctest/doctest.h>
@@ -26,7 +27,7 @@ TEST_CASE("VaultReader preserves metadata and every layout byte")
     for (const auto type : { 7, 8, 17 }) {
         data["id"] = type; // Sparse IDs remain supported.
         data["type"] = type;
-        REQUIRE(VaultReader(data).read() == PARSE_ERROR_NONE);
+        REQUIRE(VaultReader(data).read().has_value());
         const auto &vault = vaults_info.at(type);
         CHECK(vault.idx == type);
         CHECK(vault.typ == type);
@@ -49,7 +50,7 @@ TEST_CASE("VaultReader rejects invalid records atomically with field diagnostics
     const auto original = make_vault();
     auto check_invalid = [&](const nlohmann::json &data, std::string_view path) {
         VaultReader reader(data);
-        CHECK(reader.read() != PARSE_ERROR_NONE);
+        CHECK_FALSE(reader.read().has_value());
         REQUIRE(reader.error().has_value());
         CHECK(reader.error()->path == path);
         CHECK_FALSE(reader.error()->reason.empty());
@@ -113,22 +114,22 @@ TEST_CASE("VaultReader rejects duplicate and descending IDs and permits retry")
     error_idx = -1;
     auto data = make_vault();
     data["id"] = 2;
-    REQUIRE(VaultReader(data).read() == PARSE_ERROR_NONE);
-    CHECK(VaultReader(data).read() == PARSE_ERROR_NON_SEQUENTIAL_RECORDS);
+    REQUIRE(VaultReader(data).read().has_value());
+    CHECK(test::to_error_code(VaultReader(data).read()) == PARSE_ERROR_NON_SEQUENTIAL_RECORDS);
     data["id"] = 1;
-    CHECK(VaultReader(data).read() == PARSE_ERROR_NON_SEQUENTIAL_RECORDS);
+    CHECK(test::to_error_code(VaultReader(data).read()) == PARSE_ERROR_NON_SEQUENTIAL_RECORDS);
     data["id"] = 3;
     data["layout"][0] = "bad";
     VaultReader reader(data);
-    CHECK(reader.read() != PARSE_ERROR_NONE);
+    CHECK_FALSE(reader.read().has_value());
     CHECK(error_idx == 2);
     data["layout"][0] = "good";
-    CHECK(reader.read() == PARSE_ERROR_NONE);
+    CHECK(reader.read().has_value());
     CHECK_FALSE(reader.error().has_value());
     CHECK(error_idx == 3);
     data["id"] = 4;
     data["rating"] = "bad";
-    CHECK(reader.read() == PARSE_ERROR_INVALID_TYPE);
+    CHECK(test::to_error_code(reader.read()) == PARSE_ERROR_INVALID_TYPE);
     REQUIRE(reader.error().has_value());
     CHECK(reader.error()->id == "4");
     CHECK(reader.error()->path == "$.rating");
@@ -136,7 +137,7 @@ TEST_CASE("VaultReader rejects duplicate and descending IDs and permits retry")
     CHECK(vaults_info[3].text == "good\\\"# ");
     CHECK(error_idx == 3);
     data["rating"] = 8;
-    CHECK(reader.read() == PARSE_ERROR_NONE);
+    CHECK(reader.read().has_value());
     CHECK_FALSE(reader.error().has_value());
     REQUIRE(vaults_info.size() == 5);
     CHECK(vaults_info[4].rat == 8);
@@ -150,7 +151,7 @@ TEST_CASE("VaultReader preserves exact error precedence and every existing recor
     vaults_info.clear();
     auto data = make_vault();
     data["id"] = 2;
-    REQUIRE(VaultReader(data).read() == PARSE_ERROR_NONE);
+    REQUIRE(VaultReader(data).read().has_value());
     const auto previous = vaults_info;
     data["id"] = 5;
     data["name"] = "Changed vault";
@@ -231,7 +232,7 @@ TEST_CASE("VaultReader preserves exact error precedence and every existing recor
         reason = _("文字列が必要です", "expected a string");
     }
     VaultReader reader(data);
-    CHECK(reader.read() == expected);
+    CHECK(test::to_error_code(reader.read()) == expected);
     REQUIRE(reader.error().has_value());
     CHECK(reader.error()->id == id);
     CHECK(reader.error()->path == path);

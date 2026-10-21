@@ -5,6 +5,7 @@
 #include "locale/character-encoding.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/tr-types.h"
+#include "test/info-reader/parse-result-helpers.h"
 #include "test/info-reader/scoped-reader-state.h"
 #include "util/enum-converter.h"
 #include <array>
@@ -72,7 +73,7 @@ TEST_CASE("EgoReader loads bonuses, flags, activation, and probabilistic flags")
 {
     EgoStateGuard guard;
     const auto data = make_ego();
-    REQUIRE(EgoReader(data).read() == PARSE_ERROR_NONE);
+    REQUIRE(EgoReader(data).read().has_value());
     REQUIRE(egos_info.size() == 1);
     const auto &ego = egos_info.at(i2enum<EgoType>(4));
 #ifdef JP
@@ -108,7 +109,7 @@ TEST_CASE("EgoReader rejects malformed records atomically")
     EgoStateGuard guard;
     const auto original = make_ego();
     auto check_invalid = [&](const nlohmann::json &data) {
-        CHECK(EgoReader(data).read() != PARSE_ERROR_NONE);
+        CHECK_FALSE(EgoReader(data).read().has_value());
         CHECK(egos_info.empty());
         CHECK(error_idx == -1);
     };
@@ -137,12 +138,12 @@ TEST_CASE("EgoReader requires unique IDs while preserving legacy ordering")
 {
     EgoStateGuard guard;
     auto data = make_ego();
-    REQUIRE(EgoReader(data).read() == PARSE_ERROR_NONE);
-    CHECK(EgoReader(data).read() == PARSE_ERROR_NON_SEQUENTIAL_RECORDS);
+    REQUIRE(EgoReader(data).read().has_value());
+    CHECK(test::to_error_code(EgoReader(data).read()) == PARSE_ERROR_NON_SEQUENTIAL_RECORDS);
     data["id"] = 3;
-    CHECK(EgoReader(data).read() == PARSE_ERROR_NONE);
+    CHECK(EgoReader(data).read().has_value());
     data["id"] = 5;
-    CHECK(EgoReader(data).read() == PARSE_ERROR_NONE);
+    CHECK(EgoReader(data).read().has_value());
     CHECK(error_idx == 5);
     CHECK(egos_info.size() == 3);
 }
@@ -152,7 +153,7 @@ TEST_CASE("EgoReader accepts the activation difficulty upper bound")
     EgoStateGuard guard;
     auto data = make_ego();
     data["level"] = 128;
-    REQUIRE(EgoReader(data).read() == PARSE_ERROR_NONE);
+    REQUIRE(EgoReader(data).read().has_value());
     CHECK(egos_info.at(i2enum<EgoType>(4)).level == 128);
 }
 
@@ -162,7 +163,7 @@ TEST_CASE("EgoReader accepts integer percent endpoints")
         EgoStateGuard guard;
         auto data = make_ego();
         data["extra_flags"][0]["chance"] = chance;
-        REQUIRE(EgoReader(data).read() == PARSE_ERROR_NONE);
+        REQUIRE(EgoReader(data).read().has_value());
         CHECK(egos_info.at(i2enum<EgoType>(4)).xtra_flags.at(0).chance == chance);
     }
 }
@@ -171,13 +172,13 @@ TEST_CASE("EgoReader rejects invalid percentages and preserves published records
 {
     EgoStateGuard guard;
     const auto original = make_ego();
-    REQUIRE(EgoReader(original).read() == PARSE_ERROR_NONE);
+    REQUIRE(EgoReader(original).read().has_value());
     const auto *published = &egos_info.at(i2enum<EgoType>(4));
     const auto check_invalid = [&](const nlohmann::json &extra) {
         auto data = original;
         data["id"] = 5;
         data["extra_flags"][0] = extra;
-        CHECK(EgoReader(data).read() != PARSE_ERROR_NONE);
+        CHECK_FALSE(EgoReader(data).read().has_value());
         REQUIRE(egos_info.size() == 1);
         CHECK(&egos_info.at(i2enum<EgoType>(4)) == published);
         CHECK(published->xtra_flags.at(0).chance == 33);
@@ -196,16 +197,16 @@ TEST_CASE("EgoReader rejects invalid percentages and preserves published records
 TEST_CASE("EgoReader validates the percent document version")
 {
     const nlohmann::json valid{ { "version", 2 } };
-    CHECK(EgoReader::validate_root(valid) == PARSE_ERROR_NONE);
+    CHECK(EgoReader::validate_root(valid).has_value());
     for (const auto &version : std::array<nlohmann::json, 8>{ { 1, 3, -1, 2.0, true, "2", nullptr, std::numeric_limits<uint64_t>::max() } }) {
         auto root = valid;
         root["version"] = version;
-        CHECK(EgoReader::validate_root(root) != PARSE_ERROR_NONE);
+        CHECK_FALSE(EgoReader::validate_root(root).has_value());
     }
     auto root = valid;
     root.erase("version");
-    CHECK(EgoReader::validate_root(root) != PARSE_ERROR_NONE);
-    CHECK(EgoReader::validate_root(nlohmann::json::array()) != PARSE_ERROR_NONE);
+    CHECK_FALSE(EgoReader::validate_root(root).has_value());
+    CHECK_FALSE(EgoReader::validate_root(nlohmann::json::array()).has_value());
 }
 
 TEST_CASE("EgoReader restricts IDs to save format and slots to equipment or ammo")
@@ -216,7 +217,7 @@ TEST_CASE("EgoReader restricts IDs to save format and slots to equipment or ammo
             auto data = make_ego();
             data["id"] = id;
             data["slot"] = slot;
-            REQUIRE(EgoReader(data).read() == PARSE_ERROR_NONE);
+            REQUIRE(EgoReader(data).read().has_value());
             CHECK(egos_info.at(i2enum<EgoType>(id)).slot == slot);
         }
     }
@@ -226,7 +227,7 @@ TEST_CASE("EgoReader restricts IDs to save format and slots to equipment or ammo
         EgoStateGuard guard;
         auto data = make_ego();
         data[key] = value;
-        CHECK(EgoReader(data).read() != PARSE_ERROR_NONE);
+        CHECK_FALSE(EgoReader(data).read().has_value());
         CHECK(egos_info.empty());
         CHECK(error_idx == -1);
     }
@@ -248,7 +249,7 @@ TEST_CASE("EgoReader checks every scalar and signed bonus boundary")
             auto data = make_ego();
             data[nlohmann::json::json_pointer(path)] = value;
             const auto result = EgoReader(data).read();
-            CHECK((result == PARSE_ERROR_NONE) == (value >= low && value <= high));
+            CHECK(result.has_value() == (value >= low && value <= high));
         }
     }
 }
@@ -260,10 +261,10 @@ TEST_CASE("EgoReader propagates helper errors without publishing partial records
 {
     EgoStateGuard guard;
     const auto original = make_ego();
-    REQUIRE(EgoReader(original).read() == PARSE_ERROR_NONE);
+    REQUIRE(EgoReader(original).read().has_value());
     const auto *published = &egos_info.at(i2enum<EgoType>(4));
     const auto check_invalid = [&](const nlohmann::json &data, parse_error_type expected) {
-        CHECK(EgoReader(data).read() == expected);
+        CHECK(test::to_error_code(EgoReader(data).read()) == expected);
         REQUIRE(egos_info.size() == 1);
         CHECK_FALSE(egos_info.contains(i2enum<EgoType>(5)));
         CHECK(&egos_info.at(i2enum<EgoType>(4)) == published);
@@ -340,7 +341,7 @@ TEST_CASE("EgoReader accepts absent optional activation and flag groups")
                 data.erase(key);
             }
         }
-        REQUIRE(EgoReader(data).read() == PARSE_ERROR_NONE);
+        REQUIRE(EgoReader(data).read().has_value());
         REQUIRE(egos_info.size() == 1);
         const auto &ego = egos_info.at(i2enum<EgoType>(4));
         CHECK(ego.act_idx == RandomArtActType::NONE);

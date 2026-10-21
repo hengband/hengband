@@ -22,16 +22,16 @@ MessageReader::MessageReader(const nlohmann::json &message_data)
 
 /*!
  * @brief モンスターメッセージ情報(JSON Object)のパース関数
- * @return エラーコード
+ * @return 成功時は空の値、失敗時は解析エラーコード
  */
-int MessageReader::read() const
+tl::expected<void, parse_error_type> MessageReader::read() const
 {
     if (const auto result = this->set_mon_message(); !result) {
         msg_print(_("モンスターメッセージ読込失敗。", "Failed to load monster message."));
-        return result.error();
+        return result;
     }
 
-    return PARSE_ERROR_NONE;
+    return {};
 }
 
 /*!

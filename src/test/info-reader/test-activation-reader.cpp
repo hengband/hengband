@@ -12,6 +12,7 @@
 #include "system/artifact/artifact-list.h"
 #include "system/baseitem/baseitem-definition.h"
 #include "system/baseitem/baseitem-list.h"
+#include "test/info-reader/parse-result-helpers.h"
 #include "test/info-reader/scoped-reader-state.h"
 #include "test/system/artifact-list-test-access.h"
 #include "util/enum-converter.h"
@@ -120,11 +121,11 @@ void check_rejected_by_all_readers(const std::string &token)
     CHECK(grab_one_activation_flag(token) == RandomArtActType::NONE);
 
     const auto data = make_item_with_activation(token);
-    CHECK(BaseitemReader(data).read() == PARSE_ERROR_INVALID_FLAG);
+    CHECK(test::to_error_code(BaseitemReader(data).read()) == PARSE_ERROR_INVALID_FLAG);
     error_idx = -1;
-    CHECK(ArtifactReader(data).read() == PARSE_ERROR_INVALID_FLAG);
+    CHECK(test::to_error_code(ArtifactReader(data).read()) == PARSE_ERROR_INVALID_FLAG);
     error_idx = -1;
-    CHECK(EgoReader(data).read() == PARSE_ERROR_INVALID_FLAG);
+    CHECK(test::to_error_code(EgoReader(data).read()) == PARSE_ERROR_INVALID_FLAG);
     CHECK(egos_info.empty());
 }
 
@@ -138,17 +139,17 @@ void check_accepted_by_all_readers(const std::string &token, RandomArtActType ex
     ActivationStateGuard guard;
     CHECK(grab_one_activation_flag(token) == expected);
     const auto data = make_item_with_activation(token);
-    REQUIRE(BaseitemReader(data).read() == PARSE_ERROR_NONE);
+    REQUIRE(BaseitemReader(data).read().has_value());
     const auto &baseitem = BaseitemList::get_instance().get_baseitem(1);
     CHECK(baseitem.act_idx == expected);
     CHECK(baseitem.flags.has(TR_ACTIVATE));
     error_idx = -1;
-    REQUIRE(ArtifactReader(data).read() == PARSE_ERROR_NONE);
+    REQUIRE(ArtifactReader(data).read().has_value());
     const auto &artifact = ArtifactList::get_instance().get_artifact(i2enum<FixedArtifactId>(1));
     CHECK(artifact.act_idx == expected);
     CHECK(artifact.flags.has(TR_ACTIVATE));
     error_idx = -1;
-    REQUIRE(EgoReader(data).read() == PARSE_ERROR_NONE);
+    REQUIRE(EgoReader(data).read().has_value());
     CHECK(egos_info.at(i2enum<EgoType>(1)).act_idx == expected);
 }
 }
@@ -229,10 +230,10 @@ TEST_CASE("Activation readers preserve missing activation and non-string errors"
         ActivationStateGuard guard;
         const auto data = make_item_with_activation(value);
         const auto expected = value.is_null() ? PARSE_ERROR_NONE : PARSE_ERROR_INVALID_TYPE;
-        CHECK(BaseitemReader(data).read() == expected);
+        CHECK(test::to_error_code(BaseitemReader(data).read()) == expected);
         error_idx = -1;
-        CHECK(ArtifactReader(data).read() == expected);
-        CHECK(EgoReader(data).read() == expected);
+        CHECK(test::to_error_code(ArtifactReader(data).read()) == expected);
+        CHECK(test::to_error_code(EgoReader(data).read()) == expected);
     }
 }
 
@@ -253,9 +254,9 @@ TEST_CASE("Activation reader guard restores existing artifact definitions")
         auto data = make_item();
         data["activate"] = "BA_FIRE_4";
         // アーティファクトの元のベースアイテムは、先に読み込まれていなければならない。
-        REQUIRE(BaseitemReader(data).read() == PARSE_ERROR_NONE);
+        REQUIRE(BaseitemReader(data).read().has_value());
         error_idx = -1;
-        REQUIRE(ArtifactReader(data).read() == PARSE_ERROR_NONE);
+        REQUIRE(ArtifactReader(data).read().has_value());
         CHECK(artifacts.size() == 1);
     }
     REQUIRE(artifacts.size() == 1);
