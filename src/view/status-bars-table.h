@@ -86,6 +86,6 @@ enum bar_definition_type {
     BAR_IMMDARK = 73, /*!< 下部ステータス表示: 暗黒免疫 */
 };
 
-#define MAX_STAT_BARS 75
+constexpr auto MAX_STAT_BARS = 75;
 
 extern stat_bar stat_bars[MAX_STAT_BARS];

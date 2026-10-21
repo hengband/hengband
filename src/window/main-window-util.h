@@ -4,8 +4,8 @@
 #include "util/point-2d.h"
 #include <string_view>
 
-#define ROW_MAP 0
-#define COL_MAP 12
+constexpr auto ROW_MAP = 0;
+constexpr auto COL_MAP = 12;
 
 class ItemEntity;
 extern const ItemEntity *autopick_obj;

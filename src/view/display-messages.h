@@ -7,11 +7,7 @@
 #include <string>
 #include <string_view>
 
-/*
- * OPTION: Maximum number of messages to remember (see "io.c")
- * Default: assume maximal memorization of 2048 total messages
- */
-#define MESSAGE_MAX 81920
+constexpr auto MESSAGE_MAX = 81920; //!< 覚えておくメッセージの最大数
 
 extern bool msg_flag;
 extern COMMAND_CODE now_message;

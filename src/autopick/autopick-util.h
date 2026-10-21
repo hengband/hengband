@@ -7,20 +7,20 @@
 #include <string>
 #include <vector>
 
-#define MAX_LINELEN 1024
-#define MAX_LINES 6000
+constexpr auto MAX_LINELEN = 1024;
+constexpr auto MAX_LINES = 6000;
 
-#define PT_DEFAULT 0
-#define PT_WITH_PNAME 1
+constexpr auto PT_DEFAULT = 0;
+constexpr auto PT_WITH_PNAME = 1;
 
-#define MARK_MARK 0x01
-#define MARK_BY_SHIFT 0x02
+constexpr auto MARK_MARK = 0x01;
+constexpr auto MARK_BY_SHIFT = 0x02;
 
-#define LSTAT_BYPASS 0x01
-#define LSTAT_EXPRESSION 0x02
-#define LSTAT_AUTOREGISTER 0x04
-#define LSTAT_EXPRESSION_ERROR 0x08
-#define LSTAT_INCLUDE 0x10
+constexpr auto LSTAT_BYPASS = 0x01;
+constexpr auto LSTAT_EXPRESSION = 0x02;
+constexpr auto LSTAT_AUTOREGISTER = 0x04;
+constexpr auto LSTAT_EXPRESSION_ERROR = 0x08;
+constexpr auto LSTAT_INCLUDE = 0x10;
 
 /*!
  * @struct autopick_type
