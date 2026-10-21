@@ -52,6 +52,7 @@ public:
     bool matches_bet_number(int value) const;
     void set_bet_number(int value);
     void set_wager(int value);
+    static int calc_payback(int wager, uint32_t odds);
     int get_payback(bool is_draw = false) const;
     MeleeGladiator &get_gladiator(int n);
     const MeleeGladiator &get_gladiator(int n) const;

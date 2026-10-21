@@ -343,6 +343,9 @@
     <ClCompile Include="..\..\src\test\system\monrace\test-monrace-definition.cpp">
       <Filter>system\monrace</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\test\system\test-building-type-definition.cpp">
+      <Filter>system</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\test\system\test-deferred-update-requests.cpp">
       <Filter>system</Filter>
     </ClCompile>
