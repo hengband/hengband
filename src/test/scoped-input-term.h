@@ -22,10 +22,9 @@
 #include "target/target.h"
 #include "term/gameterm.h"
 #include "term/z-term.h"
+#include "test/scoped-redrawing-flags.h"
 #include "test/scoped-restore.h"
-#include "util/enum-range.h"
 #include "util/finalizer.h"
-#include "util/flag-group.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 #include <doctest/doctest.h>
@@ -36,30 +35,6 @@
 #include <vector>
 
 namespace test {
-
-/*!
- * @brief 更新フラグのうち、指定した型のフラグをすべて覚えておき、スコープを抜けるときに元の状態に戻す
- * @tparam Flag フラグの列挙型
- * @return スコープを抜けるときにフラグを戻すファイナライザ
- */
-template <RedrawingFlagType Flag>
-[[nodiscard]] auto scoped_restore_redrawing_flags()
-{
-    auto &dur = DeferredUpdateRequests::get_instance();
-    constexpr EnumRange range(static_cast<Flag>(0), Flag::MAX);
-    const EnumClassFlagGroup<Flag> all_flags(range);
-    EnumClassFlagGroup<Flag> was_set;
-    for (const auto flag : range) {
-        if (dur.has(flag)) {
-            was_set.set(flag);
-        }
-    }
-
-    return util::make_finalizer([&dur, all_flags, was_set] {
-        dur.reset_flags(all_flags);
-        dur.set_flags(was_set);
-    });
-}
 
 /*!
  * @brief 入力の処理が触るグローバル変数を覚えておき、スコープを抜けるときに元へ戻す

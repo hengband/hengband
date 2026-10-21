@@ -1502,6 +1502,7 @@ hengband_test_SOURCES = \
 	test/test-main.cpp \
 	test/scoped-restore.h \
 	test/scoped-input-term.h \
+	test/scoped-redrawing-flags.h \
 	test/save/scoped-save-io.h \
 	test/scoped-vector-wrapper.h \
 	test/scoped-rng.h \

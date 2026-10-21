@@ -155,6 +155,7 @@
     <ClInclude Include="..\..\src\test\info-reader\scoped-reader-state.h" />
     <ClInclude Include="..\..\src\test\save\scoped-save-io.h" />
     <ClInclude Include="..\..\src\test\scoped-input-term.h" />
+    <ClInclude Include="..\..\src\test\scoped-redrawing-flags.h" />
     <ClInclude Include="..\..\src\test\scoped-restore.h" />
     <ClInclude Include="..\..\src\test\scoped-rng.h" />
     <ClInclude Include="..\..\src\test\scoped-vector-wrapper.h" />
