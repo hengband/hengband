@@ -6,8 +6,8 @@
 /*
  * Bit flags for the *_can_enter() and monster_can_cross_terrain()
  */
-#define CEM_RIDING 0x0001
-#define CEM_P_CAN_ENTER_PATTERN 0x0002
+constexpr auto CEM_RIDING = 0x0001;
+constexpr auto CEM_P_CAN_ENTER_PATTERN = 0x0002;
 enum class MonraceId : short;
 class MonraceDefinition;
 class MonsterEntity;

@@ -3,8 +3,8 @@
 #include "system/angband.h"
 #include "system/system-variables.h"
 
-#define MAX_ADJ_STR 38
-#define MAX_ADJ_DEX 39
+constexpr auto MAX_ADJ_STR = 38;
+constexpr auto MAX_ADJ_DEX = 39;
 
 extern const int monk_ave_damage[PY_MAX_LEVEL + 1][3];
 extern const byte adj_str_blow[MAX_ADJ_STR];

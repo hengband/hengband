@@ -2,12 +2,12 @@
 
 #include <string_view>
 
-#define DAMAGE_FORCE 1
-#define DAMAGE_GENO 2
-#define DAMAGE_LOSELIFE 3
-#define DAMAGE_ATTACK 4
-#define DAMAGE_NOESCAPE 5
-#define DAMAGE_USELIFE 6
+constexpr auto DAMAGE_FORCE = 1;
+constexpr auto DAMAGE_GENO = 2;
+constexpr auto DAMAGE_LOSELIFE = 3;
+constexpr auto DAMAGE_ATTACK = 4;
+constexpr auto DAMAGE_NOESCAPE = 5;
+constexpr auto DAMAGE_USELIFE = 6;
 
 class MonsterEntity;
 class PlayerType;

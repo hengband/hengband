@@ -5,9 +5,9 @@
 #include <fmt/base.h>
 #include <string_view>
 
-#define MAX_MA 17 /*!< 修行僧マーシャルアーツの技数 / Monk martial arts... */
-#define MA_KNEE 1 /*!< 金的効果ID */
-#define MA_SLOW 2 /*!< 膝蹴り効果ID */
+constexpr auto MAX_MA = 17; /*!< 修行僧マーシャルアーツの技数 / Monk martial arts... */
+constexpr auto MA_KNEE = 1; /*!< 金的効果ID */
+constexpr auto MA_SLOW = 2; /*!< 減速効果ID */
 
 /* For Monk martial arts */
 struct martial_arts {

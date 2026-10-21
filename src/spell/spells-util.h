@@ -1,8 +1,8 @@
 #pragma once
 
-#define DETECT_RAD_DEFAULT 30
-#define DETECT_RAD_MAP 30
-#define DETECT_RAD_ALL 255
+constexpr auto DETECT_RAD_DEFAULT = 30;
+constexpr auto DETECT_RAD_MAP = 30;
+constexpr auto DETECT_RAD_ALL = 255;
 
 enum class SpellProcessType {
     INFO,

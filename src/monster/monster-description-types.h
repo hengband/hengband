@@ -15,4 +15,4 @@ enum monsetr_description_type {
     MD_NO_OWNER = 0x00000400, /* Do not indicate the pet's owner as in "your" */
 };
 
-#define MD_WRONGDOER_NAME (MD_IGNORE_HALLU | MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE) /* 加害明記向け */
+constexpr auto MD_WRONGDOER_NAME = MD_IGNORE_HALLU | MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE; /* 加害明記向け */

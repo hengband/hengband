@@ -1,13 +1,14 @@
 #pragma once
 
+#include "floor/floor-base-definitions.h"
 #include "util/point-2d.h"
 #include <vector>
 
 /* Minimum & maximum town size */
-#define MIN_TOWN_WID ((MAX_WID / 3) / 2)
-#define MIN_TOWN_HGT ((MAX_HGT / 3) / 2)
-#define MAX_TOWN_WID ((MAX_WID / 3) * 2 / 3)
-#define MAX_TOWN_HGT ((MAX_HGT / 3) * 2 / 3)
+constexpr auto MIN_TOWN_WID = (MAX_WID / 3) / 2;
+constexpr auto MIN_TOWN_HGT = (MAX_HGT / 3) / 2;
+constexpr auto MAX_TOWN_WID = (MAX_WID / 3) * 2 / 3;
+constexpr auto MAX_TOWN_HGT = (MAX_HGT / 3) * 2 / 3;
 
 class UndergroundBuilding {
 public:

@@ -11,6 +11,18 @@
 #include <memory>
 #include <string>
 
+constexpr int MONSTER_MAXHP = 30000; //!< モンスターの最大HP
+
+/* Sub-alignment flags for neutral monsters */
+constexpr auto SUB_ALIGN_NEUTRAL = 0x0000; /*!< モンスターのサブアライメント:中立 */
+constexpr auto SUB_ALIGN_EVIL = 0x0001; /*!< モンスターのサブアライメント:悪 */
+constexpr auto SUB_ALIGN_GOOD = 0x0002; /*!< モンスターのサブアライメント:善 */
+
+enum class MonraceId : short;
+class FloorType;
+class MonraceDefinition;
+class MonsterEntityWriter;
+
 /*!
  * @brief Monster information, for a specific monster.
  * @Note
@@ -18,12 +30,6 @@
  * The "hold_o_idx" field points to the first object of a stack
  * of objects (if any) being carried by the monster (see above).
  */
-constexpr int MONSTER_MAXHP = 30000; //!< モンスターの最大HP
-
-enum class MonraceId : short;
-class FloorType;
-class MonraceDefinition;
-class MonsterEntityWriter;
 class MonsterEntity {
 public:
     friend class MonsterEntityWriter;
@@ -35,10 +41,6 @@ public:
     MonraceId ap_r_idx{}; /*!< モンスターの外見種族ID（あやしい影、たぬき、ジュラル星人誤認などにより変化する）Monster race appearance index */
     FloorType *current_floor_ptr{}; /*!< 所在フロアID（現状はFloorType構造体によるオブジェクトは1つしかないためソースコード設計上の意義以外はない）*/
 
-/* Sub-alignment flags for neutral monsters */
-#define SUB_ALIGN_NEUTRAL 0x0000 /*!< モンスターのサブアライメント:中立 */
-#define SUB_ALIGN_EVIL 0x0001 /*!< モンスターのサブアライメント:善 */
-#define SUB_ALIGN_GOOD 0x0002 /*!< モンスターのサブアライメント:悪 */
     BIT_FLAGS8 sub_align{}; /*!< 中立属性のモンスターが召喚主のアライメントに従い一時的に立っている善悪陣営 / Sub-alignment for a neutral monster */
 
     POSITION fy{}; /*!< 所在グリッドY座標 / Y location on map */

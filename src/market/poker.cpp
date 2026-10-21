@@ -13,16 +13,16 @@
  */
 static int cards[5];
 
-#define ODDS_5A 3000 /*!< ファイブエースの役倍率 */
-#define ODDS_5C 400 /*!< ファイブカードの役倍率 */
-#define ODDS_RF 200 /*!< ロイヤルストレートフラッシュの役倍率 */
-#define ODDS_SF 80 /*!< ストレートフラッシュの役倍率 */
-#define ODDS_4C 16 /*!< フォアカードの役倍率 */
-#define ODDS_FH 12 /*!< フルハウスの役倍率 */
-#define ODDS_FL 8 /*!< フラッシュの役倍率 */
-#define ODDS_ST 4 /*!< ストレートの役倍率 */
-#define ODDS_3C 1 /*!< スリーカードの役倍率 */
-#define ODDS_2P 1 /*!< ツーペアの役倍率 */
+constexpr auto ODDS_5A = 3000; /*!< ファイブエースの役倍率 */
+constexpr auto ODDS_5C = 400; /*!< ファイブカードの役倍率 */
+constexpr auto ODDS_RF = 200; /*!< ロイヤルストレートフラッシュの役倍率 */
+constexpr auto ODDS_SF = 80; /*!< ストレートフラッシュの役倍率 */
+constexpr auto ODDS_4C = 16; /*!< フォアカードの役倍率 */
+constexpr auto ODDS_FH = 12; /*!< フルハウスの役倍率 */
+constexpr auto ODDS_FL = 8; /*!< フラッシュの役倍率 */
+constexpr auto ODDS_ST = 4; /*!< ストレートの役倍率 */
+constexpr auto ODDS_3C = 1; /*!< スリーカードの役倍率 */
+constexpr auto ODDS_2P = 1; /*!< ツーペアの役倍率 */
 
 /*! @note
  * kpoker no (tyuto-hannpa na)pakuri desu...
