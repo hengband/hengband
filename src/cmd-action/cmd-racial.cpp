@@ -13,7 +13,7 @@
 #include "core/window-redrawer.h"
 #include "game-option/text-display-options.h"
 #include "io/command-repeater.h"
-#include "io/input-key-acceptor.h"
+#include "io/input-context.h"
 #include "io/input-key-requester.h"
 #include "main/sound-of-music.h"
 #include "mutation/mutation-flag-types.h"
@@ -312,8 +312,9 @@ static void racial_power_display_explanation(PlayerType *player_ptr, rc_type *rc
     term_erase(12, 16);
     display_wrap_around(rpi.text, 62, 17, 15);
 
-    prt(_("何かキーを押して下さい。", "Hit any key."), 0, 0);
-    (void)inkey();
+    constexpr auto prompt = _("何かキーを押して下さい。", "Hit any key.");
+    prt(prompt, 0, 0);
+    (void)input_key_with_context(InputKind::ANY_KEY, prompt);
 
     screen_load();
     screen_save();

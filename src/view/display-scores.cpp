@@ -1,7 +1,8 @@
 #include "view/display-scores.h"
+#include "core/asking-player.h"
 #include "core/score-util.h"
 #include "io/files-util.h"
-#include "io/input-key-acceptor.h"
+#include "io/input-context.h"
 #include "locale/character-encoding.h"
 #include "player-info/class-info.h"
 #include "player/player-personality.h"
@@ -185,8 +186,9 @@ void display_scores(int from, int to, int note, high_score *score)
             c_put_str(attr, out_val, n * 4 + 4, 0);
         }
 
-        prt(_("[ ESCで中断, その他のキーで続けます ]", "[Press ESC to quit, any other key to continue.]"), MAIN_TERM_MIN_ROWS - 1, _(21, 17));
-        auto key = inkey();
+        constexpr auto prompt = _("[ ESCで中断, その他のキーで続けます ]", "[Press ESC to quit, any other key to continue.]");
+        prt(prompt, MAIN_TERM_MIN_ROWS - 1, _(21, 17));
+        const auto key = input_key_with_context(InputKind::ANY_KEY, prompt);
         prt("", MAIN_TERM_MIN_ROWS - 1, 0);
         if (key == ESCAPE) {
             break;

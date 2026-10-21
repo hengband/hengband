@@ -1,5 +1,6 @@
 #include "spell-kind/spells-sight.h"
 #include "avatar/avatar.h"
+#include "core/asking-player.h"
 #include "core/window-redrawer.h"
 #include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
@@ -8,7 +9,7 @@
 #include "game-option/map-screen-options.h"
 #include "grid/grid.h"
 #include "io/cursor.h"
-#include "io/input-key-acceptor.h"
+#include "io/input-context.h"
 #include "locale/english.h"
 #include "monster-race/monster-kind-mask.h"
 #include "monster/monster-describer.h"
@@ -464,7 +465,7 @@ bool probing(PlayerType *player_ptr)
         dur.set_flag(SubWindowRedrawingFlag::MESSAGE);
         window_stuff(player_ptr);
         move_cursor_relative(monster.fy, monster.fx);
-        inkey();
+        (void)input_key_with_context(InputKind::ANY_KEY, probe_result);
         term_erase(0, 0);
         const auto mes = monrace.probe_lore();
         if (mes) {

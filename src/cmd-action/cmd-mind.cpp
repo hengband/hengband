@@ -21,7 +21,7 @@
 #include "game-option/input-options.h"
 #include "grid/grid.h"
 #include "inventory/inventory-slot-types.h"
-#include "io/input-key-acceptor.h"
+#include "io/input-context.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "mind/mind-berserker.h"
@@ -470,10 +470,12 @@ void do_cmd_mind_browse(PlayerType *player_ptr)
 
         switch (use_mind) {
         case MindKindType::MIRROR_MASTER:
-        case MindKindType::NINJUTSU:
-            prt(_("何かキーを押して下さい。", "Hit any key."), 0, 0);
-            (void)inkey();
+        case MindKindType::NINJUTSU: {
+            constexpr auto prompt = _("何かキーを押して下さい。", "Hit any key.");
+            prt(prompt, 0, 0);
+            (void)input_key_with_context(InputKind::ANY_KEY, prompt);
             break;
+        }
         default:
             break;
         }

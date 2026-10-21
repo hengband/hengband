@@ -52,6 +52,29 @@ TEST_CASE("input_key_with_context publishes the given context while waiting for 
     CHECK(input_key_with_context(InputKind::CONFIRM, "Really? [y/n/Auto]") == 'A');
 }
 
+TEST_CASE("input_key_with_context publishes the any-key context also when all terms are refreshed")
+{
+    test::ScopedInputTerm term;
+    term.expect({ InputKind::ANY_KEY, "Hit any key.", {} }, " ");
+    CHECK(input_key_with_context(InputKind::ANY_KEY, "Hit any key.", true) == ' ');
+}
+
+TEST_CASE("pause_line publishes the any-key context")
+{
+#ifdef JP
+#ifdef SJIS
+    constexpr auto prompt = "[ \x89\xbd\x82\xa9\x83\x4c\x81\x5b\x82\xf0\x89\x9f\x82\xb5\x82\xc4\x89\xba\x82\xb3\x82\xa2 ]"; // [ 何かキーを押して下さい ]
+#else
+    constexpr auto prompt = "[ \xb2\xbf\xa4\xab\xa5\xad\xa1\xbc\xa4\xf2\xb2\xa1\xa4\xb7\xa4\xc6\xb2\xbc\xa4\xb5\xa4\xa4 ]"; // [ 何かキーを押して下さい ]
+#endif
+#else
+    constexpr auto prompt = "[Press any key to continue]";
+#endif
+    test::ScopedInputTerm term;
+    term.expect({ InputKind::ANY_KEY, prompt, {} }, "x");
+    pause_line(23);
+}
+
 TEST_CASE("input_quantity publishes the quantity context")
 {
     test::ScopedInputTerm term;

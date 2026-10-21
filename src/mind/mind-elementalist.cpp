@@ -21,6 +21,7 @@
 #include "grid/grid.h"
 #include "hpmp/hp-mp-processor.h"
 #include "io/command-repeater.h"
+#include "io/input-context.h"
 #include "io/input-key-acceptor.h"
 #include "io/input-key-requester.h"
 #include "main/sound-definitions-table.h"
@@ -956,8 +957,9 @@ void do_cmd_element_browse(PlayerType *player_ptr)
         term_erase(12, 16);
         display_wrap_around(get_element_tip(player_ptr, n), 62, 17, 15);
 
-        prt(_("何かキーを押して下さい。", "Hit any key."), 0, 0);
-        (void)inkey();
+        constexpr auto prompt = _("何かキーを押して下さい。", "Hit any key.");
+        prt(prompt, 0, 0);
+        (void)input_key_with_context(InputKind::ANY_KEY, prompt);
     }
 }
 

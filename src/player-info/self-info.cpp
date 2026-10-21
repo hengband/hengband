@@ -12,7 +12,8 @@
 
 #include "player-info/self-info.h"
 #include "avatar/avatar.h"
-#include "io/input-key-acceptor.h"
+#include "core/asking-player.h"
+#include "io/input-context.h"
 #include "object-enchant/trc-types.h"
 #include "player-info/base-status-info.h"
 #include "player-info/body-improvement-info.h"
@@ -436,15 +437,17 @@ void report_magics(PlayerType *player_ptr)
 
         /* Every 20 entries (lines 2 to 21), start over */
         if ((k == 22) && (j + 1 < size)) {
-            prt(_("-- 続く --", "-- more --"), k, 15);
-            inkey();
+            constexpr auto more_prompt = _("-- 続く --", "-- more --");
+            prt(more_prompt, k, 15);
+            (void)input_key_with_context(InputKind::ANY_KEY, more_prompt);
             for (; k > 2; k--) {
                 prt("", k, 15);
             }
         }
     }
 
-    prt(_("[何かキーを押すとゲームに戻ります]", "[Press any key to continue]"), k, 13);
-    inkey();
+    constexpr auto prompt = _("[何かキーを押すとゲームに戻ります]", "[Press any key to continue]");
+    prt(prompt, k, 13);
+    (void)input_key_with_context(InputKind::ANY_KEY, prompt);
     screen_load();
 }

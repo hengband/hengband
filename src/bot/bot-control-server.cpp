@@ -164,6 +164,8 @@ std::string_view input_kind_name(InputKind kind)
         return "target";
     case InputKind::POINT:
         return "point";
+    case InputKind::ANY_KEY:
+        return "any_key";
     }
 
     THROW_EXCEPTION(std::logic_error, "Invalid InputKind was specified!");

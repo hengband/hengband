@@ -1,5 +1,6 @@
 #include "market/building-craft-armor.h"
-#include "io/input-key-acceptor.h"
+#include "core/asking-player.h"
+#include "io/input-context.h"
 #include "market/building-util.h"
 #include "term/screen-processor.h"
 #include "view/display-util.h"
@@ -66,10 +67,11 @@ bool eval_ac(short ac)
 
     display_wrap_around(memo, 70, row + 4, 4);
 
-    prt(_("現在のあなたの装備からすると、あなたの防御力はこれくらいです:", "Defense abilities from your current Armor Class are evaluated below."), 0, 0);
+    constexpr auto prompt = _("現在のあなたの装備からすると、あなたの防御力はこれくらいです:", "Defense abilities from your current Armor Class are evaluated below.");
+    prt(prompt, 0, 0);
 
     flush();
-    (void)inkey();
+    (void)input_key_with_context(InputKind::ANY_KEY, prompt);
     screen_load();
 
     return true;
