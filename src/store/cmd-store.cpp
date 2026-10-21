@@ -32,6 +32,7 @@
 #include "view/display-messages.h"
 #include "view/display-store.h"
 #include "world/world.h"
+#include <tl/optional.hpp>
 
 /*!
  * @brief 入った店舗がある町のIDを決める
@@ -108,6 +109,7 @@ void do_cmd_store(PlayerType *player_ptr)
     command_new = 0;
     get_com_no_macros = true;
     StoreScreen screen(store, town_index, grid.feat, term_get_size().second);
+    tl::optional<BotScreenScope> bot_screen(tl::in_place, make_bot_store_screen(screen));
     play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_BUILD);
     display_store(player_ptr, screen);
     auto should_leave = false;
@@ -188,6 +190,7 @@ void do_cmd_store(PlayerType *player_ptr)
         }
     }
 
+    bot_screen.reset();
     select_floor_music(player_ptr);
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
     world.character_icky_depth = 0;

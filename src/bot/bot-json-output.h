@@ -1,5 +1,6 @@
 #pragma once
 
+#include <functional>
 #include <nlohmann/json_fwd.hpp>
 #include <string>
 #include <string_view>
@@ -71,6 +72,37 @@ struct BotPowerListRow {
     int fail; //!< 失敗率 (%)
     std::string info; //!< 効果欄
 };
+
+/*!
+ * @brief 開いている画面の情報を、制御サーバの state のスナップショットに足すためのもの
+ */
+struct BotScreen {
+    std::function<void(nlohmann::json &snapshot, PlayerType *player_ptr)> add_to_snapshot; //!< スナップショットの type を変え、画面の情報を足す
+    bool include_map = true; //!< 地図を載せてよいか (state の map の指定より優先して地図を省く)
+};
+
+/*!
+ * @brief 画面を開いている間、その画面を登録する
+ * @details 制御サーバの state は、登録された画面があれば、JSONL のその画面のスナップショットと同じく
+ * type を変えて画面の情報を載せる。入れ子に登録したときは、最後に登録した画面が有効になる。
+ */
+class BotScreenScope {
+public:
+    explicit BotScreenScope(BotScreen screen);
+    ~BotScreenScope();
+
+    BotScreenScope(const BotScreenScope &) = delete;
+    BotScreenScope &operator=(const BotScreenScope &) = delete;
+    BotScreenScope(BotScreenScope &&) = delete;
+    BotScreenScope &operator=(BotScreenScope &&) = delete;
+
+private:
+    BotScreen registered; //!< 登録した画面
+    const BotScreen *previous; //!< 前に登録されていた画面
+};
+
+BotScreen make_bot_store_screen(const StoreScreen &screen);
+BotScreen make_bot_store_screen(StoreScreen &&screen) = delete;
 
 std::string to_json_utf8(std::string_view str);
 nlohmann::json make_message_history_json(int count);
