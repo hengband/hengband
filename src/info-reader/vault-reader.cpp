@@ -83,6 +83,7 @@ tl::expected<void, ParseErrorType> VaultReader::read()
         return this->fail(ParseErrorType::INVALID_VALUE, "$.type", _("Vault種別は7、8、17のいずれかです", "vault type must be 7, 8 or 17"));
     }
     vault.typ = static_cast<uint8_t>(type);
+    // rating はゲーム中で参照しない（未使用）。定義の形を保つため、読み込んで保持だけする。
     if (const auto result = this->read_integer("rating", vault.rat, 0, std::numeric_limits<int>::max()); !result) {
         return result;
     }
