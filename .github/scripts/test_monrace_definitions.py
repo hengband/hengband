@@ -1,5 +1,6 @@
 """JSONCのCI検証入口でモンスター種族の読込規則を確認する。"""
 import copy
+import re
 from pathlib import Path
 import unittest
 
@@ -78,6 +79,19 @@ class MonraceValidationTest(unittest.TestCase):
         self.assert_valid([self.monster(level=0, rarity=1), self.monster(2, level=127, rarity=255)])
         self.assert_invalid([self.monster(level=128)], ["monsters", 0, "level"])
         self.assert_invalid([self.monster(rarity=0)], ["monsters", 0, "rarity"])
+
+    def test_armor_class_fits_range_whose_computations_do_not_overflow(self):
+        # 五右衛門の AC を3倍しても16ビットに収まる範囲 (根拠は race-reader.cpp の MONRACE_AC_MAX)。
+        self.assert_valid([self.monster(armor_class=0), self.monster(2, armor_class=10000)])
+        self.assert_invalid([self.monster(armor_class=10001)], ["monsters", 0, "armor_class"])
+        self.assert_invalid([self.monster(armor_class=-1)], ["monsters", 0, "armor_class"])
+        source = (Path(__file__).resolve().parents[2] / "src/info-reader/race-reader.cpp").read_text(encoding="utf-8")
+        match = re.search(r"constexpr int MONRACE_AC_MAX = (\d+);", source)
+        self.assertIsNotNone(match, "MONRACE_AC_MAX not found in src/info-reader/race-reader.cpp")
+        limit = int(match.group(1))
+        schema = self.loaded[self.schema_path]["properties"]["monsters"]["items"]["properties"]["armor_class"]
+        self.assertEqual(schema["maximum"], limit)
+        self.assertLessEqual(limit * 3, 32767)
 
     def test_float_integers_are_rejected(self):
         for field in ("speed", "level", "rarity", "exp"):

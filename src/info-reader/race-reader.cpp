@@ -31,6 +31,14 @@ namespace {
 constexpr int64_t MAX_MONRACE_DICE_ROLL = std::numeric_limits<short>::max();
 
 /*!
+ * @brief モンスターのACの上限
+ * @details shoot.cpp の test_hit_fire() は、起きている五右衛門の AC を3倍して ARMOUR_CLASS (16ビット) に入れる。
+ * 3倍しても 32,767 に収まるのは 10,922 までなので、同梱のデータの最大 (10,000) と同じ 10,000 を上限とする。
+ * ほかの AC を使う計算 (命中率・モンスター同士の攻撃) は int で行うため、これより緩い。
+ */
+constexpr int MONRACE_AC_MAX = 10000;
+
+/*!
  * @brief JSON Objectからモンスター定義のダイスを読み、値の範囲を検証する
  * @param json ダイスを表す文字列が格納されたJSON Object
  * @param dice 保管先のダイス
@@ -120,7 +128,7 @@ tl::expected<void, ParseErrorType> RaceReader::read() const
         msg_print(_("モンスター感知範囲読込失敗。ID: '{}'。", "Failed to load monster vision. ID: '{}'."), error_idx);
         return result;
     }
-    if (const auto result = info_set_integer(get_json_value(this->monrace_data, "armor_class"), monrace.ac, true, Range(0, 10000)); !result) {
+    if (const auto result = info_set_integer(get_json_value(this->monrace_data, "armor_class"), monrace.ac, true, Range(0, MONRACE_AC_MAX)); !result) {
         msg_print(_("モンスターAC読込失敗。ID: '{}'。", "Failed to load monster AC. ID: '{}'."), error_idx);
         return result;
     }
