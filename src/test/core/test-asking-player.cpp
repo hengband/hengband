@@ -45,6 +45,13 @@ TEST_CASE("input_command publishes the command character context")
     }
 }
 
+TEST_CASE("input_key_with_context publishes the given context while waiting for a key")
+{
+    test::ScopedInputTerm term;
+    term.expect({ InputKind::CONFIRM, "Really? [y/n/Auto]", {} }, "A");
+    CHECK(input_key_with_context(InputKind::CONFIRM, "Really? [y/n/Auto]") == 'A');
+}
+
 TEST_CASE("input_quantity publishes the quantity context")
 {
     test::ScopedInputTerm term;

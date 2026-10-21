@@ -18,7 +18,7 @@
 #include "floor/geometry.h"
 #include "game-option/game-play-options.h"
 #include "grid/grid.h"
-#include "io/input-key-acceptor.h"
+#include "io/input-context.h"
 #include "io/input-key-requester.h"
 #include "io/write-diary.h"
 #include "main/music-definitions-table.h"
@@ -131,9 +131,10 @@ static bool decide_suicide()
         return true;
     }
 
-    prt(_("確認のため '@' を押して下さい。", "Please verify SUICIDE by typing the '@' sign: "), 0, 0);
+    constexpr auto prompt = _("確認のため '@' を押して下さい。", "Please verify SUICIDE by typing the '@' sign: ");
+    prt(prompt, 0, 0);
     flush();
-    int i = inkey();
+    const auto i = input_key_with_context(InputKind::CONFIRM, prompt);
     prt("", 0, 0);
     return i == '@';
 }

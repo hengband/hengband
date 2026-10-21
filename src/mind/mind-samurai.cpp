@@ -8,8 +8,9 @@
 #include "action/action-limited.h"
 #include "avatar/avatar.h"
 #include "cmd-action/cmd-attack.h"
+#include "core/asking-player.h"
 #include "inventory/inventory-slot-types.h"
-#include "io/input-key-acceptor.h"
+#include "io/input-context.h"
 #include "mind/stances-table.h"
 #include "monster-attack/monster-attack-player.h"
 #include "monster-race/race-resistance-mask.h"
@@ -31,6 +32,7 @@
 #include "term/screen-processor.h"
 #include "timed-effect/timed-effects.h"
 #include "util/int-char-converter.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
 #include <fmt/format.h>
 #include <memory>
@@ -389,11 +391,13 @@ bool choose_samurai_stance(PlayerType *player_ptr)
     }
 
     prt("", 1, 0);
-    prt(_("        どの型で構えますか？", "        Choose Stance: "), 1, 14);
+    constexpr auto prompt = _("        どの型で構えますか？", "        Choose Stance: ");
+    prt(prompt, 1, 14);
 
+    const auto context_prompt = str_trim(prompt);
     SamuraiStanceType new_stance = SamuraiStanceType::NONE;
     while (true) {
-        choice = inkey();
+        choice = input_key_with_context(InputKind::COMMAND_CHAR, context_prompt);
 
         if (choice == ESCAPE) {
             screen_load();
