@@ -131,8 +131,8 @@
         "dungeon": {
           "type": "integer",
           "minimum": 0,
-          "maximum": 2147483647,
-          "description": "DungeonId; 0 = none/quest-local floor."
+          "maximum": 20,
+          "description": "DungeonId; 0 = none/quest-local floor. At most DungeonId::MAX - 1."
         },
         "monster": {
           "type": "integer",
@@ -281,8 +281,8 @@
         "leavingQuest": {
           "type": "integer",
           "minimum": 0,
-          "maximum": 2147483647,
-          "description": "QuestId being left ($LEAVING_QUEST); omit for the default/fallback entry."
+          "maximum": 32766,
+          "description": "QuestId being left ($LEAVING_QUEST); omit for the default/fallback entry. At most the QuestId storage maximum - 1."
         },
         "y": {
           "type": "integer",

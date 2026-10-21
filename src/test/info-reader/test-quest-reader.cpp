@@ -4,16 +4,19 @@
 
 #include "artifact/fixed-art-types.h"
 #include "floor/floor-base-definitions.h"
+#include "info-reader/info-reader-util.h"
 #include "info-reader/parse-error-types.h"
 #include "info-reader/quest-reader.h"
 #include "info-reader/random-grid-effect-types.h"
 #include "system/dungeon/quest-definition.h"
 #include "system/dungeon/quest-fixed-map.h"
+#include "system/enums/dungeon/dungeon-id.h"
 #include "system/enums/terrain/terrain-tag.h"
 #include "system/grid-type-definition.h"
 #include "system/terrain/terrain-list.h"
 #include "test/info-reader/parse-result-helpers.h"
 #include "test/system/terrain-list-test-access.h"
+#include "util/enum-converter.h"
 #include <cstdint>
 #include <doctest/doctest.h>
 #include <limits>
@@ -80,6 +83,13 @@ std::pair<int64_t, int64_t> get_quest_integer_range(const std::string &path)
     }
     if (is_quest_short_id(path)) {
         return { std::numeric_limits<int16_t>::min(), std::numeric_limits<int16_t>::max() };
+    }
+    // ダンジョンIDは DungeonId の範囲、離脱するクエストのIDは QuestId の型の上限−1までとする。
+    if (path == "/definition/dungeon") {
+        return { 0, enum2i(DungeonId::MAX) - 1 };
+    }
+    if (path.ends_with("/leavingQuest")) {
+        return { 0, MAX_QUEST_ID };
     }
     return { std::numeric_limits<int>::min(), std::numeric_limits<int>::max() };
 }

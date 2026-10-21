@@ -933,13 +933,12 @@ def validate_terrain_semantics(data: dict, schema_path: Path) -> None:
             state_count += 1
 
 
-def load_class_ids(repository_root: Path) -> dict[str, int]:
-    """Read MagicReader's tokens and PlayerClassType values, not map order."""
-    enum_path = repository_root / "src/player-info/class-types.h"
+def load_cpp_enum_values(enum_path: Path, enum_name: str) -> dict[str, int]:
+    """Read the enumerator values of a C++ enum class: an explicit "= N", or the previous value + 1."""
     enum_source = enum_path.read_text(encoding="utf-8")
-    enum_match = re.search(r'enum class PlayerClassType\s*:[^{]+\{([^}]+)\}', enum_source)
+    enum_match = re.search(rf'enum class {re.escape(enum_name)}\b[^{{;]*\{{([^}}]+)\}}', enum_source)
     if not enum_match:
-        raise ValueError(f"PlayerClassType definition not found in {enum_path}")
+        raise ValueError(f"{enum_name} definition not found in {enum_path}")
     entries = re.sub(r'/\*.*?\*/|//[^\n]*', '', enum_match[1], flags=re.DOTALL)
     enum_ids = {}
     next_id = 0
@@ -948,12 +947,18 @@ def load_class_ids(repository_root: Path) -> dict[str, int]:
             continue
         match = re.fullmatch(r'\s*([A-Z][A-Z0-9_]*)(?:\s*=\s*(-?\d+))?\s*', entry)
         if not match:
-            raise ValueError(f"Unsupported PlayerClassType value in {enum_path}: {entry.strip()}")
+            raise ValueError(f"Unsupported {enum_name} value in {enum_path}: {entry.strip()}")
         name, explicit_id = match.groups()
         if explicit_id is not None:
             next_id = int(explicit_id)
         enum_ids[name] = next_id
         next_id += 1
+    return enum_ids
+
+
+def load_class_ids(repository_root: Path) -> dict[str, int]:
+    """Read MagicReader's tokens and PlayerClassType values, not map order."""
+    enum_ids = load_cpp_enum_values(repository_root / "src/player-info/class-types.h", "PlayerClassType")
     reader_path = repository_root / "src/info-reader/magic-reader.cpp"
     tokens = re.findall(r'\{\s*"([A-Z][A-Z0-9_]*)"\s*,\s*PlayerClassType::([A-Z][A-Z0-9_]*)\s*\}',
                         reader_path.read_text(encoding="utf-8"))

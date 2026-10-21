@@ -15,6 +15,7 @@ extern int error_idx; //!< エラーが発生したinfo ID
 
 enum class FixedArtifactId : short;
 enum class MonraceId : short;
+enum class QuestId : short;
 enum class RandomArtActType : short;
 
 /*
@@ -25,6 +26,7 @@ constexpr int MAX_BASEITEM_ID = std::numeric_limits<short>::max() - 1; //!< ベ�
 constexpr int MAX_MONRACE_ID = std::numeric_limits<std::underlying_type_t<MonraceId>>::max() - 1; //!< モンスター種族IDの上限
 constexpr int MAX_FIXED_ARTIFACT_ID = std::numeric_limits<std::underlying_type_t<FixedArtifactId>>::max() - 1; //!< 固定アーティファクトIDの上限
 constexpr int MAX_TERRAIN_ID = std::numeric_limits<FEAT_IDX>::max() - 1; //!< 地形IDの上限
+constexpr int MAX_QUEST_ID = std::numeric_limits<std::underlying_type_t<QuestId>>::max() - 1; //!< クエストIDの上限
 
 RandomArtActType grab_one_activation_flag(std::string_view what);
 

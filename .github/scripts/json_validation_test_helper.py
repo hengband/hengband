@@ -4,7 +4,7 @@ from pathlib import Path
 import re
 import tempfile
 
-from validate_json import validate_one
+from validate_json import load_cpp_enum_values, validate_one
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[2]
 
@@ -56,3 +56,18 @@ def fixed_artifact_id_schema_maximum():
 def terrain_id_schema_maximum():
     """地形IDのスキーマの上限（FEAT_IDX の上限−1）を返す。"""
     return cpp_storage_maximum("src/system/h-type.h", r"typedef (\w+) FEAT_IDX;") - 1
+
+
+def quest_id_schema_maximum():
+    """クエストIDを参照する項目のスキーマの上限（QuestId の基になる型の上限−1）を返す。"""
+    return cpp_storage_maximum("src/system/dungeon/quest-definition.h", r"enum class QuestId : (\w+) \{") - 1
+
+
+def dungeon_id_maximum():
+    """ダンジョンIDの上限（DungeonId::MAX − 1）を返す。"""
+    relative_path = "src/system/enums/dungeon/dungeon-id.h"
+    # 列挙子の値の読み方（明示した "= N"、無ければ直前の値+1）は validate_json.py と共通にする。
+    values = load_cpp_enum_values(REPOSITORY_ROOT / relative_path, "DungeonId")
+    if "MAX" not in values:
+        raise AssertionError(f"{relative_path}: DungeonId has no MAX")
+    return values["MAX"] - 1
