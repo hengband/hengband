@@ -268,6 +268,8 @@ tl::expected<void, ParseErrorType> TerrainReader::set_terrain_conversion(Terrain
 
     auto stream_index = -1;
     if (it->second == TerrainConversionType::STREAM) {
+        // 上限 254 は、1バイトだった旧形式の SUBTYPE を stream_index に移したとき (51228d3210) に引き継いだもの。
+        // ダンジョンの streams の数には上限がなく、数を超える位置は DungeonDefinition::select_stream_terrain_id() で元の地形のままになる。
         if (const auto result = info_set_integer(get_json_value(convert_obj, "stream_index"), stream_index, true, Range(0, 254)); !result) {
             return result;
         }

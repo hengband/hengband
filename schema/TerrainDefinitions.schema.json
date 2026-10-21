@@ -244,9 +244,11 @@
                 "enum": ["FLOOR", "WALL", "INNER", "OUTER", "SOLID", "STREAM"]
               },
               "stream_index": {
+                "$comment": "maximum 254 was carried over from the old one-byte SUBTYPE when it was moved to stream_index (commit 51228d3210); the number of streams in a dungeon is not limited.",
                 "type": "integer",
                 "minimum": 0,
-                "maximum": 254
+                "maximum": 254,
+                "description": "変換先にするダンジョン定義の streams (読み込み後に priority の順に並べたもの) の位置。そのダンジョンの streams の数を超える位置を指したときは、失敗せずに元の地形のままにする。"
               }
             },
             "additionalProperties": false
