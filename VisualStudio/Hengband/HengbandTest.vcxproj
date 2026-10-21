@@ -114,6 +114,7 @@
     <ClCompile Include="..\..\src\test\player\test-process-name.cpp" />
     <ClCompile Include="..\..\src\test\racial\test-racial-android.cpp" />
     <ClCompile Include="..\..\src\test\save\test-item-writer.cpp" />
+    <ClCompile Include="..\..\src\test\spell-realm\test-spells-hex.cpp" />
     <ClCompile Include="..\..\src\test\spell\test-spell-info.cpp" />
     <ClCompile Include="..\..\src\test\store\test-pricing.cpp" />
     <ClCompile Include="..\..\src\test\store\test-store-screen.cpp" />
@@ -156,6 +157,7 @@
     <ClInclude Include="..\..\src\test\info-reader\scoped-reader-state.h" />
     <ClInclude Include="..\..\src\test\save\scoped-save-io.h" />
     <ClInclude Include="..\..\src\test\scoped-input-term.h" />
+    <ClInclude Include="..\..\src\test\scoped-redrawing-flags.h" />
     <ClInclude Include="..\..\src\test\scoped-restore.h" />
     <ClInclude Include="..\..\src\test\scoped-rng.h" />
     <ClInclude Include="..\..\src\test\scoped-vector-wrapper.h" />

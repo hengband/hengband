@@ -1502,6 +1502,7 @@ hengband_test_SOURCES = \
 	test/test-main.cpp \
 	test/scoped-restore.h \
 	test/scoped-input-term.h \
+	test/scoped-redrawing-flags.h \
 	test/save/scoped-save-io.h \
 	test/scoped-vector-wrapper.h \
 	test/scoped-rng.h \
@@ -1571,6 +1572,7 @@ hengband_test_SOURCES = \
 	test/object/test-object-info.cpp \
 	test/player/test-process-name.cpp \
 	test/spell/test-spell-info.cpp \
+	test/spell-realm/test-spells-hex.cpp \
 	test/store/test-pricing.cpp \
 	test/store/test-store-screen.cpp \
 	test/store/test-store-util.cpp \

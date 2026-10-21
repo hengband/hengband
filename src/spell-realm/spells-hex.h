@@ -19,6 +19,8 @@ public:
     SpellHex(PlayerType *player_ptr);
     virtual ~SpellHex() = default;
 
+    static void request_casting_change_updates();
+
     bool stop_spells_with_selection();
     void decrease_mana();
     void stop_all_spells();
