@@ -295,7 +295,7 @@ static void generate_fixed_floor(PlayerType *player_ptr)
     get_mon_num_prep_enum(player_ptr, floor.get_monrace_hook());
     init_flags = INIT_CREATE_DUNGEON;
     if (fixed_map && fixed_map->has_map()) {
-        if (const auto err = generate_quest_floor_from_json(player_ptr, quest, *fixed_map); err != PARSE_ERROR_NONE) {
+        if (const auto err = generate_quest_floor_from_json(player_ptr, quest, *fixed_map); err != ParseErrorType::NONE) {
             constexpr auto message = _("クエスト {} の固定マップ生成に失敗しました (コード {})", "Failed to generate fixed map for quest {} (code {})");
             quit(fmt::format(message, enum2i(floor.quest_number), static_cast<int>(err)));
         }

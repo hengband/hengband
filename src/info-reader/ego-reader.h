@@ -17,15 +17,15 @@ public:
     EgoReader &operator=(EgoReader &&) = delete;
 
     static constexpr int FORMAT_VERSION = 2;
-    static tl::expected<void, parse_error_type> validate_root(const nlohmann::json &root);
-    tl::expected<void, parse_error_type> read() const;
+    static tl::expected<void, ParseErrorType> validate_root(const nlohmann::json &root);
+    tl::expected<void, ParseErrorType> read() const;
 
 private:
     bool grab_one_flag(EgoItemDefinition &ego, const nlohmann::json &flag) const;
     bool grab_one_extra_flag(ego_generate_type &extra, const nlohmann::json &flag) const;
-    tl::expected<void, parse_error_type> set_flags(EgoItemDefinition &ego) const;
-    tl::expected<void, parse_error_type> set_extra_flags(EgoItemDefinition &ego) const;
-    tl::expected<void, parse_error_type> set_activation(EgoItemDefinition &ego) const;
+    tl::expected<void, ParseErrorType> set_flags(EgoItemDefinition &ego) const;
+    tl::expected<void, ParseErrorType> set_extra_flags(EgoItemDefinition &ego) const;
+    tl::expected<void, ParseErrorType> set_activation(EgoItemDefinition &ego) const;
 
     const nlohmann::json &ego_data;
 };

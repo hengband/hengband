@@ -101,12 +101,12 @@ TEST_CASE("WildernessReader rejects duplicate IDs and symbols")
     auto data = make_definition();
     data["towns"].push_back(data["towns"][0]);
     WildernessDefinition definition;
-    CHECK(test::to_error_code(WildernessReader(data).read(definition)) == PARSE_ERROR_NON_SEQUENTIAL_RECORDS);
+    CHECK(test::to_error_code(WildernessReader(data).read(definition)) == ParseErrorType::NON_SEQUENTIAL_RECORDS);
 
     data = make_definition();
     data["maps"]["normal"]["letters"].push_back(data["maps"]["normal"]["letters"][0]);
     definition = {};
-    CHECK(test::to_error_code(WildernessReader(data).read(definition)) == PARSE_ERROR_NON_SEQUENTIAL_RECORDS);
+    CHECK(test::to_error_code(WildernessReader(data).read(definition)) == ParseErrorType::NON_SEQUENTIAL_RECORDS);
 }
 
 TEST_CASE("WildernessReader rejects undefined town references")
@@ -116,7 +116,7 @@ TEST_CASE("WildernessReader rejects undefined town references")
         data["maps"][map_name]["letters"][0]["town"] = 2;
         WildernessDefinition definition;
         CAPTURE(map_name);
-        CHECK(test::to_error_code(WildernessReader(data).read(definition)) == PARSE_ERROR_INVALID_VALUE);
+        CHECK(test::to_error_code(WildernessReader(data).read(definition)) == ParseErrorType::INVALID_VALUE);
     }
 }
 
@@ -136,12 +136,12 @@ TEST_CASE("WildernessReader limits town IDs to the town records")
     data["towns"][0]["id"] = 7;
     data["maps"]["normal"]["letters"][1]["town"] = 1;
     auto existing = make_existing_definition();
-    CHECK(test::to_error_code(WildernessReader(data).read(existing)) == PARSE_ERROR_INVALID_FLAG);
+    CHECK(test::to_error_code(WildernessReader(data).read(existing)) == ParseErrorType::INVALID_FLAG);
     check_existing_definition(existing);
 
     data = make_definition();
     data["maps"]["normal"]["letters"][1]["town"] = 7;
-    CHECK(test::to_error_code(WildernessReader(data).read(existing)) == PARSE_ERROR_INVALID_FLAG);
+    CHECK(test::to_error_code(WildernessReader(data).read(existing)) == ParseErrorType::INVALID_FLAG);
     check_existing_definition(existing);
 }
 
@@ -169,7 +169,7 @@ TEST_CASE("WildernessReader requires the wilderness edge to be closed")
                 data["maps"][map_name]["letters"].push_back(letter);
                 data["maps"][map_name]["layout"][row_index] = row;
                 auto definition = make_existing_definition();
-                CHECK(test::to_error_code(WildernessReader(data).read(definition)) == PARSE_ERROR_INVALID_VALUE);
+                CHECK(test::to_error_code(WildernessReader(data).read(definition)) == ParseErrorType::INVALID_VALUE);
                 check_existing_definition(definition);
             }
         }
@@ -185,7 +185,7 @@ TEST_CASE("WildernessReader requires the wilderness edge to be closed")
         auto definition = make_existing_definition();
         CHECK(WildernessReader(data).read(definition).has_value());
         data["maps"]["compact"]["layout"] = { "####", "###x", "###" };
-        CHECK(test::to_error_code(WildernessReader(data).read(definition)) == PARSE_ERROR_INVALID_VALUE);
+        CHECK(test::to_error_code(WildernessReader(data).read(definition)) == ParseErrorType::INVALID_VALUE);
     }
 
     // 内側のマスは外周の決まりに関わらない。
@@ -201,12 +201,12 @@ TEST_CASE("WildernessReader validates layout dimensions and symbols")
     auto data = make_definition();
     data["maps"]["normal"]["layout"][1] = "##";
     WildernessDefinition definition;
-    CHECK(test::to_error_code(WildernessReader(data).read(definition)) == PARSE_ERROR_INVALID_VALUE);
+    CHECK(test::to_error_code(WildernessReader(data).read(definition)) == ParseErrorType::INVALID_VALUE);
 
     data = make_definition();
     data["maps"]["normal"]["layout"][1] = "#.#";
     definition = {};
-    CHECK(test::to_error_code(WildernessReader(data).read(definition)) == PARSE_ERROR_INVALID_VALUE);
+    CHECK(test::to_error_code(WildernessReader(data).read(definition)) == ParseErrorType::INVALID_VALUE);
 
     data = make_definition();
     data["maps"]["compact"]["starting_position"]["x"] = 3;
@@ -252,50 +252,50 @@ TEST_CASE("WildernessReader propagates map helper errors without replacing outpu
     struct InvalidField {
         const char *path;
         nlohmann::json value;
-        parse_error_type error;
+        ParseErrorType error;
     };
     const std::vector<InvalidField> invalid_fields = {
-        { "", nullptr, PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "", 1, PARSE_ERROR_INVALID_TYPE },
-        { "/letters", nullptr, PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "/letters", nlohmann::json::object(), PARSE_ERROR_INVALID_TYPE },
-        { "/letters", nlohmann::json::array(), PARSE_ERROR_INVALID_TYPE },
-        { "/letters/0", 1, PARSE_ERROR_INVALID_TYPE },
-        { "/letters/0/symbol", 1, PARSE_ERROR_INVALID_TYPE },
-        { "/letters/0/symbol", "", PARSE_ERROR_INVALID_VALUE },
-        { "/letters/0/symbol", "##", PARSE_ERROR_INVALID_VALUE },
-        { "/letters/1/symbol", "#", PARSE_ERROR_NON_SEQUENTIAL_RECORDS },
-        { "/letters/0/terrain", nullptr, PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "/letters/0/terrain", false, PARSE_ERROR_INVALID_TYPE },
-        { "/letters/0/terrain", static_cast<int>(WildernessTerrain::MAX), PARSE_ERROR_INVALID_FLAG },
-        { "/letters/0/level", "bad", PARSE_ERROR_INVALID_TYPE },
-        { "/letters/0/level", false, PARSE_ERROR_INVALID_TYPE },
-        { "/letters/0/level", 0.5, PARSE_ERROR_INVALID_TYPE },
-        { "/letters/0/level", -1, PARSE_ERROR_INVALID_FLAG },
-        { "/letters/0/level", MAX_DEPTH, PARSE_ERROR_INVALID_FLAG },
-        { "/letters/0/level", uint64_t{ std::numeric_limits<int>::max() } + 1, PARSE_ERROR_INVALID_FLAG },
-        { "/letters/0/level", nlohmann::json::object(), PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "/letters/0/level", { { other, 0 } }, PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "/letters/0/level", { { selected, nullptr }, { other, 0 } }, PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "/letters/0/level", { { selected, false }, { other, 0 } }, PARSE_ERROR_INVALID_TYPE },
-        { "/letters/0/level", { { selected, -1 }, { other, 0 } }, PARSE_ERROR_INVALID_FLAG },
-        { "/letters/0/level", { { selected, MAX_DEPTH }, { other, 0 } }, PARSE_ERROR_INVALID_FLAG },
-        { "/letters/0/town", false, PARSE_ERROR_INVALID_TYPE },
-        { "/letters/0/town", 32768, PARSE_ERROR_INVALID_FLAG },
-        { "/letters/0/road", 16, PARSE_ERROR_INVALID_FLAG },
-        { "/layout", nullptr, PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "/layout", nlohmann::json::array(), PARSE_ERROR_INVALID_VALUE },
-        { "/layout/0", 1, PARSE_ERROR_INVALID_TYPE },
-        { "/layout/0", "", PARSE_ERROR_INVALID_VALUE },
-        { "/layout/0", "#X#", PARSE_ERROR_INVALID_VALUE },
-        { "/layout/0", "####", PARSE_ERROR_INVALID_VALUE },
-        { "/layout/3", "###", PARSE_ERROR_INVALID_VALUE },
-        { "/starting_position", nullptr, PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "/starting_position", 1, PARSE_ERROR_INVALID_TYPE },
-        { "/starting_position/x", nullptr, PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "/starting_position/x", false, PARSE_ERROR_INVALID_TYPE },
-        { "/starting_position/x", 0, PARSE_ERROR_INVALID_FLAG },
-        { "/starting_position/y", 3, PARSE_ERROR_INVALID_FLAG },
+        { "", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "", 1, ParseErrorType::INVALID_TYPE },
+        { "/letters", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/letters", nlohmann::json::object(), ParseErrorType::INVALID_TYPE },
+        { "/letters", nlohmann::json::array(), ParseErrorType::INVALID_TYPE },
+        { "/letters/0", 1, ParseErrorType::INVALID_TYPE },
+        { "/letters/0/symbol", 1, ParseErrorType::INVALID_TYPE },
+        { "/letters/0/symbol", "", ParseErrorType::INVALID_VALUE },
+        { "/letters/0/symbol", "##", ParseErrorType::INVALID_VALUE },
+        { "/letters/1/symbol", "#", ParseErrorType::NON_SEQUENTIAL_RECORDS },
+        { "/letters/0/terrain", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/letters/0/terrain", false, ParseErrorType::INVALID_TYPE },
+        { "/letters/0/terrain", static_cast<int>(WildernessTerrain::MAX), ParseErrorType::INVALID_FLAG },
+        { "/letters/0/level", "bad", ParseErrorType::INVALID_TYPE },
+        { "/letters/0/level", false, ParseErrorType::INVALID_TYPE },
+        { "/letters/0/level", 0.5, ParseErrorType::INVALID_TYPE },
+        { "/letters/0/level", -1, ParseErrorType::INVALID_FLAG },
+        { "/letters/0/level", MAX_DEPTH, ParseErrorType::INVALID_FLAG },
+        { "/letters/0/level", uint64_t{ std::numeric_limits<int>::max() } + 1, ParseErrorType::INVALID_FLAG },
+        { "/letters/0/level", nlohmann::json::object(), ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/letters/0/level", { { other, 0 } }, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/letters/0/level", { { selected, nullptr }, { other, 0 } }, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/letters/0/level", { { selected, false }, { other, 0 } }, ParseErrorType::INVALID_TYPE },
+        { "/letters/0/level", { { selected, -1 }, { other, 0 } }, ParseErrorType::INVALID_FLAG },
+        { "/letters/0/level", { { selected, MAX_DEPTH }, { other, 0 } }, ParseErrorType::INVALID_FLAG },
+        { "/letters/0/town", false, ParseErrorType::INVALID_TYPE },
+        { "/letters/0/town", 32768, ParseErrorType::INVALID_FLAG },
+        { "/letters/0/road", 16, ParseErrorType::INVALID_FLAG },
+        { "/layout", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/layout", nlohmann::json::array(), ParseErrorType::INVALID_VALUE },
+        { "/layout/0", 1, ParseErrorType::INVALID_TYPE },
+        { "/layout/0", "", ParseErrorType::INVALID_VALUE },
+        { "/layout/0", "#X#", ParseErrorType::INVALID_VALUE },
+        { "/layout/0", "####", ParseErrorType::INVALID_VALUE },
+        { "/layout/3", "###", ParseErrorType::INVALID_VALUE },
+        { "/starting_position", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/starting_position", 1, ParseErrorType::INVALID_TYPE },
+        { "/starting_position/x", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/starting_position/x", false, ParseErrorType::INVALID_TYPE },
+        { "/starting_position/x", 0, ParseErrorType::INVALID_FLAG },
+        { "/starting_position/y", 3, ParseErrorType::INVALID_FLAG },
     };
     for (const auto *map_name : { "normal", "compact" }) {
         CAPTURE(map_name);
@@ -316,7 +316,7 @@ TEST_CASE("WildernessReader propagates map helper errors without replacing outpu
         data["maps"][map_name]["layout"] = { "#", "#", "#" };
         data["maps"][map_name]["starting_position"]["x"] = 1;
         auto definition = make_existing_definition();
-        CHECK(test::to_error_code(WildernessReader(data).read(definition)) == PARSE_ERROR_OUT_OF_BOUNDS);
+        CHECK(test::to_error_code(WildernessReader(data).read(definition)) == ParseErrorType::OUT_OF_BOUNDS);
         check_existing_definition(definition);
     }
 
@@ -324,12 +324,12 @@ TEST_CASE("WildernessReader propagates map helper errors without replacing outpu
     data["maps"]["normal"]["letters"][0]["terrain"] = false;
     data["maps"]["compact"]["layout"] = nlohmann::json::array();
     auto definition = make_existing_definition();
-    CHECK(test::to_error_code(WildernessReader(data).read(definition)) == PARSE_ERROR_INVALID_TYPE);
+    CHECK(test::to_error_code(WildernessReader(data).read(definition)) == ParseErrorType::INVALID_TYPE);
     check_existing_definition(definition);
     data = make_definition();
     data["maps"]["normal"]["layout"].erase(2);
     data["maps"]["compact"]["starting_position"] = false;
-    CHECK(test::to_error_code(WildernessReader(data).read(definition)) == PARSE_ERROR_INVALID_VALUE);
+    CHECK(test::to_error_code(WildernessReader(data).read(definition)) == ParseErrorType::INVALID_VALUE);
     check_existing_definition(definition);
 }
 
@@ -400,7 +400,7 @@ TEST_CASE("WildernessReader limits dimensions to the floor size")
         CAPTURE(height);
         const auto data = make_sized(width, height);
         auto definition = make_existing_definition();
-        CHECK(test::to_error_code(WildernessReader(data).read(definition)) == PARSE_ERROR_INVALID_FLAG);
+        CHECK(test::to_error_code(WildernessReader(data).read(definition)) == ParseErrorType::INVALID_FLAG);
         check_existing_definition(definition);
     }
 }
@@ -417,7 +417,7 @@ TEST_CASE("WildernessReader rejects starting positions on the wilderness edge")
             auto data = make_definition();
             data["maps"][map_name]["starting_position"][axis] = 2;
             auto definition = make_existing_definition();
-            CHECK(test::to_error_code(WildernessReader(data).read(definition)) == PARSE_ERROR_INVALID_FLAG);
+            CHECK(test::to_error_code(WildernessReader(data).read(definition)) == ParseErrorType::INVALID_FLAG);
             check_existing_definition(definition);
         }
     }

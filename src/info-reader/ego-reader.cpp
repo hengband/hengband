@@ -22,7 +22,7 @@ EgoReader::EgoReader(const nlohmann::json &ego_data)
  * @param root JSON文書のルート
  * @return 成功時は空の値、失敗時は解析エラーコード。旧分数形式のversion 1は受理しない。
  */
-tl::expected<void, parse_error_type> EgoReader::validate_root(const nlohmann::json &root)
+tl::expected<void, ParseErrorType> EgoReader::validate_root(const nlohmann::json &root)
 {
     int version = 0;
     return info_set_integer(get_json_value(root, "version"), version, true, Range(FORMAT_VERSION, FORMAT_VERSION));
@@ -33,10 +33,10 @@ tl::expected<void, parse_error_type> EgoReader::validate_root(const nlohmann::js
  * @return 成功時は空の値、失敗時は解析エラーコード
  * @details 失敗時は既存のegos_infoとerror_idxを保持する。文書のversion検証は呼び出し側が先に行う。
  */
-tl::expected<void, parse_error_type> EgoReader::read() const
+tl::expected<void, ParseErrorType> EgoReader::read() const
 {
     if (!this->ego_data.is_object()) {
-        return tl::make_unexpected(PARSE_ERROR_INVALID_TYPE);
+        return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
     }
 
     int id = 0;
@@ -44,7 +44,7 @@ tl::expected<void, parse_error_type> EgoReader::read() const
         return result;
     }
     if (egos_info.contains(i2enum<EgoType>(id))) {
-        return tl::make_unexpected(PARSE_ERROR_NON_SEQUENTIAL_RECORDS);
+        return tl::make_unexpected(ParseErrorType::NON_SEQUENTIAL_RECORDS);
     }
 
     EgoItemDefinition ego;
@@ -71,7 +71,7 @@ tl::expected<void, parse_error_type> EgoReader::read() const
     const auto &base = get_json_value(this->ego_data, "base_bonuses");
     if (!base.is_null()) {
         if (!base.is_object()) {
-            return tl::make_unexpected(PARSE_ERROR_INVALID_TYPE);
+            return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
         }
         if (const auto result = info_set_integer(get_json_value(base, "to_hit"), ego.base_to_h, true, Range(-32768, 32767)); !result) {
             return result;
@@ -87,7 +87,7 @@ tl::expected<void, parse_error_type> EgoReader::read() const
     const auto &maximum = get_json_value(this->ego_data, "maximum_bonuses");
     if (!maximum.is_null()) {
         if (!maximum.is_object()) {
-            return tl::make_unexpected(PARSE_ERROR_INVALID_TYPE);
+            return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
         }
         if (const auto result = info_set_integer(get_json_value(maximum, "to_hit"), ego.max_to_h, true, Range(-32768, 32767)); !result) {
             return result;
@@ -150,18 +150,18 @@ bool EgoReader::grab_one_extra_flag(ego_generate_type &extra, const nlohmann::js
  * @param ego 読み込み途中のエゴ定義
  * @return 成功時は空の値、失敗時は解析エラーコード
  */
-tl::expected<void, parse_error_type> EgoReader::set_flags(EgoItemDefinition &ego) const
+tl::expected<void, ParseErrorType> EgoReader::set_flags(EgoItemDefinition &ego) const
 {
     const auto &flags = get_json_value(this->ego_data, "flags");
     if (!flags.is_array()) {
         if (flags.is_null()) {
             return {};
         }
-        return tl::make_unexpected(PARSE_ERROR_INVALID_TYPE);
+        return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
     }
     for (const auto &flag : flags) {
         if (!this->grab_one_flag(ego, flag)) {
-            return tl::make_unexpected(flag.is_string() ? PARSE_ERROR_INVALID_FLAG : PARSE_ERROR_INVALID_TYPE);
+            return tl::make_unexpected(flag.is_string() ? ParseErrorType::INVALID_FLAG : ParseErrorType::INVALID_TYPE);
         }
     }
     return {};
@@ -173,37 +173,37 @@ tl::expected<void, parse_error_type> EgoReader::set_flags(EgoItemDefinition &ego
  * @return 成功時は空の値、失敗時は解析エラーコード
  * @details extra_flagsの省略は許可する。旧分数形式・新旧混在、0～100以外の確率を拒否する。
  */
-tl::expected<void, parse_error_type> EgoReader::set_extra_flags(EgoItemDefinition &ego) const
+tl::expected<void, ParseErrorType> EgoReader::set_extra_flags(EgoItemDefinition &ego) const
 {
     const auto &extras = get_json_value(this->ego_data, "extra_flags");
     if (!extras.is_array()) {
         if (extras.is_null()) {
             return {};
         }
-        return tl::make_unexpected(PARSE_ERROR_INVALID_TYPE);
+        return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
     }
     for (const auto &extra_data : extras) {
         if (!extra_data.is_object()) {
-            return tl::make_unexpected(PARSE_ERROR_INVALID_TYPE);
+            return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
         }
         ego_generate_type extra;
         // 旧分数や混在指定を黙って無視せず、整数百分率へ移行させる。
         if (extra_data.contains("numerator") || extra_data.contains("denominator")) {
-            return tl::make_unexpected(PARSE_ERROR_INVALID_VALUE);
+            return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
         }
         if (const auto result = info_set_integer(get_json_value(extra_data, "chance"), extra.chance, true, Range(0, 100)); !result) {
             return result;
         }
         const auto &flags = get_json_value(extra_data, "flags");
         if (!flags.is_array()) {
-            return tl::make_unexpected(flags.is_null() ? PARSE_ERROR_TOO_FEW_ARGUMENTS : PARSE_ERROR_INVALID_TYPE);
+            return tl::make_unexpected(flags.is_null() ? ParseErrorType::TOO_FEW_ARGUMENTS : ParseErrorType::INVALID_TYPE);
         }
         if (flags.empty()) {
-            return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+            return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
         }
         for (const auto &flag : flags) {
             if (!this->grab_one_extra_flag(extra, flag)) {
-                return tl::make_unexpected(flag.is_string() ? PARSE_ERROR_INVALID_FLAG : PARSE_ERROR_INVALID_TYPE);
+                return tl::make_unexpected(flag.is_string() ? ParseErrorType::INVALID_FLAG : ParseErrorType::INVALID_TYPE);
             }
         }
         ego.xtra_flags.push_back(std::move(extra));
@@ -216,18 +216,18 @@ tl::expected<void, parse_error_type> EgoReader::set_extra_flags(EgoItemDefinitio
  * @param ego 読み込み途中のエゴ定義
  * @return 成功時は空の値、失敗時は解析エラーコード
  */
-tl::expected<void, parse_error_type> EgoReader::set_activation(EgoItemDefinition &ego) const
+tl::expected<void, ParseErrorType> EgoReader::set_activation(EgoItemDefinition &ego) const
 {
     const auto &activation = get_json_value(this->ego_data, "activation");
     if (activation.is_null()) {
         return {};
     }
     if (!activation.is_string()) {
-        return tl::make_unexpected(PARSE_ERROR_INVALID_TYPE);
+        return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
     }
     ego.act_idx = grab_one_activation_flag(activation.get<std::string>());
     if (ego.act_idx <= RandomArtActType::NONE) {
-        return tl::make_unexpected(PARSE_ERROR_INVALID_FLAG);
+        return tl::make_unexpected(ParseErrorType::INVALID_FLAG);
     }
     return {};
 }

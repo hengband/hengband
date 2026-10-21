@@ -27,11 +27,11 @@ TerrainReader::TerrainReader(const nlohmann::json &terrain_data)
  * @brief 地形定義(TerrainDefinitions)のパース関数
  * @return 成功時は空の値、失敗時は解析エラーコード
  */
-tl::expected<void, parse_error_type> TerrainReader::read() const
+tl::expected<void, ParseErrorType> TerrainReader::read() const
 {
     const auto &element = this->terrain_data;
     if (element.is_null() || !element.is_object()) {
-        return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
     }
 
     int id = 0;
@@ -41,11 +41,11 @@ tl::expected<void, parse_error_type> TerrainReader::read() const
 
     const auto &key_obj = get_json_value(element, "key");
     if (!key_obj.is_string()) {
-        return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
     }
     const auto key = key_obj.get<std::string>();
     if (key.empty()) {
-        return tl::make_unexpected(PARSE_ERROR_GENERIC);
+        return tl::make_unexpected(ParseErrorType::GENERIC);
     }
 
     auto &terrains = TerrainList::get_instance();
@@ -84,7 +84,7 @@ tl::expected<void, parse_error_type> TerrainReader::read() const
     const auto &mimic_obj = get_json_value(element, "mimic");
     if (!mimic_obj.is_null()) {
         if (!mimic_obj.is_string()) {
-            return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+            return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
         }
         terrain.mimic_tag = mimic_obj.get<std::string>();
     }
@@ -98,12 +98,12 @@ tl::expected<void, parse_error_type> TerrainReader::read() const
 
     const auto &flags_obj = get_json_value(element, "flags");
     if (flags_obj.is_null() || !flags_obj.is_array()) {
-        return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
     }
 
     for (const auto &f_obj : flags_obj) {
         if (!f_obj.is_string()) {
-            return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+            return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
         }
 
         const auto f = f_obj.get<std::string>();
@@ -112,7 +112,7 @@ tl::expected<void, parse_error_type> TerrainReader::read() const
         }
 
         if (!this->grab_one_feat_flag(terrain, f)) {
-            return tl::make_unexpected(PARSE_ERROR_INVALID_FLAG);
+            return tl::make_unexpected(ParseErrorType::INVALID_FLAG);
         }
     }
     if (const auto result = this->set_terrain_door(terrain); !result) {
@@ -181,11 +181,11 @@ static std::optional<TerrainCharacteristics> parse_terrain_action(std::string_vi
  * @param terrain 公開前の地形情報
  * @return 成功時は空の値、失敗時は解析エラーコード
  */
-tl::expected<void, parse_error_type> TerrainReader::set_terrain_symbol(TerrainType &terrain) const
+tl::expected<void, ParseErrorType> TerrainReader::set_terrain_symbol(TerrainType &terrain) const
 {
     const auto &symbol_obj = get_json_value(this->terrain_data, "symbol");
     if (symbol_obj.is_null() || !symbol_obj.is_object()) {
-        return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
     }
 
     const auto &ch_obj = get_json_value(symbol_obj, "character");
@@ -193,25 +193,25 @@ tl::expected<void, parse_error_type> TerrainReader::set_terrain_symbol(TerrainTy
     const auto &lit_obj = get_json_value(symbol_obj, "lit");
 
     if (!ch_obj.is_string() || !color_obj.is_string() || !lit_obj.is_boolean()) {
-        return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
     }
 
     const auto ch_str = ch_obj.get<std::string>();
     if (ch_str.empty()) {
-        return tl::make_unexpected(PARSE_ERROR_GENERIC);
+        return tl::make_unexpected(ParseErrorType::GENERIC);
     }
     if (ch_str.size() != 1) {
-        return tl::make_unexpected(PARSE_ERROR_INVALID_VALUE);
+        return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
     }
 
     const auto color_name = color_obj.get<std::string>();
     const auto it = color_list.find(color_name);
     if (it == color_list.end()) {
         msg_print(_("未知の色 '{}'。", "Unknown color '{}'."), color_name);
-        return tl::make_unexpected(PARSE_ERROR_INVALID_FLAG);
+        return tl::make_unexpected(ParseErrorType::INVALID_FLAG);
     }
     if (it->second > 127) {
-        return tl::make_unexpected(PARSE_ERROR_GENERIC);
+        return tl::make_unexpected(ParseErrorType::GENERIC);
     }
 
     const auto character = ch_str.front();
@@ -237,19 +237,19 @@ tl::expected<void, parse_error_type> TerrainReader::set_terrain_symbol(TerrainTy
  * @param terrain 公開前の地形情報
  * @return 成功時は空の値、失敗時は解析エラーコード
  */
-tl::expected<void, parse_error_type> TerrainReader::set_terrain_conversion(TerrainType &terrain) const
+tl::expected<void, ParseErrorType> TerrainReader::set_terrain_conversion(TerrainType &terrain) const
 {
     const auto &convert_obj = get_json_value(this->terrain_data, "convert");
     if (convert_obj.is_null()) {
         return {};
     }
     if (!convert_obj.is_object()) {
-        return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
     }
 
     const auto &type_obj = get_json_value(convert_obj, "type");
     if (!type_obj.is_string()) {
-        return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
     }
 
     static const std::unordered_map<std::string_view, TerrainConversionType> conversion_types = {
@@ -263,7 +263,7 @@ tl::expected<void, parse_error_type> TerrainReader::set_terrain_conversion(Terra
     const auto type = type_obj.get<std::string>();
     const auto it = conversion_types.find(type);
     if (it == conversion_types.end()) {
-        return tl::make_unexpected(PARSE_ERROR_INVALID_FLAG);
+        return tl::make_unexpected(ParseErrorType::INVALID_FLAG);
     }
 
     auto stream_index = -1;
@@ -275,7 +275,7 @@ tl::expected<void, parse_error_type> TerrainReader::set_terrain_conversion(Terra
 
     terrain.flags.set(TerrainCharacteristics::CONVERT);
     if (!terrain.init_conversion_type(it->second, stream_index)) {
-        return tl::make_unexpected(PARSE_ERROR_INVALID_VALUE);
+        return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
     }
     return {};
 }
@@ -285,36 +285,36 @@ tl::expected<void, parse_error_type> TerrainReader::set_terrain_conversion(Terra
  * @param terrain 公開前の地形情報
  * @return 成功時は空の値、失敗時は解析エラーコード
  */
-tl::expected<void, parse_error_type> TerrainReader::set_terrain_generation(TerrainType &terrain) const
+tl::expected<void, ParseErrorType> TerrainReader::set_terrain_generation(TerrainType &terrain) const
 {
     const auto &generation_obj = get_json_value(this->terrain_data, "generation");
     if (generation_obj.is_null()) {
         return {};
     }
     if (!generation_obj.is_object()) {
-        return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
     }
 
     const auto &changes_obj = get_json_value(generation_obj, "changes");
     if (!changes_obj.is_array()) {
-        return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
     }
 
     auto probability_sum = 0;
     for (const auto &change_obj : changes_obj) {
         if (!change_obj.is_object()) {
-            return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+            return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
         }
 
         const auto &terrain_obj = get_json_value(change_obj, "terrain");
         if (!terrain_obj.is_string()) {
-            return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+            return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
         }
 
         auto change = TerrainGenerationChange{};
         change.result_tag = terrain_obj.get<std::string>();
         if (change.result_tag.empty()) {
-            return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+            return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
         }
 
         if (const auto result = info_set_integer(get_json_value(change_obj, "probability"), change.probability, true, Range(1, 100)); !result) {
@@ -323,7 +323,7 @@ tl::expected<void, parse_error_type> TerrainReader::set_terrain_generation(Terra
 
         probability_sum += change.probability;
         if (probability_sum > 100) {
-            return tl::make_unexpected(PARSE_ERROR_INVALID_FLAG);
+            return tl::make_unexpected(ParseErrorType::INVALID_FLAG);
         }
 
         terrain.generation_changes.push_back(change);
@@ -339,7 +339,7 @@ tl::expected<void, parse_error_type> TerrainReader::set_terrain_generation(Terra
  * @param is_required trueなら未定義時にエラーとする
  * @return 成功時は空の値、失敗時は解析エラーコード
  */
-static tl::expected<void, parse_error_type> set_terrain_power(const nlohmann::json &power_obj, uint8_t &power, bool is_required = false)
+static tl::expected<void, ParseErrorType> set_terrain_power(const nlohmann::json &power_obj, uint8_t &power, bool is_required = false)
 {
     if (const auto result = info_set_integer(power_obj, power, is_required, Range(0, 255)); !result) {
         return result;
@@ -352,19 +352,19 @@ static tl::expected<void, parse_error_type> set_terrain_power(const nlohmann::js
  * @param terrain 公開前の地形情報
  * @return 成功時は空の値、失敗時は解析エラーコード
  */
-tl::expected<void, parse_error_type> TerrainReader::set_terrain_trap(TerrainType &terrain) const
+tl::expected<void, ParseErrorType> TerrainReader::set_terrain_trap(TerrainType &terrain) const
 {
     const auto &trap_obj = get_json_value(this->terrain_data, "trap");
     if (trap_obj.is_null()) {
         return {};
     }
     if (!trap_obj.is_object()) {
-        return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
     }
 
     const auto &type_obj = get_json_value(trap_obj, "type");
     if (!type_obj.is_string()) {
-        return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
     }
     if (const auto result = set_terrain_power(get_json_value(trap_obj, "power"), terrain.trap_power, true); !result) {
         return result;
@@ -396,12 +396,12 @@ tl::expected<void, parse_error_type> TerrainReader::set_terrain_trap(TerrainType
     const auto type = type_obj.get<std::string>();
     const auto it = trap_types.find(type);
     if (it == trap_types.end()) {
-        return tl::make_unexpected(PARSE_ERROR_INVALID_FLAG);
+        return tl::make_unexpected(ParseErrorType::INVALID_FLAG);
     }
 
     terrain.flags.set(TerrainCharacteristics::TRAP);
     if (!terrain.init_trap_type(it->second)) {
-        return tl::make_unexpected(PARSE_ERROR_INVALID_VALUE);
+        return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
     }
     return {};
 }
@@ -411,14 +411,14 @@ tl::expected<void, parse_error_type> TerrainReader::set_terrain_trap(TerrainType
  * @param terrain 設定先の地形情報
  * @return 成功時は空の値、失敗時は解析エラーコード
  */
-tl::expected<void, parse_error_type> TerrainReader::set_terrain_door(TerrainType &terrain) const
+tl::expected<void, ParseErrorType> TerrainReader::set_terrain_door(TerrainType &terrain) const
 {
     const auto &door_obj = get_json_value(this->terrain_data, "door");
     if (door_obj.is_null()) {
         return {};
     }
     if (!door_obj.is_object()) {
-        return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
     }
 
     terrain.flags.set(TerrainCharacteristics::DOOR);
@@ -430,14 +430,14 @@ tl::expected<void, parse_error_type> TerrainReader::set_terrain_door(TerrainType
  * @param terrain 設定先の地形情報
  * @return 成功時は空の値、失敗時は解析エラーコード
  */
-tl::expected<void, parse_error_type> TerrainReader::set_terrain_tunnel(TerrainType &terrain) const
+tl::expected<void, ParseErrorType> TerrainReader::set_terrain_tunnel(TerrainType &terrain) const
 {
     const auto &tunnel_obj = get_json_value(this->terrain_data, "tunnel");
     if (tunnel_obj.is_null()) {
         return {};
     }
     if (!tunnel_obj.is_object()) {
-        return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
     }
 
     terrain.flags.set(TerrainCharacteristics::TUNNEL);
@@ -449,19 +449,19 @@ tl::expected<void, parse_error_type> TerrainReader::set_terrain_tunnel(TerrainTy
  * @param terrain 公開前の地形情報
  * @return 成功時は空の値、失敗時は解析エラーコード
  */
-tl::expected<void, parse_error_type> TerrainReader::set_terrain_pattern(TerrainType &terrain) const
+tl::expected<void, ParseErrorType> TerrainReader::set_terrain_pattern(TerrainType &terrain) const
 {
     const auto &pattern_obj = get_json_value(this->terrain_data, "pattern");
     if (pattern_obj.is_null()) {
         return {};
     }
     if (!pattern_obj.is_object()) {
-        return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
     }
 
     const auto &type_obj = get_json_value(pattern_obj, "type");
     if (!type_obj.is_string()) {
-        return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
     }
 
     static const std::unordered_map<std::string_view, PatternTileType> pattern_types = {
@@ -478,12 +478,12 @@ tl::expected<void, parse_error_type> TerrainReader::set_terrain_pattern(TerrainT
     const auto type = type_obj.get<std::string>();
     const auto it = pattern_types.find(type);
     if (it == pattern_types.end()) {
-        return tl::make_unexpected(PARSE_ERROR_INVALID_FLAG);
+        return tl::make_unexpected(ParseErrorType::INVALID_FLAG);
     }
 
     terrain.flags.set(TerrainCharacteristics::PATTERN);
     if (!terrain.init_pattern_tile_type(it->second)) {
-        return tl::make_unexpected(PARSE_ERROR_INVALID_VALUE);
+        return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
     }
     return {};
 }
@@ -493,19 +493,19 @@ tl::expected<void, parse_error_type> TerrainReader::set_terrain_pattern(TerrainT
  * @param terrain 公開前の地形情報
  * @return 成功時は空の値、失敗時は解析エラーコード
  */
-tl::expected<void, parse_error_type> TerrainReader::set_terrain_store(TerrainType &terrain) const
+tl::expected<void, ParseErrorType> TerrainReader::set_terrain_store(TerrainType &terrain) const
 {
     const auto &store_obj = get_json_value(this->terrain_data, "store");
     if (store_obj.is_null()) {
         return {};
     }
     if (!store_obj.is_object()) {
-        return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
     }
 
     const auto &type_obj = get_json_value(store_obj, "type");
     if (!type_obj.is_string()) {
-        return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
     }
 
     static const std::unordered_map<std::string_view, StoreSaleType> store_types = {
@@ -523,12 +523,12 @@ tl::expected<void, parse_error_type> TerrainReader::set_terrain_store(TerrainTyp
     const auto type = type_obj.get<std::string>();
     const auto it = store_types.find(type);
     if (it == store_types.end()) {
-        return tl::make_unexpected(PARSE_ERROR_INVALID_FLAG);
+        return tl::make_unexpected(ParseErrorType::INVALID_FLAG);
     }
 
     terrain.flags.set(TerrainCharacteristics::STORE);
     if (!terrain.init_store_sale_type(it->second)) {
-        return tl::make_unexpected(PARSE_ERROR_INVALID_VALUE);
+        return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
     }
     return {};
 }
@@ -538,19 +538,19 @@ tl::expected<void, parse_error_type> TerrainReader::set_terrain_store(TerrainTyp
  * @param terrain 公開前の地形情報
  * @return 成功時は空の値、失敗時は解析エラーコード
  */
-tl::expected<void, parse_error_type> TerrainReader::set_terrain_building(TerrainType &terrain) const
+tl::expected<void, ParseErrorType> TerrainReader::set_terrain_building(TerrainType &terrain) const
 {
     const auto &building_obj = get_json_value(this->terrain_data, "building");
     if (building_obj.is_null()) {
         return {};
     }
     if (!building_obj.is_object()) {
-        return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
     }
 
     const auto &type_obj = get_json_value(building_obj, "type");
     if (!type_obj.is_string()) {
-        return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
     }
 
     static const std::unordered_map<std::string_view, BuildingType> building_types = {
@@ -590,12 +590,12 @@ tl::expected<void, parse_error_type> TerrainReader::set_terrain_building(Terrain
     const auto type = type_obj.get<std::string>();
     const auto it = building_types.find(type);
     if (it == building_types.end()) {
-        return tl::make_unexpected(PARSE_ERROR_INVALID_FLAG);
+        return tl::make_unexpected(ParseErrorType::INVALID_FLAG);
     }
 
     terrain.flags.set(TerrainCharacteristics::BLDG);
     if (!terrain.init_building_type(it->second)) {
-        return tl::make_unexpected(PARSE_ERROR_INVALID_VALUE);
+        return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
     }
     return {};
 }
@@ -605,25 +605,25 @@ tl::expected<void, parse_error_type> TerrainReader::set_terrain_building(Terrain
  * @param terrain 設定先の地形情報
  * @return 成功時は空の値、失敗時は解析エラーコード
  */
-tl::expected<void, parse_error_type> TerrainReader::set_terrain_interactions(TerrainType &terrain) const
+tl::expected<void, ParseErrorType> TerrainReader::set_terrain_interactions(TerrainType &terrain) const
 {
     const auto &interactions_obj = get_json_value(this->terrain_data, "interactions");
     if (interactions_obj.is_null()) {
         return {};
     }
     if (!interactions_obj.is_object()) {
-        return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
     }
 
     for (auto it = interactions_obj.begin(); it != interactions_obj.end(); ++it) {
         const auto action = it.key();
         const auto &value_obj = it.value();
         if (!value_obj.is_string()) {
-            return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+            return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
         }
         const auto result_tag = value_obj.get<std::string>();
         if (result_tag.empty()) {
-            return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+            return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
         }
 
         if (action == "DROP_GOLD") {
@@ -646,7 +646,7 @@ tl::expected<void, parse_error_type> TerrainReader::set_terrain_interactions(Ter
         const auto state_it = std::find_if(std::begin(terrain.state), std::end(terrain.state),
             [](const auto &s) { return s.action == TerrainCharacteristics::MAX; });
         if (state_it == std::end(terrain.state)) {
-            return tl::make_unexpected(PARSE_ERROR_GENERIC);
+            return tl::make_unexpected(ParseErrorType::GENERIC);
         }
 
         const auto idx_state = static_cast<int>(std::distance(std::begin(terrain.state), state_it));
@@ -658,7 +658,7 @@ tl::expected<void, parse_error_type> TerrainReader::set_terrain_interactions(Ter
             }
         } else {
             msg_print(_("未知の地形アクション '{}'。", "Unknown feature action '{}'."), action);
-            return tl::make_unexpected(PARSE_ERROR_INVALID_FLAG);
+            return tl::make_unexpected(ParseErrorType::INVALID_FLAG);
         }
         terrain.state[idx_state].result_tag = result_tag;
     }

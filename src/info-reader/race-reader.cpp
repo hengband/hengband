@@ -37,13 +37,13 @@ constexpr int64_t MAX_MONRACE_DICE_ROLL = std::numeric_limits<short>::max();
  * @param is_required 必須かどうか
  * @return 成功、またはパースエラー
  * @details 個数と面数は1以上、最大の出目は MAX_MONRACE_DICE_ROLL 以下とする。
- * 範囲外の値は PARSE_ERROR_OUT_OF_BOUNDS、"01d5" のような先頭に0の付いた表記は PARSE_ERROR_INVALID_VALUE を返し、保管先を変更しない。
+ * 範囲外の値は ParseErrorType::OUT_OF_BOUNDS、"01d5" のような先頭に0の付いた表記は ParseErrorType::INVALID_VALUE を返し、保管先を変更しない。
  */
-tl::expected<void, parse_error_type> info_set_monrace_dice(const nlohmann::json &json, Dice &dice, bool is_required)
+tl::expected<void, ParseErrorType> info_set_monrace_dice(const nlohmann::json &json, Dice &dice, bool is_required)
 {
     if (json.is_null()) {
         if (is_required) {
-            return tl::unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+            return tl::unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
         }
         return {};
     }
@@ -53,11 +53,11 @@ tl::expected<void, parse_error_type> info_set_monrace_dice(const nlohmann::json 
         return result;
     }
     if (!parsed.is_valid() || static_cast<int64_t>(parsed.num) * parsed.sides > MAX_MONRACE_DICE_ROLL) {
-        return tl::unexpected(PARSE_ERROR_OUT_OF_BOUNDS);
+        return tl::unexpected(ParseErrorType::OUT_OF_BOUNDS);
     }
     // CI の pattern と同じく、先頭に0の付いた個数や面数を拒否する。
     if (parsed.to_string() != json.get<std::string>()) {
-        return tl::unexpected(PARSE_ERROR_INVALID_VALUE);
+        return tl::unexpected(ParseErrorType::INVALID_VALUE);
     }
 
     dice = parsed;
@@ -74,15 +74,15 @@ RaceReader::RaceReader(const nlohmann::json &monrace_data)
  * @brief モンスター種族情報(MonraceDefinitions)のパース関数
  * @return 成功時は空の値、失敗時は解析エラーコード
  */
-tl::expected<void, parse_error_type> RaceReader::read() const
+tl::expected<void, ParseErrorType> RaceReader::read() const
 {
     if (!this->monrace_data.is_object()) {
-        return tl::make_unexpected(PARSE_ERROR_INVALID_TYPE);
+        return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
     }
 
     const auto &id_obj = get_json_value(this->monrace_data, "id");
     if (!id_obj.is_number_integer()) {
-        return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
     }
 
     int monrace_id_int = 0;
@@ -91,7 +91,7 @@ tl::expected<void, parse_error_type> RaceReader::read() const
     }
     // 同じIDの定義が重なると後の定義が前の定義に混ざるため、IDは昇順で重複なしとする。
     if (monrace_id_int <= error_idx) {
-        return tl::make_unexpected(PARSE_ERROR_NON_SEQUENTIAL_RECORDS);
+        return tl::make_unexpected(ParseErrorType::NON_SEQUENTIAL_RECORDS);
     }
 
     error_idx = monrace_id_int;
@@ -289,16 +289,16 @@ bool RaceReader::grab_one_spell_flag(MonraceDefinition &monrace, std::string_vie
  * @param monrace 保管先のモンスター種族構造体
  * @return 成功、またはパースエラー
  */
-tl::expected<void, parse_error_type> RaceReader::set_mon_name(MonraceDefinition &monrace) const
+tl::expected<void, ParseErrorType> RaceReader::set_mon_name(MonraceDefinition &monrace) const
 {
     const auto &name_data = get_json_value(this->monrace_data, "name");
     if (name_data.is_null()) {
-        return tl::unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        return tl::unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
     }
     const auto &ja_obj = get_json_value(name_data, "ja");
     const auto &en_obj = get_json_value(name_data, "en");
     if (!ja_obj.is_string() || !en_obj.is_string()) {
-        return tl::unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        return tl::unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
     }
 
     const auto ja_name = ja_obj.get<std::string>();
@@ -307,7 +307,7 @@ tl::expected<void, parse_error_type> RaceReader::set_mon_name(MonraceDefinition 
 #ifdef JP
     auto ja_name_sys = utf8_to_sys(ja_name);
     if (!ja_name_sys) {
-        return tl::unexpected(PARSE_ERROR_INVALID_FLAG);
+        return tl::unexpected(ParseErrorType::INVALID_FLAG);
     }
     monrace.name = { *ja_name_sys, en_name };
 #else
@@ -321,37 +321,37 @@ tl::expected<void, parse_error_type> RaceReader::set_mon_name(MonraceDefinition 
  * @param monrace 保管先のモンスター種族構造体
  * @return 成功、またはパースエラー
  */
-tl::expected<void, parse_error_type> RaceReader::set_mon_symbol(MonraceDefinition &monrace) const
+tl::expected<void, ParseErrorType> RaceReader::set_mon_symbol(MonraceDefinition &monrace) const
 {
     const auto &symbol_data = get_json_value(this->monrace_data, "symbol");
     if (symbol_data.is_null()) {
-        return tl::unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        return tl::unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
     }
 
     const auto &character_obj = get_json_value(symbol_data, "character");
     if (!character_obj.is_string()) {
-        return tl::unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        return tl::unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
     }
 
     const auto &color_obj = get_json_value(symbol_data, "color");
     if (!color_obj.is_string()) {
-        return tl::unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        return tl::unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
     }
 
     const auto color = color_list.find(color_obj.get<std::string>());
     if (color == color_list.end()) {
-        return tl::unexpected(PARSE_ERROR_INVALID_FLAG);
+        return tl::unexpected(ParseErrorType::INVALID_FLAG);
     }
     if (color->second > 127) {
-        return tl::unexpected(PARSE_ERROR_GENERIC);
+        return tl::unexpected(ParseErrorType::GENERIC);
     }
 
     const auto character = character_obj.get<std::string>();
     if (character.empty()) {
-        return tl::unexpected(PARSE_ERROR_GENERIC);
+        return tl::unexpected(ParseErrorType::GENERIC);
     }
     if (character.size() != 1) {
-        return tl::unexpected(PARSE_ERROR_INVALID_VALUE);
+        return tl::unexpected(ParseErrorType::INVALID_VALUE);
     }
 
     monrace.symbol_definition = { color->second, character.front() };
@@ -363,7 +363,7 @@ tl::expected<void, parse_error_type> RaceReader::set_mon_symbol(MonraceDefinitio
  * @param monrace 保管先のモンスター種族構造体
  * @return 成功、またはパースエラー
  */
-tl::expected<void, parse_error_type> RaceReader::set_mon_speed(MonraceDefinition &monrace) const
+tl::expected<void, ParseErrorType> RaceReader::set_mon_speed(MonraceDefinition &monrace) const
 {
     int speed = 0;
     if (const auto result = info_set_integer(get_json_value(this->monrace_data, "speed"), speed, true, Range(-50, 99)); !result) {
@@ -378,7 +378,7 @@ tl::expected<void, parse_error_type> RaceReader::set_mon_speed(MonraceDefinition
  * @param monrace 保管先のモンスター種族構造体
  * @return 成功、またはパースエラー
  */
-tl::expected<void, parse_error_type> RaceReader::set_mon_evolve(MonraceDefinition &monrace) const
+tl::expected<void, ParseErrorType> RaceReader::set_mon_evolve(MonraceDefinition &monrace) const
 {
     const auto &evolve_data = get_json_value(this->monrace_data, "evolve");
     if (evolve_data.is_null()) {
@@ -400,19 +400,19 @@ tl::expected<void, parse_error_type> RaceReader::set_mon_evolve(MonraceDefinitio
  * @param monrace 保管先のモンスター種族構造体
  * @return 成功、またはパースエラー
  */
-tl::expected<void, parse_error_type> RaceReader::set_mon_sex(MonraceDefinition &monrace) const
+tl::expected<void, ParseErrorType> RaceReader::set_mon_sex(MonraceDefinition &monrace) const
 {
     const auto &sex_data = get_json_value(this->monrace_data, "sex");
     if (sex_data.is_null()) {
         return {};
     }
     if (!sex_data.is_string()) {
-        return tl::unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        return tl::unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
     }
 
     uint32_t sex;
     if (!info_grab_one_const(sex, r_info_sex, sex_data.get<std::string>())) {
-        return tl::unexpected(PARSE_ERROR_INVALID_FLAG);
+        return tl::unexpected(ParseErrorType::INVALID_FLAG);
     }
     monrace.init_sex(sex);
     return {};
@@ -423,14 +423,14 @@ tl::expected<void, parse_error_type> RaceReader::set_mon_sex(MonraceDefinition &
  * @param monrace 保管先のモンスター種族構造体
  * @return 成功、またはパースエラー
  */
-tl::expected<void, parse_error_type> RaceReader::set_mon_artifacts(MonraceDefinition &monrace) const
+tl::expected<void, ParseErrorType> RaceReader::set_mon_artifacts(MonraceDefinition &monrace) const
 {
     const auto &artifact_data = get_json_value(this->monrace_data, "artifacts");
     if (artifact_data.is_null()) {
         return {};
     }
     if (!artifact_data.is_array()) {
-        return tl::unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        return tl::unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
     }
 
     for (const auto &artifact : artifact_data) {
@@ -453,14 +453,14 @@ tl::expected<void, parse_error_type> RaceReader::set_mon_artifacts(MonraceDefini
  * @param monrace 保管先のモンスター種族構造体
  * @return 成功、またはパースエラー
  */
-tl::expected<void, parse_error_type> RaceReader::set_mon_escorts(MonraceDefinition &monrace) const
+tl::expected<void, ParseErrorType> RaceReader::set_mon_escorts(MonraceDefinition &monrace) const
 {
     const auto &escort_data = get_json_value(this->monrace_data, "escorts");
     if (escort_data.is_null()) {
         return {};
     }
     if (!escort_data.is_array()) {
-        return tl::unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        return tl::unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
     }
 
     for (const auto &escort : escort_data) {
@@ -484,7 +484,7 @@ tl::expected<void, parse_error_type> RaceReader::set_mon_escorts(MonraceDefiniti
  * @param monrace 保管先のモンスター種族構造体
  * @return 成功、またはパースエラー
  */
-tl::expected<void, parse_error_type> RaceReader::set_mon_blows(MonraceDefinition &monrace) const
+tl::expected<void, ParseErrorType> RaceReader::set_mon_blows(MonraceDefinition &monrace) const
 {
     const auto &blow_data = get_json_value(this->monrace_data, "blows");
     if (blow_data.is_null()) {
@@ -492,28 +492,28 @@ tl::expected<void, parse_error_type> RaceReader::set_mon_blows(MonraceDefinition
         return {};
     }
     if (!blow_data.is_array()) {
-        return tl::unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        return tl::unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
     }
 
     for (auto blow_num = 0; const auto &blow : blow_data) {
         if (blow_num >= MAX_NUM_BLOWS) {
-            return tl::unexpected(PARSE_ERROR_GENERIC);
+            return tl::unexpected(ParseErrorType::GENERIC);
         }
 
         const auto &blow_method = get_json_value(blow, "method");
         const auto &blow_effect = get_json_value(blow, "effect");
         if (blow_method.is_null() || blow_effect.is_null()) {
-            return tl::unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+            return tl::unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
         }
 
         const auto rbm = r_info_blow_method.find(blow_method.get<std::string>());
         if (rbm == r_info_blow_method.end()) {
-            return tl::unexpected(PARSE_ERROR_INVALID_FLAG);
+            return tl::unexpected(ParseErrorType::INVALID_FLAG);
         }
 
         const auto rbe = r_info_blow_effect.find(blow_effect.get<std::string>());
         if (rbe == r_info_blow_effect.end()) {
-            return tl::unexpected(PARSE_ERROR_INVALID_FLAG);
+            return tl::unexpected(ParseErrorType::INVALID_FLAG);
         }
         auto &mon_blow = monrace.blows[blow_num];
         mon_blow.method = rbm->second;
@@ -533,19 +533,19 @@ tl::expected<void, parse_error_type> RaceReader::set_mon_blows(MonraceDefinition
  * @param monrace 保管先のモンスター種族構造体
  * @return 成功、またはパースエラー
  */
-tl::expected<void, parse_error_type> RaceReader::set_mon_flags(MonraceDefinition &monrace) const
+tl::expected<void, ParseErrorType> RaceReader::set_mon_flags(MonraceDefinition &monrace) const
 {
     const auto &flag_data = get_json_value(this->monrace_data, "flags");
     if (flag_data.is_null()) {
         return {};
     }
     if (!flag_data.is_array()) {
-        return tl::unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        return tl::unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
     }
 
     for (const auto &flag : flag_data) {
         if (!this->grab_one_basic_flag(monrace, flag.get<std::string>())) {
-            return tl::unexpected(PARSE_ERROR_INVALID_FLAG);
+            return tl::unexpected(ParseErrorType::INVALID_FLAG);
         }
     }
     return {};
@@ -556,30 +556,30 @@ tl::expected<void, parse_error_type> RaceReader::set_mon_flags(MonraceDefinition
  * @param monrace 保管先のモンスター種族構造体
  * @return 成功、またはパースエラー
  */
-tl::expected<void, parse_error_type> RaceReader::set_mon_skills(MonraceDefinition &monrace) const
+tl::expected<void, ParseErrorType> RaceReader::set_mon_skills(MonraceDefinition &monrace) const
 {
     const auto &skill_data = get_json_value(this->monrace_data, "skill");
     if (skill_data.is_null()) {
         return {};
     }
     if (!skill_data.is_object()) {
-        return tl::unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        return tl::unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
     }
 
     const auto &prob = get_json_value(skill_data, "probability");
     if (!prob.is_string()) {
-        return tl::unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        return tl::unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
     }
 
     const auto &prob_token = str_split(prob.get<std::string>(), '_', false, 2);
     if (prob_token.size() != 3 || prob_token[0] != "1" || prob_token[1] != "IN") {
-        return tl::unexpected(PARSE_ERROR_GENERIC);
+        return tl::unexpected(ParseErrorType::GENERIC);
     }
     const auto &denominator_token = prob_token[2];
     int denominator;
     const auto [end, ec] = std::from_chars(denominator_token.data(), denominator_token.data() + denominator_token.size(), denominator);
     if (ec != std::errc{} || end != denominator_token.data() + denominator_token.size() || denominator_token.front() == '0' || denominator < 1 || denominator > 100) {
-        return tl::unexpected(PARSE_ERROR_INVALID_VALUE);
+        return tl::unexpected(ParseErrorType::INVALID_VALUE);
     }
     monrace.freq_spell = 100 / denominator;
 
@@ -595,17 +595,17 @@ tl::expected<void, parse_error_type> RaceReader::set_mon_skills(MonraceDefinitio
     const auto &skill_list = skill_data.find("list");
     if (skill_list == skill_data.end()) {
         if (!shoot) {
-            return tl::unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+            return tl::unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
         }
         return {};
     }
 
     for (auto &skill : skill_list->items()) {
         if (!skill.value().is_string()) {
-            return tl::unexpected(PARSE_ERROR_INVALID_TYPE);
+            return tl::unexpected(ParseErrorType::INVALID_TYPE);
         }
         if (!this->grab_one_spell_flag(monrace, skill.value().get<std::string>())) {
-            return tl::unexpected(PARSE_ERROR_INVALID_FLAG);
+            return tl::unexpected(ParseErrorType::INVALID_FLAG);
         }
     }
     return {};
@@ -616,14 +616,14 @@ tl::expected<void, parse_error_type> RaceReader::set_mon_skills(MonraceDefinitio
  * @param monrace 保管先のモンスター種族構造体
  * @return 成功、またはパースエラー
  */
-tl::expected<void, parse_error_type> RaceReader::set_mon_final_summons(MonraceDefinition &monrace) const
+tl::expected<void, ParseErrorType> RaceReader::set_mon_final_summons(MonraceDefinition &monrace) const
 {
     const auto &summon_data = get_json_value(this->monrace_data, "final_summon");
     if (summon_data.is_null()) {
         return {};
     }
     if (!summon_data.is_array()) {
-        return tl::unexpected(PARSE_ERROR_INVALID_TYPE);
+        return tl::unexpected(ParseErrorType::INVALID_TYPE);
     }
 
     for (auto &summon_item : summon_data) {
@@ -641,7 +641,7 @@ tl::expected<void, parse_error_type> RaceReader::set_mon_final_summons(MonraceDe
             return result;
         }
         if (min_num > max_num) {
-            return tl::unexpected(PARSE_ERROR_INVALID_VALUE);
+            return tl::unexpected(ParseErrorType::INVALID_VALUE);
         }
         if (const auto result = info_set_integer(get_json_value(summon_item, "radius"), radius, true, Range(1, 20)); !result) {
             return result;
@@ -656,27 +656,27 @@ tl::expected<void, parse_error_type> RaceReader::set_mon_final_summons(MonraceDe
  * @param messages 保管先の未公開メッセージ群
  * @return 成功、またはパースエラー
  */
-tl::expected<void, parse_error_type> RaceReader::set_mon_message(MonraceMessage &messages) const
+tl::expected<void, ParseErrorType> RaceReader::set_mon_message(MonraceMessage &messages) const
 {
     const auto &message_data = get_json_value(this->monrace_data, "message");
     if (message_data.is_null()) {
         return {};
     }
     if (!message_data.is_array()) {
-        return tl::unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        return tl::unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
     }
 
     for (const auto &message : message_data) {
         const auto &action_str = get_json_value(message, "action");
         if (action_str.is_null()) {
-            return tl::unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+            return tl::unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
         }
         if (!action_str.is_string()) {
-            return tl::unexpected(PARSE_ERROR_INVALID_TYPE);
+            return tl::unexpected(ParseErrorType::INVALID_TYPE);
         }
         const auto action = r_info_message_flags.find(action_str.get<std::string>());
         if (action == r_info_message_flags.end()) {
-            return tl::unexpected(PARSE_ERROR_INVALID_FLAG);
+            return tl::unexpected(ParseErrorType::INVALID_FLAG);
         }
 
         int chance = 0;

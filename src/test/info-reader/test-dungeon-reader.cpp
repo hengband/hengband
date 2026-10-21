@@ -115,7 +115,7 @@ TEST_CASE("DungeonReader rejects player levels outside their storage type")
         DungeonReaderStateGuard guard;
         auto data = make_dungeon();
         data["generation"]["minPlayerLevel"] = value;
-        CHECK(test::to_error_code(DungeonReader(data).read()) == PARSE_ERROR_INVALID_FLAG);
+        CHECK(test::to_error_code(DungeonReader(data).read()) == ParseErrorType::INVALID_FLAG);
         CHECK(DungeonList::get_instance().empty());
     }
 }
@@ -149,7 +149,7 @@ TEST_CASE("DungeonReader rejects item chance caps outside zero to one hundred be
             auto data = make_dungeon(1);
             data["name"] = { { "ja", "changed" }, { "en", "changed" } };
             data["generation"][field] = number;
-            CHECK(test::to_error_code(DungeonReader(data).read()) == PARSE_ERROR_INVALID_FLAG);
+            CHECK(test::to_error_code(DungeonReader(data).read()) == ParseErrorType::INVALID_FLAG);
             REQUIRE(DungeonList::get_instance().size() == 1);
             const auto &previous = DungeonList::get_instance().get_dungeon(DungeonId::WILDERNESS);
             CHECK(previous.name == "test dungeon");
@@ -180,7 +180,7 @@ TEST_CASE("DungeonReader rejects monster counts outside zero to one hundred befo
         REQUIRE(DungeonReader(original).read().has_value());
         auto data = make_dungeon(1);
         data["monsters"]["minCount"] = number;
-        CHECK(test::to_error_code(DungeonReader(data).read()) == PARSE_ERROR_INVALID_FLAG);
+        CHECK(test::to_error_code(DungeonReader(data).read()) == ParseErrorType::INVALID_FLAG);
         REQUIRE(DungeonList::get_instance().size() == 1);
         CHECK(DungeonList::get_instance().get_dungeon(DungeonId::WILDERNESS).min_monster_count_on_floor == 14);
     }
@@ -210,7 +210,7 @@ TEST_CASE("DungeonReader rejects depths outside save range and inverted depths")
             DungeonReaderStateGuard guard;
             auto data = make_dungeon();
             data["generation"][field] = depth;
-            CHECK(test::to_error_code(DungeonReader(data).read()) == PARSE_ERROR_INVALID_FLAG);
+            CHECK(test::to_error_code(DungeonReader(data).read()) == ParseErrorType::INVALID_FLAG);
             CHECK(DungeonList::get_instance().empty());
         }
     }
@@ -218,7 +218,7 @@ TEST_CASE("DungeonReader rejects depths outside save range and inverted depths")
     auto data = make_dungeon();
     data["generation"]["minDepth"] = 100;
     data["generation"]["maxDepth"] = 99;
-    CHECK(test::to_error_code(DungeonReader(data).read()) == PARSE_ERROR_INVALID_VALUE);
+    CHECK(test::to_error_code(DungeonReader(data).read()) == ParseErrorType::INVALID_VALUE);
     CHECK(DungeonList::get_instance().empty());
 }
 
@@ -233,7 +233,7 @@ TEST_CASE("DungeonReader restricts required player level to playable levels")
             REQUIRE(DungeonReader(data).read().has_value());
             CHECK(DungeonList::get_instance().get_dungeon(DungeonId::WILDERNESS).min_plev == level);
         } else {
-            CHECK(test::to_error_code(DungeonReader(data).read()) == PARSE_ERROR_INVALID_FLAG);
+            CHECK(test::to_error_code(DungeonReader(data).read()) == ParseErrorType::INVALID_FLAG);
             CHECK(DungeonList::get_instance().empty());
         }
     }
@@ -248,7 +248,7 @@ TEST_CASE("DungeonReader rejects coordinates outside wilderness storage and IDs 
             DungeonReaderStateGuard guard;
             auto data = make_dungeon();
             data["position"][field] = coordinate;
-            CHECK(test::to_error_code(DungeonReader(data).read()) == PARSE_ERROR_INVALID_FLAG);
+            CHECK(test::to_error_code(DungeonReader(data).read()) == ParseErrorType::INVALID_FLAG);
             CHECK(DungeonList::get_instance().empty());
         }
     }
@@ -256,7 +256,7 @@ TEST_CASE("DungeonReader rejects coordinates outside wilderness storage and IDs 
         CAPTURE(id);
         DungeonReaderStateGuard guard;
         const auto data = make_dungeon(id);
-        CHECK(test::to_error_code(DungeonReader(data).read()) == PARSE_ERROR_INVALID_FLAG);
+        CHECK(test::to_error_code(DungeonReader(data).read()) == ParseErrorType::INVALID_FLAG);
         CHECK(DungeonList::get_instance().empty());
     }
 }
@@ -272,7 +272,7 @@ TEST_CASE("DungeonReader preserves nonpercentage tunnel thresholds within the de
             REQUIRE(DungeonReader(data).read().has_value());
             CHECK(DungeonList::get_instance().get_dungeon(DungeonId::WILDERNESS).tunnel_percent == threshold);
         } else {
-            CHECK(test::to_error_code(DungeonReader(data).read()) == PARSE_ERROR_INVALID_FLAG);
+            CHECK(test::to_error_code(DungeonReader(data).read()) == ParseErrorType::INVALID_FLAG);
             CHECK(DungeonList::get_instance().empty());
         }
     }
@@ -290,7 +290,7 @@ TEST_CASE("DungeonReader validates entrances against actual wilderness dimension
         REQUIRE(DungeonReader(data).read().has_value());
         const auto previous = DungeonList::get_instance().get_dungeon_shared(DungeonId::ANGBAND);
         const auto inside = (y == 1) && (x == 1 || x == 2);
-        CHECK(test::to_error_code(DungeonReader::validate_wilderness_positions(3, 4)) == (inside ? PARSE_ERROR_NONE : PARSE_ERROR_OUT_OF_BOUNDS));
+        CHECK(test::to_error_code(DungeonReader::validate_wilderness_positions(3, 4)) == (inside ? ParseErrorType::NONE : ParseErrorType::OUT_OF_BOUNDS));
         CHECK(DungeonList::get_instance().get_dungeon_shared(DungeonId::ANGBAND) == previous);
         CHECK(previous->get_position() == Pos2D(y, x));
     }
@@ -336,7 +336,7 @@ TEST_CASE("DungeonReader rejects invalid weights without publishing a dungeon")
             DungeonReaderStateGuard guard;
             auto data = make_dungeon();
             data[section]["tiles"][0]["rate"] = rate;
-            CHECK(test::to_error_code(DungeonReader(data).read()) == PARSE_ERROR_UNDEFINED_TERRAIN_TAG);
+            CHECK(test::to_error_code(DungeonReader(data).read()) == ParseErrorType::UNDEFINED_TERRAIN_TAG);
             CHECK(DungeonList::get_instance().empty());
         }
     }
@@ -363,7 +363,7 @@ TEST_CASE("DungeonReader rejects unusable or malformed terrain tables")
             DungeonReaderStateGuard guard;
             auto data = make_dungeon();
             data[section]["tiles"] = tiles;
-            CHECK(test::to_error_code(DungeonReader(data).read()) == PARSE_ERROR_UNDEFINED_TERRAIN_TAG);
+            CHECK(test::to_error_code(DungeonReader(data).read()) == ParseErrorType::UNDEFINED_TERRAIN_TAG);
             CHECK(DungeonList::get_instance().empty());
         }
     }
@@ -382,7 +382,7 @@ TEST_CASE("DungeonReader does not change published dungeons after a terrain tabl
         data["name"]["ja"] = "replacement";
         data["name"]["en"] = "replacement";
         data[section]["tiles"][0]["rate"] = 65537;
-        CHECK(test::to_error_code(DungeonReader(data).read()) == PARSE_ERROR_UNDEFINED_TERRAIN_TAG);
+        CHECK(test::to_error_code(DungeonReader(data).read()) == ParseErrorType::UNDEFINED_TERRAIN_TAG);
         CHECK(dungeons.size() == 1);
         CHECK_FALSE(dungeons.contains(DungeonId::ANGBAND));
         CHECK(dungeons.get_dungeon_shared(DungeonId::WILDERNESS) == before);
@@ -410,7 +410,7 @@ TEST_CASE("DungeonReader checks the total terrain weight before integer overflow
 
         data["id"] = 1;
         data[section]["tiles"].push_back({ { "type", "FLOOR" }, { "rate", 1 } });
-        CHECK(test::to_error_code(DungeonReader(data).read()) == PARSE_ERROR_UNDEFINED_TERRAIN_TAG);
+        CHECK(test::to_error_code(DungeonReader(data).read()) == ParseErrorType::UNDEFINED_TERRAIN_TAG);
         CHECK(DungeonList::get_instance().size() == 1);
         CHECK_FALSE(DungeonList::get_instance().contains(DungeonId::ANGBAND));
     }
@@ -447,7 +447,7 @@ TEST_CASE("DungeonReader rejects final-floor ID narrowing before reference looku
             auto data = make_dungeon(1);
             data["final_floor"] = { { "guardian", 1 }, { "artifact", 1 } };
             data["final_floor"][field] = value;
-            CHECK(test::to_error_code(DungeonReader(data).read()) == PARSE_ERROR_OUT_OF_BOUNDS);
+            CHECK(test::to_error_code(DungeonReader(data).read()) == ParseErrorType::OUT_OF_BOUNDS);
             CHECK(dungeons.size() == 1);
             CHECK_FALSE(dungeons.contains(DungeonId::ANGBAND));
             CHECK(dungeons.get_dungeon_shared(DungeonId::WILDERNESS) == original);
@@ -485,7 +485,7 @@ TEST_CASE("DungeonReader still rejects undefined representable final-floor IDs")
         auto data = make_dungeon();
         data["final_floor"] = { { "guardian", 1 }, { "artifact", 1 } };
         data["final_floor"][field] = 2;
-        CHECK(test::to_error_code(DungeonReader(data).read()) == PARSE_ERROR_INVALID_VALUE);
+        CHECK(test::to_error_code(DungeonReader(data).read()) == ParseErrorType::INVALID_VALUE);
         CHECK(DungeonList::get_instance().empty());
     }
 }
@@ -517,7 +517,7 @@ TEST_CASE("DungeonReader rejects final objects outside the Baseitem limit and mi
         const test::ScopedVectorWrapper saved_items(items);
         auto data = make_dungeon();
         data["final_floor"] = { { "object", id } };
-        CHECK(test::to_error_code(DungeonReader(data).read()) == (id == 1 ? PARSE_ERROR_INVALID_VALUE : PARSE_ERROR_INVALID_FLAG));
+        CHECK(test::to_error_code(DungeonReader(data).read()) == (id == 1 ? ParseErrorType::INVALID_VALUE : ParseErrorType::INVALID_FLAG));
         CHECK(DungeonList::get_instance().empty());
     }
 }
@@ -527,7 +527,7 @@ TEST_CASE("DungeonReader rejects guardian zero as below the schema minimum befor
     const FinalFloorStateGuard state;
     auto data = make_dungeon();
     data["final_floor"] = { { "guardian", 0 } };
-    CHECK(test::to_error_code(DungeonReader(data).read()) == PARSE_ERROR_OUT_OF_BOUNDS);
+    CHECK(test::to_error_code(DungeonReader(data).read()) == ParseErrorType::OUT_OF_BOUNDS);
     CHECK(DungeonList::get_instance().empty());
 }
 
@@ -536,41 +536,41 @@ TEST_CASE("DungeonReader propagates nested parse errors without publishing parti
     struct InvalidField {
         const char *path;
         nlohmann::json value;
-        parse_error_type error;
+        ParseErrorType error;
     };
     const std::vector<InvalidField> invalid_fields = {
-        { "/description", 1, PARSE_ERROR_INVALID_TYPE },
-        { "/generation", nullptr, PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "/generation/minDepth", "depth", PARSE_ERROR_INVALID_TYPE },
-        { "/generation/pit", nullptr, PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "/generation/pit", { "ORC", "UNKNOWN" }, PARSE_ERROR_INVALID_FLAG },
-        { "/generation/nest", { "UNDEAD", 1 }, PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "/generation/nest", { "UNKNOWN" }, PARSE_ERROR_INVALID_FLAG },
-        { "/floor", nullptr, PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "/floor/tunnelRate", "rate", PARSE_ERROR_INVALID_TYPE },
-        { "/wall", nullptr, PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "/wall/inner", "UNKNOWN", PARSE_ERROR_UNDEFINED_TERRAIN_TAG },
-        { "/wall/streams", 1, PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "/wall/streams/1/type", "UNKNOWN", PARSE_ERROR_UNDEFINED_TERRAIN_TAG },
-        { "/wall/streams/1/count", 0, PARSE_ERROR_INVALID_FLAG },
-        { "/wall/streams/1/chance", "chance", PARSE_ERROR_INVALID_TYPE },
-        { "/wall/streams/1/priority", nullptr, PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "/final_floor", 1, PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "/final_floor/guardian", 65537, PARSE_ERROR_OUT_OF_BOUNDS },
-        { "/final_floor/guardian", 2, PARSE_ERROR_INVALID_VALUE },
-        { "/final_floor/object", 0, PARSE_ERROR_INVALID_FLAG },
-        { "/final_floor/artifact", 2, PARSE_ERROR_INVALID_VALUE },
-        { "/flags", 1, PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "/flags", { "MAZE", "UNKNOWN" }, PARSE_ERROR_INVALID_FLAG },
-        { "/monsters", nullptr, PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "/monsters/additionalSpawnProbability", 0, PARSE_ERROR_INVALID_FLAG },
-        { "/monsters/flagsMode", 1, PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "/monsters/flagsMode", "UNKNOWN", PARSE_ERROR_INVALID_FLAG },
-        { "/monsters/flags", { "UNIQUE", "UNKNOWN" }, PARSE_ERROR_INVALID_FLAG },
-        { "/monsters/symbols", { "D", "XX" }, PARSE_ERROR_INVALID_FLAG },
-        { "/monsters/symbols", { "D", 1 }, PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "/monsters/spells", { "HASTE", "UNKNOWN" }, PARSE_ERROR_INVALID_FLAG },
-        { "/monsters/spells", { "HASTE", 1 }, PARSE_ERROR_TOO_FEW_ARGUMENTS },
+        { "/description", 1, ParseErrorType::INVALID_TYPE },
+        { "/generation", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/generation/minDepth", "depth", ParseErrorType::INVALID_TYPE },
+        { "/generation/pit", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/generation/pit", { "ORC", "UNKNOWN" }, ParseErrorType::INVALID_FLAG },
+        { "/generation/nest", { "UNDEAD", 1 }, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/generation/nest", { "UNKNOWN" }, ParseErrorType::INVALID_FLAG },
+        { "/floor", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/floor/tunnelRate", "rate", ParseErrorType::INVALID_TYPE },
+        { "/wall", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/wall/inner", "UNKNOWN", ParseErrorType::UNDEFINED_TERRAIN_TAG },
+        { "/wall/streams", 1, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/wall/streams/1/type", "UNKNOWN", ParseErrorType::UNDEFINED_TERRAIN_TAG },
+        { "/wall/streams/1/count", 0, ParseErrorType::INVALID_FLAG },
+        { "/wall/streams/1/chance", "chance", ParseErrorType::INVALID_TYPE },
+        { "/wall/streams/1/priority", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/final_floor", 1, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/final_floor/guardian", 65537, ParseErrorType::OUT_OF_BOUNDS },
+        { "/final_floor/guardian", 2, ParseErrorType::INVALID_VALUE },
+        { "/final_floor/object", 0, ParseErrorType::INVALID_FLAG },
+        { "/final_floor/artifact", 2, ParseErrorType::INVALID_VALUE },
+        { "/flags", 1, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/flags", { "MAZE", "UNKNOWN" }, ParseErrorType::INVALID_FLAG },
+        { "/monsters", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/monsters/additionalSpawnProbability", 0, ParseErrorType::INVALID_FLAG },
+        { "/monsters/flagsMode", 1, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/monsters/flagsMode", "UNKNOWN", ParseErrorType::INVALID_FLAG },
+        { "/monsters/flags", { "UNIQUE", "UNKNOWN" }, ParseErrorType::INVALID_FLAG },
+        { "/monsters/symbols", { "D", "XX" }, ParseErrorType::INVALID_FLAG },
+        { "/monsters/symbols", { "D", 1 }, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/monsters/spells", { "HASTE", "UNKNOWN" }, ParseErrorType::INVALID_FLAG },
+        { "/monsters/spells", { "HASTE", 1 }, ParseErrorType::TOO_FEW_ARGUMENTS },
     };
     for (const auto &field : invalid_fields) {
         CAPTURE(field.path);
@@ -610,24 +610,24 @@ TEST_CASE("DungeonReader preserves error priority and the diagnostic record ID")
     SUBCASE("an invalid ID does not update the diagnostic ID")
     {
         data["id"] = "id";
-        CHECK(test::to_error_code(DungeonReader(data).read()) == PARSE_ERROR_INVALID_TYPE);
+        CHECK(test::to_error_code(DungeonReader(data).read()) == ParseErrorType::INVALID_TYPE);
         CHECK(error_idx == -1);
     }
     SUBCASE("a nonsequential ID precedes field parsing")
     {
         error_idx = 1;
-        CHECK(test::to_error_code(DungeonReader(data).read()) == PARSE_ERROR_NON_SEQUENTIAL_RECORDS);
+        CHECK(test::to_error_code(DungeonReader(data).read()) == ParseErrorType::NON_SEQUENTIAL_RECORDS);
         CHECK(error_idx == 1);
     }
     SUBCASE("the valid ID is selected before name parsing")
     {
         data["name"] = 1;
-        CHECK(test::to_error_code(DungeonReader(data).read()) == PARSE_ERROR_INVALID_TYPE);
+        CHECK(test::to_error_code(DungeonReader(data).read()) == ParseErrorType::INVALID_TYPE);
         CHECK(error_idx == 1);
     }
     SUBCASE("generation errors precede later field errors")
     {
-        CHECK(test::to_error_code(DungeonReader(data).read()) == PARSE_ERROR_INVALID_FLAG);
+        CHECK(test::to_error_code(DungeonReader(data).read()) == ParseErrorType::INVALID_FLAG);
         CHECK(error_idx == 1);
     }
     CHECK(DungeonList::get_instance().empty());

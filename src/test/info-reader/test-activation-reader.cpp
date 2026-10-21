@@ -121,11 +121,11 @@ void check_rejected_by_all_readers(const std::string &token)
     CHECK(grab_one_activation_flag(token) == RandomArtActType::NONE);
 
     const auto data = make_item_with_activation(token);
-    CHECK(test::to_error_code(BaseitemReader(data).read()) == PARSE_ERROR_INVALID_FLAG);
+    CHECK(test::to_error_code(BaseitemReader(data).read()) == ParseErrorType::INVALID_FLAG);
     error_idx = -1;
-    CHECK(test::to_error_code(ArtifactReader(data).read()) == PARSE_ERROR_INVALID_FLAG);
+    CHECK(test::to_error_code(ArtifactReader(data).read()) == ParseErrorType::INVALID_FLAG);
     error_idx = -1;
-    CHECK(test::to_error_code(EgoReader(data).read()) == PARSE_ERROR_INVALID_FLAG);
+    CHECK(test::to_error_code(EgoReader(data).read()) == ParseErrorType::INVALID_FLAG);
     CHECK(egos_info.empty());
 }
 
@@ -229,7 +229,7 @@ TEST_CASE("Activation readers preserve missing activation and non-string errors"
         CAPTURE(value);
         ActivationStateGuard guard;
         const auto data = make_item_with_activation(value);
-        const auto expected = value.is_null() ? PARSE_ERROR_NONE : PARSE_ERROR_INVALID_TYPE;
+        const auto expected = value.is_null() ? ParseErrorType::NONE : ParseErrorType::INVALID_TYPE;
         CHECK(test::to_error_code(BaseitemReader(data).read()) == expected);
         error_idx = -1;
         CHECK(test::to_error_code(ArtifactReader(data).read()) == expected);

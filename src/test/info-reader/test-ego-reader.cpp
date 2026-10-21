@@ -139,7 +139,7 @@ TEST_CASE("EgoReader requires unique IDs while preserving legacy ordering")
     EgoStateGuard guard;
     auto data = make_ego();
     REQUIRE(EgoReader(data).read().has_value());
-    CHECK(test::to_error_code(EgoReader(data).read()) == PARSE_ERROR_NON_SEQUENTIAL_RECORDS);
+    CHECK(test::to_error_code(EgoReader(data).read()) == ParseErrorType::NON_SEQUENTIAL_RECORDS);
     data["id"] = 3;
     CHECK(EgoReader(data).read().has_value());
     data["id"] = 5;
@@ -263,7 +263,7 @@ TEST_CASE("EgoReader propagates helper errors without publishing partial records
     const auto original = make_ego();
     REQUIRE(EgoReader(original).read().has_value());
     const auto *published = &egos_info.at(i2enum<EgoType>(4));
-    const auto check_invalid = [&](const nlohmann::json &data, parse_error_type expected) {
+    const auto check_invalid = [&](const nlohmann::json &data, ParseErrorType expected) {
         CHECK(test::to_error_code(EgoReader(data).read()) == expected);
         REQUIRE(egos_info.size() == 1);
         CHECK_FALSE(egos_info.contains(i2enum<EgoType>(5)));
@@ -279,30 +279,30 @@ TEST_CASE("EgoReader propagates helper errors without publishing partial records
     struct InvalidField {
         const char *path;
         nlohmann::json value;
-        parse_error_type error;
+        ParseErrorType error;
     };
     const std::vector<InvalidField> invalid_fields = {
-        { "/activation", 1, PARSE_ERROR_INVALID_TYPE },
-        { "/activation", "UNKNOWN", PARSE_ERROR_INVALID_FLAG },
-        { "/activation", "999999999999999999999999999999", PARSE_ERROR_INVALID_FLAG },
-        { "/activation", "0", PARSE_ERROR_INVALID_FLAG },
-        { "/flags", 1, PARSE_ERROR_INVALID_TYPE },
-        { "/flags", nlohmann::json::array({ "STR", 1 }), PARSE_ERROR_INVALID_TYPE },
-        { "/flags", nlohmann::json::array({ "STR", "UNKNOWN" }), PARSE_ERROR_INVALID_FLAG },
-        { "/extra_flags", nlohmann::json::object(), PARSE_ERROR_INVALID_TYPE },
-        { "/extra_flags/0", 1, PARSE_ERROR_INVALID_TYPE },
-        { "/extra_flags/1", 1, PARSE_ERROR_INVALID_TYPE },
-        { "/extra_flags/0/numerator", 1, PARSE_ERROR_INVALID_VALUE },
-        { "/extra_flags/0/denominator", 3, PARSE_ERROR_INVALID_VALUE },
-        { "/extra_flags/0", { { "numerator", 1 }, { "denominator", 3 }, { "flags", { "RES_FIRE" } } }, PARSE_ERROR_INVALID_VALUE },
-        { "/extra_flags/0/chance", nullptr, PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "/extra_flags/0/chance", false, PARSE_ERROR_INVALID_TYPE },
-        { "/extra_flags/0/chance", 101, PARSE_ERROR_INVALID_FLAG },
-        { "/extra_flags/0/flags", nullptr, PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "/extra_flags/0/flags", nlohmann::json::object(), PARSE_ERROR_INVALID_TYPE },
-        { "/extra_flags/0/flags", nlohmann::json::array(), PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "/extra_flags/0/flags", nlohmann::json::array({ "RES_FIRE", 1 }), PARSE_ERROR_INVALID_TYPE },
-        { "/extra_flags/0/flags", nlohmann::json::array({ "RES_FIRE", "UNKNOWN" }), PARSE_ERROR_INVALID_FLAG },
+        { "/activation", 1, ParseErrorType::INVALID_TYPE },
+        { "/activation", "UNKNOWN", ParseErrorType::INVALID_FLAG },
+        { "/activation", "999999999999999999999999999999", ParseErrorType::INVALID_FLAG },
+        { "/activation", "0", ParseErrorType::INVALID_FLAG },
+        { "/flags", 1, ParseErrorType::INVALID_TYPE },
+        { "/flags", nlohmann::json::array({ "STR", 1 }), ParseErrorType::INVALID_TYPE },
+        { "/flags", nlohmann::json::array({ "STR", "UNKNOWN" }), ParseErrorType::INVALID_FLAG },
+        { "/extra_flags", nlohmann::json::object(), ParseErrorType::INVALID_TYPE },
+        { "/extra_flags/0", 1, ParseErrorType::INVALID_TYPE },
+        { "/extra_flags/1", 1, ParseErrorType::INVALID_TYPE },
+        { "/extra_flags/0/numerator", 1, ParseErrorType::INVALID_VALUE },
+        { "/extra_flags/0/denominator", 3, ParseErrorType::INVALID_VALUE },
+        { "/extra_flags/0", { { "numerator", 1 }, { "denominator", 3 }, { "flags", { "RES_FIRE" } } }, ParseErrorType::INVALID_VALUE },
+        { "/extra_flags/0/chance", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/extra_flags/0/chance", false, ParseErrorType::INVALID_TYPE },
+        { "/extra_flags/0/chance", 101, ParseErrorType::INVALID_FLAG },
+        { "/extra_flags/0/flags", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/extra_flags/0/flags", nlohmann::json::object(), ParseErrorType::INVALID_TYPE },
+        { "/extra_flags/0/flags", nlohmann::json::array(), ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/extra_flags/0/flags", nlohmann::json::array({ "RES_FIRE", 1 }), ParseErrorType::INVALID_TYPE },
+        { "/extra_flags/0/flags", nlohmann::json::array({ "RES_FIRE", "UNKNOWN" }), ParseErrorType::INVALID_FLAG },
     };
     for (const auto &invalid : invalid_fields) {
         CAPTURE(invalid.path);
@@ -318,11 +318,11 @@ TEST_CASE("EgoReader propagates helper errors without publishing partial records
     data["activation"] = "UNKNOWN";
     data["flags"] = 1;
     data["extra_flags"][0]["numerator"] = 1;
-    check_invalid(data, PARSE_ERROR_INVALID_FLAG);
+    check_invalid(data, ParseErrorType::INVALID_FLAG);
     data["activation"] = "BA_FIRE_4";
-    check_invalid(data, PARSE_ERROR_INVALID_TYPE);
+    check_invalid(data, ParseErrorType::INVALID_TYPE);
     data["flags"] = original["flags"];
-    check_invalid(data, PARSE_ERROR_INVALID_VALUE);
+    check_invalid(data, ParseErrorType::INVALID_VALUE);
 }
 
 /*!

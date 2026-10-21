@@ -26,6 +26,7 @@
 #include "test/system/monrace-list-test-access.h"
 #include "test/system/quest-list-test-access.h"
 #include "test/temporary-json-files.h"
+#include "util/enum-converter.h"
 #include <array>
 #include <cstdint>
 #include <doctest/doctest.h>
@@ -419,7 +420,7 @@ TEST_CASE("QuestList initialization preserves every store on late input errors")
                 } else if (kind.starts_with("start ")) {
                     const std::string diagnostic(error.what());
                     CHECK(diagnostic.find("02.jsonc") != std::string::npos);
-                    CHECK(diagnostic.find(std::to_string(PARSE_ERROR_OUT_OF_BOUNDS)) != std::string::npos);
+                    CHECK(diagnostic.find(std::to_string(enum2i(ParseErrorType::OUT_OF_BOUNDS))) != std::string::npos);
                 }
             }
             CHECK(list.size() == (seeded ? 2 : 0));

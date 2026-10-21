@@ -13,10 +13,10 @@ public:
     MessageReader &operator=(const MessageReader &) = delete;
     MessageReader &operator=(MessageReader &&) = delete;
 
-    tl::expected<void, parse_error_type> read() const;
+    tl::expected<void, ParseErrorType> read() const;
 
 private:
-    tl::expected<void, parse_error_type> set_mon_message() const;
+    tl::expected<void, ParseErrorType> set_mon_message() const;
 
     const nlohmann::json &message_data;
 };

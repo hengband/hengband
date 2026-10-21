@@ -27,10 +27,10 @@ ArtifactReader::ArtifactReader(const nlohmann::json &art_data)
  * @brief 固定アーティファクト情報(JSON Object)のパース関数
  * @return 成功時は空の値、失敗時は解析エラーコード
  */
-tl::expected<void, parse_error_type> ArtifactReader::read() const
+tl::expected<void, ParseErrorType> ArtifactReader::read() const
 {
     if (!get_json_value(this->art_data, "id").is_number_integer()) {
-        return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
     }
 
     int int_id = 0;
@@ -40,7 +40,7 @@ tl::expected<void, parse_error_type> ArtifactReader::read() const
     // 実行時の記録は 1〜件数の ID だけを作るため、1 から欠番なく並んでいることを求める。
     if (const auto previous_id = std::max(error_idx, 0); int_id != previous_id + 1) {
         msg_print(_("アーティファクトIDが連番ではありません。ID: '{}'、直前ID: '{}'。", "Artifact ID is not sequential. ID: '{}', previous ID: '{}'."), int_id, previous_id);
-        return tl::make_unexpected(PARSE_ERROR_NON_SEQUENTIAL_RECORDS);
+        return tl::make_unexpected(ParseErrorType::NON_SEQUENTIAL_RECORDS);
     }
     const auto artifact_id = i2enum<FixedArtifactId>(int_id);
 
@@ -120,7 +120,7 @@ tl::expected<void, parse_error_type> ArtifactReader::read() const
     });
     if (!has_baseitem) {
         msg_print(_("アーティファクトのベースアイテムが存在しない。ID: '{}'。", "Base item of artifact does not exist. ID: '{}'."), error_idx);
-        return tl::make_unexpected(PARSE_ERROR_INVALID_VALUE);
+        return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
     }
 
     ArtifactList::get_instance().emplace(artifact_id, std::move(artifact));
@@ -153,11 +153,11 @@ bool ArtifactReader::grab_one_artifact_flag(ArtifactDefinition &artifact, std::s
  * @param artifact 保管先のアーティファクト
  * @return 成功時は値なし、失敗時は解析エラー。
  */
-tl::expected<void, parse_error_type> ArtifactReader::set_art_baseitem(ArtifactDefinition &artifact) const
+tl::expected<void, ParseErrorType> ArtifactReader::set_art_baseitem(ArtifactDefinition &artifact) const
 {
     const auto &baseitem_data = get_json_value(this->art_data, "base_item");
     if (baseitem_data.is_null()) {
-        return tl::unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        return tl::unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
     }
 
     // 失敗時は直後に返るが、gcc の最適化で未初期化と誤検出されないよう初期化しておく。
@@ -180,19 +180,19 @@ tl::expected<void, parse_error_type> ArtifactReader::set_art_baseitem(ArtifactDe
  * @param artifact 保管先のアーティファクト
  * @return 成功時は値なし、失敗時は解析エラー。
  */
-tl::expected<void, parse_error_type> ArtifactReader::set_art_activate(ArtifactDefinition &artifact) const
+tl::expected<void, ParseErrorType> ArtifactReader::set_art_activate(ArtifactDefinition &artifact) const
 {
     const auto &act_data = get_json_value(this->art_data, "activate");
     if (act_data.is_null()) {
         return {};
     }
     if (!act_data.is_string()) {
-        return tl::unexpected(PARSE_ERROR_INVALID_TYPE);
+        return tl::unexpected(ParseErrorType::INVALID_TYPE);
     }
 
     const auto activation = grab_one_activation_flag(act_data.get<std::string>());
     if (activation <= RandomArtActType::NONE) {
-        return tl::unexpected(PARSE_ERROR_INVALID_FLAG);
+        return tl::unexpected(ParseErrorType::INVALID_FLAG);
     }
 
     artifact.act_idx = activation;
@@ -205,22 +205,22 @@ tl::expected<void, parse_error_type> ArtifactReader::set_art_activate(ArtifactDe
  * @param artifact 保管先のアーティファクト
  * @return 成功時は値なし、失敗時は解析エラー。
  */
-tl::expected<void, parse_error_type> ArtifactReader::set_art_flags(ArtifactDefinition &artifact) const
+tl::expected<void, ParseErrorType> ArtifactReader::set_art_flags(ArtifactDefinition &artifact) const
 {
     const auto &flag_data = get_json_value(this->art_data, "flags");
     if (flag_data.is_null()) {
         return {};
     }
     if (!flag_data.is_array()) {
-        return tl::unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        return tl::unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
     }
 
     for (auto &flag : flag_data) {
         if (!flag.is_string()) {
-            return tl::unexpected(PARSE_ERROR_INVALID_FLAG);
+            return tl::unexpected(ParseErrorType::INVALID_FLAG);
         }
         if (!this->grab_one_artifact_flag(artifact, flag.get<std::string>())) {
-            return tl::unexpected(PARSE_ERROR_INVALID_FLAG);
+            return tl::unexpected(ParseErrorType::INVALID_FLAG);
         }
     }
     return {};

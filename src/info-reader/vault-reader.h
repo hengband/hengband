@@ -22,12 +22,12 @@ public:
     VaultReader &operator=(const VaultReader &) = delete;
     VaultReader &operator=(VaultReader &&) = delete;
 
-    tl::expected<void, parse_error_type> read();
+    tl::expected<void, ParseErrorType> read();
     const std::optional<VaultReadError> &error() const;
 
 private:
-    tl::expected<void, parse_error_type> fail(parse_error_type code, std::string_view path, std::string_view reason);
-    tl::expected<void, parse_error_type> read_integer(std::string_view key, int &value, int minimum, int maximum);
+    tl::expected<void, ParseErrorType> fail(ParseErrorType code, std::string_view path, std::string_view reason);
+    tl::expected<void, ParseErrorType> read_integer(std::string_view key, int &value, int minimum, int maximum);
     const nlohmann::json &data;
     std::optional<VaultReadError> diagnostic;
 };

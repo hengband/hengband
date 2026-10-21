@@ -16,14 +16,14 @@ public:
     MagicReader &operator=(const MagicReader &) = delete;
     MagicReader &operator=(MagicReader &&) = delete;
 
-    tl::expected<void, parse_error_type> read() const;
+    tl::expected<void, ParseErrorType> read() const;
 
 private:
-    tl::expected<int, parse_error_type> read_class_id() const;
-    tl::expected<void, parse_error_type> set_spell_type(player_magic &magics_info) const;
-    tl::expected<void, parse_error_type> set_magic_status(player_magic &magics_info) const;
-    tl::expected<void, parse_error_type> set_spell_data(const nlohmann::json &spell_data, player_magic &magics_info, RealmType realm) const;
-    tl::expected<void, parse_error_type> set_realm_data(player_magic &magics_info) const;
+    tl::expected<int, ParseErrorType> read_class_id() const;
+    tl::expected<void, ParseErrorType> set_spell_type(player_magic &magics_info) const;
+    tl::expected<void, ParseErrorType> set_magic_status(player_magic &magics_info) const;
+    tl::expected<void, ParseErrorType> set_spell_data(const nlohmann::json &spell_data, player_magic &magics_info, RealmType realm) const;
+    tl::expected<void, ParseErrorType> set_realm_data(player_magic &magics_info) const;
 
     const nlohmann::json &class_data;
 };

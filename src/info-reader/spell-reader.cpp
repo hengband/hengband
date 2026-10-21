@@ -20,7 +20,7 @@ SpellReader::SpellReader(const nlohmann::json &realm_data, SpellInfoList &spell_
  * @brief 呪文情報(SpellDefinitions)のパース関数
  * @return 成功時は空の値、失敗時は解析エラーコード
  */
-tl::expected<void, parse_error_type> SpellReader::read() const
+tl::expected<void, ParseErrorType> SpellReader::read() const
 {
     error_idx++; //!< @note 呪文領域は数値IDを持たないため、エラー表示用に要素の順序を用いる
 
@@ -48,20 +48,20 @@ tl::expected<void, parse_error_type> SpellReader::read() const
  * @brief JSON Objectから呪文領域IDを取得する
  * @return 呪文領域、失敗時はエラーコード
  */
-tl::expected<RealmType, parse_error_type> SpellReader::read_realm() const
+tl::expected<RealmType, ParseErrorType> SpellReader::read_realm() const
 {
     if (this->realm_data.is_null()) {
-        return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
     }
 
     const auto &realmname_obj = get_json_value(this->realm_data, "name");
     if (!realmname_obj.is_string()) {
-        return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
     }
 
     const auto it = realms_list.find(realmname_obj.get<std::string>());
     if (it == realms_list.end()) {
-        return tl::make_unexpected(PARSE_ERROR_OUT_OF_BOUNDS);
+        return tl::make_unexpected(ParseErrorType::OUT_OF_BOUNDS);
     }
     return it->second;
 }
@@ -72,10 +72,10 @@ tl::expected<RealmType, parse_error_type> SpellReader::read_realm() const
  * @param spells 解析結果の一時保存先
  * @return 成功時は空の値、失敗時はエラーコード
  */
-tl::expected<void, parse_error_type> SpellReader::set_spell_data(const nlohmann::json &spell_data, std::vector<SpellInfo> &spells) const
+tl::expected<void, ParseErrorType> SpellReader::set_spell_data(const nlohmann::json &spell_data, std::vector<SpellInfo> &spells) const
 {
     if (spell_data.is_null()) {
-        return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
     }
 
     int spell_id = 0;
@@ -89,7 +89,7 @@ tl::expected<void, parse_error_type> SpellReader::set_spell_data(const nlohmann:
     const auto &tag_obj = get_json_value(spell_data, "spell_tag");
     if (!tag_obj.is_string()) {
         msg_print(_("呪文タグ読込失敗。ID: '{}'。", "Failed to load spell tag. ID: '{}'."), error_idx);
-        return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
     }
     info.tag = tag_obj.get<std::string>();
 
@@ -111,23 +111,23 @@ tl::expected<void, parse_error_type> SpellReader::set_spell_data(const nlohmann:
  * @param spells 解析結果の一時保存先
  * @return 成功時は空の値、失敗時はエラーコード
  */
-tl::expected<void, parse_error_type> SpellReader::set_book_data(std::vector<SpellInfo> &spells) const
+tl::expected<void, ParseErrorType> SpellReader::set_book_data(std::vector<SpellInfo> &spells) const
 {
     const auto &book_obj = get_json_value(this->realm_data, "books");
     if (book_obj.is_null()) {
-        return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
     }
     if (!book_obj.is_array()) {
-        return tl::make_unexpected(PARSE_ERROR_INVALID_TYPE);
+        return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
     }
 
     for (const auto &book : book_obj) {
         const auto &spells_obj = get_json_value(book, "spells");
         if (spells_obj.is_null()) {
-            return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+            return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
         }
         if (!spells_obj.is_array()) {
-            return tl::make_unexpected(PARSE_ERROR_INVALID_TYPE);
+            return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
         }
 
         for (const auto &spell : spells_obj) {
