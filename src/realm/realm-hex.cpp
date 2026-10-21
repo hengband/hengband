@@ -747,10 +747,7 @@ tl::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type sp
     }
 
     if (!info) {
-        auto &dur = DeferredUpdateRequests::get_instance();
-        dur.request_player_status_recalculation();
-        dur.set_flag(MainWindowRedrawingFlag::EXTRA);
-        dur.request_hp_mp_redrawing();
+        SpellHex::request_casting_change_updates();
     }
 
     return "";
