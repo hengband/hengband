@@ -2,7 +2,6 @@
 #include "artifact/fixed-art-types.h"
 #include "info-reader/json-reader-util.h"
 #include "info-reader/jsonc-document-loader.h"
-#include "info-reader/parse-error-types.h"
 #include "info-reader/quest-reader.h"
 #include "info-reader/random-grid-effect-types.h"
 #include "io/files-util.h"
@@ -321,9 +320,9 @@ std::map<char, QuestLegendCell> QuestList::load_base_legend()
         }
 
         QuestLegendCell cell;
-        if (const auto err = parse_quest_legend_cell(cell_data, cell); err != PARSE_ERROR_NONE) {
+        if (const auto result = parse_quest_legend_cell(cell_data, cell); !result) {
             constexpr auto fmt = _("ベース凡例 '{}' にエラーがあります ({}): コード {}", "Error in base legend '{}' ({}): code {}");
-            THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, symbol, path.string(), static_cast<int>(err)));
+            THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, symbol, path.string(), static_cast<int>(result.error())));
         }
 
         base_legend.insert_or_assign(symbol.front(), cell);

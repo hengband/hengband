@@ -193,7 +193,7 @@ void do_cmd_knowledge_stat(PlayerType *player_ptr)
  */
 void do_cmd_knowledge_home(PlayerType *player_ptr)
 {
-    apply_wilderness_definition();
+    (void)apply_wilderness_definition();
 
     FILE *fff = nullptr;
     GAME_TEXT file_name[FILE_NAME_SIZE];

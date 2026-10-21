@@ -1,10 +1,12 @@
 #include "info-reader/town-preferences-reader.h"
 #include "system/dungeon/quest-fixed-map.h"
+#include "test/info-reader/parse-result-helpers.h"
 #include <cstdint>
 #include <doctest/doctest.h>
 #include <limits>
 #include <nlohmann/json.hpp>
 #include <string>
+#include <tl/expected.hpp>
 
 namespace {
 nlohmann::json make_town_preferences()
@@ -18,28 +20,28 @@ nlohmann::json make_town_preferences()
     };
 }
 
-parse_error_type parse_test_cell(const nlohmann::json &data, QuestLegendCell &cell)
+tl::expected<void, parse_error_type> parse_test_cell(const nlohmann::json &data, QuestLegendCell &cell)
 {
     const auto &terrain = data["terrain"].get_ref<const std::string &>();
     if (terrain == "INVALID") {
-        return PARSE_ERROR_UNDEFINED_TERRAIN_TAG;
+        return tl::make_unexpected(PARSE_ERROR_UNDEFINED_TERRAIN_TAG);
     }
     for (const auto &flag : data["caveInfo"]) {
         if (flag == "INVALID_FLAG") {
-            return PARSE_ERROR_INVALID_FLAG;
+            return tl::make_unexpected(PARSE_ERROR_INVALID_FLAG);
         }
     }
     cell.grid.feature = terrain == "FLOOR" ? 10 : 20;
     cell.grid.cave_info = static_cast<BIT_FLAGS>(data["caveInfo"].size());
     cell.grid.special = static_cast<int16_t>(data.value("special", 0));
-    return PARSE_ERROR_NONE;
+    return {};
 }
 
 void check_rejected(const nlohmann::json &data, parse_error_type expected)
 {
     TownPreferencesLegend legend{ { '?', dungeon_grid{} } };
     legend.front().second.feature = 99;
-    CHECK(TownPreferencesReader(data).read(legend, parse_test_cell) == expected);
+    CHECK(test::to_error_code(TownPreferencesReader(data).read(legend, parse_test_cell)) == expected);
     REQUIRE(legend.size() == 1);
     CHECK(legend.front().first == '?');
     CHECK(legend.front().second.feature == 99);
@@ -51,7 +53,7 @@ TEST_CASE("TownPreferencesReader reads a complete legend and replaces output")
     const auto data = nlohmann::json::parse(make_town_preferences().dump());
     REQUIRE(data["version"].is_number_unsigned());
     TownPreferencesLegend legend{ { '?', dungeon_grid{} } };
-    CHECK(TownPreferencesReader(data).read(legend, parse_test_cell) == PARSE_ERROR_NONE);
+    CHECK(TownPreferencesReader(data).read(legend, parse_test_cell).has_value());
     REQUIRE(legend.size() == 2);
     CHECK(legend[0].first == 'A');
     CHECK(legend[0].second.feature == 10);
@@ -91,7 +93,7 @@ TEST_CASE("TownPreferencesReader validates printable one-byte symbols")
         auto data = make_town_preferences();
         data["legend"] = { { symbol, { { "terrain", "FLOOR" }, { "caveInfo", nlohmann::json::array() } } } };
         TownPreferencesLegend legend;
-        CHECK(TownPreferencesReader(data).read(legend, parse_test_cell) == PARSE_ERROR_NONE);
+        CHECK(TownPreferencesReader(data).read(legend, parse_test_cell).has_value());
         REQUIRE(legend.size() == 1);
         CHECK(legend.front().first == symbol[0]);
     }
@@ -138,7 +140,7 @@ TEST_CASE("TownPreferencesReader validates special within signed 16-bit range")
         auto data = make_town_preferences();
         data["legend"]["b"]["special"] = special;
         TownPreferencesLegend legend;
-        CHECK(TownPreferencesReader(data).read(legend, parse_test_cell) == PARSE_ERROR_NONE);
+        CHECK(TownPreferencesReader(data).read(legend, parse_test_cell).has_value());
         REQUIRE(legend.size() == 2);
         CHECK(legend[1].second.special == special);
     }
@@ -157,7 +159,7 @@ TEST_CASE("TownPreferencesReader preserves unsigned special boundaries after JSO
             continue;
         }
         TownPreferencesLegend legend;
-        REQUIRE(TownPreferencesReader(data).read(legend, parse_test_cell) == PARSE_ERROR_NONE);
+        REQUIRE(TownPreferencesReader(data).read(legend, parse_test_cell).has_value());
         REQUIRE(legend.size() == 2);
         CHECK(legend[1].second.special == special);
     }
@@ -179,6 +181,6 @@ TEST_CASE("TownPreferencesReader retains permissive runtime behavior for extra f
     data["unused"] = true;
     data["legend"]["A"]["unused"] = true;
     TownPreferencesLegend legend;
-    CHECK(TownPreferencesReader(data).read(legend, parse_test_cell) == PARSE_ERROR_NONE);
+    CHECK(TownPreferencesReader(data).read(legend, parse_test_cell).has_value());
     CHECK(legend.size() == 2);
 }

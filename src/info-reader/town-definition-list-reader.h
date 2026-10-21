@@ -3,6 +3,7 @@
 #include "info-reader/parse-error-types.h"
 #include <nlohmann/json_fwd.hpp>
 #include <string>
+#include <tl/expected.hpp>
 
 enum class TownMapMode {
     NORMAL,
@@ -23,7 +24,7 @@ public:
     TownDefinitionListReader &operator=(const TownDefinitionListReader &) = delete;
     TownDefinitionListReader &operator=(TownDefinitionListReader &&) = delete;
 
-    parse_error_type read(int town_index, TownMapMode mode, std::string &map_file) const;
+    tl::expected<void, parse_error_type> read(int town_index, TownMapMode mode, std::string &map_file) const;
 
 private:
     const nlohmann::json &data;

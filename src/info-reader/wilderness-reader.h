@@ -55,4 +55,4 @@ private:
 };
 
 bool initialize_wilderness_definition();
-parse_error_type apply_wilderness_definition();
+tl::expected<void, parse_error_type> apply_wilderness_definition();

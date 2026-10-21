@@ -45,8 +45,4 @@ private:
     QuestFixedMap &fixed_map;
 };
 
-/*!
- * @brief JSONC の gridDefinition 1件を凡例セルへ変換する (set_legend から使用)
- * @return エラーコード
- */
-parse_error_type parse_quest_legend_cell(const nlohmann::json &cell_data, QuestLegendCell &out);
+tl::expected<void, parse_error_type> parse_quest_legend_cell(const nlohmann::json &cell_data, QuestLegendCell &out);

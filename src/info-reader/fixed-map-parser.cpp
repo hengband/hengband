@@ -63,13 +63,13 @@ static concptr variant = "ZANGBAND";
 /*!
  * @brief 条件評価済みの建物宣言を文字コード変換し、対象言語の建物へ適用する。
  * @param rule 読込検証と条件評価を済ませた建物宣言
- * @return 適用成功、または文字列検証後の対象外言語ではPARSE_ERROR_NONE。
- * 文字列変換の失敗、建物・行動番号の範囲外、会員配列の長さやsigned16格納値の
- * 不正はPARSE_ERROR_INVALID_VALUE。
+ * @return 成功時は空の値、失敗時は解析エラーコード。対象外言語の建物は、文字列を検証した後に
+ * 何もせず成功とする。文字列変換の失敗、建物・行動番号の範囲外、会員配列の長さや
+ * signed16格納値の不正はPARSE_ERROR_INVALID_VALUE。
  * @details 言語判定より先に文字列変換を検証する。会員フラグは全件検証してから
  * 反映する。宣言順と条件評価は呼び出し側が管理する。
  */
-parse_error_type apply_town_building_rule(const TownMapBuildingRule &rule)
+tl::expected<void, parse_error_type> apply_town_building_rule(const TownMapBuildingRule &rule)
 {
     auto directive = rule.directive;
     const auto convert = [](std::string &text) {
@@ -98,20 +98,20 @@ parse_error_type apply_town_building_rule(const TownMapBuildingRule &rule)
     },
         directive);
     if (!converted) {
-        return PARSE_ERROR_INVALID_VALUE;
+        return tl::make_unexpected(PARSE_ERROR_INVALID_VALUE);
     }
 #ifdef JP
     if (rule.english) {
 #else
     if (!rule.english) {
 #endif
-        return PARSE_ERROR_NONE;
+        return {};
     }
     if (rule.index < 0 || rule.index >= MAX_BUILDINGS) {
-        return PARSE_ERROR_INVALID_VALUE;
+        return tl::make_unexpected(PARSE_ERROR_INVALID_VALUE);
     }
     auto &building = buildings[rule.index];
-    return std::visit([&building](const auto &value) {
+    return std::visit([&building](const auto &value) -> tl::expected<void, parse_error_type> {
         using T = std::decay_t<decltype(value)>;
         if constexpr (std::is_same_v<T, TownMapBuildingNames>) {
             angband_strcpy(building.name, value.name, sizeof(building.name));
@@ -119,7 +119,7 @@ parse_error_type apply_town_building_rule(const TownMapBuildingRule &rule)
             angband_strcpy(building.owner_race, value.owner_race, sizeof(building.owner_race));
         } else if constexpr (std::is_same_v<T, TownMapBuildingAction>) {
             if (value.index < 0 || value.index >= 8 || !std::in_range<int16_t>(value.action) || !std::in_range<int16_t>(value.restriction)) {
-                return PARSE_ERROR_INVALID_VALUE;
+                return tl::make_unexpected(PARSE_ERROR_INVALID_VALUE);
             }
             angband_strcpy(building.act_names[value.index], value.name, sizeof(building.act_names[value.index]));
             building.member_costs[value.index] = value.member_cost;
@@ -133,17 +133,17 @@ parse_error_type apply_town_building_rule(const TownMapBuildingRule &rule)
             const auto count = value.kind == TownMapBuildingMembershipKind::CLASS ? static_cast<size_t>(PLAYER_CLASS_TYPE_MAX) : (is_realm ? static_cast<size_t>(MAX_MAGIC) : static_cast<size_t>(MAX_RACES));
             const auto offset = is_realm ? 1U : 0U;
             if (value.values.empty() || value.values.size() > count || members.size() < count + offset) {
-                return PARSE_ERROR_INVALID_VALUE;
+                return tl::make_unexpected(PARSE_ERROR_INVALID_VALUE);
             }
             // 最後の値が不正でも、先頭の会員フラグを部分的に書き換えない。
             if (!std::all_of(value.values.begin(), value.values.end(), [](int number) { return std::in_range<int16_t>(number); })) {
-                return PARSE_ERROR_INVALID_VALUE;
+                return tl::make_unexpected(PARSE_ERROR_INVALID_VALUE);
             }
             for (size_t i = 0; i < count; ++i) {
                 members[i + offset] = i < value.values.size() ? static_cast<int16_t>(value.values[i]) : 1;
             }
         }
-        return PARSE_ERROR_NONE;
+        return {};
     },
         directive);
 }
@@ -152,20 +152,20 @@ parse_error_type apply_town_building_rule(const TownMapBuildingRule &rule)
  * @brief 条件評価済みの町凡例の地形とクエスト報酬を解決し、letter[]へ適用する。
  * @param floor クエスト報酬を解決する生成対象フロア
  * @param feature 読込検証と条件評価を済ませた町凡例
- * @return 適用成功、または建物専用モードではPARSE_ERROR_NONE。
+ * @return 成功時は空の値、失敗時は解析エラーコード。建物専用モードでは何もせず成功とする。
  * 地形・トラップタグの解決失敗はPARSE_ERROR_UNDEFINED_TERRAIN_TAG。
  * 無効な記号、未定義のクエスト・報酬参照、報酬解決失敗はPARSE_ERROR_INVALID_VALUE。
  * @details 建物専用モードでは何もしない。地形や報酬の解決に失敗した場合は
  * この凡例の既存letter[]を保持する。宣言順と条件評価は呼び出し側が管理する。
  */
-parse_error_type apply_town_map_feature(const FloorType &floor, const TownMapFeatureRule &feature)
+tl::expected<void, parse_error_type> apply_town_map_feature(const FloorType &floor, const TownMapFeatureRule &feature)
 {
     if (init_flags & INIT_ONLY_BUILDINGS) {
-        return PARSE_ERROR_NONE;
+        return {};
     }
 
     if (!is_fixed_map_symbol(static_cast<unsigned char>(feature.symbol))) {
-        return PARSE_ERROR_INVALID_VALUE;
+        return tl::make_unexpected(PARSE_ERROR_INVALID_VALUE);
     }
 
     auto grid = feature.cell.grid;
@@ -184,19 +184,19 @@ parse_error_type apply_town_map_feature(const FloorType &floor, const TownMapFea
             grid.trap = terrains.get_terrain_id(feature.trap);
         }
     } catch (const std::exception &) {
-        return PARSE_ERROR_UNDEFINED_TERRAIN_TAG;
+        return tl::make_unexpected(PARSE_ERROR_UNDEFINED_TERRAIN_TAG);
     }
 
     try {
         if (floor.is_in_quest() && (feature.cell.object_is_quest_reward || feature.cell.artifact_is_quest_reward)) {
             const auto &quests = QuestList::get_instance();
             if (!quests.contains(floor.quest_number)) {
-                return PARSE_ERROR_INVALID_VALUE;
+                return tl::make_unexpected(PARSE_ERROR_INVALID_VALUE);
             }
             const auto &quest = quests.get_quest(floor.quest_number);
             const auto reward = quest.get_reward();
             if (reward && !ArtifactList::get_instance().contains(*reward)) {
-                return PARSE_ERROR_INVALID_VALUE;
+                return tl::make_unexpected(PARSE_ERROR_INVALID_VALUE);
             }
             if (feature.cell.object_is_quest_reward && quest.has_reward() && !quest.is_reward_instant_artifact()) {
                 grid.object = quest.get_reward_bi_id();
@@ -207,10 +207,10 @@ parse_error_type apply_town_map_feature(const FloorType &floor, const TownMapFea
         }
     } catch (const std::exception &) {
         // 報酬解決に失敗した場合は、地形テンプレートを変更せず解析エラーとして返す。
-        return PARSE_ERROR_INVALID_VALUE;
+        return tl::make_unexpected(PARSE_ERROR_INVALID_VALUE);
     }
     fixed_map_letter_at(static_cast<unsigned char>(feature.symbol)) = grid;
-    return PARSE_ERROR_NONE;
+    return {};
 }
 
 static tl::expected<void, parse_error_type> load_town_preferences()
@@ -227,8 +227,8 @@ static tl::expected<void, parse_error_type> load_town_preferences()
     try {
         const auto data = loader.parse();
         TownPreferencesLegend legend;
-        if (const auto err = TownPreferencesReader(data).read(legend, parse_quest_legend_cell); err != PARSE_ERROR_NONE) {
-            return tl::make_unexpected(err);
+        if (const auto result = TownPreferencesReader(data).read(legend, parse_quest_legend_cell); !result) {
+            return result;
         }
 
         for (const auto &[symbol, grid] : legend) {
@@ -255,8 +255,8 @@ static tl::expected<std::string, parse_error_type> load_town_definition_file()
         const auto data = loader.parse();
         const auto mode = vanilla_town ? TownMapMode::NONE : (lite_town ? TownMapMode::LITE : TownMapMode::NORMAL);
         std::string map_file;
-        if (const auto err = TownDefinitionListReader(data).read(AngbandWorld::get_instance().get_town_index(), mode, map_file); err != PARSE_ERROR_NONE) {
-            return tl::make_unexpected(err);
+        if (const auto result = TownDefinitionListReader(data).read(AngbandWorld::get_instance().get_town_index(), mode, map_file); !result) {
+            return tl::make_unexpected(result.error());
         }
         return map_file;
     } catch (const nlohmann::json::exception &) {
@@ -382,8 +382,8 @@ static tl::expected<void, parse_error_type> apply_town_rules(PlayerType *player_
         if (!*condition) {
             continue;
         }
-        if (const auto err = apply(rule); err != PARSE_ERROR_NONE) {
-            return tl::make_unexpected(err);
+        if (const auto result = apply(rule); !result) {
+            return result;
         }
     }
     return {};
@@ -399,8 +399,8 @@ static tl::expected<void, parse_error_type> parse_town_map_jsonc(PlayerType *pla
         const auto data = loader.parse();
         TownMapDefinition definition;
         const bool only_buildings = (init_flags & INIT_ONLY_BUILDINGS) != 0;
-        if (const auto err = TownMapReader(data).read(definition, MAX_HGT, MAX_WID, only_buildings); err != PARSE_ERROR_NONE) {
-            return tl::make_unexpected(err);
+        if (const auto result = TownMapReader(data).read(definition, MAX_HGT, MAX_WID, only_buildings); !result) {
+            return result;
         }
         auto y = 0;
         auto x = 0;
@@ -417,12 +417,12 @@ static tl::expected<void, parse_error_type> parse_town_map_jsonc(PlayerType *pla
             return {};
         }
         const TownMapVariant *selected_map = nullptr;
-        const auto select_map = [&selected_map](const auto &map) {
+        const auto select_map = [&selected_map](const auto &map) -> tl::expected<void, parse_error_type> {
             if (selected_map != nullptr) {
-                return PARSE_ERROR_INVALID_VALUE;
+                return tl::make_unexpected(PARSE_ERROR_INVALID_VALUE);
             }
             selected_map = &map;
-            return PARSE_ERROR_NONE;
+            return {};
         };
         if (const auto result = apply_town_rules(player_ptr, name, "mapVariants", definition.maps, select_map); !result) {
             return result;
@@ -434,12 +434,12 @@ static tl::expected<void, parse_error_type> parse_town_map_jsonc(PlayerType *pla
                 }
             }
         }
-        const auto apply_start = [player_ptr, qg_ptr, selected_map](const auto &start) {
+        const auto apply_start = [player_ptr, qg_ptr, selected_map](const auto &start) -> tl::expected<void, parse_error_type> {
             if (selected_map == nullptr) {
-                return PARSE_ERROR_INVALID_VALUE;
+                return tl::make_unexpected(PARSE_ERROR_INVALID_VALUE);
             }
             apply_fixed_map_start(player_ptr, qg_ptr, start.y, start.x);
-            return PARSE_ERROR_NONE;
+            return {};
         };
         return apply_town_rules(player_ptr, name, "startingPositions", definition.starts, apply_start);
     } catch (const nlohmann::json::exception &) {

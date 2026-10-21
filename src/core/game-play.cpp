@@ -131,7 +131,7 @@ static void send_waiting_record(PlayerType *player_ptr)
     highscore_fd = fd_open(path, O_RDWR);
 
     /* 町名消失バグ対策(#38205)のためここで世界マップ情報を読み出す */
-    apply_wilderness_definition();
+    (void)apply_wilderness_definition();
     bool success = send_world_score(player_ptr, true);
     if (!success && !input_check_strict(player_ptr, _("スコア登録を諦めますか？", "Do you give up score registration? "), UserCheck::NO_HISTORY)) {
         prt(_("引き続き待機します。", "standing by for future registration..."), 0, 0);
@@ -244,7 +244,7 @@ static void reset_world_info(PlayerType *player_ptr)
 
 static void generate_wilderness(PlayerType *player_ptr)
 {
-    apply_wilderness_definition();
+    (void)apply_wilderness_definition();
     init_flags = INIT_ONLY_BUILDINGS;
     load_town_map(player_ptr);
     select_floor_music(player_ptr);
