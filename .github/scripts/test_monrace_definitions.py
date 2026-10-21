@@ -4,7 +4,7 @@ import re
 from pathlib import Path
 import unittest
 
-from json_validation_test_helper import monrace_id_schema_maximum, validate_document
+from json_validation_test_helper import fixed_artifact_id_schema_maximum, monrace_id_schema_maximum, validate_document
 from validate_json import build_schema_registry, load_all_schemas, load_jsonc
 
 
@@ -122,6 +122,14 @@ class MonraceValidationTest(unittest.TestCase):
             with self.subTest(reference=suffix[0]):
                 self.assert_valid([self.monster(**make(32766)), self.monster(32766)])
                 self.assert_invalid([self.monster(**make(32767))], ["monsters", 0] + suffix)
+
+    def test_drop_artifact_id_maximum_matches_fixed_artifact_id_storage(self):
+        # 固定アーティファクトIDの上限は、IDを格納する型(FixedArtifactId)の上限−1とする。
+        maximum = fixed_artifact_id_schema_maximum()
+        properties = self.loaded[self.schema_path]["properties"]["monsters"]["items"]["properties"]
+        self.assertEqual(properties["artifacts"]["items"]["properties"]["drop_artifact_id"]["maximum"], maximum)
+        drop = {"drop_artifact_id": maximum + 1, "drop_probability": 50}
+        self.assert_invalid([self.monster(artifacts=[drop])], ["monsters", 0, "artifacts", 0, "drop_artifact_id"])
 
     def test_ids_must_be_strictly_increasing(self):
         self.assert_valid([self.monster(1), self.monster(3)])

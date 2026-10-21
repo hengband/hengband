@@ -41,3 +41,8 @@ def cpp_storage_maximum(relative_path, pattern):
 def monrace_id_schema_maximum():
     """モンスター種族IDのスキーマの上限（MonraceId の基になる型の上限−1）を返す。"""
     return cpp_storage_maximum("src/system/enums/monrace/monrace-id.h", r"enum class MonraceId : (\w+) \{") - 1
+
+
+def fixed_artifact_id_schema_maximum():
+    """固定アーティファクトIDのスキーマの上限（FixedArtifactId の基になる型の上限−1）を返す。"""
+    return cpp_storage_maximum("src/artifact/fixed-art-types.h", r"enum class FixedArtifactId : (\w+) \{") - 1

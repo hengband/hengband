@@ -194,7 +194,7 @@
                                     "type": "integer",
                                     "description": "ドロップアーティファクトID",
                                     "minimum": 1,
-                                    "maximum": 999
+                                    "maximum": 32766
                                 },
                                 "drop_probability": {
                                     "type": "integer",

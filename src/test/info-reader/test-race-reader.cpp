@@ -600,8 +600,8 @@ TEST_CASE("RaceReader validates referenced ID ranges")
         CHECK(test::to_error_code(read_as_first_record(with_escort(id))) == ParseErrorType::INVALID_FLAG);
         CHECK(test::to_error_code(read_as_first_record(with_final_summon(id))) == ParseErrorType::INVALID_FLAG);
     }
-    CHECK(read_as_first_record(with_artifact(999)).has_value());
-    for (const auto id : { 0, 1000 }) {
+    CHECK(read_as_first_record(with_artifact(32766)).has_value());
+    for (const auto id : { 0, 32767 }) {
         CAPTURE(id);
         CHECK(test::to_error_code(read_as_first_record(with_artifact(id))) == ParseErrorType::INVALID_FLAG);
     }

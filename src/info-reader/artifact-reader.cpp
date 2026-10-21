@@ -36,7 +36,7 @@ tl::expected<void, ParseErrorType> ArtifactReader::read() const
     }
 
     int int_id = 0;
-    if (const auto result = info_set_integer(get_json_value(this->art_data, "id"), int_id, true, Range(0, 9999)); !result) {
+    if (const auto result = info_set_integer(get_json_value(this->art_data, "id"), int_id, true, Range(0, MAX_FIXED_ARTIFACT_ID)); !result) {
         return result;
     }
     // 実行時の記録は 1〜件数の ID だけを作るため、1 から欠番なく並んでいることを求める。

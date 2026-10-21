@@ -548,7 +548,7 @@ tl::expected<void, ParseErrorType> DungeonReader::set_dungeon_final_floor(Dungeo
         }
     }
     if (final_floor_obj.contains("artifact")) {
-        if (const auto result = info_set_enum_from_integer_checked(get_json_value(final_floor_obj, "artifact"), dungeon.final_artifact, "final_floor.artifact", Range(0, 9999), [](FixedArtifactId artifact_id) {
+        if (const auto result = info_set_enum_from_integer_checked(get_json_value(final_floor_obj, "artifact"), dungeon.final_artifact, "final_floor.artifact", Range(0, MAX_FIXED_ARTIFACT_ID), [](FixedArtifactId artifact_id) {
                 const auto &artifacts = ArtifactList::get_instance();
                 return (artifact_id == FixedArtifactId::NONE) || artifacts.contains(artifact_id);
             });

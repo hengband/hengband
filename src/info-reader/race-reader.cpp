@@ -443,7 +443,7 @@ tl::expected<void, ParseErrorType> RaceReader::set_mon_artifacts(MonraceDefiniti
 
     for (const auto &artifact : artifact_data) {
         FixedArtifactId fa_id{};
-        if (const auto result = info_set_integer(get_json_value(artifact, "drop_artifact_id"), fa_id, true, Range(1, 999)); !result) {
+        if (const auto result = info_set_integer(get_json_value(artifact, "drop_artifact_id"), fa_id, true, Range(1, MAX_FIXED_ARTIFACT_ID)); !result) {
             return result;
         }
         int chance = 0;
