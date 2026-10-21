@@ -429,15 +429,13 @@ static void add_hex_status_flags(PlayerType *player_ptr, StatusBarFlags &bar_fla
         bar_flags.set(BAR_CURE);
     }
 
-    if (spell_hex.get_revenge_turn() > 0) {
-        auto revenge_type = spell_hex.get_revenge_type();
-        if (revenge_type == SpellHexRevengeType::PATIENCE) {
-            bar_flags.set(BAR_PATIENCE);
-        }
+    const auto revenge_type = spell_hex.get_shown_revenge_type();
+    if (revenge_type == SpellHexRevengeType::PATIENCE) {
+        bar_flags.set(BAR_PATIENCE);
+    }
 
-        if (revenge_type == SpellHexRevengeType::REVENGE) {
-            bar_flags.set(BAR_REVENGE);
-        }
+    if (revenge_type == SpellHexRevengeType::REVENGE) {
+        bar_flags.set(BAR_REVENGE);
     }
 }
 

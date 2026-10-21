@@ -40,8 +40,9 @@ public:
     int32_t get_revenge_power() const;
     void set_revenge_power(int32_t power, bool substitution);
     byte get_revenge_turn() const;
-    void set_revenge_turn(byte power, bool substitution);
+    void set_revenge_turn(byte turn, bool substitution);
     SpellHexRevengeType get_revenge_type() const;
+    SpellHexRevengeType get_shown_revenge_type() const;
     void set_revenge_type(SpellHexRevengeType type);
 
 private:

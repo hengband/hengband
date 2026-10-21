@@ -94,6 +94,7 @@ void SpellHex::discard_interrupted_spells()
 
 /*!
  * @brief 詠唱フラグとは別に継続する我慢・復讐を解除する
+ * @details 状態の表示は、我慢・復讐を表示していたときだけ描き直しを要求する。
  */
 void SpellHex::clear_revenge()
 {
@@ -101,10 +102,9 @@ void SpellHex::clear_revenge()
         return;
     }
 
-    this->spell_hex_data->revenge_type = SpellHexRevengeType::NONE;
-    this->spell_hex_data->revenge_power = 0;
-    this->spell_hex_data->revenge_turn = 0;
-    DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
+    this->set_revenge_type(SpellHexRevengeType::NONE);
+    this->set_revenge_power(0, true);
+    this->set_revenge_turn(0, true);
 }
 
 /*!
@@ -438,10 +438,15 @@ byte SpellHex::get_revenge_turn() const
  */
 void SpellHex::set_revenge_turn(byte turn, bool substitution)
 {
+    const auto shown_type = this->get_shown_revenge_type();
     if (substitution) {
         this->spell_hex_data->revenge_turn = turn;
     } else {
         this->spell_hex_data->revenge_turn -= turn;
+    }
+
+    if (shown_type != this->get_shown_revenge_type()) {
+        DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     }
 }
 
@@ -452,5 +457,19 @@ SpellHexRevengeType SpellHex::get_revenge_type() const
 
 void SpellHex::set_revenge_type(SpellHexRevengeType type)
 {
+    const auto shown_type = this->get_shown_revenge_type();
     this->spell_hex_data->revenge_type = type;
+    if (shown_type != this->get_shown_revenge_type()) {
+        DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
+    }
+}
+
+/*!
+ * @brief 状態の表示に出している我慢・復讐の種類を返す
+ * @return 残りターンがあれば我慢・復讐の種類、無ければ NONE
+ * @details 状態の表示 (main-window-stat-poster.cpp) はこの値で我慢・復讐を出すので、変わったら状態の表示を描き直す。
+ */
+SpellHexRevengeType SpellHex::get_shown_revenge_type() const
+{
+    return this->spell_hex_data->revenge_turn > 0 ? this->spell_hex_data->revenge_type : SpellHexRevengeType::NONE;
 }

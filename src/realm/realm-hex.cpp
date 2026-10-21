@@ -239,9 +239,7 @@ tl::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type sp
                     msg_print(_("{}点のダメージを返した。", "You return {} damage."), power);
                 }
 
-                spell_hex.set_revenge_type(SpellHexRevengeType::NONE);
-                spell_hex.set_revenge_turn(0, true);
-                spell_hex.set_revenge_power(0, true);
+                spell_hex.clear_revenge();
             }
         }
         break;
