@@ -686,6 +686,18 @@ class TownMapValidationTest(unittest.TestCase):
         ok, message = self.validate(self.data)
         self.assertTrue(ok, message)
 
+    def test_cave_info_fits_16_bit_flags(self):
+        # CAVE_* のフラグは16ビットに収まり、セーブでも16ビットで書く。
+        valid = copy.deepcopy(self.data)
+        valid["featureRules"][0]["definition"]["caveInfo"] = 65535
+        ok, message = self.validate(valid)
+        self.assertTrue(ok, message)
+        invalid = copy.deepcopy(self.data)
+        invalid["featureRules"][0]["definition"]["caveInfo"] = 65536
+        ok, message = self.validate(invalid)
+        self.assertFalse(ok)
+        self.assertIn("Location: ['featureRules', 0, 'definition', 'caveInfo']", message)
+
     def test_start_must_be_inside_layout(self):
         invalid = copy.deepcopy(self.data)
         invalid["startingPositions"][0] = {"y": 3, "x": 1}
