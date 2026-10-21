@@ -1,5 +1,6 @@
 #include "artifact/fixed-art-types.h"
 #include "artifact/random-art-effects.h"
+#include "floor/floor-base-definitions.h"
 #include "info-reader/artifact-reader.h"
 #include "info-reader/info-reader-util.h"
 #include "info-reader/item-reader-limits.h"
@@ -235,6 +236,29 @@ TEST_CASE("ArtifactReader rejects a base item which is not a valid baseitem")
     CHECK(ArtifactList::get_instance().empty());
     // ID の確認は済んでいるため、診断のための ID は進む。
     CHECK(error_idx == 1);
+}
+
+/*!
+ * @brief 生成階 (level) は、たどり着ける最深の階 (MAX_DEPTH - 1) までとする
+ */
+TEST_CASE("ArtifactReader limits level to the deepest reachable floor")
+{
+    {
+        test::ScopedReaderState reader_state;
+        test::ArtifactListTestAccess artifact_state;
+        ScopedArtifactBaseitem baseitem;
+        auto data = make_artifact();
+        data["level"] = MAX_DEPTH;
+        CHECK(test::to_error_code(ArtifactReader(data).read()) == ParseErrorType::INVALID_FLAG);
+        CHECK(ArtifactList::get_instance().empty());
+    }
+    test::ScopedReaderState reader_state;
+    test::ArtifactListTestAccess artifact_state;
+    ScopedArtifactBaseitem baseitem;
+    auto data = make_artifact();
+    data["level"] = MAX_DEPTH - 1;
+    REQUIRE(ArtifactReader(data).read().has_value());
+    CHECK(ArtifactList::get_instance().get_artifact(i2enum<FixedArtifactId>(1)).level == MAX_DEPTH - 1);
 }
 
 /*!

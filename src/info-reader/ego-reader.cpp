@@ -1,5 +1,6 @@
 #include "info-reader/ego-reader.h"
 #include "artifact/random-art-effects.h"
+#include "floor/floor-base-definitions.h"
 #include "info-reader/baseitem-tokens-table.h"
 #include "info-reader/info-reader-util.h"
 #include "info-reader/json-reader-util.h"
@@ -58,7 +59,9 @@ tl::expected<void, ParseErrorType> EgoReader::read() const
     if (const auto result = info_set_integer(get_json_value(this->ego_data, "rating"), ego.rating, true, Range(0, 100)); !result) {
         return result;
     }
-    if (const auto result = info_set_integer(get_json_value(this->ego_data, "level"), ego.level, true, Range(0, 128)); !result) {
+    // エゴの level は指輪・アミュレットの発動の基本難易度で、生成階ではない。同じ計算に使うベースアイテム・アーティファクトの level にそろえ、
+    // それらの上限 (たどり着ける最深の階、MAX_DEPTH - 1) までとする。
+    if (const auto result = info_set_integer(get_json_value(this->ego_data, "level"), ego.level, true, Range(0, MAX_DEPTH - 1)); !result) {
         return result;
     }
     if (const auto result = info_set_integer(get_json_value(this->ego_data, "rarity"), ego.rarity, true, Range(0, 255)); !result) {

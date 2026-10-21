@@ -1,4 +1,5 @@
 #include "artifact/random-art-effects.h"
+#include "floor/floor-base-definitions.h"
 #include "info-reader/ego-reader.h"
 #include "info-reader/info-reader-util.h"
 #include "info-reader/parse-error-types.h"
@@ -148,13 +149,23 @@ TEST_CASE("EgoReader requires unique IDs while preserving legacy ordering")
     CHECK(egos_info.size() == 3);
 }
 
-TEST_CASE("EgoReader accepts the activation difficulty upper bound")
+/*!
+ * @brief 発動の基本難易度の level は、ベースアイテム・アーティファクトの level と同じく MAX_DEPTH - 1 までとする
+ */
+TEST_CASE("EgoReader limits the activation difficulty level like item levels")
 {
+    {
+        EgoStateGuard guard;
+        auto data = make_ego();
+        data["level"] = MAX_DEPTH;
+        CHECK(test::to_error_code(EgoReader(data).read()) == ParseErrorType::INVALID_FLAG);
+        CHECK_FALSE(egos_info.contains(i2enum<EgoType>(4)));
+    }
     EgoStateGuard guard;
     auto data = make_ego();
-    data["level"] = 128;
+    data["level"] = MAX_DEPTH - 1;
     REQUIRE(EgoReader(data).read().has_value());
-    CHECK(egos_info.at(i2enum<EgoType>(4)).level == 128);
+    CHECK(egos_info.at(i2enum<EgoType>(4)).level == MAX_DEPTH - 1);
 }
 
 TEST_CASE("EgoReader accepts integer percent endpoints")
@@ -243,7 +254,7 @@ TEST_CASE("EgoReader checks every scalar and signed bonus boundary")
         const auto high = bonus ? 32767 : std::string_view(path) == "/rarity" ? 255
                                       : std::string_view(path) == "/cost"     ? std::numeric_limits<PRICE>::max() / 32
                                       : std::string_view(path) == "/rating"   ? 100
-                                                                              : 128;
+                                                                              : MAX_DEPTH - 1;
         for (const auto value : { int64_t{ low } - 1, int64_t{ low }, int64_t{ high }, int64_t{ high } + 1 }) {
             EgoStateGuard guard;
             auto data = make_ego();

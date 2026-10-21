@@ -1,6 +1,7 @@
 #include "info-reader/artifact-reader.h"
 #include "artifact/fixed-art-types.h"
 #include "artifact/random-art-effects.h"
+#include "floor/floor-base-definitions.h"
 #include "info-reader/baseitem-tokens-table.h"
 #include "info-reader/info-reader-util.h"
 #include "info-reader/item-reader-limits.h"
@@ -64,7 +65,8 @@ tl::expected<void, ParseErrorType> ArtifactReader::read() const
         msg_print(_("アーティファクトのパラメータ値読込失敗。ID: '{}'。", "Failed to load parameter value of artifact. ID: '{}'."), error_idx);
         return result;
     }
-    if (const auto result = info_set_integer(get_json_value(this->art_data, "level"), artifact.level, true, Range(0, 128)); !result) {
+    // level は生成階 (固定アーティファクトの発動の基本難易度にも使う) で、たどり着ける最深の階 (MAX_DEPTH - 1) までとする。
+    if (const auto result = info_set_integer(get_json_value(this->art_data, "level"), artifact.level, true, Range(0, MAX_DEPTH - 1)); !result) {
         msg_print(_("アーティファクトのレベル読込失敗。ID: '{}'。", "Failed to load level of artifact. ID: '{}'."), error_idx);
         return result;
     }

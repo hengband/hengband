@@ -276,6 +276,41 @@ class ArtifactDefinitionValidationTest(unittest.TestCase):
         self.assertIn("integer JSON value", message)
 
 
+class DefinitionLevelLimitTest(unittest.TestCase):
+    def test_level_is_limited_to_the_deepest_reachable_floor(self):
+        # ベースアイテム・アーティファクトの生成階と、同じ発動の難易度の計算に使うエゴの level は、MAX_DEPTH - 1 までとする。
+        root = Path(__file__).resolve().parents[2]
+        header = (root / "src/floor/floor-base-definitions.h").read_text(encoding="utf-8")
+        match = re.search(r"constexpr int MAX_DEPTH = (\d+);", header)
+        self.assertIsNotNone(match, "MAX_DEPTH not found in floor-base-definitions.h")
+        max_depth = int(match.group(1))
+        loaded, schema_map = load_all_schemas(root / "schema")
+        levels = {
+            "BaseitemDefinitions": loaded[schema_map["BaseitemDefinitions"]]["properties"]["baseitems"]["items"]["properties"]["level"],
+            "ArtifactDefinitions": loaded[schema_map["ArtifactDefinitions"]]["properties"]["artifacts"]["items"]["properties"]["level"],
+        }
+        levels["EgoDefinitions"] = loaded[schema_map["EgoDefinitions"]]["definitions"]["ego"]["properties"]["level"]
+        for name, level in levels.items():
+            with self.subTest(name=name):
+                self.assertEqual((level["minimum"], level["maximum"]), (0, max_depth - 1))
+
+    def test_level_boundaries(self):
+        root = Path(__file__).resolve().parents[2]
+        loaded, schema_map = load_all_schemas(root / "schema")
+        registry = build_schema_registry(loaded)
+        for name, key in (("BaseitemDefinitions", "baseitems"), ("ArtifactDefinitions", "artifacts")):
+            document = load_jsonc(root / "lib/edit" / f"{name}.jsonc")
+            sample = {**document[key][0], "id": 1}
+            schema_path = schema_map[name]
+            for level, accepted in ((127, True), (128, False)):
+                with self.subTest(name=name, level=level):
+                    ok, message = validate_document({"version": document["version"], key: [{**sample, "level": level}]},
+                                                    schema_path, loaded[schema_path], registry)
+                    self.assertEqual(ok, accepted, message)
+                    if not accepted:
+                        self.assertIn(f"Location: {[key, 0, 'level']}", message)
+
+
 class ItemBonusLimitTest(unittest.TestCase):
     def test_schema_matches_reader_limits(self):
         # schema の範囲が item-reader-limits.h の定数と合っていることを確かめる。

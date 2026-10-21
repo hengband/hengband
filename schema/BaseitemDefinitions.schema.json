@@ -116,9 +116,9 @@
                     },
                     "level": {
                         "type": "integer",
-                        "description": "出現階層",
+                        "description": "基本の生成階。発動の基本難易度などにも使う。たどり着ける最深の階 (MAX_DEPTH - 1) まで",
                         "minimum": 0,
-                        "maximum": 128
+                        "maximum": 127
                     },
                     "weight": {
                         "type": "integer",

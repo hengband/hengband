@@ -313,12 +313,12 @@ class EgoValidationTest(unittest.TestCase):
         ok, message = self.validate({"version": 2, "egos": [record]})
         self.assertFalse(ok)
 
-    def test_level_matches_activation_difficulty_domain(self):
-        """levelの発動難易度上限128を受理し、その直外を拒否する。"""
-        record = {**self.record, "level": 128}
+    def test_level_is_limited_to_the_deepest_reachable_floor(self):
+        """levelは発動の基本難易度で、ベースアイテム・アーティファクトのlevelと同じ127までを受理し、その直外を拒否する。"""
+        record = {**self.record, "level": 127}
         ok, message = self.validate({"version": 2, "egos": [record]})
         self.assertTrue(ok, message)
-        record["level"] = 129
+        record["level"] = 128
         ok, message = self.validate({"version": 2, "egos": [record]})
         self.assertFalse(ok)
 
@@ -419,7 +419,7 @@ class EgoValidationTest(unittest.TestCase):
 
     def test_every_remaining_numeric_domain_boundary(self):
         """残る全スカラーと7種類の符号付きボーナスの境界・直外を確認する。"""
-        domains = [(field, 0, {"rating": 100, "level": 128, "rarity": 255, "cost": 67108863}[field])
+        domains = [(field, 0, {"rating": 100, "level": 127, "rarity": 255, "cost": 67108863}[field])
                    for field in ("rating", "level", "rarity", "cost")]
         domains += [(group + "." + field, -32768, 32767)
                     for group, fields in (("base_bonuses", ("to_hit", "to_damage", "to_ac")),

@@ -473,6 +473,25 @@ TEST_CASE("BaseitemReader limits base AC and bonuses to small numbers up to 255 
 }
 
 /*!
+ * @brief 基本の生成階 (level) は、たどり着ける最深の階 (MAX_DEPTH - 1) までとする
+ */
+TEST_CASE("BaseitemReader limits level to the deepest reachable floor")
+{
+    {
+        BaseitemStateGuard guard;
+        auto data = make_baseitem();
+        data["level"] = MAX_DEPTH;
+        CHECK(test::to_error_code(BaseitemReader(data).read()) == ParseErrorType::INVALID_FLAG);
+        CHECK(BaseitemList::get_instance().empty());
+    }
+    BaseitemStateGuard guard;
+    auto data = make_baseitem();
+    data["level"] = MAX_DEPTH - 1;
+    REQUIRE(BaseitemReader(data).read().has_value());
+    CHECK(BaseitemList::get_instance().get_baseitem(1).level == MAX_DEPTH - 1);
+}
+
+/*!
  * @brief 出現階層は、生成の表で階層ごとの配列 (要素数 MAX_DEPTH) の添え字になるため、MAX_DEPTH - 1 までに限る
  */
 TEST_CASE("BaseitemReader limits allocation depth to the generation table size")

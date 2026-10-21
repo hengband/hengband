@@ -77,9 +77,9 @@
                     },
                     "level": {
                         "type": "integer",
-                        "description": "出現階層",
+                        "description": "生成階。固定アーティファクトの発動の基本難易度にも使う。たどり着ける最深の階 (MAX_DEPTH - 1) まで",
                         "minimum": 0,
-                        "maximum": 128
+                        "maximum": 127
                     },
                     "rarity": {
                         "type": "integer",

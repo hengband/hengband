@@ -168,8 +168,8 @@
         "level": {
           "type": "integer",
           "minimum": 0,
-          "maximum": 128,
-          "description": "指輪・アミュレットの発動の基本難易度。生成階の制限ではない。同じ発動難易度計算で使うBaseitem・Artifactのlevelと上限128を揃える。"
+          "maximum": 127,
+          "description": "指輪・アミュレットの発動の基本難易度。生成階の制限ではない。同じ発動難易度計算で使うBaseitem・Artifactのlevelと上限 (MAX_DEPTH - 1 = 127) を揃える。"
         },
         "rarity": {
           "type": "integer",

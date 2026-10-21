@@ -99,7 +99,8 @@ tl::expected<void, ParseErrorType> BaseitemReader::read() const
         msg_print(_("アイテムのパラメータ値読込失敗。ID: '{}'。", "Failed to load parameter value of item. ID: '{}'."), error_idx);
         return result;
     }
-    if (const auto result = info_set_integer(get_json_value(this->baseitem_data, "level"), baseitem.level, true, Range(0, 128)); !result) {
+    // level は基本の生成階 (発動の基本難易度などにも使う) で、たどり着ける最深の階 (MAX_DEPTH - 1) までとする。
+    if (const auto result = info_set_integer(get_json_value(this->baseitem_data, "level"), baseitem.level, true, Range(0, MAX_DEPTH - 1)); !result) {
         msg_print(_("アイテムのレベル読込失敗。ID: '{}'。", "Failed to load level of item. ID: '{}'."), error_idx);
         return result;
     }
