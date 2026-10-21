@@ -4,7 +4,7 @@
     "description": "ベースアイテムの定義",
     "properties": {
         "version": {
-            "type": "number",
+            "const": 1,
             "description": "Version情報"
         },
         "baseitems": {

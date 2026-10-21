@@ -4,7 +4,7 @@
     "description": "職業に関する魔法の定義",
     "properties": {
         "version": {
-            "type": "number",
+            "const": 1,
             "description": "Version情報"
         },
         "classes": {

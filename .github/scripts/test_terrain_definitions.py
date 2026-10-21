@@ -291,9 +291,14 @@ class TerrainValidationTest(unittest.TestCase):
         self.assert_valid([])
 
     def test_version_is_not_a_reader_integer_field(self):
-        ok, diagnostic = validate_document({"version": 1.5, "terrains": [self.terrain()]},
+        # version は 1 に限るが、reader が読まない項目なので、整数の表記 (1) でなく 1.0 と書いてもよい。
+        ok, diagnostic = validate_document({"version": 1.0, "terrains": [self.terrain()]},
                                            self.schema_path, self.schema, self.registry)
         self.assertTrue(ok, diagnostic)
+        ok, diagnostic = validate_document({"version": 1.5, "terrains": [self.terrain()]},
+                                           self.schema_path, self.schema, self.registry)
+        self.assertFalse(ok, diagnostic)
+        self.assertIn("Location: ['version']", diagnostic)
 
 
 if __name__ == "__main__":

@@ -4,7 +4,7 @@
     "description": "MonsterMessageの定義",
     "properties": {
         "versions": {
-            "type": "number",
+            "const": 1,
             "description": "Version情報"
         },
         "groups": {

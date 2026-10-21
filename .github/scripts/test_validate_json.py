@@ -9,6 +9,7 @@ from unittest.mock import patch
 
 from json_validation_test_helper import validate_document
 from jsonschema import ValidationError
+from jsonschema.validators import validator_for
 from validate_json import (build_schema_registry, build_validation_pairs, load_all_schemas, load_jsonc, validate_one,
                            validate_town_map_semantics, validate_town_preferences_semantics)
 
@@ -939,6 +940,45 @@ class TownMapValidationTest(unittest.TestCase):
                 invalid = copy.deepcopy(self.data)
                 invalid["featureRules"][0]["definition"][field] = token
                 self.assertFalse(self.validate(invalid)[0])
+
+
+class DefinitionVersionValidationTest(unittest.TestCase):
+    """reader が読まない version もほかの定義と同じく 1 に限る。"""
+
+    VERSION_KEYS = {
+        "ArtifactDefinitions": "version",
+        "BaseitemDefinitions": "version",
+        "ClassMagicDefinitions": "version",
+        "SpellDefinitions": "version",
+        "TerrainDefinitions": "version",
+        "MonraceDefinitions": "versions",
+        "MonsterMessages": "versions",
+    }
+
+    @classmethod
+    def setUpClass(cls):
+        cls.root = Path(__file__).resolve().parents[2]
+        cls.loaded, cls.schema_map = load_all_schemas(cls.root / "schema")
+        cls.registry = build_schema_registry(cls.loaded)
+
+    def test_version_subschema_accepts_only_one(self):
+        # 同梱のデータには 1.0 と書いたものもあり、JSON Schema の const は 1.0 を 1 と等しく扱う。
+        for name, key in self.VERSION_KEYS.items():
+            schema = self.loaded[self.schema_map[name]]["properties"][key]
+            validator = validator_for(schema)(schema)
+            for value, accepted in ((1, True), (1.0, True), (2, False), (0, False), (1.5, False), (True, False), ("1", False)):
+                with self.subTest(name=name, value=value):
+                    self.assertEqual(validator.is_valid(value), accepted)
+
+    def test_bundled_document_with_another_version_is_rejected(self):
+        for name, key in self.VERSION_KEYS.items():
+            with self.subTest(name=name):
+                document = load_jsonc(self.root / "lib/edit" / f"{name}.jsonc")
+                document[key] = 2
+                schema_path = self.schema_map[name]
+                ok, message = validate_document(document, schema_path, self.loaded[schema_path], self.registry)
+                self.assertFalse(ok, message)
+                self.assertIn(f"Location: {[key]}", message)
 
 
 if __name__ == "__main__":

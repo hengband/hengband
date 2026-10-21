@@ -4,7 +4,7 @@
     "description": "固定アーティファクトの定義",
     "properties": {
         "version": {
-            "type": "number",
+            "const": 1,
             "description": "Version情報"
         },
         "artifacts": {
