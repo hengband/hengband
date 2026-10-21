@@ -5,6 +5,8 @@
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
 #include "system/services/dungeon-service.h"
+#include <algorithm>
+#include <limits>
 #include <numeric>
 
 std::array<building_type, MAX_BUILDINGS> buildings;
@@ -107,9 +109,9 @@ void MeleeArena::update_gladiators(PlayerType *player_ptr)
     }
 }
 
-std::pair<int, bool> MeleeArena::set_gladiators(PlayerType *player_ptr, int mon_level)
+std::pair<int64_t, bool> MeleeArena::set_gladiators(PlayerType *player_ptr, int mon_level)
 {
-    auto total = 0;
+    int64_t total = 0;
     auto is_applicable = false;
     for (auto i = 0; i < NUM_GLADIATORS; i++) {
         auto &gladiator = this->get_gladiator(i);
@@ -127,11 +129,13 @@ std::pair<int, bool> MeleeArena::set_gladiators(PlayerType *player_ptr, int mon_
  * @param current_total 計算済のモンスター数
  * @param is_applicable モンスターのレベルが基準値未満か否か (基準値以上のモンスターはブレが激しすぎる)
  * @return このメソッドで計算したモンスター数と累積計算済モンスター数のペア
+ * @details 強さとその和は int ではあふれうるので int64_t で計算する。
+ * オッズは get_payback() で int として読むので、int の上限で抑えてから保存する。
  */
-std::pair<int, int> MeleeArena::set_odds(int current_total, bool is_applicable)
+std::pair<int, int64_t> MeleeArena::set_odds(int64_t current_total, bool is_applicable)
 {
     const auto &monraces = MonraceList::get_instance();
-    std::array<int, NUM_GLADIATORS> powers;
+    std::array<int64_t, NUM_GLADIATORS> powers;
     std::transform(std::begin(this->gladiators), std::end(this->gladiators), std::begin(powers),
         [&monraces](const auto &gladiator) { return monraces.get_monrace(gladiator.monrace_id).calc_power(); });
     const auto total = current_total + std::reduce(std::begin(powers), std::end(powers));
@@ -154,7 +158,7 @@ std::pair<int, int> MeleeArena::set_odds(int current_total, bool is_applicable)
             power = 100 + randint1(5);
         }
 
-        this->gladiators[count].odds = power;
+        this->gladiators[count].odds = static_cast<uint32_t>(std::min<int64_t>(power, std::numeric_limits<int>::max()));
         count++;
     }
 
