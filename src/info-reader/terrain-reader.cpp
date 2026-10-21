@@ -35,7 +35,7 @@ tl::expected<void, ParseErrorType> TerrainReader::read() const
     }
 
     int id = 0;
-    if (const auto result = info_set_integer(get_json_value(element, "id"), id, true, Range(0, 9999)); !result) {
+    if (const auto result = info_set_integer(get_json_value(element, "id"), id, true, Range(0, MAX_TERRAIN_ID)); !result) {
         return result;
     }
 

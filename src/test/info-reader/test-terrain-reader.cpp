@@ -300,6 +300,27 @@ TEST_CASE("TerrainReader propagates helper errors without publishing staged terr
     }
 }
 
+TEST_CASE("TerrainReader accepts IDs up to one below the FEAT_IDX storage maximum")
+{
+    TerrainStateGuard guard;
+    auto &terrains = TerrainList::get_instance();
+    terrains.resize(0);
+    // 地形IDの上限は、IDを格納する型(FEAT_IDX)の上限−1とする。
+    constexpr short max_id = 32766;
+    static_assert(max_id == MAX_TERRAIN_ID);
+    auto data = make_terrain();
+    data["id"] = max_id;
+    // 上限のIDを読むため、地形の一覧を 32,767 件に広げるのは意図どおり。
+    REQUIRE(TerrainReader(data).read().has_value());
+    CHECK(terrains.size() == static_cast<size_t>(max_id) + 1);
+    CHECK(terrains.get_terrain(max_id).idx == max_id);
+    CHECK(error_idx == max_id);
+
+    data["id"] = max_id + 1;
+    CHECK(test::to_error_code(TerrainReader(data).read()) == ParseErrorType::INVALID_FLAG);
+    CHECK(terrains.size() == static_cast<size_t>(max_id) + 1);
+}
+
 /*!
  * @brief 公開境界のエラー位置更新とヘルパーの検証順を維持する
  */
@@ -309,7 +330,7 @@ TEST_CASE("TerrainReader keeps helper validation order and error index timing")
     auto &terrains = TerrainList::get_instance();
     terrains.resize(0);
     auto data = make_terrain();
-    data["id"] = 10000;
+    data["id"] = 32767;
     CHECK(test::to_error_code(TerrainReader(data).read()) == ParseErrorType::INVALID_FLAG);
     CHECK(error_idx == 73);
     data["id"] = 0;
