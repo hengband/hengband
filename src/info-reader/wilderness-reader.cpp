@@ -250,6 +250,7 @@ tl::expected<void, ParseErrorType> WildernessReader::read_map(const nlohmann::js
                 return result;
             }
         }
+        // road の値の大きさは使っていない (0 より大きければ道とみなし、1〜15 の違いはゲーム中で区別しない)。
         const auto &road_data = get_json_value(letter_data, "road");
         if (!road_data.is_null()) {
             if (const auto result = info_set_integer(road_data, letter.road, true, Range(0, 15)); !result) {

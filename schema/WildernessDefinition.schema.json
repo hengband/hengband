@@ -65,7 +65,12 @@
           ]
         },
         "town": { "type": "integer", "minimum": 0, "maximum": 6 },
-        "road": { "type": "integer", "minimum": 0, "maximum": 15 }
+        "road": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 15,
+          "description": "道があるか。値の大きさは使っていない（0より大きければ道とみなし、1〜15の違いはゲーム中で区別しない）。道の向きは隣の格子に道があるかで決まる。"
+        }
       }
     },
     "position": {

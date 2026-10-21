@@ -20,7 +20,7 @@ struct WildernessLetterDefinition {
     WildernessTerrain terrain;
     int level = 0;
     short town = 0;
-    int road = 0;
+    int road = 0; //!< 道があるか (値の大きさは使っていない。0 より大きければ道とみなす)
 };
 
 struct WildernessMapDefinition {
