@@ -298,6 +298,9 @@
     <ClCompile Include="..\..\src\test\system\floor\test-floor-info.cpp">
       <Filter>system\floor</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\test\system\floor\test-town-records.cpp">
+      <Filter>system\floor</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\test\system\item\test-item-entity.cpp">
       <Filter>system\item</Filter>
     </ClCompile>

@@ -290,7 +290,7 @@ bool tele_town(PlayerType *player_ptr)
     const auto towns_size = towns.size();
     const auto &town_records = TownRecords::get_instance();
     for (size_t i = 1; i < towns_size; i++) {
-        if ((i == VALID_TOWNS) || (i == SECRET_TOWN) || (i == world.get_town_index()) || !town_records.has_visited(i2enum<TownId>(i - 1))) {
+        if ((i == VALID_TOWNS) || (i == SECRET_TOWN) || (i == world.get_town_index()) || !town_records.has_visited(to_town_id(i))) {
             continue;
         }
 
@@ -322,7 +322,7 @@ bool tele_town(PlayerType *player_ptr)
         }
 
         const size_t town_num = key - 'a' + 1;
-        if ((town_num == world.get_town_index()) || (town_num == VALID_TOWNS) || (town_num == SECRET_TOWN) || !town_records.has_visited(i2enum<TownId>(key - 'a'))) {
+        if ((town_num == world.get_town_index()) || (town_num == VALID_TOWNS) || (town_num == SECRET_TOWN) || !town_records.has_visited(to_town_id(town_num))) {
             continue;
         }
 

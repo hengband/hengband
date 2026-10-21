@@ -1646,7 +1646,7 @@ nlohmann::json make_snapshot(PlayerType *player_ptr, bool include_map = true,
                        { "height", floor.height },
                        { "inside_arena", floor.inside_arena },
                        { "quest_id", enum2i(floor.quest_number) },
-                       { "town_id", world.is_in_any_town() ? static_cast<int>(world.get_town_index()) - 1 : -1 },
+                       { "town_id", world.is_in_any_town() ? enum2i(to_town_id(world.get_town_index())) : -1 },
                        { "town_index", world.is_in_any_town() ? static_cast<int>(world.get_town_index()) : 0 },
                        // True only while standing ON an actual town tile. Gate on
                        // dun_level == 0: is_in_any_town() (current_town_index > 0)
@@ -1682,7 +1682,7 @@ nlohmann::json make_snapshot(PlayerType *player_ptr, bool include_map = true,
                           // at the inn ("You know the way to ..."). The inn's
                           // "Teleport to other town" menu lists exactly these towns,
                           // so this mirrors player-visible state. IDs follow the
-                          // floor.town_id convention (town_index - 1).
+                          // floor.town_id convention (TownId; see to_town_id()).
                           { "visited_town_ids", [] {
                                std::vector<int> ids;
                                const auto &records = TownRecords::get_instance();

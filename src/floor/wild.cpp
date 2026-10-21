@@ -287,7 +287,7 @@ static void generate_area(PlayerType *player_ptr, const Pos2D &pos, bool is_bord
 
         load_town_map(player_ptr);
         if (!is_corner && !is_border) {
-            TownRecords::get_instance().set_visited(i2enum<TownId>(world.get_town_index() - 1));
+            TownRecords::get_instance().set_visited(to_town_id(world.get_town_index()));
         }
     } else {
         generate_wilderness_area(floor, wg, is_corner);
@@ -490,6 +490,7 @@ void wilderness_gen(PlayerType *player_ptr)
     }
 
     if (player_ptr->teleport_town) {
+        const auto is_in_outpost = world.get_town_index() == to_town_index(TownId::OUTPOST);
         for (const auto &pos : floor.get_area()) {
             auto &grid = floor.get_grid(pos);
             const auto &terrain = grid.get_terrain();
@@ -497,7 +498,7 @@ void wilderness_gen(PlayerType *player_ptr)
                 continue;
             }
 
-            if ((terrain.building_type != BuildingType::BUILDING_04) && !((world.get_town_index() == 1) && (terrain.building_type == BuildingType::BUILDING_00))) {
+            if ((terrain.building_type != BuildingType::BUILDING_04) && !(is_in_outpost && (terrain.building_type == BuildingType::BUILDING_00))) {
                 continue;
             }
 

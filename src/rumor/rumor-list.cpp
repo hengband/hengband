@@ -195,7 +195,7 @@ void RumorList::add_towns()
     for (size_t i = 1; i < towns.size(); i++) {
         if ((i < VALID_TOWNS) && (i != SECRET_TOWN)) {
             const auto town_name = str_replace(this->type_template.at(RumorType::TOWN), NAME_TEMPLATE, towns.get_town(i).get_name());
-            rumors.emplace_back(std::make_shared<const RumorDefinition>(RumorType::TOWN, i2enum<TownId>(i - 1), town_name));
+            rumors.emplace_back(std::make_shared<const RumorDefinition>(RumorType::TOWN, to_town_id(i), town_name));
         }
     }
 }
