@@ -340,7 +340,7 @@ XImage *ReadBMP(Display *dpy, char *Name)
 /*
  * to save ourselves some labour, define a maximum expected icon width here:
  */
-#define MAX_ICON_WIDTH 32
+constexpr auto MAX_ICON_WIDTH = 32;
 
 /* some static variables for composing and decomposing pixel values into
  * red, green and blue values

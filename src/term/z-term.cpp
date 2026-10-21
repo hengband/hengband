@@ -16,8 +16,8 @@
 #include "view/display-symbol.h"
 
 //! Special flags in the attr data
-#define AF_BIGTILE2 0xf0
-#define AF_TILE1 0x80
+constexpr auto AF_BIGTILE2 = 0xf0;
+constexpr auto AF_TILE1 = 0x80;
 
 #ifdef JP
 /*!
@@ -25,9 +25,9 @@
  * 属性に全角文字の1バイト目、2バイト目も記憶。
  * By FIRST
  */
-#define AF_KANJI1 0x10
-#define AF_KANJI2 0x20
-#define AF_KANJIC 0x0f
+constexpr auto AF_KANJI1 = 0x10;
+constexpr auto AF_KANJI2 = 0x20;
+constexpr auto AF_KANJIC = 0x0f;
 #endif
 
 //! The current "term"

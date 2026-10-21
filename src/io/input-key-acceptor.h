@@ -6,19 +6,19 @@
 /*
  * Special key code used for inkey_special()
  */
-#define SKEY_MOD_MASK 0x0f00
-#define SKEY_MOD_SHIFT 0x0100
-#define SKEY_MOD_CONTROL 0x0200
+constexpr auto SKEY_MOD_MASK = 0x0f00;
+constexpr auto SKEY_MOD_SHIFT = 0x0100;
+constexpr auto SKEY_MOD_CONTROL = 0x0200;
 
-#define SKEY_MASK 0xf000
-#define SKEY_DOWN 0xf001
-#define SKEY_LEFT 0xf002
-#define SKEY_RIGHT 0xf003
-#define SKEY_UP 0xf004
-#define SKEY_PGUP 0xf005
-#define SKEY_PGDOWN 0xf006
-#define SKEY_HOME 0xf007
-#define SKEY_END 0xf008
+constexpr auto SKEY_MASK = 0xf000;
+constexpr auto SKEY_DOWN = 0xf001;
+constexpr auto SKEY_LEFT = 0xf002;
+constexpr auto SKEY_RIGHT = 0xf003;
+constexpr auto SKEY_UP = 0xf004;
+constexpr auto SKEY_PGUP = 0xf005;
+constexpr auto SKEY_PGDOWN = 0xf006;
+constexpr auto SKEY_HOME = 0xf007;
+constexpr auto SKEY_END = 0xf008;
 
 //! マクロのトリガーとして扱うキー列の最大の長さ
 constexpr size_t MAX_MACRO_TRIGGER_LENGTH = 1023;

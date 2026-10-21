@@ -122,12 +122,12 @@
 /*
  * Available graphic modes
  */
-// clang-format off
-#define GRAPHICS_NONE       0
-#define GRAPHICS_ORIGINAL   1
-#define GRAPHICS_ADAM_BOLT  2
-#define GRAPHICS_HENGBAND   3
-// clang-format on
+enum : byte {
+    GRAPHICS_NONE = 0,
+    GRAPHICS_ORIGINAL = 1,
+    GRAPHICS_ADAM_BOLT = 2,
+    GRAPHICS_HENGBAND = 3,
+};
 
 #ifdef USE_X11
 #ifndef __MAKEDEPEND__
