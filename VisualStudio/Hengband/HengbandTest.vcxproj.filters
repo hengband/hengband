@@ -64,6 +64,12 @@
     <Filter Include="object-enchant">
       <UniqueIdentifier>{2ef0e4b3-9f0f-429d-acaa-d7d386513869}</UniqueIdentifier>
     </Filter>
+    <Filter Include="object-use">
+      <UniqueIdentifier>{f8eb8b7c-bedc-53de-96f0-a05d509ce3f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="object-use\quaff">
+      <UniqueIdentifier>{636f36b1-bb9e-5173-a778-f076e936ba94}</UniqueIdentifier>
+    </Filter>
     <Filter Include="player">
       <UniqueIdentifier>{9d3e0b2a-7c41-4f58-b6ad-2e1c5f80a4d7}</UniqueIdentifier>
     </Filter>
@@ -267,6 +273,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\test\object-enchant\test-object-ego.cpp">
       <Filter>object-enchant</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\object-use\quaff\test-quaff-execution.cpp">
+      <Filter>object-use\quaff</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\test\object\test-object-info.cpp">
       <Filter>object</Filter>

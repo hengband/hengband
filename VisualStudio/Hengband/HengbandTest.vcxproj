@@ -111,6 +111,7 @@
     <ClCompile Include="..\..\src\test\object-activation\test-activation-util.cpp" />
     <ClCompile Include="..\..\src\test\object-enchant\test-item-feeling.cpp" />
     <ClCompile Include="..\..\src\test\object-enchant\test-object-ego.cpp" />
+    <ClCompile Include="..\..\src\test\object-use\quaff\test-quaff-execution.cpp" />
     <ClCompile Include="..\..\src\test\object\test-object-info.cpp" />
     <ClCompile Include="..\..\src\test\object\test-object-value.cpp" />
     <ClCompile Include="..\..\src\test\player\test-player-skill.cpp" />
