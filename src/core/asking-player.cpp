@@ -355,13 +355,14 @@ tl::optional<char> input_command_with_context(InputContext input_context)
  * @brief 入力待ちの文脈を公開して、キーを1つ待つ
  * @param kind 入力の種類
  * @param prompt 公開するプロンプト (表示は呼び出し元が行う)
+ * @param do_all_term_refresh true なら inkey() と同じく、待つ前に全ての端末を描き直す
  * @return 入力したキー
- * @details 独自に表示した選択肢や確認に答えるキーを、1つずつ読む処理に使う。
+ * @details 独自に表示した選択肢や確認に答えるキーや、何かキーを押す待ちのキーを読む処理に使う。
  */
-char input_key_with_context(InputKind kind, std::string_view prompt)
+char input_key_with_context(InputKind kind, std::string_view prompt, bool do_all_term_refresh)
 {
     const InputContextScope input_context(kind, prompt);
-    return inkey();
+    return inkey(do_all_term_refresh);
 }
 
 /*
@@ -425,9 +426,10 @@ int input_quantity(int max, std::string_view initial_prompt)
 void pause_line(int row)
 {
     prt("", row, 0);
-    put_str(_("[ 何かキーを押して下さい ]", "[Press any key to continue]"), row, _(26, 23));
+    constexpr auto prompt = _("[ 何かキーを押して下さい ]", "[Press any key to continue]");
+    put_str(prompt, row, _(26, 23));
 
-    (void)inkey();
+    (void)input_key_with_context(InputKind::ANY_KEY, prompt);
     prt("", row, 0);
 }
 

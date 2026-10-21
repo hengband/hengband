@@ -9,6 +9,7 @@
 #include "core/asking-player.h"
 #include "core/visuals-reseter.h"
 #include "io/files-util.h"
+#include "io/input-context.h"
 #include "io/input-key-acceptor.h"
 #include "system/angband-exceptions.h"
 #include "system/player-type-definition.h"
@@ -459,8 +460,9 @@ void do_cmd_load_screen(void)
     draw_colored_characters(fff, wid, hgt, okay);
 
     angband_fclose(fff);
-    prt(_("ファイルに書き出された画面(記念撮影)をロードしました。", "Screen dump loaded."), 0, 0);
+    constexpr auto prompt = _("ファイルに書き出された画面(記念撮影)をロードしました。", "Screen dump loaded.");
+    prt(prompt, 0, 0);
     flush();
-    inkey();
+    (void)input_key_with_context(InputKind::ANY_KEY, prompt);
     screen_load();
 }

@@ -14,7 +14,7 @@
 #include "floor/floor-save.h"
 #include "game-option/cheat-options.h"
 #include "io/files-util.h"
-#include "io/input-key-acceptor.h"
+#include "io/input-context.h"
 #include "io/signal-handlers.h"
 #include "io/uid-checker.h"
 #include "io/write-diary.h"
@@ -74,9 +74,10 @@ static bool check_death(PlayerType *player_ptr)
     }
 
     do_cmd_save_game(player_ptr, false);
-    prt(_("リターンキーか ESC キーを押して下さい。", "Press Return (or Escape)."), 0, 40);
+    constexpr auto prompt = _("リターンキーか ESC キーを押して下さい。", "Press Return (or Escape).");
+    prt(prompt, 0, 40);
     play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_EXIT);
-    if (inkey() != ESCAPE) {
+    if (input_key_with_context(InputKind::ANY_KEY, prompt) != ESCAPE) {
         predict_score(player_ptr);
     }
 

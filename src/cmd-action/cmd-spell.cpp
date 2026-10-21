@@ -21,6 +21,7 @@
 #include "grid/grid.h"
 #include "inventory/inventory-slot-types.h"
 #include "io/command-repeater.h"
+#include "io/input-context.h"
 #include "io/input-key-acceptor.h"
 #include "io/input-key-requester.h"
 #include "io/write-diary.h"
@@ -646,12 +647,13 @@ void do_cmd_browse(PlayerType *player_ptr)
             print_spells(player_ptr, 0, spells.data(), spells.size(), 1, 15, use_realm, true);
 
             /* Notify that there's nothing to see, and wait. */
+            std::string_view prompt = _("読める呪文がない。", "No spells to browse.");
             if (use_realm == RealmType::HISSATSU) {
-                prt(_("読める技がない。", "No techniques to browse."), 0, 0);
-            } else {
-                prt(_("読める呪文がない。", "No spells to browse."), 0, 0);
+                prompt = _("読める技がない。", "No techniques to browse.");
             }
-            (void)inkey();
+
+            prt(prompt, 0, 0);
+            (void)input_key_with_context(InputKind::ANY_KEY, prompt);
 
             screen_load();
 

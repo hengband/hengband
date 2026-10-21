@@ -13,7 +13,7 @@
 #include "game-option/game-play-options.h"
 #include "inventory/inventory-slot-types.h"
 #include "io/files-util.h"
-#include "io/input-key-acceptor.h"
+#include "io/input-context.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
 #include "perception/object-perception.h"
@@ -281,8 +281,9 @@ static bool show_dead_player_items(PlayerType *player_ptr)
     if (player_ptr->equip_cnt) {
         term_clear();
         (void)show_equipment(player_ptr, 0, USE_FULL, AllMatchItemTester());
-        prt(_("装備していたアイテム: -続く-", "You are using: -more-"), 0, 0);
-        if (inkey() == ESCAPE) {
+        constexpr auto prompt = _("装備していたアイテム: -続く-", "You are using: -more-");
+        prt(prompt, 0, 0);
+        if (input_key_with_context(InputKind::ANY_KEY, prompt) == ESCAPE) {
             return true;
         }
     }
@@ -290,9 +291,10 @@ static bool show_dead_player_items(PlayerType *player_ptr)
     if (player_ptr->inven_cnt) {
         term_clear();
         (void)show_inventory(player_ptr, 0, USE_FULL, AllMatchItemTester());
-        prt(_("持っていたアイテム: -続く-", "You are carrying: -more-"), 0, 0);
+        constexpr auto prompt = _("持っていたアイテム: -続く-", "You are carrying: -more-");
+        prt(prompt, 0, 0);
 
-        if (inkey() == ESCAPE) {
+        if (input_key_with_context(InputKind::ANY_KEY, prompt) == ESCAPE) {
             return true;
         }
     }
@@ -322,8 +324,9 @@ static void show_dead_home_items(PlayerType *player_ptr)
                 c_put_str(tval_to_attr[enum2i(item.bi_key.tval())], item_name, j + 2, 7);
             }
 
-            prt(fmt::format(_("我が家に置いてあったアイテム ( {} ページ): -続く-", "Your home contains (page {}): -more-"), k + 1), 0, 0);
-            if (inkey() == ESCAPE) {
+            const auto prompt = fmt::format(_("我が家に置いてあったアイテム ( {} ページ): -続く-", "Your home contains (page {}): -more-"), k + 1);
+            prt(prompt, 0, 0);
+            if (input_key_with_context(InputKind::ANY_KEY, prompt) == ESCAPE) {
                 return;
             }
         }
@@ -389,8 +392,9 @@ void show_death_info(PlayerType *player_ptr)
 
     export_player_info(player_ptr);
     (void)display_player(player_ptr, 0);
-    prt(_("何かキーを押すとさらに情報が続きます (ESCで中断): ", "Hit any key to see more information (ESC to abort): "), 23, 0);
-    if (inkey() == ESCAPE) {
+    constexpr auto prompt = _("何かキーを押すとさらに情報が続きます (ESCで中断): ", "Hit any key to see more information (ESC to abort): ");
+    prt(prompt, 23, 0);
+    if (input_key_with_context(InputKind::ANY_KEY, prompt) == ESCAPE) {
         return;
     }
     if (show_dead_player_items(player_ptr)) {

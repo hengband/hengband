@@ -1,6 +1,7 @@
 #include "view/display-self-info.h"
 #include "avatar/avatar.h"
-#include "io/input-key-acceptor.h"
+#include "core/asking-player.h"
+#include "io/input-context.h"
 #include "player-info/alignment.h"
 #include "player-info/race-info.h"
 #include "player-info/self-info-util.h"
@@ -121,14 +122,16 @@ void display_self_info(self_info_type *self_ptr)
             continue;
         }
 
-        prt(_("-- 続く --", "-- more --"), k, 15);
-        inkey();
+        constexpr auto more_prompt = _("-- 続く --", "-- more --");
+        prt(more_prompt, k, 15);
+        (void)input_key_with_context(InputKind::ANY_KEY, more_prompt);
         for (; k > 2; k--) {
             prt("", k, 15);
         }
     }
 
-    prt(_("[何かキーを押すとゲームに戻ります]", "[Press any key to continue]"), k, 13);
-    inkey();
+    constexpr auto prompt = _("[何かキーを押すとゲームに戻ります]", "[Press any key to continue]");
+    prt(prompt, k, 13);
+    (void)input_key_with_context(InputKind::ANY_KEY, prompt);
     screen_load();
 }
