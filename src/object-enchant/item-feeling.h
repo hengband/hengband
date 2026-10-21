@@ -32,6 +32,33 @@ constexpr bool is_cursed_feeling(int feel)
 }
 
 /*!
+ * @brief 新しい感触が今の感触より詳しいか
+ * @param feel 新しい感触
+ * @param current 今の感触
+ * @return 新しい感触のほうが詳しければ true
+ * @details 詳しさは、感触なし < 呪われていない (軽い擬似鑑定) < 呪われている・壊れている (呪いの有無だけ。
+ * 軽い擬似鑑定や呪い感知でも付く) < それ以外 (重い擬似鑑定でだけ付く) の順。
+ * 簡易鑑定済みの品を定期の擬似鑑定で感じ直すかを決めるためのもので、呪いが付いたときの置き換え (to_cursed_feeling()) とは別。
+ */
+constexpr bool is_more_detailed_feeling(int feel, int current)
+{
+    constexpr auto get_detail = [](int f) {
+        switch (f) {
+        case FEEL_NONE:
+            return 0;
+        case FEEL_UNCURSED:
+            return 1;
+        case FEEL_CURSED:
+        case FEEL_BROKEN:
+            return 2;
+        default:
+            return 3;
+        }
+    };
+    return get_detail(feel) > get_detail(current);
+}
+
+/*!
  * @brief 呪いが付いた品の感触を、前の感触から求める
  * @param feel 前の感触
  * @return 恐ろしい・特別製なら恐ろしい、無価値・高級品なら無価値、それ以外 (感触なしを含む) は呪われている
