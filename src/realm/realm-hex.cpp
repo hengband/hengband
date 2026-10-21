@@ -744,7 +744,10 @@ tl::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type sp
         }
     }
 
-    if (!info) {
+    // 維持している間 (continuation) は、維持している呪術の組が変わらないので能力を計算し直さない。
+    // 途中で自分で止まる呪術 (影のクローク・全復活) は、止める処理が要求する。
+    // 維持の効果で変わるもの (HP・能力値・経験値・我慢と復讐の表示など) は、変える処理がそれぞれ要求する
+    if (cast || stop) {
         SpellHex::request_casting_change_updates();
     }
 

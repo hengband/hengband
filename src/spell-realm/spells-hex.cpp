@@ -50,8 +50,8 @@ SpellHex::SpellHex(PlayerType *player_ptr)
 /*!
  * @brief 維持している呪術が変わったときの更新を予約する
  * @details 呪術の効果で変わる能力 (最大 HP・最大 MP・覚えられる呪文の数を含む) を計算し直し、
- * 拡張ステータスと HP・MP の表示を描き直す。呪術を唱えたとき (途中で取りやめたときを除く)・失敗したとき・止めたときに呼ばれる。
- * 維持している間も、do_hex_spell() の CONTNUATION を通るたびに呼ばれる。
+ * 拡張ステータスと HP・MP の表示を描き直す。呪術を唱えたとき (途中で取りやめたときを除く)・止めたとき・中断していた呪術を再開したときに呼ばれる。
+ * 維持している間の毎ターンの処理 (CONTNUATION) では、維持している呪術の組は変わらないので呼ばない。
  */
 void SpellHex::request_casting_change_updates()
 {
@@ -252,12 +252,8 @@ bool SpellHex::process_mana_cost(const bool need_restart)
     msg_print(_("詠唱を再開した。", "You restart casting."));
     this->player_ptr->action = ACTION_SPELL;
     dur.request_monster_update_and_map_redrawing();
-    dur.request_bonus_and_max_hp_recalculation();
-    static constexpr auto flags_mwrf = {
-        MainWindowRedrawingFlag::TIMED_EFFECT,
-        MainWindowRedrawingFlag::ACTION,
-    };
-    dur.set_flags(flags_mwrf);
+    // 中断していた呪術が戻り、維持している呪術の組が変わる (状態の表示と行動の表示は拡張ステータスに含まれる)
+    request_casting_change_updates();
     return true;
 }
 
