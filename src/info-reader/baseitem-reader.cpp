@@ -6,6 +6,7 @@
 
 #include "info-reader/baseitem-reader.h"
 #include "artifact/random-art-effects.h"
+#include "floor/floor-base-definitions.h"
 #include "info-reader/baseitem-tokens-table.h"
 #include "info-reader/info-reader-util.h"
 #include "info-reader/json-reader-util.h"
@@ -301,7 +302,8 @@ tl::expected<void, ParseErrorType> BaseitemReader::set_baseitem_allocations(Base
         }
 
         auto &table = baseitem.alloc_tables[i];
-        if (const auto result = info_set_integer(get_json_value(alloc, "depth"), table.level, true, Range(0, 128)); !result) {
+        // 出現階層は、生成の表を作るときに階層ごとの配列 (要素数 MAX_DEPTH) の添え字に使われる
+        if (const auto result = info_set_integer(get_json_value(alloc, "depth"), table.level, true, Range(0, MAX_DEPTH - 1)); !result) {
             return result;
         }
         if (const auto result = info_set_integer(get_json_value(alloc, "rarity"), table.chance, true, Range(0, 256)); !result) {

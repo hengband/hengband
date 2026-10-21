@@ -178,7 +178,7 @@
                                     "type": "integer",
                                     "description": "出現階層",
                                     "minimum": 0,
-                                    "maximum": 128
+                                    "maximum": 127
                                 },
                                 "rarity": {
                                     "type": "integer",

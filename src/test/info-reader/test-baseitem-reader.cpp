@@ -1,4 +1,5 @@
 #include "artifact/random-art-effects.h"
+#include "floor/floor-base-definitions.h"
 #include "info-reader/baseitem-reader.h"
 #include "info-reader/info-reader-util.h"
 #include "info-reader/parse-error-types.h"
@@ -417,4 +418,26 @@ TEST_CASE("BaseitemReader limits base dice to the save format range")
     data["base_dice"] = "255d255";
     REQUIRE(BaseitemReader(data).read().has_value());
     CHECK(BaseitemList::get_instance().get_baseitem(1).damage_dice == Dice(255, 255));
+}
+
+/*!
+ * @brief 出現階層は、生成の表で階層ごとの配列 (要素数 MAX_DEPTH) の添え字になるため、MAX_DEPTH - 1 までに限る
+ */
+TEST_CASE("BaseitemReader limits allocation depth to the generation table size")
+{
+    for (const auto depth : { MAX_DEPTH, -1 }) {
+        CAPTURE(depth);
+        BaseitemStateGuard guard;
+        auto data = make_baseitem();
+        data["allocations"] = { { { "depth", depth }, { "rarity", 1 } } };
+        CHECK(test::to_error_code(BaseitemReader(data).read()) == ParseErrorType::INVALID_FLAG);
+        CHECK(BaseitemList::get_instance().empty());
+    }
+    BaseitemStateGuard guard;
+    auto data = make_baseitem();
+    data["allocations"] = { { { "depth", MAX_DEPTH - 1 }, { "rarity", 1 } } };
+    REQUIRE(BaseitemReader(data).read().has_value());
+    const auto &table = BaseitemList::get_instance().get_baseitem(1).alloc_tables[0];
+    CHECK(table.level == MAX_DEPTH - 1);
+    CHECK(table.chance == 1);
 }

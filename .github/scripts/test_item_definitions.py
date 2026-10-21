@@ -110,6 +110,12 @@ class BaseitemDefinitionValidationTest(unittest.TestCase):
         self.check(self.changed(self.sample, ["allocations"], [allocation] * 5), False, ["baseitems", 0, "allocations"])
         self.check(self.changed(self.sample, ["allocations"], [1]), False, ["baseitems", 0, "allocations", 0])
 
+    def test_allocation_depth_fits_generation_table(self):
+        # 出現階層は生成の表で要素数 MAX_DEPTH の配列の添え字になるため、BaseitemReader は MAX_DEPTH - 1 まで受け付ける。
+        self.check(self.changed(self.sample, ["allocations"], [{"depth": 127, "rarity": 1}]), True)
+        self.check(self.changed(self.sample, ["allocations"], [{"depth": 128, "rarity": 1}]), False, ["baseitems", 0, "allocations", 0, "depth"])
+        self.check(self.changed(self.sample, ["allocations"], [{"depth": -1, "rarity": 1}]), False, ["baseitems", 0, "allocations", 0, "depth"])
+
     def test_reader_tokens_and_rarity_boundary_are_accepted(self):
         for flag in ("ACTIVATE", "IM_LITE"):
             with self.subTest(flag=flag):
