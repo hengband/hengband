@@ -37,7 +37,7 @@
 #include "view/display-util.h"
 #include <fmt/format.h>
 
-#define MAX_SNIPE_POWERS 16
+constexpr auto MAX_SNIPE_POWERS = 16;
 
 /*! スナイパー技能情報の構造体 */
 struct snipe_power {

@@ -11,7 +11,7 @@
 #include <vector>
 
 /** ClassMagicDefinitions.txtでMPの無い職業に設定される */
-#define SPELL_FIRST_NO_SPELL 99
+constexpr auto SPELL_FIRST_NO_SPELL = 99;
 
 /*
  * Information about the player's "magic"

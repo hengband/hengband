@@ -3,7 +3,7 @@
 #include <cstdint>
 #include <tl/optional.hpp>
 
-#define LOW_PRICE_THRESHOLD 10L
+constexpr auto LOW_PRICE_THRESHOLD = 10L;
 
 /*!
  * @brief 店舗での取引の向き (プレイヤーから見て)

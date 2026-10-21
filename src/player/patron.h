@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 
-#define MAX_PATRON 16 /*!< カオスパトロンの最大定義数 / The number of "patrons" available (for Chaos Warriors) */
+constexpr auto MAX_PATRON = 16; /*!< カオスパトロンの最大定義数 / The number of "patrons" available (for Chaos Warriors) */
 
 /* カオスパトロンからの報酬種別定義 / Chaos Warrior: Reward types: */
 enum patron_reward {

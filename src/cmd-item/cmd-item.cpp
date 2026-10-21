@@ -24,6 +24,7 @@
 #include "core/asking-player.h"
 #include "core/window-redrawer.h"
 #include "flavor/flavor-describer.h"
+#include "flavor/flavor-util.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/floor-object.h"
 #include "game-option/input-options.h"

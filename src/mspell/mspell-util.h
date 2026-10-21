@@ -5,8 +5,8 @@
 #include <string_view>
 
 /* Spell Type flag */
-#define MONSTER_TO_PLAYER 0x01
-#define MONSTER_TO_MONSTER 0x02
+constexpr auto MONSTER_TO_PLAYER = 0x01;
+constexpr auto MONSTER_TO_MONSTER = 0x02;
 
 class FloorType;
 class PlayerType;

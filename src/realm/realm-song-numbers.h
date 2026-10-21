@@ -27,4 +27,4 @@ enum realm_song_type : int {
     MUSIC_PSI = 23,
 };
 
-#define MUSIC_DETECT 101
+constexpr auto MUSIC_DETECT = 101;
