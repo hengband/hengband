@@ -24,7 +24,7 @@ MessageReader::MessageReader(const nlohmann::json &message_data)
  * @brief モンスターメッセージ情報(JSON Object)のパース関数
  * @return 成功時は空の値、失敗時は解析エラーコード
  */
-tl::expected<void, parse_error_type> MessageReader::read() const
+tl::expected<void, ParseErrorType> MessageReader::read() const
 {
     if (const auto result = this->set_mon_message(); !result) {
         msg_print(_("モンスターメッセージ読込失敗。", "Failed to load monster message."));
@@ -39,17 +39,17 @@ tl::expected<void, parse_error_type> MessageReader::read() const
  * @param id_list_data id群情報の格納されたJSON Object
  * @param id_list id群情報を保管するvector
  * @return 成功時は空の値、失敗時は解析エラーコード
- * @details モンスター種族の定義を読み込んだ後に呼ぶ。未定義の種族IDは PARSE_ERROR_INVALID_VALUE を返す。
+ * @details モンスター種族の定義を読み込んだ後に呼ぶ。未定義の種族IDは ParseErrorType::INVALID_VALUE を返す。
  */
-static tl::expected<void, parse_error_type> set_id_list(const nlohmann::json &id_list_data, std::vector<int> &id_list)
+static tl::expected<void, ParseErrorType> set_id_list(const nlohmann::json &id_list_data, std::vector<int> &id_list)
 {
     if (!id_list_data.is_array()) {
-        return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
     }
 
     for (const auto &id_data : id_list_data) {
         if (!id_data.is_number()) {
-            return tl::make_unexpected(PARSE_ERROR_INVALID_FLAG);
+            return tl::make_unexpected(ParseErrorType::INVALID_FLAG);
         }
         int id = 0;
         if (const auto result = info_set_integer(id_data, id, true, Range(1, 9999)); !result) {
@@ -58,7 +58,7 @@ static tl::expected<void, parse_error_type> set_id_list(const nlohmann::json &id
         // 未定義の種族IDに登録したメッセージは使われないため、定義の誤記として拒否する。
         const auto monrace_id = i2enum<MonraceId>(id);
         if (!MonraceList::is_valid(monrace_id) || !MonraceList::get_instance().contains(monrace_id)) {
-            return tl::make_unexpected(PARSE_ERROR_INVALID_VALUE);
+            return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
         }
         id_list.push_back(id);
     }
@@ -70,12 +70,12 @@ static tl::expected<void, parse_error_type> set_id_list(const nlohmann::json &id
  * @return 成功時は空の値、失敗時は解析エラーコード
  * @details 選択言語が無く他言語だけがある場合、先行分を公開して早期成功する既存動作を維持する。
  */
-tl::expected<void, parse_error_type> MessageReader::set_mon_message() const
+tl::expected<void, ParseErrorType> MessageReader::set_mon_message() const
 {
     const auto &group_data = this->message_data;
     const auto message_iter = group_data.find("message");
     if (message_iter == group_data.end() || !message_iter->is_array()) {
-        return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
     }
     const auto &message_array = message_iter.value();
     auto id_list = std::vector<int>();
@@ -108,29 +108,29 @@ tl::expected<void, parse_error_type> MessageReader::set_mon_message() const
     } else {
         const auto &name_obj = get_json_value(group_data, "name");
         if (!name_obj.is_string()) {
-            return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+            return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
         }
 
         const auto group_name = name_obj.get<std::string>();
         if (group_name != "DEFAULT") {
-            return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+            return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
         }
     }
 
     for (const auto &message : message_array) {
         const auto action_iter = message.find("action");
         if (action_iter == message.end() || !action_iter->is_string()) {
-            return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+            return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
         }
         const auto &action_data = action_iter.value();
         const auto action = r_info_message_flags.find(action_data.get<std::string>());
         if (action == r_info_message_flags.end()) {
-            return tl::make_unexpected(PARSE_ERROR_INVALID_FLAG);
+            return tl::make_unexpected(ParseErrorType::INVALID_FLAG);
         }
 
         const auto chance_iter = message.find("chance");
         if (chance_iter == message.end() || !chance_iter->is_number()) {
-            return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+            return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
         }
         const auto &chance_data = chance_iter.value();
         int chance = 0;
@@ -149,7 +149,7 @@ tl::expected<void, parse_error_type> MessageReader::set_mon_message() const
 
         const auto language_iter = message.find("message");
         if (language_iter == message.end() || !language_iter->is_object()) {
-            return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+            return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
         }
         const auto &language_list = language_iter.value();
 
@@ -158,7 +158,7 @@ tl::expected<void, parse_error_type> MessageReader::set_mon_message() const
 #ifdef JP
         if (ja_list == language_list.end()) {
             if (en_list == language_list.end()) {
-                return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+                return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
             }
             publish();
             return {};
@@ -167,7 +167,7 @@ tl::expected<void, parse_error_type> MessageReader::set_mon_message() const
 #else
         if (en_list == language_list.end()) {
             if (ja_list == language_list.end()) {
-                return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+                return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
             }
             publish();
             return {};
@@ -176,22 +176,22 @@ tl::expected<void, parse_error_type> MessageReader::set_mon_message() const
 #endif
 
         if (message_list.is_null()) {
-            return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+            return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
         }
         if (!message_list.is_array()) {
-            return tl::make_unexpected(PARSE_ERROR_INVALID_TYPE);
+            return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
         }
 
         for (const auto &message_str : message_list) {
             if (message_str.is_null()) {
-                return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+                return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
             }
             if (!message_str.is_string()) {
-                return tl::make_unexpected(PARSE_ERROR_INVALID_FLAG);
+                return tl::make_unexpected(ParseErrorType::INVALID_FLAG);
             }
             auto str_test = utf8_to_sys(message_str.get<std::string>());
             if (!str_test) {
-                return tl::make_unexpected(PARSE_ERROR_INVALID_FLAG);
+                return tl::make_unexpected(ParseErrorType::INVALID_FLAG);
             }
             pending_messages.push_back({ action->second, chance, use_name, std::move(*str_test) });
         }

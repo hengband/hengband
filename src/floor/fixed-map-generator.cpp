@@ -180,18 +180,18 @@ static void parse_qtw_D(PlayerType *player_ptr, qtwg_type *qtwg_ptr, std::string
 }
 
 /*! @brief 印字可能なASCII行を適用し、行カーソルを進める。不正な記号やNULがある行は変更せずエラーを返す。 */
-parse_error_type apply_fixed_map_row(PlayerType *player_ptr, qtwg_type *qtwg_ptr, std::string_view row)
+ParseErrorType apply_fixed_map_row(PlayerType *player_ptr, qtwg_type *qtwg_ptr, std::string_view row)
 {
     if (init_flags & INIT_ONLY_BUILDINGS) {
-        return PARSE_ERROR_NONE;
+        return ParseErrorType::NONE;
     }
 
     if (!std::all_of(row.begin(), row.end(), is_fixed_map_symbol)) {
-        return PARSE_ERROR_INVALID_VALUE;
+        return ParseErrorType::INVALID_VALUE;
     }
     parse_qtw_D(player_ptr, qtwg_ptr, row);
     (*qtwg_ptr->y)++;
-    return PARSE_ERROR_NONE;
+    return ParseErrorType::NONE;
 }
 
 static void apply_fixed_map_size(PlayerType *player_ptr, qtwg_type *qtwg_ptr)
@@ -259,7 +259,7 @@ static const QuestStartPosition *select_quest_start(const QuestFixedMap &fixed_m
     return fallback;
 }
 
-parse_error_type generate_quest_floor_from_json(PlayerType *player_ptr, QuestType &quest, const QuestFixedMap &fixed_map)
+ParseErrorType generate_quest_floor_from_json(PlayerType *player_ptr, QuestType &quest, const QuestFixedMap &fixed_map)
 {
     // 型付きレイアウトを直接渡す場合も、凡例やセルの書き込み前に記号を検証する。
     const auto &base_legend = QuestFixedMapList::get_instance().get_base_legend();
@@ -269,14 +269,14 @@ parse_error_type generate_quest_floor_from_json(PlayerType *player_ptr, QuestTyp
         });
     };
     if (!valid_legend(base_legend) || !valid_legend(fixed_map.legend)) {
-        return PARSE_ERROR_INVALID_VALUE;
+        return ParseErrorType::INVALID_VALUE;
     }
     const auto variant_count = fixed_map.maps.size();
     const auto variant_index = (variant_count <= 1) ? 0 : (AngbandSystem::get_instance().get_seed_town() % variant_count);
     if (fixed_map.has_map()) {
         for (const auto &row : fixed_map.maps[variant_index]) {
             if (!std::all_of(row.begin(), row.end(), is_fixed_map_symbol)) {
-                return PARSE_ERROR_INVALID_VALUE;
+                return ParseErrorType::INVALID_VALUE;
             }
         }
     }
@@ -300,7 +300,7 @@ parse_error_type generate_quest_floor_from_json(PlayerType *player_ptr, QuestTyp
     }
 
     if (!fixed_map.has_map()) {
-        return PARSE_ERROR_NONE;
+        return ParseErrorType::NONE;
     }
 
     // 3. マップバリアント選択: 旧 $RANDOMn は seed_town % n で決まる (乱数ではなくキャラ毎に固定)
@@ -321,5 +321,5 @@ parse_error_type generate_quest_floor_from_json(PlayerType *player_ptr, QuestTyp
         apply_fixed_map_start(player_ptr, &qg, start->y, start->x);
     }
 
-    return PARSE_ERROR_NONE;
+    return ParseErrorType::NONE;
 }

@@ -30,19 +30,19 @@ public:
     QuestReader &operator=(const QuestReader &) = delete;
     QuestReader &operator=(QuestReader &&) = delete;
 
-    tl::expected<void, parse_error_type> read() const;
+    tl::expected<void, ParseErrorType> read() const;
 
 private:
-    tl::expected<void, parse_error_type> set_name(std::string &name) const;
-    tl::expected<void, parse_error_type> set_definition(QuestFixedMap &parsed) const;
-    tl::expected<void, parse_error_type> set_descriptions(QuestFixedMap &parsed) const;
-    tl::expected<void, parse_error_type> set_legend(QuestFixedMap &parsed) const;
-    tl::expected<void, parse_error_type> set_maps(QuestFixedMap &parsed) const;
-    tl::expected<void, parse_error_type> set_starts(QuestFixedMap &parsed) const;
+    tl::expected<void, ParseErrorType> set_name(std::string &name) const;
+    tl::expected<void, ParseErrorType> set_definition(QuestFixedMap &parsed) const;
+    tl::expected<void, ParseErrorType> set_descriptions(QuestFixedMap &parsed) const;
+    tl::expected<void, ParseErrorType> set_legend(QuestFixedMap &parsed) const;
+    tl::expected<void, ParseErrorType> set_maps(QuestFixedMap &parsed) const;
+    tl::expected<void, ParseErrorType> set_starts(QuestFixedMap &parsed) const;
 
     const nlohmann::json &quest_data;
     QuestType &quest;
     QuestFixedMap &fixed_map;
 };
 
-tl::expected<void, parse_error_type> parse_quest_legend_cell(const nlohmann::json &cell_data, QuestLegendCell &out);
+tl::expected<void, ParseErrorType> parse_quest_legend_cell(const nlohmann::json &cell_data, QuestLegendCell &out);

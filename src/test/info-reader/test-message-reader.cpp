@@ -54,7 +54,7 @@ TEST_CASE("MessageReader preserves existing messages after a late parse error")
     messages.emplace_default(MonsterMessageType::SPEAK_ALL, 1, false, "default");
     const auto valid = make_message("SPEAK_ALL", nlohmann::json::array({ "new" }));
     auto invalid = make_message("SPEAK_BATTLE", nlohmann::json::array({ "staged", "valid" }));
-    int expected = PARSE_ERROR_INVALID_FLAG;
+    auto expected = ParseErrorType::INVALID_FLAG;
     SUBCASE("invalid second localized string")
     {
         invalid["message"]["ja"][1] = 7;
@@ -71,7 +71,7 @@ TEST_CASE("MessageReader preserves existing messages after a late parse error")
     SUBCASE("null later string")
     {
         invalid = make_message("SPEAK_BATTLE", nlohmann::json::array({ "staged", nullptr }));
-        expected = PARSE_ERROR_TOO_FEW_ARGUMENTS;
+        expected = ParseErrorType::TOO_FEW_ARGUMENTS;
     }
     nlohmann::json data = { { "id_list", { 4, 5 } }, { "message", { valid, invalid } } };
     CHECK(test::to_error_code(MessageReader(data).read()) == expected);
@@ -145,7 +145,7 @@ TEST_CASE("MessageReader rejects monster IDs without monster definitions")
     for (const auto undefined_id : { 6, 9999 }) {
         CAPTURE(undefined_id);
         const nlohmann::json data = { { "id_list", { 4, undefined_id } }, { "message", { message } } };
-        CHECK(test::to_error_code(MessageReader(data).read()) == PARSE_ERROR_INVALID_VALUE);
+        CHECK(test::to_error_code(MessageReader(data).read()) == ParseErrorType::INVALID_VALUE);
         CHECK(state.message_count(4, MonsterMessageType::SPEAK_ALL) == 0);
         CHECK(state.message_count(undefined_id, MonsterMessageType::SPEAK_ALL) == 0);
     }
@@ -169,11 +169,11 @@ TEST_CASE("MessageReader requires arrays for localized message lists")
     // JSON objects are iterable and their string values used to be accepted as messages.
     data["message"][0]["message"]["ja"] = { { "first", "hello" } };
     data["message"][0]["message"]["en"] = { { "first", "hello" } };
-    CHECK(test::to_error_code(MessageReader(data).read()) == PARSE_ERROR_INVALID_TYPE);
+    CHECK(test::to_error_code(MessageReader(data).read()) == ParseErrorType::INVALID_TYPE);
 
     data["message"][0]["message"]["ja"] = nullptr;
     data["message"][0]["message"]["en"] = nullptr;
-    CHECK(test::to_error_code(MessageReader(data).read()) == PARSE_ERROR_TOO_FEW_ARGUMENTS);
+    CHECK(test::to_error_code(MessageReader(data).read()) == ParseErrorType::TOO_FEW_ARGUMENTS);
 }
 
 /*!
@@ -190,20 +190,20 @@ TEST_CASE("MessageReader propagates ID helper errors without publishing messages
     messages.emplace_default(MonsterMessageType::SPEAK_ALL, 1, false, "default");
     struct InvalidIds {
         nlohmann::json value;
-        parse_error_type error;
+        ParseErrorType error;
     };
     const std::vector<InvalidIds> invalid_ids = {
-        { nullptr, PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { 1, PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { nlohmann::json::object(), PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { nlohmann::json::array({ nullptr }), PARSE_ERROR_INVALID_FLAG },
-        { nlohmann::json::array({ true }), PARSE_ERROR_INVALID_FLAG },
-        { nlohmann::json::array({ 4.0 }), PARSE_ERROR_INVALID_TYPE },
-        { nlohmann::json::array({ 0 }), PARSE_ERROR_INVALID_FLAG },
-        { nlohmann::json::array({ 10000 }), PARSE_ERROR_INVALID_FLAG },
-        { nlohmann::json::array({ std::numeric_limits<uint64_t>::max() }), PARSE_ERROR_INVALID_FLAG },
-        { nlohmann::json::array({ 4, 6 }), PARSE_ERROR_INVALID_VALUE },
-        { nlohmann::json::array({ 4, 5, 10000 }), PARSE_ERROR_INVALID_FLAG },
+        { nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { 1, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { nlohmann::json::object(), ParseErrorType::TOO_FEW_ARGUMENTS },
+        { nlohmann::json::array({ nullptr }), ParseErrorType::INVALID_FLAG },
+        { nlohmann::json::array({ true }), ParseErrorType::INVALID_FLAG },
+        { nlohmann::json::array({ 4.0 }), ParseErrorType::INVALID_TYPE },
+        { nlohmann::json::array({ 0 }), ParseErrorType::INVALID_FLAG },
+        { nlohmann::json::array({ 10000 }), ParseErrorType::INVALID_FLAG },
+        { nlohmann::json::array({ std::numeric_limits<uint64_t>::max() }), ParseErrorType::INVALID_FLAG },
+        { nlohmann::json::array({ 4, 6 }), ParseErrorType::INVALID_VALUE },
+        { nlohmann::json::array({ 4, 5, 10000 }), ParseErrorType::INVALID_FLAG },
     };
     for (const auto &invalid : invalid_ids) {
         CAPTURE(invalid.value.dump());
@@ -236,27 +236,27 @@ TEST_CASE("MessageReader propagates message helper errors and keeps validation o
     struct InvalidField {
         const char *path;
         nlohmann::json value;
-        parse_error_type error;
+        ParseErrorType error;
     };
     const std::vector<InvalidField> invalid_fields = {
-        { "/message", nullptr, PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "/message", nlohmann::json::object(), PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "/message/1", nullptr, PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "/message/1/action", nullptr, PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "/message/1/action", 1, PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "/message/1/action", "UNKNOWN", PARSE_ERROR_INVALID_FLAG },
-        { "/message/1/chance", nullptr, PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "/message/1/chance", true, PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "/message/1/chance", 0.5, PARSE_ERROR_INVALID_TYPE },
-        { "/message/1/chance", 0, PARSE_ERROR_INVALID_FLAG },
-        { "/message/1/chance", 101, PARSE_ERROR_INVALID_FLAG },
-        { "/message/1/message", nullptr, PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "/message/1/message", nlohmann::json::object(), PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "/message/1/message", { { "ja", "text" }, { "en", "text" } }, PARSE_ERROR_INVALID_TYPE },
-        { "/message/1/message", { { "ja", nlohmann::json::array({ nullptr }) }, { "en", nlohmann::json::array({ nullptr }) } }, PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "/message/1/message", { { "ja", nlohmann::json::array({ 7 }) }, { "en", nlohmann::json::array({ 7 }) } }, PARSE_ERROR_INVALID_FLAG },
+        { "/message", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/message", nlohmann::json::object(), ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/message/1", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/message/1/action", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/message/1/action", 1, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/message/1/action", "UNKNOWN", ParseErrorType::INVALID_FLAG },
+        { "/message/1/chance", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/message/1/chance", true, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/message/1/chance", 0.5, ParseErrorType::INVALID_TYPE },
+        { "/message/1/chance", 0, ParseErrorType::INVALID_FLAG },
+        { "/message/1/chance", 101, ParseErrorType::INVALID_FLAG },
+        { "/message/1/message", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/message/1/message", nlohmann::json::object(), ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/message/1/message", { { "ja", "text" }, { "en", "text" } }, ParseErrorType::INVALID_TYPE },
+        { "/message/1/message", { { "ja", nlohmann::json::array({ nullptr }) }, { "en", nlohmann::json::array({ nullptr }) } }, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/message/1/message", { { "ja", nlohmann::json::array({ 7 }) }, { "en", nlohmann::json::array({ 7 }) } }, ParseErrorType::INVALID_FLAG },
     };
-    const auto check_unchanged = [&](const nlohmann::json &data, parse_error_type expected) {
+    const auto check_unchanged = [&](const nlohmann::json &data, ParseErrorType expected) {
         CHECK(test::to_error_code(MessageReader(data).read()) == expected);
         CHECK(error_idx == 73);
         CHECK(state.message_count(4, MonsterMessageType::SPEAK_ALL) == 1);
@@ -283,14 +283,14 @@ TEST_CASE("MessageReader propagates message helper errors and keeps validation o
     auto data = original;
     data["message"][0]["action"] = "UNKNOWN";
     data["id_list"] = { 6 };
-    check_unchanged(data, PARSE_ERROR_INVALID_VALUE);
+    check_unchanged(data, ParseErrorType::INVALID_VALUE);
     data["message"] = nullptr;
-    check_unchanged(data, PARSE_ERROR_TOO_FEW_ARGUMENTS);
+    check_unchanged(data, ParseErrorType::TOO_FEW_ARGUMENTS);
     data = original;
     data.erase("id_list");
     data["name"] = "UNKNOWN";
     data["message"][0]["action"] = "UNKNOWN";
-    check_unchanged(data, PARSE_ERROR_TOO_FEW_ARGUMENTS);
+    check_unchanged(data, ParseErrorType::TOO_FEW_ARGUMENTS);
 
     data = original;
     data["id_list"] = nlohmann::json::array();

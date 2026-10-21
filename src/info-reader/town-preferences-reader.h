@@ -10,7 +10,7 @@
 struct QuestLegendCell;
 
 using TownPreferencesLegend = std::vector<std::pair<unsigned char, dungeon_grid>>;
-using TownPreferencesCellParser = tl::expected<void, parse_error_type> (*)(const nlohmann::json &, QuestLegendCell &);
+using TownPreferencesCellParser = tl::expected<void, ParseErrorType> (*)(const nlohmann::json &, QuestLegendCell &);
 
 /*!
  * @brief 町の共通凡例 JSONC を検証して読み込む。
@@ -26,7 +26,7 @@ public:
     TownPreferencesReader &operator=(TownPreferencesReader &&) = delete;
 
     /*! @brief 全件成功した場合に限り出力を置き換える。 */
-    tl::expected<void, parse_error_type> read(TownPreferencesLegend &legend, TownPreferencesCellParser parse_cell) const;
+    tl::expected<void, ParseErrorType> read(TownPreferencesLegend &legend, TownPreferencesCellParser parse_cell) const;
 
 private:
     const nlohmann::json &data;

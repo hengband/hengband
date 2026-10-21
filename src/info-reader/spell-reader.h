@@ -18,12 +18,12 @@ public:
     SpellReader &operator=(const SpellReader &) = delete;
     SpellReader &operator=(SpellReader &&) = delete;
 
-    tl::expected<void, parse_error_type> read() const;
+    tl::expected<void, ParseErrorType> read() const;
 
 private:
-    tl::expected<RealmType, parse_error_type> read_realm() const;
-    tl::expected<void, parse_error_type> set_spell_data(const nlohmann::json &spell_data, std::vector<SpellInfo> &spells) const;
-    tl::expected<void, parse_error_type> set_book_data(std::vector<SpellInfo> &spells) const;
+    tl::expected<RealmType, ParseErrorType> read_realm() const;
+    tl::expected<void, ParseErrorType> set_spell_data(const nlohmann::json &spell_data, std::vector<SpellInfo> &spells) const;
+    tl::expected<void, ParseErrorType> set_book_data(std::vector<SpellInfo> &spells) const;
 
     const nlohmann::json &realm_data;
     SpellInfoList &spell_info_list;

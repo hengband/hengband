@@ -84,10 +84,10 @@ MagicReader::MagicReader(const nlohmann::json &class_data)
  * @brief 職業魔法情報(ClassMagicDefinitions)のパース関数
  * @return 成功時は空の値、失敗時は解析エラーコード
  */
-tl::expected<void, parse_error_type> MagicReader::read() const
+tl::expected<void, ParseErrorType> MagicReader::read() const
 {
     if (!this->class_data.is_object()) {
-        return tl::make_unexpected(PARSE_ERROR_INVALID_TYPE);
+        return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
     }
 
     const auto class_id_result = this->read_class_id();
@@ -98,7 +98,7 @@ tl::expected<void, parse_error_type> MagicReader::read() const
 
     const auto class_id = *class_id_result;
     if (class_id < error_idx) {
-        return tl::make_unexpected(PARSE_ERROR_NON_SEQUENTIAL_RECORDS);
+        return tl::make_unexpected(ParseErrorType::NON_SEQUENTIAL_RECORDS);
     }
     error_idx = class_id;
     // レコード全体が有効と確定するまで、既存の職業定義を維持する。
@@ -145,16 +145,16 @@ tl::expected<void, parse_error_type> MagicReader::read() const
  * @brief JSON Objectから職業IDを取得する
  * @return 職業ID、失敗時はエラーコード
  */
-tl::expected<int, parse_error_type> MagicReader::read_class_id() const
+tl::expected<int, ParseErrorType> MagicReader::read_class_id() const
 {
     const auto &classname_obj = get_json_value(this->class_data, "name");
     if (!classname_obj.is_string()) {
-        return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
     }
 
     const auto player_class = class_list.find(classname_obj.get<std::string>());
     if (player_class == class_list.end()) {
-        return tl::make_unexpected(PARSE_ERROR_OUT_OF_BOUNDS);
+        return tl::make_unexpected(ParseErrorType::OUT_OF_BOUNDS);
     }
     return enum2i(player_class->second);
 }
@@ -164,16 +164,16 @@ tl::expected<int, parse_error_type> MagicReader::read_class_id() const
  * @param magics_info 保存先の魔法情報構造体
  * @return 成功時は空の値、失敗時はエラーコード
  */
-tl::expected<void, parse_error_type> MagicReader::set_spell_type(player_magic &magics_info) const
+tl::expected<void, ParseErrorType> MagicReader::set_spell_type(player_magic &magics_info) const
 {
     const auto &spell_book = get_json_value(this->class_data, "spell_type");
     if (!spell_book.is_string()) {
-        return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
     }
 
     const auto tval = spelltype_to_tval.find(spell_book.get<std::string>());
     if (tval == spelltype_to_tval.end()) {
-        return tl::make_unexpected(PARSE_ERROR_INVALID_FLAG);
+        return tl::make_unexpected(ParseErrorType::INVALID_FLAG);
     }
     magics_info.spell_book = tval->second;
     return {};
@@ -184,16 +184,16 @@ tl::expected<void, parse_error_type> MagicReader::set_spell_type(player_magic &m
  * @param magics_info 保存先の魔法情報構造体
  * @return 成功時は空の値、失敗時はエラーコード
  */
-tl::expected<void, parse_error_type> MagicReader::set_magic_status(player_magic &magics_info) const
+tl::expected<void, ParseErrorType> MagicReader::set_magic_status(player_magic &magics_info) const
 {
     const auto &magic_status = get_json_value(this->class_data, "magic_status");
     if (!magic_status.is_string()) {
-        return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
     }
 
     const auto status = name_to_stat.find(magic_status.get<std::string>());
     if (status == name_to_stat.end()) {
-        return tl::make_unexpected(PARSE_ERROR_INVALID_FLAG);
+        return tl::make_unexpected(ParseErrorType::INVALID_FLAG);
     }
     magics_info.spell_stat = status->second;
     return {};
@@ -206,15 +206,15 @@ tl::expected<void, parse_error_type> MagicReader::set_magic_status(player_magic 
  * @param realm 呪文の領域
  * @return 成功時は空の値、失敗時はエラーコード
  */
-tl::expected<void, parse_error_type> MagicReader::set_spell_data(const nlohmann::json &spell_data, player_magic &magics_info, RealmType realm) const
+tl::expected<void, ParseErrorType> MagicReader::set_spell_data(const nlohmann::json &spell_data, player_magic &magics_info, RealmType realm) const
 {
     const auto &spell_tag_obj = get_json_value(spell_data, "spell_tag");
     if (!spell_tag_obj.is_string()) {
-        return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
     }
     const auto spell_id = SpellInfoList::get_instance().get_spell_id(realm, spell_tag_obj.get<std::string>());
     if (!spell_id) {
-        return tl::make_unexpected(PARSE_ERROR_INVALID_FLAG);
+        return tl::make_unexpected(ParseErrorType::INVALID_FLAG);
     }
     auto &info = magics_info.info[enum2i(realm)][*spell_id];
 
@@ -243,34 +243,34 @@ tl::expected<void, parse_error_type> MagicReader::set_spell_data(const nlohmann:
  * @param magics_info 保存先の魔法情報構造体
  * @return 成功時は空の値、失敗時はエラーコード
  */
-tl::expected<void, parse_error_type> MagicReader::set_realm_data(player_magic &magics_info) const
+tl::expected<void, ParseErrorType> MagicReader::set_realm_data(player_magic &magics_info) const
 {
     const auto &realms_data = get_json_value(this->class_data, "realms");
     if (realms_data.is_null()) {
-        return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
     }
     if (!realms_data.is_array()) {
-        return tl::make_unexpected(PARSE_ERROR_INVALID_TYPE);
+        return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
     }
 
     for (const auto &realm : realms_data) {
         const auto &realm_name_obj = get_json_value(realm, "name");
         if (!realm_name_obj.is_string()) {
-            return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+            return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
         }
 
         const auto realm_name = realms_list.find(realm_name_obj.get<std::string>());
         if (realm_name == realms_list.end()) {
-            return tl::make_unexpected(PARSE_ERROR_INVALID_FLAG);
+            return tl::make_unexpected(ParseErrorType::INVALID_FLAG);
         }
 
         const auto realm_id = realm_name->second;
         const auto &spells_info_obj = get_json_value(realm, "spells_info");
         if (spells_info_obj.is_null()) {
-            return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+            return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
         }
         if (!spells_info_obj.is_array()) {
-            return tl::make_unexpected(PARSE_ERROR_INVALID_TYPE);
+            return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
         }
 
         for (const auto &spell : spells_info_obj) {

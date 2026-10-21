@@ -24,7 +24,7 @@ public:
     TownDefinitionListReader &operator=(const TownDefinitionListReader &) = delete;
     TownDefinitionListReader &operator=(TownDefinitionListReader &&) = delete;
 
-    tl::expected<void, parse_error_type> read(int town_index, TownMapMode mode, std::string &map_file) const;
+    tl::expected<void, ParseErrorType> read(int town_index, TownMapMode mode, std::string &map_file) const;
 
 private:
     const nlohmann::json &data;

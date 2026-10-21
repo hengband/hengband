@@ -51,17 +51,17 @@ TEST_CASE("BaseitemReader does not grow the list after a parse error")
     SUBCASE("early name error")
     {
         data["name"] = 42;
-        CHECK(test::to_error_code(BaseitemReader(data).read()) == PARSE_ERROR_INVALID_TYPE);
+        CHECK(test::to_error_code(BaseitemReader(data).read()) == ParseErrorType::INVALID_TYPE);
     }
     SUBCASE("late activation error")
     {
         data["activate"] = "UNKNOWN_ACTIVATION";
-        CHECK(test::to_error_code(BaseitemReader(data).read()) == PARSE_ERROR_INVALID_FLAG);
+        CHECK(test::to_error_code(BaseitemReader(data).read()) == ParseErrorType::INVALID_FLAG);
     }
     SUBCASE("late flag error after a valid flag")
     {
         data["flags"] = { "STR", "UNKNOWN_FLAG" };
-        CHECK(test::to_error_code(BaseitemReader(data).read()) == PARSE_ERROR_INVALID_FLAG);
+        CHECK(test::to_error_code(BaseitemReader(data).read()) == ParseErrorType::INVALID_FLAG);
     }
     CHECK(items.empty());
     CHECK(error_idx == 7);
@@ -84,25 +84,25 @@ TEST_CASE("BaseitemReader preserves helper error precedence without replacing ex
     const auto previous_ids = items.collect_valid_bi_ids();
     auto data = make_baseitem();
     data["name"] = { { "ja", "Changed" }, { "en", "Changed" } };
-    auto expected = PARSE_ERROR_INVALID_TYPE;
+    auto expected = ParseErrorType::INVALID_TYPE;
     SUBCASE("symbol before item kind")
     {
         data["symbol"]["character"] = "!!";
         data["itemkind"] = 42;
-        expected = PARSE_ERROR_INVALID_VALUE;
+        expected = ParseErrorType::INVALID_VALUE;
     }
     SUBCASE("item kind before parameter value")
     {
         data["itemkind"].erase("subtype_value");
         data["parameter_value"] = "bad";
-        expected = PARSE_ERROR_TOO_FEW_ARGUMENTS;
+        expected = ParseErrorType::TOO_FEW_ARGUMENTS;
     }
     SUBCASE("rod parameter value before level")
     {
         data["itemkind"]["type_value"] = static_cast<int>(ItemKindType::ROD);
         data["parameter_value"] = 0;
         data["level"] = "bad";
-        expected = PARSE_ERROR_INVALID_PVAL;
+        expected = ParseErrorType::INVALID_PVAL;
     }
     SUBCASE("allocation entries before activation")
     {
@@ -113,7 +113,7 @@ TEST_CASE("BaseitemReader preserves helper error precedence without replacing ex
     {
         data["activate"] = "UNKNOWN_ACTIVATION";
         data["flags"] = 42;
-        expected = PARSE_ERROR_INVALID_FLAG;
+        expected = ParseErrorType::INVALID_FLAG;
     }
     SUBCASE("invalid flag element after valid activation and flag")
     {
@@ -125,7 +125,7 @@ TEST_CASE("BaseitemReader preserves helper error precedence without replacing ex
         data["allocations"] = { { { "depth", 4 }, { "rarity", 5 } } };
         data["activate"] = "LIGHT";
         data["flags"] = { "STR", "DEX", "UNKNOWN_FLAG" };
-        expected = PARSE_ERROR_INVALID_FLAG;
+        expected = ParseErrorType::INVALID_FLAG;
     }
     error_idx = -1;
     CHECK(test::to_error_code(BaseitemReader(data).read()) == expected);
@@ -194,7 +194,7 @@ TEST_CASE("BaseitemReader publishes complete records and preserves omitted optio
     CHECK(updated.alloc_tables[0].level == 4);
     CHECK(updated.alloc_tables[0].chance == 5);
     CHECK(error_idx == 3);
-    CHECK(test::to_error_code(BaseitemReader(data).read()) == PARSE_ERROR_NON_SEQUENTIAL_RECORDS);
+    CHECK(test::to_error_code(BaseitemReader(data).read()) == ParseErrorType::NON_SEQUENTIAL_RECORDS);
 }
 
 TEST_CASE("BaseitemReader validates full-width integer IDs before narrowing or publishing")
@@ -224,7 +224,7 @@ TEST_CASE("BaseitemReader validates full-width integer IDs before narrowing or p
         data["cost"] = 91;
         error_idx = -1;
         const auto is_negative = !id.is_number_unsigned() && id.get<nlohmann::json::number_integer_t>() < 0;
-        const auto expected = is_negative ? PARSE_ERROR_NON_SEQUENTIAL_RECORDS : PARSE_ERROR_OUT_OF_BOUNDS;
+        const auto expected = is_negative ? ParseErrorType::NON_SEQUENTIAL_RECORDS : ParseErrorType::OUT_OF_BOUNDS;
         CHECK(test::to_error_code(BaseitemReader(data).read()) == expected);
         REQUIRE(items.size() == 2);
         CHECK(std::addressof(items.get_baseitem(1)) == existing);
@@ -242,14 +242,14 @@ TEST_CASE("BaseitemReader preserves missing and wrong-type ID errors without pub
         CAPTURE(id);
         auto data = make_baseitem();
         data["id"] = id;
-        const auto expected = id.is_null() ? PARSE_ERROR_TOO_FEW_ARGUMENTS : PARSE_ERROR_INVALID_TYPE;
+        const auto expected = id.is_null() ? ParseErrorType::TOO_FEW_ARGUMENTS : ParseErrorType::INVALID_TYPE;
         CHECK(test::to_error_code(BaseitemReader(data).read()) == expected);
         CHECK(items.empty());
         CHECK(error_idx == -1);
     }
     auto data = make_baseitem();
     data.erase("id");
-    CHECK(test::to_error_code(BaseitemReader(data).read()) == PARSE_ERROR_TOO_FEW_ARGUMENTS);
+    CHECK(test::to_error_code(BaseitemReader(data).read()) == ParseErrorType::TOO_FEW_ARGUMENTS);
     CHECK(items.empty());
     CHECK(error_idx == -1);
 }
@@ -284,7 +284,7 @@ TEST_CASE("BaseitemReader preserves the short ID upper bound independently of th
         data["id"] = id;
         // Prove the ID passed validation without allocating 32768 definitions.
         data["name"] = 42;
-        CHECK(test::to_error_code(BaseitemReader(data).read()) == PARSE_ERROR_INVALID_TYPE);
+        CHECK(test::to_error_code(BaseitemReader(data).read()) == ParseErrorType::INVALID_TYPE);
         CHECK(error_idx == id.get<int>());
         CHECK(BaseitemList::get_instance().empty());
     }
@@ -308,7 +308,7 @@ TEST_CASE("BaseitemReader preserves ordering precedence and rejects negative ind
 {
     BaseitemStateGuard guard;
     auto data = make_baseitem();
-    auto expected = PARSE_ERROR_NON_SEQUENTIAL_RECORDS;
+    auto expected = ParseErrorType::NON_SEQUENTIAL_RECORDS;
     auto previous = 1;
     SUBCASE("duplicate")
     {
@@ -327,7 +327,7 @@ TEST_CASE("BaseitemReader preserves ordering precedence and rejects negative ind
     {
         data["id"] = -1;
         previous = -100;
-        expected = PARSE_ERROR_OUT_OF_BOUNDS;
+        expected = ParseErrorType::OUT_OF_BOUNDS;
     }
     error_idx = previous;
     CHECK(test::to_error_code(BaseitemReader(data).read()) == expected);
@@ -378,7 +378,7 @@ TEST_CASE("BaseitemReader rejects duplicated kinds of valid baseitems")
     REQUIRE(read(make_baseitem(1)).has_value());
 
     auto duplicated = make_baseitem(2);
-    CHECK(test::to_error_code(read(duplicated)) == PARSE_ERROR_INVALID_VALUE);
+    CHECK(test::to_error_code(read(duplicated)) == ParseErrorType::INVALID_VALUE);
     CHECK(items.size() == 2);
 
     // 失敗した読み込みでも診断のための ID は進むため、同じ ID を読み直す前に戻す。
@@ -395,7 +395,7 @@ TEST_CASE("BaseitemReader rejects duplicated kinds of valid baseitems")
     auto other_type = make_baseitem(4);
     other_type["itemkind"]["type_value"] = 2;
     REQUIRE(read(other_type).has_value());
-    CHECK(test::to_error_code(read(make_baseitem(5))) == PARSE_ERROR_INVALID_VALUE);
+    CHECK(test::to_error_code(read(make_baseitem(5))) == ParseErrorType::INVALID_VALUE);
     CHECK(items.size() == 5);
 }
 
@@ -409,7 +409,7 @@ TEST_CASE("BaseitemReader limits base dice to the save format range")
         BaseitemStateGuard guard;
         auto data = make_baseitem();
         data["base_dice"] = dice;
-        CHECK(test::to_error_code(BaseitemReader(data).read()) == PARSE_ERROR_INVALID_FLAG);
+        CHECK(test::to_error_code(BaseitemReader(data).read()) == ParseErrorType::INVALID_FLAG);
         CHECK(BaseitemList::get_instance().empty());
     }
     BaseitemStateGuard guard;

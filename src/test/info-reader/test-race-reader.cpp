@@ -58,7 +58,7 @@ MonraceDefinition &test_monrace()
  * @details IDは1つのファイルの中で昇順・重複なしとするため、同じ定義を繰り返し読むテストでは
  * 読み込みのたびにファイルの読み直しと同じく error_idx を戻す。
  */
-tl::expected<void, parse_error_type> read_as_first_record(const nlohmann::json &data)
+tl::expected<void, ParseErrorType> read_as_first_record(const nlohmann::json &data)
 {
     error_idx = -1;
     return RaceReader(data).read();
@@ -88,7 +88,7 @@ TEST_CASE("RaceReader rejects out-of-range IDs before conversion or registration
              nlohmann::json(std::numeric_limits<int64_t>::min()), nlohmann::json(std::numeric_limits<uint64_t>::max()) }) {
         CAPTURE(id);
         data["id"] = id;
-        CHECK(test::to_error_code(read_as_first_record(data)) == PARSE_ERROR_INVALID_FLAG);
+        CHECK(test::to_error_code(read_as_first_record(data)) == ParseErrorType::INVALID_FLAG);
         CHECK(MonraceList::get_instance().empty());
         CHECK(error_idx == -1);
     }
@@ -99,10 +99,10 @@ TEST_CASE("RaceReader preserves ID type and missing-value errors")
     test::MonraceListTestAccess guard;
     auto data = make_monrace();
     data.erase("id");
-    CHECK(test::to_error_code(read_as_first_record(data)) == PARSE_ERROR_TOO_FEW_ARGUMENTS);
+    CHECK(test::to_error_code(read_as_first_record(data)) == ParseErrorType::TOO_FEW_ARGUMENTS);
     for (const auto &id : { nlohmann::json(), nlohmann::json(true), nlohmann::json("1"), nlohmann::json(1.0), nlohmann::json::array(), nlohmann::json::object() }) {
         data["id"] = id;
-        CHECK(test::to_error_code(read_as_first_record(data)) == PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        CHECK(test::to_error_code(read_as_first_record(data)) == ParseErrorType::TOO_FEW_ARGUMENTS);
         CHECK(MonraceList::get_instance().empty());
     }
 }
@@ -124,11 +124,11 @@ TEST_CASE("RaceReader rejects empty and multibyte symbol characters")
     test::MonraceListTestAccess guard;
     auto data = make_monrace();
     data["symbol"]["character"] = "";
-    CHECK(test::to_error_code(read_as_first_record(data)) == PARSE_ERROR_GENERIC);
+    CHECK(test::to_error_code(read_as_first_record(data)) == ParseErrorType::GENERIC);
     for (const auto *character : { "pp", "\xc3\xa9", "\xf0\x9f\x8c\xb2" }) {
         CAPTURE(character);
         data["symbol"]["character"] = character;
-        CHECK(test::to_error_code(read_as_first_record(data)) == PARSE_ERROR_INVALID_VALUE);
+        CHECK(test::to_error_code(read_as_first_record(data)) == ParseErrorType::INVALID_VALUE);
     }
 }
 
@@ -156,7 +156,7 @@ TEST_CASE("RaceReader rejects excess blows before accessing beyond their storage
         for (int i = 0; i < count; ++i) {
             data["blows"].push_back({ { "method", "HIT" }, { "effect", "HURT" }, { "damage_dice", "1d6" } });
         }
-        CHECK(test::to_error_code(read_as_first_record(data)) == PARSE_ERROR_GENERIC);
+        CHECK(test::to_error_code(read_as_first_record(data)) == ParseErrorType::GENERIC);
     }
 }
 
@@ -180,12 +180,12 @@ TEST_CASE("RaceReader rejects invalid skill probability denominators without thr
     for (const auto *probability : { "1_IN_0", "1_IN_101", "1_IN_255", "1_IN_256", "1_IN_-1", "1_IN_x", "1_IN_3x", "1_IN_99999999999999999999", "1_IN_01", "1_IN_+3", "1_IN_ 3", "1_IN_3 ", "1_IN_" }) {
         CAPTURE(probability);
         data["skill"]["probability"] = probability;
-        CHECK(test::to_error_code(read_as_first_record(data)) == PARSE_ERROR_INVALID_VALUE);
+        CHECK(test::to_error_code(read_as_first_record(data)) == ParseErrorType::INVALID_VALUE);
     }
     for (const auto *probability : { "", "bad", "1_IN", "2_IN_3", "1_OF_3", "1_IN_3_extra" }) {
         CAPTURE(probability);
         data["skill"]["probability"] = probability;
-        CHECK(test::to_error_code(read_as_first_record(data)) == PARSE_ERROR_GENERIC);
+        CHECK(test::to_error_code(read_as_first_record(data)) == ParseErrorType::GENERIC);
     }
 }
 
@@ -194,10 +194,10 @@ TEST_CASE("RaceReader reports missing and nonstring skill probabilities")
     test::MonraceListTestAccess guard;
     auto data = make_monrace();
     data["skill"].erase("probability");
-    CHECK(test::to_error_code(read_as_first_record(data)) == PARSE_ERROR_TOO_FEW_ARGUMENTS);
+    CHECK(test::to_error_code(read_as_first_record(data)) == ParseErrorType::TOO_FEW_ARGUMENTS);
     for (const auto &value : { nlohmann::json(), nlohmann::json(42), nlohmann::json(true), nlohmann::json::array(), nlohmann::json::object() }) {
         data["skill"]["probability"] = value;
-        CHECK(test::to_error_code(read_as_first_record(data)) == PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        CHECK(test::to_error_code(read_as_first_record(data)) == ParseErrorType::TOO_FEW_ARGUMENTS);
     }
 }
 
@@ -214,7 +214,7 @@ TEST_CASE("RaceReader reads shoot dice with and without a skill list")
     REQUIRE(read_as_first_record(data).has_value());
     CHECK(test_monrace().shoot_damage_dice == Dice(2, 6));
     data["skill"].erase("shoot");
-    CHECK(test::to_error_code(read_as_first_record(data)) == PARSE_ERROR_TOO_FEW_ARGUMENTS);
+    CHECK(test::to_error_code(read_as_first_record(data)) == ParseErrorType::TOO_FEW_ARGUMENTS);
 }
 
 TEST_CASE("RaceReader rejects nonstring shoot dice and skill list entries")
@@ -223,19 +223,19 @@ TEST_CASE("RaceReader rejects nonstring shoot dice and skill list entries")
     auto data = make_monrace();
     for (const auto &value : { nlohmann::json(42), nlohmann::json(true), nlohmann::json::array(), nlohmann::json::object() }) {
         data["skill"]["shoot"] = value;
-        CHECK(test::to_error_code(read_as_first_record(data)) == PARSE_ERROR_INVALID_TYPE);
+        CHECK(test::to_error_code(read_as_first_record(data)) == ParseErrorType::INVALID_TYPE);
     }
     data["skill"]["shoot"] = nullptr;
-    CHECK(test::to_error_code(read_as_first_record(data)) == PARSE_ERROR_TOO_FEW_ARGUMENTS);
+    CHECK(test::to_error_code(read_as_first_record(data)) == ParseErrorType::TOO_FEW_ARGUMENTS);
     data["skill"]["shoot"] = "bad";
-    CHECK(test::to_error_code(read_as_first_record(data)) == PARSE_ERROR_TOO_FEW_ARGUMENTS);
+    CHECK(test::to_error_code(read_as_first_record(data)) == ParseErrorType::TOO_FEW_ARGUMENTS);
     data["skill"].erase("shoot");
     for (const auto &value : { nlohmann::json(), nlohmann::json(42), nlohmann::json(true), nlohmann::json::array(), nlohmann::json::object() }) {
         data["skill"]["list"] = nlohmann::json::array({ "SHRIEK", value });
-        CHECK(test::to_error_code(read_as_first_record(data)) == PARSE_ERROR_INVALID_TYPE);
+        CHECK(test::to_error_code(read_as_first_record(data)) == ParseErrorType::INVALID_TYPE);
     }
     data["skill"]["list"] = { "UNKNOWN" };
-    CHECK(test::to_error_code(read_as_first_record(data)) == PARSE_ERROR_INVALID_FLAG);
+    CHECK(test::to_error_code(read_as_first_record(data)) == ParseErrorType::INVALID_FLAG);
 }
 
 TEST_CASE("RaceReader rejects nonstring message actions before message insertion")
@@ -243,15 +243,15 @@ TEST_CASE("RaceReader rejects nonstring message actions before message insertion
     test::MonraceListTestAccess guard;
     auto data = make_monrace();
     data["message"] = nlohmann::json::array({ { { "chance", 100 } } });
-    CHECK(test::to_error_code(read_as_first_record(data)) == PARSE_ERROR_TOO_FEW_ARGUMENTS);
+    CHECK(test::to_error_code(read_as_first_record(data)) == ParseErrorType::TOO_FEW_ARGUMENTS);
     data["message"][0]["action"] = nullptr;
-    CHECK(test::to_error_code(read_as_first_record(data)) == PARSE_ERROR_TOO_FEW_ARGUMENTS);
+    CHECK(test::to_error_code(read_as_first_record(data)) == ParseErrorType::TOO_FEW_ARGUMENTS);
     for (const auto &value : { nlohmann::json(42), nlohmann::json(true), nlohmann::json::array(), nlohmann::json::object() }) {
         data["message"][0]["action"] = value;
-        CHECK(test::to_error_code(read_as_first_record(data)) == PARSE_ERROR_INVALID_TYPE);
+        CHECK(test::to_error_code(read_as_first_record(data)) == ParseErrorType::INVALID_TYPE);
     }
     data["message"][0]["action"] = "UNKNOWN";
-    CHECK(test::to_error_code(read_as_first_record(data)) == PARSE_ERROR_INVALID_FLAG);
+    CHECK(test::to_error_code(read_as_first_record(data)) == ParseErrorType::INVALID_FLAG);
 }
 
 TEST_CASE("RaceReader preserves existing definition messages and record after helper failures")
@@ -278,14 +278,14 @@ TEST_CASE("RaceReader preserves existing definition messages and record after he
         { { "action", "SPEAK_ALL" }, { "chance", 1 }, { "use_name", false }, { "message", { { "ja", "new" }, { "en", "new" } } } },
         { { "action", "UNKNOWN" }, { "chance", 1 } },
     });
-    auto expected = PARSE_ERROR_INVALID_FLAG;
+    auto expected = ParseErrorType::INVALID_FLAG;
     SUBCASE("late message failure") {}
     SUBCASE("late message string failure")
     {
         data["message"][1] = data["message"][0];
         data["message"][1]["message"]["ja"] = 7;
         data["message"][1]["message"]["en"] = 7;
-        expected = PARSE_ERROR_INVALID_TYPE;
+        expected = ParseErrorType::INVALID_TYPE;
     }
     SUBCASE("late race failure")
     {
@@ -295,66 +295,66 @@ TEST_CASE("RaceReader preserves existing definition messages and record after he
     {
         data["name"] = 42;
         data["symbol"]["character"] = "pp";
-        expected = PARSE_ERROR_TOO_FEW_ARGUMENTS;
+        expected = ParseErrorType::TOO_FEW_ARGUMENTS;
     }
     SUBCASE("symbol before speed")
     {
         data["symbol"]["character"] = "pp";
         data["speed"] = 100;
-        expected = PARSE_ERROR_INVALID_VALUE;
+        expected = ParseErrorType::INVALID_VALUE;
     }
     SUBCASE("speed before hit dice")
     {
         data["speed"] = "bad";
         data["hit_point"] = "0d1";
-        expected = PARSE_ERROR_INVALID_TYPE;
+        expected = ParseErrorType::INVALID_TYPE;
     }
     SUBCASE("hit dice before vision")
     {
         data["hit_point"] = "1d32768";
         data["vision"] = "bad";
-        expected = PARSE_ERROR_OUT_OF_BOUNDS;
+        expected = ParseErrorType::OUT_OF_BOUNDS;
     }
     SUBCASE("evolution before sex")
     {
         data["evolve"] = { { "need_exp", "bad" }, { "to", 2 } };
         data["sex"] = "UNKNOWN";
-        expected = PARSE_ERROR_INVALID_TYPE;
+        expected = ParseErrorType::INVALID_TYPE;
     }
     SUBCASE("sex before artifact drops")
     {
         data["sex"] = 42;
         data["artifacts"] = nlohmann::json::array({ { { "drop_artifact_id", 0 }, { "drop_probability", 50 } } });
-        expected = PARSE_ERROR_TOO_FEW_ARGUMENTS;
+        expected = ParseErrorType::TOO_FEW_ARGUMENTS;
     }
     SUBCASE("artifact probability before escort dice")
     {
         data["artifacts"] = nlohmann::json::array({ { { "drop_artifact_id", 3 }, { "drop_probability", "bad" } } });
         data["escorts"][0]["escort_num"] = "1d32768";
-        expected = PARSE_ERROR_INVALID_TYPE;
+        expected = ParseErrorType::INVALID_TYPE;
     }
     SUBCASE("escort dice before blows")
     {
         data["escorts"][0]["escort_num"] = "01d2";
         data["blows"] = "bad";
-        expected = PARSE_ERROR_INVALID_VALUE;
+        expected = ParseErrorType::INVALID_VALUE;
     }
     SUBCASE("blow dice before flags")
     {
         data["blows"] = nlohmann::json::array({ { { "method", "HIT" }, { "effect", "HURT" }, { "damage_dice", "0d2" } } });
         data["flags"] = { "UNKNOWN" };
-        expected = PARSE_ERROR_OUT_OF_BOUNDS;
+        expected = ParseErrorType::OUT_OF_BOUNDS;
     }
     SUBCASE("shoot dice before final summons")
     {
         data["skill"]["shoot"] = "01d2";
         data["final_summon"] = "bad";
-        expected = PARSE_ERROR_INVALID_VALUE;
+        expected = ParseErrorType::INVALID_VALUE;
     }
     SUBCASE("final summon count relation before messages")
     {
         data["final_summon"] = nlohmann::json::array({ { { "id", 2 }, { "probability", 100 }, { "min_num", 2 }, { "max_num", 1 }, { "radius", 1 } } });
-        expected = PARSE_ERROR_INVALID_VALUE;
+        expected = ParseErrorType::INVALID_VALUE;
     }
     CHECK(test::to_error_code(read_as_first_record(data)) == expected);
     CHECK(list.get_monrace_shared(static_cast<MonraceId>(1)) == identity);
@@ -442,7 +442,7 @@ TEST_CASE("RaceReader does not publish a new ID or messages after a late failure
     {
         data["flags"] = { "RES_FIRE", "UNKNOWN" };
     }
-    CHECK(test::to_error_code(read_as_first_record(data)) == PARSE_ERROR_INVALID_FLAG);
+    CHECK(test::to_error_code(read_as_first_record(data)) == ParseErrorType::INVALID_FLAG);
     CHECK(MonraceList::get_instance().empty());
     CHECK(messages.message_count(2, MonsterMessageType::SPEAK_ALL) == 0);
     CHECK(messages.message_count(2, MonsterMessageType::SPEAK_BATTLE) == 0);
@@ -526,7 +526,7 @@ TEST_CASE("RaceReader rejects duplicate and descending IDs within a file")
         data["id"] = id;
         data["level"] = 20;
         data["flags"] = { "RES_FIRE" };
-        CHECK(test::to_error_code(RaceReader(data).read()) == PARSE_ERROR_NON_SEQUENTIAL_RECORDS);
+        CHECK(test::to_error_code(RaceReader(data).read()) == ParseErrorType::NON_SEQUENTIAL_RECORDS);
         CHECK(error_idx == 2);
     }
     auto &list = MonraceList::get_instance();
@@ -541,16 +541,16 @@ TEST_CASE("RaceReader validates level rarity and starting HP ranges")
 {
     test::MonraceListTestAccess races;
     auto data = make_monrace();
-    for (const auto &[field, value, expected] : std::initializer_list<std::tuple<const char *, int, int>>{
-             { "level", 0, PARSE_ERROR_NONE },
-             { "level", 127, PARSE_ERROR_NONE },
-             { "level", 128, PARSE_ERROR_INVALID_FLAG },
-             { "rarity", 1, PARSE_ERROR_NONE },
-             { "rarity", 255, PARSE_ERROR_NONE },
-             { "rarity", 0, PARSE_ERROR_INVALID_FLAG },
-             { "start_hp_percentage", 1, PARSE_ERROR_NONE },
-             { "start_hp_percentage", 99, PARSE_ERROR_NONE },
-             { "start_hp_percentage", 0, PARSE_ERROR_INVALID_FLAG },
+    for (const auto &[field, value, expected] : std::initializer_list<std::tuple<const char *, int, ParseErrorType>>{
+             { "level", 0, ParseErrorType::NONE },
+             { "level", 127, ParseErrorType::NONE },
+             { "level", 128, ParseErrorType::INVALID_FLAG },
+             { "rarity", 1, ParseErrorType::NONE },
+             { "rarity", 255, ParseErrorType::NONE },
+             { "rarity", 0, ParseErrorType::INVALID_FLAG },
+             { "start_hp_percentage", 1, ParseErrorType::NONE },
+             { "start_hp_percentage", 99, ParseErrorType::NONE },
+             { "start_hp_percentage", 0, ParseErrorType::INVALID_FLAG },
          }) {
         CAPTURE(field);
         CAPTURE(value);
@@ -586,13 +586,13 @@ TEST_CASE("RaceReader validates referenced ID ranges")
     }
     for (const auto id : { 0, 10000 }) {
         CAPTURE(id);
-        CHECK(test::to_error_code(read_as_first_record(with_evolve(id))) == PARSE_ERROR_INVALID_FLAG);
-        CHECK(test::to_error_code(read_as_first_record(with_escort(id))) == PARSE_ERROR_INVALID_FLAG);
+        CHECK(test::to_error_code(read_as_first_record(with_evolve(id))) == ParseErrorType::INVALID_FLAG);
+        CHECK(test::to_error_code(read_as_first_record(with_escort(id))) == ParseErrorType::INVALID_FLAG);
     }
     CHECK(read_as_first_record(with_artifact(999)).has_value());
     for (const auto id : { 0, 1000 }) {
         CAPTURE(id);
-        CHECK(test::to_error_code(read_as_first_record(with_artifact(id))) == PARSE_ERROR_INVALID_FLAG);
+        CHECK(test::to_error_code(read_as_first_record(with_artifact(id))) == ParseErrorType::INVALID_FLAG);
     }
 }
 
@@ -621,13 +621,13 @@ TEST_CASE("RaceReader limits every monster dice to positive values and a short m
         }
         for (const auto *dice : { "1d32768", "32768d1", "182d181", "0d5", "5d0", "-1d5", "1d-5", "2147483647d2147483647" }) {
             CAPTURE(dice);
-            CHECK(test::to_error_code(read_as_first_record(set_dice(kind, dice))) == PARSE_ERROR_OUT_OF_BOUNDS);
+            CHECK(test::to_error_code(read_as_first_record(set_dice(kind, dice))) == ParseErrorType::OUT_OF_BOUNDS);
         }
         for (const auto *dice : { "01d5", "1d05", "00001d1" }) {
             CAPTURE(dice);
-            CHECK(test::to_error_code(read_as_first_record(set_dice(kind, dice))) == PARSE_ERROR_INVALID_VALUE);
+            CHECK(test::to_error_code(read_as_first_record(set_dice(kind, dice))) == ParseErrorType::INVALID_VALUE);
         }
-        CHECK(test::to_error_code(read_as_first_record(set_dice(kind, "1d5\n"))) == PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        CHECK(test::to_error_code(read_as_first_record(set_dice(kind, "1d5\n"))) == ParseErrorType::TOO_FEW_ARGUMENTS);
     }
 }
 

@@ -75,7 +75,7 @@ concept HasShrinkToFit = requires(T t) {
  * @param validate_root 追加のルート検証（指定した定義形式だけに適用）
  */
 template <typename DefinitionList>
-void init_json(std::string_view filename, std::string_view keyname, DefinitionHashDataType dhdt, DefinitionList &definition_list, std::function<tl::expected<void, parse_error_type>(nlohmann::json &)> json_parser, std::function<void()> retouch = nullptr, bool allow_empty = true, std::function<tl::expected<void, parse_error_type>(const nlohmann::json &)> validate_root = nullptr)
+void init_json(std::string_view filename, std::string_view keyname, DefinitionHashDataType dhdt, DefinitionList &definition_list, std::function<tl::expected<void, ParseErrorType>(nlohmann::json &)> json_parser, std::function<void()> retouch = nullptr, bool allow_empty = true, std::function<tl::expected<void, ParseErrorType>(const nlohmann::json &)> validate_root = nullptr)
 {
     const auto path = path_build(ANGBAND_DIR_EDIT, filename);
     JsoncDocumentLoader loader(path);
@@ -86,7 +86,7 @@ void init_json(std::string_view filename, std::string_view keyname, DefinitionHa
     auto json_object = loader.parse();
 
     if (const auto result = info_validate_json_array(json_object, keyname, allow_empty); !result) {
-        if (result.error() == PARSE_ERROR_INVALID_VALUE) {
+        if (result.error() == ParseErrorType::INVALID_VALUE) {
             quit(fmt::format(_("{}: $.{}: 空配列は許可されません", "{}: $.{}: empty array is not allowed"), filename, keyname));
         }
         quit(fmt::format(_("{}: ルートオブジェクトに配列 '{}' が必要です", "{}: expected a root object containing array '{}'"), filename, keyname));
@@ -123,7 +123,7 @@ void init_json(std::string_view filename, std::string_view keyname, DefinitionHa
  * @details init_jsonのjson_parserに「JSON要素からReaderを構築してread()する」定型ラムダを与える処理を共通化したもの。
  */
 template <typename Reader, typename DefinitionList>
-void init_json_reader(std::string_view filename, std::string_view keyname, DefinitionHashDataType dhdt, DefinitionList &definition_list, std::function<void()> retouch = nullptr, bool allow_empty = true, std::function<tl::expected<void, parse_error_type>(const nlohmann::json &)> validate_root = nullptr)
+void init_json_reader(std::string_view filename, std::string_view keyname, DefinitionHashDataType dhdt, DefinitionList &definition_list, std::function<void()> retouch = nullptr, bool allow_empty = true, std::function<tl::expected<void, ParseErrorType>(const nlohmann::json &)> validate_root = nullptr)
 {
     auto parser = [](nlohmann::json &element) { return Reader(element).read(); };
     init_json(filename, keyname, dhdt, definition_list, parser, retouch, allow_empty, validate_root);

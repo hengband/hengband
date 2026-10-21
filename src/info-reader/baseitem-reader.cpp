@@ -36,30 +36,30 @@ BaseitemReader::BaseitemReader(const nlohmann::json &baseitem_data)
  * @note BaseitemReader が保持する baseitem_data を参照する
  * @return 成功時は空の値、失敗時は解析エラーコード
  */
-tl::expected<void, parse_error_type> BaseitemReader::read() const
+tl::expected<void, ParseErrorType> BaseitemReader::read() const
 {
     if (!this->baseitem_data.is_object()) {
-        return tl::make_unexpected(PARSE_ERROR_INVALID_TYPE);
+        return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
     }
 
     const auto &id_data = get_json_value(this->baseitem_data, "id");
     if (id_data.is_null()) {
         msg_print(_("ベースアイテムIDの読込失敗。", "Failed to load baseitem ID."));
-        return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
     }
     if (!id_data.is_number_integer()) {
         msg_print(_("ベースアイテムIDの読込失敗。", "Failed to load baseitem ID."));
-        return tl::make_unexpected(PARSE_ERROR_INVALID_TYPE);
+        return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
     }
 
-    const auto validate_id = [](const auto id) -> tl::expected<void, parse_error_type> {
+    const auto validate_id = [](const auto id) -> tl::expected<void, ParseErrorType> {
         if (std::cmp_less_equal(id, error_idx)) {
             msg_print(_("ベースアイテムIDが非連番です。ID: '{}'、直前ID: '{}'。", "Baseitem ID is not sequential. ID: '{}', previous ID: '{}'."), id, error_idx);
-            return tl::make_unexpected(PARSE_ERROR_NON_SEQUENTIAL_RECORDS);
+            return tl::make_unexpected(ParseErrorType::NON_SEQUENTIAL_RECORDS);
         }
         if (std::cmp_less(id, 0) || std::cmp_greater(id, std::numeric_limits<short>::max())) {
             msg_print(_("ベースアイテムIDが範囲外です。ID: '{}'。", "Baseitem ID is out of bounds. ID: '{}'."), id);
-            return tl::make_unexpected(PARSE_ERROR_OUT_OF_BOUNDS);
+            return tl::make_unexpected(ParseErrorType::OUT_OF_BOUNDS);
         }
         return {};
     };
@@ -153,7 +153,7 @@ tl::expected<void, parse_error_type> BaseitemReader::read() const
         if (duplicated != previous_end) {
             const auto duplicated_id = std::distance(baseitems.begin(), duplicated);
             msg_print(_("ベースアイテムの種別・副種別が重複している。ID: '{}'、重複先ID: '{}'。", "Duplicated kind of baseitem. ID: '{}', duplicated ID: '{}'."), error_idx, duplicated_id);
-            return tl::make_unexpected(PARSE_ERROR_INVALID_VALUE);
+            return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
         }
     }
 
@@ -190,36 +190,36 @@ bool BaseitemReader::grab_one_baseitem_flag(BaseitemDefinition &baseitem, std::s
  * @param baseitem 保管先のベースアイテム情報インスタンス
  * @return 成功、またはパースエラー
  */
-tl::expected<void, parse_error_type> BaseitemReader::set_baseitem_symbol(BaseitemDefinition &baseitem) const
+tl::expected<void, ParseErrorType> BaseitemReader::set_baseitem_symbol(BaseitemDefinition &baseitem) const
 {
     const auto &symbol_data = get_json_value(this->baseitem_data, "symbol");
     if (symbol_data.is_null()) {
-        return tl::unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        return tl::unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
     }
     if (!symbol_data.is_object()) {
-        return tl::unexpected(PARSE_ERROR_INVALID_TYPE);
+        return tl::unexpected(ParseErrorType::INVALID_TYPE);
     }
 
     const auto &character_obj = get_json_value(symbol_data, "character");
     if (!character_obj.is_string()) {
-        return tl::unexpected(character_obj.is_null() ? PARSE_ERROR_TOO_FEW_ARGUMENTS : PARSE_ERROR_INVALID_TYPE);
+        return tl::unexpected(character_obj.is_null() ? ParseErrorType::TOO_FEW_ARGUMENTS : ParseErrorType::INVALID_TYPE);
     }
     const auto &character = character_obj.get_ref<const std::string &>();
     if (character.size() != 1) {
-        return tl::unexpected(PARSE_ERROR_INVALID_VALUE);
+        return tl::unexpected(ParseErrorType::INVALID_VALUE);
     }
 
     const auto &color_obj = get_json_value(symbol_data, "color");
     if (!color_obj.is_string()) {
-        return tl::unexpected(color_obj.is_null() ? PARSE_ERROR_TOO_FEW_ARGUMENTS : PARSE_ERROR_INVALID_TYPE);
+        return tl::unexpected(color_obj.is_null() ? ParseErrorType::TOO_FEW_ARGUMENTS : ParseErrorType::INVALID_TYPE);
     }
 
     const auto color = color_list.find(color_obj.get<std::string>());
     if (color == color_list.end()) {
-        return tl::unexpected(PARSE_ERROR_INVALID_FLAG);
+        return tl::unexpected(ParseErrorType::INVALID_FLAG);
     }
     if (color->second > 127) {
-        return tl::unexpected(PARSE_ERROR_GENERIC);
+        return tl::unexpected(ParseErrorType::GENERIC);
     }
 
     baseitem.init_symbol(DisplaySymbol(color->second, character.front()));
@@ -232,14 +232,14 @@ tl::expected<void, parse_error_type> BaseitemReader::set_baseitem_symbol(Baseite
  * @param baseitem 保管先のベースアイテム情報インスタンス
  * @return 成功、またはパースエラー
  */
-tl::expected<void, parse_error_type> BaseitemReader::set_baseitem_kind(BaseitemDefinition &baseitem) const
+tl::expected<void, ParseErrorType> BaseitemReader::set_baseitem_kind(BaseitemDefinition &baseitem) const
 {
     const auto &itemkind_data = get_json_value(this->baseitem_data, "itemkind");
     if (itemkind_data.is_null()) {
-        return tl::unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        return tl::unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
     }
     if (!itemkind_data.is_object()) {
-        return tl::unexpected(PARSE_ERROR_INVALID_TYPE);
+        return tl::unexpected(ParseErrorType::INVALID_TYPE);
     }
 
     // 失敗時は直後に返るが、gcc の最適化で未初期化と誤検出されないよう初期化しておく。
@@ -262,14 +262,14 @@ tl::expected<void, parse_error_type> BaseitemReader::set_baseitem_kind(BaseitemD
  * @param baseitem 保管先のベースアイテム情報インスタンス
  * @return 成功、またはパースエラー
  */
-tl::expected<void, parse_error_type> BaseitemReader::set_baseitem_parameter_value(BaseitemDefinition &baseitem) const
+tl::expected<void, ParseErrorType> BaseitemReader::set_baseitem_parameter_value(BaseitemDefinition &baseitem) const
 {
     const auto &pval_data = get_json_value(this->baseitem_data, "parameter_value");
     if (const auto result = info_set_integer(pval_data, baseitem.pval, false, Range(-9999, 9999)); !result) {
         return result;
     }
     if ((baseitem.bi_key.tval() == ItemKindType::ROD) && (baseitem.pval <= 0)) {
-        return tl::unexpected(PARSE_ERROR_INVALID_PVAL);
+        return tl::unexpected(ParseErrorType::INVALID_PVAL);
     }
 
     return {};
@@ -281,23 +281,23 @@ tl::expected<void, parse_error_type> BaseitemReader::set_baseitem_parameter_valu
  * @param baseitem 保管先のベースアイテム情報インスタンス
  * @return 成功、またはパースエラー
  */
-tl::expected<void, parse_error_type> BaseitemReader::set_baseitem_allocations(BaseitemDefinition &baseitem) const
+tl::expected<void, ParseErrorType> BaseitemReader::set_baseitem_allocations(BaseitemDefinition &baseitem) const
 {
     const auto &allocations_data = get_json_value(this->baseitem_data, "allocations");
     if (allocations_data.is_null()) {
         return {};
     }
     if (!allocations_data.is_array()) {
-        return tl::unexpected(PARSE_ERROR_INVALID_TYPE);
+        return tl::unexpected(ParseErrorType::INVALID_TYPE);
     }
 
     for (auto i = 0U; const auto &alloc : allocations_data) {
         if (i >= baseitem.alloc_tables.size()) {
-            return tl::unexpected(PARSE_ERROR_OUT_OF_BOUNDS);
+            return tl::unexpected(ParseErrorType::OUT_OF_BOUNDS);
         }
 
         if (!alloc.is_object()) {
-            return tl::unexpected(PARSE_ERROR_INVALID_TYPE);
+            return tl::unexpected(ParseErrorType::INVALID_TYPE);
         }
 
         auto &table = baseitem.alloc_tables[i];
@@ -318,19 +318,19 @@ tl::expected<void, parse_error_type> BaseitemReader::set_baseitem_allocations(Ba
  * @param baseitem 保管先のベースアイテム情報インスタンス
  * @return 成功、またはパースエラー
  */
-tl::expected<void, parse_error_type> BaseitemReader::set_baseitem_activate(BaseitemDefinition &baseitem) const
+tl::expected<void, ParseErrorType> BaseitemReader::set_baseitem_activate(BaseitemDefinition &baseitem) const
 {
     const auto &act_data = get_json_value(this->baseitem_data, "activate");
     if (act_data.is_null()) {
         return {};
     }
     if (!act_data.is_string()) {
-        return tl::unexpected(PARSE_ERROR_INVALID_TYPE);
+        return tl::unexpected(ParseErrorType::INVALID_TYPE);
     }
 
     const auto activation = grab_one_activation_flag(act_data.get<std::string>());
     if (activation <= RandomArtActType::NONE) {
-        return tl::unexpected(PARSE_ERROR_INVALID_FLAG);
+        return tl::unexpected(ParseErrorType::INVALID_FLAG);
     }
 
     baseitem.act_idx = activation;
@@ -344,22 +344,22 @@ tl::expected<void, parse_error_type> BaseitemReader::set_baseitem_activate(Basei
  * @param baseitem 保管先のベースアイテム情報インスタンス
  * @return 成功、またはパースエラー
  */
-tl::expected<void, parse_error_type> BaseitemReader::set_baseitem_flags(BaseitemDefinition &baseitem) const
+tl::expected<void, ParseErrorType> BaseitemReader::set_baseitem_flags(BaseitemDefinition &baseitem) const
 {
     const auto &flag_data = get_json_value(this->baseitem_data, "flags");
     if (flag_data.is_null()) {
         return {};
     }
     if (!flag_data.is_array()) {
-        return tl::unexpected(PARSE_ERROR_INVALID_TYPE);
+        return tl::unexpected(ParseErrorType::INVALID_TYPE);
     }
 
     for (auto &flag : flag_data) {
         if (!flag.is_string()) {
-            return tl::unexpected(PARSE_ERROR_INVALID_TYPE);
+            return tl::unexpected(ParseErrorType::INVALID_TYPE);
         }
         if (!this->grab_one_baseitem_flag(baseitem, flag.get<std::string>())) {
-            return tl::unexpected(PARSE_ERROR_INVALID_FLAG);
+            return tl::unexpected(ParseErrorType::INVALID_FLAG);
         }
     }
     return {};

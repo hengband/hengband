@@ -15,11 +15,11 @@ class Dice;
 
 using Range = std::pair<int, int>;
 
-tl::expected<void, parse_error_type> info_set_string(const nlohmann::json &json, std::string &data, bool is_required);
-tl::expected<void, parse_error_type> info_set_dice(const nlohmann::json &json, Dice &dice, bool is_required, tl::optional<Range> range = tl::nullopt);
-tl::expected<void, parse_error_type> info_set_bool(const nlohmann::json &json, bool &bool_value, bool is_required);
+tl::expected<void, ParseErrorType> info_set_string(const nlohmann::json &json, std::string &data, bool is_required);
+tl::expected<void, ParseErrorType> info_set_dice(const nlohmann::json &json, Dice &dice, bool is_required, tl::optional<Range> range = tl::nullopt);
+tl::expected<void, ParseErrorType> info_set_bool(const nlohmann::json &json, bool &bool_value, bool is_required);
 const nlohmann::json &get_json_value(const nlohmann::json &json, std::string_view key);
-tl::expected<void, parse_error_type> info_validate_json_array(const nlohmann::json &root, std::string_view key, bool allow_empty = true);
+tl::expected<void, ParseErrorType> info_validate_json_array(const nlohmann::json &root, std::string_view key, bool allow_empty = true);
 
 /*!
  * @brief JSON Objectから整数値もしくはenum値を取得する
@@ -29,26 +29,26 @@ tl::expected<void, parse_error_type> info_validate_json_array(const nlohmann::js
  * @param json 整数値が格納されたJSON Object
  * @param data 値を格納する変数への参照
  * @param is_required 必須かどうか。
- * JSON値がnullの場合、必須ならPARSE_ERROR_TOO_FEW_ARGUMENTSを返し、任意なら何もせずに成功する。
- * null以外の非整数値は、必須かどうかによらずPARSE_ERROR_INVALID_TYPEを返す。
+ * JSON値がnullの場合、必須ならParseErrorType::TOO_FEW_ARGUMENTSを返し、任意なら何もせずに成功する。
+ * null以外の非整数値は、必須かどうかによらずParseErrorType::INVALID_TYPEを返す。
  * @param range 取得した値の範囲（両端を含む）を指定する。
- * 格納先の型へ変換する前に検証し、範囲外ならPARSE_ERROR_INVALID_FLAGを返す。
+ * 格納先の型へ変換する前に検証し、範囲外ならParseErrorType::INVALID_FLAGを返す。
  * range の指定にかかわらず格納先の型 (enum は基底型) の表現範囲も検証する。
  * エラーまたは任意のnullの場合、dataは変更しない。
- * @return 成功時は空の値、失敗時は解析エラーコード（PARSE_ERROR_TOO_FEW_ARGUMENTS、PARSE_ERROR_INVALID_TYPE、
- * PARSE_ERROR_INVALID_FLAGのいずれか。条件は上記のとおり）
+ * @return 成功時は空の値、失敗時は解析エラーコード（ParseErrorType::TOO_FEW_ARGUMENTS、ParseErrorType::INVALID_TYPE、
+ * ParseErrorType::INVALID_FLAGのいずれか。条件は上記のとおり）
  */
 template <IntegralOrEnum T>
-tl::expected<void, parse_error_type> info_set_integer(const nlohmann::json &json, T &data, bool is_required, tl::optional<Range> range = tl::nullopt)
+tl::expected<void, ParseErrorType> info_set_integer(const nlohmann::json &json, T &data, bool is_required, tl::optional<Range> range = tl::nullopt)
 {
     if (json.is_null()) {
         if (is_required) {
-            return tl::make_unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+            return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
         }
         return {};
     }
     if (!json.is_number_integer()) {
-        return tl::make_unexpected(PARSE_ERROR_INVALID_TYPE);
+        return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
     }
 
     // 範囲チェックは格納先の型へ変換する前に行う。変換してから比べると、
@@ -64,7 +64,7 @@ tl::expected<void, parse_error_type> info_set_integer(const nlohmann::json &json
     if (json.is_number_unsigned()) {
         const auto value = json.get<nlohmann::json::number_unsigned_t>();
         if (!fits_destination(value) || (range && (std::cmp_less(value, range->first) || std::cmp_greater(value, range->second)))) {
-            return tl::make_unexpected(PARSE_ERROR_INVALID_FLAG);
+            return tl::make_unexpected(ParseErrorType::INVALID_FLAG);
         }
 
         data = static_cast<T>(value);
@@ -73,7 +73,7 @@ tl::expected<void, parse_error_type> info_set_integer(const nlohmann::json &json
 
     const auto value = json.get<nlohmann::json::number_integer_t>();
     if (!fits_destination(value) || (range && (value < range->first || value > range->second))) {
-        return tl::make_unexpected(PARSE_ERROR_INVALID_FLAG);
+        return tl::make_unexpected(ParseErrorType::INVALID_FLAG);
     }
 
     data = static_cast<T>(value);

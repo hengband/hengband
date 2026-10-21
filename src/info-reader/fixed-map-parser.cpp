@@ -65,11 +65,11 @@ static concptr variant = "ZANGBAND";
  * @param rule 読込検証と条件評価を済ませた建物宣言
  * @return 成功時は空の値、失敗時は解析エラーコード。対象外言語の建物は、文字列を検証した後に
  * 何もせず成功とする。文字列変換の失敗、建物・行動番号の範囲外、会員配列の長さや
- * signed16格納値の不正はPARSE_ERROR_INVALID_VALUE。
+ * signed16格納値の不正はParseErrorType::INVALID_VALUE。
  * @details 言語判定より先に文字列変換を検証する。会員フラグは全件検証してから
  * 反映する。宣言順と条件評価は呼び出し側が管理する。
  */
-tl::expected<void, parse_error_type> apply_town_building_rule(const TownMapBuildingRule &rule)
+tl::expected<void, ParseErrorType> apply_town_building_rule(const TownMapBuildingRule &rule)
 {
     auto directive = rule.directive;
     const auto convert = [](std::string &text) {
@@ -98,7 +98,7 @@ tl::expected<void, parse_error_type> apply_town_building_rule(const TownMapBuild
     },
         directive);
     if (!converted) {
-        return tl::make_unexpected(PARSE_ERROR_INVALID_VALUE);
+        return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
     }
 #ifdef JP
     if (rule.english) {
@@ -108,10 +108,10 @@ tl::expected<void, parse_error_type> apply_town_building_rule(const TownMapBuild
         return {};
     }
     if (rule.index < 0 || rule.index >= MAX_BUILDINGS) {
-        return tl::make_unexpected(PARSE_ERROR_INVALID_VALUE);
+        return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
     }
     auto &building = buildings[rule.index];
-    return std::visit([&building](const auto &value) -> tl::expected<void, parse_error_type> {
+    return std::visit([&building](const auto &value) -> tl::expected<void, ParseErrorType> {
         using T = std::decay_t<decltype(value)>;
         if constexpr (std::is_same_v<T, TownMapBuildingNames>) {
             angband_strcpy(building.name, value.name, sizeof(building.name));
@@ -119,7 +119,7 @@ tl::expected<void, parse_error_type> apply_town_building_rule(const TownMapBuild
             angband_strcpy(building.owner_race, value.owner_race, sizeof(building.owner_race));
         } else if constexpr (std::is_same_v<T, TownMapBuildingAction>) {
             if (value.index < 0 || value.index >= 8 || !std::in_range<int16_t>(value.action) || !std::in_range<int16_t>(value.restriction)) {
-                return tl::make_unexpected(PARSE_ERROR_INVALID_VALUE);
+                return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
             }
             angband_strcpy(building.act_names[value.index], value.name, sizeof(building.act_names[value.index]));
             building.member_costs[value.index] = value.member_cost;
@@ -133,11 +133,11 @@ tl::expected<void, parse_error_type> apply_town_building_rule(const TownMapBuild
             const auto count = value.kind == TownMapBuildingMembershipKind::CLASS ? static_cast<size_t>(PLAYER_CLASS_TYPE_MAX) : (is_realm ? static_cast<size_t>(MAX_MAGIC) : static_cast<size_t>(MAX_RACES));
             const auto offset = is_realm ? 1U : 0U;
             if (value.values.empty() || value.values.size() > count || members.size() < count + offset) {
-                return tl::make_unexpected(PARSE_ERROR_INVALID_VALUE);
+                return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
             }
             // 最後の値が不正でも、先頭の会員フラグを部分的に書き換えない。
             if (!std::all_of(value.values.begin(), value.values.end(), [](int number) { return std::in_range<int16_t>(number); })) {
-                return tl::make_unexpected(PARSE_ERROR_INVALID_VALUE);
+                return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
             }
             for (size_t i = 0; i < count; ++i) {
                 members[i + offset] = i < value.values.size() ? static_cast<int16_t>(value.values[i]) : 1;
@@ -153,19 +153,19 @@ tl::expected<void, parse_error_type> apply_town_building_rule(const TownMapBuild
  * @param floor クエスト報酬を解決する生成対象フロア
  * @param feature 読込検証と条件評価を済ませた町凡例
  * @return 成功時は空の値、失敗時は解析エラーコード。建物専用モードでは何もせず成功とする。
- * 地形・トラップタグの解決失敗はPARSE_ERROR_UNDEFINED_TERRAIN_TAG。
- * 無効な記号、未定義のクエスト・報酬参照、報酬解決失敗はPARSE_ERROR_INVALID_VALUE。
+ * 地形・トラップタグの解決失敗はParseErrorType::UNDEFINED_TERRAIN_TAG。
+ * 無効な記号、未定義のクエスト・報酬参照、報酬解決失敗はParseErrorType::INVALID_VALUE。
  * @details 建物専用モードでは何もしない。地形や報酬の解決に失敗した場合は
  * この凡例の既存letter[]を保持する。宣言順と条件評価は呼び出し側が管理する。
  */
-tl::expected<void, parse_error_type> apply_town_map_feature(const FloorType &floor, const TownMapFeatureRule &feature)
+tl::expected<void, ParseErrorType> apply_town_map_feature(const FloorType &floor, const TownMapFeatureRule &feature)
 {
     if (init_flags & INIT_ONLY_BUILDINGS) {
         return {};
     }
 
     if (!is_fixed_map_symbol(static_cast<unsigned char>(feature.symbol))) {
-        return tl::make_unexpected(PARSE_ERROR_INVALID_VALUE);
+        return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
     }
 
     auto grid = feature.cell.grid;
@@ -184,19 +184,19 @@ tl::expected<void, parse_error_type> apply_town_map_feature(const FloorType &flo
             grid.trap = terrains.get_terrain_id(feature.trap);
         }
     } catch (const std::exception &) {
-        return tl::make_unexpected(PARSE_ERROR_UNDEFINED_TERRAIN_TAG);
+        return tl::make_unexpected(ParseErrorType::UNDEFINED_TERRAIN_TAG);
     }
 
     try {
         if (floor.is_in_quest() && (feature.cell.object_is_quest_reward || feature.cell.artifact_is_quest_reward)) {
             const auto &quests = QuestList::get_instance();
             if (!quests.contains(floor.quest_number)) {
-                return tl::make_unexpected(PARSE_ERROR_INVALID_VALUE);
+                return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
             }
             const auto &quest = quests.get_quest(floor.quest_number);
             const auto reward = quest.get_reward();
             if (reward && !ArtifactList::get_instance().contains(*reward)) {
-                return tl::make_unexpected(PARSE_ERROR_INVALID_VALUE);
+                return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
             }
             if (feature.cell.object_is_quest_reward && quest.has_reward() && !quest.is_reward_instant_artifact()) {
                 grid.object = quest.get_reward_bi_id();
@@ -207,13 +207,13 @@ tl::expected<void, parse_error_type> apply_town_map_feature(const FloorType &flo
         }
     } catch (const std::exception &) {
         // 報酬解決に失敗した場合は、地形テンプレートを変更せず解析エラーとして返す。
-        return tl::make_unexpected(PARSE_ERROR_INVALID_VALUE);
+        return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
     }
     fixed_map_letter_at(static_cast<unsigned char>(feature.symbol)) = grid;
     return {};
 }
 
-static tl::expected<void, parse_error_type> load_town_preferences()
+static tl::expected<void, ParseErrorType> load_town_preferences()
 {
     if (init_flags & INIT_ONLY_BUILDINGS) {
         return {};
@@ -221,7 +221,7 @@ static tl::expected<void, parse_error_type> load_town_preferences()
 
     JsoncDocumentLoader loader(path_build(ANGBAND_DIR_EDIT, TOWN_PREFERENCES));
     if (!loader.is_open()) {
-        return tl::make_unexpected(PARSE_ERROR_GENERIC);
+        return tl::make_unexpected(ParseErrorType::GENERIC);
     }
 
     try {
@@ -236,7 +236,7 @@ static tl::expected<void, parse_error_type> load_town_preferences()
         }
         return {};
     } catch (const nlohmann::json::exception &) {
-        return tl::make_unexpected(PARSE_ERROR_INVALID_VALUE);
+        return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
     }
 }
 
@@ -244,11 +244,11 @@ static tl::expected<void, parse_error_type> load_town_preferences()
  * @brief 町の定義の一覧から、現在の町のマップのファイル名を読む
  * @return マップのファイル名（一覧に現在の町が無ければ空文字列）、またはエラーコード
  */
-static tl::expected<std::string, parse_error_type> load_town_definition_file()
+static tl::expected<std::string, ParseErrorType> load_town_definition_file()
 {
     JsoncDocumentLoader loader(path_build(ANGBAND_DIR_EDIT, TOWN_DEFINITION_LIST));
     if (!loader.is_open()) {
-        return tl::make_unexpected(PARSE_ERROR_GENERIC);
+        return tl::make_unexpected(ParseErrorType::GENERIC);
     }
 
     try {
@@ -260,7 +260,7 @@ static tl::expected<std::string, parse_error_type> load_town_definition_file()
         }
         return map_file;
     } catch (const nlohmann::json::exception &) {
-        return tl::make_unexpected(PARSE_ERROR_INVALID_VALUE);
+        return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
     }
 }
 
@@ -370,14 +370,14 @@ std::string format_town_map_condition_error(std::string_view filename, std::stri
 
 /*! @brief 町の各規則の条件を評価し、不正な変数は位置を示して解析エラーにする。 */
 template <typename Rules, typename Apply>
-static tl::expected<void, parse_error_type> apply_town_rules(PlayerType *player_ptr, std::string_view filename, std::string_view array_name, const Rules &rules, Apply apply)
+static tl::expected<void, ParseErrorType> apply_town_rules(PlayerType *player_ptr, std::string_view filename, std::string_view array_name, const Rules &rules, Apply apply)
 {
     for (size_t i = 0; i < rules.size(); ++i) {
         const auto &rule = rules[i];
         const auto condition = is_town_map_condition_met(player_ptr, rule.condition);
         if (!condition) {
             msg_print(format_town_map_condition_error(filename, fmt::format("{}[{}].when", array_name, i), *rule.condition, condition.error().variable));
-            return tl::make_unexpected(PARSE_ERROR_INVALID_VALUE);
+            return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
         }
         if (!*condition) {
             continue;
@@ -389,11 +389,11 @@ static tl::expected<void, parse_error_type> apply_town_rules(PlayerType *player_
     return {};
 }
 
-static tl::expected<void, parse_error_type> parse_town_map_jsonc(PlayerType *player_ptr, std::string_view name)
+static tl::expected<void, ParseErrorType> parse_town_map_jsonc(PlayerType *player_ptr, std::string_view name)
 {
     JsoncDocumentLoader loader(path_build(ANGBAND_DIR_EDIT, name));
     if (!loader.is_open()) {
-        return tl::make_unexpected(PARSE_ERROR_GENERIC);
+        return tl::make_unexpected(ParseErrorType::GENERIC);
     }
     try {
         const auto data = loader.parse();
@@ -417,9 +417,9 @@ static tl::expected<void, parse_error_type> parse_town_map_jsonc(PlayerType *pla
             return {};
         }
         const TownMapVariant *selected_map = nullptr;
-        const auto select_map = [&selected_map](const auto &map) -> tl::expected<void, parse_error_type> {
+        const auto select_map = [&selected_map](const auto &map) -> tl::expected<void, ParseErrorType> {
             if (selected_map != nullptr) {
-                return tl::make_unexpected(PARSE_ERROR_INVALID_VALUE);
+                return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
             }
             selected_map = &map;
             return {};
@@ -429,21 +429,21 @@ static tl::expected<void, parse_error_type> parse_town_map_jsonc(PlayerType *pla
         }
         if (selected_map != nullptr) {
             for (const auto &row : selected_map->rows) {
-                if (const auto err = apply_fixed_map_row(player_ptr, qg_ptr, row); err != PARSE_ERROR_NONE) {
+                if (const auto err = apply_fixed_map_row(player_ptr, qg_ptr, row); err != ParseErrorType::NONE) {
                     return tl::make_unexpected(err);
                 }
             }
         }
-        const auto apply_start = [player_ptr, qg_ptr, selected_map](const auto &start) -> tl::expected<void, parse_error_type> {
+        const auto apply_start = [player_ptr, qg_ptr, selected_map](const auto &start) -> tl::expected<void, ParseErrorType> {
             if (selected_map == nullptr) {
-                return tl::make_unexpected(PARSE_ERROR_INVALID_VALUE);
+                return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
             }
             apply_fixed_map_start(player_ptr, qg_ptr, start.y, start.x);
             return {};
         };
         return apply_town_rules(player_ptr, name, "startingPositions", definition.starts, apply_start);
     } catch (const nlohmann::json::exception &) {
-        return tl::make_unexpected(PARSE_ERROR_INVALID_VALUE);
+        return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
     }
 }
 
@@ -452,9 +452,9 @@ static tl::expected<void, parse_error_type> parse_town_map_jsonc(PlayerType *pla
  * @param err エラーコード
  * @param filename 読み込んでいたファイルの名前
  */
-static void report_load_error(parse_error_type err, std::string_view filename)
+static void report_load_error(ParseErrorType err, std::string_view filename)
 {
-    const auto oops = ((err > 0) && (err < PARSE_ERROR_MAX)) ? err_str[err] : "unknown";
+    const auto oops = ((err > ParseErrorType::NONE) && (err < ParseErrorType::MAX)) ? err_str[enum2i(err)] : "unknown";
     msg_print("Error {} ({}) loading '{}'.", enum2i(err), oops, filename);
     msg_erase();
 }
@@ -464,7 +464,7 @@ static void report_load_error(parse_error_type err, std::string_view filename)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return 成功、またはエラーコード。失敗した場合はエラーを表示済み
  */
-static tl::expected<void, parse_error_type> generate_town_map(PlayerType *player_ptr)
+static tl::expected<void, ParseErrorType> generate_town_map(PlayerType *player_ptr)
 {
     if (const auto result = load_town_preferences(); !result) {
         report_load_error(result.error(), TOWN_PREFERENCES);

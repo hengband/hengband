@@ -137,7 +137,7 @@ TEST_CASE("TerrainReader leaves an existing terrain unchanged after a late parse
     data["map_priority"] = 19;
     data["generation"]["changes"] = { { { "terrain", "WALL" }, { "probability", 90 } } };
     data["interactions"] = { { "DESTROYED", 42 } };
-    CHECK(test::to_error_code(TerrainReader(data).read()) == PARSE_ERROR_TOO_FEW_ARGUMENTS);
+    CHECK(test::to_error_code(TerrainReader(data).read()) == ParseErrorType::TOO_FEW_ARGUMENTS);
 
     const auto &after = TerrainList::get_instance().get_terrain(0);
     CHECK(TerrainList::get_instance().size() == size_before);
@@ -178,12 +178,12 @@ TEST_CASE("TerrainReader rejects invalid symbol lengths without publishing a ter
     const auto size_before = terrains.size();
 
     std::string character = "..";
-    int expected = PARSE_ERROR_INVALID_VALUE;
+    auto expected = ParseErrorType::INVALID_VALUE;
     SUBCASE("multiple ASCII characters") {}
     SUBCASE("empty string keeps its existing error")
     {
         character.clear();
-        expected = PARSE_ERROR_GENERIC;
+        expected = ParseErrorType::GENERIC;
     }
     SUBCASE("two-byte UTF-8 character")
     {
@@ -218,7 +218,7 @@ TEST_CASE("TerrainReader does not grow the terrain list after a failed new entry
     const auto size_before = TerrainList::get_instance().size();
     data["id"] = size_before + 1;
     data["interactions"] = { { "DESTROYED", 42 } };
-    CHECK(test::to_error_code(TerrainReader(data).read()) == PARSE_ERROR_TOO_FEW_ARGUMENTS);
+    CHECK(test::to_error_code(TerrainReader(data).read()) == ParseErrorType::TOO_FEW_ARGUMENTS);
     CHECK(TerrainList::get_instance().size() == size_before);
 }
 
@@ -237,51 +237,51 @@ TEST_CASE("TerrainReader propagates helper errors without publishing staged terr
     struct InvalidField {
         const char *path;
         nlohmann::json value;
-        parse_error_type error;
+        ParseErrorType error;
     };
     const std::vector<InvalidField> invalid_fields = {
-        { "/symbol", nullptr, PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "/symbol/character", "", PARSE_ERROR_GENERIC },
-        { "/symbol/character", "..", PARSE_ERROR_INVALID_VALUE },
-        { "/symbol/color", "UNKNOWN", PARSE_ERROR_INVALID_FLAG },
-        { "/symbol/lit", 1, PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "/door", false, PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "/door", nlohmann::json::object(), PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "/door/power", false, PARSE_ERROR_INVALID_TYPE },
-        { "/door/power", 256, PARSE_ERROR_INVALID_FLAG },
-        { "/tunnel", false, PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "/tunnel/power", nullptr, PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "/tunnel/power", -1, PARSE_ERROR_INVALID_FLAG },
-        { "/trap", false, PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "/trap", { { "power", 1 } }, PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "/trap", { { "type", "PIT" } }, PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "/trap", { { "type", "UNKNOWN" }, { "power", 1 } }, PARSE_ERROR_INVALID_FLAG },
-        { "/pattern", false, PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "/pattern/type", 1, PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "/pattern/type", "UNKNOWN", PARSE_ERROR_INVALID_FLAG },
-        { "/store", false, PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "/store/type", 1, PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "/store/type", "UNKNOWN", PARSE_ERROR_INVALID_FLAG },
-        { "/building", false, PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "/building/type", 1, PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "/building/type", "UNKNOWN", PARSE_ERROR_INVALID_FLAG },
-        { "/convert", false, PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "/convert/type", 1, PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "/convert/type", "UNKNOWN", PARSE_ERROR_INVALID_FLAG },
-        { "/convert", { { "type", "STREAM" } }, PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "/convert", { { "type", "STREAM" }, { "stream_index", 255 } }, PARSE_ERROR_INVALID_FLAG },
-        { "/generation", false, PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "/generation/changes", nullptr, PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "/generation/changes/0", false, PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "/generation/changes/0/terrain", "", PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "/generation/changes/0/probability", false, PARSE_ERROR_INVALID_TYPE },
-        { "/generation/changes/0/probability", 0, PARSE_ERROR_INVALID_FLAG },
-        { "/generation/changes/1/probability", 100, PARSE_ERROR_INVALID_FLAG },
-        { "/interactions", false, PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "/interactions/DESTROYED", 1, PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "/interactions/OPEN", "", PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "/interactions/DROP_GOLD", "bad", PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "/interactions/UNKNOWN", "FLOOR", PARSE_ERROR_INVALID_FLAG },
+        { "/symbol", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/symbol/character", "", ParseErrorType::GENERIC },
+        { "/symbol/character", "..", ParseErrorType::INVALID_VALUE },
+        { "/symbol/color", "UNKNOWN", ParseErrorType::INVALID_FLAG },
+        { "/symbol/lit", 1, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/door", false, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/door", nlohmann::json::object(), ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/door/power", false, ParseErrorType::INVALID_TYPE },
+        { "/door/power", 256, ParseErrorType::INVALID_FLAG },
+        { "/tunnel", false, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/tunnel/power", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/tunnel/power", -1, ParseErrorType::INVALID_FLAG },
+        { "/trap", false, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/trap", { { "power", 1 } }, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/trap", { { "type", "PIT" } }, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/trap", { { "type", "UNKNOWN" }, { "power", 1 } }, ParseErrorType::INVALID_FLAG },
+        { "/pattern", false, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/pattern/type", 1, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/pattern/type", "UNKNOWN", ParseErrorType::INVALID_FLAG },
+        { "/store", false, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/store/type", 1, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/store/type", "UNKNOWN", ParseErrorType::INVALID_FLAG },
+        { "/building", false, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/building/type", 1, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/building/type", "UNKNOWN", ParseErrorType::INVALID_FLAG },
+        { "/convert", false, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/convert/type", 1, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/convert/type", "UNKNOWN", ParseErrorType::INVALID_FLAG },
+        { "/convert", { { "type", "STREAM" } }, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/convert", { { "type", "STREAM" }, { "stream_index", 255 } }, ParseErrorType::INVALID_FLAG },
+        { "/generation", false, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/generation/changes", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/generation/changes/0", false, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/generation/changes/0/terrain", "", ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/generation/changes/0/probability", false, ParseErrorType::INVALID_TYPE },
+        { "/generation/changes/0/probability", 0, ParseErrorType::INVALID_FLAG },
+        { "/generation/changes/1/probability", 100, ParseErrorType::INVALID_FLAG },
+        { "/interactions", false, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/interactions/DESTROYED", 1, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/interactions/OPEN", "", ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/interactions/DROP_GOLD", "bad", ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/interactions/UNKNOWN", "FLOOR", ParseErrorType::INVALID_FLAG },
     };
     for (const auto id : { 0, 3 }) {
         CAPTURE(id);
@@ -310,16 +310,16 @@ TEST_CASE("TerrainReader keeps helper validation order and error index timing")
     terrains.resize(0);
     auto data = make_terrain();
     data["id"] = 10000;
-    CHECK(test::to_error_code(TerrainReader(data).read()) == PARSE_ERROR_INVALID_FLAG);
+    CHECK(test::to_error_code(TerrainReader(data).read()) == ParseErrorType::INVALID_FLAG);
     CHECK(error_idx == 73);
     data["id"] = 0;
     data["key"] = "";
-    CHECK(test::to_error_code(TerrainReader(data).read()) == PARSE_ERROR_GENERIC);
+    CHECK(test::to_error_code(TerrainReader(data).read()) == ParseErrorType::GENERIC);
     CHECK(error_idx == 73);
     data = make_terrain();
     REQUIRE(TerrainReader(data).read().has_value());
     const auto before = terrains.get_terrain(0);
-    const auto check_invalid = [&](parse_error_type expected) {
+    const auto check_invalid = [&](ParseErrorType expected) {
         CHECK(test::to_error_code(TerrainReader(data).read()) == expected);
         CHECK(error_idx == 0);
         CHECK(terrains.size() == 1);
@@ -329,32 +329,32 @@ TEST_CASE("TerrainReader keeps helper validation order and error index timing")
     data["symbol"]["character"] = "";
     data["door"] = { { "power", 256 } };
     data["tunnel"] = nlohmann::json::object();
-    check_invalid(PARSE_ERROR_GENERIC);
+    check_invalid(ParseErrorType::GENERIC);
     data["symbol"]["character"] = ".";
-    check_invalid(PARSE_ERROR_INVALID_FLAG);
+    check_invalid(ParseErrorType::INVALID_FLAG);
     data["door"]["power"] = 0;
-    check_invalid(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+    check_invalid(ParseErrorType::TOO_FEW_ARGUMENTS);
     data["tunnel"]["power"] = 0;
     data["trap"] = { { "type", "UNKNOWN" }, { "power", 1 } };
     data["pattern"] = nlohmann::json::object();
-    check_invalid(PARSE_ERROR_INVALID_FLAG);
+    check_invalid(ParseErrorType::INVALID_FLAG);
     data["trap"]["type"] = "PIT";
-    check_invalid(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+    check_invalid(ParseErrorType::TOO_FEW_ARGUMENTS);
     data["pattern"]["type"] = "START";
     data["store"] = { { "type", "UNKNOWN" } };
     data["building"] = nlohmann::json::object();
-    check_invalid(PARSE_ERROR_INVALID_FLAG);
+    check_invalid(ParseErrorType::INVALID_FLAG);
     data["store"]["type"] = "GENERAL";
-    check_invalid(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+    check_invalid(ParseErrorType::TOO_FEW_ARGUMENTS);
     data["building"]["type"] = "BUILDING_00";
     data["convert"] = { { "type", "STREAM" } };
     data["generation"]["changes"][0]["probability"] = 101;
     data["interactions"] = { { "DESTROYED", 1 } };
-    check_invalid(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+    check_invalid(ParseErrorType::TOO_FEW_ARGUMENTS);
     data["convert"]["stream_index"] = 0;
-    check_invalid(PARSE_ERROR_INVALID_FLAG);
+    check_invalid(ParseErrorType::INVALID_FLAG);
     data["generation"]["changes"][0]["probability"] = 25;
-    check_invalid(PARSE_ERROR_TOO_FEW_ARGUMENTS);
+    check_invalid(ParseErrorType::TOO_FEW_ARGUMENTS);
 }
 
 /*!

@@ -11,28 +11,28 @@ TownPreferencesReader::TownPreferencesReader(const nlohmann::json &data)
 {
 }
 
-tl::expected<void, parse_error_type> TownPreferencesReader::read(TownPreferencesLegend &legend, TownPreferencesCellParser parse_cell) const
+tl::expected<void, ParseErrorType> TownPreferencesReader::read(TownPreferencesLegend &legend, TownPreferencesCellParser parse_cell) const
 {
     if (!this->data.is_object() || !this->data.contains("version") || !this->data["version"].is_number_integer() || this->data["version"] != 1 ||
         !this->data.contains("legend") || !this->data["legend"].is_object() || this->data["legend"].empty()) {
-        return tl::make_unexpected(PARSE_ERROR_INVALID_TYPE);
+        return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
     }
 
     TownPreferencesLegend parsed;
     for (const auto &[symbol, cell_data] : this->data["legend"].items()) {
         if (symbol.size() != 1 || symbol.front() < '!' || symbol.front() > '~' || !cell_data.is_object() ||
             !cell_data.contains("terrain") || !cell_data["terrain"].is_string() || !cell_data.contains("caveInfo") || !cell_data["caveInfo"].is_array()) {
-            return tl::make_unexpected(PARSE_ERROR_INVALID_TYPE);
+            return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
         }
         for (const auto &flag : cell_data["caveInfo"]) {
             if (!flag.is_string()) {
-                return tl::make_unexpected(PARSE_ERROR_INVALID_TYPE);
+                return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
             }
         }
         int special = 0;
         if (cell_data.contains("special") &&
             !info_set_integer(cell_data["special"], special, true, Range(std::numeric_limits<int16_t>::min(), std::numeric_limits<int16_t>::max()))) {
-            return tl::make_unexpected(PARSE_ERROR_INVALID_VALUE);
+            return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
         }
 
         QuestLegendCell cell;

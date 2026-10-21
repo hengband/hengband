@@ -25,10 +25,10 @@ TEST_CASE("SpellReader requires arrays for books and spells")
 
     // A JSON object is iterable too, so these used to be accepted as record arrays.
     data["books"] = { { "first", { { "spells", nlohmann::json::array() } } } };
-    CHECK(test::to_error_code(SpellReader(data, spells).read()) == PARSE_ERROR_INVALID_TYPE);
+    CHECK(test::to_error_code(SpellReader(data, spells).read()) == ParseErrorType::INVALID_TYPE);
 
     data["books"] = nlohmann::json::array({ { { "spells", nlohmann::json::object() } } });
-    CHECK(test::to_error_code(SpellReader(data, spells).read()) == PARSE_ERROR_INVALID_TYPE);
+    CHECK(test::to_error_code(SpellReader(data, spells).read()) == ParseErrorType::INVALID_TYPE);
 }
 
 namespace {
@@ -93,19 +93,19 @@ TEST_CASE("SpellReader commits all books only after the whole realm succeeds")
         auto invalid = make_spell(4, "invalid");
         invalid.erase("description");
         data["books"][0]["spells"].push_back(invalid);
-        CHECK(test::to_error_code(SpellReader(data, spells).read()) == PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        CHECK(test::to_error_code(SpellReader(data, spells).read()) == ParseErrorType::TOO_FEW_ARGUMENTS);
         check_unchanged();
     }
     SUBCASE("a spell in a later book is invalid")
     {
         data["books"][1]["spells"][0]["spell_id"] = 32;
-        CHECK(test::to_error_code(SpellReader(data, spells).read()) == PARSE_ERROR_INVALID_FLAG);
+        CHECK(test::to_error_code(SpellReader(data, spells).read()) == ParseErrorType::INVALID_FLAG);
         check_unchanged();
     }
     SUBCASE("a later book has an invalid spells container")
     {
         data["books"][1]["spells"] = nlohmann::json::object();
-        CHECK(test::to_error_code(SpellReader(data, spells).read()) == PARSE_ERROR_INVALID_TYPE);
+        CHECK(test::to_error_code(SpellReader(data, spells).read()) == ParseErrorType::INVALID_TYPE);
         check_unchanged();
     }
     SUBCASE("successful reload preserves unspecified spells and other realms")
@@ -156,25 +156,25 @@ TEST_CASE("SpellReader propagates helper errors without publishing staged spells
     struct InvalidField {
         const char *path;
         nlohmann::json value;
-        parse_error_type error;
+        ParseErrorType error;
     };
     const std::vector<InvalidField> invalid_fields = {
-        { "", nullptr, PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "/name", nullptr, PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "/name", "UNKNOWN_REALM", PARSE_ERROR_OUT_OF_BOUNDS },
-        { "/books", nullptr, PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "/books", nlohmann::json::object(), PARSE_ERROR_INVALID_TYPE },
-        { "/books/1/spells", nullptr, PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "/books/1/spells", nlohmann::json::object(), PARSE_ERROR_INVALID_TYPE },
-        { "/books/1/spells/0", nullptr, PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "/books/1/spells/0/spell_id", nullptr, PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "/books/1/spells/0/spell_id", 32, PARSE_ERROR_INVALID_FLAG },
-        { "/books/1/spells/0/spell_id", true, PARSE_ERROR_INVALID_TYPE },
-        { "/books/1/spells/0/spell_tag", nullptr, PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "/books/1/spells/0/name", nullptr, PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "/books/1/spells/0/name", 7, PARSE_ERROR_INVALID_TYPE },
-        { "/books/1/spells/0/description", nullptr, PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "/books/1/spells/0/description", 7, PARSE_ERROR_INVALID_TYPE },
+        { "", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/name", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/name", "UNKNOWN_REALM", ParseErrorType::OUT_OF_BOUNDS },
+        { "/books", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/books", nlohmann::json::object(), ParseErrorType::INVALID_TYPE },
+        { "/books/1/spells", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/books/1/spells", nlohmann::json::object(), ParseErrorType::INVALID_TYPE },
+        { "/books/1/spells/0", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/books/1/spells/0/spell_id", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/books/1/spells/0/spell_id", 32, ParseErrorType::INVALID_FLAG },
+        { "/books/1/spells/0/spell_id", true, ParseErrorType::INVALID_TYPE },
+        { "/books/1/spells/0/spell_tag", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/books/1/spells/0/name", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/books/1/spells/0/name", 7, ParseErrorType::INVALID_TYPE },
+        { "/books/1/spells/0/description", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/books/1/spells/0/description", 7, ParseErrorType::INVALID_TYPE },
     };
     for (const auto &invalid : invalid_fields) {
         CAPTURE(invalid.path);

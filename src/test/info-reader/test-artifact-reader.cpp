@@ -92,7 +92,7 @@ TEST_CASE("ArtifactReader validates ID range before narrowing signed and unsigne
         ScopedArtifactBaseitem baseitem;
         auto data = make_artifact();
         data["id"] = id;
-        CHECK(test::to_error_code(ArtifactReader(data).read()) == PARSE_ERROR_INVALID_FLAG);
+        CHECK(test::to_error_code(ArtifactReader(data).read()) == ParseErrorType::INVALID_FLAG);
         CHECK(ArtifactList::get_instance().empty());
         CHECK(error_idx == -1);
     }
@@ -107,7 +107,7 @@ TEST_CASE("ArtifactReader rejects rarity values outside its storage type")
         ScopedArtifactBaseitem baseitem;
         auto data = make_artifact();
         data["rarity"] = value;
-        CHECK(test::to_error_code(ArtifactReader(data).read()) == PARSE_ERROR_INVALID_FLAG);
+        CHECK(test::to_error_code(ArtifactReader(data).read()) == ParseErrorType::INVALID_FLAG);
         CHECK(ArtifactList::get_instance().empty());
     }
 }
@@ -121,7 +121,7 @@ TEST_CASE("ArtifactReader preserves missing and non-integer ID errors")
         ScopedArtifactBaseitem baseitem;
         auto data = make_artifact();
         data["id"] = id;
-        CHECK(test::to_error_code(ArtifactReader(data).read()) == PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        CHECK(test::to_error_code(ArtifactReader(data).read()) == ParseErrorType::TOO_FEW_ARGUMENTS);
         CHECK(error_idx == -1);
         CHECK(ArtifactList::get_instance().empty());
     }
@@ -130,9 +130,9 @@ TEST_CASE("ArtifactReader preserves missing and non-integer ID errors")
     ScopedArtifactBaseitem baseitem;
     auto data = make_artifact();
     data.erase("id");
-    CHECK(test::to_error_code(ArtifactReader(data).read()) == PARSE_ERROR_TOO_FEW_ARGUMENTS);
+    CHECK(test::to_error_code(ArtifactReader(data).read()) == ParseErrorType::TOO_FEW_ARGUMENTS);
     const auto non_object = nlohmann::json::array();
-    CHECK(test::to_error_code(ArtifactReader(non_object).read()) == PARSE_ERROR_TOO_FEW_ARGUMENTS);
+    CHECK(test::to_error_code(ArtifactReader(non_object).read()) == ParseErrorType::TOO_FEW_ARGUMENTS);
     CHECK(error_idx == -1);
     CHECK(ArtifactList::get_instance().empty());
 }
@@ -150,7 +150,7 @@ TEST_CASE("ArtifactReader requires IDs to start at 1 and continue without gaps")
         ScopedArtifactBaseitem baseitem;
         auto data = make_artifact();
         data["id"] = id;
-        CHECK(test::to_error_code(ArtifactReader(data).read()) == PARSE_ERROR_NON_SEQUENTIAL_RECORDS);
+        CHECK(test::to_error_code(ArtifactReader(data).read()) == ParseErrorType::NON_SEQUENTIAL_RECORDS);
         CHECK(ArtifactList::get_instance().empty());
         CHECK(error_idx == -1);
     }
@@ -166,7 +166,7 @@ TEST_CASE("ArtifactReader requires IDs to start at 1 and continue without gaps")
     REQUIRE(read_id(1).has_value());
     for (const auto id : { 1, 3, 0 }) {
         CAPTURE(id);
-        CHECK(test::to_error_code(read_id(id)) == PARSE_ERROR_NON_SEQUENTIAL_RECORDS);
+        CHECK(test::to_error_code(read_id(id)) == ParseErrorType::NON_SEQUENTIAL_RECORDS);
         CHECK(artifacts.size() == 1);
         CHECK(error_idx == 1);
     }
@@ -229,7 +229,7 @@ TEST_CASE("ArtifactReader rejects a base item which is not a valid baseitem")
         unnamed.bi_key = { ItemKindType::FLAVOR_SKELETON, 2 };
         baseitems.replace_baseitem(1, std::move(unnamed));
     }
-    CHECK(test::to_error_code(ArtifactReader(data).read()) == PARSE_ERROR_INVALID_VALUE);
+    CHECK(test::to_error_code(ArtifactReader(data).read()) == ParseErrorType::INVALID_VALUE);
     CHECK(ArtifactList::get_instance().empty());
     // ID の確認は済んでいるため、診断のための ID は進む。
     CHECK(error_idx == 1);
@@ -247,7 +247,7 @@ TEST_CASE("ArtifactReader limits base dice to the save format range")
         ScopedArtifactBaseitem baseitem;
         auto data = make_artifact();
         data["base_dice"] = dice;
-        CHECK(test::to_error_code(ArtifactReader(data).read()) == PARSE_ERROR_INVALID_FLAG);
+        CHECK(test::to_error_code(ArtifactReader(data).read()) == ParseErrorType::INVALID_FLAG);
         CHECK(ArtifactList::get_instance().empty());
     }
     test::ScopedReaderState reader_state;
@@ -335,7 +335,7 @@ TEST_CASE("ArtifactReader preserves existing definitions after early and late pa
     auto data = make_artifact(2);
     data["activate"] = "BA_FIRE_4";
     data["flags"] = { "STR" };
-    auto expected_error = PARSE_ERROR_INVALID_TYPE;
+    auto expected_error = ParseErrorType::INVALID_TYPE;
     SUBCASE("early name error")
     {
         data["name"] = 42;
@@ -343,7 +343,7 @@ TEST_CASE("ArtifactReader preserves existing definitions after early and late pa
     SUBCASE("late flag error after a valid flag and activation")
     {
         data["flags"] = { "STR", "UNKNOWN_FLAG" };
-        expected_error = PARSE_ERROR_INVALID_FLAG;
+        expected_error = ParseErrorType::INVALID_FLAG;
     }
     SUBCASE("last flavor error after all other fields")
     {

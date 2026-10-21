@@ -43,7 +43,7 @@ TEST_CASE("MagicReader preserves an existing class on a later parse error")
     data["has_glove_mp_penalty"] = true;
     data["first_spell_level"] = 1;
     data["realms"] = nlohmann::json::object();
-    CHECK(test::to_error_code(MagicReader(data).read()) == PARSE_ERROR_INVALID_TYPE);
+    CHECK(test::to_error_code(MagicReader(data).read()) == ParseErrorType::INVALID_TYPE);
     CHECK(class_magics_info[0].spell_book == ItemKindType::NONE);
     CHECK(class_magics_info[0].has_glove_mp_penalty == false);
     CHECK(class_magics_info[0].spell_first == 99);
@@ -131,7 +131,7 @@ TEST_CASE("MagicReader rejects invalid difficulty without publishing partial dat
     for (const auto &difficulty : std::vector<nlohmann::json>{ -1, 101, 999, std::numeric_limits<uint64_t>::max(), 1.0, true }) {
         CAPTURE(difficulty.dump());
         data["realms"][0]["spells_info"][1]["difficulty"] = difficulty;
-        const auto expected = difficulty.is_number_integer() ? PARSE_ERROR_INVALID_FLAG : PARSE_ERROR_INVALID_TYPE;
+        const auto expected = difficulty.is_number_integer() ? ParseErrorType::INVALID_FLAG : ParseErrorType::INVALID_TYPE;
         CHECK(test::to_error_code(MagicReader(data).read()) == expected);
         CHECK(class_magics_info[0].spell_first == 1);
         CHECK(class_magics_info[0].spell_weight == 430);
@@ -182,7 +182,7 @@ TEST_CASE("MagicReader rejects invalid bounded fields without publishing partial
             } else {
                 data["realms"][0]["spells_info"][1][field] = value;
             }
-            const auto expected = value.is_number_integer() ? PARSE_ERROR_INVALID_FLAG : PARSE_ERROR_INVALID_TYPE;
+            const auto expected = value.is_number_integer() ? ParseErrorType::INVALID_FLAG : ParseErrorType::INVALID_TYPE;
             CHECK(test::to_error_code(MagicReader(data).read()) == expected);
             CHECK(class_magics_info[0].spell_first == 1);
             CHECK(class_magics_info[0].spell_weight == 430);
@@ -227,26 +227,26 @@ TEST_CASE("MagicReader propagates helper errors without publishing partial data"
     struct InvalidField {
         const char *path;
         nlohmann::json value;
-        parse_error_type error;
+        ParseErrorType error;
     };
     const std::vector<InvalidField> invalid_fields = {
-        { "/name", nullptr, PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "/name", "UNKNOWN_CLASS", PARSE_ERROR_OUT_OF_BOUNDS },
-        { "/spell_type", nullptr, PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "/spell_type", "UNKNOWN_BOOK", PARSE_ERROR_INVALID_FLAG },
-        { "/magic_status", nullptr, PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "/magic_status", "UNKNOWN_STAT", PARSE_ERROR_INVALID_FLAG },
-        { "/realms", nullptr, PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "/realms", nlohmann::json::object(), PARSE_ERROR_INVALID_TYPE },
-        { "/realms/0", 1, PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "/realms/0/name", nullptr, PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "/realms/0/name", "UNKNOWN_REALM", PARSE_ERROR_INVALID_FLAG },
-        { "/realms/0/spells_info", nullptr, PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "/realms/0/spells_info", nlohmann::json::object(), PARSE_ERROR_INVALID_TYPE },
-        { "/realms/0/spells_info/1", 1, PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "/realms/0/spells_info/1/spell_tag", nullptr, PARSE_ERROR_TOO_FEW_ARGUMENTS },
-        { "/realms/0/spells_info/1/spell_tag", "unknown-tag", PARSE_ERROR_INVALID_FLAG },
-        { "/realms/0/spells_info/1/learn_level", 100, PARSE_ERROR_INVALID_FLAG },
+        { "/name", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/name", "UNKNOWN_CLASS", ParseErrorType::OUT_OF_BOUNDS },
+        { "/spell_type", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/spell_type", "UNKNOWN_BOOK", ParseErrorType::INVALID_FLAG },
+        { "/magic_status", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/magic_status", "UNKNOWN_STAT", ParseErrorType::INVALID_FLAG },
+        { "/realms", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/realms", nlohmann::json::object(), ParseErrorType::INVALID_TYPE },
+        { "/realms/0", 1, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/realms/0/name", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/realms/0/name", "UNKNOWN_REALM", ParseErrorType::INVALID_FLAG },
+        { "/realms/0/spells_info", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/realms/0/spells_info", nlohmann::json::object(), ParseErrorType::INVALID_TYPE },
+        { "/realms/0/spells_info/1", 1, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/realms/0/spells_info/1/spell_tag", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/realms/0/spells_info/1/spell_tag", "unknown-tag", ParseErrorType::INVALID_FLAG },
+        { "/realms/0/spells_info/1/learn_level", 100, ParseErrorType::INVALID_FLAG },
     };
     for (const auto &invalid : invalid_fields) {
         CAPTURE(invalid.path);

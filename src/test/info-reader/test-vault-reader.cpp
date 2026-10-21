@@ -115,9 +115,9 @@ TEST_CASE("VaultReader rejects duplicate and descending IDs and permits retry")
     auto data = make_vault();
     data["id"] = 2;
     REQUIRE(VaultReader(data).read().has_value());
-    CHECK(test::to_error_code(VaultReader(data).read()) == PARSE_ERROR_NON_SEQUENTIAL_RECORDS);
+    CHECK(test::to_error_code(VaultReader(data).read()) == ParseErrorType::NON_SEQUENTIAL_RECORDS);
     data["id"] = 1;
-    CHECK(test::to_error_code(VaultReader(data).read()) == PARSE_ERROR_NON_SEQUENTIAL_RECORDS);
+    CHECK(test::to_error_code(VaultReader(data).read()) == ParseErrorType::NON_SEQUENTIAL_RECORDS);
     data["id"] = 3;
     data["layout"][0] = "bad";
     VaultReader reader(data);
@@ -129,7 +129,7 @@ TEST_CASE("VaultReader rejects duplicate and descending IDs and permits retry")
     CHECK(error_idx == 3);
     data["id"] = 4;
     data["rating"] = "bad";
-    CHECK(test::to_error_code(reader.read()) == PARSE_ERROR_INVALID_TYPE);
+    CHECK(test::to_error_code(reader.read()) == ParseErrorType::INVALID_TYPE);
     REQUIRE(reader.error().has_value());
     CHECK(reader.error()->id == "4");
     CHECK(reader.error()->path == "$.rating");
@@ -155,7 +155,7 @@ TEST_CASE("VaultReader preserves exact error precedence and every existing recor
     const auto previous = vaults_info;
     data["id"] = 5;
     data["name"] = "Changed vault";
-    auto expected = PARSE_ERROR_TOO_FEW_ARGUMENTS;
+    auto expected = ParseErrorType::TOO_FEW_ARGUMENTS;
     std::string id = "5";
     std::string path;
     std::string reason;
@@ -170,7 +170,7 @@ TEST_CASE("VaultReader preserves exact error precedence and every existing recor
     {
         data["typo"] = 42;
         data["id"] = "bad";
-        expected = PARSE_ERROR_UNDEFINED_DIRECTIVE;
+        expected = ParseErrorType::UNDEFINED_DIRECTIVE;
         id = "\"bad\"";
         path = "$.typo";
         reason = _("未知の項目です", "unknown field");
@@ -179,7 +179,7 @@ TEST_CASE("VaultReader preserves exact error precedence and every existing recor
     {
         data["id"] = "bad";
         data["name"] = 42;
-        expected = PARSE_ERROR_INVALID_TYPE;
+        expected = ParseErrorType::INVALID_TYPE;
         id = "\"bad\"";
         path = "$.id";
         reason = _("0以上32767以下の整数が必要です", "expected an integer in [0, 32767]");
@@ -188,7 +188,7 @@ TEST_CASE("VaultReader preserves exact error precedence and every existing recor
     {
         data["id"] = 2;
         data["name"] = 42;
-        expected = PARSE_ERROR_NON_SEQUENTIAL_RECORDS;
+        expected = ParseErrorType::NON_SEQUENTIAL_RECORDS;
         id = "2";
         path = "$.id";
         reason = _("IDは重複せず昇順に並べてください", "IDs must be unique and in increasing order");
@@ -197,7 +197,7 @@ TEST_CASE("VaultReader preserves exact error precedence and every existing recor
     {
         data["type"] = 9;
         data["rating"] = nullptr;
-        expected = PARSE_ERROR_INVALID_VALUE;
+        expected = ParseErrorType::INVALID_VALUE;
         path = "$.type";
         reason = _("Vault種別は7、8、17のいずれかです", "vault type must be 7, 8 or 17");
     }
@@ -212,7 +212,7 @@ TEST_CASE("VaultReader preserves exact error precedence and every existing recor
     {
         data["height"] = 0;
         data["width"] = 0;
-        expected = PARSE_ERROR_INVALID_FLAG;
+        expected = ParseErrorType::INVALID_FLAG;
         path = "$.height";
         reason = _("1以上66以下の整数が必要です", "expected an integer in [1, 66]");
     }
@@ -220,14 +220,14 @@ TEST_CASE("VaultReader preserves exact error precedence and every existing recor
     {
         data["width"] = MAX_WID + 1;
         data["layout"] = nullptr;
-        expected = PARSE_ERROR_INVALID_FLAG;
+        expected = ParseErrorType::INVALID_FLAG;
         path = "$.width";
         reason = _("1以上198以下の整数が必要です", "expected an integer in [1, 198]");
     }
     SUBCASE("second layout row after successfully parsed metadata and first row")
     {
         data["layout"][1] = 42;
-        expected = PARSE_ERROR_INVALID_TYPE;
+        expected = ParseErrorType::INVALID_TYPE;
         path = "$.layout[1]";
         reason = _("文字列が必要です", "expected a string");
     }

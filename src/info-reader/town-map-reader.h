@@ -85,13 +85,13 @@ public:
     TownMapReader &operator=(const TownMapReader &) = delete;
     TownMapReader &operator=(TownMapReader &&) = delete;
 
-    tl::expected<void, parse_error_type> read(TownMapDefinition &definition, int maximum_height, int maximum_width, bool only_buildings = false) const;
+    tl::expected<void, ParseErrorType> read(TownMapDefinition &definition, int maximum_height, int maximum_width, bool only_buildings = false) const;
 
 private:
-    tl::expected<void, parse_error_type> read_features(TownMapDefinition &definition) const;
-    tl::expected<void, parse_error_type> read_buildings(TownMapDefinition &definition) const;
-    tl::expected<void, parse_error_type> read_maps(TownMapDefinition &definition, int maximum_height, int maximum_width) const;
-    tl::expected<void, parse_error_type> read_starts(TownMapDefinition &definition) const;
+    tl::expected<void, ParseErrorType> read_features(TownMapDefinition &definition) const;
+    tl::expected<void, ParseErrorType> read_buildings(TownMapDefinition &definition) const;
+    tl::expected<void, ParseErrorType> read_maps(TownMapDefinition &definition, int maximum_height, int maximum_width) const;
+    tl::expected<void, ParseErrorType> read_starts(TownMapDefinition &definition) const;
 
     const nlohmann::json &data;
 };
