@@ -1576,6 +1576,7 @@ hengband_test_SOURCES = \
 	test/object-use/quaff/test-quaff-execution.cpp \
 	test/player/test-player-skill.cpp \
 	test/player/test-process-name.cpp \
+	test/player-status/test-player-speed.cpp \
 	test/spell/test-spell-info.cpp \
 	test/spell-realm/test-spells-hex.cpp \
 	test/store/test-pricing.cpp \
