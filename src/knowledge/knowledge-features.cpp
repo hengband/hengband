@@ -230,6 +230,15 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
         prt(fmt::format(_("<方向>{}, 'd'で標準光源効果{}, ESC", "<dir>{}, 'd' for default lighting{}, ESC"), visual_list ? _(", ENTERで決定, 'a'で対象明度変更", ", ENTER to accept, 'a' for lighting level") : _(", 'v'でシンボル変更", ", 'v' for visuals"), (symbols_cb.symbol != DisplaySymbol()) ? _(", 'c', 'p'でペースト", ", 'c', 'p' to paste") : _(", 'c'でコピー", ", 'c' to copy")),
             hgt - 1, 0);
 
+        // 一覧に載る地形が無ければ、地形を引かずに ESC だけを受け付ける
+        if (feat_cnt == 0) {
+            if (inkey() == ESCAPE) {
+                flag = true;
+            }
+
+            continue;
+        }
+
         auto &terrain = terrains.get_terrain(feat_idx[feat_cur]);
         auto &symbol_orig = terrain.symbol_configs.at(*lighting_level);
         if (visual_list) {
