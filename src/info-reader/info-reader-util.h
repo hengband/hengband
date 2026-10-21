@@ -4,6 +4,7 @@
 #include "util/bit-flags-calculator.h"
 #include <concepts>
 #include <cstdint>
+#include <limits>
 #include <string_view>
 #include <tl/optional.hpp>
 #include <type_traits>
@@ -11,7 +12,14 @@
 
 extern int error_idx; //!< エラーが発生したinfo ID
 
+enum class MonraceId : short;
 enum class RandomArtActType : short;
+
+/*
+ * 定義のIDの上限は、IDを格納する型の上限−1とする。
+ * IDの最大値+1になる件数（種族の数など）も同じ型に収まるようにするため。
+ */
+constexpr int MAX_MONRACE_ID = std::numeric_limits<std::underlying_type_t<MonraceId>>::max() - 1; //!< モンスター種族IDの上限
 RandomArtActType grab_one_activation_flag(std::string_view what);
 
 /*!

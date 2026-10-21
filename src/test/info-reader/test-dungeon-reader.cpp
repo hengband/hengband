@@ -25,6 +25,7 @@
 #include <limits>
 #include <nlohmann/json.hpp>
 #include <string>
+#include <string_view>
 #include <utility>
 #include <vector>
 
@@ -421,7 +422,6 @@ TEST_CASE("DungeonReader rejects final-floor ID narrowing before reference looku
     const std::vector<nlohmann::json> invalid_ids{
         -1,
         -32768,
-        10000,
         32767,
         32768,
         -32769,
@@ -436,7 +436,11 @@ TEST_CASE("DungeonReader rejects final-floor ID narrowing before reference looku
         std::numeric_limits<uint64_t>::max(),
     };
     for (const auto *field : { "guardian", "artifact" }) {
-        for (const auto &value : invalid_ids) {
+        auto field_invalid_ids = invalid_ids;
+        if (std::string_view(field) == "artifact") {
+            field_invalid_ids.emplace_back(10000);
+        }
+        for (const auto &value : field_invalid_ids) {
             CAPTURE(std::string(field));
             CAPTURE(value);
             const FinalFloorStateGuard state;
@@ -459,12 +463,15 @@ TEST_CASE("DungeonReader rejects final-floor ID narrowing before reference looku
 
 TEST_CASE("DungeonReader preserves representable final-floor IDs and the no-artifact sentinel")
 {
-    for (const auto &[guardian, artifact] : { std::pair{ 1, 0 }, std::pair{ 1, 1 }, std::pair{ 1, 9999 } }) {
+    for (const auto &[guardian, artifact] : { std::pair{ 1, 0 }, std::pair{ 1, 1 }, std::pair{ 1, 9999 }, std::pair{ 32766, 1 } }) {
         CAPTURE(guardian);
         CAPTURE(artifact);
         const FinalFloorStateGuard state;
         const auto guardian_id = static_cast<MonraceId>(guardian);
         const auto artifact_id = static_cast<FixedArtifactId>(artifact);
+        if (guardian_id != MonraceId::FILTHY_URCHIN) {
+            MonraceList::get_instance().emplace(guardian_id);
+        }
         if (artifact_id != FixedArtifactId::NONE && artifact_id != FixedArtifactId::GALADRIEL_PHIAL) {
             ArtifactList::get_instance().emplace(artifact_id, {});
         }

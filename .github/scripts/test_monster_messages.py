@@ -7,7 +7,7 @@ import tempfile
 import unittest
 from unittest.mock import patch
 
-from json_validation_test_helper import validate_document
+from json_validation_test_helper import monrace_id_schema_maximum, validate_document
 from validate_json import (build_schema_registry, load_all_schemas, load_jsonc,
                            load_validated_companion, validate_one, validate_monster_message_semantics)
 
@@ -167,8 +167,14 @@ class MonsterMessageValidationTest(unittest.TestCase):
     def test_integer_boundaries(self):
         self.assert_valid([{"id_list": [1, self.max_monrace_id], "message": [self.message(chance=1), self.message(chance=100)]}])
 
+    def test_monster_id_maximum_matches_monrace_id_storage(self):
+        # モンスターIDの上限は、IDを格納する型(MonraceId)の上限−1とする。
+        maximum = monrace_id_schema_maximum()
+        id_list = self.loaded[self.schema_path]["properties"]["groups"]["items"]["properties"]["id_list"]
+        self.assertEqual(id_list["items"]["maximum"], maximum)
+
     def test_undefined_monster_ids_are_rejected(self):
-        for value in (self.max_monrace_id + 1, 9999):
+        for value in (self.max_monrace_id + 1, 32766):
             with self.subTest(value=value):
                 self.assert_invalid([{"id_list": [1, value], "message": []}], ["groups", 0, "id_list", 1], "unknown monster ID")
 
@@ -180,7 +186,7 @@ class MonsterMessageValidationTest(unittest.TestCase):
                             ["groups", 0, "message", 0, "chance"], "integer JSON value")
 
     def test_other_invalid_ids_still_fail(self):
-        for value in (True, "1", None, 1.5, 0, 10000):
+        for value in (True, "1", None, 1.5, 0, 32767):
             with self.subTest(value=value):
                 self.assert_invalid([{"id_list": [value], "message": []}], ["groups", 0, "id_list", 0])
 
