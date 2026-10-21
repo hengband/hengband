@@ -808,7 +808,7 @@ def load_dungeon_wilderness_dimensions(schema_path: Path, data_path: Path, regis
 
 
 def validate_dungeon_semantics(data: dict, schema_path: Path, data_path: Path, registry: Registry) -> None:
-    """DungeonReaderの整数型・ID順序・地形抽選の合計を検証する。"""
+    """DungeonReaderの整数型・ID順序・地形の重み (百分率) の合計を検証する。"""
     dimensions = None
     if any(dungeon["id"] != 0 for dungeon in data["dungeons"]):
         dimensions = load_dungeon_wilderness_dimensions(schema_path, data_path, registry)
@@ -833,16 +833,14 @@ def validate_dungeon_semantics(data: dict, schema_path: Path, data_path: Path, r
                     raise ValidationError("dungeon entrance must be inside the wilderness map excluding the edges", path=path + ["position", field])
         if dungeon["generation"]["minDepth"] > dungeon["generation"]["maxDepth"]:
             raise ValidationError("minDepth must not exceed maxDepth", path=path + ["generation", "minDepth"])
+        # 床・壁の地形の重みは百分率で、合計はちょうど100にする (各0～100はschemaで確認する)。
         for group in ("floor", "wall"):
             total = 0
             for tile_index, tile in enumerate(dungeon[group]["tiles"]):
-                weight_path = path + [group, "tiles", tile_index, "rate"]
-                require_integer(tile["rate"], weight_path)
+                require_integer(tile["rate"], path + [group, "tiles", tile_index, "rate"])
                 total += tile["rate"]
-                if total > 2147483647:
-                    raise ValidationError("total weight exceeds the reader's integer range", path=weight_path)
-            if total == 0:
-                raise ValidationError("tiles require a positive total weight", path=path + [group, "tiles"])
+            if total != 100:
+                raise ValidationError(f"tile rates are percentages and must total exactly 100 (got {total})", path=path + [group, "tiles"])
         for stream_index, stream in enumerate(dungeon["wall"]["streams"]):
             for name in ("count", "chance", "priority"):
                 require_integer(stream[name], path + ["wall", "streams", stream_index, name])

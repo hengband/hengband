@@ -146,6 +146,7 @@
       "required": ["tiles", "tunnelRate"],
       "properties": {
         "tiles": {
+          "description": "床の地形と、その地形が選ばれる割合 (百分率)。rate の合計はちょうど100にする",
           "type": "array",
           "minItems": 1,
           "items": {
@@ -188,6 +189,7 @@
       "required": ["tiles", "outer", "inner", "streams"],
       "properties": {
         "tiles": {
+          "description": "壁の地形と、その地形が選ばれる割合 (百分率)。rate の合計はちょうど100にする",
           "type": "array",
           "minItems": 1,
           "items": {
@@ -227,9 +229,10 @@
           ]
         },
         "rate": {
+          "description": "この地形が床に選ばれる割合 (百分率)。各0～100で、tiles の合計はちょうど100にする (合計は読み込み時とCIの意味検証で確認する)。0の地形は抽選に登録しない",
           "type": "integer",
           "minimum": 0,
-          "maximum": 32767
+          "maximum": 100
         }
       }
     },
@@ -254,9 +257,10 @@
           ]
         },
         "rate": {
+          "description": "この地形が壁に選ばれる割合 (百分率)。各0～100で、tiles の合計はちょうど100にする (合計は読み込み時とCIの意味検証で確認する)。0の地形は抽選に登録しない",
           "type": "integer",
           "minimum": 0,
-          "maximum": 32767
+          "maximum": 100
         }
       }
     },

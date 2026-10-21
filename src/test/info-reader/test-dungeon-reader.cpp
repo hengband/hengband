@@ -81,8 +81,8 @@ nlohmann::json make_dungeon(int id = 0)
         { "name", { { "ja", "test dungeon" }, { "en", "test dungeon" } } },
         { "position", { { "wild_y", 0 }, { "wild_x", 0 } } },
         { "generation", { { "minDepth", 0 }, { "maxDepth", 0 }, { "minPlayerLevel", 0 }, { "objGood", 0 }, { "objGreat", 0 }, { "pit", nlohmann::json::array() }, { "nest", nlohmann::json::array() } } },
-        { "floor", { { "tiles", { { { "type", "FLOOR" }, { "rate", 1 } } } }, { "tunnelRate", 50 } } },
-        { "wall", { { "tiles", { { { "type", "GRANITE" }, { "rate", 1 } } } }, { "outer", "GRANITE" }, { "inner", "GRANITE" } } },
+        { "floor", { { "tiles", { { { "type", "FLOOR" }, { "rate", 100 } } } }, { "tunnelRate", 50 } } },
+        { "wall", { { "tiles", { { { "type", "GRANITE" }, { "rate", 100 } } } }, { "outer", "GRANITE" }, { "inner", "GRANITE" } } },
         { "monsters", { { "minCount", 14 }, { "additionalSpawnProbability", 6250 }, { "normalMonsterRate", 100 }, { "flagsMode", "NONE" } } },
     };
 }
@@ -103,9 +103,9 @@ TEST_CASE("DungeonReader reads floor and wall probabilities")
     const auto &dungeon = dungeons.get_dungeon(DungeonId::WILDERNESS);
     CHECK(dungeon.name == "test dungeon");
     CHECK(dungeon.prob_table_floor.item_count() == 1);
-    CHECK(dungeon.prob_table_floor.total_prob() == 1);
+    CHECK(dungeon.prob_table_floor.total_prob() == 100);
     CHECK(dungeon.prob_table_wall.item_count() == 1);
-    CHECK(dungeon.prob_table_wall.total_prob() == 1);
+    CHECK(dungeon.prob_table_wall.total_prob() == 100);
 }
 
 TEST_CASE("DungeonReader rejects player levels outside their storage type")
@@ -301,17 +301,30 @@ TEST_CASE("DungeonReader validates entrances against actual wilderness dimension
     CHECK(DungeonReader::validate_wilderness_positions(3, 4).has_value());
 }
 
-TEST_CASE("DungeonReader accepts bounded weights and excludes zero weight entries")
+TEST_CASE("DungeonReader accepts percentage weight boundaries and excludes zero weight entries")
 {
+    struct AcceptedTiles {
+        nlohmann::json tiles;
+        int item_count;
+    };
+    const std::vector<AcceptedTiles> accepted_tiles = {
+        { { { { "type", "FLOOR" }, { "rate", 0 } }, { { "type", "GRANITE" }, { "rate", 100 } } }, 1 },
+        { { { { "type", "FLOOR" }, { "rate", 100 } }, { { "type", "GRANITE" }, { "rate", 0 } } }, 1 },
+        { { { { "type", "FLOOR" }, { "rate", 1 } }, { { "type", "GRANITE" }, { "rate", 99 } } }, 2 },
+        { { { { "type", "FLOOR" }, { "rate", 20 } }, { { "type", "GRANITE" }, { "rate", 30 } }, { { "type", "FLOOR" }, { "rate", 50 } } }, 3 },
+    };
     for (const std::string section : { "floor", "wall" }) {
-        CAPTURE(section);
-        DungeonReaderStateGuard guard;
-        auto data = make_dungeon();
-        data[section]["tiles"] = { { { "type", "FLOOR" }, { "rate", 0 } }, { { "type", "GRANITE" }, { "rate", 32767 } } };
-        REQUIRE(DungeonReader(data).read().has_value());
-        const auto &table = terrain_table(DungeonList::get_instance().get_dungeon(DungeonId::WILDERNESS), section);
-        CHECK(table.item_count() == 1);
-        CHECK(table.total_prob() == 32767);
+        for (const auto &accepted : accepted_tiles) {
+            CAPTURE(section);
+            CAPTURE(accepted.tiles);
+            DungeonReaderStateGuard guard;
+            auto data = make_dungeon();
+            data[section]["tiles"] = accepted.tiles;
+            REQUIRE(DungeonReader(data).read().has_value());
+            const auto &table = terrain_table(DungeonList::get_instance().get_dungeon(DungeonId::WILDERNESS), section);
+            CHECK(table.item_count() == accepted.item_count);
+            CHECK(table.total_prob() == 100);
+        }
     }
 }
 
@@ -319,6 +332,8 @@ TEST_CASE("DungeonReader rejects invalid weights without publishing a dungeon")
 {
     const std::vector<nlohmann::json> invalid_rates = {
         -1,
+        101,
+        150,
         32768,
         65537,
         std::numeric_limits<int64_t>::min(),
@@ -345,8 +360,6 @@ TEST_CASE("DungeonReader rejects invalid weights without publishing a dungeon")
 TEST_CASE("DungeonReader rejects unusable or malformed terrain tables")
 {
     const std::vector<nlohmann::json> invalid_tiles = {
-        nlohmann::json::array(),
-        { { { "type", "FLOOR" }, { "rate", 0 } }, { { "type", "GRANITE" }, { "rate", 0 } } },
         { { { "type", "FLOOR" } } },
         { { { "type", "UNKNOWN" }, { "rate", 1 } } },
         { { { "type", "UNKNOWN" }, { "rate", 0 } } },
@@ -387,32 +400,61 @@ TEST_CASE("DungeonReader does not change published dungeons after a terrain tabl
         CHECK_FALSE(dungeons.contains(DungeonId::ANGBAND));
         CHECK(dungeons.get_dungeon_shared(DungeonId::WILDERNESS) == before);
         CHECK(before->name == "test dungeon");
-        CHECK(before->prob_table_floor.total_prob() == 1);
-        CHECK(before->prob_table_wall.total_prob() == 1);
+        CHECK(before->prob_table_floor.total_prob() == 100);
+        CHECK(before->prob_table_wall.total_prob() == 100);
     }
 }
 
-TEST_CASE("DungeonReader checks the total terrain weight before integer overflow")
+TEST_CASE("DungeonReader rejects terrain weight totals other than one hundred without publishing a dungeon")
 {
+    const std::vector<nlohmann::json> invalid_tiles = {
+        nlohmann::json::array(),
+        { { { "type", "FLOOR" }, { "rate", 0 } } },
+        { { { "type", "FLOOR" }, { "rate", 0 } }, { { "type", "GRANITE" }, { "rate", 0 } } },
+        { { { "type", "FLOOR" }, { "rate", 99 } } },
+        { { { "type", "FLOOR" }, { "rate", 49 } }, { { "type", "GRANITE" }, { "rate", 50 } } },
+        { { { "type", "FLOOR" }, { "rate", 50 } }, { { "type", "GRANITE" }, { "rate", 51 } } },
+        { { { "type", "FLOOR" }, { "rate", 100 } }, { { "type", "GRANITE" }, { "rate", 1 } } },
+        { { { "type", "FLOOR" }, { "rate", 100 } }, { { "type", "GRANITE" }, { "rate", 100 } } },
+    };
     for (const std::string section : { "floor", "wall" }) {
-        CAPTURE(section);
-        DungeonReaderStateGuard guard;
-        auto data = make_dungeon();
-        const auto tile = nlohmann::json{ { "type", "FLOOR" }, { "rate", 32767 } };
-        auto tiles = nlohmann::json::array();
-        for (int i = 0; i < std::numeric_limits<int>::max() / 32767; ++i) {
-            tiles.push_back(tile);
+        for (const auto &tiles : invalid_tiles) {
+            CAPTURE(section);
+            CAPTURE(tiles);
+            DungeonReaderStateGuard guard;
+            auto &dungeons = DungeonList::get_instance();
+            const auto original = make_dungeon();
+            REQUIRE(DungeonReader(original).read().has_value());
+            const auto before = dungeons.get_dungeon_shared(DungeonId::WILDERNESS);
+            auto data = make_dungeon(1);
+            data[section]["tiles"] = tiles;
+            CHECK(test::to_error_code(DungeonReader(data).read()) == ParseErrorType::INVALID_VALUE);
+            CHECK(dungeons.size() == 1);
+            CHECK_FALSE(dungeons.contains(DungeonId::ANGBAND));
+            CHECK(dungeons.get_dungeon_shared(DungeonId::WILDERNESS) == before);
         }
-        tiles.push_back({ { "type", "FLOOR" }, { "rate", 1 } });
-        data[section]["tiles"] = tiles;
-        REQUIRE(DungeonReader(data).read().has_value());
-        CHECK(terrain_table(DungeonList::get_instance().get_dungeon(DungeonId::WILDERNESS), section).total_prob() == std::numeric_limits<int>::max());
+    }
+}
 
-        data["id"] = 1;
-        data[section]["tiles"].push_back({ { "type", "FLOOR" }, { "rate", 1 } });
-        CHECK(test::to_error_code(DungeonReader(data).read()) == ParseErrorType::UNDEFINED_TERRAIN_TAG);
-        CHECK(DungeonList::get_instance().size() == 1);
-        CHECK_FALSE(DungeonList::get_instance().contains(DungeonId::ANGBAND));
+TEST_CASE("DungeonReader reports invalid terrain entries before the weight total regardless of their position")
+{
+    const std::vector<nlohmann::json> invalid_tiles = {
+        { { { "type", "FLOOR" }, { "rate", 100 } }, { { "type", "UNKNOWN" }, { "rate", 50 } } },
+        { { { "type", "UNKNOWN" }, { "rate", 50 } }, { { "type", "FLOOR" }, { "rate", 100 } } },
+        { { { "type", "FLOOR" }, { "rate", 100 } }, { { "type", "GRANITE" }, { "rate", 100 } }, { { "type", "UNKNOWN" }, { "rate", 0 } } },
+        { { { "type", "FLOOR" }, { "rate", 100 } }, { { "type", "GRANITE" }, { "rate", 1 } }, { { "type", "FLOOR" }, { "rate", 101 } } },
+        { { { "type", "FLOOR" }, { "rate", 100 } }, { { "type", "GRANITE" }, { "rate", 1 } }, { { "type", "FLOOR" } } },
+    };
+    for (const std::string section : { "floor", "wall" }) {
+        for (const auto &tiles : invalid_tiles) {
+            CAPTURE(section);
+            CAPTURE(tiles);
+            DungeonReaderStateGuard guard;
+            auto data = make_dungeon();
+            data[section]["tiles"] = tiles;
+            CHECK(test::to_error_code(DungeonReader(data).read()) == ParseErrorType::UNDEFINED_TERRAIN_TAG);
+            CHECK(DungeonList::get_instance().empty());
+        }
     }
 }
 
@@ -547,8 +589,12 @@ TEST_CASE("DungeonReader propagates nested parse errors without publishing parti
         { "/generation/nest", { "UNDEAD", 1 }, ParseErrorType::TOO_FEW_ARGUMENTS },
         { "/generation/nest", { "UNKNOWN" }, ParseErrorType::INVALID_FLAG },
         { "/floor", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/floor/tiles/0/rate", 99, ParseErrorType::INVALID_VALUE },
+        { "/floor/tiles/0/rate", 101, ParseErrorType::UNDEFINED_TERRAIN_TAG },
         { "/floor/tunnelRate", "rate", ParseErrorType::INVALID_TYPE },
         { "/wall", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/wall/tiles/0/rate", 99, ParseErrorType::INVALID_VALUE },
+        { "/wall/tiles/0/rate", 101, ParseErrorType::UNDEFINED_TERRAIN_TAG },
         { "/wall/inner", "UNKNOWN", ParseErrorType::UNDEFINED_TERRAIN_TAG },
         { "/wall/streams", 1, ParseErrorType::TOO_FEW_ARGUMENTS },
         { "/wall/streams/1/type", "UNKNOWN", ParseErrorType::UNDEFINED_TERRAIN_TAG },
@@ -595,8 +641,8 @@ TEST_CASE("DungeonReader propagates nested parse errors without publishing parti
         CHECK(dungeons.get_dungeon_shared(DungeonId::WILDERNESS) == before);
         CHECK(before->name == "test dungeon");
         CHECK(before->streams.empty());
-        CHECK(before->prob_table_floor.total_prob() == 1);
-        CHECK(before->prob_table_wall.total_prob() == 1);
+        CHECK(before->prob_table_floor.total_prob() == 100);
+        CHECK(before->prob_table_wall.total_prob() == 100);
     }
 }
 
