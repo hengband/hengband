@@ -2,9 +2,9 @@
 #include "core/window-redrawer.h"
 #include "inventory/inventory-slot-types.h"
 #include "object-enchant/trc-types.h"
+#include "system/deferred-update-requests.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "view/display-messages.h"
 
 /*!
@@ -17,7 +17,7 @@
 static int exe_curse_removal(PlayerType *player_ptr, int all)
 {
     auto count = 0;
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &dur = DeferredUpdateRequests::get_instance();
     for (const auto i_idx : INVEN_WIELDING_SLOTS) {
         auto *o_ptr = player_ptr->inventory[i_idx].get();
         if (!o_ptr->is_valid() || !o_ptr->is_cursed()) {
@@ -34,7 +34,7 @@ static int exe_curse_removal(PlayerType *player_ptr, int all)
         }
 
         o_ptr->remove_curses();
-        rfu.set_flag(StatusRecalculatingFlag::BONUS);
+        dur.set_flag(StatusRecalculatingFlag::BONUS);
         count++;
     }
 

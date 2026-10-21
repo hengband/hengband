@@ -11,8 +11,8 @@
 #include "player-base/player-class.h"
 #include "player-info/race-info.h"
 #include "system/angband-system.h"
+#include "system/deferred-update-requests.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
@@ -48,7 +48,7 @@ void redraw_window()
         return;
     }
 
-    RedrawingFlagsUpdater::get_instance().fill_up_sub_flags();
+    DeferredUpdateRequests::get_instance().fill_up_sub_flags();
     window_stuff_including_deferred(p_ptr);
     term_redraw();
 }
@@ -83,8 +83,8 @@ void redraw_stuff(PlayerType *player_ptr)
         return;
     }
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    if (!rfu.any_main()) {
+    auto &dur = DeferredUpdateRequests::get_instance();
+    if (!dur.any_main()) {
         return;
     }
 
@@ -100,10 +100,10 @@ void redraw_stuff(PlayerType *player_ptr)
     redrawing = true;
     const auto finish_redrawing = util::make_finalizer([&] { redrawing = false; });
 
-    if (rfu.has(MainWindowRedrawingFlag::WIPE)) {
+    if (dur.has(MainWindowRedrawingFlag::WIPE)) {
         msg_erase();
         // 待ち中のリサイズが追加した WIPE も、直後の消去と再描画で処理される。
-        rfu.reset_flag(MainWindowRedrawingFlag::WIPE);
+        dur.reset_flag(MainWindowRedrawingFlag::WIPE);
         term_clear();
     }
 
@@ -114,18 +114,18 @@ void redraw_stuff(PlayerType *player_ptr)
         MainWindowRedrawingFlag::BASIC,
         MainWindowRedrawingFlag::MP,
     };
-    if (rfu.has_any_of(flags_basic_mp)) {
-        rfu.request_spell_info_redrawing();
-    } else if (rfu.has(MainWindowRedrawingFlag::HP)) {
-        rfu.set_flag(SubWindowRedrawingFlag::SPELL);
+    if (dur.has_any_of(flags_basic_mp)) {
+        dur.request_spell_info_redrawing();
+    } else if (dur.has(MainWindowRedrawingFlag::HP)) {
+        dur.set_flag(SubWindowRedrawingFlag::SPELL);
     }
 
-    if (rfu.has(MainWindowRedrawingFlag::MAP)) {
-        rfu.reset_flag(MainWindowRedrawingFlag::MAP);
+    if (dur.has(MainWindowRedrawingFlag::MAP)) {
+        dur.reset_flag(MainWindowRedrawingFlag::MAP);
         print_map(player_ptr);
     }
 
-    if (rfu.has(MainWindowRedrawingFlag::BASIC)) {
+    if (dur.has(MainWindowRedrawingFlag::BASIC)) {
         static constexpr auto flags = {
             MainWindowRedrawingFlag::BASIC,
             MainWindowRedrawingFlag::TITLE,
@@ -140,34 +140,34 @@ void redraw_stuff(PlayerType *player_ptr)
             MainWindowRedrawingFlag::HEALTH,
             MainWindowRedrawingFlag::UHEALTH,
         };
-        rfu.reset_flags(flags);
+        dur.reset_flags(flags);
         print_frame_basic(player_ptr);
         WorldTurnProcessor(player_ptr).print_time();
         print_dungeon(player_ptr);
     }
 
-    if (rfu.has(MainWindowRedrawingFlag::EQUIPPY)) {
-        rfu.reset_flag(MainWindowRedrawingFlag::EQUIPPY);
+    if (dur.has(MainWindowRedrawingFlag::EQUIPPY)) {
+        dur.reset_flag(MainWindowRedrawingFlag::EQUIPPY);
         display_player_equippy(player_ptr, ROW_EQUIPPY, COL_EQUIPPY, 0);
     }
 
-    if (rfu.has(MainWindowRedrawingFlag::TITLE)) {
-        rfu.reset_flag(MainWindowRedrawingFlag::TITLE);
+    if (dur.has(MainWindowRedrawingFlag::TITLE)) {
+        dur.reset_flag(MainWindowRedrawingFlag::TITLE);
         print_title(player_ptr);
     }
 
-    if (rfu.has(MainWindowRedrawingFlag::LEVEL)) {
-        rfu.reset_flag(MainWindowRedrawingFlag::LEVEL);
+    if (dur.has(MainWindowRedrawingFlag::LEVEL)) {
+        dur.reset_flag(MainWindowRedrawingFlag::LEVEL);
         print_level(player_ptr);
     }
 
-    if (rfu.has(MainWindowRedrawingFlag::EXP)) {
-        rfu.reset_flag(MainWindowRedrawingFlag::EXP);
+    if (dur.has(MainWindowRedrawingFlag::EXP)) {
+        dur.reset_flag(MainWindowRedrawingFlag::EXP);
         print_exp(player_ptr);
     }
 
-    if (rfu.has(MainWindowRedrawingFlag::ABILITY_SCORE)) {
-        rfu.reset_flag(MainWindowRedrawingFlag::ABILITY_SCORE);
+    if (dur.has(MainWindowRedrawingFlag::ABILITY_SCORE)) {
+        dur.reset_flag(MainWindowRedrawingFlag::ABILITY_SCORE);
         print_stat(player_ptr, A_STR);
         print_stat(player_ptr, A_INT);
         print_stat(player_ptr, A_WIS);
@@ -176,47 +176,47 @@ void redraw_stuff(PlayerType *player_ptr)
         print_stat(player_ptr, A_CHR);
     }
 
-    if (rfu.has(MainWindowRedrawingFlag::TIMED_EFFECT)) {
-        rfu.reset_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
+    if (dur.has(MainWindowRedrawingFlag::TIMED_EFFECT)) {
+        dur.reset_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
         print_status(player_ptr);
     }
 
-    if (rfu.has(MainWindowRedrawingFlag::AC)) {
-        rfu.reset_flag(MainWindowRedrawingFlag::AC);
+    if (dur.has(MainWindowRedrawingFlag::AC)) {
+        dur.reset_flag(MainWindowRedrawingFlag::AC);
         print_ac(player_ptr);
     }
 
-    if (rfu.has(MainWindowRedrawingFlag::HP)) {
-        rfu.reset_flag(MainWindowRedrawingFlag::HP);
+    if (dur.has(MainWindowRedrawingFlag::HP)) {
+        dur.reset_flag(MainWindowRedrawingFlag::HP);
         print_hp(player_ptr);
     }
 
-    if (rfu.has(MainWindowRedrawingFlag::MP)) {
-        rfu.reset_flag(MainWindowRedrawingFlag::MP);
+    if (dur.has(MainWindowRedrawingFlag::MP)) {
+        dur.reset_flag(MainWindowRedrawingFlag::MP);
         print_sp(player_ptr);
     }
 
-    if (rfu.has(MainWindowRedrawingFlag::GOLD)) {
-        rfu.reset_flag(MainWindowRedrawingFlag::GOLD);
+    if (dur.has(MainWindowRedrawingFlag::GOLD)) {
+        dur.reset_flag(MainWindowRedrawingFlag::GOLD);
         print_gold(player_ptr);
     }
 
-    if (rfu.has(MainWindowRedrawingFlag::DEPTH)) {
-        rfu.reset_flag(MainWindowRedrawingFlag::DEPTH);
+    if (dur.has(MainWindowRedrawingFlag::DEPTH)) {
+        dur.reset_flag(MainWindowRedrawingFlag::DEPTH);
         print_depth(player_ptr);
     }
 
-    if (rfu.has(MainWindowRedrawingFlag::UHEALTH)) {
-        rfu.reset_flag(MainWindowRedrawingFlag::UHEALTH);
+    if (dur.has(MainWindowRedrawingFlag::UHEALTH)) {
+        dur.reset_flag(MainWindowRedrawingFlag::UHEALTH);
         print_health(player_ptr, true);
     }
 
-    if (rfu.has(MainWindowRedrawingFlag::HEALTH)) {
-        rfu.reset_flag(MainWindowRedrawingFlag::HEALTH);
+    if (dur.has(MainWindowRedrawingFlag::HEALTH)) {
+        dur.reset_flag(MainWindowRedrawingFlag::HEALTH);
         print_health(player_ptr, false);
     }
 
-    if (rfu.has(MainWindowRedrawingFlag::EXTRA)) {
+    if (dur.has(MainWindowRedrawingFlag::EXTRA)) {
         static constexpr auto flags = {
             MainWindowRedrawingFlag::EXTRA,
             MainWindowRedrawingFlag::CUT,
@@ -228,46 +228,46 @@ void redraw_stuff(PlayerType *player_ptr)
             MainWindowRedrawingFlag::IMITATION,
             MainWindowRedrawingFlag::TIMED_EFFECT,
         };
-        rfu.reset_flags(flags);
+        dur.reset_flags(flags);
         print_frame_extra(player_ptr);
     }
 
-    if (rfu.has(MainWindowRedrawingFlag::CUT)) {
-        rfu.reset_flag(MainWindowRedrawingFlag::CUT);
+    if (dur.has(MainWindowRedrawingFlag::CUT)) {
+        dur.reset_flag(MainWindowRedrawingFlag::CUT);
         print_cut(player_ptr);
     }
 
-    if (rfu.has(MainWindowRedrawingFlag::STUN)) {
-        rfu.reset_flag(MainWindowRedrawingFlag::STUN);
+    if (dur.has(MainWindowRedrawingFlag::STUN)) {
+        dur.reset_flag(MainWindowRedrawingFlag::STUN);
         print_stun(player_ptr);
     }
 
-    if (rfu.has(MainWindowRedrawingFlag::HUNGER)) {
-        rfu.reset_flag(MainWindowRedrawingFlag::HUNGER);
+    if (dur.has(MainWindowRedrawingFlag::HUNGER)) {
+        dur.reset_flag(MainWindowRedrawingFlag::HUNGER);
         print_hunger(player_ptr);
     }
 
-    if (rfu.has(MainWindowRedrawingFlag::ACTION)) {
-        rfu.reset_flag(MainWindowRedrawingFlag::ACTION);
+    if (dur.has(MainWindowRedrawingFlag::ACTION)) {
+        dur.reset_flag(MainWindowRedrawingFlag::ACTION);
         print_state(player_ptr);
     }
 
-    if (rfu.has(MainWindowRedrawingFlag::SPEED)) {
-        rfu.reset_flag(MainWindowRedrawingFlag::SPEED);
+    if (dur.has(MainWindowRedrawingFlag::SPEED)) {
+        dur.reset_flag(MainWindowRedrawingFlag::SPEED);
         print_speed(player_ptr);
     }
 
     if (PlayerClass(player_ptr).equals(PlayerClassType::IMITATOR)) {
-        if (rfu.has(MainWindowRedrawingFlag::IMITATION)) {
-            rfu.reset_flag(MainWindowRedrawingFlag::IMITATION);
+        if (dur.has(MainWindowRedrawingFlag::IMITATION)) {
+            dur.reset_flag(MainWindowRedrawingFlag::IMITATION);
             print_imitation(player_ptr);
         }
 
         return;
     }
 
-    if (rfu.has(MainWindowRedrawingFlag::STUDY)) {
-        rfu.reset_flag(MainWindowRedrawingFlag::STUDY);
+    if (dur.has(MainWindowRedrawingFlag::STUDY)) {
+        dur.reset_flag(MainWindowRedrawingFlag::STUDY);
         print_study(player_ptr);
     }
 }
@@ -293,15 +293,15 @@ static void request_overhead_redrawing_if_changed(PlayerType *player_ptr)
         return;
     }
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    if (rfu.has(SubWindowRedrawingFlag::OVERHEAD) || display_autopick.any()) {
+    auto &dur = DeferredUpdateRequests::get_instance();
+    if (dur.has(SubWindowRedrawingFlag::OVERHEAD) || display_autopick.any()) {
         return;
     }
 
     auto &overview_map_cache = OverviewMapCache::get_instance();
-    if (rfu.has(MainWindowRedrawingFlag::MAP)) {
+    if (dur.has(MainWindowRedrawingFlag::MAP)) {
         if (overview_map_cache.has_dirty_grids() || overview_map_cache.has_changed()) {
-            rfu.set_flag(SubWindowRedrawingFlag::OVERHEAD);
+            dur.set_flag(SubWindowRedrawingFlag::OVERHEAD);
         }
 
         return;
@@ -309,7 +309,7 @@ static void request_overhead_redrawing_if_changed(PlayerType *player_ptr)
 
     overview_map_cache.update(player_ptr);
     if (overview_map_cache.has_changed()) {
-        rfu.set_flag(SubWindowRedrawingFlag::OVERHEAD);
+        dur.set_flag(SubWindowRedrawingFlag::OVERHEAD);
     }
 }
 
@@ -374,8 +374,8 @@ static void update_sub_windows(PlayerType *player_ptr, bool include_deferred)
         request_monster_lore_redraw_if_changed(*player_ptr);
     }
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    if (!rfu.any_sub()) {
+    auto &dur = DeferredUpdateRequests::get_instance();
+    if (!dur.any_sub()) {
         return;
     }
 
@@ -389,73 +389,73 @@ static void update_sub_windows(PlayerType *player_ptr, bool include_deferred)
         deferred_flags.set(SubWindowRedrawingFlag::MESSAGE);
     }
 
-    auto window_flags = rfu.get_sub_intersection(target_flags);
+    auto window_flags = dur.get_sub_intersection(target_flags);
     window_flags.reset(deferred_flags);
 
     if (window_flags.has(SubWindowRedrawingFlag::INVENTORY)) {
-        rfu.reset_flag(SubWindowRedrawingFlag::INVENTORY);
+        dur.reset_flag(SubWindowRedrawingFlag::INVENTORY);
         fix_inventory(player_ptr);
     }
 
     if (window_flags.has(SubWindowRedrawingFlag::EQUIPMENT)) {
-        rfu.reset_flag(SubWindowRedrawingFlag::EQUIPMENT);
+        dur.reset_flag(SubWindowRedrawingFlag::EQUIPMENT);
         fix_equip(player_ptr);
     }
 
     if (window_flags.has(SubWindowRedrawingFlag::SPELL)) {
-        rfu.reset_flag(SubWindowRedrawingFlag::SPELL);
+        dur.reset_flag(SubWindowRedrawingFlag::SPELL);
         fix_spell(player_ptr);
     }
 
     if (window_flags.has(SubWindowRedrawingFlag::PLAYER)) {
-        rfu.reset_flag(SubWindowRedrawingFlag::PLAYER);
+        dur.reset_flag(SubWindowRedrawingFlag::PLAYER);
         fix_player(player_ptr);
     }
 
     // モンスターBGM対応のため、視界内モンスター表示のサブウインドウなし時も処理を行う
-    if (rfu.has(SubWindowRedrawingFlag::SIGHT_MONSTERS)) {
-        rfu.reset_flag(SubWindowRedrawingFlag::SIGHT_MONSTERS);
+    if (dur.has(SubWindowRedrawingFlag::SIGHT_MONSTERS)) {
+        dur.reset_flag(SubWindowRedrawingFlag::SIGHT_MONSTERS);
         fix_monster_list(player_ptr);
     }
 
     if (window_flags.has(SubWindowRedrawingFlag::PETS)) {
-        rfu.reset_flag(SubWindowRedrawingFlag::PETS);
+        dur.reset_flag(SubWindowRedrawingFlag::PETS);
         fix_pet_list(player_ptr);
     }
 
     if (window_flags.has(SubWindowRedrawingFlag::MESSAGE)) {
-        rfu.reset_flag(SubWindowRedrawingFlag::MESSAGE);
+        dur.reset_flag(SubWindowRedrawingFlag::MESSAGE);
         fix_message();
     }
 
     if (window_flags.has(SubWindowRedrawingFlag::OVERHEAD)) {
-        rfu.reset_flag(SubWindowRedrawingFlag::OVERHEAD);
+        dur.reset_flag(SubWindowRedrawingFlag::OVERHEAD);
         fix_overhead(player_ptr);
     }
 
     if (window_flags.has(SubWindowRedrawingFlag::DUNGEON)) {
-        rfu.reset_flag(SubWindowRedrawingFlag::DUNGEON);
+        dur.reset_flag(SubWindowRedrawingFlag::DUNGEON);
         fix_dungeon(player_ptr);
     }
 
     if (window_flags.has(SubWindowRedrawingFlag::MONSTER_LORE)) {
-        rfu.reset_flag(SubWindowRedrawingFlag::MONSTER_LORE);
+        dur.reset_flag(SubWindowRedrawingFlag::MONSTER_LORE);
         fix_monster(player_ptr);
     }
 
     if (window_flags.has(SubWindowRedrawingFlag::ITEM_KNOWLEDGE)) {
-        rfu.reset_flag(SubWindowRedrawingFlag::ITEM_KNOWLEDGE);
+        dur.reset_flag(SubWindowRedrawingFlag::ITEM_KNOWLEDGE);
         fix_object(player_ptr);
     }
 
     if (window_flags.has(SubWindowRedrawingFlag::FLOOR_ITEMS)) {
-        rfu.reset_flag(SubWindowRedrawingFlag::FLOOR_ITEMS);
+        dur.reset_flag(SubWindowRedrawingFlag::FLOOR_ITEMS);
         // ウィンドウサイズ変更に対応できず。カーソル位置を取る必要がある。
         fix_floor_item_list(player_ptr, player_ptr->get_position());
     }
 
     if (window_flags.has(SubWindowRedrawingFlag::FOUND_ITEMS)) {
-        rfu.reset_flag(SubWindowRedrawingFlag::FOUND_ITEMS);
+        dur.reset_flag(SubWindowRedrawingFlag::FOUND_ITEMS);
         fix_found_item_list(player_ptr);
     }
 }
@@ -474,7 +474,7 @@ void window_stuff_if_needed(PlayerType *player_ptr)
         request_player_redraw_if_points_changed(*player_ptr);
     }
 
-    if (RedrawingFlagsUpdater::get_instance().any_sub()) {
+    if (DeferredUpdateRequests::get_instance().any_sub()) {
         window_stuff(player_ptr);
     }
 }

@@ -10,8 +10,8 @@
 #include "player-info/race-types.h"
 #include "player/process-name.h"
 #include "racial/racial-android.h"
+#include "system/deferred-update-requests.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
@@ -43,19 +43,19 @@ void do_cmd_redraw(PlayerType *player_ptr)
 {
     term_xtra(TERM_XTRA_REACT, 0);
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.request_whole_status_recalculation();
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.request_whole_status_recalculation();
     static constexpr auto flags_iaf = {
         InventoryArrangementFlag::COMBINATION,
         InventoryArrangementFlag::REORDER,
     };
-    rfu.set_flags(flags_iaf);
-    rfu.request_whole_main_window_redrawing();
+    dur.set_flags(flags_iaf);
+    dur.request_whole_main_window_redrawing();
     auto &world = AngbandWorld::get_instance();
     // フロアが無いとき (新しいキャラクターの作成中に Windows 版のメニューから記号を切り替えたときなど) は、
     // フロアに入るときに全てのサブウィンドウを描き直す
     if (world.character_dungeon) {
-        rfu.fill_up_sub_flags();
+        dur.fill_up_sub_flags();
     }
 
     world.play_time.update();
@@ -141,7 +141,7 @@ void do_cmd_player_status(PlayerType *player_ptr)
     }
 
     screen_load();
-    RedrawingFlagsUpdater::get_instance().request_whole_main_window_redrawing();
+    DeferredUpdateRequests::get_instance().request_whole_main_window_redrawing();
     redraw_stuff(player_ptr);
 }
 

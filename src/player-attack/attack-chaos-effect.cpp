@@ -27,12 +27,12 @@
 #include "spell-kind/spells-sight.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell-realm/spells-hex.h"
+#include "system/deferred-update-requests.h"
 #include "system/floor/floor-info.h"
 #include "system/item/item-entity.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
@@ -50,7 +50,7 @@ static void attack_confuse(PlayerType *player_ptr, player_attack_type *pa_ptr, b
     if (player_ptr->special_attack & ATTACK_CONFUSE) {
         player_ptr->special_attack &= ~(ATTACK_CONFUSE);
         msg_print(_("手の輝きがなくなった。", "Your hands stop glowing."));
-        RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
+        DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     }
 
     auto &monrace = *pa_ptr->monrace;
@@ -145,7 +145,7 @@ static void attack_dispel(PlayerType *player_ptr, player_attack_type *pa_ptr)
 
     auto sp = Dice::roll(dd, 8);
     player_ptr->csp = std::min(player_ptr->msp, player_ptr->csp + sp);
-    RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::MP);
+    DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::MP);
 }
 
 /*!

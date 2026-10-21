@@ -8,9 +8,9 @@
 #include "market/building-util.h"
 #include "object/item-use-flags.h"
 #include "spell-kind/spells-perception.h"
+#include "system/deferred-update-requests.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
@@ -148,9 +148,9 @@ void building_recharge(PlayerType *player_ptr)
 #else
     msg_print("{} {} recharged for {} gold.", str_upcase_first(item_name), ((item->number > 1) ? "were" : "was"), price);
 #endif
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.request_inventory_arrangement();
-    rfu.request_item_lists_redrawing();
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.request_inventory_arrangement();
+    dur.request_item_lists_redrawing();
     player_ptr->au -= price;
 }
 
@@ -262,6 +262,6 @@ void building_recharge_all(PlayerType *player_ptr)
 
     msg_print(_("＄{} で再充填しました。", "You pay {} gold."), total_cost);
     msg_erase();
-    RedrawingFlagsUpdater::get_instance().request_inventory_arrangement();
+    DeferredUpdateRequests::get_instance().request_inventory_arrangement();
     player_ptr->au -= total_cost;
 }

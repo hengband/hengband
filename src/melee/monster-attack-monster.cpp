@@ -22,12 +22,12 @@
 #include "monster/monster-status-setter.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell-realm/spells-hex.h"
+#include "system/deferred-update-requests.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/floor/floor-info.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "tracking/health-bar-tracker.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
@@ -47,7 +47,7 @@ static void heal_monster_by_melee(mam_type *mam_ptr)
 
     HealthBarTracker::get_instance().set_flag_if_tracking(mam_ptr->m_idx);
     if (mam_ptr->m_ptr->is_riding()) {
-        RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::UHEALTH);
+        DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::UHEALTH);
     }
 
     if (mam_ptr->see_m && did_heal) {
@@ -190,7 +190,7 @@ static void redraw_health_bar(mam_type *mam_ptr)
 
     HealthBarTracker::get_instance().set_flag_if_tracking(mam_ptr->t_idx);
     if (mam_ptr->t_ptr->is_riding()) {
-        RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::UHEALTH);
+        DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::UHEALTH);
     }
 }
 

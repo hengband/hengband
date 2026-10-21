@@ -24,6 +24,7 @@
 #include "sv-definition/sv-protector-types.h"
 #include "sv-definition/sv-ring-types.h"
 #include "system/angband-system.h"
+#include "system/deferred-update-requests.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/dungeon/quest-definition.h"
 #include "system/dungeon/quest-list.h"
@@ -33,7 +34,6 @@
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "system/terrain/terrain-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -43,9 +43,9 @@
 
 static void update_sun_light(PlayerType *player_ptr)
 {
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.request_monster_update_and_map_redrawing();
-    rfu.set_flag(StatusRecalculatingFlag::MONSTER_LITE);
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.request_monster_update_and_map_redrawing();
+    dur.set_flag(StatusRecalculatingFlag::MONSTER_LITE);
     if ((player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].info & CAVE_GLOW) != 0) {
         set_superstealth(player_ptr, false);
     }
@@ -307,7 +307,7 @@ void update_dungeon_feeling(PlayerType *player_ptr)
     df.set_feeling(new_feeling);
     do_cmd_feeling(player_ptr);
     select_floor_music(player_ptr);
-    RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::DEPTH);
+    DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::DEPTH);
     if (disturb_minor) {
         disturb(player_ptr, false, false);
     }
@@ -339,12 +339,12 @@ void glow_deep_lava_and_bldg(PlayerType *player_ptr)
         }
     }
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &dur = DeferredUpdateRequests::get_instance();
     static constexpr auto flags_srf = {
         StatusRecalculatingFlag::VIEW,
         StatusRecalculatingFlag::LITE,
         StatusRecalculatingFlag::MONSTER_LITE,
     };
-    rfu.set_flags(flags_srf);
-    rfu.request_map_redrawing();
+    dur.set_flags(flags_srf);
+    dur.request_map_redrawing();
 }

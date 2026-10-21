@@ -15,9 +15,9 @@
 #include "io/input-key-acceptor.h"
 #include "io/write-diary.h"
 #include "main/sound-of-music.h"
+#include "system/deferred-update-requests.h"
 #include "system/inner-game-data.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
@@ -554,7 +554,7 @@ void do_cmd_options(PlayerType *player_ptr)
         case 'W':
         case 'w': {
             do_cmd_options_win(player_ptr);
-            RedrawingFlagsUpdater::get_instance().fill_up_sub_flags();
+            DeferredUpdateRequests::get_instance().fill_up_sub_flags();
             break;
         }
         case 'P':
@@ -633,7 +633,7 @@ void do_cmd_options(PlayerType *player_ptr)
     }
 
     screen_load();
-    RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::EQUIPPY);
+    DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::EQUIPPY);
 }
 
 /*!

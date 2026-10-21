@@ -18,11 +18,11 @@
 #include "object/item-use-flags.h"
 #include "perception/object-perception.h"
 #include "player-info/class-info.h"
+#include "system/deferred-update-requests.h"
 #include "system/floor/floor-info.h"
 #include "system/floor/town-list.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "util/buffer-shaper.h"
@@ -378,7 +378,7 @@ void show_death_info(PlayerType *player_ptr)
     inventory_aware(player_ptr);
     home_aware(player_ptr);
 
-    RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
+    DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
     handle_stuff_with_inventory_arrangement(player_ptr);
     flush();
     msg_erase();

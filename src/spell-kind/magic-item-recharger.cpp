@@ -20,9 +20,9 @@
 #include "object/item-use-flags.h"
 #include "player-base/player-class.h"
 #include "system/angband-exceptions.h"
+#include "system/deferred-update-requests.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "view/display-messages.h"
 
 /*!
@@ -55,7 +55,7 @@ bool recharge(PlayerType *player_ptr, int power)
         return false;
     }
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &dur = DeferredUpdateRequests::get_instance();
     const auto item_level = item->get_baseitem_level();
 
     TIME_EFFECT recharge_amount;
@@ -112,8 +112,8 @@ bool recharge(PlayerType *player_ptr, int power)
     }
 
     if (is_recharge_successful) {
-        rfu.request_inventory_arrangement();
-        rfu.request_item_lists_redrawing();
+        dur.request_inventory_arrangement();
+        dur.request_item_lists_redrawing();
         return true;
     }
 
@@ -125,8 +125,8 @@ bool recharge(PlayerType *player_ptr, int power)
         } else if (item->is_wand_staff()) {
             item->pval = 0;
         }
-        rfu.request_inventory_arrangement();
-        rfu.request_item_lists_redrawing();
+        dur.request_inventory_arrangement();
+        dur.request_item_lists_redrawing();
         return true;
     }
 
@@ -226,7 +226,7 @@ bool recharge(PlayerType *player_ptr, int power)
         THROW_EXCEPTION(std::logic_error, "Invalid fail type!");
     }
 
-    rfu.request_inventory_arrangement();
-    rfu.request_item_lists_redrawing();
+    dur.request_inventory_arrangement();
+    dur.request_item_lists_redrawing();
     return true;
 }

@@ -12,10 +12,10 @@
 #include "io/input-key-requester.h"
 #include "io/screen-util.h"
 #include "main/sound-of-music.h"
+#include "system/deferred-update-requests.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "target/projection-path-calculator.h"
 #include "target/target-checker.h"
 #include "target/target-describer.h"
@@ -321,7 +321,7 @@ Direction TargetSetter::switch_target_input()
         return Direction::none();
     case 'p': {
         verify_panel(this->player_ptr);
-        RedrawingFlagsUpdater::get_instance().request_monster_update_and_map_redrawing();
+        DeferredUpdateRequests::get_instance().request_monster_update_and_map_redrawing();
         handle_stuff(this->player_ptr);
         this->pos_interests = target_set_prepare(this->player_ptr, this->mode);
         this->pos_target = this->player_ptr->get_position();
@@ -392,7 +392,7 @@ tl::optional<int> TargetSetter::sweep_targets(const Direction &dir, int panel_ro
     panel_col_min = panel_col_min_initial;
     panel_bounds_center();
 
-    RedrawingFlagsUpdater::get_instance().request_monster_update_and_map_redrawing();
+    DeferredUpdateRequests::get_instance().request_monster_update_and_map_redrawing();
     handle_stuff(this->player_ptr);
 
     this->pos_interests = target_set_prepare(this->player_ptr, this->mode);
@@ -488,7 +488,7 @@ tl::optional<std::pair<Direction, bool>> TargetSetter::switch_next_grid_command(
         return tl::nullopt;
     case 'p': {
         verify_panel(this->player_ptr);
-        RedrawingFlagsUpdater::get_instance().request_monster_update_and_map_redrawing();
+        DeferredUpdateRequests::get_instance().request_monster_update_and_map_redrawing();
         handle_stuff(this->player_ptr);
         this->pos_interests = target_set_prepare(this->player_ptr, this->mode);
         this->pos_target = this->player_ptr->get_position();
@@ -590,9 +590,9 @@ Target target_set(PlayerType *player_ptr, target_type mode)
     ts.sweep_target_grids();
     prt("", 0, 0);
     verify_panel(player_ptr);
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.request_monster_update_and_map_redrawing();
-    rfu.set_flag(SubWindowRedrawingFlag::FLOOR_ITEMS);
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.request_monster_update_and_map_redrawing();
+    dur.set_flag(SubWindowRedrawingFlag::FLOOR_ITEMS);
     handle_stuff(player_ptr);
     Target::set_last_target(ts.get_target());
     return ts.get_target();

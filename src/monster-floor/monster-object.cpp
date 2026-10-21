@@ -19,13 +19,13 @@
 #include "monster/smart-learn-types.h"
 #include "object-enchant/tr-types.h"
 #include "object/object-mark-types.h"
+#include "system/deferred-update-requests.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/item/item-entity.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
@@ -158,7 +158,7 @@ static void monster_pickup_object(PlayerType *player_ptr, turn_flags *turn_flags
 
         // 拾われたアイテムがマップに残らないように描き直す (モンスターが見えていなければ、床などが見える)
         lite_spot(player_ptr, { ny, nx });
-        RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::FOUND_ITEMS);
+        DeferredUpdateRequests::get_instance().set_flag(SubWindowRedrawingFlag::FOUND_ITEMS);
         return;
     }
 

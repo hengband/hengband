@@ -4,12 +4,12 @@
 #include "monster/monster-status.h"
 #include "player-info/class-info.h"
 #include "player/player-status.h"
+#include "system/deferred-update-requests.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "util/bit-flags-calculator.h"
 #include "world/world.h"
 
@@ -39,8 +39,8 @@ bool can_player_ride_pet(PlayerType *player_ptr, const Grid &grid, bool now_ridi
     }
 
     // 騎乗状態を仮に変えた能力値で判定する。仮の状態を画面に描かないよう、再計算だけを行う。
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.set_flag(StatusRecalculatingFlag::BONUS);
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.set_flag(StatusRecalculatingFlag::BONUS);
     update_creature(player_ptr);
 
     bool p_can_enter = player_can_enter(player_ptr, grid.feat, CEM_P_CAN_ENTER_PATTERN);
@@ -53,7 +53,7 @@ bool can_player_ride_pet(PlayerType *player_ptr, const Grid &grid, bool now_ridi
 
     player_ptr->riding_ryoute = old_riding_two_hands;
     player_ptr->old_riding_ryoute = old_old_riding_two_hands;
-    rfu.set_flag(StatusRecalculatingFlag::BONUS);
+    dur.set_flag(StatusRecalculatingFlag::BONUS);
     update_creature(player_ptr);
 
     world.character_xtra = old_character_xtra;

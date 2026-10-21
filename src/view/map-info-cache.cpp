@@ -1,7 +1,7 @@
 #include "view/map-info-cache.h"
+#include "system/deferred-update-requests.h"
 #include "system/floor/floor-info.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "view/display-map.h"
 
 MapInfoCache MapInfoCache::instance{};
@@ -75,7 +75,7 @@ void MapInfoCache::prepare(const PlayerType &player)
         this->entries.assign(static_cast<size_t>(this->height * this->width), {});
     }
 
-    if (RedrawingFlagsUpdater::get_instance().has(MainWindowRedrawingFlag::MAP)) {
+    if (DeferredUpdateRequests::get_instance().has(MainWindowRedrawingFlag::MAP)) {
         this->invalidate_all();
     }
 }

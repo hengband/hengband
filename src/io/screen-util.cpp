@@ -22,10 +22,10 @@
 #include "io/input-key-acceptor.h"
 #include "monster/monster-update.h"
 #include "player-info/mimic-info-table.h"
+#include "system/deferred-update-requests.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/floor/floor-info.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "target/target-checker.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
@@ -52,9 +52,9 @@ void resize_map()
     panel_col_min = p_ptr->current_floor_ptr->width;
     verify_panel(p_ptr);
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.request_whole_status_recalculation();
-    rfu.request_whole_main_window_redrawing();
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.request_whole_status_recalculation();
+    dur.request_whole_main_window_redrawing();
 
     // -続く- の待ちの最中に描き直すと、メッセージの消去から -続く- がもう一度表示されて
     // 入力待ちが入れ子になる。フラグだけを立てておき、-続く- が明けた後の handle_stuff() で描き直す。

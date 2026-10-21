@@ -2617,6 +2617,9 @@
     <ClCompile Include="..\..\src\system\building-type-definition.cpp">
       <Filter>system</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\system\deferred-update-requests.cpp">
+      <Filter>system</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\system\dungeon\dungeon-data-definition.cpp">
       <Filter>system\dungeon</Filter>
     </ClCompile>
@@ -2690,9 +2693,6 @@
       <Filter>system</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\system\player-type-definition.cpp">
-      <Filter>system</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\system\redrawing-flags-updater.cpp">
       <Filter>system</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\system\services\baseitem-monrace-service.cpp">
@@ -5605,6 +5605,9 @@
     <ClInclude Include="..\..\src\system\building-type-definition.h">
       <Filter>system</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\system\deferred-update-requests.h">
+      <Filter>system</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\src\system\dungeon\dungeon-data-definition.h">
       <Filter>system\dungeon</Filter>
     </ClInclude>
@@ -5738,9 +5741,6 @@
       <Filter>system</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\system\player-type-definition.h">
-      <Filter>system</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\system\redrawing-flags-updater.h">
       <Filter>system</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\system\services\baseitem-monrace-service.h">

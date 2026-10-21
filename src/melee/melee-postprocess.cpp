@@ -22,11 +22,11 @@
 #include "monster/monster-status-setter.h"
 #include "monster/monster-status.h"
 #include "pet/pet-fall-off.h"
+#include "system/deferred-update-requests.h"
 #include "system/floor/floor-info.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "tracking/health-bar-tracker.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
@@ -69,7 +69,7 @@ static void prepare_redraw(mam_pp_type *mam_pp_ptr)
 
     HealthBarTracker::get_instance().set_flag_if_tracking(mam_pp_ptr->m_idx);
     if (mam_pp_ptr->m_ptr->is_riding()) {
-        RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::UHEALTH);
+        DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::UHEALTH);
     }
 }
 

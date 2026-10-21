@@ -26,6 +26,7 @@
 #include "monster/monster-update.h"
 #include "player/player-status-flags.h"
 #include "player/player-status.h"
+#include "system/deferred-update-requests.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/enums/grid-flow.h"
 #include "system/enums/terrain/terrain-tag.h"
@@ -34,7 +35,6 @@
 #include "system/item/item-entity.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "system/terrain/terrain-definition.h"
 #include "system/terrain/terrain-list.h"
 #include "term/gameterm.h"
@@ -130,7 +130,7 @@ void set_terrain_id_to_grid(PlayerType *player_ptr, const Pos2D &pos, short terr
             StatusRecalculatingFlag::MONSTER_LITE,
             StatusRecalculatingFlag::MONSTER_STATUSES,
         };
-        RedrawingFlagsUpdater::get_instance().set_flags(flags);
+        DeferredUpdateRequests::get_instance().set_flags(flags);
     }
 
     if (terrain.flags.has_not(TerrainCharacteristics::GLOW) || dungeon.flags.has(DungeonFeatureType::DARKNESS)) {
@@ -408,7 +408,7 @@ void note_spot(PlayerType *player_ptr, const Pos2D &pos)
 
         // 足元のアイテムの一覧も、見つけたアイテムだけを出す。
         // 見つけていたアイテムでも、置かれたアイテムが重なって数が変わったときなどに描き直す
-        RedrawingFlagsUpdater::get_instance().request_floor_item_lists_redrawing();
+        DeferredUpdateRequests::get_instance().request_floor_item_lists_redrawing();
     }
 
     /* Hack -- memorize grids */
@@ -472,7 +472,7 @@ void lite_spot(PlayerType *player_ptr, const Pos2D &pos)
     if (!panel_contains(pos)) {
         // メイン画面の外のグリッドは表示が変わったか分からないので、自分の周囲を描き直す
         map_info_cache.invalidate(pos);
-        RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::DUNGEON);
+        DeferredUpdateRequests::get_instance().set_flag(SubWindowRedrawingFlag::DUNGEON);
         return;
     }
 
@@ -484,7 +484,7 @@ void lite_spot(PlayerType *player_ptr, const Pos2D &pos)
     // 自分の周囲は、メイン画面の表示が変わったときと、覚えていた結果 (表示しているかもしれない) と違うときに描き直す
     const auto is_main_window_changed = term_queue_bigchar(panel_col_of(pos.x), pos.y - panel_row_prt, symbol_pair);
     if (is_main_window_changed || is_cache_changed) {
-        RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::DUNGEON);
+        DeferredUpdateRequests::get_instance().set_flag(SubWindowRedrawingFlag::DUNGEON);
     }
 }
 

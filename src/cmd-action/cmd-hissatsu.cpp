@@ -29,8 +29,8 @@
 #include "player/player-spell-status.h"
 #include "spell/spells-execution.h"
 #include "spell/technic-info-table.h"
+#include "system/deferred-update-requests.h"
 #include "system/item/item-entity.h"
-#include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
 #include "util/int-char-converter.h"
 #include "util/string-processor.h"
@@ -275,7 +275,7 @@ static int get_hissatsu_power(PlayerType *player_ptr, SPELL_IDX *sn)
         screen_load();
     }
 
-    RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::SPELL);
+    DeferredUpdateRequests::get_instance().set_flag(SubWindowRedrawingFlag::SPELL);
     window_stuff(player_ptr);
 
     /* Abort if needed */
@@ -345,8 +345,8 @@ void do_cmd_hissatsu(PlayerType *player_ptr)
         player_ptr->csp = 0;
     }
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.set_flag(MainWindowRedrawingFlag::MP);
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.set_flag(MainWindowRedrawingFlag::MP);
 }
 
 /*!
@@ -404,5 +404,5 @@ void do_cmd_gain_hissatsu(PlayerType *player_ptr)
         PlayerEnergy(player_ptr).set_player_turn_energy(100);
     }
 
-    RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::SPELLS);
+    DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::SPELLS);
 }

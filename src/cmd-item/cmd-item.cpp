@@ -58,9 +58,9 @@
 #include "realm/realm-hex-numbers.h"
 #include "realm/realm-types.h"
 #include "status/action-setter.h"
+#include "system/deferred-update-requests.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
 #include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"
@@ -138,7 +138,7 @@ void do_cmd_drop(PlayerType *player_ptr)
         calc_android_exp(player_ptr);
     }
 
-    RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::EQUIPPY);
+    DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::EQUIPPY);
 }
 
 /*!
@@ -185,9 +185,9 @@ void do_cmd_uninscribe(PlayerType *player_ptr)
 
     msg_print(_("銘を消した。", "Inscription removed."));
     item->inscription.reset();
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.request_inscription_change_updates();
-    rfu.request_floor_item_lists_redrawing();
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.request_inscription_change_updates();
+    dur.request_floor_item_lists_redrawing();
 }
 
 /*!
@@ -218,9 +218,9 @@ void do_cmd_inscribe(PlayerType *player_ptr)
     } else {
         item->inscription.emplace(*input_inscription);
     }
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.request_inscription_change_updates();
-    rfu.request_floor_item_lists_redrawing();
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.request_inscription_change_updates();
+    dur.request_floor_item_lists_redrawing();
 }
 
 /*!

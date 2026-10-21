@@ -5,8 +5,8 @@
 #include "io/input-key-requester.h"
 #include "player/attack-defense-types.h"
 #include "status/action-setter.h"
+#include "system/deferred-update-requests.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "target/target-checker.h"
 #include "term/screen-processor.h"
 
@@ -31,9 +31,9 @@ void stop_running(PlayerType *player_ptr)
         StatusRecalculatingFlag::TORCH,
         StatusRecalculatingFlag::FLOW,
     };
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.set_flags(flags);
-    rfu.request_floor_item_lists_redrawing();
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.set_flags(flags);
+    dur.request_floor_item_lists_redrawing();
 }
 
 /*
@@ -44,10 +44,10 @@ void stop_running(PlayerType *player_ptr)
  */
 void disturb(PlayerType *player_ptr, bool stop_search, bool stop_travel)
 {
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &dur = DeferredUpdateRequests::get_instance();
     if (command_rep) {
         command_rep = 0;
-        rfu.set_flag(MainWindowRedrawingFlag::ACTION);
+        dur.set_flag(MainWindowRedrawingFlag::ACTION);
     }
 
     if ((player_ptr->action == ACTION_REST) || (player_ptr->action == ACTION_FISH) || (stop_search && (player_ptr->action == ACTION_SEARCH))) {
@@ -62,7 +62,7 @@ void disturb(PlayerType *player_ptr, bool stop_search, bool stop_travel)
             verify_panel(player_ptr);
         }
 
-        rfu.set_flag(StatusRecalculatingFlag::TORCH);
+        dur.set_flag(StatusRecalculatingFlag::TORCH);
     }
 
     if (flush_disturb) {

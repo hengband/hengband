@@ -21,8 +21,8 @@
 #include "player/special-defense-types.h"
 #include "spell-realm/spells-hex.h"
 #include "spell-realm/spells-song.h"
+#include "system/deferred-update-requests.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "view/display-messages.h"
 
 /*!
@@ -38,11 +38,11 @@ void set_action(PlayerType *player_ptr, uint8_t typ)
         return;
     }
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &dur = DeferredUpdateRequests::get_instance();
     switch (prev_typ) {
     case ACTION_SEARCH:
         msg_print(_("探索をやめた。", "You no longer walk carefully."));
-        rfu.set_flag(MainWindowRedrawingFlag::SPEED);
+        dur.set_flag(MainWindowRedrawingFlag::SPEED);
         break;
     case ACTION_REST:
         player_ptr->resting = 0;
@@ -60,8 +60,8 @@ void set_action(PlayerType *player_ptr, uint8_t typ)
     case ACTION_SAMURAI_STANCE:
         msg_print(_("型を崩した。", "You stop assuming the special stance."));
         PlayerClass(player_ptr).set_samurai_stance(SamuraiStanceType::NONE);
-        rfu.set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
-        rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
+        dur.set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
+        dur.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
         break;
     case ACTION_SING:
         msg_print(_("歌うのをやめた。", "You stop singing."));
@@ -92,7 +92,7 @@ void set_action(PlayerType *player_ptr, uint8_t typ)
     switch (player_ptr->action) {
     case ACTION_SEARCH:
         msg_print(_("注意深く歩き始めた。", "You begin to walk carefully."));
-        rfu.set_flag(MainWindowRedrawingFlag::SPEED);
+        dur.set_flag(MainWindowRedrawingFlag::SPEED);
         break;
     case ACTION_LEARN:
         msg_print(_("学習を始めた。", "You begin learning"));
@@ -107,6 +107,6 @@ void set_action(PlayerType *player_ptr, uint8_t typ)
         break;
     }
 
-    rfu.set_flag(StatusRecalculatingFlag::BONUS);
-    rfu.set_flag(MainWindowRedrawingFlag::ACTION);
+    dur.set_flag(StatusRecalculatingFlag::BONUS);
+    dur.set_flag(MainWindowRedrawingFlag::ACTION);
 }

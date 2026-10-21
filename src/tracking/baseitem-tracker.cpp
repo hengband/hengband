@@ -5,8 +5,8 @@
  */
 
 #include "tracking/baseitem-tracker.h"
+#include "system/deferred-update-requests.h"
 #include "system/item/item-entity.h"
-#include "system/redrawing-flags-updater.h"
 
 BaseitemTracker BaseitemTracker::instance{};
 
@@ -28,5 +28,5 @@ ItemEntity BaseitemTracker::get_trackee() const
 void BaseitemTracker::set_trackee(short new_bi_id)
 {
     this->bi_id = new_bi_id;
-    RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::ITEM_KNOWLEDGE);
+    DeferredUpdateRequests::get_instance().set_flag(SubWindowRedrawingFlag::ITEM_KNOWLEDGE);
 }

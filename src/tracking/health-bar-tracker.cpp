@@ -5,7 +5,7 @@
  */
 
 #include "tracking/health-bar-tracker.h"
-#include "system/redrawing-flags-updater.h"
+#include "system/deferred-update-requests.h"
 
 HealthBarTracker HealthBarTracker::instance{};
 
@@ -32,12 +32,12 @@ short HealthBarTracker::get_trackee() const
 void HealthBarTracker::set_trackee(short m_idx)
 {
     this->tracking_m_idx = m_idx;
-    RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::HEALTH);
+    DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::HEALTH);
 }
 
 void HealthBarTracker::set_flag_if_tracking(short m_idx) const
 {
     if (this->is_tracking(m_idx)) {
-        RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::HEALTH);
+        DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::HEALTH);
     }
 }

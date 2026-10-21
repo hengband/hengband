@@ -16,6 +16,7 @@
 #include "player/player-move.h"
 #include "player/player-status-flags.h"
 #include "status/bad-status-setter.h"
+#include "system/deferred-update-requests.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/dungeon/quest-definition.h"
 #include "system/enums/terrain/terrain-tag.h"
@@ -24,7 +25,6 @@
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "system/terrain/terrain-definition.h"
 #include "util/probability-table.h"
 #include "util/string-processor.h"
@@ -298,15 +298,15 @@ void glow_earthquake_area(auto &floor, std::span<const Pos2D> area)
 
 void set_redrawing_flags()
 {
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.request_monster_update_and_map_redrawing();
-    rfu.request_sight_recalculation();
-    rfu.set_flag(StatusRecalculatingFlag::FLOW);
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.request_monster_update_and_map_redrawing();
+    dur.request_sight_recalculation();
+    dur.set_flag(StatusRecalculatingFlag::FLOW);
     static constexpr auto flags_mwrf = {
         MainWindowRedrawingFlag::HEALTH,
         MainWindowRedrawingFlag::UHEALTH,
     };
-    rfu.set_flags(flags_mwrf);
+    dur.set_flags(flags_mwrf);
 }
 } // namespace
 

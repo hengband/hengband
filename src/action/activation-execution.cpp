@@ -35,11 +35,11 @@
 #include "sv-definition/sv-lite-types.h"
 #include "sv-definition/sv-ring-types.h"
 #include "system/baseitem/baseitem-key.h"
+#include "system/deferred-update-requests.h"
 #include "system/floor/floor-info.h"
 #include "system/item/item-entity.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "target/target-getter.h"
 #include "term/screen-processor.h"
 #include "timed-effect/timed-effects.h"
@@ -185,7 +185,7 @@ void exe_activate(PlayerType *player_ptr, INVENTORY_IDX i_idx)
     sound(SoundKind::ZAP);
     if (ae.item->has_activation()) {
         activate_artifact(player_ptr, ae.item);
-        RedrawingFlagsUpdater::get_instance().request_carried_item_lists_redrawing();
+        DeferredUpdateRequests::get_instance().request_carried_item_lists_redrawing();
         return;
     }
 

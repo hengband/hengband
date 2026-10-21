@@ -43,13 +43,13 @@
 #include "player/player-status-flags.h"
 #include "player/special-defense-types.h"
 #include "status/action-setter.h"
+#include "system/deferred-update-requests.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/item/item-entity.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "system/terrain/terrain-definition.h"
 #include "target/target-checker.h"
 #include "target/target-getter.h"
@@ -91,7 +91,7 @@ void do_cmd_pet_dismiss(PlayerType *player_ptr)
     /* Process the monsters (backwards) */
     auto all_pets = false;
     auto num_dismissed = 0;
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &dur = DeferredUpdateRequests::get_instance();
     const int num_pet_index = std::ssize(pet_index);
     for (auto i = 0; i < num_pet_index; i++) {
         const auto pet_ctr = pet_index[i];
@@ -145,13 +145,13 @@ void do_cmd_pet_dismiss(PlayerType *player_ptr)
             if (monster.is_riding()) {
                 msg_print(_("{}から降りた。", "You dismount from {}. "), friend_name);
                 player_ptr->ride_monster(0);
-                rfu.set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
-                rfu.request_riding_status_redrawing();
+                dur.set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
+                dur.request_riding_status_redrawing();
             }
 
             msg_print(_("{} を放した。", "Dismissed {}."), friend_name);
-            rfu.set_flag(StatusRecalculatingFlag::BONUS);
-            rfu.set_flag(SubWindowRedrawingFlag::MESSAGE);
+            dur.set_flag(StatusRecalculatingFlag::BONUS);
+            dur.set_flag(SubWindowRedrawingFlag::MESSAGE);
             delete_monster_idx(player_ptr, pet_ctr);
             num_dismissed++;
         }
@@ -271,15 +271,15 @@ bool do_cmd_riding(PlayerType *player_ptr, bool force)
 
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &dur = DeferredUpdateRequests::get_instance();
     static constexpr auto flags_srf = {
         StatusRecalculatingFlag::UN_VIEW,
         StatusRecalculatingFlag::UN_LITE,
         StatusRecalculatingFlag::BONUS,
     };
-    rfu.set_flags(flags_srf);
-    rfu.request_map_redrawing();
-    rfu.request_riding_status_redrawing();
+    dur.set_flags(flags_srf);
+    dur.request_map_redrawing();
+    dur.request_riding_status_redrawing();
     (void)move_player_effect(player_ptr, pos.y, pos.x, MPE_HANDLE_STUFF | MPE_ENERGY_USE | MPE_DONT_PICKUP | MPE_DONT_SWAP_MON);
     return true;
 }
@@ -794,7 +794,7 @@ void do_cmd_pet(PlayerType *player_ptr)
             player_ptr->pet_extra_flags |= (PF_TWO_HANDS);
         }
 
-        RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
+        DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
         handle_stuff(player_ptr);
         break;
     }

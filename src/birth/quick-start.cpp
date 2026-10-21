@@ -13,8 +13,8 @@
 #include "player/player-status.h"
 #include "player/process-name.h"
 #include "player/race-info-table.h"
+#include "system/deferred-update-requests.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
 #include "util/enum-converter.h"
 
@@ -66,7 +66,7 @@ bool ask_quick_start(PlayerType *player_ptr)
     ap_ptr = &personality_info[player_ptr->ppersonality];
 
     get_extra(player_ptr, false);
-    RedrawingFlagsUpdater::get_instance().request_bonus_and_max_hp_recalculation();
+    DeferredUpdateRequests::get_instance().request_bonus_and_max_hp_recalculation();
     update_creature(player_ptr);
     player_ptr->chp = player_ptr->mhp;
     player_ptr->csp = player_ptr->msp;

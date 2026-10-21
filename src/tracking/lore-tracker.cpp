@@ -5,8 +5,8 @@
  */
 
 #include "tracking/lore-tracker.h"
+#include "system/deferred-update-requests.h"
 #include "system/monrace/monrace-list.h"
-#include "system/redrawing-flags-updater.h"
 
 LoreTracker LoreTracker::instance{};
 
@@ -44,5 +44,5 @@ const MonraceDefinition &LoreTracker::get_tracking_monrace() const
 void LoreTracker::set_trackee(MonraceId new_monrace_id)
 {
     this->monrace_id = new_monrace_id;
-    RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::MONSTER_LORE);
+    DeferredUpdateRequests::get_instance().set_flag(SubWindowRedrawingFlag::MONSTER_LORE);
 }

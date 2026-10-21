@@ -50,12 +50,12 @@
 #include "spell/spells-status.h"
 #include "system/angband-exceptions.h"
 #include "system/building-type-definition.h"
+#include "system/deferred-update-requests.h"
 #include "system/floor/floor-info.h"
 #include "system/floor/wilderness-grid.h"
 #include "system/grid-type-definition.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "system/terrain/terrain-definition.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
@@ -387,7 +387,7 @@ void do_cmd_building(PlayerType *player_ptr)
 
         // 建物の中ではプレイヤーのターンの処理 (process_player()) が行われず、ターンごとの描き直しの要求が来ないので、
         // 支払いや報酬で変わる所持金などを反映するよう、コマンドごとにプレイヤーの情報のサブウィンドウを描き直す
-        RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::PLAYER);
+        DeferredUpdateRequests::get_instance().set_flag(SubWindowRedrawingFlag::PLAYER);
         handle_stuff_with_inventory_arrangement(player_ptr);
         if (should_leave) {
             break;
@@ -406,19 +406,19 @@ void do_cmd_building(PlayerType *player_ptr)
     world.character_icky_depth--;
     term_clear();
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.request_monster_update_and_map_redrawing();
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.request_monster_update_and_map_redrawing();
     static constexpr auto flags_srf = {
         StatusRecalculatingFlag::VIEW,
         StatusRecalculatingFlag::BONUS,
         StatusRecalculatingFlag::LITE,
         StatusRecalculatingFlag::MONSTER_LITE,
     };
-    rfu.set_flags(flags_srf);
+    dur.set_flags(flags_srf);
     static constexpr auto flags_mwrf = {
         MainWindowRedrawingFlag::BASIC,
         MainWindowRedrawingFlag::EXTRA,
         MainWindowRedrawingFlag::EQUIPPY,
     };
-    rfu.set_flags(flags_mwrf);
+    dur.set_flags(flags_mwrf);
 }

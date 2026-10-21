@@ -24,11 +24,11 @@
 #include "object/object-mark-types.h"
 #include "player/player-move.h"
 #include "spell-kind/spells-perception.h"
+#include "system/deferred-update-requests.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "target/target-checker.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
@@ -94,7 +94,7 @@ static void py_pickup_all_golds_on_floor(PlayerType *player_ptr, const Grid &gri
 
         delete_object_idx(player_ptr, i_idx);
 
-        RedrawingFlagsUpdater::get_instance().request_gold_redrawing();
+        DeferredUpdateRequests::get_instance().request_gold_redrawing();
     }
 }
 
@@ -263,7 +263,7 @@ void process_player_pickup_item(PlayerType *player_ptr, OBJECT_IDX o_idx)
 void carry(PlayerType *player_ptr, bool pickup)
 {
     verify_panel(player_ptr);
-    RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
+    DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
     handle_stuff(player_ptr);
     const auto &grid = player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
     autopick_pickup_items(player_ptr, grid);

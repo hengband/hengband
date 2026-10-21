@@ -27,8 +27,8 @@
 #include "store/store-owners.h"
 #include "store/store-screen.h"
 #include "store/store.h"
+#include "system/deferred-update-requests.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "view/display-messages.h"
 #include "view/display-store.h"
 #include "view/object-describer.h"
@@ -224,9 +224,9 @@ void store_sell(PlayerType *player_ptr, StoreScreen &screen)
         }
     }
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.set_flag(StatusRecalculatingFlag::BONUS);
-    rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.set_flag(StatusRecalculatingFlag::BONUS);
+    dur.set_flag(SubWindowRedrawingFlag::PLAYER);
     handle_stuff(player_ptr);
 
     if (placed && (i_idx >= INVEN_MAIN_HAND)) {

@@ -6,8 +6,8 @@
 #include "game-option/input-options.h"
 #include "game-option/text-display-options.h"
 #include "io/input-key-acceptor.h"
+#include "system/deferred-update-requests.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "term/gameterm.h"
 #include "term/z-term.h"
 #include "view/display-messages.h"
@@ -31,9 +31,9 @@ errr event_hook(int action, int)
     if (!injected) {
         injected = true;
         term_resize(120, 36);
-        auto &rfu = RedrawingFlagsUpdater::get_instance();
-        rfu.set_flag(MainWindowRedrawingFlag::WIPE);
-        rfu.set_flag(MainWindowRedrawingFlag::GOLD);
+        auto &dur = DeferredUpdateRequests::get_instance();
+        dur.set_flag(MainWindowRedrawingFlag::WIPE);
+        dur.set_flag(MainWindowRedrawingFlag::GOLD);
         // 旧実装でも無限待ちせず失敗を検出できるよう、再入前に応答キーを用意する。
         term_key_push(' ');
         if (reenter) {
@@ -92,17 +92,17 @@ int main(int argc, char **argv)
         msg_print("pending message before wipe");
     }
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.set_flag(MainWindowRedrawingFlag::WIPE);
-    rfu.set_flag(MainWindowRedrawingFlag::GOLD);
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.set_flag(MainWindowRedrawingFlag::WIPE);
+    dur.set_flag(MainWindowRedrawingFlag::GOLD);
     redraw_stuff(&player);
 
-    const auto consumed = !rfu.has(MainWindowRedrawingFlag::WIPE);
+    const auto consumed = !dur.has(MainWindowRedrawingFlag::WIPE);
     const auto drawn = gold_visible(term, "123456");
     redraw_stuff(&player);
     const auto preserved = gold_visible(term, "123456");
     player.au = 654321;
-    rfu.set_flag(MainWindowRedrawingFlag::GOLD);
+    dur.set_flag(MainWindowRedrawingFlag::GOLD);
     redraw_stuff(&player);
     const auto guard_released = gold_visible(term, "654321");
     const auto expected_input = injected == (mode != "plain");

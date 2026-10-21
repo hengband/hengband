@@ -19,9 +19,9 @@
 #include "player-base/player-class.h"
 #include "player-status/player-energy.h"
 #include "status/experience.h"
+#include "system/deferred-update-requests.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
@@ -88,9 +88,9 @@ void ObjectUseEntity::execute()
 
         msg_print(_("この杖にはもう魔力が残っていない。", "The staff has no charges left."));
         item->set_identification_flag(IdentificationFlag::EMPTY);
-        auto &rfu = RedrawingFlagsUpdater::get_instance();
-        rfu.request_inventory_arrangement();
-        rfu.request_item_lists_redrawing();
+        auto &dur = DeferredUpdateRequests::get_instance();
+        dur.request_inventory_arrangement();
+        dur.request_item_lists_redrawing();
         return;
     }
 
@@ -102,15 +102,15 @@ void ObjectUseEntity::execute()
         chg_virtue(this->player_ptr, Virtue::KNOWLEDGE, -1);
     }
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &dur = DeferredUpdateRequests::get_instance();
     item->mark_as_tried();
     if (ident && !item->is_aware()) {
         object_aware(this->player_ptr, *item);
         gain_exp(this->player_ptr, (item_level + (this->player_ptr->lev >> 1)) / this->player_ptr->lev);
     }
 
-    rfu.request_inventory_arrangement();
-    rfu.request_item_lists_redrawing();
+    dur.request_inventory_arrangement();
+    dur.request_item_lists_redrawing();
     if (!use_charge) {
         return;
     }

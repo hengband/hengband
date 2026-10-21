@@ -39,6 +39,7 @@
 #include "store/store-util.h"
 #include "store/store.h"
 #include "system/angband-system.h"
+#include "system/deferred-update-requests.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
@@ -46,7 +47,6 @@
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "target/target-checker.h"
 #include "target/target-getter.h"
 #include "target/target-setter.h"
@@ -95,7 +95,7 @@ void process_world_aux_mutation(PlayerType *player_ptr)
     if (player_ptr->muta.has(PlayerMutationType::ALCOHOL) && (randint1(6400) == 321)) {
         if (!has_resist_conf(player_ptr) && !has_resist_chaos(player_ptr)) {
             disturb(player_ptr, false, true);
-            RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::EXTRA);
+            DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::EXTRA);
             msg_print(_("いひきがもーろーとひてきたきがふる...ヒック！", "You feel a SSSCHtupor cOmINg over yOu... *HIC*!"));
         }
 
@@ -127,7 +127,7 @@ void process_world_aux_mutation(PlayerType *player_ptr)
     if (player_ptr->muta.has(PlayerMutationType::HALLU) && (randint1(6400) == 42)) {
         if (!has_resist_chaos(player_ptr)) {
             disturb(player_ptr, false, true);
-            RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::EXTRA);
+            DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::EXTRA);
             (void)bss.mod_hallucination(randint0(50) + 20);
         }
     }
@@ -415,7 +415,7 @@ void process_world_aux_mutation(PlayerType *player_ptr)
 
             hp_player(player_ptr, healing);
             player_ptr->csp -= healing;
-            RedrawingFlagsUpdater::get_instance().request_hp_mp_redrawing();
+            DeferredUpdateRequests::get_instance().request_hp_mp_redrawing();
         }
     }
 
@@ -428,7 +428,7 @@ void process_world_aux_mutation(PlayerType *player_ptr)
             }
 
             player_ptr->csp += healing;
-            RedrawingFlagsUpdater::get_instance().request_hp_mp_redrawing();
+            DeferredUpdateRequests::get_instance().request_hp_mp_redrawing();
             take_hit(player_ptr, DAMAGE_LOSELIFE, healing, _("頭に昇った血", "blood rushing to the head"));
         }
     }

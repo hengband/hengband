@@ -1,6 +1,6 @@
 #pragma once
 
-#include "system/redrawing-flags-updater.h"
+#include "system/deferred-update-requests.h"
 #include "util/flag-group.h"
 #include <array>
 #include <cstdint>

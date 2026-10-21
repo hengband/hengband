@@ -10,11 +10,11 @@
 #include "player-base/player-class.h"
 #include "player/player-damage.h"
 #include "status/bad-status-setter.h"
+#include "system/deferred-update-requests.h"
 #include "system/grid-type-definition.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
@@ -262,8 +262,8 @@ static void effect_monster_psi_drain_resist(PlayerType *player_ptr, EffectMonste
         player_ptr->csp = 0;
     }
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.set_flag(MainWindowRedrawingFlag::MP);
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.set_flag(MainWindowRedrawingFlag::MP);
     take_hit(player_ptr, DAMAGE_ATTACK, em_ptr->dam, em_ptr->killer);
     em_ptr->dam = 0;
 }
@@ -282,8 +282,8 @@ static void effect_monster_psi_drain_change_power(PlayerType *player_ptr, Effect
 
     b = std::min(player_ptr->msp, player_ptr->csp + b);
     player_ptr->csp = b;
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.set_flag(MainWindowRedrawingFlag::MP);
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.set_flag(MainWindowRedrawingFlag::MP);
 }
 
 /*!

@@ -9,9 +9,9 @@
 #include "object-hook/hook-expendable.h"
 #include "object/item-use-flags.h"
 #include "object/object-value.h"
+#include "system/deferred-update-requests.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "view/display-messages.h"
 #include <fmt/format.h>
 
@@ -82,7 +82,7 @@ bool alchemy(PlayerType *player_ptr)
     const auto gold = static_cast<PRICE>(price);
     msg_print(_("{}を＄{} の金に変えた。", "You turn {} to {} coins worth of gold."), item_name, gold);
     player_ptr->au = clamp_price(int64_t{ player_ptr->au } + gold);
-    RedrawingFlagsUpdater::get_instance().request_gold_redrawing();
+    DeferredUpdateRequests::get_instance().request_gold_redrawing();
     vary_item(player_ptr, i_idx, -amt);
     return true;
 }

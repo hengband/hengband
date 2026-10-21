@@ -23,10 +23,10 @@
 #include "player-info/race-types.h"
 #include "sv-definition/sv-other-types.h"
 #include "sv-definition/sv-wand-types.h"
+#include "system/deferred-update-requests.h"
 #include "system/item/item-entity.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 #include <fmt/format.h>
@@ -157,5 +157,5 @@ void auto_destroy_item(PlayerType *player_ptr, ItemEntity *o_ptr, int autopick_i
 
     autopick_last_destroyed_object = o_ptr->clone();
     o_ptr->marked.set(OmType::AUTODESTROY);
-    RedrawingFlagsUpdater::get_instance().set_flag(InventoryArrangementFlag::AUTO_DESTRUCTION);
+    DeferredUpdateRequests::get_instance().set_flag(InventoryArrangementFlag::AUTO_DESTRUCTION);
 }

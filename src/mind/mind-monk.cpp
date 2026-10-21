@@ -7,8 +7,8 @@
 #include "player/attack-defense-types.h"
 #include "player/special-defense-types.h"
 #include "status/action-setter.h"
+#include "system/deferred-update-requests.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
@@ -23,9 +23,9 @@ static void set_stance(PlayerType *player_ptr, const MonkStanceType new_stance)
         return;
     }
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.set_flag(StatusRecalculatingFlag::BONUS);
-    rfu.set_flag(MainWindowRedrawingFlag::ACTION);
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.set_flag(StatusRecalculatingFlag::BONUS);
+    dur.set_flag(MainWindowRedrawingFlag::ACTION);
     msg_print(_("{}の構えをとった。", "You assume the {} stance."), monk_stances[enum2i(new_stance) - 1].desc);
     pc.set_monk_stance(new_stance);
 }
@@ -86,7 +86,7 @@ bool choose_monk_stance(PlayerType *player_ptr)
     }
 
     set_stance(player_ptr, new_stance);
-    RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::ACTION);
+    DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::ACTION);
     screen_load();
     return true;
 }

@@ -10,10 +10,10 @@
 #include "main/sound-of-music.h"
 #include "player-status/player-energy.h"
 #include "player/player-move.h"
+#include "system/deferred-update-requests.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "system/terrain/terrain-definition.h"
 #include "view/display-messages.h"
 
@@ -79,7 +79,7 @@ bool exe_tunnel(PlayerType *player_ptr, POSITION y, POSITION x)
             sound(SoundKind::DIG_THROUGH);
             msg_print(_("{}をくずした。", "You have removed the {}."), name);
             cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::TUNNEL);
-            RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::FLOW);
+            DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::FLOW);
         } else {
             msg_print(_("{}をくずしている。", "You dig into the {}."), name);
             more = true;
@@ -92,7 +92,7 @@ bool exe_tunnel(PlayerType *player_ptr, POSITION y, POSITION x)
                 msg_print(_("{}を切り払った。", "You have cleared away the {}."), name);
             } else {
                 msg_print(_("穴を掘り終えた。", "You have finished the tunnel."));
-                RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::FLOW);
+                DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::FLOW);
             }
 
             if (terrain.flags.has(TerrainCharacteristics::GLASS)) {

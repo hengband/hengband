@@ -17,8 +17,8 @@
 #include "player-info/class-info.h"
 #include "player-info/race-types.h"
 #include "player/player-realm.h"
+#include "system/deferred-update-requests.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "util/enum-converter.h"
 #include "util/probability-table.h"
 #include <fmt/format.h>
@@ -464,7 +464,7 @@ void chg_virtue(PlayerType *player_ptr, Virtue virtue_id, int amount)
             }
         }
 
-        RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
+        DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
         return;
     }
 }

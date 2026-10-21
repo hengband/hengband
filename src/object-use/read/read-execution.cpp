@@ -20,10 +20,10 @@
 #include "spell-realm/spells-hex.h"
 #include "spell-realm/spells-song.h"
 #include "status/experience.h"
+#include "system/deferred-update-requests.h"
 #include "system/floor/floor-info.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
@@ -61,12 +61,12 @@ void ObjectReadEntity::execute(bool known)
 
     auto executor = ReadExecutorFactory::create(player_ptr, item.get(), known);
     auto used_up = executor->read();
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &dur = DeferredUpdateRequests::get_instance();
     this->change_virtue_as_read(*item);
     item->mark_as_tried();
     this->gain_exp_from_item_use(item.get(), executor->is_identified());
-    rfu.request_inventory_arrangement();
-    rfu.request_item_lists_redrawing();
+    dur.request_inventory_arrangement();
+    dur.request_item_lists_redrawing();
     if (!used_up) {
         return;
     }

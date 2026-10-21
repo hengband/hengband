@@ -14,9 +14,9 @@
 #include "player/special-defense-types.h"
 #include "status/action-setter.h"
 #include "sv-definition/sv-lite-types.h"
+#include "system/deferred-update-requests.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
@@ -52,7 +52,7 @@ static void do_cmd_refill_lamp(PlayerType *player_ptr)
     }
 
     vary_item(player_ptr, i_idx, -1);
-    RedrawingFlagsUpdater::get_instance().request_light_fuel_change_updates();
+    DeferredUpdateRequests::get_instance().request_light_fuel_change_updates();
 }
 
 /*!
@@ -89,7 +89,7 @@ static void do_cmd_refill_torch(PlayerType *player_ptr)
     }
 
     vary_item(player_ptr, i_idx, -1);
-    RedrawingFlagsUpdater::get_instance().request_light_fuel_change_updates();
+    DeferredUpdateRequests::get_instance().request_light_fuel_change_updates();
 }
 
 /*!

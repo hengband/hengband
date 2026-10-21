@@ -12,11 +12,11 @@
 #include "player-base/player-class.h"
 #include "player-info/mane-data-type.h"
 #include "spell-realm/spells-hex.h"
+#include "system/deferred-update-requests.h"
 #include "system/floor/floor-info.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "timed-effect/timed-effects.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
@@ -74,7 +74,7 @@ static void process_special_melee_spell(PlayerType *player_ptr, melee_spell_type
 
     mane_data->mane_list.push_back({ ms_ptr->thrown_spell, ms_ptr->dam });
     mane_data->new_mane = true;
-    RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::IMITATION);
+    DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::IMITATION);
 }
 
 static void process_rememberance(melee_spell_type *ms_ptr)

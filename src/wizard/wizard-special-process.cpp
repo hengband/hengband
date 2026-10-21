@@ -60,6 +60,7 @@
 #include "system/artifact/artifact-definition.h"
 #include "system/artifact/artifact-list.h"
 #include "system/artifact/artifact-record.h"
+#include "system/deferred-update-requests.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/dungeon/dungeon-list.h"
 #include "system/dungeon/quest-definition.h"
@@ -70,7 +71,6 @@
 #include "system/inner-game-data.h"
 #include "system/item/item-entity.h"
 #include "system/monster-entity.h"
-#include "system/redrawing-flags-updater.h"
 #include "system/terrain/terrain-definition.h"
 #include "system/terrain/terrain-list.h"
 #include "target/grid-selector.h"
@@ -421,7 +421,7 @@ void wiz_create_feature(PlayerType *player_ptr)
 
     note_spot(player_ptr, *pos);
     lite_spot(player_ptr, *pos);
-    RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::FLOW);
+    DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::FLOW);
 }
 
 /*!
@@ -539,15 +539,15 @@ void wiz_learn_items_all(PlayerType *player_ptr)
 
 static void change_birth_flags()
 {
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
-    rfu.request_player_status_recalculation();
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.set_flag(SubWindowRedrawingFlag::PLAYER);
+    dur.request_player_status_recalculation();
     static constexpr auto flags_mwrf = {
         MainWindowRedrawingFlag::BASIC,
         MainWindowRedrawingFlag::ABILITY_SCORE,
     };
-    rfu.set_flags(flags_mwrf);
-    rfu.request_hp_mp_redrawing();
+    dur.set_flags(flags_mwrf);
+    dur.request_hp_mp_redrawing();
 }
 
 static tl::optional<ElementRealmType> wiz_select_element_realm()

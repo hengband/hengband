@@ -21,8 +21,8 @@
 #include "player/player-status-table.h"
 #include "realm/realm-types.h"
 #include "spell/spell-info.h"
+#include "system/deferred-update-requests.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
 #include "timed-effect/timed-effects.h"
 #include "util/enum-converter.h"
@@ -666,7 +666,7 @@ tl::optional<MonsterAbilityType> get_learned_power(PlayerType *player_ptr)
                               ? select_learnt_spells_by_menu(player_ptr, *bluemage_data, *spells)
                               : select_learnt_spells_by_symbol(player_ptr, *bluemage_data, *spells);
 
-    RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::SPELL);
+    DeferredUpdateRequests::get_instance().set_flag(SubWindowRedrawingFlag::SPELL);
     window_stuff(player_ptr);
 
     if (!selected_spell) {
