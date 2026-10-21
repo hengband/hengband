@@ -46,6 +46,9 @@
     <Filter Include="main">
       <UniqueIdentifier>{3e3bfbaf-32fc-46d7-a1fc-51c277aaa757}</UniqueIdentifier>
     </Filter>
+    <Filter Include="market">
+      <UniqueIdentifier>{c39c00e0-2243-5bfa-a98a-0989f0a30293}</UniqueIdentifier>
+    </Filter>
     <Filter Include="monster-race">
       <UniqueIdentifier>{eb4b30d0-a9aa-492e-b43c-12d323e03a83}</UniqueIdentifier>
     </Filter>
@@ -255,6 +258,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\test\main\test-init-error-messages-table.cpp">
       <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\market\test-building-recharger.cpp">
+      <Filter>market</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\test\monster-race\test-race-ability-mask.cpp">
       <Filter>monster-race</Filter>

@@ -1568,6 +1568,7 @@ hengband_test_SOURCES = \
 	test/locale/test-character-encoding.cpp \
 	test/lore/test-monster-lore-snapshot.cpp \
 	test/main/test-init-error-messages-table.cpp \
+	test/market/test-building-recharger.cpp \
 	test/monster-race/test-race-ability-mask.cpp \
 	test/mspell/test-mspell-projection-table.cpp \
 	test/mutation/test-mutation-roll-table.cpp \
