@@ -64,6 +64,7 @@
     </ClCompile>
     <ClCompile Include="..\..\src\test\autopick\test-autopick-editor-util.cpp" />
     <ClCompile Include="..\..\src\test\cmd-io\test-cmd-autopick.cpp" />
+    <ClCompile Include="..\..\src\test\cmd-item\test-cmd-item.cpp" />
     <ClCompile Include="..\..\src\test\core\test-asking-player.cpp" />
     <ClCompile Include="..\..\src\test\flavor\test-flavor-util.cpp" />
     <ClCompile Include="..\..\src\test\floor\test-fixed-map-generator.cpp" />

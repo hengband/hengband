@@ -42,7 +42,7 @@ namespace test {
 [[nodiscard]] inline auto scoped_restore_input_globals()
 {
     return test::scoped_restore(p_ptr, angband_terms, game_term, term_inkey_wait_hook, msg_flag, num_more, command_arg, command_cmd, command_new,
-        command_dir, command_see, command_wrk, use_menu, project_length, inkey_base, inkey_xtra, inkey_scan, inkey_flag, inkey_next, signal_count);
+        command_dir, command_see, command_wrk, command_gap, use_menu, project_length, inkey_base, inkey_xtra, inkey_scan, inkey_flag, inkey_next, signal_count);
 }
 
 /*!
@@ -51,7 +51,7 @@ namespace test {
 [[nodiscard]] inline auto scoped_restore_input_options()
 {
     return test::scoped_restore(auto_more, skip_more, quick_messages, command_menu, rogue_like_commands, always_repeat, cheat_turn, fresh_once, fresh_message,
-        hilite_player, always_show_list, carry_query_flag, use_old_target, keymap_actions_map, macro_patterns, macro_actions, active_macros);
+        hilite_player, always_show_list, carry_query_flag, easy_floor, use_old_target, keymap_actions_map, macro_patterns, macro_actions, active_macros);
 }
 
 /*!
@@ -126,6 +126,7 @@ public:
         hilite_player = false;
         always_show_list = false;
         carry_query_flag = false;
+        easy_floor = false;
         use_old_target = false;
         Target::clear_last_target();
         keymap_actions_map[KeymapMode::ORIGINAL].assign(256, tl::nullopt);

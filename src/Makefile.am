@@ -1521,6 +1521,7 @@ hengband_test_SOURCES = \
 	\
 	test/autopick/test-autopick-editor-util.cpp \
 	test/cmd-io/test-cmd-autopick.cpp \
+	test/cmd-item/test-cmd-item.cpp \
 	test/core/test-asking-player.cpp \
 	test/flavor/test-flavor-util.cpp \
 	test/floor/test-fixed-map-generator.cpp \

@@ -14,7 +14,7 @@
 #include "inventory/inventory-describer.h"
 #include "inventory/inventory-object.h"
 #include "inventory/inventory-slot-types.h"
-#include "io/input-key-acceptor.h"
+#include "io/input-context.h"
 #include "io/input-key-requester.h"
 #include "locale/japanese.h"
 #include "main/sound-definitions-table.h"
@@ -47,6 +47,7 @@
 #include "term/screen-processor.h"
 #include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"
+#include "util/string-processor.h"
 #include "view/display-inventory.h"
 #include "view/display-messages.h"
 #include <fmt/format.h>
@@ -83,8 +84,10 @@ static void do_curse_on_equip(OBJECT_IDX slot, ItemEntity &item, PlayerType *pla
 
 /*!
  * @brief 装備一覧を表示するコマンドのメインルーチン / Display equipment
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param shopping 店の中のコマンドか (一覧の後に入力したキーは店のコマンドになる)
  */
-void do_cmd_equip(PlayerType *player_ptr)
+void do_cmd_equip(PlayerType *player_ptr, bool shopping)
 {
     command_wrk = true;
     if (easy_floor) {
@@ -103,7 +106,8 @@ void do_cmd_equip(PlayerType *player_ptr)
 #endif
 
     prt(out_val, 0, 0);
-    command_new = inkey();
+    const auto prompt = str_trim(out_val);
+    command_new = input_key_with_context({ InputKind::COMMAND, prompt, CommandInputDetails{ .shopping = shopping, .item_list = ItemSelectionArea::EQUIPMENT } });
     screen_load();
 
     if (command_new != ESCAPE) {

@@ -361,7 +361,19 @@ tl::optional<char> input_command_with_context(InputContext input_context)
  */
 char input_key_with_context(InputKind kind, std::string_view prompt, bool do_all_term_refresh)
 {
-    const InputContextScope input_context(kind, prompt);
+    return input_key_with_context({ kind, std::string(prompt), {} }, do_all_term_refresh);
+}
+
+/*!
+ * @brief 入力待ちの文脈を指定して公開し、キーを1つ待つ
+ * @param input_context 入力待ちの間に公開する文脈 (表示は呼び出し元が行う)
+ * @param do_all_term_refresh true なら inkey() と同じく、待つ前に全ての端末を描き直す
+ * @return 入力したキー
+ * @details input_key_with_context(InputKind, std::string_view, bool) のうち、種類ごとの詳細も公開したいものに使う。
+ */
+char input_key_with_context(InputContext input_context, bool do_all_term_refresh)
+{
+    const InputContextScope context_scope(std::move(input_context));
     return inkey(do_all_term_refresh);
 }
 
