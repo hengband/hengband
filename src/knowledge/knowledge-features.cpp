@@ -23,13 +23,23 @@
 #include "world/world.h"
 #include <fmt/format.h>
 
-/*
- * Build a list of feature indexes in the given group. Return the number
- * of features in the group.
- *
- * mode & 0x01 : check for non-empty group
+/*!
+ * @brief 一覧に載せる地形のIDを格納する配列を確保する
+ * @return すべての地形と終端の -1 を格納できる大きさの配列
  */
-static FEAT_IDX collect_features(FEAT_IDX *feat_idx, BIT_FLAGS8 mode)
+std::vector<FEAT_IDX> make_feature_index_buffer()
+{
+    // すべての地形が一覧に載っても終端の -1 を書けるよう、1つ多く確保する
+    return std::vector<FEAT_IDX>(TerrainList::get_instance().size() + 1);
+}
+
+/*!
+ * @brief 一覧に載せる地形のIDを集める
+ * @param feat_idx 地形のIDを格納する配列 (末尾に終端の -1 を書く)
+ * @param mode 0x01 が立っていれば、空でないかだけを調べる (最初の1つで打ち切る)
+ * @return 集めた地形の数
+ */
+FEAT_IDX collect_features(std::vector<FEAT_IDX> &feat_idx, BIT_FLAGS8 mode)
 {
     FEAT_IDX feat_cnt = 0;
     for (const auto &terrain : TerrainList::get_instance()) {
@@ -40,13 +50,13 @@ static FEAT_IDX collect_features(FEAT_IDX *feat_idx, BIT_FLAGS8 mode)
             continue;
         }
 
-        feat_idx[feat_cnt++] = terrain.idx;
+        feat_idx.at(feat_cnt++) = terrain.idx;
         if (mode & 0x01) {
             break;
         }
     }
 
-    feat_idx[feat_cnt] = -1;
+    feat_idx.at(feat_cnt) = -1;
     return feat_cnt;
 }
 
@@ -111,7 +121,7 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
     TerrainSymbols symbols{};
     const auto &[wid, hgt] = term_get_size();
     auto &terrains = TerrainList::get_instance();
-    std::vector<FEAT_IDX> feat_idx(terrains.size());
+    auto feat_idx = make_feature_index_buffer();
 
     const std::string terrain_group(_("地形    ", "Terrains")); //!< @details 他と合わせるためgroupと呼ぶ.
     const auto max_length = terrain_group.length();
@@ -122,7 +132,7 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
     byte char_left = 0;
     TERM_LEN browser_rows = hgt - 8;
     if (direct_f_idx < 0) {
-        if (collect_features(feat_idx.data(), 0x01)) {
+        if (collect_features(feat_idx, 0x01)) {
             grp_idx.push_back(0);
         }
 
@@ -198,7 +208,7 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
             display_group_list(max_length, browser_rows, terrain_group_num, { terrain_group }, grp_cur, grp_top);
             if (old_grp_cur != grp_cur) {
                 old_grp_cur = grp_cur;
-                feat_cnt = collect_features(feat_idx.data(), 0x00);
+                feat_cnt = collect_features(feat_idx, 0x00);
             }
 
             while (feat_cur < feat_top) {
