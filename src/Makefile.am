@@ -627,6 +627,7 @@ libhengband_a_SOURCES = \
 	info-reader/fixed-map-parser.cpp info-reader/fixed-map-parser.h \
 	info-reader/general-parser.cpp info-reader/general-parser.h \
 	info-reader/info-reader-util.cpp info-reader/info-reader-util.h \
+	info-reader/item-reader-limits.h \
 	info-reader/json-reader-util.cpp info-reader/json-reader-util.h \
 	info-reader/jsonc-document-loader.cpp info-reader/jsonc-document-loader.h \
 	info-reader/magic-reader.cpp info-reader/magic-reader.h \

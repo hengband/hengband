@@ -3,6 +3,7 @@
 #include "artifact/random-art-effects.h"
 #include "info-reader/baseitem-tokens-table.h"
 #include "info-reader/info-reader-util.h"
+#include "info-reader/item-reader-limits.h"
 #include "info-reader/json-reader-util.h"
 #include "info-reader/parse-error-types.h"
 #include "locale/japanese.h"
@@ -79,7 +80,7 @@ tl::expected<void, ParseErrorType> ArtifactReader::read() const
         msg_print(_("アーティファクトの売値読込失敗。ID: '{}'。", "Failed to load cost of artifact. ID: '{}'."), error_idx);
         return result;
     }
-    if (const auto result = info_set_integer(get_json_value(this->art_data, "base_ac"), artifact.ac, false, Range(-99, 99)); !result) {
+    if (const auto result = info_set_integer(get_json_value(this->art_data, "base_ac"), artifact.ac, false, Range(0, ITEM_BASE_AC_MAX)); !result) {
         msg_print(_("アーティファクトのベースAC読込失敗。ID: '{}'。", "Failed to load base AC of artifact. ID: '{}'."), error_idx);
         return result;
     }
@@ -88,15 +89,15 @@ tl::expected<void, ParseErrorType> ArtifactReader::read() const
         msg_print(_("アーティファクトのベースダイス読込失敗。ID: '{}'。", "Failed to load base dice of artifact. ID: '{}'."), error_idx);
         return result;
     }
-    if (const auto result = info_set_integer(get_json_value(this->art_data, "hit_bonus"), artifact.to_h, false, Range(-99, 99)); !result) {
+    if (const auto result = info_set_integer(get_json_value(this->art_data, "hit_bonus"), artifact.to_h, false, Range(-ITEM_BONUS_MAX, ITEM_BONUS_MAX)); !result) {
         msg_print(_("アーティファクトの命中補正値読込失敗。ID: '{}'。", "Failed to load hit bonus of artifact. ID: '{}'."), error_idx);
         return result;
     }
-    if (const auto result = info_set_integer(get_json_value(this->art_data, "damage_bonus"), artifact.to_d, false, Range(-99, 99)); !result) {
+    if (const auto result = info_set_integer(get_json_value(this->art_data, "damage_bonus"), artifact.to_d, false, Range(-ITEM_BONUS_MAX, ITEM_BONUS_MAX)); !result) {
         msg_print(_("アーティファクトのダメージ補正値読込失敗。ID: '{}'。", "Failed to load damage bonus of artifact. ID: '{}'."), error_idx);
         return result;
     }
-    if (const auto result = info_set_integer(get_json_value(this->art_data, "ac_bonus"), artifact.to_a, false, Range(-99, 99)); !result) {
+    if (const auto result = info_set_integer(get_json_value(this->art_data, "ac_bonus"), artifact.to_a, false, Range(-ITEM_BONUS_MAX, ITEM_BONUS_MAX)); !result) {
         msg_print(_("アーティファクトのAC補正値読込失敗。ID: '{}'。", "Failed to load AC bonus of artifact. ID: '{}'."), error_idx);
         return result;
     }

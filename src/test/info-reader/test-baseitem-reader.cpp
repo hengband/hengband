@@ -2,6 +2,7 @@
 #include "floor/floor-base-definitions.h"
 #include "info-reader/baseitem-reader.h"
 #include "info-reader/info-reader-util.h"
+#include "info-reader/item-reader-limits.h"
 #include "info-reader/parse-error-types.h"
 #include "locale/language-switcher.h"
 #include "object-enchant/tr-types.h"
@@ -12,10 +13,12 @@
 #include "test/info-reader/scoped-reader-state.h"
 #include "test/scoped-vector-wrapper.h"
 #include "util/dice.h"
+#include <cstdint>
 #include <doctest/doctest.h>
 #include <limits>
 #include <nlohmann/json.hpp>
 #include <stdexcept>
+#include <utility>
 #include <vector>
 
 namespace {
@@ -418,6 +421,55 @@ TEST_CASE("BaseitemReader limits base dice to the save format range")
     data["base_dice"] = "255d255";
     REQUIRE(BaseitemReader(data).read().has_value());
     CHECK(BaseitemList::get_instance().get_baseitem(1).damage_dice == Dice(255, 255));
+}
+
+/*!
+ * @brief item-reader-limits.h の見積もり (前提はそのファイルに書いた) の式に範囲の端の値を入れると、16ビットに収まる
+ * @details 見積もりの式を確かめるだけで、合計があふれないことの保証ではない (修理を繰り返した場合などは含まない)。
+ */
+TEST_CASE("Item reader limits keep the stated equipment-sum estimate within 16 bits")
+{
+    constexpr auto max16 = int{ std::numeric_limits<int16_t>::max() };
+    constexpr auto slots = 12;
+    // ACの合計: ベースAC (エゴの XTRA_AC で 1/4 上乗せ) + 盾の技能 + ACの修正値 (修理した武器2か所は2倍) + そのほかの補正
+    CHECK(slots * (ITEM_BASE_AC_MAX + ITEM_BASE_AC_MAX / 4) + 12 + (slots + 2) * (ITEM_BONUS_MAX + 70) + 800 <= max16);
+    // 命中の合計 (弓の部位を含む12か所) とダメージの合計 (弓の部位を除く11か所)
+    CHECK(slots * (ITEM_BONUS_MAX + 481) + 316 <= max16);
+    CHECK((slots - 1) * (ITEM_BONUS_MAX + 481) + 652 <= max16);
+}
+
+/*!
+ * @brief ベースACと修正値は絶対値が255以下の小さな数に限る (ベースACは負の値を認めない)
+ */
+TEST_CASE("BaseitemReader limits base AC and bonuses to small numbers up to 255 in absolute value")
+{
+    for (const auto &[field, value] : { std::pair{ "base_ac", -1 }, std::pair{ "base_ac", ITEM_BASE_AC_MAX + 1 }, std::pair{ "hit_bonus", -ITEM_BONUS_MAX - 1 },
+             std::pair{ "hit_bonus", ITEM_BONUS_MAX + 1 }, std::pair{ "damage_bonus", -ITEM_BONUS_MAX - 1 }, std::pair{ "damage_bonus", ITEM_BONUS_MAX + 1 },
+             std::pair{ "ac_bonus", -ITEM_BONUS_MAX - 1 }, std::pair{ "ac_bonus", ITEM_BONUS_MAX + 1 } }) {
+        CAPTURE(field);
+        CAPTURE(value);
+        BaseitemStateGuard guard;
+        auto data = make_baseitem();
+        data[field] = value;
+        CHECK(test::to_error_code(BaseitemReader(data).read()) == ParseErrorType::INVALID_FLAG);
+        CHECK(BaseitemList::get_instance().empty());
+    }
+    for (const auto bonus : { -ITEM_BONUS_MAX, ITEM_BONUS_MAX }) {
+        CAPTURE(bonus);
+        BaseitemStateGuard guard;
+        auto data = make_baseitem();
+        const auto base_ac = bonus < 0 ? 0 : ITEM_BASE_AC_MAX;
+        data["base_ac"] = base_ac;
+        data["hit_bonus"] = bonus;
+        data["damage_bonus"] = bonus;
+        data["ac_bonus"] = bonus;
+        REQUIRE(BaseitemReader(data).read().has_value());
+        const auto &baseitem = BaseitemList::get_instance().get_baseitem(1);
+        CHECK(baseitem.ac == base_ac);
+        CHECK(baseitem.to_h == bonus);
+        CHECK(baseitem.to_d == bonus);
+        CHECK(baseitem.to_a == bonus);
+    }
 }
 
 /*!
