@@ -71,6 +71,31 @@ TownInfo &TownList::get_town(TownId town_id)
     return this->get_town(to_town_index(town_id));
 }
 
+/*!
+ * @brief 我が家を得る
+ * @return 我が家
+ * @details 我が家は全ての町で内容を共有するため、辺境の地の店舗を返す.
+ */
+const Store &TownList::get_home() const
+{
+    return this->get_town(TownId::OUTPOST).get_store(StoreSaleType::HOME);
+}
+
+Store &TownList::get_home()
+{
+    return this->get_town(TownId::OUTPOST).get_store(StoreSaleType::HOME);
+}
+
+/*!
+ * @brief 博物館を得る
+ * @return 博物館
+ * @details 博物館は全ての町で内容を共有するため、辺境の地の店舗を返す.
+ */
+const Store &TownList::get_museum() const
+{
+    return this->get_town(TownId::OUTPOST).get_store(StoreSaleType::MUSEUM);
+}
+
 bool TownList::is_all_initialized() const
 {
     for (const auto &town : this->towns | ranges::views::drop(1) | ranges::views::take(VALID_TOWNS - 1)) {
