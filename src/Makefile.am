@@ -1562,6 +1562,7 @@ hengband_test_SOURCES = \
 	test/io/test-macro-configurations-store.cpp \
 	test/io/test-pref-file-expressor.cpp \
 	test/io/test-tokenizer.cpp \
+	test/knowledge/test-knowledge-features.cpp \
 	test/load/test-angband-version-comparer.cpp \
 	test/locale/test-character-encoding.cpp \
 	test/lore/test-monster-lore-snapshot.cpp \
