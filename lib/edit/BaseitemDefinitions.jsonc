@@ -854,6 +854,7 @@
       "level": 0,
       "weight": 2,
       "cost": 1,
+      "natural_generation": false,
       "flavor": {
         "ja": "日持ちを良くする為に二度焼きした乾パンの一種だ。岩のように固く、味もだいたいその程度。",
         "en": "Twice-cooked for good keeping qualities, this lump of bread is as hard as a rock and about as tasty.",
@@ -878,6 +879,7 @@
       "level": 0,
       "weight": 2,
       "cost": 2,
+      "natural_generation": false,
       "flavor": {
         "ja": "良く乾燥させた肉。決して腐る事が無さそうだ。",
         "en": "A strip of jerked beef that never seems to spoil.",
@@ -964,6 +966,7 @@
       "level": 0,
       "weight": 5,
       "cost": 1,
+      "natural_generation": false,
       "flavor": {
         "ja": "エリアドールの大麦を醸造し、金色になるまで熟成させたものだ。",
         "en": "Made from the barley of Eriador, and brewed to golden perfection.",
@@ -987,6 +990,7 @@
       "level": 0,
       "weight": 10,
       "cost": 2,
+      "natural_generation": false,
       "flavor": {
         "ja": "水の辺村の緑竜館で出るのと同じくらい質の良い、アルコール度の高いワインだ。",
         "en": "A heady wine, almost as good as that served at the Green Dragon at Bywater.",
@@ -7208,6 +7212,7 @@
       "level": 5,
       "weight": 5,
       "cost": 10,
+      "natural_generation": false,
       "flavor": {
         "ja": "それは読むと満腹になる。",
         "en": "It satisfies hunger when you read it.",
@@ -21333,6 +21338,7 @@
       "hit_bonus": 0,
       "damage_bonus": 0,
       "ac_bonus": 0,
+      "natural_generation": false,
       "flags": ["FULL_NAME"],
       "flavor": {
         "ja": "それは使っても何も起こらない。",
