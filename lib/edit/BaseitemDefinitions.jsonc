@@ -4826,12 +4826,7 @@
       "level": 5,
       "weight": 2,
       "cost": 250,
-      "allocations": [
-        {
-          "depth": 5,
-          "rarity": 255,
-        },
-      ],
+      "natural_generation": false,
       "flags": ["SLOW_DIGEST"],
     },
     {
@@ -5707,12 +5702,7 @@
       "level": 15,
       "weight": 3,
       "cost": 200,
-      "allocations": [
-        {
-          "depth": 15,
-          "rarity": 255,
-        },
-      ],
+      "natural_generation": false,
       "flags": ["SLOW_DIGEST"],
     },
     {
@@ -11684,12 +11674,7 @@
       "hit_bonus": 0,
       "damage_bonus": 0,
       "ac_bonus": 0,
-      "allocations": [
-        {
-          "depth": 100,
-          "rarity": 255,
-        },
-      ],
+      "natural_generation": false,
       "flavor": {
         "ja": "それは使うと魔力が最大まで回復し、知能を回復し、狂戦士化を癒す。",
         "en": "It restores mana to full, restores your intelligence and cures berserk when you use it.",
@@ -18974,12 +18959,7 @@
       "hit_bonus": 0,
       "damage_bonus": 0,
       "ac_bonus": 0,
-      "allocations": [
-        {
-          "depth": 1,
-          "rarity": 255,
-        },
-      ],
+      "natural_generation": false,
     },
     {
       "id": 581,
@@ -20219,12 +20199,7 @@
       "level": 1,
       "weight": 50,
       "cost": 500000,
-      "allocations": [
-        {
-          "depth": 1,
-          "rarity": 255,
-        },
-      ],
+      "natural_generation": false,
       "flags": ["IGNORE_ACID", "IGNORE_ELEC", "IGNORE_FIRE", "IGNORE_COLD"],
     },
     {
@@ -20690,12 +20665,7 @@
       "level": 0,
       "weight": 5,
       "cost": 1,
-      "allocations": [
-        {
-          "depth": 0,
-          "rarity": 255,
-        },
-      ],
+      "natural_generation": false,
       "flags": ["IGNORE_ACID", "IGNORE_ELEC", "IGNORE_FIRE", "IGNORE_COLD"],
     },
     {
@@ -20923,12 +20893,7 @@
       "hit_bonus": 0,
       "damage_bonus": 0,
       "ac_bonus": 0,
-      "allocations": [
-        {
-          "depth": 0,
-          "rarity": 255,
-        },
-      ],
+      "natural_generation": false,
     },
     {
       "id": 644,
@@ -20987,12 +20952,7 @@
       "hit_bonus": 0,
       "damage_bonus": 0,
       "ac_bonus": 0,
-      "allocations": [
-        {
-          "depth": 1,
-          "rarity": 255,
-        },
-      ],
+      "natural_generation": false,
     },
     {
       "id": 646,
@@ -21877,12 +21837,7 @@
       "level": 0,
       "weight": 5,
       "cost": 1,
-      "allocations": [
-        {
-          "depth": 0,
-          "rarity": 255,
-        },
-      ],
+      "natural_generation": false,
       "flags": ["IGNORE_ACID", "IGNORE_ELEC", "IGNORE_FIRE", "IGNORE_COLD"],
     },
     {
@@ -21903,12 +21858,7 @@
       "level": 0,
       "weight": 5,
       "cost": 1,
-      "allocations": [
-        {
-          "depth": 0,
-          "rarity": 255,
-        },
-      ],
+      "natural_generation": false,
       "flags": ["IGNORE_ACID", "IGNORE_ELEC", "IGNORE_FIRE", "IGNORE_COLD"],
     },
     {
@@ -21929,12 +21879,7 @@
       "level": 0,
       "weight": 5,
       "cost": 1,
-      "allocations": [
-        {
-          "depth": 0,
-          "rarity": 255,
-        },
-      ],
+      "natural_generation": false,
       "flags": ["IGNORE_ACID", "IGNORE_ELEC", "IGNORE_FIRE", "IGNORE_COLD"],
     },
     {
@@ -21955,12 +21900,7 @@
       "level": 0,
       "weight": 5,
       "cost": 1,
-      "allocations": [
-        {
-          "depth": 0,
-          "rarity": 255,
-        },
-      ],
+      "natural_generation": false,
       "flags": ["IGNORE_ACID", "IGNORE_ELEC", "IGNORE_FIRE", "IGNORE_COLD"],
     },
     {
@@ -21981,12 +21921,7 @@
       "level": 0,
       "weight": 5,
       "cost": 1,
-      "allocations": [
-        {
-          "depth": 0,
-          "rarity": 255,
-        },
-      ],
+      "natural_generation": false,
       "flags": ["IGNORE_ACID", "IGNORE_ELEC", "IGNORE_FIRE", "IGNORE_COLD"],
     },
     {
@@ -22007,12 +21942,7 @@
       "level": 0,
       "weight": 5,
       "cost": 1,
-      "allocations": [
-        {
-          "depth": 0,
-          "rarity": 255,
-        },
-      ],
+      "natural_generation": false,
       "flags": ["IGNORE_ACID", "IGNORE_ELEC", "IGNORE_FIRE", "IGNORE_COLD"],
     },
     {
@@ -22033,12 +21963,7 @@
       "level": 0,
       "weight": 5,
       "cost": 1,
-      "allocations": [
-        {
-          "depth": 0,
-          "rarity": 255,
-        },
-      ],
+      "natural_generation": false,
       "flags": ["IGNORE_ACID", "IGNORE_ELEC", "IGNORE_FIRE", "IGNORE_COLD"],
       "flavor": {
         "ja": "安っぽい紙切れだ。グングニルの隠し場所でも書いてあるのだろうか。",
