@@ -126,6 +126,20 @@ class BaseitemDefinitionValidationTest(unittest.TestCase):
         self.check(self.changed(self.sample, ["allocations"], [{"depth": 128, "rarity": 1}]), False, ["baseitems", 0, "allocations", 0, "depth"])
         self.check(self.changed(self.sample, ["allocations"], [{"depth": -1, "rarity": 1}]), False, ["baseitems", 0, "allocations", 0, "depth"])
 
+    def test_natural_generation_false_excludes_allocations(self):
+        # 自然生成しないベースアイテムは生成テーブルを持たないため、BaseitemReader は空でない allocations との併記を拒否する。
+        without_allocations = copy.deepcopy(self.sample)
+        del without_allocations["allocations"]
+        for natural_generation in (True, False):
+            with self.subTest(natural_generation=natural_generation):
+                self.check({**without_allocations, "natural_generation": natural_generation}, True)
+                self.check({**without_allocations, "natural_generation": natural_generation, "allocations": []}, True)
+        self.check({**self.sample, "natural_generation": True}, True)
+        self.check({**self.sample, "natural_generation": False}, False, ["baseitems", 0, "allocations"], "must not have allocations")
+        for value in (0, 1, "false", []):
+            with self.subTest(value=value):
+                self.check({**without_allocations, "natural_generation": value}, False, ["baseitems", 0, "natural_generation"])
+
     def test_reader_tokens_and_rarity_boundary_are_accepted(self):
         for flag in ("ACTIVATE", "IM_LITE"):
             with self.subTest(flag=flag):

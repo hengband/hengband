@@ -512,3 +512,118 @@ TEST_CASE("BaseitemReader limits allocation depth to the generation table size")
     CHECK(table.level == MAX_DEPTH - 1);
     CHECK(table.chance == 1);
 }
+
+/*!
+ * @brief natural_generation は省略すると true で、bool 以外の値を拒否する
+ */
+TEST_CASE("BaseitemReader reads natural_generation as an optional boolean")
+{
+    {
+        BaseitemStateGuard guard;
+        const auto data = make_baseitem();
+        REQUIRE(BaseitemReader(data).read().has_value());
+        CHECK(BaseitemList::get_instance().get_baseitem(1).natural_generation);
+    }
+    for (const auto natural_generation : { false, true }) {
+        CAPTURE(natural_generation);
+        BaseitemStateGuard guard;
+        auto data = make_baseitem();
+        data["natural_generation"] = natural_generation;
+        REQUIRE(BaseitemReader(data).read().has_value());
+        CHECK(BaseitemList::get_instance().get_baseitem(1).natural_generation == natural_generation);
+    }
+    for (const auto &value : { nlohmann::json(0), nlohmann::json("false"), nlohmann::json::array() }) {
+        CAPTURE(value);
+        BaseitemStateGuard guard;
+        auto data = make_baseitem();
+        data["natural_generation"] = value;
+        CHECK(test::to_error_code(BaseitemReader(data).read()) == ParseErrorType::INVALID_TYPE);
+        CHECK(BaseitemList::get_instance().empty());
+    }
+}
+
+/*!
+ * @brief 自然生成しないベースアイテムは生成情報を持てない (空の allocations は書かないのと同じに扱う)
+ */
+TEST_CASE("BaseitemReader rejects natural_generation false with allocations")
+{
+    {
+        BaseitemStateGuard guard;
+        auto data = make_baseitem();
+        data["natural_generation"] = false;
+        data["allocations"] = { { { "depth", 4 }, { "rarity", 5 } } };
+        CHECK(test::to_error_code(BaseitemReader(data).read()) == ParseErrorType::INVALID_VALUE);
+        CHECK(BaseitemList::get_instance().empty());
+        CHECK(error_idx == 1);
+    }
+    BaseitemStateGuard guard;
+    auto data = make_baseitem();
+    data["natural_generation"] = false;
+    data["allocations"] = nlohmann::json::array();
+    REQUIRE(BaseitemReader(data).read().has_value());
+    const auto &baseitem = BaseitemList::get_instance().get_baseitem(1);
+    CHECK_FALSE(baseitem.natural_generation);
+    CHECK_FALSE(baseitem.has_allocation());
+}
+
+/*!
+ * @brief 同じ ID を読み直したときは、引き継いだ生成情報・natural_generation も含めて併記を拒否する
+ */
+TEST_CASE("BaseitemReader judges natural_generation against inherited allocations on reload")
+{
+    BaseitemStateGuard guard;
+    auto &items = BaseitemList::get_instance();
+    auto data = make_baseitem();
+    auto first_natural_generation = true;
+    auto reload = make_baseitem();
+    SUBCASE("inherited allocations with natural_generation false")
+    {
+        data["allocations"] = { { { "depth", 4 }, { "rarity", 5 } } };
+        reload["natural_generation"] = false;
+    }
+    SUBCASE("inherited allocations with natural_generation false and empty allocations")
+    {
+        data["allocations"] = { { { "depth", 4 }, { "rarity", 5 } } };
+        reload["natural_generation"] = false;
+        reload["allocations"] = nlohmann::json::array();
+    }
+    SUBCASE("inherited natural_generation false with allocations")
+    {
+        data["natural_generation"] = false;
+        first_natural_generation = false;
+        reload["allocations"] = { { { "depth", 4 }, { "rarity", 5 } } };
+    }
+    REQUIRE(BaseitemReader(data).read().has_value());
+    reload["cost"] = 91;
+    error_idx = -1;
+    CHECK(test::to_error_code(BaseitemReader(reload).read()) == ParseErrorType::INVALID_VALUE);
+    const auto &existing = items.get_baseitem(1);
+    CHECK(existing.cost == 4);
+    CHECK(existing.natural_generation == first_natural_generation);
+}
+
+/*!
+ * @brief 同じ ID を読み直したときに natural_generation を省略すると引き継ぎ、明示すれば上書きする
+ */
+TEST_CASE("BaseitemReader preserves or overrides natural_generation on reload")
+{
+    BaseitemStateGuard guard;
+    auto &items = BaseitemList::get_instance();
+    auto data = make_baseitem();
+    data["natural_generation"] = false;
+    REQUIRE(BaseitemReader(data).read().has_value());
+
+    auto reload = make_baseitem();
+    reload["cost"] = 91;
+    error_idx = -1;
+    REQUIRE(BaseitemReader(reload).read().has_value());
+    CHECK(items.get_baseitem(1).cost == 91);
+    CHECK_FALSE(items.get_baseitem(1).natural_generation);
+
+    reload["natural_generation"] = true;
+    reload["allocations"] = { { { "depth", 4 }, { "rarity", 5 } } };
+    error_idx = -1;
+    REQUIRE(BaseitemReader(reload).read().has_value());
+    CHECK(items.get_baseitem(1).natural_generation);
+    CHECK(items.get_baseitem(1).alloc_tables[0].chance == 5);
+}

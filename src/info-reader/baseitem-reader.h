@@ -26,6 +26,7 @@ private:
     tl::expected<void, ParseErrorType> set_baseitem_allocations(BaseitemDefinition &baseitem) const;
     tl::expected<void, ParseErrorType> set_baseitem_activate(BaseitemDefinition &baseitem) const;
     tl::expected<void, ParseErrorType> set_baseitem_flags(BaseitemDefinition &baseitem) const;
+    tl::expected<void, ParseErrorType> set_baseitem_natural_generation(BaseitemDefinition &baseitem) const;
 
     const nlohmann::json &baseitem_data;
 };

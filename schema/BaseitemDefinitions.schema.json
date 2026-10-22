@@ -193,6 +193,11 @@
                             }
                         }
                     },
+                    "natural_generation": {
+                        "$comment": "false must not be combined with non-empty allocations (rejected by BaseitemReader and validate_json.py; the schema cannot express it)",
+                        "type": "boolean",
+                        "description": "生成テーブルによる自然生成 (床やモンスターのドロップなど) の対象か。省略時は true。false のベースアイテムは allocations を持たず、特定の経路 (店・特定のモンスターのドロップ・アーティファクトの本体など) でだけ作られる。false なら知識の一覧の候補になる"
+                    },
                     "activate": {
                         "type": "string",
                         "description": "発動能力",

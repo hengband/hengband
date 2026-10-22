@@ -53,11 +53,14 @@ public:
     };
 
     std::array<alloc_table, 4> alloc_tables{}; /*!< ベースアイテムの生成テーブル */
+    bool natural_generation = true; /*!< 生成テーブルによる自然生成の対象か (false なら生成テーブルを持たず、特定の経路でだけ作られる) */
     bool easy_know{}; /*!< ベースアイテムが初期からベース名を判断可能かどうか / This object is always known (if aware) */
     RandomArtActType act_idx{}; /*!< 発動能力のID /  Activative ability index */
 
     BaseitemDefinition clone_without_required_fields() const;
     bool is_valid() const;
+    bool has_allocation() const;
+    bool is_knowledge_candidate() const;
     std::string stripped_name() const;
     bool order_cost(const BaseitemDefinition &other) const;
     void decide_easy_know();

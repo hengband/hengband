@@ -2088,8 +2088,7 @@ nlohmann::json make_knowledge_json(PlayerType *player_ptr, BotKnowledgeCategory 
         for (const auto id : BaseitemList::get_instance().collect_valid_bi_ids()) {
             const auto &record = BaseitemRecords::get_instance().get_record(id);
             const auto &baseitem = BaseitemList::get_instance().get_baseitem(id);
-            const auto has_allocation = std::any_of(baseitem.alloc_tables.begin(), baseitem.alloc_tables.end(), [](const auto &table) { return table.chance > 0; });
-            if (!record.is_apparent() || !record.is_aware() || !has_allocation) {
+            if (!record.is_apparent() || !record.is_aware() || !baseitem.is_knowledge_candidate()) {
                 continue;
             }
             rows.push_back({ { "id", id }, { "tval", enum2i(baseitem.bi_key.tval()) }, { "sval", baseitem.bi_key.sval().value_or(-1) },
