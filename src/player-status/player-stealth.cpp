@@ -145,10 +145,10 @@ bool PlayerStealth::is_aggravated_s_fairy()
  * @details
  * * セクシーギャルでない影フェアリーがTRC_AGGRAVATE持ちの時、別処理でTRC_AGGRAVATEを無効にする代わりに減算(-3か3未満なら(現在値+2)/2)
  */
-int16_t PlayerStealth::set_exception_bonus(int16_t value)
+int PlayerStealth::set_exception_bonus(int value)
 {
     if (this->is_aggravated_s_fairy()) {
-        value = std::min<int16_t>(value - 3, (value + 2) / 2);
+        value = std::min(value - 3, (value + 2) / 2);
     }
 
     return value;

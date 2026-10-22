@@ -370,7 +370,7 @@ BIT_FLAGS PlayerSpeed::equipments_flags(tr_type check_flag)
  * * 非乗馬時 - ここまでの修正値合算をそのまま使用
  * * 乗馬時 - 乗馬の速度と重量減衰のみを計算
  */
-int16_t PlayerSpeed::set_exception_bonus(int16_t value)
+int PlayerSpeed::set_exception_bonus(int value)
 {
     if (!this->player_ptr->riding) {
         return value;

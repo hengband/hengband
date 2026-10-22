@@ -26,7 +26,7 @@ PlayerStatusBase::PlayerStatusBase(PlayerType *player_ptr)
 int16_t PlayerStatusBase::get_value()
 {
     this->set_locals(); /* 計算前に値のセット。派生クラスの値がセットされる。*/
-    int16_t pow = this->default_value;
+    int pow = this->default_value;
 
     pow += this->action_bonus();
     pow += this->stance_bonus();
@@ -49,7 +49,7 @@ int16_t PlayerStatusBase::get_value()
         pow = this->min_value;
     }
 
-    return pow;
+    return static_cast<int16_t>(pow);
 }
 
 /*!
@@ -330,7 +330,7 @@ int16_t PlayerStatusBase::action_bonus()
  * * 派生クラスで必要とされる例外処理でoverrideされる
  * @return 直接変更された値。このままmin-max処理され最終的なvalueになる。
  */
-int16_t PlayerStatusBase::set_exception_bonus(int16_t value)
+int PlayerStatusBase::set_exception_bonus(int value)
 {
     return value;
 }

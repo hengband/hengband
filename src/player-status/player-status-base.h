@@ -32,7 +32,7 @@ protected:
     virtual int16_t riding_bonus();
     virtual int16_t inventory_weight_bonus();
     virtual int16_t action_bonus();
-    virtual int16_t set_exception_bonus(int16_t value);
+    virtual int set_exception_bonus(int value);
     virtual BIT_FLAGS equipments_flags(tr_type check_flag);
     virtual BIT_FLAGS equipments_bad_flags(tr_type check_flag);
 };

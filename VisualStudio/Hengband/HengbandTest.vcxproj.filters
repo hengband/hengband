@@ -301,6 +301,9 @@
     <ClCompile Include="..\..\src\test\player-status\test-player-speed.cpp">
       <Filter>player-status</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\test\player-status\test-player-status-base.cpp">
+      <Filter>player-status</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\test\player\test-player-skill.cpp">
       <Filter>player</Filter>
     </ClCompile>

@@ -80,9 +80,9 @@ int16_t PlayerCharisma::mutation_bonus()
     return result;
 }
 
-int16_t PlayerCharisma::set_exception_bonus(int16_t value)
+int PlayerCharisma::set_exception_bonus(int value)
 {
-    int16_t result = value;
+    int result = value;
 
     if (this->player_ptr->muta.has(PlayerMutationType::ILL_NORM)) {
         result = 0;

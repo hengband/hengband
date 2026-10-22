@@ -22,5 +22,5 @@ protected:
     int16_t action_bonus() override;
     BIT_FLAGS equipments_flags(tr_type check_flag) override;
     int16_t special_weapon_set_value();
-    int16_t set_exception_bonus(int16_t value) override;
+    int set_exception_bonus(int value) override;
 };
