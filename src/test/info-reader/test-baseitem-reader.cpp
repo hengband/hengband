@@ -627,3 +627,26 @@ TEST_CASE("BaseitemReader preserves or overrides natural_generation on reload")
     CHECK(items.get_baseitem(1).natural_generation);
     CHECK(items.get_baseitem(1).alloc_tables[0].chance == 5);
 }
+
+/*!
+ * @brief 希少度は 1〜100 に限る
+ * @details 生成の重みは 100÷希少度 の整数除算なので、101 以上はどれも 0 になり、0 は欄が無いのと同じに扱われる。
+ */
+TEST_CASE("BaseitemReader limits allocation rarity to 1 through 100")
+{
+    for (const auto rarity : { 0, 101, -1 }) {
+        CAPTURE(rarity);
+        BaseitemStateGuard guard;
+        auto data = make_baseitem();
+        data["allocations"] = { { { "depth", 1 }, { "rarity", rarity } } };
+        CHECK(test::to_error_code(BaseitemReader(data).read()) == ParseErrorType::INVALID_FLAG);
+        CHECK(BaseitemList::get_instance().empty());
+    }
+    BaseitemStateGuard guard;
+    auto data = make_baseitem();
+    data["allocations"] = { { { "depth", 1 }, { "rarity", 1 } }, { { "depth", 2 }, { "rarity", 100 } } };
+    REQUIRE(BaseitemReader(data).read().has_value());
+    const auto &tables = BaseitemList::get_instance().get_baseitem(1).alloc_tables;
+    CHECK(tables[0].chance == 1);
+    CHECK(tables[1].chance == 100);
+}

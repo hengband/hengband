@@ -319,7 +319,9 @@ tl::expected<void, ParseErrorType> BaseitemReader::set_baseitem_allocations(Base
         if (const auto result = info_set_integer(get_json_value(alloc, "depth"), table.level, true, Range(0, MAX_DEPTH - 1)); !result) {
             return result;
         }
-        if (const auto result = info_set_integer(get_json_value(alloc, "rarity"), table.chance, true, Range(0, 256)); !result) {
+        // 生成の重みは 100÷希少度 の整数除算なので、101 以上はどれも 0 になり、0 は欄が無いのと同じに扱われる。
+        // どちらも書く意味が無いため 1〜100 に限る (自然生成させないベースアイテムは natural_generation: false で表す)
+        if (const auto result = info_set_integer(get_json_value(alloc, "rarity"), table.chance, true, Range(1, 100)); !result) {
             return result;
         }
         i++;

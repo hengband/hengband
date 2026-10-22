@@ -145,9 +145,11 @@ class BaseitemDefinitionValidationTest(unittest.TestCase):
             with self.subTest(flag=flag):
                 self.check(self.changed(self.sample, ["flags"], [flag]), True)
         self.check(self.changed(self.sample, ["activate"], "DARKNESS"), True)
-        # 出現率は 100÷希少度なので 101 以上はどれも 0 になるが、BaseitemReader は 256 まで受け付ける。
-        self.check(self.changed(self.sample, ["allocations"], [{"depth": 1, "rarity": 256}]), True)
-        self.check(self.changed(self.sample, ["allocations"], [{"depth": 1, "rarity": 257}]), False, ["baseitems", 0, "allocations", 0, "rarity"])
+        # 出現率は 100÷希少度なので 101 以上はどれも 0 になり、0 は欄が無いのと同じになる。BaseitemReader は 1〜100 を受け付ける。
+        for rarity, accepted in ((1, True), (100, True), (0, False), (101, False)):
+            with self.subTest(rarity=rarity):
+                record = self.changed(self.sample, ["allocations"], [{"depth": 1, "rarity": rarity}])
+                self.check(record, accepted, None if accepted else ["baseitems", 0, "allocations", 0, "rarity"])
 
     def test_kinds_of_valid_baseitems_must_be_unique(self):
         # 種別・副種別から ID を引く表では後の ID が先の ID を隠すため、有効なベースアイテムどうしの重複を拒否する。

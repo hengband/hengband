@@ -95,12 +95,6 @@
       "level": 0,
       "weight": 0,
       "cost": 0,
-      "allocations": [
-        {
-          "depth": 0,
-          "rarity": 0,
-        },
-      ],
     },
     //##### Mushrooms #####
     {
