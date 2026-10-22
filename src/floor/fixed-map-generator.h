@@ -1,7 +1,9 @@
 #pragma once
 
+#include "info-reader/parse-error-types.h"
 #include "system/angband.h"
 #include <string_view>
+#include <tl/expected.hpp>
 
 // Quest/Town/World Generator
 struct qtwg_type {
@@ -16,9 +18,8 @@ struct qtwg_type {
 class PlayerType;
 class QuestType;
 struct QuestFixedMap;
-enum class ParseErrorType : int;
 qtwg_type *initialize_quest_generator_type(qtwg_type *qg_ptr, int ymin, int xmin, int ymax, int xmax, int *y, int *x);
-ParseErrorType apply_fixed_map_row(PlayerType *player_ptr, qtwg_type *qg_ptr, std::string_view row);
+tl::expected<void, ParseErrorType> apply_fixed_map_row(PlayerType *player_ptr, qtwg_type *qg_ptr, std::string_view row);
 /*! @brief 生成済みの行・列からパネルサイズを設定し、開始位置を適用する. */
 void apply_fixed_map_start(PlayerType *player_ptr, qtwg_type *qg_ptr, int start_y, int start_x);
 

@@ -429,8 +429,8 @@ static tl::expected<void, ParseErrorType> parse_town_map_jsonc(PlayerType *playe
         }
         if (selected_map != nullptr) {
             for (const auto &row : selected_map->rows) {
-                if (const auto err = apply_fixed_map_row(player_ptr, qg_ptr, row); err != ParseErrorType::NONE) {
-                    return tl::make_unexpected(err);
+                if (const auto result = apply_fixed_map_row(player_ptr, qg_ptr, row); !result) {
+                    return result;
                 }
             }
         }

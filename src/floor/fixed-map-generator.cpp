@@ -179,19 +179,27 @@ static void parse_qtw_D(PlayerType *player_ptr, qtwg_type *qtwg_ptr, std::string
     }
 }
 
-/*! @brief 印字可能なASCII行を適用し、行カーソルを進める。不正な記号やNULがある行は変更せずエラーを返す。 */
-ParseErrorType apply_fixed_map_row(PlayerType *player_ptr, qtwg_type *qtwg_ptr, std::string_view row)
+/*!
+ * @brief 印字可能なASCII行を適用し、行カーソルを進める。不正な記号やNULがある行は変更せずエラーを返す。
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param qtwg_ptr 固定マップの生成範囲と、次に書く行・列のカーソル
+ * @param row 適用する1行分の記号の並び
+ * @return 成功時は空の値、失敗時は解析エラーコード (固定マップで使えない記号があれば ParseErrorType::INVALID_VALUE)
+ * @details 建物だけを読み込むとき (init_flags に INIT_ONLY_BUILDINGS が立っているとき) は、行の記号を検証せず、
+ * 行カーソルも進めずに成功を返す。
+ */
+tl::expected<void, ParseErrorType> apply_fixed_map_row(PlayerType *player_ptr, qtwg_type *qtwg_ptr, std::string_view row)
 {
     if (init_flags & INIT_ONLY_BUILDINGS) {
-        return ParseErrorType::NONE;
+        return {};
     }
 
     if (!std::all_of(row.begin(), row.end(), is_fixed_map_symbol)) {
-        return ParseErrorType::INVALID_VALUE;
+        return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
     }
     parse_qtw_D(player_ptr, qtwg_ptr, row);
     (*qtwg_ptr->y)++;
-    return ParseErrorType::NONE;
+    return {};
 }
 
 static void apply_fixed_map_size(PlayerType *player_ptr, qtwg_type *qtwg_ptr)
