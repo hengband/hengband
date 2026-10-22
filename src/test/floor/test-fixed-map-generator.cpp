@@ -215,7 +215,7 @@ TEST_CASE("QuestFixedMap JSON rows preserve origin empty rows and final row widt
     fixture.player.oldpy = 9;
     fixture.player.oldpx = 10;
     init_flags = INIT_CREATE_DUNGEON;
-    REQUIRE(generate_quest_floor_from_json(&fixture.player, quest, map) == ParseErrorType::NONE);
+    REQUIRE(generate_quest_floor_from_json(&fixture.player, quest, map).has_value());
     CHECK(fixture.floor.grid_array[0][0].feat == 1);
     CHECK(fixture.floor.grid_array[0][1].feat == 2);
     CHECK(fixture.floor.grid_array[1][0].feat == 0);
@@ -235,7 +235,7 @@ TEST_CASE("QuestFixedMap JSON rows preserve origin empty rows and final row widt
     CHECK(map.maps[0][2] == "A");
 
     map.maps = { { std::string(SCREEN_WID + 1, 'A'), "" } };
-    REQUIRE(generate_quest_floor_from_json(&fixture.player, quest, map) == ParseErrorType::NONE);
+    REQUIRE(generate_quest_floor_from_json(&fixture.player, quest, map).has_value());
     CHECK(fixture.floor.height == SCREEN_HGT);
     CHECK(fixture.floor.width == 0);
 }
@@ -253,7 +253,7 @@ TEST_CASE("QuestFixedMap JSON retains quest specific initialization flag behavio
     auto &grid = fixture.floor.grid_array[0][0];
     SUBCASE("without create flag rows apply but dimensions and start do not")
     {
-        REQUIRE(generate_quest_floor_from_json(&fixture.player, quest, map) == ParseErrorType::NONE);
+        REQUIRE(generate_quest_floor_from_json(&fixture.player, quest, map).has_value());
         CHECK(grid.feat == 1);
         CHECK(grid.info == (CAVE_GLOW | CAVE_ROOM));
         CHECK(grid.special == 7);
@@ -265,7 +265,7 @@ TEST_CASE("QuestFixedMap JSON retains quest specific initialization flag behavio
     SUBCASE("only buildings does not skip quest rows unlike town rows")
     {
         init_flags = static_cast<init_flags_type>(INIT_ONLY_BUILDINGS | INIT_CREATE_DUNGEON);
-        REQUIRE(generate_quest_floor_from_json(&fixture.player, quest, map) == ParseErrorType::NONE);
+        REQUIRE(generate_quest_floor_from_json(&fixture.player, quest, map).has_value());
         CHECK(grid.feat == 1);
         CHECK(grid.info == (CAVE_GLOW | CAVE_ROOM));
         CHECK(grid.special == 7);
@@ -281,7 +281,7 @@ TEST_CASE("QuestFixedMap JSON retains quest specific initialization flag behavio
         grid.special = 11;
         grid.mimic = 2;
         letter['A'].trap = 2;
-        REQUIRE(generate_quest_floor_from_json(&fixture.player, quest, map) == ParseErrorType::NONE);
+        REQUIRE(generate_quest_floor_from_json(&fixture.player, quest, map).has_value());
         CHECK(grid.feat == 1);
         CHECK(grid.info == CAVE_MARK);
         CHECK(grid.special == 11);
@@ -302,7 +302,7 @@ TEST_CASE("QuestFixedMap JSON variants use town seed modulo count without changi
     for (const auto seed : { 0U, 4U, 5U, 6U }) {
         system.set_seed_town(seed);
         fixture.floor.grid_array[0][1].feat = 0;
-        REQUIRE(generate_quest_floor_from_json(&fixture.player, quest, map) == ParseErrorType::NONE);
+        REQUIRE(generate_quest_floor_from_json(&fixture.player, quest, map).has_value());
         CHECK(fixture.floor.grid_array[0][0].feat == (seed % 3 == 1 ? 2 : 1));
         CHECK(fixture.floor.grid_array[0][1].feat == (seed % 3 == 2 ? 2 : 0));
         CHECK(system.get_seed_town() == seed);
@@ -320,21 +320,21 @@ TEST_CASE("QuestFixedMap JSON start selection keeps first match last fallback an
     fixture.floor.quest_number = QuestId::THIEF;
     init_flags = INIT_CREATE_DUNGEON;
     leaving_quest = static_cast<QuestId>(7);
-    REQUIRE(generate_quest_floor_from_json(&fixture.player, quest, map) == ParseErrorType::NONE);
+    REQUIRE(generate_quest_floor_from_json(&fixture.player, quest, map).has_value());
     CHECK(fixture.player.get_position() == Pos2D(3, 4));
     leaving_quest = static_cast<QuestId>(8);
-    REQUIRE(generate_quest_floor_from_json(&fixture.player, quest, map) == ParseErrorType::NONE);
+    REQUIRE(generate_quest_floor_from_json(&fixture.player, quest, map).has_value());
     CHECK(fixture.player.get_position() == Pos2D(5, 6));
     map.starts = { { 7, 3, 4 } };
     fixture.floor.height = 9;
     fixture.floor.width = 10;
-    REQUIRE(generate_quest_floor_from_json(&fixture.player, quest, map) == ParseErrorType::NONE);
+    REQUIRE(generate_quest_floor_from_json(&fixture.player, quest, map).has_value());
     CHECK(fixture.floor.grid_array[0][0].feat == 1);
     CHECK(fixture.player.get_position() == Pos2D(5, 6));
     CHECK(fixture.floor.height == 9);
     CHECK(fixture.floor.width == 10);
     map.starts.clear();
-    REQUIRE(generate_quest_floor_from_json(&fixture.player, quest, map) == ParseErrorType::NONE);
+    REQUIRE(generate_quest_floor_from_json(&fixture.player, quest, map).has_value());
     CHECK(fixture.player.get_position() == Pos2D(5, 6));
     CHECK(fixture.floor.height == 9);
 }
@@ -355,7 +355,7 @@ TEST_CASE("QuestFixedMap JSON no map applies legend overrides but not selected s
     init_flags = INIT_CREATE_DUNGEON;
     fixture.floor.height = 9;
     fixture.floor.width = 10;
-    REQUIRE(generate_quest_floor_from_json(&fixture.player, quest, map) == ParseErrorType::NONE);
+    REQUIRE(generate_quest_floor_from_json(&fixture.player, quest, map).has_value());
     CHECK(letter['A'].feature == 1);
     CHECK(letter['A'].special == 17);
     CHECK(letter['C'].feature == 2);
@@ -389,7 +389,7 @@ TEST_CASE("QuestFixedMap JSON fixture restores base legend seed leaving quest le
         map.maps = { { "A" } };
         map.starts = { { tl::nullopt, 1, 2 } };
         init_flags = INIT_CREATE_DUNGEON;
-        REQUIRE(generate_quest_floor_from_json(&inner.player, quest, map) == ParseErrorType::NONE);
+        REQUIRE(generate_quest_floor_from_json(&inner.player, quest, map).has_value());
         CHECK(letter['A'].feature == 2);
     }
     const auto &legend = QuestFixedMapList::get_instance().get_base_legend();
@@ -548,7 +548,7 @@ TEST_CASE("QuestFixedMap rejects unsafe typed symbols before writing any output"
             } else {
                 map.maps = { { "A" + std::string(1, symbol) } };
             }
-            CHECK(generate_quest_floor_from_json(&fixture.player, quest, map) == ParseErrorType::INVALID_VALUE);
+            CHECK(test::to_error_code(generate_quest_floor_from_json(&fixture.player, quest, map)) == ParseErrorType::INVALID_VALUE);
             CHECK(letter['A'].feature == 1);
             CHECK(fixture.floor.grid_array[0][0].feat == 0);
             CHECK(fixture.floor.height == 0);

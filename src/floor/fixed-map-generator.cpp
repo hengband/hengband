@@ -221,6 +221,14 @@ static void apply_fixed_map_size(PlayerType *player_ptr, qtwg_type *qtwg_ptr)
     panel_col_min = floor.width;
 }
 
+/*!
+ * @brief 生成済みの行・列からパネルサイズを設定し、開始位置を適用する.
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param qtwg_ptr 固定マップの生成範囲と、生成し終えた行・列のカーソル
+ * @param start_y 開始位置の y 座標 (フロアの座標。固定マップの1行目を 0 とする)
+ * @param start_x 開始位置の x 座標 (フロアの座標。固定マップの1列目を 0 とする)
+ * @details クエストの中ではプレイヤーをこの位置に置き、それ以外 (町など) では前の位置が無いときに戻り先として使う。
+ */
 void apply_fixed_map_start(PlayerType *player_ptr, qtwg_type *qtwg_ptr, int start_y, int start_x)
 {
     if ((init_flags & INIT_CREATE_DUNGEON) == 0) {
@@ -267,7 +275,14 @@ static const QuestStartPosition *select_quest_start(const QuestFixedMap &fixed_m
     return fallback;
 }
 
-ParseErrorType generate_quest_floor_from_json(PlayerType *player_ptr, QuestType &quest, const QuestFixedMap &fixed_map)
+/*!
+ * @brief JSONCから読み込んだ固定クエストのレイアウトでフロアを生成する
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param quest 対象クエスト (報酬解決のため参照)
+ * @param fixed_map 生成に用いるレイアウト情報
+ * @return 成功時は空の値、失敗時は解析エラーコード (凡例やマップに固定マップで使えない記号があれば ParseErrorType::INVALID_VALUE)
+ */
+tl::expected<void, ParseErrorType> generate_quest_floor_from_json(PlayerType *player_ptr, QuestType &quest, const QuestFixedMap &fixed_map)
 {
     // 型付きレイアウトを直接渡す場合も、凡例やセルの書き込み前に記号を検証する。
     const auto &base_legend = QuestFixedMapList::get_instance().get_base_legend();
@@ -277,14 +292,14 @@ ParseErrorType generate_quest_floor_from_json(PlayerType *player_ptr, QuestType 
         });
     };
     if (!valid_legend(base_legend) || !valid_legend(fixed_map.legend)) {
-        return ParseErrorType::INVALID_VALUE;
+        return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
     }
     const auto variant_count = fixed_map.maps.size();
     const auto variant_index = (variant_count <= 1) ? 0 : (AngbandSystem::get_instance().get_seed_town() % variant_count);
     if (fixed_map.has_map()) {
         for (const auto &row : fixed_map.maps[variant_index]) {
             if (!std::all_of(row.begin(), row.end(), is_fixed_map_symbol)) {
-                return ParseErrorType::INVALID_VALUE;
+                return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
             }
         }
     }
@@ -308,7 +323,7 @@ ParseErrorType generate_quest_floor_from_json(PlayerType *player_ptr, QuestType 
     }
 
     if (!fixed_map.has_map()) {
-        return ParseErrorType::NONE;
+        return {};
     }
 
     // 3. マップバリアント選択: 旧 $RANDOMn は seed_town % n で決まる (乱数ではなくキャラ毎に固定)
@@ -329,5 +344,5 @@ ParseErrorType generate_quest_floor_from_json(PlayerType *player_ptr, QuestType 
         apply_fixed_map_start(player_ptr, &qg, start->y, start->x);
     }
 
-    return ParseErrorType::NONE;
+    return {};
 }
