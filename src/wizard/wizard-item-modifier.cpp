@@ -1007,7 +1007,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
             }
 
             const int len = item_name.length();
-            if (pray_chars.find(item_name) != std::string::npos) {
+            if (str_find(pray_chars, item_name)) {
                 if (len > max_len) {
                     baseitem_ids.clear();
                     max_len = len;
@@ -1035,7 +1035,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
                     msg_print("matching ego no.{} {}...", enum2i(ego.idx), item_name);
                 }
 
-                if (pray_chars.find(item_name) != std::string::npos) {
+                if (str_find(pray_chars, item_name)) {
                     if (is_slot_able_to_be_ego(player_ptr, &item) != ego.slot) {
                         continue;
                     }
