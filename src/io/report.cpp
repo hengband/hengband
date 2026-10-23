@@ -168,7 +168,7 @@ std::string make_screen_dump(PlayerType *player_ptr)
         /* Dump each row */
         uint8_t old_a = 0;
         DisplaySymbol ds(0, ' ');
-        for (int x = 0; x < wid - 1; x++) {
+        for (int x = 0; x < wid; x++) {
             int rv, gv, bv;
             concptr cc = nullptr;
             ds = term_what(x, y, ds);

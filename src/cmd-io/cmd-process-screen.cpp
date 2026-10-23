@@ -86,7 +86,7 @@ static void screen_dump_one_line(int wid, int y, FILE *fff)
 {
     uint8_t old_a = 0;
     DisplaySymbol ds(0, ' ');
-    for (TERM_LEN x = 0; x < wid - 1; x++) {
+    for (TERM_LEN x = 0; x < wid; x++) {
         concptr cc = nullptr;
         ds = term_what(x, y, ds);
         switch (ds.character) {
@@ -308,7 +308,7 @@ static void do_cmd_save_screen_text(int wid, int hgt)
     for (TERM_LEN y = 0; y < hgt; y++) {
         TERM_LEN x;
         char buf[1024]{};
-        for (x = 0; x < wid - 1; x++) {
+        for (x = 0; x < wid; x++) {
             ds = term_what(x, y, ds);
             buf[x] = ds.character;
         }
@@ -321,7 +321,7 @@ static void do_cmd_save_screen_text(int wid, int hgt)
     for (TERM_LEN y = 0; y < hgt; y++) {
         TERM_LEN x;
         char buf[1024]{};
-        for (x = 0; x < wid - 1; x++) {
+        for (x = 0; x < wid; x++) {
             ds = term_what(x, y, ds);
             buf[x] = hack[ds.color & 0x0F];
         }
@@ -385,7 +385,7 @@ static bool draw_white_characters(FILE *fff, int wid, int hgt)
             continue;
         }
 
-        for (TERM_LEN x = 0; x < wid - 1; x++) {
+        for (TERM_LEN x = 0; x < wid; x++) {
             if (buf[x] == '\n' || buf[x] == '\0') {
                 break;
             }
@@ -421,7 +421,7 @@ static void draw_colored_characters(FILE *fff, int wid, int hgt, bool okay)
             continue;
         }
 
-        for (auto x = 0; x < wid - 1; x++) {
+        for (auto x = 0; x < wid; x++) {
             if (buf[x] == '\n' || buf[x] == '\0') {
                 break;
             }
