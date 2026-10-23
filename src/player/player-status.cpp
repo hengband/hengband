@@ -2570,8 +2570,8 @@ void update_creature(PlayerType *player_ptr)
         return;
     }
 
-    // 呪文の失敗率・消費 MP・覚えている呪文は、能力の修正 (朦朧・能力値・装備・熟練度・レベルなど)、
-    // 最大 MP、覚えられる呪文の数を計算し直すと変わりうる
+    // 呪文の失敗率・消費 MP・覚えている呪文は、能力の修正 (朦朧・能力値・装備・レベルなど)、
+    // 最大 MP、覚えられる呪文の数を計算し直すと変わりうる (呪文の熟練度が増えたときは、熟練度を加える処理が要求する)
     static constexpr auto flags_srf = {
         StatusRecalculatingFlag::BONUS,
         StatusRecalculatingFlag::MP,

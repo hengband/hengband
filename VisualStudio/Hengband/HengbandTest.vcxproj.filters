@@ -268,6 +268,9 @@
     <ClCompile Include="..\..\src\test\object\test-object-value.cpp">
       <Filter>object</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\test\player\test-player-skill.cpp">
+      <Filter>player</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\test\player\test-process-name.cpp">
       <Filter>player</Filter>
     </ClCompile>
