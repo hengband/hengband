@@ -4,7 +4,7 @@ import re
 from pathlib import Path
 import unittest
 
-from json_validation_test_helper import fixed_artifact_id_schema_maximum, validate_document
+from json_validation_test_helper import baseitem_id_schema_maximum, fixed_artifact_id_schema_maximum, validate_document
 from validate_json import build_schema_registry, load_all_schemas, load_cpp_tokens, load_jsonc, load_rod_type_value
 
 
@@ -58,6 +58,12 @@ class BaseitemDefinitionValidationTest(unittest.TestCase):
         for field in ("base_ac", "hit_bonus", "damage_bonus", "ac_bonus"):
             with self.subTest(field=field):
                 self.check(self.changed(self.sample, [field], 1.0), False, ["baseitems", 0, field], "integer JSON value")
+
+    def test_id_maximum_matches_baseitem_id_storage(self):
+        # ベースアイテムIDの上限は、IDを扱う型(BaseitemList の short)の上限−1とする。
+        maximum = baseitem_id_schema_maximum()
+        schema = self.loaded[self.schema_map["BaseitemDefinitions"]]
+        self.assertEqual(schema["properties"]["baseitems"]["items"]["properties"]["id"]["maximum"], maximum)
 
     def test_ids_must_be_strictly_increasing(self):
         for second_id in (self.sample["id"], self.sample["id"] - 1):

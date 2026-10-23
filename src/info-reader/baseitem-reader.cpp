@@ -59,7 +59,7 @@ tl::expected<void, ParseErrorType> BaseitemReader::read() const
             msg_print(_("ベースアイテムIDが非連番です。ID: '{}'、直前ID: '{}'。", "Baseitem ID is not sequential. ID: '{}', previous ID: '{}'."), id, error_idx);
             return tl::make_unexpected(ParseErrorType::NON_SEQUENTIAL_RECORDS);
         }
-        if (std::cmp_less(id, 0) || std::cmp_greater(id, std::numeric_limits<short>::max())) {
+        if (std::cmp_less(id, 0) || std::cmp_greater(id, MAX_BASEITEM_ID)) {
             msg_print(_("ベースアイテムIDが範囲外です。ID: '{}'。", "Baseitem ID is out of bounds. ID: '{}'."), id);
             return tl::make_unexpected(ParseErrorType::OUT_OF_BOUNDS);
         }

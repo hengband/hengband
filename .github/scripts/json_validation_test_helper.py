@@ -38,6 +38,11 @@ def cpp_storage_maximum(relative_path, pattern):
 
 
 # 定義のIDの上限は、IDを格納する型の上限−1とする。IDの最大値+1になる件数も同じ型に収まるようにするため。
+def baseitem_id_schema_maximum():
+    """ベースアイテムIDのスキーマの上限（BaseitemList がIDを扱う型の上限−1）を返す。"""
+    return cpp_storage_maximum("src/system/baseitem/baseitem-list.h", r"bool is_valid\((\w+) bi_id\) const;") - 1
+
+
 def monrace_id_schema_maximum():
     """モンスター種族IDのスキーマの上限（MonraceId の基になる型の上限−1）を返す。"""
     return cpp_storage_maximum("src/system/enums/monrace/monrace-id.h", r"enum class MonraceId : (\w+) \{") - 1

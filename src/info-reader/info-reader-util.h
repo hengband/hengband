@@ -21,6 +21,7 @@ enum class RandomArtActType : short;
  * 定義のIDの上限は、IDを格納する型の上限−1とする。
  * IDの最大値+1になる件数（種族の数など）も同じ型に収まるようにするため。
  */
+constexpr int MAX_BASEITEM_ID = std::numeric_limits<short>::max() - 1; //!< ベースアイテムIDの上限 (BaseitemList は short でIDを扱う)
 constexpr int MAX_MONRACE_ID = std::numeric_limits<std::underlying_type_t<MonraceId>>::max() - 1; //!< モンスター種族IDの上限
 constexpr int MAX_FIXED_ARTIFACT_ID = std::numeric_limits<std::underlying_type_t<FixedArtifactId>>::max() - 1; //!< 固定アーティファクトIDの上限
 constexpr int MAX_TERRAIN_ID = std::numeric_limits<FEAT_IDX>::max() - 1; //!< 地形IDの上限
