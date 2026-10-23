@@ -859,6 +859,62 @@ static int is_slot_able_to_be_ego(PlayerType *player_ptr, ItemEntity *o_ptr)
 }
 
 /*!
+ * @brief 願いの 1 文字が空白かを判定する
+ * @param ch 1 文字 (2 バイト文字は 2 バイト)
+ * @return 半角の空白・タブ (日本語版は全角空白も) なら true
+ */
+static bool is_wish_space(std::string_view ch)
+{
+#ifdef JP
+    if (ch == "　") {
+        return true;
+    }
+#endif
+    return (ch == " ") || (ch == "\t");
+}
+
+/*!
+ * @brief 願いの文字列の左端の空白を取り除く
+ * @param str 願いの文字列
+ * @return 左端の空白 (日本語版は全角空白も) を取り除いた文字列
+ */
+static std::string ltrim_wish(std::string_view str)
+{
+    size_t pos = 0;
+    while (pos < str.length()) {
+        const size_t len = is_multibyte_char_at(str, pos) ? 2 : 1;
+        if (!is_wish_space(str.substr(pos, len))) {
+            break;
+        }
+
+        pos += len;
+    }
+
+    return std::string(str.substr(pos));
+}
+
+/*!
+ * @brief 願いの文字列の右端の空白を取り除く
+ * @param str 願いの文字列
+ * @return 右端の空白 (日本語版は全角空白も) を取り除いた文字列
+ * @details 2 バイト文字の後半バイトと続く 1 バイト文字を全角空白と取り違えないよう、文字の境界を先頭からたどる
+ */
+static std::string rtrim_wish(std::string_view str)
+{
+    size_t end = 0;
+    for (size_t pos = 0; pos < str.length();) {
+        const size_t len = is_multibyte_char_at(str, pos) ? 2 : 1;
+        if (!is_wish_space(str.substr(pos, len))) {
+            end = pos + len;
+        }
+
+        pos += len;
+    }
+
+    return std::string(str.substr(0, end));
+}
+
+/*!
  * @brief 願ったが消えてしまった場合のメッセージ
  */
 static void wishing_puff_of_smoke(void)
@@ -925,7 +981,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
     pray = str_tolower(pray);
 #endif
 
-    auto pray_chars = str_ltrim(pray);
+    auto pray_chars = ltrim_wish(pray);
 
     // 先頭が prefix なら取り除いて、続く空白も読み飛ばす
     const auto consume_prefix = [&pray_chars](std::string_view prefix) {
@@ -933,7 +989,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
             return false;
         }
 
-        pray_chars = str_ltrim(std::string_view(pray_chars).substr(prefix.length()));
+        pray_chars = ltrim_wish(std::string_view(pray_chars).substr(prefix.length()));
         return true;
     };
 
@@ -944,7 +1000,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
 #endif
 
     // 末尾の空白は冠詞を調べた後に取る (先に取ると「a  」が冠詞でなく「a」という名前になる)
-    pray_chars = str_rtrim(pray_chars);
+    pray_chars = rtrim_wish(pray_chars);
 
     if (consume_prefix(_("祝福された", "blessed"))) {
         blessed = true;
