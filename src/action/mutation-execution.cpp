@@ -46,7 +46,6 @@
 #include "status/shape-changer.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
-#include "system/item/item-entity.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
@@ -162,11 +161,8 @@ bool exe_mutation_power(PlayerType *player_ptr, PlayerMutationType power)
         (void)lite_area(player_ptr, Dice::roll(2, (lvl / 2)), (lvl / 10) + 1);
         return true;
     case PlayerMutationType::DET_CURSE:
-        // 呪われた品を、呪いに合わせた感触で簡易鑑定済みにする
         for (const auto i_idx : INVEN_ALL_SLOTS) {
-            if (const auto feel = player_ptr->inventory[i_idx]->find_curse_feeling()) {
-                apply_item_feeling(player_ptr, i_idx, *feel);
-            }
+            sense_curse(player_ptr, i_idx);
         }
 
         return true;

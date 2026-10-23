@@ -172,7 +172,7 @@ TEST_CASE("ItemEntity match_feeling_to_curses leaves an identified item without 
 {
     ItemEntity item;
     item.mark_as_known();
-    item.set_identification_flag(IdentificationFlag::SENSE); // 呪われた品を装備すると鑑定済みでも付く
+    item.set_identification_flag(IdentificationFlag::SENSE); // 古いセーブに残りうる状態 (以前は呪われた品を装備すると鑑定済みでも付いた)
     item.match_feeling_to_curses();
 
     CHECK(item.feeling == FEEL_NONE);
@@ -193,7 +193,7 @@ TEST_CASE("ItemEntity find_curse_feeling gives a cursed feeling to a cursed item
     item.sense(FEEL_EXCELLENT);
     CHECK(item.find_curse_feeling() == FEEL_WORTHLESS);
 
-    item.sense(FEEL_NONE); // 呪われた品を装備すると、感触の無いまま SENSE が付く
+    item.sense(FEEL_NONE); // 古いセーブに残りうる状態 (以前は呪われた品を装備すると感触の無いまま付いた)
     CHECK(item.find_curse_feeling() == FEEL_CURSED);
 
     item.sense(FEEL_BROKEN); // 壊れているは呪いを表さない

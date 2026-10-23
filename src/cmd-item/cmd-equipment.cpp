@@ -28,6 +28,7 @@
 #include "object/object-info.h"
 #include "object/object-mark-types.h"
 #include "perception/object-perception.h"
+#include "perception/simple-perception.h"
 #include "player-base/player-class.h"
 #include "player-base/player-race.h"
 #include "player-info/equipment-info.h"
@@ -229,6 +230,7 @@ void do_cmd_wield(PlayerType *player_ptr)
 #else
         msg_print("The {} you are {} appears to be cursed.", item_name, describe_use(player_ptr, slot));
 #endif
+        sense_curse(player_ptr, slot);
         return;
     }
 
@@ -333,7 +335,7 @@ void do_cmd_wield(PlayerType *player_ptr)
     if (wield_slot_item.is_cursed()) {
         msg_print(_("うわ！ すさまじく冷たい！", "Oops! It feels deathly cold!"));
         chg_virtue(player_ptr, Virtue::HARMONY, -1);
-        wield_slot_item.set_identification_flag(IdentificationFlag::SENSE);
+        sense_curse(player_ptr, slot);
     }
 
     do_curse_on_equip(slot, wield_slot_item, player_ptr);
@@ -372,6 +374,7 @@ void do_cmd_takeoff(PlayerType *player_ptr)
     if (item->is_cursed()) {
         if (item->curse_flags.has(CurseTraitType::PERMA_CURSE) || !pc.equals(PlayerClassType::BERSERKER)) {
             msg_print(_("ふーむ、どうやら呪われているようだ。", "Hmmm, it seems to be cursed."));
+            sense_curse(player_ptr, i_idx);
             return;
         }
 
@@ -382,6 +385,7 @@ void do_cmd_takeoff(PlayerType *player_ptr)
             msg_print(_("呪いを打ち破った。", "You break the curse."));
         } else {
             msg_print(_("装備を外せなかった。", "You couldn't remove the equipment."));
+            sense_curse(player_ptr, i_idx);
             energy.set_player_turn_energy(50);
             return;
         }

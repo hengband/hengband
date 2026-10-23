@@ -18,6 +18,7 @@
 #include "object/object-info.h"
 #include "object/object-stack.h"
 #include "object/object-value.h"
+#include "perception/simple-perception.h"
 #include "racial/racial-android.h"
 #include "spell-kind/spells-perception.h"
 #include "store/home.h"
@@ -95,6 +96,7 @@ void store_sell(PlayerType *player_ptr, StoreScreen &screen)
 
     if ((i_idx >= INVEN_MAIN_HAND) && item->is_cursed()) {
         msg_print(_("ふーむ、どうやらそれは呪われているようだね。", "Hmmm, it seems to be cursed."));
+        sense_curse(player_ptr, i_idx);
         return;
     }
 

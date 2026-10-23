@@ -1557,11 +1557,6 @@ void ItemEntity::reset_identification_flag(IdentificationFlag flag)
     this->identification_flags.reset(flag);
 }
 
-void ItemEntity::set_identification_flags(const EnumClassFlagGroup<IdentificationFlag> &flags)
-{
-    this->identification_flags.set(flags);
-}
-
 void ItemEntity::reset_identification_flags(const EnumClassFlagGroup<IdentificationFlag> &flags)
 {
     this->identification_flags.reset(flags);
