@@ -331,11 +331,9 @@ void sense_inventory1(PlayerType *player_ptr)
             continue;
         }
 
-        if (has_good_luck(player_ptr) && !randint0(13)) {
-            heavy = true;
-        }
-
-        sense_inventory_aux(player_ptr, i_idx, heavy);
+        // 幸運で重い判定にするのはこの品だけ (後の品は職業の判定のまま)
+        const auto is_lucky = has_good_luck(player_ptr) && !randint0(13);
+        sense_inventory_aux(player_ptr, i_idx, heavy || is_lucky);
     }
 }
 
