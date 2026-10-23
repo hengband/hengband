@@ -1,5 +1,6 @@
 """ベースアイテム・アーティファクト定義の schema と意味検証が reader の受理範囲と一致することを確かめる。"""
 import copy
+import re
 from pathlib import Path
 import unittest
 
@@ -110,6 +111,21 @@ class BaseitemDefinitionValidationTest(unittest.TestCase):
         self.check(self.changed(self.sample, ["allocations"], [allocation] * 5), False, ["baseitems", 0, "allocations"])
         self.check(self.changed(self.sample, ["allocations"], [1]), False, ["baseitems", 0, "allocations", 0])
 
+    def test_ac_and_bonuses_fit_ranges_whose_equipment_sums_do_not_overflow(self):
+        # ベースACと修正値は絶対値が255以下の小さな数に限る (装備の合計の見積もりは item-reader-limits.h)。ベースACは負の値を認めない。
+        for field, minimum in (("base_ac", 0), ("hit_bonus", -255), ("damage_bonus", -255), ("ac_bonus", -255)):
+            with self.subTest(field=field):
+                self.check(self.changed(self.sample, [field], minimum), True)
+                self.check(self.changed(self.sample, [field], 255), True)
+                self.check(self.changed(self.sample, [field], minimum - 1), False, ["baseitems", 0, field])
+                self.check(self.changed(self.sample, [field], 256), False, ["baseitems", 0, field])
+
+    def test_allocation_depth_fits_generation_table(self):
+        # 出現階層は生成の表で要素数 MAX_DEPTH の配列の添え字になるため、BaseitemReader は MAX_DEPTH - 1 まで受け付ける。
+        self.check(self.changed(self.sample, ["allocations"], [{"depth": 127, "rarity": 1}]), True)
+        self.check(self.changed(self.sample, ["allocations"], [{"depth": 128, "rarity": 1}]), False, ["baseitems", 0, "allocations", 0, "depth"])
+        self.check(self.changed(self.sample, ["allocations"], [{"depth": -1, "rarity": 1}]), False, ["baseitems", 0, "allocations", 0, "depth"])
+
     def test_reader_tokens_and_rarity_boundary_are_accepted(self):
         for flag in ("ACTIVATE", "IM_LITE"):
             with self.subTest(flag=flag):
@@ -181,6 +197,15 @@ class ArtifactDefinitionValidationTest(unittest.TestCase):
                 base_item = {**self.sample["base_item"], field: float(self.sample["base_item"][field])}
                 self.check({**self.sample, "base_item": base_item}, False, ["artifacts", 0, "base_item", field], "integer JSON value")
 
+    def test_ac_and_bonuses_fit_ranges_whose_equipment_sums_do_not_overflow(self):
+        # ベースACと修正値は絶対値が255以下の小さな数に限る (装備の合計の見積もりは item-reader-limits.h)。ベースACは負の値を認めない。
+        for field, minimum in (("base_ac", 0), ("hit_bonus", -255), ("damage_bonus", -255), ("ac_bonus", -255)):
+            with self.subTest(field=field):
+                self.check({**self.sample, field: minimum}, True)
+                self.check({**self.sample, field: 255}, True)
+                self.check({**self.sample, field: minimum - 1}, False, ["artifacts", 0, field])
+                self.check({**self.sample, field: 256}, False, ["artifacts", 0, field])
+
     def test_ids_must_start_at_one_without_gaps(self):
         # 実行時の記録は 1〜件数の ID だけを作るため、0・欠番・重複・逆順を拒否する。
         for first_id in (2, 9999):
@@ -249,6 +274,57 @@ class ArtifactDefinitionValidationTest(unittest.TestCase):
         self.assertFalse(ok, message)
         self.assertIn("Invalid artifact definitions", message)
         self.assertIn("integer JSON value", message)
+
+
+class DefinitionLevelLimitTest(unittest.TestCase):
+    def test_level_is_limited_to_the_deepest_reachable_floor(self):
+        # ベースアイテム・アーティファクトの生成階と、同じ発動の難易度の計算に使うエゴの level は、MAX_DEPTH - 1 までとする。
+        root = Path(__file__).resolve().parents[2]
+        header = (root / "src/floor/floor-base-definitions.h").read_text(encoding="utf-8")
+        match = re.search(r"constexpr int MAX_DEPTH = (\d+);", header)
+        self.assertIsNotNone(match, "MAX_DEPTH not found in floor-base-definitions.h")
+        max_depth = int(match.group(1))
+        loaded, schema_map = load_all_schemas(root / "schema")
+        levels = {
+            "BaseitemDefinitions": loaded[schema_map["BaseitemDefinitions"]]["properties"]["baseitems"]["items"]["properties"]["level"],
+            "ArtifactDefinitions": loaded[schema_map["ArtifactDefinitions"]]["properties"]["artifacts"]["items"]["properties"]["level"],
+        }
+        levels["EgoDefinitions"] = loaded[schema_map["EgoDefinitions"]]["definitions"]["ego"]["properties"]["level"]
+        for name, level in levels.items():
+            with self.subTest(name=name):
+                self.assertEqual((level["minimum"], level["maximum"]), (0, max_depth - 1))
+
+    def test_level_boundaries(self):
+        root = Path(__file__).resolve().parents[2]
+        loaded, schema_map = load_all_schemas(root / "schema")
+        registry = build_schema_registry(loaded)
+        for name, key in (("BaseitemDefinitions", "baseitems"), ("ArtifactDefinitions", "artifacts")):
+            document = load_jsonc(root / "lib/edit" / f"{name}.jsonc")
+            sample = {**document[key][0], "id": 1}
+            schema_path = schema_map[name]
+            for level, accepted in ((127, True), (128, False)):
+                with self.subTest(name=name, level=level):
+                    ok, message = validate_document({"version": document["version"], key: [{**sample, "level": level}]},
+                                                    schema_path, loaded[schema_path], registry)
+                    self.assertEqual(ok, accepted, message)
+                    if not accepted:
+                        self.assertIn(f"Location: {[key, 0, 'level']}", message)
+
+
+class ItemBonusLimitTest(unittest.TestCase):
+    def test_schema_matches_reader_limits(self):
+        # schema の範囲が item-reader-limits.h の定数と合っていることを確かめる。
+        root = Path(__file__).resolve().parents[2]
+        header = (root / "src/info-reader/item-reader-limits.h").read_text(encoding="utf-8")
+        limits = {name: int(value) for name, value in re.findall(r"constexpr int (ITEM_BASE_AC_MAX|ITEM_BONUS_MAX) = (\d+);", header)}
+        self.assertEqual(set(limits), {"ITEM_BASE_AC_MAX", "ITEM_BONUS_MAX"}, "ITEM_BASE_AC_MAX / ITEM_BONUS_MAX not found in item-reader-limits.h")
+        loaded, schema_map = load_all_schemas(root / "schema")
+        for name, key in (("BaseitemDefinitions", "baseitems"), ("ArtifactDefinitions", "artifacts")):
+            properties = loaded[schema_map[name]]["properties"][key]["items"]["properties"]
+            with self.subTest(name=name):
+                self.assertEqual((properties["base_ac"]["minimum"], properties["base_ac"]["maximum"]), (0, limits["ITEM_BASE_AC_MAX"]))
+                for field in ("hit_bonus", "damage_bonus", "ac_bonus"):
+                    self.assertEqual((properties[field]["minimum"], properties[field]["maximum"]), (-limits["ITEM_BONUS_MAX"], limits["ITEM_BONUS_MAX"]))
 
 
 class ItemTokenListTest(unittest.TestCase):

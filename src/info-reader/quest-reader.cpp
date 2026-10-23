@@ -13,6 +13,7 @@
 #include "system/terrain/terrain-list.h"
 #include "util/enum-converter.h"
 #include <algorithm>
+#include <cstdint>
 #include <limits>
 #include <nlohmann/json.hpp>
 #include <string>
@@ -24,7 +25,8 @@ namespace {
 constexpr Range LEGEND_SHORT_RANGE(std::numeric_limits<int16_t>::min(), std::numeric_limits<int16_t>::max());
 // 負のモンスターIDは生成時にshortのまま符号反転されるので、最小値は許可しない。
 constexpr Range LEGEND_MONSTER_RANGE(-std::numeric_limits<MONSTER_IDX>::max(), std::numeric_limits<MONSTER_IDX>::max());
-constexpr Range LEGEND_EGO_RANGE(std::numeric_limits<int>::min(), std::numeric_limits<int>::max());
+// エゴのIDはエゴ定義でもセーブでも1バイトに収まるため、上限を255とする。
+constexpr Range LEGEND_EGO_RANGE(std::numeric_limits<int>::min(), std::numeric_limits<uint8_t>::max());
 constexpr Range QUEST_INTEGER_RANGE(std::numeric_limits<int>::min(), std::numeric_limits<int>::max());
 // メタデータはintで保持するが、対象モンスターと報酬は実行時にshort基底のIDへ変換される。
 constexpr Range QUEST_ID_RANGE(std::numeric_limits<int16_t>::min(), std::numeric_limits<int16_t>::max());

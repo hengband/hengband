@@ -4,7 +4,7 @@
     "description": "ベースアイテムの定義",
     "properties": {
         "version": {
-            "type": "number",
+            "const": 1,
             "description": "Version情報"
         },
         "baseitems": {
@@ -116,9 +116,9 @@
                     },
                     "level": {
                         "type": "integer",
-                        "description": "出現階層",
+                        "description": "基本の生成階。発動の基本難易度などにも使う。たどり着ける最深の階 (MAX_DEPTH - 1) まで",
                         "minimum": 0,
-                        "maximum": 128
+                        "maximum": 127
                     },
                     "weight": {
                         "type": "integer",
@@ -133,10 +133,11 @@
                         "maximum": 99999999
                     },
                     "base_ac": {
+                        "$comment": "maximum = ITEM_BASE_AC_MAX in src/info-reader/item-reader-limits.h (a small number from 0 to 255; sums over all equipment slots are estimated to stay within 16 bits up to about 1,000)",
                         "type": "integer",
                         "description": "ベースAC",
-                        "minimum": -99,
-                        "maximum": 99
+                        "minimum": 0,
+                        "maximum": 255
                     },
                     "base_dice": {
                         "type": "string",
@@ -144,22 +145,25 @@
                         "pattern": "[0-9]*d[0-9]*"
                     },
                     "hit_bonus": {
+                        "$comment": "range = +-ITEM_BONUS_MAX in src/info-reader/item-reader-limits.h (a small number with absolute value up to 255; sums over all equipment slots are estimated to stay within 16 bits up to about 1,000)",
                         "type": "integer",
                         "description": "命中補正値",
-                        "minimum": -99,
-                        "maximum": 99
+                        "minimum": -255,
+                        "maximum": 255
                     },
                     "damage_bonus": {
+                        "$comment": "range = +-ITEM_BONUS_MAX in src/info-reader/item-reader-limits.h (a small number with absolute value up to 255; sums over all equipment slots are estimated to stay within 16 bits up to about 1,000)",
                         "type": "integer",
                         "description": "ダメージ補正値",
-                        "minimum": -99,
-                        "maximum": 99
+                        "minimum": -255,
+                        "maximum": 255
                     },
                     "ac_bonus": {
+                        "$comment": "range = +-ITEM_BONUS_MAX in src/info-reader/item-reader-limits.h (a small number with absolute value up to 255; sums over all equipment slots are estimated to stay within 16 bits up to about 1,000)",
                         "type": "integer",
                         "description": "AC補正値",
-                        "minimum": -99,
-                        "maximum": 99
+                        "minimum": -255,
+                        "maximum": 255
                     },
                     "allocations": {
                         "type": "array",
@@ -178,7 +182,7 @@
                                     "type": "integer",
                                     "description": "出現階層",
                                     "minimum": 0,
-                                    "maximum": 128
+                                    "maximum": 127
                                 },
                                 "rarity": {
                                     "type": "integer",

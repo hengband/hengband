@@ -537,7 +537,7 @@ TEST_CASE("RaceReader rejects duplicate and descending IDs within a file")
     CHECK(RaceReader(data).read().has_value());
 }
 
-TEST_CASE("RaceReader validates level rarity and starting HP ranges")
+TEST_CASE("RaceReader validates level rarity starting HP and armor class ranges")
 {
     test::MonraceListTestAccess races;
     auto data = make_monrace();
@@ -551,6 +551,10 @@ TEST_CASE("RaceReader validates level rarity and starting HP ranges")
              { "start_hp_percentage", 1, ParseErrorType::NONE },
              { "start_hp_percentage", 99, ParseErrorType::NONE },
              { "start_hp_percentage", 0, ParseErrorType::INVALID_FLAG },
+             { "armor_class", 0, ParseErrorType::NONE },
+             { "armor_class", 10000, ParseErrorType::NONE },
+             { "armor_class", 10001, ParseErrorType::INVALID_FLAG },
+             { "armor_class", -1, ParseErrorType::INVALID_FLAG },
          }) {
         CAPTURE(field);
         CAPTURE(value);

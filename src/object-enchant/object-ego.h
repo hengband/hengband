@@ -254,7 +254,7 @@ public:
     INVENTORY_IDX slot{}; //!< 装備部位 / Standard slot value
     PRICE rating{}; //!< 雰囲気とアンドロイド装備経験値への重み（0～100）。0は悪いエゴの判定にも使う。
 
-    DEPTH level{}; //!< 指輪・アミュレット発動の基本難易度（0～128）。生成階の制限ではない。
+    DEPTH level{}; //!< 指輪・アミュレット発動の基本難易度（0～127）。生成階の制限ではない。
     RARITY rarity{}; //!< 0は通常抽選から除外、正値は255/rarityを抽選の重みにする。
 
     HIT_PROB base_to_h{}; //!< ベース命中修正

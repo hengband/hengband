@@ -83,7 +83,7 @@ public:
     StoreSaleType store_sale_type = StoreSaleType::NONE; /*!< 店舗種別 */
     BuildingType building_type = BuildingType::NONE; /*!< 施設種別 */
     TerrainConversionType conversion_type = TerrainConversionType::NONE; /*!< 変換地形種別 */
-    int stream_index = -1; /*!< 川地形種別 */
+    int stream_index = -1; /*!< 川地形種別 (ダンジョンの streams の位置。数を超える位置では元の地形のまま。STREAM 以外では -1) */
     uint8_t door_power{}; /*!< 扉の強度 */
     uint8_t trap_power{}; /*!< 罠の解除難易度 */
     uint8_t tunnel_power{}; /*!< トンネル掘削難易度 */

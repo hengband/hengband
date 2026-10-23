@@ -6,8 +6,10 @@
 
 #include "info-reader/baseitem-reader.h"
 #include "artifact/random-art-effects.h"
+#include "floor/floor-base-definitions.h"
 #include "info-reader/baseitem-tokens-table.h"
 #include "info-reader/info-reader-util.h"
+#include "info-reader/item-reader-limits.h"
 #include "info-reader/json-reader-util.h"
 #include "info-reader/parse-error-types.h"
 #include "locale/japanese.h"
@@ -97,7 +99,8 @@ tl::expected<void, ParseErrorType> BaseitemReader::read() const
         msg_print(_("アイテムのパラメータ値読込失敗。ID: '{}'。", "Failed to load parameter value of item. ID: '{}'."), error_idx);
         return result;
     }
-    if (const auto result = info_set_integer(get_json_value(this->baseitem_data, "level"), baseitem.level, true, Range(0, 128)); !result) {
+    // level は基本の生成階 (発動の基本難易度などにも使う) で、たどり着ける最深の階 (MAX_DEPTH - 1) までとする。
+    if (const auto result = info_set_integer(get_json_value(this->baseitem_data, "level"), baseitem.level, true, Range(0, MAX_DEPTH - 1)); !result) {
         msg_print(_("アイテムのレベル読込失敗。ID: '{}'。", "Failed to load level of item. ID: '{}'."), error_idx);
         return result;
     }
@@ -109,7 +112,7 @@ tl::expected<void, ParseErrorType> BaseitemReader::read() const
         msg_print(_("アイテムの売値読込失敗。ID: '{}'。", "Failed to load cost of item. ID: '{}'."), error_idx);
         return result;
     }
-    if (const auto result = info_set_integer(get_json_value(this->baseitem_data, "base_ac"), baseitem.ac, false, Range(-99, 99)); !result) {
+    if (const auto result = info_set_integer(get_json_value(this->baseitem_data, "base_ac"), baseitem.ac, false, Range(0, ITEM_BASE_AC_MAX)); !result) {
         msg_print(_("アイテムのベースAC読込失敗。ID: '{}'。", "Failed to load base AC of item. ID: '{}'."), error_idx);
         return result;
     }
@@ -118,15 +121,15 @@ tl::expected<void, ParseErrorType> BaseitemReader::read() const
         msg_print(_("アイテムのベースダイス読込失敗。ID: '{}'。", "Failed to load base dice of item. ID: '{}'."), error_idx);
         return result;
     }
-    if (const auto result = info_set_integer(get_json_value(this->baseitem_data, "hit_bonus"), baseitem.to_h, false, Range(-99, 99)); !result) {
+    if (const auto result = info_set_integer(get_json_value(this->baseitem_data, "hit_bonus"), baseitem.to_h, false, Range(-ITEM_BONUS_MAX, ITEM_BONUS_MAX)); !result) {
         msg_print(_("アイテムの命中補正値読込失敗。ID: '{}'。", "Failed to load hit bonus of item. ID: '{}'."), error_idx);
         return result;
     }
-    if (const auto result = info_set_integer(get_json_value(this->baseitem_data, "damage_bonus"), baseitem.to_d, false, Range(-99, 99)); !result) {
+    if (const auto result = info_set_integer(get_json_value(this->baseitem_data, "damage_bonus"), baseitem.to_d, false, Range(-ITEM_BONUS_MAX, ITEM_BONUS_MAX)); !result) {
         msg_print(_("アイテムのダメージ補正値読込失敗。ID: '{}'。", "Failed to load damage bonus of item. ID: '{}'."), error_idx);
         return result;
     }
-    if (const auto result = info_set_integer(get_json_value(this->baseitem_data, "ac_bonus"), baseitem.to_a, false, Range(-99, 99)); !result) {
+    if (const auto result = info_set_integer(get_json_value(this->baseitem_data, "ac_bonus"), baseitem.to_a, false, Range(-ITEM_BONUS_MAX, ITEM_BONUS_MAX)); !result) {
         msg_print(_("アイテムのAC補正値読込失敗。ID: '{}'。", "Failed to load AC bonus of item. ID: '{}'."), error_idx);
         return result;
     }
@@ -301,7 +304,8 @@ tl::expected<void, ParseErrorType> BaseitemReader::set_baseitem_allocations(Base
         }
 
         auto &table = baseitem.alloc_tables[i];
-        if (const auto result = info_set_integer(get_json_value(alloc, "depth"), table.level, true, Range(0, 128)); !result) {
+        // 出現階層は、生成の表を作るときに階層ごとの配列 (要素数 MAX_DEPTH) の添え字に使われる
+        if (const auto result = info_set_integer(get_json_value(alloc, "depth"), table.level, true, Range(0, MAX_DEPTH - 1)); !result) {
             return result;
         }
         if (const auto result = info_set_integer(get_json_value(alloc, "rarity"), table.chance, true, Range(0, 256)); !result) {

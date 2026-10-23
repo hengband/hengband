@@ -1,5 +1,6 @@
 """DungeonReaderの数値契約を公開JSONC検証入口で確認する。"""
 import copy
+import re
 from pathlib import Path
 import unittest
 
@@ -164,12 +165,44 @@ class DungeonValidationTest(unittest.TestCase):
                 ok, diagnostic = self.validate(document, companions={"WildernessDefinition.jsonc": wilderness})
                 self.assertEqual(ok, rejected_field is None, diagnostic)
                 if rejected_field:
-                    self.assertIn("dungeon entrance must be inside the wilderness map excluding the edges", diagnostic)
-                    self.assertIn(f"Location: {['dungeons', 0, 'position', rejected_field]}", diagnostic)
+                    # 0 は schema が拒否し、荒野の大きさを超える位置は意味の検査が拒否する。
+                    if min(y, x) >= 1:
+                        self.assertIn("dungeon entrance must be inside the wilderness map excluding the edges", diagnostic)
+                    self.assertIn(f"{['dungeons', 0, 'position', rejected_field]}", diagnostic)
         wilderness["height"] = 3.0
         ok, diagnostic = self.validate(self.sample(), companions={"WildernessDefinition.jsonc": wilderness})
         self.assertFalse(ok, diagnostic)
         self.assertIn("Invalid wilderness definitions", diagnostic)
+
+    def test_entrance_limits_match_largest_wilderness(self):
+        # 荒野 (ID 0) 以外の入口は荒野の端を除いた内側に限られ、荒野は最大で MAX_WID×MAX_HGT になる。
+        header = (self.root / "src/floor/floor-base-definitions.h").read_text(encoding="utf-8")
+        limits = {name: int(value) for name, value in re.findall(r"constexpr int (MAX_HGT|MAX_WID) = (\d+);", header)}
+        self.assertEqual(set(limits), {"MAX_HGT", "MAX_WID"}, "MAX_HGT / MAX_WID not found in floor-base-definitions.h")
+        position = self.schema["$defs"]["entrancePosition"]["properties"]
+        self.assertEqual((position["wild_y"]["minimum"], position["wild_y"]["maximum"]), (1, limits["MAX_HGT"] - 2))
+        self.assertEqual((position["wild_x"]["minimum"], position["wild_x"]["maximum"]), (1, limits["MAX_WID"] - 2))
+
+    def test_entrances_of_dungeons_fit_the_largest_wilderness(self):
+        # 最大の荒野 (198×66) を隣に置き、荒野 (ID 0) 以外の入口の境界を確かめる。
+        width, height = 198, 66
+        wilderness = {"version": 1, "width": width, "height": height,
+                      "towns": [{"id": 1, "name": {"ja": "Town", "en": "Town"}, "alias": {"ja": "Town", "en": "Town"}}]
+                      + [{"id": town_id, "name": {"ja": "Town", "en": "Town"}} for town_id in range(2, 6)],
+                      "maps": {name: {"letters": [{"symbol": "#", "terrain": 0}],
+                                      "layout": ["#" * width] * height,
+                                      "starting_position": {"y": 1, "x": 1}}
+                               for name in ("normal", "compact")}}
+        cases = ((1, 1, None), (height - 2, width - 2, None), (0, 1, "wild_y"), (height - 1, 1, "wild_y"),
+                 (1, 0, "wild_x"), (1, width - 1, "wild_x"))
+        for y, x, rejected_field in cases:
+            with self.subTest(y=y, x=x):
+                document = self.sample()
+                document["dungeons"][0]["position"].update(wild_y=y, wild_x=x)
+                ok, diagnostic = self.validate(document, companions={"WildernessDefinition.jsonc": wilderness})
+                self.assertEqual(ok, rejected_field is None, diagnostic)
+                if rejected_field:
+                    self.assertIn(f"{['dungeons', 0, 'position', rejected_field]}", diagnostic)
 
     def test_artifact_sentinel_and_guardian_requirement(self):
         document = self.sample()

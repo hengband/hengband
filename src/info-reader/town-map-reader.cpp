@@ -178,7 +178,7 @@ tl::expected<void, ParseErrorType> TownMapReader::read_features(TownMapDefinitio
                 return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
             }
         }
-        if (!fields.contains("caveInfo") || !is_json_integer_in_range(fields["caveInfo"], 0, std::numeric_limits<int>::max()) ||
+        if (!fields.contains("caveInfo") || !is_json_integer_in_range(fields["caveInfo"], 0, std::numeric_limits<uint16_t>::max()) ||
             !fields.contains("special") || !is_json_integer_in_range(fields["special"], std::numeric_limits<int16_t>::min(), std::numeric_limits<int16_t>::max())) {
             return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
         }

@@ -4,7 +4,7 @@
     "description": "呪文情報の定義",
     "properties": {
         "version": {
-            "type": "number",
+            "const": 1,
             "description": "Version情報"
         },
         "realms": {

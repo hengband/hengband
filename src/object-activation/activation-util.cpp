@@ -40,7 +40,7 @@ void ae_type::decide_activation_level()
 /*!
  * @brief 発動の基本難易度と技能から抽選用の成功・失敗重みを求める
  * @param skill 混乱等の補正後の魔道具技能（符号付き16bit）
- * @details levは各定義readerで0～128に制限される。この範囲と技能型なら重みと抽選時の2倍もintに収まる。
+ * @details levは各定義readerで0～127に制限される。この範囲と技能型なら重みと抽選時の2倍もintに収まる。
  */
 void ae_type::decide_chance_fail(ACTION_SKILL_POWER skill)
 {

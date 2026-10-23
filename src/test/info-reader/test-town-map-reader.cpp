@@ -392,7 +392,7 @@ TEST_CASE("TownMapReader rejects out of range JSON integers before conversion")
         }
     }
     auto data = make_town_map();
-    data["featureRules"][0]["definition"]["caveInfo"] = std::numeric_limits<int>::max();
+    data["featureRules"][0]["definition"]["caveInfo"] = std::numeric_limits<uint16_t>::max();
     for (const int value : { -32768, 32767 }) {
         data["featureRules"][0]["definition"]["special"] = value;
         CHECK(read_town(data).has_value());
@@ -402,9 +402,13 @@ TEST_CASE("TownMapReader rejects out of range JSON integers before conversion")
         data["featureRules"][0]["definition"]["special"] = value;
         CHECK(test::to_error_code(read_town(data)) == ParseErrorType::INVALID_TYPE);
     }
-    data = make_town_map();
-    data["featureRules"][0]["definition"]["caveInfo"] = -1;
-    CHECK(test::to_error_code(read_town(data)) == ParseErrorType::INVALID_TYPE);
+    // caveInfo は CAVE_* のフラグの組で、フラグは16ビットに収まり、セーブでも16ビットで書く。
+    for (const int value : { -1, std::numeric_limits<uint16_t>::max() + 1 }) {
+        CAPTURE(value);
+        data = make_town_map();
+        data["featureRules"][0]["definition"]["caveInfo"] = value;
+        CHECK(test::to_error_code(read_town(data)) == ParseErrorType::INVALID_TYPE);
+    }
     for (const auto *coordinate : { "x", "y" }) {
         for (const auto &value : { nlohmann::json(-1), nlohmann::json(3), nlohmann::json(std::numeric_limits<uint64_t>::max()) }) {
             data = make_town_map();
@@ -571,7 +575,7 @@ TEST_CASE("TownMapReader building-only mode skips map and start contents, not ro
 TEST_CASE("TownMapReader accepts unsigned integers produced by JSON parsing")
 {
     auto input = make_town_map();
-    input["featureRules"][0]["definition"]["caveInfo"] = std::numeric_limits<int>::max();
+    input["featureRules"][0]["definition"]["caveInfo"] = std::numeric_limits<uint16_t>::max();
     input["featureRules"][0]["definition"]["special"] = 32767;
     input["buildingRules"][0]["index"] = MAX_BUILDINGS - 1;
     input["startingPositions"][0]["x"] = 2;
@@ -585,7 +589,7 @@ TEST_CASE("TownMapReader accepts unsigned integers produced by JSON parsing")
     REQUIRE(data["startingPositions"][0]["y"].is_number_unsigned());
     TownMapDefinition definition;
     REQUIRE(TownMapReader(data).read(definition, 3, 3).has_value());
-    CHECK(definition.features[0].cell.grid.cave_info == std::numeric_limits<int>::max());
+    CHECK(definition.features[0].cell.grid.cave_info == std::numeric_limits<uint16_t>::max());
     CHECK(definition.features[0].cell.grid.special == 32767);
     CHECK(definition.buildings[0].index == MAX_BUILDINGS - 1);
     CHECK(definition.starts[0].x == 2);
@@ -743,7 +747,7 @@ TEST_CASE("TownMapReader rejects parsed unsigned integers immediately above each
     };
     for (const auto &boundary : {
              Boundary{ "featureRules", "special", 32768, ParseErrorType::INVALID_TYPE },
-             Boundary{ "featureRules", "caveInfo", static_cast<uint64_t>(std::numeric_limits<int>::max()) + 1, ParseErrorType::INVALID_TYPE },
+             Boundary{ "featureRules", "caveInfo", static_cast<uint64_t>(std::numeric_limits<uint16_t>::max()) + 1, ParseErrorType::INVALID_TYPE },
              Boundary{ "buildingRules", "index", static_cast<uint64_t>(MAX_BUILDINGS), ParseErrorType::INVALID_VALUE },
              Boundary{ "startingPositions", "x", 3, ParseErrorType::INVALID_VALUE },
              Boundary{ "startingPositions", "y", 3, ParseErrorType::INVALID_VALUE },
@@ -1195,14 +1199,14 @@ TEST_CASE("TownMapReader applies typed feature token values and random flags")
         auto &fields = data["featureRules"][0]["definition"];
         fields["terrain"] = "TOWN_FEATURE_TEST_FLOOR";
         fields["trap"] = "TOWN_FEATURE_TEST_TRAP";
-        fields["caveInfo"] = std::numeric_limits<int>::max();
+        fields["caveInfo"] = std::numeric_limits<uint16_t>::max();
         fields["special"] = -32768;
         for (const auto *field : { "monster", "object", "ego", "artifact" }) {
             fields[field] = token;
         }
         TownMapDefinition definition;
         REQUIRE(TownMapReader(data).read(definition, 3, 3).has_value());
-        const dungeon_grid expected{ .feature = state.floor_id(), .monster = value, .object = value, .ego = i2enum<EgoType>(value), .artifact = i2enum<FixedArtifactId>(value), .trap = state.trap_id(), .cave_info = std::numeric_limits<int>::max(), .special = -32768, .random = random };
+        const dungeon_grid expected{ .feature = state.floor_id(), .monster = value, .object = value, .ego = i2enum<EgoType>(value), .artifact = i2enum<FixedArtifactId>(value), .trap = state.trap_id(), .cave_info = std::numeric_limits<uint16_t>::max(), .special = -32768, .random = random };
         letter['#'] = {};
         REQUIRE(apply_town_map_feature(floor, definition.features.front()).has_value());
         check_same_grid(letter['#'], expected);

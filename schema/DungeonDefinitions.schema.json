@@ -48,6 +48,22 @@
         }
       }
     },
+    "entrancePosition": {
+      "$comment": "Dungeons other than the wilderness (ID 0) have their entrance inside the largest wilderness (MAX_WID x MAX_HGT in src/floor/floor-base-definitions.h) excluding the edges.",
+      "type": "object",
+      "properties": {
+        "wild_y": {
+          "$comment": "maximum = MAX_HGT - 2",
+          "minimum": 1,
+          "maximum": 64
+        },
+        "wild_x": {
+          "$comment": "maximum = MAX_WID - 2",
+          "minimum": 1,
+          "maximum": 196
+        }
+      }
+    },
     "generation": {
       "type": "object",
       "additionalProperties": false,
@@ -361,6 +377,22 @@
     "dungeon": {
       "type": "object",
       "additionalProperties": false,
+      "if": {
+        "properties": {
+          "id": {
+            "not": {
+              "const": 0
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "position": {
+            "$ref": "#/$defs/entrancePosition"
+          }
+        }
+      },
       "required": [
         "id",
         "name",

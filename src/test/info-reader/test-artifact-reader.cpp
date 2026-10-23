@@ -1,7 +1,9 @@
 #include "artifact/fixed-art-types.h"
 #include "artifact/random-art-effects.h"
+#include "floor/floor-base-definitions.h"
 #include "info-reader/artifact-reader.h"
 #include "info-reader/info-reader-util.h"
+#include "info-reader/item-reader-limits.h"
 #include "info-reader/parse-error-types.h"
 #include "locale/language-switcher.h"
 #include "object-enchant/tr-types.h"
@@ -21,6 +23,7 @@
 #include <memory>
 #include <nlohmann/json.hpp>
 #include <string_view>
+#include <utility>
 #include <vector>
 
 namespace {
@@ -236,6 +239,29 @@ TEST_CASE("ArtifactReader rejects a base item which is not a valid baseitem")
 }
 
 /*!
+ * @brief 生成階 (level) は、たどり着ける最深の階 (MAX_DEPTH - 1) までとする
+ */
+TEST_CASE("ArtifactReader limits level to the deepest reachable floor")
+{
+    {
+        test::ScopedReaderState reader_state;
+        test::ArtifactListTestAccess artifact_state;
+        ScopedArtifactBaseitem baseitem;
+        auto data = make_artifact();
+        data["level"] = MAX_DEPTH;
+        CHECK(test::to_error_code(ArtifactReader(data).read()) == ParseErrorType::INVALID_FLAG);
+        CHECK(ArtifactList::get_instance().empty());
+    }
+    test::ScopedReaderState reader_state;
+    test::ArtifactListTestAccess artifact_state;
+    ScopedArtifactBaseitem baseitem;
+    auto data = make_artifact();
+    data["level"] = MAX_DEPTH - 1;
+    REQUIRE(ArtifactReader(data).read().has_value());
+    CHECK(ArtifactList::get_instance().get_artifact(i2enum<FixedArtifactId>(1)).level == MAX_DEPTH - 1);
+}
+
+/*!
  * @brief ダイスの個数と面数は、セーブの1バイトに収まる 0〜255 に限る
  */
 TEST_CASE("ArtifactReader limits base dice to the save format range")
@@ -257,6 +283,44 @@ TEST_CASE("ArtifactReader limits base dice to the save format range")
     data["base_dice"] = "255d255";
     REQUIRE(ArtifactReader(data).read().has_value());
     CHECK(ArtifactList::get_instance().get_artifact(i2enum<FixedArtifactId>(1)).damage_dice == Dice(255, 255));
+}
+
+/*!
+ * @brief ベースACと修正値は絶対値が255以下の小さな数に限る (ベースACは負の値を認めない)
+ */
+TEST_CASE("ArtifactReader limits base AC and bonuses to small numbers up to 255 in absolute value")
+{
+    for (const auto &[field, value] : { std::pair{ "base_ac", -1 }, std::pair{ "base_ac", ITEM_BASE_AC_MAX + 1 }, std::pair{ "hit_bonus", -ITEM_BONUS_MAX - 1 },
+             std::pair{ "hit_bonus", ITEM_BONUS_MAX + 1 }, std::pair{ "damage_bonus", -ITEM_BONUS_MAX - 1 }, std::pair{ "damage_bonus", ITEM_BONUS_MAX + 1 },
+             std::pair{ "ac_bonus", -ITEM_BONUS_MAX - 1 }, std::pair{ "ac_bonus", ITEM_BONUS_MAX + 1 } }) {
+        CAPTURE(field);
+        CAPTURE(value);
+        test::ScopedReaderState reader_state;
+        test::ArtifactListTestAccess artifact_state;
+        ScopedArtifactBaseitem baseitem;
+        auto data = make_artifact();
+        data[field] = value;
+        CHECK(test::to_error_code(ArtifactReader(data).read()) == ParseErrorType::INVALID_FLAG);
+        CHECK(ArtifactList::get_instance().empty());
+    }
+    for (const auto bonus : { -ITEM_BONUS_MAX, ITEM_BONUS_MAX }) {
+        CAPTURE(bonus);
+        test::ScopedReaderState reader_state;
+        test::ArtifactListTestAccess artifact_state;
+        ScopedArtifactBaseitem baseitem;
+        auto data = make_artifact();
+        const auto base_ac = bonus < 0 ? 0 : ITEM_BASE_AC_MAX;
+        data["base_ac"] = base_ac;
+        data["hit_bonus"] = bonus;
+        data["damage_bonus"] = bonus;
+        data["ac_bonus"] = bonus;
+        REQUIRE(ArtifactReader(data).read().has_value());
+        const auto &artifact = ArtifactList::get_instance().get_artifact(i2enum<FixedArtifactId>(1));
+        CHECK(artifact.ac == base_ac);
+        CHECK(artifact.to_h == bonus);
+        CHECK(artifact.to_d == bonus);
+        CHECK(artifact.to_a == bonus);
+    }
 }
 
 TEST_CASE("ArtifactReader publishes complete records with localized text and optional fields")

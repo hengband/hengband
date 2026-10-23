@@ -4,7 +4,7 @@
     "description": "MonsterRaceの定義",
     "properties": {
         "versions": {
-            "type": "number",
+            "const": 1,
             "description": "Version情報"
         },
         "monsters": {
@@ -106,6 +106,7 @@
                         "maximum": 999
                     },
                     "armor_class": {
+                        "$comment": "maximum = MONRACE_AC_MAX in src/info-reader/race-reader.cpp (GOEMON's AC is tripled in a 16-bit variable)",
                         "type": "integer",
                         "description": "物理防御力",
                         "minimum": 0,

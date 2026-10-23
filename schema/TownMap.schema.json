@@ -67,8 +67,8 @@
         "caveInfo": {
           "type": "integer",
           "minimum": 0,
-          "maximum": 2147483647,
-          "description": "Cave flags bitmask used by the fixed-map reader."
+          "maximum": 65535,
+          "description": "Cave flags bitmask used by the fixed-map reader. The flags fit in 16 bits and are saved as a 16-bit value."
         },
         "monster": {
           "type": "string",
