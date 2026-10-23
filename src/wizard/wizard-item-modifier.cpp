@@ -902,7 +902,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
     auto ok_ego = evaluate_percent(50 + prob);
     auto must = prob < 0;
     auto blessed = false;
-    auto fixed = true;
+    auto fixed = false;
 
     std::string pray;
     while (true) {
