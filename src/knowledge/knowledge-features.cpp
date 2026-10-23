@@ -24,24 +24,12 @@
 #include <fmt/format.h>
 
 /*!
- * @brief 一覧に載せる地形のIDを格納する配列を確保する
- * @return すべての地形と終端の -1 を格納できる大きさの配列
- */
-std::vector<FEAT_IDX> make_feature_index_buffer()
-{
-    // すべての地形が一覧に載っても終端の -1 を書けるよう、1つ多く確保する
-    return std::vector<FEAT_IDX>(TerrainList::get_instance().size() + 1);
-}
-
-/*!
  * @brief 一覧に載せる地形のIDを集める
- * @param feat_idx 地形のIDを格納する配列 (末尾に終端の -1 を書く)
- * @param mode 0x01 が立っていれば、空でないかだけを調べる (最初の1つで打ち切る)
- * @return 集めた地形の数
+ * @return 集めた地形のIDの一覧 (地形の一覧の順)
  */
-FEAT_IDX collect_features(std::vector<FEAT_IDX> &feat_idx, BIT_FLAGS8 mode)
+std::vector<FEAT_IDX> collect_features()
 {
-    FEAT_IDX feat_cnt = 0;
+    std::vector<FEAT_IDX> feat_idx;
     for (const auto &terrain : TerrainList::get_instance()) {
         if (terrain.name.empty()) {
             continue;
@@ -50,20 +38,16 @@ FEAT_IDX collect_features(std::vector<FEAT_IDX> &feat_idx, BIT_FLAGS8 mode)
             continue;
         }
 
-        feat_idx.at(feat_cnt++) = terrain.idx;
-        if (mode & 0x01) {
-            break;
-        }
+        feat_idx.push_back(terrain.idx);
     }
 
-    feat_idx.at(feat_cnt) = -1;
-    return feat_cnt;
+    return feat_idx;
 }
 
 /*
  * Display the features in a group.
  */
-static void display_feature_list(int col, int row, int per_page, FEAT_IDX *feat_idx, FEAT_IDX feat_cur, FEAT_IDX feat_top, bool visual_only, int lighting_level)
+static void display_feature_list(int col, int row, int per_page, const std::vector<FEAT_IDX> &feat_idx, FEAT_IDX feat_cur, FEAT_IDX feat_top, bool visual_only, int lighting_level)
 {
     int lit_col[F_LIT_MAX]{};
     int f_idx_col = use_bigtile ? 62 : 64;
@@ -76,7 +60,7 @@ static void display_feature_list(int col, int row, int per_page, FEAT_IDX *feat_
     const auto is_wizard = AngbandWorld::get_instance().wizard;
     const auto &terrains = TerrainList::get_instance();
     int i;
-    for (i = 0; i < per_page && (feat_idx[feat_top + i] >= 0); i++) {
+    for (i = 0; i < per_page && (feat_top + i < std::ssize(feat_idx)); i++) {
         TERM_COLOR attr;
         auto terrain_id = feat_idx[feat_top + i];
         const auto &terrain = terrains.get_terrain(terrain_id);
@@ -121,28 +105,18 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
     TerrainSymbols symbols{};
     const auto &[wid, hgt] = term_get_size();
     auto &terrains = TerrainList::get_instance();
-    auto feat_idx = make_feature_index_buffer();
+    std::vector<FEAT_IDX> feat_idx;
 
     const std::string terrain_group(_("地形    ", "Terrains")); //!< @details 他と合わせるためgroupと呼ぶ.
     const auto max_length = terrain_group.length();
-    int feat_cnt;
-    std::vector<short> grp_idx;
     TERM_COLOR attr_top = 0;
     bool visual_list = false;
     byte char_left = 0;
     TERM_LEN browser_rows = hgt - 8;
-    if (direct_f_idx < 0) {
-        if (collect_features(feat_idx, 0x01)) {
-            grp_idx.push_back(0);
-        }
-
-        feat_cnt = 0;
-    } else {
+    if (direct_f_idx >= 0) {
         auto &terrain = terrains.get_terrain(direct_f_idx);
         auto &symbol_config = terrain.symbol_configs.at(*lighting_level);
-        feat_idx[0] = direct_f_idx;
-        feat_cnt = 1;
-        feat_idx[1] = -1;
+        feat_idx.push_back(static_cast<FEAT_IDX>(direct_f_idx));
         (void)visual_mode_command('v', &visual_list, browser_rows - 1, wid - max_length + 3, &attr_top, &char_left, &symbol_config.color,
             &symbol_config.character, need_redraw);
 
@@ -208,22 +182,22 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
             display_group_list(max_length, browser_rows, terrain_group_num, { terrain_group }, grp_cur, grp_top);
             if (old_grp_cur != grp_cur) {
                 old_grp_cur = grp_cur;
-                feat_cnt = collect_features(feat_idx, 0x00);
+                feat_idx = collect_features();
             }
 
             while (feat_cur < feat_top) {
                 feat_top = std::max<short>(0, feat_top - browser_rows / 2);
             }
             while (feat_cur >= feat_top + browser_rows) {
-                feat_top = std::min<short>(feat_cnt - browser_rows, feat_top + browser_rows / 2);
+                feat_top = std::min<short>(std::ssize(feat_idx) - browser_rows, feat_top + browser_rows / 2);
             }
         }
 
         if (!visual_list) {
-            display_feature_list(max_length + 3, 6, browser_rows, feat_idx.data(), feat_cur, feat_top, visual_only, F_LIT_STANDARD);
+            display_feature_list(max_length + 3, 6, browser_rows, feat_idx, feat_cur, feat_top, visual_only, F_LIT_STANDARD);
         } else {
             feat_top = feat_cur;
-            display_feature_list(max_length + 3, 6, 1, feat_idx.data(), feat_cur, feat_top, visual_only, *lighting_level);
+            display_feature_list(max_length + 3, 6, 1, feat_idx, feat_cur, feat_top, visual_only, *lighting_level);
             display_visual_list(max_length + 3, 7, browser_rows - 1, wid - max_length + 3, attr_top, char_left);
         }
 
@@ -231,7 +205,7 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
             hgt - 1, 0);
 
         // 一覧に載る地形が無ければ、地形を引かずに ESC だけを受け付ける
-        if (feat_cnt == 0) {
+        if (feat_idx.empty()) {
             if (inkey() == ESCAPE) {
                 flag = true;
             }
@@ -359,7 +333,7 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
 
         default: {
             constexpr auto dummy_count = 0;
-            browser_cursor(ch, &column, &grp_cur, dummy_count, &feat_cur, feat_cnt);
+            browser_cursor(ch, &column, &grp_cur, dummy_count, &feat_cur, std::ssize(feat_idx));
             break;
         }
         }
