@@ -46,6 +46,20 @@ void apply_item_feeling(PlayerType *player_ptr, INVENTORY_IDX i_idx, item_feel_t
 }
 
 /*!
+ * @brief 呪いに気づいた持ち物・床のアイテムに、呪いに合わせた感触を付ける
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param i_idx 持ち物の番号 (床のアイテムは負の値)
+ * @details 感触は ItemEntity::find_curse_feeling() で求める。呪われていない品・鑑定済みの品・
+ * 呪いを表す感触で感じ済みの品は変えない。
+ */
+void sense_curse(PlayerType *player_ptr, INVENTORY_IDX i_idx)
+{
+    if (const auto feel = ref_item(player_ptr, i_idx)->find_curse_feeling()) {
+        apply_item_feeling(player_ptr, i_idx, *feel);
+    }
+}
+
+/*!
  * @brief 擬似鑑定を実際に行い判定を反映する
  * @param slot 擬似鑑定を行うプレイヤーの所持リストID
  * @param player_ptr プレイヤーへの参照ポインタ
