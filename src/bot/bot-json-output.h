@@ -103,6 +103,10 @@ private:
 
 BotScreen make_bot_store_screen(const StoreScreen &screen);
 BotScreen make_bot_store_screen(StoreScreen &&screen) = delete;
+BotScreen make_bot_character_screen();
+tl::optional<BotKnowledgeCategory> find_bot_knowledge_category(int key);
+BotScreen make_bot_knowledge_screen(BotKnowledgeCategory category);
+BotScreen make_bot_look_screen();
 
 std::string to_json_utf8(std::string_view str);
 nlohmann::json make_message_history_json(int count);
@@ -110,10 +114,7 @@ nlohmann::json make_bot_proficiency_values_json(int exp, int max, bool show_valu
 nlohmann::json make_bot_character_speed_json(int total, int temporary, bool lightspeed, bool riding);
 nlohmann::json make_bot_json_snapshot(PlayerType *player_ptr, bool include_map = true);
 void output_bot_json_snapshot(PlayerType *player_ptr);
-void output_bot_json_store_snapshot(PlayerType *player_ptr, const StoreScreen &screen);
-void output_bot_json_character_snapshot(PlayerType *player_ptr);
-void output_bot_json_knowledge_snapshot(PlayerType *player_ptr, BotKnowledgeCategory category);
-void output_bot_json_look_snapshot(PlayerType *player_ptr);
+void output_bot_json_screen_snapshot(PlayerType *player_ptr);
 void output_bot_json_spell_list_snapshot(PlayerType *player_ptr, int realm_id, const std::vector<BotSpellListRow> &rows);
 void output_bot_json_power_list_snapshot(PlayerType *player_ptr, std::string_view kind, const std::vector<BotPowerListRow> &rows, int page, bool browse_mode);
 void output_bot_json_lore_snapshot(PlayerType *player_ptr, MonraceId monrace_id, int lore_mode);
