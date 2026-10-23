@@ -36,15 +36,6 @@ SpellHex::SpellHex(PlayerType *player_ptr)
     : player_ptr(player_ptr)
     , spell_hex_data(PlayerClass(player_ptr).get_specific_data<spell_hex_data_type>())
 {
-    if (!this->spell_hex_data) {
-        return;
-    }
-
-    HexSpellFlagGroup::get_flags(this->spell_hex_data->casting_spells, std::back_inserter(this->casting_spells));
-
-    if (this->casting_spells.size() > MAX_KEEP) {
-        THROW_EXCEPTION(std::logic_error, "Invalid numbers of hex magics keep!");
-    }
 }
 
 /*!
@@ -70,7 +61,7 @@ void SpellHex::stop_all_spells()
         return;
     }
 
-    for (auto spell : this->casting_spells) {
+    for (auto spell : this->get_casting_spells()) {
         exe_spell(this->player_ptr, RealmType::HEX, spell, SpellProcessType::STOP);
     }
 
@@ -134,7 +125,7 @@ bool SpellHex::stop_spells_with_selection()
 
     screen_load();
     if (choice) {
-        auto n = this->casting_spells[A2I(*choice)];
+        auto n = this->get_casting_spells()[A2I(*choice)];
         exe_spell(this->player_ptr, RealmType::HEX, n, SpellProcessType::STOP);
         this->reset_casting_flag(i2enum<spell_hex_type>(n));
     }
@@ -186,7 +177,7 @@ void SpellHex::display_casting_spells_list()
     auto n = 0;
     term_erase(x, y);
     prt(_("     名前", "     Name"), y, x + 5);
-    for (auto spell : this->casting_spells) {
+    for (auto spell : this->get_casting_spells()) {
         term_erase(x, y + n + 1);
         const auto &spell_name = PlayerRealm::get_spell_name(RealmType::HEX, spell);
         put_str(fmt::format("{:c})  {}", I2A(n), spell_name), y + n + 1, x + 2);
@@ -218,7 +209,7 @@ void SpellHex::decrease_mana()
     }
 
     this->gain_exp();
-    for (auto spell : this->casting_spells) {
+    for (auto spell : this->get_casting_spells()) {
         exe_spell(this->player_ptr, RealmType::HEX, spell, SpellProcessType::CONTNUATION);
     }
 }
@@ -271,7 +262,7 @@ bool SpellHex::check_restart()
 int SpellHex::calc_need_mana()
 {
     auto need_mana = 0;
-    for (auto spell_id : this->casting_spells) {
+    for (auto spell_id : this->get_casting_spells()) {
         const auto &spell = PlayerRealm::get_spell_info(RealmType::HEX, spell_id);
         need_mana += mod_need_mana(this->player_ptr, spell.smana, spell_id, RealmType::HEX);
     }
@@ -282,13 +273,29 @@ int SpellHex::calc_need_mana()
 void SpellHex::gain_exp()
 {
     PlayerSkill ps(player_ptr);
-    for (auto spell : this->casting_spells) {
-        if (!this->is_spelling_specific(spell)) {
-            continue;
-        }
-
+    for (auto spell : this->get_casting_spells()) {
         ps.gain_continuous_spell_skill_exp(RealmType::HEX, spell);
     }
+}
+
+/*!
+ * @brief 詠唱中の呪術の一覧を返す
+ * @details 再開や停止で詠唱フラグが変わっても古い一覧を使わないよう、呼ぶたびに詠唱フラグから作る。
+ * @return 詠唱中の呪術の番号 (昇順)
+ */
+std::vector<int> SpellHex::get_casting_spells() const
+{
+    std::vector<int> spells;
+    if (!this->spell_hex_data) {
+        return spells;
+    }
+
+    HexSpellFlagGroup::get_flags(this->spell_hex_data->casting_spells, std::back_inserter(spells));
+    if (spells.size() > MAX_KEEP) {
+        THROW_EXCEPTION(std::logic_error, "Invalid numbers of hex magics keep!");
+    }
+
+    return spells;
 }
 
 /*!
