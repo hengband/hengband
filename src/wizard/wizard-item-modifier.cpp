@@ -283,7 +283,8 @@ void wiz_identify_full_inventory(PlayerType *player_ptr)
 
         auto &baseitem_record = o_ptr->get_baseitem_record();
         baseitem_record.mark_awareness(true); //!< @note 記録には残さない.
-        o_ptr->set_identification_flags({ IdentificationFlag::KNOWN, IdentificationFlag::FULL_KNOWN });
+        o_ptr->mark_as_known();
+        o_ptr->set_identification_flag(IdentificationFlag::FULL_KNOWN);
         o_ptr->marked.set(OmType::TOUCHED);
     }
 

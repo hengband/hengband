@@ -197,7 +197,6 @@ public:
     void set_fixed_artifact_generated(bool new_state) const;
     void set_identification_flag(IdentificationFlag flag);
     void reset_identification_flag(IdentificationFlag flag);
-    void set_identification_flags(const EnumClassFlagGroup<IdentificationFlag> &flags);
     void reset_identification_flags(const EnumClassFlagGroup<IdentificationFlag> &flags);
     bool has_identification_flag(IdentificationFlag flag) const;
     bool has_not_identification_flag(IdentificationFlag flag) const;
