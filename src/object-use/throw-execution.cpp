@@ -34,6 +34,7 @@
 #include "object/item-use-flags.h"
 #include "object/object-broken.h"
 #include "object/object-stack.h"
+#include "perception/simple-perception.h"
 #include "player-base/player-class.h"
 #include "player-info/equipment-info.h"
 #include "player-status/player-energy.h"
@@ -90,6 +91,7 @@ bool ObjectThrowEntity::check_can_throw()
 
     if (this->item->is_cursed() && (this->i_idx >= INVEN_MAIN_HAND)) {
         msg_print(_("ふーむ、どうやら呪われているようだ。", "Hmmm, it seems to be cursed."));
+        sense_curse(this->player_ptr, this->i_idx);
         return false;
     }
 

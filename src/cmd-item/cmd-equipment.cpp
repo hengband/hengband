@@ -226,6 +226,7 @@ void do_cmd_wield(PlayerType *player_ptr)
 #else
         msg_print("The {} you are {} appears to be cursed.", item_name, describe_use(player_ptr, slot));
 #endif
+        sense_curse(player_ptr, slot);
         return;
     }
 
@@ -369,6 +370,7 @@ void do_cmd_takeoff(PlayerType *player_ptr)
     if (item->is_cursed()) {
         if (item->curse_flags.has(CurseTraitType::PERMA_CURSE) || !pc.equals(PlayerClassType::BERSERKER)) {
             msg_print(_("ふーむ、どうやら呪われているようだ。", "Hmmm, it seems to be cursed."));
+            sense_curse(player_ptr, i_idx);
             return;
         }
 
@@ -379,6 +381,7 @@ void do_cmd_takeoff(PlayerType *player_ptr)
             msg_print(_("呪いを打ち破った。", "You break the curse."));
         } else {
             msg_print(_("装備を外せなかった。", "You couldn't remove the equipment."));
+            sense_curse(player_ptr, i_idx);
             energy.set_player_turn_energy(50);
             return;
         }
