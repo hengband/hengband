@@ -1,5 +1,6 @@
 #include "target/target-describer.h"
 #include "action/travel-execution.h"
+#include "bot/bot-json-output.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "dungeon/quest.h"
@@ -196,6 +197,7 @@ static ProcessResult describe_hallucinated_target(PlayerType *player_ptr, GridEx
 
 static bool describe_grid_lore(PlayerType *player_ptr, GridExamination *ge_ptr)
 {
+    BotDrawnScreenScope bot_screen;
     screen_save();
     screen_roff(player_ptr, ge_ptr->m_ptr->ap_r_idx, MONSTER_LORE_NORMAL);
     term_addstr(-1, TERM_WHITE, fmt::format(_("  [r思 {}{}]", "  [r,{}{}]"), ge_ptr->x_info, ge_ptr->info));

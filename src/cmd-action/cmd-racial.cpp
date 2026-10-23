@@ -383,6 +383,8 @@ static bool racial_power_select_power(PlayerType *player_ptr, rc_type *rc_ptr)
         }
     }
 
+    // 一覧は選び終えるまで消さないので、この関数を抜けるまで登録する
+    BotDrawnScreenScope bot_screen;
     screen_save();
     if (use_menu) {
         racial_power_display_list(player_ptr, rc_ptr);

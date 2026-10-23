@@ -7,6 +7,7 @@
  */
 
 #include "knowledge/knowledge-monsters.h"
+#include "bot/bot-json-output.h"
 #include "core/show-file.h"
 #include "core/window-redrawer.h"
 #include "game-option/cheat-options.h"
@@ -417,6 +418,7 @@ void do_cmd_knowledge_monsters(PlayerType *player_ptr, bool *need_redraw, bool v
         case 'R':
         case 'r': {
             if (!visual_list && !visual_only && !monrace_ids.empty() && MonraceList::is_valid(monrace_ids[mon_cur])) {
+                BotDrawnScreenScope bot_screen;
                 screen_roff(player_ptr, monrace_ids[mon_cur], MONSTER_LORE_NORMAL);
                 (void)inkey();
                 redraw = true;

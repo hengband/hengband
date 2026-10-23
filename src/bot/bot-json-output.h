@@ -101,6 +101,33 @@ private:
     const BotScreen *previous; //!< 前に登録されていた画面
 };
 
+/*!
+ * @brief 描いたときに中身が決まる画面 (呪文の一覧など) を、開いている間だけ登録する
+ * @details 一覧を出すメニューの間などに置く。一覧を描くと、output_bot_json_*_snapshot() が
+ * いちばん内側のこのスコープの登録を、描いた中身に入れ替える。一覧を隠したら hide_bot_drawn_screen() で登録を外す。
+ * 登録がない間は、外側で登録された画面 (店など) が有効になる。
+ * 中身を入れ替えるときに登録し直すので、このスコープより内側に BotScreenScope を置いたまま一覧を描かないこと。
+ * 構築した後に登録を書き換えるので、const で宣言しないこと。
+ */
+class BotDrawnScreenScope {
+public:
+    BotDrawnScreenScope();
+    ~BotDrawnScreenScope();
+
+    BotDrawnScreenScope(const BotDrawnScreenScope &) = delete;
+    BotDrawnScreenScope &operator=(const BotDrawnScreenScope &) = delete;
+    BotDrawnScreenScope(BotDrawnScreenScope &&) = delete;
+    BotDrawnScreenScope &operator=(BotDrawnScreenScope &&) = delete;
+
+private:
+    friend void show_bot_drawn_screen(BotScreen screen);
+    friend void hide_bot_drawn_screen();
+
+    tl::optional<BotScreenScope> registered; //!< 描いた中身の登録
+    BotDrawnScreenScope *previous; //!< 外側のスコープ
+};
+
+void hide_bot_drawn_screen();
 BotScreen make_bot_store_screen(const StoreScreen &screen);
 BotScreen make_bot_store_screen(StoreScreen &&screen) = delete;
 BotScreen make_bot_character_screen();

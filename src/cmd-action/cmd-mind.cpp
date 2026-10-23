@@ -12,6 +12,7 @@
 
 #include "cmd-action/cmd-mind.h"
 #include "action/action-limited.h"
+#include "bot/bot-json-output.h"
 #include "core/asking-player.h"
 #include "core/window-redrawer.h"
 #include "effect/attribute-types.h"
@@ -400,7 +401,16 @@ void do_cmd_mind(PlayerType *player_ptr)
 {
     cm_type tmp_cm;
     cm_type *cm_ptr = initialize_cm_type(player_ptr, &tmp_cm);
-    if (cmd_limit_confused(player_ptr) || !MindPowerGetter(player_ptr).get_mind_power(&cm_ptr->n, false)) {
+    if (cmd_limit_confused(player_ptr)) {
+        return;
+    }
+
+    // 技の一覧は選び終えると消えるので、選んでいる間だけ登録する
+    const auto is_selected = [player_ptr, cm_ptr] {
+        BotDrawnScreenScope bot_screen;
+        return MindPowerGetter(player_ptr).get_mind_power(&cm_ptr->n, false);
+    }();
+    if (!is_selected) {
         return;
     }
 
@@ -453,6 +463,9 @@ void do_cmd_mind_browse(PlayerType *player_ptr)
 {
     SPELL_IDX n = 0;
     MindKindType use_mind = decide_use_mind_browse(player_ptr);
+
+    // 閲覧では技を選んで説明を出している間も一覧が残るので、閲覧を終えるまで登録する
+    BotDrawnScreenScope bot_screen;
     screen_save();
     while (true) {
         if (!MindPowerGetter(player_ptr).get_mind_power(&n, true)) {
