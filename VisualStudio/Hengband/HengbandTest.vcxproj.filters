@@ -7,6 +7,9 @@
     <Filter Include="cmd-io">
       <UniqueIdentifier>{050a79fd-58ab-48f3-a881-f83ff7a488b7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="cmd-item">
+      <UniqueIdentifier>{4fb7900b-d5fc-5337-97e2-09f5d3514d95}</UniqueIdentifier>
+    </Filter>
     <Filter Include="core">
       <UniqueIdentifier>{4d7c328f-7398-52cb-9b9c-78920b0c1e67}</UniqueIdentifier>
     </Filter>
@@ -123,6 +126,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\test\cmd-io\test-cmd-autopick.cpp">
       <Filter>cmd-io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\cmd-item\test-cmd-item.cpp">
+      <Filter>cmd-item</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\test\core\test-asking-player.cpp">
       <Filter>core</Filter>

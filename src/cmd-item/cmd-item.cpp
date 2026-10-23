@@ -30,7 +30,7 @@
 #include "game-option/input-options.h"
 #include "inventory/inventory-object.h"
 #include "inventory/inventory-slot-types.h"
-#include "io/input-key-acceptor.h"
+#include "io/input-context.h"
 #include "io/input-key-requester.h"
 #include "locale/japanese.h"
 #include "mind/snipe-types.h"
@@ -73,8 +73,10 @@
 
 /*!
  * @brief 持ち物一覧を表示するコマンドのメインルーチン / Display inventory_list
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param shopping 店の中のコマンドか (一覧の後に入力したキーは店のコマンドになる)
  */
-void do_cmd_inven(PlayerType *player_ptr)
+void do_cmd_inven(PlayerType *player_ptr, bool shopping)
 {
     command_wrk = false;
     if (easy_floor) {
@@ -93,7 +95,8 @@ void do_cmd_inven(PlayerType *player_ptr)
 #endif
 
     prt(mes, 0, 0);
-    command_new = inkey();
+    const auto prompt = str_trim(mes);
+    command_new = input_key_with_context({ InputKind::COMMAND, prompt, CommandInputDetails{ .shopping = shopping, .item_list = ItemSelectionArea::INVENTORY } });
     screen_load();
     if (command_new != ESCAPE) {
         command_see = true;

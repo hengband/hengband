@@ -23,7 +23,7 @@ enum class InputKind {
     STRING, //!< 文字列の入力
     QUANTITY, //!< 数量の入力
     MORE, //!< メッセージの -続く- (-more-)
-    COMMAND, //!< 次のコマンドの入力 (自分のターン、店のコマンド)
+    COMMAND, //!< 次のコマンドの入力 (自分のターン、店のコマンド、持ち物・装備品の一覧の後)
     ITEM, //!< アイテムの選択
     DIRECTION, //!< 方向の入力
     TARGET, //!< ターゲットの選択と、見るコマンドのカーソル
@@ -52,21 +52,22 @@ struct QuantityInputDetails {
 };
 
 /*!
- * @brief コマンドの入力の詳細
- */
-struct CommandInputDetails {
-    bool shopping; //!< 店のコマンドの入力か
-
-    bool operator==(const CommandInputDetails &) const = default;
-};
-
-/*!
  * @brief アイテムを選ぶ区分
  */
 enum class ItemSelectionArea {
     INVENTORY, //!< 持ち物
     EQUIPMENT, //!< 装備品
     FLOOR, //!< 足元
+};
+
+/*!
+ * @brief コマンドの入力の詳細
+ */
+struct CommandInputDetails {
+    bool shopping; //!< 店のコマンドの入力か
+    tl::optional<ItemSelectionArea> item_list = tl::nullopt; //!< 持ち物・装備品の一覧を表示した後の待ちなら、一覧の区分
+
+    bool operator==(const CommandInputDetails &) const = default;
 };
 
 /*!

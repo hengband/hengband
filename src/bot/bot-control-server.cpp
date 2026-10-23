@@ -213,7 +213,8 @@ public:
 
     nlohmann::json operator()(const CommandInputDetails &details) const
     {
-        return { { "shopping", details.shopping } };
+        const auto item_list = details.item_list ? nlohmann::json(item_selection_area_name(*details.item_list)) : nlohmann::json();
+        return { { "shopping", details.shopping }, { "item_list", item_list } };
     }
 
     nlohmann::json operator()(const ItemInputDetails &details) const
@@ -618,6 +619,7 @@ nlohmann::json handle_state_request(const nlohmann::json &id, const nlohmann::js
  * コマンドの入力待ち (入力の文脈が COMMAND) でなければエラーを返す。コマンドの途中の入力待ち (ターゲットの選択や
  * 「見る」など) では、サブウィンドウがカーソルの位置などに合わせた内容を描いていることがあり、
  * 描き直すと食い違いが出たうえに表示も変わってしまうため。
+ * 持ち物・装備品の一覧の後の待ちも、文脈は COMMAND だが i・e のコマンドの途中なのでエラーを返す。
  */
 nlohmann::json handle_verify_subwindows_request(const nlohmann::json &id)
 {
@@ -631,6 +633,12 @@ nlohmann::json handle_verify_subwindows_request(const nlohmann::json &id)
     const auto &context = get_input_context();
     if (!context || (context->kind != InputKind::COMMAND)) {
         return make_error_response(id, "the game is not waiting for a command");
+    }
+
+    // 持ち物・装備品の一覧の後の待ちは i・e のコマンドの途中で、メッセージの色などコマンドの区切りで変わる表示がまだ描き直されていない
+    const auto *details = std::get_if<CommandInputDetails>(&context->details);
+    if ((details != nullptr) && details->item_list) {
+        return make_error_response(id, "the game is showing the inventory or equipment list");
     }
 
     return make_ok_response(id, verify_bot_subwindows(p_ptr));

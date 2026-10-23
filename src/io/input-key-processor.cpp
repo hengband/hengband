@@ -235,11 +235,11 @@ void process_command(PlayerType *player_ptr)
         break;
     }
     case 'e': {
-        do_cmd_equip(player_ptr);
+        do_cmd_equip(player_ptr, false);
         break;
     }
     case 'i': {
-        do_cmd_inven(player_ptr);
+        do_cmd_inven(player_ptr, false);
         break;
     }
     case 'I': {

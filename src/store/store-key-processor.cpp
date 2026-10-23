@@ -117,11 +117,11 @@ bool store_process_command(PlayerType *player_ptr, StoreScreen &screen)
         return false;
     }
     case 'e': {
-        do_cmd_equip(player_ptr);
+        do_cmd_equip(player_ptr, true);
         return false;
     }
     case 'i': {
-        do_cmd_inven(player_ptr);
+        do_cmd_inven(player_ptr, true);
         return false;
     }
     case 'I': {
