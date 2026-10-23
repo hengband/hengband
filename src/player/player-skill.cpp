@@ -59,6 +59,10 @@ void gain_attack_skill_exp(PlayerType *player_ptr, short &exp, const GainAmountL
         gain_amount = calc_gain_amount(PlayerSkillRank::EXPERT, WEAPON_EXP_MASTER);
     }
 
+    if (gain_amount == 0) {
+        return;
+    }
+
     exp += static_cast<short>(gain_amount);
     DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
 }
@@ -308,6 +312,10 @@ void PlayerSkill::gain_riding_skill_exp_on_melee_attack(const MonraceDefinition 
         } else {
             inc += 1;
         }
+    }
+
+    if (inc == 0) {
+        return;
     }
 
     this->player_ptr->skill_exp[PlayerSkillKindType::RIDING] = std::min<SUB_EXP>(max_exp, now_exp + inc);

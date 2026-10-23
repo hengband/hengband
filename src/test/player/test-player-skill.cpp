@@ -3,12 +3,15 @@
  *
  * player/player-skill.h の PlayerSkill の熟練度を加える処理が、能力の再計算 (StatusRecalculatingFlag::BONUS) を
  * 必要なときだけ要求することを確かめる。
+ * 武器の熟練度は、実際に増えたときだけ要求する。
  * 呪文の熟練度は能力の計算に使わないので、増えても能力の再計算を要求せず、呪文の情報だけ描き直す。
  */
 
+#include "object/tval-types.h"
 #include "player-info/class-info.h"
 #include "player/player-skill.h"
 #include "realm/realm-types.h"
+#include "system/baseitem/baseitem-key.h"
 #include "system/deferred-update-requests.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
@@ -16,9 +19,44 @@
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
 #include "test/scoped-redrawing-flags.h"
+#include "test/scoped-rng.h"
 #include "util/enum-converter.h"
 #include "util/finalizer.h"
 #include <doctest/doctest.h>
+
+TEST_CASE("PlayerSkill::gain_melee_weapon_exp requests recalculating the bonuses only when the proficiency increases")
+{
+    const auto restore_srf = test::scoped_restore_redrawing_flags<StatusRecalculatingFlag>();
+    const auto restore_rng = test::scoped_rng();
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.reset_flag(StatusRecalculatingFlag::BONUS);
+
+    PlayerType player;
+    ItemEntity item;
+    item.bi_key = BaseitemKey(ItemKindType::SWORD, 1);
+    const auto skilled = PlayerSkill::weapon_exp_at(PlayerSkillRank::SKILLED);
+    player.weapon_exp[ItemKindType::SWORD].fill(skilled);
+    player.weapon_exp_max[ItemKindType::SWORD].fill(PlayerSkill::weapon_exp_at(PlayerSkillRank::MASTER));
+    auto &exp = player.weapon_exp[ItemKindType::SWORD][1];
+
+    SUBCASE("does not request when no proficiency is gained")
+    {
+        // レベル 19 以下では、熟練 (SKILLED) から先の熟練度は増えない
+        player.lev = 19;
+        PlayerSkill(&player).gain_melee_weapon_exp(&item);
+        CHECK(exp == skilled);
+        CHECK_FALSE(dur.has(StatusRecalculatingFlag::BONUS));
+    }
+
+    SUBCASE("requests when the proficiency increases")
+    {
+        player.lev = 20;
+        PlayerSkill(&player).gain_melee_weapon_exp(&item);
+        CHECK(exp == skilled + 1);
+        CHECK(player.weapon_exp[ItemKindType::SWORD][0] == skilled);
+        CHECK(dur.has(StatusRecalculatingFlag::BONUS));
+    }
+}
 
 TEST_CASE("PlayerSkill::gain_spell_skill_exp_over_learning requests redrawing the spell info but not recalculating the bonuses")
 {
