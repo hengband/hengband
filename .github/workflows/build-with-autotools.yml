@@ -27,6 +27,11 @@ on:
         type: number
         required: false
         default: 100
+      # apt でダウンロードしたパッケージ (.deb) をキャッシュに保存する。PR では保存せずベースのブランチのものを読むだけにし、
+      # 保存は develop の 1 ジョブだけで行う。全ジョブで使うパッケージをすべて入れる構成で指定する
+      apt-cache-save:
+        type: boolean
+        required: false
 
 permissions:
   contents: read
@@ -63,34 +68,127 @@ jobs:
           esac
 
       - id: calculate-cache-key
-        name: Calculate cache key for ccache
+        name: Calculate cache keys
         shell: bash
         run: |
           key=$(printf '%s' "${{ inputs.runner }} ${{ inputs.cxx }} ${{ inputs.cxx-flags }} ${{ inputs.configure-opts }} distcheck=${{ inputs.distcheck }}" | shasum -a 256 | awk '{print $1}')
-          # 保存するキーは、この接頭辞に時刻を付けたもの。
+          # apt のパッケージのキャッシュはランナーごとに全ジョブで共有する。
+          # キーにパッケージの一覧を含めないので、一覧を変えても前のキャッシュを読み、足したパッケージだけをダウンロードする
+          apt_key=$(printf '%s' "${{ inputs.runner }}" | shasum -a 256 | awk '{print $1}')
+          # 保存するキーは、これらの接頭辞に時刻を付けたもの。
           # キーの書式は .github/scripts/cleanup-ccache-caches.sh が前提にしている
           echo "prefix=ccache-$key-" >> "$GITHUB_OUTPUT"
+          echo "apt-prefix=apt-archives-$apt_key-" >> "$GITHUB_OUTPUT"
 
+      # Ubuntu のミラーが極端に遅いことがあるので、ダウンロードしたパッケージをキャッシュする。
+      # キャッシュは全ジョブで共有し、全ジョブで使うパッケージの和集合を入れておく。各ジョブはそのうち要るものだけを入れる。
       # --disable-net では、ネットワークの機能の外から curl のヘッダを読んでいないことを確かめるため、libcurl を入れない
+      - id: apt-packages
+        name: Decide packages to install (Ubuntu)
+        if: ${{ steps.os.outputs.family == 'linux' }}
+        shell: bash
+        env:
+          DISABLE_NET: ${{ contains(format(' {0} ', inputs.configure-opts), ' --disable-net ') }}
+          USE_CCACHE: ${{ inputs.use-ccache }}
+          APT_CACHE_SAVE: ${{ inputs.apt-cache-save }}
+        run: |
+          packages=(
+            autoconf
+            automake
+            pkg-config
+            libncurses-dev
+            libx11-dev
+            libxext-dev
+            libxft-dev
+            nkf
+            g++-16
+            libc++-21-dev
+            libc++abi-21-dev
+          )
+          skipped=()
+          if [ "${DISABLE_NET}" = true ]; then
+            skipped+=(libcurl4-openssl-dev)
+          else
+            packages+=(libcurl4-openssl-dev)
+          fi
+          if [ "${USE_CCACHE}" = true ]; then
+            packages+=(ccache)
+          else
+            skipped+=(ccache)
+          fi
+          # 保存するジョブが入れなかったパッケージはキャッシュに入らず、ほかのジョブが毎回ダウンロードすることになる
+          if [ "${APT_CACHE_SAVE}" = true ] && [ "${#skipped[@]}" -ne 0 ]; then
+            echo "The job saving the apt cache must install all packages, but skips: ${skipped[*]}" >&2
+            exit 1
+          fi
+          echo "packages=${packages[*]}" >> "$GITHUB_OUTPUT"
+
+      # actions/cache は root の持ち物の /var/cache/apt/archives に書き込めないので、ホームに読み込んでから写す
+      - name: Restore apt cache
+        if: ${{ steps.os.outputs.family == 'linux' }}
+        uses: actions/cache/restore@v6
+        with:
+          path: ~/apt-archives
+          key: ${{ steps.calculate-cache-key.outputs.apt-prefix }}
+          restore-keys: ${{ steps.calculate-cache-key.outputs.apt-prefix }}
+
+      # キャッシュのパッケージは、名前 (版) と大きさが索引と一致すればダウンロードせずに使われる
       - name: Install required packages (Ubuntu)
         if: ${{ steps.os.outputs.family == 'linux' }}
         shell: bash
         run: |
+          if compgen -G "${HOME}/apt-archives/*.deb" >/dev/null; then
+            sudo cp "${HOME}"/apt-archives/*.deb /var/cache/apt/archives/
+          fi
           sudo apt-get update
-          sudo apt-get install -y \
-            autoconf \
-            automake \
-            pkg-config \
-            libncurses-dev \
-            ${{ !contains(format(' {0} ', inputs.configure-opts), ' --disable-net ') && 'libcurl4-openssl-dev' || '' }} \
-            libx11-dev \
-            libxext-dev \
-            libxft-dev \
-            nkf \
-            g++-16 \
-            libc++-21-dev \
-            libc++abi-21-dev \
-            ${{ inputs.use-ccache && 'ccache' || '' }}
+          sudo apt-get install -y ${{ steps.apt-packages.outputs.packages }}
+
+      # 入れた版と一致するものだけを残し、古い版がたまらないようにする。中身が読み込んだものと同じなら保存しない
+      - id: apt-save
+        name: Decide whether to save apt cache
+        if: ${{ steps.os.outputs.family == 'linux' && inputs.apt-cache-save }}
+        continue-on-error: true
+        shell: bash
+        run: |
+          # 複数のアーキテクチャで入っているパッケージもあるので、名前ごとに問い合わせず一覧から引く
+          declare -A installed=()
+          while IFS=$'\t' read -r status package version; do
+            [ "${status}" = installed ] && installed["${package} ${version}"]=1
+          done < <(dpkg-query -W -f='${db:Status-Status}\t${Package}:${Architecture}\t${Version}\n')
+          debs=()
+          for deb in /var/cache/apt/archives/*.deb; do
+            [ -e "${deb}" ] || continue
+            if ! IFS=$'\t' read -r package version < <(dpkg-deb --show --showformat='${Package}:${Architecture}\t${Version}\n' "${deb}"); then
+              echo "::warning::Failed to read ${deb}"
+              continue
+            fi
+            if [ -n "${installed["${package} ${version}"]+x}" ]; then
+              debs+=("${deb}")
+            fi
+          done
+          # ランナーの apt の設定でインストール後に .deb が消されるようになったときに、空のキャッシュを保存しない
+          if [ "${#debs[@]}" -eq 0 ]; then
+            echo "::warning::No downloaded packages are left in /var/cache/apt/archives; the apt cache is not saved"
+            exit 0
+          fi
+          if cmp -s <(ls "${HOME}/apt-archives" 2>/dev/null) <(printf '%s\n' "${debs[@]##*/}" | sort); then
+            echo "The apt cache is up to date"
+            exit 0
+          fi
+          rm -rf "${HOME}/apt-archives"
+          mkdir -p "${HOME}/apt-archives"
+          cp "${debs[@]}" "${HOME}/apt-archives/"
+          du -sh "${HOME}/apt-archives"
+          echo "save=true" >> "$GITHUB_OUTPUT"
+          echo "key=${{ steps.calculate-cache-key.outputs.apt-prefix }}$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "$GITHUB_OUTPUT"
+
+      - name: Save apt cache
+        if: ${{ steps.apt-save.outputs.save == 'true' }}
+        continue-on-error: true
+        uses: actions/cache/save@v6
+        with:
+          path: ~/apt-archives
+          key: ${{ steps.apt-save.outputs.key }}
 
       - name: Install required packages (macOS)
         if: ${{ steps.os.outputs.family == 'macos' }}
