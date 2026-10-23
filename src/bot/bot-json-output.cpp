@@ -110,6 +110,7 @@
 #include <fstream>
 #include <iostream>
 #include <nlohmann/json.hpp>
+#include <range/v3/algorithm.hpp>
 #include <stdexcept>
 #include <string_view>
 #include <unordered_map>
@@ -2048,6 +2049,9 @@ nlohmann::json make_artifacts_knowledge_json(PlayerType *player_ptr, bool identi
     return rows;
 }
 
+constexpr char KNOWLEDGE_MENU_KEYS[] = { '1', '2', '3', '4', '5', '8', '9', '0', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', '6', '7' }; //!< 一覧の種類ごとの知識メニューのキー
+static_assert(sizeof(KNOWLEDGE_MENU_KEYS) / sizeof(KNOWLEDGE_MENU_KEYS[0]) == enum2i(BotKnowledgeCategory::MAX));
+
 nlohmann::json make_knowledge_json(PlayerType *player_ptr, BotKnowledgeCategory category)
 {
     static constexpr const char *slugs[] = {
@@ -2073,11 +2077,9 @@ nlohmann::json make_knowledge_json(PlayerType *player_ptr, BotKnowledgeCategory 
         "monsters",
         "kill_count",
     };
-    static constexpr const char keys[] = { '1', '2', '3', '4', '5', '8', '9', '0', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', '6', '7' };
     static_assert(sizeof(slugs) / sizeof(slugs[0]) == enum2i(BotKnowledgeCategory::MAX));
-    static_assert(sizeof(keys) / sizeof(keys[0]) == enum2i(BotKnowledgeCategory::MAX));
     const auto index = enum2i(category);
-    auto result = nlohmann::json{ { "category", slugs[index] }, { "menu_key", std::string(1, keys[index]) } };
+    auto result = nlohmann::json{ { "category", slugs[index] }, { "menu_key", std::string(1, KNOWLEDGE_MENU_KEYS[index]) } };
     auto rows = nlohmann::json::array();
     switch (category) {
     case BotKnowledgeCategory::ARTIFACTS_KNOWN:
@@ -2595,6 +2597,25 @@ nlohmann::json make_bot_character_speed_json(int total, int temporary, bool ligh
 
 namespace {
 const BotScreen *current_bot_screen = nullptr; //!< 開いている画面 (BotScreenScope が登録する)
+
+/*!
+ * @brief 画面の情報を足したスナップショットを作る
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param screen 画面の情報を足すときはその画面、ふだんのスナップショットなら nullptr
+ * @param include_map grid_mapを含めるか (画面が地図を省くときは含めない)
+ * @param messages_source messagesに載せるメッセージ
+ * @return スナップショットのJSONオブジェクト
+ */
+nlohmann::json make_screen_snapshot(PlayerType *player_ptr, const BotScreen *screen, bool include_map, BotSnapshotMessages messages_source)
+{
+    const auto should_include_map = include_map && ((screen == nullptr) || screen->include_map);
+    auto snapshot = make_snapshot(player_ptr, should_include_map, messages_source);
+    if (screen != nullptr) {
+        screen->add_to_snapshot(snapshot, player_ptr);
+    }
+
+    return snapshot;
+}
 }
 
 /*!
@@ -2610,13 +2631,7 @@ const BotScreen *current_bot_screen = nullptr; //!< 開いている画面 (BotSc
  */
 nlohmann::json make_bot_json_snapshot(PlayerType *player_ptr, bool include_map)
 {
-    const auto should_include_map = include_map && ((current_bot_screen == nullptr) || current_bot_screen->include_map);
-    auto snapshot = make_snapshot(player_ptr, should_include_map, BotSnapshotMessages::HISTORY);
-    if (current_bot_screen != nullptr) {
-        current_bot_screen->add_to_snapshot(snapshot, player_ptr);
-    }
-
-    return snapshot;
+    return make_screen_snapshot(player_ptr, current_bot_screen, include_map, BotSnapshotMessages::HISTORY);
 }
 
 /*!
@@ -2658,67 +2673,95 @@ BotScreen make_bot_store_screen(const StoreScreen &screen)
     return { add_store, false };
 }
 
+/*!
+ * @brief キャラクター情報の画面を登録するための BotScreen を作る
+ * @return キャラクター情報の画面の BotScreen
+ */
+BotScreen make_bot_character_screen()
+{
+    const auto add_character = [](nlohmann::json &snapshot, PlayerType *player_ptr) {
+        snapshot["type"] = "character";
+        snapshot["character"] = make_character_json(player_ptr);
+    };
+    return { add_character, true };
+}
+
+/*!
+ * @brief 知識メニューのキーに対応する一覧の種類を返す
+ * @param key 押したキー
+ * @return 一覧の種類 (一覧に対応しないキーなら tl::nullopt)
+ */
+tl::optional<BotKnowledgeCategory> find_bot_knowledge_category(int key)
+{
+    const auto it = ranges::find(KNOWLEDGE_MENU_KEYS, key);
+    if (it == ranges::end(KNOWLEDGE_MENU_KEYS)) {
+        return tl::nullopt;
+    }
+
+    return i2enum<BotKnowledgeCategory>(ranges::distance(ranges::begin(KNOWLEDGE_MENU_KEYS), it));
+}
+
+/*!
+ * @brief 知識メニューの一覧の画面を登録するための BotScreen を作る
+ * @param category 一覧の種類
+ * @return 知識メニューの一覧の画面の BotScreen
+ */
+BotScreen make_bot_knowledge_screen(BotKnowledgeCategory category)
+{
+    const auto add_knowledge = [category](nlohmann::json &snapshot, PlayerType *player_ptr) {
+        snapshot["type"] = "knowledge";
+        snapshot["knowledge"] = make_knowledge_json(player_ptr, category);
+    };
+    return { add_knowledge, true };
+}
+
+/*!
+ * @brief 注視の画面を登録するための BotScreen を作る
+ * @return 注視の画面の BotScreen
+ * @details 注視の対象は、スナップショットを作るときの画面の表示範囲から求める。
+ * 注視の途中で表示範囲が動いたときは、動いた後の範囲の対象になる。
+ */
+BotScreen make_bot_look_screen()
+{
+    const auto add_look = [](nlohmann::json &snapshot, PlayerType *player_ptr) {
+        snapshot["type"] = "look";
+        snapshot["look"] = make_look_json(player_ptr);
+    };
+    return { add_look, true };
+}
+
+namespace {
+/*!
+ * @brief スナップショットを JSONL に書き出す
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param screen 画面の情報を足すときはその画面 (地図を載せてよいかも従う)、ふだんのスナップショットなら nullptr
+ */
+void write_bot_json_snapshot(PlayerType *player_ptr, const BotScreen *screen)
+{
+    if (!arg_bot_json_output || player_ptr == nullptr || player_ptr->current_floor_ptr == nullptr) {
+        return;
+    }
+
+    const auto build_started = BotJsonClock::now();
+    const auto snapshot = make_screen_snapshot(player_ptr, screen, true, BotSnapshotMessages::RECENT_DIFF);
+    write_snapshot(snapshot, elapsed_microseconds(build_started));
+}
+}
+
 void output_bot_json_snapshot(PlayerType *player_ptr)
 {
-    if (!arg_bot_json_output || player_ptr == nullptr || player_ptr->current_floor_ptr == nullptr) {
-        return;
-    }
-
-    const auto build_started = BotJsonClock::now();
-    auto snapshot = make_snapshot(player_ptr);
-    write_snapshot(snapshot, elapsed_microseconds(build_started));
+    write_bot_json_snapshot(player_ptr, nullptr);
 }
 
-void output_bot_json_store_snapshot(PlayerType *player_ptr, const StoreScreen &screen)
+/*!
+ * @brief 登録している画面のスナップショットを JSONL に書き出す
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @details BotScreenScope で画面を登録した後に呼ぶ。最後に登録した画面の type と情報を載せる。
+ */
+void output_bot_json_screen_snapshot(PlayerType *player_ptr)
 {
-    if (!arg_bot_json_output || player_ptr == nullptr || player_ptr->current_floor_ptr == nullptr) {
-        return;
-    }
-
-    // Same base snapshot (player gold, inventory, equipment) plus the store's
-    // stock, so the bot can decide what to buy while at the store prompt.
-    // 地図は載せない。理由は make_bot_store_screen() の説明を参照
-    const auto build_started = BotJsonClock::now();
-    const auto store_screen = make_bot_store_screen(screen);
-    auto snapshot = make_snapshot(player_ptr, store_screen.include_map);
-    store_screen.add_to_snapshot(snapshot, player_ptr);
-    write_snapshot(snapshot, elapsed_microseconds(build_started));
-}
-
-void output_bot_json_character_snapshot(PlayerType *player_ptr)
-{
-    if (!arg_bot_json_output || player_ptr == nullptr || player_ptr->current_floor_ptr == nullptr) {
-        return;
-    }
-    const auto build_started = BotJsonClock::now();
-    auto snapshot = make_snapshot(player_ptr);
-    snapshot["type"] = "character";
-    snapshot["character"] = make_character_json(player_ptr);
-    write_snapshot(snapshot, elapsed_microseconds(build_started));
-}
-
-void output_bot_json_knowledge_snapshot(PlayerType *player_ptr, BotKnowledgeCategory category)
-{
-    if (!arg_bot_json_output || player_ptr == nullptr || player_ptr->current_floor_ptr == nullptr) {
-        return;
-    }
-    const auto build_started = BotJsonClock::now();
-    auto snapshot = make_snapshot(player_ptr);
-    snapshot["type"] = "knowledge";
-    snapshot["knowledge"] = make_knowledge_json(player_ptr, category);
-    write_snapshot(snapshot, elapsed_microseconds(build_started));
-}
-
-void output_bot_json_look_snapshot(PlayerType *player_ptr)
-{
-    if (!arg_bot_json_output || player_ptr == nullptr || player_ptr->current_floor_ptr == nullptr) {
-        return;
-    }
-    const auto build_started = BotJsonClock::now();
-    auto snapshot = make_snapshot(player_ptr);
-    snapshot["type"] = "look";
-    snapshot["look"] = make_look_json(player_ptr);
-    write_snapshot(snapshot, elapsed_microseconds(build_started));
+    assert(current_bot_screen != nullptr);
+    write_bot_json_snapshot(player_ptr, current_bot_screen);
 }
 
 /*!

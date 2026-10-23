@@ -48,8 +48,13 @@ void do_cmd_look(PlayerType *player_ptr)
     };
     DeferredUpdateRequests::get_instance().set_flags(flags);
     window_stuff(player_ptr);
-    output_bot_json_look_snapshot(player_ptr);
-    if (target_set(player_ptr, TARGET_LOOK).is_okay()) {
+    // 注視を終えた後のメッセージの待ちでは注視の情報を載せないよう、注視の間だけ登録する
+    const auto is_targeted = [player_ptr] {
+        const BotScreenScope bot_screen(make_bot_look_screen());
+        output_bot_json_screen_snapshot(player_ptr);
+        return target_set(player_ptr, TARGET_LOOK).is_okay();
+    }();
+    if (is_targeted) {
         msg_print(_("ターゲット決定。", "Target Selected."));
     }
 }

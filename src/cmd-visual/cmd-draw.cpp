@@ -115,7 +115,8 @@ static tl::optional<int> input_status_command(PlayerType *player_ptr, int page)
  */
 void do_cmd_player_status(PlayerType *player_ptr)
 {
-    output_bot_json_character_snapshot(player_ptr);
+    const BotScreenScope bot_screen(make_bot_character_screen());
+    output_bot_json_screen_snapshot(player_ptr);
     auto page = 0;
     screen_save();
     constexpr auto prompt = _("['c'で名前変更, 'f'でファイルへ書出, 'h'でモード変更, ESCで終了]", "['c' to change name, 'f' to file, 'h' to change mode, or ESC]");

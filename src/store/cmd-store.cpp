@@ -146,7 +146,7 @@ void do_cmd_store(PlayerType *player_ptr)
         }
 
         prt(_("コマンド:", "You may: "), screen.get_command_row(0), 0);
-        output_bot_json_store_snapshot(player_ptr, screen);
+        output_bot_json_screen_snapshot(player_ptr);
         InputKeyRequestor(player_ptr, true).request_command();
         should_leave = store_process_command(player_ptr, screen);
 
