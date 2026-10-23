@@ -59,6 +59,10 @@ void gain_attack_skill_exp(PlayerType *player_ptr, short &exp, const GainAmountL
         gain_amount = calc_gain_amount(PlayerSkillRank::EXPERT, WEAPON_EXP_MASTER);
     }
 
+    if (gain_amount == 0) {
+        return;
+    }
+
     exp += static_cast<short>(gain_amount);
     DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
 }
@@ -89,8 +93,15 @@ void gain_spell_skill_exp_aux(PlayerType *player_ptr, short &exp, const GainAmou
         }
     }
 
+    if (gain_amount == 0) {
+        return;
+    }
+
     exp += static_cast<short>(gain_amount);
-    DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
+
+    // 呪文の熟練度は能力の計算に使わないので、能力の再計算は要求しない。
+    // 熟練度・失敗率・消費 MP を表示する呪文の情報だけ描き直す
+    DeferredUpdateRequests::get_instance().request_spell_info_redrawing();
 }
 
 }
@@ -303,6 +314,10 @@ void PlayerSkill::gain_riding_skill_exp_on_melee_attack(const MonraceDefinition 
         }
     }
 
+    if (inc == 0) {
+        return;
+    }
+
     this->player_ptr->skill_exp[PlayerSkillKindType::RIDING] = std::min<SUB_EXP>(max_exp, now_exp + inc);
     DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
 }
@@ -407,7 +422,8 @@ PlayerSkillRank PlayerSkill::gain_spell_skill_exp_over_learning(int spell_idx)
         exp = SPELL_EXP_BEGINNER + exp / 3;
     }
 
-    DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
+    // 呪文の熟練度は能力の計算に使わないので、呪文の情報だけ描き直す (gain_spell_skill_exp_aux() と同じ)
+    DeferredUpdateRequests::get_instance().request_spell_info_redrawing();
     return PlayerSkill::spell_skill_rank(exp);
 }
 

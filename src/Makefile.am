@@ -1572,6 +1572,7 @@ hengband_test_SOURCES = \
 	test/mspell/test-mspell-projection-table.cpp \
 	test/mutation/test-mutation-roll-table.cpp \
 	test/object/test-object-info.cpp \
+	test/player/test-player-skill.cpp \
 	test/player/test-process-name.cpp \
 	test/spell/test-spell-info.cpp \
 	test/spell-realm/test-spells-hex.cpp \
