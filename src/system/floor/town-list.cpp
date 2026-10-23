@@ -19,7 +19,7 @@ namespace {
  * @details 町定義ファイル名の先頭2文字は番号であることを利用してカウントする.
  * 辺境の地を表すファイルは(01_*.jsonc) は3つあるのでユニークではない. また町番号は1から始まるので最後に加算する.
  */
-int count_town_numbers()
+size_t count_town_numbers()
 {
     const auto path = path_build(ANGBAND_DIR_EDIT, "towns");
     std::set<std::string> unique_towns;
@@ -63,12 +63,37 @@ TownInfo &TownList::get_town(size_t index)
 
 const TownInfo &TownList::get_town(TownId town_id) const
 {
-    return this->get_town(static_cast<size_t>(town_id) + 1);
+    return this->get_town(to_town_index(town_id));
 }
 
 TownInfo &TownList::get_town(TownId town_id)
 {
-    return this->get_town(static_cast<size_t>(town_id) + 1);
+    return this->get_town(to_town_index(town_id));
+}
+
+/*!
+ * @brief 我が家を得る
+ * @return 我が家
+ * @details 我が家は全ての町で内容を共有するため、辺境の地の店舗を返す.
+ */
+const Store &TownList::get_home() const
+{
+    return this->get_town(TownId::OUTPOST).get_store(StoreSaleType::HOME);
+}
+
+Store &TownList::get_home()
+{
+    return this->get_town(TownId::OUTPOST).get_store(StoreSaleType::HOME);
+}
+
+/*!
+ * @brief 博物館を得る
+ * @return 博物館
+ * @details 博物館は全ての町で内容を共有するため、辺境の地の店舗を返す.
+ */
+const Store &TownList::get_museum() const
+{
+    return this->get_town(TownId::OUTPOST).get_store(StoreSaleType::MUSEUM);
 }
 
 bool TownList::is_all_initialized() const
@@ -91,11 +116,12 @@ void TownList::initialize()
     const auto &baseitems = BaseitemList::get_instance();
     const auto town_numbers = count_town_numbers();
     this->towns = std::vector<TownInfo>(town_numbers);
-    for (auto i = 1; i < town_numbers; i++) {
+    const auto outpost_index = to_town_index(TownId::OUTPOST);
+    for (size_t i = 1; i < town_numbers; i++) {
         auto &town = this->towns[i];
         for (auto sst : STORE_SALE_TYPE_LIST) {
             auto &store = town.emplace(sst);
-            if ((i > 1) && (sst == StoreSaleType::MUSEUM || sst == StoreSaleType::HOME)) {
+            if ((i != outpost_index) && (sst == StoreSaleType::MUSEUM || sst == StoreSaleType::HOME)) {
                 continue;
             }
 

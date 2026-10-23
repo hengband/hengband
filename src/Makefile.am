@@ -1582,6 +1582,7 @@ hengband_test_SOURCES = \
 	test/system/baseitem/test-baseitem-allocation.cpp \
 	test/system/baseitem/test-baseitem-list.cpp \
 	test/system/floor/test-floor-info.cpp \
+	test/system/floor/test-town-records.cpp \
 	test/system/monrace/test-monrace-definition.cpp \
 	test/system/test-quest-list.cpp \
 	test/system/test-dungeon-record.cpp \

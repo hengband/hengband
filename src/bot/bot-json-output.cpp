@@ -1647,7 +1647,7 @@ nlohmann::json make_snapshot(PlayerType *player_ptr, bool include_map = true,
                        { "height", floor.height },
                        { "inside_arena", floor.inside_arena },
                        { "quest_id", enum2i(floor.quest_number) },
-                       { "town_id", world.is_in_any_town() ? static_cast<int>(world.get_town_index()) - 1 : -1 },
+                       { "town_id", world.is_in_any_town() ? enum2i(to_town_id(world.get_town_index())) : -1 },
                        { "town_index", world.is_in_any_town() ? static_cast<int>(world.get_town_index()) : 0 },
                        // True only while standing ON an actual town tile. Gate on
                        // dun_level == 0: is_in_any_town() (current_town_index > 0)
@@ -1683,7 +1683,7 @@ nlohmann::json make_snapshot(PlayerType *player_ptr, bool include_map = true,
                           // at the inn ("You know the way to ..."). The inn's
                           // "Teleport to other town" menu lists exactly these towns,
                           // so this mirrors player-visible state. IDs follow the
-                          // floor.town_id convention (town_index - 1).
+                          // floor.town_id convention (TownId; see to_town_id()).
                           { "visited_town_ids", [] {
                                std::vector<int> ids;
                                const auto &records = TownRecords::get_instance();
@@ -2130,7 +2130,7 @@ nlohmann::json make_knowledge_json(PlayerType *player_ptr, BotKnowledgeCategory 
         break;
     }
     case BotKnowledgeCategory::HOME: {
-        const auto &store = TownList::get_instance().get_town(TownId::OUTPOST).get_store(StoreSaleType::HOME);
+        const auto &store = TownList::get_instance().get_home();
         for (auto i = 0; i < store.stock_num; ++i) {
             auto item = make_item_json(player_ptr, *store.stock[i]);
             item["slot"] = i;
@@ -2155,7 +2155,7 @@ nlohmann::json make_knowledge_json(PlayerType *player_ptr, BotKnowledgeCategory 
         for (const auto slot : INVEN_PACK_SLOTS) {
             add_item(*player_ptr->inventory[slot], "inventory", slot);
         }
-        const auto &home = TownList::get_instance().get_town(TownId::OUTPOST).get_store(StoreSaleType::HOME);
+        const auto &home = TownList::get_instance().get_home();
         for (auto slot = 0; slot < home.stock_num; ++slot) {
             add_item(*home.stock[slot], "home", slot);
         }

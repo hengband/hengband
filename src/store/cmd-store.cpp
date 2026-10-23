@@ -22,6 +22,7 @@
 #include "system/dungeon/dungeon-definition.h"
 #include "system/floor/floor-info.h"
 #include "system/floor/town-list.h"
+#include "system/floor/town-records.h"
 #include "system/grid-type-definition.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
@@ -35,10 +36,10 @@
 #include <tl/optional.hpp>
 
 /*!
- * @brief 入った店舗がある町のIDを決める
+ * @brief 入った店舗がある町の番号を決める
  * @param floor 現在のフロア
  * @param store_num 店舗の種類
- * @return 町のID
+ * @return 町の番号 (TownList の添字)
  * @details 我が家と博物館は全ての町で内容を共有するため、辺境の地の店舗を使う。
  * ダンジョン内の店舗は、ダンジョン用の町 (VALID_TOWNS) の店舗を使う。
  */
@@ -49,7 +50,7 @@ static size_t decide_store_town_index(const FloorType &floor, StoreSaleType stor
     }
 
     if ((store_num == StoreSaleType::HOME) || (store_num == StoreSaleType::MUSEUM)) {
-        return 1;
+        return to_town_index(TownId::OUTPOST);
     }
 
     return AngbandWorld::get_instance().get_town_index();

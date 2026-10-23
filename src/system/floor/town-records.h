@@ -20,6 +20,9 @@ enum class TownId {
     MAX,
 };
 
+size_t to_town_index(TownId town_id);
+TownId to_town_id(size_t town_index);
+
 class TownRecords {
 public:
     TownRecords(TownRecords &&) = delete;

@@ -59,14 +59,14 @@ static void home_carry_load(PlayerType *player_ptr, Store *store_ptr, ItemEntity
 /*!
  * @brief 店舗情報を読み込む
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param town_number_initial 街ID (v0.3.3以降)
+ * @param town_number_initial 町の番号 (v0.3.3以降。TownList の添字)
  * @param store_number 店舗ID
  */
 static void rd_store(PlayerType *player_ptr, int town_number_initial, StoreSaleType store_number)
 {
     const auto is_old_version = h_older_than(0, 3, 3) && (store_number == StoreSaleType::HOME);
-    const auto town_number = is_old_version ? 1 : town_number_initial;
-    auto &store = TownList::get_instance().get_town(town_number).get_store(store_number);
+    auto &towns = TownList::get_instance();
+    auto &store = is_old_version ? towns.get_home() : towns.get_town(town_number_initial).get_store(store_number);
     auto sort = is_old_version && (store.stock_num > 0);
     store.store_open = rd_s32b();
     store.insult_cur = rd_s16b();

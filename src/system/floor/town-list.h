@@ -22,6 +22,9 @@ public:
     TownInfo &get_town(size_t index);
     const TownInfo &get_town(TownId town_id) const;
     TownInfo &get_town(TownId town_id);
+    const Store &get_home() const;
+    Store &get_home();
+    const Store &get_museum() const;
     bool is_all_initialized() const;
 
 private:

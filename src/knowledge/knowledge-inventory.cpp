@@ -16,7 +16,6 @@
 #include "perception/object-perception.h"
 #include "store/store-util.h"
 #include "system/floor/town-list.h"
-#include "system/floor/town-records.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
 #include "util/angband-files.h"
@@ -220,7 +219,7 @@ static int show_holding_equipment_resistances(PlayerType *player_ptr, ItemKindTy
 static int show_home_equipment_resistances(PlayerType *player_ptr, ItemKindType tval, int label_number_initial, FILE *fff)
 {
     auto label_number = label_number_initial;
-    const auto &store = TownList::get_instance().get_town(TownId::OUTPOST).get_store(StoreSaleType::HOME);
+    const auto &store = TownList::get_instance().get_home();
     for (short i = 0; i < store.stock_num; i++) {
         const auto &item = *store.stock[i];
         if (!item.has_knowledge(tval)) {
