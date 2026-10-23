@@ -106,14 +106,17 @@
     <ClCompile Include="..\..\src\test\locale\test-character-encoding.cpp" />
     <ClCompile Include="..\..\src\test\lore\test-monster-lore-snapshot.cpp" />
     <ClCompile Include="..\..\src\test\main\test-init-error-messages-table.cpp" />
+    <ClCompile Include="..\..\src\test\market\test-building-recharger.cpp" />
     <ClCompile Include="..\..\src\test\monster-race\test-race-ability-mask.cpp" />
     <ClCompile Include="..\..\src\test\mspell\test-mspell-projection-table.cpp" />
     <ClCompile Include="..\..\src\test\mutation\test-mutation-roll-table.cpp" />
     <ClCompile Include="..\..\src\test\object-activation\test-activation-util.cpp" />
     <ClCompile Include="..\..\src\test\object-enchant\test-item-feeling.cpp" />
     <ClCompile Include="..\..\src\test\object-enchant\test-object-ego.cpp" />
+    <ClCompile Include="..\..\src\test\object-use\quaff\test-quaff-execution.cpp" />
     <ClCompile Include="..\..\src\test\object\test-object-info.cpp" />
     <ClCompile Include="..\..\src\test\object\test-object-value.cpp" />
+    <ClCompile Include="..\..\src\test\player-status\test-player-speed.cpp" />
     <ClCompile Include="..\..\src\test\player\test-player-skill.cpp" />
     <ClCompile Include="..\..\src\test\player\test-process-name.cpp" />
     <ClCompile Include="..\..\src\test\racial\test-racial-android.cpp" />
@@ -130,6 +133,7 @@
     <ClCompile Include="..\..\src\test\system\floor\test-town-records.cpp" />
     <ClCompile Include="..\..\src\test\system\item\test-item-entity.cpp" />
     <ClCompile Include="..\..\src\test\system\monrace\test-monrace-definition.cpp" />
+    <ClCompile Include="..\..\src\test\system\test-building-type-definition.cpp" />
     <ClCompile Include="..\..\src\test\system\test-deferred-update-requests.cpp" />
     <ClCompile Include="..\..\src\test\system\test-dungeon-record.cpp" />
     <ClCompile Include="..\..\src\test\system\test-quest-list.cpp" />

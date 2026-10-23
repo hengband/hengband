@@ -261,14 +261,15 @@ bool MonraceDefinition::is_bounty(bool unachieved_only) const
 /*!
  * @brief モンスター種族の総合的な強さを計算する。
  * @details 現在はモンスター闘技場でのモンスターの強さの総合的な評価にのみ使用されている。
+ * 全属性耐性で10万倍し、さらに闘技場の倍率を掛けるので、int ではあふれうる。int64_t で計算する。
  * @return 計算した結果のモンスター種族の総合的な強さの値を返す。
  */
-int MonraceDefinition::calc_power() const
+int64_t MonraceDefinition::calc_power() const
 {
-    auto power = 0;
-    const auto num_resistances = EnumClassFlagGroup<MonsterResistanceType>(this->resistance_flags & RFR_EFF_IMMUNE_ELEMENT_MASK).count();
+    int64_t power;
+    const auto num_resistances = static_cast<int64_t>(EnumClassFlagGroup<MonsterResistanceType>(this->resistance_flags & RFR_EFF_IMMUNE_ELEMENT_MASK).count());
     if (this->misc_flags.has(MonsterMiscType::FORCE_MAXHP)) {
-        power = this->hit_dice.maxroll() * 2;
+        power = int64_t{ this->hit_dice.maxroll() } * 2;
     } else {
         power = this->hit_dice.floored_expected_value_multiplied_by(2);
     }

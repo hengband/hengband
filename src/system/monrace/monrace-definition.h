@@ -167,7 +167,7 @@ public:
     const MonraceDefinition &get_next() const;
     std::shared_ptr<const MonraceDefinition> get_next_shared() const;
     bool is_bounty(bool unachieved_only) const;
-    int calc_power() const;
+    int64_t calc_power() const;
     int calc_figurine_value() const;
     int calc_capture_value() const;
     std::string build_eldritch_horror_message(std::string_view description) const;

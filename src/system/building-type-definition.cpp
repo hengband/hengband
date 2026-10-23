@@ -2,9 +2,12 @@
 #include "monster-floor/place-monster-types.h"
 #include "monster/monster-list.h"
 #include "monster/monster-util.h"
+#include "object/object-value.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
 #include "system/services/dungeon-service.h"
+#include <algorithm>
+#include <limits>
 #include <numeric>
 
 std::array<building_type, MAX_BUILDINGS> buildings;
@@ -42,14 +45,26 @@ void MeleeArena::set_wager(int value)
     this->wager = value;
 }
 
+/*!
+ * @brief 賭けに勝った時の払い戻しを計算する
+ * @param wager 賭け金
+ * @param odds 賭けたモンスターのオッズ (100で1倍)
+ * @return 払い戻し (賭け金より1以上多く、PRICE の上限以下)
+ * @details 賭け金とオッズの積は int ではあふれうるので int64_t で計算し、ほかの金額と同じく PRICE の範囲に抑える。
+ */
+int MeleeArena::calc_payback(int wager, uint32_t odds)
+{
+    const auto payback = int64_t{ wager } * odds / 100;
+    return clamp_price(std::max(int64_t{ wager } + 1, payback));
+}
+
 int MeleeArena::get_payback(bool is_draw) const
 {
     if (is_draw) {
         return this->wager;
     }
 
-    const int odds = this->get_gladiator(this->bet_number).odds;
-    return std::max(this->wager + 1, this->wager * odds / 100);
+    return calc_payback(this->wager, this->get_gladiator(this->bet_number).odds);
 }
 
 MeleeGladiator &MeleeArena::get_gladiator(int n)
@@ -107,9 +122,9 @@ void MeleeArena::update_gladiators(PlayerType *player_ptr)
     }
 }
 
-std::pair<int, bool> MeleeArena::set_gladiators(PlayerType *player_ptr, int mon_level)
+std::pair<int64_t, bool> MeleeArena::set_gladiators(PlayerType *player_ptr, int mon_level)
 {
-    auto total = 0;
+    int64_t total = 0;
     auto is_applicable = false;
     for (auto i = 0; i < NUM_GLADIATORS; i++) {
         auto &gladiator = this->get_gladiator(i);
@@ -127,11 +142,14 @@ std::pair<int, bool> MeleeArena::set_gladiators(PlayerType *player_ptr, int mon_
  * @param current_total 計算済のモンスター数
  * @param is_applicable モンスターのレベルが基準値未満か否か (基準値以上のモンスターはブレが激しすぎる)
  * @return このメソッドで計算したモンスター数と累積計算済モンスター数のペア
+ * @details 強さとその和は int ではあふれうるので int64_t で計算する。
+ * オッズはセーブで uint32_t として書き、表示や払い戻しの計算でも使うので、int の上限で抑えてから保存する
+ * (修正前もオッズは int を超えなかったので、あふれなかった値は変わらない)。
  */
-std::pair<int, int> MeleeArena::set_odds(int current_total, bool is_applicable)
+std::pair<int, int64_t> MeleeArena::set_odds(int64_t current_total, bool is_applicable)
 {
     const auto &monraces = MonraceList::get_instance();
-    std::array<int, NUM_GLADIATORS> powers;
+    std::array<int64_t, NUM_GLADIATORS> powers;
     std::transform(std::begin(this->gladiators), std::end(this->gladiators), std::begin(powers),
         [&monraces](const auto &gladiator) { return monraces.get_monrace(gladiator.monrace_id).calc_power(); });
     const auto total = current_total + std::reduce(std::begin(powers), std::end(powers));
@@ -154,7 +172,7 @@ std::pair<int, int> MeleeArena::set_odds(int current_total, bool is_applicable)
             power = 100 + randint1(5);
         }
 
-        this->gladiators[count].odds = power;
+        this->gladiators[count].odds = static_cast<uint32_t>(std::min<int64_t>(power, std::numeric_limits<int>::max()));
         count++;
     }
 

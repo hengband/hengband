@@ -1,5 +1,8 @@
 #pragma once
 #include "player-status/player-status-base.h"
+#include <cstdint>
+
+int16_t calc_speed_bonus_by_weight(int weight, int limit);
 
 class PlayerSpeed : public PlayerStatusBase {
 public:

@@ -1570,12 +1570,15 @@ hengband_test_SOURCES = \
 	test/locale/test-character-encoding.cpp \
 	test/lore/test-monster-lore-snapshot.cpp \
 	test/main/test-init-error-messages-table.cpp \
+	test/market/test-building-recharger.cpp \
 	test/monster-race/test-race-ability-mask.cpp \
 	test/mspell/test-mspell-projection-table.cpp \
 	test/mutation/test-mutation-roll-table.cpp \
 	test/object/test-object-info.cpp \
+	test/object-use/quaff/test-quaff-execution.cpp \
 	test/player/test-player-skill.cpp \
 	test/player/test-process-name.cpp \
+	test/player-status/test-player-speed.cpp \
 	test/spell/test-spell-info.cpp \
 	test/spell-realm/test-spells-hex.cpp \
 	test/store/test-pricing.cpp \
@@ -1591,6 +1594,7 @@ hengband_test_SOURCES = \
 	test/system/test-quest-list.cpp \
 	test/system/test-dungeon-record.cpp \
 	test/system/test-deferred-update-requests.cpp \
+	test/system/test-building-type-definition.cpp \
 	test/target/test-target-getter.cpp \
 	test/term/test-z-rand.cpp \
 	test/timed-effect/test-player-cut.cpp \
