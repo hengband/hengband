@@ -418,7 +418,8 @@ TEST_CASE("DeferredUpdateRequests::request_riding_status_redrawing requests redr
 
     CHECK(dur.has(MainWindowRedrawingFlag::EXTRA));
     CHECK(dur.has(MainWindowRedrawingFlag::UHEALTH));
-    // 追跡しているモンスターの体力や、乗っているモンスターで変わる能力の再計算は、それぞれの箇所で要求する
+    // 追跡しているモンスターの体力はそれぞれの箇所で、乗っているモンスターで変わる能力の再計算は
+    // request_riding_change_updates() で要求する
     CHECK_FALSE(dur.has(MainWindowRedrawingFlag::HEALTH));
     CHECK_FALSE(dur.has(StatusRecalculatingFlag::BONUS));
     // 乗り降りのコマンドで一緒に要求するメイン画面の地図 (MAP) と、落馬で一緒に要求するサブウィンドウの地図
@@ -426,6 +427,46 @@ TEST_CASE("DeferredUpdateRequests::request_riding_status_redrawing requests redr
     CHECK_FALSE(dur.has(MainWindowRedrawingFlag::MAP));
     CHECK_FALSE(dur.has(SubWindowRedrawingFlag::OVERHEAD));
     CHECK_FALSE(dur.has(SubWindowRedrawingFlag::DUNGEON));
+}
+
+TEST_CASE("DeferredUpdateRequests::request_riding_change_updates requests recalculating the bonuses and redrawing the riding status")
+{
+    auto &dur = DeferredUpdateRequests::get_instance();
+    static constexpr auto flags_mwrf = {
+        MainWindowRedrawingFlag::EXTRA,
+        MainWindowRedrawingFlag::UHEALTH,
+        MainWindowRedrawingFlag::HEALTH,
+        MainWindowRedrawingFlag::MAP,
+    };
+    static constexpr auto flags_srf = {
+        StatusRecalculatingFlag::BONUS,
+        StatusRecalculatingFlag::MONSTER_STATUSES,
+        StatusRecalculatingFlag::VIEW,
+    };
+    static constexpr auto flags_swrf = {
+        SubWindowRedrawingFlag::OVERHEAD,
+        SubWindowRedrawingFlag::DUNGEON,
+    };
+    const auto restore_mwrf = scoped_restore_flags(dur, flags_mwrf);
+    const auto restore_srf = scoped_restore_flags(dur, flags_srf);
+    const auto restore_swrf = scoped_restore_flags(dur, flags_swrf);
+    dur.reset_flags(flags_mwrf);
+    dur.reset_flags(flags_srf);
+    dur.reset_flags(flags_swrf);
+
+    dur.request_riding_change_updates();
+
+    CHECK(dur.has(StatusRecalculatingFlag::BONUS));
+    CHECK(dur.has(MainWindowRedrawingFlag::EXTRA));
+    CHECK(dur.has(MainWindowRedrawingFlag::UHEALTH));
+    // 追跡しているモンスターの体力と、乗り降りで位置が変わることによる地図・視界・モンスターの状態の更新は、
+    // それぞれの箇所で要求する
+    CHECK_FALSE(dur.has(MainWindowRedrawingFlag::HEALTH));
+    CHECK_FALSE(dur.has(MainWindowRedrawingFlag::MAP));
+    CHECK_FALSE(dur.has(SubWindowRedrawingFlag::OVERHEAD));
+    CHECK_FALSE(dur.has(SubWindowRedrawingFlag::DUNGEON));
+    CHECK_FALSE(dur.has(StatusRecalculatingFlag::VIEW));
+    CHECK_FALSE(dur.has(StatusRecalculatingFlag::MONSTER_STATUSES));
 }
 
 TEST_CASE("DeferredUpdateRequests::request_hp_mp_redrawing requests redrawing the HP and the MP")

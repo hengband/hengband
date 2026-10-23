@@ -190,9 +190,8 @@ void DeferredUpdateRequests::request_equipment_change_updates()
 /*!
  * @brief 乗馬の状態が変わったときの描き直しを予約する
  * @details 乗馬中の表示 (EXTRA の行の「乗馬」) と、乗っているモンスターの体力の表示を描き直す。
- * モンスターに乗ったとき・降りたとき (落馬・乗っているモンスターが消えたときを含む) に呼ぶ。
+ * 乗り降りでは能力も変わるので、能力の再計算と合わせて要求する request_riding_change_updates() から呼ぶ。
  * 階を移るときは画面全体を描き直すので、呼んでも呼ばなくてもよい。
- * 乗っているモンスターの速度などで決まる能力の再計算 (BONUS) は、それぞれの箇所で要求する。
  */
 void DeferredUpdateRequests::request_riding_status_redrawing()
 {
@@ -201,6 +200,18 @@ void DeferredUpdateRequests::request_riding_status_redrawing()
         MainWindowRedrawingFlag::UHEALTH,
     };
     this->main_window_flags.set(flags_mwrf);
+}
+
+/*!
+ * @brief 乗馬の状態が変わったときの更新を予約する
+ * @details 乗っているモンスターの速度などで決まる能力を計算し直し、乗馬中の表示と乗っているモンスターの体力の表示を描き直す。
+ * モンスターに乗ったとき・降りたとき (落馬・乗っているモンスターが消えたとき・乗っているペットを放したときを含む) に呼ぶ。
+ * 視界や地図など、乗り降りで位置が変わることによる更新は、それぞれの箇所で要求する。
+ */
+void DeferredUpdateRequests::request_riding_change_updates()
+{
+    this->status_flags.set(StatusRecalculatingFlag::BONUS);
+    this->request_riding_status_redrawing();
 }
 
 /*!
