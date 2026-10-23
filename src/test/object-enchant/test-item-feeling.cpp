@@ -26,3 +26,18 @@ TEST_CASE("to_cursed_feeling keeps what the feeling told about artifacts and ego
         CHECK(to_cursed_feeling(feel) == FEEL_CURSED);
     }
 }
+
+TEST_CASE("is_more_detailed_feeling orders none, light, curse only and heavy feelings")
+{
+    CHECK(is_more_detailed_feeling(FEEL_UNCURSED, FEEL_NONE));
+    CHECK(is_more_detailed_feeling(FEEL_CURSED, FEEL_UNCURSED));
+    CHECK(is_more_detailed_feeling(FEEL_TERRIBLE, FEEL_CURSED));
+    CHECK(is_more_detailed_feeling(FEEL_AVERAGE, FEEL_BROKEN));
+    CHECK(is_more_detailed_feeling(FEEL_CURSED, FEEL_NONE));
+
+    CHECK_FALSE(is_more_detailed_feeling(FEEL_CURSED, FEEL_CURSED));
+    CHECK_FALSE(is_more_detailed_feeling(FEEL_BROKEN, FEEL_CURSED));
+    CHECK_FALSE(is_more_detailed_feeling(FEEL_TERRIBLE, FEEL_SPECIAL));
+    CHECK_FALSE(is_more_detailed_feeling(FEEL_CURSED, FEEL_GOOD));
+    CHECK_FALSE(is_more_detailed_feeling(FEEL_NONE, FEEL_UNCURSED));
+}

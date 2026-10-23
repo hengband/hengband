@@ -188,6 +188,7 @@ public:
     void remove_curses();
     bool add_curses(const EnumClassFlagGroup<CurseTraitType> &curses);
     void match_feeling_to_curses();
+    tl::optional<item_feel_type> find_curse_feeling() const;
     void mark_as_tried() const;
 
     void set_position(const Pos2D &pos);

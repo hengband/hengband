@@ -1440,6 +1440,29 @@ void ItemEntity::match_feeling_to_curses()
 }
 
 /*!
+ * @brief 呪いを感知したときに付ける擬似鑑定の感触を求める
+ * @return 付ける感触。呪われていない品・鑑定済みの品・感触を得られない種類の品と、呪いを表す感触で感じ済みの品は tl::nullopt
+ * @details 感触は呪いが付いたときと同じく、前の感触から求める (to_cursed_feeling())。
+ */
+tl::optional<item_feel_type> ItemEntity::find_curse_feeling() const
+{
+    if (!this->is_cursed() || this->has_identification_flag(IdentificationFlag::KNOWN) || !this->can_be_sensed()) {
+        return tl::nullopt;
+    }
+
+    if (this->has_identification_flag(IdentificationFlag::SENSE)) {
+        if (is_cursed_feeling(this->feeling)) {
+            return tl::nullopt;
+        }
+
+        return to_cursed_feeling(this->feeling);
+    }
+
+    // 感じていない品の感触は、呪いを表すもののほかは確かめていないので使わない (match_feeling_to_curses() と同じ)
+    return is_cursed_feeling(this->feeling) ? static_cast<item_feel_type>(this->feeling) : FEEL_CURSED;
+}
+
+/*!
  * @brief 試行済にする
  */
 void ItemEntity::mark_as_tried() const
