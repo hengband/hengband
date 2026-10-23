@@ -1,13 +1,13 @@
 #!/bin/bash
 
-# Actions のキャッシュのうち、ccache のキャッシュの不要なものを削除する。
-# - ブランチ・PR とビルド構成の組ごとに、最新の 1 件だけを残す
-#   (読み込みでは最新のものしか使わない)
+# Actions のキャッシュのうち、ccache と apt のパッケージのキャッシュの不要なものを削除する。
+# - ブランチ・PR と構成 (キャッシュの種類と、ccache ならビルド構成、apt ならランナー) の組ごとに、
+#   最新の 1 件だけを残す (読み込みでは最新のものしか使わない)
 # - 閉じた PR と、削除されたブランチ、ブランチでも PR でもない ref (タグなど) のキャッシュはすべて削除する
 # - PR のキャッシュは、同じ構成の PR のベースのブランチのキャッシュより古ければ削除する。
 #   PR では自分のキャッシュがベースのブランチのものより優先して読まれるため、残すと
 #   ベースのブランチの新しいキャッシュが使われなくなる
-# 対象はキーが ccache- で始まるものだけで、ほかのキャッシュには触れない。
+# 対象はキーが ccache- か apt-archives- で始まるものだけで、ほかのキャッシュには触れない。
 #
 # 使い方: cleanup-ccache-caches.sh [--dry-run]
 #   --dry-run を付けると、削除せずに削除する対象を表示するだけにする。
@@ -43,7 +43,13 @@ delete_cache() {
 
 # 取得に失敗したときに何も消さずにエラーで止まるよう、ループに渡す前に変数に受ける。
 # 取得の合間に作られた PR・ブランチのキャッシュを消してしまわないよう、キャッシュを先に取る
-caches=$(gh cache list --key ccache- --limit 1000 --sort created_at --order desc --json id,key,ref --jq '.[] | [.id, .key, .ref] | @tsv')
+# 残すかどうかは同じ種類のキャッシュの中でしか比べないので、種類ごとに取って続けるだけでよい
+list_caches() {
+    gh cache list --key "$1" --limit 1000 --sort created_at --order desc --json id,key,ref --jq '.[] | [.id, .key, .ref] | @tsv'
+}
+ccache_caches=$(list_caches ccache-)
+apt_caches=$(list_caches apt-archives-)
+caches=$(printf '%s\n' "$ccache_caches" "$apt_caches")
 max_open_prs=1000
 open_prs=$(gh pr list --state open --limit $max_open_prs --json number,baseRefName --jq '.[] | [.number, .baseRefName] | @tsv')
 branch_names=$(gh api 'repos/{owner}/{repo}/branches?per_page=100' --paginate --jq '.[].name')
@@ -65,10 +71,14 @@ done
 while IFS=$'\t' read -r id key ref; do
     # 一覧が空のときも空の行が 1 行渡される
     [ -n "$id" ] || continue
-    # キーは ccache-<構成のハッシュ>-<時刻> (.github/workflows/build-with-autotools.yml で決めている)。
-    # 構成のハッシュは - を含まない
-    config=${key#ccache-}
-    config=${config%%-*}
+    # キーは ccache-<構成のハッシュ>-<時刻> か apt-archives-<ランナーのハッシュ>-<時刻>
+    # (.github/workflows/build-with-autotools.yml で決めている)。ハッシュは - を含まない
+    case $key in
+        apt-archives-*) prefix=apt-archives- ;;
+        *) prefix=ccache- ;;
+    esac
+    rest=${key#"$prefix"}
+    config=$prefix${rest%%-*}
 
     # 削除する理由。空なら残す
     reason=
