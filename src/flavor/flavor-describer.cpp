@@ -331,7 +331,7 @@ static std::string describe_charges_staff_wand(const ItemEntity &item)
         staff_num = fmt::format("{}x ", item.number);
     }
 
-    const auto charge_str = _("回分", (item.pval != 1 ? " charge" : " charges"));
+    const auto charge_str = _("回分", (item.pval == 1 ? " charge" : " charges"));
     return fmt::format(" ({}{}{})", staff_num, item.pval, charge_str);
 }
 
