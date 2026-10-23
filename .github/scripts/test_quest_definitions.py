@@ -5,7 +5,8 @@ from pathlib import Path
 import tempfile
 import unittest
 
-from json_validation_test_helper import dungeon_id_maximum, quest_id_schema_maximum, validate_document
+from json_validation_test_helper import (dungeon_id_maximum, fixed_artifact_id_schema_maximum, monrace_id_schema_maximum,
+                                         quest_id_schema_maximum, validate_document)
 from validate_json import build_schema_registry, load_all_schemas, load_jsonc, validate_one
 
 
@@ -83,15 +84,28 @@ class QuestInt16RangeTest(unittest.TestCase):
             with self.subTest(rejected=rejected):
                 self.assert_boundary(lambda value: self.quest({"special": value}), accepted, rejected, ["legend", "#", "special"])
 
-    def test_definition_ids_follow_reader_int16_range(self):
+    def test_definition_ids_follow_cpp_id_maximums(self):
+        # 対象モンスターは MonraceId、報酬のアーティファクトは FixedArtifactId の基になる型の上限−1までとする。
+        monster_maximum = monrace_id_schema_maximum()
+        artifact_maximum = fixed_artifact_id_schema_maximum()
+        schema = self.loaded[self.schema_map["Quest"]]
+        reward = schema["$defs"]["reward"]["properties"]
+        self.assertEqual(schema["$defs"]["definition"]["properties"]["monster"]["maximum"], monster_maximum)
+        self.assertEqual(reward["artifact"]["maximum"], artifact_maximum)
+        self.assertEqual(reward["artifacts"]["items"]["maximum"], artifact_maximum)
         cases = (
-            (lambda value: {"monster": value}, ["definition", "monster"]),
-            (lambda value: {"reward": {"artifact": value}}, ["definition", "reward", "artifact"]),
-            (lambda value: {"reward": {"artifacts": [1, value]}}, ["definition", "reward", "artifacts", 1]),
+            (lambda value: {"monster": value}, monster_maximum, ["definition", "monster"]),
+            (lambda value: {"reward": {"artifact": value}}, artifact_maximum, ["definition", "reward", "artifact"]),
+            (lambda value: {"reward": {"artifacts": [1, value]}}, artifact_maximum, ["definition", "reward", "artifacts", 1]),
         )
-        for make_definition, location in cases:
-            with self.subTest(definition=make_definition(32768)):
-                self.assert_boundary(lambda value: self.quest(definition=make_definition(value)), 32767, 32768, location)
+        for make_definition, maximum, location in cases:
+            with self.subTest(location=location):
+                ok, message = self.validate("Quest", self.quest(definition=make_definition(maximum)))
+                self.assert_schema_accepted(ok, message)
+                ok, message = self.validate("Quest", self.quest(definition=make_definition(maximum + 1)))
+                self.assertFalse(ok, message)
+                self.assertIn(f"{maximum + 1} is greater than the maximum of {maximum}", message)
+                self.assertIn(f"Location: {location}", message)
 
     def test_level_and_kill_count_follow_reader_ranges(self):
         # 階層は MAX_DEPTH - 1 まで、撃破数はセーブの16ビットまでしか読み込まない。
@@ -319,9 +333,9 @@ class QuestReferenceTest(QuestEditDirTestCase):
             return document
 
         cases = (
-            (lambda d: d["definition"].update(monster=32767), "unknown monster ID", ["definition", "monster"]),
-            (lambda d: d["definition"].update(reward={"artifact": 32767}), "unknown artifact ID", ["definition", "reward", "artifact"]),
-            (lambda d: d["definition"].update(reward={"artifacts": [1, 32767]}), "unknown artifact ID",
+            (lambda d: d["definition"].update(monster=32766), "unknown monster ID", ["definition", "monster"]),
+            (lambda d: d["definition"].update(reward={"artifact": 32766}), "unknown artifact ID", ["definition", "reward", "artifact"]),
+            (lambda d: d["definition"].update(reward={"artifacts": [1, 32766]}), "unknown artifact ID",
              ["definition", "reward", "artifacts", 1]),
             (lambda d: d["legend"]["#"].update(terrain="NO_SUCH_TERRAIN"), "unknown terrain tag", ["legend", "#", "terrain"]),
             (lambda d: d["legend"]["#"].update(trap="NO_SUCH_TERRAIN"), "unknown terrain tag", ["legend", "#", "trap"]),

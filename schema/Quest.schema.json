@@ -137,8 +137,8 @@
         "monster": {
           "type": "integer",
           "minimum": 0,
-          "maximum": 32767,
-          "description": "MonraceId of the quest target (r_idx); 0 = none."
+          "maximum": 32766,
+          "description": "MonraceId of the quest target (r_idx); 0 = none. At most the MonraceId storage maximum - 1."
         },
         "numMon": {
           "type": "integer",
@@ -173,7 +173,7 @@
         "artifact": {
           "type": "integer",
           "minimum": 1,
-          "maximum": 32767
+          "maximum": 32766
         },
         "artifacts": {
           "type": "array",
@@ -181,7 +181,7 @@
           "items": {
             "type": "integer",
             "minimum": 1,
-            "maximum": 32767
+            "maximum": 32766
           }
         }
       }

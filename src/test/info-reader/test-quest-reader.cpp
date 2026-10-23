@@ -65,11 +65,6 @@ const std::vector<std::string> QUEST_INTEGER_PATHS = {
     "/startVariants/1/leavingQuest",
 };
 
-bool is_quest_short_id(const std::string &path)
-{
-    return path == "/definition/monster" || path.starts_with("/definition/reward/");
-}
-
 /*!
  * @brief 整数の項目ごとに QuestReader が受け付ける範囲を返す
  */
@@ -81,8 +76,12 @@ std::pair<int64_t, int64_t> get_quest_integer_range(const std::string &path)
     if (path == "/definition/maxNum") {
         return { 0, std::numeric_limits<int16_t>::max() };
     }
-    if (is_quest_short_id(path)) {
-        return { std::numeric_limits<int16_t>::min(), std::numeric_limits<int16_t>::max() };
+    // 対象モンスターと報酬のアーティファクトは、それぞれのIDの型の上限−1までとする (0 は指定なし)。
+    if (path == "/definition/monster") {
+        return { 0, MAX_MONRACE_ID };
+    }
+    if (path.starts_with("/definition/reward/")) {
+        return { 0, MAX_FIXED_ARTIFACT_ID };
     }
     // ダンジョンIDは DungeonId の範囲、離脱するクエストのIDは QuestId の型の上限−1までとする。
     if (path == "/definition/dungeon") {
