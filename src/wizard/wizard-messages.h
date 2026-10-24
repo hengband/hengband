@@ -5,9 +5,11 @@
 #include <string_view>
 #include <utility>
 
+class MonsterEntity;
 class PlayerType;
 bool is_wizard_message_enabled(int cheat_type);
 void msg_print_wizard(PlayerType *player_ptr, int cheat_type, std::string_view msg);
+void msg_print_wizard_damage(PlayerType *player_ptr, const MonsterEntity &monster, int damage);
 
 template <typename... Args>
 void msg_print_wizard(PlayerType *player_ptr, int cheat_type, fmt::format_string<Args...> fmt, Args &&...args)
