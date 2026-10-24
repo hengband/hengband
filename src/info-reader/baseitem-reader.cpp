@@ -6,6 +6,7 @@
 
 #include "info-reader/baseitem-reader.h"
 #include "artifact/random-art-effects.h"
+#include "cmd-action/cmd-spell.h"
 #include "floor/floor-base-definitions.h"
 #include "grid/trap.h"
 #include "info-reader/baseitem-tokens-table.h"
@@ -17,6 +18,10 @@
 #include "object-enchant/tr-types.h"
 #include "object/tval-types.h"
 #include "player/digestion-processor.h"
+#include "player/player-skill.h"
+#include "sv-definition/sv-rod-types.h"
+#include "sv-definition/sv-staff-types.h"
+#include "sv-definition/sv-wand-types.h"
 #include "system/baseitem/baseitem-definition.h"
 #include "system/baseitem/baseitem-list.h"
 #include "system/gamevalue.h"
@@ -25,6 +30,7 @@
 #include "util/enum-converter.h"
 #include "view/display-messages.h"
 #include <algorithm>
+#include <array>
 #include <iterator>
 #include <limits>
 #include <memory>
@@ -130,6 +136,33 @@ Range pval_range(const BaseitemKey &key)
     }
 }
 
+/*!
+ * @brief ベースアイテムの種別ごとの副種別の上限を返す
+ * @param key ベースアイテムのキー (種別だけを見る)
+ * @return 受け付ける副種別の上限 (下限は 0)
+ */
+int subtype_max(const BaseitemKey &key)
+{
+    if (key.is_weapon()) {
+        // 武器熟練度の種別ごとの配列を副種別で引く。
+        return static_cast<int>(std::tuple_size_v<decltype(skill_table::w_max)::mapped_type>) - 1;
+    }
+    if (key.is_spell_book()) {
+        // 魔法書の副種別で呪文のビット表を引く。
+        return static_cast<int>(std::size(fake_spell_flags)) - 1;
+    }
+    // 魔道具術師の取り込み先の要素数に合わせる。
+    switch (key.tval()) {
+    case ItemKindType::STAFF:
+        return SV_STAFF_MAX - 1;
+    case ItemKindType::WAND:
+        return SV_WAND_MAX - 1;
+    case ItemKindType::ROD:
+        return SV_ROD_MAX - 1;
+    default:
+        return 128;
+    }
+}
 }
 
 BaseitemReader::BaseitemReader(const nlohmann::json &baseitem_data)
@@ -370,7 +403,7 @@ tl::expected<void, ParseErrorType> BaseitemReader::set_baseitem_kind(BaseitemDef
         return tl::unexpected(ParseErrorType::INVALID_VALUE);
     }
     int subtype_value = 0;
-    if (const auto result = info_set_integer(get_json_value(itemkind_data, "subtype_value"), subtype_value, true, Range(0, 128)); !result) {
+    if (const auto result = info_set_integer(get_json_value(itemkind_data, "subtype_value"), subtype_value, true, Range(0, subtype_max({ type_value, 0 }))); !result) {
         return result;
     }
 

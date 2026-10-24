@@ -782,3 +782,23 @@ TEST_CASE("BaseitemReader accepts only defined item kinds up to 127")
         check_baseitem_boundary(data, true);
     }
 }
+
+TEST_CASE("BaseitemReader bounds subtypes by the indexed tables")
+{
+    for (const auto kind : { 19, 20, 21, 22, 23, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 105, 106, 107, 55, 65, 66, 16, 30, 1 }) {
+        const auto maximum = (kind >= 19 && kind <= 23) ? 63 : kind >= 90 ? 3
+                                                           : kind == 55   ? 32
+                                                           : kind == 65   ? 31
+                                                           : kind == 66   ? 30
+                                                                          : 128;
+        for (const auto subtype : { -1, 0, maximum, maximum + 1 }) {
+            CAPTURE(kind);
+            CAPTURE(subtype);
+            auto data = make_baseitem();
+            data["itemkind"]["type_value"] = kind;
+            data["itemkind"]["subtype_value"] = subtype;
+            data["parameter_value"] = (kind == 55 || kind == 65 || kind == 66) ? 1 : 0;
+            check_baseitem_boundary(data, subtype >= 0 && subtype <= maximum);
+        }
+    }
+}

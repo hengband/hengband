@@ -153,6 +153,17 @@ class BaseitemDefinitionValidationTest(unittest.TestCase):
         table = source.split("DEFINED_ITEM_KINDS[] = {", 1)[1].split("};", 1)[0]
         self.assertEqual(set(re.findall(r"ItemKindType::([A-Z_]+)", table)), set(kinds))
 
+    def test_subtype_boundaries_per_kind(self):
+        limits = {**dict.fromkeys((19, 20, 21, 22, 23), 63),
+                  **dict.fromkeys((90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 105, 106, 107), 3),
+                  55: 32, 65: 31, 66: 30, 16: 128, 30: 128, 1: 128}
+        for kind, maximum in limits.items():
+            for value in (-1, 0, maximum, maximum + 1):
+                with self.subTest(kind=kind, value=value):
+                    record = self.range_record(kind)
+                    record["itemkind"]["subtype_value"] = value
+                    self.check_range_record(record, 0 <= value <= maximum)
+
     def test_dice_matches_reader(self):
         # from_chars は先頭の0をいくつでも読み飛ばす。セーブでは個数・面数を1バイトで書くため0〜255に限る。
         for dice in ("1d4", "0d0", "007d08", "255d255", "0" * 5000 + "1d4"):

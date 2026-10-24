@@ -225,6 +225,10 @@ def validate_baseitem_semantics(data: dict, schema_path: Path) -> None:
         type_value = baseitem["itemkind"]["type_value"]
         if not 0 <= type_value <= 127 or type_value not in kinds.values():
             raise ValidationError("type_value must be a defined ItemKindType up to 127", path=path + ["itemkind", "type_value"])
+        # 読み込みと同じく、種別・副種別・pval の順に確かめる。
+        maximum = baseitem_subtype_max(type_value)
+        if not 0 <= baseitem["itemkind"]["subtype_value"] <= maximum:
+            raise ValidationError(f"subtype_value must be in 0..{maximum}", path=path + ["itemkind", "subtype_value"])
         minimum, maximum = baseitem_pval_range(type_value)
         if not minimum <= baseitem.get("parameter_value", 0) <= maximum:
             raise ValidationError(f"parameter_value must be in {minimum}..{maximum}", path=path + ["parameter_value"])
@@ -260,6 +264,15 @@ BASEITEM_PVAL_RANGES = {
 
 def baseitem_pval_range(type_value: int) -> tuple[int, int]:
     return (-128, 128) if type_value in EQUIPMENT_KINDS else BASEITEM_PVAL_RANGES.get(type_value, (0, 0))
+
+
+# 武器熟練度64要素、fake_spell_flags 4要素、魔道具術師の SV_*_MAX 要素の添え字。
+BOOK_KINDS = {*range(90, 100), 105, 106, 107}
+BASEITEM_SUBTYPE_MAX = {**dict.fromkeys(range(19, 24), 63), **dict.fromkeys(BOOK_KINDS, 3), 55: 32, 65: 31, 66: 30}
+
+
+def baseitem_subtype_max(type_value: int) -> int:
+    return BASEITEM_SUBTYPE_MAX.get(type_value, 128)
 
 
 def collect_valid_baseitem_keys(baseitem_data: dict) -> set[tuple[int, int]]:
