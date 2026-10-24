@@ -81,14 +81,7 @@ static void racial_power_display_list(PlayerType *player_ptr, rc_type *rc_ptr)
         if (use_menu) {
             dummy = "    ";
         } else {
-            char letter;
-            if (ctr < 26) {
-                letter = I2A(ctr);
-            } else {
-                letter = '0' + ctr - 26;
-            }
-
-            dummy = fmt::format(" {:c}) ", letter);
+            dummy = fmt::format(" {:c}) ", I2AD(ctr));
         }
 
         auto &rpi = rc_ptr->power_desc[ctr];
@@ -106,7 +99,7 @@ static void racial_power_display_list(PlayerType *player_ptr, rc_type *rc_ptr)
     std::vector<BotPowerListRow> bot_rows;
     for (auto ctr = 0; ctr < rc_ptr->power_count(); ctr++) {
         const auto &rpi = rc_ptr->power_desc[ctr];
-        const auto letter = (ctr < 26) ? I2A(ctr) : static_cast<char>('0' + ctr - 26);
+        const auto letter = I2AD(ctr);
         bot_rows.push_back({ letter, ctr / RC_PAGE_SIZE, rpi.racial_name, rpi.min_level, rpi.cost, 100 - racial_chance(player_ptr, &rc_ptr->power_desc[ctr]), rpi.info });
     }
     output_bot_json_power_list_snapshot(player_ptr, "racial", bot_rows, rc_ptr->page, rc_ptr->browse_mode);
@@ -120,7 +113,7 @@ static void racial_power_make_prompt(rc_type *rc_ptr)
 {
     constexpr auto fmt_browse = _("(特殊能力 {:c}-{:c}, '*':一覧, '/'で使用, ESCで中断) どの能力について知りますか？", "(Powers {:c}-{:c}, *=List. /=Use, ESC=exit) Browse which power? ");
     constexpr auto fmt_use = _("(特殊能力 {:c}-{:c}, '*'で一覧, '/'で閲覧, ESCで中断) どの能力を使いますか？", "(Powers {:c}-{:c}, *=List, /=Browse, ESC=exit) Use which power? ");
-    const auto last = (rc_ptr->power_count() <= 26) ? I2A(rc_ptr->power_count() - 1) : static_cast<char>('0' + rc_ptr->power_count() - 27);
+    const auto last = I2AD(rc_ptr->power_count() - 1);
     rc_ptr->out_val = rc_ptr->browse_mode ? fmt::format(fmt_browse, I2A(0), last) : fmt::format(fmt_use, I2A(0), last);
 }
 
@@ -336,12 +329,16 @@ static void racial_power_display_explanation(PlayerType *player_ptr, rc_type *rc
 static bool racial_power_process_input(PlayerType *player_ptr, rc_type *rc_ptr)
 {
     rc_ptr->choice = (always_show_list || use_menu) ? ESCAPE : 1;
+    const auto first_label = I2A(0);
+    const auto last_label = I2AD(rc_ptr->power_count() - 1);
 
     while (true) {
         if (rc_ptr->choice == ESCAPE) {
             rc_ptr->choice = ' ';
         } else {
-            const auto choice = input_command(rc_ptr->out_val);
+            // ページが -1 なら一覧を表示していない。max_page のページは行が無く見出しだけを描く (一覧を隠した状態)
+            const auto is_list_shown = rc_ptr->page >= 0 && rc_ptr->page < rc_ptr->max_page;
+            const auto choice = input_spell_choice(rc_ptr->out_val, { .first_label = first_label, .last_label = last_label, .list = is_list_shown, .browse = rc_ptr->browse_mode, .menu = use_menu });
             if (!choice) {
                 return false;
             }

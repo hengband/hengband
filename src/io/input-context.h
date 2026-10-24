@@ -29,6 +29,7 @@ enum class InputKind {
     TARGET, //!< ターゲットの選択と、見るコマンドのカーソル
     POINT, //!< 場所の指定 (テレポートの行き先など)
     ANY_KEY, //!< 何かキーを押す待ち (どのキーでも先へ進む)
+    SPELL, //!< 呪文・技・特殊能力・ペットのコマンドなどを一覧から選ぶ待ち
 };
 
 /*!
@@ -118,8 +119,21 @@ struct PointInputDetails {
     bool operator==(const PointInputDetails &) const = default;
 };
 
+/*!
+ * @brief 呪文・技・特殊能力などを一覧から選ぶ待ちの詳細
+ */
+struct SpellInputDetails {
+    char first_label; //!< ラベルの範囲の先頭 (範囲の中にも選べないものや、一覧に表示しないものがありうる)
+    char last_label; //!< ラベルの範囲の末尾
+    bool list; //!< 一覧を表示しているか
+    bool browse = false; //!< 調べるだけか (選ぶと説明を表示して、選び直す待ちに戻る)
+    bool menu = false; //!< コマンドメニューから選んだコマンドで、ラベルではなくカーソルで選ぶか
+
+    bool operator==(const SpellInputDetails &) const = default;
+};
+
 //! 入力の種類ごとの詳細。詳細を持たない入力では std::monostate
-using InputDetails = std::variant<std::monostate, StringInputDetails, QuantityInputDetails, CommandInputDetails, ItemInputDetails, DirectionInputDetails, TargetInputDetails, PointInputDetails>;
+using InputDetails = std::variant<std::monostate, StringInputDetails, QuantityInputDetails, CommandInputDetails, ItemInputDetails, DirectionInputDetails, TargetInputDetails, PointInputDetails, SpellInputDetails>;
 
 /*!
  * @brief 現在待っている入力の種類と、画面に表示したプロンプト

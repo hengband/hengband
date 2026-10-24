@@ -166,6 +166,8 @@ std::string_view input_kind_name(InputKind kind)
         return "point";
     case InputKind::ANY_KEY:
         return "any_key";
+    case InputKind::SPELL:
+        return "spell";
     }
 
     THROW_EXCEPTION(std::logic_error, "Invalid InputKind was specified!");
@@ -261,6 +263,17 @@ public:
     nlohmann::json operator()(const PointInputDetails &details) const
     {
         return { { "y", details.pos.y }, { "x", details.pos.x } };
+    }
+
+    nlohmann::json operator()(const SpellInputDetails &details) const
+    {
+        return {
+            { "first_label", std::string(1, details.first_label) },
+            { "last_label", std::string(1, details.last_label) },
+            { "list", details.list },
+            { "browse", details.browse },
+            { "menu", details.menu },
+        };
     }
 };
 
