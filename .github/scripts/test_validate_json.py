@@ -670,7 +670,6 @@ class TownMapValidationTest(unittest.TestCase):
                         "caveInfo": 3,
                         "monster": "0",
                         "object": "0",
-                        "ego": "0",
                         "artifact": "0",
                         "trap": "NONE",
                         "special": 0,
@@ -688,6 +687,35 @@ class TownMapValidationTest(unittest.TestCase):
     def test_valid_map_and_start(self):
         ok, message = self.validate(self.data)
         self.assertTrue(ok, message)
+
+    def test_optional_ego_and_positive_byte_ids(self):
+        # 省略はエゴなし。ランダム指定のIDも同じ範囲で検証する。
+        for token in ("1", "255", "0001", "*", "*1", "*255", "*000255"):
+            with self.subTest(token=token):
+                data = copy.deepcopy(self.data)
+                data["featureRules"][0]["definition"]["ego"] = token
+                ok, message = self.validate(data)
+                self.assertTrue(ok, message)
+        for token in ("0", "-0", "0000", "256", "-1", "-2147483648", "*0", "*256", "*-1", "**", "+1", "*+1", "!", "c1", None, 1):
+            with self.subTest(token=token):
+                data = copy.deepcopy(self.data)
+                data["featureRules"][0]["when"] = "0"
+                data["featureRules"][0]["definition"]["ego"] = token
+                ok, message = self.validate(data)
+                self.assertFalse(ok, message)
+
+    def test_ego_semantics_matches_schema_range(self):
+        # スキーマのpatternを通らなくても、意味検証が同じ範囲を強制する。
+        for token, accepted in (("1", True), ("255", True), ("*", True), ("*255", True),
+                                ("0", False), ("256", False), ("-1", False), ("*0", False), ("*256", False)):
+            with self.subTest(token=token):
+                data = copy.deepcopy(self.data)
+                data["featureRules"][0]["definition"]["ego"] = token
+                if accepted:
+                    validate_town_map_semantics(data, self.schema_path)
+                else:
+                    with self.assertRaises(ValidationError):
+                        validate_town_map_semantics(data, self.schema_path)
 
     def test_cave_info_fits_16_bit_flags(self):
         # CAVE_* のフラグは16ビットに収まり、セーブでも16ビットで書く。
@@ -822,7 +850,7 @@ class TownMapValidationTest(unittest.TestCase):
             for delimiter in ("/", "\\"):
                 with self.subTest(field=field, delimiter=delimiter):
                     invalid = copy.deepcopy(self.data)
-                    invalid["featureRules"][0]["definition"][field] += delimiter
+                    invalid["featureRules"][0]["definition"][field] = invalid["featureRules"][0]["definition"].get(field, "1") + delimiter
                     self.assertFalse(self.validate(invalid)[0])
 
     def test_start_must_fit_every_map_variant(self):

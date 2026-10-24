@@ -2,6 +2,7 @@
 #include "artifact/fixed-art-types.h"
 #include "info-reader/json-reader-util.h"
 #include "info-reader/random-grid-effect-types.h"
+#include "object-enchant/object-ego.h"
 #include "player-info/class-info.h"
 #include "player-info/race-info.h"
 #include "player/player-realm.h"
@@ -31,6 +32,15 @@ bool is_unsigned_integer_in_range(std::string_view value, unsigned int maximum)
 
 bool is_feature_token(std::string_view field, std::string_view token)
 {
+    if (field == "ego") {
+        if (token == "*") {
+            return true;
+        }
+        if (token.starts_with('*')) {
+            token.remove_prefix(1);
+        }
+        return is_integer_in_range(token, 1, MAX_EGO_ID);
+    }
     const bool short_field = (field == "monster") || (field == "object") || (field == "artifact");
     const auto minimum = field == "monster" ? -std::numeric_limits<int16_t>::max() : (short_field ? std::numeric_limits<int16_t>::min() : std::numeric_limits<int>::min());
     const auto maximum = short_field ? std::numeric_limits<int16_t>::max() : std::numeric_limits<int>::max();
@@ -71,10 +81,10 @@ int feature_token_value(std::string_view token)
 void read_feature_tokens(const nlohmann::json &fields, QuestLegendCell &cell)
 {
     auto &grid = cell.grid;
-    const auto &monster = fields["monster"].get_ref<const std::string &>();
-    const auto &object = fields["object"].get_ref<const std::string &>();
-    const auto &ego = fields["ego"].get_ref<const std::string &>();
-    const auto &artifact = fields["artifact"].get_ref<const std::string &>();
+    const std::string_view monster = fields["monster"].get_ref<const std::string &>();
+    const std::string_view object = fields["object"].get_ref<const std::string &>();
+    const auto ego = fields.contains("ego") ? std::string_view(fields["ego"].get_ref<const std::string &>()) : std::string_view{};
+    const std::string_view artifact = fields["artifact"].get_ref<const std::string &>();
     grid.monster = static_cast<MONSTER_IDX>(feature_token_value(monster) * (monster.starts_with('c') ? -1 : 1));
     cell.object_is_quest_reward = object == "!";
     cell.artifact_is_quest_reward = artifact == "!";
@@ -166,6 +176,9 @@ tl::expected<void, ParseErrorType> TownMapReader::read_features(TownMapDefinitio
         feature.condition = *condition;
         const auto &fields = rule["definition"];
         for (const auto *field : { "terrain", "monster", "object", "ego", "artifact", "trap" }) {
+            if (field == std::string_view("ego") && !fields.contains(field)) {
+                continue;
+            }
             if (!fields.contains(field) || !fields[field].is_string()) {
                 return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
             }

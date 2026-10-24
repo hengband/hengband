@@ -14,6 +14,10 @@ from referencing.exceptions import Unresolvable
 from referencing.jsonschema import specification_with
 
 
+# エゴのIDは定義とセーブで1バイトに収まる範囲とする。
+MAX_EGO_ID = (1 << 8) - 1
+
+
 def load_jsonc(file_path: Path) -> dict:
     with file_path.open(encoding='utf-8-sig') as f:
         return pyjson5.load(f)
@@ -682,6 +686,8 @@ def validate_town_map_semantics(data: dict, schema_path: Path) -> None:
             raise ValidationError("feature symbol must be exactly one printable ASCII character", path=["featureRules", rule_index, "symbol"])
         definition = rule["definition"]
         for field in ("terrain", "monster", "object", "ego", "artifact", "trap"):
+            if field == "ego" and field not in definition:
+                continue
             if any(not (" " <= character <= "~") for character in definition[field]):
                 raise ValidationError("feature field must contain printable ASCII characters", path=["featureRules", rule_index, "definition", field])
             if any(delimiter in definition[field] for delimiter in (":", "/", "\\", "\r", "\n")):
@@ -694,6 +700,8 @@ def validate_town_map_semantics(data: dict, schema_path: Path) -> None:
             if terrain_tag != "*" and terrain_tag not in valid_terrain_tags:
                 raise ValidationError("unknown terrain tag", path=["featureRules", rule_index, "definition", field])
         for field, pattern in feature_tokens.items():
+            if field == "ego" and field not in definition:
+                continue
             token = definition[field]
             if re.fullmatch(pattern, token) is None:
                 raise ValidationError("invalid fixed-map token", path=["featureRules", rule_index, "definition", field])
@@ -710,7 +718,7 @@ def validate_town_map_semantics(data: dict, schema_path: Path) -> None:
                     else:
                         minimum, maximum = -32768, 32767
                 else:
-                    minimum, maximum = -2147483648, 2147483647
+                    minimum, maximum = 1, MAX_EGO_ID
                 if integer < minimum or integer > maximum:
                     raise ValidationError("fixed-map token exceeds the reader's integer range", path=["featureRules", rule_index, "definition", field])
 

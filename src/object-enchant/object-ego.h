@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstdint>
+#include <limits>
 #include <map>
 #include <string>
 #include <vector>
@@ -10,6 +12,9 @@
 #include "object-enchant/trg-types.h"
 #include "system/angband.h"
 #include "util/flag-group.h"
+
+// エゴのIDは定義とセーブで1バイトに収まる範囲とする。0はエゴなし。
+constexpr auto MAX_EGO_ID = std::numeric_limits<uint8_t>::max();
 
 enum class EgoType {
     NONE = 0,

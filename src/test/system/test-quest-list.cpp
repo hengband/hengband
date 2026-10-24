@@ -890,7 +890,7 @@ TEST_CASE("QuestList preserves legend fixed references and generation parameters
 {
     const std::vector<nlohmann::json> cells{
         { { "ego", 123 } },
-        { { "ego", -1 } },
+        { { "ego", 255 } },
         { { "monster", 1 }, { "object", 1 }, { "ego", 1 }, { "artifact", 1 } },
         { { "monster", -1 } },
         { { "monster", { { "cloneOf", 1 } } } },
@@ -899,7 +899,7 @@ TEST_CASE("QuestList preserves legend fixed references and generation parameters
         { { "artifact", { { "random", true }, { "id", 1 } } } },
         { { "artifact", { { "random", true } } } },
         { { "object", { { "questReward", true } } }, { "artifact", { { "questReward", true } } } },
-        { { "monster", 0 }, { "object", 0 }, { "ego", 0 }, { "artifact", 0 } },
+        { { "monster", 0 }, { "object", 0 }, { "artifact", 0 } },
         { { "terrain", "QUEST_UP" }, { "special", 2 } },
         { { "terrain", "QUEST_ENTER" }, { "special", 2 } },
         { { "terrain", "QUEST_EXIT" }, { "special", 0 } },

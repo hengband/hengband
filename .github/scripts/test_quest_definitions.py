@@ -7,7 +7,7 @@ import unittest
 
 from json_validation_test_helper import (dungeon_id_maximum, fixed_artifact_id_schema_maximum, monrace_id_schema_maximum,
                                          quest_id_schema_maximum, validate_document)
-from validate_json import build_schema_registry, load_all_schemas, load_jsonc, validate_one
+from validate_json import MAX_EGO_ID, build_schema_registry, load_all_schemas, load_jsonc, validate_one
 
 
 class QuestInt16RangeTest(unittest.TestCase):
@@ -67,17 +67,26 @@ class QuestInt16RangeTest(unittest.TestCase):
 
     def test_legend_ego_follows_ego_id_range(self):
         # エゴのIDはエゴ定義でもセーブでも1バイトに収まる 1〜255 に限られる。
+        shared = self.loaded[next(path for path in self.loaded if path.name == "QuestGrid.schema.json")]
+        plain, random = shared["$defs"]["egoSpec"]["oneOf"]
+        self.assertEqual((plain["minimum"], plain["maximum"]), (1, MAX_EGO_ID))
+        self.assertEqual((random["properties"]["id"]["minimum"], random["properties"]["id"]["maximum"]), (1, MAX_EGO_ID))
         cases = (
             lambda value: {"ego": value},
             lambda value: {"ego": {"random": True, "id": value}},
         )
         for make_cell in cases:
-            with self.subTest(cell=make_cell(256)):
-                ok, message = self.validate("Quest", self.quest(make_cell(255)))
-                self.assert_schema_accepted(ok, message)
-                ok, message = self.validate("Quest", self.quest(make_cell(256)))
-                self.assertFalse(ok, message)
-                self.assertIn("256 is greater than the maximum of 255", message)
+            for schema_name in ("Quest", "QuestPreferences"):
+                for value in (1, 255, 0, 256, -1):
+                    with self.subTest(schema=schema_name, cell=make_cell(value)):
+                        document = self.quest(make_cell(value)) if schema_name == "Quest" else {"version": 1, "legend": {"#": make_cell(value)}}
+                        ok, message = self.validate(schema_name, document)
+                        if value in (1, 255):
+                            self.assert_schema_accepted(ok, message)
+                        else:
+                            self.assertFalse(ok, message)
+                            reason = "256 is greater than the maximum of 255" if value == 256 else f"{value} is less than the minimum of 1"
+                            self.assertIn(reason, message)
 
     def test_special_follows_reader_signed_int16_range(self):
         for accepted, rejected in ((32767, 32768), (-32768, -32769)):
