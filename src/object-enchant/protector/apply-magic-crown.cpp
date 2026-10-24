@@ -41,6 +41,16 @@ void CrownEnchanter::apply_magic()
  */
 void CrownEnchanter::give_ego_index()
 {
+    if (this->has_ego_request()) {
+        if (const auto &ego = this->get_specific_ego_request()) {
+            this->o_ptr->ego_idx = *ego;
+        } else {
+            this->select_ego();
+        }
+        this->adjust_for_ego();
+        return;
+    }
+
     if ((this->power > 2) || one_in_(20)) {
         become_random_artifact(this->player_ptr, this->o_ptr, false);
         return;

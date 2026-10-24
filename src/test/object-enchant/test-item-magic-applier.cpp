@@ -1,3 +1,4 @@
+#include "artifact/random-art-effects.h"
 #include "inventory/inventory-slot-types.h"
 #include "object-enchant/item-apply-magic.h"
 #include "object-enchant/item-magic-applier.h"
@@ -29,6 +30,7 @@
 #include <cstdint>
 #include <doctest/doctest.h>
 #include <functional>
+#include <set>
 #include <utility>
 
 namespace {
@@ -64,6 +66,12 @@ const std::array BASE_SPECS{
     BaseSpec{ 54, ItemKindType::POTION, 1 },
     BaseSpec{ 55, ItemKindType::RING, 1 },
 };
+
+// BASE_SPECS の先頭から、エゴを付けられる種類（フェアノールのランプまで）の数。残りはエゴの置き換え先とエゴを付けない品。
+constexpr size_t EGO_APPLICABLE_SPEC_COUNT = 17;
+
+// 可視のエゴに足される弱いテレパシーの候補（add_low_telepathy() の付けるフラグ）。
+const TrFlags LOW_TELEPATHY_FLAGS{ TR_TELEPATHY, TR_ESP_EVIL, TR_ESP_NONLIVING, TR_ESP_ANIMAL, TR_ESP_UNDEAD, TR_ESP_DEMON, TR_ESP_ORC, TR_ESP_TROLL, TR_ESP_GIANT, TR_ESP_DRAGON, TR_ESP_HUMAN, TR_ESP_GOOD, TR_ESP_UNIQUE };
 
 class MagicFixture {
 public:
@@ -244,6 +252,135 @@ TEST_CASE("natural enchanters keep the generated values and RNG consumption")
             CHECK(item.damage_dice.sides == 5);
             CHECK(item.art_flags.str() == expected.art_flags[depth_index].str());
             CHECK(get_game_rng()() == expected.next[depth_index]);
+        }
+    }
+}
+
+TEST_CASE("execute_with_ego applies the specified ego with its special adjustments")
+{
+    MagicFixture fixture;
+    egos_info.at(EgoType::DF).act_idx = RandomArtActType::SUNLIGHT;
+    struct Specified {
+        short base_id;
+        EgoType ego;
+    };
+    const std::array cases{
+        Specified{ 42, EgoType::DF },
+        Specified{ 42, EgoType::SHARPNESS },
+        Specified{ 43, EgoType::EARTHQUAKES },
+        Specified{ 44, EgoType::DF },
+        Specified{ 84, EgoType::DIGGING },
+        Specified{ 45, EgoType::ACCURACY },
+        Specified{ 46, EgoType::HURT_EVIL },
+        Specified{ 47, EgoType::S_DWARVEN },
+        Specified{ 122, EgoType::ENDURE_FIRE },
+        Specified{ 94, EgoType::INFRAVISION },
+        Specified{ 94, EgoType::SEEING },
+        Specified{ 48, EgoType::SEEING },
+        Specified{ 48, EgoType::TELEPATHY },
+        Specified{ 49, EgoType::DWARVEN },
+        Specified{ 101, EgoType::DRUID },
+        Specified{ 101, EgoType::PERMANENCE },
+        Specified{ 101, EgoType::TWILIGHT },
+        Specified{ 50, EgoType::QUIET },
+        Specified{ 51, EgoType::FREE_ACTION },
+        Specified{ 52, EgoType::STEALTH },
+        Specified{ 53, EgoType::LITE_LONG },
+        Specified{ 582, EgoType::LITE_SHINE },
+    };
+    auto saw_seeing_telepathy = false;
+    auto saw_earthquakes_blows = false;
+    for (const auto depth : std::array<DEPTH, 3>{ { 1, 40, 80 } }) {
+        for (const auto seed : { 1U, 42U, 12345U, 98765U }) {
+            for (const auto &entry : cases) {
+                CAPTURE(entry.base_id);
+                CAPTURE(static_cast<int>(entry.ego));
+                CAPTURE(depth);
+                CAPTURE(seed);
+                const auto rng = test::scoped_rng(seed);
+                ItemEntity item(entry.base_id);
+                REQUIRE(can_apply_ego(item.bi_key, entry.ego));
+                ItemMagicApplier(&fixture.player, &item, depth, AM_NO_FIXED_ART | AM_GOOD).execute_with_ego(entry.ego);
+                CHECK(item.ego_idx == entry.ego);
+                CHECK(!item.is_random_artifact());
+                CHECK(!item.is_fixed_artifact());
+                CHECK(item.activation_id == egos_info.at(entry.ego).act_idx);
+                CHECK(item.curse_flags.none());
+                if (entry.ego == EgoType::SHARPNESS) {
+                    CHECK(item.pval > 0);
+                }
+                if (entry.ego == EgoType::EARTHQUAKES) {
+                    // 浅い階では pval の m_bonus() が 0 になり得るので、効果は深い階でだけ確かめる。
+                    const auto has_blows = item.art_flags.has(TR_BLOWS);
+                    if (depth > 60) {
+                        CHECK((has_blows || (item.pval > 0)));
+                    }
+                    if (has_blows) {
+                        CHECK(depth > 60);
+                        saw_earthquakes_blows = true;
+                    }
+                }
+                if (entry.ego == EgoType::SEEING) {
+                    saw_seeing_telepathy |= item.art_flags.has_any_of(LOW_TELEPATHY_FLAGS);
+                }
+                if (entry.ego == EgoType::TWILIGHT) {
+                    CHECK(item.bi_id == 645);
+                    CHECK(item.bi_key == BaseitemKey(ItemKindType::SOFT_ARMOR, SV_TWILIGHT_ROBE));
+                    CHECK(item.ac == 0);
+                } else {
+                    CHECK(item.bi_id == entry.base_id);
+                }
+            }
+        }
+    }
+    CHECK(saw_seeing_telepathy);
+    CHECK(saw_earthquakes_blows);
+}
+
+TEST_CASE("execute_with_random_ego picks exactly the egos can_apply_ego accepts without artifacts")
+{
+    MagicFixture fixture;
+    bool saw_permanence = false;
+    bool saw_twilight = false;
+    std::array<std::set<EgoType>, EGO_APPLICABLE_SPEC_COUNT> picked_egos;
+    for (uint32_t seed = 1; seed <= 1024; ++seed) {
+        for (size_t index = 0; index < EGO_APPLICABLE_SPEC_COUNT; ++index) {
+            const auto &spec = BASE_SPECS[index];
+            CAPTURE(spec.id);
+            CAPTURE(seed);
+            const auto rng = test::scoped_rng(seed);
+            ItemEntity item(spec.id);
+            const auto original_key = item.bi_key;
+            ItemMagicApplier(&fixture.player, &item, 80, AM_NO_FIXED_ART | AM_GOOD).execute_with_random_ego();
+            REQUIRE(item.is_ego());
+            CHECK(!item.is_random_artifact());
+            CHECK(!item.is_fixed_artifact());
+            CHECK(!is_worthless_ego(item.get_ego()));
+            CHECK(can_apply_ego(original_key, item.ego_idx));
+            if (spec.kind == ItemKindType::DIGGING) {
+                CHECK(item.ego_idx == EgoType::DIGGING);
+            }
+            if (item.ego_idx == EgoType::TWILIGHT) {
+                saw_twilight = true;
+                CHECK(item.bi_id == 645);
+                CHECK(item.ac == 0);
+            }
+            saw_permanence |= item.ego_idx == EgoType::PERMANENCE;
+            picked_egos[index].insert(item.ego_idx);
+        }
+    }
+    CHECK(saw_permanence);
+    CHECK(saw_twilight);
+
+    // 逆向きに、can_apply_ego() が通すエゴはすべて enchanter の選択でも選ばれる。
+    for (size_t index = 0; index < EGO_APPLICABLE_SPEC_COUNT; ++index) {
+        const auto &spec = BASE_SPECS[index];
+        CAPTURE(spec.id);
+        const BaseitemKey key(spec.kind, spec.sval);
+        for (const auto &entry : egos_info) {
+            const auto ego = entry.first;
+            CAPTURE(static_cast<int>(ego));
+            CHECK(can_apply_ego(key, ego) == picked_egos[index].contains(ego));
         }
     }
 }

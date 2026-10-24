@@ -31,6 +31,15 @@ ArmorEnchanter::ArmorEnchanter(PlayerType *player_ptr, ItemEntity *o_ptr, DEPTH 
  */
 void ArmorEnchanter::give_ego_index()
 {
+    if (this->has_ego_request()) {
+        if (const auto &ego = this->get_specific_ego_request()) {
+            this->o_ptr->ego_idx = *ego;
+        } else {
+            this->select_ego();
+        }
+        return;
+    }
+
     if ((this->power > 2) || one_in_(20)) {
         become_random_artifact(this->player_ptr, this->o_ptr, false);
         return;

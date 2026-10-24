@@ -39,12 +39,16 @@ void BootsEnchanter::apply_magic()
     }
 
     if (this->power > 1) {
-        if ((this->power > 2) || one_in_(20)) {
+        if (!this->has_ego_request() && ((this->power > 2) || one_in_(20))) {
             become_random_artifact(this->player_ptr, this->o_ptr, false);
             return;
         }
 
-        this->o_ptr->ego_idx = get_random_ego(INVEN_FEET, true);
+        if (const auto &ego = this->get_specific_ego_request()) {
+            this->o_ptr->ego_idx = *ego;
+        } else {
+            this->o_ptr->ego_idx = get_random_ego(INVEN_FEET, true);
+        }
         return;
     }
 
