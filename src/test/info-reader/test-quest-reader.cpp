@@ -499,6 +499,7 @@ TEST_CASE("TerrainList test tag access restores tags after scope and exception")
 
 TEST_CASE("Quest legend integers retain representable signed and unsigned boundaries")
 {
+    const test::ScopedReaderState reader_state;
     test::TerrainListTestAccess terrain_tag(TerrainTag::NONE, 0);
     const std::vector<std::string> paths = {
         "/monster",
@@ -516,10 +517,10 @@ TEST_CASE("Quest legend integers retain representable signed and unsigned bounda
         const auto is_ego = path.starts_with("/ego");
         const auto is_monster_id = path == "/monster" || path == "/monster/cloneOf";
         // エゴのIDはエゴ定義でもセーブでも1バイトに収まる範囲に限られる。
-        const auto maximum = is_ego ? int{ std::numeric_limits<uint8_t>::max() } : int{ std::numeric_limits<int16_t>::max() };
-        const auto minimum = is_ego ? std::numeric_limits<int>::min() : is_monster_id ? -maximum
-                                                                                      : std::numeric_limits<int16_t>::min();
-        const std::vector<nlohmann::json> values = { minimum, 0, static_cast<uint64_t>(maximum) };
+        const auto maximum = is_ego ? int{ MAX_EGO_ID } : int{ std::numeric_limits<int16_t>::max() };
+        const auto minimum = is_ego ? 1 : is_monster_id ? -maximum
+                                                        : std::numeric_limits<int16_t>::min();
+        const std::vector<nlohmann::json> values = { minimum, is_ego ? 1 : 0, static_cast<uint64_t>(maximum) };
         for (const auto &value : values) {
             CAPTURE(path);
             CAPTURE(value);
@@ -548,6 +549,7 @@ TEST_CASE("Quest legend integers retain representable signed and unsigned bounda
 
 TEST_CASE("QuestReader rejects legend integer overflow without publishing output")
 {
+    const test::ScopedReaderState reader_state;
     test::TerrainListTestAccess terrain_tag(TerrainTag::NONE, 0);
     const std::vector<std::string> paths = {
         "/monster",
@@ -564,9 +566,9 @@ TEST_CASE("QuestReader rejects legend integer overflow without publishing output
     for (const auto &path : paths) {
         const auto is_ego = path.starts_with("/ego");
         const auto is_monster_id = path == "/monster" || path == "/monster/cloneOf";
-        const int64_t maximum = is_ego ? std::numeric_limits<uint8_t>::max() : std::numeric_limits<int16_t>::max();
-        const int64_t minimum = is_ego ? std::numeric_limits<int>::min() : is_monster_id ? -maximum
-                                                                                         : std::numeric_limits<int16_t>::min();
+        const int64_t maximum = is_ego ? MAX_EGO_ID : std::numeric_limits<int16_t>::max();
+        const int64_t minimum = is_ego ? 1 : is_monster_id ? -maximum
+                                                           : std::numeric_limits<int16_t>::min();
         std::vector<nlohmann::json> values = {
             minimum - 1,
             maximum + 1,
@@ -576,6 +578,9 @@ TEST_CASE("QuestReader rejects legend integer overflow without publishing output
             std::numeric_limits<uint64_t>::max(),
             uint64_t{ 4294967297 },
         };
+        if (is_ego) {
+            values.emplace_back(-1);
+        }
         if (!is_ego) {
             values.emplace_back(std::numeric_limits<int>::min());
         }

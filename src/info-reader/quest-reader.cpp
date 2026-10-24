@@ -6,6 +6,7 @@
 #include "info-reader/parse-error-types.h"
 #include "info-reader/random-grid-effect-types.h"
 #include "locale/character-encoding.h"
+#include "object-enchant/object-ego.h"
 #include "system/dungeon/quest-definition.h"
 #include "system/dungeon/quest-fixed-map.h"
 #include "system/enums/dungeon/dungeon-id.h"
@@ -26,8 +27,7 @@ namespace {
 constexpr Range LEGEND_SHORT_RANGE(std::numeric_limits<int16_t>::min(), std::numeric_limits<int16_t>::max());
 // 負のモンスターIDは生成時にshortのまま符号反転されるので、最小値は許可しない。
 constexpr Range LEGEND_MONSTER_RANGE(-std::numeric_limits<MONSTER_IDX>::max(), std::numeric_limits<MONSTER_IDX>::max());
-// エゴのIDはエゴ定義でもセーブでも1バイトに収まるため、上限を255とする。
-constexpr Range LEGEND_EGO_RANGE(std::numeric_limits<int>::min(), std::numeric_limits<uint8_t>::max());
+constexpr Range LEGEND_EGO_RANGE(1, MAX_EGO_ID);
 constexpr Range QUEST_INTEGER_RANGE(std::numeric_limits<int>::min(), std::numeric_limits<int>::max());
 // メタデータはintで保持するが、対象モンスターと報酬は実行時にshort基底のIDへ変換される。
 // どちらも 0 は指定なしで、ほかの定義と同じくIDの型から決めた上限までとする。

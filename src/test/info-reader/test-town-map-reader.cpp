@@ -187,7 +187,7 @@ nlohmann::json make_town_map()
 {
     return {
         { "version", 2 },
-        { "featureRules", { { { "symbol", "#" }, { "definition", { { "terrain", "WALL" }, { "caveInfo", 0 }, { "monster", "0" }, { "object", "0" }, { "ego", "0" }, { "artifact", "0" }, { "trap", "NONE" }, { "special", 0 } } } } } },
+        { "featureRules", { { { "symbol", "#" }, { "definition", { { "terrain", "WALL" }, { "caveInfo", 0 }, { "monster", "0" }, { "object", "0" }, { "artifact", "0" }, { "trap", "NONE" }, { "special", 0 } } } } } },
         { "buildingRules", { { { "index", 1 }, { "locale", "en" }, { "command", "N" }, { "fields", { "Building", "Owner", "Race" } } } } },
         { "mapVariants", { { { "rows", { "###", "#.#", "###" } } } } },
         { "startingPositions", { { { "y", 1 }, { "x", 1 } } } },
@@ -350,12 +350,21 @@ TEST_CASE("TownMapReader validates root and conditions on every rule")
 
 TEST_CASE("TownMapReader validates feature token grammar and narrowing bounds")
 {
-    for (const auto *field : { "monster", "object", "ego", "artifact" }) {
+    const test::ScopedReaderState reader_state;
+    for (const auto *field : { "monster", "object", "artifact" }) {
         for (const auto *token : { "0", "-1", "*", "*32767", "32767" }) {
             auto data = make_town_map();
             data["featureRules"][0]["definition"][field] = token;
             CHECK(read_town(data).has_value());
         }
+    }
+    // エゴの ID は 1〜255 なので、受け付ける値の一覧を分ける
+    for (const auto *token : { "1", "255", "*", "*255" }) {
+        auto data = make_town_map();
+        data["featureRules"][0]["definition"]["ego"] = token;
+        CHECK(read_town(data).has_value());
+    }
+    for (const auto *field : { "monster", "object", "ego", "artifact" }) {
         for (const auto *token : { "", "1x", "+1", "*-1", "2147483648", "0:1", "0/1", "0\\1" }) {
             auto data = make_town_map();
             data["featureRules"][0]["when"] = "0"; // Inactive rules must still be validated.
@@ -374,11 +383,56 @@ TEST_CASE("TownMapReader validates feature token grammar and narrowing bounds")
     data["featureRules"][0]["definition"]["monster"] = "c32767";
     data["featureRules"][0]["definition"]["object"] = "!";
     data["featureRules"][0]["definition"]["artifact"] = "!";
-    data["featureRules"][0]["definition"]["ego"] = "-2147483648";
+    data["featureRules"][0]["definition"]["ego"] = "255";
     CHECK(read_town(data).has_value());
     for (const auto *token : { "c", "c-1", "c32768", "-32768", "!" }) {
         data["featureRules"][0]["definition"]["monster"] = token;
         CHECK(test::to_error_code(read_town(data)) == ParseErrorType::INVALID_VALUE);
+    }
+}
+
+TEST_CASE("TownMapReader ego is optional and uses positive byte IDs")
+{
+    const test::ScopedReaderState reader_state;
+    auto data = make_town_map();
+    TownMapDefinition definition;
+    REQUIRE(TownMapReader(data).read(definition, 3, 3).has_value());
+    REQUIRE(definition.features.size() == 1);
+    CHECK(definition.features.front().cell.grid.ego == EgoType::NONE);
+    CHECK((definition.features.front().cell.grid.random & RANDOM_EGO) == 0);
+
+    for (const auto *token : { "1", "255", "0001", "*", "*1", "*255", "*000255" }) {
+        CAPTURE(std::string(token));
+        data["featureRules"][0]["definition"]["ego"] = token;
+        REQUIRE(TownMapReader(data).read(definition, 3, 3).has_value());
+        const std::string_view text(token);
+        const auto expected = text == "*" ? 0 : text.ends_with("255") ? 255
+                                                                      : 1;
+        CHECK(enum2i(definition.features.front().cell.grid.ego) == expected);
+        CHECK(definition.features.front().cell.grid.random == (text.starts_with('*') ? RANDOM_EGO : RANDOM_NONE));
+    }
+
+    for (const auto *token : { "0", "-0", "0000", "256", "-1", "-2147483648", "*0", "*256", "*-1", "**", "+1", "*+1", "!", "c1" }) {
+        CAPTURE(std::string(token));
+        auto invalid = data;
+        invalid["featureRules"][0]["symbol"] = ".";
+        invalid["buildingRules"][0]["fields"][0] = "Changed";
+        invalid["mapVariants"][0]["rows"][0] = "...";
+        invalid["startingPositions"][0]["x"] = 2;
+        invalid["featureRules"][0]["definition"]["ego"] = token;
+        for (const bool only_buildings : { false, true }) {
+            CHECK(test::to_error_code(TownMapReader(invalid).read(definition, 3, 3, only_buildings)) == ParseErrorType::INVALID_VALUE);
+            REQUIRE(definition.features.size() == 1);
+            REQUIRE(definition.buildings.size() == 1);
+            REQUIRE(definition.maps.size() == 1);
+            REQUIRE(definition.starts.size() == 1);
+            CHECK(definition.features.front().symbol == '#');
+            CHECK(enum2i(definition.features.front().cell.grid.ego) == MAX_EGO_ID);
+            CHECK(definition.features.front().cell.grid.random == RANDOM_EGO);
+            CHECK(std::get<TownMapBuildingNames>(definition.buildings.front().directive).name == "Building");
+            CHECK(definition.maps.front().rows.front() == "###");
+            CHECK(definition.starts.front().x == 1);
+        }
     }
 }
 
@@ -733,7 +787,7 @@ TEST_CASE("TownMapReader validates feature symbols and token types")
         data["featureRules"][0]["definition"][field] = 0;
         CHECK(test::to_error_code(read_town(data)) == ParseErrorType::INVALID_TYPE);
         data["featureRules"][0]["definition"].erase(field);
-        CHECK(test::to_error_code(read_town(data)) == ParseErrorType::INVALID_TYPE);
+        CHECK(test::to_error_code(read_town(data)) == (std::string_view(field) == "ego" ? ParseErrorType::NONE : ParseErrorType::INVALID_TYPE));
     }
 }
 
@@ -1191,7 +1245,7 @@ TEST_CASE("TownMapReader applies typed feature token values and random flags")
         short value;
         int random;
     };
-    const auto random_tokens = RANDOM_MONSTER | RANDOM_OBJECT | RANDOM_EGO | RANDOM_ARTIFACT;
+    const auto random_tokens = RANDOM_MONSTER | RANDOM_OBJECT | RANDOM_ARTIFACT;
     for (const auto &[token, value, random] : { TokenCase{ "0", 0, 0 }, TokenCase{ "-1", -1, 0 },
              TokenCase{ "*", 0, random_tokens }, TokenCase{ "*32767", 32767, random_tokens }, TokenCase{ "32767", 32767, 0 } }) {
         CAPTURE(std::string(token));
@@ -1201,12 +1255,12 @@ TEST_CASE("TownMapReader applies typed feature token values and random flags")
         fields["trap"] = "TOWN_FEATURE_TEST_TRAP";
         fields["caveInfo"] = std::numeric_limits<uint16_t>::max();
         fields["special"] = -32768;
-        for (const auto *field : { "monster", "object", "ego", "artifact" }) {
+        for (const auto *field : { "monster", "object", "artifact" }) {
             fields[field] = token;
         }
         TownMapDefinition definition;
         REQUIRE(TownMapReader(data).read(definition, 3, 3).has_value());
-        const dungeon_grid expected{ .feature = state.floor_id(), .monster = value, .object = value, .ego = i2enum<EgoType>(value), .artifact = i2enum<FixedArtifactId>(value), .trap = state.trap_id(), .cave_info = std::numeric_limits<uint16_t>::max(), .special = -32768, .random = random };
+        const dungeon_grid expected{ .feature = state.floor_id(), .monster = value, .object = value, .ego = EgoType::NONE, .artifact = i2enum<FixedArtifactId>(value), .trap = state.trap_id(), .cave_info = std::numeric_limits<uint16_t>::max(), .special = -32768, .random = random };
         letter['#'] = {};
         REQUIRE(apply_town_map_feature(floor, definition.features.front()).has_value());
         check_same_grid(letter['#'], expected);
@@ -1271,11 +1325,11 @@ TEST_CASE("TownMapReader applies random terrain trap clones and reward placehold
     fields["monster"] = "c32767";
     fields["object"] = "!";
     fields["artifact"] = "!";
-    fields["ego"] = "-2147483648";
+    fields["ego"] = "255";
     fields["special"] = 32767;
     TownMapDefinition definition;
     REQUIRE(TownMapReader(data).read(definition, 3, 3).has_value());
-    const dungeon_grid expected{ .feature = 0, .monster = -32767, .object = 0, .ego = i2enum<EgoType>(std::numeric_limits<int>::min()), .artifact = FixedArtifactId::NONE, .trap = 0, .cave_info = 0, .special = 32767, .random = RANDOM_FEATURE | RANDOM_TRAP };
+    const dungeon_grid expected{ .feature = 0, .monster = -32767, .object = 0, .ego = i2enum<EgoType>(255), .artifact = FixedArtifactId::NONE, .trap = 0, .cave_info = 0, .special = 32767, .random = RANDOM_FEATURE | RANDOM_TRAP };
     letter['#'] = {};
     REQUIRE(apply_town_map_feature(floor, definition.features.front()).has_value());
     check_same_grid(letter['#'], expected);
