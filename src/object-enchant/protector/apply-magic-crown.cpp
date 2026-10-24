@@ -55,18 +55,8 @@ void CrownEnchanter::select_ego()
 {
     while (true) {
         this->o_ptr->ego_idx = get_random_ego(INVEN_HEAD, true);
-        switch (this->o_ptr->ego_idx) {
-        case EgoType::TELEPATHY:
-        case EgoType::MAGI:
-        case EgoType::MIGHT:
-        case EgoType::REGENERATION:
-        case EgoType::LORDLINESS:
-        case EgoType::BASILISK:
+        if (is_crown_ego(this->o_ptr->ego_idx)) {
             return;
-        case EgoType::SEEING:
-            return;
-        default:
-            continue;
         }
     }
 }

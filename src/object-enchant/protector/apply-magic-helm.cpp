@@ -64,17 +64,8 @@ void HelmEnchanter::select_ego()
 {
     while (true) {
         this->o_ptr->ego_idx = get_random_ego(INVEN_HEAD, true);
-        switch (this->o_ptr->ego_idx) {
-        case EgoType::BRILLIANCE:
-        case EgoType::DARK:
-        case EgoType::INFRAVISION:
-        case EgoType::H_PROTECTION:
-        case EgoType::LITE:
+        if (is_helm_ego(this->o_ptr->ego_idx)) {
             return;
-        case EgoType::SEEING:
-            return;
-        default:
-            continue;
         }
     }
 }

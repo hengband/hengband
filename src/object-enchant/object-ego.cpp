@@ -5,13 +5,17 @@
  */
 #include "object-enchant/object-ego.h"
 #include "artifact/random-art-effects.h"
+#include "inventory/inventory-slot-types.h"
 #include "object-enchant/object-boost.h"
 #include "object-enchant/object-curse.h"
 #include "object-enchant/trc-types.h"
 #include "object-hook/hook-weapon.h"
 #include "object/tval-types.h"
+#include "sv-definition/sv-armor-types.h"
+#include "sv-definition/sv-lite-types.h"
 #include "sv-definition/sv-protector-types.h"
 #include "sv-definition/sv-weapon-types.h"
+#include "system/baseitem/baseitem-key.h"
 #include "system/item/item-entity.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
@@ -365,4 +369,158 @@ bool is_worthless_ego(const EgoItemDefinition &ego)
 {
     const auto curses = { ItemGenerationTraitType::CURSED, ItemGenerationTraitType::HEAVY_CURSE, ItemGenerationTraitType::PERMA_CURSE };
     return ego.rating == 0 || ego.gen_flags.has_any_of(curses);
+}
+
+/*!
+ * @brief 兜に付くよいエゴか判定する。
+ * @param ego 判定するエゴ
+ * @return 兜に付くよいエゴなら true
+ * @details HelmEnchanter::select_ego() が抽選したエゴを選ぶときと、can_apply_ego() で使う。
+ */
+bool is_helm_ego(EgoType ego)
+{
+    switch (ego) {
+    case EgoType::BRILLIANCE:
+    case EgoType::DARK:
+    case EgoType::INFRAVISION:
+    case EgoType::H_PROTECTION:
+    case EgoType::LITE:
+    case EgoType::SEEING:
+        return true;
+    default:
+        return false;
+    }
+}
+
+/*!
+ * @brief 冠に付くよいエゴか判定する。
+ * @param ego 判定するエゴ
+ * @return 冠に付くよいエゴなら true
+ * @details CrownEnchanter::select_ego() が抽選したエゴを選ぶときと、can_apply_ego() で使う。
+ */
+bool is_crown_ego(EgoType ego)
+{
+    switch (ego) {
+    case EgoType::TELEPATHY:
+    case EgoType::MAGI:
+    case EgoType::MIGHT:
+    case EgoType::REGENERATION:
+    case EgoType::LORDLINESS:
+    case EgoType::BASILISK:
+    case EgoType::SEEING:
+        return true;
+    default:
+        return false;
+    }
+}
+
+/*!
+ * @brief 部位と種類別の制限から、指定したよいエゴを付けられるか判定する。
+ * @param key エゴを付けるベースアイテムの種類
+ * @param ego 付けたいエゴ
+ * @return エゴが定義済みのよいエゴで、部位が合い、種類別の除外にも当たらなければ true
+ * @details 兜と冠は、それぞれの enchanter が選ぶエゴだけを通す。
+ * 穴掘りのエゴは利き手の部位だが、希少度 0 で抽選されず掘削道具にだけ付くので、剣・鈍器・長柄には通さない。
+ * ドラゴンの兜・盾・靴・籠手は、自然生成では 3 回に 1 回エゴが付くが、エゴを要求しても enchanter が
+ * エゴを付けずに戻ることがあるので拒む。
+ */
+bool can_apply_ego(const BaseitemKey &key, EgoType ego)
+{
+    if (ego == EgoType::NONE) {
+        return false;
+    }
+    const auto it = egos_info.find(ego);
+    if ((it == egos_info.end()) || is_worthless_ego(it->second)) {
+        return false;
+    }
+    const auto &ego_definition = it->second;
+    const auto tval = key.tval();
+    const auto sval = key.sval();
+    INVENTORY_IDX slot{};
+    if (ego == EgoType::DIGGING && tval != ItemKindType::DIGGING) {
+        return false;
+    }
+    switch (tval) {
+    case ItemKindType::SWORD:
+        if (sval == SV_POISON_NEEDLE || sval == SV_DIAMOND_EDGE || ego == EgoType::EARTHQUAKES) {
+            return false;
+        }
+        slot = INVEN_MAIN_HAND;
+        break;
+    case ItemKindType::HAFTED:
+        if (ego == EgoType::SHARPNESS) {
+            return false;
+        }
+        slot = INVEN_MAIN_HAND;
+        break;
+    case ItemKindType::POLEARM:
+        if (sval == SV_DEATH_SCYTHE || ego == EgoType::SHARPNESS || ego == EgoType::EARTHQUAKES) {
+            return false;
+        }
+        slot = INVEN_MAIN_HAND;
+        break;
+    case ItemKindType::DIGGING:
+        if (ego != EgoType::DIGGING) {
+            return false;
+        }
+        slot = INVEN_MAIN_HAND;
+        break;
+    case ItemKindType::BOW:
+        slot = INVEN_BOW;
+        break;
+    case ItemKindType::SHOT:
+    case ItemKindType::ARROW:
+    case ItemKindType::BOLT:
+        slot = INVEN_AMMO;
+        break;
+    case ItemKindType::SOFT_ARMOR:
+    case ItemKindType::HARD_ARMOR:
+        if ((ego == EgoType::DWARVEN && tval != ItemKindType::HARD_ARMOR) || (ego == EgoType::DRUID && tval != ItemKindType::SOFT_ARMOR) || ((ego == EgoType::PERMANENCE || ego == EgoType::TWILIGHT) && (tval != ItemKindType::SOFT_ARMOR || sval != SV_ROBE))) {
+            return false;
+        }
+        slot = INVEN_BODY;
+        break;
+    case ItemKindType::SHIELD:
+        if (sval == SV_DRAGON_SHIELD || (ego == EgoType::S_DWARVEN && sval != SV_SMALL_METAL_SHIELD && sval != SV_LARGE_METAL_SHIELD) || (ego == EgoType::REFLECTION && sval == SV_MIRROR_SHIELD)) {
+            return false;
+        }
+        slot = INVEN_SUB_HAND;
+        break;
+    case ItemKindType::HELM:
+        if (sval == SV_DRAGON_HELM || !is_helm_ego(ego)) {
+            return false;
+        }
+        slot = INVEN_HEAD;
+        break;
+    case ItemKindType::CROWN:
+        if (!is_crown_ego(ego)) {
+            return false;
+        }
+        slot = INVEN_HEAD;
+        break;
+    case ItemKindType::BOOTS:
+        if (sval == SV_PAIR_OF_DRAGON_GREAVE) {
+            return false;
+        }
+        slot = INVEN_FEET;
+        break;
+    case ItemKindType::GLOVES:
+        if (sval == SV_SET_OF_DRAGON_GLOVES) {
+            return false;
+        }
+        slot = INVEN_ARMS;
+        break;
+    case ItemKindType::CLOAK:
+        slot = INVEN_OUTER;
+        break;
+    case ItemKindType::LITE:
+        if (sval == SV_LITE_FEANOR && ego == EgoType::LITE_LONG) {
+            return false;
+        }
+        slot = INVEN_LITE;
+        break;
+    default:
+        return false;
+    }
+    return ego_definition.slot == slot;
 }
