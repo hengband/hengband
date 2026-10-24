@@ -139,6 +139,12 @@
     <ClCompile Include="..\..\src\test\autopick\test-autopick-editor-util.cpp">
       <Filter>autopick</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\test\autopick\test-autopick-finder.cpp">
+      <Filter>autopick</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\autopick\test-autopick-reader-writer.cpp">
+      <Filter>autopick</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\test\bot\test-bot-json-output.cpp">
       <Filter>bot</Filter>
     </ClCompile>

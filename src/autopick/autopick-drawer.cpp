@@ -32,15 +32,15 @@ constexpr std::string_view AUTOREGISTER_DIRECTIVE = "$AUTOREGISTER";
 void update_autopick_expression_states(PlayerType *player_ptr, AutopickTextBody *tb)
 {
     const auto edited_line = tb->dirty_line;
-    const auto include_edited = (edited_line >= 0) && (static_cast<size_t>(edited_line) < tb->lines.size()) &&
-                                tb->lines[edited_line].line && (tb->lines[edited_line].state.has(AutopickEntryStatus::INCLUDE) || tb->lines[edited_line].line->starts_with("%:"));
+    const auto include_edited = tb->has_line(edited_line) &&
+                                (tb->lines[edited_line].state.has(AutopickEntryStatus::INCLUDE) || tb->lines[edited_line].line.starts_with("%:"));
     if (((tb->dirty_flags & (DIRTY_EXPRESSION | DIRTY_ALL)) == 0) && !include_edited) {
         return;
     }
 
     EnumClassFlagGroup<AutopickEntryStatus> state{};
-    for (size_t y = 0; y < tb->lines.size() && tb->lines[y].line; ++y) {
-        std::string_view s(*tb->lines[y].line);
+    for (size_t y = 0; y < tb->lines.size(); ++y) {
+        std::string_view s(tb->lines[y].line);
         if (state.has_not(AutopickEntryStatus::BYPASS) && s.starts_with("%:") &&
             (check_autopick_file_conditions(player_ptr, s.substr(2)) == PREF_EXPRESSION_ERROR)) {
             state = { AutopickEntryStatus::BYPASS, AutopickEntryStatus::EXPRESSION_ERROR };
@@ -155,11 +155,11 @@ void draw_text_editor(PlayerType *player_ptr, AutopickTextBody *tb)
             continue;
         }
 
-        if (!tb->lines[y].line) {
+        if (!tb->has_line(y)) {
             break;
         }
 
-        std::string_view msg(*tb->lines[y].line);
+        std::string_view msg(tb->lines[y].line);
         for (auto j = 0; !msg.empty(); msg.remove_prefix(1), j++) {
             if (j == tb->left) {
                 break;
@@ -196,7 +196,7 @@ void draw_text_editor(PlayerType *player_ptr, AutopickTextBody *tb)
              * 選択範囲の前・選択範囲・選択範囲の後に分けて描く。選択範囲は表示を始める位置 x0 より左を除き、
              * 端が全角文字の途中にあれば (行頭に '!' などを足した場合など)、文字を割らないようにその文字を含める。
              */
-            const std::string_view line(*tb->lines[y].line);
+            const std::string_view line(tb->lines[y].line);
             const auto x0 = line.length() - msg.length();
             auto bx1 = std::max<size_t>(std::min(tb->mx, tb->cx), x0);
             if (is_second_byte_of_kanji(line, static_cast<int>(bx1))) {
@@ -240,10 +240,10 @@ void draw_text_editor(PlayerType *player_ptr, AutopickTextBody *tb)
         str1 = _("検索するパターンがありません(^S で検索)。", "No pattern to search. (Press ^S to search.)");
     } else if (tb->lines[tb->cy].state.has(AutopickEntryStatus::EXPRESSION_ERROR)) {
         str1 = _("条件式エラーのため、この行以降は読み込まれません。", "A condition error prevents loading this and subsequent lines.");
-    } else if ((*tb->lines[tb->cy].line)[0] == '#') {
+    } else if (tb->lines[tb->cy].line[0] == '#') {
         str1 = _("この行はコメントです。", "This line is a comment.");
-    } else if ((*tb->lines[tb->cy].line)[0] && (*tb->lines[tb->cy].line)[1] == ':') {
-        switch ((*tb->lines[tb->cy].line)[0]) {
+    } else if (tb->lines[tb->cy].line[0] && tb->lines[tb->cy].line[1] == ':') {
+        switch (tb->lines[tb->cy].line[0]) {
         case '?':
             str1 = _("この行は条件分岐式です。", "This line is a Conditional Expression.");
             break;
@@ -258,7 +258,7 @@ void draw_text_editor(PlayerType *player_ptr, AutopickTextBody *tb)
             break;
         }
 
-        switch ((*tb->lines[tb->cy].line)[0]) {
+        switch (tb->lines[tb->cy].line[0]) {
         case '?':
             if (tb->lines[tb->cy].state.has(AutopickEntryStatus::BYPASS)) {
                 str2 = _("現在の式の値は「偽(=0)」です。", "The expression is 'False'(=0) currently.");
@@ -277,7 +277,7 @@ void draw_text_editor(PlayerType *player_ptr, AutopickTextBody *tb)
             }
             break;
         }
-    } else if (autopick_new_entry(entry, *tb->lines[tb->cy].line, false)) {
+    } else if (autopick_new_entry(entry, tb->lines[tb->cy].line, false)) {
         std::stringstream ss;
         ss << describe_autopick(*entry);
         if (tb->lines[tb->cy].state.has(AutopickEntryStatus::AUTOREGISTER)) {

@@ -3,13 +3,11 @@
 #include "autopick/autopick-methods-table.h"
 #include "system/angband.h"
 #include "util/flag-group.h"
-#include <cstddef>
 #include <memory>
 #include <string>
 #include <vector>
 
 constexpr auto MAX_LINELEN = 1024;
-constexpr size_t MAX_AUTOPICK_ENTRIES = 6000;
 
 enum class PickType {
     DEFAULT = 0, //!< picktype.prf
@@ -49,17 +47,8 @@ enum class AutopickEntryStatus {
     MAX,
 };
 
-class AutopickEntryLine {
-public:
-    AutopickEntryLine() = default;
-    AutopickEntryLine(const std::string &line, const EnumClassFlagGroup<AutopickEntryStatus> &state); // For tests.
-
-    AutopickEntryLine(const AutopickEntryLine &) = delete;
-    AutopickEntryLine &operator=(const AutopickEntryLine &) = delete;
-    AutopickEntryLine(AutopickEntryLine &&) = default;
-    AutopickEntryLine &operator=(AutopickEntryLine &&) = default;
-
-    std::unique_ptr<std::string> line;
+struct AutopickEntryLine {
+    std::string line;
     EnumClassFlagGroup<AutopickEntryStatus> state;
 };
 
@@ -76,6 +65,9 @@ public:
     void adjust_cursor_column();
     void update_cursor_column_record(EditorCommandId com_id);
     bool is_cursor_on_second_byte_of_kanji() const;
+    bool has_line(int y) const;
+    bool is_last_line(int y) const;
+    void set_lines(std::vector<std::string> new_lines);
 
     int cx;
     int cy;
@@ -109,7 +101,6 @@ public:
 
     bool changed = false;
 
-    int count_line() const;
     std::vector<std::string> get_entry_lines() const;
 };
 
@@ -120,14 +111,3 @@ extern std::vector<autopick_type> autopick_list;
 extern ItemEntity autopick_last_destroyed_object;
 
 bool auto_inscribe_item(ItemEntity &item, int idx);
-
-/*!
- * @brief 最大行数を超えるかチェックする
- * @param count 行数
- * @retval true 最大行数を超える
- * @retval false 最大行数を超えない
- */
-inline bool is_greater_autopick_max_line(size_t count)
-{
-    return count > MAX_AUTOPICK_ENTRIES - 3;
-}

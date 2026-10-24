@@ -25,7 +25,7 @@ void toggle_keyword(AutopickTextBody *tb, BIT_FLAGS flg)
 
     for (int y = by1; y <= by2; y++) {
         autopick_type an_entry, *entry = &an_entry;
-        if (!autopick_new_entry(entry, *tb->lines[y].line, !fixed)) {
+        if (!autopick_new_entry(entry, tb->lines[y].line, !fixed)) {
             continue;
         }
 
@@ -67,7 +67,7 @@ void toggle_keyword(AutopickTextBody *tb, BIT_FLAGS flg)
             entry->remove(flg);
         }
 
-        tb->lines[y].line = std::make_unique<std::string>(autopick_line_from_entry(*entry));
+        tb->lines[y].line = autopick_line_from_entry(*entry);
         tb->dirty_flags |= DIRTY_ALL;
         tb->changed = true;
     }
@@ -92,7 +92,7 @@ void toggle_command_letter(AutopickTextBody *tb, AutopickMethod am)
 
     for (int y = by1; y <= by2; y++) {
         auto wid = 0;
-        if (!autopick_new_entry(entry, *tb->lines[y].line, false)) {
+        if (!autopick_new_entry(entry, tb->lines[y].line, false)) {
             continue;
         }
 
@@ -145,7 +145,7 @@ void toggle_command_letter(AutopickTextBody *tb, AutopickMethod am)
             }
         }
 
-        tb->lines[y].line = std::make_unique<std::string>(autopick_line_from_entry(*entry));
+        tb->lines[y].line = autopick_line_from_entry(*entry);
         tb->dirty_flags |= DIRTY_ALL;
         tb->changed = true;
     }
@@ -166,7 +166,7 @@ void add_keyword(AutopickTextBody *tb, BIT_FLAGS flg)
 
     for (int y = by1; y <= by2; y++) {
         autopick_type an_entry, *entry = &an_entry;
-        if (!autopick_new_entry(entry, *tb->lines[y].line, false)) {
+        if (!autopick_new_entry(entry, tb->lines[y].line, false)) {
             continue;
         }
 
@@ -182,7 +182,7 @@ void add_keyword(AutopickTextBody *tb, BIT_FLAGS flg)
         }
 
         entry->add(flg);
-        tb->lines[y].line = std::make_unique<std::string>(autopick_line_from_entry(*entry));
+        tb->lines[y].line = autopick_line_from_entry(*entry);
         tb->dirty_flags |= DIRTY_ALL;
         tb->changed = true;
     }
@@ -191,22 +191,15 @@ void add_keyword(AutopickTextBody *tb, BIT_FLAGS flg)
 /*!
  * @brief Add an empty line at the last of the file
  * @param tb エディタの状態
- * @return 空行を追加した場合true、最終行が既に空の場合と最大行数に達している場合はfalse
- * @details 行バッファは使用中の行の直後に nullptr の番兵があることを前提に走査されるため、
- * insert_return_code() と同じく最大行数を超えて行を増やしてはならない。
+ * @return 空行を追加した場合true、最終行が既に空の場合はfalse
  */
 bool add_empty_line(AutopickTextBody *tb)
 {
-    const auto num_lines = tb->count_line();
-    if (is_greater_autopick_max_line(num_lines)) {
+    if (tb->lines.back().line.empty()) {
         return false;
     }
 
-    if (tb->lines[num_lines - 1].line->empty()) {
-        return false;
-    }
-
-    tb->lines[num_lines].line = std::make_unique<std::string>();
+    tb->lines.emplace_back();
     tb->dirty_flags |= DIRTY_EXPRESSION;
     tb->changed = true;
     return true;
@@ -229,7 +222,7 @@ void add_str_to_yank(AutopickTextBody *tb, std::string_view str)
  */
 void copy_text_to_yank(AutopickTextBody *tb)
 {
-    const int len = tb->lines[tb->cy].line->length();
+    const int len = tb->lines[tb->cy].line.length();
     if (tb->cx > len) {
         tb->cx = len;
     }
@@ -246,7 +239,7 @@ void copy_text_to_yank(AutopickTextBody *tb)
         int by2 = std::max(tb->my, tb->cy);
 
         for (int y = by1; y <= by2; y++) {
-            add_str_to_yank(tb, *tb->lines[y].line);
+            add_str_to_yank(tb, tb->lines[y].line);
         }
 
         add_str_to_yank(tb, "");
@@ -262,10 +255,10 @@ void copy_text_to_yank(AutopickTextBody *tb)
     }
 
     if ((bx1 == 0) && (bx2 == len)) {
-        add_str_to_yank(tb, *tb->lines[tb->cy].line);
+        add_str_to_yank(tb, tb->lines[tb->cy].line);
         add_str_to_yank(tb, "");
     } else {
-        const std::string_view buf(*tb->lines[tb->cy].line);
+        const std::string_view buf(tb->lines[tb->cy].line);
         add_str_to_yank(tb, buf.substr(bx1, bx2 - bx1));
     }
 
