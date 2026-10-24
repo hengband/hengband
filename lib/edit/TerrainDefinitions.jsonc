@@ -4853,7 +4853,7 @@
       "key": "HEAVY_COLD_ZONE",
       "name": {
         "ja": "極低温帯",
-        "en": "heavy cold zone ",
+        "en": "heavy cold zone",
       },
       "symbol": {
         "character": "^",
