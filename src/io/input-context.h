@@ -126,7 +126,7 @@ using InputDetails = std::variant<std::monostate, StringInputDetails, QuantityIn
  */
 struct InputContext {
     InputKind kind; //!< 入力の種類
-    std::string prompt; //!< 画面に表示したプロンプト (アイテムの選択では、画面の行のうち選ぶ目的の部分)
+    std::string prompt; //!< 画面に表示したプロンプト (前後の空白は除く。アイテムの選択では、画面の行のうち選ぶ目的の部分)
     InputDetails details; //!< 入力の種類ごとの詳細
 };
 

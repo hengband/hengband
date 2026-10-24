@@ -61,7 +61,7 @@
 #include "game-option/disturbance-options.h"
 #include "game-option/text-display-options.h"
 #include "io/command-repeater.h"
-#include "io/input-key-acceptor.h"
+#include "io/input-context.h"
 #include "io/input-key-requester.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
@@ -104,6 +104,9 @@ static tl::optional<BaseitemKey> select_magic_eater(PlayerType *player_ptr, bool
     }
 
     if (use_menu) {
+        const auto prompt = only_browse
+                                ? _("どの種類の魔法を見ますか？", "Which type of magic do you browse?")
+                                : _("どの種類の魔法を使いますか？", "Which type of magic do you use?");
         screen_save();
 
         while (tval == ItemKindType::NONE) {
@@ -117,13 +120,8 @@ static tl::optional<BaseitemKey> select_magic_eater(PlayerType *player_ptr, bool
             prt(fmt::format(" {} rod", (menu_line == 3) ? "> " : "  "), 4, 14);
 #endif
 
-            if (only_browse) {
-                prt(_("どの種類の魔法を見ますか？", "Which type of magic do you browse?"), 0, 0);
-            } else {
-                prt(_("どの種類の魔法を使いますか？", "Which type of magic do you use?"), 0, 0);
-            }
-
-            const auto choice = inkey();
+            prt(prompt, 0, 0);
+            const auto choice = input_key_with_context(InputKind::COMMAND_CHAR, prompt);
             switch (choice) {
             case ESCAPE:
             case 'z':

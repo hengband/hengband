@@ -32,7 +32,6 @@
 #include "term/screen-processor.h"
 #include "timed-effect/timed-effects.h"
 #include "util/int-char-converter.h"
-#include "util/string-processor.h"
 #include "view/display-messages.h"
 #include <fmt/format.h>
 #include <memory>
@@ -394,10 +393,9 @@ bool choose_samurai_stance(PlayerType *player_ptr)
     constexpr auto prompt = _("        どの型で構えますか？", "        Choose Stance: ");
     prt(prompt, 1, 14);
 
-    const auto context_prompt = str_trim(prompt);
     SamuraiStanceType new_stance = SamuraiStanceType::NONE;
     while (true) {
-        choice = input_key_with_context(InputKind::COMMAND_CHAR, context_prompt);
+        choice = input_key_with_context(InputKind::COMMAND_CHAR, prompt);
 
         if (choice == ESCAPE) {
             screen_load();

@@ -22,7 +22,6 @@
 #include "inventory/inventory-slot-types.h"
 #include "io/command-repeater.h"
 #include "io/input-context.h"
-#include "io/input-key-acceptor.h"
 #include "io/input-key-requester.h"
 #include "io/write-diary.h"
 #include "locale/japanese.h"
@@ -522,8 +521,9 @@ static int get_spell(PlayerType *player_ptr, SPELL_IDX *sn, std::string_view pro
 
 /*!
  * @brief プレイヤーの職業が練気術師の時、領域魔法と練気術を切り換える処理のインターフェイス
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param browse_only 魔法と技能の閲覧を行うならばTRUE
- * @return 魔道書を一冊も持っていないならTRUEを返す
+ * @details 魔道書を持っていないときと、盲目や暗闇で魔道書を読めないときに呼ばれ、'w' なら練気術を使う (閲覧する)。
  */
 static void confirm_use_force(PlayerType *player_ptr, bool browse_only)
 {
@@ -532,10 +532,11 @@ static void confirm_use_force(PlayerType *player_ptr, bool browse_only)
         return;
     }
 
-    prt(_("('w'練気術, ESC) 'w'かESCを押してください。 ", "(w for the Force, ESC) Hit 'w' or ESC. "), 0, 0);
+    constexpr auto prompt = _("('w'練気術, ESC) 'w'かESCを押してください。 ", "(w for the Force, ESC) Hit 'w' or ESC. ");
+    prt(prompt, 0, 0);
     char which;
     while (true) {
-        which = inkey();
+        which = input_key_with_context(InputKind::COMMAND_CHAR, prompt);
         if (which == ESCAPE) {
             break;
         }

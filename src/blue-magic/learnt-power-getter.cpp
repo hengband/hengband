@@ -10,7 +10,7 @@
 #include "core/window-redrawer.h"
 #include "game-option/text-display-options.h"
 #include "io/command-repeater.h"
-#include "io/input-key-acceptor.h"
+#include "io/input-context.h"
 #include "io/input-key-requester.h"
 #include "io/screen-util.h"
 #include "main/sound-of-music.h"
@@ -76,6 +76,7 @@ static tl::optional<BlueMagicType> select_blue_magic_type_by_menu()
 {
     auto menu_line = 1;
     tl::optional<BlueMagicType> type;
+    constexpr auto prompt = _("どの種類の魔法を使いますか？", "use which type of magic? ");
 
     screen_save();
 
@@ -85,9 +86,8 @@ static tl::optional<BlueMagicType> select_blue_magic_type_by_menu()
         prt(fmt::format(_(" {} ブレス", " {} breath"), (menu_line == 3) ? _("》", "> ") : "  "), 4, 14);
         prt(fmt::format(_(" {} 召喚", " {} sommoning"), (menu_line == 4) ? _("》", "> ") : "  "), 5, 14);
         prt(fmt::format(_(" {} その他", " {} others"), (menu_line == 5) ? _("》", "> ") : "  "), 6, 14);
-        prt(_("どの種類の魔法を使いますか？", "use which type of magic? "), 0, 0);
-
-        auto choice = inkey();
+        prt(prompt, 0, 0);
+        const auto choice = input_key_with_context(InputKind::COMMAND_CHAR, prompt);
         switch (choice) {
         case ESCAPE:
         case 'z':

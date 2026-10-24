@@ -2831,9 +2831,8 @@ void check_experience(PlayerType *player_ptr)
                     constexpr auto prompt = _("        どの能力値を上げますか？", "        Which stat do you want to raise?");
                     prt(prompt, 1, 14);
 
-                    const auto context_prompt = str_trim(prompt);
                     while (true) {
-                        choice = input_key_with_context(InputKind::COMMAND_CHAR, context_prompt);
+                        choice = input_key_with_context(InputKind::COMMAND_CHAR, prompt);
                         if ((choice >= 'a') && (choice <= 'f')) {
                             break;
                         }

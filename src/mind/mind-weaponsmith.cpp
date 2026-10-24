@@ -8,7 +8,7 @@
 #include "floor/floor-object.h"
 #include "game-option/text-display-options.h"
 #include "io/command-repeater.h"
-#include "io/input-key-acceptor.h"
+#include "io/input-context.h"
 #include "io/input-key-requester.h"
 #include "main/sound-of-music.h"
 #include "object-enchant/tr-types.h"
@@ -74,8 +74,9 @@ static void display_essence(PlayerType *player_ptr)
             prt(fmt::format("{:<11} {:5}", fmt::bytes(name), amount), 2 + num % row_count, 8 + (num / row_count) * column_width);
         }
 
-        prt(fmt::format(_("現在所持しているエッセンス {}/{}", "List of all essences you have. {}/{}"), (page + 1), page_max), 0, 0);
-        const auto key = inkey();
+        const auto prompt = fmt::format(_("現在所持しているエッセンス {}/{}", "List of all essences you have. {}/{}"), (page + 1), page_max);
+        prt(prompt, 0, 0);
+        const auto key = input_key_with_context(InputKind::COMMAND_CHAR, prompt);
         if (key == ESCAPE) {
             break;
         }
@@ -178,9 +179,9 @@ static COMMAND_CODE choose_essence(void)
 #endif
             }
 
-            prt(_("どの種類のエッセンス付加を行いますか？", "Choose from menu."), 0, 0);
-
-            choice = inkey();
+            constexpr auto prompt = _("どの種類のエッセンス付加を行いますか？", "Choose from menu.");
+            prt(prompt, 0, 0);
+            choice = input_key_with_context(InputKind::COMMAND_CHAR, prompt);
             switch (choice) {
             case ESCAPE:
             case 'z':
@@ -560,6 +561,7 @@ void do_cmd_kaji(PlayerType *player_ptr, bool only_browse)
             }
 
             if (use_menu) {
+                const auto prompt = _(only_browse ? "どの種類の技術を調べますか？" : "どの種類の技術を使いますか？", "Choose command from menu.");
                 while (mode == 0) {
 #ifdef JP
                     prt(fmt::format(" {} エッセンス一覧", (menu_line == 1) ? "》" : "  "), 2, 14);
@@ -567,16 +569,15 @@ void do_cmd_kaji(PlayerType *player_ptr, bool only_browse)
                     prt(fmt::format(" {} エッセンス消去", (menu_line == 3) ? "》" : "  "), 4, 14);
                     prt(fmt::format(" {} エッセンス付加", (menu_line == 4) ? "》" : "  "), 5, 14);
                     prt(fmt::format(" {} 武器/防具強化", (menu_line == 5) ? "》" : "  "), 6, 14);
-                    prt(fmt::format("どの種類の技術を{}ますか？", only_browse ? "調べ" : "使い"), 0, 0);
 #else
                     prt(fmt::format(" {} List essences", (menu_line == 1) ? "> " : "  "), 2, 14);
                     prt(fmt::format(" {} Extract essence", (menu_line == 2) ? "> " : "  "), 3, 14);
                     prt(fmt::format(" {} Remove essence", (menu_line == 3) ? "> " : "  "), 4, 14);
                     prt(fmt::format(" {} Add essence", (menu_line == 4) ? "> " : "  "), 5, 14);
                     prt(fmt::format(" {} Enchant weapon/armor", (menu_line == 5) ? "> " : "  "), 6, 14);
-                    prt("Choose command from menu.", 0, 0);
 #endif
-                    const auto choice = inkey();
+                    prt(prompt, 0, 0);
+                    const auto choice = input_key_with_context(InputKind::COMMAND_CHAR, prompt);
                     switch (choice) {
                     case ESCAPE:
                     case 'z':

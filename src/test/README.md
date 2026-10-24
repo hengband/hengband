@@ -328,6 +328,7 @@ TEST_CASE("VaultReader keeps the existing vaults on a parse error")
 `input_string()` やメッセージの `-続く-`（`msg_print()`・`msg_erase()`）のようにキー入力を待つ処理は、`test/scoped-input-term.h` の `test::ScopedInputTerm` を使うと
 テストできます。メモリ上の端末と `PlayerType` を用意してゲームの端末として登録し、端末が入力を待つたびに、
 `expect()` で指定した入力待ちの文脈（`io/input-context.h`）が公開されているかを確かめて、指定したキーを 1 つずつ渡します。
+文脈のプロンプトは前後の空白を除いたものなので、`expect()` には表示する文字列から空白を除いて書きます（下の例の `"Text:"`）。
 キーを使い切った後にさらに入力を待つと、例外でテストが失敗します（入力を待たないことは、`expect()` を呼ばずに処理を呼べば確かめられます）。
 1 つの処理の中でキーに応じて文脈が変わる場合（アイテムの選択で区分を切り替えるなど）は、`expect()` の後に `then_expect()` で、
 続けて待つ入力の文脈とキーを足します。
@@ -345,7 +346,7 @@ TEST_CASE("VaultReader keeps the existing vaults on a parse error")
 TEST_CASE("example: input_string waits for a string")
 {
     test::ScopedInputTerm term;
-    term.expect({ InputKind::STRING, "Text: ", StringInputDetails{ 20, "seed" } }, "\r");
+    term.expect({ InputKind::STRING, "Text:", StringInputDetails{ 20, "seed" } }, "\r");
     CHECK(input_string("Text: ", 20, "seed", false) == "seed");
 }
 ```

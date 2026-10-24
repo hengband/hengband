@@ -10,6 +10,7 @@
 
 namespace {
 constexpr auto PROMPT = "Which? ";
+constexpr auto PROMPT_IN_CONTEXT = "Which?"; //!< 文脈では前後の空白を除く
 
 /*!
  * @brief 指定したスロットに、AllMatchItemTester で選べるアイテムを置く
@@ -23,7 +24,7 @@ void put_item(PlayerType &player, int slot)
 
 InputContext item_context(ItemInputDetails details)
 {
-    return { InputKind::ITEM, PROMPT, details };
+    return { InputKind::ITEM, PROMPT_IN_CONTEXT, details };
 }
 }
 
