@@ -46,6 +46,13 @@ void CrownEnchanter::give_ego_index()
         return;
     }
 
+    this->select_ego();
+    this->adjust_for_ego();
+}
+
+/*! @brief 種類に合うエゴを選択する。 */
+void CrownEnchanter::select_ego()
+{
     while (true) {
         this->o_ptr->ego_idx = get_random_ego(INVEN_HEAD, true);
         switch (this->o_ptr->ego_idx) {
@@ -57,10 +64,6 @@ void CrownEnchanter::give_ego_index()
         case EgoType::BASILISK:
             return;
         case EgoType::SEEING:
-            if (one_in_(3)) {
-                add_low_telepathy(this->o_ptr);
-            }
-
             return;
         default:
             continue;
@@ -78,5 +81,13 @@ void CrownEnchanter::give_cursed()
         default:
             continue;
         }
+    }
+}
+
+/*! @brief 可視のエゴに弱いテレパシーを追加する。 */
+void CrownEnchanter::adjust_for_ego()
+{
+    if ((this->o_ptr->ego_idx == EgoType::SEEING) && one_in_(3)) {
+        add_low_telepathy(this->o_ptr);
     }
 }

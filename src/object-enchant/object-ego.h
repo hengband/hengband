@@ -287,3 +287,5 @@ class ItemEntity;
 class PlayerType;
 EgoType get_random_ego(byte slot, bool good);
 void apply_ego(ItemEntity *o_ptr, DEPTH lev);
+
+bool is_worthless_ego(const EgoItemDefinition &ego);

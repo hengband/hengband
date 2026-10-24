@@ -55,6 +55,13 @@ void HelmEnchanter::give_ego_index()
         return;
     }
 
+    this->select_ego();
+    this->adjust_for_ego();
+}
+
+/*! @brief 種類に合うエゴを選択する。 */
+void HelmEnchanter::select_ego()
+{
     while (true) {
         this->o_ptr->ego_idx = get_random_ego(INVEN_HEAD, true);
         switch (this->o_ptr->ego_idx) {
@@ -65,10 +72,6 @@ void HelmEnchanter::give_ego_index()
         case EgoType::LITE:
             return;
         case EgoType::SEEING:
-            if (one_in_(7)) {
-                add_low_telepathy(this->o_ptr);
-            }
-
             return;
         default:
             continue;
@@ -86,5 +89,13 @@ void HelmEnchanter::give_cursed()
         default:
             continue;
         }
+    }
+}
+
+/*! @brief 可視のエゴに弱いテレパシーを追加する。 */
+void HelmEnchanter::adjust_for_ego()
+{
+    if ((this->o_ptr->ego_idx == EgoType::SEEING) && one_in_(7)) {
+        add_low_telepathy(this->o_ptr);
     }
 }

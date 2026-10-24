@@ -13,6 +13,7 @@ public:
 protected:
     void sval_enchant() override;
     void give_high_ego_index() override;
+    void adjust_for_ego();
 
 private:
     bool is_high_ego_generated = false;

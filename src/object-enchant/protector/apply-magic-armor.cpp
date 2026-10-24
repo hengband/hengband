@@ -36,6 +36,12 @@ void ArmorEnchanter::give_ego_index()
         return;
     }
 
+    this->select_ego();
+}
+
+/*! @brief 種類に合うエゴを選択する。 */
+void ArmorEnchanter::select_ego()
+{
     while (true) {
         auto valid = true;
         this->o_ptr->ego_idx = get_random_ego(INVEN_BODY, true);

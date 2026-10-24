@@ -38,12 +38,7 @@ EgoType get_random_ego(byte slot, bool good)
             continue;
         }
 
-        const auto curses = {
-            ItemGenerationTraitType::CURSED,
-            ItemGenerationTraitType::HEAVY_CURSE,
-            ItemGenerationTraitType::PERMA_CURSE
-        };
-        const auto worthless = ego.rating == 0 || ego.gen_flags.has_any_of(curses);
+        const auto worthless = is_worthless_ego(ego);
         if (good != worthless) {
             prob_table.entry_item(ego.idx, (255 / ego.rarity));
         }
@@ -359,4 +354,15 @@ void apply_ego(ItemEntity *o_ptr, DEPTH lev)
     o_ptr->to_d = static_cast<int>(std::clamp<int64_t>(to_d, low, high));
     o_ptr->to_a = static_cast<ARMOUR_CLASS>(std::clamp<int64_t>(to_a, low, high));
     o_ptr->pval = static_cast<PARAMETER_VALUE>(std::clamp(pval, int{ low }, int{ high }));
+}
+
+/*!
+ * @brief 評価値または生成時の呪いから悪いエゴか判定する。
+ * @param ego 判定するエゴの定義
+ * @return 評価値が0か、生成時に呪われるエゴなら true
+ */
+bool is_worthless_ego(const EgoItemDefinition &ego)
+{
+    const auto curses = { ItemGenerationTraitType::CURSED, ItemGenerationTraitType::HEAVY_CURSE, ItemGenerationTraitType::PERMA_CURSE };
+    return ego.rating == 0 || ego.gen_flags.has_any_of(curses);
 }

@@ -15,5 +15,6 @@ protected:
     PlayerType *player_ptr;
 
     void give_ego_index() override;
+    void select_ego();
     void give_cursed() override;
 };
