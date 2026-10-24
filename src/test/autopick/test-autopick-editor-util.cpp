@@ -24,8 +24,8 @@ using namespace test;
 
 namespace {
 
-//! is_greater_autopick_max_line() が偽になる最大の行数
-constexpr auto MAX_EDITABLE_LINES = MAX_AUTOPICK_ENTRIES - 2;
+//! 以前の行数の上限 (5998 行) を超える行数
+constexpr auto MANY_LINES = 7000;
 
 /*!
  * @brief 空でない行を指定の行数だけ持つエディタの状態を作る
@@ -61,25 +61,24 @@ const std::string LINE_WITH_LONE_LEAD_BYTE = cat("ab", KANJI_KAN.substr(0, 1));
 
 }
 
-TEST_CASE("add_empty_line appends an empty line below the line limit")
+TEST_CASE("add_empty_line appends an empty line")
 {
-    auto tb = make_text_body(MAX_EDITABLE_LINES - 1);
+    auto tb = make_text_body(1);
 
     CHECK(add_empty_line(&tb));
-    REQUIRE(tb.lines.size() == MAX_EDITABLE_LINES);
-    CHECK(tb.lines[MAX_EDITABLE_LINES - 1].line->empty());
+    REQUIRE(tb.lines.size() == 2);
+    CHECK(tb.lines[1].line->empty());
     CHECK((tb.dirty_flags & DIRTY_EXPRESSION) != 0);
     CHECK(tb.changed);
 }
 
-TEST_CASE("add_empty_line does not append a line at the line limit")
+TEST_CASE("add_empty_line appends an empty line to many lines")
 {
-    auto tb = make_text_body(MAX_EDITABLE_LINES);
+    auto tb = make_text_body(MANY_LINES);
 
-    CHECK_FALSE(add_empty_line(&tb));
-    CHECK(tb.lines.size() == MAX_EDITABLE_LINES);
-    CHECK(tb.dirty_flags == 0);
-    CHECK_FALSE(tb.changed);
+    CHECK(add_empty_line(&tb));
+    REQUIRE(tb.lines.size() == MANY_LINES + 1);
+    CHECK(tb.lines[MANY_LINES].line->empty());
 }
 
 TEST_CASE("add_empty_line does not append a line when the last line is empty")
@@ -104,7 +103,7 @@ TEST_CASE("insert_return_code splits the line at the cursor")
 {
     auto tb = make_text_body_with_line("abcd", 2);
 
-    REQUIRE(insert_return_code(&tb));
+    insert_return_code(&tb);
     CHECK(*tb.lines[0].line == "ab");
     REQUIRE(tb.lines.size() == 2);
     CHECK(*tb.lines[1].line == "cd");
@@ -115,8 +114,21 @@ TEST_CASE("insert_return_code shifts the following lines down")
     AutopickTextBody tb(1, 1);
     tb.set_lines({ "ab", "cd", "ef" });
 
-    REQUIRE(insert_return_code(&tb));
+    insert_return_code(&tb);
     CHECK(tb.get_entry_lines() == std::vector<std::string>{ "ab", "c", "d", "ef" });
+}
+
+TEST_CASE("insert_return_code splits the last line of many lines")
+{
+    std::vector<std::string> lines(MANY_LINES - 1, "a");
+    lines.push_back("bc");
+    AutopickTextBody tb(1, MANY_LINES - 1);
+    tb.set_lines(lines);
+
+    insert_return_code(&tb);
+    lines.back() = "b";
+    lines.push_back("c");
+    CHECK(tb.get_entry_lines() == lines);
 }
 
 TEST_CASE("EditorCommandId::BACKSPACE at the beginning of a line joins it to the previous line")
@@ -293,7 +305,7 @@ TEST_CASE("insert_return_code does not split a double-byte character")
 {
     auto tb = make_text_body_with_line(cat(KANJI_KAN, KANJI_JI), 1);
 
-    REQUIRE(insert_return_code(&tb));
+    insert_return_code(&tb);
     CHECK(*tb.lines[0].line == KANJI_KAN);
     REQUIRE(tb.lines.size() == 2);
     CHECK(*tb.lines[1].line == KANJI_JI);
@@ -303,7 +315,7 @@ TEST_CASE("insert_return_code splits a line ending with a lone lead byte at its 
 {
     auto tb = make_text_body_with_line(LINE_WITH_LONE_LEAD_BYTE, 3);
 
-    REQUIRE(insert_return_code(&tb));
+    insert_return_code(&tb);
     CHECK(*tb.lines[0].line == LINE_WITH_LONE_LEAD_BYTE);
     REQUIRE(tb.lines.size() == 2);
     CHECK(tb.lines[1].line->empty());

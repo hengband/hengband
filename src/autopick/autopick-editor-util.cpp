@@ -191,14 +191,10 @@ void add_keyword(AutopickTextBody *tb, BIT_FLAGS flg)
 /*!
  * @brief Add an empty line at the last of the file
  * @param tb エディタの状態
- * @return 空行を追加した場合true、最終行が既に空の場合と最大行数に達している場合はfalse
+ * @return 空行を追加した場合true、最終行が既に空の場合はfalse
  */
 bool add_empty_line(AutopickTextBody *tb)
 {
-    if (is_greater_autopick_max_line(tb->lines.size())) {
-        return false;
-    }
-
     if (tb->lines.back().line->empty()) {
         return false;
     }

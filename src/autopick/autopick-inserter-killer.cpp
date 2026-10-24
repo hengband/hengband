@@ -27,26 +27,10 @@ void check_expression_line(AutopickTextBody *tb, int y)
 }
 
 /*!
- * @brief 行を追加可能かチェックする
- * @param tb 自動拾いテキストへの参照ポインタ
- * @param add_num 追加する行数
- * @retval true 追加可能
- * @retval false 最大行数を超えるため追加不可
- */
-bool can_insert_line(AutopickTextBody *tb, int add_num)
-{
-    return !is_greater_autopick_max_line(tb->lines.size() + add_num);
-}
-
-/*!
  * @brief Insert return code and split the line
  */
-bool insert_return_code(AutopickTextBody *tb)
+void insert_return_code(AutopickTextBody *tb)
 {
-    if (is_greater_autopick_max_line(tb->lines.size())) {
-        return false;
-    }
-
     // 2バイト文字の途中では分けず、その文字の後ろで分ける
     auto &line = *tb->lines[tb->cy].line;
     auto split_pos = std::min(tb->cx, static_cast<int>(line.length()));
@@ -60,7 +44,6 @@ bool insert_return_code(AutopickTextBody *tb)
     tb->lines.emplace(tb->lines.begin() + tb->cy + 1, std::move(rest), EnumClassFlagGroup<AutopickEntryStatus>());
     tb->dirty_flags |= DIRTY_EXPRESSION;
     tb->changed = true;
-    return true;
 }
 
 /*!
@@ -68,9 +51,6 @@ bool insert_return_code(AutopickTextBody *tb)
  */
 bool insert_macro_line(AutopickTextBody *tb)
 {
-    if (!can_insert_line(tb, 2)) {
-        return false;
-    }
     const auto trigger = inkey_macro_trigger();
     char tmp[1024];
     ascii_to_text(tmp, trigger, sizeof(tmp));
@@ -99,10 +79,6 @@ bool insert_macro_line(AutopickTextBody *tb)
  */
 bool insert_keymap_line(AutopickTextBody *tb)
 {
-    if (!can_insert_line(tb, 2)) {
-        return false;
-    }
-
     const auto mode = rogue_like_commands ? KeymapMode::ROGUE : KeymapMode::ORIGINAL;
     flush();
     char buf[2]{};

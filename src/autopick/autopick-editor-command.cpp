@@ -81,9 +81,7 @@ ape_quittance do_editor_command(PlayerType *player_ptr, AutopickTextBody *tb, Ed
             tb->dirty_flags |= DIRTY_ALL;
         }
 
-        if (!insert_return_code(tb)) {
-            break;
-        }
+        insert_return_code(tb);
         tb->cy++;
         tb->cx = 0;
         tb->dirty_flags |= DIRTY_ALL;
@@ -264,10 +262,7 @@ ape_quittance do_editor_command(PlayerType *player_ptr, AutopickTextBody *tb, Ed
 
             const auto is_last_yank_line = i + 1 == tb->yank.size();
             if (!is_last_yank_line || tb->yank_eol) {
-                if (!insert_return_code(tb)) {
-                    break;
-                }
-
+                insert_return_code(tb);
                 tb->lines[tb->cy].line = std::make_unique<std::string>(std::move(buf));
                 tb->cx = 0;
                 tb->cy++;
@@ -478,10 +473,7 @@ ape_quittance do_editor_command(PlayerType *player_ptr, AutopickTextBody *tb, Ed
         }
 
         tb->cx = 0;
-        if (!insert_return_code(tb)) {
-            break;
-        }
-
+        insert_return_code(tb);
         tb->lines[tb->cy].line = std::make_unique<std::string>(autopick_line_from_entry(*entry));
         tb->dirty_flags |= DIRTY_SCREEN;
         break;
@@ -492,19 +484,13 @@ ape_quittance do_editor_command(PlayerType *player_ptr, AutopickTextBody *tb, Ed
         }
 
         tb->cx = 0;
-        if (!insert_return_code(tb)) {
-            break;
-        }
-
+        insert_return_code(tb);
         tb->lines[tb->cy].line = std::make_unique<std::string>(tb->last_destroyed);
         tb->dirty_flags |= DIRTY_ALL;
         tb->changed = true;
         break;
     }
     case EditorCommandId::INSERT_BLOCK: {
-        if (!can_insert_line(tb, 2)) {
-            break;
-        }
         const auto expression = fmt::format("?:[AND [EQU $RACE {}] [EQU $CLASS {}] [GEQ $LEVEL {:02}]]", rp_ptr->title.en_string(), cp_ptr->title.en_string(), player_ptr->lev);
         tb->cx = 0;
         insert_return_code(tb);

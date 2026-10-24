@@ -97,9 +97,6 @@ static tl::optional<std::vector<std::string>> read_text_lines(std::string_view f
     std::string line;
     while (std::getline(ifs, line)) {
         lines.push_back(std::move(line));
-        if (is_greater_autopick_max_line(lines.size())) {
-            break;
-        }
     }
 
     return lines;
