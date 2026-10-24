@@ -280,6 +280,12 @@ TEST_CASE("RaceReader preserves existing definition messages and record after he
     });
     auto expected = ParseErrorType::INVALID_FLAG;
     SUBCASE("late message failure") {}
+    SUBCASE("late message boolean failure")
+    {
+        data["message"][1] = data["message"][0];
+        data["message"][1]["use_name"] = "false";
+        expected = ParseErrorType::INVALID_TYPE;
+    }
     SUBCASE("late message string failure")
     {
         data["message"][1] = data["message"][0];
@@ -675,4 +681,15 @@ TEST_CASE("RaceReader validates references after every definition is read")
     const auto error = RaceReader::validate_references();
     REQUIRE(error.has_value());
     CHECK(error->find(reported_id) != std::string::npos);
+}
+
+TEST_CASE("RaceReader rejects non-boolean message use_name without publishing")
+{
+    test::MonraceListTestAccess races;
+    test::MonraceMessageListTestAccess messages;
+    auto data = make_monrace();
+    data["message"] = nlohmann::json::array({ { { "action", "SPEAK_ALL" }, { "chance", 1 }, { "use_name", "false" }, { "message", { { "ja", "new" }, { "en", "new" } } } } });
+    CHECK(test::to_error_code(read_as_first_record(data)) == ParseErrorType::INVALID_TYPE);
+    CHECK(MonraceList::get_instance().empty());
+    CHECK(messages.message_count(0, MonsterMessageType::SPEAK_ALL) == 0);
 }

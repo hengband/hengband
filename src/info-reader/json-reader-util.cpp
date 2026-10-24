@@ -144,18 +144,22 @@ tl::expected<void, ParseErrorType> info_set_dice(const nlohmann::json &json, Dic
  * @param json bool値が格納されたJSON Object
  * @param bool_value bool値を格納する変数への参照
  * @param is_required 必須かどうか
- * nullおよび非bool値は、必須ならParseErrorType::TOO_FEW_ARGUMENTSを返し、任意なら何もせずに成功する。
- * 型不一致でもParseErrorType::INVALID_TYPEにはしない、他のinfo_set_*とは異なる契約を持つ。
+ * nullは、必須ならParseErrorType::TOO_FEW_ARGUMENTSを返し、任意なら何もせずに成功する。
+ * null以外の非bool値はParseErrorType::INVALID_TYPEを返す。
  * bool値が入力された場合のみbool_valueを変更する。
- * @return 成功時は空の値、失敗時は解析エラーコード（必須の値がnullか非bool値ならParseErrorType::TOO_FEW_ARGUMENTS）
+ * @return 成功時は空の値、失敗時は解析エラーコード
  */
 tl::expected<void, ParseErrorType> info_set_bool(const nlohmann::json &json, bool &bool_value, bool is_required)
 {
-    if (json.is_null() || !json.is_boolean()) {
+    if (json.is_null()) {
         if (is_required) {
             return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
         }
         return {};
+    }
+
+    if (!json.is_boolean()) {
+        return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
     }
 
     bool_value = json.get<bool>();
