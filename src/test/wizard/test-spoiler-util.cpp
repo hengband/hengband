@@ -23,6 +23,12 @@
 using namespace test;
 
 namespace {
+#if defined(JP) && defined(SJIS)
+constexpr std::string_view SOKUON = "\x82\xc1"; //!< っ
+#elif defined(JP)
+constexpr std::string_view SOKUON = "\xa4\xc3"; //!< っ
+#endif
+
 /*!
  * @brief 文字列を順に spoil_out() へ渡し、最後に flush_buffer を指定して書き出された内容を返す
  * @param texts spoil_out() へ渡す文字列の並び
@@ -91,5 +97,13 @@ TEST_CASE("spoil_out wraps a long Japanese text without splitting a 2-byte chara
     // 2バイト文字は1行に36文字 (72バイト) まで
     const auto expected = cat(repeat(KANJI_KAN, 36), "\n", repeat(KANJI_KAN, 14), "\n\n");
     CHECK(capture_spoil_out({ repeat(KANJI_KAN, 50) }) == expected);
+}
+
+TEST_CASE("spoil_out does not put a kinsoku character at the head of a line")
+{
+    // 行頭禁則文字の前では折り返さず、その1文字前で折り返す
+    const auto text = cat(repeat(KANJI_KAN, 36), SOKUON, repeat(KANJI_KAN, 13));
+    const auto expected = cat(repeat(KANJI_KAN, 35), "\n", KANJI_KAN, SOKUON, repeat(KANJI_KAN, 13), "\n\n");
+    CHECK(capture_spoil_out({ text }) == expected);
 }
 #endif

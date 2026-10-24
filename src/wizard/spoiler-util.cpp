@@ -1,4 +1,5 @@
 #include "wizard/spoiler-util.h"
+#include "locale/japanese.h"
 #include "system/item/item-entity.h"
 #include <algorithm>
 #include <fmt/format.h>
@@ -208,8 +209,7 @@ void spoil_out(std::string_view sv, bool flush_buffer)
                 break_pos = line.length();
             }
         } else {
-            const auto rest = sv.substr(i);
-            if (iskanji_flag && !rest.starts_with("。") && !rest.starts_with("、") && !rest.starts_with("ィ") && !rest.starts_with("ー")) {
+            if (iskanji_flag && !is_kinsoku(sv.substr(i, 2))) {
                 break_pos = line.length();
             }
         }
