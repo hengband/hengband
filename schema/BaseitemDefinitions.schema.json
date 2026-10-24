@@ -110,9 +110,9 @@
                     },
                     "parameter_value": {
                         "type": "integer",
-                        "description": "パラメータ補正値",
-                        "minimum": -9999,
-                        "maximum": 9999
+                        "description": "種別ごとの値。装備 -128〜128、杖・魔法棒 1〜127、ロッド 1〜1000、食料 0〜10000、薬 -10000〜10000、油つぼ 1〜15000、箱 0〜63、その他 0。C++ の判定を正とする",
+                        "minimum": -10000,
+                        "maximum": 15000
                     },
                     "level": {
                         "type": "integer",
@@ -567,7 +567,258 @@
                             }
                         }
                     }
-                }
+                },
+                "allOf": [
+                    {
+                        "if": {
+                            "properties": {
+                                "itemkind": {
+                                    "properties": {
+                                        "type_value": {
+                                            "enum": [
+                                                16,
+                                                17,
+                                                18,
+                                                19,
+                                                20,
+                                                21,
+                                                22,
+                                                23,
+                                                30,
+                                                31,
+                                                32,
+                                                33,
+                                                34,
+                                                35,
+                                                36,
+                                                37,
+                                                38,
+                                                39,
+                                                40,
+                                                45,
+                                                50
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "then": {
+                            "properties": {
+                                "parameter_value": {
+                                    "type": "integer",
+                                    "minimum": -128,
+                                    "maximum": 128
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "if": {
+                            "properties": {
+                                "itemkind": {
+                                    "properties": {
+                                        "type_value": {
+                                            "enum": [
+                                                55,
+                                                65
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "then": {
+                            "required": [
+                                "parameter_value"
+                            ],
+                            "properties": {
+                                "parameter_value": {
+                                    "type": "integer",
+                                    "minimum": 1,
+                                    "maximum": 127
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "if": {
+                            "properties": {
+                                "itemkind": {
+                                    "properties": {
+                                        "type_value": {
+                                            "enum": [
+                                                66
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "then": {
+                            "required": [
+                                "parameter_value"
+                            ],
+                            "properties": {
+                                "parameter_value": {
+                                    "type": "integer",
+                                    "minimum": 1,
+                                    "maximum": 1000
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "if": {
+                            "properties": {
+                                "itemkind": {
+                                    "properties": {
+                                        "type_value": {
+                                            "enum": [
+                                                80
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "then": {
+                            "properties": {
+                                "parameter_value": {
+                                    "type": "integer",
+                                    "minimum": 0,
+                                    "maximum": 10000
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "if": {
+                            "properties": {
+                                "itemkind": {
+                                    "properties": {
+                                        "type_value": {
+                                            "enum": [
+                                                75
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "then": {
+                            "properties": {
+                                "parameter_value": {
+                                    "type": "integer",
+                                    "minimum": -10000,
+                                    "maximum": 10000
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "if": {
+                            "properties": {
+                                "itemkind": {
+                                    "properties": {
+                                        "type_value": {
+                                            "enum": [
+                                                77
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "then": {
+                            "required": [
+                                "parameter_value"
+                            ],
+                            "properties": {
+                                "parameter_value": {
+                                    "type": "integer",
+                                    "minimum": 1,
+                                    "maximum": 15000
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "if": {
+                            "properties": {
+                                "itemkind": {
+                                    "properties": {
+                                        "type_value": {
+                                            "enum": [
+                                                7
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "then": {
+                            "properties": {
+                                "parameter_value": {
+                                    "type": "integer",
+                                    "minimum": 0,
+                                    "maximum": 63
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "if": {
+                            "properties": {
+                                "itemkind": {
+                                    "properties": {
+                                        "type_value": {
+                                            "not": {
+                                                "enum": [
+                                                    16,
+                                                    17,
+                                                    18,
+                                                    19,
+                                                    20,
+                                                    21,
+                                                    22,
+                                                    23,
+                                                    30,
+                                                    31,
+                                                    32,
+                                                    33,
+                                                    34,
+                                                    35,
+                                                    36,
+                                                    37,
+                                                    38,
+                                                    39,
+                                                    40,
+                                                    45,
+                                                    50,
+                                                    55,
+                                                    65,
+                                                    66,
+                                                    80,
+                                                    75,
+                                                    77,
+                                                    7
+                                                ]
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "then": {
+                            "properties": {
+                                "parameter_value": {
+                                    "const": 0
+                                }
+                            }
+                        }
+                    }
+                ]
             }
         }
     },

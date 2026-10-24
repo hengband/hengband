@@ -200,10 +200,9 @@ def load_rod_type_value(repository_root: Path) -> int:
 
 
 def validate_baseitem_semantics(data: dict, schema_path: Path) -> None:
-    """BaseitemReaderの整数型・ID順序・表示・ロッドのpval・ダイス・自然生成と生成情報の併記を検証する。"""
+    """BaseitemReaderの整数型・ID順序・表示・種別ごとの範囲・ダイス・自然生成と生成情報の併記を検証する。"""
     repository_root = schema_path.resolve().parent.parent
     valid_colors = load_cpp_map_keys(repository_root / "src/term/gameterm.cpp", "color_list")
-    rod_type_value = load_rod_type_value(repository_root)
     valid_keys = {language: set() for language in INVALID_BASEITEM_NAMES}
     previous_id = -1
     for index, baseitem in enumerate(data["baseitems"]):
@@ -222,9 +221,10 @@ def validate_baseitem_semantics(data: dict, schema_path: Path) -> None:
             raise ValidationError("symbol character must be a single byte", path=path + ["symbol", "character"])
         if baseitem["symbol"]["color"] not in valid_colors:
             raise ValidationError("unknown color", path=path + ["symbol", "color"])
-        # BaseitemReaderはロッドのpval(省略時は0)が正でなければ拒否する。
-        if baseitem["itemkind"]["type_value"] == rod_type_value and baseitem.get("parameter_value", 0) <= 0:
-            raise ValidationError("rod parameter_value must be positive", path=path + ["parameter_value"])
+        type_value = baseitem["itemkind"]["type_value"]
+        minimum, maximum = baseitem_pval_range(type_value)
+        if not minimum <= baseitem.get("parameter_value", 0) <= maximum:
+            raise ValidationError(f"parameter_value must be in {minimum}..{maximum}", path=path + ["parameter_value"])
         if "base_dice" in baseitem:
             require_reader_dice(baseitem["base_dice"], path + ["base_dice"], *ITEM_DICE_RANGE)
         for allocation_index, allocation in enumerate(baseitem.get("allocations", [])):
@@ -243,6 +243,20 @@ def validate_baseitem_semantics(data: dict, schema_path: Path) -> None:
             if key in valid_keys[language]:
                 raise ValidationError("kind of a valid baseitem must be unique", path=path + ["itemkind"])
             valid_keys[language].add(key)
+
+
+# BaseitemKey::is_equipement() と同じ種別。装備はアーティファクトと同じ補正幅とする。
+EQUIPMENT_KINDS = {*range(16, 24), *range(30, 41), 45, 50}
+# 回数は取り込みの byte への変換を避ける。充填時間は仕様として1,000までとする。
+BASEITEM_PVAL_RANGES = {
+    55: (1, 127), 65: (1, 127), 66: (1, 1000),
+    # 滋養は PY_FOOD_FULL、燃料は FUEL_LAMP、箱は chest_traps の64要素に合わせる。
+    80: (0, 10000), 75: (-10000, 10000), 77: (1, 15000), 7: (0, 63),
+}
+
+
+def baseitem_pval_range(type_value: int) -> tuple[int, int]:
+    return (-128, 128) if type_value in EQUIPMENT_KINDS else BASEITEM_PVAL_RANGES.get(type_value, (0, 0))
 
 
 def collect_valid_baseitem_keys(baseitem_data: dict) -> set[tuple[int, int]]:

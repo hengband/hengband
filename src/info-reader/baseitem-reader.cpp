@@ -7,6 +7,7 @@
 #include "info-reader/baseitem-reader.h"
 #include "artifact/random-art-effects.h"
 #include "floor/floor-base-definitions.h"
+#include "grid/trap.h"
 #include "info-reader/baseitem-tokens-table.h"
 #include "info-reader/info-reader-util.h"
 #include "info-reader/item-reader-limits.h"
@@ -15,8 +16,10 @@
 #include "locale/japanese.h"
 #include "object-enchant/tr-types.h"
 #include "object/tval-types.h"
+#include "player/digestion-processor.h"
 #include "system/baseitem/baseitem-definition.h"
 #include "system/baseitem/baseitem-list.h"
+#include "system/gamevalue.h"
 #include "term/gameterm.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
@@ -27,6 +30,48 @@
 #include <memory>
 #include <nlohmann/json.hpp>
 #include <utility>
+
+namespace {
+// 装備はアーティファクトと同じ補正幅、回数は魔道具術師の取り込みで byte に回らない幅に揃える。
+constexpr auto EQUIPMENT_PVAL_MAX = 128;
+constexpr auto DEVICE_CHARGES_MAX = 127;
+// ロッドは重ねる数を充填時間から制限する。定義の充填時間は仕様として 1,000 までとする。
+constexpr auto ROD_PVAL_MAX = 1000;
+/*!
+ * @brief ベースアイテムの種別ごとの pval の範囲を返す
+ * @param key ベースアイテムのキー (種別だけを見る)
+ * @return 受け付ける pval の下限と上限
+ */
+Range pval_range(const BaseitemKey &key)
+{
+    if (key.is_equipement()) {
+        return { -EQUIPMENT_PVAL_MAX, EQUIPMENT_PVAL_MAX };
+    }
+    switch (key.tval()) {
+    case ItemKindType::STAFF:
+    case ItemKindType::WAND:
+        // 基本回数は価格計算の除数でもあるため、0 を認めない。
+        return { 1, DEVICE_CHARGES_MAX };
+    case ItemKindType::ROD:
+        return { 1, ROD_PVAL_MAX };
+    case ItemKindType::FOOD:
+        // 1個の滋養は満腹の閾値まで。薬は同じ量を減らすことも認める。
+        return { 0, PY_FOOD_FULL };
+    case ItemKindType::POTION:
+        return { -PY_FOOD_FULL, PY_FOOD_FULL };
+    case ItemKindType::FLASK:
+        // 空のランタンを満たす量までの正の燃料とする。
+        return { 1, FUEL_LAMP };
+    case ItemKindType::CHEST:
+        // 未解除の罠の表の添え字。0 は空の箱を表す。
+        return { 0, static_cast<int>(chest_traps.size()) - 1 };
+    default:
+        // 定義の pval に意味のない種別は0に統一する。
+        return { 0, 0 };
+    }
+}
+
+}
 
 BaseitemReader::BaseitemReader(const nlohmann::json &baseitem_data)
     : baseitem_data(baseitem_data)
@@ -279,11 +324,13 @@ tl::expected<void, ParseErrorType> BaseitemReader::set_baseitem_kind(BaseitemDef
 tl::expected<void, ParseErrorType> BaseitemReader::set_baseitem_parameter_value(BaseitemDefinition &baseitem) const
 {
     const auto &pval_data = get_json_value(this->baseitem_data, "parameter_value");
-    if (const auto result = info_set_integer(pval_data, baseitem.pval, false, Range(-9999, 9999)); !result) {
+    const auto range = pval_range(baseitem.bi_key);
+    if (const auto result = info_set_integer(pval_data, baseitem.pval, false, range); !result) {
         return result;
     }
-    if ((baseitem.bi_key.tval() == ItemKindType::ROD) && (baseitem.pval <= 0)) {
-        return tl::unexpected(ParseErrorType::INVALID_PVAL);
+    // 省略・nullでは既存の値（新規なら0）を保つため、種別を変えた再読込もここで検査する。
+    if (baseitem.pval < range.first || baseitem.pval > range.second) {
+        return tl::unexpected(ParseErrorType::INVALID_FLAG);
     }
 
     return {};
