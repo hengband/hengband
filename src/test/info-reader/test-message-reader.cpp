@@ -55,6 +55,11 @@ TEST_CASE("MessageReader preserves existing messages after a late parse error")
     const auto valid = make_message("SPEAK_ALL", nlohmann::json::array({ "new" }));
     auto invalid = make_message("SPEAK_BATTLE", nlohmann::json::array({ "staged", "valid" }));
     auto expected = ParseErrorType::INVALID_FLAG;
+    SUBCASE("invalid later boolean")
+    {
+        invalid["use_name"] = "false";
+        expected = ParseErrorType::INVALID_TYPE;
+    }
     SUBCASE("invalid second localized string")
     {
         invalid["message"]["ja"][1] = 7;
@@ -324,4 +329,22 @@ TEST_CASE("MessageReader propagates message helper errors and keeps validation o
     CHECK(error_idx == 73);
     CHECK(state.message_count(4, MonsterMessageType::SPEAK_ALL) == 1);
     CHECK(state.message_count(5, MonsterMessageType::SPEAK_ALL) == 0);
+}
+
+TEST_CASE("MessageReader rejects non-boolean use_name without publishing")
+{
+    test::MonraceMessageListTestAccess state;
+    const test::ScopedReaderState reader_state;
+    const auto rng = test::scoped_rng();
+    auto &messages = MonraceMessageList::get_instance();
+    messages.emplace_default(MonsterMessageType::SPEAK_ALL, 1, false, "original");
+    auto message = make_message("SPEAK_ALL", nlohmann::json::array({ "new" }));
+    for (const auto &value : { nlohmann::json("false"), nlohmann::json(1), nlohmann::json::array(), nlohmann::json::object() }) {
+        CAPTURE(value);
+        message["use_name"] = value;
+        const nlohmann::json data = { { "name", "DEFAULT" }, { "message", { message } } };
+        CHECK(test::to_error_code(MessageReader(data).read()) == ParseErrorType::INVALID_TYPE);
+        CHECK(state.default_message_count(MonsterMessageType::SPEAK_ALL) == 1);
+        CHECK(messages.get_message(6, "", MonsterMessageType::SPEAK_ALL) == "original");
+    }
 }

@@ -698,7 +698,7 @@ TEST_CASE("info_set_bool stores the value")
     }
 }
 
-TEST_CASE("info_set_bool treats a non-boolean JSON as an unwritten key")
+TEST_CASE("info_set_bool preserves null semantics and rejects other non-boolean types")
 {
     // 格納先を書き換えないことを確かめるため、既定値の false ではなく true から始める。
     // false で始めると、誤って false を書き込む実装でもテストが通ってしまう
@@ -714,10 +714,10 @@ TEST_CASE("info_set_bool treats a non-boolean JSON as an unwritten key")
 
     SUBCASE("JSON of another type")
     {
-        // 他の info_set_* と異なり、型が違っても ParseErrorType::INVALID_TYPE ではなく
-        // キーが書かれていない場合と同じ扱いになる
+        // 必須・任意のどちらでも型不一致を報告し、格納先は変更しない。
         const std::vector<nlohmann::json> invalid_values = {
             "true",
+            "false",
             1,
             1.5,
             nlohmann::json::array(),
@@ -726,9 +726,9 @@ TEST_CASE("info_set_bool treats a non-boolean JSON as an unwritten key")
         for (const auto &json : invalid_values) {
             CAPTURE(json.type_name());
 
-            CHECK(test::to_error_code(info_set_bool(json, data, true)) == ParseErrorType::TOO_FEW_ARGUMENTS);
+            CHECK(test::to_error_code(info_set_bool(json, data, true)) == ParseErrorType::INVALID_TYPE);
             CHECK(data);
-            CHECK(info_set_bool(json, data, false).has_value());
+            CHECK(test::to_error_code(info_set_bool(json, data, false)) == ParseErrorType::INVALID_TYPE);
             CHECK(data);
         }
     }

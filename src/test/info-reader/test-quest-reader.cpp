@@ -15,6 +15,7 @@
 #include "system/grid-type-definition.h"
 #include "system/terrain/terrain-list.h"
 #include "test/info-reader/parse-result-helpers.h"
+#include "test/info-reader/scoped-reader-state.h"
 #include "test/system/terrain-list-test-access.h"
 #include "util/enum-converter.h"
 #include <cstdint>
@@ -841,18 +842,18 @@ TEST_CASE("QuestReader accepts map extents at the floor boundary")
     }
 }
 
-TEST_CASE("QuestReader rejects ragged maps and preserves empty and skipped map rows")
+TEST_CASE("QuestReader rejects ragged and non-string map rows and preserves empty maps")
 {
     auto data = make_quest_with_description("Description");
-    data["mapVariants"] = { nlohmann::json::array(), { "...", nullptr, ".", 7 } };
+    data["mapVariants"] = { nlohmann::json::array(), { "...", "." } };
     QuestType quest;
     QuestFixedMap fixed_map;
     CHECK(test::to_error_code(QuestReader(data, quest, fixed_map).read()) == ParseErrorType::INVALID_VALUE);
     CHECK(fixed_map.maps.empty());
 
     data["mapVariants"] = { nlohmann::json::array(), { "...", nullptr, "...", 7 } };
-    REQUIRE(QuestReader(data, quest, fixed_map).read().has_value());
-    CHECK(fixed_map.maps == std::vector<std::vector<std::string>>{ {}, { "...", "..." } });
+    CHECK(test::to_error_code(QuestReader(data, quest, fixed_map).read()) == ParseErrorType::INVALID_TYPE);
+    CHECK(fixed_map.maps.empty());
 
     // map が存在すれば mapVariants は読まない。空の map も従来どおり保持する。
     data["map"] = nlohmann::json::array();
@@ -860,11 +861,11 @@ TEST_CASE("QuestReader rejects ragged maps and preserves empty and skipped map r
     REQUIRE(QuestReader(data, quest, fixed_map).read().has_value());
     CHECK(fixed_map.maps == std::vector<std::vector<std::string>>{ {} });
 
-    // 非文字列行は配置されないため、行数の上限に含めない。
+    // 行数の上限に達した後でも、非文字列行は型不一致として拒否する。
     data["map"] = std::vector<std::string>(MAX_HGT, ".");
     data["map"].push_back(nullptr);
-    REQUIRE(QuestReader(data, quest, fixed_map).read().has_value());
-    CHECK(fixed_map.maps[0].size() == MAX_HGT);
+    CHECK(test::to_error_code(QuestReader(data, quest, fixed_map).read()) == ParseErrorType::INVALID_TYPE);
+    CHECK(fixed_map.maps == std::vector<std::vector<std::string>>{ {} });
 }
 
 TEST_CASE("QuestReader checks every declared start against every map before publishing")
@@ -912,3 +913,156 @@ TEST_CASE("QuestReader rejects a description line which cannot be converted to t
     check_existing_output(quest, fixed_map);
 }
 #endif
+
+TEST_CASE("QuestReader rejects malformed map text and predicates without publishing")
+{
+    const test::ScopedReaderState reader_state;
+    const std::vector<std::string> paths = {
+        "/map/1",
+        "/mapVariants/1/1",
+        "/descriptions/0/text/ja",
+        "/descriptions/0/text/en",
+        "/descriptions/0/text/ja/1",
+        "/descriptions/0/text/en/1",
+        "/descriptions/0/when/statusAtMost",
+        "/descriptions/0/when/status",
+        "/descriptions/0/when/questType",
+    };
+    for (const auto &path : paths) {
+        std::vector<nlohmann::json> invalid_values = { 7, true, nlohmann::json::object() };
+        if (!path.ends_with("/ja") && !path.ends_with("/en")) {
+            invalid_values.push_back(nlohmann::json::array());
+        }
+        if (path.ends_with("/1")) {
+            invalid_values.push_back(nullptr);
+        }
+        for (const auto &value : invalid_values) {
+            CAPTURE(path);
+            CAPTURE(value);
+            auto data = make_quest_with_description("New");
+            if (path.starts_with("/mapVariants")) {
+                data["mapVariants"] = { { "..." }, { "...", "..." } };
+            } else if (path.starts_with("/map/")) {
+                data["map"] = { "...", "..." };
+            }
+            data[nlohmann::json::json_pointer(path)] = value;
+            QuestType quest;
+            QuestFixedMap fixed_map;
+            set_existing_output(quest, fixed_map);
+            CHECK(test::to_error_code(QuestReader(data, quest, fixed_map).read()) == ParseErrorType::INVALID_TYPE);
+            check_existing_output(quest, fixed_map);
+        }
+    }
+    for (const auto *language : { "ja", "en" }) {
+        auto data = make_quest_with_description("New");
+        data["descriptions"][0]["text"][language] = "not an array";
+        QuestType quest;
+        QuestFixedMap fixed_map;
+        set_existing_output(quest, fixed_map);
+        CHECK(test::to_error_code(QuestReader(data, quest, fixed_map).read()) == ParseErrorType::INVALID_TYPE);
+        check_existing_output(quest, fixed_map);
+    }
+}
+
+TEST_CASE("QuestReader rejects malformed legend booleans and trap shapes without publishing")
+{
+    const test::ScopedReaderState reader_state;
+    const test::TerrainListTestAccess terrain_tag(TerrainTag::NONE, 0);
+    for (const auto *path : { "/monster/random", "/object/random", "/ego/random", "/artifact/random", "/trap/random", "/object/questReward", "/artifact/questReward", "/trap" }) {
+        for (const auto &value : { nlohmann::json("true"), nlohmann::json(1), nlohmann::json(1.5), nlohmann::json(false), nlohmann::json(true), nlohmann::json::array(), nlohmann::json::object() }) {
+            if (std::string(path) != "/trap" && value.is_boolean()) {
+                continue;
+            }
+            if (std::string(path) == "/trap" && (value.is_string() || value.is_object())) {
+                continue;
+            }
+            CAPTURE(path);
+            CAPTURE(value);
+            auto data = make_quest_with_description("New");
+            auto cell = nlohmann::json::object();
+            cell[nlohmann::json::json_pointer(path)] = value;
+            data["legend"] = { { ".", cell } };
+            QuestType quest;
+            QuestFixedMap fixed_map;
+            set_existing_output(quest, fixed_map);
+            CHECK(test::to_error_code(QuestReader(data, quest, fixed_map).read()) == ParseErrorType::INVALID_TYPE);
+            check_existing_output(quest, fixed_map);
+        }
+    }
+    for (const auto *field : { "object", "artifact" }) {
+        auto data = make_quest_with_description("New");
+        data["legend"] = { { ".", { { field, { { "random", true }, { "questReward", "true" } } } } } };
+        QuestType quest;
+        QuestFixedMap fixed_map;
+        set_existing_output(quest, fixed_map);
+        CHECK(test::to_error_code(QuestReader(data, quest, fixed_map).read()) == ParseErrorType::INVALID_TYPE);
+        check_existing_output(quest, fixed_map);
+    }
+}
+
+TEST_CASE("QuestReader rejects malformed description containers and legend terrain without publishing")
+{
+    const test::ScopedReaderState reader_state;
+    const test::TerrainListTestAccess terrain_tag(TerrainTag::NONE, 0);
+    const std::vector<nlohmann::json> invalid_values = { "TAKEN", 1, true, nlohmann::json::array() };
+    for (const auto &value : invalid_values) {
+        CAPTURE(value);
+        for (const auto *field : { "when", "text" }) {
+            CAPTURE(field);
+            auto data = make_quest_with_description("New");
+            data["descriptions"][0][field] = value;
+            QuestType quest;
+            QuestFixedMap fixed_map;
+            set_existing_output(quest, fixed_map);
+            CHECK(test::to_error_code(QuestReader(data, quest, fixed_map).read()) == ParseErrorType::INVALID_TYPE);
+            check_existing_output(quest, fixed_map);
+        }
+
+        {
+            auto data = make_quest_with_description("New");
+            data["descriptions"][0] = value;
+            QuestType quest;
+            QuestFixedMap fixed_map;
+            set_existing_output(quest, fixed_map);
+            CHECK(test::to_error_code(QuestReader(data, quest, fixed_map).read()) == ParseErrorType::INVALID_TYPE);
+            check_existing_output(quest, fixed_map);
+        }
+
+        if (!value.is_string()) {
+            auto data = make_quest_with_description("New");
+            data["legend"] = { { ".", { { "terrain", value } } } };
+            QuestType quest;
+            QuestFixedMap fixed_map;
+            set_existing_output(quest, fixed_map);
+            CHECK(test::to_error_code(QuestReader(data, quest, fixed_map).read()) == ParseErrorType::INVALID_TYPE);
+            check_existing_output(quest, fixed_map);
+        }
+    }
+}
+
+TEST_CASE("QuestReader preserves optional null values and boolean legend values")
+{
+    const test::ScopedReaderState reader_state;
+    const test::TerrainListTestAccess terrain_tag(TerrainTag::NONE, 0);
+    for (const auto &value : { nlohmann::json(), nlohmann::json(false), nlohmann::json(true) }) {
+        auto data = make_quest_with_description("New");
+        data["descriptions"][0]["when"] = { { "statusAtMost", nullptr }, { "status", nullptr }, { "questType", nullptr } };
+        data["descriptions"][0]["text"] = { { "ja", nullptr }, { "en", nullptr } };
+        auto cell = nlohmann::json::object();
+        for (const auto *field : { "monster", "object", "ego", "artifact", "trap" }) {
+            cell[field] = { { "random", value } };
+        }
+        data["legend"] = { { ".", cell } };
+        QuestType quest;
+        QuestFixedMap fixed_map;
+        REQUIRE(QuestReader(data, quest, fixed_map).read().has_value());
+        const auto &parsed = fixed_map.legend.at('.');
+        CHECK(parsed.grid.random == (value == true ? RANDOM_MONSTER | RANDOM_OBJECT | RANDOM_EGO | RANDOM_ARTIFACT | RANDOM_TRAP : RANDOM_NONE));
+        for (const auto *field : { "object", "artifact" }) {
+            data["legend"]["."][field] = { { "questReward", value } };
+        }
+        REQUIRE(QuestReader(data, quest, fixed_map).read().has_value());
+        CHECK(fixed_map.legend.at('.').object_is_quest_reward == (value == true));
+        CHECK(fixed_map.legend.at('.').artifact_is_quest_reward == (value == true));
+    }
+}
