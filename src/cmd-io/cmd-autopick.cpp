@@ -28,6 +28,7 @@
 AutopickTextBody::AutopickTextBody(int cx, int cy)
     : cx(cx)
     , cy(cy)
+    , lines(MAX_AUTOPICK_ENTRIES)
 {
 }
 
@@ -75,20 +76,21 @@ static EditorCommandId analyze_move_key(AutopickTextBody *tb, uint32_t skey)
          * Un-shifted cursor keys cancells
          * selection created by shift+cursor.
          */
-        if (tb->mark & MARK_BY_SHIFT) {
-            tb->mark = 0;
+        if (tb->marks.has(AutopickMark::BY_SHIFT)) {
+            tb->marks.clear();
             tb->dirty_flags |= DIRTY_ALL;
         }
 
         return com_id;
     }
 
-    if (tb->mark) {
+    if (tb->marks.any()) {
         return com_id;
     }
 
-    const int len = tb->lines_list[tb->cy]->length();
-    tb->mark = MARK_MARK | MARK_BY_SHIFT;
+    const int len = tb->lines[tb->cy].line->length();
+    tb->marks.set(AutopickMark::MARK);
+    tb->marks.set(AutopickMark::BY_SHIFT);
     tb->my = tb->cy;
     tb->mx = tb->cx;
     if (tb->cx > len) {
@@ -112,9 +114,9 @@ static EditorCommandId analyze_move_key(AutopickTextBody *tb, uint32_t skey)
 void AutopickTextBody::adjust_cursor_column()
 {
     this->cx = std::max(this->cx, this->rec_cx);
-    this->cx = std::min<int>(this->lines_list[this->cy]->length(), this->cx);
-    if (this->mark) {
-        this->mx = std::min<int>(this->lines_list[this->my]->length(), this->mx);
+    this->cx = std::min<int>(this->lines[this->cy].line->length(), this->cx);
+    if (this->marks.any()) {
+        this->mx = std::min<int>(this->lines[this->my].line->length(), this->mx);
     }
 }
 
@@ -131,7 +133,7 @@ void AutopickTextBody::update_cursor_column_record(EditorCommandId com_id)
  */
 bool AutopickTextBody::is_cursor_on_second_byte_of_kanji() const
 {
-    return is_second_byte_of_kanji(*this->lines_list[this->cy], this->cx);
+    return is_second_byte_of_kanji(*this->lines[this->cy].line, this->cx);
 }
 
 /*
@@ -143,7 +145,6 @@ void do_cmd_edit_autopick(PlayerType *player_ptr)
     static int cx_save = 0;
     static int cy_save = 0;
     autopick_type an_entry, *entry = &an_entry;
-    int i;
     int key = -1;
     static int32_t old_autosave_turn = 0L;
     ape_quittance quit = APE_QUIT;
@@ -151,7 +152,7 @@ void do_cmd_edit_autopick(PlayerType *player_ptr)
     AutopickTextBody text_body(cx_save, cy_save);
     AutopickTextBody *tb = &text_body;
     tb->dirty_flags = DIRTY_ALL | DIRTY_MODE | DIRTY_EXPRESSION;
-    tb->filename_mode = PT_DEFAULT;
+    tb->filename_mode = PickType::DEFAULT;
     auto &world = AngbandWorld::get_instance();
     world.play_time.pause();
     const auto unpauser = util::make_finalizer([&world]() { world.play_time.unpause(); });
@@ -172,9 +173,19 @@ void do_cmd_edit_autopick(PlayerType *player_ptr)
         tb->last_destroyed = autopick_line_from_entry(*entry);
     }
 
-    tb->lines_list = read_pickpref_text_lines(player_ptr->base_name, &tb->filename_mode);
-    for (i = 0; i < tb->cy; i++) {
-        if (!tb->lines_list[i]) {
+    auto [filename_mode, lines] = read_pickpref_text_lines(player_ptr->base_name);
+    tb->filename_mode = filename_mode;
+    const auto loop_count = lines.size();
+    for (size_t i = 0; i < loop_count; i++) {
+        std::swap(tb->lines[i].line, lines[i]);
+    }
+
+    for (size_t i = loop_count; i < MAX_AUTOPICK_ENTRIES; i++) {
+        tb->lines[i].line.reset();
+    }
+
+    for (auto i = 0; i < tb->cy; i++) {
+        if (!tb->lines[i].line) {
             tb->cy = tb->cx = 0;
             break;
         }
@@ -190,7 +201,7 @@ void do_cmd_edit_autopick(PlayerType *player_ptr)
         prt(_("(^Q:終了 ^W:セーブして終了, ESC:メニュー, その他:入力)",
                 "(^Q:Quit, ^W:Save&Quit, ESC:Menu, Other:Input text)"),
             0, 0);
-        if (!tb->mark) {
+        if (tb->marks.none()) {
             prt(fmt::format("({},{})", tb->cx, tb->cy), 0, 60);
         } else {
             prt(fmt::format("({},{})-({},{})", tb->mx, tb->my, tb->cx, tb->cy), 0, 60);
@@ -213,8 +224,8 @@ void do_cmd_edit_autopick(PlayerType *player_ptr)
             com_id = do_command_menu(0, 0);
             tb->dirty_flags |= DIRTY_SCREEN;
         } else if (!iscntrl((unsigned char)key)) {
-            if (tb->mark) {
-                tb->mark = 0;
+            if (tb->marks.any()) {
+                tb->marks.clear();
                 tb->dirty_flags |= DIRTY_ALL;
             }
 
@@ -234,7 +245,7 @@ void do_cmd_edit_autopick(PlayerType *player_ptr)
     const auto filename = pickpref_filename(player_ptr->base_name, tb->filename_mode);
 
     if (quit == APE_QUIT_AND_SAVE) {
-        write_text_lines(filename, tb->lines_list);
+        write_text_lines(filename, tb->get_entry_lines());
     }
 
     process_autopick_file(player_ptr, filename);

@@ -32,26 +32,26 @@ constexpr std::string_view AUTOREGISTER_DIRECTIVE = "$AUTOREGISTER";
 void update_autopick_expression_states(PlayerType *player_ptr, AutopickTextBody *tb)
 {
     const auto edited_line = tb->dirty_line;
-    const auto include_edited = (edited_line >= 0) && (static_cast<size_t>(edited_line) < tb->lines_list.size()) &&
-                                tb->lines_list[edited_line] && ((tb->states[edited_line] & LSTAT_INCLUDE) || tb->lines_list[edited_line]->starts_with("%:"));
+    const auto include_edited = (edited_line >= 0) && (static_cast<size_t>(edited_line) < tb->lines.size()) &&
+                                tb->lines[edited_line].line && (tb->lines[edited_line].state.has(AutopickEntryStatus::INCLUDE) || tb->lines[edited_line].line->starts_with("%:"));
     if (((tb->dirty_flags & (DIRTY_EXPRESSION | DIRTY_ALL)) == 0) && !include_edited) {
         return;
     }
 
-    byte state = 0;
-    for (auto y = 0; tb->lines_list[y]; y++) {
-        std::string_view s(*tb->lines_list[y]);
-        if (!(state & LSTAT_BYPASS) && s.starts_with("%:") &&
+    EnumClassFlagGroup<AutopickEntryStatus> state{};
+    for (size_t y = 0; y < tb->lines.size() && tb->lines[y].line; ++y) {
+        std::string_view s(*tb->lines[y].line);
+        if (state.has_not(AutopickEntryStatus::BYPASS) && s.starts_with("%:") &&
             (check_autopick_file_conditions(player_ptr, s.substr(2)) == PREF_EXPRESSION_ERROR)) {
-            state = LSTAT_BYPASS | LSTAT_EXPRESSION_ERROR;
+            state = { AutopickEntryStatus::BYPASS, AutopickEntryStatus::EXPRESSION_ERROR };
         }
-        if ((state & LSTAT_EXPRESSION_ERROR) || !s.starts_with(EXPRESSION_DIRECTIVE_PREFIX)) {
-            tb->states[y] = state;
+        if ((state.has(AutopickEntryStatus::EXPRESSION_ERROR)) || !s.starts_with(EXPRESSION_DIRECTIVE_PREFIX)) {
+            tb->lines[y].state = state;
             if (s.starts_with("%:")) {
-                tb->states[y] |= LSTAT_INCLUDE;
+                tb->lines[y].state.set(AutopickEntryStatus::INCLUDE);
             }
             if (s.starts_with(EXPRESSION_DIRECTIVE_PREFIX)) {
-                tb->states[y] |= LSTAT_EXPRESSION;
+                tb->lines[y].state.set(AutopickEntryStatus::EXPRESSION);
             }
             continue;
         }
@@ -59,19 +59,21 @@ void update_autopick_expression_states(PlayerType *player_ptr, AutopickTextBody 
         s.remove_prefix(EXPRESSION_DIRECTIVE_PREFIX.length());
 
         if (s == AUTOREGISTER_DIRECTIVE) {
-            state |= LSTAT_AUTOREGISTER;
+            state.set(AutopickEntryStatus::AUTOREGISTER);
         }
 
         const auto result = process_pref_file_expr_checked(player_ptr, s);
         if (!result) {
-            state = LSTAT_BYPASS | LSTAT_EXPRESSION_ERROR;
+            state = { AutopickEntryStatus::BYPASS, AutopickEntryStatus::EXPRESSION_ERROR };
         } else if (*result == "0") {
-            state |= LSTAT_BYPASS;
+            state.set(AutopickEntryStatus::BYPASS);
         } else {
-            state &= ~LSTAT_BYPASS;
+            state.reset(AutopickEntryStatus::BYPASS);
         }
 
-        tb->states[y] = state | LSTAT_EXPRESSION;
+        EnumClassFlagGroup<AutopickEntryStatus> tmp_state = state;
+        tmp_state.set(AutopickEntryStatus::EXPRESSION);
+        tb->lines[y].state = tmp_state;
     }
 
     tb->dirty_flags |= DIRTY_ALL;
@@ -136,7 +138,7 @@ void draw_text_editor(PlayerType *player_ptr, AutopickTextBody *tb)
     }
 
     update_autopick_expression_states(player_ptr, tb);
-    if (tb->mark) {
+    if (tb->marks.any()) {
         tb->dirty_flags |= DIRTY_ALL;
 
         by1 = std::min(tb->my, tb->cy);
@@ -153,11 +155,11 @@ void draw_text_editor(PlayerType *player_ptr, AutopickTextBody *tb)
             continue;
         }
 
-        if (!tb->lines_list[y]) {
+        if (!tb->lines[y].line) {
             break;
         }
 
-        std::string_view msg(*tb->lines_list[y]);
+        std::string_view msg(*tb->lines[y].line);
         for (auto j = 0; !msg.empty(); msg.remove_prefix(1), j++) {
             if (j == tb->left) {
                 break;
@@ -175,17 +177,17 @@ void draw_text_editor(PlayerType *player_ptr, AutopickTextBody *tb)
         }
 
         term_erase(0, i + 1, tb->wid);
-        if (tb->states[y] & LSTAT_AUTOREGISTER) {
+        if (tb->lines[y].state.has(AutopickEntryStatus::AUTOREGISTER)) {
             color = TERM_L_RED;
         } else {
-            if (tb->states[y] & LSTAT_BYPASS) {
+            if (tb->lines[y].state.has(AutopickEntryStatus::BYPASS)) {
                 color = TERM_SLATE;
             } else {
                 color = TERM_WHITE;
             }
         }
 
-        if (!tb->mark || (y < by1 || by2 < y)) {
+        if (tb->marks.none() || (y < by1 || by2 < y)) {
             term_putstr(leftcol, i + 1, tb->wid - 1, color, msg);
         } else if (by1 != by2) {
             term_putstr(leftcol, i + 1, tb->wid - 1, TERM_YELLOW, msg);
@@ -194,7 +196,7 @@ void draw_text_editor(PlayerType *player_ptr, AutopickTextBody *tb)
              * 選択範囲の前・選択範囲・選択範囲の後に分けて描く。選択範囲は表示を始める位置 x0 より左を除き、
              * 端が全角文字の途中にあれば (行頭に '!' などを足した場合など)、文字を割らないようにその文字を含める。
              */
-            const std::string_view line(*tb->lines_list[y]);
+            const std::string_view line(*tb->lines[y].line);
             const auto x0 = line.length() - msg.length();
             auto bx1 = std::max<size_t>(std::min(tb->mx, tb->cx), x0);
             if (is_second_byte_of_kanji(line, static_cast<int>(bx1))) {
@@ -236,12 +238,12 @@ void draw_text_editor(PlayerType *player_ptr, AutopickTextBody *tb)
         str1 = fmt::format(_("無効状態の行だけが見付かりました。({}を検索中)", "Found only an inactive line. (Searching {})"), tb->search_str);
     } else if (tb->dirty_flags & DIRTY_NO_SEARCH) {
         str1 = _("検索するパターンがありません(^S で検索)。", "No pattern to search. (Press ^S to search.)");
-    } else if (tb->states[tb->cy] & LSTAT_EXPRESSION_ERROR) {
+    } else if (tb->lines[tb->cy].state.has(AutopickEntryStatus::EXPRESSION_ERROR)) {
         str1 = _("条件式エラーのため、この行以降は読み込まれません。", "A condition error prevents loading this and subsequent lines.");
-    } else if ((*tb->lines_list[tb->cy])[0] == '#') {
+    } else if ((*tb->lines[tb->cy].line)[0] == '#') {
         str1 = _("この行はコメントです。", "This line is a comment.");
-    } else if ((*tb->lines_list[tb->cy])[0] && (*tb->lines_list[tb->cy])[1] == ':') {
-        switch ((*tb->lines_list[tb->cy])[0]) {
+    } else if ((*tb->lines[tb->cy].line)[0] && (*tb->lines[tb->cy].line)[1] == ':') {
+        switch ((*tb->lines[tb->cy].line)[0]) {
         case '?':
             str1 = _("この行は条件分岐式です。", "This line is a Conditional Expression.");
             break;
@@ -256,9 +258,9 @@ void draw_text_editor(PlayerType *player_ptr, AutopickTextBody *tb)
             break;
         }
 
-        switch ((*tb->lines_list[tb->cy])[0]) {
+        switch ((*tb->lines[tb->cy].line)[0]) {
         case '?':
-            if (tb->states[tb->cy] & LSTAT_BYPASS) {
+            if (tb->lines[tb->cy].state.has(AutopickEntryStatus::BYPASS)) {
                 str2 = _("現在の式の値は「偽(=0)」です。", "The expression is 'False'(=0) currently.");
             } else {
                 str2 = _("現在の式の値は「真(=1)」です。", "The expression is 'True'(=1) currently.");
@@ -266,23 +268,23 @@ void draw_text_editor(PlayerType *player_ptr, AutopickTextBody *tb)
             break;
 
         default:
-            if (tb->states[tb->cy] & LSTAT_AUTOREGISTER) {
+            if (tb->lines[tb->cy].state.has(AutopickEntryStatus::AUTOREGISTER)) {
                 str2 = _("この行は後で削除されます。", "This line will be deleted later.");
             }
 
-            else if (tb->states[tb->cy] & LSTAT_BYPASS) {
+            else if (tb->lines[tb->cy].state.has(AutopickEntryStatus::BYPASS)) {
                 str2 = _("この行は現在は無効な状態です。", "This line is bypassed currently.");
             }
             break;
         }
-    } else if (autopick_new_entry(entry, *tb->lines_list[tb->cy], false)) {
+    } else if (autopick_new_entry(entry, *tb->lines[tb->cy].line, false)) {
         std::stringstream ss;
         ss << describe_autopick(*entry);
-        if (tb->states[tb->cy] & LSTAT_AUTOREGISTER) {
+        if (tb->lines[tb->cy].state.has(AutopickEntryStatus::AUTOREGISTER)) {
             ss << _("この行は後で削除されます。", "  This line will be deleted later.");
         }
 
-        if (tb->states[tb->cy] & LSTAT_BYPASS) {
+        if (tb->lines[tb->cy].state.has(AutopickEntryStatus::BYPASS)) {
             ss << _("この行は現在は無効な状態です。", "  This line is bypassed currently.");
         }
 

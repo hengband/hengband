@@ -24,7 +24,7 @@ using namespace test;
 namespace {
 
 //! is_greater_autopick_max_line() が偽になる最大の行数
-constexpr auto MAX_EDITABLE_LINES = MAX_LINES - 2;
+constexpr auto MAX_EDITABLE_LINES = MAX_AUTOPICK_ENTRIES - 2;
 
 /*!
  * @brief 空でない行を指定の行数だけ持つエディタの状態を作る
@@ -34,9 +34,8 @@ constexpr auto MAX_EDITABLE_LINES = MAX_LINES - 2;
 AutopickTextBody make_text_body(int num_lines)
 {
     AutopickTextBody tb(0, 0);
-    tb.lines_list.resize(MAX_LINES);
     for (auto y = 0; y < num_lines; y++) {
-        tb.lines_list[y] = std::make_unique<std::string>("a");
+        tb.lines[y] = { "a", EnumClassFlagGroup<AutopickEntryStatus>() };
     }
 
     return tb;
@@ -51,7 +50,7 @@ AutopickTextBody make_text_body(int num_lines)
 AutopickTextBody make_text_body_with_line(std::string_view line, int cx)
 {
     auto tb = make_text_body(1);
-    *tb.lines_list[0] = line;
+    *tb.lines[0].line = line;
     tb.cx = cx;
     return tb;
 }
@@ -69,8 +68,8 @@ TEST_CASE("add_empty_line appends an empty line below the line limit")
 
     CHECK(add_empty_line(&tb));
     CHECK(tb.count_line() == MAX_EDITABLE_LINES);
-    REQUIRE(tb.lines_list[MAX_EDITABLE_LINES - 1] != nullptr);
-    CHECK(tb.lines_list[MAX_EDITABLE_LINES - 1]->empty());
+    REQUIRE(tb.lines[MAX_EDITABLE_LINES - 1].line != nullptr);
+    CHECK(tb.lines[MAX_EDITABLE_LINES - 1].line->empty());
     CHECK((tb.dirty_flags & DIRTY_EXPRESSION) != 0);
     CHECK(tb.changed);
 }
@@ -81,7 +80,7 @@ TEST_CASE("add_empty_line does not append a line at the line limit")
 
     CHECK_FALSE(add_empty_line(&tb));
     CHECK(tb.count_line() == MAX_EDITABLE_LINES);
-    CHECK(tb.lines_list[MAX_EDITABLE_LINES] == nullptr);
+    CHECK(tb.lines[MAX_EDITABLE_LINES].line == nullptr);
     CHECK(tb.dirty_flags == 0);
     CHECK_FALSE(tb.changed);
 }
@@ -89,7 +88,7 @@ TEST_CASE("add_empty_line does not append a line at the line limit")
 TEST_CASE("add_empty_line does not append a line when the last line is empty")
 {
     auto tb = make_text_body(1);
-    *tb.lines_list[0] = "";
+    *tb.lines[0].line = "";
 
     CHECK_FALSE(add_empty_line(&tb));
     CHECK(tb.count_line() == 1);
@@ -109,9 +108,9 @@ TEST_CASE("insert_return_code splits the line at the cursor")
     auto tb = make_text_body_with_line("abcd", 2);
 
     REQUIRE(insert_return_code(&tb));
-    CHECK(*tb.lines_list[0] == "ab");
-    REQUIRE(tb.lines_list[1] != nullptr);
-    CHECK(*tb.lines_list[1] == "cd");
+    CHECK(*tb.lines[0].line == "ab");
+    REQUIRE(tb.lines[1].line != nullptr);
+    CHECK(*tb.lines[1].line == "cd");
 }
 
 TEST_CASE("auto_inscribe_item returns false for invalid index or empty insc")
@@ -191,9 +190,9 @@ TEST_CASE("insert_return_code does not split a double-byte character")
     auto tb = make_text_body_with_line(cat(KANJI_KAN, KANJI_JI), 1);
 
     REQUIRE(insert_return_code(&tb));
-    CHECK(*tb.lines_list[0] == KANJI_KAN);
-    REQUIRE(tb.lines_list[1] != nullptr);
-    CHECK(*tb.lines_list[1] == KANJI_JI);
+    CHECK(*tb.lines[0].line == KANJI_KAN);
+    REQUIRE(tb.lines[1].line != nullptr);
+    CHECK(*tb.lines[1].line == KANJI_JI);
 }
 
 TEST_CASE("insert_return_code splits a line ending with a lone lead byte at its end")
@@ -201,9 +200,9 @@ TEST_CASE("insert_return_code splits a line ending with a lone lead byte at its 
     auto tb = make_text_body_with_line(LINE_WITH_LONE_LEAD_BYTE, 3);
 
     REQUIRE(insert_return_code(&tb));
-    CHECK(*tb.lines_list[0] == LINE_WITH_LONE_LEAD_BYTE);
-    REQUIRE(tb.lines_list[1] != nullptr);
-    CHECK(tb.lines_list[1]->empty());
+    CHECK(*tb.lines[0].line == LINE_WITH_LONE_LEAD_BYTE);
+    REQUIRE(tb.lines[1].line != nullptr);
+    CHECK(tb.lines[1].line->empty());
 }
 
 TEST_CASE("EditorCommandId::LEFT moves back one double-byte character at a time")
@@ -224,7 +223,7 @@ TEST_CASE("insert_single_letter does not split a double-byte character pushed pa
     auto tb = make_text_body_with_line(line, 0);
 
     insert_single_letter(&tb, 'x');
-    CHECK(*tb.lines_list[0] == "xa" + repeat(KANJI_KAN, (MAX_LINELEN - 2) / 2 - 1));
+    CHECK(*tb.lines[0].line == "xa" + repeat(KANJI_KAN, (MAX_LINELEN - 2) / 2 - 1));
 }
 
 TEST_CASE("EditorCommandId::PASTE does not split a double-byte character pushed past the line limit")
@@ -235,7 +234,7 @@ TEST_CASE("EditorCommandId::PASTE does not split a double-byte character pushed 
     tb.yank = { "xyz" };
 
     do_editor_command(nullptr, &tb, EditorCommandId::PASTE);
-    CHECK(*tb.lines_list[0] == "xyza" + repeat(KANJI_KAN, (MAX_LINELEN - 4) / 2 - 1));
+    CHECK(*tb.lines[0].line == "xyza" + repeat(KANJI_KAN, (MAX_LINELEN - 4) / 2 - 1));
     CHECK(tb.cx == 3);
 }
 
