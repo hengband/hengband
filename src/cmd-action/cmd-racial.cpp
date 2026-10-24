@@ -60,9 +60,14 @@ static void racial_power_erase_cursor(rc_type *rc_ptr)
  * @brief レイシャルパワー一覧を表示
  * @param player_ptr プレイヤー情報への参照ポインタ
  * @param rc_ptr レイシャルパワー情報への参照ポインタ
+ * @details 一覧を表示していない (ページが -1) ときは何も描かない。
  */
 static void racial_power_display_list(PlayerType *player_ptr, rc_type *rc_ptr)
 {
+    if (rc_ptr->page < 0) {
+        return;
+    }
+
     TERM_LEN x = 11;
     prt(_("                                   Lv   MP 失率 効果", "                                   Lv   MP Fail Effect"), 1, x);
     auto y = 0;
