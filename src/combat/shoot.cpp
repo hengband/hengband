@@ -11,7 +11,6 @@
 #include "flavor/object-flavor-types.h"
 #include "floor/floor-object.h"
 #include "floor/geometry.h"
-#include "game-option/cheat-types.h"
 #include "game-option/special-options.h"
 #include "grid/grid.h"
 #include "inventory/inventory-object.h"
@@ -800,7 +799,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
                         tdam = mon_damage_mod(player_ptr, monster, tdam, false);
                     }
 
-                    msg_print_wizard(player_ptr, CHEAT_MONSTER, _("{}のダメージを与えた。(残りHP {}/{}({}))", "You do {} damage. (left HP {}/{}({}))"), tdam, monster.hp - tdam, monster.maxhp, monster.max_maxhp);
+                    msg_print_wizard_damage(player_ptr, monster, tdam);
 
                     /* Sniper */
                     if (snipe_type == SP_EXPLODE) {

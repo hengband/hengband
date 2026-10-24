@@ -15,7 +15,6 @@
 #include "dungeon/dungeon-flag-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
-#include "game-option/cheat-types.h"
 #include "inventory/inventory-slot-types.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
@@ -123,7 +122,7 @@ static void natural_attack(PlayerType *player_ptr, MONSTER_IDX m_idx, PlayerMuta
     }
 
     k = mon_damage_mod(player_ptr, monster, k, false);
-    msg_print_wizard(player_ptr, CHEAT_MONSTER, _("{}のダメージを与えた。(残りHP {}/{}({}))", "You do {} damage. (left HP {}/{}({}))"), k, monster.hp - k, monster.maxhp, monster.max_maxhp);
+    msg_print_wizard_damage(player_ptr, monster, k);
     if (k > 0) {
         anger_monster(player_ptr, monster);
     }

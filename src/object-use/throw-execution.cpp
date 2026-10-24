@@ -16,7 +16,6 @@
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/floor-object.h"
-#include "game-option/cheat-types.h"
 #include "grid/grid.h"
 #include "inventory/inventory-object.h"
 #include "inventory/inventory-slot-types.h"
@@ -438,7 +437,7 @@ void ObjectThrowEntity::attack_racial_power()
 
     this->display_attack_racial_power();
     this->calc_racial_power_damage();
-    msg_print_wizard(this->player_ptr, CHEAT_MONSTER, _("{}のダメージを与えた。(残りHP {}/{}({}))", "You do {} damage. (left HP {}/{}({}))"), this->tdam, monster.hp - this->tdam, monster.maxhp, monster.max_maxhp);
+    msg_print_wizard_damage(this->player_ptr, monster, this->tdam);
 
     auto fear = false;
     AttributeFlags attribute_flags{};
