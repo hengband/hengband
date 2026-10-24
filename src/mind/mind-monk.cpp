@@ -12,7 +12,6 @@
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "util/int-char-converter.h"
-#include "util/string-processor.h"
 #include "view/display-messages.h"
 #include <fmt/format.h>
 
@@ -55,10 +54,9 @@ bool choose_monk_stance(PlayerType *player_ptr)
     constexpr auto prompt = _("        どの構えをとりますか？", "        Choose Stance: ");
     prt(prompt, 1, 14);
 
-    const auto context_prompt = str_trim(prompt);
     auto new_stance = MonkStanceType::NONE;
     while (true) {
-        const auto choice = input_key_with_context(InputKind::COMMAND_CHAR, context_prompt);
+        const auto choice = input_key_with_context(InputKind::COMMAND_CHAR, prompt);
         if (choice == ESCAPE) {
             screen_load();
             return false;

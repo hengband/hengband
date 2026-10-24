@@ -4,6 +4,7 @@
  */
 
 #include "io/input-context.h"
+#include "util/string-processor.h"
 #include <string>
 #include <string_view>
 #include <tl/optional.hpp>
@@ -24,11 +25,13 @@ InputContextScope::InputContextScope(InputKind kind, std::string_view prompt)
 
 /*!
  * @brief 詳細情報を含む入力文脈を保持し、以前の文脈を退避する
- * @details 新しい値の構築が失敗した場合は、現在の文脈を変更しない。
+ * @details プロンプトは前後の空白 (入力欄との間を空ける空白など) を除いて保持する。
+ * 新しい値の構築が失敗した場合は、現在の文脈を変更しない。
  */
 InputContextScope::InputContextScope(InputContext input_context)
     : previous(std::move(input_context))
 {
+    this->previous->prompt = str_trim(this->previous->prompt);
     current_input_context.swap(this->previous);
 }
 

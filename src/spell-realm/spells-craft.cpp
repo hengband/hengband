@@ -25,7 +25,6 @@
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
-#include "util/string-processor.h"
 #include "view/display-messages.h"
 
 /*!
@@ -237,7 +236,7 @@ bool choose_ele_attack(PlayerType *player_ptr, TIME_EFFECT turn)
     constexpr auto brand_prompt = _("        どの元素攻撃をしますか？", "        Choose a temporary elemental brand ");
     prt(brand_prompt, 1, 14);
 
-    const auto choice = input_key_with_context(InputKind::COMMAND_CHAR, str_trim(brand_prompt));
+    const auto choice = input_key_with_context(InputKind::COMMAND_CHAR, brand_prompt);
 
     if ((choice == 'a') || (choice == 'A')) {
         set_ele_attack(player_ptr, ATTACK_FIRE, turn);
@@ -279,7 +278,7 @@ bool choose_ele_immune(PlayerType *player_ptr, TIME_EFFECT immune_turn)
     constexpr auto immunity_prompt = _("        どの元素の免疫をつけますか？", "        Choose a temporary elemental immunity ");
     prt(immunity_prompt, 1, 14);
 
-    const auto choice = input_key_with_context(InputKind::COMMAND_CHAR, str_trim(immunity_prompt));
+    const auto choice = input_key_with_context(InputKind::COMMAND_CHAR, immunity_prompt);
 
     if ((choice == 'a') || (choice == 'A')) {
         set_ele_immune(player_ptr, DEFENSE_FIRE, immune_turn);

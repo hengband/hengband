@@ -95,8 +95,7 @@ void do_cmd_inven(PlayerType *player_ptr, bool shopping)
 #endif
 
     prt(mes, 0, 0);
-    const auto prompt = str_trim(mes);
-    command_new = input_key_with_context({ InputKind::COMMAND, prompt, CommandInputDetails{ .shopping = shopping, .item_list = ItemSelectionArea::INVENTORY } });
+    command_new = input_key_with_context({ InputKind::COMMAND, mes, CommandInputDetails{ .shopping = shopping, .item_list = ItemSelectionArea::INVENTORY } });
     screen_load();
     if (command_new != ESCAPE) {
         command_see = true;

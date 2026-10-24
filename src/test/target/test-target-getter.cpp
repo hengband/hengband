@@ -27,15 +27,15 @@ constexpr auto SENTAKU = "\xc1\xaa\xc2\xf2"; // 選択
 constexpr auto HE = "\xa4\xd8"; // へ
 constexpr auto SAI = "\xba\xc6"; // 再
 #endif
-const auto DIRECTION_PROMPT = test::cat(HOUKOU, " (", ESC_DE_CHUUDAN, ")? ");
-const auto DIRECTION_AT_FEET_PROMPT = test::cat(HOUKOU, " ('.'", ASHIMOTO, ", ", ESC_DE_CHUUDAN, ")? ");
-const auto AIM_PROMPT = test::cat(HOUKOU, " ('*'", DE_TARGET, SENTAKU, ", ", ESC_DE_CHUUDAN, ")? ");
-const auto AIM_WITH_TARGET_PROMPT = test::cat(HOUKOU, " ('5'", DE_TARGET, HE, ", '*'", DE_TARGET, SAI, SENTAKU, ", ", ESC_DE_CHUUDAN, ")? ");
+const auto DIRECTION_PROMPT = test::cat(HOUKOU, " (", ESC_DE_CHUUDAN, ")?");
+const auto DIRECTION_AT_FEET_PROMPT = test::cat(HOUKOU, " ('.'", ASHIMOTO, ", ", ESC_DE_CHUUDAN, ")?");
+const auto AIM_PROMPT = test::cat(HOUKOU, " ('*'", DE_TARGET, SENTAKU, ", ", ESC_DE_CHUUDAN, ")?");
+const auto AIM_WITH_TARGET_PROMPT = test::cat(HOUKOU, " ('5'", DE_TARGET, HE, ", '*'", DE_TARGET, SAI, SENTAKU, ", ", ESC_DE_CHUUDAN, ")?");
 #else
-const std::string DIRECTION_PROMPT = "Direction (Escape to cancel)? ";
-const std::string DIRECTION_AT_FEET_PROMPT = "Direction ('.' at feet, Escape to cancel)? ";
-const std::string AIM_PROMPT = "Direction ('*' to choose a target, Escape to cancel)? ";
-const std::string AIM_WITH_TARGET_PROMPT = "Direction ('5' for target, '*' to re-target, Escape to cancel)? ";
+const std::string DIRECTION_PROMPT = "Direction (Escape to cancel)?";
+const std::string DIRECTION_AT_FEET_PROMPT = "Direction ('.' at feet, Escape to cancel)?";
+const std::string AIM_PROMPT = "Direction ('*' to choose a target, Escape to cancel)?";
+const std::string AIM_WITH_TARGET_PROMPT = "Direction ('5' for target, '*' to re-target, Escape to cancel)?";
 #endif
 
 InputContext direction_context(const std::string &prompt, DirectionInputDetails details)

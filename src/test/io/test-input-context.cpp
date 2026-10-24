@@ -14,15 +14,33 @@ TEST_CASE("Input context is restored after a nested input finishes")
         CHECK(get_input_context()->prompt == "Continue? [y/n]");
 
         {
-            const InputContextScope inner(InputKind::COMMAND_CHAR, "Command: ");
+            const InputContextScope inner(InputKind::COMMAND_CHAR, "Command:");
             REQUIRE(get_input_context());
             CHECK(get_input_context()->kind == InputKind::COMMAND_CHAR);
-            CHECK(get_input_context()->prompt == "Command: ");
+            CHECK(get_input_context()->prompt == "Command:");
         }
 
         REQUIRE(get_input_context());
         CHECK(get_input_context()->kind == InputKind::CONFIRM);
         CHECK(get_input_context()->prompt == "Continue? [y/n]");
+    }
+
+    CHECK_FALSE(get_input_context());
+}
+
+TEST_CASE("Input context trims the spaces around the prompt")
+{
+    CHECK_FALSE(get_input_context());
+    {
+        const InputContextScope scope(InputKind::COMMAND_CHAR, "  Command: ");
+        REQUIRE(get_input_context());
+        CHECK(get_input_context()->prompt == "Command:");
+    }
+
+    {
+        const InputContextScope scope({ InputKind::STRING, "Text: ", StringInputDetails{ 12, "" } });
+        REQUIRE(get_input_context());
+        CHECK(get_input_context()->prompt == "Text:");
     }
 
     CHECK_FALSE(get_input_context());
@@ -49,7 +67,7 @@ TEST_CASE("Input context details are restored after a nested quantity scope")
 {
     CHECK_FALSE(get_input_context());
     {
-        const InputContextScope outer({ InputKind::STRING, "Text: ", StringInputDetails{ 12, "outer seed" } });
+        const InputContextScope outer({ InputKind::STRING, "Text:", StringInputDetails{ 12, "outer seed" } });
         {
             const InputContextScope inner({ InputKind::QUANTITY, "Quantity: ", QuantityInputDetails{ 5, 1 } });
             REQUIRE(get_input_context());
@@ -62,7 +80,7 @@ TEST_CASE("Input context details are restored after a nested quantity scope")
 
         REQUIRE(get_input_context());
         CHECK(get_input_context()->kind == InputKind::STRING);
-        CHECK(get_input_context()->prompt == "Text: ");
+        CHECK(get_input_context()->prompt == "Text:");
         const auto *details = std::get_if<StringInputDetails>(&get_input_context()->details);
         REQUIRE(details != nullptr);
         CHECK(details->max_length == 12);

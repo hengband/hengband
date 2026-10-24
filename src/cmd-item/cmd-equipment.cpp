@@ -47,7 +47,6 @@
 #include "term/screen-processor.h"
 #include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"
-#include "util/string-processor.h"
 #include "view/display-inventory.h"
 #include "view/display-messages.h"
 #include <fmt/format.h>
@@ -106,8 +105,7 @@ void do_cmd_equip(PlayerType *player_ptr, bool shopping)
 #endif
 
     prt(out_val, 0, 0);
-    const auto prompt = str_trim(out_val);
-    command_new = input_key_with_context({ InputKind::COMMAND, prompt, CommandInputDetails{ .shopping = shopping, .item_list = ItemSelectionArea::EQUIPMENT } });
+    command_new = input_key_with_context({ InputKind::COMMAND, out_val, CommandInputDetails{ .shopping = shopping, .item_list = ItemSelectionArea::EQUIPMENT } });
     screen_load();
 
     if (command_new != ESCAPE) {

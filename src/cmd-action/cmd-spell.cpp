@@ -532,9 +532,8 @@ static void confirm_use_force(PlayerType *player_ptr, bool browse_only)
         return;
     }
 
-    constexpr auto prompt_line = _("('w'練気術, ESC) 'w'かESCを押してください。 ", "(w for the Force, ESC) Hit 'w' or ESC. ");
-    const auto prompt = str_trim(prompt_line);
-    prt(prompt_line, 0, 0);
+    constexpr auto prompt = _("('w'練気術, ESC) 'w'かESCを押してください。 ", "(w for the Force, ESC) Hit 'w' or ESC. ");
+    prt(prompt, 0, 0);
     char which;
     while (true) {
         which = input_key_with_context(InputKind::COMMAND_CHAR, prompt);
