@@ -106,9 +106,10 @@ void init_json(std::string_view filename, std::string_view keyname, DefinitionHa
 
     auto &elements = json_object[keyname];
     for (size_t index = 0; index < elements.size(); ++index) {
+        // 起動中は履歴に残らず、msg_print自体も入力を待つため、レコード単位で診断を捕捉する。
+        ScopedMessageCapture diagnostics;
         if (const auto result = json_parser(elements[index]); !result) {
-            msg_erase();
-            quit(format_record_parse_error(filename, keyname, index, result.error()));
+            quit(format_definition_load_error(diagnostics.messages(), format_record_parse_error(filename, keyname, index, result.error())));
         }
     }
 
@@ -175,7 +176,7 @@ void init_class_skills_info()
         const auto result = reader.read();
         if (!result) {
             const auto &diagnostic = reader.error().value();
-            quit(fmt::format(_("ClassSkillDefinitions.jsonc: 職業{}の{}: {}", "ClassSkillDefinitions.jsonc: class {} at {}: {}"), diagnostic.class_id, diagnostic.path, diagnostic.reason));
+            msg_print(_("ClassSkillDefinitions.jsonc: 職業{}の{}: {}", "ClassSkillDefinitions.jsonc: class {} at {}: {}"), diagnostic.class_id, diagnostic.path, diagnostic.reason);
         }
         return result;
     };
@@ -270,7 +271,7 @@ void init_vaults_info()
         const auto result = reader.read();
         if (!result) {
             const auto &diagnostic = reader.error().value();
-            quit(fmt::format(_("VaultDefinitions.jsonc: Vault{}の{}: {}", "VaultDefinitions.jsonc: vault {} at {}: {}"), diagnostic.id, diagnostic.path, diagnostic.reason));
+            msg_print(_("VaultDefinitions.jsonc: Vault{}の{}: {}", "VaultDefinitions.jsonc: vault {} at {}: {}"), diagnostic.id, diagnostic.path, diagnostic.reason);
         }
         return result;
     };
@@ -282,7 +283,8 @@ void init_vaults_info()
  */
 void init_wilderness()
 {
+    ScopedMessageCapture diagnostics;
     if (const auto result = initialize_wilderness_definition(); !result) {
-        quit(result.error());
+        quit(format_definition_load_error(diagnostics.messages(), result.error()));
     }
 }
