@@ -802,3 +802,18 @@ TEST_CASE("BaseitemReader bounds subtypes by the indexed tables")
         }
     }
 }
+
+TEST_CASE("BaseitemReader caps costs like egos and limits gold separately")
+{
+    for (const auto kind : { 1, 127 }) {
+        const auto maximum = kind == 127 ? 1024 : 67108863;
+        for (const auto cost : { -1, 0, maximum, maximum + 1 }) {
+            CAPTURE(kind);
+            CAPTURE(cost);
+            auto data = make_baseitem();
+            data["itemkind"]["type_value"] = kind;
+            data["cost"] = cost;
+            check_baseitem_boundary(data, cost >= 0 && cost <= maximum);
+        }
+    }
+}
