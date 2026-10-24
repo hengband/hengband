@@ -68,7 +68,8 @@ static tl::expected<void, ParseErrorType> set_id_list(const nlohmann::json &id_l
 /*!
  * @brief JSON Objectからモンスターのメッセージをセットする
  * @return 成功時は空の値、失敗時は解析エラーコード
- * @details 選択言語が無く他言語だけがある場合、先行分を公開して早期成功する既存動作を維持する。
+ * @details 選択言語が無く他言語だけがあるメッセージは読み飛ばし、後続の解析を続ける。
+ * グループ全体の解析に成功した場合だけ、選択言語のメッセージをまとめて公開する。
  */
 tl::expected<void, ParseErrorType> MessageReader::set_mon_message() const
 {
@@ -160,8 +161,7 @@ tl::expected<void, ParseErrorType> MessageReader::set_mon_message() const
             if (en_list == language_list.end()) {
                 return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
             }
-            publish();
-            return {};
+            continue;
         }
         const auto &message_list = ja_list.value();
 #else
@@ -169,8 +169,7 @@ tl::expected<void, ParseErrorType> MessageReader::set_mon_message() const
             if (ja_list == language_list.end()) {
                 return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
             }
-            publish();
-            return {};
+            continue;
         }
         const auto &message_list = en_list.value();
 #endif

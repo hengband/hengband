@@ -252,12 +252,11 @@ class MonsterMessageValidationTest(unittest.TestCase):
                                                             self.message(())]}],
                             ["groups", 0, "message", 2, "message"], "must contain ja or en")
 
-    def test_locale_cannot_return_after_gap(self):
+    def test_locale_can_return_after_gap(self):
         for language, other in (("ja", "en"), ("en", "ja")):
             for prefix in ([self.message((other,))], [self.message(), self.message((other,))]):
                 with self.subTest(language=language, prefix=prefix):
-                    self.assert_invalid([{"name": "DEFAULT", "message": prefix + [self.message()]}],
-                                        ["groups", 0, "message", len(prefix), "message", language], "would be discarded")
+                    self.assert_valid([{"name": "DEFAULT", "message": prefix + [self.message()]}])
 
     def test_single_locale_suffix_is_allowed(self):
         for language in ("ja", "en"):
@@ -280,13 +279,13 @@ class MonsterMessageValidationTest(unittest.TestCase):
         self.assert_invalid([{"name": "DEFAULT", "message": [self.message(("ja",)), self.message(("en",)), tail]}],
                             ["groups", 0, "message", 2, "action"])
 
-    def test_original_bundled_gaps_are_rejected(self):
+    def test_bundled_data_with_locale_gaps_is_accepted(self):
         document = load_jsonc(self.root / "lib/edit/MonsterMessages.jsonc")
-        for group_index, message_index, later_index in ((2, 1, 2), (3, 1, 2), (75, 0, 1)):
+        for group_index, message_index in ((2, 1), (3, 1), (75, 0)):
             with self.subTest(group=group_index):
                 group = copy.deepcopy(document["groups"][group_index])
                 del group["message"][message_index]["message"]["en"]
-                self.assert_invalid([group], ["groups", 0, "message", later_index, "message", "en"], "would be discarded")
+                self.assert_valid([group])
 
 
 if __name__ == "__main__":

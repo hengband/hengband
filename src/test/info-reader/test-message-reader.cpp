@@ -53,6 +53,12 @@ TEST_CASE("MessageReader preserves existing messages after a late parse error")
     messages.emplace(4, MonsterMessageType::SPEAK_ALL, 1, false, "original");
     messages.emplace_default(MonsterMessageType::SPEAK_ALL, 1, false, "default");
     const auto valid = make_message("SPEAK_ALL", nlohmann::json::array({ "new" }));
+    auto skipped = make_message("SPEAK_BATTLE", nlohmann::json::array({ "other language" }));
+#ifdef JP
+    skipped["message"].erase("ja");
+#else
+    skipped["message"].erase("en");
+#endif
     auto invalid = make_message("SPEAK_BATTLE", nlohmann::json::array({ "staged", "valid" }));
     auto expected = ParseErrorType::INVALID_FLAG;
     SUBCASE("invalid later boolean")
@@ -78,7 +84,28 @@ TEST_CASE("MessageReader preserves existing messages after a late parse error")
         invalid = make_message("SPEAK_BATTLE", nlohmann::json::array({ "staged", nullptr }));
         expected = ParseErrorType::TOO_FEW_ARGUMENTS;
     }
-    nlohmann::json data = { { "id_list", { 4, 5 } }, { "message", { valid, invalid } } };
+    SUBCASE("unknown action without selected language")
+    {
+        invalid = skipped;
+        invalid["action"] = "UNKNOWN";
+    }
+    SUBCASE("invalid chance without selected language")
+    {
+        invalid = skipped;
+        invalid["chance"] = 101;
+    }
+    SUBCASE("invalid boolean without selected language")
+    {
+        invalid = skipped;
+        invalid["use_name"] = "false";
+        expected = ParseErrorType::INVALID_TYPE;
+    }
+    SUBCASE("neither language after missing selected language")
+    {
+        invalid["message"] = nlohmann::json::object();
+        expected = ParseErrorType::TOO_FEW_ARGUMENTS;
+    }
+    nlohmann::json data = { { "id_list", { 4, 5 } }, { "message", { valid, skipped, invalid } } };
     CHECK(test::to_error_code(MessageReader(data).read()) == expected);
     CHECK(messages.get_message(4, "", MonsterMessageType::SPEAK_ALL) == "original");
     CHECK(state.message_count(4, MonsterMessageType::SPEAK_ALL) == 1);
@@ -92,7 +119,7 @@ TEST_CASE("MessageReader preserves existing messages after a late parse error")
     CHECK(state.default_message_count(MonsterMessageType::SPEAK_BATTLE) == 0);
 }
 
-TEST_CASE("MessageReader publishes successful groups and preserves missing-language early success")
+TEST_CASE("MessageReader publishes successful groups and skips messages missing the selected language")
 {
     const DefinedMonracesGuard monraces;
     test::MonraceMessageListTestAccess state;
@@ -105,25 +132,28 @@ TEST_CASE("MessageReader publishes successful groups and preserves missing-langu
 #else
     skipped["message"].erase("en");
 #endif
-    const auto later = make_message("UNKNOWN", nlohmann::json::array({ "unreachable" }));
+    const auto later = make_message("SPEAK_BATTLE", nlohmann::json::array({ "later" }));
     nlohmann::json data = { { "id_list", { 4, 5 } }, { "message", { valid } } };
+    bool has_later = false;
     SUBCASE("normal success") {}
-    SUBCASE("early success")
+    SUBCASE("skip missing language")
     {
         data["message"].push_back(skipped);
         data["message"].push_back(later);
+        has_later = true;
     }
     SUBCASE("default success")
     {
         data.erase("id_list");
         data["name"] = "DEFAULT";
     }
-    SUBCASE("default early success")
+    SUBCASE("default skips missing language")
     {
         data.erase("id_list");
         data["name"] = "DEFAULT";
         data["message"].push_back(skipped);
         data["message"].push_back(later);
+        has_later = true;
     }
     REQUIRE(MessageReader(data).read().has_value());
     CHECK(error_idx == -1);
@@ -133,11 +163,18 @@ TEST_CASE("MessageReader publishes successful groups and preserves missing-langu
     if (data.contains("id_list")) {
         CHECK(state.message_count(4, MonsterMessageType::SPEAK_ALL) == 1);
         CHECK(state.message_count(5, MonsterMessageType::SPEAK_ALL) == 1);
+        CHECK(state.message_count(4, MonsterMessageType::SPEAK_BATTLE) == (has_later ? 1 : 0));
+        CHECK(state.message_count(5, MonsterMessageType::SPEAK_BATTLE) == (has_later ? 1 : 0));
+        CHECK(state.default_message_count(MonsterMessageType::SPEAK_BATTLE) == 0);
     } else {
         CHECK(state.default_message_count(MonsterMessageType::SPEAK_ALL) == 1);
+        CHECK(state.default_message_count(MonsterMessageType::SPEAK_BATTLE) == (has_later ? 1 : 0));
+        CHECK(state.message_count(4, MonsterMessageType::SPEAK_BATTLE) == 0);
     }
-    CHECK(state.message_count(4, MonsterMessageType::SPEAK_BATTLE) == 0);
-    CHECK(state.default_message_count(MonsterMessageType::SPEAK_BATTLE) == 0);
+    if (has_later) {
+        CHECK(messages.get_message(4, "", MonsterMessageType::SPEAK_BATTLE) == "later");
+        CHECK(messages.get_message(5, "", MonsterMessageType::SPEAK_BATTLE) == "later");
+    }
 }
 
 TEST_CASE("MessageReader rejects monster IDs without monster definitions")
