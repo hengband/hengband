@@ -31,6 +31,14 @@ constexpr char I2D(int i)
     return static_cast<char>(i + '0');
 }
 
+/*!
+ * @brief 一覧の位置をラベルの文字にする (a〜z の後は 0 から続ける)
+ */
+constexpr char I2AD(int i)
+{
+    return (i < 26) ? I2A(i) : I2D(i - 26);
+}
+
 template <typename T>
 constexpr T KTRL(T ch)
 {
