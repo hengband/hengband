@@ -513,6 +513,9 @@ tl::expected<void, ParseErrorType> RaceReader::set_mon_blows(MonraceDefinition &
         if (blow_method.is_null() || blow_effect.is_null()) {
             return tl::unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
         }
+        if (!blow_method.is_string() || !blow_effect.is_string()) {
+            return tl::unexpected(ParseErrorType::INVALID_TYPE);
+        }
 
         const auto rbm = r_info_blow_method.find(blow_method.get<std::string>());
         if (rbm == r_info_blow_method.end()) {
@@ -552,6 +555,9 @@ tl::expected<void, ParseErrorType> RaceReader::set_mon_flags(MonraceDefinition &
     }
 
     for (const auto &flag : flag_data) {
+        if (!flag.is_string()) {
+            return tl::unexpected(ParseErrorType::INVALID_TYPE);
+        }
         if (!this->grab_one_basic_flag(monrace, flag.get<std::string>())) {
             return tl::unexpected(ParseErrorType::INVALID_FLAG);
         }
@@ -601,11 +607,15 @@ tl::expected<void, ParseErrorType> RaceReader::set_mon_skills(MonraceDefinition 
     }
 
     const auto &skill_list = skill_data.find("list");
-    if (skill_list == skill_data.end()) {
+    if ((skill_list == skill_data.end()) || skill_list->is_null()) {
         if (!shoot) {
             return tl::unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
         }
         return {};
+    }
+
+    if (!skill_list->is_array()) {
+        return tl::unexpected(ParseErrorType::INVALID_TYPE);
     }
 
     for (auto &skill : skill_list->items()) {

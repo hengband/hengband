@@ -217,6 +217,18 @@ TEST_CASE("RaceReader reads shoot dice with and without a skill list")
     CHECK(test::to_error_code(read_as_first_record(data)) == ParseErrorType::TOO_FEW_ARGUMENTS);
 }
 
+TEST_CASE("RaceReader treats a null skill list like an omitted one")
+{
+    test::MonraceListTestAccess guard;
+    auto data = make_monrace();
+    data["skill"]["list"] = nullptr;
+    CHECK(test::to_error_code(read_as_first_record(data)) == ParseErrorType::TOO_FEW_ARGUMENTS);
+    data["skill"]["shoot"] = "2d6";
+    REQUIRE(read_as_first_record(data).has_value());
+    CHECK(test_monrace().ability_flags.has(MonsterAbilityType::SHOOT));
+    CHECK_FALSE(test_monrace().ability_flags.has(MonsterAbilityType::SHRIEK));
+}
+
 TEST_CASE("RaceReader rejects nonstring shoot dice and skill list entries")
 {
     test::MonraceListTestAccess guard;
@@ -681,6 +693,51 @@ TEST_CASE("RaceReader validates references after every definition is read")
     const auto error = RaceReader::validate_references();
     REQUIRE(error.has_value());
     CHECK(error->find(reported_id) != std::string::npos);
+}
+
+TEST_CASE("RaceReader rejects malformed blow flags and skill list types without publishing")
+{
+    test::MonraceListTestAccess races;
+    test::MonraceMessageListTestAccess messages;
+    test::MonraceRecordsTestAccess records;
+    const auto rng = test::scoped_rng();
+    auto &list = MonraceList::get_instance();
+    auto &original = list.emplace(static_cast<MonraceId>(1));
+    original.level = 42;
+    const auto identity = list.get_monrace_shared(static_cast<MonraceId>(1));
+    const auto record = MonraceRecords::get_instance().get_record(static_cast<MonraceId>(1));
+    record->set_seen_count(23);
+    auto &message_list = MonraceMessageList::get_instance();
+    message_list.emplace(1, MonsterMessageType::SPEAK_ALL, 1, false, "old");
+    const auto base = [] {
+        auto data = make_monrace();
+        data["id"] = 1;
+        data["blows"] = nlohmann::json::array({ { { "method", "HIT" }, { "effect", "HURT" } } });
+        data["flags"] = { "RES_FIRE" };
+        return data;
+    }();
+    for (const std::string path : { "/blows/0/method", "/blows/0/effect", "/flags/1", "/skill/list" }) {
+        CAPTURE(path);
+        for (const auto &value : { nlohmann::json(7), nlohmann::json(true), nlohmann::json::array(), nlohmann::json{ { "first", "SHRIEK" } } }) {
+            // 空の配列は技能の一覧として正しい型なので対象外とする
+            if ((path == "/skill/list") && value.is_array()) {
+                continue;
+            }
+            CAPTURE(value);
+            auto data = base;
+            data[nlohmann::json::json_pointer(path)] = value;
+            auto error = ParseErrorType::NONE;
+            CHECK_NOTHROW(error = test::to_error_code(read_as_first_record(data)));
+            CHECK(error == ParseErrorType::INVALID_TYPE);
+            CHECK(list.get_monrace_shared(static_cast<MonraceId>(1)) == identity);
+            CHECK(original.level == 42);
+            CHECK(record->get_seen_count() == 23);
+            CHECK(message_list.get_message(1, "", MonsterMessageType::SPEAK_ALL) == "old");
+            CHECK(error_idx == 1);
+        }
+    }
+    REQUIRE(read_as_first_record(base).has_value());
+    CHECK(list.get_monrace(static_cast<MonraceId>(1)).level == 0);
 }
 
 TEST_CASE("RaceReader rejects non-boolean message use_name without publishing")
