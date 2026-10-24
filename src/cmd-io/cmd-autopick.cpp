@@ -88,7 +88,7 @@ static EditorCommandId analyze_move_key(AutopickTextBody *tb, uint32_t skey)
         return com_id;
     }
 
-    const int len = tb->lines[tb->cy].line->length();
+    const int len = tb->lines[tb->cy].line.length();
     tb->marks.set(AutopickMark::MARK);
     tb->marks.set(AutopickMark::BY_SHIFT);
     tb->my = tb->cy;
@@ -114,9 +114,9 @@ static EditorCommandId analyze_move_key(AutopickTextBody *tb, uint32_t skey)
 void AutopickTextBody::adjust_cursor_column()
 {
     this->cx = std::max(this->cx, this->rec_cx);
-    this->cx = std::min<int>(this->lines[this->cy].line->length(), this->cx);
+    this->cx = std::min<int>(this->lines[this->cy].line.length(), this->cx);
     if (this->marks.any()) {
-        this->mx = std::min<int>(this->lines[this->my].line->length(), this->mx);
+        this->mx = std::min<int>(this->lines[this->my].line.length(), this->mx);
     }
 }
 
@@ -133,7 +133,7 @@ void AutopickTextBody::update_cursor_column_record(EditorCommandId com_id)
  */
 bool AutopickTextBody::is_cursor_on_second_byte_of_kanji() const
 {
-    return is_second_byte_of_kanji(*this->lines[this->cy].line, this->cx);
+    return is_second_byte_of_kanji(this->lines[this->cy].line, this->cx);
 }
 
 /*!
@@ -166,7 +166,7 @@ void AutopickTextBody::set_lines(std::vector<std::string> new_lines)
     this->lines.clear();
     this->lines.reserve(new_lines.size());
     for (auto &line : new_lines) {
-        this->lines.emplace_back(std::move(line), EnumClassFlagGroup<AutopickEntryStatus>());
+        this->lines.emplace_back().line = std::move(line);
     }
 
     if (this->lines.empty()) {

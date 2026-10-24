@@ -9,7 +9,6 @@
 #include <doctest/doctest.h>
 
 #include <initializer_list>
-#include <memory>
 #include <string>
 #include <vector>
 
@@ -59,7 +58,7 @@ TEST_CASE("adjust_cursor_column keeps the mark column within the line shortened 
     tb.marks.set(AutopickMark::MARK);
     tb.mx = 5;
     toggle_command_letter(&tb, AutopickMethod::AUTOPICK);
-    REQUIRE(*tb.lines[0].line == "aaaa");
+    REQUIRE(tb.lines[0].line == "aaaa");
 
     tb.adjust_cursor_column();
 

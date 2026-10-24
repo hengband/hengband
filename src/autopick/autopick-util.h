@@ -47,17 +47,8 @@ enum class AutopickEntryStatus {
     MAX,
 };
 
-class AutopickEntryLine {
-public:
-    AutopickEntryLine() = default;
-    AutopickEntryLine(std::string line, const EnumClassFlagGroup<AutopickEntryStatus> &state);
-
-    AutopickEntryLine(const AutopickEntryLine &) = delete;
-    AutopickEntryLine &operator=(const AutopickEntryLine &) = delete;
-    AutopickEntryLine(AutopickEntryLine &&) = default;
-    AutopickEntryLine &operator=(AutopickEntryLine &&) = default;
-
-    std::unique_ptr<std::string> line = std::make_unique<std::string>();
+struct AutopickEntryLine {
+    std::string line;
     EnumClassFlagGroup<AutopickEntryStatus> state;
 };
 

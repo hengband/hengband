@@ -15,7 +15,6 @@
 #include "test/string-helpers.h"
 
 #include <doctest/doctest.h>
-#include <memory>
 #include <string>
 #include <string_view>
 #include <vector>
@@ -49,7 +48,7 @@ AutopickTextBody make_text_body(int num_lines)
 AutopickTextBody make_text_body_with_line(std::string_view line, int cx)
 {
     auto tb = make_text_body(1);
-    *tb.lines[0].line = line;
+    tb.lines[0].line = line;
     tb.cx = cx;
     return tb;
 }
@@ -67,7 +66,7 @@ TEST_CASE("add_empty_line appends an empty line")
 
     CHECK(add_empty_line(&tb));
     REQUIRE(tb.lines.size() == 2);
-    CHECK(tb.lines[1].line->empty());
+    CHECK(tb.lines[1].line.empty());
     CHECK((tb.dirty_flags & DIRTY_EXPRESSION) != 0);
     CHECK(tb.changed);
 }
@@ -78,13 +77,13 @@ TEST_CASE("add_empty_line appends an empty line to many lines")
 
     CHECK(add_empty_line(&tb));
     REQUIRE(tb.lines.size() == MANY_LINES + 1);
-    CHECK(tb.lines[MANY_LINES].line->empty());
+    CHECK(tb.lines[MANY_LINES].line.empty());
 }
 
 TEST_CASE("add_empty_line does not append a line when the last line is empty")
 {
     auto tb = make_text_body(1);
-    *tb.lines[0].line = "";
+    tb.lines[0].line = "";
 
     CHECK_FALSE(add_empty_line(&tb));
     CHECK(tb.lines.size() == 1);
@@ -104,9 +103,9 @@ TEST_CASE("insert_return_code splits the line at the cursor")
     auto tb = make_text_body_with_line("abcd", 2);
 
     insert_return_code(&tb);
-    CHECK(*tb.lines[0].line == "ab");
+    CHECK(tb.lines[0].line == "ab");
     REQUIRE(tb.lines.size() == 2);
-    CHECK(*tb.lines[1].line == "cd");
+    CHECK(tb.lines[1].line == "cd");
 }
 
 TEST_CASE("insert_return_code shifts the following lines down")
@@ -306,9 +305,9 @@ TEST_CASE("insert_return_code does not split a double-byte character")
     auto tb = make_text_body_with_line(cat(KANJI_KAN, KANJI_JI), 1);
 
     insert_return_code(&tb);
-    CHECK(*tb.lines[0].line == KANJI_KAN);
+    CHECK(tb.lines[0].line == KANJI_KAN);
     REQUIRE(tb.lines.size() == 2);
-    CHECK(*tb.lines[1].line == KANJI_JI);
+    CHECK(tb.lines[1].line == KANJI_JI);
 }
 
 TEST_CASE("insert_return_code splits a line ending with a lone lead byte at its end")
@@ -316,9 +315,9 @@ TEST_CASE("insert_return_code splits a line ending with a lone lead byte at its 
     auto tb = make_text_body_with_line(LINE_WITH_LONE_LEAD_BYTE, 3);
 
     insert_return_code(&tb);
-    CHECK(*tb.lines[0].line == LINE_WITH_LONE_LEAD_BYTE);
+    CHECK(tb.lines[0].line == LINE_WITH_LONE_LEAD_BYTE);
     REQUIRE(tb.lines.size() == 2);
-    CHECK(tb.lines[1].line->empty());
+    CHECK(tb.lines[1].line.empty());
 }
 
 TEST_CASE("EditorCommandId::LEFT moves back one double-byte character at a time")
@@ -339,7 +338,7 @@ TEST_CASE("insert_single_letter does not split a double-byte character pushed pa
     auto tb = make_text_body_with_line(line, 0);
 
     insert_single_letter(&tb, 'x');
-    CHECK(*tb.lines[0].line == "xa" + repeat(KANJI_KAN, (MAX_LINELEN - 2) / 2 - 1));
+    CHECK(tb.lines[0].line == "xa" + repeat(KANJI_KAN, (MAX_LINELEN - 2) / 2 - 1));
 }
 
 TEST_CASE("EditorCommandId::PASTE does not split a double-byte character pushed past the line limit")
@@ -350,7 +349,7 @@ TEST_CASE("EditorCommandId::PASTE does not split a double-byte character pushed 
     tb.yank = { "xyz" };
 
     do_editor_command(nullptr, &tb, EditorCommandId::PASTE);
-    CHECK(*tb.lines[0].line == "xyza" + repeat(KANJI_KAN, (MAX_LINELEN - 4) / 2 - 1));
+    CHECK(tb.lines[0].line == "xyza" + repeat(KANJI_KAN, (MAX_LINELEN - 4) / 2 - 1));
     CHECK(tb.cx == 3);
 }
 
