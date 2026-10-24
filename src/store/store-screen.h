@@ -38,6 +38,8 @@ public:
     int get_command_row(int offset) const;
 
 private:
+    int get_browsable_stock_num() const;
+
     Store &store;
     size_t town_index; //!< 店舗がある町のID
     short terrain_id; //!< 入店した地形のID

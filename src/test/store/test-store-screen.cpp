@@ -9,6 +9,7 @@
 
 #include "game-option/birth-options.h"
 #include "store/store-util.h"
+#include "store/store.h"
 #include "term/gameterm.h"
 #include "test/scoped-restore.h"
 
@@ -78,6 +79,7 @@ TEST_CASE("StoreScreen::turn_page_forward wraps to the first page")
     SUBCASE("at the end of the stock")
     {
         Store store(StoreSaleType::GENERAL);
+        store.stock_size = store_get_stock_capacity(StoreSaleType::GENERAL);
         StoreScreen screen(store, 1, 0, DEFAULT_HEIGHT);
         store.stock_num = 30;
         screen.turn_page_forward();
@@ -90,13 +92,26 @@ TEST_CASE("StoreScreen::turn_page_forward wraps to the first page")
         CHECK(screen.get_page_top() == 0);
     }
 
-    SUBCASE("at the second page of a home without powerup_home")
+    SUBCASE("in a home without powerup_home, which does not go past the stock limit")
     {
         Store store(StoreSaleType::HOME);
+        store.stock_size = store_get_stock_capacity(StoreSaleType::HOME);
         StoreScreen screen(store, 1, 0, DEFAULT_HEIGHT);
         store.stock_num = 30;
         screen.turn_page_forward();
         CHECK(screen.get_page_top() == 12);
+        screen.turn_page_forward();
+        CHECK(screen.get_page_top() == 0);
+    }
+
+    SUBCASE("in a home without powerup_home on a taller terminal")
+    {
+        Store store(StoreSaleType::HOME);
+        store.stock_size = store_get_stock_capacity(StoreSaleType::HOME);
+        StoreScreen screen(store, 1, 0, DEFAULT_HEIGHT + 6);
+        store.stock_num = 24;
+        screen.turn_page_forward();
+        CHECK(screen.get_page_top() == 18);
         screen.turn_page_forward();
         CHECK(screen.get_page_top() == 0);
     }
@@ -110,6 +125,7 @@ TEST_CASE("StoreScreen::turn_page_backward wraps to the last page")
     SUBCASE("in a store")
     {
         Store store(StoreSaleType::GENERAL);
+        store.stock_size = store_get_stock_capacity(StoreSaleType::GENERAL);
         StoreScreen screen(store, 1, 0, DEFAULT_HEIGHT);
         store.stock_num = 30;
         screen.turn_page_backward();
@@ -120,19 +136,43 @@ TEST_CASE("StoreScreen::turn_page_backward wraps to the last page")
         CHECK(screen.get_page_top() == 0);
     }
 
-    SUBCASE("in a home without powerup_home, which shows only two pages")
+    SUBCASE("in a home without powerup_home, which does not go past the stock limit")
     {
         Store store(StoreSaleType::HOME);
+        store.stock_size = store_get_stock_capacity(StoreSaleType::HOME);
         StoreScreen screen(store, 1, 0, DEFAULT_HEIGHT);
         store.stock_num = 30;
         screen.turn_page_backward();
         CHECK(screen.get_page_top() == 12);
     }
 
+    SUBCASE("in a home without powerup_home on a taller terminal")
+    {
+        Store store(StoreSaleType::HOME);
+        store.stock_size = store_get_stock_capacity(StoreSaleType::HOME);
+        StoreScreen screen(store, 1, 0, DEFAULT_HEIGHT + 6);
+        store.stock_num = 24;
+        screen.turn_page_backward();
+        CHECK(screen.get_page_top() == 18);
+        screen.turn_page_backward();
+        CHECK(screen.get_page_top() == 0);
+    }
+
+    SUBCASE("in a home without powerup_home that holds more items than the stock limit")
+    {
+        Store store(StoreSaleType::HOME);
+        store.stock_size = store_get_stock_capacity(StoreSaleType::HOME);
+        StoreScreen screen(store, 1, 0, DEFAULT_HEIGHT + 12);
+        store.stock_num = 30;
+        screen.turn_page_backward();
+        CHECK(screen.get_page_top() == 0);
+    }
+
     SUBCASE("in a home with powerup_home")
     {
         powerup_home = true;
         Store store(StoreSaleType::HOME);
+        store.stock_size = store_get_stock_capacity(StoreSaleType::HOME);
         StoreScreen screen(store, 1, 0, DEFAULT_HEIGHT);
         store.stock_num = 30;
         screen.turn_page_backward();
@@ -142,6 +182,7 @@ TEST_CASE("StoreScreen::turn_page_backward wraps to the last page")
     SUBCASE("when the stock ends at a page boundary")
     {
         Store store(StoreSaleType::GENERAL);
+        store.stock_size = store_get_stock_capacity(StoreSaleType::GENERAL);
         StoreScreen screen(store, 1, 0, DEFAULT_HEIGHT);
         store.stock_num = 24;
         screen.turn_page_backward();

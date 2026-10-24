@@ -1,6 +1,5 @@
 #include "view/display-store.h"
 #include "flavor/flavor-describer.h"
-#include "game-option/birth-options.h"
 #include "game-option/special-options.h"
 #include "game-option/text-display-options.h"
 #include "locale/japanese.h"
@@ -9,6 +8,7 @@
 #include "store/store-owners.h"
 #include "store/store-screen.h"
 #include "store/store-util.h"
+#include "store/store.h"
 #include "system/player-type-definition.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
@@ -121,12 +121,7 @@ void display_store_inventory(PlayerType *player_ptr, const StoreScreen &screen)
     }
 
     if (store_num == StoreSaleType::HOME || store_num == StoreSaleType::MUSEUM) {
-        int stock_limit = store.stock_size;
-        if (store_num == StoreSaleType::HOME && !powerup_home) {
-            stock_limit /= 10;
-        }
-
-        put_str(fmt::format(_("アイテム数:  {:4}/{:4}", "Objects:  {:4}/{:4}"), store.stock_num, stock_limit), screen.get_status_row(), _(27, 30));
+        put_str(fmt::format(_("アイテム数:  {:4}/{:4}", "Objects:  {:4}/{:4}"), store.stock_num, store_get_stock_limit(store)), screen.get_status_row(), _(27, 30));
     }
 }
 

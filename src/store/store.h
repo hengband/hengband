@@ -15,7 +15,8 @@ constexpr auto STORE_TICKS = 1000; /* Number of ticks between turnovers */
 
 class PlayerType;
 class StoreScreen;
-int16_t store_get_stock_max(StoreSaleType sst, bool powerup = true);
+int16_t store_get_stock_capacity(StoreSaleType sst);
+int16_t store_get_stock_limit(const Store &store);
 void store_shuffle(size_t town_num, StoreSaleType store_num);
 void store_maintenance(PlayerType *player_ptr, size_t town_num, Store &store, int chance);
 void store_init(size_t town_num, StoreSaleType store_num);

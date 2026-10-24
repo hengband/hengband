@@ -1588,6 +1588,7 @@ hengband_test_SOURCES = \
 	test/store/test-pricing.cpp \
 	test/store/test-store-screen.cpp \
 	test/store/test-store-util.cpp \
+	test/store/test-store.cpp \
 	test/system/baseitem/test-baseitem-definition.cpp \
 	test/save/test-item-writer.cpp \
 	test/system/baseitem/test-baseitem-allocation.cpp \

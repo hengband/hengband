@@ -36,19 +36,21 @@
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#include <algorithm>
 #include <fmt/format.h>
 #include <tl/optional.hpp>
 
 /*!
- * @brief 店舗の最大スロット数を返す
- * @param store_idx 店舗ID
- * @return 店舗の最大スロット数
+ * @brief 店舗の在庫の容量を返す
+ * @param sst 店舗の種類
+ * @return 町を作るときに確保する在庫の数 (我が家は powerup_home が有効なときの数)
+ * @details セーブの読み込みでも、この数まで品を受け入れる。実際に品を置ける数の上限は store_get_stock_limit() で求める。
  */
-int16_t store_get_stock_max(StoreSaleType sst, bool powerup)
+int16_t store_get_stock_capacity(StoreSaleType sst)
 {
     switch (sst) {
     case StoreSaleType::HOME:
-        return powerup ? STORE_INVEN_MAX * 10 : STORE_INVEN_MAX;
+        return STORE_INVEN_MAX * 10;
     case StoreSaleType::BLACK:
         return STORE_INVEN_MAX * 50;
     case StoreSaleType::MUSEUM:
@@ -59,19 +61,35 @@ int16_t store_get_stock_max(StoreSaleType sst, bool powerup)
 }
 
 /*!
+ * @brief 店舗に品を置ける数の上限を返す
+ * @param store 店舗
+ * @return 品を置ける数の上限
+ * @details 我が家は powerup_home が有効なときの容量を確保しているが、オプション powerup_home が無効なときは
+ * STORE_INVEN_MAX までしか使えない。
+ * また、確保した容量 (stock_size) を超えない。容量を確保していない店 (辺境の地以外の町の我が家と博物館) では 0 になる。
+ */
+int16_t store_get_stock_limit(const Store &store)
+{
+    const auto sale_type = store.get_sale_type();
+    if ((sale_type == StoreSaleType::HOME) && !powerup_home) {
+        return std::min<int16_t>(STORE_INVEN_MAX, store.stock_size);
+    }
+
+    return std::min(store_get_stock_capacity(sale_type), store.stock_size);
+}
+
+/*!
  * @brief アイテムが格納可能な数より多いかをチェックする
  * @param store 判定する店舗
  * @return
  * 0 : No space
  * 1 : Cannot be combined but there are empty spaces.
- * @details オプション powerup_home が設定されていると我が家が 20 ページまで使える /
+ * @details 置ける数の上限は store_get_stock_limit() で決まる /
  * Free space is always usable
  */
 static int check_free_space(const Store &store)
 {
-    const auto is_narrow_home = (store.get_sale_type() == StoreSaleType::HOME) && !powerup_home;
-    const auto stock_limit = is_narrow_home ? (store.stock_size / 10) : store.stock_size;
-    return store.stock_num < stock_limit ? 1 : 0;
+    return store.stock_num < store_get_stock_limit(store) ? 1 : 0;
 }
 
 /*!
