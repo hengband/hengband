@@ -30,6 +30,8 @@ COMMAND_CODE now_message;
 
 namespace {
 
+std::vector<std::string> *message_capture = nullptr;
+
 /*! 表示するメッセージの先頭位置 */
 static int msg_head_pos = 0;
 
@@ -111,6 +113,31 @@ msg_sp make_message(std::string &&msg)
 int32_t message_num(void)
 {
     return message_history.size();
+}
+
+/*!
+ * @brief スコープ内のメッセージをシステムの文字コードのまま捕捉する
+ */
+ScopedMessageCapture::ScopedMessageCapture()
+    : previous_capture(message_capture)
+{
+    message_capture = &this->captured_messages;
+}
+
+/*!
+ * @brief 元のメッセージ出力先を復元する
+ */
+ScopedMessageCapture::~ScopedMessageCapture()
+{
+    message_capture = this->previous_capture;
+}
+
+/*!
+ * @brief 捕捉した診断を出力順に返す
+ */
+const std::vector<std::string> &ScopedMessageCapture::messages() const
+{
+    return this->captured_messages;
 }
 
 /*!
@@ -342,6 +369,11 @@ static int split_length(std::string_view sv, int max)
  */
 void msg_print(std::string_view msg)
 {
+    if (message_capture != nullptr) {
+        message_capture->emplace_back(msg);
+        return;
+    }
+
     const auto &world = AngbandWorld::get_instance();
     if (world.timewalk_m_idx) {
         return;

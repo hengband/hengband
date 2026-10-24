@@ -320,8 +320,6 @@ tl::expected<void, std::string> initialize_wilderness_definition()
     }
 
     if (!DungeonReader::validate_wilderness_positions(definition->height, definition->width)) {
-        // 起動時の終了より先に、入口のID・座標・寸法を含む診断を表示する。
-        msg_erase();
         return tl::make_unexpected(std::string(_("荒野を初期化できません", "Cannot initialize wilderness")));
     }
 

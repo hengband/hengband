@@ -33,6 +33,26 @@ concptr err_str[enum2i(ParseErrorType::MAX)] = {
 }
 
 /*!
+ * @brief 読み込み中の診断を出力順に並べ、最後に終了理由を付ける
+ * @param diagnostics 読み込み中に集めた診断 (空の行は飛ばす)
+ * @param error 終了理由 (記録の位置とエラーの種類など)
+ * @return 診断を1行ずつ並べ、最後に終了理由を付けた文字列
+ * @details 診断は既にシステムの文字コードなので変換しない。
+ */
+std::string format_definition_load_error(std::span<const std::string> diagnostics, std::string_view error)
+{
+    std::string message;
+    for (const auto &diagnostic : diagnostics) {
+        if (!diagnostic.empty()) {
+            message.append(diagnostic);
+            message.push_back('\n');
+        }
+    }
+    message.append(error);
+    return message;
+}
+
+/*!
  * @brief 解析エラーの名称を返す
  * @param err 解析エラーの種類
  * @return エラーの名称 (エラーでない値や範囲外の値には「不明なエラー」)

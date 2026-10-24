@@ -34,7 +34,6 @@
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/angband-files.h"
-#include "view/display-messages.h"
 #include "world/world.h"
 #include <fmt/format.h>
 #include <string_view>
@@ -232,11 +231,7 @@ void init_angband(PlayerType *player_ptr, bool no_term)
     try {
         QuestList::get_instance().initialize();
     } catch (const std::exception &e) {
-        std::stringstream ss;
-        ss << _("ファイル読み込みエラー: ", "File loading error: ") << e.what();
-        msg_print(ss.str());
-        msg_erase();
-        quit(_("クエスト初期化エラー", "Error of quests initializing"));
+        quit(fmt::format("{}{}\n{}", _("ファイル読み込みエラー: ", "File loading error: "), e.what(), _("クエスト初期化エラー", "Error of quests initializing")));
     }
 
     init_note(_("[データの初期化中... (宝物庫)]", "[Initializing arrays... (vaults)]"));
