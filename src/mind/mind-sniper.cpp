@@ -15,6 +15,7 @@
 #include "grid/grid.h"
 #include "inventory/inventory-slot-types.h"
 #include "io/command-repeater.h"
+#include "io/input-context.h"
 #include "io/input-key-requester.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
@@ -283,15 +284,18 @@ static int get_snipe_power(PlayerType *player_ptr, COMMAND_CODE *sn, bool only_b
     constexpr auto fmt_browse = _("({} {:c}-{:c}, '*'で一覧, ESC) どの{}について知りますか？", "({}s {:c}-{:c}, *=List, ESC=exit) Browse which {}? ");
     constexpr auto fmt_use = _("({} {:c}-{:c}, '*'で一覧, ESC) どの{}を使いますか？", "({}s {:c}-{:c}, *=List, ESC=exit) Use which {}? ");
     const auto desc_upcased = str_upcase_first(p);
-    const auto first_letter = I2A(0);
-    const auto last_letter = I2A(num);
-    const auto prompt = only_browse ? fmt::format(fmt_browse, desc_upcased, first_letter, last_letter, p) : fmt::format(fmt_use, desc_upcased, first_letter, last_letter, p);
+    const auto first_label = I2A(0);
+    const auto last_label = I2A(num);
+    const auto prompt = only_browse ? fmt::format(fmt_browse, desc_upcased, first_label, last_label, p) : fmt::format(fmt_use, desc_upcased, first_label, last_label, p);
     auto choice = always_show_list ? ESCAPE : '\1';
+
+    // 調べるときは一覧を隠しても画面から消さない (screen_load() しない) ので、redraw とは別に一覧を描いたままかを覚える
+    auto is_list_drawn = false;
     while (!flag) {
         if (choice == ESCAPE) {
             choice = ' ';
         } else {
-            const auto new_choice = input_command(prompt);
+            const auto new_choice = input_spell_choice(prompt, { .first_label = first_label, .last_label = last_label, .list = is_list_drawn, .browse = only_browse });
             if (!new_choice) {
                 break;
             }
@@ -304,6 +308,7 @@ static int get_snipe_power(PlayerType *player_ptr, COMMAND_CODE *sn, bool only_b
             /* Show the list */
             if (!redraw) {
                 redraw = true;
+                is_list_drawn = true;
                 if (!only_browse) {
                     screen_save();
                 }
@@ -341,6 +346,7 @@ static int get_snipe_power(PlayerType *player_ptr, COMMAND_CODE *sn, bool only_b
                 redraw = false;
                 if (!only_browse) {
                     screen_load();
+                    is_list_drawn = false;
                 }
             }
 

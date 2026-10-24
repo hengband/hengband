@@ -352,6 +352,17 @@ tl::optional<char> input_command_with_context(InputContext input_context)
 }
 
 /*!
+ * @brief 呪文・技・特殊能力などを一覧から選ぶ待ちで、1文字の入力を受け付ける
+ * @param prompt プロンプト
+ * @param details ラベルの範囲や一覧を表示しているかなどの詳細
+ * @return 入力した文字。ESCで中断したらnullopt
+ */
+tl::optional<char> input_spell_choice(std::string_view prompt, const SpellInputDetails &details)
+{
+    return input_command_with_context({ InputKind::SPELL, std::string(prompt), details });
+}
+
+/*!
  * @brief 入力待ちの文脈を公開して、キーを1つ待つ
  * @param kind 入力の種類
  * @param prompt 公開するプロンプト (表示は呼び出し元が行う)

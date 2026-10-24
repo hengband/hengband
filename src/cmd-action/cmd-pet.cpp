@@ -517,13 +517,15 @@ void do_cmd_pet(PlayerType *player_ptr)
         flag = false;
         redraw = false;
 
+        const auto first_label = I2A(0);
+        const auto last_label = I2A(num - 1);
         std::string prompt;
         if (use_menu) {
             screen_save();
             prompt = _("(コマンド、ESC=終了) コマンドを選んでください:", "(Command, ESC=exit) Choose command from menu.");
         } else {
             constexpr auto fmt = _("(コマンド {:c}-{:c}、'*'=一覧、ESC=終了) コマンドを選んでください:", "(Command {:c}-{:c}, *=List, ESC=exit) Select a command: ");
-            prompt = fmt::format(fmt, I2A(0), I2A(num - 1));
+            prompt = fmt::format(fmt, first_label, last_label);
         }
 
         choice = (always_show_list || use_menu) ? ESCAPE : '\1';
@@ -533,7 +535,7 @@ void do_cmd_pet(PlayerType *player_ptr)
             if (choice == ESCAPE) {
                 choice = ' ';
             } else {
-                const auto new_choice = input_command(prompt);
+                const auto new_choice = input_spell_choice(prompt, { .first_label = first_label, .last_label = last_label, .list = redraw, .menu = use_menu });
                 if (!new_choice) {
                     break;
                 }

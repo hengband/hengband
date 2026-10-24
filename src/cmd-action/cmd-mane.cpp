@@ -20,6 +20,7 @@
 #include "game-option/text-display-options.h"
 #include "hpmp/hp-mp-processor.h"
 #include "inventory/inventory-slot-types.h"
+#include "io/input-context.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "mind/mind-mage.h"
@@ -173,14 +174,16 @@ static int get_mane_power(PlayerType *player_ptr, int *sn, bool baigaesi)
 
     /* Build a prompt (accept all spells) */
     constexpr auto fmt = _("({:c}-{:c}, '*'で一覧, ESC) どの{}をまねますか？", "({:c}-{:c}, *=List, ESC=exit) Use which {}? ");
-    const auto prompt = fmt::format(fmt, I2A(0), I2A(num - 1), p);
+    const auto first_label = I2A(0);
+    const auto last_label = I2A(num - 1);
+    const auto prompt = fmt::format(fmt, first_label, last_label, p);
 
     char choice = always_show_list ? ESCAPE : '\1';
     while (!flag) {
         if (choice == ESCAPE) {
             choice = ' ';
         } else {
-            const auto new_choice = input_command(prompt);
+            const auto new_choice = input_spell_choice(prompt, { .first_label = first_label, .last_label = last_label, .list = redraw });
             if (!new_choice) {
                 break;
             }
