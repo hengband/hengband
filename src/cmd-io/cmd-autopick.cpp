@@ -184,11 +184,9 @@ void do_cmd_edit_autopick(PlayerType *player_ptr)
         tb->lines[i].line.reset();
     }
 
-    for (auto i = 0; i < tb->cy; i++) {
-        if (!tb->lines[i].line) {
-            tb->cy = tb->cx = 0;
-            break;
-        }
+    // 前回閉じたときのカーソルの行が、読み込み直したファイルに無ければ先頭に戻す
+    if (!tb->lines[tb->cy].line) {
+        tb->cy = tb->cx = 0;
     }
 
     TermCenteredOffsetSetter tcos(tl::nullopt, tl::nullopt);
