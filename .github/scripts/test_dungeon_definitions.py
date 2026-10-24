@@ -39,6 +39,20 @@ class DungeonValidationTest(unittest.TestCase):
                 ok, diagnostic = self.validate(document)
                 self.assertTrue(ok, diagnostic)
 
+    def test_visual_and_special_flags_match_the_reader_token_tables(self):
+        schema_tokens = set(self.schema["$defs"]["monsterFlag"]["enum"])
+        for table in ("r_info_visual_flags", "r_info_special_flags"):
+            tokens = load_cpp_map_keys(self.root / "src/info-reader/race-info-tokens-table.cpp", table)
+            with self.subTest(table=table):
+                self.assertTrue(tokens)
+                self.assertLessEqual(tokens, schema_tokens)
+            for token in sorted(tokens):
+                with self.subTest(token=token):
+                    document = self.sample()
+                    document["dungeons"][0]["monsters"]["flags"] = [token]
+                    ok, diagnostic = self.validate(document)
+                    self.assertTrue(ok, diagnostic)
+
     def test_unknown_aura_flags_are_rejected(self):
         document = self.sample()
         document["dungeons"][0]["monsters"]["flags"] = ["AURA_FIRE", "AURA_UNKNOWN"]

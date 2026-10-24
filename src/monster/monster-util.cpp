@@ -112,6 +112,8 @@ bool restrict_monster_to_dungeon(const DungeonDefinition &dungeon, int floor_lev
         std::vector<bool> is_possible = {
             is_possible_monster_and(monrace.ability_flags, dungeon.mon_ability_flags),
             is_possible_monster_and(monrace.aura_flags, dungeon.mon_aura_flags),
+            is_possible_monster_and(monrace.visual_flags, dungeon.mon_visual_flags),
+            is_possible_monster_and(monrace.special_flags, dungeon.mon_special_flags),
             is_possible_monster_and(monrace.behavior_flags, dungeon.mon_behavior_flags),
             is_possible_monster_and(monrace.resistance_flags, dungeon.mon_resistance_flags),
             is_possible_monster_and(monrace.drop_flags, dungeon.mon_drop_flags),
@@ -133,6 +135,8 @@ bool restrict_monster_to_dungeon(const DungeonDefinition &dungeon, int floor_lev
         std::vector<bool> is_possible = {
             is_possible_monster_or(monrace.ability_flags, dungeon.mon_ability_flags),
             is_possible_monster_or(monrace.aura_flags, dungeon.mon_aura_flags),
+            is_possible_monster_or(monrace.visual_flags, dungeon.mon_visual_flags),
+            is_possible_monster_or(monrace.special_flags, dungeon.mon_special_flags),
             is_possible_monster_or(monrace.behavior_flags, dungeon.mon_behavior_flags),
             is_possible_monster_or(monrace.resistance_flags, dungeon.mon_resistance_flags),
             is_possible_monster_or(monrace.drop_flags, dungeon.mon_drop_flags),
