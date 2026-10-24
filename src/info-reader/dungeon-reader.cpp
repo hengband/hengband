@@ -206,6 +206,10 @@ static tl::expected<void, ParseErrorType> info_set_enum_flag_group(const nlohman
  */
 bool DungeonReader::grab_one_basic_monster_flag(DungeonDefinition &dungeon, std::string_view what) const
 {
+    if (EnumClassFlagGroup<MonsterAuraType>::grab_one_flag(dungeon.mon_aura_flags, r_info_aura_flags, what)) {
+        return true;
+    }
+
     if (EnumClassFlagGroup<MonsterResistanceType>::grab_one_flag(dungeon.mon_resistance_flags, r_info_flagsr, what)) {
         return true;
     }

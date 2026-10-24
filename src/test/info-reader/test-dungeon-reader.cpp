@@ -1,6 +1,8 @@
 #include "artifact/fixed-art-types.h"
 #include "info-reader/dungeon-reader.h"
 #include "info-reader/parse-error-types.h"
+#include "info-reader/race-info-tokens-table.h"
+#include "monster/monster-util.h"
 #include "system/artifact/artifact-definition.h"
 #include "system/artifact/artifact-list.h"
 #include "system/baseitem/baseitem-definition.h"
@@ -106,6 +108,80 @@ TEST_CASE("DungeonReader reads floor and wall probabilities")
     CHECK(dungeon.prob_table_floor.total_prob() == 100);
     CHECK(dungeon.prob_table_wall.item_count() == 1);
     CHECK(dungeon.prob_table_wall.total_prob() == 100);
+}
+
+TEST_CASE("DungeonReader stores every supported aura token")
+{
+    for (const auto &[token, aura] : r_info_aura_flags) {
+        CAPTURE(token);
+        DungeonReaderStateGuard guard;
+        auto data = make_dungeon();
+        data["monsters"]["flags"] = { std::string(token) };
+        REQUIRE(DungeonReader(data).read().has_value());
+        const auto &dungeon = DungeonList::get_instance().get_dungeon(DungeonId::WILDERNESS);
+        CHECK(dungeon.mon_aura_flags.has(aura));
+        CHECK(dungeon.mon_aura_flags.count() == 1);
+    }
+}
+
+TEST_CASE("DungeonReader rejects unknown aura tokens without publishing a dungeon")
+{
+    DungeonReaderStateGuard guard;
+    auto data = make_dungeon();
+    data["monsters"]["flags"] = { "AURA_FIRE", "AURA_UNKNOWN" };
+    CHECK(test::to_error_code(DungeonReader(data).read()) == ParseErrorType::INVALID_FLAG);
+    CHECK(DungeonList::get_instance().empty());
+}
+
+TEST_CASE("DungeonReader aura restrictions participate in every monster filter mode")
+{
+    for (const auto *mode : { "NONE", "AND", "NAND", "OR", "NOR" }) {
+        for (auto aura_mask = 0; aura_mask < 4; ++aura_mask) {
+            for (const auto resistant : { false, true }) {
+                CAPTURE(mode);
+                CAPTURE(aura_mask);
+                CAPTURE(resistant);
+                const test::MonraceListTestAccess races;
+                DungeonReaderStateGuard guard;
+                auto &monrace = MonraceList::get_instance().emplace(MonraceId::FILTHY_URCHIN);
+                if ((aura_mask & 1) != 0) {
+                    monrace.aura_flags.set(MonsterAuraType::FIRE);
+                }
+                if ((aura_mask & 2) != 0) {
+                    monrace.aura_flags.set(MonsterAuraType::COLD);
+                }
+                if (resistant) {
+                    monrace.resistance_flags.set(MonsterResistanceType::IMMUNE_FIRE);
+                }
+                auto data = make_dungeon();
+                data["monsters"]["normalMonsterRate"] = 0;
+                data["monsters"]["flagsMode"] = mode;
+                data["monsters"]["flags"] = { "AURA_FIRE", "AURA_COLD", "IM_FIRE" };
+                REQUIRE(DungeonReader(data).read().has_value());
+                const auto &dungeon = DungeonList::get_instance().get_dungeon(DungeonId::WILDERNESS);
+                const auto all = aura_mask == 3 && resistant;
+                const auto any = aura_mask != 0 || resistant;
+                auto expected = true;
+                switch (dungeon.mode) {
+                case DungeonMode::NONE:
+                    break;
+                case DungeonMode::AND:
+                    expected = all;
+                    break;
+                case DungeonMode::NAND:
+                    expected = !all;
+                    break;
+                case DungeonMode::OR:
+                    expected = any;
+                    break;
+                case DungeonMode::NOR:
+                    expected = !any;
+                    break;
+                }
+                CHECK(restrict_monster_to_dungeon(dungeon, 0, MonraceId::FILTHY_URCHIN) == expected);
+            }
+        }
+    }
 }
 
 TEST_CASE("DungeonReader rejects player levels outside their storage type")
