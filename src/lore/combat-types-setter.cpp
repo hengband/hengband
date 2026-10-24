@@ -100,6 +100,10 @@ void set_monster_blow_method(lore_type *lore_ptr, int m)
         lore_ptr->p = _("歌う", "sing");
         lore_ptr->pc = TERM_SLATE;
         break;
+    case RaceBlowMethodType::DASH:
+        lore_ptr->p = _("体当たりする", "dash");
+        lore_ptr->pc = TERM_L_WHITE;
+        break;
 
     case RaceBlowMethodType::NONE:
     case RaceBlowMethodType::MAX:

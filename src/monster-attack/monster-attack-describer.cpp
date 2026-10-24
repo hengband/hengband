@@ -222,6 +222,13 @@ void describe_monster_attack_method(MonsterAttackPlayer *monap_ptr)
         monster_attack_show(monap_ptr);
         break;
     }
+    case RaceBlowMethodType::DASH: {
+        monap_ptr->act = _("体当たりされた。", "dashes you.");
+        monap_ptr->do_stun = 1;
+        monap_ptr->touched = true;
+        sound(SOUND_ENEMY_HIT);
+        break;
+    }
 
     case RaceBlowMethodType::NONE:
     case RaceBlowMethodType::MAX:
