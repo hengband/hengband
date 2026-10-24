@@ -14,6 +14,7 @@
 #include "game-option/birth-options.h"
 #include "info-reader/general-parser.h"
 #include "info-reader/jsonc-document-loader.h"
+#include "info-reader/parse-error-messages.h"
 #include "info-reader/parse-error-types.h"
 #include "info-reader/quest-reader.h"
 #include "info-reader/random-grid-effect-types.h"
@@ -25,7 +26,6 @@
 #include "io/files-util.h"
 #include "io/pref-file-expressor.h"
 #include "locale/character-encoding.h"
-#include "main/init-error-messages-table.h"
 #include "player-info/class-info.h"
 #include "player-info/race-info.h"
 #include "player/player-realm.h"
@@ -44,6 +44,7 @@
 #include "system/terrain/terrain-list.h"
 #include "term/z-util.h"
 #include "util/angband-files.h"
+#include "util/enum-converter.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "world/world.h"
@@ -454,8 +455,7 @@ static tl::expected<void, ParseErrorType> parse_town_map_jsonc(PlayerType *playe
  */
 static void report_load_error(ParseErrorType err, std::string_view filename)
 {
-    const auto oops = ((err > ParseErrorType::NONE) && (err < ParseErrorType::MAX)) ? err_str[enum2i(err)] : "unknown";
-    msg_print("Error {} ({}) loading '{}'.", enum2i(err), oops, filename);
+    msg_print("Error {} ({}) loading '{}'.", enum2i(err), describe_parse_error(err), filename);
     msg_erase();
 }
 

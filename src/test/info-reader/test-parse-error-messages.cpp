@@ -2,28 +2,21 @@
  * @brief ゲームデータ解析エラー名の表のテスト
  */
 
+#include "info-reader/parse-error-messages.h"
 #include "info-reader/parse-error-types.h"
-#include "main/init-error-messages-table.h"
 #include "util/enum-converter.h"
 #include <doctest/doctest.h>
 #include <string>
 
-TEST_CASE("err_str has a message for every parse error")
-{
-    // ParseErrorType::NONE (0) はエラーではないので名称を持たない
-    for (auto err = 1; err < enum2i(ParseErrorType::MAX); err++) {
-        CAPTURE(err);
-        CHECK(err_str[err] != nullptr);
-    }
-}
-
 TEST_CASE("describe_parse_error names every parse error")
 {
+    // ParseErrorType::NONE (0) はエラーではないので名称を持たず、代替名になる
+    const auto fallback = describe_parse_error(ParseErrorType::NONE);
     for (auto code = enum2i(ParseErrorType::GENERIC); code < enum2i(ParseErrorType::MAX); ++code) {
         CAPTURE(code);
         const auto err = static_cast<ParseErrorType>(code);
         CHECK_FALSE(describe_parse_error(err).empty());
-        CHECK(describe_parse_error(err) == err_str[code]);
+        CHECK(describe_parse_error(err) != fallback);
     }
 }
 
