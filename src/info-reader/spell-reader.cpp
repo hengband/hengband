@@ -10,9 +10,10 @@
 #include <utility>
 #include <vector>
 
-SpellReader::SpellReader(const nlohmann::json &realm_data, SpellInfoList &spell_info_list)
+SpellReader::SpellReader(const nlohmann::json &realm_data, SpellInfoList &spell_info_list, Session &session)
     : realm_data(realm_data)
     , spell_info_list(spell_info_list)
+    , session(session)
 {
 }
 
@@ -37,6 +38,22 @@ tl::expected<void, ParseErrorType> SpellReader::read() const
         return result;
     }
 
+    // レコード全体の検証が済むまでは、呪文表もセッション状態も変更しない。
+    const auto previous = this->session.realms.find(realm_id);
+    auto staged = previous == this->session.realms.end() ? Session::RealmSpells{} : previous->second;
+    const auto realm_name = get_json_value(this->realm_data, "name").get<std::string>();
+    for (const auto &info : spells) {
+        if (!staged.ids.insert(info.idx).second) {
+            msg_print(_("呪文ID重複。領域: '{}'。呪文ID: '{}'。", "Duplicate spell ID. Realm: '{}'. Spell ID: '{}'."), realm_name, info.idx);
+            return tl::make_unexpected(ParseErrorType::NON_SEQUENTIAL_RECORDS);
+        }
+        if (!staged.tags.insert(info.tag).second) {
+            msg_print(_("呪文タグ重複。領域: '{}'。呪文タグ: '{}'。", "Duplicate spell tag. Realm: '{}'. Spell tag: '{}'."), realm_name, info.tag);
+            return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
+        }
+    }
+
+    this->session.realms[realm_id] = std::move(staged);
     for (auto &info : spells) {
         this->spell_info_list.set_spell_info(realm_id, info.idx, std::move(info));
     }

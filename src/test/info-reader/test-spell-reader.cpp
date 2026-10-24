@@ -15,20 +15,21 @@
 TEST_CASE("SpellReader requires arrays for books and spells")
 {
     const test::ScopedReaderState reader_state;
+    SpellReader::Session session;
     auto &spells = SpellInfoList::get_instance();
     nlohmann::json data = { { "name", "LIFE" }, { "books", nlohmann::json::array() } };
 
-    CHECK(SpellReader(data, spells).read().has_value());
+    CHECK(SpellReader(data, spells, session).read().has_value());
 
     data["books"] = nlohmann::json::array({ { { "spells", nlohmann::json::array() } } });
-    CHECK(SpellReader(data, spells).read().has_value());
+    CHECK(SpellReader(data, spells, session).read().has_value());
 
     // A JSON object is iterable too, so these used to be accepted as record arrays.
     data["books"] = { { "first", { { "spells", nlohmann::json::array() } } } };
-    CHECK(test::to_error_code(SpellReader(data, spells).read()) == ParseErrorType::INVALID_TYPE);
+    CHECK(test::to_error_code(SpellReader(data, spells, session).read()) == ParseErrorType::INVALID_TYPE);
 
     data["books"] = nlohmann::json::array({ { { "spells", nlohmann::json::object() } } });
-    CHECK(test::to_error_code(SpellReader(data, spells).read()) == ParseErrorType::INVALID_TYPE);
+    CHECK(test::to_error_code(SpellReader(data, spells, session).read()) == ParseErrorType::INVALID_TYPE);
 }
 
 namespace {
@@ -41,12 +42,44 @@ nlohmann::json make_spell(int id, const std::string &tag)
         { "description", { { "ja", tag + " description" }, { "en", tag + " description" } } },
     };
 }
+
+nlohmann::json make_realm(const std::string &name, const nlohmann::json &first, const nlohmann::json &second)
+{
+    return { { "name", name }, { "books", nlohmann::json::array({
+                                              { { "spells", first } },
+                                              { { "spells", second } },
+                                          }) } };
+}
+
+std::vector<SpellInfo> snapshot_spells(const SpellInfoList &spells)
+{
+    std::vector<SpellInfo> saved;
+    for (int realm = 0; realm < enum2i(RealmType::MAX); ++realm) {
+        for (int id = 0; id < SPELLS_IN_REALM; ++id) {
+            saved.push_back(spells.get_spell_info(i2enum<RealmType>(realm), id));
+        }
+    }
+    return saved;
+}
+
+void check_spells_unchanged(const SpellInfoList &spells, const std::vector<SpellInfo> &saved)
+{
+    const auto actual = snapshot_spells(spells);
+    REQUIRE(actual.size() == saved.size());
+    for (size_t i = 0; i < saved.size(); ++i) {
+        CHECK(actual[i].idx == saved[i].idx);
+        CHECK(actual[i].tag == saved[i].tag);
+        CHECK(actual[i].name == saved[i].name);
+        CHECK(actual[i].description == saved[i].description);
+    }
+}
 }
 
 TEST_CASE("SpellReader commits all books only after the whole realm succeeds")
 {
     auto &spells = SpellInfoList::get_instance();
     const test::ScopedReaderState reader_state;
+    SpellReader::Session session;
     const test::SpellInfoListTestAccess spell_state;
 
     nlohmann::json data = {
@@ -56,7 +89,7 @@ TEST_CASE("SpellReader commits all books only after the whole realm succeeds")
                        { { "spells", nlohmann::json::array({ make_spell(8, "old-eight") }) } },
                    }) },
     };
-    REQUIRE(SpellReader(data, spells).read().has_value());
+    REQUIRE(SpellReader(data, spells, session).read().has_value());
     auto other = SpellInfo();
     other.idx = 3;
     other.tag = "other-realm";
@@ -93,25 +126,27 @@ TEST_CASE("SpellReader commits all books only after the whole realm succeeds")
         auto invalid = make_spell(4, "invalid");
         invalid.erase("description");
         data["books"][0]["spells"].push_back(invalid);
-        CHECK(test::to_error_code(SpellReader(data, spells).read()) == ParseErrorType::TOO_FEW_ARGUMENTS);
+        CHECK(test::to_error_code(SpellReader(data, spells, session).read()) == ParseErrorType::TOO_FEW_ARGUMENTS);
         check_unchanged();
     }
     SUBCASE("a spell in a later book is invalid")
     {
         data["books"][1]["spells"][0]["spell_id"] = 32;
-        CHECK(test::to_error_code(SpellReader(data, spells).read()) == ParseErrorType::INVALID_FLAG);
+        CHECK(test::to_error_code(SpellReader(data, spells, session).read()) == ParseErrorType::INVALID_FLAG);
         check_unchanged();
     }
     SUBCASE("a later book has an invalid spells container")
     {
         data["books"][1]["spells"] = nlohmann::json::object();
-        CHECK(test::to_error_code(SpellReader(data, spells).read()) == ParseErrorType::INVALID_TYPE);
+        CHECK(test::to_error_code(SpellReader(data, spells, session).read()) == ParseErrorType::INVALID_TYPE);
         check_unchanged();
     }
     SUBCASE("successful reload preserves unspecified spells and other realms")
     {
-        data["books"][1]["spells"] = nlohmann::json::array({ make_spell(8, "new-eight"), make_spell(0, "last-zero") });
-        REQUIRE(SpellReader(data, spells).read().has_value());
+        SpellReader::Session reload_session;
+        data["books"][0]["spells"][0] = make_spell(0, "last-zero");
+        data["books"][1]["spells"] = nlohmann::json::array({ make_spell(8, "new-eight") });
+        REQUIRE(SpellReader(data, spells, reload_session).read().has_value());
         CHECK(spells.get_spell_id(RealmType::LIFE, "last-zero") == 0);
         CHECK_FALSE(spells.get_spell_id(RealmType::LIFE, "old-zero"));
         CHECK_FALSE(spells.get_spell_id(RealmType::LIFE, "new-zero"));
@@ -124,7 +159,7 @@ TEST_CASE("SpellReader commits all books only after the whole realm succeeds")
         CHECK(spells.get_spell_info(RealmType::LIFE, 2).idx == 2);
         CHECK(spells.get_spell_info(RealmType::LIFE, 8).name == "new-eight");
         data["books"] = nlohmann::json::array();
-        CHECK(SpellReader(data, spells).read().has_value());
+        CHECK(SpellReader(data, spells, reload_session).read().has_value());
         CHECK(spells.get_spell_id(RealmType::LIFE, "last-zero") == 0);
     }
 }
@@ -135,6 +170,7 @@ TEST_CASE("SpellReader commits all books only after the whole realm succeeds")
 TEST_CASE("SpellReader propagates helper errors without publishing staged spells")
 {
     const test::ScopedReaderState reader_state;
+    SpellReader::Session session;
     const test::SpellInfoListTestAccess spell_state;
     auto &spells = SpellInfoList::get_instance();
     nlohmann::json original = {
@@ -144,7 +180,7 @@ TEST_CASE("SpellReader propagates helper errors without publishing staged spells
                        { { "spells", nlohmann::json::array({ make_spell(8, "old-eight") }) } },
                    }) },
     };
-    REQUIRE(SpellReader(original, spells).read().has_value());
+    REQUIRE(SpellReader(original, spells, session).read().has_value());
     auto other = SpellInfo();
     other.idx = 3;
     other.tag = "other-realm";
@@ -182,7 +218,7 @@ TEST_CASE("SpellReader propagates helper errors without publishing staged spells
         auto candidate = replacement;
         candidate[nlohmann::json::json_pointer(invalid.path)] = invalid.value;
         error_idx = 4;
-        CHECK(test::to_error_code(SpellReader(candidate, spells).read()) == invalid.error);
+        CHECK(test::to_error_code(SpellReader(candidate, spells, session).read()) == invalid.error);
         CHECK(error_idx == 5);
         CHECK(spells.get_spell_id(RealmType::LIFE, "old-zero") == 0);
         CHECK(spells.get_spell_id(RealmType::LIFE, "old-eight") == 8);
@@ -192,9 +228,110 @@ TEST_CASE("SpellReader propagates helper errors without publishing staged spells
         CHECK(spells.get_spell_info(RealmType::LIFE, 8).description == "old-eight description");
         CHECK(spells.get_spell_id(RealmType::SORCERY, "other-realm") == 3);
     }
-    REQUIRE(SpellReader(replacement, spells).read().has_value());
+    SpellReader::Session reload_session;
+    REQUIRE(SpellReader(replacement, spells, reload_session).read().has_value());
     CHECK(error_idx == 6);
     CHECK(spells.get_spell_id(RealmType::LIFE, "new-zero") == 0);
     CHECK(spells.get_spell_id(RealmType::LIFE, "new-eight") == 8);
     CHECK(spells.get_spell_id(RealmType::SORCERY, "other-realm") == 3);
+}
+
+TEST_CASE("SpellReader rejects duplicate IDs within a realm record")
+{
+    const test::ScopedReaderState reader_state;
+    const test::SpellInfoListTestAccess spell_state;
+    auto &spells = SpellInfoList::get_instance();
+    SpellReader::Session seed_session;
+    auto seed = make_realm("LIFE", nlohmann::json::array({ make_spell(0, "old-zero") }), nlohmann::json::array());
+    REQUIRE(SpellReader(seed, spells, seed_session).read().has_value());
+    const auto saved = snapshot_spells(spells);
+    SpellReader::Session session;
+    auto data = make_realm("LIFE", nlohmann::json::array({ make_spell(0, "new-zero"), make_spell(2, "new-two") }), nlohmann::json::array());
+    SUBCASE("same book")
+    {
+        data["books"][0]["spells"].push_back(make_spell(0, "duplicate-id"));
+    }
+    SUBCASE("different books")
+    {
+        data["books"][1]["spells"].push_back(make_spell(0, "duplicate-id"));
+    }
+    CHECK(test::to_error_code(SpellReader(data, spells, session).read()) == ParseErrorType::NON_SEQUENTIAL_RECORDS);
+    check_spells_unchanged(spells, saved);
+    // 失敗したレコードで見たID・タグを、セッションに残さない。
+    data["books"][0]["spells"] = nlohmann::json::array({ make_spell(0, "new-zero"), make_spell(2, "new-two") });
+    data["books"][1]["spells"] = nlohmann::json::array();
+    CHECK(SpellReader(data, spells, session).read().has_value());
+}
+
+TEST_CASE("SpellReader rejects duplicate tags within a realm record")
+{
+    const test::ScopedReaderState reader_state;
+    const test::SpellInfoListTestAccess spell_state;
+    auto &spells = SpellInfoList::get_instance();
+    const auto saved = snapshot_spells(spells);
+    SpellReader::Session session;
+    auto data = make_realm("LIFE", nlohmann::json::array({ make_spell(0, "shared-tag") }), nlohmann::json::array());
+    SUBCASE("same book")
+    {
+        data["books"][0]["spells"].push_back(make_spell(1, "shared-tag"));
+    }
+    SUBCASE("different books")
+    {
+        data["books"][1]["spells"].push_back(make_spell(1, "shared-tag"));
+    }
+    CHECK(test::to_error_code(SpellReader(data, spells, session).read()) == ParseErrorType::INVALID_VALUE);
+    check_spells_unchanged(spells, saved);
+    data["books"][0]["spells"] = nlohmann::json::array({ make_spell(0, "shared-tag") });
+    data["books"][1]["spells"] = nlohmann::json::array({ make_spell(1, "unique-tag") });
+    CHECK(SpellReader(data, spells, session).read().has_value());
+}
+
+TEST_CASE("SpellReader rejects duplicate IDs and tags across realm records in one session")
+{
+    const test::ScopedReaderState reader_state;
+    const test::SpellInfoListTestAccess spell_state;
+    auto &spells = SpellInfoList::get_instance();
+    SpellReader::Session session;
+    auto first = make_realm("LIFE", nlohmann::json::array({ make_spell(0, "first") }), nlohmann::json::array());
+    REQUIRE(SpellReader(first, spells, session).read().has_value());
+    const auto saved = snapshot_spells(spells);
+    auto next = make_realm("LIFE", nlohmann::json::array({ make_spell(2, "staged") }), nlohmann::json::array());
+    SUBCASE("duplicate ID")
+    {
+        next["books"][1]["spells"].push_back(make_spell(0, "different-tag"));
+        CHECK(test::to_error_code(SpellReader(next, spells, session).read()) == ParseErrorType::NON_SEQUENTIAL_RECORDS);
+    }
+    SUBCASE("duplicate tag")
+    {
+        next["books"][1]["spells"].push_back(make_spell(1, "first"));
+        CHECK(test::to_error_code(SpellReader(next, spells, session).read()) == ParseErrorType::INVALID_VALUE);
+    }
+    check_spells_unchanged(spells, saved);
+    next["books"][1]["spells"] = nlohmann::json::array({ make_spell(1, "unique") });
+    REQUIRE(SpellReader(next, spells, session).read().has_value());
+    CHECK(spells.get_spell_id(RealmType::LIFE, "first") == 0);
+    CHECK(spells.get_spell_id(RealmType::LIFE, "staged") == 2);
+    CHECK(spells.get_spell_id(RealmType::LIFE, "unique") == 1);
+}
+
+TEST_CASE("SpellReader allows the same ID and tag in different realms and a new session")
+{
+    const test::ScopedReaderState reader_state;
+    const test::SpellInfoListTestAccess spell_state;
+    auto &spells = SpellInfoList::get_instance();
+    SpellReader::Session session;
+    auto data = make_realm("LIFE", nlohmann::json::array({ make_spell(0, "shared") }), nlohmann::json::array());
+    REQUIRE(SpellReader(data, spells, session).read().has_value());
+    data["name"] = "SORCERY";
+    REQUIRE(SpellReader(data, spells, session).read().has_value());
+    CHECK(spells.get_spell_id(RealmType::LIFE, "shared") == 0);
+    CHECK(spells.get_spell_id(RealmType::SORCERY, "shared") == 0);
+
+    SpellReader::Session reload_session;
+    data["name"] = "LIFE";
+    data["books"][0]["spells"][0]["description"]["en"] = "replacement";
+    data["books"][0]["spells"][0]["description"]["ja"] = "replacement";
+    REQUIRE(SpellReader(data, spells, reload_session).read().has_value());
+    CHECK(spells.get_spell_info(RealmType::LIFE, 0).description == "replacement");
+    CHECK(spells.get_spell_info(RealmType::SORCERY, 0).description == "shared description");
 }

@@ -1,7 +1,10 @@
 #pragma once
 
 #include "info-reader/parse-error-types.h"
+#include <map>
 #include <nlohmann/json_fwd.hpp>
+#include <set>
+#include <string>
 #include <tl/expected.hpp>
 #include <vector>
 
@@ -11,8 +14,19 @@ class SpellInfoList;
 
 class SpellReader {
 public:
-    SpellReader(const nlohmann::json &realm_data, SpellInfoList &spell_info_list);
-    SpellReader(nlohmann::json &&, SpellInfoList &) = delete;
+    //! 1回の呪文定義の読み込み (init_json の呼び出し) ごとに所有し、登録済みのID・タグを領域ごとに保持する
+    class Session {
+        friend class SpellReader;
+
+        struct RealmSpells {
+            std::set<short> ids;
+            std::set<std::string> tags;
+        };
+        std::map<RealmType, RealmSpells> realms;
+    };
+
+    SpellReader(const nlohmann::json &realm_data, SpellInfoList &spell_info_list, Session &session);
+    SpellReader(nlohmann::json &&, SpellInfoList &, Session &) = delete;
     SpellReader(const SpellReader &) = delete;
     SpellReader(SpellReader &&) = delete;
     SpellReader &operator=(const SpellReader &) = delete;
@@ -27,4 +41,5 @@ private:
 
     const nlohmann::json &realm_data;
     SpellInfoList &spell_info_list;
+    Session &session;
 };
