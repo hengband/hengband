@@ -200,10 +200,10 @@ def load_rod_type_value(repository_root: Path) -> int:
 
 
 def validate_baseitem_semantics(data: dict, schema_path: Path) -> None:
-    """BaseitemReaderの整数型・ID順序・表示・ロッドのpval・ダイス・自然生成と生成情報の併記を検証する。"""
+    """BaseitemReaderの整数型・ID順序・表示・種別ごとの範囲・ダイス・自然生成と生成情報の併記を検証する。"""
     repository_root = schema_path.resolve().parent.parent
     valid_colors = load_cpp_map_keys(repository_root / "src/term/gameterm.cpp", "color_list")
-    rod_type_value = load_rod_type_value(repository_root)
+    kinds = load_cpp_enum_values(repository_root / "src/object/tval-types.h", "ItemKindType")
     valid_keys = {language: set() for language in INVALID_BASEITEM_NAMES}
     previous_id = -1
     for index, baseitem in enumerate(data["baseitems"]):
@@ -222,9 +222,19 @@ def validate_baseitem_semantics(data: dict, schema_path: Path) -> None:
             raise ValidationError("symbol character must be a single byte", path=path + ["symbol", "character"])
         if baseitem["symbol"]["color"] not in valid_colors:
             raise ValidationError("unknown color", path=path + ["symbol", "color"])
-        # BaseitemReaderはロッドのpval(省略時は0)が正でなければ拒否する。
-        if baseitem["itemkind"]["type_value"] == rod_type_value and baseitem.get("parameter_value", 0) <= 0:
-            raise ValidationError("rod parameter_value must be positive", path=path + ["parameter_value"])
+        type_value = baseitem["itemkind"]["type_value"]
+        if not 0 <= type_value <= 127 or type_value not in kinds.values():
+            raise ValidationError("type_value must be a defined ItemKindType up to 127", path=path + ["itemkind", "type_value"])
+        # 読み込みと同じく、種別・副種別・pval の順に確かめる。
+        maximum = baseitem_subtype_max(type_value)
+        if not 0 <= baseitem["itemkind"]["subtype_value"] <= maximum:
+            raise ValidationError(f"subtype_value must be in 0..{maximum}", path=path + ["itemkind", "subtype_value"])
+        minimum, maximum = baseitem_pval_range(type_value)
+        if not minimum <= baseitem.get("parameter_value", 0) <= maximum:
+            raise ValidationError(f"parameter_value must be in {minimum}..{maximum}", path=path + ["parameter_value"])
+        maximum = GOLD_COST_MAX if type_value == kinds["GOLD"] else BASEITEM_COST_MAX
+        if not 0 <= baseitem["cost"] <= maximum:
+            raise ValidationError(f"cost must be in 0..{maximum}", path=path + ["cost"])
         if "base_dice" in baseitem:
             require_reader_dice(baseitem["base_dice"], path + ["base_dice"], *ITEM_DICE_RANGE)
         for allocation_index, allocation in enumerate(baseitem.get("allocations", [])):
@@ -243,6 +253,34 @@ def validate_baseitem_semantics(data: dict, schema_path: Path) -> None:
             if key in valid_keys[language]:
                 raise ValidationError("kind of a valid baseitem must be unique", path=path + ["itemkind"])
             valid_keys[language].add(key)
+
+
+# BaseitemKey::is_equipement() と同じ種別。装備はアーティファクトと同じ補正幅とする。
+EQUIPMENT_KINDS = {*range(16, 24), *range(30, 41), 45, 50}
+# 回数は取り込みの byte への変換を避ける。充填時間は仕様として1,000までとする。
+BASEITEM_PVAL_RANGES = {
+    55: (1, 127), 65: (1, 127), 66: (1, 1000),
+    # 滋養は PY_FOOD_FULL、燃料は FUEL_LAMP、箱は chest_traps の64要素に合わせる。
+    80: (0, 10000), 75: (-10000, 10000), 77: (1, 15000), 7: (0, 63),
+}
+
+
+def baseitem_pval_range(type_value: int) -> tuple[int, int]:
+    return (-128, 128) if type_value in EQUIPMENT_KINDS else BASEITEM_PVAL_RANGES.get(type_value, (0, 0))
+
+
+# 武器熟練度64要素、fake_spell_flags 4要素、魔道具術師の SV_*_MAX 要素の添え字。
+BOOK_KINDS = {*range(90, 100), 105, 106, 107}
+BASEITEM_SUBTYPE_MAX = {**dict.fromkeys(range(19, 24), 63), **dict.fromkeys(BOOK_KINDS, 3), 55: 32, 65: 31, 66: 30}
+
+
+def baseitem_subtype_max(type_value: int) -> int:
+    return BASEITEM_SUBTYPE_MAX.get(type_value, 128)
+
+
+# EgoReader の PRICE 上限 / 32 に揃え、金貨の生成額（最大で価格の9倍）には別の上限を設ける。
+BASEITEM_COST_MAX = (2**31 - 1) // 32
+GOLD_COST_MAX = 1024
 
 
 def collect_valid_baseitem_keys(baseitem_data: dict) -> set[tuple[int, int]]:

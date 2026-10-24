@@ -3,9 +3,11 @@ import copy
 import re
 from pathlib import Path
 import unittest
+from jsonschema import ValidationError
 
 from json_validation_test_helper import baseitem_id_schema_maximum, fixed_artifact_id_schema_maximum, validate_document
-from validate_json import build_schema_registry, load_all_schemas, load_cpp_tokens, load_jsonc, load_rod_type_value
+from validate_json import (build_schema_registry, load_all_schemas, load_cpp_enum_values, load_cpp_tokens, load_jsonc,
+                           load_rod_type_value, validate_baseitem_semantics)
 
 
 class BaseitemDefinitionValidationTest(unittest.TestCase):
@@ -95,11 +97,80 @@ class BaseitemDefinitionValidationTest(unittest.TestCase):
 
     def test_rod_parameter_value_must_be_positive(self):
         self.check(self.changed(self.rod, ["parameter_value"], 1), True)
-        self.check(self.changed(self.rod, ["parameter_value"], 0), False, ["baseitems", 0, "parameter_value"], "must be positive")
+        self.check(self.changed(self.rod, ["parameter_value"], 0), False, ["baseitems", 0, "parameter_value"])
         record = copy.deepcopy(self.rod)
         del record["parameter_value"]
-        self.check(record, False, ["baseitems", 0, "parameter_value"], "must be positive")
+        self.check(record, False)
         self.check(self.changed(self.sample, ["parameter_value"], 0), True)
+
+    def check_range_record(self, record, accepted):
+        # schema と意味検証をそれぞれ通し、schema だけで拒否される場合も CI の規則自体を試す。
+        self.check(record, accepted)
+        schema_path = self.schema_map["BaseitemDefinitions"]
+        document = {"baseitems": [record]}
+        if accepted:
+            validate_baseitem_semantics(document, schema_path)
+        else:
+            with self.assertRaises(ValidationError):
+                validate_baseitem_semantics(document, schema_path)
+
+    def range_record(self, kind):
+        record = copy.deepcopy(self.sample)
+        record["itemkind"] = {"type_value": kind, "subtype_value": 0}
+        record["parameter_value"] = 1 if kind in (55, 65, 66, 77) else 0
+        record["cost"] = 0
+        return record
+
+    def test_pval_boundaries_for_every_defined_kind(self):
+        root = Path(__file__).resolve().parents[2]
+        kinds = load_cpp_enum_values(root / "src/object/tval-types.h", "ItemKindType")
+        equipment = {16, 17, 18, 19, 20, 21, 22, 23, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 45, 50}
+        ranges = {55: (1, 127), 65: (1, 127), 66: (1, 1000), 80: (0, 10000),
+                  75: (-10000, 10000), 77: (1, 15000), 7: (0, 63)}
+        for kind in kinds.values():
+            low, high = (-128, 128) if kind in equipment else ranges.get(kind, (0, 0))
+            for value in (low - 1, low, high, high + 1):
+                with self.subTest(kind=kind, value=value):
+                    record = self.range_record(kind)
+                    record["parameter_value"] = value
+                    self.check_range_record(record, low <= value <= high)
+            with self.subTest(kind=kind, omitted=True):
+                record = self.range_record(kind)
+                del record["parameter_value"]
+                self.check_range_record(record, low <= 0 <= high)
+
+    def test_only_defined_kinds_up_to_127_are_accepted(self):
+        root = Path(__file__).resolve().parents[2]
+        kinds = set(load_cpp_enum_values(root / "src/object/tval-types.h", "ItemKindType").values())
+        for kind in range(-1, 130):
+            with self.subTest(kind=kind):
+                self.check_range_record(self.range_record(kind), kind in kinds and 0 <= kind <= 127)
+
+    def test_reader_kind_table_matches_cpp_enum(self):
+        root = Path(__file__).resolve().parents[2]
+        kinds = load_cpp_enum_values(root / "src/object/tval-types.h", "ItemKindType")
+        source = (root / "src/info-reader/baseitem-reader.cpp").read_text(encoding="utf-8")
+        table = source.split("DEFINED_ITEM_KINDS[] = {", 1)[1].split("};", 1)[0]
+        self.assertEqual(set(re.findall(r"ItemKindType::([A-Z_]+)", table)), set(kinds))
+
+    def test_subtype_boundaries_per_kind(self):
+        limits = {**dict.fromkeys((19, 20, 21, 22, 23), 63),
+                  **dict.fromkeys((90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 105, 106, 107), 3),
+                  55: 32, 65: 31, 66: 30, 16: 128, 30: 128, 1: 128}
+        for kind, maximum in limits.items():
+            for value in (-1, 0, maximum, maximum + 1):
+                with self.subTest(kind=kind, value=value):
+                    record = self.range_record(kind)
+                    record["itemkind"]["subtype_value"] = value
+                    self.check_range_record(record, 0 <= value <= maximum)
+
+    def test_cost_boundaries_and_gold_cap(self):
+        for kind, maximum in ((1, 67108863), (127, 1024)):
+            for value in (-1, 0, maximum, maximum + 1):
+                with self.subTest(kind=kind, value=value):
+                    record = self.range_record(kind)
+                    record["cost"] = value
+                    self.check_range_record(record, 0 <= value <= maximum)
 
     def test_dice_matches_reader(self):
         # from_chars は先頭の0をいくつでも読み飛ばす。セーブでは個数・面数を1バイトで書くため0〜255に限る。
@@ -277,7 +348,7 @@ class ArtifactDefinitionValidationTest(unittest.TestCase):
         ok, message = self.validate_with_baseitems(self.sample, [{**baseitem, "id": 1}])
         self.assertTrue(ok, message)
         # 隣の候補のベースアイテム定義を優先し、同梱定義にあっても候補に無ければ拒否する。
-        other = {**baseitem, "id": 1, "itemkind": {"type_value": 127, "subtype_value": 0}}
+        other = {**baseitem, "id": 1, "itemkind": {"type_value": 127, "subtype_value": 0}, "parameter_value": 0, "cost": 0}
         ok, message = self.validate_with_baseitems(self.sample, [other])
         self.assertFalse(ok, message)
         self.assertIn("Reason: base item must be a valid baseitem", message)
