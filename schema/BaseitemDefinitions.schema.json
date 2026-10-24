@@ -96,9 +96,9 @@
                         "properties": {
                             "type_value": {
                                 "type": "integer",
-                                "description": "ベースアイテムカテゴリ",
+                                "description": "ベースアイテムカテゴリ。ItemKindType に定義された値のみ（C++ と CI で列挙子を検証）",
                                 "minimum": 0,
-                                "maximum": 128
+                                "maximum": 127
                             },
                             "subtype_value": {
                                 "type": "integer",

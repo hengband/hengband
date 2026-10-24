@@ -203,6 +203,7 @@ def validate_baseitem_semantics(data: dict, schema_path: Path) -> None:
     """BaseitemReaderの整数型・ID順序・表示・種別ごとの範囲・ダイス・自然生成と生成情報の併記を検証する。"""
     repository_root = schema_path.resolve().parent.parent
     valid_colors = load_cpp_map_keys(repository_root / "src/term/gameterm.cpp", "color_list")
+    kinds = load_cpp_enum_values(repository_root / "src/object/tval-types.h", "ItemKindType")
     valid_keys = {language: set() for language in INVALID_BASEITEM_NAMES}
     previous_id = -1
     for index, baseitem in enumerate(data["baseitems"]):
@@ -222,6 +223,8 @@ def validate_baseitem_semantics(data: dict, schema_path: Path) -> None:
         if baseitem["symbol"]["color"] not in valid_colors:
             raise ValidationError("unknown color", path=path + ["symbol", "color"])
         type_value = baseitem["itemkind"]["type_value"]
+        if not 0 <= type_value <= 127 or type_value not in kinds.values():
+            raise ValidationError("type_value must be a defined ItemKindType up to 127", path=path + ["itemkind", "type_value"])
         minimum, maximum = baseitem_pval_range(type_value)
         if not minimum <= baseitem.get("parameter_value", 0) <= maximum:
             raise ValidationError(f"parameter_value must be in {minimum}..{maximum}", path=path + ["parameter_value"])
