@@ -23,8 +23,9 @@ namespace {
 constexpr int MAX_TERRAIN_MAP_PRIORITY = 125;
 }
 
-TerrainReader::TerrainReader(const nlohmann::json &terrain_data)
+TerrainReader::TerrainReader(const nlohmann::json &terrain_data, Session &session)
     : terrain_data(terrain_data)
+    , session(session)
 {
 }
 
@@ -55,6 +56,15 @@ tl::expected<void, ParseErrorType> TerrainReader::read() const
 
     auto &terrains = TerrainList::get_instance();
     error_idx = id;
+
+    if (this->session.ids.contains(id)) {
+        msg_print(_("地形ID '{}' が重複しています。", "Duplicate terrain ID '{}'."), id);
+        return tl::make_unexpected(ParseErrorType::NON_SEQUENTIAL_RECORDS);
+    }
+    if (this->session.keys.contains(key)) {
+        msg_print(_("地形タグ '{}' が重複しています。", "Duplicate terrain tag '{}'."), key);
+        return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
+    }
 
     const auto s = static_cast<short>(id);
     // Preserve fields that are not supplied by the JSON when reloading a terrain.
@@ -152,6 +162,8 @@ tl::expected<void, ParseErrorType> TerrainReader::read() const
         terrains.resize(id + 1);
     }
     terrains.get_terrain(s) = std::move(terrain);
+    this->session.ids.insert(id);
+    this->session.keys.insert(key);
 
     return {};
 }
