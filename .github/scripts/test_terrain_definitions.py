@@ -25,7 +25,7 @@ class TerrainValidationTest(unittest.TestCase):
         return {"changes": [{"terrain": "FLOOR", "probability": value} for value in probabilities]}
 
     def numeric_cases(self):
-        return ((["id"], 0, 32766), (["map_priority"], -9999, 9999),
+        return ((["id"], 0, 32766), (["map_priority"], 0, 125),
                 (["trap", "power"], 0, 255), (["door", "power"], 0, 255),
                 (["tunnel", "power"], 0, 255), (["convert", "stream_index"], 0, 254),
                 (["generation", "changes", 0, "probability"], 1, 100))

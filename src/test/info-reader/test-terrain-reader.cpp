@@ -7,6 +7,7 @@
 #include "test/info-reader/scoped-reader-state.h"
 #include <algorithm>
 #include <doctest/doctest.h>
+#include <initializer_list>
 #include <nlohmann/json.hpp>
 #include <string>
 #include <vector>
@@ -121,6 +122,45 @@ TEST_CASE("TerrainReader reads a valid terrain and replaces generation changes o
     REQUIRE(terrain.generation_changes.size() == 1);
     CHECK(terrain.generation_changes[0].result_tag == "FLOOR");
     CHECK(terrain.generation_changes[0].probability == 100);
+}
+
+TEST_CASE("TerrainReader accepts map priority from 0 to 125 and rejects values outside")
+{
+    TerrainStateGuard guard;
+    auto &terrains = TerrainList::get_instance();
+    for (const auto priority : { 0, 125 }) {
+        CAPTURE(priority);
+        terrains.resize(0);
+        auto data = make_terrain();
+        data["map_priority"] = priority;
+        REQUIRE(TerrainReader(data).read().has_value());
+        CHECK(terrains.get_terrain(0).priority == priority);
+    }
+
+    terrains.resize(0);
+    auto data = make_terrain();
+    data["map_priority"] = nullptr;
+    REQUIRE(TerrainReader(data).read().has_value());
+    CHECK(terrains.get_terrain(0).priority == 0);
+
+    data = make_terrain();
+    REQUIRE(TerrainReader(data).read().has_value());
+    const auto before = terrains.get_terrain(0);
+    const auto size_before = terrains.size();
+    for (const auto priority : { -1, 126 }) {
+        CAPTURE(priority);
+        for (const auto id : { 0, 3 }) {
+            CAPTURE(id);
+            data["id"] = id;
+            data["name"]["ja"] = "replacement";
+            data["name"]["en"] = "replacement";
+            data["map_priority"] = priority;
+            CHECK(test::to_error_code(TerrainReader(data).read()) == ParseErrorType::INVALID_FLAG);
+            CHECK(error_idx == id);
+            CHECK(terrains.size() == size_before);
+            check_existing_terrain(terrains.get_terrain(0), before);
+        }
+    }
 }
 
 TEST_CASE("TerrainReader leaves an existing terrain unchanged after a late parse error")

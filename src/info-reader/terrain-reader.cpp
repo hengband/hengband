@@ -18,6 +18,11 @@
 #include <unordered_map>
 #include <utility>
 
+namespace {
+// 縮小マップの byte 変換で折り返さず、同順位の +1 後も自動拾い印の 127 未満にする。
+constexpr int MAX_TERRAIN_MAP_PRIORITY = 125;
+}
+
 TerrainReader::TerrainReader(const nlohmann::json &terrain_data)
     : terrain_data(terrain_data)
 {
@@ -91,7 +96,7 @@ tl::expected<void, ParseErrorType> TerrainReader::read() const
 
     const auto &prio_obj = get_json_value(element, "map_priority");
     if (!prio_obj.is_null()) {
-        if (const auto result = info_set_integer(prio_obj, terrain.priority, true, Range(-9999, 9999)); !result) {
+        if (const auto result = info_set_integer(prio_obj, terrain.priority, true, Range(0, MAX_TERRAIN_MAP_PRIORITY)); !result) {
             return result;
         }
     }
