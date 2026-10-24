@@ -139,6 +139,20 @@ class BaseitemDefinitionValidationTest(unittest.TestCase):
                 del record["parameter_value"]
                 self.check_range_record(record, low <= 0 <= high)
 
+    def test_only_defined_kinds_up_to_127_are_accepted(self):
+        root = Path(__file__).resolve().parents[2]
+        kinds = set(load_cpp_enum_values(root / "src/object/tval-types.h", "ItemKindType").values())
+        for kind in range(-1, 130):
+            with self.subTest(kind=kind):
+                self.check_range_record(self.range_record(kind), kind in kinds and 0 <= kind <= 127)
+
+    def test_reader_kind_table_matches_cpp_enum(self):
+        root = Path(__file__).resolve().parents[2]
+        kinds = load_cpp_enum_values(root / "src/object/tval-types.h", "ItemKindType")
+        source = (root / "src/info-reader/baseitem-reader.cpp").read_text(encoding="utf-8")
+        table = source.split("DEFINED_ITEM_KINDS[] = {", 1)[1].split("};", 1)[0]
+        self.assertEqual(set(re.findall(r"ItemKindType::([A-Z_]+)", table)), set(kinds))
+
     def test_dice_matches_reader(self):
         # from_chars は先頭の0をいくつでも読み飛ばす。セーブでは個数・面数を1バイトで書くため0〜255に限る。
         for dice in ("1d4", "0d0", "007d08", "255d255", "0" * 5000 + "1d4"):

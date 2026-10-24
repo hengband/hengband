@@ -37,6 +37,65 @@ constexpr auto EQUIPMENT_PVAL_MAX = 128;
 constexpr auto DEVICE_CHARGES_MAX = 127;
 // ロッドは重ねる数を充填時間から制限する。定義の充填時間は仕様として 1,000 までとする。
 constexpr auto ROD_PVAL_MAX = 1000;
+// ItemKindType の列挙子だけを受け付け、空き番号を定義として使わせない。
+constexpr ItemKindType DEFINED_ITEM_KINDS[] = {
+    ItemKindType::NONE,
+    ItemKindType::FLAVOR_SKELETON,
+    ItemKindType::BOTTLE,
+    ItemKindType::JUNK,
+    ItemKindType::WHISTLE,
+    ItemKindType::SPIKE,
+    ItemKindType::CHEST,
+    ItemKindType::FIGURINE,
+    ItemKindType::STATUE,
+    ItemKindType::MONSTER_REMAINS,
+    ItemKindType::CAPTURE,
+    ItemKindType::NO_AMMO,
+    ItemKindType::SHOT,
+    ItemKindType::ARROW,
+    ItemKindType::BOLT,
+    ItemKindType::BOW,
+    ItemKindType::DIGGING,
+    ItemKindType::HAFTED,
+    ItemKindType::POLEARM,
+    ItemKindType::SWORD,
+    ItemKindType::BOOTS,
+    ItemKindType::GLOVES,
+    ItemKindType::HELM,
+    ItemKindType::CROWN,
+    ItemKindType::SHIELD,
+    ItemKindType::CLOAK,
+    ItemKindType::SOFT_ARMOR,
+    ItemKindType::HARD_ARMOR,
+    ItemKindType::DRAG_ARMOR,
+    ItemKindType::LITE,
+    ItemKindType::AMULET,
+    ItemKindType::RING,
+    ItemKindType::CARD,
+    ItemKindType::STAFF,
+    ItemKindType::WAND,
+    ItemKindType::ROD,
+    ItemKindType::PARCHMENT,
+    ItemKindType::SCROLL,
+    ItemKindType::POTION,
+    ItemKindType::FLASK,
+    ItemKindType::FOOD,
+    ItemKindType::LIFE_BOOK,
+    ItemKindType::SORCERY_BOOK,
+    ItemKindType::NATURE_BOOK,
+    ItemKindType::CHAOS_BOOK,
+    ItemKindType::DEATH_BOOK,
+    ItemKindType::TRUMP_BOOK,
+    ItemKindType::ARCANE_BOOK,
+    ItemKindType::CRAFT_BOOK,
+    ItemKindType::DEMON_BOOK,
+    ItemKindType::CRUSADE_BOOK,
+    ItemKindType::MUSIC_BOOK,
+    ItemKindType::HISSATSU_BOOK,
+    ItemKindType::HEX_BOOK,
+    ItemKindType::GOLD,
+};
+
 /*!
  * @brief ベースアイテムの種別ごとの pval の範囲を返す
  * @param key ベースアイテムのキー (種別だけを見る)
@@ -303,8 +362,12 @@ tl::expected<void, ParseErrorType> BaseitemReader::set_baseitem_kind(BaseitemDef
 
     // 失敗時は直後に返るが、gcc の最適化で未初期化と誤検出されないよう初期化しておく。
     ItemKindType type_value{};
-    if (const auto result = info_set_integer(get_json_value(itemkind_data, "type_value"), type_value, true, Range(0, 128)); !result) {
+    // 種別をそのまま添え字にする色の表は128要素。
+    if (const auto result = info_set_integer(get_json_value(itemkind_data, "type_value"), type_value, true, Range(0, 127)); !result) {
         return result;
+    }
+    if (std::find(std::begin(DEFINED_ITEM_KINDS), std::end(DEFINED_ITEM_KINDS), type_value) == std::end(DEFINED_ITEM_KINDS)) {
+        return tl::unexpected(ParseErrorType::INVALID_VALUE);
     }
     int subtype_value = 0;
     if (const auto result = info_set_integer(get_json_value(itemkind_data, "subtype_value"), subtype_value, true, Range(0, 128)); !result) {

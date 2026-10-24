@@ -767,3 +767,18 @@ TEST_CASE("BaseitemReader validates inherited pval after changing item kind")
         CHECK(items.collect_valid_bi_ids() == previous_ids);
     }
 }
+
+TEST_CASE("BaseitemReader accepts only defined item kinds up to 127")
+{
+    for (const auto kind : { -1, 6, 12, 13, 14, 24, 41, 64, 100, 126, 128, 129 }) {
+        CAPTURE(kind);
+        auto data = make_baseitem();
+        data["itemkind"]["type_value"] = kind;
+        check_baseitem_boundary(data, false, kind < 0 || kind > 127 ? ParseErrorType::INVALID_FLAG : ParseErrorType::INVALID_VALUE);
+    }
+    for (const auto kind : { 0, 15, 127 }) {
+        auto data = make_baseitem();
+        data["itemkind"]["type_value"] = kind;
+        check_baseitem_boundary(data, true);
+    }
+}
