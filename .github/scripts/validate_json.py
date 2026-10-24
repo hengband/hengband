@@ -1007,8 +1007,8 @@ def validate_class_magic_semantics(data: dict, schema_path: Path, data_path: Pat
         class_id = class_ids.get(record["name"])
         if class_id is None:
             raise ValidationError("unknown class token", path=path + ["name"])
-        if class_id < previous_id:
-            raise ValidationError("class IDs must be in nondecreasing order", path=path + ["name"])
+        if class_id <= previous_id:
+            raise ValidationError("class IDs must be in strictly increasing order", path=path + ["name"])
         previous_id = class_id
         for field in ("first_spell_level", "armour_weight_limit"):
             require_integer(record[field], path + [field])

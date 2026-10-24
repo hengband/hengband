@@ -97,7 +97,7 @@ tl::expected<void, ParseErrorType> MagicReader::read() const
     }
 
     const auto class_id = *class_id_result;
-    if (class_id < error_idx) {
+    if (class_id <= error_idx) {
         return tl::make_unexpected(ParseErrorType::NON_SEQUENTIAL_RECORDS);
     }
     error_idx = class_id;
