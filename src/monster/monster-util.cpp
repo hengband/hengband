@@ -61,11 +61,11 @@ static bool is_possible_monster_or(const EnumClassFlagGroup<T> &r_flags, const E
  * @param dungeon ダンジョンへの参照
  * @param floor_level 生成階層
  * @param monrace_id チェックするモンスター種族ID
- * @param summon_specific_type summon_specific() によるものの場合、召喚種別を指定する
+ * @param has_summon_specific_type summon_specific() によるものの場合、true
  * @param is_chameleon_polymorph カメレオンの変身の場合、true
  * @return 召喚条件が一致するならtrue / Return TRUE is the monster is OK and FALSE otherwise
  */
-static bool restrict_monster_to_dungeon(const DungeonDefinition &dungeon, int floor_level, MonraceId monrace_id, bool has_summon_specific_type = false, bool is_chameleon_polymorph = false)
+bool restrict_monster_to_dungeon(const DungeonDefinition &dungeon, int floor_level, MonraceId monrace_id, bool has_summon_specific_type, bool is_chameleon_polymorph)
 {
     const auto &monrace = MonraceList::get_instance().get_monrace(monrace_id);
     if (dungeon.flags.has(DungeonFeatureType::CHAMELEON)) {
@@ -111,6 +111,7 @@ static bool restrict_monster_to_dungeon(const DungeonDefinition &dungeon, int fl
     case DungeonMode::NAND: {
         std::vector<bool> is_possible = {
             is_possible_monster_and(monrace.ability_flags, dungeon.mon_ability_flags),
+            is_possible_monster_and(monrace.aura_flags, dungeon.mon_aura_flags),
             is_possible_monster_and(monrace.behavior_flags, dungeon.mon_behavior_flags),
             is_possible_monster_and(monrace.resistance_flags, dungeon.mon_resistance_flags),
             is_possible_monster_and(monrace.drop_flags, dungeon.mon_drop_flags),
@@ -131,6 +132,7 @@ static bool restrict_monster_to_dungeon(const DungeonDefinition &dungeon, int fl
     case DungeonMode::NOR: {
         std::vector<bool> is_possible = {
             is_possible_monster_or(monrace.ability_flags, dungeon.mon_ability_flags),
+            is_possible_monster_or(monrace.aura_flags, dungeon.mon_aura_flags),
             is_possible_monster_or(monrace.behavior_flags, dungeon.mon_behavior_flags),
             is_possible_monster_or(monrace.resistance_flags, dungeon.mon_resistance_flags),
             is_possible_monster_or(monrace.drop_flags, dungeon.mon_drop_flags),

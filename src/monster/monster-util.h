@@ -10,6 +10,8 @@ enum summon_type : int;
 enum class MonraceId : short;
 class PlayerType;
 class MonsterEntity;
+class DungeonDefinition;
+bool restrict_monster_to_dungeon(const DungeonDefinition &dungeon, int floor_level, MonraceId monrace_id, bool has_summon_specific_type = false, bool is_chameleon_polymorph = false);
 void get_mon_num_prep_enum(PlayerType *player_ptr, MonraceHook hook1 = MonraceHook::NONE, MonraceHookTerrain hook2 = MonraceHookTerrain::NONE);
 void get_mon_num_prep_escort(PlayerType *player_ptr, MonraceId escorted_monrace_id, short m_idx, MonraceHookTerrain hook2);
 

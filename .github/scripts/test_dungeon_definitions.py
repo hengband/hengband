@@ -5,7 +5,7 @@ from pathlib import Path
 import unittest
 
 from json_validation_test_helper import fixed_artifact_id_schema_maximum, monrace_id_schema_maximum, validate_document
-from validate_json import build_schema_registry, load_all_schemas, load_jsonc
+from validate_json import build_schema_registry, load_all_schemas, load_cpp_map_keys, load_jsonc
 
 
 class DungeonValidationTest(unittest.TestCase):
@@ -27,6 +27,24 @@ class DungeonValidationTest(unittest.TestCase):
 
     def validate(self, document, *, companions=None):
         return validate_document(document, self.schema_path, self.schema, self.registry, companions=companions)
+
+    def test_aura_flags_match_the_reader_token_table(self):
+        tokens = load_cpp_map_keys(self.root / "src/info-reader/race-info-tokens-table.cpp", "r_info_aura_flags")
+        schema_tokens = set(self.schema["$defs"]["monsterFlag"]["enum"])
+        self.assertEqual({token for token in schema_tokens if token.startswith("AURA_")}, tokens)
+        for token in sorted(tokens):
+            with self.subTest(token=token):
+                document = self.sample()
+                document["dungeons"][0]["monsters"]["flags"] = [token]
+                ok, diagnostic = self.validate(document)
+                self.assertTrue(ok, diagnostic)
+
+    def test_unknown_aura_flags_are_rejected(self):
+        document = self.sample()
+        document["dungeons"][0]["monsters"]["flags"] = ["AURA_FIRE", "AURA_UNKNOWN"]
+        ok, diagnostic = self.validate(document)
+        self.assertFalse(ok, diagnostic)
+        self.assertIn("Location: ['dungeons', 0, 'monsters', 'flags', 1]", diagnostic)
 
     def numeric_cases(self):
         return ((["id"], 0, 20),
