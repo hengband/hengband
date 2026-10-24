@@ -117,6 +117,7 @@
     <ClCompile Include="..\..\src\test\object\test-object-info.cpp" />
     <ClCompile Include="..\..\src\test\object\test-object-value.cpp" />
     <ClCompile Include="..\..\src\test\player-status\test-player-speed.cpp" />
+    <ClCompile Include="..\..\src\test\player-status\test-player-status-base.cpp" />
     <ClCompile Include="..\..\src\test\player\test-player-skill.cpp" />
     <ClCompile Include="..\..\src\test\player\test-process-name.cpp" />
     <ClCompile Include="..\..\src\test\racial\test-racial-android.cpp" />

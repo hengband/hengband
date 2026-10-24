@@ -15,6 +15,6 @@ protected:
     int16_t personality_bonus() override;
     int16_t time_effect_bonus() override;
     int16_t mutation_bonus() override;
-    int16_t set_exception_bonus(int16_t value) override;
+    int set_exception_bonus(int value) override;
     bool is_aggravated_s_fairy();
 };
