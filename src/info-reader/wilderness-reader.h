@@ -54,5 +54,5 @@ private:
     const nlohmann::json &data;
 };
 
-bool initialize_wilderness_definition();
+tl::expected<void, std::string> initialize_wilderness_definition();
 tl::expected<void, ParseErrorType> apply_wilderness_definition();

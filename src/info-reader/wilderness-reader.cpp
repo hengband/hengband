@@ -7,6 +7,7 @@
 #include "info-reader/jsonc-document-loader.h"
 #include "io/files-util.h"
 #include "locale/language-switcher.h"
+#include "main/init-error-messages-table.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/dungeon/dungeon-list.h"
 #include "system/enums/dungeon/dungeon-id.h"
@@ -19,6 +20,7 @@
 #include "view/display-messages.h"
 #include <algorithm>
 #include <array>
+#include <fmt/format.h>
 #include <nlohmann/json.hpp>
 #include <set>
 #include <utility>
@@ -73,24 +75,36 @@ tl::expected<void, ParseErrorType> read_localized_integer(const nlohmann::json &
     return {};
 }
 
-std::optional<WildernessDefinition> load_wilderness_definition()
+//! 荒野の定義ファイルを読み込めなかった理由
+struct WildernessLoadError {
+    std::string message; //!< 起動時に表示する診断
+    ParseErrorType code = ParseErrorType::GENERIC; //!< 定義の誤りならその種類、ファイルを開けない・構文エラーなら GENERIC
+};
+
+/*!
+ * @brief 荒野の定義ファイルを読み込む
+ * @return 読み込んだ定義、失敗時はファイルを開けない・構文エラー・定義の誤りを区別した理由
+ */
+tl::expected<WildernessDefinition, WildernessLoadError> load_wilderness_definition()
 {
     const auto path = path_build(ANGBAND_DIR_EDIT, WILDERNESS_DEFINITION);
     JsoncDocumentLoader loader(path);
     if (!loader.is_open()) {
-        return std::nullopt;
+        return tl::make_unexpected(WildernessLoadError{ fmt::format(_("{}: ファイルを開けません", "{}: cannot open the file"), WILDERNESS_DEFINITION) });
     }
 
     try {
         const auto json_object = loader.parse();
         WildernessDefinition definition;
-        if (!WildernessReader(json_object).read(definition)) {
-            return std::nullopt;
+        if (const auto result = WildernessReader(json_object).read(definition); !result) {
+            const auto code = result.error();
+            return tl::make_unexpected(WildernessLoadError{
+                fmt::format(_("{}: {} (エラー{})", "{}: {} (error {})"), WILDERNESS_DEFINITION, describe_parse_error(code), enum2i(code)), code });
         }
 
         return definition;
-    } catch (const nlohmann::json::exception &) {
-        return std::nullopt;
+    } catch (const nlohmann::json::exception &e) {
+        return tl::make_unexpected(WildernessLoadError{ format_json_syntax_error(WILDERNESS_DEFINITION, e.what()) });
     }
 }
 }
@@ -298,23 +312,23 @@ tl::expected<void, ParseErrorType> WildernessReader::read_map(const nlohmann::js
     return {};
 }
 
-bool initialize_wilderness_definition()
+tl::expected<void, std::string> initialize_wilderness_definition()
 {
     const auto definition = load_wilderness_definition();
     if (!definition) {
-        return false;
+        return tl::make_unexpected(definition.error().message);
     }
 
     if (!DungeonReader::validate_wilderness_positions(definition->height, definition->width)) {
         // 起動時の終了より先に、入口のID・座標・寸法を含む診断を表示する。
         msg_erase();
-        return false;
+        return tl::make_unexpected(std::string(_("荒野を初期化できません", "Cannot initialize wilderness")));
     }
 
     auto &towns = TownList::get_instance();
     for (const auto &town : definition->towns) {
         if (town.id >= static_cast<int>(towns.size())) {
-            return false;
+            return tl::make_unexpected(fmt::format(_("{}: 町ID {} が範囲外です", "{}: town ID {} is out of range"), WILDERNESS_DEFINITION, town.id));
         }
         auto &destination = towns.get_town(town.id);
         destination.init_name(town.name);
@@ -323,7 +337,7 @@ bool initialize_wilderness_definition()
         }
     }
     if (!towns.is_all_initialized()) {
-        return false;
+        return tl::make_unexpected(fmt::format(_("{}: 初期化されていない町があります", "{}: some towns are not initialized"), WILDERNESS_DEFINITION));
     }
 
     auto &wilderness = WildernessGrids::get_instance();
@@ -331,14 +345,14 @@ bool initialize_wilderness_definition()
     wilderness.initialize_height(definition->height);
     wilderness.initialize_grids();
     wilderness.set_ambushes(false);
-    return true;
+    return {};
 }
 
 tl::expected<void, ParseErrorType> apply_wilderness_definition()
 {
     const auto definition = load_wilderness_definition();
     if (!definition) {
-        return tl::make_unexpected(ParseErrorType::GENERIC);
+        return tl::make_unexpected(definition.error().code);
     }
     if (const auto result = DungeonReader::validate_wilderness_positions(definition->height, definition->width); !result) {
         return result;

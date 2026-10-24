@@ -4,6 +4,8 @@
  */
 
 #include "main/init-error-messages-table.h"
+#include "locale/character-encoding.h"
+#include <fmt/format.h>
 
 /*!
  * エラーメッセージの名称定義 / Standard error message text
@@ -24,3 +26,54 @@ concptr err_str[enum2i(ParseErrorType::MAX)] = {
     _("不正な値", "invalid value"),
     _("不正な型", "invalid type"),
 };
+
+/*!
+ * @brief 解析エラーの名称を返す
+ * @param err 解析エラーの種類
+ * @return エラーの名称 (エラーでない値や範囲外の値には「不明なエラー」)
+ */
+std::string_view describe_parse_error(ParseErrorType err)
+{
+    const auto code = enum2i(err);
+    if ((code <= enum2i(ParseErrorType::NONE)) || (code >= enum2i(ParseErrorType::MAX)) || (err_str[code] == nullptr)) {
+        return _("不明なエラー", "unknown error");
+    }
+    return err_str[code];
+}
+
+/*!
+ * @brief 定義配列の要素の位置と解析エラーを含む診断を組み立てる
+ * @param filename 定義ファイル名
+ * @param keyname 定義配列のキー名
+ * @param index 失敗した要素の配列の中の位置 (0始まり)
+ * @param err 解析エラーの種類
+ * @return 「ファイル名: $.キー[位置]: エラーの名称 (エラー番号)」の形の診断
+ */
+std::string format_record_parse_error(std::string_view filename, std::string_view keyname, size_t index, ParseErrorType err)
+{
+    return fmt::format(_("{}: $.{}[{}]: {} (エラー{})", "{}: $.{}[{}]: {} (error {})"), filename, keyname, index, describe_parse_error(err), enum2i(err));
+}
+
+/*!
+ * @brief JSONの構文エラーの診断を組み立てる
+ * @param filename 定義ファイル名
+ * @param what JSONライブラリの例外の説明
+ * @return 「ファイル名: JSONの構文エラー: 説明」の形の診断
+ * @details 例外の説明には定義ファイルの一部 (UTF-8) が含まれ、途中で切れた文字のこともある。
+ * システムの文字コードに変換し、変換できなければ ASCII 以外のバイトを '?' に置き換えて、日本語の文と混ざっても読めるようにする。
+ */
+std::string format_json_syntax_error(std::string_view filename, std::string_view what)
+{
+    auto detail = is_utf8_str(what) ? utf8_to_sys(what) : tl::optional<std::string>();
+    if (!detail) {
+        std::string ascii(what);
+        for (auto &ch : ascii) {
+            if (static_cast<unsigned char>(ch) >= 0x80) {
+                ch = '?';
+            }
+        }
+        detail = std::move(ascii);
+    }
+
+    return fmt::format(_("{}: JSONの構文エラー: {}", "{}: JSON syntax error: {}"), filename, *detail);
+}
