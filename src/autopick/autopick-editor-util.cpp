@@ -192,21 +192,18 @@ void add_keyword(AutopickTextBody *tb, BIT_FLAGS flg)
  * @brief Add an empty line at the last of the file
  * @param tb エディタの状態
  * @return 空行を追加した場合true、最終行が既に空の場合と最大行数に達している場合はfalse
- * @details 行バッファは使用中の行の直後に nullptr の番兵があることを前提に走査されるため、
- * insert_return_code() と同じく最大行数を超えて行を増やしてはならない。
  */
 bool add_empty_line(AutopickTextBody *tb)
 {
-    const auto num_lines = tb->count_line();
-    if (is_greater_autopick_max_line(num_lines)) {
+    if (is_greater_autopick_max_line(tb->lines.size())) {
         return false;
     }
 
-    if (tb->lines[num_lines - 1].line->empty()) {
+    if (tb->lines.back().line->empty()) {
         return false;
     }
 
-    tb->lines[num_lines].line = std::make_unique<std::string>();
+    tb->lines.emplace_back();
     tb->dirty_flags |= DIRTY_EXPRESSION;
     tb->changed = true;
     return true;

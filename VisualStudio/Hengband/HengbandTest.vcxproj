@@ -63,6 +63,7 @@
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\..\src\test\autopick\test-autopick-editor-util.cpp" />
+    <ClCompile Include="..\..\src\test\autopick\test-autopick-finder.cpp" />
     <ClCompile Include="..\..\src\test\bot\test-bot-json-output.cpp" />
     <ClCompile Include="..\..\src\test\cmd-io\test-cmd-autopick.cpp" />
     <ClCompile Include="..\..\src\test\cmd-item\test-cmd-item.cpp" />

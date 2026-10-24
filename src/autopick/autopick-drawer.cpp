@@ -32,14 +32,14 @@ constexpr std::string_view AUTOREGISTER_DIRECTIVE = "$AUTOREGISTER";
 void update_autopick_expression_states(PlayerType *player_ptr, AutopickTextBody *tb)
 {
     const auto edited_line = tb->dirty_line;
-    const auto include_edited = (edited_line >= 0) && (static_cast<size_t>(edited_line) < tb->lines.size()) &&
-                                tb->lines[edited_line].line && (tb->lines[edited_line].state.has(AutopickEntryStatus::INCLUDE) || tb->lines[edited_line].line->starts_with("%:"));
+    const auto include_edited = tb->has_line(edited_line) &&
+                                (tb->lines[edited_line].state.has(AutopickEntryStatus::INCLUDE) || tb->lines[edited_line].line->starts_with("%:"));
     if (((tb->dirty_flags & (DIRTY_EXPRESSION | DIRTY_ALL)) == 0) && !include_edited) {
         return;
     }
 
     EnumClassFlagGroup<AutopickEntryStatus> state{};
-    for (size_t y = 0; y < tb->lines.size() && tb->lines[y].line; ++y) {
+    for (size_t y = 0; y < tb->lines.size(); ++y) {
         std::string_view s(*tb->lines[y].line);
         if (state.has_not(AutopickEntryStatus::BYPASS) && s.starts_with("%:") &&
             (check_autopick_file_conditions(player_ptr, s.substr(2)) == PREF_EXPRESSION_ERROR)) {
@@ -155,7 +155,7 @@ void draw_text_editor(PlayerType *player_ptr, AutopickTextBody *tb)
             continue;
         }
 
-        if (!tb->lines[y].line) {
+        if (!tb->has_line(y)) {
             break;
         }
 

@@ -28,7 +28,7 @@
 AutopickTextBody::AutopickTextBody(int cx, int cy)
     : cx(cx)
     , cy(cy)
-    , lines(MAX_AUTOPICK_ENTRIES)
+    , lines(1)
 {
 }
 
@@ -136,6 +136,44 @@ bool AutopickTextBody::is_cursor_on_second_byte_of_kanji() const
     return is_second_byte_of_kanji(*this->lines[this->cy].line, this->cx);
 }
 
+/*!
+ * @brief 指定の行があるかどうかを判定する
+ * @param y 行番号
+ * @return 指定の行があれば true
+ */
+bool AutopickTextBody::has_line(int y) const
+{
+    return (0 <= y) && (y < std::ssize(this->lines));
+}
+
+/*!
+ * @brief 指定の行が最終行かどうかを判定する
+ * @param y 行番号
+ * @return 指定の行より後ろに行が無ければ true
+ */
+bool AutopickTextBody::is_last_line(int y) const
+{
+    return !this->has_line(y + 1);
+}
+
+/*!
+ * @brief 行をすべて差し替える
+ * @param new_lines 新しい行
+ * @details 行が無ければ空行を 1 行だけ持つ。各行の状態は初期化するので、描き直しの前に DIRTY_EXPRESSION で求め直すこと。
+ */
+void AutopickTextBody::set_lines(std::vector<std::string> new_lines)
+{
+    this->lines.clear();
+    this->lines.reserve(new_lines.size());
+    for (auto &line : new_lines) {
+        this->lines.emplace_back(std::move(line), EnumClassFlagGroup<AutopickEntryStatus>());
+    }
+
+    if (this->lines.empty()) {
+        this->lines.emplace_back();
+    }
+}
+
 /*
  * In-game editor of Object Auto-picker/Destoryer
  * @param player_ptr プレイヤーへの参照ポインタ
@@ -175,17 +213,10 @@ void do_cmd_edit_autopick(PlayerType *player_ptr)
 
     auto [filename_mode, lines] = read_pickpref_text_lines(player_ptr->base_name);
     tb->filename_mode = filename_mode;
-    const auto loop_count = lines.size();
-    for (size_t i = 0; i < loop_count; i++) {
-        std::swap(tb->lines[i].line, lines[i]);
-    }
-
-    for (size_t i = loop_count; i < MAX_AUTOPICK_ENTRIES; i++) {
-        tb->lines[i].line.reset();
-    }
+    tb->set_lines(std::move(lines));
 
     // 前回閉じたときのカーソルの行が、読み込み直したファイルに無ければ先頭に戻す
-    if (!tb->lines[tb->cy].line) {
+    if (!tb->has_line(tb->cy)) {
         tb->cy = tb->cx = 0;
     }
 

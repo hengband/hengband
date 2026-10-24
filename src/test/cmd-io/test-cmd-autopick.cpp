@@ -11,6 +11,7 @@
 #include <initializer_list>
 #include <memory>
 #include <string>
+#include <vector>
 
 namespace {
 
@@ -18,10 +19,7 @@ namespace {
 AutopickTextBody make_text_body(std::initializer_list<std::string> lines)
 {
     AutopickTextBody tb(0, 0);
-    auto y = 0;
-    for (const auto &line : lines) {
-        tb.lines[y++] = { line, EnumClassFlagGroup<AutopickEntryStatus>() };
-    }
+    tb.set_lines(lines);
 
     return tb;
 }
@@ -67,4 +65,20 @@ TEST_CASE("adjust_cursor_column keeps the mark column within the line shortened 
 
     CHECK(tb.mx == 4);
     CHECK(tb.cx == 4);
+}
+
+TEST_CASE("set_lines replaces all the lines")
+{
+    auto tb = make_text_body({ "aa", "bb", "cc" });
+
+    tb.set_lines({ "dd" });
+    CHECK(tb.get_entry_lines() == std::vector<std::string>{ "dd" });
+}
+
+TEST_CASE("set_lines keeps an empty line when no lines are given")
+{
+    auto tb = make_text_body({ "aa", "bb" });
+
+    tb.set_lines({});
+    CHECK(tb.get_entry_lines() == std::vector<std::string>{ "" });
 }

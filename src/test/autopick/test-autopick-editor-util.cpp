@@ -18,6 +18,7 @@
 #include <memory>
 #include <string>
 #include <string_view>
+#include <vector>
 
 using namespace test;
 
@@ -34,9 +35,7 @@ constexpr auto MAX_EDITABLE_LINES = MAX_AUTOPICK_ENTRIES - 2;
 AutopickTextBody make_text_body(int num_lines)
 {
     AutopickTextBody tb(0, 0);
-    for (auto y = 0; y < num_lines; y++) {
-        tb.lines[y] = { "a", EnumClassFlagGroup<AutopickEntryStatus>() };
-    }
+    tb.set_lines(std::vector<std::string>(num_lines, "a"));
 
     return tb;
 }
@@ -67,8 +66,7 @@ TEST_CASE("add_empty_line appends an empty line below the line limit")
     auto tb = make_text_body(MAX_EDITABLE_LINES - 1);
 
     CHECK(add_empty_line(&tb));
-    CHECK(tb.count_line() == MAX_EDITABLE_LINES);
-    REQUIRE(tb.lines[MAX_EDITABLE_LINES - 1].line != nullptr);
+    REQUIRE(tb.lines.size() == MAX_EDITABLE_LINES);
     CHECK(tb.lines[MAX_EDITABLE_LINES - 1].line->empty());
     CHECK((tb.dirty_flags & DIRTY_EXPRESSION) != 0);
     CHECK(tb.changed);
@@ -79,8 +77,7 @@ TEST_CASE("add_empty_line does not append a line at the line limit")
     auto tb = make_text_body(MAX_EDITABLE_LINES);
 
     CHECK_FALSE(add_empty_line(&tb));
-    CHECK(tb.count_line() == MAX_EDITABLE_LINES);
-    CHECK(tb.lines[MAX_EDITABLE_LINES].line == nullptr);
+    CHECK(tb.lines.size() == MAX_EDITABLE_LINES);
     CHECK(tb.dirty_flags == 0);
     CHECK_FALSE(tb.changed);
 }
@@ -91,7 +88,7 @@ TEST_CASE("add_empty_line does not append a line when the last line is empty")
     *tb.lines[0].line = "";
 
     CHECK_FALSE(add_empty_line(&tb));
-    CHECK(tb.count_line() == 1);
+    CHECK(tb.lines.size() == 1);
     CHECK_FALSE(tb.changed);
 }
 
@@ -109,8 +106,115 @@ TEST_CASE("insert_return_code splits the line at the cursor")
 
     REQUIRE(insert_return_code(&tb));
     CHECK(*tb.lines[0].line == "ab");
-    REQUIRE(tb.lines[1].line != nullptr);
+    REQUIRE(tb.lines.size() == 2);
     CHECK(*tb.lines[1].line == "cd");
+}
+
+TEST_CASE("insert_return_code shifts the following lines down")
+{
+    AutopickTextBody tb(1, 1);
+    tb.set_lines({ "ab", "cd", "ef" });
+
+    REQUIRE(insert_return_code(&tb));
+    CHECK(tb.get_entry_lines() == std::vector<std::string>{ "ab", "c", "d", "ef" });
+}
+
+TEST_CASE("EditorCommandId::BACKSPACE at the beginning of a line joins it to the previous line")
+{
+    AutopickTextBody tb(0, 1);
+    tb.set_lines({ "ab", "cd", "ef" });
+
+    do_editor_command(nullptr, &tb, EditorCommandId::BACKSPACE);
+    CHECK(tb.get_entry_lines() == std::vector<std::string>{ "abcd", "ef" });
+    CHECK(tb.cx == 2);
+    CHECK(tb.cy == 0);
+}
+
+TEST_CASE("kill_line_segment removes a whole line and shifts the following lines up")
+{
+    AutopickTextBody tb(0, 0);
+    tb.set_lines({ "ab", "cd", "ef" });
+
+    kill_line_segment(&tb, 1, 0, 2, true);
+    CHECK(tb.get_entry_lines() == std::vector<std::string>{ "ab", "ef" });
+}
+
+TEST_CASE("kill_line_segment empties the last line instead of removing it")
+{
+    AutopickTextBody tb(0, 0);
+    tb.set_lines({ "ab", "cd" });
+
+    kill_line_segment(&tb, 1, 0, 2, true);
+    CHECK(tb.get_entry_lines() == std::vector<std::string>{ "ab", "" });
+}
+
+TEST_CASE("EditorCommandId::DOWN on the last line appends an empty line")
+{
+    AutopickTextBody tb(0, 0);
+    tb.set_lines({ "a" });
+
+    do_editor_command(nullptr, &tb, EditorCommandId::DOWN);
+    CHECK(tb.get_entry_lines() == std::vector<std::string>{ "a", "" });
+    CHECK(tb.cy == 1);
+}
+
+TEST_CASE("EditorCommandId::DOWN on an empty last line stays there")
+{
+    AutopickTextBody tb(0, 1);
+    tb.set_lines({ "a", "" });
+
+    do_editor_command(nullptr, &tb, EditorCommandId::DOWN);
+    CHECK(tb.get_entry_lines() == std::vector<std::string>{ "a", "" });
+    CHECK(tb.cy == 1);
+}
+
+TEST_CASE("EditorCommandId::BOTTOM appends an empty line after a non-empty last line and moves there")
+{
+    AutopickTextBody tb(1, 0);
+    tb.set_lines({ "a", "b" });
+
+    do_editor_command(nullptr, &tb, EditorCommandId::BOTTOM);
+    CHECK(tb.get_entry_lines() == std::vector<std::string>{ "a", "b", "" });
+    CHECK(tb.cy == 2);
+    CHECK(tb.cx == 0);
+}
+
+TEST_CASE("EditorCommandId::BOTTOM moves to an empty last line without appending a line")
+{
+    AutopickTextBody tb(1, 0);
+    tb.set_lines({ "a", "" });
+
+    do_editor_command(nullptr, &tb, EditorCommandId::BOTTOM);
+    CHECK(tb.get_entry_lines() == std::vector<std::string>{ "a", "" });
+    CHECK(tb.cy == 1);
+    CHECK(tb.cx == 0);
+}
+
+TEST_CASE("EditorCommandId::CUT of lines up to the last line removes them and empties the last line")
+{
+    AutopickTextBody tb(1, 2);
+    tb.set_lines({ "a", "b", "c" });
+    tb.marks.set(AutopickMark::MARK);
+    tb.my = 1;
+    tb.mx = 0;
+
+    do_editor_command(nullptr, &tb, EditorCommandId::CUT);
+    CHECK(tb.get_entry_lines() == std::vector<std::string>{ "a", "" });
+    CHECK(tb.cy == 1);
+    CHECK(tb.cx == 0);
+}
+
+TEST_CASE("EditorCommandId::PASTE of whole lines inserts them before the rest of the line")
+{
+    AutopickTextBody tb(1, 0);
+    tb.set_lines({ "ab" });
+    tb.yank = { "x", "y" };
+    tb.yank_eol = true;
+
+    do_editor_command(nullptr, &tb, EditorCommandId::PASTE);
+    CHECK(tb.get_entry_lines() == std::vector<std::string>{ "ax", "y", "b" });
+    CHECK(tb.cy == 2);
+    CHECK(tb.cx == 0);
 }
 
 TEST_CASE("auto_inscribe_item returns false for invalid index or empty insc")
@@ -191,7 +295,7 @@ TEST_CASE("insert_return_code does not split a double-byte character")
 
     REQUIRE(insert_return_code(&tb));
     CHECK(*tb.lines[0].line == KANJI_KAN);
-    REQUIRE(tb.lines[1].line != nullptr);
+    REQUIRE(tb.lines.size() == 2);
     CHECK(*tb.lines[1].line == KANJI_JI);
 }
 
@@ -201,7 +305,7 @@ TEST_CASE("insert_return_code splits a line ending with a lone lead byte at its 
 
     REQUIRE(insert_return_code(&tb));
     CHECK(*tb.lines[0].line == LINE_WITH_LONE_LEAD_BYTE);
-    REQUIRE(tb.lines[1].line != nullptr);
+    REQUIRE(tb.lines.size() == 2);
     CHECK(tb.lines[1].line->empty());
 }
 

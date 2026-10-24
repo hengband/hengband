@@ -35,8 +35,7 @@ void check_expression_line(AutopickTextBody *tb, int y)
  */
 bool can_insert_line(AutopickTextBody *tb, int add_num)
 {
-    const int count = tb->count_line();
-    return !is_greater_autopick_max_line(count + add_num);
+    return !is_greater_autopick_max_line(tb->lines.size() + add_num);
 }
 
 /*!
@@ -44,16 +43,8 @@ bool can_insert_line(AutopickTextBody *tb, int add_num)
  */
 bool insert_return_code(AutopickTextBody *tb)
 {
-    auto num_lines = tb->count_line();
-    if (is_greater_autopick_max_line(num_lines)) {
+    if (is_greater_autopick_max_line(tb->lines.size())) {
         return false;
-    }
-
-    num_lines--;
-
-    for (; tb->cy < num_lines; num_lines--) {
-        std::swap(tb->lines[num_lines + 1].line, tb->lines[num_lines].line);
-        std::swap(tb->lines[num_lines + 1].state, tb->lines[num_lines].state);
     }
 
     // 2バイト文字の途中では分けず、その文字の後ろで分ける
@@ -63,8 +54,10 @@ bool insert_return_code(AutopickTextBody *tb)
         split_pos++;
     }
 
-    tb->lines[tb->cy + 1].line = std::make_unique<std::string>(line.substr(split_pos));
+    // 挿入すると line の参照が無効になるので、先に分ける
+    auto rest = line.substr(split_pos);
     line.erase(split_pos);
+    tb->lines.emplace(tb->lines.begin() + tb->cy + 1, std::move(rest), EnumClassFlagGroup<AutopickEntryStatus>());
     tb->dirty_flags |= DIRTY_EXPRESSION;
     tb->changed = true;
     return true;
@@ -185,13 +178,8 @@ void insert_single_letter(AutopickTextBody *tb, int key)
 void kill_line_segment(AutopickTextBody *tb, int y, int x0, int x1, bool whole)
 {
     auto &s = *tb->lines[y].line;
-    if (whole && (x0 == 0) && (s[x1] == '\0') && tb->lines[y + 1].line) {
-        int i;
-        for (i = y; tb->lines[i + 1].line; i++) {
-            std::swap(tb->lines[i].line, tb->lines[i + 1].line);
-        }
-
-        tb->lines[i].line.reset();
+    if (whole && (x0 == 0) && (s[x1] == '\0') && !tb->is_last_line(y)) {
+        tb->lines.erase(tb->lines.begin() + y);
         tb->dirty_flags |= DIRTY_EXPRESSION;
         return;
     }

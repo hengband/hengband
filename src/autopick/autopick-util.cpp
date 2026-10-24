@@ -8,7 +8,6 @@
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
-#include <algorithm>
 
 /*!
  * @brief 自動拾い/破壊設定のリストに関する変数 / List for auto-picker/destroyer entries
@@ -51,32 +50,17 @@ bool auto_inscribe_item(ItemEntity &item, int idx)
     return true;
 }
 
-AutopickEntryLine::AutopickEntryLine(const std::string &line, const EnumClassFlagGroup<AutopickEntryStatus> &state)
-    : line(std::make_unique<std::string>(line))
+AutopickEntryLine::AutopickEntryLine(std::string line, const EnumClassFlagGroup<AutopickEntryStatus> &state)
+    : line(std::make_unique<std::string>(std::move(line)))
     , state(state)
 {
-}
-
-/*!
- * @brief 行数をカウントする
- * @return 行数
- */
-int AutopickTextBody::count_line() const
-{
-    const auto begin = this->lines.begin();
-    const auto it = std::find_if(begin, this->lines.end(), [](const auto &x) {
-        return !x.line;
-    });
-    return std::distance(begin, it);
 }
 
 std::vector<std::string> AutopickTextBody::get_entry_lines() const
 {
     std::vector<std::string> output_lines;
     for (const auto &line : this->lines) {
-        if (line.line) {
-            output_lines.push_back(*line.line);
-        }
+        output_lines.push_back(*line.line);
     }
 
     return output_lines;

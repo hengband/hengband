@@ -13,6 +13,7 @@
 #include <fstream>
 #include <string>
 #include <string_view>
+#include <tl/optional.hpp>
 #include <vector>
 
 /*!
@@ -82,27 +83,23 @@ std::string pickpref_filename(std::string_view player_base_name, PickType filena
 
 /*!
  * @brief Read whole lines of a file to memory
+ * @return 行の配列。ファイルを開けなければ tl::nullopt
  */
-static std::vector<std::unique_ptr<std::string>> read_text_lines(std::string_view filename)
+static tl::optional<std::vector<std::string>> read_text_lines(std::string_view filename)
 {
     const auto path = path_build(ANGBAND_DIR_USER, filename);
     auto ifs = std::ifstream(path);
     if (!ifs) {
-        return {};
+        return tl::nullopt;
     }
 
-    auto num_lines = 0;
-    std::vector<std::unique_ptr<std::string>> lines(MAX_AUTOPICK_ENTRIES);
+    std::vector<std::string> lines;
     std::string line;
     while (std::getline(ifs, line)) {
-        lines[num_lines++] = std::make_unique<std::string>(std::move(line));
-        if (is_greater_autopick_max_line(num_lines)) {
+        lines.push_back(std::move(line));
+        if (is_greater_autopick_max_line(lines.size())) {
             break;
         }
-    }
-
-    if (num_lines == 0) {
-        lines[0] = std::make_unique<std::string>();
     }
 
     return lines;
@@ -157,30 +154,26 @@ static void prepare_default_pickpref(std::string_view player_base_name)
 /*!
  * @brief Read an autopick prefence file to memory
  * Prepare default if no user file is found
+ * @return ファイル名の種類と行の配列 (空のファイルか、どのファイルも読めなければ空)
  */
-std::pair<PickType, std::vector<std::unique_ptr<std::string>>> read_pickpref_text_lines(std::string_view player_base_name)
+std::pair<PickType, std::vector<std::string>> read_pickpref_text_lines(std::string_view player_base_name)
 {
     /* Try a filename with player name */
     auto filename_mode = PickType::WITH_PNAME;
     auto filename = pickpref_filename(player_base_name, filename_mode);
     auto lines_list = read_text_lines(filename);
-    if (lines_list.empty()) {
+    if (!lines_list) {
         filename_mode = PickType::DEFAULT;
         filename = pickpref_filename(player_base_name, filename_mode);
         lines_list = read_text_lines(filename);
     }
 
-    if (lines_list.empty()) {
+    if (!lines_list) {
         prepare_default_pickpref(player_base_name);
         lines_list = read_text_lines(filename);
     }
 
-    if (lines_list.empty()) {
-        lines_list.resize(MAX_AUTOPICK_ENTRIES);
-        lines_list[0] = std::make_unique<std::string>();
-    }
-
-    return { filename_mode, std::move(lines_list) };
+    return { filename_mode, std::move(lines_list).value_or(std::vector<std::string>{}) };
 }
 
 /*!
