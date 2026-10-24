@@ -189,7 +189,8 @@ static MonsterSpellResult spell_RF6_SPECIAL_B(PlayerType *player_ptr, POSITION y
     const auto m_name = monster_name(player_ptr, m_idx);
 
     disturb(player_ptr, true, true);
-    if (one_in_(3) || !direct) {
+    // プレイヤーを狙ったのに、プレイヤーがその地点にいなければ掴めない (モンスターを狙ったときは掴める)
+    if (one_in_(3) || (monster_to_player && !direct)) {
         msg.to_player = _("{}は突然視界から消えた!", "You lose sight of {2}!");
         msg.to_mons = _("{}は突然急上昇して視界から消えた!", "You lose sight of {2}!");
 
@@ -200,14 +201,15 @@ static MonsterSpellResult spell_RF6_SPECIAL_B(PlayerType *player_ptr, POSITION y
         return MonsterSpellResult::make_valid();
     }
 
-    if (direct) {
-        sound(SoundKind::FALL);
-    }
-
     msg.to_player = _("{}があなたを掴んで空中から投げ落とした。", "{} snatches you, soars into the sky, and drops you.");
     msg.to_mons = _("{}が{}を掴んで空中から投げ落とした。", "{} snatches {}, soars into the sky, and releases its grip.");
 
-    simple_monspell_message(player_ptr, m_idx, t_idx, msg, target_type);
+    // 音は、プレイヤー (乗っている馬を含む) が掴まれたときと、モンスター同士で掴んだメッセージを出したときだけ出す。
+    // プレイヤーが狙われたときはメッセージを必ず出すが、乗っている馬が狙われたときは見えないと出さないので direct も見る
+    const auto is_noticed = simple_monspell_message(player_ptr, m_idx, t_idx, msg, target_type);
+    if (direct || is_noticed) {
+        sound(SoundKind::FALL);
+    }
 
     bool fear, dead; /* dummy */
     int dam = Dice::roll(4, 8);
