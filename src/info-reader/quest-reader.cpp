@@ -76,13 +76,14 @@ const std::unordered_map<std::string_view, BIT_FLAGS> CAVE_FLAG_TOKENS = {
  * @brief JSONの文字列配列をフロアに収まるマップ行として取り込む
  * @details マップ行のようなASCIIの記号列は文字コードの変換が不要なので、そのまま取り込む
  * @return 成功時は空の値、失敗時は解析エラーコード（行数または行のバイト数がフロアの上限を超える場合は
- * ParseErrorType::OUT_OF_BOUNDS、行幅が揃っていない場合や印字可能なASCII以外のセルがある場合は ParseErrorType::INVALID_VALUE）
+ * ParseErrorType::OUT_OF_BOUNDS、非文字列行は ParseErrorType::INVALID_TYPE、行幅が揃っていない場合や
+ * 印字可能なASCII以外のセルがある場合は ParseErrorType::INVALID_VALUE）
  */
 tl::expected<void, ParseErrorType> read_map_rows(const nlohmann::json &array_data, std::vector<std::string> &out)
 {
     for (const auto &line : array_data) {
         if (!line.is_string()) {
-            continue;
+            return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
         }
 
         const auto &row = line.get_ref<const std::string &>();
@@ -123,36 +124,32 @@ tl::expected<void, ParseErrorType> validate_quest_start(const QuestFixedMap &par
 
 /*!
  * @brief JSONの文字列配列を、各行を UTF-8 からシステムの文字コードへ変換して取り込む (説明文用、null/欠落は空)
- * @return 変換できない行があった場合は false
+ * @return 成功時は空の値、型不一致はINVALID_TYPE、文字コード変換の失敗はINVALID_VALUE
  */
-bool read_localized_lines(const nlohmann::json &array_data, std::vector<std::string> &out)
+tl::expected<void, ParseErrorType> read_localized_lines(const nlohmann::json &array_data, std::vector<std::string> &out)
 {
+    if (array_data.is_null()) {
+        return {};
+    }
     if (!array_data.is_array()) {
-        return true;
+        return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
     }
 
     for (const auto &line : array_data) {
         if (!line.is_string()) {
-            continue;
+            return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
         }
 
         auto line_sys = utf8_to_sys(line.get_ref<const std::string &>());
         if (!line_sys) {
-            return false;
+            return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
         }
         out.push_back(std::move(*line_sys));
     }
 
-    return true;
+    return {};
 }
 
-/*!
- * @brief JSON値が真偽値 true のときのみ true を返す (存在しても false や非booleanなら無効)
- */
-bool json_is_true(const nlohmann::json &value)
-{
-    return value.is_boolean() && value.get<bool>();
-}
 }
 
 /*!
@@ -213,6 +210,8 @@ tl::expected<void, ParseErrorType> parse_quest_legend_cell(const nlohmann::json 
                 return tl::make_unexpected(ParseErrorType::UNDEFINED_TERRAIN_TAG);
             }
         }
+    } else if (!terrain.is_null()) {
+        return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
     }
 
     // 整数・オブジェクト以外の値（5.0 などの整数でない数を含む）は黙って無視せず解析エラーにする。
@@ -222,7 +221,11 @@ tl::expected<void, ParseErrorType> parse_quest_legend_cell(const nlohmann::json 
             return result;
         }
     } else if (monster.is_object()) {
-        if (json_is_true(get_json_value(monster, "random"))) {
+        auto random = false;
+        if (const auto result = info_set_bool(get_json_value(monster, "random"), random, false); !result) {
+            return result;
+        }
+        if (random) {
             grid.random |= RANDOM_MONSTER;
             if (const auto result = info_set_integer(get_json_value(monster, "oodLevel"), grid.monster, false, LEGEND_SHORT_RANGE); !result) {
                 return result;
@@ -247,12 +250,20 @@ tl::expected<void, ParseErrorType> parse_quest_legend_cell(const nlohmann::json 
             return result;
         }
     } else if (object.is_object()) {
-        if (json_is_true(get_json_value(object, "random"))) {
+        auto random = false;
+        if (const auto result = info_set_bool(get_json_value(object, "random"), random, false); !result) {
+            return result;
+        }
+        auto quest_reward = false;
+        if (const auto result = info_set_bool(get_json_value(object, "questReward"), quest_reward, false); !result) {
+            return result;
+        }
+        if (random) {
             grid.random |= RANDOM_OBJECT;
             if (const auto result = info_set_integer(get_json_value(object, "oodLevel"), grid.object, false, LEGEND_SHORT_RANGE); !result) {
                 return result;
             }
-        } else if (json_is_true(get_json_value(object, "questReward"))) {
+        } else if (quest_reward) {
             out.object_is_quest_reward = true;
         }
     } else if (!object.is_null()) {
@@ -264,12 +275,18 @@ tl::expected<void, ParseErrorType> parse_quest_legend_cell(const nlohmann::json 
         if (const auto result = info_set_integer(ego, grid.ego, true, LEGEND_EGO_RANGE); !result) {
             return result;
         }
-    } else if (ego.is_object() && json_is_true(get_json_value(ego, "random"))) {
-        grid.random |= RANDOM_EGO;
-        if (const auto result = info_set_integer(get_json_value(ego, "id"), grid.ego, false, LEGEND_EGO_RANGE); !result) {
+    } else if (ego.is_object()) {
+        auto random = false;
+        if (const auto result = info_set_bool(get_json_value(ego, "random"), random, false); !result) {
             return result;
         }
-    } else if (!ego.is_null() && !ego.is_object()) {
+        if (random) {
+            grid.random |= RANDOM_EGO;
+            if (const auto result = info_set_integer(get_json_value(ego, "id"), grid.ego, false, LEGEND_EGO_RANGE); !result) {
+                return result;
+            }
+        }
+    } else if (!ego.is_null()) {
         return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
     }
 
@@ -279,12 +296,20 @@ tl::expected<void, ParseErrorType> parse_quest_legend_cell(const nlohmann::json 
             return result;
         }
     } else if (artifact.is_object()) {
-        if (json_is_true(get_json_value(artifact, "random"))) {
+        auto random = false;
+        if (const auto result = info_set_bool(get_json_value(artifact, "random"), random, false); !result) {
+            return result;
+        }
+        auto quest_reward = false;
+        if (const auto result = info_set_bool(get_json_value(artifact, "questReward"), quest_reward, false); !result) {
+            return result;
+        }
+        if (random) {
             grid.random |= RANDOM_ARTIFACT;
             if (const auto result = info_set_integer(get_json_value(artifact, "id"), grid.artifact, false, LEGEND_SHORT_RANGE); !result) {
                 return result;
             }
-        } else if (json_is_true(get_json_value(artifact, "questReward"))) {
+        } else if (quest_reward) {
             out.artifact_is_quest_reward = true;
         }
     } else if (!artifact.is_null()) {
@@ -298,8 +323,16 @@ tl::expected<void, ParseErrorType> parse_quest_legend_cell(const nlohmann::json 
         } catch (const std::exception &) {
             return tl::make_unexpected(ParseErrorType::UNDEFINED_TERRAIN_TAG);
         }
-    } else if (trap.is_object() && json_is_true(get_json_value(trap, "random"))) {
-        grid.random |= RANDOM_TRAP;
+    } else if (trap.is_object()) {
+        auto random = false;
+        if (const auto result = info_set_bool(get_json_value(trap, "random"), random, false); !result) {
+            return result;
+        }
+        if (random) {
+            grid.random |= RANDOM_TRAP;
+        }
+    } else if (!trap.is_null()) {
+        return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
     }
 
     if (const auto result = info_set_integer(get_json_value(cell_data, "special"), grid.special, false, LEGEND_SHORT_RANGE); !result) {
@@ -454,10 +487,22 @@ tl::expected<void, ParseErrorType> QuestReader::set_descriptions(QuestFixedMap &
     }
 
     for (const auto &description : descriptions) {
+        // get_json_value() はオブジェクト以外から引くと null を返すので、入れ物の型を先に確かめる。
+        // 確かめないと、条件が無いものとして扱われ、説明文が黙ってどの状態でも表示される。
+        if (!description.is_object()) {
+            return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
+        }
+
         QuestDescriptionBlock block;
 
         const auto &when = get_json_value(description, "when");
+        if (!when.is_null() && !when.is_object()) {
+            return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
+        }
         const auto &status_at_most = get_json_value(when, "statusAtMost");
+        if (!status_at_most.is_null() && !status_at_most.is_string()) {
+            return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
+        }
         if (status_at_most.is_string()) {
             const auto it = QUEST_STATUS_TOKENS.find(status_at_most.get<std::string>());
             if (it == QUEST_STATUS_TOKENS.end()) {
@@ -467,6 +512,9 @@ tl::expected<void, ParseErrorType> QuestReader::set_descriptions(QuestFixedMap &
         }
 
         const auto &status = get_json_value(when, "status");
+        if (!status.is_null() && !status.is_string()) {
+            return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
+        }
         if (status.is_string()) {
             const auto it = QUEST_STATUS_TOKENS.find(status.get<std::string>());
             if (it == QUEST_STATUS_TOKENS.end()) {
@@ -476,6 +524,9 @@ tl::expected<void, ParseErrorType> QuestReader::set_descriptions(QuestFixedMap &
         }
 
         const auto &quest_type = get_json_value(when, "questType");
+        if (!quest_type.is_null() && !quest_type.is_string()) {
+            return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
+        }
         if (quest_type.is_string()) {
             const auto it = QUEST_KIND_TOKENS.find(quest_type.get<std::string>());
             if (it == QUEST_KIND_TOKENS.end()) {
@@ -485,8 +536,14 @@ tl::expected<void, ParseErrorType> QuestReader::set_descriptions(QuestFixedMap &
         }
 
         const auto &text = get_json_value(description, "text");
-        if (!read_localized_lines(get_json_value(text, "ja"), block.lines_ja) || !read_localized_lines(get_json_value(text, "en"), block.lines_en)) {
-            return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
+        if (!text.is_null() && !text.is_object()) {
+            return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
+        }
+        if (const auto result = read_localized_lines(get_json_value(text, "ja"), block.lines_ja); !result) {
+            return result;
+        }
+        if (const auto result = read_localized_lines(get_json_value(text, "en"), block.lines_en); !result) {
+            return result;
         }
 
         parsed.descriptions.push_back(std::move(block));
