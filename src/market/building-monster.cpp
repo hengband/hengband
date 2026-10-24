@@ -1,4 +1,5 @@
 #include "market/building-monster.h"
+#include "bot/bot-json-output.h"
 #include "core/asking-player.h"
 #include "core/window-redrawer.h"
 #include "game-option/game-play-options.h"
@@ -142,6 +143,8 @@ bool research_mon(PlayerType *player_ptr)
     auto notpicked = true;
     auto query = 'y';
     while (notpicked) {
+        // 思い出は 'r' でもう一度押して止めても画面に残るので、このモンスターを表示している間は登録したままにする
+        BotDrawnScreenScope bot_screen;
         auto monrace_id = monrace_ids[i];
         roff_top(monrace_id);
         term_addstr(-1, TERM_WHITE, _(" ['r'思い出, ' 'で続行, ESC]", " [(r)ecall, ESC, space to continue]"));

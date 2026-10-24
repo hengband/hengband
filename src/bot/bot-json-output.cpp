@@ -1542,8 +1542,7 @@ enum class BotSnapshotMessages {
  * 出力量は既知の地形に依存する。地図を出さない呼び出し
  * （店内スナップショット）では作ってから消すのではなく最初から作らない。
  */
-nlohmann::json make_snapshot(PlayerType *player_ptr, bool include_map = true,
-    BotSnapshotMessages messages_source = BotSnapshotMessages::RECENT_DIFF)
+nlohmann::json make_snapshot(PlayerType *player_ptr, bool include_map, BotSnapshotMessages messages_source)
 {
     const auto &player = *player_ptr;
     const auto &floor = *player.current_floor_ptr;
@@ -2730,18 +2729,63 @@ BotScreen make_bot_look_screen()
 }
 
 namespace {
+BotDrawnScreenScope *current_bot_drawn_screen = nullptr; //!< いちばん内側の BotDrawnScreenScope
+}
+
+/*!
+ * @brief 描いた画面を登録するスコープを始める (まだ何も登録しない)
+ */
+BotDrawnScreenScope::BotDrawnScreenScope()
+    : previous(current_bot_drawn_screen)
+{
+    current_bot_drawn_screen = this;
+}
+
+/*!
+ * @brief 描いた画面の登録を外し、外側のスコープに戻す
+ * @details 始めたときとは逆の順に終えること
+ */
+BotDrawnScreenScope::~BotDrawnScreenScope()
+{
+    assert(current_bot_drawn_screen == this);
+    current_bot_drawn_screen = this->previous;
+}
+
+/*!
+ * @brief いちばん内側の BotDrawnScreenScope の登録を、描いた中身で登録し直す
+ * @param screen 描いた中身を足す処理と、地図を載せてよいか
+ * @pre BotDrawnScreenScope があること
+ */
+void show_bot_drawn_screen(BotScreen screen)
+{
+    assert(current_bot_drawn_screen != nullptr);
+    current_bot_drawn_screen->registered.emplace(std::move(screen));
+}
+
+/*!
+ * @brief 一覧を隠したときに、いちばん内側の BotDrawnScreenScope の登録を外す
+ * @details 描くときと同じく、いちばん内側のスコープに作用する。スコープが無ければ何もしない
+ */
+void hide_bot_drawn_screen()
+{
+    if (current_bot_drawn_screen != nullptr) {
+        current_bot_drawn_screen->registered.reset();
+    }
+}
+
+namespace {
 /*!
  * @brief スナップショットを JSONL に書き出す
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param screen 画面の情報を足すときはその画面 (地図を載せてよいかも従う)、ふだんのスナップショットなら nullptr
+ * @param build_started スナップショットを作り始めた時刻 (書き出しの計時に使う)
  */
-void write_bot_json_snapshot(PlayerType *player_ptr, const BotScreen *screen)
+void write_bot_json_snapshot(PlayerType *player_ptr, const BotScreen *screen, BotJsonClock::time_point build_started = BotJsonClock::now())
 {
     if (!arg_bot_json_output || player_ptr == nullptr || player_ptr->current_floor_ptr == nullptr) {
         return;
     }
 
-    const auto build_started = BotJsonClock::now();
     const auto snapshot = make_screen_snapshot(player_ptr, screen, true, BotSnapshotMessages::RECENT_DIFF);
     write_snapshot(snapshot, elapsed_microseconds(build_started));
 }
@@ -2763,6 +2807,54 @@ void output_bot_json_screen_snapshot(PlayerType *player_ptr)
     write_bot_json_snapshot(player_ptr, current_bot_screen);
 }
 
+namespace {
+/*!
+ * @brief 描いた画面を制御サーバの state に載せるか
+ * @return 制御サーバが動いていて、登録するスコープがあれば true
+ */
+bool should_register_drawn_screen()
+{
+    return arg_control_port.has_value() && (current_bot_drawn_screen != nullptr);
+}
+
+/*!
+ * @brief 描いた画面の中身を作る必要があるか
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @return JSONL に書き出すか、制御サーバの state に載せるなら true
+ */
+bool should_make_drawn_screen(PlayerType *player_ptr)
+{
+    if ((player_ptr == nullptr) || (player_ptr->current_floor_ptr == nullptr)) {
+        return false;
+    }
+
+    return arg_bot_json_output || should_register_drawn_screen();
+}
+
+/*!
+ * @brief 描いた画面を JSONL に書き出し、いちばん内側の BotDrawnScreenScope にも登録する
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param type スナップショットの type と、中身を載せるキー
+ * @param content 描いたときの中身 (地図は載せない)
+ * @param build_started 中身を作り始めた時刻 (書き出しの計時に使う)
+ */
+void show_drawn_screen(PlayerType *player_ptr, std::string_view type, nlohmann::json content, BotJsonClock::time_point build_started)
+{
+    BotScreen screen{
+        [type = std::string(type), content = std::move(content)](nlohmann::json &snapshot, PlayerType *) {
+            snapshot["type"] = type;
+            // std::string のキーは値で受ける operator[] に渡り、MSVC が評価順を保証できない (C4866) ので、文字列リテラルのキーと同じく const char * で渡す
+            snapshot[type.data()] = content;
+        },
+        false
+    };
+    write_bot_json_snapshot(player_ptr, &screen, build_started);
+    if (should_register_drawn_screen()) {
+        show_bot_drawn_screen(std::move(screen));
+    }
+}
+}
+
 /*!
  * @brief 呪文一覧 (魔法書の閲覧・詠唱メニュー) を表示したときのスナップショットを出力する
  * @param player_ptr プレイヤーへの参照ポインタ
@@ -2771,9 +2863,10 @@ void output_bot_json_screen_snapshot(PlayerType *player_ptr)
  */
 void output_bot_json_spell_list_snapshot(PlayerType *player_ptr, int realm_id, const std::vector<BotSpellListRow> &rows)
 {
-    if (!arg_bot_json_output || player_ptr == nullptr || player_ptr->current_floor_ptr == nullptr) {
+    if (!should_make_drawn_screen(player_ptr)) {
         return;
     }
+
     const auto build_started = BotJsonClock::now();
     auto spells = nlohmann::json::array();
     for (const auto &row : rows) {
@@ -2792,10 +2885,7 @@ void output_bot_json_spell_list_snapshot(PlayerType *player_ptr, int realm_id, c
         spells.push_back(std::move(spell));
     }
 
-    auto snapshot = make_snapshot(player_ptr, false);
-    snapshot["type"] = "spell_list";
-    snapshot["spell_list"] = { { "realm_id", realm_id }, { "spells", std::move(spells) } };
-    write_snapshot(snapshot, elapsed_microseconds(build_started));
+    show_drawn_screen(player_ptr, "spell_list", { { "realm_id", realm_id }, { "spells", std::move(spells) } }, build_started);
 }
 
 /*!
@@ -2808,9 +2898,10 @@ void output_bot_json_spell_list_snapshot(PlayerType *player_ptr, int realm_id, c
  */
 void output_bot_json_power_list_snapshot(PlayerType *player_ptr, std::string_view kind, const std::vector<BotPowerListRow> &rows, int page, bool browse_mode)
 {
-    if (!arg_bot_json_output || player_ptr == nullptr || player_ptr->current_floor_ptr == nullptr) {
+    if (!should_make_drawn_screen(player_ptr)) {
         return;
     }
+
     const auto build_started = BotJsonClock::now();
     auto powers = nlohmann::json::array();
     for (const auto &row : rows) {
@@ -2825,10 +2916,7 @@ void output_bot_json_power_list_snapshot(PlayerType *player_ptr, std::string_vie
         });
     }
 
-    auto snapshot = make_snapshot(player_ptr, false);
-    snapshot["type"] = "power_list";
-    snapshot["power_list"] = { { "kind", kind }, { "page", page }, { "browse_mode", browse_mode }, { "powers", std::move(powers) } };
-    write_snapshot(snapshot, elapsed_microseconds(build_started));
+    show_drawn_screen(player_ptr, "power_list", { { "kind", kind }, { "page", page }, { "browse_mode", browse_mode }, { "powers", std::move(powers) } }, build_started);
 }
 
 namespace {
@@ -2852,9 +2940,10 @@ void capture_lore_text(TERM_COLOR, std::string_view str)
  */
 void output_bot_json_lore_snapshot(PlayerType *player_ptr, MonraceId monrace_id, int lore_mode)
 {
-    if (!arg_bot_json_output || player_ptr == nullptr || player_ptr->current_floor_ptr == nullptr) {
+    if (!should_make_drawn_screen(player_ptr)) {
         return;
     }
+
     const auto build_started = BotJsonClock::now();
     std::string text;
     const auto previous_hook = hook_c_roff;
@@ -2865,12 +2954,10 @@ void output_bot_json_lore_snapshot(PlayerType *player_ptr, MonraceId monrace_id,
     lore_capture_buffer = nullptr;
 
     const auto &monrace = MonraceList::get_instance().get_monrace(monrace_id);
-    auto snapshot = make_snapshot(player_ptr, false);
-    snapshot["type"] = "lore";
-    snapshot["lore"] = {
+    auto lore = nlohmann::json{
         { "race_id", enum2i(monrace_id) },
         { "name", to_json_utf8(monrace.name.string()) },
         { "text", to_json_utf8(text) },
     };
-    write_snapshot(snapshot, elapsed_microseconds(build_started));
+    show_drawn_screen(player_ptr, "lore", std::move(lore), build_started);
 }

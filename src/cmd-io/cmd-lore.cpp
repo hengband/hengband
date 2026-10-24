@@ -1,4 +1,5 @@
 #include "cmd-io/cmd-lore.h"
+#include "bot/bot-json-output.h"
 #include "core/asking-player.h"
 #include "core/window-redrawer.h"
 #include "game-option/cheat-options.h"
@@ -127,6 +128,7 @@ void do_cmd_query_symbol(PlayerType *player_ptr)
         tracker.set_trackee(monrace_id);
         window_stuff(player_ptr);
         while (true) {
+            BotDrawnScreenScope bot_screen;
             if (recall) {
                 screen_save();
                 screen_roff(player_ptr, monrace_ids[i], MONSTER_LORE_NORMAL);

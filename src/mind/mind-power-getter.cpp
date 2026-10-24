@@ -74,6 +74,7 @@ bool MindPowerGetter::get_mind_power(SPELL_IDX *sn, bool only_browse)
 
     this->choice = (always_show_list || use_menu) ? ESCAPE : 1;
     this->decide_mind_choice(prompt, only_browse);
+
     if (this->redraw && !only_browse) {
         screen_load();
     }
@@ -245,6 +246,8 @@ bool MindPowerGetter::display_minds_chance(const bool only_browse)
     }
 
     this->redraw = false;
+    hide_bot_drawn_screen();
+
     screen_load();
     return true;
 }
