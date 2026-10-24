@@ -22,7 +22,7 @@ class DungeonValidationTest(unittest.TestCase):
         dungeon = copy.deepcopy(self.bundled["dungeons"][1])
         dungeon["final_floor"] = {"guardian": 237, "object": 148, "artifact": 89}
         for group, terrain in (("floor", "FLOOR"), ("wall", "GRANITE")):
-            dungeon[group]["tiles"] = [{"type": terrain, "rate": 1}, {"type": terrain, "rate": 1}]
+            dungeon[group]["tiles"] = [{"type": terrain, "rate": 50}, {"type": terrain, "rate": 50}]
         return {"version": 1, "dungeons": [dungeon]}
 
     def validate(self, document, *, companions=None):
@@ -41,8 +41,8 @@ class DungeonValidationTest(unittest.TestCase):
                 (["monsters", "additionalSpawnProbability"], 1, 1000000),
                 (["monsters", "normalMonsterRate"], 0, 100),
                 (["floor", "tunnelRate"], 0, 32767),
-                (["floor", "tiles", 0, "rate"], 0, 32767),
-                (["wall", "tiles", 0, "rate"], 0, 32767),
+                (["floor", "tiles", 0, "rate"], 0, 100),
+                (["wall", "tiles", 0, "rate"], 0, 100),
                 (["wall", "streams", 0, "count"], 1, 255),
                 (["wall", "streams", 0, "chance"], 1, 65535),
                 (["wall", "streams", 0, "priority"], 0, 255),
@@ -62,6 +62,9 @@ class DungeonValidationTest(unittest.TestCase):
             generation["maxDepth"] = max(0, min(32767, int(value)))
         elif path == ["generation", "maxDepth"]:
             generation["minDepth"] = 0
+        # 地形の重みの単独境界試験では、もう一方の重みで合計を100に揃え、合計の誤りを混ぜない。
+        if path[1:] == ["tiles", 0, "rate"] and type(value) is int and 0 <= value <= 100:
+            document["dungeons"][0][path[0]]["tiles"][1]["rate"] = 100 - value
         # ID0は入口配置を行わない。座標の保存上限はこのレコードで独立して検証する。
         if path[0] == "position":
             document["dungeons"][0]["id"] = 0
@@ -123,29 +126,42 @@ class DungeonValidationTest(unittest.TestCase):
         ok, diagnostic = self.validate(document)
         self.assertTrue(ok, diagnostic)
 
-    def test_zero_total_weights_are_rejected(self):
-        for group in ("floor", "wall"):
-            document = self.sample()
-            for tile in document["dungeons"][0][group]["tiles"]:
-                tile["rate"] = 0
-            ok, diagnostic = self.validate(document)
-            self.assertFalse(ok, diagnostic)
-            self.assertIn("positive total weight", diagnostic)
-            self.assertIn(f"Location: {['dungeons', 0, group, 'tiles']}", diagnostic)
+    def test_bundled_tile_rates_are_percentages(self):
+        for dungeon in self.bundled["dungeons"]:
+            for group in ("floor", "wall"):
+                with self.subTest(id=dungeon["id"], group=group):
+                    rates = [tile["rate"] for tile in dungeon[group]["tiles"]]
+                    self.assertTrue(all(0 <= rate <= 100 for rate in rates), rates)
+                    self.assertEqual(sum(rates), 100)
 
-    def test_weight_total_int_limit(self):
-        # 個々のrateを32767以下に保ち、実際の公開入口で合計境界を検証する。
-        # 2MB程度の文書2件を順次処理して、ピークメモリを抑える。
-        count, remainder = divmod(2147483647, 32767)
-        for tail in (remainder, remainder + 1):
-            document = self.sample()
-            tiles = [{"type": "FLOOR", "rate": 32767}] * count
-            document["dungeons"][0]["floor"]["tiles"] = tiles + [{"type": "FLOOR", "rate": tail}]
-            ok, diagnostic = self.validate(document)
-            self.assertEqual(ok, tail == remainder, diagnostic)
-            if tail != remainder:
-                self.assertIn("total weight exceeds the reader's integer range", diagnostic)
-                self.assertIn(f"Location: {['dungeons', 0, 'floor', 'tiles', count, 'rate']}", diagnostic)
+    def test_schema_tile_rates_are_bounded_as_percentages(self):
+        for definition in ("floorTile", "wallTile"):
+            with self.subTest(definition=definition):
+                rate = self.schema["$defs"][definition]["properties"]["rate"]
+                self.assertEqual(rate["minimum"], 0)
+                self.assertEqual(rate["maximum"], 100)
+
+    def test_tile_rates_totaling_100_are_accepted(self):
+        for group in ("floor", "wall"):
+            for rates in ([100], [0, 100], [100, 0], [1, 99], [20, 30, 50]):
+                with self.subTest(group=group, rates=rates):
+                    document = self.sample()
+                    terrain = document["dungeons"][0][group]["tiles"][0]["type"]
+                    document["dungeons"][0][group]["tiles"] = [{"type": terrain, "rate": rate} for rate in rates]
+                    ok, diagnostic = self.validate(document)
+                    self.assertTrue(ok, diagnostic)
+
+    def test_tile_rate_totals_other_than_100_are_rejected(self):
+        for group in ("floor", "wall"):
+            for rates in ([0], [0, 0], [99], [49, 50], [50, 51], [100, 1], [100, 100]):
+                with self.subTest(group=group, rates=rates):
+                    document = self.sample()
+                    terrain = document["dungeons"][0][group]["tiles"][0]["type"]
+                    document["dungeons"][0][group]["tiles"] = [{"type": terrain, "rate": rate} for rate in rates]
+                    ok, diagnostic = self.validate(document)
+                    self.assertFalse(ok, diagnostic)
+                    self.assertIn(f"must total exactly 100 (got {sum(rates)})", diagnostic)
+                    self.assertIn(f"Location: {['dungeons', 0, group, 'tiles']}", diagnostic)
 
     def test_entrances_follow_candidate_wilderness_dimensions(self):
         wilderness = {"version": 1, "width": 4, "height": 3,

@@ -273,36 +273,62 @@ bool DungeonReader::grab_one_spell_monster_flag(DungeonDefinition &dungeon, std:
     return false;
 }
 
-static tl::optional<ProbabilityTable<short>> parse_terrain_probability(const nlohmann::json &tiles_obj)
+/*!
+ * @brief 床・壁の地形の抽選表を読み込む。
+ * @param tiles_obj 地形と重みの配列
+ * @param section 診断に表示する節の名前 (floor / wall)
+ * @return 抽選表。地形や重みの書式が不正なら UNDEFINED_TERRAIN_TAG、重みの合計が100でなければ INVALID_VALUE
+ * @details 重みは百分率で、各0～100・合計はちょうど100とする。重みが0の地形は抽選表に登録しない。
+ */
+static tl::expected<ProbabilityTable<short>, ParseErrorType> parse_terrain_probability(const nlohmann::json &tiles_obj, std::string_view section)
 {
     if (tiles_obj.is_null() || !tiles_obj.is_array()) {
-        return tl::nullopt;
+        return tl::unexpected(ParseErrorType::UNDEFINED_TERRAIN_TAG);
     }
 
+    constexpr auto total_percent = 100;
     const auto &terrains = TerrainList::get_instance();
     ProbabilityTable<short> prob_table;
     int total_probability = 0;
     for (const auto &tile_obj : tiles_obj) {
         if (!tile_obj.is_object() || !get_json_value(tile_obj, "type").is_string() || !get_json_value(tile_obj, "rate").is_number_integer()) {
-            return tl::nullopt;
+            return tl::unexpected(ParseErrorType::UNDEFINED_TERRAIN_TAG);
         }
 
         int prob = 0;
-        if (!info_set_integer(get_json_value(tile_obj, "rate"), prob, true, Range(0, 32767)) || prob > std::numeric_limits<int>::max() - total_probability) {
-            return tl::nullopt;
+        const auto &rate_obj = get_json_value(tile_obj, "rate");
+        if (!info_set_integer(rate_obj, prob, true, Range(0, total_percent))) {
+            msg_print(_("DungeonDefinitions.jsonc: ダンジョンID '{}' の{}.tiles の rate '{}' が0～100の範囲外です (百分率で指定してください)。",
+                          "DungeonDefinitions.jsonc: dungeon ID '{}' {}.tiles rate '{}' is outside 0 to 100 (they are percentages)."),
+                error_idx, section, rate_obj.dump());
+            return tl::unexpected(ParseErrorType::UNDEFINED_TERRAIN_TAG);
         }
-        total_probability += prob;
 
         try {
             const auto terrain_id = terrains.get_terrain_id(get_json_value(tile_obj, "type").get<std::string>());
             prob_table.entry_item(terrain_id, prob);
         } catch (const std::exception &) {
-            return tl::nullopt;
+            return tl::unexpected(ParseErrorType::UNDEFINED_TERRAIN_TAG);
+        }
+
+        // 合計は全項目の地形と重みを確かめてから判定し、未知の地形は位置によらず UNDEFINED_TERRAIN_TAG とする。
+        // 各重みは100以下なので、合計が100を超えた後は加算をやめれば int の範囲を超えない。
+        if (total_probability <= total_percent) {
+            total_probability += prob;
         }
     }
 
-    if (prob_table.empty()) {
-        return tl::nullopt;
+    if (total_probability > total_percent) {
+        msg_print(_("DungeonDefinitions.jsonc: ダンジョンID '{}' の{}.tiles の rate の合計が '{}' となり100を超えています (百分率で指定してください)。",
+                      "DungeonDefinitions.jsonc: dungeon ID '{}' {}.tiles rates reach a total of '{}', exceeding 100 (they are percentages)."),
+            error_idx, section, total_probability);
+        return tl::unexpected(ParseErrorType::INVALID_VALUE);
+    }
+    if (total_probability != total_percent) {
+        msg_print(_("DungeonDefinitions.jsonc: ダンジョンID '{}' の{}.tiles の rate の合計 '{}' が100ではありません (百分率で指定してください)。",
+                      "DungeonDefinitions.jsonc: dungeon ID '{}' {}.tiles rates total '{}', not 100 (they are percentages)."),
+            error_idx, section, total_probability);
+        return tl::unexpected(ParseErrorType::INVALID_VALUE);
     }
 
     return prob_table;
@@ -368,9 +394,9 @@ tl::expected<void, ParseErrorType> DungeonReader::set_dungeon_floor(DungeonDefin
         return tl::unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
     }
 
-    auto prob_table = parse_terrain_probability(get_json_value(floor_obj, "tiles"));
+    auto prob_table = parse_terrain_probability(get_json_value(floor_obj, "tiles"), "floor");
     if (!prob_table) {
-        return tl::unexpected(ParseErrorType::UNDEFINED_TERRAIN_TAG);
+        return tl::unexpected(prob_table.error());
     }
     dungeon.prob_table_floor = std::move(*prob_table);
 
@@ -427,9 +453,9 @@ tl::expected<void, ParseErrorType> DungeonReader::set_dungeon_wall(DungeonDefini
         return tl::unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
     }
 
-    auto prob_table = parse_terrain_probability(get_json_value(wall_obj, "tiles"));
+    auto prob_table = parse_terrain_probability(get_json_value(wall_obj, "tiles"), "wall");
     if (!prob_table) {
-        return tl::unexpected(ParseErrorType::UNDEFINED_TERRAIN_TAG);
+        return tl::unexpected(prob_table.error());
     }
     dungeon.prob_table_wall = std::move(*prob_table);
 
