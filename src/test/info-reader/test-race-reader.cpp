@@ -65,6 +65,64 @@ tl::expected<void, ParseErrorType> read_as_first_record(const nlohmann::json &da
 }
 }
 
+TEST_CASE("RaceReader accepts arena odds correction ratio boundaries")
+{
+    test::MonraceListTestAccess guard;
+    auto data = make_monrace();
+    for (const auto ratio : { 1, 1000 }) {
+        CAPTURE(ratio);
+        data["odds_correction_ratio"] = ratio;
+        REQUIRE(read_as_first_record(data).has_value());
+        CHECK(test_monrace().arena_ratio == ratio);
+    }
+}
+
+TEST_CASE("RaceReader rejects arena odds correction ratios outside the range without changing the destination")
+{
+    test::MonraceListTestAccess guard;
+    auto data = make_monrace();
+    data["odds_correction_ratio"] = 100;
+    REQUIRE(read_as_first_record(data).has_value());
+    const auto identity = MonraceList::get_instance().get_monrace_shared(static_cast<MonraceId>(0));
+    for (const auto ratio : { 0, 1001 }) {
+        CAPTURE(ratio);
+        data["odds_correction_ratio"] = ratio;
+        CHECK(test::to_error_code(read_as_first_record(data)) == ParseErrorType::INVALID_FLAG);
+        CHECK(MonraceList::get_instance().get_monrace_shared(static_cast<MonraceId>(0)) == identity);
+        CHECK(test_monrace().arena_ratio == 100);
+    }
+}
+
+TEST_CASE("RaceReader accepts evolution experience boundaries")
+{
+    test::MonraceListTestAccess guard;
+    auto data = make_monrace();
+    for (const auto need_exp : { 1, 9999999 }) {
+        CAPTURE(need_exp);
+        data["evolve"] = { { "need_exp", need_exp }, { "to", 2 } };
+        REQUIRE(read_as_first_record(data).has_value());
+        CHECK(test_monrace().next_exp == need_exp);
+        CHECK(test_monrace().next_r_idx == static_cast<MonraceId>(2));
+    }
+}
+
+TEST_CASE("RaceReader rejects evolution experience outside the range without changing the destination")
+{
+    test::MonraceListTestAccess guard;
+    auto data = make_monrace();
+    data["evolve"] = { { "need_exp", 10 }, { "to", 2 } };
+    REQUIRE(read_as_first_record(data).has_value());
+    const auto identity = MonraceList::get_instance().get_monrace_shared(static_cast<MonraceId>(0));
+    for (const auto need_exp : { 0, 10000000 }) {
+        CAPTURE(need_exp);
+        data["evolve"] = { { "need_exp", need_exp }, { "to", 3 } };
+        CHECK(test::to_error_code(read_as_first_record(data)) == ParseErrorType::INVALID_FLAG);
+        CHECK(MonraceList::get_instance().get_monrace_shared(static_cast<MonraceId>(0)) == identity);
+        CHECK(test_monrace().next_exp == 10);
+        CHECK(test_monrace().next_r_idx == static_cast<MonraceId>(2));
+    }
+}
+
 TEST_CASE("RaceReader accepts schema boundary IDs")
 {
     test::MonraceListTestAccess guard;

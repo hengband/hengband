@@ -38,6 +38,11 @@ constexpr int64_t MAX_MONRACE_DICE_ROLL = std::numeric_limits<short>::max();
  */
 constexpr int MONRACE_AC_MAX = 10000;
 
+//! 闘技場のオッズ補正は100で等倍。10倍あれば十分で、同梱データの最大値900も収まる。
+constexpr int MONRACE_ODDS_CORRECTION_RATIO_MAX = 1000;
+//! 進化に必要な経験値 (need_exp、格納先は next_exp) が0だと進化しないため、進化を定義する場合は1以上とする。
+constexpr int MONRACE_EVOLVE_NEED_EXP_MIN = 1;
+
 /*!
  * @brief JSON Objectからモンスター定義のダイスを読み、値の範囲を検証する
  * @param json ダイスを表す文字列が格納されたJSON Object
@@ -156,7 +161,7 @@ tl::expected<void, ParseErrorType> RaceReader::read() const
         msg_print(_("モンスター性別読込失敗。ID: '{}'。", "Failed to load monster sex. ID: '{}'."), error_idx);
         return result;
     }
-    if (const auto result = info_set_integer(get_json_value(this->monrace_data, "odds_correction_ratio"), monrace.arena_ratio, false, Range(1, 9999)); !result) {
+    if (const auto result = info_set_integer(get_json_value(this->monrace_data, "odds_correction_ratio"), monrace.arena_ratio, false, Range(1, MONRACE_ODDS_CORRECTION_RATIO_MAX)); !result) {
         msg_print(_("モンスター賭け倍率読込失敗。ID: '{}'。", "Failed to load monster odds for arena. ID: '{}'."), error_idx);
         return result;
     }
@@ -393,7 +398,7 @@ tl::expected<void, ParseErrorType> RaceReader::set_mon_evolve(MonraceDefinition 
         return {};
     }
 
-    if (const auto result = info_set_integer(get_json_value(evolve_data, "need_exp"), monrace.next_exp, true, Range(0, 9999999)); !result) {
+    if (const auto result = info_set_integer(get_json_value(evolve_data, "need_exp"), monrace.next_exp, true, Range(MONRACE_EVOLVE_NEED_EXP_MIN, 9999999)); !result) {
         return result;
     }
     if (const auto result = info_set_integer(get_json_value(evolve_data, "to"), monrace.next_r_idx, true, Range(1, MAX_MONRACE_ID)); !result) {

@@ -93,6 +93,38 @@ class MonraceValidationTest(unittest.TestCase):
         self.assertEqual(schema["maximum"], limit)
         self.assertLessEqual(limit * 3, 32767)
 
+    def test_arena_odds_correction_ratio_boundaries(self):
+        self.assert_valid([self.monster(odds_correction_ratio=1),
+                           self.monster(2, odds_correction_ratio=1000)])
+        for ratio in (0, 1001):
+            with self.subTest(ratio=ratio):
+                self.assert_invalid([self.monster(odds_correction_ratio=ratio)],
+                                    ["monsters", 0, "odds_correction_ratio"])
+
+    def test_evolution_experience_boundaries(self):
+        for need_exp in (1, 9999999):
+            with self.subTest(need_exp=need_exp):
+                self.assert_valid([self.monster(evolve={"need_exp": need_exp, "to": 2}),
+                                   self.monster(2)])
+        for need_exp in (0, 10000000):
+            with self.subTest(need_exp=need_exp):
+                self.assert_invalid([self.monster(evolve={"need_exp": need_exp, "to": 2}),
+                                     self.monster(2)], ["monsters", 0, "evolve", "need_exp"])
+
+    def test_legacy_range_constants_match_schema(self):
+        source = (self.root / "src/info-reader/race-reader.cpp").read_text(encoding="utf-8")
+        properties = self.loaded[self.schema_path]["properties"]["monsters"]["items"]["properties"]
+        for constant, schema, bound in (
+            ("MONRACE_ODDS_CORRECTION_RATIO_MAX", properties["odds_correction_ratio"], "maximum"),
+            ("MONRACE_EVOLVE_NEED_EXP_MIN", properties["evolve"]["properties"]["need_exp"], "minimum"),
+        ):
+            with self.subTest(constant=constant):
+                match = re.search(rf"constexpr int {constant} = (\d+);", source)
+                self.assertIsNotNone(match, f"{constant} not found in race-reader.cpp")
+                self.assertEqual(schema[bound], int(match.group(1)))
+        self.assertEqual(properties["evolve"]["properties"]["need_exp"]["maximum"],
+                         properties["exp"]["maximum"])
+
     def test_float_integers_are_rejected(self):
         for field in ("speed", "level", "rarity", "exp"):
             with self.subTest(field=field):
