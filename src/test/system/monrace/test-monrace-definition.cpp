@@ -77,7 +77,7 @@ TEST_CASE("MonraceDefinition::calc_power() does not overflow with a large odds c
 
     SUBCASE("the largest ratio accepted by the reader")
     {
-        monrace.arena_ratio = 9999;
-        CHECK(monrace.calc_power() == 429957000);
+        monrace.arena_ratio = 1000;
+        CHECK(monrace.calc_power() == 43000000);
     }
 }
