@@ -166,7 +166,7 @@ bool autopick_autoregister(PlayerType *player_ptr, const ItemEntity *o_ptr)
     }
 
     /* If file was not there.  Create one specific to the player. */
-    const auto path_pref_append = !path_pref.empty() ? path_pref : path_build(ANGBAND_DIR_USER, pickpref_filename(player_ptr->base_name, PT_WITH_PNAME));
+    const auto path_pref_append = !path_pref.empty() ? path_pref : path_build(ANGBAND_DIR_USER, pickpref_filename(player_ptr->base_name, PickType::WITH_PNAME));
     pref_fff = angband_fopen(path_pref_append, FileOpenMode::APPEND);
     if (!pref_fff) {
         const auto filename_pref = path_pref_append.string();

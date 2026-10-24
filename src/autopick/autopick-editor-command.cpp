@@ -60,7 +60,8 @@ ape_quittance do_editor_command(PlayerType *player_ptr, AutopickTextBody *tb, Ed
             break;
         }
 
-        auto lines = read_pickpref_text_lines(player_ptr->base_name, &tb->filename_mode);
+        auto [filename_mode, lines] = read_pickpref_text_lines(player_ptr->base_name);
+        tb->filename_mode = filename_mode;
         const auto loop_count = lines.size();
         for (size_t i = 0; i < loop_count; i++) {
             std::swap(tb->lines[i].line, lines[i]);

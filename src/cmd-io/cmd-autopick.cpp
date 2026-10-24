@@ -152,7 +152,7 @@ void do_cmd_edit_autopick(PlayerType *player_ptr)
     AutopickTextBody text_body(cx_save, cy_save);
     AutopickTextBody *tb = &text_body;
     tb->dirty_flags = DIRTY_ALL | DIRTY_MODE | DIRTY_EXPRESSION;
-    tb->filename_mode = PT_DEFAULT;
+    tb->filename_mode = PickType::DEFAULT;
     auto &world = AngbandWorld::get_instance();
     world.play_time.pause();
     const auto unpauser = util::make_finalizer([&world]() { world.play_time.unpause(); });
@@ -173,7 +173,8 @@ void do_cmd_edit_autopick(PlayerType *player_ptr)
         tb->last_destroyed = autopick_line_from_entry(*entry);
     }
 
-    auto lines = read_pickpref_text_lines(player_ptr->base_name, &tb->filename_mode);
+    auto [filename_mode, lines] = read_pickpref_text_lines(player_ptr->base_name);
+    tb->filename_mode = filename_mode;
     const auto loop_count = lines.size();
     for (size_t i = 0; i < loop_count; i++) {
         std::swap(tb->lines[i].line, lines[i]);

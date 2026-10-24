@@ -48,7 +48,7 @@ void autopick_load_pref(PlayerType *player_ptr, bool disp_mes)
  */
 std::filesystem::path search_pickpref_path(std::string_view player_base_name)
 {
-    for (const auto filename_mode : { PT_WITH_PNAME, PT_DEFAULT }) {
+    for (const auto filename_mode : { PickType::WITH_PNAME, PickType::DEFAULT }) {
         const auto filename = pickpref_filename(player_base_name, filename_mode);
         const auto path = path_build(ANGBAND_DIR_USER, filename);
         if (std::filesystem::exists(path)) {
@@ -62,19 +62,19 @@ std::filesystem::path search_pickpref_path(std::string_view player_base_name)
 /*!
  * @brief Get file name for autopick preference
  */
-std::string pickpref_filename(std::string_view player_base_name, int filename_mode)
+std::string pickpref_filename(std::string_view player_base_name, PickType filename_mode)
 {
     static const char namebase[] = _("picktype", "pickpref");
 
     switch (filename_mode) {
-    case PT_DEFAULT:
+    case PickType::DEFAULT:
         return fmt::format("{}.prf", namebase);
 
-    case PT_WITH_PNAME:
+    case PickType::WITH_PNAME:
         return fmt::format("{}-{}.prf", namebase, player_base_name);
 
     default: {
-        const auto msg = fmt::format("The value of argument 'filename_mode' is invalid: {}", filename_mode);
+        const auto msg = fmt::format("The value of argument 'filename_mode' is invalid: {}", enum2i(filename_mode));
         THROW_EXCEPTION(std::invalid_argument, msg);
     }
     }
@@ -117,7 +117,7 @@ static void prepare_default_pickpref(std::string_view player_base_name)
         _("自動拾いのユーザー設定ファイルがまだ書かれていないので、", "Since user pref file for autopick is not yet created,"),
         _("基本的な自動拾い設定ファイルをlib/pref/picktype.prfからコピーします。", "the default setting is loaded from lib/pref/pickpref.prf .") };
 
-    const auto filename = pickpref_filename(player_base_name, PT_DEFAULT);
+    const auto filename = pickpref_filename(player_base_name, PickType::DEFAULT);
     for (const auto &message : messages) {
         msg_print(message);
     }
@@ -158,15 +158,15 @@ static void prepare_default_pickpref(std::string_view player_base_name)
  * @brief Read an autopick prefence file to memory
  * Prepare default if no user file is found
  */
-std::vector<std::unique_ptr<std::string>> read_pickpref_text_lines(std::string_view player_base_name, int *filename_mode_p)
+std::pair<PickType, std::vector<std::unique_ptr<std::string>>> read_pickpref_text_lines(std::string_view player_base_name)
 {
     /* Try a filename with player name */
-    *filename_mode_p = PT_WITH_PNAME;
-    auto filename = pickpref_filename(player_base_name, *filename_mode_p);
+    auto filename_mode = PickType::WITH_PNAME;
+    auto filename = pickpref_filename(player_base_name, filename_mode);
     auto lines_list = read_text_lines(filename);
     if (lines_list.empty()) {
-        *filename_mode_p = PT_DEFAULT;
-        filename = pickpref_filename(player_base_name, *filename_mode_p);
+        filename_mode = PickType::DEFAULT;
+        filename = pickpref_filename(player_base_name, filename_mode);
         lines_list = read_text_lines(filename);
     }
 
@@ -180,7 +180,7 @@ std::vector<std::unique_ptr<std::string>> read_pickpref_text_lines(std::string_v
         lines_list[0] = std::make_unique<std::string>();
     }
 
-    return lines_list;
+    return { filename_mode, std::move(lines_list) };
 }
 
 /*!

@@ -11,8 +11,10 @@
 constexpr auto MAX_LINELEN = 1024;
 constexpr size_t MAX_AUTOPICK_ENTRIES = 6000;
 
-constexpr auto PT_DEFAULT = 0;
-constexpr auto PT_WITH_PNAME = 1;
+enum class PickType {
+    DEFAULT = 0, //!< picktype.prf
+    WITH_PNAME = 1, //!< picktype-<playername>.prf
+};
 
 /*!
  * @struct autopick_type
@@ -102,7 +104,7 @@ public:
 
     uint16_t dirty_flags = 0;
     int dirty_line = -1;
-    int filename_mode = 0;
+    PickType filename_mode{};
     EditorCommandId old_com_id{};
 
     bool changed = false;
