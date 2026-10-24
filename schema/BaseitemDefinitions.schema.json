@@ -128,9 +128,9 @@
                     },
                     "cost": {
                         "type": "integer",
-                        "description": "売値",
+                        "description": "売値。エゴと同じ INT_MAX / 32 以下、金貨は 1024 以下",
                         "minimum": 0,
-                        "maximum": 99999999
+                        "maximum": 67108863
                     },
                     "base_ac": {
                         "$comment": "maximum = ITEM_BASE_AC_MAX in src/info-reader/item-reader-limits.h (a small number from 0 to 255; sums over all equipment slots are estimated to stay within 16 bits up to about 1,000)",
@@ -960,6 +960,26 @@
                                             "maximum": 30
                                         }
                                     }
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "if": {
+                            "properties": {
+                                "itemkind": {
+                                    "properties": {
+                                        "type_value": {
+                                            "const": 127
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "then": {
+                            "properties": {
+                                "cost": {
+                                    "maximum": 1024
                                 }
                             }
                         }

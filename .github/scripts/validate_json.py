@@ -232,6 +232,9 @@ def validate_baseitem_semantics(data: dict, schema_path: Path) -> None:
         minimum, maximum = baseitem_pval_range(type_value)
         if not minimum <= baseitem.get("parameter_value", 0) <= maximum:
             raise ValidationError(f"parameter_value must be in {minimum}..{maximum}", path=path + ["parameter_value"])
+        maximum = GOLD_COST_MAX if type_value == kinds["GOLD"] else BASEITEM_COST_MAX
+        if not 0 <= baseitem["cost"] <= maximum:
+            raise ValidationError(f"cost must be in 0..{maximum}", path=path + ["cost"])
         if "base_dice" in baseitem:
             require_reader_dice(baseitem["base_dice"], path + ["base_dice"], *ITEM_DICE_RANGE)
         for allocation_index, allocation in enumerate(baseitem.get("allocations", [])):
@@ -273,6 +276,11 @@ BASEITEM_SUBTYPE_MAX = {**dict.fromkeys(range(19, 24), 63), **dict.fromkeys(BOOK
 
 def baseitem_subtype_max(type_value: int) -> int:
     return BASEITEM_SUBTYPE_MAX.get(type_value, 128)
+
+
+# EgoReader の PRICE 上限 / 32 に揃え、金貨の生成額（最大で価格の9倍）には別の上限を設ける。
+BASEITEM_COST_MAX = (2**31 - 1) // 32
+GOLD_COST_MAX = 1024
 
 
 def collect_valid_baseitem_keys(baseitem_data: dict) -> set[tuple[int, int]]:

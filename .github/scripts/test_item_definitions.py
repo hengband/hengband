@@ -164,6 +164,14 @@ class BaseitemDefinitionValidationTest(unittest.TestCase):
                     record["itemkind"]["subtype_value"] = value
                     self.check_range_record(record, 0 <= value <= maximum)
 
+    def test_cost_boundaries_and_gold_cap(self):
+        for kind, maximum in ((1, 67108863), (127, 1024)):
+            for value in (-1, 0, maximum, maximum + 1):
+                with self.subTest(kind=kind, value=value):
+                    record = self.range_record(kind)
+                    record["cost"] = value
+                    self.check_range_record(record, 0 <= value <= maximum)
+
     def test_dice_matches_reader(self):
         # from_chars は先頭の0をいくつでも読み飛ばす。セーブでは個数・面数を1バイトで書くため0〜255に限る。
         for dice in ("1d4", "0d0", "007d08", "255d255", "0" * 5000 + "1d4"):
@@ -340,7 +348,7 @@ class ArtifactDefinitionValidationTest(unittest.TestCase):
         ok, message = self.validate_with_baseitems(self.sample, [{**baseitem, "id": 1}])
         self.assertTrue(ok, message)
         # 隣の候補のベースアイテム定義を優先し、同梱定義にあっても候補に無ければ拒否する。
-        other = {**baseitem, "id": 1, "itemkind": {"type_value": 127, "subtype_value": 0}, "parameter_value": 0}
+        other = {**baseitem, "id": 1, "itemkind": {"type_value": 127, "subtype_value": 0}, "parameter_value": 0, "cost": 0}
         ok, message = self.validate_with_baseitems(self.sample, [other])
         self.assertFalse(ok, message)
         self.assertIn("Reason: base item must be a valid baseitem", message)
