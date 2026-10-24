@@ -169,6 +169,7 @@ public:
     void request_inscription_change_updates();
     void request_equipment_change_updates();
     void request_riding_status_redrawing();
+    void request_riding_change_updates();
     void request_hp_mp_redrawing();
     void request_gold_redrawing();
     void request_light_fuel_change_updates();
