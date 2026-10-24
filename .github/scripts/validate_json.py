@@ -1117,24 +1117,13 @@ def validate_monster_message_semantics(data: dict, schema_path: Path, data_path:
                 # MessageReaderはモンスター種族の定義に無いIDを拒否する。
                 if monster_id not in defined_monrace_ids:
                     raise ValidationError("unknown monster ID", path=group_path + ["id_list", id_index])
-        # 実行時の到達可否によらず、全メッセージの入力を検証する。
+        # 全メッセージの入力を検証する。
         for message_index, message in enumerate(group["message"]):
             message_path = group_path + ["message", message_index]
             require_integer(message["chance"], message_path + ["chance"])
             languages = message["message"]
             if not languages:
                 raise ValidationError("a message must contain ja or en", path=message_path + ["message"])
-
-        # 読込を終えた言語の後続メッセージが黙って捨てられる定義を拒否する。
-        missing_languages = set()
-        for message_index, message in enumerate(group["message"]):
-            languages = message["message"]
-            for language in ("ja", "en"):
-                if language not in languages:
-                    missing_languages.add(language)
-                elif language in missing_languages:
-                    path = group_path + ["message", message_index, "message", language]
-                    raise ValidationError(f"{language} messages after a missing locale would be discarded", path=path)
 
 
 MAX_MONRACE_DICE_ROLL = 32767
