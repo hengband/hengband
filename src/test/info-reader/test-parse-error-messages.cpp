@@ -7,6 +7,19 @@
 #include "util/enum-converter.h"
 #include <doctest/doctest.h>
 #include <string>
+#include <vector>
+
+TEST_CASE("format_definition_load_error preserves diagnostics before the record error")
+{
+    const auto record = format_record_parse_error("Definitions.jsonc", "records", 3, ParseErrorType::INVALID_FLAG);
+    CHECK(format_definition_load_error({}, record) == record);
+    const std::vector<std::string> diagnostics{ "Unknown flag", "", "Failed to load flags" };
+    CHECK(format_definition_load_error(diagnostics, record) == "Unknown flag\nFailed to load flags\n" + record);
+
+    // システムの文字コードのバイト列を変換せず、そのまま残す。
+    const std::vector<std::string> encoded{ std::string("\x82\xa0\xa4\xa2") };
+    CHECK(format_definition_load_error(encoded, record) == encoded.front() + "\n" + record);
+}
 
 TEST_CASE("describe_parse_error names every parse error")
 {
