@@ -24,6 +24,7 @@
 #include "info-reader/wilderness-reader.h"
 #include "io/files-util.h"
 #include "io/uid-checker.h"
+#include "main/init-error-messages-table.h"
 #include "object-enchant/object-ego.h"
 #include "player-info/class-info.h"
 #include "player/player-skill.h"
@@ -83,7 +84,12 @@ void init_json(std::string_view filename, std::string_view keyname, DefinitionHa
         quit(fmt::format(_("'{}'ファイルをオープンできません。", "Cannot open '{}' file."), filename));
     }
 
-    auto json_object = loader.parse();
+    nlohmann::json json_object;
+    try {
+        json_object = loader.parse();
+    } catch (const nlohmann::json::exception &e) {
+        quit(format_json_syntax_error(filename, e.what()));
+    }
 
     if (const auto result = info_validate_json_array(json_object, keyname, allow_empty); !result) {
         if (result.error() == ParseErrorType::INVALID_VALUE) {
@@ -98,10 +104,11 @@ void init_json(std::string_view filename, std::string_view keyname, DefinitionHa
 
     error_idx = -1;
 
-    for (auto &element : json_object[keyname]) {
-        if (!json_parser(element)) {
+    auto &elements = json_object[keyname];
+    for (size_t index = 0; index < elements.size(); ++index) {
+        if (const auto result = json_parser(elements[index]); !result) {
             msg_erase();
-            quit(fmt::format(_("'{}'ファイルにエラー", "Error in '{}' file."), filename));
+            quit(format_record_parse_error(filename, keyname, index, result.error()));
         }
     }
 
@@ -272,7 +279,7 @@ void init_vaults_info()
  */
 void init_wilderness()
 {
-    if (!initialize_wilderness_definition()) {
-        quit(_("荒野を初期化できません", "Cannot initialize wilderness"));
+    if (const auto result = initialize_wilderness_definition(); !result) {
+        quit(result.error());
     }
 }
