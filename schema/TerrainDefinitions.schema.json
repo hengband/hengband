@@ -63,10 +63,10 @@
             "type": ["string", "null"]
           },
           "map_priority": {
-            "description": "マップ表示優先度",
+            "description": "縮小マップの表示優先度 (0..125)。null・省略は新しい地形では 0 (読み直すときは今の値のまま)。同順位で +1 されても自動拾い印の 127 未満に収める。",
             "type": ["integer", "null"],
-            "minimum": -9999,
-            "maximum": 9999
+            "minimum": 0,
+            "maximum": 125
           },
           "flags": {
             "type": "array",
