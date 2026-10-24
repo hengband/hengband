@@ -46,7 +46,7 @@ std::string screen_dump;
 #ifdef WORLD_SCORE
 
 #ifdef JP
-constexpr auto SCORE_POST_URL = "http://mars.kmc.gr.jp/~dis/heng_score/register_score.php"; /*!< スコア開示URL */
+constexpr auto SCORE_POST_URL = "https://score.hengband.net/scores"; /*!< スコア送信先URL */
 #endif
 
 static constexpr auto get_score_content_type()
