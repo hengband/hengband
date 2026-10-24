@@ -2,8 +2,8 @@
  * @brief ゲームデータ解析エラー名の表のテスト
  */
 
+#include "info-reader/parse-error-messages.h"
 #include "info-reader/parse-error-types.h"
-#include "main/init-error-messages-table.h"
 #include "util/enum-converter.h"
 #include <doctest/doctest.h>
 #include <string>

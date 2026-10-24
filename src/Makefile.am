@@ -632,6 +632,7 @@ libhengband_a_SOURCES = \
 	info-reader/jsonc-document-loader.cpp info-reader/jsonc-document-loader.h \
 	info-reader/magic-reader.cpp info-reader/magic-reader.h \
 	info-reader/message-reader.cpp info-reader/message-reader.h \
+	info-reader/parse-error-messages.cpp info-reader/parse-error-messages.h \
 	info-reader/parse-error-types.h \
 	info-reader/quest-reader.cpp info-reader/quest-reader.h \
 	info-reader/race-info-tokens-table.cpp info-reader/race-info-tokens-table.h \
@@ -759,7 +760,6 @@ libhengband_a_SOURCES = \
 	main/angband-initializer.cpp main/angband-initializer.h \
 	main/game-data-initializer.cpp main/game-data-initializer.h \
 	main/info-initializer.cpp main/info-initializer.h \
-	main/init-error-messages-table.cpp main/init-error-messages-table.h \
 	main/music-definitions-table.cpp main/music-definitions-table.h \
 	main/scene-table.cpp main/scene-table.h \
 	main/scene-table-floor.cpp main/scene-table-floor.h \
@@ -1547,6 +1547,7 @@ hengband_test_SOURCES = \
 	test/info-reader/test-jsonc-document-loader.cpp \
 	test/info-reader/test-magic-reader.cpp \
 	test/info-reader/test-message-reader.cpp \
+	test/info-reader/test-parse-error-messages.cpp \
 	test/info-reader/test-quest-reader.cpp \
 	test/info-reader/test-race-reader.cpp \
 	test/info-reader/test-skill-reader.cpp \
@@ -1570,7 +1571,6 @@ hengband_test_SOURCES = \
 	test/load/test-angband-version-comparer.cpp \
 	test/locale/test-character-encoding.cpp \
 	test/lore/test-monster-lore-snapshot.cpp \
-	test/main/test-init-error-messages-table.cpp \
 	test/market/test-building-recharger.cpp \
 	test/monster-race/test-race-ability-mask.cpp \
 	test/mspell/test-mspell-projection-table.cpp \

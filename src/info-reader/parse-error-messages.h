@@ -1,6 +1,6 @@
 #pragma once
 /*!
- * @file init-error-messages-table.h
+ * @file parse-error-messages.h
  * @brief 変愚蛮怒のゲームデータ解析エラー名ヘッダ
  */
 

@@ -83,6 +83,7 @@
     <ClCompile Include="..\..\src\test\info-reader\test-jsonc-document-loader.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-magic-reader.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-message-reader.cpp" />
+    <ClCompile Include="..\..\src\test\info-reader\test-parse-error-messages.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-quest-reader.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-race-reader.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-skill-reader.cpp" />
@@ -106,7 +107,6 @@
     <ClCompile Include="..\..\src\test\load\test-angband-version-comparer.cpp" />
     <ClCompile Include="..\..\src\test\locale\test-character-encoding.cpp" />
     <ClCompile Include="..\..\src\test\lore\test-monster-lore-snapshot.cpp" />
-    <ClCompile Include="..\..\src\test\main\test-init-error-messages-table.cpp" />
     <ClCompile Include="..\..\src\test\market\test-building-recharger.cpp" />
     <ClCompile Include="..\..\src\test\monster-race\test-race-ability-mask.cpp" />
     <ClCompile Include="..\..\src\test\mspell\test-mspell-projection-table.cpp" />

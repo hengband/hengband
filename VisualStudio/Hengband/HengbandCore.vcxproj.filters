@@ -996,6 +996,9 @@
     <ClCompile Include="..\..\src\info-reader\message-reader.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\info-reader\parse-error-messages.cpp">
+      <Filter>info-reader</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\info-reader\quest-reader.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>
@@ -1339,9 +1342,6 @@
       <Filter>main</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\main\info-initializer.cpp">
-      <Filter>main</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\main\init-error-messages-table.cpp">
       <Filter>main</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\main\music-definitions-table.cpp">
@@ -3699,6 +3699,9 @@
     <ClInclude Include="..\..\src\info-reader\message-reader.h">
       <Filter>info-reader</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\info-reader\parse-error-messages.h">
+      <Filter>info-reader</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\src\info-reader\parse-error-types.h">
       <Filter>info-reader</Filter>
     </ClInclude>
@@ -4084,9 +4087,6 @@
       <Filter>main</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\main\info-initializer.h">
-      <Filter>main</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\main\init-error-messages-table.h">
       <Filter>main</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\main\music-definitions-table.h">

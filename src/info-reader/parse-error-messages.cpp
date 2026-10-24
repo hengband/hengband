@@ -1,9 +1,9 @@
 /*!
- * @file init-error-messages-table.cpp
+ * @file parse-error-messages.cpp
  * @brief 変愚蛮怒のゲームデータ解析エラー名定義
  */
 
-#include "main/init-error-messages-table.h"
+#include "info-reader/parse-error-messages.h"
 #include "locale/character-encoding.h"
 #include <fmt/format.h>
 

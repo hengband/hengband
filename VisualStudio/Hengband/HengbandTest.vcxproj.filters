@@ -49,9 +49,6 @@
     <Filter Include="lore">
       <UniqueIdentifier>{8ca43536-f921-5018-9314-5ef95d1231f2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="main">
-      <UniqueIdentifier>{3e3bfbaf-32fc-46d7-a1fc-51c277aaa757}</UniqueIdentifier>
-    </Filter>
     <Filter Include="market">
       <UniqueIdentifier>{c39c00e0-2243-5bfa-a98a-0989f0a30293}</UniqueIdentifier>
     </Filter>
@@ -202,6 +199,9 @@
     <ClCompile Include="..\..\src\test\info-reader\test-message-reader.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\test\info-reader\test-parse-error-messages.cpp">
+      <Filter>info-reader</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\test\info-reader\test-quest-reader.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>
@@ -270,9 +270,6 @@
     </ClCompile>
     <ClCompile Include="..\..\src\test\lore\test-monster-lore-snapshot.cpp">
       <Filter>lore</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\test\main\test-init-error-messages-table.cpp">
-      <Filter>main</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\test\market\test-building-recharger.cpp">
       <Filter>market</Filter>
