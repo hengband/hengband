@@ -44,6 +44,7 @@
 #include "system/terrain/terrain-list.h"
 #include "term/z-util.h"
 #include "util/angband-files.h"
+#include "util/enum-converter.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "world/world.h"
@@ -454,8 +455,7 @@ static tl::expected<void, ParseErrorType> parse_town_map_jsonc(PlayerType *playe
  */
 static void report_load_error(ParseErrorType err, std::string_view filename)
 {
-    const auto oops = ((err > ParseErrorType::NONE) && (err < ParseErrorType::MAX)) ? err_str[enum2i(err)] : "unknown";
-    msg_print("Error {} ({}) loading '{}'.", enum2i(err), oops, filename);
+    msg_print("Error {} ({}) loading '{}'.", enum2i(err), describe_parse_error(err), filename);
     msg_erase();
 }
 

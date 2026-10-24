@@ -5,10 +5,14 @@
 
 #include "info-reader/parse-error-messages.h"
 #include "locale/character-encoding.h"
+#include "system/angband.h"
+#include "util/enum-converter.h"
 #include <fmt/format.h>
 
+namespace {
 /*!
  * エラーメッセージの名称定義 / Standard error message text
+ * @details 外からは describe_parse_error() を通して引く
  */
 concptr err_str[enum2i(ParseErrorType::MAX)] = {
     nullptr,
@@ -26,6 +30,7 @@ concptr err_str[enum2i(ParseErrorType::MAX)] = {
     _("不正な値", "invalid value"),
     _("不正な型", "invalid type"),
 };
+}
 
 /*!
  * @brief 解析エラーの名称を返す
