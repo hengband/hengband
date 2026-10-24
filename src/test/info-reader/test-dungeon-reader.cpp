@@ -463,7 +463,6 @@ TEST_CASE("DungeonReader rejects final-floor ID narrowing before reference looku
     const std::vector<nlohmann::json> invalid_ids{
         -1,
         -32768,
-        10000,
         32767,
         32768,
         -32769,
@@ -501,12 +500,15 @@ TEST_CASE("DungeonReader rejects final-floor ID narrowing before reference looku
 
 TEST_CASE("DungeonReader preserves representable final-floor IDs and the no-artifact sentinel")
 {
-    for (const auto &[guardian, artifact] : { std::pair{ 1, 0 }, std::pair{ 1, 1 }, std::pair{ 1, 9999 } }) {
+    for (const auto &[guardian, artifact] : { std::pair{ 1, 0 }, std::pair{ 1, 1 }, std::pair{ 1, 32766 }, std::pair{ 32766, 1 } }) {
         CAPTURE(guardian);
         CAPTURE(artifact);
         const FinalFloorStateGuard state;
         const auto guardian_id = static_cast<MonraceId>(guardian);
         const auto artifact_id = static_cast<FixedArtifactId>(artifact);
+        if (guardian_id != MonraceId::FILTHY_URCHIN) {
+            MonraceList::get_instance().emplace(guardian_id);
+        }
         if (artifact_id != FixedArtifactId::NONE && artifact_id != FixedArtifactId::GALADRIEL_PHIAL) {
             ArtifactList::get_instance().emplace(artifact_id, {});
         }

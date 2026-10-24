@@ -311,7 +311,7 @@ TEST_CASE("QuestList leaves all records unpublished when a later file fails")
 TEST_CASE("QuestList initialization preserves every store on late input errors")
 {
     for (const auto seeded : { false, true }) {
-        for (const auto *failure : { "syntax", "root", "id", "duplicate", "type", "range", "start", "start bounds", "start no map", "start variant", "monster", "dungeon", "reward", "reward candidate", "leaving quest", "leaving wrap" }) {
+        for (const auto *failure : { "syntax", "root", "id", "duplicate", "type", "range", "start", "start bounds", "start no map", "start variant", "monster", "dungeon", "reward", "reward candidate", "leaving quest", "leaving max" }) {
             CAPTURE(seeded);
             CAPTURE(std::string(failure));
             test::QuestListTestAccess quests;
@@ -386,13 +386,15 @@ TEST_CASE("QuestList initialization preserves every store on late input errors")
             } else if (kind == "monster") {
                 bad["definition"]["monster"] = 123;
             } else if (kind == "dungeon") {
-                bad["definition"]["dungeon"] = 123;
+                // 読み込みで受け付ける範囲 (DungeonId) の中で、定義の無いダンジョンを指す。
+                bad["definition"]["dungeon"] = 20;
             } else if (kind == "reward") {
                 bad["definition"]["reward"] = { { "artifact", 123 } };
             } else if (kind == "reward candidate") {
                 bad["definition"]["reward"] = { { "artifacts", { 0, 123 } } };
-            } else if (kind == "leaving quest" || kind == "leaving wrap") {
-                bad["startVariants"] = { { { "leavingQuest", kind == "leaving wrap" ? 65537 : 48 }, { "y", 0 }, { "x", 0 } } };
+            } else if (kind == "leaving quest" || kind == "leaving max") {
+                // 読み込みで受け付ける上限 (QuestId の型の上限−1) でも、クエストの範囲外なら参照の照合で拒否する。
+                bad["startVariants"] = { { { "leavingQuest", kind == "leaving max" ? 32766 : 48 }, { "y", 0 }, { "x", 0 } } };
             }
             if (kind == "syntax") {
                 files.write_raw("quests/02.jsonc", "{\"id\":2,");
@@ -414,8 +416,9 @@ TEST_CASE("QuestList initialization preserves every store on late input errors")
                     const auto field = kind == "dungeon" ? "definition.dungeon" : kind == "reward"         ? "definition.reward.artifact"
                                                                               : kind == "reward candidate" ? "definition.reward.artifacts[1]"
                                                                                                            : "startVariants[0].leavingQuest";
-                    const auto id = kind == "leaving wrap" ? "65537" : kind == "leaving quest" ? "48"
-                                                                                               : "123";
+                    const auto id = kind == "leaving max" ? "32766" : kind == "leaving quest" ? "48"
+                                                                  : kind == "dungeon"         ? "20"
+                                                                                              : "123";
                     CHECK(diagnostic.find(std::string(field) + " " + id) != std::string::npos);
                 } else if (kind.starts_with("start ")) {
                     const std::string diagnostic(error.what());

@@ -52,7 +52,7 @@ static tl::expected<void, ParseErrorType> set_id_list(const nlohmann::json &id_l
             return tl::make_unexpected(ParseErrorType::INVALID_FLAG);
         }
         int id = 0;
-        if (const auto result = info_set_integer(id_data, id, true, Range(1, 9999)); !result) {
+        if (const auto result = info_set_integer(id_data, id, true, Range(1, MAX_MONRACE_ID)); !result) {
             return result;
         }
         // 未定義の種族IDに登録したメッセージは使われないため、定義の誤記として拒否する。

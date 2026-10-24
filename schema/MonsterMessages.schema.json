@@ -22,7 +22,7 @@
                         "items": {
                             "type": "integer",
                             "minimum": 1,
-                            "maximum": 9999
+                            "maximum": 32766
                         }
                     },
                     "name": {

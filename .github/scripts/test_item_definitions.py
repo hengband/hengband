@@ -4,7 +4,7 @@ import re
 from pathlib import Path
 import unittest
 
-from json_validation_test_helper import validate_document
+from json_validation_test_helper import baseitem_id_schema_maximum, fixed_artifact_id_schema_maximum, validate_document
 from validate_json import build_schema_registry, load_all_schemas, load_cpp_tokens, load_jsonc, load_rod_type_value
 
 
@@ -58,6 +58,12 @@ class BaseitemDefinitionValidationTest(unittest.TestCase):
         for field in ("base_ac", "hit_bonus", "damage_bonus", "ac_bonus"):
             with self.subTest(field=field):
                 self.check(self.changed(self.sample, [field], 1.0), False, ["baseitems", 0, field], "integer JSON value")
+
+    def test_id_maximum_matches_baseitem_id_storage(self):
+        # ベースアイテムIDの上限は、IDを扱う型(BaseitemList の short)の上限−1とする。
+        maximum = baseitem_id_schema_maximum()
+        schema = self.loaded[self.schema_map["BaseitemDefinitions"]]
+        self.assertEqual(schema["properties"]["baseitems"]["items"]["properties"]["id"]["maximum"], maximum)
 
     def test_ids_must_be_strictly_increasing(self):
         for second_id in (self.sample["id"], self.sample["id"] - 1):
@@ -206,9 +212,16 @@ class ArtifactDefinitionValidationTest(unittest.TestCase):
                 self.check({**self.sample, field: minimum - 1}, False, ["artifacts", 0, field])
                 self.check({**self.sample, field: 256}, False, ["artifacts", 0, field])
 
+    def test_id_maximum_matches_fixed_artifact_id_storage(self):
+        # 固定アーティファクトIDの上限は、IDを格納する型(FixedArtifactId)の上限−1とする。
+        maximum = fixed_artifact_id_schema_maximum()
+        schema = self.loaded[self.schema_map["ArtifactDefinitions"]]
+        self.assertEqual(schema["properties"]["artifacts"]["items"]["properties"]["id"]["maximum"], maximum)
+        self.check({**self.sample, "id": maximum + 1}, False, ["artifacts", 0, "id"])
+
     def test_ids_must_start_at_one_without_gaps(self):
         # 実行時の記録は 1〜件数の ID だけを作るため、0・欠番・重複・逆順を拒否する。
-        for first_id in (2, 9999):
+        for first_id in (2, 32766):
             with self.subTest(first_id=first_id):
                 self.check({**self.sample, "id": first_id}, False, ["artifacts", 0, "id"], "start at 1")
         self.check({**self.sample, "id": 0}, False, ["artifacts", 0, "id"])

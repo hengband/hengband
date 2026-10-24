@@ -34,6 +34,9 @@
     <Filter Include="io">
       <UniqueIdentifier>{1bffe338-7a9b-482c-b4ea-71f5f4815fff}</UniqueIdentifier>
     </Filter>
+    <Filter Include="io-dump">
+      <UniqueIdentifier>{17c54c89-5d7d-5139-89c0-1fcabf3073d6}</UniqueIdentifier>
+    </Filter>
     <Filter Include="knowledge">
       <UniqueIdentifier>{1c932258-e90b-53b8-bed1-49cc3463650d}</UniqueIdentifier>
     </Filter>
@@ -231,6 +234,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\test\inventory\test-floor-item-getter.cpp">
       <Filter>inventory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\io-dump\test-dump-util.cpp">
+      <Filter>io-dump</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\test\io\test-condition-expression.cpp">
       <Filter>io</Filter>

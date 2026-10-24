@@ -1558,6 +1558,7 @@ hengband_test_SOURCES = \
 	test/info-reader/test-town-preferences-reader.cpp \
 	test/info-reader/test-vault-reader.cpp \
 	test/inventory/test-floor-item-getter.cpp \
+	test/io-dump/test-dump-util.cpp \
 	test/io/test-condition-expression.cpp \
 	test/io/test-input-context.cpp \
 	test/io/test-input-key-requester.cpp \

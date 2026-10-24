@@ -94,7 +94,7 @@ tl::expected<void, ParseErrorType> RaceReader::read() const
     }
 
     int monrace_id_int = 0;
-    if (const auto result = info_set_integer(id_obj, monrace_id_int, true, Range(0, 9999)); !result) {
+    if (const auto result = info_set_integer(id_obj, monrace_id_int, true, Range(0, MAX_MONRACE_ID)); !result) {
         return result;
     }
     // 同じIDの定義が重なると後の定義が前の定義に混ざるため、IDは昇順で重複なしとする。
@@ -396,7 +396,7 @@ tl::expected<void, ParseErrorType> RaceReader::set_mon_evolve(MonraceDefinition 
     if (const auto result = info_set_integer(get_json_value(evolve_data, "need_exp"), monrace.next_exp, true, Range(0, 9999999)); !result) {
         return result;
     }
-    if (const auto result = info_set_integer(get_json_value(evolve_data, "to"), monrace.next_r_idx, true, Range(1, 9999)); !result) {
+    if (const auto result = info_set_integer(get_json_value(evolve_data, "to"), monrace.next_r_idx, true, Range(1, MAX_MONRACE_ID)); !result) {
         return result;
     }
 
@@ -443,7 +443,7 @@ tl::expected<void, ParseErrorType> RaceReader::set_mon_artifacts(MonraceDefiniti
 
     for (const auto &artifact : artifact_data) {
         FixedArtifactId fa_id{};
-        if (const auto result = info_set_integer(get_json_value(artifact, "drop_artifact_id"), fa_id, true, Range(1, 999)); !result) {
+        if (const auto result = info_set_integer(get_json_value(artifact, "drop_artifact_id"), fa_id, true, Range(1, MAX_FIXED_ARTIFACT_ID)); !result) {
             return result;
         }
         int chance = 0;
@@ -473,7 +473,7 @@ tl::expected<void, ParseErrorType> RaceReader::set_mon_escorts(MonraceDefinition
 
     for (const auto &escort : escort_data) {
         MonraceId monrace_id{};
-        if (const auto result = info_set_integer(get_json_value(escort, "escorts_id"), monrace_id, true, Range(1, 9999)); !result) {
+        if (const auto result = info_set_integer(get_json_value(escort, "escorts_id"), monrace_id, true, Range(1, MAX_MONRACE_ID)); !result) {
             return result;
         }
 
@@ -636,7 +636,7 @@ tl::expected<void, ParseErrorType> RaceReader::set_mon_final_summons(MonraceDefi
 
     for (auto &summon_item : summon_data) {
         int id, probability, min_num, max_num, radius;
-        if (const auto result = info_set_integer(get_json_value(summon_item, "id"), id, true, Range(1, 9999)); !result) {
+        if (const auto result = info_set_integer(get_json_value(summon_item, "id"), id, true, Range(1, MAX_MONRACE_ID)); !result) {
             return result;
         }
         if (const auto result = info_set_integer(get_json_value(summon_item, "probability"), probability, true, Range(1, 100)); !result) {

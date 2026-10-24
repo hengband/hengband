@@ -142,7 +142,7 @@ TEST_CASE("MessageReader rejects monster IDs without monster definitions")
     const test::ScopedReaderState reader_state;
     const auto message = make_message("SPEAK_ALL", nlohmann::json::array({ "unused" }));
     // 範囲内でも定義の無い種族ID。既知のIDの後ろに置いても、どのIDにも登録しない。
-    for (const auto undefined_id : { 6, 9999 }) {
+    for (const auto undefined_id : { 6, 32766 }) {
         CAPTURE(undefined_id);
         const nlohmann::json data = { { "id_list", { 4, undefined_id } }, { "message", { message } } };
         CHECK(test::to_error_code(MessageReader(data).read()) == ParseErrorType::INVALID_VALUE);
@@ -154,6 +154,25 @@ TEST_CASE("MessageReader rejects monster IDs without monster definitions")
     REQUIRE(MessageReader(defined).read().has_value());
     CHECK(state.message_count(4, MonsterMessageType::SPEAK_ALL) == 1);
     CHECK(state.message_count(5, MonsterMessageType::SPEAK_ALL) == 1);
+}
+
+TEST_CASE("MessageReader accepts monster IDs up to one below the MonraceId storage maximum")
+{
+    const DefinedMonracesGuard monraces;
+    test::MonraceMessageListTestAccess state;
+    const test::ScopedReaderState reader_state;
+    // 種族IDの上限は、IDを格納する型(MonraceId)の上限−1とする。
+    constexpr auto max_id = 32766;
+    static_assert(max_id == MAX_MONRACE_ID);
+    MonraceList::get_instance().emplace(static_cast<MonraceId>(max_id));
+    const auto message = make_message("SPEAK_ALL", nlohmann::json::array({ "unused" }));
+    const nlohmann::json data = { { "id_list", { 4, max_id } }, { "message", { message } } };
+    REQUIRE(MessageReader(data).read().has_value());
+    CHECK(state.message_count(4, MonsterMessageType::SPEAK_ALL) == 1);
+    CHECK(state.message_count(max_id, MonsterMessageType::SPEAK_ALL) == 1);
+
+    const nlohmann::json over = { { "id_list", { 4, max_id + 1 } }, { "message", { message } } };
+    CHECK(test::to_error_code(MessageReader(over).read()) == ParseErrorType::INVALID_FLAG);
 }
 
 TEST_CASE("MessageReader requires arrays for localized message lists")
@@ -200,10 +219,10 @@ TEST_CASE("MessageReader propagates ID helper errors without publishing messages
         { nlohmann::json::array({ true }), ParseErrorType::INVALID_FLAG },
         { nlohmann::json::array({ 4.0 }), ParseErrorType::INVALID_TYPE },
         { nlohmann::json::array({ 0 }), ParseErrorType::INVALID_FLAG },
-        { nlohmann::json::array({ 10000 }), ParseErrorType::INVALID_FLAG },
+        { nlohmann::json::array({ 32767 }), ParseErrorType::INVALID_FLAG },
         { nlohmann::json::array({ std::numeric_limits<uint64_t>::max() }), ParseErrorType::INVALID_FLAG },
         { nlohmann::json::array({ 4, 6 }), ParseErrorType::INVALID_VALUE },
-        { nlohmann::json::array({ 4, 5, 10000 }), ParseErrorType::INVALID_FLAG },
+        { nlohmann::json::array({ 4, 5, 32767 }), ParseErrorType::INVALID_FLAG },
     };
     for (const auto &invalid : invalid_ids) {
         CAPTURE(invalid.value.dump());

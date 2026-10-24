@@ -4,7 +4,7 @@ import re
 from pathlib import Path
 import unittest
 
-from json_validation_test_helper import validate_document
+from json_validation_test_helper import fixed_artifact_id_schema_maximum, monrace_id_schema_maximum, validate_document
 from validate_json import build_schema_registry, load_all_schemas, load_jsonc
 
 
@@ -46,9 +46,9 @@ class DungeonValidationTest(unittest.TestCase):
                 (["wall", "streams", 0, "count"], 1, 255),
                 (["wall", "streams", 0, "chance"], 1, 65535),
                 (["wall", "streams", 0, "priority"], 0, 255),
-                (["final_floor", "guardian"], 1, 9999),
+                (["final_floor", "guardian"], 1, 32766),
                 (["final_floor", "object"], 1, 32767),
-                (["final_floor", "artifact"], 0, 9999))
+                (["final_floor", "artifact"], 0, 32766))
 
     def with_number(self, path, value):
         document = self.sample()
@@ -80,6 +80,16 @@ class DungeonValidationTest(unittest.TestCase):
                 with self.subTest(path=path, number=number):
                     ok, diagnostic = self.validate(self.with_number(path, number))
                     self.assertTrue(ok, diagnostic)
+
+    def test_final_floor_guardian_maximum_matches_monrace_id_storage(self):
+        # モンスターIDの上限は、IDを格納する型(MonraceId)の上限−1とする。
+        maximum = monrace_id_schema_maximum()
+        self.assertEqual(self.schema["$defs"]["final_floor"]["properties"]["guardian"]["maximum"], maximum)
+
+    def test_final_floor_artifact_maximum_matches_fixed_artifact_id_storage(self):
+        # 固定アーティファクトIDの上限は、IDを格納する型(FixedArtifactId)の上限−1とする。
+        maximum = fixed_artifact_id_schema_maximum()
+        self.assertEqual(self.schema["$defs"]["final_floor"]["properties"]["artifact"]["maximum"], maximum)
 
     def test_values_outside_reader_ranges_are_rejected(self):
         for path, minimum, maximum in self.numeric_cases():

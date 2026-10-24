@@ -76,7 +76,7 @@ TEST_CASE("ArtifactReader validates ID range before narrowing signed and unsigne
 {
     const auto invalid_ids = std::vector<nlohmann::json>{
         -1,
-        10000,
+        32767,
         32768,
         65537,
         std::numeric_limits<int>::max(),
@@ -84,7 +84,7 @@ TEST_CASE("ArtifactReader validates ID range before narrowing signed and unsigne
         std::numeric_limits<nlohmann::json::number_integer_t>::max(),
         nlohmann::json::number_integer_t{ 4294967297LL },
         nlohmann::json::number_integer_t{ -4294967295LL },
-        nlohmann::json::number_unsigned_t{ 10000 },
+        nlohmann::json::number_unsigned_t{ 32767 },
         nlohmann::json::number_unsigned_t{ 4294967297ULL },
         std::numeric_limits<nlohmann::json::number_unsigned_t>::max(),
     };
@@ -146,7 +146,7 @@ TEST_CASE("ArtifactReader preserves missing and non-integer ID errors")
  */
 TEST_CASE("ArtifactReader requires IDs to start at 1 and continue without gaps")
 {
-    for (const auto &id : { nlohmann::json(0), nlohmann::json(2), nlohmann::json(nlohmann::json::number_unsigned_t{ 0 }), nlohmann::json(9999) }) {
+    for (const auto &id : { nlohmann::json(0), nlohmann::json(2), nlohmann::json(nlohmann::json::number_unsigned_t{ 0 }), nlohmann::json(32766) }) {
         CAPTURE(id);
         test::ScopedReaderState reader_state;
         test::ArtifactListTestAccess artifact_state;
@@ -179,24 +179,24 @@ TEST_CASE("ArtifactReader requires IDs to start at 1 and continue without gaps")
 }
 
 /*!
- * @brief 直前の ID が 9998 なら、ID の範囲の上限 9999 を受け付ける
- * @details 診断のための ID を直接進めて、範囲の検査だけを確かめる（一覧に 9999 だけがある状態は実行時には起きない）。
+ * @brief 直前の ID が 32765 なら、ID の範囲の上限 32766（FixedArtifactId の型の上限−1）を受け付ける
+ * @details 診断のための ID を直接進めて、範囲の検査だけを確かめる（一覧に 32766 だけがある状態は実行時には起きない）。
  */
 TEST_CASE("ArtifactReader accepts the largest schema ID after its predecessor")
 {
-    for (const auto &id : { nlohmann::json(9999), nlohmann::json(nlohmann::json::number_unsigned_t{ 9999 }) }) {
+    for (const auto &id : { nlohmann::json(32766), nlohmann::json(nlohmann::json::number_unsigned_t{ 32766 }) }) {
         CAPTURE(id);
         test::ScopedReaderState reader_state;
         test::ArtifactListTestAccess artifact_state;
         ScopedArtifactBaseitem baseitem;
-        error_idx = 9998;
+        error_idx = 32765;
         auto data = make_artifact();
         data["id"] = id;
         REQUIRE(ArtifactReader(data).read().has_value());
         auto &artifacts = ArtifactList::get_instance();
         REQUIRE(artifacts.size() == 1);
-        CHECK(enum2i(artifacts.begin()->first) == 9999);
-        CHECK(error_idx == 9999);
+        CHECK(enum2i(artifacts.begin()->first) == 32766);
+        CHECK(error_idx == 32766);
     }
 }
 

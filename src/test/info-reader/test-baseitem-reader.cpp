@@ -209,6 +209,7 @@ TEST_CASE("BaseitemReader validates full-width integer IDs before narrowing or p
     REQUIRE(BaseitemReader(original).read().has_value());
     const auto *existing = std::addressof(items.get_baseitem(1));
     const auto invalid_ids = std::vector<nlohmann::json>{
+        32767,
         32768,
         65537,
         std::numeric_limits<int>::max(),
@@ -217,6 +218,7 @@ TEST_CASE("BaseitemReader validates full-width integer IDs before narrowing or p
         nlohmann::json::number_integer_t{ -4294967295LL },
         std::numeric_limits<nlohmann::json::number_integer_t>::min(),
         -1,
+        nlohmann::json::number_unsigned_t{ 32767 },
         nlohmann::json::number_unsigned_t{ 32768 },
         nlohmann::json::number_unsigned_t{ 4294967297ULL },
         std::numeric_limits<nlohmann::json::number_unsigned_t>::max(),
@@ -273,20 +275,24 @@ TEST_CASE("BaseitemReader accepts signed and unsigned zero IDs")
     }
 }
 
-TEST_CASE("BaseitemReader preserves the short ID upper bound independently of the schema cap")
+/*!
+ * @brief ベースアイテムIDは short の上限−1 (MAX_BASEITEM_ID) まで受け付ける
+ * @details 最大のID+1になる件数も short に収まるようにするため、short の上限そのものは拒否する。
+ */
+TEST_CASE("BaseitemReader accepts IDs up to the short maximum minus one")
 {
     const auto ids = std::vector<nlohmann::json>{
         9999,
         10000,
-        32767,
-        nlohmann::json::number_unsigned_t{ 32767 },
+        32766,
+        nlohmann::json::number_unsigned_t{ 32766 },
     };
     for (const auto &id : ids) {
         CAPTURE(id);
         BaseitemStateGuard guard;
         auto data = make_baseitem();
         data["id"] = id;
-        // Prove the ID passed validation without allocating 32768 definitions.
+        // Prove the ID passed validation without allocating 32767 definitions.
         data["name"] = 42;
         CHECK(test::to_error_code(BaseitemReader(data).read()) == ParseErrorType::INVALID_TYPE);
         CHECK(error_idx == id.get<int>());
@@ -294,17 +300,17 @@ TEST_CASE("BaseitemReader preserves the short ID upper bound independently of th
     }
 }
 
-TEST_CASE("BaseitemReader publishes accessible ID 32767 with 32768 entries")
+TEST_CASE("BaseitemReader publishes accessible ID 32766 with 32767 entries")
 {
     BaseitemStateGuard baseitems_guard;
-    const auto data = make_baseitem(32767);
+    const auto data = make_baseitem(32766);
     REQUIRE(BaseitemReader(data).read().has_value());
 
     auto &baseitems = BaseitemList::get_instance();
-    REQUIRE(baseitems.size() == 32768);
-    CHECK(baseitems.is_valid(32767));
-    CHECK_FALSE(baseitems.is_valid(32766));
-    CHECK(baseitems.get_baseitem(32767).cost == 4);
+    REQUIRE(baseitems.size() == 32767);
+    CHECK(baseitems.is_valid(32766));
+    CHECK_FALSE(baseitems.is_valid(32765));
+    CHECK(baseitems.get_baseitem(32766).cost == 4);
     CHECK_THROWS_AS(baseitems.get_baseitem(-1), std::logic_error);
 }
 

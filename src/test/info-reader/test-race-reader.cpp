@@ -69,7 +69,7 @@ TEST_CASE("RaceReader accepts schema boundary IDs")
 {
     test::MonraceListTestAccess guard;
     auto data = make_monrace();
-    for (const auto id : { 0, 9999 }) {
+    for (const auto id : { 0, 32766 }) {
         CAPTURE(id);
         data["id"] = id;
         REQUIRE(read_as_first_record(data).has_value());
@@ -83,7 +83,7 @@ TEST_CASE("RaceReader rejects out-of-range IDs before conversion or registration
     test::MonraceListTestAccess guard;
     auto data = make_monrace();
     for (const auto &id : {
-             nlohmann::json(-1), nlohmann::json(10000), nlohmann::json(65536),
+             nlohmann::json(-1), nlohmann::json(32767), nlohmann::json(32768), nlohmann::json(65536),
              nlohmann::json(int64_t{ 1 } << 32), nlohmann::json((int64_t{ 1 } << 32) + 1),
              nlohmann::json(std::numeric_limits<int64_t>::min()), nlohmann::json(std::numeric_limits<uint64_t>::max()) }) {
         CAPTURE(id);
@@ -578,23 +578,30 @@ TEST_CASE("RaceReader validates referenced ID ranges")
         monrace["escorts"] = nlohmann::json::array({ { { "escorts_id", id }, { "escort_num", "1d2" } } });
         return monrace;
     };
+    const auto with_final_summon = [&data](int id) {
+        auto monrace = data;
+        monrace["final_summon"] = nlohmann::json::array({ { { "id", id }, { "probability", 100 }, { "min_num", 1 }, { "max_num", 1 }, { "radius", 1 } } });
+        return monrace;
+    };
     const auto with_artifact = [&data](int id) {
         auto monrace = data;
         monrace["artifacts"] = nlohmann::json::array({ { { "drop_artifact_id", id }, { "drop_probability", 50 } } });
         return monrace;
     };
-    for (const auto id : { 1, 9999 }) {
+    for (const auto id : { 1, 32766 }) {
         CAPTURE(id);
         CHECK(read_as_first_record(with_evolve(id)).has_value());
         CHECK(read_as_first_record(with_escort(id)).has_value());
+        CHECK(read_as_first_record(with_final_summon(id)).has_value());
     }
-    for (const auto id : { 0, 10000 }) {
+    for (const auto id : { 0, 32767 }) {
         CAPTURE(id);
         CHECK(test::to_error_code(read_as_first_record(with_evolve(id))) == ParseErrorType::INVALID_FLAG);
         CHECK(test::to_error_code(read_as_first_record(with_escort(id))) == ParseErrorType::INVALID_FLAG);
+        CHECK(test::to_error_code(read_as_first_record(with_final_summon(id))) == ParseErrorType::INVALID_FLAG);
     }
-    CHECK(read_as_first_record(with_artifact(999)).has_value());
-    for (const auto id : { 0, 1000 }) {
+    CHECK(read_as_first_record(with_artifact(32766)).has_value());
+    for (const auto id : { 0, 32767 }) {
         CAPTURE(id);
         CHECK(test::to_error_code(read_as_first_record(with_artifact(id))) == ParseErrorType::INVALID_FLAG);
     }

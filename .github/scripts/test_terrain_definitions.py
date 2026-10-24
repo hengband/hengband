@@ -4,7 +4,7 @@ from pathlib import Path
 import unittest
 from jsonschema import ValidationError, validate
 
-from json_validation_test_helper import validate_document
+from json_validation_test_helper import terrain_id_schema_maximum, validate_document
 from validate_json import build_schema_registry, load_all_schemas, load_jsonc
 
 
@@ -25,7 +25,7 @@ class TerrainValidationTest(unittest.TestCase):
         return {"changes": [{"terrain": "FLOOR", "probability": value} for value in probabilities]}
 
     def numeric_cases(self):
-        return ((["id"], 0, 9999), (["map_priority"], -9999, 9999),
+        return ((["id"], 0, 32766), (["map_priority"], -9999, 9999),
                 (["trap", "power"], 0, 255), (["door", "power"], 0, 255),
                 (["tunnel", "power"], 0, 255), (["convert", "stream_index"], 0, 254),
                 (["generation", "changes", 0, "probability"], 1, 100))
@@ -54,6 +54,11 @@ class TerrainValidationTest(unittest.TestCase):
         self.assertIn(f"Location: {path}", diagnostic)
         if reason:
             self.assertIn(reason, diagnostic)
+
+    def test_id_maximum_matches_feat_idx_storage(self):
+        # 地形IDの上限は、IDを格納する型(FEAT_IDX)の上限−1とする。
+        maximum = terrain_id_schema_maximum()
+        self.assertEqual(self.schema["properties"]["terrains"]["items"]["properties"]["id"]["maximum"], maximum)
 
     def test_bundled_terrains(self):
         document = load_jsonc(self.root / "lib/edit/TerrainDefinitions.jsonc")

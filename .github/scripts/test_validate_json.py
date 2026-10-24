@@ -7,7 +7,7 @@ import tempfile
 import unittest
 from unittest.mock import patch
 
-from json_validation_test_helper import validate_document
+from json_validation_test_helper import baseitem_id_schema_maximum, validate_document
 from jsonschema import ValidationError
 from jsonschema.validators import validator_for
 from validate_json import (build_schema_registry, build_validation_pairs, load_all_schemas, load_jsonc, validate_one,
@@ -175,13 +175,15 @@ class QuestGridValidationTest(unittest.TestCase):
 
 class BaseitemValidationTest(unittest.TestCase):
     def test_id_boundary_matches_reader_and_short_storage(self):
+        # BaseitemReader と同じく、IDを扱う型(short)の上限−1までを受け付ける。
+        maximum = baseitem_id_schema_maximum()
         root = Path(__file__).resolve().parents[2]
         schema_path = root / "schema/BaseitemDefinitions.schema.json"
         schema = load_jsonc(schema_path)
         example = load_jsonc(root / "lib/edit/BaseitemDefinitions.jsonc")["baseitems"][-1]
         with tempfile.TemporaryDirectory() as folder:
             target = Path(folder) / "BaseitemDefinitions.jsonc"
-            for item_id, accepted in ((9999, True), (32767, True), (32768, False)):
+            for item_id, accepted in ((9999, True), (maximum, True), (maximum + 1, False)):
                 with self.subTest(item_id=item_id):
                     target.write_text(json.dumps({"version": 1, "baseitems": [{**example, "id": item_id}]}), encoding="utf-8")
                     ok, message = validate_one((target, schema_path, schema))

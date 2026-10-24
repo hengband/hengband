@@ -4,7 +4,7 @@ import re
 from pathlib import Path
 import unittest
 
-from json_validation_test_helper import validate_document
+from json_validation_test_helper import fixed_artifact_id_schema_maximum, monrace_id_schema_maximum, validate_document
 from validate_json import build_schema_registry, load_all_schemas, load_jsonc
 
 
@@ -99,6 +99,37 @@ class MonraceValidationTest(unittest.TestCase):
                 monster = self.monster()
                 monster[field] = float(monster[field])
                 self.assert_invalid([monster], ["monsters", 0, field], "integer JSON value")
+
+    def test_monster_id_maximums_match_monrace_id_storage(self):
+        # モンスターIDの上限は、IDを格納する型(MonraceId)の上限−1とする。
+        maximum = monrace_id_schema_maximum()
+        properties = self.loaded[self.schema_path]["properties"]["monsters"]["items"]["properties"]
+        self.assertEqual(properties["id"]["maximum"], maximum)
+        self.assertEqual(properties["evolve"]["properties"]["to"]["maximum"], maximum)
+        self.assertEqual(properties["escorts"]["items"]["properties"]["escorts_id"]["maximum"], maximum)
+        self.assertEqual(properties["final_summon"]["items"]["properties"]["id"]["maximum"], maximum)
+
+    def test_monster_id_boundaries(self):
+        self.assert_valid([self.monster(1), self.monster(32766)])
+        self.assert_invalid([self.monster(1), self.monster(32767)], ["monsters", 1, "id"])
+        cases = (
+            (lambda target: {"evolve": {"need_exp": 10, "to": target}}, ["evolve", "to"]),
+            (lambda target: {"escorts": [{"escorts_id": target, "escort_num": "1d2"}]}, ["escorts", 0, "escorts_id"]),
+            (lambda target: {"final_summon": [{"id": target, "probability": 100, "min_num": 1, "max_num": 1, "radius": 1}]},
+             ["final_summon", 0, "id"]),
+        )
+        for make, suffix in cases:
+            with self.subTest(reference=suffix[0]):
+                self.assert_valid([self.monster(**make(32766)), self.monster(32766)])
+                self.assert_invalid([self.monster(**make(32767))], ["monsters", 0] + suffix)
+
+    def test_drop_artifact_id_maximum_matches_fixed_artifact_id_storage(self):
+        # 固定アーティファクトIDの上限は、IDを格納する型(FixedArtifactId)の上限−1とする。
+        maximum = fixed_artifact_id_schema_maximum()
+        properties = self.loaded[self.schema_path]["properties"]["monsters"]["items"]["properties"]
+        self.assertEqual(properties["artifacts"]["items"]["properties"]["drop_artifact_id"]["maximum"], maximum)
+        drop = {"drop_artifact_id": maximum + 1, "drop_probability": 50}
+        self.assert_invalid([self.monster(artifacts=[drop])], ["monsters", 0, "artifacts", 0, "drop_artifact_id"])
 
     def test_ids_must_be_strictly_increasing(self):
         self.assert_valid([self.monster(1), self.monster(3)])

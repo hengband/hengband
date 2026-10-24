@@ -1,6 +1,7 @@
 #include "info-reader/quest-reader.h"
 #include "artifact/fixed-art-types.h"
 #include "floor/floor-base-definitions.h"
+#include "info-reader/info-reader-util.h"
 #include "info-reader/json-reader-util.h"
 #include "info-reader/parse-error-types.h"
 #include "info-reader/random-grid-effect-types.h"
@@ -29,10 +30,15 @@ constexpr Range LEGEND_MONSTER_RANGE(-std::numeric_limits<MONSTER_IDX>::max(), s
 constexpr Range LEGEND_EGO_RANGE(std::numeric_limits<int>::min(), std::numeric_limits<uint8_t>::max());
 constexpr Range QUEST_INTEGER_RANGE(std::numeric_limits<int>::min(), std::numeric_limits<int>::max());
 // メタデータはintで保持するが、対象モンスターと報酬は実行時にshort基底のIDへ変換される。
-constexpr Range QUEST_ID_RANGE(std::numeric_limits<int16_t>::min(), std::numeric_limits<int16_t>::max());
+// どちらも 0 は指定なしで、ほかの定義と同じくIDの型から決めた上限までとする。
+constexpr Range QUEST_MONSTER_RANGE(0, MAX_MONRACE_ID);
+constexpr Range QUEST_ARTIFACT_RANGE(0, MAX_FIXED_ARTIFACT_ID);
 // 階層と撃破数はセーブで16ビットになる。階層はダンジョンの最深階 (MAX_DEPTH - 1) までしか移動できない。
 constexpr Range QUEST_LEVEL_RANGE(0, MAX_DEPTH - 1);
 constexpr Range QUEST_MAX_NUM_RANGE(0, std::numeric_limits<int16_t>::max());
+// ダンジョンIDは DungeonId の範囲 (0 は指定なし)、離脱するクエストのIDは QuestId の型から決めた上限までとする。
+constexpr Range QUEST_DUNGEON_RANGE(0, enum2i(DungeonId::MAX) - 1);
+constexpr Range QUEST_LEAVING_QUEST_RANGE(0, MAX_QUEST_ID);
 
 const std::unordered_map<std::string_view, QuestKindType> QUEST_KIND_TOKENS = {
     { "NONE", QuestKindType::NONE },
@@ -391,10 +397,10 @@ tl::expected<void, ParseErrorType> QuestReader::set_definition(QuestFixedMap &pa
     if (const auto result = info_set_integer(get_json_value(definition, "maxNum"), meta.max_num, false, QUEST_MAX_NUM_RANGE); !result) {
         return result;
     }
-    if (const auto result = info_set_integer(get_json_value(definition, "dungeon"), meta.dungeon, false, QUEST_INTEGER_RANGE); !result) {
+    if (const auto result = info_set_integer(get_json_value(definition, "dungeon"), meta.dungeon, false, QUEST_DUNGEON_RANGE); !result) {
         return result;
     }
-    if (const auto result = info_set_integer(get_json_value(definition, "monster"), meta.r_idx, false, QUEST_ID_RANGE); !result) {
+    if (const auto result = info_set_integer(get_json_value(definition, "monster"), meta.r_idx, false, QUEST_MONSTER_RANGE); !result) {
         return result;
     }
 
@@ -421,7 +427,7 @@ tl::expected<void, ParseErrorType> QuestReader::set_definition(QuestFixedMap &pa
         if (!reward.is_object()) {
             return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
         }
-        if (const auto result = info_set_integer(get_json_value(reward, "artifact"), meta.reward_artifact, false, QUEST_ID_RANGE); !result) {
+        if (const auto result = info_set_integer(get_json_value(reward, "artifact"), meta.reward_artifact, false, QUEST_ARTIFACT_RANGE); !result) {
             return result;
         }
 
@@ -432,7 +438,7 @@ tl::expected<void, ParseErrorType> QuestReader::set_definition(QuestFixedMap &pa
             }
             for (const auto &candidate : artifacts) {
                 int candidate_id = 0;
-                if (const auto result = info_set_integer(candidate, candidate_id, true, QUEST_ID_RANGE); !result) {
+                if (const auto result = info_set_integer(candidate, candidate_id, true, QUEST_ARTIFACT_RANGE); !result) {
                     return result;
                 }
                 parsed.reward_artifact_candidates.push_back(candidate_id);
@@ -587,7 +593,7 @@ tl::expected<void, ParseErrorType> QuestReader::set_starts(QuestFixedMap &parsed
             const auto &leaving_quest = get_json_value(variant, "leavingQuest");
             if (!leaving_quest.is_null()) {
                 int leaving_id = 0;
-                if (const auto result = info_set_integer(leaving_quest, leaving_id, true, QUEST_INTEGER_RANGE); !result) {
+                if (const auto result = info_set_integer(leaving_quest, leaving_id, true, QUEST_LEAVING_QUEST_RANGE); !result) {
                     return result;
                 }
                 position.leaving_quest = leaving_id;

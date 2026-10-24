@@ -5,7 +5,8 @@ from pathlib import Path
 import tempfile
 import unittest
 
-from json_validation_test_helper import validate_document
+from json_validation_test_helper import (dungeon_id_maximum, fixed_artifact_id_schema_maximum, monrace_id_schema_maximum,
+                                         quest_id_schema_maximum, validate_document)
 from validate_json import build_schema_registry, load_all_schemas, load_jsonc, validate_one
 
 
@@ -83,15 +84,28 @@ class QuestInt16RangeTest(unittest.TestCase):
             with self.subTest(rejected=rejected):
                 self.assert_boundary(lambda value: self.quest({"special": value}), accepted, rejected, ["legend", "#", "special"])
 
-    def test_definition_ids_follow_reader_int16_range(self):
+    def test_definition_ids_follow_cpp_id_maximums(self):
+        # 対象モンスターは MonraceId、報酬のアーティファクトは FixedArtifactId の基になる型の上限−1までとする。
+        monster_maximum = monrace_id_schema_maximum()
+        artifact_maximum = fixed_artifact_id_schema_maximum()
+        schema = self.loaded[self.schema_map["Quest"]]
+        reward = schema["$defs"]["reward"]["properties"]
+        self.assertEqual(schema["$defs"]["definition"]["properties"]["monster"]["maximum"], monster_maximum)
+        self.assertEqual(reward["artifact"]["maximum"], artifact_maximum)
+        self.assertEqual(reward["artifacts"]["items"]["maximum"], artifact_maximum)
         cases = (
-            (lambda value: {"monster": value}, ["definition", "monster"]),
-            (lambda value: {"reward": {"artifact": value}}, ["definition", "reward", "artifact"]),
-            (lambda value: {"reward": {"artifacts": [1, value]}}, ["definition", "reward", "artifacts", 1]),
+            (lambda value: {"monster": value}, monster_maximum, ["definition", "monster"]),
+            (lambda value: {"reward": {"artifact": value}}, artifact_maximum, ["definition", "reward", "artifact"]),
+            (lambda value: {"reward": {"artifacts": [1, value]}}, artifact_maximum, ["definition", "reward", "artifacts", 1]),
         )
-        for make_definition, location in cases:
-            with self.subTest(definition=make_definition(32768)):
-                self.assert_boundary(lambda value: self.quest(definition=make_definition(value)), 32767, 32768, location)
+        for make_definition, maximum, location in cases:
+            with self.subTest(location=location):
+                ok, message = self.validate("Quest", self.quest(definition=make_definition(maximum)))
+                self.assert_schema_accepted(ok, message)
+                ok, message = self.validate("Quest", self.quest(definition=make_definition(maximum + 1)))
+                self.assertFalse(ok, message)
+                self.assertIn(f"{maximum + 1} is greater than the maximum of {maximum}", message)
+                self.assertIn(f"Location: {location}", message)
 
     def test_level_and_kill_count_follow_reader_ranges(self):
         # 階層は MAX_DEPTH - 1 まで、撃破数はセーブの16ビットまでしか読み込まない。
@@ -103,16 +117,23 @@ class QuestInt16RangeTest(unittest.TestCase):
                     if not accepted:
                         self.assertIn(f"Location: {['definition', field]}", message)
 
+    def test_dungeon_and_leaving_quest_maximums_match_cpp(self):
+        # ダンジョンIDは DungeonId::MAX − 1、離脱するクエストのIDは QuestId の型の上限−1までとする。
+        schema = self.loaded[self.schema_map["Quest"]]
+        self.assertEqual(schema["$defs"]["definition"]["properties"]["dungeon"]["maximum"], dungeon_id_maximum())
+        self.assertEqual(schema["$defs"]["startVariant"]["properties"]["leavingQuest"]["maximum"], quest_id_schema_maximum())
+
     def test_other_integers_follow_reader_ranges(self):
         # QuestReader は int に収まらない値を拒否し、開始位置は地図（最大 66 行 198 列）の中に限る。
+        # ダンジョンIDと離脱するクエストのIDは、型と定数から決めた上限までに限る。
         int_max = 2147483647
         full_map = ["#" * 198] * 66
         cases = (
             ("numMon", int_max, lambda value: self.quest(definition={"numMon": value}), ["definition", "numMon"]),
-            ("dungeon", int_max, lambda value: self.quest(definition={"dungeon": value}), ["definition", "dungeon"]),
+            ("dungeon", dungeon_id_maximum(), lambda value: self.quest(definition={"dungeon": value}), ["definition", "dungeon"]),
             ("start.y", 65, lambda value: {**self.quest(), "map": full_map, "start": {"y": value, "x": 0}}, ["start", "y"]),
             ("start.x", 197, lambda value: {**self.quest(), "map": full_map, "start": {"y": 0, "x": value}}, ["start", "x"]),
-            ("leavingQuest", int_max,
+            ("leavingQuest", quest_id_schema_maximum(),
              lambda value: {**self.quest(), "map": full_map, "startVariants": [{"leavingQuest": value, "y": 0, "x": 0}]},
              ["startVariants", 0, "leavingQuest"]),
             ("startVariants.y", 65, lambda value: {**self.quest(), "map": full_map, "startVariants": [{"y": value, "x": 0}]},
@@ -312,10 +333,9 @@ class QuestReferenceTest(QuestEditDirTestCase):
             return document
 
         cases = (
-            (lambda d: d["definition"].update(monster=32767), "unknown monster ID", ["definition", "monster"]),
-            (lambda d: d["definition"].update(dungeon=999), "unknown dungeon ID", ["definition", "dungeon"]),
-            (lambda d: d["definition"].update(reward={"artifact": 32767}), "unknown artifact ID", ["definition", "reward", "artifact"]),
-            (lambda d: d["definition"].update(reward={"artifacts": [1, 32767]}), "unknown artifact ID",
+            (lambda d: d["definition"].update(monster=32766), "unknown monster ID", ["definition", "monster"]),
+            (lambda d: d["definition"].update(reward={"artifact": 32766}), "unknown artifact ID", ["definition", "reward", "artifact"]),
+            (lambda d: d["definition"].update(reward={"artifacts": [1, 32766]}), "unknown artifact ID",
              ["definition", "reward", "artifacts", 1]),
             (lambda d: d["legend"]["#"].update(terrain="NO_SUCH_TERRAIN"), "unknown terrain tag", ["legend", "#", "terrain"]),
             (lambda d: d["legend"]["#"].update(trap="NO_SUCH_TERRAIN"), "unknown terrain tag", ["legend", "#", "trap"]),
@@ -330,6 +350,15 @@ class QuestReferenceTest(QuestEditDirTestCase):
         for change, reason, location in cases:
             with self.subTest(location=location):
                 self.assert_rejected(self.validate_in_edit_dir({"001.jsonc": mutate(change)}, "001.jsonc"), reason, location)
+
+    def test_undefined_dungeon_is_rejected(self):
+        # 範囲内でも、ダンジョン定義に無いIDは参照の照合で拒否する。
+        document = self.quest()
+        document["definition"]["dungeon"] = dungeon_id_maximum()
+        dungeons = self.bundled("DungeonDefinitions")
+        dungeons["dungeons"] = [dungeon for dungeon in dungeons["dungeons"] if dungeon["id"] != dungeon_id_maximum()]
+        result = self.validate_in_edit_dir({"001.jsonc": document}, "001.jsonc", {"DungeonDefinitions.jsonc": dungeons})
+        self.assert_rejected(result, "unknown dungeon ID", ["definition", "dungeon"])
 
     def test_omitted_monster_and_zero_dungeon_follow_the_reader(self):
         # 対象モンスターは省略すると 0 として照合され、dungeon の 0 は指定なしとして照合しない。
