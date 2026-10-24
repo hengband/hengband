@@ -145,6 +145,17 @@ tl::expected<void, ParseErrorType> BaseitemReader::read() const
         msg_print(_("アイテムのフラグ読込失敗。ID: '{}'。", "Failed to load flags of item. ID: '{}'."), error_idx);
         return result;
     }
+    if (const auto result = this->set_baseitem_natural_generation(baseitem); !result) {
+        msg_print(_("アイテムの自然生成の指定の読込失敗。ID: '{}'。", "Failed to load natural generation of item. ID: '{}'."), error_idx);
+        return result;
+    }
+
+    // 自然生成しないベースアイテムは生成テーブルを持たない (生成の側は natural_generation を見ず、生成テーブルの有無だけで決まる)。
+    // 同じ ID を読み直したときに引き継いだ生成テーブルも含めて判定するため、読み込んだ後の定義で確かめる。
+    if (!baseitem.natural_generation && baseitem.has_allocation()) {
+        msg_print(_("自然生成しないアイテムに生成情報がある。ID: '{}'。", "Item without natural generation has generation info. ID: '{}'."), error_idx);
+        return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
+    }
 
     // 種別・副種別から ID を引く表では後の ID が先の ID を隠し、先のベースアイテムが店の品揃えや
     // 初期の持ち物などで使われなくなるため、有効なベースアイテムどうしの重複は拒否する。
@@ -308,7 +319,9 @@ tl::expected<void, ParseErrorType> BaseitemReader::set_baseitem_allocations(Base
         if (const auto result = info_set_integer(get_json_value(alloc, "depth"), table.level, true, Range(0, MAX_DEPTH - 1)); !result) {
             return result;
         }
-        if (const auto result = info_set_integer(get_json_value(alloc, "rarity"), table.chance, true, Range(0, 256)); !result) {
+        // 生成の重みは 100÷希少度 の整数除算なので、101 以上はどれも 0 になり、0 は欄が無いのと同じに扱われる。
+        // どちらも書く意味が無いため 1〜100 に限る (自然生成させないベースアイテムは natural_generation: false で表す)
+        if (const auto result = info_set_integer(get_json_value(alloc, "rarity"), table.chance, true, Range(1, 100)); !result) {
             return result;
         }
         i++;
@@ -339,6 +352,27 @@ tl::expected<void, ParseErrorType> BaseitemReader::set_baseitem_activate(Baseite
 
     baseitem.act_idx = activation;
     baseitem.flags.set(tr_type::TR_ACTIVATE);
+    return {};
+}
+
+/*!
+ * @brief JSON Objectからベースアイテムの自然生成の指定をセットする
+ * @note BaseitemReader が保持する baseitem_data を参照する
+ * @details 省略時は既存の値 (新しい定義なら true) のままにする。null は省略と同じ扱い (ほかの省略可能な項目と同じ)。
+ * @param baseitem 保管先のベースアイテム情報インスタンス
+ * @return 成功、またはパースエラー
+ */
+tl::expected<void, ParseErrorType> BaseitemReader::set_baseitem_natural_generation(BaseitemDefinition &baseitem) const
+{
+    const auto &natural_generation_data = get_json_value(this->baseitem_data, "natural_generation");
+    if (natural_generation_data.is_null()) {
+        return {};
+    }
+    if (!natural_generation_data.is_boolean()) {
+        return tl::unexpected(ParseErrorType::INVALID_TYPE);
+    }
+
+    baseitem.natural_generation = natural_generation_data.get<bool>();
     return {};
 }
 

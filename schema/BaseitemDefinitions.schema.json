@@ -185,13 +185,19 @@
                                     "maximum": 127
                                 },
                                 "rarity": {
+                                    "$comment": "the generation weight is 100 / rarity (integer division), so 101 or more would be 0; 0 would be the same as no entry",
                                     "type": "integer",
-                                    "description": "希少度",
-                                    "minimum": 0,
-                                    "maximum": 256
+                                    "description": "希少度。生成の重みは 100÷希少度 (整数の除算) で、1〜100 に限る。自然生成させないベースアイテムは natural_generation: false で表す",
+                                    "minimum": 1,
+                                    "maximum": 100
                                 }
                             }
                         }
+                    },
+                    "natural_generation": {
+                        "$comment": "false must not be combined with non-empty allocations (rejected by BaseitemReader and validate_json.py; the schema cannot express it)",
+                        "type": "boolean",
+                        "description": "生成テーブルによる自然生成 (床やモンスターのドロップなど) の対象か。省略時は true。false のベースアイテムは allocations を持たず、特定の経路 (店・特定のモンスターのドロップ・アーティファクトの本体など) でだけ作られる。false なら知識の一覧の候補になる"
                     },
                     "activate": {
                         "type": "string",

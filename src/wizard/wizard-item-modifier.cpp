@@ -295,18 +295,19 @@ void wiz_identify_full_inventory(PlayerType *player_ptr)
 
 /*!
  * @brief アイテムの階層毎生成率を表示する / Output a rarity graph for a type of object.
- * @param tval ベースアイテムの大項目ID
- * @param sval ベースアイテムの小項目ID
+ * @param bi_key ベースアイテムのキー
+ * @param home ベースアイテムの基本の生成階 (定義の level)。この階を含む行を赤く表示する (表示する最後の階より深ければ最後の行)
  * @param row 表示列
  * @param col 表示行
+ * @details 基本の生成階は、生成表に項目の無いベースアイテム (natural_generation: false のものなど) でも分かるよう、
+ * 生成表ではなく定義の level から受け取る。
  */
-static void prt_alloc(const BaseitemKey &bi_key, TERM_LEN row, TERM_LEN col)
+static void prt_alloc(const BaseitemKey &bi_key, int home, TERM_LEN row, TERM_LEN col)
 {
     uint32_t rarity[BASEITEM_MAX_DEPTH]{};
     uint32_t total[BASEITEM_MAX_DEPTH]{};
     int32_t display[22]{};
 
-    auto home = 0;
     for (auto i = 0; i < BASEITEM_MAX_DEPTH; i++) {
         auto total_frac = 0;
         constexpr auto magnificant = CHANCE_BASEITEM_LEVEL_BOOST * BASEITEM_MAX_DEPTH;
@@ -322,7 +323,6 @@ static void prt_alloc(const BaseitemKey &bi_key, TERM_LEN row, TERM_LEN col)
             total_frac += prob % magnificant;
 
             if (entry.is_same_bi_key(bi_key)) {
-                home = entry.get_baseitem_level();
                 rarity[i] += prob / magnificant;
             }
         }
@@ -339,10 +339,12 @@ static void prt_alloc(const BaseitemKey &bi_key, TERM_LEN row, TERM_LEN col)
         display[i] = possibility / 5;
     }
 
+    // 表示する最後の階より深い品 (INSTA_ART の指輪など) も、最後の行に印を付ける
+    const auto home_depth = std::min(home, BASEITEM_MAX_DEPTH - 1);
     for (auto i = 0; i < 22; i++) {
         term_putch(col, row + i + 1, { TERM_WHITE, '|' });
         prt(fmt::format("{:2}F", (i * 5)), row + i + 1, col);
-        const auto is_home = (i * BASEITEM_MAX_DEPTH / 22 <= home) && (home < (i + 1) * BASEITEM_MAX_DEPTH / 22);
+        const auto is_home = (i * BASEITEM_MAX_DEPTH / 22 <= home_depth) && (home_depth < (i + 1) * BASEITEM_MAX_DEPTH / 22);
         c_prt(is_home ? TERM_RED : TERM_WHITE, fmt::format("{:3}.{:03}%", display[i] / 1000, display[i] % 1000), row + i + 1, col + 3);
     }
 
@@ -387,7 +389,7 @@ static void wiz_display_item(PlayerType *player_ptr, ItemEntity *o_ptr)
         prt("", i, j - 2);
     }
 
-    prt_alloc(o_ptr->bi_key, 1, 0);
+    prt_alloc(o_ptr->bi_key, o_ptr->get_baseitem_level(), 1, 0);
     const auto item_name = describe_flavor(player_ptr, *o_ptr, OD_STORE);
     prt(item_name, 2, j);
 

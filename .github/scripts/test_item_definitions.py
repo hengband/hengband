@@ -132,14 +132,30 @@ class BaseitemDefinitionValidationTest(unittest.TestCase):
         self.check(self.changed(self.sample, ["allocations"], [{"depth": 128, "rarity": 1}]), False, ["baseitems", 0, "allocations", 0, "depth"])
         self.check(self.changed(self.sample, ["allocations"], [{"depth": -1, "rarity": 1}]), False, ["baseitems", 0, "allocations", 0, "depth"])
 
+    def test_natural_generation_false_excludes_allocations(self):
+        # 自然生成しないベースアイテムは生成テーブルを持たないため、BaseitemReader は空でない allocations との併記を拒否する。
+        without_allocations = copy.deepcopy(self.sample)
+        del without_allocations["allocations"]
+        for natural_generation in (True, False):
+            with self.subTest(natural_generation=natural_generation):
+                self.check({**without_allocations, "natural_generation": natural_generation}, True)
+                self.check({**without_allocations, "natural_generation": natural_generation, "allocations": []}, True)
+        self.check({**self.sample, "natural_generation": True}, True)
+        self.check({**self.sample, "natural_generation": False}, False, ["baseitems", 0, "allocations"], "must not have allocations")
+        for value in (0, 1, "false", []):
+            with self.subTest(value=value):
+                self.check({**without_allocations, "natural_generation": value}, False, ["baseitems", 0, "natural_generation"])
+
     def test_reader_tokens_and_rarity_boundary_are_accepted(self):
         for flag in ("ACTIVATE", "IM_LITE"):
             with self.subTest(flag=flag):
                 self.check(self.changed(self.sample, ["flags"], [flag]), True)
         self.check(self.changed(self.sample, ["activate"], "DARKNESS"), True)
-        # 出現率は 100÷希少度なので 101 以上はどれも 0 になるが、BaseitemReader は 256 まで受け付ける。
-        self.check(self.changed(self.sample, ["allocations"], [{"depth": 1, "rarity": 256}]), True)
-        self.check(self.changed(self.sample, ["allocations"], [{"depth": 1, "rarity": 257}]), False, ["baseitems", 0, "allocations", 0, "rarity"])
+        # 出現率は 100÷希少度なので 101 以上はどれも 0 になり、0 は欄が無いのと同じになる。BaseitemReader は 1〜100 を受け付ける。
+        for rarity, accepted in ((1, True), (100, True), (0, False), (101, False)):
+            with self.subTest(rarity=rarity):
+                record = self.changed(self.sample, ["allocations"], [{"depth": 1, "rarity": rarity}])
+                self.check(record, accepted, None if accepted else ["baseitems", 0, "allocations", 0, "rarity"])
 
     def test_kinds_of_valid_baseitems_must_be_unique(self):
         # 種別・副種別から ID を引く表では後の ID が先の ID を隠すため、有効なベースアイテムどうしの重複を拒否する。

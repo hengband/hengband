@@ -200,7 +200,7 @@ def load_rod_type_value(repository_root: Path) -> int:
 
 
 def validate_baseitem_semantics(data: dict, schema_path: Path) -> None:
-    """BaseitemReaderの整数型・ID順序・表示・ロッドのpval・ダイスを検証する。"""
+    """BaseitemReaderの整数型・ID順序・表示・ロッドのpval・ダイス・自然生成と生成情報の併記を検証する。"""
     repository_root = schema_path.resolve().parent.parent
     valid_colors = load_cpp_map_keys(repository_root / "src/term/gameterm.cpp", "color_list")
     rod_type_value = load_rod_type_value(repository_root)
@@ -230,6 +230,10 @@ def validate_baseitem_semantics(data: dict, schema_path: Path) -> None:
         for allocation_index, allocation in enumerate(baseitem.get("allocations", [])):
             for field in ("depth", "rarity"):
                 require_integer(allocation[field], path + ["allocations", allocation_index, field])
+        # 自然生成しないベースアイテムは生成テーブルを持たないため、BaseitemReaderは
+        # natural_generation: false と空でない allocations の併記を拒否する。空の allocations は書かないのと同じ。
+        if baseitem.get("natural_generation", True) is False and baseitem.get("allocations"):
+            raise ValidationError("baseitem without natural generation must not have allocations", path=path + ["allocations"])
         # 種別・副種別から ID を引く表では後の ID が先の ID を隠すため、BaseitemReaderは
         # 有効なベースアイテムどうしの重複を拒否する。有効かどうかはビルドの言語の名前で決まる。
         key = (baseitem["itemkind"]["type_value"], baseitem["itemkind"]["subtype_value"])

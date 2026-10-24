@@ -95,12 +95,6 @@
       "level": 0,
       "weight": 0,
       "cost": 0,
-      "allocations": [
-        {
-          "depth": 0,
-          "rarity": 0,
-        },
-      ],
     },
     //##### Mushrooms #####
     {
@@ -860,6 +854,7 @@
       "level": 0,
       "weight": 2,
       "cost": 1,
+      "natural_generation": false,
       "flavor": {
         "ja": "日持ちを良くする為に二度焼きした乾パンの一種だ。岩のように固く、味もだいたいその程度。",
         "en": "Twice-cooked for good keeping qualities, this lump of bread is as hard as a rock and about as tasty.",
@@ -884,6 +879,7 @@
       "level": 0,
       "weight": 2,
       "cost": 2,
+      "natural_generation": false,
       "flavor": {
         "ja": "良く乾燥させた肉。決して腐る事が無さそうだ。",
         "en": "A strip of jerked beef that never seems to spoil.",
@@ -970,6 +966,7 @@
       "level": 0,
       "weight": 5,
       "cost": 1,
+      "natural_generation": false,
       "flavor": {
         "ja": "エリアドールの大麦を醸造し、金色になるまで熟成させたものだ。",
         "en": "Made from the barley of Eriador, and brewed to golden perfection.",
@@ -993,6 +990,7 @@
       "level": 0,
       "weight": 10,
       "cost": 2,
+      "natural_generation": false,
       "flavor": {
         "ja": "水の辺村の緑竜館で出るのと同じくらい質の良い、アルコール度の高いワインだ。",
         "en": "A heady wine, almost as good as that served at the Green Dragon at Bywater.",
@@ -4826,12 +4824,7 @@
       "level": 5,
       "weight": 2,
       "cost": 250,
-      "allocations": [
-        {
-          "depth": 5,
-          "rarity": 255,
-        },
-      ],
+      "natural_generation": false,
       "flags": ["SLOW_DIGEST"],
     },
     {
@@ -5707,12 +5700,7 @@
       "level": 15,
       "weight": 3,
       "cost": 200,
-      "allocations": [
-        {
-          "depth": 15,
-          "rarity": 255,
-        },
-      ],
+      "natural_generation": false,
       "flags": ["SLOW_DIGEST"],
     },
     {
@@ -7224,6 +7212,7 @@
       "level": 5,
       "weight": 5,
       "cost": 10,
+      "natural_generation": false,
       "flavor": {
         "ja": "それは読むと満腹になる。",
         "en": "It satisfies hunger when you read it.",
@@ -11684,12 +11673,7 @@
       "hit_bonus": 0,
       "damage_bonus": 0,
       "ac_bonus": 0,
-      "allocations": [
-        {
-          "depth": 100,
-          "rarity": 255,
-        },
-      ],
+      "natural_generation": false,
       "flavor": {
         "ja": "それは使うと魔力が最大まで回復し、知能を回復し、狂戦士化を癒す。",
         "en": "It restores mana to full, restores your intelligence and cures berserk when you use it.",
@@ -18974,12 +18958,7 @@
       "hit_bonus": 0,
       "damage_bonus": 0,
       "ac_bonus": 0,
-      "allocations": [
-        {
-          "depth": 1,
-          "rarity": 255,
-        },
-      ],
+      "natural_generation": false,
     },
     {
       "id": 581,
@@ -20219,12 +20198,7 @@
       "level": 1,
       "weight": 50,
       "cost": 500000,
-      "allocations": [
-        {
-          "depth": 1,
-          "rarity": 255,
-        },
-      ],
+      "natural_generation": false,
       "flags": ["IGNORE_ACID", "IGNORE_ELEC", "IGNORE_FIRE", "IGNORE_COLD"],
     },
     {
@@ -20690,12 +20664,7 @@
       "level": 0,
       "weight": 5,
       "cost": 1,
-      "allocations": [
-        {
-          "depth": 0,
-          "rarity": 255,
-        },
-      ],
+      "natural_generation": false,
       "flags": ["IGNORE_ACID", "IGNORE_ELEC", "IGNORE_FIRE", "IGNORE_COLD"],
     },
     {
@@ -20923,12 +20892,7 @@
       "hit_bonus": 0,
       "damage_bonus": 0,
       "ac_bonus": 0,
-      "allocations": [
-        {
-          "depth": 0,
-          "rarity": 255,
-        },
-      ],
+      "natural_generation": false,
     },
     {
       "id": 644,
@@ -20987,12 +20951,7 @@
       "hit_bonus": 0,
       "damage_bonus": 0,
       "ac_bonus": 0,
-      "allocations": [
-        {
-          "depth": 1,
-          "rarity": 255,
-        },
-      ],
+      "natural_generation": false,
     },
     {
       "id": 646,
@@ -21379,6 +21338,7 @@
       "hit_bonus": 0,
       "damage_bonus": 0,
       "ac_bonus": 0,
+      "natural_generation": false,
       "flags": ["FULL_NAME"],
       "flavor": {
         "ja": "それは使っても何も起こらない。",
@@ -21877,12 +21837,7 @@
       "level": 0,
       "weight": 5,
       "cost": 1,
-      "allocations": [
-        {
-          "depth": 0,
-          "rarity": 255,
-        },
-      ],
+      "natural_generation": false,
       "flags": ["IGNORE_ACID", "IGNORE_ELEC", "IGNORE_FIRE", "IGNORE_COLD"],
     },
     {
@@ -21903,12 +21858,7 @@
       "level": 0,
       "weight": 5,
       "cost": 1,
-      "allocations": [
-        {
-          "depth": 0,
-          "rarity": 255,
-        },
-      ],
+      "natural_generation": false,
       "flags": ["IGNORE_ACID", "IGNORE_ELEC", "IGNORE_FIRE", "IGNORE_COLD"],
     },
     {
@@ -21929,12 +21879,7 @@
       "level": 0,
       "weight": 5,
       "cost": 1,
-      "allocations": [
-        {
-          "depth": 0,
-          "rarity": 255,
-        },
-      ],
+      "natural_generation": false,
       "flags": ["IGNORE_ACID", "IGNORE_ELEC", "IGNORE_FIRE", "IGNORE_COLD"],
     },
     {
@@ -21955,12 +21900,7 @@
       "level": 0,
       "weight": 5,
       "cost": 1,
-      "allocations": [
-        {
-          "depth": 0,
-          "rarity": 255,
-        },
-      ],
+      "natural_generation": false,
       "flags": ["IGNORE_ACID", "IGNORE_ELEC", "IGNORE_FIRE", "IGNORE_COLD"],
     },
     {
@@ -21981,12 +21921,7 @@
       "level": 0,
       "weight": 5,
       "cost": 1,
-      "allocations": [
-        {
-          "depth": 0,
-          "rarity": 255,
-        },
-      ],
+      "natural_generation": false,
       "flags": ["IGNORE_ACID", "IGNORE_ELEC", "IGNORE_FIRE", "IGNORE_COLD"],
     },
     {
@@ -22007,12 +21942,7 @@
       "level": 0,
       "weight": 5,
       "cost": 1,
-      "allocations": [
-        {
-          "depth": 0,
-          "rarity": 255,
-        },
-      ],
+      "natural_generation": false,
       "flags": ["IGNORE_ACID", "IGNORE_ELEC", "IGNORE_FIRE", "IGNORE_COLD"],
     },
     {
@@ -22033,12 +21963,7 @@
       "level": 0,
       "weight": 5,
       "cost": 1,
-      "allocations": [
-        {
-          "depth": 0,
-          "rarity": 255,
-        },
-      ],
+      "natural_generation": false,
       "flags": ["IGNORE_ACID", "IGNORE_ELEC", "IGNORE_FIRE", "IGNORE_COLD"],
       "flavor": {
         "ja": "安っぽい紙切れだ。グングニルの隠し場所でも書いてあるのだろうか。",

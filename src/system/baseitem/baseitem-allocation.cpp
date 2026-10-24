@@ -36,11 +36,6 @@ bool BaseitemAllocationEntry::is_gold() const
     return this->get_bi_key().tval() == ItemKindType::GOLD;
 }
 
-int BaseitemAllocationEntry::get_baseitem_level() const
-{
-    return this->get_baseitem().level;
-}
-
 bool BaseitemAllocationEntry::order_level(const BaseitemAllocationEntry &other) const
 {
     return this->level < other.level;
