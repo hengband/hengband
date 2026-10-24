@@ -57,6 +57,8 @@ jobs:
       configure-opts: "--enable-xft"
       use-ccache: true
       ccache-save-min-misses: 1
+      # 全パッケージを入れる構成なので、apt のキャッシュはこのジョブで保存する
+      apt-cache-save: true
 
   gcc_english:
     name: English version with gcc 16 (without using pre-compiled headers, without XFT)
