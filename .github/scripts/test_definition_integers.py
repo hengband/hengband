@@ -101,14 +101,22 @@ class DefinitionIntegerValidationTest(unittest.TestCase):
         document["classes"][0], document["classes"][1] = document["classes"][1], document["classes"][0]
         ok, message = self.validate("ClassMagicDefinitions", document)
         self.assertFalse(ok)
-        self.assertIn("nondecreasing order", message)
+        self.assertIn("strictly increasing order", message)
         self.assertIn("Location: ['classes', 1, 'name']", message)
 
-    def test_magic_repeated_classes_and_gaps_are_accepted(self):
+    def test_magic_gaps_are_accepted(self):
         document = copy.deepcopy(self.documents["ClassMagicDefinitions"])
-        document["classes"] = [document["classes"][1], document["classes"][1], document["classes"][3]]
+        document["classes"] = [document["classes"][1], document["classes"][3]]
         ok, message = self.validate("ClassMagicDefinitions", document)
         self.assertTrue(ok, message)
+
+    def test_magic_repeated_class_is_rejected(self):
+        document = copy.deepcopy(self.documents["ClassMagicDefinitions"])
+        document["classes"] = [document["classes"][1], document["classes"][1]]
+        ok, message = self.validate("ClassMagicDefinitions", document)
+        self.assertFalse(ok)
+        self.assertIn("strictly increasing order", message)
+        self.assertIn("Location: ['classes', 1, 'name']", message)
 
     def test_class_ids_follow_enum_values_and_token_mapping(self):
         with tempfile.TemporaryDirectory() as folder:
