@@ -206,6 +206,8 @@ static tl::optional<BaseitemKey> select_magic_eater(PlayerType *player_ptr, bool
     request_list = always_show_list;
 
     const int item_group_size = item_group.size();
+    const auto first_label = I2A(0);
+    const auto last_label = I2AD(item_group_size - 1);
     auto sval = 0;
     const auto &baseitems = BaseitemList::get_instance();
     while (!flag) {
@@ -249,13 +251,7 @@ static tl::optional<BaseitemKey> select_magic_eater(PlayerType *player_ptr, bool
                 }
                 /* letter/number for power selection */
                 else {
-                    char letter;
-                    if (sval_ctr < 26) {
-                        letter = I2A(sval_ctr);
-                    } else {
-                        letter = '0' + sval_ctr - 26;
-                    }
-                    dummy = fmt::format("{:c})", letter);
+                    dummy = fmt::format("{:c})", I2AD(sval_ctr));
                 }
                 x1 = ((sval_ctr < item_group_size / 2) ? x : x + 40);
                 y1 = ((sval_ctr < item_group_size / 2) ? y + sval_ctr : y + sval_ctr - item_group_size / 2);
@@ -303,7 +299,8 @@ static tl::optional<BaseitemKey> select_magic_eater(PlayerType *player_ptr, bool
             }
         }
 
-        const auto choice = input_command(prompt);
+        const auto is_list_shown = request_list || use_menu;
+        const auto choice = input_spell_choice(prompt, { .first_label = first_label, .last_label = last_label, .list = is_list_shown, .browse = only_browse, .menu = use_menu });
         if (!choice) {
             break;
         }

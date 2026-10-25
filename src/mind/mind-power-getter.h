@@ -34,7 +34,7 @@ private:
 
     void select_mind_description();
     bool select_spell_index(SPELL_IDX *sn);
-    bool decide_mind_choice(std::string_view prompt, const bool only_browse);
+    bool decide_mind_choice(std::string_view prompt, char first_label, char last_label, const bool only_browse);
     bool interpret_mind_key_input(const bool only_browse);
     bool display_minds_chance(const bool only_browse);
     void display_each_mind_chance(bool only_browse);

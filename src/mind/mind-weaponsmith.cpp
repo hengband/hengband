@@ -318,6 +318,7 @@ static void add_essence(PlayerType *player_ptr, SmithCategoryType mode)
     if (effect_index < 0 || effect_index >= smith_effect_list_max) {
         flag = false;
         screen_save();
+        const auto first_label = I2A(0);
         while (!flag) {
             std::string prompt;
             if (page_max > 1) {
@@ -329,7 +330,8 @@ static void add_essence(PlayerType *player_ptr, SmithCategoryType mode)
             display_smith_effect_list(smith, smith_effect_list, menu_line, page * effect_num_per_page, effect_num_per_page);
 
             const auto page_effect_num = std::min<int>(effect_num_per_page, smith_effect_list.size() - (page * effect_num_per_page));
-            const auto choice = input_command(prompt);
+            const auto last_label = I2A(page_effect_num - 1);
+            const auto choice = input_spell_choice(prompt, { .first_label = first_label, .last_label = last_label, .list = true, .menu = use_menu });
             if (!choice) {
                 break;
             }

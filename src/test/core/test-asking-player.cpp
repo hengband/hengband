@@ -45,6 +45,31 @@ TEST_CASE("input_command publishes the command character context")
     }
 }
 
+TEST_CASE("input_spell_choice publishes the spell context")
+{
+    test::ScopedInputTerm term;
+    const SpellInputDetails details{ .first_label = 'a', .last_label = 'd', .list = true };
+
+    SUBCASE("accept a key")
+    {
+        term.expect({ InputKind::SPELL, "Use which spell?", details }, "c");
+        CHECK(input_spell_choice("Use which spell? ", details) == 'c');
+    }
+
+    SUBCASE("cancel")
+    {
+        term.expect({ InputKind::SPELL, "Use which spell?", details }, "\033");
+        CHECK_FALSE(input_spell_choice("Use which spell? ", details));
+    }
+
+    SUBCASE("browse with the cursor menu")
+    {
+        const SpellInputDetails menu_details{ .first_label = 'a', .last_label = 'd', .list = true, .browse = true, .menu = true };
+        term.expect({ InputKind::SPELL, "Browse which spell?", menu_details }, "\r");
+        CHECK(input_spell_choice("Browse which spell? ", menu_details) == '\r');
+    }
+}
+
 TEST_CASE("input_key_with_context publishes the given context while waiting for a key")
 {
     test::ScopedInputTerm term;

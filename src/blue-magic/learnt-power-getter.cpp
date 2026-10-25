@@ -491,7 +491,9 @@ static bool confirm_cast_blue_magic(MonsterAbilityType spell)
 static tl::optional<MonsterAbilityType> select_learnt_spells_by_symbol(PlayerType *player_ptr, const BluemageData &bluemage_data, std::span<const MonsterAbilityType> spells)
 {
     constexpr auto fmt = _("({}-{}, '*'で頁送り, ESC) どの{}を唱えますか？", "({}-{}, *=Next page, ESC=exit) Use which {}? ");
-    const auto prompt = fmt::format(fmt, I2A(0), I2A(spells.size() - 1), _("魔法", "magic"));
+    const auto first_label = I2A(0);
+    const auto last_label = I2A(spells.size() - 1);
+    const auto prompt = fmt::format(fmt, first_label, last_label, _("魔法", "magic"));
 
     bool first_show_list = always_show_list;
     auto show_list = false;
@@ -501,7 +503,7 @@ static tl::optional<MonsterAbilityType> select_learnt_spells_by_symbol(PlayerTyp
     while (!selected_spell) {
         auto choice = '\0';
         if (!first_show_list) {
-            const auto choice_opt = input_command(prompt);
+            const auto choice_opt = input_spell_choice(prompt, { .first_label = first_label, .last_label = last_label, .list = show_list });
             if (!choice_opt) {
                 break;
             }
@@ -588,12 +590,14 @@ static tl::optional<MonsterAbilityType> select_learnt_spells_by_menu(PlayerType 
     screen_save();
 
     const auto page_size = make_blue_magic_list_page_context(0, spells.size()).page_size;
+    const auto first_label = I2A(0);
+    const auto last_label = I2A(spells.size() - 1);
 
     while (!selected_spell) {
         const auto page_context = make_blue_magic_list_page_context((menu_line - 1) / page_size, spells.size());
         describe_blue_magic_name(player_ptr, bluemage_data, menu_line, spells, page_context);
 
-        const auto choice = input_command(prompt);
+        const auto choice = input_spell_choice(prompt, { .first_label = first_label, .last_label = last_label, .list = true, .menu = true });
         if (!choice) {
             break;
         }
