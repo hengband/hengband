@@ -3,6 +3,7 @@
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
 #include "util/angband-files.h"
+#include "util/buffer-shaper.h"
 #include "util/enum-converter.h"
 #include "util/string-processor.h"
 #include "view/display-lore.h"
@@ -96,7 +97,8 @@ SpoilerOutputResultType spoil_mon_desc(std::string_view filename, std::function<
             continue;
         }
 
-        const auto name = str_separate(monrace.name, 40);
+        // shape_buffer() は終端文字の分を除いた maxlen - 1 バイトごとに区切るので、名前の欄の幅 + 1 を渡す
+        const auto name = shape_buffer(monrace.name, 40 + 1);
         std::string nam;
         if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
             nam = "[U] ";

@@ -13,7 +13,7 @@
 #include "system/monrace/monrace-records.h"
 #include "system/player-type-definition.h"
 #include "util/angband-files.h"
-#include "util/string-processor.h"
+#include "util/buffer-shaper.h"
 #include <fmt/format.h>
 
 class UniqueList {
@@ -116,7 +116,8 @@ static void display_uniques(UniqueList *unique_list_ptr, FILE *fff)
             details = fmt::format(_(" - レベル{:2} - {}:{:02}:{:02}", " - level {:2} - {}:{:02}:{:02}"), monrace.defeat_level, monrace.defeat_time / (60 * 60), (monrace.defeat_time / 60) % 60, monrace.defeat_time % 60);
         }
 
-        const auto name = str_separate(monrace.name, 40);
+        // shape_buffer() は終端文字の分を除いた maxlen - 1 バイトごとに区切るので、名前の欄の幅 + 1 を渡す
+        const auto name = shape_buffer(monrace.name, 40 + 1);
         fmt::println(fff, _("     {:<40} (レベル{:3}){}", "     {:<40} (level {:3}){}"), fmt::bytes(name.front()), (int)monrace.level, details);
         for (auto i = 1U; i < name.size(); ++i) {
             fmt::println(fff, "     {}", name[i]);

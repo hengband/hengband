@@ -22,8 +22,8 @@
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "util/angband-files.h"
+#include "util/buffer-shaper.h"
 #include "util/enum-converter.h"
-#include "util/string-processor.h"
 #include "world/world.h"
 #include <fmt/format.h>
 #include <numeric>
@@ -171,15 +171,17 @@ static bool do_cmd_knowledge_quests_aux(PlayerType *, FILE *fff, QuestId q_idx)
         }
     };
 
+    // shape_buffer() は終端文字の分を除いた maxlen - 1 バイトごとに区切るので、名前の欄の幅 + 1 を渡す
+    constexpr auto name_maxlen = 35 + 1;
     if (is_fixed_quest || !quest.get_bounty().is_valid()) {
-        auto name = str_separate(quest.name, 35);
+        const auto name = shape_buffer(quest.name, name_maxlen);
         constexpr auto mes = _("  {:<35} (危険度:{:3}階相当) - レベル{:2} - {}\n", "  {:<35} (Danger  level: {:3}) - level {:2} - {}\n");
         fmt::print(fff, mes, fmt::bytes(name.front()), (int)quest.level, quest.complev, playtime_str);
         fputs_name_remain(name);
         return true;
     }
 
-    const auto name = str_separate(quest.get_bounty().name, 35);
+    const auto name = shape_buffer(quest.get_bounty().name, name_maxlen);
     if (quest.complev == 0) {
         constexpr auto mes = _("  {:<35} ({:3}階)            -   不戦勝 - {}\n", "  {:<35} (Dungeon level: {:3}) - Unearned - {}\n");
         fmt::print(fff, mes, fmt::bytes(name.front()), (int)quest.level, playtime_str);
