@@ -1601,6 +1601,7 @@ hengband_test_SOURCES = \
 	test/system/test-deferred-update-requests.cpp \
 	test/system/test-building-type-definition.cpp \
 	test/target/test-target-getter.cpp \
+	test/term/test-screen-processor.cpp \
 	test/term/test-z-rand.cpp \
 	test/timed-effect/test-player-cut.cpp \
 	test/timed-effect/test-player-stun.cpp \

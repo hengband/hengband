@@ -123,12 +123,15 @@ static std::vector<DisplaySymbol> c_roff_wrap(int x, int y, int w, std::string_v
         /* 現在が全角文字の場合 */
         /* 行頭が行頭禁則文字になるときは、その１つ前の語で改行 */
         if (is_kinsoku(ch)) {
-            DisplaySymbol ds;
-            ds = term_what(x - 2, y, ds);
-            wrap_chars.push_back(ds);
-            ds = term_what(x - 1, y, ds);
-            wrap_chars.push_back(ds);
-            wrap_col = x - 2;
+            // 1つ前の文字が全角文字 (後半バイトに 0x20 の印がある) なら2マス、半角文字なら1マスを次の行へ送る
+            const auto prev = term_what(x - 1, y, {});
+            const auto is_full_width = (prev.color & 0x20) != 0;
+            if (is_full_width) {
+                wrap_chars.push_back(term_what(x - 2, y, {}));
+            }
+
+            wrap_chars.push_back(prev);
+            wrap_col = x - (is_full_width ? 2 : 1);
         }
     } else {
         /* 現在が半角文字の場合 */
