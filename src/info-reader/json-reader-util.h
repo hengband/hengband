@@ -32,11 +32,11 @@ tl::expected<void, ParseErrorType> info_validate_json_array(const nlohmann::json
  * JSON値がnullの場合、必須ならParseErrorType::TOO_FEW_ARGUMENTSを返し、任意なら何もせずに成功する。
  * null以外の非整数値は、必須かどうかによらずParseErrorType::INVALID_TYPEを返す。
  * @param range 取得した値の範囲（両端を含む）を指定する。
- * 格納先の型へ変換する前に検証し、範囲外ならParseErrorType::INVALID_FLAGを返す。
+ * 格納先の型へ変換する前に検証し、範囲外ならParseErrorType::INVALID_VALUEを返す。
  * range の指定にかかわらず格納先の型 (enum は基底型) の表現範囲も検証する。
  * エラーまたは任意のnullの場合、dataは変更しない。
  * @return 成功時は空の値、失敗時は解析エラーコード（ParseErrorType::TOO_FEW_ARGUMENTS、ParseErrorType::INVALID_TYPE、
- * ParseErrorType::INVALID_FLAGのいずれか。条件は上記のとおり）
+ * ParseErrorType::INVALID_VALUEのいずれか。条件は上記のとおり）
  */
 template <IntegralOrEnum T>
 tl::expected<void, ParseErrorType> info_set_integer(const nlohmann::json &json, T &data, bool is_required, tl::optional<Range> range = tl::nullopt)
@@ -64,7 +64,7 @@ tl::expected<void, ParseErrorType> info_set_integer(const nlohmann::json &json, 
     if (json.is_number_unsigned()) {
         const auto value = json.get<nlohmann::json::number_unsigned_t>();
         if (!fits_destination(value) || (range && (std::cmp_less(value, range->first) || std::cmp_greater(value, range->second)))) {
-            return tl::make_unexpected(ParseErrorType::INVALID_FLAG);
+            return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
         }
 
         data = static_cast<T>(value);
@@ -73,7 +73,7 @@ tl::expected<void, ParseErrorType> info_set_integer(const nlohmann::json &json, 
 
     const auto value = json.get<nlohmann::json::number_integer_t>();
     if (!fits_destination(value) || (range && (value < range->first || value > range->second))) {
-        return tl::make_unexpected(ParseErrorType::INVALID_FLAG);
+        return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
     }
 
     data = static_cast<T>(value);

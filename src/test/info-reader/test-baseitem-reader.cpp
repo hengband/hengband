@@ -234,7 +234,7 @@ TEST_CASE("BaseitemReader validates full-width integer IDs before narrowing or p
         data["cost"] = 91;
         error_idx = -1;
         const auto is_negative = !id.is_number_unsigned() && id.get<nlohmann::json::number_integer_t>() < 0;
-        const auto expected = is_negative ? ParseErrorType::NON_SEQUENTIAL_RECORDS : ParseErrorType::OUT_OF_BOUNDS;
+        const auto expected = is_negative ? ParseErrorType::NON_SEQUENTIAL_RECORDS : ParseErrorType::INVALID_VALUE;
         CHECK(test::to_error_code(BaseitemReader(data).read()) == expected);
         REQUIRE(items.size() == 2);
         CHECK(std::addressof(items.get_baseitem(1)) == existing);
@@ -341,7 +341,7 @@ TEST_CASE("BaseitemReader preserves ordering precedence and rejects negative ind
     {
         data["id"] = -1;
         previous = -100;
-        expected = ParseErrorType::OUT_OF_BOUNDS;
+        expected = ParseErrorType::INVALID_VALUE;
     }
     error_idx = previous;
     CHECK(test::to_error_code(BaseitemReader(data).read()) == expected);
@@ -423,7 +423,7 @@ TEST_CASE("BaseitemReader limits base dice to the save format range")
         BaseitemStateGuard guard;
         auto data = make_baseitem();
         data["base_dice"] = dice;
-        CHECK(test::to_error_code(BaseitemReader(data).read()) == ParseErrorType::INVALID_FLAG);
+        CHECK(test::to_error_code(BaseitemReader(data).read()) == ParseErrorType::INVALID_VALUE);
         CHECK(BaseitemList::get_instance().empty());
     }
     BaseitemStateGuard guard;
@@ -461,7 +461,7 @@ TEST_CASE("BaseitemReader limits base AC and bonuses to small numbers up to 255 
         BaseitemStateGuard guard;
         auto data = make_baseitem();
         data[field] = value;
-        CHECK(test::to_error_code(BaseitemReader(data).read()) == ParseErrorType::INVALID_FLAG);
+        CHECK(test::to_error_code(BaseitemReader(data).read()) == ParseErrorType::INVALID_VALUE);
         CHECK(BaseitemList::get_instance().empty());
     }
     for (const auto bonus : { -ITEM_BONUS_MAX, ITEM_BONUS_MAX }) {
@@ -491,7 +491,7 @@ TEST_CASE("BaseitemReader limits level to the deepest reachable floor")
         BaseitemStateGuard guard;
         auto data = make_baseitem();
         data["level"] = MAX_DEPTH;
-        CHECK(test::to_error_code(BaseitemReader(data).read()) == ParseErrorType::INVALID_FLAG);
+        CHECK(test::to_error_code(BaseitemReader(data).read()) == ParseErrorType::INVALID_VALUE);
         CHECK(BaseitemList::get_instance().empty());
     }
     BaseitemStateGuard guard;
@@ -511,7 +511,7 @@ TEST_CASE("BaseitemReader limits allocation depth to the generation table size")
         BaseitemStateGuard guard;
         auto data = make_baseitem();
         data["allocations"] = { { { "depth", depth }, { "rarity", 1 } } };
-        CHECK(test::to_error_code(BaseitemReader(data).read()) == ParseErrorType::INVALID_FLAG);
+        CHECK(test::to_error_code(BaseitemReader(data).read()) == ParseErrorType::INVALID_VALUE);
         CHECK(BaseitemList::get_instance().empty());
     }
     BaseitemStateGuard guard;
@@ -649,7 +649,7 @@ TEST_CASE("BaseitemReader limits allocation rarity to 1 through 100")
         BaseitemStateGuard guard;
         auto data = make_baseitem();
         data["allocations"] = { { { "depth", 1 }, { "rarity", rarity } } };
-        CHECK(test::to_error_code(BaseitemReader(data).read()) == ParseErrorType::INVALID_FLAG);
+        CHECK(test::to_error_code(BaseitemReader(data).read()) == ParseErrorType::INVALID_VALUE);
         CHECK(BaseitemList::get_instance().empty());
     }
     BaseitemStateGuard guard;
@@ -663,7 +663,7 @@ TEST_CASE("BaseitemReader limits allocation rarity to 1 through 100")
 
 namespace {
 // 同じIDの再読込で拒否した場合、既存の項目と種別の索引を保つことも確かめる。
-void check_baseitem_boundary(const nlohmann::json &data, bool accepted, ParseErrorType error = ParseErrorType::INVALID_FLAG)
+void check_baseitem_boundary(const nlohmann::json &data, bool accepted, ParseErrorType error = ParseErrorType::INVALID_VALUE)
 {
     BaseitemStateGuard guard;
     auto &items = BaseitemList::get_instance();
@@ -770,11 +770,12 @@ TEST_CASE("BaseitemReader validates inherited pval after changing item kind")
 
 TEST_CASE("BaseitemReader accepts only defined item kinds up to 127")
 {
+    // 範囲外 (-1, 128, 129) も範囲内で未定義の種別も INVALID_VALUE で、どちらの経路でも同じ診断になるため区別しない
     for (const auto kind : { -1, 6, 12, 13, 14, 24, 41, 64, 100, 126, 128, 129 }) {
         CAPTURE(kind);
         auto data = make_baseitem();
         data["itemkind"]["type_value"] = kind;
-        check_baseitem_boundary(data, false, kind < 0 || kind > 127 ? ParseErrorType::INVALID_FLAG : ParseErrorType::INVALID_VALUE);
+        check_baseitem_boundary(data, false);
     }
     for (const auto kind : { 0, 15, 127 }) {
         auto data = make_baseitem();

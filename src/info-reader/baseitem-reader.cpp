@@ -202,7 +202,7 @@ tl::expected<void, ParseErrorType> BaseitemReader::read() const
         }
         if (std::cmp_less(id, 0) || std::cmp_greater(id, MAX_BASEITEM_ID)) {
             msg_print(_("ベースアイテムIDが範囲外です。ID: '{}'。", "Baseitem ID is out of bounds. ID: '{}'."), id);
-            return tl::make_unexpected(ParseErrorType::OUT_OF_BOUNDS);
+            return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
         }
         return {};
     };
@@ -457,7 +457,7 @@ tl::expected<void, ParseErrorType> BaseitemReader::set_baseitem_allocations(Base
 
     for (auto i = 0U; const auto &alloc : allocations_data) {
         if (i >= baseitem.alloc_tables.size()) {
-            return tl::unexpected(ParseErrorType::OUT_OF_BOUNDS);
+            return tl::unexpected(ParseErrorType::INVALID_VALUE);
         }
 
         if (!alloc.is_object()) {

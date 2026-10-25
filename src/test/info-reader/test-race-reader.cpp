@@ -1,6 +1,7 @@
 #include "info-reader/info-reader-util.h"
 #include "info-reader/parse-error-types.h"
 #include "info-reader/race-reader.h"
+#include "locale/character-encoding.h"
 #include "monster-attack/monster-attack-effect.h"
 #include "monster-attack/monster-attack-table.h"
 #include "player-ability/player-ability-types.h"
@@ -87,7 +88,7 @@ TEST_CASE("RaceReader rejects arena odds correction ratios outside the range wit
     for (const auto ratio : { 0, 1001 }) {
         CAPTURE(ratio);
         data["odds_correction_ratio"] = ratio;
-        CHECK(test::to_error_code(read_as_first_record(data)) == ParseErrorType::INVALID_FLAG);
+        CHECK(test::to_error_code(read_as_first_record(data)) == ParseErrorType::INVALID_VALUE);
         CHECK(MonraceList::get_instance().get_monrace_shared(static_cast<MonraceId>(0)) == identity);
         CHECK(test_monrace().arena_ratio == 100);
     }
@@ -116,7 +117,7 @@ TEST_CASE("RaceReader rejects evolution experience outside the range without cha
     for (const auto need_exp : { 0, 10000000 }) {
         CAPTURE(need_exp);
         data["evolve"] = { { "need_exp", need_exp }, { "to", 3 } };
-        CHECK(test::to_error_code(read_as_first_record(data)) == ParseErrorType::INVALID_FLAG);
+        CHECK(test::to_error_code(read_as_first_record(data)) == ParseErrorType::INVALID_VALUE);
         CHECK(MonraceList::get_instance().get_monrace_shared(static_cast<MonraceId>(0)) == identity);
         CHECK(test_monrace().next_exp == 10);
         CHECK(test_monrace().next_r_idx == static_cast<MonraceId>(2));
@@ -146,7 +147,7 @@ TEST_CASE("RaceReader rejects out-of-range IDs before conversion or registration
              nlohmann::json(std::numeric_limits<int64_t>::min()), nlohmann::json(std::numeric_limits<uint64_t>::max()) }) {
         CAPTURE(id);
         data["id"] = id;
-        CHECK(test::to_error_code(read_as_first_record(data)) == ParseErrorType::INVALID_FLAG);
+        CHECK(test::to_error_code(read_as_first_record(data)) == ParseErrorType::INVALID_VALUE);
         CHECK(MonraceList::get_instance().empty());
         CHECK(error_idx == -1);
     }
@@ -298,7 +299,7 @@ TEST_CASE("RaceReader rejects nonstring shoot dice and skill list entries")
     data["skill"]["shoot"] = nullptr;
     CHECK(test::to_error_code(read_as_first_record(data)) == ParseErrorType::TOO_FEW_ARGUMENTS);
     data["skill"]["shoot"] = "bad";
-    CHECK(test::to_error_code(read_as_first_record(data)) == ParseErrorType::TOO_FEW_ARGUMENTS);
+    CHECK(test::to_error_code(read_as_first_record(data)) == ParseErrorType::INVALID_VALUE);
     data["skill"].erase("shoot");
     for (const auto &value : { nlohmann::json(), nlohmann::json(42), nlohmann::json(true), nlohmann::json::array(), nlohmann::json::object() }) {
         data["skill"]["list"] = nlohmann::json::array({ "SHRIEK", value });
@@ -376,7 +377,8 @@ TEST_CASE("RaceReader preserves existing definition messages and record after he
     SUBCASE("symbol before speed")
     {
         data["symbol"]["character"] = "pp";
-        data["speed"] = 100;
+        // 速度を先に検証すると INVALID_TYPE になり、シンボルの INVALID_VALUE と区別できる。
+        data["speed"] = "bad";
         expected = ParseErrorType::INVALID_VALUE;
     }
     SUBCASE("speed before hit dice")
@@ -389,7 +391,7 @@ TEST_CASE("RaceReader preserves existing definition messages and record after he
     {
         data["hit_point"] = "1d32768";
         data["vision"] = "bad";
-        expected = ParseErrorType::OUT_OF_BOUNDS;
+        expected = ParseErrorType::INVALID_VALUE;
     }
     SUBCASE("evolution before sex")
     {
@@ -419,7 +421,7 @@ TEST_CASE("RaceReader preserves existing definition messages and record after he
     {
         data["blows"] = nlohmann::json::array({ { { "method", "HIT" }, { "effect", "HURT" }, { "damage_dice", "0d2" } } });
         data["flags"] = { "UNKNOWN" };
-        expected = ParseErrorType::OUT_OF_BOUNDS;
+        expected = ParseErrorType::INVALID_VALUE;
     }
     SUBCASE("shoot dice before final summons")
     {
@@ -513,12 +515,14 @@ TEST_CASE("RaceReader does not publish a new ID or messages after a late failure
         { { "action", "SPEAK_ALL" }, { "chance", 1 }, { "message", { { "ja", "new" }, { "en", "new" } } } },
         { { "action", "SPEAK_BATTLE" }, { "chance", 101 } },
     });
+    auto expected = ParseErrorType::INVALID_VALUE;
     SUBCASE("late message failure") {}
     SUBCASE("late race failure")
     {
         data["flags"] = { "RES_FIRE", "UNKNOWN" };
+        expected = ParseErrorType::INVALID_FLAG;
     }
-    CHECK(test::to_error_code(read_as_first_record(data)) == ParseErrorType::INVALID_FLAG);
+    CHECK(test::to_error_code(read_as_first_record(data)) == expected);
     CHECK(MonraceList::get_instance().empty());
     CHECK(messages.message_count(2, MonsterMessageType::SPEAK_ALL) == 0);
     CHECK(messages.message_count(2, MonsterMessageType::SPEAK_BATTLE) == 0);
@@ -620,17 +624,17 @@ TEST_CASE("RaceReader validates level rarity starting HP and armor class ranges"
     for (const auto &[field, value, expected] : std::initializer_list<std::tuple<const char *, int, ParseErrorType>>{
              { "level", 0, ParseErrorType::NONE },
              { "level", 127, ParseErrorType::NONE },
-             { "level", 128, ParseErrorType::INVALID_FLAG },
+             { "level", 128, ParseErrorType::INVALID_VALUE },
              { "rarity", 1, ParseErrorType::NONE },
              { "rarity", 255, ParseErrorType::NONE },
-             { "rarity", 0, ParseErrorType::INVALID_FLAG },
+             { "rarity", 0, ParseErrorType::INVALID_VALUE },
              { "start_hp_percentage", 1, ParseErrorType::NONE },
              { "start_hp_percentage", 99, ParseErrorType::NONE },
-             { "start_hp_percentage", 0, ParseErrorType::INVALID_FLAG },
+             { "start_hp_percentage", 0, ParseErrorType::INVALID_VALUE },
              { "armor_class", 0, ParseErrorType::NONE },
              { "armor_class", 10000, ParseErrorType::NONE },
-             { "armor_class", 10001, ParseErrorType::INVALID_FLAG },
-             { "armor_class", -1, ParseErrorType::INVALID_FLAG },
+             { "armor_class", 10001, ParseErrorType::INVALID_VALUE },
+             { "armor_class", -1, ParseErrorType::INVALID_VALUE },
          }) {
         CAPTURE(field);
         CAPTURE(value);
@@ -672,14 +676,14 @@ TEST_CASE("RaceReader validates referenced ID ranges")
     }
     for (const auto id : { 0, 32767 }) {
         CAPTURE(id);
-        CHECK(test::to_error_code(read_as_first_record(with_evolve(id))) == ParseErrorType::INVALID_FLAG);
-        CHECK(test::to_error_code(read_as_first_record(with_escort(id))) == ParseErrorType::INVALID_FLAG);
-        CHECK(test::to_error_code(read_as_first_record(with_final_summon(id))) == ParseErrorType::INVALID_FLAG);
+        CHECK(test::to_error_code(read_as_first_record(with_evolve(id))) == ParseErrorType::INVALID_VALUE);
+        CHECK(test::to_error_code(read_as_first_record(with_escort(id))) == ParseErrorType::INVALID_VALUE);
+        CHECK(test::to_error_code(read_as_first_record(with_final_summon(id))) == ParseErrorType::INVALID_VALUE);
     }
     CHECK(read_as_first_record(with_artifact(32766)).has_value());
     for (const auto id : { 0, 32767 }) {
         CAPTURE(id);
-        CHECK(test::to_error_code(read_as_first_record(with_artifact(id))) == ParseErrorType::INVALID_FLAG);
+        CHECK(test::to_error_code(read_as_first_record(with_artifact(id))) == ParseErrorType::INVALID_VALUE);
     }
 }
 
@@ -708,13 +712,13 @@ TEST_CASE("RaceReader limits every monster dice to positive values and a short m
         }
         for (const auto *dice : { "1d32768", "32768d1", "182d181", "0d5", "5d0", "-1d5", "1d-5", "2147483647d2147483647" }) {
             CAPTURE(dice);
-            CHECK(test::to_error_code(read_as_first_record(set_dice(kind, dice))) == ParseErrorType::OUT_OF_BOUNDS);
+            CHECK(test::to_error_code(read_as_first_record(set_dice(kind, dice))) == ParseErrorType::INVALID_VALUE);
         }
         for (const auto *dice : { "01d5", "1d05", "00001d1" }) {
             CAPTURE(dice);
             CHECK(test::to_error_code(read_as_first_record(set_dice(kind, dice))) == ParseErrorType::INVALID_VALUE);
         }
-        CHECK(test::to_error_code(read_as_first_record(set_dice(kind, "1d5\n"))) == ParseErrorType::TOO_FEW_ARGUMENTS);
+        CHECK(test::to_error_code(read_as_first_record(set_dice(kind, "1d5\n"))) == ParseErrorType::INVALID_VALUE);
     }
 }
 
@@ -815,3 +819,16 @@ TEST_CASE("RaceReader rejects non-boolean message use_name without publishing")
     CHECK(MonraceList::get_instance().empty());
     CHECK(messages.message_count(0, MonsterMessageType::SPEAK_ALL) == 0);
 }
+
+#ifdef JP
+TEST_CASE("RaceReader reports a name which cannot be converted to the system encoding as an invalid value")
+{
+    test::MonraceListTestAccess guard;
+    // 途中に '\0' を含む文字列は、どの環境でもシステムの文字コードに変換しない
+    const std::string name("a\0b", 3);
+    REQUIRE_FALSE(utf8_to_sys(name).has_value());
+    auto data = make_monrace();
+    data["name"]["ja"] = name;
+    CHECK(test::to_error_code(read_as_first_record(data)) == ParseErrorType::INVALID_VALUE);
+}
+#endif

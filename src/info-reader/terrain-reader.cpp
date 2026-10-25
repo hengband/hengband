@@ -339,7 +339,7 @@ tl::expected<void, ParseErrorType> TerrainReader::set_terrain_generation(Terrain
 
         probability_sum += change.probability;
         if (probability_sum > 100) {
-            return tl::make_unexpected(ParseErrorType::INVALID_FLAG);
+            return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
         }
 
         terrain.generation_changes.push_back(change);

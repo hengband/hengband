@@ -50,7 +50,7 @@ constexpr int MONRACE_EVOLVE_NEED_EXP_MIN = 1;
  * @param is_required 必須かどうか
  * @return 成功、またはパースエラー
  * @details 個数と面数は1以上、最大の出目は MAX_MONRACE_DICE_ROLL 以下とする。
- * 範囲外の値は ParseErrorType::OUT_OF_BOUNDS、"01d5" のような先頭に0の付いた表記は ParseErrorType::INVALID_VALUE を返し、保管先を変更しない。
+ * 範囲外の値と "01d5" のような先頭に0の付いた表記は ParseErrorType::INVALID_VALUE を返し、保管先を変更しない。
  */
 tl::expected<void, ParseErrorType> info_set_monrace_dice(const nlohmann::json &json, Dice &dice, bool is_required)
 {
@@ -66,7 +66,7 @@ tl::expected<void, ParseErrorType> info_set_monrace_dice(const nlohmann::json &j
         return result;
     }
     if (!parsed.is_valid() || static_cast<int64_t>(parsed.num) * parsed.sides > MAX_MONRACE_DICE_ROLL) {
-        return tl::unexpected(ParseErrorType::OUT_OF_BOUNDS);
+        return tl::unexpected(ParseErrorType::INVALID_VALUE);
     }
     // CI の pattern と同じく、先頭に0の付いた個数や面数を拒否する。
     if (parsed.to_string() != json.get<std::string>()) {
@@ -320,7 +320,7 @@ tl::expected<void, ParseErrorType> RaceReader::set_mon_name(MonraceDefinition &m
 #ifdef JP
     auto ja_name_sys = utf8_to_sys(ja_name);
     if (!ja_name_sys) {
-        return tl::unexpected(ParseErrorType::INVALID_FLAG);
+        return tl::unexpected(ParseErrorType::INVALID_VALUE);
     }
     monrace.name = { *ja_name_sys, en_name };
 #else

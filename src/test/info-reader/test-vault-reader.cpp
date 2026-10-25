@@ -212,7 +212,7 @@ TEST_CASE("VaultReader preserves exact error precedence and every existing recor
     {
         data["height"] = 0;
         data["width"] = 0;
-        expected = ParseErrorType::INVALID_FLAG;
+        expected = ParseErrorType::INVALID_VALUE;
         path = "$.height";
         reason = _("1以上66以下の整数が必要です", "expected an integer in [1, 66]");
     }
@@ -220,7 +220,7 @@ TEST_CASE("VaultReader preserves exact error precedence and every existing recor
     {
         data["width"] = MAX_WID + 1;
         data["layout"] = nullptr;
-        expected = ParseErrorType::INVALID_FLAG;
+        expected = ParseErrorType::INVALID_VALUE;
         path = "$.width";
         reason = _("1以上198以下の整数が必要です", "expected an integer in [1, 198]");
     }

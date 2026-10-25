@@ -78,7 +78,7 @@ tl::expected<RealmType, ParseErrorType> SpellReader::read_realm() const
 
     const auto it = realms_list.find(realmname_obj.get<std::string>());
     if (it == realms_list.end()) {
-        return tl::make_unexpected(ParseErrorType::OUT_OF_BOUNDS);
+        return tl::make_unexpected(ParseErrorType::INVALID_FLAG);
     }
     return it->second;
 }

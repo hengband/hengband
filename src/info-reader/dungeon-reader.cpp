@@ -26,6 +26,7 @@
 #include <memory>
 #include <nlohmann/json.hpp>
 #include <span>
+#include <utility>
 
 DungeonReader::DungeonReader(const nlohmann::json &dungeon_data)
     : dungeon_data(dungeon_data)
@@ -281,13 +282,14 @@ bool DungeonReader::grab_one_spell_monster_flag(DungeonDefinition &dungeon, std:
  * @brief 床・壁の地形の抽選表を読み込む。
  * @param tiles_obj 地形と重みの配列
  * @param section 診断に表示する節の名前 (floor / wall)
- * @return 抽選表。地形や重みの書式が不正なら UNDEFINED_TERRAIN_TAG、重みの合計が100でなければ INVALID_VALUE
+ * @return 抽選表。配列や地形・重みが無ければ TOO_FEW_ARGUMENTS、型が誤っていれば INVALID_TYPE、未知の地形なら UNDEFINED_TERRAIN_TAG、
+ * 重みが範囲外か重みの合計が100でなければ INVALID_VALUE
  * @details 重みは百分率で、各0～100・合計はちょうど100とする。重みが0の地形は抽選表に登録しない。
  */
 static tl::expected<ProbabilityTable<short>, ParseErrorType> parse_terrain_probability(const nlohmann::json &tiles_obj, std::string_view section)
 {
-    if (tiles_obj.is_null() || !tiles_obj.is_array()) {
-        return tl::unexpected(ParseErrorType::UNDEFINED_TERRAIN_TAG);
+    if (!tiles_obj.is_array()) {
+        return tl::unexpected(tiles_obj.is_null() ? ParseErrorType::TOO_FEW_ARGUMENTS : ParseErrorType::INVALID_TYPE);
     }
 
     constexpr auto total_percent = 100;
@@ -295,21 +297,28 @@ static tl::expected<ProbabilityTable<short>, ParseErrorType> parse_terrain_proba
     ProbabilityTable<short> prob_table;
     int total_probability = 0;
     for (const auto &tile_obj : tiles_obj) {
-        if (!tile_obj.is_object() || !get_json_value(tile_obj, "type").is_string() || !get_json_value(tile_obj, "rate").is_number_integer()) {
-            return tl::unexpected(ParseErrorType::UNDEFINED_TERRAIN_TAG);
+        if (!tile_obj.is_object()) {
+            return tl::unexpected(ParseErrorType::INVALID_TYPE);
+        }
+        const auto &type_obj = get_json_value(tile_obj, "type");
+        if (!type_obj.is_string()) {
+            return tl::unexpected(type_obj.is_null() ? ParseErrorType::TOO_FEW_ARGUMENTS : ParseErrorType::INVALID_TYPE);
+        }
+        const auto &rate_obj = get_json_value(tile_obj, "rate");
+        if (!rate_obj.is_number_integer()) {
+            return tl::unexpected(rate_obj.is_null() ? ParseErrorType::TOO_FEW_ARGUMENTS : ParseErrorType::INVALID_TYPE);
         }
 
         int prob = 0;
-        const auto &rate_obj = get_json_value(tile_obj, "rate");
         if (!info_set_integer(rate_obj, prob, true, Range(0, total_percent))) {
             msg_print(_("DungeonDefinitions.jsonc: ダンジョンID '{}' の{}.tiles の rate '{}' が0～100の範囲外です (百分率で指定してください)。",
                           "DungeonDefinitions.jsonc: dungeon ID '{}' {}.tiles rate '{}' is outside 0 to 100 (they are percentages)."),
                 error_idx, section, rate_obj.dump());
-            return tl::unexpected(ParseErrorType::UNDEFINED_TERRAIN_TAG);
+            return tl::unexpected(ParseErrorType::INVALID_VALUE);
         }
 
         try {
-            const auto terrain_id = terrains.get_terrain_id(get_json_value(tile_obj, "type").get<std::string>());
+            const auto terrain_id = terrains.get_terrain_id(type_obj.get<std::string>());
             prob_table.entry_item(terrain_id, prob);
         } catch (const std::exception &) {
             return tl::unexpected(ParseErrorType::UNDEFINED_TERRAIN_TAG);
@@ -464,11 +473,19 @@ tl::expected<void, ParseErrorType> DungeonReader::set_dungeon_wall(DungeonDefini
     dungeon.prob_table_wall = std::move(*prob_table);
 
     const auto &terrains = TerrainList::get_instance();
-    try {
-        dungeon.outer_wall = terrains.get_terrain_id(get_json_value(wall_obj, "outer").get<std::string>());
-        dungeon.inner_wall = terrains.get_terrain_id(get_json_value(wall_obj, "inner").get<std::string>());
-    } catch (const std::exception &) {
-        return tl::unexpected(ParseErrorType::UNDEFINED_TERRAIN_TAG);
+    for (const auto &[key, wall_id] : { std::pair{ "outer", &dungeon.outer_wall }, std::pair{ "inner", &dungeon.inner_wall } }) {
+        const auto &terrain_obj = get_json_value(wall_obj, key);
+        if (terrain_obj.is_null()) {
+            return tl::unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
+        }
+        if (!terrain_obj.is_string()) {
+            return tl::unexpected(ParseErrorType::INVALID_TYPE);
+        }
+        try {
+            *wall_id = terrains.get_terrain_id(terrain_obj.get<std::string>());
+        } catch (const std::exception &) {
+            return tl::unexpected(ParseErrorType::UNDEFINED_TERRAIN_TAG);
+        }
     }
 
     return this->set_dungeon_streams(get_json_value(wall_obj, "streams"), dungeon);
@@ -507,9 +524,8 @@ static tl::expected<void, ParseErrorType> info_set_enum_from_integer_checked(con
 {
     Enum enum_value{};
     if (const auto result = info_set_integer(json, enum_value, true, range); !result) {
-        if (result.error() == ParseErrorType::INVALID_FLAG) {
+        if (result.error() == ParseErrorType::INVALID_VALUE) {
             msg_print(_("{} ID '{}' は範囲外です。", "{} ID '{}' is out of range."), label, json.dump());
-            return tl::unexpected(ParseErrorType::OUT_OF_BOUNDS);
         }
         return result;
     }
@@ -517,7 +533,7 @@ static tl::expected<void, ParseErrorType> info_set_enum_from_integer_checked(con
     const auto value = enum2i(enum_value);
     if (value < 0) {
         msg_print(_("{} ID '{}' は範囲外です。", "{} ID '{}' is out of range."), label, value);
-        return tl::unexpected(ParseErrorType::OUT_OF_BOUNDS);
+        return tl::unexpected(ParseErrorType::INVALID_VALUE);
     }
     if (!validator(enum_value)) {
         msg_print(_("不正な{} ID '{}'。", "Invalid {} ID '{}'."), label, value);
@@ -636,7 +652,7 @@ tl::expected<void, ParseErrorType> DungeonReader::set_dungeon_monster_symbols(co
             continue;
         }
         if (symbol.size() != 1) {
-            return tl::unexpected(ParseErrorType::INVALID_FLAG);
+            return tl::unexpected(ParseErrorType::INVALID_VALUE);
         }
 
         dungeon.r_chars.push_back(symbol[0]);

@@ -468,7 +468,7 @@ TEST_CASE("QuestReader rejects metadata reward and start integer overflow withou
             QuestType quest;
             QuestFixedMap fixed_map;
             set_existing_output(quest, fixed_map);
-            CHECK(test::to_error_code(QuestReader(data, quest, fixed_map).read()) == ParseErrorType::INVALID_FLAG);
+            CHECK(test::to_error_code(QuestReader(data, quest, fixed_map).read()) == ParseErrorType::INVALID_VALUE);
             check_existing_output(quest, fixed_map);
         }
     }
@@ -801,7 +801,7 @@ TEST_CASE("QuestReader rejects legend integer overflow without publishing output
             QuestType quest;
             QuestFixedMap fixed_map;
             set_existing_output(quest, fixed_map);
-            CHECK(test::to_error_code(QuestReader(data, quest, fixed_map).read()) == ParseErrorType::INVALID_FLAG);
+            CHECK(test::to_error_code(QuestReader(data, quest, fixed_map).read()) == ParseErrorType::INVALID_VALUE);
             check_existing_output(quest, fixed_map);
         }
     }

@@ -49,7 +49,7 @@ static tl::expected<void, ParseErrorType> set_id_list(const nlohmann::json &id_l
 
     for (const auto &id_data : id_list_data) {
         if (!id_data.is_number()) {
-            return tl::make_unexpected(ParseErrorType::INVALID_FLAG);
+            return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
         }
         int id = 0;
         if (const auto result = info_set_integer(id_data, id, true, Range(1, MAX_MONRACE_ID)); !result) {
@@ -186,11 +186,11 @@ tl::expected<void, ParseErrorType> MessageReader::set_mon_message() const
                 return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
             }
             if (!message_str.is_string()) {
-                return tl::make_unexpected(ParseErrorType::INVALID_FLAG);
+                return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
             }
             auto str_test = utf8_to_sys(message_str.get<std::string>());
             if (!str_test) {
-                return tl::make_unexpected(ParseErrorType::INVALID_FLAG);
+                return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
             }
             pending_messages.push_back({ action->second, chance, use_name, std::move(*str_test) });
         }
