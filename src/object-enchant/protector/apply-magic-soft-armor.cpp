@@ -31,6 +31,12 @@ void SoftArmorEnchanter::apply_magic()
 {
     this->sval_enchant();
     if (this->power > 1) {
+        if (const auto &ego = this->get_specific_ego_request()) {
+            this->o_ptr->ego_idx = *ego;
+            this->adjust_for_ego();
+            return;
+        }
+
         this->give_high_ego_index();
         if (this->is_high_ego_generated) {
             return;
@@ -89,7 +95,13 @@ void SoftArmorEnchanter::give_high_ego_index()
     this->is_high_ego_generated = true;
     auto ego_robe = one_in_(5);
     this->o_ptr->ego_idx = ego_robe ? EgoType::TWILIGHT : EgoType::PERMANENCE;
-    if (!ego_robe) {
+    this->adjust_for_ego();
+}
+
+/*! @brief 宵闇のローブのベースアイテムとACを置き換える。 */
+void SoftArmorEnchanter::adjust_for_ego()
+{
+    if (this->o_ptr->ego_idx != EgoType::TWILIGHT) {
         return;
     }
 

@@ -42,6 +42,17 @@ void ShieldEnchanter::apply_magic()
         return;
     }
 
+    if (this->has_ego_request()) {
+        if (const auto &ego = this->get_specific_ego_request()) {
+            this->o_ptr->ego_idx = *ego;
+        } else {
+            while (!this->o_ptr->is_ego()) {
+                this->give_ego_index();
+            }
+        }
+        return;
+    }
+
     if ((this->power > 2) || one_in_(20)) {
         become_random_artifact(this->player_ptr, this->o_ptr, false);
         return;

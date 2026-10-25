@@ -287,3 +287,10 @@ class ItemEntity;
 class PlayerType;
 EgoType get_random_ego(byte slot, bool good);
 void apply_ego(ItemEntity *o_ptr, DEPTH lev);
+
+bool is_worthless_ego(const EgoItemDefinition &ego);
+bool is_helm_ego(EgoType ego);
+bool is_crown_ego(EgoType ego);
+
+class BaseitemKey;
+bool can_apply_ego(const BaseitemKey &key, EgoType ego);

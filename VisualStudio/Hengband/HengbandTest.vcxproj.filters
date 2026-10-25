@@ -295,6 +295,9 @@
     <ClCompile Include="..\..\src\test\object-enchant\test-item-feeling.cpp">
       <Filter>object-enchant</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\test\object-enchant\test-item-magic-applier.cpp">
+      <Filter>object-enchant</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\test\object-enchant\test-object-ego.cpp">
       <Filter>object-enchant</Filter>
     </ClCompile>

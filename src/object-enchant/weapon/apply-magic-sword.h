@@ -15,6 +15,7 @@ protected:
     void decide_skip() override;
     void sval_enchant() override {};
     void give_ego_index() override;
+    void adjust_for_ego() override;
     void give_high_ego_index() override {};
     void give_cursed() override;
 };
