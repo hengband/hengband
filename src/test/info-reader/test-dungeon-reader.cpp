@@ -184,6 +184,105 @@ TEST_CASE("DungeonReader aura restrictions participate in every monster filter m
     }
 }
 
+TEST_CASE("DungeonReader visual restrictions participate in every monster filter mode")
+{
+    for (const auto *mode : { "NONE", "AND", "NAND", "OR", "NOR" }) {
+        for (auto visual_mask = 0; visual_mask < 4; ++visual_mask) {
+            for (const auto resistant : { false, true }) {
+                CAPTURE(mode);
+                CAPTURE(visual_mask);
+                CAPTURE(resistant);
+                const test::MonraceListTestAccess races;
+                DungeonReaderStateGuard guard;
+                auto &monrace = MonraceList::get_instance().emplace(MonraceId::FILTHY_URCHIN);
+                if ((visual_mask & 1) != 0) {
+                    monrace.visual_flags.set(MonsterVisualType::CLEAR);
+                }
+                if ((visual_mask & 2) != 0) {
+                    monrace.visual_flags.set(MonsterVisualType::MULTI_COLOR);
+                }
+                if (resistant) {
+                    monrace.resistance_flags.set(MonsterResistanceType::IMMUNE_FIRE);
+                }
+                auto data = make_dungeon();
+                data["monsters"]["normalMonsterRate"] = 0;
+                data["monsters"]["flagsMode"] = mode;
+                data["monsters"]["flags"] = { "CHAR_CLEAR", "ATTR_MULTI", "IM_FIRE" };
+                REQUIRE(DungeonReader(data).read().has_value());
+                const auto &dungeon = DungeonList::get_instance().get_dungeon(DungeonId::WILDERNESS);
+                const auto all = visual_mask == 3 && resistant;
+                const auto any = visual_mask != 0 || resistant;
+                auto expected = true;
+                switch (dungeon.mode) {
+                case DungeonMode::NONE:
+                    break;
+                case DungeonMode::AND:
+                    expected = all;
+                    break;
+                case DungeonMode::NAND:
+                    expected = !all;
+                    break;
+                case DungeonMode::OR:
+                    expected = any;
+                    break;
+                case DungeonMode::NOR:
+                    expected = !any;
+                    break;
+                }
+                CHECK(restrict_monster_to_dungeon(dungeon, 0, MonraceId::FILTHY_URCHIN) == expected);
+            }
+        }
+    }
+}
+
+TEST_CASE("DungeonReader special restrictions participate in every monster filter mode")
+{
+    for (const auto *mode : { "NONE", "AND", "NAND", "OR", "NOR" }) {
+        for (auto special_mask = 0; special_mask < 2; ++special_mask) {
+            for (const auto resistant : { false, true }) {
+                CAPTURE(mode);
+                CAPTURE(special_mask);
+                CAPTURE(resistant);
+                const test::MonraceListTestAccess races;
+                DungeonReaderStateGuard guard;
+                auto &monrace = MonraceList::get_instance().emplace(MonraceId::FILTHY_URCHIN);
+                if ((special_mask & 1) != 0) {
+                    monrace.special_flags.set(MonsterSpecialType::DIMINISH_MAX_DAMAGE);
+                }
+                if (resistant) {
+                    monrace.resistance_flags.set(MonsterResistanceType::IMMUNE_FIRE);
+                }
+                auto data = make_dungeon();
+                data["monsters"]["normalMonsterRate"] = 0;
+                data["monsters"]["flagsMode"] = mode;
+                data["monsters"]["flags"] = { "DIMINISH_MAX_DAMAGE", "IM_FIRE" };
+                REQUIRE(DungeonReader(data).read().has_value());
+                const auto &dungeon = DungeonList::get_instance().get_dungeon(DungeonId::WILDERNESS);
+                const auto all = special_mask == 1 && resistant;
+                const auto any = special_mask != 0 || resistant;
+                auto expected = true;
+                switch (dungeon.mode) {
+                case DungeonMode::NONE:
+                    break;
+                case DungeonMode::AND:
+                    expected = all;
+                    break;
+                case DungeonMode::NAND:
+                    expected = !all;
+                    break;
+                case DungeonMode::OR:
+                    expected = any;
+                    break;
+                case DungeonMode::NOR:
+                    expected = !any;
+                    break;
+                }
+                CHECK(restrict_monster_to_dungeon(dungeon, 0, MonraceId::FILTHY_URCHIN) == expected);
+            }
+        }
+    }
+}
+
 TEST_CASE("DungeonReader rejects player levels outside their storage type")
 {
     for (const auto value : { -32769, 65537 }) {
