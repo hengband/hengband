@@ -1,5 +1,6 @@
 #include "market/poker.h"
-#include "io/input-key-acceptor.h"
+#include "core/asking-player.h"
+#include "io/input-context.h"
 #include "system/angband.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
@@ -602,7 +603,8 @@ int do_poker(void)
         is_put[i] = 0;
     }
 
-    prt(_("残すカードを決めて下さい(方向で移動, スペースで選択)。", "Keep which cards (direction keys move; space selects)? "), 0, 0);
+    constexpr auto prompt = _("残すカードを決めて下さい(方向で移動, スペースで選択)。", "Keep which cards (direction keys move; space selects)? ");
+    prt(prompt, 0, 0);
 
     display_cards();
     poker_hand_check();
@@ -615,7 +617,7 @@ int do_poker(void)
         }
 
         draw = false;
-        cmd = inkey();
+        cmd = input_key_with_context(InputKind::COMMAND_CHAR, prompt);
         switch (cmd) {
         case '6':
         case 'l':
