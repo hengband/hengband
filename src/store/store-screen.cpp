@@ -1,5 +1,4 @@
 #include "store/store-screen.h"
-#include "game-option/birth-options.h"
 #include "store/store-util.h"
 #include "store/store.h"
 #include "system/terrain/terrain-definition.h"
@@ -119,33 +118,35 @@ void StoreScreen::adjust_page_after_removal()
 }
 
 /*!
+ * @brief ページ送り・ページ戻しで見られる品の数を返す
+ * @return 在庫の数と、品を置ける数の上限 (store_get_stock_limit()) の小さいほう
+ */
+int StoreScreen::get_browsable_stock_num() const
+{
+    return std::min<int>(this->store.stock_num, store_get_stock_limit(this->store));
+}
+
+/*!
  * @brief 次のページに進む。最後のページからは最初のページに戻る
- * @details 隠しオプション (powerup_home) が無効なときは、我が家では2ページまでしか表示しない
+ * @details 品を置ける数の上限を超えるページには進まない
  */
 void StoreScreen::turn_page_forward()
 {
     this->page_top += this->get_page_size();
-    const auto stock_max = store_get_stock_max(this->store.get_sale_type(), powerup_home);
-    if ((this->page_top >= this->store.stock_num) || (this->page_top >= stock_max)) {
+    if (this->page_top >= this->get_browsable_stock_num()) {
         this->page_top = 0;
     }
 }
 
 /*!
  * @brief 前のページに戻る。最初のページからは最後のページに進む
- * @details 隠しオプション (powerup_home) が無効なときは、我が家では2ページまでしか表示しない
+ * @details 品を置ける数の上限を超えるページには進まない
  */
 void StoreScreen::turn_page_backward()
 {
-    const auto page_size = this->get_page_size();
-    this->page_top -= page_size;
+    this->page_top -= this->get_page_size();
     if (this->page_top < 0) {
-        this->show_page_containing(this->store.stock_num - 1);
-    }
-
-    const auto is_narrow_home = (this->store.get_sale_type() == StoreSaleType::HOME) && !powerup_home;
-    if (is_narrow_home && (this->page_top >= page_size)) {
-        this->page_top = page_size;
+        this->show_page_containing(this->get_browsable_stock_num() - 1);
     }
 }
 

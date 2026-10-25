@@ -125,7 +125,7 @@ void TownList::initialize()
                 continue;
             }
 
-            store.stock_size = store_get_stock_max(sst);
+            store.stock_size = store_get_stock_capacity(sst);
             std::vector<std::unique_ptr<ItemEntity>> stock;
             for (auto j = 0; j < store.stock_size; j++) {
                 stock.push_back(std::make_unique<ItemEntity>());

@@ -50,6 +50,7 @@
 #include "store/store-owners.h"
 #include "store/store-screen.h"
 #include "store/store-util.h"
+#include "store/store.h"
 #include "sv-definition/sv-bow-types.h"
 #include "system/artifact/artifact-definition.h"
 #include "system/artifact/artifact-list.h"
@@ -1322,11 +1323,7 @@ nlohmann::json make_store_json(PlayerType *player_ptr, const StoreScreen &screen
     // Header lines of display_store(): a shop shows "owner (race)" and
     // "shop name (purse limit)"; the home and the museum show "Objects: n/capacity".
     if (is_personal_storage) {
-        auto capacity = store.stock_size;
-        if (store_num == StoreSaleType::HOME && !powerup_home) {
-            capacity /= 10;
-        }
-        result["capacity"] = capacity;
+        result["capacity"] = store_get_stock_limit(store);
     } else {
         const auto &owner = store.get_owner();
         result["owner_name"] = to_json_utf8(owner.owner_name);
