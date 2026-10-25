@@ -229,10 +229,10 @@ TEST_CASE("TerrainReader rejects invalid symbol lengths without publishing a ter
     std::string character = "..";
     auto expected = ParseErrorType::INVALID_VALUE;
     SUBCASE("multiple ASCII characters") {}
-    SUBCASE("empty string keeps its existing error")
+    SUBCASE("empty string")
     {
         character.clear();
-        expected = ParseErrorType::GENERIC;
+        expected = ParseErrorType::INVALID_VALUE;
     }
     SUBCASE("two-byte UTF-8 character")
     {
@@ -273,6 +273,31 @@ TEST_CASE("TerrainReader does not grow the terrain list after a failed new entry
 }
 
 /*!
+ * @brief 状態遷移の枠 (MAX_FEAT_STATES) を超える相互作用は不正な値として拒否する
+ */
+TEST_CASE("TerrainReader reports interactions beyond the state slots as invalid values")
+{
+    TerrainStateGuard guard;
+    auto data = make_terrain();
+    const auto new_id = static_cast<int>(TerrainList::get_instance().size());
+    data["id"] = new_id;
+    constexpr auto slots = static_cast<size_t>(MAX_FEAT_STATES);
+    const std::vector<std::string> actions = { "OPEN", "CLOSE", "BASH", "SPIKE", "DISARM", "TUNNEL", "LOS", "MOVE", "PLACE" };
+    REQUIRE(actions.size() == slots + 1);
+    data["interactions"] = nlohmann::json::object();
+    for (size_t i = 0; i < slots; ++i) {
+        data["interactions"][actions[i]] = "FLOOR";
+    }
+    REQUIRE(TerrainReader(data, guard.session).read().has_value());
+
+    // 新しいIDにして、前の読み込みで埋まった状態を引き継がない地形で枠を超えさせる
+    guard.session = {};
+    data["id"] = new_id + 1;
+    data["interactions"][actions.back()] = "FLOOR";
+    CHECK(test::to_error_code(TerrainReader(data, guard.session).read()) == ParseErrorType::INVALID_VALUE);
+}
+
+/*!
  * @brief 全ヘルパーの解析エラーを伝播し、既存地形と新規IDの件数を保持する
  */
 TEST_CASE("TerrainReader propagates helper errors without publishing staged terrain")
@@ -291,7 +316,7 @@ TEST_CASE("TerrainReader propagates helper errors without publishing staged terr
     };
     const std::vector<InvalidField> invalid_fields = {
         { "/symbol", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
-        { "/symbol/character", "", ParseErrorType::GENERIC },
+        { "/symbol/character", "", ParseErrorType::INVALID_VALUE },
         { "/symbol/character", "..", ParseErrorType::INVALID_VALUE },
         { "/symbol/color", "UNKNOWN", ParseErrorType::INVALID_FLAG },
         { "/symbol/lit", 1, ParseErrorType::TOO_FEW_ARGUMENTS },
@@ -386,7 +411,7 @@ TEST_CASE("TerrainReader keeps helper validation order and error index timing")
     CHECK(error_idx == 73);
     data["id"] = 0;
     data["key"] = "";
-    CHECK(test::to_error_code(TerrainReader(data, guard.session).read()) == ParseErrorType::GENERIC);
+    CHECK(test::to_error_code(TerrainReader(data, guard.session).read()) == ParseErrorType::INVALID_VALUE);
     CHECK(error_idx == 73);
     data = make_terrain();
     REQUIRE(TerrainReader(data, guard.session).read().has_value());
@@ -402,7 +427,7 @@ TEST_CASE("TerrainReader keeps helper validation order and error index timing")
     data["symbol"]["character"] = "";
     data["door"] = { { "power", 256 } };
     data["tunnel"] = nlohmann::json::object();
-    check_invalid(ParseErrorType::GENERIC);
+    check_invalid(ParseErrorType::INVALID_VALUE);
     data["symbol"]["character"] = ".";
     check_invalid(ParseErrorType::INVALID_FLAG);
     data["door"]["power"] = 0;

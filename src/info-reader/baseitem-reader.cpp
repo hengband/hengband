@@ -375,7 +375,7 @@ tl::expected<void, ParseErrorType> BaseitemReader::set_baseitem_symbol(BaseitemD
         return tl::unexpected(ParseErrorType::INVALID_FLAG);
     }
     if (color->second > 127) {
-        return tl::unexpected(ParseErrorType::GENERIC);
+        return tl::unexpected(ParseErrorType::INVALID_VALUE);
     }
 
     baseitem.init_symbol(DisplaySymbol(color->second, character.front()));

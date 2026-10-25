@@ -356,13 +356,10 @@ tl::expected<void, ParseErrorType> RaceReader::set_mon_symbol(MonraceDefinition 
         return tl::unexpected(ParseErrorType::INVALID_FLAG);
     }
     if (color->second > 127) {
-        return tl::unexpected(ParseErrorType::GENERIC);
+        return tl::unexpected(ParseErrorType::INVALID_VALUE);
     }
 
     const auto character = character_obj.get<std::string>();
-    if (character.empty()) {
-        return tl::unexpected(ParseErrorType::GENERIC);
-    }
     if (character.size() != 1) {
         return tl::unexpected(ParseErrorType::INVALID_VALUE);
     }
@@ -510,7 +507,7 @@ tl::expected<void, ParseErrorType> RaceReader::set_mon_blows(MonraceDefinition &
 
     for (auto blow_num = 0; const auto &blow : blow_data) {
         if (blow_num >= MAX_NUM_BLOWS) {
-            return tl::unexpected(ParseErrorType::GENERIC);
+            return tl::unexpected(ParseErrorType::INVALID_VALUE);
         }
 
         const auto &blow_method = get_json_value(blow, "method");
@@ -592,7 +589,7 @@ tl::expected<void, ParseErrorType> RaceReader::set_mon_skills(MonraceDefinition 
 
     const auto &prob_token = str_split(prob.get<std::string>(), '_', false, 2);
     if (prob_token.size() != 3 || prob_token[0] != "1" || prob_token[1] != "IN") {
-        return tl::unexpected(ParseErrorType::GENERIC);
+        return tl::unexpected(ParseErrorType::INVALID_VALUE);
     }
     const auto &denominator_token = prob_token[2];
     int denominator;

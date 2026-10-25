@@ -182,7 +182,7 @@ TEST_CASE("RaceReader rejects empty and multibyte symbol characters")
     test::MonraceListTestAccess guard;
     auto data = make_monrace();
     data["symbol"]["character"] = "";
-    CHECK(test::to_error_code(read_as_first_record(data)) == ParseErrorType::GENERIC);
+    CHECK(test::to_error_code(read_as_first_record(data)) == ParseErrorType::INVALID_VALUE);
     for (const auto *character : { "pp", "\xc3\xa9", "\xf0\x9f\x8c\xb2" }) {
         CAPTURE(character);
         data["symbol"]["character"] = character;
@@ -214,7 +214,7 @@ TEST_CASE("RaceReader rejects excess blows before accessing beyond their storage
         for (int i = 0; i < count; ++i) {
             data["blows"].push_back({ { "method", "HIT" }, { "effect", "HURT" }, { "damage_dice", "1d6" } });
         }
-        CHECK(test::to_error_code(read_as_first_record(data)) == ParseErrorType::GENERIC);
+        CHECK(test::to_error_code(read_as_first_record(data)) == ParseErrorType::INVALID_VALUE);
     }
 }
 
@@ -243,7 +243,7 @@ TEST_CASE("RaceReader rejects invalid skill probability denominators without thr
     for (const auto *probability : { "", "bad", "1_IN", "2_IN_3", "1_OF_3", "1_IN_3_extra" }) {
         CAPTURE(probability);
         data["skill"]["probability"] = probability;
-        CHECK(test::to_error_code(read_as_first_record(data)) == ParseErrorType::GENERIC);
+        CHECK(test::to_error_code(read_as_first_record(data)) == ParseErrorType::INVALID_VALUE);
     }
 }
 

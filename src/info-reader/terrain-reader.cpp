@@ -51,7 +51,7 @@ tl::expected<void, ParseErrorType> TerrainReader::read() const
     }
     const auto key = key_obj.get<std::string>();
     if (key.empty()) {
-        return tl::make_unexpected(ParseErrorType::GENERIC);
+        return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
     }
 
     auto &terrains = TerrainList::get_instance();
@@ -214,9 +214,6 @@ tl::expected<void, ParseErrorType> TerrainReader::set_terrain_symbol(TerrainType
     }
 
     const auto ch_str = ch_obj.get<std::string>();
-    if (ch_str.empty()) {
-        return tl::make_unexpected(ParseErrorType::GENERIC);
-    }
     if (ch_str.size() != 1) {
         return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
     }
@@ -228,7 +225,7 @@ tl::expected<void, ParseErrorType> TerrainReader::set_terrain_symbol(TerrainType
         return tl::make_unexpected(ParseErrorType::INVALID_FLAG);
     }
     if (it->second > 127) {
-        return tl::make_unexpected(ParseErrorType::GENERIC);
+        return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
     }
 
     const auto character = ch_str.front();
@@ -665,7 +662,7 @@ tl::expected<void, ParseErrorType> TerrainReader::set_terrain_interactions(Terra
         const auto state_it = std::find_if(std::begin(terrain.state), std::end(terrain.state),
             [](const auto &s) { return s.action == TerrainCharacteristics::MAX; });
         if (state_it == std::end(terrain.state)) {
-            return tl::make_unexpected(ParseErrorType::GENERIC);
+            return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
         }
 
         const auto idx_state = static_cast<int>(std::distance(std::begin(terrain.state), state_it));
