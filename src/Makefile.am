@@ -1572,6 +1572,7 @@ hengband_test_SOURCES = \
 	test/knowledge/test-knowledge-features.cpp \
 	test/load/test-angband-version-comparer.cpp \
 	test/locale/test-character-encoding.cpp \
+	test/locale/test-japanese.cpp \
 	test/lore/test-monster-lore-snapshot.cpp \
 	test/market/test-building-recharger.cpp \
 	test/monster-race/test-race-ability-mask.cpp \
