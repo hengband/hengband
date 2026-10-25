@@ -62,14 +62,7 @@ ape_quittance do_editor_command(PlayerType *player_ptr, AutopickTextBody *tb, Ed
 
         auto [filename_mode, lines] = read_pickpref_text_lines(player_ptr->base_name);
         tb->filename_mode = filename_mode;
-        const auto loop_count = lines.size();
-        for (size_t i = 0; i < loop_count; i++) {
-            std::swap(tb->lines[i].line, lines[i]);
-        }
-
-        for (size_t i = loop_count; i < MAX_AUTOPICK_ENTRIES; i++) {
-            tb->lines[i].line.reset();
-        }
+        tb->set_lines(std::move(lines));
 
         tb->dirty_flags |= DIRTY_ALL | DIRTY_MODE | DIRTY_EXPRESSION;
         tb->cx = tb->cy = 0;
@@ -88,9 +81,7 @@ ape_quittance do_editor_command(PlayerType *player_ptr, AutopickTextBody *tb, Ed
             tb->dirty_flags |= DIRTY_ALL;
         }
 
-        if (!insert_return_code(tb)) {
-            break;
-        }
+        insert_return_code(tb);
         tb->cy++;
         tb->cx = 0;
         tb->dirty_flags |= DIRTY_ALL;
@@ -99,7 +90,7 @@ ape_quittance do_editor_command(PlayerType *player_ptr, AutopickTextBody *tb, Ed
     case EditorCommandId::LEFT: {
         if (0 < tb->cx) {
             tb->cx--;
-            const int len = tb->lines[tb->cy].line->length();
+            const int len = tb->lines[tb->cy].line.length();
             if (len < tb->cx) {
                 tb->cx = len;
             }
@@ -109,13 +100,13 @@ ape_quittance do_editor_command(PlayerType *player_ptr, AutopickTextBody *tb, Ed
             }
         } else if (tb->cy > 0) {
             tb->cy--;
-            tb->cx = tb->lines[tb->cy].line->length();
+            tb->cx = tb->lines[tb->cy].line.length();
         }
 
         break;
     }
     case EditorCommandId::DOWN: {
-        if (!tb->lines[tb->cy + 1].line) {
+        if (tb->is_last_line(tb->cy)) {
             if (!add_empty_line(tb)) {
                 break;
             }
@@ -130,15 +121,15 @@ ape_quittance do_editor_command(PlayerType *player_ptr, AutopickTextBody *tb, Ed
         }
         break;
     case EditorCommandId::RIGHT: {
-        const int len = tb->lines[tb->cy].line->length();
-        if (is_multibyte_char_at(*tb->lines[tb->cy].line, tb->cx)) {
+        const int len = tb->lines[tb->cy].line.length();
+        if (is_multibyte_char_at(tb->lines[tb->cy].line, tb->cx)) {
             tb->cx++;
         }
         tb->cx++;
 
         if (len < tb->cx) {
             tb->cx = len;
-            if (!tb->lines[tb->cy + 1].line) {
+            if (tb->is_last_line(tb->cy)) {
                 if (!add_empty_line(tb)) {
                     break;
                 }
@@ -154,7 +145,7 @@ ape_quittance do_editor_command(PlayerType *player_ptr, AutopickTextBody *tb, Ed
         tb->cx = 0;
         break;
     case EditorCommandId::EOL:
-        tb->cx = tb->lines[tb->cy].line->length();
+        tb->cx = tb->lines[tb->cy].line.length();
         break;
     case EditorCommandId::PGUP:
         while (0 < tb->cy && tb->upper <= tb->cy) {
@@ -168,7 +159,7 @@ ape_quittance do_editor_command(PlayerType *player_ptr, AutopickTextBody *tb, Ed
         break;
     case EditorCommandId::PGDOWN:
         while (tb->cy < tb->upper + tb->hgt) {
-            if (!tb->lines[tb->cy + 1].line) {
+            if (tb->is_last_line(tb->cy)) {
                 if (!add_empty_line(tb)) {
                     break;
                 }
@@ -183,16 +174,8 @@ ape_quittance do_editor_command(PlayerType *player_ptr, AutopickTextBody *tb, Ed
         tb->cy = 0;
         break;
     case EditorCommandId::BOTTOM:
-        while (true) {
-            if (!tb->lines[tb->cy + 1].line) {
-                if (!add_empty_line(tb)) {
-                    break;
-                }
-            }
-
-            tb->cy++;
-        }
-
+        add_empty_line(tb);
+        tb->cy = static_cast<int>(tb->lines.size()) - 1;
         tb->cx = 0;
         break;
     case EditorCommandId::CUT: {
@@ -200,7 +183,7 @@ ape_quittance do_editor_command(PlayerType *player_ptr, AutopickTextBody *tb, Ed
         if (tb->my == tb->cy) {
             const auto bx1 = std::min(tb->mx, tb->cx);
             auto bx2 = std::max(tb->mx, tb->cx);
-            const int len = tb->lines[tb->cy].line->length();
+            const int len = tb->lines[tb->cy].line.length();
             if (bx2 > len) {
                 bx2 = len;
             }
@@ -211,7 +194,7 @@ ape_quittance do_editor_command(PlayerType *player_ptr, AutopickTextBody *tb, Ed
             const auto by1 = std::min(tb->my, tb->cy);
             const auto by2 = std::max(tb->my, tb->cy);
             for (auto y = by2; y >= by1; y--) {
-                const int len = tb->lines[y].line->length();
+                const int len = tb->lines[y].line.length();
                 kill_line_segment(tb, y, 0, len, true);
             }
 
@@ -234,7 +217,7 @@ ape_quittance do_editor_command(PlayerType *player_ptr, AutopickTextBody *tb, Ed
          */
         if (tb->my != tb->cy) {
             tb->cy = std::max(tb->cy, tb->my);
-            if (!tb->lines[tb->cy + 1].line) {
+            if (tb->is_last_line(tb->cy)) {
                 if (!add_empty_line(tb)) {
                     break;
                 }
@@ -245,8 +228,8 @@ ape_quittance do_editor_command(PlayerType *player_ptr, AutopickTextBody *tb, Ed
         }
 
         tb->cx = std::max(tb->cx, tb->mx);
-        if ((*tb->lines[tb->cy].line)[tb->cx] == '\0') {
-            if (!tb->lines[tb->cy + 1].line) {
+        if (tb->lines[tb->cy].line[tb->cx] == '\0') {
+            if (tb->is_last_line(tb->cy)) {
                 if (!add_empty_line(tb)) {
                     break;
                 }
@@ -259,7 +242,7 @@ ape_quittance do_editor_command(PlayerType *player_ptr, AutopickTextBody *tb, Ed
         break;
     }
     case EditorCommandId::PASTE: {
-        const int len = tb->lines[tb->cy].line->length();
+        const int len = tb->lines[tb->cy].line.length();
         if (tb->yank.empty()) {
             break;
         }
@@ -273,17 +256,14 @@ ape_quittance do_editor_command(PlayerType *player_ptr, AutopickTextBody *tb, Ed
         }
 
         for (auto i = 0U; i < tb->yank.size(); ++i) {
-            const std::string_view line(*tb->lines[tb->cy].line);
+            const std::string_view line(tb->lines[tb->cy].line);
             // 行の上限を超える分は、2バイト文字を分断しないように切り詰める
             auto buf = str_substr(std::string(line.substr(0, tb->cx)) + tb->yank[i], 0, MAX_LINELEN - 1);
 
-            const auto is_last_line = i + 1 == tb->yank.size();
-            if (!is_last_line || tb->yank_eol) {
-                if (!insert_return_code(tb)) {
-                    break;
-                }
-
-                tb->lines[tb->cy].line = std::make_unique<std::string>(std::move(buf));
+            const auto is_last_yank_line = i + 1 == tb->yank.size();
+            if (!is_last_yank_line || tb->yank_eol) {
+                insert_return_code(tb);
+                tb->lines[tb->cy].line = std::move(buf);
                 tb->cx = 0;
                 tb->cy++;
                 continue;
@@ -292,7 +272,7 @@ ape_quittance do_editor_command(PlayerType *player_ptr, AutopickTextBody *tb, Ed
             const auto rest = line.substr(tb->cx);
             tb->cx = buf.length();
             buf.append(rest);
-            tb->lines[tb->cy].line = std::make_unique<std::string>(str_substr(std::move(buf), 0, MAX_LINELEN - 1));
+            tb->lines[tb->cy].line = str_substr(std::move(buf), 0, MAX_LINELEN - 1);
             break;
         }
 
@@ -320,7 +300,7 @@ ape_quittance do_editor_command(PlayerType *player_ptr, AutopickTextBody *tb, Ed
             break;
         }
 
-        const int len = tb->lines[tb->cy].line->length();
+        const int len = tb->lines[tb->cy].line.length();
 
         tb->my = tb->cy;
         tb->mx = tb->cx;
@@ -330,7 +310,7 @@ ape_quittance do_editor_command(PlayerType *player_ptr, AutopickTextBody *tb, Ed
         break;
     }
     case EditorCommandId::KILL_LINE: {
-        const int len = tb->lines[tb->cy].line->length();
+        const int len = tb->lines[tb->cy].line.length();
         if (tb->cx > len) {
             tb->cx = len;
         }
@@ -345,7 +325,7 @@ ape_quittance do_editor_command(PlayerType *player_ptr, AutopickTextBody *tb, Ed
         }
 
         if (tb->cx < len) {
-            add_str_to_yank(tb, &((*tb->lines[tb->cy].line)[tb->cx]));
+            add_str_to_yank(tb, &(tb->lines[tb->cy].line[tb->cx]));
             kill_line_segment(tb, tb->cy, tb->cx, len, false);
             tb->dirty_line = tb->cy;
             break;
@@ -366,18 +346,18 @@ ape_quittance do_editor_command(PlayerType *player_ptr, AutopickTextBody *tb, Ed
         }
 
 #ifdef JP
-        if (iskanji((*tb->lines[tb->cy].line)[tb->cx])) {
+        if (iskanji(tb->lines[tb->cy].line[tb->cx])) {
             tb->cx++;
         }
 #endif
         tb->cx++;
-        const int len = tb->lines[tb->cy].line->length();
+        const int len = tb->lines[tb->cy].line.length();
         if (len >= tb->cx) {
             do_editor_command(player_ptr, tb, EditorCommandId::BACKSPACE);
             break;
         }
 
-        if (tb->lines[tb->cy + 1].line) {
+        if (!tb->is_last_line(tb->cy)) {
             tb->cy++;
             tb->cx = 0;
         } else {
@@ -394,7 +374,7 @@ ape_quittance do_editor_command(PlayerType *player_ptr, AutopickTextBody *tb, Ed
             tb->dirty_flags |= DIRTY_ALL;
         }
 
-        const int len = tb->lines[tb->cy].line->length();
+        const int len = tb->lines[tb->cy].line.length();
         if (len < tb->cx) {
             tb->cx = len;
         }
@@ -403,15 +383,9 @@ ape_quittance do_editor_command(PlayerType *player_ptr, AutopickTextBody *tb, Ed
             if (tb->cy == 0) {
                 break;
             }
-            tb->cx = tb->lines[tb->cy - 1].line->length();
-            tb->lines[tb->cy - 1].line->append(*tb->lines[tb->cy].line);
-
-            int i;
-            for (i = tb->cy; tb->lines[i + 1].line; i++) {
-                std::swap(tb->lines[i].line, tb->lines[i + 1].line);
-            }
-
-            tb->lines[i].line.reset();
+            tb->cx = tb->lines[tb->cy - 1].line.length();
+            tb->lines[tb->cy - 1].line.append(tb->lines[tb->cy].line);
+            tb->lines.erase(tb->lines.begin() + tb->cy);
             tb->cy--;
             tb->dirty_flags |= DIRTY_ALL;
             tb->dirty_flags |= DIRTY_EXPRESSION;
@@ -419,9 +393,9 @@ ape_quittance do_editor_command(PlayerType *player_ptr, AutopickTextBody *tb, Ed
             break;
         }
 
-        const auto delete_bytes = is_second_byte_of_kanji(*tb->lines[tb->cy].line, tb->cx - 1) ? 2 : 1;
+        const auto delete_bytes = is_second_byte_of_kanji(tb->lines[tb->cy].line, tb->cx - 1) ? 2 : 1;
         tb->cx -= delete_bytes;
-        tb->lines[tb->cy].line->erase(tb->cx, delete_bytes);
+        tb->lines[tb->cy].line.erase(tb->cx, delete_bytes);
         tb->dirty_line = tb->cy;
         check_expression_line(tb, tb->cy);
         tb->changed = true;
@@ -499,11 +473,8 @@ ape_quittance do_editor_command(PlayerType *player_ptr, AutopickTextBody *tb, Ed
         }
 
         tb->cx = 0;
-        if (!insert_return_code(tb)) {
-            break;
-        }
-
-        tb->lines[tb->cy].line = std::make_unique<std::string>(autopick_line_from_entry(*entry));
+        insert_return_code(tb);
+        tb->lines[tb->cy].line = autopick_line_from_entry(*entry);
         tb->dirty_flags |= DIRTY_SCREEN;
         break;
     }
@@ -513,26 +484,20 @@ ape_quittance do_editor_command(PlayerType *player_ptr, AutopickTextBody *tb, Ed
         }
 
         tb->cx = 0;
-        if (!insert_return_code(tb)) {
-            break;
-        }
-
-        tb->lines[tb->cy].line = std::make_unique<std::string>(tb->last_destroyed);
+        insert_return_code(tb);
+        tb->lines[tb->cy].line = tb->last_destroyed;
         tb->dirty_flags |= DIRTY_ALL;
         tb->changed = true;
         break;
     }
     case EditorCommandId::INSERT_BLOCK: {
-        if (!can_insert_line(tb, 2)) {
-            break;
-        }
         const auto expression = fmt::format("?:[AND [EQU $RACE {}] [EQU $CLASS {}] [GEQ $LEVEL {:02}]]", rp_ptr->title.en_string(), cp_ptr->title.en_string(), player_ptr->lev);
         tb->cx = 0;
         insert_return_code(tb);
-        tb->lines[tb->cy].line = std::make_unique<std::string>(expression);
+        tb->lines[tb->cy].line = expression;
         tb->cy++;
         insert_return_code(tb);
-        tb->lines[tb->cy].line = std::make_unique<std::string>("?:1");
+        tb->lines[tb->cy].line = "?:1";
         tb->dirty_flags |= DIRTY_ALL;
         tb->changed = true;
         break;

@@ -249,17 +249,11 @@ void search_for_object(PlayerType *player_ptr, AutopickTextBody *tb, const ItemE
 
     while (true) {
         bool match;
-        if (forward) {
-            if (!tb->lines[++i].line) {
-                break;
-            }
-        } else {
-            if (--i < 0) {
-                break;
-            }
+        if (!tb->has_line(forward ? ++i : --i)) {
+            break;
         }
 
-        if (!autopick_new_entry(entry, *tb->lines[i].line, false)) {
+        if (!autopick_new_entry(entry, tb->lines[i].line, false)) {
             continue;
         }
 
@@ -304,17 +298,11 @@ void search_for_string(AutopickTextBody *tb, std::string_view search_str, bool f
 
     int i = tb->cy;
     while (true) {
-        if (forward) {
-            if (!tb->lines[++i].line) {
-                break;
-            }
-        } else {
-            if (--i < 0) {
-                break;
-            }
+        if (!tb->has_line(forward ? ++i : --i)) {
+            break;
         }
 
-        const auto line_data = tb->lines[i].line->data();
+        const auto line_data = tb->lines[i].line.data();
         const auto *pos = angband_strstr(line_data, search_str);
         if (!pos) {
             continue;
