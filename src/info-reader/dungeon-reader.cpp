@@ -206,6 +206,11 @@ static tl::expected<void, ParseErrorType> info_set_enum_flag_group(const nlohman
  */
 bool DungeonReader::grab_one_basic_monster_flag(DungeonDefinition &dungeon, std::string_view what) const
 {
+    // NONEは種族の性別未設定を表す値であり、出現条件のフラグにはしない。
+    if (what != "NONE" && EnumClassFlagGroup<MonsterSex>::grab_one_flag(dungeon.mon_sex, r_info_sex, what)) {
+        return true;
+    }
+
     if (EnumClassFlagGroup<MonsterAuraType>::grab_one_flag(dungeon.mon_aura_flags, r_info_aura_flags, what)) {
         return true;
     }

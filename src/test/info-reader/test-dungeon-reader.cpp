@@ -283,6 +283,113 @@ TEST_CASE("DungeonReader special restrictions participate in every monster filte
     }
 }
 
+TEST_CASE("DungeonReader stores every supported sex token")
+{
+    for (const auto &[token, sex] : r_info_sex) {
+        if (sex == MonsterSex::NONE) {
+            continue;
+        }
+        CAPTURE(token);
+        DungeonReaderStateGuard guard;
+        auto data = make_dungeon();
+        data["monsters"]["flags"] = { std::string(token) };
+        REQUIRE(DungeonReader(data).read().has_value());
+        const auto &dungeon = DungeonList::get_instance().get_dungeon(DungeonId::WILDERNESS);
+        CHECK(dungeon.mon_sex.has(sex));
+        CHECK(dungeon.mon_sex.count() == 1);
+    }
+}
+
+TEST_CASE("DungeonReader accumulates sex tokens independently of order and duplicates")
+{
+    for (const auto &tokens : { std::vector<std::string>{ "MALE", "FEMALE", "MALE" }, std::vector<std::string>{ "FEMALE", "MALE", "FEMALE" } }) {
+        DungeonReaderStateGuard guard;
+        auto data = make_dungeon();
+        data["monsters"]["flags"] = tokens;
+        REQUIRE(DungeonReader(data).read().has_value());
+        const auto &dungeon = DungeonList::get_instance().get_dungeon(DungeonId::WILDERNESS);
+        CHECK(dungeon.mon_sex.has(MonsterSex::MALE));
+        CHECK(dungeon.mon_sex.has(MonsterSex::FEMALE));
+        CHECK(dungeon.mon_sex.count() == 2);
+    }
+}
+
+TEST_CASE("DungeonReader rejects unknown sex tokens without publishing a dungeon")
+{
+    for (const auto *token : { "SEX_UNKNOWN", "NONE" }) {
+        CAPTURE(token);
+        DungeonReaderStateGuard guard;
+        auto data = make_dungeon();
+        data["monsters"]["flags"] = { "MALE", token };
+        CHECK(test::to_error_code(DungeonReader(data).read()) == ParseErrorType::INVALID_FLAG);
+        CHECK(DungeonList::get_instance().empty());
+    }
+}
+
+TEST_CASE("DungeonReader sex restrictions participate in every monster filter mode")
+{
+    for (const auto *mode : { "NONE", "AND", "NAND", "OR", "NOR" }) {
+        for (auto sex_mask = 0; sex_mask < 4; ++sex_mask) {
+            for (const auto sex : { MonsterSex::NONE, MonsterSex::MALE, MonsterSex::FEMALE }) {
+                for (const auto require_resistance : { false, true }) {
+                    for (const auto resistant : { false, true }) {
+                        CAPTURE(mode);
+                        CAPTURE(sex_mask);
+                        CAPTURE(static_cast<int>(sex));
+                        CAPTURE(require_resistance);
+                        CAPTURE(resistant);
+                        const test::MonraceListTestAccess races;
+                        DungeonReaderStateGuard guard;
+                        auto &monrace = MonraceList::get_instance().emplace(MonraceId::FILTHY_URCHIN);
+                        monrace.init_sex(static_cast<uint32_t>(sex));
+                        if (resistant) {
+                            monrace.resistance_flags.set(MonsterResistanceType::IMMUNE_FIRE);
+                        }
+                        auto data = make_dungeon();
+                        data["monsters"]["normalMonsterRate"] = 0;
+                        data["monsters"]["flagsMode"] = mode;
+                        data["monsters"]["flags"] = nlohmann::json::array();
+                        if ((sex_mask & 1) != 0) {
+                            data["monsters"]["flags"].push_back("MALE");
+                        }
+                        if ((sex_mask & 2) != 0) {
+                            data["monsters"]["flags"].push_back("FEMALE");
+                        }
+                        if (require_resistance) {
+                            data["monsters"]["flags"].push_back("IM_FIRE");
+                        }
+                        REQUIRE(DungeonReader(data).read().has_value());
+                        const auto &dungeon = DungeonList::get_instance().get_dungeon(DungeonId::WILDERNESS);
+                        CHECK(dungeon.mon_sex.count() == static_cast<size_t>(((sex_mask & 1) != 0) + ((sex_mask & 2) != 0)));
+                        const auto male_matches = sex == MonsterSex::MALE;
+                        const auto female_matches = sex == MonsterSex::FEMALE;
+                        const auto all = ((sex_mask & 1) == 0 || male_matches) && ((sex_mask & 2) == 0 || female_matches) && (!require_resistance || resistant);
+                        const auto any = ((sex_mask & 1) != 0 && male_matches) || ((sex_mask & 2) != 0 && female_matches) || (require_resistance && resistant);
+                        auto expected = true;
+                        switch (dungeon.mode) {
+                        case DungeonMode::NONE:
+                            break;
+                        case DungeonMode::AND:
+                            expected = all;
+                            break;
+                        case DungeonMode::NAND:
+                            expected = !all;
+                            break;
+                        case DungeonMode::OR:
+                            expected = any;
+                            break;
+                        case DungeonMode::NOR:
+                            expected = !any;
+                            break;
+                        }
+                        CHECK(restrict_monster_to_dungeon(dungeon, 0, MonraceId::FILTHY_URCHIN) == expected);
+                    }
+                }
+            }
+        }
+    }
+}
+
 TEST_CASE("DungeonReader rejects player levels outside their storage type")
 {
     for (const auto value : { -32769, 65537 }) {
