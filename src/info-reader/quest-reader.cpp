@@ -156,16 +156,14 @@ tl::expected<void, ParseErrorType> read_localized_lines(const nlohmann::json &ar
     return {};
 }
 
-}
-
 /*!
- * @brief JSONC の gridDefinition 1件を凡例セルへ変換する
+ * @brief 地形の解決方法を分け、凡例セルの共通項目を同じ順序で解析する
  * @param cell_data 凡例セルの定義
  * @param out 変換した凡例セルの出力先
+ * @param deferred 遅延解決時のタグ出力先。nullptrなら既存どおり即時解決する
  * @return 成功時は空の値、失敗時は解析エラーコード
- * @details クエストの凡例（set_legend）、共通の凡例（QuestPreferences）、町の凡例（TownPreferences）の読み込みから使う。
  */
-tl::expected<void, ParseErrorType> parse_quest_legend_cell(const nlohmann::json &cell_data, QuestLegendCell &out)
+tl::expected<void, ParseErrorType> parse_legend_cell(const nlohmann::json &cell_data, QuestLegendCell &out, DeferredQuestLegendCell *deferred)
 {
     if (!cell_data.is_object()) {
         return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
@@ -190,28 +188,36 @@ tl::expected<void, ParseErrorType> parse_quest_legend_cell(const nlohmann::json 
     }
 
     auto &grid = out.grid;
-    grid.set_terrain_id(TerrainTag::NONE);
+    if (deferred != nullptr) {
+        grid.feature = 0;
+    } else {
+        grid.set_terrain_id(TerrainTag::NONE);
+    }
     grid.monster = 0;
     grid.object = 0;
     grid.ego = EgoType::NONE;
     grid.artifact = FixedArtifactId::NONE;
-    grid.set_trap_id(TerrainTag::NONE);
+    if (deferred != nullptr) {
+        grid.trap = 0;
+    } else {
+        grid.set_trap_id(TerrainTag::NONE);
+    }
     grid.cave_info = cave_flags;
     grid.special = 0;
     grid.random = RANDOM_NONE;
     out.object_is_quest_reward = false;
     out.artifact_is_quest_reward = false;
 
-    const auto &terrains = TerrainList::get_instance();
-
     const auto &terrain = get_json_value(cell_data, "terrain");
     if (terrain.is_string()) {
         const auto tag = terrain.get<std::string>();
-        if (tag == "*") {
+        if (deferred != nullptr) {
+            deferred->terrain_tag = tag;
+        } else if (tag == "*") {
             grid.random |= RANDOM_FEATURE;
         } else {
             try {
-                grid.feature = terrains.get_terrain_id(tag);
+                grid.feature = TerrainList::get_instance().get_terrain_id(tag);
             } catch (const std::exception &) {
                 return tl::make_unexpected(ParseErrorType::UNDEFINED_TERRAIN_TAG);
             }
@@ -324,10 +330,14 @@ tl::expected<void, ParseErrorType> parse_quest_legend_cell(const nlohmann::json 
 
     const auto &trap = get_json_value(cell_data, "trap");
     if (trap.is_string()) {
-        try {
-            grid.trap = terrains.get_terrain_id(trap.get<std::string>());
-        } catch (const std::exception &) {
-            return tl::make_unexpected(ParseErrorType::UNDEFINED_TERRAIN_TAG);
+        if (deferred != nullptr) {
+            deferred->trap_tag = trap.get<std::string>();
+        } else {
+            try {
+                grid.trap = TerrainList::get_instance().get_terrain_id(trap.get<std::string>());
+            } catch (const std::exception &) {
+                return tl::make_unexpected(ParseErrorType::UNDEFINED_TERRAIN_TAG);
+            }
         }
     } else if (trap.is_object()) {
         auto random = false;
@@ -335,7 +345,11 @@ tl::expected<void, ParseErrorType> parse_quest_legend_cell(const nlohmann::json 
             return result;
         }
         if (random) {
-            grid.random |= RANDOM_TRAP;
+            if (deferred != nullptr) {
+                deferred->trap_tag = "*";
+            } else {
+                grid.random |= RANDOM_TRAP;
+            }
         }
     } else if (!trap.is_null()) {
         return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
@@ -345,6 +359,39 @@ tl::expected<void, ParseErrorType> parse_quest_legend_cell(const nlohmann::json 
         return result;
     }
 
+    return {};
+}
+
+}
+
+/*!
+ * @brief JSONC の gridDefinition 1件を地形・罠の即時解決付きで凡例セルへ変換する
+ * @param cell_data 凡例セルの定義
+ * @param out 変換した凡例セルの出力先
+ * @return 成功時は空の値、失敗時は解析エラーコード
+ * @details set_legend、QuestPreferences、TownPreferencesの読み込みから使う。
+ */
+tl::expected<void, ParseErrorType> parse_quest_legend_cell(const nlohmann::json &cell_data, QuestLegendCell &out)
+{
+    return parse_legend_cell(cell_data, out, nullptr);
+}
+
+/*!
+ * @brief 地形・罠を解決せず、タグ文字列とそれ以外の凡例セルの値を解析する
+ * @param cell_data 凡例セルの定義
+ * @param out 成功時だけ置換する出力先。失敗時は変更しない
+ * @return 成功時は空の値、失敗時は即時解決版と共通の解析エラーコード
+ * @details TerrainListにはNONEも含めてアクセスしない。省略・nullのタグはNONE、構造化ランダム罠は*にする。
+ * feature/trapの数値欄は0、RANDOM_FEATURE/RANDOM_TRAPは未設定とし、他の4ランダムビットは保持する。
+ * タグの存在確認や町固有の制約の検証は行わない。
+ */
+tl::expected<void, ParseErrorType> parse_quest_legend_cell_deferred(const nlohmann::json &cell_data, DeferredQuestLegendCell &out)
+{
+    DeferredQuestLegendCell parsed;
+    if (const auto result = parse_legend_cell(cell_data, parsed.cell, &parsed); !result) {
+        return result;
+    }
+    out = std::move(parsed);
     return {};
 }
 

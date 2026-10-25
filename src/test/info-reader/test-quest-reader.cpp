@@ -8,15 +8,22 @@
 #include "info-reader/parse-error-types.h"
 #include "info-reader/quest-reader.h"
 #include "info-reader/random-grid-effect-types.h"
+#include "info-reader/town-preferences-reader.h"
+#include "io/files-util.h"
 #include "system/dungeon/quest-definition.h"
 #include "system/dungeon/quest-fixed-map.h"
 #include "system/enums/dungeon/dungeon-id.h"
 #include "system/enums/terrain/terrain-tag.h"
 #include "system/grid-type-definition.h"
+#include "system/terrain/terrain-definition.h"
 #include "system/terrain/terrain-list.h"
 #include "test/info-reader/parse-result-helpers.h"
 #include "test/info-reader/scoped-reader-state.h"
+#include "test/scoped-restore.h"
+#include "test/scoped-vector-wrapper.h"
+#include "test/system/quest-list-test-access.h"
 #include "test/system/terrain-list-test-access.h"
+#include "test/temporary-json-files.h"
 #include "util/enum-converter.h"
 #include <cstdint>
 #include <doctest/doctest.h>
@@ -28,6 +35,22 @@
 #include <vector>
 
 namespace {
+
+void check_same_legend_cell(const QuestLegendCell &actual, const QuestLegendCell &expected)
+{
+    CHECK(actual.grid.feature == expected.grid.feature);
+    CHECK(actual.grid.trap == expected.grid.trap);
+    CHECK(actual.grid.monster == expected.grid.monster);
+    CHECK(actual.grid.object == expected.grid.object);
+    CHECK(actual.grid.ego == expected.grid.ego);
+    CHECK(actual.grid.artifact == expected.grid.artifact);
+    CHECK(actual.grid.cave_info == expected.grid.cave_info);
+    CHECK(actual.grid.special == expected.grid.special);
+    CHECK(actual.grid.random == expected.grid.random);
+    CHECK(actual.object_is_quest_reward == expected.object_is_quest_reward);
+    CHECK(actual.artifact_is_quest_reward == expected.artifact_is_quest_reward);
+}
+
 /*!
  * @brief 説明文を1つだけ持つ最小限のクエスト定義を作る
  * @param line 説明文の行 (日本語・英語の両方に使う)
@@ -207,6 +230,192 @@ void check_existing_output(const QuestType &quest, const QuestFixedMap &fixed_ma
     CHECK(fixed_map.starts[0].x == 4);
     CHECK(fixed_map.reward_artifact_candidates == std::vector<int>{ 41, 42 });
 }
+}
+
+TEST_CASE("Quest legend deferred parsing keeps unresolved tags with an empty terrain list")
+{
+    const test::ScopedReaderState reader_state;
+    test::ScopedVectorWrapper<TerrainList> terrain_state(TerrainList::get_instance());
+    // NONEの初期化もID解決を通らないことを、通常では使えない値への対応で確認する。
+    const test::TerrainListTestAccess none_tag(TerrainTag::NONE, 73);
+    REQUIRE(TerrainList::get_instance().empty());
+    const std::vector<nlohmann::json> inputs = {
+        nlohmann::json::object(),
+        { { "terrain", nullptr }, { "trap", nullptr } },
+        { { "terrain", "NONE" }, { "trap", "NONE" } },
+        { { "terrain", "UNKNOWN_TERRAIN" }, { "trap", "UNKNOWN_TRAP" } },
+        { { "terrain", "*" }, { "trap", { { "random", true } } } },
+        { { "terrain", "" }, { "trap", "*" } },
+        { { "trap", { { "random", false } } } },
+    };
+    const std::vector<std::string> terrain_tags = { "NONE", "NONE", "NONE", "UNKNOWN_TERRAIN", "*", "", "NONE" };
+    const std::vector<std::string> trap_tags = { "NONE", "NONE", "NONE", "UNKNOWN_TRAP", "*", "*", "NONE" };
+    DeferredQuestLegendCell parsed;
+    for (size_t i = 0; i < inputs.size(); ++i) {
+        CAPTURE(i);
+        REQUIRE(parse_quest_legend_cell_deferred(inputs[i], parsed).has_value());
+        CHECK(parsed.terrain_tag == terrain_tags[i]);
+        CHECK(parsed.trap_tag == trap_tags[i]);
+        check_same_legend_cell(parsed.cell, QuestLegendCell{});
+    }
+}
+
+TEST_CASE("Quest legend deferred parsing preserves common values and random bits")
+{
+    const test::ScopedReaderState reader_state;
+    const test::TerrainListTestAccess none_tag(TerrainTag::NONE, 73);
+    const std::vector<nlohmann::json> inputs = {
+        { { "monster", -12 }, { "object", -13 }, { "ego", 255 }, { "artifact", -14 } },
+        { { "monster", { { "cloneOf", 12 } } }, { "object", { { "questReward", true } } }, { "artifact", { { "questReward", true } } } },
+        { { "monster", { { "random", true }, { "oodLevel", -2 }, { "cloneOf", 99 } } },
+            { "object", { { "random", true }, { "oodLevel", 3 }, { "questReward", true } } },
+            { "ego", { { "random", true }, { "id", 4 } } },
+            { "artifact", { { "random", true }, { "id", 5 }, { "questReward", true } } } },
+        { { "monster", { { "random", false } } }, { "object", nullptr }, { "ego", { { "random", true } } }, { "artifact", nullptr } },
+    };
+    for (auto data : inputs) {
+        data["terrain"] = "*";
+        data["trap"] = { { "random", true } };
+        data["caveInfo"] = { "MARK", "GLOW", "NO_TELEPORT_DEST", "ROOM", "LITE", "MARK" };
+        data["special"] = -32768;
+        CAPTURE(data.dump());
+        QuestLegendCell immediate;
+        DeferredQuestLegendCell deferred;
+        REQUIRE(parse_quest_legend_cell(data, immediate).has_value());
+        REQUIRE(parse_quest_legend_cell_deferred(data, deferred).has_value());
+        CHECK(deferred.terrain_tag == "*");
+        CHECK(deferred.trap_tag == "*");
+        CHECK(immediate.grid.feature == 73);
+        CHECK(immediate.grid.trap == 73);
+        CHECK((immediate.grid.random & (RANDOM_FEATURE | RANDOM_TRAP)) == (RANDOM_FEATURE | RANDOM_TRAP));
+        immediate.grid.feature = 0;
+        immediate.grid.trap = 0;
+        immediate.grid.random &= ~(RANDOM_FEATURE | RANDOM_TRAP);
+        check_same_legend_cell(deferred.cell, immediate);
+        CHECK(deferred.cell.grid.cave_info == (CAVE_MARK | CAVE_GLOW | CAVE_NO_TELEPORT_DEST | CAVE_ROOM | CAVE_LITE));
+        CHECK(deferred.cell.grid.special == -32768);
+        if (data["monster"].is_object() && data["monster"].value("random", false)) {
+            CHECK(deferred.cell.grid.random == (RANDOM_MONSTER | RANDOM_OBJECT | RANDOM_EGO | RANDOM_ARTIFACT));
+            CHECK(deferred.cell.grid.monster == -2);
+            CHECK(deferred.cell.grid.object == 3);
+            CHECK(enum2i(deferred.cell.grid.ego) == 4);
+            CHECK(enum2i(deferred.cell.grid.artifact) == 5);
+        }
+    }
+}
+
+TEST_CASE("Quest legend deferred parsing preserves output and shared error codes on failure")
+{
+    const test::ScopedReaderState reader_state;
+    const test::TerrainListTestAccess none_tag(TerrainTag::NONE, 0);
+    DeferredQuestLegendCell previous;
+    previous.terrain_tag = "PREVIOUS_TERRAIN";
+    previous.trap_tag = "PREVIOUS_TRAP";
+    previous.cell.grid = { 1, 2, 3, static_cast<EgoType>(4), static_cast<FixedArtifactId>(5), 6, 7, 8, 9 };
+    previous.cell.object_is_quest_reward = true;
+    previous.cell.artifact_is_quest_reward = true;
+    std::vector<nlohmann::json> inputs = {
+        nullptr,
+        1,
+        nlohmann::json::array(),
+        { { "caveInfo", 1 } },
+        { { "caveInfo", { 1 } } },
+        { { "caveInfo", { "UNKNOWN" } } },
+        { { "terrain", 1 } },
+        { { "trap", 1 } },
+        { { "trap", { { "random", "true" } } } },
+    };
+    for (const auto *path : { "/monster", "/monster/cloneOf", "/monster/oodLevel", "/object", "/object/oodLevel", "/ego", "/ego/id", "/artifact", "/artifact/id", "/special" }) {
+        for (const auto &value : std::vector<nlohmann::json>{ "bad", 1.5, true, 65536 }) {
+            inputs.push_back(make_legend_integer_cell(path, value));
+        }
+    }
+    for (const auto *field : { "monster", "object", "ego", "artifact" }) {
+        inputs.push_back({ { field, { { "random", "true" } } } });
+    }
+    for (const auto *field : { "object", "artifact" }) {
+        inputs.push_back({ { field, { { "questReward", "true" } } } });
+    }
+    for (auto data : inputs) {
+        if (data.is_object()) {
+            // 後段で失敗する場合も、途中で解析したタグを公開しない。
+            if (!data.contains("terrain")) {
+                data["terrain"] = "*";
+            }
+            if (!data.contains("trap")) {
+                data["trap"] = { { "random", true } };
+            }
+        }
+        CAPTURE(data.dump());
+        auto deferred = previous;
+        QuestLegendCell immediate;
+        const auto expected = parse_quest_legend_cell(data, immediate);
+        REQUIRE_FALSE(expected.has_value());
+        const auto actual = parse_quest_legend_cell_deferred(data, deferred);
+        REQUIRE_FALSE(actual.has_value());
+        CHECK(actual.error() == expected.error());
+        CHECK(deferred.terrain_tag == previous.terrain_tag);
+        CHECK(deferred.trap_tag == previous.trap_tag);
+        check_same_legend_cell(deferred.cell, previous.cell);
+    }
+}
+
+TEST_CASE("Quest legend immediate callers retain terrain resolution and undefined tag errors")
+{
+    const test::ScopedReaderState reader_state;
+    test::ScopedVectorWrapper<TerrainList> terrain_state(TerrainList::get_instance());
+    auto &terrains = TerrainList::get_instance();
+    terrains.resize(4);
+    terrains.get_terrain(1).tag = "NONE";
+    terrains.get_terrain(2).tag = "FLOOR";
+    terrains.get_terrain(3).tag = "TRAP";
+    test::QuestListTestAccess quests;
+    const test::TerrainListTestAccess none_tag(TerrainTag::NONE, 1);
+    test::TemporaryJsonFiles files;
+    const auto restore_path = test::scoped_restore(ANGBAND_DIR_EDIT);
+    ANGBAND_DIR_EDIT = files.directory;
+    const std::vector<nlohmann::json> inputs = {
+        { { "terrain", "FLOOR" }, { "trap", "TRAP" } },
+        { { "terrain", "*" }, { "trap", { { "random", true } } } },
+        { { "terrain", "NONE" } },
+        { { "terrain", "UNDEFINED" } },
+        { { "terrain", "FLOOR" }, { "trap", "UNDEFINED" } },
+    };
+    for (auto cell : inputs) {
+        cell["caveInfo"] = { "MARK", "GLOW" };
+        cell["special"] = 17;
+        CAPTURE(cell.dump());
+        const nlohmann::json legend = { { ".", cell } };
+        auto data = make_quest_with_description("Test");
+        data["legend"] = legend;
+        QuestType quest;
+        QuestFixedMap fixed_map;
+        const auto quest_result = QuestReader(data, quest, fixed_map).read();
+        files.write("QuestPreferences.jsonc", { { "legend", legend } });
+        TownPreferencesLegend town_legend;
+        const nlohmann::json town_data = { { "version", 1 }, { "legend", legend } };
+        const auto town_result = TownPreferencesReader(town_data).read(town_legend, parse_quest_legend_cell);
+        if (cell["terrain"] == "UNDEFINED" || cell.value("trap", nlohmann::json()) == "UNDEFINED") {
+            CHECK(test::to_error_code(quest_result) == ParseErrorType::UNDEFINED_TERRAIN_TAG);
+            CHECK(test::to_error_code(town_result) == ParseErrorType::UNDEFINED_TERRAIN_TAG);
+            CHECK_THROWS_AS(quests.load_base_legend(), std::runtime_error);
+            continue;
+        }
+        REQUIRE(quest_result.has_value());
+        REQUIRE(town_result.has_value());
+        REQUIRE_NOTHROW(quests.load_base_legend());
+        const auto &parsed = fixed_map.legend.at('.');
+        check_same_legend_cell(QuestFixedMapList::get_instance().get_base_legend().at('.'), parsed);
+        REQUIRE(town_legend.size() == 1);
+        QuestLegendCell town_cell;
+        town_cell.grid = town_legend.front().second;
+        check_same_legend_cell(town_cell, parsed);
+        CHECK(parsed.grid.feature == (cell["terrain"] == "FLOOR" ? 2 : 1));
+        CHECK(parsed.grid.trap == (cell.value("trap", nlohmann::json()) == "TRAP" ? 3 : 1));
+        CHECK(parsed.grid.random == (cell["terrain"] == "*" ? (RANDOM_FEATURE | RANDOM_TRAP) : RANDOM_NONE));
+        CHECK(parsed.grid.cave_info == (CAVE_MARK | CAVE_GLOW));
+        CHECK(parsed.grid.special == 17);
+    }
 }
 
 TEST_CASE("QuestReader reads description lines")
