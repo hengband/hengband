@@ -5,13 +5,12 @@
  */
 
 #include "info-reader/parse-error-types.h"
+#include "system/dungeon/quest-fixed-map.h"
 #include <nlohmann/json_fwd.hpp>
 #include <string>
 #include <tl/expected.hpp>
 
 class QuestType;
-struct QuestFixedMap;
-struct QuestLegendCell;
 struct QuestDescriptionBlock;
 
 /*!
@@ -46,3 +45,12 @@ private:
 };
 
 tl::expected<void, ParseErrorType> parse_quest_legend_cell(const nlohmann::json &cell_data, QuestLegendCell &out);
+
+/*! @brief 地形・罠を未解決のタグとして保持する凡例セル。地形・罠の数値欄は0、対応するランダムビットは未設定。 */
+struct DeferredQuestLegendCell {
+    QuestLegendCell cell{};
+    std::string terrain_tag = "NONE";
+    std::string trap_tag = "NONE";
+};
+
+tl::expected<void, ParseErrorType> parse_quest_legend_cell_deferred(const nlohmann::json &cell_data, DeferredQuestLegendCell &out);
