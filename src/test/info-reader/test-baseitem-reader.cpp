@@ -75,7 +75,8 @@ TEST_CASE("BaseitemReader preserves helper error precedence without replacing ex
 {
     BaseitemStateGuard guard;
     auto &items = BaseitemList::get_instance();
-    const auto original = make_baseitem();
+    auto original = make_baseitem();
+    original["itemkind"]["type_value"] = static_cast<int>(ItemKindType::SWORD);
     REQUIRE(BaseitemReader(original).read().has_value());
     auto &existing = items.get_baseitem(1);
     existing.name = "Existing";
@@ -87,6 +88,7 @@ TEST_CASE("BaseitemReader preserves helper error precedence without replacing ex
     existing.flags.set(TR_STR);
     const auto previous_ids = items.collect_valid_bi_ids();
     auto data = make_baseitem();
+    data["itemkind"]["type_value"] = static_cast<int>(ItemKindType::SWORD);
     data["name"] = { { "ja", "Changed" }, { "en", "Changed" } };
     auto expected = ParseErrorType::INVALID_TYPE;
     SUBCASE("symbol before item kind")
@@ -153,6 +155,7 @@ TEST_CASE("BaseitemReader publishes complete records and preserves omitted optio
     BaseitemStateGuard guard;
     auto &items = BaseitemList::get_instance();
     auto data = make_baseitem(3);
+    data["itemkind"]["type_value"] = static_cast<int>(ItemKindType::SWORD);
     data["activate"] = "LIGHT";
     data["flags"] = { "STR" };
     data["allocations"] = { { { "depth", 4 }, { "rarity", 5 } } };
@@ -178,6 +181,7 @@ TEST_CASE("BaseitemReader publishes complete records and preserves omitted optio
     existing.damage_dice = Dice(2, 3);
     existing.easy_know = true;
     data = make_baseitem(3);
+    data["itemkind"]["type_value"] = static_cast<int>(ItemKindType::SWORD);
     data["cost"] = 17;
     error_idx = -1;
     REQUIRE(BaseitemReader(data).read().has_value());
@@ -655,4 +659,161 @@ TEST_CASE("BaseitemReader limits allocation rarity to 1 through 100")
     const auto &tables = BaseitemList::get_instance().get_baseitem(1).alloc_tables;
     CHECK(tables[0].chance == 1);
     CHECK(tables[1].chance == 100);
+}
+
+namespace {
+// 同じIDの再読込で拒否した場合、既存の項目と種別の索引を保つことも確かめる。
+void check_baseitem_boundary(const nlohmann::json &data, bool accepted, ParseErrorType error = ParseErrorType::INVALID_FLAG)
+{
+    BaseitemStateGuard guard;
+    auto &items = BaseitemList::get_instance();
+    const auto original = make_baseitem();
+    REQUIRE(BaseitemReader(original).read().has_value());
+    const auto previous_ids = items.collect_valid_bi_ids();
+    const auto *existing = &items.get_baseitem(1);
+    error_idx = -1;
+    const auto result = BaseitemReader(data).read();
+    CHECK(result.has_value() == accepted);
+    if (accepted) {
+        const auto &updated = items.get_baseitem(1);
+        CHECK(static_cast<int>(updated.bi_key.tval()) == data["itemkind"]["type_value"].get<int>());
+        CHECK(*updated.bi_key.sval() == data["itemkind"]["subtype_value"].get<int>());
+        CHECK(updated.cost == data["cost"].get<int>());
+        if (data.contains("parameter_value") && !data["parameter_value"].is_null()) {
+            CHECK(updated.pval == data["parameter_value"].get<int>());
+        }
+        return;
+    }
+    CHECK(test::to_error_code(result) == error);
+    CHECK(items.size() == 2);
+    CHECK(&items.get_baseitem(1) == existing);
+    CHECK(existing->name == "Test");
+    CHECK(existing->bi_key == BaseitemKey(ItemKindType::FLAVOR_SKELETON, 1));
+    CHECK(existing->pval == 0);
+    CHECK(existing->cost == 4);
+    CHECK(items.collect_valid_bi_ids() == previous_ids);
+}
+
+void check_pval_boundaries(int kind, int minimum, int maximum)
+{
+    for (const auto value : { minimum - 1, minimum, maximum, maximum + 1 }) {
+        CAPTURE(kind);
+        CAPTURE(value);
+        auto data = make_baseitem();
+        data["itemkind"]["type_value"] = kind;
+        data["parameter_value"] = value;
+        check_baseitem_boundary(data, value >= minimum && value <= maximum, ParseErrorType::INVALID_PVAL);
+    }
+    for (const auto null_value : { false, true }) {
+        auto data = make_baseitem();
+        data["itemkind"]["type_value"] = kind;
+        if (null_value) {
+            data["parameter_value"] = nullptr;
+        }
+        check_baseitem_boundary(data, minimum <= 0 && maximum >= 0, ParseErrorType::INVALID_PVAL);
+    }
+}
+}
+
+TEST_CASE("BaseitemReader bounds equipment pval like artifacts")
+{
+    for (const auto kind : { 16, 17, 18, 19, 20, 21, 22, 23, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 45, 50 }) {
+        check_pval_boundaries(kind, -128, 128);
+    }
+}
+
+TEST_CASE("BaseitemReader requires positive bounded device pval")
+{
+    check_pval_boundaries(55, 1, 127);
+    check_pval_boundaries(65, 1, 127);
+    check_pval_boundaries(66, 1, 1000);
+}
+
+TEST_CASE("BaseitemReader bounds nourishment fuel and chest pval")
+{
+    check_pval_boundaries(80, 0, 10000);
+    check_pval_boundaries(75, -10000, 10000);
+    check_pval_boundaries(77, 1, 15000);
+    check_pval_boundaries(7, 0, 63);
+}
+
+TEST_CASE("BaseitemReader requires zero pval for unused kinds")
+{
+    for (const auto kind : { 0, 1, 2, 3, 4, 5, 8, 9, 10, 11, 15, 69, 70, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 105, 106, 107, 127 }) {
+        check_pval_boundaries(kind, 0, 0);
+    }
+}
+
+TEST_CASE("BaseitemReader validates inherited pval after changing item kind")
+{
+    BaseitemStateGuard guard;
+    auto original = make_baseitem();
+    original["itemkind"]["type_value"] = static_cast<int>(ItemKindType::SWORD);
+    original["parameter_value"] = 128;
+    REQUIRE(BaseitemReader(original).read().has_value());
+    auto &items = BaseitemList::get_instance();
+    const auto previous_ids = items.collect_valid_bi_ids();
+    for (const auto null_value : { false, true }) {
+        auto data = make_baseitem();
+        data["itemkind"]["type_value"] = static_cast<int>(ItemKindType::STAFF);
+        if (null_value) {
+            data["parameter_value"] = nullptr;
+        }
+        error_idx = -1;
+        CHECK(test::to_error_code(BaseitemReader(data).read()) == ParseErrorType::INVALID_PVAL);
+        CHECK(items.size() == 2);
+        CHECK(items.get_baseitem(1).bi_key == BaseitemKey(ItemKindType::SWORD, 1));
+        CHECK(items.get_baseitem(1).pval == 128);
+        CHECK(items.collect_valid_bi_ids() == previous_ids);
+    }
+}
+
+TEST_CASE("BaseitemReader accepts only defined item kinds up to 127")
+{
+    for (const auto kind : { -1, 6, 12, 13, 14, 24, 41, 64, 100, 126, 128, 129 }) {
+        CAPTURE(kind);
+        auto data = make_baseitem();
+        data["itemkind"]["type_value"] = kind;
+        check_baseitem_boundary(data, false, kind < 0 || kind > 127 ? ParseErrorType::INVALID_FLAG : ParseErrorType::INVALID_VALUE);
+    }
+    for (const auto kind : { 0, 15, 127 }) {
+        auto data = make_baseitem();
+        data["itemkind"]["type_value"] = kind;
+        check_baseitem_boundary(data, true);
+    }
+}
+
+TEST_CASE("BaseitemReader bounds subtypes by the indexed tables")
+{
+    for (const auto kind : { 19, 20, 21, 22, 23, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 105, 106, 107, 55, 65, 66, 16, 30, 1 }) {
+        const auto maximum = (kind >= 19 && kind <= 23) ? 63 : kind >= 90 ? 3
+                                                           : kind == 55   ? 32
+                                                           : kind == 65   ? 31
+                                                           : kind == 66   ? 30
+                                                                          : 128;
+        for (const auto subtype : { -1, 0, maximum, maximum + 1 }) {
+            CAPTURE(kind);
+            CAPTURE(subtype);
+            auto data = make_baseitem();
+            data["itemkind"]["type_value"] = kind;
+            data["itemkind"]["subtype_value"] = subtype;
+            data["parameter_value"] = (kind == 55 || kind == 65 || kind == 66) ? 1 : 0;
+            check_baseitem_boundary(data, subtype >= 0 && subtype <= maximum);
+        }
+    }
+}
+
+TEST_CASE("BaseitemReader caps costs like egos and limits gold separately")
+{
+    for (const auto kind : { 1, 127 }) {
+        const auto maximum = kind == 127 ? 1024 : 67108863;
+        for (const auto cost : { -1, 0, maximum, maximum + 1 }) {
+            CAPTURE(kind);
+            CAPTURE(cost);
+            auto data = make_baseitem();
+            data["itemkind"]["type_value"] = kind;
+            data["cost"] = cost;
+            check_baseitem_boundary(data, cost >= 0 && cost <= maximum);
+        }
+    }
 }
