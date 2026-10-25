@@ -1624,6 +1624,8 @@ hengband_test_SOURCES = \
 	test/window/test-shrunk-overview-map.cpp \
 	test/wizard/test-spoiler-util.cpp
 
+# VPATHビルドでも同じソースツリーの同梱データを参照する。
+AM_TESTS_ENVIRONMENT = HENGBAND_TEST_SOURCE_DIR='$(abs_top_srcdir)'; export HENGBAND_TEST_SOURCE_DIR;
 hengband_test_LDADD = libhengband.a
 
 ## 端末と入力待ちを使う共通描画の回帰プローブ。通常のユニットテストとは別に明示実行する。
