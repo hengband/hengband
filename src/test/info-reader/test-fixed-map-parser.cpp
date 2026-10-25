@@ -1,14 +1,31 @@
+#include "game-option/birth-options.h"
+#include "game-option/input-options.h"
+#include "info-reader/fixed-map-parser.h"
+#include "info-reader/parse-error-messages.h"
 #include "info-reader/town-map-condition.h"
+#include "io/files-util.h"
 #include "system/angband-system.h"
 #include "system/dungeon/quest-definition.h"
 #include "system/dungeon/quest-fixed-map.h"
 #include "system/dungeon/quest-list.h"
+#include "system/gamevalue.h"
 #include "system/player-type-definition.h"
+#include "system/system-variables.h"
+#include "term/z-util.h"
+#include "test/info-reader/scoped-reader-state.h"
+#include "test/scoped-input-term.h"
+#include "test/scoped-restore.h"
 #include "test/system/quest-list-test-access.h"
+#include "test/temporary-json-files.h"
+#include "util/enum-converter.h"
 #include "util/finalizer.h"
+#include "view/display-messages.h"
+#include "world/world.h"
 #include <cstdint>
 #include <doctest/doctest.h>
+#include <fmt/format.h>
 #include <limits>
+#include <nlohmann/json.hpp>
 #include <string>
 #include <string_view>
 
@@ -162,4 +179,133 @@ TEST_CASE("TownMapCondition diagnostics identify file field expression and inval
         CHECK(message.find(expression) != std::string::npos);
         CHECK(message.find("variable '$QUEST2O'") != std::string::npos);
     }
+}
+
+namespace {
+struct TownLoadFailure {
+    std::string message;
+};
+
+void check_town_load_failure(PlayerType *player, ParseErrorType error, std::string_view filename, std::string_view diagnostic = {})
+{
+    // 既存の終了フックで終了文を受け取り、テストプロセスの終了だけを避ける。
+    const auto restore_quit = test::scoped_restore(quit_aux);
+    quit_aux = [](std::string_view message) { throw TownLoadFailure{ std::string(message) }; };
+    const auto history_size = message_num();
+    try {
+        load_town_map(player);
+        FAIL("Town load must quit on failure");
+    } catch (const TownLoadFailure &failure) {
+        const auto summary = fmt::format("Error {} ({}) loading '{}'.", enum2i(error), describe_parse_error(error), filename);
+        const auto prefix = diagnostic.empty() ? summary : std::string(diagnostic) + "\n" + summary;
+        REQUIRE(failure.message.starts_with(prefix + "\n"));
+        CHECK(failure.message.size() > prefix.size() + 1);
+        CHECK(failure.message.find('\n', prefix.size() + 1) == std::string::npos);
+#ifndef JP
+        CHECK(failure.message == prefix + "\nFailed to load the town definition");
+#endif
+    }
+    CHECK(message_num() == history_size);
+}
+}
+
+TEST_CASE("Town load failures collect diagnostics and quit without requesting input")
+{
+    const test::ScopedReaderState reader_state;
+    test::ScopedInputTerm term;
+    term.player().playing = false;
+    test::TemporaryJsonFiles files;
+    const auto restore = test::scoped_restore(ANGBAND_DIR_EDIT, init_flags, vanilla_town, lite_town);
+    ANGBAND_DIR_EDIT = files.directory;
+    init_flags = INIT_ONLY_BUILDINGS;
+    vanilla_town = false;
+    lite_town = false;
+    auto &world = AngbandWorld::get_instance();
+    const auto restore_town = util::make_finalizer([town = world.get_town_index()] { AngbandWorld::get_instance().set_town_index(town); });
+    world.set_town_index(1);
+    world.character_generated = true;
+
+    SUBCASE("missing preferences in floor generation")
+    {
+        init_flags = INIT_CREATE_DUNGEON;
+        check_town_load_failure(&term.player(), ParseErrorType::GENERIC, TOWN_PREFERENCES);
+    }
+    SUBCASE("invalid preferences in floor generation")
+    {
+        init_flags = INIT_CREATE_DUNGEON;
+        files.write(TOWN_PREFERENCES, nlohmann::json::object());
+        check_town_load_failure(&term.player(), ParseErrorType::INVALID_TYPE, TOWN_PREFERENCES);
+    }
+    SUBCASE("missing list at startup")
+    {
+        check_town_load_failure(&term.player(), ParseErrorType::GENERIC, TOWN_DEFINITION_LIST);
+    }
+    SUBCASE("pending message does not make diagnostics wait")
+    {
+        msg_print("Pending message");
+        check_town_load_failure(&term.player(), ParseErrorType::GENERIC, TOWN_DEFINITION_LIST);
+        // テストが表示した通常メッセージは、入力を待たないプレイ中の設定で片付ける。
+        term.player().playing = true;
+        skip_more = true;
+        msg_erase();
+    }
+    SUBCASE("invalid list at startup")
+    {
+        files.write(TOWN_DEFINITION_LIST, nlohmann::json::object());
+        check_town_load_failure(&term.player(), ParseErrorType::INVALID_TYPE, TOWN_DEFINITION_LIST);
+    }
+    SUBCASE("selected map failures at startup")
+    {
+        constexpr auto filename = "towns/test.jsonc";
+        files.write(TOWN_DEFINITION_LIST, { { "version", 1 }, { "towns", { { "1", filename } } } });
+        SUBCASE("missing file")
+        {
+            check_town_load_failure(&term.player(), ParseErrorType::GENERIC, filename);
+        }
+        SUBCASE("JSON syntax error")
+        {
+            files.write_raw(filename, "{");
+            check_town_load_failure(&term.player(), ParseErrorType::INVALID_VALUE, filename);
+        }
+        SUBCASE("invalid structure")
+        {
+            files.write(filename, nlohmann::json::object());
+            check_town_load_failure(&term.player(), ParseErrorType::INVALID_TYPE, filename);
+        }
+        SUBCASE("invalid condition preserves detail before the summary")
+        {
+            const std::string expression = "[EQU $RANDOM0 0]";
+            files.write(filename, {
+                                      { "version", 3 },
+                                      { "featureRules", nlohmann::json::array() },
+                                      { "mapVariants", { { { "rows", { "." } } } } },
+                                      { "startingPositions", { { { "y", 0 }, { "x", 0 } } } },
+                                      { "buildingRules", { { { "index", 0 }, { "locale", "en" }, { "command", "Z" },
+                                                             { "fields", nlohmann::json::array() }, { "when", expression } } } },
+                                  });
+            check_town_load_failure(&term.player(), ParseErrorType::INVALID_VALUE, filename,
+                format_town_map_condition_error(filename, "buildingRules[0].when", expression, "RANDOM0"));
+        }
+    }
+    // 例外で終了経路を抜けても捕捉先が復元され、次のメッセージを受け取れる。
+    ScopedMessageCapture after_load;
+    msg_print("After town load");
+    REQUIRE(after_load.messages().size() == 1);
+    CHECK(after_load.messages().front() == "After town load");
+}
+
+TEST_CASE("Town load outside towns succeeds without loading a map or requesting input")
+{
+    const test::ScopedReaderState reader_state;
+    test::ScopedInputTerm term;
+    term.player().playing = false;
+    test::TemporaryJsonFiles files;
+    const auto restore = test::scoped_restore(ANGBAND_DIR_EDIT, init_flags);
+    ANGBAND_DIR_EDIT = files.directory;
+    init_flags = INIT_ONLY_BUILDINGS;
+    auto &world = AngbandWorld::get_instance();
+    const auto restore_town = util::make_finalizer([town = world.get_town_index()] { AngbandWorld::get_instance().set_town_index(town); });
+    world.set_town_index(0);
+    files.write(TOWN_DEFINITION_LIST, { { "version", 1 }, { "towns", { { "1", "towns/missing.jsonc" } } } });
+    CHECK_NOTHROW(load_town_map(&term.player()));
 }

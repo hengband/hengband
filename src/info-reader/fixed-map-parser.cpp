@@ -58,6 +58,7 @@
 #include <type_traits>
 #include <utility>
 #include <variant>
+#include <vector>
 
 static concptr variant = "ZANGBAND";
 
@@ -449,20 +450,19 @@ static tl::expected<void, ParseErrorType> parse_town_map_jsonc(PlayerType *playe
 }
 
 /*!
- * @brief 町の固定マップの読み込みエラーを表示する
+ * @brief 町の固定マップの読み込みエラーを捕捉先へ報告する
  * @param err エラーコード
  * @param filename 読み込んでいたファイルの名前
  */
 static void report_load_error(ParseErrorType err, std::string_view filename)
 {
     msg_print("Error {} ({}) loading '{}'.", enum2i(err), describe_parse_error(err), filename);
-    msg_erase();
 }
 
 /*!
  * @brief 町の定義から現在の町の固定マップを読み込んで生成し、失敗はエラーコードで返す (load_town_map() の本体)
  * @param player_ptr プレイヤーへの参照ポインタ
- * @return 成功、またはエラーコード。失敗した場合はエラーを表示済み
+ * @return 成功、またはエラーコード。失敗した場合は診断をメッセージの出力先（捕捉中は捕捉先）へ出力済み
  */
 static tl::expected<void, ParseErrorType> generate_town_map(PlayerType *player_ptr)
 {
@@ -488,12 +488,25 @@ static tl::expected<void, ParseErrorType> generate_town_map(PlayerType *player_p
 
 /*!
  * @brief 町の定義 (TownDefinitionList.jsonc) から現在の町の固定マップを読み込んでフロア全体に生成し、失敗したら終了する
- * @details 町を生成できないとゲームを続けられないので、読み込みに失敗した場合は、他のデータの読み込みと同じく終了する
+ * @details 町を生成できないとゲームを続けられないので、読み込みに失敗した場合は、他のデータの読み込みと同じく終了する。
+ * 起動時 (ゲーム開始前) はメッセージごとに入力を待つため、読み込みと生成の間のメッセージは捕捉する。
+ * 失敗した場合は捕捉した診断を終了の理由にまとめて表示し、成功した場合は捕捉を終えてから表示し直す。
+ * 失敗の報告の経路にメッセージの消去など入力を待つ処理を足さないこと。
  * @param player_ptr プレイヤーへの参照ポインタ
  */
 void load_town_map(PlayerType *player_ptr)
 {
-    if (!generate_town_map(player_ptr)) {
-        quit(_("町の定義の読み込みに失敗しました", "Failed to load the town definition"));
+    std::vector<std::string> messages;
+    {
+        // 起動時・町への移動時とも、致命的な診断で入力を待たず終了理由にまとめる。
+        ScopedMessageCapture diagnostics;
+        if (!generate_town_map(player_ptr)) {
+            quit(format_definition_load_error(diagnostics.messages(), _("町の定義の読み込みに失敗しました", "Failed to load the town definition")));
+        }
+        messages = diagnostics.messages();
+    }
+    // 生成に成功した場合の通常メッセージは、捕捉を終えてから表示する。
+    for (const auto &message : messages) {
+        msg_print(message);
     }
 }
