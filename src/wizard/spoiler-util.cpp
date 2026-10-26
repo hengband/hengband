@@ -1,6 +1,6 @@
 #include "wizard/spoiler-util.h"
-#include "locale/japanese.h"
 #include "system/item/item-entity.h"
+#include "util/buffer-shaper.h"
 #include <algorithm>
 #include <fmt/format.h>
 #include <fstream>
@@ -80,8 +80,8 @@ void spoil_out(std::string_view sv, bool flush_buffer)
     static std::string line; //!< 書き出し待ちの行
     static auto break_pos = std::string::npos; //!< 行の中で折り返せる位置
     static tl::optional<std::string> waiting_line; //!< 後ろに空白しか続かないため、書き出しを保留している行
-
 #ifdef JP
+    static std::string prev_char; //!< 行に最後に足した文字 (2バイト文字ならまとめて。行末禁則の判定に使う)
     bool iskanji_flag = false;
 #endif
 
@@ -101,6 +101,9 @@ void spoil_out(std::string_view sv, bool flush_buffer)
 
         line.clear();
         break_pos = std::string::npos;
+#ifdef JP
+        prev_char.clear();
+#endif
         return;
     }
 
@@ -117,6 +120,7 @@ void spoil_out(std::string_view sv, bool flush_buffer)
             ch = ' ';
         }
 
+        const auto is_second_byte = iskanji_flag;
         iskanji_flag = k_flag && !iskanji_flag;
 #else
         if (!isprint(ch)) {
@@ -197,6 +201,18 @@ void spoil_out(std::string_view sv, bool flush_buffer)
 
             break_pos = std::string::npos;
             line = std::move(next_line);
+
+            // 次の行へ送った部分と今の文字が幅に収まらなければ (送った部分に折り返す位置が無い)、送った部分もそのまま書き出す。
+            // 2バイト文字の前半バイトを足した後に、後半バイトで改めて幅に達して文字を行の間で分けてしまうのを防ぐ
+            if (line.length() >= _((iskanji_flag ? 74U : 75U), 75U)) {
+                if (waiting_line) {
+                    fmt::print(spoiler_file, "{}\n", *waiting_line);
+                    waiting_line.reset();
+                }
+
+                fmt::print(spoiler_file, "{}\n", line);
+                line.clear();
+            }
         }
 
         if (line.empty() && (ch == ' ')) {
@@ -204,14 +220,21 @@ void spoil_out(std::string_view sv, bool flush_buffer)
         }
 
 #ifdef JP
+        // 「(」と全角文字の前で折り返してよいかは、画面の折り返しと同じ classify_line_break() で決める
+        // (行頭禁則文字の前、行末禁則文字の後ろでは折り返さない)。折り返す位置が無いときに語の途中までさかのぼる処理は持たない。
+        // 行の先頭は、そこで折り返すと空の行を書き出すので、折り返す位置にしない
         if (!k_flag) {
-            if ((ch == ' ') || (ch == '(')) {
+            if ((ch == ' ') || ((ch == '(') && !line.empty() && (classify_line_break(prev_char, "(") != LineBreakKind::NONE))) {
                 break_pos = line.length();
             }
         } else {
-            if (iskanji_flag && !is_line_start_kinsoku(sv.substr(i, 2))) {
+            if (iskanji_flag && !line.empty() && (classify_line_break(prev_char, sv.substr(i, 2)) != LineBreakKind::NONE)) {
                 break_pos = line.length();
             }
+        }
+
+        if (!is_second_byte) {
+            prev_char = iskanji_flag ? std::string(sv.substr(i, 2)) : std::string(1, ch);
         }
 #else
         if (ch == ' ') {

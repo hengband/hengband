@@ -168,4 +168,34 @@ TEST_CASE("c_roff does not leave a line of only spaces when the line starts with
     CHECK(read_screen_line(0) == cat("  ", KANJI_KAN, repeat(TOUTEN, 37)));
     CHECK(read_screen_line(1) == std::string(TOUTEN));
 }
+
+TEST_CASE("c_roff does not leave an opening bracket at the end of a line")
+{
+    // 始め括弧の直後では折り返さず、始め括弧ごと次の行へ送る
+    ScopedInputTerm term;
+    term_clear();
+    c_roff(TERM_WHITE, cat(repeat(KANJI_KAN, 38), KAKKO_OPEN, repeat(KANJI_KAN, 2)));
+    CHECK(read_screen_line(0) == repeat(KANJI_KAN, 38));
+    CHECK(read_screen_line(1) == cat(KAKKO_OPEN, repeat(KANJI_KAN, 2)));
+}
+
+TEST_CASE("c_roff splits before a half-width opening bracket at the right edge in a word")
+{
+    // 半角の始め括弧で行が終わるときは、語の途中でも括弧ごと次の行へ送る
+    ScopedInputTerm term;
+    term_clear();
+    c_roff(TERM_WHITE, cat(std::string(78, 'a'), "(b"));
+    CHECK(read_screen_line(0) == std::string(78, 'a'));
+    CHECK(read_screen_line(1) == "(b");
+}
+
+TEST_CASE("c_roff splits in a word after a half-width opening bracket if the word break is in the first half")
+{
+    // 行末禁則文字でさかのぼるときも、語の切れ目が行の前半にしか無ければ、始め括弧の前 (語の途中) で折り返す
+    ScopedInputTerm term;
+    term_clear();
+    c_roff(TERM_WHITE, cat(KANJI_KAN, " ", std::string(75, 'a'), "(b"));
+    CHECK(read_screen_line(0) == cat(KANJI_KAN, " ", std::string(75, 'a')));
+    CHECK(read_screen_line(1) == "(b");
+}
 #endif

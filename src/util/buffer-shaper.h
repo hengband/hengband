@@ -15,4 +15,5 @@ enum class LineBreakKind {
 };
 
 LineBreakKind classify_line_break(std::string_view prev, std::string_view next);
+bool needs_line_break_backtrack(std::string_view prev, std::string_view next);
 std::vector<std::string> shape_buffer(std::string_view sv, size_t maxlen);

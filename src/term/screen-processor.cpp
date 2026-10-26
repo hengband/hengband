@@ -141,8 +141,8 @@ static std::string get_char_before(int end_col, int y)
  * @return 折り返す桁。この桁から x の手前までのマスを次の行へ送る (x なら何も送らない)
  * @details 文字の境目のうち、classify_line_break() で語の切れ目になるもっとも右のものを選ぶ。
  * 前が空白だけの桁は、空白だけの行ができるので選ばない。
- * ch が全角文字で x の前で分けられない (行頭禁則文字) ときは、語の切れ目が無いか行の前半にしか無ければ、
- * 語の途中で折り返す。どちらも無ければ x で折り返す。
+ * x の前で分けられず、needs_line_break_backtrack() でさかのぼってよいとき (行頭禁則文字の前か行末禁則文字の後ろ) は、
+ * 語の切れ目が無いか行の前半にしか無ければ、語の途中で折り返す。どちらも無ければ x で折り返す。
  * 送ったマスと ch で次の行の最終桁に達する桁は選ばない (最終桁には書かない)。
  * 語の切れ目が行の前半か後半かは、shape_buffer() と同じく、語の切れ目の前の空白を除いた桁で決める。
  * 全角文字の後半のマスには、c_roff() が属性に 0x20 の印を付けている。
@@ -150,7 +150,7 @@ static std::string get_char_before(int end_col, int y)
 static int find_wrap_column(int x, int y, int w, std::string_view ch)
 {
     const auto is_second_half = [y](int col) { return (term_what(col, y, {}).color & 0x20) != 0; };
-    const auto needs_backtrack = (ch.length() == 2) && (classify_line_break(get_char_before(x, y), ch) == LineBreakKind::NONE);
+    const auto needs_backtrack = needs_line_break_backtrack(get_char_before(x, y), ch);
     // 前が空白だけの桁では、空白だけの行ができるので折り返さない
     auto first_text_col = 0;
     while ((first_text_col < x) && (term_what(first_text_col, y, {}).character == ' ')) {
@@ -167,18 +167,13 @@ static int find_wrap_column(int x, int y, int w, std::string_view ch)
             continue;
         }
 
-        std::string right(ch);
-        if (col < x) {
-            right.assign(1, term_what(col, y, {}).character);
-            if ((col + 1 < x) && is_second_half(col + 1)) {
-                right.push_back(term_what(col + 1, y, {}).character);
-            }
-        }
+        const auto right_width = ((col + 1 < x) && is_second_half(col + 1)) ? 2 : 1;
+        const auto right = (col < x) ? get_char_before(col + right_width, y) : std::string(ch);
 
         const auto left = get_char_before(col, y);
         const auto kind = classify_line_break(left, right);
         if (kind == LineBreakKind::WORD_BREAK) {
-            // 行頭禁則文字の前でさかのぼるときは、語の切れ目が行の前半にしか無ければ語の途中で折り返す
+            // 禁則でさかのぼるとき (行頭禁則文字の前か行末禁則文字の後ろ) は、語の切れ目が行の前半にしか無ければ語の途中で折り返す
             const auto line_width = (left == " ") ? col - 1 : col;
             const auto is_far = needs_backtrack && (line_width * 2 <= x) && (mid_word_col > 0);
             return is_far ? mid_word_col : col;
@@ -194,7 +189,7 @@ static int find_wrap_column(int x, int y, int w, std::string_view ch)
 
 static std::vector<DisplaySymbol> c_roff_wrap(int x, int y, int w, std::string_view ch)
 {
-    // 最終桁に空白を書いた後 (x が幅に達している) も、行頭禁則文字なら前の語の切れ目までさかのぼる
+    // 最終桁に空白を書いた後 (x が幅に達している) も、禁則で分けられなければ (行頭禁則文字の前か行末禁則文字の後ろ) 前の語の切れ目までさかのぼる
     const auto wrap_col = find_wrap_column(x, y, w, ch);
     std::vector<DisplaySymbol> wrap_chars;
     for (auto col = wrap_col; col < x; col++) {

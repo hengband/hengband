@@ -106,4 +106,28 @@ TEST_CASE("spoil_out does not put a kinsoku character at the head of a line")
     const auto expected = cat(repeat(KANJI_KAN, 35), "\n", KANJI_KAN, SOKUON, repeat(KANJI_KAN, 13), "\n\n");
     CHECK(capture_spoil_out({ text }) == expected);
 }
+
+TEST_CASE("spoil_out does not leave an opening bracket at the end of a line")
+{
+    // 始め括弧の直後では折り返さず、始め括弧の前で折り返す
+    const auto text = cat(repeat(KANJI_KAN, 35), KAKKO_OPEN, repeat(KANJI_KAN, 14));
+    const auto expected = cat(repeat(KANJI_KAN, 35), "\n", KAKKO_OPEN, repeat(KANJI_KAN, 14), "\n\n");
+    CHECK(capture_spoil_out({ text }) == expected);
+}
+
+TEST_CASE("spoil_out does not break before a half-width opening bracket right after an opening bracket")
+{
+    // 始め括弧の直後の「(」の前では折り返さず、始め括弧の前で折り返す
+    const auto text = cat(repeat(KANJI_KAN, 35), KAKKO_OPEN, "(abcdefgh)");
+    const auto expected = cat(repeat(KANJI_KAN, 35), "\n", KAKKO_OPEN, "(abcdefgh)\n\n");
+    CHECK(capture_spoil_out({ text }) == expected);
+}
+
+TEST_CASE("spoil_out does not split a multibyte character when the moved part of a line fills the width")
+{
+    // 次の行へ送った部分 (始め括弧が続き、折り返す位置が無い) と全角文字が幅に収まらなければ、送った部分をそのまま書き出す
+    const auto text = cat("a", std::string(74, '('), KANJI_KAN, KANJI_JI);
+    const auto expected = cat("a\n", std::string(74, '('), "\n", KANJI_KAN, KANJI_JI, "\n\n");
+    CHECK(capture_spoil_out({ text }) == expected);
+}
 #endif
