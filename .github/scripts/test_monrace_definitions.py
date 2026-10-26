@@ -4,7 +4,8 @@ import re
 from pathlib import Path
 import unittest
 
-from json_validation_test_helper import fixed_artifact_id_schema_maximum, monrace_id_schema_maximum, validate_document
+from json_validation_test_helper import (fixed_artifact_id_schema_maximum, monrace_id_schema_maximum, race_info_table_keys,
+                                         reader_token_tables, schema_enum_values, validate_document)
 from validate_json import build_schema_registry, load_all_schemas, load_jsonc
 
 
@@ -124,6 +125,33 @@ class MonraceValidationTest(unittest.TestCase):
                 self.assertEqual(schema[bound], int(match.group(1)))
         self.assertEqual(properties["evolve"]["properties"]["need_exp"]["maximum"],
                          properties["exp"]["maximum"])
+
+    def flags_schema(self):
+        return self.loaded[self.schema_path]["properties"]["monsters"]["items"]["properties"]["flags"]["items"]
+
+    def reader_flag_tokens(self):
+        tables = reader_token_tables("src/info-reader/race-reader.cpp", "RaceReader::grab_one_basic_flag")
+        # 性別は sex の項目で別に読むため、flags の辞書には含まれない。
+        self.assertNotIn("r_info_sex", tables)
+        return set().union(*(race_info_table_keys(table) for table in tables))
+
+    def test_monster_flags_match_the_reader_token_tables(self):
+        # flags には grab_one_basic_flag が照合する辞書のトークンをすべて書け、それ以外は書けない。
+        tokens = schema_enum_values(self.flags_schema(), self.schema_path, self.loaded)
+        self.assertEqual(tokens, self.reader_flag_tokens())
+
+    def test_monster_flags_use_the_shared_definition(self):
+        # フラグの列挙はダンジョンの出現条件と共通の定義にまとめ、ここでは重複して書かない。
+        self.assertEqual(self.flags_schema(), {"$ref": "common/MonsterFlag.schema.json#/$defs/monsterFlag"})
+
+    def test_every_reader_flag_is_accepted(self):
+        self.assert_valid([self.monster(flags=sorted(self.reader_flag_tokens()))])
+
+    def test_sex_and_unknown_flags_are_rejected(self):
+        # MALE/FEMALE はダンジョンの出現条件にだけ書け、モンスターの flags には書けない (性別は sex の項目で指定する)。
+        for token in ("MALE", "FEMALE", "NONE", "AURA_UNKNOWN", "BR_FIRE", "WALK_CLOSERANGE"):
+            with self.subTest(token=token):
+                self.assert_invalid([self.monster(flags=["UNIQUE", token])], ["monsters", 0, "flags", 1])
 
     def test_float_integers_are_rejected(self):
         for field in ("speed", "level", "rarity", "exp"):

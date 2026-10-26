@@ -78,7 +78,11 @@ class QuestGridValidationTest(unittest.TestCase):
         makefile = (self.schema_dir.parent / "Makefile.am").read_text(encoding="utf-8")
         schema_files = makefile.split("schema_files =", 1)[1].split("\n\n", 1)[0]
         extra_dist = makefile.split("EXTRA_DIST =", 1)[1].split("\n\n", 1)[0]
-        self.assertIn("\tschema/common/QuestGrid.schema.json \\", schema_files)
+        shared_schemas = sorted((self.schema_dir / "common").glob("*.schema.json"))
+        self.assertTrue(shared_schemas)
+        for shared_schema in shared_schemas:
+            with self.subTest(schema=shared_schema.name):
+                self.assertIn(f"\tschema/common/{shared_schema.name} \\", schema_files)
         self.assertIn("$(schema_files)", extra_dist)
 
     def test_shared_grid_contract(self):
