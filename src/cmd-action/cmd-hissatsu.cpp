@@ -34,6 +34,7 @@
 #include "system/item/item-entity.h"
 #include "term/screen-processor.h"
 #include "util/int-char-converter.h"
+#include "util/menu-column-switcher.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 #include <fmt/format.h>
@@ -152,29 +153,8 @@ static int get_hissatsu_power(PlayerType *player_ptr, SPELL_IDX *sn)
             case '6':
             case 'l':
             case 'L': {
-                bool reverse = false;
-                if ((choice == '4') || (choice == 'h') || (choice == 'H')) {
-                    reverse = true;
-                }
-                if (menu_line > 16) {
-                    menu_line -= 16;
-                    reverse = true;
-                } else {
-                    menu_line += 16;
-                }
-                while (!realm_status.is_learned(menu_line - 1)) {
-                    if (reverse) {
-                        menu_line--;
-                        if (menu_line < 2) {
-                            reverse = false;
-                        }
-                    } else {
-                        menu_line++;
-                        if (menu_line > 31) {
-                            reverse = true;
-                        }
-                    }
-                }
+                const auto is_left_key = (choice == '4') || (choice == 'h') || (choice == 'H');
+                menu_line = switch_menu_column(menu_line, is_left_key, 32, [&realm_status](int i) { return realm_status.is_learned(i); });
                 break;
             }
 
