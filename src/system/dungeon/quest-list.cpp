@@ -2,6 +2,7 @@
 #include "artifact/fixed-art-types.h"
 #include "info-reader/json-reader-util.h"
 #include "info-reader/jsonc-document-loader.h"
+#include "info-reader/legend-ego-validator.h"
 #include "info-reader/quest-reader.h"
 #include "info-reader/random-grid-effect-types.h"
 #include "io/files-util.h"
@@ -36,6 +37,30 @@
 #include <vector>
 
 namespace {
+// 検証結果を利用者向けの理由に変換し、ランダム指定でも原因を特定できるようにする。
+std::string_view describe_legend_ego_error(LegendEgoError error)
+{
+    switch (error) {
+    case LegendEgoError::UNDEFINED_ID:
+        return _("未定義のエゴID", "undefined ego ID");
+    case LegendEgoError::WORTHLESS:
+        return _("悪いエゴ", "worthless ego");
+    case LegendEgoError::NO_PLACED_OBJECT:
+        return _("固定の配置対象がない", "no fixed object to place");
+    case LegendEgoError::RANDOM_OBJECT:
+        return _("ランダムな品には指定できない", "cannot apply to a random object");
+    case LegendEgoError::QUEST_REWARD:
+        return _("クエスト報酬には指定できない", "cannot apply to a quest reward");
+    case LegendEgoError::GOLD:
+        return _("財宝には指定できない", "cannot apply to gold");
+    case LegendEgoError::WITH_TRAP:
+        return _("罠と同居できない", "cannot coexist with a trap");
+    case LegendEgoError::INCOMPATIBLE:
+        return _("品の種類と相性が合わない", "incompatible object kind");
+    }
+    return {};
+}
+
 void require_quest_reference(bool valid, const std::filesystem::path &file, std::string_view field, int id)
 {
     if (!valid) {
@@ -175,7 +200,13 @@ void validate_quest_legend_references(const std::map<char, QuestLegendCell> &leg
         if (!(grid.random & RANDOM_OBJECT) && !cell.object_is_quest_reward && grid.object != 0) {
             require_reference(baseitems.is_valid(grid.object), "object", grid.object);
         }
-        // 配置側で使わないegoは、凡例の保持値として存在を照合しない。
+        const auto ego_result = validate_legend_ego(grid, cell.object_is_quest_reward, grid.trap != 0 || (grid.random & RANDOM_TRAP));
+        if (!ego_result) {
+            constexpr auto fmt = _("クエストのエゴ指定が不正です ({}): {}.ego {} (object {}): {}",
+                "Invalid quest ego ({}): {}.ego {} (object {}): {}");
+            const auto ego = (grid.random & RANDOM_EGO) ? std::string("random") : std::to_string(enum2i(grid.ego));
+            THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, file.string(), prefix, ego, grid.object, describe_legend_ego_error(ego_result.error())));
+        }
         // 配置側はRANDOM_ARTIFACTでもidを固定Artifactとして参照する。
         if (!cell.artifact_is_quest_reward && grid.artifact != FixedArtifactId::NONE) {
             require_reference(artifacts.contains(grid.artifact), "artifact", enum2i(grid.artifact));

@@ -4,6 +4,9 @@
 #include "info-reader/fixed-map-parser.h"
 #include "info-reader/general-parser.h"
 #include "info-reader/parse-error-types.h"
+#include "info-reader/quest-reader.h"
+#include "info-reader/town-map-reader.h"
+#include "info-reader/town-preferences-reader.h"
 #include "io/files-util.h"
 #include "system/angband-system.h"
 #include "system/dungeon/dungeon-definition.h"
@@ -22,6 +25,7 @@
 #include "system/terrain/terrain-list.h"
 #include "target/target.h"
 #include "term/z-util.h"
+#include "test/info-reader/legend-ego-fixture.h"
 #include "test/info-reader/parse-result-helpers.h"
 #include "test/info-reader/scoped-reader-state.h"
 #include "test/scoped-restore.h"
@@ -861,4 +865,72 @@ TEST_CASE("FixedMapPD monrace fixture restores shared definition identity")
     REQUIRE(monraces.size() == 1);
     CHECK(monraces.get_monrace_shared(original_id) == original);
     CHECK(original->cur_num == 9);
+}
+
+TEST_CASE("FixedMapPD validates all town ego rules before applying letters")
+{
+    const test::LegendEgoFixture ego_state;
+    FixedMapFixture fixture;
+    const test::ScopedReaderState reader_state;
+    const test::TerrainListTestAccess floor_tag(TerrainTag::FLOOR, 1);
+    const test::TerrainListTestAccess wall_tag(TerrainTag::GRANITE_WALL, 2);
+    const test::TerrainListTestAccess none_tag(TerrainTag::NONE, 0);
+    const auto restore = test::scoped_restore(ANGBAND_DIR_EDIT, vanilla_town, lite_town, quit_aux);
+    vanilla_town = lite_town = false;
+    quit_aux = throw_town_load_failure;
+    fixture.player.lev = 7;
+    for (const auto *text : {
+             R"({"object":42,"ego":1})",
+             R"({"object":42,"ego":102})",
+             R"({"object":94,"ego":33})",
+             R"({"object":42,"ego":65,"trap":"GRANITE"})",
+             R"({"object":42,"ego":65,"trap":{"random":true}})",
+             R"({"object":{"questReward":true},"ego":65})" }) {
+        const auto cell = nlohmann::json::parse(text);
+        for (const bool only_buildings : { false, true }) {
+            for (const bool preferences : { false, true }) {
+                CAPTURE(text);
+                CAPTURE(only_buildings);
+                CAPTURE(preferences);
+                TownFiles files;
+                ANGBAND_DIR_EDIT = files.directory;
+                auto town = make_application_town();
+                if (!preferences) {
+                    town["featureRules"][0]["when"] = "[EQU $LEVEL 999]";
+                    town["featureRules"][0]["definition"] = cell;
+                    TownMapDefinition output;
+                    output.features.emplace_back();
+                    output.features.front().symbol = '?';
+                    CHECK(test::to_error_code(TownMapReader(town).read(output, 66, 198, only_buildings)) == ParseErrorType::INVALID_VALUE);
+                    REQUIRE(output.features.size() == 1);
+                    CHECK(output.features.front().symbol == '?');
+                }
+                write_application_town(files, town);
+                if (preferences) {
+                    auto pref_cell = cell;
+                    pref_cell["terrain"] = "FLOOR";
+                    pref_cell["caveInfo"] = nlohmann::json::array();
+                    const nlohmann::json pref = { { "version", 1 }, { "legend", { { "A", pref_cell } } } };
+                    TownPreferencesLegend output{ { '?', dungeon_grid{} } };
+                    CHECK(test::to_error_code(TownPreferencesReader(pref).read(output, parse_quest_legend_cell)) == ParseErrorType::INVALID_VALUE);
+                    REQUIRE(output.size() == 1);
+                    CHECK(output.front().first == '?');
+                    files.write("TownPreferences.jsonc", pref);
+                }
+                // 建物専用モードでは町共通凡例を読まないため、読込失敗の検査から除外する。
+                if (preferences && only_buildings) {
+                    continue;
+                }
+                init_flags = only_buildings ? INIT_ONLY_BUILDINGS : INIT_CREATE_DUNGEON;
+                const auto old_a = letter['A'];
+                const auto old_b = letter['B'];
+                CHECK_THROWS_AS(load_town_map(&fixture.player), TownMapLoadFailure);
+                CHECK(letter['A'].feature == old_a.feature);
+                CHECK(letter['A'].object == old_a.object);
+                CHECK(letter['B'].feature == old_b.feature);
+                CHECK(letter['B'].ego == old_b.ego);
+                CHECK(fixture.floor.grid_array[0][0].feat == 0);
+            }
+        }
+    }
 }

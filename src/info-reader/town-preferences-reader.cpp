@@ -1,5 +1,7 @@
 #include "info-reader/town-preferences-reader.h"
 #include "info-reader/json-reader-util.h"
+#include "info-reader/legend-ego-validator.h"
+#include "info-reader/random-grid-effect-types.h"
 #include "system/dungeon/quest-fixed-map.h"
 #include <cstdint>
 #include <limits>
@@ -38,6 +40,9 @@ tl::expected<void, ParseErrorType> TownPreferencesReader::read(TownPreferencesLe
         QuestLegendCell cell;
         if (const auto result = parse_cell(cell_data, cell); !result) {
             return result;
+        }
+        if (!validate_legend_ego(cell.grid, cell.object_is_quest_reward, cell.grid.trap != 0 || (cell.grid.random & RANDOM_TRAP))) {
+            return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
         }
         parsed.emplace_back(static_cast<unsigned char>(symbol.front()), cell.grid);
     }

@@ -493,6 +493,36 @@ def extract_valid_baseitem_ids(data: dict) -> frozenset[int]:
                      if all(baseitem["name"][language] not in ("", invalid) for language, invalid in invalid_names.items()))
 
 
+
+def extract_baseitem_attributes(data: dict) -> dict[int, int]:
+    valid = extract_valid_baseitem_ids(data)
+    return {item["id"]: item["itemkind"]["type_value"] for item in data["baseitems"] if item["id"] in valid}
+
+
+def extract_ego_attributes(data: dict) -> dict[int, tuple[int, frozenset[str]]]:
+    return {ego["id"]: (ego["rating"], frozenset(ego.get("flags", []))) for ego in data["egos"]}
+
+
+def validate_legend_ego(cell: dict, baseitems: dict, egos: dict, path: list) -> None:
+    """JSONだけで判定できる凡例のエゴ指定を照合する。部位の相性はC++に任せる。"""
+    ego = cell.get("ego")
+    if ego is None:
+        return
+    if type(ego) is int:
+        if ego not in egos:
+            raise ValidationError("unknown ego ID", path=path + ["ego"])
+        rating, flags = egos[ego]
+        if rating == 0 or flags & {"CURSED", "HEAVY_CURSE", "PERMA_CURSE"}:
+            raise ValidationError("worthless ego", path=path + ["ego"])
+    obj = cell.get("object")
+    if type(obj) is not int or obj not in baseitems:
+        raise ValidationError("ego requires a fixed placed object", path=path + ["ego"])
+    # ItemKindType::GOLD と揃える。
+    if baseitems[obj] == 127:
+        raise ValidationError("ego cannot be applied to gold", path=path + ["ego"])
+    if cell.get("trap", "NONE") != "NONE":
+        raise ValidationError("ego cannot coexist with a trap", path=path + ["ego"])
+
 def extract_terrain_tags(data: dict) -> frozenset[str]:
     return frozenset(terrain["key"] for terrain in data["terrains"])
 
@@ -503,12 +533,13 @@ def quest_companion_anchor(data_path: Path) -> Path:
     return data_path.parent if data_path.parent.name == "quests" else data_path
 
 
-def load_quest_references(schema_path: Path, data_path: Path, registry: Registry) -> dict[str, frozenset]:
-    """QuestListが照合する定義のID集合を返す。"""
+def load_quest_references(schema_path: Path, data_path: Path, registry: Registry) -> dict:
+    """QuestListが照合する定義のIDと生成属性を返す。"""
     anchor = quest_companion_anchor(data_path)
     return {
         "monster": load_companion_ids(schema_path, anchor, registry, "MonraceDefinitions", "monster", extract_monster_ids),
-        "object": load_companion_ids(schema_path, anchor, registry, "BaseitemDefinitions", "baseitem", extract_valid_baseitem_ids),
+        "object": load_companion_ids(schema_path, anchor, registry, "BaseitemDefinitions", "baseitem", extract_baseitem_attributes),
+        "ego": load_companion_ids(schema_path, anchor, registry, "EgoDefinitions", "ego", extract_ego_attributes),
         "artifact": load_companion_ids(schema_path, anchor, registry, "ArtifactDefinitions", "artifact", extract_artifact_ids),
         "dungeon": load_companion_ids(schema_path, anchor, registry, "DungeonDefinitions", "dungeon", extract_dungeon_ids),
         "terrain": load_companion_ids(schema_path, anchor, registry, "TerrainDefinitions", "terrain", extract_terrain_tags),
@@ -584,9 +615,10 @@ def load_quest_ids(quests_dir: Path) -> frozenset[int]:
 def validate_quest_legend_references(legend: dict, references: dict[str, frozenset]) -> None:
     """QuestListと同じく、凡例の地形と固定の参照を照合する。"""
     # ランダム生成の深さ補正と受託時の報酬指定は固定IDではない。ランダムなアーティファクトの id は固定の参照として使われる。
-    # ego は配置で使われないため照合しない。special は配置後の地形で意味が決まるため、起動時の照合に任せる。
+    # special は配置後の地形で意味が決まるため、起動時の照合に任せる。
     for symbol, cell in legend.items():
         path = ["legend", symbol]
+        validate_legend_ego(cell, references["object"], references["ego"], path)
         if cell.get("terrain", "*") != "*" and cell["terrain"] not in references["terrain"]:
             raise ValidationError("unknown terrain tag", path=path + ["terrain"])
         if isinstance(cell.get("trap"), str) and cell["trap"] not in references["terrain"]:
@@ -651,12 +683,15 @@ def validate_town_preferences_semantics(data: dict, schema_path: Path) -> None:
     terrain_data = load_jsonc(repository_root / "lib/edit/TerrainDefinitions.jsonc")
     valid_terrain_tags = {terrain["key"] for terrain in terrain_data["terrains"]}
 
+    baseitems = extract_baseitem_attributes(load_jsonc(repository_root / "lib/edit/BaseitemDefinitions.jsonc"))
+    egos = extract_ego_attributes(load_jsonc(repository_root / "lib/edit/EgoDefinitions.jsonc"))
     if type(data["version"]) is not int:
         raise ValidationError("expected an integer JSON value", path=["version"])
     for symbol, cell in data["legend"].items():
         # propertyNames の $ は末尾の改行の前にも一致するため、TownPreferencesReaderと同じく1文字ちょうどを確かめる。
         if len(symbol) != 1:
             raise ValidationError("legend symbol must be exactly one printable ASCII character", path=["legend", symbol])
+        validate_legend_ego(cell, baseitems, egos, ["legend", symbol])
         terrain_tag = cell["terrain"]
         if terrain_tag != "*" and terrain_tag not in valid_terrain_tags:
             raise ValidationError("unknown terrain tag", path=["legend", symbol, "terrain"])
@@ -712,11 +747,14 @@ def validate_town_map_semantics(data: dict, schema_path: Path) -> None:
     repository_root = schema_path.resolve().parent.parent
     terrain_data = load_jsonc(repository_root / "lib/edit/TerrainDefinitions.jsonc")
     valid_terrain_tags = {terrain["key"] for terrain in terrain_data["terrains"]}
+    baseitems = extract_baseitem_attributes(load_jsonc(repository_root / "lib/edit/BaseitemDefinitions.jsonc"))
+    egos = extract_ego_attributes(load_jsonc(repository_root / "lib/edit/EgoDefinitions.jsonc"))
     for rule_index, rule in enumerate(data["featureRules"]):
         if len(rule["symbol"]) != 1:
             raise ValidationError("feature symbol must be exactly one printable ASCII character", path=["featureRules", rule_index, "symbol"])
         definition = rule["definition"]
         path = ["featureRules", rule_index, "definition"]
+        validate_legend_ego(definition, baseitems, egos, path)
         for field in ("monster", "object", "ego", "artifact", "special"):
             if field not in definition:
                 continue
@@ -1104,11 +1142,11 @@ def extract_monster_ids(data: dict) -> frozenset[int]:
 
 
 def load_companion_ids(schema_path: Path, data_path: Path, registry: Registry, name: str, label: str,
-                       extract: Callable[[dict], frozenset]) -> frozenset:
+                       extract: Callable[[dict], frozenset | dict]) -> frozenset | dict:
     """同じ内容・schema・検証コンテキストの付随定義から作ったID集合を再利用する。"""
     companion_path = find_companion_path(schema_path, data_path, name).resolve()
     companion_schema_path = (schema_path.parent / f"{name}.schema.json").resolve()
-    key = (companion_path, companion_schema_path)
+    key = (companion_path, companion_schema_path, extract)
     fingerprint = (companion_digest(companion_path), companion_digest(companion_schema_path))
     cached = _companion_id_cache.get(key)
     if cached is not None and cached[0] is registry and cached[1] == fingerprint:

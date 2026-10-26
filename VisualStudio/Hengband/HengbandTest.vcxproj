@@ -83,6 +83,7 @@
     <ClCompile Include="..\..\src\test\info-reader\test-info-reader-util.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-json-reader-util.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-jsonc-document-loader.cpp" />
+    <ClCompile Include="..\..\src\test\info-reader\test-legend-ego-validator.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-magic-reader.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-message-reader.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-parse-error-messages.cpp" />
@@ -171,6 +172,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\stdafx.h" />
+    <ClInclude Include="..\..\src\test\info-reader\legend-ego-fixture.h" />
     <ClInclude Include="..\..\src\test\info-reader\parse-result-helpers.h" />
     <ClInclude Include="..\..\src\test\info-reader\scoped-reader-state.h" />
     <ClInclude Include="..\..\src\test\save\scoped-save-io.h" />
