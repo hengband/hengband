@@ -11,6 +11,7 @@
 #include "test/info-reader/scoped-reader-state.h"
 #include "test/scoped-restore.h"
 #include <doctest/doctest.h>
+#include <fmt/format.h>
 #include <nlohmann/json.hpp>
 
 namespace {
@@ -29,18 +30,18 @@ nlohmann::json make_class()
 
 TEST_CASE("SkillReader converts all weapon ranks and preserves raw skill experience")
 {
-    const auto restore = test::scoped_restore(class_skills_info, error_idx);
+    const auto restore = test::scoped_restore(class_skills_info);
     class_skills_info.assign(29, {});
-    error_idx = -1;
+    auto session = SkillReader::create_session();
     auto data = make_class();
     for (int rank = 0; rank < 5; ++rank) {
         data["weapons"]["BOW"]["start_ranks"][rank] = rank;
         data["weapons"]["BOW"]["max_ranks"][rank] = rank;
     }
     data["skills"]["RIDING"] = { { "start_exp", 500 }, { "max_exp", 5000 } };
-    const auto result = SkillReader(data).read();
+    const auto result = test::read_and_commit(SkillReader(data, session), session);
     REQUIRE(result.has_value());
-    CHECK(error_idx == 0);
+    CHECK(session.last_id().value_or(-1) == 0);
     constexpr int expected[] = { 0, 4000, 6000, 7000, 8000 };
     for (size_t rank = 0; rank < 5; ++rank) {
         CHECK(class_skills_info[0].w_start.at(ItemKindType::BOW)[rank] == expected[rank]);
@@ -56,10 +57,11 @@ TEST_CASE("SkillReader converts all weapon ranks and preserves raw skill experie
 
 TEST_CASE("SkillReader rejects malformed records without modifying the destination")
 {
-    const auto restore = test::scoped_restore(class_skills_info, error_idx);
+    const auto restore = test::scoped_restore(class_skills_info);
     class_skills_info.assign(29, {});
+    auto session = SkillReader::create_session();
     class_skills_info[0].s_start[PlayerSkillKindType::SHIELD] = 123;
-    error_idx = -1;
+    session = SkillReader::create_session();
     auto data = make_class();
     SUBCASE("non object")
     {
@@ -166,13 +168,13 @@ TEST_CASE("SkillReader rejects malformed records without modifying the destinati
     {
         data["skills"]["SHIELD"] = { { "start_exp", 500 }, { "max_exp", 499 } };
     }
-    SkillReader reader(data);
-    const auto result = reader.read();
+    SkillReader reader(data, session);
+    const auto result = test::read_and_commit(reader, session);
     CHECK_FALSE(result.has_value());
     REQUIRE(reader.error().has_value());
     CHECK_FALSE(reader.error()->path.empty());
     CHECK_FALSE(reader.error()->reason.empty());
-    CHECK(error_idx == -1);
+    CHECK(session.last_id().value_or(-1) == -1);
     CHECK(class_skills_info[0].w_start.empty());
     CHECK(class_skills_info[0].w_max.empty());
     CHECK(class_skills_info[0].s_start.size() == 1);
@@ -182,36 +184,37 @@ TEST_CASE("SkillReader rejects malformed records without modifying the destinati
 
 TEST_CASE("SkillReader rejects duplicate and missing class ids and can be reused after reset")
 {
-    const auto restore = test::scoped_restore(class_skills_info, error_idx);
+    const auto restore = test::scoped_restore(class_skills_info);
     class_skills_info.assign(29, {});
-    error_idx = -1;
+    auto session = SkillReader::create_session();
     auto data = make_class();
-    auto result = SkillReader(data).read();
+    auto result = test::read_and_commit(SkillReader(data, session), session);
     REQUIRE(result.has_value());
-    result = SkillReader(data).read();
+    result = test::read_and_commit(SkillReader(data, session), session);
     CHECK(test::to_error_code(result) == ParseErrorType::NON_SEQUENTIAL_RECORDS);
     data["id"] = 2;
-    result = SkillReader(data).read();
+    result = test::read_and_commit(SkillReader(data, session), session);
     CHECK(test::to_error_code(result) == ParseErrorType::NON_SEQUENTIAL_RECORDS);
-    CHECK(error_idx == 0);
+    CHECK(session.last_id().value_or(-1) == 0);
     for (int id = 1; id < 29; ++id) {
         data["id"] = id;
-        result = SkillReader(data).read();
+        result = test::read_and_commit(SkillReader(data, session), session);
         CHECK(result.has_value());
     }
-    CHECK(error_idx == 28);
+    CHECK(session.last_id().value_or(-1) == 28);
     class_skills_info.assign(29, {});
-    error_idx = -1;
+    session = SkillReader::create_session();
     data["id"] = 0;
-    result = SkillReader(data).read();
+    result = test::read_and_commit(SkillReader(data, session), session);
     CHECK(result.has_value());
 }
 
 TEST_CASE("SkillReader diagnostics identify the class field and cause")
 {
     const auto restore = test::scoped_restore(class_skills_info);
-    const test::ScopedReaderState reader_state(6);
+    const test::ScopedReaderState reader_state;
     class_skills_info.assign(29, {});
+    auto session = SkillReader::create_session(6);
     auto &existing = class_skills_info[7];
     existing.w_start[ItemKindType::BOW][0] = 111;
     existing.w_max[ItemKindType::SWORD][63] = 222;
@@ -302,7 +305,7 @@ TEST_CASE("SkillReader diagnostics identify the class field and cause")
         data.erase("id");
         class_id = "<unknown>";
         path = "$.id";
-        reason = _("必須項目がありません", "missing required field");
+        reason = fmt::format(_("{}の ID がありません", "Missing {} ID"), _("職業技能", "class skill"));
     }
     SUBCASE("invalid id")
     {
@@ -310,7 +313,7 @@ TEST_CASE("SkillReader diagnostics identify the class field and cause")
         data["id"] = 29;
         class_id = "29";
         path = "$.id";
-        reason = _("0以上28以下の整数が必要です", "expected an integer in [0, 28]");
+        reason = fmt::format(_("{}の ID '{}' は {}～{} の範囲外です", "{} ID '{}' is outside the range {} to {}"), _("職業技能", "class skill"), 29, 0, 28);
     }
     SUBCASE("duplicate class before weapon validation")
     {
@@ -319,7 +322,7 @@ TEST_CASE("SkillReader diagnostics identify the class field and cause")
         data["weapons"] = nullptr;
         class_id = "6";
         path = "$.id";
-        reason = _("職業ID 7が必要です（職業の重複または欠落）", "expected class id 7 (duplicate or missing class)");
+        reason = fmt::format(_("{}の ID '{}' は直前の ID '{}' の次（{}）ではありません", "{} ID '{}' does not follow previous ID '{}' (expected {})"), _("職業技能", "class skill"), 6, 6, 7);
     }
     SUBCASE("non object record")
     {
@@ -352,7 +355,7 @@ TEST_CASE("SkillReader diagnostics identify the class field and cause")
         expected = ParseErrorType::INVALID_TYPE;
         class_id = "\"bad\"";
         path = "$.id";
-        reason = _("整数が必要です", "expected an integer");
+        reason = fmt::format(_("{}の ID は整数ではありません", "{} ID is not an integer"), _("職業技能", "class skill"));
     }
     SUBCASE("late weapon failure before skills validation")
     {
@@ -363,14 +366,14 @@ TEST_CASE("SkillReader diagnostics identify the class field and cause")
         path = "$.weapons.SWORD.start_ranks[63]";
         reason = _("初期ランク4が上限3を超えています", "start rank 4 exceeds maximum 3");
     }
-    SkillReader reader(data);
-    const auto result = reader.read();
+    SkillReader reader(data, session);
+    const auto result = test::read_and_commit(reader, session);
     CHECK(test::to_error_code(result) == expected);
     REQUIRE(reader.error().has_value());
     CHECK(reader.error()->class_id == class_id);
     CHECK(reader.error()->path == path);
     CHECK(reader.error()->reason == reason);
-    CHECK(error_idx == 6);
+    CHECK(session.last_id().value_or(-1) == 6);
     REQUIRE(class_skills_info.size() == previous.size());
     for (size_t i = 0; i < previous.size(); ++i) {
         CAPTURE(i);
@@ -383,23 +386,23 @@ TEST_CASE("SkillReader diagnostics identify the class field and cause")
 
 TEST_CASE("SkillReader clears stale diagnostics before another read")
 {
-    const auto restore = test::scoped_restore(class_skills_info, error_idx);
+    const auto restore = test::scoped_restore(class_skills_info);
     class_skills_info.assign(29, {});
-    error_idx = -1;
+    auto session = SkillReader::create_session();
     auto data = make_class();
-    SkillReader reader(data);
+    SkillReader reader(data, session);
     CHECK_FALSE(reader.error().has_value());
     data["skills"]["RIDING"]["max_exp"] = 8001;
-    auto result = reader.read();
+    auto result = test::read_and_commit(reader, session);
     REQUIRE(!result.has_value());
     REQUIRE(reader.error().has_value());
     CHECK(reader.error()->path == "$.skills.RIDING.max_exp");
     data["skills"]["RIDING"]["max_exp"] = 8000;
-    result = reader.read();
+    result = test::read_and_commit(reader, session);
     CHECK(result.has_value());
     CHECK_FALSE(reader.error().has_value());
     // 再度失敗した際も前回の技能エラーを残さない。
-    result = reader.read();
+    result = test::read_and_commit(reader, session);
     REQUIRE(!result.has_value());
     REQUIRE(reader.error().has_value());
     CHECK(reader.error()->path == "$.id");

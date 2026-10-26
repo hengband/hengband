@@ -15,8 +15,14 @@ constexpr auto weapon_names = std::to_array({ "BOW", "DIGGING", "HAFTED", "POLEA
 constexpr auto skill_names = std::to_array({ "MARTIAL_ARTS", "TWO_WEAPON", "RIDING", "SHIELD" });
 }
 
-SkillReader::SkillReader(const nlohmann::json &class_data)
+SkillReader::Session SkillReader::create_session(tl::optional<int> last_id)
+{
+    return Session(DefinitionIdOrder::SEQUENTIAL, { 0, static_cast<int>(class_skills_info.size()) - 1 }, _("職業技能", "class skill"), last_id);
+}
+
+SkillReader::SkillReader(const nlohmann::json &class_data, Session &session)
     : class_data(class_data)
+    , session(session)
 {
 }
 
@@ -38,6 +44,10 @@ tl::expected<void, ParseErrorType> SkillReader::check_keys(const nlohmann::json 
     }
     for (const auto key : keys) {
         if (!data.contains(key)) {
+            if (path == "$" && key == "id") {
+                const auto result = this->session.read(get_json_value(data, key));
+                return this->fail(result.error().code, "$.id", result.error().reason);
+            }
             return this->fail(ParseErrorType::TOO_FEW_ARGUMENTS, fmt::format("{}.{}", path, key), _("必須項目がありません", "missing required field"));
         }
     }
@@ -71,14 +81,11 @@ tl::expected<void, ParseErrorType> SkillReader::read()
         return result;
     }
 
-    int id;
-    if (const auto result = this->read_integer(this->class_data["id"], id, static_cast<int>(class_skills_info.size()) - 1, "$.id"); !result) {
-        return result;
+    const auto id_result = this->session.read(get_json_value(this->class_data, "id"));
+    if (!id_result) {
+        return this->fail(id_result.error().code, "$.id", id_result.error().reason);
     }
-    // 職業IDは0から連続。重複と途中の欠落を拒否する。
-    if (id != error_idx + 1) {
-        return this->fail(ParseErrorType::NON_SEQUENTIAL_RECORDS, "$.id", fmt::format(_("職業ID {}が必要です（職業の重複または欠落）", "expected class id {} (duplicate or missing class)"), error_idx + 1));
-    }
+    const auto id = *id_result;
 
     skill_table skills{};
     if (const auto result = this->read_weapons(skills); !result) {
@@ -88,7 +95,6 @@ tl::expected<void, ParseErrorType> SkillReader::read()
         return result;
     }
     class_skills_info[id] = std::move(skills);
-    error_idx = id;
     return {};
 }
 

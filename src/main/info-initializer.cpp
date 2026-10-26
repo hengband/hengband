@@ -193,18 +193,22 @@ void init_class_magics_info()
 void init_class_skills_info()
 {
     class_skills_info.assign(PLAYER_CLASS_TYPE_MAX, {});
-    auto parser = [](nlohmann::json &element) {
-        SkillReader reader(element);
+    auto session = SkillReader::create_session();
+    auto parser = [&session](nlohmann::json &element) {
+        SkillReader reader(element, session);
         const auto result = reader.read();
         if (!result) {
             const auto &diagnostic = reader.error().value();
             msg_print(_("ClassSkillDefinitions.jsonc: 職業{}の{}: {}", "ClassSkillDefinitions.jsonc: class {} at {}: {}"), diagnostic.class_id, diagnostic.path, diagnostic.reason);
         }
+        if (result) {
+            session.commit();
+        }
         return result;
     };
-    init_json("ClassSkillDefinitions.jsonc", "classes", DefinitionHashDataType::CLASS_SKILLS, class_skills_info, parser, [] {
-        if (error_idx != PLAYER_CLASS_TYPE_MAX - 1) {
-            quit(fmt::format(_("ClassSkillDefinitions.jsonc: 職業{}の$.classes: 職業レコードが不足しています", "ClassSkillDefinitions.jsonc: class {} at $.classes: missing class records"), error_idx + 1));
+    init_json("ClassSkillDefinitions.jsonc", "classes", DefinitionHashDataType::CLASS_SKILLS, class_skills_info, parser, [&session] {
+        if (session.last_id() != PLAYER_CLASS_TYPE_MAX - 1) {
+            quit(fmt::format(_("ClassSkillDefinitions.jsonc: 職業{}の$.classes: 職業レコードが不足しています", "ClassSkillDefinitions.jsonc: class {} at $.classes: missing class records"), session.last_id().value_or(-1) + 1));
         }
     });
 }
