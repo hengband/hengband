@@ -150,6 +150,11 @@ static std::vector<DisplaySymbol> c_roff_wrap(int x, int y, int w, std::string_v
                 wrap_chars.push_back(ds);
             }
         }
+
+        // 空白も全角文字も無ければ、何も送らずに今の位置で折り返す
+        if (wrap_col == w) {
+            wrap_chars.clear();
+        }
     }
 
     term_erase(wrap_col, y);
