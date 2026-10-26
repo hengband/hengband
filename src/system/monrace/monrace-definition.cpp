@@ -109,6 +109,15 @@ bool MonraceDefinition::is_female() const
 }
 
 /*!
+ * @brief 性別を返す
+ * @return 性別 (性別の無い種族は MonsterSex::NONE)
+ */
+MonsterSex MonraceDefinition::get_sex() const
+{
+    return this->sex;
+}
+
+/*!
  * @brief モンスターが生命体かどうかを返す
  * @return 生命体ならばtrue
  */

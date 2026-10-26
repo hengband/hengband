@@ -39,7 +39,12 @@ class DungeonValidationTest(unittest.TestCase):
 
     def reader_tokens(self, function):
         path = self.root / "src/info-reader/race-info-tokens-table.cpp"
-        return set().union(*(load_cpp_map_keys(path, table) for table in self.reader_token_tables(function)))
+        tokens = set()
+        for table in self.reader_token_tables(function):
+            keys = load_cpp_map_keys(path, table)
+            # NONEは種族の性別未設定を表し、DungeonReaderも条件フラグとしては拒否する。
+            tokens.update(set(keys) - {"NONE"} if table == "r_info_sex" else keys)
+        return tokens
 
     def test_monster_flags_match_the_reader_token_tables(self):
         # flags には grab_one_basic_monster_flag が照合する辞書のトークンをすべて書け、それ以外は書けない。
@@ -67,6 +72,24 @@ class DungeonValidationTest(unittest.TestCase):
                 ok, diagnostic = self.validate(document)
                 self.assertFalse(ok, diagnostic)
                 self.assertIn(f"Location: ['dungeons', 0, 'monsters', '{field}', 0]", diagnostic)
+
+    def test_monster_sex_flags_are_accepted(self):
+        self.assertIn("r_info_sex", self.reader_token_tables("grab_one_basic_monster_flag"))
+        for flags in (["MALE"], ["FEMALE"], ["MALE", "FEMALE"]):
+            with self.subTest(flags=flags):
+                document = self.sample()
+                document["dungeons"][0]["monsters"]["flags"] = flags
+                ok, diagnostic = self.validate(document)
+                self.assertTrue(ok, diagnostic)
+
+    def test_unknown_sex_flags_are_rejected(self):
+        for token in ("NONE", "SEX_UNKNOWN"):
+            with self.subTest(token=token):
+                document = self.sample()
+                document["dungeons"][0]["monsters"]["flags"] = [token]
+                ok, diagnostic = self.validate(document)
+                self.assertFalse(ok, diagnostic)
+                self.assertIn("Location: ['dungeons', 0, 'monsters', 'flags', 0]", diagnostic)
 
     def test_unknown_aura_flags_are_rejected(self):
         document = self.sample()
