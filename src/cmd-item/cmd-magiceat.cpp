@@ -79,6 +79,7 @@
 #include "term/term-color-types.h"
 #include "timed-effect/timed-effects.h"
 #include "util/int-char-converter.h"
+#include "util/menu-column-switcher.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "view/display-util.h"
@@ -343,29 +344,8 @@ static tl::optional<BaseitemKey> select_magic_eater(PlayerType *player_ptr, bool
             case '6':
             case 'l':
             case 'L': {
-                bool reverse = false;
-                if ((choice == '4') || (choice == 'h') || (choice == 'H')) {
-                    reverse = true;
-                }
-                if (menu_line > item_group_size / 2) {
-                    menu_line -= item_group_size / 2;
-                    reverse = true;
-                } else {
-                    menu_line += item_group_size / 2;
-                }
-                while (item_group[menu_line - 1].count == 0) {
-                    if (reverse) {
-                        menu_line--;
-                        if (menu_line < 2) {
-                            reverse = false;
-                        }
-                    } else {
-                        menu_line++;
-                        if (menu_line > item_group_size - 1) {
-                            reverse = true;
-                        }
-                    }
-                }
+                const auto is_left_key = (choice == '4') || (choice == 'h') || (choice == 'H');
+                menu_line = switch_menu_column(menu_line, is_left_key, item_group_size, [&item_group](int i) { return item_group[i].count > 0; });
                 break;
             }
 

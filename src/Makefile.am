@@ -1409,6 +1409,7 @@ libhengband_a_SOURCES = \
 	util/flag-group.h \
 	util/dice.cpp util/dice.h \
 	util/int-char-converter.h \
+	util/menu-column-switcher.h \
 	util/object-sort.cpp util/object-sort.h \
 	util/point-2d.h \
 	util/probability-table.h \
@@ -1614,6 +1615,7 @@ hengband_test_SOURCES = \
 	test/util/test-finalizer.cpp \
 	test/util/test-flag-group.cpp \
 	test/util/test-int-char-converter.cpp \
+	test/util/test-menu-column-switcher.cpp \
 	test/util/test-probability-table.cpp \
 	test/util/test-sha256.cpp \
 	test/util/test-string-processor.cpp \

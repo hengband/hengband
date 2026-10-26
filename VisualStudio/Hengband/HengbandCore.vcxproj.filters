@@ -5875,6 +5875,9 @@
     <ClInclude Include="..\..\src\util\int-char-converter.h">
       <Filter>util</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\util\menu-column-switcher.h">
+      <Filter>util</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\src\util\object-sort.h">
       <Filter>util</Filter>
     </ClInclude>
