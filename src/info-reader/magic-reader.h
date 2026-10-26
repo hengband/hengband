@@ -1,5 +1,7 @@
 #pragma once
 
+#include "info-reader/definition-id-checker.h"
+
 #include "info-reader/parse-error-types.h"
 #include <nlohmann/json_fwd.hpp>
 #include <tl/expected.hpp>
@@ -9,8 +11,11 @@ struct player_magic;
 
 class MagicReader {
 public:
-    explicit MagicReader(const nlohmann::json &class_data);
-    MagicReader(nlohmann::json &&) = delete;
+    using Session = DefinitionIdChecker;
+    static Session create_session(tl::optional<int> last_id = tl::nullopt);
+
+    MagicReader(const nlohmann::json &class_data, Session &session);
+    MagicReader(nlohmann::json &&, Session &) = delete;
     MagicReader(const MagicReader &) = delete;
     MagicReader(MagicReader &&) = delete;
     MagicReader &operator=(const MagicReader &) = delete;
@@ -26,4 +31,5 @@ private:
     tl::expected<void, ParseErrorType> set_realm_data(player_magic &magics_info) const;
 
     const nlohmann::json &class_data;
+    Session &session;
 };
