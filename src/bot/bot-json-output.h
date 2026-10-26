@@ -1,5 +1,6 @@
 #pragma once
 
+#include "object-enchant/tr-flags.h"
 #include <functional>
 #include <nlohmann/json_fwd.hpp>
 #include <string>
@@ -13,6 +14,18 @@ class PlayerType;
 class Store;
 class StoreScreen;
 enum class MonraceId : short;
+
+/*!
+ * @brief プレイヤーの特性を供給源ごとに集めたもの
+ * @details キャラクター画面の特性のページの列と同じく、装備・本人 (常時と一時)・乗馬に分けて持つ。
+ */
+struct BotPlayerKnownFlags {
+    TrFlags equipment; //!< 鑑定済みの装備の特性 (get_flags_known())
+    TrFlags permanent; //!< 種族・職業・突然変異・性格の特性 (player_flags())
+    TrFlags temporary; //!< 時限効果と構えの特性 (tim_player_flags())
+    TrFlags riding; //!< 乗っている馬で得ている特性 (riding_flags())
+    TrFlags riding_negative; //!< 乗っている馬のために失っている特性 (riding_flags())
+};
 
 /*!
  * @brief JSONスナップショットのキーを足す・変える・消す変更で更新する
@@ -144,6 +157,7 @@ nlohmann::json make_bot_character_speed_json(int total, int temporary, bool ligh
 nlohmann::json make_bot_item_identity_json(const ItemEntity &item, bool store_identified);
 nlohmann::json make_bot_found_item_identity_json(const ItemEntity &item, bool is_hallucinated);
 nlohmann::json make_bot_pet_row_json(int index, const MonsterEntity &monster, bool is_hallucinated);
+nlohmann::json make_bot_player_ability_sources_json(const BotPlayerKnownFlags &flags);
 nlohmann::json make_bot_json_snapshot(PlayerType *player_ptr, bool include_map = true);
 void output_bot_json_snapshot(PlayerType *player_ptr);
 void output_bot_json_screen_snapshot(PlayerType *player_ptr);

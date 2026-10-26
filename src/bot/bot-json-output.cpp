@@ -872,20 +872,15 @@ nlohmann::json make_player_stats_json(const PlayerType &player)
     };
 }
 
-struct PlayerKnownFlags {
-    TrFlags equipment;
-    TrFlags permanent;
-    TrFlags temporary;
-};
-
-PlayerKnownFlags collect_player_known_flags(PlayerType *player_ptr)
+BotPlayerKnownFlags collect_player_known_flags(PlayerType *player_ptr)
 {
-    PlayerKnownFlags result;
+    BotPlayerKnownFlags result;
     for (const auto slot : INVEN_WIELDING_SLOTS) {
         result.equipment.set(player_ptr->inventory[slot]->get_flags_known());
     }
     player_flags(player_ptr, result.permanent);
     tim_player_flags(player_ptr, result.temporary);
+    riding_flags(player_ptr, result.riding, result.riding_negative);
     return result;
 }
 
@@ -904,7 +899,7 @@ PlayerKnownFlags collect_player_known_flags(PlayerType *player_ptr)
  * スナップショットは変身状態そのものを出していないので、消費側は permanent を
  * 「切れない」と読んではならない。
  */
-nlohmann::json make_ability_sources_json(const PlayerKnownFlags &flags, tr_type flag, tr_type greater_flag = TR_FLAG_MAX)
+nlohmann::json make_ability_sources_json(const BotPlayerKnownFlags &flags, tr_type flag, tr_type greater_flag = TR_FLAG_MAX)
 {
     const auto has = [flag, greater_flag](const TrFlags &source) {
         return source.has(flag) || ((greater_flag != TR_FLAG_MAX) && source.has(greater_flag));
@@ -916,6 +911,8 @@ nlohmann::json make_ability_sources_json(const PlayerKnownFlags &flags, tr_type 
     };
 }
 
+}
+
 /*!
  * @brief 能力の有無を供給源ごとに出力する
  * @details 出力キーは ability_sources であって abilities ではない。#5498 の abilities は
@@ -923,14 +920,27 @@ nlohmann::json make_ability_sources_json(const PlayerKnownFlags &flags, tr_type 
  * でも空でないオブジェクトは Python でも JavaScript でも真と評価され、消費側は例外も出さずに
  * 「全能力あり」と誤読する。キーを分けておけば、旧来の消費側は KeyError / undefined で
  * 即座に破綻する。
+ * 浮遊だけは乗馬の分を riding に出す (乗っていなければ null、浮遊する馬なら true、浮遊しない馬なら false)。
+ * @param flags 装備 (鑑定済み)・常時・一時・乗馬の特性
+ * @return 能力ごとの供給源の有無
  */
-nlohmann::json make_player_ability_sources_json(const PlayerKnownFlags &flags)
+nlohmann::json make_bot_player_ability_sources_json(const BotPlayerKnownFlags &flags)
 {
     // Aggregate only identified equipment flags plus intrinsic and temporary
     // flags. A known immunity upgrades its resistance on the character screen.
     const auto sources = [&flags](tr_type flag, tr_type greater_flag = TR_FLAG_MAX) {
         return make_ability_sources_json(flags, flag, greater_flag);
     };
+    // 浮遊は乗っている馬で決まる (浮遊する馬なら浮遊し、浮遊しない馬なら装備などがあっても浮遊しない)。
+    // キャラクター画面も riding_flags() で浮遊の行の色を変えて示している。
+    auto levitation = sources(TR_LEVITATION);
+    if (flags.riding.has(TR_LEVITATION)) {
+        levitation["riding"] = true;
+    } else if (flags.riding_negative.has(TR_LEVITATION)) {
+        levitation["riding"] = false;
+    } else {
+        levitation["riding"] = nullptr;
+    }
     return {
         { "resist_fire", sources(TR_RES_FIRE, TR_IM_FIRE) },
         { "resist_cold", sources(TR_RES_COLD, TR_IM_COLD) },
@@ -954,9 +964,25 @@ nlohmann::json make_player_ability_sources_json(const PlayerKnownFlags &flags)
         { "telepathy", sources(TR_TELEPATHY) },
         { "free_action", sources(TR_FREE_ACT) },
         { "see_invisible", sources(TR_SEE_INVIS) },
+        { "hold_exp", sources(TR_HOLD_EXP) },
+        // 銘 $ を刻んだ装備の警告は働かないが、キャラクター画面の装備の列と同じく装備の特性のとおりに出す。
+        { "warning", sources(TR_WARNING) },
+        { "slow_digest", sources(TR_SLOW_DIGEST) },
+        // 突然変異の肉体の腐敗は急回復をすべて打ち消すが、キャラクター画面と同じく特性のとおりに出す
+        // (種族・職業の急回復と一時の分は消え、装備と突然変異の急回復は残る)。
+        { "regenerate", sources(TR_REGEN) },
+        { "levitation", std::move(levitation) },
+        { "reflect", sources(TR_REFLECT) },
+        { "sustain_str", sources(TR_SUST_STR) },
+        { "sustain_int", sources(TR_SUST_INT) },
+        { "sustain_wis", sources(TR_SUST_WIS) },
+        { "sustain_dex", sources(TR_SUST_DEX) },
+        { "sustain_con", sources(TR_SUST_CON) },
+        { "sustain_chr", sources(TR_SUST_CHR) },
     };
 }
 
+namespace {
 /*!
  * @brief 免疫（ダメージ0）を供給源ごとに出力する
  * @details 耐性とは軽減率が別物（耐性は 1/3、免疫は 0）で、ability_sources では免疫を耐性に
@@ -964,7 +990,7 @@ nlohmann::json make_player_ability_sources_json(const PlayerKnownFlags &flags)
  * 画面の免疫欄、一時的な元素免疫はステータスバー（BAR_IMMFIRE 等）でプレイヤーも常時
  * 確認できる。
  */
-nlohmann::json make_player_immunities_json(PlayerType *player_ptr, const PlayerKnownFlags &flags)
+nlohmann::json make_player_immunities_json(PlayerType *player_ptr, const BotPlayerKnownFlags &flags)
 {
     const auto sources = [&flags](tr_type flag) {
         return nlohmann::json{
@@ -1000,7 +1026,7 @@ nlohmann::json make_player_immunities_json(PlayerType *player_ptr, const PlayerK
  * TR_VUL_LITE はキャラクター画面には "v" として出るのにダメージには乗らない。
  * lite.equipment はその表示に合わせてあるので、消費側は倍率と同一視してはならない。
  */
-nlohmann::json make_player_vulnerabilities_json(PlayerType *player_ptr, const PlayerKnownFlags &flags)
+nlohmann::json make_player_vulnerabilities_json(PlayerType *player_ptr, const BotPlayerKnownFlags &flags)
 {
     // 変異「元素に弱い」は player_flags() が拾わない（has_vuln_*() が FLAG_CAUSE_MUTATION
     // として別に立てている）ため、恒久側へ明示的に足す。
@@ -1640,7 +1666,7 @@ nlohmann::json make_snapshot(PlayerType *player_ptr, bool include_map, BotSnapsh
                                    } },
                         { "status", make_player_status_json(*player.effects()) },
                         { "stats", make_player_stats_json(player) },
-                        { "ability_sources", make_player_ability_sources_json(known_flags) },
+                        { "ability_sources", make_bot_player_ability_sources_json(known_flags) },
                         { "immunities", make_player_immunities_json(player_ptr, known_flags) },
                         { "vulnerabilities", make_player_vulnerabilities_json(player_ptr, known_flags) },
                     } },

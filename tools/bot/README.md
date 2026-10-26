@@ -443,6 +443,7 @@ terrain_bits:
 名前は日本語版と英語版で異なり、表示オプションでも変わるため、言語に依らない ID を追加しました。
 ID はそれぞれ `lib/edit/` の `EgoDefinitions.jsonc` / `ArtifactDefinitions.jsonc` / `BaseitemDefinitions.jsonc` の `id` で、
 名前はそこから引けます。出すのは品の名前に出る範囲だけで、名前から分かる以上のことは出しません。
+キャラクター画面の特性のページ（能力値の維持はその 2 ページ先）に並ぶ浮遊・反射などの能力も、`player.ability_sources` に足しました（[能力の供給源](#能力の供給源)）。
 あわせて、幻覚中に画面が表示しない品とペットの種族を伏せるようにしました（[幻覚中に伏せるもの](#幻覚中に伏せるもの)）。
 
 #### 追加したキー
@@ -461,6 +462,28 @@ ID はそれぞれ `lib/edit/` の `EgoDefinitions.jsonc` / `ArtifactDefinitions
 `aware` になって `sval` が出るまで分かりません。並べ替えない種類（`FIXED_FLAVOR`。リンゴジュースや金無垢の指輪など）は、
 `flavor_id` が中身の行の `id` と一致しますが、見た目の文字列もゲームによらず同じなので、名前から分かる以上のことは分かりません。
 
+#### 能力の供給源
+
+`player.ability_sources` には、キャラクター画面の特性のページ（能力値の維持はその 2 ページ先）に並ぶ能力のうち、次のものを足しました。値はほかの能力と同じ
+`{equipment, permanent, temporary}`（鑑定済みの装備・種族/職業/突然変異/性格・時限効果と構え）です。
+
+| キー | 能力 |
+| --- | --- |
+| `hold_exp` | 経験値保持 |
+| `warning` | 警告 |
+| `slow_digest` | 遅消化 |
+| `regenerate` | 急回復 |
+| `levitation` | 浮遊。乗馬の分の `riding` も持つ（下記） |
+| `reflect` | 反射 |
+| `sustain_str` / `sustain_int` / `sustain_wis` / `sustain_dex` / `sustain_con` / `sustain_chr` | 腕力・知能・賢さ・器用さ・耐久力・魅力の維持 |
+
+浮遊は乗っている馬で決まります。`levitation.riding` は、乗っていなければ `null`、浮遊する馬に乗っていれば `true`（ほかの供給源が無くても浮遊する）、
+浮遊しない馬に乗っていれば `false`（ほかの供給源があっても浮遊しない）です。キャラクター画面は、乗馬中は浮遊の行の色でこれを示します。
+乗馬中の浮遊は馬だけで決まるので、`levitation.temporary` は浮遊の時限効果があっても `false` になります（降りれば元に戻ります）。
+突然変異の「肉体の腐敗」があると、急回復はどの供給源があっても働きません。`regenerate` はキャラクター画面と同じく特性のとおりに出すので、
+種族・職業の急回復と一時の分は `false` になりますが、装備と突然変異の急回復は `true` のまま残ります。突然変異は `knowledge` の突然変異の一覧（`mutation_ids`）で分かります。
+警告の装備に銘 `$` を刻むと警告は働きませんが、`warning.equipment` も同じく装備の特性のとおりに出します。銘は装備の `inscription` で分かります。
+
 #### 幻覚中に伏せるもの
 
 | キー | 版3まで | 版4 |
@@ -474,6 +497,7 @@ ID はそれぞれ `lib/edit/` の `EgoDefinitions.jsonc` / `ArtifactDefinitions
 2. エゴ・アーティファクト・見た目を名前の文字列で判定している箇所は、`ego_id` / `artifact_id` / `flavor_id` と `lib/edit/` の定義で判定できる。
    キーが無いことは「名前から分からない」（未鑑定・ランダムアーティファクトなど）を表す。
 3. `knowledge.pets[]` の行が `hallucinated: true` のときは `race_id`・`name` が無いので、`visible_monsters` と同じく欠落を扱う。
+4. `player.ability_sources.levitation.riding` は乗馬中だけ真偽値になる（乗っていなければ `null`）。`false` のときは、ほかの供給源があっても浮遊しない。
 
 ### 版3での変更
 
