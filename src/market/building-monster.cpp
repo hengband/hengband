@@ -3,7 +3,7 @@
 #include "core/asking-player.h"
 #include "core/window-redrawer.h"
 #include "game-option/game-play-options.h"
-#include "io/input-key-acceptor.h"
+#include "io/input-context.h"
 #include "lore/lore-util.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
@@ -142,12 +142,13 @@ bool research_mon(PlayerType *player_ptr)
     auto &tracker = LoreTracker::get_instance();
     auto notpicked = true;
     auto query = 'y';
+    constexpr auto query_prompt = _(" ['r'思い出, ' 'で続行, ESC]", " [(r)ecall, ESC, space to continue]");
     while (notpicked) {
         // 思い出は 'r' でもう一度押して止めても画面に残るので、このモンスターを表示している間は登録したままにする
         BotDrawnScreenScope bot_screen;
         auto monrace_id = monrace_ids[i];
         roff_top(monrace_id);
-        term_addstr(-1, TERM_WHITE, _(" ['r'思い出, ' 'で続行, ESC]", " [(r)ecall, ESC, space to continue]"));
+        term_addstr(-1, TERM_WHITE, query_prompt);
         while (true) {
             if (recall) {
                 const auto mes = monraces.get_monrace(monrace_id).probe_lore();
@@ -159,12 +160,14 @@ bool research_mon(PlayerType *player_ptr)
                 tracker.set_trackee(monrace_id);
                 window_stuff(player_ptr);
                 screen_roff(player_ptr, monrace_id, MONSTER_LORE_RESEARCH);
+                // 思い出の表示は 1 行目を消してモンスターの名前だけを描き直すので、キーの案内も描き直す
+                term_addstr(-1, TERM_WHITE, query_prompt);
                 notpicked = false;
                 old_sym = *sym;
                 old_i = i;
             }
 
-            query = inkey();
+            query = input_key_with_context(InputKind::COMMAND_CHAR, query_prompt);
             if (query != 'r') {
                 break;
             }

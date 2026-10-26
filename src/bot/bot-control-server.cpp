@@ -168,6 +168,8 @@ std::string_view input_kind_name(InputKind kind)
         return "any_key";
     case InputKind::SPELL:
         return "spell";
+    case InputKind::BUILDING:
+        return "building";
     }
 
     THROW_EXCEPTION(std::logic_error, "Invalid InputKind was specified!");

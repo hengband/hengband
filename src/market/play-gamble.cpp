@@ -2,7 +2,7 @@
 #include "avatar/avatar.h"
 #include "core/asking-player.h"
 #include "core/show-file.h"
-#include "io/input-key-acceptor.h"
+#include "io/input-context.h"
 #include "market/building-actions-table.h"
 #include "market/building-util.h"
 #include "market/poker.h"
@@ -61,7 +61,7 @@ void gamble_comm(PlayerType *player_ptr, int cmd)
     prt(fmt::format(_("ゲーム前の所持金: {:9}", "Gold before game: {:9}"), oldgold), 20, 2);
     prt(fmt::format(_("現在の掛け金:     {:9}", "Current Wager:    {:9}"), *wager), 21, 2);
     // 所持金を変えたらプレイヤーの情報のサブウィンドウの描き直しを要求する。
-    // 次の入力待ち (inkey()) が残っている要求を処理して描き直す
+    // 次の入力待ち (input_key_with_context() の中の inkey()) が残っている要求を処理して描き直す
     auto &dur = DeferredUpdateRequests::get_instance();
     while (true) {
         player_ptr->au -= *wager;
@@ -240,9 +240,10 @@ void gamble_comm(PlayerType *player_ptr, int cmd)
         }
 
         prt(fmt::format(_("現在の所持金:     {:9}", "Current Gold:     {:9}"), player_ptr->au), 22, 2);
-        prt(_("もう一度(Y/N)？", "Again(Y/N)?"), 18, 37);
+        constexpr auto again_prompt = _("もう一度(Y/N)？", "Again(Y/N)?");
+        prt(again_prompt, 18, 37);
         move_cursor(18, 52);
-        auto again = inkey();
+        const auto again = input_key_with_context(InputKind::CONFIRM, again_prompt);
         prt("", 16, 37);
         prt("", 17, 37);
         prt("", 18, 37);

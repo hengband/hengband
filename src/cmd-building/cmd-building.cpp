@@ -21,7 +21,7 @@
 #include "core/special-internal-keys.h"
 #include "core/stuff-handler.h"
 #include "floor/floor-mode-changer.h"
-#include "io/input-key-acceptor.h"
+#include "io/input-context.h"
 #include "io/input-key-requester.h"
 #include "locale/language-switcher.h"
 #include "main/music-definitions-table.h"
@@ -367,7 +367,7 @@ void do_cmd_building(PlayerType *player_ptr)
     while (true) {
         prt("", 1, 0);
         building_prt_gold(player_ptr->au);
-        const auto command = inkey();
+        const auto command = input_key_with_context(InputKind::BUILDING, "");
         if (command == ESCAPE) {
             floor.inside_arena = false;
             system.set_phase_out(false);
