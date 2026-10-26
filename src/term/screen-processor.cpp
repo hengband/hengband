@@ -132,7 +132,7 @@ static int find_wrap_column(int x, int y, int w, std::string_view ch)
     const auto is_second_half = [y](int col) { return (term_what(col, y, {}).color & 0x20) != 0; };
     // 語の途中では、半角の閉じ括弧・句読点の前で折り返さない (次の行がこれらで始まり、前の語から離れるのを避ける)
     constexpr std::string_view closing_punctuations = ")]},.!?:;";
-    const auto is_ch_kinsoku = is_kinsoku(ch);
+    const auto is_ch_kinsoku = is_line_start_kinsoku(ch);
     auto mid_word_col = 0;
     for (auto col = x; col > 0; col--) {
         if (x - col + std::ssize(ch) > w - 1) {
@@ -151,7 +151,7 @@ static int find_wrap_column(int x, int y, int w, std::string_view ch)
             }
         }
 
-        if ((right == " ") || is_kinsoku(right)) {
+        if ((right == " ") || is_line_start_kinsoku(right)) {
             continue;
         }
 

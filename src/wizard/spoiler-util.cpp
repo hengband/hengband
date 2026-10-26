@@ -209,7 +209,7 @@ void spoil_out(std::string_view sv, bool flush_buffer)
                 break_pos = line.length();
             }
         } else {
-            if (iskanji_flag && !is_kinsoku(sv.substr(i, 2))) {
+            if (iskanji_flag && !is_line_start_kinsoku(sv.substr(i, 2))) {
                 break_pos = line.length();
             }
         }

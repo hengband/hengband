@@ -151,7 +151,7 @@ std::string conjugate_jverb(std::string_view in, JVerbConjugationType type)
  * 小書きの仮名・ハイフン) のうち、JIS X 0208 にあるもの。
  * 波ダッシュ (〜) は、Shift_JIS では全角チルダ (～) と同じバイト列になるので、全角チルダだけを入れている。
  */
-static const std::set<std::string_view> kinsoku_list{
+static const std::set<std::string_view> line_start_kinsoku_list{
     // clang-format off
     "、", "。", "，", "．", "？", "！", "・", "：", "；",
     "ァ", "ィ", "ゥ", "ェ", "ォ", "ャ", "ュ", "ョ", "ッ", "ヮ", "ヵ", "ヶ",
@@ -168,9 +168,9 @@ static const std::set<std::string_view> kinsoku_list{
  * @param ch 調べる文字
  * @return 行頭禁則文字であるなら true、そうでないなら false
  */
-bool is_kinsoku(std::string_view ch)
+bool is_line_start_kinsoku(std::string_view ch)
 {
-    return (ch.length() >= 2) && kinsoku_list.contains(ch);
+    return (ch.length() >= 2) && line_start_kinsoku_list.contains(ch);
 }
 
 /*!

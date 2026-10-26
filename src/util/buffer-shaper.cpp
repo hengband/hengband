@@ -57,7 +57,7 @@ SeparatePositions find_separate_positions(std::string_view line, std::string_vie
         const auto is_full_width = is_end ? (ch.length() == 2) : is_multibyte_char_at(line, pos);
         const auto next_char = is_end ? ch : line.substr(pos, is_full_width ? 2 : 1);
         // 行の末尾で分割するのは、次の文字が全角文字か前が空白のときだけにする (全角文字の直後の半角文字なら、これまでどおり全角文字の前で分ける)
-        const auto can_split = (pos > 0) && (!is_end || is_full_width || is_prev_space) && (next_char != " ") && !is_kinsoku(next_char);
+        const auto can_split = (pos > 0) && (!is_end || is_full_width || is_prev_space) && (next_char != " ") && !is_line_start_kinsoku(next_char);
         if (can_split) {
             if (is_full_width || is_prev_full_width || is_prev_space) {
                 positions.word_break = pos;
@@ -90,7 +90,7 @@ SeparatePositions find_separate_positions(std::string_view line, std::string_vie
  *   但し、最後の語の切れ目が行の前半にある場合は、連続の途中でも分割する。
  * - 分割後の先頭の文字が空白である場合は残さず削除する。
  * - 改行文字('\\n')が検出された場合はその位置で強制的に分割する。
- * - 日本語（全角文字）の場合は基本的にどこでも分割するが、分割後の先頭の文字が行頭禁則文字 (is_kinsoku())
+ * - 日本語（全角文字）の場合は基本的にどこでも分割するが、分割後の先頭の文字が行頭禁則文字 (is_line_start_kinsoku())
  *   にならないようにする。（いわゆる行頭禁則処理）
  *   行頭禁則文字が続く場合や、前が半角の単語や空白の場合は、その前の語の切れ目までさかのぼって分割する。
  *   語の切れ目が行の前半にしか無ければ、それより後ろの半角の単語の途中で分割する。
@@ -130,7 +130,7 @@ std::vector<std::string> shape_buffer(std::string_view sv, size_t maxlen)
             if (ch[0] == ' ') {
                 const auto rest = sv.substr(line.length());
                 const auto next_pos = rest.find_first_not_of(' ');
-                is_before_kinsoku = (next_pos != std::string_view::npos) && is_kinsoku(rest.substr(next_pos, 2));
+                is_before_kinsoku = (next_pos != std::string_view::npos) && is_line_start_kinsoku(rest.substr(next_pos, 2));
             }
 
             if (!is_newline && ((ch[0] != ' ') || is_before_kinsoku)) {
@@ -144,7 +144,7 @@ std::vector<std::string> shape_buffer(std::string_view sv, size_t maxlen)
 
                 if (line.length() < word_break_line_length * 2) {
                     split_pos = word_break;
-                } else if (is_kinsoku(ch) || is_before_kinsoku) {
+                } else if (is_line_start_kinsoku(ch) || is_before_kinsoku) {
                     // 語の切れ目が行の前半にしか無ければ、それより後ろの語の途中で分ける
                     const auto pos = std::max(word_break, mid_word);
                     split_pos = (pos > 0) ? pos : line.length();
