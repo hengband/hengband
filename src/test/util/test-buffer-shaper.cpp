@@ -20,8 +20,10 @@ using Lines = std::vector<std::string>;
 
 #if defined(JP) && defined(SJIS)
 constexpr std::string_view KUTEN = "\x81\x42"; //!< 。
+constexpr std::string_view CHOON = "\x81\x5b"; //!< ー
 #elif defined(JP)
 constexpr std::string_view KUTEN = "\xa1\xa3"; //!< 。
+constexpr std::string_view CHOON = "\xa1\xbc"; //!< ー
 #endif
 
 }
@@ -110,5 +112,55 @@ TEST_CASE("shape_buffer does not put a kinsoku character at the head of a line")
 {
     const auto str = cat(repeat(KANJI_KAN, 4), KUTEN, KANJI_KAN);
     CHECK(shape_buffer(str, 10) == Lines{ repeat(KANJI_KAN, 3), cat(KANJI_KAN, KUTEN, KANJI_KAN) });
+}
+
+TEST_CASE("shape_buffer goes back over consecutive kinsoku characters")
+{
+    const auto str = cat(repeat(KANJI_KAN, 3), KUTEN, KUTEN, KANJI_KAN);
+    CHECK(shape_buffer(str, 10) == Lines{ repeat(KANJI_KAN, 2), cat(KANJI_KAN, KUTEN, KUTEN, KANJI_KAN) });
+}
+
+TEST_CASE("shape_buffer does not split at a space before a kinsoku character")
+{
+    // 空白の後ろで分けると次の行が禁則文字で始まるので、その前の語の切れ目で分ける
+    const auto str = cat(repeat(KANJI_KAN, 3), "a ", KUTEN);
+    CHECK(shape_buffer(str, 10) == Lines{ repeat(KANJI_KAN, 3), cat("a ", KUTEN) });
+}
+
+TEST_CASE("shape_buffer does not split at a space that reaches the width before a kinsoku character")
+{
+    // 最大長に達した空白で分けると次の行が禁則文字で始まるので、その前の語の切れ目で分ける
+    const auto str = cat(repeat(KANJI_KAN, 4), "! ", KUTEN);
+    CHECK(shape_buffer(str, 10) == Lines{ repeat(KANJI_KAN, 4), cat("! ", KUTEN) });
+}
+
+TEST_CASE("shape_buffer splits a half-width word before a kinsoku character when there is no word break")
+{
+    // 語の切れ目が無ければ、半角の単語の途中で分ける
+    CHECK(shape_buffer(cat("abcdefgh", KUTEN), 10) == Lines{ "abcdefg", cat("h", KUTEN) });
+}
+
+TEST_CASE("shape_buffer does not split a half-width word before a closing punctuation")
+{
+    // 語の途中で分けるときは、半角の閉じ括弧の前では分けない
+    CHECK(shape_buffer(cat("abcdefghij(150)", KUTEN), 16) == Lines{ "abcdefghij(15", cat("0)", KUTEN) });
+}
+
+TEST_CASE("shape_buffer splits at a word break in the first half if it is after the last position in a word")
+{
+    // 語の切れ目が行の前半にしか無くても、それより後ろに語の途中の位置が無ければ語の切れ目で分ける
+    CHECK(shape_buffer(cat("abc", KANJI_KAN, repeat(CHOON, 5)), 15) == Lines{ "abc", cat(KANJI_KAN, repeat(CHOON, 5)) });
+}
+
+TEST_CASE("shape_buffer does not add an empty line when the only word break is after a leading space")
+{
+    // 先頭の空白の直後しか語の切れ目が無ければ、空の行を作らずに今の位置で分ける
+    CHECK(shape_buffer(cat(" ", KANJI_KAN, repeat(KUTEN, 6)), 10) == Lines{ cat(" ", KANJI_KAN, repeat(KUTEN, 3)), repeat(KUTEN, 3) });
+}
+
+TEST_CASE("shape_buffer keeps a multibyte character together with the following half-width character at the width")
+{
+    // 全角文字の直後の半角文字で最大長に達したときは、これまでどおり全角文字の前で分ける
+    CHECK(shape_buffer(cat("abcdefg", KANJI_KAN, "h"), 10) == Lines{ "abcdefg", cat(KANJI_KAN, "h") });
 }
 #endif
