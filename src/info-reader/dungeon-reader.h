@@ -1,5 +1,7 @@
 #pragma once
 
+#include "info-reader/definition-id-checker.h"
+
 #include "info-reader/parse-error-types.h"
 #include <nlohmann/json_fwd.hpp>
 #include <string_view>
@@ -9,8 +11,11 @@ class DungeonDefinition;
 
 class DungeonReader {
 public:
-    explicit DungeonReader(const nlohmann::json &dungeon_data);
-    DungeonReader(nlohmann::json &&) = delete;
+    using Session = DefinitionIdChecker;
+    static Session create_session(tl::optional<int> last_id = tl::nullopt);
+
+    DungeonReader(const nlohmann::json &dungeon_data, Session &session);
+    DungeonReader(nlohmann::json &&, Session &) = delete;
     DungeonReader(const DungeonReader &) = delete;
     DungeonReader(DungeonReader &&) = delete;
     DungeonReader &operator=(const DungeonReader &) = delete;
@@ -37,4 +42,5 @@ private:
     tl::expected<void, ParseErrorType> set_dungeon_monsters(DungeonDefinition &dungeon) const;
 
     const nlohmann::json &dungeon_data;
+    Session &session;
 };
