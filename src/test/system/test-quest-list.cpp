@@ -20,6 +20,7 @@
 #include "system/terrain/terrain-definition.h"
 #include "system/terrain/terrain-list.h"
 #include "test/info-reader/legend-ego-fixture.h"
+#include "test/info-reader/scoped-reader-state.h"
 #include "test/scoped-restore.h"
 #include "test/scoped-rng.h"
 #include "test/scoped-vector-wrapper.h"
@@ -926,8 +927,6 @@ TEST_CASE("QuestList preserves legend fixed references and generation parameters
         { { "terrain", "OTHER" }, { "trap", "QUEST_ENTER" }, { "special", 2 } },
         { { "terrain", "OTHER" }, { "trap", "ENTRANCE" }, { "special", 1 } },
         { { "terrain", "QUEST_ENTER" }, { "trap", "OTHER" }, { "special", 2 } },
-        // ランダムobjectの分岐では固定trapを配置しないため、元の地形のspecialとして扱う。
-        { { "terrain", "OTHER" }, { "trap", "QUEST_ENTER" }, { "object", { { "random", true }, { "oodLevel", 1 } } }, { "special", 48 } },
     };
     for (const auto base : { false, true }) {
         for (const auto &cell : cells) {
@@ -1470,5 +1469,57 @@ TEST_CASE("QuestList keeps incompatible ego diagnostic text")
             (files.directory / "quest.jsonc").string(), static_cast<int>(EgoType::DF), _("品の種類と相性が合わない", "incompatible object kind"));
         const std::string diagnostic(error.what());
         CHECK(diagnostic.find(": " + expected + "\nStack trace:\n") != std::string::npos);
+    }
+}
+
+TEST_CASE("QuestList checks object trap conflicts in quest and shared legends")
+{
+    const auto cases = nlohmann::json::parse(R"([
+        [{"object":1,"trap":"OTHER"},false],
+        [{"object":1,"trap":"OTHER","special":"x"},false,false],
+        [{"object":1,"trap":"OTHER","special":32768},false,false],
+        [{"object":{"questReward":true},"trap":"OTHER"},false],
+        [{"object":{"questReward":true},"trap":{"random":true}},false],
+        [{"object":{"questReward":true},"trap":"NONE"},true],
+        [{"object":{"random":true},"trap":"OTHER"},false],
+        [{"object":1,"trap":{"random":true}},false],
+        [{"terrain":"OTHER","trap":"QUEST_ENTER","object":{"random":true,"oodLevel":1},"special":48},false],
+        [{"object":{"random":true},"trap":{"random":true}},true],
+        [{"object":1,"trap":"NONE"},true],
+        [{"artifact":1,"trap":"OTHER"},true]
+    ])");
+    for (const bool base : { false, true }) {
+        for (const auto &entry : cases) {
+            CAPTURE(base);
+            CAPTURE(entry.dump());
+            const test::ScopedReaderState reader_state;
+            LegendReferenceState state;
+            QuestFiles files;
+            const auto restore_path = test::scoped_restore(ANGBAND_DIR_EDIT);
+            ANGBAND_DIR_EDIT = files.directory;
+            auto common = nlohmann::json::parse(R"({"version":1,"legend":{}})");
+            auto data = make_quest(1);
+            if (base) {
+                common["legend"]["!"] = entry[0];
+            } else {
+                data["legend"]["!"] = entry[0];
+            }
+            files.write("QuestPreferences.jsonc", common);
+            files.write("quests/01.jsonc", data);
+            if (entry[1].get<bool>()) {
+                REQUIRE_NOTHROW(QuestList::get_instance().initialize());
+            } else {
+                try {
+                    QuestList::get_instance().initialize();
+                    FAIL("invalid legends must be rejected");
+                } catch (const std::runtime_error &error) {
+                    const std::string diagnostic(error.what());
+                    CHECK(diagnostic.find(base ? "QuestPreferences.jsonc" : "01.jsonc") != std::string::npos);
+                    const auto conflict = entry.size() < 3 || entry[2].get<bool>();
+                    CHECK((diagnostic.find(_("品と罠の指定の片方が配置時に無視される組み合わせです", "This object/trap combination silently ignores one placement")) != std::string::npos) == conflict);
+                }
+                check_unpublished(QuestId::THIEF);
+            }
+        }
     }
 }

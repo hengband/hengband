@@ -3,6 +3,7 @@
 #include "floor/floor-base-definitions.h"
 #include "info-reader/info-reader-util.h"
 #include "info-reader/json-reader-util.h"
+#include "info-reader/legend-object-trap-validator.h"
 #include "info-reader/parse-error-types.h"
 #include "info-reader/random-grid-effect-types.h"
 #include "locale/character-encoding.h"
@@ -162,9 +163,10 @@ tl::expected<void, ParseErrorType> read_localized_lines(const nlohmann::json &ar
  * @param cell_data 凡例セルの定義
  * @param out 変換した凡例セルの出力先
  * @param deferred 遅延解決時のタグ出力先。nullptrなら既存どおり即時解決する
+ * @param reason 配置衝突で失敗した場合の理由の出力先
  * @return 成功時は空の値、失敗時は解析エラーコード
  */
-tl::expected<void, ParseErrorType> parse_legend_cell(const nlohmann::json &cell_data, QuestLegendCell &out, DeferredQuestLegendCell *deferred)
+tl::expected<void, ParseErrorType> parse_legend_cell(const nlohmann::json &cell_data, QuestLegendCell &out, DeferredQuestLegendCell *deferred, std::string *reason = nullptr)
 {
     if (!cell_data.is_object()) {
         return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
@@ -360,6 +362,15 @@ tl::expected<void, ParseErrorType> parse_legend_cell(const nlohmann::json &cell_
         return result;
     }
 
+    const auto random_trap = deferred != nullptr ? deferred->trap_tag == "*" : (grid.random & RANDOM_TRAP) != 0;
+    const auto fixed_trap = deferred != nullptr ? deferred->trap_tag != "NONE" && !random_trap : grid.trap != 0 && !random_trap;
+    if (has_legend_object_trap_conflict(grid, out.object_is_quest_reward, fixed_trap, random_trap)) {
+        if (reason != nullptr) {
+            *reason = describe_legend_object_trap_conflict();
+        }
+        return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
+    }
+
     return {};
 }
 
@@ -385,6 +396,13 @@ bool is_legend_cave_flag(std::string_view name)
 tl::expected<void, ParseErrorType> parse_quest_legend_cell(const nlohmann::json &cell_data, QuestLegendCell &out)
 {
     return parse_legend_cell(cell_data, out, nullptr);
+}
+
+/*! @brief 凡例セルを解析し、配置衝突で失敗した場合だけ理由を返す。 */
+tl::expected<void, ParseErrorType> parse_quest_legend_cell(const nlohmann::json &cell_data, QuestLegendCell &out, std::string &reason)
+{
+    reason.clear();
+    return parse_legend_cell(cell_data, out, nullptr, &reason);
 }
 
 /*!
@@ -415,11 +433,15 @@ QuestReader::QuestReader(const nlohmann::json &quest_data, QuestType &quest, Que
 
 /*!
  * @brief クエスト定義(JSON Object)のパース関数
+ * @param reason 凡例の配置衝突がある場合に理由を返す省略可能な出力先
  * @return 成功時は空の値、失敗時は解析エラーコード
  * @details 全件成功時のみ名前と固定マップを置き換える。失敗・例外時は既存の出力を保持する。
  */
-tl::expected<void, ParseErrorType> QuestReader::read() const
+tl::expected<void, ParseErrorType> QuestReader::read(std::string *reason) const
 {
+    if (reason != nullptr) {
+        reason->clear();
+    }
     if (!this->quest_data.is_object()) {
         return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
     }
@@ -435,7 +457,7 @@ tl::expected<void, ParseErrorType> QuestReader::read() const
     if (const auto result = this->set_descriptions(parsed); !result) {
         return result;
     }
-    if (const auto result = this->set_legend(parsed); !result) {
+    if (const auto result = this->set_legend(parsed, reason); !result) {
         return result;
     }
     if (const auto result = this->set_maps(parsed); !result) {
@@ -616,7 +638,7 @@ tl::expected<void, ParseErrorType> QuestReader::set_descriptions(QuestFixedMap &
     return {};
 }
 
-tl::expected<void, ParseErrorType> QuestReader::set_legend(QuestFixedMap &parsed) const
+tl::expected<void, ParseErrorType> QuestReader::set_legend(QuestFixedMap &parsed, std::string *reason) const
 {
     const auto &legend = get_json_value(this->quest_data, "legend");
     if (legend.is_null()) {
@@ -635,7 +657,11 @@ tl::expected<void, ParseErrorType> QuestReader::set_legend(QuestFixedMap &parsed
         }
 
         QuestLegendCell cell;
-        if (const auto result = parse_quest_legend_cell(cell_data, cell); !result) {
+        std::string cell_reason;
+        if (const auto result = parse_quest_legend_cell(cell_data, cell, cell_reason); !result) {
+            if (reason != nullptr && !cell_reason.empty()) {
+                *reason = "legend['" + symbol + "'].trap: " + cell_reason;
+            }
             return result;
         }
         parsed.legend.insert_or_assign(symbol.front(), cell);

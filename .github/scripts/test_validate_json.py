@@ -98,7 +98,7 @@ class QuestGridValidationTest(unittest.TestCase):
         cases = (
             ({}, True),
             ({"terrain": "*", "caveInfo": ["GLOW", "MARK"], "special": -1}, True),
-            ({"monster": 1, "object": 1, "artifact": 1, "trap": "TRAP_PIT"}, True),
+            ({"monster": 1, "artifact": 1, "trap": "TRAP_PIT"}, True),
             ({"object": 42, "ego": 65}, True),
             ({"object": 42, "ego": {"random": True}}, True),
             ({"monster": {"random": True, "oodLevel": 0}, "object": {"random": True, "oodLevel": 0},
@@ -1033,6 +1033,60 @@ class TownMapValidationTest(unittest.TestCase):
                 invalid = copy.deepcopy(self.data)
                 invalid["featureRules"][0]["definition"][field] = token
                 self.assertFalse(self.validate(invalid)[0])
+
+
+class LegendObjectTrapValidationTest(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.root = Path(__file__).resolve().parents[2]
+        cls.loaded, cls.schema_map = load_all_schemas(cls.root / "schema")
+        cls.registry = build_schema_registry(cls.loaded)
+
+    def test_all_legend_readers_reject_dropped_placements(self):
+        cases = (
+            ({"object": 1, "trap": "TRAP_PIT"}, False),
+            ({"object": {"questReward": True}, "trap": "TRAP_PIT"}, False),
+            ({"object": {"questReward": True}, "trap": {"random": True}}, False),
+            ({"object": {"questReward": True}, "trap": "NONE"}, True),
+            ({"object": {"random": True}, "trap": "TRAP_PIT"}, False),
+            ({"object": 1, "trap": {"random": True}}, False),
+            ({"object": {"random": True}, "trap": {"random": True}}, True),
+            ({"object": 1, "trap": "NONE"}, True),
+            ({"object": {"random": True}, "trap": "NONE"}, True),
+            ({"artifact": 1, "trap": "TRAP_PIT"}, True),
+            ({"artifact": 1, "trap": {"random": True}}, True),
+        )
+        for schema_name in ("Quest", "QuestPreferences", "TownMap", "TownPreferences"):
+            for cell, accepted in cases:
+                with self.subTest(schema=schema_name, cell=cell):
+                    cell = {"terrain": "NONE", "caveInfo": [], **cell}
+                    if schema_name == "TownMap":
+                        data = {"version": 3, "featureRules": [{"symbol": "#", "when": "0", "definition": cell}],
+                                "buildingRules": [], "mapVariants": [{"rows": ["#"]}],
+                                "startingPositions": [{"y": 0, "x": 0}]}
+                        path = ["featureRules", 0, "definition", "trap"]
+                    else:
+                        data = {"version": 1, "legend": {"#": cell}}
+                        if schema_name == "Quest":
+                            data.update(id=1, name={"ja": "Test", "en": "Test"},
+                                        definition={"type": "KILL_ALL", "level": 1})
+                        path = ["legend", "#", "trap"]
+                    schema_path = self.schema_map[schema_name]
+                    if schema_name == "TownPreferences":
+                        # スキーマは品・罠欄を許可しないが、実行時の追加欄と同じ意味検証も直接確かめる。
+                        if accepted:
+                            validate_town_preferences_semantics(data, schema_path)
+                        else:
+                            with self.assertRaisesRegex(ValidationError, "silently ignores one placement") as caught:
+                                validate_town_preferences_semantics(data, schema_path)
+                            self.assertEqual(list(caught.exception.path), path)
+                        continue
+                    ok, message = validate_document(data, schema_path, self.loaded[schema_path], self.registry,
+                                                    filename="Test.jsonc")
+                    self.assertEqual(ok, accepted, message)
+                    if not accepted:
+                        self.assertIn("silently ignores one placement", message)
+                        self.assertIn(f"Location: {path}", message)
 
 
 class DefinitionVersionValidationTest(unittest.TestCase):

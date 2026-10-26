@@ -327,9 +327,11 @@ std::map<char, QuestLegendCell> QuestList::load_base_legend()
         }
 
         QuestLegendCell cell;
-        if (const auto result = parse_quest_legend_cell(cell_data, cell); !result) {
+        std::string cell_reason;
+        if (const auto result = parse_quest_legend_cell(cell_data, cell, cell_reason); !result) {
             constexpr auto fmt = _("ベース凡例 '{}' にエラーがあります ({}): コード {}", "Error in base legend '{}' ({}): code {}");
-            THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, symbol, path.string(), static_cast<int>(result.error())));
+            const auto reason = cell_reason.empty() ? std::string() : fmt::format(": {}", cell_reason);
+            THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, symbol, path.string(), static_cast<int>(result.error())) + reason);
         }
 
         base_legend.insert_or_assign(symbol.front(), cell);
@@ -422,9 +424,10 @@ void QuestList::load_json_quests(const std::filesystem::path &quests_dir, std::m
 
         QuestType quest;
         QuestFixedMap fixed_map;
-        if (const auto result = QuestReader(quest_data, quest, fixed_map).read(); !result) {
+        std::string reason;
+        if (const auto result = QuestReader(quest_data, quest, fixed_map).read(&reason); !result) {
             constexpr auto fmt = _("クエストファイルにエラーがあります ({}): コード {}", "Error in quest file ({}): code {}");
-            THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, file.string(), static_cast<int>(result.error())));
+            THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, file.string(), static_cast<int>(result.error())) + (reason.empty() ? std::string() : ": " + reason));
         }
 
         parsed_quests.emplace(quest_id, std::move(quest));

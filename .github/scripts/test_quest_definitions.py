@@ -292,7 +292,7 @@ class QuestEditDirTestCase(unittest.TestCase):
             "name": {"ja": "試験", "en": "Test"},
             "definition": {"type": "KILL_ALL", "level": 1, "monster": 1, "dungeon": 1, "reward": {"artifact": 1}},
             "legend": {
-                "#": {"terrain": "FLOOR", "trap": "CLOSED_DOOR", "monster": 1, "object": 1, "artifact": 1},
+                "#": {"terrain": "FLOOR", "trap": "NONE", "monster": 1, "object": 1, "artifact": 1},
                 "c": {"monster": {"cloneOf": 1}, "artifact": {"random": True, "id": 1}},
                 "r": {"terrain": "*", "trap": {"random": True}, "monster": {"random": True, "oodLevel": 32767},
                       "object": {"random": True, "oodLevel": 32767}, "artifact": {"questReward": True}},

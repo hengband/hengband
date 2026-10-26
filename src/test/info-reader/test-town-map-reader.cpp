@@ -125,22 +125,22 @@ class TownFeatureStateGuard {
 public:
     TownFeatureStateGuard()
         : saved_init_flags(init_flags)
-        , terrain_count(TerrainList::get_instance().size())
+        , terrain_state(TerrainList::get_instance())
         , none_tag(TerrainTag::NONE, 0)
     {
         std::copy(std::begin(letter), std::end(letter), saved_letters.begin());
         init_flags = static_cast<init_flags_type>(0);
         auto &terrains = TerrainList::get_instance();
-        terrains.resize(terrain_count + 2);
-        terrains.get_terrain(static_cast<short>(terrain_count)).tag = "TOWN_FEATURE_TEST_FLOOR";
-        terrains.get_terrain(static_cast<short>(terrain_count + 1)).tag = "TOWN_FEATURE_TEST_TRAP";
+        terrains.resize(3);
+        terrains.get_terrain(0).tag = "NONE";
+        terrains.get_terrain(1).tag = "TOWN_FEATURE_TEST_FLOOR";
+        terrains.get_terrain(2).tag = "TOWN_FEATURE_TEST_TRAP";
     }
 
     ~TownFeatureStateGuard()
     {
         std::copy(saved_letters.begin(), saved_letters.end(), std::begin(letter));
         init_flags = saved_init_flags;
-        TerrainList::get_instance().resize(terrain_count);
     }
 
     TownFeatureStateGuard(const TownFeatureStateGuard &) = delete;
@@ -148,17 +148,17 @@ public:
 
     short floor_id() const
     {
-        return static_cast<short>(terrain_count);
+        return 1;
     }
     short trap_id() const
     {
-        return static_cast<short>(terrain_count + 1);
+        return 2;
     }
 
 private:
     init_flags_type saved_init_flags;
-    size_t terrain_count;
     std::array<dungeon_grid, 255> saved_letters;
+    test::ScopedVectorWrapper<TerrainList> terrain_state;
     test::TerrainListTestAccess none_tag;
     test::ScopedReaderState reader_state;
 };
@@ -211,7 +211,7 @@ TownMapDefinition read_reward_town_map(FloorType &floor, ArtifactDefinition arti
     auto data = make_town_map();
     auto &fields = data["featureRules"][0]["definition"];
     fields["terrain"] = "TOWN_FEATURE_TEST_FLOOR";
-    fields["trap"] = "TOWN_FEATURE_TEST_TRAP";
+    fields["trap"] = "NONE";
     fields["object"] = { { "questReward", true } };
     fields["artifact"] = { { "questReward", true } };
     TownMapDefinition definition;
@@ -1313,7 +1313,7 @@ TEST_CASE("TownMapReader applies typed feature values and random flags")
         auto data = make_town_map();
         auto &fields = data["featureRules"][0]["definition"];
         fields["terrain"] = "TOWN_FEATURE_TEST_FLOOR";
-        fields["trap"] = "TOWN_FEATURE_TEST_TRAP";
+        fields["trap"] = "NONE";
         fields["caveInfo"] = { "MARK", "GLOW", "NO_TELEPORT_DEST", "ROOM", "LITE" };
         fields["special"] = -32768;
         for (const auto *field : { "monster", "object", "artifact" }) {
@@ -1322,7 +1322,7 @@ TEST_CASE("TownMapReader applies typed feature values and random flags")
         TownMapDefinition definition;
         REQUIRE(TownMapReader(data).read(definition, 3, 3).has_value());
         const short value = random ? short{ 0 } : short{ 32767 };
-        const dungeon_grid expected{ .feature = state.floor_id(), .monster = value, .object = value, .ego = EgoType::NONE, .artifact = i2enum<FixedArtifactId>(value), .trap = state.trap_id(), .cave_info = 31, .special = -32768, .random = random ? RANDOM_MONSTER | RANDOM_OBJECT | RANDOM_ARTIFACT : 0 };
+        const dungeon_grid expected{ .feature = state.floor_id(), .monster = value, .object = value, .ego = EgoType::NONE, .artifact = i2enum<FixedArtifactId>(value), .trap = 0, .cave_info = 31, .special = -32768, .random = random ? RANDOM_MONSTER | RANDOM_OBJECT | RANDOM_ARTIFACT : 0 };
         letter['#'] = {};
         REQUIRE(apply_town_map_feature(floor, definition.features.front()).has_value());
         check_same_grid(letter['#'], expected);
@@ -1383,7 +1383,6 @@ TEST_CASE("TownMapReader applies random terrain trap clones and reward placehold
     fields["terrain"] = "*";
     fields["trap"] = { { "random", true } };
     fields["monster"] = { { "cloneOf", 32767 } };
-    fields["object"] = { { "questReward", true } };
     fields["artifact"] = { { "questReward", true } };
     fields["special"] = 32767;
     TownMapDefinition definition;
@@ -1394,7 +1393,7 @@ TEST_CASE("TownMapReader applies random terrain trap clones and reward placehold
     check_same_grid(letter['#'], expected);
     CHECK(letter['#'].monster == -32767);
     CHECK(letter['#'].random == (RANDOM_FEATURE | RANDOM_TRAP));
-    CHECK(definition.features.front().cell.object_is_quest_reward);
+    CHECK_FALSE(definition.features.front().cell.object_is_quest_reward);
     CHECK(definition.features.front().cell.artifact_is_quest_reward);
 }
 
@@ -1438,7 +1437,7 @@ TEST_CASE("TownMapReader resolves quest rewards at feature application time")
     CHECK(letter['#'].object == 0);
     CHECK(letter['#'].artifact == FixedArtifactId::NONE);
     test::QuestFeatureTestAccess::set_resolved_reward(FixedArtifactId::GALADRIEL_PHIAL);
-    const dungeon_grid expected{ .feature = state.floor_id(), .monster = 0, .object = 0, .ego = EgoType::NONE, .artifact = FixedArtifactId::GALADRIEL_PHIAL, .trap = state.trap_id(), .cave_info = 0, .special = 0, .random = 0 };
+    const dungeon_grid expected{ .feature = state.floor_id(), .monster = 0, .object = 0, .ego = EgoType::NONE, .artifact = FixedArtifactId::GALADRIEL_PHIAL, .trap = 0, .cave_info = 0, .special = 0, .random = 0 };
     letter['#'] = {};
     REQUIRE(apply_town_map_feature(floor, definition.features.front()).has_value());
     check_same_grid(letter['#'], expected);
@@ -1473,7 +1472,7 @@ TEST_CASE("TownMapReader applies resolved ordinary quest reward baseitem and art
     CHECK(letter['#'].object == 7);
     CHECK(letter['#'].artifact == FixedArtifactId::GALADRIEL_PHIAL);
     CHECK(letter['#'].feature == state.floor_id());
-    CHECK(letter['#'].trap == state.trap_id());
+    CHECK(letter['#'].trap == 0);
 }
 
 TEST_CASE("TownMapReader returns an error and preserves the feature when quest reward reference lookup fails")
@@ -1567,7 +1566,7 @@ TEST_CASE("TownMapReader applies an artifact-only reward without resolving its b
     CHECK(letter['#'].object == 19);
     CHECK(letter['#'].artifact == reward.value_or(FixedArtifactId::NONE));
     CHECK(letter['#'].feature == state.floor_id());
-    CHECK(letter['#'].trap == state.trap_id());
+    CHECK(letter['#'].trap == 0);
 }
 
 TEST_CASE("TownMapReader v3 validates precedence and preserves output and letters")

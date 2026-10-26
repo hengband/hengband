@@ -523,6 +523,19 @@ def validate_legend_ego(cell: dict, baseitems: dict, egos: dict, path: list) -> 
     if cell.get("trap", "NONE") != "NONE":
         raise ValidationError("ego cannot coexist with a trap", path=path + ["ego"])
 
+
+def validate_legend_object_trap(cell: dict, path: list) -> None:
+    """配置時に品または罠が無視される指定を拒否する。ランダム同士の抽選は許可する。"""
+    obj = cell.get("object")
+    trap = cell.get("trap", "NONE")
+    random_object = isinstance(obj, dict) and obj.get("random") is True
+    fixed_object = (type(obj) is int and obj != 0) or (isinstance(obj, dict) and obj.get("questReward") is True)
+    random_trap = isinstance(trap, dict) and trap.get("random") is True
+    fixed_trap = isinstance(trap, str) and trap not in ("NONE", "*")
+    if (fixed_object and (fixed_trap or random_trap)) or (random_object and fixed_trap):
+        raise ValidationError("object/trap combination silently ignores one placement", path=path + ["trap"])
+
+
 def extract_terrain_tags(data: dict) -> frozenset[str]:
     return frozenset(terrain["key"] for terrain in data["terrains"])
 
@@ -623,6 +636,7 @@ def validate_quest_legend_references(legend: dict, references: dict[str, frozens
             raise ValidationError("unknown terrain tag", path=path + ["terrain"])
         if isinstance(cell.get("trap"), str) and cell["trap"] not in references["terrain"]:
             raise ValidationError("unknown terrain tag", path=path + ["trap"])
+        validate_legend_object_trap(cell, path)
         # 整数で書いた固定IDと、オブジェクトの中のIDを (位置, 種類, 値, 理由) で並べる。
         fixed_references = []
         for field, kind, nested, reason in (("monster", "monster", "cloneOf", "unknown monster ID"),
@@ -692,6 +706,7 @@ def validate_town_preferences_semantics(data: dict, schema_path: Path) -> None:
         if len(symbol) != 1:
             raise ValidationError("legend symbol must be exactly one printable ASCII character", path=["legend", symbol])
         validate_legend_ego(cell, baseitems, egos, ["legend", symbol])
+        validate_legend_object_trap(cell, ["legend", symbol])
         terrain_tag = cell["terrain"]
         if terrain_tag != "*" and terrain_tag not in valid_terrain_tags:
             raise ValidationError("unknown terrain tag", path=["legend", symbol, "terrain"])
@@ -755,6 +770,7 @@ def validate_town_map_semantics(data: dict, schema_path: Path) -> None:
         definition = rule["definition"]
         path = ["featureRules", rule_index, "definition"]
         validate_legend_ego(definition, baseitems, egos, path)
+        validate_legend_object_trap(definition, path)
         for field in ("monster", "object", "ego", "artifact", "special"):
             if field not in definition:
                 continue
@@ -774,7 +790,7 @@ def validate_town_map_semantics(data: dict, schema_path: Path) -> None:
             if not value or any(not " " <= c <= "~" or c in ":/\\" for c in value):
                 raise ValidationError("feature field must contain printable ASCII characters without delimiters", path=path + [field])
             if field == "trap" and value == "*":
-                raise ValidationError("random trap requires an object", path=path + [field])
+                raise ValidationError("random trap requires a structured random specification", path=path + [field])
             if value != "*" and value not in valid_terrain_tags:
                 raise ValidationError("unknown terrain tag", path=path + [field])
 
