@@ -132,7 +132,7 @@ TEST_CASE("SpellReader commits all books only after the whole realm succeeds")
     SUBCASE("a spell in a later book is invalid")
     {
         data["books"][1]["spells"][0]["spell_id"] = 32;
-        CHECK(test::to_error_code(SpellReader(data, spells, session).read()) == ParseErrorType::INVALID_FLAG);
+        CHECK(test::to_error_code(SpellReader(data, spells, session).read()) == ParseErrorType::INVALID_VALUE);
         check_unchanged();
     }
     SUBCASE("a later book has an invalid spells container")
@@ -197,14 +197,14 @@ TEST_CASE("SpellReader propagates helper errors without publishing staged spells
     const std::vector<InvalidField> invalid_fields = {
         { "", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
         { "/name", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
-        { "/name", "UNKNOWN_REALM", ParseErrorType::OUT_OF_BOUNDS },
+        { "/name", "UNKNOWN_REALM", ParseErrorType::INVALID_FLAG },
         { "/books", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
         { "/books", nlohmann::json::object(), ParseErrorType::INVALID_TYPE },
         { "/books/1/spells", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
         { "/books/1/spells", nlohmann::json::object(), ParseErrorType::INVALID_TYPE },
         { "/books/1/spells/0", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
         { "/books/1/spells/0/spell_id", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
-        { "/books/1/spells/0/spell_id", 32, ParseErrorType::INVALID_FLAG },
+        { "/books/1/spells/0/spell_id", 32, ParseErrorType::INVALID_VALUE },
         { "/books/1/spells/0/spell_id", true, ParseErrorType::INVALID_TYPE },
         { "/books/1/spells/0/spell_tag", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
         { "/books/1/spells/0/name", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },

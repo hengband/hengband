@@ -116,7 +116,7 @@ tl::expected<void, ParseErrorType> SkillReader::read_weapons(skill_table &skills
                 return this->fail(ParseErrorType::INVALID_TYPE, field_path, _("配列が必要です", "expected an array"));
             }
             if (ranks.size() != starts.size()) {
-                return this->fail(ParseErrorType::OUT_OF_BOUNDS, field_path, fmt::format(_("要素数は{}個が必要ですが、{}個あります", "expected {} entries, got {}"), starts.size(), ranks.size()));
+                return this->fail(ParseErrorType::INVALID_VALUE, field_path, fmt::format(_("要素数は{}個が必要ですが、{}個あります", "expected {} entries, got {}"), starts.size(), ranks.size()));
             }
         }
         for (size_t sval = 0; sval < starts.size(); ++sval) {

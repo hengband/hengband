@@ -95,7 +95,7 @@ TEST_CASE("ArtifactReader validates ID range before narrowing signed and unsigne
         ScopedArtifactBaseitem baseitem;
         auto data = make_artifact();
         data["id"] = id;
-        CHECK(test::to_error_code(ArtifactReader(data).read()) == ParseErrorType::INVALID_FLAG);
+        CHECK(test::to_error_code(ArtifactReader(data).read()) == ParseErrorType::INVALID_VALUE);
         CHECK(ArtifactList::get_instance().empty());
         CHECK(error_idx == -1);
     }
@@ -110,9 +110,23 @@ TEST_CASE("ArtifactReader rejects rarity values outside its storage type")
         ScopedArtifactBaseitem baseitem;
         auto data = make_artifact();
         data["rarity"] = value;
-        CHECK(test::to_error_code(ArtifactReader(data).read()) == ParseErrorType::INVALID_FLAG);
+        CHECK(test::to_error_code(ArtifactReader(data).read()) == ParseErrorType::INVALID_VALUE);
         CHECK(ArtifactList::get_instance().empty());
     }
+}
+
+TEST_CASE("ArtifactReader reports non-string flags as invalid types and unknown flags as invalid flags")
+{
+    const auto read_with_flags = [](const nlohmann::json &flags) {
+        test::ScopedReaderState reader_state;
+        test::ArtifactListTestAccess artifact_state;
+        ScopedArtifactBaseitem baseitem;
+        auto data = make_artifact();
+        data["flags"] = flags;
+        return test::to_error_code(ArtifactReader(data).read());
+    };
+    CHECK(read_with_flags(nlohmann::json::array({ 1 })) == ParseErrorType::INVALID_TYPE);
+    CHECK(read_with_flags(nlohmann::json::array({ "UNKNOWN_FLAG" })) == ParseErrorType::INVALID_FLAG);
 }
 
 TEST_CASE("ArtifactReader preserves missing and non-integer ID errors")
@@ -249,7 +263,7 @@ TEST_CASE("ArtifactReader limits level to the deepest reachable floor")
         ScopedArtifactBaseitem baseitem;
         auto data = make_artifact();
         data["level"] = MAX_DEPTH;
-        CHECK(test::to_error_code(ArtifactReader(data).read()) == ParseErrorType::INVALID_FLAG);
+        CHECK(test::to_error_code(ArtifactReader(data).read()) == ParseErrorType::INVALID_VALUE);
         CHECK(ArtifactList::get_instance().empty());
     }
     test::ScopedReaderState reader_state;
@@ -273,7 +287,7 @@ TEST_CASE("ArtifactReader limits base dice to the save format range")
         ScopedArtifactBaseitem baseitem;
         auto data = make_artifact();
         data["base_dice"] = dice;
-        CHECK(test::to_error_code(ArtifactReader(data).read()) == ParseErrorType::INVALID_FLAG);
+        CHECK(test::to_error_code(ArtifactReader(data).read()) == ParseErrorType::INVALID_VALUE);
         CHECK(ArtifactList::get_instance().empty());
     }
     test::ScopedReaderState reader_state;
@@ -300,7 +314,7 @@ TEST_CASE("ArtifactReader limits base AC and bonuses to small numbers up to 255 
         ScopedArtifactBaseitem baseitem;
         auto data = make_artifact();
         data[field] = value;
-        CHECK(test::to_error_code(ArtifactReader(data).read()) == ParseErrorType::INVALID_FLAG);
+        CHECK(test::to_error_code(ArtifactReader(data).read()) == ParseErrorType::INVALID_VALUE);
         CHECK(ArtifactList::get_instance().empty());
     }
     for (const auto bonus : { -ITEM_BONUS_MAX, ITEM_BONUS_MAX }) {

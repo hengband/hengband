@@ -242,7 +242,7 @@ tl::expected<void, ParseErrorType> WildernessReader::read_map(const nlohmann::js
         }
         const auto symbol_index = static_cast<unsigned char>(symbol[0]);
         if (defined_symbols[symbol_index]) {
-            return tl::make_unexpected(ParseErrorType::NON_SEQUENTIAL_RECORDS);
+            return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
         }
         defined_symbols[symbol_index] = true;
 

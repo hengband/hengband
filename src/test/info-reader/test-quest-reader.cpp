@@ -468,7 +468,7 @@ TEST_CASE("QuestReader rejects metadata reward and start integer overflow withou
             QuestType quest;
             QuestFixedMap fixed_map;
             set_existing_output(quest, fixed_map);
-            CHECK(test::to_error_code(QuestReader(data, quest, fixed_map).read()) == ParseErrorType::INVALID_FLAG);
+            CHECK(test::to_error_code(QuestReader(data, quest, fixed_map).read()) == ParseErrorType::INVALID_VALUE);
             check_existing_output(quest, fixed_map);
         }
     }
@@ -579,7 +579,7 @@ TEST_CASE("QuestReader preserves previous output on parse errors at every stage"
     SUBCASE("Invalid legend after descriptions")
     {
         data["legend"] = { { "too long", nlohmann::json::object() } };
-        expected_error = ParseErrorType::GENERIC;
+        expected_error = ParseErrorType::INVALID_VALUE;
     }
     SUBCASE("Invalid map after legend")
     {
@@ -635,7 +635,7 @@ TEST_CASE("QuestReader reports the first failing stage in declaration order")
     data["definition"]["type"] = "KILL_ALL";
     CHECK(test::to_error_code(read()) == ParseErrorType::INVALID_TYPE);
     data["descriptions"] = descriptions;
-    CHECK(test::to_error_code(read()) == ParseErrorType::GENERIC);
+    CHECK(test::to_error_code(read()) == ParseErrorType::INVALID_VALUE);
     data["legend"] = nlohmann::json::object();
     CHECK(test::to_error_code(read()) == ParseErrorType::INVALID_TYPE);
     data["map"] = { "..." };
@@ -801,7 +801,7 @@ TEST_CASE("QuestReader rejects legend integer overflow without publishing output
             QuestType quest;
             QuestFixedMap fixed_map;
             set_existing_output(quest, fixed_map);
-            CHECK(test::to_error_code(QuestReader(data, quest, fixed_map).read()) == ParseErrorType::INVALID_FLAG);
+            CHECK(test::to_error_code(QuestReader(data, quest, fixed_map).read()) == ParseErrorType::INVALID_VALUE);
             check_existing_output(quest, fixed_map);
         }
     }

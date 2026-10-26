@@ -163,7 +163,7 @@ TEST_CASE("TerrainReader accepts map priority from 0 to 125 and rejects values o
             data["name"]["en"] = "replacement";
             data["map_priority"] = priority;
             guard.session = {};
-            CHECK(test::to_error_code(TerrainReader(data, guard.session).read()) == ParseErrorType::INVALID_FLAG);
+            CHECK(test::to_error_code(TerrainReader(data, guard.session).read()) == ParseErrorType::INVALID_VALUE);
             CHECK(error_idx == id);
             CHECK(terrains.size() == size_before);
             check_existing_terrain(terrains.get_terrain(0), before);
@@ -229,10 +229,10 @@ TEST_CASE("TerrainReader rejects invalid symbol lengths without publishing a ter
     std::string character = "..";
     auto expected = ParseErrorType::INVALID_VALUE;
     SUBCASE("multiple ASCII characters") {}
-    SUBCASE("empty string keeps its existing error")
+    SUBCASE("empty string")
     {
         character.clear();
-        expected = ParseErrorType::GENERIC;
+        expected = ParseErrorType::INVALID_VALUE;
     }
     SUBCASE("two-byte UTF-8 character")
     {
@@ -273,6 +273,31 @@ TEST_CASE("TerrainReader does not grow the terrain list after a failed new entry
 }
 
 /*!
+ * @brief 状態遷移の枠 (MAX_FEAT_STATES) を超える相互作用は不正な値として拒否する
+ */
+TEST_CASE("TerrainReader reports interactions beyond the state slots as invalid values")
+{
+    TerrainStateGuard guard;
+    auto data = make_terrain();
+    const auto new_id = static_cast<int>(TerrainList::get_instance().size());
+    data["id"] = new_id;
+    constexpr auto slots = static_cast<size_t>(MAX_FEAT_STATES);
+    const std::vector<std::string> actions = { "OPEN", "CLOSE", "BASH", "SPIKE", "DISARM", "TUNNEL", "LOS", "MOVE", "PLACE" };
+    REQUIRE(actions.size() == slots + 1);
+    data["interactions"] = nlohmann::json::object();
+    for (size_t i = 0; i < slots; ++i) {
+        data["interactions"][actions[i]] = "FLOOR";
+    }
+    REQUIRE(TerrainReader(data, guard.session).read().has_value());
+
+    // 新しいIDにして、前の読み込みで埋まった状態を引き継がない地形で枠を超えさせる
+    guard.session = {};
+    data["id"] = new_id + 1;
+    data["interactions"][actions.back()] = "FLOOR";
+    CHECK(test::to_error_code(TerrainReader(data, guard.session).read()) == ParseErrorType::INVALID_VALUE);
+}
+
+/*!
  * @brief 全ヘルパーの解析エラーを伝播し、既存地形と新規IDの件数を保持する
  */
 TEST_CASE("TerrainReader propagates helper errors without publishing staged terrain")
@@ -291,17 +316,17 @@ TEST_CASE("TerrainReader propagates helper errors without publishing staged terr
     };
     const std::vector<InvalidField> invalid_fields = {
         { "/symbol", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
-        { "/symbol/character", "", ParseErrorType::GENERIC },
+        { "/symbol/character", "", ParseErrorType::INVALID_VALUE },
         { "/symbol/character", "..", ParseErrorType::INVALID_VALUE },
         { "/symbol/color", "UNKNOWN", ParseErrorType::INVALID_FLAG },
         { "/symbol/lit", 1, ParseErrorType::TOO_FEW_ARGUMENTS },
         { "/door", false, ParseErrorType::TOO_FEW_ARGUMENTS },
         { "/door", nlohmann::json::object(), ParseErrorType::TOO_FEW_ARGUMENTS },
         { "/door/power", false, ParseErrorType::INVALID_TYPE },
-        { "/door/power", 256, ParseErrorType::INVALID_FLAG },
+        { "/door/power", 256, ParseErrorType::INVALID_VALUE },
         { "/tunnel", false, ParseErrorType::TOO_FEW_ARGUMENTS },
         { "/tunnel/power", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
-        { "/tunnel/power", -1, ParseErrorType::INVALID_FLAG },
+        { "/tunnel/power", -1, ParseErrorType::INVALID_VALUE },
         { "/trap", false, ParseErrorType::TOO_FEW_ARGUMENTS },
         { "/trap", { { "power", 1 } }, ParseErrorType::TOO_FEW_ARGUMENTS },
         { "/trap", { { "type", "PIT" } }, ParseErrorType::TOO_FEW_ARGUMENTS },
@@ -319,18 +344,18 @@ TEST_CASE("TerrainReader propagates helper errors without publishing staged terr
         { "/convert/type", 1, ParseErrorType::TOO_FEW_ARGUMENTS },
         { "/convert/type", "UNKNOWN", ParseErrorType::INVALID_FLAG },
         { "/convert", { { "type", "STREAM" } }, ParseErrorType::TOO_FEW_ARGUMENTS },
-        { "/convert", { { "type", "STREAM" }, { "stream_index", 255 } }, ParseErrorType::INVALID_FLAG },
+        { "/convert", { { "type", "STREAM" }, { "stream_index", 255 } }, ParseErrorType::INVALID_VALUE },
         { "/generation", false, ParseErrorType::TOO_FEW_ARGUMENTS },
         { "/generation/changes", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
         { "/generation/changes/0", false, ParseErrorType::TOO_FEW_ARGUMENTS },
         { "/generation/changes/0/terrain", "", ParseErrorType::TOO_FEW_ARGUMENTS },
         { "/generation/changes/0/probability", false, ParseErrorType::INVALID_TYPE },
-        { "/generation/changes/0/probability", 0, ParseErrorType::INVALID_FLAG },
-        { "/generation/changes/1/probability", 100, ParseErrorType::INVALID_FLAG },
+        { "/generation/changes/0/probability", 0, ParseErrorType::INVALID_VALUE },
+        { "/generation/changes/1/probability", 100, ParseErrorType::INVALID_VALUE },
         { "/interactions", false, ParseErrorType::TOO_FEW_ARGUMENTS },
         { "/interactions/DESTROYED", 1, ParseErrorType::TOO_FEW_ARGUMENTS },
         { "/interactions/OPEN", "", ParseErrorType::TOO_FEW_ARGUMENTS },
-        { "/interactions/DROP_GOLD", "bad", ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/interactions/DROP_GOLD", "bad", ParseErrorType::INVALID_VALUE },
         { "/interactions/UNKNOWN", "FLOOR", ParseErrorType::INVALID_FLAG },
     };
     for (const auto id : { 0, 3 }) {
@@ -368,7 +393,7 @@ TEST_CASE("TerrainReader accepts IDs up to one below the FEAT_IDX storage maximu
     CHECK(error_idx == max_id);
 
     data["id"] = max_id + 1;
-    CHECK(test::to_error_code(TerrainReader(data, guard.session).read()) == ParseErrorType::INVALID_FLAG);
+    CHECK(test::to_error_code(TerrainReader(data, guard.session).read()) == ParseErrorType::INVALID_VALUE);
     CHECK(terrains.size() == static_cast<size_t>(max_id) + 1);
 }
 
@@ -382,11 +407,11 @@ TEST_CASE("TerrainReader keeps helper validation order and error index timing")
     terrains.resize(0);
     auto data = make_terrain();
     data["id"] = 32767;
-    CHECK(test::to_error_code(TerrainReader(data, guard.session).read()) == ParseErrorType::INVALID_FLAG);
+    CHECK(test::to_error_code(TerrainReader(data, guard.session).read()) == ParseErrorType::INVALID_VALUE);
     CHECK(error_idx == 73);
     data["id"] = 0;
     data["key"] = "";
-    CHECK(test::to_error_code(TerrainReader(data, guard.session).read()) == ParseErrorType::GENERIC);
+    CHECK(test::to_error_code(TerrainReader(data, guard.session).read()) == ParseErrorType::INVALID_VALUE);
     CHECK(error_idx == 73);
     data = make_terrain();
     REQUIRE(TerrainReader(data, guard.session).read().has_value());
@@ -400,11 +425,11 @@ TEST_CASE("TerrainReader keeps helper validation order and error index timing")
         CHECK(terrains.get_terrain(0).generation_changes.size() == 2);
     };
     data["symbol"]["character"] = "";
-    data["door"] = { { "power", 256 } };
+    data["door"] = { { "power", false } };
     data["tunnel"] = nlohmann::json::object();
-    check_invalid(ParseErrorType::GENERIC);
+    check_invalid(ParseErrorType::INVALID_VALUE);
     data["symbol"]["character"] = ".";
-    check_invalid(ParseErrorType::INVALID_FLAG);
+    check_invalid(ParseErrorType::INVALID_TYPE);
     data["door"]["power"] = 0;
     check_invalid(ParseErrorType::TOO_FEW_ARGUMENTS);
     data["tunnel"]["power"] = 0;
@@ -425,7 +450,7 @@ TEST_CASE("TerrainReader keeps helper validation order and error index timing")
     data["interactions"] = { { "DESTROYED", 1 } };
     check_invalid(ParseErrorType::TOO_FEW_ARGUMENTS);
     data["convert"]["stream_index"] = 0;
-    check_invalid(ParseErrorType::INVALID_FLAG);
+    check_invalid(ParseErrorType::INVALID_VALUE);
     data["generation"]["changes"][0]["probability"] = 25;
     check_invalid(ParseErrorType::TOO_FEW_ARGUMENTS);
 }

@@ -188,7 +188,7 @@ TEST_CASE("MagicReader rejects invalid difficulty without publishing partial dat
     for (const auto &difficulty : std::vector<nlohmann::json>{ -1, 101, 999, std::numeric_limits<uint64_t>::max(), 1.0, true }) {
         CAPTURE(difficulty.dump());
         data["realms"][0]["spells_info"][1]["difficulty"] = difficulty;
-        const auto expected = difficulty.is_number_integer() ? ParseErrorType::INVALID_FLAG : ParseErrorType::INVALID_TYPE;
+        const auto expected = difficulty.is_number_integer() ? ParseErrorType::INVALID_VALUE : ParseErrorType::INVALID_TYPE;
         error_idx = -1;
         CHECK(test::to_error_code(MagicReader(data).read()) == expected);
         CHECK(class_magics_info[0].spell_first == 1);
@@ -241,7 +241,7 @@ TEST_CASE("MagicReader rejects invalid bounded fields without publishing partial
             } else {
                 data["realms"][0]["spells_info"][1][field] = value;
             }
-            const auto expected = value.is_number_integer() ? ParseErrorType::INVALID_FLAG : ParseErrorType::INVALID_TYPE;
+            const auto expected = value.is_number_integer() ? ParseErrorType::INVALID_VALUE : ParseErrorType::INVALID_TYPE;
             error_idx = -1;
             CHECK(test::to_error_code(MagicReader(data).read()) == expected);
             CHECK(class_magics_info[0].spell_first == 1);
@@ -291,7 +291,7 @@ TEST_CASE("MagicReader propagates helper errors without publishing partial data"
     };
     const std::vector<InvalidField> invalid_fields = {
         { "/name", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
-        { "/name", "UNKNOWN_CLASS", ParseErrorType::OUT_OF_BOUNDS },
+        { "/name", "UNKNOWN_CLASS", ParseErrorType::INVALID_FLAG },
         { "/spell_type", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
         { "/spell_type", "UNKNOWN_BOOK", ParseErrorType::INVALID_FLAG },
         { "/magic_status", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
@@ -306,7 +306,7 @@ TEST_CASE("MagicReader propagates helper errors without publishing partial data"
         { "/realms/0/spells_info/1", 1, ParseErrorType::TOO_FEW_ARGUMENTS },
         { "/realms/0/spells_info/1/spell_tag", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
         { "/realms/0/spells_info/1/spell_tag", "unknown-tag", ParseErrorType::INVALID_FLAG },
-        { "/realms/0/spells_info/1/learn_level", 100, ParseErrorType::INVALID_FLAG },
+        { "/realms/0/spells_info/1/learn_level", 100, ParseErrorType::INVALID_VALUE },
     };
     for (const auto &invalid : invalid_fields) {
         CAPTURE(invalid.path);

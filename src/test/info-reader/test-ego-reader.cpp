@@ -158,7 +158,7 @@ TEST_CASE("EgoReader limits the activation difficulty level like item levels")
         EgoStateGuard guard;
         auto data = make_ego();
         data["level"] = MAX_DEPTH;
-        CHECK(test::to_error_code(EgoReader(data).read()) == ParseErrorType::INVALID_FLAG);
+        CHECK(test::to_error_code(EgoReader(data).read()) == ParseErrorType::INVALID_VALUE);
         CHECK_FALSE(egos_info.contains(i2enum<EgoType>(4)));
     }
     EgoStateGuard guard;
@@ -308,7 +308,7 @@ TEST_CASE("EgoReader propagates helper errors without publishing partial records
         { "/extra_flags/0", { { "numerator", 1 }, { "denominator", 3 }, { "flags", { "RES_FIRE" } } }, ParseErrorType::INVALID_VALUE },
         { "/extra_flags/0/chance", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
         { "/extra_flags/0/chance", false, ParseErrorType::INVALID_TYPE },
-        { "/extra_flags/0/chance", 101, ParseErrorType::INVALID_FLAG },
+        { "/extra_flags/0/chance", 101, ParseErrorType::INVALID_VALUE },
         { "/extra_flags/0/flags", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
         { "/extra_flags/0/flags", nlohmann::json::object(), ParseErrorType::INVALID_TYPE },
         { "/extra_flags/0/flags", nlohmann::json::array(), ParseErrorType::TOO_FEW_ARGUMENTS },

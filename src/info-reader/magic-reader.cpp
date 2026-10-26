@@ -154,7 +154,7 @@ tl::expected<int, ParseErrorType> MagicReader::read_class_id() const
 
     const auto player_class = class_list.find(classname_obj.get<std::string>());
     if (player_class == class_list.end()) {
-        return tl::make_unexpected(ParseErrorType::OUT_OF_BOUNDS);
+        return tl::make_unexpected(ParseErrorType::INVALID_FLAG);
     }
     return enum2i(player_class->second);
 }

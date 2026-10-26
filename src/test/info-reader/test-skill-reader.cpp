@@ -255,7 +255,7 @@ TEST_CASE("SkillReader diagnostics identify the class field and cause")
     }
     SUBCASE("out of range rank")
     {
-        expected = ParseErrorType::INVALID_FLAG;
+        expected = ParseErrorType::INVALID_VALUE;
         data["weapons"]["SWORD"]["max_ranks"][63] = 5;
         path = "$.weapons.SWORD.max_ranks[63]";
         reason = _("0以上4以下の整数が必要です", "expected an integer in [0, 4]");
@@ -269,7 +269,7 @@ TEST_CASE("SkillReader diagnostics identify the class field and cause")
     }
     SUBCASE("wrong array length")
     {
-        expected = ParseErrorType::OUT_OF_BOUNDS;
+        expected = ParseErrorType::INVALID_VALUE;
         data["weapons"]["SWORD"]["start_ranks"].erase(63);
         path = "$.weapons.SWORD.start_ranks";
         reason = _("要素数は64個が必要ですが、63個あります", "expected 64 entries, got 63");
@@ -292,7 +292,7 @@ TEST_CASE("SkillReader diagnostics identify the class field and cause")
     }
     SUBCASE("out of range experience")
     {
-        expected = ParseErrorType::INVALID_FLAG;
+        expected = ParseErrorType::INVALID_VALUE;
         data["skills"]["SHIELD"]["max_exp"] = 8001;
         path = "$.skills.SHIELD.max_exp";
         reason = _("0以上8000以下の整数が必要です", "expected an integer in [0, 8000]");
@@ -306,7 +306,7 @@ TEST_CASE("SkillReader diagnostics identify the class field and cause")
     }
     SUBCASE("invalid id")
     {
-        expected = ParseErrorType::INVALID_FLAG;
+        expected = ParseErrorType::INVALID_VALUE;
         data["id"] = 29;
         class_id = "29";
         path = "$.id";

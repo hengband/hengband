@@ -220,7 +220,7 @@ tl::expected<void, ParseErrorType> ArtifactReader::set_art_flags(ArtifactDefinit
 
     for (auto &flag : flag_data) {
         if (!flag.is_string()) {
-            return tl::unexpected(ParseErrorType::INVALID_FLAG);
+            return tl::unexpected(ParseErrorType::INVALID_TYPE);
         }
         if (!this->grab_one_artifact_flag(artifact, flag.get<std::string>())) {
             return tl::unexpected(ParseErrorType::INVALID_FLAG);

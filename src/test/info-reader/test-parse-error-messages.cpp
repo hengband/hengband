@@ -6,6 +6,7 @@
 #include "info-reader/parse-error-types.h"
 #include "locale/character-encoding.h"
 #include "util/enum-converter.h"
+#include <array>
 #include <doctest/doctest.h>
 #include <nlohmann/json.hpp>
 #include <string>
@@ -30,16 +31,49 @@ TEST_CASE("format_definition_load_error preserves diagnostics before the record 
     CHECK(format_definition_load_error(encoded, record) == encoded.front() + "\n" + record);
 }
 
+namespace {
+/*!
+ * @brief エラーである解析エラーの種類の一覧
+ * @details 番号には欠番があるため、番号の範囲ではなく種類を列挙して確かめる
+ */
+constexpr auto PARSE_ERRORS = std::to_array({
+    ParseErrorType::GENERIC,
+    ParseErrorType::NON_SEQUENTIAL_RECORDS,
+    ParseErrorType::INVALID_FLAG,
+    ParseErrorType::UNDEFINED_DIRECTIVE,
+    ParseErrorType::OUT_OF_BOUNDS,
+    ParseErrorType::TOO_FEW_ARGUMENTS,
+    ParseErrorType::UNDEFINED_TERRAIN_TAG,
+    ParseErrorType::INVALID_PVAL,
+    ParseErrorType::INVALID_VALUE,
+    ParseErrorType::INVALID_TYPE,
+});
+}
+
 TEST_CASE("describe_parse_error names every parse error")
 {
     // ParseErrorType::NONE (0) はエラーではないので名称を持たず、代替名になる
     const auto fallback = describe_parse_error(ParseErrorType::NONE);
-    for (auto code = enum2i(ParseErrorType::GENERIC); code < enum2i(ParseErrorType::MAX); ++code) {
-        CAPTURE(code);
-        const auto err = static_cast<ParseErrorType>(code);
+    for (const auto err : PARSE_ERRORS) {
+        CAPTURE(enum2i(err));
         CHECK_FALSE(describe_parse_error(err).empty());
         CHECK(describe_parse_error(err) != fallback);
     }
+}
+
+TEST_CASE("parse error codes keep their displayed numbers")
+{
+    // 番号は診断に表示されるので、種類を削除しても残りの番号は変えない
+    CHECK(enum2i(ParseErrorType::GENERIC) == 1);
+    CHECK(enum2i(ParseErrorType::NON_SEQUENTIAL_RECORDS) == 4);
+    CHECK(enum2i(ParseErrorType::INVALID_FLAG) == 5);
+    CHECK(enum2i(ParseErrorType::UNDEFINED_DIRECTIVE) == 6);
+    CHECK(enum2i(ParseErrorType::OUT_OF_BOUNDS) == 8);
+    CHECK(enum2i(ParseErrorType::TOO_FEW_ARGUMENTS) == 9);
+    CHECK(enum2i(ParseErrorType::UNDEFINED_TERRAIN_TAG) == 10);
+    CHECK(enum2i(ParseErrorType::INVALID_PVAL) == 11);
+    CHECK(enum2i(ParseErrorType::INVALID_VALUE) == 12);
+    CHECK(enum2i(ParseErrorType::INVALID_TYPE) == 13);
 }
 
 TEST_CASE("describe_parse_error falls back for non-errors and out of range values")
@@ -49,13 +83,19 @@ TEST_CASE("describe_parse_error falls back for non-errors and out of range value
     CHECK(describe_parse_error(ParseErrorType::MAX) == fallback);
     CHECK(describe_parse_error(static_cast<ParseErrorType>(-1)) == fallback);
     CHECK(describe_parse_error(static_cast<ParseErrorType>(enum2i(ParseErrorType::MAX) + 1)) == fallback);
+
+    // 削除した種類の欠番
+    for (const auto code : { 2, 3, 7 }) {
+        CAPTURE(code);
+        CHECK(describe_parse_error(static_cast<ParseErrorType>(code)) == fallback);
+    }
 }
 
 TEST_CASE("format_record_parse_error includes the file position name and code")
 {
-    for (auto code = enum2i(ParseErrorType::GENERIC); code < enum2i(ParseErrorType::MAX); ++code) {
+    for (const auto err : PARSE_ERRORS) {
+        const auto code = enum2i(err);
         CAPTURE(code);
-        const auto err = static_cast<ParseErrorType>(code);
         const auto message = format_record_parse_error("Definitions.jsonc", "records", 27, "", err);
         CHECK(message.find("Definitions.jsonc: $.records[27]: ") == 0);
         CHECK(message.find(describe_parse_error(err)) != std::string::npos);
