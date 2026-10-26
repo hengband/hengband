@@ -1901,6 +1901,7 @@
     <ClInclude Include="..\..\src\util\finalizer.h" />
     <ClInclude Include="..\..\src\util\flag-group.h" />
     <ClInclude Include="..\..\src\util\int-char-converter.h" />
+    <ClInclude Include="..\..\src\util\menu-column-switcher.h" />
     <ClInclude Include="..\..\src\util\object-sort.h" />
     <ClInclude Include="..\..\src\util\point-2d.h" />
     <ClInclude Include="..\..\src\util\probability-table.h" />
