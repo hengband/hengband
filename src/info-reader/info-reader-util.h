@@ -11,8 +11,6 @@
 #include <type_traits>
 #include <utility>
 
-extern int error_idx; //!< エラーが発生したinfo ID
-
 enum class FixedArtifactId : short;
 enum class MonraceId : short;
 enum class QuestId : short;

@@ -109,8 +109,6 @@ void init_json(std::string_view filename, std::string_view keyname, DefinitionHa
         quit(fmt::format(_("{}: 定義形式のversionが不正です", "{}: invalid definition version"), filename));
     }
 
-    error_idx = -1;
-
     auto &elements = json_object[keyname];
     for (size_t index = 0; index < elements.size(); ++index) {
         // 起動中は履歴に残らず、msg_print自体も入力を待つため、レコード単位で診断を捕捉する。

@@ -130,9 +130,7 @@ void check_rejected_by_all_readers(const std::string &token)
 
     const auto data = make_item_with_activation(token);
     CHECK(test::to_error_code(read_record<BaseitemReader>(data)) == ParseErrorType::INVALID_FLAG);
-    error_idx = -1;
     CHECK(test::to_error_code(read_record<ArtifactReader>(data)) == ParseErrorType::INVALID_FLAG);
-    error_idx = -1;
     CHECK(test::to_error_code(read_record<EgoReader>(data)) == ParseErrorType::INVALID_FLAG);
     CHECK(egos_info.empty());
 }
@@ -151,12 +149,10 @@ void check_accepted_by_all_readers(const std::string &token, RandomArtActType ex
     const auto &baseitem = BaseitemList::get_instance().get_baseitem(1);
     CHECK(baseitem.act_idx == expected);
     CHECK(baseitem.flags.has(TR_ACTIVATE));
-    error_idx = -1;
     REQUIRE(read_record<ArtifactReader>(data).has_value());
     const auto &artifact = ArtifactList::get_instance().get_artifact(i2enum<FixedArtifactId>(1));
     CHECK(artifact.act_idx == expected);
     CHECK(artifact.flags.has(TR_ACTIVATE));
-    error_idx = -1;
     REQUIRE(read_record<EgoReader>(data).has_value());
     CHECK(egos_info.at(i2enum<EgoType>(1)).act_idx == expected);
 }
@@ -239,7 +235,6 @@ TEST_CASE("Activation readers preserve missing activation and non-string errors"
         const auto data = make_item_with_activation(value);
         const auto expected = value.is_null() ? ParseErrorType::NONE : ParseErrorType::INVALID_TYPE;
         CHECK(test::to_error_code(read_record<BaseitemReader>(data)) == expected);
-        error_idx = -1;
         CHECK(test::to_error_code(read_record<ArtifactReader>(data)) == expected);
         CHECK(test::to_error_code(read_record<EgoReader>(data)) == expected);
     }
@@ -263,7 +258,6 @@ TEST_CASE("Activation reader guard restores existing artifact definitions")
         data["activate"] = "BA_FIRE_4";
         // アーティファクトの元のベースアイテムは、先に読み込まれていなければならない。
         REQUIRE(read_record<BaseitemReader>(data).has_value());
-        error_idx = -1;
         REQUIRE(read_record<ArtifactReader>(data).has_value());
         CHECK(artifacts.size() == 1);
     }

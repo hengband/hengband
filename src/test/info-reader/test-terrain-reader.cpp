@@ -16,12 +16,10 @@ namespace {
 class TerrainStateGuard {
 public:
     /*!
-     * @brief 既存の地形定義を退避し、エラー位置とメッセージ出力をテスト用に設定する
-     * @param initial_error_idx テストの間に設定しておく error_idx の値
+     * @brief 既存の地形定義を退避し、メッセージ出力をテスト用に設定する
      */
-    explicit TerrainStateGuard(int initial_error_idx = -1)
-        : reader_state(initial_error_idx)
-        , terrains(TerrainList::get_instance())
+    TerrainStateGuard()
+        : terrains(TerrainList::get_instance())
         , saved_terrains(terrains.begin(), terrains.end())
     {
     }
@@ -32,7 +30,7 @@ public:
     TerrainStateGuard &operator=(const TerrainStateGuard &) = delete;
 
     /*!
-     * @brief 退避した地形定義を復元する。エラー位置は reader_state が復元する
+     * @brief 退避した地形定義を復元する
      */
     ~TerrainStateGuard()
     {
@@ -398,7 +396,7 @@ TEST_CASE("TerrainReader accepts IDs up to one below the FEAT_IDX storage maximu
  */
 TEST_CASE("TerrainReader keeps helper validation order and error index timing")
 {
-    TerrainStateGuard guard(73);
+    TerrainStateGuard guard;
     auto &terrains = TerrainList::get_instance();
     terrains.resize(0);
     auto data = make_terrain();
