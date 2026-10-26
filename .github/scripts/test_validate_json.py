@@ -208,6 +208,13 @@ class VaultValidationTest(unittest.TestCase):
         ok, message = self.validate({"vaults": [self.record, second]})
         self.assertTrue(ok, message)
 
+    def test_id_upper_bound(self):
+        for value, accepted in ((32766, True), (32767, False)):
+            with self.subTest(value=value):
+                record = {**self.record, "id": value}
+                ok, message = self.validate({"vaults": [record]})
+                self.assertEqual(ok, accepted, message)
+
     def test_invalid_roots(self):
         for root in (None, [], {}, {"vaults": None}, {"vaults": {}}, {"vaults": []}):
             with self.subTest(root=root):

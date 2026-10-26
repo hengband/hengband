@@ -59,7 +59,7 @@ tl::expected<void, ParseErrorType> VaultReader::read()
         }
     }
     int id;
-    if (const auto result = this->read_integer("id", id, 0, std::numeric_limits<short>::max()); !result) {
+    if (const auto result = this->read_integer("id", id, 0, std::numeric_limits<short>::max() - 1); !result) {
         return result;
     }
     if (id <= error_idx) {

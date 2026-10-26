@@ -182,7 +182,7 @@ TEST_CASE("VaultReader preserves exact error precedence and every existing recor
         expected = ParseErrorType::INVALID_TYPE;
         id = "\"bad\"";
         path = "$.id";
-        reason = _("0以上32767以下の整数が必要です", "expected an integer in [0, 32767]");
+        reason = _("0以上32766以下の整数が必要です", "expected an integer in [0, 32766]");
     }
     SUBCASE("id order before name validation")
     {
@@ -249,4 +249,18 @@ TEST_CASE("VaultReader preserves exact error precedence and every existing recor
         CHECK(vaults_info[i].name == previous[i].name);
         CHECK(vaults_info[i].text == previous[i].text);
     }
+}
+
+TEST_CASE("VaultReader accepts ID 32766 and rejects ID 32767")
+{
+    const auto restore = test::scoped_restore(vaults_info, error_idx);
+    const test::ScopedReaderState reader_state;
+    vaults_info.clear();
+    auto data = make_vault();
+    data["id"] = 32766;
+    REQUIRE(VaultReader(data).read().has_value());
+    data["id"] = 32767;
+    CHECK(test::to_error_code(VaultReader(data).read()) == ParseErrorType::INVALID_VALUE);
+    CHECK(error_idx == 32766);
+    CHECK(vaults_info.size() == 32767);
 }

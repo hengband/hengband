@@ -13,7 +13,7 @@
         "additionalProperties": false,
         "required": ["id", "name", "type", "rating", "height", "width", "layout"],
         "properties": {
-          "id": { "type": "integer", "minimum": 0, "maximum": 32767 },
+          "id": { "type": "integer", "minimum": 0, "maximum": 32766 },
           "name": { "type": "string", "minLength": 1 },
           "type": { "type": "integer", "enum": [7, 8, 17] },
           "rating": {
