@@ -11,8 +11,14 @@
 #include <limits>
 #include <utility>
 
-VaultReader::VaultReader(const nlohmann::json &data)
+VaultReader::Session VaultReader::create_session(tl::optional<int> last_id)
+{
+    return Session(DefinitionIdOrder::STRICTLY_INCREASING, { 0, std::numeric_limits<short>::max() - 1 }, _("Vault", "vault"), last_id);
+}
+
+VaultReader::VaultReader(const nlohmann::json &data, Session &session)
     : data(data)
+    , session(session)
 {
 }
 
@@ -50,6 +56,10 @@ tl::expected<void, ParseErrorType> VaultReader::read()
     constexpr auto keys = std::to_array<std::string_view>({ "id", "name", "type", "rating", "height", "width", "layout" });
     for (const auto key : keys) {
         if (!this->data.contains(key)) {
+            if (key == "id") {
+                const auto result = this->session.read(get_json_value(this->data, key));
+                return this->fail(result.error().code, "$.id", result.error().reason);
+            }
             return this->fail(ParseErrorType::TOO_FEW_ARGUMENTS, fmt::format("$.{}", key), _("必須項目がありません", "missing required field"));
         }
     }
@@ -58,13 +68,12 @@ tl::expected<void, ParseErrorType> VaultReader::read()
             return this->fail(ParseErrorType::UNDEFINED_DIRECTIVE, fmt::format("$.{}", entry.key()), _("未知の項目です", "unknown field"));
         }
     }
-    int id;
-    if (const auto result = this->read_integer("id", id, 0, std::numeric_limits<short>::max() - 1); !result) {
-        return result;
+    const auto id_result = this->session.read(get_json_value(this->data, "id"));
+    if (!id_result) {
+        return this->fail(id_result.error().code, "$.id", id_result.error().reason);
     }
-    if (id <= error_idx) {
-        return this->fail(ParseErrorType::NON_SEQUENTIAL_RECORDS, "$.id", _("IDは重複せず昇順に並べてください", "IDs must be unique and in increasing order"));
-    }
+    const auto id = *id_result;
+
     vault_type vault;
     vault.idx = static_cast<short>(id);
     if (!this->data["name"].is_string() || this->data["name"].get_ref<const std::string &>().empty()) {
@@ -116,6 +125,5 @@ tl::expected<void, ParseErrorType> VaultReader::read()
         vaults_info.resize(id + 1);
     }
     vaults_info[id] = std::move(vault);
-    error_idx = id;
     return {};
 }

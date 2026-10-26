@@ -286,12 +286,16 @@ void init_spell_info()
  */
 void init_vaults_info()
 {
-    auto parser = [](nlohmann::json &element) {
-        VaultReader reader(element);
+    auto session = VaultReader::create_session();
+    auto parser = [&session](nlohmann::json &element) {
+        VaultReader reader(element, session);
         const auto result = reader.read();
         if (!result) {
             const auto &diagnostic = reader.error().value();
             msg_print(_("VaultDefinitions.jsonc: Vault{}の{}: {}", "VaultDefinitions.jsonc: vault {} at {}: {}"), diagnostic.id, diagnostic.path, diagnostic.reason);
+        }
+        if (result) {
+            session.commit();
         }
         return result;
     };
