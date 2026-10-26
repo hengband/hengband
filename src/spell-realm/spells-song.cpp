@@ -17,9 +17,9 @@
 #include "spell/spells-execution.h"
 #include "spell/technic-info-table.h"
 #include "status/action-setter.h"
+#include "system/deferred-update-requests.h"
 #include "system/floor/floor-info.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
@@ -55,30 +55,20 @@ void check_music(PlayerType *player_ptr)
     }
 
     s64b_sub(&(player_ptr->csp), &(player_ptr->csp_frac), need_mana, need_mana_frac);
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.set_flag(MainWindowRedrawingFlag::MP);
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.set_flag(MainWindowRedrawingFlag::MP);
     if (interupting_song_effect != 0) {
         set_singing_song_effect(player_ptr, interupting_song_effect);
         set_interrupting_song_effect(player_ptr, MUSIC_NONE);
         msg_print(_("歌を再開した。", "You resume singing."));
         player_ptr->action = ACTION_SING;
-        static constexpr auto flags_srf = {
-            StatusRecalculatingFlag::BONUS,
-            StatusRecalculatingFlag::HP,
-            StatusRecalculatingFlag::MONSTER_STATUSES,
-        };
-        rfu.set_flags(flags_srf);
+        dur.request_monster_update_and_map_redrawing();
+        dur.request_bonus_and_max_hp_recalculation();
         static constexpr auto flags_mwrf = {
-            MainWindowRedrawingFlag::MAP,
             MainWindowRedrawingFlag::TIMED_EFFECT,
             MainWindowRedrawingFlag::ACTION,
         };
-        rfu.set_flags(flags_mwrf);
-        static constexpr auto flags_swrf = {
-            SubWindowRedrawingFlag::OVERHEAD,
-            SubWindowRedrawingFlag::DUNGEON,
-        };
-        rfu.set_flags(flags_swrf);
+        dur.set_flags(flags_mwrf);
     }
 
     PlayerSkill(player_ptr).gain_continuous_spell_skill_exp(RealmType::MUSIC, spell_id);
@@ -119,8 +109,8 @@ bool set_tim_stealth(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     }
 
     player_ptr->tim_stealth = v;
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     if (!notice) {
         return false;
     }
@@ -129,7 +119,7 @@ bool set_tim_stealth(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
         disturb(player_ptr, false, true);
     }
 
-    rfu.set_flag(StatusRecalculatingFlag::BONUS);
+    dur.set_flag(StatusRecalculatingFlag::BONUS);
     handle_stuff(player_ptr);
     return true;
 }
@@ -159,9 +149,9 @@ void stop_singing(PlayerType *player_ptr)
     (void)exe_spell(player_ptr, RealmType::MUSIC, get_singing_song_id(player_ptr), SpellProcessType::STOP);
     set_singing_song_effect(player_ptr, MUSIC_NONE);
     set_singing_song_id(player_ptr, 0);
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.set_flag(StatusRecalculatingFlag::BONUS);
-    rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.set_flag(StatusRecalculatingFlag::BONUS);
+    dur.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
 }
 
 bool music_singing(PlayerType *player_ptr, int music_songs)

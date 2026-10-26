@@ -9,6 +9,7 @@
 #include "view/display-messages.h"
 #include "wizard/artifact-analyzer.h"
 #include "wizard/spoiler-util.h"
+#include <fmt/format.h>
 #include <sstream>
 
 /*!
@@ -108,14 +109,14 @@ static void spoiler_print_art(const ArtifactsDumpInfo *art_ptr, std::ofstream &o
     spoiler_outlist("", art_ptr->misc_magic, list_separator, ofs);
 
     if (!art_ptr->addition.empty()) {
-        ofs << format(_("%s追加: %s\n", "%sAdditional %s\n"), spoiler_indent.data(), art_ptr->addition.data());
+        ofs << fmt::format(_("{}追加: {}\n", "{}Additional {}\n"), spoiler_indent, art_ptr->addition);
     }
 
     if (!art_ptr->activation.empty()) {
-        ofs << format(_("%s発動: %s\n", "%sActivates for %s\n"), spoiler_indent.data(), art_ptr->activation.data());
+        ofs << fmt::format(_("{}発動: {}\n", "{}Activates for {}\n"), spoiler_indent, art_ptr->activation);
     }
 
-    ofs << format("%s%s\n\n", spoiler_indent.data(), art_ptr->misc_desc.data());
+    ofs << fmt::format("{}{}\n\n", spoiler_indent, art_ptr->misc_desc);
 }
 
 /*!

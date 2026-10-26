@@ -17,8 +17,8 @@
 #include "spell/spell-info.h"
 #include "status/bad-status-setter.h"
 #include "status/base-status.h"
+#include "system/deferred-update-requests.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
@@ -78,7 +78,7 @@ bool do_cmd_cast_learned(PlayerType *player_ptr)
         player_ptr->csp = 0;
         player_ptr->csp_frac = 0;
         msg_print(_("精神を集中しすぎて気を失ってしまった！", "You faint from the effort!"));
-        (void)BadStatusSetter(player_ptr).mod_paralysis(randnum1<short>(5 * oops + 1));
+        (void)BadStatusSetter(player_ptr).mod_paralysis(roll_spell_over_exertion_duration(oops));
         chg_virtue(player_ptr, Virtue::KNOWLEDGE, -10);
         if (one_in_(2)) {
             const auto perm = one_in_(4);
@@ -88,12 +88,7 @@ bool do_cmd_cast_learned(PlayerType *player_ptr)
     }
 
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.set_flag(MainWindowRedrawingFlag::MP);
-    static constexpr auto flags = {
-        SubWindowRedrawingFlag::PLAYER,
-        SubWindowRedrawingFlag::SPELL,
-    };
-    rfu.set_flags(flags);
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.set_flag(MainWindowRedrawingFlag::MP);
     return true;
 }

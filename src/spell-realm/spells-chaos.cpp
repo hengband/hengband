@@ -8,15 +8,16 @@
 #include "player/player-damage.h"
 #include "spell-kind/spells-floor.h"
 #include "spell-kind/spells-launcher.h"
+#include "system/deferred-update-requests.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/dungeon/quest-definition.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "system/terrain/terrain-definition.h"
 #include "target/projection-path-calculator.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
 
 /*!
@@ -61,11 +62,11 @@ void call_the_void(PlayerType *player_ptr)
         return;
     }
 
+    const auto is_prayer = mp_ptr->spell_book == ItemKindType::LIFE_BOOK;
 #ifdef JP
-    msg_format("あなたは%sを壁に近すぎる場所で唱えてしまった！", ((mp_ptr->spell_book == ItemKindType::LIFE_BOOK) ? "祈り" : "呪文"));
+    msg_print("あなたは{}を壁に近すぎる場所で唱えてしまった！", is_prayer ? "祈り" : "呪文");
 #else
-    msg_format("You %s the %s too close to a wall!", ((mp_ptr->spell_book == ItemKindType::LIFE_BOOK) ? "recite" : "cast"),
-        ((mp_ptr->spell_book == ItemKindType::LIFE_BOOK) ? "prayer" : "spell"));
+    msg_print("You {} the {} too close to a wall!", is_prayer ? "recite" : "cast", is_prayer ? "prayer" : "spell");
 #endif
     msg_print(_("大きな爆発音があった！", "There is a loud explosion!"));
 
@@ -144,7 +145,7 @@ bool vanish_dungeon(PlayerType *player_ptr)
             (void)set_monster_csleep(floor, grid.m_idx, 0);
             if (monster.ml) {
                 const auto m_name = monster_desc(player_ptr, monster, 0);
-                msg_format(_("%s^が目を覚ました。", "%s^ wakes up."), m_name.data());
+                msg_print(_("{}が目を覚ました。", "{} wakes up."), str_upcase_first(m_name));
             }
         }
 
@@ -154,23 +155,10 @@ bool vanish_dungeon(PlayerType *player_ptr)
     }
 
     erase_all_walls(floor);
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    static constexpr auto flags_srf = {
-        StatusRecalculatingFlag::UN_VIEW,
-        StatusRecalculatingFlag::UN_LITE,
-        StatusRecalculatingFlag::VIEW,
-        StatusRecalculatingFlag::LITE,
-        StatusRecalculatingFlag::FLOW,
-        StatusRecalculatingFlag::MONSTER_LITE,
-        StatusRecalculatingFlag::MONSTER_STATUSES,
-    };
-    rfu.set_flags(flags_srf);
-    rfu.set_flag(MainWindowRedrawingFlag::MAP);
-    static constexpr auto flags_swrf = {
-        SubWindowRedrawingFlag::OVERHEAD,
-        SubWindowRedrawingFlag::DUNGEON,
-    };
-    rfu.set_flags(flags_swrf);
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.request_monster_update_and_map_redrawing();
+    dur.request_sight_recalculation();
+    dur.set_flag(StatusRecalculatingFlag::FLOW);
     return true;
 }
 
@@ -191,7 +179,7 @@ void cast_meteor(PlayerType *player_ptr, int dam, POSITION rad)
         Pos2D pos(0, 0);
         int count;
         for (count = 0; count <= 20; count++) {
-            const Pos2DVec vec(randint0(17) - 8, randint0(17) - 8);
+            const Pos2DVec vec{ randint0(17) - 8, randint0(17) - 8 };
             pos = p_pos + vec;
             const auto dx = std::abs(player_ptr->x - pos.x);
             const auto dy = std::abs(player_ptr->y - pos.y);

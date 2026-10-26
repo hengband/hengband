@@ -16,11 +16,6 @@ QuestFixedMapList &QuestFixedMapList::get_instance()
     return instance;
 }
 
-QuestFixedMap &QuestFixedMapList::emplace(QuestId id)
-{
-    return this->maps[id];
-}
-
 tl::optional<QuestFixedMap> QuestFixedMapList::find(QuestId id) const
 {
     const auto it = this->maps.find(id);
@@ -29,11 +24,6 @@ tl::optional<QuestFixedMap> QuestFixedMapList::find(QuestId id) const
     }
 
     return it->second;
-}
-
-void QuestFixedMapList::clear()
-{
-    this->maps.clear();
 }
 
 void QuestFixedMapList::set_base_legend(std::map<char, QuestLegendCell> legend)

@@ -12,6 +12,7 @@
 
 #include "cmd-action/cmd-mind.h"
 #include "action/action-limited.h"
+#include "bot/bot-json-output.h"
 #include "core/asking-player.h"
 #include "core/window-redrawer.h"
 #include "effect/attribute-types.h"
@@ -21,7 +22,7 @@
 #include "game-option/input-options.h"
 #include "grid/grid.h"
 #include "inventory/inventory-slot-types.h"
-#include "io/input-key-acceptor.h"
+#include "io/input-context.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "mind/mind-berserker.h"
@@ -41,17 +42,19 @@
 #include "player/player-status-table.h"
 #include "player/player-status.h"
 #include "spell-kind/spells-teleport.h"
+#include "spell/spell-info.h"
 #include "status/bad-status-setter.h"
 #include "status/base-status.h"
+#include "system/deferred-update-requests.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
 #include "timed-effect/timed-effects.h"
 #include "util/enum-converter.h"
 #include "view/display-messages.h"
 #include "view/display-util.h"
+#include <fmt/format.h>
 
 /*!
  * @brief 職業別特殊技能の処理用構造体
@@ -236,7 +239,7 @@ static void check_mind_mindcrafter(PlayerType *player_ptr, cm_type *cm_ptr)
         return;
     }
 
-    msg_print(_(format("%sの力が制御できない氾流となって解放された！", cm_ptr->mind_explanation), "Your mind unleashes its power in an uncontrollable storm!"));
+    msg_print(_("{}の力が制御できない氾流となって解放された！", "Your mind unleashes its power in an uncontrollable storm!"), cm_ptr->mind_explanation);
     project(player_ptr, PROJECT_WHO_UNCTRL_POWER, 2 + cm_ptr->plev / 10, player_ptr->y, player_ptr->x, cm_ptr->plev * 2, AttributeType::MANA,
         PROJECT_JUMP | PROJECT_KILL | PROJECT_GRID | PROJECT_ITEM);
     player_ptr->csp = std::max(0, player_ptr->csp - cm_ptr->plev * std::max(1, cm_ptr->plev / 10));
@@ -264,7 +267,7 @@ static void check_mind_mirror_master(PlayerType *player_ptr, cm_type *cm_ptr)
         return;
     }
 
-    msg_print(_(format("%sの力が制御できない氾流となって解放された！", cm_ptr->mind_explanation), "Your mind unleashes its power in an uncontrollable storm!"));
+    msg_print(_("{}の力が制御できない氾流となって解放された！", "Your mind unleashes its power in an uncontrollable storm!"), cm_ptr->mind_explanation);
     project(player_ptr, PROJECT_WHO_UNCTRL_POWER, 2 + cm_ptr->plev / 10, player_ptr->y, player_ptr->x, cm_ptr->plev * 2, AttributeType::MANA,
         PROJECT_JUMP | PROJECT_KILL | PROJECT_GRID | PROJECT_ITEM);
     player_ptr->csp = std::max(0, player_ptr->csp - cm_ptr->plev * std::max(1, cm_ptr->plev / 10));
@@ -313,7 +316,7 @@ static bool switch_mind_class(PlayerType *player_ptr, cm_type *cm_ptr)
         cm_ptr->cast = cast_ninja_spell(player_ptr, i2enum<MindNinjaType>(cm_ptr->n));
         return true;
     default:
-        msg_format(_("謎の能力:%d, %d", "Mystery power:%d, %d"), enum2i(cm_ptr->use_mind), cm_ptr->n);
+        msg_print(_("謎の能力:{}, {}", "Mystery power:{}, {}"), enum2i(cm_ptr->use_mind), cm_ptr->n);
         return false;
     }
 }
@@ -342,7 +345,7 @@ static bool judge_mind_chance(PlayerType *player_ptr, cm_type *cm_ptr)
         flush();
     }
 
-    msg_format(_("%sの集中に失敗した！", "You failed to concentrate hard enough for %s!"), cm_ptr->mind_explanation);
+    msg_print(_("{}の集中に失敗した！", "You failed to concentrate hard enough for {}!"), cm_ptr->mind_explanation);
     sound(SoundKind::FAIL);
     check_mind_class(player_ptr, cm_ptr);
     return true;
@@ -356,8 +359,8 @@ static void mind_reflection(PlayerType *player_ptr, cm_type *cm_ptr)
     }
 
     player_ptr->csp = std::max(0, player_ptr->csp - cm_ptr->mana_cost);
-    msg_print(_(format("%sを集中しすぎて気を失ってしまった！", cm_ptr->mind_explanation), "You faint from the effort!"));
-    (void)BadStatusSetter(player_ptr).mod_paralysis(randnum1<short>(5 * oops + 1));
+    msg_print(_("{}を集中しすぎて気を失ってしまった！", "You faint from the effort!"), cm_ptr->mind_explanation);
+    (void)BadStatusSetter(player_ptr).mod_paralysis(roll_spell_over_exertion_duration(oops));
     if (one_in_(2)) {
         return;
     }
@@ -371,7 +374,7 @@ static void process_hard_concentration(PlayerType *player_ptr, cm_type *cm_ptr)
 {
     if ((cm_ptr->use_mind == MindKindType::BERSERKER) || (cm_ptr->use_mind == MindKindType::NINJUTSU)) {
         take_hit(player_ptr, DAMAGE_USELIFE, cm_ptr->mana_cost, _("過度の集中", "concentrating too hard"));
-        RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::HP);
+        DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::HP);
         return;
     }
 
@@ -398,7 +401,16 @@ void do_cmd_mind(PlayerType *player_ptr)
 {
     cm_type tmp_cm;
     cm_type *cm_ptr = initialize_cm_type(player_ptr, &tmp_cm);
-    if (cmd_limit_confused(player_ptr) || !MindPowerGetter(player_ptr).get_mind_power(&cm_ptr->n, false)) {
+    if (cmd_limit_confused(player_ptr)) {
+        return;
+    }
+
+    // 技の一覧は選び終えると消えるので、選んでいる間だけ登録する
+    const auto is_selected = [player_ptr, cm_ptr] {
+        BotDrawnScreenScope bot_screen;
+        return MindPowerGetter(player_ptr).get_mind_power(&cm_ptr->n, false);
+    }();
+    if (!is_selected) {
         return;
     }
 
@@ -422,13 +434,8 @@ void do_cmd_mind(PlayerType *player_ptr)
 
     mind_turn_passing(player_ptr, cm_ptr);
     process_hard_concentration(player_ptr, cm_ptr);
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.set_flag(MainWindowRedrawingFlag::MP);
-    static constexpr auto flags = {
-        SubWindowRedrawingFlag::PLAYER,
-        SubWindowRedrawingFlag::SPELL,
-    };
-    rfu.set_flags(flags);
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.set_flag(MainWindowRedrawingFlag::MP);
 }
 
 static MindKindType decide_use_mind_browse(PlayerType *player_ptr)
@@ -456,6 +463,9 @@ void do_cmd_mind_browse(PlayerType *player_ptr)
 {
     SPELL_IDX n = 0;
     MindKindType use_mind = decide_use_mind_browse(player_ptr);
+
+    // 閲覧では技を選んで説明を出している間も一覧が残るので、閲覧を終えるまで登録する
+    BotDrawnScreenScope bot_screen;
     screen_save();
     while (true) {
         if (!MindPowerGetter(player_ptr).get_mind_power(&n, true)) {
@@ -473,10 +483,12 @@ void do_cmd_mind_browse(PlayerType *player_ptr)
 
         switch (use_mind) {
         case MindKindType::MIRROR_MASTER:
-        case MindKindType::NINJUTSU:
-            prt(_("何かキーを押して下さい。", "Hit any key."), 0, 0);
-            (void)inkey();
+        case MindKindType::NINJUTSU: {
+            constexpr auto prompt = _("何かキーを押して下さい。", "Hit any key.");
+            prt(prompt, 0, 0);
+            (void)input_key_with_context(InputKind::ANY_KEY, prompt);
             break;
+        }
         default:
             break;
         }

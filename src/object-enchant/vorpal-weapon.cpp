@@ -21,31 +21,31 @@ static void print_vorpal_message(player_attack_type *pa_ptr, const int magnifica
 {
     switch (magnification) {
     case 2:
-        msg_format(_("%sを斬った！", "You gouge %s!"), pa_ptr->m_name);
+        msg_print(_("{}を斬った！", "You gouge {}!"), pa_ptr->m_name);
         sound(SoundKind::GOUGE_HIT);
         break;
     case 3:
-        msg_format(_("%sをぶった斬った！", "You maim %s!"), pa_ptr->m_name);
+        msg_print(_("{}をぶった斬った！", "You maim {}!"), pa_ptr->m_name);
         sound(SoundKind::MAIM_HIT);
         break;
     case 4:
-        msg_format(_("%sをメッタ斬りにした！", "You carve %s!"), pa_ptr->m_name);
+        msg_print(_("{}をメッタ斬りにした！", "You carve {}!"), pa_ptr->m_name);
         sound(SoundKind::CARVE_HIT);
         break;
     case 5:
-        msg_format(_("%sをメッタメタに斬った！", "You cleave %s!"), pa_ptr->m_name);
+        msg_print(_("{}をメッタメタに斬った！", "You cleave {}!"), pa_ptr->m_name);
         sound(SoundKind::CLEAVE_HIT);
         break;
     case 6:
-        msg_format(_("%sを刺身にした！", "You smite %s!"), pa_ptr->m_name);
+        msg_print(_("{}を刺身にした！", "You smite {}!"), pa_ptr->m_name);
         sound(SoundKind::SMITE_HIT);
         break;
     case 7:
-        msg_format(_("%sを斬って斬って斬りまくった！", "You eviscerate %s!"), pa_ptr->m_name);
+        msg_print(_("{}を斬って斬って斬りまくった！", "You eviscerate {}!"), pa_ptr->m_name);
         sound(SoundKind::EVISCERATE_HIT);
         break;
     default:
-        msg_format(_("%sを細切れにした！", "You shred %s!"), pa_ptr->m_name);
+        msg_print(_("{}を細切れにした！", "You shred {}!"), pa_ptr->m_name);
         sound(SoundKind::SHRED_HIT);
         break;
     }
@@ -86,7 +86,7 @@ void process_vorpal_attack(PlayerType *player_ptr, player_attack_type *pa_ptr, c
     if (o_ptr->is_specific_artifact(FixedArtifactId::VORPAL_BLADE)) {
         msg_print(_("目にも止まらぬヴォーパルブレード、手錬の早業！", "Your Vorpal Blade goes snicker-snack!"));
     } else {
-        msg_format(_("%sをグッサリ切り裂いた！", "Your weapon cuts deep into %s!"), pa_ptr->m_name);
+        msg_print(_("{}をグッサリ切り裂いた！", "Your weapon cuts deep into {}!"), pa_ptr->m_name);
     }
 
     while (one_in_(vorpal_chance)) {
@@ -96,7 +96,7 @@ void process_vorpal_attack(PlayerType *player_ptr, player_attack_type *pa_ptr, c
     pa_ptr->attack_damage *= (int)vorpal_magnification;
     const auto &monrace = pa_ptr->m_ptr->get_monrace();
     if ((monrace.resistance_flags.has(MonsterResistanceType::RESIST_ALL) ? pa_ptr->attack_damage / 100 : pa_ptr->attack_damage) > pa_ptr->m_ptr->hp) {
-        msg_format(_("%sを真っ二つにした！", "You cut %s in half!"), pa_ptr->m_name);
+        msg_print(_("{}を真っ二つにした！", "You cut {} in half!"), pa_ptr->m_name);
     } else {
         print_vorpal_message(pa_ptr, vorpal_magnification);
     }

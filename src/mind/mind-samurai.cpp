@@ -8,8 +8,9 @@
 #include "action/action-limited.h"
 #include "avatar/avatar.h"
 #include "cmd-action/cmd-attack.h"
+#include "core/asking-player.h"
 #include "inventory/inventory-slot-types.h"
-#include "io/input-key-acceptor.h"
+#include "io/input-context.h"
 #include "mind/stances-table.h"
 #include "monster-attack/monster-attack-player.h"
 #include "monster-race/race-resistance-mask.h"
@@ -22,16 +23,17 @@
 #include "player-info/samurai-data-type.h"
 #include "player/attack-defense-types.h"
 #include "status/action-setter.h"
+#include "system/deferred-update-requests.h"
 #include "system/grid-type-definition.h"
 #include "system/item/item-entity.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
 #include "system/monster-entity.h"
-#include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
 #include "timed-effect/timed-effects.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
+#include <fmt/format.h>
 #include <memory>
 
 struct samurai_slaying_type {
@@ -352,7 +354,7 @@ void concentration(PlayerType *player_ptr)
         player_ptr->csp_frac = 0;
     }
 
-    RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::MP);
+    DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::MP);
 }
 
 /*!
@@ -382,17 +384,18 @@ bool choose_samurai_stance(PlayerType *player_ptr)
     prt(_(" a) 型を崩す", " a) No Form"), 2, 20);
     for (auto i = 0U; i < samurai_stances.size(); i++) {
         if (player_ptr->lev >= samurai_stances[i].min_level) {
-            const auto buf = format(_(" %c) %sの型    %s", " %c) Stance of %-12s  %s"), I2A(i + 1), samurai_stances[i].desc, samurai_stances[i].info);
+            const auto buf = fmt::format(_(" {:c}) {}の型    {}", " {:c}) Stance of {:<12}  {}"), I2A(i + 1), fmt::bytes(samurai_stances[i].desc), samurai_stances[i].info);
             prt(buf, 3 + i, 20);
         }
     }
 
     prt("", 1, 0);
-    prt(_("        どの型で構えますか？", "        Choose Stance: "), 1, 14);
+    constexpr auto prompt = _("        どの型で構えますか？", "        Choose Stance: ");
+    prt(prompt, 1, 14);
 
     SamuraiStanceType new_stance = SamuraiStanceType::NONE;
     while (true) {
-        choice = inkey();
+        choice = input_key_with_context(InputKind::COMMAND_CHAR, prompt);
 
         if (choice == ESCAPE) {
             screen_load();
@@ -421,7 +424,7 @@ bool choose_samurai_stance(PlayerType *player_ptr)
     }
 
     set_action(player_ptr, ACTION_SAMURAI_STANCE);
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &dur = DeferredUpdateRequests::get_instance();
     if (PlayerClass(player_ptr).samurai_stance_is(new_stance)) {
         msg_print(_("構え直した。", "You reassume a stance."));
     } else {
@@ -429,8 +432,8 @@ bool choose_samurai_stance(PlayerType *player_ptr)
             StatusRecalculatingFlag::BONUS,
             StatusRecalculatingFlag::MONSTER_STATUSES,
         };
-        rfu.set_flags(flags_srf);
-        msg_format(_("%sの型で構えた。", "You assume the %s stance."), samurai_stances[enum2i(new_stance) - 1].desc);
+        dur.set_flags(flags_srf);
+        msg_print(_("{}の型で構えた。", "You assume the {} stance."), samurai_stances[enum2i(new_stance) - 1].desc);
         PlayerClass(player_ptr).set_samurai_stance(new_stance);
     }
 
@@ -438,7 +441,7 @@ bool choose_samurai_stance(PlayerType *player_ptr)
         MainWindowRedrawingFlag::ACTION,
         MainWindowRedrawingFlag::TIMED_EFFECT,
     };
-    rfu.set_flags(flags);
+    dur.set_flags(flags);
     screen_load();
     return true;
 }
@@ -490,16 +493,16 @@ void mineuchi(PlayerType *player_ptr, player_attack_type *pa_ptr)
 
     const auto &monrace = pa_ptr->m_ptr->get_monrace();
     if (monrace.resistance_flags.has(MonsterResistanceType::NO_STUN)) {
-        msg_format(_("%s には効果がなかった。", "%s is not effected."), pa_ptr->m_name);
+        msg_print(_("{} には効果がなかった。", "{} is not effected."), pa_ptr->m_name);
         return;
     }
 
     int tmp = (10 + randint1(15) + player_ptr->lev / 5);
     if (pa_ptr->m_ptr->get_remaining_stun()) {
-        msg_format(_("%sはひどくもうろうとした。", "%s is more dazed."), pa_ptr->m_name);
+        msg_print(_("{}はひどくもうろうとした。", "{} is more dazed."), pa_ptr->m_name);
         tmp /= 2;
     } else {
-        msg_format(_("%s はもうろうとした。", "%s is dazed."), pa_ptr->m_name);
+        msg_print(_("{} はもうろうとした。", "{} is dazed."), pa_ptr->m_name);
     }
 
     (void)set_monster_stunned(*player_ptr->current_floor_ptr, pa_ptr->g_ptr->m_idx, pa_ptr->m_ptr->get_remaining_stun() + tmp);
@@ -519,8 +522,8 @@ void musou_counterattack(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
 
     const auto m_target_name = monster_desc(player_ptr, *monap_ptr->m_ptr, 0);
     player_ptr->csp -= 7;
-    msg_format(_("%s^に反撃した！", "You counterattacked %s!"), m_target_name.data());
+    msg_print(_("{}に反撃した！", "You counterattacked {}!"), m_target_name);
     do_cmd_attack(player_ptr, monap_ptr->m_ptr->fy, monap_ptr->m_ptr->fx, HISSATSU_COUNTER);
     monap_ptr->fear = false;
-    RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::MP);
+    DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::MP);
 }

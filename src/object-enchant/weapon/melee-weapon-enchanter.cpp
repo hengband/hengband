@@ -40,12 +40,21 @@ void MeleeWeaponEnchanter::apply_magic()
  */
 void MeleeWeaponEnchanter::strengthen()
 {
-    if ((this->power > 2) || one_in_(40)) {
-        become_random_artifact(this->player_ptr, this->o_ptr, false);
-        return;
-    }
+    if (this->has_ego_request()) {
+        if (const auto &ego = this->get_specific_ego_request()) {
+            this->o_ptr->ego_idx = *ego;
+            this->adjust_for_ego();
+        } else {
+            this->give_ego_index();
+        }
+    } else {
+        if ((this->power > 2) || one_in_(40)) {
+            become_random_artifact(this->player_ptr, this->o_ptr, false);
+            return;
+        }
 
-    this->give_ego_index();
+        this->give_ego_index();
+    }
     if (this->o_ptr->is_random_artifact()) {
         return;
     }

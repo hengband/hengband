@@ -37,6 +37,7 @@
 #include "status/body-improvement.h"
 #include "status/element-resistance.h"
 #include "status/temporary-resistance.h"
+#include "system/deferred-update-requests.h"
 #include "system/enums/monrace/monrace-id.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
@@ -44,7 +45,6 @@
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "system/terrain/terrain-definition.h"
 #include "target/projection-path-calculator.h"
 #include "target/target-checker.h"
@@ -83,11 +83,11 @@ bool kawarimi(PlayerType *player_ptr, bool success)
         return false;
     }
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &dur = DeferredUpdateRequests::get_instance();
     if (!success && one_in_(3)) {
         msg_print(_("変わり身失敗！逃げられなかった。", "Kawarimi failed! You couldn't run away."));
         ninja_data->kawarimi = false;
-        rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
+        dur.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
         return false;
     }
 
@@ -105,7 +105,7 @@ bool kawarimi(PlayerType *player_ptr, bool success)
     }
 
     ninja_data->kawarimi = false;
-    rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
+    dur.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     return true;
 }
 
@@ -166,13 +166,13 @@ bool rush_attack(PlayerType *player_ptr, bool *mdeath)
         const auto &monster = floor.m_list[grid_new.m_idx];
         if (tm_idx != grid_new.m_idx) {
 #ifdef JP
-            msg_format("%s%sが立ちふさがっている！", tm_idx > 0 ? "別の" : "", monster.ml ? "モンスター" : "何か");
+            msg_print("{}{}が立ちふさがっている！", tm_idx > 0 ? "別の" : "", monster.ml ? "モンスター" : "何か");
 #else
-            msg_format("There is %s in the way!", monster.ml ? (tm_idx > 0 ? "another monster" : "a monster") : "someone");
+            msg_print("There is {} in the way!", monster.ml ? (tm_idx > 0 ? "another monster" : "a monster") : "someone");
 #endif
         } else if (!player_ptr->is_located_at(p_pos_new)) {
             const auto m_name = monster_desc(player_ptr, monster, 0);
-            msg_format(_("素早く%sの懐に入り込んだ！", "You quickly jump in and attack %s!"), m_name.data());
+            msg_print(_("素早く{}の懐に入り込んだ！", "You quickly jump in and attack {}!"), m_name);
         }
 
         if (!player_ptr->is_located_at(p_pos_new)) {
@@ -233,16 +233,16 @@ void process_surprise_attack(PlayerType *player_ptr, player_attack_type *pa_ptr)
 void print_surprise_attack(player_attack_type *pa_ptr)
 {
     if (pa_ptr->backstab) {
-        msg_format(_("あなたは冷酷にも眠っている無力な%sを突き刺した！", "You cruelly stab the helpless, sleeping %s!"), pa_ptr->m_name);
+        msg_print(_("あなたは冷酷にも眠っている無力な{}を突き刺した！", "You cruelly stab the helpless, sleeping {}!"), pa_ptr->m_name);
         sound(SoundKind::BACKSTAB_HIT);
     } else if (pa_ptr->surprise_attack) {
-        msg_format(_("不意を突いて%sに強烈な一撃を喰らわせた！", "You make surprise attack, and hit %s with a powerful blow!"), pa_ptr->m_name);
+        msg_print(_("不意を突いて{}に強烈な一撃を喰らわせた！", "You make surprise attack, and hit {} with a powerful blow!"), pa_ptr->m_name);
         sound(SoundKind::SURPRISE_HIT);
     } else if (pa_ptr->stab_fleeing) {
-        msg_format(_("逃げる%sを背中から突き刺した！", "You backstab the fleeing %s!"), pa_ptr->m_name);
+        msg_print(_("逃げる{}を背中から突き刺した！", "You backstab the fleeing {}!"), pa_ptr->m_name);
         sound(SoundKind::FLEEING_HIT);
     } else if (!pa_ptr->monk_attack) {
-        msg_format(_("%sを攻撃した。", "You hit %s."), pa_ptr->m_name);
+        msg_print(_("{}を攻撃した。", "You hit {}."), pa_ptr->m_name);
     }
 }
 
@@ -333,7 +333,7 @@ bool set_superstealth(PlayerType *player_ptr, bool set)
         return false;
     }
 
-    RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
+    DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     if (disturb_state) {
         disturb(player_ptr, false, false);
     }
@@ -380,7 +380,7 @@ bool cast_ninja_spell(PlayerType *player_ptr, MindNinjaType spell)
         if (ninja_data && !ninja_data->kawarimi) {
             msg_print(_("敵の攻撃に対して敏感になった。", "You are now prepared to evade any attacks."));
             ninja_data->kawarimi = true;
-            RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
+            DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
         }
 
         break;

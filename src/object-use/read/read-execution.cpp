@@ -20,10 +20,10 @@
 #include "spell-realm/spells-hex.h"
 #include "spell-realm/spells-song.h"
 #include "status/experience.h"
+#include "system/deferred-update-requests.h"
 #include "system/floor/floor-info.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
@@ -61,31 +61,19 @@ void ObjectReadEntity::execute(bool known)
 
     auto executor = ReadExecutorFactory::create(player_ptr, item.get(), known);
     auto used_up = executor->read();
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    using Srf = StatusRecalculatingFlag;
-    EnumClassFlagGroup<Srf> flags_srf = { Srf::COMBINATION, Srf::REORDER };
-    if (rfu.has(Srf::AUTO_DESTRUCTION)) {
-        flags_srf.set(Srf::AUTO_DESTRUCTION);
-    }
-
-    rfu.reset_flags(flags_srf);
+    auto &dur = DeferredUpdateRequests::get_instance();
     this->change_virtue_as_read(*item);
     item->mark_as_tried();
     this->gain_exp_from_item_use(item.get(), executor->is_identified());
-    static constexpr auto flags_swrf = {
-        SubWindowRedrawingFlag::INVENTORY,
-        SubWindowRedrawingFlag::EQUIPMENT,
-        SubWindowRedrawingFlag::PLAYER,
-    };
-    rfu.set_flags(flags_swrf);
-    rfu.set_flags(flags_srf);
+    dur.request_inventory_arrangement();
+    dur.request_item_lists_redrawing();
     if (!used_up) {
         return;
     }
 
     sound(SoundKind::SCROLL);
 
-    // 効果中のアイテム削除や並べ替えでインデックスが変わるため、同じ実体を探し直す。
+    // 効果中のアイテム削除でインデックスが変わるため、同じ実体を探し直す。
     const auto current_i_idx = find_current_i_idx(this->player_ptr, this->i_idx >= 0, item);
     if (current_i_idx) {
         vary_item(this->player_ptr, *current_i_idx, -1);

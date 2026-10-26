@@ -28,17 +28,18 @@
 #include "spell-kind/spells-lite.h"
 #include "spell/summon-types.h"
 #include "status/temporary-resistance.h"
+#include "system/deferred-update-requests.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "target/projection-path-calculator.h"
 #include "target/target-checker.h"
 #include "target/target-getter.h"
 #include "target/target-setter.h"
 #include "target/target-types.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 
@@ -90,7 +91,7 @@ bool clear_mind(PlayerType *player_ptr)
         player_ptr->csp_frac = 0;
     }
 
-    RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::MP);
+    DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::MP);
     return true;
 }
 
@@ -142,7 +143,7 @@ void set_lightspeed(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
         disturb(player_ptr, false, false);
     }
 
-    RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
+    DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
     handle_stuff(player_ptr);
 }
 
@@ -179,7 +180,7 @@ bool set_tim_sh_force(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     }
 
     player_ptr->tim_sh_touki = v;
-    RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
+    DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     if (!notice) {
         return false;
     }
@@ -227,8 +228,9 @@ bool shock_power(PlayerType *player_ptr)
     const auto &monrace = monster.get_monrace();
     const auto m_name = monster_desc(player_ptr, monster, 0);
 
-    if (randint1(monrace.level * 3 / 2) > randint0(dam / 2) + dam / 2) {
-        msg_format(_("%sは飛ばされなかった。", "%s^ was not blown away."), m_name.data());
+    const auto resistance_power = randint1(monrace.level * 3 / 2);
+    if (resistance_power > randint0(dam / 2) + dam / 2) {
+        msg_print(_("{}は飛ばされなかった。", "{} was not blown away."), str_upcase_first(m_name));
         return true;
     }
 
@@ -246,12 +248,12 @@ bool shock_power(PlayerType *player_ptr)
         return true;
     }
 
-    msg_format(_("%sを吹き飛ばした！", "You blow %s away!"), m_name.data());
+    msg_print(_("{}を吹き飛ばした！", "You blow {} away!"), m_name);
     monster.set_target(player_ptr->get_position());
     move_monster_to(player_ptr, monster, pos_target);
 
     if (monrace.brightness_flags.has_any_of(ld_mask)) {
-        RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::MONSTER_LITE);
+        DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::MONSTER_LITE);
     }
 
     return true;
@@ -271,7 +273,7 @@ bool cast_force_spell(PlayerType *player_ptr, MindForceTrainerType spell)
         boost /= 2;
     }
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &dur = DeferredUpdateRequests::get_instance();
     switch (spell) {
     case MindForceTrainerType::SMALL_FORCE_BALL: {
         const auto dir = get_aim_dir(player_ptr);
@@ -304,7 +306,7 @@ bool cast_force_spell(PlayerType *player_ptr, MindForceTrainerType spell)
     case MindForceTrainerType::IMPROVE_FORCE:
         msg_print(_("気を練った。", "You improved the Force."));
         set_current_ki(player_ptr, false, 70 + plev);
-        rfu.set_flag(StatusRecalculatingFlag::BONUS);
+        dur.set_flag(StatusRecalculatingFlag::BONUS);
         if (randint1(get_current_ki(player_ptr)) > (plev * 4 + 120)) {
             msg_print(_("気が暴走した！", "The Force exploded!"));
             fire_ball(player_ptr, AttributeType::MANA, Direction::self(), get_current_ki(player_ptr) / 2, 10);
@@ -384,6 +386,6 @@ bool cast_force_spell(PlayerType *player_ptr, MindForceTrainerType spell)
     }
 
     set_current_ki(player_ptr, true, 0);
-    rfu.set_flag(StatusRecalculatingFlag::BONUS);
+    dur.set_flag(StatusRecalculatingFlag::BONUS);
     return true;
 }

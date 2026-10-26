@@ -12,7 +12,7 @@ struct vault_type {
     std::string text = ""; /* Text (offset) */
 
     uint8_t typ = 0; /* Vault type */
-    int rat = 0; /* Vault rating (unused) */
+    int rat = 0; /* Vault rating (unused: read and kept, but never referenced in the game) */
     int hgt = 0; /* Vault height */
     int wid = 0; /* Vault width */
 };

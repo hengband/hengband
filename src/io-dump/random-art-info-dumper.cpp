@@ -12,6 +12,7 @@
 #include "wizard/artifact-analyzer.h"
 #include "wizard/fixed-artifacts-spoiler.h"
 #include "wizard/spoiler-util.h"
+#include <fmt/format.h>
 #include <sstream>
 
 /*!
@@ -27,7 +28,7 @@ static void spoiler_print_randart(const ItemEntity &item, const ArtifactsDumpInf
     const auto *pval_ptr = &art_ptr->pval_info;
     ofs << art_ptr->description << '\n';
     if (!item.is_fully_known()) {
-        ofs << format(_("%s不明\n", "%sUnknown\n"), spoiler_indent.data());
+        ofs << fmt::format(_("{}不明\n", "{}Unknown\n"), spoiler_indent);
         return;
     }
 
@@ -44,7 +45,7 @@ static void spoiler_print_randart(const ItemEntity &item, const ArtifactsDumpInf
     spoiler_outlist(_("維持:", "Sustain"), art_ptr->sustenances, item_separator, ofs);
     spoiler_outlist("", art_ptr->misc_magic, list_separator, ofs);
     if (!art_ptr->activation.empty()) {
-        ofs << format(_("%s発動: %s\n", "%sActivates for %s\n"), spoiler_indent.data(), art_ptr->activation.data());
+        ofs << fmt::format(_("{}発動: {}\n", "{}Activates for {}\n"), spoiler_indent, art_ptr->activation);
     }
 }
 
@@ -78,7 +79,9 @@ void spoil_random_artifact(PlayerType *player_ptr)
     }
 
     spoiler_underline("Random artifacts list.\r", ofs);
-    const auto &outpost = TownList::get_instance().get_town(1);
+    const auto &towns = TownList::get_instance();
+    const auto &home = towns.get_home();
+    const auto &museum = towns.get_museum();
     for (const auto &[tval_list, name] : group_artifact_list) {
         for (auto tval : tval_list) {
             for (const auto i_idx : INVEN_WIELDING_SLOTS) {
@@ -91,13 +94,11 @@ void spoil_random_artifact(PlayerType *player_ptr)
                 spoil_random_artifact_aux(player_ptr, item, tval, ofs);
             }
 
-            const auto &home = outpost.get_store(StoreSaleType::HOME);
             for (int i = 0; i < home.stock_num; i++) {
                 auto &item = *home.stock[i];
                 spoil_random_artifact_aux(player_ptr, item, tval, ofs);
             }
 
-            const auto &museum = outpost.get_store(StoreSaleType::MUSEUM);
             for (int i = 0; i < museum.stock_num; i++) {
                 auto &item = *museum.stock[i];
                 spoil_random_artifact_aux(player_ptr, item, tval, ofs);

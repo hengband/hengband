@@ -22,6 +22,7 @@
 #include "floor/floor-mode-changer.h"
 #include "floor/floor-object.h"
 #include "game-option/birth-options.h"
+#include "game-option/cheat-types.h"
 #include "game-option/option-types-table.h"
 #include "game-option/play-record-options.h"
 #include "game-option/special-options.h"
@@ -44,6 +45,7 @@
 #include "player-info/race-types.h"
 #include "player-info/self-info.h"
 #include "player-status/player-energy.h"
+#include "player/attack-defense-types.h"
 #include "player/digestion-processor.h"
 #include "player/player-realm.h"
 #include "player/player-skill.h"
@@ -53,10 +55,12 @@
 #include "player/race-info-table.h"
 #include "spell-kind/spells-world.h"
 #include "spell/spells-status.h"
+#include "status/action-setter.h"
 #include "status/bad-status-setter.h"
 #include "system/artifact/artifact-definition.h"
 #include "system/artifact/artifact-list.h"
 #include "system/artifact/artifact-record.h"
+#include "system/deferred-update-requests.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/dungeon/dungeon-list.h"
 #include "system/dungeon/quest-definition.h"
@@ -67,7 +71,6 @@
 #include "system/inner-game-data.h"
 #include "system/item/item-entity.h"
 #include "system/monster-entity.h"
-#include "system/redrawing-flags-updater.h"
 #include "system/terrain/terrain-definition.h"
 #include "system/terrain/terrain-list.h"
 #include "target/grid-selector.h"
@@ -80,6 +83,7 @@
 #include "wizard/wizard-messages.h"
 #include "world/world.h"
 #include <algorithm>
+#include <fmt/format.h>
 #include <fstream>
 #include <span>
 #include <sstream>
@@ -122,7 +126,7 @@ static tl::optional<short> wiz_select_sval(const tval_desc &td)
         bi_ids.push_back(bi_id);
     }
 
-    const auto prompt = format(_("%s群の具体的なアイテムを選んで下さい", "What Kind of %s? "), td.desc);
+    const auto prompt = fmt::format(_("{}群の具体的なアイテムを選んで下さい", "What Kind of {}? "), td.desc);
 
     CandidateSelector cs(prompt, 15);
     const auto choice = cs.select(bi_ids,
@@ -417,7 +421,7 @@ void wiz_create_feature(PlayerType *player_ptr)
 
     note_spot(player_ptr, *pos);
     lite_spot(player_ptr, *pos);
-    RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::FLOW);
+    DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::FLOW);
 }
 
 /*!
@@ -475,9 +479,9 @@ static void wiz_jump_floor(PlayerType *player_ptr, DungeonId dun_idx, DEPTH dept
     leave_quest_check(player_ptr);
     auto to = !floor.is_underground()
                   ? _("地上", "the surface")
-                  : format(_("%d階(%s)", "level %d of %s"), floor.dun_level, floor.get_dungeon_definition().name.data());
-    constexpr auto mes = _("%sへとウィザード・テレポートで移動した。\n", "You wizard-teleported to %s.\n");
-    msg_print_wizard(player_ptr, 2, format(mes, to.data()));
+                  : fmt::format(_("{}階({})", "level {} of {}"), floor.dun_level, floor.get_dungeon_definition().name);
+    constexpr auto mes = _("{}へとウィザード・テレポートで移動した。\n", "You wizard-teleported to {}.\n");
+    msg_print_wizard(player_ptr, CHEAT_DUNGEON, mes, to);
     floor.quest_number = QuestId::NONE;
     PlayerEnergy(player_ptr).reset_player_turn();
     player_ptr->energy_need = 0;
@@ -509,7 +513,7 @@ void wiz_jump_to_dungeon(PlayerType *player_ptr)
         return;
     }
 
-    msg_format("You jump to dungeon level %d.", *level);
+    msg_print("You jump to dungeon level {}.", *level);
     if (autosave_l) {
         do_cmd_save_game(player_ptr, true);
     }
@@ -535,22 +539,15 @@ void wiz_learn_items_all(PlayerType *player_ptr)
 
 static void change_birth_flags()
 {
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    static constexpr auto flags_srf = {
-        StatusRecalculatingFlag::BONUS,
-        StatusRecalculatingFlag::HP,
-        StatusRecalculatingFlag::MP,
-        StatusRecalculatingFlag::SPELLS,
-    };
-    rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
-    rfu.set_flags(flags_srf);
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.set_flag(SubWindowRedrawingFlag::PLAYER);
+    dur.request_player_status_recalculation();
     static constexpr auto flags_mwrf = {
         MainWindowRedrawingFlag::BASIC,
-        MainWindowRedrawingFlag::HP,
-        MainWindowRedrawingFlag::MP,
         MainWindowRedrawingFlag::ABILITY_SCORE,
     };
-    rfu.set_flags(flags_mwrf);
+    dur.set_flags(flags_mwrf);
+    dur.request_hp_mp_redrawing();
 }
 
 static tl::optional<ElementRealmType> wiz_select_element_realm()
@@ -577,7 +574,10 @@ static tl::optional<RealmType> wiz_select_realm(const RealmChoices &choices, con
     return (choice != candidates.end()) ? tl::make_optional(*choice) : tl::nullopt;
 }
 
-static tl::optional<std::tuple<RealmType, RealmType, ElementRealmType>> wiz_select_realms(PlayerClassType pclass)
+//! デバッグコマンドで選んだ領域 (第 1 領域・第 2 領域・元素の領域)
+using WizChosenRealms = std::tuple<RealmType, RealmType, ElementRealmType>;
+
+static tl::optional<WizChosenRealms> wiz_select_realms(PlayerClassType pclass)
 {
     if (pclass == PlayerClassType::ELEMENTALIST) {
         const auto realm = wiz_select_element_realm();
@@ -631,8 +631,37 @@ void wiz_reset_race(PlayerType *player_ptr)
 }
 
 /*!
+ * @brief 選んだ領域をプレイヤーに設定し、呪文の習得状況を初期化する
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param chosen_realms 選んだ領域
+ * @param should_init_specific_data 職業固有のデータを作り直すならtrue
+ */
+static void wiz_apply_realms(PlayerType *player_ptr, const WizChosenRealms &chosen_realms, bool should_init_specific_data)
+{
+    PlayerRealm pr(player_ptr);
+    pr.reset();
+    const auto &[realm1, realm2, element_realm] = chosen_realms;
+    if (realm1 != RealmType::NONE) {
+        pr.set(realm1, realm2);
+    }
+    player_ptr->element_realm = element_realm;
+
+    // 職業固有のデータは領域によって変わる (呪術のハイ=メイジ) ので、領域を決めた後に作り直す
+    if (should_init_specific_data) {
+        PlayerClass(player_ptr).init_specific_data();
+    }
+
+    PlayerSpellStatus pss(player_ptr);
+    pss.realm1().initialize();
+    pss.realm2().initialize();
+    player_ptr->learned_spells = 0;
+    change_birth_flags();
+    handle_stuff(player_ptr);
+}
+
+/*!
  * @brief プレイヤーの職業を変更する
- * @todo 魔法領域の再選択などがまだ不完全、要実装。
+ * @todo 呪文の熟練度 (spell_exp) は前の職業・領域のものが残る
  */
 void wiz_reset_class(PlayerType *player_ptr)
 {
@@ -650,23 +679,12 @@ void wiz_reset_class(PlayerType *player_ptr)
         return;
     }
 
+    // 歌・呪術の詠唱・構えなどは、今の職業固有のデータで止めてから職業を変える
+    set_action(player_ptr, ACTION_NONE);
     player_ptr->pclass = *chosen_class;
     cp_ptr = &class_info.at(player_ptr->pclass);
     mp_ptr = &class_magics_info[enum2i(player_ptr->pclass)];
-    PlayerClass(player_ptr).init_specific_data();
-    PlayerRealm pr(player_ptr);
-    pr.reset();
-    const auto &[realm1, realm2, element_realm] = *chosen_realms;
-    if (realm1 != RealmType::NONE) {
-        pr.set(realm1, realm2);
-    }
-    player_ptr->element_realm = element_realm;
-    PlayerSpellStatus pss(player_ptr);
-    pss.realm1().initialize();
-    pss.realm2().initialize();
-    player_ptr->learned_spells = 0;
-    change_birth_flags();
-    handle_stuff(player_ptr);
+    wiz_apply_realms(player_ptr, *chosen_realms, true);
 }
 
 /*!
@@ -680,19 +698,15 @@ void wiz_reset_realms(PlayerType *player_ptr)
         return;
     }
 
-    PlayerRealm pr(player_ptr);
-    pr.reset();
-    const auto &[realm1, realm2, element_realm] = *chosen_realms;
-    if (realm1 != RealmType::NONE) {
-        pr.set(realm1, realm2);
+    // 呪術を使う・使っていたハイ=メイジだけ職業固有のデータを作り直すので、そのときは先に今のデータで詠唱などを止める
+    const auto &[new_realm1, new_realm2, new_element_realm] = *chosen_realms;
+    const auto is_hex_involved = PlayerRealm(player_ptr).is_realm_hex() || (new_realm1 == RealmType::HEX);
+    const auto should_init_specific_data = PlayerClass(player_ptr).equals(PlayerClassType::HIGH_MAGE) && is_hex_involved;
+    if (should_init_specific_data) {
+        set_action(player_ptr, ACTION_NONE);
     }
-    player_ptr->element_realm = element_realm;
-    PlayerSpellStatus pss(player_ptr);
-    pss.realm1().initialize();
-    pss.realm2().initialize();
-    player_ptr->learned_spells = 0;
-    change_birth_flags();
-    handle_stuff(player_ptr);
+
+    wiz_apply_realms(player_ptr, *chosen_realms, should_init_specific_data);
 }
 
 /*!
@@ -705,7 +719,7 @@ void wiz_dump_options()
     const auto &filename = path.string();
     std::ofstream ofs(path);
     if (ofs.bad()) {
-        msg_format(_("ファイル %s を開けませんでした。", "Failed to open file %s."), filename.data());
+        msg_print(_("ファイル {} を開けませんでした。", "Failed to open file {}."), filename);
         msg_erase();
         return;
     }
@@ -728,16 +742,16 @@ void wiz_dump_options()
             if (exist[i][j]) {
                 const auto &option = option_info[exist[i][j] - 1];
                 const auto page = option.page ? enum2i(*option.page) : 255; //!< @details かつてnulloptではなかった頃の値.
-                ofs << format("  %d -  %02d (%4d) %s\n", i, j, page, option.text.data());
+                ofs << fmt::format("  {} -  {:02} ({:4}) {}\n", i, j, page, option.text);
             } else {
-                ofs << format("  %d -  %02d\n", i, j);
+                ofs << fmt::format("  {} -  {:02}\n", i, j);
             }
         }
 
         ofs << '\n';
     }
 
-    msg_format(_("オプションbit使用状況をファイル %s に書き出しました。", "Option bits usage dump saved to file %s."), filename.data());
+    msg_print(_("オプションbit使用状況をファイル {} に書き出しました。", "Option bits usage dump saved to file {}."), filename);
 }
 
 /*!

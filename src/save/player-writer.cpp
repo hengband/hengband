@@ -24,6 +24,19 @@
 #include <variant>
 
 /*!
+ * @brief Write recall depths and dungeon visit history to the savefile.
+ */
+void wr_dungeons()
+{
+    const auto &records = DungeonRecords::get_instance();
+    wr_byte(static_cast<uint8_t>(records.size()));
+    for (const auto &[_, record] : records) {
+        wr_s16b(static_cast<int16_t>(record->get_max_level()));
+        wr_bool(record->has_visited());
+    }
+}
+
+/*!
  * @brief セーブデータに領域情報を書き込む / Write player realms
  * @param player_ptr プレイヤーへの参照ポインタ
  */
@@ -151,12 +164,7 @@ void wr_player(PlayerType *player_ptr)
     wr_u32b(player_ptr->csp_frac);
     wr_s16b(player_ptr->max_plv);
 
-    const auto &dungeon_records = DungeonRecords::get_instance();
-    auto tmp8u = static_cast<uint8_t>(dungeon_records.size());
-    wr_byte(tmp8u);
-    for (const auto &[_, dungeon_record] : dungeon_records) {
-        wr_s16b(static_cast<int16_t>(dungeon_record->get_max_level()));
-    }
+    wr_dungeons();
 
     wr_s16b(0);
     wr_s16b(0);

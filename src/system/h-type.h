@@ -58,7 +58,6 @@ constexpr auto MAX_SHORT = 32767; /*!< Maximum value storable in a "int16_t" (ha
 constexpr auto MAX_INT = 2147483647;
 constexpr auto MAX_NLEN = 160; /*!< Maximum length of object's name */
 constexpr auto MAX_MONSTER_NAME = 160; /*!< モンスター名称の最大バイト数 / Max characters of monster's name */
-#define MAX_INSCRIPTION _(76, 69) /*!< Maximum length of object's inscription */
 
 /*!
  * @brief 符号なし整数の簡潔な定義

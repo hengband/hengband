@@ -47,21 +47,21 @@ void do_cmd_knowledge_weapon_exp(PlayerType *player_ptr)
 
                 SUB_EXP weapon_exp = player_ptr->weapon_exp[tval][num];
                 SUB_EXP weapon_max = player_ptr->weapon_exp_max[tval][num];
-                fprintf(fff, "%-25s ", baseitem.stripped_name().data());
+                fmt::print(fff, "{:<25} ", fmt::bytes(baseitem.stripped_name()));
                 if (show_actual_value) {
-                    fprintf(fff, "%4d/%4d ", weapon_exp, weapon_max);
+                    fmt::print(fff, "{:4}/{:4} ", weapon_exp, weapon_max);
                 }
                 if (weapon_exp >= weapon_max) {
-                    fprintf(fff, "!");
+                    fmt::print(fff, "!");
                 } else {
-                    fprintf(fff, " ");
+                    fmt::print(fff, " ");
                 }
                 auto skill_rank = PlayerSkill::weapon_skill_rank(weapon_exp);
-                fprintf(fff, "%s", PlayerSkill::skill_rank_str(skill_rank));
+                fmt::print(fff, "{}", PlayerSkill::skill_rank_str(skill_rank));
                 if (cheat_xtra) {
-                    fprintf(fff, " %d", weapon_exp);
+                    fmt::print(fff, " {}", weapon_exp);
                 }
-                fprintf(fff, "\n");
+                fmt::print(fff, "\n");
                 break;
             }
         }
@@ -87,7 +87,7 @@ void do_cmd_knowledge_spell_exp(PlayerType *player_ptr)
     PlayerRealm pr(player_ptr);
 
     if (pr.realm1().is_available()) {
-        fprintf(fff, _("%sの魔法書\n", "%s Spellbook\n"), pr.realm1().get_name().data());
+        fmt::println(fff, _("{}の魔法書", "{} Spellbook"), pr.realm1().get_name());
         for (SPELL_IDX i = 0; i < 32; i++) {
             const auto &spell = pr.realm1().get_spell_info(i);
 
@@ -97,33 +97,33 @@ void do_cmd_knowledge_spell_exp(PlayerType *player_ptr)
             SUB_EXP spell_exp = player_ptr->spell_exp[i];
             auto skill_rank = PlayerSkill::spell_skill_rank(spell_exp);
             const auto &spell_name = pr.realm1().get_spell_name(i);
-            fprintf(fff, "%-25s ", spell_name.data());
+            fmt::print(fff, "{:<25} ", fmt::bytes(spell_name));
             if (pr.realm1().equals(RealmType::HISSATSU)) {
                 if (show_actual_value) {
-                    fprintf(fff, "----/---- ");
+                    fmt::print(fff, "----/---- ");
                 }
-                fprintf(fff, "[--]");
+                fmt::print(fff, "[--]");
             } else {
                 if (show_actual_value) {
-                    fprintf(fff, "%4d/%4d ", spell_exp, PlayerSkill::spell_exp_at(PlayerSkillRank::MASTER));
+                    fmt::print(fff, "{:4}/{:4} ", spell_exp, PlayerSkill::spell_exp_at(PlayerSkillRank::MASTER));
                 }
                 if (skill_rank >= PlayerSkillRank::MASTER) {
-                    fprintf(fff, "!");
+                    fmt::print(fff, "!");
                 } else {
-                    fprintf(fff, " ");
+                    fmt::print(fff, " ");
                 }
-                fprintf(fff, "%s", PlayerSkill::skill_rank_str(skill_rank));
+                fmt::print(fff, "{}", PlayerSkill::skill_rank_str(skill_rank));
             }
 
             if (cheat_xtra) {
-                fprintf(fff, " %d", spell_exp);
+                fmt::print(fff, " {}", spell_exp);
             }
-            fprintf(fff, "\n");
+            fmt::print(fff, "\n");
         }
     }
 
     if (pr.realm2().is_available()) {
-        fprintf(fff, _("%sの魔法書\n", "\n%s Spellbook\n"), pr.realm2().get_name().data());
+        fmt::println(fff, _("\n{}の魔法書", "\n{} Spellbook"), pr.realm2().get_name());
         for (SPELL_IDX i = 0; i < 32; i++) {
             const auto &spell = pr.realm2().get_spell_info(i);
 
@@ -134,20 +134,20 @@ void do_cmd_knowledge_spell_exp(PlayerType *player_ptr)
             SUB_EXP spell_exp = player_ptr->spell_exp[i + 32];
             auto skill_rank = PlayerSkill::spell_skill_rank(spell_exp);
             const auto spell_name = pr.realm2().get_spell_name(i);
-            fprintf(fff, "%-25s ", spell_name.data());
+            fmt::print(fff, "{:<25} ", fmt::bytes(spell_name));
             if (show_actual_value) {
-                fprintf(fff, "%4d/%4d ", spell_exp, PlayerSkill::spell_exp_at(PlayerSkillRank::MASTER));
+                fmt::print(fff, "{:4}/{:4} ", spell_exp, PlayerSkill::spell_exp_at(PlayerSkillRank::MASTER));
             }
             if (skill_rank >= PlayerSkillRank::EXPERT) {
-                fprintf(fff, "!");
+                fmt::print(fff, "!");
             } else {
-                fprintf(fff, " ");
+                fmt::print(fff, " ");
             }
-            fprintf(fff, "%s", PlayerSkill::skill_rank_str(skill_rank));
+            fmt::print(fff, "{}", PlayerSkill::skill_rank_str(skill_rank));
             if (cheat_xtra) {
-                fprintf(fff, " %d", spell_exp);
+                fmt::print(fff, " {}", spell_exp);
             }
-            fprintf(fff, "\n");
+            fmt::print(fff, "\n");
         }
     }
 
@@ -171,21 +171,21 @@ void do_cmd_knowledge_skill_exp(PlayerType *player_ptr)
     for (auto i : PLAYER_SKILL_KIND_TYPE_RANGE) {
         SUB_EXP skill_exp = player_ptr->skill_exp[i];
         SUB_EXP skill_max = class_skills_info[enum2i(player_ptr->pclass)].s_max[i];
-        fprintf(fff, "%-20s ", PlayerSkill::skill_name(i));
+        fmt::print(fff, "{:<20} ", fmt::bytes(PlayerSkill::skill_name(i)));
         if (show_actual_value) {
-            fprintf(fff, "%4d/%4d ", std::min(skill_exp, skill_max), skill_max);
+            fmt::print(fff, "{:4}/{:4} ", std::min(skill_exp, skill_max), skill_max);
         }
         if (skill_exp >= skill_max) {
-            fprintf(fff, "!");
+            fmt::print(fff, "!");
         } else {
-            fprintf(fff, " ");
+            fmt::print(fff, " ");
         }
         auto skill_rank = (i == PlayerSkillKindType::RIDING) ? PlayerSkill::riding_skill_rank(skill_exp) : PlayerSkill::weapon_skill_rank(skill_exp);
-        fprintf(fff, "%s", PlayerSkill::skill_rank_str(skill_rank));
+        fmt::print(fff, "{}", PlayerSkill::skill_rank_str(skill_rank));
         if (cheat_xtra) {
-            fprintf(fff, " %d", skill_exp);
+            fmt::print(fff, " {}", skill_exp);
         }
-        fprintf(fff, "\n");
+        fmt::print(fff, "\n");
     }
 
     angband_fclose(fff);

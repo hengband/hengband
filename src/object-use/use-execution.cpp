@@ -19,9 +19,9 @@
 #include "player-base/player-class.h"
 #include "player-status/player-energy.h"
 #include "status/experience.h"
+#include "system/deferred-update-requests.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
@@ -88,13 +88,9 @@ void ObjectUseEntity::execute()
 
         msg_print(_("この杖にはもう魔力が残っていない。", "The staff has no charges left."));
         item->set_identification_flag(IdentificationFlag::EMPTY);
-        auto &rfu = RedrawingFlagsUpdater::get_instance();
-        static constexpr auto flags = {
-            StatusRecalculatingFlag::COMBINATION,
-            StatusRecalculatingFlag::REORDER,
-        };
-        rfu.set_flags(flags);
-        rfu.set_flag(SubWindowRedrawingFlag::INVENTORY);
+        auto &dur = DeferredUpdateRequests::get_instance();
+        dur.request_inventory_arrangement();
+        dur.request_item_lists_redrawing();
         return;
     }
 
@@ -106,29 +102,15 @@ void ObjectUseEntity::execute()
         chg_virtue(this->player_ptr, Virtue::KNOWLEDGE, -1);
     }
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    using Srf = StatusRecalculatingFlag;
-    EnumClassFlagGroup<Srf> flags_srf = { Srf::COMBINATION, Srf::REORDER };
-    if (rfu.has(Srf::AUTO_DESTRUCTION)) {
-        flags_srf.set(Srf::AUTO_DESTRUCTION);
-    }
-
-    rfu.reset_flags(flags_srf);
+    auto &dur = DeferredUpdateRequests::get_instance();
     item->mark_as_tried();
     if (ident && !item->is_aware()) {
         object_aware(this->player_ptr, *item);
         gain_exp(this->player_ptr, (item_level + (this->player_ptr->lev >> 1)) / this->player_ptr->lev);
     }
 
-    static constexpr auto flags_swrf = {
-        SubWindowRedrawingFlag::INVENTORY,
-        SubWindowRedrawingFlag::EQUIPMENT,
-        SubWindowRedrawingFlag::PLAYER,
-        SubWindowRedrawingFlag::FLOOR_ITEMS,
-        SubWindowRedrawingFlag::FOUND_ITEMS,
-    };
-    rfu.set_flags(flags_swrf);
-    rfu.set_flags(flags_srf);
+    dur.request_inventory_arrangement();
+    dur.request_item_lists_redrawing();
     if (!use_charge) {
         return;
     }

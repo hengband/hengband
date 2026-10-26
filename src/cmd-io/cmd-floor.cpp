@@ -8,8 +8,8 @@
 #include "io/cursor.h"
 #include "io/screen-util.h"
 #include "main/sound-of-music.h"
+#include "system/deferred-update-requests.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "target/target-checker.h"
 #include "target/target-setter.h"
 #include "target/target-types.h"
@@ -46,10 +46,15 @@ void do_cmd_look(PlayerType *player_ptr)
         SubWindowRedrawingFlag::SIGHT_MONSTERS,
         SubWindowRedrawingFlag::FLOOR_ITEMS,
     };
-    RedrawingFlagsUpdater::get_instance().set_flags(flags);
-    handle_stuff(player_ptr);
-    output_bot_json_look_snapshot(player_ptr);
-    if (target_set(player_ptr, TARGET_LOOK).is_okay()) {
+    DeferredUpdateRequests::get_instance().set_flags(flags);
+    window_stuff(player_ptr);
+    // 注視を終えた後のメッセージの待ちでは注視の情報を載せないよう、注視の間だけ登録する
+    const auto is_targeted = [player_ptr] {
+        const BotScreenScope bot_screen(make_bot_look_screen());
+        output_bot_json_screen_snapshot(player_ptr);
+        return target_set(player_ptr, TARGET_LOOK).is_okay();
+    }();
+    if (is_targeted) {
         msg_print(_("ターゲット決定。", "Target Selected."));
     }
 }
@@ -98,13 +103,6 @@ void do_cmd_locate(PlayerType *player_ptr)
     }
 
     verify_panel(player_ptr);
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
-    rfu.set_flag(MainWindowRedrawingFlag::MAP);
-    static constexpr auto flags = {
-        SubWindowRedrawingFlag::OVERHEAD,
-        SubWindowRedrawingFlag::DUNGEON,
-    };
-    rfu.set_flags(flags);
+    DeferredUpdateRequests::get_instance().request_monster_update_and_map_redrawing();
     handle_stuff(player_ptr);
 }

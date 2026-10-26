@@ -99,9 +99,9 @@
 #include "save/save.h"
 #include "system/angband-version.h"
 #include "system/angband.h"
+#include "system/deferred-update-requests.h"
 #include "system/floor/floor-info.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
@@ -115,8 +115,10 @@
 #include "world/world.h"
 #include <algorithm>
 #include <commdlg.h>
+#include <cstdio>
 #include <cstdlib>
 #include <direct.h>
+#include <fmt/format.h>
 #include <locale>
 #include <string>
 #include <string_view>
@@ -246,7 +248,7 @@ static void validate_file(const std::filesystem::path &s)
     }
 
     const auto &file = s.string();
-    quit_fmt(_("必要なファイル[%s]が見あたりません。", "Cannot find required file:\n%s"), file.data());
+    quit(fmt::format(_("必要なファイル[{}]が見あたりません。", "Cannot find required file:\n{}"), file));
 }
 
 /*!
@@ -260,9 +262,9 @@ static void validate_dir(const std::filesystem::path &s, bool vital)
 
     const auto &dir = s.string();
     if (vital) {
-        quit_fmt(_("必要なディレクトリ[%s]が見あたりません。", "Cannot find required directory:\n%s"), dir.data());
+        quit(fmt::format(_("必要なディレクトリ[{}]が見あたりません。", "Cannot find required directory:\n{}"), dir));
     } else if (mkdir(dir.data())) {
-        quit_fmt("Unable to create directory:\n%s", dir.data());
+        quit(fmt::format("Unable to create directory:\n{}", dir));
     }
 }
 
@@ -413,7 +415,7 @@ static void save_prefs()
     const auto savefile_str = savefile.string();
     const auto savefile_dir_str = savefile_str.substr(0, path_length);
     if (angband_dir_str == savefile_dir_str) {
-        const auto relative_path = format(".\\%s", (savefile_str.data() + path_length));
+        const auto relative_path = fmt::format(".\\{}", std::string_view(savefile_str).substr(path_length));
         WritePrivateProfileStringA("Angband", "SaveFile", relative_path.data(), ini_file);
     } else {
         WritePrivateProfileStringA("Angband", "SaveFile", savefile_str.data(), ini_file);
@@ -597,7 +599,7 @@ static bool change_bg_mode(bg_mode new_mode, bool show_error = false, bool force
             current_bg_mode = bg_mode::BG_NONE;
             if (show_error) {
                 const auto &wallaper_filename = wallpaper_path.string();
-                plog_fmt(_("壁紙用ファイル '%s' を読み込めません。", "Can't load the image file '%s'."), wallaper_filename.data());
+                plog(fmt::format(_("壁紙用ファイル '{}' を読み込めません。", "Can't load the image file '{}'."), wallaper_filename));
             }
         }
     } else {
@@ -2139,8 +2141,8 @@ static void fit_term_size_to_window(term_data *td, bool recalc_window_size = fal
 
         rebuild_term(td, recalc_window_size);
 
-        if (!is_main_term(td)) {
-            RedrawingFlagsUpdater::get_instance().fill_up_sub_flags();
+        if (!is_main_term(td) && AngbandWorld::get_instance().character_dungeon) {
+            DeferredUpdateRequests::get_instance().fill_up_sub_flags();
             handle_stuff(p_ptr);
         }
     }
@@ -2703,15 +2705,16 @@ void create_debug_spoiler()
     init_stuff();
     init_angband(p_ptr, true);
 
+    // GUI アプリはコンソールを持たないことがあり、fmt::print() は書き込みに失敗すると例外を投げるので、std::fputs() で出力する
     switch (output_all_spoilers()) {
     case SpoilerOutputResultType::SUCCESSFUL:
-        fprintf(stdout, "Successfully created a spoiler file.");
+        std::fputs("Successfully created a spoiler file.", stdout);
         break;
     case SpoilerOutputResultType::FILE_OPEN_FAILED:
-        fprintf(stderr, "Cannot create spoiler file.");
+        std::fputs("Cannot create spoiler file.", stderr);
         break;
     case SpoilerOutputResultType::FILE_CLOSE_FAILED:
-        fprintf(stderr, "Cannot close spoiler file.");
+        std::fputs("Cannot close spoiler file.", stderr);
         break;
     default:
         break;

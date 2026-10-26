@@ -18,15 +18,16 @@
 #include "spell/technic-info-table.h"
 #include "status/action-setter.h"
 #include "system/angband-exceptions.h"
+#include "system/deferred-update-requests.h"
 #include "system/floor/floor-info.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
 #include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
+#include <fmt/format.h>
 
 /*!< 呪術の最大詠唱数 */
 constexpr int MAX_KEEP = 4;
@@ -35,15 +36,20 @@ SpellHex::SpellHex(PlayerType *player_ptr)
     : player_ptr(player_ptr)
     , spell_hex_data(PlayerClass(player_ptr).get_specific_data<spell_hex_data_type>())
 {
-    if (!this->spell_hex_data) {
-        return;
-    }
+}
 
-    HexSpellFlagGroup::get_flags(this->spell_hex_data->casting_spells, std::back_inserter(this->casting_spells));
-
-    if (this->casting_spells.size() > MAX_KEEP) {
-        THROW_EXCEPTION(std::logic_error, "Invalid numbers of hex magics keep!");
-    }
+/*!
+ * @brief 維持している呪術が変わったときの更新を予約する
+ * @details 呪術の効果で変わる能力 (最大 HP・最大 MP・覚えられる呪文の数を含む) を計算し直し、
+ * 拡張ステータスと HP・MP の表示を描き直す。呪術を唱えたとき (途中で取りやめたときを除く)・止めたとき・中断していた呪術を再開したときに呼ばれる。
+ * 維持している間の毎ターンの処理 (CONTNUATION) では、維持している呪術の組は変わらないので呼ばない。
+ */
+void SpellHex::request_casting_change_updates()
+{
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.request_player_status_recalculation();
+    dur.set_flag(MainWindowRedrawingFlag::EXTRA);
+    dur.request_hp_mp_redrawing();
 }
 
 /*!
@@ -51,7 +57,11 @@ SpellHex::SpellHex(PlayerType *player_ptr)
  */
 void SpellHex::stop_all_spells()
 {
-    for (auto spell : this->casting_spells) {
+    if (!this->spell_hex_data) {
+        return;
+    }
+
+    for (auto spell : this->get_casting_spells()) {
         exe_spell(this->player_ptr, RealmType::HEX, spell, SpellProcessType::STOP);
     }
 
@@ -60,20 +70,32 @@ void SpellHex::stop_all_spells()
         set_action(this->player_ptr, ACTION_NONE);
     }
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    static constexpr auto flags_srf = {
-        StatusRecalculatingFlag::BONUS,
-        StatusRecalculatingFlag::HP,
-        StatusRecalculatingFlag::MP,
-        StatusRecalculatingFlag::SPELLS,
-    };
-    rfu.set_flags(flags_srf);
-    static constexpr auto flags_mwrf = {
-        MainWindowRedrawingFlag::EXTRA,
-        MainWindowRedrawingFlag::HP,
-        MainWindowRedrawingFlag::MP,
-    };
-    rfu.set_flags(flags_mwrf);
+    request_casting_change_updates();
+}
+
+/*!
+ * @brief 中断後に再開待ちとなっている呪術を破棄する
+ */
+void SpellHex::discard_interrupted_spells()
+{
+    if (this->spell_hex_data) {
+        this->spell_hex_data->interrupting_spells.clear();
+    }
+}
+
+/*!
+ * @brief 詠唱フラグとは別に継続する我慢・復讐を解除する
+ * @details 状態の表示は、我慢・復讐を表示していたときだけ描き直しを要求する。
+ */
+void SpellHex::clear_revenge()
+{
+    if (!this->spell_hex_data) {
+        return;
+    }
+
+    this->set_revenge_type(SpellHexRevengeType::NONE);
+    this->set_revenge_power(0, true);
+    this->set_revenge_turn(0, true);
 }
 
 /*!
@@ -93,8 +115,8 @@ bool SpellHex::stop_spells_with_selection()
         return true;
     }
 
-    constexpr auto fmt = _("どの呪文の詠唱を中断しますか？(呪文 %c-%c, 'l'全て, ESC)", "Which spell do you stop casting? (Spell %c-%c, 'l' to all, ESC)");
-    const auto prompt = format(fmt, I2A(0), I2A(casting_num - 1));
+    constexpr auto fmt = _("どの呪文の詠唱を中断しますか？(呪文 {:c}-{:c}, 'l'全て, ESC)", "Which spell do you stop casting? (Spell {:c}-{:c}, 'l' to all, ESC)");
+    const auto prompt = fmt::format(fmt, I2A(0), I2A(casting_num - 1));
     screen_save();
     const auto &[is_all, choice] = select_spell_stopping(prompt);
     if (is_all) {
@@ -103,25 +125,12 @@ bool SpellHex::stop_spells_with_selection()
 
     screen_load();
     if (choice) {
-        auto n = this->casting_spells[A2I(*choice)];
+        auto n = this->get_casting_spells()[A2I(*choice)];
         exe_spell(this->player_ptr, RealmType::HEX, n, SpellProcessType::STOP);
         this->reset_casting_flag(i2enum<spell_hex_type>(n));
     }
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    static constexpr auto flags_srf = {
-        StatusRecalculatingFlag::BONUS,
-        StatusRecalculatingFlag::HP,
-        StatusRecalculatingFlag::MP,
-        StatusRecalculatingFlag::SPELLS,
-    };
-    rfu.set_flags(flags_srf);
-    static constexpr auto flags_mwrf = {
-        MainWindowRedrawingFlag::EXTRA,
-        MainWindowRedrawingFlag::HP,
-        MainWindowRedrawingFlag::MP,
-    };
-    rfu.set_flags(flags_mwrf);
+    request_casting_change_updates();
     return choice.has_value();
 }
 
@@ -168,10 +177,10 @@ void SpellHex::display_casting_spells_list()
     auto n = 0;
     term_erase(x, y);
     prt(_("     名前", "     Name"), y, x + 5);
-    for (auto spell : this->casting_spells) {
+    for (auto spell : this->get_casting_spells()) {
         term_erase(x, y + n + 1);
         const auto &spell_name = PlayerRealm::get_spell_name(RealmType::HEX, spell);
-        put_str(format("%c)  %s", I2A(n), spell_name.data()), y + n + 1, x + 2);
+        put_str(fmt::format("{:c})  {}", I2A(n), spell_name), y + n + 1, x + 2);
         n++;
     }
 }
@@ -200,7 +209,7 @@ void SpellHex::decrease_mana()
     }
 
     this->gain_exp();
-    for (auto spell : this->casting_spells) {
+    for (auto spell : this->get_casting_spells()) {
         exe_spell(this->player_ptr, RealmType::HEX, spell, SpellProcessType::CONTNUATION);
     }
 }
@@ -225,31 +234,17 @@ bool SpellHex::process_mana_cost(const bool need_restart)
     }
 
     s64b_sub(&(this->player_ptr->csp), &(this->player_ptr->csp_frac), need_mana, need_mana_frac);
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.set_flag(MainWindowRedrawingFlag::MP);
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.set_flag(MainWindowRedrawingFlag::MP);
     if (!need_restart) {
         return true;
     }
 
     msg_print(_("詠唱を再開した。", "You restart casting."));
     this->player_ptr->action = ACTION_SPELL;
-    static constexpr auto flags_srf = {
-        StatusRecalculatingFlag::BONUS,
-        StatusRecalculatingFlag::HP,
-        StatusRecalculatingFlag::MONSTER_STATUSES,
-    };
-    rfu.set_flags(flags_srf);
-    static constexpr auto flags_mwrf = {
-        MainWindowRedrawingFlag::MAP,
-        MainWindowRedrawingFlag::TIMED_EFFECT,
-        MainWindowRedrawingFlag::ACTION,
-    };
-    rfu.set_flags(flags_mwrf);
-    static constexpr auto flags_swrf = {
-        SubWindowRedrawingFlag::OVERHEAD,
-        SubWindowRedrawingFlag::DUNGEON,
-    };
-    rfu.set_flags(flags_swrf);
+    dur.request_monster_update_and_map_redrawing();
+    // 中断していた呪術が戻り、維持している呪術の組が変わる (状態の表示と行動の表示は拡張ステータスに含まれる)
+    request_casting_change_updates();
     return true;
 }
 
@@ -267,7 +262,7 @@ bool SpellHex::check_restart()
 int SpellHex::calc_need_mana()
 {
     auto need_mana = 0;
-    for (auto spell_id : this->casting_spells) {
+    for (auto spell_id : this->get_casting_spells()) {
         const auto &spell = PlayerRealm::get_spell_info(RealmType::HEX, spell_id);
         need_mana += mod_need_mana(this->player_ptr, spell.smana, spell_id, RealmType::HEX);
     }
@@ -278,13 +273,29 @@ int SpellHex::calc_need_mana()
 void SpellHex::gain_exp()
 {
     PlayerSkill ps(player_ptr);
-    for (auto spell : this->casting_spells) {
-        if (!this->is_spelling_specific(spell)) {
-            continue;
-        }
-
+    for (auto spell : this->get_casting_spells()) {
         ps.gain_continuous_spell_skill_exp(RealmType::HEX, spell);
     }
+}
+
+/*!
+ * @brief 詠唱中の呪術の一覧を返す
+ * @details 再開や停止で詠唱フラグが変わっても古い一覧を使わないよう、呼ぶたびに詠唱フラグから作る。
+ * @return 詠唱中の呪術の番号 (昇順)
+ */
+std::vector<int> SpellHex::get_casting_spells() const
+{
+    std::vector<int> spells;
+    if (!this->spell_hex_data) {
+        return spells;
+    }
+
+    HexSpellFlagGroup::get_flags(this->spell_hex_data->casting_spells, std::back_inserter(spells));
+    if (spells.size() > MAX_KEEP) {
+        THROW_EXCEPTION(std::logic_error, "Invalid numbers of hex magics keep!");
+    }
+
+    return spells;
 }
 
 /*!
@@ -376,10 +387,10 @@ void SpellHex::eyes_on_eyes(MONSTER_IDX m_idx, int dam)
     const auto &monster = this->player_ptr->current_floor_ptr->m_list[m_idx];
     const auto m_name = monster_desc(this->player_ptr, monster, 0);
 #ifdef JP
-    msg_format("攻撃が%s自身を傷つけた！", m_name.data());
+    msg_print("攻撃が{}自身を傷つけた！", m_name);
 #else
     const auto m_name_self = monster_desc(this->player_ptr, monster, MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE);
-    msg_format("The attack of %s has wounded %s!", m_name.data(), m_name_self.data());
+    msg_print("The attack of {} has wounded {}!", m_name, m_name_self);
 #endif
     const auto y = monster.fy;
     const auto x = monster.fx;
@@ -430,10 +441,15 @@ byte SpellHex::get_revenge_turn() const
  */
 void SpellHex::set_revenge_turn(byte turn, bool substitution)
 {
+    const auto shown_type = this->get_shown_revenge_type();
     if (substitution) {
         this->spell_hex_data->revenge_turn = turn;
     } else {
         this->spell_hex_data->revenge_turn -= turn;
+    }
+
+    if (shown_type != this->get_shown_revenge_type()) {
+        DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     }
 }
 
@@ -444,5 +460,19 @@ SpellHexRevengeType SpellHex::get_revenge_type() const
 
 void SpellHex::set_revenge_type(SpellHexRevengeType type)
 {
+    const auto shown_type = this->get_shown_revenge_type();
     this->spell_hex_data->revenge_type = type;
+    if (shown_type != this->get_shown_revenge_type()) {
+        DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
+    }
+}
+
+/*!
+ * @brief 状態の表示に出している我慢・復讐の種類を返す
+ * @return 残りターンがあれば我慢・復讐の種類、無ければ NONE
+ * @details 状態の表示 (main-window-stat-poster.cpp) はこの値で我慢・復讐を出すので、変わったら状態の表示を描き直す。
+ */
+SpellHexRevengeType SpellHex::get_shown_revenge_type() const
+{
+    return this->spell_hex_data->revenge_turn > 0 ? this->spell_hex_data->revenge_type : SpellHexRevengeType::NONE;
 }

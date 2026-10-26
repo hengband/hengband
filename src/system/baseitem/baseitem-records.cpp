@@ -45,7 +45,7 @@ void BaseitemRecords::reset_identification_flags()
 
 void BaseitemRecords::validate(short bi_id) const
 {
-    if ((bi_id < 0) || (bi_id >= static_cast<short>(this->size()))) {
+    if ((bi_id < 0) || (static_cast<size_t>(bi_id) >= this->size())) {
         THROW_EXCEPTION(std::logic_error, fmt::format("Invalid Baseitem ID: {}", bi_id));
     }
 }

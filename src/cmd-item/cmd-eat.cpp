@@ -40,10 +40,10 @@
 #include "status/experience.h"
 #include "sv-definition/sv-food-types.h"
 #include "sv-definition/sv-other-types.h"
+#include "system/deferred-update-requests.h"
 #include "system/item/item-entity.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "util/dice.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
@@ -162,15 +162,15 @@ static bool exe_eat_charge_of_magic_device(PlayerType *player_ptr, ItemEntity *o
 
     const auto staff = is_staff ? _("杖", "staff") : _("魔法棒", "wand");
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &dur = DeferredUpdateRequests::get_instance();
     if (o_ptr->pval == 0) {
-        msg_format(_("この%sにはもう魔力が残っていない。", "The %s has no charges left."), staff);
+        msg_print(_("この{}にはもう魔力が残っていない。", "The {} has no charges left."), staff);
         o_ptr->set_identification_flag(IdentificationFlag::EMPTY);
-        rfu.set_flag(SubWindowRedrawingFlag::INVENTORY);
+        dur.request_item_lists_redrawing();
         return true;
     }
 
-    msg_format(_("あなたは%sの魔力をエネルギー源として吸収した。", "You absorb mana of the %s as your energy."), staff);
+    msg_print(_("あなたは{}の魔力をエネルギー源として吸収した。", "You absorb mana of the {} as your energy."), staff);
 
     /* Use a single charge */
     o_ptr->pval--;
@@ -189,16 +189,14 @@ static bool exe_eat_charge_of_magic_device(PlayerType *player_ptr, ItemEntity *o
         /* Unstack the used item */
         o_ptr->number--;
         i_idx = store_item_to_inventory(player_ptr, &item);
-        msg_format(_("杖をまとめなおした。", "You unstack your staff."));
+        msg_print(_("杖をまとめなおした。", "You unstack your staff."));
     }
 
     describe_item_charges(player_ptr, i_idx >= 0, ref_item(player_ptr, i_idx));
 
-    static constexpr auto flags = {
-        SubWindowRedrawingFlag::INVENTORY,
-        SubWindowRedrawingFlag::EQUIPMENT,
-    };
-    rfu.set_flags(flags);
+    // 充填が変わったので、足元の品も含めてアイテムの一覧の描き直しを予約する。
+    // 呼び出し元での予約は、充填を変える前のメッセージの表示で使われることがあるので当てにしない
+    dur.request_item_lists_redrawing();
     return true;
 }
 
@@ -228,21 +226,6 @@ void exe_eat_food(PlayerType *player_ptr, INVENTORY_IDX i_idx)
     const auto &bi_key = item->bi_key;
     const auto ident = exe_eat_food_type_object(player_ptr, bi_key);
 
-    /*
-     * Store what may have to be updated for the inventory (including
-     * autodestroy if set by something else).  Then turn off those flags
-     * so that updates triggered by calling gain_exp() or set_food() below
-     * do not rearrange the inventory before the food item is destroyed in
-     * the pack.
-     */
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    using Srf = StatusRecalculatingFlag;
-    EnumClassFlagGroup<Srf> flags_srf = { Srf::COMBINATION, Srf::REORDER };
-    if (rfu.has(Srf::AUTO_DESTRUCTION)) {
-        flags_srf.set(Srf::AUTO_DESTRUCTION);
-    }
-
-    rfu.reset_flags(flags_srf);
     if (!(item->is_aware())) {
         chg_virtue(player_ptr, Virtue::KNOWLEDGE, -1);
         chg_virtue(player_ptr, Virtue::PATIENCE, -1);
@@ -261,16 +244,12 @@ void exe_eat_food(PlayerType *player_ptr, INVENTORY_IDX i_idx)
         gain_exp(player_ptr, (level + (player_ptr->lev >> 1)) / player_ptr->lev);
     }
 
-    static constexpr auto flags_swrf = {
-        SubWindowRedrawingFlag::INVENTORY,
-        SubWindowRedrawingFlag::EQUIPMENT,
-        SubWindowRedrawingFlag::PLAYER,
-    };
-    rfu.set_flags(flags_swrf);
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.request_inventory_arrangement();
+    dur.request_item_lists_redrawing();
 
     /* Undeads drain recharge of magic device */
     if (exe_eat_charge_of_magic_device(player_ptr, item.get(), i_idx)) {
-        rfu.set_flags(flags_srf);
         return;
     }
 
@@ -280,10 +259,8 @@ void exe_eat_food(PlayerType *player_ptr, INVENTORY_IDX i_idx)
     if (food_type == PlayerRaceFoodType::CORPSE) {
         if (item->is_corpse() && item->get_monrace().is_human()) {
             const auto item_name = describe_flavor(player_ptr, *item, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-            msg_format(_("%sは燃え上り灰になった。精力を吸収した気がする。", "%s^ is burnt to ashes.  You absorb its vitality!"), item_name.data());
+            msg_print(_("{}は燃え上り灰になった。精力を吸収した気がする。", "{} is burnt to ashes.  You absorb its vitality!"), str_upcase_first(item_name));
             (void)set_food(player_ptr, PY_FOOD_MAX - 1);
-
-            rfu.set_flags(flags_srf);
             vary_item(player_ptr, i_idx, -1);
             return;
         }
@@ -324,7 +301,6 @@ void exe_eat_food(PlayerType *player_ptr, INVENTORY_IDX i_idx)
         }
     }
 
-    rfu.set_flags(flags_srf);
     vary_item(player_ptr, i_idx, -1);
 }
 

@@ -2,7 +2,7 @@
 
 #include "system/angband.h"
 
-#define MAX_HISCORES 999 /*!< スコア情報保存の最大数 / Maximum number of high scores in the high score file */
+constexpr auto MAX_HISCORES = 999; /*!< スコア情報保存の最大数 / Maximum number of high scores in the high score file */
 
 /*
  * Semi-Portable High Score List Entry (128 bytes) -- BEN

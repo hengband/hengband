@@ -12,22 +12,7 @@
 #include "system/enums/dungeon/dungeon-id.h"
 #include "term/z-rand.h"
 #include "util/enum-converter.h"
-
-namespace {
-std::string get_dungeon_format(DungeonMessageFormat dmf)
-{
-    switch (dmf) {
-    case DungeonMessageFormat::DUMP:
-        return _("   %c%-12s: %3d 階\n", "   %c%-16s: level %3d\n");
-    case DungeonMessageFormat::KNOWLEDGE:
-        return _("%c%-12s :  %3d 階\n", "%c%-16s :  level %3d\n");
-    case DungeonMessageFormat::RECALL:
-        return _("      %c) %c%-12s : 最大 %d 階", "      %c) %c%-16s : Max level %d");
-    default:
-        THROW_EXCEPTION(std::logic_error, format("Invalid dungeon message format is specified! %d", enum2i(dmf)));
-    }
-}
-}
+#include <fmt/format.h>
 
 int DungeonService::decide_gradiator_level()
 {
@@ -77,9 +62,8 @@ tl::optional<std::string> DungeonService::check_first_entrance(DungeonId dungeon
     return DungeonList::get_instance().get_dungeon(dungeon_id).build_entrance_message();
 }
 
-std::vector<std::string> DungeonService::build_known_dungeons(DungeonMessageFormat dmf)
+std::vector<std::string> DungeonService::build_known_dungeons(DungeonMessageFormat dmf, tl::optional<bool> visited)
 {
-    const auto fmt = get_dungeon_format(dmf);
     const auto &dungeons = DungeonList::get_instance();
     std::vector<std::string> known_dungeons;
     auto num_entered = 0;
@@ -87,23 +71,29 @@ std::vector<std::string> DungeonService::build_known_dungeons(DungeonMessageForm
         if (!record->has_entered()) {
             continue;
         }
+        if (visited && record->has_visited() != *visited) {
+            continue;
+        }
 
         const auto max_level = record->get_max_level();
         const auto &dungeon = dungeons.get_dungeon(dungeon_id);
         const auto is_dungeon_conquered = dungeon.is_conquered();
-        const auto is_conquered = is_dungeon_conquered || (max_level == dungeon.maxdepth);
+        const auto is_conquered = (dmf != DungeonMessageFormat::DUMP || record->has_visited()) && (is_dungeon_conquered || (max_level == dungeon.maxdepth));
+        const auto mark = is_conquered ? '!' : ' ';
         std::string known_dungeon;
         switch (dmf) {
         case DungeonMessageFormat::DUMP:
+            known_dungeon = fmt::format(_("   {:c}{:<12}: {:3} 階\n", "   {:c}{:<16}: level {:3}\n"), mark, fmt::bytes(dungeon.name), max_level);
+            break;
         case DungeonMessageFormat::KNOWLEDGE:
-            known_dungeon = format(fmt.data(), is_conquered ? '!' : ' ', dungeon.name.data(), max_level);
+            known_dungeon = fmt::format(_("{:c}{:<12} :  {:3} 階\n", "{:c}{:<16} :  level {:3}\n"), mark, fmt::bytes(dungeon.name), max_level);
             break;
         case DungeonMessageFormat::RECALL:
-            known_dungeon = format(fmt.data(), static_cast<char>('a' + num_entered), is_conquered ? '!' : ' ', dungeon.name.data(), max_level);
+            known_dungeon = fmt::format(_("      {:c}) {:c}{:<12} : 最大 {} 階", "      {:c}) {:c}{:<16} : Max level {}"), 'a' + num_entered, mark, fmt::bytes(dungeon.name), max_level);
             num_entered++;
             break;
         default:
-            THROW_EXCEPTION(std::logic_error, format("Invalid dungeon message format is specified! %d", enum2i(dmf)));
+            THROW_EXCEPTION(std::logic_error, fmt::format("Invalid dungeon message format is specified! {}", enum2i(dmf)));
         }
 
         known_dungeons.push_back(known_dungeon);

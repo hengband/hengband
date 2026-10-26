@@ -48,6 +48,7 @@
 #include "window/main-window-util.h"
 #include "world/world.h"
 #include <algorithm>
+#include <fmt/format.h>
 #include <range/v3/view.hpp>
 
 /*!
@@ -156,7 +157,7 @@ static void place_pet(PlayerType *player_ptr)
         } else {
             const auto &monster = party_mon[current_monster];
             auto &monrace = monster.get_real_monrace();
-            msg_format(_("%sとはぐれてしまった。", "You have lost sight of %s."), monster_desc(player_ptr, monster, 0).data());
+            msg_print(_("{}とはぐれてしまった。", "You have lost sight of {}."), monster_desc(player_ptr, monster, 0));
             if (record_named_pet && monster.is_named()) {
                 exe_write_diary(floor, DiaryKind::NAMED_PET, RECORD_NAMED_PET_LOST_SIGHT, monster_desc(player_ptr, monster, MD_INDEF_VISIBLE));
             }
@@ -295,6 +296,18 @@ static void reset_unique_by_floor_change(PlayerType *player_ptr)
     }
 }
 
+/*!
+ * @brief 保存フロアの復帰時に生成するモンスターの試行数を制限する。
+ * @param requested_trials 不在時間と生成頻度から算出し、端数処理を済ませた試行数
+ * @return 0以上、番号0を除くフロア登録可能数以下の試行数。
+ * @details 最大1023回に制限する。成功数ではなく試行数に上限を設け、配置できない
+ * フロアでも長期不在に比例して生成処理を繰り返さない。
+ */
+GAME_TURN limit_loaded_floor_monster_trials(GAME_TURN requested_trials)
+{
+    return std::clamp(requested_trials, GAME_TURN{ 0 }, GAME_TURN{ MAX_FLOOR_MONSTERS - 1 });
+}
+
 static void allocate_loaded_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
 {
     GAME_TURN tmp_last_visit = sf_ptr->last_visit;
@@ -327,9 +340,8 @@ static void allocate_loaded_floor(PlayerType *player_ptr, saved_floor_type *sf_p
         alloc_times++;
     }
 
-    for (MONSTER_IDX i = 0; i < alloc_times; i++) {
-        (void)alloc_monster(player_ptr, 0, 0, summon_specific);
-    }
+    // 長期不在でも試行を登録可能数以内に制限し、集団配置で満杯になった場合も終了する。
+    attempt_loaded_floor_monsters(alloc_times, [&floor] { return floor.m_cnt < MAX_FLOOR_MONSTERS - 1; }, [player_ptr] { return alloc_monster(player_ptr, 0, 0, summon_specific); });
 }
 
 /*!

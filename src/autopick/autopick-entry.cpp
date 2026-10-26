@@ -136,15 +136,14 @@ bool autopick_new_entry(autopick_type *entry, std::string_view line_input, bool 
     std::string inscription;
     std::stringstream ss;
     while (!line.empty()) {
-        auto c = line.front();
-        line.remove_prefix(1);
-#ifdef JP
-        if (iskanji(c) && !line.empty()) {
-            ss << c << line.front();
-            line.remove_prefix(1);
+        if (is_multibyte_char_at(line)) {
+            ss << line.substr(0, 2);
+            line.remove_prefix(2);
             continue;
         }
-#endif
+
+        auto c = line.front();
+        line.remove_prefix(1);
         if (c == '#') {
             inscription = line;
             break;

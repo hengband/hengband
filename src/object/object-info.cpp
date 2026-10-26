@@ -164,7 +164,7 @@ tl::optional<short> find_item_index(std::span<const std::shared_ptr<ItemEntity>>
  * @param is_inventory 所持品から探すならtrue、床上から探すならfalse
  * @param item 探すアイテム
  * @return 所持品ID (床上のアイテムは負の値)。アイテムが空または既に削除された場合はnullopt。
- * @details 効果の前に選んだ所持品IDは、効果によるアイテムの削除や並べ替えで変わるため、実体から探し直す。
+ * @details 効果の前に選んだ所持品IDは、効果によるアイテムの削除で変わるため、実体から探し直す。
  * 所持品から削除されたアイテムは、消去された状態で所持品の末尾に移されるだけで配列には残るため、
  * 消去されているかどうかも確かめる。
  */

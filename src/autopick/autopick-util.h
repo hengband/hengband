@@ -7,20 +7,12 @@
 #include <string>
 #include <vector>
 
-#define MAX_LINELEN 1024
-#define MAX_AUTOPICK_DEFAULT 200
-#define MAX_YANK MAX_LINELEN
-#define MAX_LINES 6000
+constexpr auto MAX_LINELEN = 1024;
 
-#define PT_DEFAULT 0
-#define PT_WITH_PNAME 1
-
-#define MARK_MARK 0x01
-#define MARK_BY_SHIFT 0x02
-
-#define LSTAT_BYPASS 0x01
-#define LSTAT_EXPRESSION 0x02
-#define LSTAT_AUTOREGISTER 0x04
+enum class PickType {
+    DEFAULT = 0, //!< picktype.prf
+    WITH_PNAME = 1, //!< picktype-<playername>.prf
+};
 
 /*!
  * @struct autopick_type
@@ -38,17 +30,44 @@ struct autopick_type {
     void remove(int flag);
 };
 
-/*
- * Data struct for text editor
- */
 enum class EditorCommandId;
 class ItemEntity;
-struct text_body_type {
-    text_body_type(int cx, int cy); //!< @details 画面表示はX→Yの順番であることが多いので一応揃える.
+enum class AutopickMark {
+    MARK = 0,
+    BY_SHIFT = 1,
+    MAX,
+};
+
+enum class AutopickEntryStatus {
+    BYPASS = 0,
+    EXPRESSION = 1,
+    AUTOREGISTER = 2,
+    EXPRESSION_ERROR = 3,
+    INCLUDE = 4,
+    MAX,
+};
+
+struct AutopickEntryLine {
+    std::string line;
+    EnumClassFlagGroup<AutopickEntryStatus> state;
+};
+
+/*!
+ * @brief 自動拾い設定ファイル用テキストエディタの状態を保持するクラス
+ *
+ * 編集中の行データ・各行の状態・カーソル位置・画面スクロール位置・選択範囲・検索条件・ヤンクバッファ・再描画用ダーティ情報・変更フラグなどをまとめて管理する。
+ * ユーザがエディタを操作する度に、このクラスのインスタンスを通じて状態が更新される。
+ */
+class AutopickTextBody {
+public:
+    AutopickTextBody(int cx, int cy); // 画面表示はX→Yの順番であることが多いので一応揃える.
 
     void adjust_cursor_column();
     void update_cursor_column_record(EditorCommandId com_id);
     bool is_cursor_on_second_byte_of_kanji() const;
+    bool has_line(int y) const;
+    bool is_last_line(int y) const;
+    void set_lines(std::vector<std::string> new_lines);
 
     int cx;
     int cy;
@@ -64,7 +83,7 @@ struct text_body_type {
     int old_left = -1;
     int mx = 0;
     int my = 0;
-    byte mark = 0;
+    EnumClassFlagGroup<AutopickMark> marks{};
 
     std::shared_ptr<ItemEntity> search_item = nullptr;
     std::string search_str = "";
@@ -73,15 +92,16 @@ struct text_body_type {
     std::vector<std::string> yank{};
     bool yank_eol = false;
 
-    std::vector<std::unique_ptr<std::string>> lines_list;
-    byte states[MAX_LINES]{};
+    std::vector<AutopickEntryLine> lines;
 
     uint16_t dirty_flags = 0;
     int dirty_line = -1;
-    int filename_mode = 0;
+    PickType filename_mode{};
     EditorCommandId old_com_id{};
 
     bool changed = false;
+
+    std::vector<std::string> get_entry_lines() const;
 };
 
 /*
@@ -90,16 +110,4 @@ struct text_body_type {
 extern std::vector<autopick_type> autopick_list;
 extern ItemEntity autopick_last_destroyed_object;
 
-void auto_inscribe_item(ItemEntity *o_ptr, int idx);
-int count_line(text_body_type *tb);
-
-/*!
- * @brief 最大行数を超えるかチェックする
- * @param count 行数
- * @retval true 最大行数を超える
- * @retval false 最大行数を超えない
- */
-inline bool is_greater_autopick_max_line(int count)
-{
-    return count > MAX_LINES - 3;
-}
+bool auto_inscribe_item(ItemEntity &item, int idx);

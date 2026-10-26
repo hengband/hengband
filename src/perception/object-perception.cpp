@@ -5,6 +5,7 @@
 #include "io/write-diary.h"
 #include "system/baseitem/baseitem-definition.h"
 #include "system/baseitem/baseitem-record.h"
+#include "system/deferred-update-requests.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
 
@@ -19,6 +20,10 @@ void object_aware(PlayerType *player_ptr, const ItemEntity &item)
     const auto &baseitem = item.get_baseitem();
     auto &baseitem_record = item.get_baseitem_record();
     baseitem_record.mark_awareness(true);
+    if (!is_already_awared) {
+        // 同じ種類のアイテムの名前が、持ち物・装備・床のどこにあっても変わる
+        DeferredUpdateRequests::get_instance().request_item_lists_redrawing();
+    }
 
     // 以下、playrecordに記録しない場合はreturnする
     if (!record_ident) {

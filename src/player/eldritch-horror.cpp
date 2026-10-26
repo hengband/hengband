@@ -16,13 +16,14 @@
 #include "player/player-status-flags.h"
 #include "status/bad-status-setter.h"
 #include "status/base-status.h"
+#include "system/deferred-update-requests.h"
 #include "system/floor/floor-info.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "timed-effect/timed-effects.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 #include <string>
@@ -141,7 +142,7 @@ void sanity_blast(PlayerType *player_ptr, tl::optional<short> m_idx, bool necro)
         }
 
         if (evaluate_percent(player_ptr->skill_sav * 100 / power)) {
-            msg_format(_("夢の中で%sに追いかけられた。", "%s^ chases you through your dreams."), m_name.data());
+            msg_print(_("夢の中で{}に追いかけられた。", "{} chases you through your dreams."), str_upcase_first(m_name));
             return;
         }
 
@@ -292,6 +293,6 @@ void sanity_blast(PlayerType *player_ptr, tl::optional<short> m_idx, bool necro)
         break;
     }
 
-    RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
+    DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
     handle_stuff(player_ptr);
 }

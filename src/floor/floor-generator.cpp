@@ -41,12 +41,15 @@
 #include "system/terrain/terrain-definition.h"
 #include "system/terrain/terrain-list.h"
 #include "term/z-rand.h"
+#include "term/z-util.h"
 #include "util/bit-flags-calculator.h"
+#include "util/enum-converter.h"
 #include "view/display-messages.h"
 #include "window/main-window-util.h"
 #include "world/world.h"
 #include <algorithm>
 #include <array>
+#include <fmt/format.h>
 #include <stack>
 
 /*!
@@ -291,7 +294,10 @@ static void generate_fixed_floor(PlayerType *player_ptr)
     get_mon_num_prep_enum(player_ptr, floor.get_monrace_hook());
     init_flags = INIT_CREATE_DUNGEON;
     if (fixed_map && fixed_map->has_map()) {
-        generate_quest_floor_from_json(player_ptr, quest, *fixed_map);
+        if (const auto result = generate_quest_floor_from_json(player_ptr, quest, *fixed_map); !result) {
+            constexpr auto message = _("クエスト {} の固定マップ生成に失敗しました (コード {})", "Failed to generate fixed map for quest {} (code {})");
+            quit(fmt::format(message, enum2i(floor.quest_number), static_cast<int>(result.error())));
+        }
     }
 }
 
@@ -529,7 +535,7 @@ void generate_floor(PlayerType *player_ptr)
             break;
         }
 
-        msg_format(_("生成やり直し(%s)", "Generation restarted (%s)"), why->data());
+        msg_print(_("生成やり直し({})", "Generation restarted ({})"), *why);
         wipe_o_list(floor);
         wipe_monsters_list(player_ptr);
     }

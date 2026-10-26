@@ -102,6 +102,7 @@ libhengband_a_SOURCES = \
 	bot/bot-report.cpp bot/bot-report.h \
 	bot/bot-screen.cpp bot/bot-screen.h \
 	bot/bot-socket-server.cpp bot/bot-socket-server.h \
+	bot/bot-subwindow-verifier.cpp bot/bot-subwindow-verifier.h \
 	\
 	cmd-action/cmd-attack.cpp cmd-action/cmd-attack.h \
 	cmd-action/cmd-hissatsu.cpp cmd-action/cmd-hissatsu.h \
@@ -626,9 +627,12 @@ libhengband_a_SOURCES = \
 	info-reader/fixed-map-parser.cpp info-reader/fixed-map-parser.h \
 	info-reader/general-parser.cpp info-reader/general-parser.h \
 	info-reader/info-reader-util.cpp info-reader/info-reader-util.h \
+	info-reader/item-reader-limits.h \
 	info-reader/json-reader-util.cpp info-reader/json-reader-util.h \
+	info-reader/jsonc-document-loader.cpp info-reader/jsonc-document-loader.h \
 	info-reader/magic-reader.cpp info-reader/magic-reader.h \
 	info-reader/message-reader.cpp info-reader/message-reader.h \
+	info-reader/parse-error-messages.cpp info-reader/parse-error-messages.h \
 	info-reader/parse-error-types.h \
 	info-reader/quest-reader.cpp info-reader/quest-reader.h \
 	info-reader/race-info-tokens-table.cpp info-reader/race-info-tokens-table.h \
@@ -638,6 +642,7 @@ libhengband_a_SOURCES = \
 	info-reader/spell-reader.cpp info-reader/spell-reader.h \
 	info-reader/terrain-reader.cpp info-reader/terrain-reader.h \
 	info-reader/town-definition-list-reader.cpp info-reader/town-definition-list-reader.h \
+	info-reader/town-map-condition.h \
 	info-reader/town-map-reader.cpp info-reader/town-map-reader.h \
 	info-reader/town-preferences-reader.cpp info-reader/town-preferences-reader.h \
 	info-reader/vault-reader.cpp info-reader/vault-reader.h \
@@ -655,10 +660,12 @@ libhengband_a_SOURCES = \
 	inventory/recharge-processor.cpp inventory/recharge-processor.h \
 	\
 	io/command-repeater.cpp io/command-repeater.h \
+	io/condition-expression.cpp io/condition-expression.h \
 	io/cursor.cpp io/cursor.h \
 	io/exit-panic.cpp io/exit-panic.h \
 	io/files-util.cpp io/files-util.h \
 	io/gf-descriptions.cpp io/gf-descriptions.h \
+	io/input-context.cpp io/input-context.h \
 	io/input-key-acceptor.cpp io/input-key-acceptor.h \
 	io/input-key-processor.cpp io/input-key-processor.h \
 	io/input-key-requester.cpp io/input-key-requester.h \
@@ -745,6 +752,7 @@ libhengband_a_SOURCES = \
 	lore/lore-calculator.cpp lore/lore-calculator.h \
 	lore/lore-util.cpp lore/lore-util.h \
 	lore/magic-types-setter.cpp lore/magic-types-setter.h \
+	lore/monster-lore-snapshot.cpp lore/monster-lore-snapshot.h \
 	lore/monster-lore.cpp lore/monster-lore.h \
 	\
 	main-x11.cpp main-gcu.cpp \
@@ -752,7 +760,6 @@ libhengband_a_SOURCES = \
 	main/angband-initializer.cpp main/angband-initializer.h \
 	main/game-data-initializer.cpp main/game-data-initializer.h \
 	main/info-initializer.cpp main/info-initializer.h \
-	main/init-error-messages-table.cpp main/init-error-messages-table.h \
 	main/music-definitions-table.cpp main/music-definitions-table.h \
 	main/scene-table.cpp main/scene-table.h \
 	main/scene-table-floor.cpp main/scene-table-floor.h \
@@ -1294,13 +1301,13 @@ libhengband_a_SOURCES = \
 	system/artifact/artifact-record.cpp system/artifact/artifact-record.h \
 	system/artifact/artifact-service.cpp system/artifact/artifact-service.h \
 	system/building-type-definition.cpp system/building-type-definition.h \
+	system/deferred-update-requests.cpp system/deferred-update-requests.h \
 	system/grid-type-definition.cpp system/grid-type-definition.h \
 	system/h-basic.h system/h-config.h \
 	system/h-system.h system/h-type.h \
 	system/inner-game-data.cpp system/inner-game-data.h \
 	system/monster-entity.cpp system/monster-entity.h \
 	system/player-type-definition.cpp system/player-type-definition.h \
-	system/redrawing-flags-updater.cpp system/redrawing-flags-updater.h \
 	system/spell-info-list.cpp system/spell-info-list.h \
 	system/system-variables.cpp system/system-variables.h \
 	system/gamevalue.h \
@@ -1377,7 +1384,7 @@ libhengband_a_SOURCES = \
 	term/gameterm.cpp term/gameterm.h \
 	term/screen-processor.cpp term/screen-processor.h \
 	term/term-color-types.h \
-	term/z-form.cpp term/z-form.h term/z-rand.cpp term/z-rand.h \
+	term/z-rand.cpp term/z-rand.h \
 	term/z-term.cpp term/z-term.h term/z-util.cpp term/z-util.h \
 	\
 	timed-effect/player-cut.cpp timed-effect/player-cut.h \
@@ -1430,6 +1437,7 @@ libhengband_a_SOURCES = \
 	view/display-store.cpp view/display-store.h \
 	view/display-symbol.h \
 	view/display-util.cpp view/display-util.h \
+	view/map-info-cache.cpp view/map-info-cache.h \
 	view/object-describer.cpp view/object-describer.h \
 	view/status-first-page.cpp view/status-first-page.h \
 	view/status-bars-table.cpp view/status-bars-table.h \
@@ -1439,6 +1447,8 @@ libhengband_a_SOURCES = \
 	window/main-window-row-column.h \
 	window/main-window-stat-poster.cpp window/main-window-stat-poster.h \
 	window/main-window-util.cpp window/main-window-util.h \
+	window/overview-map-cache.cpp window/overview-map-cache.h \
+	window/shrunk-overview-map.cpp window/shrunk-overview-map.h \
 	window/main-window-equipments.cpp window/main-window-equipments.h \
 	\
 	wizard/artifact-analyzer.cpp wizard/artifact-analyzer.h \
@@ -1492,52 +1502,106 @@ check_PROGRAMS = hengband-test
 hengband_test_SOURCES = \
 	test/test-main.cpp \
 	test/scoped-restore.h \
+	test/scoped-input-term.h \
+	test/scoped-redrawing-flags.h \
+	test/save/scoped-save-io.h \
+	test/scoped-vector-wrapper.h \
 	test/scoped-rng.h \
 	test/string-helpers.h \
+	test/temporary-json-files.h \
+	test/info-reader/parse-result-helpers.h \
 	test/info-reader/scoped-reader-state.h \
 	test/system/artifact-list-test-access.h \
+	test/system/dungeon-list-test-access.h \
+	test/system/monrace-list-test-access.h \
+	test/system/monrace-message-list-test-access.h \
+	test/system/monrace-records-test-access.h \
 	test/system/terrain-list-test-access.h \
+	test/system/quest-list-test-access.h \
+	test/system/spell-info-list-test-access.h \
 	\
 	test/autopick/test-autopick-editor-util.cpp \
+	test/autopick/test-autopick-finder.cpp \
+	test/autopick/test-autopick-reader-writer.cpp \
+	test/bot/test-bot-json-output.cpp \
 	test/cmd-io/test-cmd-autopick.cpp \
+	test/cmd-item/test-cmd-item.cpp \
+	test/core/test-asking-player.cpp \
 	test/flavor/test-flavor-util.cpp \
+	test/floor/test-fixed-map-generator.cpp \
+	test/floor/test-floor-changer.cpp \
 	test/game-option/test-runtime-arguments.cpp \
 	test/info-reader/test-activation-reader.cpp \
+	test/info-reader/test-artifact-reader.cpp \
 	test/info-reader/test-baseitem-reader.cpp \
+	test/info-reader/test-dungeon-reader.cpp \
 	test/info-reader/test-ego-reader.cpp \
-	test/info-reader/test-general-parser.cpp \
+	test/floor/test-floor-events.cpp \
+	test/object-activation/test-activation-util.cpp \
+	test/object-enchant/test-item-feeling.cpp \
+	test/object-enchant/test-item-magic-applier.cpp \
+	test/object-enchant/test-object-ego.cpp \
+	test/object/test-object-value.cpp \
+	test/racial/test-racial-android.cpp \
+	test/system/item/test-item-entity.cpp \
 	test/info-reader/test-wilderness-reader.cpp \
 	test/info-reader/test-info-reader-util.cpp \
 	test/info-reader/test-json-reader-util.cpp \
+	test/info-reader/test-jsonc-document-loader.cpp \
 	test/info-reader/test-magic-reader.cpp \
 	test/info-reader/test-message-reader.cpp \
+	test/info-reader/test-parse-error-messages.cpp \
 	test/info-reader/test-quest-reader.cpp \
 	test/info-reader/test-race-reader.cpp \
 	test/info-reader/test-skill-reader.cpp \
 	test/info-reader/test-spell-reader.cpp \
 	test/info-reader/test-terrain-reader.cpp \
 	test/info-reader/test-town-definition-list-reader.cpp \
+	test/info-reader/test-fixed-map-parser.cpp \
 	test/info-reader/test-town-map-reader.cpp \
 	test/info-reader/test-town-preferences-reader.cpp \
 	test/info-reader/test-vault-reader.cpp \
+	test/inventory/test-floor-item-getter.cpp \
+	test/io-dump/test-dump-util.cpp \
+	test/io/test-condition-expression.cpp \
+	test/io/test-input-context.cpp \
+	test/io/test-input-key-requester.cpp \
 	test/io/test-interpret-pref-file.cpp \
 	test/io/test-macro-configurations-store.cpp \
 	test/io/test-pref-file-expressor.cpp \
 	test/io/test-tokenizer.cpp \
+	test/knowledge/test-knowledge-features.cpp \
 	test/load/test-angband-version-comparer.cpp \
 	test/locale/test-character-encoding.cpp \
-	test/main/test-init-error-messages-table.cpp \
+	test/lore/test-monster-lore-snapshot.cpp \
+	test/market/test-building-recharger.cpp \
 	test/monster-race/test-race-ability-mask.cpp \
 	test/mspell/test-mspell-projection-table.cpp \
 	test/mutation/test-mutation-roll-table.cpp \
 	test/object/test-object-info.cpp \
+	test/object-use/quaff/test-quaff-execution.cpp \
+	test/player-status/test-player-status-base.cpp \
+	test/player/test-player-skill.cpp \
 	test/player/test-process-name.cpp \
+	test/player-status/test-player-speed.cpp \
+	test/spell/test-spell-info.cpp \
+	test/spell-realm/test-spells-hex.cpp \
 	test/store/test-pricing.cpp \
 	test/store/test-store-screen.cpp \
 	test/store/test-store-util.cpp \
+	test/store/test-store.cpp \
 	test/system/baseitem/test-baseitem-definition.cpp \
+	test/save/test-item-writer.cpp \
+	test/system/baseitem/test-baseitem-allocation.cpp \
+	test/system/baseitem/test-baseitem-list.cpp \
+	test/system/floor/test-floor-info.cpp \
+	test/system/floor/test-town-records.cpp \
 	test/system/monrace/test-monrace-definition.cpp \
-	test/term/test-z-form.cpp \
+	test/system/test-quest-list.cpp \
+	test/system/test-dungeon-record.cpp \
+	test/system/test-deferred-update-requests.cpp \
+	test/system/test-building-type-definition.cpp \
+	test/target/test-target-getter.cpp \
 	test/term/test-z-rand.cpp \
 	test/timed-effect/test-player-cut.cpp \
 	test/timed-effect/test-player-stun.cpp \
@@ -1547,17 +1611,50 @@ hengband_test_SOURCES = \
 	test/util/test-dice.cpp \
 	test/util/test-finalizer.cpp \
 	test/util/test-flag-group.cpp \
+	test/util/test-int-char-converter.cpp \
 	test/util/test-probability-table.cpp \
 	test/util/test-sha256.cpp \
 	test/util/test-string-processor.cpp \
+	test/util/test-temporary-json-files.cpp \
+	test/view/test-display-messages.cpp \
+	test/view/test-map-info-cache.cpp \
 	test/view/test-map-terrain-visibility.cpp \
-	test/view/test-screen-parity-helpers.cpp
+	test/view/test-screen-parity-helpers.cpp \
+	test/window/test-overview-map-cache.cpp \
+	test/window/test-shrunk-overview-map.cpp \
+	test/wizard/test-spoiler-util.cpp
 
 hengband_test_LDADD = libhengband.a
+
+## 端末と入力待ちを使う共通描画の回帰プローブ。通常のユニットテストとは別に明示実行する。
+main-window-wipe-probe$(EXEEXT): $(top_srcdir)/tools/tests/main-window-wipe-probe.cpp libhengband.a
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) $(LDFLAGS) -o $@ $(top_srcdir)/tools/tests/main-window-wipe-probe.cpp libhengband.a $(LIBS)
+
+.PHONY: check-main-window-wipe
+check-main-window-wipe: main-window-wipe-probe$(EXEEXT)
+	./main-window-wipe-probe$(EXEEXT) plain
+	./main-window-wipe-probe$(EXEEXT) deferred
+	./main-window-wipe-probe$(EXEEXT) reenter
+
+## 状態解除の終了処理・入力待ちを実際の端末で確認する独立プローブ。
+arena-status-probe$(EXEEXT): $(top_srcdir)/tools/tests/arena-status-probe.cpp libhengband.a
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) $(LDFLAGS) -o $@ $(top_srcdir)/tools/tests/arena-status-probe.cpp libhengband.a $(LIBS)
+
+.PHONY: check-arena-status
+check-arena-status: arena-status-probe$(EXEEXT)
+	@set -e; scratch=$$(mktemp -d); \
+	trap 'rm -rf "$$scratch"' EXIT HUP INT TERM; \
+	for mode in timed-force arena-force dispel-force timed-ninja arena-ninja dispel-ninja hex-active hex-interrupted hex-stop hex-dispel dispel-invuln song-active song-interrupted ordinary tsuyoshi arena-normal arena-silent arena-metal arena-cancel arena-watch; do \
+		./arena-status-probe$(EXEEXT) "$(top_srcdir)/lib" "$$scratch" "$$mode"; \
+	done
+
+CLEANFILES = main-window-wipe-probe$(EXEEXT) arena-status-probe$(EXEEXT)
 
 TESTS = $(check_PROGRAMS)
 
 EXTRA_DIST = \
+	$(top_srcdir)/tools/tests/arena-status-probe.cpp \
+	$(top_srcdir)/tools/tests/main-window-wipe-probe.cpp \
 	gcc-wrap \
 	test/README.md
 

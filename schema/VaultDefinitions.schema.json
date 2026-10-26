@@ -16,7 +16,12 @@
           "id": { "type": "integer", "minimum": 0, "maximum": 32767 },
           "name": { "type": "string", "minLength": 1 },
           "type": { "type": "integer", "enum": [7, 8, 17] },
-          "rating": { "type": "integer", "minimum": 0, "maximum": 2147483647 },
+          "rating": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 2147483647,
+            "description": "未使用。読み込んで保持するだけで、ゲーム中では参照しない。"
+          },
           "height": { "type": "integer", "minimum": 1, "maximum": 66 },
           "width": { "type": "integer", "minimum": 1, "maximum": 198 },
           "layout": {

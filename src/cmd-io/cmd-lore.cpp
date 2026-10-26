@@ -1,6 +1,7 @@
 #include "cmd-io/cmd-lore.h"
+#include "bot/bot-json-output.h"
 #include "core/asking-player.h"
-#include "core/stuff-handler.h"
+#include "core/window-redrawer.h"
 #include "game-option/cheat-options.h"
 #include "game-option/game-play-options.h"
 #include "io/input-key-acceptor.h"
@@ -12,7 +13,6 @@
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
-#include "term/z-form.h"
 #include "tracking/lore-tracker.h"
 #include "util/int-char-converter.h"
 #include "util/string-processor.h"
@@ -126,8 +126,9 @@ void do_cmd_query_symbol(PlayerType *player_ptr)
     while (true) {
         const auto monrace_id = monrace_ids[i];
         tracker.set_trackee(monrace_id);
-        handle_stuff(player_ptr);
+        window_stuff(player_ptr);
         while (true) {
+            BotDrawnScreenScope bot_screen;
             if (recall) {
                 screen_save();
                 screen_roff(player_ptr, monrace_ids[i], MONSTER_LORE_NORMAL);

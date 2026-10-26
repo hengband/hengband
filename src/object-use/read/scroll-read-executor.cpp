@@ -37,10 +37,10 @@
 #include "status/element-resistance.h"
 #include "store/rumor.h"
 #include "sv-definition/sv-scroll-types.h"
+#include "system/deferred-update-requests.h"
 #include "system/floor/floor-info.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -211,13 +211,16 @@ bool ScrollReadExecutor::read()
 
         this->ident = true;
         break;
-    case SV_SCROLL_STAR_ENCHANT_WEAPON:
-        if (!enchant_spell(this->player_ptr, randnum1<short>(3), randint1(3), 0)) {
+    case SV_SCROLL_STAR_ENCHANT_WEAPON: {
+        const auto num_hit = randnum1<short>(3);
+        const auto num_dam = randint1(3);
+        if (!enchant_spell(this->player_ptr, num_hit, num_dam, 0)) {
             used_up = false;
         }
 
         this->ident = true;
         break;
+    }
     case SV_SCROLL_RECHARGING:
         if (!recharge(this->player_ptr, 130)) {
             used_up = false;
@@ -312,7 +315,7 @@ bool ScrollReadExecutor::read()
 
         msg_print(_("手が輝き始めた。", "Your hands begin to glow."));
         this->player_ptr->special_attack |= ATTACK_CONFUSE;
-        RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
+        DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
         this->ident = true;
         break;
     case SV_SCROLL_PROTECTION_FROM_EVIL: {
@@ -355,7 +358,7 @@ bool ScrollReadExecutor::read()
         }
 
         this->player_ptr->add_spells++;
-        RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::SPELLS);
+        DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::SPELLS);
         this->ident = true;
         break;
     case SV_SCROLL_GENOCIDE:

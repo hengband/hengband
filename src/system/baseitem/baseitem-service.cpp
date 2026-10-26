@@ -16,7 +16,6 @@
 #include "view/display-symbol.h"
 #include "world/world.h"
 #include <functional>
-#include <numeric>
 #include <range/v3/algorithm/for_each.hpp>
 #include <range/v3/view.hpp>
 
@@ -232,7 +231,7 @@ void BaseitemService::shuffle_flavors(ItemKindType tval)
  * @details
  * modeにVISUAL_ONLY が含まれるなら常に対象とする.
  * 通常時は、ウィザードモードを除き、未鑑定名が見えていて鑑定済であることと、
- * 出現率の合計が1以上であることを要求する.
+ * 出現率の合計が1以上であるか自然生成しないことが明示されていること (BaseitemDefinition::is_knowledge_candidate()) を要求する.
  * @param mode 収集モード
  * @param baseitem ベースアイテム定義
  * @param record ベースアイテム記録
@@ -248,10 +247,5 @@ bool BaseitemService::check_chance(const EnumClassFlagGroup<BaseitemCollectionMo
         return false;
     }
 
-    const auto &alloc_tables = baseitem.alloc_tables;
-    const auto sum_chances = std::accumulate(alloc_tables.begin(), alloc_tables.end(), 0, [](int sum, const auto &table) {
-        return sum + table.chance;
-    });
-
-    return sum_chances > 0;
+    return baseitem.is_knowledge_candidate();
 }

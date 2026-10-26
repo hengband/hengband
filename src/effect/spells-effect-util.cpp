@@ -5,6 +5,7 @@
 #include "system/floor/floor-info.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
 #include <algorithm>
 
@@ -53,14 +54,14 @@ void FallOffHorseEffect::apply() const
 
     if (this->shake_off_damage > 0) {
         if (process_fall_off_horse(this->player_ptr, this->shake_off_damage, false)) {
-            msg_format(_("%s^に振り落とされた！", "%s^ has thrown you off!"), m_name.data());
+            msg_print(_("{}に振り落とされた！", "{} has thrown you off!"), str_upcase_first(m_name));
             return;
         }
     }
 
     if (this->fall_off_damage > 0) {
         if (process_fall_off_horse(this->player_ptr, this->fall_off_damage, false)) {
-            msg_format(_("%s^から落ちてしまった！", "You have fallen from %s."), m_name.data());
+            msg_print(_("{}から落ちてしまった！", "You have fallen from {}."), m_name);
         }
     }
 }

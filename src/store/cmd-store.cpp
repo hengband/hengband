@@ -18,13 +18,14 @@
 #include "store/store-screen.h"
 #include "store/store-util.h"
 #include "store/store.h"
+#include "system/deferred-update-requests.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/floor/floor-info.h"
 #include "system/floor/town-list.h"
+#include "system/floor/town-records.h"
 #include "system/grid-type-definition.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "system/terrain/terrain-definition.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
@@ -32,12 +33,13 @@
 #include "view/display-messages.h"
 #include "view/display-store.h"
 #include "world/world.h"
+#include <tl/optional.hpp>
 
 /*!
- * @brief 入った店舗がある町のIDを決める
+ * @brief 入った店舗がある町の番号を決める
  * @param floor 現在のフロア
  * @param store_num 店舗の種類
- * @return 町のID
+ * @return 町の番号 (TownList の添字)
  * @details 我が家と博物館は全ての町で内容を共有するため、辺境の地の店舗を使う。
  * ダンジョン内の店舗は、ダンジョン用の町 (VALID_TOWNS) の店舗を使う。
  */
@@ -48,7 +50,7 @@ static size_t decide_store_town_index(const FloorType &floor, StoreSaleType stor
     }
 
     if ((store_num == StoreSaleType::HOME) || (store_num == StoreSaleType::MUSEUM)) {
-        return 1;
+        return to_town_index(TownId::OUTPOST);
     }
 
     return AngbandWorld::get_instance().get_town_index();
@@ -108,10 +110,11 @@ void do_cmd_store(PlayerType *player_ptr)
     command_new = 0;
     get_com_no_macros = true;
     StoreScreen screen(store, town_index, grid.feat, term_get_size().second);
+    tl::optional<BotScreenScope> bot_screen(tl::in_place, make_bot_store_screen(screen));
     play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_BUILD);
     display_store(player_ptr, screen);
     auto should_leave = false;
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &dur = DeferredUpdateRequests::get_instance();
     while (!should_leave) {
         prt("", 1, 0);
         clear_from(screen.get_command_row(0));
@@ -143,13 +146,13 @@ void do_cmd_store(PlayerType *player_ptr)
         }
 
         prt(_("コマンド:", "You may: "), screen.get_command_row(0), 0);
-        output_bot_json_store_snapshot(player_ptr, screen);
+        output_bot_json_screen_snapshot(player_ptr);
         InputKeyRequestor(player_ptr, true).request_command();
         should_leave = store_process_command(player_ptr, screen);
 
-        const auto should_redraw_store_inventory = rfu.has(StatusRecalculatingFlag::BONUS);
+        const auto should_redraw_store_inventory = dur.has(StatusRecalculatingFlag::BONUS);
         world.character_icky_depth = 1;
-        handle_stuff(player_ptr);
+        handle_stuff_with_inventory_arrangement(player_ptr);
         if (player_ptr->inventory[INVEN_PACK]->bi_id) {
             INVENTORY_IDX i_idx = INVEN_PACK;
             const auto &item_inventory = *player_ptr->inventory[i_idx];
@@ -168,9 +171,9 @@ void do_cmd_store(PlayerType *player_ptr)
                 msg_print(_("ザックからアイテムがあふれてしまった！", "Your pack overflows!"));
                 auto item = item_inventory.clone();
                 const auto item_name = describe_flavor(player_ptr, item, 0);
-                msg_format(_("%sが落ちた。(%c)", "You drop %s (%c)."), item_name.data(), index_to_label(i_idx));
+                msg_print(_("{}が落ちた。({:c})", "You drop {} ({:c})."), item_name, index_to_label(i_idx));
                 vary_item(player_ptr, i_idx, -255);
-                handle_stuff(player_ptr);
+                handle_stuff_with_inventory_arrangement(player_ptr);
                 const auto item_pos = home_carry(player_ptr, store, &item);
                 if (item_pos >= 0) {
                     screen.show_page_containing(item_pos);
@@ -188,6 +191,7 @@ void do_cmd_store(PlayerType *player_ptr)
         }
     }
 
+    bot_screen.reset();
     select_floor_music(player_ptr);
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
     world.character_icky_depth = 0;
@@ -198,23 +202,17 @@ void do_cmd_store(PlayerType *player_ptr)
     msg_erase();
     term_clear();
 
+    dur.request_monster_update_and_map_redrawing();
     static constexpr auto flags_srf = {
         StatusRecalculatingFlag::VIEW,
         StatusRecalculatingFlag::LITE,
         StatusRecalculatingFlag::MONSTER_LITE,
-        StatusRecalculatingFlag::MONSTER_STATUSES,
     };
-    rfu.set_flags(flags_srf);
+    dur.set_flags(flags_srf);
     static constexpr auto flags_mwrf = {
         MainWindowRedrawingFlag::BASIC,
         MainWindowRedrawingFlag::EXTRA,
         MainWindowRedrawingFlag::EQUIPPY,
-        MainWindowRedrawingFlag::MAP,
     };
-    rfu.set_flags(flags_mwrf);
-    static constexpr auto flags_swrf = {
-        SubWindowRedrawingFlag::OVERHEAD,
-        SubWindowRedrawingFlag::DUNGEON,
-    };
-    rfu.set_flags(flags_swrf);
+    dur.set_flags(flags_mwrf);
 }

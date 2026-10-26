@@ -63,7 +63,7 @@ static void message_breath(PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTER_ID
     } else {
         if (player_ptr->effects()->blindness().is_active()) {
             if (mon_to_player || (mon_to_mon && known && see_either)) {
-                msg_format(_("%s^が何かのブレスを吐いた。", "%s^ breathes."), m_name.data());
+                msg_print(_("{}が何かのブレスを吐いた。", "{} breathes."), str_upcase_first(m_name));
             }
         } else {
             if (mon_to_player) {

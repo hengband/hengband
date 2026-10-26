@@ -84,11 +84,11 @@
 #include "store/cmd-store.h"
 #include "store/home.h"
 #include "store/store-util.h"
+#include "system/deferred-update-requests.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/floor/floor-info.h"
 #include "system/inner-game-data.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
 #include "term/z-rand.h"
 #include "util/int-char-converter.h"
@@ -96,6 +96,7 @@
 #include "window/display-sub-windows.h"
 #include "wizard/cmd-wizard.h"
 #include "world/world.h"
+#include <fmt/format.h>
 #include <string>
 #include <tl/optional.hpp>
 
@@ -196,9 +197,9 @@ void process_command(PlayerType *player_ptr)
             msg_print(_("ウィザードモード突入。", "Wizard mode on."));
         }
 
-        auto &rfu = RedrawingFlagsUpdater::get_instance();
-        rfu.set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
-        rfu.set_flag(MainWindowRedrawingFlag::TITLE);
+        auto &dur = DeferredUpdateRequests::get_instance();
+        dur.set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
+        dur.set_flag(MainWindowRedrawingFlag::TITLE);
         break;
     }
     case KTRL('A'): {
@@ -234,11 +235,11 @@ void process_command(PlayerType *player_ptr)
         break;
     }
     case 'e': {
-        do_cmd_equip(player_ptr);
+        do_cmd_equip(player_ptr, false);
         break;
     }
     case 'i': {
-        do_cmd_inven(player_ptr);
+        do_cmd_inven(player_ptr, false);
         break;
     }
     case 'I': {
@@ -448,13 +449,13 @@ void process_command(PlayerType *player_ptr)
                 break;
             }
 
-            msg_format(_("反魔法バリアが%sを邪魔した！", "An anti-magic shell disrupts your %s!"), which_power);
+            msg_print(_("反魔法バリアが{}を邪魔した！", "An anti-magic shell disrupts your {}!"), which_power);
             PlayerEnergy(player_ptr).reset_player_turn();
             break;
         }
 
         if (is_shero(player_ptr) && !pc.equals(PlayerClassType::BERSERKER)) {
-            msg_format(_("狂戦士化していて頭が回らない！", "You cannot think directly!"));
+            msg_print(_("狂戦士化していて頭が回らない！", "You cannot think directly!"));
             PlayerEnergy(player_ptr).reset_player_turn();
             break;
         }

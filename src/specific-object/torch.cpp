@@ -8,12 +8,12 @@
 #include "player-info/race-info.h"
 #include "player/special-defense-types.h"
 #include "sv-definition/sv-lite-types.h"
+#include "system/deferred-update-requests.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "util/bit-flags-calculator.h"
 #include "util/point-2d.h"
 #include <vector>
@@ -125,7 +125,7 @@ void update_lite_radius(PlayerType *player_ptr)
         StatusRecalculatingFlag::MONSTER_LITE,
         StatusRecalculatingFlag::MONSTER_STATUSES,
     };
-    RedrawingFlagsUpdater::get_instance().set_flags(flags);
+    DeferredUpdateRequests::get_instance().set_flags(flags);
     player_ptr->old_lite = player_ptr->cur_lite;
     if (player_ptr->cur_lite > 0) {
         set_superstealth(player_ptr, false);
@@ -275,5 +275,5 @@ void update_lite(PlayerType *player_ptr)
         floor.set_redraw_at(pos);
     }
 
-    RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::DELAY_VISIBILITY);
+    DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::DELAY_VISIBILITY);
 }

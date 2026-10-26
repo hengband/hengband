@@ -44,7 +44,7 @@ private:
     WildernessTerrain terrain{};
     uint32_t seed = 0;
     short town = 0;
-    int road = 0;
+    int road = 0; //!< 道があるか (値の大きさは使っていない。0 より大きければ道とみなす)
     int level = 0;
     DungeonId entrance{};
     std::string name = "";

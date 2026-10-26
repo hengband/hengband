@@ -23,6 +23,7 @@
 #include "spell-kind/spells-world.h"
 #include "spell-realm/spells-hex.h"
 #include "system/angband-system.h"
+#include "system/deferred-update-requests.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/dungeon/quest-definition.h"
 #include "system/enums/monrace/monrace-id.h"
@@ -30,7 +31,6 @@
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "target/projection-path-calculator.h"
 #include "timed-effect/timed-effects.h"
 #include "util/string-processor.h"
@@ -191,12 +191,12 @@ static bool check_mspell_unexploded(PlayerType *player_ptr, msa_type *msa_ptr)
 
     if (!spell_is_inate(msa_ptr->thrown_spell) && (msa_ptr->in_no_magic_dungeon || (msa_ptr->m_ptr->get_remaining_stun() && one_in_(2)) || evaluate_percent(fail_rate))) {
         disturb(player_ptr, true, true);
-        msg_format(_("%s^は呪文を唱えようとしたが失敗した。", "%s^ tries to cast a spell, but fails."), msa_ptr->m_name.data());
+        msg_print(_("{}は呪文を唱えようとしたが失敗した。", "{} tries to cast a spell, but fails."), str_upcase_first(msa_ptr->m_name));
         return true;
     }
 
     if (!spell_is_inate(msa_ptr->thrown_spell) && SpellHex(player_ptr).check_hex_barrier(msa_ptr->m_idx, HEX_ANTI_MAGIC)) {
-        msg_format(_("反魔法バリアが%s^の呪文をかき消した。", "Anti magic barrier cancels the spell which %s^ casts."), msa_ptr->m_name.data());
+        msg_print(_("反魔法バリアが{}の呪文をかき消した。", "Anti-magic barrier cancels the spell which {} casts."), msa_ptr->m_name);
         return true;
     }
 
@@ -283,7 +283,7 @@ static void check_mspell_imitation(PlayerType *player_ptr, msa_type *msa_ptr)
 
     mane_data->mane_list.push_back({ msa_ptr->thrown_spell, msa_ptr->dam });
     mane_data->new_mane = true;
-    RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::IMITATION);
+    DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::IMITATION);
 }
 
 static void remember_mspell(msa_type *msa_ptr)

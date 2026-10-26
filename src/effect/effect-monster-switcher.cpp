@@ -26,6 +26,7 @@
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
 
 ProcessResult effect_monster_hypodynamia(PlayerType *player_ptr, EffectMonster *em_ptr)
@@ -86,7 +87,9 @@ ProcessResult effect_monster_death_ray(PlayerType *player_ptr, EffectMonster *em
     }
 
     bool has_resistance = (em_ptr->monrace->kind_flags.has(MonsterKindType::UNIQUE) && (randint1(888) != 666));
-    has_resistance |= (((em_ptr->monrace->level + randint1(20)) > randint1((em_ptr->caster_lev / 2) + randint1(10))) && randint1(100) != 66);
+    const auto resistance_power = em_ptr->monrace->level + randint1(20);
+    const auto caster_power = randint1((em_ptr->caster_lev / 2) + randint1(10));
+    has_resistance |= ((resistance_power > caster_power) && randint1(100) != 66);
 
     if (has_resistance) {
         em_ptr->note = _("には耐性がある！", " resists!");
@@ -129,8 +132,10 @@ ProcessResult effect_monster_hand_doom(EffectMonster *em_ptr)
         return ProcessResult::PROCESS_CONTINUE;
     }
 
-    if (em_ptr->is_monster() ? ((em_ptr->caster_lev + randint1(em_ptr->dam)) > (em_ptr->monrace->level + 10 + randint1(20)))
-                             : (((em_ptr->caster_lev / 2) + randint1(em_ptr->dam)) > (em_ptr->monrace->level + randint1(200)))) {
+    const auto is_monster = em_ptr->is_monster();
+    const auto caster_power = (is_monster ? em_ptr->caster_lev : em_ptr->caster_lev / 2) + randint1(em_ptr->dam);
+    const auto resistance_power = is_monster ? (em_ptr->monrace->level + 10 + randint1(20)) : (em_ptr->monrace->level + randint1(200));
+    if (caster_power > resistance_power) {
         em_ptr->dam = ((40 + randint1(20)) * em_ptr->m_ptr->hp) / 100;
         if (em_ptr->m_ptr->hp < em_ptr->dam) {
             em_ptr->dam = em_ptr->m_ptr->hp - 1;
@@ -259,7 +264,7 @@ ProcessResult effect_monster_genocide(PlayerType *player_ptr, EffectMonster *em_
     std::string_view spell_name(_("モンスター消滅", "Genocide One"));
     if (genocide_aux(player_ptr, em_ptr->g_ptr->m_idx, em_ptr->dam, em_ptr->is_player(), (em_ptr->monrace->level + 1) / 2, spell_name)) {
         if (em_ptr->seen_msg) {
-            msg_format(_("%sは消滅した！", "%s^ disappeared!"), em_ptr->m_name);
+            msg_print(_("{}は消滅した！", "{} disappeared!"), str_upcase_first(em_ptr->m_name));
         }
         chg_virtue(player_ptr, Virtue::VITALITY, -1);
         return ProcessResult::PROCESS_TRUE;
@@ -272,7 +277,7 @@ ProcessResult effect_monster_genocide(PlayerType *player_ptr, EffectMonster *em_
 ProcessResult effect_monster_photo(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
     if (em_ptr->is_player()) {
-        msg_format(_("%sを写真に撮った。", "You take a photograph of %s."), em_ptr->m_name);
+        msg_print(_("{}を写真に撮った。", "You take a photograph of {}."), em_ptr->m_name);
     }
 
     if (em_ptr->monrace->resistance_flags.has(MonsterResistanceType::HURT_LITE)) {

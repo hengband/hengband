@@ -26,6 +26,7 @@
 #include "player/player-status.h"
 #include "spell-kind/spells-random.h"
 #include "status/experience.h"
+#include "system/deferred-update-requests.h"
 #include "system/enums/monrace/monrace-id.h"
 #include "system/floor/floor-info.h"
 #include "system/monrace/monrace-definition.h"
@@ -33,7 +34,6 @@
 #include "system/monrace/monrace-records.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "timed-effect/timed-effects.h"
 #include "tracking/health-bar-tracker.h"
 #include "tracking/lore-tracker.h"
@@ -101,7 +101,7 @@ bool MonsterDamageProcessor::mon_take_hit(std::string_view note)
     }
 
     if (AngbandWorld::get_instance().wizard) {
-        msg_format(_("合計%d/%dのダメージを与えた。", "You do %d (out of %d) damage."), monster.dealt_damage, monster.maxhp);
+        msg_print(_("合計{}/{}のダメージを与えた。", "You do {} (out of {}) damage."), monster.dealt_damage, monster.maxhp);
     }
 
     if (this->process_dead_exp_virtue(note, exp_mon)) {
@@ -149,7 +149,7 @@ bool MonsterDamageProcessor::process_dead_exp_virtue(std::string_view note, cons
 
     sound(SoundKind::KILL);
     this->show_kill_message(note, m_name);
-    this->show_bounty_message(m_name);
+    this->show_bounty_message();
     monster_death(this->player_ptr, this->m_idx, true, this->attribute_flags);
     delete_monster_idx(this->player_ptr, this->m_idx);
     this->get_exp_from_mon(exp_mon, exp_mon.max_maxhp * 2);
@@ -310,7 +310,7 @@ void MonsterDamageProcessor::show_explosion_message(std::string_view died_mes, s
     return;
 }
 
-void MonsterDamageProcessor::show_bounty_message(std::string_view m_name)
+void MonsterDamageProcessor::show_bounty_message()
 {
     auto &floor = *this->player_ptr->current_floor_ptr;
     auto &monster = floor.m_list[this->m_idx];
@@ -324,7 +324,8 @@ void MonsterDamageProcessor::show_bounty_message(std::string_view m_name)
     }
 
     if (monrace.is_bounty(true)) {
-        msg_print(_("{}の首には賞金がかかっている。", "There is a price on {}'s head."), m_name);
+        const auto m_name = monster_desc(this->player_ptr, monster, MD_TRUE_NAME | _(0, MD_POSSESSIVE));
+        msg_print(_("{}の首には賞金がかかっている。", "There is a price on {} head."), m_name);
     }
 }
 
@@ -409,7 +410,7 @@ void MonsterDamageProcessor::set_redraw()
     auto &monster = this->player_ptr->current_floor_ptr->m_list[this->m_idx];
     HealthBarTracker::get_instance().set_flag_if_tracking(this->m_idx);
     if (monster.is_riding()) {
-        RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::UHEALTH);
+        DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::UHEALTH);
     }
 }
 

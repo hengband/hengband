@@ -14,17 +14,19 @@
 #include "monster/monster-status-setter.h" //!< @todo 相互依存. 後で何とかする.
 #include "monster/monster-update.h"
 #include "system/angband-system.h"
+#include "system/deferred-update-requests.h"
 #include "system/floor/floor-info.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
 #include "system/monrace/monrace-service.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "timed-effect/timed-effects.h"
 #include "tracking/health-bar-tracker.h"
 #include "util/bit-flags-calculator.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
+#include <fmt/format.h>
 #ifdef JP
 #else
 #include "monster/monster-description-types.h"
@@ -83,7 +85,7 @@ int mon_damage_mod(PlayerType *player_ptr, const MonsterEntity &monster, int dam
         race_info.r_special_flags.set(MonsterSpecialType::DIMINISH_MAX_DAMAGE);
         if (dam > monster.hp / 10) {
             dam = std::max(monster.hp / 10, monster.maxhp * 7 / 500);
-            msg_format(_("%s^は致命的なダメージを抑えた！", "%s^ resisted a critical damage!"), monster_desc(player_ptr, monster, 0).data());
+            msg_print(_("{}は致命的なダメージを抑えた！", "{} resisted a critical damage!"), str_upcase_first(monster_desc(player_ptr, monster, 0)));
         }
     }
 
@@ -172,7 +174,7 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
         /* Notice the "waking up" */
         if (monster.ml) {
             const auto m_name = monster_desc(player_ptr, monster, 0);
-            msg_format(_("%s^が目を覚ました。", "%s^ wakes up."), m_name.data());
+            msg_print(_("{}が目を覚ました。", "{} wakes up."), str_upcase_first(m_name));
         }
 
         if (is_original_ap_and_seen(player_ptr, monster)) {
@@ -189,7 +191,7 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
         if (set_monster_fast(floor, m_idx, monster.get_remaining_acceleration() - 1)) {
             if (is_seen(player_ptr, monster)) {
                 const auto m_name = monster_desc(player_ptr, monster, 0);
-                msg_format(_("%s^はもう加速されていない。", "%s^ is no longer fast."), m_name.data());
+                msg_print(_("{}はもう加速されていない。", "{} is no longer fast."), str_upcase_first(m_name));
             }
         }
 
@@ -199,7 +201,7 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
         if (set_monster_slow(floor, m_idx, monster.get_remaining_deceleration() - 1)) {
             if (is_seen(player_ptr, monster)) {
                 const auto m_name = monster_desc(player_ptr, monster, 0);
-                msg_format(_("%s^はもう減速されていない。", "%s^ is no longer slow."), m_name.data());
+                msg_print(_("{}はもう減速されていない。", "{} is no longer slow."), str_upcase_first(m_name));
             }
         }
 
@@ -212,7 +214,7 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
             /* Message if visible */
             if (is_seen(player_ptr, monster)) {
                 const auto m_name = monster_desc(player_ptr, monster, 0);
-                msg_format(_("%s^は朦朧状態から立ち直った。", "%s^ is no longer stunned."), m_name.data());
+                msg_print(_("{}は朦朧状態から立ち直った。", "{} is no longer stunned."), str_upcase_first(m_name));
             }
         }
 
@@ -227,7 +229,7 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
         /* Message if visible */
         if (is_seen(player_ptr, monster)) {
             const auto m_name = monster_desc(player_ptr, monster, 0);
-            msg_format(_("%s^は混乱から立ち直った。", "%s^ is no longer confused."), m_name.data());
+            msg_print(_("{}は混乱から立ち直った。", "{} is no longer confused."), str_upcase_first(m_name));
         }
 
         break;
@@ -247,9 +249,9 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
             const auto m_poss = monster_desc(player_ptr, monster, MD_PRON_VISIBLE | MD_POSSESSIVE);
 #endif
 #ifdef JP
-            msg_format("%s^は勇気を取り戻した。", m_name.data());
+            msg_print("{}は勇気を取り戻した。", str_upcase_first(m_name));
 #else
-            msg_format("%s^ recovers %s courage.", m_name.data(), m_poss.data());
+            msg_print("{} recovers {} courage.", str_upcase_first(m_name), m_poss);
 #endif
         }
 
@@ -263,13 +265,13 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
 
         if (is_seen(player_ptr, monster)) {
             const auto m_name = monster_desc(player_ptr, monster, 0);
-            msg_format(_("%s^はもう無敵でない。", "%s^ is no longer invulnerable."), m_name.data());
+            msg_print(_("{}はもう無敵でない。", "{} is no longer invulnerable."), str_upcase_first(m_name));
         }
 
         break;
     }
     default:
-        THROW_EXCEPTION(std::logic_error, format("Invalid MonsterTimedEffect is specified! %d", enum2i(mte)));
+        THROW_EXCEPTION(std::logic_error, fmt::format("Invalid MonsterTimedEffect is specified! {}", enum2i(mte)));
     }
 }
 
@@ -311,19 +313,19 @@ void dispel_monster_status(PlayerType *player_ptr, MONSTER_IDX m_idx)
     const auto m_name = monster_desc(player_ptr, monster, 0);
     if (set_monster_invulner(floor, m_idx, 0, true)) {
         if (monster.ml) {
-            msg_format(_("%sはもう無敵ではない。", "%s^ is no longer invulnerable."), m_name.data());
+            msg_print(_("{}はもう無敵ではない。", "{} is no longer invulnerable."), str_upcase_first(m_name));
         }
     }
 
     if (set_monster_fast(floor, m_idx, 0)) {
         if (monster.ml) {
-            msg_format(_("%sはもう加速されていない。", "%s^ is no longer fast."), m_name.data());
+            msg_print(_("{}はもう加速されていない。", "{} is no longer fast."), str_upcase_first(m_name));
         }
     }
 
     if (set_monster_slow(floor, m_idx, 0)) {
         if (monster.ml) {
-            msg_format(_("%sはもう減速されていない。", "%s^ is no longer slow."), m_name.data());
+            msg_print(_("{}はもう減速されていない。", "{} is no longer slow."), str_upcase_first(m_name));
         }
     }
 }
@@ -367,10 +369,10 @@ void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MonraceId monra
         return;
     }
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &dur = DeferredUpdateRequests::get_instance();
     if (monster.exp < old_monrace.next_exp) {
         if (monster.is_riding()) {
-            rfu.set_flag(StatusRecalculatingFlag::BONUS);
+            dur.set_flag(StatusRecalculatingFlag::BONUS);
         }
 
         return;
@@ -427,12 +429,13 @@ void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MonraceId monra
             if (is_hallucinated) {
                 const auto ids = MonraceService::search([](const auto &monrace) { return monrace.kind_flags.has_not(MonsterKindType::UNIQUE); });
                 const auto &monrace_hallucinated = monraces.get_monrace(rand_choice(ids));
-                auto mes_evolution = _("%sは%sに進化した。", "%s^ evolved into %s.");
-                auto mes_degeneration = _("%sは%sに退化した。", "%s^ degenerated into %s.");
-                auto mes = randint0(2) == 0 ? mes_evolution : mes_degeneration;
-                msg_format(mes, m_name.data(), monrace_hallucinated.name.data());
+                if (randint0(2) == 0) {
+                    msg_print(_("{}は{}に進化した。", "{} evolved into {}."), str_upcase_first(m_name), monrace_hallucinated.name);
+                } else {
+                    msg_print(_("{}は{}に退化した。", "{} degenerated into {}."), str_upcase_first(m_name), monrace_hallucinated.name);
+                }
             } else {
-                msg_format(_("%sは%sに進化した。", "%s^ evolved into %s."), m_name.data(), new_monrace.name.data());
+                msg_print(_("{}は{}に進化した。", "{} evolved into {}."), str_upcase_first(m_name), new_monrace.name);
             }
         }
 
@@ -448,6 +451,6 @@ void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MonraceId monra
     lite_spot(player_ptr, monster.get_position());
 
     if (monster.is_riding()) {
-        rfu.set_flag(StatusRecalculatingFlag::BONUS);
+        dur.set_flag(StatusRecalculatingFlag::BONUS);
     }
 }

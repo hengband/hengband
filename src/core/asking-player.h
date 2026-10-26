@@ -15,12 +15,19 @@ enum class UserCheck {
 };
 
 class PlayerType;
+struct InputContext;
+struct SpellInputDetails;
+enum class InputKind;
 tl::optional<std::string> askfor(int len, std::string_view initial_value = "", bool numpad_cursor = true);
 tl::optional<std::string> input_string(std::string_view prompt, int len, std::string_view initial_value = "", bool numpad_cursor = true);
 bool input_check(std::string_view prompt);
 bool input_check_strict(PlayerType *player_ptr, std::string_view prompt, UserCheck one_mode);
 bool input_check_strict(PlayerType *player_ptr, std::string_view prompt, EnumClassFlagGroup<UserCheck> mode);
 tl::optional<char> input_command(std::string_view prompt);
+tl::optional<char> input_command_with_context(InputContext input_context);
+tl::optional<char> input_spell_choice(std::string_view prompt, const SpellInputDetails &details);
+char input_key_with_context(InputKind kind, std::string_view prompt, bool do_all_term_refresh = false);
+char input_key_with_context(InputContext input_context, bool do_all_term_refresh = false);
 int input_quantity(int max, std::string_view initial_prompt = "");
 void pause_line(int row);
 tl::optional<int> input_integer(std::string_view prompt, int min, int max, int initial_value = 0);

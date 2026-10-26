@@ -4,6 +4,7 @@
 #include "game-option/birth-options.h"
 #include "io/files-util.h"
 #include "player/player-personality.h"
+#include "system/deferred-update-requests.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
@@ -12,6 +13,7 @@
 #include "util/string-processor.h"
 #include "view/display-player-misc-info.h"
 #include "world/world.h"
+#include <fmt/format.h>
 #include <sstream>
 #ifdef SAVEFILE_USE_UID
 #include "main-unix/unix-user-ids.h"
@@ -120,7 +122,7 @@ void process_player_name(PlayerType *player_ptr, bool is_new_savefile)
 #endif
 
         if (iscntrl(static_cast<unsigned char>(name[i]))) {
-            quit_fmt(_("'%s' という名前は不正なコントロールコードを含んでいます。", "The name '%s' contains control chars!"), player_ptr->name);
+            quit(fmt::format(_("'{}' という名前は不正なコントロールコードを含んでいます。", "The name '{}' contains control chars!"), player_ptr->name));
         }
     }
 
@@ -166,6 +168,8 @@ void get_name(PlayerType *player_ptr)
 {
     const auto finalizer = util::make_finalizer([player_ptr]() {
         display_player_misc_info(player_ptr);
+        // 名前を表示するプレイヤーの情報のサブウィンドウも描き直す (店の中ではプレイヤーのターンごとの要求が来ない)
+        DeferredUpdateRequests::get_instance().set_flag(SubWindowRedrawingFlag::PLAYER);
     });
 
     std::string initial_name(player_ptr->name);

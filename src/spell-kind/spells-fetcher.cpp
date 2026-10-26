@@ -8,6 +8,7 @@
 #include "monster/monster-status-setter.h"
 #include "monster/monster-update.h"
 #include "monster/monster-util.h"
+#include "system/deferred-update-requests.h"
 #include "system/enums/terrain/terrain-characteristics.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
@@ -15,12 +16,12 @@
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "target/projection-path-calculator.h"
 #include "target/target-setter.h"
 #include "target/target-types.h"
 #include "timed-effect/timed-effects.h"
 #include "tracking/lore-tracker.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
 
 /*!
@@ -99,9 +100,11 @@ void fetch_item(PlayerType *player_ptr, const Direction &dir, WEIGHT wgt, bool r
     item.set_position(p_pos);
 
     const auto item_name = describe_flavor(player_ptr, item, OD_NAME_ONLY);
-    msg_format(_("%s^があなたの足元に飛んできた。", "%s^ flies through the air to your feet."), item_name.data());
+    msg_print(_("{}があなたの足元に飛んできた。", "{} flies through the air to your feet."), str_upcase_first(item_name));
     note_spot(player_ptr, p_pos);
-    RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::MAP);
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.request_map_redrawing();
+    dur.request_floor_item_lists_redrawing();
 }
 
 bool fetch_monster(PlayerType *player_ptr)
@@ -148,7 +151,7 @@ bool fetch_monster(PlayerType *player_ptr)
     lite_spot(player_ptr, *pos);
     lite_spot(player_ptr, pos_target);
     if (monster.get_monrace().brightness_flags.has_any_of(ld_mask)) {
-        RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::MONSTER_LITE);
+        DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::MONSTER_LITE);
     }
 
     if (monster.ml) {

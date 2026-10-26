@@ -20,12 +20,13 @@
 #include "sv-definition/sv-weapon-types.h"
 #include "system/baseitem/baseitem-definition.h"
 #include "system/baseitem/baseitem-list.h"
+#include "system/deferred-update-requests.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
+#include <fmt/format.h>
 #include <tl/optional.hpp>
 #include <utility>
 #include <vector>
@@ -120,16 +121,16 @@ static tl::optional<std::pair<std::shared_ptr<ItemEntity>, short>> select_repair
 static void display_reparing_weapon(PlayerType *player_ptr, const ItemEntity &item, const int row)
 {
     const auto item_name = describe_flavor(player_ptr, item, OD_NAME_ONLY);
-    prt(format(_("修復する武器　： %s", "Repairing: %s"), item_name.data()), row + 3, 2);
+    prt(fmt::format(_("修復する武器　： {}", "Repairing: {}"), item_name), row + 3, 2);
 }
 
 static void display_repair_success_message(PlayerType *player_ptr, const ItemEntity &item, const int cost)
 {
     const auto item_name = describe_flavor(player_ptr, item, OD_NAME_ONLY);
 #ifdef JP
-    msg_format("＄%dで%sに修復しました。", cost, item_name.data());
+    msg_print("＄{}で{}に修復しました。", cost, item_name);
 #else
-    msg_format("Repaired into %s for %d gold.", item_name.data(), cost);
+    msg_print("Repaired into {} for {} gold.", item_name, cost);
 #endif
     msg_erase();
 }
@@ -165,24 +166,25 @@ static PRICE repair_broken_weapon_aux(PlayerType *player_ptr, PRICE bcost)
     }
 
     const auto item_name = describe_flavor(player_ptr, *item_material, OD_NAME_ONLY);
-    prt(format(_("材料とする武器： %s", "Material : %s"), item_name.data()), row + 4, 2);
-    const auto cost = bcost + object_value_real(item_broken.get()) * 2;
-    if (!input_check(format(_("＄%dかかりますがよろしいですか？ ", "Costs %d gold, okay? "), cost))) {
+    prt(fmt::format(_("材料とする武器： {}", "Material : {}"), item_name), row + 4, 2);
+    const auto total_cost = int64_t{ bcost } + int64_t{ object_value_real(item_broken.get()) } * 2;
+    if (!input_check(fmt::format(_("＄{}かかりますがよろしいですか？ ", "Costs {} gold, okay? "), total_cost))) {
         return 0;
     }
 
-    if (player_ptr->au < cost) {
-        msg_format(_("%sを修復するだけのゴールドがありません！", "You do not have the gold to repair %s!"), item_name.data());
+    if (player_ptr->au < total_cost) {
+        msg_print(_("{}を修復するだけのゴールドがありません！", "You do not have the gold to repair {}!"), item_name);
         msg_erase();
         return 0;
     }
 
+    const auto cost = static_cast<PRICE>(total_cost);
     short bi_id;
     const auto &baseitems = BaseitemList::get_instance();
     if (item_broken->bi_key.sval() == SV_BROKEN_DAGGER) {
         auto n = 1;
         bi_id = 0;
-        for (short tmp_bi_id = 0; tmp_bi_id < static_cast<short>(baseitems.size()); tmp_bi_id++) {
+        for (const auto tmp_bi_id : baseitems.collect_valid_bi_ids()) {
             const auto &baseitem = baseitems.get_baseitem(tmp_bi_id);
             if (baseitem.bi_key.tval() != ItemKindType::SWORD) {
                 continue;
@@ -308,7 +310,7 @@ static PRICE repair_broken_weapon_aux(PlayerType *player_ptr, PRICE bcost)
     inven_item_increase(player_ptr, material_idx, -1);
     inven_item_optimize(player_ptr, material_idx);
 
-    RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
+    DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
     handle_stuff(player_ptr);
     return cost;
 }

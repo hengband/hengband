@@ -4,12 +4,12 @@
 #include <string_view>
 
 enum class AutopickMethod;
-struct text_body_type;
-void toggle_keyword(text_body_type *tb, BIT_FLAGS flg);
-void toggle_command_letter(text_body_type *tb, AutopickMethod am);
-void add_keyword(text_body_type *tb, BIT_FLAGS flg);
-bool add_empty_line(text_body_type *tb);
-void kill_yank_chain(text_body_type *tb);
-void add_str_to_yank(text_body_type *tb, std::string_view str);
-void copy_text_to_yank(text_body_type *tb);
+class AutopickTextBody;
+void toggle_keyword(AutopickTextBody *tb, BIT_FLAGS flg);
+void toggle_command_letter(AutopickTextBody *tb, AutopickMethod am);
+void add_keyword(AutopickTextBody *tb, BIT_FLAGS flg);
+bool add_empty_line(AutopickTextBody *tb);
+void kill_yank_chain(AutopickTextBody *tb);
+void add_str_to_yank(AutopickTextBody *tb, std::string_view str);
+void copy_text_to_yank(AutopickTextBody *tb);
 bool is_second_byte_of_kanji(std::string_view line, int pos);

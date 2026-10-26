@@ -5,6 +5,7 @@
 #include <string_view>
 #include <tl/optional.hpp>
 #include <utility>
+#include <vector>
 
 enum class SpellHexRevengeType : byte {
     NONE = 0,
@@ -19,9 +20,13 @@ public:
     SpellHex(PlayerType *player_ptr);
     virtual ~SpellHex() = default;
 
+    static void request_casting_change_updates();
+
     bool stop_spells_with_selection();
     void decrease_mana();
     void stop_all_spells();
+    void discard_interrupted_spells();
+    void clear_revenge();
     bool is_casting_full_capacity() const;
     void continue_revenge();
     void store_vengeful_damage(int dam);
@@ -36,13 +41,13 @@ public:
     int32_t get_revenge_power() const;
     void set_revenge_power(int32_t power, bool substitution);
     byte get_revenge_turn() const;
-    void set_revenge_turn(byte power, bool substitution);
+    void set_revenge_turn(byte turn, bool substitution);
     SpellHexRevengeType get_revenge_type() const;
+    SpellHexRevengeType get_shown_revenge_type() const;
     void set_revenge_type(SpellHexRevengeType type);
 
 private:
     PlayerType *player_ptr;
-    std::vector<int> casting_spells;
     std::shared_ptr<spell_hex_data_type> spell_hex_data;
 
     std::pair<bool, tl::optional<char>> select_spell_stopping(std::string_view prompt);
@@ -51,4 +56,5 @@ private:
     bool check_restart();
     int calc_need_mana();
     void gain_exp();
+    std::vector<int> get_casting_spells() const;
 };

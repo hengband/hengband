@@ -7,6 +7,7 @@
 #include "main-unix/unix-cfg-reader.h"
 #include "locale/character-encoding.h"
 #include "main/sound-definitions-table.h"
+#include "term/z-rand.h"
 #include "term/z-term.h"
 #include "util/angband-files.h"
 #include <cstring>
@@ -16,9 +17,9 @@
 #include <tl/optional.hpp>
 
 // 1つの項目に設定可能な最大ファイル数
-#define SAMPLE_MAX 16
+constexpr auto SAMPLE_MAX = 16;
 // max path length
-#define MAIN_WIN_MAX_PATH 1024
+constexpr auto MAIN_WIN_MAX_PATH = 1024;
 /*
  * - Taken from files.c.
  *
@@ -90,8 +91,9 @@ tl::optional<std::string> CfgData::get_rand(int key1_type, int key2_val) const
         return tl::nullopt;
     }
 
-    const auto &filenames = it->second;
-    return filenames.at(Rand_external(filenames.size()));
+    // 音を鳴らすかどうかは設定やファイルの有無で変わるため、固定シードで再現する Rand_external() の乱数列は消費しない
+    static xso::rng32 rng;
+    return rand_choice(rng, it->second);
 }
 
 bool CfgData::has_key(int key1_type, int key2_val) const
@@ -152,7 +154,8 @@ CfgData CfgReader::read_sections(std::initializer_list<cfg_section> sections) co
             if (value.empty()) {
                 continue;
             }
-            snprintf(buf, sizeof(buf), "%s", value.data());
+            // value は UTF-8 なので、2 バイト文字を考慮する angband_strcpy() ではなくバイト単位でコピーする (buf はゼロ初期化済み)
+            value.copy(buf, sizeof(buf) - 1);
 #ifdef JP
             // .cfg (UTF-8) to Shift-JIS
             guess_convert_to_system_encoding(buf, MAIN_WIN_MAX_PATH);

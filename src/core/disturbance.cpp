@@ -5,10 +5,36 @@
 #include "io/input-key-requester.h"
 #include "player/attack-defense-types.h"
 #include "status/action-setter.h"
+#include "system/deferred-update-requests.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "target/target-checker.h"
 #include "term/screen-processor.h"
+
+/*!
+ * @brief 走っていれば走るのをやめる
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @details 走っている間は画面をプレイヤーに合わせない (center_running がオフのとき) ので、合わせ直す。
+ * 足元・発見済みのアイテムの一覧も描き直していないので、描き直しを要求する
+ */
+void stop_running(PlayerType *player_ptr)
+{
+    if (!player_ptr->running) {
+        return;
+    }
+
+    player_ptr->running = 0;
+    if (center_player && !center_running) {
+        verify_panel(player_ptr);
+    }
+
+    static constexpr auto flags = {
+        StatusRecalculatingFlag::TORCH,
+        StatusRecalculatingFlag::FLOW,
+    };
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.set_flags(flags);
+    dur.request_floor_item_lists_redrawing();
+}
 
 /*
  * Something has happened to disturb the player.
@@ -18,28 +44,17 @@
  */
 void disturb(PlayerType *player_ptr, bool stop_search, bool stop_travel)
 {
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &dur = DeferredUpdateRequests::get_instance();
     if (command_rep) {
         command_rep = 0;
-        rfu.set_flag(MainWindowRedrawingFlag::ACTION);
+        dur.set_flag(MainWindowRedrawingFlag::ACTION);
     }
 
     if ((player_ptr->action == ACTION_REST) || (player_ptr->action == ACTION_FISH) || (stop_search && (player_ptr->action == ACTION_SEARCH))) {
         set_action(player_ptr, ACTION_NONE);
     }
 
-    if (player_ptr->running) {
-        player_ptr->running = 0;
-        if (center_player && !center_running) {
-            verify_panel(player_ptr);
-        }
-
-        static constexpr auto flags = {
-            StatusRecalculatingFlag::TORCH,
-            StatusRecalculatingFlag::FLOW,
-        };
-        rfu.set_flags(flags);
-    }
+    stop_running(player_ptr);
 
     if (stop_travel) {
         Travel::get_instance().stop();
@@ -47,7 +62,7 @@ void disturb(PlayerType *player_ptr, bool stop_search, bool stop_travel)
             verify_panel(player_ptr);
         }
 
-        rfu.set_flag(StatusRecalculatingFlag::TORCH);
+        dur.set_flag(StatusRecalculatingFlag::TORCH);
     }
 
     if (flush_disturb) {

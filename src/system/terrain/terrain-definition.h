@@ -10,8 +10,8 @@
 #include "util/dice.h"
 #include "util/flag-group.h"
 #include "view/display-symbol.h"
+#include <array>
 #include <cstdint>
-#include <map>
 #include <string>
 #include <vector>
 
@@ -25,7 +25,8 @@ constexpr auto F_LIT_DARK = 2; /* Darkened */
 constexpr auto F_LIT_MAX = 3;
 constexpr auto F_LIT_NS_BEGIN = 1; /* Nonstandard */
 
-const std::map<int, DisplaySymbol> DEFAULT_SYMBOLS = { { F_LIT_STANDARD, {} }, { F_LIT_LITE, {} }, { F_LIT_DARK, {} } };
+//! 照明状態 (F_LIT_STANDARD など) ごとの地形シンボル
+using TerrainSymbols = std::array<DisplaySymbol, F_LIT_MAX>;
 
 enum class TerrainAction {
     DESTROY = 1,
@@ -59,7 +60,7 @@ public:
 enum class TerrainTag;
 class TerrainType {
 public:
-    TerrainType();
+    TerrainType() = default;
     FEAT_IDX idx{};
     std::string name; /*!< 地形名 */
     std::string text; /*!< 地形説明 */
@@ -82,14 +83,14 @@ public:
     StoreSaleType store_sale_type = StoreSaleType::NONE; /*!< 店舗種別 */
     BuildingType building_type = BuildingType::NONE; /*!< 施設種別 */
     TerrainConversionType conversion_type = TerrainConversionType::NONE; /*!< 変換地形種別 */
-    int stream_index = -1; /*!< 川地形種別 */
+    int stream_index = -1; /*!< 川地形種別 (ダンジョンの streams の位置。数を超える位置では元の地形のまま。STREAM 以外では -1) */
     uint8_t door_power{}; /*!< 扉の強度 */
     uint8_t trap_power{}; /*!< 罠の解除難易度 */
     uint8_t tunnel_power{}; /*!< トンネル掘削難易度 */
     Dice gold_drop{}; /*!< 財宝地形から生成する財宝数 */
     std::vector<TerrainGenerationChange> generation_changes; /*!< 生成時の変化候補 */
-    std::map<int, DisplaySymbol> symbol_definitions; //!< デフォルトの地形シンボル (色/文字).
-    std::map<int, DisplaySymbol> symbol_configs; //!< 設定変更後の地形シンボル (色/文字).
+    TerrainSymbols symbol_definitions; //!< デフォルトの地形シンボル (色/文字).
+    TerrainSymbols symbol_configs; //!< 設定変更後の地形シンボル (色/文字).
 
     static bool has(TerrainCharacteristics tc, TerrainAction ta);
 
@@ -107,6 +108,6 @@ public:
     void reset_lighting(bool is_config = true);
 
 private:
-    void reset_lighting_ascii(std::map<int, DisplaySymbol> &symbols);
-    void reset_lighting_graphics(std::map<int, DisplaySymbol> &symbols);
+    void reset_lighting_ascii(TerrainSymbols &symbols);
+    void reset_lighting_graphics(TerrainSymbols &symbols);
 };

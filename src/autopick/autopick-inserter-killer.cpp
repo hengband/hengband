@@ -18,66 +18,39 @@
 /*!
  * @brief Check if this line is expression or not. And update it if it is.
  */
-void check_expression_line(text_body_type *tb, int y)
+void check_expression_line(AutopickTextBody *tb, int y)
 {
-    const auto &s = *tb->lines_list[y];
-    if ((s[0] == '?' && s[1] == ':') || (tb->states[y] & LSTAT_BYPASS)) {
+    const auto &s = tb->lines[y].line;
+    if ((s[0] == '?' && s[1] == ':') || (tb->lines[y].state.has(AutopickEntryStatus::BYPASS))) {
         tb->dirty_flags |= DIRTY_EXPRESSION;
     }
 }
 
 /*!
- * @brief 行を追加可能かチェックする
- * @param tb text_body_type
- * @param add_num 追加する行数
- * @retval true 追加可能
- * @retval false 最大行数を超えるため追加不可
- */
-bool can_insert_line(text_body_type *tb, int add_num)
-{
-    const int count = count_line(tb);
-    return !is_greater_autopick_max_line(count + add_num);
-}
-
-/*!
  * @brief Insert return code and split the line
  */
-bool insert_return_code(text_body_type *tb)
+void insert_return_code(AutopickTextBody *tb)
 {
-    auto num_lines = count_line(tb);
-    if (is_greater_autopick_max_line(num_lines)) {
-        return false;
-    }
-
-    num_lines--;
-
-    for (; tb->cy < num_lines; num_lines--) {
-        std::swap(tb->lines_list[num_lines + 1], tb->lines_list[num_lines]);
-        std::swap(tb->states[num_lines + 1], tb->states[num_lines]);
-    }
-
     // 2バイト文字の途中では分けず、その文字の後ろで分ける
-    auto &line = *tb->lines_list[tb->cy];
+    auto &line = tb->lines[tb->cy].line;
     auto split_pos = std::min(tb->cx, static_cast<int>(line.length()));
     if (is_second_byte_of_kanji(line, split_pos)) {
         split_pos++;
     }
 
-    tb->lines_list[tb->cy + 1] = std::make_unique<std::string>(line.substr(split_pos));
+    // 挿入すると line の参照が無効になるので、先に分ける
+    auto rest = line.substr(split_pos);
     line.erase(split_pos);
+    tb->lines.emplace(tb->lines.begin() + tb->cy + 1)->line = std::move(rest);
     tb->dirty_flags |= DIRTY_EXPRESSION;
     tb->changed = true;
-    return true;
 }
 
 /*!
  * @brief Get a trigger key and insert ASCII string for the trigger
  */
-bool insert_macro_line(text_body_type *tb)
+bool insert_macro_line(AutopickTextBody *tb)
 {
-    if (!can_insert_line(tb, 2)) {
-        return false;
-    }
     const auto trigger = inkey_macro_trigger();
     char tmp[1024];
     ascii_to_text(tmp, trigger, sizeof(tmp));
@@ -87,7 +60,7 @@ bool insert_macro_line(text_body_type *tb)
 
     tb->cx = 0;
     insert_return_code(tb);
-    tb->lines_list[tb->cy] = std::make_unique<std::string>(format("P:%s", tmp));
+    tb->lines[tb->cy].line = fmt::format("P:{}", tmp);
 
     const auto i = macro_find_exact(trigger.data());
     if (i == -1) {
@@ -97,20 +70,15 @@ bool insert_macro_line(text_body_type *tb)
     }
 
     insert_return_code(tb);
-    tb->lines_list[tb->cy] = std::make_unique<std::string>(format("A:%s", tmp));
-
+    tb->lines[tb->cy].line = fmt::format("A:{}", tmp);
     return true;
 }
 
 /*!
  * @brief Get a command key and insert ASCII string for the key
  */
-bool insert_keymap_line(text_body_type *tb)
+bool insert_keymap_line(AutopickTextBody *tb)
 {
-    if (!can_insert_line(tb, 2)) {
-        return false;
-    }
-
     const auto mode = rogue_like_commands ? KeymapMode::ROGUE : KeymapMode::ORIGINAL;
     flush();
     char buf[2]{};
@@ -126,7 +94,7 @@ bool insert_keymap_line(text_body_type *tb)
 
     tb->cx = 0;
     insert_return_code(tb);
-    tb->lines_list[tb->cy] = std::make_unique<std::string>(fmt::format("C:{}:{}", enum2i(mode), tmp));
+    tb->lines[tb->cy].line = fmt::format("C:{}:{}", enum2i(mode), tmp);
 
     const auto &act = keymap_actions_map.at(mode).at(static_cast<uint8_t>(buf[0]));
     if (act) {
@@ -134,16 +102,16 @@ bool insert_keymap_line(text_body_type *tb)
     }
 
     insert_return_code(tb);
-    tb->lines_list[tb->cy] = std::make_unique<std::string>(fmt::format("A:{}", tmp));
+    tb->lines[tb->cy].line = fmt::format("A:{}", tmp);
     return true;
 }
 
 /*!
  * @brief Insert single letter at cursor position.
  */
-void insert_single_letter(text_body_type *tb, int key)
+void insert_single_letter(AutopickTextBody *tb, int key)
 {
-    const auto &line = *tb->lines_list[tb->cy];
+    const auto &line = tb->lines[tb->cy].line;
     const auto head_len = std::min<size_t>(tb->cx, line.length());
     auto buf = line.substr(0, head_len);
 
@@ -169,8 +137,8 @@ void insert_single_letter(text_body_type *tb, int key)
 
     // 行の上限を超える分は、2バイト文字を分断しないように切り詰める
     buf.append(line, head_len);
-    tb->lines_list[tb->cy] = std::make_unique<std::string>(str_substr(std::move(buf), 0, MAX_LINELEN - 1));
-    const int len = tb->lines_list[tb->cy]->length();
+    tb->lines[tb->cy].line = str_substr(std::move(buf), 0, MAX_LINELEN - 1);
+    const int len = tb->lines[tb->cy].line.length();
     if (len < tb->cx) {
         tb->cx = len;
     }
@@ -183,16 +151,11 @@ void insert_single_letter(text_body_type *tb, int key)
 /*!
  * @brief Kill segment of a line
  */
-void kill_line_segment(text_body_type *tb, int y, int x0, int x1, bool whole)
+void kill_line_segment(AutopickTextBody *tb, int y, int x0, int x1, bool whole)
 {
-    auto &s = *tb->lines_list[y];
-    if (whole && (x0 == 0) && (s[x1] == '\0') && tb->lines_list[y + 1]) {
-        int i;
-        for (i = y; tb->lines_list[i + 1]; i++) {
-            std::swap(tb->lines_list[i], tb->lines_list[i + 1]);
-        }
-
-        tb->lines_list[i].reset();
+    auto &s = tb->lines[y].line;
+    if (whole && (x0 == 0) && (s[x1] == '\0') && !tb->is_last_line(y)) {
+        tb->lines.erase(tb->lines.begin() + y);
         tb->dirty_flags |= DIRTY_EXPRESSION;
         return;
     }
@@ -210,7 +173,7 @@ void kill_line_segment(text_body_type *tb, int y, int x0, int x1, bool whole)
         buf.push_back(s[x]);
     }
 
-    tb->lines_list[y] = std::make_unique<std::string>(std::move(buf));
+    tb->lines[y].line = std::move(buf);
     check_expression_line(tb, y);
     tb->changed = true;
 }

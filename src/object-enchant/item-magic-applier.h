@@ -3,12 +3,15 @@
 #include "system/angband.h"
 #include <tuple>
 
+enum class EgoType;
 class ItemEntity;
 class PlayerType;
 class ItemMagicApplier {
 public:
     ItemMagicApplier(PlayerType *player_ptr, ItemEntity *o_ptr, DEPTH lev, BIT_FLAGS mode);
     void execute();
+    void execute_with_ego(EgoType ego);
+    void execute_with_random_ego();
 
 private:
     PlayerType *player_ptr;

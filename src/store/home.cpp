@@ -1,11 +1,11 @@
 #include "store/home.h"
 #include "avatar/avatar.h"
-#include "game-option/birth-options.h"
 #include "game-option/game-play-options.h"
 #include "object/object-stack.h"
 #include "object/object-value.h"
 #include "object/tval-types.h"
 #include "store/store-util.h"
+#include "store/store.h"
 #include "system/floor/town-list.h"
 #include "system/floor/town-records.h"
 #include "system/item/item-entity.h"
@@ -56,19 +56,8 @@ int home_carry(PlayerType *player_ptr, Store &store, ItemEntity *o_ptr)
         stack_force_costs = old_stack_force_costs;
     }
 
-    /* No space? */
-    /*
-     * 隠し機能: オプション powerup_home が設定されていると
-     *           我が家が 20 ページまで使える
-     */
-    if ((store_num != StoreSaleType::HOME) || powerup_home) {
-        if (store.stock_num >= store.stock_size) {
-            return -1;
-        }
-    } else {
-        if (store.stock_num >= ((store.stock_size) / 10)) {
-            return -1;
-        }
+    if (store.stock_num >= store_get_stock_limit(store)) {
+        return -1;
     }
 
     const auto first = store.stock.begin();

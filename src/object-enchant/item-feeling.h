@@ -17,3 +17,65 @@ enum item_feel_type {
     FEEL_SPECIAL = 9, /*!< 簡易鑑定: 特別 */
     FEEL_MAX = 9, /*!< 簡易鑑定の種別数 */
 };
+
+/*!
+ * @brief 呪われていることを表す感触か
+ * @param feel 感触
+ * @return 恐ろしい・無価値・呪われているなら true
+ * @details 恐ろしい (アーティファクト)・無価値 (エゴ) は、呪われているか壊れているときに付くので、呪われているかもしれないことを表す。
+ * 擬似鑑定は呪いを壊れより先に判定するので、壊れているの感触は、付けた時点で呪われていない品にしか付かない
+ * (後から呪いが付いたときは、呪われた品の感触に置き換える。to_cursed_feeling() を参照)。
+ */
+constexpr bool is_cursed_feeling(int feel)
+{
+    return (feel == FEEL_TERRIBLE) || (feel == FEEL_WORTHLESS) || (feel == FEEL_CURSED);
+}
+
+/*!
+ * @brief 新しい感触が今の感触より詳しいか
+ * @param feel 新しい感触
+ * @param current 今の感触
+ * @return 新しい感触のほうが詳しければ true
+ * @details 詳しさは、感触なし < 呪われていない (軽い擬似鑑定) < 呪われている・壊れている (呪いの有無だけ。
+ * 軽い擬似鑑定や呪い感知でも付く) < それ以外 (重い擬似鑑定でだけ付く) の順。
+ * 簡易鑑定済みの品を定期の擬似鑑定で感じ直すかを決めるためのもので、呪いが付いたときの置き換え (to_cursed_feeling()) とは別。
+ */
+constexpr bool is_more_detailed_feeling(int feel, int current)
+{
+    constexpr auto get_detail = [](int f) {
+        switch (f) {
+        case FEEL_NONE:
+            return 0;
+        case FEEL_UNCURSED:
+            return 1;
+        case FEEL_CURSED:
+        case FEEL_BROKEN:
+            return 2;
+        default:
+            return 3;
+        }
+    };
+    return get_detail(feel) > get_detail(current);
+}
+
+/*!
+ * @brief 呪いが付いた品の感触を、前の感触から求める
+ * @param feel 前の感触
+ * @return 恐ろしい・特別製なら恐ろしい、無価値・高級品なら無価値、それ以外 (感触なしを含む) は呪われている
+ * @details 重い擬似鑑定で呪われた品に付く感触にそろえる。アーティファクト・エゴであることは前の感触から
+ * 分かっていた分だけを残す。上質・並 (重い擬似鑑定で、アーティファクト・エゴでないと分かっている品) と
+ * 呪われていない (軽い擬似鑑定で、どちらか分からない品) は呪われているにする。
+ */
+constexpr item_feel_type to_cursed_feeling(int feel)
+{
+    switch (feel) {
+    case FEEL_TERRIBLE:
+    case FEEL_SPECIAL:
+        return FEEL_TERRIBLE;
+    case FEEL_WORTHLESS:
+    case FEEL_EXCELLENT:
+        return FEEL_WORTHLESS;
+    default:
+        return FEEL_CURSED;
+    }
+}

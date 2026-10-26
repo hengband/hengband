@@ -8,6 +8,7 @@
 #include "system/item/item-entity.h"
 #include "view/display-messages.h"
 #include "view/display-store.h"
+#include <fmt/format.h>
 
 /*!
  * @brief 博物館のアイテムを除去するコマンドのメインルーチン /
@@ -33,11 +34,11 @@ void museum_remove_object(PlayerType *player_ptr, StoreScreen &screen)
     const auto &item = *store.stock[item_num];
     const auto item_name = describe_flavor(player_ptr, item, 0);
     msg_print(_("展示をやめさせたアイテムは二度と見ることはできません！", "Once removed from the Museum, an item will be gone forever!"));
-    if (!input_check(format(_("本当に%sの展示をやめさせますか？", "Really order to remove %s from the Museum? "), item_name.data()))) {
+    if (!input_check(fmt::format(_("本当に{}の展示をやめさせますか？", "Really order to remove {} from the Museum? "), item_name))) {
         return;
     }
 
-    msg_format(_("%sの展示をやめさせた。", "You ordered to remove %s."), item_name.data());
+    msg_print(_("{}の展示をやめさせた。", "You ordered to remove {}."), item_name);
     store.increase_item(item_num, -item.number);
     store.optimize_item(item_num);
     (void)combine_and_reorder_home(player_ptr, store);

@@ -59,6 +59,7 @@ public:
 
 private:
     MonraceMessageList() = default;
+    friend class RaceReader;
     friend class test::MonraceMessageListTestAccess;
     static MonraceMessageList instance;
     tl::optional<const MonsterMessage &> get_message_obj(const int monrace_id, const MonsterMessageType message_type) const;

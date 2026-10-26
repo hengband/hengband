@@ -393,7 +393,7 @@ std::pair<bool, std::shared_ptr<ItemEntity>> switch_activation(PlayerType *playe
     case RandomArtActType::CAPTURE_MONSTER:
         return { exe_monster_capture(player_ptr, item), nullptr };
     default:
-        msg_format(_("Unknown activation effect: %d.", "Unknown activation effect: %d."), enum2i(index));
+        msg_print("Unknown activation effect: {}.", enum2i(index));
         return { false, nullptr };
     }
 }

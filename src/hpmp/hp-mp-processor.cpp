@@ -30,6 +30,7 @@
 #include "player/special-defense-types.h"
 #include "status/bad-status-setter.h"
 #include "status/element-resistance.h"
+#include "system/deferred-update-requests.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
@@ -37,12 +38,12 @@
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "system/terrain/terrain-definition.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#include <fmt/format.h>
 #include <functional>
 #include <sstream>
 
@@ -83,8 +84,8 @@ static bool deal_damege_by_feat(PlayerType *player_ptr, const Grid &grid, concpt
 
     if (player_ptr->levitation) {
         msg_print(msg_levitation);
-        constexpr auto mes = _("%sの上に浮遊したダメージ", "flying over %s");
-        take_hit(player_ptr, DAMAGE_NOESCAPE, damage, format(mes, grid.get_terrain(TerrainKind::MIMIC).name.data()));
+        constexpr auto mes = _("{}の上に浮遊したダメージ", "flying over {}");
+        take_hit(player_ptr, DAMAGE_NOESCAPE, damage, fmt::format(mes, grid.get_terrain(TerrainKind::MIMIC).name));
 
         if (additional_effect != nullptr) {
             additional_effect(player_ptr, damage);
@@ -92,7 +93,7 @@ static bool deal_damege_by_feat(PlayerType *player_ptr, const Grid &grid, concpt
     } else {
         const auto p_pos = player_ptr->get_position();
         const auto &name = player_ptr->current_floor_ptr->get_grid(p_pos).get_terrain(TerrainKind::MIMIC).name;
-        msg_format(_("%s%s！", "The %s %s!"), name.data(), msg_normal);
+        msg_print(_("{}{}！", "The {} {}!"), name, msg_normal);
         take_hit(player_ptr, DAMAGE_NOESCAPE, damage, name);
 
         if (additional_effect != nullptr) {
@@ -145,7 +146,7 @@ void process_player_hp_mp(PlayerType *player_ptr)
         const auto flags = item.get_flags();
         if ((player_ptr->inventory[INVEN_LITE]->bi_key.tval() != ItemKindType::NONE) && flags.has_not(TR_DARK_SOURCE) && !has_resist_lite(player_ptr)) {
             const auto item_name = describe_flavor(player_ptr, item, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-            msg_format(_("%sがあなたのアンデッドの肉体を焼き焦がした！", "The %s scorches your undead flesh!"), item_name.data());
+            msg_print(_("{}があなたのアンデッドの肉体を焼き焦がした！", "The {} scorches your undead flesh!"), item_name);
             cave_no_regen = true;
             if (!is_invuln(player_ptr)) {
                 const auto wielding_item_name = describe_flavor(player_ptr, item, OD_NAME_ONLY);
@@ -401,7 +402,7 @@ void process_player_hp_mp(PlayerType *player_ptr)
 
             upkeep_factor = calculate_upkeep(player_ptr);
 
-            msg_format(_("維持ＭＰは %d%%", "Upkeep: %d%% mana."), upkeep_factor);
+            msg_print(_("維持ＭＰは {}%", "Upkeep: {}% mana."), upkeep_factor);
             msg_erase();
         }
     }
@@ -449,9 +450,8 @@ bool hp_player(PlayerType *player_ptr, int num)
             player_ptr->chp_frac = 0;
         }
 
-        auto &rfu = RedrawingFlagsUpdater::get_instance();
-        rfu.set_flag(MainWindowRedrawingFlag::HP);
-        rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
+        auto &dur = DeferredUpdateRequests::get_instance();
+        dur.set_flag(MainWindowRedrawingFlag::HP);
         if (num < 5) {
             msg_print(_("少し気分が良くなった。", "You feel a little better."));
         } else if (num < 15) {

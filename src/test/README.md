@@ -17,6 +17,9 @@ autotools（Unix 系）では `make check`、Windows では Visual Studio の `H
 - 不要 → ユニットテストを書く
 - 必要 → [シナリオテスト](#テストしにくいコードをどう確かめるか)で確かめる。可能なら純粋関数として切り出してユニットテスト化する
 
+ただし、キー入力を待つ処理のうち、メモリ上の端末と `PlayerType` を用意するだけで呼べ、フロアやゲームデータを使わないものは、
+`test::ScopedInputTerm` を使ってユニットテストにできます（[入力を待つ処理をテストする](#入力を待つ処理をテストする)）。
+
 ---
 
 ## 実行方法
@@ -112,7 +115,7 @@ Visual Studio の IDE から実行する場合は、`HengbandTest` を右クリ�
        ...
    ```
 
-   `VisualStudio/Hengband/HengbandTest.vcxproj` の `<ClCompile>`:
+   `VisualStudio/Hengband/HengbandTest.vcxproj` の `<ClCompile>`（パスの昇順に並べる）:
 
    ```xml
    <ItemGroup>
@@ -123,8 +126,10 @@ Visual Studio の IDE から実行する場合は、`HengbandTest` を右クリ�
    </ItemGroup>
    ```
 
-   Visual Studio 上での表示を整えるため、`HengbandTest.vcxproj.filters` にも
-   同じファイルを追加しておくとよいです（こちらは登録しなくてもビルド・実行はできます）。
+   Visual Studio 上でのフォルダ分けの表示に使う `HengbandTest.vcxproj.filters` は、
+   `python3 .github/scripts/check-vcxproj.py --fix` で vcxproj の登録内容から作り直します
+   （vcxproj の並び順もあわせて直ります）。CI の `check_vcxproj` は、vcxproj と `hengband_test_SOURCES` の
+   食い違いや、並び順・filters が `--fix` の結果と違うことを検出します。
 
 4. **ビルドして確認する**
 
@@ -307,12 +312,47 @@ TEST_CASE("VaultReader keeps the existing vaults on a parse error")
 配列のようにコピー代入できないものや、関数を呼んで戻すもの（`initialize()` など）は、
 `util::make_finalizer()` を直接使ってください。
 
+更新フラグ（`DeferredUpdateRequests`）を立てたり調べたりするテストでは、`test/scoped-redrawing-flags.h` の
+`test::scoped_restore_redrawing_flags<Flag>()` で、フラグの型ごとにすべてのフラグを退避して元へ戻せます。
+これも戻り値は必ず変数で受けてください。
+
 データの読み込み処理（`info-reader/`）のテストでは、`test/info-reader/scoped-reader-state.h` の
 `test::ScopedReaderState` を使ってください。エラーの位置（`error_idx`）を設定し、端末が無くてもメッセージを
 出さないようにして、スコープを抜けるときに元へ戻します。
 
 そのうえで、**必要な前提は各テストケースの中で自分で設定してください。**
 テストの実行順序や `--test-case=` での絞り込み実行に依存しないようにするためです。
+
+### 入力を待つ処理をテストする
+
+`input_string()` やメッセージの `-続く-`（`msg_print()`・`msg_erase()`）のようにキー入力を待つ処理は、`test/scoped-input-term.h` の `test::ScopedInputTerm` を使うと
+テストできます。メモリ上の端末と `PlayerType` を用意してゲームの端末として登録し、端末が入力を待つたびに、
+`expect()` で指定した入力待ちの文脈（`io/input-context.h`）が公開されているかを確かめて、指定したキーを 1 つずつ渡します。
+文脈のプロンプトは前後の空白を除いたものなので、`expect()` には表示する文字列から空白を除いて書きます（下の例の `"Text:"`）。
+キーを使い切った後にさらに入力を待つと、例外でテストが失敗します（入力を待たないことは、`expect()` を呼ばずに処理を呼べば確かめられます）。
+1 つの処理の中でキーに応じて文脈が変わる場合（アイテムの選択で区分を切り替えるなど）は、`expect()` の後に `then_expect()` で、
+続けて待つ入力の文脈とキーを足します。
+スコープを抜けるときに、キーをすべて渡したことと、入力待ちの文脈が残っていないことを確かめます。
+キーは端末が入力を待つたびに 1 つずつ渡すので、待たずに後続のキーを読む処理（マクロのトリガーの照合など）は確かめられません。
+入力の処理が触るグローバル変数（`p_ptr`、`angband_terms`、入力のオプション、最後に選んだターゲットなど）は、作るときに既定にし、スコープを抜けるときに元へ戻します。
+ただし、コマンドの繰り返しの記録（`io/command-repeater.cpp`）とメッセージ行の表示位置など `view/display-messages.cpp` の内部の状態は
+外から戻せないため、戻しません。繰り返しの記録は `test::ScopedInputTerm` を作るたびに書き換わります。
+メッセージの表示を途中で終えるテストは、後のテストに影響することがあります。
+
+```cpp
+#include "core/asking-player.h"
+#include "test/scoped-input-term.h"
+
+TEST_CASE("example: input_string waits for a string")
+{
+    test::ScopedInputTerm term;
+    term.expect({ InputKind::STRING, "Text:", StringInputDetails{ 20, "seed" } }, "\r");
+    CHECK(input_string("Text: ", 20, "seed", false) == "seed");
+}
+```
+
+テストケースごとに作り、同時に 2 つ作らないでください。フロアやゲームデータ（`lib/`）が要る処理は対象外で、
+シナリオテストで確かめてください。
 
 ## リンクについて
 
@@ -375,8 +415,46 @@ doctest によるユニットテストのみです）。
 
 ## 制限
 
+### 共通描画の回帰プローブ
+
+画面消去に伴うメッセージ待ち中に、リサイズによる消去・再描画要求が追加されるケースは、
+メモリ上の端末と本体の `msg_erase()` / `redraw_stuff()` を使う独立プロセスで検証します。
+既存のビルドディレクトリで実行してください（`make check` とは別の明示実行です）。
+
+```sh
+make -C src check-main-window-wipe
+```
+
+`plain`（待ちなし）、`deferred`（待ち中に追加した要求を保留）、`reenter`（待ち中に描画へ再入）の
+3ケースで、WIPEが残らないこと、消去後に所持金が描かれること、次の呼び出しで消えないこと、
+さらに別の更新を描画できることを確認します。各ケースは独立プロセスで実行します。
+
+入力イベントで `term_resize()` とWIPE/GOLD要求を直接注入するため、フロントエンドのリサイズ処理、
+地図・基本/拡張ステータス、制御サーバのRPCまでは検証しません。それらは実機シナリオで確認してください。
+ソースは `tools/tests/main-window-wipe-probe.cpp` にあり、doctestやMSVCのユニットテストには登録していません。
+
+### アリーナの状態解除の回帰プローブ
+
+既存の Unix ビルドディレクトリで `make -C src -j2 check-arena-status` を明示実行します。
+`tools/tests/arena-status-probe.cpp` は本体のゲームデータとメモリ上の端末を初期化し、
+各ケースを独立プロセスで実行します。スコア等の書き込み先も一時ディレクトリへ分離します。
+doctest や MSVC のユニットテストには登録しません。
+
+通常の時限効果の無言解除、無敵解除時の行動待ち時間、練気・変わり身の解除と
+`reset_tim_flags()` からの分離、詠唱中の歌・呪術の実際の STOP 処理が一度だけ呼ばれること、
+中断後の再開待ちと我慢・復讐の破棄を確認します。つよしは STR・CON の現在値と最大値・徳の減少を
+検証し、通常入場・最終挑戦者への入場・観戦・入場取り消しも施設コマンドから確認します。
+つよしの終了通知は施設画面が消える前に確認でき、通常の強化状態だけなら通知待ちが増えないことも確認します。
+
+このプローブはコマンドの直前状態を用意して施設コマンドを直接呼ぶため、マップ移動、
+施設メニューへの出入り、アリーナ敗北後のフロア遷移、制御サーバの RPC は検証しません。
+これらのゲーム進行は制御サーバで別途確認してください。
+
+### 通常テストの制限
+
 - **`PlayerType` やフロア、`term` を必要とするコードはユニットテストにできません。**
   冒頭の判断基準のとおり、シナリオテストで確かめてください。
+  例外は、メモリ上の端末で入力を待つ処理です（[入力を待つ処理をテストする](#入力を待つ処理をテストする)）。
 - **シナリオテストを自動実行する仕組みはありません。** `make check` と MSVC の CI が
   対象とするのは doctest によるユニットテストのみです。
 - **MSVC の CI がテストを実行するのは Debug 構成だけです。** 手元では 4 構成すべてで

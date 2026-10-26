@@ -26,7 +26,6 @@
 #include "system/monrace/monrace-list.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
-#include "term/z-form.h"
 #include "util/angband-files.h"
 #include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"
@@ -38,6 +37,7 @@
 #include "wizard/spoiler-util.h"
 #include <algorithm>
 #include <array>
+#include <fmt/format.h>
 #include <iterator>
 #include <set>
 #include <sstream>
@@ -92,7 +92,7 @@ static auto get_mon_evol_roots()
 /*!
  * @brief 進化ツリーをスポイラー出力するメインルーチン
  *
- * fprintf() に'%' (壁)を渡すとフォーマット指定子扱いされるので、関数の外でフォーマットしてはいけない.
+ * モンスターのシンボル ('{' など) を書式に埋め込むと書式の指定として扱われるので、シンボルは書式の引数で渡すこと.
  */
 static SpoilerOutputResultType spoil_mon_evol()
 {
@@ -109,19 +109,19 @@ static SpoilerOutputResultType spoil_mon_evol()
     const auto &monraces = MonraceList::get_instance();
     for (auto monrace_id : get_mon_evol_roots()) {
         auto monrace = monraces.get_monrace_shared(monrace_id);
-        constexpr auto fmt_before = _("[%d]: %s (レベル%d, '%c')\n", "[%d]: %s (Level %d, '%c')\n");
-        fprintf(spoiler_file, fmt_before, enum2i(monrace_id), monrace->name.data(), monrace->level, monrace->symbol_definition.character);
+        constexpr auto fmt_before = _("[{}]: {} (レベル{}, '{:c}')\n", "[{}]: {} (Level {}, '{:c}')\n");
+        fmt::print(spoiler_file, fmt_before, enum2i(monrace_id), monrace->name, monrace->level, monrace->symbol_definition.character);
         for (auto n = 1;; n++) {
             const auto monrace_next = monrace->get_next_shared();
             if (!monrace_next->is_valid()) {
                 break;
             }
 
-            fprintf(spoiler_file, "%*s-(%d)-> ", n * 2, "", monrace->next_exp);
+            fmt::print(spoiler_file, "{}-({})-> ", std::string(n * 2, ' '), monrace->next_exp);
             monrace = monrace_next;
-            fprintf(spoiler_file, "[%d]: ", enum2i(monrace->idx));
-            constexpr auto fmt_after = _("%s (レベル%d, '%c')\n", "%s (Level %d, '%c')\n");
-            fprintf(spoiler_file, fmt_after, monrace->name.data(), monrace->level, monrace->symbol_definition.character);
+            fmt::print(spoiler_file, "[{}]: ", enum2i(monrace->idx));
+            constexpr auto fmt_after = _("{} (レベル{}, '{:c}')\n", "{} (Level {}, '{:c}')\n");
+            fmt::print(spoiler_file, fmt_after, monrace->name, monrace->level, monrace->symbol_definition.character);
         }
 
         fputc('\n', spoiler_file);
@@ -185,13 +185,15 @@ static SpoilerOutputResultType spoil_player_spell()
         return SpoilerOutputResultType::FILE_OPEN_FAILED;
     }
 
-    spoil_out(format("Player spells for %s\n", AngbandSystem::get_instance().build_version_expression(VersionExpression::FULL).data()));
+    spoil_out(fmt::format("Player spells for {}\n", AngbandSystem::get_instance().build_version_expression(VersionExpression::FULL)));
     spoil_out("------------------------------------------\n\n");
 
     PlayerType dummy_p;
     dummy_p.lev = 1;
     for (const auto pclass : EnumRange(PlayerClassType::WARRIOR, PlayerClassType::MAX)) {
-        spoil_out(format("[[Class: %s]]\n", class_info.at(pclass).title.data()));
+        spoil_out(fmt::format("[[Class: {}]]\n", class_info.at(pclass).title));
+        // 英語版の魔法書の名前の書式は職業で決まるので、出力する職業にする
+        dummy_p.pclass = pclass;
 
         const auto *magic_ptr = &class_magics_info[enum2i(pclass)];
         std::string book_name = _("なし", "None");
@@ -223,12 +225,12 @@ static SpoilerOutputResultType spoil_player_spell()
                 continue;
             }
 
-            spoil_out(format("[Realm: %s]\n", PlayerRealm::get_name(realm).data()));
-            spoil_out("Name                     Lv Cst Dif Exp\n");
+            spoil_out(fmt::format("[Realm: {}]\n", PlayerRealm::get_name(realm)));
+            spoil_out("Name                     Lv  Cst Dif  Exp\n");
             for (SPELL_IDX i = 0; i < 32; i++) {
                 const auto &spell = PlayerRealm::get_spell_info(realm, i, pclass);
                 const auto &spell_name = PlayerRealm::get_spell_name(realm, i);
-                spoil_out(format("%-24s %2d %3d %3d %3d\n", spell_name.data(), spell.slevel, spell.smana, spell.sfail, spell.sexp));
+                spoil_out(fmt::format("{:<24} {:2} {:4} {:3} {:4}\n", fmt::bytes(spell_name), spell.slevel, spell.smana, spell.sfail, spell.sexp));
             }
             spoil_out("\n");
         }

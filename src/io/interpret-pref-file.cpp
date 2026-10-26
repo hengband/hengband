@@ -19,6 +19,7 @@
 #include "system/baseitem/baseitem-configs.h"
 #include "system/baseitem/baseitem-definition.h"
 #include "system/baseitem/baseitem-list.h"
+#include "system/deferred-update-requests.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
 #include "system/player-type-definition.h"
@@ -607,11 +608,26 @@ int interpret_pref_file(PlayerType *player_ptr, std::string_view buf)
 
     // std::stoi() の変換失敗 (invalid_argument / out_of_range) と、
     // 存在しない ID を .at() で参照したとき (out_of_range) は解釈の失敗として扱う
+    int result;
     try {
-        return interpret_pref_line(player_ptr, buf);
+        result = interpret_pref_line(player_ptr, buf);
     } catch (const std::invalid_argument &) {
         return 1;
     } catch (const std::out_of_range &) {
         return 1;
     }
+
+    if (result != 0) {
+        return result;
+    }
+
+    // 記号や表示のオプションが変わると、マップやサブウィンドウの表示も変わりうる。
+    // フロアが無いとき (新しいキャラクターの作成中など) は、フロアに入るときに全てのサブウィンドウを描き直す
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.request_map_redrawing();
+    if (AngbandWorld::get_instance().character_dungeon) {
+        dur.fill_up_sub_flags();
+    }
+
+    return 0;
 }

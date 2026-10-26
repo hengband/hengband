@@ -1,7 +1,33 @@
 #include "util/buffer-shaper.h"
 #include "locale/japanese.h"
+#include "util/string-processor.h"
 #include <algorithm>
 #include <array>
+
+namespace {
+/*!
+ * @brief 文字列を分割せずにそのまま 1 行にできるか
+ * @param sv 調べる文字列
+ * @return 改行も表示できない文字 (空白に置き換える文字) も無ければ true
+ * @details shape_buffer() と同じく全角文字は 2 バイトをまとめて見る。前半バイトで終わっている文字列は、
+ * その前半バイトを 1 バイトの文字として表示できるかで判断する (shape_buffer() と同じ)
+ */
+bool is_printable_as_is(std::string_view sv)
+{
+    for (auto i = 0U; i < sv.length(); i++) {
+        if (is_multibyte_char_at(sv, i)) {
+            i++;
+            continue;
+        }
+
+        if (!isprint(static_cast<unsigned char>(sv[i]))) {
+            return false;
+        }
+    }
+
+    return true;
+}
+}
 
 /*!
  * @brief 文字列を指定した最大長を目安として分割する
@@ -17,6 +43,8 @@
  * - 日本語（全角文字）の場合は基本的にどこでも分割するが、分割後の先頭の文字が kinsoku_list
  *   に含まれる場合はその1文字前で分割する。（いわゆる行頭禁則処理）
  * - 終端文字('\\0')の領域を残すため、分割後の文字列の長さは最大 maxlen - 1 バイトになるように分割する。
+ *   但し、1文字も収まらない場合 (maxlen が 1 以下、日本語の全角文字では 2 以下) でも、各行に少なくとも1文字は入れる。
+ *   1文字も入れずに分割すると、文字列を読み進められず空の行を際限なく追加してしまうため。
  *
  * @param sv 分割する文字列
  * @param maxlen 分割する最大長
@@ -24,6 +52,13 @@
  */
 std::vector<std::string> shape_buffer(std::string_view sv, size_t maxlen)
 {
+    // 1 行に収まる文字列 (メッセージの多く) は、1 文字ずつ組み立てずにそのまま返す
+    if (!sv.empty() && (sv.length() < maxlen) && is_printable_as_is(sv)) {
+        std::vector<std::string> one_line;
+        one_line.emplace_back(sv);
+        return one_line;
+    }
+
     std::vector<std::string> result;
     std::string line;
     auto separate_pos = 0U;
@@ -35,11 +70,11 @@ std::vector<std::string> shape_buffer(std::string_view sv, size_t maxlen)
         auto ch = sv.substr(line.length(), is_kanji[0] ? 2 : 1);
         const auto is_newline = ch[0] == '\n';
 
-        if ((ch.length() == 1) && !isprint(ch[0])) {
+        if ((ch.length() == 1) && !isprint(static_cast<unsigned char>(ch[0]))) {
             ch = " ";
         }
 
-        if ((line.length() + ch.length() >= maxlen) || is_newline) {
+        if ((!line.empty() && (line.length() + ch.length() >= maxlen)) || is_newline) {
             if ((ch[0] == ' ') || (line.length() >= separate_pos * 2) || (is_kanji[0] && !is_kinsoku(ch))) {
                 sv.remove_prefix(line.length());
             } else {

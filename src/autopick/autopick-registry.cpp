@@ -19,6 +19,7 @@
 #include "system/player-type-definition.h"
 #include "util/angband-files.h"
 #include "view/display-messages.h"
+#include <fmt/format.h>
 
 static const char autoregister_header[] = "?:$AUTOREGISTER";
 
@@ -40,7 +41,7 @@ static bool clear_auto_register(std::string_view player_base_name)
     auto *tmp_fff = angband_fopen_temp(tmp_file, sizeof(tmp_file));
     if (!tmp_fff) {
         fclose(pref_fff);
-        msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), tmp_file);
+        msg_print(_("一時ファイル {} を作成できませんでした。", "Failed to create temporary file {}."), tmp_file);
         msg_erase();
         return false;
     }
@@ -63,7 +64,7 @@ static bool clear_auto_register(std::string_view player_base_name)
         if (streq(*buf, autoregister_header)) {
             autoregister = true;
         } else {
-            fprintf(tmp_fff, "%s\n", buf->data());
+            fmt::println(tmp_fff, "{}", *buf);
         }
     }
 
@@ -72,7 +73,7 @@ static bool clear_auto_register(std::string_view player_base_name)
 
     bool okay = true;
     if (num) {
-        msg_format(_("以前のキャラクター用の自動設定(%d行)が残っています。", "Auto registered lines (%d lines) for previous character are remaining."), num);
+        msg_print(_("以前のキャラクター用の自動設定({}行)が残っています。", "Auto registered lines ({} lines) for previous character are remaining."), num);
         constexpr auto mes = _("古い設定行は削除します。よろしいですか？", "These lines will be deleted.  Are you sure? ");
 
         if (!input_check(mes)) {
@@ -91,7 +92,7 @@ static bool clear_auto_register(std::string_view player_base_name)
             if (!buf) {
                 break;
             }
-            fprintf(pref_fff, "%s\n", buf->data());
+            fmt::println(pref_fff, "{}", *buf);
         }
 
         angband_fclose(pref_fff);
@@ -128,7 +129,7 @@ bool autopick_autoregister(PlayerType *player_ptr, const ItemEntity *o_ptr)
 
     if ((o_ptr->is_known() && o_ptr->is_fixed_or_random_artifact()) || (o_ptr->has_identification_flag(IdentificationFlag::SENSE) && (o_ptr->feeling == FEEL_TERRIBLE || o_ptr->feeling == FEEL_SPECIAL))) {
         const auto item_name = describe_flavor(player_ptr, *o_ptr, 0);
-        msg_format(_("%sは破壊不能だ。", "You cannot auto-destroy %s."), item_name.data());
+        msg_print(_("{}は破壊不能だ。", "You cannot auto-destroy {}."), item_name);
         return false;
     }
 
@@ -165,22 +166,20 @@ bool autopick_autoregister(PlayerType *player_ptr, const ItemEntity *o_ptr)
     }
 
     /* If file was not there.  Create one specific to the player. */
-    const auto path_pref_append = !path_pref.empty() ? path_pref : path_build(ANGBAND_DIR_USER, pickpref_filename(player_ptr->base_name, PT_WITH_PNAME));
+    const auto path_pref_append = !path_pref.empty() ? path_pref : path_build(ANGBAND_DIR_USER, pickpref_filename(player_ptr->base_name, PickType::WITH_PNAME));
     pref_fff = angband_fopen(path_pref_append, FileOpenMode::APPEND);
     if (!pref_fff) {
         const auto filename_pref = path_pref_append.string();
-        msg_format(_("%s を開くことができませんでした。", "Failed to open %s."), filename_pref.data());
+        msg_print(_("{} を開くことができませんでした。", "Failed to open {}."), filename_pref);
         msg_erase();
         return false;
     }
 
     if (!player_ptr->autopick_autoregister) {
-        fprintf(pref_fff, "%s\n", autoregister_header);
+        fmt::println(pref_fff, "{}", autoregister_header);
 
-        fprintf(pref_fff, "%s\n", _("# *警告!!* 以降の行は自動登録されたものです。", "# *Warning!* The lines below will be deleted later."));
-        fprintf(pref_fff, "%s\n",
-            _("# 後で自動的に削除されますので、必要な行は上の方へ移動しておいてください。",
-                "# Keep it by cut & paste if you need these lines for future characters."));
+        fmt::println(pref_fff, "{}", _("# *警告!!* 以降の行は自動登録されたものです。", "# *Warning!* The lines below will be deleted later."));
+        fmt::println(pref_fff, "{}", _("# 後で自動的に削除されますので、必要な行は上の方へ移動しておいてください。", "# Keep it by cut & paste if you need these lines for future characters."));
         player_ptr->autopick_autoregister = true;
     }
 
@@ -190,7 +189,7 @@ bool autopick_autoregister(PlayerType *player_ptr, const ItemEntity *o_ptr)
     autopick_list.push_back(*entry);
 
     const auto line = autopick_line_from_entry(*entry);
-    fprintf(pref_fff, "%s\n", line.data());
+    fmt::println(pref_fff, "{}", line);
     fclose(pref_fff);
     return true;
 }

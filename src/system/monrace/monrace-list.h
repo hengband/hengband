@@ -21,6 +21,7 @@ class LocalizedString;
 class MonraceDefinition;
 namespace test {
 class MonraceListTestAccess;
+class FixedMapMonraceTestAccess;
 }
 class MonraceList : public util::AbstractMapWrapper<MonraceId, std::shared_ptr<MonraceDefinition>> {
 public:
@@ -66,18 +67,22 @@ public:
 
     void reset_current_numbers();
     void reset_all_visuals();
-    tl::optional<std::string> probe_lore(MonraceId monrace_id);
     void kill_unique_monster(MonraceId monrace_id);
 
 private:
     friend class test::MonraceListTestAccess;
+    friend class test::FixedMapMonraceTestAccess;
 
     MonraceList() = default;
 
     static MonraceList instance;
     std::map<MonraceId, std::shared_ptr<MonraceDefinition>> monraces;
+    std::vector<std::shared_ptr<MonraceDefinition>> monraces_by_id; //!< 種族IDを添字にした monraces の索引 (無い種族は空). monraces を変えるときは必ず更新する
 
     const static std::map<MonraceId, std::set<MonraceId>> unified_uniques;
+
+    const std::shared_ptr<MonraceDefinition> &find(MonraceId monrace_id) const;
+    void add_to_index(MonraceId monrace_id, const std::shared_ptr<MonraceDefinition> &monrace);
 
     std::map<MonraceId, std::shared_ptr<MonraceDefinition>> &get_inner_container() override
     {

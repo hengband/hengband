@@ -13,7 +13,6 @@
 #include "game-option/birth-options.h"
 #include "game-option/map-screen-options.h"
 #include "info-reader/fixed-map-parser.h"
-#include "info-reader/parse-error-types.h"
 #include "info-reader/wilderness-reader.h"
 #include "market/building-initializer.h"
 #include "monster-floor/monster-generator.h"
@@ -43,7 +42,6 @@
 #include "system/player-type-definition.h"
 #include "system/terrain/terrain-definition.h"
 #include "system/terrain/terrain-list.h"
-#include "term/z-util.h"
 #include "util/bit-flags-calculator.h"
 #include "util/finalizer.h"
 #include "view/display-messages.h"
@@ -287,12 +285,9 @@ static void generate_area(PlayerType *player_ptr, const Pos2D &pos, bool is_bord
             init_flags = INIT_CREATE_DUNGEON;
         }
 
-        if (parse_fixed_map(player_ptr, TOWN_DEFINITION_LIST, 0, 0, MAX_HGT, MAX_WID) != PARSE_ERROR_NONE) {
-            quit(_("町の定義の読み込みに失敗しました", "Failed to load the town definition"));
-        }
-
+        load_town_map(player_ptr);
         if (!is_corner && !is_border) {
-            TownRecords::get_instance().set_visited(i2enum<TownId>(world.get_town_index() - 1));
+            TownRecords::get_instance().set_visited(to_town_id(world.get_town_index()));
         }
     } else {
         generate_wilderness_area(floor, wg, is_corner);
@@ -345,7 +340,7 @@ static void generate_area(PlayerType *player_ptr, const Pos2D &pos, bool is_bord
     const auto restore_rng = util::make_finalizer([&system, rng_backup = system.get_rng()]() { system.set_rng(rng_backup); });
     xso::rng32 wilderness_rng(wg.get_seed());
     system.set_rng(wilderness_rng);
-    const Pos2D pos_entrance(rand_range(6, floor.height - 6), rand_range(6, floor.width - 6));
+    const Pos2D pos_entrance{ rand_range(6, floor.height - 6), rand_range(6, floor.width - 6) };
     floor.get_grid(pos_entrance).set_terrain_id(TerrainTag::ENTRANCE);
     floor.get_grid(pos_entrance).special = static_cast<short>(entrance);
 }
@@ -388,7 +383,7 @@ void wilderness_gen(PlayerType *player_ptr)
     panel_row_min = floor.height;
     panel_col_min = floor.width;
     auto &wilderness = WildernessGrids::get_instance();
-    apply_wilderness_definition();
+    (void)apply_wilderness_definition();
 
     const auto &pos_wilderness = wilderness.get_player_position();
     get_mon_num_prep_enum(player_ptr, floor.get_monrace_hook());
@@ -495,6 +490,7 @@ void wilderness_gen(PlayerType *player_ptr)
     }
 
     if (player_ptr->teleport_town) {
+        const auto is_in_outpost = world.get_town_index() == to_town_index(TownId::OUTPOST);
         for (const auto &pos : floor.get_area()) {
             auto &grid = floor.get_grid(pos);
             const auto &terrain = grid.get_terrain();
@@ -502,7 +498,7 @@ void wilderness_gen(PlayerType *player_ptr)
                 continue;
             }
 
-            if ((terrain.building_type != BuildingType::BUILDING_04) && !((world.get_town_index() == 1) && (terrain.building_type == BuildingType::BUILDING_00))) {
+            if ((terrain.building_type != BuildingType::BUILDING_04) && !(is_in_outpost && (terrain.building_type == BuildingType::BUILDING_00))) {
                 continue;
             }
 
@@ -568,7 +564,7 @@ void wilderness_gen_small(PlayerType *player_ptr)
     auto &world = AngbandWorld::get_instance();
     const auto &wilderness = WildernessGrids::get_instance();
     const auto &area = wilderness.get_area();
-    apply_wilderness_definition();
+    (void)apply_wilderness_definition();
     for (const auto &pos : area) {
         auto &grid = floor.get_grid(pos);
         const auto &wg = wilderness.get_grid(pos);

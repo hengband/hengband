@@ -35,38 +35,30 @@
 #include "sv-definition/sv-lite-types.h"
 #include "sv-definition/sv-ring-types.h"
 #include "system/baseitem/baseitem-key.h"
+#include "system/deferred-update-requests.h"
 #include "system/floor/floor-info.h"
 #include "system/item/item-entity.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "target/target-getter.h"
 #include "term/screen-processor.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 
+/*!
+ * @brief 混乱による技能補正を適用し、発動の成功・失敗重みを設定する
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param ae_ptr 発動情報への参照ポインタ
+ */
 static void decide_chance_fail(PlayerType *player_ptr, ae_type *ae_ptr)
 {
-    ae_ptr->chance = player_ptr->skill_dev;
+    auto skill = player_ptr->skill_dev;
     if (player_ptr->effects()->confusion().is_active()) {
-        ae_ptr->chance = ae_ptr->chance / 2;
+        skill /= 2;
     }
 
-    ae_ptr->fail = ae_ptr->lev + 5;
-    if (ae_ptr->chance > ae_ptr->fail) {
-        ae_ptr->fail -= (ae_ptr->chance - ae_ptr->fail) * 2;
-    } else {
-        ae_ptr->chance -= (ae_ptr->fail - ae_ptr->chance) * 2;
-    }
-
-    if (ae_ptr->fail < USE_DEVICE) {
-        ae_ptr->fail = USE_DEVICE;
-    }
-
-    if (ae_ptr->chance < USE_DEVICE) {
-        ae_ptr->chance = USE_DEVICE;
-    }
+    ae_ptr->decide_chance_fail(skill);
 }
 
 static void decide_activation_success(PlayerType *player_ptr, ae_type *ae_ptr)
@@ -164,7 +156,7 @@ static void activate_artifact(PlayerType *player_ptr, std::shared_ptr<ItemEntity
     case RandomArtActType::MURAMASA:
         return;
     default:
-        msg_format("Special timeout is not implemented: %d.", enum2i(it_activation->index));
+        msg_print("Special timeout is not implemented: {}.", enum2i(it_activation->index));
         return;
     }
 }
@@ -193,11 +185,7 @@ void exe_activate(PlayerType *player_ptr, INVENTORY_IDX i_idx)
     sound(SoundKind::ZAP);
     if (ae.item->has_activation()) {
         activate_artifact(player_ptr, ae.item);
-        static constexpr auto flags = {
-            SubWindowRedrawingFlag::INVENTORY,
-            SubWindowRedrawingFlag::EQUIPMENT,
-        };
-        RedrawingFlagsUpdater::get_instance().set_flags(flags);
+        DeferredUpdateRequests::get_instance().request_carried_item_lists_redrawing();
         return;
     }
 

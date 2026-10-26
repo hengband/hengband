@@ -13,14 +13,15 @@
 #include "monster/monster-util.h"
 #include "monster/smart-learn-types.h"
 #include "system/angband-system.h"
+#include "system/deferred-update-requests.h"
 #include "system/enums/monrace/monrace-id.h"
 #include "system/floor/floor-info.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "target/projection-path-calculator.h"
 #include "tracking/health-bar-tracker.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 #include <string>
@@ -51,7 +52,7 @@ void anger_monster(PlayerType *player_ptr, MonsterEntity &monster)
     }
 
     const auto m_name = monster_desc(player_ptr, monster, 0);
-    msg_format(_("%s^は怒った！", "%s^ gets angry!"), m_name.data());
+    msg_print(_("{}は怒った！", "{} gets angry!"), str_upcase_first(m_name));
     monster.set_hostile();
     chg_virtue(player_ptr, Virtue::INDIVIDUALISM, 1);
     chg_virtue(player_ptr, Virtue::HONOUR, -1);
@@ -89,16 +90,16 @@ bool set_monster_csleep(FloorType &floor, MONSTER_IDX m_idx, int v)
         return false;
     }
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &dur = DeferredUpdateRequests::get_instance();
     if (monster.ml) {
         HealthBarTracker::get_instance().set_flag_if_tracking(m_idx);
         if (monster.is_riding()) {
-            rfu.set_flag(MainWindowRedrawingFlag::UHEALTH);
+            dur.set_flag(MainWindowRedrawingFlag::UHEALTH);
         }
     }
 
     if (monster.get_monrace().brightness_flags.has_any_of(has_ld_mask)) {
-        rfu.set_flag(StatusRecalculatingFlag::MONSTER_LITE);
+        dur.set_flag(StatusRecalculatingFlag::MONSTER_LITE);
     }
 
     return true;
@@ -135,7 +136,7 @@ bool set_monster_fast(FloorType &floor, MONSTER_IDX m_idx, int v)
     }
 
     if (monster.is_riding()) {
-        RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
+        DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
     }
 
     return true;
@@ -172,7 +173,7 @@ bool set_monster_slow(FloorType &floor, MONSTER_IDX m_idx, int v)
     }
 
     if (monster.is_riding()) {
-        RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
+        DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
     }
 
     return true;
@@ -270,7 +271,7 @@ bool set_monster_monfear(FloorType &floor, MONSTER_IDX m_idx, int v)
     if (monster.ml) {
         HealthBarTracker::get_instance().set_flag_if_tracking(m_idx);
         if (monster.is_riding()) {
-            RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::UHEALTH);
+            DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::UHEALTH);
         }
     }
 
@@ -314,7 +315,7 @@ bool set_monster_invulner(FloorType &floor, MONSTER_IDX m_idx, int v, bool energ
     if (monster.ml) {
         HealthBarTracker::get_instance().set_flag_if_tracking(m_idx);
         if (monster.is_riding()) {
-            RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::UHEALTH);
+            DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::UHEALTH);
         }
     }
 
@@ -361,20 +362,13 @@ bool set_monster_timewalk(PlayerType *player_ptr, MONSTER_IDX m_idx, int num, bo
 
         process_monster(player_ptr, world.timewalk_m_idx);
         monster.reset_target();
-        handle_stuff(player_ptr);
+        handle_stuff_with_inventory_arrangement(player_ptr);
         if (vs_player) {
             term_xtra(TERM_XTRA_DELAY, 500);
         }
     }
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.set_flag(MainWindowRedrawingFlag::MAP);
-    rfu.set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
-    static constexpr auto flags = {
-        SubWindowRedrawingFlag::OVERHEAD,
-        SubWindowRedrawingFlag::DUNGEON,
-    };
-    rfu.set_flags(flags);
+    DeferredUpdateRequests::get_instance().request_monster_update_and_map_redrawing();
     world.timewalk_m_idx = 0;
     const auto p_pos = player_ptr->get_position();
     const auto m_pos = monster.get_position();

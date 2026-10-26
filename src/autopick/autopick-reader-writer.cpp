@@ -9,9 +9,11 @@
 #include "util/angband-files.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
+#include <fmt/format.h>
 #include <fstream>
 #include <string>
 #include <string_view>
+#include <tl/optional.hpp>
 #include <vector>
 
 /*!
@@ -26,7 +28,7 @@ void autopick_load_pref(PlayerType *player_ptr, bool disp_mes)
         const auto pickpref_filename = path.filename().string();
         if (process_autopick_file(player_ptr, pickpref_filename) == 0) {
             if (disp_mes) {
-                msg_format(_("%sを読み込みました。", "Loaded '%s'."), pickpref_filename.data());
+                msg_print(_("{}を読み込みました。", "Loaded '{}'."), pickpref_filename);
             }
             return;
         }
@@ -47,7 +49,7 @@ void autopick_load_pref(PlayerType *player_ptr, bool disp_mes)
  */
 std::filesystem::path search_pickpref_path(std::string_view player_base_name)
 {
-    for (const auto filename_mode : { PT_WITH_PNAME, PT_DEFAULT }) {
+    for (const auto filename_mode : { PickType::WITH_PNAME, PickType::DEFAULT }) {
         const auto filename = pickpref_filename(player_base_name, filename_mode);
         const auto path = path_build(ANGBAND_DIR_USER, filename);
         if (std::filesystem::exists(path)) {
@@ -61,19 +63,19 @@ std::filesystem::path search_pickpref_path(std::string_view player_base_name)
 /*!
  * @brief Get file name for autopick preference
  */
-std::string pickpref_filename(std::string_view player_base_name, int filename_mode)
+std::string pickpref_filename(std::string_view player_base_name, PickType filename_mode)
 {
     static const char namebase[] = _("picktype", "pickpref");
 
     switch (filename_mode) {
-    case PT_DEFAULT:
-        return format("%s.prf", namebase);
+    case PickType::DEFAULT:
+        return fmt::format("{}.prf", namebase);
 
-    case PT_WITH_PNAME:
+    case PickType::WITH_PNAME:
         return fmt::format("{}-{}.prf", namebase, player_base_name);
 
     default: {
-        const auto msg = format("The value of argument 'filename_mode' is invalid: %d", filename_mode);
+        const auto msg = fmt::format("The value of argument 'filename_mode' is invalid: {}", enum2i(filename_mode));
         THROW_EXCEPTION(std::invalid_argument, msg);
     }
     }
@@ -81,27 +83,20 @@ std::string pickpref_filename(std::string_view player_base_name, int filename_mo
 
 /*!
  * @brief Read whole lines of a file to memory
+ * @return 行の配列。ファイルを開けなければ tl::nullopt
  */
-static std::vector<std::unique_ptr<std::string>> read_text_lines(std::string_view filename)
+static tl::optional<std::vector<std::string>> read_text_lines(std::string_view filename)
 {
     const auto path = path_build(ANGBAND_DIR_USER, filename);
     auto ifs = std::ifstream(path);
     if (!ifs) {
-        return {};
+        return tl::nullopt;
     }
 
-    auto num_lines = 0;
-    std::vector<std::unique_ptr<std::string>> lines(MAX_LINES);
+    std::vector<std::string> lines;
     std::string line;
     while (std::getline(ifs, line)) {
-        lines[num_lines++] = std::make_unique<std::string>(std::move(line));
-        if (is_greater_autopick_max_line(num_lines)) {
-            break;
-        }
-    }
-
-    if (num_lines == 0) {
-        lines[0] = std::make_unique<std::string>();
+        lines.push_back(std::move(line));
     }
 
     return lines;
@@ -116,7 +111,7 @@ static void prepare_default_pickpref(std::string_view player_base_name)
         _("自動拾いのユーザー設定ファイルがまだ書かれていないので、", "Since user pref file for autopick is not yet created,"),
         _("基本的な自動拾い設定ファイルをlib/pref/picktype.prfからコピーします。", "the default setting is loaded from lib/pref/pickpref.prf .") };
 
-    const auto filename = pickpref_filename(player_base_name, PT_DEFAULT);
+    const auto filename = pickpref_filename(player_base_name, PickType::DEFAULT);
     for (const auto &message : messages) {
         msg_print(message);
     }
@@ -128,12 +123,12 @@ static void prepare_default_pickpref(std::string_view player_base_name)
         return;
     }
 
-    fprintf(user_fp, "#***\n");
+    fmt::println(user_fp, "#***");
     for (const auto &message : messages) {
-        fprintf(user_fp, "#***  %s\n", message.data());
+        fmt::println(user_fp, "#***  {}", message);
     }
 
-    fprintf(user_fp, "#***\n\n\n");
+    fmt::println(user_fp, "#***\n\n");
     const auto path_pref = path_build(ANGBAND_DIR_PREF, filename);
     auto *pref_fp = angband_fopen(path_pref, FileOpenMode::READ);
     if (!pref_fp) {
@@ -146,7 +141,7 @@ static void prepare_default_pickpref(std::string_view player_base_name)
         if (!line_str) {
             break;
         }
-        fprintf(user_fp, "%s\n", line_str->data());
+        fmt::println(user_fp, "{}", *line_str);
     }
 
     angband_fclose(user_fp);
@@ -156,36 +151,32 @@ static void prepare_default_pickpref(std::string_view player_base_name)
 /*!
  * @brief Read an autopick prefence file to memory
  * Prepare default if no user file is found
+ * @return ファイル名の種類と行の配列 (空のファイルか、どのファイルも読めなければ空)
  */
-std::vector<std::unique_ptr<std::string>> read_pickpref_text_lines(std::string_view player_base_name, int *filename_mode_p)
+std::pair<PickType, std::vector<std::string>> read_pickpref_text_lines(std::string_view player_base_name)
 {
     /* Try a filename with player name */
-    *filename_mode_p = PT_WITH_PNAME;
-    auto filename = pickpref_filename(player_base_name, *filename_mode_p);
+    auto filename_mode = PickType::WITH_PNAME;
+    auto filename = pickpref_filename(player_base_name, filename_mode);
     auto lines_list = read_text_lines(filename);
-    if (lines_list.empty()) {
-        *filename_mode_p = PT_DEFAULT;
-        filename = pickpref_filename(player_base_name, *filename_mode_p);
+    if (!lines_list) {
+        filename_mode = PickType::DEFAULT;
+        filename = pickpref_filename(player_base_name, filename_mode);
         lines_list = read_text_lines(filename);
     }
 
-    if (lines_list.empty()) {
+    if (!lines_list) {
         prepare_default_pickpref(player_base_name);
         lines_list = read_text_lines(filename);
     }
 
-    if (lines_list.empty()) {
-        lines_list.resize(MAX_LINES);
-        lines_list[0] = std::make_unique<std::string>();
-    }
-
-    return lines_list;
+    return { filename_mode, std::move(lines_list).value_or(std::vector<std::string>{}) };
 }
 
 /*!
  * @brief Write whole lines of memory to a file.
  */
-bool write_text_lines(std::string_view filename, const std::vector<std::unique_ptr<std::string>> &lines)
+bool write_text_lines(std::string_view filename, const std::vector<std::string> &lines)
 {
     const auto path = path_build(ANGBAND_DIR_USER, filename);
     auto ofs = std::ofstream(path);
@@ -194,11 +185,7 @@ bool write_text_lines(std::string_view filename, const std::vector<std::unique_p
     }
 
     for (const auto &line : lines) {
-        if (!line) {
-            break;
-        }
-
-        ofs << *line << '\n';
+        ofs << line << '\n';
     }
 
     return true;

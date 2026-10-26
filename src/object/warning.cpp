@@ -510,7 +510,7 @@ bool process_warning(PlayerType *player_ptr, const Pos2D &pos)
                 item_name = _("体", "body");
             }
 
-            msg_format(_("%sが鋭く震えた！", "Your %s pulsates sharply!"), item_name.data());
+            msg_print(_("{}が鋭く震えた！", "Your {} pulsates sharply!"), item_name);
 
             disturb(player_ptr, false, true);
             return input_check(_("本当にこのまま進むか？", "Really want to go ahead? "));
@@ -533,7 +533,7 @@ bool process_warning(PlayerType *player_ptr, const Pos2D &pos)
         item_name = _("体", "body");
     }
 
-    msg_format(_("%sが鋭く震えた！", "Your %s pulsates sharply!"), item_name.data());
+    msg_print(_("{}が鋭く震えた！", "Your {} pulsates sharply!"), item_name);
     disturb(player_ptr, false, true);
     return input_check(_("本当にこのまま進むか？", "Really want to go ahead? "));
 }

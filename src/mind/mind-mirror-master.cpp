@@ -39,10 +39,10 @@
 #include "status/buff-setter.h"
 #include "status/sight-setter.h"
 #include "system/angband-system.h"
+#include "system/deferred-update-requests.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "target/grid-selector.h"
 #include "target/projection-path-calculator.h"
 #include "target/target-getter.h"
@@ -280,8 +280,8 @@ bool set_multishadow(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     }
 
     player_ptr->multishadow = v;
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     if (!notice) {
         return false;
     }
@@ -290,7 +290,7 @@ bool set_multishadow(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
         disturb(player_ptr, false, true);
     }
 
-    rfu.set_flag(StatusRecalculatingFlag::BONUS);
+    dur.set_flag(StatusRecalculatingFlag::BONUS);
     handle_stuff(player_ptr);
     return true;
 }
@@ -329,8 +329,8 @@ bool set_dustrobe(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     }
 
     player_ptr->dustrobe = v;
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     if (!notice) {
         return false;
     }
@@ -339,7 +339,7 @@ bool set_dustrobe(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
         disturb(player_ptr, false, true);
     }
 
-    rfu.set_flag(StatusRecalculatingFlag::BONUS);
+    dur.set_flag(StatusRecalculatingFlag::BONUS);
     handle_stuff(player_ptr);
     return true;
 }
@@ -392,7 +392,7 @@ bool cast_mirror_spell(PlayerType *player_ptr, MindMirrorMasterType spell)
                 msg_print(*error);
             }
         } else {
-            msg_format(_("これ以上鏡は制御できない！", "There are too many mirrors to control!"));
+            msg_print(_("これ以上鏡は制御できない！", "There are too many mirrors to control!"));
         }
 
         break;

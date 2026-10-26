@@ -89,6 +89,12 @@ public:
         return item_list_.size();
     }
 
+    //! 登録された正の重みの項目を、抽選や乱数消費なしで参照する。
+    const std::vector<std::tuple<IdType, int>> &entries() const noexcept
+    {
+        return item_list_;
+    }
+
     /**
      * @brief 確率テーブルの項目が空かどうかを調べる
      *

@@ -1,11 +1,11 @@
 #include "mind/mind-power-getter.h"
 #include "bot/bot-json-output.h"
 #include "core/asking-player.h"
-#include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "game-option/text-display-options.h"
 #include "inventory/inventory-slot-types.h"
 #include "io/command-repeater.h"
+#include "io/input-context.h"
 #include "io/input-key-requester.h"
 #include "main/sound-of-music.h"
 #include "mind/mind-explanations-table.h"
@@ -15,13 +15,14 @@
 #include "player-info/class-info.h"
 #include "player-info/equipment-info.h"
 #include "player/player-status-table.h"
+#include "system/deferred-update-requests.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
-#include "term/z-form.h"
 #include "timed-effect/timed-effects.h"
 #include "util/enum-converter.h"
 #include "util/int-char-converter.h"
+#include "util/string-processor.h"
+#include <fmt/format.h>
 
 MindPowerGetter::MindPowerGetter(PlayerType *player_ptr)
     : player_ptr(player_ptr)
@@ -61,27 +62,26 @@ bool MindPowerGetter::get_mind_power(SPELL_IDX *sn, bool only_browse)
         }
     }
 
-    std::string prompt;
-    if (only_browse) {
-        constexpr auto fmt = _("(%s^ %c-%c, '*'で一覧, ESC) どの%sについて知りますか？", "(%s^s %c-%c, *=List, ESC=exit) Use which %s? ");
-        prompt = format(fmt, this->mind_description, I2A(0), I2A(this->num - 1), this->mind_description);
-    } else {
-        constexpr auto fmt = _("(%s^ %c-%c, '*'で一覧, ESC) どの%sを使いますか？", "(%s^s %c-%c, *=List, ESC=exit) Use which %s? ");
-        prompt = format(fmt, this->mind_description, I2A(0), I2A(this->num - 1), this->mind_description);
-    }
+    constexpr auto fmt_browse = _("({} {:c}-{:c}, '*'で一覧, ESC) どの{}について知りますか？", "({}s {:c}-{:c}, *=List, ESC=exit) Browse which {}? ");
+    constexpr auto fmt_use = _("({} {:c}-{:c}, '*'で一覧, ESC) どの{}を使いますか？", "({}s {:c}-{:c}, *=List, ESC=exit) Use which {}? ");
+    const auto desc_upcased = str_upcase_first(this->mind_description);
+    const auto first_label = I2A(0);
+    const auto last_label = I2A(this->num - 1);
+    const auto prompt = only_browse ? fmt::format(fmt_browse, desc_upcased, first_label, last_label, this->mind_description) : fmt::format(fmt_use, desc_upcased, first_label, last_label, this->mind_description);
 
     if (use_menu && !only_browse) {
         screen_save();
     }
 
     this->choice = (always_show_list || use_menu) ? ESCAPE : 1;
-    this->decide_mind_choice(prompt, only_browse);
+    this->decide_mind_choice(prompt, first_label, last_label, only_browse);
+
     if (this->redraw && !only_browse) {
         screen_load();
     }
 
-    RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::SPELL);
-    handle_stuff(this->player_ptr);
+    DeferredUpdateRequests::get_instance().set_flag(SubWindowRedrawingFlag::SPELL);
+    window_stuff(this->player_ptr);
     if (!this->flag) {
         return false;
     }
@@ -144,13 +144,13 @@ bool MindPowerGetter::select_spell_index(SPELL_IDX *sn)
     return mind_ptr->info[*sn].min_lev <= this->player_ptr->lev;
 }
 
-bool MindPowerGetter::decide_mind_choice(std::string_view prompt, const bool only_browse)
+bool MindPowerGetter::decide_mind_choice(std::string_view prompt, char first_label, char last_label, const bool only_browse)
 {
     while (!this->flag) {
         if (this->choice == ESCAPE) {
             this->choice = ' ';
         } else {
-            const auto command = input_command(prompt);
+            const auto command = input_spell_choice(prompt, { .first_label = first_label, .last_label = last_label, .list = this->redraw, .browse = only_browse, .menu = use_menu });
             if (!command) {
                 break;
             }
@@ -235,8 +235,7 @@ bool MindPowerGetter::display_minds_chance(const bool only_browse)
 
         prt("", y, x);
         put_str(_("名前", "Name"), y, x + 5);
-        put_str(format(_("Lv   %s   失率 効果", "Lv   %s   Fail Info"),
-                    ((this->use_mind == MindKindType::BERSERKER) || (this->use_mind == MindKindType::NINJUTSU)) ? "HP" : "MP"),
+        put_str(fmt::format(_("Lv   {}   失率 効果", "Lv   {}   Fail Info"), ((this->use_mind == MindKindType::BERSERKER) || (this->use_mind == MindKindType::NINJUTSU)) ? "HP" : "MP"),
             y, x + 35);
         display_each_mind_chance(only_browse);
         prt("", y + this->index + 1, x);
@@ -248,6 +247,8 @@ bool MindPowerGetter::display_minds_chance(const bool only_browse)
     }
 
     this->redraw = false;
+    hide_bot_drawn_screen();
+
     screen_load();
     return true;
 }
@@ -273,11 +274,10 @@ void MindPowerGetter::display_each_mind_chance(bool only_browse)
                 psi_desc = "     ";
             }
         } else {
-            psi_desc = format("  %c) ", I2A(this->index));
+            psi_desc = fmt::format("  {:c}) ", I2A(this->index));
         }
 
-        psi_desc.append(format("%-30s%2d %4d%s %3d%%%s", this->spell->name, this->spell->min_lev, mana_cost,
-            (((this->use_mind == MindKindType::MINDCRAFTER) && (this->index == 13)) ? _("～", "~ ") : "  "), chance, comment.data()));
+        psi_desc.append(fmt::format("{:<30}{:2} {:4}{} {:3}%{}", fmt::bytes(this->spell->name), this->spell->min_lev, mana_cost, (((this->use_mind == MindKindType::MINDCRAFTER) && (this->index == 13)) ? _("～", "~ ") : "  "), chance, comment));
         prt(psi_desc, y + this->index + 1, x);
         bot_rows.push_back({ I2A(this->index), 0, this->spell->name, this->spell->min_lev, mana_cost, chance, comment });
     }

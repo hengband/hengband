@@ -21,13 +21,14 @@
 #include "status/base-status.h"
 #include "status/element-resistance.h"
 #include "sv-definition/sv-other-types.h"
+#include "system/deferred-update-requests.h"
 #include "system/floor/floor-info.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
-/*!< この値以降の小項目IDを持った箱は大型の箱としてドロップ数を増やす / Special "sval" limit -- first "large" chest */
-#define SV_CHEST_MIN_LARGE 4
+/*! この値以降の小項目IDを持った箱は大型の箱としてドロップ数を増やす / Special "sval" limit -- first "large" chest */
+constexpr auto SV_CHEST_MIN_LARGE = 4;
 
 Chest::Chest(PlayerType *player_ptr)
     : player_ptr(player_ptr)
@@ -106,6 +107,7 @@ void Chest::open(bool scatter, const Pos2D &pos, std::shared_ptr<ItemEntity> che
     floor.object_level = floor.base_level;
     item.pval = 0;
     item.mark_as_known();
+    DeferredUpdateRequests::get_instance().request_floor_item_lists_redrawing();
 }
 
 /*!
@@ -288,6 +290,7 @@ void Chest::fire_trap(const Pos2D &pos, std::shared_ptr<ItemEntity> chest)
         msg_print(_("突然、箱が爆発した！", "There is a sudden explosion!"));
         msg_print(_("箱の中の物はすべて粉々に砕け散った！", "Everything inside the chest is destroyed!"));
         o_ptr->pval = 0;
+        DeferredUpdateRequests::get_instance().request_floor_item_lists_redrawing();
         sound(SoundKind::EXPLODE);
         take_hit(this->player_ptr, DAMAGE_ATTACK, Dice::roll(5, 8), _("爆発する箱", "an exploding chest"));
     }

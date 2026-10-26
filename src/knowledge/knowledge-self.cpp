@@ -43,7 +43,7 @@ void do_cmd_knowledge_virtues(PlayerType *player_ptr)
     }
 
     std::string alg = PlayerAlignment(player_ptr).get_alignment_description();
-    fprintf(fff, _("現在の属性 : %s\n\n", "Your alignment : %s\n\n"), alg.data());
+    fmt::println(fff, _("現在の属性 : {}\n", "Your alignment : {}\n"), alg);
     dump_virtues(player_ptr, fff);
     angband_fclose(fff);
     FileDisplayer(player_ptr->name).display(true, file_name, 0, 0, _("八つの徳", "Virtues"));
@@ -69,29 +69,29 @@ static void dump_yourself(PlayerType *player_ptr, FILE *fff)
         return;
     }
 
-    fprintf(fff, "\n\n");
-    fprintf(fff, _("種族: %s\n", "Race: %s\n"), race_info[enum2i(player_ptr->prace)].title.data());
+    fmt::println(fff, "\n");
+    fmt::println(fff, _("種族: {}", "Race: {}"), race_info[enum2i(player_ptr->prace)].title);
     dump_explanation(race_explanations[enum2i(player_ptr->prace)], fff);
 
-    fprintf(fff, "\n");
-    fprintf(fff, _("職業: %s\n", "Class: %s\n"), class_info.at(player_ptr->pclass).title.data());
+    fmt::print(fff, "\n");
+    fmt::println(fff, _("職業: {}", "Class: {}"), class_info.at(player_ptr->pclass).title);
     auto short_pclass = enum2i(player_ptr->pclass);
     dump_explanation(class_explanations[short_pclass], fff);
 
-    fprintf(fff, "\n");
-    fprintf(fff, _("性格: %s\n", "Pesonality: %s\n"), personality_info[player_ptr->ppersonality].title.data());
+    fmt::print(fff, "\n");
+    fmt::println(fff, _("性格: {}", "Personality: {}"), personality_info[player_ptr->ppersonality].title);
     dump_explanation(personality_explanations[player_ptr->ppersonality], fff);
 
-    fprintf(fff, "\n");
+    fmt::print(fff, "\n");
     PlayerRealm pr(player_ptr);
     if (pr.realm1().is_available()) {
-        fprintf(fff, _("魔法: %s\n", "Realm: %s\n"), pr.realm1().get_name().data());
+        fmt::println(fff, _("魔法: {}", "Realm: {}"), pr.realm1().get_name());
         dump_explanation(pr.realm1().get_explanation(), fff);
     }
 
-    fprintf(fff, "\n");
+    fmt::print(fff, "\n");
     if (pr.realm2().is_available()) {
-        fprintf(fff, _("魔法: %s\n", "Realm: %s\n"), pr.realm2().get_name().data());
+        fmt::println(fff, _("魔法: {}", "Realm: {}"), pr.realm2().get_name());
         dump_explanation(pr.realm2().get_explanation(), fff);
     }
 }
@@ -104,8 +104,11 @@ static void dump_winner_classes(FILE *fff)
 {
     const auto &igd = InnerGameData::get_instance();
     const int n = igd.get_won_classes_count();
-    std::string ss = n > 1 ? _("", "s") : "";
-    fprintf(fff, _("*勝利*済みの職業%s : %d\n", "Class of *Winner%s* : %d\n"), ss.data(), n);
+#ifdef JP
+    fmt::println(fff, "*勝利*済みの職業 : {}", n);
+#else
+    fmt::println(fff, "Class{} of *Winner* : {}", (n == 1) ? "" : "es", n);
+#endif
     if (n == 0) {
         return;
     }
@@ -126,7 +129,7 @@ static void dump_winner_classes(FILE *fff)
         }
 
         if (l.size() + t.size() + 2 > max_len) {
-            fprintf(fff, " %s\n", str_rtrim(l).data());
+            fmt::println(fff, " {}", str_rtrim(l));
             l = "";
         }
         if (l.size() > 0) {
@@ -136,7 +139,7 @@ static void dump_winner_classes(FILE *fff)
     }
 
     if (l.size() > 0) {
-        fprintf(fff, " %s\n", str_rtrim(l).data());
+        fmt::println(fff, " {}", str_rtrim(l));
     }
 }
 
@@ -156,22 +159,22 @@ void do_cmd_knowledge_stat(PlayerType *player_ptr)
     world.play_time.update();
     const auto play_time = world.play_time.elapsed_sec();
     const auto all_time = InnerGameData::get_instance().get_total_play_time() + play_time;
-    fprintf(fff, _("現在のプレイ時間 : %d:%02d:%02d\n", "Current Play Time is %d:%02d:%02d\n"), play_time / (60 * 60), (play_time / 60) % 60, play_time % 60);
-    fprintf(fff, _("合計のプレイ時間 : %d:%02d:%02d\n", "  Total play Time is %d:%02d:%02d\n"), all_time / (60 * 60), (all_time / 60) % 60, all_time % 60);
+    fmt::println(fff, _("現在のプレイ時間 : {}:{:02}:{:02}", "Current Play Time is {}:{:02}:{:02}"), play_time / (60 * 60), (play_time / 60) % 60, play_time % 60);
+    fmt::println(fff, _("合計のプレイ時間 : {}:{:02}:{:02}", "  Total play Time is {}:{:02}:{:02}"), all_time / (60 * 60), (all_time / 60) % 60, all_time % 60);
     fputs("\n", fff);
 
     if (player_ptr->knowledge & KNOW_HPRATE) {
-        fprintf(fff, _("現在の体力ランク : %d/100\n\n", "Your current Life Rating is %d/100.\n\n"), player_ptr->calc_life_rating());
+        fmt::println(fff, _("現在の体力ランク : {}/100\n", "Your current Life Rating is {}/100.\n"), player_ptr->calc_life_rating());
     } else {
-        fprintf(fff, _("現在の体力ランク : ???\n\n", "Your current Life Rating is ???.\n\n"));
+        fmt::println(fff, _("現在の体力ランク : ???\n", "Your current Life Rating is ???.\n"));
     }
 
-    fprintf(fff, _("能力の最大値\n\n", "Limits of maximum stats\n\n"));
+    fmt::println(fff, _("能力の最大値\n", "Limits of maximum stats\n"));
     for (int v_nr = 0; v_nr < A_MAX; v_nr++) {
         if ((player_ptr->knowledge & KNOW_STAT) || player_ptr->stat_max[v_nr] == player_ptr->stat_max_max[v_nr]) {
-            fprintf(fff, "%s 18/%d\n", stat_names[v_nr], player_ptr->stat_max_max[v_nr] - 18);
+            fmt::println(fff, "{} 18/{}", stat_names[v_nr], player_ptr->stat_max_max[v_nr] - 18);
         } else {
-            fprintf(fff, "%s ???\n", stat_names[v_nr]);
+            fmt::println(fff, "{} ???", stat_names[v_nr]);
         }
     }
 
@@ -189,7 +192,7 @@ void do_cmd_knowledge_stat(PlayerType *player_ptr)
  */
 void do_cmd_knowledge_home(PlayerType *player_ptr)
 {
-    apply_wilderness_definition();
+    (void)apply_wilderness_definition();
 
     FILE *fff = nullptr;
     GAME_TEXT file_name[FILE_NAME_SIZE];
@@ -198,7 +201,7 @@ void do_cmd_knowledge_home(PlayerType *player_ptr)
     }
 
     constexpr auto home_inventory = _("我が家のアイテム", "Home Inventory");
-    const auto &store = TownList::get_instance().get_town(1).get_store(StoreSaleType::HOME);
+    const auto &store = TownList::get_instance().get_home();
     if (store.stock_num == 0) {
         angband_fclose(fff);
         FileDisplayer(player_ptr->name).display(true, file_name, 0, 0, home_inventory);
@@ -209,29 +212,29 @@ void do_cmd_knowledge_home(PlayerType *player_ptr)
 #ifdef JP
     TERM_LEN x = 1;
 #endif
-    fprintf(fff, _("  [ 我が家のアイテム ]\n", "  [Home Inventory]\n"));
+    fmt::println(fff, _("  [ 我が家のアイテム ]", "  [Home Inventory]"));
     constexpr auto close_bracket = ")";
     for (auto i = 0; i < store.stock_num; i++) {
         const auto item_name = describe_flavor(player_ptr, *store.stock[i], 0);
 #ifdef JP
         if ((i % 12) == 0) {
-            fprintf(fff, "\n ( %d ページ )\n", x++);
+            fmt::println(fff, "\n ( {} ページ )", x++);
         }
 
         // 1行に収まらない名前は、全角文字の途中で切らないように複数行に分ける。
         // 1行目の先頭には "a) " が付くので、2行目以降も同じ幅だけ字下げする
         constexpr auto max_line_length = 80 - 3;
         const auto lines = str_separate(item_name, max_line_length);
-        fprintf(fff, "%c%s %s\n", I2A(i % 12), close_bracket, lines.front().data());
+        fmt::println(fff, "{:c}{} {}", I2A(i % 12), close_bracket, lines.front());
         for (auto j = 1U; j < lines.size(); ++j) {
-            fprintf(fff, "   %s\n", lines[j].data());
+            fmt::println(fff, "   {}", lines[j]);
         }
 #else
-        fprintf(fff, "%c%s %s\n", I2A(i % 12), close_bracket, item_name.data());
+        fmt::println(fff, "{:c}{} {}", I2A(i % 12), close_bracket, item_name);
 #endif
     }
 
-    fprintf(fff, "\n\n");
+    fmt::println(fff, "\n");
     angband_fclose(fff);
     FileDisplayer(player_ptr->name).display(true, file_name, 0, 0, home_inventory);
     fd_kill(file_name);

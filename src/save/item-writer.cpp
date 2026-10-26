@@ -286,3 +286,12 @@ void wr_perception(short bi_id)
 
     wr_byte(tmp8u);
 }
+
+void wr_baseitem_records()
+{
+    const auto count = static_cast<uint16_t>(BaseitemRecords::get_instance().size());
+    wr_u16b(count);
+    for (uint16_t index = 0; index < count; index++) {
+        wr_perception(static_cast<short>(index));
+    }
+}

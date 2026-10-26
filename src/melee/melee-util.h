@@ -2,6 +2,9 @@
 
 #include "system/angband.h"
 #include "util/dice.h"
+#include <fmt/base.h>
+#include <string_view>
+#include <tl/optional.hpp>
 
 enum class AttributeType;
 enum class BlowEffectType;
@@ -10,6 +13,10 @@ enum class RaceBlowMethodType;
 
 /* monster-attack-monster type*/
 class MonsterEntity;
+
+//! 打撃の説明の書式。{} で対象の名前を受ける
+using MonsterBlowFormat = fmt::format_string<std::string_view>;
+
 struct mam_type {
     BlowEffectType attribute{};
     MONSTER_IDX m_idx = 0;
@@ -27,7 +34,7 @@ struct mam_type {
     RaceBlowMethodType method{};
     bool explode = false;
     bool touched = false;
-    concptr act = "";
+    tl::optional<MonsterBlowFormat> act; //!< 打撃の説明
     AttributeType pt{};
     RaceBlowEffectType effect{};
     ARMOUR_CLASS ac = 0;

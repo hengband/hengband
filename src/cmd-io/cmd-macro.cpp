@@ -12,11 +12,11 @@
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
-#include "term/z-form.h"
 #include "util/angband-files.h"
 #include "util/int-char-converter.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
+#include <fmt/format.h>
 
 /*!
  * @brief マクロ情報をprefファイルに保存する
@@ -32,15 +32,15 @@ static bool macro_dump(std::string_view filename)
         return false;
     }
 
-    auto_dump_printf(auto_dump_stream, _("\n# 自動マクロセーブ\n\n", "\n# Automatic macro dump\n\n"));
+    auto_dump_print(auto_dump_stream, _("\n# 自動マクロセーブ\n\n", "\n# Automatic macro dump\n\n"));
 
     for (auto i = 0; i < active_macros; i++) {
         char buf[1024]{};
         ascii_to_text(buf, macro_actions[i], sizeof(buf));
-        auto_dump_printf(auto_dump_stream, "A:%s\n", buf);
+        auto_dump_print(auto_dump_stream, "A:{}\n", buf);
         ascii_to_text(buf, macro_patterns[i], sizeof(buf));
-        auto_dump_printf(auto_dump_stream, "P:%s\n", buf);
-        auto_dump_printf(auto_dump_stream, "\n");
+        auto_dump_print(auto_dump_stream, "P:{}\n", buf);
+        auto_dump_print(auto_dump_stream, "\n");
     }
 
     close_auto_dump(&auto_dump_stream, mark);
@@ -97,7 +97,7 @@ static bool keymap_dump(std::string_view filename)
         return false;
     }
 
-    auto_dump_printf(auto_dump_stream, _("\n# 自動キー配置セーブ\n\n", "\n# Automatic keymap dump\n\n"));
+    auto_dump_print(auto_dump_stream, _("\n# 自動キー配置セーブ\n\n", "\n# Automatic keymap dump\n\n"));
     for (auto i = 0; i < 256; i++) {
         const auto &act = keymap_actions_map.at(mode).at(i);
         if (!act) {
@@ -108,8 +108,8 @@ static bool keymap_dump(std::string_view filename)
         buf[0] = (char)i;
         ascii_to_text(key, buf, sizeof(key));
         ascii_to_text(buf, *act, sizeof(buf));
-        auto_dump_printf(auto_dump_stream, "A:%s\n", buf);
-        auto_dump_printf(auto_dump_stream, "C:%d:%s\n", enum2i(mode), key);
+        auto_dump_print(auto_dump_stream, "A:{}\n", buf);
+        auto_dump_print(auto_dump_stream, "C:{}:{}\n", enum2i(mode), key);
     }
 
     close_auto_dump(&auto_dump_stream, mark);
@@ -149,7 +149,7 @@ void do_cmd_macros(PlayerType *player_ptr)
     };
     print_macro_menu();
 
-    const auto initial_filename = format("%s.prf", player_ptr->base_name);
+    const auto initial_filename = fmt::format("{}.prf", player_ptr->base_name);
     while (true) {
         msg_print(_("コマンド: ", "Command: "));
         const auto key = inkey();
@@ -169,13 +169,12 @@ void do_cmd_macros(PlayerType *player_ptr)
             }
 
             const auto err = process_pref_file(player_ptr, *ask_result, true);
-            const auto *mes = ask_result->data();
             if (-2 == err) {
-                msg_format(_("標準の設定ファイル'%s'を読み込みました。", "Loaded default '%s'."), mes);
+                msg_print(_("標準の設定ファイル'{}'を読み込みました。", "Loaded default '{}'."), *ask_result);
             } else if (err) {
-                msg_format(_("'%s'の読み込みに失敗しました！", "Failed to load '%s'!"), mes);
+                msg_print(_("'{}'の読み込みに失敗しました！", "Failed to load '{}'!"), *ask_result);
             } else {
-                msg_format(_("'%s'を読み込みました。", "Loaded '%s'."), mes);
+                msg_print(_("'{}'を読み込みました。", "Loaded '{}'."), *ask_result);
             }
 
             break;

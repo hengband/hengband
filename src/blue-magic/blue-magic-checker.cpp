@@ -20,8 +20,8 @@
 #include "player/attack-defense-types.h"
 #include "status/experience.h"
 #include "system/angband.h"
+#include "system/deferred-update-requests.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 
@@ -57,7 +57,7 @@ void learn_spell(PlayerType *player_ptr, MonsterAbilityType monspell)
         gain_exp(player_ptr, monster_power.level * monster_power.smana);
         sound(SoundKind::STUDY);
         bluemage_data->new_magic_learned = true;
-        RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::ACTION);
+        DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::ACTION);
     }
 }
 

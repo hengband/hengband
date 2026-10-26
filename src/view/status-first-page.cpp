@@ -26,9 +26,9 @@
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
 #include "term/term-color-types.h"
-#include "term/z-form.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-util.h"
+#include <fmt/format.h>
 
 /*!
  * @brief
@@ -201,7 +201,7 @@ std::pair<std::string, TERM_COLOR> describe_skill_rating(int x, int y)
     std::string desc;
 
     if (show_actual_value) {
-        desc = format("%3d-", x);
+        desc = fmt::format("{:3}-", x);
     }
 
     const auto [rating, legendary_level] = classify_skill_rating(x, y);
@@ -226,7 +226,7 @@ std::pair<std::string, TERM_COLOR> describe_skill_rating(int x, int y)
         return make_pair(desc.append(_("英雄的", "Heroic")), TERM_BLUE);
     case SkillRating::LEGENDARY:
     default:
-        desc.append(format(_("伝説的[%d]", "Legendary[%d]"), legendary_level));
+        desc.append(fmt::format(_("伝説的[{}]", "Legendary[{}]"), legendary_level));
         return make_pair(desc, TERM_VIOLET);
     }
 }
@@ -355,22 +355,22 @@ static void display_first_page(PlayerType *player_ptr, int *damage, int shots, i
     }
 
     if (!muta_att) {
-        display_player_one_line(ENTRY_BLOWS, format("%d+%d", blows1, blows2), TERM_L_BLUE);
+        display_player_one_line(ENTRY_BLOWS, fmt::format("{}+{}", blows1, blows2), TERM_L_BLUE);
     } else {
-        display_player_one_line(ENTRY_BLOWS, format("%d+%d+%d", blows1, blows2, muta_att), TERM_L_BLUE);
+        display_player_one_line(ENTRY_BLOWS, fmt::format("{}+{}+{}", blows1, blows2, muta_att), TERM_L_BLUE);
     }
 
-    display_player_one_line(ENTRY_SHOTS, format("%d.%02d", shots, shot_frac), TERM_L_BLUE);
+    display_player_one_line(ENTRY_SHOTS, fmt::format("{}.{:02}", shots, shot_frac), TERM_L_BLUE);
 
     std::string desc;
     if (melee.damage_nil) {
         desc = "nil!";
     } else {
-        desc = format("%d+%d", melee.damage_per_round[0], melee.damage_per_round[1]);
+        desc = fmt::format("{}+{}", melee.damage_per_round[0], melee.damage_per_round[1]);
     }
 
     display_player_one_line(ENTRY_AVG_DMG, desc, TERM_L_BLUE);
-    display_player_one_line(ENTRY_INFRA, format("%d feet", player_ptr->see_infra * 10), TERM_WHITE);
+    display_player_one_line(ENTRY_INFRA, fmt::format("{} feet", player_ptr->see_infra * 10), TERM_WHITE);
 }
 
 /*!

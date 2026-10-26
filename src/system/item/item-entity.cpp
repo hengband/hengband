@@ -175,6 +175,15 @@ bool ItemEntity::is_weapon_armour_ammo() const
 }
 
 /*!
+ * @brief 擬似鑑定で感触を得られる種類かを判定する
+ * @return 武器・防具・矢弾・カード・指輪・アミュレット・光源・人形なら true
+ */
+bool ItemEntity::can_be_sensed() const
+{
+    return this->is_equipment() || (this->bi_key.tval() == ItemKindType::FIGURINE);
+}
+
+/*!
  * @brief 近接武器として装備できるかを判定する
  * @return 近接武器として使えるか否か
  */
@@ -641,7 +650,7 @@ int ItemEntity::calc_price() const
     }
 
     if (this->discount) {
-        value -= (value * this->discount / 100L);
+        value = clamp_price(int64_t{ value } - int64_t{ value } * this->discount / 100);
     }
 
     return value;
@@ -1369,6 +1378,91 @@ void ItemEntity::mark_as_known()
 }
 
 /*!
+ * @brief 擬似鑑定で得た感触を付け、簡易鑑定済みにする
+ * @param feel 感触
+ */
+void ItemEntity::sense(item_feel_type feel)
+{
+    this->feeling = feel;
+    this->identification_flags.set(IdentificationFlag::SENSE);
+}
+
+/*!
+ * @brief 呪いを全て解き、擬似鑑定の感触を消す
+ * @details 呪いが解けると感触が実際の品と合わなくなるので、呪いと関係の無い感触 ({特別製} など) も消す。
+ * 永遠の呪いが解けない場合の扱いは呼び出し元が行う。
+ * 呪いの無くなった品をもう一度擬似鑑定で感じられるよう、簡易鑑定済みの印 (SENSE) も外す。
+ */
+void ItemEntity::remove_curses()
+{
+    this->curse_flags.clear();
+    this->identification_flags.reset(IdentificationFlag::SENSE);
+    this->feeling = FEEL_NONE;
+}
+
+/*!
+ * @brief 呪いを付け、新しく付いた呪いがあれば擬似鑑定の感触を呪いに合わせる
+ * @param curses 付ける呪い
+ * @return 新しく付いた呪いがあれば true
+ */
+bool ItemEntity::add_curses(const EnumClassFlagGroup<CurseTraitType> &curses)
+{
+    if (this->curse_flags.has_all_of(curses)) {
+        return false;
+    }
+
+    this->curse_flags.set(curses);
+    this->match_feeling_to_curses();
+    return true;
+}
+
+/*!
+ * @brief 呪われた品の擬似鑑定の感触を、呪いに合わせる
+ * @details 新しく呪われると {高級品} などの感触は実際の品と合わなくなる。感じていた品 (簡易鑑定済みの印 SENSE の
+ * ある品) は、前の感触から求めた呪われた品の感触 ({恐ろしい}・{無価値}・{呪われている}、to_cursed_feeling()) に
+ * 感じ直したことにする。感じていない品は、呪いを表す感触のほかは付けずに後の擬似鑑定に任せる。
+ */
+void ItemEntity::match_feeling_to_curses()
+{
+    // 鑑定済みの品は呪いが表示されるので、感触を持たせない (鑑定すると感触は消える)
+    if (this->has_identification_flag(IdentificationFlag::KNOWN)) {
+        return;
+    }
+
+    if (this->has_identification_flag(IdentificationFlag::SENSE)) {
+        this->feeling = to_cursed_feeling(this->feeling);
+        return;
+    }
+
+    if (!is_cursed_feeling(this->feeling)) {
+        this->feeling = FEEL_NONE;
+    }
+}
+
+/*!
+ * @brief 呪いを感知したときに付ける擬似鑑定の感触を求める
+ * @return 付ける感触。呪われていない品・鑑定済みの品・感触を得られない種類の品と、呪いを表す感触で感じ済みの品は tl::nullopt
+ * @details 感触は呪いが付いたときと同じく、前の感触から求める (to_cursed_feeling())。
+ */
+tl::optional<item_feel_type> ItemEntity::find_curse_feeling() const
+{
+    if (!this->is_cursed() || this->has_identification_flag(IdentificationFlag::KNOWN) || !this->can_be_sensed()) {
+        return tl::nullopt;
+    }
+
+    if (this->has_identification_flag(IdentificationFlag::SENSE)) {
+        if (is_cursed_feeling(this->feeling)) {
+            return tl::nullopt;
+        }
+
+        return to_cursed_feeling(this->feeling);
+    }
+
+    // 感じていない品の感触は、呪いを表すもののほかは確かめていないので使わない (match_feeling_to_curses() と同じ)
+    return is_cursed_feeling(this->feeling) ? static_cast<item_feel_type>(this->feeling) : FEEL_CURSED;
+}
+
+/*!
  * @brief 試行済にする
  */
 void ItemEntity::mark_as_tried() const
@@ -1461,11 +1555,6 @@ void ItemEntity::set_identification_flag(IdentificationFlag flag)
 void ItemEntity::reset_identification_flag(IdentificationFlag flag)
 {
     this->identification_flags.reset(flag);
-}
-
-void ItemEntity::set_identification_flags(const EnumClassFlagGroup<IdentificationFlag> &flags)
-{
-    this->identification_flags.set(flags);
 }
 
 void ItemEntity::reset_identification_flags(const EnumClassFlagGroup<IdentificationFlag> &flags)

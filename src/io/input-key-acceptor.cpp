@@ -1,15 +1,14 @@
 #include "io/input-key-acceptor.h"
 #include "cmd-io/macro-util.h"
-#include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "game-option/input-options.h"
 #include "game-option/map-screen-options.h"
 #include "io/macro-configurations-store.h"
 #include "io/signal-handlers.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
+#include "window/display-sub-windows.h"
 #include "world/world.h"
 
 bool inkey_base; /* See the "inkey()" function */
@@ -43,8 +42,30 @@ bool parse_under = false;
 }
 
 /*!
- * @brief 全てのウィンドウの再描画を行う
+ * @brief 全ての端末に、描いてまだ画面に反映していない内容を反映する
  * @details
+ * fresh_once などで描画を止めている間 (never_fresh) にサブウィンドウに描いた内容は画面に出ておらず、
+ * 描き直しの要求も残っていないことがある。変更の無い端末は term_fresh() がすぐに戻る。
+ * まだ一度も使っていないサブウィンドウは、有効にする (init_hook を呼ぶ) ことになるので外す。
+ * curses 版ではカーソルが最後に反映した端末に置かれるので、メイン画面を最後に反映し、メイン画面を有効にして戻る。
+ */
+void fresh_all_terms()
+{
+    for (auto i = 1U; i < angband_terms.size(); ++i) {
+        if ((angband_terms[i] != nullptr) && angband_terms[i]->active_flag) {
+            term_activate(angband_terms[i]);
+            term_fresh();
+        }
+    }
+
+    term_activate(angband_terms[0]);
+    term_fresh();
+}
+
+/*!
+ * @brief メイン画面とサブウィンドウの描き直しの要求を処理し、全ての端末に反映する
+ * @details
+ * サブウィンドウは、表示が変わる箇所で要求されたものだけを描き直す。
  * カーソル位置がずれるので戻す。
  */
 static void all_term_fresh()
@@ -52,12 +73,17 @@ static void all_term_fresh()
     term_activate(angband_terms[0]);
     auto [x, y] = term_locate();
 
-    RedrawingFlagsUpdater::get_instance().fill_up_sub_flags();
-    handle_stuff(p_ptr);
+    // コマンドの入力を待つとき (inkey_flag) だけ比べる。M コマンドの中の入力待ちなどで比べると、
+    // 前のメッセージがいったん灰色で描かれ、コマンドの終わりに白に戻ってちらつく
+    if (inkey_flag) {
+        request_message_redraw_if_color_changed();
+    }
+    redraw_stuff(p_ptr);
+    window_stuff_including_deferred(p_ptr);
 
     term_activate(angband_terms[0]);
     term_gotoxy(x, y);
-    term_fresh();
+    fresh_all_terms();
 }
 
 /*
@@ -186,7 +212,7 @@ static char inkey_aux()
 
 /*
  * @brief キー入力を受け付けるメインルーチン / Get a keypress from the user.
- * @param do_all_term_refresh trueであれば強制的にhandle_stuffと再描画を行う。デフォルト false
+ * @param do_all_term_refresh trueであれば、入力を待つ前にメイン画面とサブウィンドウの描き直しの要求を処理して、全ての端末に反映する。デフォルト false
  * return キーを表すコード
  */
 char inkey(bool do_all_term_refresh)
@@ -230,7 +256,12 @@ char inkey(bool do_all_term_refresh)
                 if (do_all_term_refresh) {
                     all_term_fresh();
                 } else {
-                    term_fresh();
+                    // -more- や確認などで入力を待つ前にも、残っているサブウィンドウの再描画の要求を処理して最新にする
+                    if (world.character_dungeon) {
+                        window_stuff_including_deferred(p_ptr);
+                    }
+
+                    fresh_all_terms();
                 }
 
                 world.character_saved = false;

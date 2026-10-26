@@ -83,6 +83,12 @@ void WildernessGrid::set_town(short town_parsing)
     this->town = town_parsing;
 }
 
+/*!
+ * @brief 道があるかを返す
+ * @return road が 0 より大きければ true
+ * @details road の値の大きさは使っていない (1〜15 の違いはゲーム中で区別しない)。
+ * 道の向きは、地上の生成で隣の格子に道があるかで決める (wild.cpp)。
+ */
 bool WildernessGrid::has_road() const
 {
     return this->road > 0;

@@ -7,7 +7,7 @@
 
 #include "specific-object/death-scythe.h"
 #include "combat/attack-criticality.h"
-#include "core/stuff-handler.h"
+#include "core/window-redrawer.h"
 #include "inventory/inventory-slot-types.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
@@ -18,9 +18,9 @@
 #include "player/player-damage.h"
 #include "player/player-status-flags.h"
 #include "status/element-resistance.h"
+#include "system/deferred-update-requests.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
@@ -112,7 +112,7 @@ static void compensate_death_scythe_reflection_magnification(PlayerType *player_
 
     if (!PlayerClass(player_ptr).equals(PlayerClassType::SAMURAI) && (death_scythe_flags.has(TR_FORCE_WEAPON)) && (player_ptr->csp > (player_ptr->msp / 30))) {
         player_ptr->csp -= (1 + (player_ptr->msp / 30));
-        RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::MP);
+        DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::MP);
         *magnification = *magnification * 3 / 2 + 20;
     }
 }
@@ -128,7 +128,7 @@ static void death_scythe_reflection_critial_hit(player_attack_type *pa_ptr)
     }
 
     int more_magnification = 2;
-    msg_format(_("グッサリ切り裂かれた！", "Your weapon cuts deep into yourself!"));
+    msg_print(_("グッサリ切り裂かれた！", "Your weapon cuts deep into yourself!"));
     while (one_in_(4)) {
         more_magnification++;
     }
@@ -144,7 +144,7 @@ static void death_scythe_reflection_critial_hit(player_attack_type *pa_ptr)
 void process_death_scythe_reflection(PlayerType *player_ptr, player_attack_type *pa_ptr)
 {
     sound(SoundKind::HIT);
-    msg_format(_("ミス！ %sにかわされた。", "You miss %s."), pa_ptr->m_name);
+    msg_print(_("ミス！ {}にかわされた。", "You miss {}."), pa_ptr->m_name);
     msg_print(_("振り回した大鎌が自分自身に返ってきた！", "Your scythe returns to you!"));
 
     auto *o_ptr = player_ptr->inventory[INVEN_MAIN_HAND + pa_ptr->hand].get();
@@ -164,5 +164,5 @@ void process_death_scythe_reflection(PlayerType *player_ptr, player_attack_type 
     }
 
     take_hit(player_ptr, DAMAGE_FORCE, pa_ptr->attack_damage, _("死の大鎌", "Death scythe"));
-    handle_stuff(player_ptr);
+    redraw_stuff(player_ptr);
 }

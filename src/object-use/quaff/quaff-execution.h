@@ -4,6 +4,9 @@
 
 class ItemEntity;
 class PlayerType;
+
+short calc_moistened_food(short food, short pval);
+
 class ObjectQuaffEntity {
 public:
     ObjectQuaffEntity(PlayerType *player_ptr);

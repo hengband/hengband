@@ -7,7 +7,7 @@
 #include "wizard/monrace-filter-debug-info.h"
 #include "floor/floor-base-definitions.h"
 #include "locale/language-switcher.h"
-#include "term/z-form.h"
+#include <fmt/format.h>
 
 MonraceFilterDebugInfo::MonraceFilterDebugInfo()
     : min_level(MAX_DEPTH)
@@ -34,6 +34,6 @@ void MonraceFilterDebugInfo::update(int probabilty, int level)
 
 std::string MonraceFilterDebugInfo::to_string() const
 {
-    constexpr auto fmt = _("モンスター第2次候補数:%d(%d-%dF)%d ", "monster second selection:%d(%d-%dF)%d ");
-    return format(fmt, this->num_monrace, this->min_level, this->max_level, this->total_probability);
+    constexpr auto fmt = _("モンスター第2次候補数:{}({}-{}F){} ", "monster second selection:{}({}-{}F){} ");
+    return fmt::format(fmt, this->num_monrace, this->min_level, this->max_level, this->total_probability);
 }

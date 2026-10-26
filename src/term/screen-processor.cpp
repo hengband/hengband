@@ -2,6 +2,7 @@
 #include "io/input-key-acceptor.h"
 #include "locale/japanese.h"
 #include "term/term-color-types.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "view/display-symbol.h"
 #include "world/world.h"
@@ -175,8 +176,7 @@ void c_roff(TERM_COLOR a, std::string_view str)
     }
 
     for (auto s = str.begin(); s != str.end(); ++s) {
-        // 文字列が全角文字の前半バイトで終わっている場合は、後半バイトが無いので全角文字として扱わない
-        const auto is_kanji = _(iskanji(*s) && (std::next(s) != str.end()), false);
+        const auto is_kanji = is_multibyte_char_at(std::string_view(s, str.end()));
 
         if (*s == '\n') {
             if (y + 1 < hgt) {

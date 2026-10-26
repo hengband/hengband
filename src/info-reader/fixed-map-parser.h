@@ -1,7 +1,13 @@
 #pragma once
 
-#include <string_view>
+#include "info-reader/parse-error-types.h"
+#include <tl/expected.hpp>
 
+class FloorType;
 class PlayerType;
-enum parse_error_type : int;
-parse_error_type parse_fixed_map(PlayerType *player_ptr, std::string_view name, int ymin, int xmin, int ymax, int xmax);
+struct TownMapBuildingRule;
+struct TownMapFeatureRule;
+
+tl::expected<void, ParseErrorType> apply_town_building_rule(const TownMapBuildingRule &rule);
+tl::expected<void, ParseErrorType> apply_town_map_feature(const FloorType &floor, const TownMapFeatureRule &feature);
+void load_town_map(PlayerType *player_ptr);

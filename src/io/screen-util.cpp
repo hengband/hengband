@@ -22,15 +22,16 @@
 #include "io/input-key-acceptor.h"
 #include "monster/monster-update.h"
 #include "player-info/mimic-info-table.h"
+#include "system/deferred-update-requests.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/floor/floor-info.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "target/target-checker.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-map.h"
+#include "view/display-messages.h"
 #include "window/main-window-util.h"
 #include "world/world.h"
 
@@ -51,29 +52,19 @@ void resize_map()
     panel_col_min = p_ptr->current_floor_ptr->width;
     verify_panel(p_ptr);
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    static constexpr auto flags_srf = {
-        StatusRecalculatingFlag::TORCH,
-        StatusRecalculatingFlag::BONUS,
-        StatusRecalculatingFlag::HP,
-        StatusRecalculatingFlag::MP,
-        StatusRecalculatingFlag::SPELLS,
-        StatusRecalculatingFlag::UN_VIEW,
-        StatusRecalculatingFlag::UN_LITE,
-        StatusRecalculatingFlag::VIEW,
-        StatusRecalculatingFlag::LITE,
-        StatusRecalculatingFlag::MONSTER_LITE,
-        StatusRecalculatingFlag::MONSTER_STATUSES,
-    };
-    rfu.set_flags(flags_srf);
-    static constexpr auto flags_mwrf = {
-        MainWindowRedrawingFlag::WIPE,
-        MainWindowRedrawingFlag::BASIC,
-        MainWindowRedrawingFlag::EXTRA,
-        MainWindowRedrawingFlag::MAP,
-        MainWindowRedrawingFlag::EQUIPPY,
-    };
-    rfu.set_flags(flags_mwrf);
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.request_whole_status_recalculation();
+    dur.request_whole_main_window_redrawing();
+
+    // -続く- の待ちの最中に描き直すと、メッセージの消去から -続く- がもう一度表示されて
+    // 入力待ちが入れ子になる。フラグだけを立てておき、-続く- が明けた後の handle_stuff() で描き直す。
+    // それまでは今の内容を新しい大きさの画面に反映しておく。縮めた場合に備え、-続く- は見える位置に表示し直す
+    if (is_waiting_for_more()) {
+        redisplay_more_prompt();
+        term_fresh();
+        return;
+    }
+
     handle_stuff(p_ptr);
     term_redraw();
 

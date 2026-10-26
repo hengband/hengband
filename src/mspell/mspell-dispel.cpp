@@ -26,10 +26,10 @@
 #include "status/shape-changer.h"
 #include "status/sight-setter.h"
 #include "status/temporary-resistance.h"
+#include "system/deferred-update-requests.h"
 #include "system/floor/floor-info.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "view/display-messages.h"
 
 /*!
@@ -37,6 +37,8 @@
  */
 static void dispel_player(PlayerType *player_ptr)
 {
+    reset_ki_and_kawarimi(player_ptr, true);
+
     (void)set_acceleration(player_ptr, 0, true);
     set_lightspeed(player_ptr, 0, true);
     (void)BadStatusSetter(player_ptr).set_deceleration(0, true);
@@ -103,24 +105,14 @@ static void dispel_player(PlayerType *player_ptr)
         }
 
         player_ptr->action = ACTION_NONE;
-        auto &rfu = RedrawingFlagsUpdater::get_instance();
-        static constexpr auto flags_srf = {
-            StatusRecalculatingFlag::BONUS,
-            StatusRecalculatingFlag::HP,
-            StatusRecalculatingFlag::MONSTER_STATUSES,
-        };
-        rfu.set_flags(flags_srf);
+        auto &dur = DeferredUpdateRequests::get_instance();
+        dur.request_monster_update_and_map_redrawing();
+        dur.request_bonus_and_max_hp_recalculation();
         static constexpr auto flags_mwrf = {
-            MainWindowRedrawingFlag::MAP,
             MainWindowRedrawingFlag::TIMED_EFFECT,
             MainWindowRedrawingFlag::ACTION,
         };
-        rfu.set_flags(flags_mwrf);
-        static constexpr auto flags_swrf = {
-            SubWindowRedrawingFlag::OVERHEAD,
-            SubWindowRedrawingFlag::DUNGEON,
-        };
-        rfu.set_flags(flags_swrf);
+        dur.set_flags(flags_mwrf);
         player_ptr->energy_need += ENERGY_NEED();
     }
 }
@@ -139,8 +131,8 @@ MonsterSpellResult spell_RF4_DISPEL(MONSTER_IDX m_idx, PlayerType *player_ptr, M
     auto res = MonsterSpellResult::make_valid();
     res.learnable = target_type == MONSTER_TO_PLAYER;
 
-    mspell_cast_msg_blind msg(_("%s^が何かを力強くつぶやいた。", "%s^ mumbles powerfully."),
-        _("%s^が魔力消去の呪文を念じた。", "%s^ invokes a dispel magic."), _("%s^が%sに対して魔力消去の呪文を念じた。", "%s^ invokes a dispel magic at %s."));
+    mspell_cast_msg_blind msg(_("{}が何かを力強くつぶやいた。", "{} mumbles powerfully."),
+        _("{}が魔力消去の呪文を念じた。", "{} invokes a dispel magic."), _("{}が{}に対して魔力消去の呪文を念じた。", "{} invokes a dispel magic at {}."));
 
     monspell_message(player_ptr, m_idx, t_idx, msg, target_type);
 

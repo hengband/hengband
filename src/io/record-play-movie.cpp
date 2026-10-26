@@ -13,10 +13,11 @@
 #include "locale/character-encoding.h"
 #include "system/player-type-definition.h"
 #include "term/gameterm.h"
-#include "term/z-form.h"
 #include "util/angband-files.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
 #include <algorithm>
+#include <fmt/format.h>
 #include <sstream>
 #include <vector>
 
@@ -235,7 +236,7 @@ static void send_offset_update(const TERM_LEN x, const TERM_LEN y, bool force_up
 
     std::pair<int, int> recording_xy_offset = { x / SPLIT_SIZE, y / SPLIT_SIZE };
     if (recording_xy_offset != last_xy_offset || force_update) {
-        insert_ringbuf(format("o%c%c", recording_xy_offset.first + 1, recording_xy_offset.second + 1));
+        insert_ringbuf(fmt::format("o{:c}{:c}", recording_xy_offset.first + 1, recording_xy_offset.second + 1));
         last_xy_offset = recording_xy_offset;
     }
 }
@@ -244,7 +245,7 @@ static errr send_text_to_chuukei_server(TERM_LEN x, TERM_LEN y, int len, TERM_CO
 {
     if (len == 1) {
         send_offset_update(x, y);
-        insert_ringbuf(format("s%c%c%c%c", (x % SPLIT_SIZE) + 1, (y % SPLIT_SIZE) + 1, col, *str));
+        insert_ringbuf(fmt::format("s{:c}{:c}{:c}{:c}", (x % SPLIT_SIZE) + 1, (y % SPLIT_SIZE) + 1, col, *str));
         return (*old_text_hook)(x, y, len, col, str);
     }
 
@@ -253,16 +254,16 @@ static errr send_text_to_chuukei_server(TERM_LEN x, TERM_LEN y, int len, TERM_CO
         auto rb_len = len;
         while (rb_len > SPLIT_MAX) {
             send_offset_update(rb_x, y);
-            insert_ringbuf(format("n%c%c%c%c%c", (rb_x % SPLIT_SIZE) + 1, (y % SPLIT_SIZE) + 1, SPLIT_MAX, col, *str));
+            insert_ringbuf(fmt::format("n{:c}{:c}{:c}{:c}{:c}", (rb_x % SPLIT_SIZE) + 1, (y % SPLIT_SIZE) + 1, SPLIT_MAX, col, *str));
             rb_x += SPLIT_MAX;
             rb_len -= SPLIT_MAX;
         }
 
         std::string formatted_text;
         if (rb_len > 1) {
-            formatted_text = format("n%c%c%c%c%c", (rb_x % SPLIT_SIZE) + 1, (y % SPLIT_SIZE) + 1, rb_len, col, *str);
+            formatted_text = fmt::format("n{:c}{:c}{:c}{:c}{:c}", (rb_x % SPLIT_SIZE) + 1, (y % SPLIT_SIZE) + 1, rb_len, col, *str);
         } else {
-            formatted_text = format("s%c%c%c%c", (rb_x % SPLIT_SIZE) + 1, (y % SPLIT_SIZE) + 1, col, *str);
+            formatted_text = fmt::format("s{:c}{:c}{:c}{:c}", (rb_x % SPLIT_SIZE) + 1, (y % SPLIT_SIZE) + 1, col, *str);
         }
 
         send_offset_update(rb_x, y);
@@ -282,14 +283,14 @@ static errr send_text_to_chuukei_server(TERM_LEN x, TERM_LEN y, int len, TERM_CO
     while (rb_len > SPLIT_MAX) {
         auto split_len = _(find_split(payload, SPLIT_MAX), SPLIT_MAX);
         send_offset_update(rb_x, y);
-        insert_ringbuf(format("t%c%c%c%c", (rb_x % SPLIT_SIZE) + 1, (y % SPLIT_SIZE) + 1, split_len, col), std::string_view(payload, split_len));
+        insert_ringbuf(fmt::format("t{:c}{:c}{:c}{:c}", (rb_x % SPLIT_SIZE) + 1, (y % SPLIT_SIZE) + 1, split_len, col), std::string_view(payload, split_len));
         rb_x += split_len;
         rb_len -= split_len;
         payload += split_len;
     }
 
     send_offset_update(rb_x, y);
-    insert_ringbuf(format("t%c%c%c%c", (rb_x % SPLIT_SIZE) + 1, (y % SPLIT_SIZE) + 1, rb_len, col), std::string_view(payload, rb_len));
+    insert_ringbuf(fmt::format("t{:c}{:c}{:c}{:c}", (rb_x % SPLIT_SIZE) + 1, (y % SPLIT_SIZE) + 1, rb_len, col), std::string_view(payload, rb_len));
     return (*old_text_hook)(x, y, len, col, str);
 }
 
@@ -299,12 +300,12 @@ static errr send_wipe_to_chuukei_server(int x, int y, int len)
     auto rb_len = len;
     while (rb_len > SPLIT_MAX) {
         send_offset_update(rb_x, y);
-        insert_ringbuf(format("w%c%c%c", (rb_x % SPLIT_SIZE) + 1, (y % SPLIT_SIZE) + 1, SPLIT_MAX));
+        insert_ringbuf(fmt::format("w{:c}{:c}{:c}", (rb_x % SPLIT_SIZE) + 1, (y % SPLIT_SIZE) + 1, SPLIT_MAX));
         rb_x += SPLIT_MAX;
         rb_len -= SPLIT_MAX;
     }
     send_offset_update(rb_x, y);
-    insert_ringbuf(format("w%c%c%c", (rb_x % SPLIT_SIZE) + 1, (y % SPLIT_SIZE) + 1, rb_len));
+    insert_ringbuf(fmt::format("w{:c}{:c}{:c}", (rb_x % SPLIT_SIZE) + 1, (y % SPLIT_SIZE) + 1, rb_len));
 
     return (*old_wipe_hook)(x, y, len);
 }
@@ -312,7 +313,7 @@ static errr send_wipe_to_chuukei_server(int x, int y, int len)
 static errr send_xtra_to_chuukei_server(int n, int v)
 {
     if (n == TERM_XTRA_CLEAR || n == TERM_XTRA_FRESH || n == TERM_XTRA_SHAPE) {
-        insert_ringbuf(format("x%c", n + 1));
+        insert_ringbuf(fmt::format("x{:c}", n + 1));
 
         if (n == TERM_XTRA_FRESH) {
             insert_ringbuf("d", std::to_string(get_current_time() - epoch_time));
@@ -330,7 +331,7 @@ static errr send_xtra_to_chuukei_server(int n, int v)
 static errr send_curs_to_chuukei_server(int x, int y)
 {
     send_offset_update(x, y);
-    insert_ringbuf(format("c%c%c", (x % SPLIT_SIZE) + 1, (y % SPLIT_SIZE) + 1));
+    insert_ringbuf(fmt::format("c{:c}{:c}", (x % SPLIT_SIZE) + 1, (y % SPLIT_SIZE) + 1));
 
     return (*old_curs_hook)(x, y);
 }
@@ -338,7 +339,7 @@ static errr send_curs_to_chuukei_server(int x, int y)
 static errr send_bigcurs_to_chuukei_server(int x, int y)
 {
     send_offset_update(x, y);
-    insert_ringbuf(format("C%c%c", (x % SPLIT_SIZE) + 1, (y % SPLIT_SIZE) + 1));
+    insert_ringbuf(fmt::format("C{:c}{:c}", (x % SPLIT_SIZE) + 1, (y % SPLIT_SIZE) + 1));
 
     return (*old_bigcurs_hook)(x, y);
 }
@@ -499,13 +500,10 @@ static void win2unix(int col, char *buf)
     }
 
     while (*buf) {
-#ifdef JP
-        // 文字列が全角文字の前半バイトで終わっている場合は、後半バイトが無いので全角文字として扱わない
-        if (iskanji(*buf) && (buf[1] != '\0')) {
+        if (is_multibyte_char_at(buf)) {
             buf += 2;
             continue;
         }
-#endif
         if (*buf == 127) {
             *buf = wall;
         } else if (*buf == 31) {

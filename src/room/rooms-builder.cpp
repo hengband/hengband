@@ -48,6 +48,7 @@
 #include "system/player-type-definition.h"
 #include "system/terrain/terrain-definition.h"
 #include "view/display-messages.h"
+#include <fmt/format.h>
 
 /*!
  * @brief 1マスだけの部屋を作成し、上下左右いずれか一つに隠しドアを配置する。
@@ -102,7 +103,8 @@ void build_cavern(PlayerType *player_ptr)
 
     while (!done) {
         int grd = randint1(4) + 4;
-        int roug = randint1(8) * randint1(4);
+        int roug = randint1(8);
+        roug *= randint1(4);
         int cutoff = xsize / 2;
         generate_hmap(floor, y0 + 1, x0 + 1, xsize, ysize, grd, roug, cutoff);
         done = generate_fracave(player_ptr, y0 + 1, x0 + 1, xsize, ysize, cutoff, light, false);
@@ -115,7 +117,7 @@ void build_cavern(PlayerType *player_ptr)
 void build_lake(PlayerType *player_ptr, int type)
 {
     if ((type < LAKE_T_LAVA) || (type > LAKE_T_FIRE_VAULT)) {
-        msg_format("Invalid lake type (%d)", type);
+        msg_print("Invalid lake type ({})", type);
         return;
     }
 
@@ -129,9 +131,11 @@ void build_lake(PlayerType *player_ptr, int type)
     bool done = false;
     while (!done) {
         int grd = randint1(3) + 4;
-        int roug = randint1(8) * randint1(4);
+        int roug = randint1(8);
+        roug *= randint1(4);
         int c3 = 3 * xsize / 4;
-        int c1 = randint0(c3 / 2) + randint0(c3 / 2) - 5;
+        int c1 = randint0(c3 / 2) - 5;
+        c1 += randint0(c3 / 2);
         int c2 = (c1 + c3) / 2;
         generate_hmap(floor, y0 + 1, x0 + 1, xsize, ysize, grd, roug, c3);
         done = generate_lake(player_ptr, y0 + 1, x0 + 1, xsize, ysize, c1, c2, c3, type);

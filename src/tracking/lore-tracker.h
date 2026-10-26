@@ -12,7 +12,6 @@ public:
 
     static LoreTracker &get_instance();
     bool is_tracking() const;
-    bool is_tracking(MonraceId trackee) const;
     MonraceId get_trackee() const;
     const MonraceDefinition &get_tracking_monrace() const;
     void set_trackee(MonraceId new_monrace_id);

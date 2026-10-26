@@ -8,19 +8,24 @@
 #include "game-option/disturbance-options.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
+#include "mind/mind-force-trainer.h"
+#include "mind/mind-sniper.h"
 #include "monster/monster-status-setter.h"
 #include "player-base/player-class.h"
 #include "player-info/class-info.h"
+#include "player-info/ninja-data-type.h"
 #include "player-info/race-info.h"
 #include "player/attack-defense-types.h"
 #include "player/player-status.h"
 #include "realm/realm-song-numbers.h"
+#include "spell-realm/spells-hex.h"
 #include "spell-realm/spells-song.h"
+#include "status/action-setter.h"
 #include "status/base-status.h"
 #include "status/buff-setter.h"
 #include "status/element-resistance.h"
+#include "system/deferred-update-requests.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 
@@ -63,6 +68,7 @@ void reset_tim_flags(PlayerType *player_ptr)
     player_ptr->magicdef = 0;
     player_ptr->resist_magic = 0;
     player_ptr->tsuyoshi = 0;
+    player_ptr->tsubureru = 0;
     player_ptr->tim_pass_wall = 0;
     player_ptr->tim_res_nether = 0;
     player_ptr->tim_res_lite = 0;
@@ -113,6 +119,59 @@ void reset_tim_flags(PlayerType *player_ptr)
 }
 
 /*!
+ * @brief 時限効果ではない練気と変わり身の備えを解除する。
+ * @param notify 魔力消去時は解除メッセージを表示する。
+ */
+void reset_ki_and_kawarimi(PlayerType *player_ptr, bool notify)
+{
+    auto &dur = DeferredUpdateRequests::get_instance();
+    if (get_current_ki(player_ptr) > 0) {
+        set_current_ki(player_ptr, true, 0);
+        dur.set_flag(StatusRecalculatingFlag::BONUS);
+        if (notify) {
+            msg_print(_("練気が消えた。", "Your stored Force dissipates."));
+        }
+    }
+
+    auto ninja_data = PlayerClass(player_ptr).get_specific_data<ninja_data_type>();
+    if (ninja_data && ninja_data->kawarimi) {
+        ninja_data->kawarimi = false;
+        dur.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
+        if (notify) {
+            msg_print(_("変わり身の備えが消えた。", "You are no longer prepared to evade attacks."));
+        }
+    }
+}
+
+/*!
+ * @brief アリーナ入場・敗北時に持ち越せない状態を解除する。
+ * @details 通常の時限効果は無言で一括解除し、終了処理が必要な状態だけ先に終了する。
+ */
+void reset_arena_buffs(PlayerType *player_ptr)
+{
+    // 現在の行動に対応する歌・呪術・構えは set_action が終了する。
+    set_action(player_ptr, ACTION_NONE);
+    if (music_singing_any(player_ptr) || (get_interrupting_song_effect(player_ptr) != MUSIC_NONE)) {
+        stop_singing(player_ptr);
+    }
+
+    auto spell_hex = SpellHex(player_ptr);
+    if (spell_hex.is_spelling_any()) {
+        spell_hex.stop_all_spells();
+    }
+    spell_hex.discard_interrupted_spells();
+    spell_hex.clear_revenge();
+    reset_concentration(player_ptr, true);
+    // つよしの終了ペナルティを、一括リセットで踏み倒せないようにする。
+    set_tsuyoshi(player_ptr, 0, true);
+    reset_ki_and_kawarimi(player_ptr, false);
+    reset_tim_flags(player_ptr);
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.set_flag(StatusRecalculatingFlag::BONUS);
+    dur.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
+}
+
+/*!
  * @brief 加速の継続時間をセットする / Set "fast", notice observable changes
  * @param v 継続時間
  * @param do_dec 現在の継続時間より長い値のみ上書きする
@@ -160,7 +219,7 @@ bool set_acceleration(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     if (disturb_state || Travel::get_instance().is_ongoing()) {
         disturb(player_ptr, false, true);
     }
-    RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
+    DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
     handle_stuff(player_ptr);
     return true;
 }
@@ -204,8 +263,8 @@ bool set_shield(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     }
 
     player_ptr->shield = v;
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     if (!notice) {
         return false;
     }
@@ -214,7 +273,7 @@ bool set_shield(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
         disturb(player_ptr, false, true);
     }
 
-    rfu.set_flag(StatusRecalculatingFlag::BONUS);
+    dur.set_flag(StatusRecalculatingFlag::BONUS);
     handle_stuff(player_ptr);
     return true;
 }
@@ -253,8 +312,8 @@ bool set_magicdef(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     }
 
     player_ptr->magicdef = v;
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     if (!notice) {
         return false;
     }
@@ -263,7 +322,7 @@ bool set_magicdef(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
         disturb(player_ptr, false, true);
     }
 
-    rfu.set_flag(StatusRecalculatingFlag::BONUS);
+    dur.set_flag(StatusRecalculatingFlag::BONUS);
     handle_stuff(player_ptr);
     return true;
 }
@@ -302,8 +361,8 @@ bool set_blessed(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     }
 
     player_ptr->blessed = v;
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     if (!notice) {
         return false;
     }
@@ -312,7 +371,7 @@ bool set_blessed(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
         disturb(player_ptr, false, true);
     }
 
-    rfu.set_flag(StatusRecalculatingFlag::BONUS);
+    dur.set_flag(StatusRecalculatingFlag::BONUS);
     handle_stuff(player_ptr);
     return true;
 }
@@ -351,8 +410,8 @@ bool set_hero(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     }
 
     player_ptr->hero = v;
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     if (!notice) {
         return false;
     }
@@ -361,11 +420,7 @@ bool set_hero(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
         disturb(player_ptr, false, true);
     }
 
-    static constexpr auto flags = {
-        StatusRecalculatingFlag::BONUS,
-        StatusRecalculatingFlag::HP,
-    };
-    RedrawingFlagsUpdater::get_instance().set_flags(flags);
+    DeferredUpdateRequests::get_instance().request_bonus_and_max_hp_recalculation();
     handle_stuff(player_ptr);
     return true;
 }
@@ -421,17 +476,13 @@ bool set_mimic(PlayerType *player_ptr, TIME_EFFECT v, MimicKindType mimic_race_i
         disturb(player_ptr, false, true);
     }
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &dur = DeferredUpdateRequests::get_instance();
     static constexpr auto flags_mwrf = {
         MainWindowRedrawingFlag::BASIC,
         MainWindowRedrawingFlag::TIMED_EFFECT,
     };
-    rfu.set_flags(flags_mwrf);
-    static constexpr auto flags_srf = {
-        StatusRecalculatingFlag::BONUS,
-        StatusRecalculatingFlag::HP,
-    };
-    rfu.set_flags(flags_srf);
+    dur.set_flags(flags_mwrf);
+    dur.request_bonus_and_max_hp_recalculation();
     handle_stuff(player_ptr);
     return true;
 }
@@ -475,8 +526,8 @@ bool set_berserk(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     }
 
     player_ptr->berserk = v;
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     if (!notice) {
         return false;
     }
@@ -485,11 +536,7 @@ bool set_berserk(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
         disturb(player_ptr, false, true);
     }
 
-    static constexpr auto flags = {
-        StatusRecalculatingFlag::BONUS,
-        StatusRecalculatingFlag::HP,
-    };
-    RedrawingFlagsUpdater::get_instance().set_flags(flags);
+    DeferredUpdateRequests::get_instance().request_bonus_and_max_hp_recalculation();
     handle_stuff(player_ptr);
     return true;
 }
@@ -510,11 +557,7 @@ bool set_wraith_form(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
         return false;
     }
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    static constexpr auto flags_swrf = {
-        SubWindowRedrawingFlag::OVERHEAD,
-        SubWindowRedrawingFlag::DUNGEON,
-    };
+    auto &dur = DeferredUpdateRequests::get_instance();
     if (v) {
         if (player_ptr->wraith_form && !do_dec) {
             if (player_ptr->wraith_form > v) {
@@ -527,23 +570,19 @@ bool set_wraith_form(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
             chg_virtue(player_ptr, Virtue::HONOUR, -2);
             chg_virtue(player_ptr, Virtue::SACRIFICE, -2);
             chg_virtue(player_ptr, Virtue::VALOUR, -5);
-            rfu.set_flag(MainWindowRedrawingFlag::MAP);
-            rfu.set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
-            rfu.set_flags(flags_swrf);
+            dur.request_monster_update_and_map_redrawing();
         }
     } else {
         if (player_ptr->wraith_form) {
             msg_print(_("不透明になった感じがする。", "You feel opaque."));
             sound(SoundKind::BUFF_EXPIRE);
             notice = true;
-            rfu.set_flag(MainWindowRedrawingFlag::MAP);
-            rfu.set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
-            rfu.set_flags(flags_swrf);
+            dur.request_monster_update_and_map_redrawing();
         }
     }
 
     player_ptr->wraith_form = v;
-    rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
+    dur.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     if (!notice) {
         return false;
     }
@@ -552,7 +591,7 @@ bool set_wraith_form(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
         disturb(player_ptr, false, true);
     }
 
-    rfu.set_flag(StatusRecalculatingFlag::BONUS);
+    dur.set_flag(StatusRecalculatingFlag::BONUS);
     handle_stuff(player_ptr);
     return true;
 }
@@ -597,8 +636,8 @@ bool set_tsuyoshi(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     }
 
     player_ptr->tsuyoshi = v;
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     if (!notice) {
         return false;
     }
@@ -607,11 +646,7 @@ bool set_tsuyoshi(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
         disturb(player_ptr, false, true);
     }
 
-    static constexpr auto flags = {
-        StatusRecalculatingFlag::BONUS,
-        StatusRecalculatingFlag::HP,
-    };
-    rfu.set_flags(flags);
+    dur.request_bonus_and_max_hp_recalculation();
     handle_stuff(player_ptr);
     return true;
 }

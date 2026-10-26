@@ -4,7 +4,7 @@
     "description": "MonsterMessageの定義",
     "properties": {
         "versions": {
-            "type": "number",
+            "const": 1,
             "description": "Version情報"
         },
         "groups": {
@@ -22,7 +22,7 @@
                         "items": {
                             "type": "integer",
                             "minimum": 1,
-                            "maximum": 9999
+                            "maximum": 32766
                         }
                     },
                     "name": {
@@ -99,6 +99,23 @@
                             }
                         }
                     }
+                },
+                "if": {
+                    "not": {
+                        "required": [
+                            "id_list"
+                        ]
+                    }
+                },
+                "then": {
+                    "properties": {
+                        "name": {
+                            "const": "DEFAULT"
+                        }
+                    },
+                    "required": [
+                        "name"
+                    ]
                 }
             }
         }

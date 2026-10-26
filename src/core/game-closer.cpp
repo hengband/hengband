@@ -14,7 +14,7 @@
 #include "floor/floor-save.h"
 #include "game-option/cheat-options.h"
 #include "io/files-util.h"
-#include "io/input-key-acceptor.h"
+#include "io/input-context.h"
 #include "io/signal-handlers.h"
 #include "io/uid-checker.h"
 #include "io/write-diary.h"
@@ -34,6 +34,7 @@
 #include "view/display-player.h"
 #include "view/display-scores.h"
 #include "world/world.h"
+#include <fmt/format.h>
 
 static void clear_floor(PlayerType *player_ptr)
 {
@@ -73,9 +74,10 @@ static bool check_death(PlayerType *player_ptr)
     }
 
     do_cmd_save_game(player_ptr, false);
-    prt(_("リターンキーか ESC キーを押して下さい。", "Press Return (or Escape)."), 0, 40);
+    constexpr auto prompt = _("リターンキーか ESC キーを押して下さい。", "Press Return (or Escape).");
+    prt(prompt, 0, 40);
     play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_EXIT);
-    if (inkey() != ESCAPE) {
+    if (input_key_with_context(InputKind::ANY_KEY, prompt) != ESCAPE) {
         predict_score(player_ptr);
     }
 
@@ -118,11 +120,11 @@ static void kingly(PlayerType *player_ptr)
 #ifdef JP
     put_str("Veni, Vidi, Vici!", 15, 31);
     put_str("来た、見た、勝った！", 16, 30);
-    put_str(format("偉大なる%s万歳！", sp_ptr->winner.data()), 17, 29);
+    put_str(fmt::format("偉大なる{}万歳！", sp_ptr->winner), 17, 29);
 #else
     put_str("Veni, Vidi, Vici!", 15, 31);
     put_str("I came, I saw, I conquered!", 16, 26);
-    put_str(format("All Hail the Mighty %s!", sp_ptr->winner.data()), 17, 27);
+    put_str(fmt::format("All Hail the Mighty {}!", sp_ptr->winner), 17, 27);
 #endif
 
     if (!seppuku) {
@@ -146,7 +148,7 @@ static void kingly(PlayerType *player_ptr)
  */
 void close_game(PlayerType *player_ptr)
 {
-    handle_stuff(player_ptr);
+    handle_stuff_with_inventory_arrangement(player_ptr);
     msg_erase();
     flush();
     signals_ignore_tstp();

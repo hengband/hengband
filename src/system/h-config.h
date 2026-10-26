@@ -96,7 +96,3 @@ constexpr auto MAINTAINER = "echizen@users.sourceforge.jp";
 #endif
 
 // clang-format on
-
-#if !defined(__GNUC__)
-#define __attribute__(x)
-#endif

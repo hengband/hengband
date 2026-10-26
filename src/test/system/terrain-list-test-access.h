@@ -1,7 +1,7 @@
 #pragma once
 
 #include "system/terrain/terrain-list.h"
-#include <map>
+#include <vector>
 
 namespace test {
 
@@ -14,9 +14,7 @@ public:
         : terrains(TerrainList::get_instance())
         , previous_tags(terrains.tags)
     {
-        auto test_tags = previous_tags;
-        test_tags[tag] = terrain_id;
-        terrains.tags.swap(test_tags);
+        terrains.set_terrain_id(tag, terrain_id);
     }
 
     TerrainListTestAccess(const TerrainListTestAccess &) = delete;
@@ -28,14 +26,14 @@ public:
     }
 
     /*! @brief 現在の地形タグ対応表を検証用に取得する */
-    static std::map<TerrainTag, short> current_tags()
+    static std::vector<short> current_tags()
     {
         return TerrainList::get_instance().tags;
     }
 
 private:
     TerrainList &terrains;
-    std::map<TerrainTag, short> previous_tags;
+    std::vector<short> previous_tags;
 };
 
 }

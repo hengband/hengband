@@ -9,10 +9,14 @@
 
 #include "io/interpret-pref-file.h"
 #include "io/macro-configurations-store.h"
+#include "system/deferred-update-requests.h"
 #include "term/gameterm.h"
 #include "test/scoped-restore.h"
+#include "util/enum-converter.h"
+#include "util/enum-range.h"
 #include "util/finalizer.h"
 #include "view/display-symbol.h"
+#include "world/world.h"
 
 #include <doctest/doctest.h>
 
@@ -51,6 +55,29 @@ namespace {
 [[nodiscard]] auto scoped_macro_triggers()
 {
     return test::scoped_restore(macro_template, macro_modifier_chr, macro_modifier_names, macro_trigger_names, macro_trigger_keycodes, max_macrotrigger);
+}
+
+/*!
+ * @brief pref の行で立つ描き直しの要求 (メイン画面のマップと全てのサブウィンドウ) を消し、スコープを抜けるときに元に戻す
+ * @return スコープを抜けるときに元の要求へ戻すファイナライザ
+ * @details 戻り値は必ず変数で受けること。受けないとその場で元に戻ってしまう。
+ */
+[[nodiscard]] auto scoped_clear_redrawing_flags()
+{
+    auto &dur = DeferredUpdateRequests::get_instance();
+    const EnumClassFlagGroup<SubWindowRedrawingFlag> all_sub_flags(EnumRange(SubWindowRedrawingFlag::INVENTORY, SubWindowRedrawingFlag::MAX));
+    const auto old_sub_flags = dur.get_sub_intersection(all_sub_flags);
+    const auto had_map = dur.has(MainWindowRedrawingFlag::MAP);
+    dur.reset_flags(all_sub_flags);
+    dur.reset_flag(MainWindowRedrawingFlag::MAP);
+    return util::make_finalizer([&dur, all_sub_flags, old_sub_flags, had_map] {
+        dur.reset_flags(all_sub_flags);
+        dur.set_flags(old_sub_flags);
+        dur.reset_flag(MainWindowRedrawingFlag::MAP);
+        if (had_map) {
+            dur.set_flag(MainWindowRedrawingFlag::MAP);
+        }
+    });
 }
 
 /*!
@@ -199,4 +226,41 @@ TEST_CASE("interpret_pref_file clears the macro template with an empty template"
     CHECK(macro_modifier_names.at(0).empty());
     CHECK(max_macrotrigger == 0);
     CHECK(macro_trigger_names.at(0).empty());
+}
+
+TEST_CASE("interpret_pref_file requests redrawing the map but not the sub-windows before entering a floor")
+{
+    const auto restore_tables = scoped_display_tables();
+    const auto restore_flags = scoped_clear_redrawing_flags();
+    auto &world = AngbandWorld::get_instance();
+    const auto restore_world = test::scoped_restore(world.character_dungeon);
+    world.character_dungeon = false;
+
+    REQUIRE(interpret("V:255:1:2:3:0x10") == 0);
+
+    const auto &dur = DeferredUpdateRequests::get_instance();
+    CHECK(dur.has(MainWindowRedrawingFlag::MAP));
+    // 地図のサブウィンドウはマップを描き直すときに、ほかのサブウィンドウはフロアに入るときに要求される
+    CHECK_FALSE(dur.has(SubWindowRedrawingFlag::OVERHEAD));
+    CHECK_FALSE(dur.has(SubWindowRedrawingFlag::DUNGEON));
+    CHECK_FALSE(dur.has(SubWindowRedrawingFlag::INVENTORY));
+    CHECK_FALSE(dur.has(SubWindowRedrawingFlag::FLOOR_ITEMS));
+}
+
+TEST_CASE("interpret_pref_file requests redrawing every sub-window after entering a floor")
+{
+    const auto restore_tables = scoped_display_tables();
+    const auto restore_flags = scoped_clear_redrawing_flags();
+    auto &world = AngbandWorld::get_instance();
+    const auto restore_world = test::scoped_restore(world.character_dungeon);
+    world.character_dungeon = true;
+
+    REQUIRE(interpret("V:255:1:2:3:0x10") == 0);
+
+    const auto &dur = DeferredUpdateRequests::get_instance();
+    CHECK(dur.has(MainWindowRedrawingFlag::MAP));
+    for (const auto flag : EnumRange(SubWindowRedrawingFlag::INVENTORY, SubWindowRedrawingFlag::MAX)) {
+        CAPTURE(enum2i(flag));
+        CHECK(dur.has(flag));
+    }
 }

@@ -6,12 +6,29 @@
 #include <memory>
 #include <string>
 #include <string_view>
+#include <vector>
 
-/*
- * OPTION: Maximum number of messages to remember (see "io.c")
- * Default: assume maximal memorization of 2048 total messages
+/*!
+ * 定義読み込み中の診断を、画面表示や入力待ちをせずに収集する。
+ * 捕捉中の msg_print() は履歴にも残らないため、捕捉したメッセージを使わずに破棄すると失われる。
  */
-#define MESSAGE_MAX 81920
+class ScopedMessageCapture {
+public:
+    ScopedMessageCapture();
+    ~ScopedMessageCapture();
+    ScopedMessageCapture(const ScopedMessageCapture &) = delete;
+    ScopedMessageCapture(ScopedMessageCapture &&) = delete;
+    ScopedMessageCapture &operator=(const ScopedMessageCapture &) = delete;
+    ScopedMessageCapture &operator=(ScopedMessageCapture &&) = delete;
+
+    const std::vector<std::string> &messages() const;
+
+private:
+    std::vector<std::string> captured_messages;
+    std::vector<std::string> *previous_capture;
+};
+
+constexpr auto MESSAGE_MAX = 81920; //!< 覚えておくメッセージの最大数
 
 extern bool msg_flag;
 extern COMMAND_CODE now_message;
@@ -21,8 +38,9 @@ uint64_t message_sequence();
 std::shared_ptr<const std::string> message_str(int age);
 void message_add(std::string_view msg);
 void msg_erase();
+bool is_waiting_for_more();
+void redisplay_more_prompt();
 void msg_print(std::string_view msg);
-void msg_format(const char *fmt, ...) __attribute__((format(printf, 1, 2)));
 void wr_message_history();
 void rd_message_history();
 

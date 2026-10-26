@@ -32,6 +32,7 @@
 #include "spell-realm/spells-hex.h"
 #include "spell-realm/spells-song.h"
 #include "status/action-setter.h"
+#include "system/deferred-update-requests.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/dungeon/quest-definition.h"
 #include "system/dungeon/quest-list.h"
@@ -40,7 +41,6 @@
 #include "system/floor/wilderness-grid.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "system/services/dungeon-service.h"
 #include "system/terrain/terrain-definition.h"
 #include "target/target-getter.h"
@@ -312,7 +312,7 @@ void do_cmd_go_down(PlayerType *player_ptr)
         }
     } else {
         if (dungeon_id > DungeonId::WILDERNESS) {
-            msg_format(_("%sへ入った。", "You entered %s."), dungeon.text.data());
+            msg_print(_("{}へ入った。", "You entered {}."), dungeon.text);
         } else {
             if (is_echizen(player_ptr)) {
                 msg_print(_("なんだこの階段は！", "What's this STAIRWAY!"));
@@ -346,7 +346,7 @@ void do_cmd_walk(PlayerType *player_ptr, bool pickup)
 {
     if (command_arg) {
         command_rep = command_arg - 1;
-        RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::ACTION);
+        DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::ACTION);
         command_arg = 0;
     }
 
@@ -426,7 +426,7 @@ void do_cmd_stay(PlayerType *player_ptr, bool pickup)
     uint32_t mpe_mode = MPE_STAYING | MPE_ENERGY_USE;
     if (command_arg) {
         command_rep = command_arg - 1;
-        RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::ACTION);
+        DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::ACTION);
         command_arg = 0;
     }
 
@@ -507,9 +507,9 @@ void do_cmd_rest(PlayerType *player_ptr)
 
     player_ptr->resting = command_arg;
     player_ptr->action = ACTION_REST;
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.set_flag(StatusRecalculatingFlag::BONUS);
-    rfu.set_flag(MainWindowRedrawingFlag::ACTION);
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.set_flag(StatusRecalculatingFlag::BONUS);
+    dur.set_flag(MainWindowRedrawingFlag::ACTION);
     handle_stuff(player_ptr);
     term_fresh();
 }

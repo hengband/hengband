@@ -6,7 +6,7 @@
 
 #include "knowledge/knowledge-items.h"
 #include "core/show-file.h"
-#include "core/stuff-handler.h"
+#include "core/window-redrawer.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "game-option/special-options.h"
@@ -121,11 +121,11 @@ static void display_object_list(int col, int row, int per_page, const std::vecto
         const auto item_name = is_flavor_only ? flavor_baseitem.flavor_name : baseitem.stripped_name();
         c_prt(attr, item_name.data(), row + i, col);
         if (per_page == 1) {
-            c_prt(attr, format("%02x/%02x", flavor_config.get_color(), flavor_config.get_character()), row + i, (is_wizard || visual_only) ? 64 : 68);
+            c_prt(attr, fmt::format("{:02x}/{:02x}", flavor_config.get_color(), static_cast<uint8_t>(flavor_config.get_character())), row + i, (is_wizard || visual_only) ? 64 : 68);
         }
 
         if (is_wizard || visual_only) {
-            c_prt(attr, format("%d", bi_id), row + i, 70);
+            c_prt(attr, fmt::format("{}", bi_id), row + i, 70);
         }
 
         const auto ds = flavor_baseitem.is_valid() ? flavor_config.get_symbol() : empty_symbol;
@@ -144,7 +144,6 @@ static void desc_obj_fake(PlayerType *player_ptr, short bi_id)
 {
     ItemEntity item(bi_id);
     item.set_identification_flag(IdentificationFlag::KNOWN);
-    handle_stuff(player_ptr);
     if (screen_object(player_ptr, item, SCROBJ_FAKE_OBJECT | SCROBJ_FORCE_DETAIL)) {
         return;
     }
@@ -218,7 +217,7 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
             clear_from(0);
 
 #ifdef JP
-            prt(format("%s - アイテム", !visual_only ? "知識" : "表示"), 2, 0);
+            prt(fmt::format("{} - アイテム", !visual_only ? "知識" : "表示"), 2, 0);
             if (bi_id < 0) {
                 prt("グループ", 4, 0);
             }
@@ -228,7 +227,7 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
             }
             prt("文字", 4, 74);
 #else
-            prt(format("%s - objects", !visual_only ? "Knowledge" : "Visuals"), 2, 0);
+            prt(fmt::format("{} - objects", !visual_only ? "Knowledge" : "Visuals"), 2, 0);
             if (bi_id < 0) {
                 prt("Group", 4, 0);
             }
@@ -290,12 +289,10 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
         }
 
 #ifdef JP
-        prt(format("<方向>%s%s%s, ESC", (!visual_list && !visual_only) ? ", 'r'で詳細を見る" : "", visual_list ? ", ENTERで決定" : ", 'v'でシンボル変更",
-                (symbols_cb.symbol != DisplaySymbol()) ? ", 'c', 'p'でペースト" : ", 'c'でコピー"),
+        prt(fmt::format("<方向>{}{}{}, ESC", (!visual_list && !visual_only) ? ", 'r'で詳細を見る" : "", visual_list ? ", ENTERで決定" : ", 'v'でシンボル変更", (symbols_cb.symbol != DisplaySymbol()) ? ", 'c', 'p'でペースト" : ", 'c'でコピー"),
             hgt - 1, 0);
 #else
-        prt(format("<dir>%s%s%s, ESC", (!visual_list && !visual_only) ? ", 'r' to recall" : "", visual_list ? ", ENTER to accept" : ", 'v' for visuals",
-                (symbols_cb.symbol != DisplaySymbol()) ? ", 'c', 'p' to paste" : ", 'c' to copy"),
+        prt(fmt::format("<dir>{}{}{}, ESC", (!visual_list && !visual_only) ? ", 'r' to recall" : "", visual_list ? ", ENTER to accept" : ", 'v' for visuals", (symbols_cb.symbol != DisplaySymbol()) ? ", 'c', 'p' to paste" : ", 'c' to copy"),
             hgt - 1, 0);
 #endif
 
@@ -323,7 +320,7 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
         if (!visual_only) {
             tracker.set_trackee(bi_id_cursor);
             if (previous_bi_id != bi_id_cursor) {
-                handle_stuff(player_ptr);
+                window_stuff(player_ptr);
                 previous_bi_id = bi_id_cursor;
             }
         }

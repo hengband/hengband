@@ -1,18 +1,33 @@
 #pragma once
 
 #include "system/angband.h"
+#include "system/h-type.h"
 #include "util/bit-flags-calculator.h"
 #include <concepts>
-#include <map>
-#include <string>
+#include <cstdint>
+#include <limits>
 #include <string_view>
 #include <tl/optional.hpp>
-#include <unordered_map>
+#include <type_traits>
 #include <utility>
 
 extern int error_idx; //!< エラーが発生したinfo ID
 
+enum class FixedArtifactId : short;
+enum class MonraceId : short;
+enum class QuestId : short;
 enum class RandomArtActType : short;
+
+/*
+ * 定義のIDの上限は、IDを格納する型の上限−1とする。
+ * IDの最大値+1になる件数（種族の数など）も同じ型に収まるようにするため。
+ */
+constexpr int MAX_BASEITEM_ID = std::numeric_limits<short>::max() - 1; //!< ベースアイテムIDの上限 (BaseitemList は short でIDを扱う)
+constexpr int MAX_MONRACE_ID = std::numeric_limits<std::underlying_type_t<MonraceId>>::max() - 1; //!< モンスター種族IDの上限
+constexpr int MAX_FIXED_ARTIFACT_ID = std::numeric_limits<std::underlying_type_t<FixedArtifactId>>::max() - 1; //!< 固定アーティファクトIDの上限
+constexpr int MAX_TERRAIN_ID = std::numeric_limits<FEAT_IDX>::max() - 1; //!< 地形IDの上限
+constexpr int MAX_QUEST_ID = std::numeric_limits<std::underlying_type_t<QuestId>>::max() - 1; //!< クエストIDの上限
+
 RandomArtActType grab_one_activation_flag(std::string_view what);
 
 /*!
@@ -59,15 +74,4 @@ bool info_grab_one_const(uint32_t &buf, const Dict &dict, Key &&what)
         return true;
     }
     return false;
-}
-
-/*!
- * @brief infoパラメータに値をセットする
- * @param パラメータ変数
- * @val 値
- */
-template <typename T>
-void info_set_value(T &arg, const std::string &val, int base = 10)
-{
-    arg = static_cast<T>(std::stoi(val, nullptr, base));
 }

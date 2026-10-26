@@ -4,7 +4,7 @@
     "description": "MonsterRaceの定義",
     "properties": {
         "versions": {
-            "type": "number",
+            "const": 1,
             "description": "Version情報"
         },
         "monsters": {
@@ -29,7 +29,7 @@
                     "id": {
                         "type": "integer",
                         "minimum": 0,
-                        "maximum": 9999
+                        "maximum": 32766
                     },
                     "name": {
                         "type": "object",
@@ -62,7 +62,7 @@
                             "character": {
                                 "type": "string",
                                 "description": "表示される文字",
-                                "pattern": "[a-zA-Z0-9!\/.!?#$%&()@,|*'`<>+{}=~\\[\\]]|\\\\"
+                                "pattern": "^([a-zA-Z0-9!\/.!?#$%&()@,|*'`<>+{}=~\\[\\]]|\\\\)$"
                             },
                             "color": {
                                 "type": "string",
@@ -97,7 +97,7 @@
                     "hit_point": {
                         "type": "string",
                         "description": "体力。XdY形式",
-                        "pattern": "[1-9][0-9]*d[1-9][0-9]*"
+                        "pattern": "^[1-9][0-9]*d[1-9][0-9]*$"
                     },
                     "vision": {
                         "type": "integer",
@@ -106,6 +106,7 @@
                         "maximum": 999
                     },
                     "armor_class": {
+                        "$comment": "maximum = MONRACE_AC_MAX in src/info-reader/race-reader.cpp (GOEMON's AC is tripled in a 16-bit variable)",
                         "type": "integer",
                         "description": "物理防御力",
                         "minimum": 0,
@@ -121,12 +122,12 @@
                         "type": "integer",
                         "description": "出現階層",
                         "minimum": 0,
-                        "maximum": 128
+                        "maximum": 127
                     },
                     "rarity": {
                         "type": "integer",
                         "description": "出現頻度。高いほど出にくい",
-                        "minimum": 0,
+                        "minimum": 1,
                         "maximum": 255
                     },
                     "exp": {
@@ -146,15 +147,15 @@
                         "properties": {
                             "need_exp": {
                                 "type": "integer",
-                                "description": "進化に必要な経験値",
-                                "minimum": 0,
+                                "description": "進化に必要な経験値。0は進化しない値なので1以上とし、上限はexpと同じ9999999",
+                                "minimum": 1,
                                 "maximum": 9999999
                             },
                             "to": {
                                 "type": "integer",
                                 "description": "進化先モンスターID",
                                 "minimum": 1,
-                                "maximum": 9999
+                                "maximum": 32766
                             }
                         }
                     },
@@ -168,9 +169,9 @@
                     },
                     "odds_correction_ratio": {
                         "type": "integer",
-                        "description": "闘技場オッズ補正値。1/100を使用、100で等倍200で2倍",
+                        "description": "闘技場オッズ補正値。100で等倍、200で2倍。補正は10倍あれば十分なので上限1000（同梱データの最大値900も含む）",
                         "minimum": 1,
-                        "maximum": 9999
+                        "maximum": 1000
                     },
                     "start_hp_percentage": {
                         "type": "integer",
@@ -193,7 +194,7 @@
                                     "type": "integer",
                                     "description": "ドロップアーティファクトID",
                                     "minimum": 1,
-                                    "maximum": 999
+                                    "maximum": 32766
                                 },
                                 "drop_probability": {
                                     "type": "integer",
@@ -219,12 +220,12 @@
                                     "type": "integer",
                                     "description": "護衛モンスターID",
                                     "minimum": 1,
-                                    "maximum": 9999
+                                    "maximum": 32766
                                 },
                                 "escort_num": {
                                     "type": "string",
                                     "description": "護衛生成数 XdY形式",
-                                    "pattern": "[1-9][0-9]*d[1-9][0-9]*"
+                                    "pattern": "^[1-9][0-9]*d[1-9][0-9]*$"
                                 }
                             }
                         }
@@ -317,7 +318,7 @@
                                 "damage_dice": {
                                     "type": "string",
                                     "description": "ダメージダイス。XdY形式",
-                                    "pattern": "[1-9][0-9]*d[1-9][0-9]*"
+                                    "pattern": "^[1-9][0-9]*d[1-9][0-9]*$"
                                 }
                             }
                         }
@@ -559,7 +560,7 @@
                             "shoot": {
                                 "type": "string",
                                 "description": "射撃威力。XdY方式",
-                                "pattern": "[1-9][0-9]*d[1-9][0-9]*"
+                                "pattern": "^[1-9][0-9]*d[1-9][0-9]*$"
                             },
                             "list": {
                                 "type": "array",
@@ -708,7 +709,7 @@
                                     "type": "integer",
                                     "description": "召喚するモンスターID",
                                     "minimum": 1,
-                                    "maximum": 9999
+                                    "maximum": 32766
                                 },
                                 "probability": {
                                     "type": "integer",

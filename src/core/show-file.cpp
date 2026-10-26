@@ -9,11 +9,12 @@
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
-#include "term/z-form.h"
 #include "util/angband-files.h"
 #include "util/int-char-converter.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
+#include <algorithm>
+#include <fmt/format.h>
 #include <sstream>
 #include <string>
 #include <string_view>
@@ -37,51 +38,30 @@
 static void show_file_aux_line(std::string_view str, int cy, std::string_view shower)
 {
     const auto lcstr = str_tolower(str);
-    concptr ptr;
-    byte textcolor = TERM_WHITE;
-    byte focuscolor = TERM_YELLOW;
-
-    if (!shower.empty()) {
-        ptr = angband_strstr(lcstr.data(), shower);
-        textcolor = (ptr == nullptr) ? TERM_L_DARK : TERM_WHITE;
-    }
+    const std::string_view lcstr_view = lcstr;
+    const byte textcolor = (!shower.empty() && !str_find(lcstr, shower)) ? TERM_L_DARK : TERM_WHITE;
+    const byte focuscolor = TERM_YELLOW;
 
     int cx = 0;
     term_gotoxy(cx, cy);
 
-    static const char tag_str[] = "[[[[";
+    constexpr std::string_view tag_str = "[[[[";
     byte color = textcolor;
     char in_tag = '\0';
     for (size_t i = 0; i < str.length();) {
-        int len = strlen(&str[i]);
-        int showercol = len + 1;
-        int bracketcol = len + 1;
-        int endcol = len;
-        if (!shower.empty()) {
-            ptr = angband_strstr(&lcstr[i], shower);
-            if (ptr) {
-                showercol = ptr - &lcstr[i];
-            }
-        }
+        // 強調する文字列とタグのうち、先に現れる方の手前までを書き出す (見つからなければ npos)
+        const auto rest = str.substr(i);
+        const auto showercol = shower.empty() ? std::string_view::npos : str_find_position(lcstr_view.substr(i), shower);
+        const auto bracketcol = in_tag ? str_find_position(rest, in_tag) : str_find_position(rest, tag_str);
+        const auto endcol = std::min({ rest.length(), showercol, bracketcol });
 
-        ptr = in_tag ? angband_strchr(&str[i], in_tag) : angband_strstr(&str[i], tag_str);
-        if (ptr) {
-            bracketcol = ptr - &str[i];
-        }
-        if (bracketcol < endcol) {
-            endcol = bracketcol;
-        }
-        if (showercol < endcol) {
-            endcol = showercol;
-        }
-
-        term_addstr(endcol, color, &str[i]);
+        term_addstr(static_cast<int>(endcol), color, rest);
         cx += endcol;
         i += endcol;
 
-        if (!shower.empty() && (endcol == showercol)) {
+        if (endcol == showercol) {
             const auto showerlen = shower.length();
-            term_addstr(showerlen, focuscolor, &str[i]);
+            term_addstr(showerlen, focuscolor, str.substr(i));
             cx += showerlen;
             i += showerlen;
             continue;
@@ -98,15 +78,17 @@ static void show_file_aux_line(std::string_view str, int cy, std::string_view sh
             continue;
         }
 
-        i += sizeof(tag_str) - 1;
-        color = color_char_to_attr(str[i]);
-        if (color == 255 || str[i + 1] == '\0') {
+        // 「[[[[」の後には色を表す文字と、区切りの文字が続く。どちらかが無ければタグとして扱わない
+        i += tag_str.length();
+        const auto tag_color = (i + 1 < str.length()) ? color_char_to_attr(str[i]) : TERM_COLOR{ 255 };
+        if (tag_color == 255) {
             color = textcolor;
             term_addstr(-1, color, tag_str);
-            cx += sizeof(tag_str) - 1;
+            cx += tag_str.length();
             continue;
         }
 
+        color = tag_color;
         i++;
         in_tag = str[i];
         i++;
@@ -123,7 +105,7 @@ static void show_file_aux_line(std::string_view str, int cy, std::string_view sh
 static std::string make_open_error_message(std::string_view name_with_tag)
 {
     const auto name = str_split(name_with_tag, '#')[0];
-    return format(_("'%s'をオープンできません。", "Cannot open '%s'."), name.data());
+    return fmt::format(_("'{}'をオープンできません。", "Cannot open '{}'."), name);
 }
 
 /*!
@@ -325,12 +307,12 @@ bool FileDisplayer::try_display(bool show_version, std::string_view name_with_ta
         }
 
         if (show_version) {
-            constexpr auto title = _("[%s, %s, %d/%d]", "[%s, %s, Line %d/%d]");
+            constexpr auto title = _("[{}, {}, {}/{}]", "[{}, {}, Line {}/{}]");
             const auto version = AngbandSystem::get_instance().build_version_expression(VersionExpression::FULL);
-            prt(format(title, version.data(), caption_str.data(), line, size), 0, 0);
+            prt(fmt::format(title, version, caption_str, line, size), 0, 0);
         } else {
-            constexpr auto title = _("[%s, %d/%d]", "[%s, Line %d/%d]");
-            prt(format(title, caption_str.data(), line, size), 0, 0);
+            constexpr auto title = _("[{}, {}/{}]", "[{}, Line {}/{}]");
+            prt(fmt::format(title, caption_str, line, size), 0, 0);
         }
 
         if (size <= rows) {
@@ -534,7 +516,7 @@ bool FileDisplayer::try_display(bool show_version, std::string_view name_with_ta
                     break;
                 }
 
-                fprintf(ffp, "%s\n", line_str->data());
+                fmt::println(ffp, "{}", *line_str);
             }
             angband_fclose(fff);
             angband_fclose(ffp);

@@ -16,13 +16,16 @@
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
-#include "term/z-form.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#include <algorithm>
+#include <cstdint>
+#include <fmt/format.h>
+#include <limits>
 #include <vector>
 
 /*!
@@ -36,9 +39,9 @@
  */
 MANA_POINT mod_need_mana(PlayerType *player_ptr, MANA_POINT need_mana, SPELL_IDX spell_id, RealmType realm)
 {
-#define MANA_CONST 2400
-#define MANA_DIV 4
-#define DEC_MANA_DIV 3
+    constexpr auto MANA_CONST = 2400;
+    constexpr auto MANA_DIV = 4;
+    constexpr auto DEC_MANA_DIV = 3;
     if (PlayerRealm::is_magic(realm) || PlayerRealm::is_technic(realm)) {
         need_mana = need_mana * (MANA_CONST + PlayerSkill::spell_exp_at(PlayerSkillRank::EXPERT) - PlayerSkill(player_ptr).exp_of_spell(realm, spell_id)) + (MANA_CONST - 1);
         need_mana *= player_ptr->dec_mana ? DEC_MANA_DIV : MANA_DIV;
@@ -52,11 +55,21 @@ MANA_POINT mod_need_mana(PlayerType *player_ptr, MANA_POINT need_mana, SPELL_IDX
         }
     }
 
-#undef DEC_MANA_DIV
-#undef MANA_DIV
-#undef MANA_CONST
-
     return need_mana;
+}
+
+/*!
+ * @brief MP不足の詠唱・技能で発生する状態異常の時間を抽選する
+ * @param need_mana 呼び出し側が用いる消費MPまたは不足MP
+ * @return 状態異常の上限10000を超えない時間
+ * @details 職業魔法以外の技能と保存済みMPも入力元になるため、入力型intの範囲で乗算を保護する。
+ * 現在のClassMagic上限2047と正常な保存値だけでは、この抽選上限の保護には到達しない。
+ */
+TIME_EFFECT roll_spell_over_exertion_duration(MANA_POINT need_mana)
+{
+    const auto maximum = std::clamp<int64_t>(5LL * need_mana + 1, 1, std::numeric_limits<int>::max());
+    // 抽選後に上限へ丸め、shortへの変換で負の麻痺時間にならないようにする。
+    return static_cast<TIME_EFFECT>(std::min(randint1(static_cast<int>(maximum)), 10000));
 }
 
 /*!
@@ -297,13 +310,13 @@ void print_spells(PlayerType *player_ptr, SPELL_IDX target_spell_id, const SPELL
                 out_val = "     ";
             }
         } else {
-            out_val = format("  %c) ", I2A(i));
+            out_val = fmt::format("  {:c}) ", I2A(i));
         }
 
         BotSpellListRow bot_row{};
         bot_row.spell_id = spell_id;
         if (spell.slevel >= 99) {
-            out_val.append(format("%-30s", _("(判読不能)", "(illegible)")));
+            out_val.append(fmt::format("{:<30}", fmt::bytes(_("(判読不能)", "(illegible)"))));
             c_prt(TERM_L_DARK, out_val, y + i + 1, x);
             bot_row.status = "illegible";
             bot_rows.push_back(std::move(bot_row));
@@ -349,11 +362,10 @@ void print_spells(PlayerType *player_ptr, SPELL_IDX target_spell_id, const SPELL
         bot_row.level = spell.slevel;
         bot_row.mana = need_mana;
         if (use_realm == RealmType::HISSATSU) {
-            out_val.append(format("%-25s %2d %4d", spell_name.data(), spell.slevel, need_mana));
+            out_val.append(fmt::format("{:<25} {:2} {:4}", fmt::bytes(spell_name), spell.slevel, need_mana));
         } else {
             const auto chance = spell_chance(player_ptr, spell_id, use_realm);
-            out_val.append(format("%-25s%c%-4s %2d %4d %3d%% %s", spell_name.data(), (max ? '!' : ' '), ryakuji, spell.slevel,
-                need_mana, chance, comment));
+            out_val.append(fmt::format("{:<25}{:c}{:<4} {:2} {:4} {:3}% {}", fmt::bytes(spell_name), (max ? '!' : ' '), fmt::bytes(ryakuji), spell.slevel, need_mana, chance, comment));
             bot_row.fail = chance;
             bot_row.proficiency = ryakuji;
             bot_row.proficiency_mark = max;

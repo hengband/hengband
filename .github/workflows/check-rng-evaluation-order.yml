@@ -1,0 +1,54 @@
+name: Check the evaluation order of random number calls
+
+on:
+  # PR では変更されたファイルだけを解析するので、全ファイルの解析は定期的に行う
+  schedule:
+    - cron: "0 18 * * 0" # 毎週月曜 3:00 (JST)
+
+  # 手動トリガーを許可
+  workflow_dispatch:
+
+  # PR のチェック (pull-request-status-check.yml) から呼び出す
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: Check
+    runs-on: ubuntu-26.04
+    steps:
+      # PR ではマージコミットとその親 (ベースブランチの先端) を比べるので、2 世代分を取得する
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+
+      # PR では変更されたファイルだけを、それ以外では全ファイルを解析する
+      - id: targets
+        name: List the files to check
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+        run: |
+          args=""
+          if [ "$EVENT_NAME" = "pull_request" ]; then
+            args="--base HEAD^1"
+          fi
+          echo "args=$args" >> "$GITHUB_OUTPUT"
+          files=$(python3 .github/scripts/check-rng-evaluation-order.py $args --list)
+          echo "$files"
+          if [ -n "$files" ]; then
+            echo "found=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      # 解析するソースが取り込むライブラリのヘッダ (curl) も入れる
+      - name: Install clang-query
+        if: steps.targets.outputs.found == 'true'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang-tools-21 libcurl4-openssl-dev
+
+      - name: Check the evaluation order
+        if: steps.targets.outputs.found == 'true'
+        run: python3 .github/scripts/check-rng-evaluation-order.py --clang-query clang-query-21 ${{ steps.targets.outputs.args }}

@@ -21,11 +21,11 @@
 #include "system/monrace/monrace-list.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
-#include "term/z-form.h"
 #include "util/angband-files.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 #include <algorithm>
+#include <fmt/format.h>
 #ifdef SAVEFILE_USE_UID
 #include "main-unix/unix-user-ids.h"
 #endif
@@ -161,7 +161,7 @@ tl::optional<std::string> get_random_line(xso::rng32 &rng, concptr file_name, in
                 break;
             }
         } else {
-            msg_format("Error in line %d of %s!", line_num, file_name);
+            msg_print("Error in line {} of {}!", line_num, file_name);
             angband_fclose(fp);
             return tl::nullopt;
         }
@@ -216,9 +216,9 @@ static errr counts_seek(PlayerType *player_ptr, int fd, uint32_t where, bool fla
     auto short_pclass = enum2i(player_ptr->pclass);
 #ifdef SAVEFILE_USE_UID
     const auto user_id = UnixUserIds::get_instance().get_user_id();
-    const auto header = format("%d.%s.%d%d%d", user_id, savefile_base.string().data(), short_pclass, player_ptr->ppersonality, player_ptr->age);
+    const auto header = fmt::format("{}.{}.{}{}{}", user_id, savefile_base.string(), short_pclass, static_cast<int>(player_ptr->ppersonality), player_ptr->age);
 #else
-    const auto header = format("%s.%d%d%d", savefile_base.string().data(), short_pclass, player_ptr->ppersonality, player_ptr->age);
+    const auto header = fmt::format("{}.{}{}{}", savefile_base.string(), short_pclass, static_cast<int>(player_ptr->ppersonality), player_ptr->age);
 #endif
     angband_strcpy(temp1, header, sizeof(temp1));
     for (int i = 0; temp1[i]; i++) {

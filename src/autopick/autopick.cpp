@@ -26,6 +26,7 @@
 #include "inventory/player-inventory.h"
 #include "object/object-info.h"
 #include "object/object-mark-types.h"
+#include "system/deferred-update-requests.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/item/item-entity.h"
@@ -33,6 +34,7 @@
 #include "term/screen-processor.h"
 #include "view/display-messages.h"
 #include "window/display-sub-windows.h"
+#include <fmt/format.h>
 #include <range/v3/view.hpp>
 #include <sstream>
 
@@ -54,7 +56,7 @@ static void autopick_delayed_alter_aux(PlayerType *player_ptr, INVENTORY_IDX i_i
         delete_object_idx(player_ptr, 0 - i_idx);
     }
 
-    msg_format(_("%sを自動破壊します。", "Auto-destroying %s."), item_name.data());
+    msg_print(_("{}を自動破壊します。", "Auto-destroying {}."), item_name);
 }
 
 /*!
@@ -90,7 +92,10 @@ void autopick_alter_item(PlayerType *player_ptr, INVENTORY_IDX i_idx, bool destr
 {
     auto item = ref_item(player_ptr, i_idx);
     int idx = find_autopick_list(player_ptr, item.get());
-    auto_inscribe_item(item.get(), idx);
+    if (auto_inscribe_item(*item, idx)) {
+        DeferredUpdateRequests::get_instance().request_inscription_change_updates();
+    }
+
     if (destroy && i_idx <= INVEN_PACK) {
         auto_destroy_item(player_ptr, item.get(), idx);
     }
@@ -105,7 +110,10 @@ void autopick_pickup_items(PlayerType *player_ptr, const Grid &grid)
         OBJECT_IDX this_o_idx = *it++;
         auto &item = *player_ptr->current_floor_ptr->o_list[this_o_idx];
         int idx = find_autopick_list(player_ptr, &item);
-        auto_inscribe_item(&item, idx);
+        if (auto_inscribe_item(item, idx)) {
+            DeferredUpdateRequests::get_instance().request_inscription_change_updates();
+        }
+
         if ((idx < 0) || (autopick_list[idx].action.has_none_of({ AutopickMethod::AUTOPICK, AutopickMethod::QUERY_AUTOPICK }))) {
             auto_destroy_item(player_ptr, &item, idx);
             continue;
@@ -114,7 +122,7 @@ void autopick_pickup_items(PlayerType *player_ptr, const Grid &grid)
         disturb(player_ptr, false, false);
         if (!check_store_item_to_inventory(player_ptr, &item)) {
             const auto item_name = describe_flavor(player_ptr, item, 0);
-            msg_format(_("ザックには%sを入れる隙間がない。", "You have no room for %s."), item_name.data());
+            msg_print(_("ザックには{}を入れる隙間がない。", "You have no room for {}."), item_name);
             item.marked.set(OmType::SUPRESS_MESSAGE);
             continue;
         }

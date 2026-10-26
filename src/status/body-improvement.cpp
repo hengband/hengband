@@ -11,8 +11,8 @@
 #include "player/player-status.h"
 #include "realm/realm-song-numbers.h"
 #include "spell-realm/spells-song.h"
+#include "system/deferred-update-requests.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 
@@ -67,7 +67,7 @@ void BodyImprovement::set_protection(short v, bool is_decrease)
     }
 
     protection.set(v);
-    RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
+    DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     if (!notice) {
         return;
     }
@@ -96,11 +96,7 @@ bool set_invuln(PlayerType *player_ptr, short v, bool do_dec)
         return false;
     }
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    static constexpr auto flags_swrf = {
-        SubWindowRedrawingFlag::OVERHEAD,
-        SubWindowRedrawingFlag::DUNGEON,
-    };
+    auto &dur = DeferredUpdateRequests::get_instance();
     if (v) {
         if (player_ptr->invuln && !do_dec) {
             if (player_ptr->invuln > v) {
@@ -113,24 +109,20 @@ bool set_invuln(PlayerType *player_ptr, short v, bool do_dec)
             chg_virtue(player_ptr, Virtue::HONOUR, -2);
             chg_virtue(player_ptr, Virtue::SACRIFICE, -3);
             chg_virtue(player_ptr, Virtue::VALOUR, -5);
-            rfu.set_flag(MainWindowRedrawingFlag::MAP);
-            rfu.set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
-            rfu.set_flags(flags_swrf);
+            dur.request_monster_update_and_map_redrawing();
         }
     } else {
         if (player_ptr->invuln && !music_singing(player_ptr, MUSIC_INVULN)) {
             msg_print(_("無敵ではなくなった。", "The invulnerability wears off."));
             sound(SoundKind::BUFF_EXPIRE);
             notice = true;
-            rfu.set_flag(MainWindowRedrawingFlag::MAP);
-            rfu.set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
-            rfu.set_flags(flags_swrf);
+            dur.request_monster_update_and_map_redrawing();
             player_ptr->energy_need += ENERGY_NEED();
         }
     }
 
     player_ptr->invuln = v;
-    rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
+    dur.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
 
     if (!notice) {
         return false;
@@ -140,7 +132,7 @@ bool set_invuln(PlayerType *player_ptr, short v, bool do_dec)
         disturb(player_ptr, false, true);
     }
 
-    rfu.set_flag(StatusRecalculatingFlag::BONUS);
+    dur.set_flag(StatusRecalculatingFlag::BONUS);
     handle_stuff(player_ptr);
     return true;
 }
@@ -179,8 +171,8 @@ bool set_tim_regen(PlayerType *player_ptr, short v, bool do_dec)
     }
 
     player_ptr->tim_regen = v;
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     if (!notice) {
         return false;
     }
@@ -189,7 +181,7 @@ bool set_tim_regen(PlayerType *player_ptr, short v, bool do_dec)
         disturb(player_ptr, false, true);
     }
 
-    rfu.set_flag(StatusRecalculatingFlag::BONUS);
+    dur.set_flag(StatusRecalculatingFlag::BONUS);
     handle_stuff(player_ptr);
     return true;
 }
@@ -228,8 +220,8 @@ bool set_tim_reflect(PlayerType *player_ptr, short v, bool do_dec)
     }
 
     player_ptr->tim_reflect = v;
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     if (!notice) {
         return false;
     }
@@ -238,7 +230,7 @@ bool set_tim_reflect(PlayerType *player_ptr, short v, bool do_dec)
         disturb(player_ptr, false, true);
     }
 
-    rfu.set_flag(StatusRecalculatingFlag::BONUS);
+    dur.set_flag(StatusRecalculatingFlag::BONUS);
     handle_stuff(player_ptr);
     return true;
 }
@@ -277,8 +269,8 @@ bool set_pass_wall(PlayerType *player_ptr, short v, bool do_dec)
     }
 
     player_ptr->tim_pass_wall = v;
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     if (!notice) {
         return false;
     }
@@ -287,7 +279,7 @@ bool set_pass_wall(PlayerType *player_ptr, short v, bool do_dec)
         disturb(player_ptr, false, true);
     }
 
-    rfu.set_flag(StatusRecalculatingFlag::BONUS);
+    dur.set_flag(StatusRecalculatingFlag::BONUS);
     handle_stuff(player_ptr);
     return true;
 }
@@ -326,8 +318,8 @@ bool set_tim_emission(PlayerType *player_ptr, short v, bool do_dec)
     }
 
     player_ptr->tim_emission = v;
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     if (!notice) {
         return false;
     }
@@ -336,8 +328,8 @@ bool set_tim_emission(PlayerType *player_ptr, short v, bool do_dec)
         disturb(player_ptr, false, true);
     }
 
-    rfu.set_flag(StatusRecalculatingFlag::BONUS);
-    rfu.set_flag(StatusRecalculatingFlag::TORCH);
+    dur.set_flag(StatusRecalculatingFlag::BONUS);
+    dur.set_flag(StatusRecalculatingFlag::TORCH);
     handle_stuff(player_ptr);
     return true;
 }
@@ -375,8 +367,8 @@ bool set_tim_exorcism(PlayerType *player_ptr, short v, bool do_dec)
     }
 
     player_ptr->tim_exorcism = v;
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     if (!notice) {
         return false;
     }
@@ -385,7 +377,7 @@ bool set_tim_exorcism(PlayerType *player_ptr, short v, bool do_dec)
         disturb(player_ptr, false, true);
     }
 
-    rfu.set_flag(StatusRecalculatingFlag::BONUS);
+    dur.set_flag(StatusRecalculatingFlag::BONUS);
     handle_stuff(player_ptr);
     return true;
 }

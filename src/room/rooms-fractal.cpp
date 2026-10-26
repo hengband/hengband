@@ -44,11 +44,14 @@ bool build_type9(PlayerType *player_ptr, DungeonData *dd_ptr)
         const auto grd = 1 << (randint0(4));
 
         /* want average of about 16 */
-        const auto roug = randint1(8) * randint1(4);
+        auto roug = randint1(8);
+        roug *= randint1(4);
 
         /* about size/2 */
-        const auto cutoff = randint1(width / 4) + randint1(height / 4) +
-                            randint1(width / 4) + randint1(height / 4);
+        auto cutoff = randint1(width / 4);
+        cutoff += randint1(height / 4);
+        cutoff += randint1(width / 4);
+        cutoff += randint1(height / 4);
 
         /* make it */
         generate_hmap(floor, center->y, center->x, width, height, grd, roug, cutoff);

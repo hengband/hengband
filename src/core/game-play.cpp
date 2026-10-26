@@ -35,10 +35,9 @@
 #include "game-option/play-record-options.h"
 #include "game-option/runtime-arguments.h"
 #include "info-reader/fixed-map-parser.h"
-#include "info-reader/parse-error-types.h"
 #include "info-reader/wilderness-reader.h"
 #include "io/files-util.h"
-#include "io/input-key-acceptor.h"
+#include "io/input-context.h"
 #include "io/input-key-processor.h"
 #include "io/read-pref-file.h"
 #include "io/record-play-movie.h"
@@ -74,6 +73,7 @@
 #include "system/angband-system.h"
 #include "system/angband-version.h"
 #include "system/baseitem/baseitem-service.h"
+#include "system/deferred-update-requests.h"
 #include "system/dungeon/quest-definition.h"
 #include "system/enums/monrace/monrace-id.h"
 #include "system/floor/floor-info.h"
@@ -82,11 +82,9 @@
 #include "system/monrace/monrace-list.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "target/target-checker.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
-#include "term/z-form.h"
 #include "util/angband-files.h"
 #include "view/display-messages.h"
 #include "view/display-player.h"
@@ -94,6 +92,7 @@
 #include "wizard/wizard-special-process.h"
 #include "world/town-info-service.h"
 #include "world/world.h"
+#include <fmt/format.h>
 
 static void restore_windows(PlayerType *player_ptr)
 {
@@ -121,13 +120,7 @@ static void send_waiting_record(PlayerType *player_ptr)
         quit("");
     }
 
-    static constexpr auto flags = {
-        StatusRecalculatingFlag::BONUS,
-        StatusRecalculatingFlag::HP,
-        StatusRecalculatingFlag::MP,
-        StatusRecalculatingFlag::SPELLS,
-    };
-    RedrawingFlagsUpdater::get_instance().set_flags(flags);
+    DeferredUpdateRequests::get_instance().request_player_status_recalculation();
     update_creature(player_ptr);
     player_ptr->is_dead = true;
     auto &world = AngbandWorld::get_instance();
@@ -138,11 +131,12 @@ static void send_waiting_record(PlayerType *player_ptr)
     highscore_fd = fd_open(path, O_RDWR);
 
     /* 町名消失バグ対策(#38205)のためここで世界マップ情報を読み出す */
-    apply_wilderness_definition();
+    (void)apply_wilderness_definition();
     bool success = send_world_score(player_ptr, true);
     if (!success && !input_check_strict(player_ptr, _("スコア登録を諦めますか？", "Do you give up score registration? "), UserCheck::NO_HISTORY)) {
-        prt(_("引き続き待機します。", "standing by for future registration..."), 0, 0);
-        (void)inkey();
+        constexpr auto prompt = _("引き続き待機します。", "standing by for future registration...");
+        prt(prompt, 0, 0);
+        (void)input_key_with_context(InputKind::ANY_KEY, prompt);
     } else {
         system.set_awaiting_report_score(false);
         top_twenty(player_ptr);
@@ -160,11 +154,11 @@ static void send_waiting_record(PlayerType *player_ptr)
 static void init_random_seed(PlayerType *player_ptr, bool new_game)
 {
     auto &world = AngbandWorld::get_instance();
-    auto init_random_seed = false;
+    auto init_game_rng = false;
     if (!world.character_loaded) {
         new_game = true;
         world.character_dungeon = false;
-        init_random_seed = true;
+        init_game_rng = true;
         init_saved_floors(false);
     } else if (new_game) {
         init_saved_floors(true);
@@ -176,8 +170,14 @@ static void init_random_seed(PlayerType *player_ptr, bool new_game)
 
     // 既存のセーブデータから新規ゲームを始める場合、乱数生成器の状態はセーブデータのものが
     // 読み込まれている。固定シードを指定した時はこれを上書きしないと再現性が得られない
-    if (init_random_seed || (new_game && arg_fixed_seed)) {
+    if (init_game_rng || (new_game && arg_fixed_seed)) {
         Rand_state_init(arg_fixed_seed);
+    }
+
+    // ゲームの進行に影響しない乱数生成器はセーブデータに記録されないため、固定シードを指定した時は
+    // 既存のセーブデータを読み込んだ場合も初期化する。タイトル画面での乱数の消費に左右されないよう、ゲームの開始時に行う
+    if (arg_fixed_seed) {
+        Rand_external_state_init(arg_fixed_seed);
     }
 }
 
@@ -245,11 +245,9 @@ static void reset_world_info(PlayerType *player_ptr)
 
 static void generate_wilderness(PlayerType *player_ptr)
 {
-    apply_wilderness_definition();
+    (void)apply_wilderness_definition();
     init_flags = INIT_ONLY_BUILDINGS;
-    if (parse_fixed_map(player_ptr, TOWN_DEFINITION_LIST, 0, 0, MAX_HGT, MAX_WID) != PARSE_ERROR_NONE) {
-        quit(_("町の定義の読み込みに失敗しました", "Failed to load the town definition"));
-    }
+    load_town_map(player_ptr);
     select_floor_music(player_ptr);
 }
 
@@ -296,14 +294,14 @@ static void generate_world(PlayerType *player_ptr, bool new_game)
         return;
     }
 
-    const auto mes = format(_("%sに降り立った。", "arrived in %s."), map_name(player_ptr).data());
+    const auto mes = fmt::format(_("{}に降り立った。", "arrived in {}."), map_name(player_ptr));
     exe_write_diary(floor, DiaryKind::DESCRIPTION, 0, mes);
 }
 
 static void init_io(PlayerType *player_ptr)
 {
     term_xtra(TERM_XTRA_REACT, 0);
-    RedrawingFlagsUpdater::get_instance().fill_up_sub_flags();
+    DeferredUpdateRequests::get_instance().fill_up_sub_flags();
     handle_stuff(player_ptr);
     if (arg_force_original) {
         rogue_like_commands = false;
@@ -330,7 +328,8 @@ static void init_riding_pet(PlayerType *player_ptr, bool new_game)
     monster.max_maxhp = monster.maxhp;
     monster.hp = monrace.hit_dice.floored_expected_value();
     monster.dealt_damage = 0;
-    monster.energy_need = ENERGY_NEED() + ENERGY_NEED();
+    monster.energy_need = ENERGY_NEED();
+    monster.energy_need += ENERGY_NEED();
 }
 
 static void decide_arena_death(PlayerType *player_ptr)
@@ -361,7 +360,7 @@ static void decide_arena_death(PlayerType *player_ptr)
     player_ptr->chp = 0;
     player_ptr->chp_frac = 0;
     world.set_arena(true);
-    reset_tim_flags(player_ptr);
+    reset_arena_buffs(player_ptr);
     FloorChangeModesStore::get_instace()->set({ FloorChangeMode::SAVE_FLOORS, FloorChangeMode::RANDOM_CONNECT });
     leave_floor(player_ptr);
 }
@@ -375,7 +374,7 @@ static void process_game_turn(PlayerType *player_ptr)
     while (true) {
         process_dungeon(player_ptr, load_game);
         world.character_xtra = true;
-        handle_stuff(player_ptr);
+        handle_stuff_with_inventory_arrangement(player_ptr);
         world.character_xtra = false;
         Target::clear_last_target();
         health_track(player_ptr, 0);
@@ -421,8 +420,8 @@ void play_game(PlayerType *player_ptr, bool new_game, bool browsing_movie)
     }
 
     restore_windows(player_ptr);
-    if (!load_savedata(player_ptr, &new_game)) {
-        quit(_("セーブファイルが壊れています", "broken savefile"));
+    if (const auto result = load_savedata(player_ptr, &new_game); !result) {
+        quit(result.error());
     }
 
     extract_option_vars();

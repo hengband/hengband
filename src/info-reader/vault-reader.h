@@ -1,9 +1,11 @@
 #pragma once
 
+#include "info-reader/parse-error-types.h"
 #include <nlohmann/json_fwd.hpp>
 #include <optional>
 #include <string>
 #include <string_view>
+#include <tl/expected.hpp>
 
 struct VaultReadError {
     std::string id;
@@ -20,12 +22,12 @@ public:
     VaultReader &operator=(const VaultReader &) = delete;
     VaultReader &operator=(VaultReader &&) = delete;
 
-    int read();
+    tl::expected<void, ParseErrorType> read();
     const std::optional<VaultReadError> &error() const;
 
 private:
-    int fail(int code, std::string_view path, std::string_view reason);
-    int read_integer(std::string_view key, int &value, int minimum, int maximum);
+    tl::expected<void, ParseErrorType> fail(ParseErrorType code, std::string_view path, std::string_view reason);
+    tl::expected<void, ParseErrorType> read_integer(std::string_view key, int &value, int minimum, int maximum);
     const nlohmann::json &data;
     std::optional<VaultReadError> diagnostic;
 };

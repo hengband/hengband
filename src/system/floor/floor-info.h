@@ -32,13 +32,6 @@ constexpr auto MON_LITE_MAX = 1536;
  */
 constexpr auto VIEW_MAX = 1536;
 
-/*!
- * @brief 再描画処理用配列サイズ / Max array size of the "redraw"
- * @details 遅延再描画を適切に機能させるため、最大ビュー領域の 2倍の大きさにする.
- * ビューグリッド数の最大値は1149なのでその2倍とする.
- */
-constexpr auto REDRAW_MAX = 2298;
-
 enum class FloorBoundary {
     OUTER_WALL_EXCLUSIVE,
     OUTER_WALL_INCLUSIVE,
@@ -143,6 +136,7 @@ public:
     void reset_lite_area();
     void set_lite_at(const Pos2D &pos);
     void set_redraw_at(const Pos2D &pos);
+    void set_note_and_redraw_walls_lit_from_player_side(const Pos2D &p_pos_old, const Pos2D &p_pos_new);
     void set_view_at(const Pos2D &pos);
     void set_view();
     void set_note_and_redraw();
@@ -175,9 +169,7 @@ private:
     std::array<int, MON_LITE_MAX> mon_lite_y{};
     std::array<int, MON_LITE_MAX> mon_lite_x{};
 
-    short redraw_n = 0; //!< Array of grids for delayed visual updating
-    std::array<int, REDRAW_MAX> redraw_y{};
-    std::array<int, REDRAW_MAX> redraw_x{};
+    std::vector<Pos2D> redraw_points; //!< 遅延再描画するグリッドの座標 (CAVE_REDRAW で重複を除くので、フロアのグリッド数を超えない)
 
     static int decide_selection_count();
     static std::pair<int, int> select_floor_size_beginner();

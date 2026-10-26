@@ -7,7 +7,6 @@
 #pragma once
 
 #include "util/abstract-vector-wrapper.h"
-#include <map>
 #include <string_view>
 #include <tl/optional.hpp>
 #include <vector>
@@ -24,6 +23,7 @@ public:
     TerrainList(TerrainList &&) = delete;
     TerrainList operator=(const TerrainList &) = delete;
     TerrainList operator=(TerrainList &&) = delete;
+    ~TerrainList() override;
 
     static TerrainList &get_instance();
     TerrainType &get_terrain(short terrain_id);
@@ -44,7 +44,7 @@ private:
 
     static TerrainList instance;
     std::vector<TerrainType> terrains;
-    std::map<TerrainTag, short> tags; //!< @details リテラルで呼ばれていない地形タグ(文字列形式)もあるので残しておく.
+    std::vector<short> tags; //!< 地形タグの値を添字とした地形ID (対応する地形の無いタグは UNASSIGNED_TERRAIN_ID)
     std::vector<TerrainTag> normal_traps;
 
     std::vector<TerrainType> &get_inner_container() override
@@ -52,5 +52,8 @@ private:
         return this->terrains;
     }
 
+    static constexpr short UNASSIGNED_TERRAIN_ID = -1;
+
     tl::optional<short> search_real_terrain(std::string_view tag) const;
+    void set_terrain_id(TerrainTag tag, short terrain_id);
 };

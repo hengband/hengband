@@ -11,7 +11,6 @@
 #include "flavor/object-flavor-types.h"
 #include "floor/floor-object.h"
 #include "floor/geometry.h"
-#include "game-option/cheat-types.h"
 #include "game-option/special-options.h"
 #include "grid/grid.h"
 #include "inventory/inventory-object.h"
@@ -47,6 +46,7 @@
 #include "system/artifact/artifact-definition.h"
 #include "system/artifact/artifact-record.h"
 #include "system/baseitem/baseitem-key.h"
+#include "system/deferred-update-requests.h"
 #include "system/enums/monrace/monrace-id.h"
 #include "system/enums/terrain/terrain-characteristics.h"
 #include "system/floor/floor-info.h"
@@ -55,13 +55,13 @@
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "target/projection-path-calculator.h"
 #include "target/target-checker.h"
 #include "target/target-getter.h"
 #include "timed-effect/timed-effects.h"
 #include "tracking/lore-tracker.h"
 #include "util/bit-flags-calculator.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "wizard/wizard-messages.h"
 
@@ -432,7 +432,7 @@ static MULTIPLY calc_shot_damage_with_slay(
 
         if ((flags.has(TR_FORCE_WEAPON)) && (player_ptr->csp > (player_ptr->msp / 30))) {
             player_ptr->csp -= (1 + (player_ptr->msp / 30));
-            RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::MP);
+            DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::MP);
             mult = mult * 5 / 2;
         }
         break;
@@ -581,7 +581,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
     /* Sniper - Repeat shooting when double shots */
     auto &tracker = LoreTracker::get_instance();
     for (auto i = 0; i < ((snipe_type == SP_DOUBLE) ? 2 : 1); i++) {
-        // 1射目の効果でアイテムの削除や並べ替えが起きると番号が変わるため、同じ実体を探し直す。
+        // 1射目の効果でアイテムが削除されると番号が変わるため、同じ実体を探し直す。
         const auto current_i_idx = find_current_i_idx(player_ptr, is_inventory, ammo);
         if (!current_i_idx) {
             break;
@@ -634,7 +634,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
                         StatusRecalculatingFlag::FLOW,
                         StatusRecalculatingFlag::MONSTER_LITE,
                     };
-                    RedrawingFlagsUpdater::get_instance().set_flags(flags);
+                    DeferredUpdateRequests::get_instance().set_flags(flags);
 
                     /* Destroy the wall */
                     cave_alter_feat(player_ptr, pos_impact.y, pos_impact.x, TerrainCharacteristics::STONE);
@@ -745,7 +745,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
                     /* Handle unseen monster */
                     if (!visible) {
                         /* Invisible monster */
-                        msg_format(_("%sが敵を捕捉した。", "The %s finds a mark."), item_name.data());
+                        msg_print(_("{}が敵を捕捉した。", "The {} finds a mark."), item_name);
                     }
 
                     /* Handle visible monster */
@@ -753,7 +753,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
                         /* Get "the monster" or "it" */
                         const auto m_name = monster_desc(player_ptr, monster, 0);
 
-                        msg_format(_("%sが%sに命中した。", "The %s hits %s."), item_name.data(), m_name.data());
+                        msg_print(_("{}が{}に命中した。", "The {} hits {}."), item_name, m_name);
 
                         if (monster.ml) {
                             if (!player_ptr->effects()->hallucination().is_active()) {
@@ -774,7 +774,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
 
                             tdam = monster.hp + 1;
                             base_dam = tdam;
-                            msg_format(_("%sの急所に突き刺さった！", "Your shot hit a fatal spot of %s!"), m_name.data());
+                            msg_print(_("{}の急所に突き刺さった！", "Your shot hit a fatal spot of {}!"), m_name);
                         } else {
                             if (no_instantly_death) {
                                 monrace.r_resistance_flags.set(MonsterResistanceType::NO_INSTANTLY_DEATH);
@@ -799,8 +799,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
                         tdam = mon_damage_mod(player_ptr, monster, tdam, false);
                     }
 
-                    msg_format_wizard(player_ptr, CHEAT_MONSTER, _("%dのダメージを与えた。(残りHP %d/%d(%d))", "You do %d damage. (left HP %d/%d(%d))"), tdam,
-                        monster.hp - tdam, monster.maxhp, monster.max_maxhp);
+                    msg_print_wizard_damage(player_ptr, monster, tdam);
 
                     /* Sniper */
                     if (snipe_type == SP_EXPLODE) {
@@ -830,7 +829,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
                         /* STICK TO */
                         if (fire_item.is_fixed_artifact() && (sniper_concent == 0)) {
                             stick_to = true;
-                            msg_format(_("%sは%sに突き刺さった！", "%s^ is stuck in %s!"), item_name.data(), m_name.data());
+                            msg_print(_("{}は{}に突き刺さった！", "{} is stuck in {}!"), str_upcase_first(item_name), m_name);
                         }
 
                         const auto pain_message = monster.get_pain_message(m_name, tdam);
@@ -845,7 +844,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
 
                         if (fear && monster.ml) {
                             sound(SoundKind::FLEE);
-                            msg_format(_("%s^は恐怖して逃げ出した！", "%s^ flees in terror!"), m_name.data());
+                            msg_print(_("{}は恐怖して逃げ出した！", "{} flees in terror!"), str_upcase_first(m_name));
                         }
 
                         monster.set_target(player_ptr->get_position());
@@ -912,7 +911,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
             const auto m_idx = floor.get_grid(pos_impact).m_idx;
             const auto item_idx = floor.pop_empty_index_item();
             if (item_idx == 0) {
-                msg_format(_("%sはどこかへ行った。", "The %s went somewhere."), item_name.data());
+                msg_print(_("{}はどこかへ行った。", "The {} went somewhere."), item_name);
                 if (fire_item.is_fixed_artifact()) {
                     ArtifactRecords::get_instance().set_generated(j_ptr->fa_id, false);
                 }

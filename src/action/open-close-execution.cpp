@@ -20,6 +20,7 @@
 #include "specific-object/chest.h"
 #include "status/bad-status-setter.h"
 #include "status/experience.h"
+#include "system/deferred-update-requests.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
@@ -44,8 +45,8 @@ bool exe_open(PlayerType *player_ptr, POSITION y, POSITION x)
     auto &terrain = grid.get_terrain();
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
     if (terrain.flags.has_not(TerrainCharacteristics::OPEN)) {
-        constexpr auto fmt = _("%sはがっちりと閉じられているようだ。", "The %s appears to be stuck.");
-        msg_format(fmt, grid.get_terrain(TerrainKind::MIMIC).name.data());
+        constexpr auto fmt = _("{}はがっちりと閉じられているようだ。", "The {} appears to be stuck.");
+        msg_print(fmt, grid.get_terrain(TerrainKind::MIMIC).name);
         return false;
     }
 
@@ -153,8 +154,8 @@ bool easy_open_door(PlayerType *player_ptr, const Pos2D &pos)
     const auto &grid = floor.get_grid(pos);
     const auto &terrain = grid.get_terrain();
     if (terrain.flags.has_not(TerrainCharacteristics::OPEN)) {
-        constexpr auto fmt = _("%sはがっちりと閉じられているようだ。", "The %s appears to be stuck.");
-        msg_format(fmt, grid.get_terrain(TerrainKind::MIMIC).name.data());
+        constexpr auto fmt = _("{}はがっちりと閉じられているようだ。", "The {} appears to be stuck.");
+        msg_print(fmt, grid.get_terrain(TerrainKind::MIMIC).name);
     } else if (terrain.door_power) {
         auto power_disarm = player_ptr->skill_dis;
         const auto effects = player_ptr->effects();
@@ -237,6 +238,7 @@ bool exe_disarm_chest(PlayerType *player_ptr, POSITION y, POSITION x, OBJECT_IDX
         msg_print(_("箱に仕掛けられていたトラップを解除した。", "You have disarmed the chest."));
         gain_exp(player_ptr, o_ptr->pval);
         o_ptr->pval = (0 - o_ptr->pval);
+        DeferredUpdateRequests::get_instance().request_floor_item_lists_redrawing();
     } else if ((i > 5) && (randint1(i) > 5)) {
         more = true;
         if (flush_failure) {
@@ -293,7 +295,7 @@ bool exe_disarm(PlayerType *player_ptr, POSITION y, POSITION x, const Direction 
 
     auto more = false;
     if (evaluate_percent(j)) {
-        msg_format(_("%sを解除した。", "You have disarmed the %s."), name.data());
+        msg_print(_("{}を解除した。", "You have disarmed the {}."), name);
         gain_exp(player_ptr, power);
         cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::DISARM);
         exe_movement(player_ptr, dir, easy_disarm, false);
@@ -302,10 +304,10 @@ bool exe_disarm(PlayerType *player_ptr, POSITION y, POSITION x, const Direction 
             flush();
         }
 
-        msg_format(_("%sの解除に失敗した。", "You failed to disarm the %s."), name.data());
+        msg_print(_("{}の解除に失敗した。", "You failed to disarm the {}."), name);
         more = true;
     } else {
-        msg_format(_("%sを作動させてしまった！", "You set off the %s!"), name.data());
+        msg_print(_("{}を作動させてしまった！", "You set off the {}!"), name);
         exe_movement(player_ptr, dir, easy_disarm, false);
     }
 
@@ -336,7 +338,7 @@ bool exe_bash(PlayerType *player_ptr, POSITION y, POSITION x, const Direction &d
     int power = terrain.door_power;
     const auto &name = grid.get_terrain(TerrainKind::MIMIC).name;
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
-    msg_format(_("%sに体当たりをした！", "You smash into the %s!"), name.data());
+    msg_print(_("{}に体当たりをした！", "You smash into the {}!"), name);
     power = (bash - (power * 10));
     if (PlayerClass(player_ptr).equals(PlayerClassType::BERSERKER)) {
         power *= 2;
@@ -348,7 +350,7 @@ bool exe_bash(PlayerType *player_ptr, POSITION y, POSITION x, const Direction &d
 
     auto more = false;
     if (evaluate_percent(power)) {
-        msg_format(_("%sを壊した！", "The %s crashes open!"), name.data());
+        msg_print(_("{}を壊した！", "The {} crashes open!"), name);
         sound(terrain.flags.has(TerrainCharacteristics::GLASS) ? SoundKind::GLASS : SoundKind::OPENDOOR);
         const auto &dungeon = floor.get_dungeon_definition();
         if (one_in_(2) || (dungeon.convert_terrain_id(grid.feat, TerrainCharacteristics::OPEN) == grid.feat) || terrain.flags.has(TerrainCharacteristics::GLASS)) {
@@ -359,7 +361,7 @@ bool exe_bash(PlayerType *player_ptr, POSITION y, POSITION x, const Direction &d
 
         exe_movement(player_ptr, dir, false, false);
     } else if (evaluate_percent(adj_dex_safe[player_ptr->stat_index[A_DEX]] + player_ptr->lev)) {
-        msg_format(_("この%sは頑丈だ。", "The %s holds firm."), name.data());
+        msg_print(_("この{}は頑丈だ。", "The {} holds firm."), name);
         more = true;
     } else {
         msg_print(_("体のバランスをくずしてしまった。", "You are off-balance."));

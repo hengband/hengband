@@ -1,12 +1,12 @@
 #pragma once
 
 #include "system/angband.h"
+#include "system/terrain/terrain-definition.h"
 #include "view/display-symbol.h"
-#include <map>
 #include <string>
 #include <vector>
 
-#define FILE_NAME_SIZE 1024
+constexpr auto FILE_NAME_SIZE = 1024;
 
 class DisplaySymbol;
 class DisplaySymbolsClipboard {
@@ -20,13 +20,13 @@ public:
     static DisplaySymbolsClipboard &get_instance();
 
     DisplaySymbol symbol;
-    std::map<int, DisplaySymbol> symbols;
+    TerrainSymbols symbols;
 
     void reset_symbols();
-    void set_symbol(const std::map<int, DisplaySymbol> &symbol_configs);
+    void set_symbol(const TerrainSymbols &symbol_configs);
 
 private:
-    DisplaySymbolsClipboard();
+    DisplaySymbolsClipboard() = default;
     static DisplaySymbolsClipboard instance;
 };
 

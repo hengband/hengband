@@ -36,11 +36,6 @@ bool BaseitemAllocationEntry::is_gold() const
     return this->get_bi_key().tval() == ItemKindType::GOLD;
 }
 
-int BaseitemAllocationEntry::get_baseitem_level() const
-{
-    return this->get_baseitem().level;
-}
-
 bool BaseitemAllocationEntry::order_level(const BaseitemAllocationEntry &other) const
 {
     return this->level < other.level;
@@ -65,10 +60,11 @@ BaseitemAllocationTable &BaseitemAllocationTable::get_instance()
 
 void BaseitemAllocationTable::initialize()
 {
-    std::array<short, MAX_DEPTH> num{};
-    auto allocation_size = 0;
+    std::array<size_t, MAX_DEPTH> num{};
+    size_t allocation_size = 0;
     const auto &baseitems = BaseitemList::get_instance();
-    for (const auto &baseitem : baseitems) {
+    for (const auto bi_id : baseitems.collect_valid_bi_ids()) {
+        const auto &baseitem = baseitems.get_baseitem(bi_id);
         for (const auto &[level, chance] : baseitem.alloc_tables) {
             if (chance != 0) {
                 allocation_size++;
@@ -86,8 +82,8 @@ void BaseitemAllocationTable::initialize()
     }
 
     this->entries = std::vector<BaseitemAllocationEntry>(allocation_size);
-    std::array<short, MAX_DEPTH> aux{};
-    for (short bi_id : baseitems.collect_valid_bi_ids()) {
+    std::array<size_t, MAX_DEPTH> aux{};
+    for (const auto bi_id : baseitems.collect_valid_bi_ids()) {
         const auto &baseitem = baseitems.get_baseitem(bi_id);
         for (const auto &[level, chance] : baseitem.alloc_tables) {
             if (chance == 0) {

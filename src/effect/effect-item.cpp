@@ -15,6 +15,7 @@
 #include "spell-kind/spells-perception.h"
 #include "sv-definition/sv-other-types.h"
 #include "sv-definition/sv-scroll-types.h"
+#include "system/deferred-update-requests.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/item/item-entity.h"
@@ -209,6 +210,7 @@ bool affect_item(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POSITI
 
             item.pval = (0 - item.pval);
             item.mark_as_known();
+            DeferredUpdateRequests::get_instance().request_floor_item_lists_redrawing();
             if (known && item.marked.has(OmType::FOUND)) {
                 msg_print(_("カチッと音がした！", "Click!"));
                 is_item_affected = true;
@@ -262,14 +264,18 @@ bool affect_item(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POSITI
 
         if ((is_fixed_or_random_artifact || ignore)) {
             if (known && item.marked.has(OmType::FOUND)) {
-                msg_format(_("%sは影響を受けない！", (plural ? "The %s are unaffected!" : "The %s is unaffected!")), item_name.data());
+#ifdef JP
+                msg_print("{}は影響を受けない！", item_name);
+#else
+                msg_print("The {} {} unaffected!", item_name, plural ? "are" : "is");
+#endif
             }
 
             continue;
         }
 
         if (known && item.marked.has(OmType::FOUND) && note_kill) {
-            msg_format(_("%sは%s", "The %s%s"), item_name.data(), note_kill);
+            msg_print(_("{}は{}", "The {}{}"), item_name, note_kill);
         }
 
         delete_i_idx_list.push_back(this_o_idx);

@@ -14,9 +14,9 @@
 #include "player/special-defense-types.h"
 #include "specific-object/torch.h"
 #include "status/action-setter.h"
+#include "system/deferred-update-requests.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "world/world.h"
 
 ThrowCommand::ThrowCommand(PlayerType *player_ptr)
@@ -64,7 +64,7 @@ bool ThrowCommand::do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
     ote.reflect_inventory_by_throw();
     if (ote.i_idx >= INVEN_MAIN_HAND) {
         ote.equiped_item = true;
-        RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::EQUIPPY);
+        DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::EQUIPPY);
     }
 
     ote.set_class_specific_throw_params();

@@ -4,6 +4,7 @@
 #include "floor/geometry.h"
 #include "game-option/input-options.h"
 #include "io/command-repeater.h"
+#include "io/input-context.h"
 #include "io/input-key-requester.h"
 #include "main/sound-of-music.h"
 #include "monster/monster-describer.h"
@@ -17,10 +18,24 @@
 #include "target/target-types.h"
 #include "timed-effect/timed-effects.h"
 #include "util/finalizer.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
+#include <fmt/format.h>
 #include <string>
 #include <string_view>
+#include <tl/optional.hpp>
 #include <unordered_set>
+
+/*!
+ * @brief 方向の入力の文脈を公開して、1文字の入力を受け付ける
+ * @param prompt プロンプト
+ * @param details 方向の入力の詳細
+ * @return 入力した文字。ESCで中断したらnullopt
+ */
+static tl::optional<char> input_direction(std::string_view prompt, const DirectionInputDetails &details)
+{
+    return input_command_with_context({ InputKind::DIRECTION, std::string(prompt), details });
+}
 
 /*!
  * @brief 上下左右および斜め方向、またはターゲットを指定する
@@ -53,12 +68,14 @@ Direction get_aim_dir(PlayerType *player_ptr, bool enable_repeat)
     }
 
     while (!dir) {
+        const auto has_target = target.is_okay();
         const auto prompt =
-            target.is_okay()
+            has_target
                 ? _("方向 ('5'でターゲットへ, '*'でターゲット再選択, ESCで中断)? ", "Direction ('5' for target, '*' to re-target, Escape to cancel)? ")
                 : _("方向 ('*'でターゲット選択, ESCで中断)? ", "Direction ('*' to choose a target, Escape to cancel)? ");
 
-        const auto command_opt = input_command(prompt);
+        const DirectionInputDetails details{ .can_choose_target = true, .has_target = has_target, .at_feet = false };
+        const auto command_opt = input_direction(prompt, details);
         if (!command_opt) {
             project_length = 0;
             return Direction::none();
@@ -116,8 +133,9 @@ Direction get_direction(PlayerType *player_ptr)
     }
 
     constexpr auto prompt = _("方向 (ESCで中断)? ", "Direction (Escape to cancel)? ");
+    constexpr DirectionInputDetails details{ .can_choose_target = false, .has_target = false, .at_feet = false };
     while (!dir) {
-        const auto command = input_command(prompt);
+        const auto command = input_direction(prompt, details);
         if (!command) {
             return Direction::none();
         }
@@ -148,10 +166,12 @@ Direction get_direction(PlayerType *player_ptr)
 
     const auto &monster = player_ptr->current_floor_ptr->m_list[player_ptr->riding];
     const auto m_name = monster_desc(player_ptr, monster, 0);
-    const auto fmt = monster.is_confused()
-                         ? _("%sは混乱している。", "%s^ is confused.")
-                         : _("%sは思い通りに動いてくれない。", "You cannot control %s.");
-    msg_format(fmt, m_name.data());
+    if (monster.is_confused()) {
+        msg_print(_("{}は混乱している。", "{} is confused."), str_upcase_first(m_name));
+    } else {
+        msg_print(_("{}は思い通りに動いてくれない。", "You cannot control {}."), m_name);
+    }
+
     return dir;
 }
 
@@ -175,8 +195,9 @@ Direction get_rep_dir(PlayerType *player_ptr, bool under)
 
     const auto prompt = under ? _("方向 ('.'足元, ESCで中断)? ", "Direction ('.' at feet, Escape to cancel)? ")
                               : _("方向 (ESCで中断)? ", "Direction (Escape to cancel)? ");
+    const DirectionInputDetails details{ .can_choose_target = false, .has_target = false, .at_feet = under };
     while (!dir) {
-        const auto command = input_command(prompt);
+        const auto command = input_direction(prompt, details);
         if (!command) {
             return Direction::none();
         }
@@ -223,9 +244,9 @@ Direction get_rep_dir(PlayerType *player_ptr, bool under)
             const auto &monster = player_ptr->current_floor_ptr->m_list[player_ptr->riding];
             const auto m_name = monster_desc(player_ptr, monster, 0);
             if (monster.is_confused()) {
-                msg_format(_("%sは混乱している。", "%s^ is confused."), m_name.data());
+                msg_print(_("{}は混乱している。", "{} is confused."), str_upcase_first(m_name));
             } else {
-                msg_format(_("%sは思い通りに動いてくれない。", "You cannot control %s."), m_name.data());
+                msg_print(_("{}は思い通りに動いてくれない。", "You cannot control {}."), m_name);
             }
         }
     }

@@ -6,6 +6,7 @@
  */
 #include "player-base/player-class.h"
 #include "cmd-io/diary-subtitle-table.h"
+#include "core/stuff-handler.h"
 #include "inventory/inventory-slot-types.h"
 #include "mind/mind-elementalist.h"
 #include "player-info/bard-data-type.h"
@@ -26,9 +27,9 @@
 #include "player/special-defense-types.h"
 #include "realm/realm-types.h"
 #include "status/action-setter.h"
+#include "system/deferred-update-requests.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 
@@ -395,17 +396,17 @@ bool PlayerClass::lose_balance()
     }
 
     this->set_samurai_stance(SamuraiStanceType::NONE);
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &dur = DeferredUpdateRequests::get_instance();
     static constexpr auto flags_srf = {
         StatusRecalculatingFlag::BONUS,
         StatusRecalculatingFlag::MONSTER_STATUSES,
     };
-    rfu.set_flags(flags_srf);
+    dur.set_flags(flags_srf);
     static constexpr auto flags_mwrf = {
         MainWindowRedrawingFlag::ACTION,
         MainWindowRedrawingFlag::TIMED_EFFECT,
     };
-    rfu.set_flags(flags_mwrf);
+    dur.set_flags(flags_mwrf);
     this->player_ptr->action = ACTION_NONE;
     return true;
 }
@@ -429,6 +430,8 @@ bool PlayerClass::samurai_stance_is(SamuraiStanceType stance) const
  * @brief 剣術家の型を崩す
  *
  * @param stance_list 崩す型を指定する。取っている型が指定された型に含まれない場合は崩さない。
+ * @details 型は能力値や攻撃回数などに影響する。型を崩した後の処理 (直後の攻撃やアイテムの使用など) が
+ * 型を崩した後の値を使えるよう、崩したときはその場で再計算する。
  */
 void PlayerClass::break_samurai_stance(std::initializer_list<SamuraiStanceType> stance_list)
 {
@@ -441,6 +444,7 @@ void PlayerClass::break_samurai_stance(std::initializer_list<SamuraiStanceType> 
         if (samurai_data->stance == stance) {
             set_action(player_ptr, ACTION_NONE);
             samurai_data->stance = SamuraiStanceType::NONE;
+            handle_stuff(player_ptr);
             break;
         }
     }

@@ -22,6 +22,7 @@
 #include "store/store-owners.h"
 #include "store/store-screen.h"
 #include "store/store.h"
+#include "system/deferred-update-requests.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "util/int-char-converter.h"
@@ -41,11 +42,10 @@
  * @param o_ptr オブジェクトの構造体参照ポインタ
  * @return プレイヤーが購入するなら購入価格、購入しないならnullopt
  */
-static tl::optional<PRICE> prompt_to_buy(PlayerType *player_ptr, const Store &store, ItemEntity *o_ptr)
+static tl::optional<int64_t> prompt_to_buy(PlayerType *player_ptr, const Store &store, ItemEntity *o_ptr)
 {
-    auto price_ask = price_item(player_ptr, o_ptr->calc_price(), store, StoreTradeType::PLAYER_BUYS);
-
-    price_ask *= o_ptr->number;
+    const auto unit_price = price_item(player_ptr, o_ptr->calc_price(), store, StoreTradeType::PLAYER_BUYS);
+    const auto price_ask = int64_t{ unit_price } * o_ptr->number;
     const auto s = fmt::format(_("買値 ${} で買いますか？", "Do you buy for ${}? "), price_ask);
     if (input_check_strict(player_ptr, s, UserCheck::DEFAULT_Y)) {
         return price_ask;
@@ -94,7 +94,7 @@ static void take_item_from_home(PlayerType *player_ptr, StoreScreen &screen, Ite
     const auto item_new = store_item_to_inventory(player_ptr, &item_inventory);
     const auto item_name = describe_flavor(player_ptr, *player_ptr->inventory[item_new], 0);
     handle_stuff(player_ptr);
-    msg_format(_("%s(%c)を取った。", "You have %s (%c)."), item_name.data(), index_to_label(item_new));
+    msg_print(_("{}({:c})を取った。", "You have {} ({:c})."), item_name, index_to_label(item_new));
 
     const auto stock_num = store.stock_num;
     store.increase_item(i_idx, -amt);
@@ -128,7 +128,7 @@ static void shuffle_store(const StoreScreen &screen)
     store_shuffle(screen.get_town_index(), store.get_sale_type());
     prt("", 3, 0);
     const auto &owner = store.get_owner();
-    put_str(format("%s (%s)", owner.owner_name, race_info[enum2i(owner.owner_race)].title.data()), 3, 10);
+    put_str(fmt::format("{} ({})", owner.owner_name, race_info[enum2i(owner.owner_race)].title), 3, 10);
     prt(fmt::format("{} ({})", screen.get_name(), owner.max_cost), 3, 50);
 }
 
@@ -201,7 +201,7 @@ void store_purchase(PlayerType *player_ptr, StoreScreen &screen)
     const auto best = price_item(player_ptr, item.calc_price(), store, StoreTradeType::PLAYER_BUYS);
     if (item_store.number > 1) {
         if (store_num != StoreSaleType::HOME) {
-            msg_format(_("一つにつき $%dです。", "That costs %d gold per item."), best);
+            msg_print(_("一つにつき ${}です。", "That costs {} gold per item."), best);
         }
 
         amt = input_quantity(item_store.number);
@@ -233,7 +233,7 @@ void store_purchase(PlayerType *player_ptr, StoreScreen &screen)
     const auto item_index = *item_num_opt;
     const auto item_index_char = (item_index > 25) ? toupper(I2A(item_index - 26)) : I2A(item_index);
 
-    msg_format(_("%s(%c)を購入する。", "Buying %s (%c)."), purchased_item_name.data(), item_index_char);
+    msg_print(_("{}({:c})を購入する。", "Buying {} ({:c})."), purchased_item_name, item_index_char);
     msg_erase();
 
     const auto &world = AngbandWorld::get_instance();
@@ -245,13 +245,14 @@ void store_purchase(PlayerType *player_ptr, StoreScreen &screen)
         return;
     }
 
-    const auto price = *res;
+    const auto total_price = *res;
 
-    if (player_ptr->au < price) {
+    if (player_ptr->au < total_price) {
         msg_print(_("お金が足りません。", "You do not have enough gold."));
         return;
     }
 
+    const auto price = static_cast<PRICE>(total_price);
     store_owner_says_comment(price, store_num);
     if (store_num == StoreSaleType::BLACK) {
         chg_virtue(player_ptr, Virtue::JUSTICE, -1);
@@ -283,13 +284,15 @@ void store_purchase(PlayerType *player_ptr, StoreScreen &screen)
     item.reset_identification_flag(IdentificationFlag::STORE);
 
     const auto idx = find_autopick_list(player_ptr, &item);
-    auto_inscribe_item(&item, idx);
+    if (auto_inscribe_item(item, idx)) {
+        DeferredUpdateRequests::get_instance().request_inscription_change_updates();
+    }
 
     item_new = store_item_to_inventory(player_ptr, &item);
     handle_stuff(player_ptr);
 
     const auto got_item_name = describe_flavor(player_ptr, *player_ptr->inventory[item_new], 0);
-    msg_format(_("%s(%c)を手に入れた。", "You have %s (%c)."), got_item_name.data(), index_to_label(item_new));
+    msg_print(_("{}({:c})を手に入れた。", "You have {} ({:c})."), got_item_name, index_to_label(item_new));
 
     if (item_store.is_wand_rod()) {
         item_store.pval -= item.pval;

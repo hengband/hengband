@@ -20,6 +20,96 @@
 #include "term/screen-processor.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
+#include <cassert>
+#include <fmt/format.h>
+
+/*!
+ * @brief 知識メニューの一覧を開く
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param category 一覧の種類
+ * @param need_redraw 閉じた後に画面全体を描き直す必要があるか (一覧によっては true にする)
+ * @details 一覧を開いている間だけ、制御サーバの state に一覧の情報を載せる。
+ * 賞金首の一覧は、町が 1 つだけのときは無いので開かない。
+ */
+static void display_knowledge(PlayerType *player_ptr, BotKnowledgeCategory category, bool &need_redraw)
+{
+    assert(category != BotKnowledgeCategory::MAX);
+    if ((category == BotKnowledgeCategory::BOUNTY) && vanilla_town) {
+        return;
+    }
+
+    const BotScreenScope bot_screen(make_bot_knowledge_screen(category));
+    output_bot_json_screen_snapshot(player_ptr);
+    switch (category) {
+    case BotKnowledgeCategory::ARTIFACTS_KNOWN:
+        do_cmd_knowledge_artifacts(player_ptr, ArtifactKnowledgeMode::KNOWN);
+        break;
+    case BotKnowledgeCategory::ARTIFACTS_IDENTIFIED:
+        do_cmd_knowledge_artifacts(player_ptr, ArtifactKnowledgeMode::IDENTIFIED);
+        break;
+    case BotKnowledgeCategory::OBJECTS_KNOWN:
+        do_cmd_knowledge_objects(player_ptr, &need_redraw, false, -1);
+        break;
+    case BotKnowledgeCategory::UNIQUES_ALIVE:
+        do_cmd_knowledge_uniques(player_ptr, true);
+        break;
+    case BotKnowledgeCategory::UNIQUES_DEAD:
+        do_cmd_knowledge_uniques(player_ptr, false);
+        break;
+    case BotKnowledgeCategory::MONSTERS:
+        do_cmd_knowledge_monsters(player_ptr, &need_redraw, false);
+        break;
+    case BotKnowledgeCategory::KILL_COUNT:
+        do_cmd_knowledge_kill_count(player_ptr);
+        break;
+    case BotKnowledgeCategory::BOUNTY:
+        do_cmd_knowledge_bounty(player_ptr->name);
+        break;
+    case BotKnowledgeCategory::HOME:
+        do_cmd_knowledge_home(player_ptr);
+        break;
+    case BotKnowledgeCategory::EQUIP_RESISTANCES:
+        do_cmd_knowledge_inventory(player_ptr);
+        break;
+    case BotKnowledgeCategory::FEATURES: {
+        IDX lighting_level = F_LIT_STANDARD;
+        do_cmd_knowledge_features(&need_redraw, false, -1, &lighting_level);
+        break;
+    }
+    case BotKnowledgeCategory::SELF_INFO:
+        do_cmd_knowledge_stat(player_ptr);
+        break;
+    case BotKnowledgeCategory::MUTATIONS:
+        do_cmd_knowledge_mutations(player_ptr);
+        break;
+    case BotKnowledgeCategory::WEAPON_EXP:
+        do_cmd_knowledge_weapon_exp(player_ptr);
+        break;
+    case BotKnowledgeCategory::SPELL_EXP:
+        do_cmd_knowledge_spell_exp(player_ptr);
+        break;
+    case BotKnowledgeCategory::SKILL_EXP:
+        do_cmd_knowledge_skill_exp(player_ptr);
+        break;
+    case BotKnowledgeCategory::VIRTUES:
+        do_cmd_knowledge_virtues(player_ptr);
+        break;
+    case BotKnowledgeCategory::DUNGEONS:
+        do_cmd_knowledge_dungeon(player_ptr);
+        break;
+    case BotKnowledgeCategory::QUESTS:
+        do_cmd_knowledge_quests(player_ptr);
+        break;
+    case BotKnowledgeCategory::PETS:
+        do_cmd_knowledge_pets(player_ptr);
+        break;
+    case BotKnowledgeCategory::AUTOPICK:
+        do_cmd_knowledge_autopick(player_ptr);
+        break;
+    case BotKnowledgeCategory::MAX:
+        break;
+    }
+}
 
 /*
  * Interact with "knowledge"
@@ -32,7 +122,7 @@ void do_cmd_knowledge(PlayerType *player_ptr)
     TermCenteredOffsetSetter tcos(MAIN_TERM_MIN_COLS, MAIN_TERM_MIN_ROWS);
     while (true) {
         term_clear();
-        prt(format(_("%d/2 ページ", "page %d/2"), (p + 1)), 2, 65);
+        prt(fmt::format(_("{}/2 ページ", "page {}/2"), (p + 1)), 2, 65);
         prt(_("現在の知識を確認する", "Display current knowledge"), 3, 0);
         if (p == 0) {
             prt(_("(1) 既知の伝説のアイテム                 の一覧", "(1) Display known artifacts"), 6, 5);
@@ -71,102 +161,12 @@ void do_cmd_knowledge(PlayerType *player_ptr)
         if (i == ESCAPE) {
             break;
         }
-        switch (i) {
-        case ' ': /* Page change */
-        case '-':
+
+        if ((i == ' ') || (i == '-')) {
             p = 1 - p;
-            break;
-        case '1': /* Artifacts */
-            output_bot_json_knowledge_snapshot(player_ptr, BotKnowledgeCategory::ARTIFACTS_KNOWN);
-            do_cmd_knowledge_artifacts(player_ptr, ArtifactKnowledgeMode::KNOWN);
-            break;
-        case '2': /* Artifacts */
-            output_bot_json_knowledge_snapshot(player_ptr, BotKnowledgeCategory::ARTIFACTS_IDENTIFIED);
-            do_cmd_knowledge_artifacts(player_ptr, ArtifactKnowledgeMode::IDENTIFIED);
-            break;
-        case '3': /* Objects */
-            output_bot_json_knowledge_snapshot(player_ptr, BotKnowledgeCategory::OBJECTS_KNOWN);
-            do_cmd_knowledge_objects(player_ptr, &need_redraw, false, -1);
-            break;
-        case '4': /* Uniques */
-            output_bot_json_knowledge_snapshot(player_ptr, BotKnowledgeCategory::UNIQUES_ALIVE);
-            do_cmd_knowledge_uniques(player_ptr, true);
-            break;
-        case '5': /* Uniques */
-            output_bot_json_knowledge_snapshot(player_ptr, BotKnowledgeCategory::UNIQUES_DEAD);
-            do_cmd_knowledge_uniques(player_ptr, false);
-            break;
-        case '6': /* Monsters */
-            output_bot_json_knowledge_snapshot(player_ptr, BotKnowledgeCategory::MONSTERS);
-            do_cmd_knowledge_monsters(player_ptr, &need_redraw, false);
-            break;
-        case '7': /* Kill count  */
-            output_bot_json_knowledge_snapshot(player_ptr, BotKnowledgeCategory::KILL_COUNT);
-            do_cmd_knowledge_kill_count(player_ptr);
-            break;
-        case '8': /* wanted */
-            if (!vanilla_town) {
-                output_bot_json_knowledge_snapshot(player_ptr, BotKnowledgeCategory::BOUNTY);
-                do_cmd_knowledge_bounty(player_ptr->name);
-            }
-            break;
-        case '9': /* Home */
-            output_bot_json_knowledge_snapshot(player_ptr, BotKnowledgeCategory::HOME);
-            do_cmd_knowledge_home(player_ptr);
-            break;
-        case '0': /* Resist list */
-            output_bot_json_knowledge_snapshot(player_ptr, BotKnowledgeCategory::EQUIP_RESISTANCES);
-            do_cmd_knowledge_inventory(player_ptr);
-            break;
-        /* Next page */
-        case 'a': /* Feature list */
-        {
-            IDX lighting_level = F_LIT_STANDARD;
-            output_bot_json_knowledge_snapshot(player_ptr, BotKnowledgeCategory::FEATURES);
-            do_cmd_knowledge_features(&need_redraw, false, -1, &lighting_level);
-            break;
-        }
-        case 'b': /* Max stat */
-            output_bot_json_knowledge_snapshot(player_ptr, BotKnowledgeCategory::SELF_INFO);
-            do_cmd_knowledge_stat(player_ptr);
-            break;
-        case 'c': /* Mutations */
-            output_bot_json_knowledge_snapshot(player_ptr, BotKnowledgeCategory::MUTATIONS);
-            do_cmd_knowledge_mutations(player_ptr);
-            break;
-        case 'd': /* weapon-exp */
-            output_bot_json_knowledge_snapshot(player_ptr, BotKnowledgeCategory::WEAPON_EXP);
-            do_cmd_knowledge_weapon_exp(player_ptr);
-            break;
-        case 'e': /* spell-exp */
-            output_bot_json_knowledge_snapshot(player_ptr, BotKnowledgeCategory::SPELL_EXP);
-            do_cmd_knowledge_spell_exp(player_ptr);
-            break;
-        case 'f': /* skill-exp */
-            output_bot_json_knowledge_snapshot(player_ptr, BotKnowledgeCategory::SKILL_EXP);
-            do_cmd_knowledge_skill_exp(player_ptr);
-            break;
-        case 'g': /* Virtues */
-            output_bot_json_knowledge_snapshot(player_ptr, BotKnowledgeCategory::VIRTUES);
-            do_cmd_knowledge_virtues(player_ptr);
-            break;
-        case 'h': /* Dungeon */
-            output_bot_json_knowledge_snapshot(player_ptr, BotKnowledgeCategory::DUNGEONS);
-            do_cmd_knowledge_dungeon(player_ptr);
-            break;
-        case 'i': /* Quests */
-            output_bot_json_knowledge_snapshot(player_ptr, BotKnowledgeCategory::QUESTS);
-            do_cmd_knowledge_quests(player_ptr);
-            break;
-        case 'j': /* Pets */
-            output_bot_json_knowledge_snapshot(player_ptr, BotKnowledgeCategory::PETS);
-            do_cmd_knowledge_pets(player_ptr);
-            break;
-        case 'k': /* Autopick */
-            output_bot_json_knowledge_snapshot(player_ptr, BotKnowledgeCategory::AUTOPICK);
-            do_cmd_knowledge_autopick(player_ptr);
-            break;
-        default: /* Unknown option */
+        } else if (const auto category = find_bot_knowledge_category(i)) {
+            display_knowledge(player_ptr, *category, need_redraw);
+        } else {
             bell();
         }
 

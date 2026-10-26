@@ -12,6 +12,7 @@
 #include "system/artifact/artifact-list.h"
 #include "system/baseitem/baseitem-definition.h"
 #include "system/baseitem/baseitem-list.h"
+#include "test/info-reader/parse-result-helpers.h"
 #include "test/info-reader/scoped-reader-state.h"
 #include "test/system/artifact-list-test-access.h"
 #include "util/enum-converter.h"
@@ -35,6 +36,10 @@ constexpr auto unused_activation_ranges = std::array{
     std::pair{ 146, 243 },
 };
 
+/*!
+ * @brief 各readerの発動検証に必要な最小限の正常なアイテム定義を作る
+ * @return エゴ用の装備slotを含むテスト用JSON
+ */
 nlohmann::json make_item()
 {
     return {
@@ -47,7 +52,7 @@ nlohmann::json make_item()
         { "rarity", 1 },
         { "weight", 1 },
         { "cost", 1 },
-        { "slot", 1 },
+        { "slot", 31 },
         { "rating", 1 },
     };
 }
@@ -66,6 +71,9 @@ nlohmann::json make_item_with_activation(const nlohmann::json &activation)
 
 class ActivationStateGuard {
 public:
+    /*!
+     * @brief 基本アイテムとエゴを退避し、発動を検証する各readerの読込先を初期化する
+     */
     ActivationStateGuard()
     {
         auto &baseitems = BaseitemList::get_instance();
@@ -79,6 +87,9 @@ public:
     ActivationStateGuard(const ActivationStateGuard &) = delete;
     ActivationStateGuard &operator=(const ActivationStateGuard &) = delete;
 
+    /*!
+     * @brief 一時的な定義を置き換え、検証前の基本アイテムとエゴを復元する
+     */
     ~ActivationStateGuard()
     {
         auto &baseitems = BaseitemList::get_instance();
@@ -102,22 +113,19 @@ private:
 /*!
  * @brief ベースアイテム・アーティファクト・エゴの読み込み処理が、いずれも発動の指定を不正なフラグとして拒否することを確かめる
  * @param token 発動の指定
- * @param also_check_grab grab_one_activation_flag() でも発動なしになることを確かめるか
- * (数値でない指定は std::stoi() が例外を投げるため、読み込み処理を通してだけ確かめる)
+ * @details grab_one_activation_flag() でも発動なしになることを確かめる。
  */
-void check_rejected_by_all_readers(const std::string &token, bool also_check_grab)
+void check_rejected_by_all_readers(const std::string &token)
 {
     ActivationStateGuard guard;
-    if (also_check_grab) {
-        CHECK(grab_one_activation_flag(token) == RandomArtActType::NONE);
-    }
+    CHECK(grab_one_activation_flag(token) == RandomArtActType::NONE);
 
     const auto data = make_item_with_activation(token);
-    CHECK(BaseitemReader(data).read() == PARSE_ERROR_INVALID_FLAG);
+    CHECK(test::to_error_code(BaseitemReader(data).read()) == ParseErrorType::INVALID_FLAG);
     error_idx = -1;
-    CHECK(ArtifactReader(data).read() == PARSE_ERROR_INVALID_FLAG);
+    CHECK(test::to_error_code(ArtifactReader(data).read()) == ParseErrorType::INVALID_FLAG);
     error_idx = -1;
-    CHECK(EgoReader(data).read() == PARSE_ERROR_INVALID_FLAG);
+    CHECK(test::to_error_code(EgoReader(data).read()) == ParseErrorType::INVALID_FLAG);
     CHECK(egos_info.empty());
 }
 
@@ -131,17 +139,17 @@ void check_accepted_by_all_readers(const std::string &token, RandomArtActType ex
     ActivationStateGuard guard;
     CHECK(grab_one_activation_flag(token) == expected);
     const auto data = make_item_with_activation(token);
-    REQUIRE(BaseitemReader(data).read() == PARSE_ERROR_NONE);
+    REQUIRE(BaseitemReader(data).read().has_value());
     const auto &baseitem = BaseitemList::get_instance().get_baseitem(1);
     CHECK(baseitem.act_idx == expected);
     CHECK(baseitem.flags.has(TR_ACTIVATE));
     error_idx = -1;
-    REQUIRE(ArtifactReader(data).read() == PARSE_ERROR_NONE);
+    REQUIRE(ArtifactReader(data).read().has_value());
     const auto &artifact = ArtifactList::get_instance().get_artifact(i2enum<FixedArtifactId>(1));
     CHECK(artifact.act_idx == expected);
     CHECK(artifact.flags.has(TR_ACTIVATE));
     error_idx = -1;
-    REQUIRE(EgoReader(data).read() == PARSE_ERROR_NONE);
+    REQUIRE(EgoReader(data).read().has_value());
     CHECK(egos_info.at(i2enum<EgoType>(1)).act_idx == expected);
 }
 }
@@ -150,7 +158,7 @@ TEST_CASE("Activation readers reject unknown and out-of-range strings as invalid
 {
     for (const auto *token : { "UNKNOWN_ACTIVATION", "", "999999999999999999999", "-999999999999999999999", "0", "-1" }) {
         CAPTURE(token);
-        check_rejected_by_all_readers(token, false);
+        check_rejected_by_all_readers(token);
     }
 }
 
@@ -159,7 +167,7 @@ TEST_CASE("Activation readers reject numeric IDs before narrowing")
     const int max = enum2i(RandomArtActType::MAX);
     for (const auto id : { max, max + 1, 9999, 32767, 32768, 65536, 65536 + enum2i(RandomArtActType::BA_FIRE_4), 70000, std::numeric_limits<int>::max() }) {
         CAPTURE(id);
-        check_rejected_by_all_readers(std::to_string(id), true);
+        check_rejected_by_all_readers(std::to_string(id));
     }
 }
 
@@ -170,19 +178,22 @@ TEST_CASE("Activation readers reject unused numeric IDs")
             const auto numeric = std::to_string(id);
             for (const auto &token : { numeric, " +" + numeric, numeric + "suffix" }) {
                 CAPTURE(token);
-                check_rejected_by_all_readers(token, true);
+                check_rejected_by_all_readers(token);
             }
         }
     }
 }
 
-TEST_CASE("Activation readers accept every registered activation")
+TEST_CASE("Activation readers accept every registered activation by name only")
 {
+    // 番号は効果を足すとずれるため、登録された発動でも番号での指定は受け付けない。
     for (const auto &activation : activation_info) {
+        CAPTURE(activation.flag);
+        check_accepted_by_all_readers(activation.flag, activation.index);
         const auto numeric = std::to_string(enum2i(activation.index));
-        for (const auto &token : { activation.flag, numeric, " +" + numeric, numeric + "suffix" }) {
+        for (const auto &token : { numeric, " +" + numeric, numeric + "suffix" }) {
             CAPTURE(token);
-            check_accepted_by_all_readers(token, activation.index);
+            check_rejected_by_all_readers(token);
         }
     }
 }
@@ -212,34 +223,17 @@ TEST_CASE("Activation registry covers all non-reserved IDs with unique names")
     }
 }
 
-TEST_CASE("Activation readers accept numeric ID boundaries")
-{
-    for (const auto expected : { RandomArtActType::SUNLIGHT, RandomArtActType::CRIMSON }) {
-        CAPTURE(expected);
-        check_accepted_by_all_readers(std::to_string(enum2i(expected)), expected);
-    }
-}
-
-TEST_CASE("Activation readers preserve named and legacy numeric string conversion")
-{
-    const auto numeric = std::to_string(enum2i(RandomArtActType::BA_FIRE_4));
-    for (const auto &token : { std::string("BA_FIRE_4"), numeric, " +" + numeric, numeric + "suffix" }) {
-        CAPTURE(token);
-        check_accepted_by_all_readers(token, RandomArtActType::BA_FIRE_4);
-    }
-}
-
 TEST_CASE("Activation readers preserve missing activation and non-string errors")
 {
     for (const auto &value : { nlohmann::json(), nlohmann::json(1), nlohmann::json(true) }) {
         CAPTURE(value);
         ActivationStateGuard guard;
         const auto data = make_item_with_activation(value);
-        const auto expected = value.is_null() ? PARSE_ERROR_NONE : PARSE_ERROR_INVALID_TYPE;
-        CHECK(BaseitemReader(data).read() == expected);
+        const auto expected = value.is_null() ? ParseErrorType::NONE : ParseErrorType::INVALID_TYPE;
+        CHECK(test::to_error_code(BaseitemReader(data).read()) == expected);
         error_idx = -1;
-        CHECK(ArtifactReader(data).read() == expected);
-        CHECK(EgoReader(data).read() == expected);
+        CHECK(test::to_error_code(ArtifactReader(data).read()) == expected);
+        CHECK(test::to_error_code(EgoReader(data).read()) == expected);
     }
 }
 
@@ -259,7 +253,10 @@ TEST_CASE("Activation reader guard restores existing artifact definitions")
         CHECK(artifacts.empty());
         auto data = make_item();
         data["activate"] = "BA_FIRE_4";
-        REQUIRE(ArtifactReader(data).read() == PARSE_ERROR_NONE);
+        // アーティファクトの元のベースアイテムは、先に読み込まれていなければならない。
+        REQUIRE(BaseitemReader(data).read().has_value());
+        error_idx = -1;
+        REQUIRE(ArtifactReader(data).read().has_value());
         CHECK(artifacts.size() == 1);
     }
     REQUIRE(artifacts.size() == 1);

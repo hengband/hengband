@@ -7,7 +7,6 @@
 #include "effect/effect-monster.h"
 #include "avatar/avatar.h"
 #include "core/disturbance.h"
-#include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
@@ -38,6 +37,7 @@
 #include "spell-kind/spells-teleport.h"
 #include "sv-definition/sv-other-types.h"
 #include "system/angband-system.h"
+#include "system/deferred-update-requests.h"
 #include "system/enums/monrace/monrace-id.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
@@ -45,9 +45,7 @@
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "tracking/health-bar-tracker.h"
-#include "tracking/lore-tracker.h"
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
@@ -183,7 +181,7 @@ static void effect_damage_killed_pet(PlayerType *player_ptr, EffectMonster *em_p
     if (em_ptr->known && !em_ptr->note.empty()) {
         angband_strcpy(em_ptr->m_name, monster_desc(player_ptr, *em_ptr->m_ptr, MD_TRUE_NAME), sizeof(em_ptr->m_name));
         if (em_ptr->see_s_msg) {
-            msg_format("%s^%s", em_ptr->m_name, em_ptr->note.data());
+            msg_print("{}{}", str_upcase_first(em_ptr->m_name), em_ptr->note);
         } else {
             player_ptr->current_floor_ptr->monster_noise = true;
         }
@@ -208,7 +206,7 @@ static void effect_damage_killed_pet(PlayerType *player_ptr, EffectMonster *em_p
 static void effect_damage_makes_sleep(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
     if (!em_ptr->note.empty() && em_ptr->seen_msg) {
-        msg_format("%s^%s", em_ptr->m_name, em_ptr->note.data());
+        msg_print("{}{}", str_upcase_first(em_ptr->m_name), em_ptr->note);
     } else if (em_ptr->see_s_msg) {
         const auto m_name = monster_desc(player_ptr, *em_ptr->m_ptr, 0);
         const auto pain_message = em_ptr->m_ptr->get_pain_message(m_name, em_ptr->dam);
@@ -240,7 +238,7 @@ static bool deal_effect_damage_from_monster(PlayerType *player_ptr, EffectMonste
 
     HealthBarTracker::get_instance().set_flag_if_tracking(em_ptr->g_ptr->m_idx);
     if (em_ptr->m_ptr->is_riding()) {
-        RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::UHEALTH);
+        DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::UHEALTH);
     }
 
     (void)set_monster_csleep(*player_ptr->current_floor_ptr, em_ptr->g_ptr->m_idx, 0);
@@ -300,7 +298,7 @@ static bool deal_effect_damage_from_player(PlayerType *player_ptr, EffectMonster
     }
 
     if (!em_ptr->note.empty() && em_ptr->seen) {
-        msg_format(_("%s%s", "%s^%s"), em_ptr->m_name, em_ptr->note.data());
+        msg_print("{}{}", str_upcase_first(em_ptr->m_name), em_ptr->note);
     } else if (em_ptr->known && (em_ptr->dam || !em_ptr->do_fear)) {
         const auto m_name = monster_desc(player_ptr, *em_ptr->m_ptr, 0);
         const auto pain_message = em_ptr->m_ptr->get_pain_message(m_name, em_ptr->dam);
@@ -315,7 +313,7 @@ static bool deal_effect_damage_from_player(PlayerType *player_ptr, EffectMonster
 
     if ((fear || em_ptr->do_fear) && em_ptr->seen) {
         sound(SoundKind::FLEE);
-        msg_format(_("%s^は恐怖して逃げ出した！", "%s^ flees in terror!"), em_ptr->m_name);
+        msg_print(_("{}は恐怖して逃げ出した！", "{} flees in terror!"), str_upcase_first(em_ptr->m_name));
     }
 
     return false;
@@ -624,7 +622,7 @@ static void update_phase_out_stat(PlayerType *player_ptr, EffectMonster *em_ptr)
     }
 
     HealthBarTracker::get_instance().set_trackee(em_ptr->g_ptr->m_idx);
-    handle_stuff(player_ptr);
+    redraw_stuff(player_ptr);
 }
 
 /*!
@@ -750,16 +748,11 @@ bool affect_monster(
     exe_affect_monster_by_damage(player_ptr, em_ptr);
 
     update_phase_out_stat(player_ptr, em_ptr);
-    const auto monster_is_valid = em_ptr->m_ptr->is_valid();
-    if (monster_is_valid) {
+    if (em_ptr->m_ptr->is_valid()) {
         update_monster(player_ptr, target_m_idx, false);
     }
 
     lite_spot(player_ptr, em_ptr->get_position());
-    if (LoreTracker::get_instance().is_tracking(em_ptr->m_ptr->r_idx) && (em_ptr->seen || !monster_is_valid)) {
-        RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::MONSTER_LORE);
-    }
-
     exe_affect_monster_postprocess(player_ptr, em_ptr, fall_off_horse_effect);
     return em_ptr->obvious;
 }

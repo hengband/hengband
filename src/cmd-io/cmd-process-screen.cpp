@@ -7,20 +7,19 @@
 #include "cmd-io/cmd-process-screen.h"
 #include "cmd-visual/cmd-draw.h"
 #include "core/asking-player.h"
-#include "core/stuff-handler.h"
 #include "core/visuals-reseter.h"
-#include "game-option/special-options.h"
 #include "io/files-util.h"
+#include "io/input-context.h"
 #include "io/input-key-acceptor.h"
 #include "system/angband-exceptions.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/angband-files.h"
 #include "view/display-messages.h"
 #include "view/display-symbol.h"
+#include <fmt/format.h>
 #include <string>
 #include <string_view>
 #include <tl/optional.hpp>
@@ -73,7 +72,7 @@ static void read_temporary_file(FILE *fff, FILE *tmpfff, int num_tag)
             break;
         }
 
-        fprintf(fff, "%s\n", buf->data());
+        fmt::println(fff, "{}", *buf);
     }
 }
 
@@ -87,7 +86,7 @@ static void screen_dump_one_line(int wid, int y, FILE *fff)
 {
     uint8_t old_a = 0;
     DisplaySymbol ds(0, ' ');
-    for (TERM_LEN x = 0; x < wid - 1; x++) {
+    for (TERM_LEN x = 0; x < wid; x++) {
         concptr cc = nullptr;
         ds = term_what(x, y, ds);
         switch (ds.character) {
@@ -115,15 +114,14 @@ static void screen_dump_one_line(int wid, int y, FILE *fff)
             int rv = angband_color_table[ds.color][1];
             int gv = angband_color_table[ds.color][2];
             int bv = angband_color_table[ds.color][3];
-            fprintf(fff, "%s<font color=\"#%02x%02x%02x\">",
-                ((y == 0 && x == 0) ? "" : "</font>"), rv, gv, bv);
+            fmt::print(fff, "{}<font color=\"#{:02x}{:02x}{:02x}\">", ((y == 0 && x == 0) ? "" : "</font>"), rv, gv, bv);
             old_a = ds.color;
         }
 
         if (cc) {
-            fprintf(fff, "%s", cc);
+            fmt::print(fff, "{}", cc);
         } else {
-            fprintf(fff, "%c", ds.character);
+            fmt::print(fff, "{:c}", ds.character);
         }
     }
 }
@@ -138,7 +136,7 @@ static void screen_dump_lines(int wid, int hgt, FILE *fff)
 {
     for (TERM_LEN y = 0; y < hgt; y++) {
         if (y != 0) {
-            fprintf(fff, "\n");
+            fmt::print(fff, "\n");
         }
 
         screen_dump_one_line(wid, y, fff);
@@ -163,7 +161,7 @@ static bool check_screen_html_can_open(FILE *fff, const std::filesystem::path &p
     }
 
     const auto &path_str = path.string();
-    const auto mes = format(_("ファイル %s を開けませんでした。", "Failed to open file %s."), path_str.data());
+    const auto mes = fmt::format(_("ファイル {} を開けませんでした。", "Failed to open file {}."), path_str);
     THROW_EXCEPTION(std::runtime_error, mes);
 }
 
@@ -191,7 +189,7 @@ static void write_html_header(FILE *tmpfff, FILE *fff)
  */
 static void write_html_footer(FILE *tmpfff, FILE *fff)
 {
-    fprintf(fff, "</font>");
+    fmt::print(fff, "</font>");
     if (!tmpfff) {
         for (int i = 0; html_foot[i]; i++) {
             fputs(html_foot[i], fff);
@@ -202,7 +200,7 @@ static void write_html_footer(FILE *tmpfff, FILE *fff)
         angband_fclose(tmpfff);
     }
 
-    fprintf(fff, "\n");
+    fmt::print(fff, "\n");
 }
 
 void exe_cmd_save_screen_html(const std::filesystem::path &path, bool need_message)
@@ -295,75 +293,48 @@ static bool check_screen_text_can_open(FILE *fff, const std::string_view filenam
  * @brief テキスト方式で記念撮影する
  * @param wid 幅
  * @param hgt 高さ
- * @return 記念撮影に成功したらTRUE、ファイルが開けなかったらFALSE
  * @todo どこかバグっていて、(恐らく初期化されていない)変な文字列まで出力される
  */
-static bool do_cmd_save_screen_text(int wid, int hgt)
+static void do_cmd_save_screen_text(int wid, int hgt)
 {
     DisplaySymbol ds(0, ' ');
     const auto path = path_build(ANGBAND_DIR_USER, "dump.txt");
     auto *fff = angband_fopen(path, FileOpenMode::WRITE);
     if (!check_screen_text_can_open(fff, path.string())) {
-        return false;
+        return;
     }
 
     screen_save();
     for (TERM_LEN y = 0; y < hgt; y++) {
         TERM_LEN x;
         char buf[1024]{};
-        for (x = 0; x < wid - 1; x++) {
+        for (x = 0; x < wid; x++) {
             ds = term_what(x, y, ds);
             buf[x] = ds.character;
         }
 
         buf[x] = '\0';
-        fprintf(fff, "%s\n", buf);
+        fmt::println(fff, "{}", buf);
     }
 
-    fprintf(fff, "\n");
+    fmt::print(fff, "\n");
     for (TERM_LEN y = 0; y < hgt; y++) {
         TERM_LEN x;
         char buf[1024]{};
-        for (x = 0; x < wid - 1; x++) {
+        for (x = 0; x < wid; x++) {
             ds = term_what(x, y, ds);
             buf[x] = hack[ds.color & 0x0F];
         }
 
         buf[x] = '\0';
-        fprintf(fff, "%s\n", buf);
+        fmt::println(fff, "{}", buf);
     }
 
-    fprintf(fff, "\n");
+    fmt::print(fff, "\n");
     angband_fclose(fff);
     msg_print(_("画面(記念撮影)をファイルに書き出しました。", "Screen dump saved."));
     msg_erase();
     screen_load();
-    return true;
-}
-
-/*!
- * @brief 記念撮影のためにグラフィック使用をOFFにする
- * @param player_ptr プレイヤーへの参照ポインタ
- * @return 記念撮影直前のグラフィックオプション
- */
-static bool update_use_graphics(PlayerType *player_ptr)
-{
-    if (!use_graphics) {
-        return true;
-    }
-
-    use_graphics = false;
-    reset_visuals(player_ptr);
-    static constexpr auto flags = {
-        MainWindowRedrawingFlag::WIPE,
-        MainWindowRedrawingFlag::BASIC,
-        MainWindowRedrawingFlag::EXTRA,
-        MainWindowRedrawingFlag::MAP,
-        MainWindowRedrawingFlag::EQUIPPY,
-    };
-    RedrawingFlagsUpdater::get_instance().set_flags(flags);
-    handle_stuff(player_ptr);
-    return false;
 }
 
 /*
@@ -379,30 +350,14 @@ void do_cmd_save_screen(PlayerType *player_ptr)
     }
 
     const auto &[wid, hgt] = term_get_size();
-    const auto old_use_graphics = update_use_graphics(player_ptr);
+    const GraphicsSuspender graphics_suspender(player_ptr);
 
     if (html_dump) {
         exe_cmd_save_screen_html_with_naming();
         do_cmd_redraw(player_ptr);
-    } else if (!do_cmd_save_screen_text(wid, hgt)) {
-        return;
+    } else {
+        do_cmd_save_screen_text(wid, hgt);
     }
-
-    if (old_use_graphics) {
-        return;
-    }
-
-    use_graphics = true;
-    reset_visuals(player_ptr);
-    static constexpr auto flags = {
-        MainWindowRedrawingFlag::WIPE,
-        MainWindowRedrawingFlag::BASIC,
-        MainWindowRedrawingFlag::EXTRA,
-        MainWindowRedrawingFlag::MAP,
-        MainWindowRedrawingFlag::EQUIPPY,
-    };
-    RedrawingFlagsUpdater::get_instance().set_flags(flags);
-    handle_stuff(player_ptr);
 }
 
 /*!
@@ -430,7 +385,7 @@ static bool draw_white_characters(FILE *fff, int wid, int hgt)
             continue;
         }
 
-        for (TERM_LEN x = 0; x < wid - 1; x++) {
+        for (TERM_LEN x = 0; x < wid; x++) {
             if (buf[x] == '\n' || buf[x] == '\0') {
                 break;
             }
@@ -466,7 +421,7 @@ static void draw_colored_characters(FILE *fff, int wid, int hgt, bool okay)
             continue;
         }
 
-        for (auto x = 0; x < wid - 1; x++) {
+        for (auto x = 0; x < wid; x++) {
             if (buf[x] == '\n' || buf[x] == '\0') {
                 break;
             }
@@ -494,7 +449,7 @@ void do_cmd_load_screen(void)
     auto *fff = angband_fopen(path, FileOpenMode::READ);
     if (!fff) {
         const auto filename = path.string();
-        msg_format(_("%s を開くことができませんでした。", "Failed to open %s."), filename.data());
+        msg_print(_("{} を開くことができませんでした。", "Failed to open {}."), filename);
         msg_erase();
         return;
     }
@@ -505,8 +460,9 @@ void do_cmd_load_screen(void)
     draw_colored_characters(fff, wid, hgt, okay);
 
     angband_fclose(fff);
-    prt(_("ファイルに書き出された画面(記念撮影)をロードしました。", "Screen dump loaded."), 0, 0);
+    constexpr auto prompt = _("ファイルに書き出された画面(記念撮影)をロードしました。", "Screen dump loaded.");
+    prt(prompt, 0, 0);
     flush();
-    inkey();
+    (void)input_key_with_context(InputKind::ANY_KEY, prompt);
     screen_load();
 }

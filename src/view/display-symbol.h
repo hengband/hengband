@@ -59,6 +59,8 @@ public:
     {
     }
 
+    bool operator==(const DisplaySymbolPair &other) const = default;
+
     DisplaySymbol symbol_foreground;
     DisplaySymbol symbol_background;
 };

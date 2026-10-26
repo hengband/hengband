@@ -14,6 +14,6 @@ protected:
     void set_locals() override;
     int16_t stance_bonus() override;
     int16_t mutation_bonus() override;
-    int16_t set_exception_bonus(int16_t value) override;
+    int set_exception_bonus(int value) override;
     int16_t set_exception_use_status(int16_t value) override;
 };

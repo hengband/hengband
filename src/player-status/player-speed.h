@@ -1,5 +1,8 @@
 #pragma once
 #include "player-status/player-status-base.h"
+#include <cstdint>
+
+int16_t calc_speed_bonus_by_weight(int weight, int limit);
 
 class PlayerSpeed : public PlayerStatusBase {
 public:
@@ -19,5 +22,5 @@ protected:
     int16_t action_bonus() override;
     BIT_FLAGS equipments_flags(tr_type check_flag) override;
     int16_t special_weapon_set_value();
-    int16_t set_exception_bonus(int16_t value) override;
+    int set_exception_bonus(int value) override;
 };

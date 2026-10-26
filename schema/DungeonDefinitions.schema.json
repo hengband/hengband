@@ -38,11 +38,29 @@
       "properties": {
         "wild_y": {
           "type": "integer",
-          "minimum": 0
+          "minimum": 0,
+          "maximum": 32766
         },
         "wild_x": {
           "type": "integer",
-          "minimum": 0
+          "minimum": 0,
+          "maximum": 32766
+        }
+      }
+    },
+    "entrancePosition": {
+      "$comment": "Dungeons other than the wilderness (ID 0) have their entrance inside the largest wilderness (MAX_WID x MAX_HGT in src/floor/floor-base-definitions.h) excluding the edges.",
+      "type": "object",
+      "properties": {
+        "wild_y": {
+          "$comment": "maximum = MAX_HGT - 2",
+          "minimum": 1,
+          "maximum": 64
+        },
+        "wild_x": {
+          "$comment": "maximum = MAX_WID - 2",
+          "minimum": 1,
+          "maximum": 196
         }
       }
     },
@@ -53,23 +71,28 @@
       "properties": {
         "minDepth": {
           "type": "integer",
-          "minimum": 0
+          "minimum": 0,
+          "maximum": 32767
         },
         "maxDepth": {
           "type": "integer",
-          "minimum": 0
+          "minimum": 0,
+          "maximum": 32767
         },
         "minPlayerLevel": {
           "type": "integer",
-          "minimum": 0
+          "minimum": 0,
+          "maximum": 50
         },
         "objGood": {
           "type": "integer",
-          "minimum": 0
+          "minimum": 0,
+          "maximum": 100
         },
         "objGreat": {
           "type": "integer",
-          "minimum": 0
+          "minimum": 0,
+          "maximum": 100
         },
         "pit": {
           "type": "array",
@@ -94,7 +117,8 @@
       "properties": {
         "minCount": {
           "type": "integer",
-          "minimum": 0
+          "minimum": 0,
+          "maximum": 100
         },
         "additionalSpawnProbability": {
           "type": "integer",
@@ -138,6 +162,7 @@
       "required": ["tiles", "tunnelRate"],
       "properties": {
         "tiles": {
+          "description": "床の地形と、その地形が選ばれる割合 (百分率)。rate の合計はちょうど100にする",
           "type": "array",
           "minItems": 1,
           "items": {
@@ -146,29 +171,31 @@
         },
         "tunnelRate": {
           "type": "integer",
-          "minimum": 0
+          "minimum": 0,
+          "maximum": 32767
         }
       }
     },
     "final_floor": {
       "type": "object",
       "additionalProperties": false,
+      "dependentRequired": { "artifact": ["guardian"] },
       "minProperties": 1,
       "properties": {
         "guardian": {
           "type": "integer",
           "minimum": 1,
-          "maximum": 9999
+          "maximum": 32766
         },
         "object": {
           "type": "integer",
           "minimum": 1,
-          "maximum": 9999
+          "maximum": 32767
         },
         "artifact": {
           "type": "integer",
-          "minimum": 1,
-          "maximum": 999
+          "minimum": 0,
+          "maximum": 32766
         }
       }
     },
@@ -178,6 +205,7 @@
       "required": ["tiles", "outer", "inner", "streams"],
       "properties": {
         "tiles": {
+          "description": "壁の地形と、その地形が選ばれる割合 (百分率)。rate の合計はちょうど100にする",
           "type": "array",
           "minItems": 1,
           "items": {
@@ -217,9 +245,10 @@
           ]
         },
         "rate": {
+          "description": "この地形が床に選ばれる割合 (百分率)。各0～100で、tiles の合計はちょうど100にする (合計は読み込み時とCIの意味検証で確認する)。0の地形は抽選に登録しない",
           "type": "integer",
           "minimum": 0,
-          "maximum": 32767
+          "maximum": 100
         }
       }
     },
@@ -244,9 +273,10 @@
           ]
         },
         "rate": {
+          "description": "この地形が壁に選ばれる割合 (百分率)。各0～100で、tiles の合計はちょうど100にする (合計は読み込み時とCIの意味検証で確認する)。0の地形は抽選に登録しない",
           "type": "integer",
           "minimum": 0,
-          "maximum": 32767
+          "maximum": 100
         }
       }
     },
@@ -315,10 +345,40 @@
       "enum": [
         "ANIMAL",
         "AQUATIC",
+        "ATTR_ANY",
+        "ATTR_CLEAR",
+        "ATTR_MULTI",
+        "ATTR_SEMIRAND",
+        "AURA_ABYSS",
+        "AURA_ACID",
+        "AURA_CHAOS",
+        "AURA_COLD",
+        "AURA_DARK",
+        "AURA_DISENCHANT",
+        "AURA_ELEC",
+        "AURA_FIRE",
+        "AURA_FORCE",
+        "AURA_GRAVITY",
+        "AURA_HOLINESS",
+        "AURA_ICEE",
+        "AURA_LITE",
+        "AURA_MANA",
+        "AURA_METEOR",
+        "AURA_NETHER",
+        "AURA_NEXUS",
+        "AURA_NUKE",
+        "AURA_PLASMA",
+        "AURA_POISON",
+        "AURA_SHARDS",
+        "AURA_TIME",
+        "AURA_VOIDS",
+        "AURA_WATER",
         "CAN_FLY",
         "CAN_SWIM",
         "CHAMELEON",
+        "CHAR_CLEAR",
         "DEMON",
+        "DIMINISH_MAX_DAMAGE",
         "DRAGON",
         "ELDRITCH_HORROR",
         "EVIL",
@@ -336,6 +396,7 @@
         "SELF_DARK_2",
         "SELF_LITE_1",
         "SELF_LITE_2",
+        "SHAPECHANGER",
         "TROLL",
         "UNDEAD",
         "WILD_MOUNTAIN",
@@ -351,6 +412,22 @@
     "dungeon": {
       "type": "object",
       "additionalProperties": false,
+      "if": {
+        "properties": {
+          "id": {
+            "not": {
+              "const": 0
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "position": {
+            "$ref": "#/$defs/entrancePosition"
+          }
+        }
+      },
       "required": [
         "id",
         "name",
@@ -365,7 +442,8 @@
       "properties": {
         "id": {
           "type": "integer",
-          "minimum": 0
+          "minimum": 0,
+          "maximum": 20
         },
         "name": {
           "$ref": "#/$defs/localizedText"

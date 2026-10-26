@@ -9,12 +9,11 @@
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
 #include "system/monrace/monrace-records.h"
-#include "system/redrawing-flags-updater.h"
 #include "term/term-color-types.h"
-#include "tracking/lore-tracker.h"
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
 #include <algorithm>
+#include <fmt/format.h>
 
 MonsterEntity::MonsterEntity()
 {
@@ -521,9 +520,6 @@ void MonsterEntity::make_lore_treasure(int num_item, int num_gold) const
     }
 
     monrace.make_lore_treasure(num_item, num_gold);
-    if (LoreTracker::get_instance().is_tracking(this->r_idx)) {
-        RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::MONSTER_LORE);
-    }
 }
 
 tl::optional<bool> MonsterEntity::order_pet_named(const MonsterEntity &other) const
@@ -615,12 +611,12 @@ std::string MonsterEntity::build_looking_description(bool needs_attitude) const
     const std::string clone(this->mflag2.has(MonsterConstantFlagType::CLONED) ? ", clone" : "");
     const auto &apparent_monrace = this->get_apparent_monrace();
     if ((apparent_monrace.r_tkills > 0) && this->mflag2.has_not(MonsterConstantFlagType::KAGE)) {
-        constexpr auto fmt = _("レベル%d, %s%s%s", "Level %d, %s%s%s");
-        return format(fmt, apparent_monrace.level, description.data(), attitude.data(), clone.data());
+        constexpr auto fmt = _("レベル{}, {}{}{}", "Level {}, {}{}{}");
+        return fmt::format(fmt, apparent_monrace.level, description, attitude, clone);
     }
 
-    constexpr auto fmt = _("レベル???, %s%s%s", "Level ???, %s%s%s");
-    return format(fmt, description.data(), attitude.data(), clone.data());
+    constexpr auto fmt = _("レベル???, {}{}{}", "Level ???, {}{}{}");
+    return fmt::format(fmt, description, attitude, clone);
 }
 
 std::string MonsterEntity::build_damage_description() const

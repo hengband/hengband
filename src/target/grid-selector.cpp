@@ -4,14 +4,15 @@
 #include "game-option/input-options.h"
 #include "game-option/keymap-directory-getter.h"
 #include "io/cursor.h"
+#include "io/input-context.h"
 #include "io/input-key-acceptor.h"
 #include "io/screen-util.h"
 #include "system/building-type-definition.h"
+#include "system/deferred-update-requests.h"
 #include "system/enums/terrain/terrain-characteristics.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "system/terrain/terrain-definition.h"
 #include "target/target-checker.h"
 #include "target/target-sorter.h"
@@ -177,10 +178,7 @@ void tgt_pt_info::move_to_symbol(PlayerType *player_ptr)
         this->n = 0;
         this->pos = player_ptr->get_position();
         verify_panel(player_ptr);
-        auto &rfu = RedrawingFlagsUpdater::get_instance();
-        rfu.set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
-        rfu.set_flag(MainWindowRedrawingFlag::MAP);
-        rfu.set_flag(SubWindowRedrawingFlag::OVERHEAD);
+        DeferredUpdateRequests::get_instance().request_monster_update_and_map_redrawing();
         handle_stuff(player_ptr);
     } else {
         const auto cx = (panel_col_min + panel_col_max) / 2;
@@ -211,11 +209,17 @@ tl::optional<Pos2D> point_target(PlayerType *player_ptr)
     info.ch = 0;
     info.n = 0;
     tl::optional<Pos2D> pos_target;
+    constexpr auto prompt = _("場所を選んでスペースキーを押して下さい。", "Select a point and press space.");
     while ((info.ch != ESCAPE) && !pos_target) {
-        prt(_("場所を選んでスペースキーを押して下さい。", "Select a point and press space."), 0, 0);
+        prt(prompt, 0, 0);
         auto move_fast = false;
         move_cursor_relative(info.pos.y, info.pos.x);
-        info.ch = inkey();
+        {
+            const PointInputDetails details{ .pos = info.pos };
+            const InputContextScope input_context({ InputKind::POINT, prompt, details });
+            info.ch = inkey();
+        }
+
         switch (info.ch) {
         case ESCAPE:
             break;
@@ -318,10 +322,7 @@ tl::optional<Pos2D> point_target(PlayerType *player_ptr)
 
     prt("", 0, 0);
     verify_panel(player_ptr);
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
-    rfu.set_flag(MainWindowRedrawingFlag::MAP);
-    rfu.set_flag(SubWindowRedrawingFlag::OVERHEAD);
+    DeferredUpdateRequests::get_instance().request_monster_update_and_map_redrawing();
     handle_stuff(player_ptr);
     return pos_target;
 }

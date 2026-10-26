@@ -1,6 +1,7 @@
 #pragma once
 
 #include "dungeon/dungeon-flag-types.h"
+#include "monster-race/monster-aura-types.h"
 #include "monster-race/race-ability-flags.h"
 #include "monster-race/race-behavior-flags.h"
 #include "monster-race/race-brightness-flags.h"
@@ -72,6 +73,7 @@ public:
     EnumClassFlagGroup<DungeonFeatureType> flags{}; /* Dungeon Flags */
 
     EnumClassFlagGroup<MonsterAbilityType> mon_ability_flags;
+    EnumClassFlagGroup<MonsterAuraType> mon_aura_flags;
     EnumClassFlagGroup<MonsterBehaviorType> mon_behavior_flags;
     EnumClassFlagGroup<MonsterVisualType> mon_visual_flags;
     EnumClassFlagGroup<MonsterKindType> mon_kind_flags;

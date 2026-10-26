@@ -418,9 +418,12 @@ void run_step(PlayerType *player_ptr, const Direction &dir)
         }
     }
 
-    if (--player_ptr->running <= 0) {
+    if (player_ptr->running <= 1) {
+        stop_running(player_ptr);
         return;
     }
+
+    player_ptr->running--;
 
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
     exe_movement(player_ptr, find_current, false, false);

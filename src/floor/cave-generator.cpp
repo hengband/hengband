@@ -307,8 +307,7 @@ static void decide_dungeon_data_allocation(PlayerType *player_ptr, DungeonData *
     if (dd_ptr->alloc_monster_num > small_tester) {
         dd_ptr->alloc_monster_num = small_tester;
     } else {
-        msg_format_wizard(player_ptr, CHEAT_DUNGEON, _("モンスター数基本値を %d から %d に減らします", "Reduced monsters base from %d to %d"), small_tester,
-            dd_ptr->alloc_monster_num);
+        msg_print_wizard(player_ptr, CHEAT_DUNGEON, _("モンスター数基本値を {} から {} に減らします", "Reduced monsters base from {} to {}"), small_tester, dd_ptr->alloc_monster_num);
     }
 }
 

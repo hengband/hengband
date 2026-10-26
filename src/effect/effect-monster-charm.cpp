@@ -18,6 +18,7 @@
 #include "system/grid-type-definition.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
 
 static void effect_monster_charm_resist(PlayerType *player_ptr, EffectMonster *em_ptr)
@@ -194,7 +195,7 @@ ProcessResult effect_monster_charm_living(PlayerType *player_ptr, EffectMonster 
         em_ptr->dam -= player_ptr->virtues[vir - 1] / 20;
     }
 
-    msg_format(_("%sを見つめた。", "You stare at %s."), em_ptr->m_name);
+    msg_print(_("{}を見つめた。", "You stare at {}."), em_ptr->m_name);
 
     if (common_saving_throw_charm(player_ptr, em_ptr->dam, *em_ptr->m_ptr) || !em_ptr->m_ptr->has_living_flag()) {
         em_ptr->note = _("には効果がなかった。", " is unaffected.");
@@ -251,9 +252,8 @@ static void effect_monster_domination_corrupted(PlayerType *player_ptr, EffectMo
     }
 
     em_ptr->note = "";
-    msg_format(_("%s^の堕落した精神は攻撃を跳ね返した！",
-                   (em_ptr->seen ? "%s^'s corrupted mind backlashes your attack!" : "%s^s corrupted mind backlashes your attack!")),
-        em_ptr->m_name);
+    const auto poss = em_ptr->seen ? "'s" : "s";
+    msg_print(_("{}の堕落した精神は攻撃を跳ね返した！", "{}{} corrupted mind backlashes your attack!"), str_upcase_first(em_ptr->m_name), poss);
     if (randint0(100 + em_ptr->monrace->level / 2) < player_ptr->skill_sav) {
         msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
         return;
@@ -407,7 +407,7 @@ static void effect_monster_captured(PlayerType *player_ptr, EffectMonster *em_pt
         em_ptr->m_ptr->reset_chameleon_polymorph();
     }
 
-    msg_format(_("%sを捕えた！", "You capture %s^!"), em_ptr->m_name);
+    msg_print(_("{}を捕えた！", "You capture {}!"), em_ptr->m_name);
     auto cap_mon_ptr = *tmp_cap_mon_ptr;
     cap_mon_ptr->r_idx = em_ptr->m_ptr->r_idx;
     cap_mon_ptr->speed = em_ptr->m_ptr->mspeed;
@@ -415,7 +415,7 @@ static void effect_monster_captured(PlayerType *player_ptr, EffectMonster *em_pt
     cap_mon_ptr->max_hp = static_cast<short>(em_ptr->m_ptr->max_maxhp);
     cap_mon_ptr->nickname = em_ptr->m_ptr->nickname;
     if (em_ptr->m_ptr->is_riding() && process_fall_off_horse(player_ptr, -1, false)) {
-        msg_print(_("地面に落とされた。", format("You have fallen from %s.", em_ptr->m_name)));
+        msg_print(_("地面に落とされた。", "You have fallen from {}."), em_ptr->m_name);
     }
 
     delete_monster_idx(player_ptr, em_ptr->g_ptr->m_idx);
@@ -445,7 +445,7 @@ ProcessResult effect_monster_capture(PlayerType *player_ptr, EffectMonster *em_p
     cannot_capture |= em_ptr->monrace->population_flags.has(MonsterPopulationType::BUNBUN_STRIKER);
     cannot_capture |= em_ptr->m_ptr->has_parent();
     if (cannot_capture) {
-        msg_format(_("%sには効果がなかった。", "%s is unaffected."), em_ptr->m_name);
+        msg_print(_("{}には効果がなかった。", "{} is unaffected."), em_ptr->m_name);
         em_ptr->skipped = true;
         return ProcessResult::PROCESS_CONTINUE;
     }
@@ -455,7 +455,7 @@ ProcessResult effect_monster_capture(PlayerType *player_ptr, EffectMonster *em_p
     auto capturable_hp = std::max(2, calcutate_capturable_hp(player_ptr, *em_ptr->m_ptr, em_ptr->m_ptr->max_maxhp));
 
     if (threshold_hp < 2 || em_ptr->m_ptr->hp >= capturable_hp) {
-        msg_print(_("もっと弱らせないと。", format("You need to weaken %s more.", em_ptr->m_name)));
+        msg_print(_("もっと弱らせないと。", "You need to weaken {} more."), em_ptr->m_name);
         em_ptr->skipped = true;
         return ProcessResult::PROCESS_CONTINUE;
     }
@@ -465,7 +465,7 @@ ProcessResult effect_monster_capture(PlayerType *player_ptr, EffectMonster *em_p
         return ProcessResult::PROCESS_TRUE;
     }
 
-    msg_print(_("うまく捕まえられなかった。", format("You failed to capture %s.", em_ptr->m_name)));
+    msg_print(_("うまく捕まえられなかった。", "You failed to capture {}."), em_ptr->m_name);
     em_ptr->skipped = true;
     return ProcessResult::PROCESS_CONTINUE;
 }

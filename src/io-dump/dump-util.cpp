@@ -8,14 +8,9 @@
 #include "util/angband-files.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
+#include <fmt/format.h>
 
 DisplaySymbolsClipboard DisplaySymbolsClipboard::instance{};
-
-DisplaySymbolsClipboard::DisplaySymbolsClipboard()
-    : symbol()
-    , symbols(DEFAULT_SYMBOLS)
-{
-}
 
 DisplaySymbolsClipboard &DisplaySymbolsClipboard::get_instance()
 {
@@ -24,10 +19,10 @@ DisplaySymbolsClipboard &DisplaySymbolsClipboard::get_instance()
 
 void DisplaySymbolsClipboard::reset_symbols()
 {
-    this->symbols = DEFAULT_SYMBOLS;
+    this->symbols = {};
 }
 
-void DisplaySymbolsClipboard::set_symbol(const std::map<int, DisplaySymbol> &symbol_configs)
+void DisplaySymbolsClipboard::set_symbol(const TerrainSymbols &symbol_configs)
 {
     this->symbols = symbol_configs;
 }
@@ -179,7 +174,7 @@ bool open_temporary_file(FILE **fff, char *file_name)
         return true;
     }
 
-    msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), file_name);
+    msg_print(_("一時ファイル {} を作成できませんでした。", "Failed to create temporary file {}."), file_name);
     msg_erase();
     return false;
 }
@@ -265,9 +260,10 @@ void place_visual_list_cursor(TERM_LEN col, TERM_LEN row, TERM_COLOR a, byte c, 
  */
 void browser_cursor(char ch, int *column, IDX *grp_cur, int grp_cnt, IDX *list_cur, int list_cnt)
 {
+    // 一覧の件数は IDX の上限近くまであり得るため、移動と範囲の調整は int で計算してから IDX に戻す。
     int col = *column;
-    IDX grp = *grp_cur;
-    IDX list = *list_cur;
+    int grp = *grp_cur;
+    int list = *list_cur;
     auto dir = Direction::none();
     if (ch == ' ') {
         dir = Direction(3);
@@ -308,8 +304,8 @@ void browser_cursor(char ch, int *column, IDX *grp_cur, int grp_cnt, IDX *list_c
             }
         }
 
-        (*grp_cur) = grp;
-        (*list_cur) = list;
+        (*grp_cur) = static_cast<IDX>(grp);
+        (*list_cur) = static_cast<IDX>(list);
         return;
     }
 
@@ -328,7 +324,7 @@ void browser_cursor(char ch, int *column, IDX *grp_cur, int grp_cnt, IDX *list_c
 
     if (!col) {
         int old_grp = grp;
-        grp += (IDX)vec.y;
+        grp += vec.y;
         if (grp >= grp_cnt) {
             grp = grp_cnt - 1;
         }
@@ -339,7 +335,7 @@ void browser_cursor(char ch, int *column, IDX *grp_cur, int grp_cnt, IDX *list_c
             list = 0;
         }
     } else {
-        list += (IDX)vec.y;
+        list += vec.y;
         if (list >= list_cnt) {
             list = list_cnt - 1;
         }
@@ -348,6 +344,6 @@ void browser_cursor(char ch, int *column, IDX *grp_cur, int grp_cnt, IDX *list_c
         }
     }
 
-    (*grp_cur) = grp;
-    (*list_cur) = list;
+    (*grp_cur) = static_cast<IDX>(grp);
+    (*list_cur) = static_cast<IDX>(list);
 }

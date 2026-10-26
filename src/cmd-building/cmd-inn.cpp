@@ -17,11 +17,13 @@
 #include "rumor/rumor-service.h"
 #include "status/bad-status-setter.h"
 #include "store/rumor.h"
+#include "system/deferred-update-requests.h"
 #include "system/inner-game-data.h"
 #include "system/player-type-definition.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#include <fmt/format.h>
 
 /*!
  * @brief 宿屋で食事を摂る
@@ -151,9 +153,9 @@ static void display_stay_result(PlayerType *player_ptr, int prev_hour)
     const auto &floor = *player_ptr->current_floor_ptr;
     if ((prev_hour >= 6) && (prev_hour < 18)) {
 #ifdef JP
-        msg_format("あなたはリフレッシュして目覚め、%sを迎えた。", is_player_undead(player_ptr) ? "夜" : "夕方");
+        msg_print("あなたはリフレッシュして目覚め、{}を迎えた。", is_player_undead(player_ptr) ? "夜" : "夕方");
 #else
-        msg_format("You awake refreshed for the %s.", is_player_undead(player_ptr) ? "evening" : "twilight");
+        msg_print("You awake refreshed for the {}.", is_player_undead(player_ptr) ? "evening" : "twilight");
 #endif
         const auto awake_message = _(is_player_undead(player_ptr) ? "すがすがしい夜を迎えた。" : "夕方を迎えた。", "awoke refreshed.");
         exe_write_diary(floor, DiaryKind::DESCRIPTION, 0, awake_message);
@@ -187,11 +189,23 @@ static bool stay_inn(PlayerType *player_ptr)
     }
 
     player_ptr->chp = player_ptr->mhp;
+
+    // 建物の中ではメイン画面の描き直しが後回しになり、そこからの要求も来ないので、ここでサブウィンドウの描き直しを要求する。
+    // HP はプレイヤーの情報と呪文の一覧 (職業によっては技の失敗率や効果の表示) に表れる
+    auto &dur = DeferredUpdateRequests::get_instance();
+    static constexpr auto flags_swrf = {
+        SubWindowRedrawingFlag::PLAYER,
+        SubWindowRedrawingFlag::SPELL,
+    };
+    dur.set_flags(flags_swrf);
     if (has_a_nightmare(player_ptr)) {
         return true;
     }
 
     back_to_health(player_ptr);
+
+    // MP・朦朧は、呪文の一覧に加えてアイテムの知識の失敗率にも表れる
+    dur.request_spell_info_redrawing();
     charge_magic_eating_energy(player_ptr);
 
     display_stay_result(player_ptr, prev_hour);

@@ -11,7 +11,6 @@
 
 #include <cctype>
 #include <cerrno>
-#include <cstdarg>
 #include <cstddef>
 #include <cstdio>
 #include <cstdlib>

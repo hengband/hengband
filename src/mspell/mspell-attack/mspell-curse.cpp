@@ -14,21 +14,21 @@
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 
-static bool message_curse(PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, std::string_view msg1, std::string_view msg2, std::string_view msg3, int target_type)
+static bool message_curse(PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, CurseData::Format msg1, CurseData::Format msg2, CurseData::Format msg3, int target_type)
 {
-    const auto m_name = monster_name(player_ptr, m_idx);
+    const auto m_name = str_upcase_first(monster_name(player_ptr, m_idx));
     const auto t_name = monster_name(player_ptr, t_idx);
 
     if (target_type == MONSTER_TO_PLAYER) {
         disturb(player_ptr, true, true);
         if (player_ptr->effects()->blindness().is_active()) {
-            msg_print(fmt::runtime(msg1), str_upcase_first(m_name));
+            msg_print(msg1, std::string_view(m_name), std::string_view(t_name));
         } else {
-            msg_print(fmt::runtime(msg2), str_upcase_first(m_name));
+            msg_print(msg2, std::string_view(m_name), std::string_view(t_name));
         }
     } else if (target_type == MONSTER_TO_MONSTER) {
         if (see_monster(player_ptr, m_idx)) {
-            msg_print(fmt::runtime(msg3), str_upcase_first(m_name), t_name);
+            msg_print(msg3, std::string_view(m_name), std::string_view(t_name));
         } else {
             player_ptr->current_floor_ptr->monster_noise = true;
         }
@@ -36,7 +36,7 @@ static bool message_curse(PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX
     return false;
 }
 
-CurseData::CurseData(const std::string_view &msg1, const std::string_view &msg2, const std::string_view &msg3, const AttributeType &typ)
+CurseData::CurseData(Format msg1, Format msg2, Format msg3, const AttributeType &typ)
     : MSpellData([=](auto *player_ptr, auto m_idx, auto t_idx, int target_type) {
         return message_curse(player_ptr, m_idx, t_idx, msg1, msg2, msg3, target_type);
     },

@@ -27,10 +27,11 @@
 #include "system/terrain/terrain-list.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
-#include "term/z-form.h"
 #include "util/angband-files.h"
 #include "util/int-char-converter.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
+#include <fmt/format.h>
 #include <tl/optional.hpp>
 
 /*!
@@ -60,6 +61,23 @@ static tl::optional<T> input_new_visual_id(int i, T initial_visual_id, int max)
 }
 
 /*!
+ * @brief シンボルの文字を変更する際の対象指定
+ * @param i 指定対象となるキャラクタコード
+ * @param initial_character 現在の文字
+ * @return 新しい文字
+ * @details 0x80 以上の文字は char では負になるので、0〜255 の値として指定させる
+ */
+static tl::optional<char> input_new_visual_character(int i, char initial_character)
+{
+    const auto new_character = input_new_visual_id(i, static_cast<uint8_t>(initial_character), 256);
+    if (!new_character) {
+        return tl::nullopt;
+    }
+
+    return static_cast<char>(*new_character);
+}
+
+/*!
  * @brief キャラクタの変更メニュー表示
  * @param choice_msg 選択メッセージ
  */
@@ -77,7 +95,7 @@ static void print_visuals_menu(concptr choice_msg)
     prt(_("(8) アイテムの   色/文字 を変更する (シンボルエディタ)", "(8) Change object attr/chars (visual mode)"), 11, 5);
     prt(_("(9) 地形の       色/文字 を変更する (シンボルエディタ)", "(9) Change feature attr/chars (visual mode)"), 12, 5);
     prt(_("(R) 画面表示方法の初期化", "(R) Reset visuals"), 13, 5);
-    prt(format(_("コマンド: %s", "Command: %s"), choice_msg ? choice_msg : _("", "")), 15, 0);
+    prt(fmt::format(_("コマンド: {}", "Command: {}"), choice_msg ? choice_msg : _("", "")), 15, 0);
 }
 
 /*
@@ -93,7 +111,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
     }
 
     screen_save();
-    const auto initial_filename = format("%s.prf", player_ptr->base_name);
+    const auto initial_filename = fmt::format("{}.prf", player_ptr->base_name);
     while (true) {
         term_clear();
         print_visuals_menu(nullptr);
@@ -129,11 +147,11 @@ void do_cmd_visuals(PlayerType *player_ptr)
                 continue;
             }
 
-            auto_dump_printf(auto_dump_stream, _("\n# モンスターの[色/文字]の設定\n\n", "\n# Monster attr/char definitions\n\n"));
+            auto_dump_print(auto_dump_stream, _("\n# モンスターの[色/文字]の設定\n\n", "\n# Monster attr/char definitions\n\n"));
             for (const auto &[monrace_id, monrace] : MonraceList::get_instance()) {
-                auto_dump_printf(auto_dump_stream, "# %s\n", monrace->name.data());
+                auto_dump_print(auto_dump_stream, "# {}\n", monrace->name);
                 const auto &symbol_config = monrace->symbol_config;
-                auto_dump_printf(auto_dump_stream, "R:%d:0x%02X/0x%02X\n\n", enum2i(monrace_id), symbol_config.color, static_cast<uint8_t>(symbol_config.character));
+                auto_dump_print(auto_dump_stream, "R:{}:0x{:02X}/0x{:02X}\n\n", enum2i(monrace_id), symbol_config.color, static_cast<uint8_t>(symbol_config.character));
             }
 
             close_auto_dump(&auto_dump_stream, mark);
@@ -154,7 +172,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                 continue;
             }
 
-            auto_dump_printf(auto_dump_stream, _("\n# アイテムの[色/文字]の設定\n\n", "\n# Object attr/char definitions\n\n"));
+            auto_dump_print(auto_dump_stream, _("\n# アイテムの[色/文字]の設定\n\n", "\n# Object attr/char definitions\n\n"));
             const auto &baseitems = BaseitemList::get_instance();
             const auto &baseitem_configs = BaseitemConfigs::get_instance();
             const auto &baseitem_records = BaseitemRecords::get_instance();
@@ -169,8 +187,8 @@ void do_cmd_visuals(PlayerType *player_ptr)
                 }
 
                 const auto &baseitem_config = baseitem_configs.get_config(bi_id);
-                auto_dump_printf(auto_dump_stream, "# %s\n", item_name.data());
-                auto_dump_printf(auto_dump_stream, "K:%d:0x%02X/0x%02X\n\n", bi_id, baseitem_config.get_color(), static_cast<uint8_t>(baseitem_config.get_character()));
+                auto_dump_print(auto_dump_stream, "# {}\n", item_name);
+                auto_dump_print(auto_dump_stream, "K:{}:0x{:02X}/0x{:02X}\n\n", bi_id, baseitem_config.get_color(), static_cast<uint8_t>(baseitem_config.get_character()));
             }
 
             close_auto_dump(&auto_dump_stream, mark);
@@ -191,7 +209,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                 continue;
             }
 
-            auto_dump_printf(auto_dump_stream, _("\n# 地形の[色/文字]の設定\n\n", "\n# Feature attr/char definitions\n\n"));
+            auto_dump_print(auto_dump_stream, _("\n# 地形の[色/文字]の設定\n\n", "\n# Feature attr/char definitions\n\n"));
             for (const auto &terrain : TerrainList::get_instance()) {
                 if (terrain.name.empty()) {
                     continue;
@@ -200,13 +218,11 @@ void do_cmd_visuals(PlayerType *player_ptr)
                     continue;
                 }
 
-                auto_dump_printf(auto_dump_stream, "# %s\n", (terrain.name.data()));
+                auto_dump_print(auto_dump_stream, "# {}\n", terrain.name);
                 const auto &symbol_standard = terrain.symbol_configs.at(F_LIT_STANDARD);
                 const auto &symbol_lite = terrain.symbol_configs.at(F_LIT_LITE);
                 const auto &symbol_dark = terrain.symbol_configs.at(F_LIT_DARK);
-                auto_dump_printf(auto_dump_stream, "F:%d:0x%02X/0x%02X:0x%02X/0x%02X:0x%02X/0x%02X\n\n", terrain.idx, symbol_standard.color,
-                    static_cast<uint8_t>(symbol_standard.character), symbol_lite.color, static_cast<uint8_t>(symbol_lite.character),
-                    symbol_dark.color, static_cast<uint8_t>(symbol_dark.character));
+                auto_dump_print(auto_dump_stream, "F:{}:0x{:02X}/0x{:02X}:0x{:02X}/0x{:02X}:0x{:02X}/0x{:02X}\n\n", terrain.idx, symbol_standard.color, static_cast<uint8_t>(symbol_standard.character), symbol_lite.color, static_cast<uint8_t>(symbol_lite.character), symbol_dark.color, static_cast<uint8_t>(symbol_dark.character));
             }
 
             close_auto_dump(&auto_dump_stream, mark);
@@ -218,17 +234,17 @@ void do_cmd_visuals(PlayerType *player_ptr)
             auto &monraces = MonraceList::get_instance();
             static auto choice_msg = _("モンスターの[色/文字]を変更します", "Change monster attr/chars");
             static auto monrace_id = monraces.begin()->second->idx;
-            prt(format(_("コマンド: %s", "Command: %s"), choice_msg), 15, 0);
+            prt(fmt::format(_("コマンド: {}", "Command: {}"), choice_msg), 15, 0);
             while (true) {
                 auto &monrace = monraces.get_monrace(monrace_id);
                 int c;
                 const auto &symbol_definition = monrace.symbol_definition;
                 auto &symbol_config = monrace.symbol_config;
-                term_putstr(5, 17, -1, TERM_WHITE, format(_("モンスター = %d, 名前 = %-40.40s", "Monster = %d, Name = %-40.40s"), enum2i(monrace_id), monrace.name.data()));
-                term_putstr(10, 19, -1, TERM_WHITE, format(_("初期値  色 / 文字 = %3u / %3u", "Default attr/char = %3u / %3u"), symbol_definition.color, static_cast<uint8_t>(symbol_definition.character)));
+                term_putstr(5, 17, -1, TERM_WHITE, fmt::format(_("モンスター = {}, 名前 = {:<40}", "Monster = {}, Name = {:<40}"), enum2i(monrace_id), fmt::bytes(str_substr(monrace.name, 0, 40))));
+                term_putstr(10, 19, -1, TERM_WHITE, fmt::format(_("初期値  色 / 文字 = {:3} / {:3}", "Default attr/char = {:3} / {:3}"), symbol_definition.color, static_cast<uint8_t>(symbol_definition.character)));
                 term_putstr(40, 19, -1, TERM_WHITE, empty_symbol);
                 term_queue_bigchar(43, 19, { symbol_definition, {} });
-                term_putstr(10, 20, -1, TERM_WHITE, format(_("現在値  色 / 文字 = %3u / %3u", "Current attr/char = %3u / %3u"), symbol_config.color, static_cast<uint8_t>(symbol_config.character)));
+                term_putstr(10, 20, -1, TERM_WHITE, fmt::format(_("現在値  色 / 文字 = {:3} / {:3}", "Current attr/char = {:3} / {:3}"), symbol_config.color, static_cast<uint8_t>(symbol_config.character)));
                 term_putstr(40, 20, -1, TERM_WHITE, empty_symbol);
                 term_queue_bigchar(43, 20, { symbol_config, {} });
                 term_putstr(0, 22, -1, TERM_WHITE, _("コマンド (n/N/^N/a/A/^A/c/C/^C/v/V/^V): ", "Command (n/N/^N/a/A/^A/c/C/^C/v/V/^V): "));
@@ -247,7 +263,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
 
                 switch (c) {
                 case 'n': {
-                    const auto new_monrace_id_opt = input_new_visual_id(ch, num, static_cast<short>(monraces.size()));
+                    const auto new_monrace_id_opt = input_new_visual_id(ch, num, static_cast<int>(monraces.size()));
                     if (!new_monrace_id_opt) {
                         break;
                     }
@@ -268,7 +284,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                     break;
                 }
                 case 'c': {
-                    const auto visual_id = input_new_visual_id(ch, symbol_config.character, 256);
+                    const auto visual_id = input_new_visual_character(ch, symbol_config.character);
                     if (!visual_id) {
                         break;
                     }
@@ -290,7 +306,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
         case '5': {
             static auto choice_msg = _("アイテムの[色/文字]を変更します", "Change object attr/chars");
             static short bi_id = 0;
-            prt(format(_("コマンド: %s", "Command: %s"), choice_msg), 15, 0);
+            prt(fmt::format(_("コマンド: {}", "Command: {}"), choice_msg), 15, 0);
             const auto &baseitems = BaseitemList::get_instance();
             const auto &baseitem_records = BaseitemRecords::get_instance();
             auto &baseitem_configs = BaseitemConfigs::get_instance();
@@ -300,14 +316,14 @@ void do_cmd_visuals(PlayerType *player_ptr)
                 const auto &symbol_definition = baseitem.get_symbol();
                 auto &baseitem_record = baseitem_records.get_record(bi_id);
                 auto &baseitem_config = baseitem_configs.get_config(bi_id);
-                constexpr auto fmt_title = _("アイテム = %d, 名前 = %-40.40s", "Object = %d, Name = %-40.40s");
+                constexpr auto fmt_title = _("アイテム = {}, 名前 = {:<40}", "Object = {}, Name = {:<40}");
                 const auto &baseitem_name = baseitem_record.is_apparent() ? baseitem.flavor_name : baseitem.name;
-                const auto title = format(fmt_title, bi_id, baseitem_name.data());
+                const auto title = fmt::format(fmt_title, bi_id, fmt::bytes(str_substr(baseitem_name, 0, 40)));
                 term_putstr(5, 17, -1, TERM_WHITE, title);
-                term_putstr(10, 19, -1, TERM_WHITE, format(_("初期値  色 / 文字 = %3d / %3d", "Default attr/char = %3d / %3d"), symbol_definition.color, symbol_definition.character));
+                term_putstr(10, 19, -1, TERM_WHITE, fmt::format(_("初期値  色 / 文字 = {:3} / {:3}", "Default attr/char = {:3} / {:3}"), symbol_definition.color, static_cast<uint8_t>(symbol_definition.character)));
                 term_putstr(40, 19, -1, TERM_WHITE, empty_symbol);
                 term_queue_bigchar(43, 19, { symbol_definition, {} });
-                term_putstr(10, 20, -1, TERM_WHITE, format(_("現在値  色 / 文字 = %3d / %3d", "Current attr/char = %3d / %3d"), baseitem_config.get_color(), baseitem_config.get_character()));
+                term_putstr(10, 20, -1, TERM_WHITE, fmt::format(_("現在値  色 / 文字 = {:3} / {:3}", "Current attr/char = {:3} / {:3}"), baseitem_config.get_color(), static_cast<uint8_t>(baseitem_config.get_character())));
                 term_putstr(40, 20, -1, TERM_WHITE, empty_symbol);
                 term_queue_bigchar(43, 20, { baseitem_config.get_symbol(), {} });
                 term_putstr(0, 22, -1, TERM_WHITE, _("コマンド (n/N/^N/a/A/^A/c/C/^C/v/V/^V): ", "Command (n/N/^N/a/A/^A/c/C/^C/v/V/^V): "));
@@ -330,7 +346,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                     tl::optional<short> new_baseitem_id;
                     const auto previous_bi_id = bi_id;
                     while (true) {
-                        new_baseitem_id = input_new_visual_id(ch, bi_id, static_cast<short>(baseitems.size()));
+                        new_baseitem_id = input_new_visual_id(ch, bi_id, static_cast<int>(baseitems.size()));
                         if (!new_baseitem_id) {
                             bi_id = previous_bi_id;
                             break;
@@ -355,7 +371,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                     break;
                 }
                 case 'c': {
-                    const auto visual_id = input_new_visual_id(ch, baseitem_config.get_character(), 256);
+                    const auto visual_id = input_new_visual_character(ch, baseitem_config.get_character());
                     if (!visual_id) {
                         break;
                     }
@@ -378,7 +394,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
             static auto choice_msg = _("地形の[色/文字]を変更します", "Change feature attr/chars");
             static short terrain_id = 0;
             static short lighting_level = F_LIT_STANDARD;
-            prt(format(_("コマンド: %s", "Command: %s"), choice_msg), 15, 0);
+            prt(fmt::format(_("コマンド: {}", "Command: {}"), choice_msg), 15, 0);
             auto &terrains = TerrainList::get_instance();
             while (true) {
                 auto &terrain = terrains.get_terrain(terrain_id);
@@ -387,12 +403,11 @@ void do_cmd_visuals(PlayerType *player_ptr)
                 const auto &symbol_config = terrain.symbol_configs[lighting_level];
                 prt("", 17, 5);
                 term_putstr(5, 17, -1, TERM_WHITE,
-                    format(_("地形 = %d, 名前 = %s, 明度 = %s", "Terrain = %d, Name = %s, Lighting = %s"), terrain_id, (terrain.name.data()),
-                        lighting_level_str[lighting_level]));
-                term_putstr(10, 19, -1, TERM_WHITE, format(_("初期値  色 / 文字 = %3d / %3d", "Default attr/char = %3d / %3d"), symbol_definition.color, symbol_definition.character));
+                    fmt::format(_("地形 = {}, 名前 = {}, 明度 = {}", "Terrain = {}, Name = {}, Lighting = {}"), terrain_id, terrain.name, lighting_level_str[lighting_level]));
+                term_putstr(10, 19, -1, TERM_WHITE, fmt::format(_("初期値  色 / 文字 = {:3} / {:3}", "Default attr/char = {:3} / {:3}"), symbol_definition.color, static_cast<uint8_t>(symbol_definition.character)));
                 term_putstr(40, 19, -1, TERM_WHITE, empty_symbol);
                 term_queue_bigchar(43, 19, { symbol_definition, {} });
-                term_putstr(10, 20, -1, TERM_WHITE, format(_("現在値  色 / 文字 = %3d / %3d", "Current attr/char = %3d / %3d"), symbol_config.color, symbol_config.character));
+                term_putstr(10, 20, -1, TERM_WHITE, fmt::format(_("現在値  色 / 文字 = {:3} / {:3}", "Current attr/char = {:3} / {:3}"), symbol_config.color, static_cast<uint8_t>(symbol_config.character)));
                 term_putstr(40, 20, -1, TERM_WHITE, empty_symbol);
                 term_queue_bigchar(43, 20, { symbol_config, {} });
                 term_putstr(0, 22, -1, TERM_WHITE,
@@ -416,7 +431,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                     tl::optional<short> new_terrain_id;
                     const auto previous_terrain_id = terrain_id;
                     while (true) {
-                        new_terrain_id = input_new_visual_id(ch, terrain_id, static_cast<short>(TerrainList::get_instance().size()));
+                        new_terrain_id = input_new_visual_id(ch, terrain_id, static_cast<int>(TerrainList::get_instance().size()));
                         if (!new_terrain_id) {
                             terrain_id = previous_terrain_id;
                             break;
@@ -444,7 +459,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                 }
                 case 'c': {
                     auto &character_config = terrain.symbol_configs[lighting_level].character;
-                    const auto visual_id = input_new_visual_id(ch, character_config, 256);
+                    const auto visual_id = input_new_visual_character(ch, character_config);
                     if (!visual_id) {
                         break;
                     }

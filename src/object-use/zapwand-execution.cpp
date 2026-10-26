@@ -15,9 +15,9 @@
 #include "player-status/player-energy.h"
 #include "status/experience.h"
 #include "sv-definition/sv-wand-types.h"
+#include "system/deferred-update-requests.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "target/target-getter.h"
 #include "term/screen-processor.h"
 #include "timed-effect/timed-effects.h"
@@ -85,7 +85,7 @@ void ObjectZapWandEntity::execute(INVENTORY_IDX i_idx)
         return;
     }
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &dur = DeferredUpdateRequests::get_instance();
     if (item->pval <= 0) {
         if (flush_failure) {
             flush();
@@ -93,24 +93,13 @@ void ObjectZapWandEntity::execute(INVENTORY_IDX i_idx)
 
         msg_print(_("この魔法棒にはもう魔力が残っていない。", "The wand has no charges left."));
         item->set_identification_flag(IdentificationFlag::EMPTY);
-        static constexpr auto flags = {
-            StatusRecalculatingFlag::COMBINATION,
-            StatusRecalculatingFlag::REORDER,
-        };
-        rfu.set_flags(flags);
-        rfu.set_flag(SubWindowRedrawingFlag::INVENTORY);
+        dur.request_inventory_arrangement();
+        dur.request_item_lists_redrawing();
         return;
     }
 
     sound(SoundKind::ZAP);
     auto ident = wand_effect(this->player_ptr, *sval, dir, false, false);
-    using Srf = StatusRecalculatingFlag;
-    EnumClassFlagGroup<Srf> flags_srf = { Srf::COMBINATION, Srf::REORDER };
-    if (rfu.has(Srf::AUTO_DESTRUCTION)) {
-        flags_srf.set(Srf::AUTO_DESTRUCTION);
-    }
-
-    rfu.reset_flags(flags_srf);
     if (!item->is_aware()) {
         chg_virtue(this->player_ptr, Virtue::PATIENCE, -1);
         chg_virtue(this->player_ptr, Virtue::CHANCE, 1);
@@ -123,15 +112,8 @@ void ObjectZapWandEntity::execute(INVENTORY_IDX i_idx)
         gain_exp(this->player_ptr, (item_level + (this->player_ptr->lev >> 1)) / this->player_ptr->lev);
     }
 
-    static constexpr auto flags_swrf = {
-        SubWindowRedrawingFlag::INVENTORY,
-        SubWindowRedrawingFlag::EQUIPMENT,
-        SubWindowRedrawingFlag::PLAYER,
-        SubWindowRedrawingFlag::FLOOR_ITEMS,
-        SubWindowRedrawingFlag::FOUND_ITEMS,
-    };
-    rfu.set_flags(flags_swrf);
-    rfu.set_flags(flags_srf);
+    dur.request_inventory_arrangement();
+    dur.request_item_lists_redrawing();
     item->pval--;
 
     describe_item_charges(this->player_ptr, i_idx >= 0, item);

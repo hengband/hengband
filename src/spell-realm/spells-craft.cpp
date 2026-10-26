@@ -1,6 +1,7 @@
 #include "spell-realm/spells-craft.h"
 #include "action/travel-execution.h"
 #include "avatar/avatar.h"
+#include "core/asking-player.h"
 #include "core/disturbance.h"
 #include "core/stuff-handler.h"
 #include "flavor/flavor-describer.h"
@@ -8,7 +9,7 @@
 #include "floor/floor-object.h"
 #include "game-option/disturbance-options.h"
 #include "inventory/inventory-slot-types.h"
-#include "io/input-key-acceptor.h"
+#include "io/input-context.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "object-enchant/object-ego.h"
@@ -19,9 +20,9 @@
 #include "racial/racial-android.h"
 #include "spell/spells-object.h"
 #include "sv-definition/sv-protector-types.h"
+#include "system/deferred-update-requests.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "view/display-messages.h"
@@ -92,17 +93,17 @@ bool set_ele_attack(PlayerType *player_ptr, uint32_t attack_type, TIME_EFFECT v)
             break;
         }
 
-        constexpr auto mes = _("%sで攻撃できるようになった！", "For a while, the blows you deal will %s");
-        msg_format(mes, element.data());
+        constexpr auto mes = _("{}で攻撃できるようになった！", "For a while, the blows you deal will {}");
+        msg_print(mes, element);
     }
 
     if (disturb_state || Travel::get_instance().is_ongoing()) {
         disturb(player_ptr, false, false);
     }
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
-    rfu.set_flag(StatusRecalculatingFlag::BONUS);
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
+    dur.set_flag(StatusRecalculatingFlag::BONUS);
     handle_stuff(player_ptr);
 
     return true;
@@ -174,16 +175,16 @@ bool set_ele_immune(PlayerType *player_ptr, uint32_t immune_type, TIME_EFFECT v)
             break;
         }
 
-        msg_format(_("%sの攻撃を受けつけなくなった！", "For a while, you are immune to %s"), element.data());
+        msg_print(_("{}の攻撃を受けつけなくなった！", "For a while, you are immune to {}"), element);
     }
 
     if (disturb_state || Travel::get_instance().is_ongoing()) {
         disturb(player_ptr, false, true);
     }
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
-    rfu.set_flag(StatusRecalculatingFlag::BONUS);
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
+    dur.set_flag(StatusRecalculatingFlag::BONUS);
     handle_stuff(player_ptr);
 
     return true;
@@ -195,7 +196,7 @@ bool set_ele_immune(PlayerType *player_ptr, uint32_t immune_type, TIME_EFFECT v)
 bool choose_ele_attack(PlayerType *player_ptr, TIME_EFFECT turn)
 {
     if (!has_melee_weapon(player_ptr, INVEN_MAIN_HAND) && !has_melee_weapon(player_ptr, INVEN_SUB_HAND)) {
-        msg_format(_("武器を持たないと魔法剣は使えない。", "You cannot use temporary branding with no weapon."));
+        msg_print(_("武器を持たないと魔法剣は使えない。", "You cannot use temporary branding with no weapon."));
         return false;
     }
 
@@ -232,9 +233,10 @@ bool choose_ele_attack(PlayerType *player_ptr, TIME_EFFECT turn)
     prt("", 9, 14);
 
     prt("", 1, 0);
-    prt(_("        どの元素攻撃をしますか？", "        Choose a temporary elemental brand "), 1, 14);
+    constexpr auto brand_prompt = _("        どの元素攻撃をしますか？", "        Choose a temporary elemental brand ");
+    prt(brand_prompt, 1, 14);
 
-    char choice = inkey();
+    const auto choice = input_key_with_context(InputKind::COMMAND_CHAR, brand_prompt);
 
     if ((choice == 'a') || (choice == 'A')) {
         set_ele_attack(player_ptr, ATTACK_FIRE, turn);
@@ -273,9 +275,10 @@ bool choose_ele_immune(PlayerType *player_ptr, TIME_EFFECT immune_turn)
     prt("", 9, 14);
 
     prt("", 1, 0);
-    prt(_("        どの元素の免疫をつけますか？", "        Choose a temporary elemental immunity "), 1, 14);
+    constexpr auto immunity_prompt = _("        どの元素の免疫をつけますか？", "        Choose a temporary elemental immunity ");
+    prt(immunity_prompt, 1, 14);
 
-    char choice = inkey();
+    const auto choice = input_key_with_context(InputKind::COMMAND_CHAR, immunity_prompt);
 
     if ((choice == 'a') || (choice == 'A')) {
         set_ele_immune(player_ptr, DEFENSE_FIRE, immune_turn);
@@ -316,14 +319,21 @@ bool pulish_shield(PlayerType *player_ptr)
     is_pulish_successful &= (item->bi_key.sval() != SV_MIRROR_SHIELD);
     if (is_pulish_successful) {
 #ifdef JP
-        msg_format("%sは輝いた！", item_name.data());
+        msg_print("{}は輝いた！", item_name);
 #else
-        msg_format("%s %s shine%s!", ((i_idx >= 0) ? "Your" : "The"), item_name.data(), ((item->number > 1) ? "" : "s"));
+        msg_print("{} {} shine{}!", ((i_idx >= 0) ? "Your" : "The"), item_name, ((item->number > 1) ? "" : "s"));
 #endif
         item->ego_idx = EgoType::REFLECTION;
         enchant_equipment(*item, randint0(3) + 4, ENCH_TOAC);
         item->discount = 99;
+
+        // 修正値の強化に失敗しても、エゴの能力は付いている
+        auto &dur = DeferredUpdateRequests::get_instance();
+        dur.set_flag(StatusRecalculatingFlag::BONUS);
+        dur.request_inventory_arrangement();
+        dur.request_item_lists_redrawing();
         chg_virtue(player_ptr, Virtue::ENCHANT, 2);
+        calc_android_exp(player_ptr);
         return true;
     }
 

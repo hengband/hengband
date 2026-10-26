@@ -13,6 +13,7 @@
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
 #include "racial/racial-android.h"
+#include "system/deferred-update-requests.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
@@ -35,39 +36,39 @@ bool artifact_scroll(PlayerType *player_ptr)
 
     const auto item_name = describe_flavor(player_ptr, *item, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 #ifdef JP
-    msg_format("%s は眩い光を発した！", item_name.data());
+    msg_print("{} は眩い光を発した！", item_name);
 #else
-    msg_format("%s %s radiate%s a blinding light!", ((i_idx >= 0) ? "Your" : "The"), item_name.data(), ((item->number > 1) ? "" : "s"));
+    msg_print("{} {} radiate{} a blinding light!", ((i_idx >= 0) ? "Your" : "The"), item_name, ((item->number > 1) ? "" : "s"));
 #endif
 
     bool okay = false;
     if (item->is_fixed_or_random_artifact()) {
 #ifdef JP
-        msg_format("%sは既に伝説のアイテムです！", item_name.data());
+        msg_print("{}は既に伝説のアイテムです！", item_name);
 #else
-        msg_format("The %s %s already %s!", item_name.data(), ((item->number > 1) ? "are" : "is"), ((item->number > 1) ? "artifacts" : "an artifact"));
+        msg_print("The {} {} already {}!", item_name, ((item->number > 1) ? "are" : "is"), ((item->number > 1) ? "artifacts" : "an artifact"));
 #endif
         okay = false;
     } else if (item->is_ego()) {
 #ifdef JP
-        msg_format("%sは既に名のあるアイテムです！", item_name.data());
+        msg_print("{}は既に名のあるアイテムです！", item_name);
 #else
-        msg_format("The %s %s already %s!", item_name.data(), ((item->number > 1) ? "are" : "is"), ((item->number > 1) ? "ego items" : "an ego item"));
+        msg_print("The {} {} already {}!", item_name, ((item->number > 1) ? "are" : "is"), ((item->number > 1) ? "ego items" : "an ego item"));
 #endif
         okay = false;
     } else if (item->is_smith()) {
 #ifdef JP
-        msg_format("%sは既に強化されています！", item_name.data());
+        msg_print("{}は既に強化されています！", item_name);
 #else
-        msg_format("The %s %s already %s!", item_name.data(), ((item->number > 1) ? "are" : "is"), ((item->number > 1) ? "customized items" : "a customized item"));
+        msg_print("The {} {} already {}!", item_name, ((item->number > 1) ? "are" : "is"), ((item->number > 1) ? "customized items" : "a customized item"));
 #endif
     } else {
         if (item->number > 1) {
             msg_print(_("複数のアイテムに魔法をかけるだけのエネルギーはありません！", "Not enough energy to enchant more than one object!"));
 #ifdef JP
-            msg_format("%d 個の%sが壊れた！", (item->number) - 1, item_name.data());
+            msg_print("{} 個の{}が壊れた！", (item->number) - 1, item_name);
 #else
-            msg_format("%d of your %s %s destroyed!", (item->number) - 1, item_name.data(), (item->number > 2 ? "were" : "was"));
+            msg_print("{} of your {} {} destroyed!", (item->number) - 1, item_name, (item->number > 2 ? "were" : "was"));
 #endif
 
             if (i_idx >= 0) {
@@ -93,6 +94,9 @@ bool artifact_scroll(PlayerType *player_ptr)
         calc_android_exp(player_ptr);
         return true;
     }
+
+    // 装備品なら、アーティファクトの能力が付く
+    DeferredUpdateRequests::get_instance().request_equipment_change_updates();
 
     if (record_rand_art) {
         const auto diary_item_name = describe_flavor(player_ptr, *item, OD_NAME_ONLY);
@@ -131,13 +135,38 @@ bool mundane_spell(PlayerType *player_ptr, bool only_equip)
     }
 
     msg_print(_("まばゆい閃光が走った！", "There is a bright flash of light!"));
+    // 束の数・位置・印・銘は、ベースアイテムから作り直した後も引き継ぐ (ロッドの pval と充填の残り時間は、後の条件に合うときだけ)
+    const auto number = item->number;
+    const auto pval = item->pval;
+    const auto timeout = item->timeout;
+    const auto activation = item->find_activation_info();
     auto pos = item->get_position();
     auto marked = item->marked;
-    auto &&inscription = std::move(item->inscription);
+    auto inscription = std::move(item->inscription);
     item->generate(item->bi_id);
+    item->number = number;
+    // ロッドの束の pval は 1 本分の充填時間 × 個数なので、個数と合わせて引き継ぐ
+    if (item->bi_key.tval() == ItemKindType::ROD) {
+        item->pval = pval;
+    }
+
     item->set_position(pos);
     item->marked = marked;
     item->inscription = std::move(inscription);
+
+    // 充填中のロッドや発動は、凡庸化しても充填が終わらない。
+    // 発動が無くなったもの・エゴやアーティファクトの発動からベースアイテムの発動に変わったものは、前の充填を引き継がない
+    if ((item->bi_key.tval() == ItemKindType::ROD) || (item->has_activation() && (item->find_activation_info() == activation))) {
+        item->timeout = timeout;
+    }
+
+    // 装備品なら、修正値・エゴ・アーティファクトの能力が無くなる
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.request_equipment_change_updates();
+
+    // 鑑定の状態・エゴ・修正値が変わるので、並び順や束をまとめられるかも変わる
+    dur.request_inventory_arrangement();
+    dur.request_item_lists_redrawing();
     calc_android_exp(player_ptr);
     return true;
 }

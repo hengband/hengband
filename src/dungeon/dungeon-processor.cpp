@@ -22,6 +22,7 @@
 #include "realm/realm-song-numbers.h"
 #include "spell-realm/spells-song.h"
 #include "system/building-type-definition.h"
+#include "system/deferred-update-requests.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/dungeon/dungeon-record.h"
 #include "system/dungeon/quest-definition.h"
@@ -30,40 +31,23 @@
 #include "system/floor/floor-info.h"
 #include "system/floor/wilderness-grid.h"
 #include "system/monrace/monrace-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "target/target-checker.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "world/world-turn-processor.h"
 #include "world/world.h"
+#include <fmt/format.h>
 
 static void redraw_character_xtra(PlayerType *player_ptr)
 {
     auto &world = AngbandWorld::get_instance();
     world.character_xtra = true;
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    static constexpr auto flags_swrf = {
-        SubWindowRedrawingFlag::INVENTORY,
-        SubWindowRedrawingFlag::EQUIPMENT,
-        SubWindowRedrawingFlag::SPELL,
-        SubWindowRedrawingFlag::PLAYER,
-        SubWindowRedrawingFlag::MONSTER_LORE,
-        SubWindowRedrawingFlag::OVERHEAD,
-        SubWindowRedrawingFlag::DUNGEON,
-    };
-    rfu.set_flags(flags_swrf);
-    static constexpr auto flags_mwrf = {
-        MainWindowRedrawingFlag::WIPE,
-        MainWindowRedrawingFlag::BASIC,
-        MainWindowRedrawingFlag::EXTRA,
-        MainWindowRedrawingFlag::EQUIPPY,
-        MainWindowRedrawingFlag::MAP,
-    };
-    rfu.set_flags(flags_mwrf);
-    auto flags_srf = {
-        StatusRecalculatingFlag::BONUS,
-        StatusRecalculatingFlag::HP,
-        StatusRecalculatingFlag::MP,
-        StatusRecalculatingFlag::SPELLS,
+    auto &dur = DeferredUpdateRequests::get_instance();
+    // フロアが変わったので、足元や発見済みのアイテムの一覧なども含め、すべてのサブウィンドウを描き直す
+    dur.fill_up_sub_flags();
+    dur.request_whole_main_window_redrawing();
+    dur.request_player_status_recalculation();
+    static constexpr auto flags_srf = {
         StatusRecalculatingFlag::VIEW,
         StatusRecalculatingFlag::LITE,
         StatusRecalculatingFlag::MONSTER_LITE,
@@ -72,7 +56,7 @@ static void redraw_character_xtra(PlayerType *player_ptr)
         StatusRecalculatingFlag::DISTANCE,
         StatusRecalculatingFlag::FLOW,
     };
-    rfu.set_flags(flags_srf);
+    dur.set_flags(flags_srf);
     handle_stuff(player_ptr);
     world.character_xtra = false;
 }
@@ -123,6 +107,9 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
     }
 
     auto &dungeon_record = DungeonRecords::get_instance().get_record(floor.dungeon_id);
+    if (floor.is_underground() && !floor.is_in_quest()) {
+        dungeon_record.mark_visited();
+    }
     if ((dungeon_record.get_max_level() < floor.dun_level) && !floor.is_in_quest()) {
         dungeon_record.set_max_level(floor.dun_level);
         if (record_maxdepth) {
@@ -136,16 +123,14 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
     msg_erase();
 
     redraw_character_xtra(player_ptr);
-    auto flags_srf = {
-        StatusRecalculatingFlag::BONUS,
-        StatusRecalculatingFlag::HP,
-        StatusRecalculatingFlag::MP,
-        StatusRecalculatingFlag::SPELLS,
-        StatusRecalculatingFlag::COMBINATION,
-        StatusRecalculatingFlag::REORDER,
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.request_player_status_recalculation();
+    static constexpr auto flags_iaf = {
+        InventoryArrangementFlag::COMBINATION,
+        InventoryArrangementFlag::REORDER,
     };
-    RedrawingFlagsUpdater::get_instance().set_flags(flags_srf);
-    handle_stuff(player_ptr);
+    dur.set_flags(flags_iaf);
+    handle_stuff_with_inventory_arrangement(player_ptr);
     term_fresh();
 
     auto no_feeling_quest = (quest_id == QuestId::OBERON);
@@ -186,9 +171,9 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
         const auto &monrace = dungeon.get_guardian();
         if (!monrace.is_dead_unique()) {
 #ifdef JP
-            msg_format("この階には%sの主である%sが棲んでいる。", dungeon.name.data(), monrace.name.data());
+            msg_print("この階には{}の主である{}が棲んでいる。", dungeon.name, monrace.name);
 #else
-            msg_format("%s^ lives in this level as the keeper of %s.", monrace.name.data(), dungeon.name.data());
+            msg_print("{} lives in this level as the keeper of {}.", str_upcase_first(monrace.name), dungeon.name);
 #endif
         }
     }
@@ -222,7 +207,7 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
 
         process_player(player_ptr);
         process_upkeep_with_speed(player_ptr);
-        handle_stuff(player_ptr);
+        handle_stuff_with_inventory_arrangement(player_ptr);
 
         move_cursor_relative(player_ptr->y, player_ptr->x);
         if (fresh_after) {
@@ -234,7 +219,7 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
         }
 
         process_monsters(player_ptr);
-        handle_stuff(player_ptr);
+        handle_stuff_with_inventory_arrangement(player_ptr);
 
         move_cursor_relative(player_ptr->y, player_ptr->x);
         if (fresh_after) {
@@ -246,7 +231,7 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
         }
 
         WorldTurnProcessor(player_ptr).process_world();
-        handle_stuff(player_ptr);
+        handle_stuff_with_inventory_arrangement(player_ptr);
 
         move_cursor_relative(player_ptr->y, player_ptr->x);
         if (fresh_after) {

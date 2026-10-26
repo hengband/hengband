@@ -161,7 +161,7 @@ void OtherItemsEnchanter::generate_statue()
     this->o_ptr->pval = enum2i(monrace_id);
     if (cheat_peek) {
         const auto &monrace = monraces.get_monrace(monrace_id);
-        msg_format(_("%sの像", "Statue of %s"), monrace.name.data());
+        msg_print(_("{}の像", "Statue of {}"), monrace.name);
     }
 
     object_aware(this->player_ptr, *this->o_ptr);

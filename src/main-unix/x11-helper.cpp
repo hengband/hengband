@@ -21,6 +21,7 @@
 #include "main-unix/x11-gamma-builder.h"
 #include "main-unix/x11-helper.h"
 #include <X11/Xutil.h>
+#include <fmt/format.h>
 #include <math.h>
 
 /*
@@ -109,14 +110,14 @@ unsigned long create_pixel(Display *dpy, uint8_t red, uint8_t green, uint8_t blu
     xcol.blue = xcolour.blue;
     xcol.alpha = 0xFFFF;
     if (!XftColorAllocValue(dpy, DefaultVisual(dpy, 0), cmap, &xcol, &color)) {
-        quit_fmt("Couldn't allocate bitmap color '#%02x%02x%02x'\n", red, green, blue);
+        quit(fmt::format("Couldn't allocate bitmap color '#{:02x}{:02x}{:02x}'\n", red, green, blue));
     }
 
     return color;
 #else
     /* Attempt to Allocate the Parsed color */
     if (!(XAllocColor(dpy, cmap, &xcolour))) {
-        quit_fmt("Couldn't allocate bitmap color '#%02x%02x%02x'\n", red, green, blue);
+        quit(fmt::format("Couldn't allocate bitmap color '#{:02x}{:02x}{:02x}'\n", red, green, blue));
     }
 
     return xcolour.pixel;
@@ -251,7 +252,7 @@ XImage *ReadBMP(Display *dpy, char *Name)
 
     /* Verify the header */
     if (feof(f) || (fileheader.bfType != 19778) || (infoheader.biSize != 40)) {
-        quit_fmt("Incorrect BMP file format %s", Name);
+        quit(fmt::format("Incorrect BMP file format {}", Name));
     }
 
     /* The two headers above occupy 54 bytes total */
@@ -301,7 +302,7 @@ XImage *ReadBMP(Display *dpy, char *Name)
 
             /* Verify not at end of file XXX XXX */
             if (feof(f)) {
-                quit_fmt("Unexpected end of file in %s", Name);
+                quit(fmt::format("Unexpected end of file in {}", Name));
             }
 
             if (infoheader.biBitCount == 24) {
@@ -310,7 +311,7 @@ XImage *ReadBMP(Display *dpy, char *Name)
 
                 /* Verify not at end of file XXX XXX */
                 if (feof(f)) {
-                    quit_fmt("Unexpected end of file in %s", Name);
+                    quit(fmt::format("Unexpected end of file in {}", Name));
                 }
 
                 XPutPixel(Res, x, y2, create_pixel(dpy, ch, c2, c3));
@@ -322,7 +323,7 @@ XImage *ReadBMP(Display *dpy, char *Name)
                 XPutPixel(Res, x, y2, clr_pixels[ch % 16]);
             } else {
                 /* Technically 1 bit is legal too */
-                quit_fmt("Illegal biBitCount %d in %s", infoheader.biBitCount, Name);
+                quit(fmt::format("Illegal biBitCount {} in {}", infoheader.biBitCount, Name));
             }
         }
     }
@@ -339,7 +340,7 @@ XImage *ReadBMP(Display *dpy, char *Name)
 /*
  * to save ourselves some labour, define a maximum expected icon width here:
  */
-#define MAX_ICON_WIDTH 32
+constexpr auto MAX_ICON_WIDTH = 32;
 
 /* some static variables for composing and decomposing pixel values into
  * red, green and blue values

@@ -35,7 +35,7 @@ extern int usleep(ulong usecs);
 #endif
 #endif
 
-#define FILE_READ_BUFF_SIZE 65535
+constexpr auto FILE_READ_BUFF_SIZE = 65535;
 
 enum class FileOpenMode {
     READ,

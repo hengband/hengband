@@ -16,5 +16,6 @@ bool fresh_before; /* Flush output while in repeated command */
 bool fresh_after; /* Flush output after monster's move */
 bool fresh_once; /* Flush output only once per key input */
 bool fresh_message; /* Flush output after every message */
+bool defer_map_subwindows; /* Redraw map subwindows at most once per turn */
 bool hilite_player; /* Hilite the player with the cursor */
 bool display_path; /* Display actual path before shooting */

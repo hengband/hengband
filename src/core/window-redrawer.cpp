@@ -4,18 +4,21 @@
  * @author Hourier
  */
 #include "core/window-redrawer.h"
-#include "core/stuff-handler.h"
 #include "floor/floor-util.h"
+#include "game-option/map-screen-options.h"
 #include "game-option/option-flags.h"
 #include "object/item-tester-hooker.h"
 #include "player-base/player-class.h"
 #include "player-info/race-info.h"
+#include "system/angband-system.h"
+#include "system/deferred-update-requests.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/bit-flags-calculator.h"
+#include "util/finalizer.h"
+#include "view/display-map.h"
 #include "view/display-messages.h"
 #include "view/display-player.h"
 #include "window/display-sub-windows.h"
@@ -23,6 +26,7 @@
 #include "window/main-window-row-column.h"
 #include "window/main-window-stat-poster.h"
 #include "window/main-window-util.h"
+#include "window/overview-map-cache.h"
 #include "world/world-turn-processor.h"
 #include "world/world.h"
 
@@ -30,6 +34,13 @@
  * @brief コンソールを再描画する /
  * Redraw a term when it is resized
  * @todo ここにPlayerType を追加するとz-termに影響が行くので保留
+ * @details
+ * サブウィンドウの大きさが変わった時に呼ばれ、サブウィンドウだけを描き直す。
+ * キー入力待ちの最中に呼ばれるため、入力を待つ前の inkey() と同じく
+ * window_stuff_including_deferred() だけを使う。handle_stuff() を呼ぶと、残っている
+ * メイン画面の再描画の要求を、有効になっているこのサブウィンドウへ描いてしまう。
+ * さらにメッセージの消去から -続く- の入力待ちに入ることもある。
+ * メイン画面の要求は、メインループの handle_stuff() に任せる。
  */
 void redraw_window()
 {
@@ -37,8 +48,8 @@ void redraw_window()
         return;
     }
 
-    RedrawingFlagsUpdater::get_instance().fill_up_sub_flags();
-    handle_stuff(p_ptr);
+    DeferredUpdateRequests::get_instance().fill_up_sub_flags();
+    window_stuff_including_deferred(p_ptr);
     term_redraw();
 }
 
@@ -66,8 +77,14 @@ static void print_dungeon(PlayerType *player_ptr)
  */
 void redraw_stuff(PlayerType *player_ptr)
 {
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    if (!rfu.any_main()) {
+    // msg_erase() の入力待ち中にもリサイズから呼ばれる。外側の描画が最新の要求を処理する。
+    static bool redrawing = false;
+    if (redrawing) {
+        return;
+    }
+
+    auto &dur = DeferredUpdateRequests::get_instance();
+    if (!dur.any_main()) {
         return;
     }
 
@@ -80,18 +97,35 @@ void redraw_stuff(PlayerType *player_ptr)
         return;
     }
 
-    if (rfu.has(MainWindowRedrawingFlag::WIPE)) {
-        rfu.reset_flag(MainWindowRedrawingFlag::WIPE);
+    redrawing = true;
+    const auto finish_redrawing = util::make_finalizer([&] { redrawing = false; });
+
+    if (dur.has(MainWindowRedrawingFlag::WIPE)) {
         msg_erase();
+        // 待ち中のリサイズが追加した WIPE も、直後の消去と再描画で処理される。
+        dur.reset_flag(MainWindowRedrawingFlag::WIPE);
         term_clear();
     }
 
-    if (rfu.has(MainWindowRedrawingFlag::MAP)) {
-        rfu.reset_flag(MainWindowRedrawingFlag::MAP);
+    // 呪文の失敗率は今の MP で変わり、職業によっては技の失敗率や効果の表示が今の HP でも変わる。
+    // BASIC は HP・MP も描き直すので同じに扱う。WIPE の消去で入力を待つ間に立った要求も拾うよう、その後で判定する
+    // (領域の魔法の呪文の一覧は名前だけを表示するが、職業で分けずにまとめて要求する)
+    static constexpr auto flags_basic_mp = {
+        MainWindowRedrawingFlag::BASIC,
+        MainWindowRedrawingFlag::MP,
+    };
+    if (dur.has_any_of(flags_basic_mp)) {
+        dur.request_spell_info_redrawing();
+    } else if (dur.has(MainWindowRedrawingFlag::HP)) {
+        dur.set_flag(SubWindowRedrawingFlag::SPELL);
+    }
+
+    if (dur.has(MainWindowRedrawingFlag::MAP)) {
+        dur.reset_flag(MainWindowRedrawingFlag::MAP);
         print_map(player_ptr);
     }
 
-    if (rfu.has(MainWindowRedrawingFlag::BASIC)) {
+    if (dur.has(MainWindowRedrawingFlag::BASIC)) {
         static constexpr auto flags = {
             MainWindowRedrawingFlag::BASIC,
             MainWindowRedrawingFlag::TITLE,
@@ -106,34 +140,34 @@ void redraw_stuff(PlayerType *player_ptr)
             MainWindowRedrawingFlag::HEALTH,
             MainWindowRedrawingFlag::UHEALTH,
         };
-        rfu.reset_flags(flags);
+        dur.reset_flags(flags);
         print_frame_basic(player_ptr);
         WorldTurnProcessor(player_ptr).print_time();
         print_dungeon(player_ptr);
     }
 
-    if (rfu.has(MainWindowRedrawingFlag::EQUIPPY)) {
-        rfu.reset_flag(MainWindowRedrawingFlag::EQUIPPY);
+    if (dur.has(MainWindowRedrawingFlag::EQUIPPY)) {
+        dur.reset_flag(MainWindowRedrawingFlag::EQUIPPY);
         display_player_equippy(player_ptr, ROW_EQUIPPY, COL_EQUIPPY, 0);
     }
 
-    if (rfu.has(MainWindowRedrawingFlag::TITLE)) {
-        rfu.reset_flag(MainWindowRedrawingFlag::TITLE);
+    if (dur.has(MainWindowRedrawingFlag::TITLE)) {
+        dur.reset_flag(MainWindowRedrawingFlag::TITLE);
         print_title(player_ptr);
     }
 
-    if (rfu.has(MainWindowRedrawingFlag::LEVEL)) {
-        rfu.reset_flag(MainWindowRedrawingFlag::LEVEL);
+    if (dur.has(MainWindowRedrawingFlag::LEVEL)) {
+        dur.reset_flag(MainWindowRedrawingFlag::LEVEL);
         print_level(player_ptr);
     }
 
-    if (rfu.has(MainWindowRedrawingFlag::EXP)) {
-        rfu.reset_flag(MainWindowRedrawingFlag::EXP);
+    if (dur.has(MainWindowRedrawingFlag::EXP)) {
+        dur.reset_flag(MainWindowRedrawingFlag::EXP);
         print_exp(player_ptr);
     }
 
-    if (rfu.has(MainWindowRedrawingFlag::ABILITY_SCORE)) {
-        rfu.reset_flag(MainWindowRedrawingFlag::ABILITY_SCORE);
+    if (dur.has(MainWindowRedrawingFlag::ABILITY_SCORE)) {
+        dur.reset_flag(MainWindowRedrawingFlag::ABILITY_SCORE);
         print_stat(player_ptr, A_STR);
         print_stat(player_ptr, A_INT);
         print_stat(player_ptr, A_WIS);
@@ -142,47 +176,47 @@ void redraw_stuff(PlayerType *player_ptr)
         print_stat(player_ptr, A_CHR);
     }
 
-    if (rfu.has(MainWindowRedrawingFlag::TIMED_EFFECT)) {
-        rfu.reset_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
+    if (dur.has(MainWindowRedrawingFlag::TIMED_EFFECT)) {
+        dur.reset_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
         print_status(player_ptr);
     }
 
-    if (rfu.has(MainWindowRedrawingFlag::AC)) {
-        rfu.reset_flag(MainWindowRedrawingFlag::AC);
+    if (dur.has(MainWindowRedrawingFlag::AC)) {
+        dur.reset_flag(MainWindowRedrawingFlag::AC);
         print_ac(player_ptr);
     }
 
-    if (rfu.has(MainWindowRedrawingFlag::HP)) {
-        rfu.reset_flag(MainWindowRedrawingFlag::HP);
+    if (dur.has(MainWindowRedrawingFlag::HP)) {
+        dur.reset_flag(MainWindowRedrawingFlag::HP);
         print_hp(player_ptr);
     }
 
-    if (rfu.has(MainWindowRedrawingFlag::MP)) {
-        rfu.reset_flag(MainWindowRedrawingFlag::MP);
+    if (dur.has(MainWindowRedrawingFlag::MP)) {
+        dur.reset_flag(MainWindowRedrawingFlag::MP);
         print_sp(player_ptr);
     }
 
-    if (rfu.has(MainWindowRedrawingFlag::GOLD)) {
-        rfu.reset_flag(MainWindowRedrawingFlag::GOLD);
+    if (dur.has(MainWindowRedrawingFlag::GOLD)) {
+        dur.reset_flag(MainWindowRedrawingFlag::GOLD);
         print_gold(player_ptr);
     }
 
-    if (rfu.has(MainWindowRedrawingFlag::DEPTH)) {
-        rfu.reset_flag(MainWindowRedrawingFlag::DEPTH);
+    if (dur.has(MainWindowRedrawingFlag::DEPTH)) {
+        dur.reset_flag(MainWindowRedrawingFlag::DEPTH);
         print_depth(player_ptr);
     }
 
-    if (rfu.has(MainWindowRedrawingFlag::UHEALTH)) {
-        rfu.reset_flag(MainWindowRedrawingFlag::UHEALTH);
+    if (dur.has(MainWindowRedrawingFlag::UHEALTH)) {
+        dur.reset_flag(MainWindowRedrawingFlag::UHEALTH);
         print_health(player_ptr, true);
     }
 
-    if (rfu.has(MainWindowRedrawingFlag::HEALTH)) {
-        rfu.reset_flag(MainWindowRedrawingFlag::HEALTH);
+    if (dur.has(MainWindowRedrawingFlag::HEALTH)) {
+        dur.reset_flag(MainWindowRedrawingFlag::HEALTH);
         print_health(player_ptr, false);
     }
 
-    if (rfu.has(MainWindowRedrawingFlag::EXTRA)) {
+    if (dur.has(MainWindowRedrawingFlag::EXTRA)) {
         static constexpr auto flags = {
             MainWindowRedrawingFlag::EXTRA,
             MainWindowRedrawingFlag::CUT,
@@ -194,136 +228,274 @@ void redraw_stuff(PlayerType *player_ptr)
             MainWindowRedrawingFlag::IMITATION,
             MainWindowRedrawingFlag::TIMED_EFFECT,
         };
-        rfu.reset_flags(flags);
+        dur.reset_flags(flags);
         print_frame_extra(player_ptr);
     }
 
-    if (rfu.has(MainWindowRedrawingFlag::CUT)) {
-        rfu.reset_flag(MainWindowRedrawingFlag::CUT);
+    if (dur.has(MainWindowRedrawingFlag::CUT)) {
+        dur.reset_flag(MainWindowRedrawingFlag::CUT);
         print_cut(player_ptr);
     }
 
-    if (rfu.has(MainWindowRedrawingFlag::STUN)) {
-        rfu.reset_flag(MainWindowRedrawingFlag::STUN);
+    if (dur.has(MainWindowRedrawingFlag::STUN)) {
+        dur.reset_flag(MainWindowRedrawingFlag::STUN);
         print_stun(player_ptr);
     }
 
-    if (rfu.has(MainWindowRedrawingFlag::HUNGER)) {
-        rfu.reset_flag(MainWindowRedrawingFlag::HUNGER);
+    if (dur.has(MainWindowRedrawingFlag::HUNGER)) {
+        dur.reset_flag(MainWindowRedrawingFlag::HUNGER);
         print_hunger(player_ptr);
     }
 
-    if (rfu.has(MainWindowRedrawingFlag::ACTION)) {
-        rfu.reset_flag(MainWindowRedrawingFlag::ACTION);
+    if (dur.has(MainWindowRedrawingFlag::ACTION)) {
+        dur.reset_flag(MainWindowRedrawingFlag::ACTION);
         print_state(player_ptr);
     }
 
-    if (rfu.has(MainWindowRedrawingFlag::SPEED)) {
-        rfu.reset_flag(MainWindowRedrawingFlag::SPEED);
+    if (dur.has(MainWindowRedrawingFlag::SPEED)) {
+        dur.reset_flag(MainWindowRedrawingFlag::SPEED);
         print_speed(player_ptr);
     }
 
     if (PlayerClass(player_ptr).equals(PlayerClassType::IMITATOR)) {
-        if (rfu.has(MainWindowRedrawingFlag::IMITATION)) {
-            rfu.reset_flag(MainWindowRedrawingFlag::IMITATION);
+        if (dur.has(MainWindowRedrawingFlag::IMITATION)) {
+            dur.reset_flag(MainWindowRedrawingFlag::IMITATION);
             print_imitation(player_ptr);
         }
 
         return;
     }
 
-    if (rfu.has(MainWindowRedrawingFlag::STUDY)) {
-        rfu.reset_flag(MainWindowRedrawingFlag::STUDY);
+    if (dur.has(MainWindowRedrawingFlag::STUDY)) {
+        dur.reset_flag(MainWindowRedrawingFlag::STUDY);
         print_study(player_ptr);
     }
 }
 
 /*!
- * @brief SubWindowRedrawingFlag のフラグに応じた更新をまとめて行う
+ * @brief ダンジョン全体図の表示が変わっていたら、描き直しを要求する
  * @param player_ptr プレイヤーへの参照ポインタ
- * @details 更新処理の対象はサブウィンドウ全て
+ * @details
+ * lite_spot() は全体図のグリッドに印を付けるだけなので、印を付けたグリッドを求め直して比べる。
+ * 縮小するときは優先度で記号を選ぶので、メイン画面の記号が変わらなくても全体図の表示が変わることがある
+ * (透明なモンスターが現れて、記号はそのまま優先度だけ変わったときなど)。
+ * 次の場合は求め直さない。
+ * - フロアを作っている (作り終えたら全てのサブウィンドウの描き直しを要求する)
+ * - すでに要求されている (描くときに求め直す)
+ * - 自動拾いの対象を表示している (M コマンドの間は、サブウィンドウの全体図を通常の表示のままにする)
+ * - マップ全体の描き直しの要求が残っている (描くときに全グリッドを求め直すので、二度求めないようにする)。
+ *   画面の保存中は print_map() が呼ばれずに要求が残るので、印を付けたグリッドがあるか、
+ *   表示が変わったと覚えていれば描き直しを要求する
  */
-void window_stuff(PlayerType *player_ptr)
+static void request_overhead_redrawing_if_changed(PlayerType *player_ptr)
 {
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    if (!rfu.any_sub()) {
+    if (!AngbandWorld::get_instance().character_dungeon) {
         return;
     }
 
-    EnumClassFlagGroup<SubWindowRedrawingFlag> target_flags{};
+    auto &dur = DeferredUpdateRequests::get_instance();
+    if (dur.has(SubWindowRedrawingFlag::OVERHEAD) || display_autopick.any()) {
+        return;
+    }
+
+    auto &overview_map_cache = OverviewMapCache::get_instance();
+    if (dur.has(MainWindowRedrawingFlag::MAP)) {
+        if (overview_map_cache.has_dirty_grids() || overview_map_cache.has_changed()) {
+            dur.set_flag(SubWindowRedrawingFlag::OVERHEAD);
+        }
+
+        return;
+    }
+
+    overview_map_cache.update(player_ptr);
+    if (overview_map_cache.has_changed()) {
+        dur.set_flag(SubWindowRedrawingFlag::OVERHEAD);
+    }
+}
+
+/*!
+ * @brief 表示しているサブウィンドウの種類を得る
+ * @return 使っている端末に割り当てたサブウィンドウの種類
+ */
+static EnumClassFlagGroup<SubWindowRedrawingFlag> get_shown_sub_window_flags()
+{
+    EnumClassFlagGroup<SubWindowRedrawingFlag> shown_flags{};
     for (auto i = 0U; i < angband_terms.size(); ++i) {
         if ((angband_terms[i] == nullptr) || angband_terms[i]->never_fresh) {
             continue;
         }
 
-        target_flags.set(g_window_flags[i]);
+        shown_flags.set(g_window_flags[i]);
     }
 
-    const auto &window_flags = rfu.get_sub_intersection(target_flags);
+    return shown_flags;
+}
+
+/*!
+ * @brief メッセージのサブウィンドウの描き直しを、ターンの区切りか入力待ちまで遅らせてよいか
+ * @return 遅らせてよいか
+ * @details
+ * メッセージは 1 件出るたびに全体を描き直すので、モンスターの攻撃などで続けて出ると重い。
+ * フラグは残し、ターンの区切りか入力待ち (-続く- を含む) で window_stuff_including_deferred() からまとめて描く。
+ * 次のときは遅らせると描かれないか、画面だけが先に進むので、今まで通りメッセージのたびに描く。
+ * - ダンジョンに入る前 (フロアの生成中など): 入力待ちでサブウィンドウを描かない
+ * - 闘技場の観戦中: プレイヤーのターンが来ず、ターンの区切りで描かない
+ * - fresh_message・fresh_after が有効: メッセージやモンスターの行動のたびに画面へ出すオプション
+ */
+static bool can_defer_message_window()
+{
+    if (!AngbandWorld::get_instance().character_dungeon || AngbandSystem::get_instance().is_phase_out()) {
+        return false;
+    }
+
+    return !fresh_message && !fresh_after;
+}
+
+/*!
+ * @brief SubWindowRedrawingFlag のフラグに応じた更新をまとめて行う
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param include_deferred 遅らせている地図 (defer_map_subwindows が有効なとき) とメッセージのサブウィンドウも更新するならtrue
+ */
+static void update_sub_windows(PlayerType *player_ptr, bool include_deferred)
+{
+    const auto target_flags = get_shown_sub_window_flags();
+
+    // 地図はフロア全体を描き直すため重い。フラグは残し、ターンの区切りか入力待ちでまとめて描く
+    const auto is_map_deferred = defer_map_subwindows && !include_deferred;
+    if (!is_map_deferred && target_flags.has(SubWindowRedrawingFlag::OVERHEAD)) {
+        request_overhead_redrawing_if_changed(player_ptr);
+    }
+
+    if (target_flags.has(SubWindowRedrawingFlag::PLAYER)) {
+        request_player_redraw_if_points_changed(*player_ptr);
+    }
+
+    if (target_flags.has(SubWindowRedrawingFlag::MONSTER_LORE)) {
+        request_monster_lore_redraw_if_changed(*player_ptr);
+    }
+
+    auto &dur = DeferredUpdateRequests::get_instance();
+    if (!dur.any_sub()) {
+        return;
+    }
+
+    const auto is_message_deferred = !include_deferred && can_defer_message_window();
+    EnumClassFlagGroup<SubWindowRedrawingFlag> deferred_flags;
+    if (is_map_deferred) {
+        deferred_flags.set({ SubWindowRedrawingFlag::OVERHEAD, SubWindowRedrawingFlag::DUNGEON });
+    }
+
+    if (is_message_deferred) {
+        deferred_flags.set(SubWindowRedrawingFlag::MESSAGE);
+    }
+
+    auto window_flags = dur.get_sub_intersection(target_flags);
+    window_flags.reset(deferred_flags);
+
     if (window_flags.has(SubWindowRedrawingFlag::INVENTORY)) {
-        rfu.reset_flag(SubWindowRedrawingFlag::INVENTORY);
+        dur.reset_flag(SubWindowRedrawingFlag::INVENTORY);
         fix_inventory(player_ptr);
     }
 
     if (window_flags.has(SubWindowRedrawingFlag::EQUIPMENT)) {
-        rfu.reset_flag(SubWindowRedrawingFlag::EQUIPMENT);
+        dur.reset_flag(SubWindowRedrawingFlag::EQUIPMENT);
         fix_equip(player_ptr);
     }
 
     if (window_flags.has(SubWindowRedrawingFlag::SPELL)) {
-        rfu.reset_flag(SubWindowRedrawingFlag::SPELL);
+        dur.reset_flag(SubWindowRedrawingFlag::SPELL);
         fix_spell(player_ptr);
     }
 
     if (window_flags.has(SubWindowRedrawingFlag::PLAYER)) {
-        rfu.reset_flag(SubWindowRedrawingFlag::PLAYER);
+        dur.reset_flag(SubWindowRedrawingFlag::PLAYER);
         fix_player(player_ptr);
     }
 
     // モンスターBGM対応のため、視界内モンスター表示のサブウインドウなし時も処理を行う
-    if (rfu.has(SubWindowRedrawingFlag::SIGHT_MONSTERS)) {
-        rfu.reset_flag(SubWindowRedrawingFlag::SIGHT_MONSTERS);
+    if (dur.has(SubWindowRedrawingFlag::SIGHT_MONSTERS)) {
+        dur.reset_flag(SubWindowRedrawingFlag::SIGHT_MONSTERS);
         fix_monster_list(player_ptr);
     }
 
     if (window_flags.has(SubWindowRedrawingFlag::PETS)) {
-        rfu.reset_flag(SubWindowRedrawingFlag::PETS);
+        dur.reset_flag(SubWindowRedrawingFlag::PETS);
         fix_pet_list(player_ptr);
     }
 
     if (window_flags.has(SubWindowRedrawingFlag::MESSAGE)) {
-        rfu.reset_flag(SubWindowRedrawingFlag::MESSAGE);
+        dur.reset_flag(SubWindowRedrawingFlag::MESSAGE);
         fix_message();
     }
 
     if (window_flags.has(SubWindowRedrawingFlag::OVERHEAD)) {
-        rfu.reset_flag(SubWindowRedrawingFlag::OVERHEAD);
+        dur.reset_flag(SubWindowRedrawingFlag::OVERHEAD);
         fix_overhead(player_ptr);
     }
 
     if (window_flags.has(SubWindowRedrawingFlag::DUNGEON)) {
-        rfu.reset_flag(SubWindowRedrawingFlag::DUNGEON);
+        dur.reset_flag(SubWindowRedrawingFlag::DUNGEON);
         fix_dungeon(player_ptr);
     }
 
     if (window_flags.has(SubWindowRedrawingFlag::MONSTER_LORE)) {
-        rfu.reset_flag(SubWindowRedrawingFlag::MONSTER_LORE);
+        dur.reset_flag(SubWindowRedrawingFlag::MONSTER_LORE);
         fix_monster(player_ptr);
     }
 
     if (window_flags.has(SubWindowRedrawingFlag::ITEM_KNOWLEDGE)) {
-        rfu.reset_flag(SubWindowRedrawingFlag::ITEM_KNOWLEDGE);
+        dur.reset_flag(SubWindowRedrawingFlag::ITEM_KNOWLEDGE);
         fix_object(player_ptr);
     }
 
     if (window_flags.has(SubWindowRedrawingFlag::FLOOR_ITEMS)) {
-        rfu.reset_flag(SubWindowRedrawingFlag::FLOOR_ITEMS);
+        dur.reset_flag(SubWindowRedrawingFlag::FLOOR_ITEMS);
         // ウィンドウサイズ変更に対応できず。カーソル位置を取る必要がある。
         fix_floor_item_list(player_ptr, player_ptr->get_position());
     }
 
     if (window_flags.has(SubWindowRedrawingFlag::FOUND_ITEMS)) {
-        rfu.reset_flag(SubWindowRedrawingFlag::FOUND_ITEMS);
+        dur.reset_flag(SubWindowRedrawingFlag::FOUND_ITEMS);
         fix_found_item_list(player_ptr);
     }
+}
+
+/*!
+ * @brief サブウィンドウの描き直しが要るときだけ描き直す
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @details HP・MP は描き直しを要求せずに変える箇所が多いので、描き直しの要求が無くても、
+ * プレイヤー情報に描いた HP・MP と比べてから描き直すかを決める (window_stuff() を直接呼ぶ経路のために
+ * update_sub_windows() でも比べる)。思い出や全体図の比較は写しを作るのが重いので、ここでは行わず
+ * 入力待ちやメッセージの表示で window_stuff() を呼ぶときに任せる。
+ */
+void window_stuff_if_needed(PlayerType *player_ptr)
+{
+    if (get_shown_sub_window_flags().has(SubWindowRedrawingFlag::PLAYER)) {
+        request_player_redraw_if_points_changed(*player_ptr);
+    }
+
+    if (DeferredUpdateRequests::get_instance().any_sub()) {
+        window_stuff(player_ptr);
+    }
+}
+
+/*!
+ * @brief SubWindowRedrawingFlag のフラグに応じてサブウィンドウを更新する
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @details メッセージのサブウィンドウ (can_defer_message_window() のとき) と、defer_map_subwindows が有効なときの地図のサブウィンドウ
+ * (ダンジョン全体図・自分の周囲) は、フラグを残したまま描き直さない。それらは window_stuff_including_deferred() で描く。
+ */
+void window_stuff(PlayerType *player_ptr)
+{
+    update_sub_windows(player_ptr, false);
+}
+
+/*!
+ * @brief 遅らせている地図とメッセージのサブウィンドウも含めて、サブウィンドウを更新する
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @details プレイヤーのターンの区切りと、キー入力を待つ前に呼ぶ
+ */
+void window_stuff_including_deferred(PlayerType *player_ptr)
+{
+    update_sub_windows(player_ptr, true);
 }

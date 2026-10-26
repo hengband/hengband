@@ -12,11 +12,15 @@
 #include "monster/smart-learn-types.h"
 #include "pet/pet-fall-off.h"
 #include "player/player-skill.h"
+#include "spell-kind/spells-teleport.h"
+#include "spell/spells-util.h"
 #include "system/angband-system.h"
+#include "system/deferred-update-requests.h"
 #include "system/floor/floor-info.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
 
 /*!
@@ -38,7 +42,7 @@ bool rodeo(PlayerType *player_ptr)
     auto &monster = player_ptr->current_floor_ptr->m_list[player_ptr->riding];
     const auto &monrace = monster.get_monrace();
     const auto m_name = monster_desc(player_ptr, monster, 0);
-    msg_format(_("%sに乗った。", "You ride on %s."), m_name.data());
+    msg_print(_("{}に乗った。", "You ride on {}."), m_name);
 
     if (monster.is_pet()) {
         return true;
@@ -55,15 +59,33 @@ bool rodeo(PlayerType *player_ptr)
     if ((randint1(player_ptr->skill_exp[PlayerSkillKindType::RIDING] / 120 + player_ptr->lev * 2 / 3) > rlev) && one_in_(2) &&
         !player_ptr->current_floor_ptr->inside_arena && !AngbandSystem::get_instance().is_phase_out() && monrace.misc_flags.has_not(MonsterMiscType::GUARDIAN) && monrace.misc_flags.has_not(MonsterMiscType::QUESTOR) &&
         (rlev < player_ptr->lev * 3 / 2 + randint0(player_ptr->lev / 5))) {
-        msg_format(_("%sを手なずけた。", "You tame %s."), m_name.data());
+        msg_print(_("{}を手なずけた。", "You tame {}."), m_name);
         set_pet(player_ptr, monster);
-    } else {
-        msg_format(_("%sに振り落とされた！", "You have been thrown off by %s."), m_name.data());
-        process_fall_off_horse(player_ptr, 1, true);
-
-        /* 落馬処理に失敗してもとにかく乗馬解除 */
-        player_ptr->ride_monster(0);
+        return true;
     }
+
+    msg_print(_("{}に振り落とされた！", "You have been thrown off by {}."), m_name);
+    process_fall_off_horse(player_ptr, 1, true);
+    if (!player_ptr->riding || player_ptr->is_dead) { // 落ちる先が無く壁にぶつかったダメージで死んだときもここで抜ける
+        return true;
+    }
+
+    // 落ちる先が無く振り落とされなかったときも降ろし、重ならないようモンスターを近くの入れる地形へ走り去らせる
+    // (フロアに行き先が 1 つも無ければ重なったまま)
+    const auto m_idx = player_ptr->riding;
+    player_ptr->dismount();
+    const auto fled_m_name = monster_desc(player_ptr, monster, 0); // 乗馬中と付かず、見えなくなる前の名前
+    if (teleport_away(player_ptr, m_idx, 10, TELEPORT_SPONTANEOUS)) {
+        if (monrace.feature_flags.has(MonsterFeatureType::CAN_FLY)) {
+            msg_print(_("{}は暴れて飛び去った。", "{} flies away."), str_upcase_first(fled_m_name));
+        } else {
+            msg_print(_("{}は暴れて走り去った。", "{} bolts away."), str_upcase_first(fled_m_name));
+        }
+    }
+
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
+    dur.request_riding_change_updates();
 
     return true;
 }

@@ -4,12 +4,12 @@
 #include "player-info/class-info.h"
 #include "player/player-realm.h"
 #include "sv-definition/sv-weapon-types.h"
+#include "system/deferred-update-requests.h"
 #include "system/floor/floor-info.h"
 #include "system/item/item-entity.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "util/bit-flags-calculator.h"
 
 /* Proficiency of weapons and misc. skills (except riding) */
@@ -59,8 +59,12 @@ void gain_attack_skill_exp(PlayerType *player_ptr, short &exp, const GainAmountL
         gain_amount = calc_gain_amount(PlayerSkillRank::EXPERT, WEAPON_EXP_MASTER);
     }
 
+    if (gain_amount == 0) {
+        return;
+    }
+
     exp += static_cast<short>(gain_amount);
-    RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
+    DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
 }
 
 void gain_spell_skill_exp_aux(PlayerType *player_ptr, short &exp, const GainAmountList &gain_amount_list, int spell_level)
@@ -89,8 +93,15 @@ void gain_spell_skill_exp_aux(PlayerType *player_ptr, short &exp, const GainAmou
         }
     }
 
+    if (gain_amount == 0) {
+        return;
+    }
+
     exp += static_cast<short>(gain_amount);
-    RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
+
+    // 呪文の熟練度は能力の計算に使わないので、能力の再計算は要求しない。
+    // 熟練度・失敗率・消費 MP を表示する呪文の情報だけ描き直す
+    DeferredUpdateRequests::get_instance().request_spell_info_redrawing();
 }
 
 }
@@ -303,8 +314,12 @@ void PlayerSkill::gain_riding_skill_exp_on_melee_attack(const MonraceDefinition 
         }
     }
 
+    if (inc == 0) {
+        return;
+    }
+
     this->player_ptr->skill_exp[PlayerSkillKindType::RIDING] = std::min<SUB_EXP>(max_exp, now_exp + inc);
-    RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
+    DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
 }
 
 void PlayerSkill::gain_riding_skill_exp_on_range_attack()
@@ -320,7 +335,7 @@ void PlayerSkill::gain_riding_skill_exp_on_range_attack()
     const auto &monrace = monster.get_monrace();
     if (((this->player_ptr->skill_exp[PlayerSkillKindType::RIDING] - (RIDING_EXP_BEGINNER * 2)) / 200 < monrace.level) && one_in_(2)) {
         this->player_ptr->skill_exp[PlayerSkillKindType::RIDING] += 1;
-        RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
+        DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
     }
 }
 
@@ -346,7 +361,7 @@ void PlayerSkill::gain_riding_skill_exp_on_fall_off_check(int dam)
     }
 
     this->player_ptr->skill_exp[PlayerSkillKindType::RIDING] = std::min<SUB_EXP>(max_exp, now_exp + inc);
-    RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
+    DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
 }
 
 void PlayerSkill::gain_spell_skill_exp(RealmType realm, int spell_idx)
@@ -407,7 +422,8 @@ PlayerSkillRank PlayerSkill::gain_spell_skill_exp_over_learning(int spell_idx)
         exp = SPELL_EXP_BEGINNER + exp / 3;
     }
 
-    RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
+    // 呪文の熟練度は能力の計算に使わないので、呪文の情報だけ描き直す (gain_spell_skill_exp_aux() と同じ)
+    DeferredUpdateRequests::get_instance().request_spell_info_redrawing();
     return PlayerSkill::spell_skill_rank(exp);
 }
 

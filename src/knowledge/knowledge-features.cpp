@@ -21,16 +21,15 @@
 #include "util/angband-files.h"
 #include "util/int-char-converter.h"
 #include "world/world.h"
+#include <fmt/format.h>
 
-/*
- * Build a list of feature indexes in the given group. Return the number
- * of features in the group.
- *
- * mode & 0x01 : check for non-empty group
+/*!
+ * @brief 一覧に載せる地形のIDを集める
+ * @return 集めた地形のIDの一覧 (地形の一覧の順)
  */
-static FEAT_IDX collect_features(FEAT_IDX *feat_idx, BIT_FLAGS8 mode)
+std::vector<FEAT_IDX> collect_features()
 {
-    FEAT_IDX feat_cnt = 0;
+    std::vector<FEAT_IDX> feat_idx;
     for (const auto &terrain : TerrainList::get_instance()) {
         if (terrain.name.empty()) {
             continue;
@@ -39,20 +38,16 @@ static FEAT_IDX collect_features(FEAT_IDX *feat_idx, BIT_FLAGS8 mode)
             continue;
         }
 
-        feat_idx[feat_cnt++] = terrain.idx;
-        if (mode & 0x01) {
-            break;
-        }
+        feat_idx.push_back(terrain.idx);
     }
 
-    feat_idx[feat_cnt] = -1;
-    return feat_cnt;
+    return feat_idx;
 }
 
 /*
  * Display the features in a group.
  */
-static void display_feature_list(int col, int row, int per_page, FEAT_IDX *feat_idx, FEAT_IDX feat_cur, FEAT_IDX feat_top, bool visual_only, int lighting_level)
+static void display_feature_list(int col, int row, int per_page, const std::vector<FEAT_IDX> &feat_idx, FEAT_IDX feat_cur, FEAT_IDX feat_top, bool visual_only, int lighting_level)
 {
     int lit_col[F_LIT_MAX]{};
     int f_idx_col = use_bigtile ? 62 : 64;
@@ -65,7 +60,7 @@ static void display_feature_list(int col, int row, int per_page, FEAT_IDX *feat_
     const auto is_wizard = AngbandWorld::get_instance().wizard;
     const auto &terrains = TerrainList::get_instance();
     int i;
-    for (i = 0; i < per_page && (feat_idx[feat_top + i] >= 0); i++) {
+    for (i = 0; i < per_page && (feat_top + i < std::ssize(feat_idx)); i++) {
         TERM_COLOR attr;
         auto terrain_id = feat_idx[feat_top + i];
         const auto &terrain = terrains.get_terrain(terrain_id);
@@ -73,13 +68,13 @@ static void display_feature_list(int col, int row, int per_page, FEAT_IDX *feat_
         attr = ((i + feat_top == feat_cur) ? TERM_L_BLUE : TERM_WHITE);
         c_prt(attr, terrain.name.data(), row_i, col);
         if (per_page == 1) {
-            c_prt(attr, format("(%s)", lighting_level_str[lighting_level]), row_i, col + 1 + terrain.name.size());
+            c_prt(attr, fmt::format("({})", lighting_level_str[lighting_level]), row_i, col + 1 + terrain.name.size());
             const auto &symbol_config = terrain.symbol_configs.at(lighting_level);
-            c_prt(attr, format("%02x/%02x", symbol_config.color, static_cast<uint8_t>(symbol_config.character)), row_i,
+            c_prt(attr, fmt::format("{:02x}/{:02x}", symbol_config.color, static_cast<uint8_t>(symbol_config.character)), row_i,
                 f_idx_col - ((is_wizard || visual_only) ? 6 : 2));
         }
         if (is_wizard || visual_only) {
-            c_prt(attr, format("%d", terrain_id), row_i, f_idx_col);
+            c_prt(attr, fmt::format("{}", terrain_id), row_i, f_idx_col);
         }
 
         const auto &symbol_standard = terrain.symbol_configs.at(F_LIT_STANDARD);
@@ -107,31 +102,21 @@ static void display_feature_list(int col, int row, int per_page, FEAT_IDX *feat_
 void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f_idx, IDX *lighting_level)
 {
     TermCenteredOffsetSetter tcos(MAIN_TERM_MIN_COLS, tl::nullopt);
-    std::map<int, DisplaySymbol> symbols;
+    TerrainSymbols symbols{};
     const auto &[wid, hgt] = term_get_size();
     auto &terrains = TerrainList::get_instance();
-    std::vector<FEAT_IDX> feat_idx(terrains.size());
+    std::vector<FEAT_IDX> feat_idx;
 
     const std::string terrain_group(_("地形    ", "Terrains")); //!< @details 他と合わせるためgroupと呼ぶ.
     const auto max_length = terrain_group.length();
-    int feat_cnt;
-    std::vector<short> grp_idx;
     TERM_COLOR attr_top = 0;
     bool visual_list = false;
     byte char_left = 0;
     TERM_LEN browser_rows = hgt - 8;
-    if (direct_f_idx < 0) {
-        if (collect_features(feat_idx.data(), 0x01)) {
-            grp_idx.push_back(0);
-        }
-
-        feat_cnt = 0;
-    } else {
+    if (direct_f_idx >= 0) {
         auto &terrain = terrains.get_terrain(direct_f_idx);
         auto &symbol_config = terrain.symbol_configs.at(*lighting_level);
-        feat_idx[0] = direct_f_idx;
-        feat_cnt = 1;
-        feat_idx[1] = -1;
+        feat_idx.push_back(static_cast<FEAT_IDX>(direct_f_idx));
         (void)visual_mode_command('v', &visual_list, browser_rows - 1, wid - max_length + 3, &attr_top, &char_left, &symbol_config.color,
             &symbol_config.character, need_redraw);
 
@@ -197,30 +182,36 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
             display_group_list(max_length, browser_rows, terrain_group_num, { terrain_group }, grp_cur, grp_top);
             if (old_grp_cur != grp_cur) {
                 old_grp_cur = grp_cur;
-                feat_cnt = collect_features(feat_idx.data(), 0x00);
+                feat_idx = collect_features();
             }
 
             while (feat_cur < feat_top) {
                 feat_top = std::max<short>(0, feat_top - browser_rows / 2);
             }
             while (feat_cur >= feat_top + browser_rows) {
-                feat_top = std::min<short>(feat_cnt - browser_rows, feat_top + browser_rows / 2);
+                feat_top = std::min<short>(std::ssize(feat_idx) - browser_rows, feat_top + browser_rows / 2);
             }
         }
 
         if (!visual_list) {
-            display_feature_list(max_length + 3, 6, browser_rows, feat_idx.data(), feat_cur, feat_top, visual_only, F_LIT_STANDARD);
+            display_feature_list(max_length + 3, 6, browser_rows, feat_idx, feat_cur, feat_top, visual_only, F_LIT_STANDARD);
         } else {
             feat_top = feat_cur;
-            display_feature_list(max_length + 3, 6, 1, feat_idx.data(), feat_cur, feat_top, visual_only, *lighting_level);
+            display_feature_list(max_length + 3, 6, 1, feat_idx, feat_cur, feat_top, visual_only, *lighting_level);
             display_visual_list(max_length + 3, 7, browser_rows - 1, wid - max_length + 3, attr_top, char_left);
         }
 
-        prt(format(_("<方向>%s, 'd'で標準光源効果%s, ESC", "<dir>%s, 'd' for default lighting%s, ESC"),
-                visual_list ? _(", ENTERで決定, 'a'で対象明度変更", ", ENTER to accept, 'a' for lighting level")
-                            : _(", 'v'でシンボル変更", ", 'v' for visuals"),
-                (symbols_cb.symbol != DisplaySymbol()) ? _(", 'c', 'p'でペースト", ", 'c', 'p' to paste") : _(", 'c'でコピー", ", 'c' to copy")),
+        prt(fmt::format(_("<方向>{}, 'd'で標準光源効果{}, ESC", "<dir>{}, 'd' for default lighting{}, ESC"), visual_list ? _(", ENTERで決定, 'a'で対象明度変更", ", ENTER to accept, 'a' for lighting level") : _(", 'v'でシンボル変更", ", 'v' for visuals"), (symbols_cb.symbol != DisplaySymbol()) ? _(", 'c', 'p'でペースト", ", 'c', 'p' to paste") : _(", 'c'でコピー", ", 'c' to copy")),
             hgt - 1, 0);
+
+        // 一覧に載る地形が無ければ、地形を引かずに ESC だけを受け付ける
+        if (feat_idx.empty()) {
+            if (inkey() == ESCAPE) {
+                flag = true;
+            }
+
+            continue;
+        }
 
         auto &terrain = terrains.get_terrain(feat_idx[feat_cur]);
         auto &symbol_orig = terrain.symbol_configs.at(*lighting_level);
@@ -315,10 +306,9 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
                     break;
                 }
 
-                auto &symbols_cb_map = symbols_cb.symbols;
                 for (auto i = F_LIT_NS_BEGIN; i < F_LIT_MAX; i++) {
                     auto &symbol_config = terrain.symbol_configs.at(i);
-                    auto &symbol = symbols_cb_map.at(i);
+                    auto &symbol = symbols_cb.symbols.at(i);
                     const auto has_character = symbol.has_character();
                     if ((symbol.color != 0) || (!(symbol.character & 0x80) && has_character)) {
                         symbol_config.color = symbol.color;
@@ -343,7 +333,7 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
 
         default: {
             constexpr auto dummy_count = 0;
-            browser_cursor(ch, &column, &grp_cur, dummy_count, &feat_cur, feat_cnt);
+            browser_cursor(ch, &column, &grp_cur, dummy_count, &feat_cur, std::ssize(feat_idx));
             break;
         }
         }
@@ -363,7 +353,7 @@ void do_cmd_knowledge_dungeon(PlayerType *player_ptr)
 
     const auto known_dungeons = DungeonService::build_known_dungeons(DungeonMessageFormat::KNOWLEDGE);
     for (const auto &known_dungeon : known_dungeons) {
-        fprintf(fff, "%s", known_dungeon.data());
+        fmt::print(fff, "{}", known_dungeon);
     }
 
     angband_fclose(fff);

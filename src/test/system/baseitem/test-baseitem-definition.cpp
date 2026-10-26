@@ -33,6 +33,7 @@ TEST_CASE("BaseitemDefinition::clone_without_required_fields preserves only opti
     original.act_idx = RandomArtActType::LIGHT;
     original.flags.set(TR_STR);
     original.gen_flags.set(ItemGenerationTraitType::INSTA_ART);
+    original.natural_generation = false;
     original.easy_know = true;
 
     auto cloned = original.clone_without_required_fields();
@@ -57,6 +58,7 @@ TEST_CASE("BaseitemDefinition::clone_without_required_fields preserves only opti
     CHECK(cloned.act_idx == original.act_idx);
     CHECK(cloned.flags == original.flags);
     CHECK(cloned.gen_flags == original.gen_flags);
+    CHECK(cloned.natural_generation == original.natural_generation);
     CHECK(cloned.easy_know == original.easy_know);
 
     cloned.text = "Changed";
@@ -64,6 +66,7 @@ TEST_CASE("BaseitemDefinition::clone_without_required_fields preserves only opti
     cloned.alloc_tables[0] = { 20, 21 };
     cloned.flags.set(TR_DEX);
     cloned.gen_flags.clear();
+    cloned.natural_generation = true;
     CHECK(original.name == "Required name");
     CHECK(original.get_symbol() == DisplaySymbol(7, '!'));
     CHECK(original.bi_key == BaseitemKey(ItemKindType::POTION, 1));
@@ -76,6 +79,33 @@ TEST_CASE("BaseitemDefinition::clone_without_required_fields preserves only opti
     CHECK(original.alloc_tables[0].chance == 9);
     CHECK_FALSE(original.flags.has(TR_DEX));
     CHECK(original.gen_flags.has(ItemGenerationTraitType::INSTA_ART));
+    CHECK_FALSE(original.natural_generation);
+}
+
+TEST_CASE("BaseitemDefinition::has_allocation requires a positive sum of chances")
+{
+    BaseitemDefinition baseitem;
+    CHECK_FALSE(baseitem.has_allocation());
+    baseitem.alloc_tables[0] = { 5, 0 };
+    CHECK_FALSE(baseitem.has_allocation());
+    baseitem.alloc_tables[3] = { 10, 1 };
+    CHECK(baseitem.has_allocation());
+}
+
+/*!
+ * @brief 知識の一覧の候補は、生成情報を持つか、自然生成しないことが明示されたもの
+ * @details 生成情報も natural_generation: false も持たないもの (INSTA_ART の本体など) は候補にしない。
+ */
+TEST_CASE("BaseitemDefinition::is_knowledge_candidate accepts allocations or natural_generation false")
+{
+    BaseitemDefinition baseitem;
+    CHECK(baseitem.natural_generation);
+    CHECK_FALSE(baseitem.is_knowledge_candidate());
+    baseitem.natural_generation = false;
+    CHECK(baseitem.is_knowledge_candidate());
+    baseitem.natural_generation = true;
+    baseitem.alloc_tables[0] = { 5, 1 };
+    CHECK(baseitem.is_knowledge_candidate());
 }
 
 TEST_CASE("BaseitemDefinition::stripped_name removes trailing tilde and hash")

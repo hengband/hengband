@@ -54,8 +54,7 @@ inline constexpr std::string_view KANJI_JI = "\xbb\xfa"; //!< 字
 inline constexpr std::string_view DAME_SO = "\x83\x5c"; //!< ソ (後半バイトが 0x5c、ASCIIの '\')
 inline constexpr std::string_view DAME_HYOU = "\x95\x5c"; //!< 表 (後半バイトが 0x5c、ASCIIの '\')
 inline constexpr std::string_view DAME_KANA_A = "\x83\x41"; //!< ア (後半バイトが 0x41、ASCIIの 'A')
-inline constexpr std::string_view DAME_KANA_DI = "\x83\x61"; //!< ヂ (後半バイトが 0x61、ASCIIの 'a')
-inline constexpr std::string_view DAME_KANA_TA = "\x83\x5e"; //!< タ (後半バイトが 0x5e、ASCIIの '^')
+inline constexpr std::string_view DAME_KANA_ZO = "\x83\x5d"; //!< ゾ (後半バイトが 0x5d、ASCIIの ']')
 inline constexpr std::string_view DAME_CHOON = "\x81\x5b"; //!< ー (後半バイトが 0x5b、ASCIIの '[')
 inline constexpr std::string_view DAME_SPACE = "\x81\x40"; //!< 全角スペース (後半バイトが 0x40、ASCIIの '@')
 #endif
@@ -63,12 +62,8 @@ inline constexpr std::string_view DAME_SPACE = "\x81\x40"; //!< 全角スペー�
 // UTF-8としても正しいバイト列になる2バイト文字の並び。バイト数とコードポイント数が異なる
 #if defined(JP) && defined(SJIS)
 inline constexpr std::string_view UTF8_LOOKALIKE = "\xe0\xa0\x81\xe3\x82\x81"; //!< 燿√ａ (UTF-8では U+0801 U+3081 の2コードポイント)
-inline constexpr std::string_view UTF8_LOOKALIKE_1ST = "\xe0\xa0"; //!< 燿
-inline constexpr std::string_view UTF8_LOOKALIKE_2ND = "\x81\xe3"; //!< √
 #elif defined(JP)
 inline constexpr std::string_view UTF8_LOOKALIKE = "\xc2\xa3\xcd\xbf"; //!< 贈与 (UTF-8では U+00A3 U+037F の2コードポイント)
-inline constexpr std::string_view UTF8_LOOKALIKE_1ST = "\xc2\xa3"; //!< 贈
-inline constexpr std::string_view UTF8_LOOKALIKE_2ND = "\xcd\xbf"; //!< 与
 #endif
 
 }

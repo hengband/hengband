@@ -7,8 +7,8 @@
 #include "system/enums/monrace/monrace-id.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "util/bit-flags-calculator.h"
+#include <range/v3/view.hpp>
 
 /*!
  * @brief 自動拾い/破壊設定のリストに関する変数 / List for auto-picker/destroyer entries
@@ -41,39 +41,17 @@ void autopick_type::remove(int flag)
 /*!
  * @brief Auto inscription
  */
-void auto_inscribe_item(ItemEntity *o_ptr, int idx)
+bool auto_inscribe_item(ItemEntity &item, int idx)
 {
-    if (idx < 0 || autopick_list[idx].insc.empty()) {
-        return;
+    if (idx < 0 || autopick_list[idx].insc.empty() || item.is_inscribed()) {
+        return false;
     }
 
-    if (!o_ptr->is_inscribed()) {
-        o_ptr->inscription = autopick_list[idx].insc;
-    }
-
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    static constexpr auto flags_swrf = {
-        SubWindowRedrawingFlag::INVENTORY,
-        SubWindowRedrawingFlag::EQUIPMENT,
-    };
-    rfu.set_flags(flags_swrf);
-    static constexpr auto flags_srf = {
-        StatusRecalculatingFlag::BONUS,
-        StatusRecalculatingFlag::COMBINATION,
-    };
-    rfu.set_flags(flags_srf);
+    item.inscription = autopick_list[idx].insc;
+    return true;
 }
 
-/*!
- * @brief 行数をカウントする
- * @param tb text_body_type
- * @return 行数
- */
-int count_line(text_body_type *tb)
+std::vector<std::string> AutopickTextBody::get_entry_lines() const
 {
-    const auto begin = tb->lines_list.begin();
-    const auto it = std::find_if(begin, tb->lines_list.end(), [](const auto &line) {
-        return !line;
-    });
-    return std::distance(begin, it);
+    return this->lines | ranges::views::transform(&AutopickEntryLine::line) | ranges::to<std::vector>();
 }

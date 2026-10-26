@@ -18,7 +18,7 @@
 #include "floor/geometry.h"
 #include "game-option/game-play-options.h"
 #include "grid/grid.h"
-#include "io/input-key-acceptor.h"
+#include "io/input-context.h"
 #include "io/input-key-requester.h"
 #include "io/write-diary.h"
 #include "main/music-definitions-table.h"
@@ -30,11 +30,11 @@
 #include "player/player-move.h"
 #include "player/special-defense-types.h"
 #include "status/action-setter.h"
+#include "system/deferred-update-requests.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/inner-game-data.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "system/terrain/terrain-definition.h"
 #include "target/target-getter.h"
 #include "term/screen-processor.h"
@@ -49,7 +49,7 @@ void do_cmd_search(PlayerType *player_ptr)
 {
     if (command_arg) {
         command_rep = command_arg - 1;
-        RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::ACTION);
+        DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::ACTION);
         command_arg = 0;
     }
 
@@ -111,7 +111,7 @@ void do_cmd_alter(PlayerType *player_ptr)
 
     if (command_arg) {
         command_rep = command_arg - 1;
-        RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::ACTION);
+        DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::ACTION);
         command_arg = 0;
     }
 
@@ -131,9 +131,10 @@ static bool decide_suicide()
         return true;
     }
 
-    prt(_("確認のため '@' を押して下さい。", "Please verify SUICIDE by typing the '@' sign: "), 0, 0);
+    constexpr auto prompt = _("確認のため '@' を押して下さい。", "Please verify SUICIDE by typing the '@' sign: ");
+    prt(prompt, 0, 0);
     flush();
-    int i = inkey();
+    const auto i = input_key_with_context(InputKind::CONFIRM, prompt);
     prt("", 0, 0);
     return i == '@';
 }

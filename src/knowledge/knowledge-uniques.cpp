@@ -12,9 +12,9 @@
 #include "system/monrace/monrace-list.h"
 #include "system/monrace/monrace-records.h"
 #include "system/player-type-definition.h"
-#include "term/z-form.h"
 #include "util/angband-files.h"
-#include "util/string-processor.h"
+#include "util/buffer-shaper.h"
+#include <fmt/format.h>
 
 class UniqueList {
 public:
@@ -113,14 +113,14 @@ static void display_uniques(UniqueList *unique_list_ptr, FILE *fff)
         const auto &monrace = monraces.get_monrace(monrace_id);
         std::string details;
         if (!unique_list_ptr->is_alive && monrace.defeat_level && monrace.defeat_time) {
-            details = format(_(" - レベル%2d - %d:%02d:%02d", " - level %2d - %d:%02d:%02d"), monrace.defeat_level, monrace.defeat_time / (60 * 60),
-                (monrace.defeat_time / 60) % 60, monrace.defeat_time % 60);
+            details = fmt::format(_(" - レベル{:2} - {}:{:02}:{:02}", " - level {:2} - {}:{:02}:{:02}"), monrace.defeat_level, monrace.defeat_time / (60 * 60), (monrace.defeat_time / 60) % 60, monrace.defeat_time % 60);
         }
 
-        const auto name = str_separate(monrace.name, 40);
-        fprintf(fff, _("     %-40s (レベル%3d)%s\n", "     %-40s (level %3d)%s\n"), name.front().data(), (int)monrace.level, details.data());
+        // shape_buffer() は終端文字の分を除いた maxlen - 1 バイトごとに区切るので、名前の欄の幅 + 1 を渡す
+        const auto name = shape_buffer(monrace.name, 40 + 1);
+        fmt::println(fff, _("     {:<40} (レベル{:3}){}", "     {:<40} (level {:3}){}"), fmt::bytes(name.front()), (int)monrace.level, details);
         for (auto i = 1U; i < name.size(); ++i) {
-            fprintf(fff, "     %s\n", name[i].data());
+            fmt::println(fff, "     {}", name[i]);
         }
     }
 }

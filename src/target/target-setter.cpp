@@ -8,25 +8,26 @@
 #include "game-option/game-play-options.h"
 #include "game-option/input-options.h"
 #include "io/cursor.h"
+#include "io/input-context.h"
 #include "io/input-key-requester.h"
 #include "io/screen-util.h"
 #include "main/sound-of-music.h"
+#include "system/deferred-update-requests.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "target/projection-path-calculator.h"
 #include "target/target-checker.h"
 #include "target/target-describer.h"
 #include "target/target-preparation.h"
 #include "target/target-types.h"
 #include "term/screen-processor.h"
-#include "term/z-form.h"
 #include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"
 #include "util/string-processor.h"
 #include "window/display-sub-windows.h"
 #include "window/main-window-util.h"
+#include <fmt/format.h>
 #include <tl/optional.hpp>
 #include <tuple>
 #include <vector>
@@ -42,8 +43,10 @@ public:
 
 private:
     tl::optional<int> pick_nearest_interest_target(const Pos2D &pos, const Direction &dir);
-    std::string describe_projectablity() const;
-    char examine_target_grid(const std::string &info, tl::optional<target_type> append_mode = tl::nullopt) const;
+    bool can_target_monster_at_cursor() const;
+    void scroll_to_cursor() const;
+    std::string build_key_guide(bool can_target) const;
+    char examine_target_grid(const std::string &info, bool free_mode, bool can_target) const;
     void change_interest_index(int amount);
     Direction switch_target_input();
     tl::optional<int> check_panel_changed(const Direction &dir);
@@ -182,17 +185,39 @@ tl::optional<int> TargetSetter::pick_nearest_interest_target(const Pos2D &pos, c
     return nearest_interest_index;
 }
 
-std::string TargetSetter::describe_projectablity() const
+/*!
+ * @brief カーソルのマスにいるモンスターをターゲットにできるか
+ * @return ターゲットにできるなら true
+ * @details 興味のあるものを順に選ぶモードで、t などで決められるかの条件
+ */
+bool TargetSetter::can_target_monster_at_cursor() const
+{
+    const auto &grid = this->player_ptr->current_floor_ptr->get_grid(this->pos_target);
+    return target_able(this->player_ptr, grid.m_idx);
+}
+
+/*!
+ * @brief カーソルのマスが見えるよう画面を動かし、ターゲットの選択ではカーソルのマスへの射線を表示する
+ * @details 画面を動かすとモンスターの情報を更新するので、ターゲットにできるかはこの後で求める
+ */
+void TargetSetter::scroll_to_cursor() const
 {
     change_panel_xy(this->player_ptr, this->pos_target);
     if ((this->mode & TARGET_LOOK) == 0) {
         print_path(this->player_ptr, this->pos_target.y, this->pos_target.x);
     }
+}
 
+/*!
+ * @brief キーの案内を作る
+ * @param can_target カーソルのマスのモンスターをターゲットにできるか (できれば案内に t を含める)
+ * @return キーの案内
+ */
+std::string TargetSetter::build_key_guide(bool can_target) const
+{
     const auto &floor = *this->player_ptr->current_floor_ptr;
     std::string info;
-    const auto &grid = floor.get_grid(this->pos_target);
-    if (target_able(this->player_ptr, grid.m_idx)) {
+    if (can_target) {
         info = _("q止 t決 p自 o現 +次 -前", "q,t,p,o,+,-,<dir>");
     } else {
         info = _("q止 p自 o現 +次 -前", "q,p,o,+,-,<dir>");
@@ -207,16 +232,30 @@ std::string TargetSetter::describe_projectablity() const
     }
 
     const auto p_pos = this->player_ptr->get_position();
-    const auto cheatinfo = format(" X:%d Y:%d LOS:%d LOP:%d",
-        this->pos_target.x, this->pos_target.y,
-        los(*this->player_ptr->current_floor_ptr, p_pos, this->pos_target),
-        projectable(floor, p_pos, this->pos_target));
+    const auto cheatinfo = fmt::format(" X:{} Y:{} LOS:{:d} LOP:{:d}", this->pos_target.x, this->pos_target.y, los(*this->player_ptr->current_floor_ptr, p_pos, this->pos_target), projectable(floor, p_pos, this->pos_target));
     return info.append(cheatinfo);
 }
 
-char TargetSetter::examine_target_grid(const std::string &info, tl::optional<target_type> append_mode) const
+/*!
+ * @brief カーソルのマスを説明し、ターゲットの選択のキーを受け付ける
+ * @param info 説明の後ろに表示するキーの案内
+ * @param free_mode カーソルを任意のマスへ動かすモードか
+ * @param can_target t などでカーソルのマスをターゲットにできるか
+ * @return 入力したキー
+ * @details 説明の途中のキー待ち (モンスターの思い出や足元のアイテムの一覧を含む) の間、ターゲットの選択の文脈を公開する。
+ */
+char TargetSetter::examine_target_grid(const std::string &info, bool free_mode, bool can_target) const
 {
-    const auto target_mode = append_mode ? i2enum<target_type>(this->mode | *append_mode) : this->mode;
+    // 任意のマスへ動かすモードでは、見るコマンドと同じく興味の無いマスも説明する
+    const auto target_mode = free_mode ? i2enum<target_type>(this->mode | TARGET_LOOK) : this->mode;
+    const auto is_look = any_bits(this->mode, TARGET_LOOK);
+    const TargetInputDetails details{
+        .look = is_look,
+        .free_mode = free_mode,
+        .can_target = can_target,
+        .pos = this->pos_target,
+    };
+    const InputContextScope input_context({ InputKind::TARGET, info, details });
     while (true) {
         const auto query = examine_grid(this->player_ptr, this->pos_target.y, this->pos_target.x, target_mode, info.data());
         if (query != '\0') {
@@ -247,8 +286,10 @@ void TargetSetter::change_interest_index(int amount)
 
 Direction TargetSetter::switch_target_input()
 {
-    const auto info = this->describe_projectablity();
-    const auto query = this->examine_target_grid(info);
+    this->scroll_to_cursor();
+    const auto can_target = this->can_target_monster_at_cursor();
+    const auto info = this->build_key_guide(can_target);
+    const auto query = this->examine_target_grid(info, false, can_target);
     switch (query) {
     case ESCAPE:
     case 'q':
@@ -258,12 +299,13 @@ Direction TargetSetter::switch_target_input()
     case '.':
     case '5':
     case '0': {
-        const auto &grid = this->player_ptr->current_floor_ptr->get_grid(this->pos_target);
-        if (!target_able(this->player_ptr, grid.m_idx)) {
+        // 説明の途中でモンスターの情報が変わることがあるので、決めるときに確かめ直す
+        if (!this->can_target_monster_at_cursor()) {
             bell();
             return Direction::none();
         }
 
+        const auto &grid = this->player_ptr->current_floor_ptr->get_grid(this->pos_target);
         health_track(this->player_ptr, grid.m_idx);
         this->target = Target::create_monster_target(this->player_ptr, grid.m_idx);
         this->done = true;
@@ -279,10 +321,7 @@ Direction TargetSetter::switch_target_input()
         return Direction::none();
     case 'p': {
         verify_panel(this->player_ptr);
-        auto &rfu = RedrawingFlagsUpdater::get_instance();
-        rfu.set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
-        rfu.set_flag(MainWindowRedrawingFlag::MAP);
-        rfu.set_flag(SubWindowRedrawingFlag::OVERHEAD);
+        DeferredUpdateRequests::get_instance().request_monster_update_and_map_redrawing();
         handle_stuff(this->player_ptr);
         this->pos_interests = target_set_prepare(this->player_ptr, this->mode);
         this->pos_target = this->player_ptr->get_position();
@@ -353,10 +392,7 @@ tl::optional<int> TargetSetter::sweep_targets(const Direction &dir, int panel_ro
     panel_col_min = panel_col_min_initial;
     panel_bounds_center();
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
-    rfu.set_flag(MainWindowRedrawingFlag::MAP);
-    rfu.set_flag(SubWindowRedrawingFlag::OVERHEAD);
+    DeferredUpdateRequests::get_instance().request_monster_update_and_map_redrawing();
     handle_stuff(this->player_ptr);
 
     this->pos_interests = target_set_prepare(this->player_ptr, this->mode);
@@ -416,11 +452,11 @@ std::string TargetSetter::describe_grid_wizard() const
 
     const auto &floor = *this->player_ptr->current_floor_ptr;
     const auto &grid = floor.get_grid(this->pos_target);
-    constexpr auto fmt = " X:%d Y:%d LOS:%d LOP:%d SPECIAL:%d";
+    constexpr auto fmt = " X:{} Y:{} LOS:{:d} LOP:{:d} SPECIAL:{}";
     const auto p_pos = this->player_ptr->get_position();
     const auto is_los = los(floor, p_pos, this->pos_target);
     const auto is_projectable = projectable(floor, p_pos, this->pos_target);
-    const auto cheatinfo = format(fmt, this->pos_target.x, this->pos_target.y, is_los, is_projectable, grid.special);
+    const auto cheatinfo = fmt::format(fmt, this->pos_target.x, this->pos_target.y, is_los, is_projectable, grid.special);
     return cheatinfo;
 }
 
@@ -436,7 +472,8 @@ tl::optional<std::pair<Direction, bool>> TargetSetter::switch_next_grid_command(
         info.append(_(" g移", ",g"));
     }
     info.append(this->describe_grid_wizard());
-    const auto query = this->examine_target_grid(info, TARGET_LOOK);
+    // 任意のマスへ動かすモードでは、どのマスもターゲットにできる
+    const auto query = this->examine_target_grid(info, true, true);
     switch (query) {
     case ESCAPE:
     case 'q':
@@ -451,10 +488,7 @@ tl::optional<std::pair<Direction, bool>> TargetSetter::switch_next_grid_command(
         return tl::nullopt;
     case 'p': {
         verify_panel(this->player_ptr);
-        auto &rfu = RedrawingFlagsUpdater::get_instance();
-        rfu.set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
-        rfu.set_flag(MainWindowRedrawingFlag::MAP);
-        rfu.set_flag(SubWindowRedrawingFlag::OVERHEAD);
+        DeferredUpdateRequests::get_instance().request_monster_update_and_map_redrawing();
         handle_stuff(this->player_ptr);
         this->pos_interests = target_set_prepare(this->player_ptr, this->mode);
         this->pos_target = this->player_ptr->get_position();
@@ -556,14 +590,9 @@ Target target_set(PlayerType *player_ptr, target_type mode)
     ts.sweep_target_grids();
     prt("", 0, 0);
     verify_panel(player_ptr);
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
-    rfu.set_flag(MainWindowRedrawingFlag::MAP);
-    static constexpr auto flags = {
-        SubWindowRedrawingFlag::OVERHEAD,
-        SubWindowRedrawingFlag::FLOOR_ITEMS,
-    };
-    rfu.set_flags(flags);
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.request_monster_update_and_map_redrawing();
+    dur.set_flag(SubWindowRedrawingFlag::FLOOR_ITEMS);
     handle_stuff(player_ptr);
     Target::set_last_target(ts.get_target());
     return ts.get_target();

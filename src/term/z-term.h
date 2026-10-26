@@ -171,26 +171,26 @@ private:
  *
  * The other actions do not need a "v" code, so "zero" is used.
  */
-#define TERM_XTRA_EVENT 1 /* Process some pending events */
-#define TERM_XTRA_FLUSH 2 /* Flush all pending events */
-#define TERM_XTRA_CLEAR 3 /* Clear the entire window */
-#define TERM_XTRA_SHAPE 4 /* Set cursor shape (optional) */
-#define TERM_XTRA_FROSH 5 /* Flush one row (optional) */
-#define TERM_XTRA_FRESH 6 /* Flush all rows (optional) */
-#define TERM_XTRA_NOISE 7 /* Make a noise (optional) */
-#define TERM_XTRA_SOUND 8 /* Make a sound (optional) */
-#define TERM_XTRA_BORED 9 /* Handle stuff when bored (optional) */
-#define TERM_XTRA_REACT 10 /* React to global changes (optional) */
-#define TERM_XTRA_ALIVE 11 /* Change the "hard" level (optional) */
-#define TERM_XTRA_LEVEL 12 /* Change the "soft" level (optional) */
-#define TERM_XTRA_DELAY 13 /* Delay some milliseconds (optional) */
-#define TERM_XTRA_MUSIC_BASIC 14 /* Play a music(basic) (optional) */
-#define TERM_XTRA_MUSIC_DUNGEON 15 /* Play a music(dungeon) (optional) */
-#define TERM_XTRA_MUSIC_QUEST 16 /* Play a music(quest) (optional) */
-#define TERM_XTRA_MUSIC_TOWN 17 /* Play a music(floor) (optional) */
-#define TERM_XTRA_MUSIC_MONSTER 18 /* Play a music(monster) (optional) */
-#define TERM_XTRA_MUSIC_MUTE 19
-#define TERM_XTRA_SCENE 20 /* React to scene changes (optional) */
+constexpr auto TERM_XTRA_EVENT = 1; /* Process some pending events */
+constexpr auto TERM_XTRA_FLUSH = 2; /* Flush all pending events */
+constexpr auto TERM_XTRA_CLEAR = 3; /* Clear the entire window */
+constexpr auto TERM_XTRA_SHAPE = 4; /* Set cursor shape (optional) */
+constexpr auto TERM_XTRA_FROSH = 5; /* Flush one row (optional) */
+constexpr auto TERM_XTRA_FRESH = 6; /* Flush all rows (optional) */
+constexpr auto TERM_XTRA_NOISE = 7; /* Make a noise (optional) */
+constexpr auto TERM_XTRA_SOUND = 8; /* Make a sound (optional) */
+constexpr auto TERM_XTRA_BORED = 9; /* Handle stuff when bored (optional) */
+constexpr auto TERM_XTRA_REACT = 10; /* React to global changes (optional) */
+constexpr auto TERM_XTRA_ALIVE = 11; /* Change the "hard" level (optional) */
+constexpr auto TERM_XTRA_LEVEL = 12; /* Change the "soft" level (optional) */
+constexpr auto TERM_XTRA_DELAY = 13; /* Delay some milliseconds (optional) */
+constexpr auto TERM_XTRA_MUSIC_BASIC = 14; /* Play a music(basic) (optional) */
+constexpr auto TERM_XTRA_MUSIC_DUNGEON = 15; /* Play a music(dungeon) (optional) */
+constexpr auto TERM_XTRA_MUSIC_QUEST = 16; /* Play a music(quest) (optional) */
+constexpr auto TERM_XTRA_MUSIC_TOWN = 17; /* Play a music(floor) (optional) */
+constexpr auto TERM_XTRA_MUSIC_MONSTER = 18; /* Play a music(monster) (optional) */
+constexpr auto TERM_XTRA_MUSIC_MUTE = 19;
+constexpr auto TERM_XTRA_SCENE = 20; /* React to scene changes (optional) */
 
 /**** Available Variables ****/
 extern term_type *game_term;
@@ -213,7 +213,7 @@ void term_user();
 void term_xtra(int n, int v);
 
 void term_queue_char(TERM_LEN x, TERM_LEN y, const DisplaySymbolPair &symbol_pair);
-void term_queue_bigchar(TERM_LEN x, TERM_LEN y, const DisplaySymbolPair &symbol_pair);
+bool term_queue_bigchar(TERM_LEN x, TERM_LEN y, const DisplaySymbolPair &symbol_pair);
 
 void term_fresh();
 void term_fresh_force();

@@ -24,6 +24,7 @@
 #include "monster/monster-util.h"
 #include "object/warning.h"
 #include "player/player-status.h"
+#include "system/deferred-update-requests.h"
 #include "system/dungeon/quest-definition.h"
 #include "system/dungeon/quest-list.h"
 #include "system/enums/monrace/monrace-id.h"
@@ -33,10 +34,10 @@
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "view/display-messages.h"
 #include "wizard/wizard-messages.h"
 #include "world/world.h"
+#include <fmt/format.h>
 #include <range/v3/algorithm.hpp>
 
 /*!
@@ -198,9 +199,9 @@ static void warn_unique_generation(PlayerType *player_ptr, MonraceId r_idx)
     const auto &item = choose_warning_item(player_ptr);
     if (item) {
         const auto item_name = describe_flavor(player_ptr, *item, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-        msg_format(_("%sは%s光った。", "%s glows %s."), item_name.data(), color.data());
+        msg_print(_("{}は{}光った。", "{} glows {}."), item_name, color);
     } else {
-        msg_format(_("%s光る物が頭に浮かんだ。", "A %s image forms in your mind."), color.data());
+        msg_print(_("{}光る物が頭に浮かんだ。", "A {} image forms in your mind."), color);
     }
 }
 
@@ -233,7 +234,7 @@ tl::optional<MONSTER_IDX> place_monster_one(PlayerType *player_ptr, POSITION y, 
         return tl::nullopt;
     }
 
-    msg_format_wizard(player_ptr, CHEAT_MONSTER, _("%s(Lv%d)を生成しました。", "%s(Lv%d) was generated."), monrace.name.data(), monrace.level);
+    msg_print_wizard(player_ptr, CHEAT_MONSTER, _("{}(Lv{})を生成しました。", "{}(Lv{}) was generated."), monrace.name, monrace.level);
     if (monrace.kind_flags.has(MonsterKindType::UNIQUE) || monrace.population_flags.has(MonsterPopulationType::NAZGUL) || (monrace.level < 10)) {
         reset_bits(mode, PM_KAGE);
     }
@@ -368,11 +369,8 @@ tl::optional<MONSTER_IDX> place_monster_one(PlayerType *player_ptr, POSITION y, 
         (void)set_monster_fast(floor, grid.m_idx, 100);
     }
 
-    if (!ironman_nightmare) {
-        monster.energy_need = ENERGY_NEED() - randnum0<short>(100);
-    } else {
-        monster.energy_need = ENERGY_NEED() - randnum0<short>(100) * 2;
-    }
+    monster.energy_need = ENERGY_NEED();
+    monster.energy_need -= randnum0<short>(100) * (ironman_nightmare ? 2 : 1);
 
     if (!ironman_nightmare) {
         monster.mflag.set(MonsterTemporaryFlagType::PREVENT_MAGIC);
@@ -381,7 +379,7 @@ tl::optional<MONSTER_IDX> place_monster_one(PlayerType *player_ptr, POSITION y, 
     auto is_awake_lightning_monster = new_monrace.brightness_flags.has_any_of(self_ld_mask);
     is_awake_lightning_monster |= new_monrace.brightness_flags.has_any_of(has_ld_mask) && !monster.is_asleep();
     if (is_awake_lightning_monster) {
-        RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::MONSTER_LITE);
+        DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::MONSTER_LITE);
     }
 
     update_monster(player_ptr, grid.m_idx, true);

@@ -21,6 +21,17 @@ on:
       use-ccache:
         type: boolean
         required: false
+      # ccache のミスがこの数以上のときだけキャッシュを保存する。既定値は PR 向けで、
+      # ヘッダを変えたときのように多くのファイルを作り直したときだけ保存し、それ以外はベースのブランチのものを使う
+      ccache-save-min-misses:
+        type: number
+        required: false
+        default: 100
+      # apt でダウンロードしたパッケージ (.deb) をキャッシュに保存する。PR では保存せずベースのブランチのものを読むだけにし、
+      # 保存は develop の 1 ジョブだけで行う。全ジョブで使うパッケージをすべて入れる構成で指定する
+      apt-cache-save:
+        type: boolean
+        required: false
 
 permissions:
   contents: read
@@ -57,17 +68,147 @@ jobs:
           esac
 
       - id: calculate-cache-key
-        name: Calculate cache key for ccache
+        name: Calculate cache keys
         shell: bash
         run: |
-          key=$(printf '%s' "${{ inputs.runner }} ${{ inputs.cxx }} ${{ inputs.cxx-flags }} ${{ inputs.configure-opts }}" | shasum -a 256 | awk '{print $1}')
-          echo "key=$key" >> "$GITHUB_OUTPUT"
+          key=$(printf '%s' "${{ inputs.runner }} ${{ inputs.cxx }} ${{ inputs.cxx-flags }} ${{ inputs.configure-opts }} distcheck=${{ inputs.distcheck }}" | shasum -a 256 | awk '{print $1}')
+          # apt のパッケージのキャッシュはランナーごとに全ジョブで共有する。
+          # キーにパッケージの一覧を含めないので、一覧を変えても前のキャッシュを読み、足したパッケージだけをダウンロードする
+          apt_key=$(printf '%s' "${{ inputs.runner }}" | shasum -a 256 | awk '{print $1}')
+          # 保存するキーは、これらの接頭辞に時刻を付けたもの。
+          # キーの書式は .github/scripts/cleanup-ccache-caches.sh が前提にしている
+          echo "prefix=ccache-$key-" >> "$GITHUB_OUTPUT"
+          echo "apt-prefix=apt-archives-$apt_key-" >> "$GITHUB_OUTPUT"
 
-      - if: ${{ inputs.use-ccache }}
-        uses: hendrikmuhs/ccache-action@v1.2.23
+      # Ubuntu のミラーが極端に遅いことがあるので、ダウンロードしたパッケージをキャッシュする。
+      # キャッシュは全ジョブで共有し、全ジョブで使うパッケージの和集合を入れておく。各ジョブはそのうち要るものだけを入れる。
+      # --disable-net では、ネットワークの機能の外から curl のヘッダを読んでいないことを確かめるため、libcurl を入れない
+      - id: apt-packages
+        name: Decide packages to install (Ubuntu)
+        if: ${{ steps.os.outputs.family == 'linux' }}
+        shell: bash
+        env:
+          DISABLE_NET: ${{ contains(format(' {0} ', inputs.configure-opts), ' --disable-net ') }}
+          USE_CCACHE: ${{ inputs.use-ccache }}
+          APT_CACHE_SAVE: ${{ inputs.apt-cache-save }}
+        run: |
+          packages=(
+            autoconf
+            automake
+            pkg-config
+            libncurses-dev
+            libx11-dev
+            libxext-dev
+            libxft-dev
+            nkf
+            g++-16
+            libc++-21-dev
+            libc++abi-21-dev
+          )
+          skipped=()
+          if [ "${DISABLE_NET}" = true ]; then
+            skipped+=(libcurl4-openssl-dev)
+          else
+            packages+=(libcurl4-openssl-dev)
+          fi
+          if [ "${USE_CCACHE}" = true ]; then
+            packages+=(ccache)
+          else
+            skipped+=(ccache)
+          fi
+          # 保存するジョブが入れなかったパッケージはキャッシュに入らず、ほかのジョブが毎回ダウンロードすることになる
+          if [ "${APT_CACHE_SAVE}" = true ] && [ "${#skipped[@]}" -ne 0 ]; then
+            echo "The job saving the apt cache must install all packages, but skips: ${skipped[*]}" >&2
+            exit 1
+          fi
+          echo "packages=${packages[*]}" >> "$GITHUB_OUTPUT"
+
+      # actions/cache は root の持ち物の /var/cache/apt/archives に書き込めないので、ホームに読み込んでから写す
+      - name: Restore apt cache
+        if: ${{ steps.os.outputs.family == 'linux' }}
+        uses: actions/cache/restore@v6
         with:
-          key: ${{ steps.calculate-cache-key.outputs.key }}
-          max-size: "200M"
+          path: ~/apt-archives
+          key: ${{ steps.calculate-cache-key.outputs.apt-prefix }}
+          restore-keys: ${{ steps.calculate-cache-key.outputs.apt-prefix }}
+
+      # キャッシュのパッケージは、名前 (版) と大きさが索引と一致すればダウンロードせずに使われる
+      - name: Install required packages (Ubuntu)
+        if: ${{ steps.os.outputs.family == 'linux' }}
+        shell: bash
+        run: |
+          if compgen -G "${HOME}/apt-archives/*.deb" >/dev/null; then
+            sudo cp "${HOME}"/apt-archives/*.deb /var/cache/apt/archives/
+          fi
+          sudo apt-get update
+          sudo apt-get install -y ${{ steps.apt-packages.outputs.packages }}
+
+      # 入れた版と一致するものだけを残し、古い版がたまらないようにする。中身が読み込んだものと同じなら保存しない
+      - id: apt-save
+        name: Decide whether to save apt cache
+        if: ${{ steps.os.outputs.family == 'linux' && inputs.apt-cache-save }}
+        continue-on-error: true
+        shell: bash
+        run: |
+          # 複数のアーキテクチャで入っているパッケージもあるので、名前ごとに問い合わせず一覧から引く
+          declare -A installed=()
+          while IFS=$'\t' read -r status package version; do
+            [ "${status}" = installed ] && installed["${package} ${version}"]=1
+          done < <(dpkg-query -W -f='${db:Status-Status}\t${Package}:${Architecture}\t${Version}\n')
+          debs=()
+          for deb in /var/cache/apt/archives/*.deb; do
+            [ -e "${deb}" ] || continue
+            if ! IFS=$'\t' read -r package version < <(dpkg-deb --show --showformat='${Package}:${Architecture}\t${Version}\n' "${deb}"); then
+              echo "::warning::Failed to read ${deb}"
+              continue
+            fi
+            if [ -n "${installed["${package} ${version}"]+x}" ]; then
+              debs+=("${deb}")
+            fi
+          done
+          # ランナーの apt の設定でインストール後に .deb が消されるようになったときに、空のキャッシュを保存しない
+          if [ "${#debs[@]}" -eq 0 ]; then
+            echo "::warning::No downloaded packages are left in /var/cache/apt/archives; the apt cache is not saved"
+            exit 0
+          fi
+          if cmp -s <(ls "${HOME}/apt-archives" 2>/dev/null) <(printf '%s\n' "${debs[@]##*/}" | sort); then
+            echo "The apt cache is up to date"
+            exit 0
+          fi
+          rm -rf "${HOME}/apt-archives"
+          mkdir -p "${HOME}/apt-archives"
+          cp "${debs[@]}" "${HOME}/apt-archives/"
+          du -sh "${HOME}/apt-archives"
+          echo "save=true" >> "$GITHUB_OUTPUT"
+          echo "key=${{ steps.calculate-cache-key.outputs.apt-prefix }}$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "$GITHUB_OUTPUT"
+
+      - name: Save apt cache
+        if: ${{ steps.apt-save.outputs.save == 'true' }}
+        continue-on-error: true
+        uses: actions/cache/save@v6
+        with:
+          path: ~/apt-archives
+          key: ${{ steps.apt-save.outputs.key }}
+
+      - name: Install required packages (macOS)
+        if: ${{ steps.os.outputs.family == 'macos' }}
+        shell: bash
+        run: |
+          brew update
+          brew install autoconf automake pkg-config nkf ncurses curl ${{ inputs.use-ccache && 'ccache' || '' }}
+          echo "PKG_CONFIG_PATH=$(brew --prefix ncurses)/lib/pkgconfig:$(brew --prefix curl)/lib/pkgconfig:${PKG_CONFIG_PATH:-}" >> "$GITHUB_ENV"
+          echo "LDFLAGS=-L$(brew --prefix ncurses)/lib -L$(brew --prefix curl)/lib ${LDFLAGS:-}" >> "$GITHUB_ENV"
+          echo "CPPFLAGS=-I$(brew --prefix ncurses)/include -I$(brew --prefix curl)/include ${CPPFLAGS:-}" >> "$GITHUB_ENV"
+
+      - name: Restore ccache cache
+        if: ${{ inputs.use-ccache }}
+        uses: actions/cache/restore@v6
+        with:
+          path: ~/.ccache
+          # 保存のキーは接頭辞に時刻を付けたものなので、接頭辞の前方一致で、このブランチ・PR のもの、
+          # 無ければベースのブランチのものから最新のものを読む (key は必須なので同じ接頭辞を渡す)
+          key: ${{ steps.calculate-cache-key.outputs.prefix }}
+          restore-keys: ${{ steps.calculate-cache-key.outputs.prefix }}
 
       - name: Configuring ccache to intercept the compiler
         if: ${{ inputs.use-ccache }}
@@ -78,38 +219,19 @@ jobs:
           mkdir -p "${WRAP_DIR}"
           ln -sfn "${CCACHE_BIN}" "${WRAP_DIR}/${{ inputs.cxx }}"
           echo "${WRAP_DIR}" >> "$GITHUB_PATH"
+          # 作業ツリーの中に置くと、ソースの走査 (失敗時の find など) に巻き込まれるので外に置く。
+          # 設定は $CCACHE_DIR/ccache.conf に書かれ、キャッシュと一緒に保存される
+          export CCACHE_DIR="${HOME}/.ccache"
+          echo "CCACHE_DIR=${CCACHE_DIR}" >> "$GITHUB_ENV"
+          # 保存の前にこのジョブで使わなかったものを捨てるので、保存する大きさは 1 回のビルド分に収まる。
+          # ビルドの途中で ccache が自分で掃除し、使うものまで捨てないよう、上限には余裕を持たせる
+          "${CCACHE_BIN}" --set-config=max_size=400M
           "${CCACHE_BIN}" --set-config=sloppiness=pch_defines,time_macros,include_file_mtime,include_file_ctime
           "${CCACHE_BIN}" --set-config=pch_external_checksum=true
           "${CCACHE_BIN}" -p
-
-      - name: Install required packages (Ubuntu)
-        if: ${{ steps.os.outputs.family == 'linux' }}
-        shell: bash
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y \
-            autoconf \
-            automake \
-            pkg-config \
-            libncurses-dev \
-            libcurl4-openssl-dev \
-            libx11-dev \
-            libxext-dev \
-            libxft-dev \
-            nkf \
-            g++-16 \
-            libc++-21-dev \
-            libc++abi-21-dev
-
-      - name: Install required packages (macOS)
-        if: ${{ steps.os.outputs.family == 'macos' }}
-        shell: bash
-        run: |
-          brew update
-          brew install autoconf automake pkg-config nkf ncurses curl
-          echo "PKG_CONFIG_PATH=$(brew --prefix ncurses)/lib/pkgconfig:$(brew --prefix curl)/lib/pkgconfig:${PKG_CONFIG_PATH:-}" >> "$GITHUB_ENV"
-          echo "LDFLAGS=-L$(brew --prefix ncurses)/lib -L$(brew --prefix curl)/lib ${LDFLAGS:-}" >> "$GITHUB_ENV"
-          echo "CPPFLAGS=-I$(brew --prefix ncurses)/include -I$(brew --prefix curl)/include ${CPPFLAGS:-}" >> "$GITHUB_ENV"
+          # 読み込んだキャッシュには前回のジョブの統計が残っているので、0 にしてからビルドする
+          "${CCACHE_BIN}" -z
+          echo "CCACHE_JOB_START=$(date +%s)" >> "$GITHUB_ENV"
 
       - name: Show compiler version
         shell: bash
@@ -193,6 +315,7 @@ jobs:
           echo "n=${jobs}" >> "$GITHUB_OUTPUT"
 
       - name: Build with distcheck
+        id: distcheck
         if: ${{ inputs.distcheck }}
         shell: bash
         run: make DISTCHECK_CONFIGURE_FLAGS="CXX=\"${{ inputs.cxx }}\" CXXFLAGS=\"${{ inputs.cxx-flags }}\" ${{ inputs.configure-opts }}" -j${{ steps.jobs.outputs.n }} distcheck >/dev/null
@@ -202,7 +325,15 @@ jobs:
         shell: bash
         run: make -j${{ steps.jobs.outputs.n }} >/dev/null
 
+      # テストのコンパイルが済んだかどうかで ccache のキャッシュを保存するか決めるので、
+      # テストの実行とは分けてコンパイルする。
       # distcheck は make check を内部で実行するため、ここでは実行しない
+      - name: Build unit tests
+        id: build-tests
+        if: ${{ !inputs.distcheck }}
+        shell: bash
+        run: make -j${{ steps.jobs.outputs.n }} -C src hengband-test >/dev/null
+
       - name: Run unit tests
         if: ${{ !inputs.distcheck }}
         shell: bash
@@ -214,3 +345,39 @@ jobs:
         if: ${{ failure() }}
         shell: bash
         run: find . -name test-suite.log -exec sh -c 'echo "==== {} ===="; cat {}' \;
+
+      # 変化の少ないキャッシュを毎回保存すると、Actions のキャッシュの上限を圧迫するので、ミスが多いときだけ保存する。
+      # 保存の前にこのジョブで使わなかったものを捨てるので、コンパイルが最後まで済んだときに限る
+      # (distcheck はテストの実行と分けられないので、成功したときだけ)
+      - name: Decide whether to save ccache cache
+        id: ccache-save
+        if: ${{ !cancelled() && inputs.use-ccache && (steps.build-tests.outcome == 'success' || steps.distcheck.outcome == 'success') }}
+        continue-on-error: true
+        shell: bash
+        env:
+          MIN_MISSES: ${{ inputs.ccache-save-min-misses }}
+        run: |
+          ccache -s
+          misses=$(ccache --print-stats | awk -F'\t' '$1 == "cache_miss" { print $2 }')
+          echo "ccache misses: ${misses} (saves if >= ${MIN_MISSES})"
+          # 統計の形式が変わって読めなくなったときに、毎回保存してしまわないよう保存しない
+          if ! [[ "${misses}" =~ ^[0-9]+$ ]]; then
+            echo "::warning::Failed to read the number of ccache misses; the cache is not saved"
+            exit 0
+          fi
+          if [ "${misses}" -lt "${MIN_MISSES}" ]; then
+            exit 0
+          fi
+          # このジョブで使わなかったものを捨てる (60 秒は時刻の切り捨ての分の余裕)
+          ccache --evict-older-than "$(( $(date +%s) - CCACHE_JOB_START + 60 ))s"
+          ccache -s
+          echo "save=true" >> "$GITHUB_OUTPUT"
+          echo "key=${{ steps.calculate-cache-key.outputs.prefix }}$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "$GITHUB_OUTPUT"
+
+      - name: Save ccache cache
+        if: ${{ !cancelled() && steps.ccache-save.outputs.save == 'true' }}
+        continue-on-error: true
+        uses: actions/cache/save@v6
+        with:
+          path: ~/.ccache
+          key: ${{ steps.ccache-save.outputs.key }}

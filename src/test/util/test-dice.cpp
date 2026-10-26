@@ -80,8 +80,53 @@ TEST_CASE("Dice::parse rejects a malformed string")
     // 空文字列
     CHECK_THROWS_AS(Dice::parse(""), std::runtime_error);
 
-    // intに収まらない値。std::stoi の std::out_of_range も同じく変換される
+    // intに収まらない値もruntime_errorになる
     CHECK_THROWS_AS(Dice::parse("99999999999d6"), std::runtime_error);
+}
+
+TEST_CASE("Dice::parse rejects unconsumed characters in either integer")
+{
+    for (const auto *text : { "3d5junk", "3junkd5", "3d5.7", "3.7d5", "0x3d5", "3d0x5", "3d5 7", "3 7d5", "3d5 junk", "3 junkd5" }) {
+        CAPTURE(text);
+        CHECK_THROWS_AS(Dice::parse(text), std::runtime_error);
+    }
+
+    CHECK_THROWS_AS(Dice::parse(std::string("3d5\0junk", 8)), std::runtime_error);
+    CHECK_THROWS_AS(Dice::parse(std::string("3\0junkd5", 8)), std::runtime_error);
+    CHECK_THROWS_AS(Dice::parse(std::string("3d5\0", 4)), std::runtime_error);
+    CHECK_THROWS_AS(Dice::parse(std::string("3\0d5", 4)), std::runtime_error);
+}
+
+TEST_CASE("Dice::parse rejects plus signs and ASCII whitespace around integers")
+{
+    for (const auto *text : { "+3d5", "3d+5", "+3d+5" }) {
+        CAPTURE(text);
+        CHECK_THROWS_AS(Dice::parse(text), std::runtime_error);
+    }
+    for (const auto whitespace : { ' ', '\t', '\n', '\r', '\f', '\v' }) {
+        CAPTURE(static_cast<int>(whitespace));
+        const std::string padding(1, whitespace);
+        CHECK_THROWS_AS(Dice::parse(padding + "3d5"), std::runtime_error);
+        CHECK_THROWS_AS(Dice::parse("3" + padding + "d5"), std::runtime_error);
+        CHECK_THROWS_AS(Dice::parse("3d" + padding + "5"), std::runtime_error);
+        CHECK_THROWS_AS(Dice::parse("3d5" + padding), std::runtime_error);
+    }
+}
+
+TEST_CASE("Dice::parse accepts the int boundaries and rejects overflow in either integer")
+{
+    const auto minimum = std::numeric_limits<int>::min();
+    const auto maximum = std::numeric_limits<int>::max();
+    CHECK(Dice::parse(Dice::to_string(minimum, maximum)) == Dice(minimum, maximum));
+    CHECK(Dice::parse(Dice::to_string(maximum, minimum)) == Dice(maximum, minimum));
+
+    const auto positive_overflow = std::to_string(static_cast<long long>(maximum) + 1);
+    const auto negative_overflow = std::to_string(static_cast<long long>(minimum) - 1);
+    for (const auto &overflow : { positive_overflow, negative_overflow }) {
+        CAPTURE(overflow);
+        CHECK_THROWS_AS(Dice::parse(overflow + "d6"), std::runtime_error);
+        CHECK_THROWS_AS(Dice::parse("3d" + overflow), std::runtime_error);
+    }
 }
 
 TEST_CASE("Dice::parse does not check whether the dice is valid")
@@ -101,6 +146,12 @@ TEST_CASE("Dice::parse does not check whether the dice is valid")
     const auto negative_num = Dice::parse("-1d6");
     CHECK(negative_num == Dice(-1, 6));
     CHECK_FALSE(negative_num.is_valid());
+
+    const auto negative_sides = Dice::parse("3d-5");
+    CHECK(negative_sides == Dice(3, -5));
+    CHECK_FALSE(negative_sides.is_valid());
+
+    CHECK(Dice::parse("-3d-5") == Dice(-3, -5));
 }
 
 TEST_CASE("Dice::to_string builds the NdM notation")

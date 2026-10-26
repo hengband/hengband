@@ -5,7 +5,6 @@
  */
 
 #include "mind/mind-mage.h"
-#include "core/stuff-handler.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/floor-object.h"
@@ -14,9 +13,25 @@
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
 #include "player-base/player-class.h"
+#include "system/deferred-update-requests.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
+
+/*!
+ * @brief 魔力食いの後で、増えた MP を上限に切り詰め、所持品の整理と表示の更新を予約する
+ */
+static void finish_eating_magic(PlayerType *player_ptr)
+{
+    if (player_ptr->csp > player_ptr->msp) {
+        player_ptr->csp = player_ptr->msp;
+    }
+
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.set_flag(MainWindowRedrawingFlag::MP);
+    dur.request_inventory_arrangement();
+    dur.request_item_lists_redrawing();
+}
 
 /*!
  * @brief 魔力食い処理
@@ -85,19 +100,22 @@ bool eat_magic(PlayerType *player_ptr, int power)
     }
 
     if (is_eating_successful) {
-        return redraw_player(player_ptr);
+        finish_eating_magic(player_ptr);
+        return true;
     }
 
     if (item->is_fixed_artifact()) {
         const auto item_name = describe_flavor(player_ptr, *item, OD_NAME_ONLY);
-        msg_format(_("魔力が逆流した！%sは完全に魔力を失った。", "The recharging backfires - %s is completely drained!"), item_name.data());
+        msg_print(_("魔力が逆流した！{}は完全に魔力を失った。", "The recharging backfires - {} is completely drained!"), item_name);
         if (tval == ItemKindType::ROD) {
             item->timeout = base_pval * item->number;
         } else if (item->is_wand_staff()) {
             item->pval = 0;
         }
 
-        return redraw_player(player_ptr);
+        finish_eating_magic(player_ptr);
+
+        return true;
     }
 
     const auto item_name = describe_flavor(player_ptr, *item, (OD_OMIT_PREFIX | OD_NAME_ONLY));
@@ -159,15 +177,15 @@ bool eat_magic(PlayerType *player_ptr, int power)
             msg_print(_("ロッドは破損を免れたが、魔力は全て失なわれた。", "You save your rod from destruction, but all charges are lost."));
             item->timeout = base_pval * item->number;
         } else if (tval == ItemKindType::WAND) {
-            constexpr auto mes = _("%sは破損を免れたが、魔力が全て失われた。", "You save your %s from destruction, but all charges are lost.");
-            msg_format(mes, item_name.data());
+            constexpr auto mes = _("{}は破損を免れたが、魔力が全て失われた。", "You save your {} from destruction, but all charges are lost.");
+            msg_print(mes, item_name);
             item->pval = 0;
         }
     }
 
     if (fail_type == 2) {
         if (item->number > 1) {
-            msg_format(_("乱暴な魔法のために%sが一本壊れた！", "Wild magic consumes one of your %s!"), item_name.data());
+            msg_print(_("乱暴な魔法のために{}が一本壊れた！", "Wild magic consumes one of your {}!"), item_name);
             /* Reduce rod stack maximum timeout, drain wands. */
             if (tval == ItemKindType::ROD) {
                 item->timeout = std::min<short>(item->timeout, base_pval * (item->number - 1));
@@ -175,7 +193,7 @@ bool eat_magic(PlayerType *player_ptr, int power)
                 item->pval = item->pval * (item->number - 1) / item->number;
             }
         } else {
-            msg_format(_("乱暴な魔法のために%sが壊れた！", "Wild magic consumes your %s!"), item_name.data());
+            msg_print(_("乱暴な魔法のために{}が壊れた！", "Wild magic consumes your {}!"), item_name);
         }
 
         vary_item(player_ptr, i_idx, -1);
@@ -183,13 +201,15 @@ bool eat_magic(PlayerType *player_ptr, int power)
 
     if (fail_type == 3) {
         if (item->number > 1) {
-            msg_format(_("乱暴な魔法のために%sが全て壊れた！", "Wild magic consumes all your %s!"), item_name.data());
+            msg_print(_("乱暴な魔法のために{}が全て壊れた！", "Wild magic consumes all your {}!"), item_name);
         } else {
-            msg_format(_("乱暴な魔法のために%sが壊れた！", "Wild magic consumes your %s!"), item_name.data());
+            msg_print(_("乱暴な魔法のために{}が壊れた！", "Wild magic consumes your {}!"), item_name);
         }
 
         vary_item(player_ptr, i_idx, -999);
     }
 
-    return redraw_player(player_ptr);
+    finish_eating_magic(player_ptr);
+
+    return true;
 }

@@ -9,13 +9,13 @@
 #include "action/action-limited.h"
 #include "cmd-action/cmd-shoot.h"
 #include "core/asking-player.h"
-#include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "floor/geometry.h"
 #include "game-option/text-display-options.h"
 #include "grid/grid.h"
 #include "inventory/inventory-slot-types.h"
 #include "io/command-repeater.h"
+#include "io/input-context.h"
 #include "io/input-key-requester.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
@@ -25,19 +25,20 @@
 #include "player-base/player-class.h"
 #include "player-info/sniper-data-type.h"
 #include "player-status/player-energy.h"
+#include "system/deferred-update-requests.h"
 #include "system/item/item-entity.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
-#include "term/z-form.h"
 #include "util/int-char-converter.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "view/display-util.h"
+#include <fmt/format.h>
 
-#define MAX_SNIPE_POWERS 16
+constexpr auto MAX_SNIPE_POWERS = 16;
 
 /*! スナイパー技能情報の構造体 */
 struct snipe_power {
@@ -128,13 +129,13 @@ static snipe_power const snipe_powers[MAX_SNIPE_POWERS] = {
 void SniperData::reset_concentration_flag()
 {
     this->reset_concent = false;
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &dur = DeferredUpdateRequests::get_instance();
     static constexpr auto flags = {
         StatusRecalculatingFlag::BONUS,
         StatusRecalculatingFlag::MONSTER_STATUSES,
     };
-    rfu.set_flags(flags);
-    rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
+    dur.set_flags(flags);
+    dur.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
 }
 
 /*!
@@ -152,7 +153,7 @@ static bool snipe_concentrate(PlayerType *player_ptr)
         sniper_data->concent++;
     }
 
-    msg_format(_("集中した。(集中度 %d)", "You concentrate deeply. (lvl %d)"), sniper_data->concent);
+    msg_print(_("集中した。(集中度 {})", "You concentrate deeply. (lvl {})"), sniper_data->concent);
     sniper_data->reset_concentration_flag();
     return true;
 }
@@ -217,7 +218,7 @@ void display_snipe_list(PlayerType *player_ptr)
             continue;
         }
 
-        const auto psi_desc = format("  %c) %-30s%2d %4d", I2A(i), spell.name, spell.min_lev, spell.mana_cost);
+        const auto psi_desc = fmt::format("  {:c}) {:<30}{:2} {:4}", I2A(i), fmt::bytes(spell.name), spell.min_lev, spell.mana_cost);
 
         TERM_COLOR tcol = (spell.mana_cost > sniper_data->concent) ? TERM_SLATE : TERM_WHITE;
         term_putstr(x, y + i + 1, -1, tcol, psi_desc);
@@ -280,20 +281,21 @@ static int get_snipe_power(PlayerType *player_ptr, COMMAND_CODE *sn, bool only_b
         }
     }
 
-    std::string fmt;
-    if (only_browse) {
-        fmt = _("(%s^ %c-%c, '*'で一覧, ESC) どの%sについて知りますか？", "(%s^s %c-%c, *=List, ESC=exit) Use which %s? ");
-    } else {
-        fmt = _("(%s^ %c-%c, '*'で一覧, ESC) どの%sを使いますか？", "(%s^s %c-%c, *=List, ESC=exit) Use which %s? ");
-    }
-
-    const auto prompt = format(fmt.data(), p, I2A(0), I2A(num), p);
+    constexpr auto fmt_browse = _("({} {:c}-{:c}, '*'で一覧, ESC) どの{}について知りますか？", "({}s {:c}-{:c}, *=List, ESC=exit) Browse which {}? ");
+    constexpr auto fmt_use = _("({} {:c}-{:c}, '*'で一覧, ESC) どの{}を使いますか？", "({}s {:c}-{:c}, *=List, ESC=exit) Use which {}? ");
+    const auto desc_upcased = str_upcase_first(p);
+    const auto first_label = I2A(0);
+    const auto last_label = I2A(num);
+    const auto prompt = only_browse ? fmt::format(fmt_browse, desc_upcased, first_label, last_label, p) : fmt::format(fmt_use, desc_upcased, first_label, last_label, p);
     auto choice = always_show_list ? ESCAPE : '\1';
+
+    // 調べるときは一覧を隠しても画面から消さない (screen_load() しない) ので、redraw とは別に一覧を描いたままかを覚える
+    auto is_list_drawn = false;
     while (!flag) {
         if (choice == ESCAPE) {
             choice = ' ';
         } else {
-            const auto new_choice = input_command(prompt);
+            const auto new_choice = input_spell_choice(prompt, { .first_label = first_label, .last_label = last_label, .list = is_list_drawn, .browse = only_browse });
             if (!new_choice) {
                 break;
             }
@@ -306,6 +308,7 @@ static int get_snipe_power(PlayerType *player_ptr, COMMAND_CODE *sn, bool only_b
             /* Show the list */
             if (!redraw) {
                 redraw = true;
+                is_list_drawn = true;
                 if (!only_browse) {
                     screen_save();
                 }
@@ -329,8 +332,8 @@ static int get_snipe_power(PlayerType *player_ptr, COMMAND_CODE *sn, bool only_b
                     } else if (spell.mana_cost > sniper_data->concent) {
                         tcol = TERM_L_BLUE;
                     }
-                    term_putstr(x, y + i + 1, -1, tcol, (spell.min_lev > plev) ? "   ) " : format("  %c) ", I2A(i)));
-                    term_putstr(x + 5, y + i + 1, -1, tcol, format("%-30s%2d %4d", spell.name, spell.min_lev, spell.mana_cost));
+                    term_putstr(x, y + i + 1, -1, tcol, (spell.min_lev > plev) ? "   ) " : fmt::format("  {:c}) ", I2A(i)));
+                    term_putstr(x + 5, y + i + 1, -1, tcol, fmt::format("{:<30}{:2} {:4}", fmt::bytes(spell.name), spell.min_lev, spell.mana_cost));
                 }
 
                 /* Clear the bottom line */
@@ -343,6 +346,7 @@ static int get_snipe_power(PlayerType *player_ptr, COMMAND_CODE *sn, bool only_b
                 redraw = false;
                 if (!only_browse) {
                     screen_load();
+                    is_list_drawn = false;
                 }
             }
 
@@ -368,8 +372,8 @@ static int get_snipe_power(PlayerType *player_ptr, COMMAND_CODE *sn, bool only_b
         screen_load();
     }
 
-    RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::SPELL);
-    handle_stuff(player_ptr);
+    DeferredUpdateRequests::get_instance().set_flag(SubWindowRedrawingFlag::SPELL);
+    window_stuff(player_ptr);
 
     /* Abort if needed */
     if (!flag) {
@@ -623,17 +627,7 @@ void do_cmd_snipe(PlayerType *player_ptr)
         return;
     }
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    static constexpr auto flags_mwrf = {
-        MainWindowRedrawingFlag::HP,
-        MainWindowRedrawingFlag::MP,
-    };
-    rfu.set_flags(flags_mwrf);
-    static constexpr auto flags_swrf = {
-        SubWindowRedrawingFlag::PLAYER,
-        SubWindowRedrawingFlag::SPELL,
-    };
-    rfu.set_flags(flags_swrf);
+    DeferredUpdateRequests::get_instance().request_hp_mp_redrawing();
 }
 
 /*!

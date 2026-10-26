@@ -6,7 +6,7 @@
 #include "locale/localized-string.h"
 #include "system/angband.h"
 
-#define MAX_GAME_INSCRIPTIONS 10
+constexpr auto MAX_GAME_INSCRIPTIONS = 10;
 
 enum tr_type : int32_t;
 

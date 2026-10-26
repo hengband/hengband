@@ -25,11 +25,11 @@
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
 #include "term/term-color-types.h"
-#include "term/z-form.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-util.h"
 #include "view/status-first-page.h"
 #include "world/world.h"
+#include <fmt/format.h>
 
 /*!
  * @brief キャラクター画面に表示する打撃の命中・ダメージ修正を求める
@@ -63,7 +63,7 @@ std::pair<int, int> calc_displayed_melee_bonus(PlayerType *player_ptr, int hand)
 static void display_player_melee_bonus(PlayerType *player_ptr, int hand, int hand_entry)
 {
     const auto [show_tohit, show_todam] = calc_displayed_melee_bonus(player_ptr, hand);
-    const auto buf = format("(%+d,%+d)", show_tohit, show_todam);
+    const auto buf = fmt::format("({:+},{:+})", show_tohit, show_todam);
     if (!has_melee_weapon(player_ptr, INVEN_MAIN_HAND) && !has_melee_weapon(player_ptr, INVEN_SUB_HAND)) {
         display_player_one_line(ENTRY_BARE_HAND, buf, TERM_L_BLUE);
     } else if (has_two_handed_weapons(player_ptr)) {
@@ -97,7 +97,7 @@ static void display_sub_hand(PlayerType *player_ptr)
     uint stance_num = enum2i(pc.get_monk_stance()) - 1;
 
     if (stance_num < monk_stances.size()) {
-        display_player_one_line(ENTRY_POSTURE, format(_("%sの構え", "%s form"), monk_stances[stance_num].desc), TERM_YELLOW);
+        display_player_one_line(ENTRY_POSTURE, fmt::format(_("{}の構え", "{} form"), monk_stances[stance_num].desc), TERM_YELLOW);
     }
 }
 
@@ -108,7 +108,7 @@ static void display_sub_hand(PlayerType *player_ptr)
 static void display_bow_hit_damage(PlayerType *player_ptr)
 {
     const auto [show_tohit, show_todam] = calc_displayed_bow_bonus(player_ptr);
-    display_player_one_line(ENTRY_SHOOT_HIT_DAM, format("(%+d,%+d)", show_tohit, show_todam), TERM_L_BLUE);
+    display_player_one_line(ENTRY_SHOOT_HIT_DAM, fmt::format("({:+},{:+})", show_tohit, show_todam), TERM_L_BLUE);
 }
 
 /*!
@@ -163,7 +163,7 @@ static void display_shoot_magnification(PlayerType *player_ptr)
         tmul = tmul * (100 + (int)(adj_str_td[player_ptr->stat_index[A_STR]]) - 128);
     }
 
-    display_player_one_line(ENTRY_SHOOT_POWER, format("x%d.%02d", tmul / 100, tmul % 100), TERM_L_BLUE);
+    display_player_one_line(ENTRY_SHOOT_POWER, fmt::format("x{}.{:02}", tmul / 100, tmul % 100), TERM_L_BLUE);
 }
 
 /*!
@@ -261,10 +261,10 @@ static void display_player_speed(PlayerType *player_ptr, TERM_COLOR attr, int ba
             if (player_ptr->lightspeed) {
                 buf = _("光速化 (+99)", "Lightspeed (+99)");
             } else {
-                buf = format("(%+d%+d)", base_speed - tmp_speed, tmp_speed);
+                buf = fmt::format("({:+}{:+})", base_speed - tmp_speed, tmp_speed);
             }
         } else {
-            buf = format(_("乗馬中 (%+d%+d)", "Riding (%+d%+d)"), base_speed - tmp_speed, tmp_speed);
+            buf = fmt::format(_("乗馬中 ({:+}{:+})", "Riding ({:+}{:+})"), base_speed - tmp_speed, tmp_speed);
         }
 
         if (tmp_speed > 0) {
@@ -274,14 +274,14 @@ static void display_player_speed(PlayerType *player_ptr, TERM_COLOR attr, int ba
         }
     } else {
         if (!player_ptr->riding) {
-            buf = format("(%+d)", base_speed);
+            buf = fmt::format("({:+})", base_speed);
         } else {
-            buf = format(_("乗馬中 (%+d)", "Riding (%+d)"), base_speed);
+            buf = fmt::format(_("乗馬中 ({:+})", "Riding ({:+})"), base_speed);
         }
     }
 
     display_player_one_line(ENTRY_SPEED, buf, attr);
-    display_player_one_line(ENTRY_LEVEL, format("%d", player_ptr->lev), TERM_L_GREEN);
+    display_player_one_line(ENTRY_LEVEL, fmt::format("{}", player_ptr->lev), TERM_L_GREEN);
 }
 
 /*!
@@ -293,13 +293,13 @@ static void display_player_exp(PlayerType *player_ptr)
     PlayerRace pr(player_ptr);
     int e = pr.equals(PlayerRaceType::ANDROID) ? ENTRY_EXP_ANDR : ENTRY_CUR_EXP;
     if (player_ptr->exp >= player_ptr->max_exp) {
-        display_player_one_line(e, format("%d", player_ptr->exp), TERM_L_GREEN);
+        display_player_one_line(e, fmt::format("{}", player_ptr->exp), TERM_L_GREEN);
     } else {
-        display_player_one_line(e, format("%d", player_ptr->exp), TERM_YELLOW);
+        display_player_one_line(e, fmt::format("{}", player_ptr->exp), TERM_YELLOW);
     }
 
     if (!pr.equals(PlayerRaceType::ANDROID)) {
-        display_player_one_line(ENTRY_MAX_EXP, format("%d", player_ptr->max_exp), TERM_L_GREEN);
+        display_player_one_line(ENTRY_MAX_EXP, fmt::format("{}", player_ptr->max_exp), TERM_L_GREEN);
     }
 
     e = pr.equals(PlayerRaceType::ANDROID) ? ENTRY_EXP_TO_ADV_ANDR : ENTRY_EXP_TO_ADV;
@@ -307,39 +307,37 @@ static void display_player_exp(PlayerType *player_ptr)
     if (player_ptr->lev >= PY_MAX_LEVEL) {
         display_player_one_line(e, "*****", TERM_L_GREEN);
     } else if (pr.equals(PlayerRaceType::ANDROID)) {
-        display_player_one_line(e, format("%d", player_exp_a[player_ptr->lev - 1] * player_ptr->expfact / 100), TERM_L_GREEN);
+        display_player_one_line(e, fmt::format("{}", player_exp_a[player_ptr->lev - 1] * player_ptr->expfact / 100), TERM_L_GREEN);
     } else {
-        display_player_one_line(e, format("%d", player_exp[player_ptr->lev - 1] * player_ptr->expfact / 100), TERM_L_GREEN);
+        display_player_one_line(e, fmt::format("{}", player_exp[player_ptr->lev - 1] * player_ptr->expfact / 100), TERM_L_GREEN);
     }
 }
 
 /*!
  * @brief ゲーム内の経過時間を表示する
  * @param player_ptr プレイヤーへの参照ポインタ
- * @details fmt をstring で受けているのはClang対策
  */
 static void display_playtime_in_game(PlayerType *player_ptr)
 {
     const auto &[day, hour, min] = AngbandWorld::get_instance().extract_date_time(InnerGameData::get_instance().get_start_race());
     const auto is_days_countable = day < MAX_DAYS;
-    const std::string fmt = is_days_countable ? _("%d日目 %2d:%02d", "Day %d %2d:%02d") : _("*****日目 %2d:%02d", "Day ***** %2d:%02d");
-    const auto mes = is_days_countable ? format(fmt.data(), day, hour, min) : format(fmt.data(), hour, min);
+    const auto mes = is_days_countable ? fmt::format(_("{}日目 {:2}:{:02}", "Day {} {:2}:{:02}"), day, hour, min) : fmt::format(_("*****日目 {:2}:{:02}", "Day ***** {:2}:{:02}"), hour, min);
     display_player_one_line(ENTRY_DAY, mes, TERM_L_GREEN);
 
     if (player_ptr->chp >= player_ptr->mhp) {
-        display_player_one_line(ENTRY_HP, format("%4d/%4d", player_ptr->chp, player_ptr->mhp), TERM_L_GREEN);
+        display_player_one_line(ENTRY_HP, fmt::format("{:4}/{:4}", player_ptr->chp, player_ptr->mhp), TERM_L_GREEN);
     } else if (player_ptr->chp > (player_ptr->mhp * hitpoint_warn) / 10) {
-        display_player_one_line(ENTRY_HP, format("%4d/%4d", player_ptr->chp, player_ptr->mhp), TERM_YELLOW);
+        display_player_one_line(ENTRY_HP, fmt::format("{:4}/{:4}", player_ptr->chp, player_ptr->mhp), TERM_YELLOW);
     } else {
-        display_player_one_line(ENTRY_HP, format("%4d/%4d", player_ptr->chp, player_ptr->mhp), TERM_RED);
+        display_player_one_line(ENTRY_HP, fmt::format("{:4}/{:4}", player_ptr->chp, player_ptr->mhp), TERM_RED);
     }
 
     if (player_ptr->csp >= player_ptr->msp) {
-        display_player_one_line(ENTRY_SP, format("%4d/%4d", player_ptr->csp, player_ptr->msp), TERM_L_GREEN);
+        display_player_one_line(ENTRY_SP, fmt::format("{:4}/{:4}", player_ptr->csp, player_ptr->msp), TERM_L_GREEN);
     } else if (player_ptr->csp > (player_ptr->msp * mana_warn) / 10) {
-        display_player_one_line(ENTRY_SP, format("%4d/%4d", player_ptr->csp, player_ptr->msp), TERM_YELLOW);
+        display_player_one_line(ENTRY_SP, fmt::format("{:4}/{:4}", player_ptr->csp, player_ptr->msp), TERM_YELLOW);
     } else {
-        display_player_one_line(ENTRY_SP, format("%4d/%4d", player_ptr->csp, player_ptr->msp), TERM_RED);
+        display_player_one_line(ENTRY_SP, fmt::format("{:4}/{:4}", player_ptr->csp, player_ptr->msp), TERM_RED);
     }
 }
 
@@ -357,13 +355,13 @@ void display_player_middle(PlayerType *player_ptr)
     display_sub_hand(player_ptr);
     display_bow_hit_damage(player_ptr);
     display_shoot_magnification(player_ptr);
-    display_player_one_line(ENTRY_BASE_AC, format("[%d,%+d]", player_ptr->dis_ac, player_ptr->dis_to_a), TERM_L_BLUE);
+    display_player_one_line(ENTRY_BASE_AC, fmt::format("[{},{:+}]", player_ptr->dis_ac, player_ptr->dis_to_a), TERM_L_BLUE);
 
     const auto [base_speed, tmp_speed] = calc_displayed_speed(player_ptr);
     TERM_COLOR attr = decide_speed_color(player_ptr, base_speed);
     display_player_speed(player_ptr, attr, base_speed, tmp_speed);
     display_player_exp(player_ptr);
-    display_player_one_line(ENTRY_GOLD, format("%d", player_ptr->au), TERM_L_GREEN);
+    display_player_one_line(ENTRY_GOLD, fmt::format("{}", player_ptr->au), TERM_L_GREEN);
     display_playtime_in_game(player_ptr);
     display_player_one_line(ENTRY_PLAY_TIME, AngbandWorld::get_instance().format_real_playtime(), TERM_L_GREEN);
 }

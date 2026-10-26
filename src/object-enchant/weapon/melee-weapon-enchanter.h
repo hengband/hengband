@@ -19,5 +19,6 @@ protected:
     void prepare_magic_application();
 
 private:
+    virtual void adjust_for_ego() {}
     void strengthen();
 };

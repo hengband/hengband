@@ -50,6 +50,7 @@ Y:fresh_before
 X:fresh_after
 X:fresh_once
 X:fresh_message
+Y:defer_map_subwindows
 X:hilite_player
 Y:display_path
 

@@ -10,18 +10,18 @@
 #include "player-info/race-types.h"
 #include "player/process-name.h"
 #include "racial/racial-android.h"
+#include "system/deferred-update-requests.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
-#include "term/z-form.h"
 #include "util/buffer-shaper.h"
 #include "util/int-char-converter.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "view/display-player.h"
 #include "world/world.h"
+#include <fmt/format.h>
 #include <tl/optional.hpp>
 
 /*!
@@ -43,44 +43,22 @@ void do_cmd_redraw(PlayerType *player_ptr)
 {
     term_xtra(TERM_XTRA_REACT, 0);
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    static constexpr auto flags_srf = {
-        StatusRecalculatingFlag::COMBINATION,
-        StatusRecalculatingFlag::REORDER,
-        StatusRecalculatingFlag::TORCH,
-        StatusRecalculatingFlag::BONUS,
-        StatusRecalculatingFlag::HP,
-        StatusRecalculatingFlag::MP,
-        StatusRecalculatingFlag::SPELLS,
-        StatusRecalculatingFlag::UN_VIEW,
-        StatusRecalculatingFlag::UN_LITE,
-        StatusRecalculatingFlag::VIEW,
-        StatusRecalculatingFlag::LITE,
-        StatusRecalculatingFlag::MONSTER_LITE,
-        StatusRecalculatingFlag::MONSTER_STATUSES,
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.request_whole_status_recalculation();
+    static constexpr auto flags_iaf = {
+        InventoryArrangementFlag::COMBINATION,
+        InventoryArrangementFlag::REORDER,
     };
-    rfu.set_flags(flags_srf);
-    static constexpr auto flags_mwrf = {
-        MainWindowRedrawingFlag::WIPE,
-        MainWindowRedrawingFlag::BASIC,
-        MainWindowRedrawingFlag::EXTRA,
-        MainWindowRedrawingFlag::EQUIPPY,
-        MainWindowRedrawingFlag::MAP,
-    };
-    rfu.set_flags(flags_mwrf);
-    static constexpr auto flags_swrf = {
-        SubWindowRedrawingFlag::INVENTORY,
-        SubWindowRedrawingFlag::EQUIPMENT,
-        SubWindowRedrawingFlag::SPELL,
-        SubWindowRedrawingFlag::PLAYER,
-        SubWindowRedrawingFlag::MESSAGE,
-        SubWindowRedrawingFlag::OVERHEAD,
-        SubWindowRedrawingFlag::DUNGEON,
-        SubWindowRedrawingFlag::MONSTER_LORE,
-        SubWindowRedrawingFlag::ITEM_KNOWLEDGE,
-    };
-    rfu.set_flags(flags_swrf);
-    AngbandWorld::get_instance().play_time.update();
+    dur.set_flags(flags_iaf);
+    dur.request_whole_main_window_redrawing();
+    auto &world = AngbandWorld::get_instance();
+    // フロアが無いとき (新しいキャラクターの作成中に Windows 版のメニューから記号を切り替えたときなど) は、
+    // フロアに入るときに全てのサブウィンドウを描き直す
+    if (world.character_dungeon) {
+        dur.fill_up_sub_flags();
+    }
+
+    world.play_time.update();
     handle_stuff(player_ptr);
     if (PlayerRace(player_ptr).equals(PlayerRaceType::ANDROID)) {
         calc_android_exp(player_ptr);
@@ -108,7 +86,7 @@ static tl::optional<int> input_status_command(PlayerType *player_ptr, int page)
         process_player_name(player_ptr);
         return page;
     case 'f': {
-        const auto initial_filename = format("%s.txt", player_ptr->base_name);
+        const auto initial_filename = fmt::format("{}.txt", player_ptr->base_name);
         const auto input_filename = input_string(_("ファイル名: ", "File name: "), 80, initial_filename);
         if (!input_filename) {
             return page;
@@ -137,7 +115,8 @@ static tl::optional<int> input_status_command(PlayerType *player_ptr, int page)
  */
 void do_cmd_player_status(PlayerType *player_ptr)
 {
-    output_bot_json_character_snapshot(player_ptr);
+    const BotScreenScope bot_screen(make_bot_character_screen());
+    output_bot_json_screen_snapshot(player_ptr);
     auto page = 0;
     screen_save();
     constexpr auto prompt = _("['c'で名前変更, 'f'でファイルへ書出, 'h'でモード変更, ESCで終了]", "['c' to change name, 'f' to file, 'h' to change mode, or ESC]");
@@ -163,16 +142,8 @@ void do_cmd_player_status(PlayerType *player_ptr)
     }
 
     screen_load();
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    static constexpr auto flags_mwrf = {
-        MainWindowRedrawingFlag::WIPE,
-        MainWindowRedrawingFlag::BASIC,
-        MainWindowRedrawingFlag::EXTRA,
-        MainWindowRedrawingFlag::EQUIPPY,
-        MainWindowRedrawingFlag::MAP,
-    };
-    rfu.set_flags(flags_mwrf);
-    handle_stuff(player_ptr);
+    DeferredUpdateRequests::get_instance().request_whole_main_window_redrawing();
+    redraw_stuff(player_ptr);
 }
 
 /*!
@@ -181,7 +152,7 @@ void do_cmd_player_status(PlayerType *player_ptr)
  */
 void do_cmd_message_one(void)
 {
-    prt(format("> %s", message_str(0)->data()), 0, 0);
+    prt(fmt::format("> {}", *message_str(0)), 0, 0);
 }
 
 /*!
@@ -317,8 +288,8 @@ void do_cmd_messages(int num_now)
     while (true) {
         const auto displayed_msg_count = display_message_history(base_msg_num, num_now, num_lines, wid, shower);
 
-        constexpr auto fmt = _("以前のメッセージ %d-%d 全部で(%d)", "Message Recall (%d-%d of %d)");
-        prt(format(fmt, base_msg_num, base_msg_num + displayed_msg_count - 1, message_num()), 0, 0);
+        constexpr auto fmt = _("以前のメッセージ {}-{} 全部で({})", "Message Recall ({}-{} of {})");
+        prt(fmt::format(fmt, base_msg_num, base_msg_num + displayed_msg_count - 1, message_num()), 0, 0);
         prt(_("[ 'p' で更に古いもの, 'n' で更に新しいもの, '/' で検索, ESC で中断 ]", "[Press 'p' for older, 'n' for newer, ..., or ESCAPE]"), hgt - 1, 0);
 
         const auto skey = inkey_special(true);

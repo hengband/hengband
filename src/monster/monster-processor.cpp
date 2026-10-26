@@ -59,15 +59,15 @@
 #include "spell-realm/spells-hex.h"
 #include "spell/summon-types.h"
 #include "system/angband-system.h"
+#include "system/deferred-update-requests.h"
 #include "system/enums/monrace/monrace-id.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "target/projection-path-calculator.h"
-#include "tracking/lore-tracker.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 
@@ -139,15 +139,15 @@ void process_monster(PlayerType *player_ptr, MONSTER_IDX m_idx)
         const auto &new_monrace = monster.get_monrace();
 
         if (new_monrace.brightness_flags.has_any_of(ld_mask) || monrace.brightness_flags.has_any_of(ld_mask)) {
-            RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::MONSTER_LITE);
+            DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::MONSTER_LITE);
         }
 
         if (turn_flags_ptr->is_riding_mon) {
-            msg_format(_("突然%sが変身した。", "Suddenly, %s transforms!"), old_m_name.data());
+            msg_print(_("突然{}が変身した。", "Suddenly, {} transforms!"), old_m_name);
             if (new_monrace.misc_flags.has_not(MonsterMiscType::RIDING)) {
                 if (process_fall_off_horse(player_ptr, 0, true)) {
                     const auto m_name = monster_desc(player_ptr, monster, 0);
-                    msg_print(_("地面に落とされた。", format("You have fallen from %s.", m_name.data())));
+                    msg_print(_("地面に落とされた。", "You have fallen from {}."), m_name);
                 }
             }
         }
@@ -208,7 +208,7 @@ void process_monster(PlayerType *player_ptr, MONSTER_IDX m_idx)
     }
 
     if (turn_flags_ptr->is_riding_mon) {
-        RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
+        DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
     }
 
     process_angar(player_ptr, m_idx, turn_flags_ptr->see_m);
@@ -252,7 +252,7 @@ void process_monster(PlayerType *player_ptr, MONSTER_IDX m_idx)
         }
     }
 
-    update_map_flags(turn_flags_ptr);
+    update_flow_flags(turn_flags_ptr);
     update_lite_flags(turn_flags_ptr, monrace);
     update_monster_race_flags(player_ptr, turn_flags_ptr, monster);
 
@@ -315,7 +315,7 @@ void decide_drop_from_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool is
         msg_print("地面に落とされた。");
 #else
         const auto m_name = monster_desc(player_ptr, player_ptr->current_floor_ptr->m_list[player_ptr->riding], 0);
-        msg_format("You have fallen from %s.", m_name.data());
+        msg_print("You have fallen from {}.", m_name);
 #endif
     }
 }
@@ -343,7 +343,7 @@ bool vanish_summoned_children(PlayerType *player_ptr, MONSTER_IDX m_idx, bool se
 
     if (see_m) {
         const auto m_name = monster_desc(player_ptr, monster, 0);
-        msg_format(_("%sは消え去った！", "%s^ disappears!"), m_name.data());
+        msg_print(_("{}は消え去った！", "{} disappears!"), str_upcase_first(m_name));
     }
 
     if (record_named_pet && monster.is_named_pet()) {
@@ -376,7 +376,7 @@ bool awake_monster(PlayerType *player_ptr, MONSTER_IDX m_idx)
     (void)set_monster_csleep(*player_ptr->current_floor_ptr, m_idx, 0);
     if (monster.ml) {
         const auto m_name = monster_desc(player_ptr, monster, 0);
-        msg_format(_("%s^が目を覚ました。", "%s^ wakes up."), m_name.data());
+        msg_print(_("{}が目を覚ました。", "{} wakes up."), str_upcase_first(m_name));
     }
 
     if (is_original_ap_and_seen(player_ptr, monster) && (monrace.r_wake < MAX_UCHAR)) {
@@ -417,16 +417,16 @@ void process_angar(PlayerType *player_ptr, MONSTER_IDX m_idx, bool see_m)
             return;
         }
 
-        msg_format(_("%s^が突然暴れだした！", "%s^ suddenly begins unruly!"), m_name.data());
+        msg_print(_("{}が突然暴れだした！", "{} suddenly begins unruly!"), str_upcase_first(m_name));
         if (!process_fall_off_horse(player_ptr, 1, true)) {
             return;
         }
 
-        msg_format(_("あなたは振り落とされた。", "You have fallen."));
+        msg_print(_("あなたは振り落とされた。", "You have fallen."));
     }
 
     if (monster.is_pet() || see_m) {
-        msg_format(_("%s^は突然敵にまわった！", "%s^ suddenly becomes hostile!"), m_name.data());
+        msg_print(_("{}は突然敵にまわった！", "{} suddenly becomes hostile!"), str_upcase_first(m_name));
     }
 
     monster.set_hostile();
@@ -445,7 +445,8 @@ bool explode_grenade(PlayerType *player_ptr, MONSTER_IDX m_idx)
         return false;
     }
 
-    bool fear, dead;
+    auto fear = false;
+    auto dead = false;
     mon_take_hit_mon(player_ptr, m_idx, 1, &dead, &fear, _("は爆発して粉々になった。", " explodes into tiny shreds."), m_idx);
     return dead;
 }
@@ -601,7 +602,7 @@ bool process_monster_fear(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MO
     }
 
     const auto m_name = monster_desc(player_ptr, monster, 0);
-    msg_format(_("%s^は戦いを決意した！", "%s^ turns to fight!"), m_name.data());
+    msg_print(_("{}は戦いを決意した！", "{} turns to fight!"), str_upcase_first(m_name));
     return true;
 }
 
@@ -633,23 +634,11 @@ bool process_monster_fear(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MO
  *\n
  * Note the special "PREVENT_MAGIC" flag, which allows the player to get one\n
  * move before any "nasty" monsters get to use their spell attacks.\n
- *\n
- * Note that when the "knowledge" about the currently tracked monster\n
- * changes (flags, attacks, spells), we induce a redraw of the monster\n
- * recall window.\n
  */
 void process_monsters(PlayerType *player_ptr)
 {
-    const auto &tracker = LoreTracker::get_instance();
-    const auto old_monrace_id = tracker.get_trackee();
-    OldRaceFlags flags(old_monrace_id);
     player_ptr->current_floor_ptr->monster_noise = false;
     sweep_monster_process(player_ptr);
-    if (!tracker.is_tracking() || !tracker.is_tracking(old_monrace_id)) {
-        return;
-    }
-
-    flags.update_lore_window_flag(tracker.get_tracking_monrace());
 }
 
 /*!
@@ -763,7 +752,7 @@ bool process_stalking(PlayerType *player_ptr, MONSTER_IDX m_idx)
     // 呪術魔法によりテレポートが阻害されているならば寄ってこない
     if (SpellHex(player_ptr).check_hex_barrier(m_idx, HEX_ANTI_TELE)) {
         if (see_monster(player_ptr, m_idx)) {
-            msg_format(_("魔法のバリアが%s^のテレポートを邪魔した。", "Magic barrier obstructs teleporting of %s^."), m_name.data());
+            msg_print(_("魔法のバリアが{}のテレポートを邪魔した。", "Magic barrier obstructs teleporting of {}."), m_name);
         }
         return false;
     }

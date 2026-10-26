@@ -3,7 +3,7 @@
   "required": ["version", "terrains"],
   "properties": {
     "version": {
-      "type": "number",
+      "const": 1,
       "description": "Version情報"
     },
     "terrains": {
@@ -15,11 +15,13 @@
         "properties": {
           "id": {
             "type": "integer",
-            "minimum": 0
+            "minimum": 0,
+            "maximum": 32766
           },
           "key": {
             "description": "地形の識別子",
-            "type": "string"
+            "type": "string",
+            "minLength": 1
           },
           "name": {
             "type": "object",
@@ -43,7 +45,8 @@
               "character": {
                 "type": "string",
                 "minLength": 1,
-                "maxLength": 1
+                "maxLength": 1,
+                "pattern": "^[\\u0000-\\u007f]$"
               },
               "color": {
                 "type": "string"
@@ -60,71 +63,17 @@
             "type": ["string", "null"]
           },
           "map_priority": {
-            "description": "マップ表示優先度",
-            "type": ["integer", "null"]
+            "description": "縮小マップの表示優先度 (0..125)。null・省略は新しい地形では 0 (読み直すときは今の値のまま)。同順位で +1 されても自動拾い印の 127 未満に収める。",
+            "type": ["integer", "null"],
+            "minimum": 0,
+            "maximum": 125
           },
           "flags": {
             "type": "array",
             "items": {
               "type": "string",
-              "enum": [
-                "ACID_PUDDLE",
-                "AVOID_RUN",
-                "BASH",
-                "BLDG",
-                "CAN_DIG",
-                "CAN_FLY",
-                "CAN_PASS",
-                "CAN_SWIM",
-                "CLOSE",
-                "COLD_PUDDLE",
-                "DEEP",
-                "DISARM",
-                "DROP",
-                "ELEC_PUDDLE",
-                "ENTRANCE",
-                "FLOOR",
-                "GLASS",
-                "GLOW",
-                "HAS_ITEM",
-                "HIT_TRAP",
-                "CAN_DISINTEGRATE",
-                "STONE",
-                "LAVA",
-                "UP_STAIRS",
-                "LOS",
-                "MIRROR",
-                "DOWN_STAIRS",
-                "MOUNTAIN",
-                "MOVE",
-                "NOTICE",
-                "OPEN",
-                "PATTERN",
-                "PERMANENT",
-                "PLACE",
-                "PLANT",
-                "POISON_PUDDLE",
-                "PROJECTION",
-                "QUEST",
-                "QUEST_ENTER",
-                "QUEST_EXIT",
-                "REMEMBER",
-                "RUNE_EXPLOSION",
-                "RUNE_PROTECTION",
-                "SECRET",
-                "SHAFT",
-                "SHALLOW",
-                "SPECIAL",
-                "SPIKE",
-                "STAIRS",
-                "STORE",
-                "TELEPORTABLE",
-                "TOWN",
-                "TRAP",
-                "TREE",
-                "WALL",
-                "WATER"
-              ]
+              "description": "語彙はvalidate_json.pyでC++のトークン辞書と照合する。空文字列はreaderと同じく無視する。",
+              "pattern": "^(?:[A-Z][A-Z0-9_]*)?(?![\\s\\S])"
             }
           },
           "trap": {
@@ -279,14 +228,27 @@
           "convert": {
             "type": ["object", "null"],
             "required": ["type"],
+            "if": {
+              "properties": {
+                "type": {
+                  "const": "STREAM"
+                }
+              }
+            },
+            "then": {
+              "required": ["stream_index"]
+            },
             "properties": {
               "type": {
                 "type": "string",
                 "enum": ["FLOOR", "WALL", "INNER", "OUTER", "SOLID", "STREAM"]
               },
               "stream_index": {
+                "$comment": "maximum 254 was carried over from the old one-byte SUBTYPE when it was moved to stream_index (commit 51228d3210); the number of streams in a dungeon is not limited.",
                 "type": "integer",
-                "minimum": 0
+                "minimum": 0,
+                "maximum": 254,
+                "description": "変換先にするダンジョン定義の streams (読み込み後に priority の順に並べたもの) の位置。そのダンジョンの streams の数を超える位置を指したときは、失敗せずに元の地形のままにする。"
               }
             },
             "additionalProperties": false
@@ -318,51 +280,22 @@
             "additionalProperties": false
           },
           "interactions": {
-            "type": "object",
-            "description": "特定行動後の地形変化定義",
+            "type": ["object", "null"],
+            "description": "特定行動後の地形変化定義。状態は最大8件、DESTROYEDとDROP_GOLDは別枠。",
+            "propertyNames": {
+              "description": "行動の語彙はvalidate_json.pyでC++のトークン辞書と照合する。DESTROYEDとDROP_GOLDは専用指定。",
+              "pattern": "^[A-Z][A-Z0-9_]*(?![\\s\\S])"
+            },
             "properties": {
-              "BASH": {
-                "type": "string"
-              },
-              "CLOSE": {
-                "type": "string"
-              },
-              "DESTROYED": {
-                "type": "string"
-              },
-              "DISARM": {
-                "type": "string"
-              },
               "DROP_GOLD": {
                 "type": "string",
-                "pattern": "^[1-9][0-9]*d[1-9][0-9]*$"
-              },
-              "ENSECRET": {
-                "type": "string"
-              },
-              "HIT_TRAP": {
-                "type": "string"
-              },
-              "MAY_HAVE_GOLD": {
-                "type": "string"
-              },
-              "OPEN": {
-                "type": "string"
-              },
-              "SECRET": {
-                "type": "string"
-              },
-              "SHAFT": {
-                "type": "string"
-              },
-              "SPIKE": {
-                "type": "string"
-              },
-              "UNPERM": {
-                "type": "string"
+                "pattern": "^0*[1-9][0-9]*d0*[1-9][0-9]*(?![\\s\\S])"
               }
             },
-            "additionalProperties": false
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            }
           }
         },
         "additionalProperties": false

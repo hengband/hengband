@@ -11,13 +11,13 @@
 #include "save/item-writer.h"
 #include "save/monster-entity-writer.h"
 #include "save/save-util.h"
+#include "system/deferred-update-requests.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
-#include "term/z-form.h"
 #include "util/angband-files.h"
+#include <fmt/format.h>
 #include <range/v3/view.hpp>
 
 namespace {
@@ -167,7 +167,7 @@ bool wr_dungeon(PlayerType *player_ptr)
         StatusRecalculatingFlag::DISTANCE,
         StatusRecalculatingFlag::FLOW,
     };
-    RedrawingFlagsUpdater::get_instance().set_flags(flags);
+    DeferredUpdateRequests::get_instance().set_flags(flags);
     wr_s16b(max_floor_id);
     wr_byte(static_cast<uint8_t>(floor.dungeon_id));
     if (!player_ptr->in_saved_floor()) {
@@ -257,7 +257,7 @@ bool save_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mode
     }
 
     auto floor_savefile = savefile.string();
-    const auto ext = format(".F%02d", (int)sf_ptr->savefile_id);
+    const auto ext = fmt::format(".F{:02}", sf_ptr->savefile_id);
     floor_savefile.append(ext);
     safe_setuid_grab();
     fd_kill(floor_savefile);

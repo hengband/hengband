@@ -38,6 +38,8 @@ constexpr auto trim_back = ranges::views::reverse | trim_front | ranges::views::
  * 文字列の末尾が2バイト文字の前半バイトだけで終わっている場合も2を返す。
  * 戻り値を足した位置が文字列の長さを超えうるため、添字を進める用途では
  * ループの継続条件で範囲を確かめること。
+ * 前半バイトだけで終わる場合に false を返す is_multibyte_char_at() とは意図して扱いを変えている。
+ * str_substr() が前半バイトだけの末尾を部分文字列に含めないことなどは、この仕様を前提にしている。
  */
 size_t char_byte_length([[maybe_unused]] std::string_view sv, [[maybe_unused]] size_t i)
 {
@@ -170,6 +172,50 @@ size_t angband_strcat(char *buf, std::string_view src, size_t bufsize)
 }
 
 /*!
+ * @brief 2バイト文字を考慮しつつ文字列を検索し、見つかった位置を返す
+ * @param haystack 検索対象の文字列
+ * @param needle 検索する文字列
+ * @return 最初に見つかった位置。見つからなければ std::string_view::npos
+ * @details
+ * 2バイト文字の後半バイトから始まる位置にはマッチしない。
+ * needle が空文字列の場合は 0 を返す。
+ */
+size_t str_find_position(std::string_view haystack, std::string_view needle)
+{
+    if (haystack.length() < needle.length()) {
+        return std::string_view::npos;
+    }
+
+    const auto last_pos = haystack.length() - needle.length();
+    for (size_t i = 0; i <= last_pos; i += char_byte_length(haystack, i)) {
+        if (haystack.substr(i).starts_with(needle)) {
+            return i;
+        }
+    }
+
+    return std::string_view::npos;
+}
+
+/*!
+ * @brief 2バイト文字を考慮しつつ文字を検索し、見つかった位置を返す
+ * @param str 検索対象の文字列
+ * @param ch 検索する文字
+ * @return 最初に見つかった位置。見つからなければ std::string_view::npos
+ * @details
+ * 2バイト文字の後半バイトにはマッチしない。
+ */
+size_t str_find_position(std::string_view str, char ch)
+{
+    for (size_t i = 0; i < str.length(); i += char_byte_length(str, i)) {
+        if (str[i] == ch) {
+            return i;
+        }
+    }
+
+    return std::string_view::npos;
+}
+
+/*!
  * @brief 2バイト文字を考慮しつつ文字列を検索する (ANSIのstrstr相当)
  * @param haystack 検索対象のNUL終端された文字列
  * @param needle 検索する文字列
@@ -180,19 +226,8 @@ size_t angband_strcat(char *buf, std::string_view src, size_t bufsize)
  */
 char *angband_strstr(const char *haystack, std::string_view needle)
 {
-    const std::string_view haystack_view(haystack);
-    if (haystack_view.length() < needle.length()) {
-        return nullptr;
-    }
-
-    const auto last_pos = haystack_view.length() - needle.length();
-    for (size_t i = 0; i <= last_pos; i += char_byte_length(haystack_view, i)) {
-        if (haystack_view.substr(i).starts_with(needle)) {
-            return const_cast<char *>(haystack) + i;
-        }
-    }
-
-    return nullptr;
+    const auto pos = str_find_position(haystack, needle);
+    return (pos == std::string_view::npos) ? nullptr : const_cast<char *>(haystack) + pos;
 }
 
 /*!
@@ -206,48 +241,8 @@ char *angband_strstr(const char *haystack, std::string_view needle)
  */
 char *angband_strchr(const char *ptr, char ch)
 {
-    const std::string_view sv(ptr);
-    for (size_t i = 0; i < sv.length(); i += char_byte_length(sv, i)) {
-        if (sv[i] == ch) {
-            return const_cast<char *>(ptr) + i;
-        }
-    }
-
-    return nullptr;
-}
-
-/*!
- * @brief 文字列の左端の半角スペースを読み飛ばす
- * @param p NUL終端された文字列
- * @return 左端の半角スペースを読み飛ばした位置へのポインタ
- * @details
- * 元の文字列は書き換えない。タブや全角スペースは対象外。
- * タブも含めて取り除きたい場合や新しい文字列が欲しい場合は str_ltrim() を使う。
- */
-char *ltrim(char *p)
-{
-    while (p[0] == ' ') {
-        p++;
-    }
-    return p;
-}
-
-/*!
- * @brief 文字列の右端の半角スペースをNUL文字で潰す
- * @param p NUL終端された文字列。この文字列自体が書き換えられる
- * @return p と同じポインタ
- * @details
- * 2バイト文字の後半バイトが 0x20 になる文字コードは無いため、2バイト文字を壊すことはない。
- * タブや全角スペースは対象外。
- * 元の文字列を書き換えたくない場合は str_rtrim() を使う。
- */
-char *rtrim(char *p)
-{
-    for (auto i = strlen(p); (i > 0) && (p[i - 1] == ' '); --i) {
-        p[i - 1] = '\0';
-    }
-
-    return p;
+    const auto pos = str_find_position(ptr, ch);
+    return (pos == std::string_view::npos) ? nullptr : const_cast<char *>(ptr) + pos;
 }
 
 /*!
@@ -257,12 +252,12 @@ char *rtrim(char *p)
  * @return src に find が含まれるならtrue
  * @details
  * 2バイト文字の後半バイトから始まる位置にはマッチしない。
- * find には正しい長さを持つ文字列を渡すこと。NUL終端されていない char の配列や
+ * src・find には正しい長さを持つ文字列を渡すこと。NUL終端されていない char の配列や
  * char 単体のアドレスを渡すと、std::string_view への変換で範囲外を読む。
  */
-bool str_find(const std::string &src, std::string_view find)
+bool str_find(std::string_view src, std::string_view find)
 {
-    return angband_strstr(src.data(), find) != nullptr;
+    return str_find_position(src, find) != std::string_view::npos;
 }
 
 /*!
@@ -345,22 +340,14 @@ std::vector<std::string> str_split(std::string_view str, char delim, bool trim, 
     const auto make_str = [trim](std::string_view sv) { return trim ? str_trim(sv) : std::string(sv); };
 
     while (true) {
-        auto found = false;
-        for (size_t i = 0; i < str.length(); i += char_byte_length(str, i)) {
-            if (str[i] != delim) {
-                continue;
-            }
-
-            result.push_back(make_str(str.substr(0, i)));
-            str.remove_prefix(i + 1);
-            found = true;
-            break;
-        }
-
-        if (!found) {
+        const auto pos = str_find_position(str, delim);
+        if (pos == std::string_view::npos) {
             result.push_back(make_str(str));
             return result;
         }
+
+        result.push_back(make_str(str.substr(0, pos)));
+        str.remove_prefix(pos + 1);
     }
 }
 
@@ -611,6 +598,38 @@ std::set<int> str_find_all_multibyte_chars([[maybe_unused]] std::string_view str
     return mb_chars;
 #else
     return {};
+#endif
+}
+
+/*!
+ * @brief 文字列の指定した位置から、後半バイトまでそろった2バイト文字が始まるかを返す
+ * @param sv 文字列
+ * @param pos 位置(バイト)
+ * @return pos が2バイト文字の前半バイトを指し、その後ろに後半バイトがあれば true (英語版では常に false)
+ * @details
+ * 2バイト文字の後半バイトは前半バイトと同じ範囲の値もとるため、pos は文字の先頭を指していること。
+ */
+bool is_multibyte_char_at([[maybe_unused]] std::string_view sv, [[maybe_unused]] size_t pos)
+{
+#ifdef JP
+    // pos + 1 は pos が大きいと桁あふれするので、残りの長さで確かめる
+    return (pos < sv.length()) && (sv.length() - pos >= 2) && iskanji(sv[pos]);
+#else
+    return false;
+#endif
+}
+
+/*!
+ * @brief NUL 終端の文字列の先頭が、後半バイトまでそろった2バイト文字かを返す
+ * @param s NUL 終端の文字列
+ * @return s が2バイト文字の前半バイトを指し、その後ろに後半バイトがあれば true (英語版では常に false)
+ */
+bool is_multibyte_char_at([[maybe_unused]] const char *s)
+{
+#ifdef JP
+    return iskanji(s[0]) && (s[1] != '\0');
+#else
+    return false;
 #endif
 }
 

@@ -8,6 +8,7 @@
 #include "main-win/main-win-define.h"
 #include "main-win/main-win-tokenizer.h"
 #include "main/sound-definitions-table.h"
+#include "term/z-rand.h"
 #include "term/z-term.h"
 #include "util/angband-files.h"
 #include <span>
@@ -15,7 +16,7 @@
 #include <windows.h>
 
 // 1つの項目に設定可能な最大ファイル数
-#define SAMPLE_MAX 16
+constexpr auto SAMPLE_MAX = 16;
 
 /*!
  * @brief マップのキーを生成する
@@ -43,8 +44,9 @@ tl::optional<std::string> CfgData::get_rand(int key1_type, int key2_val) const
         return tl::nullopt;
     }
 
-    const auto &filenames = it->second;
-    return filenames.at(Rand_external(filenames.size()));
+    // 音を鳴らすかどうかは設定やファイルの有無で変わるため、固定シードで再現する Rand_external() の乱数列は消費しない
+    static xso::rng32 rng;
+    return rand_choice(rng, it->second);
 }
 
 bool CfgData::has_key(int key1_type, int key2_val) const

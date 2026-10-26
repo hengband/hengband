@@ -6,6 +6,7 @@
 
 #include "system/baseitem/baseitem-definition.h"
 #include "util/string-processor.h"
+#include <numeric>
 #include <string>
 #include <string_view>
 
@@ -32,6 +33,7 @@ BaseitemDefinition BaseitemDefinition::clone_without_required_fields() const
     cloned.to_d = this->to_d;
     cloned.to_a = this->to_a;
     cloned.alloc_tables = this->alloc_tables;
+    cloned.natural_generation = this->natural_generation;
     cloned.act_idx = this->act_idx;
     cloned.flags = this->flags;
     cloned.gen_flags = this->gen_flags;
@@ -49,6 +51,31 @@ BaseitemDefinition BaseitemDefinition::clone_without_required_fields() const
 bool BaseitemDefinition::is_valid() const
 {
     return !this->name.empty() && (this->name != _("異常アイテム", "Invalid item"));
+}
+
+/*!
+ * @brief 生成テーブルに出現率のある項目を持つかを判定する
+ * @details 希少度 (chance) が 0 の欄は使われていない欄と同じに扱う。
+ * @return 希少度の合計が正ならtrue
+ */
+bool BaseitemDefinition::has_allocation() const
+{
+    const auto sum_chances = std::accumulate(this->alloc_tables.begin(), this->alloc_tables.end(), 0, [](int sum, const auto &table) {
+        return sum + table.chance;
+    });
+    return sum_chances > 0;
+}
+
+/*!
+ * @brief 知識の一覧 (と bot の同じ一覧) に載せる候補かを判定する
+ * @details 生成テーブルを持つもの、または自然生成しないことが定義で明示されているものを候補とする。
+ * 生成テーブルも natural_generation: false も持たないもの (INSTA_ART の本体など) は候補にしない。
+ * 鑑定済みかどうかなど、ほかの表示の条件は呼び出し側で判定する。
+ * @return 候補ならtrue
+ */
+bool BaseitemDefinition::is_knowledge_candidate() const
+{
+    return this->has_allocation() || !this->natural_generation;
 }
 
 /*!

@@ -161,6 +161,7 @@ void set_zangband_reflection(PlayerType *player_ptr)
 void rd_zangband_dungeon()
 {
     DungeonRecords::get_instance().get_record(DungeonId::ANGBAND).set_max_level(rd_s16b());
+    DungeonRecords::get_instance().get_record(DungeonId::ANGBAND).mark_visited();
 }
 
 void set_zangband_game_turns(PlayerType *player_ptr)

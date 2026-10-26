@@ -7,13 +7,20 @@
 #include "mspell/mspell-data.h"
 #include "mspell/mspell-util.h"
 #include "system/player-type-definition.h"
+#include <fmt/base.h>
+#include <string_view>
 #include <type_traits>
 
 struct MonsterSpellResult;
 
+/*!
+ * @brief 呪いの呪文
+ * @details メッセージの書式の引数は、{0} が唱えたモンスターの名前 (先頭を大文字にする)、{1} が対象のモンスターの名前
+ */
 class CurseData : public MSpellData {
 public:
-    CurseData(const std::string_view &msg1, const std::string_view &msg2, const std::string_view &msg3, const AttributeType &typ);
+    using Format = fmt::format_string<std::string_view, std::string_view>;
+    CurseData(Format msg1, Format msg2, Format msg3, const AttributeType &typ);
     template <typename FUNC>
     CurseData(FUNC msg_func, AttributeType typ)
         : MSpellData(msg_func, typ)

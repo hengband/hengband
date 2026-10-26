@@ -16,16 +16,17 @@
 #include "player/player-damage.h"
 #include "player/player-move.h"
 #include "player/player-skill.h"
+#include "system/deferred-update-requests.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "system/terrain/terrain-definition.h"
 #include "target/target-checker.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#include <fmt/format.h>
 #include <tl/optional.hpp>
 
 /*!
@@ -41,7 +42,7 @@ void check_fall_off_horse(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr
 
     const auto m_steed_name = monster_desc(player_ptr, player_ptr->current_floor_ptr->m_list[player_ptr->riding], 0);
     if (process_fall_off_horse(player_ptr, (monap_ptr->damage > 200) ? 200 : monap_ptr->damage, false)) {
-        msg_format(_("%s^から落ちてしまった！", "You have fallen from %s."), m_steed_name.data());
+        msg_print(_("{}から落ちてしまった！", "You have fallen from {}."), m_steed_name);
     }
 }
 
@@ -135,7 +136,7 @@ bool process_fall_off_horse(PlayerType *player_ptr, int dam, bool force)
 
         if (!pos_fall_off) {
             const auto m_name = monster_desc(player_ptr, monster, 0);
-            msg_format(_("%sから振り落とされそうになって、壁にぶつかった。", "You have nearly fallen from %s but bumped into a wall."), m_name.data());
+            msg_print(_("{}から振り落とされそうになって、壁にぶつかった。", "You have nearly fallen from {} but bumped into a wall."), m_name);
             take_hit(player_ptr, DAMAGE_NOESCAPE, monrace.level + 3, _("壁への衝突", "bumping into a wall"));
             return false;
         }
@@ -145,35 +146,23 @@ bool process_fall_off_horse(PlayerType *player_ptr, int dam, bool force)
         verify_panel(player_ptr);
     }
 
-    player_ptr->ride_monster(0);
-    player_ptr->pet_extra_flags &= ~(PF_TWO_HANDS);
-    player_ptr->riding_ryoute = player_ptr->old_riding_ryoute = false;
+    player_ptr->dismount();
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &dur = DeferredUpdateRequests::get_instance();
     static constexpr auto flags_srf = {
-        StatusRecalculatingFlag::BONUS,
         StatusRecalculatingFlag::VIEW,
         StatusRecalculatingFlag::LITE,
         StatusRecalculatingFlag::FLOW,
         StatusRecalculatingFlag::MONSTER_LITE,
         StatusRecalculatingFlag::MONSTER_STATUSES,
     };
-    rfu.set_flags(flags_srf);
+    dur.set_flags(flags_srf);
+    dur.request_riding_change_updates();
     handle_stuff(player_ptr);
-    static constexpr auto flags_swrf = {
-        SubWindowRedrawingFlag::OVERHEAD,
-        SubWindowRedrawingFlag::DUNGEON,
-    };
-    rfu.set_flags(flags_swrf);
-    static constexpr auto flags_mwrf = {
-        MainWindowRedrawingFlag::EXTRA,
-        MainWindowRedrawingFlag::UHEALTH,
-    };
-    rfu.set_flags(flags_mwrf);
     auto fall_dam = false;
     if (player_ptr->levitation && !force) {
         const auto m_name = monster_desc(player_ptr, monster, 0);
-        msg_format(_("%sから落ちたが、空中でうまく体勢を立て直して着地した。", "You are thrown from %s but make a good landing."), m_name.data());
+        msg_print(_("{}から落ちたが、空中でうまく体勢を立て直して着地した。", "You are thrown from {} but make a good landing."), m_name);
     } else {
         take_hit(player_ptr, DAMAGE_NOESCAPE, monrace.level + 3, _("落馬", "Falling from riding"));
         fall_dam = true;

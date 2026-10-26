@@ -41,7 +41,6 @@
 #include "system/player-type-definition.h"
 #include "system/services/dungeon-service.h"
 #include "term/gameterm.h"
-#include "term/z-form.h"
 #include "util/buffer-shaper.h"
 #include "util/enum-converter.h"
 #include "util/int-char-converter.h"
@@ -179,8 +178,12 @@ static void dump_aux_last_message(PlayerType *player_ptr, FILE *fff)
  */
 static void dump_aux_recall(FILE *fff)
 {
-    fmt::println(fff, _("\n  [帰還場所]\n", "\n  [Recall Depth]\n"));
-    for (const auto &known_dungeon : DungeonService::build_known_dungeons(DungeonMessageFormat::DUMP)) {
+    fmt::println(fff, _("\n  [帰還場所 (訪問済み)]\n", "\n  [Recall Depth (Visited)]\n"));
+    for (const auto &known_dungeon : DungeonService::build_known_dungeons(DungeonMessageFormat::DUMP, true)) {
+        fmt::print(fff, "{}", known_dungeon);
+    }
+    fmt::println(fff, _("\n  [帰還場所 (解放済み・未訪問)]\n", "\n  [Recall Depth (Unlocked Only)]\n"));
+    for (const auto &known_dungeon : DungeonService::build_known_dungeons(DungeonMessageFormat::DUMP, false)) {
         fmt::print(fff, "{}", known_dungeon);
     }
 }
@@ -191,7 +194,7 @@ static void dump_aux_recall(FILE *fff)
  */
 static void dump_aux_options(FILE *fff)
 {
-    fprintf(fff, _("\n  [オプション設定]\n", "\n  [Option Settings]\n"));
+    fmt::println(fff, _("\n  [オプション設定]", "\n  [Option Settings]"));
     if (preserve_mode) {
         fmt::print(fff, _("\n 保存モード:         ON", "\n Preserve Mode:      ON"));
     } else {
@@ -286,11 +289,10 @@ static void dump_aux_arena(FILE *fff)
         return;
     }
 
-    const auto victory_count = current_entry > max_entries ? max_entries : current_entry;
 #ifdef JP
-    fprintf(fff, "\n 闘技場: %2d勝\n", victory_count);
+    fmt::println(fff, "\n 闘技場: {:2}勝", current_entry);
 #else
-    fprintf(fff, "\n Arena: %2d %s\n", victory_count, (current_entry > 1) ? "Victories" : "Victory");
+    fmt::println(fff, "\n Arena: {:2} {}", current_entry, (current_entry == 1) ? "Victory" : "Victories");
 #endif
     fmt::print(fff, "\n");
 }
@@ -373,8 +375,9 @@ static void dump_aux_monsters(FILE *fff)
             defeat_info = fmt::format(fmt, defeat_level, defeat_hour, max_hour_digits, defeat_minute, defeat_second);
         }
 
-        const auto names = str_separate(monrace.name, 40);
-        fprintf(fff, _("  %-40s (レベル%3d)%s\n", "  %-40s (level %3d)%s\n"), names.front().data(), monrace.level, defeat_info.data());
+        // shape_buffer() は終端文字の分を除いた maxlen - 1 バイトごとに区切るので、名前の欄の幅 + 1 を渡す
+        const auto names = shape_buffer(monrace.name, 40 + 1);
+        fmt::println(fff, _("  {:<40} (レベル{:3}){}", "  {:<40} (level {:3}){}"), fmt::bytes(names.front()), monrace.level, defeat_info);
         for (const auto &name : names | ranges::views::drop(1)) {
             fmt::println(fff, "  {}", name);
         }
@@ -529,8 +532,8 @@ static void dump_aux_equipment_inventory(PlayerType *player_ptr, FILE *fff)
  */
 static void dump_aux_home_museum(PlayerType *player_ptr, FILE *fff)
 {
-    const auto &outpost = TownList::get_instance().get_town(1);
-    const auto &home = outpost.get_store(StoreSaleType::HOME);
+    const auto &towns = TownList::get_instance();
+    const auto &home = towns.get_home();
     if (home.stock_num) {
         fmt::println(fff, _("  [我が家のアイテム]", "  [Home Inventory]"));
         auto page = 1;
@@ -546,7 +549,7 @@ static void dump_aux_home_museum(PlayerType *player_ptr, FILE *fff)
         fmt::println(fff, "\n");
     }
 
-    const auto &museum = outpost.get_store(StoreSaleType::MUSEUM);
+    const auto &museum = towns.get_museum();
     if (museum.stock_num == 0) {
         return;
     }

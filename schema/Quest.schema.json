@@ -5,6 +5,15 @@
   "type": "object",
   "additionalProperties": false,
   "required": ["version", "id", "name", "definition"],
+  "dependentSchemas": {
+    "start": {
+      "anyOf": [{ "required": ["map"] }, { "required": ["mapVariants"] }]
+    },
+    "startVariants": {
+      "if": { "properties": { "startVariants": { "minItems": 1 } } },
+      "then": { "anyOf": [{ "required": ["map"] }, { "required": ["mapVariants"] }] }
+    }
+  },
   "properties": {
     "version": {
       "type": "integer",
@@ -36,7 +45,7 @@
         "maxLength": 1
       },
       "additionalProperties": {
-        "$ref": "#/$defs/gridDefinition"
+        "$ref": "common/QuestGrid.schema.json#/$defs/gridDefinition"
       }
     },
     "map": {
@@ -115,26 +124,32 @@
         },
         "level": {
           "type": "integer",
-          "minimum": 0
+          "minimum": 0,
+          "maximum": 127,
+          "description": "Dungeon level; at most MAX_DEPTH - 1, the deepest reachable level."
         },
         "dungeon": {
           "type": "integer",
           "minimum": 0,
-          "description": "DungeonId; 0 = none/quest-local floor."
+          "maximum": 20,
+          "description": "DungeonId; 0 = none/quest-local floor. At most DungeonId::MAX - 1."
         },
         "monster": {
           "type": "integer",
           "minimum": 0,
-          "description": "MonraceId of the quest target (r_idx); 0 = none."
+          "maximum": 32766,
+          "description": "MonraceId of the quest target (r_idx); 0 = none. At most the MonraceId storage maximum - 1."
         },
         "numMon": {
           "type": "integer",
-          "minimum": 0
+          "minimum": 0,
+          "maximum": 2147483647
         },
         "maxNum": {
           "type": "integer",
           "minimum": 0,
-          "description": "Required kill count (KILL_NUMBER)."
+          "maximum": 32767,
+          "description": "Required kill count (KILL_NUMBER); saved as a 16-bit value."
         },
         "flags": {
           "type": "array",
@@ -157,14 +172,16 @@
       "properties": {
         "artifact": {
           "type": "integer",
-          "minimum": 1
+          "minimum": 1,
+          "maximum": 32766
         },
         "artifacts": {
           "type": "array",
           "minItems": 1,
           "items": {
             "type": "integer",
-            "minimum": 1
+            "minimum": 1,
+            "maximum": 32766
           }
         }
       }
@@ -244,11 +261,15 @@
       "properties": {
         "y": {
           "type": "integer",
-          "minimum": 0
+          "minimum": 0,
+          "maximum": 65,
+          "description": "Row in every map variant; at most MAX_HGT - 1."
         },
         "x": {
           "type": "integer",
-          "minimum": 0
+          "minimum": 0,
+          "maximum": 197,
+          "description": "Column in every map variant; at most MAX_WID - 1."
         }
       }
     },
@@ -260,198 +281,22 @@
         "leavingQuest": {
           "type": "integer",
           "minimum": 0,
-          "description": "QuestId being left ($LEAVING_QUEST); omit for the default/fallback entry."
+          "maximum": 32766,
+          "description": "QuestId being left ($LEAVING_QUEST); omit for the default/fallback entry. At most the QuestId storage maximum - 1."
         },
         "y": {
           "type": "integer",
-          "minimum": 0
+          "minimum": 0,
+          "maximum": 65,
+          "description": "Row in every map variant; at most MAX_HGT - 1."
         },
         "x": {
           "type": "integer",
-          "minimum": 0
+          "minimum": 0,
+          "maximum": 197,
+          "description": "Column in every map variant; at most MAX_WID - 1."
         }
       }
-    },
-    "gridDefinition": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "terrain": {
-          "type": "string",
-          "description": "TerrainTag name (e.g. FLOOR, PERMANENT), or \"*\" for a random feature."
-        },
-        "caveInfo": {
-          "type": "array",
-          "uniqueItems": true,
-          "items": {
-            "enum": ["MARK", "GLOW", "NO_TELEPORT_DEST", "ROOM", "LITE"]
-          }
-        },
-        "monster": {
-          "$ref": "#/$defs/monsterSpec"
-        },
-        "object": {
-          "$ref": "#/$defs/objectSpec"
-        },
-        "ego": {
-          "$ref": "#/$defs/egoSpec"
-        },
-        "artifact": {
-          "$ref": "#/$defs/artifactSpec"
-        },
-        "trap": {
-          "$ref": "#/$defs/trapSpec"
-        },
-        "special": {
-          "type": "integer"
-        }
-      }
-    },
-    "monsterSpec": {
-      "oneOf": [
-        {
-          "type": "integer",
-          "minimum": 1,
-          "description": "MonraceId."
-        },
-        {
-          "type": "object",
-          "additionalProperties": false,
-          "required": ["random"],
-          "properties": {
-            "random": {
-              "const": true
-            },
-            "oodLevel": {
-              "type": "integer",
-              "minimum": 0,
-              "description": "Out-of-depth level boost (legacy *N)."
-            }
-          }
-        },
-        {
-          "type": "object",
-          "additionalProperties": false,
-          "required": ["cloneOf"],
-          "properties": {
-            "cloneOf": {
-              "type": "integer",
-              "minimum": 1,
-              "description": "Place a clone of this MonraceId (legacy cN)."
-            }
-          }
-        }
-      ]
-    },
-    "objectSpec": {
-      "oneOf": [
-        {
-          "type": "integer",
-          "minimum": 1,
-          "description": "BaseitemId."
-        },
-        {
-          "type": "object",
-          "additionalProperties": false,
-          "required": ["random"],
-          "properties": {
-            "random": {
-              "const": true
-            },
-            "oodLevel": {
-              "type": "integer",
-              "minimum": 0,
-              "description": "Out-of-depth object level boost (legacy *N)."
-            }
-          }
-        },
-        {
-          "type": "object",
-          "additionalProperties": false,
-          "required": ["questReward"],
-          "properties": {
-            "questReward": {
-              "const": true,
-              "description": "Drop this quest's reward item (legacy !)."
-            }
-          }
-        }
-      ]
-    },
-    "egoSpec": {
-      "oneOf": [
-        {
-          "type": "integer",
-          "minimum": 1,
-          "description": "EgoType id."
-        },
-        {
-          "type": "object",
-          "additionalProperties": false,
-          "required": ["random"],
-          "properties": {
-            "random": {
-              "const": true
-            },
-            "id": {
-              "type": "integer",
-              "minimum": 1
-            }
-          }
-        }
-      ]
-    },
-    "artifactSpec": {
-      "oneOf": [
-        {
-          "type": "integer",
-          "minimum": 1,
-          "description": "FixedArtifactId."
-        },
-        {
-          "type": "object",
-          "additionalProperties": false,
-          "required": ["random"],
-          "properties": {
-            "random": {
-              "const": true
-            },
-            "id": {
-              "type": "integer",
-              "minimum": 1
-            }
-          }
-        },
-        {
-          "type": "object",
-          "additionalProperties": false,
-          "required": ["questReward"],
-          "properties": {
-            "questReward": {
-              "const": true,
-              "description": "Use this quest's reward artifact (legacy !)."
-            }
-          }
-        }
-      ]
-    },
-    "trapSpec": {
-      "oneOf": [
-        {
-          "type": "string",
-          "description": "TerrainTag name of the trap."
-        },
-        {
-          "type": "object",
-          "additionalProperties": false,
-          "required": ["random"],
-          "properties": {
-            "random": {
-              "const": true
-            }
-          }
-        }
-      ]
     }
   }
 }

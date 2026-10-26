@@ -37,7 +37,7 @@ bool cmd_limit_cast(PlayerType *player_ptr)
     }
 
     if (is_shero(player_ptr) && !PlayerClass(player_ptr).equals(PlayerClassType::BERSERKER)) {
-        msg_format(_("狂戦士化していて頭が回らない！", "You cannot think directly!"));
+        msg_print(_("狂戦士化していて頭が回らない！", "You cannot think directly!"));
         return true;
     }
 

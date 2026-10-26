@@ -33,6 +33,7 @@
 #include "world/world-movement-processor.h"
 #include "world/world.h"
 #include <algorithm>
+#include <fmt/format.h>
 
 /*!
  * @brief パターン終点到達時のテレポート処理を行う
@@ -75,7 +76,7 @@ void pattern_teleport(PlayerType *player_ptr)
         return;
     }
 
-    msg_format(_("%d 階にテレポートしました。", "You teleport to dungeon level %d."), command_arg);
+    msg_print(_("{} 階にテレポートしました。", "You teleport to dungeon level {}."), command_arg);
     if (autosave_l) {
         do_cmd_save_game(player_ptr, true);
     }
@@ -248,7 +249,7 @@ bool pattern_seq(PlayerType *player_ptr, const Pos2D &pos)
         break;
     default:
         if (AngbandWorld::get_instance().wizard) {
-            msg_format(_("おかしなパターン歩行、%d。", "Funny Pattern walking, %d."), enum2i(pattern_type_cur));
+            msg_print(_("おかしなパターン歩行、{}。", "Funny Pattern walking, {}."), enum2i(pattern_type_cur));
         }
         return true;
     }

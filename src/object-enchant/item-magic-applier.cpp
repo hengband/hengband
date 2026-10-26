@@ -10,6 +10,7 @@
 #include "object-enchant/enchanter-factory.h"
 #include "object-enchant/item-apply-magic.h"
 #include "object-enchant/object-curse.h"
+#include "object-enchant/object-ego.h"
 #include "player/player-status-flags.h"
 #include "system/baseitem/baseitem-definition.h"
 #include "system/dungeon/dungeon-definition.h"
@@ -18,6 +19,8 @@
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "world/world.h"
+#include <cassert>
+#include <range/v3/algorithm/any_of.hpp>
 
 /*!
  * @brief コンストラクタ
@@ -229,5 +232,51 @@ void ItemMagicApplier::apply_cursed()
 
     if (baseitem.gen_flags.has(ItemGenerationTraitType::RANDOM_CURSE2)) {
         this->o_ptr->curse_flags.set(get_curse(2, this->o_ptr));
+    }
+}
+
+/*!
+ * @brief 指定したエゴを、アーティファクトの抽選をせずに付ける
+ * @param ego 付けるエゴ。呼び出し側で can_apply_ego() により付けられることを確かめておく
+ * @details
+ * power 2 の enchanter にエゴを指定して強化し、エゴの能力を与える。生成オプション (mode) は読まない。
+ * 付けられないエゴが渡されたときは、デバッグ時は assert で止め、リリース時は品を変えずに戻る。
+ */
+void ItemMagicApplier::execute_with_ego(EgoType ego)
+{
+    const auto can_apply = can_apply_ego(this->o_ptr->bi_key, ego);
+    assert(can_apply);
+    if (!can_apply) {
+        return;
+    }
+
+    auto enchanter = EnchanterFactory::create_enchanter(this->player_ptr, this->o_ptr, this->lev, 2);
+    enchanter->request_ego(ego);
+    enchanter->apply_magic();
+    if (this->o_ptr->is_ego()) {
+        apply_ego(this->o_ptr, this->lev);
+    }
+}
+
+/*!
+ * @brief 種類に合うよいエゴを、アーティファクトの抽選をせずに付ける
+ * @details
+ * power 2 の enchanter にランダムなよいエゴを要求して強化し、エゴの能力を与える。生成オプション (mode) は読まない。
+ * 呼び出し側で、品の種類に can_apply_ego() が真のエゴがあることを確かめておく。
+ * 無いときは、デバッグ時は assert で止め、リリース時は品を変えずに戻る。
+ */
+void ItemMagicApplier::execute_with_random_ego()
+{
+    const auto can_apply = ranges::any_of(egos_info, [this](const auto &entry) { return can_apply_ego(this->o_ptr->bi_key, entry.first); });
+    assert(can_apply);
+    if (!can_apply) {
+        return;
+    }
+
+    auto enchanter = EnchanterFactory::create_enchanter(this->player_ptr, this->o_ptr, this->lev, 2);
+    enchanter->request_random_ego();
+    enchanter->apply_magic();
+    if (this->o_ptr->is_ego()) {
+        apply_ego(this->o_ptr, this->lev);
     }
 }

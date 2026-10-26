@@ -1,6 +1,7 @@
 #include "net/http-client.h"
 #include "net/curl-easy-session.h"
 #include "net/curl-slist.h"
+#include <fmt/format.h>
 #include <fstream>
 #include <string_view>
 
@@ -133,7 +134,7 @@ tl::optional<Response> Client::post(const std::string &url, const std::string &p
 {
     libcurl::EasySession session;
     libcurl::SList headers;
-    headers.append(format("Content-Type: %s", media_type.data()));
+    headers.append(fmt::format("Content-Type: {}", media_type));
 
     if (!session.is_valid() || !headers.is_valid()) {
         return tl::nullopt;

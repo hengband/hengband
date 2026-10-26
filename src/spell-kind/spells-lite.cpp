@@ -18,6 +18,7 @@
 #include "system/terrain/terrain-definition.h"
 #include "target/projection-path-calculator.h"
 #include "timed-effect/timed-effects.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 #include <range/v3/view.hpp>
@@ -63,7 +64,7 @@ static void cave_temp_room_lite(PlayerType *player_ptr, const std::vector<Pos2D>
                 (void)set_monster_csleep(*player_ptr->current_floor_ptr, grid.m_idx, 0);
                 if (monster.ml) {
                     const auto m_name = monster_desc(player_ptr, monster, 0);
-                    msg_format(_("%s^が目を覚ました。", "%s^ wakes up."), m_name.data());
+                    msg_print(_("{}が目を覚ました。", "{} wakes up."), str_upcase_first(m_name));
                 }
             }
         }

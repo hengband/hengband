@@ -15,8 +15,8 @@
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
-#include "term/z-form.h"
 #include "util/string-processor.h"
+#include <fmt/format.h>
 
 /*!
  * @brief 所持アイテムの表示を行う /
@@ -95,9 +95,9 @@ COMMAND_CODE show_inventory(PlayerType *player_ptr, int target_item, BIT_FLAGS m
                 head = "  ";
             }
         } else if (i <= INVEN_PACK) {
-            head = format("%c)", inven_label[i]);
+            head = fmt::format("{:c})", inven_label[i]);
         } else {
-            head = format("%c)", index_to_label(i));
+            head = fmt::format("{:c})", index_to_label(i));
         }
 
         put_str(head, j + 1, col);
@@ -114,7 +114,7 @@ COMMAND_CODE show_inventory(PlayerType *player_ptr, int target_item, BIT_FLAGS m
         c_put_str(out_color[j], out_desc[j], j + 1, cur_col);
         if (show_weights) {
             const auto wgt = item.weight * item.number;
-            const auto weight = format(_("%3d.%1d kg", "%3d.%1d lb"), _(lb_to_kg_integer(wgt), wgt / 10), _(lb_to_kg_fraction(wgt), wgt % 10));
+            const auto weight = fmt::format(_("{:3}.{:1} kg", "{:3}.{:1} lb"), _(lb_to_kg_integer(wgt), wgt / 10), _(lb_to_kg_fraction(wgt), wgt % 10));
             prt(weight, j + 1, wid - 9);
         }
     }
@@ -183,9 +183,7 @@ void display_inventory(PlayerType *player_ptr, const ItemTester &item_tester)
 
         if (show_weights) {
             const auto wgt = item.weight * item.number;
-            const auto weight = format(_("%3d.%1d kg", "%3d.%1d lb"),
-                _(lb_to_kg_integer(wgt), wgt / 10),
-                _(lb_to_kg_fraction(wgt), wgt % 10));
+            const auto weight = fmt::format(_("{:3}.{:1} kg", "{:3}.{:1} lb"), _(lb_to_kg_integer(wgt), wgt / 10), _(lb_to_kg_fraction(wgt), wgt % 10));
             prt(weight, i, wid - 9);
         }
     }

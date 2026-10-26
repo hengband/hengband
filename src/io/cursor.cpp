@@ -1,5 +1,6 @@
 #include "io/cursor.h"
 #include "core/stuff-handler.h"
+#include "core/window-redrawer.h"
 #include "effect/effect-characteristics.h"
 #include "effect/spells-effect-util.h"
 #include "game-option/map-screen-options.h"
@@ -7,11 +8,11 @@
 #include "io/screen-util.h"
 #include "player/player-status.h"
 #include "system/angband-system.h"
+#include "system/deferred-update-requests.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "system/terrain/terrain-definition.h"
 #include "target/projection-path-calculator.h"
 #include "term/term-color-types.h"
@@ -46,8 +47,9 @@ void print_path(PlayerType *player_ptr, POSITION y, POSITION x)
     const auto p_pos = player_ptr->get_position();
     const auto range = project_length != 0 ? project_length : AngbandSystem::get_instance().get_max_range();
     ProjectionPath path_g(floor, range, p_pos, p_pos, pos, PROJECT_PATH | PROJECT_THRU);
-    RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::MAP);
-    handle_stuff(player_ptr);
+    DeferredUpdateRequests::get_instance().request_map_redrawing();
+    redraw_stuff(player_ptr);
+    const auto monochrome_color = get_monochrome_display_color(player_ptr);
     for (const auto &pos_path : path_g) {
         const auto &grid = floor.get_grid(pos_path);
         if (panel_contains(pos_path)) {
@@ -64,7 +66,7 @@ void print_path(PlayerType *player_ptr, POSITION y, POSITION x)
                 }
             }
 
-            symbol_pair.symbol_foreground.color = get_monochrome_display_color(player_ptr).value_or(symbol_pair.symbol_foreground.color);
+            symbol_pair.symbol_foreground.color = monochrome_color.value_or(symbol_pair.symbol_foreground.color);
             symbol_pair.symbol_foreground.character = '*';
             term_queue_bigchar(panel_col_of(pos_path.x), pos_path.y - panel_row_prt, symbol_pair);
         }
@@ -117,9 +119,7 @@ bool change_panel(PlayerType *player_ptr, POSITION dy, POSITION dx)
     panel_row_min = y;
     panel_col_min = x;
     panel_bounds_center();
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
-    rfu.set_flag(MainWindowRedrawingFlag::MAP);
+    DeferredUpdateRequests::get_instance().request_monster_update_and_map_redrawing();
     handle_stuff(player_ptr);
     return true;
 }

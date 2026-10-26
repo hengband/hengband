@@ -2,7 +2,7 @@
 #include "io/input-key-requester.h"
 #include "util/int-char-converter.h"
 
-#define REPEAT_MAX 20
+constexpr auto REPEAT_MAX = 20;
 
 /* Number of chars saved */
 static int repeat_counter = 0;

@@ -5,6 +5,7 @@
 #include "util/finalizer.h"
 #include <array>
 #include <concepts>
+#include <fmt/format.h>
 #include <limits>
 #include <sstream>
 #include <string>
@@ -114,7 +115,7 @@ private:
             put_str(ss.str(), i + 1, this->start_col);
         }
         if (page_max > 1) {
-            const auto page_info = format(" -- more (%lu/%lu) --", page + 1, page_max);
+            const auto page_info = fmt::format(" -- more ({}/{}) --", page + 1, page_max);
             put_str(page_info, page_item_count + 1, this->start_col);
         }
     }

@@ -9,12 +9,12 @@
 #include "player/attack-defense-types.h"
 #include "player/player-status-table.h"
 #include "player/special-defense-types.h"
+#include "system/deferred-update-requests.h"
 #include "system/floor/floor-info.h"
 #include "system/item/item-entity.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "tracking/health-bar-tracker.h"
 
 /*!<広域マップ移動時の自然回復処理カウンタ（広域マップ1マス毎に20回処理を基本とする）*/
@@ -50,9 +50,8 @@ void regenhp(PlayerType *player_ptr, int percent)
     }
 
     if (old_chp != player_ptr->chp) {
-        auto &rfu = RedrawingFlagsUpdater::get_instance();
-        rfu.set_flag(MainWindowRedrawingFlag::HP);
-        rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
+        auto &dur = DeferredUpdateRequests::get_instance();
+        dur.set_flag(MainWindowRedrawingFlag::HP);
         wild_regen = 20;
     }
 }
@@ -107,13 +106,8 @@ void regenmana(PlayerType *player_ptr, MANA_POINT upkeep_factor, MANA_POINT rege
     }
 
     if (old_csp != player_ptr->csp) {
-        auto &rfu = RedrawingFlagsUpdater::get_instance();
-        rfu.set_flag(MainWindowRedrawingFlag::MP);
-        static constexpr auto flags = {
-            SubWindowRedrawingFlag::PLAYER,
-            SubWindowRedrawingFlag::SPELL,
-        };
-        rfu.set_flags(flags);
+        auto &dur = DeferredUpdateRequests::get_instance();
+        dur.set_flag(MainWindowRedrawingFlag::MP);
         wild_regen = 20;
     }
 }
@@ -172,7 +166,7 @@ void regenmagic(PlayerType *player_ptr, int regen_amount)
 void regenerate_monsters(PlayerType *player_ptr)
 {
     auto &tracker = HealthBarTracker::get_instance();
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &dur = DeferredUpdateRequests::get_instance();
     for (short i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
         auto &monster = player_ptr->current_floor_ptr->m_list[i];
         const auto &monrace = monster.get_monrace();
@@ -199,7 +193,7 @@ void regenerate_monsters(PlayerType *player_ptr)
 
             tracker.set_flag_if_tracking(i);
             if (monster.is_riding()) {
-                rfu.set_flag(MainWindowRedrawingFlag::UHEALTH);
+                dur.set_flag(MainWindowRedrawingFlag::UHEALTH);
             }
         }
     }
@@ -247,14 +241,14 @@ void regenerate_captured_monsters(PlayerType *player_ptr)
     }
 
     if (heal) {
-        RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::COMBINATION);
+        DeferredUpdateRequests::get_instance().set_flag(InventoryArrangementFlag::COMBINATION);
 
         /*!
          * @todo FIXME 広域マップ移動で1歩毎に何度も再描画されて重くなる.
          * 現在はボール中モンスターのHP回復でボールの表示は変わらないためコメントアウトする.
          */
-        // rfu.set_flag(SubWindowRedrawingFlag::INVENTORY);
-        // rfu.set_flag(SubWindowRedrawingFlag::EQUIPMENT);
+        // dur.set_flag(SubWindowRedrawingFlag::INVENTORY);
+        // dur.set_flag(SubWindowRedrawingFlag::EQUIPMENT);
         wild_regen = 20;
     }
 }

@@ -34,6 +34,14 @@ using namespace test;
 // 文字コードに依存しないテスト
 //
 
+TEST_CASE("is_multibyte_char_at returns false for ASCII strings")
+{
+    CHECK_FALSE(is_multibyte_char_at("ab"));
+    CHECK_FALSE(is_multibyte_char_at(std::string_view("ab"), 0));
+    CHECK_FALSE(is_multibyte_char_at(""));
+    CHECK_FALSE(is_multibyte_char_at(std::string_view(), 0));
+}
+
 TEST_CASE("str_to_num converts a decimal string")
 {
     CHECK(str_to_num<int>("123") == 123);
@@ -189,47 +197,38 @@ TEST_CASE("angband_strchr cannot find the terminating NUL")
     CHECK(angband_strchr("abc", '\0') == nullptr);
 }
 
-TEST_CASE("ltrim skips the leading spaces")
+TEST_CASE("str_find_position finds the position of the first occurrence of the needle")
 {
-    char buf[] = "  abc ";
-    CHECK(std::string_view(ltrim(buf)) == "abc ");
+    CHECK(str_find_position("abcabc", "bc") == 1);
+    CHECK(str_find_position("abcabc", "d") == std::string_view::npos);
+    CHECK(str_find_position("abc", "abcd") == std::string_view::npos);
+    CHECK(str_find_position("abc", "") == 0);
 }
 
-TEST_CASE("ltrim does not skip a tab")
+TEST_CASE("str_find_position finds the position of the first occurrence of the character")
 {
-    char buf[] = "\tabc";
-    CHECK(std::string_view(ltrim(buf)) == "\tabc");
+    CHECK(str_find_position("abcabc", 'c') == 2);
+    CHECK(str_find_position("abcabc", 'd') == std::string_view::npos);
+    CHECK(str_find_position("", 'a') == std::string_view::npos);
 }
 
-TEST_CASE("ltrim accepts a string which consists of spaces or is empty")
+TEST_CASE("str_find_position does not search past the end of the view")
 {
-    char spaces[] = "   ";
-    CHECK(std::string_view(ltrim(spaces)).empty());
-
-    char empty[] = "";
-    CHECK(std::string_view(ltrim(empty)).empty());
+    // 「abc」の先頭2文字だけを対象にするので、「c」は見つからない
+    constexpr std::string_view haystack = "abc";
+    CHECK(str_find_position(haystack.substr(0, 2), "c") == std::string_view::npos);
+    CHECK(str_find_position(haystack.substr(0, 2), 'c') == std::string_view::npos);
 }
 
-TEST_CASE("rtrim removes the trailing spaces")
+#ifdef JP
+TEST_CASE("str_find_position does not match the trailing byte of a 2-byte character")
 {
-    char buf[] = " abc  ";
-    CHECK(std::string_view(rtrim(buf)) == " abc");
+    const auto trail_byte = KANJI_KAN.substr(1, 1);
+    CHECK(str_find_position(KANJI_KAN, trail_byte) == std::string_view::npos);
+    CHECK(str_find_position(KANJI_KAN, trail_byte[0]) == std::string_view::npos);
+    CHECK(str_find_position(cat("a", KANJI_KAN, "b"), "b") == 3);
 }
-
-TEST_CASE("rtrim does not remove a tab")
-{
-    char buf[] = "abc\t";
-    CHECK(std::string_view(rtrim(buf)) == "abc\t");
-}
-
-TEST_CASE("rtrim accepts a string which consists of spaces or is empty")
-{
-    char spaces[] = "   ";
-    CHECK(std::string_view(rtrim(spaces)).empty());
-
-    char empty[] = "";
-    CHECK(std::string_view(rtrim(empty)).empty());
-}
+#endif
 
 TEST_CASE("str_find tells whether the string contains the substring")
 {
@@ -592,6 +591,26 @@ TEST_CASE("str_upcase_first leaves a leading two byte character as it is")
     CHECK(str_upcase_first(str) == str);
 }
 
+TEST_CASE("is_multibyte_char_at finds a two byte character with its trailing byte")
+{
+    const auto str = cat("a", KANJI_KAN);
+    CHECK_FALSE(is_multibyte_char_at(str));
+    CHECK(is_multibyte_char_at(str, 1));
+    CHECK(is_multibyte_char_at(KANJI_KAN));
+    CHECK(is_multibyte_char_at(str.data() + 1));
+}
+
+TEST_CASE("is_multibyte_char_at rejects a leading byte without its trailing byte")
+{
+    const auto str = cat("a", KANJI_KAN.substr(0, 1));
+    CHECK_FALSE(is_multibyte_char_at(str, 1));
+    CHECK_FALSE(is_multibyte_char_at(str.data() + 1));
+
+    // 範囲外の位置は2バイト文字の先頭ではない
+    CHECK_FALSE(is_multibyte_char_at(str, 2));
+    CHECK_FALSE(is_multibyte_char_at(str, std::string_view::npos));
+}
+
 TEST_CASE("str_find_all_multibyte_chars returns the index of each leading byte")
 {
     const std::set<int> expected = { 1, 4 };
@@ -686,6 +705,12 @@ TEST_CASE("str_substr does not split a two byte character whose trailing byte is
     const auto str = cat(DAME_SO, DAME_HYOU);
     CHECK(str_substr(std::string_view(str), 0, 3) == DAME_SO);
     CHECK(str_substr(std::string_view(str), 1, 3) == DAME_HYOU);
+}
+
+TEST_CASE("is_multibyte_char_at finds a character whose trailing byte is ASCII")
+{
+    CHECK(is_multibyte_char_at(DAME_SO));
+    CHECK(is_multibyte_char_at(cat(DAME_SO, "a").data()));
 }
 
 TEST_CASE("str_find_all_multibyte_chars finds a character whose trailing byte is ASCII")

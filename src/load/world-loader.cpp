@@ -16,6 +16,7 @@
 #include "system/inner-game-data.h"
 #include "system/player-type-definition.h"
 #include "world/world.h"
+#include <fmt/format.h>
 
 static void rd_hengband_dungeons()
 {
@@ -25,6 +26,8 @@ static void rd_hengband_dungeons()
     const int max = rd_byte();
     for (auto i = 0; i < max; i++) {
         int tmp16s = rd_s16b();
+        // Older saves do not distinguish a rumor unlock from an actual visit.
+        const auto visited = loading_savefile_version_is_older_than(27) ? tmp16s > 0 : rd_bool();
         if (i >= dungeons_size) {
             continue;
         }
@@ -32,8 +35,12 @@ static void rd_hengband_dungeons()
         const auto dungeon_id = i2enum<DungeonId>(i);
         const auto &dungeon = dungeons.get_dungeon(dungeon_id);
         auto &record = records.get_record(dungeon_id);
+        record.reset();
         if (tmp16s > 0) {
             record.set_max_level(tmp16s);
+            if (visited) {
+                record.mark_visited();
+            }
         }
 
         if (record.get_max_level() > dungeon.maxdepth) {
@@ -211,7 +218,7 @@ errr analyze_wilderness(void)
     auto &wilderness = WildernessGrids::get_instance();
     const auto &area = wilderness.get_area();
     if ((wild_y_size > area.height()) || (wild_x_size > area.width())) {
-        load_note(format(_("荒野が大きすぎる(%d/%d)！", "Wilderness is too big (%d/%d)!"), wild_x_size, wild_y_size));
+        load_note(fmt::format(_("荒野が大きすぎる({}/{})！", "Wilderness is too big ({}/{})!"), wild_x_size, wild_y_size));
         return 23;
     }
 

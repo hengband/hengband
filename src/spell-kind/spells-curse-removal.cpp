@@ -1,11 +1,10 @@
 #include "spell-kind/spells-curse-removal.h"
 #include "core/window-redrawer.h"
 #include "inventory/inventory-slot-types.h"
-#include "object-enchant/item-feeling.h"
 #include "object-enchant/trc-types.h"
+#include "system/deferred-update-requests.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "view/display-messages.h"
 
 /*!
@@ -18,7 +17,7 @@
 static int exe_curse_removal(PlayerType *player_ptr, int all)
 {
     auto count = 0;
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto &dur = DeferredUpdateRequests::get_instance();
     for (const auto i_idx : INVEN_WIELDING_SLOTS) {
         auto *o_ptr = player_ptr->inventory[i_idx].get();
         if (!o_ptr->is_valid() || !o_ptr->is_cursed()) {
@@ -34,11 +33,8 @@ static int exe_curse_removal(PlayerType *player_ptr, int all)
             continue;
         }
 
-        o_ptr->curse_flags.clear();
-        o_ptr->set_identification_flag(IdentificationFlag::SENSE);
-        o_ptr->feeling = FEEL_NONE;
-        rfu.set_flag(StatusRecalculatingFlag::BONUS);
-        rfu.set_flag(SubWindowRedrawingFlag::EQUIPMENT);
+        o_ptr->remove_curses();
+        dur.set_flag(StatusRecalculatingFlag::BONUS);
         count++;
     }
 

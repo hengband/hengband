@@ -21,9 +21,9 @@
 #include "perception/identification.h"
 #include "perception/object-perception.h"
 #include "system/artifact/artifact-record.h"
+#include "system/deferred-update-requests.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
@@ -75,21 +75,10 @@ bool identify_item(PlayerType *player_ptr, ItemEntity *o_ptr)
         records.set_identified(o_ptr->fa_id);
     }
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    static constexpr auto flags_srf = {
-        StatusRecalculatingFlag::BONUS,
-        StatusRecalculatingFlag::COMBINATION,
-        StatusRecalculatingFlag::REORDER,
-    };
-    rfu.set_flags(flags_srf);
-    static constexpr auto flags_swrf = {
-        SubWindowRedrawingFlag::INVENTORY,
-        SubWindowRedrawingFlag::EQUIPMENT,
-        SubWindowRedrawingFlag::PLAYER,
-        SubWindowRedrawingFlag::FLOOR_ITEMS,
-        SubWindowRedrawingFlag::FOUND_ITEMS,
-    };
-    rfu.set_flags(flags_swrf);
+    auto &dur = DeferredUpdateRequests::get_instance();
+    dur.set_flag(StatusRecalculatingFlag::BONUS);
+    dur.request_inventory_arrangement();
+    dur.request_item_lists_redrawing();
     record_item_name = known_item_name;
     record_turn = AngbandWorld::get_instance().game_turn;
 
@@ -141,11 +130,11 @@ bool ident_spell(PlayerType *player_ptr, bool only_equip)
     auto old_known = identify_item(player_ptr, item.get());
     const auto item_name = describe_flavor(player_ptr, *item, 0);
     if (i_idx >= INVEN_MAIN_HAND) {
-        msg_format(_("%s^: %s(%c)。", "%s^: %s (%c)."), describe_use(player_ptr, i_idx), item_name.data(), index_to_label(i_idx));
+        msg_print(_("{}: {}({:c})。", "{}: {} ({:c})."), str_upcase_first(describe_use(player_ptr, i_idx)), item_name, index_to_label(i_idx));
     } else if (i_idx >= 0) {
-        msg_format(_("ザック中: %s(%c)。", "In your pack: %s (%c)."), item_name.data(), index_to_label(i_idx));
+        msg_print(_("ザック中: {}({:c})。", "In your pack: {} ({:c})."), item_name, index_to_label(i_idx));
     } else {
-        msg_format(_("床上: %s。", "On the ground: %s."), item_name.data());
+        msg_print(_("床上: {}。", "On the ground: {}."), item_name);
     }
 
     autopick_alter_item(player_ptr, i_idx, (bool)(destroy_identify && !old_known));
@@ -189,11 +178,11 @@ bool identify_fully(PlayerType *player_ptr, bool only_equip)
     window_stuff(player_ptr);
     const auto item_name = describe_flavor(player_ptr, *item, 0);
     if (i_idx >= INVEN_MAIN_HAND) {
-        msg_format(_("%s^: %s(%c)。", "%s^: %s (%c)."), describe_use(player_ptr, i_idx), item_name.data(), index_to_label(i_idx));
+        msg_print(_("{}: {}({:c})。", "{}: {} ({:c})."), str_upcase_first(describe_use(player_ptr, i_idx)), item_name, index_to_label(i_idx));
     } else if (i_idx >= 0) {
-        msg_format(_("ザック中: %s(%c)。", "In your pack: %s (%c)."), item_name.data(), index_to_label(i_idx));
+        msg_print(_("ザック中: {}({:c})。", "In your pack: {} ({:c})."), item_name, index_to_label(i_idx));
     } else {
-        msg_format(_("床上: %s。", "On the ground: %s."), item_name.data());
+        msg_print(_("床上: {}。", "On the ground: {}."), item_name);
     }
 
     (void)screen_object(player_ptr, *item, 0L);

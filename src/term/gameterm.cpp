@@ -13,6 +13,36 @@
  */
 #define PICT(A, C) ((((uint16_t)(A)) << 8) | ((byte)(C)))
 
+/*!
+ * @brief 端末の大きさの下限を返す
+ * @param index angband_terms上の添字
+ * @return 大きさの下限
+ * @details
+ * 主端末はゲームの画面を描画できる最小の大きさ (MAIN_TERM_MIN_COLS/ROWS)、副端末は1x1とする。
+ * X11版がウィンドウの大きさの変化を受けた時の扱いと同じ。Windows版は副端末の下限を
+ * 20x3としているが、これはウィンドウを操作しやすくするためのもので、描画上の制約ではない。
+ */
+TermSize get_term_min_size(int index)
+{
+    if (index == 0) {
+        return { MAIN_TERM_MIN_COLS, MAIN_TERM_MIN_ROWS };
+    }
+
+    return { 1, 1 };
+}
+
+/*!
+ * @brief 端末の大きさとして妥当か否かを判定する
+ * @param index angband_terms上の添字
+ * @param size 端末の大きさ
+ * @return 下限 (get_term_min_size()) 以上、上限 (TERM_MAX_COLS/ROWS) 以下ならtrue
+ */
+bool is_valid_term_size(int index, const TermSize &size)
+{
+    const auto min_size = get_term_min_size(index);
+    return (size.cols >= min_size.cols) && (size.cols <= TERM_MAX_COLS) && (size.rows >= min_size.rows) && (size.rows <= TERM_MAX_ROWS);
+}
+
 /*
  * Standard window names
  */
@@ -375,10 +405,11 @@ std::map<AttributeType, std::string> gf_colors;
 /*!
  * @brief 万色表現用にランダムな色を選択する関数 /
  * Get a legal "multi-hued" color for drawing "spells"
+ * @param rng 乱数生成器
  * @param max 色IDの最大値
  * @return 選択した色ID
  */
-static TERM_COLOR mh_attr(int max)
+static TERM_COLOR mh_attr(xso::rng32 &rng, int max)
 {
     constexpr static auto colors = {
         TERM_RED,
@@ -399,16 +430,17 @@ static TERM_COLOR mh_attr(int max)
     };
 
     auto candidates = std::span(colors).first(max);
-    return rand_choice(get_external_rng(), candidates);
+    return rand_choice(rng, candidates);
 }
 
 /*!
  * @brief 魔法属性に応じたエフェクトの色を返す /
  * Return a color to use for the bolt/ball spells
+ * @param rng 乱数生成器
  * @param type 魔法属性
  * @return 対応する色ID
  */
-static TERM_COLOR spell_color(AttributeType type)
+static TERM_COLOR spell_color(xso::rng32 &rng, AttributeType type)
 {
     /* Check if A.B.'s new graphics should be used (rr9) */
     if ((ANGBAND_GRAF == "new") || (ANGBAND_GRAF == "ne2")) {
@@ -447,13 +479,13 @@ static TERM_COLOR spell_color(AttributeType type)
         case AttributeType::NETHER:
             return 0x07;
         case AttributeType::CHAOS:
-            return mh_attr(15);
+            return mh_attr(rng, 15);
         case AttributeType::DISENCHANT:
             return 0x05;
         case AttributeType::NEXUS:
             return 0x0C;
         case AttributeType::CONFUSION:
-            return mh_attr(4);
+            return mh_attr(rng, 4);
         case AttributeType::SOUND:
             return 0x09;
         case AttributeType::SHARDS:
@@ -485,7 +517,7 @@ static TERM_COLOR spell_color(AttributeType type)
         case AttributeType::DEATH_RAY:
             return 0x07;
         case AttributeType::NUKE:
-            return mh_attr(2);
+            return mh_attr(rng, 2);
         case AttributeType::DISINTEGRATE:
             return 0x05;
         case AttributeType::PSI:
@@ -527,7 +559,7 @@ static TERM_COLOR spell_color(AttributeType type)
         }
 
         /* Pick a random color */
-        auto c = rand_choice(get_external_rng(), color);
+        auto c = rand_choice(rng, color);
 
         /* Lookup this color */
         a = angband_strchr(color_char, c) - color_char;
@@ -548,12 +580,13 @@ static TERM_COLOR spell_color(AttributeType type)
 
 /*!
  * @brief 始点から終点にかけた方向毎にボルトのキャラクタを返す
+ * @param rng 色を選ぶ乱数生成器
  * @param pos_src 始点座標
  * @param pos_dst 終点座標
  * @param typ 魔法の効果属性
  * @return 方向キャラID
  */
-const DisplaySymbol &bolt_pict(const Pos2D &pos_src, const Pos2D &pos_dst, AttributeType typ)
+const DisplaySymbol &bolt_pict(xso::rng32 &rng, const Pos2D &pos_src, const Pos2D &pos_dst, AttributeType typ)
 {
     int base;
     if (pos_dst == pos_src) {
@@ -570,7 +603,7 @@ const DisplaySymbol &bolt_pict(const Pos2D &pos_src, const Pos2D &pos_dst, Attri
         base = 0x30; // Weird (*)
     }
 
-    const auto k = spell_color(typ);
+    const auto k = spell_color(rng, typ);
     return ds_bolt[base + k];
 }
 

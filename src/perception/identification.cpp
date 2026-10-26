@@ -1,9 +1,10 @@
 #include "perception/identification.h"
 #include "artifact/fixed-art-types.h"
+#include "core/asking-player.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "game-option/special-options.h"
-#include "io/input-key-acceptor.h"
+#include "io/input-context.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trc-types.h"
@@ -24,6 +25,7 @@
 #include "util/enum-converter.h"
 #include <algorithm>
 #include <array>
+#include <fmt/format.h>
 #include <string>
 
 /*!
@@ -776,7 +778,7 @@ bool screen_object(PlayerType *player_ptr, const ItemEntity &item, BIT_FLAGS mod
     if (!is_fake_object && (bi_key == BaseitemKey(ItemKindType::STATUE, SV_PHOTO))) {
         const auto &monrace = item.get_monrace();
         const auto name_length = monrace.name->length();
-        prt(format("%s: '", monrace.name.data()), 1, 15);
+        prt(fmt::format("{}: '", monrace.name), 1, 15);
         term_queue_bigchar(18 + name_length, 1, { monrace.symbol_config, {} });
         prt("'", 1, (use_bigtile ? 20 : 19) + name_length);
     } else {
@@ -787,16 +789,18 @@ bool screen_object(PlayerType *player_ptr, const ItemEntity &item, BIT_FLAGS mod
     for (int j = 0; j < i; j++) {
         prt(info[j], k++, 15);
         if ((k == hgt - 2) && (j + 1 < i)) {
-            prt(_("-- 続く --", "-- more --"), k, 15);
-            inkey();
+            constexpr auto more_prompt = _("-- 続く --", "-- more --");
+            prt(more_prompt, k, 15);
+            (void)input_key_with_context(InputKind::ANY_KEY, more_prompt);
             for (; k > 2; k--) {
                 prt("", k, 15);
             }
         }
     }
 
-    prt(_("[何かキーを押すとゲームに戻ります]", "[Press any key to continue]"), k, 15);
-    inkey();
+    constexpr auto prompt = _("[何かキーを押すとゲームに戻ります]", "[Press any key to continue]");
+    prt(prompt, k, 15);
+    (void)input_key_with_context(InputKind::ANY_KEY, prompt);
     screen_load();
     return true;
 }

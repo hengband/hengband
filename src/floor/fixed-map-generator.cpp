@@ -4,11 +4,9 @@
 #include "dungeon/quest.h"
 #include "floor/floor-object.h"
 #include "grid/object-placer.h"
-#include "info-reader/fixed-map-parser.h"
 #include "info-reader/general-parser.h"
 #include "info-reader/parse-error-types.h"
 #include "info-reader/random-grid-effect-types.h"
-#include "io/tokenizer.h"
 #include "monster-floor/monster-generator.h"
 #include "monster-floor/monster-remover.h"
 #include "monster-floor/place-monster-types.h"
@@ -33,6 +31,7 @@
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
 #include "window/main-window-util.h"
+#include <algorithm>
 
 qtwg_type *initialize_quest_generator_type(qtwg_type *qtwg_ptr, int ymin, int xmin, int ymax, int xmax, int *y, int *x)
 {
@@ -80,25 +79,26 @@ static void generate_artifact(PlayerType *player_ptr, qtwg_type *qtwg_ptr, const
     drop_here(*player_ptr->current_floor_ptr, std::move(item), *qtwg_ptr->y, *qtwg_ptr->x);
 }
 
-static void parse_qtw_D(PlayerType *player_ptr, qtwg_type *qtwg_ptr, char *s)
+static void parse_qtw_D(PlayerType *player_ptr, qtwg_type *qtwg_ptr, std::string_view row)
 {
     *qtwg_ptr->x = qtwg_ptr->xmin;
     auto &floor = *player_ptr->current_floor_ptr;
-    int len = strlen(s);
+    const auto len = row.size();
     auto &monraces = MonraceList::get_instance();
     const auto &dungeon = floor.get_dungeon_definition();
-    for (auto i = 0; ((*qtwg_ptr->x < qtwg_ptr->xmax) && (i < len)); (*qtwg_ptr->x)++, s++, i++) {
+    for (size_t i = 0; ((*qtwg_ptr->x < qtwg_ptr->xmax) && (i < len)); (*qtwg_ptr->x)++, i++) {
         auto &grid = floor.grid_array[*qtwg_ptr->y][*qtwg_ptr->x];
-        int idx = s[0];
-        const auto item_index = letter[idx].object;
-        auto monster_index = letter[idx].monster;
-        const auto random = letter[idx].random;
-        grid.feat = dungeon.convert_terrain_id(letter[idx].feature);
+        const auto idx = static_cast<unsigned char>(row[i]);
+        const auto &cell = fixed_map_letter_at(idx);
+        const auto item_index = cell.object;
+        auto monster_index = cell.monster;
+        const auto random = cell.random;
+        grid.feat = dungeon.convert_terrain_id(cell.feature);
         if (init_flags & INIT_ONLY_FEATURES) {
             continue;
         }
 
-        grid.info = letter[idx].cave_info;
+        grid.info = cell.cave_info;
         if (random & RANDOM_MONSTER) {
             floor.monster_level = floor.base_level + monster_index;
             place_random_monster(player_ptr, *qtwg_ptr->y, *qtwg_ptr->x, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP | PM_NO_QUEST));
@@ -161,9 +161,9 @@ static void parse_qtw_D(PlayerType *player_ptr, qtwg_type *qtwg_ptr, char *s)
         } else if (random & RANDOM_TRAP) {
             const Pos2D pos(*qtwg_ptr->y, *qtwg_ptr->x);
             floor.place_trap_at(pos);
-        } else if (letter[idx].trap) {
+        } else if (cell.trap) {
             grid.mimic = grid.feat;
-            grid.feat = dungeon.convert_terrain_id(letter[idx].trap);
+            grid.feat = dungeon.convert_terrain_id(cell.trap);
         } else if (item_index) {
             ItemEntity item(item_index);
             if (item.bi_key.tval() == ItemKindType::GOLD) {
@@ -174,26 +174,36 @@ static void parse_qtw_D(PlayerType *player_ptr, qtwg_type *qtwg_ptr, char *s)
             drop_here(floor, std::move(item), *qtwg_ptr->y, *qtwg_ptr->x);
         }
 
-        generate_artifact(player_ptr, qtwg_ptr, letter[idx].artifact);
-        grid.special = letter[idx].special;
+        generate_artifact(player_ptr, qtwg_ptr, cell.artifact);
+        grid.special = cell.special;
     }
 }
 
-static bool parse_qtw_P(PlayerType *player_ptr, qtwg_type *qtwg_ptr)
+/*!
+ * @brief 印字可能なASCII行を適用し、行カーソルを進める。不正な記号やNULがある行は変更せずエラーを返す。
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param qtwg_ptr 固定マップの生成範囲と、次に書く行・列のカーソル
+ * @param row 適用する1行分の記号の並び
+ * @return 成功時は空の値、失敗時は解析エラーコード (固定マップで使えない記号があれば ParseErrorType::INVALID_VALUE)
+ * @details 建物だけを読み込むとき (init_flags に INIT_ONLY_BUILDINGS が立っているとき) は、行の記号を検証せず、
+ * 行カーソルも進めずに成功を返す。
+ */
+tl::expected<void, ParseErrorType> apply_fixed_map_row(PlayerType *player_ptr, qtwg_type *qtwg_ptr, std::string_view row)
 {
-    if (qtwg_ptr->buf[0] != 'P') {
-        return false;
+    if (init_flags & INIT_ONLY_BUILDINGS) {
+        return {};
     }
 
-    if ((init_flags & INIT_CREATE_DUNGEON) == 0) {
-        return true;
+    if (!std::all_of(row.begin(), row.end(), is_fixed_map_symbol)) {
+        return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
     }
+    parse_qtw_D(player_ptr, qtwg_ptr, row);
+    (*qtwg_ptr->y)++;
+    return {};
+}
 
-    const auto tokens = tokenize(qtwg_ptr->buf + 2, 2);
-    if (tokens.size() != 2) {
-        return true;
-    }
-
+static void apply_fixed_map_size(PlayerType *player_ptr, qtwg_type *qtwg_ptr)
+{
     int panels_y = (*qtwg_ptr->y / SCREEN_HGT);
     if (*qtwg_ptr->y % SCREEN_HGT) {
         panels_y++;
@@ -209,87 +219,34 @@ static bool parse_qtw_P(PlayerType *player_ptr, qtwg_type *qtwg_ptr)
     floor.width = panels_x * SCREEN_WID;
     panel_row_min = floor.height;
     panel_col_min = floor.width;
-    if (floor.is_in_quest()) {
-        Pos2D p_pos(std::stoi(tokens[0]), std::stoi(tokens[1]));
-        player_ptr->set_position(p_pos);
-        delete_monster(player_ptr, player_ptr->get_position());
-        return true;
-    }
-
-    if (!player_ptr->oldpx && !player_ptr->oldpy) {
-        player_ptr->oldpy = std::stoi(tokens[0]);
-        player_ptr->oldpx = std::stoi(tokens[1]);
-    }
-
-    return true;
 }
 
 /*!
- * @brief 固定マップ (クエスト＆街＆広域マップ)をフロアに生成する
- * Parse a sub-file of the "extra info"
+ * @brief 生成済みの行・列からパネルサイズを設定し、開始位置を適用する.
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param buf 文字列
- * @param ymin 詳細不明
- * @param xmin 詳細不明
- * @param ymax 詳細不明
- * @param xmax 詳細不明
- * @param y 詳細不明
- * @param x 詳細不明
- * @return エラーコード
- * @todo クエスト情報のみを読み込む手段と実際にフロアデータまで読み込む処理は分離したい
+ * @param qtwg_ptr 固定マップの生成範囲と、生成し終えた行・列のカーソル
+ * @param start_y 開始位置の y 座標 (フロアの座標。固定マップの1行目を 0 とする)
+ * @param start_x 開始位置の x 座標 (フロアの座標。固定マップの1列目を 0 とする)
+ * @details クエストの中ではプレイヤーをこの位置に置き、それ以外 (町など) では前の位置が無いときに戻り先として使う。
  */
-parse_error_type generate_fixed_map_floor(PlayerType *player_ptr, qtwg_type *qtwg_ptr, process_dungeon_file_pf parse_fixed_map)
+void apply_fixed_map_start(PlayerType *player_ptr, qtwg_type *qtwg_ptr, int start_y, int start_x)
 {
-    if (!qtwg_ptr->buf[0]) {
-        return PARSE_ERROR_NONE;
+    if ((init_flags & INIT_CREATE_DUNGEON) == 0) {
+        return;
     }
 
-    if (iswspace(qtwg_ptr->buf[0])) {
-        return PARSE_ERROR_NONE;
+    apply_fixed_map_size(player_ptr, qtwg_ptr);
+    auto &floor = *player_ptr->current_floor_ptr;
+    if (floor.is_in_quest()) {
+        player_ptr->set_position(Pos2D(start_y, start_x));
+        delete_monster(player_ptr, player_ptr->get_position());
+        return;
     }
 
-    if (qtwg_ptr->buf[0] == '#') {
-        return PARSE_ERROR_NONE;
+    if (!player_ptr->oldpx && !player_ptr->oldpy) {
+        player_ptr->oldpy = start_y;
+        player_ptr->oldpx = start_x;
     }
-
-    if (qtwg_ptr->buf[1] != ':') {
-        return PARSE_ERROR_GENERIC;
-    }
-
-    if (qtwg_ptr->buf[0] == '%') {
-        return (*parse_fixed_map)(player_ptr, qtwg_ptr->buf + 2, qtwg_ptr->ymin, qtwg_ptr->xmin, qtwg_ptr->ymax, qtwg_ptr->xmax);
-    }
-
-    /* Process "F:<letter>:<terrain>:<cave_info>:<monster>:<object>:<ego>:<artifact>:<trap>:<special>" -- info for dungeon grid */
-    if (qtwg_ptr->buf[0] == 'F') {
-        return parse_line_feature(*player_ptr->current_floor_ptr, qtwg_ptr->buf);
-    }
-
-    if (qtwg_ptr->buf[0] == 'D') {
-        char *s = qtwg_ptr->buf + 2;
-        if (init_flags & INIT_ONLY_BUILDINGS) {
-            return PARSE_ERROR_NONE;
-        }
-
-        parse_qtw_D(player_ptr, qtwg_ptr, s);
-        (*qtwg_ptr->y)++;
-        return PARSE_ERROR_NONE;
-    }
-
-    if (parse_qtw_P(player_ptr, qtwg_ptr)) {
-        return PARSE_ERROR_NONE;
-    }
-
-    if (qtwg_ptr->buf[0] == 'B') {
-        return parse_line_building(qtwg_ptr->buf);
-    }
-
-    // 荒野の広さを表すタグ。初期化時に読み込むのでそれ以降は無視する.
-    if (qtwg_ptr->buf[0] == 'M') {
-        return PARSE_ERROR_NONE;
-    }
-
-    return PARSE_ERROR_GENERIC;
 }
 
 /*!
@@ -318,11 +275,38 @@ static const QuestStartPosition *select_quest_start(const QuestFixedMap &fixed_m
     return fallback;
 }
 
-parse_error_type generate_quest_floor_from_json(PlayerType *player_ptr, QuestType &quest, const QuestFixedMap &fixed_map)
+/*!
+ * @brief JSONCから読み込んだ固定クエストのレイアウトでフロアを生成する
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param quest 対象クエスト (報酬解決のため参照)
+ * @param fixed_map 生成に用いるレイアウト情報
+ * @return 成功時は空の値、失敗時は解析エラーコード (凡例やマップに固定マップで使えない記号があれば ParseErrorType::INVALID_VALUE)
+ */
+tl::expected<void, ParseErrorType> generate_quest_floor_from_json(PlayerType *player_ptr, QuestType &quest, const QuestFixedMap &fixed_map)
 {
+    // 型付きレイアウトを直接渡す場合も、凡例やセルの書き込み前に記号を検証する。
+    const auto &base_legend = QuestFixedMapList::get_instance().get_base_legend();
+    const auto valid_legend = [](const auto &legend) {
+        return std::all_of(legend.begin(), legend.end(), [](const auto &entry) {
+            return is_fixed_map_symbol(static_cast<unsigned char>(entry.first));
+        });
+    };
+    if (!valid_legend(base_legend) || !valid_legend(fixed_map.legend)) {
+        return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
+    }
+    const auto variant_count = fixed_map.maps.size();
+    const auto variant_index = (variant_count <= 1) ? 0 : (AngbandSystem::get_instance().get_seed_town() % variant_count);
+    if (fixed_map.has_map()) {
+        for (const auto &row : fixed_map.maps[variant_index]) {
+            if (!std::all_of(row.begin(), row.end(), is_fixed_map_symbol)) {
+                return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
+            }
+        }
+    }
+
     // 1. 共通ベース凡例 (X/./%/D/< など) を letter[] へ適用 (旧 QuestPreferences.txt、起動時に読込済み)
-    for (const auto &[symbol, cell] : QuestFixedMapList::get_instance().get_base_legend()) {
-        letter[static_cast<uint8_t>(symbol)] = cell.grid;
+    for (const auto &[symbol, cell] : base_legend) {
+        fixed_map_letter_at(static_cast<unsigned char>(symbol)) = cell.grid;
     }
 
     // 2. このクエスト固有の凡例を letter[] に上書き (報酬は受託時 resolve_quest_reward で解決済み)
@@ -335,16 +319,14 @@ parse_error_type generate_quest_floor_from_json(PlayerType *player_ptr, QuestTyp
             grid.artifact = quest.get_reward().value_or(FixedArtifactId::NONE);
         }
 
-        letter[static_cast<uint8_t>(symbol)] = grid;
+        fixed_map_letter_at(static_cast<unsigned char>(symbol)) = grid;
     }
 
     if (!fixed_map.has_map()) {
-        return PARSE_ERROR_NONE;
+        return {};
     }
 
     // 3. マップバリアント選択: 旧 $RANDOMn は seed_town % n で決まる (乱数ではなくキャラ毎に固定)
-    const auto variant_count = fixed_map.maps.size();
-    const auto variant_index = (variant_count <= 1) ? 0 : (AngbandSystem::get_instance().get_seed_town() % variant_count);
     const auto &rows = fixed_map.maps[variant_index];
 
     // 4. 既存のセル配置ロジックでグリッドを敷く
@@ -353,17 +335,14 @@ parse_error_type generate_quest_floor_from_json(PlayerType *player_ptr, QuestTyp
     qtwg_type qg;
     initialize_quest_generator_type(&qg, 0, 0, MAX_HGT, MAX_WID, &y, &x);
     for (const auto &row : rows) {
-        std::string buffer(row);
-        parse_qtw_D(player_ptr, &qg, buffer.data());
+        parse_qtw_D(player_ptr, &qg, row);
         (*qg.y)++;
     }
 
-    // 5. 開始位置とフロアサイズ (parse_qtw_P を "P:y:x" で再利用)
+    // 5. 開始位置とフロアサイズを型付きの値から適用する
     if (const auto *start = select_quest_start(fixed_map); start != nullptr) {
-        std::string p_line = "P:" + std::to_string(start->y) + ":" + std::to_string(start->x);
-        qg.buf = p_line.data();
-        parse_qtw_P(player_ptr, &qg);
+        apply_fixed_map_start(player_ptr, &qg, start->y, start->x);
     }
 
-    return PARSE_ERROR_NONE;
+    return {};
 }

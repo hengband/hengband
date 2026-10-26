@@ -34,9 +34,9 @@
 #include "status/sight-setter.h"
 #include "sv-definition/sv-potion-types.h"
 #include "system/angband.h"
+#include "system/deferred-update-requests.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "util/dice.h"
@@ -501,7 +501,7 @@ bool QuaffEffects::new_life()
 {
     roll_hitdice(this->player_ptr, SPOP_NONE);
     get_max_stats(this->player_ptr);
-    RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
+    DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
     lose_all_mutations(this->player_ptr);
     return true;
 }

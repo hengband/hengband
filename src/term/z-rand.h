@@ -8,7 +8,8 @@
  *
  * 描画処理など、呼び出される回数がウィンドウの大きさや設定などの環境によって変わる処理では、
  * ゲームの乱数生成器を使うと固定シードでのゲームの再現性が失われる。
- * そのような処理では get_external_rng() を乱数生成器として引数に渡すこと。
+ * そのような処理では make_keyed_rng() でゲームのターンや座標などのキーから乱数生成器を作り、引数に渡すこと。
+ * 呼び出される回数がキー入力だけで決まる、ゲームの時間が経過しない操作などでは get_external_rng() を渡してよい。
  *
  * @note xso::rng32 のメンバ関数 (sample(), shuffle(), flip() など) や標準ライブラリの分布
  * (std::uniform_int_distribution など) は、実装依存のアルゴリズムで値を生成するため、
@@ -48,9 +49,21 @@
  */
 constexpr auto RAND_DEG = 63;
 
+/*!
+ * @brief make_keyed_rng() の用途
+ * @details 用途が違えば、同じキーからも別の乱数列を作る。
+ */
+enum class KeyedRngPurpose : uint32_t {
+    MAP_SYMBOL = 1, //!< マップの表示 (幻覚・万色・シェイプチェンジャー)
+    BOLT_COLOR = 2, //!< ボルト・ボールの色
+    MONSTER_NAME = 3, //!< 幻覚中のモンスターの名前
+};
+
 void Rand_state_init(tl::optional<uint32_t> seed = tl::nullopt);
+void Rand_external_state_init(tl::optional<uint32_t> seed = tl::nullopt);
 xso::rng32 &get_game_rng();
 xso::rng32 &get_external_rng();
+xso::rng32 make_keyed_rng(KeyedRngPurpose purpose, std::initializer_list<int> keys);
 int rand_range(xso::rng32 &rng, int a, int b);
 int rand_range(int a, int b);
 int16_t randnor(int mean, int stand);

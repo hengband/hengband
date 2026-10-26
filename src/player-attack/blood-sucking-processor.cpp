@@ -12,6 +12,7 @@
 #include "player-attack/player-attack.h"
 #include "player-info/equipment-info.h"
 #include "spell-realm/spells-hex.h"
+#include "system/deferred-update-requests.h"
 #include "system/item/item-entity.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
@@ -109,6 +110,7 @@ static void drain_muramasa(PlayerType *player_ptr, player_attack_type *pa_ptr, c
     msg_print(_("妖刀は血を吸って強くなった！", "Muramasa sucked blood, and became more powerful!"));
     o_ptr->to_h = to_h;
     o_ptr->to_d = to_d;
+    DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
 }
 
 /*!
@@ -132,7 +134,7 @@ static void drain_result(PlayerType *player_ptr, player_attack_type *pa_ptr, boo
     }
 
     if (cheat_xtra) {
-        msg_format(_("Draining left: %d", "Draining left: %d"), pa_ptr->drain_left);
+        msg_print("Draining left: {}", pa_ptr->drain_left);
     }
 
     if (pa_ptr->drain_left == 0) {
@@ -148,9 +150,9 @@ static void drain_result(PlayerType *player_ptr, player_attack_type *pa_ptr, boo
 
     if (*drain_msg) {
         if (has_melee_weapon(player_ptr, enum2i(INVEN_MAIN_HAND) + pa_ptr->hand)) {
-            msg_format(_("刃が%sから生命力を吸い取った！", "Your weapon drains life from %s!"), pa_ptr->m_name);
+            msg_print(_("刃が{}から生命力を吸い取った！", "Your weapon drains life from {}!"), pa_ptr->m_name);
         } else {
-            msg_format(_("手が%sから生命力を吸い取った！", "Your hands drain life from %s!"), pa_ptr->m_name);
+            msg_print(_("手が{}から生命力を吸い取った！", "Your hands drain life from {}!"), pa_ptr->m_name);
         }
         *drain_msg = false;
     }

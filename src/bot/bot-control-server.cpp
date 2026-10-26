@@ -19,8 +19,11 @@
 #include "bot/bot-report.h"
 #include "bot/bot-screen.h"
 #include "bot/bot-socket-server.h"
+#include "bot/bot-subwindow-verifier.h"
 #include "game-option/runtime-arguments.h"
+#include "io/input-context.h"
 #include "io/macro-configurations-store.h"
+#include "system/angband-exceptions.h"
 #include "system/angband-system.h"
 #include "system/angband-version.h"
 #include "system/player-type-definition.h"
@@ -35,12 +38,14 @@
 #include <iterator>
 #include <memory>
 #include <nlohmann/json.hpp>
+#include <stdexcept>
 #include <string>
 #include <string_view>
 #include <tl/expected.hpp>
 #include <tl/optional.hpp>
 #include <type_traits>
 #include <utility>
+#include <variant>
 
 namespace {
 
@@ -77,6 +82,9 @@ constexpr auto BOT_CONTROL_POLL_INTERVAL = std::chrono::milliseconds(15);
 constexpr auto BOT_CONTROL_IDLE_POLL_INTERVAL = std::chrono::seconds(1);
 
 std::unique_ptr<BotSocketServer> bot_control_server;
+
+//! フロントエンドが登録した端末の大きさを変える関数 (登録されていなければ大きさを変えられない)
+BotTermResizer bot_term_resizer = nullptr;
 
 /*!
  * @brief リクエストの処理結果
@@ -129,15 +137,175 @@ nlohmann::json make_ok_response(const nlohmann::json &id, nlohmann::json result 
 }
 
 /*!
+ * @brief 入力の種類を応答で使う名前へ変換する
+ * @param kind 入力の種類
+ * @return 応答の input_context.kind に入れる名前
+ */
+std::string_view input_kind_name(InputKind kind)
+{
+    switch (kind) {
+    case InputKind::CONFIRM:
+        return "confirm";
+    case InputKind::COMMAND_CHAR:
+        return "command_char";
+    case InputKind::STRING:
+        return "string";
+    case InputKind::QUANTITY:
+        return "quantity";
+    case InputKind::MORE:
+        return "more";
+    case InputKind::COMMAND:
+        return "command";
+    case InputKind::ITEM:
+        return "item";
+    case InputKind::DIRECTION:
+        return "direction";
+    case InputKind::TARGET:
+        return "target";
+    case InputKind::POINT:
+        return "point";
+    case InputKind::ANY_KEY:
+        return "any_key";
+    case InputKind::SPELL:
+        return "spell";
+    }
+
+    THROW_EXCEPTION(std::logic_error, "Invalid InputKind was specified!");
+}
+
+/*!
+ * @brief アイテムを選ぶ区分を応答で使う名前へ変換する
+ * @param area アイテムを選ぶ区分
+ * @return 応答の input_context.area・areas に入れる名前
+ */
+std::string_view item_selection_area_name(ItemSelectionArea area)
+{
+    switch (area) {
+    case ItemSelectionArea::INVENTORY:
+        return "inventory";
+    case ItemSelectionArea::EQUIPMENT:
+        return "equipment";
+    case ItemSelectionArea::FLOOR:
+        return "floor";
+    }
+
+    THROW_EXCEPTION(std::logic_error, "Invalid ItemSelectionArea was specified!");
+}
+
+/*!
+ * @brief 入力の種類ごとの詳細を、入力の文脈のJSONに足すキーへ変換する
+ * @details 詳細の型ごとに関数を分けてstd::visitで呼び分ける。詳細の型を足したときに変換を書き漏らすと、コンパイルが通らない。
+ */
+class InputDetailsJsonConverter {
+public:
+    nlohmann::json operator()(std::monostate) const
+    {
+        return nlohmann::json::object();
+    }
+
+    nlohmann::json operator()(const StringInputDetails &details) const
+    {
+        return { { "max_length", details.max_length }, { "initial", to_json_utf8(details.initial) } };
+    }
+
+    nlohmann::json operator()(const QuantityInputDetails &details) const
+    {
+        return { { "max", details.max }, { "initial", details.initial } };
+    }
+
+    nlohmann::json operator()(const CommandInputDetails &details) const
+    {
+        const auto item_list = details.item_list ? nlohmann::json(item_selection_area_name(*details.item_list)) : nlohmann::json();
+        return { { "shopping", details.shopping }, { "item_list", item_list } };
+    }
+
+    nlohmann::json operator()(const ItemInputDetails &details) const
+    {
+        auto areas = nlohmann::json::array();
+        if (details.inventory) {
+            areas.push_back(item_selection_area_name(ItemSelectionArea::INVENTORY));
+        }
+
+        if (details.equipment) {
+            areas.push_back(item_selection_area_name(ItemSelectionArea::EQUIPMENT));
+        }
+
+        if (details.floor) {
+            areas.push_back(item_selection_area_name(ItemSelectionArea::FLOOR));
+        }
+
+        return {
+            { "area", item_selection_area_name(details.area) },
+            { "areas", std::move(areas) },
+            { "first_label", std::string(1, details.first_label) },
+            { "last_label", std::string(1, details.last_label) },
+            { "force", details.force },
+            { "menu", details.menu },
+        };
+    }
+
+    nlohmann::json operator()(const DirectionInputDetails &details) const
+    {
+        return { { "can_choose_target", details.can_choose_target }, { "has_target", details.has_target }, { "at_feet", details.at_feet } };
+    }
+
+    nlohmann::json operator()(const TargetInputDetails &details) const
+    {
+        return {
+            { "look", details.look },
+            { "free", details.free_mode },
+            { "can_target", details.can_target },
+            { "y", details.pos.y },
+            { "x", details.pos.x },
+        };
+    }
+
+    nlohmann::json operator()(const PointInputDetails &details) const
+    {
+        return { { "y", details.pos.y }, { "x", details.pos.x } };
+    }
+
+    nlohmann::json operator()(const SpellInputDetails &details) const
+    {
+        return {
+            { "first_label", std::string(1, details.first_label) },
+            { "last_label", std::string(1, details.last_label) },
+            { "list", details.list },
+            { "browse", details.browse },
+            { "menu", details.menu },
+        };
+    }
+};
+
+/*!
+ * @brief 現在の入力待ちの文脈をJSONへ変換する
+ */
+nlohmann::json make_input_context_json()
+{
+    const auto &context = get_input_context();
+    if (!context) {
+        return nullptr;
+    }
+
+    auto result = nlohmann::json{ { "kind", input_kind_name(context->kind) }, { "prompt", to_json_utf8(context->prompt) } };
+    result.update(std::visit(InputDetailsJsonConverter(), context->details));
+    return result;
+}
+
+/*!
  * @brief リクエストから指定した型の値を取り出す
  * @param request リクエストのJSONオブジェクト
  * @param key 取り出す値のキー
  * @param default_value キーが存在しない場合に返す既定値
- * @return 取り出した値。値の型が期待する型と異なる場合はnullopt
+ * @return 取り出した値。値の型が期待する型と異なる場合や、整数がTに収まらない場合はnullopt
  * @details
  * nlohmann::json::value()は型が異なると例外を投げる。これをそのまま送出すると
  * serve_request()がidを持たないエラーレスポンスに変換してしまい、
  * クライアントがレスポンスをリクエストと対応付けられなくなるため、ここで型を検証する。
+ *
+ * 整数はget<T>()で変換すると、Tに収まらない値が黙って切り詰められる。例えば4294967376は
+ * 32ビットのintでは80になり、範囲外の指定が有効な値として受け付けられてしまうため、
+ * 変換する前にTに収まるかを確かめる。
  */
 template <typename T>
 tl::optional<T> find_request_value(const nlohmann::json &request, const char *key, T default_value)
@@ -151,7 +319,12 @@ tl::optional<T> find_request_value(const nlohmann::json &request, const char *ke
         if constexpr (std::is_same_v<T, bool>) {
             return it->is_boolean();
         } else if constexpr (std::is_integral_v<T>) {
-            return it->is_number_integer();
+            if (!it->is_number_integer()) {
+                return false;
+            }
+
+            // 符号無しの整数として保持された値をint64_tで読むと、大きな値が負の値に化けるため分けて読む
+            return it->is_number_unsigned() ? std::in_range<T>(it->template get<uint64_t>()) : std::in_range<T>(it->template get<int64_t>());
         } else {
             return it->is_string();
         }
@@ -181,6 +354,25 @@ bool is_valid_term_index(int index)
 
     const auto *t = angband_terms[index];
     return (t != nullptr) && (t->scr != nullptr);
+}
+
+/*!
+ * @brief リクエストから対象の端末の添字を取り出す
+ * @param request リクエストのJSONオブジェクト
+ * @return 有効な端末の添字 (既定は主端末の0)。取り出せない場合はエラーの理由
+ */
+tl::expected<int, std::string> find_term_index(const nlohmann::json &request)
+{
+    const auto index = find_request_value(request, "term", 0);
+    if (!index) {
+        return tl::make_unexpected("\"term\" must be an integer");
+    }
+
+    if (!is_valid_term_index(*index)) {
+        return tl::make_unexpected("the term index is out of range");
+    }
+
+    return *index;
 }
 
 /*!
@@ -352,13 +544,9 @@ tl::expected<int, std::string> push_keys(const std::string &keys)
  */
 nlohmann::json handle_screen_request(const nlohmann::json &id, const nlohmann::json &request)
 {
-    const auto index = find_request_value(request, "term", 0);
+    const auto index = find_term_index(request);
     if (!index) {
-        return make_error_response(id, "\"term\" must be an integer");
-    }
-
-    if (!is_valid_term_index(*index)) {
-        return make_error_response(id, "the term index is out of range");
+        return make_error_response(id, index.error());
     }
 
     const auto with_attrs = find_request_value(request, "attrs", true);
@@ -368,7 +556,42 @@ nlohmann::json handle_screen_request(const nlohmann::json &id, const nlohmann::j
 
     auto screen = make_bot_screen_json(*angband_terms[*index], *with_attrs);
     screen["term"] = *index;
+    screen["input_context"] = make_input_context_json();
     return make_ok_response(id, std::move(screen));
+}
+
+/*!
+ * @brief resizeリクエストを処理する
+ * @param id リクエストのid
+ * @param request リクエストのJSONオブジェクト
+ * @return レスポンスのJSONオブジェクト
+ * @details
+ * 大きさを変える手段はフロントエンドが登録する (set_bot_term_resizer())。
+ * 大きさの範囲の判定と、範囲外の場合の理由はフロントエンド側が受け持つ。
+ */
+nlohmann::json handle_resize_request(const nlohmann::json &id, const nlohmann::json &request)
+{
+    if (bot_term_resizer == nullptr) {
+        return make_error_response(id, "resizing a terminal is not supported by this frontend");
+    }
+
+    const auto index = find_term_index(request);
+    if (!index) {
+        return make_error_response(id, index.error());
+    }
+
+    // 大きさに既定値は無い。キーが無い場合は0として扱い、範囲外として理由を返させる
+    const auto width = find_request_value(request, "width", 0);
+    const auto height = find_request_value(request, "height", 0);
+    if (!width || !height) {
+        return make_error_response(id, "\"width\" and \"height\" must be integers");
+    }
+
+    if (const auto resized = bot_term_resizer(*index, { *width, *height }); !resized) {
+        return make_error_response(id, resized.error());
+    }
+
+    return make_ok_response(id, { { "term", *index }, { "width", *width }, { "height", *height } });
 }
 
 /*!
@@ -393,7 +616,45 @@ nlohmann::json handle_state_request(const nlohmann::json &id, const nlohmann::js
         return make_error_response(id, "\"map\" must be a boolean");
     }
 
-    return make_ok_response(id, make_bot_json_snapshot(p_ptr, *include_map));
+    auto state = make_bot_json_snapshot(p_ptr, *include_map);
+    state["input_context"] = make_input_context_json();
+    return make_ok_response(id, std::move(state));
+}
+
+/*!
+ * @brief verify_subwindowsリクエストを処理する
+ * @param id リクエストのid
+ * @return レスポンスのJSONオブジェクト
+ * @details
+ * サブウィンドウの描き直しの漏れを調べる (verify_bot_subwindows())。
+ * 調べるために全てのサブウィンドウを描き直すので、検証のためだけに使う。
+ * 描き直すサブウィンドウ (全体図など) はフロアを要するため、ダンジョン (町を含む) に入る前はエラーを返す。
+ * コマンドの入力待ち (入力の文脈が COMMAND) でなければエラーを返す。コマンドの途中の入力待ち (ターゲットの選択や
+ * 「見る」など) では、サブウィンドウがカーソルの位置などに合わせた内容を描いていることがあり、
+ * 描き直すと食い違いが出たうえに表示も変わってしまうため。
+ * 持ち物・装備品の一覧の後の待ちも、文脈は COMMAND だが i・e のコマンドの途中なのでエラーを返す。
+ */
+nlohmann::json handle_verify_subwindows_request(const nlohmann::json &id)
+{
+    const auto &world = AngbandWorld::get_instance();
+    const auto is_ready = world.character_dungeon && (p_ptr != nullptr) && (p_ptr->current_floor_ptr != nullptr);
+    if (!is_ready) {
+        return make_error_response(id, "the game is not in a dungeon yet");
+    }
+
+    // 入力の文脈は入れ子の入力待ち (-続く- など) で上書きされるので、コマンドの入力そのものを待っているときだけ COMMAND になる
+    const auto &context = get_input_context();
+    if (!context || (context->kind != InputKind::COMMAND)) {
+        return make_error_response(id, "the game is not waiting for a command");
+    }
+
+    // 持ち物・装備品の一覧の後の待ちは i・e のコマンドの途中で、メッセージの色などコマンドの区切りで変わる表示がまだ描き直されていない
+    const auto *details = std::get_if<CommandInputDetails>(&context->details);
+    if ((details != nullptr) && details->item_list) {
+        return make_error_response(id, "the game is showing the inventory or equipment list");
+    }
+
+    return make_ok_response(id, verify_bot_subwindows(p_ptr));
 }
 
 /*!
@@ -441,6 +702,10 @@ RequestResult dispatch_request(const nlohmann::json &request)
         return make_ok_response(id, { { "pushed", *pushed } });
     }
 
+    if (*op == "resize") {
+        return handle_resize_request(id, request);
+    }
+
     if (*op == "state") {
         return handle_state_request(id, request);
     }
@@ -452,6 +717,10 @@ RequestResult dispatch_request(const nlohmann::json &request)
         }
 
         return make_ok_response(id, { { "messages", make_message_history_json(*count) } });
+    }
+
+    if (*op == "verify_subwindows") {
+        return handle_verify_subwindows_request(id);
     }
 
     if (*op == "quit") {
@@ -536,6 +805,19 @@ void serve_pending_requests()
     serve_request(deadline);
 }
 
+}
+
+/*!
+ * @brief 制御サーバから端末の大きさを変える関数を登録する
+ * @param resizer 端末の大きさを変える関数
+ * @details
+ * 実際のウィンドウを持つフロントエンドでは、ゲームの端末だけ大きさを変えるとウィンドウと
+ * 食い違ってしまう。そのため、ウィンドウの大きさを合わせられるフロントエンドだけが登録する。
+ * 制御サーバの起動とは独立しており、起動の前後どちらで登録してもよい。
+ */
+void set_bot_term_resizer(BotTermResizer resizer)
+{
+    bot_term_resizer = resizer;
 }
 
 /*!
