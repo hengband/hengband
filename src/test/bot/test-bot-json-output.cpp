@@ -4,6 +4,7 @@
 
 #include "artifact/fixed-art-types.h"
 #include "bot/bot-json-output.h"
+#include "locale/localized-string.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/tr-types.h"
 #include "object/tval-types.h"
@@ -13,8 +14,12 @@
 #include "system/baseitem/baseitem-records.h"
 #include "system/baseitem/baseitem-service.h"
 #include "system/item/item-entity.h"
+#include "system/monrace/monrace-definition.h"
+#include "system/monrace/monrace-list.h"
+#include "system/monster-entity.h"
 #include "test/scoped-rng.h"
 #include "test/scoped-vector-wrapper.h"
+#include "test/system/monrace-list-test-access.h"
 #include "util/enum-converter.h"
 #include <doctest/doctest.h>
 #include <nlohmann/json.hpp>
@@ -201,4 +206,15 @@ TEST_CASE("make_bot_found_item_identity_json hides the ids while hallucinating")
     const ItemEntity potion(POTION_A_ID);
     CHECK(make_bot_found_item_identity_json(potion, true).is_null());
     CHECK(make_bot_found_item_identity_json(potion, false) == nlohmann::json{ { "flavor_id", POTION_B_ID } });
+}
+
+TEST_CASE("make_bot_pet_row_json hides the race while hallucinating")
+{
+    test::MonraceListTestAccess monraces;
+    auto &monrace = MonraceList::get_instance().emplace(static_cast<MonraceId>(1));
+    monrace.name = LocalizedString("Test pet", "Test pet");
+    MonsterEntity monster;
+    monster.r_idx = static_cast<MonraceId>(1);
+    CHECK(make_bot_pet_row_json(5, monster, false) == nlohmann::json{ { "index", 5 }, { "race_id", 1 }, { "name", "Test pet" } });
+    CHECK(make_bot_pet_row_json(5, monster, true) == nlohmann::json{ { "index", 5 }, { "hallucinated", true } });
 }

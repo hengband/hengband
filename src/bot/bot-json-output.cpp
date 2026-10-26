@@ -2246,16 +2246,17 @@ nlohmann::json make_knowledge_json(PlayerType *player_ptr, BotKnowledgeCategory 
     case BotKnowledgeCategory::QUESTS:
         result["quests"] = make_disclosed_quests_json();
         break;
-    case BotKnowledgeCategory::PETS:
+    case BotKnowledgeCategory::PETS: {
+        const auto is_hallucinated = player_ptr->effects()->hallucination().is_active();
         for (auto i = 1; i < player_ptr->current_floor_ptr->m_max; ++i) {
             const auto &monster = player_ptr->current_floor_ptr->m_list[i];
             if (monster.is_valid() && monster.is_pet()) {
-                rows.push_back({ { "index", i }, { "race_id", enum2i(monster.get_monrace_id()) },
-                    { "name", to_json_utf8(monster.get_monrace().name.string()) } });
+                rows.push_back(make_bot_pet_row_json(i, monster, is_hallucinated));
             }
         }
         result["pets"] = std::move(rows);
         break;
+    }
     case BotKnowledgeCategory::AUTOPICK:
         for (const auto &entry : autopick_list) {
             rows.push_back({ { "rule", to_json_utf8(autopick_line_from_entry(entry)) } });
@@ -2641,6 +2642,23 @@ nlohmann::json make_bot_item_identity_json(const ItemEntity &item, bool store_id
 nlohmann::json make_bot_found_item_identity_json(const ItemEntity &item, bool is_hallucinated)
 {
     return is_hallucinated ? nlohmann::json(nullptr) : make_bot_item_identity_json(item, false);
+}
+
+/*!
+ * @brief 知識メニューのペットの一覧 (knowledge.pets) の 1 行を出力する
+ * @details 幻覚中の画面の一覧はペットの名前をでたらめな種族名にするので、ほかのモンスターの記録と同じく種族を伏せる。
+ * @param index モンスターの番号
+ * @param monster ペット
+ * @param is_hallucinated 幻覚中か
+ * @return {index, race_id, name}、幻覚中は {index, hallucinated: true}
+ */
+nlohmann::json make_bot_pet_row_json(int index, const MonsterEntity &monster, bool is_hallucinated)
+{
+    if (is_hallucinated) {
+        return { { "index", index }, { "hallucinated", true } };
+    }
+
+    return { { "index", index }, { "race_id", enum2i(monster.get_monrace_id()) }, { "name", to_json_utf8(monster.get_monrace().name.string()) } };
 }
 
 namespace {
