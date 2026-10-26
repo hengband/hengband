@@ -608,6 +608,7 @@ nlohmann::json make_grid_map_json(PlayerType *player_ptr)
     auto cells = nlohmann::json::array();
     auto found_items = nlohmann::json::array();
     auto found_item_names = nlohmann::json::array();
+    auto found_item_ids = nlohmann::json::array();
     auto unsafe_rows = make_unsafe_rows_json(floor);
     std::unordered_map<GridSignature, std::size_t, GridSignatureHash> palette_indices;
 
@@ -628,6 +629,7 @@ nlohmann::json make_grid_map_json(PlayerType *player_ptr)
         auto found_item_count = 0;
         auto found_item_tvals = nlohmann::json::array();
         auto found_item_name_list = nlohmann::json::array();
+        auto found_item_id_list = nlohmann::json::array();
         auto visible_object_count = 0;
         auto visible_object_tvals = nlohmann::json::array();
         for (const auto o_idx : source_grid.o_idx_list) {
@@ -653,6 +655,7 @@ nlohmann::json make_grid_map_json(PlayerType *player_ptr)
                 // reads as its flavor, never its real kind. While hallucinating
                 // the look command cannot name items either.
                 found_item_name_list.push_back(is_hallucinated ? nlohmann::json(nullptr) : nlohmann::json(to_json_utf8(describe_flavor(player_ptr, item, 0))));
+                found_item_id_list.push_back(make_bot_found_item_identity_json(item, is_hallucinated));
             }
         }
         if (found_item_count != 0) {
@@ -666,6 +669,11 @@ nlohmann::json make_grid_map_json(PlayerType *player_ptr)
                 found_item_name_row.push_back(std::move(name));
             }
             found_item_names.push_back(std::move(found_item_name_row));
+            auto found_item_id_row = nlohmann::json::array({ pos.y, pos.x });
+            for (auto &ids : found_item_id_list) {
+                found_item_id_row.push_back(std::move(ids));
+            }
+            found_item_ids.push_back(std::move(found_item_id_row));
         }
 
         if (!is_known) {
@@ -735,6 +743,7 @@ nlohmann::json make_grid_map_json(PlayerType *player_ptr)
         { "cells", std::move(cells) },
         { "found_items", std::move(found_items) },
         { "found_item_names", std::move(found_item_names) },
+        { "found_item_ids", std::move(found_item_ids) },
         { "unsafe_rows", std::move(unsafe_rows) },
     };
 }
@@ -1064,9 +1073,8 @@ nlohmann::json make_item_json(PlayerType *player_ptr, const ItemEntity &item, bo
     // Match what the normal item description reveals. An unaware flavor does
     // not reveal its base kind, and an unidentified instance does not reveal
     // charges, pval-derived values, or remaining fuel.
-    if (aware) {
-        result["sval"] = item.bi_key.sval().value_or(-1);
-    }
+    // 名前から分かる ID (sval・ego_id・artifact_id・flavor_id) は make_bot_item_identity_json() で決める。
+    result.update(make_bot_item_identity_json(item, store_identified));
     if (item.has_identification_flag(IdentificationFlag::SENSE)) {
         result["pseudo_feeling"] = pseudo_feeling_name(static_cast<item_feel_type>(item.feeling));
     }
@@ -2588,6 +2596,47 @@ nlohmann::json make_bot_character_speed_json(int total, int temporary, bool ligh
         { "lightspeed", displayed_lightspeed },
         { "riding", riding },
     };
+}
+
+/*!
+ * @brief 品の名前から分かる種類・エゴ・固定アーティファクト・見た目を、言語に依らない ID で出力する
+ * @details 名前に出る範囲に限る。sval は aware のとき、ego_id と artifact_id は known のときだけ出す
+ * (エゴ名・固定アーティファクト名も鑑定するまで名前に出ない)。ランダムアーティファクトには固定の ID が無いので artifact_id を出さない。
+ * flavor_id は aware でない品の名前に出る見た目で、その見た目を flavor_name に持つ BaseitemDefinitions の行の ID を表す。
+ * 見た目は同じ tval の中でゲームごとに混ぜてあるので、flavor_id から中身は分からない。
+ * @param item 品
+ * @param store_identified 店の商品として鑑定済みに扱うか
+ * @return {sval, ego_id, artifact_id, flavor_id} のうち出せるものだけを持つオブジェクト
+ */
+nlohmann::json make_bot_item_identity_json(const ItemEntity &item, bool store_identified)
+{
+    const auto aware = store_identified || item.is_aware();
+    const auto known = store_identified || item.is_known();
+    auto result = nlohmann::json::object();
+    if (aware) {
+        result["sval"] = item.bi_key.sval().value_or(-1);
+    } else if (const auto &record = item.get_baseitem_record(); record.is_apparent()) {
+        result["flavor_id"] = record.get_appearance_id();
+    }
+    if (known && item.is_ego()) {
+        result["ego_id"] = enum2i(item.ego_idx);
+    }
+    if (known && item.is_fixed_artifact()) {
+        result["artifact_id"] = enum2i(item.fa_id);
+    }
+    return result;
+}
+
+/*!
+ * @brief 床の品の一覧 (grid_map.found_item_ids) の 1 品分を出力する
+ * @details 幻覚中は注視コマンドでも品の名前が分からないので null にする。
+ * @param item 床の品
+ * @param is_hallucinated 幻覚中か
+ * @return make_bot_item_identity_json() の結果、幻覚中は null
+ */
+nlohmann::json make_bot_found_item_identity_json(const ItemEntity &item, bool is_hallucinated)
+{
+    return is_hallucinated ? nlohmann::json(nullptr) : make_bot_item_identity_json(item, false);
 }
 
 namespace {
