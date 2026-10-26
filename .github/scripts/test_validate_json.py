@@ -660,17 +660,14 @@ class TownMapValidationTest(unittest.TestCase):
         self.schema_path = Path(__file__).resolve().parents[2] / "schema/TownMap.schema.json"
         self.schema = load_jsonc(self.schema_path)
         self.data = {
-            "version": 2,
+            "version": 3,
             "featureRules": [
                 {
                     "when": "[EQU $QUEST1 1]",
                     "symbol": "#",
                     "definition": {
                         "terrain": "PERMANENT",
-                        "caveInfo": 3,
-                        "monster": "0",
-                        "object": "0",
-                        "artifact": "0",
+                        "caveInfo": ["MARK", "GLOW"],
                         "trap": "NONE",
                         "special": 0,
                     },
@@ -690,13 +687,13 @@ class TownMapValidationTest(unittest.TestCase):
 
     def test_optional_ego_and_positive_byte_ids(self):
         # 省略はエゴなし。ランダム指定のIDも同じ範囲で検証する。
-        for token in ("1", "255", "0001", "*", "*1", "*255", "*000255"):
+        for token in (1, 255, {"random": True}):
             with self.subTest(token=token):
                 data = copy.deepcopy(self.data)
                 data["featureRules"][0]["definition"]["ego"] = token
                 ok, message = self.validate(data)
                 self.assertTrue(ok, message)
-        for token in ("0", "-0", "0000", "256", "-1", "-2147483648", "*0", "*256", "*-1", "**", "+1", "*+1", "!", "c1", None, 1):
+        for token in ("0", "-0", "0000", "256", "-1", "-2147483648", "*0", "*256", "*-1", "**", "+1", "*+1", "!", "c1", None, 0, 256, -1, {"random": True, "id": 1}):
             with self.subTest(token=token):
                 data = copy.deepcopy(self.data)
                 data["featureRules"][0]["when"] = "0"
@@ -704,30 +701,42 @@ class TownMapValidationTest(unittest.TestCase):
                 ok, message = self.validate(data)
                 self.assertFalse(ok, message)
 
-    def test_ego_semantics_matches_schema_range(self):
-        # スキーマのpatternを通らなくても、意味検証が同じ範囲を強制する。
-        for token, accepted in (("1", True), ("255", True), ("*", True), ("*255", True),
-                                ("0", False), ("256", False), ("-1", False), ("*0", False), ("*256", False)):
-            with self.subTest(token=token):
+    def test_v3_constraints_and_positions(self):
+        cases = (
+            ("caveInfo", 3), ("caveInfo", ["MARK", "MARK"]), ("caveInfo", ["UNKNOWN"]),
+            ("trap", "*"), ("trap", ""), ("terrain", ""), ("unknown", 1),
+            ("monster", {}), ("monster", {"oodLevel": 1}),
+            ("monster", {"random": False}), ("monster", {"random": True, "cloneOf": 1}),
+            ("object", {"questReward": False}), ("ego", {"random": True, "id": 1}),
+            ("object", 0), ("artifact", 32768), ("special", -32769),
+        )
+        for field, value in cases:
+            with self.subTest(field=field, value=value):
                 data = copy.deepcopy(self.data)
-                data["featureRules"][0]["definition"]["ego"] = token
-                if accepted:
-                    validate_town_map_semantics(data, self.schema_path)
-                else:
-                    with self.assertRaises(ValidationError):
-                        validate_town_map_semantics(data, self.schema_path)
+                data["featureRules"][0]["definition"][field] = value
+                ok, message = self.validate(data)
+                self.assertFalse(ok, message)
+                self.assertIn("['featureRules', 0, 'definition'", message)
 
-    def test_cave_info_fits_16_bit_flags(self):
-        # CAVE_* のフラグは16ビットに収まり、セーブでも16ビットで書く。
-        valid = copy.deepcopy(self.data)
-        valid["featureRules"][0]["definition"]["caveInfo"] = 65535
-        ok, message = self.validate(valid)
-        self.assertTrue(ok, message)
-        invalid = copy.deepcopy(self.data)
-        invalid["featureRules"][0]["definition"]["caveInfo"] = 65536
-        ok, message = self.validate(invalid)
-        self.assertFalse(ok)
-        self.assertIn("Location: ['featureRules', 0, 'definition', 'caveInfo']", message)
+    def test_all_fields_optional_and_common_modes(self):
+        for definition in ({}, {"monster": {"cloneOf": 32767}},
+                           {"object": {"random": True, "oodLevel": 0}},
+                           {"artifact": {"random": True, "id": 32767}},
+                           {"trap": {"random": True}},
+                           {"object": {"questReward": True}, "artifact": {"questReward": True}}):
+            data = copy.deepcopy(self.data)
+            data["featureRules"][0]["definition"] = definition
+            ok, message = self.validate(data)
+            self.assertTrue(ok, message)
+
+    def test_only_integer_version_three(self):
+        for version in (2, 4, 3.0, True, None, "3"):
+            data = copy.deepcopy(self.data)
+            data["version"] = version
+            self.assertFalse(self.validate(data)[0])
+        data = copy.deepcopy(self.data)
+        del data["version"]
+        self.assertFalse(self.validate(data)[0])
 
     def test_start_must_be_inside_layout(self):
         invalid = copy.deepcopy(self.data)
@@ -871,10 +880,13 @@ class TownMapValidationTest(unittest.TestCase):
 
     def test_integer_representation_matches_reader(self):
         cases = {
-            "version": lambda data: data.update(version=2.0),
+            "version": lambda data: data.update(version=3.0),
             "starting position y": lambda data: data["startingPositions"][0].update(y=1.0),
             "starting position x": lambda data: data["startingPositions"][0].update(x=1.0),
-            "caveInfo": lambda data: data["featureRules"][0]["definition"].update(caveInfo=3.0),
+            "monster": lambda data: data["featureRules"][0]["definition"].update(monster=5.0),
+            "oodLevel": lambda data: data["featureRules"][0]["definition"].update(object={"random": True, "oodLevel": 5.0}),
+            "id": lambda data: data["featureRules"][0]["definition"].update(artifact={"random": True, "id": 5.0}),
+            "cloneOf": lambda data: data["featureRules"][0]["definition"].update(monster={"cloneOf": 5.0}),
             "special": lambda data: data["featureRules"][0]["definition"].update(special=0.0),
             "building index": lambda data: data["buildingRules"][0].update(index=0.0),
         }

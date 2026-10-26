@@ -170,8 +170,8 @@ public:
 nlohmann::json make_application_town()
 {
     return {
-        { "version", 2 },
-        { "featureRules", { { { "symbol", "B" }, { "definition", { { "terrain", "GRANITE" }, { "caveInfo", CAVE_ROOM }, { "monster", "0" }, { "object", "0" }, { "artifact", "0" }, { "trap", "NONE" }, { "special", 17 } } } } } },
+        { "version", 3 },
+        { "featureRules", { { { "symbol", "B" }, { "definition", { { "terrain", "GRANITE" }, { "caveInfo", { "ROOM" } }, { "trap", "NONE" }, { "special", 17 } } } } } },
         { "buildingRules", nlohmann::json::array() },
         { "mapVariants", { { { "when", "[EQU $LEVEL 7]" }, { "rows", { "AB", "BA" } } }, { { "when", "[EQU $LEVEL 8]" }, { "rows", { "BB", "BB" } } } } },
         { "startingPositions", { { { "when", "[EQU $LEVEL 7]" }, { "y", 1 }, { "x", 1 } }, { { "when", "[EQU $LEVEL 8]" }, { "y", 0 }, { "x", 1 } }, { { "when", "[EQU $LEVEL 7]" }, { "y", 0 }, { "x", 0 } } } },

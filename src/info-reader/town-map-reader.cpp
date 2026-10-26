@@ -1,8 +1,6 @@
 #include "info-reader/town-map-reader.h"
-#include "artifact/fixed-art-types.h"
 #include "info-reader/json-reader-util.h"
-#include "info-reader/random-grid-effect-types.h"
-#include "object-enchant/object-ego.h"
+#include "info-reader/quest-reader.h"
 #include "player-info/class-info.h"
 #include "player-info/race-info.h"
 #include "player/player-realm.h"
@@ -23,82 +21,120 @@ bool is_integer_in_range(std::string_view value, int minimum, int maximum)
     return !value.empty() && error == std::errc{} && end == value.data() + value.size() && parsed >= minimum && parsed <= maximum;
 }
 
-bool is_unsigned_integer_in_range(std::string_view value, unsigned int maximum)
-{
-    unsigned int parsed = 0;
-    const auto [end, error] = std::from_chars(value.data(), value.data() + value.size(), parsed);
-    return !value.empty() && error == std::errc{} && end == value.data() + value.size() && parsed <= maximum;
-}
-
-bool is_feature_token(std::string_view field, std::string_view token)
-{
-    if (field == "ego") {
-        if (token == "*") {
-            return true;
-        }
-        if (token.starts_with('*')) {
-            token.remove_prefix(1);
-        }
-        return is_integer_in_range(token, 1, MAX_EGO_ID);
-    }
-    const bool short_field = (field == "monster") || (field == "object") || (field == "artifact");
-    const auto minimum = field == "monster" ? -std::numeric_limits<int16_t>::max() : (short_field ? std::numeric_limits<int16_t>::min() : std::numeric_limits<int>::min());
-    const auto maximum = short_field ? std::numeric_limits<int16_t>::max() : std::numeric_limits<int>::max();
-    if ((field == "object" || field == "artifact") && token == "!") {
-        return true;
-    }
-    if (token == "*") {
-        return true;
-    }
-    if (field == "monster" && token.starts_with('c')) {
-        return is_unsigned_integer_in_range(token.substr(1), static_cast<unsigned int>(maximum));
-    }
-    if (token.starts_with('*')) {
-        return is_unsigned_integer_in_range(token.substr(1), static_cast<unsigned int>(maximum));
-    }
-    return is_integer_in_range(token, minimum, maximum);
-}
-
 bool is_json_integer_in_range(const nlohmann::json &value, int minimum, int maximum)
 {
     int parsed = 0;
     return info_set_integer(value, parsed, true, Range(minimum, maximum)).has_value();
 }
 
-// 数値トークンの文法と範囲はis_feature_tokenで検証済み。
-int feature_token_value(std::string_view token)
+bool is_cell_key(std::string_view key)
 {
-    if (token.starts_with('*') || token.starts_with('c')) {
-        token.remove_prefix(1);
-    }
-    int value = 0;
-    if (!token.empty()) {
-        std::from_chars(token.data(), token.data() + token.size(), value);
-    }
-    return value;
+    return key == "terrain" || key == "trap" || key == "monster" || key == "object" ||
+           key == "ego" || key == "artifact" || key == "caveInfo" || key == "special";
 }
 
-void read_feature_tokens(const nlohmann::json &fields, QuestLegendCell &cell)
+bool is_spec_field(std::string_view field)
 {
-    auto &grid = cell.grid;
-    const std::string_view monster = fields["monster"].get_ref<const std::string &>();
-    const std::string_view object = fields["object"].get_ref<const std::string &>();
-    const auto ego = fields.contains("ego") ? std::string_view(fields["ego"].get_ref<const std::string &>()) : std::string_view{};
-    const std::string_view artifact = fields["artifact"].get_ref<const std::string &>();
-    grid.monster = static_cast<MONSTER_IDX>(feature_token_value(monster) * (monster.starts_with('c') ? -1 : 1));
-    cell.object_is_quest_reward = object == "!";
-    cell.artifact_is_quest_reward = artifact == "!";
-    grid.object = cell.object_is_quest_reward ? 0 : static_cast<OBJECT_IDX>(feature_token_value(object));
-    grid.ego = i2enum<EgoType>(feature_token_value(ego));
-    grid.artifact = cell.artifact_is_quest_reward ? FixedArtifactId{} : i2enum<FixedArtifactId>(feature_token_value(artifact));
-    grid.cave_info = fields["caveInfo"].get<BIT_FLAGS>();
-    grid.special = fields["special"].get<int16_t>();
-    for (const auto &[token, flag] : { std::pair{ monster, RANDOM_MONSTER }, std::pair{ object, RANDOM_OBJECT },
-             std::pair{ ego, RANDOM_EGO }, std::pair{ artifact, RANDOM_ARTIFACT } }) {
-        if (token.starts_with('*')) {
-            grid.random |= flag;
+    return field == "monster" || field == "object" || field == "ego" || field == "artifact" || field == "trap";
+}
+
+bool is_spec_key(std::string_view field, std::string_view key)
+{
+    return key == "random" || (key == "cloneOf" && field == "monster") ||
+           (key == "oodLevel" && (field == "monster" || field == "object")) ||
+           (key == "questReward" && (field == "object" || field == "artifact")) ||
+           (key == "id" && field == "artifact");
+}
+
+/*!
+ * @brief 共通解析の前に町v3の形・値だけを検証する。地形の存在は適用時に確認する。
+ * @details 未知キー、空の指定、型と必須構造、値の順で検査し、Questの受理範囲は変えない。
+ */
+ParseErrorType validate_town_cell(const nlohmann::json &fields)
+{
+    for (const auto &[field, value] : fields.items()) {
+        if (!is_cell_key(field)) {
+            return ParseErrorType::INVALID_VALUE;
+        }
+        if (is_spec_field(field) && value.is_object()) {
+            for (const auto &[key, ignored] : value.items()) {
+                if (!is_spec_key(field, key)) {
+                    return ParseErrorType::INVALID_VALUE;
+                }
+            }
         }
     }
+    for (const auto &[field, value] : fields.items()) {
+        if (is_spec_field(field) && value.is_object() && value.empty()) {
+            return ParseErrorType::INVALID_VALUE;
+        }
+    }
+    for (const auto &[field, value] : fields.items()) {
+        if (field == "terrain" || (field == "trap" && !value.is_object())) {
+            if (!value.is_string()) {
+                return ParseErrorType::INVALID_TYPE;
+            }
+        } else if (field == "caveInfo") {
+            if (!value.is_array() || !std::all_of(value.begin(), value.end(), [](const auto &flag) { return flag.is_string(); })) {
+                return ParseErrorType::INVALID_TYPE;
+            }
+        } else if (field == "special" || !value.is_object()) {
+            if (!value.is_number_integer()) {
+                return ParseErrorType::INVALID_TYPE;
+            }
+        } else {
+            if (!value.contains("random") && !value.contains("questReward") && !value.contains("cloneOf")) {
+                return ParseErrorType::INVALID_TYPE;
+            }
+            for (const auto &[key, item] : value.items()) {
+                if ((key == "random" || key == "questReward") ? !item.is_boolean() : !item.is_number_integer()) {
+                    return ParseErrorType::INVALID_TYPE;
+                }
+            }
+        }
+    }
+    for (const auto &[field, value] : fields.items()) {
+        if (value.is_string()) {
+            const auto &tag = value.get_ref<const std::string &>();
+            if (tag.empty() || tag.find_first_of(":/\\") != std::string::npos ||
+                std::any_of(tag.begin(), tag.end(), [](unsigned char c) { return c < ' ' || c > '~'; }) ||
+                (field == "trap" && tag == "*")) {
+                return ParseErrorType::INVALID_VALUE;
+            }
+        } else if (field == "caveInfo") {
+            std::vector<std::string> seen;
+            for (const auto &flag : value) {
+                const auto name = flag.get<std::string>();
+                if (std::find(seen.begin(), seen.end(), name) != seen.end()) {
+                    return ParseErrorType::INVALID_VALUE;
+                }
+                if (name != "MARK" && name != "GLOW" && name != "NO_TELEPORT_DEST" && name != "ROOM" && name != "LITE") {
+                    return ParseErrorType::INVALID_FLAG;
+                }
+                seen.push_back(name);
+            }
+        } else if (value.is_number_integer()) {
+            if (!is_json_integer_in_range(value, field == "special" ? -32768 : 1, field == "ego" ? 255 : 32767)) {
+                return ParseErrorType::INVALID_VALUE;
+            }
+        } else if (value.is_object()) {
+            const auto modes = static_cast<int>(value.contains("random")) + static_cast<int>(value.contains("cloneOf")) + static_cast<int>(value.contains("questReward"));
+            if (modes != 1 || (value.contains("oodLevel") && !value.contains("random")) ||
+                (value.contains("id") && !value.contains("random"))) {
+                return ParseErrorType::INVALID_VALUE;
+            }
+            for (const auto &[key, item] : value.items()) {
+                if (key == "random" || key == "questReward") {
+                    if (!item.get<bool>()) {
+                        return ParseErrorType::INVALID_VALUE;
+                    }
+                } else if (!is_json_integer_in_range(item, key == "oodLevel" ? 0 : 1, 32767)) {
+                    return ParseErrorType::INVALID_VALUE;
+                }
+            }
+        }
+    }
+    return ParseErrorType::NONE;
 }
 
 tl::expected<std::optional<std::string>, ParseErrorType> read_condition(const nlohmann::json &data)
@@ -126,7 +162,7 @@ TownMapReader::TownMapReader(const nlohmann::json &data)
  */
 tl::expected<void, ParseErrorType> TownMapReader::read(TownMapDefinition &definition, int maximum_height, int maximum_width, bool only_buildings) const
 {
-    if (!this->data.is_object() || !this->data.contains("version") || !this->data["version"].is_number_integer() || this->data["version"] != 2) {
+    if (!this->data.is_object() || !this->data.contains("version") || !this->data["version"].is_number_integer() || this->data["version"] != 3) {
         return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
     }
     for (const auto *field : { "featureRules", "mapVariants", "buildingRules", "startingPositions" }) {
@@ -175,29 +211,16 @@ tl::expected<void, ParseErrorType> TownMapReader::read_features(TownMapDefinitio
         }
         feature.condition = *condition;
         const auto &fields = rule["definition"];
-        for (const auto *field : { "terrain", "monster", "object", "ego", "artifact", "trap" }) {
-            if (field == std::string_view("ego") && !fields.contains(field)) {
-                continue;
-            }
-            if (!fields.contains(field) || !fields[field].is_string()) {
-                return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
-            }
-            const auto &value = fields[field].get_ref<const std::string &>();
-            if (value.find_first_of(":/\\\r\n") != std::string::npos ||
-                std::any_of(value.begin(), value.end(), [](unsigned char character) { return character < ' ' || character > '~'; })) {
-                return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
-            }
-            if (field != std::string_view("terrain") && field != std::string_view("trap") && !is_feature_token(field, value)) {
-                return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
-            }
+        if (const auto error = validate_town_cell(fields); error != ParseErrorType::NONE) {
+            return tl::make_unexpected(error);
         }
-        if (!fields.contains("caveInfo") || !is_json_integer_in_range(fields["caveInfo"], 0, std::numeric_limits<uint16_t>::max()) ||
-            !fields.contains("special") || !is_json_integer_in_range(fields["special"], std::numeric_limits<int16_t>::min(), std::numeric_limits<int16_t>::max())) {
-            return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
+        DeferredQuestLegendCell parsed;
+        if (const auto result = parse_quest_legend_cell_deferred(fields, parsed); !result) {
+            return tl::make_unexpected(result.error());
         }
-        feature.terrain = fields["terrain"].get<std::string>();
-        feature.trap = fields["trap"].get<std::string>();
-        read_feature_tokens(fields, feature.cell);
+        feature.terrain = std::move(parsed.terrain_tag);
+        feature.trap = std::move(parsed.trap_tag);
+        feature.cell = std::move(parsed.cell);
         definition.features.push_back(std::move(feature));
     }
     return {};

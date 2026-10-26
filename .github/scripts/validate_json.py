@@ -706,59 +706,39 @@ def validate_town_map_semantics(data: dict, schema_path: Path) -> None:
     max_width = 198
     if type(data["version"]) is not int:
         raise ValidationError("expected an integer JSON value", path=["version"])
-    if data["version"] != 2:
-        raise ValidationError("expected version 2", path=["version"])
+    if data["version"] != 3:
+        raise ValidationError("expected version 3", path=["version"])
 
     repository_root = schema_path.resolve().parent.parent
     terrain_data = load_jsonc(repository_root / "lib/edit/TerrainDefinitions.jsonc")
     valid_terrain_tags = {terrain["key"] for terrain in terrain_data["terrains"]}
-    feature_tokens = {
-        "monster": r"(?:-?[0-9]+|\*[0-9]*|c[0-9]+)",
-        "object": r"(?:-?[0-9]+|\*[0-9]*|!)",
-        "ego": r"(?:-?[0-9]+|\*[0-9]*)",
-        "artifact": r"(?:-?[0-9]+|\*[0-9]*|!)",
-    }
     for rule_index, rule in enumerate(data["featureRules"]):
-        # pattern の $ は末尾の改行の前にも一致するため、TownMapReaderと同じく1文字ちょうどを確かめる。
         if len(rule["symbol"]) != 1:
             raise ValidationError("feature symbol must be exactly one printable ASCII character", path=["featureRules", rule_index, "symbol"])
         definition = rule["definition"]
-        for field in ("terrain", "monster", "object", "ego", "artifact", "trap"):
-            if field == "ego" and field not in definition:
+        path = ["featureRules", rule_index, "definition"]
+        for field in ("monster", "object", "ego", "artifact", "special"):
+            if field not in definition:
                 continue
-            if any(not (" " <= character <= "~") for character in definition[field]):
-                raise ValidationError("feature field must contain printable ASCII characters", path=["featureRules", rule_index, "definition", field])
-            if any(delimiter in definition[field] for delimiter in (":", "/", "\\", "\r", "\n")):
-                raise ValidationError("feature field contains a legacy delimiter or line break", path=["featureRules", rule_index, "definition", field])
-        for field in ("caveInfo", "special"):
-            if type(definition[field]) is not int:
-                raise ValidationError("expected an integer JSON value", path=["featureRules", rule_index, "definition", field])
+            value = definition[field]
+            if isinstance(value, dict):
+                for key in ("oodLevel", "id", "cloneOf"):
+                    if key in value:
+                        require_integer(value[key], path + [field, key])
+            else:
+                require_integer(value, path + [field])
+                if field == "ego" and not 1 <= value <= MAX_EGO_ID:
+                    raise ValidationError("ego ID outside 1..255", path=path + [field])
         for field in ("terrain", "trap"):
-            terrain_tag = definition[field]
-            if terrain_tag != "*" and terrain_tag not in valid_terrain_tags:
-                raise ValidationError("unknown terrain tag", path=["featureRules", rule_index, "definition", field])
-        for field, pattern in feature_tokens.items():
-            if field == "ego" and field not in definition:
+            value = definition.get(field, "NONE")
+            if not isinstance(value, str):
                 continue
-            token = definition[field]
-            if re.fullmatch(pattern, token) is None:
-                raise ValidationError("invalid fixed-map token", path=["featureRules", rule_index, "definition", field])
-            number = token.removeprefix("*").removeprefix("c")
-            if re.fullmatch(r"-?[0-9]+", number):
-                integer = int(number)
-                if field in ("monster", "object", "artifact"):
-                    if token.startswith("c"):
-                        minimum, maximum = 0, 32767
-                    elif token.startswith("*"):
-                        minimum, maximum = 0, 32767
-                    elif field == "monster":
-                        minimum, maximum = -32767, 32767
-                    else:
-                        minimum, maximum = -32768, 32767
-                else:
-                    minimum, maximum = 1, MAX_EGO_ID
-                if integer < minimum or integer > maximum:
-                    raise ValidationError("fixed-map token exceeds the reader's integer range", path=["featureRules", rule_index, "definition", field])
+            if not value or any(not " " <= c <= "~" or c in ":/\\" for c in value):
+                raise ValidationError("feature field must contain printable ASCII characters without delimiters", path=path + [field])
+            if field == "trap" and value == "*":
+                raise ValidationError("random trap requires an object", path=path + [field])
+            if value != "*" and value not in valid_terrain_tags:
+                raise ValidationError("unknown terrain tag", path=path + [field])
 
     for rule_index, rule in enumerate(data["buildingRules"]):
         if type(rule["index"]) is not int:
@@ -1284,8 +1264,9 @@ def validate_one(pair: tuple[Path, Path, dict], registry: Registry | None = None
         return True, f"Succeeded: {data_path.name} <= {schema_path.name}"
     except ValidationError as e:
         msg = [f"Failed: {data_path.name}", f"Reason: {e.message}"]
-        if e.path:
-            msg.append(f"Location: {list(e.path)}")
+        error_path = e.absolute_path if schema_path.name == "TownMap.schema.json" else e.path
+        if error_path:
+            msg.append(f"Location: {list(error_path)}")
 
         return False, "\n".join(msg)
     except SchemaError as e:
