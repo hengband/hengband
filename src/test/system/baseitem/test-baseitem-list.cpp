@@ -4,6 +4,7 @@
 #include "system/baseitem/baseitem-definition.h"
 #include "system/baseitem/baseitem-key.h"
 #include "system/baseitem/baseitem-list.h"
+#include "test/info-reader/parse-result-helpers.h"
 #include "test/info-reader/scoped-reader-state.h"
 #include "test/scoped-rng.h"
 #include "test/scoped-vector-wrapper.h"
@@ -90,7 +91,8 @@ TEST_CASE("BaseitemReader publication refreshes cached keys without changing the
         { "weight", 3 },
         { "cost", 4 },
     };
-    REQUIRE(BaseitemReader(data).read().has_value());
+    auto session = BaseitemReader::create_session();
+    REQUIRE(test::read_and_commit(BaseitemReader(data, session), session).has_value());
     CHECK(items.size() == 2);
     check_lookup(items, 1, ItemKindType::RING, 30);
     CHECK_THROWS_AS(items.lookup_baseitem_id({ ItemKindType::SWORD, 10 }), std::runtime_error);
