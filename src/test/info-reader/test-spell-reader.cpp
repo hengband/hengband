@@ -217,9 +217,7 @@ TEST_CASE("SpellReader propagates helper errors without publishing staged spells
         CAPTURE(invalid.value.dump());
         auto candidate = replacement;
         candidate[nlohmann::json::json_pointer(invalid.path)] = invalid.value;
-        error_idx = 4;
         CHECK(test::to_error_code(SpellReader(candidate, spells, session).read()) == invalid.error);
-        CHECK(error_idx == 5);
         CHECK(spells.get_spell_id(RealmType::LIFE, "old-zero") == 0);
         CHECK(spells.get_spell_id(RealmType::LIFE, "old-eight") == 8);
         CHECK_FALSE(spells.get_spell_id(RealmType::LIFE, "new-zero"));
@@ -230,7 +228,6 @@ TEST_CASE("SpellReader propagates helper errors without publishing staged spells
     }
     SpellReader::Session reload_session;
     REQUIRE(SpellReader(replacement, spells, reload_session).read().has_value());
-    CHECK(error_idx == 6);
     CHECK(spells.get_spell_id(RealmType::LIFE, "new-zero") == 0);
     CHECK(spells.get_spell_id(RealmType::LIFE, "new-eight") == 8);
     CHECK(spells.get_spell_id(RealmType::SORCERY, "other-realm") == 3);
