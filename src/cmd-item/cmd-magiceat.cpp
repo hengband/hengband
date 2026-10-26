@@ -381,11 +381,7 @@ static tl::optional<BaseitemKey> select_magic_eater(PlayerType *player_ptr, bool
         }
 
         if (!use_menu) {
-            if (isalpha(*choice)) {
-                sval = A2I(*choice);
-            } else {
-                sval = *choice - '0' + 26;
-            }
+            sval = AD2I(*choice);
         }
 
         /* Totally Illegal */
