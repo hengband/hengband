@@ -963,6 +963,9 @@
     <ClCompile Include="..\..\src\info-reader\definition-hash-data.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\info-reader\definition-id-checker.cpp">
+      <Filter>info-reader</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\info-reader\dungeon-info-tokens-table.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>
@@ -3661,6 +3664,9 @@
       <Filter>info-reader</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\info-reader\definition-hash-data.h">
+      <Filter>info-reader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\info-reader\definition-id-checker.h">
       <Filter>info-reader</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\info-reader\dungeon-info-tokens-table.h">

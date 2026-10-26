@@ -619,6 +619,7 @@ libhengband_a_SOURCES = \
 	info-reader/baseitem-reader.cpp info-reader/baseitem-reader.h \
 	info-reader/baseitem-tokens-table.cpp info-reader/baseitem-tokens-table.h \
 	info-reader/definition-hash-data.cpp info-reader/definition-hash-data.h \
+	info-reader/definition-id-checker.cpp info-reader/definition-id-checker.h \
 	info-reader/dungeon-info-tokens-table.cpp info-reader/dungeon-info-tokens-table.h \
 	info-reader/dungeon-reader.cpp info-reader/dungeon-reader.h \
 	info-reader/ego-reader.cpp info-reader/ego-reader.h \
@@ -1535,6 +1536,7 @@ hengband_test_SOURCES = \
 	test/info-reader/test-activation-reader.cpp \
 	test/info-reader/test-artifact-reader.cpp \
 	test/info-reader/test-baseitem-reader.cpp \
+	test/info-reader/test-definition-id-checker.cpp \
 	test/info-reader/test-dungeon-reader.cpp \
 	test/info-reader/test-ego-reader.cpp \
 	test/floor/test-floor-events.cpp \
