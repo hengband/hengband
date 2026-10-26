@@ -7,16 +7,17 @@
 #include <tl/optional.hpp>
 #include <vector>
 
+class ItemEntity;
 class PlayerType;
 class Store;
 class StoreScreen;
 enum class MonraceId : short;
 
 /*!
- * @brief JSONスナップショットの互換性を壊す変更で更新する
- * @details 版ごとの追加・変更・削除キーは tools/bot/README.md の「版3での変更」に記載する。
+ * @brief JSONスナップショットのキーを足す・変える・消す変更で更新する
+ * @details 版ごとの追加・変更・削除キーは tools/bot/README.md の「版4での変更」「版3での変更」などに記載する。
  */
-inline constexpr auto BOT_JSON_PROTOCOL_VERSION = 3;
+inline constexpr auto BOT_JSON_PROTOCOL_VERSION = 4;
 
 enum class BotKnowledgeCategory {
     ARTIFACTS_KNOWN,
@@ -139,6 +140,8 @@ std::string to_json_utf8(std::string_view str);
 nlohmann::json make_message_history_json(int count);
 nlohmann::json make_bot_proficiency_values_json(int exp, int max, bool show_values, bool show_debug, bool cap_exp = false);
 nlohmann::json make_bot_character_speed_json(int total, int temporary, bool lightspeed, bool riding);
+nlohmann::json make_bot_item_identity_json(const ItemEntity &item, bool store_identified);
+nlohmann::json make_bot_found_item_identity_json(const ItemEntity &item, bool is_hallucinated);
 nlohmann::json make_bot_json_snapshot(PlayerType *player_ptr, bool include_map = true);
 void output_bot_json_snapshot(PlayerType *player_ptr);
 void output_bot_json_screen_snapshot(PlayerType *player_ptr);
