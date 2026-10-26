@@ -70,10 +70,9 @@ class QuestInt16RangeTest(unittest.TestCase):
         shared = self.loaded[next(path for path in self.loaded if path.name == "QuestGrid.schema.json")]
         plain, random = shared["$defs"]["egoSpec"]["oneOf"]
         self.assertEqual((plain["minimum"], plain["maximum"]), (1, MAX_EGO_ID))
-        self.assertEqual((random["properties"]["id"]["minimum"], random["properties"]["id"]["maximum"]), (1, MAX_EGO_ID))
+        self.assertNotIn("id", random["properties"])
         cases = (
             lambda value: {"ego": value},
-            lambda value: {"ego": {"random": True, "id": value}},
         )
         for make_cell in cases:
             for schema_name in ("Quest", "QuestPreferences"):

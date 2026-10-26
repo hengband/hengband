@@ -269,7 +269,7 @@ TEST_CASE("Quest legend deferred parsing preserves common values and random bits
         { { "monster", { { "cloneOf", 12 } } }, { "object", { { "questReward", true } } }, { "artifact", { { "questReward", true } } } },
         { { "monster", { { "random", true }, { "oodLevel", -2 }, { "cloneOf", 99 } } },
             { "object", { { "random", true }, { "oodLevel", 3 }, { "questReward", true } } },
-            { "ego", { { "random", true }, { "id", 4 } } },
+            { "ego", { { "random", true } } },
             { "artifact", { { "random", true }, { "id", 5 }, { "questReward", true } } } },
         { { "monster", { { "random", false } } }, { "object", nullptr }, { "ego", { { "random", true } } }, { "artifact", nullptr } },
     };
@@ -298,7 +298,7 @@ TEST_CASE("Quest legend deferred parsing preserves common values and random bits
             CHECK(deferred.cell.grid.random == (RANDOM_MONSTER | RANDOM_OBJECT | RANDOM_EGO | RANDOM_ARTIFACT));
             CHECK(deferred.cell.grid.monster == -2);
             CHECK(deferred.cell.grid.object == 3);
-            CHECK(enum2i(deferred.cell.grid.ego) == 4);
+            CHECK(deferred.cell.grid.ego == EgoType::NONE);
             CHECK(enum2i(deferred.cell.grid.artifact) == 5);
         }
     }
@@ -325,7 +325,7 @@ TEST_CASE("Quest legend deferred parsing preserves output and shared error codes
         { { "trap", 1 } },
         { { "trap", { { "random", "true" } } } },
     };
-    for (const auto *path : { "/monster", "/monster/cloneOf", "/monster/oodLevel", "/object", "/object/oodLevel", "/ego", "/ego/id", "/artifact", "/artifact/id", "/special" }) {
+    for (const auto *path : { "/monster", "/monster/cloneOf", "/monster/oodLevel", "/object", "/object/oodLevel", "/ego", "/artifact", "/artifact/id", "/special" }) {
         for (const auto &value : std::vector<nlohmann::json>{ "bad", 1.5, true, 65536 }) {
             inputs.push_back(make_legend_integer_cell(path, value));
         }
@@ -717,7 +717,6 @@ TEST_CASE("Quest legend integers retain representable signed and unsigned bounda
         "/object",
         "/object/oodLevel",
         "/ego",
-        "/ego/id",
         "/artifact",
         "/artifact/id",
         "/special",
@@ -767,7 +766,6 @@ TEST_CASE("QuestReader rejects legend integer overflow without publishing output
         "/object",
         "/object/oodLevel",
         "/ego",
-        "/ego/id",
         "/artifact",
         "/artifact/id",
         "/special",
@@ -820,7 +818,6 @@ TEST_CASE("Quest legend treats null as omitted and rejects non-integer values")
         "/object",
         "/object/oodLevel",
         "/ego",
-        "/ego/id",
         "/artifact",
         "/artifact/id",
     };
@@ -858,7 +855,7 @@ TEST_CASE("Quest legend random forms preserve precedence over clone and reward m
     const nlohmann::json data = {
         { "monster", { { "random", true }, { "oodLevel", 7 }, { "cloneOf", std::numeric_limits<uint64_t>::max() } } },
         { "object", { { "random", true }, { "oodLevel", 8 }, { "questReward", true } } },
-        { "ego", { { "random", true }, { "id", 9 } } },
+        { "ego", { { "random", true } } },
         { "artifact", { { "random", true }, { "id", 10 }, { "questReward", true } } },
     };
     QuestLegendCell cell;
@@ -866,7 +863,7 @@ TEST_CASE("Quest legend random forms preserve precedence over clone and reward m
     CHECK(cell.grid.random == (RANDOM_MONSTER | RANDOM_OBJECT | RANDOM_EGO | RANDOM_ARTIFACT));
     CHECK(cell.grid.monster == 7);
     CHECK(cell.grid.object == 8);
-    CHECK(static_cast<int>(cell.grid.ego) == 9);
+    CHECK(cell.grid.ego == EgoType::NONE);
     CHECK(static_cast<int>(cell.grid.artifact) == 10);
     CHECK_FALSE(cell.object_is_quest_reward);
     CHECK_FALSE(cell.artifact_is_quest_reward);
@@ -1278,5 +1275,26 @@ TEST_CASE("QuestReader preserves optional null values and boolean legend values"
         REQUIRE(QuestReader(data, quest, fixed_map).read().has_value());
         CHECK(fixed_map.legend.at('.').object_is_quest_reward == (value == true));
         CHECK(fixed_map.legend.at('.').artifact_is_quest_reward == (value == true));
+    }
+}
+
+TEST_CASE("Quest legend rejects ego id keys regardless of random value")
+{
+    const test::ScopedReaderState reader_state;
+    const test::TerrainListTestAccess none_tag(TerrainTag::NONE, 0);
+    for (const auto &text : { R"({"ego":{"random":true,"id":65}})", R"({"ego":{"random":false,"id":65}})", R"({"ego":{"id":65}})", R"({"ego":{"random":true,"id":null}})" }) {
+        const auto data = nlohmann::json::parse(text);
+        QuestLegendCell cell;
+        cell.grid.object = 42;
+        const auto result = parse_quest_legend_cell(data, cell);
+        REQUIRE_FALSE(result.has_value());
+        CHECK(result.error() == ParseErrorType::INVALID_VALUE);
+        // 即時解析は途中まで出力を更新し、遅延解析は失敗時に出力を保持する。
+        DeferredQuestLegendCell deferred;
+        deferred.cell.grid.object = 42;
+        const auto deferred_result = parse_quest_legend_cell_deferred(data, deferred);
+        REQUIRE_FALSE(deferred_result.has_value());
+        CHECK(deferred_result.error() == ParseErrorType::INVALID_VALUE);
+        CHECK(deferred.cell.grid.object == 42);
     }
 }

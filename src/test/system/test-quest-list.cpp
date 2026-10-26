@@ -895,7 +895,7 @@ TEST_CASE("QuestList preserves legend fixed references and generation parameters
         { { "monster", -1 } },
         { { "monster", { { "cloneOf", 1 } } } },
         { { "monster", { { "random", true }, { "oodLevel", -32768 } } }, { "object", { { "random", true }, { "oodLevel", 32767 } } },
-            { "ego", { { "random", true }, { "id", 123 } } } },
+            { "ego", { { "random", true } } } },
         { { "artifact", { { "random", true }, { "id", 1 } } } },
         { { "artifact", { { "random", true } } } },
         { { "object", { { "questReward", true } } }, { "artifact", { { "questReward", true } } } },

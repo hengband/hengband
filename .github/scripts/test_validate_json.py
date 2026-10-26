@@ -87,7 +87,7 @@ class QuestGridValidationTest(unittest.TestCase):
             ({"terrain": "*", "caveInfo": ["GLOW", "MARK"], "special": -1}, True),
             ({"monster": 1, "object": 1, "ego": 1, "artifact": 1, "trap": "TRAP_PIT"}, True),
             ({"monster": {"random": True, "oodLevel": 0}, "object": {"random": True, "oodLevel": 0},
-              "ego": {"random": True, "id": 1}, "artifact": {"random": True, "id": 1}, "trap": {"random": True}}, True),
+              "ego": {"random": True}, "artifact": {"random": True, "id": 1}, "trap": {"random": True}}, True),
             ({"monster": {"cloneOf": 1}, "object": {"questReward": True}, "artifact": {"questReward": True}}, True),
             ({"terrain": 1}, False),
             ({"caveInfo": ["GLOW", "GLOW"]}, False),
@@ -103,6 +103,9 @@ class QuestGridValidationTest(unittest.TestCase):
                   ({"object": {"random": True, "oodLevel": -1}}, False),
                   ({"monster": {"cloneOf": 0}}, False),
                   ({"ego": {"random": True, "id": 0}}, False),
+                  ({"ego": {"random": True, "id": 65}}, False),
+                  ({"ego": {"random": False, "id": 65}}, False),
+                  ({"ego": {"id": 65}}, False),
                   ({"artifact": {"random": True, "id": 0}}, False))
         for schema_name in ("Quest", "QuestPreferences"):
             # Recreate the former inlined graph and compare acceptance as well
