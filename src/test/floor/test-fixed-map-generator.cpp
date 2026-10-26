@@ -8,6 +8,8 @@
 #include "info-reader/town-map-reader.h"
 #include "info-reader/town-preferences-reader.h"
 #include "io/files-util.h"
+#include "object-enchant/item-apply-magic.h"
+#include "object-enchant/item-magic-applier.h"
 #include "system/angband-system.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/dungeon/dungeon-list.h"
@@ -17,6 +19,7 @@
 #include "system/enums/terrain/terrain-tag.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
+#include "system/item/item-entity.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
 #include "system/monster-entity.h"
@@ -29,6 +32,7 @@
 #include "test/info-reader/parse-result-helpers.h"
 #include "test/info-reader/scoped-reader-state.h"
 #include "test/scoped-restore.h"
+#include "test/scoped-rng.h"
 #include "test/system/dungeon-list-test-access.h"
 #include "test/system/terrain-list-test-access.h"
 #include "test/temporary-json-files.h"
@@ -99,7 +103,9 @@ public:
         terrains.get_terrain(0).tag = "NONE";
         terrains.get_terrain(1).tag = "FLOOR";
         terrains.get_terrain(2).tag = "GRANITE";
-        DungeonList::get_instance().emplace(DungeonId::WILDERNESS, DungeonDefinition{});
+        DungeonDefinition dungeon;
+        dungeon.obj_good = dungeon.obj_great = 100;
+        DungeonList::get_instance().emplace(DungeonId::WILDERNESS, std::move(dungeon));
         letter['A'] = {};
         letter['A'].feature = 1;
         letter['A'].cave_info = CAVE_GLOW | CAVE_ROOM;
@@ -931,6 +937,121 @@ TEST_CASE("FixedMapPD validates all town ego rules before applying letters")
                 CHECK(letter['B'].ego == old_b.ego);
                 CHECK(fixture.floor.grid_array[0][0].feat == 0);
             }
+        }
+    }
+}
+
+TEST_CASE("QuestFixedMap generates specified and random egos")
+{
+    const test::LegendEgoFixture ego_state;
+    for (const bool random : { false, true }) {
+        FixedMapFixture fixture;
+        const auto restore = scoped_quest_layout_state();
+        const auto rng = test::scoped_rng(12345);
+        const test::TerrainListTestAccess none_tag(TerrainTag::NONE, 0);
+        const test::TerrainListTestAccess floor_tag(TerrainTag::FLOOR, 1);
+        fixture.floor.o_list.resize(1);
+        QuestType quest;
+        QuestFixedMap map;
+        auto data = nlohmann::json::parse(R"({"terrain":"FLOOR","object":42,"ego":65})");
+        if (random) {
+            data["ego"] = { { "random", true } };
+        }
+        REQUIRE(parse_quest_legend_cell(data, map.legend['!']).has_value());
+        map.maps = { { "!" } };
+        fixture.floor.quest_number = QuestId::THIEF;
+        init_flags = INIT_CREATE_DUNGEON;
+        REQUIRE(generate_quest_floor_from_json(&fixture.player, quest, map).has_value());
+        REQUIRE(fixture.floor.o_list.size() == 2);
+        const auto &item = *fixture.floor.o_list[1];
+        CHECK(item.bi_id == 42);
+        CHECK(item.is_ego());
+        CHECK_FALSE(item.is_random_artifact());
+        if (random) {
+            CHECK(can_apply_ego(item.bi_key, item.ego_idx));
+        } else {
+            CHECK(item.ego_idx == EgoType::DF);
+        }
+    }
+}
+
+TEST_CASE("QuestFixedMap without ego preserves magic and subsequent RNG")
+{
+    const test::LegendEgoFixture ego_state;
+    FixedMapFixture fixture;
+    const auto restore = scoped_quest_layout_state();
+    fixture.floor.o_list.resize(1);
+    fixture.floor.base_level = 40;
+    ItemEntity expected;
+    uint32_t expected_next{};
+    {
+        const auto rng = test::scoped_rng(12345);
+        expected = ItemEntity(42);
+        ItemMagicApplier(&fixture.player, &expected, fixture.floor.base_level, AM_NO_FIXED_ART | AM_GOOD).execute();
+        expected_next = get_game_rng()();
+    }
+    const auto rng = test::scoped_rng(12345);
+    QuestType quest;
+    QuestFixedMap map;
+    map.legend['!'].grid.feature = 1;
+    map.legend['!'].grid.object = 42;
+    map.maps = { { "!" } };
+    fixture.floor.quest_number = QuestId::THIEF;
+    init_flags = INIT_CREATE_DUNGEON;
+    REQUIRE(generate_quest_floor_from_json(&fixture.player, quest, map).has_value());
+    REQUIRE(fixture.floor.o_list.size() == 2);
+    const auto &actual = *fixture.floor.o_list[1];
+    CHECK(actual.bi_id == expected.bi_id);
+    CHECK(actual.ego_idx == expected.ego_idx);
+    CHECK(actual.to_h == expected.to_h);
+    CHECK(actual.to_d == expected.to_d);
+    CHECK(actual.to_a == expected.to_a);
+    CHECK(actual.pval == expected.pval);
+    CHECK(actual.damage_dice.num == expected.damage_dice.num);
+    CHECK(actual.damage_dice.sides == expected.damage_dice.sides);
+    CHECK(actual.art_flags.str() == expected.art_flags.str());
+    CHECK(actual.is_random_artifact() == expected.is_random_artifact());
+    CHECK(get_game_rng()() == expected_next);
+}
+
+TEST_CASE("FixedMapPD town JSONC generates specified and random egos")
+{
+    const test::LegendEgoFixture ego_state;
+    for (const bool random : { false, true }) {
+        FixedMapFixture fixture;
+        const auto rng = test::scoped_rng(12345);
+        const test::ScopedReaderState reader_state;
+        const test::TerrainListTestAccess floor_tag(TerrainTag::FLOOR, 1);
+        const test::TerrainListTestAccess wall_tag(TerrainTag::GRANITE_WALL, 2);
+        const test::TerrainListTestAccess none_tag(TerrainTag::NONE, 0);
+        const auto restore = test::scoped_restore(ANGBAND_DIR_EDIT, vanilla_town, lite_town, quit_aux);
+        fixture.floor.o_list.resize(1);
+        TownFiles files;
+        auto town = make_application_town();
+        town["mapVariants"] = { { { "rows", { "B" } } } };
+        town["startingPositions"] = { { { "y", 0 }, { "x", 0 } } };
+        auto &cell = town["featureRules"][0]["definition"];
+        cell["object"] = 42;
+        cell["ego"] = 65;
+        if (random) {
+            cell["ego"] = { { "random", true } };
+        }
+        write_application_town(files, town);
+        ANGBAND_DIR_EDIT = files.directory;
+        vanilla_town = lite_town = false;
+        quit_aux = throw_town_load_failure;
+        fixture.player.lev = 7;
+        init_flags = INIT_CREATE_DUNGEON;
+        REQUIRE_NOTHROW(load_town_map(&fixture.player));
+        REQUIRE(fixture.floor.o_list.size() == 2);
+        const auto &item = *fixture.floor.o_list[1];
+        CHECK(item.bi_id == 42);
+        CHECK(item.is_ego());
+        CHECK_FALSE(item.is_random_artifact());
+        if (random) {
+            CHECK(can_apply_ego(item.bi_key, item.ego_idx));
+        } else {
+            CHECK(item.ego_idx == EgoType::DF);
         }
     }
 }
