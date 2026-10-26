@@ -1,7 +1,7 @@
 #include "term/screen-processor.h"
 #include "io/input-key-acceptor.h"
-#include "locale/japanese.h"
 #include "term/term-color-types.h"
+#include "util/buffer-shaper.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "view/display-symbol.h"
@@ -112,17 +112,36 @@ void prt(std::string_view sv, TERM_LEN row, TERM_LEN col)
 }
 
 /*!
+ * @brief c_roff() が書いた行から、指定した桁で終わる文字を取り出す
+ * @param end_col 文字の次の桁
+ * @param y 行
+ * @return 文字 (全角文字なら2バイト。行の先頭なら空)
+ * @details 全角文字の後半のマスには、c_roff() が属性に 0x20 の印を付けている。
+ */
+static std::string get_char_before(int end_col, int y)
+{
+    if (end_col <= 0) {
+        return {};
+    }
+
+    const auto last = term_what(end_col - 1, y, {});
+    if (((last.color & 0x20) == 0) || (end_col < 2)) {
+        return std::string(1, last.character);
+    }
+
+    return { term_what(end_col - 2, y, {}).character, last.character };
+}
+
+/*!
  * @brief c_roff() で右端に達したときに折り返す桁を決める
  * @param x 次の文字を置く桁
  * @param y 行
  * @param w 端末の幅
  * @param ch 次に置く文字 (全角文字なら2バイト)
  * @return 折り返す桁。この桁から x の手前までのマスを次の行へ送る (x なら何も送らない)
- * @details 文字の境目のうち、後ろの文字 (x なら ch) が空白でも行頭禁則文字でもなく、
- * 前後のどちらかが全角文字か前が空白 (語の切れ目) のもので、もっとも右のものを選ぶ。
- * ch が行頭禁則文字で、語の切れ目が無いか行の前半にしか無いときは、半角文字どうしの間 (語の途中) で折り返す。
- * 語の途中では、半角の閉じ括弧・句読点の前は選ばない。
- * どちらも無ければ x で折り返す。
+ * @details 文字の境目のうち、classify_line_break() で語の切れ目になるもっとも右のものを選ぶ。
+ * ch が全角文字で x の前で分けられない (行頭禁則文字) ときは、語の切れ目が無いか行の前半にしか無ければ、
+ * 語の途中で折り返す。どちらも無ければ x で折り返す。
  * 送ったマスと ch で次の行の最終桁に達する桁は選ばない (最終桁には書かない)。
  * 語の切れ目が行の前半か後半かは、shape_buffer() と同じく、語の切れ目の前の空白を除いた桁で決める。
  * 全角文字の後半のマスには、c_roff() が属性に 0x20 の印を付けている。
@@ -130,9 +149,7 @@ void prt(std::string_view sv, TERM_LEN row, TERM_LEN col)
 static int find_wrap_column(int x, int y, int w, std::string_view ch)
 {
     const auto is_second_half = [y](int col) { return (term_what(col, y, {}).color & 0x20) != 0; };
-    // 語の途中では、半角の閉じ括弧・句読点の前で折り返さない (次の行がこれらで始まり、前の語から離れるのを避ける)
-    constexpr std::string_view closing_punctuations = ")]},.!?:;";
-    const auto is_ch_kinsoku = is_line_start_kinsoku(ch);
+    const auto needs_backtrack = (ch.length() == 2) && (classify_line_break(get_char_before(x, y), ch) == LineBreakKind::NONE);
     auto mid_word_col = 0;
     for (auto col = x; col > 0; col--) {
         if (x - col + std::ssize(ch) > w - 1) {
@@ -151,25 +168,21 @@ static int find_wrap_column(int x, int y, int w, std::string_view ch)
             }
         }
 
-        if ((right == " ") || is_line_start_kinsoku(right)) {
-            continue;
-        }
-
-        const auto prev = term_what(col - 1, y, {});
-        const auto is_after_space = prev.character == ' ';
-        if ((right.length() == 2) || ((prev.color & 0x20) != 0) || is_after_space) {
+        const auto left = get_char_before(col, y);
+        const auto kind = classify_line_break(left, right);
+        if (kind == LineBreakKind::WORD_BREAK) {
             // 行頭禁則文字の前でさかのぼるときは、語の切れ目が行の前半にしか無ければ語の途中で折り返す
-            const auto line_width = is_after_space ? col - 1 : col;
-            const auto is_far = is_ch_kinsoku && (line_width * 2 <= x) && (mid_word_col > 0);
+            const auto line_width = (left == " ") ? col - 1 : col;
+            const auto is_far = needs_backtrack && (line_width * 2 <= x) && (mid_word_col > 0);
             return is_far ? mid_word_col : col;
         }
 
-        if ((mid_word_col == 0) && (closing_punctuations.find(right[0]) == std::string_view::npos)) {
+        if ((kind == LineBreakKind::MID_WORD) && (mid_word_col == 0)) {
             mid_word_col = col;
         }
     }
 
-    return (is_ch_kinsoku && (mid_word_col > 0)) ? mid_word_col : x;
+    return (needs_backtrack && (mid_word_col > 0)) ? mid_word_col : x;
 }
 
 static std::vector<DisplaySymbol> c_roff_wrap(int x, int y, int w, std::string_view ch)

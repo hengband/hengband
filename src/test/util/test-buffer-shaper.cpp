@@ -28,6 +28,21 @@ constexpr std::string_view CHOON = "\xa1\xbc"; //!< ー
 
 }
 
+TEST_CASE("classify_line_break allows a break after a space and in the middle of a half-width word")
+{
+    CHECK(classify_line_break(" ", "a") == LineBreakKind::WORD_BREAK);
+    CHECK(classify_line_break("a", "b") == LineBreakKind::MID_WORD);
+}
+
+TEST_CASE("classify_line_break does not allow a break at the head, before a space or before a closing punctuation in a word")
+{
+    CHECK(classify_line_break("", "a") == LineBreakKind::NONE);
+    CHECK(classify_line_break("a", "") == LineBreakKind::NONE);
+    CHECK(classify_line_break("a", " ") == LineBreakKind::NONE);
+    CHECK(classify_line_break("a", ")") == LineBreakKind::NONE);
+    CHECK(classify_line_break("a", ",") == LineBreakKind::NONE);
+}
+
 TEST_CASE("shape_buffer returns a short string as is")
 {
     CHECK(shape_buffer("abc", 10) == Lines{ "abc" });
@@ -85,6 +100,21 @@ TEST_CASE("shape_buffer puts at least one character in each line even if no char
 }
 
 #ifdef JP
+TEST_CASE("classify_line_break allows a break before and after a multibyte character")
+{
+    CHECK(classify_line_break("a", KANJI_KAN) == LineBreakKind::WORD_BREAK);
+    CHECK(classify_line_break(KANJI_KAN, "a") == LineBreakKind::WORD_BREAK);
+    CHECK(classify_line_break(KANJI_KAN, ")") == LineBreakKind::WORD_BREAK);
+    CHECK(classify_line_break(KANJI_KAN, KANJI_JI) == LineBreakKind::WORD_BREAK);
+}
+
+TEST_CASE("classify_line_break does not allow a break before a kinsoku character")
+{
+    CHECK(classify_line_break(KANJI_KAN, KUTEN) == LineBreakKind::NONE);
+    CHECK(classify_line_break("a", KUTEN) == LineBreakKind::NONE);
+    CHECK(classify_line_break(" ", KUTEN) == LineBreakKind::NONE);
+}
+
 TEST_CASE("shape_buffer puts at least one multibyte character in each line even if it does not fit in the width")
 {
     CHECK(shape_buffer(repeat(KANJI_KAN, 2), 2) == Lines{ std::string(KANJI_KAN), std::string(KANJI_KAN) });
