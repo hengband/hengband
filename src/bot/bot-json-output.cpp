@@ -1147,6 +1147,8 @@ nlohmann::json make_look_json(PlayerType *player_ptr)
         const auto &terrain = terrain_redacted
                                   ? TerrainList::get_instance().get_terrain(TerrainTag::NONE)
                                   : grid.get_terrain(TerrainKind::MIMIC);
+        // 幻覚中の注視コマンドはマスの中身を「何か奇妙な物」としか表示しないので、モンスターの正体と
+        // 持ち物 (carried_items)、床の品 (items) を出さない。地形は地図に描かれるので出す。
         auto monster_json = nlohmann::json(nullptr);
         auto carried_items = nlohmann::json::array();
         // This look record mirrors what the look command itself reports:
@@ -1165,21 +1167,23 @@ nlohmann::json make_look_json(PlayerType *player_ptr)
                     monster_json["clone"] = monster.mflag2.has(MonsterConstantFlagType::CLONED);
                     monster_json["kills_to_level"] = evaluate_monster_exp(player_ptr, monster);
                     monster_json["description"] = to_json_utf8(monster.build_looking_description(true));
-                }
-                for (const auto o_idx : monster.hold_o_idx_list) {
-                    const auto &item = *floor.o_list[o_idx];
-                    if (item.is_valid()) {
-                        carried_items.push_back(make_item_json(player_ptr, item));
+                    for (const auto o_idx : monster.hold_o_idx_list) {
+                        const auto &item = *floor.o_list[o_idx];
+                        if (item.is_valid()) {
+                            carried_items.push_back(make_item_json(player_ptr, item));
+                        }
                     }
                 }
             }
         }
 
         auto items = nlohmann::json::array();
-        for (const auto o_idx : grid.o_idx_list) {
-            const auto &item = *floor.o_list[o_idx];
-            if (item.is_valid() && item.marked.has(OmType::FOUND)) {
-                items.push_back(make_item_json(player_ptr, item));
+        if (!is_hallucinated) {
+            for (const auto o_idx : grid.o_idx_list) {
+                const auto &item = *floor.o_list[o_idx];
+                if (item.is_valid() && item.marked.has(OmType::FOUND)) {
+                    items.push_back(make_item_json(player_ptr, item));
+                }
             }
         }
 
