@@ -28,6 +28,21 @@ TEST_CASE("input_string clears the context when cancelled")
     CHECK_FALSE(input_string("Cancel: ", 20, "seed", false));
 }
 
+TEST_CASE("input_string_on_row publishes the byte limit that fits the input field after the prompt")
+{
+    test::ScopedInputTerm term;
+    const std::string long_prompt(75, 'P');
+    term.expect({ InputKind::STRING, long_prompt, StringInputDetails{ 5, "seed" } }, "\r");
+    CHECK(input_string_on_row(long_prompt, 23, 20, "seed", false) == "seed");
+}
+
+TEST_CASE("input_string_on_row clears the context when cancelled")
+{
+    test::ScopedInputTerm term;
+    term.expect({ InputKind::STRING, "Find:", StringInputDetails{ 74, "" } }, "\033");
+    CHECK_FALSE(input_string_on_row("Find: ", 23, 80, "", false));
+}
+
 TEST_CASE("input_command publishes the command character context")
 {
     test::ScopedInputTerm term;
@@ -82,6 +97,13 @@ TEST_CASE("input_key_with_context publishes the any-key context also when all te
     test::ScopedInputTerm term;
     term.expect({ InputKind::ANY_KEY, "Hit any key.", {} }, " ");
     CHECK(input_key_with_context(InputKind::ANY_KEY, "Hit any key.", true) == ' ');
+}
+
+TEST_CASE("input_special_key_with_context publishes the given context while waiting for a key")
+{
+    test::ScopedInputTerm term;
+    term.expect({ InputKind::FILE_VIEW, "[Press ESC to exit.]", {} }, " ");
+    CHECK(input_special_key_with_context(InputKind::FILE_VIEW, "[Press ESC to exit.]") == ' ');
 }
 
 TEST_CASE("pause_line publishes the any-key context")
