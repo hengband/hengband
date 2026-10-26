@@ -108,6 +108,7 @@
     <ClCompile Include="..\..\src\test\knowledge\test-knowledge-features.cpp" />
     <ClCompile Include="..\..\src\test\load\test-angband-version-comparer.cpp" />
     <ClCompile Include="..\..\src\test\locale\test-character-encoding.cpp" />
+    <ClCompile Include="..\..\src\test\locale\test-japanese.cpp" />
     <ClCompile Include="..\..\src\test\lore\test-monster-lore-snapshot.cpp" />
     <ClCompile Include="..\..\src\test\market\test-building-recharger.cpp" />
     <ClCompile Include="..\..\src\test\monster-race\test-race-ability-mask.cpp" />
@@ -144,6 +145,7 @@
     <ClCompile Include="..\..\src\test\system\test-dungeon-record.cpp" />
     <ClCompile Include="..\..\src\test\system\test-quest-list.cpp" />
     <ClCompile Include="..\..\src\test\target\test-target-getter.cpp" />
+    <ClCompile Include="..\..\src\test\term\test-screen-processor.cpp" />
     <ClCompile Include="..\..\src\test\term\test-z-rand.cpp" />
     <ClCompile Include="..\..\src\test\test-main.cpp" />
     <ClCompile Include="..\..\src\test\timed-effect\test-player-cut.cpp" />

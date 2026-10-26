@@ -274,6 +274,9 @@
     <ClCompile Include="..\..\src\test\locale\test-character-encoding.cpp">
       <Filter>locale</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\test\locale\test-japanese.cpp">
+      <Filter>locale</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\test\lore\test-monster-lore-snapshot.cpp">
       <Filter>lore</Filter>
     </ClCompile>
@@ -381,6 +384,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\test\target\test-target-getter.cpp">
       <Filter>target</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\term\test-screen-processor.cpp">
+      <Filter>term</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\test\term\test-z-rand.cpp">
       <Filter>term</Filter>

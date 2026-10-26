@@ -1573,6 +1573,7 @@ hengband_test_SOURCES = \
 	test/knowledge/test-knowledge-features.cpp \
 	test/load/test-angband-version-comparer.cpp \
 	test/locale/test-character-encoding.cpp \
+	test/locale/test-japanese.cpp \
 	test/lore/test-monster-lore-snapshot.cpp \
 	test/market/test-building-recharger.cpp \
 	test/monster-race/test-race-ability-mask.cpp \
@@ -1602,6 +1603,7 @@ hengband_test_SOURCES = \
 	test/system/test-deferred-update-requests.cpp \
 	test/system/test-building-type-definition.cpp \
 	test/target/test-target-getter.cpp \
+	test/term/test-screen-processor.cpp \
 	test/term/test-z-rand.cpp \
 	test/timed-effect/test-player-cut.cpp \
 	test/timed-effect/test-player-stun.cpp \
