@@ -158,4 +158,14 @@ TEST_CASE("c_roff does not split a half-width word before a closing punctuation"
     CHECK(read_screen_line(0) == cat(KANJI_KAN, std::string(71, 'a'), "(15"));
     CHECK(read_screen_line(1) == cat("0)", TOUTEN));
 }
+
+TEST_CASE("c_roff does not leave a line of only spaces when the line starts with spaces")
+{
+    // 行頭の空白の直後しか語の切れ目が無ければ、空白だけの行を残さずに今の位置で折り返す
+    ScopedInputTerm term;
+    term_clear();
+    c_roff(TERM_WHITE, cat("  ", KANJI_KAN, repeat(TOUTEN, 38)));
+    CHECK(read_screen_line(0) == cat("  ", KANJI_KAN, repeat(TOUTEN, 37)));
+    CHECK(read_screen_line(1) == std::string(TOUTEN));
+}
 #endif

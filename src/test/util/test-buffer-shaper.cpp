@@ -182,6 +182,12 @@ TEST_CASE("shape_buffer splits at a word break in the first half if it is after 
     CHECK(shape_buffer(cat("abc", KANJI_KAN, repeat(CHOON, 5)), 15) == Lines{ "abc", cat(KANJI_KAN, repeat(CHOON, 5)) });
 }
 
+TEST_CASE("shape_buffer does not add a line of only spaces when the line starts with spaces")
+{
+    // 先頭の空白の直後しか語の切れ目が無ければ、空白だけの行を作らずに今の位置で分ける
+    CHECK(shape_buffer(cat("  ", KANJI_KAN, repeat(KUTEN, 6)), 10) == Lines{ cat("  ", KANJI_KAN, repeat(KUTEN, 2)), repeat(KUTEN, 4) });
+}
+
 TEST_CASE("shape_buffer does not add an empty line when the only word break is after a leading space")
 {
     // 先頭の空白の直後しか語の切れ目が無ければ、空の行を作らずに今の位置で分ける

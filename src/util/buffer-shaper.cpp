@@ -42,7 +42,7 @@ struct SeparatePositions {
  * @param line 組み立て中の行
  * @param ch 行に収まらなかった次の文字
  * @return 語の切れ目と語の途中の、分割できる位置
- * @details 分割できるかは classify_line_break() で決める。
+ * @details 分割できるかは classify_line_break() で決める。前が空白だけの位置は、空白だけの行ができるので候補にしない。
  * 行の末尾は、ch が全角文字か、行の末尾が空白のときだけ候補にする (全角文字の直後の半角文字なら、これまでどおり全角文字の前で分ける)。
  * 全角文字は shape_buffer() と同じく、前半バイトの後に 1 バイト以上続くときに 2 バイトをまとめて見る。
  */
@@ -50,6 +50,7 @@ SeparatePositions find_separate_positions(std::string_view line, std::string_vie
 {
     SeparatePositions positions;
     std::string_view prev_char;
+    auto has_text = false; // 分ける位置より前に空白でない文字があるか (空白だけの行を作らない)
     for (size_t pos = 0; pos <= line.length();) {
         const auto is_end = pos == line.length();
         const auto is_full_width = is_end ? (ch.length() == 2) : is_multibyte_char_at(line, pos);
@@ -59,7 +60,7 @@ SeparatePositions find_separate_positions(std::string_view line, std::string_vie
             positions.at_end = kind;
         }
 
-        const auto is_candidate = !is_end || is_full_width || (prev_char == " ");
+        const auto is_candidate = has_text && (!is_end || is_full_width || (prev_char == " "));
         if (is_candidate && (kind == LineBreakKind::WORD_BREAK)) {
             positions.word_break = pos;
         } else if (is_candidate && (kind == LineBreakKind::MID_WORD)) {
@@ -70,6 +71,7 @@ SeparatePositions find_separate_positions(std::string_view line, std::string_vie
             break;
         }
 
+        has_text = has_text || (next_char != " ");
         prev_char = next_char;
         pos += next_char.length();
     }
@@ -157,14 +159,10 @@ std::vector<std::string> shape_buffer(std::string_view sv, size_t maxlen)
             }
 
             if (!is_newline && ((ch[0] != ' ') || is_before_kinsoku)) {
-                auto [word_break, mid_word, at_end] = find_separate_positions(line, ch);
-                // 語の切れ目の前の空白は前の行に残さないので、空白を除いた長さで前半か後半かを決める (空白しか残らない位置は使わない)
+                const auto [word_break, mid_word, at_end] = find_separate_positions(line, ch);
+                // 語の切れ目の前の空白は前の行に残さないので、空白を除いた長さで前半か後半かを決める
                 const auto has_space_before_break = (word_break > 0) && (line[word_break - 1] == ' ');
                 const auto word_break_line_length = has_space_before_break ? word_break - 1 : word_break;
-                if (word_break_line_length == 0) {
-                    word_break = 0;
-                }
-
                 if (line.length() < word_break_line_length * 2) {
                     split_pos = word_break;
                 } else if (((ch.length() == 2) && (at_end == LineBreakKind::NONE)) || is_before_kinsoku) {

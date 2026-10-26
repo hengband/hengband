@@ -140,6 +140,7 @@ static std::string get_char_before(int end_col, int y)
  * @param ch 次に置く文字 (全角文字なら2バイト)
  * @return 折り返す桁。この桁から x の手前までのマスを次の行へ送る (x なら何も送らない)
  * @details 文字の境目のうち、classify_line_break() で語の切れ目になるもっとも右のものを選ぶ。
+ * 前が空白だけの桁は、空白だけの行ができるので選ばない。
  * ch が全角文字で x の前で分けられない (行頭禁則文字) ときは、語の切れ目が無いか行の前半にしか無ければ、
  * 語の途中で折り返す。どちらも無ければ x で折り返す。
  * 送ったマスと ch で次の行の最終桁に達する桁は選ばない (最終桁には書かない)。
@@ -150,8 +151,14 @@ static int find_wrap_column(int x, int y, int w, std::string_view ch)
 {
     const auto is_second_half = [y](int col) { return (term_what(col, y, {}).color & 0x20) != 0; };
     const auto needs_backtrack = (ch.length() == 2) && (classify_line_break(get_char_before(x, y), ch) == LineBreakKind::NONE);
+    // 前が空白だけの桁では、空白だけの行ができるので折り返さない
+    auto first_text_col = 0;
+    while ((first_text_col < x) && (term_what(first_text_col, y, {}).character == ' ')) {
+        first_text_col++;
+    }
+
     auto mid_word_col = 0;
-    for (auto col = x; col > 0; col--) {
+    for (auto col = x; col > first_text_col; col--) {
         if (x - col + std::ssize(ch) > w - 1) {
             break;
         }
