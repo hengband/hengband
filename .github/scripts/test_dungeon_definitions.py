@@ -28,30 +28,45 @@ class DungeonValidationTest(unittest.TestCase):
     def validate(self, document, *, companions=None):
         return validate_document(document, self.schema_path, self.schema, self.registry, companions=companions)
 
-    def test_aura_flags_match_the_reader_token_table(self):
-        tokens = load_cpp_map_keys(self.root / "src/info-reader/race-info-tokens-table.cpp", "r_info_aura_flags")
-        schema_tokens = set(self.schema["$defs"]["monsterFlag"]["enum"])
-        self.assertEqual({token for token in schema_tokens if token.startswith("AURA_")}, tokens)
-        for token in sorted(tokens):
-            with self.subTest(token=token):
+    def reader_token_tables(self, function):
+        """DungeonReaderの指定関数が照合する r_info_* の辞書名を、照合の順に読む。"""
+        source = (self.root / "src/info-reader/dungeon-reader.cpp").read_text(encoding="utf-8")
+        match = re.search(r"\bDungeonReader::" + re.escape(function) + r"\(.*?\n\{(.*?)^\}", source, re.DOTALL | re.MULTILINE)
+        self.assertIsNotNone(match, f"{function} not found in dungeon-reader.cpp")
+        tables = re.findall(r"grab_one_flag\(\s*dungeon\.\w+\s*,\s*(r_info_\w+)\s*,", match[1])
+        self.assertTrue(tables, f"no token tables found in {function}")
+        return tables
+
+    def reader_tokens(self, function):
+        path = self.root / "src/info-reader/race-info-tokens-table.cpp"
+        return set().union(*(load_cpp_map_keys(path, table) for table in self.reader_token_tables(function)))
+
+    def test_monster_flags_match_the_reader_token_tables(self):
+        # flags には grab_one_basic_monster_flag が照合する辞書のトークンをすべて書け、それ以外は書けない。
+        self.assertEqual(set(self.schema["$defs"]["monsterFlag"]["enum"]), self.reader_tokens("grab_one_basic_monster_flag"))
+
+    def test_monster_spells_match_the_reader_token_tables(self):
+        # spells には grab_one_spell_monster_flag が照合する辞書のトークンをすべて書け、それ以外は書けない。
+        self.assertEqual(set(self.schema["$defs"]["monsterSpell"]["enum"]), self.reader_tokens("grab_one_spell_monster_flag"))
+
+    def test_every_reader_token_is_accepted(self):
+        for field, function in (("flags", "grab_one_basic_monster_flag"), ("spells", "grab_one_spell_monster_flag")):
+            with self.subTest(field=field):
                 document = self.sample()
-                document["dungeons"][0]["monsters"]["flags"] = [token]
+                document["dungeons"][0]["monsters"][field] = sorted(self.reader_tokens(function))
                 ok, diagnostic = self.validate(document)
                 self.assertTrue(ok, diagnostic)
 
-    def test_visual_and_special_flags_match_the_reader_token_tables(self):
-        schema_tokens = set(self.schema["$defs"]["monsterFlag"]["enum"])
-        for table in ("r_info_visual_flags", "r_info_special_flags"):
-            tokens = load_cpp_map_keys(self.root / "src/info-reader/race-info-tokens-table.cpp", table)
-            with self.subTest(table=table):
-                self.assertTrue(tokens)
-                self.assertLessEqual(tokens, schema_tokens)
-            for token in sorted(tokens):
-                with self.subTest(token=token):
-                    document = self.sample()
-                    document["dungeons"][0]["monsters"]["flags"] = [token]
-                    ok, diagnostic = self.validate(document)
-                    self.assertTrue(ok, diagnostic)
+    def test_tokens_of_tables_the_reader_does_not_consult_are_rejected(self):
+        # 発言の辞書 (r_info_message_flags) だけにある WALK_* などや、flags と spells の取り違えは読み込みが拒否する。
+        cases = (("flags", "WALK_CLOSERANGE"), ("flags", "MESSAGE_STALKER"), ("flags", "BR_FIRE"), ("spells", "UNIQUE"))
+        for field, token in cases:
+            with self.subTest(field=field, token=token):
+                document = self.sample()
+                document["dungeons"][0]["monsters"][field] = [token]
+                ok, diagnostic = self.validate(document)
+                self.assertFalse(ok, diagnostic)
+                self.assertIn(f"Location: ['dungeons', 0, 'monsters', '{field}', 0]", diagnostic)
 
     def test_unknown_aura_flags_are_rejected(self):
         document = self.sample()
