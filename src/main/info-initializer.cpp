@@ -45,6 +45,7 @@
 #include "system/terrain/terrain-list.h"
 #include "util/angband-files.h"
 #include "view/display-messages.h"
+#include <concepts>
 #include <fmt/format.h>
 #include <functional>
 #include <nlohmann/json.hpp>
@@ -57,6 +58,12 @@
 #endif
 
 namespace {
+
+template <typename Reader>
+concept HasReadSession = requires(typename Reader::Session &session) {
+    { Reader::create_session() } -> std::same_as<typename Reader::Session>;
+    session.commit();
+};
 
 template <typename T>
 concept HasShrinkToFit = requires(T t) {
@@ -136,8 +143,20 @@ void init_json(std::string_view filename, std::string_view keyname, DefinitionHa
 template <typename Reader, typename DefinitionList>
 void init_json_reader(std::string_view filename, std::string_view keyname, DefinitionHashDataType dhdt, DefinitionList &definition_list, std::function<void()> retouch = nullptr, bool allow_empty = true, std::function<tl::expected<void, ParseErrorType>(const nlohmann::json &)> validate_root = nullptr)
 {
-    auto parser = [](nlohmann::json &element) { return Reader(element).read(); };
-    init_json(filename, keyname, dhdt, definition_list, parser, retouch, allow_empty, validate_root);
+    if constexpr (HasReadSession<Reader>) {
+        auto session = Reader::create_session();
+        auto parser = [&session](nlohmann::json &element) {
+            auto result = Reader(element, session).read();
+            if (result) {
+                session.commit();
+            }
+            return result;
+        };
+        init_json(filename, keyname, dhdt, definition_list, parser, retouch, allow_empty, validate_root);
+    } else {
+        auto parser = [](nlohmann::json &element) { return Reader(element).read(); };
+        init_json(filename, keyname, dhdt, definition_list, parser, retouch, allow_empty, validate_root);
+    }
 }
 }
 
