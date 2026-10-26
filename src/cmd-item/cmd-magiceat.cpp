@@ -409,7 +409,7 @@ static tl::optional<BaseitemKey> select_magic_eater(PlayerType *player_ptr, bool
         }
 
         /* Totally Illegal */
-        if ((sval < 0) || (sval > item_group_size) || item_group[sval].count == 0) {
+        if ((sval < 0) || (sval >= item_group_size) || item_group[sval].count == 0) {
             bell();
             continue;
         }
