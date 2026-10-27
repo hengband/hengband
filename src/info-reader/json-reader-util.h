@@ -1,6 +1,7 @@
 #pragma once
 
 #include "info-reader/parse-error-types.h"
+#include "info-reader/range.h"
 #include "system/angband.h"
 #include "util/type-concepts.h"
 #include <concepts>
@@ -12,8 +13,6 @@
 #include <utility>
 
 class Dice;
-
-using Range = std::pair<int, int>;
 
 tl::expected<void, ParseErrorType> info_set_string(const nlohmann::json &json, std::string &data, bool is_required);
 tl::expected<void, ParseErrorType> info_set_dice(const nlohmann::json &json, Dice &dice, bool is_required, tl::optional<Range> range = tl::nullopt);

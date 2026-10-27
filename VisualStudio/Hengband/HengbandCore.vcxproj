@@ -1185,6 +1185,7 @@
     <ClInclude Include="..\..\src\info-reader\race-info-tokens-table.h" />
     <ClInclude Include="..\..\src\info-reader\race-reader.h" />
     <ClInclude Include="..\..\src\info-reader\random-grid-effect-types.h" />
+    <ClInclude Include="..\..\src\info-reader\range.h" />
     <ClInclude Include="..\..\src\info-reader\skill-reader.h" />
     <ClInclude Include="..\..\src\info-reader\spell-reader.h" />
     <ClInclude Include="..\..\src\info-reader\terrain-reader.h" />

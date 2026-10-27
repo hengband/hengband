@@ -1,4 +1,5 @@
 #include "info-reader/definition-id-checker.h"
+#include "info-reader/json-reader-util.h"
 #include "locale/language-switcher.h"
 #include <cstdint>
 #include <fmt/format.h>
