@@ -903,3 +903,49 @@ TEST_CASE("BaseitemReader pins flag array type errors and missing values")
         }
     }
 }
+
+TEST_CASE("BaseitemReader preserves symbol error codes and validation precedence")
+{
+    BaseitemStateGuard guard;
+    auto session = BaseitemReader::create_session();
+    struct InvalidSymbol {
+        const char *json;
+        ParseErrorType error;
+    };
+    const InvalidSymbol cases[] = {
+        { R"(null)", ParseErrorType::TOO_FEW_ARGUMENTS },
+        { R"(42)", ParseErrorType::INVALID_TYPE },
+        { R"([])", ParseErrorType::INVALID_TYPE },
+        { R"(true)", ParseErrorType::INVALID_TYPE },
+        { R"("bad")", ParseErrorType::INVALID_TYPE },
+        { R"({})", ParseErrorType::TOO_FEW_ARGUMENTS },
+        { R"({"character":null,"color":"White"})", ParseErrorType::TOO_FEW_ARGUMENTS },
+        { R"({"character":42,"color":"White"})", ParseErrorType::INVALID_TYPE },
+        { R"({"character":true,"color":"White"})", ParseErrorType::INVALID_TYPE },
+        { R"({"character":[],"color":"White"})", ParseErrorType::INVALID_TYPE },
+        { R"({"character":{},"color":"White"})", ParseErrorType::INVALID_TYPE },
+        { R"({"color":null,"character":"!"})", ParseErrorType::TOO_FEW_ARGUMENTS },
+        { R"({"color":42,"character":"!"})", ParseErrorType::INVALID_TYPE },
+        { R"({"color":true,"character":"!"})", ParseErrorType::INVALID_TYPE },
+        { R"({"color":[],"character":"!"})", ParseErrorType::INVALID_TYPE },
+        { R"({"color":{},"character":"!"})", ParseErrorType::INVALID_TYPE },
+        { R"({"character":"!"})", ParseErrorType::TOO_FEW_ARGUMENTS },
+        { R"({"color":"White"})", ParseErrorType::TOO_FEW_ARGUMENTS },
+        { R"({"character":"","color":"White"})", ParseErrorType::INVALID_VALUE },
+        { R"({"character":"!!","color":"White"})", ParseErrorType::INVALID_VALUE },
+        { R"({"character":"\u3042","color":"White"})", ParseErrorType::INVALID_VALUE },
+        { R"({"character":"!","color":"UNKNOWN"})", ParseErrorType::INVALID_FLAG },
+        { R"({"character":"","color":"UNKNOWN"})", ParseErrorType::INVALID_VALUE },
+        { R"({"character":"","color":42})", ParseErrorType::INVALID_VALUE },
+        { R"({"character":""})", ParseErrorType::INVALID_VALUE },
+    };
+    for (const auto &invalid : cases) {
+        CAPTURE(invalid.json);
+        auto data = make_baseitem();
+        data["symbol"] = nlohmann::json::parse(invalid.json);
+        CHECK(test::to_error_code(test::read_and_commit(BaseitemReader(data, session), session)) == invalid.error);
+    }
+    auto data = make_baseitem();
+    data.erase("symbol");
+    CHECK(test::to_error_code(test::read_and_commit(BaseitemReader(data, session), session)) == ParseErrorType::TOO_FEW_ARGUMENTS);
+}

@@ -1,7 +1,9 @@
 #include "info-reader/json-reader-util.h"
 #include "info-reader/info-reader-util.h"
+#include "info-reader/symbol-reader-util.h"
 #include "locale/character-encoding.h"
 #include "locale/language-switcher.h"
+#include "term/gameterm.h"
 #include "util/dice.h"
 
 /*!
@@ -187,4 +189,45 @@ tl::expected<void, ParseErrorType> info_set_bool(const nlohmann::json &json, boo
 
     bool_value = json.get<bool>();
     return {};
+}
+
+/*!
+ * @brief 表示記号の文字と色を読み取り、既存リーダーの検証順序を保つ。
+ * @param json character と color を持つオブジェクト
+ * @param policy 通常は型・文字数・色の順。モンスターは型不一致も欠落として扱い、色を文字数より先に検証する。
+ * @return 表示記号、または欠落・型・文字数・未知の色に対応する解析エラー
+ * @details 文字は1バイトなら制御文字や非ASCIIも許容する。地形固有の lit とメッセージは呼出側で扱う。
+ */
+tl::expected<DisplaySymbol, ParseErrorType> info_read_symbol(const nlohmann::json &json, SymbolReadPolicy policy)
+{
+    const auto monster = policy == SymbolReadPolicy::MONSTER_COLOR_FIRST;
+    if (json.is_null()) {
+        return tl::unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
+    }
+    if (!json.is_object()) {
+        return tl::unexpected(monster ? ParseErrorType::TOO_FEW_ARGUMENTS : ParseErrorType::INVALID_TYPE);
+    }
+
+    const auto &character_obj = get_json_value(json, "character");
+    if (!character_obj.is_string()) {
+        return tl::unexpected(monster || character_obj.is_null() ? ParseErrorType::TOO_FEW_ARGUMENTS : ParseErrorType::INVALID_TYPE);
+    }
+    const auto &character = character_obj.get_ref<const std::string &>();
+    if (!monster && character.size() != 1) {
+        return tl::unexpected(ParseErrorType::INVALID_VALUE);
+    }
+
+    const auto &color_obj = get_json_value(json, "color");
+    if (!color_obj.is_string()) {
+        return tl::unexpected(monster || color_obj.is_null() ? ParseErrorType::TOO_FEW_ARGUMENTS : ParseErrorType::INVALID_TYPE);
+    }
+    const auto color = color_list.find(color_obj.get<std::string>());
+    if (color == color_list.end()) {
+        return tl::unexpected(ParseErrorType::INVALID_FLAG);
+    }
+    if (character.size() != 1) {
+        return tl::unexpected(ParseErrorType::INVALID_VALUE);
+    }
+
+    return DisplaySymbol(color->second, character.front());
 }

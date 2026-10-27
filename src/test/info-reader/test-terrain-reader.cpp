@@ -614,3 +614,67 @@ TEST_CASE("TerrainReader pins flag array type errors and missing values")
         }
     }
 }
+
+TEST_CASE("TerrainReader preserves symbol error codes and validation precedence")
+{
+    TerrainStateGuard guard;
+    auto session = TerrainReader::create_session();
+    struct InvalidSymbol {
+        const char *json;
+        ParseErrorType error;
+    };
+    const InvalidSymbol cases[] = {
+        { R"(null)", ParseErrorType::TOO_FEW_ARGUMENTS },
+        { R"(42)", ParseErrorType::TOO_FEW_ARGUMENTS },
+        { R"([])", ParseErrorType::TOO_FEW_ARGUMENTS },
+        { R"(true)", ParseErrorType::TOO_FEW_ARGUMENTS },
+        { R"("bad")", ParseErrorType::TOO_FEW_ARGUMENTS },
+        { R"({"lit": false})", ParseErrorType::TOO_FEW_ARGUMENTS },
+        { R"({"character": null, "color": "White", "lit": false})", ParseErrorType::TOO_FEW_ARGUMENTS },
+        { R"({"character": 42, "color": "White", "lit": false})", ParseErrorType::TOO_FEW_ARGUMENTS },
+        { R"({"character": true, "color": "White", "lit": false})", ParseErrorType::TOO_FEW_ARGUMENTS },
+        { R"({"character": [], "color": "White", "lit": false})", ParseErrorType::TOO_FEW_ARGUMENTS },
+        { R"({"character": {}, "color": "White", "lit": false})", ParseErrorType::TOO_FEW_ARGUMENTS },
+        { R"({"color": null, "character": "!", "lit": false})", ParseErrorType::TOO_FEW_ARGUMENTS },
+        { R"({"color": 42, "character": "!", "lit": false})", ParseErrorType::TOO_FEW_ARGUMENTS },
+        { R"({"color": true, "character": "!", "lit": false})", ParseErrorType::TOO_FEW_ARGUMENTS },
+        { R"({"color": [], "character": "!", "lit": false})", ParseErrorType::TOO_FEW_ARGUMENTS },
+        { R"({"color": {}, "character": "!", "lit": false})", ParseErrorType::TOO_FEW_ARGUMENTS },
+        { R"({"character": "!", "lit": false})", ParseErrorType::TOO_FEW_ARGUMENTS },
+        { R"({"color": "White", "lit": false})", ParseErrorType::TOO_FEW_ARGUMENTS },
+        { R"({"character": "", "color": "White", "lit": false})", ParseErrorType::INVALID_VALUE },
+        { R"({"character": "!!", "color": "White", "lit": false})", ParseErrorType::INVALID_VALUE },
+        { R"({"character": "\u3042", "color": "White", "lit": false})", ParseErrorType::INVALID_VALUE },
+        { R"({"character": "!", "color": "UNKNOWN", "lit": false})", ParseErrorType::INVALID_FLAG },
+        { R"({"character": "", "color": "UNKNOWN", "lit": false})", ParseErrorType::INVALID_VALUE },
+        { R"({"character": "", "color": 42, "lit": false})", ParseErrorType::TOO_FEW_ARGUMENTS },
+        { R"({"character": "", "lit": false})", ParseErrorType::TOO_FEW_ARGUMENTS },
+    };
+    for (const auto &invalid : cases) {
+        CAPTURE(invalid.json);
+        auto data = make_terrain();
+        data["symbol"] = nlohmann::json::parse(invalid.json);
+        CHECK(test::to_error_code(test::read_and_commit(TerrainReader(data, session), session)) == invalid.error);
+    }
+    auto data = make_terrain();
+    data.erase("symbol");
+    CHECK(test::to_error_code(test::read_and_commit(TerrainReader(data, session), session)) == ParseErrorType::TOO_FEW_ARGUMENTS);
+}
+
+TEST_CASE("TerrainReader checks lit type before symbol length and color")
+{
+    TerrainStateGuard guard;
+    for (const auto *invalid_lit : { "null", "1", "[]", "{}", "\"bad\"" }) {
+        CAPTURE(invalid_lit);
+        auto session = TerrainReader::create_session();
+        auto data = make_terrain();
+        data["symbol"]["character"] = "";
+        data["symbol"]["color"] = "UNKNOWN";
+        data["symbol"]["lit"] = nlohmann::json::parse(invalid_lit);
+        CHECK(test::to_error_code(test::read_and_commit(TerrainReader(data, session), session)) == ParseErrorType::TOO_FEW_ARGUMENTS);
+    }
+    auto session = TerrainReader::create_session();
+    auto data = make_terrain();
+    data["symbol"].erase("lit");
+    CHECK(test::to_error_code(test::read_and_commit(TerrainReader(data, session), session)) == ParseErrorType::TOO_FEW_ARGUMENTS);
+}

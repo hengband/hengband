@@ -10,6 +10,8 @@
 #include "info-reader/json-reader-util.h"
 
 #include "info-reader/parse-error-types.h"
+#include "info-reader/symbol-reader-util.h"
+#include "term/gameterm.h"
 #include "test/info-reader/parse-result-helpers.h"
 #include "util/dice.h"
 
@@ -762,4 +764,114 @@ TEST_CASE("Flag arrays preserve token order duplicates and stop at the first err
     CHECK(read(nlohmann::json::parse(R"(["A", 1, "UNKNOWN"])")) == ParseErrorType::INVALID_TYPE);
     REQUIRE(seen.size() == 1);
     CHECK(seen.front() == "A");
+}
+
+TEST_CASE("info_read_symbol preserves baseitem validation errors")
+{
+    struct InvalidSymbol {
+        const char *json;
+        ParseErrorType error;
+    };
+    const InvalidSymbol cases[] = {
+        { R"(null)", ParseErrorType::TOO_FEW_ARGUMENTS },
+        { R"(42)", ParseErrorType::INVALID_TYPE },
+        { R"([])", ParseErrorType::INVALID_TYPE },
+        { R"(true)", ParseErrorType::INVALID_TYPE },
+        { R"("bad")", ParseErrorType::INVALID_TYPE },
+        { R"({})", ParseErrorType::TOO_FEW_ARGUMENTS },
+        { R"({"character":null,"color":"White"})", ParseErrorType::TOO_FEW_ARGUMENTS },
+        { R"({"character":42,"color":"White"})", ParseErrorType::INVALID_TYPE },
+        { R"({"character":true,"color":"White"})", ParseErrorType::INVALID_TYPE },
+        { R"({"character":[],"color":"White"})", ParseErrorType::INVALID_TYPE },
+        { R"({"character":{},"color":"White"})", ParseErrorType::INVALID_TYPE },
+        { R"({"color":null,"character":"!"})", ParseErrorType::TOO_FEW_ARGUMENTS },
+        { R"({"color":42,"character":"!"})", ParseErrorType::INVALID_TYPE },
+        { R"({"color":true,"character":"!"})", ParseErrorType::INVALID_TYPE },
+        { R"({"color":[],"character":"!"})", ParseErrorType::INVALID_TYPE },
+        { R"({"color":{},"character":"!"})", ParseErrorType::INVALID_TYPE },
+        { R"({"character":"!"})", ParseErrorType::TOO_FEW_ARGUMENTS },
+        { R"({"color":"White"})", ParseErrorType::TOO_FEW_ARGUMENTS },
+        { R"({"character":"","color":"White"})", ParseErrorType::INVALID_VALUE },
+        { R"({"character":"!!","color":"White"})", ParseErrorType::INVALID_VALUE },
+        { R"({"character":"\u3042","color":"White"})", ParseErrorType::INVALID_VALUE },
+        { R"({"character":"!","color":"UNKNOWN"})", ParseErrorType::INVALID_FLAG },
+        { R"({"character":"","color":"UNKNOWN"})", ParseErrorType::INVALID_VALUE },
+        { R"({"character":"","color":42})", ParseErrorType::INVALID_VALUE },
+        { R"({"character":""})", ParseErrorType::INVALID_VALUE },
+    };
+    for (const auto &invalid : cases) {
+        CAPTURE(invalid.json);
+        const auto input = nlohmann::json::parse(invalid.json);
+        const auto saved = input;
+        const auto result = info_read_symbol(input, SymbolReadPolicy::TYPE_AND_CHARACTER_FIRST);
+        REQUIRE_FALSE(result.has_value());
+        CHECK(result.error() == invalid.error);
+        CHECK(input == saved);
+    }
+}
+
+TEST_CASE("info_read_symbol preserves monster validation errors")
+{
+    struct InvalidSymbol {
+        const char *json;
+        ParseErrorType error;
+    };
+    const InvalidSymbol cases[] = {
+        { R"(null)", ParseErrorType::TOO_FEW_ARGUMENTS },
+        { R"(42)", ParseErrorType::TOO_FEW_ARGUMENTS },
+        { R"([])", ParseErrorType::TOO_FEW_ARGUMENTS },
+        { R"(true)", ParseErrorType::TOO_FEW_ARGUMENTS },
+        { R"("bad")", ParseErrorType::TOO_FEW_ARGUMENTS },
+        { R"({})", ParseErrorType::TOO_FEW_ARGUMENTS },
+        { R"({"character":null,"color":"White"})", ParseErrorType::TOO_FEW_ARGUMENTS },
+        { R"({"character":42,"color":"White"})", ParseErrorType::TOO_FEW_ARGUMENTS },
+        { R"({"character":true,"color":"White"})", ParseErrorType::TOO_FEW_ARGUMENTS },
+        { R"({"character":[],"color":"White"})", ParseErrorType::TOO_FEW_ARGUMENTS },
+        { R"({"character":{},"color":"White"})", ParseErrorType::TOO_FEW_ARGUMENTS },
+        { R"({"color":null,"character":"!"})", ParseErrorType::TOO_FEW_ARGUMENTS },
+        { R"({"color":42,"character":"!"})", ParseErrorType::TOO_FEW_ARGUMENTS },
+        { R"({"color":true,"character":"!"})", ParseErrorType::TOO_FEW_ARGUMENTS },
+        { R"({"color":[],"character":"!"})", ParseErrorType::TOO_FEW_ARGUMENTS },
+        { R"({"color":{},"character":"!"})", ParseErrorType::TOO_FEW_ARGUMENTS },
+        { R"({"character":"!"})", ParseErrorType::TOO_FEW_ARGUMENTS },
+        { R"({"color":"White"})", ParseErrorType::TOO_FEW_ARGUMENTS },
+        { R"({"character":"","color":"White"})", ParseErrorType::INVALID_VALUE },
+        { R"({"character":"!!","color":"White"})", ParseErrorType::INVALID_VALUE },
+        { R"({"character":"\u3042","color":"White"})", ParseErrorType::INVALID_VALUE },
+        { R"({"character":"!","color":"UNKNOWN"})", ParseErrorType::INVALID_FLAG },
+        { R"({"character":"","color":"UNKNOWN"})", ParseErrorType::INVALID_FLAG },
+        { R"({"character":"","color":42})", ParseErrorType::TOO_FEW_ARGUMENTS },
+        { R"({"character":""})", ParseErrorType::TOO_FEW_ARGUMENTS },
+    };
+    for (const auto &invalid : cases) {
+        CAPTURE(invalid.json);
+        const auto input = nlohmann::json::parse(invalid.json);
+        const auto saved = input;
+        const auto result = info_read_symbol(input, SymbolReadPolicy::MONSTER_COLOR_FIRST);
+        REQUIRE_FALSE(result.has_value());
+        CHECK(result.error() == invalid.error);
+        CHECK(input == saved);
+    }
+}
+
+TEST_CASE("info_read_symbol accepts every single byte and color token")
+{
+    for (const auto policy : { SymbolReadPolicy::TYPE_AND_CHARACTER_FIRST, SymbolReadPolicy::MONSTER_COLOR_FIRST }) {
+        for (const auto &[name, color] : color_list) {
+            CHECK(color <= 15);
+            for (int byte = 0; byte <= 255; ++byte) {
+                CAPTURE(name);
+                CAPTURE(byte);
+                nlohmann::json input;
+                input["character"] = std::string(1, static_cast<char>(byte));
+                input["color"] = std::string(name);
+                const auto saved = input;
+                const auto result = info_read_symbol(input, policy);
+                REQUIRE(result.has_value());
+                CHECK(result->character == static_cast<char>(byte));
+                CHECK(result->color == color);
+                CHECK(input == saved);
+            }
+        }
+    }
 }

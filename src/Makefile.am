@@ -645,6 +645,7 @@ libhengband_a_SOURCES = \
 	info-reader/range.h \
 	info-reader/skill-reader.cpp info-reader/skill-reader.h \
 	info-reader/spell-reader.cpp info-reader/spell-reader.h \
+	info-reader/symbol-reader-util.h \
 	info-reader/terrain-reader.cpp info-reader/terrain-reader.h \
 	info-reader/town-definition-list-reader.cpp info-reader/town-definition-list-reader.h \
 	info-reader/town-map-condition.h \
