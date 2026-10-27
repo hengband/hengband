@@ -1476,6 +1476,10 @@ TEST_CASE("QuestList checks object trap conflicts in quest and shared legends")
 {
     const auto cases = nlohmann::json::parse(R"([
         [{"object":1,"trap":"OTHER"},false],
+        [{"object":42,"ego":65,"trap":"OTHER"},false],
+        [{"object":42,"ego":65,"trap":{"random":true}},false],
+        [{"object":42,"ego":{"random":true},"trap":"OTHER"},false],
+        [{"object":42,"ego":{"random":true},"trap":{"random":true}},false],
         [{"object":1,"trap":"OTHER","special":"x"},false,false],
         [{"object":1,"trap":"OTHER","special":32768},false,false],
         [{"object":{"questReward":true},"trap":"OTHER"},false],

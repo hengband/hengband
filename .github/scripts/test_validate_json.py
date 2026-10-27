@@ -741,8 +741,6 @@ class TownMapValidationTest(unittest.TestCase):
             {"object": 42, "ego": 1}, {"object": 42, "ego": 102}, {"ego": 65},
             {"object": {"random": True}, "ego": 65},
             {"object": {"questReward": True}, "ego": 65},
-            {"object": 42, "ego": 65, "trap": "TRAP_PIT"},
-            {"object": 42, "ego": 65, "trap": {"random": True}},
         ):
             with self.subTest(cell=cell):
                 data = copy.deepcopy(self.data)
@@ -1055,6 +1053,9 @@ class LegendObjectTrapValidationTest(unittest.TestCase):
             ({"object": {"random": True}, "trap": "NONE"}, True),
             ({"artifact": 1, "trap": "TRAP_PIT"}, True),
             ({"artifact": 1, "trap": {"random": True}}, True),
+            # エゴは固定の品に付くので、罠と同じマスなら品と罠の組み合わせとして拒否する。
+            ({"object": 42, "ego": 65, "trap": "TRAP_PIT"}, False),
+            ({"object": 42, "ego": {"random": True}, "trap": {"random": True}}, False),
         )
         for schema_name in ("Quest", "QuestPreferences", "TownMap", "TownPreferences"):
             for cell, accepted in cases:

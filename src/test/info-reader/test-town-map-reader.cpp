@@ -204,15 +204,17 @@ nlohmann::json make_town_map()
     };
 }
 
-TownMapDefinition read_reward_town_map(FloorType &floor, ArtifactDefinition artifact)
+TownMapDefinition read_reward_town_map(FloorType &floor, ArtifactDefinition artifact, bool artifact_only_with_trap = false)
 {
     ArtifactList::get_instance().emplace(FixedArtifactId::GALADRIEL_PHIAL, std::move(artifact));
     floor.quest_number = QuestId::THIEF;
     auto data = make_town_map();
     auto &fields = data["featureRules"][0]["definition"];
     fields["terrain"] = "TOWN_FEATURE_TEST_FLOOR";
-    fields["trap"] = "NONE";
-    fields["object"] = { { "questReward", true } };
+    fields["trap"] = artifact_only_with_trap ? "TOWN_FEATURE_TEST_TRAP" : "NONE";
+    if (!artifact_only_with_trap) {
+        fields["object"] = { { "questReward", true } };
+    }
     fields["artifact"] = { { "questReward", true } };
     TownMapDefinition definition;
     REQUIRE(TownMapReader(data).read(definition, 3, 3).has_value());
@@ -1539,6 +1541,28 @@ TEST_CASE("TownMapReader returns an error and preserves the feature when quest r
     const auto original = letter['#'];
     CHECK(test::to_error_code(apply_town_map_feature(floor, definition.features.front())) == ParseErrorType::INVALID_VALUE);
     check_same_grid(letter['#'], original);
+}
+
+TEST_CASE("TownMapReader preserves an artifact-only quest reward with a fixed trap")
+{
+    const TownFeatureStateGuard state;
+    const test::QuestFeatureTestAccess quest_state;
+    const test::ArtifactListTestAccess artifact_state;
+    ArtifactDefinition artifact;
+    artifact.gen_flags.set(ItemGenerationTraitType::INSTA_ART);
+    FloorType floor;
+    const auto definition = read_reward_town_map(floor, std::move(artifact), true);
+    const auto &feature = definition.features.front();
+    CHECK(feature.cell.artifact_is_quest_reward);
+    CHECK_FALSE(feature.cell.object_is_quest_reward);
+    CHECK(feature.cell.grid.object == 0);
+    CHECK(feature.trap == "TOWN_FEATURE_TEST_TRAP");
+    test::QuestFeatureTestAccess::set_resolved_reward(FixedArtifactId::GALADRIEL_PHIAL);
+    REQUIRE(apply_town_map_feature(floor, feature).has_value());
+    CHECK(letter['#'].artifact == FixedArtifactId::GALADRIEL_PHIAL);
+    CHECK(letter['#'].trap == state.trap_id());
+    CHECK(letter['#'].object == 0);
+    CHECK(letter['#'].feature == state.floor_id());
 }
 
 TEST_CASE("TownMapReader applies an artifact-only reward without resolving its baseitem")

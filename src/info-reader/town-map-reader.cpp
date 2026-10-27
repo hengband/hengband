@@ -229,7 +229,7 @@ tl::expected<void, ParseErrorType> TownMapReader::read_features(TownMapDefinitio
         if (const auto result = parse_quest_legend_cell_deferred(fields, parsed); !result) {
             return tl::make_unexpected(result.error());
         }
-        if (const auto result = validate_legend_ego(parsed.cell.grid, parsed.cell.object_is_quest_reward, parsed.trap_tag != "NONE"); !result) {
+        if (const auto result = validate_legend_ego(parsed.cell.grid, parsed.cell.object_is_quest_reward); !result) {
             constexpr auto fmt = _("町のエゴ指定が不正です: featureRules[{}] (記号 '{}'): {}",
                 "Invalid town ego: featureRules[{}] (symbol '{}'): {}");
             msg_print(fmt, index, symbol, describe_legend_ego_error(result.error()));

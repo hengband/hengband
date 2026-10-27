@@ -176,7 +176,7 @@ void validate_quest_legend_references(const std::map<char, QuestLegendCell> &leg
         if (!(grid.random & RANDOM_OBJECT) && !cell.object_is_quest_reward && grid.object != 0) {
             require_reference(baseitems.is_valid(grid.object), "object", grid.object);
         }
-        const auto ego_result = validate_legend_ego(grid, cell.object_is_quest_reward, grid.trap != 0 || (grid.random & RANDOM_TRAP));
+        const auto ego_result = validate_legend_ego(grid, cell.object_is_quest_reward);
         if (!ego_result) {
             constexpr auto fmt = _("クエストのエゴ指定が不正です ({}): {}.ego {} (object {}): {}",
                 "Invalid quest ego ({}): {}.ego {} (object {}): {}");

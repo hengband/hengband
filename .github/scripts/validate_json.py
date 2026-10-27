@@ -520,8 +520,6 @@ def validate_legend_ego(cell: dict, baseitems: dict, egos: dict, path: list) -> 
     # ItemKindType::GOLD と揃える。
     if baseitems[obj] == 127:
         raise ValidationError("ego cannot be applied to gold", path=path + ["ego"])
-    if cell.get("trap", "NONE") != "NONE":
-        raise ValidationError("ego cannot coexist with a trap", path=path + ["ego"])
 
 
 def validate_legend_object_trap(cell: dict, path: list) -> None:

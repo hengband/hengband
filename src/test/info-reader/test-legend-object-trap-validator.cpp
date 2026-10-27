@@ -25,6 +25,10 @@ TEST_CASE("Legend object and trap placement conflicts are rejected in every read
     terrains.get_terrain(1).tag = "TRAP_PIT";
     const auto cases = nlohmann::json::parse(R"([
         [{"object":1,"trap":"TRAP_PIT"},false],
+        [{"object":42,"ego":65,"trap":"TRAP_PIT"},false],
+        [{"object":42,"ego":65,"trap":{"random":true}},false],
+        [{"object":42,"ego":{"random":true},"trap":"TRAP_PIT"},false],
+        [{"object":42,"ego":{"random":true},"trap":{"random":true}},false],
         [{"object":{"questReward":true},"trap":"TRAP_PIT"},false],
         [{"object":{"questReward":true},"trap":{"random":true}},false],
         [{"object":{"questReward":true},"trap":"NONE"},true],
