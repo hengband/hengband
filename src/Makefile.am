@@ -643,6 +643,7 @@ libhengband_a_SOURCES = \
 	info-reader/race-reader.cpp info-reader/race-reader.h \
 	info-reader/random-grid-effect-types.h \
 	info-reader/range.h \
+	info-reader/record-diagnostic.cpp info-reader/record-diagnostic.h \
 	info-reader/skill-reader.cpp info-reader/skill-reader.h \
 	info-reader/spell-reader.cpp info-reader/spell-reader.h \
 	info-reader/terrain-reader.cpp info-reader/terrain-reader.h \
@@ -1562,6 +1563,7 @@ hengband_test_SOURCES = \
 	test/info-reader/test-legend-ego-validator.cpp \
 	test/info-reader/test-quest-reader.cpp \
 	test/info-reader/test-race-reader.cpp \
+	test/info-reader/test-record-diagnostic.cpp \
 	test/info-reader/test-skill-reader.cpp \
 	test/info-reader/test-spell-reader.cpp \
 	test/info-reader/test-terrain-reader.cpp \

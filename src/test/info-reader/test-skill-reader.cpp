@@ -370,7 +370,7 @@ TEST_CASE("SkillReader diagnostics identify the class field and cause")
     const auto result = test::read_and_commit(reader, session);
     CHECK(test::to_error_code(result) == expected);
     REQUIRE(reader.error().has_value());
-    CHECK(reader.error()->class_id == class_id);
+    CHECK(reader.error()->id == class_id);
     CHECK(reader.error()->path == path);
     CHECK(reader.error()->reason == reason);
     CHECK(session.last_id().value_or(-1) == 6);
