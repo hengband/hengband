@@ -505,7 +505,7 @@ tl::expected<void, ParseErrorType> QuestReader::set_definition(QuestFixedMap &pa
             meta.flags |= it->second;
             return true;
         };
-        if (const auto result = info_read_flag_array(flags, grab_flag, ParseErrorType::INVALID_TYPE, ParseErrorType::INVALID_TYPE); !result) {
+        if (const auto result = info_read_flag_array(flags, grab_flag); !result) {
             return result;
         }
     }

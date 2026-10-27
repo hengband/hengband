@@ -604,10 +604,8 @@ TEST_CASE("TerrainReader pins flag array type errors and missing values")
                 data[pointer] = nlohmann::json::parse(input);
             }
             auto expected = ParseErrorType::NONE;
-            if (input_text == "42") {
-                expected = ParseErrorType::TOO_FEW_ARGUMENTS;
-            } else if (input_text == "[1]") {
-                expected = ParseErrorType::TOO_FEW_ARGUMENTS;
+            if (input_text == "42" || input_text == "[1]") {
+                expected = ParseErrorType::INVALID_TYPE;
             }
             if (input_text == "null" || input_text == "missing") {
                 expected = ParseErrorType::TOO_FEW_ARGUMENTS;

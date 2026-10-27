@@ -177,7 +177,7 @@ template <typename Enum>
 static tl::expected<void, ParseErrorType> info_set_enum_flag_group(const nlohmann::json &obj, std::string_view key, EnumClassFlagGroup<Enum> &flags, const std::unordered_map<std::string_view, Enum> &tokens, std::string_view label)
 {
     const auto it = obj.find(key);
-    if (it == obj.end() || it->is_null() || !it->is_array()) {
+    if (it == obj.end() || it->is_null()) {
         return tl::unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
     }
 
@@ -192,7 +192,7 @@ static tl::expected<void, ParseErrorType> info_set_enum_flag_group(const nlohman
             return true;
         }
         msg_print(_("未知のダンジョン{}種別 '{}'。", "Unknown dungeon {} kind '{}'."), label, token);
-        return false; }, ParseErrorType::TOO_FEW_ARGUMENTS, ParseErrorType::TOO_FEW_ARGUMENTS);
+        return false; });
 }
 
 /*!
@@ -500,7 +500,7 @@ tl::expected<void, ParseErrorType> DungeonReader::set_dungeon_flags(DungeonDefin
     }
     return info_read_flag_array(flags_obj, [this, &dungeon](const nlohmann::json &flag) {
         const auto token = flag.get<std::string>();
-        return token.empty() || this->grab_one_dungeon_flag(dungeon, token); }, ParseErrorType::TOO_FEW_ARGUMENTS, ParseErrorType::TOO_FEW_ARGUMENTS);
+        return token.empty() || this->grab_one_dungeon_flag(dungeon, token); });
 }
 
 template <typename Enum, typename Validator>
@@ -594,7 +594,7 @@ tl::expected<void, ParseErrorType> DungeonReader::set_dungeon_monster_flags(cons
     }
     return info_read_flag_array(flags_obj, [this, &dungeon](const nlohmann::json &flag) {
         const auto token = flag.get<std::string>();
-        return token.empty() || this->grab_one_basic_monster_flag(dungeon, token); }, ParseErrorType::TOO_FEW_ARGUMENTS, ParseErrorType::TOO_FEW_ARGUMENTS);
+        return token.empty() || this->grab_one_basic_monster_flag(dungeon, token); });
 }
 
 tl::expected<void, ParseErrorType> DungeonReader::set_dungeon_monster_symbols(const nlohmann::json &symbols_obj, DungeonDefinition &dungeon) const
@@ -632,7 +632,7 @@ tl::expected<void, ParseErrorType> DungeonReader::set_dungeon_monster_spells(con
     }
     return info_read_flag_array(spells_obj, [this, &dungeon](const nlohmann::json &flag) {
         const auto token = flag.get<std::string>();
-        return token.empty() || this->grab_one_spell_monster_flag(dungeon, token); }, ParseErrorType::TOO_FEW_ARGUMENTS, ParseErrorType::TOO_FEW_ARGUMENTS);
+        return token.empty() || this->grab_one_spell_monster_flag(dungeon, token); });
 }
 
 /*!

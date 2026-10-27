@@ -498,9 +498,7 @@ TEST_CASE("ArtifactReader pins flag array type errors and missing values")
                 data[pointer] = nlohmann::json::parse(input);
             }
             auto expected = ParseErrorType::NONE;
-            if (input_text == "42") {
-                expected = ParseErrorType::TOO_FEW_ARGUMENTS;
-            } else if (input_text == "[1]") {
+            if (input_text == "42" || input_text == "[1]") {
                 expected = ParseErrorType::INVALID_TYPE;
             }
             CHECK(test::to_error_code(test::read_and_commit(ArtifactReader(data, session), session)) == expected);

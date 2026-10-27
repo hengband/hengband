@@ -161,7 +161,7 @@ tl::expected<void, ParseErrorType> EgoReader::set_flags(EgoItemDefinition &ego) 
     if (flags.is_null()) {
         return {};
     }
-    return info_read_flag_array(flags, [this, &ego](const auto &flag) { return this->grab_one_flag(ego, flag); }, ParseErrorType::INVALID_TYPE, ParseErrorType::INVALID_TYPE);
+    return info_read_flag_array(flags, [this, &ego](const auto &flag) { return this->grab_one_flag(ego, flag); });
 }
 
 /*!
@@ -198,7 +198,7 @@ tl::expected<void, ParseErrorType> EgoReader::set_extra_flags(EgoItemDefinition 
         if (flags.empty()) {
             return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
         }
-        if (const auto result = info_read_flag_array(flags, [this, &extra](const auto &flag) { return this->grab_one_extra_flag(extra, flag); }, ParseErrorType::INVALID_TYPE, ParseErrorType::INVALID_TYPE); !result) {
+        if (const auto result = info_read_flag_array(flags, [this, &extra](const auto &flag) { return this->grab_one_extra_flag(extra, flag); }); !result) {
             return result;
         }
         ego.xtra_flags.push_back(std::move(extra));

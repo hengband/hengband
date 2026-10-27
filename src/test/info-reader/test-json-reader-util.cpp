@@ -745,12 +745,12 @@ TEST_CASE("Flag arrays preserve token order duplicates and stop at the first err
         return token != "UNKNOWN";
     };
     const auto read = [&grab](const nlohmann::json &flags) {
-        return test::to_error_code(info_read_flag_array(flags, grab, ParseErrorType::TOO_FEW_ARGUMENTS, ParseErrorType::INVALID_TYPE));
+        return test::to_error_code(info_read_flag_array(flags, grab));
     };
     CHECK(read(nlohmann::json::array()) == ParseErrorType::NONE);
     CHECK(seen.empty());
-    CHECK(read(1) == ParseErrorType::TOO_FEW_ARGUMENTS);
-    CHECK(read(nullptr) == ParseErrorType::TOO_FEW_ARGUMENTS);
+    CHECK(read(1) == ParseErrorType::INVALID_TYPE);
+    CHECK(read(nullptr) == ParseErrorType::INVALID_TYPE);
     CHECK(seen.empty());
     const auto tokens = nlohmann::json::parse(R"(["A", "A", "", "UNKNOWN", 1])");
     const auto saved = tokens;
@@ -762,5 +762,4 @@ TEST_CASE("Flag arrays preserve token order duplicates and stop at the first err
     CHECK(read(nlohmann::json::parse(R"(["A", 1, "UNKNOWN"])")) == ParseErrorType::INVALID_TYPE);
     REQUIRE(seen.size() == 1);
     CHECK(seen.front() == "A");
-    CHECK(test::to_error_code(info_read_flag_array(nlohmann::json::parse("[false]"), grab, ParseErrorType::INVALID_VALUE, ParseErrorType::GENERIC)) == ParseErrorType::GENERIC);
 }

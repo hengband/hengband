@@ -133,7 +133,7 @@ tl::expected<void, ParseErrorType> TerrainReader::read() const
     }
     if (const auto result = info_read_flag_array(flags_obj, [this, &terrain](const nlohmann::json &flag) {
             const auto token = flag.get<std::string>();
-            return token.empty() || this->grab_one_feat_flag(terrain, token); }, ParseErrorType::TOO_FEW_ARGUMENTS, ParseErrorType::TOO_FEW_ARGUMENTS); !result) {
+            return token.empty() || this->grab_one_feat_flag(terrain, token); }); !result) {
         return result;
     }
     if (const auto result = this->set_terrain_door(terrain); !result) {

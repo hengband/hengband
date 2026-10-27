@@ -213,5 +213,5 @@ tl::expected<void, ParseErrorType> ArtifactReader::set_art_flags(ArtifactDefinit
     if (flag_data.is_null()) {
         return {};
     }
-    return info_read_flag_array(flag_data, [this, &artifact](const auto &flag) { return this->grab_one_artifact_flag(artifact, flag.template get<std::string>()); }, ParseErrorType::TOO_FEW_ARGUMENTS, ParseErrorType::INVALID_TYPE);
+    return info_read_flag_array(flag_data, [this, &artifact](const auto &flag) { return this->grab_one_artifact_flag(artifact, flag.template get<std::string>()); });
 }

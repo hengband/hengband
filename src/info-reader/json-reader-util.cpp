@@ -10,18 +10,16 @@
  * 最初のエラーで停止する。エラーより前に処理済みのフラグは巻き戻さない。
  * @param json フラグ配列
  * @param grab_flag 各文字列の解釈と格納を行う関数。未知のトークンならfalseを返す。
- * @param array_error 配列でない場合のエラー
- * @param element_error 文字列でない要素の場合のエラー
- * @return 成功時は空、型の誤りは指定のエラー、未知のトークンはINVALID_FLAG
+ * @return 成功時は空、型の誤りはINVALID_TYPE、未知のトークンはINVALID_FLAG
  */
-tl::expected<void, ParseErrorType> info_read_flag_array(const nlohmann::json &json, const std::function<bool(const nlohmann::json &)> &grab_flag, ParseErrorType array_error, ParseErrorType element_error)
+tl::expected<void, ParseErrorType> info_read_flag_array(const nlohmann::json &json, const std::function<bool(const nlohmann::json &)> &grab_flag)
 {
     if (!json.is_array()) {
-        return tl::make_unexpected(array_error);
+        return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
     }
     for (const auto &flag : json) {
         if (!flag.is_string()) {
-            return tl::make_unexpected(element_error);
+            return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
         }
         if (!grab_flag(flag)) {
             return tl::make_unexpected(ParseErrorType::INVALID_FLAG);

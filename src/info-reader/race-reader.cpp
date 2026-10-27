@@ -550,7 +550,7 @@ tl::expected<void, ParseErrorType> RaceReader::set_mon_flags(MonraceDefinition &
     if (flag_data.is_null()) {
         return {};
     }
-    return info_read_flag_array(flag_data, [this, &monrace](const auto &flag) { return this->grab_one_basic_flag(monrace, flag.template get<std::string>()); }, ParseErrorType::TOO_FEW_ARGUMENTS, ParseErrorType::INVALID_TYPE);
+    return info_read_flag_array(flag_data, [this, &monrace](const auto &flag) { return this->grab_one_basic_flag(monrace, flag.template get<std::string>()); });
 }
 
 /*!
@@ -602,7 +602,7 @@ tl::expected<void, ParseErrorType> RaceReader::set_mon_skills(MonraceDefinition 
         return {};
     }
 
-    return info_read_flag_array(*skill_list, [this, &monrace](const nlohmann::json &flag) { return this->grab_one_spell_flag(monrace, flag.get<std::string>()); }, ParseErrorType::INVALID_TYPE, ParseErrorType::INVALID_TYPE);
+    return info_read_flag_array(*skill_list, [this, &monrace](const nlohmann::json &flag) { return this->grab_one_spell_flag(monrace, flag.get<std::string>()); });
 }
 
 /*!
