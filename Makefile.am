@@ -52,6 +52,8 @@ schema_files = \
 EXTRA_DIST = \
 	lib/edit/ClassSkillDefinitions.md \
 	lib/edit/VaultDefinitions.md \
+	AGENTS.md \
+	CLAUDE.md \
 	autopick.txt \
 	autopick_eng.txt \
 	bootstrap \
