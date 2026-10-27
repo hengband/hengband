@@ -2,7 +2,6 @@
 #include "avatar/avatar.h"
 #include "floor/dungeon-feeling.h"
 #include "game-option/option-flags.h"
-#include "info-reader/fixed-map-parser.h"
 #include "load/angband-version-comparer.h"
 #include "load/load-util.h"
 #include "market/bounty.h"

@@ -1,7 +1,6 @@
 #pragma once
 
 #include "util/abstract-map-wrapper.h"
-#include "util/enum-range.h"
 #include "util/sha256.h"
 
 enum class DefinitionHashDataType {

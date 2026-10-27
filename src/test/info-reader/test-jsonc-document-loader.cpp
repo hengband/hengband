@@ -3,6 +3,7 @@
 #include <doctest/doctest.h>
 #include <filesystem>
 #include <fstream>
+#include <nlohmann/json.hpp>
 #include <stdexcept>
 #include <string>
 #include <string_view>

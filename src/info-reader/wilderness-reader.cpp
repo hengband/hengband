@@ -2,7 +2,6 @@
 #include "floor/floor-base-definitions.h"
 #include "game-option/birth-options.h"
 #include "info-reader/dungeon-reader.h"
-#include "info-reader/info-reader-util.h"
 #include "info-reader/json-reader-util.h"
 #include "info-reader/jsonc-document-loader.h"
 #include "info-reader/parse-error-messages.h"

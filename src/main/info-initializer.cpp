@@ -10,7 +10,6 @@
 #include "info-reader/definition-hash-data.h"
 #include "info-reader/dungeon-reader.h"
 #include "info-reader/ego-reader.h"
-#include "info-reader/fixed-map-parser.h"
 #include "info-reader/info-reader-util.h"
 #include "info-reader/json-reader-util.h"
 #include "info-reader/jsonc-document-loader.h"

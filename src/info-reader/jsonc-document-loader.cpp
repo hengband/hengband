@@ -1,5 +1,6 @@
 #include "info-reader/jsonc-document-loader.h"
 #include <iterator>
+#include <nlohmann/json.hpp>
 
 JsoncDocumentLoader::JsoncDocumentLoader(const std::filesystem::path &path)
     : input(path)

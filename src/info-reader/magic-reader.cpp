@@ -8,7 +8,6 @@
 #include "system/spell-info-list.h"
 #include "util/enum-converter.h"
 #include "view/display-messages.h"
-#include <fmt/format.h>
 #include <limits>
 #include <nlohmann/json.hpp>
 #include <utility>

@@ -2,7 +2,7 @@
 
 #include <filesystem>
 #include <fstream>
-#include <nlohmann/json.hpp>
+#include <nlohmann/json_fwd.hpp>
 
 /*!
  * @brief コメントと末尾カンマを許可して JSONC ファイルを読み込む

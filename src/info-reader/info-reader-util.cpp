@@ -3,8 +3,6 @@
 #include "object-enchant/activation-info-table.h"
 #include "view/display-messages.h"
 
-/* Help give useful error messages */
-
 /*!
  * @brief テキストトークンを走査してフラグを一つ得る(発動能力用) /
  * Grab one activation index flag

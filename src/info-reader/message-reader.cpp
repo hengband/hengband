@@ -9,7 +9,6 @@
 #include "system/monrace/monrace-message.h"
 #include "util/enum-converter.h"
 #include "view/display-messages.h"
-#include <fmt/format.h>
 #include <nlohmann/json.hpp>
 #include <string>
 #include <utility>
