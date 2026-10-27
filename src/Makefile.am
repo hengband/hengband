@@ -634,6 +634,8 @@ libhengband_a_SOURCES = \
 	info-reader/message-reader.cpp info-reader/message-reader.h \
 	info-reader/parse-error-messages.cpp info-reader/parse-error-messages.h \
 	info-reader/parse-error-types.h \
+	info-reader/legend-ego-validator.cpp \
+	info-reader/legend-ego-validator.h \
 	info-reader/quest-reader.cpp info-reader/quest-reader.h \
 	info-reader/race-info-tokens-table.cpp info-reader/race-info-tokens-table.h \
 	info-reader/race-reader.cpp info-reader/race-reader.h \
@@ -1552,6 +1554,8 @@ hengband_test_SOURCES = \
 	test/info-reader/test-magic-reader.cpp \
 	test/info-reader/test-message-reader.cpp \
 	test/info-reader/test-parse-error-messages.cpp \
+	test/info-reader/legend-ego-fixture.h \
+	test/info-reader/test-legend-ego-validator.cpp \
 	test/info-reader/test-quest-reader.cpp \
 	test/info-reader/test-race-reader.cpp \
 	test/info-reader/test-skill-reader.cpp \

@@ -5,6 +5,7 @@
 #include "floor/floor-object.h"
 #include "grid/object-placer.h"
 #include "info-reader/general-parser.h"
+#include "info-reader/legend-ego-validator.h"
 #include "info-reader/parse-error-types.h"
 #include "info-reader/random-grid-effect-types.h"
 #include "monster-floor/monster-generator.h"
@@ -32,6 +33,7 @@
 #include "system/player-type-definition.h"
 #include "window/main-window-util.h"
 #include <algorithm>
+#include <cassert>
 
 qtwg_type *initialize_quest_generator_type(qtwg_type *qtwg_ptr, int ymin, int xmin, int ymax, int xmax, int *y, int *x)
 {
@@ -170,7 +172,14 @@ static void parse_qtw_D(PlayerType *player_ptr, qtwg_type *qtwg_ptr, std::string
                 item = floor.make_gold(item.bi_key);
             }
 
-            ItemMagicApplier(player_ptr, &item, floor.base_level, AM_NO_FIXED_ART | AM_GOOD).execute();
+            assert(validate_legend_ego(cell, false, cell.trap != 0 || (random & RANDOM_TRAP)).has_value());
+            if (cell.ego != EgoType::NONE) {
+                ItemMagicApplier(player_ptr, &item, floor.base_level, AM_NO_FIXED_ART | AM_GOOD).execute_with_ego(cell.ego);
+            } else if (random & RANDOM_EGO) {
+                ItemMagicApplier(player_ptr, &item, floor.base_level, AM_NO_FIXED_ART | AM_GOOD).execute_with_random_ego();
+            } else {
+                ItemMagicApplier(player_ptr, &item, floor.base_level, AM_NO_FIXED_ART | AM_GOOD).execute();
+            }
             drop_here(floor, std::move(item), *qtwg_ptr->y, *qtwg_ptr->x);
         }
 

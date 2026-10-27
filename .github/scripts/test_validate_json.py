@@ -85,9 +85,11 @@ class QuestGridValidationTest(unittest.TestCase):
         cases = (
             ({}, True),
             ({"terrain": "*", "caveInfo": ["GLOW", "MARK"], "special": -1}, True),
-            ({"monster": 1, "object": 1, "ego": 1, "artifact": 1, "trap": "TRAP_PIT"}, True),
+            ({"monster": 1, "object": 1, "artifact": 1, "trap": "TRAP_PIT"}, True),
+            ({"object": 42, "ego": 65}, True),
+            ({"object": 42, "ego": {"random": True}}, True),
             ({"monster": {"random": True, "oodLevel": 0}, "object": {"random": True, "oodLevel": 0},
-              "ego": {"random": True, "id": 1}, "artifact": {"random": True, "id": 1}, "trap": {"random": True}}, True),
+              "artifact": {"random": True, "id": 1}, "trap": {"random": True}}, True),
             ({"monster": {"cloneOf": 1}, "object": {"questReward": True}, "artifact": {"questReward": True}}, True),
             ({"terrain": 1}, False),
             ({"caveInfo": ["GLOW", "GLOW"]}, False),
@@ -103,6 +105,9 @@ class QuestGridValidationTest(unittest.TestCase):
                   ({"object": {"random": True, "oodLevel": -1}}, False),
                   ({"monster": {"cloneOf": 0}}, False),
                   ({"ego": {"random": True, "id": 0}}, False),
+                  ({"ego": {"random": True, "id": 65}}, False),
+                  ({"ego": {"random": False, "id": 65}}, False),
+                  ({"ego": {"id": 65}}, False),
                   ({"artifact": {"random": True, "id": 0}}, False))
         for schema_name in ("Quest", "QuestPreferences"):
             # Recreate the former inlined graph and compare acceptance as well
@@ -686,11 +691,12 @@ class TownMapValidationTest(unittest.TestCase):
         self.assertTrue(ok, message)
 
     def test_optional_ego_and_positive_byte_ids(self):
-        # 省略はエゴなし。ランダム指定のIDも同じ範囲で検証する。
-        for token in (1, 255, {"random": True}):
+        # 固定の装備品に、定義済みのよいエゴかランダムエゴを指定する。
+        for token in (65, {"random": True}):
             with self.subTest(token=token):
                 data = copy.deepcopy(self.data)
                 data["featureRules"][0]["definition"]["ego"] = token
+                data["featureRules"][0]["definition"]["object"] = 42
                 ok, message = self.validate(data)
                 self.assertTrue(ok, message)
         for token in ("0", "-0", "0000", "256", "-1", "-2147483648", "*0", "*256", "*-1", "**", "+1", "*+1", "!", "c1", None, 0, 256, -1, {"random": True, "id": 1}):
@@ -700,6 +706,22 @@ class TownMapValidationTest(unittest.TestCase):
                 data["featureRules"][0]["definition"]["ego"] = token
                 ok, message = self.validate(data)
                 self.assertFalse(ok, message)
+
+    def test_ego_validation_ignores_when_and_rejects_unplaced_objects(self):
+        for cell in (
+            {"object": 42, "ego": 1}, {"object": 42, "ego": 102}, {"ego": 65},
+            {"object": {"random": True}, "ego": 65},
+            {"object": {"questReward": True}, "ego": 65},
+            {"object": 42, "ego": 65, "trap": "TRAP_PIT"},
+            {"object": 42, "ego": 65, "trap": {"random": True}},
+        ):
+            with self.subTest(cell=cell):
+                data = copy.deepcopy(self.data)
+                data["featureRules"][0]["when"] = "0"
+                data["featureRules"][0]["definition"].update(cell)
+                ok, message = self.validate(data)
+                self.assertFalse(ok, message)
+                self.assertIn("ego", message)
 
     def test_v3_constraints_and_positions(self):
         cases = (

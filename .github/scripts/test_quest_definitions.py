@@ -70,10 +70,9 @@ class QuestInt16RangeTest(unittest.TestCase):
         shared = self.loaded[next(path for path in self.loaded if path.name == "QuestGrid.schema.json")]
         plain, random = shared["$defs"]["egoSpec"]["oneOf"]
         self.assertEqual((plain["minimum"], plain["maximum"]), (1, MAX_EGO_ID))
-        self.assertEqual((random["properties"]["id"]["minimum"], random["properties"]["id"]["maximum"]), (1, MAX_EGO_ID))
+        self.assertNotIn("id", random["properties"])
         cases = (
             lambda value: {"ego": value},
-            lambda value: {"ego": {"random": True, "id": value}},
         )
         for make_cell in cases:
             for schema_name in ("Quest", "QuestPreferences"):
@@ -296,7 +295,7 @@ class QuestEditDirTestCase(unittest.TestCase):
                 "#": {"terrain": "FLOOR", "trap": "CLOSED_DOOR", "monster": 1, "object": 1, "artifact": 1},
                 "c": {"monster": {"cloneOf": 1}, "artifact": {"random": True, "id": 1}},
                 "r": {"terrain": "*", "trap": {"random": True}, "monster": {"random": True, "oodLevel": 32767},
-                      "object": {"random": True, "oodLevel": 32767}, "artifact": {"questReward": True}, "ego": 255},
+                      "object": {"random": True, "oodLevel": 32767}, "artifact": {"questReward": True}},
             },
             "map": ["#cr"],
         }
@@ -330,6 +329,33 @@ class QuestEditDirTestCase(unittest.TestCase):
 
 class QuestReferenceTest(QuestEditDirTestCase):
     """CI が QuestList と同じくクエストの参照を照合することを確かめる。"""
+
+    def test_legend_ego_validation_in_local_and_shared_legends(self):
+        cases = [
+            ({"object": 42, "ego": 65}, True),
+            ({"object": 42, "ego": {"random": True}}, True),
+            ({"object": 42, "ego": 1}, False),
+            ({"object": 42, "ego": 255}, False),
+            ({"object": 42, "ego": 102}, False),
+            ({"ego": 65}, False),
+            ({"object": {"random": True}, "ego": 65}, False),
+            ({"object": {"questReward": True}, "ego": 65}, False),
+            ({"object": 42, "ego": 65, "trap": "CLOSED_DOOR"}, False),
+            ({"object": 42, "ego": {"random": True}, "trap": {"random": True}}, False),
+        ]
+        gold = next(item["id"] for item in self.bundled("BaseitemDefinitions")["baseitems"]
+                    if item["itemkind"]["type_value"] == 127)
+        cases.append(({"object": gold, "ego": 65}, False))
+        for cell, accepted in cases:
+            for shared in (False, True):
+                with self.subTest(cell=cell, shared=shared):
+                    document = self.quest()
+                    document["legend"]["#"] = cell
+                    extra = {"QuestPreferences.jsonc": {"version": 1, "legend": {"#": cell}}}
+                    schema = "QuestPreferences" if shared else "Quest"
+                    target = "QuestPreferences.jsonc" if shared else "001.jsonc"
+                    ok, message = self.validate_in_edit_dir({"001.jsonc": document}, target, extra, schema)
+                    self.assertEqual(ok, accepted, message)
 
     def test_defined_references_are_accepted(self):
         ok, message = self.validate_in_edit_dir({"001.jsonc": self.quest()}, "001.jsonc")
@@ -472,6 +498,38 @@ class QuestMapSymbolTest(QuestEditDirTestCase):
         quests = broken | {"001.jsonc": self.quest(startVariants=[{"leavingQuest": 3, "y": 0, "x": 0}])}
         ok, message = self.validate_in_edit_dir(quests, "001.jsonc", raw_quests={"004.jsonc": "{\"id\": 4,"})
         self.assertTrue(ok, message)
+
+
+class LegendEgoSemanticsTest(unittest.TestCase):
+    def test_ego_structure_and_attributes(self):
+        from jsonschema.exceptions import ValidationError
+        from validate_json import validate_legend_ego, extract_baseitem_attributes, extract_ego_attributes
+        baseitems = extract_baseitem_attributes({
+            "baseitems": [
+                {"id": 42, "name": {"ja": "Sword", "en": "Sword"}, "itemkind": {"type_value": 23}},
+                {"id": 56, "name": {"ja": "Gold", "en": "Gold"}, "itemkind": {"type_value": 127}},
+            ]})
+        egos = extract_ego_attributes({"egos": [
+            {"id": 65, "rating": 10},
+            {"id": 102, "rating": 0},
+            {"id": 4, "rating": 30, "flags": ["CURSED"]},
+            {"id": 5, "rating": 30, "flags": ["HEAVY_CURSE"]},
+            {"id": 6, "rating": 30, "flags": ["PERMA_CURSE"]},
+        ]})
+        accepted = ({}, {"object": 42, "ego": 65}, {"object": 42, "ego": {"random": True}, "trap": "NONE"})
+        rejected = (
+            {"object": 42, "ego": 1}, {"object": 42, "ego": 255},
+            *({"object": 42, "ego": ego} for ego in (102, 4, 5, 6)),
+            {"ego": 65}, {"object": {"random": True}, "ego": 65},
+            {"object": {"questReward": True}, "ego": 65},
+            {"object": 56, "ego": 65}, {"object": 42, "ego": 65, "trap": "TRAP_PIT"},
+            {"object": 42, "ego": {"random": True}, "trap": {"random": True}},
+        )
+        for cell in accepted:
+            validate_legend_ego(cell, baseitems, egos, ["legend", "#"])
+        for cell in rejected:
+            with self.subTest(cell=cell), self.assertRaises(ValidationError):
+                validate_legend_ego(cell, baseitems, egos, ["legend", "#"])
 
 
 if __name__ == "__main__":

@@ -23,6 +23,7 @@
 #include "system/system-variables.h"
 #include "system/terrain/terrain-definition.h"
 #include "system/terrain/terrain-list.h"
+#include "test/info-reader/legend-ego-fixture.h"
 #include "test/info-reader/parse-result-helpers.h"
 #include "test/info-reader/scoped-reader-state.h"
 #include "test/scoped-vector-wrapper.h"
@@ -360,7 +361,11 @@ TEST_CASE("TownMapReader validates v3 modes types and narrowing bounds")
         for (const auto &value : std::array<nlohmann::json, 4>{ { 1, 255, { { "random", true } }, nullptr } }) {
             auto data = make_town_map();
             data["featureRules"][0]["definition"][field] = value;
-            CHECK(test::to_error_code(read_town(data)) == (value.is_null() ? ParseErrorType::INVALID_TYPE : ParseErrorType::NONE));
+            // エゴ単独では配置対象がなく、固定ID 1/255 も未定義なので拒否する。
+            const auto expected = value.is_null()                    ? ParseErrorType::INVALID_TYPE
+                                  : std::string_view(field) == "ego" ? ParseErrorType::INVALID_VALUE
+                                                                     : ParseErrorType::NONE;
+            CHECK(test::to_error_code(read_town(data)) == expected);
         }
         for (const auto &value : std::array<nlohmann::json, 6>{ { 0, -1, 32768, { { "random", false } }, { { "random", true }, { "questReward", true } }, nlohmann::json::object() } }) {
             auto data = make_town_map();
@@ -376,13 +381,15 @@ TEST_CASE("TownMapReader validates v3 modes types and narrowing bounds")
     }
 }
 
-TEST_CASE("TownMapReader ego is optional and uses positive byte IDs")
+TEST_CASE("TownMapReader ego is optional and validates placed equipment")
 {
+    const test::LegendEgoFixture ego_state;
     auto data = make_town_map();
     TownMapDefinition definition;
     REQUIRE(TownMapReader(data).read(definition, 3, 3).has_value());
     CHECK(definition.features.front().cell.grid.ego == EgoType::NONE);
-    for (const int id : { 1, 255 }) {
+    data["featureRules"][0]["definition"]["object"] = 42;
+    for (const int id : { static_cast<int>(EgoType::DF), static_cast<int>(EgoType::BRAND_FIRE) }) {
         data["featureRules"][0]["definition"]["ego"] = id;
         REQUIRE(TownMapReader(data).read(definition, 3, 3).has_value());
         CHECK(enum2i(definition.features.front().cell.grid.ego) == id);
@@ -1277,11 +1284,10 @@ TEST_CASE("TownMapReader applies random terrain trap clones and reward placehold
     fields["monster"] = { { "cloneOf", 32767 } };
     fields["object"] = { { "questReward", true } };
     fields["artifact"] = { { "questReward", true } };
-    fields["ego"] = 255;
     fields["special"] = 32767;
     TownMapDefinition definition;
     REQUIRE(TownMapReader(data).read(definition, 3, 3).has_value());
-    const dungeon_grid expected{ .feature = 0, .monster = -32767, .object = 0, .ego = i2enum<EgoType>(255), .artifact = FixedArtifactId::NONE, .trap = 0, .cave_info = 0, .special = 32767, .random = RANDOM_FEATURE | RANDOM_TRAP };
+    const dungeon_grid expected{ .feature = 0, .monster = -32767, .object = 0, .ego = EgoType::NONE, .artifact = FixedArtifactId::NONE, .trap = 0, .cave_info = 0, .special = 32767, .random = RANDOM_FEATURE | RANDOM_TRAP };
     letter['#'] = {};
     REQUIRE(apply_town_map_feature(floor, definition.features.front()).has_value());
     check_same_grid(letter['#'], expected);
@@ -1676,7 +1682,7 @@ TEST_CASE("TownMapReader later v3 rules replace the whole cell")
         { "terrain", "*" }, { "trap", { { "random", true } } },
         { "monster", { { "random", true }, { "oodLevel", 10 } } },
         { "object", { { "random", true }, { "oodLevel", 25 } } },
-        { "ego", { { "random", true } } }, { "artifact", { { "random", true }, { "id", 3 } } },
+        { "artifact", { { "random", true }, { "id", 3 } } },
         { "caveInfo", { "MARK", "GLOW" } }, { "special", 42 }
     };
     data["featureRules"].push_back({ { "symbol", "#" }, { "definition", { { "terrain", "TOWN_FEATURE_TEST_FLOOR" }, { "trap", "TOWN_FEATURE_TEST_TRAP" } } } });
@@ -1684,7 +1690,7 @@ TEST_CASE("TownMapReader later v3 rules replace the whole cell")
     REQUIRE(TownMapReader(data).read(definition, 3, 3).has_value());
     REQUIRE(apply_town_map_feature(floor, definition.features[0]).has_value());
     CHECK(letter['#'].object == 25);
-    CHECK(letter['#'].random == (RANDOM_FEATURE | RANDOM_MONSTER | RANDOM_OBJECT | RANDOM_EGO | RANDOM_ARTIFACT | RANDOM_TRAP));
+    CHECK(letter['#'].random == (RANDOM_FEATURE | RANDOM_MONSTER | RANDOM_OBJECT | RANDOM_ARTIFACT | RANDOM_TRAP));
     REQUIRE(apply_town_map_feature(floor, definition.features[1]).has_value());
     dungeon_grid expected{};
     expected.feature = state.floor_id();

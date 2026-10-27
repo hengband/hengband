@@ -1,6 +1,7 @@
 #include "artifact/fixed-art-types.h"
 #include "info-reader/parse-error-types.h"
 #include "io/files-util.h"
+#include "locale/language-switcher.h"
 #include "monster-race/race-kind-flags.h"
 #include "monster-race/race-misc-flags.h"
 #include "system/artifact/artifact-definition.h"
@@ -18,6 +19,7 @@
 #include "system/monrace/monrace-list.h"
 #include "system/terrain/terrain-definition.h"
 #include "system/terrain/terrain-list.h"
+#include "test/info-reader/legend-ego-fixture.h"
 #include "test/scoped-restore.h"
 #include "test/scoped-rng.h"
 #include "test/scoped-vector-wrapper.h"
@@ -798,6 +800,11 @@ TEST_CASE("QuestList rejects missing local and base legend references before pub
         int id;
     };
     const std::vector<InvalidCell> invalid_cells{
+        { { { "ego", 123 } }, "ego", 123 },
+        { { { "ego", 255 } }, "ego", 255 },
+        { { { "object", 1 }, { "ego", 1 } }, "ego", 1 },
+        { { { "object", { { "random", true } } }, { "ego", { { "random", true } } } }, "ego", 0 },
+        { { { "object", { { "questReward", true } } }, { "ego", { { "random", true } } } }, "ego", 0 },
         { { { "monster", 123 } }, "monster", 123 },
         { { { "monster", -123 } }, "monster", -123 },
         { { { "monster", { { "cloneOf", 123 } } } }, "monster", -123 },
@@ -864,7 +871,17 @@ TEST_CASE("QuestList rejects missing local and base legend references before pub
                 } catch (const std::runtime_error &error) {
                     const std::string diagnostic(error.what());
                     CHECK(diagnostic.find(base ? "QuestPreferences.jsonc" : "02.jsonc") != std::string::npos);
-                    CHECK(diagnostic.find("legend['!']." + input.field + " " + std::to_string(input.id)) != std::string::npos);
+                    if (input.field == "ego") {
+                        const auto random = input.data["ego"].is_object();
+                        CHECK(diagnostic.find("legend['!'].ego " + (random ? std::string("random") : std::to_string(input.id))) != std::string::npos);
+                        const auto reason = !random                                   ? _("未定義のエゴID", "undefined ego ID")
+                                            : input.data["object"].contains("random") ? _("ランダムな品には指定できない", "cannot apply to a random object")
+                                                                                      : _("クエスト報酬には指定できない", "cannot apply to a quest reward");
+                        CHECK(diagnostic.find(reason) != std::string::npos);
+                        CHECK(diagnostic.find("object ") != std::string::npos);
+                    } else {
+                        CHECK(diagnostic.find("legend['!']." + input.field + " " + std::to_string(input.id)) != std::string::npos);
+                    }
                 }
                 CHECK(list.size() == (seeded ? 2 : 0));
                 CHECK_FALSE(list.contains(QuestId::THIEF));
@@ -889,13 +906,12 @@ TEST_CASE("QuestList rejects missing local and base legend references before pub
 TEST_CASE("QuestList preserves legend fixed references and generation parameters")
 {
     const std::vector<nlohmann::json> cells{
-        { { "ego", 123 } },
-        { { "ego", 255 } },
-        { { "monster", 1 }, { "object", 1 }, { "ego", 1 }, { "artifact", 1 } },
+        { { "object", 42 }, { "ego", 65 } },
+        { { "object", 42 }, { "ego", { { "random", true } } } },
+        { { "monster", 1 }, { "object", 1 }, { "artifact", 1 } },
         { { "monster", -1 } },
         { { "monster", { { "cloneOf", 1 } } } },
-        { { "monster", { { "random", true }, { "oodLevel", -32768 } } }, { "object", { { "random", true }, { "oodLevel", 32767 } } },
-            { "ego", { { "random", true }, { "id", 123 } } } },
+        { { "monster", { { "random", true }, { "oodLevel", -32768 } } }, { "object", { { "random", true }, { "oodLevel", 32767 } } } },
         { { "artifact", { { "random", true }, { "id", 1 } } } },
         { { "artifact", { { "random", true } } } },
         { { "object", { { "questReward", true } } }, { "artifact", { { "questReward", true } } } },
@@ -917,6 +933,8 @@ TEST_CASE("QuestList preserves legend fixed references and generation parameters
             CAPTURE(base);
             CAPTURE(cell);
             LegendReferenceState state;
+            const test::LegendEgoFixture ego_state;
+            BaseitemList::get_instance().get_baseitem(1).name = "Valid";
             QuestFiles files;
             const auto restore_path = test::scoped_restore(ANGBAND_DIR_EDIT);
             ANGBAND_DIR_EDIT = files.directory;
@@ -941,9 +959,6 @@ TEST_CASE("QuestList preserves legend fixed references and generation parameters
             }
             if (cell.contains("monster") && cell["monster"].is_object() && cell["monster"].contains("oodLevel")) {
                 CHECK(parsed.grid.monster == cell["monster"]["oodLevel"].get<int>());
-            }
-            if (cell.contains("ego") && cell["ego"].is_object() && cell["ego"].contains("id")) {
-                CHECK(enum2i(parsed.grid.ego) == cell["ego"]["id"].get<int>());
             }
             if (cell.contains("ego") && cell["ego"].is_number_integer()) {
                 CHECK(enum2i(parsed.grid.ego) == cell["ego"].get<int>());

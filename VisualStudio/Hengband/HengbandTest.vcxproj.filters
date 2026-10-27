@@ -199,6 +199,9 @@
     <ClCompile Include="..\..\src\test\info-reader\test-jsonc-document-loader.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\test\info-reader\test-legend-ego-validator.cpp">
+      <Filter>info-reader</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\test\info-reader\test-magic-reader.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>
@@ -458,6 +461,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\stdafx.h" />
+    <ClInclude Include="..\..\src\test\info-reader\legend-ego-fixture.h">
+      <Filter>info-reader</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\src\test\info-reader\parse-result-helpers.h">
       <Filter>info-reader</Filter>
     </ClInclude>

@@ -1,5 +1,6 @@
 #include "info-reader/town-map-reader.h"
 #include "info-reader/json-reader-util.h"
+#include "info-reader/legend-ego-validator.h"
 #include "info-reader/quest-reader.h"
 #include "player-info/class-info.h"
 #include "player-info/race-info.h"
@@ -217,6 +218,9 @@ tl::expected<void, ParseErrorType> TownMapReader::read_features(TownMapDefinitio
         DeferredQuestLegendCell parsed;
         if (const auto result = parse_quest_legend_cell_deferred(fields, parsed); !result) {
             return tl::make_unexpected(result.error());
+        }
+        if (!validate_legend_ego(parsed.cell.grid, parsed.cell.object_is_quest_reward, parsed.trap_tag != "NONE")) {
+            return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
         }
         feature.terrain = std::move(parsed.terrain_tag);
         feature.trap = std::move(parsed.trap_tag);

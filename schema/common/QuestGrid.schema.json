@@ -131,11 +131,6 @@
           "properties": {
             "random": {
               "const": true
-            },
-            "id": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 255
             }
           }
         }

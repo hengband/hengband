@@ -288,15 +288,15 @@ tl::expected<void, ParseErrorType> parse_legend_cell(const nlohmann::json &cell_
             return result;
         }
     } else if (ego.is_object()) {
+        if (ego.contains("id")) {
+            return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
+        }
         auto random = false;
         if (const auto result = info_set_bool(get_json_value(ego, "random"), random, false); !result) {
             return result;
         }
         if (random) {
             grid.random |= RANDOM_EGO;
-            if (const auto result = info_set_integer(get_json_value(ego, "id"), grid.ego, false, LEGEND_EGO_RANGE); !result) {
-                return result;
-            }
         }
     } else if (!ego.is_null()) {
         return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
