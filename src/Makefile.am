@@ -631,6 +631,7 @@ libhengband_a_SOURCES = \
 	info-reader/item-reader-limits.h \
 	info-reader/json-reader-util.cpp info-reader/json-reader-util.h \
 	info-reader/jsonc-document-loader.cpp info-reader/jsonc-document-loader.h \
+	info-reader/magic-info-tokens-table.cpp info-reader/magic-info-tokens-table.h \
 	info-reader/magic-reader.cpp info-reader/magic-reader.h \
 	info-reader/message-reader.cpp info-reader/message-reader.h \
 	info-reader/parse-error-messages.cpp info-reader/parse-error-messages.h \

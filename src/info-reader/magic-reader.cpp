@@ -1,9 +1,9 @@
 #include "info-reader/magic-reader.h"
 #include "info-reader/info-reader-util.h"
 #include "info-reader/json-reader-util.h"
+#include "info-reader/magic-info-tokens-table.h"
 #include "info-reader/parse-error-types.h"
 #include "locale/language-switcher.h"
-#include "player-ability/player-ability-types.h"
 #include "player-info/class-info.h"
 #include "system/spell-info-list.h"
 #include "util/enum-converter.h"
@@ -16,64 +16,6 @@
 namespace {
 //! 消費MP・初回経験値倍率・装備重量閾値の上限。
 constexpr auto MAX_CLASS_MAGIC_VALUE = std::numeric_limits<short>::max() / 16;
-
-/*!
- * @brief 魔法タイプ名とtvalの対応表
- */
-const std::unordered_map<std::string_view, ItemKindType> spelltype_to_tval = {
-    { "SORCERY", ItemKindType::SORCERY_BOOK },
-    { "LIFE", ItemKindType::LIFE_BOOK },
-    { "MUSIC", ItemKindType::MUSIC_BOOK },
-    { "HISSATSU", ItemKindType::HISSATSU_BOOK },
-    { "NONE", ItemKindType::NONE },
-};
-
-/*!
- * @brief 魔法必須能力とenumの対応表
- */
-const std::unordered_map<std::string_view, int> name_to_stat = {
-    { "STR", A_STR },
-    { "INT", A_INT },
-    { "WIS", A_WIS },
-    { "DEX", A_DEX },
-    { "CON", A_CON },
-    { "CHR", A_CHR },
-};
-
-/*!
- * @brief 職業名とenumの対応表
- */
-const std::unordered_map<std::string_view, PlayerClassType> class_list = {
-    { "WARRIOR", PlayerClassType::WARRIOR },
-    { "MAGE", PlayerClassType::MAGE },
-    { "PRIEST", PlayerClassType::PRIEST },
-    { "ROGUE", PlayerClassType::ROGUE },
-    { "RANGER", PlayerClassType::RANGER },
-    { "PALADIN", PlayerClassType::PALADIN },
-    { "WARRIOR_MAGE", PlayerClassType::WARRIOR_MAGE },
-    { "CHAOS_WARRIOR", PlayerClassType::CHAOS_WARRIOR },
-    { "MONK", PlayerClassType::MONK },
-    { "MINDCRAFTER", PlayerClassType::MINDCRAFTER },
-    { "HIGH_MAGE", PlayerClassType::HIGH_MAGE },
-    { "TOURIST", PlayerClassType::TOURIST },
-    { "IMITATOR", PlayerClassType::IMITATOR },
-    { "BEASTMASTER", PlayerClassType::BEASTMASTER },
-    { "SORCERER", PlayerClassType::SORCERER },
-    { "ARCHER", PlayerClassType::ARCHER },
-    { "MAGIC_EATER", PlayerClassType::MAGIC_EATER },
-    { "BARD", PlayerClassType::BARD },
-    { "RED_MAGE", PlayerClassType::RED_MAGE },
-    { "SAMURAI", PlayerClassType::SAMURAI },
-    { "FORCETRAINER", PlayerClassType::FORCETRAINER },
-    { "BLUE_MAGE", PlayerClassType::BLUE_MAGE },
-    { "CAVALRY", PlayerClassType::CAVALRY },
-    { "BERSERKER", PlayerClassType::BERSERKER },
-    { "SMITH", PlayerClassType::SMITH },
-    { "MIRROR_MASTER", PlayerClassType::MIRROR_MASTER },
-    { "NINJA", PlayerClassType::NINJA },
-    { "SNIPER", PlayerClassType::SNIPER },
-    { "ELEMENTALIST", PlayerClassType::ELEMENTALIST },
-};
 }
 
 MagicReader::Session MagicReader::create_session(tl::optional<int> last_id)
@@ -160,8 +102,8 @@ tl::expected<int, ParseErrorType> MagicReader::read_class_id() const
         return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
     }
 
-    const auto player_class = class_list.find(classname_obj.get<std::string>());
-    if (player_class == class_list.end()) {
+    const auto player_class = magic_info_class_list.find(classname_obj.get<std::string>());
+    if (player_class == magic_info_class_list.end()) {
         msg_print(_("未知の職業名 '{}'。", "Unknown class name '{}'."), classname_obj.get<std::string>());
         return tl::make_unexpected(ParseErrorType::INVALID_FLAG);
     }
@@ -180,8 +122,8 @@ tl::expected<void, ParseErrorType> MagicReader::set_spell_type(player_magic &mag
         return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
     }
 
-    const auto tval = spelltype_to_tval.find(spell_book.get<std::string>());
-    if (tval == spelltype_to_tval.end()) {
+    const auto tval = magic_info_spelltype_to_tval.find(spell_book.get<std::string>());
+    if (tval == magic_info_spelltype_to_tval.end()) {
         return tl::make_unexpected(ParseErrorType::INVALID_FLAG);
     }
     magics_info.spell_book = tval->second;
@@ -200,8 +142,8 @@ tl::expected<void, ParseErrorType> MagicReader::set_magic_status(player_magic &m
         return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
     }
 
-    const auto status = name_to_stat.find(magic_status.get<std::string>());
-    if (status == name_to_stat.end()) {
+    const auto status = magic_info_name_to_stat.find(magic_status.get<std::string>());
+    if (status == magic_info_name_to_stat.end()) {
         return tl::make_unexpected(ParseErrorType::INVALID_FLAG);
     }
     magics_info.spell_stat = status->second;
