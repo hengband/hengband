@@ -5,10 +5,19 @@
  */
 
 #include "info-reader/parse-error-types.h"
+#include "info-reader/range.h"
 #include "system/dungeon/quest-fixed-map.h"
 #include <nlohmann/json_fwd.hpp>
 #include <string>
+#include <string_view>
 #include <tl/expected.hpp>
+
+// 凡例のセルの値の範囲（両端を含む）。値は quest-reader.cpp で ID の型から決める。
+extern const Range LEGEND_SHORT_RANGE;
+extern const Range LEGEND_MONSTER_RANGE;
+extern const Range LEGEND_EGO_RANGE;
+
+bool is_legend_cave_flag(std::string_view name);
 
 class QuestType;
 struct QuestDescriptionBlock;

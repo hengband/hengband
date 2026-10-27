@@ -2,6 +2,7 @@
 #include "info-reader/fixed-map-parser.h"
 #include "info-reader/general-parser.h"
 #include "info-reader/jsonc-document-loader.h"
+#include "info-reader/quest-reader.h"
 #include "info-reader/random-grid-effect-types.h"
 #include "info-reader/town-map-reader.h"
 #include "io/condition-expression.h"
@@ -223,6 +224,103 @@ tl::expected<void, ParseErrorType> read_town(const nlohmann::json &data, bool on
     TownMapDefinition definition;
     return TownMapReader(data).read(definition, 3, 3, only_buildings);
 }
+}
+
+TEST_CASE("TownMapReader shares legend cave flag names")
+{
+    test::ScopedReaderState reader_state;
+    for (const auto *name : { "MARK", "GLOW", "NO_TELEPORT_DEST", "ROOM", "LITE" }) {
+        CAPTURE(name);
+        REQUIRE(is_legend_cave_flag(name));
+        auto data = make_town_map();
+        auto &fields = data["featureRules"][0]["definition"];
+        fields["caveInfo"] = nlohmann::json::array();
+        fields["caveInfo"].push_back(name);
+        DeferredQuestLegendCell parsed;
+        REQUIRE(parse_quest_legend_cell_deferred(fields, parsed).has_value());
+        TownMapDefinition town;
+        REQUIRE(TownMapReader(data).read(town, 3, 3).has_value());
+        REQUIRE(town.features.size() == 1);
+        CHECK(town.features.front().cell.grid.cave_info == parsed.cell.grid.cave_info);
+        CHECK(parsed.cell.grid.cave_info != 0);
+    }
+    auto data = make_town_map();
+    data["featureRules"][0]["definition"]["caveInfo"] = { "UNKNOWN" };
+    CHECK_FALSE(is_legend_cave_flag("UNKNOWN"));
+    const auto result = read_town(data);
+    REQUIRE_FALSE(result.has_value());
+    CHECK(result.error() == ParseErrorType::INVALID_FLAG);
+}
+
+TEST_CASE("TownMapReader preserves scalar legend boundaries")
+{
+    test::ScopedReaderState reader_state;
+    test::LegendEgoFixture fixture;
+    // 境界のエゴIDも有効な剣用定義として用意し、数値検証後の存在・相性検証を通す。
+    for (const auto id : { 1, 255 }) {
+        const auto ego_id = static_cast<EgoType>(id);
+        auto &ego = egos_info[ego_id];
+        ego.idx = ego_id;
+        ego.slot = INVEN_MAIN_HAND;
+        ego.rating = 10;
+    }
+    struct Boundary {
+        const char *field;
+        int minimum;
+        int maximum;
+    };
+    for (const auto boundary : { Boundary{ "special", -32768, 32767 }, Boundary{ "monster", 1, 32767 },
+             Boundary{ "object", 1, 32767 }, Boundary{ "artifact", 1, 32767 }, Boundary{ "ego", 1, 255 } }) {
+        CAPTURE(boundary.field);
+        for (const int value : { boundary.minimum - 1, boundary.minimum, boundary.maximum, boundary.maximum + 1 }) {
+            CAPTURE(value);
+            auto data = make_town_map();
+            auto &fields = data["featureRules"][0]["definition"];
+            if (std::string_view(boundary.field) == "ego") {
+                fields["object"] = 42;
+            }
+            fields[boundary.field] = value;
+            const auto result = read_town(data);
+            if (value >= boundary.minimum && value <= boundary.maximum) {
+                CHECK(test::to_error_code(result) == ParseErrorType::NONE);
+            } else {
+                REQUIRE_FALSE(result.has_value());
+                CHECK(result.error() == ParseErrorType::INVALID_VALUE);
+            }
+        }
+    }
+}
+
+TEST_CASE("TownMapReader preserves structured legend boundaries")
+{
+    test::ScopedReaderState reader_state;
+    struct Boundary {
+        const char *field;
+        const char *key;
+        int minimum;
+    };
+    for (const auto boundary : { Boundary{ "monster", "cloneOf", 1 }, Boundary{ "monster", "oodLevel", 0 },
+             Boundary{ "object", "oodLevel", 0 }, Boundary{ "artifact", "id", 1 } }) {
+        CAPTURE(boundary.field);
+        CAPTURE(boundary.key);
+        for (const int value : { boundary.minimum - 1, boundary.minimum, 32767, 32768 }) {
+            CAPTURE(value);
+            auto data = make_town_map();
+            auto &spec = data["featureRules"][0]["definition"][boundary.field];
+            spec = nlohmann::json::object();
+            if (std::string_view(boundary.key) != "cloneOf") {
+                spec["random"] = true;
+            }
+            spec[boundary.key] = value;
+            const auto result = read_town(data);
+            if (value >= boundary.minimum && value <= 32767) {
+                CHECK(test::to_error_code(result) == ParseErrorType::NONE);
+            } else {
+                REQUIRE_FALSE(result.has_value());
+                CHECK(result.error() == ParseErrorType::INVALID_VALUE);
+            }
+        }
+    }
 }
 
 TEST_CASE("TownMapReader byte diagnostics preserve control and UTF-8 bytes")
