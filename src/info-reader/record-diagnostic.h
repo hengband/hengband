@@ -14,14 +14,9 @@ struct RecordReadError {
     std::string reason;
 };
 
-enum class IntegerDiagnostic {
-    DISTINGUISH_TYPE,
-    ALWAYS_RANGE,
-};
-
 class RecordDiagnostic {
 public:
-    RecordDiagnostic(DefinitionIdChecker &session, IntegerDiagnostic integer_diagnostic);
+    explicit RecordDiagnostic(DefinitionIdChecker &session);
     RecordDiagnostic(const RecordDiagnostic &) = delete;
     RecordDiagnostic(RecordDiagnostic &&) = delete;
     RecordDiagnostic &operator=(const RecordDiagnostic &) = delete;
@@ -37,7 +32,6 @@ protected:
     DefinitionIdChecker &session;
 
 private:
-    IntegerDiagnostic integer_diagnostic;
     std::string record_id;
     std::optional<RecordReadError> diagnostic;
 };

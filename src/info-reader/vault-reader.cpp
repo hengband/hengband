@@ -17,7 +17,7 @@ VaultReader::Session VaultReader::create_session(tl::optional<int> last_id)
 }
 
 VaultReader::VaultReader(const nlohmann::json &data, Session &session)
-    : RecordDiagnostic(session, IntegerDiagnostic::ALWAYS_RANGE)
+    : RecordDiagnostic(session)
     , data(data)
 {
 }

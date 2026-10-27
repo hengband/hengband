@@ -137,6 +137,7 @@ TEST_CASE("VaultReader rejects duplicate and descending IDs and permits retry")
     REQUIRE(reader.error().has_value());
     CHECK(reader.error()->id == "4");
     CHECK(reader.error()->path == "$.rating");
+    CHECK(reader.error()->reason == _("整数が必要です", "expected an integer"));
     REQUIRE(vaults_info.size() == 4);
     CHECK(vaults_info[3].text == "good\\\"# ");
     CHECK(session.last_id().value_or(-1) == 3);
@@ -211,7 +212,7 @@ TEST_CASE("VaultReader preserves exact error precedence and every existing recor
         data["rating"] = nullptr;
         data["height"] = 0;
         path = "$.rating";
-        reason = _("0以上2147483647以下の整数が必要です", "expected an integer in [0, 2147483647]");
+        reason = _("整数が必要です", "expected an integer");
     }
     SUBCASE("height before width")
     {

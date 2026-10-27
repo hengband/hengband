@@ -11,7 +11,7 @@
 TEST_CASE("RecordDiagnostic checks required keys before unknown keys")
 {
     DefinitionIdChecker session(DefinitionIdOrder::SEQUENTIAL, { 0, 9 }, "record");
-    RecordDiagnostic reader(session, IntegerDiagnostic::DISTINGUISH_TYPE);
+    RecordDiagnostic reader(session);
     const auto keys = std::to_array<std::string_view>({ "id", "value" });
     nlohmann::json data = { { "id", 3 }, { "typo", 1 } };
     auto expected = ParseErrorType::TOO_FEW_ARGUMENTS;
@@ -44,7 +44,7 @@ TEST_CASE("RecordDiagnostic checks required keys before unknown keys")
 TEST_CASE("RecordDiagnostic delegates only a missing root id to the session")
 {
     DefinitionIdChecker session(DefinitionIdOrder::SEQUENTIAL, { 0, 9 }, "record");
-    RecordDiagnostic reader(session, IntegerDiagnostic::DISTINGUISH_TYPE);
+    RecordDiagnostic reader(session);
     const nlohmann::json data = nlohmann::json::object();
     const auto keys = std::to_array<std::string_view>({ "id" });
     std::string path = "$";
@@ -65,30 +65,28 @@ TEST_CASE("RecordDiagnostic delegates only a missing root id to the session")
     CHECK_FALSE(session.last_id().has_value());
 }
 
-TEST_CASE("RecordDiagnostic preserves integer codes and both reason policies")
+TEST_CASE("RecordDiagnostic preserves integer codes and distinguishes type and range reasons")
 {
     DefinitionIdChecker session(DefinitionIdOrder::SEQUENTIAL, { 0, 9 }, "record");
     nlohmann::json data = "2";
     auto expected = ParseErrorType::INVALID_TYPE;
     std::string reason = _("整数が必要です", "expected an integer");
-    auto policy = IntegerDiagnostic::DISTINGUISH_TYPE;
     SUBCASE("out of range")
     {
         data = 5;
         expected = ParseErrorType::INVALID_VALUE;
         reason = _("0以上4以下の整数が必要です", "expected an integer in [0, 4]");
     }
-    SUBCASE("range reason for non integer")
+    SUBCASE("floating point value")
     {
-        policy = IntegerDiagnostic::ALWAYS_RANGE;
-        reason = _("0以上4以下の整数が必要です", "expected an integer in [0, 4]");
+        data = 2.5;
     }
     SUBCASE("required null")
     {
         data = nullptr;
         expected = ParseErrorType::TOO_FEW_ARGUMENTS;
     }
-    RecordDiagnostic reader(session, policy);
+    RecordDiagnostic reader(session);
     reader.begin_read(nlohmann::json::object());
     int value = 99;
     const auto result = reader.read_integer(data, value, 0, 4, "$.value");
@@ -103,7 +101,7 @@ TEST_CASE("RecordDiagnostic preserves integer codes and both reason policies")
 TEST_CASE("RecordDiagnostic accepts valid keys and inclusive integer bounds and resets errors")
 {
     DefinitionIdChecker session(DefinitionIdOrder::SEQUENTIAL, { 0, 9 }, "record");
-    RecordDiagnostic reader(session, IntegerDiagnostic::DISTINGUISH_TYPE);
+    RecordDiagnostic reader(session);
     nlohmann::json data = { { "id", "bad" } };
     reader.begin_read(data);
     CHECK_FALSE(reader.fail(ParseErrorType::INVALID_VALUE, "$.id", "test").has_value());

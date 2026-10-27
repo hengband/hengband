@@ -20,7 +20,7 @@ SkillReader::Session SkillReader::create_session(tl::optional<int> last_id)
 }
 
 SkillReader::SkillReader(const nlohmann::json &class_data, Session &session)
-    : RecordDiagnostic(session, IntegerDiagnostic::DISTINGUISH_TYPE)
+    : RecordDiagnostic(session)
     , class_data(class_data)
 {
 }

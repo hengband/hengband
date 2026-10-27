@@ -4,9 +4,8 @@
 #include <algorithm>
 #include <fmt/format.h>
 
-RecordDiagnostic::RecordDiagnostic(DefinitionIdChecker &session, IntegerDiagnostic integer_diagnostic)
+RecordDiagnostic::RecordDiagnostic(DefinitionIdChecker &session)
     : session(session)
-    , integer_diagnostic(integer_diagnostic)
 {
 }
 
@@ -57,12 +56,12 @@ tl::expected<void, ParseErrorType> RecordDiagnostic::check_keys(const nlohmann::
 }
 
 /*!
- * @brief 整数と範囲を検証し、従来の Reader ごとの診断文言を保持する。
+ * @brief 整数の型と範囲を検証し、失敗した条件に応じた診断を保持する。
  */
 tl::expected<void, ParseErrorType> RecordDiagnostic::read_integer(const nlohmann::json &data, int &value, int minimum, int maximum, std::string_view path)
 {
     if (const auto result = info_set_integer(data, value, true, Range(minimum, maximum)); !result) {
-        const auto reason = this->integer_diagnostic == IntegerDiagnostic::ALWAYS_RANGE || data.is_number_integer()
+        const auto reason = data.is_number_integer()
                                 ? fmt::format(_("{}以上{}以下の整数が必要です", "expected an integer in [{}, {}]"), minimum, maximum)
                                 : _("整数が必要です", "expected an integer");
         return this->fail(result.error(), path, reason);
