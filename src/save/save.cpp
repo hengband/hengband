@@ -32,7 +32,6 @@
 #include "system/artifact/artifact-record.h"
 #include "system/dungeon/quest-definition.h"
 #include "system/dungeon/quest-list.h"
-#include "system/floor/floor-info.h"
 #include "system/floor/town-list.h"
 #include "system/floor/wilderness-grid.h"
 #include "system/inner-game-data.h"
@@ -306,7 +305,6 @@ bool save_player(PlayerType *player_ptr, SaveType type)
     if (type != SaveType::CLOSE_GAME) {
         world.is_loading_now = false;
         update_creature(player_ptr);
-        player_ptr->current_floor_ptr->reset_mproc();
         world.is_loading_now = true;
     }
 
