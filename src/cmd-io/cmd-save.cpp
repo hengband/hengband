@@ -1,6 +1,5 @@
 #include "cmd-io/cmd-save.h"
 #include "cmd-io/cmd-dump.h"
-#include "core/disturbance.h"
 #include "io/signal-handlers.h"
 #include "io/write-diary.h"
 #include "monster/monster-status.h" // 違和感。要調査.
@@ -21,8 +20,6 @@ void do_cmd_save_game(PlayerType *player_ptr, int is_autosave)
 {
     if (is_autosave) {
         msg_print(_("自動セーブ中", "Autosaving the game..."));
-    } else {
-        disturb(player_ptr, true, true);
     }
 
     msg_erase();
