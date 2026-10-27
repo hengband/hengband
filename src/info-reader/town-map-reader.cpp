@@ -111,13 +111,17 @@ ParseErrorType validate_town_cell(const nlohmann::json &fields)
                 if (std::find(seen.begin(), seen.end(), name) != seen.end()) {
                     return ParseErrorType::INVALID_VALUE;
                 }
-                if (name != "MARK" && name != "GLOW" && name != "NO_TELEPORT_DEST" && name != "ROOM" && name != "LITE") {
+                if (!is_legend_cave_flag(name)) {
                     return ParseErrorType::INVALID_FLAG;
                 }
                 seen.push_back(name);
             }
         } else if (value.is_number_integer()) {
-            if (!is_json_integer_in_range(value, field == "special" ? -32768 : 1, field == "ego" ? 255 : 32767)) {
+            const auto &range = field == "ego" ? LEGEND_EGO_RANGE : field == "monster" ? LEGEND_MONSTER_RANGE
+                                                                                       : LEGEND_SHORT_RANGE;
+            // 町の固定IDは正数に限定し、specialとegoは共通範囲全体を受理する。
+            const auto minimum = field == "special" || field == "ego" ? range.first : 1;
+            if (!is_json_integer_in_range(value, minimum, range.second)) {
                 return ParseErrorType::INVALID_VALUE;
             }
         } else if (value.is_object()) {
@@ -131,8 +135,12 @@ ParseErrorType validate_town_cell(const nlohmann::json &fields)
                     if (!item.get<bool>()) {
                         return ParseErrorType::INVALID_VALUE;
                     }
-                } else if (!is_json_integer_in_range(item, key == "oodLevel" ? 0 : 1, 32767)) {
-                    return ParseErrorType::INVALID_VALUE;
+                } else {
+                    const auto &range = key == "cloneOf" ? LEGEND_MONSTER_RANGE : LEGEND_SHORT_RANGE;
+                    // 町の階層補正は非負、構造化指定のIDは正数に限定する。
+                    if (!is_json_integer_in_range(item, key == "oodLevel" ? 0 : 1, range.second)) {
+                        return ParseErrorType::INVALID_VALUE;
+                    }
                 }
             }
         }

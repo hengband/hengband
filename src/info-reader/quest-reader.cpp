@@ -23,11 +23,12 @@
 #include <unordered_map>
 #include <utility>
 
-namespace {
-constexpr Range LEGEND_SHORT_RANGE(std::numeric_limits<int16_t>::min(), std::numeric_limits<int16_t>::max());
+const Range LEGEND_SHORT_RANGE(std::numeric_limits<int16_t>::min(), std::numeric_limits<int16_t>::max());
 // 負のモンスターIDは生成時にshortのまま符号反転されるので、最小値は許可しない。
-constexpr Range LEGEND_MONSTER_RANGE(-std::numeric_limits<MONSTER_IDX>::max(), std::numeric_limits<MONSTER_IDX>::max());
-constexpr Range LEGEND_EGO_RANGE(1, MAX_EGO_ID);
+const Range LEGEND_MONSTER_RANGE(-std::numeric_limits<MONSTER_IDX>::max(), std::numeric_limits<MONSTER_IDX>::max());
+const Range LEGEND_EGO_RANGE(1, MAX_EGO_ID);
+
+namespace {
 constexpr Range QUEST_INTEGER_RANGE(std::numeric_limits<int>::min(), std::numeric_limits<int>::max());
 // メタデータはintで保持するが、対象モンスターと報酬は実行時にshort基底のIDへ変換される。
 // どちらも 0 は指定なしで、ほかの定義と同じくIDの型から決めた上限までとする。
@@ -362,6 +363,16 @@ tl::expected<void, ParseErrorType> parse_legend_cell(const nlohmann::json &cell_
     return {};
 }
 
+}
+
+/*!
+ * @brief 共通凡例パーサが受理するcaveInfoの名前かを調べる
+ * @param name 検査するフラグ名
+ * @return 登録済みのフラグ名ならtrue
+ */
+bool is_legend_cave_flag(std::string_view name)
+{
+    return CAVE_FLAG_TOKENS.contains(name);
 }
 
 /*!
