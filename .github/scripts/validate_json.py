@@ -1023,9 +1023,9 @@ def load_cpp_enum_values(enum_path: Path, enum_name: str) -> dict[str, int]:
 
 
 def load_class_ids(repository_root: Path) -> dict[str, int]:
-    """Read MagicReader's tokens and PlayerClassType values, not map order."""
+    """Read the class magic tokens table and PlayerClassType values, not map order."""
     enum_ids = load_cpp_enum_values(repository_root / "src/player-info/class-types.h", "PlayerClassType")
-    reader_path = repository_root / "src/info-reader/magic-reader.cpp"
+    reader_path = repository_root / "src/info-reader/magic-info-tokens-table.cpp"
     tokens = re.findall(r'\{\s*"([A-Z][A-Z0-9_]*)"\s*,\s*PlayerClassType::([A-Z][A-Z0-9_]*)\s*\}',
                         reader_path.read_text(encoding="utf-8"))
     if not tokens or any(name not in enum_ids for _, name in tokens):

@@ -15,7 +15,6 @@
 #include <optional>
 #include <string>
 #include <string_view>
-#include <unordered_map>
 #include <utility>
 
 namespace {
@@ -282,17 +281,9 @@ tl::expected<void, ParseErrorType> TerrainReader::set_terrain_conversion(Terrain
         return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
     }
 
-    static const std::unordered_map<std::string_view, TerrainConversionType> conversion_types = {
-        { "FLOOR", TerrainConversionType::FLOOR },
-        { "WALL", TerrainConversionType::WALL },
-        { "INNER", TerrainConversionType::INNER },
-        { "OUTER", TerrainConversionType::OUTER },
-        { "SOLID", TerrainConversionType::SOLID },
-        { "STREAM", TerrainConversionType::STREAM },
-    };
     const auto type = type_obj.get<std::string>();
-    const auto it = conversion_types.find(type);
-    if (it == conversion_types.end()) {
+    const auto it = f_info_conversion_types.find(type);
+    if (it == f_info_conversion_types.end()) {
         return tl::make_unexpected(ParseErrorType::INVALID_FLAG);
     }
 
@@ -402,32 +393,9 @@ tl::expected<void, ParseErrorType> TerrainReader::set_terrain_trap(TerrainType &
         return result;
     }
 
-    static const std::unordered_map<std::string_view, TrapType> trap_types = {
-        { "TRAPDOOR", TrapType::TRAPDOOR },
-        { "PIT", TrapType::PIT },
-        { "SPIKED_PIT", TrapType::SPIKED_PIT },
-        { "POISON_PIT", TrapType::POISON_PIT },
-        { "TY_CURSE", TrapType::TY_CURSE },
-        { "TELEPORT", TrapType::TELEPORT },
-        { "FIRE", TrapType::FIRE },
-        { "ACID", TrapType::ACID },
-        { "SLOW", TrapType::SLOW },
-        { "LOSE_STR", TrapType::LOSE_STR },
-        { "LOSE_DEX", TrapType::LOSE_DEX },
-        { "LOSE_CON", TrapType::LOSE_CON },
-        { "BLIND", TrapType::BLIND },
-        { "CONFUSE", TrapType::CONFUSE },
-        { "POISON", TrapType::POISON },
-        { "SLEEP", TrapType::SLEEP },
-        { "TRAPS", TrapType::TRAPS },
-        { "ALARM", TrapType::ALARM },
-        { "OPEN", TrapType::OPEN },
-        { "ARMAGEDDON", TrapType::ARMAGEDDON },
-        { "PIRANHA", TrapType::PIRANHA },
-    };
     const auto type = type_obj.get<std::string>();
-    const auto it = trap_types.find(type);
-    if (it == trap_types.end()) {
+    const auto it = f_info_trap_types.find(type);
+    if (it == f_info_trap_types.end()) {
         return tl::make_unexpected(ParseErrorType::INVALID_FLAG);
     }
 
@@ -496,20 +464,9 @@ tl::expected<void, ParseErrorType> TerrainReader::set_terrain_pattern(TerrainTyp
         return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
     }
 
-    static const std::unordered_map<std::string_view, PatternTileType> pattern_types = {
-        { "START", PatternTileType::START },
-        { "TILE_1", PatternTileType::TILE_1 },
-        { "TILE_2", PatternTileType::TILE_2 },
-        { "TILE_3", PatternTileType::TILE_3 },
-        { "TILE_4", PatternTileType::TILE_4 },
-        { "END", PatternTileType::END },
-        { "OLD", PatternTileType::OLD },
-        { "TELEPORT", PatternTileType::TELEPORT },
-        { "WRECKED", PatternTileType::WRECKED },
-    };
     const auto type = type_obj.get<std::string>();
-    const auto it = pattern_types.find(type);
-    if (it == pattern_types.end()) {
+    const auto it = f_info_pattern_types.find(type);
+    if (it == f_info_pattern_types.end()) {
         return tl::make_unexpected(ParseErrorType::INVALID_FLAG);
     }
 
@@ -540,21 +497,9 @@ tl::expected<void, ParseErrorType> TerrainReader::set_terrain_store(TerrainType 
         return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
     }
 
-    static const std::unordered_map<std::string_view, StoreSaleType> store_types = {
-        { "GENERAL", StoreSaleType::GENERAL },
-        { "ARMOURY", StoreSaleType::ARMOURY },
-        { "WEAPON", StoreSaleType::WEAPON },
-        { "TEMPLE", StoreSaleType::TEMPLE },
-        { "ALCHEMIST", StoreSaleType::ALCHEMIST },
-        { "MAGIC", StoreSaleType::MAGIC },
-        { "BLACK", StoreSaleType::BLACK },
-        { "HOME", StoreSaleType::HOME },
-        { "BOOK", StoreSaleType::BOOK },
-        { "MUSEUM", StoreSaleType::MUSEUM },
-    };
     const auto type = type_obj.get<std::string>();
-    const auto it = store_types.find(type);
-    if (it == store_types.end()) {
+    const auto it = f_info_store_types.find(type);
+    if (it == f_info_store_types.end()) {
         return tl::make_unexpected(ParseErrorType::INVALID_FLAG);
     }
 
@@ -585,43 +530,9 @@ tl::expected<void, ParseErrorType> TerrainReader::set_terrain_building(TerrainTy
         return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
     }
 
-    static const std::unordered_map<std::string_view, BuildingType> building_types = {
-        { "BUILDING_00", BuildingType::BUILDING_00 },
-        { "BUILDING_01", BuildingType::BUILDING_01 },
-        { "BUILDING_02", BuildingType::BUILDING_02 },
-        { "BUILDING_03", BuildingType::BUILDING_03 },
-        { "BUILDING_04", BuildingType::BUILDING_04 },
-        { "BUILDING_05", BuildingType::BUILDING_05 },
-        { "BUILDING_06", BuildingType::BUILDING_06 },
-        { "BUILDING_07", BuildingType::BUILDING_07 },
-        { "BUILDING_08", BuildingType::BUILDING_08 },
-        { "BUILDING_09", BuildingType::BUILDING_09 },
-        { "BUILDING_10", BuildingType::BUILDING_10 },
-        { "BUILDING_11", BuildingType::BUILDING_11 },
-        { "BUILDING_12", BuildingType::BUILDING_12 },
-        { "BUILDING_13", BuildingType::BUILDING_13 },
-        { "BUILDING_14", BuildingType::BUILDING_14 },
-        { "BUILDING_15", BuildingType::BUILDING_15 },
-        { "BUILDING_16", BuildingType::BUILDING_16 },
-        { "BUILDING_17", BuildingType::BUILDING_17 },
-        { "BUILDING_18", BuildingType::BUILDING_18 },
-        { "BUILDING_19", BuildingType::BUILDING_19 },
-        { "BUILDING_20", BuildingType::BUILDING_20 },
-        { "BUILDING_21", BuildingType::BUILDING_21 },
-        { "BUILDING_22", BuildingType::BUILDING_22 },
-        { "BUILDING_23", BuildingType::BUILDING_23 },
-        { "BUILDING_24", BuildingType::BUILDING_24 },
-        { "BUILDING_25", BuildingType::BUILDING_25 },
-        { "BUILDING_26", BuildingType::BUILDING_26 },
-        { "BUILDING_27", BuildingType::BUILDING_27 },
-        { "BUILDING_28", BuildingType::BUILDING_28 },
-        { "BUILDING_29", BuildingType::BUILDING_29 },
-        { "BUILDING_30", BuildingType::BUILDING_30 },
-        { "BUILDING_31", BuildingType::BUILDING_31 },
-    };
     const auto type = type_obj.get<std::string>();
-    const auto it = building_types.find(type);
-    if (it == building_types.end()) {
+    const auto it = f_info_building_types.find(type);
+    if (it == f_info_building_types.end()) {
         return tl::make_unexpected(ParseErrorType::INVALID_FLAG);
     }
 
