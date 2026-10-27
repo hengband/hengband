@@ -1302,11 +1302,17 @@ def validate_one(pair: tuple[Path, Path, dict], registry: Registry | None = None
         return True, f"Succeeded: {data_path.name} <= {schema_path.name}"
     except ValidationError as e:
         reason = e.message
-        # anyOf で列挙を足し合わせた schema では親の文面に候補が出ないため、子の列挙の候補をまとめて示す。
+        # 子の列挙候補は文字列のときだけまとめ、全分岐が型で失敗した場合だけ型エラーを選ぶ。
         enum_errors = [sub_error for sub_error in e.context if sub_error.validator == "enum"]
-        if enum_errors:
+        if isinstance(e.instance, str) and enum_errors:
             candidates = [value for sub_error in enum_errors for value in sub_error.validator_value]
             reason = f"{e.instance!r} is not one of {candidates!r}"
+        elif not isinstance(e.instance, str):
+            type_errors = [sub_error for sub_error in e.context if sub_error.validator == "type"]
+            branches = {sub_error.relative_schema_path[0] for sub_error in e.context}
+            typed = {sub_error.relative_schema_path[0] for sub_error in type_errors}
+            if type_errors and typed == branches:
+                reason = type_errors[0].message
         msg = [f"Failed: {data_path.name}", f"Reason: {reason}"]
         error_path = e.absolute_path if schema_path.name == "TownMap.schema.json" else e.path
         if error_path:
