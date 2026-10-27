@@ -50,9 +50,26 @@
 #include <algorithm>
 #include <queue>
 
+/*!
+ * @brief グリッドの情報フラグのうち、セーブに書くものを返す
+ * @param info グリッドの情報フラグ
+ * @return 視界と光源の印を除いた情報フラグ
+ * @details 視界と光源の印はフロアにいる間に計算し直すもので、読み込んだ後にも計算し直すので書かない。
+ * セーブしてもメモリ上のフロアを書き換えないよう、書き出すときに除く。
+ */
+BIT_FLAGS GridTemplate::to_saved_info(BIT_FLAGS info)
+{
+    return info & ~static_cast<BIT_FLAGS>(CAVE_VIEW | CAVE_LITE | CAVE_MNLT | CAVE_MNDK);
+}
+
+/*!
+ * @brief グリッドがこのテンプレートで書けるかを返す
+ * @param grid グリッド
+ * @return セーブに書く情報がすべて同じならtrue
+ */
 bool GridTemplate::matches(const Grid &grid) const
 {
-    auto is_matched = this->info == grid.info;
+    auto is_matched = this->info == to_saved_info(grid.info);
     is_matched &= this->feat == grid.feat;
     is_matched &= this->mimic == grid.mimic;
     is_matched &= this->special == grid.special;

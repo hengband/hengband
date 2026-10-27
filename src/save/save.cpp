@@ -19,7 +19,6 @@
 #include "io/report.h"
 #include "io/uid-checker.h"
 #include "locale/character-encoding.h"
-#include "player/player-status.h"
 #include "save/artifact-record-writer.h"
 #include "save/floor-writer.h"
 #include "save/info-writer.h"
@@ -276,7 +275,7 @@ static bool save_player_aux(PlayerType *player_ptr, const std::filesystem::path 
  * 3. hoge.new をhoge にリネームする
  * 4. hoge.old を削除する
  */
-bool save_player(PlayerType *player_ptr, SaveType type)
+bool save_player(PlayerType *player_ptr, [[maybe_unused]] SaveType type)
 {
     std::stringstream ss_new;
     ss_new << savefile.string() << ".new";
@@ -300,12 +299,6 @@ bool save_player(PlayerType *player_ptr, SaveType type)
         safe_setuid_drop();
         world.character_loaded = true;
         result = true;
-    }
-
-    if (type != SaveType::CLOSE_GAME) {
-        world.is_loading_now = false;
-        update_creature(player_ptr);
-        world.is_loading_now = true;
     }
 
     return result;

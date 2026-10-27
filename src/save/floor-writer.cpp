@@ -10,7 +10,6 @@
 #include "save/item-writer.h"
 #include "save/monster-entity-writer.h"
 #include "save/save-util.h"
-#include "system/deferred-update-requests.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/item/item-entity.h"
@@ -48,7 +47,7 @@ std::vector<GridTemplate> generate_sorted_grid_templates(const FloorType &floor)
             continue;
         }
 
-        templates.emplace_back(grid.info, grid.feat, grid.mimic, grid.special, static_cast<uint16_t>(1));
+        templates.emplace_back(GridTemplate::to_saved_info(grid.info), grid.feat, grid.mimic, grid.special, static_cast<uint16_t>(1));
     }
 
     std::stable_sort(templates.begin(), templates.end(),
@@ -162,19 +161,7 @@ void wr_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
  */
 bool wr_dungeon(PlayerType *player_ptr)
 {
-    auto &floor = *player_ptr->current_floor_ptr;
-    floor.forget_lite();
-    floor.forget_view();
-    floor.forget_mon_lite();
-    static constexpr auto flags = {
-        StatusRecalculatingFlag::VIEW,
-        StatusRecalculatingFlag::LITE,
-        StatusRecalculatingFlag::MONSTER_LITE,
-        StatusRecalculatingFlag::MONSTER_STATUSES,
-        StatusRecalculatingFlag::DISTANCE,
-        StatusRecalculatingFlag::FLOW,
-    };
-    DeferredUpdateRequests::get_instance().set_flags(flags);
+    const auto &floor = *player_ptr->current_floor_ptr;
     wr_s16b(max_floor_id);
     wr_byte(static_cast<uint8_t>(floor.dungeon_id));
     if (!player_ptr->in_saved_floor()) {
