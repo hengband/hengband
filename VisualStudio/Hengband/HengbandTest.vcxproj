@@ -129,6 +129,7 @@
     <ClCompile Include="..\..\src\test\player\test-process-name.cpp" />
     <ClCompile Include="..\..\src\test\racial\test-racial-android.cpp" />
     <ClCompile Include="..\..\src\test\save\test-item-writer.cpp" />
+    <ClCompile Include="..\..\src\test\save\test-monster-entity-writer.cpp" />
     <ClCompile Include="..\..\src\test\spell-realm\test-spells-hex.cpp" />
     <ClCompile Include="..\..\src\test\spell\test-spell-info.cpp" />
     <ClCompile Include="..\..\src\test\store\test-pricing.cpp" />
