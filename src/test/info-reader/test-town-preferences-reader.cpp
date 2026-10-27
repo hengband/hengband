@@ -1,6 +1,13 @@
+#include "info-reader/quest-reader.h"
 #include "info-reader/town-preferences-reader.h"
+#include "locale/language-switcher.h"
 #include "system/dungeon/quest-fixed-map.h"
+#include "system/enums/terrain/terrain-tag.h"
+#include "test/info-reader/legend-ego-fixture.h"
 #include "test/info-reader/parse-result-helpers.h"
+#include "test/info-reader/scoped-reader-state.h"
+#include "test/system/terrain-list-test-access.h"
+#include "view/display-messages.h"
 #include <cstdint>
 #include <doctest/doctest.h>
 #include <limits>
@@ -183,4 +190,22 @@ TEST_CASE("TownPreferencesReader retains permissive runtime behavior for extra f
     TownPreferencesLegend legend;
     CHECK(TownPreferencesReader(data).read(legend, parse_test_cell).has_value());
     CHECK(legend.size() == 2);
+}
+
+TEST_CASE("TownPreferencesReader reports incompatible ego with legend key")
+{
+    const test::ScopedReaderState reader_state;
+    const test::LegendEgoFixture ego_state;
+    const test::TerrainListTestAccess none_tag(TerrainTag::NONE, 0);
+    auto data = make_town_preferences();
+    data["legend"]["A"]["terrain"] = "*";
+    data["legend"]["A"]["object"] = 54;
+    data["legend"]["A"]["ego"] = static_cast<int>(EgoType::DF);
+    ScopedMessageCapture diagnostics;
+    TownPreferencesLegend legend;
+    CHECK(test::to_error_code(TownPreferencesReader(data).read(legend, parse_quest_legend_cell)) == ParseErrorType::INVALID_VALUE);
+    CHECK(legend.empty());
+    REQUIRE(diagnostics.messages().size() == 1);
+    CHECK(diagnostics.messages().front() == _("町のエゴ指定が不正です: legend['A']: 品の種類と相性が合わない",
+                                                "Invalid town ego: legend['A']: incompatible object kind"));
 }

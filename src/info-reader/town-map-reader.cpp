@@ -2,10 +2,12 @@
 #include "info-reader/json-reader-util.h"
 #include "info-reader/legend-ego-validator.h"
 #include "info-reader/quest-reader.h"
+#include "locale/language-switcher.h"
 #include "player-info/class-info.h"
 #include "player-info/race-info.h"
 #include "player/player-realm.h"
 #include "system/building-type-definition.h"
+#include "view/display-messages.h"
 #include <algorithm>
 #include <charconv>
 #include <cstdint>
@@ -196,7 +198,7 @@ tl::expected<void, ParseErrorType> TownMapReader::read(TownMapDefinition &defini
 
 tl::expected<void, ParseErrorType> TownMapReader::read_features(TownMapDefinition &definition) const
 {
-    for (const auto &rule : this->data["featureRules"]) {
+    for (const auto &[index, rule] : this->data["featureRules"].items()) {
         if (!rule.is_object() || !rule.contains("symbol") || !rule["symbol"].is_string() || !rule.contains("definition") || !rule["definition"].is_object()) {
             return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
         }
@@ -219,7 +221,10 @@ tl::expected<void, ParseErrorType> TownMapReader::read_features(TownMapDefinitio
         if (const auto result = parse_quest_legend_cell_deferred(fields, parsed); !result) {
             return tl::make_unexpected(result.error());
         }
-        if (!validate_legend_ego(parsed.cell.grid, parsed.cell.object_is_quest_reward, parsed.trap_tag != "NONE")) {
+        if (const auto result = validate_legend_ego(parsed.cell.grid, parsed.cell.object_is_quest_reward, parsed.trap_tag != "NONE"); !result) {
+            constexpr auto fmt = _("町のエゴ指定が不正です: featureRules[{}] (記号 '{}'): {}",
+                "Invalid town ego: featureRules[{}] (symbol '{}'): {}");
+            msg_print(fmt, index, symbol, describe_legend_ego_error(result.error()));
             return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
         }
         feature.terrain = std::move(parsed.terrain_tag);

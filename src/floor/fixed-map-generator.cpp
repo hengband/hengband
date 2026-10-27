@@ -172,7 +172,8 @@ static void parse_qtw_D(PlayerType *player_ptr, qtwg_type *qtwg_ptr, std::string
                 item = floor.make_gold(item.bi_key);
             }
 
-            assert(validate_legend_ego(cell, false, cell.trap != 0 || (random & RANDOM_TRAP)).has_value());
+            // この経路では罠を配置しない。
+            assert(validate_legend_ego(cell, false, false).has_value());
             if (cell.ego != EgoType::NONE) {
                 ItemMagicApplier(player_ptr, &item, floor.base_level, AM_NO_FIXED_ART | AM_GOOD).execute_with_ego(cell.ego);
             } else if (random & RANDOM_EGO) {
