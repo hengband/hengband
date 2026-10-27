@@ -77,6 +77,7 @@
     <ClCompile Include="..\..\src\test\info-reader\test-activation-reader.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-artifact-reader.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-baseitem-reader.cpp" />
+    <ClCompile Include="..\..\src\test\info-reader\test-definition-id-checker.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-dungeon-reader.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-ego-reader.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-fixed-map-parser.cpp" />

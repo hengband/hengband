@@ -16,12 +16,10 @@ namespace {
 class TerrainStateGuard {
 public:
     /*!
-     * @brief 既存の地形定義を退避し、エラー位置とメッセージ出力をテスト用に設定する
-     * @param initial_error_idx テストの間に設定しておく error_idx の値
+     * @brief 既存の地形定義を退避し、メッセージ出力をテスト用に設定する
      */
-    explicit TerrainStateGuard(int initial_error_idx = -1)
-        : reader_state(initial_error_idx)
-        , terrains(TerrainList::get_instance())
+    TerrainStateGuard()
+        : terrains(TerrainList::get_instance())
         , saved_terrains(terrains.begin(), terrains.end())
     {
     }
@@ -32,7 +30,7 @@ public:
     TerrainStateGuard &operator=(const TerrainStateGuard &) = delete;
 
     /*!
-     * @brief 退避した地形定義を復元する。エラー位置は reader_state が復元する
+     * @brief 退避した地形定義を復元する
      */
     ~TerrainStateGuard()
     {
@@ -105,9 +103,8 @@ TEST_CASE("TerrainReader reads a valid terrain and replaces generation changes o
 {
     TerrainStateGuard guard;
     auto data = make_terrain();
-    REQUIRE(TerrainReader(data, guard.session).read().has_value());
+    REQUIRE(test::read_and_commit(TerrainReader(data, guard.session), guard.session).has_value());
     const auto &terrain = TerrainList::get_instance().get_terrain(0);
-    CHECK(error_idx == 0);
     CHECK(terrain.idx == 0);
     CHECK(terrain.tag == "NONE");
     CHECK(terrain.name == "test terrain");
@@ -122,7 +119,7 @@ TEST_CASE("TerrainReader reads a valid terrain and replaces generation changes o
     // 再読み込みは新しいロードセッションとして実行する。
     guard.session = {};
     data["generation"]["changes"] = { { { "terrain", "FLOOR" }, { "probability", 100 } } };
-    REQUIRE(TerrainReader(data, guard.session).read().has_value());
+    REQUIRE(test::read_and_commit(TerrainReader(data, guard.session), guard.session).has_value());
     REQUIRE(terrain.generation_changes.size() == 1);
     CHECK(terrain.generation_changes[0].result_tag == "FLOOR");
     CHECK(terrain.generation_changes[0].probability == 100);
@@ -138,7 +135,7 @@ TEST_CASE("TerrainReader accepts map priority from 0 to 125 and rejects values o
         auto data = make_terrain();
         data["map_priority"] = priority;
         guard.session = {};
-        REQUIRE(TerrainReader(data, guard.session).read().has_value());
+        REQUIRE(test::read_and_commit(TerrainReader(data, guard.session), guard.session).has_value());
         CHECK(terrains.get_terrain(0).priority == priority);
     }
 
@@ -146,12 +143,12 @@ TEST_CASE("TerrainReader accepts map priority from 0 to 125 and rejects values o
     auto data = make_terrain();
     data["map_priority"] = nullptr;
     guard.session = {};
-    REQUIRE(TerrainReader(data, guard.session).read().has_value());
+    REQUIRE(test::read_and_commit(TerrainReader(data, guard.session), guard.session).has_value());
     CHECK(terrains.get_terrain(0).priority == 0);
 
     data = make_terrain();
     guard.session = {};
-    REQUIRE(TerrainReader(data, guard.session).read().has_value());
+    REQUIRE(test::read_and_commit(TerrainReader(data, guard.session), guard.session).has_value());
     const auto before = terrains.get_terrain(0);
     const auto size_before = terrains.size();
     for (const auto priority : { -1, 126 }) {
@@ -163,8 +160,7 @@ TEST_CASE("TerrainReader accepts map priority from 0 to 125 and rejects values o
             data["name"]["en"] = "replacement";
             data["map_priority"] = priority;
             guard.session = {};
-            CHECK(test::to_error_code(TerrainReader(data, guard.session).read()) == ParseErrorType::INVALID_VALUE);
-            CHECK(error_idx == id);
+            CHECK(test::to_error_code(test::read_and_commit(TerrainReader(data, guard.session), guard.session)) == ParseErrorType::INVALID_VALUE);
             CHECK(terrains.size() == size_before);
             check_existing_terrain(terrains.get_terrain(0), before);
         }
@@ -175,7 +171,7 @@ TEST_CASE("TerrainReader leaves an existing terrain unchanged after a late parse
 {
     TerrainStateGuard guard;
     auto data = make_terrain();
-    REQUIRE(TerrainReader(data, guard.session).read().has_value());
+    REQUIRE(test::read_and_commit(TerrainReader(data, guard.session), guard.session).has_value());
     const auto before = TerrainList::get_instance().get_terrain(0);
     const auto size_before = TerrainList::get_instance().size();
 
@@ -186,7 +182,7 @@ TEST_CASE("TerrainReader leaves an existing terrain unchanged after a late parse
     data["map_priority"] = 19;
     data["generation"]["changes"] = { { { "terrain", "WALL" }, { "probability", 90 } } };
     data["interactions"] = { { "DESTROYED", 42 } };
-    CHECK(test::to_error_code(TerrainReader(data, guard.session).read()) == ParseErrorType::TOO_FEW_ARGUMENTS);
+    CHECK(test::to_error_code(test::read_and_commit(TerrainReader(data, guard.session), guard.session)) == ParseErrorType::TOO_FEW_ARGUMENTS);
 
     const auto &after = TerrainList::get_instance().get_terrain(0);
     CHECK(TerrainList::get_instance().size() == size_before);
@@ -210,7 +206,7 @@ TEST_CASE("TerrainReader accepts single-byte symbol characters")
         character = " ";
     }
     data["symbol"]["character"] = character;
-    REQUIRE(TerrainReader(data, guard.session).read().has_value());
+    REQUIRE(test::read_and_commit(TerrainReader(data, guard.session), guard.session).has_value());
     const auto &terrain = TerrainList::get_instance().get_terrain(0);
     for (int lighting = F_LIT_STANDARD; lighting < F_LIT_MAX; ++lighting) {
         CHECK(terrain.symbol_definitions.at(lighting).character == character.front());
@@ -221,7 +217,7 @@ TEST_CASE("TerrainReader rejects invalid symbol lengths without publishing a ter
 {
     TerrainStateGuard guard;
     auto data = make_terrain();
-    REQUIRE(TerrainReader(data, guard.session).read().has_value());
+    REQUIRE(test::read_and_commit(TerrainReader(data, guard.session), guard.session).has_value());
     auto &terrains = TerrainList::get_instance();
     const auto before = terrains.get_terrain(0);
     const auto size_before = terrains.size();
@@ -246,7 +242,7 @@ TEST_CASE("TerrainReader rejects invalid symbol lengths without publishing a ter
     data["symbol"]["character"] = character;
     data["name"]["ja"] = "replacement";
     data["name"]["en"] = "replacement";
-    CHECK(test::to_error_code(TerrainReader(data, guard.session).read()) == expected);
+    CHECK(test::to_error_code(test::read_and_commit(TerrainReader(data, guard.session), guard.session)) == expected);
     CHECK(terrains.size() == size_before);
     const auto &after = terrains.get_terrain(0);
     CHECK(after.name == before.name);
@@ -256,7 +252,7 @@ TEST_CASE("TerrainReader rejects invalid symbol lengths without publishing a ter
     }
 
     data["id"] = size_before + 1;
-    CHECK(test::to_error_code(TerrainReader(data, guard.session).read()) == expected);
+    CHECK(test::to_error_code(test::read_and_commit(TerrainReader(data, guard.session), guard.session)) == expected);
     CHECK(terrains.size() == size_before);
     CHECK(terrains.get_terrain(0).name == before.name);
 }
@@ -268,7 +264,7 @@ TEST_CASE("TerrainReader does not grow the terrain list after a failed new entry
     const auto size_before = TerrainList::get_instance().size();
     data["id"] = size_before + 1;
     data["interactions"] = { { "DESTROYED", 42 } };
-    CHECK(test::to_error_code(TerrainReader(data, guard.session).read()) == ParseErrorType::TOO_FEW_ARGUMENTS);
+    CHECK(test::to_error_code(test::read_and_commit(TerrainReader(data, guard.session), guard.session)) == ParseErrorType::TOO_FEW_ARGUMENTS);
     CHECK(TerrainList::get_instance().size() == size_before);
 }
 
@@ -288,13 +284,13 @@ TEST_CASE("TerrainReader reports interactions beyond the state slots as invalid 
     for (size_t i = 0; i < slots; ++i) {
         data["interactions"][actions[i]] = "FLOOR";
     }
-    REQUIRE(TerrainReader(data, guard.session).read().has_value());
+    REQUIRE(test::read_and_commit(TerrainReader(data, guard.session), guard.session).has_value());
 
     // 新しいIDにして、前の読み込みで埋まった状態を引き継がない地形で枠を超えさせる
     guard.session = {};
     data["id"] = new_id + 1;
     data["interactions"][actions.back()] = "FLOOR";
-    CHECK(test::to_error_code(TerrainReader(data, guard.session).read()) == ParseErrorType::INVALID_VALUE);
+    CHECK(test::to_error_code(test::read_and_commit(TerrainReader(data, guard.session), guard.session)) == ParseErrorType::INVALID_VALUE);
 }
 
 /*!
@@ -306,7 +302,7 @@ TEST_CASE("TerrainReader propagates helper errors without publishing staged terr
     auto &terrains = TerrainList::get_instance();
     terrains.resize(0);
     const auto original = make_terrain();
-    REQUIRE(TerrainReader(original, guard.session).read().has_value());
+    REQUIRE(test::read_and_commit(TerrainReader(original, guard.session), guard.session).has_value());
     const auto before = terrains.get_terrain(0);
     const auto size_before = terrains.size();
     struct InvalidField {
@@ -368,8 +364,7 @@ TEST_CASE("TerrainReader propagates helper errors without publishing staged terr
             data["name"]["ja"] = "replacement";
             data["name"]["en"] = "replacement";
             data[nlohmann::json::json_pointer(invalid.path)] = invalid.value;
-            CHECK(test::to_error_code(TerrainReader(data, guard.session).read()) == invalid.error);
-            CHECK(error_idx == id);
+            CHECK(test::to_error_code(test::read_and_commit(TerrainReader(data, guard.session), guard.session)) == invalid.error);
             CHECK(terrains.size() == size_before);
             check_existing_terrain(terrains.get_terrain(0), before);
         }
@@ -387,39 +382,35 @@ TEST_CASE("TerrainReader accepts IDs up to one below the FEAT_IDX storage maximu
     auto data = make_terrain();
     data["id"] = max_id;
     // 上限のIDを読むため、地形の一覧を 32,767 件に広げるのは意図どおり。
-    REQUIRE(TerrainReader(data, guard.session).read().has_value());
+    REQUIRE(test::read_and_commit(TerrainReader(data, guard.session), guard.session).has_value());
     CHECK(terrains.size() == static_cast<size_t>(max_id) + 1);
     CHECK(terrains.get_terrain(max_id).idx == max_id);
-    CHECK(error_idx == max_id);
 
     data["id"] = max_id + 1;
-    CHECK(test::to_error_code(TerrainReader(data, guard.session).read()) == ParseErrorType::INVALID_VALUE);
+    CHECK(test::to_error_code(test::read_and_commit(TerrainReader(data, guard.session), guard.session)) == ParseErrorType::INVALID_VALUE);
     CHECK(terrains.size() == static_cast<size_t>(max_id) + 1);
 }
 
 /*!
- * @brief 公開境界のエラー位置更新とヘルパーの検証順を維持する
+ * @brief 公開境界でのヘルパーの検証順を維持する
  */
 TEST_CASE("TerrainReader keeps helper validation order and error index timing")
 {
-    TerrainStateGuard guard(73);
+    TerrainStateGuard guard;
     auto &terrains = TerrainList::get_instance();
     terrains.resize(0);
     auto data = make_terrain();
     data["id"] = 32767;
-    CHECK(test::to_error_code(TerrainReader(data, guard.session).read()) == ParseErrorType::INVALID_VALUE);
-    CHECK(error_idx == 73);
+    CHECK(test::to_error_code(test::read_and_commit(TerrainReader(data, guard.session), guard.session)) == ParseErrorType::INVALID_VALUE);
     data["id"] = 0;
     data["key"] = "";
-    CHECK(test::to_error_code(TerrainReader(data, guard.session).read()) == ParseErrorType::INVALID_VALUE);
-    CHECK(error_idx == 73);
+    CHECK(test::to_error_code(test::read_and_commit(TerrainReader(data, guard.session), guard.session)) == ParseErrorType::INVALID_VALUE);
     data = make_terrain();
-    REQUIRE(TerrainReader(data, guard.session).read().has_value());
+    REQUIRE(test::read_and_commit(TerrainReader(data, guard.session), guard.session).has_value());
     const auto before = terrains.get_terrain(0);
     const auto check_invalid = [&](ParseErrorType expected) {
         guard.session = {};
-        CHECK(test::to_error_code(TerrainReader(data, guard.session).read()) == expected);
-        CHECK(error_idx == 0);
+        CHECK(test::to_error_code(test::read_and_commit(TerrainReader(data, guard.session), guard.session)) == expected);
         CHECK(terrains.size() == 1);
         CHECK(terrains.get_terrain(0).flags == before.flags);
         CHECK(terrains.get_terrain(0).generation_changes.size() == 2);
@@ -473,8 +464,7 @@ TEST_CASE("TerrainReader preserves optional helpers and successful endpoint valu
                 data[key] = nullptr;
             }
         }
-        REQUIRE(TerrainReader(data, guard.session).read().has_value());
-        CHECK(error_idx == 0);
+        REQUIRE(test::read_and_commit(TerrainReader(data, guard.session), guard.session).has_value());
         CHECK(terrains.get_terrain(0).flags.has(TerrainCharacteristics::LOS));
         CHECK(terrains.get_terrain(0).generation_changes.empty());
         CHECK(terrains.get_terrain(0).door_power == 0);
@@ -495,9 +485,8 @@ TEST_CASE("TerrainReader preserves optional helpers and successful endpoint valu
         const auto stream_index = power == 0 ? 0 : 254;
         data["convert"] = { { "type", "STREAM" }, { "stream_index", stream_index } };
         data["interactions"] = { { "DESTROYED", "WALL" }, { "DROP_GOLD", "1d2" }, { "OPEN", "FLOOR" } };
-        REQUIRE(TerrainReader(data, guard.session).read().has_value());
+        REQUIRE(test::read_and_commit(TerrainReader(data, guard.session), guard.session).has_value());
         const auto &terrain = terrains.get_terrain(0);
-        CHECK(error_idx == 0);
         CHECK(terrain.symbol_definitions[F_LIT_STANDARD].character == '.');
         CHECK(terrain.door_power == power);
         CHECK(terrain.tunnel_power == power);
@@ -524,10 +513,10 @@ TEST_CASE("TerrainReader rejects duplicate IDs and keys within one session witho
     auto &terrains = TerrainList::get_instance();
     terrains.resize(0);
     auto data = make_terrain();
-    REQUIRE(TerrainReader(data, guard.session).read().has_value());
+    REQUIRE(test::read_and_commit(TerrainReader(data, guard.session), guard.session).has_value());
     data["id"] = 2;
     data["key"] = "WALL";
-    REQUIRE(TerrainReader(data, guard.session).read().has_value());
+    REQUIRE(test::read_and_commit(TerrainReader(data, guard.session), guard.session).has_value());
     const std::vector<TerrainType> before(terrains.begin(), terrains.end());
 
     auto expected = ParseErrorType::NON_SEQUENTIAL_RECORDS;
@@ -550,8 +539,7 @@ TEST_CASE("TerrainReader rejects duplicate IDs and keys within one session witho
     }
     data["name"]["ja"] = "replacement";
     data["name"]["en"] = "replacement";
-    CHECK(test::to_error_code(TerrainReader(data, guard.session).read()) == expected);
-    CHECK(error_idx == data["id"].get<int>());
+    CHECK(test::to_error_code(test::read_and_commit(TerrainReader(data, guard.session), guard.session)) == expected);
     REQUIRE(terrains.size() == before.size());
     for (size_t i = 0; i < before.size(); ++i) {
         check_existing_terrain(terrains.get_terrain(static_cast<short>(i)), before[i]);
@@ -565,13 +553,13 @@ TEST_CASE("TerrainReader accepts distinct IDs and keys in any order within a ses
     terrains.resize(0);
     auto data = make_terrain();
     data["id"] = 2;
-    REQUIRE(TerrainReader(data, guard.session).read().has_value());
+    REQUIRE(test::read_and_commit(TerrainReader(data, guard.session), guard.session).has_value());
     data["id"] = 0;
     data["key"] = "FLOOR";
-    REQUIRE(TerrainReader(data, guard.session).read().has_value());
+    REQUIRE(test::read_and_commit(TerrainReader(data, guard.session), guard.session).has_value());
     data["id"] = 1;
     data["key"] = "WALL";
-    REQUIRE(TerrainReader(data, guard.session).read().has_value());
+    REQUIRE(test::read_and_commit(TerrainReader(data, guard.session), guard.session).has_value());
     CHECK(terrains.size() == 3);
     CHECK(terrains.get_terrain(0).tag == "FLOOR");
     CHECK(terrains.get_terrain(1).tag == "WALL");
@@ -584,17 +572,17 @@ TEST_CASE("TerrainReader reloads existing IDs and keys in a new session")
     auto &terrains = TerrainList::get_instance();
     terrains.resize(0);
     auto data = make_terrain();
-    REQUIRE(TerrainReader(data, guard.session).read().has_value());
+    REQUIRE(test::read_and_commit(TerrainReader(data, guard.session), guard.session).has_value());
     data["name"]["ja"] = "replacement";
     data["name"]["en"] = "replacement";
     data["generation"]["changes"] = { { { "terrain", "WALL" }, { "probability", 100 } } };
     TerrainReader::Session reload_session;
-    REQUIRE(TerrainReader(data, reload_session).read().has_value());
+    REQUIRE(test::read_and_commit(TerrainReader(data, reload_session), reload_session).has_value());
     CHECK(terrains.size() == 1);
     const auto &terrain = terrains.get_terrain(0);
     CHECK(terrain.tag == "NONE");
     CHECK(terrain.name == "replacement");
     REQUIRE(terrain.generation_changes.size() == 1);
     CHECK(terrain.generation_changes[0].probability == 100);
-    CHECK(test::to_error_code(TerrainReader(data, reload_session).read()) == ParseErrorType::NON_SEQUENTIAL_RECORDS);
+    CHECK(test::to_error_code(test::read_and_commit(TerrainReader(data, reload_session), reload_session)) == ParseErrorType::NON_SEQUENTIAL_RECORDS);
 }

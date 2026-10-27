@@ -1,5 +1,7 @@
 #pragma once
 
+#include "info-reader/definition-id-checker.h"
+
 #include "info-reader/parse-error-types.h"
 #include <initializer_list>
 #include <nlohmann/json_fwd.hpp>
@@ -18,8 +20,11 @@ struct SkillReadError {
 
 class SkillReader {
 public:
-    explicit SkillReader(const nlohmann::json &class_data);
-    SkillReader(nlohmann::json &&) = delete;
+    using Session = DefinitionIdChecker;
+    static Session create_session(tl::optional<int> last_id = tl::nullopt);
+
+    SkillReader(const nlohmann::json &class_data, Session &session);
+    SkillReader(nlohmann::json &&, Session &) = delete;
     SkillReader(const SkillReader &) = delete;
     SkillReader(SkillReader &&) = delete;
     SkillReader &operator=(const SkillReader &) = delete;
@@ -36,6 +41,7 @@ private:
     tl::expected<void, ParseErrorType> fail(ParseErrorType code, std::string_view path, std::string_view reason);
 
     const nlohmann::json &class_data;
+    Session &session;
     std::string class_id;
     std::optional<SkillReadError> diagnostic;
 };

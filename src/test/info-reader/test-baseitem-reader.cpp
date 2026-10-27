@@ -49,35 +49,39 @@ nlohmann::json make_baseitem(int id = 1)
 
 TEST_CASE("BaseitemReader does not grow the list after a parse error")
 {
+    auto session = BaseitemReader::create_session();
     BaseitemStateGuard guard;
+    session = BaseitemReader::create_session();
     auto &items = BaseitemList::get_instance();
     auto data = make_baseitem(7);
     SUBCASE("early name error")
     {
         data["name"] = 42;
-        CHECK(test::to_error_code(BaseitemReader(data).read()) == ParseErrorType::INVALID_TYPE);
+        CHECK(test::to_error_code(test::read_and_commit(BaseitemReader(data, session), session)) == ParseErrorType::INVALID_TYPE);
     }
     SUBCASE("late activation error")
     {
         data["activate"] = "UNKNOWN_ACTIVATION";
-        CHECK(test::to_error_code(BaseitemReader(data).read()) == ParseErrorType::INVALID_FLAG);
+        CHECK(test::to_error_code(test::read_and_commit(BaseitemReader(data, session), session)) == ParseErrorType::INVALID_FLAG);
     }
     SUBCASE("late flag error after a valid flag")
     {
         data["flags"] = { "STR", "UNKNOWN_FLAG" };
-        CHECK(test::to_error_code(BaseitemReader(data).read()) == ParseErrorType::INVALID_FLAG);
+        CHECK(test::to_error_code(test::read_and_commit(BaseitemReader(data, session), session)) == ParseErrorType::INVALID_FLAG);
     }
     CHECK(items.empty());
-    CHECK(error_idx == 7);
+    CHECK_FALSE(session.last_id());
 }
 
 TEST_CASE("BaseitemReader preserves helper error precedence without replacing existing records")
 {
+    auto session = BaseitemReader::create_session();
     BaseitemStateGuard guard;
+    session = BaseitemReader::create_session();
     auto &items = BaseitemList::get_instance();
     auto original = make_baseitem();
     original["itemkind"]["type_value"] = static_cast<int>(ItemKindType::SWORD);
-    REQUIRE(BaseitemReader(original).read().has_value());
+    REQUIRE(test::read_and_commit(BaseitemReader(original, session), session).has_value());
     auto &existing = items.get_baseitem(1);
     existing.name = "Existing";
     existing.cost = 91;
@@ -133,9 +137,9 @@ TEST_CASE("BaseitemReader preserves helper error precedence without replacing ex
         data["flags"] = { "STR", "DEX", "UNKNOWN_FLAG" };
         expected = ParseErrorType::INVALID_FLAG;
     }
-    error_idx = -1;
-    CHECK(test::to_error_code(BaseitemReader(data).read()) == expected);
-    CHECK(error_idx == 1);
+    session = BaseitemReader::create_session();
+    CHECK(test::to_error_code(test::read_and_commit(BaseitemReader(data, session), session)) == expected);
+    CHECK_FALSE(session.last_id());
     REQUIRE(items.size() == 2);
     CHECK(std::addressof(items.get_baseitem(1)) == std::addressof(existing));
     CHECK(existing.name == "Existing");
@@ -152,14 +156,16 @@ TEST_CASE("BaseitemReader preserves helper error precedence without replacing ex
 
 TEST_CASE("BaseitemReader publishes complete records and preserves omitted optional fields")
 {
+    auto session = BaseitemReader::create_session();
     BaseitemStateGuard guard;
+    session = BaseitemReader::create_session();
     auto &items = BaseitemList::get_instance();
     auto data = make_baseitem(3);
     data["itemkind"]["type_value"] = static_cast<int>(ItemKindType::SWORD);
     data["activate"] = "LIGHT";
     data["flags"] = { "STR" };
     data["allocations"] = { { { "depth", 4 }, { "rarity", 5 } } };
-    REQUIRE(BaseitemReader(data).read().has_value());
+    REQUIRE(test::read_and_commit(BaseitemReader(data, session), session).has_value());
     REQUIRE(items.size() == 4);
     auto &existing = items.get_baseitem(3);
     CHECK(existing.name == "Test");
@@ -183,8 +189,8 @@ TEST_CASE("BaseitemReader publishes complete records and preserves omitted optio
     data = make_baseitem(3);
     data["itemkind"]["type_value"] = static_cast<int>(ItemKindType::SWORD);
     data["cost"] = 17;
-    error_idx = -1;
-    REQUIRE(BaseitemReader(data).read().has_value());
+    session = BaseitemReader::create_session();
+    REQUIRE(test::read_and_commit(BaseitemReader(data, session), session).has_value());
     const auto &updated = items.get_baseitem(3);
     CHECK(updated.cost == 17);
     CHECK(updated.text == "Flavor");
@@ -201,16 +207,18 @@ TEST_CASE("BaseitemReader publishes complete records and preserves omitted optio
     CHECK(updated.flags.has(TR_ACTIVATE));
     CHECK(updated.alloc_tables[0].level == 4);
     CHECK(updated.alloc_tables[0].chance == 5);
-    CHECK(error_idx == 3);
-    CHECK(test::to_error_code(BaseitemReader(data).read()) == ParseErrorType::NON_SEQUENTIAL_RECORDS);
+    CHECK(session.last_id().value_or(-1) == 3);
+    CHECK(test::to_error_code(test::read_and_commit(BaseitemReader(data, session), session)) == ParseErrorType::NON_SEQUENTIAL_RECORDS);
 }
 
 TEST_CASE("BaseitemReader validates full-width integer IDs before narrowing or publishing")
 {
+    auto session = BaseitemReader::create_session();
     BaseitemStateGuard guard;
+    session = BaseitemReader::create_session();
     auto &items = BaseitemList::get_instance();
     const auto original = make_baseitem();
-    REQUIRE(BaseitemReader(original).read().has_value());
+    REQUIRE(test::read_and_commit(BaseitemReader(original, session), session).has_value());
     const auto *existing = std::addressof(items.get_baseitem(1));
     const auto invalid_ids = std::vector<nlohmann::json>{
         32767,
@@ -232,50 +240,53 @@ TEST_CASE("BaseitemReader validates full-width integer IDs before narrowing or p
         auto data = make_baseitem();
         data["id"] = id;
         data["cost"] = 91;
-        error_idx = -1;
-        const auto is_negative = !id.is_number_unsigned() && id.get<nlohmann::json::number_integer_t>() < 0;
-        const auto expected = is_negative ? ParseErrorType::NON_SEQUENTIAL_RECORDS : ParseErrorType::INVALID_VALUE;
-        CHECK(test::to_error_code(BaseitemReader(data).read()) == expected);
+        session = BaseitemReader::create_session();
+        const auto expected = ParseErrorType::INVALID_VALUE;
+        CHECK(test::to_error_code(test::read_and_commit(BaseitemReader(data, session), session)) == expected);
         REQUIRE(items.size() == 2);
         CHECK(std::addressof(items.get_baseitem(1)) == existing);
         CHECK(existing->name == "Test");
         CHECK(existing->cost == 4);
-        CHECK(error_idx == -1);
+        CHECK(session.last_id().value_or(-1) == -1);
     }
 }
 
 TEST_CASE("BaseitemReader preserves missing and wrong-type ID errors without publishing")
 {
+    auto session = BaseitemReader::create_session();
     BaseitemStateGuard guard;
+    session = BaseitemReader::create_session();
     auto &items = BaseitemList::get_instance();
     for (const auto &id : { nlohmann::json(), nlohmann::json("1"), nlohmann::json(1.0), nlohmann::json(true), nlohmann::json::array(), nlohmann::json::object() }) {
         CAPTURE(id);
         auto data = make_baseitem();
         data["id"] = id;
         const auto expected = id.is_null() ? ParseErrorType::TOO_FEW_ARGUMENTS : ParseErrorType::INVALID_TYPE;
-        CHECK(test::to_error_code(BaseitemReader(data).read()) == expected);
+        CHECK(test::to_error_code(test::read_and_commit(BaseitemReader(data, session), session)) == expected);
         CHECK(items.empty());
-        CHECK(error_idx == -1);
+        CHECK(session.last_id().value_or(-1) == -1);
     }
     auto data = make_baseitem();
     data.erase("id");
-    CHECK(test::to_error_code(BaseitemReader(data).read()) == ParseErrorType::TOO_FEW_ARGUMENTS);
+    CHECK(test::to_error_code(test::read_and_commit(BaseitemReader(data, session), session)) == ParseErrorType::TOO_FEW_ARGUMENTS);
     CHECK(items.empty());
-    CHECK(error_idx == -1);
+    CHECK(session.last_id().value_or(-1) == -1);
 }
 
 TEST_CASE("BaseitemReader accepts signed and unsigned zero IDs")
 {
+    auto session = BaseitemReader::create_session();
     for (const auto &id : { nlohmann::json(0), nlohmann::json(nlohmann::json::number_unsigned_t{ 0 }) }) {
         CAPTURE(id);
         BaseitemStateGuard guard;
+        session = BaseitemReader::create_session();
         auto data = make_baseitem();
         data["id"] = id;
-        REQUIRE(BaseitemReader(data).read().has_value());
+        REQUIRE(test::read_and_commit(BaseitemReader(data, session), session).has_value());
         auto &items = BaseitemList::get_instance();
         REQUIRE(items.size() == 1);
         CHECK(items.get_baseitem(0).name == "Test");
-        CHECK(error_idx == 0);
+        CHECK(session.last_id().value_or(-1) == 0);
     }
 }
 
@@ -285,6 +296,7 @@ TEST_CASE("BaseitemReader accepts signed and unsigned zero IDs")
  */
 TEST_CASE("BaseitemReader accepts IDs up to the short maximum minus one")
 {
+    auto session = BaseitemReader::create_session();
     const auto ids = std::vector<nlohmann::json>{
         9999,
         10000,
@@ -294,21 +306,23 @@ TEST_CASE("BaseitemReader accepts IDs up to the short maximum minus one")
     for (const auto &id : ids) {
         CAPTURE(id);
         BaseitemStateGuard guard;
+        session = BaseitemReader::create_session();
         auto data = make_baseitem();
         data["id"] = id;
         // Prove the ID passed validation without allocating 32767 definitions.
         data["name"] = 42;
-        CHECK(test::to_error_code(BaseitemReader(data).read()) == ParseErrorType::INVALID_TYPE);
-        CHECK(error_idx == id.get<int>());
+        CHECK(test::to_error_code(test::read_and_commit(BaseitemReader(data, session), session)) == ParseErrorType::INVALID_TYPE);
+        CHECK_FALSE(session.last_id());
         CHECK(BaseitemList::get_instance().empty());
     }
 }
 
 TEST_CASE("BaseitemReader publishes accessible ID 32766 with 32767 entries")
 {
+    auto session = BaseitemReader::create_session();
     BaseitemStateGuard baseitems_guard;
     const auto data = make_baseitem(32766);
-    REQUIRE(BaseitemReader(data).read().has_value());
+    REQUIRE(test::read_and_commit(BaseitemReader(data, session), session).has_value());
 
     auto &baseitems = BaseitemList::get_instance();
     REQUIRE(baseitems.size() == 32767);
@@ -320,7 +334,9 @@ TEST_CASE("BaseitemReader publishes accessible ID 32766 with 32767 entries")
 
 TEST_CASE("BaseitemReader preserves ordering precedence and rejects negative indices")
 {
+    auto session = BaseitemReader::create_session();
     BaseitemStateGuard guard;
+    session = BaseitemReader::create_session();
     auto data = make_baseitem();
     auto expected = ParseErrorType::NON_SEQUENTIAL_RECORDS;
     auto previous = 1;
@@ -332,10 +348,11 @@ TEST_CASE("BaseitemReader preserves ordering precedence and rejects negative ind
     {
         data["id"] = nlohmann::json::number_unsigned_t{ 0 };
     }
-    SUBCASE("out-of-range ID below the previous ID still fails ordering first")
+    SUBCASE("out-of-range ID is rejected before ordering")
     {
         data["id"] = nlohmann::json::number_unsigned_t{ 32768 };
         previous = 40000;
+        expected = ParseErrorType::INVALID_VALUE;
     }
     SUBCASE("negative ID above an abnormal negative previous ID cannot index the list")
     {
@@ -343,15 +360,17 @@ TEST_CASE("BaseitemReader preserves ordering precedence and rejects negative ind
         previous = -100;
         expected = ParseErrorType::INVALID_VALUE;
     }
-    error_idx = previous;
-    CHECK(test::to_error_code(BaseitemReader(data).read()) == expected);
-    CHECK(error_idx == previous);
+    session = BaseitemReader::create_session(previous);
+    CHECK(test::to_error_code(test::read_and_commit(BaseitemReader(data, session), session)) == expected);
+    CHECK(session.last_id().value_or(-1) == previous);
     CHECK(BaseitemList::get_instance().empty());
 }
 
 TEST_CASE("BaseitemReader publishes nested helper values only after successful parsing")
 {
+    auto session = BaseitemReader::create_session();
     BaseitemStateGuard guard;
+    session = BaseitemReader::create_session();
     auto &items = BaseitemList::get_instance();
     auto data = make_baseitem(4);
     data["symbol"] = { { "character", "-" }, { "color", "Red" } };
@@ -360,7 +379,7 @@ TEST_CASE("BaseitemReader publishes nested helper values only after successful p
     data["allocations"] = { { { "depth", 4 }, { "rarity", 5 } }, { { "depth", 6 }, { "rarity", 7 } } };
     data["activate"] = "LIGHT";
     data["flags"] = { "STR", "DEX" };
-    REQUIRE(BaseitemReader(data).read().has_value());
+    REQUIRE(test::read_and_commit(BaseitemReader(data, session), session).has_value());
     REQUIRE(items.size() == 5);
     const auto &item = items.get_baseitem(4);
     CHECK(item.name == "Test");
@@ -376,7 +395,7 @@ TEST_CASE("BaseitemReader publishes nested helper values only after successful p
     CHECK(item.flags.has(TR_STR));
     CHECK(item.flags.has(TR_DEX));
     CHECK(item.flags.has(TR_ACTIVATE));
-    CHECK(error_idx == 4);
+    CHECK(session.last_id().value_or(-1) == 4);
 }
 
 /*!
@@ -386,17 +405,19 @@ TEST_CASE("BaseitemReader publishes nested helper values only after successful p
  */
 TEST_CASE("BaseitemReader rejects duplicated kinds of valid baseitems")
 {
+    auto session = BaseitemReader::create_session();
     BaseitemStateGuard guard;
+    session = BaseitemReader::create_session();
     auto &items = BaseitemList::get_instance();
-    const auto read = [](const nlohmann::json &data) { return BaseitemReader(data).read(); };
+    const auto read = [&session](const nlohmann::json &data) { return test::read_and_commit(BaseitemReader(data, session), session); };
     REQUIRE(read(make_baseitem(1)).has_value());
 
     auto duplicated = make_baseitem(2);
     CHECK(test::to_error_code(read(duplicated)) == ParseErrorType::INVALID_VALUE);
     CHECK(items.size() == 2);
 
-    // 失敗した読み込みでも診断のための ID は進むため、同じ ID を読み直す前に戻す。
-    error_idx = 1;
+    // 失敗した記録は確定されないので、同じ ID で再試行できる。
+    CHECK(session.last_id() == 1);
     auto invalid = make_baseitem(2);
     // JSON の文字列は UTF-8 で与える（「異常アイテム」）。
     invalid["name"] = { { "ja", "\xe7\x95\xb0\xe5\xb8\xb8\xe3\x82\xa2\xe3\x82\xa4\xe3\x83\x86\xe3\x83\xa0" }, { "en", "Invalid item" } };
@@ -418,18 +439,21 @@ TEST_CASE("BaseitemReader rejects duplicated kinds of valid baseitems")
  */
 TEST_CASE("BaseitemReader limits base dice to the save format range")
 {
+    auto session = BaseitemReader::create_session();
     for (const auto *dice : { "256d1", "1d256", "-1d2" }) {
         CAPTURE(dice);
         BaseitemStateGuard guard;
+        session = BaseitemReader::create_session();
         auto data = make_baseitem();
         data["base_dice"] = dice;
-        CHECK(test::to_error_code(BaseitemReader(data).read()) == ParseErrorType::INVALID_VALUE);
+        CHECK(test::to_error_code(test::read_and_commit(BaseitemReader(data, session), session)) == ParseErrorType::INVALID_VALUE);
         CHECK(BaseitemList::get_instance().empty());
     }
     BaseitemStateGuard guard;
+    session = BaseitemReader::create_session();
     auto data = make_baseitem();
     data["base_dice"] = "255d255";
-    REQUIRE(BaseitemReader(data).read().has_value());
+    REQUIRE(test::read_and_commit(BaseitemReader(data, session), session).has_value());
     CHECK(BaseitemList::get_instance().get_baseitem(1).damage_dice == Dice(255, 255));
 }
 
@@ -439,6 +463,7 @@ TEST_CASE("BaseitemReader limits base dice to the save format range")
  */
 TEST_CASE("Item reader limits keep the stated equipment-sum estimate within 16 bits")
 {
+    auto session = BaseitemReader::create_session();
     constexpr auto max16 = int{ std::numeric_limits<int16_t>::max() };
     constexpr auto slots = 12;
     // ACの合計: ベースAC (エゴの XTRA_AC で 1/4 上乗せ) + 盾の技能 + ACの修正値 (修理した武器2か所は2倍) + そのほかの補正
@@ -453,27 +478,30 @@ TEST_CASE("Item reader limits keep the stated equipment-sum estimate within 16 b
  */
 TEST_CASE("BaseitemReader limits base AC and bonuses to small numbers up to 255 in absolute value")
 {
+    auto session = BaseitemReader::create_session();
     for (const auto &[field, value] : { std::pair{ "base_ac", -1 }, std::pair{ "base_ac", ITEM_BASE_AC_MAX + 1 }, std::pair{ "hit_bonus", -ITEM_BONUS_MAX - 1 },
              std::pair{ "hit_bonus", ITEM_BONUS_MAX + 1 }, std::pair{ "damage_bonus", -ITEM_BONUS_MAX - 1 }, std::pair{ "damage_bonus", ITEM_BONUS_MAX + 1 },
              std::pair{ "ac_bonus", -ITEM_BONUS_MAX - 1 }, std::pair{ "ac_bonus", ITEM_BONUS_MAX + 1 } }) {
         CAPTURE(field);
         CAPTURE(value);
         BaseitemStateGuard guard;
+        session = BaseitemReader::create_session();
         auto data = make_baseitem();
         data[field] = value;
-        CHECK(test::to_error_code(BaseitemReader(data).read()) == ParseErrorType::INVALID_VALUE);
+        CHECK(test::to_error_code(test::read_and_commit(BaseitemReader(data, session), session)) == ParseErrorType::INVALID_VALUE);
         CHECK(BaseitemList::get_instance().empty());
     }
     for (const auto bonus : { -ITEM_BONUS_MAX, ITEM_BONUS_MAX }) {
         CAPTURE(bonus);
         BaseitemStateGuard guard;
+        session = BaseitemReader::create_session();
         auto data = make_baseitem();
         const auto base_ac = bonus < 0 ? 0 : ITEM_BASE_AC_MAX;
         data["base_ac"] = base_ac;
         data["hit_bonus"] = bonus;
         data["damage_bonus"] = bonus;
         data["ac_bonus"] = bonus;
-        REQUIRE(BaseitemReader(data).read().has_value());
+        REQUIRE(test::read_and_commit(BaseitemReader(data, session), session).has_value());
         const auto &baseitem = BaseitemList::get_instance().get_baseitem(1);
         CHECK(baseitem.ac == base_ac);
         CHECK(baseitem.to_h == bonus);
@@ -487,17 +515,20 @@ TEST_CASE("BaseitemReader limits base AC and bonuses to small numbers up to 255 
  */
 TEST_CASE("BaseitemReader limits level to the deepest reachable floor")
 {
+    auto session = BaseitemReader::create_session();
     {
         BaseitemStateGuard guard;
+        session = BaseitemReader::create_session();
         auto data = make_baseitem();
         data["level"] = MAX_DEPTH;
-        CHECK(test::to_error_code(BaseitemReader(data).read()) == ParseErrorType::INVALID_VALUE);
+        CHECK(test::to_error_code(test::read_and_commit(BaseitemReader(data, session), session)) == ParseErrorType::INVALID_VALUE);
         CHECK(BaseitemList::get_instance().empty());
     }
     BaseitemStateGuard guard;
+    session = BaseitemReader::create_session();
     auto data = make_baseitem();
     data["level"] = MAX_DEPTH - 1;
-    REQUIRE(BaseitemReader(data).read().has_value());
+    REQUIRE(test::read_and_commit(BaseitemReader(data, session), session).has_value());
     CHECK(BaseitemList::get_instance().get_baseitem(1).level == MAX_DEPTH - 1);
 }
 
@@ -506,18 +537,21 @@ TEST_CASE("BaseitemReader limits level to the deepest reachable floor")
  */
 TEST_CASE("BaseitemReader limits allocation depth to the generation table size")
 {
+    auto session = BaseitemReader::create_session();
     for (const auto depth : { MAX_DEPTH, -1 }) {
         CAPTURE(depth);
         BaseitemStateGuard guard;
+        session = BaseitemReader::create_session();
         auto data = make_baseitem();
         data["allocations"] = { { { "depth", depth }, { "rarity", 1 } } };
-        CHECK(test::to_error_code(BaseitemReader(data).read()) == ParseErrorType::INVALID_VALUE);
+        CHECK(test::to_error_code(test::read_and_commit(BaseitemReader(data, session), session)) == ParseErrorType::INVALID_VALUE);
         CHECK(BaseitemList::get_instance().empty());
     }
     BaseitemStateGuard guard;
+    session = BaseitemReader::create_session();
     auto data = make_baseitem();
     data["allocations"] = { { { "depth", MAX_DEPTH - 1 }, { "rarity", 1 } } };
-    REQUIRE(BaseitemReader(data).read().has_value());
+    REQUIRE(test::read_and_commit(BaseitemReader(data, session), session).has_value());
     const auto &table = BaseitemList::get_instance().get_baseitem(1).alloc_tables[0];
     CHECK(table.level == MAX_DEPTH - 1);
     CHECK(table.chance == 1);
@@ -528,26 +562,30 @@ TEST_CASE("BaseitemReader limits allocation depth to the generation table size")
  */
 TEST_CASE("BaseitemReader reads natural_generation as an optional boolean")
 {
+    auto session = BaseitemReader::create_session();
     {
         BaseitemStateGuard guard;
+        session = BaseitemReader::create_session();
         const auto data = make_baseitem();
-        REQUIRE(BaseitemReader(data).read().has_value());
+        REQUIRE(test::read_and_commit(BaseitemReader(data, session), session).has_value());
         CHECK(BaseitemList::get_instance().get_baseitem(1).natural_generation);
     }
     for (const auto natural_generation : { false, true }) {
         CAPTURE(natural_generation);
         BaseitemStateGuard guard;
+        session = BaseitemReader::create_session();
         auto data = make_baseitem();
         data["natural_generation"] = natural_generation;
-        REQUIRE(BaseitemReader(data).read().has_value());
+        REQUIRE(test::read_and_commit(BaseitemReader(data, session), session).has_value());
         CHECK(BaseitemList::get_instance().get_baseitem(1).natural_generation == natural_generation);
     }
     for (const auto &value : { nlohmann::json(0), nlohmann::json("false"), nlohmann::json::array() }) {
         CAPTURE(value);
         BaseitemStateGuard guard;
+        session = BaseitemReader::create_session();
         auto data = make_baseitem();
         data["natural_generation"] = value;
-        CHECK(test::to_error_code(BaseitemReader(data).read()) == ParseErrorType::INVALID_TYPE);
+        CHECK(test::to_error_code(test::read_and_commit(BaseitemReader(data, session), session)) == ParseErrorType::INVALID_TYPE);
         CHECK(BaseitemList::get_instance().empty());
     }
 }
@@ -557,20 +595,23 @@ TEST_CASE("BaseitemReader reads natural_generation as an optional boolean")
  */
 TEST_CASE("BaseitemReader rejects natural_generation false with allocations")
 {
+    auto session = BaseitemReader::create_session();
     {
         BaseitemStateGuard guard;
+        session = BaseitemReader::create_session();
         auto data = make_baseitem();
         data["natural_generation"] = false;
         data["allocations"] = { { { "depth", 4 }, { "rarity", 5 } } };
-        CHECK(test::to_error_code(BaseitemReader(data).read()) == ParseErrorType::INVALID_VALUE);
+        CHECK(test::to_error_code(test::read_and_commit(BaseitemReader(data, session), session)) == ParseErrorType::INVALID_VALUE);
         CHECK(BaseitemList::get_instance().empty());
-        CHECK(error_idx == 1);
+        CHECK_FALSE(session.last_id());
     }
     BaseitemStateGuard guard;
+    session = BaseitemReader::create_session();
     auto data = make_baseitem();
     data["natural_generation"] = false;
     data["allocations"] = nlohmann::json::array();
-    REQUIRE(BaseitemReader(data).read().has_value());
+    REQUIRE(test::read_and_commit(BaseitemReader(data, session), session).has_value());
     const auto &baseitem = BaseitemList::get_instance().get_baseitem(1);
     CHECK_FALSE(baseitem.natural_generation);
     CHECK_FALSE(baseitem.has_allocation());
@@ -581,7 +622,9 @@ TEST_CASE("BaseitemReader rejects natural_generation false with allocations")
  */
 TEST_CASE("BaseitemReader judges natural_generation against inherited allocations on reload")
 {
+    auto session = BaseitemReader::create_session();
     BaseitemStateGuard guard;
+    session = BaseitemReader::create_session();
     auto &items = BaseitemList::get_instance();
     auto data = make_baseitem();
     auto first_natural_generation = true;
@@ -603,10 +646,10 @@ TEST_CASE("BaseitemReader judges natural_generation against inherited allocation
         first_natural_generation = false;
         reload["allocations"] = { { { "depth", 4 }, { "rarity", 5 } } };
     }
-    REQUIRE(BaseitemReader(data).read().has_value());
+    REQUIRE(test::read_and_commit(BaseitemReader(data, session), session).has_value());
     reload["cost"] = 91;
-    error_idx = -1;
-    CHECK(test::to_error_code(BaseitemReader(reload).read()) == ParseErrorType::INVALID_VALUE);
+    session = BaseitemReader::create_session();
+    CHECK(test::to_error_code(test::read_and_commit(BaseitemReader(reload, session), session)) == ParseErrorType::INVALID_VALUE);
     const auto &existing = items.get_baseitem(1);
     CHECK(existing.cost == 4);
     CHECK(existing.natural_generation == first_natural_generation);
@@ -617,23 +660,25 @@ TEST_CASE("BaseitemReader judges natural_generation against inherited allocation
  */
 TEST_CASE("BaseitemReader preserves or overrides natural_generation on reload")
 {
+    auto session = BaseitemReader::create_session();
     BaseitemStateGuard guard;
+    session = BaseitemReader::create_session();
     auto &items = BaseitemList::get_instance();
     auto data = make_baseitem();
     data["natural_generation"] = false;
-    REQUIRE(BaseitemReader(data).read().has_value());
+    REQUIRE(test::read_and_commit(BaseitemReader(data, session), session).has_value());
 
     auto reload = make_baseitem();
     reload["cost"] = 91;
-    error_idx = -1;
-    REQUIRE(BaseitemReader(reload).read().has_value());
+    session = BaseitemReader::create_session();
+    REQUIRE(test::read_and_commit(BaseitemReader(reload, session), session).has_value());
     CHECK(items.get_baseitem(1).cost == 91);
     CHECK_FALSE(items.get_baseitem(1).natural_generation);
 
     reload["natural_generation"] = true;
     reload["allocations"] = { { { "depth", 4 }, { "rarity", 5 } } };
-    error_idx = -1;
-    REQUIRE(BaseitemReader(reload).read().has_value());
+    session = BaseitemReader::create_session();
+    REQUIRE(test::read_and_commit(BaseitemReader(reload, session), session).has_value());
     CHECK(items.get_baseitem(1).natural_generation);
     CHECK(items.get_baseitem(1).alloc_tables[0].chance == 5);
 }
@@ -644,18 +689,21 @@ TEST_CASE("BaseitemReader preserves or overrides natural_generation on reload")
  */
 TEST_CASE("BaseitemReader limits allocation rarity to 1 through 100")
 {
+    auto session = BaseitemReader::create_session();
     for (const auto rarity : { 0, 101, -1 }) {
         CAPTURE(rarity);
         BaseitemStateGuard guard;
+        session = BaseitemReader::create_session();
         auto data = make_baseitem();
         data["allocations"] = { { { "depth", 1 }, { "rarity", rarity } } };
-        CHECK(test::to_error_code(BaseitemReader(data).read()) == ParseErrorType::INVALID_VALUE);
+        CHECK(test::to_error_code(test::read_and_commit(BaseitemReader(data, session), session)) == ParseErrorType::INVALID_VALUE);
         CHECK(BaseitemList::get_instance().empty());
     }
     BaseitemStateGuard guard;
+    session = BaseitemReader::create_session();
     auto data = make_baseitem();
     data["allocations"] = { { { "depth", 1 }, { "rarity", 1 } }, { { "depth", 2 }, { "rarity", 100 } } };
-    REQUIRE(BaseitemReader(data).read().has_value());
+    REQUIRE(test::read_and_commit(BaseitemReader(data, session), session).has_value());
     const auto &tables = BaseitemList::get_instance().get_baseitem(1).alloc_tables;
     CHECK(tables[0].chance == 1);
     CHECK(tables[1].chance == 100);
@@ -666,13 +714,14 @@ namespace {
 void check_baseitem_boundary(const nlohmann::json &data, bool accepted, ParseErrorType error = ParseErrorType::INVALID_VALUE)
 {
     BaseitemStateGuard guard;
+    auto session = BaseitemReader::create_session();
     auto &items = BaseitemList::get_instance();
     const auto original = make_baseitem();
-    REQUIRE(BaseitemReader(original).read().has_value());
+    REQUIRE(test::read_and_commit(BaseitemReader(original, session), session).has_value());
     const auto previous_ids = items.collect_valid_bi_ids();
     const auto *existing = &items.get_baseitem(1);
-    error_idx = -1;
-    const auto result = BaseitemReader(data).read();
+    session = BaseitemReader::create_session();
+    const auto result = test::read_and_commit(BaseitemReader(data, session), session);
     CHECK(result.has_value() == accepted);
     if (accepted) {
         const auto &updated = items.get_baseitem(1);
@@ -717,6 +766,7 @@ void check_pval_boundaries(int kind, int minimum, int maximum)
 
 TEST_CASE("BaseitemReader bounds equipment pval like artifacts")
 {
+    auto session = BaseitemReader::create_session();
     for (const auto kind : { 16, 17, 18, 19, 20, 21, 22, 23, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 45, 50 }) {
         check_pval_boundaries(kind, -128, 128);
     }
@@ -724,6 +774,7 @@ TEST_CASE("BaseitemReader bounds equipment pval like artifacts")
 
 TEST_CASE("BaseitemReader requires positive bounded device pval")
 {
+    auto session = BaseitemReader::create_session();
     check_pval_boundaries(55, 1, 127);
     check_pval_boundaries(65, 1, 127);
     check_pval_boundaries(66, 1, 1000);
@@ -731,6 +782,7 @@ TEST_CASE("BaseitemReader requires positive bounded device pval")
 
 TEST_CASE("BaseitemReader bounds nourishment fuel and chest pval")
 {
+    auto session = BaseitemReader::create_session();
     check_pval_boundaries(80, 0, 10000);
     check_pval_boundaries(75, -10000, 10000);
     check_pval_boundaries(77, 1, 15000);
@@ -739,6 +791,7 @@ TEST_CASE("BaseitemReader bounds nourishment fuel and chest pval")
 
 TEST_CASE("BaseitemReader requires zero pval for unused kinds")
 {
+    auto session = BaseitemReader::create_session();
     for (const auto kind : { 0, 1, 2, 3, 4, 5, 8, 9, 10, 11, 15, 69, 70, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 105, 106, 107, 127 }) {
         check_pval_boundaries(kind, 0, 0);
     }
@@ -746,11 +799,13 @@ TEST_CASE("BaseitemReader requires zero pval for unused kinds")
 
 TEST_CASE("BaseitemReader validates inherited pval after changing item kind")
 {
+    auto session = BaseitemReader::create_session();
     BaseitemStateGuard guard;
+    session = BaseitemReader::create_session();
     auto original = make_baseitem();
     original["itemkind"]["type_value"] = static_cast<int>(ItemKindType::SWORD);
     original["parameter_value"] = 128;
-    REQUIRE(BaseitemReader(original).read().has_value());
+    REQUIRE(test::read_and_commit(BaseitemReader(original, session), session).has_value());
     auto &items = BaseitemList::get_instance();
     const auto previous_ids = items.collect_valid_bi_ids();
     for (const auto null_value : { false, true }) {
@@ -759,8 +814,8 @@ TEST_CASE("BaseitemReader validates inherited pval after changing item kind")
         if (null_value) {
             data["parameter_value"] = nullptr;
         }
-        error_idx = -1;
-        CHECK(test::to_error_code(BaseitemReader(data).read()) == ParseErrorType::INVALID_PVAL);
+        session = BaseitemReader::create_session();
+        CHECK(test::to_error_code(test::read_and_commit(BaseitemReader(data, session), session)) == ParseErrorType::INVALID_PVAL);
         CHECK(items.size() == 2);
         CHECK(items.get_baseitem(1).bi_key == BaseitemKey(ItemKindType::SWORD, 1));
         CHECK(items.get_baseitem(1).pval == 128);
@@ -770,6 +825,7 @@ TEST_CASE("BaseitemReader validates inherited pval after changing item kind")
 
 TEST_CASE("BaseitemReader accepts only defined item kinds up to 127")
 {
+    auto session = BaseitemReader::create_session();
     // 範囲外 (-1, 128, 129) も範囲内で未定義の種別も INVALID_VALUE で、どちらの経路でも同じ診断になるため区別しない
     for (const auto kind : { -1, 6, 12, 13, 14, 24, 41, 64, 100, 126, 128, 129 }) {
         CAPTURE(kind);
@@ -786,6 +842,7 @@ TEST_CASE("BaseitemReader accepts only defined item kinds up to 127")
 
 TEST_CASE("BaseitemReader bounds subtypes by the indexed tables")
 {
+    auto session = BaseitemReader::create_session();
     for (const auto kind : { 19, 20, 21, 22, 23, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 105, 106, 107, 55, 65, 66, 16, 30, 1 }) {
         const auto maximum = (kind >= 19 && kind <= 23) ? 63 : kind >= 90 ? 3
                                                            : kind == 55   ? 32
@@ -806,6 +863,7 @@ TEST_CASE("BaseitemReader bounds subtypes by the indexed tables")
 
 TEST_CASE("BaseitemReader caps costs like egos and limits gold separately")
 {
+    auto session = BaseitemReader::create_session();
     for (const auto kind : { 1, 127 }) {
         const auto maximum = kind == 127 ? 1024 : 67108863;
         for (const auto cost : { -1, 0, maximum, maximum + 1 }) {

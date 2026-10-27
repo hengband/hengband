@@ -15,4 +15,15 @@ inline ParseErrorType to_error_code(const tl::expected<void, ParseErrorType> &re
     return result ? ParseErrorType::NONE : result.error();
 }
 
+/*! @brief driver と同じく、成功した記録の Session だけを確定する */
+template <typename Reader, typename Session>
+auto read_and_commit(Reader &&reader, Session &session)
+{
+    auto result = reader.read();
+    if (result) {
+        session.commit();
+    }
+    return result;
+}
+
 }

@@ -5,6 +5,7 @@
 #include "info-reader/json-reader-util.h"
 #include "info-reader/parse-error-types.h"
 #include "info-reader/race-info-tokens-table.h"
+#include "locale/language-switcher.h"
 #include "system/artifact/artifact-definition.h"
 #include "system/artifact/artifact-list.h"
 #include "system/baseitem/baseitem-definition.h"
@@ -28,8 +29,14 @@
 #include <span>
 #include <utility>
 
-DungeonReader::DungeonReader(const nlohmann::json &dungeon_data)
+DungeonReader::Session DungeonReader::create_session(tl::optional<int> last_id)
+{
+    return Session(DefinitionIdOrder::STRICTLY_INCREASING, { 0, enum2i(DungeonId::MAX) - 1 }, _("ダンジョン", "dungeon"), last_id);
+}
+
+DungeonReader::DungeonReader(const nlohmann::json &dungeon_data, Session &session)
     : dungeon_data(dungeon_data)
+    , session(session)
 {
 }
 
@@ -44,14 +51,12 @@ tl::expected<void, ParseErrorType> DungeonReader::read() const
         return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
     }
 
-    int id = 0;
-    if (const auto result = info_set_integer(get_json_value(element, "id"), id, true, Range(0, enum2i(DungeonId::MAX) - 1)); !result) {
-        return result;
+    const auto id_result = this->session.read(get_json_value(element, "id"));
+    if (!id_result) {
+        msg_print(id_result.error().reason);
+        return tl::unexpected(id_result.error().code);
     }
-    if (id <= error_idx) {
-        return tl::make_unexpected(ParseErrorType::NON_SEQUENTIAL_RECORDS);
-    }
-    error_idx = id;
+    const auto id = *id_result;
 
     DungeonDefinition dungeon;
     if (const auto result = info_set_string(get_json_value(element, "name"), dungeon.name, true); !result) {
@@ -316,9 +321,9 @@ static tl::expected<ProbabilityTable<short>, ParseErrorType> parse_terrain_proba
 
         int prob = 0;
         if (!info_set_integer(rate_obj, prob, true, Range(0, total_percent))) {
-            msg_print(_("DungeonDefinitions.jsonc: ダンジョンID '{}' の{}.tiles の rate '{}' が0～100の範囲外です (百分率で指定してください)。",
-                          "DungeonDefinitions.jsonc: dungeon ID '{}' {}.tiles rate '{}' is outside 0 to 100 (they are percentages)."),
-                error_idx, section, rate_obj.dump());
+            msg_print(_("DungeonDefinitions.jsonc: {}.tiles の rate '{}' が0～100の範囲外です (百分率で指定してください)。",
+                          "DungeonDefinitions.jsonc: {}.tiles rate '{}' is outside 0 to 100 (they are percentages)."),
+                section, rate_obj.dump());
             return tl::unexpected(ParseErrorType::INVALID_VALUE);
         }
 
@@ -337,15 +342,15 @@ static tl::expected<ProbabilityTable<short>, ParseErrorType> parse_terrain_proba
     }
 
     if (total_probability > total_percent) {
-        msg_print(_("DungeonDefinitions.jsonc: ダンジョンID '{}' の{}.tiles の rate の合計が '{}' となり100を超えています (百分率で指定してください)。",
-                      "DungeonDefinitions.jsonc: dungeon ID '{}' {}.tiles rates reach a total of '{}', exceeding 100 (they are percentages)."),
-            error_idx, section, total_probability);
+        msg_print(_("DungeonDefinitions.jsonc: {}.tiles の rate の合計が '{}' となり100を超えています (百分率で指定してください)。",
+                      "DungeonDefinitions.jsonc: {}.tiles rates reach a total of '{}', exceeding 100 (they are percentages)."),
+            section, total_probability);
         return tl::unexpected(ParseErrorType::INVALID_VALUE);
     }
     if (total_probability != total_percent) {
-        msg_print(_("DungeonDefinitions.jsonc: ダンジョンID '{}' の{}.tiles の rate の合計 '{}' が100ではありません (百分率で指定してください)。",
-                      "DungeonDefinitions.jsonc: dungeon ID '{}' {}.tiles rates total '{}', not 100 (they are percentages)."),
-            error_idx, section, total_probability);
+        msg_print(_("DungeonDefinitions.jsonc: {}.tiles の rate の合計 '{}' が100ではありません (百分率で指定してください)。",
+                      "DungeonDefinitions.jsonc: {}.tiles rates total '{}', not 100 (they are percentages)."),
+            section, total_probability);
         return tl::unexpected(ParseErrorType::INVALID_VALUE);
     }
 
@@ -379,9 +384,9 @@ tl::expected<void, ParseErrorType> DungeonReader::set_dungeon_generation(Dungeon
     }
     // 保存形式は符号付き16bit。最浅階が最深階を超える定義も拒否する。
     if (dungeon.mindepth > dungeon.maxdepth) {
-        msg_print(_("DungeonDefinitions.jsonc: ダンジョンID '{}' のminDepth '{}' がmaxDepth '{}' を超えています。",
-                      "DungeonDefinitions.jsonc: dungeon ID '{}' minDepth '{}' exceeds maxDepth '{}'."),
-            error_idx, dungeon.mindepth, dungeon.maxdepth);
+        msg_print(_("DungeonDefinitions.jsonc: minDepth '{}' がmaxDepth '{}' を超えています。",
+                      "DungeonDefinitions.jsonc: minDepth '{}' exceeds maxDepth '{}'."),
+            dungeon.mindepth, dungeon.maxdepth);
         return tl::unexpected(ParseErrorType::INVALID_VALUE);
     }
     if (const auto result = info_set_integer(get_json_value(generation_obj, "minPlayerLevel"), dungeon.min_plev, true, Range(0, PY_MAX_LEVEL)); !result) {
@@ -536,10 +541,7 @@ static tl::expected<void, ParseErrorType> info_set_enum_from_integer_checked(con
     }
 
     const auto value = enum2i(enum_value);
-    if (value < 0) {
-        msg_print(_("{} ID '{}' は範囲外です。", "{} ID '{}' is out of range."), label, value);
-        return tl::unexpected(ParseErrorType::INVALID_VALUE);
-    }
+
     if (!validator(enum_value)) {
         msg_print(_("不正な{} ID '{}'。", "Invalid {} ID '{}'."), label, value);
         return tl::unexpected(ParseErrorType::INVALID_VALUE);

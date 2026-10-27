@@ -1,5 +1,7 @@
 #pragma once
 
+#include "info-reader/definition-id-checker.h"
+
 #include "info-reader/parse-error-types.h"
 #include <nlohmann/json_fwd.hpp>
 #include <string_view>
@@ -9,8 +11,11 @@ class ArtifactDefinition;
 
 class ArtifactReader {
 public:
-    explicit ArtifactReader(const nlohmann::json &art_data);
-    ArtifactReader(nlohmann::json &&) = delete;
+    using Session = DefinitionIdChecker;
+    static Session create_session(tl::optional<int> last_id = tl::nullopt);
+
+    ArtifactReader(const nlohmann::json &art_data, Session &session);
+    ArtifactReader(nlohmann::json &&, Session &) = delete;
     ArtifactReader(const ArtifactReader &) = delete;
     ArtifactReader(ArtifactReader &&) = delete;
     ArtifactReader &operator=(const ArtifactReader &) = delete;
@@ -25,4 +30,5 @@ private:
     tl::expected<void, ParseErrorType> set_art_flags(ArtifactDefinition &artifact) const;
 
     const nlohmann::json &art_data;
+    Session &session;
 };

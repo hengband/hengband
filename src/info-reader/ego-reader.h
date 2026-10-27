@@ -1,5 +1,7 @@
 #pragma once
 
+#include "info-reader/definition-id-checker.h"
+
 #include "info-reader/parse-error-types.h"
 #include <nlohmann/json_fwd.hpp>
 #include <tl/expected.hpp>
@@ -9,8 +11,11 @@ struct ego_generate_type;
 
 class EgoReader {
 public:
-    explicit EgoReader(const nlohmann::json &ego_data);
-    EgoReader(nlohmann::json &&) = delete;
+    using Session = DefinitionIdChecker;
+    static Session create_session(tl::optional<int> last_id = tl::nullopt);
+
+    EgoReader(const nlohmann::json &ego_data, Session &session);
+    EgoReader(nlohmann::json &&, Session &) = delete;
     EgoReader(const EgoReader &) = delete;
     EgoReader(EgoReader &&) = delete;
     EgoReader &operator=(const EgoReader &) = delete;
@@ -28,4 +33,5 @@ private:
     tl::expected<void, ParseErrorType> set_activation(EgoItemDefinition &ego) const;
 
     const nlohmann::json &ego_data;
+    Session &session;
 };

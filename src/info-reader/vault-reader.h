@@ -1,5 +1,7 @@
 #pragma once
 
+#include "info-reader/definition-id-checker.h"
+
 #include "info-reader/parse-error-types.h"
 #include <nlohmann/json_fwd.hpp>
 #include <optional>
@@ -15,8 +17,11 @@ struct VaultReadError {
 
 class VaultReader {
 public:
-    explicit VaultReader(const nlohmann::json &data);
-    VaultReader(nlohmann::json &&) = delete;
+    using Session = DefinitionIdChecker;
+    static Session create_session(tl::optional<int> last_id = tl::nullopt);
+
+    VaultReader(const nlohmann::json &data, Session &session);
+    VaultReader(nlohmann::json &&, Session &) = delete;
     VaultReader(const VaultReader &) = delete;
     VaultReader(VaultReader &&) = delete;
     VaultReader &operator=(const VaultReader &) = delete;
@@ -29,5 +34,6 @@ private:
     tl::expected<void, ParseErrorType> fail(ParseErrorType code, std::string_view path, std::string_view reason);
     tl::expected<void, ParseErrorType> read_integer(std::string_view key, int &value, int minimum, int maximum);
     const nlohmann::json &data;
+    Session &session;
     std::optional<VaultReadError> diagnostic;
 };

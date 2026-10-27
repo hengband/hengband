@@ -21,6 +21,7 @@ TEST_CASE("MagicReader preserves an existing class on a later parse error")
     const test::ScopedReaderState reader_state;
     const auto restore = test::scoped_restore(class_magics_info);
     class_magics_info.assign(1, {});
+    auto session = MagicReader::create_session();
 
     nlohmann::json data = {
         { "name", "WARRIOR" },
@@ -33,8 +34,8 @@ TEST_CASE("MagicReader preserves an existing class on a later parse error")
         { "armour_weight_limit", 0 },
         { "realms", nlohmann::json::array() },
     };
-    REQUIRE(MagicReader(data).read().has_value());
-    CHECK(error_idx == 0);
+    REQUIRE(test::read_and_commit(MagicReader(data, session), session).has_value());
+    CHECK(session.last_id().value_or(-1) == 0);
     CHECK(class_magics_info[0].spell_book == ItemKindType::NONE);
     CHECK(class_magics_info[0].spell_first == 99);
 
@@ -43,12 +44,12 @@ TEST_CASE("MagicReader preserves an existing class on a later parse error")
     data["has_glove_mp_penalty"] = true;
     data["first_spell_level"] = 1;
     data["realms"] = nlohmann::json::object();
-    error_idx = -1;
-    CHECK(test::to_error_code(MagicReader(data).read()) == ParseErrorType::INVALID_TYPE);
+    session = MagicReader::create_session();
+    CHECK(test::to_error_code(test::read_and_commit(MagicReader(data, session), session)) == ParseErrorType::INVALID_TYPE);
     CHECK(class_magics_info[0].spell_book == ItemKindType::NONE);
     CHECK(class_magics_info[0].has_glove_mp_penalty == false);
     CHECK(class_magics_info[0].spell_first == 99);
-    CHECK(error_idx == 0);
+    CHECK_FALSE(session.last_id());
 }
 
 namespace {
@@ -103,8 +104,9 @@ nlohmann::json make_magic_numeric_data(SpellInfoList &spells)
 TEST_CASE("MagicReader rejects a repeated class without changing its definition")
 {
     const MagicNumericState state;
+    auto session = MagicReader::create_session();
     auto data = make_magic_numeric_data(SpellInfoList::get_instance());
-    REQUIRE(MagicReader(data).read().has_value());
+    REQUIRE(test::read_and_commit(MagicReader(data, session), session).has_value());
     const auto original = class_magics_info[0];
 
     data["spell_type"] = "LIFE";
@@ -115,8 +117,8 @@ TEST_CASE("MagicReader rejects a repeated class without changing its definition"
     data["first_spell_level"] = 5;
     data["armour_weight_limit"] = 450;
     data["realms"][0]["spells_info"][0]["mana_cost"] = 100;
-    CHECK(test::to_error_code(MagicReader(data).read()) == ParseErrorType::NON_SEQUENTIAL_RECORDS);
-    CHECK(error_idx == 0);
+    CHECK(test::to_error_code(test::read_and_commit(MagicReader(data, session), session)) == ParseErrorType::NON_SEQUENTIAL_RECORDS);
+    CHECK(session.last_id().value_or(-1) == 0);
     REQUIRE(class_magics_info.size() == 1);
     const auto &actual = class_magics_info[0];
     CHECK(actual.spell_book == original.spell_book);
@@ -141,15 +143,17 @@ TEST_CASE("MagicReader rejects a repeated class without changing its definition"
 TEST_CASE("MagicReader accepts a gap between classes")
 {
     const MagicNumericState state;
+    auto session = MagicReader::create_session();
     class_magics_info.assign(3, {});
+    session = MagicReader::create_session();
     auto data = make_magic_numeric_data(SpellInfoList::get_instance());
-    REQUIRE(MagicReader(data).read().has_value());
-    CHECK(error_idx == 0);
+    REQUIRE(test::read_and_commit(MagicReader(data, session), session).has_value());
+    CHECK(session.last_id().value_or(-1) == 0);
 
     data["name"] = "PRIEST";
     data["first_spell_level"] = 5;
-    REQUIRE(MagicReader(data).read().has_value());
-    CHECK(error_idx == 2);
+    REQUIRE(test::read_and_commit(MagicReader(data, session), session).has_value());
+    CHECK(session.last_id().value_or(-1) == 2);
     CHECK(class_magics_info[0].spell_first == 1);
     CHECK(class_magics_info[2].spell_first == 5);
     CHECK(class_magics_info[2].info[enum2i(RealmType::LIFE)][0].smana == 2);
@@ -161,13 +165,14 @@ TEST_CASE("MagicReader accepts a gap between classes")
 TEST_CASE("MagicReader accepts difficulty from zero through one hundred")
 {
     const MagicNumericState state;
+    auto session = MagicReader::create_session();
     auto &spells = SpellInfoList::get_instance();
     auto data = make_magic_numeric_data(spells);
     for (const auto &difficulty : std::vector<nlohmann::json>{ 0, 95, 100, 100u }) {
         CAPTURE(difficulty.dump());
         data["realms"][0]["spells_info"][1]["difficulty"] = difficulty;
-        error_idx = -1;
-        REQUIRE(MagicReader(data).read().has_value());
+        session = MagicReader::create_session();
+        REQUIRE(test::read_and_commit(MagicReader(data, session), session).has_value());
         CHECK(class_magics_info[0].info[enum2i(RealmType::LIFE)][0].sfail == 7);
         CHECK(class_magics_info[0].info[enum2i(RealmType::LIFE)][1].sfail == difficulty.get<int>());
     }
@@ -179,9 +184,10 @@ TEST_CASE("MagicReader accepts difficulty from zero through one hundred")
 TEST_CASE("MagicReader rejects invalid difficulty without publishing partial data")
 {
     const MagicNumericState state;
+    auto session = MagicReader::create_session();
     auto &spells = SpellInfoList::get_instance();
     auto data = make_magic_numeric_data(spells);
-    REQUIRE(MagicReader(data).read().has_value());
+    REQUIRE(test::read_and_commit(MagicReader(data, session), session).has_value());
     data["first_spell_level"] = 5;
     data["armour_weight_limit"] = 450;
     data["realms"][0]["spells_info"][0]["difficulty"] = 20;
@@ -189,13 +195,13 @@ TEST_CASE("MagicReader rejects invalid difficulty without publishing partial dat
         CAPTURE(difficulty.dump());
         data["realms"][0]["spells_info"][1]["difficulty"] = difficulty;
         const auto expected = difficulty.is_number_integer() ? ParseErrorType::INVALID_VALUE : ParseErrorType::INVALID_TYPE;
-        error_idx = -1;
-        CHECK(test::to_error_code(MagicReader(data).read()) == expected);
+        session = MagicReader::create_session();
+        CHECK(test::to_error_code(test::read_and_commit(MagicReader(data, session), session)) == expected);
         CHECK(class_magics_info[0].spell_first == 1);
         CHECK(class_magics_info[0].spell_weight == 430);
         CHECK(class_magics_info[0].info[enum2i(RealmType::LIFE)][0].sfail == 7);
         CHECK(class_magics_info[0].info[enum2i(RealmType::LIFE)][1].sfail == 8);
-        CHECK(error_idx == 0);
+        CHECK_FALSE(session.last_id());
     }
 }
 
@@ -205,6 +211,7 @@ TEST_CASE("MagicReader rejects invalid difficulty without publishing partial dat
 TEST_CASE("MagicReader accepts configured maximum for mana experience and armour weight")
 {
     const MagicNumericState state;
+    auto session = MagicReader::create_session();
     auto &spells = SpellInfoList::get_instance();
     auto data = make_magic_numeric_data(spells);
     for (const auto &value : std::vector<nlohmann::json>{ 0, 999, 1000, 2047, 2047u }) {
@@ -212,8 +219,8 @@ TEST_CASE("MagicReader accepts configured maximum for mana experience and armour
         data["armour_weight_limit"] = value;
         data["realms"][0]["spells_info"][1]["mana_cost"] = value;
         data["realms"][0]["spells_info"][1]["first_cast_exp_rate"] = value;
-        error_idx = -1;
-        REQUIRE(MagicReader(data).read().has_value());
+        session = MagicReader::create_session();
+        REQUIRE(test::read_and_commit(MagicReader(data, session), session).has_value());
         CHECK(class_magics_info[0].spell_weight == value.get<int>());
         CHECK(class_magics_info[0].info[enum2i(RealmType::LIFE)][1].smana == value.get<int>());
         CHECK(class_magics_info[0].info[enum2i(RealmType::LIFE)][1].sexp == value.get<int>());
@@ -226,9 +233,10 @@ TEST_CASE("MagicReader accepts configured maximum for mana experience and armour
 TEST_CASE("MagicReader rejects invalid bounded fields without publishing partial data")
 {
     const MagicNumericState state;
+    auto session = MagicReader::create_session();
     auto &spells = SpellInfoList::get_instance();
     const auto original = make_magic_numeric_data(spells);
-    REQUIRE(MagicReader(original).read().has_value());
+    REQUIRE(test::read_and_commit(MagicReader(original, session), session).has_value());
     for (const auto *field : { "armour_weight_limit", "mana_cost", "first_cast_exp_rate" }) {
         for (const auto &value : std::vector<nlohmann::json>{ -1, 2048, std::numeric_limits<uint64_t>::max(), 1.0, true }) {
             CAPTURE(field);
@@ -242,8 +250,8 @@ TEST_CASE("MagicReader rejects invalid bounded fields without publishing partial
                 data["realms"][0]["spells_info"][1][field] = value;
             }
             const auto expected = value.is_number_integer() ? ParseErrorType::INVALID_VALUE : ParseErrorType::INVALID_TYPE;
-            error_idx = -1;
-            CHECK(test::to_error_code(MagicReader(data).read()) == expected);
+            session = MagicReader::create_session();
+            CHECK(test::to_error_code(test::read_and_commit(MagicReader(data, session), session)) == expected);
             CHECK(class_magics_info[0].spell_first == 1);
             CHECK(class_magics_info[0].spell_weight == 430);
             CHECK(class_magics_info[0].info[enum2i(RealmType::LIFE)][0].smana == 2);
@@ -266,6 +274,7 @@ TEST_CASE("MagicReader numeric fixture restores existing spell definitions")
     const auto *original_info = &spells.get_spell_info(RealmType::SORCERY, 7);
     {
         const MagicNumericState state;
+        auto session = MagicReader::create_session();
         make_magic_numeric_data(spells);
         CHECK_FALSE(spells.get_spell_id(RealmType::SORCERY, "existing-tag"));
     }
@@ -281,8 +290,9 @@ TEST_CASE("MagicReader numeric fixture restores existing spell definitions")
 TEST_CASE("MagicReader propagates helper errors without publishing partial data")
 {
     const MagicNumericState state;
+    auto session = MagicReader::create_session();
     auto data = make_magic_numeric_data(SpellInfoList::get_instance());
-    REQUIRE(MagicReader(data).read().has_value());
+    REQUIRE(test::read_and_commit(MagicReader(data, session), session).has_value());
 
     struct InvalidField {
         const char *path;
@@ -316,9 +326,9 @@ TEST_CASE("MagicReader propagates helper errors without publishing partial data"
         candidate["first_spell_level"] = 5;
         candidate["realms"][0]["spells_info"][0]["mana_cost"] = 100;
         candidate[nlohmann::json::json_pointer(invalid.path)] = invalid.value;
-        error_idx = -1;
-        CHECK(test::to_error_code(MagicReader(candidate).read()) == invalid.error);
-        CHECK(error_idx == (std::string_view(invalid.path) == "/name" ? -1 : 0));
+        session = MagicReader::create_session();
+        CHECK(test::to_error_code(test::read_and_commit(MagicReader(candidate, session), session)) == invalid.error);
+        CHECK_FALSE(session.last_id());
         CHECK(class_magics_info[0].spell_book == ItemKindType::SORCERY_BOOK);
         CHECK(class_magics_info[0].spell_first == 1);
         CHECK(class_magics_info[0].info[enum2i(RealmType::LIFE)][0].smana == 2);

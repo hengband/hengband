@@ -6,15 +6,23 @@
 #include "info-reader/json-reader-util.h"
 #include "info-reader/parse-error-types.h"
 #include "inventory/inventory-slot-types.h"
+#include "locale/language-switcher.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/tr-types.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
+#include "view/display-messages.h"
 #include <limits>
 #include <nlohmann/json.hpp>
 
-EgoReader::EgoReader(const nlohmann::json &ego_data)
+EgoReader::Session EgoReader::create_session(tl::optional<int> last_id)
+{
+    return Session(DefinitionIdOrder::UNIQUE, { 1, MAX_EGO_ID }, _("エゴ", "ego"), last_id);
+}
+
+EgoReader::EgoReader(const nlohmann::json &ego_data, Session &session)
     : ego_data(ego_data)
+    , session(session)
 {
 }
 
@@ -30,9 +38,9 @@ tl::expected<void, ParseErrorType> EgoReader::validate_root(const nlohmann::json
 }
 
 /*!
- * @brief エゴ1件の数値・参照を検証し、成功した場合にだけ定義とerror_idxを公開する
+ * @brief エゴ1件の数値・参照を検証し、成功した場合にだけ定義を公開する
  * @return 成功時は空の値、失敗時は解析エラーコード
- * @details 失敗時は既存のegos_infoとerror_idxを保持する。文書のversion検証は呼び出し側が先に行う。
+ * @details 失敗時は既存のegos_infoを保持する。文書のversion検証は呼び出し側が先に行う。
  */
 tl::expected<void, ParseErrorType> EgoReader::read() const
 {
@@ -40,13 +48,12 @@ tl::expected<void, ParseErrorType> EgoReader::read() const
         return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
     }
 
-    int id = 0;
-    if (const auto result = info_set_integer(get_json_value(this->ego_data, "id"), id, true, Range(1, std::numeric_limits<byte>::max())); !result) {
-        return result;
+    const auto id_result = this->session.read(get_json_value(this->ego_data, "id"));
+    if (!id_result) {
+        msg_print(id_result.error().reason);
+        return tl::unexpected(id_result.error().code);
     }
-    if (egos_info.contains(i2enum<EgoType>(id))) {
-        return tl::make_unexpected(ParseErrorType::NON_SEQUENTIAL_RECORDS);
-    }
+    const auto id = *id_result;
 
     EgoItemDefinition ego;
     ego.idx = i2enum<EgoType>(id);
@@ -116,8 +123,9 @@ tl::expected<void, ParseErrorType> EgoReader::read() const
         return result;
     }
 
+    // エゴ定義は代入禁止のため、記録全体の検証後に既存の要素を置き換える。
+    egos_info.erase(ego.idx);
     egos_info.emplace(ego.idx, std::move(ego));
-    error_idx = id;
     return {};
 }
 

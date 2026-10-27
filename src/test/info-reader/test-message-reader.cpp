@@ -29,7 +29,6 @@ nlohmann::json make_message(std::string_view action, const nlohmann::json &texts
  * @brief id_list から参照する種族ID 4 と 5 だけを定義した状態にする
  */
 struct DefinedMonracesGuard {
-    // Monraceのfixtureはerror_idxも変更するため、他のreaderの状態より先に置く。
     test::MonraceListTestAccess monraces;
 
     DefinedMonracesGuard()
@@ -161,7 +160,6 @@ TEST_CASE("MessageReader publishes successful groups and skips messages missing 
         has_later = true;
     }
     REQUIRE(MessageReader(data).read().has_value());
-    CHECK(error_idx == -1);
     auto &messages = MonraceMessageList::get_instance();
     CHECK(messages.get_message(4, "", MonsterMessageType::SPEAK_ALL) == "accepted");
     CHECK(messages.get_message(5, "", MonsterMessageType::SPEAK_ALL) == "accepted");
@@ -250,7 +248,7 @@ TEST_CASE("MessageReader propagates ID helper errors without publishing messages
     const DefinedMonracesGuard monraces;
     test::MonraceMessageListTestAccess state;
     const auto rng = test::scoped_rng();
-    const test::ScopedReaderState reader_state(73);
+    const test::ScopedReaderState reader_state;
     auto &messages = MonraceMessageList::get_instance();
     messages.emplace(4, MonsterMessageType::SPEAK_ALL, 1, false, "original");
     messages.emplace_default(MonsterMessageType::SPEAK_ALL, 1, false, "default");
@@ -275,7 +273,6 @@ TEST_CASE("MessageReader propagates ID helper errors without publishing messages
         CAPTURE(invalid.value.dump());
         const nlohmann::json data = { { "id_list", invalid.value }, { "message", { make_message("SPEAK_ALL", nlohmann::json::array({ "new" })) } } };
         CHECK(test::to_error_code(MessageReader(data).read()) == invalid.error);
-        CHECK(error_idx == 73);
         CHECK(state.message_count(4, MonsterMessageType::SPEAK_ALL) == 1);
         CHECK(state.message_count(5, MonsterMessageType::SPEAK_ALL) == 0);
         CHECK(state.default_message_count(MonsterMessageType::SPEAK_ALL) == 1);
@@ -292,7 +289,7 @@ TEST_CASE("MessageReader propagates message helper errors and keeps validation o
     const DefinedMonracesGuard monraces;
     test::MonraceMessageListTestAccess state;
     const auto rng = test::scoped_rng();
-    const test::ScopedReaderState reader_state(73);
+    const test::ScopedReaderState reader_state;
     auto &messages = MonraceMessageList::get_instance();
     messages.emplace(4, MonsterMessageType::SPEAK_ALL, 1, false, "original");
     messages.emplace_default(MonsterMessageType::SPEAK_ALL, 1, false, "default");
@@ -324,7 +321,6 @@ TEST_CASE("MessageReader propagates message helper errors and keeps validation o
     };
     const auto check_unchanged = [&](const nlohmann::json &data, ParseErrorType expected) {
         CHECK(test::to_error_code(MessageReader(data).read()) == expected);
-        CHECK(error_idx == 73);
         CHECK(state.message_count(4, MonsterMessageType::SPEAK_ALL) == 1);
         CHECK(state.message_count(5, MonsterMessageType::SPEAK_ALL) == 0);
         CHECK(state.message_count(4, MonsterMessageType::SPEAK_BATTLE) == 0);
@@ -361,14 +357,12 @@ TEST_CASE("MessageReader propagates message helper errors and keeps validation o
     data = original;
     data["id_list"] = nlohmann::json::array();
     CHECK(MessageReader(data).read().has_value());
-    CHECK(error_idx == 73);
     CHECK(state.message_count(4, MonsterMessageType::SPEAK_ALL) == 1);
     CHECK(state.message_count(5, MonsterMessageType::SPEAK_ALL) == 0);
     CHECK(state.default_message_count(MonsterMessageType::SPEAK_ALL) == 1);
     data["id_list"] = { 4, 5 };
     data["message"] = nlohmann::json::array();
     CHECK(MessageReader(data).read().has_value());
-    CHECK(error_idx == 73);
     CHECK(state.message_count(4, MonsterMessageType::SPEAK_ALL) == 1);
     CHECK(state.message_count(5, MonsterMessageType::SPEAK_ALL) == 0);
 }

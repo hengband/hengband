@@ -6,6 +6,7 @@
 #include "info-reader/parse-error-types.h"
 #include "info-reader/race-info-tokens-table.h"
 #include "locale/character-encoding.h"
+#include "locale/language-switcher.h"
 #include "player-ability/player-ability-types.h"
 #include "system/artifact/artifact-definition.h"
 #include "system/artifact/artifact-list.h"
@@ -78,8 +79,14 @@ tl::expected<void, ParseErrorType> info_set_monrace_dice(const nlohmann::json &j
 }
 }
 
-RaceReader::RaceReader(const nlohmann::json &monrace_data)
+RaceReader::Session RaceReader::create_session(tl::optional<int> last_id)
+{
+    return Session(DefinitionIdOrder::STRICTLY_INCREASING, { 0, MAX_MONRACE_ID }, _("モンスター種族", "monster race"), last_id);
+}
+
+RaceReader::RaceReader(const nlohmann::json &monrace_data, Session &session)
     : monrace_data(monrace_data)
+    , session(session)
 {
 }
 
@@ -93,115 +100,106 @@ tl::expected<void, ParseErrorType> RaceReader::read() const
         return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
     }
 
-    const auto &id_obj = get_json_value(this->monrace_data, "id");
-    if (!id_obj.is_number_integer()) {
-        return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
+    const auto id_result = this->session.read(get_json_value(this->monrace_data, "id"));
+    if (!id_result) {
+        msg_print(id_result.error().reason);
+        return tl::unexpected(id_result.error().code);
     }
-
-    int monrace_id_int = 0;
-    if (const auto result = info_set_integer(id_obj, monrace_id_int, true, Range(0, MAX_MONRACE_ID)); !result) {
-        return result;
-    }
-    // 同じIDの定義が重なると後の定義が前の定義に混ざるため、IDは昇順で重複なしとする。
-    if (monrace_id_int <= error_idx) {
-        return tl::make_unexpected(ParseErrorType::NON_SEQUENTIAL_RECORDS);
-    }
-
-    error_idx = monrace_id_int;
+    const auto monrace_id_int = *id_result;
     const auto monrace_id = i2enum<MonraceId>(monrace_id_int);
     auto &monraces = MonraceList::get_instance();
     auto monrace = monraces.contains(monrace_id) ? MonraceDefinition(monraces.get_monrace(monrace_id)) : MonraceDefinition();
     monrace.idx = monrace_id;
 
     if (const auto result = this->set_mon_name(monrace); !result) {
-        msg_print(_("モンスター名読込失敗。ID: '{}'。", "Failed to load monster name. ID: '{}'."), error_idx);
+        msg_print(_("モンスター名読込失敗。", "Failed to load monster name."));
         return result;
     }
     if (const auto result = this->set_mon_symbol(monrace); !result) {
-        msg_print(_("モンスターシンボル読込失敗。ID: '{}'。", "Failed to load monster symbol. ID: '{}'."), error_idx);
+        msg_print(_("モンスターシンボル読込失敗。", "Failed to load monster symbol."));
         return result;
     }
     if (const auto result = this->set_mon_speed(monrace); !result) {
-        msg_print(_("モンスター速度読込失敗。ID: '{}'。", "Failed to load monster speed. ID: '{}'."), error_idx);
+        msg_print(_("モンスター速度読込失敗。", "Failed to load monster speed."));
         return result;
     }
     if (const auto result = info_set_monrace_dice(get_json_value(this->monrace_data, "hit_point"), monrace.hit_dice, true); !result) {
-        msg_print(_("モンスターHP読込失敗。ID: '{}'。", "Failed to load monster HP. ID: '{}'."), error_idx);
+        msg_print(_("モンスターHP読込失敗。", "Failed to load monster HP."));
         return result;
     }
     if (const auto result = info_set_integer(get_json_value(this->monrace_data, "vision"), monrace.aaf, true, Range(0, 999)); !result) {
-        msg_print(_("モンスター感知範囲読込失敗。ID: '{}'。", "Failed to load monster vision. ID: '{}'."), error_idx);
+        msg_print(_("モンスター感知範囲読込失敗。", "Failed to load monster vision."));
         return result;
     }
     if (const auto result = info_set_integer(get_json_value(this->monrace_data, "armor_class"), monrace.ac, true, Range(0, MONRACE_AC_MAX)); !result) {
-        msg_print(_("モンスターAC読込失敗。ID: '{}'。", "Failed to load monster AC. ID: '{}'."), error_idx);
+        msg_print(_("モンスターAC読込失敗。", "Failed to load monster AC."));
         return result;
     }
     if (const auto result = info_set_integer(get_json_value(this->monrace_data, "alertness"), monrace.sleep, true, Range(0, 255)); !result) {
-        msg_print(_("モンスター警戒度読込失敗。ID: '{}'。", "Failed to load monster alertness. ID: '{}'."), error_idx);
+        msg_print(_("モンスター警戒度読込失敗。", "Failed to load monster alertness."));
         return result;
     }
     if (const auto result = info_set_integer(get_json_value(this->monrace_data, "level"), monrace.level, true, Range(0, MAX_DEPTH - 1)); !result) {
-        msg_print(_("モンスターレベル読込失敗。ID: '{}'。", "Failed to load monster level. ID: '{}'."), error_idx);
+        msg_print(_("モンスターレベル読込失敗。", "Failed to load monster level."));
         return result;
     }
     if (const auto result = info_set_integer(get_json_value(this->monrace_data, "rarity"), monrace.rarity, true, Range(1, 255)); !result) {
-        msg_print(_("モンスター希少度読込失敗。ID: '{}'。", "Failed to load monster rarity. ID: '{}'."), error_idx);
+        msg_print(_("モンスター希少度読込失敗。", "Failed to load monster rarity."));
         return result;
     }
     if (const auto result = info_set_integer(get_json_value(this->monrace_data, "exp"), monrace.mexp, true, Range(0, 9999999)); !result) {
-        msg_print(_("モンスター経験値読込失敗。ID: '{}'。", "Failed to load monster exp. ID: '{}'."), error_idx);
+        msg_print(_("モンスター経験値読込失敗。", "Failed to load monster exp."));
         return result;
     }
     if (const auto result = this->set_mon_evolve(monrace); !result) {
-        msg_print(_("モンスター進化情報読込失敗。ID: '{}'。", "Failed to load monster evolve data. ID: '{}'."), error_idx);
+        msg_print(_("モンスター進化情報読込失敗。", "Failed to load monster evolve data."));
         return result;
     }
     if (const auto result = this->set_mon_sex(monrace); !result) {
-        msg_print(_("モンスター性別読込失敗。ID: '{}'。", "Failed to load monster sex. ID: '{}'."), error_idx);
+        msg_print(_("モンスター性別読込失敗。", "Failed to load monster sex."));
         return result;
     }
     if (const auto result = info_set_integer(get_json_value(this->monrace_data, "odds_correction_ratio"), monrace.arena_ratio, false, Range(1, MONRACE_ODDS_CORRECTION_RATIO_MAX)); !result) {
-        msg_print(_("モンスター賭け倍率読込失敗。ID: '{}'。", "Failed to load monster odds for arena. ID: '{}'."), error_idx);
+        msg_print(_("モンスター賭け倍率読込失敗。", "Failed to load monster odds for arena."));
         return result;
     }
     if (const auto result = info_set_integer(get_json_value(this->monrace_data, "start_hp_percentage"), monrace.cur_hp_per, false, Range(1, 99)); !result) {
-        msg_print(_("モンスター初期体力読込失敗。ID: '{}'。", "Failed to load monster starting HP. ID: '{}'."), error_idx);
+        msg_print(_("モンスター初期体力読込失敗。", "Failed to load monster starting HP."));
         return result;
     }
     if (const auto result = this->set_mon_artifacts(monrace); !result) {
-        msg_print(_("モンスター固定アーティファクトドロップ情報読込失敗。ID: '{}'。", "Failed to load monster artifact drop data. ID: '{}'."), error_idx);
+        msg_print(_("モンスター固定アーティファクトドロップ情報読込失敗。", "Failed to load monster artifact drop data."));
         return result;
     }
     if (const auto result = this->set_mon_escorts(monrace); !result) {
-        msg_print(_("モンスター護衛情報読込失敗。ID: '{}'。", "Failed to load monster escorts. ID: '{}'."), error_idx);
+        msg_print(_("モンスター護衛情報読込失敗。", "Failed to load monster escorts."));
         return result;
     }
     if (const auto result = this->set_mon_blows(monrace); !result) {
-        msg_print(_("モンスター打撃情報読込失敗。ID: '{}'。", "Failed to load monster blow data. ID: '{}'."), error_idx);
+        msg_print(_("モンスター打撃情報読込失敗。", "Failed to load monster blow data."));
         return result;
     }
     if (const auto result = this->set_mon_flags(monrace); !result) {
-        msg_print(_("モンスターフラグ読込失敗。ID: '{}'。", "Failed to load monster flag data. ID: '{}'."), error_idx);
+        msg_print(_("モンスターフラグ読込失敗。", "Failed to load monster flag data."));
         return result;
     }
     if (const auto result = this->set_mon_skills(monrace); !result) {
-        msg_print(_("モンスター発動能力情報読込失敗。ID: '{}'。", "Failed to load monster skill data. ID: '{}'."), error_idx);
+        msg_print(_("モンスター発動能力情報読込失敗。", "Failed to load monster skill data."));
         return result;
     }
     if (const auto result = this->set_mon_final_summons(monrace); !result) {
-        msg_print(_("モンスター死亡時召喚情報読込失敗。ID: '{}'。", "Failed to load final summon data. ID: '{}'."), error_idx);
+        msg_print(_("モンスター死亡時召喚情報読込失敗。", "Failed to load final summon data."));
         return result;
     }
     if (const auto result = info_set_string(get_json_value(this->monrace_data, "flavor"), monrace.text, false); !result) {
-        msg_print(_("モンスター説明文読込失敗。ID: '{}'。", "Failed to load monster flavor text. ID: '{}'."), error_idx);
+        msg_print(_("モンスター説明文読込失敗。", "Failed to load monster flavor text."));
         return result;
     }
     auto &message_list = MonraceMessageList::get_instance();
     const auto message_it = message_list.messages.find(monrace_id_int);
     auto messages = message_it != message_list.messages.end() ? message_it->second : MonraceMessage();
     if (const auto result = this->set_mon_message(messages); !result) {
-        msg_print(_("モンスターメッセージ読込失敗。ID: '{}'。", "Failed to load monster message. ID: '{}'."), error_idx);
+        msg_print(_("モンスターメッセージ読込失敗。", "Failed to load monster message."));
         return result;
     }
 

@@ -23,6 +23,23 @@ namespace {
 constexpr int MAX_TERRAIN_MAP_PRIORITY = 125;
 }
 
+TerrainReader::Session::Session()
+    : ids(DefinitionIdOrder::UNIQUE, { 0, MAX_TERRAIN_ID }, _("地形", "terrain"))
+{
+}
+
+void TerrainReader::Session::commit()
+{
+    this->ids.commit();
+    this->keys.insert(*this->pending_key);
+    this->pending_key.reset();
+}
+
+TerrainReader::Session TerrainReader::create_session()
+{
+    return {};
+}
+
 TerrainReader::TerrainReader(const nlohmann::json &terrain_data, Session &session)
     : terrain_data(terrain_data)
     , session(session)
@@ -35,6 +52,7 @@ TerrainReader::TerrainReader(const nlohmann::json &terrain_data, Session &sessio
  */
 tl::expected<void, ParseErrorType> TerrainReader::read() const
 {
+    this->session.pending_key.reset();
     const auto &element = this->terrain_data;
     if (element.is_null() || !element.is_object()) {
         return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
@@ -55,11 +73,10 @@ tl::expected<void, ParseErrorType> TerrainReader::read() const
     }
 
     auto &terrains = TerrainList::get_instance();
-    error_idx = id;
 
-    if (this->session.ids.contains(id)) {
-        msg_print(_("地形ID '{}' が重複しています。", "Duplicate terrain ID '{}'."), id);
-        return tl::make_unexpected(ParseErrorType::NON_SEQUENTIAL_RECORDS);
+    if (const auto result = this->session.ids.check(id); !result) {
+        msg_print(result.error().reason);
+        return tl::unexpected(result.error().code);
     }
     if (this->session.keys.contains(key)) {
         msg_print(_("地形タグ '{}' が重複しています。", "Duplicate terrain tag '{}'."), key);
@@ -162,8 +179,7 @@ tl::expected<void, ParseErrorType> TerrainReader::read() const
         terrains.resize(id + 1);
     }
     terrains.get_terrain(s) = std::move(terrain);
-    this->session.ids.insert(id);
-    this->session.keys.insert(key);
+    this->session.pending_key = key;
 
     return {};
 }

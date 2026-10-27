@@ -1,5 +1,7 @@
 #pragma once
 
+#include "info-reader/definition-id-checker.h"
+
 #include "info-reader/parse-error-types.h"
 #include <nlohmann/json_fwd.hpp>
 #include <string_view>
@@ -9,8 +11,11 @@ class BaseitemDefinition;
 
 class BaseitemReader {
 public:
-    explicit BaseitemReader(const nlohmann::json &baseitem_data);
-    BaseitemReader(nlohmann::json &&) = delete;
+    using Session = DefinitionIdChecker;
+    static Session create_session(tl::optional<int> last_id = tl::nullopt);
+
+    BaseitemReader(const nlohmann::json &baseitem_data, Session &session);
+    BaseitemReader(nlohmann::json &&, Session &) = delete;
     BaseitemReader(const BaseitemReader &) = delete;
     BaseitemReader(BaseitemReader &&) = delete;
     BaseitemReader &operator=(const BaseitemReader &) = delete;
@@ -29,4 +34,5 @@ private:
     tl::expected<void, ParseErrorType> set_baseitem_natural_generation(BaseitemDefinition &baseitem) const;
 
     const nlohmann::json &baseitem_data;
+    Session &session;
 };

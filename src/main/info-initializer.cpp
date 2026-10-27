@@ -45,6 +45,7 @@
 #include "system/terrain/terrain-list.h"
 #include "util/angband-files.h"
 #include "view/display-messages.h"
+#include <concepts>
 #include <fmt/format.h>
 #include <functional>
 #include <nlohmann/json.hpp>
@@ -57,6 +58,12 @@
 #endif
 
 namespace {
+
+template <typename Reader>
+concept HasReadSession = requires(typename Reader::Session &session) {
+    { Reader::create_session() } -> std::same_as<typename Reader::Session>;
+    session.commit();
+};
 
 template <typename T>
 concept HasShrinkToFit = requires(T t) {
@@ -102,8 +109,6 @@ void init_json(std::string_view filename, std::string_view keyname, DefinitionHa
         quit(fmt::format(_("{}: 定義形式のversionが不正です", "{}: invalid definition version"), filename));
     }
 
-    error_idx = -1;
-
     auto &elements = json_object[keyname];
     for (size_t index = 0; index < elements.size(); ++index) {
         // 起動中は履歴に残らず、msg_print自体も入力を待つため、レコード単位で診断を捕捉する。
@@ -136,8 +141,20 @@ void init_json(std::string_view filename, std::string_view keyname, DefinitionHa
 template <typename Reader, typename DefinitionList>
 void init_json_reader(std::string_view filename, std::string_view keyname, DefinitionHashDataType dhdt, DefinitionList &definition_list, std::function<void()> retouch = nullptr, bool allow_empty = true, std::function<tl::expected<void, ParseErrorType>(const nlohmann::json &)> validate_root = nullptr)
 {
-    auto parser = [](nlohmann::json &element) { return Reader(element).read(); };
-    init_json(filename, keyname, dhdt, definition_list, parser, retouch, allow_empty, validate_root);
+    if constexpr (HasReadSession<Reader>) {
+        auto session = Reader::create_session();
+        auto parser = [&session](nlohmann::json &element) {
+            auto result = Reader(element, session).read();
+            if (result) {
+                session.commit();
+            }
+            return result;
+        };
+        init_json(filename, keyname, dhdt, definition_list, parser, retouch, allow_empty, validate_root);
+    } else {
+        auto parser = [](nlohmann::json &element) { return Reader(element).read(); };
+        init_json(filename, keyname, dhdt, definition_list, parser, retouch, allow_empty, validate_root);
+    }
 }
 }
 
@@ -174,18 +191,22 @@ void init_class_magics_info()
 void init_class_skills_info()
 {
     class_skills_info.assign(PLAYER_CLASS_TYPE_MAX, {});
-    auto parser = [](nlohmann::json &element) {
-        SkillReader reader(element);
+    auto session = SkillReader::create_session();
+    auto parser = [&session](nlohmann::json &element) {
+        SkillReader reader(element, session);
         const auto result = reader.read();
         if (!result) {
             const auto &diagnostic = reader.error().value();
             msg_print(_("ClassSkillDefinitions.jsonc: 職業{}の{}: {}", "ClassSkillDefinitions.jsonc: class {} at {}: {}"), diagnostic.class_id, diagnostic.path, diagnostic.reason);
         }
+        if (result) {
+            session.commit();
+        }
         return result;
     };
-    init_json("ClassSkillDefinitions.jsonc", "classes", DefinitionHashDataType::CLASS_SKILLS, class_skills_info, parser, [] {
-        if (error_idx != PLAYER_CLASS_TYPE_MAX - 1) {
-            quit(fmt::format(_("ClassSkillDefinitions.jsonc: 職業{}の$.classes: 職業レコードが不足しています", "ClassSkillDefinitions.jsonc: class {} at $.classes: missing class records"), error_idx + 1));
+    init_json("ClassSkillDefinitions.jsonc", "classes", DefinitionHashDataType::CLASS_SKILLS, class_skills_info, parser, [&session] {
+        if (session.last_id() != PLAYER_CLASS_TYPE_MAX - 1) {
+            quit(fmt::format(_("ClassSkillDefinitions.jsonc: 職業{}の$.classes: 職業レコードが不足しています", "ClassSkillDefinitions.jsonc: class {} at $.classes: missing class records"), session.last_id().value_or(-1) + 1));
         }
     });
 }
@@ -213,9 +234,7 @@ void init_egos_info()
 void init_terrains_info()
 {
     auto &terrains = TerrainList::get_instance();
-    TerrainReader::Session session;
-    auto parser = [&session](nlohmann::json &element) { return TerrainReader(element, session).read(); };
-    init_json("TerrainDefinitions.jsonc", "terrains", DefinitionHashDataType::TERRAINS, terrains, parser, [&terrains] { terrains.retouch(); });
+    init_json_reader<TerrainReader>("TerrainDefinitions.jsonc", "terrains", DefinitionHashDataType::TERRAINS, terrains, [&terrains] { terrains.retouch(); });
 }
 
 /*!
@@ -269,12 +288,16 @@ void init_spell_info()
  */
 void init_vaults_info()
 {
-    auto parser = [](nlohmann::json &element) {
-        VaultReader reader(element);
+    auto session = VaultReader::create_session();
+    auto parser = [&session](nlohmann::json &element) {
+        VaultReader reader(element, session);
         const auto result = reader.read();
         if (!result) {
             const auto &diagnostic = reader.error().value();
             msg_print(_("VaultDefinitions.jsonc: Vault{}の{}: {}", "VaultDefinitions.jsonc: vault {} at {}: {}"), diagnostic.id, diagnostic.path, diagnostic.reason);
+        }
+        if (result) {
+            session.commit();
         }
         return result;
     };

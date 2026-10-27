@@ -15,6 +15,7 @@
 #include "info-reader/json-reader-util.h"
 #include "info-reader/parse-error-types.h"
 #include "locale/japanese.h"
+#include "locale/language-switcher.h"
 #include "object-enchant/tr-types.h"
 #include "object/tval-types.h"
 #include "player/digestion-processor.h"
@@ -169,8 +170,14 @@ int subtype_max(const BaseitemKey &key)
 }
 }
 
-BaseitemReader::BaseitemReader(const nlohmann::json &baseitem_data)
+BaseitemReader::Session BaseitemReader::create_session(tl::optional<int> last_id)
+{
+    return Session(DefinitionIdOrder::STRICTLY_INCREASING, { 0, MAX_BASEITEM_ID }, _("ベースアイテム", "baseitem"), last_id);
+}
+
+BaseitemReader::BaseitemReader(const nlohmann::json &baseitem_data, Session &session)
     : baseitem_data(baseitem_data)
+    , session(session)
 {
 }
 
@@ -185,117 +192,96 @@ tl::expected<void, ParseErrorType> BaseitemReader::read() const
         return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
     }
 
-    const auto &id_data = get_json_value(this->baseitem_data, "id");
-    if (id_data.is_null()) {
-        msg_print(_("ベースアイテムIDの読込失敗。", "Failed to load baseitem ID."));
-        return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
-    }
-    if (!id_data.is_number_integer()) {
-        msg_print(_("ベースアイテムIDの読込失敗。", "Failed to load baseitem ID."));
-        return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
-    }
-
-    const auto validate_id = [](const auto id) -> tl::expected<void, ParseErrorType> {
-        if (std::cmp_less_equal(id, error_idx)) {
-            msg_print(_("ベースアイテムIDが非連番です。ID: '{}'、直前ID: '{}'。", "Baseitem ID is not sequential. ID: '{}', previous ID: '{}'."), id, error_idx);
-            return tl::make_unexpected(ParseErrorType::NON_SEQUENTIAL_RECORDS);
-        }
-        if (std::cmp_less(id, 0) || std::cmp_greater(id, MAX_BASEITEM_ID)) {
-            msg_print(_("ベースアイテムIDが範囲外です。ID: '{}'。", "Baseitem ID is out of bounds. ID: '{}'."), id);
-            return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
-        }
-        return {};
-    };
-    const auto id_result = id_data.is_number_unsigned() ? validate_id(id_data.get<nlohmann::json::number_unsigned_t>()) : validate_id(id_data.get<nlohmann::json::number_integer_t>());
+    const auto id_result = this->session.read(get_json_value(this->baseitem_data, "id"));
     if (!id_result) {
-        return id_result;
+        msg_print(id_result.error().reason);
+        return tl::unexpected(id_result.error().code);
     }
-    const auto item_id = id_data.get<int>();
+    const auto item_id = *id_result;
 
     auto &baseitems = BaseitemList::get_instance();
-    error_idx = item_id;
     const short short_id = static_cast<short>(item_id);
     auto baseitem = item_id < static_cast<int>(baseitems.size()) ? baseitems.get_baseitem(short_id).clone_without_required_fields() : BaseitemDefinition{};
     if (const auto result = info_set_string(get_json_value(this->baseitem_data, "name"), baseitem.name, true); !result) {
-        msg_print(_("アイテムの名称読込失敗。ID: '{}'。", "Failed to load item name. ID: '{}'."), error_idx);
+        msg_print(_("アイテムの名称読込失敗。", "Failed to load item name."));
         return result;
     }
     if (const auto result = info_set_string(get_json_value(this->baseitem_data, "flavor_name"), baseitem.flavor_name, false); !result) {
-        msg_print(_("アイテム未識別名の読込失敗。ID: '{}'。", "Failed to load item unidentified name. ID: '{}'."), error_idx);
+        msg_print(_("アイテム未識別名の読込失敗。", "Failed to load item unidentified name."));
         return result;
     }
     if (const auto result = info_set_string(get_json_value(this->baseitem_data, "flavor"), baseitem.text, false); !result) {
-        msg_print(_("アイテムのフレーバーテキスト読込失敗。ID: '{}'。", "Failed to load flavor text of item. ID: '{}'."), error_idx);
+        msg_print(_("アイテムのフレーバーテキスト読込失敗。", "Failed to load flavor text of item."));
         return result;
     }
     if (const auto result = this->set_baseitem_symbol(baseitem); !result) {
-        msg_print(_("アイテムのシンボル読込失敗。ID: '{}'。", "Failed to load symbol of item. ID: '{}'."), error_idx);
+        msg_print(_("アイテムのシンボル読込失敗。", "Failed to load symbol of item."));
         return result;
     }
     if (const auto result = this->set_baseitem_kind(baseitem); !result) {
-        msg_print(_("アイテム種別の読込失敗。ID: '{}'。", "Failed to load kind of item. ID: '{}'."), error_idx);
+        msg_print(_("アイテム種別の読込失敗。", "Failed to load kind of item."));
         return result;
     }
     if (const auto result = this->set_baseitem_parameter_value(baseitem); !result) {
-        msg_print(_("アイテムのパラメータ値読込失敗。ID: '{}'。", "Failed to load parameter value of item. ID: '{}'."), error_idx);
+        msg_print(_("アイテムのパラメータ値読込失敗。", "Failed to load parameter value of item."));
         return result;
     }
     // level は基本の生成階 (発動の基本難易度などにも使う) で、たどり着ける最深の階 (MAX_DEPTH - 1) までとする。
     if (const auto result = info_set_integer(get_json_value(this->baseitem_data, "level"), baseitem.level, true, Range(0, MAX_DEPTH - 1)); !result) {
-        msg_print(_("アイテムのレベル読込失敗。ID: '{}'。", "Failed to load level of item. ID: '{}'."), error_idx);
+        msg_print(_("アイテムのレベル読込失敗。", "Failed to load level of item."));
         return result;
     }
     if (const auto result = info_set_integer(get_json_value(this->baseitem_data, "weight"), baseitem.weight, true, Range(0, 9999)); !result) {
-        msg_print(_("アイテムの重量読込失敗。ID: '{}'。", "Failed to load weight of item. ID: '{}'."), error_idx);
+        msg_print(_("アイテムの重量読込失敗。", "Failed to load weight of item."));
         return result;
     }
     const auto cost_max = baseitem.bi_key.tval() == ItemKindType::GOLD ? GOLD_COST_MAX : BASEITEM_COST_MAX;
     if (const auto result = info_set_integer(get_json_value(this->baseitem_data, "cost"), baseitem.cost, true, Range(0, cost_max)); !result) {
-        msg_print(_("アイテムの売値読込失敗。ID: '{}'。", "Failed to load cost of item. ID: '{}'."), error_idx);
+        msg_print(_("アイテムの売値読込失敗。", "Failed to load cost of item."));
         return result;
     }
     if (const auto result = info_set_integer(get_json_value(this->baseitem_data, "base_ac"), baseitem.ac, false, Range(0, ITEM_BASE_AC_MAX)); !result) {
-        msg_print(_("アイテムのベースAC読込失敗。ID: '{}'。", "Failed to load base AC of item. ID: '{}'."), error_idx);
+        msg_print(_("アイテムのベースAC読込失敗。", "Failed to load base AC of item."));
         return result;
     }
     // セーブではダイスの個数・面数をそれぞれ1バイトで書くため、0〜255に限る。
     if (const auto result = info_set_dice(get_json_value(this->baseitem_data, "base_dice"), baseitem.damage_dice, false, Range(0, 255)); !result) {
-        msg_print(_("アイテムのベースダイス読込失敗。ID: '{}'。", "Failed to load base dice of item. ID: '{}'."), error_idx);
+        msg_print(_("アイテムのベースダイス読込失敗。", "Failed to load base dice of item."));
         return result;
     }
     if (const auto result = info_set_integer(get_json_value(this->baseitem_data, "hit_bonus"), baseitem.to_h, false, Range(-ITEM_BONUS_MAX, ITEM_BONUS_MAX)); !result) {
-        msg_print(_("アイテムの命中補正値読込失敗。ID: '{}'。", "Failed to load hit bonus of item. ID: '{}'."), error_idx);
+        msg_print(_("アイテムの命中補正値読込失敗。", "Failed to load hit bonus of item."));
         return result;
     }
     if (const auto result = info_set_integer(get_json_value(this->baseitem_data, "damage_bonus"), baseitem.to_d, false, Range(-ITEM_BONUS_MAX, ITEM_BONUS_MAX)); !result) {
-        msg_print(_("アイテムのダメージ補正値読込失敗。ID: '{}'。", "Failed to load damage bonus of item. ID: '{}'."), error_idx);
+        msg_print(_("アイテムのダメージ補正値読込失敗。", "Failed to load damage bonus of item."));
         return result;
     }
     if (const auto result = info_set_integer(get_json_value(this->baseitem_data, "ac_bonus"), baseitem.to_a, false, Range(-ITEM_BONUS_MAX, ITEM_BONUS_MAX)); !result) {
-        msg_print(_("アイテムのAC補正値読込失敗。ID: '{}'。", "Failed to load AC bonus of item. ID: '{}'."), error_idx);
+        msg_print(_("アイテムのAC補正値読込失敗。", "Failed to load AC bonus of item."));
         return result;
     }
     if (const auto result = this->set_baseitem_allocations(baseitem); !result) {
-        msg_print(_("アイテムの生成情報読込失敗。ID: '{}'。", "Failed to load generation info of item. ID: '{}'."), error_idx);
+        msg_print(_("アイテムの生成情報読込失敗。", "Failed to load generation info of item."));
         return result;
     }
     if (const auto result = this->set_baseitem_activate(baseitem); !result) {
-        msg_print(_("アイテムの発動能力読込失敗。ID: '{}'。", "Failed to load activation of item. ID: '{}'."), error_idx);
+        msg_print(_("アイテムの発動能力読込失敗。", "Failed to load activation of item."));
         return result;
     }
     if (const auto result = this->set_baseitem_flags(baseitem); !result) {
-        msg_print(_("アイテムのフラグ読込失敗。ID: '{}'。", "Failed to load flags of item. ID: '{}'."), error_idx);
+        msg_print(_("アイテムのフラグ読込失敗。", "Failed to load flags of item."));
         return result;
     }
     if (const auto result = this->set_baseitem_natural_generation(baseitem); !result) {
-        msg_print(_("アイテムの自然生成の指定の読込失敗。ID: '{}'。", "Failed to load natural generation of item. ID: '{}'."), error_idx);
+        msg_print(_("アイテムの自然生成の指定の読込失敗。", "Failed to load natural generation of item."));
         return result;
     }
 
     // 自然生成しないベースアイテムは生成テーブルを持たない (生成の側は natural_generation を見ず、生成テーブルの有無だけで決まる)。
     // 同じ ID を読み直したときに引き継いだ生成テーブルも含めて判定するため、読み込んだ後の定義で確かめる。
     if (!baseitem.natural_generation && baseitem.has_allocation()) {
-        msg_print(_("自然生成しないアイテムに生成情報がある。ID: '{}'。", "Item without natural generation has generation info. ID: '{}'."), error_idx);
+        msg_print(_("自然生成しないアイテムに生成情報がある。", "Item without natural generation has generation info."));
         return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
     }
 
@@ -308,7 +294,7 @@ tl::expected<void, ParseErrorType> BaseitemReader::read() const
         });
         if (duplicated != previous_end) {
             const auto duplicated_id = std::distance(baseitems.begin(), duplicated);
-            msg_print(_("ベースアイテムの種別・副種別が重複している。ID: '{}'、重複先ID: '{}'。", "Duplicated kind of baseitem. ID: '{}', duplicated ID: '{}'."), error_idx, duplicated_id);
+            msg_print(_("ベースアイテムの種別・副種別が重複している。重複先ID: '{}'。", "Duplicated kind of baseitem. duplicated ID: '{}'."), duplicated_id);
             return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
         }
     }

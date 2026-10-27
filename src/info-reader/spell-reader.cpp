@@ -23,18 +23,17 @@ SpellReader::SpellReader(const nlohmann::json &realm_data, SpellInfoList &spell_
  */
 tl::expected<void, ParseErrorType> SpellReader::read() const
 {
-    error_idx++; //!< @note 呪文領域は数値IDを持たないため、エラー表示用に要素の順序を用いる
 
     const auto realm_result = this->read_realm();
     if (!realm_result) {
-        msg_print(_("領域名読込失敗。ID: '{}'。", "Failed to load realm name. ID: '{}'."), error_idx);
+        msg_print(_("領域名読込失敗。", "Failed to load realm name."));
         return tl::make_unexpected(realm_result.error());
     }
 
     const auto realm_id = *realm_result;
     std::vector<SpellInfo> spells;
     if (const auto result = this->set_book_data(spells); !result) {
-        msg_print(_("呪文詳細読込失敗。ID: '{}'。", "Failed to load spell data. ID: '{}'."), error_idx);
+        msg_print(_("呪文詳細読込失敗。", "Failed to load spell data."));
         return result;
     }
 
@@ -97,7 +96,7 @@ tl::expected<void, ParseErrorType> SpellReader::set_spell_data(const nlohmann::j
 
     int spell_id = 0;
     if (const auto result = info_set_integer(get_json_value(spell_data, "spell_id"), spell_id, true, Range(0, 31)); !result) {
-        msg_print(_("呪文ID読込失敗。ID: '{}'。", "Failed to load spell ID. ID: '{}'."), error_idx);
+        msg_print(_("呪文ID読込失敗。", "Failed to load spell ID."));
         return result;
     }
     auto info = SpellInfo();
@@ -105,17 +104,17 @@ tl::expected<void, ParseErrorType> SpellReader::set_spell_data(const nlohmann::j
 
     const auto &tag_obj = get_json_value(spell_data, "spell_tag");
     if (!tag_obj.is_string()) {
-        msg_print(_("呪文タグ読込失敗。ID: '{}'。", "Failed to load spell tag. ID: '{}'."), error_idx);
+        msg_print(_("呪文タグ読込失敗。", "Failed to load spell tag."));
         return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
     }
     info.tag = tag_obj.get<std::string>();
 
     if (const auto result = info_set_string(get_json_value(spell_data, "name"), info.name, true); !result) {
-        msg_print(_("呪文名読込失敗。ID: '{}'。", "Failed to load spell name. ID: '{}'."), error_idx);
+        msg_print(_("呪文名読込失敗。", "Failed to load spell name."));
         return result;
     }
     if (const auto result = info_set_string(get_json_value(spell_data, "description"), info.description, true); !result) {
-        msg_print(_("呪文説明読込失敗。ID: '{}'。", "Failed to load spell description. ID: '{}'."), error_idx);
+        msg_print(_("呪文説明読込失敗。", "Failed to load spell description."));
         return result;
     }
     spells.push_back(std::move(info));

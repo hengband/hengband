@@ -8,6 +8,7 @@
 #include "test/info-reader/scoped-reader-state.h"
 #include "test/scoped-restore.h"
 #include <doctest/doctest.h>
+#include <fmt/format.h>
 #include <limits>
 #include <nlohmann/json.hpp>
 
@@ -20,14 +21,15 @@ nlohmann::json make_vault()
 
 TEST_CASE("VaultReader preserves metadata and every layout byte")
 {
-    const auto restore = test::scoped_restore(vaults_info, error_idx);
+    auto session = VaultReader::create_session();
+    const auto restore = test::scoped_restore(vaults_info);
     vaults_info.clear();
-    error_idx = -1;
+    session = VaultReader::create_session();
     auto data = make_vault();
     for (const auto type : { 7, 8, 17 }) {
         data["id"] = type; // Sparse IDs remain supported.
         data["type"] = type;
-        REQUIRE(VaultReader(data).read().has_value());
+        REQUIRE(test::read_and_commit(VaultReader(data, session), session).has_value());
         const auto &vault = vaults_info.at(type);
         CHECK(vault.idx == type);
         CHECK(vault.typ == type);
@@ -36,28 +38,29 @@ TEST_CASE("VaultReader preserves metadata and every layout byte")
         CHECK(vault.wid == 4);
         CHECK(vault.name == "Test vault");
         CHECK(vault.text == " %: \\\"# ");
-        CHECK(error_idx == type);
+        CHECK(session.last_id().value_or(-1) == type);
     }
 }
 
 TEST_CASE("VaultReader rejects invalid records atomically with field diagnostics")
 {
-    const auto restore = test::scoped_restore(vaults_info, error_idx);
+    auto session = VaultReader::create_session();
+    const auto restore = test::scoped_restore(vaults_info);
     vaults_info.assign(1, {});
     vaults_info[0].name = "unchanged";
     vaults_info[0].text = "sentinel";
-    error_idx = -1;
+    session = VaultReader::create_session();
     const auto original = make_vault();
     auto check_invalid = [&](const nlohmann::json &data, std::string_view path) {
-        VaultReader reader(data);
-        CHECK_FALSE(reader.read().has_value());
+        VaultReader reader(data, session);
+        CHECK_FALSE(test::read_and_commit(reader, session).has_value());
         REQUIRE(reader.error().has_value());
         CHECK(reader.error()->path == path);
         CHECK_FALSE(reader.error()->reason.empty());
         REQUIRE(vaults_info.size() == 1);
         CHECK(vaults_info[0].name == "unchanged");
         CHECK(vaults_info[0].text == "sentinel");
-        CHECK(error_idx == -1);
+        CHECK(session.last_id().value_or(-1) == -1);
     };
     check_invalid(nlohmann::json::array(), "$");
     for (const auto key : { "id", "name", "type", "rating", "height", "width", "layout" }) {
@@ -109,49 +112,51 @@ TEST_CASE("VaultReader rejects invalid records atomically with field diagnostics
 
 TEST_CASE("VaultReader rejects duplicate and descending IDs and permits retry")
 {
-    const auto restore = test::scoped_restore(vaults_info, error_idx);
+    auto session = VaultReader::create_session();
+    const auto restore = test::scoped_restore(vaults_info);
     vaults_info.clear();
-    error_idx = -1;
+    session = VaultReader::create_session();
     auto data = make_vault();
     data["id"] = 2;
-    REQUIRE(VaultReader(data).read().has_value());
-    CHECK(test::to_error_code(VaultReader(data).read()) == ParseErrorType::NON_SEQUENTIAL_RECORDS);
+    REQUIRE(test::read_and_commit(VaultReader(data, session), session).has_value());
+    CHECK(test::to_error_code(test::read_and_commit(VaultReader(data, session), session)) == ParseErrorType::NON_SEQUENTIAL_RECORDS);
     data["id"] = 1;
-    CHECK(test::to_error_code(VaultReader(data).read()) == ParseErrorType::NON_SEQUENTIAL_RECORDS);
+    CHECK(test::to_error_code(test::read_and_commit(VaultReader(data, session), session)) == ParseErrorType::NON_SEQUENTIAL_RECORDS);
     data["id"] = 3;
     data["layout"][0] = "bad";
-    VaultReader reader(data);
-    CHECK_FALSE(reader.read().has_value());
-    CHECK(error_idx == 2);
+    VaultReader reader(data, session);
+    CHECK_FALSE(test::read_and_commit(reader, session).has_value());
+    CHECK(session.last_id().value_or(-1) == 2);
     data["layout"][0] = "good";
-    CHECK(reader.read().has_value());
+    CHECK(test::read_and_commit(reader, session).has_value());
     CHECK_FALSE(reader.error().has_value());
-    CHECK(error_idx == 3);
+    CHECK(session.last_id().value_or(-1) == 3);
     data["id"] = 4;
     data["rating"] = "bad";
-    CHECK(test::to_error_code(reader.read()) == ParseErrorType::INVALID_TYPE);
+    CHECK(test::to_error_code(test::read_and_commit(reader, session)) == ParseErrorType::INVALID_TYPE);
     REQUIRE(reader.error().has_value());
     CHECK(reader.error()->id == "4");
     CHECK(reader.error()->path == "$.rating");
     REQUIRE(vaults_info.size() == 4);
     CHECK(vaults_info[3].text == "good\\\"# ");
-    CHECK(error_idx == 3);
+    CHECK(session.last_id().value_or(-1) == 3);
     data["rating"] = 8;
-    CHECK(reader.read().has_value());
+    CHECK(test::read_and_commit(reader, session).has_value());
     CHECK_FALSE(reader.error().has_value());
     REQUIRE(vaults_info.size() == 5);
     CHECK(vaults_info[4].rat == 8);
-    CHECK(error_idx == 4);
+    CHECK(session.last_id().value_or(-1) == 4);
 }
 
 TEST_CASE("VaultReader preserves exact error precedence and every existing record field")
 {
+    auto session = VaultReader::create_session();
     const auto restore = test::scoped_restore(vaults_info);
     const test::ScopedReaderState reader_state;
     vaults_info.clear();
     auto data = make_vault();
     data["id"] = 2;
-    REQUIRE(VaultReader(data).read().has_value());
+    REQUIRE(test::read_and_commit(VaultReader(data, session), session).has_value());
     const auto previous = vaults_info;
     data["id"] = 5;
     data["name"] = "Changed vault";
@@ -182,7 +187,7 @@ TEST_CASE("VaultReader preserves exact error precedence and every existing recor
         expected = ParseErrorType::INVALID_TYPE;
         id = "\"bad\"";
         path = "$.id";
-        reason = _("0以上32767以下の整数が必要です", "expected an integer in [0, 32767]");
+        reason = fmt::format(_("{}の ID は整数ではありません", "{} ID is not an integer"), _("Vault", "vault"));
     }
     SUBCASE("id order before name validation")
     {
@@ -191,7 +196,7 @@ TEST_CASE("VaultReader preserves exact error precedence and every existing recor
         expected = ParseErrorType::NON_SEQUENTIAL_RECORDS;
         id = "2";
         path = "$.id";
-        reason = _("IDは重複せず昇順に並べてください", "IDs must be unique and in increasing order");
+        reason = fmt::format(_("{}の ID '{}' は直前の ID '{}' より大きくありません", "{} ID '{}' is not greater than previous ID '{}'"), _("Vault", "vault"), 2, 2);
     }
     SUBCASE("vault kind before rating")
     {
@@ -231,13 +236,13 @@ TEST_CASE("VaultReader preserves exact error precedence and every existing recor
         path = "$.layout[1]";
         reason = _("文字列が必要です", "expected a string");
     }
-    VaultReader reader(data);
-    CHECK(test::to_error_code(reader.read()) == expected);
+    VaultReader reader(data, session);
+    CHECK(test::to_error_code(test::read_and_commit(reader, session)) == expected);
     REQUIRE(reader.error().has_value());
     CHECK(reader.error()->id == id);
     CHECK(reader.error()->path == path);
     CHECK(reader.error()->reason == reason);
-    CHECK(error_idx == 2);
+    CHECK(session.last_id().value_or(-1) == 2);
     REQUIRE(vaults_info.size() == previous.size());
     for (size_t i = 0; i < previous.size(); ++i) {
         CAPTURE(i);
@@ -249,4 +254,19 @@ TEST_CASE("VaultReader preserves exact error precedence and every existing recor
         CHECK(vaults_info[i].name == previous[i].name);
         CHECK(vaults_info[i].text == previous[i].text);
     }
+}
+
+TEST_CASE("VaultReader accepts ID 32766 and rejects ID 32767")
+{
+    auto session = VaultReader::create_session();
+    const auto restore = test::scoped_restore(vaults_info);
+    const test::ScopedReaderState reader_state;
+    vaults_info.clear();
+    auto data = make_vault();
+    data["id"] = 32766;
+    REQUIRE(test::read_and_commit(VaultReader(data, session), session).has_value());
+    data["id"] = 32767;
+    CHECK(test::to_error_code(test::read_and_commit(VaultReader(data, session), session)) == ParseErrorType::INVALID_VALUE);
+    CHECK(session.last_id().value_or(-1) == 32766);
+    CHECK(vaults_info.size() == 32767);
 }

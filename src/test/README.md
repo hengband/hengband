@@ -302,9 +302,10 @@ const auto restore_hoge = util::make_finalizer([&system, backup = system.get_hog
 
 TEST_CASE("VaultReader keeps the existing vaults on a parse error")
 {
-    const auto restore = test::scoped_restore(vaults_info, error_idx);
+    const auto restore = test::scoped_restore(vaults_info);
     vaults_info.clear();
-    error_idx = -1;
+    auto session = VaultReader::create_session();
+    // test::read_and_commit(VaultReader(data, session), session) で成功した記録を確定する。
     ...
 }
 ```
@@ -317,7 +318,7 @@ TEST_CASE("VaultReader keeps the existing vaults on a parse error")
 これも戻り値は必ず変数で受けてください。
 
 データの読み込み処理（`info-reader/`）のテストでは、`test/info-reader/scoped-reader-state.h` の
-`test::ScopedReaderState` を使ってください。エラーの位置（`error_idx`）を設定し、端末が無くてもメッセージを
+`test::ScopedReaderState` を使ってください。端末が無くてもメッセージを
 出さないようにして、スコープを抜けるときに元へ戻します。
 
 そのうえで、**必要な前提は各テストケースの中で自分で設定してください。**

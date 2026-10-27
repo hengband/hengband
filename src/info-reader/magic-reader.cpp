@@ -2,6 +2,7 @@
 #include "info-reader/info-reader-util.h"
 #include "info-reader/json-reader-util.h"
 #include "info-reader/parse-error-types.h"
+#include "locale/language-switcher.h"
 #include "player-ability/player-ability-types.h"
 #include "player-info/class-info.h"
 #include "system/spell-info-list.h"
@@ -75,8 +76,14 @@ const std::unordered_map<std::string_view, PlayerClassType> class_list = {
 };
 }
 
-MagicReader::MagicReader(const nlohmann::json &class_data)
+MagicReader::Session MagicReader::create_session(tl::optional<int> last_id)
+{
+    return Session(DefinitionIdOrder::STRICTLY_INCREASING, { 0, static_cast<int>(class_magics_info.size()) - 1 }, _("職業魔法", "class magic"), last_id);
+}
+
+MagicReader::MagicReader(const nlohmann::json &class_data, Session &session)
     : class_data(class_data)
+    , session(session)
 {
 }
 
@@ -92,48 +99,48 @@ tl::expected<void, ParseErrorType> MagicReader::read() const
 
     const auto class_id_result = this->read_class_id();
     if (!class_id_result) {
-        msg_print(_("職業ID読込失敗。ID: '{}'。", "Failed to load class id. ID: '{}'."), error_idx);
         return tl::make_unexpected(class_id_result.error());
     }
 
-    const auto class_id = *class_id_result;
-    if (class_id <= error_idx) {
-        return tl::make_unexpected(ParseErrorType::NON_SEQUENTIAL_RECORDS);
+    const auto id_result = this->session.check(*class_id_result);
+    if (!id_result) {
+        msg_print(id_result.error().reason);
+        return tl::unexpected(id_result.error().code);
     }
-    error_idx = class_id;
+    const auto class_id = *id_result;
     // レコード全体が有効と確定するまで、既存の職業定義を維持する。
     player_magic magics_info = class_magics_info[class_id];
 
     if (const auto result = this->set_spell_type(magics_info); !result) {
-        msg_print(_("呪文タイプ読込失敗。ID: '{}'。", "Failed to load spell type. ID: '{}'."), error_idx);
+        msg_print(_("呪文タイプ読込失敗。", "Failed to load spell type."));
         return result;
     }
     if (const auto result = this->set_magic_status(magics_info); !result) {
-        msg_print(_("呪文行使に使用する能力値読込失敗。ID: '{}'。", "Failed to load magic status. ID: '{}'."), error_idx);
+        msg_print(_("呪文行使に使用する能力値読込失敗。", "Failed to load magic status."));
         return result;
     }
     if (const auto result = info_set_bool(get_json_value(this->class_data, "has_glove_mp_penalty"), magics_info.has_glove_mp_penalty, true); !result) {
-        msg_print(_("籠手によるMPペナルティ読込失敗。ID: '{}'。", "Failed to load glove_mp_penalty. ID: '{}'."), error_idx);
+        msg_print(_("籠手によるMPペナルティ読込失敗。", "Failed to load glove_mp_penalty."));
         return result;
     }
     if (const auto result = info_set_bool(get_json_value(this->class_data, "has_magic_fail_rate_cap"), magics_info.has_magic_fail_rate_cap, true); !result) {
-        msg_print(_("最低呪文失率情報読込失敗。ID: '{}'。", "Failed to load magic_fail_rate_cap. ID: '{}'."), error_idx);
+        msg_print(_("最低呪文失率情報読込失敗。", "Failed to load magic_fail_rate_cap."));
         return result;
     }
     if (const auto result = info_set_bool(get_json_value(this->class_data, "is_spell_trainable"), magics_info.is_spell_trainable, true); !result) {
-        msg_print(_("呪文訓練可能性読込失敗。ID: '{}'。", "Failed to load spell_trainability. ID: '{}'."), error_idx);
+        msg_print(_("呪文訓練可能性読込失敗。", "Failed to load spell_trainability."));
         return result;
     }
     if (const auto result = info_set_integer(get_json_value(this->class_data, "first_spell_level"), magics_info.spell_first, true, Range(0, 99)); !result) {
-        msg_print(_("呪文行使開始レベル読込失敗。ID: '{}'。", "Failed to load spell-first level. ID: '{}'."), error_idx);
+        msg_print(_("呪文行使開始レベル読込失敗。", "Failed to load spell-first level."));
         return result;
     }
     if (const auto result = info_set_integer(get_json_value(this->class_data, "armour_weight_limit"), magics_info.spell_weight, true, Range(0, MAX_CLASS_MAGIC_VALUE)); !result) {
-        msg_print(_("MP重量制限値読込失敗。ID: '{}'。", "Failed to load spell-weight value. ID: '{}'."), error_idx);
+        msg_print(_("MP重量制限値読込失敗。", "Failed to load spell-weight value."));
         return result;
     }
     if (const auto result = this->set_realm_data(magics_info); !result) {
-        msg_print(_("呪文データ読込失敗。ID: '{}'。", "Failed to load spell data. ID: '{}'."), error_idx);
+        msg_print(_("呪文データ読込失敗。", "Failed to load spell data."));
         return result;
     }
 
@@ -149,11 +156,13 @@ tl::expected<int, ParseErrorType> MagicReader::read_class_id() const
 {
     const auto &classname_obj = get_json_value(this->class_data, "name");
     if (!classname_obj.is_string()) {
+        msg_print(_("職業名は文字列が必要です。", "Class name must be a string."));
         return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
     }
 
     const auto player_class = class_list.find(classname_obj.get<std::string>());
     if (player_class == class_list.end()) {
+        msg_print(_("未知の職業名 '{}'。", "Unknown class name '{}'."), classname_obj.get<std::string>());
         return tl::make_unexpected(ParseErrorType::INVALID_FLAG);
     }
     return enum2i(player_class->second);
@@ -219,19 +228,19 @@ tl::expected<void, ParseErrorType> MagicReader::set_spell_data(const nlohmann::j
     auto &info = magics_info.info[enum2i(realm)][*spell_id];
 
     if (const auto result = info_set_integer(get_json_value(spell_data, "learn_level"), info.slevel, true, Range(0, 99)); !result) {
-        msg_print(_("呪文学習レベル読込失敗。ID: '{}'。", "Failed to load spell learn_level. ID: '{}'."), error_idx);
+        msg_print(_("呪文学習レベル読込失敗。", "Failed to load spell learn_level."));
         return result;
     }
     if (const auto result = info_set_integer(get_json_value(spell_data, "mana_cost"), info.smana, true, Range(0, MAX_CLASS_MAGIC_VALUE)); !result) {
-        msg_print(_("呪文コスト読込失敗。ID: '{}'。", "Failed to load spell mana_cost. ID: '{}'."), error_idx);
+        msg_print(_("呪文コスト読込失敗。", "Failed to load spell mana_cost."));
         return result;
     }
     if (const auto result = info_set_integer(get_json_value(spell_data, "difficulty"), info.sfail, true, Range(0, 100)); !result) {
-        msg_print(_("呪文難易度読込失敗。ID: '{}'。", "Failed to load spell difficulty. ID: '{}'."), error_idx);
+        msg_print(_("呪文難易度読込失敗。", "Failed to load spell difficulty."));
         return result;
     }
     if (const auto result = info_set_integer(get_json_value(spell_data, "first_cast_exp_rate"), info.sexp, true, Range(0, MAX_CLASS_MAGIC_VALUE)); !result) {
-        msg_print(_("呪文詠唱ボーナスEXP読込失敗。ID: '{}'。", "Failed to load spell first_cast_exp_rate. ID: '{}'."), error_idx);
+        msg_print(_("呪文詠唱ボーナスEXP読込失敗。", "Failed to load spell first_cast_exp_rate."));
         return result;
     }
 

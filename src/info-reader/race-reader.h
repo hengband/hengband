@@ -1,5 +1,7 @@
 #pragma once
 
+#include "info-reader/definition-id-checker.h"
+
 #include "info-reader/parse-error-types.h"
 #include <nlohmann/json_fwd.hpp>
 #include <optional>
@@ -12,8 +14,11 @@ class MonraceMessage;
 
 class RaceReader {
 public:
-    explicit RaceReader(const nlohmann::json &monrace_data);
-    RaceReader(nlohmann::json &&) = delete;
+    using Session = DefinitionIdChecker;
+    static Session create_session(tl::optional<int> last_id = tl::nullopt);
+
+    RaceReader(const nlohmann::json &monrace_data, Session &session);
+    RaceReader(nlohmann::json &&, Session &) = delete;
     RaceReader(const RaceReader &) = delete;
     RaceReader(RaceReader &&) = delete;
     RaceReader &operator=(const RaceReader &) = delete;
@@ -39,4 +44,5 @@ private:
     tl::expected<void, ParseErrorType> set_mon_message(MonraceMessage &messages) const;
 
     const nlohmann::json &monrace_data;
+    Session &session;
 };
