@@ -19,7 +19,6 @@
 #include "io/report.h"
 #include "io/uid-checker.h"
 #include "locale/character-encoding.h"
-#include "monster/monster-compaction.h"
 #include "player/player-status.h"
 #include "save/artifact-record-writer.h"
 #include "save/floor-writer.h"
@@ -54,8 +53,6 @@
  */
 static bool wr_savefile_new(PlayerType *player_ptr)
 {
-    compact_monsters(player_ptr, 0);
-
     save_xor_byte = 0;
     auto variant_length = VARIANT_NAME.length();
     wr_byte(static_cast<byte>(variant_length));

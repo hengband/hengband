@@ -7,7 +7,6 @@
 #include "io/files-util.h"
 #include "io/uid-checker.h"
 #include "load/floor-loader.h"
-#include "monster/monster-compaction.h"
 #include "save/item-writer.h"
 #include "save/monster-entity-writer.h"
 #include "save/save-util.h"
@@ -220,8 +219,6 @@ bool wr_dungeon(PlayerType *player_ptr)
  */
 static bool save_floor_aux(PlayerType *player_ptr, saved_floor_type *sf_ptr)
 {
-    compact_monsters(player_ptr, 0);
-
     auto tmp8u = static_cast<uint8_t>(Rand_external(256));
     save_xor_byte = 0;
     wr_byte(tmp8u);
