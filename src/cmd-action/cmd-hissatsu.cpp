@@ -230,11 +230,7 @@ static int get_hissatsu_power(PlayerType *player_ptr, SPELL_IDX *sn)
         }
 
         if (!use_menu) {
-            if (isalpha(choice)) {
-                i = A2I(choice);
-            } else {
-                i = choice - '0' + 26;
-            }
+            i = AD2I(choice);
         }
 
         /* Totally Illegal */
