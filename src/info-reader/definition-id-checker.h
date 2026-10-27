@@ -1,8 +1,12 @@
 #pragma once
 
-#include "info-reader/json-reader-util.h"
+#include "info-reader/parse-error-types.h"
+#include "info-reader/range.h"
+#include <nlohmann/json_fwd.hpp>
 #include <string>
 #include <string_view>
+#include <tl/expected.hpp>
+#include <tl/optional.hpp>
 #include <unordered_set>
 
 struct IdCheckFailure {

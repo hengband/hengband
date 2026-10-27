@@ -3729,6 +3729,9 @@
     <ClInclude Include="..\..\src\info-reader\random-grid-effect-types.h">
       <Filter>info-reader</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\info-reader\range.h">
+      <Filter>info-reader</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\src\info-reader\skill-reader.h">
       <Filter>info-reader</Filter>
     </ClInclude>

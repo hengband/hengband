@@ -1,8 +1,10 @@
 #include "info-reader/definition-id-checker.h"
 #include "locale/language-switcher.h"
+#include <cstdint>
 #include <doctest/doctest.h>
 #include <fmt/format.h>
 #include <limits>
+#include <nlohmann/json.hpp>
 #include <stdexcept>
 #include <vector>
 
@@ -59,7 +61,7 @@ TEST_CASE("DefinitionIdChecker rejects invalid IDs and clears pending")
         CHECK(checker.read(value).error().code == ParseErrorType::INVALID_TYPE);
         CHECK(checker.read(value).error().reason == fmt::format(_("{}の ID は整数ではありません", "{} ID is not an integer"), "item"));
     }
-    CHECK(checker.read(std::numeric_limits<uint64_t>::max()).error().code == ParseErrorType::INVALID_VALUE);
+    CHECK(checker.read(std::numeric_limits<std::uint64_t>::max()).error().code == ParseErrorType::INVALID_VALUE);
     CHECK(checker.read(70000).error().reason == fmt::format(_("{}の ID '{}' は {}～{} の範囲外です", "{} ID '{}' is outside the range {} to {}"), "item", "70000", 0, 32766));
     CHECK(checker.check(-1).error().code == ParseErrorType::INVALID_VALUE);
     CHECK(checker.check(32767).error().code == ParseErrorType::INVALID_VALUE);

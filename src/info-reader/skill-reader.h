@@ -1,7 +1,6 @@
 #pragma once
 
 #include "info-reader/definition-id-checker.h"
-
 #include "info-reader/parse-error-types.h"
 #include <initializer_list>
 #include <nlohmann/json_fwd.hpp>
