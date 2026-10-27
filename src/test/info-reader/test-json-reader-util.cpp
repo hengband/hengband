@@ -735,3 +735,32 @@ TEST_CASE("info_set_bool preserves null semantics and rejects other non-boolean 
 
     CHECK(data);
 }
+
+TEST_CASE("Flag arrays preserve token order duplicates and stop at the first error")
+{
+    std::vector<std::string> seen;
+    const auto grab = [&seen](const nlohmann::json &flag) {
+        const auto token = flag.get<std::string>();
+        seen.push_back(token);
+        return token != "UNKNOWN";
+    };
+    const auto read = [&grab](const nlohmann::json &flags) {
+        return test::to_error_code(info_read_flag_array(flags, grab, ParseErrorType::TOO_FEW_ARGUMENTS, ParseErrorType::INVALID_TYPE));
+    };
+    CHECK(read(nlohmann::json::array()) == ParseErrorType::NONE);
+    CHECK(seen.empty());
+    CHECK(read(1) == ParseErrorType::TOO_FEW_ARGUMENTS);
+    CHECK(read(nullptr) == ParseErrorType::TOO_FEW_ARGUMENTS);
+    CHECK(seen.empty());
+    const auto tokens = nlohmann::json::parse(R"(["A", "A", "", "UNKNOWN", 1])");
+    const auto saved = tokens;
+    CHECK(read(tokens) == ParseErrorType::INVALID_FLAG);
+    const std::vector<std::string> expected = { "A", "A", "", "UNKNOWN" };
+    CHECK(seen == expected);
+    CHECK(tokens == saved);
+    seen.clear();
+    CHECK(read(nlohmann::json::parse(R"(["A", 1, "UNKNOWN"])")) == ParseErrorType::INVALID_TYPE);
+    REQUIRE(seen.size() == 1);
+    CHECK(seen.front() == "A");
+    CHECK(test::to_error_code(info_read_flag_array(nlohmann::json::parse("[false]"), grab, ParseErrorType::INVALID_VALUE, ParseErrorType::GENERIC)) == ParseErrorType::GENERIC);
+}

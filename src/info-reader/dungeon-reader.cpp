@@ -183,25 +183,16 @@ static tl::expected<void, ParseErrorType> info_set_enum_flag_group(const nlohman
 
     const auto &array_obj = *it;
 
-    for (const auto &flag_obj : array_obj) {
-        if (!flag_obj.is_string()) {
-            return tl::unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
-        }
-
+    return info_read_flag_array(array_obj, [&](const nlohmann::json &flag_obj) {
         const auto token = flag_obj.get<std::string_view>();
         if (token.empty()) {
-            continue;
+            return true;
         }
-
         if (EnumClassFlagGroup<Enum>::grab_one_flag(flags, tokens, token)) {
-            continue;
+            return true;
         }
-
         msg_print(_("未知のダンジョン{}種別 '{}'。", "Unknown dungeon {} kind '{}'."), label, token);
-        return tl::unexpected(ParseErrorType::INVALID_FLAG);
-    }
-
-    return {};
+        return false; }, ParseErrorType::TOO_FEW_ARGUMENTS, ParseErrorType::TOO_FEW_ARGUMENTS);
 }
 
 /*!
@@ -507,26 +498,9 @@ tl::expected<void, ParseErrorType> DungeonReader::set_dungeon_flags(DungeonDefin
     if (flags_obj.is_null()) {
         return {};
     }
-    if (!flags_obj.is_array()) {
-        return tl::unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
-    }
-
-    for (const auto &f_obj : flags_obj) {
-        if (!f_obj.is_string()) {
-            return tl::unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
-        }
-
-        const auto f = f_obj.get<std::string>();
-        if (f.empty()) {
-            continue;
-        }
-
-        if (!this->grab_one_dungeon_flag(dungeon, f)) {
-            return tl::unexpected(ParseErrorType::INVALID_FLAG);
-        }
-    }
-
-    return {};
+    return info_read_flag_array(flags_obj, [this, &dungeon](const nlohmann::json &flag) {
+        const auto token = flag.get<std::string>();
+        return token.empty() || this->grab_one_dungeon_flag(dungeon, token); }, ParseErrorType::TOO_FEW_ARGUMENTS, ParseErrorType::TOO_FEW_ARGUMENTS);
 }
 
 template <typename Enum, typename Validator>
@@ -618,26 +592,9 @@ tl::expected<void, ParseErrorType> DungeonReader::set_dungeon_monster_flags(cons
     if (flags_obj.is_null()) {
         return {};
     }
-    if (!flags_obj.is_array()) {
-        return tl::unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
-    }
-
-    for (const auto &f_obj : flags_obj) {
-        if (!f_obj.is_string()) {
-            return tl::unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
-        }
-
-        const auto f = f_obj.get<std::string>();
-        if (f.empty()) {
-            continue;
-        }
-
-        if (!this->grab_one_basic_monster_flag(dungeon, f)) {
-            return tl::unexpected(ParseErrorType::INVALID_FLAG);
-        }
-    }
-
-    return {};
+    return info_read_flag_array(flags_obj, [this, &dungeon](const nlohmann::json &flag) {
+        const auto token = flag.get<std::string>();
+        return token.empty() || this->grab_one_basic_monster_flag(dungeon, token); }, ParseErrorType::TOO_FEW_ARGUMENTS, ParseErrorType::TOO_FEW_ARGUMENTS);
 }
 
 tl::expected<void, ParseErrorType> DungeonReader::set_dungeon_monster_symbols(const nlohmann::json &symbols_obj, DungeonDefinition &dungeon) const
@@ -673,26 +630,9 @@ tl::expected<void, ParseErrorType> DungeonReader::set_dungeon_monster_spells(con
     if (spells_obj.is_null()) {
         return {};
     }
-    if (!spells_obj.is_array()) {
-        return tl::unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
-    }
-
-    for (const auto &s_obj : spells_obj) {
-        if (!s_obj.is_string()) {
-            return tl::unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
-        }
-
-        const auto s = s_obj.get<std::string>();
-        if (s.empty()) {
-            continue;
-        }
-
-        if (!this->grab_one_spell_monster_flag(dungeon, s)) {
-            return tl::unexpected(ParseErrorType::INVALID_FLAG);
-        }
-    }
-
-    return {};
+    return info_read_flag_array(spells_obj, [this, &dungeon](const nlohmann::json &flag) {
+        const auto token = flag.get<std::string>();
+        return token.empty() || this->grab_one_spell_monster_flag(dungeon, token); }, ParseErrorType::TOO_FEW_ARGUMENTS, ParseErrorType::TOO_FEW_ARGUMENTS);
 }
 
 /*!

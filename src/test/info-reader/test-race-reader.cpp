@@ -863,3 +863,33 @@ TEST_CASE("RaceReader reports a name which cannot be converted to the system enc
     CHECK(test::to_error_code(read_as_first_record(data, session)) == ParseErrorType::INVALID_VALUE);
 }
 #endif
+
+TEST_CASE("RaceReader pins flag array type errors and missing values")
+{
+    for (const auto *path : { "/flags", "/skill/list" }) {
+        for (const auto *input : { "42", "[1]", "null", "missing", "[]" }) {
+            CAPTURE(path);
+            CAPTURE(input);
+            test::MonraceListTestAccess guard;
+            auto session = RaceReader::create_session();
+            auto data = make_monrace();
+            const auto pointer = nlohmann::json::json_pointer(path);
+            const std::string input_text = input;
+            if (input_text == "missing") {
+                data[pointer.parent_pointer()].erase(pointer.back());
+            } else {
+                data[pointer] = nlohmann::json::parse(input);
+            }
+            auto expected = ParseErrorType::NONE;
+            if (input_text == "42") {
+                expected = std::string(path) == "/flags" ? ParseErrorType::TOO_FEW_ARGUMENTS : ParseErrorType::INVALID_TYPE;
+            } else if (input_text == "[1]") {
+                expected = ParseErrorType::INVALID_TYPE;
+            }
+            if (std::string(path) == "/skill/list" && (input_text == "null" || input_text == "missing")) {
+                expected = ParseErrorType::TOO_FEW_ARGUMENTS;
+            }
+            CHECK(test::to_error_code(test::read_and_commit(RaceReader(data, session), session)) == expected);
+        }
+    }
+}

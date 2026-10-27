@@ -1219,3 +1219,33 @@ TEST_CASE("DungeonReader publishes complete nested definitions and accepts optio
     CHECK(session.last_id().value_or(-1) == 0);
     CHECK(DungeonList::get_instance().size() == 1);
 }
+
+TEST_CASE("DungeonReader pins flag array type errors and missing values")
+{
+    for (const auto *path : { "/flags", "/generation/pit", "/generation/nest", "/monsters/flags", "/monsters/spells" }) {
+        for (const auto *input : { "42", "[1]", "null", "missing", "[]" }) {
+            CAPTURE(path);
+            CAPTURE(input);
+            DungeonReaderStateGuard guard;
+            auto session = DungeonReader::create_session();
+            auto data = make_dungeon();
+            const auto pointer = nlohmann::json::json_pointer(path);
+            const std::string input_text = input;
+            if (input_text == "missing") {
+                data[pointer.parent_pointer()].erase(pointer.back());
+            } else {
+                data[pointer] = nlohmann::json::parse(input);
+            }
+            auto expected = ParseErrorType::NONE;
+            if (input_text == "42") {
+                expected = ParseErrorType::TOO_FEW_ARGUMENTS;
+            } else if (input_text == "[1]") {
+                expected = ParseErrorType::TOO_FEW_ARGUMENTS;
+            }
+            if (std::string(path).starts_with("/generation/") && (input_text == "null" || input_text == "missing")) {
+                expected = ParseErrorType::TOO_FEW_ARGUMENTS;
+            }
+            CHECK(test::to_error_code(test::read_and_commit(DungeonReader(data, session), session)) == expected);
+        }
+    }
+}

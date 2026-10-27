@@ -586,3 +586,33 @@ TEST_CASE("TerrainReader reloads existing IDs and keys in a new session")
     CHECK(terrain.generation_changes[0].probability == 100);
     CHECK(test::to_error_code(test::read_and_commit(TerrainReader(data, reload_session), reload_session)) == ParseErrorType::NON_SEQUENTIAL_RECORDS);
 }
+
+TEST_CASE("TerrainReader pins flag array type errors and missing values")
+{
+    for (const auto *path : { "/flags" }) {
+        for (const auto *input : { "42", "[1]", "null", "missing", "[]" }) {
+            CAPTURE(path);
+            CAPTURE(input);
+            TerrainStateGuard guard;
+            auto session = TerrainReader::create_session();
+            auto data = make_terrain();
+            const auto pointer = nlohmann::json::json_pointer(path);
+            const std::string input_text = input;
+            if (input_text == "missing") {
+                data[pointer.parent_pointer()].erase(pointer.back());
+            } else {
+                data[pointer] = nlohmann::json::parse(input);
+            }
+            auto expected = ParseErrorType::NONE;
+            if (input_text == "42") {
+                expected = ParseErrorType::TOO_FEW_ARGUMENTS;
+            } else if (input_text == "[1]") {
+                expected = ParseErrorType::TOO_FEW_ARGUMENTS;
+            }
+            if (input_text == "null" || input_text == "missing") {
+                expected = ParseErrorType::TOO_FEW_ARGUMENTS;
+            }
+            CHECK(test::to_error_code(test::read_and_commit(TerrainReader(data, session), session)) == expected);
+        }
+    }
+}

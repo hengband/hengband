@@ -876,3 +876,30 @@ TEST_CASE("BaseitemReader caps costs like egos and limits gold separately")
         }
     }
 }
+
+TEST_CASE("BaseitemReader pins flag array type errors and missing values")
+{
+    for (const auto *path : { "/flags" }) {
+        for (const auto *input : { "42", "[1]", "null", "missing", "[]" }) {
+            CAPTURE(path);
+            CAPTURE(input);
+            BaseitemStateGuard guard;
+            auto session = BaseitemReader::create_session();
+            auto data = make_baseitem();
+            const auto pointer = nlohmann::json::json_pointer(path);
+            const std::string input_text = input;
+            if (input_text == "missing") {
+                data[pointer.parent_pointer()].erase(pointer.back());
+            } else {
+                data[pointer] = nlohmann::json::parse(input);
+            }
+            auto expected = ParseErrorType::NONE;
+            if (input_text == "42") {
+                expected = ParseErrorType::INVALID_TYPE;
+            } else if (input_text == "[1]") {
+                expected = ParseErrorType::INVALID_TYPE;
+            }
+            CHECK(test::to_error_code(test::read_and_commit(BaseitemReader(data, session), session)) == expected);
+        }
+    }
+}

@@ -398,3 +398,33 @@ TEST_CASE("EgoReader permits reloading the same ID in a new session")
     REQUIRE(test::read_and_commit(EgoReader(data, reloaded), reloaded));
     CHECK(egos_info.at(i2enum<EgoType>(4)).cost == 7);
 }
+
+TEST_CASE("EgoReader pins flag array type errors and missing values")
+{
+    for (const auto *path : { "/flags", "/extra_flags/0/flags" }) {
+        for (const auto *input : { "42", "[1]", "null", "missing", "[]" }) {
+            CAPTURE(path);
+            CAPTURE(input);
+            EgoStateGuard guard;
+            auto session = EgoReader::create_session();
+            auto data = make_ego();
+            const auto pointer = nlohmann::json::json_pointer(path);
+            const std::string input_text = input;
+            if (input_text == "missing") {
+                data[pointer.parent_pointer()].erase(pointer.back());
+            } else {
+                data[pointer] = nlohmann::json::parse(input);
+            }
+            auto expected = ParseErrorType::NONE;
+            if (input_text == "42") {
+                expected = ParseErrorType::INVALID_TYPE;
+            } else if (input_text == "[1]") {
+                expected = ParseErrorType::INVALID_TYPE;
+            }
+            if (std::string(path) == "/extra_flags/0/flags" && (input_text == "null" || input_text == "missing" || input_text == "[]")) {
+                expected = ParseErrorType::TOO_FEW_ARGUMENTS;
+            }
+            CHECK(test::to_error_code(test::read_and_commit(EgoReader(data, session), session)) == expected);
+        }
+    }
+}
