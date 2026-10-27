@@ -27,6 +27,7 @@
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 #include <fmt/format.h>
+#include <vector>
 #ifdef JP
 #else
 #include "monster/monster-description-types.h"
@@ -293,9 +294,13 @@ void process_monsters_mtimed(PlayerType *player_ptr, MonsterTimedEffect mte)
         csleep_noise = (1U << (30 - player_ptr->skill_stl));
     }
 
-    /* Process the monsters (backwards) */
-    for (auto i = floor.mproc_max.at(mte) - 1; i >= 0; i--) {
-        const auto m_idx = cur_mproc_list[i];
+    // 処理の途中で効果が切れるとリストから消えるので、写し取ってから番号の順に処理する
+    const std::vector<short> m_idxs(cur_mproc_list.begin(), cur_mproc_list.end());
+    for (const auto m_idx : m_idxs) {
+        if (!cur_mproc_list.contains(m_idx)) {
+            continue;
+        }
+
         process_monsters_mtimed_aux(player_ptr, m_idx, mte);
         HealthBarTracker::get_instance().set_flag_if_tracking(m_idx);
     }

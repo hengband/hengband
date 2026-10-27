@@ -360,9 +360,7 @@ void clear_cave(PlayerType *player_ptr)
     }
     floor.m_max = 1;
     floor.m_cnt = 0;
-    for (const auto mte : MONSTER_TIMED_EFFECT_RANGE) {
-        floor.mproc_max[mte] = 0;
-    }
+    floor.clear_mproc();
 
     precalc_cur_num_of_pet();
     for (POSITION y = 0; y < MAX_HGT; y++) {

@@ -9,6 +9,7 @@
 #include "util/point-2d.h"
 #include <array>
 #include <map>
+#include <set>
 #include <tl/optional.hpp>
 #include <utility>
 #include <vector>
@@ -72,8 +73,7 @@ public:
     MONSTER_IDX m_max = 0; /* Number of allocated monsters */
     MONSTER_IDX m_cnt = 0; /* Number of live monsters */
 
-    std::map<MonsterTimedEffect, std::vector<short>> mproc_list; /*!< The array to process dungeon monsters[max_m_idx] */
-    std::map<MonsterTimedEffect, short> mproc_max; /*!< Number of monsters to be processed */
+    std::map<MonsterTimedEffect, std::set<short>> mproc_list; /*!< 時限効果ごとの、効果を受けているモンスターの番号 (番号の順に並ぶ) */
 
     bool monster_noise = false;
     QuestId quest_number;
@@ -122,10 +122,9 @@ public:
     void enter_dungeon(bool state);
     void leave_dungeon(bool state);
     void reset_mproc();
-    void reset_mproc_max();
-    tl::optional<int> get_mproc_index(short m_idx, MonsterTimedEffect mte);
+    void clear_mproc();
     void add_mproc(short m_idx, MonsterTimedEffect mte);
-    void remove_mproc(short m_idx, MonsterTimedEffect mte);
+    bool remove_mproc(short m_idx, MonsterTimedEffect mte);
 
     short pop_empty_index_monster();
     short pop_empty_index_item();

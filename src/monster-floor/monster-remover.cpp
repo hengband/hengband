@@ -120,7 +120,7 @@ void wipe_monsters_list(PlayerType *player_ptr)
     monraces.reset_current_numbers();
     floor.m_max = 1;
     floor.m_cnt = 0;
-    floor.reset_mproc_max();
+    floor.clear_mproc();
     floor.num_repro = 0;
     Target::clear_last_target();
     player_ptr->pet_t_m_idx = 0;
