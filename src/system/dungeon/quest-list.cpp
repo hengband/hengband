@@ -37,30 +37,6 @@
 #include <vector>
 
 namespace {
-// 検証結果を利用者向けの理由に変換し、ランダム指定でも原因を特定できるようにする。
-std::string_view describe_legend_ego_error(LegendEgoError error)
-{
-    switch (error) {
-    case LegendEgoError::UNDEFINED_ID:
-        return _("未定義のエゴID", "undefined ego ID");
-    case LegendEgoError::WORTHLESS:
-        return _("悪いエゴ", "worthless ego");
-    case LegendEgoError::NO_PLACED_OBJECT:
-        return _("固定の配置対象がない", "no fixed object to place");
-    case LegendEgoError::RANDOM_OBJECT:
-        return _("ランダムな品には指定できない", "cannot apply to a random object");
-    case LegendEgoError::QUEST_REWARD:
-        return _("クエスト報酬には指定できない", "cannot apply to a quest reward");
-    case LegendEgoError::GOLD:
-        return _("財宝には指定できない", "cannot apply to gold");
-    case LegendEgoError::WITH_TRAP:
-        return _("罠と同居できない", "cannot coexist with a trap");
-    case LegendEgoError::INCOMPATIBLE:
-        return _("品の種類と相性が合わない", "incompatible object kind");
-    }
-    return {};
-}
-
 void require_quest_reference(bool valid, const std::filesystem::path &file, std::string_view field, int id)
 {
     if (!valid) {

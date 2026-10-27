@@ -4,18 +4,22 @@
 #include "info-reader/parse-error-messages.h"
 #include "info-reader/town-map-condition.h"
 #include "io/files-util.h"
+#include "locale/language-switcher.h"
 #include "system/angband-system.h"
 #include "system/dungeon/quest-definition.h"
 #include "system/dungeon/quest-fixed-map.h"
 #include "system/dungeon/quest-list.h"
+#include "system/enums/terrain/terrain-tag.h"
 #include "system/gamevalue.h"
 #include "system/player-type-definition.h"
 #include "system/system-variables.h"
 #include "term/z-util.h"
+#include "test/info-reader/legend-ego-fixture.h"
 #include "test/info-reader/scoped-reader-state.h"
 #include "test/scoped-input-term.h"
 #include "test/scoped-restore.h"
 #include "test/system/quest-list-test-access.h"
+#include "test/system/terrain-list-test-access.h"
 #include "test/temporary-json-files.h"
 #include "util/enum-converter.h"
 #include "util/finalizer.h"
@@ -236,6 +240,22 @@ TEST_CASE("Town load failures collect diagnostics and quit without requesting in
         files.write(TOWN_PREFERENCES, nlohmann::json::object());
         check_town_load_failure(&term.player(), ParseErrorType::INVALID_TYPE, TOWN_PREFERENCES);
     }
+    SUBCASE("incompatible preferences ego preserves detail before the summary")
+    {
+        const test::LegendEgoFixture ego_state;
+        const test::TerrainListTestAccess none_tag(TerrainTag::NONE, 0);
+        init_flags = INIT_CREATE_DUNGEON;
+        nlohmann::json data;
+        data["version"] = 1;
+        data["legend"]["!"]["terrain"] = "*";
+        data["legend"]["!"]["caveInfo"] = nlohmann::json::array();
+        data["legend"]["!"]["object"] = 54;
+        data["legend"]["!"]["ego"] = static_cast<int>(EgoType::DF);
+        files.write(TOWN_PREFERENCES, data);
+        check_town_load_failure(&term.player(), ParseErrorType::INVALID_VALUE, TOWN_PREFERENCES,
+            _("町のエゴ指定が不正です: legend['!']: 品の種類と相性が合わない",
+                "Invalid town ego: legend['!']: incompatible object kind"));
+    }
     SUBCASE("missing list at startup")
     {
         check_town_load_failure(&term.player(), ParseErrorType::GENERIC, TOWN_DEFINITION_LIST);
@@ -271,6 +291,23 @@ TEST_CASE("Town load failures collect diagnostics and quit without requesting in
         {
             files.write(filename, nlohmann::json::object());
             check_town_load_failure(&term.player(), ParseErrorType::INVALID_TYPE, filename);
+        }
+        SUBCASE("incompatible map ego preserves detail before the summary")
+        {
+            const test::LegendEgoFixture ego_state;
+            nlohmann::json data;
+            data["version"] = 3;
+            data["featureRules"][0]["symbol"] = "!";
+            data["featureRules"][0]["definition"]["object"] = 54;
+            data["featureRules"][0]["definition"]["ego"] = static_cast<int>(EgoType::DF);
+            data["buildingRules"] = nlohmann::json::array();
+            data["mapVariants"][0]["rows"] = { "!" };
+            data["startingPositions"][0]["y"] = 0;
+            data["startingPositions"][0]["x"] = 0;
+            files.write(filename, data);
+            check_town_load_failure(&term.player(), ParseErrorType::INVALID_VALUE, filename,
+                _("町のエゴ指定が不正です: featureRules[0] (記号 '!'): 品の種類と相性が合わない",
+                    "Invalid town ego: featureRules[0] (symbol '!'): incompatible object kind"));
         }
         SUBCASE("invalid condition preserves detail before the summary")
         {

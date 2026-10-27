@@ -6,6 +6,7 @@
 #include "info-reader/town-map-reader.h"
 #include "io/condition-expression.h"
 #include "locale/character-encoding.h"
+#include "locale/language-switcher.h"
 #include "object-enchant/trg-types.h"
 #include "object/tval-types.h"
 #include "player-info/class-info.h"
@@ -30,6 +31,7 @@
 #include "test/system/artifact-list-test-access.h"
 #include "test/system/terrain-list-test-access.h"
 #include "util/finalizer.h"
+#include "view/display-messages.h"
 #include <algorithm>
 #include <array>
 #include <cstdint>
@@ -357,6 +359,7 @@ TEST_CASE("TownMapReader validates root and conditions on every rule")
 
 TEST_CASE("TownMapReader validates v3 modes types and narrowing bounds")
 {
+    const test::ScopedReaderState reader_state;
     for (const auto *field : { "monster", "object", "artifact", "ego" }) {
         for (const auto &value : std::array<nlohmann::json, 4>{ { 1, 255, { { "random", true } }, nullptr } }) {
             auto data = make_town_map();
@@ -1696,4 +1699,22 @@ TEST_CASE("TownMapReader later v3 rules replace the whole cell")
     expected.feature = state.floor_id();
     expected.trap = state.trap_id();
     check_same_grid(letter['#'], expected);
+}
+
+TEST_CASE("TownMapReader reports incompatible ego with rule and symbol")
+{
+    const test::ScopedReaderState reader_state;
+    const test::LegendEgoFixture ego_state;
+    auto data = make_town_map();
+    data["featureRules"][0]["definition"]["object"] = 54;
+    data["featureRules"][0]["definition"]["ego"] = static_cast<int>(EgoType::DF);
+    for (const bool only_buildings : { false, true }) {
+        ScopedMessageCapture diagnostics;
+        TownMapDefinition definition;
+        CHECK(test::to_error_code(TownMapReader(data).read(definition, 3, 3, only_buildings)) == ParseErrorType::INVALID_VALUE);
+        CHECK(definition.features.empty());
+        REQUIRE(diagnostics.messages().size() == 1);
+        CHECK(diagnostics.messages().front() == _("町のエゴ指定が不正です: featureRules[0] (記号 '#'): 品の種類と相性が合わない",
+                                                    "Invalid town ego: featureRules[0] (symbol '#'): incompatible object kind"));
+    }
 }

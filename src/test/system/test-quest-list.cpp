@@ -33,6 +33,7 @@
 #include <cstdint>
 #include <doctest/doctest.h>
 #include <filesystem>
+#include <fmt/format.h>
 #include <limits>
 #include <nlohmann/json.hpp>
 #include <stdexcept>
@@ -1448,5 +1449,26 @@ TEST_CASE("QuestList validates plain up references when reward fallback can chan
                 check_unpublished(QuestId::THIEF);
             }
         }
+    }
+}
+
+TEST_CASE("QuestList keeps incompatible ego diagnostic text")
+{
+    LegendReferenceState state;
+    const test::LegendEgoFixture ego_state;
+    QuestFiles files;
+    auto data = make_quest(1);
+    data["legend"]["!"]["object"] = 54;
+    data["legend"]["!"]["ego"] = static_cast<int>(EgoType::DF);
+    files.write("quest.jsonc", data);
+    try {
+        state.quests.load(files.directory);
+        FAIL("incompatible ego was accepted");
+    } catch (const std::runtime_error &error) {
+        const auto expected = fmt::format(_("クエストのエゴ指定が不正です ({}): legend['!'].ego {} (object 54): {}",
+                                              "Invalid quest ego ({}): legend['!'].ego {} (object 54): {}"),
+            (files.directory / "quest.jsonc").string(), static_cast<int>(EgoType::DF), _("品の種類と相性が合わない", "incompatible object kind"));
+        const std::string diagnostic(error.what());
+        CHECK(diagnostic.find(": " + expected + "\nStack trace:\n") != std::string::npos);
     }
 }
