@@ -1,7 +1,6 @@
 #include "cmd-io/cmd-save.h"
 #include "cmd-io/cmd-dump.h"
 #include "core/disturbance.h"
-#include "core/stuff-handler.h"
 #include "io/signal-handlers.h"
 #include "io/write-diary.h"
 #include "monster/monster-status.h" // 違和感。要調査.
@@ -27,7 +26,6 @@ void do_cmd_save_game(PlayerType *player_ptr, int is_autosave)
     }
 
     msg_erase();
-    handle_stuff(player_ptr);
     prt(_("ゲームをセーブしています...", "Saving game..."), 0, 0);
     term_fresh();
     player_ptr->died_from = _("(セーブ)", "(saved)");
