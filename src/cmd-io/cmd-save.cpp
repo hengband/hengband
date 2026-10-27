@@ -32,7 +32,7 @@ void do_cmd_save_game(PlayerType *player_ptr, int is_autosave)
     term_fresh();
     player_ptr->died_from = _("(セーブ)", "(saved)");
     signals_ignore_tstp();
-    if (save_player(player_ptr, SaveType::CONTINUE_GAME)) {
+    if (save_player(player_ptr)) {
         prt(_("ゲームをセーブしています... 終了", "Saving game... done."), 0, 0);
     } else {
         prt(_("ゲームをセーブしています... 失敗！", "Saving game... failed!"), 0, 0);

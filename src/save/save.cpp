@@ -221,7 +221,6 @@ static bool wr_savefile_new(PlayerType *player_ptr)
  * @brief セーブデータ書き込みのサブルーチン
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param path セーブデータのフルパス
- * @param type セーブ後の処理種別
  * @return セーブの成功可否
  */
 static bool save_player_aux(PlayerType *player_ptr, const std::filesystem::path &path)
@@ -275,7 +274,7 @@ static bool save_player_aux(PlayerType *player_ptr, const std::filesystem::path 
  * 3. hoge.new をhoge にリネームする
  * 4. hoge.old を削除する
  */
-bool save_player(PlayerType *player_ptr, [[maybe_unused]] SaveType type)
+bool save_player(PlayerType *player_ptr)
 {
     std::stringstream ss_new;
     ss_new << savefile.string() << ".new";

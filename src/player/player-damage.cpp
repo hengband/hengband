@@ -274,7 +274,7 @@ int cold_dam(PlayerType *player_ptr, int dam, std::string_view kb_str, bool aura
  */
 static void death_save(PlayerType *player_ptr)
 {
-    if (!cheat_save && !save_player(player_ptr, SaveType::CLOSE_GAME)) {
+    if (!cheat_save && !save_player(player_ptr)) {
         msg_print(_("セーブ失敗！", "death save failed!"));
     }
 }

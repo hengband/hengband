@@ -42,7 +42,7 @@ void exit_game_panic(PlayerType *player_ptr)
     AngbandSystem::get_instance().set_panic_save(true);
     signals_ignore_tstp();
     player_ptr->died_from = _("(緊急セーブ)", "(panic save)");
-    if (!save_player(player_ptr, SaveType::CLOSE_GAME)) {
+    if (!save_player(player_ptr)) {
         quit(_("緊急セーブ失敗！", "panic save failed!"));
     }
     quit(_("緊急セーブ成功！", "panic save succeeded!"));
