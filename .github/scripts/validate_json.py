@@ -1301,7 +1301,13 @@ def validate_one(pair: tuple[Path, Path, dict], registry: Registry | None = None
             semantic_validator()
         return True, f"Succeeded: {data_path.name} <= {schema_path.name}"
     except ValidationError as e:
-        msg = [f"Failed: {data_path.name}", f"Reason: {e.message}"]
+        reason = e.message
+        # anyOf で列挙を足し合わせた schema では親の文面に候補が出ないため、子の列挙の候補をまとめて示す。
+        enum_errors = [sub_error for sub_error in e.context if sub_error.validator == "enum"]
+        if enum_errors:
+            candidates = [value for sub_error in enum_errors for value in sub_error.validator_value]
+            reason = f"{e.instance!r} is not one of {candidates!r}"
+        msg = [f"Failed: {data_path.name}", f"Reason: {reason}"]
         error_path = e.absolute_path if schema_path.name == "TownMap.schema.json" else e.path
         if error_path:
             msg.append(f"Location: {list(error_path)}")

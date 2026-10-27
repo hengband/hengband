@@ -4,7 +4,7 @@ from pathlib import Path
 import re
 import tempfile
 
-from validate_json import load_cpp_enum_values, validate_one
+from validate_json import load_cpp_enum_values, load_cpp_map_keys, validate_one
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[2]
 
@@ -71,3 +71,48 @@ def dungeon_id_maximum():
     if "MAX" not in values:
         raise AssertionError(f"{relative_path}: DungeonId has no MAX")
     return values["MAX"] - 1
+
+
+def schema_enum_values(node, schema_path, loaded_schemas):
+    """スキーマの節が受け付ける列挙値を、$ref と anyOf をたどってすべて集める。
+
+    共通の定義 (schema/common/) を参照する列挙も、参照先の列挙と各スキーマで足した値を合わせて読む。
+    """
+    if "$ref" in node:
+        target, _, pointer = node["$ref"].partition("#")
+        if target:
+            schema_path = (schema_path.parent / target).resolve()
+            schemas = {path.resolve(): schema for path, schema in loaded_schemas.items()}
+            if schema_path not in schemas:
+                raise AssertionError(f"unknown schema reference {node['$ref']!r}")
+            referenced = schemas[schema_path]
+        else:
+            referenced = loaded_schemas[schema_path]
+        for part in filter(None, pointer.split("/")):
+            referenced = referenced[part.replace("~1", "/").replace("~0", "~")]
+        return schema_enum_values(referenced, schema_path, loaded_schemas)
+    if "enum" in node:
+        return set(node["enum"])
+    if "anyOf" in node:
+        values = set()
+        for branch in node["anyOf"]:
+            values |= schema_enum_values(branch, schema_path, loaded_schemas)
+        return values
+    raise AssertionError(f"schema node has no enum: {node!r}")
+
+
+def reader_token_tables(relative_path, function):
+    """読み込み処理の指定関数が grab_one_flag で照合する辞書名を、照合の順に読む。"""
+    source = (REPOSITORY_ROOT / relative_path).read_text(encoding="utf-8")
+    match = re.search(r"\b" + re.escape(function) + r"\(.*?\n\{(.*?)^\}", source, re.DOTALL | re.MULTILINE)
+    if match is None:
+        raise AssertionError(f"{function} not found in {relative_path}")
+    tables = re.findall(r"grab_one_flag\(\s*\w+\.\w+\s*,\s*(r_info_\w+)\s*,", match[1])
+    if not tables:
+        raise AssertionError(f"no token tables found in {function}")
+    return tables
+
+
+def race_info_table_keys(table):
+    """race-info-tokens-table.cpp の指定した辞書のトークンを読む。"""
+    return load_cpp_map_keys(REPOSITORY_ROOT / "src/info-reader/race-info-tokens-table.cpp", table)
