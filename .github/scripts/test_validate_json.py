@@ -64,6 +64,15 @@ class QuestGridValidationTest(unittest.TestCase):
                 ok, message = self.validate({"monster": 5, "special": 1}, schema_name)
                 self.assertTrue(ok, message)
 
+    def test_object_branch_failure_does_not_report_type_error(self):
+        for schema_name in ("Quest", "QuestPreferences"):
+            with self.subTest(schema=schema_name):
+                ok, message = self.validate({"monster": {"random": True, "bogus": 1}}, schema_name)
+                self.assertFalse(ok, message)
+                self.assertIn("is not valid under any of the given schemas", message)
+                self.assertNotIn("is not of type", message)
+                self.assertIn("Location: ['legend', '#', 'monster']", message)
+
     def test_shared_schema_is_not_a_data_schema(self):
         shared_path = self.schema_dir / "common/QuestGrid.schema.json"
         self.assertIn(shared_path, self.loaded)
@@ -655,6 +664,15 @@ class TownDefinitionListValidationTest(unittest.TestCase):
                 ok, message = self.validate(invalid)
                 self.assertFalse(ok)
                 self.assertIn("town map file does not exist", message)
+
+    def test_object_branch_missing_modes_does_not_report_type_error(self):
+        invalid = copy.deepcopy(self.data)
+        invalid["towns"]["2"] = {"lite": "towns/a.jsonc"}
+        ok, message = self.validate(invalid)
+        self.assertFalse(ok, message)
+        self.assertIn("is not valid under any of the given schemas", message)
+        self.assertNotIn("is not of type", message)
+        self.assertIn("Location: ['towns', '2']", message)
 
     def test_invalid_map_mode_and_path(self):
         for replacement in ({"normal": "towns/01_Outpost_Full.txt"}, "../outside.txt"):

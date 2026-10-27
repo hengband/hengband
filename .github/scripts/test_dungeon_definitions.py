@@ -90,6 +90,14 @@ class DungeonValidationTest(unittest.TestCase):
                 self.assertFalse(ok, diagnostic)
                 self.assertIn("Location: ['dungeons', 0, 'monsters', 'flags', 0]", diagnostic)
 
+    def test_non_string_monster_flags_report_type_error(self):
+        document = self.sample()
+        document["dungeons"][0]["monsters"]["flags"] = [5]
+        ok, diagnostic = self.validate(document)
+        self.assertFalse(ok, diagnostic)
+        self.assertIn("Reason: 5 is not of type 'string'", diagnostic)
+        self.assertIn("Location: ['dungeons', 0, 'monsters', 'flags', 0]", diagnostic)
+
     def test_unknown_aura_flags_are_rejected(self):
         document = self.sample()
         document["dungeons"][0]["monsters"]["flags"] = ["AURA_FIRE", "AURA_UNKNOWN"]

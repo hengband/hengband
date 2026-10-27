@@ -5,7 +5,7 @@
   "$defs": {
     "monsterFlag": {
       "type": "string",
-      "description": "RaceReader::grab_one_basic_flag が受け付けるモンスターフラグ。DungeonReader::grab_one_basic_monster_flag も同じ辞書を照合する",
+      "description": "RaceReader::grab_one_basic_flag が受け付けるモンスターフラグ。DungeonReader::grab_one_basic_monster_flag も同じ辞書を照合し、さらに性別 (r_info_sex の MALE/FEMALE) も受け付ける（性別はこの列挙に足さない）",
       "enum": [
         "RES_ALL",
         "HURT_ACID",
