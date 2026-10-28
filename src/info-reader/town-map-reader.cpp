@@ -11,6 +11,7 @@
 #include <algorithm>
 #include <charconv>
 #include <cstdint>
+#include <fmt/format.h>
 #include <limits>
 #include <nlohmann/json.hpp>
 #include <string_view>
@@ -226,13 +227,27 @@ tl::expected<void, ParseErrorType> TownMapReader::read_features(TownMapDefinitio
             return tl::make_unexpected(error);
         }
         DeferredQuestLegendCell parsed;
-        if (const auto result = parse_quest_legend_cell_deferred(fields, parsed); !result) {
+        std::string reason;
+        if (const auto result = parse_quest_legend_cell_deferred(fields, parsed, reason); !result) {
+            if (!reason.empty()) {
+                if (fields.contains("trap") && fields["trap"].is_string()) {
+                    const auto &tag = fields["trap"].get_ref<const std::string &>();
+                    if (tag != "NONE" && tag != "*") {
+                        reason += fmt::format(_(" (trap '{}' は固定の罠として扱われます。未知のタグや誤記も固定の罠になります)",
+                                                  " (trap '{}' is treated as a fixed trap; unknown tags and typos are treated the same way)"),
+                            tag);
+                    }
+                }
+                msg_print(_("町の配置指定が不正です: featureRules[{}] (記号 '{}').trap: {}",
+                              "Invalid town placement: featureRules[{}] (symbol '{}').trap: {}"),
+                    index, symbol, reason);
+            }
             return tl::make_unexpected(result.error());
         }
         if (const auto result = validate_legend_ego(parsed.cell.grid, parsed.cell.object_is_quest_reward); !result) {
-            constexpr auto fmt = _("町のエゴ指定が不正です: featureRules[{}] (記号 '{}'): {}",
-                "Invalid town ego: featureRules[{}] (symbol '{}'): {}");
-            msg_print(fmt, index, symbol, describe_legend_ego_error(result.error()));
+            constexpr auto fmt = _("町のエゴ指定が不正です: featureRules[{}] (記号 '{}').{}: {}",
+                "Invalid town ego: featureRules[{}] (symbol '{}').{}: {}");
+            msg_print(fmt, index, symbol, describe_legend_ego_spec(parsed.cell.grid), describe_legend_ego_error(result.error()));
             return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
         }
         feature.terrain = std::move(parsed.terrain_tag);

@@ -2,6 +2,7 @@
 #include "info-reader/fixed-map-parser.h"
 #include "info-reader/general-parser.h"
 #include "info-reader/jsonc-document-loader.h"
+#include "info-reader/legend-object-trap-validator.h"
 #include "info-reader/quest-reader.h"
 #include "info-reader/random-grid-effect-types.h"
 #include "info-reader/town-map-reader.h"
@@ -39,6 +40,7 @@
 #include <cstdlib>
 #include <doctest/doctest.h>
 #include <filesystem>
+#include <fmt/format.h>
 #include <limits>
 #include <map>
 #include <nlohmann/json.hpp>
@@ -1835,7 +1837,36 @@ TEST_CASE("TownMapReader reports incompatible ego with rule and symbol")
         CHECK(test::to_error_code(TownMapReader(data).read(definition, 3, 3, only_buildings)) == ParseErrorType::INVALID_VALUE);
         CHECK(definition.features.empty());
         REQUIRE(diagnostics.messages().size() == 1);
-        CHECK(diagnostics.messages().front() == _("町のエゴ指定が不正です: featureRules[0] (記号 '#'): 品の種類と相性が合わない",
-                                                    "Invalid town ego: featureRules[0] (symbol '#'): incompatible object kind"));
+        CHECK(diagnostics.messages().front() == _("町のエゴ指定が不正です: featureRules[0] (記号 '#').ego 65 (object 54): 品の種類と相性が合わない",
+                                                    "Invalid town ego: featureRules[0] (symbol '#').ego 65 (object 54): incompatible object kind"));
+    }
+}
+
+TEST_CASE("TownMapReader reports fixed trap tags including typos in conflicts")
+{
+    const test::ScopedReaderState reader_state;
+    auto &terrains = TerrainList::get_instance();
+    const test::ScopedVectorWrapper<TerrainList> terrain_state(terrains);
+    terrains.resize(2);
+    terrains.get_terrain(0).tag = "NONE";
+    terrains.get_terrain(1).tag = "TRAP_PIT";
+    for (const auto *tag : { "TRAP_PIT", "TRAP_PTI" }) {
+        for (const bool only_buildings : { false, true }) {
+            CAPTURE(tag);
+            CAPTURE(only_buildings);
+            auto data = make_town_map();
+            auto &fields = data["featureRules"][0]["definition"];
+            fields["object"] = 54;
+            fields["trap"] = tag;
+            ScopedMessageCapture diagnostics;
+            TownMapDefinition definition;
+            CHECK(test::to_error_code(TownMapReader(data).read(definition, 3, 3, only_buildings)) == ParseErrorType::INVALID_VALUE);
+            CHECK(definition.features.empty());
+            REQUIRE(diagnostics.messages().size() == 1);
+            const auto expected = fmt::format(_("町の配置指定が不正です: featureRules[0] (記号 '#').trap: {} (trap '{}' は固定の罠として扱われます。未知のタグや誤記も固定の罠になります)",
+                                                  "Invalid town placement: featureRules[0] (symbol '#').trap: {} (trap '{}' is treated as a fixed trap; unknown tags and typos are treated the same way)"),
+                describe_legend_object_trap_conflict(), tag);
+            CHECK(diagnostics.messages().front() == expected);
+        }
     }
 }
