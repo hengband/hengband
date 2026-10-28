@@ -170,6 +170,8 @@ std::string_view input_kind_name(InputKind kind)
         return "spell";
     case InputKind::BUILDING:
         return "building";
+    case InputKind::FILE_VIEW:
+        return "file";
     }
 
     THROW_EXCEPTION(std::logic_error, "Invalid InputKind was specified!");
