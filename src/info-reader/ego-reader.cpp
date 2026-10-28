@@ -132,8 +132,12 @@ tl::expected<void, ParseErrorType> EgoReader::read() const
 bool EgoReader::grab_one_flag(EgoItemDefinition &ego, const nlohmann::json &flag) const
 {
     const auto &name = flag.get_ref<const std::string &>();
-    return TrFlags::grab_one_flag(ego.flags, baseitem_flags, name) ||
-           EnumClassFlagGroup<ItemGenerationTraitType>::grab_one_flag(ego.gen_flags, baseitem_geneneration_flags, name);
+    if (TrFlags::grab_one_flag(ego.flags, baseitem_flags, name) ||
+        EnumClassFlagGroup<ItemGenerationTraitType>::grab_one_flag(ego.gen_flags, baseitem_geneneration_flags, name)) {
+        return true;
+    }
+    msg_print(_("未知のエゴ・フラグ '{}'。", "Unknown ego flag '{}'."), name);
+    return false;
 }
 
 bool EgoReader::grab_one_extra_flag(ego_generate_type &extra, const nlohmann::json &flag) const
@@ -147,6 +151,7 @@ bool EgoReader::grab_one_extra_flag(ego_generate_type &extra, const nlohmann::js
         extra.trg_flags.push_back(it->second);
         return true;
     }
+    msg_print(_("未知のエゴ・フラグ '{}'。", "Unknown ego flag '{}'."), name);
     return false;
 }
 
