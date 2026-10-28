@@ -3,9 +3,9 @@
 #include "info-reader/info-reader-util.h"
 #include "info-reader/json-reader-util.h"
 #include "info-reader/parse-error-types.h"
+#include "info-reader/symbol-reader-util.h"
 #include "system/terrain/terrain-definition.h"
 #include "system/terrain/terrain-list.h"
-#include "term/gameterm.h"
 #include "util/dice.h"
 #include "view/display-messages.h"
 #include <algorithm>
@@ -218,25 +218,15 @@ tl::expected<void, ParseErrorType> TerrainReader::set_terrain_symbol(TerrainType
         return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
     }
 
-    const auto ch_str = ch_obj.get<std::string>();
-    if (ch_str.size() != 1) {
-        return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
+    const auto symbol = info_read_symbol(symbol_obj);
+    if (!symbol) {
+        if (symbol.error() == ParseErrorType::INVALID_FLAG) {
+            msg_print(_("未知の色 '{}'。", "Unknown color '{}'."), color_obj.get<std::string>());
+        }
+        return tl::unexpected(symbol.error());
     }
 
-    const auto color_name = color_obj.get<std::string>();
-    const auto it = color_list.find(color_name);
-    if (it == color_list.end()) {
-        msg_print(_("未知の色 '{}'。", "Unknown color '{}'."), color_name);
-        return tl::make_unexpected(ParseErrorType::INVALID_FLAG);
-    }
-    if (it->second > 127) {
-        return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
-    }
-
-    const auto character = ch_str.front();
-    const auto color = it->second;
-
-    terrain.symbol_definitions[F_LIT_STANDARD] = { color, character };
+    terrain.symbol_definitions[F_LIT_STANDARD] = *symbol;
 
     const bool lit = lit_obj.get<bool>();
     if (lit) {
@@ -245,7 +235,7 @@ tl::expected<void, ParseErrorType> TerrainReader::set_terrain_symbol(TerrainType
     }
 
     for (int j = F_LIT_NS_BEGIN; j < F_LIT_MAX; j++) {
-        terrain.symbol_definitions[j] = { color, character };
+        terrain.symbol_definitions[j] = *symbol;
     }
 
     return {};

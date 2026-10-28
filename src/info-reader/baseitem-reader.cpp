@@ -14,6 +14,7 @@
 #include "info-reader/item-reader-limits.h"
 #include "info-reader/json-reader-util.h"
 #include "info-reader/parse-error-types.h"
+#include "info-reader/symbol-reader-util.h"
 #include "locale/japanese.h"
 #include "locale/language-switcher.h"
 #include "object-enchant/tr-types.h"
@@ -26,7 +27,6 @@
 #include "system/baseitem/baseitem-definition.h"
 #include "system/baseitem/baseitem-list.h"
 #include "system/gamevalue.h"
-#include "term/gameterm.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
 #include "view/display-messages.h"
@@ -334,37 +334,11 @@ bool BaseitemReader::grab_one_baseitem_flag(BaseitemDefinition &baseitem, std::s
  */
 tl::expected<void, ParseErrorType> BaseitemReader::set_baseitem_symbol(BaseitemDefinition &baseitem) const
 {
-    const auto &symbol_data = get_json_value(this->baseitem_data, "symbol");
-    if (symbol_data.is_null()) {
-        return tl::unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
+    const auto symbol = info_read_symbol(get_json_value(this->baseitem_data, "symbol"));
+    if (!symbol) {
+        return tl::unexpected(symbol.error());
     }
-    if (!symbol_data.is_object()) {
-        return tl::unexpected(ParseErrorType::INVALID_TYPE);
-    }
-
-    const auto &character_obj = get_json_value(symbol_data, "character");
-    if (!character_obj.is_string()) {
-        return tl::unexpected(character_obj.is_null() ? ParseErrorType::TOO_FEW_ARGUMENTS : ParseErrorType::INVALID_TYPE);
-    }
-    const auto &character = character_obj.get_ref<const std::string &>();
-    if (character.size() != 1) {
-        return tl::unexpected(ParseErrorType::INVALID_VALUE);
-    }
-
-    const auto &color_obj = get_json_value(symbol_data, "color");
-    if (!color_obj.is_string()) {
-        return tl::unexpected(color_obj.is_null() ? ParseErrorType::TOO_FEW_ARGUMENTS : ParseErrorType::INVALID_TYPE);
-    }
-
-    const auto color = color_list.find(color_obj.get<std::string>());
-    if (color == color_list.end()) {
-        return tl::unexpected(ParseErrorType::INVALID_FLAG);
-    }
-    if (color->second > 127) {
-        return tl::unexpected(ParseErrorType::INVALID_VALUE);
-    }
-
-    baseitem.init_symbol(DisplaySymbol(color->second, character.front()));
+    baseitem.init_symbol(*symbol);
     return {};
 }
 
