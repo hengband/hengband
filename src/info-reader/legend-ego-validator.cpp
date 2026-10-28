@@ -7,6 +7,7 @@
 #include "system/baseitem/baseitem-definition.h"
 #include "system/baseitem/baseitem-list.h"
 #include <algorithm>
+#include <fmt/format.h>
 
 /*!
  * @brief 凡例のエゴ指定と、実際に配置される品の組み合わせを検証する。
@@ -72,4 +73,11 @@ std::string_view describe_legend_ego_error(LegendEgoError error)
         return _("品の種類と相性が合わない", "incompatible object kind");
     }
     return {};
+}
+
+/*! @brief クエストの診断と同じ形式で、エゴ指定と品IDを表示する。 */
+std::string describe_legend_ego_spec(const dungeon_grid &grid)
+{
+    const auto ego = (grid.random & RANDOM_EGO) ? std::string("random") : std::to_string(static_cast<int>(grid.ego));
+    return fmt::format("ego {} (object {})", ego, grid.object);
 }

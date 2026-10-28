@@ -416,8 +416,16 @@ tl::expected<void, ParseErrorType> parse_quest_legend_cell(const nlohmann::json 
  */
 tl::expected<void, ParseErrorType> parse_quest_legend_cell_deferred(const nlohmann::json &cell_data, DeferredQuestLegendCell &out)
 {
+    std::string reason;
+    return parse_quest_legend_cell_deferred(cell_data, out, reason);
+}
+
+/*! @brief 遅延解析で配置衝突の理由を返し、成功時だけ出力を置き換える。 */
+tl::expected<void, ParseErrorType> parse_quest_legend_cell_deferred(const nlohmann::json &cell_data, DeferredQuestLegendCell &out, std::string &reason)
+{
+    reason.clear();
     DeferredQuestLegendCell parsed;
-    if (const auto result = parse_legend_cell(cell_data, parsed.cell, &parsed); !result) {
+    if (const auto result = parse_legend_cell(cell_data, parsed.cell, &parsed, &reason); !result) {
         return result;
     }
     out = std::move(parsed);

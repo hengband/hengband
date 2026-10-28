@@ -253,8 +253,8 @@ TEST_CASE("Town load failures collect diagnostics and quit without requesting in
         data["legend"]["!"]["ego"] = static_cast<int>(EgoType::DF);
         files.write(TOWN_PREFERENCES, data);
         check_town_load_failure(&term.player(), ParseErrorType::INVALID_VALUE, TOWN_PREFERENCES,
-            _("町のエゴ指定が不正です: legend['!']: 品の種類と相性が合わない",
-                "Invalid town ego: legend['!']: incompatible object kind"));
+            _("町のエゴ指定が不正です: legend['!'].ego 65 (object 54): 品の種類と相性が合わない",
+                "Invalid town ego: legend['!'].ego 65 (object 54): incompatible object kind"));
     }
     SUBCASE("missing list at startup")
     {
@@ -306,8 +306,8 @@ TEST_CASE("Town load failures collect diagnostics and quit without requesting in
             data["startingPositions"][0]["x"] = 0;
             files.write(filename, data);
             check_town_load_failure(&term.player(), ParseErrorType::INVALID_VALUE, filename,
-                _("町のエゴ指定が不正です: featureRules[0] (記号 '!'): 品の種類と相性が合わない",
-                    "Invalid town ego: featureRules[0] (symbol '!'): incompatible object kind"));
+                _("町のエゴ指定が不正です: featureRules[0] (記号 '!').ego 65 (object 54): 品の種類と相性が合わない",
+                    "Invalid town ego: featureRules[0] (symbol '!').ego 65 (object 54): incompatible object kind"));
         }
         SUBCASE("invalid condition preserves detail before the summary")
         {

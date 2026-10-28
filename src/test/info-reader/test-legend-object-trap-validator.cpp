@@ -2,6 +2,7 @@
 #include "info-reader/quest-reader.h"
 #include "info-reader/town-map-reader.h"
 #include "info-reader/town-preferences-reader.h"
+#include "locale/language-switcher.h"
 #include "system/dungeon/quest-definition.h"
 #include "system/enums/terrain/terrain-tag.h"
 #include "system/terrain/terrain-definition.h"
@@ -10,7 +11,9 @@
 #include "test/info-reader/scoped-reader-state.h"
 #include "test/scoped-vector-wrapper.h"
 #include "test/system/terrain-list-test-access.h"
+#include "view/display-messages.h"
 #include <doctest/doctest.h>
+#include <fmt/format.h>
 #include <nlohmann/json.hpp>
 #include <string>
 
@@ -119,11 +122,14 @@ TEST_CASE("TownPreferencesReader checks conflicts from an injected cell parser")
 {
     const auto data = nlohmann::json::parse(R"({"version":1,"legend":{"#":{"terrain":"NONE","caveInfo":[]}}})");
     TownPreferencesLegend legend;
-    const auto parse_cell = +[](const nlohmann::json &, QuestLegendCell &cell) -> tl::expected<void, ParseErrorType> {
+    const auto parse_cell = +[](const nlohmann::json &, QuestLegendCell &cell, std::string &) -> tl::expected<void, ParseErrorType> {
         cell.object_is_quest_reward = true;
         cell.grid.trap = 1;
         return {};
     };
+    ScopedMessageCapture diagnostics;
     CHECK(test::to_error_code(TownPreferencesReader(data).read(legend, parse_cell)) == ParseErrorType::INVALID_VALUE);
     CHECK(legend.empty());
+    REQUIRE(diagnostics.messages().size() == 1);
+    CHECK(diagnostics.messages().front() == fmt::format(_("町の配置指定が不正です: legend['#'].trap: {}", "Invalid town placement: legend['#'].trap: {}"), describe_legend_object_trap_conflict()));
 }

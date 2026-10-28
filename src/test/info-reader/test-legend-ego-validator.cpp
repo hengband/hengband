@@ -97,3 +97,13 @@ TEST_CASE("Legend ego validator follows strict equipment compatibility")
         CHECK(validate_legend_ego(grid, false).has_value() == (object != 413 && object != 414 && object != 54 && object != 55));
     }
 }
+
+TEST_CASE("Legend ego diagnostic includes fixed or random ego and object ID")
+{
+    dungeon_grid grid{};
+    grid.ego = EgoType::DF;
+    grid.object = 54;
+    CHECK(describe_legend_ego_spec(grid) == "ego 65 (object 54)");
+    grid.random |= RANDOM_EGO;
+    CHECK(describe_legend_ego_spec(grid) == "ego random (object 54)");
+}

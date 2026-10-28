@@ -64,3 +64,5 @@ struct DeferredQuestLegendCell {
 };
 
 tl::expected<void, ParseErrorType> parse_quest_legend_cell_deferred(const nlohmann::json &cell_data, DeferredQuestLegendCell &out);
+
+tl::expected<void, ParseErrorType> parse_quest_legend_cell_deferred(const nlohmann::json &cell_data, DeferredQuestLegendCell &out, std::string &reason);

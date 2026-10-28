@@ -3,9 +3,12 @@
 #include "locale/language-switcher.h"
 #include "system/dungeon/quest-fixed-map.h"
 #include "system/enums/terrain/terrain-tag.h"
+#include "system/terrain/terrain-definition.h"
+#include "system/terrain/terrain-list.h"
 #include "test/info-reader/legend-ego-fixture.h"
 #include "test/info-reader/parse-result-helpers.h"
 #include "test/info-reader/scoped-reader-state.h"
+#include "test/scoped-vector-wrapper.h"
 #include "test/system/terrain-list-test-access.h"
 #include "view/display-messages.h"
 #include <cstdint>
@@ -27,7 +30,7 @@ nlohmann::json make_town_preferences()
     };
 }
 
-tl::expected<void, ParseErrorType> parse_test_cell(const nlohmann::json &data, QuestLegendCell &cell)
+tl::expected<void, ParseErrorType> parse_test_cell(const nlohmann::json &data, QuestLegendCell &cell, std::string &)
 {
     const auto &terrain = data["terrain"].get_ref<const std::string &>();
     if (terrain == "INVALID") {
@@ -206,6 +209,45 @@ TEST_CASE("TownPreferencesReader reports incompatible ego with legend key")
     CHECK(test::to_error_code(TownPreferencesReader(data).read(legend, parse_quest_legend_cell)) == ParseErrorType::INVALID_VALUE);
     CHECK(legend.empty());
     REQUIRE(diagnostics.messages().size() == 1);
-    CHECK(diagnostics.messages().front() == _("町のエゴ指定が不正です: legend['A']: 品の種類と相性が合わない",
-                                                "Invalid town ego: legend['A']: incompatible object kind"));
+    CHECK(diagnostics.messages().front() == _("町のエゴ指定が不正です: legend['A'].ego 65 (object 54): 品の種類と相性が合わない",
+                                                "Invalid town ego: legend['A'].ego 65 (object 54): incompatible object kind"));
+}
+
+TEST_CASE("TownPreferencesReader reports object trap conflicts with legend key")
+{
+    const test::ScopedReaderState reader_state;
+    const test::TerrainListTestAccess none_tag(TerrainTag::NONE, 0);
+    auto &terrains = TerrainList::get_instance();
+    const test::ScopedVectorWrapper<TerrainList> terrain_state(terrains);
+    terrains.resize(2);
+    terrains.get_terrain(0).tag = "NONE";
+    terrains.get_terrain(1).tag = "TRAP_PIT";
+    auto data = make_town_preferences();
+    data["legend"]["A"]["terrain"] = "*";
+    data["legend"]["A"]["object"] = 54;
+    data["legend"]["A"]["trap"] = "TRAP_PIT";
+    ScopedMessageCapture diagnostics;
+    TownPreferencesLegend legend;
+    CHECK(test::to_error_code(TownPreferencesReader(data).read(legend, parse_quest_legend_cell)) == ParseErrorType::INVALID_VALUE);
+    CHECK(legend.empty());
+    REQUIRE(diagnostics.messages().size() == 1);
+    CHECK(diagnostics.messages().front() == _("町の配置指定が不正です: legend['A'].trap: 品と罠の指定の片方が配置時に無視される組み合わせです",
+                                                "Invalid town placement: legend['A'].trap: This object/trap combination silently ignores one placement"));
+}
+
+TEST_CASE("TownPreferencesReader reports reasons from an injected cell parser")
+{
+    const auto data = nlohmann::json::parse(R"({"version":1,"legend":{"#":{"terrain":"NONE","caveInfo":[]}}})");
+    TownPreferencesLegend legend{ { '?', dungeon_grid{} } };
+    const auto parse_cell = +[](const nlohmann::json &, QuestLegendCell &, std::string &reason) -> tl::expected<void, ParseErrorType> {
+        reason = "Injected reason";
+        return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
+    };
+    ScopedMessageCapture diagnostics;
+    CHECK(test::to_error_code(TownPreferencesReader(data).read(legend, parse_cell)) == ParseErrorType::INVALID_VALUE);
+    REQUIRE(legend.size() == 1);
+    CHECK(legend.front().first == '?');
+    REQUIRE(diagnostics.messages().size() == 1);
+    CHECK(diagnostics.messages().front() == _("町の配置指定が不正です: legend['#'].trap: Injected reason",
+                                                "Invalid town placement: legend['#'].trap: Injected reason"));
 }
