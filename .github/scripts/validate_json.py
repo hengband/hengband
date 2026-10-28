@@ -318,6 +318,8 @@ def validate_artifact_semantics(data: dict, valid_baseitem_keys: set[tuple[int, 
                 require_integer(artifact[field], path + [field])
         for field in ("type_value", "subtype_value"):
             require_integer(artifact["base_item"][field], path + ["base_item", field])
+        if not 0 <= artifact["cost"] <= BASEITEM_COST_MAX:
+            raise ValidationError(f"cost must be in 0..{BASEITEM_COST_MAX}", path=path + ["cost"])
         kind = artifact["base_item"]["type_value"]
         if not 0 <= kind <= 127:
             raise ValidationError("type_value must be in 0..127", path=path + ["base_item", "type_value"])

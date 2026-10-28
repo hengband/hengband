@@ -368,6 +368,18 @@ class ArtifactDefinitionValidationTest(unittest.TestCase):
         ok, message = self.validate_with_baseitems(self.sample, [japanese_only, english_only])
         self.assertTrue(ok, message)
 
+    def test_cost_cap_matches_baseitems_and_egos(self):
+        maximum = (2**31 - 1) // 32
+        for cost in (0, maximum, maximum + 1):
+            with self.subTest(cost=cost):
+                record = {**self.sample, "cost": cost}
+                self.check(record, cost <= maximum, None if cost <= maximum else ["artifacts", 0, "cost"])
+                if cost <= maximum:
+                    validate_artifact_semantics({"artifacts": [record]})
+                else:
+                    with self.assertRaises(ValidationError):
+                        validate_artifact_semantics({"artifacts": [record]})
+
     def test_base_item_type_and_subtype_boundaries(self):
         for kind, maximum in ((127, 128), (128, 128), (1, 128), (19, 63), (23, 63),
                               (90, 3), (107, 3), (55, 32), (65, 31), (66, 30)):

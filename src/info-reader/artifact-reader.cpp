@@ -77,7 +77,7 @@ tl::expected<void, ParseErrorType> ArtifactReader::read() const
         msg_print(_("アーティファクトの重量読込失敗。", "Failed to load weight of artifact."));
         return result;
     }
-    if (const auto result = info_set_integer(get_json_value(this->art_data, "cost"), artifact.cost, true, Range(0, 99999999)); !result) {
+    if (const auto result = info_set_integer(get_json_value(this->art_data, "cost"), artifact.cost, true, Range(0, ITEM_COST_MAX)); !result) {
         msg_print(_("アーティファクトの売値読込失敗。", "Failed to load cost of artifact."));
         return result;
     }

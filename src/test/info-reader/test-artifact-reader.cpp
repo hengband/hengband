@@ -535,3 +535,24 @@ TEST_CASE("ArtifactReader shares baseitem type and subtype boundaries")
         }
     }
 }
+
+TEST_CASE("ArtifactReader shares the item cost cap")
+{
+    for (const auto cost : { 0, ITEM_COST_MAX, ITEM_COST_MAX + 1 }) {
+        CAPTURE(cost);
+        test::ScopedReaderState reader_state;
+        test::ArtifactListTestAccess artifact_state;
+        ScopedArtifactBaseitem baseitem_state;
+        auto session = ArtifactReader::create_session();
+        auto data = make_artifact();
+        data["cost"] = cost;
+        const auto accepted = cost <= ITEM_COST_MAX;
+        const auto result = test::read_and_commit(ArtifactReader(data, session), session);
+        CHECK(test::to_error_code(result) == (accepted ? ParseErrorType::NONE : ParseErrorType::INVALID_VALUE));
+        CHECK(ArtifactList::get_instance().empty() == !accepted);
+        CHECK(session.last_id().has_value() == accepted);
+        if (accepted) {
+            CHECK(ArtifactList::get_instance().get_artifact(i2enum<FixedArtifactId>(1)).cost == cost);
+        }
+    }
+}
