@@ -155,6 +155,28 @@ void init_json_reader(std::string_view filename, std::string_view keyname, Defin
         init_json(filename, keyname, dhdt, definition_list, parser, retouch, allow_empty, validate_root);
     }
 }
+
+/*!
+ * @brief 構造化診断を返す Reader の解析、診断表示と成功時の確定を共通化する。
+ */
+template <typename Reader, typename DefinitionList>
+void init_diagnostic_reader(std::string_view filename, std::string_view keyname, DefinitionHashDataType dhdt, DefinitionList &definition_list, typename Reader::Session &session, fmt::format_string<const std::string &, const std::string &, const std::string &> label_format, std::function<void()> retouch = nullptr, bool allow_empty = true)
+{
+    auto parser = [&session, filename, label_format](nlohmann::json &element) {
+        Reader reader(element, session);
+        const auto result = reader.read();
+        if (!result) {
+            const auto &diagnostic = reader.error().value();
+            msg_print("{}: {}", filename, fmt::format(label_format, diagnostic.id, diagnostic.path, diagnostic.reason));
+        }
+        if (result) {
+            session.commit();
+        }
+        return result;
+    };
+    init_json(filename, keyname, dhdt, definition_list, parser, retouch, allow_empty);
+}
+
 }
 
 /*!
@@ -191,19 +213,7 @@ void init_class_skills_info()
 {
     class_skills_info.assign(PLAYER_CLASS_TYPE_MAX, {});
     auto session = SkillReader::create_session();
-    auto parser = [&session](nlohmann::json &element) {
-        SkillReader reader(element, session);
-        const auto result = reader.read();
-        if (!result) {
-            const auto &diagnostic = reader.error().value();
-            msg_print(_("ClassSkillDefinitions.jsonc: 職業{}の{}: {}", "ClassSkillDefinitions.jsonc: class {} at {}: {}"), diagnostic.class_id, diagnostic.path, diagnostic.reason);
-        }
-        if (result) {
-            session.commit();
-        }
-        return result;
-    };
-    init_json("ClassSkillDefinitions.jsonc", "classes", DefinitionHashDataType::CLASS_SKILLS, class_skills_info, parser, [&session] {
+    init_diagnostic_reader<SkillReader>("ClassSkillDefinitions.jsonc", "classes", DefinitionHashDataType::CLASS_SKILLS, class_skills_info, session, _("職業{}の{}: {}", "class {} at {}: {}"), [&session] {
         if (session.last_id() != PLAYER_CLASS_TYPE_MAX - 1) {
             quit(fmt::format(_("ClassSkillDefinitions.jsonc: 職業{}の$.classes: 職業レコードが不足しています", "ClassSkillDefinitions.jsonc: class {} at $.classes: missing class records"), session.last_id().value_or(-1) + 1));
         }
@@ -288,19 +298,7 @@ void init_spell_info()
 void init_vaults_info()
 {
     auto session = VaultReader::create_session();
-    auto parser = [&session](nlohmann::json &element) {
-        VaultReader reader(element, session);
-        const auto result = reader.read();
-        if (!result) {
-            const auto &diagnostic = reader.error().value();
-            msg_print(_("VaultDefinitions.jsonc: Vault{}の{}: {}", "VaultDefinitions.jsonc: vault {} at {}: {}"), diagnostic.id, diagnostic.path, diagnostic.reason);
-        }
-        if (result) {
-            session.commit();
-        }
-        return result;
-    };
-    init_json("VaultDefinitions.jsonc", "vaults", DefinitionHashDataType::VAULTS, vaults_info, parser, nullptr, false);
+    init_diagnostic_reader<VaultReader>("VaultDefinitions.jsonc", "vaults", DefinitionHashDataType::VAULTS, vaults_info, session, _("Vault{}の{}: {}", "vault {} at {}: {}"), nullptr, false);
 }
 
 /*!

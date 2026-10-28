@@ -5,14 +5,13 @@
 #include "object/tval-types.h"
 #include "player/player-skill.h"
 #include "util/enum-converter.h"
-#include <algorithm>
 #include <array>
 #include <fmt/format.h>
 #include <utility>
 
 namespace {
-constexpr auto weapon_names = std::to_array({ "BOW", "DIGGING", "HAFTED", "POLEARM", "SWORD" });
-constexpr auto skill_names = std::to_array({ "MARTIAL_ARTS", "TWO_WEAPON", "RIDING", "SHIELD" });
+constexpr auto weapon_names = std::to_array<std::string_view>({ "BOW", "DIGGING", "HAFTED", "POLEARM", "SWORD" });
+constexpr auto skill_names = std::to_array<std::string_view>({ "MARTIAL_ARTS", "TWO_WEAPON", "RIDING", "SHIELD" });
 }
 
 SkillReader::Session SkillReader::create_session(tl::optional<int> last_id)
@@ -21,51 +20,9 @@ SkillReader::Session SkillReader::create_session(tl::optional<int> last_id)
 }
 
 SkillReader::SkillReader(const nlohmann::json &class_data, Session &session)
-    : class_data(class_data)
-    , session(session)
+    : RecordDiagnostic(session)
+    , class_data(class_data)
 {
-}
-
-const std::optional<SkillReadError> &SkillReader::error() const
-{
-    return this->diagnostic;
-}
-
-tl::expected<void, ParseErrorType> SkillReader::fail(ParseErrorType code, std::string_view path, std::string_view reason)
-{
-    this->diagnostic = SkillReadError{ this->class_id, std::string(path), std::string(reason) };
-    return tl::unexpected(code);
-}
-
-tl::expected<void, ParseErrorType> SkillReader::check_keys(const nlohmann::json &data, std::string_view path, std::initializer_list<std::string_view> keys)
-{
-    if (!data.is_object()) {
-        return this->fail(ParseErrorType::INVALID_TYPE, path, _("オブジェクトが必要です", "expected an object"));
-    }
-    for (const auto key : keys) {
-        if (!data.contains(key)) {
-            if (path == "$" && key == "id") {
-                const auto result = this->session.read(get_json_value(data, key));
-                return this->fail(result.error().code, "$.id", result.error().reason);
-            }
-            return this->fail(ParseErrorType::TOO_FEW_ARGUMENTS, fmt::format("{}.{}", path, key), _("必須項目がありません", "missing required field"));
-        }
-    }
-    for (const auto &key : data.items()) {
-        if (std::find(keys.begin(), keys.end(), key.key()) == keys.end()) {
-            return this->fail(ParseErrorType::UNDEFINED_DIRECTIVE, fmt::format("{}.{}", path, key.key()), _("未知の項目です", "unknown field"));
-        }
-    }
-    return {};
-}
-
-tl::expected<void, ParseErrorType> SkillReader::read_integer(const nlohmann::json &data, int &value, int maximum, std::string_view path)
-{
-    if (const auto result = info_set_integer(data, value, true, Range(0, maximum)); !result) {
-        const auto reason = data.is_number_integer() ? fmt::format(_("0以上{}以下の整数が必要です", "expected an integer in [0, {}]"), maximum) : _("整数が必要です", "expected an integer");
-        return this->fail(result.error(), path, reason);
-    }
-    return {};
 }
 
 /*!
@@ -75,9 +32,8 @@ tl::expected<void, ParseErrorType> SkillReader::read_integer(const nlohmann::jso
  */
 tl::expected<void, ParseErrorType> SkillReader::read()
 {
-    this->diagnostic.reset();
-    this->class_id = this->class_data.is_object() && this->class_data.contains("id") ? this->class_data["id"].dump() : "<unknown>";
-    if (const auto result = this->check_keys(this->class_data, "$", { "id", "weapons", "skills" }); !result) {
+    this->begin_read(this->class_data);
+    if (const auto result = this->check_keys(this->class_data, "$", std::to_array<std::string_view>({ "id", "weapons", "skills" })); !result) {
         return result;
     }
 
@@ -101,13 +57,13 @@ tl::expected<void, ParseErrorType> SkillReader::read()
 tl::expected<void, ParseErrorType> SkillReader::read_weapons(skill_table &skills)
 {
     const auto &weapons = this->class_data["weapons"];
-    if (const auto result = this->check_keys(weapons, "$.weapons", { "BOW", "DIGGING", "HAFTED", "POLEARM", "SWORD" }); !result) {
+    if (const auto result = this->check_keys(weapons, "$.weapons", weapon_names); !result) {
         return result;
     }
     for (size_t i = 0; i < weapon_names.size(); ++i) {
         const auto &weapon = weapons[weapon_names[i]];
         const auto path = fmt::format("$.weapons.{}", weapon_names[i]);
-        if (const auto result = this->check_keys(weapon, path, { "start_ranks", "max_ranks" }); !result) {
+        if (const auto result = this->check_keys(weapon, path, std::to_array<std::string_view>({ "start_ranks", "max_ranks" })); !result) {
             return result;
         }
         const auto tval = ItemKindType::BOW + static_cast<int>(i);
@@ -128,10 +84,10 @@ tl::expected<void, ParseErrorType> SkillReader::read_weapons(skill_table &skills
         for (size_t sval = 0; sval < starts.size(); ++sval) {
             int start, maximum;
             const auto start_path = fmt::format("{}.start_ranks[{}]", path, sval);
-            if (const auto result = this->read_integer(start_ranks[sval], start, 4, start_path); !result) {
+            if (const auto result = this->read_integer(start_ranks[sval], start, 0, 4, start_path); !result) {
                 return result;
             }
-            if (const auto result = this->read_integer(max_ranks[sval], maximum, 4, fmt::format("{}.max_ranks[{}]", path, sval)); !result) {
+            if (const auto result = this->read_integer(max_ranks[sval], maximum, 0, 4, fmt::format("{}.max_ranks[{}]", path, sval)); !result) {
                 return result;
             }
             if (start > maximum) {
@@ -147,21 +103,21 @@ tl::expected<void, ParseErrorType> SkillReader::read_weapons(skill_table &skills
 tl::expected<void, ParseErrorType> SkillReader::read_skills(skill_table &skills)
 {
     const auto &data = this->class_data["skills"];
-    if (const auto result = this->check_keys(data, "$.skills", { "MARTIAL_ARTS", "TWO_WEAPON", "RIDING", "SHIELD" }); !result) {
+    if (const auto result = this->check_keys(data, "$.skills", skill_names); !result) {
         return result;
     }
     for (size_t i = 0; i < skill_names.size(); ++i) {
         const auto &skill = data[skill_names[i]];
         const auto path = fmt::format("$.skills.{}", skill_names[i]);
-        if (const auto result = this->check_keys(skill, path, { "start_exp", "max_exp" }); !result) {
+        if (const auto result = this->check_keys(skill, path, std::to_array<std::string_view>({ "start_exp", "max_exp" })); !result) {
             return result;
         }
         int start, maximum;
         const auto max_exp = PlayerSkill::weapon_exp_at(PlayerSkillRank::MASTER);
-        if (const auto result = this->read_integer(skill["start_exp"], start, max_exp, fmt::format("{}.start_exp", path)); !result) {
+        if (const auto result = this->read_integer(skill["start_exp"], start, 0, max_exp, fmt::format("{}.start_exp", path)); !result) {
             return result;
         }
-        if (const auto result = this->read_integer(skill["max_exp"], maximum, max_exp, fmt::format("{}.max_exp", path)); !result) {
+        if (const auto result = this->read_integer(skill["max_exp"], maximum, 0, max_exp, fmt::format("{}.max_exp", path)); !result) {
             return result;
         }
         if (start > maximum) {

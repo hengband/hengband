@@ -278,6 +278,7 @@
     <ClCompile Include="..\..\src\info-reader\quest-reader.cpp" />
     <ClCompile Include="..\..\src\info-reader\race-info-tokens-table.cpp" />
     <ClCompile Include="..\..\src\info-reader\race-reader.cpp" />
+    <ClCompile Include="..\..\src\info-reader\record-diagnostic.cpp" />
     <ClCompile Include="..\..\src\info-reader\skill-reader.cpp" />
     <ClCompile Include="..\..\src\info-reader\spell-reader.cpp" />
     <ClCompile Include="..\..\src\info-reader\terrain-reader.cpp" />
@@ -1190,6 +1191,7 @@
     <ClInclude Include="..\..\src\info-reader\race-reader.h" />
     <ClInclude Include="..\..\src\info-reader\random-grid-effect-types.h" />
     <ClInclude Include="..\..\src\info-reader\range.h" />
+    <ClInclude Include="..\..\src\info-reader\record-diagnostic.h" />
     <ClInclude Include="..\..\src\info-reader\skill-reader.h" />
     <ClInclude Include="..\..\src\info-reader\spell-reader.h" />
     <ClInclude Include="..\..\src\info-reader\symbol-reader-util.h" />
