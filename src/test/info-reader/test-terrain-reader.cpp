@@ -678,3 +678,37 @@ TEST_CASE("TerrainReader checks lit type before symbol length and color")
     data["symbol"].erase("lit");
     CHECK(test::to_error_code(test::read_and_commit(TerrainReader(data, session), session)) == ParseErrorType::TOO_FEW_ARGUMENTS);
 }
+
+TEST_CASE("TerrainReader rejects unusable gold dice and preserves valid dice")
+{
+    for (const auto *dice : { "0d0", "0d1", "1d0", "-1d2", "1d-2", "1d1", "2d6" }) {
+        CAPTURE(dice);
+        TerrainStateGuard guard;
+        auto &terrains = TerrainList::get_instance();
+        terrains.resize(0);
+        const auto original = make_terrain();
+        REQUIRE(test::read_and_commit(TerrainReader(original, guard.session), guard.session).has_value());
+        const auto before = terrains.get_terrain(0);
+        guard.session = {};
+        auto data = original;
+        data["interactions"] = { { "DROP_GOLD", dice } };
+        const auto parsed = Dice::parse(dice);
+        const auto accepted = parsed.is_valid();
+        const auto result = test::read_and_commit(TerrainReader(data, guard.session), guard.session);
+        CHECK(test::to_error_code(result) == (accepted ? ParseErrorType::NONE : ParseErrorType::INVALID_VALUE));
+        REQUIRE(terrains.size() == 1);
+        if (accepted) {
+            CHECK(terrains.get_terrain(0).gold_drop == parsed);
+            CHECK(terrains.get_terrain(0).flags.has(TerrainCharacteristics::HAS_GOLD));
+        } else {
+            check_existing_terrain(terrains.get_terrain(0), before);
+            CHECK(terrains.get_terrain(0).gold_drop == before.gold_drop);
+            data["id"] = 3;
+            CHECK(test::to_error_code(test::read_and_commit(TerrainReader(data, guard.session), guard.session)) == ParseErrorType::INVALID_VALUE);
+            CHECK(terrains.size() == 1);
+            data["id"] = 0;
+            data["interactions"]["DROP_GOLD"] = "1d1";
+            CHECK(test::read_and_commit(TerrainReader(data, guard.session), guard.session).has_value());
+        }
+    }
+}

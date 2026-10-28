@@ -554,10 +554,12 @@ tl::expected<void, ParseErrorType> TerrainReader::set_terrain_interactions(Terra
             if (const auto result = info_set_dice(value_obj, dice, true); !result) {
                 return result;
             }
-            if (dice.is_valid()) {
-                terrain.gold_drop = dice;
-                terrain.flags.set(TerrainCharacteristics::HAS_GOLD);
+            if (!dice.is_valid()) {
+                msg_print(_("金貨ドロップのダイスが不正。", "Invalid gold drop dice."));
+                return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
             }
+            terrain.gold_drop = dice;
+            terrain.flags.set(TerrainCharacteristics::HAS_GOLD);
             continue;
         }
 

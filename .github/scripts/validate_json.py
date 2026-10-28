@@ -1008,7 +1008,7 @@ def validate_terrain_semantics(data: dict, schema_path: Path) -> None:
             action_path = path + ["interactions", action]
             if action == "DROP_GOLD":
                 # schemaは正のNdMを保証する。書式とintの範囲はアイテムのダイスと同じ規則で確かめる。
-                require_reader_dice(value, action_path)
+                require_reader_dice(value, action_path, 1, INT_MAX)
                 continue
             if action == "DESTROYED":
                 require_tag(value, action_path)
