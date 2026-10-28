@@ -478,3 +478,30 @@ TEST_CASE("ArtifactReader preserves existing definitions after early and late pa
         CHECK(session.last_id().value_or(-1) == id - 1);
     }
 }
+
+TEST_CASE("ArtifactReader pins flag array type errors and missing values")
+{
+    for (const auto *path : { "/flags" }) {
+        for (const auto *input : { "42", "[1]", "null", "missing", "[]" }) {
+            CAPTURE(path);
+            CAPTURE(input);
+            test::ScopedReaderState reader_state;
+            test::ArtifactListTestAccess artifact_state;
+            ScopedArtifactBaseitem baseitem;
+            auto session = ArtifactReader::create_session();
+            auto data = make_artifact();
+            const auto pointer = nlohmann::json::json_pointer(path);
+            const std::string input_text = input;
+            if (input_text == "missing") {
+                data[pointer.parent_pointer()].erase(pointer.back());
+            } else {
+                data[pointer] = nlohmann::json::parse(input);
+            }
+            auto expected = ParseErrorType::NONE;
+            if (input_text == "42" || input_text == "[1]") {
+                expected = ParseErrorType::INVALID_TYPE;
+            }
+            CHECK(test::to_error_code(test::read_and_commit(ArtifactReader(data, session), session)) == expected);
+        }
+    }
+}

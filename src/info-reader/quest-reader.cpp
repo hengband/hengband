@@ -497,18 +497,16 @@ tl::expected<void, ParseErrorType> QuestReader::set_definition(QuestFixedMap &pa
 
     const auto &flags = get_json_value(definition, "flags");
     if (!flags.is_null()) {
-        if (!flags.is_array()) {
-            return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
-        }
-        for (const auto &flag : flags) {
-            if (!flag.is_string()) {
-                return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
-            }
-            const auto it = QUEST_FLAG_TOKENS.find(flag.get<std::string>());
+        const auto grab_flag = [&meta](const auto &flag) {
+            const auto it = QUEST_FLAG_TOKENS.find(flag.template get_ref<const std::string &>());
             if (it == QUEST_FLAG_TOKENS.end()) {
-                return tl::make_unexpected(ParseErrorType::INVALID_FLAG);
+                return false;
             }
             meta.flags |= it->second;
+            return true;
+        };
+        if (const auto result = info_read_flag_array(flags, grab_flag); !result) {
+            return result;
         }
     }
 

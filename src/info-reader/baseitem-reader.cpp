@@ -524,17 +524,5 @@ tl::expected<void, ParseErrorType> BaseitemReader::set_baseitem_flags(BaseitemDe
     if (flag_data.is_null()) {
         return {};
     }
-    if (!flag_data.is_array()) {
-        return tl::unexpected(ParseErrorType::INVALID_TYPE);
-    }
-
-    for (auto &flag : flag_data) {
-        if (!flag.is_string()) {
-            return tl::unexpected(ParseErrorType::INVALID_TYPE);
-        }
-        if (!this->grab_one_baseitem_flag(baseitem, flag.get<std::string>())) {
-            return tl::unexpected(ParseErrorType::INVALID_FLAG);
-        }
-    }
-    return {};
+    return info_read_flag_array(flag_data, [this, &baseitem](const auto &flag) { return this->grab_one_baseitem_flag(baseitem, flag.template get<std::string>()); });
 }

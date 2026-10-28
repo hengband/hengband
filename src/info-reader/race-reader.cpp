@@ -550,19 +550,7 @@ tl::expected<void, ParseErrorType> RaceReader::set_mon_flags(MonraceDefinition &
     if (flag_data.is_null()) {
         return {};
     }
-    if (!flag_data.is_array()) {
-        return tl::unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
-    }
-
-    for (const auto &flag : flag_data) {
-        if (!flag.is_string()) {
-            return tl::unexpected(ParseErrorType::INVALID_TYPE);
-        }
-        if (!this->grab_one_basic_flag(monrace, flag.get<std::string>())) {
-            return tl::unexpected(ParseErrorType::INVALID_FLAG);
-        }
-    }
-    return {};
+    return info_read_flag_array(flag_data, [this, &monrace](const auto &flag) { return this->grab_one_basic_flag(monrace, flag.template get<std::string>()); });
 }
 
 /*!
@@ -614,19 +602,7 @@ tl::expected<void, ParseErrorType> RaceReader::set_mon_skills(MonraceDefinition 
         return {};
     }
 
-    if (!skill_list->is_array()) {
-        return tl::unexpected(ParseErrorType::INVALID_TYPE);
-    }
-
-    for (auto &skill : skill_list->items()) {
-        if (!skill.value().is_string()) {
-            return tl::unexpected(ParseErrorType::INVALID_TYPE);
-        }
-        if (!this->grab_one_spell_flag(monrace, skill.value().get<std::string>())) {
-            return tl::unexpected(ParseErrorType::INVALID_FLAG);
-        }
-    }
-    return {};
+    return info_read_flag_array(*skill_list, [this, &monrace](const nlohmann::json &flag) { return this->grab_one_spell_flag(monrace, flag.get<std::string>()); });
 }
 
 /*!

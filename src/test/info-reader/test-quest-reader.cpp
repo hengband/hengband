@@ -1298,3 +1298,54 @@ TEST_CASE("Quest legend rejects ego id keys regardless of random value")
         CHECK(deferred.cell.grid.object == 42);
     }
 }
+
+TEST_CASE("QuestReader metadata flags retain type errors and error precedence")
+{
+    const auto invalid_values = nlohmann::json::parse(R"([42, "SILENT", {}, true, [1], ["SILENT", 1], [1, "UNKNOWN"]])");
+    for (const auto &flags : invalid_values) {
+        CAPTURE(flags);
+        auto data = make_quest_with_description("New description");
+        data["definition"]["flags"] = flags;
+        QuestType quest;
+        QuestFixedMap fixed_map;
+        set_existing_output(quest, fixed_map);
+        CHECK(test::to_error_code(QuestReader(data, quest, fixed_map).read()) == ParseErrorType::INVALID_TYPE);
+        check_existing_output(quest, fixed_map);
+    }
+    const auto unknown_values = nlohmann::json::parse(R"([["UNKNOWN"], [""], ["SILENT", "UNKNOWN"], ["UNKNOWN", 1]])");
+    for (const auto &flags : unknown_values) {
+        CAPTURE(flags);
+        auto data = make_quest_with_description("New description");
+        data["definition"]["flags"] = flags;
+        QuestType quest;
+        QuestFixedMap fixed_map;
+        set_existing_output(quest, fixed_map);
+        CHECK(test::to_error_code(QuestReader(data, quest, fixed_map).read()) == ParseErrorType::INVALID_FLAG);
+        check_existing_output(quest, fixed_map);
+    }
+}
+
+TEST_CASE("QuestReader metadata flags accept missing null empty and duplicate tokens")
+{
+    auto data = make_quest_with_description("New description");
+    uint32_t expected_flags = 0;
+    SUBCASE("Missing") {}
+    SUBCASE("Null")
+    {
+        data["definition"]["flags"] = nullptr;
+    }
+    SUBCASE("Empty array")
+    {
+        data["definition"]["flags"] = nlohmann::json::array();
+    }
+    SUBCASE("Duplicate tokens")
+    {
+        data["definition"]["flags"] = { "SILENT", "PRESET", "ONCE", "TOWER", "SILENT" };
+        expected_flags = QUEST_FLAG_SILENT | QUEST_FLAG_PRESET | QUEST_FLAG_ONCE | QUEST_FLAG_TOWER;
+    }
+    QuestType quest;
+    QuestFixedMap fixed_map;
+    set_existing_output(quest, fixed_map);
+    REQUIRE(QuestReader(data, quest, fixed_map).read().has_value());
+    CHECK(fixed_map.metadata.flags == expected_flags);
+}

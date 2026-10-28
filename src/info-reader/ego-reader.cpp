@@ -131,9 +131,6 @@ tl::expected<void, ParseErrorType> EgoReader::read() const
 
 bool EgoReader::grab_one_flag(EgoItemDefinition &ego, const nlohmann::json &flag) const
 {
-    if (!flag.is_string()) {
-        return false;
-    }
     const auto &name = flag.get_ref<const std::string &>();
     return TrFlags::grab_one_flag(ego.flags, baseitem_flags, name) ||
            EnumClassFlagGroup<ItemGenerationTraitType>::grab_one_flag(ego.gen_flags, baseitem_geneneration_flags, name);
@@ -141,9 +138,6 @@ bool EgoReader::grab_one_flag(EgoItemDefinition &ego, const nlohmann::json &flag
 
 bool EgoReader::grab_one_extra_flag(ego_generate_type &extra, const nlohmann::json &flag) const
 {
-    if (!flag.is_string()) {
-        return false;
-    }
     const auto &name = flag.get_ref<const std::string &>();
     if (const auto it = baseitem_flags.find(name); it != baseitem_flags.end()) {
         extra.tr_flags.push_back(it->second);
@@ -164,18 +158,10 @@ bool EgoReader::grab_one_extra_flag(ego_generate_type &extra, const nlohmann::js
 tl::expected<void, ParseErrorType> EgoReader::set_flags(EgoItemDefinition &ego) const
 {
     const auto &flags = get_json_value(this->ego_data, "flags");
-    if (!flags.is_array()) {
-        if (flags.is_null()) {
-            return {};
-        }
-        return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
+    if (flags.is_null()) {
+        return {};
     }
-    for (const auto &flag : flags) {
-        if (!this->grab_one_flag(ego, flag)) {
-            return tl::make_unexpected(flag.is_string() ? ParseErrorType::INVALID_FLAG : ParseErrorType::INVALID_TYPE);
-        }
-    }
-    return {};
+    return info_read_flag_array(flags, [this, &ego](const auto &flag) { return this->grab_one_flag(ego, flag); });
 }
 
 /*!
@@ -212,10 +198,8 @@ tl::expected<void, ParseErrorType> EgoReader::set_extra_flags(EgoItemDefinition 
         if (flags.empty()) {
             return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
         }
-        for (const auto &flag : flags) {
-            if (!this->grab_one_extra_flag(extra, flag)) {
-                return tl::make_unexpected(flag.is_string() ? ParseErrorType::INVALID_FLAG : ParseErrorType::INVALID_TYPE);
-            }
+        if (const auto result = info_read_flag_array(flags, [this, &extra](const auto &flag) { return this->grab_one_extra_flag(extra, flag); }); !result) {
+            return result;
         }
         ego.xtra_flags.push_back(std::move(extra));
     }

@@ -1041,7 +1041,7 @@ TEST_CASE("DungeonReader propagates nested parse errors without publishing parti
         { "/generation/minDepth", "depth", ParseErrorType::INVALID_TYPE },
         { "/generation/pit", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
         { "/generation/pit", { "ORC", "UNKNOWN" }, ParseErrorType::INVALID_FLAG },
-        { "/generation/nest", { "UNDEAD", 1 }, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/generation/nest", { "UNDEAD", 1 }, ParseErrorType::INVALID_TYPE },
         { "/generation/nest", { "UNKNOWN" }, ParseErrorType::INVALID_FLAG },
         { "/floor", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
         { "/floor/tiles/0/rate", 99, ParseErrorType::INVALID_VALUE },
@@ -1066,7 +1066,7 @@ TEST_CASE("DungeonReader propagates nested parse errors without publishing parti
         { "/final_floor/guardian", 2, ParseErrorType::INVALID_VALUE },
         { "/final_floor/object", 0, ParseErrorType::INVALID_VALUE },
         { "/final_floor/artifact", 2, ParseErrorType::INVALID_VALUE },
-        { "/flags", 1, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/flags", 1, ParseErrorType::INVALID_TYPE },
         { "/flags", { "MAZE", "UNKNOWN" }, ParseErrorType::INVALID_FLAG },
         { "/monsters", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
         { "/monsters/additionalSpawnProbability", 0, ParseErrorType::INVALID_VALUE },
@@ -1076,7 +1076,7 @@ TEST_CASE("DungeonReader propagates nested parse errors without publishing parti
         { "/monsters/symbols", { "D", "XX" }, ParseErrorType::INVALID_VALUE },
         { "/monsters/symbols", { "D", 1 }, ParseErrorType::TOO_FEW_ARGUMENTS },
         { "/monsters/spells", { "HASTE", "UNKNOWN" }, ParseErrorType::INVALID_FLAG },
-        { "/monsters/spells", { "HASTE", 1 }, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/monsters/spells", { "HASTE", 1 }, ParseErrorType::INVALID_TYPE },
     };
     for (const auto &field : invalid_fields) {
         CAPTURE(field.path);
@@ -1218,4 +1218,32 @@ TEST_CASE("DungeonReader publishes complete nested definitions and accepts optio
     }
     CHECK(session.last_id().value_or(-1) == 0);
     CHECK(DungeonList::get_instance().size() == 1);
+}
+
+TEST_CASE("DungeonReader pins flag array type errors and missing values")
+{
+    for (const auto *path : { "/flags", "/generation/pit", "/generation/nest", "/monsters/flags", "/monsters/spells" }) {
+        for (const auto *input : { "42", "[1]", "null", "missing", "[]" }) {
+            CAPTURE(path);
+            CAPTURE(input);
+            DungeonReaderStateGuard guard;
+            auto session = DungeonReader::create_session();
+            auto data = make_dungeon();
+            const auto pointer = nlohmann::json::json_pointer(path);
+            const std::string input_text = input;
+            if (input_text == "missing") {
+                data[pointer.parent_pointer()].erase(pointer.back());
+            } else {
+                data[pointer] = nlohmann::json::parse(input);
+            }
+            auto expected = ParseErrorType::NONE;
+            if (input_text == "42" || input_text == "[1]") {
+                expected = ParseErrorType::INVALID_TYPE;
+            }
+            if (std::string(path).starts_with("/generation/") && (input_text == "null" || input_text == "missing")) {
+                expected = ParseErrorType::TOO_FEW_ARGUMENTS;
+            }
+            CHECK(test::to_error_code(test::read_and_commit(DungeonReader(data, session), session)) == expected);
+        }
+    }
 }

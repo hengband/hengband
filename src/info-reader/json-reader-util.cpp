@@ -5,6 +5,30 @@
 #include "util/dice.h"
 
 /*!
+ * @brief フラグの文字列配列を先頭から読み込み、各トークンを呼び出し元へ渡す。
+ * @details nullや欠落、空配列の可否は呼び出し元で判断する。重複を除去せず、
+ * 最初のエラーで停止する。エラーより前に処理済みのフラグは巻き戻さない。
+ * @param json フラグ配列
+ * @param grab_flag 各文字列の解釈と格納を行う関数。未知のトークンならfalseを返す。
+ * @return 成功時は空、型の誤りはINVALID_TYPE、未知のトークンはINVALID_FLAG
+ */
+tl::expected<void, ParseErrorType> info_read_flag_array(const nlohmann::json &json, const std::function<bool(const nlohmann::json &)> &grab_flag)
+{
+    if (!json.is_array()) {
+        return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
+    }
+    for (const auto &flag : json) {
+        if (!flag.is_string()) {
+            return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
+        }
+        if (!grab_flag(flag)) {
+            return tl::make_unexpected(ParseErrorType::INVALID_FLAG);
+        }
+    }
+    return {};
+}
+
+/*!
  * @brief 定義ファイルのルートとレコード配列を、入力を変更せず検証する。
  * @param root JSON文書のルート
  * @param key 必須のレコード配列キー

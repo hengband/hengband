@@ -128,23 +128,13 @@ tl::expected<void, ParseErrorType> TerrainReader::read() const
     }
 
     const auto &flags_obj = get_json_value(element, "flags");
-    if (flags_obj.is_null() || !flags_obj.is_array()) {
+    if (flags_obj.is_null()) {
         return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
     }
-
-    for (const auto &f_obj : flags_obj) {
-        if (!f_obj.is_string()) {
-            return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
-        }
-
-        const auto f = f_obj.get<std::string>();
-        if (f.empty()) {
-            continue;
-        }
-
-        if (!this->grab_one_feat_flag(terrain, f)) {
-            return tl::make_unexpected(ParseErrorType::INVALID_FLAG);
-        }
+    if (const auto result = info_read_flag_array(flags_obj, [this, &terrain](const nlohmann::json &flag) {
+            const auto token = flag.get<std::string>();
+            return token.empty() || this->grab_one_feat_flag(terrain, token); }); !result) {
+        return result;
     }
     if (const auto result = this->set_terrain_door(terrain); !result) {
         return result;
