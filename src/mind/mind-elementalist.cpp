@@ -22,7 +22,6 @@
 #include "hpmp/hp-mp-processor.h"
 #include "io/command-repeater.h"
 #include "io/input-context.h"
-#include "io/input-key-acceptor.h"
 #include "io/input-key-requester.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
@@ -1192,7 +1191,7 @@ static tl::optional<ElementRealmType> get_element_realm(PlayerType *player_ptr, 
         put_str(buf, 10, 10);
         os = cs;
 
-        char c = inkey();
+        const auto c = input_key_with_context({ InputKind::BIRTH, buf, BirthInputDetails{ BirthStep::ELEMENT_REALM } });
         cs = interpret_realm_select_key(cs, n, c);
 
         if (c == 'S') {
