@@ -10,7 +10,6 @@
 #include "core/visuals-reseter.h"
 #include "io/files-util.h"
 #include "io/input-context.h"
-#include "io/input-key-acceptor.h"
 #include "system/angband-exceptions.h"
 #include "system/player-type-definition.h"
 #include "term/gameterm.h"
@@ -248,28 +247,24 @@ static void exe_cmd_save_screen_html_with_naming()
 
 /*!
  * @brief 記念撮影の方式を問い合わせる
+ * @param prompt 呼び出し元が表示した問い合わせ
  * @param html_dump HTMLダンプするか否か
- * @return ダンプするならTRUE、キャンセルならFALSE
+ * @return ダンプするなら true、キャンセルなら false
  */
-static bool ask_html_dump(bool *html_dump)
+static bool ask_html_dump(std::string_view prompt, bool *html_dump)
 {
-    while (true) {
-        char c = inkey();
-        if (c == 'Y' || c == 'y') {
-            *html_dump = false;
-            return true;
-        }
-
-        if (c == 'H' || c == 'h') {
-            *html_dump = true;
-            return true;
-        }
-
-        prt("", 0, 0);
-        return false;
+    const auto c = input_key_with_context(InputKind::CONFIRM, prompt);
+    if (c == 'Y' || c == 'y') {
+        *html_dump = false;
+        return true;
     }
 
-    // コンパイル警告対応.
+    if (c == 'H' || c == 'h') {
+        *html_dump = true;
+        return true;
+    }
+
+    prt("", 0, 0);
     return false;
 }
 
@@ -343,9 +338,10 @@ static void do_cmd_save_screen_text(int wid, int hgt)
  */
 void do_cmd_save_screen(PlayerType *player_ptr)
 {
-    prt(_("記念撮影しますか？ [(y)es/(h)tml/(n)o] ", "Save screen dump? [(y)es/(h)tml/(n)o] "), 0, 0);
+    constexpr auto prompt = _("記念撮影しますか？ [(y)es/(h)tml/(n)o] ", "Save screen dump? [(y)es/(h)tml/(n)o] ");
+    prt(prompt, 0, 0);
     bool html_dump;
-    if (!ask_html_dump(&html_dump)) {
+    if (!ask_html_dump(prompt, &html_dump)) {
         return;
     }
 
