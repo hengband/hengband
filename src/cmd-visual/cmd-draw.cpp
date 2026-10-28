@@ -23,6 +23,7 @@
 #include "view/display-player.h"
 #include "world/world.h"
 #include <fmt/format.h>
+#include <string_view>
 #include <tl/optional.hpp>
 
 /*!
@@ -78,9 +79,16 @@ void do_cmd_redraw(PlayerType *player_ptr)
     }
 }
 
-static tl::optional<int> input_status_command(PlayerType *player_ptr, int page)
+/*!
+ * @brief キャラクター情報の画面のキーを待ち、押したキーの処理をする
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param page 表示しているページ
+ * @param prompt 呼び出し元が画面の下に表示したキーの案内
+ * @return 次に表示するページ。画面を閉じるなら tl::nullopt
+ */
+static tl::optional<int> input_status_command(PlayerType *player_ptr, int page, std::string_view prompt)
 {
-    auto c = inkey();
+    const auto c = input_key_with_context(InputKind::COMMAND_CHAR, prompt);
     switch (c) {
     case 'c':
         get_name(player_ptr);
@@ -133,7 +141,7 @@ void do_cmd_player_status(PlayerType *player_ptr)
         }
 
         term_putstr(2, 23, -1, TERM_WHITE, prompt);
-        auto next_page = input_status_command(player_ptr, page);
+        auto next_page = input_status_command(player_ptr, page, prompt);
         if (!next_page) {
             break;
         }
