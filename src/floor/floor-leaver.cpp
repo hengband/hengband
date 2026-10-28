@@ -38,12 +38,16 @@ static void check_riding_preservation(PlayerType *player_ptr)
         return;
     }
 
-    const auto &monster = player_ptr->current_floor_ptr->m_list[player_ptr->riding];
+    const auto riding_m_idx = player_ptr->riding;
+    const auto &monster = player_ptr->current_floor_ptr->m_list[riding_m_idx];
     if (monster.has_parent()) {
         player_ptr->dismount();
     } else {
         party_mon[0] = monster.clone();
-        delete_monster_idx(player_ptr, player_ptr->riding);
+        // 新しい階で乗り直すので、両手持ちの設定などは戻さずに降りてから消す。
+        // 乗ったまま消すと、delete_monster_idx() が dismount() で設定を戻してしまう
+        player_ptr->ride_monster(0);
+        delete_monster_idx(player_ptr, riding_m_idx);
     }
 }
 
