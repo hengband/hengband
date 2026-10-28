@@ -108,6 +108,10 @@ uint32_t MonsterEntityWriter::write_monster_flags() const
         set_bits(flags, SaveDataMonsterFlagType::PARENT);
     }
 
+    if (this->monster.mflag.any()) {
+        set_bits(flags, SaveDataMonsterFlagType::MFLAG);
+    }
+
     wr_u32b(flags);
     return flags;
 }
@@ -171,5 +175,9 @@ void MonsterEntityWriter::write_monster_info(uint32_t flags) const
 
     if (any_bits(flags, SaveDataMonsterFlagType::PARENT)) {
         wr_s16b(this->monster.parent_m_idx);
+    }
+
+    if (any_bits(flags, SaveDataMonsterFlagType::MFLAG)) {
+        wr_FlagGroup(this->monster.mflag, wr_byte);
     }
 }

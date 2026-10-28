@@ -90,4 +90,7 @@ void MonsterLoader50::rd_monster(MonsterEntity &monster)
     }
 
     monster.parent_m_idx = any_bits(flags, SaveDataMonsterFlagType::PARENT) ? rd_s16b() : 0;
+    if (any_bits(flags, SaveDataMonsterFlagType::MFLAG)) {
+        rd_FlagGroup(monster.mflag, rd_byte);
+    }
 }

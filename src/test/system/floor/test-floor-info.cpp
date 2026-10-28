@@ -1,3 +1,4 @@
+#include "system/enums/monrace/monrace-id.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/item/item-entity.h"
@@ -9,6 +10,7 @@
 #include <doctest/doctest.h>
 #include <initializer_list>
 #include <memory>
+#include <vector>
 
 TEST_CASE("Walls between the old and new player rows and columns are redrawn")
 {
@@ -78,5 +80,50 @@ TEST_CASE("Walls between the old and new player rows and columns are redrawn")
         check_marked({ 4, 3 }, { 4, 4 }, {}, {});
         CHECK((floor.get_grid(floor_on_row).info & CAVE_NOTE) == 0);
         CHECK((floor.get_grid({ 7, 3 }).info & CAVE_NOTE) == 0);
+    }
+}
+
+TEST_CASE("The monster timed effect list keeps monster indices in ascending order")
+{
+    auto floor_ptr = std::make_unique<FloorType>();
+    auto &floor = *floor_ptr;
+    const auto to_vector = [&floor](MonsterTimedEffect mte) {
+        const auto &list = floor.mproc_list.at(mte);
+        return std::vector<short>(list.begin(), list.end());
+    };
+
+    SUBCASE("Indices are sorted regardless of the order of additions and removals")
+    {
+        floor.add_mproc(5, MonsterTimedEffect::SLEEP);
+        floor.add_mproc(2, MonsterTimedEffect::SLEEP);
+        floor.add_mproc(9, MonsterTimedEffect::SLEEP);
+        floor.add_mproc(7, MonsterTimedEffect::SLEEP);
+        floor.remove_mproc(2, MonsterTimedEffect::SLEEP);
+        floor.add_mproc(3, MonsterTimedEffect::SLEEP);
+        CHECK(to_vector(MonsterTimedEffect::SLEEP) == std::vector<short>{ 3, 5, 7, 9 });
+        CHECK(floor.mproc_list.at(MonsterTimedEffect::FAST).empty());
+    }
+
+    SUBCASE("Rebuilding the list does not change the order")
+    {
+        floor.m_max = 6;
+        for (short i = 1; i < floor.m_max; i++) {
+            floor.m_list[i].r_idx = MonraceId::FILTHY_URCHIN;
+        }
+
+        floor.m_list[2].r_idx = MonraceId::PLAYER;
+        floor.m_list[4].mtimed[MonsterTimedEffect::SLEEP] = 10;
+        floor.m_list[1].mtimed[MonsterTimedEffect::SLEEP] = 10;
+        floor.m_list[2].mtimed[MonsterTimedEffect::SLEEP] = 10;
+        floor.m_list[5].mtimed[MonsterTimedEffect::STUN] = 3;
+        floor.add_mproc(4, MonsterTimedEffect::SLEEP);
+        floor.add_mproc(1, MonsterTimedEffect::SLEEP);
+        floor.add_mproc(5, MonsterTimedEffect::STUN);
+        CHECK(to_vector(MonsterTimedEffect::SLEEP) == std::vector<short>{ 1, 4 });
+
+        // 死んでいる 2 番は登録されず、並びは作り直す前と同じ
+        floor.reset_mproc();
+        CHECK(to_vector(MonsterTimedEffect::SLEEP) == std::vector<short>{ 1, 4 });
+        CHECK(to_vector(MonsterTimedEffect::STUN) == std::vector<short>{ 5 });
     }
 }

@@ -3,6 +3,7 @@
 #include "floor/floor-generator.h"
 #include "floor/floor-object.h"
 #include "floor/floor-save-util.h"
+#include "floor/floor-save.h"
 #include "game-option/birth-options.h"
 #include "grid/grid.h"
 #include "io/files-util.h"
@@ -29,7 +30,25 @@
 #include "system/player-type-definition.h"
 #include "util/angband-files.h"
 #include "util/finalizer.h"
-#include <fmt/format.h>
+#include <cstdio>
+
+/*!
+ * @brief 保存フロアの識別情報を読み込む
+ * @return 読み込んだ識別情報
+ * @details wr_saved_floor_header() と同じ順に読む。
+ */
+saved_floor_type rd_saved_floor_header()
+{
+    saved_floor_type sf{};
+    sf.floor_id = rd_s16b();
+    sf.savefile_id = rd_byte();
+    sf.dun_level = rd_s16b();
+    sf.last_visit = rd_s32b();
+    sf.visit_mark = rd_u32b();
+    sf.upper_floor_id = rd_s16b();
+    sf.lower_floor_id = rd_s16b();
+    return sf;
+}
 
 /*!
  * @brief 保存されたフロアを読み込む / Read the saved floor
@@ -56,34 +75,11 @@ errr rd_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
         floor.dun_level = rd_s16b();
         floor.base_level = floor.dun_level;
     } else {
-        if (rd_s16b() != sf_ptr->floor_id) {
+        if (rd_saved_floor_header() != *sf_ptr) {
             return 171;
         }
 
-        if (rd_byte() != sf_ptr->savefile_id) {
-            return 171;
-        }
-
-        if (rd_s16b() != sf_ptr->dun_level) {
-            return 171;
-        }
         floor.dun_level = sf_ptr->dun_level;
-
-        if (rd_s32b() != sf_ptr->last_visit) {
-            return 171;
-        }
-
-        if (rd_u32b() != sf_ptr->visit_mark) {
-            return 171;
-        }
-
-        if (rd_s16b() != sf_ptr->upper_floor_id) {
-            return 171;
-        }
-
-        if (rd_s16b() != sf_ptr->lower_floor_id) {
-            return 171;
-        }
     }
 
     floor.base_level = rd_s16b();
@@ -194,12 +190,46 @@ errr rd_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
 
         auto &monster = floor.m_list[m_idx];
         monster_loader->rd_monster(monster);
+        // 倒されたモンスターの跡 (空きの番号) は、番号を保つためにそのまま書かれている
+        if (!monster.is_valid()) {
+            floor.m_cnt--;
+            continue;
+        }
+
         auto &grid = floor.get_grid(monster.get_position());
         grid.m_idx = m_idx;
         monster.get_real_monrace().increment_current_numbers();
     }
 
     return 0;
+}
+
+/*!
+ * @brief 一時保存フロアのファイルの先頭 (暗号化のバイトと識別子) を読み、チェックサムを数え始める
+ * @return 今回の実行で書かれたファイルならtrue
+ */
+static bool rd_saved_floor_file_sign()
+{
+    load_xor_byte = 0;
+    strip_bytes(1);
+    v_check = 0L;
+    x_check = 0L;
+    return rd_u32b() == saved_floor_file_sign;
+}
+
+/*!
+ * @brief 一時保存フロアのファイルの末尾のチェックサム 2 つを読み、読んだデータと合うか確かめる
+ * @return 合えばtrue
+ */
+static bool rd_saved_floor_checksums()
+{
+    const auto n_v_check = v_check;
+    if (rd_u32b() != n_v_check) {
+        return false;
+    }
+
+    const auto n_x_check = x_check;
+    return rd_u32b() == n_x_check;
 }
 
 /*!
@@ -210,17 +240,11 @@ errr rd_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
  */
 static bool load_floor_aux(PlayerType *player_ptr, saved_floor_type *sf_ptr)
 {
-    load_xor_byte = 0;
-    strip_bytes(1);
-
-    v_check = 0L;
-    x_check = 0L;
-
     auto &system = AngbandSystem::get_instance();
     system.set_version({ H_VER_MAJOR, H_VER_MINOR, H_VER_PATCH, H_VER_EXTRA });
     loading_savefile_version = SAVEFILE_VERSION;
 
-    if (saved_floor_file_sign != rd_u32b()) {
+    if (!rd_saved_floor_file_sign()) {
         return false;
     }
 
@@ -228,13 +252,7 @@ static bool load_floor_aux(PlayerType *player_ptr, saved_floor_type *sf_ptr)
         return false;
     }
 
-    auto n_v_check = v_check;
-    if (rd_u32b() != n_v_check) {
-        return false;
-    }
-
-    auto n_x_check = x_check;
-    return rd_u32b() == n_x_check;
+    return rd_saved_floor_checksums();
 }
 
 /*!
@@ -281,10 +299,7 @@ bool load_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mode
         old_loading_savefile_version = loading_savefile_version;
     }
 
-    auto floor_savefile = savefile.string();
-    const auto ext = fmt::format(".F{:02}", sf_ptr->savefile_id);
-    floor_savefile.append(ext);
-
+    const auto floor_savefile = get_saved_floor_name(sf_ptr->savefile_id);
     safe_setuid_grab();
     loading_savefile = angband_fopen(floor_savefile, FileOpenMode::READ, true);
     safe_setuid_drop();
@@ -302,10 +317,7 @@ bool load_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mode
 
         angband_fclose(loading_savefile);
         safe_setuid_grab();
-        if (!(mode & SLF_NO_KILL)) {
-            (void)fd_kill(floor_savefile);
-        }
-
+        (void)fd_kill(floor_savefile);
         safe_setuid_drop();
     }
 
@@ -319,4 +331,68 @@ bool load_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mode
     }
 
     return is_save_successful;
+}
+
+/*!
+ * @brief 一時保存フロアのデータを、内容を解釈せずにバイト列として読み出す
+ * @param sf 読み出す保存フロア
+ * @return wr_saved_floor() が書いたデータのうち、フロアの識別情報の後の部分。
+ * ファイルが無い、壊れている、別のフロアのものであれば nullopt
+ * @details セーブデータを書き出すときに、今のフロアを書き換えずにほかの保存フロアを書き写すために使う。
+ * 確かめ方は load_floor_aux() と同じで、ファイルは消さない。
+ */
+tl::optional<std::vector<byte>> read_saved_floor_data(const saved_floor_type &sf)
+{
+    const auto floor_savefile = get_saved_floor_name(sf.savefile_id);
+    safe_setuid_grab();
+    auto *fff = angband_fopen(floor_savefile, FileOpenMode::READ, true);
+    safe_setuid_drop();
+    if (!fff) {
+        return tl::nullopt;
+    }
+
+    const auto finalizer = util::make_finalizer([fff, old_fff = loading_savefile, old_xor_byte = load_xor_byte, old_v_check = v_check, old_x_check = x_check] {
+        angband_fclose(fff);
+        loading_savefile = old_fff;
+        load_xor_byte = old_xor_byte;
+        v_check = old_v_check;
+        x_check = old_x_check;
+    });
+
+    if (fseek(fff, 0, SEEK_END) != 0) {
+        return tl::nullopt;
+    }
+
+    const auto file_size = ftell(fff);
+    if ((file_size < 0) || (fseek(fff, 0, SEEK_SET) != 0)) {
+        return tl::nullopt;
+    }
+
+    loading_savefile = fff;
+    if (!rd_saved_floor_file_sign() || (rd_saved_floor_header() != sf)) {
+        return tl::nullopt;
+    }
+
+    // 残りはデータとチェックサム 2 つ
+    constexpr auto checksums_size = 4 + 4;
+    const auto data_pos = ftell(fff);
+    if (data_pos < 0) {
+        return tl::nullopt;
+    }
+
+    const auto data_size = file_size - data_pos - checksums_size;
+    if (data_size < 0) {
+        return tl::nullopt;
+    }
+
+    std::vector<byte> data(static_cast<size_t>(data_size));
+    for (auto &value : data) {
+        value = rd_byte();
+    }
+
+    if (!rd_saved_floor_checksums() || ferror(fff)) {
+        return tl::nullopt;
+    }
+
+    return data;
 }

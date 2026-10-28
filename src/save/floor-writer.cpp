@@ -7,17 +7,14 @@
 #include "io/files-util.h"
 #include "io/uid-checker.h"
 #include "load/floor-loader.h"
-#include "monster/monster-compaction.h"
 #include "save/item-writer.h"
 #include "save/monster-entity-writer.h"
 #include "save/save-util.h"
-#include "system/deferred-update-requests.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
 #include "util/angband-files.h"
-#include <fmt/format.h>
 #include <range/v3/view.hpp>
 
 namespace {
@@ -50,12 +47,27 @@ std::vector<GridTemplate> generate_sorted_grid_templates(const FloorType &floor)
             continue;
         }
 
-        templates.emplace_back(grid.info, grid.feat, grid.mimic, grid.special, static_cast<uint16_t>(1));
+        templates.emplace_back(GridTemplate::to_saved_info(grid.info), grid.feat, grid.mimic, grid.special, static_cast<uint16_t>(1));
     }
 
     std::stable_sort(templates.begin(), templates.end(),
         [](const auto &x, const auto &y) { return x.occurrence < y.occurrence; });
     return templates;
+}
+
+/*!
+ * @brief 保存フロアの識別情報を書き込む
+ * @param sf 書き込む保存フロア
+ */
+void wr_saved_floor_header(const saved_floor_type &sf)
+{
+    wr_s16b(sf.floor_id);
+    wr_byte(static_cast<byte>(sf.savefile_id));
+    wr_s16b(static_cast<int16_t>(sf.dun_level));
+    wr_s32b(sf.last_visit);
+    wr_u32b(sf.visit_mark);
+    wr_s16b(sf.upper_floor_id);
+    wr_s16b(sf.lower_floor_id);
 }
 }
 
@@ -69,13 +81,7 @@ void wr_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
     if (!sf_ptr) {
         wr_s16b((int16_t)floor.dun_level);
     } else {
-        wr_s16b(sf_ptr->floor_id);
-        wr_byte((byte)sf_ptr->savefile_id);
-        wr_s16b((int16_t)sf_ptr->dun_level);
-        wr_s32b(sf_ptr->last_visit);
-        wr_u32b(sf_ptr->visit_mark);
-        wr_s16b(sf_ptr->upper_floor_id);
-        wr_s16b(sf_ptr->lower_floor_id);
+        wr_saved_floor_header(*sf_ptr);
     }
 
     wr_u16b((uint16_t)floor.base_level);
@@ -155,19 +161,7 @@ void wr_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
  */
 bool wr_dungeon(PlayerType *player_ptr)
 {
-    auto &floor = *player_ptr->current_floor_ptr;
-    floor.forget_lite();
-    floor.forget_view();
-    floor.forget_mon_lite();
-    static constexpr auto flags = {
-        StatusRecalculatingFlag::VIEW,
-        StatusRecalculatingFlag::LITE,
-        StatusRecalculatingFlag::MONSTER_LITE,
-        StatusRecalculatingFlag::MONSTER_STATUSES,
-        StatusRecalculatingFlag::DISTANCE,
-        StatusRecalculatingFlag::FLOW,
-    };
-    DeferredUpdateRequests::get_instance().set_flags(flags);
+    const auto &floor = *player_ptr->current_floor_ptr;
     wr_s16b(max_floor_id);
     wr_byte(static_cast<uint8_t>(floor.dungeon_id));
     if (!player_ptr->in_saved_floor()) {
@@ -178,39 +172,43 @@ bool wr_dungeon(PlayerType *player_ptr)
     }
 
     /*** In the dungeon ***/
-    wr_byte(MAX_SAVED_FLOORS);
-    for (int i = 0; i < MAX_SAVED_FLOORS; i++) {
-        saved_floor_type *sf_ptr = &saved_floors[i];
-        wr_s16b(sf_ptr->floor_id);
-        wr_byte((byte)sf_ptr->savefile_id);
-        wr_s16b((int16_t)sf_ptr->dun_level);
-        wr_s32b(sf_ptr->last_visit);
-        wr_u32b(sf_ptr->visit_mark);
-        wr_s16b(sf_ptr->upper_floor_id);
-        wr_s16b(sf_ptr->lower_floor_id);
-    }
-
-    saved_floor_type *cur_sf_ptr;
-    cur_sf_ptr = get_sf_ptr(player_ptr->floor_id);
-    if (!save_floor(player_ptr, cur_sf_ptr, SLF_SECOND)) {
+    const auto *cur_sf_ptr = get_sf_ptr(player_ptr->floor_id);
+    if (!cur_sf_ptr) {
         return false;
     }
 
-    for (int i = 0; i < MAX_SAVED_FLOORS; i++) {
-        saved_floor_type *sf_ptr = &saved_floors[i];
-        if (!is_saved_floor(sf_ptr)) {
+    wr_byte(MAX_SAVED_FLOORS);
+    for (const auto &sf : saved_floors) {
+        wr_saved_floor_header(sf);
+    }
+
+    // 今のフロアはメモリから書き、ほかの保存フロアは一時ファイルの中身を書き写す。
+    // 今のフロアを読み直さないので、セーブして続けてもフロアの状態は変わらない
+    for (auto &sf : saved_floors) {
+        if (!is_saved_floor(&sf)) {
             continue;
         }
-        if (!load_floor(player_ptr, sf_ptr, (SLF_SECOND | SLF_NO_KILL))) {
+
+        if (&sf == cur_sf_ptr) {
+            wr_byte(0);
+            wr_saved_floor(player_ptr, &sf);
+            continue;
+        }
+
+        const auto data = read_saved_floor_data(sf);
+        if (!data) {
             wr_byte(1);
             continue;
         }
 
         wr_byte(0);
-        wr_saved_floor(player_ptr, sf_ptr);
+        wr_saved_floor_header(sf);
+        for (const auto value : *data) {
+            wr_byte(value);
+        }
     }
 
-    return load_floor(player_ptr, cur_sf_ptr, (SLF_SECOND));
+    return true;
 }
 
 /*!
@@ -220,8 +218,6 @@ bool wr_dungeon(PlayerType *player_ptr)
  */
 static bool save_floor_aux(PlayerType *player_ptr, saved_floor_type *sf_ptr)
 {
-    compact_monsters(player_ptr, 0);
-
     auto tmp8u = static_cast<uint8_t>(Rand_external(256));
     save_xor_byte = 0;
     wr_byte(tmp8u);
@@ -256,9 +252,7 @@ bool save_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mode
         old_x_stamp = x_stamp;
     }
 
-    auto floor_savefile = savefile.string();
-    const auto ext = fmt::format(".F{:02}", sf_ptr->savefile_id);
-    floor_savefile.append(ext);
+    const auto floor_savefile = get_saved_floor_name(sf_ptr->savefile_id);
     safe_setuid_grab();
     fd_kill(floor_savefile);
     safe_setuid_drop();

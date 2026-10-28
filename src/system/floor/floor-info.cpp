@@ -69,8 +69,7 @@ FloorType::FloorType()
     ranges::generate(this->o_list, [] { return std::make_shared<ItemEntity>(); });
 
     for (const auto mte : MONSTER_TIMED_EFFECT_RANGE) {
-        this->mproc_list[mte] = std::vector<short>(MAX_FLOOR_MONSTERS, {});
-        this->mproc_max[mte] = 0;
+        this->mproc_list[mte] = {};
     }
 }
 
@@ -541,12 +540,13 @@ void FloorType::leave_dungeon(bool state)
 }
 
 /*!
- * @brief モンスターの時限ステータスリストを初期化する
- * @details リストは逆順に走査し、死んでいるモンスターは初期化対象外とする
+ * @brief モンスターの時限ステータスリストを作り直す
+ * @details 死んでいるモンスターは対象外とする。
+ * リストは番号の順に並ぶので、作り直しても並びは変わらない。
  */
 void FloorType::reset_mproc()
 {
-    this->reset_mproc_max();
+    this->clear_mproc();
     for (short i = this->m_max - 1; i >= 1; i--) {
         const auto &monster = this->m_list[i];
         if (!monster.is_valid()) {
@@ -561,54 +561,35 @@ void FloorType::reset_mproc()
     }
 }
 
-void FloorType::reset_mproc_max()
+/*!
+ * @brief モンスターの時限ステータスリストを空にする
+ */
+void FloorType::clear_mproc()
 {
     for (const auto mte : MONSTER_TIMED_EFFECT_RANGE) {
-        this->mproc_max[mte] = 0;
+        this->mproc_list[mte].clear();
     }
 }
 
 /*!
- * @brief モンスターの時限ステータスを取得する
+ * @brief モンスターの時限ステータスリストに追加する
  * @param m_idx モンスターの参照ID
- * @param mte モンスターの時限ステータスID
- * @return 残りターン値
- */
-tl::optional<int> FloorType::get_mproc_index(short m_idx, MonsterTimedEffect mte)
-{
-    const auto &cur_mproc_list = this->mproc_list[mte];
-    for (auto i = this->mproc_max[mte] - 1; i >= 0; i--) {
-        if (cur_mproc_list[i] == m_idx) {
-            return i;
-        }
-    }
-
-    return tl::nullopt;
-}
-
-/*!
- * @brief モンスターの時限ステータスリストを追加する
- * @param m_idx モンスターの参照ID
- * @return mte 追加したいモンスターの時限ステータスID
+ * @param mte 追加したいモンスターの時限ステータスID
  */
 void FloorType::add_mproc(short m_idx, MonsterTimedEffect mte)
 {
-    if (this->mproc_max[mte] < MAX_FLOOR_MONSTERS) {
-        this->mproc_list[mte][this->mproc_max[mte]++] = m_idx;
-    }
+    this->mproc_list[mte].insert(m_idx);
 }
 
 /*!
- * @brief モンスターの時限ステータスリストを削除
- * @return m_idx モンスターの参照ID
- * @return mte 削除したいモンスターの時限ステータスID
+ * @brief モンスターの時限ステータスリストから削除する
+ * @param m_idx モンスターの参照ID
+ * @param mte 削除したいモンスターの時限ステータスID
+ * @return リストにあって削除したらtrue
  */
-void FloorType::remove_mproc(short m_idx, MonsterTimedEffect mte)
+bool FloorType::remove_mproc(short m_idx, MonsterTimedEffect mte)
 {
-    const auto mproc_idx = this->get_mproc_index(m_idx, mte);
-    if (mproc_idx >= 0) {
-        this->mproc_list[mte][*mproc_idx] = this->mproc_list[mte][--this->mproc_max[mte]];
-    }
+    return this->mproc_list[mte].erase(m_idx) > 0;
 }
 
 /*!

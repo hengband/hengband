@@ -2447,7 +2447,7 @@ static LRESULT PASCAL angband_window_procedure(HWND hWnd, UINT uMsg, WPARAM wPar
         AngbandSystem::get_instance().set_panic_save(true);
         signals_ignore_tstp();
         p_ptr->died_from = _("(緊急セーブ)", "(panic save)");
-        (void)save_player(p_ptr, SaveType::CLOSE_GAME);
+        (void)save_player(p_ptr);
         quit("");
         return 0;
     }

@@ -23,6 +23,7 @@
 #include "system/item/item-entity.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
+#include "system/monster-entity.h"
 #include "system/player-type-definition.h"
 #include "system/terrain/terrain-definition.h"
 #include "target/projection-path-calculator.h"
@@ -425,6 +426,12 @@ static void exe_leave_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
     floor.forget_lite();
     floor.forget_view();
     floor.forget_mon_lite();
+
+    // 一時的なフラグはこの階にいる間だけのものなので、戻ったときに離れたときの状態で判定しないよう消してから保存する
+    for (short m_idx = 1; m_idx < floor.m_max; m_idx++) {
+        floor.m_list[m_idx].mflag.clear();
+    }
+
     if (save_floor(player_ptr, sf_ptr, 0)) {
         return;
     }

@@ -110,6 +110,7 @@
     <ClCompile Include="..\..\src\test\io\test-tokenizer.cpp" />
     <ClCompile Include="..\..\src\test\knowledge\test-knowledge-features.cpp" />
     <ClCompile Include="..\..\src\test\load\test-angband-version-comparer.cpp" />
+    <ClCompile Include="..\..\src\test\load\test-floor-loader.cpp" />
     <ClCompile Include="..\..\src\test\locale\test-character-encoding.cpp" />
     <ClCompile Include="..\..\src\test\locale\test-japanese.cpp" />
     <ClCompile Include="..\..\src\test\lore\test-monster-lore-snapshot.cpp" />
@@ -130,6 +131,7 @@
     <ClCompile Include="..\..\src\test\player\test-process-name.cpp" />
     <ClCompile Include="..\..\src\test\racial\test-racial-android.cpp" />
     <ClCompile Include="..\..\src\test\save\test-item-writer.cpp" />
+    <ClCompile Include="..\..\src\test\save\test-monster-entity-writer.cpp" />
     <ClCompile Include="..\..\src\test\spell-realm\test-spells-hex.cpp" />
     <ClCompile Include="..\..\src\test\spell\test-spell-info.cpp" />
     <ClCompile Include="..\..\src\test\store\test-pricing.cpp" />

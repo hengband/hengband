@@ -1584,6 +1584,7 @@ hengband_test_SOURCES = \
 	test/io/test-tokenizer.cpp \
 	test/knowledge/test-knowledge-features.cpp \
 	test/load/test-angband-version-comparer.cpp \
+	test/load/test-floor-loader.cpp \
 	test/locale/test-character-encoding.cpp \
 	test/locale/test-japanese.cpp \
 	test/lore/test-monster-lore-snapshot.cpp \
@@ -1605,6 +1606,7 @@ hengband_test_SOURCES = \
 	test/store/test-store.cpp \
 	test/system/baseitem/test-baseitem-definition.cpp \
 	test/save/test-item-writer.cpp \
+	test/save/test-monster-entity-writer.cpp \
 	test/system/baseitem/test-baseitem-allocation.cpp \
 	test/system/baseitem/test-baseitem-list.cpp \
 	test/system/floor/test-floor-info.cpp \

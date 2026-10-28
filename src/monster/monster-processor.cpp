@@ -615,7 +615,7 @@ bool process_monster_fear(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MO
  * monster, and allowing fully energized monsters to move, attack, pass, etc.\n
  *\n
  * Note that monsters can never move in the monster array (except when the\n
- * "compact_monsters()" function is called by "dungeon()" or "save_player()").\n
+ * "compact_monsters()" function is called by "dungeon()").\n
  *\n
  * This function is responsible for at least half of the processor time\n
  * on a normal system with a "normal" amount of monsters and a player doing\n

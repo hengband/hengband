@@ -57,7 +57,7 @@ static void send_world_score_on_closing(PlayerType *player_ptr, bool do_send)
 
     AngbandSystem::get_instance().set_awaiting_report_score(true);
     player_ptr->is_dead = false;
-    if (!save_player(player_ptr, SaveType::CLOSE_GAME)) {
+    if (!save_player(player_ptr)) {
         msg_print(_("セーブ失敗！", "death save failed!"));
     }
 }
@@ -176,7 +176,7 @@ void close_game(PlayerType *player_ptr)
         world.play_time.update();
         InnerGameData::get_instance().add_play_time(world.play_time.elapsed_sec());
 
-        if (!save_player(player_ptr, SaveType::CLOSE_GAME)) {
+        if (!save_player(player_ptr)) {
             msg_print(_("セーブ失敗！", "death save failed!"));
         }
     } else {

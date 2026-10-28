@@ -272,7 +272,7 @@ void WorldTurnProcessor::process_world_monsters()
     }
 
     for (const auto mte : MONSTER_TIMED_EFFECT_RANGE) {
-        if (this->player_ptr->current_floor_ptr->mproc_max[mte] > 0) {
+        if (!this->player_ptr->current_floor_ptr->mproc_list[mte].empty()) {
             process_monsters_mtimed(this->player_ptr, mte);
         }
     }
