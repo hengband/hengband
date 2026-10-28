@@ -20,7 +20,7 @@ using namespace test;
 namespace {
 //! 行頭禁則文字の一覧のすべての文字
 #ifdef SJIS
-constexpr auto KINSOKU_CHARS = std::to_array<std::string_view>({
+constexpr auto LINE_START_KINSOKU_CHARS = std::to_array<std::string_view>({
     "\x81\x41", // 、
     "\x81\x42", // 。
     "\x81\x43", // ，
@@ -72,8 +72,8 @@ constexpr auto KINSOKU_CHARS = std::to_array<std::string_view>({
     "\x81\x68", // ”
     "\x81\x66", // ’
 });
-//! 行頭禁則文字の一覧の終わり括弧に対応する始め括弧 (行頭禁則文字ではない)
-constexpr auto OPENING_BRACKETS = std::to_array<std::string_view>({
+//! 行末禁則文字の一覧のすべての文字 (行頭禁則文字の一覧の終わり括弧に対応する始め括弧と、半角の始め括弧)
+constexpr auto LINE_END_KINSOKU_CHARS = std::to_array<std::string_view>({
     "\x81\x75", // 「
     "\x81\x77", // 『
     "\x81\x69", // （
@@ -85,9 +85,12 @@ constexpr auto OPENING_BRACKETS = std::to_array<std::string_view>({
     "\x81\x71", // 〈
     "\x81\x67", // “
     "\x81\x65", // ‘
+    "(",
+    "[",
+    "{",
 });
 #else
-constexpr auto KINSOKU_CHARS = std::to_array<std::string_view>({
+constexpr auto LINE_START_KINSOKU_CHARS = std::to_array<std::string_view>({
     "\xa1\xa2", // 、
     "\xa1\xa3", // 。
     "\xa1\xa4", // ，
@@ -139,8 +142,8 @@ constexpr auto KINSOKU_CHARS = std::to_array<std::string_view>({
     "\xa1\xc9", // ”
     "\xa1\xc7", // ’
 });
-//! 行頭禁則文字の一覧の終わり括弧に対応する始め括弧 (行頭禁則文字ではない)
-constexpr auto OPENING_BRACKETS = std::to_array<std::string_view>({
+//! 行末禁則文字の一覧のすべての文字 (行頭禁則文字の一覧の終わり括弧に対応する始め括弧と、半角の始め括弧)
+constexpr auto LINE_END_KINSOKU_CHARS = std::to_array<std::string_view>({
     "\xa1\xd6", // 「
     "\xa1\xd8", // 『
     "\xa1\xca", // （
@@ -152,28 +155,51 @@ constexpr auto OPENING_BRACKETS = std::to_array<std::string_view>({
     "\xa1\xd2", // 〈
     "\xa1\xc8", // “
     "\xa1\xc6", // ‘
+    "(",
+    "[",
+    "{",
 });
 #endif
 }
 
-TEST_CASE("is_kinsoku returns true for characters prohibited at the head of a line")
+TEST_CASE("is_line_start_kinsoku returns true for characters prohibited at the head of a line")
 {
-    for (auto i = 0U; i < KINSOKU_CHARS.size(); i++) {
+    for (auto i = 0U; i < LINE_START_KINSOKU_CHARS.size(); i++) {
         CAPTURE(i);
-        CHECK(is_kinsoku(KINSOKU_CHARS[i]));
+        CHECK(is_line_start_kinsoku(LINE_START_KINSOKU_CHARS[i]));
     }
 }
 
-TEST_CASE("is_kinsoku returns false for other characters")
+TEST_CASE("is_line_start_kinsoku returns false for other characters")
 {
-    CHECK_FALSE(is_kinsoku(KANJI_KAN));
-    for (auto i = 0U; i < OPENING_BRACKETS.size(); i++) {
+    CHECK_FALSE(is_line_start_kinsoku(KANJI_KAN));
+    for (auto i = 0U; i < LINE_END_KINSOKU_CHARS.size(); i++) {
         CAPTURE(i);
-        CHECK_FALSE(is_kinsoku(OPENING_BRACKETS[i]));
+        CHECK_FALSE(is_line_start_kinsoku(LINE_END_KINSOKU_CHARS[i]));
     }
 
-    CHECK_FALSE(is_kinsoku("a"));
-    CHECK_FALSE(is_kinsoku(KINSOKU_CHARS[0].substr(0, 1)));
+    CHECK_FALSE(is_line_start_kinsoku("a"));
+    CHECK_FALSE(is_line_start_kinsoku(LINE_START_KINSOKU_CHARS[0].substr(0, 1)));
+}
+
+TEST_CASE("is_line_end_kinsoku returns true for characters prohibited at the end of a line")
+{
+    for (auto i = 0U; i < LINE_END_KINSOKU_CHARS.size(); i++) {
+        CAPTURE(i);
+        CHECK(is_line_end_kinsoku(LINE_END_KINSOKU_CHARS[i]));
+    }
+}
+
+TEST_CASE("is_line_end_kinsoku returns false for other characters")
+{
+    CHECK_FALSE(is_line_end_kinsoku(KANJI_KAN));
+    for (auto i = 0U; i < LINE_START_KINSOKU_CHARS.size(); i++) {
+        CAPTURE(i);
+        CHECK_FALSE(is_line_end_kinsoku(LINE_START_KINSOKU_CHARS[i]));
+    }
+
+    CHECK_FALSE(is_line_end_kinsoku("a"));
+    CHECK_FALSE(is_line_end_kinsoku(")"));
 }
 
 #endif

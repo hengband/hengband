@@ -29,39 +29,43 @@ bool is_printable_as_is(std::string_view sv)
 
 /*!
  * @brief 行を分割できる位置
- * @details どちらも分割した後の次の行の先頭の位置 (バイト数)。分割できる位置が無ければ 0
+ * @details word_break と mid_word は、分割した後の次の行の先頭の位置 (バイト数)。分割できる位置が無ければ 0
  */
 struct SeparatePositions {
-    size_t word_break = 0; //!< 語の切れ目 (前後のどちらかが全角文字か、前が空白) で分割できる、もっとも後ろの位置
-    size_t mid_word = 0; //!< 語の途中 (半角文字どうしの間、半角の閉じ括弧・句読点の前を除く) で分割できる、もっとも後ろの位置
+    size_t word_break = 0; //!< 語の切れ目で分割できる、もっとも後ろの位置
+    size_t mid_word = 0; //!< 語の途中で分割できる、もっとも後ろの位置
+    bool needs_backtrack = false; //!< 行の末尾 (行の最後の文字と ch の間) で分けられず、語の途中までさかのぼってよいか
 };
 
 /*!
  * @brief 組み立て中の行を分割できる位置を探す
  * @param line 組み立て中の行
  * @param ch 行に収まらなかった次の文字
- * @return 語の切れ目と語の途中の、分割できる位置
- * @details 分割した後の次の行の先頭の文字 (行の末尾で分割するなら ch) が、空白でも行頭禁則文字でもない位置だけを候補にする。
- * 行の末尾は、ch が全角文字か、行の末尾が空白のときだけ候補にする。
+ * @return 語の切れ目と語の途中の、分割できる位置と、語の途中までさかのぼってよいか
+ * @details 分割できるかは classify_line_break() で決める。前が空白だけの位置は、空白だけの行ができるので候補にしない。
+ * 行の末尾で語の途中までさかのぼってよいか (needs_backtrack) は needs_line_break_backtrack() で決める。
+ * 行の末尾は、ch が全角文字か、行の末尾が空白のときだけ候補にする (全角文字の直後の半角文字なら、これまでどおり全角文字の前で分ける)。
  * 全角文字は shape_buffer() と同じく、前半バイトの後に 1 バイト以上続くときに 2 バイトをまとめて見る。
  */
 SeparatePositions find_separate_positions(std::string_view line, std::string_view ch)
 {
-    // 語の途中では、半角の閉じ括弧・句読点の前で分けない (次の行がこれらで始まり、前の語から離れるのを避ける)
-    constexpr std::string_view closing_punctuations = ")]},.!?:;";
     SeparatePositions positions;
-    auto is_prev_full_width = false;
-    auto is_prev_space = false;
+    std::string_view prev_char;
+    auto has_text = false; // 分ける位置より前に空白でない文字があるか (空白だけの行を作らない)
     for (size_t pos = 0; pos <= line.length();) {
         const auto is_end = pos == line.length();
         const auto is_full_width = is_end ? (ch.length() == 2) : is_multibyte_char_at(line, pos);
         const auto next_char = is_end ? ch : line.substr(pos, is_full_width ? 2 : 1);
-        // 行の末尾で分割するのは、次の文字が全角文字か前が空白のときだけにする (全角文字の直後の半角文字なら、これまでどおり全角文字の前で分ける)
-        const auto can_split = (pos > 0) && (!is_end || is_full_width || is_prev_space) && (next_char != " ") && !is_kinsoku(next_char);
-        if (can_split) {
-            if (is_full_width || is_prev_full_width || is_prev_space) {
+        const auto kind = classify_line_break(prev_char, next_char);
+        if (is_end) {
+            positions.needs_backtrack = needs_line_break_backtrack(prev_char, next_char);
+        }
+
+        const auto is_candidate = has_text && (!is_end || is_full_width || (prev_char == " "));
+        if (is_candidate) {
+            if (kind == LineBreakKind::WORD_BREAK) {
                 positions.word_break = pos;
-            } else if (closing_punctuations.find(next_char[0]) == std::string_view::npos) {
+            } else if (kind == LineBreakKind::MID_WORD) {
                 positions.mid_word = pos;
             }
         }
@@ -70,13 +74,55 @@ SeparatePositions find_separate_positions(std::string_view line, std::string_vie
             break;
         }
 
-        is_prev_full_width = is_full_width;
-        is_prev_space = next_char == " ";
+        has_text = has_text || (next_char != " ");
+        prev_char = next_char;
         pos += next_char.length();
     }
 
     return positions;
 }
+}
+
+/*!
+ * @brief 2 つの文字の間で行を分けられるかを決める
+ * @param prev 前の文字 (全角文字なら2バイト。行の先頭なら空)
+ * @param next 後ろの文字 (全角文字なら2バイト)
+ * @return 分けられないか、語の切れ目か、語の途中か
+ * @details 行の先頭 (前の文字が空)、後ろの文字が空か空白か行頭禁則文字の前、前の文字が行末禁則文字 (始め括弧) の後ろでは分けられない。
+ * 前後のどちらかが全角文字か、前が空白なら語の切れ目になる。
+ * 半角文字どうしの間は語の途中になるが、半角の閉じ括弧・句読点の前では分けない (次の行がこれらで始まり、前の語から離れるのを避ける)。
+ * 画面の折り返し (c_roff()) と文字列の分割 (shape_buffer()) で同じ規則を使う。
+ */
+LineBreakKind classify_line_break(std::string_view prev, std::string_view next)
+{
+    if (prev.empty() || next.empty() || (next == " ") || is_line_start_kinsoku(next) || is_line_end_kinsoku(prev)) {
+        return LineBreakKind::NONE;
+    }
+
+    if ((prev.length() == 2) || (next.length() == 2) || (prev == " ")) {
+        return LineBreakKind::WORD_BREAK;
+    }
+
+    constexpr std::string_view closing_punctuations = ")]},.!?:;";
+    return (closing_punctuations.find(next[0]) == std::string_view::npos) ? LineBreakKind::MID_WORD : LineBreakKind::NONE;
+}
+
+/*!
+ * @brief 2 つの文字の間で行を分けられないとき、その前の語の途中までさかのぼって分けてよいか
+ * @param prev 前の文字 (全角文字なら2バイト)
+ * @param next 後ろの文字 (全角文字なら2バイト)
+ * @return 分けられず、後ろが全角文字 (行頭禁則文字) か前が行末禁則文字 (始め括弧) なら true (行の先頭か、後ろの文字が空なら false)
+ * @details 半角文字の後ろの半角の閉じ括弧・句読点の前で分けられないときは、これまでどおりさかのぼらない (英語版の分け方を変えない)。
+ * ただし前が行末禁則文字 (半角の「(」など) なら、後ろが半角の閉じ括弧でもさかのぼる。
+ * 画面の折り返し (c_roff()) と文字列の分割 (shape_buffer()) で同じ規則を使う。
+ */
+bool needs_line_break_backtrack(std::string_view prev, std::string_view next)
+{
+    if (prev.empty() || next.empty()) {
+        return false;
+    }
+
+    return (classify_line_break(prev, next) == LineBreakKind::NONE) && ((next.length() == 2) || is_line_end_kinsoku(prev));
 }
 
 /*!
@@ -90,10 +136,11 @@ SeparatePositions find_separate_positions(std::string_view line, std::string_vie
  *   但し、最後の語の切れ目が行の前半にある場合は、連続の途中でも分割する。
  * - 分割後の先頭の文字が空白である場合は残さず削除する。
  * - 改行文字('\\n')が検出された場合はその位置で強制的に分割する。
- * - 日本語（全角文字）の場合は基本的にどこでも分割するが、分割後の先頭の文字が行頭禁則文字 (is_kinsoku())
+ * - 日本語（全角文字）の場合は基本的にどこでも分割するが、分割後の先頭の文字が行頭禁則文字 (is_line_start_kinsoku())
  *   にならないようにする。（いわゆる行頭禁則処理）
  *   行頭禁則文字が続く場合や、前が半角の単語や空白の場合は、その前の語の切れ目までさかのぼって分割する。
  *   語の切れ目が行の前半にしか無ければ、それより後ろの半角の単語の途中で分割する。
+ *   同じく、分割前の末尾の文字が行末禁則文字 (is_line_end_kinsoku()、始め括弧) にならないようにする。（行末禁則処理）
  * - 終端文字('\\0')の領域を残すため、分割後の文字列の長さは最大 maxlen - 1 バイトになるように分割する。
  *   但し、1文字も収まらない場合 (maxlen が 1 以下、日本語の全角文字では 2 以下) でも、各行に少なくとも1文字は入れる。
  *   1文字も入れずに分割すると、文字列を読み進められず空の行を際限なく追加してしまうため。
@@ -130,21 +177,17 @@ std::vector<std::string> shape_buffer(std::string_view sv, size_t maxlen)
             if (ch[0] == ' ') {
                 const auto rest = sv.substr(line.length());
                 const auto next_pos = rest.find_first_not_of(' ');
-                is_before_kinsoku = (next_pos != std::string_view::npos) && is_kinsoku(rest.substr(next_pos, 2));
+                is_before_kinsoku = (next_pos != std::string_view::npos) && is_line_start_kinsoku(rest.substr(next_pos, 2));
             }
 
             if (!is_newline && ((ch[0] != ' ') || is_before_kinsoku)) {
-                auto [word_break, mid_word] = find_separate_positions(line, ch);
-                // 語の切れ目の前の空白は前の行に残さないので、空白を除いた長さで前半か後半かを決める (空白しか残らない位置は使わない)
+                const auto [word_break, mid_word, needs_backtrack] = find_separate_positions(line, ch);
+                // 語の切れ目の前の空白は前の行に残さないので、空白を除いた長さで前半か後半かを決める
                 const auto has_space_before_break = (word_break > 0) && (line[word_break - 1] == ' ');
                 const auto word_break_line_length = has_space_before_break ? word_break - 1 : word_break;
-                if (word_break_line_length == 0) {
-                    word_break = 0;
-                }
-
                 if (line.length() < word_break_line_length * 2) {
                     split_pos = word_break;
-                } else if (is_kinsoku(ch) || is_before_kinsoku) {
+                } else if (needs_backtrack || is_before_kinsoku) {
                     // 語の切れ目が行の前半にしか無ければ、それより後ろの語の途中で分ける
                     const auto pos = std::max(word_break, mid_word);
                     split_pos = (pos > 0) ? pos : line.length();

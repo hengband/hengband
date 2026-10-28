@@ -44,9 +44,11 @@ inline std::string repeat(std::string_view str, int count)
 #if defined(JP) && defined(SJIS)
 inline constexpr std::string_view KANJI_KAN = "\x8a\xbf"; //!< 漢
 inline constexpr std::string_view KANJI_JI = "\x8e\x9a"; //!< 字
+inline constexpr std::string_view KAKKO_OPEN = "\x81\x75"; //!< 「 (行末禁則文字)
 #elif defined(JP)
 inline constexpr std::string_view KANJI_KAN = "\xb4\xc1"; //!< 漢
 inline constexpr std::string_view KANJI_JI = "\xbb\xfa"; //!< 字
+inline constexpr std::string_view KAKKO_OPEN = "\xa1\xd6"; //!< 「 (行末禁則文字)
 #endif
 
 // ダメ文字 (Shift_JIS で後半バイトが ASCII の文字と同じ値になる2バイト文字)

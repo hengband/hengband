@@ -151,7 +151,7 @@ std::string conjugate_jverb(std::string_view in, JVerbConjugationType type)
  * 小書きの仮名・ハイフン) のうち、JIS X 0208 にあるもの。
  * 波ダッシュ (〜) は、Shift_JIS では全角チルダ (～) と同じバイト列になるので、全角チルダだけを入れている。
  */
-static const std::set<std::string_view> kinsoku_list{
+static const std::set<std::string_view> line_start_kinsoku_list{
     // clang-format off
     "、", "。", "，", "．", "？", "！", "・", "：", "；",
     "ァ", "ィ", "ゥ", "ェ", "ォ", "ャ", "ュ", "ョ", "ッ", "ヮ", "ヵ", "ヶ",
@@ -168,9 +168,32 @@ static const std::set<std::string_view> kinsoku_list{
  * @param ch 調べる文字
  * @return 行頭禁則文字であるなら true、そうでないなら false
  */
-bool is_kinsoku(std::string_view ch)
+bool is_line_start_kinsoku(std::string_view ch)
 {
-    return (ch.length() >= 2) && kinsoku_list.contains(ch);
+    return (ch.length() >= 2) && line_start_kinsoku_list.contains(ch);
+}
+
+/*!
+ * @brief 行末禁則文字の一覧
+ * @details JIS X 4051 の行末禁則の文字 (始め括弧) のうち、JIS X 0208 にあるものと、半角の始め括弧。
+ * 行頭禁則文字の一覧の終わり括弧と対になる。
+ */
+static const std::set<std::string_view> line_end_kinsoku_list{
+    // clang-format off
+    "「", "『", "（", "｛", "［", "《", "【", "〔", "〈", "“", "‘",
+    "(", "[", "{",
+    // clang-format on
+};
+
+/*!
+ * @brief 引数で与えられた文字が行末禁則文字 (その直後で行を分けない文字) であるかどうか調べる
+ *
+ * @param ch 調べる文字 (1 文字。2バイト文字は前半と後半をまとめて渡す。後半バイトだけを渡すと半角の括弧と取り違えることがある)
+ * @return 行末禁則文字であるなら true、そうでないなら false
+ */
+bool is_line_end_kinsoku(std::string_view ch)
+{
+    return line_end_kinsoku_list.contains(ch);
 }
 
 /*!
