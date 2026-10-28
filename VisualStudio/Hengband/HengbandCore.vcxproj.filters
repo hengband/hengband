@@ -996,6 +996,9 @@
     <ClCompile Include="..\..\src\info-reader\legend-ego-validator.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\info-reader\legend-object-trap-validator.cpp">
+      <Filter>info-reader</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\info-reader\magic-info-tokens-table.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>
@@ -3706,6 +3709,9 @@
       <Filter>info-reader</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\info-reader\legend-ego-validator.h">
+      <Filter>info-reader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\info-reader\legend-object-trap-validator.h">
       <Filter>info-reader</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\info-reader\magic-info-tokens-table.h">

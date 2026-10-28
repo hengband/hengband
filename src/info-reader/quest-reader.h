@@ -38,13 +38,13 @@ public:
     QuestReader &operator=(const QuestReader &) = delete;
     QuestReader &operator=(QuestReader &&) = delete;
 
-    tl::expected<void, ParseErrorType> read() const;
+    tl::expected<void, ParseErrorType> read(std::string *reason = nullptr) const;
 
 private:
     tl::expected<void, ParseErrorType> set_name(std::string &name) const;
     tl::expected<void, ParseErrorType> set_definition(QuestFixedMap &parsed) const;
     tl::expected<void, ParseErrorType> set_descriptions(QuestFixedMap &parsed) const;
-    tl::expected<void, ParseErrorType> set_legend(QuestFixedMap &parsed) const;
+    tl::expected<void, ParseErrorType> set_legend(QuestFixedMap &parsed, std::string *reason) const;
     tl::expected<void, ParseErrorType> set_maps(QuestFixedMap &parsed) const;
     tl::expected<void, ParseErrorType> set_starts(QuestFixedMap &parsed) const;
 
@@ -54,6 +54,7 @@ private:
 };
 
 tl::expected<void, ParseErrorType> parse_quest_legend_cell(const nlohmann::json &cell_data, QuestLegendCell &out);
+tl::expected<void, ParseErrorType> parse_quest_legend_cell(const nlohmann::json &cell_data, QuestLegendCell &out, std::string &reason);
 
 /*! @brief 地形・罠を未解決のタグとして保持する凡例セル。地形・罠の数値欄は0、対応するランダムビットは未設定。 */
 struct DeferredQuestLegendCell {

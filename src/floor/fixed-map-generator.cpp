@@ -173,7 +173,7 @@ static void parse_qtw_D(PlayerType *player_ptr, qtwg_type *qtwg_ptr, std::string
             }
 
             // この経路では罠を配置しない。
-            assert(validate_legend_ego(cell, false, false).has_value());
+            assert(validate_legend_ego(cell, false).has_value());
             if (cell.ego != EgoType::NONE) {
                 ItemMagicApplier(player_ptr, &item, floor.base_level, AM_NO_FIXED_ART | AM_GOOD).execute_with_ego(cell.ego);
             } else if (random & RANDOM_EGO) {

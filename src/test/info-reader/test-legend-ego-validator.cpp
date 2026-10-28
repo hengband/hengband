@@ -9,7 +9,7 @@
 TEST_CASE("Legend ego validator accepts absent ego without an object")
 {
     const dungeon_grid grid{};
-    CHECK(validate_legend_ego(grid, true, true).has_value());
+    CHECK(validate_legend_ego(grid, true).has_value());
 }
 
 TEST_CASE("Legend ego validator reports each placement error")
@@ -18,9 +18,9 @@ TEST_CASE("Legend ego validator reports each placement error")
     dungeon_grid grid{};
     grid.object = 42;
     grid.ego = EgoType::DF;
-    CHECK(validate_legend_ego(grid, false, false).has_value());
-    const auto check = [&](LegendEgoError expected, bool reward = false, bool trap = false) {
-        const auto result = validate_legend_ego(grid, reward, trap);
+    CHECK(validate_legend_ego(grid, false).has_value());
+    const auto check = [&](LegendEgoError expected, bool reward = false) {
+        const auto result = validate_legend_ego(grid, reward);
         REQUIRE_FALSE(result.has_value());
         CHECK(result.error() == expected);
     };
@@ -44,10 +44,9 @@ TEST_CASE("Legend ego validator reports each placement error")
     grid.object = 56;
     check(LegendEgoError::GOLD);
     grid.object = 42;
-    check(LegendEgoError::WITH_TRAP, false, true);
     grid.ego = EgoType::NONE;
     grid.random = RANDOM_EGO;
-    check(LegendEgoError::WITH_TRAP, false, true);
+    CHECK(validate_legend_ego(grid, false).has_value());
     grid.object = 54;
     check(LegendEgoError::INCOMPATIBLE);
 }
@@ -84,7 +83,7 @@ TEST_CASE("Legend ego validator follows strict equipment compatibility")
         dungeon_grid grid{};
         grid.object = entry.object;
         grid.ego = entry.ego;
-        const auto result = validate_legend_ego(grid, false, false);
+        const auto result = validate_legend_ego(grid, false);
         CHECK(result.has_value() == entry.allowed);
         if (!entry.allowed) {
             REQUIRE_FALSE(result.has_value());
@@ -95,6 +94,6 @@ TEST_CASE("Legend ego validator follows strict equipment compatibility")
         dungeon_grid grid{};
         grid.object = object;
         grid.random = RANDOM_EGO;
-        CHECK(validate_legend_ego(grid, false, false).has_value() == (object != 413 && object != 414 && object != 54 && object != 55));
+        CHECK(validate_legend_ego(grid, false).has_value() == (object != 413 && object != 414 && object != 54 && object != 55));
     }
 }

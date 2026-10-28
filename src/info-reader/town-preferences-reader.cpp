@@ -1,6 +1,7 @@
 #include "info-reader/town-preferences-reader.h"
 #include "info-reader/json-reader-util.h"
 #include "info-reader/legend-ego-validator.h"
+#include "info-reader/legend-object-trap-validator.h"
 #include "info-reader/random-grid-effect-types.h"
 #include "locale/language-switcher.h"
 #include "system/dungeon/quest-fixed-map.h"
@@ -43,7 +44,11 @@ tl::expected<void, ParseErrorType> TownPreferencesReader::read(TownPreferencesLe
         if (const auto result = parse_cell(cell_data, cell); !result) {
             return result;
         }
-        if (const auto result = validate_legend_ego(cell.grid, cell.object_is_quest_reward, cell.grid.trap != 0 || (cell.grid.random & RANDOM_TRAP)); !result) {
+        const auto random_trap = (cell.grid.random & RANDOM_TRAP) != 0;
+        if (has_legend_object_trap_conflict(cell.grid, cell.object_is_quest_reward, cell.grid.trap != 0 && !random_trap, random_trap)) {
+            return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
+        }
+        if (const auto result = validate_legend_ego(cell.grid, cell.object_is_quest_reward); !result) {
             constexpr auto fmt = _("町のエゴ指定が不正です: legend['{}']: {}", "Invalid town ego: legend['{}']: {}");
             msg_print(fmt, symbol, describe_legend_ego_error(result.error()));
             return tl::make_unexpected(ParseErrorType::INVALID_VALUE);

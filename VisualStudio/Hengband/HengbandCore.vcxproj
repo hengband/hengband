@@ -270,6 +270,7 @@
     <ClCompile Include="..\..\src\info-reader\json-reader-util.cpp" />
     <ClCompile Include="..\..\src\info-reader\jsonc-document-loader.cpp" />
     <ClCompile Include="..\..\src\info-reader\legend-ego-validator.cpp" />
+    <ClCompile Include="..\..\src\info-reader\legend-object-trap-validator.cpp" />
     <ClCompile Include="..\..\src\info-reader\magic-info-tokens-table.cpp" />
     <ClCompile Include="..\..\src\info-reader\magic-reader.cpp" />
     <ClCompile Include="..\..\src\info-reader\message-reader.cpp" />
@@ -1178,6 +1179,7 @@
     <ClInclude Include="..\..\src\info-reader\json-reader-util.h" />
     <ClInclude Include="..\..\src\info-reader\jsonc-document-loader.h" />
     <ClInclude Include="..\..\src\info-reader\legend-ego-validator.h" />
+    <ClInclude Include="..\..\src\info-reader\legend-object-trap-validator.h" />
     <ClInclude Include="..\..\src\info-reader\magic-info-tokens-table.h" />
     <ClInclude Include="..\..\src\info-reader\magic-reader.h" />
     <ClInclude Include="..\..\src\info-reader\message-reader.h" />

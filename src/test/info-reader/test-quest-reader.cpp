@@ -265,8 +265,8 @@ TEST_CASE("Quest legend deferred parsing preserves common values and random bits
     const test::ScopedReaderState reader_state;
     const test::TerrainListTestAccess none_tag(TerrainTag::NONE, 73);
     const std::vector<nlohmann::json> inputs = {
-        { { "monster", -12 }, { "object", -13 }, { "ego", 255 }, { "artifact", -14 } },
-        { { "monster", { { "cloneOf", 12 } } }, { "object", { { "questReward", true } } }, { "artifact", { { "questReward", true } } } },
+        { { "monster", -12 }, { "ego", 255 }, { "artifact", -14 } },
+        { { "monster", { { "cloneOf", 12 } } }, { "artifact", { { "questReward", true } } } },
         { { "monster", { { "random", true }, { "oodLevel", -2 }, { "cloneOf", 99 } } },
             { "object", { { "random", true }, { "oodLevel", 3 }, { "questReward", true } } },
             { "ego", { { "random", true } } },
@@ -1269,6 +1269,7 @@ TEST_CASE("QuestReader preserves optional null values and boolean legend values"
         REQUIRE(QuestReader(data, quest, fixed_map).read().has_value());
         const auto &parsed = fixed_map.legend.at('.');
         CHECK(parsed.grid.random == (value == true ? RANDOM_MONSTER | RANDOM_OBJECT | RANDOM_EGO | RANDOM_ARTIFACT | RANDOM_TRAP : RANDOM_NONE));
+        data["legend"]["."].erase("trap");
         for (const auto *field : { "object", "artifact" }) {
             data["legend"]["."][field] = { { "questReward", value } };
         }

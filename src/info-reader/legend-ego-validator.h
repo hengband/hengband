@@ -12,9 +12,8 @@ enum class LegendEgoError {
     RANDOM_OBJECT,
     QUEST_REWARD,
     GOLD,
-    WITH_TRAP,
     INCOMPATIBLE,
 };
 
-tl::expected<void, LegendEgoError> validate_legend_ego(const dungeon_grid &grid, bool object_is_quest_reward, bool has_trap);
+tl::expected<void, LegendEgoError> validate_legend_ego(const dungeon_grid &grid, bool object_is_quest_reward);
 std::string_view describe_legend_ego_error(LegendEgoError error);

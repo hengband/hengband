@@ -12,10 +12,9 @@
  * @brief 凡例のエゴ指定と、実際に配置される品の組み合わせを検証する。
  * @param grid 共通パーサーで読んだ凡例
  * @param object_is_quest_reward 報酬を指すobject指定か
- * @param has_trap 罠の指定があるか（町の未解決タグも呼び出し側で判定する）
  * @return 成功時は空の値、失敗時は生成できない理由
  */
-tl::expected<void, LegendEgoError> validate_legend_ego(const dungeon_grid &grid, bool object_is_quest_reward, bool has_trap)
+tl::expected<void, LegendEgoError> validate_legend_ego(const dungeon_grid &grid, bool object_is_quest_reward)
 {
     const auto random_ego = (grid.random & RANDOM_EGO) != 0;
     if (grid.ego == EgoType::NONE && !random_ego) {
@@ -44,9 +43,6 @@ tl::expected<void, LegendEgoError> validate_legend_ego(const dungeon_grid &grid,
     if (key.tval() == ItemKindType::GOLD) {
         return tl::make_unexpected(LegendEgoError::GOLD);
     }
-    if (has_trap) {
-        return tl::make_unexpected(LegendEgoError::WITH_TRAP);
-    }
     const auto compatible = random_ego
                                 ? std::any_of(egos_info.begin(), egos_info.end(), [&key](const auto &entry) { return can_apply_ego(key, entry.first); })
                                 : can_apply_ego(key, grid.ego);
@@ -72,8 +68,6 @@ std::string_view describe_legend_ego_error(LegendEgoError error)
         return _("クエスト報酬には指定できない", "cannot apply to a quest reward");
     case LegendEgoError::GOLD:
         return _("財宝には指定できない", "cannot apply to gold");
-    case LegendEgoError::WITH_TRAP:
-        return _("罠と同居できない", "cannot coexist with a trap");
     case LegendEgoError::INCOMPATIBLE:
         return _("品の種類と相性が合わない", "incompatible object kind");
     }

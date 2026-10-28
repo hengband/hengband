@@ -292,7 +292,7 @@ class QuestEditDirTestCase(unittest.TestCase):
             "name": {"ja": "試験", "en": "Test"},
             "definition": {"type": "KILL_ALL", "level": 1, "monster": 1, "dungeon": 1, "reward": {"artifact": 1}},
             "legend": {
-                "#": {"terrain": "FLOOR", "trap": "CLOSED_DOOR", "monster": 1, "object": 1, "artifact": 1},
+                "#": {"terrain": "FLOOR", "trap": "NONE", "monster": 1, "object": 1, "artifact": 1},
                 "c": {"monster": {"cloneOf": 1}, "artifact": {"random": True, "id": 1}},
                 "r": {"terrain": "*", "trap": {"random": True}, "monster": {"random": True, "oodLevel": 32767},
                       "object": {"random": True, "oodLevel": 32767}, "artifact": {"questReward": True}},
@@ -516,14 +516,16 @@ class LegendEgoSemanticsTest(unittest.TestCase):
             {"id": 5, "rating": 30, "flags": ["HEAVY_CURSE"]},
             {"id": 6, "rating": 30, "flags": ["PERMA_CURSE"]},
         ]})
-        accepted = ({}, {"object": 42, "ego": 65}, {"object": 42, "ego": {"random": True}, "trap": "NONE"})
+        # 罠との同居は品と罠の判定 (validate_legend_object_trap) で拒否するので、エゴの判定では受け付ける。
+        accepted = ({}, {"object": 42, "ego": 65}, {"object": 42, "ego": {"random": True}, "trap": "NONE"},
+                    {"object": 42, "ego": 65, "trap": "TRAP_PIT"},
+                    {"object": 42, "ego": {"random": True}, "trap": {"random": True}})
         rejected = (
             {"object": 42, "ego": 1}, {"object": 42, "ego": 255},
             *({"object": 42, "ego": ego} for ego in (102, 4, 5, 6)),
             {"ego": 65}, {"object": {"random": True}, "ego": 65},
             {"object": {"questReward": True}, "ego": 65},
-            {"object": 56, "ego": 65}, {"object": 42, "ego": 65, "trap": "TRAP_PIT"},
-            {"object": 42, "ego": {"random": True}, "trap": {"random": True}},
+            {"object": 56, "ego": 65},
         )
         for cell in accepted:
             validate_legend_ego(cell, baseitems, egos, ["legend", "#"])
