@@ -428,7 +428,7 @@ void process_player(PlayerType *player_ptr)
  */
 void process_upkeep_with_speed(PlayerType *player_ptr)
 {
-    if (!load && player_ptr->enchant_energy_need > 0 && !player_ptr->leaving) {
+    if (player_ptr->enchant_energy_need > 0 && !player_ptr->leaving) {
         player_ptr->enchant_energy_need -= speed_to_energy(player_ptr->pspeed);
     }
 
@@ -437,23 +437,11 @@ void process_upkeep_with_speed(PlayerType *player_ptr)
     }
 
     while (player_ptr->enchant_energy_need <= 0) {
-        if (!load) {
-            check_music(player_ptr);
-        }
-
-        if (!load) {
-            check_demigod(player_ptr);
-        }
-
+        check_music(player_ptr);
+        check_demigod(player_ptr);
         SpellHex spell_hex(player_ptr);
-        if (!load) {
-            spell_hex.decrease_mana();
-        }
-
-        if (!load) {
-            spell_hex.continue_revenge();
-        }
-
+        spell_hex.decrease_mana();
+        spell_hex.continue_revenge();
         player_ptr->enchant_energy_need += ENERGY_NEED();
     }
 }
