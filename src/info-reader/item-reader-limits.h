@@ -27,3 +27,12 @@ constexpr int ITEM_BASE_AC_MAX = 255;
  * - ACの修正値の負の側: 12 × (1,000 + 100) + 238 = 13,438。
  */
 constexpr int ITEM_BONUS_MAX = 255;
+
+class BaseitemKey;
+
+// 種別を添え字にする色の表は128要素。
+constexpr int ITEM_TYPE_MAX = 127;
+constexpr int ITEM_SUBTYPE_DEFAULT_MAX = 128;
+
+// 定義は baseitem-reader.cpp にある (武器熟練度・呪文・魔道具の表の要素数に依存するため)。
+int item_subtype_max(const BaseitemKey &key);

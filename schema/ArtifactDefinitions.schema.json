@@ -59,7 +59,7 @@
                                 "type": "integer",
                                 "description": "ベースアイテムカテゴリ",
                                 "minimum": 1,
-                                "maximum": 128
+                                "maximum": 127
                             },
                             "subtype_value": {
                                 "type": "integer",

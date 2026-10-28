@@ -7,7 +7,7 @@ from jsonschema import ValidationError
 
 from json_validation_test_helper import baseitem_id_schema_maximum, fixed_artifact_id_schema_maximum, validate_document
 from validate_json import (build_schema_registry, load_all_schemas, load_cpp_enum_values, load_cpp_tokens, load_jsonc,
-                           load_rod_type_value, validate_baseitem_semantics)
+                           load_rod_type_value, validate_baseitem_semantics, validate_artifact_semantics)
 
 
 class BaseitemDefinitionValidationTest(unittest.TestCase):
@@ -340,7 +340,10 @@ class ArtifactDefinitionValidationTest(unittest.TestCase):
         for field, value in (("type_value", 128), ("subtype_value", 128)):
             with self.subTest(field=field):
                 base_item = {**self.sample["base_item"], field: value}
-                self.check({**self.sample, "base_item": base_item}, False, ["artifacts", 0, "base_item"], "Reason: base item must be a valid baseitem")
+                if field == "type_value":
+                    self.check({**self.sample, "base_item": base_item}, False, ["artifacts", 0, "base_item", field])
+                else:
+                    self.check({**self.sample, "base_item": base_item}, False, ["artifacts", 0, "base_item"], "Reason: base item must be a valid baseitem")
 
         key = self.sample["base_item"]
         baseitem = next(item for item in self.baseitem_document["baseitems"]
@@ -364,6 +367,19 @@ class ArtifactDefinitionValidationTest(unittest.TestCase):
         english_only = {**baseitem, "id": 2, "name": {**baseitem["name"], "ja": "異常アイテム"}}
         ok, message = self.validate_with_baseitems(self.sample, [japanese_only, english_only])
         self.assertTrue(ok, message)
+
+    def test_base_item_type_and_subtype_boundaries(self):
+        for kind, maximum in ((127, 128), (128, 128), (1, 128), (19, 63), (23, 63),
+                              (90, 3), (107, 3), (55, 32), (65, 31), (66, 30)):
+            for subtype in (maximum, maximum + 1):
+                with self.subTest(kind=kind, subtype=subtype):
+                    record = {**self.sample, "base_item": {"type_value": kind, "subtype_value": subtype}}
+                    document = {"artifacts": [record]}
+                    if kind <= 127 and subtype <= maximum:
+                        validate_artifact_semantics(document, {(kind, subtype)})
+                    else:
+                        with self.assertRaises(ValidationError):
+                            validate_artifact_semantics(document, {(kind, subtype)})
 
     def test_monrace_validation_checks_artifact_companion(self):
         # モンスター定義の検証は、参照先のアーティファクト定義にも同じ意味検証をかける。

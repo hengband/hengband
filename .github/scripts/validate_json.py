@@ -318,6 +318,12 @@ def validate_artifact_semantics(data: dict, valid_baseitem_keys: set[tuple[int, 
                 require_integer(artifact[field], path + [field])
         for field in ("type_value", "subtype_value"):
             require_integer(artifact["base_item"][field], path + ["base_item", field])
+        kind = artifact["base_item"]["type_value"]
+        if not 0 <= kind <= 127:
+            raise ValidationError("type_value must be in 0..127", path=path + ["base_item", "type_value"])
+        maximum = baseitem_subtype_max(kind)
+        if not 0 <= artifact["base_item"]["subtype_value"] <= maximum:
+            raise ValidationError(f"subtype_value must be in 0..{maximum}", path=path + ["base_item", "subtype_value"])
         # 実行時の記録は 1〜件数の ID だけを作るため、ArtifactReaderは 1 から欠番なく並ぶことを求める。
         if artifact["id"] != index + 1:
             raise ValidationError("artifact IDs must start at 1 and continue without gaps", path=path + ["id"])

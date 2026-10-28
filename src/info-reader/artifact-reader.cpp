@@ -164,12 +164,12 @@ tl::expected<void, ParseErrorType> ArtifactReader::set_art_baseitem(ArtifactDefi
 
     // 失敗時は直後に返るが、gcc の最適化で未初期化と誤検出されないよう初期化しておく。
     ItemKindType type_value{};
-    if (const auto result = info_set_integer(get_json_value(baseitem_data, "type_value"), type_value, true, Range(0, 128)); !result) {
+    if (const auto result = info_set_integer(get_json_value(baseitem_data, "type_value"), type_value, true, Range(0, ITEM_TYPE_MAX)); !result) {
         return result;
     }
 
     int subtype_value = 0;
-    if (const auto result = info_set_integer(get_json_value(baseitem_data, "subtype_value"), subtype_value, true, Range(0, 128)); !result) {
+    if (const auto result = info_set_integer(get_json_value(baseitem_data, "subtype_value"), subtype_value, true, Range(0, item_subtype_max({ type_value, 0 }))); !result) {
         return result;
     }
 

@@ -141,12 +141,14 @@ Range pval_range(const BaseitemKey &key)
     }
 }
 
+}
+
 /*!
  * @brief ベースアイテムの種別ごとの副種別の上限を返す
  * @param key ベースアイテムのキー (種別だけを見る)
  * @return 受け付ける副種別の上限 (下限は 0)
  */
-int subtype_max(const BaseitemKey &key)
+int item_subtype_max(const BaseitemKey &key)
 {
     if (key.is_weapon()) {
         // 武器熟練度の種別ごとの配列を副種別で引く。
@@ -165,9 +167,8 @@ int subtype_max(const BaseitemKey &key)
     case ItemKindType::ROD:
         return SV_ROD_MAX - 1;
     default:
-        return 128;
+        return ITEM_SUBTYPE_DEFAULT_MAX;
     }
-}
 }
 
 BaseitemReader::Session BaseitemReader::create_session(tl::optional<int> last_id)
@@ -361,14 +362,14 @@ tl::expected<void, ParseErrorType> BaseitemReader::set_baseitem_kind(BaseitemDef
     // 失敗時は直後に返るが、gcc の最適化で未初期化と誤検出されないよう初期化しておく。
     ItemKindType type_value{};
     // 種別をそのまま添え字にする色の表は128要素。
-    if (const auto result = info_set_integer(get_json_value(itemkind_data, "type_value"), type_value, true, Range(0, 127)); !result) {
+    if (const auto result = info_set_integer(get_json_value(itemkind_data, "type_value"), type_value, true, Range(0, ITEM_TYPE_MAX)); !result) {
         return result;
     }
     if (std::find(std::begin(DEFINED_ITEM_KINDS), std::end(DEFINED_ITEM_KINDS), type_value) == std::end(DEFINED_ITEM_KINDS)) {
         return tl::unexpected(ParseErrorType::INVALID_VALUE);
     }
     int subtype_value = 0;
-    if (const auto result = info_set_integer(get_json_value(itemkind_data, "subtype_value"), subtype_value, true, Range(0, subtype_max({ type_value, 0 }))); !result) {
+    if (const auto result = info_set_integer(get_json_value(itemkind_data, "subtype_value"), subtype_value, true, Range(0, item_subtype_max({ type_value, 0 }))); !result) {
         return result;
     }
 
