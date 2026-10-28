@@ -3,7 +3,6 @@
 #include "floor/floor-util.h"
 #include "game-option/birth-options.h"
 #include "game-option/cheat-options.h"
-#include "info-reader/fixed-map-parser.h"
 #include "inventory/inventory-slot-types.h"
 #include "market/arena-entry.h"
 #include "pet/pet-util.h"

@@ -1,4 +1,3 @@
-#include "info-reader/info-reader-util.h"
 #include "info-reader/parse-error-types.h"
 #include "info-reader/spell-reader.h"
 #include "system/spell-info-list.h"

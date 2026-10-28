@@ -1,6 +1,5 @@
 #include "system/dungeon/quest-definition.h"
 #include "artifact/fixed-art-types.h"
-#include "info-reader/fixed-map-parser.h"
 #include "system/artifact/artifact-definition.h"
 #include "system/artifact/artifact-list.h"
 #include "system/artifact/artifact-record.h"

@@ -9,7 +9,6 @@
 #include "birth/birth-explanations-table.h"
 #include "core/show-file.h"
 #include "flavor/flavor-describer.h"
-#include "info-reader/fixed-map-parser.h"
 #include "info-reader/wilderness-reader.h"
 #include "io-dump/dump-util.h"
 #include "player-info/alignment.h"

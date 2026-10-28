@@ -18,7 +18,6 @@
 #include "floor/wild.h"
 #include "game-option/play-record-options.h"
 #include "grid/grid.h"
-#include "info-reader/fixed-map-parser.h"
 #include "io/write-diary.h"
 #include "market/arena-entry.h"
 #include "monster-floor/monster-generator.h"

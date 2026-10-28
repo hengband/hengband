@@ -1,4 +1,3 @@
-#include "info-reader/info-reader-util.h"
 #include "info-reader/magic-reader.h"
 #include "info-reader/parse-error-types.h"
 #include "player-info/class-info.h"

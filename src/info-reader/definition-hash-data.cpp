@@ -1,4 +1,5 @@
 #include "info-reader/definition-hash-data.h"
+#include "util/enum-range.h"
 
 DefinitionHashData DefinitionHashData::instance{};
 
