@@ -1581,6 +1581,7 @@ hengband_test_SOURCES = \
 	test/io/test-tokenizer.cpp \
 	test/knowledge/test-knowledge-features.cpp \
 	test/load/test-angband-version-comparer.cpp \
+	test/load/test-floor-loader.cpp \
 	test/locale/test-character-encoding.cpp \
 	test/locale/test-japanese.cpp \
 	test/lore/test-monster-lore-snapshot.cpp \

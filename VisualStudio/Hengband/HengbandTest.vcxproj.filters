@@ -277,6 +277,9 @@
     <ClCompile Include="..\..\src\test\load\test-angband-version-comparer.cpp">
       <Filter>load</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\test\load\test-floor-loader.cpp">
+      <Filter>load</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\test\locale\test-character-encoding.cpp">
       <Filter>locale</Filter>
     </ClCompile>

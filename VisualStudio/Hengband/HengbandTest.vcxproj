@@ -109,6 +109,7 @@
     <ClCompile Include="..\..\src\test\io\test-tokenizer.cpp" />
     <ClCompile Include="..\..\src\test\knowledge\test-knowledge-features.cpp" />
     <ClCompile Include="..\..\src\test\load\test-angband-version-comparer.cpp" />
+    <ClCompile Include="..\..\src\test\load\test-floor-loader.cpp" />
     <ClCompile Include="..\..\src\test\locale\test-character-encoding.cpp" />
     <ClCompile Include="..\..\src\test\locale\test-japanese.cpp" />
     <ClCompile Include="..\..\src\test\lore\test-monster-lore-snapshot.cpp" />
