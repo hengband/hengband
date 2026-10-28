@@ -407,8 +407,9 @@ static void add_essence(PlayerType *player_ptr, SmithCategoryType mode)
             }
 
             effect_index = page * effect_num_per_page + i;
-            /* Totally Illegal */
-            if ((effect_index < 0) || (effect_index >= smith_effect_list_max) || smith.get_addable_count(smith_effect_list[effect_index]) <= 0) {
+            // 表示しているページのラベルの外のキー (w〜z・最後のページの能力の無い行・記号など) で、ほかのページの能力を選ばない。
+            // 付加できない能力も選ばない
+            if ((i < 0) || (i >= page_effect_num) || smith.get_addable_count(smith_effect_list[effect_index]) <= 0) {
                 bell();
                 continue;
             }
