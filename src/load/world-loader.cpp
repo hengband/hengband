@@ -115,9 +115,9 @@ static void rd_world_info(PlayerType *player_ptr)
     floor.generated_turn = rd_s32b();
     auto &df = DungeonFeeling::get_instance();
     if (h_older_than(1, 7, 0, 4)) {
-        df.set_feeling(floor.generated_turn);
+        df.set_turns(floor.generated_turn);
     } else {
-        df.set_feeling(rd_s32b());
+        df.set_turns(rd_s32b());
     }
 
     world.game_turn = rd_s32b();
