@@ -473,6 +473,9 @@
     <ClInclude Include="..\..\src\test\info-reader\parse-result-helpers.h">
       <Filter>info-reader</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\test\info-reader\scoped-ego-list.h">
+      <Filter>info-reader</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\src\test\info-reader\scoped-reader-state.h">
       <Filter>info-reader</Filter>
     </ClInclude>

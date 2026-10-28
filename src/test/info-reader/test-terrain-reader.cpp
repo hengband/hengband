@@ -5,7 +5,7 @@
 #include "system/terrain/terrain-list.h"
 #include "test/info-reader/parse-result-helpers.h"
 #include "test/info-reader/scoped-reader-state.h"
-#include <algorithm>
+#include "test/scoped-vector-wrapper.h"
 #include <doctest/doctest.h>
 #include <initializer_list>
 #include <nlohmann/json.hpp>
@@ -13,35 +13,16 @@
 #include <vector>
 
 namespace {
-class TerrainStateGuard {
-public:
-    /*!
-     * @brief 既存の地形定義を退避し、メッセージ出力をテスト用に設定する
-     */
-    TerrainStateGuard()
-        : terrains(TerrainList::get_instance())
-        , saved_terrains(terrains.begin(), terrains.end())
-    {
-    }
-
+struct TerrainStateGuard {
     TerrainReader::Session session;
-
-    TerrainStateGuard(const TerrainStateGuard &) = delete;
-    TerrainStateGuard &operator=(const TerrainStateGuard &) = delete;
-
-    /*!
-     * @brief 退避した地形定義を復元する
-     */
-    ~TerrainStateGuard()
-    {
-        terrains.resize(saved_terrains.size());
-        std::copy(saved_terrains.begin(), saved_terrains.end(), terrains.begin());
-    }
-
-private:
     test::ScopedReaderState reader_state;
-    TerrainList &terrains;
-    std::vector<TerrainType> saved_terrains;
+    test::ScopedVectorWrapper<TerrainList> terrains{ TerrainList::get_instance() };
+
+    TerrainStateGuard() = default;
+    TerrainStateGuard(const TerrainStateGuard &) = delete;
+    TerrainStateGuard(TerrainStateGuard &&) = delete;
+    TerrainStateGuard &operator=(const TerrainStateGuard &) = delete;
+    TerrainStateGuard &operator=(TerrainStateGuard &&) = delete;
 };
 
 nlohmann::json make_terrain()

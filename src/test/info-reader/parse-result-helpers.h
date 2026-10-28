@@ -1,6 +1,7 @@
 #pragma once
 
 #include "info-reader/parse-error-types.h"
+#include <nlohmann/json_fwd.hpp>
 #include <tl/expected.hpp>
 
 namespace test {
@@ -24,6 +25,14 @@ auto read_and_commit(Reader &&reader, Session &session)
         session.commit();
     }
     return result;
+}
+
+// 各呼び出しを独立した定義ファイルの読み込みとして扱う。
+template <typename Reader>
+auto read_record(const nlohmann::json &data)
+{
+    auto session = Reader::create_session();
+    return read_and_commit(Reader(data, session), session);
 }
 
 }

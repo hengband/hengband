@@ -26,6 +26,11 @@
 #include <string>
 #include <vector>
 
+#if defined(JP) && defined(EUC)
+// _LIBICONV_VERSION (GNU libiconv の判定に使う) を参照するため
+#include <iconv.h>
+#endif
+
 TEST_CASE("JSON definition roots require an object containing the named array")
 {
     const std::vector<nlohmann::json> invalid_roots = {
@@ -57,11 +62,6 @@ TEST_CASE("Empty definition arrays are rejected only when requested")
     CHECK(info_validate_json_array(nonempty, "vaults", false).has_value());
     CHECK(test::to_error_code(info_validate_json_array(nonempty, "missing", false)) == ParseErrorType::TOO_FEW_ARGUMENTS);
 }
-
-#if defined(JP) && defined(EUC)
-// _LIBICONV_VERSION (GNU libiconv の判定に使う) を参照するため
-#include <iconv.h>
-#endif
 
 namespace {
 
