@@ -1,4 +1,5 @@
 #include "info-reader/town-definition-list-reader.h"
+#include "info-reader/json-reader-util.h"
 #include <nlohmann/json.hpp>
 #include <string>
 
@@ -18,8 +19,10 @@ TownDefinitionListReader::TownDefinitionListReader(const nlohmann::json &data)
  */
 tl::expected<void, ParseErrorType> TownDefinitionListReader::read(int town_index, TownMapMode mode, std::string &map_file) const
 {
-    if (!this->data.is_object() || !this->data.contains("version") || !this->data["version"].is_number_integer() || this->data["version"] != 1 ||
-        !this->data.contains("towns") || !this->data["towns"].is_object() || this->data["towns"].empty()) {
+    if (const auto result = info_validate_version(this->data, 1, ParseErrorType::INVALID_TYPE); !result) {
+        return result;
+    }
+    if (!this->data.contains("towns") || !this->data["towns"].is_object() || this->data["towns"].empty()) {
         return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
     }
 

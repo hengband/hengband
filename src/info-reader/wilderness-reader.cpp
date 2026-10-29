@@ -126,8 +126,7 @@ tl::expected<void, ParseErrorType> WildernessReader::read(WildernessDefinition &
     }
 
     WildernessDefinition parsed;
-    int version = 0;
-    if (const auto result = info_set_integer(get_json_value(this->data, "version"), version, true, Range(1, 1)); !result) {
+    if (const auto result = info_validate_version(this->data, 1, ParseErrorType::TOO_FEW_ARGUMENTS, ParseErrorType::INVALID_VALUE, ParseErrorType::TOO_FEW_ARGUMENTS); !result) {
         return result;
     }
     // 荒野全体図は荒野の1マスをフロアの1マスへ描くため、フロアの最大の大きさに収める。

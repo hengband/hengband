@@ -81,3 +81,5 @@ tl::expected<void, ParseErrorType> info_set_integer(const nlohmann::json &json, 
     data = static_cast<T>(value);
     return {};
 }
+
+tl::expected<void, ParseErrorType> info_validate_version(const nlohmann::json &root, int supported, ParseErrorType missing_error = ParseErrorType::TOO_FEW_ARGUMENTS, ParseErrorType unsupported_error = ParseErrorType::INVALID_TYPE, ParseErrorType null_error = ParseErrorType::INVALID_TYPE);

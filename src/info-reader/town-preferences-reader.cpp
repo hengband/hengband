@@ -20,8 +20,10 @@ TownPreferencesReader::TownPreferencesReader(const nlohmann::json &data)
 
 tl::expected<void, ParseErrorType> TownPreferencesReader::read(TownPreferencesLegend &legend, TownPreferencesCellParser parse_cell) const
 {
-    if (!this->data.is_object() || !this->data.contains("version") || !this->data["version"].is_number_integer() || this->data["version"] != 1 ||
-        !this->data.contains("legend") || !this->data["legend"].is_object() || this->data["legend"].empty()) {
+    if (const auto result = info_validate_version(this->data, 1, ParseErrorType::INVALID_TYPE); !result) {
+        return result;
+    }
+    if (!this->data.contains("legend") || !this->data["legend"].is_object() || this->data["legend"].empty()) {
         return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
     }
 

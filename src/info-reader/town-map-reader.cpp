@@ -174,8 +174,8 @@ TownMapReader::TownMapReader(const nlohmann::json &data)
  */
 tl::expected<void, ParseErrorType> TownMapReader::read(TownMapDefinition &definition, int maximum_height, int maximum_width, bool only_buildings) const
 {
-    if (!this->data.is_object() || !this->data.contains("version") || !this->data["version"].is_number_integer() || this->data["version"] != 3) {
-        return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
+    if (const auto result = info_validate_version(this->data, 3, ParseErrorType::INVALID_TYPE); !result) {
+        return result;
     }
     for (const auto *field : { "featureRules", "mapVariants", "buildingRules", "startingPositions" }) {
         if (!this->data.contains(field) || !this->data[field].is_array()) {

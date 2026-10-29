@@ -231,3 +231,28 @@ tl::expected<DisplaySymbol, ParseErrorType> info_read_symbol(const nlohmann::jso
 
     return DisplaySymbol(color->second, character.front());
 }
+
+/*!
+ * @brief JSON文書の整数バージョンを検証する。
+ * @details 欠落・未対応値・nullのエラー分類は既存リーダーの指定を保持する。
+ */
+tl::expected<void, ParseErrorType> info_validate_version(const nlohmann::json &root, int supported, ParseErrorType missing_error, ParseErrorType unsupported_error, ParseErrorType null_error)
+{
+    if (!root.is_object()) {
+        return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
+    }
+    const auto version = root.find("version");
+    if (version == root.end()) {
+        return tl::make_unexpected(missing_error);
+    }
+    if (version->is_null()) {
+        return tl::make_unexpected(null_error);
+    }
+    if (!version->is_number_integer()) {
+        return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
+    }
+    if (*version != supported) {
+        return tl::make_unexpected(unsupported_error);
+    }
+    return {};
+}
