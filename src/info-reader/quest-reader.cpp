@@ -95,16 +95,12 @@ tl::expected<void, ParseErrorType> read_map_rows(const nlohmann::json &array_dat
         }
 
         const auto &row = line.get_ref<const std::string &>();
-        // セル配置は1バイトずつ進む。幅の切り捨てと高さの配列外アクセスを読み込み時に防ぐ。
-        if (out.size() >= MAX_HGT || row.size() > MAX_WID) {
-            return tl::make_unexpected(ParseErrorType::OUT_OF_BOUNDS);
+        FixedMapRowLimits limits{ MAX_HGT, MAX_WID };
+        if (!out.empty()) {
+            limits.expected_width = out.front().size();
         }
-        // 生成側は最終行の長さからフロア幅を決めるため、行幅を揃える。
-        if (!out.empty() && row.size() != out.front().size()) {
-            return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
-        }
-        if (!std::all_of(row.begin(), row.end(), is_fixed_map_symbol)) {
-            return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
+        if (const auto result = validate_fixed_map_row(row, out.size(), limits); !result) {
+            return result;
         }
         out.push_back(row);
     }

@@ -373,12 +373,13 @@ tl::expected<void, ParseErrorType> TownMapReader::read_maps(TownMapDefinition &d
             return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
         }
         for (const auto &row : rows) {
-            if (!row.is_string() || row.get_ref<const std::string &>().size() != width) {
+            if (!row.is_string()) {
                 return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
             }
             const auto &text = row.get_ref<const std::string &>();
-            if (!std::all_of(text.begin(), text.end(), is_fixed_map_symbol)) {
-                return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
+            const FixedMapRowLimits limits{ static_cast<size_t>(maximum_height), static_cast<size_t>(maximum_width), ParseErrorType::INVALID_VALUE, false, width };
+            if (const auto result = validate_fixed_map_row(text, map.rows.size(), limits); !result) {
+                return result;
             }
             map.rows.push_back(text);
         }

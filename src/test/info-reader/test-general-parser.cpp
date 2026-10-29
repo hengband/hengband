@@ -15,3 +15,22 @@ TEST_CASE("parse_fixed_map_symbol accepts exactly one printable ASCII byte")
         }
     }
 }
+
+TEST_CASE("validate_fixed_map_row preserves caller limits and symbol rules")
+{
+    FixedMapRowLimits limits{ 2, 3 };
+    CHECK(validate_fixed_map_row("abc", 1, limits).has_value());
+    CHECK(validate_fixed_map_row("", 0, limits).has_value());
+    CHECK(validate_fixed_map_row("abcd", 0, limits).error() == ParseErrorType::OUT_OF_BOUNDS);
+    CHECK(validate_fixed_map_row("abc", 2, limits).error() == ParseErrorType::OUT_OF_BOUNDS);
+    limits.overflow_error = ParseErrorType::INVALID_VALUE;
+    CHECK(validate_fixed_map_row("abcd", 0, limits).error() == ParseErrorType::INVALID_VALUE);
+    limits.allow_empty = false;
+    CHECK(validate_fixed_map_row("", 0, limits).error() == ParseErrorType::INVALID_VALUE);
+    limits.expected_width = 2;
+    CHECK(validate_fixed_map_row("abc", 0, limits).error() == ParseErrorType::INVALID_VALUE);
+    CHECK(validate_fixed_map_row("ab", 0, limits).has_value());
+    CHECK(validate_fixed_map_row("a\t", 0, limits).error() == ParseErrorType::INVALID_VALUE);
+    CHECK(validate_fixed_map_row("ab", 0, limits, [](unsigned char c) { return c == 'a'; }).error() == ParseErrorType::INVALID_VALUE);
+    CHECK(validate_fixed_map_row("aa", 0, limits, [](unsigned char c) { return c == 'a'; }).has_value());
+}

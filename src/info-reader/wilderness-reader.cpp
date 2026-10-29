@@ -282,13 +282,9 @@ tl::expected<void, ParseErrorType> WildernessReader::read_map(const nlohmann::js
             return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
         }
         const auto &row = row_data.get_ref<const std::string &>();
-        if (row.empty() || row.size() > static_cast<size_t>(width)) {
-            return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
-        }
-        for (const auto symbol : row) {
-            if (!defined_symbols[static_cast<unsigned char>(symbol)]) {
-                return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
-            }
+        const FixedMapRowLimits limits{ static_cast<size_t>(height), static_cast<size_t>(width), ParseErrorType::INVALID_VALUE, false, tl::nullopt };
+        if (const auto result = validate_fixed_map_row(row, map.layout.size(), limits, [&defined_symbols](unsigned char symbol) { return defined_symbols[symbol]; }); !result) {
+            return result;
         }
         map.layout.push_back(row);
     }
