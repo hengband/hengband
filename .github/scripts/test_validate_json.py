@@ -10,7 +10,8 @@ from unittest.mock import patch
 from json_validation_test_helper import baseitem_id_schema_maximum, validate_document
 from jsonschema import ValidationError
 from jsonschema.validators import validator_for
-from validate_json import (build_schema_registry, build_validation_pairs, load_all_schemas, load_jsonc, validate_one,
+from validate_json import (BUILDING_MEMBERSHIP_FIELD_MAXIMUMS, build_schema_registry, build_validation_pairs,
+                           load_all_schemas, load_cpp_constant, load_jsonc, load_magic_realm_count, validate_one,
                            validate_town_map_semantics, validate_town_preferences_semantics)
 
 
@@ -874,7 +875,7 @@ class TownMapValidationTest(unittest.TestCase):
         self.assertFalse(self.validate(invalid)[0])
 
     def test_too_many_building_membership_fields_are_rejected(self):
-        for command, maximum in (("C", 29), ("M", 10), ("R", 38)):
+        for command, maximum in BUILDING_MEMBERSHIP_FIELD_MAXIMUMS.items():
             with self.subTest(command=command):
                 invalid = copy.deepcopy(self.data)
                 invalid["buildingRules"][0].update(command=command, fields=["0"] * (maximum + 1))
@@ -1127,6 +1128,108 @@ class DefinitionVersionValidationTest(unittest.TestCase):
                 ok, message = validate_document(document, schema_path, self.loaded[schema_path], self.registry)
                 self.assertFalse(ok, message)
                 self.assertIn(f"Location: {[key]}", message)
+
+
+class CppConstantLoaderTest(unittest.TestCase):
+    """C++ の定数を読む load_cpp_constant() が値を読み、読めないときは黙らずに失敗することを確かめる。"""
+
+    def setUp(self):
+        folder = tempfile.TemporaryDirectory()
+        self.addCleanup(folder.cleanup)
+        self.root = Path(folder.name)
+        (self.root / "src/system").mkdir(parents=True)
+        (self.root / "src/system/h-type.h").write_text("""typedef int32_t PRICE; /*!< 金額 */
+typedef int16_t SMALL;
+""", encoding="utf-8")
+
+    def header(self, text, name="src/limits.h"):
+        path = self.root / name
+        path.write_text(text, encoding="utf-8")
+        return path
+
+    def test_literal_and_expressions_are_read(self):
+        path = self.header("""#pragma once
+// constexpr int COMMENTED = 1;
+constexpr int MAX_HGT = 66; // 高さ
+constexpr auto MAX_EGO_ID = std::numeric_limits<uint8_t>::max();
+constexpr auto ITEM_COST_MAX = std::numeric_limits<PRICE>::max() / 32;
+constexpr auto SMALL_MIN = std::numeric_limits<SMALL>::min();
+constexpr int NEGATIVE = -7 / 2;
+constexpr size_t VALID_TOWNS = 6; /*!< 町の数 */
+""")
+        for name, expected in (("MAX_HGT", 66), ("MAX_EGO_ID", 255), ("ITEM_COST_MAX", (2**31 - 1) // 32),
+                               ("SMALL_MIN", -32768), ("NEGATIVE", -3), ("VALID_TOWNS", 6)):
+            with self.subTest(name=name):
+                self.assertEqual(load_cpp_constant(path, name), expected)
+
+    def test_enumerator_reference_is_read(self):
+        enum_path = self.header("""enum class PlayerRaceType {
+    HUMAN = 0,
+    ELF, // 妖精
+    MAX,
+};
+""", "src/race-types.h")
+        path = self.header("""constexpr auto MAX_RACES = enum2i(PlayerRaceType::MAX);
+constexpr auto CLASS_MAX = static_cast<short>(PlayerRaceType::MAX);
+""")
+        for name in ("MAX_RACES", "CLASS_MAX"):
+            with self.subTest(name=name):
+                self.assertEqual(load_cpp_constant(path, name, {"PlayerRaceType": enum_path}), 2)
+        with self.assertRaisesRegex(ValueError, "MAX_RACES.*no location given for enum PlayerRaceType"):
+            load_cpp_constant(path, "MAX_RACES")
+
+    def test_missing_constant_raises_with_file_and_name(self):
+        path = self.header("""// constexpr int MAX_HGT = 66;
+constexpr int MAX_HGT_OTHER = 1;
+""")
+        with self.assertRaises(ValueError) as raised:
+            load_cpp_constant(path, "MAX_HGT")
+        self.assertIn("MAX_HGT not found", str(raised.exception))
+        self.assertIn(str(path), str(raised.exception))
+
+    def test_duplicate_or_unsupported_definition_raises(self):
+        path = self.header("""constexpr int TWICE = 1;
+constexpr int TWICE = 2;
+constexpr int SUFFIX = 1024U;
+constexpr auto CALL = std::ssize(TABLE);
+constexpr auto UNKNOWN_TYPE = std::numeric_limits<unknown_t>::max();
+constexpr int UNDEFINED_ENUM = enum2i(PlayerRaceType::NOTHING);
+""")
+        enum_path = self.header("""enum class PlayerRaceType {
+    HUMAN,
+    MAX,
+};
+""", "src/race-types.h")
+        for name, reason in (("TWICE", "defined more than once"), ("SUFFIX", "Cannot evaluate"), ("CALL", "Cannot evaluate"),
+                             ("UNKNOWN_TYPE", "Unknown integer type unknown_t"), ("UNDEFINED_ENUM", "PlayerRaceType::NOTHING not found")):
+            with self.subTest(name=name):
+                with self.assertRaisesRegex(ValueError, reason) as raised:
+                    load_cpp_constant(path, name, {"PlayerRaceType": enum_path})
+                self.assertIn(name, str(raised.exception))
+                self.assertIn(str(path), str(raised.exception))
+
+    def test_magic_realm_count_follows_the_range(self):
+        (self.root / "src/realm").mkdir()
+        realm_path = self.root / "src/realm/realm-types.h"
+        definition = """enum class RealmType {
+    NONE = 0,
+    LIFE = 1,
+    SORCERY = 2,
+    CRUSADE = 10,
+    MAX,
+};
+
+constexpr auto MAGIC_REALM_RANGE = EnumRangeInclusive(RealmType::LIFE, RealmType::CRUSADE);
+constexpr auto MAX_MAGIC = std::ssize(MAGIC_REALM_RANGE);
+"""
+        realm_path.write_text(definition, encoding="utf-8")
+        self.assertEqual(load_magic_realm_count(self.root), 10)
+        realm_path.write_text(definition.replace("std::ssize(MAGIC_REALM_RANGE)", "10"), encoding="utf-8")
+        with self.assertRaisesRegex(ValueError, "MAX_MAGIC"):
+            load_magic_realm_count(self.root)
+        realm_path.write_text(definition.replace("RealmType::CRUSADE)", "RealmType::HEX)"), encoding="utf-8")
+        with self.assertRaisesRegex(ValueError, "undefined RealmType"):
+            load_magic_realm_count(self.root)
 
 
 if __name__ == "__main__":

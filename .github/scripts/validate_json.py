@@ -1,3 +1,4 @@
+import ast
 import hashlib
 import re
 import sys
@@ -14,13 +15,183 @@ from referencing.exceptions import Unresolvable
 from referencing.jsonschema import specification_with
 
 
-# エゴのIDは定義とセーブで1バイトに収まる範囲とする。
-MAX_EGO_ID = (1 << 8) - 1
+# このスクリプトを置いたリポジトリのルート。読み込みと揃える C++ の定数は、ここのソースから読む。
+REPOSITORY_ROOT = Path(__file__).resolve().parents[2]
+
+# C++ の整数型の上下限。型の上下限はプロジェクトの定数ではないため、C++ のソースから読まずに名前を付けて持つ。
+INT16_MIN = -(1 << 15)
+INT16_MAX = (1 << 15) - 1
+INT_MIN = -(1 << 31)
+INT_MAX = (1 << 31) - 1
+CPP_INTEGER_TYPE_LIMITS = {
+    "uint8_t": (0, (1 << 8) - 1),
+    "short": (INT16_MIN, INT16_MAX),
+    "int16_t": (INT16_MIN, INT16_MAX),
+    "int": (INT_MIN, INT_MAX),
+    "int32_t": (INT_MIN, INT_MAX),
+}
 
 
 def load_jsonc(file_path: Path) -> dict:
     with file_path.open(encoding='utf-8-sig') as f:
         return pyjson5.load(f)
+
+
+def strip_cpp_comments(source: str) -> str:
+    return re.sub(r'/\*.*?\*/|//[^\n]*', '', source, flags=re.DOTALL)
+
+
+def load_cpp_enum_values(enum_path: Path, enum_name: str) -> dict[str, int]:
+    """Read the enumerator values of a C++ enum class: an explicit "= N", or the previous value + 1."""
+    enum_source = enum_path.read_text(encoding="utf-8")
+    enum_match = re.search(rf'enum class {re.escape(enum_name)}\b[^{{;]*\{{([^}}]+)\}}', enum_source)
+    if not enum_match:
+        raise ValueError(f"{enum_name} definition not found in {enum_path}")
+    entries = strip_cpp_comments(enum_match[1])
+    enum_ids = {}
+    next_id = 0
+    for entry in entries.split(','):
+        if not entry.strip():
+            continue
+        match = re.fullmatch(r'\s*([A-Z][A-Z0-9_]*)(?:\s*=\s*(-?\d+))?\s*', entry)
+        if not match:
+            raise ValueError(f"Unsupported {enum_name} value in {enum_path}: {entry.strip()}")
+        name, explicit_id = match.groups()
+        if explicit_id is not None:
+            next_id = int(explicit_id)
+        enum_ids[name] = next_id
+        next_id += 1
+    return enum_ids
+
+
+def cpp_integer_type_limits(path: Path, type_name: str) -> tuple[int, int]:
+    """C++ の整数型の (最小, 最大) を返す。PRICE などの別名は src/system/h-type.h の typedef から引く。"""
+    if type_name in CPP_INTEGER_TYPE_LIMITS:
+        return CPP_INTEGER_TYPE_LIMITS[type_name]
+    src_dir = next((parent for parent in path.resolve().parents if parent.name == "src"), None)
+    if src_dir is None:
+        raise ValueError(f"Unknown integer type {type_name} in {path}")
+    alias_path = src_dir / "system/h-type.h"
+    aliases = re.findall(rf'^\s*typedef\s+(\w+)\s+{re.escape(type_name)}\s*;', alias_path.read_text(encoding="utf-8"), re.MULTILINE)
+    if len(aliases) != 1 or aliases[0] not in CPP_INTEGER_TYPE_LIMITS:
+        raise ValueError(f"Unknown integer type {type_name} in {path} (not a known typedef in {alias_path})")
+    return CPP_INTEGER_TYPE_LIMITS[aliases[0]]
+
+
+def evaluate_integer_expression(expression: str) -> int:
+    """整数・単項の +-・二項の + - * /（C++ と同じく0に向けて切り捨て）と括弧だけの式を計算する。"""
+    def evaluate(node) -> int:
+        if isinstance(node, ast.Constant) and type(node.value) is int:
+            return node.value
+        if isinstance(node, ast.UnaryOp) and isinstance(node.op, (ast.UAdd, ast.USub)):
+            value = evaluate(node.operand)
+            return -value if isinstance(node.op, ast.USub) else value
+        if isinstance(node, ast.BinOp) and isinstance(node.op, (ast.Add, ast.Sub, ast.Mult, ast.Div)):
+            left, right = evaluate(node.left), evaluate(node.right)
+            if isinstance(node.op, ast.Add):
+                return left + right
+            if isinstance(node.op, ast.Sub):
+                return left - right
+            if isinstance(node.op, ast.Mult):
+                return left * right
+            if right == 0:
+                raise ValueError("division by zero")
+            quotient = abs(left) // abs(right)
+            return quotient if (left < 0) == (right < 0) else -quotient
+        raise ValueError(f"unsupported expression: {ast.dump(node)}")
+
+    try:
+        tree = ast.parse(expression.strip(), mode="eval")
+    except SyntaxError as e:
+        raise ValueError(f"unsupported expression: {expression.strip()}") from e
+    return evaluate(tree.body)
+
+
+def load_cpp_constant(path: Path, name: str, enums: dict[str, Path] | None = None) -> int:
+    """C++ の `constexpr <型> NAME = <式>;` をちょうど1つ見つけ、整数の値を返す。
+
+    式に書けるのは、整数リテラル、std::numeric_limits<型>::min()/max()、enums に場所を渡した列挙子
+    （`static_cast<型>(Enum::NAME)`・`enum2i(Enum::NAME)`・`Enum::NAME`）、+ - * / と括弧だけとする。
+    見つからない・2つ以上ある・式を解釈できない場合は、ファイルと名前を付けて ValueError にする（既定値で続けない）。
+    """
+    source = strip_cpp_comments(path.read_text(encoding="utf-8"))
+    definitions = re.findall(rf'^\s*constexpr\s+[^=;(){{}}]*?\b{re.escape(name)}\s*=\s*([^;]+);', source, re.MULTILINE)
+    if len(definitions) != 1:
+        state = "not found" if not definitions else "defined more than once"
+        raise ValueError(f"constexpr {name} {state} in {path}")
+    expression = definitions[0]
+    try:
+        def limit(match):
+            minimum, maximum = cpp_integer_type_limits(path, match[1])
+            return f"({maximum if match[2] == 'max' else minimum})"
+
+        def enumerator(match):
+            enum_name, value_name = match[1], match[2]
+            if enums is None or enum_name not in enums:
+                raise ValueError(f"no location given for enum {enum_name}")
+            values = load_cpp_enum_values(enums[enum_name], enum_name)
+            if value_name not in values:
+                raise ValueError(f"{enum_name}::{value_name} not found in {enums[enum_name]}")
+            return f"({values[value_name]})"
+
+        evaluated = re.sub(r'std::numeric_limits<\s*(\w+)\s*>::(min|max)\(\s*\)', limit, expression)
+        enumerator_pattern = r'\b([A-Z]\w*)::([A-Z][A-Z0-9_]*)\b'
+        evaluated = re.sub(rf'(?:static_cast<\s*\w+\s*>|\benum2i)\(\s*{enumerator_pattern}\s*\)', enumerator, evaluated)
+        evaluated = re.sub(enumerator_pattern, enumerator, evaluated)
+        return evaluate_integer_expression(evaluated)
+    except ValueError as e:
+        raise ValueError(f"Cannot evaluate constexpr {name} in {path}: {expression.strip()} ({e})") from e
+
+
+def load_magic_realm_count(repository_root: Path) -> int:
+    """MAX_MAGIC（MAGIC_REALM_RANGE の要素数）を、範囲の両端の RealmType の値から求める。"""
+    path = repository_root / "src/realm/realm-types.h"
+    source = strip_cpp_comments(path.read_text(encoding="utf-8"))
+    if not re.search(r'^\s*constexpr\s+auto\s+MAX_MAGIC\s*=\s*std::ssize\(\s*MAGIC_REALM_RANGE\s*\)\s*;', source, re.MULTILINE):
+        raise ValueError(f"constexpr MAX_MAGIC = std::ssize(MAGIC_REALM_RANGE) not found in {path}")
+    match = re.search(r'^\s*constexpr\s+auto\s+MAGIC_REALM_RANGE\s*=\s*EnumRangeInclusive\(\s*RealmType::(\w+)\s*,\s*RealmType::(\w+)\s*\)\s*;',
+                      source, re.MULTILINE)
+    if not match:
+        raise ValueError(f"constexpr MAGIC_REALM_RANGE = EnumRangeInclusive(RealmType::..., RealmType::...) not found in {path}")
+    values = load_cpp_enum_values(path, "RealmType")
+    if match[1] not in values or match[2] not in values:
+        raise ValueError(f"MAGIC_REALM_RANGE refers to an undefined RealmType in {path}")
+    return values[match[2]] - values[match[1]] + 1
+
+
+# 読み込みと揃える C++ の定数。定義が見つからなければ、ここで例外になって CI が止まる。
+# エゴのIDは定義とセーブで1バイトに収まる範囲とする。
+MAX_EGO_ID = load_cpp_constant(REPOSITORY_ROOT / "src/object-enchant/object-ego.h", "MAX_EGO_ID")
+# 町の地図はフロアの大きさの上限の中に読み込む。
+MAX_HGT = load_cpp_constant(REPOSITORY_ROOT / "src/floor/floor-base-definitions.h", "MAX_HGT")
+MAX_WID = load_cpp_constant(REPOSITORY_ROOT / "src/floor/floor-base-definitions.h", "MAX_WID")
+# ベースアイテム・アーティファクトの種別・副種別・価格の上限。
+ITEM_TYPE_MAX = load_cpp_constant(REPOSITORY_ROOT / "src/info-reader/item-reader-limits.h", "ITEM_TYPE_MAX")
+ITEM_SUBTYPE_DEFAULT_MAX = load_cpp_constant(REPOSITORY_ROOT / "src/info-reader/item-reader-limits.h", "ITEM_SUBTYPE_DEFAULT_MAX")
+ITEM_COST_MAX = load_cpp_constant(REPOSITORY_ROOT / "src/info-reader/item-reader-limits.h", "ITEM_COST_MAX")
+# BaseitemReader の pval_range() と金貨の価格の上限。
+GOLD_COST_MAX = load_cpp_constant(REPOSITORY_ROOT / "src/info-reader/baseitem-reader.cpp", "GOLD_COST_MAX")
+EQUIPMENT_PVAL_MAX = load_cpp_constant(REPOSITORY_ROOT / "src/info-reader/baseitem-reader.cpp", "EQUIPMENT_PVAL_MAX")
+DEVICE_CHARGES_MAX = load_cpp_constant(REPOSITORY_ROOT / "src/info-reader/baseitem-reader.cpp", "DEVICE_CHARGES_MAX")
+ROD_PVAL_MAX = load_cpp_constant(REPOSITORY_ROOT / "src/info-reader/baseitem-reader.cpp", "ROD_PVAL_MAX")
+PY_FOOD_FULL = load_cpp_constant(REPOSITORY_ROOT / "src/player/digestion-processor.h", "PY_FOOD_FULL")
+FUEL_LAMP = load_cpp_constant(REPOSITORY_ROOT / "src/system/gamevalue.h", "FUEL_LAMP")
+# 金貨の種別（ItemKindType::GOLD）。凡例のエゴは金貨に付けられない。
+ITEM_KIND_GOLD = load_cpp_enum_values(REPOSITORY_ROOT / "src/object/tval-types.h", "ItemKindType").get("GOLD")
+if ITEM_KIND_GOLD is None:
+    raise ValueError(f"ItemKindType::GOLD not found in {REPOSITORY_ROOT / 'src/object/tval-types.h'}")
+# RaceReader は最大の出目（個数×面数）を捕獲したモンスターのHPを持つ short に収める。
+MAX_MONRACE_DICE_ROLL = load_cpp_constant(REPOSITORY_ROOT / "src/info-reader/race-reader.cpp", "MAX_MONRACE_DICE_ROLL")
+# TownList::is_all_initialized() が名前を求める町（1〜VALID_TOWNS-1）。町1には別名も要る。
+REQUIRED_TOWN_IDS = range(1, load_cpp_constant(REPOSITORY_ROOT / "src/system/floor/town-list.h", "VALID_TOWNS"))
+# TownMapReader の C・M・R の欄の数の上限（PLAYER_CLASS_TYPE_MAX・MAX_MAGIC・MAX_RACES）。
+BUILDING_MEMBERSHIP_FIELD_MAXIMUMS = {
+    "C": load_cpp_constant(REPOSITORY_ROOT / "src/player-info/class-types.h", "PLAYER_CLASS_TYPE_MAX",
+                           {"PlayerClassType": REPOSITORY_ROOT / "src/player-info/class-types.h"}),
+    "M": load_magic_realm_count(REPOSITORY_ROOT),
+    "R": load_cpp_constant(REPOSITORY_ROOT / "src/player-info/race-types.h", "MAX_RACES",
+                           {"PlayerRaceType": REPOSITORY_ROOT / "src/player-info/race-types.h"}),
+}
 
 
 def load_all_schemas(schema_dir: Path) -> tuple[dict[Path, dict], dict[str, Path]]:
@@ -168,9 +339,6 @@ def validate_ego_semantics(data: dict, schema_path: Path) -> None:
             require_integer(extra["chance"], path + ["extra_flags", extra_index, "chance"])
 
 
-INT_MIN = -2147483648
-INT_MAX = 2147483647
-
 
 def require_reader_dice(value: str, path: list, minimum: int = INT_MIN, maximum: int = INT_MAX) -> None:
     # Dice::parse は「個数d面数」の両方をintの10進数として読み、符号は - だけを受け付ける。
@@ -188,6 +356,7 @@ def require_reader_dice(value: str, path: list, minimum: int = INT_MIN, maximum:
 
 
 # セーブではアイテムのダイスの個数・面数をそれぞれ1バイトで書くため、BaseitemReader・ArtifactReaderは0〜255に限る。
+# C++ は baseitem-reader.cpp・artifact-reader.cpp の info_set_dice() に Range(0, 255) と直接書き、名前の付いた定数が無いため手で揃える。
 ITEM_DICE_RANGE = (0, 255)
 
 
@@ -227,8 +396,8 @@ def validate_baseitem_semantics(data: dict, schema_path: Path) -> None:
         if baseitem["symbol"]["color"] not in valid_colors:
             raise ValidationError("unknown color", path=path + ["symbol", "color"])
         type_value = baseitem["itemkind"]["type_value"]
-        if not 0 <= type_value <= 127 or type_value not in kinds.values():
-            raise ValidationError("type_value must be a defined ItemKindType up to 127", path=path + ["itemkind", "type_value"])
+        if not 0 <= type_value <= ITEM_TYPE_MAX or type_value not in kinds.values():
+            raise ValidationError(f"type_value must be a defined ItemKindType up to {ITEM_TYPE_MAX}", path=path + ["itemkind", "type_value"])
         # 読み込みと同じく、種別・副種別・pval の順に確かめる。
         maximum = baseitem_subtype_max(type_value)
         if not 0 <= baseitem["itemkind"]["subtype_value"] <= maximum:
@@ -236,7 +405,7 @@ def validate_baseitem_semantics(data: dict, schema_path: Path) -> None:
         minimum, maximum = baseitem_pval_range(type_value)
         if not minimum <= baseitem.get("parameter_value", 0) <= maximum:
             raise ValidationError(f"parameter_value must be in {minimum}..{maximum}", path=path + ["parameter_value"])
-        maximum = GOLD_COST_MAX if type_value == kinds["GOLD"] else BASEITEM_COST_MAX
+        maximum = GOLD_COST_MAX if type_value == kinds["GOLD"] else ITEM_COST_MAX
         if not 0 <= baseitem["cost"] <= maximum:
             raise ValidationError(f"cost must be in 0..{maximum}", path=path + ["cost"])
         if "base_dice" in baseitem:
@@ -260,31 +429,30 @@ def validate_baseitem_semantics(data: dict, schema_path: Path) -> None:
 
 
 # BaseitemKey::is_equipement() と同じ種別。装備はアーティファクトと同じ補正幅とする。
+# 種別の集合は C++ では判定の関数の中にあり、1つの定数ではないため手で揃える。
 EQUIPMENT_KINDS = {*range(16, 24), *range(30, 41), 45, 50}
-# 回数は取り込みの byte への変換を避ける。充填時間は仕様として1,000までとする。
+# BaseitemReader の pval_range() の種別ごとの範囲。上下限の値は C++ の定数から読み、種別との対応は関数の中の
+# switch なので手で揃える。箱の上限は chest_traps の要素数−1 で、表の大きさから決まる1つの定数が無いため手で揃える。
 BASEITEM_PVAL_RANGES = {
-    55: (1, 127), 65: (1, 127), 66: (1, 1000),
-    # 滋養は PY_FOOD_FULL、燃料は FUEL_LAMP、箱は chest_traps の64要素に合わせる。
-    80: (0, 10000), 75: (-10000, 10000), 77: (1, 15000), 7: (0, 63),
+    55: (1, DEVICE_CHARGES_MAX), 65: (1, DEVICE_CHARGES_MAX), 66: (1, ROD_PVAL_MAX),
+    80: (0, PY_FOOD_FULL), 75: (-PY_FOOD_FULL, PY_FOOD_FULL), 77: (1, FUEL_LAMP), 7: (0, 63),
 }
 
 
 def baseitem_pval_range(type_value: int) -> tuple[int, int]:
-    return (-128, 128) if type_value in EQUIPMENT_KINDS else BASEITEM_PVAL_RANGES.get(type_value, (0, 0))
+    if type_value in EQUIPMENT_KINDS:
+        return -EQUIPMENT_PVAL_MAX, EQUIPMENT_PVAL_MAX
+    return BASEITEM_PVAL_RANGES.get(type_value, (0, 0))
 
 
-# 武器熟練度64要素、fake_spell_flags 4要素、魔道具術師の SV_*_MAX 要素の添え字。
+# 武器熟練度64要素、fake_spell_flags 4要素、魔道具術師の SV_*_MAX 要素の添え字（baseitem-reader.cpp の item_subtype_max()）。
+# どれも表の要素数や通常の enum の終端から決まり、1つの定数ではないため手で揃える。
 BOOK_KINDS = {*range(90, 100), 105, 106, 107}
 BASEITEM_SUBTYPE_MAX = {**dict.fromkeys(range(19, 24), 63), **dict.fromkeys(BOOK_KINDS, 3), 55: 32, 65: 31, 66: 30}
 
 
 def baseitem_subtype_max(type_value: int) -> int:
-    return BASEITEM_SUBTYPE_MAX.get(type_value, 128)
-
-
-# EgoReader の PRICE 上限 / 32 に揃え、金貨の生成額（最大で価格の9倍）には別の上限を設ける。
-BASEITEM_COST_MAX = (2**31 - 1) // 32
-GOLD_COST_MAX = 1024
+    return BASEITEM_SUBTYPE_MAX.get(type_value, ITEM_SUBTYPE_DEFAULT_MAX)
 
 
 def collect_valid_baseitem_keys(baseitem_data: dict) -> set[tuple[int, int]]:
@@ -318,11 +486,11 @@ def validate_artifact_semantics(data: dict, valid_baseitem_keys: set[tuple[int, 
                 require_integer(artifact[field], path + [field])
         for field in ("type_value", "subtype_value"):
             require_integer(artifact["base_item"][field], path + ["base_item", field])
-        if not 0 <= artifact["cost"] <= BASEITEM_COST_MAX:
-            raise ValidationError(f"cost must be in 0..{BASEITEM_COST_MAX}", path=path + ["cost"])
+        if not 0 <= artifact["cost"] <= ITEM_COST_MAX:
+            raise ValidationError(f"cost must be in 0..{ITEM_COST_MAX}", path=path + ["cost"])
         kind = artifact["base_item"]["type_value"]
-        if not 0 <= kind <= 127:
-            raise ValidationError("type_value must be in 0..127", path=path + ["base_item", "type_value"])
+        if not 0 <= kind <= ITEM_TYPE_MAX:
+            raise ValidationError(f"type_value must be in 0..{ITEM_TYPE_MAX}", path=path + ["base_item", "type_value"])
         maximum = baseitem_subtype_max(kind)
         if not 0 <= artifact["base_item"]["subtype_value"] <= maximum:
             raise ValidationError(f"subtype_value must be in 0..{maximum}", path=path + ["base_item", "subtype_value"])
@@ -335,10 +503,6 @@ def validate_artifact_semantics(data: dict, valid_baseitem_keys: set[tuple[int, 
         key = (artifact["base_item"]["type_value"], artifact["base_item"]["subtype_value"])
         if valid_baseitem_keys is not None and key not in valid_baseitem_keys:
             raise ValidationError("base item must be a valid baseitem", path=path + ["base_item"])
-
-
-# TownList::is_all_initialized() が名前を求める町（1〜VALID_TOWNS-1）。町1には別名も要る。
-REQUIRED_TOWN_IDS = range(1, 6)
 
 
 def count_town_files(repository_root: Path) -> int:
@@ -525,8 +689,7 @@ def validate_legend_ego(cell: dict, baseitems: dict, egos: dict, path: list) -> 
     obj = cell.get("object")
     if type(obj) is not int or obj not in baseitems:
         raise ValidationError("ego requires a fixed placed object", path=path + ["ego"])
-    # ItemKindType::GOLD と揃える。
-    if baseitems[obj] == 127:
+    if baseitems[obj] == ITEM_KIND_GOLD:
         raise ValidationError("ego cannot be applied to gold", path=path + ["ego"])
 
 
@@ -756,10 +919,6 @@ def validate_town_definition_list_semantics(data: dict, schema_path: Path, data_
 
 def validate_town_map_semantics(data: dict, schema_path: Path) -> None:
     """Check town map dimensions and starting coordinates used by the map reader."""
-    # Keep these limits in sync with MAX_HGT / MAX_WID in
-    # src/floor/floor-base-definitions.h. Town maps are loaded with those bounds.
-    max_height = 66
-    max_width = 198
     if type(data["version"]) is not int:
         raise ValidationError("expected an integer JSON value", path=["version"])
     if data["version"] != 3:
@@ -788,7 +947,7 @@ def validate_town_map_semantics(data: dict, schema_path: Path) -> None:
             else:
                 require_integer(value, path + [field])
                 if field == "ego" and not 1 <= value <= MAX_EGO_ID:
-                    raise ValidationError("ego ID outside 1..255", path=path + [field])
+                    raise ValidationError(f"ego ID outside 1..{MAX_EGO_ID}", path=path + [field])
         for field in ("terrain", "trap"):
             value = definition.get(field, "NONE")
             if not isinstance(value, str):
@@ -813,9 +972,10 @@ def validate_town_map_semantics(data: dict, schema_path: Path) -> None:
             if len(fields) != 7 or any(re.fullmatch(r"-?[0-9]+", fields[index]) is None for index in (0, 2, 3, 5, 6)):
                 raise ValidationError("building action command requires seven valid fields", path=["buildingRules", rule_index, "fields"])
             for field_index in (0, 2, 3, 5, 6):
-                minimum, maximum = (-32768, 32767) if field_index in (5, 6) else (-2147483648, 2147483647)
+                minimum, maximum = (INT16_MIN, INT16_MAX) if field_index in (5, 6) else (INT_MIN, INT_MAX)
                 if not minimum <= int(fields[field_index]) <= maximum:
                     raise ValidationError("building field exceeds the reader's integer range", path=["buildingRules", rule_index, "fields", field_index])
+            # C++ は town-map-reader.cpp で is_integer_in_range(..., 0, 7) と直接書き、名前の付いた定数が無いため手で揃える。
             if not 0 <= int(fields[0]) < 8:
                 raise ValidationError("building action index is outside the reader's range", path=["buildingRules", rule_index, "fields", 0])
         if rule["command"] in ("C", "M", "R") and not fields:
@@ -823,11 +983,11 @@ def validate_town_map_semantics(data: dict, schema_path: Path) -> None:
         if rule["command"] in ("C", "M", "R") and any(re.fullmatch(r"-?[0-9]+", value) is None for value in fields):
             raise ValidationError("building membership fields must be integers", path=["buildingRules", rule_index, "fields"])
         if rule["command"] in ("C", "M", "R"):
-            max_fields = {"C": 29, "M": 10, "R": 38}[rule["command"]]
+            max_fields = BUILDING_MEMBERSHIP_FIELD_MAXIMUMS[rule["command"]]
             if len(fields) > max_fields:
                 raise ValidationError("too many fields for building membership command", path=["buildingRules", rule_index, "fields"])
             for field_index, value in enumerate(fields):
-                if not -32768 <= int(value) <= 32767:
+                if not INT16_MIN <= int(value) <= INT16_MAX:
                     raise ValidationError("building field exceeds the reader's integer range", path=["buildingRules", rule_index, "fields", field_index])
 
     map_dimensions = []
@@ -836,10 +996,10 @@ def validate_town_map_semantics(data: dict, schema_path: Path) -> None:
         if require_conditions and "when" not in variant:
             raise ValidationError("every map variant requires when when multiple variants are defined", path=["mapVariants", map_index])
         rows = variant["rows"]
-        if len(rows) > max_height:
+        if len(rows) > MAX_HGT:
             raise ValidationError("map height exceeds the reader's maximum", path=["mapVariants", map_index, "rows"])
         width = len(rows[0])
-        if width > max_width:
+        if width > MAX_WID:
             raise ValidationError("map width exceeds the reader's maximum", path=["mapVariants", map_index, "rows", 0])
         for row_index, row in enumerate(rows):
             # pattern の $ は末尾の改行の前にも一致するため、TownMapReaderと同じく行全体を確かめる。
@@ -1021,29 +1181,6 @@ def validate_terrain_semantics(data: dict, schema_path: Path) -> None:
             state_count += 1
 
 
-def load_cpp_enum_values(enum_path: Path, enum_name: str) -> dict[str, int]:
-    """Read the enumerator values of a C++ enum class: an explicit "= N", or the previous value + 1."""
-    enum_source = enum_path.read_text(encoding="utf-8")
-    enum_match = re.search(rf'enum class {re.escape(enum_name)}\b[^{{;]*\{{([^}}]+)\}}', enum_source)
-    if not enum_match:
-        raise ValueError(f"{enum_name} definition not found in {enum_path}")
-    entries = re.sub(r'/\*.*?\*/|//[^\n]*', '', enum_match[1], flags=re.DOTALL)
-    enum_ids = {}
-    next_id = 0
-    for entry in entries.split(','):
-        if not entry.strip():
-            continue
-        match = re.fullmatch(r'\s*([A-Z][A-Z0-9_]*)(?:\s*=\s*(-?\d+))?\s*', entry)
-        if not match:
-            raise ValueError(f"Unsupported {enum_name} value in {enum_path}: {entry.strip()}")
-        name, explicit_id = match.groups()
-        if explicit_id is not None:
-            next_id = int(explicit_id)
-        enum_ids[name] = next_id
-        next_id += 1
-    return enum_ids
-
-
 def load_class_ids(repository_root: Path) -> dict[str, int]:
     """Read the class magic tokens table and PlayerClassType values, not map order."""
     enum_ids = load_cpp_enum_values(repository_root / "src/player-info/class-types.h", "PlayerClassType")
@@ -1211,8 +1348,6 @@ def validate_monster_message_semantics(data: dict, schema_path: Path, data_path:
             if not languages:
                 raise ValidationError("a message must contain ja or en", path=message_path + ["message"])
 
-
-MAX_MONRACE_DICE_ROLL = 32767
 
 
 def validate_monrace_semantics(data: dict, schema_path: Path, data_path: Path, registry: Registry) -> None:
