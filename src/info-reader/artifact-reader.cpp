@@ -38,10 +38,9 @@ ArtifactReader::ArtifactReader(const nlohmann::json &art_data, Session &session)
  */
 tl::expected<void, ParseErrorType> ArtifactReader::read() const
 {
-    const auto id_result = this->session.read(get_json_value(this->art_data, "id"));
+    const auto id_result = this->session.read_and_report(get_json_value(this->art_data, "id"));
     if (!id_result) {
-        msg_print(id_result.error().reason);
-        return tl::unexpected(id_result.error().code);
+        return tl::unexpected(id_result.error());
     }
     const auto int_id = *id_result;
     const auto artifact_id = i2enum<FixedArtifactId>(int_id);

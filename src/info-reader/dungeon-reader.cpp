@@ -51,10 +51,9 @@ tl::expected<void, ParseErrorType> DungeonReader::read() const
         return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
     }
 
-    const auto id_result = this->session.read(get_json_value(element, "id"));
+    const auto id_result = this->session.read_and_report(get_json_value(element, "id"));
     if (!id_result) {
-        msg_print(id_result.error().reason);
-        return tl::unexpected(id_result.error().code);
+        return tl::unexpected(id_result.error());
     }
     const auto id = *id_result;
 

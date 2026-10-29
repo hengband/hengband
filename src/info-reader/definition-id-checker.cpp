@@ -1,6 +1,7 @@
 #include "info-reader/definition-id-checker.h"
 #include "info-reader/json-reader-util.h"
 #include "locale/language-switcher.h"
+#include "view/display-messages.h"
 #include <cstdint>
 #include <fmt/format.h>
 #include <stdexcept>
@@ -30,6 +31,21 @@ tl::expected<int, IdCheckFailure> DefinitionIdChecker::read(const nlohmann::json
         return tl::unexpected(IdCheckFailure{ result.error(), std::move(reason) });
     }
     return this->check(id);
+}
+
+/*!
+ * @brief ID を読み込み、失敗した理由を表示する
+ * @param id_json ID の JSON 値
+ * @return 成功時は ID、失敗時は解析エラーコード
+ */
+tl::expected<int, ParseErrorType> DefinitionIdChecker::read_and_report(const nlohmann::json &id_json)
+{
+    const auto result = this->read(id_json);
+    if (!result) {
+        msg_print(result.error().reason);
+        return tl::unexpected(result.error().code);
+    }
+    return *result;
 }
 
 /*! @brief 整数 ID の範囲と順序を確かめ、確定待ちの値を保持する */

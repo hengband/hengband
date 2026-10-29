@@ -192,10 +192,9 @@ tl::expected<void, ParseErrorType> BaseitemReader::read() const
         return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
     }
 
-    const auto id_result = this->session.read(get_json_value(this->baseitem_data, "id"));
+    const auto id_result = this->session.read_and_report(get_json_value(this->baseitem_data, "id"));
     if (!id_result) {
-        msg_print(id_result.error().reason);
-        return tl::unexpected(id_result.error().code);
+        return tl::unexpected(id_result.error());
     }
     const auto item_id = *id_result;
 
