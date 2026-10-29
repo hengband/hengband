@@ -389,15 +389,11 @@ tl::expected<void, ParseErrorType> RaceReader::set_mon_sex(MonraceDefinition &mo
     if (sex_data.is_null()) {
         return {};
     }
-    if (!sex_data.is_string()) {
-        return tl::unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
+    const auto sex = info_read_token(sex_data, r_info_sex, ParseErrorType::TOO_FEW_ARGUMENTS);
+    if (!sex) {
+        return tl::make_unexpected(sex.error());
     }
-
-    uint32_t sex;
-    if (!info_grab_one_const(sex, r_info_sex, sex_data.get<std::string>())) {
-        return tl::unexpected(ParseErrorType::INVALID_FLAG);
-    }
-    monrace.init_sex(sex);
+    monrace.init_sex(static_cast<uint32_t>(*sex));
     return {};
 }
 
@@ -492,18 +488,17 @@ tl::expected<void, ParseErrorType> RaceReader::set_mon_blows(MonraceDefinition &
             return tl::unexpected(ParseErrorType::INVALID_TYPE);
         }
 
-        const auto rbm = r_info_blow_method.find(blow_method.get<std::string>());
-        if (rbm == r_info_blow_method.end()) {
-            return tl::unexpected(ParseErrorType::INVALID_FLAG);
+        const auto rbm = info_read_token(blow_method, r_info_blow_method);
+        if (!rbm) {
+            return tl::make_unexpected(rbm.error());
         }
-
-        const auto rbe = r_info_blow_effect.find(blow_effect.get<std::string>());
-        if (rbe == r_info_blow_effect.end()) {
-            return tl::unexpected(ParseErrorType::INVALID_FLAG);
+        const auto rbe = info_read_token(blow_effect, r_info_blow_effect);
+        if (!rbe) {
+            return tl::make_unexpected(rbe.error());
         }
         auto &mon_blow = monrace.blows[blow_num];
-        mon_blow.method = rbm->second;
-        mon_blow.effect = rbe->second;
+        mon_blow.method = *rbm;
+        mon_blow.effect = *rbe;
 
         if (const auto result = info_set_monrace_dice(get_json_value(blow, "damage_dice"), mon_blow.damage_dice, false); !result) {
             return result;
@@ -640,12 +635,9 @@ tl::expected<void, ParseErrorType> RaceReader::set_mon_message(MonraceMessage &m
         if (action_str.is_null()) {
             return tl::unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
         }
-        if (!action_str.is_string()) {
-            return tl::unexpected(ParseErrorType::INVALID_TYPE);
-        }
-        const auto action = r_info_message_flags.find(action_str.get<std::string>());
-        if (action == r_info_message_flags.end()) {
-            return tl::unexpected(ParseErrorType::INVALID_FLAG);
+        const auto action = info_read_token(action_str, r_info_message_flags, ParseErrorType::INVALID_TYPE);
+        if (!action) {
+            return tl::make_unexpected(action.error());
         }
 
         int chance = 0;
@@ -667,7 +659,7 @@ tl::expected<void, ParseErrorType> RaceReader::set_mon_message(MonraceMessage &m
             return result;
         }
 
-        messages.emplace(action->second, chance, use_name, str);
+        messages.emplace(*action, chance, use_name, str);
     }
     return {};
 }

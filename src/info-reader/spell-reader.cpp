@@ -68,15 +68,11 @@ tl::expected<RealmType, ParseErrorType> SpellReader::read_realm() const
     }
 
     const auto &realmname_obj = get_json_value(this->realm_data, "name");
-    if (!realmname_obj.is_string()) {
-        return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
+    const auto realm = info_read_token(realmname_obj, realms_list, ParseErrorType::TOO_FEW_ARGUMENTS);
+    if (!realm) {
+        return tl::make_unexpected(realm.error());
     }
-
-    const auto it = realms_list.find(realmname_obj.get<std::string>());
-    if (it == realms_list.end()) {
-        return tl::make_unexpected(ParseErrorType::INVALID_FLAG);
-    }
-    return it->second;
+    return *realm;
 }
 
 /*!

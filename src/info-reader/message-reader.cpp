@@ -118,14 +118,9 @@ tl::expected<void, ParseErrorType> MessageReader::set_mon_message() const
     }
 
     for (const auto &message : message_array) {
-        const auto action_iter = message.find("action");
-        if (action_iter == message.end() || !action_iter->is_string()) {
-            return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
-        }
-        const auto &action_data = action_iter.value();
-        const auto action = r_info_message_flags.find(action_data.get<std::string>());
-        if (action == r_info_message_flags.end()) {
-            return tl::make_unexpected(ParseErrorType::INVALID_FLAG);
+        const auto action = info_read_token(get_json_value(message, "action"), r_info_message_flags, ParseErrorType::TOO_FEW_ARGUMENTS);
+        if (!action) {
+            return tl::make_unexpected(action.error());
         }
 
         const auto chance_iter = message.find("chance");
@@ -191,7 +186,7 @@ tl::expected<void, ParseErrorType> MessageReader::set_mon_message() const
             if (!str_test) {
                 return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
             }
-            pending_messages.push_back({ action->second, chance, use_name, std::move(*str_test) });
+            pending_messages.push_back({ *action, chance, use_name, std::move(*str_test) });
         }
     }
     publish();
