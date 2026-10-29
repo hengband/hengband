@@ -183,20 +183,15 @@ tl::expected<void, ParseErrorType> ArtifactReader::set_art_baseitem(ArtifactDefi
  */
 tl::expected<void, ParseErrorType> ArtifactReader::set_art_activate(ArtifactDefinition &artifact) const
 {
-    const auto &act_data = get_json_value(this->art_data, "activate");
-    if (act_data.is_null()) {
+    const auto activation = read_activation(get_json_value(this->art_data, "activate"));
+    if (!activation) {
+        return tl::unexpected(activation.error());
+    }
+    if (*activation == RandomArtActType::NONE) {
         return {};
     }
-    if (!act_data.is_string()) {
-        return tl::unexpected(ParseErrorType::INVALID_TYPE);
-    }
 
-    const auto activation = grab_one_activation_flag(act_data.get<std::string>());
-    if (activation <= RandomArtActType::NONE) {
-        return tl::unexpected(ParseErrorType::INVALID_FLAG);
-    }
-
-    artifact.act_idx = activation;
+    artifact.act_idx = *activation;
     artifact.flags.set(tr_type::TR_ACTIVATE);
     return {};
 }

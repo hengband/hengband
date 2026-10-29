@@ -1,12 +1,15 @@
 #pragma once
 
+#include "info-reader/parse-error-types.h"
 #include "system/angband.h"
 #include "system/h-type.h"
 #include "util/bit-flags-calculator.h"
 #include <concepts>
 #include <cstdint>
 #include <limits>
+#include <nlohmann/json_fwd.hpp>
 #include <string_view>
+#include <tl/expected.hpp>
 #include <tl/optional.hpp>
 #include <type_traits>
 #include <utility>
@@ -27,6 +30,7 @@ constexpr int MAX_TERRAIN_ID = std::numeric_limits<FEAT_IDX>::max() - 1; //!< �
 constexpr int MAX_QUEST_ID = std::numeric_limits<std::underlying_type_t<QuestId>>::max() - 1; //!< クエストIDの上限
 
 RandomArtActType grab_one_activation_flag(std::string_view what);
+tl::expected<RandomArtActType, ParseErrorType> read_activation(const nlohmann::json &activation_json);
 
 /*!
  * @brief 型Keyをキーとして持つような連想配列型のコンセプト

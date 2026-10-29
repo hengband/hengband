@@ -4,6 +4,7 @@
 #include "info-reader/baseitem-reader.h"
 #include "info-reader/ego-reader.h"
 #include "info-reader/info-reader-util.h"
+#include "info-reader/json-reader-util.h"
 #include "info-reader/parse-error-types.h"
 #include "object-enchant/activation-info-table.h"
 #include "object-enchant/object-ego.h"
@@ -16,6 +17,7 @@
 #include "test/info-reader/scoped-reader-state.h"
 #include "test/system/artifact-list-test-access.h"
 #include "util/enum-converter.h"
+#include "view/display-messages.h"
 #include <array>
 #include <doctest/doctest.h>
 #include <limits>
@@ -267,4 +269,33 @@ TEST_CASE("Activation reader guard restores existing artifact definitions")
     CHECK(restored.name == "Existing");
     CHECK(restored.act_idx == RandomArtActType::CRIMSON);
     CHECK(restored.flags.has(TR_ACTIVATE));
+}
+
+TEST_CASE("read_activation preserves absent null invalid and unknown values")
+{
+    ScopedMessageCapture capture;
+    const auto missing = nlohmann::json::object();
+    REQUIRE(read_activation(get_json_value(missing, "activate")) == RandomArtActType::NONE);
+    REQUIRE(read_activation(nullptr) == RandomArtActType::NONE);
+    CHECK(capture.messages().empty());
+    for (const auto &value : { nlohmann::json(1), nlohmann::json(true), nlohmann::json::array(), nlohmann::json::object() }) {
+        CHECK(read_activation(value).error() == ParseErrorType::INVALID_TYPE);
+        CHECK(capture.messages().empty());
+    }
+    const auto result = read_activation("UNKNOWN_ACTIVATION");
+    REQUIRE_FALSE(result);
+    CHECK(result.error() == ParseErrorType::INVALID_FLAG);
+    REQUIRE(capture.messages().size() == 1);
+    CHECK(capture.messages().front() == fmt::format(_("未知の発動・フラグ '{}'。", "Unknown activation flag '{}'."), "UNKNOWN_ACTIVATION"));
+}
+
+TEST_CASE("read_activation accepts every registered name without diagnostics")
+{
+    ScopedMessageCapture capture;
+    for (const auto &activation : activation_info) {
+        CAPTURE(activation.flag);
+        REQUIRE(activation.index > RandomArtActType::NONE);
+        CHECK(read_activation(activation.flag) == activation.index);
+    }
+    CHECK(capture.messages().empty());
 }

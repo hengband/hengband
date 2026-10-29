@@ -212,16 +212,13 @@ tl::expected<void, ParseErrorType> EgoReader::set_extra_flags(EgoItemDefinition 
  */
 tl::expected<void, ParseErrorType> EgoReader::set_activation(EgoItemDefinition &ego) const
 {
-    const auto &activation = get_json_value(this->ego_data, "activation");
-    if (activation.is_null()) {
+    const auto activation = read_activation(get_json_value(this->ego_data, "activation"));
+    if (!activation) {
+        return tl::unexpected(activation.error());
+    }
+    if (*activation == RandomArtActType::NONE) {
         return {};
     }
-    if (!activation.is_string()) {
-        return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
-    }
-    ego.act_idx = grab_one_activation_flag(activation.get<std::string>());
-    if (ego.act_idx <= RandomArtActType::NONE) {
-        return tl::make_unexpected(ParseErrorType::INVALID_FLAG);
-    }
+    ego.act_idx = *activation;
     return {};
 }
