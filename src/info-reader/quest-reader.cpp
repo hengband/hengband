@@ -212,14 +212,8 @@ tl::expected<void, ParseErrorType> parse_legend_cell(const nlohmann::json &cell_
         const auto tag = terrain.get<std::string>();
         if (deferred != nullptr) {
             deferred->terrain_tag = tag;
-        } else if (tag == "*") {
-            grid.random |= RANDOM_FEATURE;
-        } else {
-            try {
-                grid.feature = TerrainList::get_instance().get_terrain_id(tag);
-            } catch (const std::exception &) {
-                return tl::make_unexpected(ParseErrorType::UNDEFINED_TERRAIN_TAG);
-            }
+        } else if (const auto result = resolve_legend_terrain(tag, grid.feature, grid.random, RANDOM_FEATURE); !result) {
+            return result;
         }
     } else if (!terrain.is_null()) {
         return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
@@ -331,12 +325,8 @@ tl::expected<void, ParseErrorType> parse_legend_cell(const nlohmann::json &cell_
     if (trap.is_string()) {
         if (deferred != nullptr) {
             deferred->trap_tag = trap.get<std::string>();
-        } else {
-            try {
-                grid.trap = TerrainList::get_instance().get_terrain_id(trap.get<std::string>());
-            } catch (const std::exception &) {
-                return tl::make_unexpected(ParseErrorType::UNDEFINED_TERRAIN_TAG);
-            }
+        } else if (const auto result = resolve_legend_terrain(trap.get_ref<const std::string &>(), grid.trap, grid.random, RANDOM_NONE); !result) {
+            return result;
         }
     } else if (trap.is_object()) {
         auto random = false;
@@ -751,5 +741,24 @@ tl::expected<void, ParseErrorType> QuestReader::set_starts(QuestFixedMap &parsed
         }
     }
 
+    return {};
+}
+
+/*!
+ * @brief 地形・罠タグを解決し、許可された場合だけ「*」をランダム指定にする。
+ * @param random_flag 対応するランダムビット。RANDOM_NONEなら「*」も通常のタグとして解決する。
+ * @return 未定義のタグはUNDEFINED_TERRAIN_TAG。失敗時は出力を変更しない。
+ */
+tl::expected<void, ParseErrorType> resolve_legend_terrain(std::string_view tag, short &terrain, int &random, int random_flag)
+{
+    if (tag == "*" && random_flag != RANDOM_NONE) {
+        random |= random_flag;
+        return {};
+    }
+    try {
+        terrain = TerrainList::get_instance().get_terrain_id(tag);
+    } catch (const std::exception &) {
+        return tl::make_unexpected(ParseErrorType::UNDEFINED_TERRAIN_TAG);
+    }
     return {};
 }

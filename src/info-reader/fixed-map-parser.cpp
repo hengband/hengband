@@ -173,20 +173,11 @@ tl::expected<void, ParseErrorType> apply_town_map_feature(const FloorType &floor
     auto grid = feature.cell.grid;
     grid.set_terrain_id(TerrainTag::NONE);
     grid.set_trap_id(TerrainTag::NONE);
-    const auto &terrains = TerrainList::get_instance();
-    try {
-        if (feature.terrain == "*") {
-            grid.random |= RANDOM_FEATURE;
-        } else {
-            grid.feature = terrains.get_terrain_id(feature.terrain);
-        }
-        if (feature.trap == "*") {
-            grid.random |= RANDOM_TRAP;
-        } else {
-            grid.trap = terrains.get_terrain_id(feature.trap);
-        }
-    } catch (const std::exception &) {
-        return tl::make_unexpected(ParseErrorType::UNDEFINED_TERRAIN_TAG);
+    if (const auto result = resolve_legend_terrain(feature.terrain, grid.feature, grid.random, RANDOM_FEATURE); !result) {
+        return result;
+    }
+    if (const auto result = resolve_legend_terrain(feature.trap, grid.trap, grid.random, RANDOM_TRAP); !result) {
+        return result;
     }
 
     try {
