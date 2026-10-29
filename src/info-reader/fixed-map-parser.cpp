@@ -191,12 +191,7 @@ tl::expected<void, ParseErrorType> apply_town_map_feature(const FloorType &floor
             if (reward && !ArtifactList::get_instance().contains(*reward)) {
                 return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
             }
-            if (feature.cell.object_is_quest_reward && quest.has_reward() && !quest.is_reward_instant_artifact()) {
-                grid.object = quest.get_reward_bi_id();
-            }
-            if (feature.cell.artifact_is_quest_reward) {
-                grid.artifact = reward.value_or(FixedArtifactId::NONE);
-            }
+            resolve_legend_reward(grid, feature.cell, quest);
         }
     } catch (const std::exception &) {
         // 報酬解決に失敗した場合は、地形テンプレートを変更せず解析エラーとして返す。

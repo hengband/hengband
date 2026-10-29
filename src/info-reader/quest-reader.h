@@ -68,3 +68,5 @@ tl::expected<void, ParseErrorType> parse_quest_legend_cell_deferred(const nlohma
 tl::expected<void, ParseErrorType> parse_quest_legend_cell_deferred(const nlohmann::json &cell_data, DeferredQuestLegendCell &out, std::string &reason);
 
 tl::expected<void, ParseErrorType> resolve_legend_terrain(std::string_view tag, short &terrain, int &random, int random_flag);
+
+void resolve_legend_reward(dungeon_grid &grid, const QuestLegendCell &cell, const QuestType &quest);

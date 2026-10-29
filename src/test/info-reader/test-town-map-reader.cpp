@@ -1476,6 +1476,10 @@ TEST_CASE("TownMapReader applies resolved ordinary quest reward baseitem and art
     REQUIRE(apply_town_map_feature(floor, definition.features.front()).has_value());
     CHECK(letter['#'].object == 7);
     CHECK(letter['#'].artifact == FixedArtifactId::GALADRIEL_PHIAL);
+    auto grid = definition.features.front().cell.grid;
+    resolve_legend_reward(grid, definition.features.front().cell, QuestList::get_instance().get_quest(floor.quest_number));
+    CHECK(grid.object == 7);
+    CHECK(grid.artifact == FixedArtifactId::GALADRIEL_PHIAL);
     CHECK(letter['#'].feature == state.floor_id());
     CHECK(letter['#'].trap == 0);
 }

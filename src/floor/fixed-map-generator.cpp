@@ -7,6 +7,7 @@
 #include "info-reader/general-parser.h"
 #include "info-reader/legend-ego-validator.h"
 #include "info-reader/parse-error-types.h"
+#include "info-reader/quest-reader.h"
 #include "info-reader/random-grid-effect-types.h"
 #include "monster-floor/monster-generator.h"
 #include "monster-floor/monster-remover.h"
@@ -322,12 +323,7 @@ tl::expected<void, ParseErrorType> generate_quest_floor_from_json(PlayerType *pl
     // 2. このクエスト固有の凡例を letter[] に上書き (報酬は受託時 resolve_quest_reward で解決済み)
     for (const auto &[symbol, cell] : fixed_map.legend) {
         auto grid = cell.grid;
-        if (cell.object_is_quest_reward && quest.has_reward() && !quest.is_reward_instant_artifact()) {
-            grid.object = quest.get_reward_bi_id();
-        }
-        if (cell.artifact_is_quest_reward) {
-            grid.artifact = quest.get_reward().value_or(FixedArtifactId::NONE);
-        }
+        resolve_legend_reward(grid, cell, quest);
 
         fixed_map_letter_at(static_cast<unsigned char>(symbol)) = grid;
     }

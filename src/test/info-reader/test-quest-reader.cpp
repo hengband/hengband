@@ -1376,3 +1376,20 @@ TEST_CASE("resolve_legend_terrain resolves tags and preserves random policies")
         CHECK(random == RANDOM_OBJECT);
     }
 }
+
+TEST_CASE("resolve_legend_reward preserves object without reward and clears artifact references")
+{
+    QuestType quest;
+    QuestLegendCell cell;
+    dungeon_grid grid{};
+    grid.object = 77;
+    grid.artifact = FixedArtifactId::GALADRIEL_PHIAL;
+    resolve_legend_reward(grid, cell, quest);
+    CHECK(grid.object == 77);
+    CHECK(grid.artifact == FixedArtifactId::GALADRIEL_PHIAL);
+    cell.object_is_quest_reward = true;
+    cell.artifact_is_quest_reward = true;
+    resolve_legend_reward(grid, cell, quest);
+    CHECK(grid.object == 77);
+    CHECK(grid.artifact == FixedArtifactId::NONE);
+}

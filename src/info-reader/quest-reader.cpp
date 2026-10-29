@@ -762,3 +762,20 @@ tl::expected<void, ParseErrorType> resolve_legend_terrain(std::string_view tag, 
     }
     return {};
 }
+
+/*!
+ * @brief 凡例の報酬参照を、確定済みのクエスト報酬から解決する。
+ * @param grid 解決した報酬を書き込む先
+ * @param cell 凡例のセル
+ * @param quest 報酬を確定済みのクエスト
+ * @details 参照先の検証と例外処理は呼出側が担当する。objectは通常の報酬だけを対象とする。
+ */
+void resolve_legend_reward(dungeon_grid &grid, const QuestLegendCell &cell, const QuestType &quest)
+{
+    if (cell.object_is_quest_reward && quest.has_reward() && !quest.is_reward_instant_artifact()) {
+        grid.object = quest.get_reward_bi_id();
+    }
+    if (cell.artifact_is_quest_reward) {
+        grid.artifact = quest.get_reward().value_or(FixedArtifactId::NONE);
+    }
+}
