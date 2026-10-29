@@ -365,11 +365,17 @@ tl::expected<void, ParseErrorType> TownMapReader::read_maps(TownMapDefinition &d
         }
         map.condition = *condition;
         const auto &rows = variant["rows"];
-        if (maximum_height <= 0 || maximum_width <= 0 || rows.size() > static_cast<size_t>(maximum_height) || !rows.front().is_string()) {
+        if (maximum_height <= 0 || maximum_width <= 0 || rows.size() > static_cast<size_t>(maximum_height)) {
+            return tl::make_unexpected(ParseErrorType::OUT_OF_BOUNDS);
+        }
+        if (!rows.front().is_string()) {
             return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
         }
         const auto width = rows.front().get_ref<const std::string &>().size();
-        if (width == 0 || width > static_cast<size_t>(maximum_width)) {
+        if (width > static_cast<size_t>(maximum_width)) {
+            return tl::make_unexpected(ParseErrorType::OUT_OF_BOUNDS);
+        }
+        if (width == 0) {
             return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
         }
         for (const auto &row : rows) {
@@ -377,7 +383,7 @@ tl::expected<void, ParseErrorType> TownMapReader::read_maps(TownMapDefinition &d
                 return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
             }
             const auto &text = row.get_ref<const std::string &>();
-            const FixedMapRowLimits limits{ static_cast<size_t>(maximum_height), static_cast<size_t>(maximum_width), ParseErrorType::INVALID_VALUE, false, width };
+            const FixedMapRowLimits limits{ static_cast<size_t>(maximum_height), static_cast<size_t>(maximum_width), ParseErrorType::OUT_OF_BOUNDS, false, width };
             if (const auto result = validate_fixed_map_row(text, map.rows.size(), limits); !result) {
                 return result;
             }

@@ -133,10 +133,10 @@ tl::expected<void, ParseErrorType> WildernessReader::read(WildernessDefinition &
     // 荒野全体図は荒野の1マスをフロアの1マスへ描くため、フロアの最大の大きさに収める。
     // 周囲8マスを生成できる内側のマスが要るため、幅・高さとも3以上とする。
     if (const auto result = info_set_integer(get_json_value(this->data, "width"), parsed.width, true, Range(3, MAX_WID)); !result) {
-        return result;
+        return tl::make_unexpected(result.error() == ParseErrorType::INVALID_VALUE ? ParseErrorType::OUT_OF_BOUNDS : result.error());
     }
     if (const auto result = info_set_integer(get_json_value(this->data, "height"), parsed.height, true, Range(3, MAX_HGT)); !result) {
-        return result;
+        return tl::make_unexpected(result.error() == ParseErrorType::INVALID_VALUE ? ParseErrorType::OUT_OF_BOUNDS : result.error());
     }
 
     const auto &towns_data = get_json_value(this->data, "towns");
@@ -274,15 +274,18 @@ tl::expected<void, ParseErrorType> WildernessReader::read_map(const nlohmann::js
     }
 
     const auto &layout_data = get_json_value(map_data, "layout");
-    if (!layout_data.is_array() || layout_data.empty() || layout_data.size() > static_cast<size_t>(height)) {
+    if (!layout_data.is_array() || layout_data.empty()) {
         return tl::make_unexpected(layout_data.is_null() ? ParseErrorType::TOO_FEW_ARGUMENTS : ParseErrorType::INVALID_VALUE);
+    }
+    if (layout_data.size() > static_cast<size_t>(height)) {
+        return tl::make_unexpected(ParseErrorType::OUT_OF_BOUNDS);
     }
     for (const auto &row_data : layout_data) {
         if (!row_data.is_string()) {
             return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
         }
         const auto &row = row_data.get_ref<const std::string &>();
-        const FixedMapRowLimits limits{ static_cast<size_t>(height), static_cast<size_t>(width), ParseErrorType::INVALID_VALUE, false, tl::nullopt };
+        const FixedMapRowLimits limits{ static_cast<size_t>(height), static_cast<size_t>(width), ParseErrorType::OUT_OF_BOUNDS, false, tl::nullopt };
         if (const auto result = validate_fixed_map_row(row, map.layout.size(), limits, [&defined_symbols](unsigned char symbol) { return defined_symbols[symbol]; }); !result) {
             return result;
         }

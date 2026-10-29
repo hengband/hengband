@@ -661,7 +661,8 @@ TEST_CASE("TownMapReader validates rectangular printable maps and all start boun
         auto data = make_town_map();
         data["mapVariants"][0]["when"] = "0";
         data["mapVariants"][0]["rows"] = rows;
-        CHECK(test::to_error_code(read_town(data)) == ParseErrorType::INVALID_VALUE);
+        const auto oversize = rows.size() > 3 || (rows.front().is_string() && rows.front().get_ref<const std::string &>().size() > 3);
+        CHECK(test::to_error_code(read_town(data)) == (oversize ? ParseErrorType::OUT_OF_BOUNDS : ParseErrorType::INVALID_VALUE));
     }
     auto data = make_town_map();
     data["mapVariants"].push_back({ { "when", "0" }, { "rows", { "#" } } });
@@ -670,8 +671,8 @@ TEST_CASE("TownMapReader validates rectangular printable maps and all start boun
     data["startingPositions"][0]["y"] = 0;
     CHECK(read_town(data).has_value());
     TownMapDefinition definition;
-    CHECK(test::to_error_code(TownMapReader(data).read(definition, 0, 3)) == ParseErrorType::INVALID_VALUE);
-    CHECK(test::to_error_code(TownMapReader(data).read(definition, 3, 0)) == ParseErrorType::INVALID_VALUE);
+    CHECK(test::to_error_code(TownMapReader(data).read(definition, 0, 3)) == ParseErrorType::OUT_OF_BOUNDS);
+    CHECK(test::to_error_code(TownMapReader(data).read(definition, 3, 0)) == ParseErrorType::OUT_OF_BOUNDS);
 }
 
 TEST_CASE("TownMapReader building-only mode skips map and start contents, not root requirements")
@@ -1869,4 +1870,16 @@ TEST_CASE("TownMapReader reports fixed trap tags including typos in conflicts")
             CHECK(diagnostics.messages().front() == expected);
         }
     }
+}
+
+TEST_CASE("TownMapReader reports oversize maps as out of bounds")
+{
+    for (const auto &[height, width] : { std::pair{ 2, 3 }, std::pair{ 3, 2 }, std::pair{ 0, 3 }, std::pair{ 3, 0 } }) {
+        const auto data = make_town_map();
+        TownMapDefinition definition;
+        CHECK(test::to_error_code(TownMapReader(data).read(definition, height, width)) == ParseErrorType::OUT_OF_BOUNDS);
+    }
+    auto data = make_town_map();
+    data["mapVariants"][0]["rows"][1] = "####";
+    CHECK(test::to_error_code(read_town(data)) == ParseErrorType::OUT_OF_BOUNDS);
 }
