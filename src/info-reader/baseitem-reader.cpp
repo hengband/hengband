@@ -33,7 +33,6 @@
 #include <algorithm>
 #include <array>
 #include <iterator>
-#include <limits>
 #include <memory>
 #include <nlohmann/json.hpp>
 #include <utility>
@@ -44,8 +43,7 @@ constexpr auto EQUIPMENT_PVAL_MAX = 128;
 constexpr auto DEVICE_CHARGES_MAX = 127;
 // ロッドは重ねる数を充填時間から制限する。定義の充填時間は仕様として 1,000 までとする。
 constexpr auto ROD_PVAL_MAX = 1000;
-// エゴと同じ価格上限に揃え、金貨は生成時の額 (最大で基本価格の9倍) を十分小さく保つ。
-constexpr auto BASEITEM_COST_MAX = std::numeric_limits<PRICE>::max() / 32;
+// 金貨は生成時の額 (最大で基本価格の9倍) を十分小さく保つ。
 constexpr auto GOLD_COST_MAX = 1024;
 
 // ItemKindType の列挙子だけを受け付け、空き番号を定義として使わせない。
@@ -141,12 +139,14 @@ Range pval_range(const BaseitemKey &key)
     }
 }
 
+}
+
 /*!
  * @brief ベースアイテムの種別ごとの副種別の上限を返す
  * @param key ベースアイテムのキー (種別だけを見る)
  * @return 受け付ける副種別の上限 (下限は 0)
  */
-int subtype_max(const BaseitemKey &key)
+int item_subtype_max(const BaseitemKey &key)
 {
     if (key.is_weapon()) {
         // 武器熟練度の種別ごとの配列を副種別で引く。
@@ -165,9 +165,8 @@ int subtype_max(const BaseitemKey &key)
     case ItemKindType::ROD:
         return SV_ROD_MAX - 1;
     default:
-        return 128;
+        return ITEM_SUBTYPE_DEFAULT_MAX;
     }
-}
 }
 
 BaseitemReader::Session BaseitemReader::create_session(tl::optional<int> last_id)
@@ -235,7 +234,7 @@ tl::expected<void, ParseErrorType> BaseitemReader::read() const
         msg_print(_("アイテムの重量読込失敗。", "Failed to load weight of item."));
         return result;
     }
-    const auto cost_max = baseitem.bi_key.tval() == ItemKindType::GOLD ? GOLD_COST_MAX : BASEITEM_COST_MAX;
+    const auto cost_max = baseitem.bi_key.tval() == ItemKindType::GOLD ? GOLD_COST_MAX : ITEM_COST_MAX;
     if (const auto result = info_set_integer(get_json_value(this->baseitem_data, "cost"), baseitem.cost, true, Range(0, cost_max)); !result) {
         msg_print(_("アイテムの売値読込失敗。", "Failed to load cost of item."));
         return result;
@@ -361,14 +360,14 @@ tl::expected<void, ParseErrorType> BaseitemReader::set_baseitem_kind(BaseitemDef
     // 失敗時は直後に返るが、gcc の最適化で未初期化と誤検出されないよう初期化しておく。
     ItemKindType type_value{};
     // 種別をそのまま添え字にする色の表は128要素。
-    if (const auto result = info_set_integer(get_json_value(itemkind_data, "type_value"), type_value, true, Range(0, 127)); !result) {
+    if (const auto result = info_set_integer(get_json_value(itemkind_data, "type_value"), type_value, true, Range(0, ITEM_TYPE_MAX)); !result) {
         return result;
     }
     if (std::find(std::begin(DEFINED_ITEM_KINDS), std::end(DEFINED_ITEM_KINDS), type_value) == std::end(DEFINED_ITEM_KINDS)) {
         return tl::unexpected(ParseErrorType::INVALID_VALUE);
     }
     int subtype_value = 0;
-    if (const auto result = info_set_integer(get_json_value(itemkind_data, "subtype_value"), subtype_value, true, Range(0, subtype_max({ type_value, 0 }))); !result) {
+    if (const auto result = info_set_integer(get_json_value(itemkind_data, "subtype_value"), subtype_value, true, Range(0, item_subtype_max({ type_value, 0 }))); !result) {
         return result;
     }
 

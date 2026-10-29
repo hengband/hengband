@@ -4,11 +4,13 @@
 #include "info-reader/info-reader-util.h"
 #include "info-reader/parse-error-types.h"
 #include "locale/character-encoding.h"
+#include "locale/language-switcher.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/tr-types.h"
 #include "test/info-reader/parse-result-helpers.h"
 #include "test/info-reader/scoped-reader-state.h"
 #include "util/enum-converter.h"
+#include "view/display-messages.h"
 #include <array>
 #include <cstdint>
 #include <doctest/doctest.h>
@@ -427,4 +429,32 @@ TEST_CASE("EgoReader pins flag array type errors and missing values")
             CHECK(test::to_error_code(test::read_and_commit(EgoReader(data, session), session)) == expected);
         }
     }
+}
+
+TEST_CASE("EgoReader rejects an unknown flag without publishing the record")
+{
+    EgoStateGuard guard;
+    auto session = EgoReader::create_session();
+    auto data = make_ego();
+    data["flags"] = { "UNKNOWN_EGO_FLAG" };
+    ScopedMessageCapture diagnostics;
+    CHECK(test::to_error_code(test::read_and_commit(EgoReader(data, session), session)) == ParseErrorType::INVALID_FLAG);
+    CHECK(egos_info.empty());
+    CHECK_FALSE(session.last_id().has_value());
+    REQUIRE(diagnostics.messages().size() == 1);
+    CHECK(diagnostics.messages()[0] == _("未知のエゴ・フラグ 'UNKNOWN_EGO_FLAG'。", "Unknown ego flag 'UNKNOWN_EGO_FLAG'."));
+}
+
+TEST_CASE("EgoReader rejects an unknown extra flag without publishing the record")
+{
+    EgoStateGuard guard;
+    auto session = EgoReader::create_session();
+    auto data = make_ego();
+    data["extra_flags"][0]["flags"] = { "RES_FIRE", "UNKNOWN_EXTRA_FLAG" };
+    ScopedMessageCapture diagnostics;
+    CHECK(test::to_error_code(test::read_and_commit(EgoReader(data, session), session)) == ParseErrorType::INVALID_FLAG);
+    CHECK(egos_info.empty());
+    CHECK_FALSE(session.last_id().has_value());
+    REQUIRE(diagnostics.messages().size() == 1);
+    CHECK(diagnostics.messages()[0] == _("未知のエゴ・フラグ 'UNKNOWN_EXTRA_FLAG'。", "Unknown ego flag 'UNKNOWN_EXTRA_FLAG'."));
 }

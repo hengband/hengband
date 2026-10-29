@@ -3,6 +3,7 @@
 #include "floor/floor-base-definitions.h"
 #include "info-reader/baseitem-tokens-table.h"
 #include "info-reader/info-reader-util.h"
+#include "info-reader/item-reader-limits.h"
 #include "info-reader/json-reader-util.h"
 #include "info-reader/parse-error-types.h"
 #include "inventory/inventory-slot-types.h"
@@ -12,7 +13,6 @@
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
 #include "view/display-messages.h"
-#include <limits>
 #include <nlohmann/json.hpp>
 
 EgoReader::Session EgoReader::create_session(tl::optional<int> last_id)
@@ -74,7 +74,7 @@ tl::expected<void, ParseErrorType> EgoReader::read() const
     if (const auto result = info_set_integer(get_json_value(this->ego_data, "rarity"), ego.rarity, true, Range(0, 255)); !result) {
         return result;
     }
-    if (const auto result = info_set_integer(get_json_value(this->ego_data, "cost"), ego.cost, true, Range(0, std::numeric_limits<PRICE>::max() / 32)); !result) {
+    if (const auto result = info_set_integer(get_json_value(this->ego_data, "cost"), ego.cost, true, Range(0, ITEM_COST_MAX)); !result) {
         return result;
     }
 
@@ -132,8 +132,12 @@ tl::expected<void, ParseErrorType> EgoReader::read() const
 bool EgoReader::grab_one_flag(EgoItemDefinition &ego, const nlohmann::json &flag) const
 {
     const auto &name = flag.get_ref<const std::string &>();
-    return TrFlags::grab_one_flag(ego.flags, baseitem_flags, name) ||
-           EnumClassFlagGroup<ItemGenerationTraitType>::grab_one_flag(ego.gen_flags, baseitem_geneneration_flags, name);
+    if (TrFlags::grab_one_flag(ego.flags, baseitem_flags, name) ||
+        EnumClassFlagGroup<ItemGenerationTraitType>::grab_one_flag(ego.gen_flags, baseitem_geneneration_flags, name)) {
+        return true;
+    }
+    msg_print(_("未知のエゴ・フラグ '{}'。", "Unknown ego flag '{}'."), name);
+    return false;
 }
 
 bool EgoReader::grab_one_extra_flag(ego_generate_type &extra, const nlohmann::json &flag) const
@@ -147,6 +151,7 @@ bool EgoReader::grab_one_extra_flag(ego_generate_type &extra, const nlohmann::js
         extra.trg_flags.push_back(it->second);
         return true;
     }
+    msg_print(_("未知のエゴ・フラグ '{}'。", "Unknown ego flag '{}'."), name);
     return false;
 }
 

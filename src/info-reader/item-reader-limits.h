@@ -1,8 +1,11 @@
 #pragma once
 
+#include "system/h-type.h"
+#include <limits>
+
 /*!
  * @file item-reader-limits.h
- * @brief ベースアイテム・アーティファクト定義のベースACと修正値の範囲
+ * @brief ベースアイテム・アーティファクト・エゴ定義の共通の範囲 (ベースAC・修正値・種別・副種別・価格)
  * @details ベースACは 0〜255、命中・ダメージ・ACの修正値は絶対値が255以下の小さな数に限る。同梱のデータ (ベースAC 50 まで、
  * 修正値 -60〜77) には十分に足りる。装備の値は16ビットの変数で合計されるが、範囲の端が約 1,000 までなら合計はあふれないと見積もれる。
  * 見積もりの前提: 装備の12か所すべてに範囲の端のアイテムを着け、生成時の上乗せを ACの修正値 70、命中・ダメージ 481
@@ -27,3 +30,15 @@ constexpr int ITEM_BASE_AC_MAX = 255;
  * - ACの修正値の負の側: 12 × (1,000 + 100) + 238 = 13,438。
  */
 constexpr int ITEM_BONUS_MAX = 255;
+
+class BaseitemKey;
+
+// 種別を添え字にする色の表は128要素。
+constexpr int ITEM_TYPE_MAX = 127;
+constexpr int ITEM_SUBTYPE_DEFAULT_MAX = 128;
+
+// 定義は baseitem-reader.cpp にある (武器熟練度・呪文・魔道具の表の要素数に依存するため)。
+int item_subtype_max(const BaseitemKey &key);
+
+// エゴと装備の価格は、数量や割引を計算する際の余裕を確保する。
+constexpr auto ITEM_COST_MAX = std::numeric_limits<PRICE>::max() / 32;

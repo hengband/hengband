@@ -505,3 +505,54 @@ TEST_CASE("ArtifactReader pins flag array type errors and missing values")
         }
     }
 }
+
+TEST_CASE("ArtifactReader shares baseitem type and subtype boundaries")
+{
+    for (const auto &[kind, maximum] : std::vector<std::pair<int, int>>{
+             { 127, 128 }, { 128, 128 }, { 1, 128 }, { 19, 63 }, { 23, 63 },
+             { 90, 3 }, { 107, 3 }, { 55, 32 }, { 65, 31 }, { 66, 30 } }) {
+        for (const auto subtype : { maximum, maximum + 1 }) {
+            CAPTURE(kind);
+            CAPTURE(subtype);
+            test::ScopedReaderState reader_state;
+            test::ArtifactListTestAccess artifact_state;
+            ScopedArtifactBaseitem baseitem_state;
+            BaseitemDefinition baseitem;
+            baseitem.name = "Test";
+            baseitem.bi_key = { i2enum<ItemKindType>(kind), subtype };
+            BaseitemList::get_instance().replace_baseitem(1, std::move(baseitem));
+            auto session = ArtifactReader::create_session();
+            auto data = make_artifact();
+            data["base_item"] = { { "type_value", kind }, { "subtype_value", subtype } };
+            const auto accepted = kind <= 127 && subtype <= maximum;
+            const auto result = test::read_and_commit(ArtifactReader(data, session), session);
+            CHECK(test::to_error_code(result) == (accepted ? ParseErrorType::NONE : ParseErrorType::INVALID_VALUE));
+            CHECK(ArtifactList::get_instance().empty() == !accepted);
+            CHECK(session.last_id().has_value() == accepted);
+            if (accepted) {
+                CHECK(ArtifactList::get_instance().get_artifact(i2enum<FixedArtifactId>(1)).bi_key == BaseitemKey(i2enum<ItemKindType>(kind), subtype));
+            }
+        }
+    }
+}
+
+TEST_CASE("ArtifactReader shares the item cost cap")
+{
+    for (const auto cost : { 0, ITEM_COST_MAX, ITEM_COST_MAX + 1 }) {
+        CAPTURE(cost);
+        test::ScopedReaderState reader_state;
+        test::ArtifactListTestAccess artifact_state;
+        ScopedArtifactBaseitem baseitem_state;
+        auto session = ArtifactReader::create_session();
+        auto data = make_artifact();
+        data["cost"] = cost;
+        const auto accepted = cost <= ITEM_COST_MAX;
+        const auto result = test::read_and_commit(ArtifactReader(data, session), session);
+        CHECK(test::to_error_code(result) == (accepted ? ParseErrorType::NONE : ParseErrorType::INVALID_VALUE));
+        CHECK(ArtifactList::get_instance().empty() == !accepted);
+        CHECK(session.last_id().has_value() == accepted);
+        if (accepted) {
+            CHECK(ArtifactList::get_instance().get_artifact(i2enum<FixedArtifactId>(1)).cost == cost);
+        }
+    }
+}
