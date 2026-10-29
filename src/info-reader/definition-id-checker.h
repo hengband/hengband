@@ -30,6 +30,8 @@ public:
     tl::optional<int> last_id() const;
 
 private:
+    std::string range_error_reason(std::string_view id_text) const;
+
     DefinitionIdOrder order;
     Range bounds;
     std::string label;

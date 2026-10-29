@@ -145,3 +145,26 @@ TEST_CASE("DefinitionIdChecker read_and_report prints each ordering failure")
         CHECK(capture.messages().back() == expected.error().reason);
     }
 }
+
+TEST_CASE("DefinitionIdChecker direct and JSON range diagnostics agree")
+{
+    DefinitionIdChecker checker(DefinitionIdOrder::UNIQUE, { -2, 2 }, "item");
+    for (const auto id : { std::numeric_limits<int>::min(), -3, 3, std::numeric_limits<int>::max() }) {
+        const auto direct = checker.check(id);
+        const auto parsed = checker.read(id);
+        REQUIRE_FALSE(direct);
+        REQUIRE_FALSE(parsed);
+        CHECK(direct.error().code == parsed.error().code);
+        CHECK(direct.error().reason == parsed.error().reason);
+    }
+    for (const auto id : { -2, 2 }) {
+        REQUIRE(checker.check(id) == id);
+        REQUIRE(checker.read(id) == id);
+    }
+    for (const auto &value : { nlohmann::json(std::numeric_limits<std::int64_t>::min()), nlohmann::json(std::numeric_limits<std::uint64_t>::max()) }) {
+        const auto result = checker.read(value);
+        REQUIRE_FALSE(result);
+        CHECK(result.error().code == ParseErrorType::INVALID_VALUE);
+        CHECK(result.error().reason == fmt::format(_("{}の ID '{}' は {}～{} の範囲外です", "{} ID '{}' is outside the range {} to {}"), "item", value.dump(), -2, 2));
+    }
+}

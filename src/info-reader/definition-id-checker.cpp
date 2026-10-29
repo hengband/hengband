@@ -26,7 +26,7 @@ tl::expected<int, IdCheckFailure> DefinitionIdChecker::read(const nlohmann::json
         } else if (result.error() == ParseErrorType::INVALID_TYPE) {
             reason = fmt::format(_("{}の ID は整数ではありません", "{} ID is not an integer"), this->label);
         } else {
-            reason = fmt::format(_("{}の ID '{}' は {}～{} の範囲外です", "{} ID '{}' is outside the range {} to {}"), this->label, id_json.dump(), this->bounds.first, this->bounds.second);
+            reason = this->range_error_reason(id_json.dump());
         }
         return tl::unexpected(IdCheckFailure{ result.error(), std::move(reason) });
     }
@@ -54,7 +54,7 @@ tl::expected<int, IdCheckFailure> DefinitionIdChecker::check(int id)
     this->pending.reset();
     if (id < this->bounds.first || id > this->bounds.second) {
         return tl::unexpected(IdCheckFailure{ ParseErrorType::INVALID_VALUE,
-            fmt::format(_("{}の ID '{}' は {}～{} の範囲外です", "{} ID '{}' is outside the range {} to {}"), this->label, id, this->bounds.first, this->bounds.second) });
+            this->range_error_reason(std::to_string(id)) });
     }
     std::string reason;
     switch (this->order) {
@@ -84,6 +84,16 @@ tl::expected<int, IdCheckFailure> DefinitionIdChecker::check(int id)
     }
     this->pending = id;
     return id;
+}
+
+/*!
+ * @brief JSON 値と整数 ID に共通する範囲外の理由を作る
+ * @param id_text 範囲外だった ID の文字列表現
+ * @return ID と許容範囲を含む理由
+ */
+std::string DefinitionIdChecker::range_error_reason(std::string_view id_text) const
+{
+    return fmt::format(_("{}の ID '{}' は {}～{} の範囲外です", "{} ID '{}' is outside the range {} to {}"), this->label, id_text, this->bounds.first, this->bounds.second);
 }
 
 /*! @brief 記録全体の読み込みに成功した ID を確定する */
