@@ -290,7 +290,7 @@ def validate_vault_semantics(data: dict) -> None:
             raise ValidationError("row count must equal height", path=path + ["layout"])
         for row_index, row in enumerate(vault["layout"]):
             row_path = path + ["layout", row_index]
-            if any(ord(c) < 0x20 or ord(c) > 0x7e for c in row):
+            if not all(is_fixed_map_symbol(c) for c in row):
                 raise ValidationError("layout must contain printable ASCII characters", path=row_path)
             if len(row) != vault["width"]:
                 raise ValidationError("row byte length must equal width", path=row_path)
@@ -549,7 +549,7 @@ def validate_wilderness_semantics(data: dict, schema_path: Path | None = None) -
             if letter.get("town", 0) != 0 and letter["town"] not in town_ids:
                 raise ValidationError("letter references an undefined town ID", path=map_path + ["letters", index, "town"])
             symbol = letter["symbol"]
-            if any(ord(c) < 0x20 or ord(c) > 0x7e for c in symbol):
+            if not all(is_fixed_map_symbol(c) for c in symbol):
                 raise ValidationError("symbol must be printable ASCII", path=map_path + ["letters", index, "symbol"])
             if symbol in symbols:
                 raise ValidationError("symbols must be unique within a map", path=map_path + ["letters", index, "symbol"])
@@ -872,6 +872,8 @@ def validate_town_preferences_semantics(data: dict, schema_path: Path) -> None:
         raise ValidationError("expected an integer JSON value", path=["version"])
     for symbol, cell in data["legend"].items():
         # propertyNames の $ は末尾の改行の前にも一致するため、TownPreferencesReaderと同じく1文字ちょうどを確かめる。
+        # TownPreferencesReader は空白を除く '!'〜'~' に限り、固定マップの記号（空白を含む）とは規則が違うため
+        # is_fixed_map_symbol() を使わない。文字の範囲は schema の propertyNames の pattern が確かめる。
         if len(symbol) != 1:
             raise ValidationError("legend symbol must be exactly one printable ASCII character", path=["legend", symbol])
         validate_legend_ego(cell, baseitems, egos, ["legend", symbol])
@@ -930,7 +932,9 @@ def validate_town_map_semantics(data: dict, schema_path: Path) -> None:
     baseitems = extract_baseitem_attributes(load_jsonc(repository_root / "lib/edit/BaseitemDefinitions.jsonc"))
     egos = extract_ego_attributes(load_jsonc(repository_root / "lib/edit/EgoDefinitions.jsonc"))
     for rule_index, rule in enumerate(data["featureRules"]):
-        if len(rule["symbol"]) != 1:
+        # TownMapReader は固定マップの記号のうち、旧形式の区切りの文字（: / \）を拒否する。
+        symbol = rule["symbol"]
+        if len(symbol) != 1 or not is_fixed_map_symbol(symbol) or symbol in ":/\\":
             raise ValidationError("feature symbol must be exactly one printable ASCII character", path=["featureRules", rule_index, "symbol"])
         definition = rule["definition"]
         path = ["featureRules", rule_index, "definition"]
@@ -952,6 +956,7 @@ def validate_town_map_semantics(data: dict, schema_path: Path) -> None:
             value = definition.get(field, "NONE")
             if not isinstance(value, str):
                 continue
+            # 地形のタグの文字の規則（TownMapReader の地形の指定）で、地図の記号の規則ではないため is_fixed_map_symbol() を使わない。
             if not value or any(not " " <= c <= "~" or c in ":/\\" for c in value):
                 raise ValidationError("feature field must contain printable ASCII characters without delimiters", path=path + [field])
             if field == "trap" and value == "*":
@@ -1004,7 +1009,7 @@ def validate_town_map_semantics(data: dict, schema_path: Path) -> None:
         for row_index, row in enumerate(rows):
             # pattern の $ は末尾の改行の前にも一致するため、TownMapReaderと同じく行全体を確かめる。
             # 末尾の改行で幅が食い違ったときに原因を指すよう、幅より先に確かめる。
-            if any(not " " <= character <= "~" for character in row):
+            if not all(is_fixed_map_symbol(character) for character in row):
                 raise ValidationError("map rows must contain printable ASCII characters", path=["mapVariants", map_index, "rows", row_index])
             if len(row) != width:
                 raise ValidationError("map rows must have equal widths", path=["mapVariants", map_index, "rows", row_index])

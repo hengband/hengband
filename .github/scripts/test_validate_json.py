@@ -10,9 +10,10 @@ from unittest.mock import patch
 from json_validation_test_helper import baseitem_id_schema_maximum, validate_document
 from jsonschema import ValidationError
 from jsonschema.validators import validator_for
-from validate_json import (BUILDING_MEMBERSHIP_FIELD_MAXIMUMS, build_schema_registry, build_validation_pairs,
+from validate_json import (BUILDING_MEMBERSHIP_FIELD_MAXIMUMS, REPOSITORY_ROOT, build_schema_registry, build_validation_pairs,
                            load_all_schemas, load_cpp_constant, load_jsonc, load_magic_realm_count, validate_one,
-                           validate_town_map_semantics, validate_town_preferences_semantics)
+                           validate_quest_layout_semantics, validate_town_map_semantics, validate_town_preferences_semantics,
+                           validate_vault_semantics, validate_wilderness_semantics)
 
 
 class QuestGridValidationTest(unittest.TestCase):
@@ -1230,6 +1231,70 @@ constexpr auto MAX_MAGIC = std::ssize(MAGIC_REALM_RANGE);
         realm_path.write_text(definition.replace("RealmType::CRUSADE)", "RealmType::HEX)"), encoding="utf-8")
         with self.assertRaisesRegex(ValueError, "undefined RealmType"):
             load_magic_realm_count(self.root)
+
+
+class FixedMapSymbolSiteTest(unittest.TestCase):
+    """固定マップの記号を確かめる箇所が、どれも is_fixed_map_symbol() で判定することを確かめる。"""
+
+    def setUp(self):
+        self.town_map_schema_path = REPOSITORY_ROOT / "schema/TownMap.schema.json"
+
+    def vault(self, row):
+        return {"vaults": [{"id": 0, "name": "Test", "type": 7, "rating": 5, "height": 1, "width": len(row), "layout": [row]}]}
+
+    def wilderness(self, symbol):
+        letters = [{"symbol": "#", "terrain": 0}, {"symbol": symbol, "terrain": 1}]
+        maps = {"letters": letters, "layout": ["###", "###", "###"], "starting_position": {"x": 1, "y": 1}}
+        towns = [{"id": 1, "name": {"ja": "街", "en": "Town"}, "alias": {"ja": "街", "en": "Town"}}]
+        towns += [{"id": town_id, "name": {"ja": "街", "en": "Town"}} for town_id in range(2, 6)]
+        return {"version": 1, "width": 3, "height": 3, "towns": towns, "maps": {"normal": maps}}
+
+    def town_map(self, symbol="#", row="###"):
+        return {
+            "version": 3,
+            "featureRules": [{"symbol": symbol, "definition": {"terrain": "PERMANENT"}}],
+            "mapVariants": [{"rows": [row]}],
+            "buildingRules": [],
+            "startingPositions": [],
+        }
+
+    def sites(self, character):
+        """記号を1か所に置いた文書を、その検証と組で返す。"""
+        return (
+            ("vault layout", lambda: validate_vault_semantics(self.vault(f"#{character}#"))),
+            ("wilderness symbol", lambda: validate_wilderness_semantics(self.wilderness(character))),
+            ("town map row", lambda: validate_town_map_semantics(self.town_map(row=f"#{character}#"), self.town_map_schema_path)),
+            ("town map feature symbol", lambda: validate_town_map_semantics(self.town_map(symbol=character, row=f"#{character}#"),
+                                                                            self.town_map_schema_path)),
+            ("quest map row", lambda: validate_quest_layout_semantics({"map": [f"#{character}#"]})),
+        )
+
+    def test_boundaries_follow_general_parser(self):
+        # general-parser.h の is_fixed_map_symbol() と同じく、空白から '~' までの印字可能な ASCII を受け付ける。
+        for character, accepted in ((" ", True), ("~", True), ("\x1f", False), ("\x7f", False), ("é", False)):
+            for site, check in self.sites(character):
+                with self.subTest(site=site, character=character):
+                    if accepted:
+                        check()
+                    else:
+                        with self.assertRaises(ValidationError):
+                            check()
+
+    def test_every_site_uses_the_helper(self):
+        # 判定を差し替えると、どの箇所も同じ文字を拒否する（それぞれに範囲を書き写していない）。
+        for site, check in self.sites("A"):
+            with self.subTest(site=site):
+                check()
+                with patch("validate_json.is_fixed_map_symbol", lambda character: character != "A"):
+                    with self.assertRaises(ValidationError):
+                        check()
+
+    def test_town_map_feature_symbol_rejects_legacy_delimiters(self):
+        # TownMapReader は地物の記号に旧形式の区切りの文字を使わせない。schema を通さずに意味検証だけでも拒否する。
+        for symbol in (":", "/", "\\"):
+            with self.subTest(symbol=symbol):
+                with self.assertRaisesRegex(ValidationError, "feature symbol"):
+                    validate_town_map_semantics(self.town_map(symbol=symbol), self.town_map_schema_path)
 
 
 if __name__ == "__main__":
