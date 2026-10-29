@@ -489,8 +489,10 @@ def validate_artifact_semantics(data: dict, valid_baseitem_keys: set[tuple[int, 
         if not 0 <= artifact["cost"] <= ITEM_COST_MAX:
             raise ValidationError(f"cost must be in 0..{ITEM_COST_MAX}", path=path + ["cost"])
         kind = artifact["base_item"]["type_value"]
-        if not 0 <= kind <= ITEM_TYPE_MAX:
-            raise ValidationError(f"type_value must be in 0..{ITEM_TYPE_MAX}", path=path + ["base_item", "type_value"])
+        # ArtifactReader は 0 から読むが、元のベースアイテムを有効なベースアイテムから探すため、種別 0（ItemKindType::NONE）は
+        # 同梱の定義では「異常アイテム」しか無く、どのアーティファクトも読み込めない。schema と同じく 1 からにする。
+        if not 1 <= kind <= ITEM_TYPE_MAX:
+            raise ValidationError(f"type_value must be in 1..{ITEM_TYPE_MAX}", path=path + ["base_item", "type_value"])
         maximum = baseitem_subtype_max(kind)
         if not 0 <= artifact["base_item"]["subtype_value"] <= maximum:
             raise ValidationError(f"subtype_value must be in 0..{maximum}", path=path + ["base_item", "subtype_value"])

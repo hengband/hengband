@@ -4,10 +4,12 @@ import re
 from pathlib import Path
 import unittest
 from jsonschema import ValidationError
+from jsonschema.validators import validator_for
 
 from json_validation_test_helper import baseitem_id_schema_maximum, fixed_artifact_id_schema_maximum, validate_document
-from validate_json import (build_schema_registry, load_all_schemas, load_cpp_enum_values, load_cpp_tokens, load_jsonc,
-                           load_rod_type_value, validate_baseitem_semantics, validate_artifact_semantics)
+from validate_json import (baseitem_subtype_max, build_schema_registry, collect_valid_baseitem_keys, load_all_schemas,
+                           load_cpp_enum_values, load_cpp_tokens, load_jsonc, load_rod_type_value, validate_baseitem_semantics,
+                           validate_artifact_semantics)
 
 
 class BaseitemDefinitionValidationTest(unittest.TestCase):
@@ -392,6 +394,43 @@ class ArtifactDefinitionValidationTest(unittest.TestCase):
                     else:
                         with self.assertRaises(ValidationError):
                             validate_artifact_semantics(document, {(kind, subtype)})
+
+    def test_schema_subtype_limits_per_kind_match_baseitems(self):
+        # アーティファクトの副種別の上限は、ベースアイテムの schema と同じ種別ごとの if/then を持つ。
+        def subtype_limits(schema_name, array, key):
+            limits = {}
+            for block in self.loaded[self.schema_map[schema_name]]["properties"][array]["items"]["allOf"]:
+                then = block["then"].get("properties", {}).get(key, {}).get("properties", {}).get("subtype_value")
+                if then is not None:
+                    for kind in block["if"]["properties"][key]["properties"]["type_value"]["enum"]:
+                        limits[kind] = then["maximum"]
+            return limits
+
+        artifact_limits = subtype_limits("ArtifactDefinitions", "artifacts", "base_item")
+        self.assertEqual(artifact_limits, subtype_limits("BaseitemDefinitions", "baseitems", "itemkind"))
+        self.assertEqual(artifact_limits, {kind: baseitem_subtype_max(kind) for kind in artifact_limits})
+
+    def test_schema_rejects_subtype_over_the_limit_of_its_kind(self):
+        schema = self.loaded[self.schema_map["ArtifactDefinitions"]]
+        for kind, maximum in ((19, 63), (23, 63), (90, 3), (107, 3), (55, 32), (65, 31), (66, 30), (1, 128), (127, 128)):
+            for subtype in (maximum, maximum + 1):
+                with self.subTest(kind=kind, subtype=subtype):
+                    record = {**self.sample, "base_item": {"type_value": kind, "subtype_value": subtype}}
+                    errors = list(validator_for(schema)(schema).iter_errors({"version": 1, "artifacts": [record]}))
+                    if subtype <= maximum:
+                        self.assertEqual(errors, [])
+                    else:
+                        self.assertEqual([list(error.path) for error in errors], [["artifacts", 0, "base_item", "subtype_value"]])
+
+    def test_type_value_starts_at_one_like_the_schema(self):
+        # 種別 0 の有効なベースアイテムは同梱の定義に無く、ArtifactReader も読み込めないため、CI は schema と同じく 1 から受け付ける。
+        self.assertNotIn(0, {kind for kind, _ in collect_valid_baseitem_keys(self.baseitem_document)})
+        self.assertEqual(self.loaded[self.schema_map["ArtifactDefinitions"]]["properties"]["artifacts"]["items"]["properties"]
+                         ["base_item"]["properties"]["type_value"]["minimum"], 1)
+        record = {**self.sample, "base_item": {"type_value": 0, "subtype_value": 0}}
+        self.check(record, False, ["artifacts", 0, "base_item", "type_value"])
+        with self.assertRaisesRegex(ValidationError, r"type_value must be in 1\.\."):
+            validate_artifact_semantics({"artifacts": [record]}, {(0, 0)})
 
     def test_monrace_validation_checks_artifact_companion(self):
         # モンスター定義の検証は、参照先のアーティファクト定義にも同じ意味検証をかける。
