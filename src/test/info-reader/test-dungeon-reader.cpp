@@ -22,7 +22,6 @@
 #include "test/system/dungeon-list-test-access.h"
 #include "test/system/monrace-list-test-access.h"
 #include "view/display-messages.h"
-#include <algorithm>
 #include <cstdint>
 #include <doctest/doctest.h>
 #include <limits>
@@ -36,9 +35,8 @@ namespace {
 class DungeonReaderStateGuard {
 public:
     DungeonReaderStateGuard()
-        : terrains(TerrainList::get_instance())
-        , previous_terrains(terrains.begin(), terrains.end())
     {
+        auto &terrains = TerrainList::get_instance();
         terrains.resize(2);
         terrains.get_terrain(0).tag = "FLOOR";
         terrains.get_terrain(1).tag = "GRANITE";
@@ -47,17 +45,10 @@ public:
     DungeonReaderStateGuard(const DungeonReaderStateGuard &) = delete;
     DungeonReaderStateGuard &operator=(const DungeonReaderStateGuard &) = delete;
 
-    ~DungeonReaderStateGuard()
-    {
-        terrains.resize(previous_terrains.size());
-        std::copy(previous_terrains.begin(), previous_terrains.end(), terrains.begin());
-    }
-
 private:
     test::ScopedReaderState reader_state;
     test::DungeonListTestAccess dungeon_state;
-    TerrainList &terrains;
-    std::vector<TerrainType> previous_terrains;
+    test::ScopedVectorWrapper<TerrainList> terrains_state{ TerrainList::get_instance() };
 };
 
 struct FinalFloorStateGuard {

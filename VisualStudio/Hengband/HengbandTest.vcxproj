@@ -180,6 +180,7 @@
     <ClInclude Include="..\..\src\stdafx.h" />
     <ClInclude Include="..\..\src\test\info-reader\legend-ego-fixture.h" />
     <ClInclude Include="..\..\src\test\info-reader\parse-result-helpers.h" />
+    <ClInclude Include="..\..\src\test\info-reader\scoped-ego-list.h" />
     <ClInclude Include="..\..\src\test\info-reader\scoped-reader-state.h" />
     <ClInclude Include="..\..\src\test\save\scoped-save-io.h" />
     <ClInclude Include="..\..\src\test\scoped-input-term.h" />

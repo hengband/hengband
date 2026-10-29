@@ -8,6 +8,7 @@
 #include "object-enchant/object-ego.h"
 #include "object-enchant/tr-types.h"
 #include "test/info-reader/parse-result-helpers.h"
+#include "test/info-reader/scoped-ego-list.h"
 #include "test/info-reader/scoped-reader-state.h"
 #include "util/enum-converter.h"
 #include "view/display-messages.h"
@@ -22,31 +23,15 @@
 namespace {
 const std::string EGO_NAME_JA_UTF8 = "\xe8\xa9\xa6\xe9\xa8\x93\xe3\x81\xae";
 
-class EgoStateGuard {
-public:
-    /*!
-     * @brief 既存のエゴ定義を退避し、空の読込先で検証を始める
-     */
-    EgoStateGuard()
-    {
-        this->saved_egos.swap(egos_info);
-    }
-
-    EgoStateGuard(const EgoStateGuard &) = delete;
-    EgoStateGuard &operator=(const EgoStateGuard &) = delete;
-
-    /*!
-     * @brief 検証中に公開された定義を破棄し、退避した定義を復元する
-     */
-    ~EgoStateGuard()
-    {
-        egos_info.clear();
-        egos_info.swap(this->saved_egos);
-    }
-
-private:
+struct EgoStateGuard {
     test::ScopedReaderState reader_state;
-    std::map<EgoType, EgoItemDefinition> saved_egos;
+    test::ScopedEgoList egos;
+
+    EgoStateGuard() = default;
+    EgoStateGuard(const EgoStateGuard &) = delete;
+    EgoStateGuard(EgoStateGuard &&) = delete;
+    EgoStateGuard &operator=(const EgoStateGuard &) = delete;
+    EgoStateGuard &operator=(EgoStateGuard &&) = delete;
 };
 
 /*!

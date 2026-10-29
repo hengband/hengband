@@ -13,28 +13,22 @@
 #include "system/baseitem/baseitem-definition.h"
 #include "system/baseitem/baseitem-list.h"
 #include "test/info-reader/parse-result-helpers.h"
+#include "test/info-reader/scoped-ego-list.h"
 #include "test/info-reader/scoped-reader-state.h"
+#include "test/scoped-vector-wrapper.h"
 #include "test/system/artifact-list-test-access.h"
 #include "util/enum-converter.h"
 #include <array>
 #include <doctest/doctest.h>
 #include <limits>
-#include <map>
 #include <memory>
 #include <nlohmann/json.hpp>
 #include <set>
 #include <string>
 #include <utility>
-#include <vector>
 
 namespace {
-// 各呼び出しを独立した定義ファイルの読み込みとして扱う。
-template <typename Reader>
-auto read_record(const nlohmann::json &data)
-{
-    auto session = Reader::create_session();
-    return test::read_and_commit(Reader(data, session), session);
-}
+using test::read_record;
 
 constexpr auto unused_activation_ranges = std::array{
     std::pair{ 43, 48 },
@@ -77,45 +71,17 @@ nlohmann::json make_item_with_activation(const nlohmann::json &activation)
     return data;
 }
 
-class ActivationStateGuard {
-public:
-    /*!
-     * @brief 基本アイテムとエゴを退避し、発動を検証する各readerの読込先を初期化する
-     */
-    ActivationStateGuard()
-    {
-        auto &baseitems = BaseitemList::get_instance();
-        for (auto &baseitem : baseitems) {
-            this->saved_baseitems.push_back(std::move(baseitem));
-        }
-        baseitems.resize(0);
-        this->saved_egos.swap(egos_info);
-    }
-
-    ActivationStateGuard(const ActivationStateGuard &) = delete;
-    ActivationStateGuard &operator=(const ActivationStateGuard &) = delete;
-
-    /*!
-     * @brief 一時的な定義を置き換え、検証前の基本アイテムとエゴを復元する
-     */
-    ~ActivationStateGuard()
-    {
-        auto &baseitems = BaseitemList::get_instance();
-        baseitems.resize(this->saved_baseitems.size());
-        auto target = baseitems.begin();
-        for (auto &baseitem : this->saved_baseitems) {
-            std::destroy_at(std::addressof(*target));
-            std::construct_at(std::addressof(*target), std::move(baseitem));
-            ++target;
-        }
-        egos_info.swap(this->saved_egos);
-    }
-
-private:
-    std::vector<BaseitemDefinition> saved_baseitems;
-    std::map<EgoType, EgoItemDefinition> saved_egos;
+struct ActivationStateGuard {
     test::ScopedReaderState reader_state;
     test::ArtifactListTestAccess artifacts;
+    test::ScopedVectorWrapper<BaseitemList> baseitems{ BaseitemList::get_instance() };
+    test::ScopedEgoList egos;
+
+    ActivationStateGuard() = default;
+    ActivationStateGuard(const ActivationStateGuard &) = delete;
+    ActivationStateGuard(ActivationStateGuard &&) = delete;
+    ActivationStateGuard &operator=(const ActivationStateGuard &) = delete;
+    ActivationStateGuard &operator=(ActivationStateGuard &&) = delete;
 };
 
 /*!
