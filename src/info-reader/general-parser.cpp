@@ -23,3 +23,16 @@ void dungeon_grid::set_trap_id(TerrainTag tag)
 {
     this->trap = TerrainList::get_instance().get_terrain_id(tag);
 }
+
+/*!
+ * @brief 1バイトの印字可能なASCII記号を読み取る。
+ * @param symbol 凡例のキーの文字列
+ * @return 有効な記号、または文字数や文字種が不正なら空。
+ */
+tl::optional<char> parse_fixed_map_symbol(std::string_view symbol)
+{
+    if (symbol.size() != 1 || !is_fixed_map_symbol(static_cast<unsigned char>(symbol.front()))) {
+        return tl::nullopt;
+    }
+    return symbol.front();
+}

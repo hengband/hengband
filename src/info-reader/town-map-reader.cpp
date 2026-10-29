@@ -212,7 +212,7 @@ tl::expected<void, ParseErrorType> TownMapReader::read_features(TownMapDefinitio
             return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
         }
         const auto symbol = rule["symbol"].get<std::string>();
-        if (symbol.size() != 1 || !is_fixed_map_symbol(static_cast<unsigned char>(symbol.front())) || symbol.front() == ':' || symbol.front() == '/' || symbol.front() == '\\') {
+        if (!parse_fixed_map_symbol(symbol) || symbol.front() == ':' || symbol.front() == '/' || symbol.front() == '\\') {
             return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
         }
         TownMapFeatureRule feature;
