@@ -450,7 +450,7 @@ TEST_CASE("TownMapReader validates root and conditions on every rule")
     for (const auto &version : { nlohmann::json(1), nlohmann::json(2.0), nlohmann::json("2") }) {
         auto data = make_town_map();
         data["version"] = version;
-        CHECK(test::to_error_code(read_town(data)) == ParseErrorType::INVALID_TYPE);
+        CHECK(test::to_error_code(read_town(data)) == (version.is_number_integer() ? ParseErrorType::INVALID_VALUE : ParseErrorType::INVALID_TYPE));
     }
     for (const auto *field : { "mapVariants", "startingPositions" }) {
         auto data = make_town_map();
@@ -942,7 +942,6 @@ TEST_CASE("TownMapReader preserves output on root errors and value errors at eve
         const std::string_view kind = failure;
         if (kind == "version") {
             data["version"] = 1;
-            expected = ParseErrorType::INVALID_TYPE;
         } else if (kind == "emptyMaps") {
             data["mapVariants"] = nlohmann::json::array();
         } else if (kind == "missingFeatures") {
@@ -1636,7 +1635,13 @@ TEST_CASE("TownMapReader v3 validates precedence and preserves output and letter
     for (const auto &version : std::array<nlohmann::json, 6>{ { 2, 4, 3.0, true, nullptr, "3" } }) {
         data = make_town_map();
         data["version"] = version;
-        CHECK(test::to_error_code(TownMapReader(data).read(definition, 0, 0, true)) == ParseErrorType::INVALID_TYPE);
+        auto expected = ParseErrorType::INVALID_TYPE;
+        if (version.is_null()) {
+            expected = ParseErrorType::TOO_FEW_ARGUMENTS;
+        } else if (version.is_number_integer()) {
+            expected = ParseErrorType::INVALID_VALUE;
+        }
+        CHECK(test::to_error_code(TownMapReader(data).read(definition, 0, 0, true)) == expected);
     }
     data = make_town_map();
     data["featureRules"][0]["definition"] = { { "terrain", "UNINITIALIZED_TOWN_TAG" } };
@@ -1886,4 +1891,14 @@ TEST_CASE("TownMapReader reports oversize maps as out of bounds")
     auto data = make_town_map();
     data["mapVariants"][0]["rows"][1] = "####";
     CHECK(test::to_error_code(read_town(data)) == ParseErrorType::OUT_OF_BOUNDS);
+}
+
+TEST_CASE("TownMapReader classifies missing version in both reading modes")
+{
+    auto data = make_town_map();
+    data.erase("version");
+    for (const bool only_buildings : { false, true }) {
+        TownMapDefinition definition;
+        CHECK(test::to_error_code(TownMapReader(data).read(definition, 3, 3, only_buildings)) == ParseErrorType::TOO_FEW_ARGUMENTS);
+    }
 }

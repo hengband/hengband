@@ -876,7 +876,7 @@ TEST_CASE("info_read_symbol accepts every single byte and color token")
     }
 }
 
-TEST_CASE("info_validate_version preserves caller error classifications")
+TEST_CASE("info_validate_version classifies missing type and unsupported versions")
 {
     for (const auto &version : { nlohmann::json(1), nlohmann::json(uint64_t{ 1 }) }) {
         CHECK(info_validate_version({ { "version", version } }, 1).has_value());
@@ -886,14 +886,12 @@ TEST_CASE("info_validate_version preserves caller error classifications")
         CHECK(info_validate_version(root, 1).error() == ParseErrorType::INVALID_TYPE);
     }
     CHECK(info_validate_version(nlohmann::json::object(), 1).error() == ParseErrorType::TOO_FEW_ARGUMENTS);
-    CHECK(info_validate_version(nlohmann::json::object(), 1, ParseErrorType::INVALID_TYPE).error() == ParseErrorType::INVALID_TYPE);
-    for (const auto &version : { nlohmann::json(nullptr), nlohmann::json(1.0), nlohmann::json("1"), nlohmann::json(true), nlohmann::json::object() }) {
+    CHECK(info_validate_version({ { "version", nullptr } }, 1).error() == ParseErrorType::TOO_FEW_ARGUMENTS);
+    for (const auto &version : { nlohmann::json(1.0), nlohmann::json("1"), nlohmann::json(true), nlohmann::json::object() }) {
         CHECK(info_validate_version({ { "version", version } }, 1).error() == ParseErrorType::INVALID_TYPE);
     }
     for (const auto &version : { nlohmann::json(0), nlohmann::json(2), nlohmann::json(std::numeric_limits<uint64_t>::max()) }) {
         const nlohmann::json root{ { "version", version } };
-        CHECK(info_validate_version(root, 1).error() == ParseErrorType::INVALID_TYPE);
-        CHECK(info_validate_version(root, 1, ParseErrorType::TOO_FEW_ARGUMENTS, ParseErrorType::INVALID_VALUE).error() == ParseErrorType::INVALID_VALUE);
+        CHECK(info_validate_version(root, 1).error() == ParseErrorType::INVALID_VALUE);
     }
-    CHECK(info_validate_version({ { "version", nullptr } }, 1, ParseErrorType::TOO_FEW_ARGUMENTS, ParseErrorType::INVALID_VALUE, ParseErrorType::TOO_FEW_ARGUMENTS).error() == ParseErrorType::TOO_FEW_ARGUMENTS);
 }

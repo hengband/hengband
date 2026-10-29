@@ -61,14 +61,15 @@ TEST_CASE("TownDefinitionListReader validates the root and preserves output")
 {
     for (const auto &root : { nlohmann::json(nullptr), nlohmann::json::array(), nlohmann::json::object() }) {
         std::string map_file = "previous";
-        CHECK(test::to_error_code(TownDefinitionListReader(root).read(1, TownMapMode::NORMAL, map_file)) == ParseErrorType::INVALID_TYPE);
+        CHECK(test::to_error_code(TownDefinitionListReader(root).read(1, TownMapMode::NORMAL, map_file)) == (root.is_object() ? ParseErrorType::TOO_FEW_ARGUMENTS : ParseErrorType::INVALID_TYPE));
         CHECK(map_file == "previous");
     }
     for (const auto &version : { nlohmann::json(0), nlohmann::json(1.0), nlohmann::json("1") }) {
         auto data = make_town_definition_list();
         data["version"] = version;
         std::string map_file = "previous";
-        CHECK(test::to_error_code(TownDefinitionListReader(data).read(1, TownMapMode::NORMAL, map_file)) == ParseErrorType::INVALID_TYPE);
+        const auto expected = version.is_number_integer() ? ParseErrorType::INVALID_VALUE : ParseErrorType::INVALID_TYPE;
+        CHECK(test::to_error_code(TownDefinitionListReader(data).read(1, TownMapMode::NORMAL, map_file)) == expected);
         CHECK(map_file == "previous");
     }
     for (const auto &towns : { nlohmann::json(nullptr), nlohmann::json::array(), nlohmann::json::object() }) {
@@ -130,5 +131,16 @@ TEST_CASE("TownDefinitionListReader only checks the selected entry as before")
     CHECK(map_file == "towns/Normal.jsonc");
     map_file = "previous";
     CHECK(test::to_error_code(TownDefinitionListReader(data).read(3, TownMapMode::NORMAL, map_file)) == ParseErrorType::INVALID_VALUE);
+    CHECK(map_file == "previous");
+}
+
+TEST_CASE("TownDefinitionListReader classifies missing and null versions")
+{
+    auto data = make_town_definition_list();
+    std::string map_file = "previous";
+    data.erase("version");
+    CHECK(test::to_error_code(TownDefinitionListReader(data).read(1, TownMapMode::NORMAL, map_file)) == ParseErrorType::TOO_FEW_ARGUMENTS);
+    data["version"] = nullptr;
+    CHECK(test::to_error_code(TownDefinitionListReader(data).read(1, TownMapMode::NORMAL, map_file)) == ParseErrorType::TOO_FEW_ARGUMENTS);
     CHECK(map_file == "previous");
 }
