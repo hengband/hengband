@@ -28,11 +28,10 @@ tl::expected<void, ParseErrorType> info_validate_json_array(const nlohmann::json
  * @brief JSONのトークンを辞書または検索関数で値へ変換する
  * @param json トークン文字列。nullは必須値の欠落として扱う
  * @param table 辞書、または文字列を受け取りoptionalを返す検索関数
- * @param type_error 文字列以外の値に対する互換用エラーコード
  * @return 対応する値。欠落、型違い、未知の名前はそれぞれ解析エラーを返す
  */
 template <typename Table>
-auto info_read_token(const nlohmann::json &json, const Table &table, ParseErrorType type_error = ParseErrorType::INVALID_TYPE)
+auto info_read_token(const nlohmann::json &json, const Table &table)
 {
     const auto lookup = [&table](const std::string &name) {
         if constexpr (std::is_invocable_v<const Table &, const std::string &>) {
@@ -47,7 +46,7 @@ auto info_read_token(const nlohmann::json &json, const Table &table, ParseErrorT
         return Result(tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS));
     }
     if (!json.is_string()) {
-        return Result(tl::make_unexpected(type_error));
+        return Result(tl::make_unexpected(ParseErrorType::INVALID_TYPE));
     }
     const auto value = lookup(json.get_ref<const std::string &>());
     if (!value) {

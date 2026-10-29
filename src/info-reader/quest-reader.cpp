@@ -486,7 +486,7 @@ tl::expected<void, ParseErrorType> QuestReader::set_definition(QuestFixedMap &pa
     meta.present = true;
 
     const auto &type = get_json_value(definition, "type");
-    const auto kind = info_read_token(type, QUEST_KIND_TOKENS, ParseErrorType::TOO_FEW_ARGUMENTS);
+    const auto kind = info_read_token(type, QUEST_KIND_TOKENS);
     if (!kind) {
         return tl::make_unexpected(kind.error());
     }

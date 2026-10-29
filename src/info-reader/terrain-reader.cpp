@@ -257,7 +257,7 @@ tl::expected<void, ParseErrorType> TerrainReader::set_terrain_conversion(Terrain
     }
 
     const auto &type_obj = get_json_value(convert_obj, "type");
-    const auto type = info_read_token(type_obj, f_info_conversion_types, ParseErrorType::TOO_FEW_ARGUMENTS);
+    const auto type = info_read_token(type_obj, f_info_conversion_types);
     if (!type) {
         return tl::make_unexpected(type.error());
     }
@@ -361,7 +361,7 @@ tl::expected<void, ParseErrorType> TerrainReader::set_terrain_trap(TerrainType &
     }
 
     const auto &type_obj = get_json_value(trap_obj, "type");
-    const auto type = info_read_token(type_obj, f_info_trap_types, ParseErrorType::TOO_FEW_ARGUMENTS);
+    const auto type = info_read_token(type_obj, f_info_trap_types);
     if (!type && type.error() != ParseErrorType::INVALID_FLAG) {
         return tl::make_unexpected(type.error());
     }
@@ -433,7 +433,7 @@ tl::expected<void, ParseErrorType> TerrainReader::set_terrain_pattern(TerrainTyp
     }
 
     const auto &type_obj = get_json_value(pattern_obj, "type");
-    const auto type = info_read_token(type_obj, f_info_pattern_types, ParseErrorType::TOO_FEW_ARGUMENTS);
+    const auto type = info_read_token(type_obj, f_info_pattern_types);
     if (!type) {
         return tl::make_unexpected(type.error());
     }
@@ -461,7 +461,7 @@ tl::expected<void, ParseErrorType> TerrainReader::set_terrain_store(TerrainType 
     }
 
     const auto &type_obj = get_json_value(store_obj, "type");
-    const auto type = info_read_token(type_obj, f_info_store_types, ParseErrorType::TOO_FEW_ARGUMENTS);
+    const auto type = info_read_token(type_obj, f_info_store_types);
     if (!type) {
         return tl::make_unexpected(type.error());
     }
@@ -489,7 +489,7 @@ tl::expected<void, ParseErrorType> TerrainReader::set_terrain_building(TerrainTy
     }
 
     const auto &type_obj = get_json_value(building_obj, "type");
-    const auto type = info_read_token(type_obj, f_info_building_types, ParseErrorType::TOO_FEW_ARGUMENTS);
+    const auto type = info_read_token(type_obj, f_info_building_types);
     if (!type) {
         return tl::make_unexpected(type.error());
     }

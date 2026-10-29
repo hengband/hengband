@@ -905,7 +905,6 @@ TEST_CASE("info_read_token distinguishes missing types unknown and known tokens"
     CHECK(info_read_token(get_json_value(nlohmann::json::object(), "missing"), table).error() == ParseErrorType::TOO_FEW_ARGUMENTS);
     for (const auto &value : { nlohmann::json(1), nlohmann::json(true), nlohmann::json::array(), nlohmann::json::object() }) {
         CHECK(info_read_token(value, table).error() == ParseErrorType::INVALID_TYPE);
-        CHECK(info_read_token(value, table, ParseErrorType::TOO_FEW_ARGUMENTS).error() == ParseErrorType::TOO_FEW_ARGUMENTS);
     }
     CHECK(info_read_token("unknown", table).error() == ParseErrorType::INVALID_FLAG);
     REQUIRE(info_read_token("ZERO", table).has_value());

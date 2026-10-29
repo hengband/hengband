@@ -68,7 +68,7 @@ tl::expected<RealmType, ParseErrorType> SpellReader::read_realm() const
     }
 
     const auto &realmname_obj = get_json_value(this->realm_data, "name");
-    const auto realm = info_read_token(realmname_obj, realms_list, ParseErrorType::TOO_FEW_ARGUMENTS);
+    const auto realm = info_read_token(realmname_obj, realms_list);
     if (!realm) {
         return tl::make_unexpected(realm.error());
     }
@@ -96,9 +96,13 @@ tl::expected<void, ParseErrorType> SpellReader::set_spell_data(const nlohmann::j
     info.idx = static_cast<short>(spell_id);
 
     const auto &tag_obj = get_json_value(spell_data, "spell_tag");
-    if (!tag_obj.is_string()) {
+    if (tag_obj.is_null()) {
         msg_print(_("呪文タグ読込失敗。", "Failed to load spell tag."));
         return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
+    }
+    if (!tag_obj.is_string()) {
+        msg_print(_("呪文タグ読込失敗。", "Failed to load spell tag."));
+        return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
     }
     info.tag = tag_obj.get<std::string>();
 

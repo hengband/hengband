@@ -641,7 +641,7 @@ tl::expected<void, ParseErrorType> DungeonReader::set_dungeon_monsters(DungeonDe
     }
 
     const auto &flags_mode_obj = get_json_value(monsters_obj, "flagsMode");
-    const auto mode = info_read_token(flags_mode_obj, dungeon_modes, ParseErrorType::TOO_FEW_ARGUMENTS);
+    const auto mode = info_read_token(flags_mode_obj, dungeon_modes);
     if (!mode) {
         if (mode.error() == ParseErrorType::INVALID_FLAG) {
             msg_print(_("未知のダンジョン・モンスター生成モード '{}'。", "Unknown dungeon monster generation mode '{}'."), flags_mode_obj.get<std::string>());

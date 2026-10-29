@@ -389,7 +389,7 @@ tl::expected<void, ParseErrorType> RaceReader::set_mon_sex(MonraceDefinition &mo
     if (sex_data.is_null()) {
         return {};
     }
-    const auto sex = info_read_token(sex_data, r_info_sex, ParseErrorType::TOO_FEW_ARGUMENTS);
+    const auto sex = info_read_token(sex_data, r_info_sex);
     if (!sex) {
         return tl::make_unexpected(sex.error());
     }
@@ -635,7 +635,7 @@ tl::expected<void, ParseErrorType> RaceReader::set_mon_message(MonraceMessage &m
         if (action_str.is_null()) {
             return tl::unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
         }
-        const auto action = info_read_token(action_str, r_info_message_flags, ParseErrorType::INVALID_TYPE);
+        const auto action = info_read_token(action_str, r_info_message_flags);
         if (!action) {
             return tl::make_unexpected(action.error());
         }

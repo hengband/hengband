@@ -331,3 +331,20 @@ TEST_CASE("SpellReader allows the same ID and tag in different realms and a new 
     CHECK(spells.get_spell_info(RealmType::LIFE, 0).description == "replacement");
     CHECK(spells.get_spell_info(RealmType::SORCERY, 0).description == "shared description");
 }
+
+TEST_CASE("SpellReader reports non-string realm names and tags as invalid types")
+{
+    const test::ScopedReaderState reader_state;
+    const test::SpellInfoListTestAccess spell_state;
+    auto &spells = SpellInfoList::get_instance();
+    for (const auto *path : { "/name", "/books/0/spells/0/spell_tag" }) {
+        for (const auto &value : { nlohmann::json(1), nlohmann::json(true), nlohmann::json::array(), nlohmann::json::object() }) {
+            CAPTURE(path);
+            auto data = make_realm("LIFE", nlohmann::json::array({ make_spell(0, "first") }), nlohmann::json::array());
+            data[nlohmann::json::json_pointer(path)] = value;
+            SpellReader::Session session;
+            CHECK(test::to_error_code(SpellReader(data, spells, session).read()) == ParseErrorType::INVALID_TYPE);
+            CHECK_FALSE(spells.get_spell_id(RealmType::LIFE, "first"));
+        }
+    }
+}

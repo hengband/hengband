@@ -334,3 +334,20 @@ TEST_CASE("MagicReader propagates helper errors without publishing partial data"
         CHECK(class_magics_info[0].info[enum2i(RealmType::LIFE)][1].slevel == 3);
     }
 }
+
+TEST_CASE("MagicReader reports non-string tokens as invalid types")
+{
+    const MagicNumericState state;
+    const auto original = make_magic_numeric_data(SpellInfoList::get_instance());
+    for (const auto *path : { "/name", "/spell_type", "/magic_status", "/realms/0/name", "/realms/0/spells_info/0/spell_tag" }) {
+        for (const auto &value : { nlohmann::json(1), nlohmann::json(true), nlohmann::json::array(), nlohmann::json::object() }) {
+            CAPTURE(path);
+            CAPTURE(value.dump());
+            auto data = original;
+            data[nlohmann::json::json_pointer(path)] = value;
+            auto session = MagicReader::create_session();
+            CHECK(test::to_error_code(MagicReader(data, session).read()) == ParseErrorType::INVALID_TYPE);
+            CHECK_FALSE(session.last_id());
+        }
+    }
+}

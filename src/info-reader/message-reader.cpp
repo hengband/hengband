@@ -118,7 +118,7 @@ tl::expected<void, ParseErrorType> MessageReader::set_mon_message() const
     }
 
     for (const auto &message : message_array) {
-        const auto action = info_read_token(get_json_value(message, "action"), r_info_message_flags, ParseErrorType::TOO_FEW_ARGUMENTS);
+        const auto action = info_read_token(get_json_value(message, "action"), r_info_message_flags);
         if (!action) {
             return tl::make_unexpected(action.error());
         }
