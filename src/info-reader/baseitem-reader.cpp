@@ -191,10 +191,9 @@ tl::expected<void, ParseErrorType> BaseitemReader::read() const
         return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
     }
 
-    const auto id_result = this->session.read(get_json_value(this->baseitem_data, "id"));
+    const auto id_result = this->session.read_and_report(get_json_value(this->baseitem_data, "id"));
     if (!id_result) {
-        msg_print(id_result.error().reason);
-        return tl::unexpected(id_result.error().code);
+        return tl::unexpected(id_result.error());
     }
     const auto item_id = *id_result;
 
@@ -446,20 +445,15 @@ tl::expected<void, ParseErrorType> BaseitemReader::set_baseitem_allocations(Base
  */
 tl::expected<void, ParseErrorType> BaseitemReader::set_baseitem_activate(BaseitemDefinition &baseitem) const
 {
-    const auto &act_data = get_json_value(this->baseitem_data, "activate");
-    if (act_data.is_null()) {
+    const auto activation = read_activation(get_json_value(this->baseitem_data, "activate"));
+    if (!activation) {
+        return tl::unexpected(activation.error());
+    }
+    if (*activation == RandomArtActType::NONE) {
         return {};
     }
-    if (!act_data.is_string()) {
-        return tl::unexpected(ParseErrorType::INVALID_TYPE);
-    }
 
-    const auto activation = grab_one_activation_flag(act_data.get<std::string>());
-    if (activation <= RandomArtActType::NONE) {
-        return tl::unexpected(ParseErrorType::INVALID_FLAG);
-    }
-
-    baseitem.act_idx = activation;
+    baseitem.act_idx = *activation;
     baseitem.flags.set(tr_type::TR_ACTIVATE);
     return {};
 }

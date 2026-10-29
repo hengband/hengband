@@ -1,5 +1,6 @@
 #include "info-reader/definition-id-checker.h"
 #include "locale/language-switcher.h"
+#include "view/display-messages.h"
 #include <cstdint>
 #include <doctest/doctest.h>
 #include <fmt/format.h>
@@ -76,4 +77,94 @@ TEST_CASE("DefinitionIdChecker rejects invalid IDs and clears pending")
     REQUIRE(checker.read(32766));
     checker.commit();
     CHECK(checker.last_id() == 32766);
+}
+
+TEST_CASE("DefinitionIdChecker read_and_report preserves IDs and diagnostics")
+{
+    DefinitionIdChecker checker(DefinitionIdOrder::SEQUENTIAL, { 1, 3 }, "item");
+    ScopedMessageCapture capture;
+    REQUIRE(checker.read_and_report(1) == 1);
+    CHECK(capture.messages().empty());
+    CHECK_FALSE(checker.last_id());
+    checker.commit();
+    CHECK(checker.last_id() == 1);
+
+    const std::vector<nlohmann::json> invalid{
+        nullptr,
+        "1",
+        1.5,
+        true,
+        nlohmann::json::array(),
+        nlohmann::json::object(),
+        -1,
+        4,
+        std::numeric_limits<std::uint64_t>::max(),
+        1,
+        3,
+    };
+    for (const auto &value : invalid) {
+        CAPTURE(value);
+        DefinitionIdChecker reference(DefinitionIdOrder::SEQUENTIAL, { 1, 3 }, "item", 1);
+        const auto expected = reference.read(value);
+        REQUIRE_FALSE(expected);
+        const auto count = capture.messages().size();
+        const auto result = checker.read_and_report(value);
+        REQUIRE_FALSE(result);
+        CHECK(result.error() == expected.error().code);
+        REQUIRE(capture.messages().size() == count + 1);
+        CHECK(capture.messages().back() == expected.error().reason);
+        CHECK(checker.last_id() == 1);
+        CHECK_THROWS_AS(checker.commit(), std::logic_error);
+    }
+    REQUIRE(checker.read_and_report(2) == 2);
+    checker.commit();
+    CHECK(checker.last_id() == 2);
+}
+
+TEST_CASE("DefinitionIdChecker read_and_report prints each ordering failure")
+{
+    for (const auto ordering : { DefinitionIdOrder::SEQUENTIAL, DefinitionIdOrder::STRICTLY_INCREASING, DefinitionIdOrder::UNIQUE }) {
+        DefinitionIdChecker checker(ordering, { 1, 3 }, "item");
+        DefinitionIdChecker reference(ordering, { 1, 3 }, "item");
+        ScopedMessageCapture capture;
+        if (ordering == DefinitionIdOrder::SEQUENTIAL) {
+            const auto expected = reference.read(2);
+            REQUIRE_FALSE(expected);
+            CHECK(checker.read_and_report(2).error() == expected.error().code);
+            REQUIRE(capture.messages().size() == 1);
+            CHECK(capture.messages().back() == expected.error().reason);
+        }
+        REQUIRE(checker.read_and_report(1));
+        checker.commit();
+        REQUIRE(reference.read(1));
+        reference.commit();
+        const auto expected = reference.read(1);
+        const auto count = capture.messages().size();
+        CHECK(checker.read_and_report(1).error() == expected.error().code);
+        REQUIRE(capture.messages().size() == count + 1);
+        CHECK(capture.messages().back() == expected.error().reason);
+    }
+}
+
+TEST_CASE("DefinitionIdChecker direct and JSON range diagnostics agree")
+{
+    DefinitionIdChecker checker(DefinitionIdOrder::UNIQUE, { -2, 2 }, "item");
+    for (const auto id : { std::numeric_limits<int>::min(), -3, 3, std::numeric_limits<int>::max() }) {
+        const auto direct = checker.check(id);
+        const auto parsed = checker.read(id);
+        REQUIRE_FALSE(direct);
+        REQUIRE_FALSE(parsed);
+        CHECK(direct.error().code == parsed.error().code);
+        CHECK(direct.error().reason == parsed.error().reason);
+    }
+    for (const auto id : { -2, 2 }) {
+        REQUIRE(checker.check(id) == id);
+        REQUIRE(checker.read(id) == id);
+    }
+    for (const auto &value : { nlohmann::json(std::numeric_limits<std::int64_t>::min()), nlohmann::json(std::numeric_limits<std::uint64_t>::max()) }) {
+        const auto result = checker.read(value);
+        REQUIRE_FALSE(result);
+        CHECK(result.error().code == ParseErrorType::INVALID_VALUE);
+        CHECK(result.error().reason == fmt::format(_("{}の ID '{}' は {}～{} の範囲外です", "{} ID '{}' is outside the range {} to {}"), "item", value.dump(), -2, 2));
+    }
 }

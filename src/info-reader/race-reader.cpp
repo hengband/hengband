@@ -100,10 +100,9 @@ tl::expected<void, ParseErrorType> RaceReader::read() const
         return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
     }
 
-    const auto id_result = this->session.read(get_json_value(this->monrace_data, "id"));
+    const auto id_result = this->session.read_and_report(get_json_value(this->monrace_data, "id"));
     if (!id_result) {
-        msg_print(id_result.error().reason);
-        return tl::unexpected(id_result.error().code);
+        return tl::unexpected(id_result.error());
     }
     const auto monrace_id_int = *id_result;
     const auto monrace_id = i2enum<MonraceId>(monrace_id_int);
