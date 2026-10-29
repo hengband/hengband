@@ -267,6 +267,7 @@
     <ClCompile Include="..\..\src\info-reader\fixed-map-parser.cpp" />
     <ClCompile Include="..\..\src\info-reader\general-parser.cpp" />
     <ClCompile Include="..\..\src\info-reader\info-reader-util.cpp" />
+    <ClCompile Include="..\..\src\info-reader\item-flag-reader.cpp" />
     <ClCompile Include="..\..\src\info-reader\json-reader-util.cpp" />
     <ClCompile Include="..\..\src\info-reader\jsonc-document-loader.cpp" />
     <ClCompile Include="..\..\src\info-reader\legend-ego-validator.cpp" />
@@ -1176,6 +1177,7 @@
     <ClInclude Include="..\..\src\info-reader\fixed-map-parser.h" />
     <ClInclude Include="..\..\src\info-reader\general-parser.h" />
     <ClInclude Include="..\..\src\info-reader\info-reader-util.h" />
+    <ClInclude Include="..\..\src\info-reader\item-flag-reader.h" />
     <ClInclude Include="..\..\src\info-reader\item-reader-limits.h" />
     <ClInclude Include="..\..\src\info-reader\json-reader-util.h" />
     <ClInclude Include="..\..\src\info-reader\jsonc-document-loader.h" />

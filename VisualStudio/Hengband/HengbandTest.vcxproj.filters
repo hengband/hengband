@@ -196,6 +196,9 @@
     <ClCompile Include="..\..\src\test\info-reader\test-info-reader-util.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\test\info-reader\test-item-flag-reader.cpp">
+      <Filter>info-reader</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\test\info-reader\test-json-reader-util.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>

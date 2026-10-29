@@ -3,7 +3,6 @@
 #include "info-reader/definition-id-checker.h"
 #include "info-reader/parse-error-types.h"
 #include <nlohmann/json_fwd.hpp>
-#include <string_view>
 #include <tl/expected.hpp>
 
 class BaseitemDefinition;
@@ -23,7 +22,6 @@ public:
     tl::expected<void, ParseErrorType> read() const;
 
 private:
-    bool grab_one_baseitem_flag(BaseitemDefinition &baseitem, std::string_view what) const;
     tl::expected<void, ParseErrorType> set_baseitem_symbol(BaseitemDefinition &baseitem) const;
     tl::expected<void, ParseErrorType> set_baseitem_kind(BaseitemDefinition &baseitem) const;
     tl::expected<void, ParseErrorType> set_baseitem_parameter_value(BaseitemDefinition &baseitem) const;
