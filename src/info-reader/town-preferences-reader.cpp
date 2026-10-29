@@ -1,4 +1,5 @@
 #include "info-reader/town-preferences-reader.h"
+#include "info-reader/general-parser.h"
 #include "info-reader/json-reader-util.h"
 #include "info-reader/legend-ego-validator.h"
 #include "info-reader/legend-object-trap-validator.h"
@@ -26,7 +27,10 @@ tl::expected<void, ParseErrorType> TownPreferencesReader::read(TownPreferencesLe
 
     TownPreferencesLegend parsed;
     for (const auto &[symbol, cell_data] : this->data["legend"].items()) {
-        if (symbol.size() != 1 || symbol.front() < '!' || symbol.front() > '~' || !cell_data.is_object() ||
+        if (!parse_fixed_map_symbol(symbol) || symbol.front() == ':' || symbol.front() == '/' || symbol.front() == '\\') {
+            return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
+        }
+        if (!cell_data.is_object() ||
             !cell_data.contains("terrain") || !cell_data["terrain"].is_string() || !cell_data.contains("caveInfo") || !cell_data["caveInfo"].is_array()) {
             return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
         }

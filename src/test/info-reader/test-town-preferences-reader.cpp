@@ -94,12 +94,12 @@ TEST_CASE("TownPreferencesReader validates the root and legend")
 
 TEST_CASE("TownPreferencesReader validates printable one-byte symbols")
 {
-    for (const auto *symbol : { "", "AB", " ", "\xC3\xA9" }) {
+    for (const auto *symbol : { "", "AB", ":", "/", "\\", "\xC3\xA9" }) {
         auto data = make_town_preferences();
         data["legend"][symbol] = data["legend"]["A"];
-        check_rejected(data, ParseErrorType::INVALID_TYPE);
+        check_rejected(data, ParseErrorType::INVALID_VALUE);
     }
-    for (const auto *symbol : { "!", "~" }) {
+    for (const auto *symbol : { " ", "!", "~" }) {
         auto data = make_town_preferences();
         data["legend"] = { { symbol, { { "terrain", "FLOOR" }, { "caveInfo", nlohmann::json::array() } } } };
         TownPreferencesLegend legend;
