@@ -29,7 +29,8 @@ tl::expected<void, ParseErrorType> TownPreferencesReader::read(TownPreferencesLe
 
     TownPreferencesLegend parsed;
     for (const auto &[symbol, cell_data] : this->data["legend"].items()) {
-        if (!parse_town_map_symbol(symbol)) {
+        const auto parsed_symbol = parse_town_map_symbol(symbol);
+        if (!parsed_symbol) {
             return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
         }
         if (!cell_data.is_object() ||
@@ -67,7 +68,7 @@ tl::expected<void, ParseErrorType> TownPreferencesReader::read(TownPreferencesLe
             msg_print(fmt, symbol, describe_legend_ego_spec(cell.grid), describe_legend_ego_error(result.error()));
             return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
         }
-        parsed.emplace_back(static_cast<unsigned char>(symbol.front()), cell.grid);
+        parsed.emplace_back(static_cast<unsigned char>(*parsed_symbol), cell.grid);
     }
 
     legend = std::move(parsed);
