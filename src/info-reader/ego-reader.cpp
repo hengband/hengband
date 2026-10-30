@@ -132,11 +132,7 @@ tl::expected<void, ParseErrorType> EgoReader::read() const
 bool EgoReader::grab_one_flag(EgoItemDefinition &ego, const nlohmann::json &flag) const
 {
     const auto &name = flag.get_ref<const std::string &>();
-    if (grab_one_item_flag(ego.flags, ego.gen_flags, name)) {
-        return true;
-    }
-    msg_print(_("未知のエゴ・フラグ '{}'。", "Unknown ego flag '{}'."), name);
-    return false;
+    return grab_one_item_flag_or_report(ego.flags, ego.gen_flags, name, _("未知のエゴ・フラグ '{}'。", "Unknown ego flag '{}'."));
 }
 
 bool EgoReader::grab_one_extra_flag(ego_generate_type &extra, const nlohmann::json &flag) const

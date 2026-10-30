@@ -188,11 +188,6 @@ tl::expected<void, ParseErrorType> ArtifactReader::set_art_flags(ArtifactDefinit
     }
     return info_read_flag_array(flag_data, [&artifact](const auto &flag) {
         const auto what = flag.template get<std::string>();
-        if (grab_one_item_flag(artifact.flags, artifact.gen_flags, what)) {
-            return true;
-        }
-
-        msg_print(_("未知の伝説のアイテム・フラグ '{}'。", "Unknown artifact flag '{}'."), what);
-        return false;
+        return grab_one_item_flag_or_report(artifact.flags, artifact.gen_flags, what, _("未知の伝説のアイテム・フラグ '{}'。", "Unknown artifact flag '{}'."));
     });
 }
