@@ -1933,6 +1933,8 @@
     <ClInclude Include="..\..\src\view\display-lore-status.h" />
     <ClInclude Include="..\..\src\view\display-lore.h" />
     <ClInclude Include="..\..\src\view\display-map.h" />
+    <ClInclude Include="..\..\src\view\original-tiles.h" />
+    <ClInclude Include="..\..\src\view\original-tile-supplement.inc" />
     <ClInclude Include="..\..\src\view\display-messages.h" />
     <ClInclude Include="..\..\src\view\display-player-middle.h" />
     <ClInclude Include="..\..\src\view\display-player-misc-info.h" />

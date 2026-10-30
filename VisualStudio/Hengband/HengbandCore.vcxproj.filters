@@ -5971,6 +5971,12 @@
     <ClInclude Include="..\..\src\view\display-map.h">
       <Filter>view</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\view\original-tiles.h">
+      <Filter>view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\view\original-tile-supplement.inc">
+      <Filter>view</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\src\view\display-messages.h">
       <Filter>view</Filter>
     </ClInclude>

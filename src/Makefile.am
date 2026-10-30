@@ -1395,7 +1395,7 @@ libhengband_a_SOURCES = \
 	term/screen-processor.cpp term/screen-processor.h \
 	term/term-color-types.h \
 	term/z-rand.cpp term/z-rand.h \
-	term/tile-layout.h term/z-term.cpp term/z-term.h term/z-util.cpp term/z-util.h \
+	term/z-term.cpp term/z-term.h term/z-util.cpp term/z-util.h \
 	\
 	timed-effect/player-cut.cpp timed-effect/player-cut.h \
 	timed-effect/player-stun.cpp timed-effect/player-stun.h \
@@ -1438,6 +1438,7 @@ libhengband_a_SOURCES = \
 	view/display-lore-status.cpp view/display-lore-status.h \
 	view/display-lore.cpp view/display-lore.h \
 	view/display-map.cpp view/display-map.h \
+	view/original-monster-catalog.h view/original-monster-catalog.inc view/original-player-tiles.h view/original-tiles.h view/original-symbol-tiles.h view/original-item-catalog.h view/original-catalog-base.inc view/original-catalog-artifacts.inc view/original-catalog-colors.inc view/original-tile-supplement.inc view/actor-readability.h view/map-tile-layout.h term/tile-layout.h \
 	view/display-messages.cpp view/display-messages.h \
 	view/display-player-stat-info.cpp view/display-player-stat-info.h \
 	view/display-player-misc-info.cpp view/display-player-misc-info.h \
