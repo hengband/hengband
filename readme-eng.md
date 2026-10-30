@@ -58,6 +58,10 @@ To run in the graphical mode:
 ./hengband -g -- -a -n <number of windows> ## 16x16 tiles (tiles of this size are not provided)
 ```
 
+### Sound effects, music and tiles
+
+The sound effects, background music (mp3) and 8x8 tiles are in the [hengband.xtra](https://github.com/hengband/hengband.xtra) repository, which is included as the `lib/xtra` submodule. If you cloned the repository with git, `git submodule update --init lib/xtra` fetches them. In the "Source code" archives that GitHub generates, `lib/xtra` is an empty directory, and archives created by `make dist` leave out the background music because of its size. In those cases, download hengband.xtra and put its contents into `lib/xtra`. When installing with `setgid`, do this before running `./configure`.
+
 ### Install with `setgid`
 
 Run the following:

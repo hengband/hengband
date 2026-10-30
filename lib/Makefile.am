@@ -4,7 +4,7 @@ AUTOMAKE_OPTIONS = foreign
 
 SUBDIRS = apex bone data edit file help info pref save script user
 
-## lib/xtra はサブモジュールで、無くてもビルドできるようにここで扱う (インストールは HAVE_XTRA のときだけ行う)。
+## lib/xtra はサブモジュールで、無くてもビルドできるようにここで扱う (インストールは HAVE_XTRA のときだけ行う。BGM は後述)。
 ## 配布物には必ず含めるため EXTRA_DIST は条件なしとし、サブモジュールが無いと make dist は失敗する。
 
 xtra_graf_files = \
@@ -112,5 +112,40 @@ xtragrafdir = @DEFAULT_LIB_PATH@/xtra/graf
 
 xtragraf_DATA = \
 	$(xtra_graf_files)
+
+xtrasounddir = @DEFAULT_LIB_PATH@/xtra/sound
+
+xtrasound_DATA = \
+	$(xtra_sound_files)
 endif
+endif
+
+## BGM は配布物に含めないため、インストールの時点で lib/xtra/music に置かれている mp3 があれば、
+## music.cfg と配布元の readme.txt と合わせてインストールする。
+xtra_music_installdir = @DEFAULT_LIB_PATH@/xtra/music
+
+install-data-hook:
+if SET_GID
+	@set -- "$(srcdir)"/xtra/music/*.mp3; \
+	if test -f "$$1"; then \
+	  $(MKDIR_P) "$(DESTDIR)$(xtra_music_installdir)" || exit 1; \
+	  for f in "$(srcdir)/xtra/music/music.cfg" "$(srcdir)/xtra/music/readme.txt" "$$@"; do \
+	    if test -f "$$f"; then \
+	      echo " $(INSTALL_DATA) $$f $(DESTDIR)$(xtra_music_installdir)"; \
+	      $(INSTALL_DATA) "$$f" "$(DESTDIR)$(xtra_music_installdir)" || exit 1; \
+	    fi; \
+	  done; \
+	fi
+endif
+
+uninstall-hook:
+if SET_GID
+	@set -- "$(srcdir)"/xtra/music/*.mp3; \
+	if test -f "$$1"; then \
+	  for f in "$(srcdir)/xtra/music/music.cfg" "$(srcdir)/xtra/music/readme.txt" "$$@"; do \
+	    if test -f "$$f"; then \
+	      rm -f "$(DESTDIR)$(xtra_music_installdir)/$${f##*/}"; \
+	    fi; \
+	  done; \
+	fi
 endif
