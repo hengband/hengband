@@ -8,8 +8,8 @@
 #include "object-enchant/object-ego.h"
 #include "object-enchant/tr-types.h"
 #include "test/info-reader/parse-result-helpers.h"
-#include "test/info-reader/scoped-ego-list.h"
 #include "test/info-reader/scoped-reader-state.h"
+#include "test/scoped-ego-list.h"
 #include "util/enum-converter.h"
 #include "view/display-messages.h"
 #include <array>
