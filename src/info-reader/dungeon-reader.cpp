@@ -179,6 +179,7 @@ static tl::expected<void, ParseErrorType> info_set_enum_flag_group(const nlohman
 
 /*!
  * @brief テキストトークンを走査してフラグを一つ得る(モンスターのダンジョン出現条件用1)
+ * @details 性別を先に探し、見つからなければ grab_one_monster_basic_flag() で基本フラグの表を探す。
  * @param dungeon ダンジョンへの参照
  * @param what 参照元の文字列
  * @return 見つけたらtrue
@@ -190,59 +191,23 @@ bool DungeonReader::grab_one_basic_monster_flag(DungeonDefinition &dungeon, std:
         return true;
     }
 
-    if (EnumClassFlagGroup<MonsterAuraType>::grab_one_flag(dungeon.mon_aura_flags, r_info_aura_flags, what)) {
-        return true;
-    }
-
-    if (EnumClassFlagGroup<MonsterResistanceType>::grab_one_flag(dungeon.mon_resistance_flags, r_info_flagsr, what)) {
-        return true;
-    }
-
-    if (EnumClassFlagGroup<MonsterBehaviorType>::grab_one_flag(dungeon.mon_behavior_flags, r_info_behavior_flags, what)) {
-        return true;
-    }
-
-    if (EnumClassFlagGroup<MonsterVisualType>::grab_one_flag(dungeon.mon_visual_flags, r_info_visual_flags, what)) {
-        return true;
-    }
-
-    if (EnumClassFlagGroup<MonsterKindType>::grab_one_flag(dungeon.mon_kind_flags, r_info_kind_flags, what)) {
-        return true;
-    }
-
-    if (EnumClassFlagGroup<MonsterDropType>::grab_one_flag(dungeon.mon_drop_flags, r_info_drop_flags, what)) {
-        return true;
-    }
-
-    if (EnumClassFlagGroup<MonsterWildernessType>::grab_one_flag(dungeon.mon_wilderness_flags, r_info_wilderness_flags, what)) {
-        return true;
-    }
-
-    if (EnumClassFlagGroup<MonsterFeatureType>::grab_one_flag(dungeon.mon_feature_flags, r_info_feature_flags, what)) {
-        return true;
-    }
-
-    if (EnumClassFlagGroup<MonsterPopulationType>::grab_one_flag(dungeon.mon_population_flags, r_info_population_flags, what)) {
-        return true;
-    }
-
-    if (EnumClassFlagGroup<MonsterSpeakType>::grab_one_flag(dungeon.mon_speak_flags, r_info_speak_flags, what)) {
-        return true;
-    }
-
-    if (EnumClassFlagGroup<MonsterBrightnessType>::grab_one_flag(dungeon.mon_brightness_flags, r_info_brightness_flags, what)) {
-        return true;
-    }
-
-    if (EnumClassFlagGroup<MonsterSpecialType>::grab_one_flag(dungeon.mon_special_flags, r_info_special_flags, what)) {
-        return true;
-    }
-    if (EnumClassFlagGroup<MonsterMiscType>::grab_one_flag(dungeon.mon_misc_flags, r_info_misc_flags, what)) {
-        return true;
-    }
-
-    msg_print(_("未知のモンスター・フラグ '{}'。", "Unknown monster flag '{}'."), what);
-    return false;
+    return grab_one_monster_basic_flag(
+        {
+            .resistance_flags = &dungeon.mon_resistance_flags,
+            .aura_flags = &dungeon.mon_aura_flags,
+            .behavior_flags = &dungeon.mon_behavior_flags,
+            .visual_flags = &dungeon.mon_visual_flags,
+            .kind_flags = &dungeon.mon_kind_flags,
+            .drop_flags = &dungeon.mon_drop_flags,
+            .wilderness_flags = &dungeon.mon_wilderness_flags,
+            .feature_flags = &dungeon.mon_feature_flags,
+            .population_flags = &dungeon.mon_population_flags,
+            .speak_flags = &dungeon.mon_speak_flags,
+            .brightness_flags = &dungeon.mon_brightness_flags,
+            .special_flags = &dungeon.mon_special_flags,
+            .misc_flags = &dungeon.mon_misc_flags,
+        },
+        what);
 }
 
 /*!

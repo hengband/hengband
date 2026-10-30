@@ -223,59 +223,23 @@ tl::expected<void, ParseErrorType> RaceReader::read() const
  */
 bool RaceReader::grab_one_basic_flag(MonraceDefinition &monrace, std::string_view what) const
 {
-    if (EnumClassFlagGroup<MonsterResistanceType>::grab_one_flag(monrace.resistance_flags, r_info_flagsr, what)) {
-        return true;
-    }
-
-    if (EnumClassFlagGroup<MonsterAuraType>::grab_one_flag(monrace.aura_flags, r_info_aura_flags, what)) {
-        return true;
-    }
-
-    if (EnumClassFlagGroup<MonsterBehaviorType>::grab_one_flag(monrace.behavior_flags, r_info_behavior_flags, what)) {
-        return true;
-    }
-
-    if (EnumClassFlagGroup<MonsterVisualType>::grab_one_flag(monrace.visual_flags, r_info_visual_flags, what)) {
-        return true;
-    }
-
-    if (EnumClassFlagGroup<MonsterKindType>::grab_one_flag(monrace.kind_flags, r_info_kind_flags, what)) {
-        return true;
-    }
-
-    if (EnumClassFlagGroup<MonsterDropType>::grab_one_flag(monrace.drop_flags, r_info_drop_flags, what)) {
-        return true;
-    }
-
-    if (EnumClassFlagGroup<MonsterWildernessType>::grab_one_flag(monrace.wilderness_flags, r_info_wilderness_flags, what)) {
-        return true;
-    }
-
-    if (EnumClassFlagGroup<MonsterFeatureType>::grab_one_flag(monrace.feature_flags, r_info_feature_flags, what)) {
-        return true;
-    }
-
-    if (EnumClassFlagGroup<MonsterPopulationType>::grab_one_flag(monrace.population_flags, r_info_population_flags, what)) {
-        return true;
-    }
-
-    if (EnumClassFlagGroup<MonsterSpeakType>::grab_one_flag(monrace.speak_flags, r_info_speak_flags, what)) {
-        return true;
-    }
-
-    if (EnumClassFlagGroup<MonsterBrightnessType>::grab_one_flag(monrace.brightness_flags, r_info_brightness_flags, what)) {
-        return true;
-    }
-
-    if (EnumClassFlagGroup<MonsterSpecialType>::grab_one_flag(monrace.special_flags, r_info_special_flags, what)) {
-        return true;
-    }
-    if (EnumClassFlagGroup<MonsterMiscType>::grab_one_flag(monrace.misc_flags, r_info_misc_flags, what)) {
-        return true;
-    }
-
-    msg_print(_("未知のモンスター・フラグ '{}'。", "Unknown monster flag '{}'."), what);
-    return false;
+    return grab_one_monster_basic_flag(
+        {
+            .resistance_flags = &monrace.resistance_flags,
+            .aura_flags = &monrace.aura_flags,
+            .behavior_flags = &monrace.behavior_flags,
+            .visual_flags = &monrace.visual_flags,
+            .kind_flags = &monrace.kind_flags,
+            .drop_flags = &monrace.drop_flags,
+            .wilderness_flags = &monrace.wilderness_flags,
+            .feature_flags = &monrace.feature_flags,
+            .population_flags = &monrace.population_flags,
+            .speak_flags = &monrace.speak_flags,
+            .brightness_flags = &monrace.brightness_flags,
+            .special_flags = &monrace.special_flags,
+            .misc_flags = &monrace.misc_flags,
+        },
+        what);
 }
 
 /*!
