@@ -11,6 +11,7 @@
 #include "system/monrace/monrace-record.h"
 #include "system/monrace/monrace-records.h"
 #include "test/info-reader/parse-result-helpers.h"
+#include "test/info-reader/scoped-reader-state.h"
 #include "test/scoped-rng.h"
 #include "test/system/artifact-list-test-access.h"
 #include "test/system/monrace-list-test-access.h"
@@ -422,7 +423,7 @@ TEST_CASE("RaceReader preserves existing definition messages and record after he
     {
         data["sex"] = 42;
         data["artifacts"] = nlohmann::json::array({ { { "drop_artifact_id", 0 }, { "drop_probability", 50 } } });
-        expected = ParseErrorType::TOO_FEW_ARGUMENTS;
+        expected = ParseErrorType::INVALID_TYPE;
     }
     SUBCASE("artifact probability before escort dice")
     {
@@ -936,4 +937,23 @@ TEST_CASE("RaceReader preserves symbol error codes and validation precedence")
     auto data = make_monrace();
     data.erase("symbol");
     CHECK(test::to_error_code(read_as_first_record(data, session)) == ParseErrorType::TOO_FEW_ARGUMENTS);
+}
+
+TEST_CASE("RaceReader reports non-string tokens as invalid types")
+{
+    const test::ScopedReaderState reader_state;
+    test::MonraceListTestAccess guard;
+    for (const auto *path : { "/sex", "/blows/0/method", "/blows/0/effect", "/message/0/action" }) {
+        for (const auto &value : { nlohmann::json(1), nlohmann::json(true), nlohmann::json::array(), nlohmann::json::object() }) {
+            CAPTURE(path);
+            CAPTURE(value.dump());
+            auto data = make_monrace();
+            data["blows"] = nlohmann::json::array({ { { "method", "HIT" }, { "effect", "HURT" } } });
+            data["message"] = nlohmann::json::array({ { { "action", "SPEAK_ALL" }, { "chance", 1 }, { "message", { { "ja", "test" }, { "en", "test" } } } } });
+            data[nlohmann::json::json_pointer(path)] = value;
+            auto session = RaceReader::create_session();
+            CHECK(test::to_error_code(RaceReader(data, session).read()) == ParseErrorType::INVALID_TYPE);
+            CHECK(MonraceList::get_instance().empty());
+        }
+    }
 }

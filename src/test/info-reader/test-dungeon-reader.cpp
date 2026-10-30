@@ -1061,7 +1061,7 @@ TEST_CASE("DungeonReader propagates nested parse errors without publishing parti
         { "/flags", { "MAZE", "UNKNOWN" }, ParseErrorType::INVALID_FLAG },
         { "/monsters", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
         { "/monsters/additionalSpawnProbability", 0, ParseErrorType::INVALID_VALUE },
-        { "/monsters/flagsMode", 1, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/monsters/flagsMode", 1, ParseErrorType::INVALID_TYPE },
         { "/monsters/flagsMode", "UNKNOWN", ParseErrorType::INVALID_FLAG },
         { "/monsters/flags", { "UNIQUE", "UNKNOWN" }, ParseErrorType::INVALID_FLAG },
         { "/monsters/symbols", { "D", "XX" }, ParseErrorType::INVALID_VALUE },
@@ -1236,5 +1236,17 @@ TEST_CASE("DungeonReader pins flag array type errors and missing values")
             }
             CHECK(test::to_error_code(test::read_and_commit(DungeonReader(data, session), session)) == expected);
         }
+    }
+}
+
+TEST_CASE("DungeonReader reports non-string flagsMode as an invalid type")
+{
+    DungeonReaderStateGuard guard;
+    for (const auto &value : { nlohmann::json(1), nlohmann::json(true), nlohmann::json::array(), nlohmann::json::object() }) {
+        auto data = make_dungeon();
+        data["monsters"]["flagsMode"] = value;
+        auto session = DungeonReader::create_session();
+        CHECK(test::to_error_code(DungeonReader(data, session).read()) == ParseErrorType::INVALID_TYPE);
+        CHECK(DungeonList::get_instance().empty());
     }
 }

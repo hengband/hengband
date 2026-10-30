@@ -1393,3 +1393,19 @@ TEST_CASE("resolve_legend_reward preserves object without reward and clears arti
     CHECK(grid.object == 77);
     CHECK(grid.artifact == FixedArtifactId::NONE);
 }
+
+TEST_CASE("QuestReader reports non-string type and status tokens as invalid types")
+{
+    const test::ScopedReaderState reader_state;
+    for (const auto *path : { "/definition/type", "/descriptions/0/when/statusAtMost", "/descriptions/0/when/status", "/descriptions/0/when/questType" }) {
+        for (const auto &value : { nlohmann::json(1), nlohmann::json(true), nlohmann::json::array(), nlohmann::json::object() }) {
+            CAPTURE(path);
+            auto data = make_quest_with_description("test");
+            data[nlohmann::json::json_pointer(path)] = value;
+            QuestType quest;
+            QuestFixedMap fixed_map;
+            CHECK(test::to_error_code(QuestReader(data, quest, fixed_map).read()) == ParseErrorType::INVALID_TYPE);
+            CHECK_FALSE(fixed_map.metadata.present);
+        }
+    }
+}

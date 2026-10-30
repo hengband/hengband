@@ -309,16 +309,16 @@ TEST_CASE("TerrainReader propagates helper errors without publishing staged terr
         { "/trap", { { "type", "PIT" } }, ParseErrorType::TOO_FEW_ARGUMENTS },
         { "/trap", { { "type", "UNKNOWN" }, { "power", 1 } }, ParseErrorType::INVALID_FLAG },
         { "/pattern", false, ParseErrorType::TOO_FEW_ARGUMENTS },
-        { "/pattern/type", 1, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/pattern/type", 1, ParseErrorType::INVALID_TYPE },
         { "/pattern/type", "UNKNOWN", ParseErrorType::INVALID_FLAG },
         { "/store", false, ParseErrorType::TOO_FEW_ARGUMENTS },
-        { "/store/type", 1, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/store/type", 1, ParseErrorType::INVALID_TYPE },
         { "/store/type", "UNKNOWN", ParseErrorType::INVALID_FLAG },
         { "/building", false, ParseErrorType::TOO_FEW_ARGUMENTS },
-        { "/building/type", 1, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/building/type", 1, ParseErrorType::INVALID_TYPE },
         { "/building/type", "UNKNOWN", ParseErrorType::INVALID_FLAG },
         { "/convert", false, ParseErrorType::TOO_FEW_ARGUMENTS },
-        { "/convert/type", 1, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/convert/type", 1, ParseErrorType::INVALID_TYPE },
         { "/convert/type", "UNKNOWN", ParseErrorType::INVALID_FLAG },
         { "/convert", { { "type", "STREAM" } }, ParseErrorType::TOO_FEW_ARGUMENTS },
         { "/convert", { { "type", "STREAM" }, { "stream_index", 255 } }, ParseErrorType::INVALID_VALUE },
@@ -690,6 +690,22 @@ TEST_CASE("TerrainReader rejects unusable gold dice and preserves valid dice")
             data["id"] = 0;
             data["interactions"]["DROP_GOLD"] = "1d1";
             CHECK(test::read_and_commit(TerrainReader(data, guard.session), guard.session).has_value());
+        }
+    }
+}
+
+TEST_CASE("TerrainReader reports non-string type tokens as invalid types")
+{
+    TerrainStateGuard guard;
+    TerrainList::get_instance().resize(0);
+    for (const auto *field : { "convert", "trap", "pattern", "store", "building" }) {
+        for (const auto &value : { nlohmann::json(1), nlohmann::json(true), nlohmann::json::array(), nlohmann::json::object() }) {
+            CAPTURE(field);
+            auto data = make_terrain();
+            data[field] = { { "type", value }, { "power", 1 } };
+            guard.session = {};
+            CHECK(test::to_error_code(TerrainReader(data, guard.session).read()) == ParseErrorType::INVALID_TYPE);
+            CHECK(TerrainList::get_instance().empty());
         }
     }
 }

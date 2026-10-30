@@ -146,24 +146,6 @@ bool DungeonReader::grab_one_dungeon_flag(DungeonDefinition &dungeon, std::strin
 }
 
 /*!
- * @brief テキストトークンを走査してモンスター生成条件フラグの結合モードを得る
- * @param dungeon ダンジョンへの参照
- * @param what 参照元の文字列
- * @return 見つけたらtrue
- */
-bool DungeonReader::grab_one_dungeon_mode(DungeonDefinition &dungeon, std::string_view what) const
-{
-    const auto it = dungeon_modes.find(what);
-    if (it != dungeon_modes.end()) {
-        dungeon.mode = it->second;
-        return true;
-    }
-
-    msg_print(_("未知のダンジョン・モンスター生成モード '{}'。", "Unknown dungeon monster generation mode '{}'."), what);
-    return false;
-}
-
-/*!
  * @brief JSON配列からEnumClassFlagGroupを読み込む
  * @param obj JSONオブジェクト
  * @param key 読み込むキー
@@ -659,13 +641,14 @@ tl::expected<void, ParseErrorType> DungeonReader::set_dungeon_monsters(DungeonDe
     }
 
     const auto &flags_mode_obj = get_json_value(monsters_obj, "flagsMode");
-    if (!flags_mode_obj.is_string()) {
-        return tl::unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
+    const auto mode = info_read_token(flags_mode_obj, dungeon_modes);
+    if (!mode) {
+        if (mode.error() == ParseErrorType::INVALID_FLAG) {
+            msg_print(_("未知のダンジョン・モンスター生成モード '{}'。", "Unknown dungeon monster generation mode '{}'."), flags_mode_obj.get<std::string>());
+        }
+        return tl::make_unexpected(mode.error());
     }
-    const auto mode = flags_mode_obj.get<std::string>();
-    if (!this->grab_one_dungeon_mode(dungeon, mode)) {
-        return tl::unexpected(ParseErrorType::INVALID_FLAG);
-    }
+    dungeon.mode = *mode;
 
     if (auto it = monsters_obj.find("flags"); it != monsters_obj.end()) {
         if (const auto result = this->set_dungeon_monster_flags(*it, dungeon); !result) {

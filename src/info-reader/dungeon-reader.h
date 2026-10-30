@@ -25,7 +25,6 @@ public:
 
 private:
     bool grab_one_dungeon_flag(DungeonDefinition &dungeon, std::string_view what) const;
-    bool grab_one_dungeon_mode(DungeonDefinition &dungeon, std::string_view what) const;
     bool grab_one_basic_monster_flag(DungeonDefinition &dungeon, std::string_view what) const;
     bool grab_one_spell_monster_flag(DungeonDefinition &dungeon, std::string_view what) const;
     tl::expected<void, ParseErrorType> set_dungeon_description(DungeonDefinition &dungeon) const;

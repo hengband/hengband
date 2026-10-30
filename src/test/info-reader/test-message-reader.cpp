@@ -305,7 +305,7 @@ TEST_CASE("MessageReader propagates message helper errors and keeps validation o
         { "/message", nlohmann::json::object(), ParseErrorType::TOO_FEW_ARGUMENTS },
         { "/message/1", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
         { "/message/1/action", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
-        { "/message/1/action", 1, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/message/1/action", 1, ParseErrorType::INVALID_TYPE },
         { "/message/1/action", "UNKNOWN", ParseErrorType::INVALID_FLAG },
         { "/message/1/chance", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
         { "/message/1/chance", true, ParseErrorType::TOO_FEW_ARGUMENTS },
@@ -396,3 +396,16 @@ TEST_CASE("MessageReader reports a message which cannot be converted to the syst
     CHECK(test::to_error_code(MessageReader(data).read()) == ParseErrorType::INVALID_VALUE);
 }
 #endif
+
+TEST_CASE("MessageReader reports non-string actions as invalid types")
+{
+    const test::ScopedReaderState reader_state;
+    test::MonraceMessageListTestAccess state;
+    for (const auto &value : { nlohmann::json(1), nlohmann::json(true), nlohmann::json::array(), nlohmann::json::object() }) {
+        auto message = make_message("SPEAK_ALL", nlohmann::json::array({ "test" }));
+        message["action"] = value;
+        const nlohmann::json data = { { "name", "DEFAULT" }, { "message", nlohmann::json::array({ message }) } };
+        CHECK(test::to_error_code(MessageReader(data).read()) == ParseErrorType::INVALID_TYPE);
+        CHECK(state.default_message_count(MonsterMessageType::SPEAK_ALL) == 0);
+    }
+}
