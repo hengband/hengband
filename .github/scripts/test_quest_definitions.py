@@ -7,7 +7,7 @@ import unittest
 
 from json_validation_test_helper import (dungeon_id_maximum, fixed_artifact_id_schema_maximum, monrace_id_schema_maximum,
                                          quest_id_schema_maximum, validate_document)
-from validate_json import MAX_EGO_ID, build_schema_registry, load_all_schemas, load_jsonc, validate_one
+from validate_json import MAX_EGO_ID, MAX_HGT, MAX_WID, build_schema_registry, load_all_schemas, load_jsonc, validate_one
 
 
 class QuestInt16RangeTest(unittest.TestCase):
@@ -130,6 +130,16 @@ class QuestInt16RangeTest(unittest.TestCase):
         schema = self.loaded[self.schema_map["Quest"]]
         self.assertEqual(schema["$defs"]["definition"]["properties"]["dungeon"]["maximum"], dungeon_id_maximum())
         self.assertEqual(schema["$defs"]["startVariant"]["properties"]["leavingQuest"]["maximum"], quest_id_schema_maximum())
+
+    def test_map_limits_follow_floor_size(self):
+        # QuestReader は地図を MAX_HGT 行・MAX_WID 列までに限るため、schema の上限を C++ の定数と揃える。
+        definitions = self.loaded[self.schema_map["Quest"]]["$defs"]
+        self.assertEqual(definitions["mapRows"]["maxItems"], MAX_HGT)
+        self.assertEqual(definitions["mapRows"]["items"]["maxLength"], MAX_WID)
+        for name in ("position", "startVariant"):
+            with self.subTest(name=name):
+                self.assertEqual(definitions[name]["properties"]["y"]["maximum"], MAX_HGT - 1)
+                self.assertEqual(definitions[name]["properties"]["x"]["maximum"], MAX_WID - 1)
 
     def test_other_integers_follow_reader_ranges(self):
         # QuestReader は int に収まらない値を拒否し、開始位置は地図（最大 66 行 198 列）の中に限る。
