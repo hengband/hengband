@@ -630,13 +630,14 @@ def validate_quest_semantics(data: dict) -> None:
     walk(data, [])
     for symbol in data.get("legend", {}):
         # propertyNames の maxLength は文字数で数えるため、QuestReaderと同じく印字可能なASCIIの1文字ちょうどを確かめる。
-        if len(symbol) != 1 or not is_fixed_map_symbol(symbol):
+        if not is_fixed_map_symbol(symbol):
             raise ValidationError("legend symbol must be exactly one printable ASCII character", path=["legend", symbol])
 
 
 def is_fixed_map_symbol(character: str) -> bool:
-    """固定マップの記号（印字可能なASCII）か。general-parser.h の is_fixed_map_symbol と揃える。"""
-    return " " <= character <= "~"
+    """固定マップの記号（印字可能なASCIIの1文字）か。general-parser.h の is_fixed_map_symbol と揃える。"""
+    # C++ は1文字（unsigned char）を受け取る。文字列どうしの比較では "AB" なども範囲に入るため、1文字に限る。
+    return len(character) == 1 and " " <= character <= "~"
 
 
 def select_quest_maps(data: dict) -> list[tuple[list, list[str]]]:

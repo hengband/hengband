@@ -11,9 +11,9 @@ from json_validation_test_helper import baseitem_id_schema_maximum, validate_doc
 from jsonschema import ValidationError
 from jsonschema.validators import validator_for
 from validate_json import (BUILDING_MEMBERSHIP_FIELD_MAXIMUMS, REPOSITORY_ROOT, build_schema_registry, build_validation_pairs,
-                           load_all_schemas, load_cpp_constant, load_jsonc, load_magic_realm_count, validate_one,
-                           validate_quest_layout_semantics, validate_town_map_semantics, validate_town_preferences_semantics,
-                           validate_vault_semantics, validate_wilderness_semantics)
+                           is_fixed_map_symbol, load_all_schemas, load_cpp_constant, load_jsonc, load_magic_realm_count,
+                           validate_one, validate_quest_layout_semantics, validate_quest_semantics, validate_town_map_semantics,
+                           validate_town_preferences_semantics, validate_vault_semantics, validate_wilderness_semantics)
 
 
 class QuestGridValidationTest(unittest.TestCase):
@@ -1279,6 +1279,24 @@ class FixedMapSymbolSiteTest(unittest.TestCase):
                     else:
                         with self.assertRaises(ValidationError):
                             check()
+
+    def test_helper_accepts_exactly_one_character(self):
+        # general-parser.h の is_fixed_map_symbol() は1文字を受け取る。範囲内の文字を並べた文字列や空の文字列は記号ではない。
+        for symbol, accepted in ((" ", True), ("A", True), ("~", True), ("", False), ("AB", False), ("  ", False), ("~~", False),
+                                 ("A\x7f", False)):
+            with self.subTest(symbol=symbol):
+                self.assertEqual(is_fixed_map_symbol(symbol), accepted)
+
+    def test_quest_legend_symbol_must_be_one_character(self):
+        # QuestReader は凡例のキーを parse_fixed_map_symbol() で1文字ちょうどに限る。
+        for symbol, accepted in (("A", True), (" ", True), ("", False), ("AB", False)):
+            with self.subTest(symbol=symbol):
+                document = {"legend": {symbol: {}}}
+                if accepted:
+                    validate_quest_semantics(document)
+                else:
+                    with self.assertRaisesRegex(ValidationError, "legend symbol"):
+                        validate_quest_semantics(document)
 
     def test_every_site_uses_the_helper(self):
         # 判定を差し替えると、どの箇所も同じ文字を拒否する（それぞれに範囲を書き写していない）。
