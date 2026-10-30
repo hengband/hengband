@@ -979,7 +979,8 @@ def validate_town_map_semantics(data: dict, schema_path: Path) -> None:
         # TownMapReader は固定マップの記号のうち、旧形式の区切りの文字（: / \）を拒否する。
         symbol = rule["symbol"]
         if not is_town_map_symbol(symbol):
-            raise ValidationError("feature symbol must be exactly one printable ASCII character", path=["featureRules", rule_index, "symbol"])
+            raise ValidationError("feature symbol must be exactly one printable ASCII character other than ':', '/' and '\\'",
+                                  path=["featureRules", rule_index, "symbol"])
         definition = rule["definition"]
         path = ["featureRules", rule_index, "definition"]
         validate_legend_ego(definition, baseitems, egos, path)
