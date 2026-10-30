@@ -201,21 +201,30 @@ tl::expected<void, ParseErrorType> apply_town_map_feature(const FloorType &floor
     return {};
 }
 
+/*!
+ * @brief JSONC ファイルを読み込めなかった理由を町の読み込みのエラーコードに変える
+ * @param error 読み込めなかった理由
+ * @return 開けない時は GENERIC、解析器の例外は INVALID_VALUE（例外の文言は使わない）
+ */
+static ParseErrorType to_town_load_error(const JsoncLoadError &error)
+{
+    return error.kind == JsoncLoadErrorKind::CANNOT_OPEN ? ParseErrorType::GENERIC : ParseErrorType::INVALID_VALUE;
+}
+
 static tl::expected<void, ParseErrorType> load_town_preferences()
 {
     if (init_flags & INIT_ONLY_BUILDINGS) {
         return {};
     }
 
-    JsoncDocumentLoader loader(path_build(ANGBAND_DIR_EDIT, TOWN_PREFERENCES));
-    if (!loader.is_open()) {
-        return tl::make_unexpected(ParseErrorType::GENERIC);
+    const auto data = JsoncDocumentLoader::load(path_build(ANGBAND_DIR_EDIT, TOWN_PREFERENCES));
+    if (!data) {
+        return tl::make_unexpected(to_town_load_error(data.error()));
     }
 
     try {
-        const auto data = loader.parse();
         TownPreferencesLegend legend;
-        if (const auto result = TownPreferencesReader(data).read(legend, parse_quest_legend_cell); !result) {
+        if (const auto result = TownPreferencesReader(*data).read(legend, parse_quest_legend_cell); !result) {
             return result;
         }
 
@@ -234,16 +243,15 @@ static tl::expected<void, ParseErrorType> load_town_preferences()
  */
 static tl::expected<std::string, ParseErrorType> load_town_definition_file()
 {
-    JsoncDocumentLoader loader(path_build(ANGBAND_DIR_EDIT, TOWN_DEFINITION_LIST));
-    if (!loader.is_open()) {
-        return tl::make_unexpected(ParseErrorType::GENERIC);
+    const auto data = JsoncDocumentLoader::load(path_build(ANGBAND_DIR_EDIT, TOWN_DEFINITION_LIST));
+    if (!data) {
+        return tl::make_unexpected(to_town_load_error(data.error()));
     }
 
     try {
-        const auto data = loader.parse();
         const auto mode = vanilla_town ? TownMapMode::NONE : (lite_town ? TownMapMode::LITE : TownMapMode::NORMAL);
         std::string map_file;
-        if (const auto result = TownDefinitionListReader(data).read(AngbandWorld::get_instance().get_town_index(), mode, map_file); !result) {
+        if (const auto result = TownDefinitionListReader(*data).read(AngbandWorld::get_instance().get_town_index(), mode, map_file); !result) {
             return tl::make_unexpected(result.error());
         }
         return map_file;
@@ -379,15 +387,14 @@ static tl::expected<void, ParseErrorType> apply_town_rules(PlayerType *player_pt
 
 static tl::expected<void, ParseErrorType> parse_town_map_jsonc(PlayerType *player_ptr, std::string_view name)
 {
-    JsoncDocumentLoader loader(path_build(ANGBAND_DIR_EDIT, name));
-    if (!loader.is_open()) {
-        return tl::make_unexpected(ParseErrorType::GENERIC);
+    const auto data = JsoncDocumentLoader::load(path_build(ANGBAND_DIR_EDIT, name));
+    if (!data) {
+        return tl::make_unexpected(to_town_load_error(data.error()));
     }
     try {
-        const auto data = loader.parse();
         TownMapDefinition definition;
         const bool only_buildings = (init_flags & INIT_ONLY_BUILDINGS) != 0;
-        if (const auto result = TownMapReader(data).read(definition, MAX_HGT, MAX_WID, only_buildings); !result) {
+        if (const auto result = TownMapReader(*data).read(definition, MAX_HGT, MAX_WID, only_buildings); !result) {
             return result;
         }
         auto y = 0;

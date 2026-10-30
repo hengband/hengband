@@ -292,19 +292,17 @@ void QuestList::initialize()
 std::map<char, QuestLegendCell> QuestList::load_base_legend()
 {
     const auto path = path_build(ANGBAND_DIR_EDIT, "QuestPreferences.jsonc");
-    JsoncDocumentLoader loader(path);
-    if (!loader.is_open()) {
+    auto loaded = JsoncDocumentLoader::load(path);
+    if (!loaded && (loaded.error().kind == JsoncLoadErrorKind::CANNOT_OPEN)) {
         constexpr auto fmt = _("ベース凡例ファイルをオープンできません ({})", "Cannot open base legend file ({})");
         THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, path.string()));
     }
-
-    nlohmann::json data;
-    try {
-        data = loader.parse();
-    } catch (const std::exception &e) {
+    if (!loaded) {
         constexpr auto fmt = _("ベース凡例ファイルの解析に失敗しました ({}): {}", "Failed to parse base legend file ({}): {}");
-        THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, path.string(), e.what()));
+        THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, path.string(), loaded.error().message));
     }
+
+    auto &data = *loaded;
 
     const auto legend_it = data.find("legend");
     if ((legend_it == data.end()) || !legend_it->is_object()) {
@@ -389,19 +387,17 @@ void QuestList::load_json_quests(const std::filesystem::path &quests_dir, std::m
     std::vector<std::pair<QuestId, std::filesystem::path>> loaded_quests;
     loaded_quests.reserve(files.size());
     for (const auto &file : files) {
-        JsoncDocumentLoader loader(file);
-        if (!loader.is_open()) {
+        auto loaded = JsoncDocumentLoader::load(file);
+        if (!loaded && (loaded.error().kind == JsoncLoadErrorKind::CANNOT_OPEN)) {
             constexpr auto fmt = _("クエストファイルをオープンできません ({})", "Cannot open quest file ({})");
             THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, file.string()));
         }
-
-        nlohmann::json quest_data;
-        try {
-            quest_data = loader.parse();
-        } catch (const std::exception &e) {
+        if (!loaded) {
             constexpr auto fmt = _("クエストファイルの解析に失敗しました ({}): {}", "Failed to parse quest file ({}): {}");
-            THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, file.string(), e.what()));
+            THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, file.string(), loaded.error().message));
         }
+
+        auto &quest_data = *loaded;
 
         const auto id_it = quest_data.find("id");
         if ((id_it == quest_data.end()) || !id_it->is_number_integer()) {
