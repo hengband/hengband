@@ -172,6 +172,7 @@
     <ClCompile Include="..\..\src\test\util\test-temporary-json-files.cpp" />
     <ClCompile Include="..\..\src\test\view\test-display-messages.cpp" />
     <ClCompile Include="..\..\src\test\view\test-map-info-cache.cpp" />
+    <ClCompile Include="..\..\src\test\view\test-original-tiles.cpp" />
     <ClCompile Include="..\..\src\test\view\test-map-terrain-visibility.cpp" />
     <ClCompile Include="..\..\src\test\view\test-screen-parity-helpers.cpp" />
     <ClCompile Include="..\..\src\test\window\test-overview-map-cache.cpp" />
@@ -200,6 +201,10 @@
     <ClInclude Include="..\..\src\test\system\spell-info-list-test-access.h" />
     <ClInclude Include="..\..\src\test\system\terrain-list-test-access.h" />
     <ClInclude Include="..\..\src\test\temporary-json-files.h" />
+    <ClInclude Include="..\..\src\test\view\original-terrain-coverage.inc" />
+    <ClInclude Include="..\..\src\test\view\original-item-coverage.inc" />
+    <ClInclude Include="..\..\src\test\view\original-monster-coverage.inc" />
+    <ClInclude Include="..\..\src\test\view\original-symbol-coverage.inc" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="HengbandCore.vcxproj">
