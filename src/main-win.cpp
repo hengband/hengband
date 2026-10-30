@@ -128,6 +128,7 @@
 #include <direct.h>
 #include <fmt/format.h>
 #include <locale>
+#include <map>
 #include <string>
 #include <string_view>
 #include <vector>
@@ -1219,6 +1220,48 @@ static errr term_text_win(int x, int y, int n, TERM_COLOR a, concptr s)
     return 0;
 }
 
+// Original32の字形フォントは、端末とセル寸法から求めた高さごとに再利用する。
+class OriginalTileFonts {
+public:
+    OriginalTileFonts() = default;
+    OriginalTileFonts(const OriginalTileFonts &) = delete;
+    OriginalTileFonts(OriginalTileFonts &&) = delete;
+    OriginalTileFonts &operator=(const OriginalTileFonts &) = delete;
+    OriginalTileFonts &operator=(OriginalTileFonts &&) = delete;
+    ~OriginalTileFonts()
+    {
+        for (auto &font : fonts) {
+            if (font.handle) {
+                DeleteObject(font.handle);
+            }
+        }
+    }
+
+    HFONT get(int height, bool zoomed)
+    {
+        auto &font = fonts[zoomed ? 1 : 0];
+        if (!font.handle || font.height != height) {
+            const auto replacement = CreateFontW(-height, 0, 0, 0, FW_BOLD, FALSE, FALSE, FALSE,
+                DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, NONANTIALIASED_QUALITY, FIXED_PITCH, L"Consolas");
+            if (replacement) {
+                if (font.handle) {
+                    DeleteObject(font.handle);
+                }
+                font.handle = replacement;
+                font.height = height;
+            }
+        }
+        return font.handle;
+    }
+
+private:
+    struct CachedFont {
+        HFONT handle = nullptr;
+        int height = 0;
+    };
+    CachedFont fonts[2];
+};
+
 /*!
  * @brief Low level graphics.  Assumes valid input.
  * @details
@@ -1269,11 +1312,11 @@ static errr term_pict_win(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *ap, c
     if (graphic.get_mode() == graphics_mode::GRAPHICS_ORIGINAL_TERRAIN) {
         SetStretchBltMode(hdc, COLORONCOLOR);
         const auto base_height = h2;
-        const auto font = CreateFontW(-std::max(8, std::min<int>(h2 - 4, tw2)), 0, 0, 0, FW_BOLD, FALSE, FALSE, FALSE,
-            DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, NONANTIALIASED_QUALITY, FIXED_PITCH, L"Consolas");
+        static std::map<term_data *, OriginalTileFonts> font_cache;
+        auto &fonts = font_cache[td];
+        const auto font = fonts.get(std::max(8, std::min<int>(h2 - 4, tw2)), false);
         const auto previous_font = SelectObject(hdc, font);
-        const auto zoom_font = CreateFontW(-std::max(8, std::min<int>(base_height * 2 - 4, w2 * 4)), 0, 0, 0, FW_BOLD, FALSE, FALSE, FALSE,
-            DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, NONANTIALIASED_QUALITY, FIXED_PITCH, L"Consolas");
+        const auto zoom_font = fonts.get(std::max(8, std::min<int>(base_height * 2 - 4, w2 * 4)), true);
         const auto previous_bg_mode = SetBkMode(hdc, TRANSPARENT);
         for (i = 0; i < n; ++i, x2 += w2) {
             // 一括描画には、左側のタイルで描画済みの右半分が含まれることがある。
@@ -1367,8 +1410,6 @@ static errr term_pict_win(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *ap, c
         }
         SetBkMode(hdc, previous_bg_mode);
         SelectObject(hdc, previous_font);
-        DeleteObject(font);
-        DeleteObject(zoom_font);
         SelectObject(hdcSrc, hbmSrcOld);
         DeleteDC(hdcSrc);
         td->refresh();
