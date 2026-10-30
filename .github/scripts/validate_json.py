@@ -640,6 +640,15 @@ def is_fixed_map_symbol(character: str) -> bool:
     return len(character) == 1 and " " <= character <= "~"
 
 
+def is_town_map_symbol(symbol: str) -> bool:
+    """町の地図の記号か。固定マップの記号（空白を含む印字可能なASCIIの1文字）のうち、
+    旧形式の区切りの文字（コロン・スラッシュ・バックスラッシュ）を除く。
+
+    TownMapReader の地物の記号（featureRules の symbol）と TownPreferencesReader の共通の凡例のキーで同じ規則を使う。
+    """
+    return is_fixed_map_symbol(symbol) and symbol not in ":/\\"
+
+
 def select_quest_maps(data: dict) -> list[tuple[list, list[str]]]:
     """QuestReaderが使う地図を、診断用の位置と組で返す。map があれば mapVariants は読まない。"""
     if "map" in data:
@@ -901,10 +910,10 @@ def validate_town_preferences_semantics(data: dict, schema_path: Path) -> None:
         raise ValidationError("expected an integer JSON value", path=["version"])
     for symbol, cell in data["legend"].items():
         # propertyNames の $ は末尾の改行の前にも一致するため、TownPreferencesReaderと同じく1文字ちょうどを確かめる。
-        # TownPreferencesReader は空白を除く '!'〜'~' に限り、固定マップの記号（空白を含む）とは規則が違うため
-        # is_fixed_map_symbol() を使わない。文字の範囲は schema の propertyNames の pattern が確かめる。
-        if len(symbol) != 1:
-            raise ValidationError("legend symbol must be exactly one printable ASCII character", path=["legend", symbol])
+        # TownPreferencesReader は TownMapReader の地物の記号と同じ規則（空白を含む固定マップの記号から : / \ を除く）を使う。
+        if not is_town_map_symbol(symbol):
+            raise ValidationError("legend symbol must be exactly one printable ASCII character other than ':', '/' and '\\'",
+                                  path=["legend", symbol])
         validate_legend_ego(cell, baseitems, egos, ["legend", symbol])
         validate_legend_object_trap(cell, ["legend", symbol])
         terrain_tag = cell["terrain"]
@@ -963,7 +972,7 @@ def validate_town_map_semantics(data: dict, schema_path: Path) -> None:
     for rule_index, rule in enumerate(data["featureRules"]):
         # TownMapReader は固定マップの記号のうち、旧形式の区切りの文字（: / \）を拒否する。
         symbol = rule["symbol"]
-        if len(symbol) != 1 or not is_fixed_map_symbol(symbol) or symbol in ":/\\":
+        if not is_town_map_symbol(symbol):
             raise ValidationError("feature symbol must be exactly one printable ASCII character", path=["featureRules", rule_index, "symbol"])
         definition = rule["definition"]
         path = ["featureRules", rule_index, "definition"]

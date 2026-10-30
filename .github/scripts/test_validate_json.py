@@ -11,9 +11,10 @@ from json_validation_test_helper import baseitem_id_schema_maximum, validate_doc
 from jsonschema import ValidationError
 from jsonschema.validators import validator_for
 from validate_json import (BUILDING_MEMBERSHIP_FIELD_MAXIMUMS, REPOSITORY_ROOT, build_schema_registry, build_validation_pairs,
-                           is_fixed_map_symbol, load_all_schemas, load_cpp_constant, load_jsonc, load_magic_realm_count,
-                           validate_one, validate_quest_layout_semantics, validate_quest_semantics, validate_town_map_semantics,
-                           validate_town_preferences_semantics, validate_vault_semantics, validate_wilderness_semantics)
+                           is_fixed_map_symbol, is_town_map_symbol, load_all_schemas, load_cpp_constant, load_jsonc,
+                           load_magic_realm_count, validate_one, validate_quest_layout_semantics, validate_quest_semantics,
+                           validate_town_map_semantics, validate_town_preferences_semantics, validate_vault_semantics,
+                           validate_wilderness_semantics)
 
 
 class QuestGridValidationTest(unittest.TestCase):
@@ -616,6 +617,22 @@ class TownPreferencesValidationTest(unittest.TestCase):
         # schema の長さの制約が弾く。意味検証も同じ値を保険として拒否する。
         with self.assertRaisesRegex(ValidationError, "legend symbol must be exactly one printable ASCII character"):
             validate_town_preferences_semantics(data, self.schema_path)
+
+    def test_legend_symbol_follows_town_map_symbol_rule(self):
+        # TownPreferencesReader は TownMapReader の地物の記号と同じく、空白を含む固定マップの記号のうち : / \ を除いたものを受け付ける。
+        for symbol, accepted in ((" ", True), ("!", True), ("~", True), (":", False), ("/", False), ("\\", False),
+                                 ("\x1f", False), ("\x7f", False), ("é", False)):
+            with self.subTest(symbol=symbol):
+                data = {"version": 1, "legend": {symbol: {"terrain": "ENTRANCE", "caveInfo": ["MARK"]}}}
+                ok, message = self.validate(data)
+                self.assertEqual(ok, accepted, message)
+                if accepted:
+                    validate_town_preferences_semantics(data, self.schema_path)
+                else:
+                    self.assertIn("['legend']", message)
+                    # schema を通さない意味検証だけでも同じ記号を拒否する。
+                    with self.assertRaisesRegex(ValidationError, "legend symbol"):
+                        validate_town_preferences_semantics(data, self.schema_path)
 
     def test_terrain_tags_match_runtime_definitions(self):
         for terrain, valid in (("ENTRANCE", True), ("*", True), ("NOT_A_TERRAIN", False)):
@@ -1304,6 +1321,31 @@ class FixedMapSymbolSiteTest(unittest.TestCase):
             with self.subTest(site=site):
                 check()
                 with patch("validate_json.is_fixed_map_symbol", lambda character: character != "A"):
+                    with self.assertRaises(ValidationError):
+                        check()
+
+    def test_town_symbol_helper_matches_readers(self):
+        # TownMapReader・TownPreferencesReader と同じく、固定マップの記号から : / \ を除く。
+        for symbol in map(chr, range(0x20, 0x7f)):
+            with self.subTest(symbol=symbol):
+                self.assertEqual(is_town_map_symbol(symbol), symbol not in ":/\\")
+        for symbol in ("", "AB", "\x1f", "\x7f", "é"):
+            with self.subTest(symbol=symbol):
+                self.assertFalse(is_town_map_symbol(symbol))
+
+    def test_town_symbol_sites_use_the_helper(self):
+        # 判定を差し替えると、町の地図の地物の記号と共通の凡例のキーの両方が同じ記号を拒否する。
+        preferences_path = REPOSITORY_ROOT / "schema/TownPreferences.schema.json"
+        preferences = {"version": 1, "legend": {"A": {"terrain": "ENTRANCE", "caveInfo": ["MARK"]}}}
+        sites = (
+            ("town map feature symbol", lambda: validate_town_map_semantics(self.town_map(symbol="A", row="AAA"),
+                                                                            self.town_map_schema_path)),
+            ("town preferences legend", lambda: validate_town_preferences_semantics(preferences, preferences_path)),
+        )
+        for site, check in sites:
+            with self.subTest(site=site):
+                check()
+                with patch("validate_json.is_town_map_symbol", lambda symbol: symbol != "A"):
                     with self.assertRaises(ValidationError):
                         check()
 
