@@ -30,7 +30,6 @@ struct all_player_flags {
     TrFlags player_imm{};
     TrFlags tim_player_imm{};
     TrFlags player_vuln{};
-    TrFlags known_obj_imm{};
     TrFlags riding_flags{};
     TrFlags riding_negative_flags{};
 };
@@ -416,7 +415,6 @@ all_player_flags get_player_state_flags(PlayerType *player_ptr)
     tim_player_flags(player_ptr, f.tim_player_flags);
     player_immunity(player_ptr, f.player_imm);
     tim_player_immunity(player_ptr, f.tim_player_imm);
-    known_obj_immunity(player_ptr, f.known_obj_imm);
     player_vulnerability_flags(player_ptr, f.player_vuln);
     riding_flags(player_ptr, f.riding_flags, f.riding_negative_flags);
     return f;

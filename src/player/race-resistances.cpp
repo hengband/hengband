@@ -1,5 +1,4 @@
 #include "player/race-resistances.h"
-#include "inventory/inventory-slot-types.h"
 #include "mind/mind-elementalist.h"
 #include "mutation/mutation-flag-types.h"
 #include "object-enchant/tr-types.h"
@@ -8,7 +7,6 @@
 #include "player-info/race-info.h"
 #include "player-info/samurai-data-type.h"
 #include "player/special-defense-types.h"
-#include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
@@ -70,38 +68,6 @@ void tim_player_immunity(PlayerType *player_ptr, TrFlags &flags)
     }
     if (player_ptr->wraith_form) {
         flags.set(TR_RES_DARK);
-    }
-}
-
-/*!
- * @brief プレイヤーの装備による免疫フラグを返す
- * @param player_ptr プレイヤーへの参照ポインタ
- * @param flags フラグを保管する配列
- */
-void known_obj_immunity(PlayerType *player_ptr, TrFlags &flags)
-{
-    flags.clear();
-
-    for (const auto i_idx : INVEN_WIELDING_SLOTS) {
-        ItemEntity *o_ptr;
-        o_ptr = player_ptr->inventory[i_idx].get();
-        if (!o_ptr->is_valid()) {
-            continue;
-        }
-
-        auto o_flags = o_ptr->get_flags_known();
-        if (o_flags.has(TR_IM_ACID)) {
-            flags.set(TR_RES_ACID);
-        }
-        if (o_flags.has(TR_IM_ELEC)) {
-            flags.set(TR_RES_ELEC);
-        }
-        if (o_flags.has(TR_IM_FIRE)) {
-            flags.set(TR_RES_FIRE);
-        }
-        if (o_flags.has(TR_IM_COLD)) {
-            flags.set(TR_RES_COLD);
-        }
     }
 }
 
