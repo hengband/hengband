@@ -238,7 +238,7 @@ TEST_CASE("Town load failures collect diagnostics and quit without requesting in
     {
         init_flags = INIT_CREATE_DUNGEON;
         files.write(TOWN_PREFERENCES, nlohmann::json::object());
-        check_town_load_failure(&term.player(), ParseErrorType::INVALID_TYPE, TOWN_PREFERENCES);
+        check_town_load_failure(&term.player(), ParseErrorType::TOO_FEW_ARGUMENTS, TOWN_PREFERENCES);
     }
     SUBCASE("incompatible preferences ego preserves detail before the summary")
     {
@@ -272,7 +272,7 @@ TEST_CASE("Town load failures collect diagnostics and quit without requesting in
     SUBCASE("invalid list at startup")
     {
         files.write(TOWN_DEFINITION_LIST, nlohmann::json::object());
-        check_town_load_failure(&term.player(), ParseErrorType::INVALID_TYPE, TOWN_DEFINITION_LIST);
+        check_town_load_failure(&term.player(), ParseErrorType::TOO_FEW_ARGUMENTS, TOWN_DEFINITION_LIST);
     }
     SUBCASE("selected map failures at startup")
     {
@@ -290,7 +290,7 @@ TEST_CASE("Town load failures collect diagnostics and quit without requesting in
         SUBCASE("invalid structure")
         {
             files.write(filename, nlohmann::json::object());
-            check_town_load_failure(&term.player(), ParseErrorType::INVALID_TYPE, filename);
+            check_town_load_failure(&term.player(), ParseErrorType::TOO_FEW_ARGUMENTS, filename);
         }
         SUBCASE("incompatible map ego preserves detail before the summary")
         {

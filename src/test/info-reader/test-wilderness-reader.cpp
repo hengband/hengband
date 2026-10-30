@@ -289,8 +289,8 @@ TEST_CASE("WildernessReader propagates map helper errors without replacing outpu
         { "/layout/0", 1, ParseErrorType::INVALID_TYPE },
         { "/layout/0", "", ParseErrorType::INVALID_VALUE },
         { "/layout/0", "#X#", ParseErrorType::INVALID_VALUE },
-        { "/layout/0", "####", ParseErrorType::INVALID_VALUE },
-        { "/layout/3", "###", ParseErrorType::INVALID_VALUE },
+        { "/layout/0", "####", ParseErrorType::OUT_OF_BOUNDS },
+        { "/layout/3", "###", ParseErrorType::OUT_OF_BOUNDS },
         { "/starting_position", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
         { "/starting_position", 1, ParseErrorType::INVALID_TYPE },
         { "/starting_position/x", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
@@ -405,7 +405,7 @@ TEST_CASE("WildernessReader limits dimensions to the floor size")
         CAPTURE(height);
         const auto data = make_sized(width, height);
         auto definition = make_existing_definition();
-        CHECK(test::to_error_code(WildernessReader(data).read(definition)) == ParseErrorType::INVALID_VALUE);
+        CHECK(test::to_error_code(WildernessReader(data).read(definition)) == ParseErrorType::OUT_OF_BOUNDS);
         check_existing_definition(definition);
     }
 }
@@ -439,4 +439,26 @@ TEST_CASE("WildernessReader rejects starting positions on the wilderness edge")
     REQUIRE(WildernessReader(data).read(definition).has_value());
     CHECK(definition.normal.starting_position == Pos2D(2, 2));
     CHECK(definition.compact.starting_position == Pos2D(2, 2));
+}
+
+TEST_CASE("WildernessReader classifies missing, null, wrong-type and unsupported versions")
+{
+    auto data = make_definition();
+    auto definition = make_existing_definition();
+    data.erase("version");
+    CHECK(test::to_error_code(WildernessReader(data).read(definition)) == ParseErrorType::TOO_FEW_ARGUMENTS);
+    check_existing_definition(definition);
+    data["version"] = nullptr;
+    CHECK(test::to_error_code(WildernessReader(data).read(definition)) == ParseErrorType::TOO_FEW_ARGUMENTS);
+    check_existing_definition(definition);
+    for (const auto &version : { nlohmann::json(0), nlohmann::json(2), nlohmann::json(std::numeric_limits<uint64_t>::max()) }) {
+        data["version"] = version;
+        CHECK(test::to_error_code(WildernessReader(data).read(definition)) == ParseErrorType::INVALID_VALUE);
+        check_existing_definition(definition);
+    }
+    for (const auto &version : { nlohmann::json(1.0), nlohmann::json("1"), nlohmann::json(true) }) {
+        data["version"] = version;
+        CHECK(test::to_error_code(WildernessReader(data).read(definition)) == ParseErrorType::INVALID_TYPE);
+        check_existing_definition(definition);
+    }
 }

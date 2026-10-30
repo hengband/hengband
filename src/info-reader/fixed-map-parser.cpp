@@ -173,20 +173,11 @@ tl::expected<void, ParseErrorType> apply_town_map_feature(const FloorType &floor
     auto grid = feature.cell.grid;
     grid.set_terrain_id(TerrainTag::NONE);
     grid.set_trap_id(TerrainTag::NONE);
-    const auto &terrains = TerrainList::get_instance();
-    try {
-        if (feature.terrain == "*") {
-            grid.random |= RANDOM_FEATURE;
-        } else {
-            grid.feature = terrains.get_terrain_id(feature.terrain);
-        }
-        if (feature.trap == "*") {
-            grid.random |= RANDOM_TRAP;
-        } else {
-            grid.trap = terrains.get_terrain_id(feature.trap);
-        }
-    } catch (const std::exception &) {
-        return tl::make_unexpected(ParseErrorType::UNDEFINED_TERRAIN_TAG);
+    if (const auto result = resolve_legend_terrain(feature.terrain, grid.feature, grid.random, RANDOM_FEATURE); !result) {
+        return result;
+    }
+    if (const auto result = resolve_legend_terrain(feature.trap, grid.trap, grid.random, RANDOM_TRAP); !result) {
+        return result;
     }
 
     try {
@@ -200,12 +191,7 @@ tl::expected<void, ParseErrorType> apply_town_map_feature(const FloorType &floor
             if (reward && !ArtifactList::get_instance().contains(*reward)) {
                 return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
             }
-            if (feature.cell.object_is_quest_reward && quest.has_reward() && !quest.is_reward_instant_artifact()) {
-                grid.object = quest.get_reward_bi_id();
-            }
-            if (feature.cell.artifact_is_quest_reward) {
-                grid.artifact = reward.value_or(FixedArtifactId::NONE);
-            }
+            resolve_legend_reward(grid, feature.cell, quest);
         }
     } catch (const std::exception &) {
         // 報酬解決に失敗した場合は、地形テンプレートを変更せず解析エラーとして返す。

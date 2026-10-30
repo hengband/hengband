@@ -174,8 +174,8 @@ TownMapReader::TownMapReader(const nlohmann::json &data)
  */
 tl::expected<void, ParseErrorType> TownMapReader::read(TownMapDefinition &definition, int maximum_height, int maximum_width, bool only_buildings) const
 {
-    if (!this->data.is_object() || !this->data.contains("version") || !this->data["version"].is_number_integer() || this->data["version"] != 3) {
-        return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
+    if (const auto result = info_validate_version(this->data, 3); !result) {
+        return result;
     }
     for (const auto *field : { "featureRules", "mapVariants", "buildingRules", "startingPositions" }) {
         if (!this->data.contains(field) || !this->data[field].is_array()) {
@@ -212,7 +212,7 @@ tl::expected<void, ParseErrorType> TownMapReader::read_features(TownMapDefinitio
             return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
         }
         const auto symbol = rule["symbol"].get<std::string>();
-        if (symbol.size() != 1 || !is_fixed_map_symbol(static_cast<unsigned char>(symbol.front())) || symbol.front() == ':' || symbol.front() == '/' || symbol.front() == '\\') {
+        if (!parse_fixed_map_symbol(symbol) || symbol.front() == ':' || symbol.front() == '/' || symbol.front() == '\\') {
             return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
         }
         TownMapFeatureRule feature;
@@ -365,20 +365,27 @@ tl::expected<void, ParseErrorType> TownMapReader::read_maps(TownMapDefinition &d
         }
         map.condition = *condition;
         const auto &rows = variant["rows"];
-        if (maximum_height <= 0 || maximum_width <= 0 || rows.size() > static_cast<size_t>(maximum_height) || !rows.front().is_string()) {
+        if (maximum_height <= 0 || maximum_width <= 0 || rows.size() > static_cast<size_t>(maximum_height)) {
+            return tl::make_unexpected(ParseErrorType::OUT_OF_BOUNDS);
+        }
+        if (!rows.front().is_string()) {
             return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
         }
         const auto width = rows.front().get_ref<const std::string &>().size();
-        if (width == 0 || width > static_cast<size_t>(maximum_width)) {
+        if (width > static_cast<size_t>(maximum_width)) {
+            return tl::make_unexpected(ParseErrorType::OUT_OF_BOUNDS);
+        }
+        if (width == 0) {
             return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
         }
         for (const auto &row : rows) {
-            if (!row.is_string() || row.get_ref<const std::string &>().size() != width) {
+            if (!row.is_string()) {
                 return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
             }
             const auto &text = row.get_ref<const std::string &>();
-            if (!std::all_of(text.begin(), text.end(), is_fixed_map_symbol)) {
-                return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
+            const FixedMapRowLimits limits{ static_cast<size_t>(maximum_height), static_cast<size_t>(maximum_width), ParseErrorType::OUT_OF_BOUNDS, false, width };
+            if (const auto result = validate_fixed_map_row(text, map.rows.size(), limits); !result) {
+                return result;
             }
             map.rows.push_back(text);
         }

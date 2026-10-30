@@ -450,7 +450,7 @@ TEST_CASE("TownMapReader validates root and conditions on every rule")
     for (const auto &version : { nlohmann::json(1), nlohmann::json(2.0), nlohmann::json("2") }) {
         auto data = make_town_map();
         data["version"] = version;
-        CHECK(test::to_error_code(read_town(data)) == ParseErrorType::INVALID_TYPE);
+        CHECK(test::to_error_code(read_town(data)) == (version.is_number_integer() ? ParseErrorType::INVALID_VALUE : ParseErrorType::INVALID_TYPE));
     }
     for (const auto *field : { "mapVariants", "startingPositions" }) {
         auto data = make_town_map();
@@ -661,7 +661,8 @@ TEST_CASE("TownMapReader validates rectangular printable maps and all start boun
         auto data = make_town_map();
         data["mapVariants"][0]["when"] = "0";
         data["mapVariants"][0]["rows"] = rows;
-        CHECK(test::to_error_code(read_town(data)) == ParseErrorType::INVALID_VALUE);
+        const auto oversize = rows.size() > 3 || (rows.front().is_string() && rows.front().get_ref<const std::string &>().size() > 3);
+        CHECK(test::to_error_code(read_town(data)) == (oversize ? ParseErrorType::OUT_OF_BOUNDS : ParseErrorType::INVALID_VALUE));
     }
     auto data = make_town_map();
     data["mapVariants"].push_back({ { "when", "0" }, { "rows", { "#" } } });
@@ -670,8 +671,8 @@ TEST_CASE("TownMapReader validates rectangular printable maps and all start boun
     data["startingPositions"][0]["y"] = 0;
     CHECK(read_town(data).has_value());
     TownMapDefinition definition;
-    CHECK(test::to_error_code(TownMapReader(data).read(definition, 0, 3)) == ParseErrorType::INVALID_VALUE);
-    CHECK(test::to_error_code(TownMapReader(data).read(definition, 3, 0)) == ParseErrorType::INVALID_VALUE);
+    CHECK(test::to_error_code(TownMapReader(data).read(definition, 0, 3)) == ParseErrorType::OUT_OF_BOUNDS);
+    CHECK(test::to_error_code(TownMapReader(data).read(definition, 3, 0)) == ParseErrorType::OUT_OF_BOUNDS);
 }
 
 TEST_CASE("TownMapReader building-only mode skips map and start contents, not root requirements")
@@ -941,7 +942,6 @@ TEST_CASE("TownMapReader preserves output on root errors and value errors at eve
         const std::string_view kind = failure;
         if (kind == "version") {
             data["version"] = 1;
-            expected = ParseErrorType::INVALID_TYPE;
         } else if (kind == "emptyMaps") {
             data["mapVariants"] = nlohmann::json::array();
         } else if (kind == "missingFeatures") {
@@ -1475,6 +1475,10 @@ TEST_CASE("TownMapReader applies resolved ordinary quest reward baseitem and art
     REQUIRE(apply_town_map_feature(floor, definition.features.front()).has_value());
     CHECK(letter['#'].object == 7);
     CHECK(letter['#'].artifact == FixedArtifactId::GALADRIEL_PHIAL);
+    auto grid = definition.features.front().cell.grid;
+    resolve_legend_reward(grid, definition.features.front().cell, QuestList::get_instance().get_quest(floor.quest_number));
+    CHECK(grid.object == 7);
+    CHECK(grid.artifact == FixedArtifactId::GALADRIEL_PHIAL);
     CHECK(letter['#'].feature == state.floor_id());
     CHECK(letter['#'].trap == 0);
 }
@@ -1631,7 +1635,13 @@ TEST_CASE("TownMapReader v3 validates precedence and preserves output and letter
     for (const auto &version : std::array<nlohmann::json, 6>{ { 2, 4, 3.0, true, nullptr, "3" } }) {
         data = make_town_map();
         data["version"] = version;
-        CHECK(test::to_error_code(TownMapReader(data).read(definition, 0, 0, true)) == ParseErrorType::INVALID_TYPE);
+        auto expected = ParseErrorType::INVALID_TYPE;
+        if (version.is_null()) {
+            expected = ParseErrorType::TOO_FEW_ARGUMENTS;
+        } else if (version.is_number_integer()) {
+            expected = ParseErrorType::INVALID_VALUE;
+        }
+        CHECK(test::to_error_code(TownMapReader(data).read(definition, 0, 0, true)) == expected);
     }
     data = make_town_map();
     data["featureRules"][0]["definition"] = { { "terrain", "UNINITIALIZED_TOWN_TAG" } };
@@ -1868,5 +1878,27 @@ TEST_CASE("TownMapReader reports fixed trap tags including typos in conflicts")
                 describe_legend_object_trap_conflict(), tag);
             CHECK(diagnostics.messages().front() == expected);
         }
+    }
+}
+
+TEST_CASE("TownMapReader reports oversize maps as out of bounds")
+{
+    for (const auto &[height, width] : { std::pair{ 2, 3 }, std::pair{ 3, 2 }, std::pair{ 0, 3 }, std::pair{ 3, 0 } }) {
+        const auto data = make_town_map();
+        TownMapDefinition definition;
+        CHECK(test::to_error_code(TownMapReader(data).read(definition, height, width)) == ParseErrorType::OUT_OF_BOUNDS);
+    }
+    auto data = make_town_map();
+    data["mapVariants"][0]["rows"][1] = "####";
+    CHECK(test::to_error_code(read_town(data)) == ParseErrorType::OUT_OF_BOUNDS);
+}
+
+TEST_CASE("TownMapReader classifies missing version in both reading modes")
+{
+    auto data = make_town_map();
+    data.erase("version");
+    for (const bool only_buildings : { false, true }) {
+        TownMapDefinition definition;
+        CHECK(test::to_error_code(TownMapReader(data).read(definition, 3, 3, only_buildings)) == ParseErrorType::TOO_FEW_ARGUMENTS);
     }
 }

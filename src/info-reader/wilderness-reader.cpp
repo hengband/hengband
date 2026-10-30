@@ -2,6 +2,7 @@
 #include "floor/floor-base-definitions.h"
 #include "game-option/birth-options.h"
 #include "info-reader/dungeon-reader.h"
+#include "info-reader/general-parser.h"
 #include "info-reader/json-reader-util.h"
 #include "info-reader/jsonc-document-loader.h"
 #include "info-reader/parse-error-messages.h"
@@ -41,10 +42,10 @@ bool is_edge_closed(const WildernessMapDefinition &map, int width, int height)
             if ((y != 0) && (y != height - 1) && (x != 0) && (x != width - 1)) {
                 continue;
             }
-            const auto letter = std::find_if(map.letters.begin(), map.letters.end(), [symbol = row[x]](const auto &candidate) {
+            const auto found = std::find_if(map.letters.begin(), map.letters.end(), [symbol = row[x]](const auto &candidate) {
                 return candidate.symbol == symbol;
             });
-            if ((letter == map.letters.end()) || (letter->terrain != WildernessTerrain::EDGE) || (letter->town != 0) || (letter->road != 0)) {
+            if ((found == map.letters.end()) || (found->terrain != WildernessTerrain::EDGE) || (found->town != 0) || (found->road != 0)) {
                 return false;
             }
         }
@@ -125,17 +126,16 @@ tl::expected<void, ParseErrorType> WildernessReader::read(WildernessDefinition &
     }
 
     WildernessDefinition parsed;
-    int version = 0;
-    if (const auto result = info_set_integer(get_json_value(this->data, "version"), version, true, Range(1, 1)); !result) {
+    if (const auto result = info_validate_version(this->data, 1); !result) {
         return result;
     }
     // 荒野全体図は荒野の1マスをフロアの1マスへ描くため、フロアの最大の大きさに収める。
     // 周囲8マスを生成できる内側のマスが要るため、幅・高さとも3以上とする。
     if (const auto result = info_set_integer(get_json_value(this->data, "width"), parsed.width, true, Range(3, MAX_WID)); !result) {
-        return result;
+        return tl::make_unexpected(result.error() == ParseErrorType::INVALID_VALUE ? ParseErrorType::OUT_OF_BOUNDS : result.error());
     }
     if (const auto result = info_set_integer(get_json_value(this->data, "height"), parsed.height, true, Range(3, MAX_HGT)); !result) {
-        return result;
+        return tl::make_unexpected(result.error() == ParseErrorType::INVALID_VALUE ? ParseErrorType::OUT_OF_BOUNDS : result.error());
     }
 
     const auto &towns_data = get_json_value(this->data, "towns");
@@ -192,8 +192,8 @@ tl::expected<void, ParseErrorType> WildernessReader::read(WildernessDefinition &
     }
 
     const auto has_undefined_town = [&town_ids](const WildernessMapDefinition &map) {
-        return std::any_of(map.letters.begin(), map.letters.end(), [&town_ids](const auto &letter) {
-            return letter.town != 0 && !town_ids.contains(letter.town);
+        return std::any_of(map.letters.begin(), map.letters.end(), [&town_ids](const auto &entry) {
+            return entry.town != 0 && !town_ids.contains(entry.town);
         });
     };
     if (has_undefined_town(parsed.normal) || has_undefined_town(parsed.compact)) {
@@ -236,7 +236,7 @@ tl::expected<void, ParseErrorType> WildernessReader::read_map(const nlohmann::js
             return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
         }
         const auto &symbol = symbol_data.get_ref<const std::string &>();
-        if (symbol.size() != 1 || symbol[0] < 0x20 || symbol[0] > 0x7e) {
+        if (!parse_fixed_map_symbol(symbol)) {
             return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
         }
         const auto symbol_index = static_cast<unsigned char>(symbol[0]);
@@ -245,49 +245,48 @@ tl::expected<void, ParseErrorType> WildernessReader::read_map(const nlohmann::js
         }
         defined_symbols[symbol_index] = true;
 
-        WildernessLetterDefinition letter{ symbol[0], WildernessTerrain::EDGE, 0, 0, 0 };
-        if (const auto result = info_set_integer(get_json_value(letter_data, "terrain"), letter.terrain, true, Range(0, enum2i(WildernessTerrain::MAX) - 1)); !result) {
+        WildernessLetterDefinition definition{ symbol[0], WildernessTerrain::EDGE, 0, 0, 0 };
+        if (const auto result = info_set_integer(get_json_value(letter_data, "terrain"), definition.terrain, true, Range(0, enum2i(WildernessTerrain::MAX) - 1)); !result) {
             return result;
         }
         const auto &level_data = get_json_value(letter_data, "level");
         if (!level_data.is_null()) {
             // 生成は階層を MAX_DEPTH - 1 で頭打ちにし、地上の階層はセーブで16ビットになるため、それより深い値は受け付けない。
-            if (const auto result = read_localized_integer(level_data, letter.level, Range(0, MAX_DEPTH - 1)); !result) {
+            if (const auto result = read_localized_integer(level_data, definition.level, Range(0, MAX_DEPTH - 1)); !result) {
                 return result;
             }
         }
         const auto &town_data = get_json_value(letter_data, "town");
         if (!town_data.is_null()) {
-            if (const auto result = info_set_integer(town_data, letter.town, true, Range(0, enum2i(TownId::MAX))); !result) {
+            if (const auto result = info_set_integer(town_data, definition.town, true, Range(0, enum2i(TownId::MAX))); !result) {
                 return result;
             }
         }
         // road の値の大きさは使っていない (0 より大きければ道とみなし、1〜15 の違いはゲーム中で区別しない)。
         const auto &road_data = get_json_value(letter_data, "road");
         if (!road_data.is_null()) {
-            if (const auto result = info_set_integer(road_data, letter.road, true, Range(0, 15)); !result) {
+            if (const auto result = info_set_integer(road_data, definition.road, true, Range(0, 15)); !result) {
                 return result;
             }
         }
-        map.letters.push_back(letter);
+        map.letters.push_back(definition);
     }
 
     const auto &layout_data = get_json_value(map_data, "layout");
-    if (!layout_data.is_array() || layout_data.empty() || layout_data.size() > static_cast<size_t>(height)) {
+    if (!layout_data.is_array() || layout_data.empty()) {
         return tl::make_unexpected(layout_data.is_null() ? ParseErrorType::TOO_FEW_ARGUMENTS : ParseErrorType::INVALID_VALUE);
+    }
+    if (layout_data.size() > static_cast<size_t>(height)) {
+        return tl::make_unexpected(ParseErrorType::OUT_OF_BOUNDS);
     }
     for (const auto &row_data : layout_data) {
         if (!row_data.is_string()) {
             return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
         }
         const auto &row = row_data.get_ref<const std::string &>();
-        if (row.empty() || row.size() > static_cast<size_t>(width)) {
-            return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
-        }
-        for (const auto symbol : row) {
-            if (!defined_symbols[static_cast<unsigned char>(symbol)]) {
-                return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
-            }
+        const FixedMapRowLimits limits{ static_cast<size_t>(height), static_cast<size_t>(width), ParseErrorType::OUT_OF_BOUNDS, false, tl::nullopt };
+        if (const auto result = validate_fixed_map_row(row, map.layout.size(), limits, [&defined_symbols](unsigned char symbol) { return defined_symbols[symbol]; }); !result) {
+            return result;
         }
         map.layout.push_back(row);
     }
@@ -358,19 +357,19 @@ tl::expected<void, ParseErrorType> apply_wilderness_definition()
     auto &letters = WildernessLetters::get_instance();
     letters.initialize();
     for (const auto &letter_definition : map.letters) {
-        auto &letter = letters.get_grid(static_cast<unsigned char>(letter_definition.symbol));
-        letter.set_terrain(letter_definition.terrain);
-        letter.set_level(letter_definition.level);
-        letter.set_town(letter_definition.town);
-        letter.set_road(letter_definition.road);
+        auto &grid = letters.get_grid(static_cast<unsigned char>(letter_definition.symbol));
+        grid.set_terrain(letter_definition.terrain);
+        grid.set_level(letter_definition.level);
+        grid.set_town(letter_definition.town);
+        grid.set_road(letter_definition.road);
     }
 
     auto &wilderness = WildernessGrids::get_instance();
     for (size_t y = 0; y < map.layout.size(); ++y) {
         const auto &row = map.layout[y];
         for (size_t x = 0; x < row.size(); ++x) {
-            const auto &letter = letters.get_grid(static_cast<unsigned char>(row[x]));
-            wilderness.get_grid({ static_cast<int>(y), static_cast<int>(x) }).initialize(letter);
+            const auto &grid = letters.get_grid(static_cast<unsigned char>(row[x]));
+            wilderness.get_grid({ static_cast<int>(y), static_cast<int>(x) }).initialize(grid);
         }
     }
 

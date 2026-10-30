@@ -95,16 +95,12 @@ tl::expected<void, ParseErrorType> read_map_rows(const nlohmann::json &array_dat
         }
 
         const auto &row = line.get_ref<const std::string &>();
-        // セル配置は1バイトずつ進む。幅の切り捨てと高さの配列外アクセスを読み込み時に防ぐ。
-        if (out.size() >= MAX_HGT || row.size() > MAX_WID) {
-            return tl::make_unexpected(ParseErrorType::OUT_OF_BOUNDS);
+        FixedMapRowLimits limits{ MAX_HGT, MAX_WID };
+        if (!out.empty()) {
+            limits.expected_width = out.front().size();
         }
-        // 生成側は最終行の長さからフロア幅を決めるため、行幅を揃える。
-        if (!out.empty() && row.size() != out.front().size()) {
-            return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
-        }
-        if (!std::all_of(row.begin(), row.end(), is_fixed_map_symbol)) {
-            return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
+        if (const auto result = validate_fixed_map_row(row, out.size(), limits); !result) {
+            return result;
         }
         out.push_back(row);
     }
@@ -216,14 +212,8 @@ tl::expected<void, ParseErrorType> parse_legend_cell(const nlohmann::json &cell_
         const auto tag = terrain.get<std::string>();
         if (deferred != nullptr) {
             deferred->terrain_tag = tag;
-        } else if (tag == "*") {
-            grid.random |= RANDOM_FEATURE;
-        } else {
-            try {
-                grid.feature = TerrainList::get_instance().get_terrain_id(tag);
-            } catch (const std::exception &) {
-                return tl::make_unexpected(ParseErrorType::UNDEFINED_TERRAIN_TAG);
-            }
+        } else if (const auto result = resolve_legend_terrain(tag, grid.feature, grid.random, RANDOM_FEATURE); !result) {
+            return result;
         }
     } else if (!terrain.is_null()) {
         return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
@@ -335,12 +325,8 @@ tl::expected<void, ParseErrorType> parse_legend_cell(const nlohmann::json &cell_
     if (trap.is_string()) {
         if (deferred != nullptr) {
             deferred->trap_tag = trap.get<std::string>();
-        } else {
-            try {
-                grid.trap = TerrainList::get_instance().get_terrain_id(trap.get<std::string>());
-            } catch (const std::exception &) {
-                return tl::make_unexpected(ParseErrorType::UNDEFINED_TERRAIN_TAG);
-            }
+        } else if (const auto result = resolve_legend_terrain(trap.get_ref<const std::string &>(), grid.trap, grid.random, RANDOM_NONE); !result) {
+            return result;
         }
     } else if (trap.is_object()) {
         auto random = false;
@@ -655,10 +641,7 @@ tl::expected<void, ParseErrorType> QuestReader::set_legend(QuestFixedMap &parsed
     }
 
     for (const auto &[symbol, cell_data] : legend.items()) {
-        if (symbol.size() != 1) {
-            return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
-        }
-        if (!is_fixed_map_symbol(static_cast<unsigned char>(symbol.front()))) {
+        if (!parse_fixed_map_symbol(symbol)) {
             return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
         }
 
@@ -759,4 +742,40 @@ tl::expected<void, ParseErrorType> QuestReader::set_starts(QuestFixedMap &parsed
     }
 
     return {};
+}
+
+/*!
+ * @brief 地形・罠タグを解決し、許可された場合だけ「*」をランダム指定にする。
+ * @param random_flag 対応するランダムビット。RANDOM_NONEなら「*」も通常のタグとして解決する。
+ * @return 未定義のタグはUNDEFINED_TERRAIN_TAG。失敗時は出力を変更しない。
+ */
+tl::expected<void, ParseErrorType> resolve_legend_terrain(std::string_view tag, short &terrain, int &random, int random_flag)
+{
+    if (tag == "*" && random_flag != RANDOM_NONE) {
+        random |= random_flag;
+        return {};
+    }
+    try {
+        terrain = TerrainList::get_instance().get_terrain_id(tag);
+    } catch (const std::exception &) {
+        return tl::make_unexpected(ParseErrorType::UNDEFINED_TERRAIN_TAG);
+    }
+    return {};
+}
+
+/*!
+ * @brief 凡例の報酬参照を、確定済みのクエスト報酬から解決する。
+ * @param grid 解決した報酬を書き込む先
+ * @param cell 凡例のセル
+ * @param quest 報酬を確定済みのクエスト
+ * @details 参照先の検証と例外処理は呼出側が担当する。objectは通常の報酬だけを対象とする。
+ */
+void resolve_legend_reward(dungeon_grid &grid, const QuestLegendCell &cell, const QuestType &quest)
+{
+    if (cell.object_is_quest_reward && quest.has_reward() && !quest.is_reward_instant_artifact()) {
+        grid.object = quest.get_reward_bi_id();
+    }
+    if (cell.artifact_is_quest_reward) {
+        grid.artifact = quest.get_reward().value_or(FixedArtifactId::NONE);
+    }
 }

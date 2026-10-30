@@ -1350,3 +1350,46 @@ TEST_CASE("QuestReader metadata flags accept missing null empty and duplicate to
     REQUIRE(QuestReader(data, quest, fixed_map).read().has_value());
     CHECK(fixed_map.metadata.flags == expected_flags);
 }
+
+TEST_CASE("resolve_legend_terrain resolves tags and preserves random policies")
+{
+    test::ScopedVectorWrapper<TerrainList> terrain_state(TerrainList::get_instance());
+    TerrainList::get_instance().resize(1);
+    TerrainList::get_instance().get_terrain(0).tag = "FLOOR";
+    short id = 77;
+    int random = RANDOM_OBJECT;
+    REQUIRE(resolve_legend_terrain("FLOOR", id, random, RANDOM_FEATURE).has_value());
+    CHECK(id == 0);
+    CHECK(random == RANDOM_OBJECT);
+    for (const int flag : { RANDOM_FEATURE, RANDOM_TRAP }) {
+        id = 77;
+        random = RANDOM_OBJECT;
+        REQUIRE(resolve_legend_terrain("*", id, random, flag).has_value());
+        CHECK(id == 77);
+        CHECK(random == (RANDOM_OBJECT | flag));
+    }
+    for (const auto *tag : { "UNKNOWN", "*" }) {
+        id = 77;
+        random = RANDOM_OBJECT;
+        CHECK(resolve_legend_terrain(tag, id, random, RANDOM_NONE).error() == ParseErrorType::UNDEFINED_TERRAIN_TAG);
+        CHECK(id == 77);
+        CHECK(random == RANDOM_OBJECT);
+    }
+}
+
+TEST_CASE("resolve_legend_reward preserves object without reward and clears artifact references")
+{
+    QuestType quest;
+    QuestLegendCell cell;
+    dungeon_grid grid{};
+    grid.object = 77;
+    grid.artifact = FixedArtifactId::GALADRIEL_PHIAL;
+    resolve_legend_reward(grid, cell, quest);
+    CHECK(grid.object == 77);
+    CHECK(grid.artifact == FixedArtifactId::GALADRIEL_PHIAL);
+    cell.object_is_quest_reward = true;
+    cell.artifact_is_quest_reward = true;
+    resolve_legend_reward(grid, cell, quest);
+    CHECK(grid.object == 77);
+    CHECK(grid.artifact == FixedArtifactId::NONE);
+}

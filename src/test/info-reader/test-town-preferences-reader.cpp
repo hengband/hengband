@@ -78,12 +78,12 @@ TEST_CASE("TownPreferencesReader reads a complete legend and replaces output")
 TEST_CASE("TownPreferencesReader validates the root and legend")
 {
     for (const auto &root : { nlohmann::json(nullptr), nlohmann::json::array(), nlohmann::json::object() }) {
-        check_rejected(root, ParseErrorType::INVALID_TYPE);
+        check_rejected(root, root.is_object() ? ParseErrorType::TOO_FEW_ARGUMENTS : ParseErrorType::INVALID_TYPE);
     }
     for (const auto &version : { nlohmann::json(0), nlohmann::json(1.0), nlohmann::json("1") }) {
         auto data = make_town_preferences();
         data["version"] = version;
-        check_rejected(data, ParseErrorType::INVALID_TYPE);
+        check_rejected(data, version.is_number_integer() ? ParseErrorType::INVALID_VALUE : ParseErrorType::INVALID_TYPE);
     }
     for (const auto &legend : { nlohmann::json(nullptr), nlohmann::json::array(), nlohmann::json::object() }) {
         auto data = make_town_preferences();
@@ -94,12 +94,12 @@ TEST_CASE("TownPreferencesReader validates the root and legend")
 
 TEST_CASE("TownPreferencesReader validates printable one-byte symbols")
 {
-    for (const auto *symbol : { "", "AB", " ", "\xC3\xA9" }) {
+    for (const auto *symbol : { "", "AB", ":", "/", "\\", "\xC3\xA9" }) {
         auto data = make_town_preferences();
         data["legend"][symbol] = data["legend"]["A"];
-        check_rejected(data, ParseErrorType::INVALID_TYPE);
+        check_rejected(data, ParseErrorType::INVALID_VALUE);
     }
-    for (const auto *symbol : { "!", "~" }) {
+    for (const auto *symbol : { " ", "!", "~" }) {
         auto data = make_town_preferences();
         data["legend"] = { { symbol, { { "terrain", "FLOOR" }, { "caveInfo", nlohmann::json::array() } } } };
         TownPreferencesLegend legend;
@@ -250,4 +250,19 @@ TEST_CASE("TownPreferencesReader reports reasons from an injected cell parser")
     REQUIRE(diagnostics.messages().size() == 1);
     CHECK(diagnostics.messages().front() == _("町の配置指定が不正です: legend['#'].trap: Injected reason",
                                                 "Invalid town placement: legend['#'].trap: Injected reason"));
+}
+
+TEST_CASE("TownPreferencesReader classifies version errors before legend errors")
+{
+    auto data = make_town_preferences();
+    data.erase("version");
+    check_rejected(data, ParseErrorType::TOO_FEW_ARGUMENTS);
+    data["version"] = nullptr;
+    check_rejected(data, ParseErrorType::TOO_FEW_ARGUMENTS);
+    data["version"] = 2;
+    check_rejected(data, ParseErrorType::INVALID_VALUE);
+    for (const auto &version : { nlohmann::json(1.0), nlohmann::json("1"), nlohmann::json(true) }) {
+        data["version"] = version;
+        check_rejected(data, ParseErrorType::INVALID_TYPE);
+    }
 }

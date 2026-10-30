@@ -1,7 +1,12 @@
 #pragma once
 
+#include "info-reader/parse-error-types.h"
 #include "object-enchant/object-ego.h"
 #include "system/angband.h"
+#include <functional>
+#include <string_view>
+#include <tl/expected.hpp>
+#include <tl/optional.hpp>
 
 enum class FixedArtifactId : short;
 enum class TerrainTag;
@@ -30,3 +35,15 @@ constexpr bool is_fixed_map_symbol(unsigned char symbol)
 
 /*! @brief 検証済みの固定マップ記号で letter[] を参照する。 */
 dungeon_grid &fixed_map_letter_at(unsigned char symbol);
+tl::optional<char> parse_fixed_map_symbol(std::string_view symbol);
+
+struct FixedMapRowLimits {
+    size_t height;
+    size_t width;
+    ParseErrorType overflow_error = ParseErrorType::OUT_OF_BOUNDS;
+    bool allow_empty = true;
+    tl::optional<size_t> expected_width = tl::nullopt;
+};
+
+tl::expected<void, ParseErrorType> validate_fixed_map_row(std::string_view row, size_t row_index, const FixedMapRowLimits &limits,
+    const std::function<bool(unsigned char)> &valid_symbol = is_fixed_map_symbol);
