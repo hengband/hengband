@@ -116,6 +116,9 @@ namespace {
                 return static_cast<int>(i);
             }
         }
+        if (tag == "PERMANENT_GLASS_WALL") {
+            return 25;
+        }
         if (tag.starts_with("PERMANENT_")) {
             return 1;
         }
@@ -127,9 +130,6 @@ namespace {
         }
         if (tag.starts_with("LOCKED_GLASS_DOOR_") || tag.starts_with("JAMMED_GLASS_DOOR_")) {
             return 26;
-        }
-        if (tag == "PERMANENT_GLASS_WALL") {
-            return 25;
         }
         if (tag == "QUEST_EXIT" || tag == "QUEST_UP") {
             return 3;

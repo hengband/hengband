@@ -172,6 +172,29 @@ TEST_CASE("Original tiles zoom blocks repaint and erase safely from every covere
     CHECK(terminal.scr->c[3][4] == ' ');
 }
 
+TEST_CASE("Original tiles distinguish permanent glass walls from permanent rock")
+{
+    const auto restore = test::scoped_restore(use_graphics, ANGBAND_GRAF);
+    use_graphics = true;
+    ANGBAND_GRAF = "original32";
+    auto player = std::make_unique<PlayerType>();
+    TerrainType terrain;
+    for (auto lighting = 0; lighting < 3; ++lighting) {
+        for (auto x = 0; x < 64; ++x) {
+            const Pos2D pos{ 2, static_cast<POSITION>(x) };
+            terrain.tag = "GLASS_WALL";
+            const auto glass = original_tiles::terrain_symbol(*player, pos, terrain, lighting, { 1, '#' });
+            terrain.tag = "PERMANENT_GLASS_WALL";
+            const auto permanent_glass = original_tiles::terrain_symbol(*player, pos, terrain, lighting, { 1, '#' });
+            CHECK(permanent_glass.color == glass.color);
+            CHECK(permanent_glass.character == glass.character);
+            terrain.tag = "PERMANENT_WALL";
+            const auto rock = original_tiles::terrain_symbol(*player, pos, terrain, lighting, { 1, '#' });
+            CHECK((permanent_glass.color != rock.color || permanent_glass.character != rock.character));
+        }
+    }
+}
+
 TEST_CASE("Original tiles keep stair directions and shaft palettes in separate slots")
 {
     const auto restore = test::scoped_restore(use_graphics, ANGBAND_GRAF);
