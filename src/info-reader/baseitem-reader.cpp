@@ -473,11 +473,6 @@ tl::expected<void, ParseErrorType> BaseitemReader::set_baseitem_flags(BaseitemDe
     }
     return info_read_flag_array(flag_data, [&baseitem](const auto &flag) {
         const auto what = flag.template get<std::string>();
-        if (grab_one_item_flag(baseitem.flags, baseitem.gen_flags, what)) {
-            return true;
-        }
-
-        msg_print(_("未知のアイテム・フラグ '{}'。", "Unknown object flag '{}'."), what);
-        return false;
+        return grab_one_item_flag_or_report(baseitem.flags, baseitem.gen_flags, what, _("未知のアイテム・フラグ '{}'。", "Unknown object flag '{}'."));
     });
 }

@@ -29,7 +29,7 @@ tl::expected<void, ParseErrorType> TownPreferencesReader::read(TownPreferencesLe
 
     TownPreferencesLegend parsed;
     for (const auto &[symbol, cell_data] : this->data["legend"].items()) {
-        if (!parse_fixed_map_symbol(symbol) || symbol.front() == ':' || symbol.front() == '/' || symbol.front() == '\\') {
+        if (!parse_town_map_symbol(symbol)) {
             return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
         }
         if (!cell_data.is_object() ||

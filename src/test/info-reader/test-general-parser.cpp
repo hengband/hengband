@@ -16,6 +16,30 @@ TEST_CASE("parse_fixed_map_symbol accepts exactly one printable ASCII byte")
     }
 }
 
+TEST_CASE("parse_town_map_symbol rejects the symbols reserved in town maps")
+{
+    CHECK_FALSE(parse_town_map_symbol(""));
+    CHECK_FALSE(parse_town_map_symbol("AB"));
+    CHECK_FALSE(parse_town_map_symbol("::"));
+    CHECK(parse_town_map_symbol(" ") == ' ');
+    CHECK(parse_town_map_symbol("~") == '~');
+    CHECK_FALSE(parse_town_map_symbol(":"));
+    CHECK_FALSE(parse_town_map_symbol("/"));
+    CHECK_FALSE(parse_town_map_symbol("\\"));
+    CHECK_FALSE(parse_town_map_symbol("\x1f"));
+    CHECK_FALSE(parse_town_map_symbol("\x7f"));
+    for (int value = 0; value < 256; ++value) {
+        CAPTURE(value);
+        const std::string input(1, static_cast<char>(value));
+        const auto parsed = parse_town_map_symbol(input);
+        const auto reserved = (value == ':') || (value == '/') || (value == '\\');
+        CHECK(parsed.has_value() == (value >= 32 && value <= 126 && !reserved));
+        if (parsed) {
+            CHECK(*parsed == input.front());
+        }
+    }
+}
+
 TEST_CASE("validate_fixed_map_row preserves caller limits and symbol rules")
 {
     FixedMapRowLimits limits{ 2, 3 };
