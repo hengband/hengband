@@ -4,6 +4,7 @@
 #include "main/sound-of-music.h"
 #include "mind/drs-types.h"
 #include "monster-race/race-ability-flags.h"
+#include "monster-race/race-ability-mask.h"
 #include "monster/monster-info.h"
 #include "monster/monster-status.h"
 #include "monster/monster-update.h"
@@ -131,4 +132,32 @@ MSpellBall::MSpellBall(PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_
               return ball(player_ptr, y, x, m_idx, attribute, dam, rad, target_type);
           })
 {
+}
+
+/*!
+ * @brief モンスターが放つボールの半径を返す
+ * @param ability モンスターの能力
+ * @param is_powerful 強力なモンスター (POWERFUL) か
+ * @return ボールの半径。ボールでない能力 (ロケット・ブレスを含む) なら tl::nullopt
+ * @details 強さによらず半径 4 のボールは RF_ABILITY_BIG_BALL_MASK で決める。
+ */
+tl::optional<POSITION> get_monster_ball_radius(MonsterAbilityType ability, bool is_powerful)
+{
+    if (RF_ABILITY_BIG_BALL_MASK.has(ability)) {
+        return 4;
+    }
+
+    switch (ability) {
+    case MonsterAbilityType::BA_ACID:
+    case MonsterAbilityType::BA_ELEC:
+    case MonsterAbilityType::BA_FIRE:
+    case MonsterAbilityType::BA_COLD:
+        return is_powerful ? 4 : 2;
+    case MonsterAbilityType::BA_POIS:
+    case MonsterAbilityType::BA_NETH:
+    case MonsterAbilityType::BA_NUKE:
+        return 2;
+    default:
+        return tl::nullopt;
+    }
 }

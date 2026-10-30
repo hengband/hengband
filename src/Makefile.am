@@ -1597,6 +1597,7 @@ hengband_test_SOURCES = \
 	test/lore/test-monster-lore-snapshot.cpp \
 	test/market/test-building-recharger.cpp \
 	test/monster-race/test-race-ability-mask.cpp \
+	test/mspell/mspell-attack/test-mspell-ball.cpp \
 	test/mspell/test-mspell-projection-table.cpp \
 	test/mutation/test-mutation-roll-table.cpp \
 	test/object/test-object-info.cpp \
