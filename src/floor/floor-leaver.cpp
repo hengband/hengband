@@ -431,9 +431,11 @@ static void exe_leave_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
     floor.forget_view();
     floor.forget_mon_lite();
 
-    // 一時的なフラグはこの階にいる間だけのものなので、戻ったときに離れたときの状態で判定しないよう消してから保存する
+    // 一時的なフラグと見えているかどうかはこの階にいる間だけのものなので、戻ったときに離れたときの状態で判定しないよう消してから保存する
     for (short m_idx = 1; m_idx < floor.m_max; m_idx++) {
-        floor.m_list[m_idx].mflag.clear();
+        auto &monster = floor.m_list[m_idx];
+        monster.mflag.clear();
+        monster.ml = false;
     }
 
     if (save_floor(player_ptr, sf_ptr, 0)) {

@@ -38,6 +38,7 @@ MonsterEntity write_and_read(const MonsterEntity &monster)
     system.set_version({ H_VER_MAJOR, H_VER_MINOR, H_VER_PATCH, H_VER_EXTRA });
     MonsterEntity loaded;
     loaded.mflag.set(MonsterTemporaryFlagType::LOS); // 読み込みで消えることを確かめるための古い値
+    loaded.ml = !monster.ml; // 読み込みで書いた値に戻ることを確かめるための逆の値
     MonsterLoader50(nullptr).rd_monster(loaded);
     CHECK(rd_u16b() == 0x1234);
     return loaded;
@@ -66,6 +67,29 @@ TEST_CASE("Monster temporary flags survive a save and load")
         const auto loaded = write_and_read(monster);
         CHECK(loaded.mflag.none());
         CHECK(loaded.nickname == "Pochi");
+    }
+}
+
+TEST_CASE("Whether a monster is visible survives a save and load")
+{
+    MonsterEntity monster;
+    monster.r_idx = MonraceId::FILTHY_URCHIN;
+    monster.ap_r_idx = MonraceId::FILTHY_URCHIN;
+    monster.parent_m_idx = 3;
+
+    SUBCASE("A visible monster is loaded as visible")
+    {
+        monster.ml = true;
+        const auto loaded = write_and_read(monster);
+        CHECK(loaded.ml);
+        CHECK(loaded.parent_m_idx == 3);
+    }
+
+    SUBCASE("A monster not seen is loaded as not seen")
+    {
+        const auto loaded = write_and_read(monster);
+        CHECK_FALSE(loaded.ml);
+        CHECK(loaded.parent_m_idx == 3);
     }
 }
 

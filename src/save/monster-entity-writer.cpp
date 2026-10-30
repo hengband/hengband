@@ -112,6 +112,10 @@ uint32_t MonsterEntityWriter::write_monster_flags() const
         set_bits(flags, SaveDataMonsterFlagType::MFLAG);
     }
 
+    if (this->monster.ml) {
+        set_bits(flags, SaveDataMonsterFlagType::VISIBLE);
+    }
+
     wr_u32b(flags);
     return flags;
 }

@@ -93,4 +93,6 @@ void MonsterLoader50::rd_monster(MonsterEntity &monster)
     if (any_bits(flags, SaveDataMonsterFlagType::MFLAG)) {
         rd_FlagGroup(monster.mflag, rd_byte);
     }
+
+    monster.ml = any_bits(flags, SaveDataMonsterFlagType::VISIBLE);
 }
