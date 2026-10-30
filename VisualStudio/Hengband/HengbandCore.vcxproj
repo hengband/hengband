@@ -891,6 +891,7 @@
     <ClCompile Include="..\..\src\view\display-lore.cpp" />
     <ClCompile Include="..\..\src\view\display-map.cpp" />
     <ClCompile Include="..\..\src\view\original-tiles.cpp" />
+    <ClCompile Include="..\..\src\view\original-monster-tiles.cpp" />
     <ClCompile Include="..\..\src\view\display-messages.cpp" />
     <ClCompile Include="..\..\src\view\display-player-middle.cpp" />
     <ClCompile Include="..\..\src\view\display-player-misc-info.cpp" />

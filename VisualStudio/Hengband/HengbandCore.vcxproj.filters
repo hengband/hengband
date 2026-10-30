@@ -2851,6 +2851,9 @@
     <ClCompile Include="..\..\src\view\original-tiles.cpp">
       <Filter>view</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\view\original-monster-tiles.cpp">
+      <Filter>view</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\view\display-messages.cpp">
       <Filter>view</Filter>
     </ClCompile>
