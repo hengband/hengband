@@ -221,15 +221,16 @@ tl::expected<DisplaySymbol, ParseErrorType> info_read_symbol(const nlohmann::jso
     if (!color_obj.is_string()) {
         return tl::unexpected(monster || color_obj.is_null() ? ParseErrorType::TOO_FEW_ARGUMENTS : ParseErrorType::INVALID_TYPE);
     }
-    const auto color = color_list.find(color_obj.get<std::string>());
-    if (color == color_list.end()) {
-        return tl::unexpected(ParseErrorType::INVALID_FLAG);
+    // 文字列であることは確かめたので、ここで返るエラーは未知の色の INVALID_FLAG だけになる
+    const auto color = info_read_token(color_obj, color_list);
+    if (!color) {
+        return tl::unexpected(color.error());
     }
     if (character.size() != 1) {
         return tl::unexpected(ParseErrorType::INVALID_VALUE);
     }
 
-    return DisplaySymbol(color->second, character.front());
+    return DisplaySymbol(*color, character.front());
 }
 
 /*!

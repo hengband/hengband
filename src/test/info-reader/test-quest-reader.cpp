@@ -360,6 +360,40 @@ TEST_CASE("Quest legend deferred parsing preserves output and shared error codes
     }
 }
 
+/*!
+ * @brief caveInfo の誤りの種類ごとに解析エラーの種類を確かめる
+ * @details 配列でない値と文字列でない要素（null を含む）は INVALID_TYPE、未知の名前は INVALID_FLAG になる。
+ */
+TEST_CASE("Quest legend caveInfo reports type errors and unknown flags")
+{
+    const test::ScopedReaderState reader_state;
+    struct InvalidCaveInfo {
+        const char *json;
+        ParseErrorType error;
+    };
+    const InvalidCaveInfo cases[] = {
+        { R"(1)", ParseErrorType::INVALID_TYPE },
+        { R"("MARK")", ParseErrorType::INVALID_TYPE },
+        { R"({})", ParseErrorType::INVALID_TYPE },
+        { R"([null])", ParseErrorType::INVALID_TYPE },
+        { R"([1])", ParseErrorType::INVALID_TYPE },
+        { R"([true])", ParseErrorType::INVALID_TYPE },
+        { R"(["MARK",[]])", ParseErrorType::INVALID_TYPE },
+        { R"(["UNKNOWN"])", ParseErrorType::INVALID_FLAG },
+        { R"(["MARK","mark"])", ParseErrorType::INVALID_FLAG },
+        { R"([""])", ParseErrorType::INVALID_FLAG },
+    };
+    for (const auto &invalid : cases) {
+        CAPTURE(invalid.json);
+        nlohmann::json data = nlohmann::json::object();
+        data["caveInfo"] = nlohmann::json::parse(invalid.json);
+        QuestLegendCell cell;
+        const auto result = parse_quest_legend_cell(data, cell);
+        REQUIRE_FALSE(result.has_value());
+        CHECK(result.error() == invalid.error);
+    }
+}
+
 TEST_CASE("Quest legend immediate callers retain terrain resolution and undefined tag errors")
 {
     const test::ScopedReaderState reader_state;
