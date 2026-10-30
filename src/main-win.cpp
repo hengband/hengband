@@ -513,9 +513,6 @@ static void load_prefs()
     arg_graphics = (byte)GetPrivateProfileIntA("Angband", "Graphics", enum2i(graphics_mode::GRAPHICS_NONE), ini_file);
     arg_bigtile = (GetPrivateProfileIntA("Angband", "Bigtile", false, ini_file) != 0);
     original_tiles::double_map_size = GetPrivateProfileIntA("Angband", "Original32MapZoom", false, ini_file) != 0;
-    if (original_tiles::double_map_size && arg_graphics == enum2i(graphics_mode::GRAPHICS_ORIGINAL_TERRAIN)) {
-        arg_bigtile = true;
-    }
     use_bigtile = arg_bigtile;
     arg_sound = (GetPrivateProfileIntA("Angband", "Sound", 0, ini_file) != 0);
     arg_sound_volume_table_index = std::clamp<int>(GetPrivateProfileIntA("Angband", "SoundVolumeTableIndex", 0, ini_file), 0, SOUND_VOLUME_TABLE.size() - 1);
@@ -2034,7 +2031,7 @@ static void process_menus(PlayerType *player_ptr, WORD wCmd)
             break;
         }
         original_tiles::double_map_size = !original_tiles::double_map_size;
-        if (original_tiles::double_map_size) {
+        if (original_tiles::double_map_size && graphic.get_mode() == graphics_mode::GRAPHICS_ORIGINAL_TERRAIN) {
             arg_bigtile = use_bigtile = true;
         }
         auto *previous = game_term;
