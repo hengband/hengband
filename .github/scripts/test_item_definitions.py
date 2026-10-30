@@ -8,7 +8,7 @@ from jsonschema.validators import validator_for
 
 from json_validation_test_helper import baseitem_id_schema_maximum, fixed_artifact_id_schema_maximum, validate_document
 import validate_json
-from validate_json import (baseitem_subtype_max, build_schema_registry, collect_valid_baseitem_keys, item_kinds, load_all_schemas,
+from validate_json import (baseitem_subtype_max, build_schema_registry, collect_valid_baseitem_keys, item_kind, item_kinds, load_all_schemas,
                            load_cpp_enum_values, load_cpp_tokens, load_jsonc, load_rod_type_value, validate_baseitem_semantics,
                            validate_artifact_semantics)
 
@@ -174,6 +174,12 @@ class BaseitemDefinitionValidationTest(unittest.TestCase):
     def test_unknown_kind_name_is_rejected(self):
         with self.assertRaises(ValueError):
             item_kinds("SWORD", "NO_SUCH_KIND")
+
+    def test_unknown_single_kind_name_is_rejected_like_item_kinds(self):
+        # 1つの種別を引く表も、item_kinds() と同じ分かりやすい例外で止まることを固定する。
+        with self.assertRaisesRegex(ValueError, r"ItemKindType::NO_SUCH_KIND not found"):
+            item_kind("NO_SUCH_KIND")
+        self.assertEqual(item_kind("STAFF"), 55)
 
     def test_subtype_boundaries_per_kind(self):
         limits = {**dict.fromkeys((19, 20, 21, 22, 23), 63),

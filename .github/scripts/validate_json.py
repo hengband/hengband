@@ -188,8 +188,14 @@ def item_kinds(*names: str) -> set[int]:
     return {ITEM_KINDS[name] for name in names}
 
 
+def item_kind(name: str) -> int:
+    """ItemKindType の列挙子の名前1つを値にする。無い名前は item_kinds() と同じ例外にする。"""
+    (value,) = item_kinds(name)
+    return value
+
+
 # 金貨の種別（ItemKindType::GOLD）。凡例のエゴは金貨に付けられない。
-(ITEM_KIND_GOLD,) = item_kinds("GOLD")
+ITEM_KIND_GOLD = item_kind("GOLD")
 # RaceReader は最大の出目（個数×面数）を捕獲したモンスターのHPを持つ short に収める。
 MAX_MONRACE_DICE_ROLL = load_cpp_constant(REPOSITORY_ROOT / "src/info-reader/race-reader.cpp", "MAX_MONRACE_DICE_ROLL")
 # TownList::is_all_initialized() が名前を求める町（1〜VALID_TOWNS-1）。町1には別名も要る。
@@ -451,9 +457,9 @@ EQUIPMENT_KINDS = item_kinds(
 # BaseitemReader の pval_range() の種別ごとの範囲。上下限の値は C++ の定数から読み、種別との対応は関数の中の
 # switch なので手で揃える。箱の上限は chest_traps の要素数−1 で、表の大きさから決まる1つの定数が無いため手で揃える。
 BASEITEM_PVAL_RANGES = {
-    ITEM_KINDS["STAFF"]: (1, DEVICE_CHARGES_MAX), ITEM_KINDS["WAND"]: (1, DEVICE_CHARGES_MAX), ITEM_KINDS["ROD"]: (1, ROD_PVAL_MAX),
-    ITEM_KINDS["FOOD"]: (0, PY_FOOD_FULL), ITEM_KINDS["POTION"]: (-PY_FOOD_FULL, PY_FOOD_FULL), ITEM_KINDS["FLASK"]: (1, FUEL_LAMP),
-    ITEM_KINDS["CHEST"]: (0, 63),
+    item_kind("STAFF"): (1, DEVICE_CHARGES_MAX), item_kind("WAND"): (1, DEVICE_CHARGES_MAX), item_kind("ROD"): (1, ROD_PVAL_MAX),
+    item_kind("FOOD"): (0, PY_FOOD_FULL), item_kind("POTION"): (-PY_FOOD_FULL, PY_FOOD_FULL), item_kind("FLASK"): (1, FUEL_LAMP),
+    item_kind("CHEST"): (0, 63),
 }
 
 
@@ -473,7 +479,7 @@ BOOK_KINDS = item_kinds(
 )
 BASEITEM_SUBTYPE_MAX = {
     **dict.fromkeys(WEAPON_KINDS, 63), **dict.fromkeys(BOOK_KINDS, 3),
-    ITEM_KINDS["STAFF"]: 32, ITEM_KINDS["WAND"]: 31, ITEM_KINDS["ROD"]: 30,
+    item_kind("STAFF"): 32, item_kind("WAND"): 31, item_kind("ROD"): 30,
 }
 
 
