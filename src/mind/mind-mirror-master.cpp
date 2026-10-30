@@ -6,9 +6,7 @@
  */
 
 #include "mind/mind-mirror-master.h"
-#include "action/travel-execution.h"
 #include "core/disturbance.h"
-#include "core/stuff-handler.h"
 #include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-feature.h"
@@ -16,7 +14,6 @@
 #include "effect/effect-monster.h"
 #include "effect/effect-processor.h"
 #include "effect/spells-effect-util.h"
-#include "game-option/disturbance-options.h"
 #include "game-option/map-screen-options.h"
 #include "game-option/special-options.h"
 #include "grid/grid.h"
@@ -286,12 +283,8 @@ bool set_multishadow(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
         return false;
     }
 
-    if (disturb_state || Travel::get_instance().is_ongoing()) {
-        disturb(player_ptr, false, true);
-    }
-
     dur.set_flag(StatusRecalculatingFlag::BONUS);
-    handle_stuff(player_ptr);
+    finish_timed_effect_change(player_ptr);
     return true;
 }
 
@@ -335,12 +328,8 @@ bool set_dustrobe(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
         return false;
     }
 
-    if (disturb_state || Travel::get_instance().is_ongoing()) {
-        disturb(player_ptr, false, true);
-    }
-
     dur.set_flag(StatusRecalculatingFlag::BONUS);
-    handle_stuff(player_ptr);
+    finish_timed_effect_change(player_ptr);
     return true;
 }
 

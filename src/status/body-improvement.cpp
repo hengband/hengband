@@ -1,11 +1,8 @@
 #include "status/body-improvement.h"
-#include "action/travel-execution.h"
 #include "avatar/avatar.h"
 #include "core/disturbance.h"
 #include "core/speed-table.h"
-#include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
-#include "game-option/disturbance-options.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "player/player-status.h"
@@ -72,11 +69,7 @@ void BodyImprovement::set_protection(short v, bool is_decrease)
         return;
     }
 
-    if (disturb_state || Travel::get_instance().is_ongoing()) {
-        disturb(player_ptr, false, true);
-    }
-
-    handle_stuff(this->player_ptr);
+    finish_timed_effect_change(this->player_ptr);
     this->is_affected = true;
 }
 
@@ -128,12 +121,8 @@ bool set_invuln(PlayerType *player_ptr, short v, bool do_dec)
         return false;
     }
 
-    if (disturb_state || Travel::get_instance().is_ongoing()) {
-        disturb(player_ptr, false, true);
-    }
-
     dur.set_flag(StatusRecalculatingFlag::BONUS);
-    handle_stuff(player_ptr);
+    finish_timed_effect_change(player_ptr);
     return true;
 }
 
@@ -177,12 +166,8 @@ bool set_tim_regen(PlayerType *player_ptr, short v, bool do_dec)
         return false;
     }
 
-    if (disturb_state || Travel::get_instance().is_ongoing()) {
-        disturb(player_ptr, false, true);
-    }
-
     dur.set_flag(StatusRecalculatingFlag::BONUS);
-    handle_stuff(player_ptr);
+    finish_timed_effect_change(player_ptr);
     return true;
 }
 
@@ -226,12 +211,8 @@ bool set_tim_reflect(PlayerType *player_ptr, short v, bool do_dec)
         return false;
     }
 
-    if (disturb_state || Travel::get_instance().is_ongoing()) {
-        disturb(player_ptr, false, true);
-    }
-
     dur.set_flag(StatusRecalculatingFlag::BONUS);
-    handle_stuff(player_ptr);
+    finish_timed_effect_change(player_ptr);
     return true;
 }
 
@@ -275,12 +256,8 @@ bool set_pass_wall(PlayerType *player_ptr, short v, bool do_dec)
         return false;
     }
 
-    if (disturb_state || Travel::get_instance().is_ongoing()) {
-        disturb(player_ptr, false, true);
-    }
-
     dur.set_flag(StatusRecalculatingFlag::BONUS);
-    handle_stuff(player_ptr);
+    finish_timed_effect_change(player_ptr);
     return true;
 }
 
@@ -324,13 +301,9 @@ bool set_tim_emission(PlayerType *player_ptr, short v, bool do_dec)
         return false;
     }
 
-    if (disturb_state || Travel::get_instance().is_ongoing()) {
-        disturb(player_ptr, false, true);
-    }
-
     dur.set_flag(StatusRecalculatingFlag::BONUS);
     dur.set_flag(StatusRecalculatingFlag::TORCH);
-    handle_stuff(player_ptr);
+    finish_timed_effect_change(player_ptr);
     return true;
 }
 /*!
@@ -373,11 +346,7 @@ bool set_tim_exorcism(PlayerType *player_ptr, short v, bool do_dec)
         return false;
     }
 
-    if (disturb_state || Travel::get_instance().is_ongoing()) {
-        disturb(player_ptr, false, true);
-    }
-
     dur.set_flag(StatusRecalculatingFlag::BONUS);
-    handle_stuff(player_ptr);
+    finish_timed_effect_change(player_ptr);
     return true;
 }

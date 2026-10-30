@@ -1,11 +1,8 @@
 #include "status/buff-setter.h"
-#include "action/travel-execution.h"
 #include "avatar/avatar.h"
 #include "core/disturbance.h"
 #include "core/speed-table.h"
-#include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
-#include "game-option/disturbance-options.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "mind/mind-force-trainer.h"
@@ -216,11 +213,8 @@ bool set_acceleration(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
         return false;
     }
 
-    if (disturb_state || Travel::get_instance().is_ongoing()) {
-        disturb(player_ptr, false, true);
-    }
     DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
-    handle_stuff(player_ptr);
+    finish_timed_effect_change(player_ptr);
     return true;
 }
 
@@ -269,12 +263,8 @@ bool set_shield(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
         return false;
     }
 
-    if (disturb_state || Travel::get_instance().is_ongoing()) {
-        disturb(player_ptr, false, true);
-    }
-
     dur.set_flag(StatusRecalculatingFlag::BONUS);
-    handle_stuff(player_ptr);
+    finish_timed_effect_change(player_ptr);
     return true;
 }
 
@@ -318,12 +308,8 @@ bool set_magicdef(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
         return false;
     }
 
-    if (disturb_state || Travel::get_instance().is_ongoing()) {
-        disturb(player_ptr, false, true);
-    }
-
     dur.set_flag(StatusRecalculatingFlag::BONUS);
-    handle_stuff(player_ptr);
+    finish_timed_effect_change(player_ptr);
     return true;
 }
 
@@ -367,12 +353,8 @@ bool set_blessed(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
         return false;
     }
 
-    if (disturb_state || Travel::get_instance().is_ongoing()) {
-        disturb(player_ptr, false, true);
-    }
-
     dur.set_flag(StatusRecalculatingFlag::BONUS);
-    handle_stuff(player_ptr);
+    finish_timed_effect_change(player_ptr);
     return true;
 }
 
@@ -416,12 +398,8 @@ bool set_hero(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
         return false;
     }
 
-    if (disturb_state || Travel::get_instance().is_ongoing()) {
-        disturb(player_ptr, false, true);
-    }
-
-    DeferredUpdateRequests::get_instance().request_bonus_and_max_hp_recalculation();
-    handle_stuff(player_ptr);
+    dur.request_bonus_and_max_hp_recalculation();
+    finish_timed_effect_change(player_ptr);
     return true;
 }
 
@@ -472,10 +450,6 @@ bool set_mimic(PlayerType *player_ptr, TIME_EFFECT v, MimicKindType mimic_race_i
         return false;
     }
 
-    if (disturb_state || Travel::get_instance().is_ongoing()) {
-        disturb(player_ptr, false, true);
-    }
-
     auto &dur = DeferredUpdateRequests::get_instance();
     static constexpr auto flags_mwrf = {
         MainWindowRedrawingFlag::BASIC,
@@ -483,7 +457,7 @@ bool set_mimic(PlayerType *player_ptr, TIME_EFFECT v, MimicKindType mimic_race_i
     };
     dur.set_flags(flags_mwrf);
     dur.request_bonus_and_max_hp_recalculation();
-    handle_stuff(player_ptr);
+    finish_timed_effect_change(player_ptr);
     return true;
 }
 
@@ -532,12 +506,8 @@ bool set_berserk(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
         return false;
     }
 
-    if (disturb_state || Travel::get_instance().is_ongoing()) {
-        disturb(player_ptr, false, true);
-    }
-
-    DeferredUpdateRequests::get_instance().request_bonus_and_max_hp_recalculation();
-    handle_stuff(player_ptr);
+    dur.request_bonus_and_max_hp_recalculation();
+    finish_timed_effect_change(player_ptr);
     return true;
 }
 
@@ -587,12 +557,8 @@ bool set_wraith_form(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
         return false;
     }
 
-    if (disturb_state || Travel::get_instance().is_ongoing()) {
-        disturb(player_ptr, false, true);
-    }
-
     dur.set_flag(StatusRecalculatingFlag::BONUS);
-    handle_stuff(player_ptr);
+    finish_timed_effect_change(player_ptr);
     return true;
 }
 
@@ -642,11 +608,7 @@ bool set_tsuyoshi(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
         return false;
     }
 
-    if (disturb_state || Travel::get_instance().is_ongoing()) {
-        disturb(player_ptr, false, true);
-    }
-
     dur.request_bonus_and_max_hp_recalculation();
-    handle_stuff(player_ptr);
+    finish_timed_effect_change(player_ptr);
     return true;
 }

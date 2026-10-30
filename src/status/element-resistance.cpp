@@ -1,8 +1,5 @@
 #include "status/element-resistance.h"
-#include "action/travel-execution.h"
 #include "core/disturbance.h"
-#include "core/stuff-handler.h"
-#include "game-option/disturbance-options.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "player-base/player-class.h"
@@ -55,11 +52,7 @@ bool set_oppose_acid(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     }
 
     DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
-    if (disturb_state || Travel::get_instance().is_ongoing()) {
-        disturb(player_ptr, false, true);
-    }
-
-    handle_stuff(player_ptr);
+    finish_timed_effect_change(player_ptr);
     return true;
 }
 
@@ -103,11 +96,7 @@ bool set_oppose_elec(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     }
 
     DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
-    if (disturb_state || Travel::get_instance().is_ongoing()) {
-        disturb(player_ptr, false, true);
-    }
-
-    handle_stuff(player_ptr);
+    finish_timed_effect_change(player_ptr);
     return true;
 }
 
@@ -153,11 +142,7 @@ bool set_oppose_fire(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     }
 
     DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
-    if (disturb_state || Travel::get_instance().is_ongoing()) {
-        disturb(player_ptr, false, true);
-    }
-
-    handle_stuff(player_ptr);
+    finish_timed_effect_change(player_ptr);
     return true;
 }
 
@@ -200,11 +185,7 @@ bool set_oppose_cold(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     }
 
     DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
-    if (disturb_state || Travel::get_instance().is_ongoing()) {
-        disturb(player_ptr, false, true);
-    }
-
-    handle_stuff(player_ptr);
+    finish_timed_effect_change(player_ptr);
     return true;
 }
 
@@ -251,11 +232,7 @@ bool set_oppose_pois(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     }
 
     DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
-    if (disturb_state || Travel::get_instance().is_ongoing()) {
-        disturb(player_ptr, false, true);
-    }
-
-    handle_stuff(player_ptr);
+    finish_timed_effect_change(player_ptr);
     return true;
 }
 
