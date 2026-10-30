@@ -6138,6 +6138,18 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\src\view\original-catalog-artifacts.inc">
+      <Filter>view</Filter>
+    </None>
+    <None Include="..\..\src\view\original-catalog-base.inc">
+      <Filter>view</Filter>
+    </None>
+    <None Include="..\..\src\view\original-catalog-colors.inc">
+      <Filter>view</Filter>
+    </None>
+    <None Include="..\..\src\view\original-monster-catalog.inc">
+      <Filter>view</Filter>
+    </None>
     <None Include="..\..\src\view\original-tile-supplement.inc">
       <Filter>view</Filter>
     </None>

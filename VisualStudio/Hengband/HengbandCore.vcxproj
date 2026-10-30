@@ -1990,6 +1990,10 @@
     <ClInclude Include="..\..\src\world\world.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\src\view\original-catalog-artifacts.inc" />
+    <None Include="..\..\src\view\original-catalog-base.inc" />
+    <None Include="..\..\src\view\original-catalog-colors.inc" />
+    <None Include="..\..\src\view\original-monster-catalog.inc" />
     <None Include="..\..\src\view\original-tile-supplement.inc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
