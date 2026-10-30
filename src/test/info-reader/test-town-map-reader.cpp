@@ -1902,9 +1902,13 @@ TEST_CASE("TownMapReader reports fixed trap tags including typos in conflicts")
             CHECK(test::to_error_code(TownMapReader(data).read(definition, 3, 3, only_buildings)) == ParseErrorType::INVALID_VALUE);
             CHECK(definition.features.empty());
             REQUIRE(diagnostics.messages().size() == 1);
-            const auto expected = fmt::format(_("町の配置指定が不正です: featureRules[0] (記号 '#').trap: {} (trap '{}' は固定の罠として扱われます。未知のタグや誤記も固定の罠になります)",
-                                                  "Invalid town placement: featureRules[0] (symbol '#').trap: {} (trap '{}' is treated as a fixed trap; unknown tags and typos are treated the same way)"),
-                describe_legend_object_trap_conflict(), tag);
+            // 地形の一覧にあるタグでは、未知のタグや誤記への言及を付けない。
+            const auto known = std::string_view(tag) == "TRAP_PIT";
+            const auto hint = known ? std::string(_("固定の罠として扱われます", "is treated as a fixed trap"))
+                                    : std::string(_("固定の罠として扱われます。未知のタグや誤記も固定の罠になります", "is treated as a fixed trap; unknown tags and typos are treated the same way"));
+            const auto expected = fmt::format(_("町の配置指定が不正です: featureRules[0] (記号 '#').trap: {} (trap '{}' は{})",
+                                                  "Invalid town placement: featureRules[0] (symbol '#').trap: {} (trap '{}' {})"),
+                describe_legend_object_trap_conflict(), tag, hint);
             CHECK(diagnostics.messages().front() == expected);
         }
     }

@@ -2,6 +2,7 @@
 #include "info-reader/json-reader-util.h"
 #include "info-reader/legend-ego-validator.h"
 #include "info-reader/quest-reader.h"
+#include "info-reader/random-grid-effect-types.h"
 #include "locale/language-switcher.h"
 #include "player-info/class-info.h"
 #include "player-info/race-info.h"
@@ -233,9 +234,16 @@ tl::expected<void, ParseErrorType> TownMapReader::read_features(TownMapDefinitio
                 if (fields.contains("trap") && fields["trap"].is_string()) {
                     const auto &tag = fields["trap"].get_ref<const std::string &>();
                     if (tag != "NONE" && tag != "*") {
-                        reason += fmt::format(_(" (trap '{}' は固定の罠として扱われます。未知のタグや誤記も固定の罠になります)",
-                                                  " (trap '{}' is treated as a fixed trap; unknown tags and typos are treated the same way)"),
-                            tag);
+                        // 地形の一覧にあるタグなら誤記の可能性に触れない。
+                        short terrain_id = 0;
+                        auto random_flags = 0;
+                        if (resolve_legend_terrain(tag, terrain_id, random_flags, RANDOM_NONE)) {
+                            reason += fmt::format(_(" (trap '{}' は固定の罠として扱われます)", " (trap '{}' is treated as a fixed trap)"), tag);
+                        } else {
+                            reason += fmt::format(_(" (trap '{}' は固定の罠として扱われます。未知のタグや誤記も固定の罠になります)",
+                                                      " (trap '{}' is treated as a fixed trap; unknown tags and typos are treated the same way)"),
+                                tag);
+                        }
                     }
                 }
                 msg_print(_("町の配置指定が不正です: featureRules[{}] (記号 '{}').trap: {}",
