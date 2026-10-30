@@ -3,6 +3,7 @@
 #include "info-reader/dungeon-info-tokens-table.h"
 #include "info-reader/info-reader-util.h"
 #include "info-reader/json-reader-util.h"
+#include "info-reader/monster-flag-reader.h"
 #include "info-reader/parse-error-types.h"
 #include "info-reader/race-info-tokens-table.h"
 #include "locale/language-switcher.h"
@@ -252,12 +253,7 @@ bool DungeonReader::grab_one_basic_monster_flag(DungeonDefinition &dungeon, std:
  */
 bool DungeonReader::grab_one_spell_monster_flag(DungeonDefinition &dungeon, std::string_view what) const
 {
-    if (EnumClassFlagGroup<MonsterAbilityType>::grab_one_flag(dungeon.mon_ability_flags, r_info_ability_flags, what)) {
-        return true;
-    }
-
-    msg_print(_("未知のモンスター・フラグ '{}'。", "Unknown monster flag '{}'."), what);
-    return false;
+    return grab_one_monster_spell_flag(dungeon.mon_ability_flags, what);
 }
 
 /*!

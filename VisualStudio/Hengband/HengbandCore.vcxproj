@@ -275,6 +275,7 @@
     <ClCompile Include="..\..\src\info-reader\magic-info-tokens-table.cpp" />
     <ClCompile Include="..\..\src\info-reader\magic-reader.cpp" />
     <ClCompile Include="..\..\src\info-reader\message-reader.cpp" />
+    <ClCompile Include="..\..\src\info-reader\monster-flag-reader.cpp" />
     <ClCompile Include="..\..\src\info-reader\parse-error-messages.cpp" />
     <ClCompile Include="..\..\src\info-reader\quest-reader.cpp" />
     <ClCompile Include="..\..\src\info-reader\race-info-tokens-table.cpp" />
@@ -1187,6 +1188,7 @@
     <ClInclude Include="..\..\src\info-reader\magic-info-tokens-table.h" />
     <ClInclude Include="..\..\src\info-reader\magic-reader.h" />
     <ClInclude Include="..\..\src\info-reader\message-reader.h" />
+    <ClInclude Include="..\..\src\info-reader\monster-flag-reader.h" />
     <ClInclude Include="..\..\src\info-reader\parse-error-messages.h" />
     <ClInclude Include="..\..\src\info-reader\parse-error-types.h" />
     <ClInclude Include="..\..\src\info-reader\quest-reader.h" />

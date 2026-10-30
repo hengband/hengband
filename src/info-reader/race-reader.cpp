@@ -3,6 +3,7 @@
 #include "floor/floor-base-definitions.h"
 #include "info-reader/info-reader-util.h"
 #include "info-reader/json-reader-util.h"
+#include "info-reader/monster-flag-reader.h"
 #include "info-reader/parse-error-types.h"
 #include "info-reader/race-info-tokens-table.h"
 #include "info-reader/symbol-reader-util.h"
@@ -286,12 +287,7 @@ bool RaceReader::grab_one_basic_flag(MonraceDefinition &monrace, std::string_vie
  */
 bool RaceReader::grab_one_spell_flag(MonraceDefinition &monrace, std::string_view what) const
 {
-    if (EnumClassFlagGroup<MonsterAbilityType>::grab_one_flag(monrace.ability_flags, r_info_ability_flags, what)) {
-        return true;
-    }
-
-    msg_print(_("未知のモンスター・フラグ '{}'。", "Unknown monster flag '{}'."), what);
-    return false;
+    return grab_one_monster_spell_flag(monrace.ability_flags, what);
 }
 
 /*!

@@ -90,6 +90,7 @@
     <ClCompile Include="..\..\src\test\info-reader\test-legend-object-trap-validator.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-magic-reader.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-message-reader.cpp" />
+    <ClCompile Include="..\..\src\test\info-reader\test-monster-flag-reader.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-parse-error-messages.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-quest-reader.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-race-reader.cpp" />
