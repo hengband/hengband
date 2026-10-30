@@ -55,7 +55,7 @@ public:
     POSITION cdis{}; /*!< 現在のプレイヤーから距離(逐一計算を避けるためのテンポラリ変数) Current dis from player */
     EnumClassFlagGroup<MonsterTemporaryFlagType> mflag{}; /*!< モンスター個体に与えられた一時的な特殊フラグ / Extra monster flags */
     EnumClassFlagGroup<MonsterConstantFlagType> mflag2{}; /*!< モンスター個体に与えられた特殊フラグ2 (セーブ必要) / Extra monster flags */
-    bool ml{}; /*!< モンスターがプレイヤーにとって視認できるか(処理のためのテンポラリ変数) Monster is "visible" */
+    bool ml{}; /*!< モンスターがプレイヤーにとって視認できるか Monster is "visible" */
     ObjectIndexList hold_o_idx_list{}; /*!< モンスターが所持しているアイテムのリスト / Object list being held (if any) */
     POSITION target_y{}; /*!< モンスターの攻撃目標対象Y座標 / Can attack !los player */
     POSITION target_x{}; /*!< モンスターの攻撃目標対象X座標 /  Can attack !los player */
