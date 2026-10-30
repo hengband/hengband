@@ -213,6 +213,23 @@ TEST_CASE("TownPreferencesReader reports incompatible ego with legend key")
                                                 "Invalid town ego: legend['A'].ego 65 (object 54): incompatible object kind"));
 }
 
+TEST_CASE("TownPreferencesReader names a random object in ego diagnostics")
+{
+    const test::ScopedReaderState reader_state;
+    const test::LegendEgoFixture ego_state;
+    const test::TerrainListTestAccess none_tag(TerrainTag::NONE, 0);
+    auto data = make_town_preferences();
+    data["legend"]["A"]["terrain"] = "*";
+    data["legend"]["A"]["object"] = nlohmann::json{ { "random", true }, { "oodLevel", 12 } };
+    data["legend"]["A"]["ego"] = static_cast<int>(EgoType::DF);
+    ScopedMessageCapture diagnostics;
+    TownPreferencesLegend legend;
+    CHECK(test::to_error_code(TownPreferencesReader(data).read(legend, parse_quest_legend_cell)) == ParseErrorType::INVALID_VALUE);
+    REQUIRE(diagnostics.messages().size() == 1);
+    CHECK(diagnostics.messages().front() == _("町のエゴ指定が不正です: legend['A'].ego 65 (object random): ランダムな品には指定できない",
+                                                "Invalid town ego: legend['A'].ego 65 (object random): cannot apply to a random object"));
+}
+
 TEST_CASE("TownPreferencesReader reports object trap conflicts with legend key")
 {
     const test::ScopedReaderState reader_state;

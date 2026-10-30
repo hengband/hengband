@@ -64,7 +64,7 @@ tl::expected<void, ParseErrorType> TownPreferencesReader::read(TownPreferencesLe
         }
         if (const auto result = validate_legend_ego(cell.grid, cell.object_is_quest_reward); !result) {
             constexpr auto fmt = _("町のエゴ指定が不正です: legend['{}'].{}: {}", "Invalid town ego: legend['{}'].{}: {}");
-            msg_print(fmt, symbol, describe_legend_ego_spec(cell.grid), describe_legend_ego_error(result.error()));
+            msg_print(fmt, symbol, describe_legend_ego_spec(cell.grid, cell.object_is_quest_reward), describe_legend_ego_error(result.error()));
             return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
         }
         parsed.emplace_back(static_cast<unsigned char>(symbol.front()), cell.grid);

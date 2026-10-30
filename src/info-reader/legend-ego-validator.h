@@ -19,4 +19,4 @@ enum class LegendEgoError {
 tl::expected<void, LegendEgoError> validate_legend_ego(const dungeon_grid &grid, bool object_is_quest_reward);
 std::string_view describe_legend_ego_error(LegendEgoError error);
 
-std::string describe_legend_ego_spec(const dungeon_grid &grid);
+std::string describe_legend_ego_spec(const dungeon_grid &grid, bool object_is_quest_reward);

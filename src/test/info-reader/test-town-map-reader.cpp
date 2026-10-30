@@ -1852,6 +1852,35 @@ TEST_CASE("TownMapReader reports incompatible ego with rule and symbol")
     }
 }
 
+TEST_CASE("TownMapReader names random and quest reward objects in ego diagnostics")
+{
+    const test::ScopedReaderState reader_state;
+    const test::LegendEgoFixture ego_state;
+    struct Case {
+        nlohmann::json object;
+        std::string_view expected;
+    };
+    const Case cases[]{
+        { nlohmann::json{ { "random", true }, { "oodLevel", 12 } },
+            _("町のエゴ指定が不正です: featureRules[0] (記号 '#').ego 65 (object random): ランダムな品には指定できない",
+                "Invalid town ego: featureRules[0] (symbol '#').ego 65 (object random): cannot apply to a random object") },
+        { nlohmann::json{ { "questReward", true } },
+            _("町のエゴ指定が不正です: featureRules[0] (記号 '#').ego 65 (object questReward): クエスト報酬には指定できない",
+                "Invalid town ego: featureRules[0] (symbol '#').ego 65 (object questReward): cannot apply to a quest reward") },
+    };
+    for (const auto &entry : cases) {
+        CAPTURE(entry.object.dump());
+        auto data = make_town_map();
+        data["featureRules"][0]["definition"]["object"] = entry.object;
+        data["featureRules"][0]["definition"]["ego"] = static_cast<int>(EgoType::DF);
+        ScopedMessageCapture diagnostics;
+        TownMapDefinition definition;
+        CHECK(test::to_error_code(TownMapReader(data).read(definition, 3, 3)) == ParseErrorType::INVALID_VALUE);
+        REQUIRE(diagnostics.messages().size() == 1);
+        CHECK(diagnostics.messages().front() == entry.expected);
+    }
+}
+
 TEST_CASE("TownMapReader reports fixed trap tags including typos in conflicts")
 {
     const test::ScopedReaderState reader_state;

@@ -178,10 +178,9 @@ void validate_quest_legend_references(const std::map<char, QuestLegendCell> &leg
         }
         const auto ego_result = validate_legend_ego(grid, cell.object_is_quest_reward);
         if (!ego_result) {
-            constexpr auto fmt = _("クエストのエゴ指定が不正です ({}): {}.ego {} (object {}): {}",
-                "Invalid quest ego ({}): {}.ego {} (object {}): {}");
-            const auto ego = (grid.random & RANDOM_EGO) ? std::string("random") : std::to_string(enum2i(grid.ego));
-            THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, file.string(), prefix, ego, grid.object, describe_legend_ego_error(ego_result.error())));
+            constexpr auto fmt = _("クエストのエゴ指定が不正です ({}): {}.{}: {}", "Invalid quest ego ({}): {}.{}: {}");
+            const auto spec = describe_legend_ego_spec(grid, cell.object_is_quest_reward);
+            THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, file.string(), prefix, spec, describe_legend_ego_error(ego_result.error())));
         }
         // 配置側はRANDOM_ARTIFACTでもidを固定Artifactとして参照する。
         if (!cell.artifact_is_quest_reward && grid.artifact != FixedArtifactId::NONE) {

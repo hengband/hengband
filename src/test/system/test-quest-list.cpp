@@ -1472,6 +1472,39 @@ TEST_CASE("QuestList keeps incompatible ego diagnostic text")
     }
 }
 
+TEST_CASE("QuestList names random and quest reward objects in ego diagnostics")
+{
+    struct Case {
+        nlohmann::json object;
+        std::string_view shown;
+        std::string_view reason;
+    };
+    const Case cases[]{
+        { nlohmann::json{ { "random", true }, { "oodLevel", 12 } }, "random", _("ランダムな品には指定できない", "cannot apply to a random object") },
+        { nlohmann::json{ { "questReward", true } }, "questReward", _("クエスト報酬には指定できない", "cannot apply to a quest reward") },
+    };
+    for (const auto &entry : cases) {
+        CAPTURE(entry.shown);
+        LegendReferenceState state;
+        const test::LegendEgoFixture ego_state;
+        QuestFiles files;
+        auto data = make_quest(1);
+        data["legend"]["!"]["object"] = entry.object;
+        data["legend"]["!"]["ego"] = static_cast<int>(EgoType::DF);
+        files.write("quest.jsonc", data);
+        try {
+            state.quests.load(files.directory);
+            FAIL("ego on a non-fixed object was accepted");
+        } catch (const std::runtime_error &error) {
+            const auto expected = fmt::format(_("クエストのエゴ指定が不正です ({}): legend['!'].ego {} (object {}): {}",
+                                                  "Invalid quest ego ({}): legend['!'].ego {} (object {}): {}"),
+                (files.directory / "quest.jsonc").string(), static_cast<int>(EgoType::DF), entry.shown, entry.reason);
+            const std::string diagnostic(error.what());
+            CHECK(diagnostic.find(": " + expected + "\nStack trace:\n") != std::string::npos);
+        }
+    }
+}
+
 TEST_CASE("QuestList checks object trap conflicts in quest and shared legends")
 {
     const auto cases = nlohmann::json::parse(R"([
