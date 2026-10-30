@@ -22,14 +22,13 @@
 #include "system/item/item-entity.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
+#include "test/scoped-ego-list.h"
 #include "test/scoped-rng.h"
 #include "test/scoped-vector-wrapper.h"
 #include "test/system/dungeon-list-test-access.h"
-#include "util/finalizer.h"
 #include <array>
 #include <cstdint>
 #include <doctest/doctest.h>
-#include <functional>
 #include <set>
 #include <utility>
 
@@ -77,7 +76,6 @@ class MagicFixture {
 public:
     MagicFixture()
     {
-        egos_info.clear();
         const auto add = [](EgoType id, INVENTORY_IDX slot, bool good = true, bool natural = true) {
             auto &ego = egos_info.try_emplace(id).first->second;
             ego.idx = id;
@@ -152,8 +150,7 @@ public:
     MagicFixture &operator=(MagicFixture &&) = delete;
 
 private:
-    decltype(egos_info) saved_egos = std::move(egos_info);
-    util::Finalizer<std::function<void()>> restore_egos{ [this] { egos_info.swap(this->saved_egos); } };
+    test::ScopedEgoList saved_egos;
 
 public:
     test::ScopedVectorWrapper<BaseitemList> saved_items{ BaseitemList::get_instance() };

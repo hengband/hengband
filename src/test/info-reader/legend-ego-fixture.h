@@ -10,10 +10,8 @@
 #include "sv-definition/sv-weapon-types.h"
 #include "system/baseitem/baseitem-definition.h"
 #include "system/baseitem/baseitem-list.h"
+#include "test/scoped-ego-list.h"
 #include "test/scoped-vector-wrapper.h"
-#include "util/finalizer.h"
-#include <functional>
-#include <utility>
 
 namespace test {
 
@@ -22,7 +20,6 @@ class LegendEgoFixture {
 public:
     LegendEgoFixture()
     {
-        egos_info.clear();
         const auto add_ego = [](EgoType id, INVENTORY_IDX slot, bool good = true) {
             auto &ego = egos_info[id];
             ego.idx = id;
@@ -82,8 +79,7 @@ public:
     LegendEgoFixture &operator=(LegendEgoFixture &&) = delete;
 
 private:
-    decltype(egos_info) saved_egos = std::move(egos_info);
-    util::Finalizer<std::function<void()>> restore_egos{ [this] { egos_info.swap(this->saved_egos); } };
+    test::ScopedEgoList saved_egos;
     test::ScopedVectorWrapper<BaseitemList> restore_baseitems{ BaseitemList::get_instance() };
 };
 }
