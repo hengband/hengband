@@ -1202,14 +1202,14 @@ static tl::optional<ElementRealmType> get_element_realm(PlayerType *player_ptr, 
         if (c == ' ' || c == '\r' || c == '\n') {
             if (cs == n) {
                 display_realm_cursor(cs, n, TERM_WHITE);
-                cs = randint0(n - 1);
+                cs = randint0(n);
             }
             break;
         }
 
         if (c == '*') {
             display_realm_cursor(cs, n, TERM_WHITE);
-            cs = randint0(n - 1);
+            cs = randint0(n);
             break;
         }
 
