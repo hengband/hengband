@@ -176,10 +176,20 @@ DEVICE_CHARGES_MAX = load_cpp_constant(REPOSITORY_ROOT / "src/info-reader/baseit
 ROD_PVAL_MAX = load_cpp_constant(REPOSITORY_ROOT / "src/info-reader/baseitem-reader.cpp", "ROD_PVAL_MAX")
 PY_FOOD_FULL = load_cpp_constant(REPOSITORY_ROOT / "src/player/digestion-processor.h", "PY_FOOD_FULL")
 FUEL_LAMP = load_cpp_constant(REPOSITORY_ROOT / "src/system/gamevalue.h", "FUEL_LAMP")
+# ItemKindType の列挙子の名前から値を引く表。種別は番号ではなく列挙子の名前で書く。
+ITEM_KINDS = load_cpp_enum_values(REPOSITORY_ROOT / "src/object/tval-types.h", "ItemKindType")
+
+
+def item_kinds(*names: str) -> set[int]:
+    """ItemKindType の列挙子の名前の並びを値の集合にする。tval-types.h に無い名前は例外にする。"""
+    missing = [name for name in names if name not in ITEM_KINDS]
+    if missing:
+        raise ValueError(f"ItemKindType::{', '.join(missing)} not found in {REPOSITORY_ROOT / 'src/object/tval-types.h'}")
+    return {ITEM_KINDS[name] for name in names}
+
+
 # 金貨の種別（ItemKindType::GOLD）。凡例のエゴは金貨に付けられない。
-ITEM_KIND_GOLD = load_cpp_enum_values(REPOSITORY_ROOT / "src/object/tval-types.h", "ItemKindType").get("GOLD")
-if ITEM_KIND_GOLD is None:
-    raise ValueError(f"ItemKindType::GOLD not found in {REPOSITORY_ROOT / 'src/object/tval-types.h'}")
+(ITEM_KIND_GOLD,) = item_kinds("GOLD")
 # RaceReader は最大の出目（個数×面数）を捕獲したモンスターのHPを持つ short に収める。
 MAX_MONRACE_DICE_ROLL = load_cpp_constant(REPOSITORY_ROOT / "src/info-reader/race-reader.cpp", "MAX_MONRACE_DICE_ROLL")
 # TownList::is_all_initialized() が名前を求める町（1〜VALID_TOWNS-1）。町1には別名も要る。
@@ -428,14 +438,22 @@ def validate_baseitem_semantics(data: dict, schema_path: Path) -> None:
             valid_keys[language].add(key)
 
 
-# BaseitemKey::is_equipement() と同じ種別。装備はアーティファクトと同じ補正幅とする。
-# 種別の集合は C++ では判定の関数の中にあり、1つの定数ではないため手で揃える。
-EQUIPMENT_KINDS = {*range(16, 24), *range(30, 41), 45, 50}
+# BaseitemKey::is_equipement()（is_wearable() と is_ammo() の和）と同じ種別。装備はアーティファクトと同じ補正幅とする。
+# 種別の集合は C++ では判定の関数の switch の中にあり、1つの定数ではないため列挙子の名前で手で揃える。
+# tval-types.h の TV_WEARABLE_RANGE（BOW〜CARD）は値の範囲で、間の値に列挙子が無いことに頼るため使わない。
+WEAPON_KINDS = item_kinds("BOW", "DIGGING", "HAFTED", "POLEARM", "SWORD")
+EQUIPMENT_KINDS = item_kinds(
+    "SHOT", "ARROW", "BOLT",
+    "BOW", "DIGGING", "HAFTED", "POLEARM", "SWORD",
+    "BOOTS", "GLOVES", "HELM", "CROWN", "SHIELD", "CLOAK", "SOFT_ARMOR", "HARD_ARMOR", "DRAG_ARMOR",
+    "LITE", "AMULET", "RING", "CARD",
+)
 # BaseitemReader の pval_range() の種別ごとの範囲。上下限の値は C++ の定数から読み、種別との対応は関数の中の
 # switch なので手で揃える。箱の上限は chest_traps の要素数−1 で、表の大きさから決まる1つの定数が無いため手で揃える。
 BASEITEM_PVAL_RANGES = {
-    55: (1, DEVICE_CHARGES_MAX), 65: (1, DEVICE_CHARGES_MAX), 66: (1, ROD_PVAL_MAX),
-    80: (0, PY_FOOD_FULL), 75: (-PY_FOOD_FULL, PY_FOOD_FULL), 77: (1, FUEL_LAMP), 7: (0, 63),
+    ITEM_KINDS["STAFF"]: (1, DEVICE_CHARGES_MAX), ITEM_KINDS["WAND"]: (1, DEVICE_CHARGES_MAX), ITEM_KINDS["ROD"]: (1, ROD_PVAL_MAX),
+    ITEM_KINDS["FOOD"]: (0, PY_FOOD_FULL), ITEM_KINDS["POTION"]: (-PY_FOOD_FULL, PY_FOOD_FULL), ITEM_KINDS["FLASK"]: (1, FUEL_LAMP),
+    ITEM_KINDS["CHEST"]: (0, 63),
 }
 
 
@@ -447,8 +465,16 @@ def baseitem_pval_range(type_value: int) -> tuple[int, int]:
 
 # 武器熟練度64要素、fake_spell_flags 4要素、魔道具術師の SV_*_MAX 要素の添え字（baseitem-reader.cpp の item_subtype_max()）。
 # どれも表の要素数や通常の enum の終端から決まり、1つの定数ではないため手で揃える。
-BOOK_KINDS = {*range(90, 100), 105, 106, 107}
-BASEITEM_SUBTYPE_MAX = {**dict.fromkeys(range(19, 24), 63), **dict.fromkeys(BOOK_KINDS, 3), 55: 32, 65: 31, 66: 30}
+# 武器は BaseitemKey::is_weapon()、魔法書は BaseitemKey::is_spell_book() と同じ種別（どちらも関数の中の switch）。
+# tval-types.h の TV_MAGIC_BOOK_RANGE（LIFE_BOOK〜CRUSADE_BOOK）は歌・必殺技・呪術の書を含まないため使わない。
+BOOK_KINDS = item_kinds(
+    "LIFE_BOOK", "SORCERY_BOOK", "NATURE_BOOK", "CHAOS_BOOK", "DEATH_BOOK", "TRUMP_BOOK", "ARCANE_BOOK", "CRAFT_BOOK",
+    "DEMON_BOOK", "CRUSADE_BOOK", "MUSIC_BOOK", "HISSATSU_BOOK", "HEX_BOOK",
+)
+BASEITEM_SUBTYPE_MAX = {
+    **dict.fromkeys(WEAPON_KINDS, 63), **dict.fromkeys(BOOK_KINDS, 3),
+    ITEM_KINDS["STAFF"]: 32, ITEM_KINDS["WAND"]: 31, ITEM_KINDS["ROD"]: 30,
+}
 
 
 def baseitem_subtype_max(type_value: int) -> int:
@@ -604,13 +630,23 @@ def validate_quest_semantics(data: dict) -> None:
     walk(data, [])
     for symbol in data.get("legend", {}):
         # propertyNames の maxLength は文字数で数えるため、QuestReaderと同じく印字可能なASCIIの1文字ちょうどを確かめる。
-        if len(symbol) != 1 or not is_fixed_map_symbol(symbol):
+        if not is_fixed_map_symbol(symbol):
             raise ValidationError("legend symbol must be exactly one printable ASCII character", path=["legend", symbol])
 
 
 def is_fixed_map_symbol(character: str) -> bool:
-    """固定マップの記号（印字可能なASCII）か。general-parser.h の is_fixed_map_symbol と揃える。"""
-    return " " <= character <= "~"
+    """固定マップの記号（印字可能なASCIIの1文字）か。general-parser.h の is_fixed_map_symbol と揃える。"""
+    # C++ は1文字（unsigned char）を受け取る。文字列どうしの比較では "AB" なども範囲に入るため、1文字に限る。
+    return len(character) == 1 and " " <= character <= "~"
+
+
+def is_town_map_symbol(symbol: str) -> bool:
+    """町の地図の記号か。固定マップの記号（空白を含む印字可能なASCIIの1文字）のうち、
+    旧形式の区切りの文字（コロン・スラッシュ・バックスラッシュ）を除く。
+
+    TownMapReader の地物の記号（featureRules の symbol）と TownPreferencesReader の共通の凡例のキーで同じ規則を使う。
+    """
+    return is_fixed_map_symbol(symbol) and symbol not in ":/\\"
 
 
 def select_quest_maps(data: dict) -> list[tuple[list, list[str]]]:
@@ -874,10 +910,10 @@ def validate_town_preferences_semantics(data: dict, schema_path: Path) -> None:
         raise ValidationError("expected an integer JSON value", path=["version"])
     for symbol, cell in data["legend"].items():
         # propertyNames の $ は末尾の改行の前にも一致するため、TownPreferencesReaderと同じく1文字ちょうどを確かめる。
-        # TownPreferencesReader は空白を除く '!'〜'~' に限り、固定マップの記号（空白を含む）とは規則が違うため
-        # is_fixed_map_symbol() を使わない。文字の範囲は schema の propertyNames の pattern が確かめる。
-        if len(symbol) != 1:
-            raise ValidationError("legend symbol must be exactly one printable ASCII character", path=["legend", symbol])
+        # TownPreferencesReader は TownMapReader の地物の記号と同じ規則（空白を含む固定マップの記号から : / \ を除く）を使う。
+        if not is_town_map_symbol(symbol):
+            raise ValidationError("legend symbol must be exactly one printable ASCII character other than ':', '/' and '\\'",
+                                  path=["legend", symbol])
         validate_legend_ego(cell, baseitems, egos, ["legend", symbol])
         validate_legend_object_trap(cell, ["legend", symbol])
         terrain_tag = cell["terrain"]
@@ -936,7 +972,7 @@ def validate_town_map_semantics(data: dict, schema_path: Path) -> None:
     for rule_index, rule in enumerate(data["featureRules"]):
         # TownMapReader は固定マップの記号のうち、旧形式の区切りの文字（: / \）を拒否する。
         symbol = rule["symbol"]
-        if len(symbol) != 1 or not is_fixed_map_symbol(symbol) or symbol in ":/\\":
+        if not is_town_map_symbol(symbol):
             raise ValidationError("feature symbol must be exactly one printable ASCII character", path=["featureRules", rule_index, "symbol"])
         definition = rule["definition"]
         path = ["featureRules", rule_index, "definition"]

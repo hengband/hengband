@@ -7,7 +7,8 @@ from jsonschema import ValidationError
 from jsonschema.validators import validator_for
 
 from json_validation_test_helper import baseitem_id_schema_maximum, fixed_artifact_id_schema_maximum, validate_document
-from validate_json import (baseitem_subtype_max, build_schema_registry, collect_valid_baseitem_keys, load_all_schemas,
+import validate_json
+from validate_json import (baseitem_subtype_max, build_schema_registry, collect_valid_baseitem_keys, item_kinds, load_all_schemas,
                            load_cpp_enum_values, load_cpp_tokens, load_jsonc, load_rod_type_value, validate_baseitem_semantics,
                            validate_artifact_semantics)
 
@@ -154,6 +155,25 @@ class BaseitemDefinitionValidationTest(unittest.TestCase):
         source = (root / "src/info-reader/baseitem-reader.cpp").read_text(encoding="utf-8")
         table = source.split("DEFINED_ITEM_KINDS[] = {", 1)[1].split("};", 1)[0]
         self.assertEqual(set(re.findall(r"ItemKindType::([A-Z_]+)", table)), set(kinds))
+
+    def test_kind_tables_resolve_to_pinned_numbers(self):
+        # 列挙子の名前で書いた種別の表が、番号で書いていた時と同じ値になることを固定する。
+        self.assertEqual(validate_json.EQUIPMENT_KINDS, {*range(16, 24), *range(30, 41), 45, 50})
+        self.assertEqual(validate_json.WEAPON_KINDS, set(range(19, 24)))
+        self.assertEqual(validate_json.BOOK_KINDS, {*range(90, 100), 105, 106, 107})
+        self.assertEqual(validate_json.ITEM_KIND_GOLD, 127)
+        self.assertEqual(validate_json.BASEITEM_PVAL_RANGES, {
+            55: (1, validate_json.DEVICE_CHARGES_MAX), 65: (1, validate_json.DEVICE_CHARGES_MAX), 66: (1, validate_json.ROD_PVAL_MAX),
+            80: (0, validate_json.PY_FOOD_FULL), 75: (-validate_json.PY_FOOD_FULL, validate_json.PY_FOOD_FULL),
+            77: (1, validate_json.FUEL_LAMP), 7: (0, 63),
+        })
+        self.assertEqual(validate_json.BASEITEM_SUBTYPE_MAX, {
+            **dict.fromkeys(range(19, 24), 63), **dict.fromkeys({*range(90, 100), 105, 106, 107}, 3), 55: 32, 65: 31, 66: 30,
+        })
+
+    def test_unknown_kind_name_is_rejected(self):
+        with self.assertRaises(ValueError):
+            item_kinds("SWORD", "NO_SUCH_KIND")
 
     def test_subtype_boundaries_per_kind(self):
         limits = {**dict.fromkeys((19, 20, 21, 22, 23), 63),
