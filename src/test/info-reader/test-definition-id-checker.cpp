@@ -168,3 +168,36 @@ TEST_CASE("DefinitionIdChecker direct and JSON range diagnostics agree")
         CHECK(result.error().reason == fmt::format(_("{}の ID '{}' は {}～{} の範囲外です", "{} ID '{}' is outside the range {} to {}"), "item", value.dump(), -2, 2));
     }
 }
+
+/*!
+ * @brief check_and_report() は check() と同じ結果を返し、失敗した時だけ理由をそのまま1件表示する
+ */
+TEST_CASE("DefinitionIdChecker check_and_report prints the check failure reason")
+{
+    for (const auto ordering : { DefinitionIdOrder::SEQUENTIAL, DefinitionIdOrder::STRICTLY_INCREASING, DefinitionIdOrder::UNIQUE }) {
+        DefinitionIdChecker checker(ordering, { 1, 3 }, "item");
+        DefinitionIdChecker reference(ordering, { 1, 3 }, "item");
+        ScopedMessageCapture capture;
+        REQUIRE(checker.check_and_report(1) == 1);
+        CHECK(capture.messages().empty());
+        CHECK_FALSE(checker.last_id());
+        checker.commit();
+        CHECK(checker.last_id() == 1);
+        REQUIRE(reference.check(1));
+        reference.commit();
+
+        for (const auto id : { std::numeric_limits<int>::min(), 0, 1, 4, std::numeric_limits<int>::max() }) {
+            CAPTURE(id);
+            const auto expected = reference.check(id);
+            REQUIRE_FALSE(expected);
+            const auto count = capture.messages().size();
+            const auto result = checker.check_and_report(id);
+            REQUIRE_FALSE(result);
+            CHECK(result.error() == expected.error().code);
+            REQUIRE(capture.messages().size() == count + 1);
+            CHECK(capture.messages().back() == expected.error().reason);
+            CHECK(checker.last_id() == 1);
+            CHECK_THROWS_AS(checker.commit(), std::logic_error);
+        }
+    }
+}

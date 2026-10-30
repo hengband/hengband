@@ -73,9 +73,8 @@ tl::expected<void, ParseErrorType> TerrainReader::read() const
 
     auto &terrains = TerrainList::get_instance();
 
-    if (const auto result = this->session.ids.check(id); !result) {
-        msg_print(result.error().reason);
-        return tl::unexpected(result.error().code);
+    if (const auto result = this->session.ids.check_and_report(id); !result) {
+        return tl::unexpected(result.error());
     }
     if (this->session.keys.contains(key)) {
         msg_print(_("地形タグ '{}' が重複しています。", "Duplicate terrain tag '{}'."), key);

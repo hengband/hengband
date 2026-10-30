@@ -26,6 +26,7 @@ public:
     tl::expected<int, IdCheckFailure> read(const nlohmann::json &id_json);
     tl::expected<int, ParseErrorType> read_and_report(const nlohmann::json &id_json);
     tl::expected<int, IdCheckFailure> check(int id);
+    tl::expected<int, ParseErrorType> check_and_report(int id);
     void commit();
     tl::optional<int> last_id() const;
 
