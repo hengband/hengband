@@ -32,6 +32,7 @@
 #include <doctest/doctest.h>
 #include <memory>
 #include <set>
+#include <string>
 
 TEST_CASE("Original tiles zoom the main map without changing text or subwindows")
 {
@@ -170,6 +171,75 @@ TEST_CASE("Original tiles zoom blocks repaint and erase safely from every covere
     original_tiles::queue_map_tile(4, 2, tile);
     CHECK_FALSE(term_tile_block_at(*terminal.scr, 4, 2).zoomed());
     CHECK(terminal.scr->c[3][4] == ' ');
+}
+
+TEST_CASE("Original tiles keep pending text separate across the lower zoom row")
+{
+    const auto restore = test::scoped_restore(game_term, angband_terms, use_bigtile, use_graphics, ANGBAND_GRAF, original_tiles::double_map_size);
+    for (auto mode = 0; mode < 3; ++mode) {
+        term_type terminal;
+        term_init(&terminal, 16, 4, 16);
+        game_term = &terminal;
+        angband_terms[0] = &terminal;
+        use_bigtile = use_graphics = true;
+        ANGBAND_GRAF = "original32";
+        original_tiles::double_map_size = true;
+        terminal.active_flag = terminal.mapped_flag = true;
+        terminal.higher_pict = terminal.soft_cursor = true;
+        terminal.always_text = mode == 1;
+        struct Probe {
+            std::array<std::array<char, 16>, 4> pixels{};
+        } probe;
+        terminal.data = &probe;
+        terminal.text_hook = [](TERM_LEN x, TERM_LEN y, int n, TERM_COLOR, concptr text) -> errr {
+            auto &pixels = static_cast<Probe *>(game_term->data)->pixels;
+            for (auto i = 0; i < n; ++i) {
+                pixels[y][x + i] = text[i];
+            }
+            return 0;
+        };
+        terminal.wipe_hook = [](TERM_LEN x, TERM_LEN y, int n) -> errr {
+            auto &pixels = static_cast<Probe *>(game_term->data)->pixels;
+            for (auto i = 0; i < n; ++i) {
+                pixels[y][x + i] = ' ';
+            }
+            return 0;
+        };
+        terminal.pict_hook = [](TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *a, concptr c, const TERM_COLOR *, concptr) -> errr {
+            auto &pixels = static_cast<Probe *>(game_term->data)->pixels;
+            for (auto i = 0; i < n; ++i) {
+                if (term_is_tile_continuation({ a[i], c[i] })) {
+                    continue;
+                }
+                const auto block = term_tile_block_at(term_pict_buffer(), x + i, y);
+                for (auto dy = 0; dy < block.height; ++dy) {
+                    for (auto dx = 0; dx < block.width; ++dx) {
+                        pixels[y + dy][x + i + dx] = '@';
+                    }
+                }
+            }
+            return 0;
+        };
+        for (auto y = 0; y < 4; ++y) {
+            term_putstr(0, y, 16, 1, "XXXXXXXXXXXXXXXX");
+        }
+        term_fresh();
+        const DisplaySymbolPair blank{ { 0, ' ' }, {} };
+        const auto symbol = original_tiles::tile_symbol(0, 0);
+        CHECK(original_tiles::queue_map_tile(0, 1, blank));
+        CHECK(original_tiles::queue_map_tile(4, 1, { symbol, symbol }));
+        CHECK(original_tiles::queue_map_tile(8, 1, blank));
+        if (mode == 2) {
+            term_putstr(0, 2, 4, 2, "ABCD");
+            term_putstr(8, 2, 4, 2, "EFGH");
+        }
+        term_fresh();
+        INFO(mode);
+        CHECK(std::string(probe.pixels[0].begin(), probe.pixels[0].end()) == "XXXXXXXXXXXXXXXX");
+        CHECK(std::string(probe.pixels[1].begin(), probe.pixels[1].end()) == "    @@@@    XXXX");
+        CHECK(std::string(probe.pixels[2].begin(), probe.pixels[2].end()) == (mode == 2 ? "ABCD@@@@EFGHXXXX" : "    @@@@    XXXX"));
+        CHECK(std::string(probe.pixels[3].begin(), probe.pixels[3].end()) == "XXXXXXXXXXXXXXXX");
+    }
 }
 
 TEST_CASE("Original tiles distinguish permanent glass walls from permanent rock")

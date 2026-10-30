@@ -891,6 +891,15 @@ static void term_fresh_row_both(TERM_LEN y, int x1, int x2)
 
         /* 2nd byte of bigtile */
         if ((na & AF_BIGTILE2) == AF_BIGTILE2) {
+            // 拡大タイルの下段には起点がないため、継続セルの手前で保留を区切る。
+            if (fn) {
+                if (fa || always_text) {
+                    (void)((*game_term->text_hook)(fx, y, fn, fa, &scr_cc[fx]));
+                } else {
+                    (void)((*game_term->wipe_hook)(fx, y, fn));
+                }
+                fn = 0;
+            }
             continue;
         }
 
