@@ -75,9 +75,24 @@ std::string_view describe_legend_ego_error(LegendEgoError error)
     return {};
 }
 
-/*! @brief クエストの診断と同じ形式で、エゴ指定と品IDを表示する。 */
-std::string describe_legend_ego_spec(const dungeon_grid &grid)
+/*!
+ * @brief 町とクエストの診断で共通の形式により、エゴ指定と品の指定を表示する。
+ * @param grid 共通パーサーで読んだ凡例
+ * @param object_is_quest_reward 報酬を指すobject指定か
+ * @return "ego 65 (object 54)" の形式の文字列
+ * @details ランダムな品の object には生成階層の補正が、報酬の品には 0 が入っていて品IDに見えるため、
+ * 定義ファイルと同じ綴りの random / questReward で表示する。
+ */
+std::string describe_legend_ego_spec(const dungeon_grid &grid, bool object_is_quest_reward)
 {
     const auto ego = (grid.random & RANDOM_EGO) ? std::string("random") : std::to_string(static_cast<int>(grid.ego));
-    return fmt::format("ego {} (object {})", ego, grid.object);
+    std::string object;
+    if (grid.random & RANDOM_OBJECT) {
+        object = "random";
+    } else if (object_is_quest_reward) {
+        object = "questReward";
+    } else {
+        object = std::to_string(grid.object);
+    }
+    return fmt::format("ego {} (object {})", ego, object);
 }
