@@ -1395,7 +1395,7 @@ libhengband_a_SOURCES = \
 	term/screen-processor.cpp term/screen-processor.h \
 	term/term-color-types.h \
 	term/z-rand.cpp term/z-rand.h \
-	term/z-term.cpp term/z-term.h term/z-util.cpp term/z-util.h \
+	term/tile-layout.h term/z-term.cpp term/z-term.h term/z-util.cpp term/z-util.h \
 	\
 	timed-effect/player-cut.cpp timed-effect/player-cut.h \
 	timed-effect/player-stun.cpp timed-effect/player-stun.h \
