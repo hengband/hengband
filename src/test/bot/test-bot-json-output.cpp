@@ -8,6 +8,7 @@
 #include "object-enchant/object-ego.h"
 #include "object-enchant/tr-types.h"
 #include "object/tval-types.h"
+#include "player/player-known-flags.h"
 #include "system/baseitem/baseitem-definition.h"
 #include "system/baseitem/baseitem-list.h"
 #include "system/baseitem/baseitem-record.h"
@@ -238,16 +239,16 @@ TEST_CASE("make_bot_player_ability_sources_json reports each source of the chara
         { "sustain_chr", TR_SUST_CHR },
     };
     // 供給源を 1 つずつ立て、そのキーの同じ供給源だけが true になることを確かめる
-    const std::vector<std::pair<std::string, TrFlags BotPlayerKnownFlags::*>> source_members{
-        { "equipment", &BotPlayerKnownFlags::equipment },
-        { "permanent", &BotPlayerKnownFlags::permanent },
-        { "temporary", &BotPlayerKnownFlags::temporary },
+    const std::vector<std::pair<std::string, TrFlags PlayerKnownFlags::*>> source_members{
+        { "equipment", &PlayerKnownFlags::equipment },
+        { "permanent", &PlayerKnownFlags::permanent },
+        { "temporary", &PlayerKnownFlags::temporary },
     };
     for (const auto &[key, flag] : abilities) {
         CAPTURE(key);
         for (const auto &[source, member] : source_members) {
             CAPTURE(source);
-            BotPlayerKnownFlags flags;
+            PlayerKnownFlags flags;
             (flags.*member).set(flag);
             const auto sources = make_bot_player_ability_sources_json(flags);
             REQUIRE(sources.contains(key));
@@ -264,7 +265,7 @@ TEST_CASE("make_bot_player_ability_sources_json reports each source of the chara
 TEST_CASE("make_bot_player_ability_sources_json reports the levitation from the mount")
 {
     // 乗馬の分は浮遊の riding にだけ出て、どの能力の供給源にも混ざらない
-    BotPlayerKnownFlags riding_only;
+    PlayerKnownFlags riding_only;
     riding_only.riding.set(TR_LEVITATION);
     const auto riding_only_sources = make_bot_player_ability_sources_json(riding_only);
     for (const auto &[key, value] : riding_only_sources.items()) {
@@ -274,7 +275,7 @@ TEST_CASE("make_bot_player_ability_sources_json reports the levitation from the 
         CHECK(value.at("temporary") == false);
     }
 
-    BotPlayerKnownFlags flags;
+    PlayerKnownFlags flags;
     flags.equipment.set(TR_LEVITATION);
     CHECK(make_bot_player_ability_sources_json(flags).at("levitation").at("riding").is_null());
 

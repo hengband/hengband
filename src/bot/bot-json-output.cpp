@@ -35,7 +35,7 @@
 #include "player-info/race-types.h"
 #include "player/attack-defense-types.h"
 #include "player/digestion-processor.h"
-#include "player/permanent-resistances.h"
+#include "player/player-known-flags.h"
 #include "player/player-personality.h"
 #include "player/player-realm.h"
 #include "player/player-sex.h"
@@ -43,8 +43,6 @@
 #include "player/player-status-flags.h"
 #include "player/player-status-table.h"
 #include "player/race-info-table.h"
-#include "player/race-resistances.h"
-#include "player/temporary-resistances.h"
 #include "spell/technic-info-table.h"
 #include "store/pricing.h"
 #include "store/store-owners.h"
@@ -872,18 +870,6 @@ nlohmann::json make_player_stats_json(const PlayerType &player)
     };
 }
 
-BotPlayerKnownFlags collect_player_known_flags(PlayerType *player_ptr)
-{
-    BotPlayerKnownFlags result;
-    for (const auto slot : INVEN_WIELDING_SLOTS) {
-        result.equipment.set(player_ptr->inventory[slot]->get_flags_known());
-    }
-    player_flags(player_ptr, result.permanent);
-    tim_player_flags(player_ptr, result.temporary);
-    riding_flags(player_ptr, result.riding, result.riding_negative);
-    return result;
-}
-
 /*!
  * @brief 1つの能力について、供給源ごとの有無を出力する
  * @details 装備・恒久（種族/職業/変異/性格）・一時（時限効果と構え）は別々に判定する。
@@ -899,7 +885,7 @@ BotPlayerKnownFlags collect_player_known_flags(PlayerType *player_ptr)
  * スナップショットは変身状態そのものを出していないので、消費側は permanent を
  * 「切れない」と読んではならない。
  */
-nlohmann::json make_ability_sources_json(const BotPlayerKnownFlags &flags, tr_type flag, tr_type greater_flag = TR_FLAG_MAX)
+nlohmann::json make_ability_sources_json(const PlayerKnownFlags &flags, tr_type flag, tr_type greater_flag = TR_FLAG_MAX)
 {
     const auto has = [flag, greater_flag](const TrFlags &source) {
         return source.has(flag) || ((greater_flag != TR_FLAG_MAX) && source.has(greater_flag));
@@ -924,7 +910,7 @@ nlohmann::json make_ability_sources_json(const BotPlayerKnownFlags &flags, tr_ty
  * @param flags 装備 (鑑定済み)・常時・一時・乗馬の特性
  * @return 能力ごとの供給源の有無
  */
-nlohmann::json make_bot_player_ability_sources_json(const BotPlayerKnownFlags &flags)
+nlohmann::json make_bot_player_ability_sources_json(const PlayerKnownFlags &flags)
 {
     // Aggregate only identified equipment flags plus intrinsic and temporary
     // flags. A known immunity upgrades its resistance on the character screen.
@@ -990,7 +976,7 @@ namespace {
  * 画面の免疫欄、一時的な元素免疫はステータスバー（BAR_IMMFIRE 等）でプレイヤーも常時
  * 確認できる。
  */
-nlohmann::json make_player_immunities_json(PlayerType *player_ptr, const BotPlayerKnownFlags &flags)
+nlohmann::json make_player_immunities_json(PlayerType *player_ptr, const PlayerKnownFlags &flags)
 {
     const auto sources = [&flags](tr_type flag) {
         return nlohmann::json{
@@ -1026,7 +1012,7 @@ nlohmann::json make_player_immunities_json(PlayerType *player_ptr, const BotPlay
  * TR_VUL_LITE はキャラクター画面には "v" として出るのにダメージには乗らない。
  * lite.equipment はその表示に合わせてあるので、消費側は倍率と同一視してはならない。
  */
-nlohmann::json make_player_vulnerabilities_json(PlayerType *player_ptr, const BotPlayerKnownFlags &flags)
+nlohmann::json make_player_vulnerabilities_json(PlayerType *player_ptr, const PlayerKnownFlags &flags)
 {
     // 変異「元素に弱い」は player_flags() が拾わない（has_vuln_*() が FLAG_CAUSE_MUTATION
     // として別に立てている）ため、恒久側へ明示的に足す。
@@ -1887,12 +1873,6 @@ nlohmann::json make_flag_table_json(PlayerType *player_ptr)
         TR_DOWN_SAVING,
     };
     const auto known_flags = collect_player_known_flags(player_ptr);
-    TrFlags immunity;
-    TrFlags temporary_immunity;
-    TrFlags vulnerability;
-    player_immunity(player_ptr, immunity);
-    tim_player_immunity(player_ptr, temporary_immunity);
-    player_vulnerability_flags(player_ptr, vulnerability);
 
     auto rows = nlohmann::json::array();
     for (const auto flag : flags) {
@@ -1908,9 +1888,9 @@ nlohmann::json make_flag_table_json(PlayerType *player_ptr)
             { "equipment", std::move(equipment) },
             { "player", known_flags.permanent.has(flag) },
             { "temporary", known_flags.temporary.has(flag) || (flag == TR_LITE_1 && player_ptr->tim_emission > 0) },
-            { "immunity", immunity.has(flag) },
-            { "temporary_immunity", temporary_immunity.has(flag) },
-            { "vulnerability", vulnerability.has(flag) },
+            { "immunity", known_flags.immunity.has(flag) },
+            { "temporary_immunity", known_flags.temporary_immunity.has(flag) },
+            { "vulnerability", known_flags.vulnerability.has(flag) },
         });
     }
     return rows;

@@ -2115,6 +2115,9 @@
     <ClCompile Include="..\..\src\player\player-damage.cpp">
       <Filter>player</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\player\player-known-flags.cpp">
+      <Filter>player</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\player\player-move.cpp">
       <Filter>player</Filter>
     </ClCompile>
@@ -5047,6 +5050,9 @@
       <Filter>player</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\player\player-damage.h">
+      <Filter>player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player\player-known-flags.h">
       <Filter>player</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\player\player-move.h">

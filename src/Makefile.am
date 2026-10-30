@@ -1065,6 +1065,7 @@ libhengband_a_SOURCES = \
 	player/temporary-resistances.cpp player/temporary-resistances.h \
 	player/digestion-processor.cpp player/digestion-processor.h \
 	player/player-damage.cpp player/player-damage.h \
+	player/player-known-flags.cpp player/player-known-flags.h \
 	player/player-move.cpp player/player-move.h \
 	player/player-personality.cpp player/player-personality.h \
 	player/player-realm.cpp player/player-realm.h \
