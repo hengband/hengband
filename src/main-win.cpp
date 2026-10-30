@@ -1279,7 +1279,7 @@ static errr term_pict_win(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *ap, c
             DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, NONANTIALIASED_QUALITY, FIXED_PITCH, L"Consolas");
         const auto previous_bg_mode = SetBkMode(hdc, TRANSPARENT);
         for (i = 0; i < n; ++i, x2 += w2) {
-            // A batch can include the right half already painted by its left tile.
+            // 一括描画には、左側のタイルで描画済みの右半分が含まれることがある。
             if (original_tiles::is_bigtile_continuation({ ap[i], cp[i] })) {
                 continue;
             }

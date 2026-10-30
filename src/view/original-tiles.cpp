@@ -253,8 +253,8 @@ int normalize_pit_mask(int mask)
 
 int floor_variant(const Pos2D &pos, uint32_t seed)
 {
-    // Smooth fields make worn areas contiguous; a separate coordinate hash varies the four motifs.
-    // The field changes slowly enough that cardinal neighbors never skip a damage grade.
+    // 緩やかな分布で傷んだ領域を連続させ、別の座標ハッシュで4種類の模様を選ぶ。
+    // 上下左右の隣接マスで傷みの段階が飛ばない変化量に抑える。
     const auto wear = floor_wear(pos, seed);
     const auto grade = wear < 0.58 ? 0 : wear < 0.68 ? 1
                                      : wear < 0.84   ? 2
@@ -264,7 +264,7 @@ int floor_variant(const Pos2D &pos, uint32_t seed)
 
 int floor_tile_index(int variant)
 {
-    // Closed doors and up stairs only use their first four slots, leaving these duplicate slots free.
+    // 閉じた扉と上り階段は先頭4枠だけを使うため、残りの重複枠を再利用できる。
     if (variant >= 12) {
         return 28 + variant - 12;
     }
@@ -276,15 +276,15 @@ int floor_tile_index(int variant)
 
 int expanded_floor_tile(const Pos2D &pos, uint32_t seed)
 {
-    // One authored fracture per eligible 7x7 region. Jitter its center while
-    // keeping the whole patch inside its region, so separate fractures never overlap.
+    // 対象となる7×7領域に完成図のひび割れを1つ置く。中心をずらしても
+    // 図全体を領域内に収め、別のひび割れと重ならないようにする。
     const auto region_x = static_cast<int>(std::floor(static_cast<double>(pos.x) / 7));
     const auto region_y = static_cast<int>(std::floor(static_cast<double>(pos.y) / 7));
     const auto hash = coordinate_hash(region_x, region_y, seed ^ 0xd2511f53U);
     const auto center_x = region_x * 7 + 2 + static_cast<int>(hash % 3);
     const auto center_y = region_y * 7 + 2 + static_cast<int>((hash >> 8) % 3);
     const Pos2D center{ static_cast<POSITION>(center_y), static_cast<POSITION>(center_x) };
-    // Compact patches are the common accents; reserve the largest patch for worn areas.
+    // 小さな連携模様を基本とし、最大の模様は傷みの強い領域へ限定する。
     const auto size_choice = (hash >> 24) % 5;
     const auto kind = size_choice == 0 ? 0 : size_choice <= 2 ? 1
                                                               : 2;
@@ -329,8 +329,8 @@ int standalone_floor_variant(const Pos2D &pos, uint32_t seed)
                 continue;
             }
             const auto neighbor = pos + Pos2DVec{ static_cast<POSITION>(dy), static_cast<POSITION>(dx) };
-            // Keep a full eight-neighbor quiet border around standalone medium/heavy damage.
-            // Coordinate-only decisions remain stable without consulting hidden terrain.
+            // 単独の傷み中・大の周囲8マスには、同程度の傷みを置かない。
+            // 未知の地形を参照せず、座標だけで安定した配置を決める。
             if (expanded_floor_tile(neighbor, seed) >= 0) {
                 return selected % 4;
             }
@@ -343,7 +343,7 @@ int standalone_floor_variant(const Pos2D &pos, uint32_t seed)
             }
         }
     }
-    // Share isolated positions, then choose medium/heavy with an independent equal-weight hash.
+    // 孤立させる位置を共通にし、独立したハッシュで傷み中・大を同じ比率で選ぶ。
     const auto grade = (coordinate_hash(pos.x, pos.y, seed ^ 0x2c1b3c6dU) & 1U) == 0 ? 2 : 3;
     return grade * 4 + selected % 4;
 }
@@ -427,7 +427,7 @@ DisplaySymbol terrain_symbol(const PlayerType &player, const Pos2D &pos, const T
         return tile_symbol(DUNGEON_ENTRANCE_TILE + variant % 4, lighting);
     }
     if (terrain.tag == "SHAFT_UP") {
-        // Share the up-stair silhouette while keeping the shaft's own color.
+        // 上り階段の輪郭を共用し、坑道固有の色は維持する。
         return tile_symbol(23 * 8 + 4 + variant % 4, lighting);
     }
     if (terrain.tag == "DARK_PIT") {
@@ -460,7 +460,7 @@ DisplaySymbolPair encode_foreground(const PlayerType &player, const Pos2D &pos, 
     const auto foreground = symbols.symbol_foreground;
     auto &background = symbols.symbol_background;
     if (background.is_ascii_graphics()) {
-        // Unknown squares stay black. Unmade terrain keeps its original colored character.
+        // 未知のマスは黒く保ち、未対応の地形は元の色付き文字で表示する。
         if (background.character == ' ' || background.character == '\0') {
             if (foreground.character == ' ' || foreground.character == '\0') {
                 return symbols;
@@ -476,7 +476,7 @@ DisplaySymbolPair encode_foreground(const PlayerType &player, const Pos2D &pos, 
     if (foreground.character == ' ' || foreground.character == '\0') {
         symbols.symbol_foreground = background;
     } else {
-        // Reserved rows request live font drawing, not a bundled font bitmap.
+        // 予約行は同梱フォント画像ではなく、実フォントでの描画を要求する。
         symbols.symbol_foreground = { static_cast<uint8_t>(0x80 + GLYPH_ROW + (foreground.color & 15)), static_cast<char>(0x80 | (foreground.character & 0x7f)) };
     }
     return symbols;

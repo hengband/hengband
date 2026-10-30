@@ -40,7 +40,7 @@ constexpr auto MONSTER_ICONS = 96;
 constexpr auto MONSTER_COLORS = 16;
 constexpr auto MONSTER_TILES = MONSTER_ICONS * MONSTER_COLORS;
 static_assert(MONSTER_ROW + (MONSTER_TILES - 1) / 128 < 128);
-// 0xf0..0xff are terminal bigtile continuation attributes, not tile rows.
+// 0xf0〜0xffはタイル行番号ではなく、端末の拡大タイル継続属性として予約されている。
 static_assert(ITEM_ROW == LIGHTING_ROWS * 3);
 static_assert(ITEM_ROW + (ITEM_TILES + 127) / 128 == GLYPH_ROW);
 static_assert(GLYPH_ROW + 16 == MONSTER_ROW);
@@ -48,7 +48,7 @@ static_assert(MONSTER_ROW + (MONSTER_TILES + 127) / 128 <= CONNECTED_FLOOR_ROW);
 static_assert(SUPPLEMENT_ROW + (SUPPLEMENT_TILES * 3 + 127) / 128 <= 0x70);
 
 struct FloorConnections {
-    int ports; //!< N/E/S/W each use two bits:0 absent,2 connects at the middle.
+    int ports; //!< 北・東・南・西に各2ビットを使う。0は接続なし、2は中央で接続する。
     int grade;
     int lighting;
     int variant;

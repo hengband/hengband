@@ -333,8 +333,8 @@ DisplaySymbol item_symbol(const ItemEntity &item, DisplaySymbol fallback)
     if (!item.is_valid()) {
         return item_symbol_fallback(fallback);
     }
-    // Unidentified items use only their assigned public appearance. Artifact
-    // pictures are selected only once the ordinary naming rules reveal them.
+    // 未鑑定品は割り当てられた見た目だけを使う。通常の名前表示で判明するまでは、
+    // 固定アーティファクトの専用画像を選ばない。
     const auto appearance = item.get_baseitem_record().get_appearance_id();
     if (catalog_available) {
         const auto known = item.is_known();

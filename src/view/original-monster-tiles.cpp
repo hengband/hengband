@@ -17,8 +17,8 @@ namespace {
     };
     static_assert(std::size(monsters) == MONSTER_CATALOG_ICONS);
 
-    // Reuse the legacy monster bank and proven-unused cells in other banks.
-    // The live-font bank's control characters are never printable glyphs.
+    // 旧モンスターバンクと、他のバンクで未使用と確認した枠を再利用する。
+    // 実フォントバンクの制御文字は描画可能な字形としては使われない。
     constexpr int catalog_code(int payload)
     {
         if (payload < 1536) {
@@ -125,8 +125,8 @@ DisplaySymbol monster_catalog_generic(DisplaySymbol fallback)
 
 int monster_tile_index(char character, int color)
 {
-    // Only the public character and color choose the silhouette. In particular,
-    // never inspect a monster's true race, abilities, level or unique status.
+    // 公開されている文字と表示色だけで輪郭を選ぶ。真の種族・能力・レベルや、
+    // ユニークかどうかは参照しない。
     switch (character) {
     case ',':
         return 57;

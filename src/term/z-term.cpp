@@ -1797,7 +1797,7 @@ void term_redraw_section(int x1, int y1, int x2, int y2)
     if (x1 > x2 || y1 > y2) {
         return;
     }
-    // A repaint touching any part of a zoomed tile must include its anchor.
+    // 拡大タイルの一部を再描画するときは、起点のセルも対象に含める。
     auto expanded = true;
     while (expanded) {
         const std::array<int, 4> before{ { x1, y1, x2, y2 } };

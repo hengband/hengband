@@ -101,7 +101,7 @@ inline bool make_actor_region_readable(std::span<uint32_t> pixels, int width, in
                 source[y * 32 + x] = pixels[(sy + y) * width + sx + x];
             }
         }
-        // Only the legacy96-icon bank embeds a player avatar in each color set.
+        // 旧96画像バンクだけは、各表示色の組にプレイヤー画像を含む。
         const auto output = readable_actor_tile(source, players || (legacy_avatar && index % 96 == 76));
         for (auto y = 0; y < 32; ++y) {
             for (auto x = 0; x < 32; ++x) {

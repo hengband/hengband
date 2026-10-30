@@ -70,8 +70,8 @@ HBITMAP read_graphic(const std::filesystem::path &path)
     return result;
 }
 
-// Prepare once at graphics load; drawing still uses the same cached bitmap and
-// tile indices. Source files and terrain/item pixels remain unchanged.
+// 画像読込時に一度だけ補正し、描画では同じキャッシュ画像とタイル番号を使う。
+// 元ファイルと地形・アイテムの画素は変更しない。
 static HBITMAP readable_actor_bitmap(HBITMAP original)
 {
     BITMAP bitmap{};

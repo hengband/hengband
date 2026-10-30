@@ -4,8 +4,8 @@
 #include <tl/optional.hpp>
 
 namespace original_tiles {
-// Ordinary terrain uses only columns0..15 of each virtual128-column row.
-// Catalog icons occupy the unused columns16..127, below reserved attributes.
+// 通常地形は、仮想的な128列の各行のうち0〜15列だけを使う。
+// 予約属性の手前までの未使用列16〜127へ専用画像を割り当てる。
 constexpr int CATALOG_ICONS = 915;
 constexpr int CATALOG_FRAMES = 5895;
 constexpr int CATALOG_BASE_ROW = 353;
