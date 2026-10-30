@@ -42,6 +42,7 @@
 #include "system/player-type-definition.h"
 #include "system/terrain/terrain-definition.h"
 #include "system/terrain/terrain-list.h"
+#include "target/target.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -463,6 +464,13 @@ void change_floor(PlayerType *player_ptr)
     panel_col_min = 0;
     panel_col_max = 0;
     player_ptr->ambush_flag = false;
+
+    // ターゲットとペット・乗馬の攻撃対象は前の階のマスやモンスターの番号を指すので、階を替えるときに消す。
+    // 経路によっては先に消えていることもあるが、どの経路で階を替えても残らないよう、ここでまとめて消す。
+    // 読み込んで再開したときは、階を作り直さない限りここを通らず、セーブした値を使う
+    Target::clear_last_target();
+    player_ptr->pet_t_m_idx = 0;
+    player_ptr->riding_t_m_idx = 0;
     update_floor(player_ptr);
     place_pet(player_ptr);
     Travel::get_instance().reset_goal();

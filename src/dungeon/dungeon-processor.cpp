@@ -88,9 +88,6 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
     command_arg = 0;
     command_dir = Direction::none();
 
-    Target::clear_last_target();
-    player_ptr->pet_t_m_idx = 0;
-    player_ptr->riding_t_m_idx = 0;
     player_ptr->ambush_flag = false;
     health_track(player_ptr, 0);
 

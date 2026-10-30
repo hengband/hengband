@@ -18,6 +18,7 @@
 #include "system/floor/town-records.h"
 #include "system/inner-game-data.h"
 #include "system/player-type-definition.h"
+#include "target/target.h"
 #include "timed-effect/timed-effects.h"
 #include "util/flag-group.h"
 #include "world/world.h"
@@ -49,6 +50,30 @@ static void wr_relams(PlayerType *player_ptr)
         wr_byte((byte)pr.realm1().to_enum());
     }
     wr_byte((byte)pr.realm2().to_enum());
+}
+
+/*!
+ * @brief 最後にターゲットしたものを書き込む
+ * @details 種類 (0: なし、1: マス、2: モンスター) に続けて、マスなら座標、モンスターならフロアのモンスター番号を書く。
+ * モンスターのターゲットは、今はターゲットできない (target_able() が偽) ときも、メモリ上と同じく番号を書く
+ */
+static void wr_last_target()
+{
+    const auto target = Target::get_last_target();
+    if (const auto m_idx = target.get_m_idx()) {
+        wr_byte(2);
+        wr_s16b(*m_idx);
+        return;
+    }
+
+    if (const auto pos = target.get_position()) {
+        wr_byte(1);
+        wr_s16b(static_cast<int16_t>(pos->y));
+        wr_s16b(static_cast<int16_t>(pos->x));
+        return;
+    }
+
+    wr_byte(0);
 }
 
 /*!
@@ -293,4 +318,7 @@ void wr_player(PlayerType *player_ptr)
     wr_u32b(world.play_time.elapsed_sec());
     wr_FlagGroup(TownRecords::get_instance().get_ids(), wr_byte);
     wr_u32b(player_ptr->count);
+    wr_s16b(player_ptr->pet_t_m_idx);
+    wr_s16b(player_ptr->riding_t_m_idx);
+    wr_last_target();
 }

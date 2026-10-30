@@ -11,7 +11,31 @@
 #include "load/load-util.h"
 #include "load/world-loader.h"
 #include "system/player-type-definition.h"
+#include "target/target.h"
 #include "world/world.h"
+
+/*!
+ * @brief 最後にターゲットしたものを読み込む
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @details モンスターの番号は、この後で読み込む今の階のモンスターを指す
+ */
+static void rd_last_target(PlayerType *player_ptr)
+{
+    switch (rd_byte()) {
+    case 1: {
+        const auto y = rd_s16b();
+        const auto x = rd_s16b();
+        Target::set_last_target(Target::create_grid_target(player_ptr, { y, x }));
+        return;
+    }
+    case 2:
+        Target::set_last_target(Target::create_monster_target(player_ptr, rd_s16b()));
+        return;
+    default:
+        Target::clear_last_target();
+        return;
+    }
+}
 
 /*!
  * @brief その他の情報を読み込む / Read the "extra" information
@@ -42,5 +66,15 @@ void rd_extra(PlayerType *player_ptr)
     rd_visited_towns();
     if (!h_older_than(1, 0, 5)) {
         player_ptr->count = rd_u32b();
+    }
+
+    if (!loading_savefile_version_is_older_than(29)) {
+        player_ptr->pet_t_m_idx = rd_s16b();
+        player_ptr->riding_t_m_idx = rd_s16b();
+        rd_last_target(player_ptr);
+    } else {
+        player_ptr->pet_t_m_idx = 0;
+        player_ptr->riding_t_m_idx = 0;
+        Target::clear_last_target();
     }
 }
