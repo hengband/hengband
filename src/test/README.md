@@ -313,6 +313,10 @@ TEST_CASE("VaultReader keeps the existing vaults on a parse error")
 配列のようにコピー代入できないものや、関数を呼んで戻すもの（`initialize()` など）は、
 `util::make_finalizer()` を直接使ってください。
 
+エゴの一覧（`egos_info`）はエゴの定義をコピーできないので、`test::scoped_restore()` は使えません。
+`test/scoped-ego-list.h` の `test::ScopedEgoList` を使ってください。構築時に空の一覧と入れ替え、
+スコープを抜けるときに元の一覧へ戻します。
+
 更新フラグ（`DeferredUpdateRequests`）を立てたり調べたりするテストでは、`test/scoped-redrawing-flags.h` の
 `test::scoped_restore_redrawing_flags<Flag>()` で、フラグの型ごとにすべてのフラグを退避して元へ戻せます。
 これも戻り値は必ず変数で受けてください。
