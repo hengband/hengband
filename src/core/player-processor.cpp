@@ -54,6 +54,7 @@
 #include "tracking/health-bar-tracker.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
+#include "view/original-tiles.h"
 #include "world/world-turn-processor.h"
 #include <fmt/format.h>
 
@@ -371,6 +372,7 @@ void process_player(PlayerType *player_ptr)
             // 感知の印は下で行動ごとに外すので、途切れないよう外す前に感知し直すか、印を保つ
             check_emission(player_ptr);
             keep_detection_song_marks(player_ptr);
+            original_tiles::advance_liquid_animation(*player_ptr);
             for (MONSTER_IDX m_idx = 1; m_idx < player_ptr->current_floor_ptr->m_max; m_idx++) {
                 auto &monster = player_ptr->current_floor_ptr->m_list[m_idx];
                 if (!monster.is_valid()) {

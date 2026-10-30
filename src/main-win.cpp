@@ -81,6 +81,7 @@
 #include "io/files-util.h"
 #include "io/input-key-acceptor.h"
 #include "io/record-play-movie.h"
+#include "io/screen-util.h"
 #include "io/signal-handlers.h"
 #include "io/write-diary.h"
 #include "locale/character-encoding.h"
@@ -105,11 +106,18 @@
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "term/tile-layout.h"
 #include "term/z-util.h"
 #include "util/angband-files.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "view/display-scores.h"
+#include "view/map-tile-layout.h"
+#include "view/original-item-catalog.h"
+#include "view/original-monster-catalog.h"
+#include "view/original-player-tiles.h"
+#include "view/original-symbol-tiles.h"
+#include "view/original-tiles.h"
 #include "wizard/spoiler-util.h"
 #include "wizard/wizard-spoiler.h"
 #include "world/world.h"
@@ -123,6 +131,8 @@
 #include <string>
 #include <string_view>
 #include <vector>
+
+#pragma comment(lib, "Msimg32.lib")
 
 /*
  * Window names
@@ -393,6 +403,7 @@ static void save_prefs()
 
     strcpy(buf, arg_bigtile ? "1" : "0");
     WritePrivateProfileStringA("Angband", "Bigtile", buf, ini_file);
+    WritePrivateProfileStringA("Angband", "Original32MapZoom", original_tiles::double_map_size ? "1" : "0", ini_file);
 
     strcpy(buf, arg_sound ? "1" : "0");
     WritePrivateProfileStringA("Angband", "Sound", buf, ini_file);
@@ -501,6 +512,10 @@ static void load_prefs()
     const auto *ini_file = str_ini_file.data();
     arg_graphics = (byte)GetPrivateProfileIntA("Angband", "Graphics", enum2i(graphics_mode::GRAPHICS_NONE), ini_file);
     arg_bigtile = (GetPrivateProfileIntA("Angband", "Bigtile", false, ini_file) != 0);
+    original_tiles::double_map_size = GetPrivateProfileIntA("Angband", "Original32MapZoom", false, ini_file) != 0;
+    if (original_tiles::double_map_size && arg_graphics == enum2i(graphics_mode::GRAPHICS_ORIGINAL_TERRAIN)) {
+        arg_bigtile = true;
+    }
     use_bigtile = arg_bigtile;
     arg_sound = (GetPrivateProfileIntA("Angband", "Sound", 0, ini_file) != 0);
     arg_sound_volume_table_index = std::clamp<int>(GetPrivateProfileIntA("Angband", "SoundVolumeTableIndex", 0, ini_file), 0, SOUND_VOLUME_TABLE.size() - 1);
@@ -777,6 +792,9 @@ static void change_graphics_mode(graphics_mode mode)
     }
     arg_graphics = static_cast<byte>(ret);
     use_graphics = (arg_graphics > 0);
+    if (ret == graphics_mode::GRAPHICS_ORIGINAL_TERRAIN && original_tiles::double_map_size) {
+        arg_bigtile = use_bigtile = true;
+    }
 }
 
 /*!
@@ -808,9 +826,17 @@ static errr term_xtra_win_react(PlayerType *player_ptr)
     refresh_color_table();
 
     const byte current_mode = static_cast<byte>(graphic.get_mode());
+    const auto was_zoomed = current_mode == enum2i(graphics_mode::GRAPHICS_ORIGINAL_TERRAIN) && original_tiles::double_map_size && use_bigtile;
     if (current_mode != arg_graphics) {
         change_graphics_mode(static_cast<graphics_mode>(arg_graphics));
         reset_visuals(player_ptr);
+    }
+    const auto now_zoomed = graphic.get_mode() == graphics_mode::GRAPHICS_ORIGINAL_TERRAIN && original_tiles::double_map_size && use_bigtile;
+    if (was_zoomed != now_zoomed && AngbandWorld::get_instance().character_dungeon) {
+        auto *previous = game_term;
+        term_activate(&data[0].t);
+        resize_map();
+        term_activate(previous);
     }
 
     for (int i = 0; i < MAX_TERM_DATA; i++) {
@@ -1038,12 +1064,19 @@ static errr term_bigcurs_win(int x, int y)
     int tile_wid, tile_hgt;
     tile_wid = td->tile_wid;
     tile_hgt = td->tile_hgt;
+    const auto block = term_tile_block_at(*game_term->scr, x, y);
+    const auto columns = block.zoomed() ? 4 : 2;
+    const auto rows = block.zoomed() ? 2 : 1;
+    if (block.zoomed()) {
+        x = block.x;
+        y = block.y;
+    }
 
     RECT rc{};
     rc.left = x * tile_wid + td->size_ow1;
-    rc.right = rc.left + 2 * tile_wid;
+    rc.right = rc.left + columns * tile_wid;
     rc.top = y * tile_hgt + td->size_oh1;
-    rc.bottom = rc.top + tile_hgt;
+    rc.bottom = rc.top + rows * tile_hgt;
 
     HDC hdc = td->get_hdc();
     FrameRect(hdc, &rc, hbrYellow);
@@ -1234,6 +1267,115 @@ static errr term_pict_win(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *ap, c
     if (has_mask) {
         hdcMask = CreateCompatibleDC(hdc);
         SelectObject(hdcMask, infGraph.hBitmapMask);
+    }
+
+    if (graphic.get_mode() == graphics_mode::GRAPHICS_ORIGINAL_TERRAIN) {
+        SetStretchBltMode(hdc, COLORONCOLOR);
+        const auto base_height = h2;
+        const auto font = CreateFontW(-std::max(8, std::min<int>(h2 - 4, tw2)), 0, 0, 0, FW_BOLD, FALSE, FALSE, FALSE,
+            DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, NONANTIALIASED_QUALITY, FIXED_PITCH, L"Consolas");
+        const auto previous_font = SelectObject(hdc, font);
+        const auto zoom_font = CreateFontW(-std::max(8, std::min<int>(base_height * 2 - 4, w2 * 4)), 0, 0, 0, FW_BOLD, FALSE, FALSE, FALSE,
+            DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, NONANTIALIASED_QUALITY, FIXED_PITCH, L"Consolas");
+        const auto previous_bg_mode = SetBkMode(hdc, TRANSPARENT);
+        for (i = 0; i < n; ++i, x2 += w2) {
+            // A batch can include the right half already painted by its left tile.
+            if (original_tiles::is_bigtile_continuation({ ap[i], cp[i] })) {
+                continue;
+            }
+            const auto block = term_tile_block_at(term_pict_buffer(), x + i, y);
+            tw2 = w2 * block.width;
+            h2 = base_height * block.height;
+            SelectObject(hdc, block.zoomed() ? zoom_font : font);
+            RECT cell = { x2, y2, x2 + tw2, y2 + h2 };
+            FillRect(hdc, &cell, static_cast<HBRUSH>(GetStockObject(BLACK_BRUSH)));
+            const auto draw_tile = [&](TERM_COLOR color, char character) {
+                const auto monster_catalog = original_tiles::decode_monster_catalog_tile({ color, character });
+                if (monster_catalog && original_tiles::monster_catalog_available) {
+                    TransparentBlt(hdc, x2, y2, tw2, h2, hdcSrc, (*monster_catalog % original_tiles::COLUMNS) * w1,
+                        (original_tiles::MONSTER_CATALOG_BASE_ROW + *monster_catalog / original_tiles::COLUMNS) * h1, w1, h1, RGB(255, 0, 255));
+                    return;
+                }
+                const auto catalog = original_tiles::decode_catalog_tile({ color, character });
+                if (catalog && original_tiles::catalog_available) {
+                    TransparentBlt(hdc, x2, y2, tw2, h2, hdcSrc, (*catalog % original_tiles::COLUMNS) * w1,
+                        (original_tiles::CATALOG_BASE_ROW + *catalog / original_tiles::COLUMNS) * h1, w1, h1, RGB(255, 0, 255));
+                    return;
+                }
+                const auto player_index = original_tiles::decode_player_tile({ color, character });
+                if (player_index) {
+                    const auto source_x = (*player_index % original_tiles::COLUMNS) * w1;
+                    const auto source_y = (original_tiles::PLAYER_BASE_ROW + *player_index / original_tiles::COLUMNS) * h1;
+                    TransparentBlt(hdc, x2, y2, tw2, h2, hdcSrc, source_x, source_y, w1, h1, RGB(255, 0, 255));
+                    return;
+                }
+                const auto monster_index = original_tiles::decode_monster_tile({ color, character });
+                if (monster_index) {
+                    const auto source_x = (*monster_index % original_tiles::COLUMNS) * w1;
+                    const auto source_y = (original_tiles::MONSTER_BASE_ROW + *monster_index / original_tiles::COLUMNS) * h1;
+                    TransparentBlt(hdc, x2, y2, tw2, h2, hdcSrc, source_x, source_y, w1, h1, RGB(255, 0, 255));
+                    return;
+                }
+                const auto item_index = original_tiles::decode_item_tile({ color, character });
+                if (item_index) {
+                    const auto source_x = (*item_index % original_tiles::COLUMNS) * w1;
+                    const auto source_y = (original_tiles::ITEM_BASE_ROW + *item_index / original_tiles::COLUMNS) * h1;
+                    TransparentBlt(hdc, x2, y2, tw2, h2, hdcSrc, source_x, source_y, w1, h1, RGB(255, 0, 255));
+                    return;
+                }
+                if ((color & 0x80) && (character & 0x80) && (color & 0x7f) >= original_tiles::SUPPLEMENT_ROW && (color & 0x7f) <= original_tiles::SUPPLEMENT_ROW + (original_tiles::SUPPLEMENT_TILES * 3 - 1) / 128) {
+                    const auto index = ((color & 0x7f) - original_tiles::SUPPLEMENT_ROW) * 128 + (character & 0x7f);
+                    if (index < original_tiles::SUPPLEMENT_TILES * 3) {
+                        StretchBlt(hdc, x2, y2, tw2, h2, hdcSrc, (index % original_tiles::COLUMNS) * w1, (original_tiles::SUPPLEMENT_BASE_ROW + index / original_tiles::COLUMNS) * h1, w1, h1, SRCCOPY);
+                    }
+                    return;
+                }
+                if ((color & 0x80) && (character & 0x80) && (color & 0x7f) >= original_tiles::EXPANDED_FLOOR_ROW && (color & 0x7f) <= original_tiles::EXPANDED_FLOOR_ROW + (original_tiles::EXPANDED_FLOOR_TILES * 3 - 1) / 128) {
+                    const auto index = ((color & 0x7f) - original_tiles::EXPANDED_FLOOR_ROW) * 128 + (character & 0x7f);
+                    if (index < original_tiles::EXPANDED_FLOOR_TILES * 3) {
+                        StretchBlt(hdc, x2, y2, tw2, h2, hdcSrc, (index % original_tiles::COLUMNS) * w1, (original_tiles::EXPANDED_FLOOR_BASE_ROW + index / original_tiles::COLUMNS) * h1, w1, h1, SRCCOPY);
+                    }
+                    return;
+                }
+                const auto connected = original_tiles::decode_connected_floor({ color, character });
+                if (connected) {
+                    const auto index = original_tiles::connected_floor_tile_index(*connected);
+                    const auto source_x = (index % original_tiles::COLUMNS) * w1;
+                    const auto source_y = (original_tiles::CRACK_TILE_BASE_ROW + index / original_tiles::COLUMNS) * h1;
+                    StretchBlt(hdc, x2, y2, tw2, h2, hdcSrc, source_x, source_y, w1, h1, SRCCOPY);
+                    return;
+                }
+                const auto row = color & 0x7f;
+                if ((color & 0x80) && (character & 0x80) && row < original_tiles::LIGHTING_ROWS * 3 && (character & 0x7f) < original_tiles::COLUMNS) {
+                    StretchBlt(hdc, x2, y2, tw2, h2, hdcSrc, (character & 0x7f) * w1, row * h1, w1, h1, SRCCOPY);
+                }
+            };
+            draw_tile(tap[i], tcp[i]);
+            const auto row = ap[i] & 0x7f;
+            if (original_tiles::monster_catalog_available && original_tiles::decode_monster_catalog_tile({ ap[i], cp[i] })) {
+                draw_tile(ap[i], cp[i]);
+            } else if ((ap[i] & 0x80) && row >= original_tiles::GLYPH_ROW && row < original_tiles::GLYPH_ROW + 16) {
+                char character = cp[i] & 0x7f;
+                SetTextColor(hdc, RGB(0, 0, 0));
+                for (const auto &offset : { POINT{ -1, 0 }, POINT{ 1, 0 }, POINT{ 0, -1 }, POINT{ 0, 1 } }) {
+                    auto shadow = cell;
+                    OffsetRect(&shadow, offset.x, offset.y);
+                    DrawTextA(hdc, &character, 1, &shadow, DT_CENTER | DT_VCENTER | DT_SINGLELINE | DT_NOPREFIX);
+                }
+                SetTextColor(hdc, win_clr[row - original_tiles::GLYPH_ROW]);
+                DrawTextA(hdc, &character, 1, &cell, DT_CENTER | DT_VCENTER | DT_SINGLELINE | DT_NOPREFIX);
+            } else if (ap[i] != tap[i] || cp[i] != tcp[i]) {
+                draw_tile(ap[i], cp[i]);
+            }
+        }
+        SetBkMode(hdc, previous_bg_mode);
+        SelectObject(hdc, previous_font);
+        DeleteObject(font);
+        DeleteObject(zoom_font);
+        SelectObject(hdcSrc, hbmSrcOld);
+        DeleteDC(hdcSrc);
+        td->refresh();
+        return 0;
     }
 
     for (i = 0; i < n; i++, x2 += w2) {
@@ -1529,6 +1671,11 @@ static void setup_menus()
     CheckMenuItem(hm, IDM_OPTIONS_OLD_GRAPHICS, (arg_graphics == enum2i(graphics_mode::GRAPHICS_ORIGINAL) ? MF_CHECKED : MF_UNCHECKED));
     CheckMenuItem(hm, IDM_OPTIONS_NEW_GRAPHICS, (arg_graphics == enum2i(graphics_mode::GRAPHICS_ADAM_BOLT) ? MF_CHECKED : MF_UNCHECKED));
     CheckMenuItem(hm, IDM_OPTIONS_NEW2_GRAPHICS, (arg_graphics == enum2i(graphics_mode::GRAPHICS_HENGBAND) ? MF_CHECKED : MF_UNCHECKED));
+    CheckMenuItem(hm, IDM_OPTIONS_ORIGINAL_TERRAIN, (arg_graphics == enum2i(graphics_mode::GRAPHICS_ORIGINAL_TERRAIN) ? MF_CHECKED : MF_UNCHECKED));
+    const auto original_mode = arg_graphics == enum2i(graphics_mode::GRAPHICS_ORIGINAL_TERRAIN);
+    CheckMenuItem(hm, IDM_OPTIONS_DOUBLE_MAP, (original_mode && original_tiles::double_map_size ? MF_CHECKED : MF_UNCHECKED));
+    EnableMenuItem(hm, IDM_OPTIONS_DOUBLE_MAP, MF_BYCOMMAND | (original_mode ? MF_ENABLED : MF_GRAYED));
+    EnableMenuItem(hm, IDM_OPTIONS_BIGTILE, MF_BYCOMMAND | (original_mode && original_tiles::double_map_size ? MF_GRAYED : MF_ENABLED));
     CheckMenuItem(hm, IDM_OPTIONS_BIGTILE, (arg_bigtile ? MF_CHECKED : MF_UNCHECKED));
     CheckMenuItem(hm, IDM_OPTIONS_MUSIC, (arg_music ? MF_CHECKED : MF_UNCHECKED));
     CheckMenuRadioItem(hm, IDM_OPTIONS_MUSIC_VOLUME_100, IDM_OPTIONS_MUSIC_VOLUME_010,
@@ -1864,10 +2011,39 @@ static void process_menus(PlayerType *player_ptr, WORD wCmd)
 
         break;
     }
+    case IDM_OPTIONS_ORIGINAL_TERRAIN: {
+        if (arg_graphics != enum2i(graphics_mode::GRAPHICS_ORIGINAL_TERRAIN)) {
+            arg_graphics = enum2i(graphics_mode::GRAPHICS_ORIGINAL_TERRAIN);
+            if (game_in_progress) {
+                do_cmd_redraw(player_ptr);
+            }
+        }
+        break;
+    }
     case IDM_OPTIONS_BIGTILE: {
+        if (arg_graphics == enum2i(graphics_mode::GRAPHICS_ORIGINAL_TERRAIN) && original_tiles::double_map_size) {
+            break;
+        }
         td = &data[0];
         arg_bigtile = !arg_bigtile;
         rebuild_term(td);
+        break;
+    }
+    case IDM_OPTIONS_DOUBLE_MAP: {
+        if (arg_graphics != enum2i(graphics_mode::GRAPHICS_ORIGINAL_TERRAIN)) {
+            break;
+        }
+        original_tiles::double_map_size = !original_tiles::double_map_size;
+        if (original_tiles::double_map_size) {
+            arg_bigtile = use_bigtile = true;
+        }
+        auto *previous = game_term;
+        term_activate(&data[0].t);
+        if (game_in_progress) {
+            resize_map();
+            do_cmd_redraw(player_ptr);
+        }
+        term_activate(previous);
         break;
     }
     case IDM_OPTIONS_MUSIC: {

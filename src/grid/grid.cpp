@@ -44,6 +44,8 @@
 #include "view/display-map.h"
 #include "view/display-messages.h"
 #include "view/map-info-cache.h"
+#include "view/map-tile-layout.h"
+#include "view/original-tiles.h"
 #include "window/main-window-util.h"
 #include "window/overview-map-cache.h"
 #include "world/world.h"
@@ -340,7 +342,7 @@ void print_rel(PlayerType *player_ptr, const DisplaySymbol &symbol, const Pos2D 
     /* Only do "legal" locations */
     if (panel_contains(pos)) {
         const auto color = get_monochrome_display_color(player_ptr).value_or(symbol.color);
-        term_queue_bigchar(panel_col_of(pos.x), pos.y - panel_row_prt, { { color, symbol.character }, {} });
+        original_tiles::queue_map_tile(panel_col_of(pos.x), panel_row_of(pos.y), { { color, symbol.character }, {} });
     }
 }
 
@@ -476,7 +478,7 @@ void note_spot(PlayerType *player_ptr, const Pos2D &pos)
  *
  * This function should only be called on "legal" grids
  */
-void lite_spot(PlayerType *player_ptr, const Pos2D &pos)
+static void lite_spot_one(PlayerType *player_ptr, const Pos2D &pos)
 {
     if (!player_ptr->current_floor_ptr->contains(pos, FloorBoundary::OUTER_WALL_INCLUSIVE)) {
         return;
@@ -499,9 +501,24 @@ void lite_spot(PlayerType *player_ptr, const Pos2D &pos)
     symbol_pair.symbol_foreground.color = get_monochrome_display_color(player_ptr).value_or(symbol_pair.symbol_foreground.color);
 
     // 自分の周囲は、メイン画面の表示が変わったときと、覚えていた結果 (表示しているかもしれない) と違うときに描き直す
-    const auto is_main_window_changed = term_queue_bigchar(panel_col_of(pos.x), pos.y - panel_row_prt, symbol_pair);
+    const auto is_main_window_changed = original_tiles::queue_map_tile(panel_col_of(pos.x), panel_row_of(pos.y), symbol_pair);
     if (is_main_window_changed || is_cache_changed) {
         DeferredUpdateRequests::get_instance().set_flag(SubWindowRedrawingFlag::DUNGEON);
+    }
+}
+
+void lite_spot(PlayerType *player_ptr, const Pos2D &pos)
+{
+    lite_spot_one(player_ptr, pos);
+    if (!original_tiles::is_enabled()) {
+        return;
+    }
+    const auto &floor = *player_ptr->current_floor_ptr;
+    for (const auto &direction : Direction::directions_8()) {
+        const auto neighbor = pos + direction.vec();
+        if (floor.contains(neighbor, FloorBoundary::OUTER_WALL_INCLUSIVE) && original_tiles::needs_neighbor_redraw(*player_ptr, neighbor)) {
+            lite_spot_one(player_ptr, neighbor);
+        }
     }
 }
 
