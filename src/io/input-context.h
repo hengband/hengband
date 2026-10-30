@@ -32,7 +32,7 @@ enum class InputKind {
     SPELL, //!< 呪文・技・特殊能力・ペットのコマンドなどを一覧から選ぶ待ち
     BUILDING, //!< 建物 (宿屋・闘技場など) の中で、利用するサービスを選ぶ待ち
     FILE_VIEW, //!< ヘルプや知識メニューの結果などのファイルの表示と、メッセージのログで、ページを送る待ち
-    BIRTH, //!< キャラクター作成で、性別・種族・職業などを一覧から選ぶ待ち
+    BIRTH, //!< キャラクター作成で、性別・種族・職業などを選び、能力値を決めて、ゲームを始めるまでの待ち
 };
 
 /*!
@@ -136,7 +136,7 @@ struct SpellInputDetails {
 };
 
 /*!
- * @brief キャラクター作成で選んでいる段階
+ * @brief キャラクター作成の段階
  * @details 入力の文脈がキャラクター作成の処理に依存しないよう、ヘルプの選択に使う birth/birth-util.h の BirthKind とは別に持つ。
  */
 enum class BirthStep {
@@ -147,13 +147,17 @@ enum class BirthStep {
     SECOND_REALM, //!< 2つ目の魔法の領域
     ELEMENT_REALM, //!< 元素使いの領域
     PERSONALITY, //!< 性格
+    STAT_LIMITS, //!< オートローラーで得たい能力値の最低値
+    CHARA_LIMITS, //!< オートローラーで得たい年齢・身長・体重・社会的地位の範囲
+    ROLL_RESULT, //!< 能力値の結果を決めるか振り直すか
+    START, //!< 名前と生い立ちを決めた後の、ゲームを始めるかの確認
 };
 
 /*!
- * @brief キャラクター作成で一覧から選ぶ待ちの詳細
+ * @brief キャラクター作成の待ちの詳細
  */
 struct BirthInputDetails {
-    BirthStep step; //!< 選んでいる段階
+    BirthStep step; //!< 段階
 
     bool operator==(const BirthInputDetails &) const = default;
 };
