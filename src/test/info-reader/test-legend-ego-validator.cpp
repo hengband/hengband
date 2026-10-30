@@ -108,7 +108,7 @@ TEST_CASE("Legend ego diagnostic includes fixed or random ego and object ID")
     CHECK(describe_legend_ego_spec(grid, false) == "ego random (object 54)");
 }
 
-TEST_CASE("Legend ego diagnostic names random and quest reward objects instead of their numbers")
+TEST_CASE("Legend ego diagnostic names random, quest reward and omitted objects instead of their numbers")
 {
     dungeon_grid grid{};
     grid.ego = EgoType::DF;
@@ -124,6 +124,9 @@ TEST_CASE("Legend ego diagnostic names random and quest reward objects instead o
     grid.random = 0;
     grid.object = 0;
     CHECK(describe_legend_ego_spec(grid, true) == "ego 65 (object questReward)");
+
+    // 品の指定が無い場合の object は 0 のままであり、品IDとして表示しない。
+    CHECK(describe_legend_ego_spec(grid, false) == "ego 65 (object none)");
 
     // 固定の品は品IDを表示する。
     grid.object = 42;

@@ -1852,6 +1852,21 @@ TEST_CASE("TownMapReader reports incompatible ego with rule and symbol")
     }
 }
 
+TEST_CASE("TownMapReader names an omitted object as none in ego diagnostics")
+{
+    const test::ScopedReaderState reader_state;
+    const test::LegendEgoFixture ego_state;
+    auto data = make_town_map();
+    REQUIRE_FALSE(data["featureRules"][0]["definition"].contains("object"));
+    data["featureRules"][0]["definition"]["ego"] = static_cast<int>(EgoType::DF);
+    ScopedMessageCapture diagnostics;
+    TownMapDefinition definition;
+    CHECK(test::to_error_code(TownMapReader(data).read(definition, 3, 3)) == ParseErrorType::INVALID_VALUE);
+    REQUIRE(diagnostics.messages().size() == 1);
+    CHECK(diagnostics.messages().front() == _("町のエゴ指定が不正です: featureRules[0] (記号 '#').ego 65 (object none): 固定の配置対象がない",
+                                                "Invalid town ego: featureRules[0] (symbol '#').ego 65 (object none): no fixed object to place"));
+}
+
 TEST_CASE("TownMapReader names random and quest reward objects in ego diagnostics")
 {
     const test::ScopedReaderState reader_state;
