@@ -18,6 +18,7 @@
 #include "core/asking-player.h"
 #include "game-option/birth-options.h"
 #include "game-option/game-option-page.h"
+#include "io/input-context.h"
 #include "io/input-key-acceptor.h"
 #include "locale/japanese.h"
 #include "main/sound-definitions-table.h"
@@ -120,7 +121,7 @@ static bool get_player_sex(PlayerType *player_ptr)
 
         const auto buf = fmt::format(_("性別を選んで下さい ({:c}-{:c}) ('='初期オプション設定): ", "Choose a sex ({:c}-{:c}) ('=' for options): "), I2A(0), I2A(1));
         put_str(buf, 10, 10);
-        char c = inkey();
+        const auto c = input_key_with_context({ InputKind::BIRTH, buf, BirthInputDetails{ BirthStep::SEX } });
         if (c == 'Q') {
             birth_quit();
         }

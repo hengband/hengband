@@ -1,6 +1,7 @@
 #include "birth/birth-select-race.h"
 #include "birth/birth-util.h"
-#include "io/input-key-acceptor.h"
+#include "core/asking-player.h"
+#include "io/input-context.h"
 #include "player-info/race-info.h"
 #include "player/race-info-table.h"
 #include "system/player-type-definition.h"
@@ -118,7 +119,7 @@ static bool select_race(PlayerType *player_ptr, char *sym, int *k)
 
         const auto buf = fmt::format(_("種族を選んで下さい ({:c}-{:c}) ('='初期オプション設定): ", "Choose a race ({:c}-{:c}) ('=' for options): "), sym[0], sym[MAX_RACES - 1]);
         put_str(buf, 10, 10);
-        char c = inkey();
+        const auto c = input_key_with_context({ InputKind::BIRTH, buf, BirthInputDetails{ BirthStep::RACE } });
         if (c == 'Q') {
             birth_quit();
         }

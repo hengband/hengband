@@ -32,6 +32,7 @@ enum class InputKind {
     SPELL, //!< 呪文・技・特殊能力・ペットのコマンドなどを一覧から選ぶ待ち
     BUILDING, //!< 建物 (宿屋・闘技場など) の中で、利用するサービスを選ぶ待ち
     FILE_VIEW, //!< ヘルプや知識メニューの結果などのファイルの表示と、メッセージのログで、ページを送る待ち
+    BIRTH, //!< キャラクター作成で、性別・種族・職業などを一覧から選ぶ待ち
 };
 
 /*!
@@ -134,8 +135,31 @@ struct SpellInputDetails {
     bool operator==(const SpellInputDetails &) const = default;
 };
 
+/*!
+ * @brief キャラクター作成で選んでいる段階
+ * @details 入力の文脈がキャラクター作成の処理に依存しないよう、ヘルプの選択に使う birth/birth-util.h の BirthKind とは別に持つ。
+ */
+enum class BirthStep {
+    SEX, //!< 性別
+    RACE, //!< 種族
+    CLASS, //!< 職業
+    FIRST_REALM, //!< 1つ目の魔法の領域
+    SECOND_REALM, //!< 2つ目の魔法の領域
+    ELEMENT_REALM, //!< 元素使いの領域
+    PERSONALITY, //!< 性格
+};
+
+/*!
+ * @brief キャラクター作成で一覧から選ぶ待ちの詳細
+ */
+struct BirthInputDetails {
+    BirthStep step; //!< 選んでいる段階
+
+    bool operator==(const BirthInputDetails &) const = default;
+};
+
 //! 入力の種類ごとの詳細。詳細を持たない入力では std::monostate
-using InputDetails = std::variant<std::monostate, StringInputDetails, QuantityInputDetails, CommandInputDetails, ItemInputDetails, DirectionInputDetails, TargetInputDetails, PointInputDetails, SpellInputDetails>;
+using InputDetails = std::variant<std::monostate, StringInputDetails, QuantityInputDetails, CommandInputDetails, ItemInputDetails, DirectionInputDetails, TargetInputDetails, PointInputDetails, SpellInputDetails, BirthInputDetails>;
 
 /*!
  * @brief 現在待っている入力の種類と、画面に表示したプロンプト

@@ -1,7 +1,7 @@
 #include "birth/birth-select-realm.h"
 #include "birth/birth-util.h"
 #include "core/asking-player.h"
-#include "io/input-key-acceptor.h"
+#include "io/input-context.h"
 #include "mind/mind-elementalist.h"
 #include "player-base/player-class.h"
 #include "player/player-realm.h"
@@ -128,7 +128,7 @@ static void interpret_realm_select_key(birth_realm_type *birth_realm_ptr, char c
     }
 }
 
-static bool get_a_realm(PlayerType *player_ptr, birth_realm_type *birth_realm_ptr)
+static bool get_a_realm(PlayerType *player_ptr, birth_realm_type *birth_realm_ptr, BirthStep step)
 {
     birth_realm_ptr->os = birth_realm_ptr->n;
     while (true) {
@@ -140,7 +140,7 @@ static bool get_a_realm(PlayerType *player_ptr, birth_realm_type *birth_realm_pt
         const auto buf = fmt::format(_("領域を選んで下さい({:c}-{:c}) ('='初期オプション設定): ", "Choose a realm ({:c}-{:c}) ('=' for options): "), birth_realm_ptr->sym[0], birth_realm_ptr->sym[birth_realm_ptr->n - 1]);
 
         put_str(buf, 10, 10);
-        char c = inkey();
+        const auto c = input_key_with_context({ InputKind::BIRTH, buf, BirthInputDetails{ step } });
         interpret_realm_select_key(birth_realm_ptr, c);
         if (c == 'S') {
             return true;
@@ -183,12 +183,13 @@ static bool get_a_realm(PlayerType *player_ptr, birth_realm_type *birth_realm_pt
 
 /*!
  * @brief プレイヤーの魔法領域を選択する / Choose from one of the available magical realms
+ * @param step 1つ目と2つ目のどちらの領域を選ぶか
  * @param selecting_realm 現在選択中の魔法領域
  * @param choices 選択可能な魔法領域のビット配列
  * @return 選択した魔法領域のID
  * @details 領域数が0 (戦士等)or 1 (観光客等)なら自動での値を返す
  */
-static tl::optional<RealmType> select_realm(PlayerType *player_ptr, RealmType selecting_realm, RealmChoices choices)
+static tl::optional<RealmType> select_realm(PlayerType *player_ptr, BirthStep step, RealmType selecting_realm, RealmChoices choices)
 {
     clear_from(10);
     if (choices.count() <= 1) {
@@ -202,7 +203,7 @@ static tl::optional<RealmType> select_realm(PlayerType *player_ptr, RealmType se
     birth_realm_type birth_realm;
     analyze_realms(player_ptr, selecting_realm, choices, &birth_realm);
     birth_realm.cur = fmt::format("{:c}{:c} {}", '*', birth_realm.p2, _("ランダム", "Random"));
-    if (get_a_realm(player_ptr, &birth_realm)) {
+    if (get_a_realm(player_ptr, &birth_realm, step)) {
         return tl::nullopt;
     }
 
@@ -226,8 +227,9 @@ static void cleanup_realm_selection_window(void)
 static bool check_realm_selection(PlayerType *player_ptr, int count)
 {
     if (count < 2) {
-        prt(_("何かキーを押してください", "Hit any key."), 0, 0);
-        (void)inkey();
+        constexpr auto prompt = _("何かキーを押してください", "Hit any key.");
+        prt(prompt, 0, 0);
+        (void)input_key_with_context(InputKind::ANY_KEY, prompt);
         prt("", 0, 0);
         return true;
     } else if (input_check_strict(player_ptr, _("よろしいですか？", "Are you sure? "), UserCheck::DEFAULT_Y)) {
@@ -237,11 +239,11 @@ static bool check_realm_selection(PlayerType *player_ptr, int count)
     return false;
 }
 
-static tl::optional<RealmType> process_choose_realm(PlayerType *player_ptr, RealmChoices choices)
+static tl::optional<RealmType> process_choose_realm(PlayerType *player_ptr, BirthStep step, RealmChoices choices)
 {
     auto selecting_realm = RealmType::NONE;
     while (true) {
-        const auto selected_realm = select_realm(player_ptr, selecting_realm, choices);
+        const auto selected_realm = select_realm(player_ptr, step, selecting_realm, choices);
         if (!selected_realm || *selected_realm == RealmType::NONE) {
             return selected_realm;
         }
@@ -299,7 +301,7 @@ bool get_player_realms(PlayerType *player_ptr)
     }
 
     /* Select the first realm */
-    const auto realm1 = process_choose_realm(player_ptr, PlayerRealm::get_realm1_choices(player_ptr->pclass));
+    const auto realm1 = process_choose_realm(player_ptr, BirthStep::FIRST_REALM, PlayerRealm::get_realm1_choices(player_ptr->pclass));
     if (!realm1) {
         return false;
     }
@@ -310,7 +312,7 @@ bool get_player_realms(PlayerType *player_ptr)
     print_choosed_realms(player_ptr);
 
     /* Select the second realm */
-    const auto realm2 = process_choose_realm(player_ptr, PlayerRealm::get_realm2_choices(player_ptr->pclass));
+    const auto realm2 = process_choose_realm(player_ptr, BirthStep::SECOND_REALM, PlayerRealm::get_realm2_choices(player_ptr->pclass));
     if (!realm2) {
         return false;
     }
