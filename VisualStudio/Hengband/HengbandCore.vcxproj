@@ -255,6 +255,7 @@
     <ClCompile Include="..\..\src\headless-term\headless-term.cpp" />
     <ClCompile Include="..\..\src\hpmp\hp-mp-processor.cpp" />
     <ClCompile Include="..\..\src\hpmp\hp-mp-regenerator.cpp" />
+    <ClCompile Include="..\..\src\info-reader\activation-reader.cpp" />
     <ClCompile Include="..\..\src\info-reader\artifact-reader.cpp" />
     <ClCompile Include="..\..\src\info-reader\baseitem-reader.cpp" />
     <ClCompile Include="..\..\src\info-reader\baseitem-tokens-table.cpp" />
@@ -266,7 +267,6 @@
     <ClCompile Include="..\..\src\info-reader\feature-info-tokens-table.cpp" />
     <ClCompile Include="..\..\src\info-reader\fixed-map-parser.cpp" />
     <ClCompile Include="..\..\src\info-reader\general-parser.cpp" />
-    <ClCompile Include="..\..\src\info-reader\info-reader-util.cpp" />
     <ClCompile Include="..\..\src\info-reader\item-flag-reader.cpp" />
     <ClCompile Include="..\..\src\info-reader\json-reader-util.cpp" />
     <ClCompile Include="..\..\src\info-reader\jsonc-document-loader.cpp" />
@@ -1165,6 +1165,7 @@
     <ClInclude Include="..\..\src\headless-term\headless-term.h" />
     <ClInclude Include="..\..\src\hpmp\hp-mp-processor.h" />
     <ClInclude Include="..\..\src\hpmp\hp-mp-regenerator.h" />
+    <ClInclude Include="..\..\src\info-reader\activation-reader.h" />
     <ClInclude Include="..\..\src\info-reader\artifact-reader.h" />
     <ClInclude Include="..\..\src\info-reader\baseitem-reader.h" />
     <ClInclude Include="..\..\src\info-reader\baseitem-tokens-table.h" />

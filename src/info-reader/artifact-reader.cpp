@@ -2,6 +2,7 @@
 #include "artifact/fixed-art-types.h"
 #include "artifact/random-art-effects.h"
 #include "floor/floor-base-definitions.h"
+#include "info-reader/activation-reader.h"
 #include "info-reader/info-reader-util.h"
 #include "info-reader/item-flag-reader.h"
 #include "info-reader/item-reader-limits.h"

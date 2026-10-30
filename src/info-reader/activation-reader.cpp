@@ -1,4 +1,4 @@
-#include "info-reader/info-reader-util.h"
+#include "info-reader/activation-reader.h"
 #include "artifact/random-art-effects.h"
 #include "object-enchant/activation-info-table.h"
 #include "view/display-messages.h"

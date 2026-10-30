@@ -4,7 +4,7 @@
  * 定義ファイル中の文字列を定数へ変換する info_get_const / info_grab_one_const を検証する。
  * JSON から値を取り出す info_set_* 群は test-json-reader-util.cpp で扱う。
  *
- * 同じヘッダで宣言されている grab_one_activation_flag は test-activation-reader.cpp で扱う。
+ * 発動の名前を読む grab_one_activation_flag は activation-reader.h にあり、test-activation-reader.cpp で扱う。
  */
 
 #include "info-reader/info-reader-util.h"
