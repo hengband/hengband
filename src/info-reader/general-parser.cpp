@@ -39,6 +39,21 @@ tl::optional<char> parse_fixed_map_symbol(std::string_view symbol)
 }
 
 /*!
+ * @brief 町のマップ・町の共通凡例で使う記号を読み取る。
+ * @details 固定マップの記号のうち ':' '/' '\\' は町の記号に使えない。
+ * @param symbol 凡例のキーの文字列
+ * @return 有効な記号、または文字数や文字種が不正か、町で使えない記号なら空。
+ */
+tl::optional<char> parse_town_map_symbol(std::string_view symbol)
+{
+    const auto parsed = parse_fixed_map_symbol(symbol);
+    if (!parsed || *parsed == ':' || *parsed == '/' || *parsed == '\\') {
+        return tl::nullopt;
+    }
+    return parsed;
+}
+
+/*!
  * @brief 固定マップの行の上限・幅・記号を共通の順序で検証する。
  * @param row 検証する行
  * @param row_index 行の番号（0から）
