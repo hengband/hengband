@@ -94,13 +94,28 @@ bool continuous_action_running(PlayerType *player_ptr)
 }
 
 /*!
- * @brief プレイヤーの行動処理 / Process the player
- * @note
- * Notice the annoying code to handle "pack overflow", which\n
- * must come first just in case somebody manages to corrupt\n
- * the savefiles by clever use of menu commands or something.\n
+ * @brief プレイヤーの手番の始めに、時刻を表示し、画面の描き方を入力待ちに合わせる
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
-void process_player(PlayerType *player_ptr)
+static void prepare_turn_display(PlayerType *player_ptr)
+{
+    if (!command_rep) {
+        WorldTurnProcessor(player_ptr).print_time();
+    }
+
+    if (fresh_once && (continuous_action_running(player_ptr) || !command_rep)) {
+        stop_term_fresh();
+    }
+}
+
+/*!
+ * @brief プレイヤーの手番の頭の処理 (行動力の充填と、手番ごとの効果の経過)
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @return プレイヤーの手番が来たら true
+ * @details 突然変異の獲得・太古の怨念の発動と、闘技場の観戦中のモンスターの表示は、
+ * 行動力を充填する前に呼ばれるたびに行う。手番が来なければ、その後の処理は行わずに false を返す。
+ */
+static bool start_player_turn(PlayerType *player_ptr)
 {
     if (player_ptr->hack_mutation) {
         msg_print(_("何か変わった気がする！", "You feel different!"));
@@ -128,20 +143,15 @@ void process_player(PlayerType *player_ptr)
         }
 
         WorldTurnProcessor(player_ptr).print_time();
-    } else if (!(load && player_ptr->energy_need <= 0)) {
+    } else {
         player_ptr->energy_need -= speed_to_energy(player_ptr->pspeed);
     }
 
     if (player_ptr->energy_need > 0) {
-        return;
-    }
-    if (!command_rep) {
-        WorldTurnProcessor(player_ptr).print_time();
+        return false;
     }
 
-    if (fresh_once && (continuous_action_running(player_ptr) || !command_rep)) {
-        stop_term_fresh();
-    }
+    prepare_turn_display(player_ptr);
 
     if (player_ptr->resting < 0) {
         if (player_ptr->resting == COMMAND_ARG_REST_FULL_HEALING) {
@@ -208,7 +218,6 @@ void process_player(PlayerType *player_ptr)
         handle_stuff(player_ptr);
     }
 
-    load = false;
     if (player_ptr->lightspeed) {
         set_lightspeed(player_ptr, player_ptr->lightspeed - 1, true);
     }
@@ -246,6 +255,33 @@ void process_player(PlayerType *player_ptr)
             dur.set_flag(MainWindowRedrawingFlag::MP);
         }
     }
+
+    return true;
+}
+
+/*!
+ * @brief プレイヤーの行動処理 / Process the player
+ * @details セーブを読み込んだ直後に行動力が残っていれば、^S など手番の途中でセーブしている。
+ * 手番の頭の処理はセーブの前に済んでいるので、もう一度行わずに入力待ちから再開する。
+ * @note
+ * Notice the annoying code to handle "pack overflow", which\n
+ * must come first just in case somebody manages to corrupt\n
+ * the savefiles by clever use of menu commands or something.\n
+ */
+void process_player(PlayerType *player_ptr)
+{
+    // 闘技場の観戦中は、読み込むと process_dungeon() が行動力を 0 にする (手番の途中のセーブではない)
+    const auto &system = AngbandSystem::get_instance();
+    const auto resumes_turn = load && (player_ptr->energy_need <= 0) && !system.is_phase_out();
+    load = false;
+    if (resumes_turn) {
+        prepare_turn_display(player_ptr);
+    } else if (!start_player_turn(player_ptr)) {
+        return;
+    }
+
+    const auto effects = player_ptr->effects();
+    auto &dur = DeferredUpdateRequests::get_instance();
 
     /*** Handle actual user input ***/
     while (player_ptr->energy_need <= 0) {
