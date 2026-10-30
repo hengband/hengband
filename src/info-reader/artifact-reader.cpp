@@ -2,8 +2,8 @@
 #include "artifact/fixed-art-types.h"
 #include "artifact/random-art-effects.h"
 #include "floor/floor-base-definitions.h"
-#include "info-reader/baseitem-tokens-table.h"
 #include "info-reader/info-reader-util.h"
+#include "info-reader/item-flag-reader.h"
 #include "info-reader/item-reader-limits.h"
 #include "info-reader/json-reader-util.h"
 #include "info-reader/parse-error-types.h"
@@ -129,27 +129,6 @@ tl::expected<void, ParseErrorType> ArtifactReader::read() const
 }
 
 /*!
- * @brief テキストトークンを走査してフラグを一つ得る(アーティファクト用) /
- * Grab one activation index flag
- * @param a_ptr 保管先のアーティファクト構造体参照ポインタ
- * @param what 参照元の文字列ポインタ
- * @return 見つかったらtrue
- */
-bool ArtifactReader::grab_one_artifact_flag(ArtifactDefinition &artifact, std::string_view what) const
-{
-    if (TrFlags::grab_one_flag(artifact.flags, baseitem_flags, what)) {
-        return true;
-    }
-
-    if (EnumClassFlagGroup<ItemGenerationTraitType>::grab_one_flag(artifact.gen_flags, baseitem_geneneration_flags, what)) {
-        return true;
-    }
-
-    msg_print(_("未知の伝説のアイテム・フラグ '{}'。", "Unknown artifact flag '{}'."), what);
-    return false;
-}
-
-/*!
  * @brief JSON Objectから固定アーティファクトのベースアイテムをセットする
  * @param artifact 保管先のアーティファクト
  * @return 成功時は値なし、失敗時は解析エラー。
@@ -207,5 +186,13 @@ tl::expected<void, ParseErrorType> ArtifactReader::set_art_flags(ArtifactDefinit
     if (flag_data.is_null()) {
         return {};
     }
-    return info_read_flag_array(flag_data, [this, &artifact](const auto &flag) { return this->grab_one_artifact_flag(artifact, flag.template get<std::string>()); });
+    return info_read_flag_array(flag_data, [&artifact](const auto &flag) {
+        const auto what = flag.template get<std::string>();
+        if (grab_one_item_flag(artifact.flags, artifact.gen_flags, what)) {
+            return true;
+        }
+
+        msg_print(_("未知の伝説のアイテム・フラグ '{}'。", "Unknown artifact flag '{}'."), what);
+        return false;
+    });
 }

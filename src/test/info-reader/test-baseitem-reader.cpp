@@ -13,6 +13,7 @@
 #include "test/info-reader/scoped-reader-state.h"
 #include "test/scoped-vector-wrapper.h"
 #include "util/dice.h"
+#include "view/display-messages.h"
 #include <cstdint>
 #include <doctest/doctest.h>
 #include <limits>
@@ -71,6 +72,23 @@ TEST_CASE("BaseitemReader does not grow the list after a parse error")
     }
     CHECK(items.empty());
     CHECK_FALSE(session.last_id());
+}
+
+TEST_CASE("BaseitemReader reports an unknown flag and the failed flag field without publishing the record")
+{
+    auto session = BaseitemReader::create_session();
+    BaseitemStateGuard guard;
+    session = BaseitemReader::create_session();
+    auto data = make_baseitem();
+    data["flags"] = { "STR", "UNKNOWN_BASEITEM_FLAG", "DEX" };
+    ScopedMessageCapture diagnostics;
+    CHECK(test::to_error_code(test::read_and_commit(BaseitemReader(data, session), session)) == ParseErrorType::INVALID_FLAG);
+    CHECK(BaseitemList::get_instance().empty());
+    CHECK_FALSE(session.last_id());
+    // フラグ名の表示に続けて、read() がフラグの項目の読み込み失敗を表示する
+    REQUIRE(diagnostics.messages().size() == 2);
+    CHECK(diagnostics.messages()[0] == _("未知のアイテム・フラグ 'UNKNOWN_BASEITEM_FLAG'。", "Unknown object flag 'UNKNOWN_BASEITEM_FLAG'."));
+    CHECK(diagnostics.messages()[1] == _("アイテムのフラグ読込失敗。", "Failed to load flags of item."));
 }
 
 TEST_CASE("BaseitemReader preserves helper error precedence without replacing existing records")

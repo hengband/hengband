@@ -18,6 +18,7 @@
 #include "test/system/artifact-list-test-access.h"
 #include "util/dice.h"
 #include "util/enum-converter.h"
+#include "view/display-messages.h"
 #include <doctest/doctest.h>
 #include <limits>
 #include <memory>
@@ -133,6 +134,24 @@ TEST_CASE("ArtifactReader reports non-string flags as invalid types and unknown 
     };
     CHECK(read_with_flags(nlohmann::json::array({ 1 })) == ParseErrorType::INVALID_TYPE);
     CHECK(read_with_flags(nlohmann::json::array({ "UNKNOWN_FLAG" })) == ParseErrorType::INVALID_FLAG);
+}
+
+TEST_CASE("ArtifactReader reports an unknown flag and the failed flag field without publishing the record")
+{
+    test::ScopedReaderState reader_state;
+    test::ArtifactListTestAccess artifact_state;
+    ScopedArtifactBaseitem baseitem;
+    auto session = ArtifactReader::create_session();
+    auto data = make_artifact();
+    data["flags"] = { "STR", "UNKNOWN_ARTIFACT_FLAG", "DEX" };
+    ScopedMessageCapture diagnostics;
+    CHECK(test::to_error_code(test::read_and_commit(ArtifactReader(data, session), session)) == ParseErrorType::INVALID_FLAG);
+    CHECK(ArtifactList::get_instance().empty());
+    CHECK_FALSE(session.last_id().has_value());
+    // フラグ名の表示に続けて、read() がフラグの項目の読み込み失敗を表示する
+    REQUIRE(diagnostics.messages().size() == 2);
+    CHECK(diagnostics.messages()[0] == _("未知の伝説のアイテム・フラグ 'UNKNOWN_ARTIFACT_FLAG'。", "Unknown artifact flag 'UNKNOWN_ARTIFACT_FLAG'."));
+    CHECK(diagnostics.messages()[1] == _("アーティファクトの能力フラグ読込失敗。", "Failed to load ability flags of artifact."));
 }
 
 TEST_CASE("ArtifactReader preserves missing and non-integer ID errors")

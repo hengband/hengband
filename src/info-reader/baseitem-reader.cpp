@@ -9,8 +9,8 @@
 #include "cmd-action/cmd-spell.h"
 #include "floor/floor-base-definitions.h"
 #include "grid/trap.h"
-#include "info-reader/baseitem-tokens-table.h"
 #include "info-reader/info-reader-util.h"
+#include "info-reader/item-flag-reader.h"
 #include "info-reader/item-reader-limits.h"
 #include "info-reader/json-reader-util.h"
 #include "info-reader/parse-error-types.h"
@@ -305,26 +305,6 @@ tl::expected<void, ParseErrorType> BaseitemReader::read() const
 }
 
 /*!
- * @brief テキストトークンを走査してフラグを一つ得る(ベースアイテム用)
- * @param baseitem 保管先ベースアイテムへの参照
- * @param what 参照元の文字列
- * @return 見つけたらtrue
- */
-bool BaseitemReader::grab_one_baseitem_flag(BaseitemDefinition &baseitem, std::string_view what) const
-{
-    if (TrFlags::grab_one_flag(baseitem.flags, baseitem_flags, what)) {
-        return true;
-    }
-
-    if (EnumClassFlagGroup<ItemGenerationTraitType>::grab_one_flag(baseitem.gen_flags, baseitem_geneneration_flags, what)) {
-        return true;
-    }
-
-    msg_print(_("未知のアイテム・フラグ '{}'。", "Unknown object flag '{}'."), what);
-    return false;
-}
-
-/*!
  * @brief JSON Objectからベースアイテムのシンボルをセットする
  * @note BaseitemReader が保持する baseitem_data を参照する
  * @param baseitem 保管先のベースアイテム情報インスタンス
@@ -491,5 +471,13 @@ tl::expected<void, ParseErrorType> BaseitemReader::set_baseitem_flags(BaseitemDe
     if (flag_data.is_null()) {
         return {};
     }
-    return info_read_flag_array(flag_data, [this, &baseitem](const auto &flag) { return this->grab_one_baseitem_flag(baseitem, flag.template get<std::string>()); });
+    return info_read_flag_array(flag_data, [&baseitem](const auto &flag) {
+        const auto what = flag.template get<std::string>();
+        if (grab_one_item_flag(baseitem.flags, baseitem.gen_flags, what)) {
+            return true;
+        }
+
+        msg_print(_("未知のアイテム・フラグ '{}'。", "Unknown object flag '{}'."), what);
+        return false;
+    });
 }
