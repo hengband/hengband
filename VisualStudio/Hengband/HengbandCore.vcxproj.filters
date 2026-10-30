@@ -2848,18 +2848,6 @@
     <ClCompile Include="..\..\src\view\display-map.cpp">
       <Filter>view</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\view\original-tiles.cpp">
-      <Filter>view</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\view\original-item-tiles.cpp">
-      <Filter>view</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\view\original-monster-tiles.cpp">
-      <Filter>view</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\view\original-player-tiles.cpp">
-      <Filter>view</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\view\display-messages.cpp">
       <Filter>view</Filter>
     </ClCompile>
@@ -2891,6 +2879,18 @@
       <Filter>view</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\view\object-describer.cpp">
+      <Filter>view</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\view\original-item-tiles.cpp">
+      <Filter>view</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\view\original-monster-tiles.cpp">
+      <Filter>view</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\view\original-player-tiles.cpp">
+      <Filter>view</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\view\original-tiles.cpp">
       <Filter>view</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\view\status-bars-table.cpp">
@@ -5860,6 +5860,9 @@
     <ClInclude Include="..\..\src\term\term-color-types.h">
       <Filter>term</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\term\tile-layout.h">
+      <Filter>term</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\src\term\z-rand.h">
       <Filter>term</Filter>
     </ClInclude>
@@ -5953,6 +5956,9 @@
     <ClInclude Include="..\..\src\util\type-concepts.h">
       <Filter>util</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\view\actor-readability.h">
+      <Filter>view</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\src\view\display-birth.h">
       <Filter>view</Filter>
     </ClInclude>
@@ -5981,12 +5987,6 @@
       <Filter>view</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\view\display-map.h">
-      <Filter>view</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\view\original-tiles.h">
-      <Filter>view</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\view\original-tile-supplement.inc">
       <Filter>view</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\view\display-messages.h">
@@ -6022,7 +6022,25 @@
     <ClInclude Include="..\..\src\view\map-info-cache.h">
       <Filter>view</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\view\map-tile-layout.h">
+      <Filter>view</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\src\view\object-describer.h">
+      <Filter>view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\view\original-item-catalog.h">
+      <Filter>view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\view\original-monster-catalog.h">
+      <Filter>view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\view\original-player-tiles.h">
+      <Filter>view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\view\original-symbol-tiles.h">
+      <Filter>view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\view\original-tiles.h">
       <Filter>view</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\view\status-bars-table.h">
@@ -6118,5 +6136,10 @@
     <ClInclude Include="..\..\src\world\world.h">
       <Filter>world</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\src\view\original-tile-supplement.inc">
+      <Filter>view</Filter>
+    </None>
   </ItemGroup>
 </Project>

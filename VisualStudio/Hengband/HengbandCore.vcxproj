@@ -890,10 +890,6 @@
     <ClCompile Include="..\..\src\view\display-lore-status.cpp" />
     <ClCompile Include="..\..\src\view\display-lore.cpp" />
     <ClCompile Include="..\..\src\view\display-map.cpp" />
-    <ClCompile Include="..\..\src\view\original-tiles.cpp" />
-    <ClCompile Include="..\..\src\view\original-item-tiles.cpp" />
-    <ClCompile Include="..\..\src\view\original-monster-tiles.cpp" />
-    <ClCompile Include="..\..\src\view\original-player-tiles.cpp" />
     <ClCompile Include="..\..\src\view\display-messages.cpp" />
     <ClCompile Include="..\..\src\view\display-player-middle.cpp" />
     <ClCompile Include="..\..\src\view\display-player-misc-info.cpp" />
@@ -905,6 +901,10 @@
     <ClCompile Include="..\..\src\view\display-util.cpp" />
     <ClCompile Include="..\..\src\view\map-info-cache.cpp" />
     <ClCompile Include="..\..\src\view\object-describer.cpp" />
+    <ClCompile Include="..\..\src\view\original-item-tiles.cpp" />
+    <ClCompile Include="..\..\src\view\original-monster-tiles.cpp" />
+    <ClCompile Include="..\..\src\view\original-player-tiles.cpp" />
+    <ClCompile Include="..\..\src\view\original-tiles.cpp" />
     <ClCompile Include="..\..\src\view\status-bars-table.cpp" />
     <ClCompile Include="..\..\src\view\status-first-page.cpp" />
     <ClCompile Include="..\..\src\window\display-sub-windows.cpp" />
@@ -1896,6 +1896,7 @@
     <ClInclude Include="..\..\src\term\gameterm.h" />
     <ClInclude Include="..\..\src\term\screen-processor.h" />
     <ClInclude Include="..\..\src\term\term-color-types.h" />
+    <ClInclude Include="..\..\src\term\tile-layout.h" />
     <ClInclude Include="..\..\src\term\z-rand.h" />
     <ClInclude Include="..\..\src\term\z-term.h" />
     <ClInclude Include="..\..\src\term\z-util.h" />
@@ -1927,6 +1928,7 @@
     <ClInclude Include="..\..\src\util\stack-trace.h" />
     <ClInclude Include="..\..\src\util\string-processor.h" />
     <ClInclude Include="..\..\src\util\type-concepts.h" />
+    <ClInclude Include="..\..\src\view\actor-readability.h" />
     <ClInclude Include="..\..\src\view\display-birth.h" />
     <ClInclude Include="..\..\src\view\display-characteristic.h" />
     <ClInclude Include="..\..\src\view\display-fruit.h" />
@@ -1937,8 +1939,6 @@
     <ClInclude Include="..\..\src\view\display-lore-status.h" />
     <ClInclude Include="..\..\src\view\display-lore.h" />
     <ClInclude Include="..\..\src\view\display-map.h" />
-    <ClInclude Include="..\..\src\view\original-tiles.h" />
-    <ClInclude Include="..\..\src\view\original-tile-supplement.inc" />
     <ClInclude Include="..\..\src\view\display-messages.h" />
     <ClInclude Include="..\..\src\view\display-player-middle.h" />
     <ClInclude Include="..\..\src\view\display-player-misc-info.h" />
@@ -1950,7 +1950,13 @@
     <ClInclude Include="..\..\src\view\display-symbol.h" />
     <ClInclude Include="..\..\src\view\display-util.h" />
     <ClInclude Include="..\..\src\view\map-info-cache.h" />
+    <ClInclude Include="..\..\src\view\map-tile-layout.h" />
     <ClInclude Include="..\..\src\view\object-describer.h" />
+    <ClInclude Include="..\..\src\view\original-item-catalog.h" />
+    <ClInclude Include="..\..\src\view\original-monster-catalog.h" />
+    <ClInclude Include="..\..\src\view\original-player-tiles.h" />
+    <ClInclude Include="..\..\src\view\original-symbol-tiles.h" />
+    <ClInclude Include="..\..\src\view\original-tiles.h" />
     <ClInclude Include="..\..\src\view\status-bars-table.h" />
     <ClInclude Include="..\..\src\view\status-first-page.h" />
     <ClInclude Include="..\..\src\window\display-sub-windows.h" />
@@ -1982,6 +1988,9 @@
     <ClInclude Include="..\..\src\world\world-movement-processor.h" />
     <ClInclude Include="..\..\src\world\world-turn-processor.h" />
     <ClInclude Include="..\..\src\world\world.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\src\view\original-tile-supplement.inc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />
