@@ -26,6 +26,7 @@
 #include "system/system-variables.h"
 #include "system/terrain/terrain-definition.h"
 #include "system/terrain/terrain-list.h"
+#include "test/info-reader/dungeon-grid-checks.h"
 #include "test/info-reader/legend-ego-fixture.h"
 #include "test/info-reader/parse-result-helpers.h"
 #include "test/info-reader/scoped-reader-state.h"
@@ -165,18 +166,7 @@ private:
     test::ScopedReaderState reader_state;
 };
 
-void check_same_grid(const dungeon_grid &actual, const dungeon_grid &expected)
-{
-    CHECK(actual.feature == expected.feature);
-    CHECK(actual.monster == expected.monster);
-    CHECK(actual.object == expected.object);
-    CHECK(actual.ego == expected.ego);
-    CHECK(actual.artifact == expected.artifact);
-    CHECK(actual.trap == expected.trap);
-    CHECK(actual.cave_info == expected.cave_info);
-    CHECK(actual.special == expected.special);
-    CHECK(actual.random == expected.random);
-}
+using test::check_same_grid;
 
 std::string hex_bytes(std::string_view value)
 {

@@ -494,6 +494,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\stdafx.h" />
+    <ClInclude Include="..\..\src\test\info-reader\dungeon-grid-checks.h">
+      <Filter>info-reader</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\src\test\info-reader\legend-ego-fixture.h">
       <Filter>info-reader</Filter>
     </ClInclude>
