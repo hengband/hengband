@@ -1,21 +1,7 @@
 #include "info-reader/jsonc-document-loader.h"
+#include <fstream>
 #include <iterator>
 #include <nlohmann/json.hpp>
-
-JsoncDocumentLoader::JsoncDocumentLoader(const std::filesystem::path &path)
-    : input(path)
-{
-}
-
-bool JsoncDocumentLoader::is_open() const
-{
-    return static_cast<bool>(this->input);
-}
-
-nlohmann::json JsoncDocumentLoader::parse()
-{
-    return nlohmann::json::parse(std::istreambuf_iterator<char>(this->input), std::istreambuf_iterator<char>(), nullptr, true, true, true);
-}
 
 /*!
  * @brief JSONC ファイルを開いて解析する
@@ -25,13 +11,13 @@ nlohmann::json JsoncDocumentLoader::parse()
  */
 tl::expected<nlohmann::json, JsoncLoadError> JsoncDocumentLoader::load(const std::filesystem::path &path)
 {
-    JsoncDocumentLoader loader(path);
-    if (!loader.is_open()) {
+    std::ifstream input(path);
+    if (!input) {
         return tl::make_unexpected(JsoncLoadError{ JsoncLoadErrorKind::CANNOT_OPEN, std::string() });
     }
 
     try {
-        return loader.parse();
+        return nlohmann::json::parse(std::istreambuf_iterator<char>(input), std::istreambuf_iterator<char>(), nullptr, true, true, true);
     } catch (const nlohmann::json::exception &e) {
         return tl::make_unexpected(JsoncLoadError{ JsoncLoadErrorKind::PARSE_ERROR, e.what() });
     }
