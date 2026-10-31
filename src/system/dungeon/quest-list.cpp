@@ -318,7 +318,8 @@ std::map<char, QuestLegendCell> QuestList::load_base_legend()
             constexpr auto fmt = _("ベース凡例のキーが1文字ではありません ({}): '{}'", "Base legend key is not a single character ({}): '{}'");
             THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, path.string(), symbol));
         }
-        if (!parse_fixed_map_symbol(symbol)) {
+        const auto parsed_symbol = parse_fixed_map_symbol(symbol);
+        if (!parsed_symbol) {
             constexpr auto fmt = _("ベース凡例のキーが印字可能なASCIIではありません ({}): コード {}", "Base legend key is not printable ASCII ({}): code {}");
             THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, path.string(), static_cast<int>(static_cast<unsigned char>(symbol.front()))));
         }
@@ -331,7 +332,7 @@ std::map<char, QuestLegendCell> QuestList::load_base_legend()
             THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, symbol, path.string(), static_cast<int>(result.error())) + reason);
         }
 
-        base_legend.insert_or_assign(symbol.front(), cell);
+        base_legend.insert_or_assign(*parsed_symbol, cell);
     }
 
     return base_legend;

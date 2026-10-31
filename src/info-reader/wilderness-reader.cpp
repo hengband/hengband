@@ -238,16 +238,17 @@ tl::expected<void, ParseErrorType> WildernessReader::read_map(const nlohmann::js
             return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
         }
         const auto &symbol = symbol_data.get_ref<const std::string &>();
-        if (!parse_fixed_map_symbol(symbol)) {
+        const auto parsed_symbol = parse_fixed_map_symbol(symbol);
+        if (!parsed_symbol) {
             return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
         }
-        const auto symbol_index = static_cast<unsigned char>(symbol[0]);
+        const auto symbol_index = static_cast<unsigned char>(*parsed_symbol);
         if (defined_symbols[symbol_index]) {
             return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
         }
         defined_symbols[symbol_index] = true;
 
-        WildernessLetterDefinition definition{ symbol[0], WildernessTerrain::EDGE, 0, 0, 0 };
+        WildernessLetterDefinition definition{ *parsed_symbol, WildernessTerrain::EDGE, 0, 0, 0 };
         if (const auto result = info_set_integer(get_json_value(letter_data, "terrain"), definition.terrain, true, Range(0, enum2i(WildernessTerrain::MAX) - 1)); !result) {
             return result;
         }
