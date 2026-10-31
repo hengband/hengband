@@ -1718,9 +1718,9 @@ TEST_CASE("TownMapReader bundled v3 cells preserve all v2 letter values")
 
     for (const auto &[name, expected_rows] : town_v2_expected.items()) {
         CAPTURE(name);
-        JsoncDocumentLoader loader(root / "lib/edit/towns" / name);
-        REQUIRE(loader.is_open());
-        const auto data = loader.parse();
+        const auto loaded = JsoncDocumentLoader::load(root / "lib/edit/towns" / name);
+        REQUIRE(loaded.has_value());
+        const auto &data = *loaded;
         // ビルド後にソースcheckoutが戻された場合も、実際に読んだ版を診断に残す。
         const auto input_version = data.value("version", nlohmann::json{}).dump();
         CAPTURE(input_version);
