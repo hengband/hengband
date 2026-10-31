@@ -46,6 +46,7 @@ const std::unordered_map<std::string_view, RaceBlowMethodType> r_info_blow_metho
     { "INSULT", RaceBlowMethodType::INSULT },
     { "MOAN", RaceBlowMethodType::MOAN },
     { "SHOW", RaceBlowMethodType::SHOW },
+    { "DASH", RaceBlowMethodType::DASH },
 };
 
 /*!
