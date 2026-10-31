@@ -81,7 +81,7 @@ std::string_view describe_legend_ego_error(LegendEgoError error)
  * @param object_is_quest_reward 報酬を指すobject指定か
  * @return "ego 65 (object 54)" の形式の文字列
  * @details ランダムな品の object には生成階層の補正が、報酬の品には 0 が入っていて品IDに見えるため、
- * 定義ファイルと同じ綴りの random / questReward で表示する。
+ * 定義ファイルと同じ綴りの random / questReward で表示する。品の指定が無い場合も 0 が入っているため none と表示する。
  */
 std::string describe_legend_ego_spec(const dungeon_grid &grid, bool object_is_quest_reward)
 {
@@ -91,6 +91,9 @@ std::string describe_legend_ego_spec(const dungeon_grid &grid, bool object_is_qu
         object = "random";
     } else if (object_is_quest_reward) {
         object = "questReward";
+    } else if (grid.object == 0) {
+        // 品の指定が無い (省略した) 場合は、品ID 0 に見えないよう none と表示する。
+        object = "none";
     } else {
         object = std::to_string(grid.object);
     }

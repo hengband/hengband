@@ -1852,6 +1852,21 @@ TEST_CASE("TownMapReader reports incompatible ego with rule and symbol")
     }
 }
 
+TEST_CASE("TownMapReader names an omitted object as none in ego diagnostics")
+{
+    const test::ScopedReaderState reader_state;
+    const test::LegendEgoFixture ego_state;
+    auto data = make_town_map();
+    REQUIRE_FALSE(data["featureRules"][0]["definition"].contains("object"));
+    data["featureRules"][0]["definition"]["ego"] = static_cast<int>(EgoType::DF);
+    ScopedMessageCapture diagnostics;
+    TownMapDefinition definition;
+    CHECK(test::to_error_code(TownMapReader(data).read(definition, 3, 3)) == ParseErrorType::INVALID_VALUE);
+    REQUIRE(diagnostics.messages().size() == 1);
+    CHECK(diagnostics.messages().front() == _("町のエゴ指定が不正です: featureRules[0] (記号 '#').ego 65 (object none): 固定の配置対象がない",
+                                                "Invalid town ego: featureRules[0] (symbol '#').ego 65 (object none): no fixed object to place"));
+}
+
 TEST_CASE("TownMapReader names random and quest reward objects in ego diagnostics")
 {
     const test::ScopedReaderState reader_state;
@@ -1886,10 +1901,12 @@ TEST_CASE("TownMapReader reports fixed trap tags including typos in conflicts")
     const test::ScopedReaderState reader_state;
     auto &terrains = TerrainList::get_instance();
     const test::ScopedVectorWrapper<TerrainList> terrain_state(terrains);
-    terrains.resize(2);
+    terrains.resize(3);
     terrains.get_terrain(0).tag = "NONE";
     terrains.get_terrain(1).tag = "TRAP_PIT";
-    for (const auto *tag : { "TRAP_PIT", "TRAP_PTI" }) {
+    terrains.get_terrain(1).flags.set(TerrainCharacteristics::TRAP);
+    terrains.get_terrain(2).tag = "FLOOR";
+    for (const auto *tag : { "TRAP_PIT", "TRAP_PTI", "FLOOR" }) {
         for (const bool only_buildings : { false, true }) {
             CAPTURE(tag);
             CAPTURE(only_buildings);
@@ -1902,7 +1919,7 @@ TEST_CASE("TownMapReader reports fixed trap tags including typos in conflicts")
             CHECK(test::to_error_code(TownMapReader(data).read(definition, 3, 3, only_buildings)) == ParseErrorType::INVALID_VALUE);
             CHECK(definition.features.empty());
             REQUIRE(diagnostics.messages().size() == 1);
-            // 地形の一覧にあるタグでは、未知のタグや誤記への言及を付けない。
+            // 罠の地形のタグだけは、未知のタグや誤記への言及を付けない。罠ではない地形のタグには付ける。
             const auto known = std::string_view(tag) == "TRAP_PIT";
             const auto hint = known ? std::string(_("固定の罠として扱われます", "is treated as a fixed trap"))
                                     : std::string(_("固定の罠として扱われます。未知のタグや誤記も固定の罠になります", "is treated as a fixed trap; unknown tags and typos are treated the same way"));
