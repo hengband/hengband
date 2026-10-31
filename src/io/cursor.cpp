@@ -17,6 +17,7 @@
 #include "target/projection-path-calculator.h"
 #include "term/term-color-types.h"
 #include "view/display-map.h"
+#include "view/map-tile-layout.h"
 #include "window/main-window-util.h"
 #include "world/world.h"
 
@@ -25,8 +26,7 @@
  */
 void move_cursor_relative(int row, int col)
 {
-    row -= panel_row_prt;
-    term_gotoxy(panel_col_of(col), row);
+    term_gotoxy(panel_col_of(col), panel_row_of(row));
 }
 
 /*
@@ -68,7 +68,7 @@ void print_path(PlayerType *player_ptr, POSITION y, POSITION x)
 
             symbol_pair.symbol_foreground.color = monochrome_color.value_or(symbol_pair.symbol_foreground.color);
             symbol_pair.symbol_foreground.character = '*';
-            term_queue_bigchar(panel_col_of(pos_path.x), pos_path.y - panel_row_prt, symbol_pair);
+            original_tiles::queue_map_tile(panel_col_of(pos_path.x), panel_row_of(pos_path.y), symbol_pair);
         }
 
         if (grid.is_mark() && !grid.has(TerrainCharacteristics::PROJECTION)) {

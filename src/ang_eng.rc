@@ -112,6 +112,8 @@ ANGBAND MENU
 			MENUITEM "&None", 400
 			MENUITEM "&Old tiles", 401
 			MENUITEM "&Adam Bolt's tiles", 402
+			MENUITEM "Original terrain 32x32", 404
+			MENUITEM "Double map size (64x64)", 405
 			MENUITEM SEPARATOR
 			MENUITEM "&Bigtile mode", 409
 		}

@@ -476,6 +476,9 @@
     <ClCompile Include="..\..\src\test\view\test-map-terrain-visibility.cpp">
       <Filter>view</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\test\view\test-original-tiles.cpp">
+      <Filter>view</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\test\view\test-screen-parity-helpers.cpp">
       <Filter>view</Filter>
     </ClCompile>
@@ -535,5 +538,19 @@
       <Filter>system</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\test\temporary-json-files.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\src\test\view\original-terrain-coverage.inc">
+      <Filter>view</Filter>
+    </None>
+    <None Include="..\..\src\test\view\original-item-coverage.inc">
+      <Filter>view</Filter>
+    </None>
+    <None Include="..\..\src\test\view\original-monster-coverage.inc">
+      <Filter>view</Filter>
+    </None>
+    <None Include="..\..\src\test\view\original-symbol-coverage.inc">
+      <Filter>view</Filter>
+    </None>
   </ItemGroup>
 </Project>

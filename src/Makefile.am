@@ -1441,6 +1441,7 @@ libhengband_a_SOURCES = \
 	view/display-lore-status.cpp view/display-lore-status.h \
 	view/display-lore.cpp view/display-lore.h \
 	view/display-map.cpp view/display-map.h \
+	view/original-tiles.cpp view/original-item-tiles.cpp view/original-monster-tiles.cpp view/original-monster-catalog.h view/original-monster-catalog.inc view/original-player-tiles.cpp view/original-player-tiles.h view/original-tiles.h view/original-symbol-tiles.h view/original-item-catalog.h view/original-catalog-base.inc view/original-catalog-artifacts.inc view/original-catalog-colors.inc view/original-tile-supplement.inc view/actor-readability.h view/map-tile-layout.h term/tile-layout.h \
 	view/display-messages.cpp view/display-messages.h \
 	view/display-player-stat-info.cpp view/display-player-stat-info.h \
 	view/display-player-misc-info.cpp view/display-player-misc-info.h \
@@ -1647,6 +1648,7 @@ hengband_test_SOURCES = \
 	test/util/test-temporary-json-files.cpp \
 	test/view/test-display-messages.cpp \
 	test/view/test-map-info-cache.cpp \
+	test/view/test-original-tiles.cpp test/view/original-terrain-coverage.inc test/view/original-item-coverage.inc test/view/original-monster-coverage.inc test/view/original-symbol-coverage.inc \
 	test/view/test-map-terrain-visibility.cpp \
 	test/view/test-screen-parity-helpers.cpp \
 	test/window/test-overview-map-cache.cpp \
