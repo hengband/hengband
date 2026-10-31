@@ -872,7 +872,6 @@ TEST_CASE("RaceReader pins flag array type errors and missing values")
             CAPTURE(path);
             CAPTURE(input);
             test::MonraceListTestAccess guard;
-            auto session = RaceReader::create_session();
             auto data = make_monrace();
             const auto pointer = nlohmann::json::json_pointer(path);
             const std::string input_text = input;
@@ -888,7 +887,7 @@ TEST_CASE("RaceReader pins flag array type errors and missing values")
             if (std::string(path) == "/skill/list" && (input_text == "null" || input_text == "missing")) {
                 expected = ParseErrorType::TOO_FEW_ARGUMENTS;
             }
-            CHECK(test::to_error_code(test::read_and_commit(RaceReader(data, session), session)) == expected);
+            CHECK(test::to_error_code(test::read_record<RaceReader>(data)) == expected);
         }
     }
 }
