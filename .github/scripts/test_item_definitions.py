@@ -509,12 +509,14 @@ class ItemBonusLimitTest(unittest.TestCase):
         # schema の範囲が item-reader-limits.h の定数と合っていることを確かめる。
         root = Path(__file__).resolve().parents[2]
         header = (root / "src/info-reader/item-reader-limits.h").read_text(encoding="utf-8")
-        limits = {name: int(value) for name, value in re.findall(r"constexpr int (ITEM_BASE_AC_MAX|ITEM_BONUS_MAX) = (\d+);", header)}
-        self.assertEqual(set(limits), {"ITEM_BASE_AC_MAX", "ITEM_BONUS_MAX"}, "ITEM_BASE_AC_MAX / ITEM_BONUS_MAX not found in item-reader-limits.h")
+        limits = {name: int(value) for name, value in re.findall(r"constexpr int (ITEM_WEIGHT_MAX|ITEM_BASE_AC_MAX|ITEM_BONUS_MAX) = (\d+);", header)}
+        self.assertEqual(set(limits), {"ITEM_WEIGHT_MAX", "ITEM_BASE_AC_MAX", "ITEM_BONUS_MAX"},
+                         "ITEM_WEIGHT_MAX / ITEM_BASE_AC_MAX / ITEM_BONUS_MAX not found in item-reader-limits.h")
         loaded, schema_map = load_all_schemas(root / "schema")
         for name, key in (("BaseitemDefinitions", "baseitems"), ("ArtifactDefinitions", "artifacts")):
             properties = loaded[schema_map[name]]["properties"][key]["items"]["properties"]
             with self.subTest(name=name):
+                self.assertEqual((properties["weight"]["minimum"], properties["weight"]["maximum"]), (0, limits["ITEM_WEIGHT_MAX"]))
                 self.assertEqual((properties["base_ac"]["minimum"], properties["base_ac"]["maximum"]), (0, limits["ITEM_BASE_AC_MAX"]))
                 for field in ("hit_bonus", "damage_bonus", "ac_bonus"):
                     self.assertEqual((properties[field]["minimum"], properties[field]["maximum"]), (-limits["ITEM_BONUS_MAX"], limits["ITEM_BONUS_MAX"]))
