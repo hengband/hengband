@@ -957,3 +957,22 @@ TEST_CASE("RaceReader reports non-string tokens as invalid types")
         }
     }
 }
+
+TEST_CASE("RaceReader limits experience to the same cap as evolution experience")
+{
+    auto session = RaceReader::create_session();
+    test::MonraceListTestAccess guard;
+    auto data = make_monrace();
+    for (const auto exp : { 0, 9999999 }) {
+        CAPTURE(exp);
+        data["exp"] = exp;
+        REQUIRE(read_as_first_record(data, session).has_value());
+        CHECK(test_monrace().mexp == exp);
+    }
+    for (const auto exp : { -1, 10000000 }) {
+        CAPTURE(exp);
+        data["exp"] = exp;
+        CHECK(test::to_error_code(read_as_first_record(data, session)) == ParseErrorType::INVALID_VALUE);
+        CHECK(test_monrace().mexp == 9999999);
+    }
+}
