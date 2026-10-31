@@ -225,19 +225,19 @@ bool RaceReader::grab_one_basic_flag(MonraceDefinition &monrace, std::string_vie
 {
     return grab_one_monster_basic_flag(
         {
-            .resistance_flags = &monrace.resistance_flags,
-            .aura_flags = &monrace.aura_flags,
-            .behavior_flags = &monrace.behavior_flags,
-            .visual_flags = &monrace.visual_flags,
-            .kind_flags = &monrace.kind_flags,
-            .drop_flags = &monrace.drop_flags,
-            .wilderness_flags = &monrace.wilderness_flags,
-            .feature_flags = &monrace.feature_flags,
-            .population_flags = &monrace.population_flags,
-            .speak_flags = &monrace.speak_flags,
-            .brightness_flags = &monrace.brightness_flags,
-            .special_flags = &monrace.special_flags,
-            .misc_flags = &monrace.misc_flags,
+            monrace.resistance_flags,
+            monrace.aura_flags,
+            monrace.behavior_flags,
+            monrace.visual_flags,
+            monrace.kind_flags,
+            monrace.drop_flags,
+            monrace.wilderness_flags,
+            monrace.feature_flags,
+            monrace.population_flags,
+            monrace.speak_flags,
+            monrace.brightness_flags,
+            monrace.special_flags,
+            monrace.misc_flags,
         },
         what);
 }

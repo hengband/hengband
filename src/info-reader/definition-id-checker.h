@@ -14,6 +14,8 @@ struct IdCheckFailure {
     std::string reason;
 };
 
+tl::expected<int, ParseErrorType> report_id_check_result(const tl::expected<int, IdCheckFailure> &result);
+
 enum class DefinitionIdOrder {
     SEQUENTIAL,
     STRICTLY_INCREASING,

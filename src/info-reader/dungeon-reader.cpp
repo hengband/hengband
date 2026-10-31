@@ -193,19 +193,19 @@ bool DungeonReader::grab_one_basic_monster_flag(DungeonDefinition &dungeon, std:
 
     return grab_one_monster_basic_flag(
         {
-            .resistance_flags = &dungeon.mon_resistance_flags,
-            .aura_flags = &dungeon.mon_aura_flags,
-            .behavior_flags = &dungeon.mon_behavior_flags,
-            .visual_flags = &dungeon.mon_visual_flags,
-            .kind_flags = &dungeon.mon_kind_flags,
-            .drop_flags = &dungeon.mon_drop_flags,
-            .wilderness_flags = &dungeon.mon_wilderness_flags,
-            .feature_flags = &dungeon.mon_feature_flags,
-            .population_flags = &dungeon.mon_population_flags,
-            .speak_flags = &dungeon.mon_speak_flags,
-            .brightness_flags = &dungeon.mon_brightness_flags,
-            .special_flags = &dungeon.mon_special_flags,
-            .misc_flags = &dungeon.mon_misc_flags,
+            dungeon.mon_resistance_flags,
+            dungeon.mon_aura_flags,
+            dungeon.mon_behavior_flags,
+            dungeon.mon_visual_flags,
+            dungeon.mon_kind_flags,
+            dungeon.mon_drop_flags,
+            dungeon.mon_wilderness_flags,
+            dungeon.mon_feature_flags,
+            dungeon.mon_population_flags,
+            dungeon.mon_speak_flags,
+            dungeon.mon_brightness_flags,
+            dungeon.mon_special_flags,
+            dungeon.mon_misc_flags,
         },
         what);
 }

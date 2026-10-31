@@ -3,6 +3,7 @@
 #include <doctest/doctest.h>
 #include <filesystem>
 #include <fstream>
+#include <iterator>
 #include <nlohmann/json.hpp>
 #include <stdexcept>
 #include <string>
@@ -52,30 +53,41 @@ public:
 private:
     std::filesystem::path directory;
 };
+
+/*!
+ * @brief load() を通さずに、同じ設定 (コメントと末尾カンマを許可) でファイルを解析する
+ * @details 解析器が投げる例外の文言を、load() が返す文言と比べるために使う。
+ */
+nlohmann::json parse_file_directly(const std::filesystem::path &path)
+{
+    std::ifstream input(path);
+    REQUIRE(input);
+    return nlohmann::json::parse(std::istreambuf_iterator<char>(input), std::istreambuf_iterator<char>(), nullptr, true, true, true);
+}
 }
 
-TEST_CASE("JsoncDocumentLoader exposes missing files without parsing or throwing")
+TEST_CASE("JsoncDocumentLoader::load exposes missing files without creating them or throwing")
 {
     JsoncFile file;
-    JsoncDocumentLoader loader(file.path);
-    CHECK_FALSE(loader.is_open());
+    CHECK_NOTHROW((void)JsoncDocumentLoader::load(file.path));
+    CHECK_FALSE(JsoncDocumentLoader::load(file.path).has_value());
     CHECK_FALSE(std::filesystem::exists(file.path));
 }
 
-TEST_CASE("JsoncDocumentLoader parses documents without schema validation or localization")
+TEST_CASE("JsoncDocumentLoader::load parses documents without schema validation or localization")
 {
     JsoncFile file;
     file.write(R"({"name":{"ja":"\u65e5\u672c","en":"Japan"},"values":[true,null,-2,3.5],"unknown":{}})");
-    JsoncDocumentLoader loader(file.path);
-    REQUIRE(loader.is_open());
-    const auto document = loader.parse();
+    const auto loaded = JsoncDocumentLoader::load(file.path);
+    REQUIRE(loaded.has_value());
+    const auto &document = *loaded;
     CHECK(document["name"]["ja"] == "\xe6\x97\xa5\xe6\x9c\xac");
     CHECK(document["name"]["en"] == "Japan");
     CHECK(document["values"] == nlohmann::json::array({ true, nullptr, -2, 3.5 }));
     CHECK(document["unknown"].is_object());
 }
 
-TEST_CASE("JsoncDocumentLoader allows comments and trailing commas with unchanged parsed dump")
+TEST_CASE("JsoncDocumentLoader::load allows comments and trailing commas with unchanged parsed dump")
 {
     JsoncFile file;
     file.write(R"(// leading comment
@@ -84,45 +96,44 @@ TEST_CASE("JsoncDocumentLoader allows comments and trailing commas with unchange
     "a": {"value": "// not a comment",},
 } // trailing comment
 )");
-    JsoncDocumentLoader loader(file.path);
-    REQUIRE(loader.is_open());
-    const auto document = loader.parse();
-    CHECK(document.dump() == R"({"a":{"value":"// not a comment"},"z":[1,2]})");
+    const auto loaded = JsoncDocumentLoader::load(file.path);
+    REQUIRE(loaded.has_value());
+    CHECK(loaded->dump() == R"({"a":{"value":"// not a comment"},"z":[1,2]})");
 }
 
-TEST_CASE("JsoncDocumentLoader distinguishes valid null and other JSON roots from missing files")
+TEST_CASE("JsoncDocumentLoader::load distinguishes valid null and other JSON roots from missing files")
 {
     JsoncFile file;
     for (const auto &text : { "null", "[]", "{}", "42", "true", "\"text\"" }) {
         CAPTURE(text);
         file.write(text);
-        JsoncDocumentLoader loader(file.path);
-        REQUIRE(loader.is_open());
-        CHECK(loader.parse() == nlohmann::json::parse(text));
+        const auto loaded = JsoncDocumentLoader::load(file.path);
+        REQUIRE(loaded.has_value());
+        CHECK(*loaded == nlohmann::json::parse(text));
     }
 }
 
-TEST_CASE("JsoncDocumentLoader propagates parse errors for empty and malformed files")
+TEST_CASE("JsoncDocumentLoader::load reports empty and malformed files as parse_error")
 {
     JsoncFile file;
     for (const auto &text : { "", " \n\t", "// comment only", "{", "{\"value\":}", "[1,", "/* unterminated", "{} {}" }) {
         CAPTURE(text);
         file.write(text);
-        JsoncDocumentLoader loader(file.path);
-        REQUIRE(loader.is_open());
-        CHECK_THROWS_AS(loader.parse(), nlohmann::json::parse_error);
+        const auto loaded = JsoncDocumentLoader::load(file.path);
+        REQUIRE_FALSE(loaded.has_value());
+        CHECK(loaded.error().kind == JsoncLoadErrorKind::PARSE_ERROR);
+        // 解析器の例外の種類 (nlohmann::json::parse_error) は what() の先頭に出る
+        CHECK(loaded.error().message.starts_with("[json.exception.parse_error."));
     }
 }
 
-TEST_CASE("JsoncDocumentLoader parse failure leaves caller output unchanged")
+TEST_CASE("JsoncDocumentLoader::load failure leaves caller output unchanged")
 {
     JsoncFile file;
     file.write("{");
-    JsoncDocumentLoader loader(file.path);
-    REQUIRE(loader.is_open());
     nlohmann::json document = { { "sentinel", 7 } };
     const auto before = document;
-    CHECK_THROWS_AS(document = loader.parse(), nlohmann::json::parse_error);
+    CHECK_NOTHROW(document = JsoncDocumentLoader::load(file.path).value_or(document));
     CHECK(document == before);
 }
 
@@ -135,7 +146,7 @@ TEST_CASE("JsoncDocumentLoader::load reports missing files as CANNOT_OPEN with e
     CHECK(loaded.error().message.empty());
 }
 
-TEST_CASE("JsoncDocumentLoader::load returns the same document as parse for valid JSONC")
+TEST_CASE("JsoncDocumentLoader::load returns the same document for valid JSONC and every JSON root")
 {
     JsoncFile file;
     file.write(R"(// leading comment
@@ -165,15 +176,11 @@ TEST_CASE("JsoncDocumentLoader::load reports parse failures as PARSE_ERROR with 
         CAPTURE(text);
         file.write(text);
         std::string expected_message;
-        {
-            JsoncDocumentLoader loader(file.path);
-            REQUIRE(loader.is_open());
-            try {
-                (void)loader.parse();
-                FAIL("parse() must throw");
-            } catch (const nlohmann::json::exception &e) {
-                expected_message = e.what();
-            }
+        try {
+            (void)parse_file_directly(file.path);
+            FAIL("parsing must throw");
+        } catch (const nlohmann::json::exception &e) {
+            expected_message = e.what();
         }
         const auto loaded = JsoncDocumentLoader::load(file.path);
         REQUIRE_FALSE(loaded.has_value());

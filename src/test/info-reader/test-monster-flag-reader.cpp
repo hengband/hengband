@@ -39,19 +39,19 @@ struct BasicFlagStore {
     MonsterBasicFlagGroups groups()
     {
         return {
-            .resistance_flags = &this->resistance_flags,
-            .aura_flags = &this->aura_flags,
-            .behavior_flags = &this->behavior_flags,
-            .visual_flags = &this->visual_flags,
-            .kind_flags = &this->kind_flags,
-            .drop_flags = &this->drop_flags,
-            .wilderness_flags = &this->wilderness_flags,
-            .feature_flags = &this->feature_flags,
-            .population_flags = &this->population_flags,
-            .speak_flags = &this->speak_flags,
-            .brightness_flags = &this->brightness_flags,
-            .special_flags = &this->special_flags,
-            .misc_flags = &this->misc_flags,
+            this->resistance_flags,
+            this->aura_flags,
+            this->behavior_flags,
+            this->visual_flags,
+            this->kind_flags,
+            this->drop_flags,
+            this->wilderness_flags,
+            this->feature_flags,
+            this->population_flags,
+            this->speak_flags,
+            this->brightness_flags,
+            this->special_flags,
+            this->misc_flags,
         };
     }
 

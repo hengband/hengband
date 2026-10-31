@@ -201,3 +201,26 @@ TEST_CASE("DefinitionIdChecker check_and_report prints the check failure reason"
         }
     }
 }
+
+/*!
+ * @brief report_id_check_result() は成功をそのまま返し、失敗した時だけ理由を1件表示してエラーコードを返す
+ */
+TEST_CASE("report_id_check_result passes IDs through and prints each failure reason once")
+{
+    ScopedMessageCapture capture;
+    const auto passed = report_id_check_result(tl::expected<int, IdCheckFailure>(7));
+    REQUIRE(passed);
+    CHECK(*passed == 7);
+    CHECK(capture.messages().empty());
+
+    for (const auto code : { ParseErrorType::TOO_FEW_ARGUMENTS, ParseErrorType::INVALID_TYPE, ParseErrorType::INVALID_VALUE, ParseErrorType::NON_SEQUENTIAL_RECORDS }) {
+        CAPTURE(static_cast<int>(code));
+        const auto count = capture.messages().size();
+        const auto reason = fmt::format("reason {}", static_cast<int>(code));
+        const auto result = report_id_check_result(tl::unexpected(IdCheckFailure{ code, reason }));
+        REQUIRE_FALSE(result);
+        CHECK(result.error() == code);
+        REQUIRE(capture.messages().size() == count + 1);
+        CHECK(capture.messages().back() == reason);
+    }
+}
