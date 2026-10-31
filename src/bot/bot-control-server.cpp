@@ -199,8 +199,8 @@ std::string_view item_selection_area_name(ItemSelectionArea area)
 }
 
 /*!
- * @brief キャラクター作成で選んでいる段階を応答で使う名前へ変換する
- * @param step キャラクター作成で選んでいる段階
+ * @brief キャラクター作成の段階を応答で使う名前へ変換する
+ * @param step キャラクター作成の段階
  * @return 応答の input_context.step に入れる名前
  */
 std::string_view birth_step_name(BirthStep step)
@@ -220,6 +220,14 @@ std::string_view birth_step_name(BirthStep step)
         return "element_realm";
     case BirthStep::PERSONALITY:
         return "personality";
+    case BirthStep::STAT_LIMITS:
+        return "stat_limits";
+    case BirthStep::CHARA_LIMITS:
+        return "chara_limits";
+    case BirthStep::ROLL_RESULT:
+        return "roll_result";
+    case BirthStep::START:
+        return "start";
     }
 
     THROW_EXCEPTION(std::logic_error, "Invalid BirthStep was specified!");
