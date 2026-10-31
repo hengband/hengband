@@ -30,7 +30,6 @@ const Range LEGEND_MONSTER_RANGE(-std::numeric_limits<MONSTER_IDX>::max(), std::
 const Range LEGEND_EGO_RANGE(1, MAX_EGO_ID);
 
 namespace {
-constexpr Range QUEST_INTEGER_RANGE(std::numeric_limits<int>::min(), std::numeric_limits<int>::max());
 // メタデータはintで保持するが、対象モンスターと報酬は実行時にshort基底のIDへ変換される。
 // どちらも 0 は指定なしで、ほかの定義と同じくIDの型から決めた上限までとする。
 constexpr Range QUEST_MONSTER_RANGE(0, MAX_MONRACE_ID);
@@ -496,7 +495,7 @@ tl::expected<void, ParseErrorType> QuestReader::set_definition(QuestFixedMap &pa
     if (const auto result = info_set_integer(get_json_value(definition, "level"), meta.level, true, QUEST_LEVEL_RANGE); !result) {
         return result;
     }
-    if (const auto result = info_set_integer(get_json_value(definition, "numMon"), meta.num_mon, false, QUEST_INTEGER_RANGE); !result) {
+    if (const auto result = info_set_integer(get_json_value(definition, "numMon"), meta.num_mon, false); !result) {
         return result;
     }
     if (const auto result = info_set_integer(get_json_value(definition, "maxNum"), meta.max_num, false, QUEST_MAX_NUM_RANGE); !result) {
@@ -688,10 +687,10 @@ tl::expected<void, ParseErrorType> QuestReader::set_starts(QuestFixedMap &parsed
     const auto &start = get_json_value(this->quest_data, "start");
     if (!start.is_null()) {
         QuestStartPosition position;
-        if (const auto result = info_set_integer(get_json_value(start, "y"), position.y, true, QUEST_INTEGER_RANGE); !result) {
+        if (const auto result = info_set_integer(get_json_value(start, "y"), position.y, true); !result) {
             return result;
         }
-        if (const auto result = info_set_integer(get_json_value(start, "x"), position.x, true, QUEST_INTEGER_RANGE); !result) {
+        if (const auto result = info_set_integer(get_json_value(start, "x"), position.x, true); !result) {
             return result;
         }
         if (const auto result = validate_quest_start(parsed, position); !result) {
@@ -717,10 +716,10 @@ tl::expected<void, ParseErrorType> QuestReader::set_starts(QuestFixedMap &parsed
                 }
                 position.leaving_quest = leaving_id;
             }
-            if (const auto result = info_set_integer(get_json_value(variant, "y"), position.y, true, QUEST_INTEGER_RANGE); !result) {
+            if (const auto result = info_set_integer(get_json_value(variant, "y"), position.y, true); !result) {
                 return result;
             }
-            if (const auto result = info_set_integer(get_json_value(variant, "x"), position.x, true, QUEST_INTEGER_RANGE); !result) {
+            if (const auto result = info_set_integer(get_json_value(variant, "x"), position.x, true); !result) {
                 return result;
             }
             if (const auto result = validate_quest_start(parsed, position); !result) {
