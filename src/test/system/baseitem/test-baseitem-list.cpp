@@ -91,8 +91,7 @@ TEST_CASE("BaseitemReader publication refreshes cached keys without changing the
         { "weight", 3 },
         { "cost", 4 },
     };
-    auto session = BaseitemReader::create_session();
-    REQUIRE(test::read_and_commit(BaseitemReader(data, session), session).has_value());
+    REQUIRE(test::read_record<BaseitemReader>(data).has_value());
     CHECK(items.size() == 2);
     check_lookup(items, 1, ItemKindType::RING, 30);
     CHECK_THROWS_AS(items.lookup_baseitem_id({ ItemKindType::SWORD, 10 }), std::runtime_error);

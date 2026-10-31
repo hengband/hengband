@@ -575,7 +575,6 @@ TEST_CASE("TerrainReader pins flag array type errors and missing values")
             CAPTURE(path);
             CAPTURE(input);
             TerrainStateGuard guard;
-            auto session = TerrainReader::create_session();
             auto data = make_terrain();
             const auto pointer = nlohmann::json::json_pointer(path);
             const std::string input_text = input;
@@ -591,7 +590,7 @@ TEST_CASE("TerrainReader pins flag array type errors and missing values")
             if (input_text == "null" || input_text == "missing") {
                 expected = ParseErrorType::TOO_FEW_ARGUMENTS;
             }
-            CHECK(test::to_error_code(test::read_and_commit(TerrainReader(data, session), session)) == expected);
+            CHECK(test::to_error_code(test::read_record<TerrainReader>(data)) == expected);
         }
     }
 }
@@ -647,17 +646,15 @@ TEST_CASE("TerrainReader checks lit type before symbol length and color")
     TerrainStateGuard guard;
     for (const auto *invalid_lit : { "null", "1", "[]", "{}", "\"bad\"" }) {
         CAPTURE(invalid_lit);
-        auto session = TerrainReader::create_session();
         auto data = make_terrain();
         data["symbol"]["character"] = "";
         data["symbol"]["color"] = "UNKNOWN";
         data["symbol"]["lit"] = nlohmann::json::parse(invalid_lit);
-        CHECK(test::to_error_code(test::read_and_commit(TerrainReader(data, session), session)) == ParseErrorType::TOO_FEW_ARGUMENTS);
+        CHECK(test::to_error_code(test::read_record<TerrainReader>(data)) == ParseErrorType::TOO_FEW_ARGUMENTS);
     }
-    auto session = TerrainReader::create_session();
     auto data = make_terrain();
     data["symbol"].erase("lit");
-    CHECK(test::to_error_code(test::read_and_commit(TerrainReader(data, session), session)) == ParseErrorType::TOO_FEW_ARGUMENTS);
+    CHECK(test::to_error_code(test::read_record<TerrainReader>(data)) == ParseErrorType::TOO_FEW_ARGUMENTS);
 }
 
 TEST_CASE("TerrainReader rejects unusable gold dice and preserves valid dice")

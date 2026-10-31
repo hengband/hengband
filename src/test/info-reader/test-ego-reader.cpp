@@ -59,11 +59,9 @@ nlohmann::json make_ego()
 
 TEST_CASE("EgoReader loads bonuses, flags, activation, and probabilistic flags")
 {
-    auto session = EgoReader::create_session();
     EgoStateGuard guard;
-    session = EgoReader::create_session();
     const auto data = make_ego();
-    REQUIRE(test::read_and_commit(EgoReader(data, session), session).has_value());
+    REQUIRE(test::read_record<EgoReader>(data).has_value());
     REQUIRE(egos_info.size() == 1);
     const auto &ego = egos_info.at(i2enum<EgoType>(4));
 #ifdef JP
@@ -147,32 +145,27 @@ TEST_CASE("EgoReader requires unique IDs while preserving legacy ordering")
  */
 TEST_CASE("EgoReader limits the activation difficulty level like item levels")
 {
-    auto session = EgoReader::create_session();
     {
         EgoStateGuard guard;
-        session = EgoReader::create_session();
         auto data = make_ego();
         data["level"] = MAX_DEPTH;
-        CHECK(test::to_error_code(test::read_and_commit(EgoReader(data, session), session)) == ParseErrorType::INVALID_VALUE);
+        CHECK(test::to_error_code(test::read_record<EgoReader>(data)) == ParseErrorType::INVALID_VALUE);
         CHECK_FALSE(egos_info.contains(i2enum<EgoType>(4)));
     }
     EgoStateGuard guard;
-    session = EgoReader::create_session();
     auto data = make_ego();
     data["level"] = MAX_DEPTH - 1;
-    REQUIRE(test::read_and_commit(EgoReader(data, session), session).has_value());
+    REQUIRE(test::read_record<EgoReader>(data).has_value());
     CHECK(egos_info.at(i2enum<EgoType>(4)).level == MAX_DEPTH - 1);
 }
 
 TEST_CASE("EgoReader accepts integer percent endpoints")
 {
-    auto session = EgoReader::create_session();
     for (const auto chance : { 0, 1, 33, 99, 100 }) {
         EgoStateGuard guard;
-        session = EgoReader::create_session();
         auto data = make_ego();
         data["extra_flags"][0]["chance"] = chance;
-        REQUIRE(test::read_and_commit(EgoReader(data, session), session).has_value());
+        REQUIRE(test::read_record<EgoReader>(data).has_value());
         CHECK(egos_info.at(i2enum<EgoType>(4)).xtra_flags.at(0).chance == chance);
     }
 }
@@ -250,7 +243,6 @@ TEST_CASE("EgoReader restricts IDs to save format and slots to equipment or ammo
 
 TEST_CASE("EgoReader checks every scalar and signed bonus boundary")
 {
-    auto session = EgoReader::create_session();
     const std::array paths{ "/rating", "/level", "/cost", "/rarity", "/base_bonuses/to_hit", "/base_bonuses/to_damage", "/base_bonuses/to_ac",
         "/maximum_bonuses/to_hit", "/maximum_bonuses/to_damage", "/maximum_bonuses/to_ac", "/maximum_bonuses/pval" };
     for (const auto *path : paths) {
@@ -262,10 +254,9 @@ TEST_CASE("EgoReader checks every scalar and signed bonus boundary")
                                                                               : MAX_DEPTH - 1;
         for (const auto value : { int64_t{ low } - 1, int64_t{ low }, int64_t{ high }, int64_t{ high } + 1 }) {
             EgoStateGuard guard;
-            session = EgoReader::create_session();
             auto data = make_ego();
             data[nlohmann::json::json_pointer(path)] = value;
-            const auto result = test::read_and_commit(EgoReader(data, session), session);
+            const auto result = test::read_record<EgoReader>(data);
             CHECK(result.has_value() == (value >= low && value <= high));
         }
     }
@@ -380,9 +371,8 @@ TEST_CASE("EgoReader permits reloading the same ID in a new session")
     auto data = make_ego();
     REQUIRE(test::read_and_commit(EgoReader(data, session), session));
     CHECK_FALSE(test::read_and_commit(EgoReader(data, session), session));
-    auto reloaded = EgoReader::create_session();
     data["cost"] = 7;
-    REQUIRE(test::read_and_commit(EgoReader(data, reloaded), reloaded));
+    REQUIRE(test::read_record<EgoReader>(data));
     CHECK(egos_info.at(i2enum<EgoType>(4)).cost == 7);
 }
 
@@ -393,7 +383,6 @@ TEST_CASE("EgoReader pins flag array type errors and missing values")
             CAPTURE(path);
             CAPTURE(input);
             EgoStateGuard guard;
-            auto session = EgoReader::create_session();
             auto data = make_ego();
             const auto pointer = nlohmann::json::json_pointer(path);
             const std::string input_text = input;
@@ -411,7 +400,7 @@ TEST_CASE("EgoReader pins flag array type errors and missing values")
             if (std::string(path) == "/extra_flags/0/flags" && (input_text == "null" || input_text == "missing" || input_text == "[]")) {
                 expected = ParseErrorType::TOO_FEW_ARGUMENTS;
             }
-            CHECK(test::to_error_code(test::read_and_commit(EgoReader(data, session), session)) == expected);
+            CHECK(test::to_error_code(test::read_record<EgoReader>(data)) == expected);
         }
     }
 }

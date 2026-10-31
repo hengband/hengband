@@ -1525,6 +1525,7 @@ hengband_test_SOURCES = \
 	test/scoped-ego-list.h \
 	test/string-helpers.h \
 	test/temporary-json-files.h \
+	test/info-reader/dungeon-grid-checks.h \
 	test/info-reader/parse-result-helpers.h \
 	test/info-reader/scoped-reader-state.h \
 	test/system/artifact-list-test-access.h \
