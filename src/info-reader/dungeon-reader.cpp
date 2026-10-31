@@ -30,6 +30,11 @@
 #include <span>
 #include <utility>
 
+namespace {
+//! 入口の座標 (wild_y・wild_x) の上限。読み込んだ荒野の大きさに収まるかは validate_wilderness_positions() で確かめる。
+constexpr int DUNGEON_ENTRANCE_COORD_MAX = 32766;
+}
+
 DungeonReader::Session DungeonReader::create_session(tl::optional<int> last_id)
 {
     return Session(DefinitionIdOrder::STRICTLY_INCREASING, { 0, enum2i(DungeonId::MAX) - 1 }, _("ダンジョン", "dungeon"), last_id);
@@ -72,10 +77,10 @@ tl::expected<void, ParseErrorType> DungeonReader::read() const
     }
     int wild_y = 0;
     int wild_x = 0;
-    if (const auto result = info_set_integer(get_json_value(position_obj, "wild_y"), wild_y, true, Range(0, 32766)); !result) {
+    if (const auto result = info_set_integer(get_json_value(position_obj, "wild_y"), wild_y, true, Range(0, DUNGEON_ENTRANCE_COORD_MAX)); !result) {
         return result;
     }
-    if (const auto result = info_set_integer(get_json_value(position_obj, "wild_x"), wild_x, true, Range(0, 32766)); !result) {
+    if (const auto result = info_set_integer(get_json_value(position_obj, "wild_x"), wild_x, true, Range(0, DUNGEON_ENTRANCE_COORD_MAX)); !result) {
         return result;
     }
     dungeon.initialize_position({ wild_y, wild_x });
