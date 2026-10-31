@@ -6,6 +6,21 @@
 #include <fmt/format.h>
 #include <stdexcept>
 
+/*!
+ * @brief ID の検査の結果を、失敗した理由の表示と解析エラーコードに変える
+ * @param result read() または check() の結果
+ * @return 成功時は ID、失敗時は解析エラーコード
+ * @details 失敗した時だけ理由を1件表示する。
+ */
+tl::expected<int, ParseErrorType> report_id_check_result(const tl::expected<int, IdCheckFailure> &result)
+{
+    if (!result) {
+        msg_print(result.error().reason);
+        return tl::unexpected(result.error().code);
+    }
+    return *result;
+}
+
 DefinitionIdChecker::DefinitionIdChecker(DefinitionIdOrder order, Range bounds, std::string_view label, tl::optional<int> last_id)
     : order(order)
     , bounds(bounds)
@@ -40,12 +55,7 @@ tl::expected<int, IdCheckFailure> DefinitionIdChecker::read(const nlohmann::json
  */
 tl::expected<int, ParseErrorType> DefinitionIdChecker::read_and_report(const nlohmann::json &id_json)
 {
-    const auto result = this->read(id_json);
-    if (!result) {
-        msg_print(result.error().reason);
-        return tl::unexpected(result.error().code);
-    }
-    return *result;
+    return report_id_check_result(this->read(id_json));
 }
 
 /*! @brief 整数 ID の範囲と順序を確かめ、確定待ちの値を保持する */
@@ -93,12 +103,7 @@ tl::expected<int, IdCheckFailure> DefinitionIdChecker::check(int id)
  */
 tl::expected<int, ParseErrorType> DefinitionIdChecker::check_and_report(int id)
 {
-    const auto result = this->check(id);
-    if (!result) {
-        msg_print(result.error().reason);
-        return tl::unexpected(result.error().code);
-    }
-    return *result;
+    return report_id_check_result(this->check(id));
 }
 
 /*!
