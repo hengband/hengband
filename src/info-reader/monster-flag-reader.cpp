@@ -3,6 +3,17 @@
 #include "locale/language-switcher.h"
 #include "view/display-messages.h"
 
+namespace {
+/*!
+ * @brief 探した表に無かったフラグ名を、未知のモンスター・フラグとして表示する
+ * @param what フラグ名
+ */
+void print_unknown_monster_flag(std::string_view what)
+{
+    msg_print(_("未知のモンスター・フラグ '{}'。", "Unknown monster flag '{}'."), what);
+}
+}
+
 /*!
  * @brief フラグ名をモンスターの基本フラグの表で探し、見つかった表のフラグを1つ立てる
  * @details 耐性・オーラ・習性・シンボル・種族・ドロップ・荒野・地形・出現数・セリフ・明暗・特殊・その他の順に探す。
@@ -66,7 +77,7 @@ bool grab_one_monster_basic_flag(const MonsterBasicFlagGroups &groups, std::stri
         return true;
     }
 
-    msg_print(_("未知のモンスター・フラグ '{}'。", "Unknown monster flag '{}'."), what);
+    print_unknown_monster_flag(what);
     return false;
 }
 
@@ -83,6 +94,6 @@ bool grab_one_monster_spell_flag(EnumClassFlagGroup<MonsterAbilityType> &ability
         return true;
     }
 
-    msg_print(_("未知のモンスター・フラグ '{}'。", "Unknown monster flag '{}'."), what);
+    print_unknown_monster_flag(what);
     return false;
 }
