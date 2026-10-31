@@ -310,6 +310,10 @@ TEST_CASE("VaultReader keeps the existing vaults on a parse error")
 }
 ```
 
+新しい `Session` で 1 件だけ読むときは、`test/info-reader/parse-result-helpers.h` の `test::read_record<VaultReader>(data)` を使ってください。
+`Session` を作って `read_and_commit()` を呼ぶところまでをまとめて行います。上の例のように `Session` を自分で作るのは、
+同じ `Session` で続けて読むときや、`Session` の状態を確かめるときだけにします。
+
 配列のようにコピー代入できないものや、関数を呼んで戻すもの（`initialize()` など）は、
 `util::make_finalizer()` を直接使ってください。
 

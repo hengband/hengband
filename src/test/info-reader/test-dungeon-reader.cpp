@@ -90,11 +90,9 @@ const ProbabilityTable<short> &terrain_table(const DungeonDefinition &dungeon, c
 
 TEST_CASE("DungeonReader reads floor and wall probabilities")
 {
-    auto session = DungeonReader::create_session();
     DungeonReaderStateGuard guard;
-    session = DungeonReader::create_session();
     const auto data = make_dungeon();
-    REQUIRE(test::read_and_commit(DungeonReader(data, session), session).has_value());
+    REQUIRE(test::read_record<DungeonReader>(data).has_value());
     const auto &dungeons = DungeonList::get_instance();
     REQUIRE(dungeons.size() == 1);
     const auto &dungeon = dungeons.get_dungeon(DungeonId::WILDERNESS);
@@ -107,14 +105,12 @@ TEST_CASE("DungeonReader reads floor and wall probabilities")
 
 TEST_CASE("DungeonReader stores every supported aura token")
 {
-    auto session = DungeonReader::create_session();
     for (const auto &[token, aura] : r_info_aura_flags) {
         CAPTURE(token);
         DungeonReaderStateGuard guard;
-        session = DungeonReader::create_session();
         auto data = make_dungeon();
         data["monsters"]["flags"] = { std::string(token) };
-        REQUIRE(test::read_and_commit(DungeonReader(data, session), session).has_value());
+        REQUIRE(test::read_record<DungeonReader>(data).has_value());
         const auto &dungeon = DungeonList::get_instance().get_dungeon(DungeonId::WILDERNESS);
         CHECK(dungeon.mon_aura_flags.has(aura));
         CHECK(dungeon.mon_aura_flags.count() == 1);
@@ -123,18 +119,15 @@ TEST_CASE("DungeonReader stores every supported aura token")
 
 TEST_CASE("DungeonReader rejects unknown aura tokens without publishing a dungeon")
 {
-    auto session = DungeonReader::create_session();
     DungeonReaderStateGuard guard;
-    session = DungeonReader::create_session();
     auto data = make_dungeon();
     data["monsters"]["flags"] = { "AURA_FIRE", "AURA_UNKNOWN" };
-    CHECK(test::to_error_code(test::read_and_commit(DungeonReader(data, session), session)) == ParseErrorType::INVALID_FLAG);
+    CHECK(test::to_error_code(test::read_record<DungeonReader>(data)) == ParseErrorType::INVALID_FLAG);
     CHECK(DungeonList::get_instance().empty());
 }
 
 TEST_CASE("DungeonReader aura restrictions participate in every monster filter mode")
 {
-    auto session = DungeonReader::create_session();
     for (const auto *mode : { "NONE", "AND", "NAND", "OR", "NOR" }) {
         for (auto aura_mask = 0; aura_mask < 4; ++aura_mask) {
             for (const auto resistant : { false, true }) {
@@ -143,7 +136,6 @@ TEST_CASE("DungeonReader aura restrictions participate in every monster filter m
                 CAPTURE(resistant);
                 const test::MonraceListTestAccess races;
                 DungeonReaderStateGuard guard;
-                session = DungeonReader::create_session();
                 auto &monrace = MonraceList::get_instance().emplace(MonraceId::FILTHY_URCHIN);
                 if ((aura_mask & 1) != 0) {
                     monrace.aura_flags.set(MonsterAuraType::FIRE);
@@ -158,7 +150,7 @@ TEST_CASE("DungeonReader aura restrictions participate in every monster filter m
                 data["monsters"]["normalMonsterRate"] = 0;
                 data["monsters"]["flagsMode"] = mode;
                 data["monsters"]["flags"] = { "AURA_FIRE", "AURA_COLD", "IM_FIRE" };
-                REQUIRE(test::read_and_commit(DungeonReader(data, session), session).has_value());
+                REQUIRE(test::read_record<DungeonReader>(data).has_value());
                 const auto &dungeon = DungeonList::get_instance().get_dungeon(DungeonId::WILDERNESS);
                 const auto all = aura_mask == 3 && resistant;
                 const auto any = aura_mask != 0 || resistant;
@@ -187,7 +179,6 @@ TEST_CASE("DungeonReader aura restrictions participate in every monster filter m
 
 TEST_CASE("DungeonReader visual restrictions participate in every monster filter mode")
 {
-    auto session = DungeonReader::create_session();
     for (const auto *mode : { "NONE", "AND", "NAND", "OR", "NOR" }) {
         for (auto visual_mask = 0; visual_mask < 4; ++visual_mask) {
             for (const auto resistant : { false, true }) {
@@ -196,7 +187,6 @@ TEST_CASE("DungeonReader visual restrictions participate in every monster filter
                 CAPTURE(resistant);
                 const test::MonraceListTestAccess races;
                 DungeonReaderStateGuard guard;
-                session = DungeonReader::create_session();
                 auto &monrace = MonraceList::get_instance().emplace(MonraceId::FILTHY_URCHIN);
                 if ((visual_mask & 1) != 0) {
                     monrace.visual_flags.set(MonsterVisualType::CLEAR);
@@ -211,7 +201,7 @@ TEST_CASE("DungeonReader visual restrictions participate in every monster filter
                 data["monsters"]["normalMonsterRate"] = 0;
                 data["monsters"]["flagsMode"] = mode;
                 data["monsters"]["flags"] = { "CHAR_CLEAR", "ATTR_MULTI", "IM_FIRE" };
-                REQUIRE(test::read_and_commit(DungeonReader(data, session), session).has_value());
+                REQUIRE(test::read_record<DungeonReader>(data).has_value());
                 const auto &dungeon = DungeonList::get_instance().get_dungeon(DungeonId::WILDERNESS);
                 const auto all = visual_mask == 3 && resistant;
                 const auto any = visual_mask != 0 || resistant;
@@ -240,7 +230,6 @@ TEST_CASE("DungeonReader visual restrictions participate in every monster filter
 
 TEST_CASE("DungeonReader special restrictions participate in every monster filter mode")
 {
-    auto session = DungeonReader::create_session();
     for (const auto *mode : { "NONE", "AND", "NAND", "OR", "NOR" }) {
         for (auto special_mask = 0; special_mask < 2; ++special_mask) {
             for (const auto resistant : { false, true }) {
@@ -249,7 +238,6 @@ TEST_CASE("DungeonReader special restrictions participate in every monster filte
                 CAPTURE(resistant);
                 const test::MonraceListTestAccess races;
                 DungeonReaderStateGuard guard;
-                session = DungeonReader::create_session();
                 auto &monrace = MonraceList::get_instance().emplace(MonraceId::FILTHY_URCHIN);
                 if ((special_mask & 1) != 0) {
                     monrace.special_flags.set(MonsterSpecialType::DIMINISH_MAX_DAMAGE);
@@ -261,7 +249,7 @@ TEST_CASE("DungeonReader special restrictions participate in every monster filte
                 data["monsters"]["normalMonsterRate"] = 0;
                 data["monsters"]["flagsMode"] = mode;
                 data["monsters"]["flags"] = { "DIMINISH_MAX_DAMAGE", "IM_FIRE" };
-                REQUIRE(test::read_and_commit(DungeonReader(data, session), session).has_value());
+                REQUIRE(test::read_record<DungeonReader>(data).has_value());
                 const auto &dungeon = DungeonList::get_instance().get_dungeon(DungeonId::WILDERNESS);
                 const auto all = special_mask == 1 && resistant;
                 const auto any = special_mask != 0 || resistant;
@@ -298,8 +286,7 @@ TEST_CASE("DungeonReader stores every supported sex token")
         DungeonReaderStateGuard guard;
         auto data = make_dungeon();
         data["monsters"]["flags"] = { std::string(token) };
-        auto session = DungeonReader::create_session();
-        REQUIRE(test::read_and_commit(DungeonReader(data, session), session).has_value());
+        REQUIRE(test::read_record<DungeonReader>(data).has_value());
         const auto &dungeon = DungeonList::get_instance().get_dungeon(DungeonId::WILDERNESS);
         CHECK(dungeon.mon_sex.has(sex));
         CHECK(dungeon.mon_sex.count() == 1);
@@ -312,8 +299,7 @@ TEST_CASE("DungeonReader accumulates sex tokens independently of order and dupli
         DungeonReaderStateGuard guard;
         auto data = make_dungeon();
         data["monsters"]["flags"] = tokens;
-        auto session = DungeonReader::create_session();
-        REQUIRE(test::read_and_commit(DungeonReader(data, session), session).has_value());
+        REQUIRE(test::read_record<DungeonReader>(data).has_value());
         const auto &dungeon = DungeonList::get_instance().get_dungeon(DungeonId::WILDERNESS);
         CHECK(dungeon.mon_sex.has(MonsterSex::MALE));
         CHECK(dungeon.mon_sex.has(MonsterSex::FEMALE));
@@ -328,8 +314,7 @@ TEST_CASE("DungeonReader rejects unknown sex tokens without publishing a dungeon
         DungeonReaderStateGuard guard;
         auto data = make_dungeon();
         data["monsters"]["flags"] = { "MALE", token };
-        auto session = DungeonReader::create_session();
-        CHECK(test::to_error_code(test::read_and_commit(DungeonReader(data, session), session)) == ParseErrorType::INVALID_FLAG);
+        CHECK(test::to_error_code(test::read_record<DungeonReader>(data)) == ParseErrorType::INVALID_FLAG);
         CHECK(DungeonList::get_instance().empty());
     }
 }
@@ -366,8 +351,7 @@ TEST_CASE("DungeonReader sex restrictions participate in every monster filter mo
                         if (require_resistance) {
                             data["monsters"]["flags"].push_back("IM_FIRE");
                         }
-                        auto session = DungeonReader::create_session();
-                        REQUIRE(test::read_and_commit(DungeonReader(data, session), session).has_value());
+                        REQUIRE(test::read_record<DungeonReader>(data).has_value());
                         const auto &dungeon = DungeonList::get_instance().get_dungeon(DungeonId::WILDERNESS);
                         CHECK(dungeon.mon_sex.count() == static_cast<size_t>(((sex_mask & 1) != 0) + ((sex_mask & 2) != 0)));
                         const auto male_matches = sex == MonsterSex::MALE;
@@ -401,30 +385,26 @@ TEST_CASE("DungeonReader sex restrictions participate in every monster filter mo
 
 TEST_CASE("DungeonReader rejects player levels outside their storage type")
 {
-    auto session = DungeonReader::create_session();
     for (const auto value : { -32769, 65537 }) {
         CAPTURE(value);
         DungeonReaderStateGuard guard;
-        session = DungeonReader::create_session();
         auto data = make_dungeon();
         data["generation"]["minPlayerLevel"] = value;
-        CHECK(test::to_error_code(test::read_and_commit(DungeonReader(data, session), session)) == ParseErrorType::INVALID_VALUE);
+        CHECK(test::to_error_code(test::read_record<DungeonReader>(data)) == ParseErrorType::INVALID_VALUE);
         CHECK(DungeonList::get_instance().empty());
     }
 }
 
 TEST_CASE("DungeonReader preserves item chance cap boundaries")
 {
-    auto session = DungeonReader::create_session();
     for (const auto *field : { "objGood", "objGreat" }) {
         for (const auto number : { 0, 100 }) {
             CAPTURE(std::string(field));
             CAPTURE(number);
             DungeonReaderStateGuard guard;
-            session = DungeonReader::create_session();
             auto data = make_dungeon();
             data["generation"][field] = number;
-            REQUIRE(test::read_and_commit(DungeonReader(data, session), session).has_value());
+            REQUIRE(test::read_record<DungeonReader>(data).has_value());
             const auto &dungeon = DungeonList::get_instance().get_dungeon(DungeonId::WILDERNESS);
             CHECK(dungeon.obj_good == (std::string(field) == "objGood" ? number : 0));
             CHECK(dungeon.obj_great == (std::string(field) == "objGreat" ? number : 0));
@@ -458,14 +438,12 @@ TEST_CASE("DungeonReader rejects item chance caps outside zero to one hundred be
 
 TEST_CASE("DungeonReader preserves monster count boundaries")
 {
-    auto session = DungeonReader::create_session();
     for (const auto number : { 0, 100 }) {
         CAPTURE(number);
         DungeonReaderStateGuard guard;
-        session = DungeonReader::create_session();
         auto data = make_dungeon();
         data["monsters"]["minCount"] = number;
-        REQUIRE(test::read_and_commit(DungeonReader(data, session), session).has_value());
+        REQUIRE(test::read_record<DungeonReader>(data).has_value());
         CHECK(DungeonList::get_instance().get_dungeon(DungeonId::WILDERNESS).min_monster_count_on_floor == number);
     }
 }
@@ -489,15 +467,13 @@ TEST_CASE("DungeonReader rejects monster counts outside zero to one hundred befo
 
 TEST_CASE("DungeonReader preserves signed short depth bounds and deep dungeons")
 {
-    auto session = DungeonReader::create_session();
     for (const auto depth : { 0, 696, 32767 }) {
         CAPTURE(depth);
         DungeonReaderStateGuard guard;
-        session = DungeonReader::create_session();
         auto data = make_dungeon();
         data["generation"]["minDepth"] = depth;
         data["generation"]["maxDepth"] = depth;
-        REQUIRE(test::read_and_commit(DungeonReader(data, session), session).has_value());
+        REQUIRE(test::read_record<DungeonReader>(data).has_value());
         const auto &dungeon = DungeonList::get_instance().get_dungeon(DungeonId::WILDERNESS);
         CHECK(dungeon.mindepth == depth);
         CHECK(dungeon.maxdepth == depth);
@@ -506,29 +482,26 @@ TEST_CASE("DungeonReader preserves signed short depth bounds and deep dungeons")
 
 TEST_CASE("DungeonReader rejects depths outside save range and inverted depths")
 {
-    auto session = DungeonReader::create_session();
     for (const auto *field : { "minDepth", "maxDepth" }) {
         for (const auto depth : { -1, 32768, std::numeric_limits<int>::max() }) {
             CAPTURE(std::string(field));
             CAPTURE(depth);
             DungeonReaderStateGuard guard;
-            session = DungeonReader::create_session();
             auto data = make_dungeon();
             data["generation"][field] = depth;
             ScopedMessageCapture diagnostics;
-            CHECK(test::to_error_code(test::read_and_commit(DungeonReader(data, session), session)) == ParseErrorType::INVALID_VALUE);
+            CHECK(test::to_error_code(test::read_record<DungeonReader>(data)) == ParseErrorType::INVALID_VALUE);
             CHECK(DungeonList::get_instance().empty());
             // 範囲外の深さは逆転の判定より前に拒否し、逆転の診断を出さない
             CHECK(diagnostics.messages().empty());
         }
     }
     DungeonReaderStateGuard guard;
-    session = DungeonReader::create_session();
     auto data = make_dungeon();
     data["generation"]["minDepth"] = 100;
     data["generation"]["maxDepth"] = 99;
     ScopedMessageCapture diagnostics;
-    CHECK(test::to_error_code(test::read_and_commit(DungeonReader(data, session), session)) == ParseErrorType::INVALID_VALUE);
+    CHECK(test::to_error_code(test::read_record<DungeonReader>(data)) == ParseErrorType::INVALID_VALUE);
     CHECK(DungeonList::get_instance().empty());
     CHECK(diagnostics.messages().size() == 1);
 }
@@ -554,25 +527,22 @@ TEST_CASE("DungeonReader restricts required player level to playable levels")
 
 TEST_CASE("DungeonReader rejects coordinates outside wilderness storage and IDs outside the dungeon enum")
 {
-    auto session = DungeonReader::create_session();
     for (const auto *field : { "wild_y", "wild_x" }) {
         for (const auto coordinate : { -1, 32767, std::numeric_limits<int>::max() }) {
             CAPTURE(std::string(field));
             CAPTURE(coordinate);
             DungeonReaderStateGuard guard;
-            session = DungeonReader::create_session();
             auto data = make_dungeon();
             data["position"][field] = coordinate;
-            CHECK(test::to_error_code(test::read_and_commit(DungeonReader(data, session), session)) == ParseErrorType::INVALID_VALUE);
+            CHECK(test::to_error_code(test::read_record<DungeonReader>(data)) == ParseErrorType::INVALID_VALUE);
             CHECK(DungeonList::get_instance().empty());
         }
     }
     for (const auto id : { -1, 21, 9999 }) {
         CAPTURE(id);
         DungeonReaderStateGuard guard;
-        session = DungeonReader::create_session();
         const auto data = make_dungeon(id);
-        CHECK(test::to_error_code(test::read_and_commit(DungeonReader(data, session), session)) == ParseErrorType::INVALID_VALUE);
+        CHECK(test::to_error_code(test::read_record<DungeonReader>(data)) == ParseErrorType::INVALID_VALUE);
         CHECK(DungeonList::get_instance().empty());
     }
 }
@@ -598,16 +568,14 @@ TEST_CASE("DungeonReader preserves nonpercentage tunnel thresholds within the de
 
 TEST_CASE("DungeonReader validates entrances against actual wilderness dimensions without changing definitions")
 {
-    auto session = DungeonReader::create_session();
     // 3×4の荒野で端を除いた内側は y=1・x=1〜2 だけ。
     for (const auto &[y, x] : { std::pair{ 1, 1 }, std::pair{ 1, 2 }, std::pair{ 0, 1 }, std::pair{ 2, 1 }, std::pair{ 1, 0 }, std::pair{ 1, 3 }, std::pair{ 3, 0 }, std::pair{ 0, 4 } }) {
         CAPTURE(y);
         CAPTURE(x);
         DungeonReaderStateGuard guard;
-        session = DungeonReader::create_session();
         auto data = make_dungeon(1);
         data["position"] = { { "wild_y", y }, { "wild_x", x } };
-        REQUIRE(test::read_and_commit(DungeonReader(data, session), session).has_value());
+        REQUIRE(test::read_record<DungeonReader>(data).has_value());
         const auto previous = DungeonList::get_instance().get_dungeon_shared(DungeonId::ANGBAND);
         const auto inside = (y == 1) && (x == 1 || x == 2);
         CHECK(test::to_error_code(DungeonReader::validate_wilderness_positions(3, 4)) == (inside ? ParseErrorType::NONE : ParseErrorType::OUT_OF_BOUNDS));
@@ -615,16 +583,14 @@ TEST_CASE("DungeonReader validates entrances against actual wilderness dimension
         CHECK(previous->get_position() == Pos2D(y, x));
     }
     DungeonReaderStateGuard guard;
-    session = DungeonReader::create_session();
     auto data = make_dungeon();
     data["position"] = { { "wild_y", 32766 }, { "wild_x", 32766 } };
-    REQUIRE(test::read_and_commit(DungeonReader(data, session), session).has_value());
+    REQUIRE(test::read_record<DungeonReader>(data).has_value());
     CHECK(DungeonReader::validate_wilderness_positions(3, 4).has_value());
 }
 
 TEST_CASE("DungeonReader accepts percentage weight boundaries and excludes zero weight entries")
 {
-    auto session = DungeonReader::create_session();
     struct AcceptedTiles {
         nlohmann::json tiles;
         int item_count;
@@ -640,10 +606,9 @@ TEST_CASE("DungeonReader accepts percentage weight boundaries and excludes zero 
             CAPTURE(section);
             CAPTURE(accepted.tiles);
             DungeonReaderStateGuard guard;
-            session = DungeonReader::create_session();
             auto data = make_dungeon();
             data[section]["tiles"] = accepted.tiles;
-            REQUIRE(test::read_and_commit(DungeonReader(data, session), session).has_value());
+            REQUIRE(test::read_record<DungeonReader>(data).has_value());
             const auto &table = terrain_table(DungeonList::get_instance().get_dungeon(DungeonId::WILDERNESS), section);
             CHECK(table.item_count() == accepted.item_count);
             CHECK(table.total_prob() == 100);
@@ -653,7 +618,6 @@ TEST_CASE("DungeonReader accepts percentage weight boundaries and excludes zero 
 
 TEST_CASE("DungeonReader rejects invalid weights without publishing a dungeon")
 {
-    auto session = DungeonReader::create_session();
     // 範囲外の重みは不正な値、整数でない重みは不正な型、重みが無ければ引数不足とする
     const std::vector<nlohmann::json> invalid_rates = {
         -1,
@@ -691,11 +655,10 @@ TEST_CASE("DungeonReader rejects invalid weights without publishing a dungeon")
             CAPTURE(section);
             CAPTURE(rate);
             DungeonReaderStateGuard guard;
-            session = DungeonReader::create_session();
             auto data = make_dungeon();
             data[section]["tiles"][0]["rate"] = rate;
             ScopedMessageCapture diagnostics;
-            CHECK(test::to_error_code(test::read_and_commit(DungeonReader(data, session), session)) == expected);
+            CHECK(test::to_error_code(test::read_record<DungeonReader>(data)) == expected);
             CHECK(DungeonList::get_instance().empty());
             if (expected == ParseErrorType::INVALID_VALUE) {
                 // 合計の検証を先に行っても同じ種類になるため、項目だけに出る診断を確かめる。
@@ -708,7 +671,6 @@ TEST_CASE("DungeonReader rejects invalid weights without publishing a dungeon")
 
 TEST_CASE("DungeonReader rejects unusable or malformed terrain tables")
 {
-    auto session = DungeonReader::create_session();
     // 未知の地形だけを未定義地形タグとし、書式の誤りは欠けているか型が違うかで区別する
     const std::vector<nlohmann::json> invalid_tiles = {
         { { { "type", "FLOOR" } } },
@@ -738,10 +700,9 @@ TEST_CASE("DungeonReader rejects unusable or malformed terrain tables")
             CAPTURE(section);
             CAPTURE(tiles);
             DungeonReaderStateGuard guard;
-            session = DungeonReader::create_session();
             auto data = make_dungeon();
             data[section]["tiles"] = tiles;
-            CHECK(test::to_error_code(test::read_and_commit(DungeonReader(data, session), session)) == expected);
+            CHECK(test::to_error_code(test::read_record<DungeonReader>(data)) == expected);
             CHECK(DungeonList::get_instance().empty());
         }
     }
@@ -749,7 +710,6 @@ TEST_CASE("DungeonReader rejects unusable or malformed terrain tables")
 
 TEST_CASE("DungeonReader distinguishes missing mistyped and unknown wall terrain tags")
 {
-    auto session = DungeonReader::create_session();
     for (const auto *key : { "outer", "inner" }) {
         CAPTURE(key);
         // nlohmann::json の一時オブジェクトを波括弧の初期化子リストに並べると MSVC が C4868 を出すため、1 件ずつ足す。
@@ -765,17 +725,15 @@ TEST_CASE("DungeonReader distinguishes missing mistyped and unknown wall terrain
         for (const auto &[tag, expected] : invalid_tags) {
             CAPTURE(tag);
             DungeonReaderStateGuard guard;
-            session = DungeonReader::create_session();
             auto data = make_dungeon();
             data["wall"][key] = tag;
-            CHECK(test::to_error_code(test::read_and_commit(DungeonReader(data, session), session)) == expected);
+            CHECK(test::to_error_code(test::read_record<DungeonReader>(data)) == expected);
             CHECK(DungeonList::get_instance().empty());
         }
         DungeonReaderStateGuard guard;
-        session = DungeonReader::create_session();
         auto data = make_dungeon();
         data["wall"].erase(key);
-        CHECK(test::to_error_code(test::read_and_commit(DungeonReader(data, session), session)) == ParseErrorType::TOO_FEW_ARGUMENTS);
+        CHECK(test::to_error_code(test::read_record<DungeonReader>(data)) == ParseErrorType::TOO_FEW_ARGUMENTS);
         CHECK(DungeonList::get_instance().empty());
     }
 }
@@ -844,7 +802,6 @@ TEST_CASE("DungeonReader rejects terrain weight totals other than one hundred wi
 
 TEST_CASE("DungeonReader reports invalid terrain entries before the weight total regardless of their position")
 {
-    auto session = DungeonReader::create_session();
     const std::vector<nlohmann::json> invalid_tiles = {
         { { { "type", "FLOOR" }, { "rate", 100 } }, { { "type", "UNKNOWN" }, { "rate", 50 } } },
         { { { "type", "UNKNOWN" }, { "rate", 50 } }, { { "type", "FLOOR" }, { "rate", 100 } } },
@@ -867,11 +824,10 @@ TEST_CASE("DungeonReader reports invalid terrain entries before the weight total
             CAPTURE(section);
             CAPTURE(tiles);
             DungeonReaderStateGuard guard;
-            session = DungeonReader::create_session();
             auto data = make_dungeon();
             data[section]["tiles"] = tiles;
             ScopedMessageCapture diagnostics;
-            CHECK(test::to_error_code(test::read_and_commit(DungeonReader(data, session), session)) == expected);
+            CHECK(test::to_error_code(test::read_record<DungeonReader>(data)) == expected);
             CHECK(DungeonList::get_instance().empty());
             if (expected == ParseErrorType::INVALID_VALUE) {
                 // 重みの範囲外と合計の超過は同じ種類なので、合計ではなく項目の重みの診断であることを確かめる
@@ -930,12 +886,10 @@ TEST_CASE("DungeonReader rejects final-floor ID narrowing before reference looku
 
 TEST_CASE("DungeonReader preserves representable final-floor IDs and the no-artifact sentinel")
 {
-    auto session = DungeonReader::create_session();
     for (const auto &[guardian, artifact] : { std::pair{ 1, 0 }, std::pair{ 1, 1 }, std::pair{ 1, 32766 }, std::pair{ 32766, 1 } }) {
         CAPTURE(guardian);
         CAPTURE(artifact);
         const FinalFloorStateGuard state;
-        session = DungeonReader::create_session();
         const auto guardian_id = static_cast<MonraceId>(guardian);
         const auto artifact_id = static_cast<FixedArtifactId>(artifact);
         if (guardian_id != MonraceId::FILTHY_URCHIN) {
@@ -946,7 +900,7 @@ TEST_CASE("DungeonReader preserves representable final-floor IDs and the no-arti
         }
         auto data = make_dungeon();
         data["final_floor"] = { { "guardian", guardian }, { "artifact", artifact } };
-        REQUIRE(test::read_and_commit(DungeonReader(data, session), session).has_value());
+        REQUIRE(test::read_record<DungeonReader>(data).has_value());
         const auto &dungeon = DungeonList::get_instance().get_dungeon(DungeonId::WILDERNESS);
         CHECK(dungeon.final_guardian == guardian_id);
         CHECK(dungeon.final_artifact == artifact_id);
@@ -955,15 +909,13 @@ TEST_CASE("DungeonReader preserves representable final-floor IDs and the no-arti
 
 TEST_CASE("DungeonReader still rejects undefined representable final-floor IDs")
 {
-    auto session = DungeonReader::create_session();
     for (const auto *field : { "guardian", "artifact" }) {
         CAPTURE(std::string(field));
         const FinalFloorStateGuard state;
-        session = DungeonReader::create_session();
         auto data = make_dungeon();
         data["final_floor"] = { { "guardian", 1 }, { "artifact", 1 } };
         data["final_floor"][field] = 2;
-        CHECK(test::to_error_code(test::read_and_commit(DungeonReader(data, session), session)) == ParseErrorType::INVALID_VALUE);
+        CHECK(test::to_error_code(test::read_record<DungeonReader>(data)) == ParseErrorType::INVALID_VALUE);
         CHECK(DungeonList::get_instance().empty());
     }
 }
@@ -990,17 +942,15 @@ TEST_CASE("DungeonReader accepts final object IDs through the Baseitem reader li
 
 TEST_CASE("DungeonReader rejects final objects outside the Baseitem limit and missing IDs")
 {
-    auto session = DungeonReader::create_session();
     for (const auto id : { -1, 0, 1, 32768, std::numeric_limits<int>::max() }) {
         CAPTURE(id);
         DungeonReaderStateGuard guard;
-        session = DungeonReader::create_session();
         auto &items = BaseitemList::get_instance();
         const test::ScopedVectorWrapper saved_items(items);
         auto data = make_dungeon();
         data["final_floor"] = { { "object", id } };
         ScopedMessageCapture diagnostics;
-        CHECK(test::to_error_code(test::read_and_commit(DungeonReader(data, session), session)) == ParseErrorType::INVALID_VALUE);
+        CHECK(test::to_error_code(test::read_record<DungeonReader>(data)) == ParseErrorType::INVALID_VALUE);
         CHECK(DungeonList::get_instance().empty());
         // 範囲外の ID はベースアイテムを引く前に拒否し、範囲内で未定義の ID だけ参照の診断を出す
         CHECK(diagnostics.messages().size() == (id == 1 ? 1U : 0U));
@@ -1009,12 +959,10 @@ TEST_CASE("DungeonReader rejects final objects outside the Baseitem limit and mi
 
 TEST_CASE("DungeonReader rejects guardian zero as below the schema minimum before publication")
 {
-    auto session = DungeonReader::create_session();
     const FinalFloorStateGuard state;
-    session = DungeonReader::create_session();
     auto data = make_dungeon();
     data["final_floor"] = { { "guardian", 0 } };
-    CHECK(test::to_error_code(test::read_and_commit(DungeonReader(data, session), session)) == ParseErrorType::INVALID_VALUE);
+    CHECK(test::to_error_code(test::read_record<DungeonReader>(data)) == ParseErrorType::INVALID_VALUE);
     CHECK(DungeonList::get_instance().empty());
 }
 
@@ -1218,7 +1166,6 @@ TEST_CASE("DungeonReader pins flag array type errors and missing values")
             CAPTURE(path);
             CAPTURE(input);
             DungeonReaderStateGuard guard;
-            auto session = DungeonReader::create_session();
             auto data = make_dungeon();
             const auto pointer = nlohmann::json::json_pointer(path);
             const std::string input_text = input;
@@ -1234,7 +1181,7 @@ TEST_CASE("DungeonReader pins flag array type errors and missing values")
             if (std::string(path).starts_with("/generation/") && (input_text == "null" || input_text == "missing")) {
                 expected = ParseErrorType::TOO_FEW_ARGUMENTS;
             }
-            CHECK(test::to_error_code(test::read_and_commit(DungeonReader(data, session), session)) == expected);
+            CHECK(test::to_error_code(test::read_record<DungeonReader>(data)) == expected);
         }
     }
 }
