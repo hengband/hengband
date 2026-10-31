@@ -30,6 +30,7 @@ tl::optional<char> input_spell_choice(std::string_view prompt, const SpellInputD
 char input_key_with_context(InputKind kind, std::string_view prompt, bool do_all_term_refresh = false);
 char input_key_with_context(InputContext input_context, bool do_all_term_refresh = false);
 int input_special_key_with_context(InputKind kind, std::string_view prompt, bool numpad_cursor = true);
+int input_special_key_with_context(InputContext input_context, bool numpad_cursor = true);
 int input_quantity(int max, std::string_view initial_prompt = "");
 void pause_line(int row);
 tl::optional<int> input_integer(std::string_view prompt, int min, int max, int initial_value = 0);
