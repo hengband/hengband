@@ -333,8 +333,7 @@ tl::expected<void, ParseErrorType> TownMapReader::read_buildings(TownMapDefiniti
                                           command == "C" || command == "M" || command == "R";
             if (is_numeric_field) {
                 const auto short_field = command != "A" || field_index == 5 || field_index == 6;
-                const auto minimum = short_field ? std::numeric_limits<int16_t>::min() : std::numeric_limits<int>::min();
-                const auto maximum = short_field ? std::numeric_limits<int16_t>::max() : std::numeric_limits<int>::max();
+                const auto [minimum, maximum] = short_field ? LEGEND_SHORT_RANGE : Range(std::numeric_limits<int>::min(), std::numeric_limits<int>::max());
                 if (!is_integer_in_range(value, minimum, maximum)) {
                     return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
                 }
