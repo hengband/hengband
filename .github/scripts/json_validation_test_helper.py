@@ -101,13 +101,30 @@ def schema_enum_values(node, schema_path, loaded_schemas):
     raise AssertionError(f"schema node has no enum: {node!r}")
 
 
+# 種族とダンジョンの読み込みが共有する、モンスターのフラグ名を照合する関数と、その定義のあるファイル。
+SHARED_MONSTER_FLAG_FUNCTIONS = {
+    "grab_one_monster_basic_flag": "src/info-reader/monster-flag-reader.cpp",
+    "grab_one_monster_spell_flag": "src/info-reader/monster-flag-reader.cpp",
+}
+
+
 def reader_token_tables(relative_path, function):
-    """読み込み処理の指定関数が grab_one_flag で照合する辞書名を、照合の順に読む。"""
+    """読み込み処理の指定関数が grab_one_flag で照合する辞書名を、照合の順に読む。
+
+    共有の照合関数（SHARED_MONSTER_FLAG_FUNCTIONS）を呼んでいれば、その関数が照合する辞書も呼んだ位置の順に含める。
+    """
     source = (REPOSITORY_ROOT / relative_path).read_text(encoding="utf-8")
     match = re.search(r"\b" + re.escape(function) + r"\(.*?\n\{(.*?)^\}", source, re.DOTALL | re.MULTILINE)
     if match is None:
         raise AssertionError(f"{function} not found in {relative_path}")
-    tables = re.findall(r"grab_one_flag\(\s*\w+\.\w+\s*,\s*(r_info_\w+)\s*,", match[1])
+    shared_calls = "|".join(re.escape(name) for name in SHARED_MONSTER_FLAG_FUNCTIONS)
+    pattern = r"grab_one_flag\(\s*\*?[\w.]+\s*,\s*(r_info_\w+)\s*,|\b(" + shared_calls + r")\("
+    tables = []
+    for table, shared in re.findall(pattern, match[1]):
+        if table:
+            tables.append(table)
+        elif shared != function:
+            tables.extend(reader_token_tables(SHARED_MONSTER_FLAG_FUNCTIONS[shared], shared))
     if not tables:
         raise AssertionError(f"no token tables found in {function}")
     return tables
