@@ -3,7 +3,10 @@
 #include "system/angband.h"
 
 #include "mspell/mspell-attack/abstract-mspell.h"
+#include <tl/optional.hpp>
 
+enum class MonsterAbilityType;
+class PlayerType;
 struct MonsterSpellResult;
 
 class MSpellData;
@@ -18,4 +21,4 @@ public:
     MSpellBall &operator=(MSpellBall &&) = default;
 };
 
-class PlayerType;
+tl::optional<POSITION> get_monster_ball_radius(MonsterAbilityType ability, bool is_powerful);
