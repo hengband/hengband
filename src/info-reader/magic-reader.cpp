@@ -43,10 +43,9 @@ tl::expected<void, ParseErrorType> MagicReader::read() const
         return tl::make_unexpected(class_id_result.error());
     }
 
-    const auto id_result = this->session.check(*class_id_result);
+    const auto id_result = this->session.check_and_report(*class_id_result);
     if (!id_result) {
-        msg_print(id_result.error().reason);
-        return tl::unexpected(id_result.error().code);
+        return tl::unexpected(id_result.error());
     }
     const auto class_id = *id_result;
     // レコード全体が有効と確定するまで、既存の職業定義を維持する。

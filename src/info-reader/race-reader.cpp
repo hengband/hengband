@@ -591,11 +591,7 @@ tl::expected<void, ParseErrorType> RaceReader::set_mon_message(MonraceMessage &m
     }
 
     for (const auto &message : message_data) {
-        const auto &action_str = get_json_value(message, "action");
-        if (action_str.is_null()) {
-            return tl::unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
-        }
-        const auto action = info_read_token(action_str, r_info_message_flags);
+        const auto action = info_read_token(get_json_value(message, "action"), r_info_message_flags);
         if (!action) {
             return tl::make_unexpected(action.error());
         }

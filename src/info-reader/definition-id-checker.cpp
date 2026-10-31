@@ -87,6 +87,21 @@ tl::expected<int, IdCheckFailure> DefinitionIdChecker::check(int id)
 }
 
 /*!
+ * @brief 整数 ID の範囲と順序を確かめ、失敗した理由を表示する
+ * @param id 確かめる ID
+ * @return 成功時は ID、失敗時は解析エラーコード
+ */
+tl::expected<int, ParseErrorType> DefinitionIdChecker::check_and_report(int id)
+{
+    const auto result = this->check(id);
+    if (!result) {
+        msg_print(result.error().reason);
+        return tl::unexpected(result.error().code);
+    }
+    return *result;
+}
+
+/*!
  * @brief JSON 値と整数 ID に共通する範囲外の理由を作る
  * @param id_text 範囲外だった ID の文字列表現
  * @return ID と許容範囲を含む理由

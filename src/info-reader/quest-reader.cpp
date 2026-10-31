@@ -178,11 +178,12 @@ tl::expected<void, ParseErrorType> parse_legend_cell(const nlohmann::json &cell_
             if (!flag.is_string()) {
                 return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
             }
-            const auto it = CAVE_FLAG_TOKENS.find(flag.get<std::string>());
-            if (it == CAVE_FLAG_TOKENS.end()) {
-                return tl::make_unexpected(ParseErrorType::INVALID_FLAG);
+            // null の要素も INVALID_TYPE とするため、文字列かどうかは info_read_token() の前に確かめる
+            const auto cave_flag = info_read_token(flag, CAVE_FLAG_TOKENS);
+            if (!cave_flag) {
+                return tl::make_unexpected(cave_flag.error());
             }
-            cave_flags |= it->second;
+            cave_flags |= *cave_flag;
         }
     }
 

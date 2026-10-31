@@ -615,6 +615,7 @@ libhengband_a_SOURCES = \
 	hpmp/hp-mp-processor.cpp hpmp/hp-mp-processor.h \
 	hpmp/hp-mp-regenerator.cpp hpmp/hp-mp-regenerator.h \
 	\
+	info-reader/activation-reader.cpp info-reader/activation-reader.h \
 	info-reader/artifact-reader.cpp info-reader/artifact-reader.h \
 	info-reader/baseitem-reader.cpp info-reader/baseitem-reader.h \
 	info-reader/baseitem-tokens-table.cpp info-reader/baseitem-tokens-table.h \
@@ -627,7 +628,7 @@ libhengband_a_SOURCES = \
 	info-reader/feature-info-tokens-table.cpp info-reader/feature-info-tokens-table.h \
 	info-reader/fixed-map-parser.cpp info-reader/fixed-map-parser.h \
 	info-reader/general-parser.cpp info-reader/general-parser.h \
-	info-reader/info-reader-util.cpp info-reader/info-reader-util.h \
+	info-reader/info-reader-util.h \
 	info-reader/item-flag-reader.cpp info-reader/item-flag-reader.h \
 	info-reader/item-reader-limits.h \
 	info-reader/json-reader-util.cpp info-reader/json-reader-util.h \
