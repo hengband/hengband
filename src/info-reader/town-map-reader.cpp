@@ -1,16 +1,13 @@
 #include "info-reader/town-map-reader.h"
 #include "info-reader/json-reader-util.h"
 #include "info-reader/legend-ego-validator.h"
+#include "info-reader/legend-object-trap-validator.h"
 #include "info-reader/quest-reader.h"
-#include "info-reader/random-grid-effect-types.h"
 #include "locale/language-switcher.h"
 #include "player-info/class-info.h"
 #include "player-info/race-info.h"
 #include "player/player-realm.h"
 #include "system/building-type-definition.h"
-#include "system/enums/terrain/terrain-characteristics.h"
-#include "system/terrain/terrain-definition.h"
-#include "system/terrain/terrain-list.h"
 #include "view/display-messages.h"
 #include <algorithm>
 #include <charconv>
@@ -235,24 +232,7 @@ tl::expected<void, ParseErrorType> TownMapReader::read_features(TownMapDefinitio
         std::string reason;
         if (const auto result = parse_quest_legend_cell_deferred(fields, parsed, reason); !result) {
             if (!reason.empty()) {
-                if (fields.contains("trap") && fields["trap"].is_string()) {
-                    const auto &tag = fields["trap"].get_ref<const std::string &>();
-                    if (tag != "NONE" && tag != "*") {
-                        // 罠の地形を指すタグなら誤記の可能性に触れない。
-                        // 罠ではない地形のタグ (FLOOR など) は一覧にあっても誤記の可能性があるため、短くしない。
-                        short terrain_id = 0;
-                        auto random_flags = 0;
-                        const auto is_trap_tag = resolve_legend_terrain(tag, terrain_id, random_flags, RANDOM_NONE) &&
-                                                 TerrainList::get_instance().get_terrain(terrain_id).has(TerrainCharacteristics::TRAP);
-                        if (is_trap_tag) {
-                            reason += fmt::format(_(" (trap '{}' は固定の罠として扱われます)", " (trap '{}' is treated as a fixed trap)"), tag);
-                        } else {
-                            reason += fmt::format(_(" (trap '{}' は固定の罠として扱われます。未知のタグや誤記も固定の罠になります)",
-                                                      " (trap '{}' is treated as a fixed trap; unknown tags and typos are treated the same way)"),
-                                tag);
-                        }
-                    }
-                }
+                reason += describe_town_fixed_trap_tag(fields);
                 msg_print(_("町の配置指定が不正です: featureRules[{}] (記号 '{}').trap: {}",
                               "Invalid town placement: featureRules[{}] (symbol '{}').trap: {}"),
                     index, symbol, reason);

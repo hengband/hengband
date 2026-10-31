@@ -1,7 +1,9 @@
+#include "info-reader/legend-object-trap-validator.h"
 #include "info-reader/quest-reader.h"
 #include "info-reader/town-preferences-reader.h"
 #include "locale/language-switcher.h"
 #include "system/dungeon/quest-fixed-map.h"
+#include "system/enums/terrain/terrain-characteristics.h"
 #include "system/enums/terrain/terrain-tag.h"
 #include "system/terrain/terrain-definition.h"
 #include "system/terrain/terrain-list.h"
@@ -13,9 +15,11 @@
 #include "view/display-messages.h"
 #include <cstdint>
 #include <doctest/doctest.h>
+#include <fmt/format.h>
 #include <limits>
 #include <nlohmann/json.hpp>
 #include <string>
+#include <string_view>
 #include <tl/expected.hpp>
 
 namespace {
@@ -230,26 +234,61 @@ TEST_CASE("TownPreferencesReader names a random object in ego diagnostics")
                                                 "Invalid town ego: legend['A'].ego 65 (object random): cannot apply to a random object"));
 }
 
-TEST_CASE("TownPreferencesReader reports object trap conflicts with legend key")
+TEST_CASE("TownPreferencesReader reports object trap conflicts with legend key and fixed trap tag")
 {
     const test::ScopedReaderState reader_state;
     const test::TerrainListTestAccess none_tag(TerrainTag::NONE, 0);
     auto &terrains = TerrainList::get_instance();
     const test::ScopedVectorWrapper<TerrainList> terrain_state(terrains);
+    terrains.resize(3);
+    terrains.get_terrain(0).tag = "NONE";
+    terrains.get_terrain(1).tag = "TRAP_PIT";
+    terrains.get_terrain(1).flags.set(TerrainCharacteristics::TRAP);
+    terrains.get_terrain(2).tag = "FLOOR";
+    for (const auto *tag : { "TRAP_PIT", "FLOOR" }) {
+        CAPTURE(tag);
+        auto data = make_town_preferences();
+        data["legend"]["A"]["terrain"] = "*";
+        data["legend"]["A"]["object"] = 54;
+        data["legend"]["A"]["trap"] = tag;
+        ScopedMessageCapture diagnostics;
+        TownPreferencesLegend legend;
+        CHECK(test::to_error_code(TownPreferencesReader(data).read(legend, parse_quest_legend_cell)) == ParseErrorType::INVALID_VALUE);
+        CHECK(legend.empty());
+        REQUIRE(diagnostics.messages().size() == 1);
+        // 町のマップの featureRules と同じく、罠の地形のタグだけは未知のタグや誤記への言及を付けない。
+        const auto known = std::string_view(tag) == "TRAP_PIT";
+        const auto hint = known ? std::string(_("固定の罠として扱われます", "is treated as a fixed trap"))
+                                : std::string(_("固定の罠として扱われます。未知のタグや誤記も固定の罠になります", "is treated as a fixed trap; unknown tags and typos are treated the same way"));
+        const auto expected = fmt::format(_("町の配置指定が不正です: legend['A'].trap: {} (trap '{}' は{})", "Invalid town placement: legend['A'].trap: {} (trap '{}' {})"),
+            describe_legend_object_trap_conflict(), tag, hint);
+        CHECK(diagnostics.messages().front() == expected);
+    }
+}
+
+TEST_CASE("TownPreferencesReader adds the fixed trap tag note to conflicts found after the cell parser")
+{
+    const test::ScopedReaderState reader_state;
+    auto &terrains = TerrainList::get_instance();
+    const test::ScopedVectorWrapper<TerrainList> terrain_state(terrains);
     terrains.resize(2);
     terrains.get_terrain(0).tag = "NONE";
     terrains.get_terrain(1).tag = "TRAP_PIT";
-    auto data = make_town_preferences();
-    data["legend"]["A"]["terrain"] = "*";
-    data["legend"]["A"]["object"] = 54;
-    data["legend"]["A"]["trap"] = "TRAP_PIT";
+    terrains.get_terrain(1).flags.set(TerrainCharacteristics::TRAP);
+    const auto data = nlohmann::json::parse(R"({"version":1,"legend":{"#":{"terrain":"NONE","caveInfo":[],"trap":"TRAP_PIT"}}})");
+    // 衝突を拒否しない解析器を差し込み、読み込み側の衝突の検査が出す表示を確かめる。
+    const auto parse_cell = +[](const nlohmann::json &, QuestLegendCell &cell, std::string &) -> tl::expected<void, ParseErrorType> {
+        cell.grid.object = 54;
+        cell.grid.trap = 1;
+        return {};
+    };
     ScopedMessageCapture diagnostics;
     TownPreferencesLegend legend;
-    CHECK(test::to_error_code(TownPreferencesReader(data).read(legend, parse_quest_legend_cell)) == ParseErrorType::INVALID_VALUE);
+    CHECK(test::to_error_code(TownPreferencesReader(data).read(legend, parse_cell)) == ParseErrorType::INVALID_VALUE);
     CHECK(legend.empty());
     REQUIRE(diagnostics.messages().size() == 1);
-    CHECK(diagnostics.messages().front() == _("町の配置指定が不正です: legend['A'].trap: 品と罠の指定の片方が配置時に無視される組み合わせです",
-                                                "Invalid town placement: legend['A'].trap: This object/trap combination silently ignores one placement"));
+    CHECK(diagnostics.messages().front() == _("町の配置指定が不正です: legend['#'].trap: 品と罠の指定の片方が配置時に無視される組み合わせです (trap 'TRAP_PIT' は固定の罠として扱われます)",
+                                                "Invalid town placement: legend['#'].trap: This object/trap combination silently ignores one placement (trap 'TRAP_PIT' is treated as a fixed trap)"));
 }
 
 TEST_CASE("TownPreferencesReader reports reasons from an injected cell parser")
