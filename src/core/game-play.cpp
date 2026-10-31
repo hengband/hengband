@@ -376,7 +376,6 @@ static void process_game_turn(PlayerType *player_ptr)
         world.character_xtra = true;
         handle_stuff_with_inventory_arrangement(player_ptr);
         world.character_xtra = false;
-        Target::clear_last_target();
         health_track(player_ptr, 0);
         floor.forget_lite();
         floor.forget_view();
