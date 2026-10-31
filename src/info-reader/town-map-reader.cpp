@@ -216,11 +216,12 @@ tl::expected<void, ParseErrorType> TownMapReader::read_features(TownMapDefinitio
             return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
         }
         const auto symbol = rule["symbol"].get<std::string>();
-        if (!parse_town_map_symbol(symbol)) {
+        const auto parsed_symbol = parse_town_map_symbol(symbol);
+        if (!parsed_symbol) {
             return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
         }
         TownMapFeatureRule feature;
-        feature.symbol = symbol.front();
+        feature.symbol = *parsed_symbol;
         const auto condition = read_condition(rule);
         if (!condition) {
             return tl::make_unexpected(condition.error());

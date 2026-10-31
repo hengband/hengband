@@ -16,6 +16,9 @@ from validate_json import (BUILDING_MEMBERSHIP_FIELD_MAXIMUMS, REPOSITORY_ROOT, 
                            validate_town_map_semantics, validate_town_preferences_semantics, validate_vault_semantics,
                            validate_wilderness_semantics)
 
+# 町のマップの地物の記号が不正な時の文言。':' '/' '\' も印字できる1文字なので、使えない記号を挙げる。
+TOWN_FEATURE_SYMBOL_MESSAGE = "feature symbol must be exactly one printable ASCII character other than ':', '/' and '\\'"
+
 
 class QuestGridValidationTest(unittest.TestCase):
     @classmethod
@@ -846,7 +849,7 @@ class TownMapValidationTest(unittest.TestCase):
         self.assertFalse(ok, message)
         self.assertIn("['featureRules', 0, 'symbol']", message)
         # schema の長さの制約が弾く。意味検証も同じ値を保険として拒否する。
-        with self.assertRaisesRegex(ValidationError, "feature symbol must be exactly one printable ASCII character"):
+        with self.assertRaisesRegex(ValidationError, re.escape(TOWN_FEATURE_SYMBOL_MESSAGE)):
             validate_town_map_semantics(invalid, self.schema_path)
 
     def test_rows_reject_trailing_newline(self):
@@ -1353,8 +1356,10 @@ class FixedMapSymbolSiteTest(unittest.TestCase):
         # TownMapReader は地物の記号に旧形式の区切りの文字を使わせない。schema を通さずに意味検証だけでも拒否する。
         for symbol in (":", "/", "\\"):
             with self.subTest(symbol=symbol):
-                with self.assertRaisesRegex(ValidationError, "feature symbol"):
+                with self.assertRaises(ValidationError) as caught:
                     validate_town_map_semantics(self.town_map(symbol=symbol), self.town_map_schema_path)
+                # 印字できる1文字でも拒否されるため、文言は使えない記号を挙げる。
+                self.assertEqual(caught.exception.message, TOWN_FEATURE_SYMBOL_MESSAGE)
 
 
 if __name__ == "__main__":

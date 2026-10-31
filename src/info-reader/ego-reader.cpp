@@ -129,10 +129,15 @@ tl::expected<void, ParseErrorType> EgoReader::read() const
     return {};
 }
 
+namespace {
+// 未知のエゴ・フラグ名の表示の書式。flags と extra の flags で同じ文言を使う
+constexpr std::string_view UNKNOWN_EGO_FLAG_FORMAT = _("未知のエゴ・フラグ '{}'。", "Unknown ego flag '{}'.");
+}
+
 bool EgoReader::grab_one_flag(EgoItemDefinition &ego, const nlohmann::json &flag) const
 {
     const auto &name = flag.get_ref<const std::string &>();
-    return grab_one_item_flag_or_report(ego.flags, ego.gen_flags, name, _("未知のエゴ・フラグ '{}'。", "Unknown ego flag '{}'."));
+    return grab_one_item_flag_or_report(ego.flags, ego.gen_flags, name, UNKNOWN_EGO_FLAG_FORMAT);
 }
 
 bool EgoReader::grab_one_extra_flag(ego_generate_type &extra, const nlohmann::json &flag) const
@@ -146,7 +151,7 @@ bool EgoReader::grab_one_extra_flag(ego_generate_type &extra, const nlohmann::js
         extra.trg_flags.push_back(it->second);
         return true;
     }
-    msg_print(_("未知のエゴ・フラグ '{}'。", "Unknown ego flag '{}'."), name);
+    msg_print(UNKNOWN_EGO_FLAG_FORMAT, name);
     return false;
 }
 
