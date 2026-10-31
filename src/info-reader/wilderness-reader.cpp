@@ -87,15 +87,17 @@ struct WildernessLoadError {
 tl::expected<WildernessDefinition, WildernessLoadError> load_wilderness_definition()
 {
     const auto path = path_build(ANGBAND_DIR_EDIT, WILDERNESS_DEFINITION);
-    JsoncDocumentLoader loader(path);
-    if (!loader.is_open()) {
-        return tl::make_unexpected(WildernessLoadError{ fmt::format(_("{}: ファイルを開けません", "{}: cannot open the file"), WILDERNESS_DEFINITION) });
+    const auto json_object = JsoncDocumentLoader::load(path);
+    if (!json_object) {
+        if (json_object.error().kind == JsoncLoadErrorKind::CANNOT_OPEN) {
+            return tl::make_unexpected(WildernessLoadError{ fmt::format(_("{}: ファイルを開けません", "{}: cannot open the file"), WILDERNESS_DEFINITION) });
+        }
+        return tl::make_unexpected(WildernessLoadError{ format_json_syntax_error(WILDERNESS_DEFINITION, json_object.error().message) });
     }
 
     try {
-        const auto json_object = loader.parse();
         WildernessDefinition definition;
-        if (const auto result = WildernessReader(json_object).read(definition); !result) {
+        if (const auto result = WildernessReader(*json_object).read(definition); !result) {
             const auto code = result.error();
             return tl::make_unexpected(WildernessLoadError{
                 fmt::format(_("{}: {} (エラー{})", "{}: {} (error {})"), WILDERNESS_DEFINITION, describe_parse_error(code), enum2i(code)), code });

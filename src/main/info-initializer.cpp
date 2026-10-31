@@ -85,17 +85,15 @@ template <typename DefinitionList>
 void init_json(std::string_view filename, std::string_view keyname, DefinitionHashDataType dhdt, DefinitionList &definition_list, std::function<tl::expected<void, ParseErrorType>(nlohmann::json &)> json_parser, std::function<void()> retouch = nullptr, bool allow_empty = true, std::function<tl::expected<void, ParseErrorType>(const nlohmann::json &)> validate_root = nullptr)
 {
     const auto path = path_build(ANGBAND_DIR_EDIT, filename);
-    JsoncDocumentLoader loader(path);
-    if (!loader.is_open()) {
-        quit(fmt::format(_("'{}'ファイルをオープンできません。", "Cannot open '{}' file."), filename));
+    auto loaded = JsoncDocumentLoader::load(path);
+    if (!loaded) {
+        if (loaded.error().kind == JsoncLoadErrorKind::CANNOT_OPEN) {
+            quit(fmt::format(_("'{}'ファイルをオープンできません。", "Cannot open '{}' file."), filename));
+        }
+        quit(format_json_syntax_error(filename, loaded.error().message));
     }
 
-    nlohmann::json json_object;
-    try {
-        json_object = loader.parse();
-    } catch (const nlohmann::json::exception &e) {
-        quit(format_json_syntax_error(filename, e.what()));
-    }
+    auto &json_object = *loaded;
 
     if (const auto result = info_validate_json_array(json_object, keyname, allow_empty); !result) {
         if (result.error() == ParseErrorType::INVALID_VALUE) {
