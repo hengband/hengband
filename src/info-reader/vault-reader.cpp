@@ -13,7 +13,7 @@
 
 VaultReader::Session VaultReader::create_session(tl::optional<int> last_id)
 {
-    return Session(DefinitionIdOrder::STRICTLY_INCREASING, { 0, std::numeric_limits<short>::max() - 1 }, _("Vault", "vault"), last_id);
+    return Session(DefinitionIdOrder::STRICTLY_INCREASING, { 0, MAX_VAULT_ID }, _("Vault", "vault"), last_id);
 }
 
 VaultReader::VaultReader(const nlohmann::json &data, Session &session)

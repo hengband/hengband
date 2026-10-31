@@ -118,6 +118,8 @@ class MonraceValidationTest(unittest.TestCase):
         for constant, schema, bound in (
             ("MONRACE_ODDS_CORRECTION_RATIO_MAX", properties["odds_correction_ratio"], "maximum"),
             ("MONRACE_EVOLVE_NEED_EXP_MIN", properties["evolve"]["properties"]["need_exp"], "minimum"),
+            ("MONRACE_EXP_MAX", properties["exp"], "maximum"),
+            ("MONRACE_EXP_MAX", properties["evolve"]["properties"]["need_exp"], "maximum"),
         ):
             with self.subTest(constant=constant):
                 match = re.search(rf"constexpr int {constant} = (\d+);", source)

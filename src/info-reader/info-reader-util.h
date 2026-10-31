@@ -27,6 +27,7 @@ constexpr int MAX_MONRACE_ID = std::numeric_limits<std::underlying_type_t<Monrac
 constexpr int MAX_FIXED_ARTIFACT_ID = std::numeric_limits<std::underlying_type_t<FixedArtifactId>>::max() - 1; //!< 固定アーティファクトIDの上限
 constexpr int MAX_TERRAIN_ID = std::numeric_limits<FEAT_IDX>::max() - 1; //!< 地形IDの上限
 constexpr int MAX_QUEST_ID = std::numeric_limits<std::underlying_type_t<QuestId>>::max() - 1; //!< クエストIDの上限
+constexpr int MAX_VAULT_ID = std::numeric_limits<short>::max() - 1; //!< VaultのIDの上限 (vault_type は short でIDを持つ)
 
 /*!
  * @brief 型Keyをキーとして持つような連想配列型のコンセプト
