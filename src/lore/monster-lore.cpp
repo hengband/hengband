@@ -11,7 +11,6 @@
 #include "lore/lore-util.h"
 #include "lore/magic-types-setter.h"
 #include "monster-race/race-misc-flags.h"
-#include "monster-race/race-sex.h"
 #include "player-ability/player-ability-types.h"
 #include "system/angband.h"
 #include "system/enums/monrace/monrace-id.h"
@@ -25,17 +24,6 @@
 #include "view/display-lore.h"
 #include <algorithm>
 #include <fmt/format.h>
-
-static void set_msex_flags(lore_type *lore_ptr)
-{
-    lore_ptr->msex = MonsterSex::NONE;
-    if (lore_ptr->monrace->is_male()) {
-        lore_ptr->msex = MonsterSex::MALE;
-    }
-    if (lore_ptr->monrace->is_female()) {
-        lore_ptr->msex = MonsterSex::FEMALE;
-    }
-}
 
 static void set_flags1(lore_type *lore_ptr)
 {
@@ -149,7 +137,6 @@ void process_monster_lore(PlayerType *player_ptr, MonraceId r_idx, monster_lore_
         lore_ptr->know_everything = true;
     }
     set_flags_for_full_knowledge(lore_ptr);
-    set_msex_flags(lore_ptr);
     set_flags1(lore_ptr);
     set_race_flags(lore_ptr);
     const auto &text = lore_ptr->monrace->text;
