@@ -4107,6 +4107,23 @@
       ],
     },
     {
+      "id_list": [1419 /*M.O.C.C.O.S, the Evil Goddess*/],
+      "message": [
+        {
+          "action": "SPEAK_ALL",
+          "chance": 8,
+          "message": {
+            "ja": ["「崇めよ、我を」", "「限定版買えよ」", "「お前も限定版を買うんだよ！」"],
+            "en": [
+              "says, 'Worship me.'",
+              "says, 'Buy the limited edition.'",
+              "shouts, 'You're buying the limited edition too!'",
+            ],
+          },
+        },
+      ],
+    },
+    {
       "name": "DEFAULT",
       "message": [
         {
