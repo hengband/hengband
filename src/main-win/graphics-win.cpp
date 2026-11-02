@@ -99,6 +99,22 @@ static HBITMAP readable_actor_bitmap(HBITMAP original)
         ReleaseDC(nullptr, dc);
         return nullptr;
     }
+    if (original_tiles::monster_catalog_available) {
+        // 古いPNGの未使用枠は透明色なので、追加画像がない種族は汎用画像へ戻す。
+        for (auto frame = 0; frame < original_tiles::MONSTER_CATALOG_FRAMES; ++frame) {
+            auto missing = true;
+            for (auto y = 0; y < 32 && missing; ++y) {
+                for (auto x = 0; x < 32; ++x) {
+                    const auto pixel = pixels[(original_tiles::MONSTER_CATALOG_BASE_ROW * 32 + frame / 16 * 32 + y) * width + frame % 16 * 32 + x] & 0x00ffffffU;
+                    if (pixel != original_tiles::ACTOR_TRANSPARENT) {
+                        missing = false;
+                        break;
+                    }
+                }
+            }
+            original_tiles::monster_catalog_missing_frames[frame] = missing;
+        }
+    }
     void *bits = nullptr;
     const auto result = CreateDIBSection(dc, &info, DIB_RGB_COLORS, &bits, nullptr, 0);
     if (result && bits) {
@@ -122,6 +138,7 @@ graphics_mode change_graphics(graphics_mode arg)
     infGraph.delete_bitmap();
     original_tiles::catalog_available = false;
     original_tiles::monster_catalog_available = false;
+    original_tiles::monster_catalog_missing_frames.set();
 
     if (arg == graphics_mode::GRAPHICS_ORIGINAL) {
         wid = 8;
