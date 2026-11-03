@@ -11,7 +11,6 @@
 #include "locale/language-switcher.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/tr-types.h"
-#include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
 #include "view/display-messages.h"
 #include <nlohmann/json.hpp>

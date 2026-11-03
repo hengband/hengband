@@ -25,9 +25,7 @@
 #include <cstdint>
 #include <exception>
 #include <limits>
-#include <memory>
 #include <nlohmann/json.hpp>
-#include <span>
 #include <utility>
 
 DungeonReader::Session DungeonReader::create_session(tl::optional<int> last_id)

@@ -3,9 +3,7 @@
 #include "info-reader/info-reader-util.h"
 #include "info-reader/parse-error-types.h"
 #include "info-reader/range.h"
-#include "system/angband.h"
 #include "util/type-concepts.h"
-#include <concepts>
 #include <functional>
 #include <nlohmann/json.hpp>
 #include <string_view>
