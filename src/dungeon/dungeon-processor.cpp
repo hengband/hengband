@@ -32,6 +32,7 @@
 #include "system/floor/wilderness-grid.h"
 #include "system/monrace/monrace-definition.h"
 #include "target/target-checker.h"
+#include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "world/world-turn-processor.h"

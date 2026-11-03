@@ -5,6 +5,7 @@
  */
 
 #include "system/baseitem/baseitem-definition.h"
+#include "locale/language-switcher.h"
 #include "util/string-processor.h"
 #include <numeric>
 #include <string>

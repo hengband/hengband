@@ -8,6 +8,7 @@
 #include "system/angband-exceptions.h"
 #include "system/baseitem/baseitem-definition.h"
 #include "system/baseitem/baseitem-key.h"
+#include "term/z-rand.h"
 #include "util/enum-converter.h"
 #include "util/enum-range.h"
 #include <algorithm>

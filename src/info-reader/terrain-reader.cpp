@@ -176,7 +176,7 @@ tl::expected<void, ParseErrorType> TerrainReader::read() const
  */
 bool TerrainReader::grab_one_feat_flag(TerrainType &terrain, std::string_view what) const
 {
-    if (EnumClassFlagGroup<TerrainCharacteristics>::grab_one_flag(terrain.flags, f_info_flags, what)) {
+    if (info_grab_one_flag(terrain.flags, f_info_flags, what)) {
         return true;
     }
 

@@ -40,6 +40,7 @@
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
 #include "timed-effect/timed-effects.h"
+#include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "wizard/wizard-messages.h"

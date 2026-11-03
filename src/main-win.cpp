@@ -109,6 +109,7 @@
 #include "term/tile-layout.h"
 #include "term/z-util.h"
 #include "util/angband-files.h"
+#include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "view/display-scores.h"

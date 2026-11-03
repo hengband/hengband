@@ -1,6 +1,5 @@
 #pragma once
 
-#include "info-reader/info-reader-util.h"
 #include <bitset>
 #include <concepts>
 #include <cstdint>
@@ -685,27 +684,6 @@ public:
     friend void wr_FlagGroup_bytes(const FlagGroup<FlagType, MAX> &fg, Func wr_byte_func, size_t count)
     {
         flag_group::detail::write_bitset(fg.bs_, wr_byte_func, count);
-    }
-
-    /**
-     * @brief 文字列からフラグへのマップを指定した検索キーで検索し、
-     *        見つかった場合はフラグ集合に該当するフラグをセットする
-     *
-     * @param fg フラグをセットするフラグ集合
-     * @param dict 文字列からフラグへのマップ
-     * @param what マップの検索キー
-     * @return 検索キーでフラグが見つかり、フラグをセットした場合 true
-     *         見つからなかった場合 false
-     */
-    template <typename Key, DictIndexedBy<Key> Dict>
-    static bool grab_one_flag(FlagGroup<FlagType, MAX> &fg, const Dict &dict, Key &&what)
-    {
-        auto val = info_get_const(dict, std::forward<Key>(what));
-        if (val) {
-            fg.set(*val);
-            return true;
-        }
-        return false;
     }
 
 private:

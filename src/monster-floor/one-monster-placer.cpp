@@ -34,6 +34,7 @@
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
 #include "system/player-type-definition.h"
+#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "wizard/wizard-messages.h"
 #include "world/world.h"

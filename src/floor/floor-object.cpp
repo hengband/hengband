@@ -30,6 +30,7 @@
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
 #include "target/projection-path-calculator.h"
+#include "util/bit-flags-calculator.h"
 #include "util/finalizer.h"
 #include "view/display-messages.h"
 #include "window/display-sub-windows.h"

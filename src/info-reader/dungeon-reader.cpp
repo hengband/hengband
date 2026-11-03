@@ -136,7 +136,7 @@ tl::expected<void, ParseErrorType> DungeonReader::validate_wilderness_positions(
  */
 bool DungeonReader::grab_one_dungeon_flag(DungeonDefinition &dungeon, std::string_view what) const
 {
-    if (EnumClassFlagGroup<DungeonFeatureType>::grab_one_flag(dungeon.flags, dungeon_flags, what)) {
+    if (info_grab_one_flag(dungeon.flags, dungeon_flags, what)) {
         return true;
     }
 
@@ -168,7 +168,7 @@ static tl::expected<void, ParseErrorType> info_set_enum_flag_group(const nlohman
         if (token.empty()) {
             return true;
         }
-        if (EnumClassFlagGroup<Enum>::grab_one_flag(flags, tokens, token)) {
+        if (info_grab_one_flag(flags, tokens, token)) {
             return true;
         }
         msg_print(_("未知のダンジョン{}種別 '{}'。", "Unknown dungeon {} kind '{}'."), label, token);
@@ -185,7 +185,7 @@ static tl::expected<void, ParseErrorType> info_set_enum_flag_group(const nlohman
 bool DungeonReader::grab_one_basic_monster_flag(DungeonDefinition &dungeon, std::string_view what) const
 {
     // NONEは種族の性別未設定を表す値であり、出現条件のフラグにはしない。
-    if (what != "NONE" && EnumClassFlagGroup<MonsterSex>::grab_one_flag(dungeon.mon_sex, r_info_sex, what)) {
+    if (what != "NONE" && info_grab_one_flag(dungeon.mon_sex, r_info_sex, what)) {
         return true;
     }
 
