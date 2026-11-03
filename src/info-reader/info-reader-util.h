@@ -1,9 +1,7 @@
 #pragma once
 
 #include "info-reader/parse-error-types.h"
-#include "system/angband.h"
 #include "system/h-type.h"
-#include "util/bit-flags-calculator.h"
 #include <concepts>
 #include <cstdint>
 #include <limits>
