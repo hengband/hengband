@@ -1646,6 +1646,7 @@ hengband_test_SOURCES = \
 	test/util/test-sha256.cpp \
 	test/util/test-string-processor.cpp \
 	test/util/test-temporary-json-files.cpp \
+	test/view/test-display-lore.cpp \
 	test/view/test-display-messages.cpp \
 	test/view/test-map-info-cache.cpp \
 	test/view/test-original-tiles.cpp test/view/original-terrain-coverage.inc test/view/original-item-coverage.inc test/view/original-monster-coverage.inc test/view/original-symbol-coverage.inc \

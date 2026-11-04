@@ -467,6 +467,9 @@
     <ClCompile Include="..\..\src\test\util\test-temporary-json-files.cpp">
       <Filter>util</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\test\view\test-display-lore.cpp">
+      <Filter>view</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\test\view\test-display-messages.cpp">
       <Filter>view</Filter>
     </ClCompile>
