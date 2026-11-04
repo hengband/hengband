@@ -387,7 +387,26 @@ TEST_CASE("Original monster catalog covers every species without colliding with 
     CHECK(errors == 0);
     CHECK_FALSE(original_tiles::decode_monster_catalog_tile({ 0xf0, static_cast<char>(0xff) }));
     CHECK(original_tiles::monster_catalog_index(-1) == -1);
-    CHECK(original_tiles::monster_catalog_index(1419) == -1);
+    CHECK(original_tiles::monster_catalog_index(1420) == -1);
+    CHECK(original_tiles::decode_monster_catalog_tile(original_tiles::monster_catalog_tile_symbol(1419, 1)) == 2529);
+}
+
+TEST_CASE("Original monster additions use appended frames and fall back for old images")
+{
+    const auto restore = test::scoped_restore(use_graphics, ANGBAND_GRAF, original_tiles::monster_catalog_available, original_tiles::monster_catalog_missing_frames);
+    use_graphics = true;
+    ANGBAND_GRAF = "original32";
+    original_tiles::monster_catalog_available = true;
+    original_tiles::monster_catalog_missing_frames.reset();
+    const DisplaySymbol fallback{ 1, 'H' };
+    const auto added = original_tiles::monster_catalog_tile_symbol(1419, 1);
+    CHECK(original_tiles::monster_catalog_symbol(1419, fallback) == added);
+    original_tiles::monster_catalog_missing_frames.set(2529);
+    CHECK(original_tiles::monster_catalog_symbol(1419, fallback) == original_tiles::monster_catalog_generic(fallback));
+    CHECK(original_tiles::monster_catalog_symbol(1419, fallback) != added);
+    CHECK(original_tiles::monster_catalog_symbol(1418, { 9, 'B' }) == original_tiles::monster_catalog_tile_symbol(1418, 9));
+    original_tiles::monster_catalog_available = false;
+    CHECK(original_tiles::monster_catalog_symbol(1419, fallback) == original_tiles::monster_symbol(fallback));
 }
 
 TEST_CASE("Original tiles improve actor silhouettes without touching neighboring cells")
@@ -653,8 +672,8 @@ TEST_CASE("Original tiles cover public monster appearances and preserve animated
         ++mapped;
         errors += icon < 0 || icon >= original_tiles::MONSTER_ICONS;
     }
-    CHECK(std::size(definitions) == 1419);
-    CHECK(mapped == 1419);
+    CHECK(std::size(definitions) == 1420);
+    CHECK(mapped == 1420);
     CHECK(errors == 0);
     std::set<int> images;
     auto roundtrip_errors = 0;

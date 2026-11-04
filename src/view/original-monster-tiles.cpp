@@ -5,12 +5,15 @@
 
 namespace original_tiles {
 bool monster_catalog_available = false;
+std::bitset<MONSTER_CATALOG_FRAMES> monster_catalog_missing_frames;
 namespace {
     struct CatalogMonster {
         int id;
         int color_start;
         int color;
         char character;
+        // 追加画像は既存の色違いフレームを移動せず、末尾の枠を指定する。
+        int base_frame = -1;
     };
     constexpr CatalogMonster monsters[] = {
 #include "view/original-monster-catalog.inc"
@@ -67,7 +70,8 @@ DisplaySymbol monster_catalog_tile_symbol(int icon, int color)
     const auto &entry = monsters[icon];
     color &= 15;
     const auto extra = color < entry.color ? color : color - 1;
-    const auto payload = entry.color_start < 0 || color == entry.color ? icon : entry.color_start + extra;
+    const auto base_frame = entry.base_frame < 0 ? icon : entry.base_frame;
+    const auto payload = entry.color_start < 0 || color == entry.color ? base_frame : entry.color_start + extra;
     const auto code = catalog_code(payload);
     return { static_cast<uint8_t>(0x80 + code / 128), static_cast<char>(0x80 + code % 128) };
 }
@@ -109,7 +113,12 @@ DisplaySymbol monster_catalog_symbol(int apparent_id, DisplaySymbol fallback)
         return monster_symbol(fallback);
     }
     const auto icon = monster_catalog_index(apparent_id);
-    return icon < 0 ? monster_catalog_generic(fallback) : monster_catalog_tile_symbol(icon, fallback.color);
+    if (icon < 0) {
+        return monster_catalog_generic(fallback);
+    }
+    const auto symbol = monster_catalog_tile_symbol(icon, fallback.color);
+    const auto frame = decode_monster_catalog_tile(symbol);
+    return frame && monster_catalog_missing_frames[*frame] ? monster_catalog_generic(fallback) : symbol;
 }
 
 DisplaySymbol monster_catalog_generic(DisplaySymbol fallback)
