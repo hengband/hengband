@@ -432,7 +432,19 @@ char input_key_with_context(InputContext input_context, bool do_all_term_refresh
  */
 int input_special_key_with_context(InputKind kind, std::string_view prompt, bool numpad_cursor)
 {
-    const InputContextScope context_scope(kind, prompt);
+    return input_special_key_with_context({ kind, std::string(prompt), {} }, numpad_cursor);
+}
+
+/*!
+ * @brief 入力待ちの文脈を指定して公開し、特殊キーも区別してキーを1つ待つ
+ * @param input_context 入力待ちの間に公開する文脈 (表示は呼び出し元が行う)
+ * @param numpad_cursor テンキーをカーソルキーとして扱うか
+ * @return 入力したキー (カーソルキーなどの特殊キーは SKEY_* の値)
+ * @details input_special_key_with_context(InputKind, std::string_view, bool) のうち、種類ごとの詳細も公開したいものに使う。
+ */
+int input_special_key_with_context(InputContext input_context, bool numpad_cursor)
+{
+    const InputContextScope context_scope(std::move(input_context));
     return inkey_special(numpad_cursor);
 }
 

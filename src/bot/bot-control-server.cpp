@@ -226,6 +226,8 @@ std::string_view birth_step_name(BirthStep step)
         return "chara_limits";
     case BirthStep::ROLL_RESULT:
         return "roll_result";
+    case BirthStep::HISTORY:
+        return "history";
     case BirthStep::START:
         return "start";
     }

@@ -106,6 +106,13 @@ TEST_CASE("input_special_key_with_context publishes the given context while wait
     CHECK(input_special_key_with_context(InputKind::FILE_VIEW, "[Press ESC to exit.]") == ' ');
 }
 
+TEST_CASE("input_special_key_with_context publishes the details of the given context")
+{
+    test::ScopedInputTerm term;
+    term.expect({ InputKind::BIRTH, "[ Cursor key for Move, Enter for End ]", BirthInputDetails{ BirthStep::HISTORY } }, "a");
+    CHECK(input_special_key_with_context({ InputKind::BIRTH, "[ Cursor key for Move, Enter for End ]", BirthInputDetails{ BirthStep::HISTORY } }) == 'a');
+}
+
 TEST_CASE("pause_line publishes the any-key context")
 {
 #ifdef JP
