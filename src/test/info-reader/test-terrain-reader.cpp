@@ -430,6 +430,37 @@ TEST_CASE("TerrainReader keeps helper validation order and error index timing")
 /*!
  * @brief 省略・null・各用途のゼロ値と上限値を正常なヘルパー結果として公開する
  */
+TEST_CASE("TerrainReader sets only the flag of the given optional definition")
+{
+    struct Definition {
+        const char *key;
+        nlohmann::json value;
+        TerrainCharacteristics flag;
+    };
+    const std::vector<Definition> definitions = {
+        { "door", { { "power", 1 } }, TerrainCharacteristics::DOOR },
+        { "tunnel", { { "power", 1 } }, TerrainCharacteristics::TUNNEL },
+        { "pattern", { { "type", "START" } }, TerrainCharacteristics::PATTERN },
+        { "store", { { "type", "GENERAL" } }, TerrainCharacteristics::STORE },
+        { "building", { { "type", "BUILDING_00" } }, TerrainCharacteristics::BLDG },
+    };
+    TerrainStateGuard guard;
+    auto &terrains = TerrainList::get_instance();
+    for (const auto &definition : definitions) {
+        CAPTURE(definition.key);
+        guard.session = {};
+        terrains.resize(0);
+        auto data = make_terrain();
+        data[definition.key] = definition.value;
+        REQUIRE(test::read_and_commit(TerrainReader(data, guard.session), guard.session).has_value());
+        const auto &terrain = terrains.get_terrain(0);
+        for (const auto &other : definitions) {
+            CAPTURE(other.key);
+            CHECK(terrain.flags.has(other.flag) == (other.flag == definition.flag));
+        }
+    }
+}
+
 TEST_CASE("TerrainReader preserves optional helpers and successful endpoint values")
 {
     TerrainStateGuard guard;
@@ -450,6 +481,9 @@ TEST_CASE("TerrainReader preserves optional helpers and successful endpoint valu
         CHECK(terrains.get_terrain(0).generation_changes.empty());
         CHECK(terrains.get_terrain(0).door_power == 0);
         CHECK(terrains.get_terrain(0).trap_type == TrapType::NOT_TRAP);
+        for (const auto flag : { TerrainCharacteristics::DOOR, TerrainCharacteristics::TUNNEL, TerrainCharacteristics::PATTERN, TerrainCharacteristics::STORE, TerrainCharacteristics::BLDG }) {
+            CHECK_FALSE(terrains.get_terrain(0).flags.has(flag));
+        }
     }
     for (const auto power : { 0, 255 }) {
         CAPTURE(power);
@@ -469,6 +503,9 @@ TEST_CASE("TerrainReader preserves optional helpers and successful endpoint valu
         REQUIRE(test::read_and_commit(TerrainReader(data, guard.session), guard.session).has_value());
         const auto &terrain = terrains.get_terrain(0);
         CHECK(terrain.symbol_definitions[F_LIT_STANDARD].character == '.');
+        for (const auto flag : { TerrainCharacteristics::DOOR, TerrainCharacteristics::TUNNEL, TerrainCharacteristics::PATTERN, TerrainCharacteristics::STORE, TerrainCharacteristics::BLDG }) {
+            CHECK(terrain.flags.has(flag));
+        }
         CHECK(terrain.door_power == power);
         CHECK(terrain.tunnel_power == power);
         CHECK(terrain.trap_power == power);
