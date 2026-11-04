@@ -1,9 +1,7 @@
 #pragma once
 
 #include "info-reader/parse-error-types.h"
-#include "system/angband.h"
 #include "system/h-type.h"
-#include "util/bit-flags-calculator.h"
 #include <concepts>
 #include <cstdint>
 #include <limits>
@@ -70,6 +68,25 @@ bool info_grab_one_const(uint32_t &buf, const Dict &dict, Key &&what)
     auto val = info_get_const(dict, std::forward<Key>(what));
     if (val) {
         buf = static_cast<uint32_t>(*val);
+        return true;
+    }
+    return false;
+}
+
+/*!
+ * @brief info文字列からフラグを探し、フラグ集合にセットする
+ * @param fg フラグをセットするフラグ集合 (FlagGroup など)
+ * @param dict 文字列からフラグへの変換表
+ * @param what 検索する文字列
+ * @return 見つけてセットしたらtrue。見つからなければフラグ集合を変えずにfalse
+ */
+template <typename FlagGroupT, typename Key, DictIndexedBy<Key> Dict>
+    requires requires(FlagGroupT &fg, const typename Dict::mapped_type &flag) { fg.set(flag); }
+bool info_grab_one_flag(FlagGroupT &fg, const Dict &dict, Key &&what)
+{
+    auto val = info_get_const(dict, std::forward<Key>(what));
+    if (val) {
+        fg.set(*val);
         return true;
     }
     return false;

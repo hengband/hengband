@@ -2,6 +2,7 @@
 #include "load/old/monster-flag-types-savefile50.h"
 #include "save/save-util.h"
 #include "system/monster-entity.h"
+#include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
 
 MonsterEntityWriter::MonsterEntityWriter(const MonsterEntity &monster)

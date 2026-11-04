@@ -9,7 +9,6 @@
 #include "info-reader/symbol-reader-util.h"
 #include "locale/character-encoding.h"
 #include "locale/language-switcher.h"
-#include "player-ability/player-ability-types.h"
 #include "system/artifact/artifact-definition.h"
 #include "system/artifact/artifact-list.h"
 #include "system/enums/monrace/monrace-id.h"

@@ -1,5 +1,6 @@
 #include "info-reader/item-flag-reader.h"
 #include "info-reader/baseitem-tokens-table.h"
+#include "info-reader/info-reader-util.h"
 #include "view/display-messages.h"
 
 /*!
@@ -12,11 +13,11 @@
  */
 bool grab_one_item_flag(TrFlags &flags, EnumClassFlagGroup<ItemGenerationTraitType> &gen_flags, std::string_view what)
 {
-    if (TrFlags::grab_one_flag(flags, baseitem_flags, what)) {
+    if (info_grab_one_flag(flags, baseitem_flags, what)) {
         return true;
     }
 
-    return EnumClassFlagGroup<ItemGenerationTraitType>::grab_one_flag(gen_flags, baseitem_geneneration_flags, what);
+    return info_grab_one_flag(gen_flags, baseitem_geneneration_flags, what);
 }
 
 /*!

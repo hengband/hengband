@@ -16,7 +16,6 @@
 #include "info-reader/json-reader-util.h"
 #include "info-reader/parse-error-types.h"
 #include "info-reader/symbol-reader-util.h"
-#include "locale/japanese.h"
 #include "locale/language-switcher.h"
 #include "object-enchant/tr-types.h"
 #include "object/tval-types.h"
@@ -28,13 +27,9 @@
 #include "system/baseitem/baseitem-definition.h"
 #include "system/baseitem/baseitem-list.h"
 #include "system/gamevalue.h"
-#include "util/bit-flags-calculator.h"
-#include "util/enum-converter.h"
 #include "view/display-messages.h"
 #include <algorithm>
-#include <array>
 #include <iterator>
-#include <memory>
 #include <nlohmann/json.hpp>
 #include <utility>
 

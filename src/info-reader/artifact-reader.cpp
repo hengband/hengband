@@ -8,18 +8,15 @@
 #include "info-reader/item-reader-limits.h"
 #include "info-reader/json-reader-util.h"
 #include "info-reader/parse-error-types.h"
-#include "locale/japanese.h"
 #include "locale/language-switcher.h"
 #include "object-enchant/tr-types.h"
 #include "system/artifact/artifact-definition.h"
 #include "system/artifact/artifact-list.h"
 #include "system/baseitem/baseitem-definition.h"
 #include "system/baseitem/baseitem-list.h"
-#include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
 #include "view/display-messages.h"
 #include <algorithm>
-#include <fmt/format.h>
 #include <nlohmann/json.hpp>
 
 ArtifactReader::Session ArtifactReader::create_session(tl::optional<int> last_id)

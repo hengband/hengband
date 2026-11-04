@@ -1,13 +1,14 @@
 /*!
  * @brief 定義ファイル読込の共通ユーティリティのテスト
  *
- * 定義ファイル中の文字列を定数へ変換する info_get_const / info_grab_one_const を検証する。
+ * 定義ファイル中の文字列を定数へ変換する info_get_const / info_grab_one_const / info_grab_one_flag を検証する。
  * JSON から値を取り出す info_set_* 群は test-json-reader-util.cpp で扱う。
  *
  * 発動の名前を読む grab_one_activation_flag は activation-reader.h にあり、test-activation-reader.cpp で扱う。
  */
 
 #include "info-reader/info-reader-util.h"
+#include "util/flag-group.h"
 
 #include <doctest/doctest.h>
 
@@ -82,4 +83,26 @@ TEST_CASE("info_grab_one_const stores the constant only when the token is found"
         CHECK_FALSE(info_grab_one_const(buf, TEST_FLAGS, "UNKNOWN"));
         CHECK(buf == initial_value);
     }
+}
+
+TEST_CASE("info_grab_one_flag sets the flag only when the token is found")
+{
+    enum class SmallFlag {
+        ZERO,
+        THREE = 3,
+        MAX,
+    };
+    const std::map<std::string, SmallFlag> dict = {
+        { "ZERO", SmallFlag::ZERO },
+        { "THREE", SmallFlag::THREE },
+    };
+
+    EnumClassFlagGroup<SmallFlag> flags;
+
+    CHECK(info_grab_one_flag(flags, dict, "THREE"));
+    CHECK(flags.has(SmallFlag::THREE));
+
+    // 見つからなければ何も変更しない
+    CHECK_FALSE(info_grab_one_flag(flags, dict, "UNKNOWN"));
+    CHECK(flags.count() == 1);
 }

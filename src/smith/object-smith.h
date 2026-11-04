@@ -1,5 +1,6 @@
 #pragma once
 
+#include "system/h-type.h"
 #include "system/system-variables.h"
 
 #include "object-enchant/tr-flags.h"

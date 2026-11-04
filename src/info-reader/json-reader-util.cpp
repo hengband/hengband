@@ -1,5 +1,4 @@
 #include "info-reader/json-reader-util.h"
-#include "info-reader/info-reader-util.h"
 #include "info-reader/symbol-reader-util.h"
 #include "locale/character-encoding.h"
 #include "locale/language-switcher.h"

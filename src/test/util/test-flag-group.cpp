@@ -22,8 +22,6 @@
 
 #include <cstdint>
 #include <iterator>
-#include <map>
-#include <string>
 #include <vector>
 
 namespace {
@@ -497,23 +495,6 @@ TEST_CASE("FlagGroup writes the flags which are set into an output iterator")
     REQUIRE(result.size() == 2);
     CHECK(result[0] == SmallFlag::ONE);
     CHECK(result[1] == SmallFlag::FIVE);
-}
-
-TEST_CASE("FlagGroup sets a flag found in a dictionary by its key")
-{
-    const std::map<std::string, SmallFlag> dict = {
-        { "ZERO", SmallFlag::ZERO },
-        { "THREE", SmallFlag::THREE },
-    };
-
-    SmallFlagGroup flags;
-
-    CHECK(SmallFlagGroup::grab_one_flag(flags, dict, "THREE"));
-    CHECK(flags.has(SmallFlag::THREE));
-
-    // 見つからなければ何も変更しない
-    CHECK_FALSE(SmallFlagGroup::grab_one_flag(flags, dict, "UNKNOWN"));
-    CHECK(flags.count() == 1);
 }
 
 TEST_CASE("FlagGroup survives a round trip through the save file format")

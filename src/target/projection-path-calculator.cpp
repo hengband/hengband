@@ -4,6 +4,7 @@
 #include "system/enums/terrain/terrain-characteristics.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
+#include "util/bit-flags-calculator.h"
 #include "util/finalizer.h"
 
 class ProjectionPathHelper {
