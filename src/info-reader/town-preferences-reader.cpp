@@ -8,8 +8,6 @@
 #include "locale/language-switcher.h"
 #include "system/dungeon/quest-fixed-map.h"
 #include "view/display-messages.h"
-#include <cstdint>
-#include <limits>
 #include <nlohmann/json.hpp>
 #include <string>
 #include <utility>
@@ -45,7 +43,7 @@ tl::expected<void, ParseErrorType> TownPreferencesReader::read(TownPreferencesLe
         }
         int special = 0;
         if (cell_data.contains("special") &&
-            !info_set_integer(cell_data["special"], special, true, Range(std::numeric_limits<int16_t>::min(), std::numeric_limits<int16_t>::max()))) {
+            !info_set_integer(cell_data["special"], special, true, LEGEND_SHORT_RANGE)) {
             return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
         }
 

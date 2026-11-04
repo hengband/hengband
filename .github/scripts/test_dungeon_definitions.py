@@ -6,7 +6,7 @@ import unittest
 
 from json_validation_test_helper import (fixed_artifact_id_schema_maximum, monrace_id_schema_maximum, race_info_table_keys,
                                          reader_token_tables, schema_enum_values, validate_document)
-from validate_json import build_schema_registry, load_all_schemas, load_jsonc
+from validate_json import build_schema_registry, load_all_schemas, load_cpp_constant, load_jsonc
 
 
 class DungeonValidationTest(unittest.TestCase):
@@ -110,9 +110,11 @@ class DungeonValidationTest(unittest.TestCase):
         self.assertIn("'FEMALE'", diagnostic)
 
     def numeric_cases(self):
+        # schema の上限と C++ の定数を照合するため、入口の座標の上限はソースから読む。
+        entrance_coord_max = load_cpp_constant(self.root / "src/info-reader/dungeon-reader.cpp", "DUNGEON_ENTRANCE_COORD_MAX")
         return ((["id"], 0, 20),
-                (["position", "wild_y"], 0, 32766),
-                (["position", "wild_x"], 0, 32766),
+                (["position", "wild_y"], 0, entrance_coord_max),
+                (["position", "wild_x"], 0, entrance_coord_max),
                 (["generation", "minDepth"], 0, 32767),
                 (["generation", "maxDepth"], 0, 32767),
                 (["generation", "minPlayerLevel"], 0, 50),

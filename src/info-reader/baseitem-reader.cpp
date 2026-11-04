@@ -230,7 +230,7 @@ tl::expected<void, ParseErrorType> BaseitemReader::read() const
         msg_print(_("アイテムのレベル読込失敗。", "Failed to load level of item."));
         return result;
     }
-    if (const auto result = info_set_integer(get_json_value(this->baseitem_data, "weight"), baseitem.weight, true, Range(0, 9999)); !result) {
+    if (const auto result = info_set_integer(get_json_value(this->baseitem_data, "weight"), baseitem.weight, true, Range(0, ITEM_WEIGHT_MAX)); !result) {
         msg_print(_("アイテムの重量読込失敗。", "Failed to load weight of item."));
         return result;
     }
@@ -243,8 +243,7 @@ tl::expected<void, ParseErrorType> BaseitemReader::read() const
         msg_print(_("アイテムのベースAC読込失敗。", "Failed to load base AC of item."));
         return result;
     }
-    // セーブではダイスの個数・面数をそれぞれ1バイトで書くため、0〜255に限る。
-    if (const auto result = info_set_dice(get_json_value(this->baseitem_data, "base_dice"), baseitem.damage_dice, false, Range(0, 255)); !result) {
+    if (const auto result = info_set_dice(get_json_value(this->baseitem_data, "base_dice"), baseitem.damage_dice, false, Range(0, ITEM_DICE_MAX)); !result) {
         msg_print(_("アイテムのベースダイス読込失敗。", "Failed to load base dice of item."));
         return result;
     }

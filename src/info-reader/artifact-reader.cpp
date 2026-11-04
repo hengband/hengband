@@ -73,7 +73,7 @@ tl::expected<void, ParseErrorType> ArtifactReader::read() const
         msg_print(_("アーティファクトの希少度読込失敗。", "Failed to load rarity of artifact."));
         return result;
     }
-    if (const auto result = info_set_integer(get_json_value(this->art_data, "weight"), artifact.weight, true, Range(0, 9999)); !result) {
+    if (const auto result = info_set_integer(get_json_value(this->art_data, "weight"), artifact.weight, true, Range(0, ITEM_WEIGHT_MAX)); !result) {
         msg_print(_("アーティファクトの重量読込失敗。", "Failed to load weight of artifact."));
         return result;
     }
@@ -85,8 +85,7 @@ tl::expected<void, ParseErrorType> ArtifactReader::read() const
         msg_print(_("アーティファクトのベースAC読込失敗。", "Failed to load base AC of artifact."));
         return result;
     }
-    // セーブではダイスの個数・面数をそれぞれ1バイトで書くため、0〜255に限る。
-    if (const auto result = info_set_dice(get_json_value(this->art_data, "base_dice"), artifact.damage_dice, false, Range(0, 255)); !result) {
+    if (const auto result = info_set_dice(get_json_value(this->art_data, "base_dice"), artifact.damage_dice, false, Range(0, ITEM_DICE_MAX)); !result) {
         msg_print(_("アーティファクトのベースダイス読込失敗。", "Failed to load base dice of artifact."));
         return result;
     }

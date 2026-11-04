@@ -233,7 +233,9 @@ class VaultValidationTest(unittest.TestCase):
         self.assertTrue(ok, message)
 
     def test_id_upper_bound(self):
-        for value, accepted in ((32766, True), (32767, False)):
+        # schema の上限と C++ の定数を照合するため、ID の上限はソースから読む。
+        maximum = load_cpp_constant(REPOSITORY_ROOT / "src/info-reader/info-reader-util.h", "MAX_VAULT_ID")
+        for value, accepted in ((maximum, True), (maximum + 1, False)):
             with self.subTest(value=value):
                 record = {**self.record, "id": value}
                 ok, message = self.validate({"vaults": [record]})

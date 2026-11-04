@@ -14,7 +14,14 @@
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
 #include "view/display-messages.h"
+#include <cstdint>
+#include <limits>
 #include <nlohmann/json.hpp>
+
+namespace {
+// 基本の修正値と最大の修正値は16ビットの範囲とする (ダメージの修正値は int で持つが、ほかの修正値と同じ範囲に揃える)。
+constexpr Range EGO_BONUS_RANGE(std::numeric_limits<int16_t>::min(), std::numeric_limits<int16_t>::max());
+}
 
 EgoReader::Session EgoReader::create_session(tl::optional<int> last_id)
 {
@@ -83,13 +90,13 @@ tl::expected<void, ParseErrorType> EgoReader::read() const
         if (!base.is_object()) {
             return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
         }
-        if (const auto result = info_set_integer(get_json_value(base, "to_hit"), ego.base_to_h, true, Range(-32768, 32767)); !result) {
+        if (const auto result = info_set_integer(get_json_value(base, "to_hit"), ego.base_to_h, true, EGO_BONUS_RANGE); !result) {
             return result;
         }
-        if (const auto result = info_set_integer(get_json_value(base, "to_damage"), ego.base_to_d, true, Range(-32768, 32767)); !result) {
+        if (const auto result = info_set_integer(get_json_value(base, "to_damage"), ego.base_to_d, true, EGO_BONUS_RANGE); !result) {
             return result;
         }
-        if (const auto result = info_set_integer(get_json_value(base, "to_ac"), ego.base_to_a, true, Range(-32768, 32767)); !result) {
+        if (const auto result = info_set_integer(get_json_value(base, "to_ac"), ego.base_to_a, true, EGO_BONUS_RANGE); !result) {
             return result;
         }
     }
@@ -99,16 +106,16 @@ tl::expected<void, ParseErrorType> EgoReader::read() const
         if (!maximum.is_object()) {
             return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
         }
-        if (const auto result = info_set_integer(get_json_value(maximum, "to_hit"), ego.max_to_h, true, Range(-32768, 32767)); !result) {
+        if (const auto result = info_set_integer(get_json_value(maximum, "to_hit"), ego.max_to_h, true, EGO_BONUS_RANGE); !result) {
             return result;
         }
-        if (const auto result = info_set_integer(get_json_value(maximum, "to_damage"), ego.max_to_d, true, Range(-32768, 32767)); !result) {
+        if (const auto result = info_set_integer(get_json_value(maximum, "to_damage"), ego.max_to_d, true, EGO_BONUS_RANGE); !result) {
             return result;
         }
-        if (const auto result = info_set_integer(get_json_value(maximum, "to_ac"), ego.max_to_a, true, Range(-32768, 32767)); !result) {
+        if (const auto result = info_set_integer(get_json_value(maximum, "to_ac"), ego.max_to_a, true, EGO_BONUS_RANGE); !result) {
             return result;
         }
-        if (const auto result = info_set_integer(get_json_value(maximum, "pval"), ego.max_pval, true, Range(-32768, 32767)); !result) {
+        if (const auto result = info_set_integer(get_json_value(maximum, "pval"), ego.max_pval, true, EGO_BONUS_RANGE); !result) {
             return result;
         }
     }

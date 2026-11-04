@@ -575,3 +575,23 @@ TEST_CASE("ArtifactReader shares the item cost cap")
         }
     }
 }
+
+TEST_CASE("ArtifactReader limits weight to the shared item weight cap")
+{
+    for (const auto weight : { -1, 0, ITEM_WEIGHT_MAX, ITEM_WEIGHT_MAX + 1 }) {
+        CAPTURE(weight);
+        test::ScopedReaderState reader_state;
+        test::ArtifactListTestAccess artifact_state;
+        ScopedArtifactBaseitem baseitem_state;
+        auto session = ArtifactReader::create_session();
+        auto data = make_artifact();
+        data["weight"] = weight;
+        const auto accepted = weight >= 0 && weight <= ITEM_WEIGHT_MAX;
+        const auto result = test::read_and_commit(ArtifactReader(data, session), session);
+        CHECK(test::to_error_code(result) == (accepted ? ParseErrorType::NONE : ParseErrorType::INVALID_VALUE));
+        CHECK(ArtifactList::get_instance().empty() == !accepted);
+        if (accepted) {
+            CHECK(ArtifactList::get_instance().get_artifact(i2enum<FixedArtifactId>(1)).weight == weight);
+        }
+    }
+}

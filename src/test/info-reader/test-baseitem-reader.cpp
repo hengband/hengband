@@ -967,3 +967,21 @@ TEST_CASE("BaseitemReader preserves symbol error codes and validation precedence
     data.erase("symbol");
     CHECK(test::to_error_code(test::read_and_commit(BaseitemReader(data, session), session)) == ParseErrorType::TOO_FEW_ARGUMENTS);
 }
+
+TEST_CASE("BaseitemReader limits weight to the shared item weight cap")
+{
+    for (const auto weight : { -1, 0, ITEM_WEIGHT_MAX, ITEM_WEIGHT_MAX + 1 }) {
+        CAPTURE(weight);
+        BaseitemStateGuard guard;
+        auto session = BaseitemReader::create_session();
+        auto data = make_baseitem();
+        data["weight"] = weight;
+        const auto accepted = weight >= 0 && weight <= ITEM_WEIGHT_MAX;
+        const auto result = test::read_and_commit(BaseitemReader(data, session), session);
+        CHECK(test::to_error_code(result) == (accepted ? ParseErrorType::NONE : ParseErrorType::INVALID_VALUE));
+        CHECK(BaseitemList::get_instance().empty() == !accepted);
+        if (accepted) {
+            CHECK(BaseitemList::get_instance().get_baseitem(1).weight == weight);
+        }
+    }
+}

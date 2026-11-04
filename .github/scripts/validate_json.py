@@ -372,8 +372,7 @@ def require_reader_dice(value: str, path: list, minimum: int = INT_MIN, maximum:
 
 
 # セーブではアイテムのダイスの個数・面数をそれぞれ1バイトで書くため、BaseitemReader・ArtifactReaderは0〜255に限る。
-# C++ は baseitem-reader.cpp・artifact-reader.cpp の info_set_dice() に Range(0, 255) と直接書き、名前の付いた定数が無いため手で揃える。
-ITEM_DICE_RANGE = (0, 255)
+ITEM_DICE_RANGE = (0, load_cpp_constant(REPOSITORY_ROOT / "src/info-reader/item-reader-limits.h", "ITEM_DICE_MAX"))
 
 
 INVALID_BASEITEM_NAMES = {"ja": "異常アイテム", "en": "Invalid item"}
