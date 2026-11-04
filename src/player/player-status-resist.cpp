@@ -370,7 +370,7 @@ PERCENTAGE calc_nexus_damage_rate(PlayerType *player_ptr, rate_calc_type_mode mo
 {
     PERCENTAGE per = 100;
 
-    if (has_resist_disen(player_ptr)) {
+    if (has_resist_nexus(player_ptr)) {
         per *= 600;
         per /= randrate(4, 7, mode);
     }
