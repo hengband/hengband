@@ -2,11 +2,14 @@
 
 #include "system/angband.h"
 
+/*!
+ * @brief 耐性によるダメージ倍率の計算の用途
+ */
 enum rate_calc_type_mode {
-    CALC_RAND = 0,
-    CALC_AVERAGE = 1,
-    CALC_MIN = 2,
-    CALC_MAX = 3,
+    CALC_RAND = 0, //!< 乱数で決める (実際のダメージ)
+    CALC_AVERAGE = 1, //!< 平均の倍率
+    CALC_MIN = 2, //!< 最小の倍率 (ダメージが最も小さい場合)
+    CALC_MAX = 3, //!< 最大の倍率 (ダメージが最も大きい場合。警告の見積もり)
 };
 
 class PlayerType;
