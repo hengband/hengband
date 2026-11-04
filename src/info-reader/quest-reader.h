@@ -20,7 +20,6 @@ extern const Range LEGEND_EGO_RANGE;
 bool is_legend_cave_flag(std::string_view name);
 
 class QuestType;
-struct QuestDescriptionBlock;
 
 /*!
  * @brief 固定クエスト JSONC 読み込みクラス
