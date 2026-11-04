@@ -29,6 +29,11 @@
 
 /*!
  * @brief 耐性倍率計算の用途に応じた分岐処理
+ * @param dice 除数のダイスの面数
+ * @param fix 除数の固定値
+ * @param mode 計算の用途
+ * @return 耐性によるダメージ倍率の除数。dice 面のダイスの目を d として (d + fix) * 100 で、CALC_AVERAGE はその平均
+ * @details 戻り値は除数なので、ダメージが最小になる CALC_MIN では最大の値を、最大になる CALC_MAX では最小の値を返す。
  */
 PERCENTAGE randrate(int dice, int fix, rate_calc_type_mode mode)
 {
@@ -40,10 +45,10 @@ PERCENTAGE randrate(int dice, int fix, rate_calc_type_mode mode)
         return (dice + 1) * 50 + fix * 100;
         break;
     case CALC_MIN:
-        return (fix + 1) * 100;
+        return (dice + fix) * 100;
         break;
     case CALC_MAX:
-        return (dice + fix) * 100;
+        return (fix + 1) * 100;
         break;
     default:
         return (fix + 1) * 100;
@@ -426,7 +431,6 @@ PERCENTAGE calc_nether_damage_rate(PlayerType *player_ptr, rate_calc_type_mode m
  */
 PERCENTAGE calc_time_damage_rate(PlayerType *player_ptr, rate_calc_type_mode mode)
 {
-    (void)mode; // unused
     PERCENTAGE per = 100;
 
     if (has_resist_time(player_ptr)) {
@@ -442,7 +446,6 @@ PERCENTAGE calc_time_damage_rate(PlayerType *player_ptr, rate_calc_type_mode mod
  */
 PERCENTAGE calc_water_damage_rate(PlayerType *player_ptr, rate_calc_type_mode mode)
 {
-    (void)mode; // unused
     PERCENTAGE per = 100;
 
     if (has_resist_water(player_ptr)) {
@@ -499,7 +502,6 @@ PERCENTAGE calc_gravity_damage_rate(PlayerType *player_ptr, rate_calc_type_mode 
  */
 PERCENTAGE calc_void_damage_rate(PlayerType *player_ptr, rate_calc_type_mode mode)
 {
-    (void)mode; // unused
     PERCENTAGE per = 100;
     if (has_pass_wall(player_ptr)) {
         per = per * 3 / 2;
@@ -517,7 +519,6 @@ PERCENTAGE calc_void_damage_rate(PlayerType *player_ptr, rate_calc_type_mode mod
  */
 PERCENTAGE calc_abyss_damage_rate(PlayerType *player_ptr, rate_calc_type_mode mode)
 {
-    (void)mode; // unused
     PERCENTAGE per = 100;
 
     if (has_resist_dark(player_ptr) != 0) {

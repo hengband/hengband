@@ -41,9 +41,9 @@ TEST_CASE("calc_nexus_damage_rate and calc_disenchant_damage_rate depend only on
     SUBCASE("resistance to nexus reduces only nexus damage")
     {
         wear_helm_with(player, TR_RES_NEXUS);
-        // 6 / (d4 + 7) 倍。CALC_MIN・CALC_MAX は除数 (d4 + 7) の最小・最大なので、倍率の大小は逆になる
-        CHECK(calc_nexus_damage_rate(&player, CALC_MIN) == 75);
-        CHECK(calc_nexus_damage_rate(&player, CALC_MAX) == 54);
+        // 6 / (d4 + 7) 倍。最小は 6/11、最大は 6/8
+        CHECK(calc_nexus_damage_rate(&player, CALC_MIN) == 54);
+        CHECK(calc_nexus_damage_rate(&player, CALC_MAX) == 75);
         CHECK(calc_disenchant_damage_rate(&player, CALC_MAX) == 100);
     }
 
@@ -51,8 +51,8 @@ TEST_CASE("calc_nexus_damage_rate and calc_disenchant_damage_rate depend only on
     {
         wear_helm_with(player, TR_RES_DISEN);
         CHECK(calc_nexus_damage_rate(&player, CALC_MAX) == 100);
-        CHECK(calc_disenchant_damage_rate(&player, CALC_MIN) == 75);
-        CHECK(calc_disenchant_damage_rate(&player, CALC_MAX) == 54);
+        CHECK(calc_disenchant_damage_rate(&player, CALC_MIN) == 54);
+        CHECK(calc_disenchant_damage_rate(&player, CALC_MAX) == 75);
     }
 }
 
