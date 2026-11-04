@@ -17,6 +17,7 @@
 #include "system/grid-type-definition.h"
 #include "system/terrain/terrain-definition.h"
 #include "system/terrain/terrain-list.h"
+#include "test/info-reader/dungeon-grid-checks.h"
 #include "test/info-reader/parse-result-helpers.h"
 #include "test/info-reader/scoped-reader-state.h"
 #include "test/scoped-restore.h"
@@ -38,15 +39,7 @@ namespace {
 
 void check_same_legend_cell(const QuestLegendCell &actual, const QuestLegendCell &expected)
 {
-    CHECK(actual.grid.feature == expected.grid.feature);
-    CHECK(actual.grid.trap == expected.grid.trap);
-    CHECK(actual.grid.monster == expected.grid.monster);
-    CHECK(actual.grid.object == expected.grid.object);
-    CHECK(actual.grid.ego == expected.grid.ego);
-    CHECK(actual.grid.artifact == expected.grid.artifact);
-    CHECK(actual.grid.cave_info == expected.grid.cave_info);
-    CHECK(actual.grid.special == expected.grid.special);
-    CHECK(actual.grid.random == expected.grid.random);
+    test::check_same_grid(actual.grid, expected.grid);
     CHECK(actual.object_is_quest_reward == expected.object_is_quest_reward);
     CHECK(actual.artifact_is_quest_reward == expected.artifact_is_quest_reward);
 }
