@@ -174,8 +174,8 @@ tl::expected<void, ParseErrorType> WildernessReader::read(WildernessDefinition &
     }
 
     const auto &maps = get_json_value(this->data, "maps");
-    if (!maps.is_object()) {
-        return tl::make_unexpected(maps.is_null() ? ParseErrorType::TOO_FEW_ARGUMENTS : ParseErrorType::INVALID_TYPE);
+    if (const auto result = info_require_object(maps); !result) {
+        return result;
     }
     if (const auto result = this->read_map(get_json_value(maps, "normal"), parsed.width, parsed.height, parsed.normal); !result) {
         return result;
@@ -219,8 +219,8 @@ tl::expected<void, ParseErrorType> WildernessReader::read(WildernessDefinition &
  */
 tl::expected<void, ParseErrorType> WildernessReader::read_map(const nlohmann::json &map_data, int width, int height, WildernessMapDefinition &map) const
 {
-    if (!map_data.is_object()) {
-        return tl::make_unexpected(map_data.is_null() ? ParseErrorType::TOO_FEW_ARGUMENTS : ParseErrorType::INVALID_TYPE);
+    if (const auto result = info_require_object(map_data); !result) {
+        return result;
     }
 
     const auto &letters_data = get_json_value(map_data, "letters");
@@ -295,8 +295,8 @@ tl::expected<void, ParseErrorType> WildernessReader::read_map(const nlohmann::js
     }
 
     const auto &position_data = get_json_value(map_data, "starting_position");
-    if (!position_data.is_object()) {
-        return tl::make_unexpected(position_data.is_null() ? ParseErrorType::TOO_FEW_ARGUMENTS : ParseErrorType::INVALID_TYPE);
+    if (const auto result = info_require_object(position_data); !result) {
+        return result;
     }
     // 地上の生成では現在地の周囲8マスを生成するため、開始位置は荒野の端を除いた内側に限る。
     if (const auto result = info_set_integer(get_json_value(position_data, "x"), map.starting_position.x, true, Range(1, width - 2)); !result) {

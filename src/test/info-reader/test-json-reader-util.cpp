@@ -768,6 +768,77 @@ TEST_CASE("Flag arrays preserve token order duplicates and stop at the first err
     CHECK(seen.front() == "A");
 }
 
+TEST_CASE("info_require_object separates a missing value from a wrong type")
+{
+    CHECK(test::to_error_code(info_require_object(nlohmann::json::object())) == ParseErrorType::NONE);
+    CHECK(test::to_error_code(info_require_object({ { "key", 1 } })) == ParseErrorType::NONE);
+    CHECK(test::to_error_code(info_require_object(nullptr)) == ParseErrorType::TOO_FEW_ARGUMENTS);
+    for (const auto &value : { nlohmann::json(1), nlohmann::json(1.5), nlohmann::json(true), nlohmann::json("text"), nlohmann::json::array() }) {
+        CHECK(test::to_error_code(info_require_object(value)) == ParseErrorType::INVALID_TYPE);
+    }
+}
+
+TEST_CASE("info_require_array separates a missing value from a wrong type")
+{
+    CHECK(test::to_error_code(info_require_array(nlohmann::json::array())) == ParseErrorType::NONE);
+    CHECK(test::to_error_code(info_require_array(nlohmann::json::parse("[1, null]"))) == ParseErrorType::NONE);
+    CHECK(test::to_error_code(info_require_array(nullptr)) == ParseErrorType::TOO_FEW_ARGUMENTS);
+    for (const auto &value : { nlohmann::json(1), nlohmann::json(1.5), nlohmann::json(true), nlohmann::json("text"), nlohmann::json::object() }) {
+        CHECK(test::to_error_code(info_require_array(value)) == ParseErrorType::INVALID_TYPE);
+    }
+}
+
+TEST_CASE("info_read_object_array reads elements in order and stops at the first error")
+{
+    std::vector<int> seen;
+    const auto read = [&seen](const nlohmann::json &json) {
+        seen.clear();
+        return test::to_error_code(info_read_object_array(json, [&seen](const nlohmann::json &element) -> tl::expected<void, ParseErrorType> {
+            const auto id = element.at("id").get<int>();
+            seen.push_back(id);
+            if (id < 0) {
+                return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
+            }
+            return {};
+        }));
+    };
+
+    SUBCASE("every element is passed in order")
+    {
+        CHECK(read(nlohmann::json::parse(R"([{"id": 2}, {"id": 1}, {"id": 2}])")) == ParseErrorType::NONE);
+        CHECK(seen == std::vector<int>{ 2, 1, 2 });
+    }
+
+    SUBCASE("an empty array succeeds without calling the reader")
+    {
+        CHECK(read(nlohmann::json::array()) == ParseErrorType::NONE);
+        CHECK(seen.empty());
+    }
+
+    SUBCASE("a non-array value is classified without calling the reader")
+    {
+        CHECK(read(nullptr) == ParseErrorType::TOO_FEW_ARGUMENTS);
+        for (const auto &value : { nlohmann::json(1), nlohmann::json("text"), nlohmann::json::object() }) {
+            CHECK(read(value) == ParseErrorType::INVALID_TYPE);
+        }
+        CHECK(seen.empty());
+    }
+
+    SUBCASE("a non-object element stops the reading at its position")
+    {
+        CHECK(read(nlohmann::json::parse(R"([{"id": 1}, null, {"id": 3}])")) == ParseErrorType::TOO_FEW_ARGUMENTS);
+        CHECK(seen == std::vector<int>{ 1 });
+        CHECK(read(nlohmann::json::parse(R"([{"id": 1}, 2, {"id": 3}])")) == ParseErrorType::INVALID_TYPE);
+        CHECK(seen == std::vector<int>{ 1 });
+    }
+
+    SUBCASE("an error of the reader is returned as is and stops the reading")
+    {
+        CHECK(read(nlohmann::json::parse(R"([{"id": 1}, {"id": -1}, {"id": 3}])")) == ParseErrorType::INVALID_VALUE);
+        CHECK(seen == std::vector<int>{ 1, -1 });
+    }
+}
+
 TEST_CASE("info_read_symbol preserves baseitem validation errors")
 {
     struct InvalidSymbol {

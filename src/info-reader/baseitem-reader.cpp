@@ -324,11 +324,8 @@ tl::expected<void, ParseErrorType> BaseitemReader::set_baseitem_symbol(BaseitemD
 tl::expected<void, ParseErrorType> BaseitemReader::set_baseitem_kind(BaseitemDefinition &baseitem) const
 {
     const auto &itemkind_data = get_json_value(this->baseitem_data, "itemkind");
-    if (itemkind_data.is_null()) {
-        return tl::unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
-    }
-    if (!itemkind_data.is_object()) {
-        return tl::unexpected(ParseErrorType::INVALID_TYPE);
+    if (const auto result = info_require_object(itemkind_data); !result) {
+        return result;
     }
 
     // 失敗時は直後に返るが、gcc の最適化で未初期化と誤検出されないよう初期化しておく。

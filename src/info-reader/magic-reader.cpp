@@ -183,11 +183,8 @@ tl::expected<void, ParseErrorType> MagicReader::set_spell_data(const nlohmann::j
 tl::expected<void, ParseErrorType> MagicReader::set_realm_data(player_magic &magics_info) const
 {
     const auto &realms_data = get_json_value(this->class_data, "realms");
-    if (realms_data.is_null()) {
-        return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
-    }
-    if (!realms_data.is_array()) {
-        return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
+    if (const auto result = info_require_array(realms_data); !result) {
+        return result;
     }
 
     for (const auto &realm : realms_data) {
@@ -199,11 +196,8 @@ tl::expected<void, ParseErrorType> MagicReader::set_realm_data(player_magic &mag
 
         const auto realm_id = *realm_name;
         const auto &spells_info_obj = get_json_value(realm, "spells_info");
-        if (spells_info_obj.is_null()) {
-            return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
-        }
-        if (!spells_info_obj.is_array()) {
-            return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
+        if (const auto result = info_require_array(spells_info_obj); !result) {
+            return result;
         }
 
         for (const auto &spell : spells_info_obj) {

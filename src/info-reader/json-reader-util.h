@@ -15,6 +15,9 @@
 class Dice;
 
 tl::expected<void, ParseErrorType> info_read_flag_array(const nlohmann::json &json, const std::function<bool(const nlohmann::json &)> &grab_flag);
+tl::expected<void, ParseErrorType> info_require_object(const nlohmann::json &json);
+tl::expected<void, ParseErrorType> info_require_array(const nlohmann::json &json);
+tl::expected<void, ParseErrorType> info_read_object_array(const nlohmann::json &json, const std::function<tl::expected<void, ParseErrorType>(const nlohmann::json &)> &read_element);
 
 tl::expected<void, ParseErrorType> info_set_string(const nlohmann::json &json, std::string &data, bool is_required);
 tl::expected<void, ParseErrorType> info_set_dice(const nlohmann::json &json, Dice &dice, bool is_required, tl::optional<Range> range = tl::nullopt);
