@@ -1609,6 +1609,7 @@ hengband_test_SOURCES = \
 	test/object-use/quaff/test-quaff-execution.cpp \
 	test/player-status/test-player-status-base.cpp \
 	test/player/test-player-skill.cpp \
+	test/player/test-player-status-resist.cpp \
 	test/player/test-process-name.cpp \
 	test/player-status/test-player-speed.cpp \
 	test/spell/test-spell-info.cpp \
