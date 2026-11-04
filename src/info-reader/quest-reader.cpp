@@ -630,7 +630,8 @@ tl::expected<void, ParseErrorType> QuestReader::set_legend(QuestFixedMap &parsed
     }
 
     for (const auto &[symbol, cell_data] : legend.items()) {
-        if (!parse_fixed_map_symbol(symbol)) {
+        const auto parsed_symbol = parse_fixed_map_symbol(symbol);
+        if (!parsed_symbol) {
             return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
         }
 
@@ -642,7 +643,7 @@ tl::expected<void, ParseErrorType> QuestReader::set_legend(QuestFixedMap &parsed
             }
             return result;
         }
-        parsed.legend.insert_or_assign(symbol.front(), cell);
+        parsed.legend.insert_or_assign(*parsed_symbol, cell);
     }
 
     return {};
