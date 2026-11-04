@@ -976,17 +976,25 @@ TEST_CASE("DungeonReader propagates nested parse errors without publishing parti
     };
     const std::vector<InvalidField> invalid_fields = {
         { "/description", 1, ParseErrorType::INVALID_TYPE },
+        { "/position", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/position", 1, ParseErrorType::INVALID_TYPE },
         { "/generation", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/generation", 1, ParseErrorType::INVALID_TYPE },
         { "/generation/minDepth", "depth", ParseErrorType::INVALID_TYPE },
         { "/generation/pit", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
         { "/generation/pit", { "ORC", "UNKNOWN" }, ParseErrorType::INVALID_FLAG },
         { "/generation/nest", { "UNDEAD", 1 }, ParseErrorType::INVALID_TYPE },
         { "/generation/nest", { "UNKNOWN" }, ParseErrorType::INVALID_FLAG },
         { "/floor", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/floor", 1, ParseErrorType::INVALID_TYPE },
+        { "/floor/tiles", 1, ParseErrorType::INVALID_TYPE },
+        { "/floor/tiles/0", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/floor/tiles/0", 1, ParseErrorType::INVALID_TYPE },
         { "/floor/tiles/0/rate", 99, ParseErrorType::INVALID_VALUE },
         { "/floor/tiles/0/rate", 101, ParseErrorType::INVALID_VALUE },
         { "/floor/tunnelRate", "rate", ParseErrorType::INVALID_TYPE },
         { "/wall", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/wall", 1, ParseErrorType::INVALID_TYPE },
         { "/wall/tiles/0/rate", 99, ParseErrorType::INVALID_VALUE },
         { "/wall/tiles/0/rate", 101, ParseErrorType::INVALID_VALUE },
         { "/wall/outer", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
@@ -995,12 +1003,14 @@ TEST_CASE("DungeonReader propagates nested parse errors without publishing parti
         { "/wall/inner", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
         { "/wall/inner", 1, ParseErrorType::INVALID_TYPE },
         { "/wall/inner", "UNKNOWN", ParseErrorType::UNDEFINED_TERRAIN_TAG },
-        { "/wall/streams", 1, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/wall/streams", 1, ParseErrorType::INVALID_TYPE },
+        { "/wall/streams/1", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/wall/streams/1", 1, ParseErrorType::INVALID_TYPE },
         { "/wall/streams/1/type", "UNKNOWN", ParseErrorType::UNDEFINED_TERRAIN_TAG },
         { "/wall/streams/1/count", 0, ParseErrorType::INVALID_VALUE },
         { "/wall/streams/1/chance", "chance", ParseErrorType::INVALID_TYPE },
         { "/wall/streams/1/priority", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
-        { "/final_floor", 1, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/final_floor", 1, ParseErrorType::INVALID_TYPE },
         { "/final_floor/guardian", 65537, ParseErrorType::INVALID_VALUE },
         { "/final_floor/guardian", 2, ParseErrorType::INVALID_VALUE },
         { "/final_floor/object", 0, ParseErrorType::INVALID_VALUE },
@@ -1008,6 +1018,8 @@ TEST_CASE("DungeonReader propagates nested parse errors without publishing parti
         { "/flags", 1, ParseErrorType::INVALID_TYPE },
         { "/flags", { "MAZE", "UNKNOWN" }, ParseErrorType::INVALID_FLAG },
         { "/monsters", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/monsters", 1, ParseErrorType::INVALID_TYPE },
+        { "/monsters/symbols", 1, ParseErrorType::INVALID_TYPE },
         { "/monsters/additionalSpawnProbability", 0, ParseErrorType::INVALID_VALUE },
         { "/monsters/flagsMode", 1, ParseErrorType::INVALID_TYPE },
         { "/monsters/flagsMode", "UNKNOWN", ParseErrorType::INVALID_FLAG },
@@ -1157,6 +1169,19 @@ TEST_CASE("DungeonReader publishes complete nested definitions and accepts optio
     }
     CHECK(session.last_id().value_or(-1) == 0);
     CHECK(DungeonList::get_instance().size() == 1);
+}
+
+TEST_CASE("DungeonReader separates a missing record from a record of a wrong type")
+{
+    DungeonReaderStateGuard guard;
+    auto session = DungeonReader::create_session();
+    const nlohmann::json missing;
+    CHECK(test::to_error_code(test::read_and_commit(DungeonReader(missing, session), session)) == ParseErrorType::TOO_FEW_ARGUMENTS);
+    for (const auto &value : { nlohmann::json(1), nlohmann::json("dungeon"), nlohmann::json::array() }) {
+        CAPTURE(value);
+        CHECK(test::to_error_code(test::read_and_commit(DungeonReader(value, session), session)) == ParseErrorType::INVALID_TYPE);
+    }
+    CHECK(DungeonList::get_instance().empty());
 }
 
 TEST_CASE("DungeonReader pins flag array type errors and missing values")

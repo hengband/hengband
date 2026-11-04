@@ -219,6 +219,17 @@ TEST_CASE("MessageReader accepts monster IDs up to one below the MonraceId stora
     CHECK(test::to_error_code(MessageReader(over).read()) == ParseErrorType::INVALID_VALUE);
 }
 
+TEST_CASE("MessageReader separates a missing group from a group of a wrong type")
+{
+    const test::ScopedReaderState reader_state;
+    const nlohmann::json missing;
+    CHECK(test::to_error_code(MessageReader(missing).read()) == ParseErrorType::TOO_FEW_ARGUMENTS);
+    for (const auto &value : { nlohmann::json(1), nlohmann::json("message"), nlohmann::json::array() }) {
+        CAPTURE(value);
+        CHECK(test::to_error_code(MessageReader(value).read()) == ParseErrorType::INVALID_TYPE);
+    }
+}
+
 TEST_CASE("MessageReader requires arrays for localized message lists")
 {
     const test::ScopedReaderState reader_state;
@@ -257,8 +268,8 @@ TEST_CASE("MessageReader propagates ID helper errors without publishing messages
     };
     const std::vector<InvalidIds> invalid_ids = {
         { nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
-        { 1, ParseErrorType::TOO_FEW_ARGUMENTS },
-        { nlohmann::json::object(), ParseErrorType::TOO_FEW_ARGUMENTS },
+        { 1, ParseErrorType::INVALID_TYPE },
+        { nlohmann::json::object(), ParseErrorType::INVALID_TYPE },
         { nlohmann::json::array({ nullptr }), ParseErrorType::INVALID_TYPE },
         { nlohmann::json::array({ true }), ParseErrorType::INVALID_TYPE },
         { nlohmann::json::array({ 4.0 }), ParseErrorType::INVALID_TYPE },
@@ -302,7 +313,9 @@ TEST_CASE("MessageReader propagates message helper errors and keeps validation o
     };
     const std::vector<InvalidField> invalid_fields = {
         { "/message", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
-        { "/message", nlohmann::json::object(), ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/message", 1, ParseErrorType::INVALID_TYPE },
+        { "/message", nlohmann::json::object(), ParseErrorType::INVALID_TYPE },
+        { "/message/1", 1, ParseErrorType::INVALID_TYPE },
         { "/message/1", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
         { "/message/1/action", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
         { "/message/1/action", 1, ParseErrorType::INVALID_TYPE },
@@ -313,6 +326,7 @@ TEST_CASE("MessageReader propagates message helper errors and keeps validation o
         { "/message/1/chance", 0, ParseErrorType::INVALID_VALUE },
         { "/message/1/chance", 101, ParseErrorType::INVALID_VALUE },
         { "/message/1/message", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/message/1/message", 1, ParseErrorType::INVALID_TYPE },
         { "/message/1/message", nlohmann::json::object(), ParseErrorType::TOO_FEW_ARGUMENTS },
         { "/message/1/message", { { "ja", "text" }, { "en", "text" } }, ParseErrorType::INVALID_TYPE },
         { "/message/1/message", { { "ja", nlohmann::json::array({ nullptr }) }, { "en", nlohmann::json::array({ nullptr }) } }, ParseErrorType::TOO_FEW_ARGUMENTS },

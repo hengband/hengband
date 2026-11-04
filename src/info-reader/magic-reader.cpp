@@ -183,11 +183,7 @@ tl::expected<void, ParseErrorType> MagicReader::set_spell_data(const nlohmann::j
 tl::expected<void, ParseErrorType> MagicReader::set_realm_data(player_magic &magics_info) const
 {
     const auto &realms_data = get_json_value(this->class_data, "realms");
-    if (const auto result = info_require_array(realms_data); !result) {
-        return result;
-    }
-
-    for (const auto &realm : realms_data) {
+    return info_read_object_array(realms_data, [this, &magics_info](const nlohmann::json &realm) -> tl::expected<void, ParseErrorType> {
         const auto &realm_name_obj = get_json_value(realm, "name");
         const auto realm_name = info_read_token(realm_name_obj, realms_list);
         if (!realm_name) {
@@ -196,16 +192,8 @@ tl::expected<void, ParseErrorType> MagicReader::set_realm_data(player_magic &mag
 
         const auto realm_id = *realm_name;
         const auto &spells_info_obj = get_json_value(realm, "spells_info");
-        if (const auto result = info_require_array(spells_info_obj); !result) {
-            return result;
-        }
-
-        for (const auto &spell : spells_info_obj) {
-            if (const auto result = this->set_spell_data(spell, magics_info, realm_id); !result) {
-                return tl::make_unexpected(result.error());
-            }
-        }
-    }
-
-    return {};
+        return info_read_object_array(spells_info_obj, [this, &magics_info, realm_id](const nlohmann::json &spell) -> tl::expected<void, ParseErrorType> {
+            return this->set_spell_data(spell, magics_info, realm_id);
+        });
+    });
 }

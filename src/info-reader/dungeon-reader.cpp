@@ -51,8 +51,8 @@ DungeonReader::DungeonReader(const nlohmann::json &dungeon_data, Session &sessio
 tl::expected<void, ParseErrorType> DungeonReader::read() const
 {
     const auto &element = this->dungeon_data;
-    if (element.is_null() || !element.is_object()) {
-        return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
+    if (const auto result = info_require_object(element); !result) {
+        return result;
     }
 
     const auto id_result = this->session.read_and_report(get_json_value(element, "id"));
@@ -70,8 +70,8 @@ tl::expected<void, ParseErrorType> DungeonReader::read() const
     }
 
     const auto &position_obj = get_json_value(element, "position");
-    if (position_obj.is_null() || !position_obj.is_object()) {
-        return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
+    if (const auto result = info_require_object(position_obj); !result) {
+        return result;
     }
     int wild_y = 0;
     int wild_x = 0;
@@ -234,18 +234,11 @@ bool DungeonReader::grab_one_spell_monster_flag(DungeonDefinition &dungeon, std:
  */
 static tl::expected<ProbabilityTable<short>, ParseErrorType> parse_terrain_probability(const nlohmann::json &tiles_obj, std::string_view section)
 {
-    if (!tiles_obj.is_array()) {
-        return tl::unexpected(tiles_obj.is_null() ? ParseErrorType::TOO_FEW_ARGUMENTS : ParseErrorType::INVALID_TYPE);
-    }
-
     constexpr auto total_percent = 100;
     const auto &terrains = TerrainList::get_instance();
     ProbabilityTable<short> prob_table;
     int total_probability = 0;
-    for (const auto &tile_obj : tiles_obj) {
-        if (!tile_obj.is_object()) {
-            return tl::unexpected(ParseErrorType::INVALID_TYPE);
-        }
+    const auto read_result = info_read_object_array(tiles_obj, [&](const nlohmann::json &tile_obj) -> tl::expected<void, ParseErrorType> {
         const auto &type_obj = get_json_value(tile_obj, "type");
         if (!type_obj.is_string()) {
             return tl::unexpected(type_obj.is_null() ? ParseErrorType::TOO_FEW_ARGUMENTS : ParseErrorType::INVALID_TYPE);
@@ -275,6 +268,10 @@ static tl::expected<ProbabilityTable<short>, ParseErrorType> parse_terrain_proba
         if (total_probability <= total_percent) {
             total_probability += prob;
         }
+        return {};
+    });
+    if (!read_result) {
+        return tl::unexpected(read_result.error());
     }
 
     if (total_probability > total_percent) {
@@ -308,8 +305,8 @@ tl::expected<void, ParseErrorType> DungeonReader::set_dungeon_description(Dungeo
 tl::expected<void, ParseErrorType> DungeonReader::set_dungeon_generation(DungeonDefinition &dungeon) const
 {
     const auto &generation_obj = get_json_value(this->dungeon_data, "generation");
-    if (generation_obj.is_null() || !generation_obj.is_object()) {
-        return tl::unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
+    if (const auto result = info_require_object(generation_obj); !result) {
+        return result;
     }
 
     if (const auto result = info_set_integer(get_json_value(generation_obj, "minDepth"), dungeon.mindepth, true, Range(0, std::numeric_limits<int16_t>::max())); !result) {
@@ -349,8 +346,8 @@ tl::expected<void, ParseErrorType> DungeonReader::set_dungeon_generation(Dungeon
 tl::expected<void, ParseErrorType> DungeonReader::set_dungeon_floor(DungeonDefinition &dungeon) const
 {
     const auto &floor_obj = get_json_value(this->dungeon_data, "floor");
-    if (floor_obj.is_null() || !floor_obj.is_object()) {
-        return tl::unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
+    if (const auto result = info_require_object(floor_obj); !result) {
+        return result;
     }
 
     auto prob_table = parse_terrain_probability(get_json_value(floor_obj, "tiles"), "floor");
@@ -370,13 +367,10 @@ tl::expected<void, ParseErrorType> DungeonReader::set_dungeon_streams(const nloh
     if (streams_obj.is_null()) {
         return {};
     }
-    if (!streams_obj.is_array()) {
-        return tl::unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
-    }
 
     const auto &terrains = TerrainList::get_instance();
-    for (const auto &stream_obj : streams_obj) {
-        if (!stream_obj.is_object() || !get_json_value(stream_obj, "type").is_string()) {
+    const auto read_result = info_read_object_array(streams_obj, [&terrains, &dungeon](const nlohmann::json &stream_obj) -> tl::expected<void, ParseErrorType> {
+        if (!get_json_value(stream_obj, "type").is_string()) {
             return tl::unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
         }
 
@@ -398,6 +392,10 @@ tl::expected<void, ParseErrorType> DungeonReader::set_dungeon_streams(const nloh
         }
 
         dungeon.streams.emplace_back(stream);
+        return {};
+    });
+    if (!read_result) {
+        return read_result;
     }
 
     dungeon.sort_streams_by_priority();
@@ -408,8 +406,8 @@ tl::expected<void, ParseErrorType> DungeonReader::set_dungeon_streams(const nloh
 tl::expected<void, ParseErrorType> DungeonReader::set_dungeon_wall(DungeonDefinition &dungeon) const
 {
     const auto &wall_obj = get_json_value(this->dungeon_data, "wall");
-    if (wall_obj.is_null() || !wall_obj.is_object()) {
-        return tl::unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
+    if (const auto result = info_require_object(wall_obj); !result) {
+        return result;
     }
 
     auto prob_table = parse_terrain_probability(get_json_value(wall_obj, "tiles"), "wall");
@@ -497,7 +495,7 @@ tl::expected<void, ParseErrorType> DungeonReader::set_dungeon_final_floor(Dungeo
     }
 
     if (!final_floor_obj.is_object()) {
-        return tl::unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
+        return tl::unexpected(ParseErrorType::INVALID_TYPE);
     }
 
     if (final_floor_obj.contains("artifact") && !final_floor_obj.contains("guardian")) {
@@ -548,7 +546,7 @@ tl::expected<void, ParseErrorType> DungeonReader::set_dungeon_monster_symbols(co
         return {};
     }
     if (!symbols_obj.is_array()) {
-        return tl::unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
+        return tl::unexpected(ParseErrorType::INVALID_TYPE);
     }
 
     for (const auto &symbol_obj : symbols_obj) {
@@ -587,8 +585,8 @@ tl::expected<void, ParseErrorType> DungeonReader::set_dungeon_monster_spells(con
 tl::expected<void, ParseErrorType> DungeonReader::set_dungeon_monsters(DungeonDefinition &dungeon) const
 {
     const auto &monsters_obj = get_json_value(this->dungeon_data, "monsters");
-    if (monsters_obj.is_null() || !monsters_obj.is_object()) {
-        return tl::unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
+    if (const auto result = info_require_object(monsters_obj); !result) {
+        return result;
     }
 
     if (const auto result = info_set_integer(get_json_value(monsters_obj, "minCount"), dungeon.min_monster_count_on_floor, true, Range(0, 100)); !result) {

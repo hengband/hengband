@@ -565,6 +565,42 @@ TEST_CASE("QuestReader rejects non-object rewards")
     }
 }
 
+TEST_CASE("QuestReader separates a missing definition from a definition of a wrong type")
+{
+    const auto read_with = [](const nlohmann::json &definition) {
+        auto data = make_quest_with_description("New description");
+        data["definition"] = definition;
+        QuestType quest;
+        QuestFixedMap fixed_map;
+        set_existing_output(quest, fixed_map);
+        const auto error = test::to_error_code(QuestReader(data, quest, fixed_map).read());
+        check_existing_output(quest, fixed_map);
+        return error;
+    };
+    CHECK(read_with(nullptr) == ParseErrorType::TOO_FEW_ARGUMENTS);
+    for (const auto &value : { nlohmann::json(1), nlohmann::json("text"), nlohmann::json(true), nlohmann::json::array() }) {
+        CAPTURE(value);
+        CHECK(read_with(value) == ParseErrorType::INVALID_TYPE);
+    }
+}
+
+TEST_CASE("QuestReader separates a missing record from a record of a wrong type")
+{
+    const auto read_with = [](const nlohmann::json &data) {
+        QuestType quest;
+        QuestFixedMap fixed_map;
+        set_existing_output(quest, fixed_map);
+        const auto error = test::to_error_code(QuestReader(data, quest, fixed_map).read());
+        check_existing_output(quest, fixed_map);
+        return error;
+    };
+    CHECK(read_with(nlohmann::json(nullptr)) == ParseErrorType::TOO_FEW_ARGUMENTS);
+    for (const auto &value : { nlohmann::json(1), nlohmann::json("text"), nlohmann::json::array() }) {
+        CAPTURE(value);
+        CHECK(read_with(value) == ParseErrorType::INVALID_TYPE);
+    }
+}
+
 TEST_CASE("QuestReader start retains precedence over unused start variants")
 {
     auto data = make_quest_with_integer("/startVariants/1/leavingQuest", nlohmann::json::parse("18446744073709551615"));

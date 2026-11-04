@@ -839,6 +839,58 @@ TEST_CASE("RaceReader rejects malformed blow flags and skill list types without 
     CHECK(list.get_monrace(static_cast<MonraceId>(1)).level == 0);
 }
 
+TEST_CASE("RaceReader separates missing values from wrong types in nested definitions")
+{
+    auto session = RaceReader::create_session();
+    test::MonraceListTestAccess races;
+    test::MonraceMessageListTestAccess messages;
+    const auto read_with = [&session](const std::string &key, const nlohmann::json &value) {
+        auto data = make_monrace();
+        data[key] = value;
+        return test::to_error_code(read_as_first_record(data, session));
+    };
+
+    for (const std::string key : { "artifacts", "escorts", "blows", "final_summon", "message", "skill" }) {
+        CAPTURE(key);
+        CHECK(read_with(key, 1) == ParseErrorType::INVALID_TYPE);
+        CHECK(read_with(key, "text") == ParseErrorType::INVALID_TYPE);
+    }
+    for (const std::string key : { "artifacts", "escorts", "blows", "final_summon", "message" }) {
+        CAPTURE(key);
+        CHECK(read_with(key, nlohmann::json::object()) == ParseErrorType::INVALID_TYPE);
+        CHECK(read_with(key, nlohmann::json::parse("[1]")) == ParseErrorType::INVALID_TYPE);
+        CHECK(read_with(key, nlohmann::json::parse("[null]")) == ParseErrorType::TOO_FEW_ARGUMENTS);
+    }
+    CHECK(read_with("skill", nlohmann::json::array()) == ParseErrorType::INVALID_TYPE);
+
+    // 打撃の数の上限より、要素の型の誤りを先に報告する。
+    auto blows = nlohmann::json::array();
+    for (auto i = 0; i < MAX_NUM_BLOWS; ++i) {
+        blows.push_back({ { "method", "HIT" }, { "effect", "HURT" }, { "damage_dice", "1d4" } });
+    }
+    auto too_many_blows = blows;
+    too_many_blows.push_back(blows[0]);
+    CHECK(read_with("blows", too_many_blows) == ParseErrorType::INVALID_VALUE);
+    auto wrong_extra_blow = blows;
+    wrong_extra_blow.push_back(1);
+    CHECK(read_with("blows", wrong_extra_blow) == ParseErrorType::INVALID_TYPE);
+    auto null_extra_blow = blows;
+    null_extra_blow.push_back(nullptr);
+    CHECK(read_with("blows", null_extra_blow) == ParseErrorType::TOO_FEW_ARGUMENTS);
+}
+
+TEST_CASE("RaceReader separates a missing record from a record of a wrong type")
+{
+    auto session = RaceReader::create_session();
+    test::MonraceListTestAccess races;
+    test::MonraceMessageListTestAccess messages;
+    CHECK(test::to_error_code(read_as_first_record(nlohmann::json(nullptr), session)) == ParseErrorType::TOO_FEW_ARGUMENTS);
+    for (const auto &value : { nlohmann::json(1), nlohmann::json("text"), nlohmann::json::array() }) {
+        CAPTURE(value);
+        CHECK(test::to_error_code(read_as_first_record(value, session)) == ParseErrorType::INVALID_TYPE);
+    }
+}
+
 TEST_CASE("RaceReader rejects non-boolean message use_name without publishing")
 {
     auto session = RaceReader::create_session();
