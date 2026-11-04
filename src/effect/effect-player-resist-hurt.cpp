@@ -71,7 +71,7 @@ void effect_player_nuke(PlayerType *player_ptr, EffectPlayerType *ep_ptr)
         msg_print(_("放射能で攻撃された！", "You are hit by radiation!"));
     }
 
-    ep_ptr->dam = ep_ptr->dam * calc_pois_damage_rate(player_ptr) / 100;
+    ep_ptr->dam = ep_ptr->dam * calc_nuke_damage_rate(player_ptr) / 100;
 
     ep_ptr->get_damage = take_hit(player_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer);
     if ((double_resist || has_resist_pois(player_ptr)) || check_multishadow(player_ptr)) {
