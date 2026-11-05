@@ -1634,6 +1634,7 @@ hengband_test_SOURCES = \
 	test/target/test-target-getter.cpp \
 	test/term/test-screen-processor.cpp \
 	test/term/test-z-rand.cpp \
+	test/term/test-z-term.cpp \
 	test/timed-effect/test-player-cut.cpp \
 	test/timed-effect/test-player-stun.cpp \
 	test/timed-effect/test-timed-effect.cpp \
