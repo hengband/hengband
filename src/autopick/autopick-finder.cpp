@@ -13,6 +13,7 @@
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/floor-object.h"
+#include "io/input-context.h"
 #include "io/input-key-acceptor.h"
 #include "main/sound-of-music.h"
 #include "object/item-use-flags.h"
@@ -103,6 +104,7 @@ AutopickSearch get_string_for_search(PlayerType *player_ptr, const AutopickSearc
     const std::string prompt(_("検索(^I:持ち物 ^L:破壊された物): ", "Search key(^I:inven ^L:destroyed): "));
     const auto col = prompt.length();
     prt(prompt, 0, 0);
+    const InputContextScope context_scope({ InputKind::STRING, prompt, StringInputDetails{ max_len, buf } });
     int pos = 0;
     while (true) {
         bool back = false;

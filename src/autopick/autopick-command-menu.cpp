@@ -7,7 +7,8 @@
 
 #include "autopick/autopick-command-menu.h"
 #include "autopick/autopick-menu-data-table.h"
-#include "io/input-key-acceptor.h"
+#include "core/asking-player.h"
+#include "io/input-context.h"
 #include "system/angband.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
@@ -110,8 +111,9 @@ EditorCommandId do_command_menu(size_t menu_depth, size_t start)
     while (true) {
         menu_key = redraw_edit_command_menu(redraw, menu_depth, start, line, menu_key, max_length);
         redraw = false;
-        prt(fmt::format(_("(a-{:c}) コマンド:", "(a-{:c}) Command:"), menu_key + 'a' - 1), 0, 0);
-        const auto key = inkey();
+        const auto prompt = fmt::format(_("(a-{:c}) コマンド:", "(a-{:c}) Command:"), menu_key + 'a' - 1);
+        prt(prompt, 0, 0);
+        const auto key = input_key_with_context(InputKind::COMMAND_CHAR, prompt);
         if (key == ESCAPE) {
             return EditorCommandId::NONE;
         }
