@@ -12,6 +12,7 @@
 #include "game-option/option-flags.h"
 #include "game-option/option-types-table.h"
 #include "game-option/special-options.h"
+#include "io/input-context.h"
 #include "io/input-key-acceptor.h"
 #include "io/write-diary.h"
 #include "main/sound-of-music.h"
@@ -97,9 +98,10 @@ static void do_cmd_options_autosave(PlayerType *player_ptr, std::string_view inf
 {
     auto k = 0;
     constexpr auto n = 2;
+    const auto header = fmt::format(_("{} ( リターンで次へ, y/n でセット, F で頻度を入力, ESC で決定 ) ", "{} (RET to advance, y/n to set, 'F' for frequency, ESC to accept) "), info);
     term_clear();
     while (true) {
-        prt(fmt::format(_("{} ( リターンで次へ, y/n でセット, F で頻度を入力, ESC で決定 ) ", "{} (RET to advance, y/n to set, 'F' for frequency, ESC to accept) "), info), 0, 0);
+        prt(header, 0, 0);
         for (auto i = 0; i < n; i++) {
             byte a = TERM_WHITE;
             if (i == k) {
@@ -112,7 +114,7 @@ static void do_cmd_options_autosave(PlayerType *player_ptr, std::string_view inf
 
         prt(fmt::format(_("自動セーブの頻度： {} ターン毎", "Timed autosave frequency: every {} turns"), autosave_freq), 5, 0);
         move_cursor(k + 2, 50);
-        auto ch = inkey();
+        auto ch = input_key_with_context(InputKind::OPTION, header);
         auto &autosave = autosave_info[k];
         switch (ch) {
         case ESCAPE:
@@ -217,9 +219,10 @@ static void do_cmd_options_win(PlayerType *player_ptr)
     char ch;
     bool go = true;
     const auto old_flags = g_window_flags;
+    constexpr auto header = _("ウィンドウ・フラグ (<方向>で移動, 't'でON/OFF,'s'でON(他窓OFF), ESC)", "Window Flags (<dir>, <t>oggle, <s>et, ESC) ");
     term_clear();
     while (go) {
-        prt(_("ウィンドウ・フラグ (<方向>で移動, 't'でON/OFF,'s'でON(他窓OFF), ESC)", "Window Flags (<dir>, <t>oggle, <s>et, ESC) "), 0, 0);
+        prt(header, 0, 0);
         for (j = 0; j < 8; j++) {
             byte a = TERM_WHITE;
             auto s = angband_term_name[j];
@@ -259,7 +262,7 @@ static void do_cmd_options_win(PlayerType *player_ptr)
 
         bool has_flag = false;
         term_gotoxy(35 + x * 5, y + 5);
-        ch = inkey();
+        ch = input_key_with_context(InputKind::OPTION, header);
         switch (ch) {
         case ESCAPE:
             go = false;
@@ -327,8 +330,9 @@ static void do_cmd_options_cheat(const FloorType &floor, std::string_view player
     term_clear();
     auto k = 0U;
     const auto n = cheat_info.size();
+    const auto header = fmt::format(_("{} ( リターンで次へ, y/n でセット, ESC で決定 )", "{} (RET to advance, y/n to set, ESC to accept) "), info);
     while (true) {
-        prt(fmt::format(_("{} ( リターンで次へ, y/n でセット, ESC で決定 )", "{} (RET to advance, y/n to set, ESC to accept) "), info), 0, 0);
+        prt(header, 0, 0);
 
 #ifdef JP
         /* 詐欺オプションをうっかりいじってしまう人がいるようなので注意 */
@@ -349,7 +353,7 @@ static void do_cmd_options_cheat(const FloorType &floor, std::string_view player
         }
 
         move_cursor(k + 2, 50);
-        auto ch = inkey();
+        auto ch = input_key_with_context(InputKind::OPTION, header);
         if (const auto dir = get_keymap_dir(ch); dir.is_axial()) {
             ch = I2D(dir.dir());
         }
@@ -451,8 +455,9 @@ void do_cmd_options(PlayerType *player_ptr)
                 term_putstr(5, option_fields[i].row, -1, a, fmt::format("({:c}) {}", toupper(option_fields[i].key), option_fields[i].name));
             }
 
-            prt(_("<方向>で移動, Enterで決定, ESCでキャンセル, ?でヘルプ: ", "Move to <dir>, Select to Enter, Cancel to ESC, ? to help: "), 21, 0);
-            skey = inkey_special(true);
+            constexpr auto prompt = _("<方向>で移動, Enterで決定, ESCでキャンセル, ?でヘルプ: ", "Move to <dir>, Select to Enter, Cancel to ESC, ? to help: ");
+            prt(prompt, 21, 0);
+            skey = input_special_key_with_context(InputKind::COMMAND_CHAR, prompt);
             if (!(skey & SKEY_MASK)) {
                 k = (char)skey;
             } else {
@@ -581,8 +586,9 @@ void do_cmd_options(PlayerType *player_ptr)
             prt(_("コマンド: 低ヒットポイント警告", "Command: Hitpoint Warning"), 19, 0);
             while (true) {
                 prt(fmt::format(_("現在の低ヒットポイント警告: {}0%", "Current hitpoint warning: {}0%"), hitpoint_warn), 22, 0);
-                prt(_("低ヒットポイント警告 (0-9) ESCで決定: ", "Hitpoint Warning (0-9 or ESC to accept): "), 20, 0);
-                k = inkey();
+                constexpr auto prompt = _("低ヒットポイント警告 (0-9) ESCで決定: ", "Hitpoint Warning (0-9 or ESC to accept): ");
+                prt(prompt, 20, 0);
+                k = input_key_with_context(InputKind::COMMAND_CHAR, prompt);
                 if (k == ESCAPE) {
                     break;
                 } else if (k == '?') {
@@ -603,8 +609,9 @@ void do_cmd_options(PlayerType *player_ptr)
             prt(_("コマンド: 低魔力色閾値", "Command: Mana Color Threshold"), 19, 0);
             while (true) {
                 prt(fmt::format(_("現在の低魔力色閾値: {}0%", "Current mana color threshold: {}0%"), mana_warn), 22, 0);
-                prt(_("低魔力閾値 (0-9) ESCで決定: ", "Mana color Threshold (0-9 or ESC to accept): "), 20, 0);
-                k = inkey();
+                constexpr auto prompt = _("低魔力閾値 (0-9) ESCで決定: ", "Mana color Threshold (0-9 or ESC to accept): ");
+                prt(prompt, 20, 0);
+                k = input_key_with_context(InputKind::COMMAND_CHAR, prompt);
                 if (k == ESCAPE) {
                     break;
                 } else if (k == '?') {
@@ -661,10 +668,11 @@ void do_cmd_options_aux(PlayerType *player_ptr, GameOptionPage page, std::string
         option_num++;
     }
 
+    constexpr auto command = _("{} (リターン:次, {}ESC:終了, ?:ヘルプ) ", "{} (RET:next, {}, ?:help) ");
+    const auto header = fmt::format(command, info, browse_only ? _("", "ESC:exit") : _("y/n:変更, ", "y/n:change, ESC:accept"));
     term_clear();
     while (true) {
-        constexpr auto command = _("{} (リターン:次, {}ESC:終了, ?:ヘルプ) ", "{} (RET:next, {}, ?:help) ");
-        prt(fmt::format(command, info, browse_only ? _("", "ESC:exit") : _("y/n:変更, ", "y/n:change, ESC:accept")), 0, 0);
+        prt(header, 0, 0);
         if (page == GameOptionPage::AUTODESTROY) {
             constexpr auto mes = _("以下のオプションは、簡易自動破壊を使用するときのみ有効", "Following options will protect items from easy auto-destroyer.");
             c_prt(TERM_YELLOW, mes, 6, _(6, 3));
@@ -693,7 +701,7 @@ void do_cmd_options_aux(PlayerType *player_ptr, GameOptionPage page, std::string
         }
 
         move_cursor(k + 2 + l, 50);
-        ch = inkey();
+        ch = input_key_with_context(InputKind::OPTION, header);
         if (const auto dir = get_keymap_dir(ch); dir.is_axial()) {
             ch = I2D(dir.dir());
         }
