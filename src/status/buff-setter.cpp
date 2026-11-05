@@ -457,6 +457,7 @@ bool set_mimic(PlayerType *player_ptr, TIME_EFFECT v, MimicKindType mimic_race_i
     };
     dur.set_flags(flags_mwrf);
     dur.request_bonus_and_max_hp_recalculation();
+    dur.set_flag(StatusRecalculatingFlag::TORCH); // 変身先で光の半径が変わる (天使・半神の加算、吸血鬼の発光)
     finish_timed_effect_change(player_ptr);
     return true;
 }
