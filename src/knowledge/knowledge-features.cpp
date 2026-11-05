@@ -253,7 +253,7 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
         }
 
         if ((ch == 'D') || (ch == 'd')) {
-            const auto &symbol_previous = terrain.symbol_configs.at(*lighting_level);
+            const auto symbol_previous = terrain.symbol_configs.at(*lighting_level);
             terrain.reset_lighting();
             const auto &symbol_current = terrain.symbol_configs.at(*lighting_level);
             if (visual_list) {
