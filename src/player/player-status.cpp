@@ -257,6 +257,7 @@ static void update_bonuses(PlayerType *player_ptr)
     BIT_FLAGS old_esp_nonliving = player_ptr->esp_nonliving;
     BIT_FLAGS old_esp_unique = player_ptr->esp_unique;
     BIT_FLAGS old_see_inv = player_ptr->see_inv;
+    BIT_FLAGS old_lite_flags = player_ptr->lite;
     int16_t old_speed = player_ptr->pspeed;
 
     ARMOUR_CLASS old_dis_ac = player_ptr->dis_ac;
@@ -378,6 +379,11 @@ static void update_bonuses(PlayerType *player_ptr)
 
     if (player_ptr->see_inv != old_see_inv) {
         dur.set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
+    }
+
+    // 光源を持たないときの明るさ (cur_lite) は発光で決まる
+    if (player_ptr->lite != old_lite_flags) {
+        dur.set_flag(StatusRecalculatingFlag::TORCH);
     }
 
     if (player_ptr->pspeed != old_speed) {
