@@ -729,6 +729,9 @@ void lite_spot(PlayerType *player_ptr, const Pos2D &pos)
  * Oh, and outside of the "torch radius", only "lite" grids need to be scanned.
  */
 
+// 敵のプレイヤーに対する移動道のりの最大値(この値以上は処理を打ち切る).
+constexpr auto MONSTER_FLOW_DEPTH = 32;
+
 /*!
  * @brief 前回 update_flow() で探索したときのプレイヤーの位置
  * @details 走行中にこの位置が見えている間は探索を省く。また、前回の探索で値を書いた範囲を消すのにも使う。
@@ -736,47 +739,22 @@ void lite_spot(PlayerType *player_ptr, const Pos2D &pos)
 static Pos2D flow_center(0, 0);
 
 /*!
- * @brief モンスターがプレイヤーを追跡するための経路情報を更新する
- * @param player_ptr プレイヤーへの参照ポインタ
- * @details プレイヤーの位置から幅優先探索を行い、到達できるグリッドに、移動の種類 (GridFlow) ごとの
- * コスト (閉じた扉は余分にかかる) と距離を記録する。探索は monster_flow_depth マスで打ち切る。
+ * @brief セーブを読み込んだ後、まだ経路情報を探索していないか
+ * @details 読み込んだフロアには経路情報が無いので、走行中に探索を省くときも flow_center から探索し直す。
  */
-void update_flow(PlayerType *player_ptr)
+static bool is_flow_pending_after_load = false;
+
+/*!
+ * @brief 指定した位置から幅優先探索を行い、経路情報を書く
+ * @param floor フロアへの参照
+ * @param center 探索の起点 (プレイヤーの位置)
+ */
+static void build_flow(FloorType &floor, const Pos2D &center)
 {
-    auto &floor = *player_ptr->current_floor_ptr;
-
-    /* The last way-point is on the map */
-    if (player_ptr->running && floor.contains(flow_center, FloorBoundary::OUTER_WALL_EXCLUSIVE)) {
-        /* The way point is in sight - do not update.  (Speedup) */
-        if (floor.get_grid(flow_center).info & CAVE_VIEW) {
-            return;
-        }
-    }
-
-    // 敵のプレイヤーに対する移動道のりの最大値(この値以上は処理を打ち切る).
-    constexpr auto monster_flow_depth = 32;
-
-    // 前回の探索で値を書いたのは、前回の中心から monster_flow_depth マス以内のグリッドだけなので、そこだけを消す。
-    // フロアの生成・読み込み時と forget_flow() では、フロア全体を消している。
-    const auto y_min = std::max(flow_center.y - monster_flow_depth, 0);
-    const auto y_max = std::min(flow_center.y + monster_flow_depth, floor.height - 1);
-    const auto x_min = std::max(flow_center.x - monster_flow_depth, 0);
-    const auto x_max = std::min(flow_center.x + monster_flow_depth, floor.width - 1);
-    for (auto y = y_min; y <= y_max; y++) {
-        for (auto x = x_min; x <= x_max; x++) {
-            auto &grid = floor.get_grid({ y, x });
-            grid.reset_costs();
-            grid.reset_dists();
-        }
-    }
-
-    const auto p_pos = player_ptr->get_position();
-    flow_center = p_pos;
-
     for (const auto gf : GRID_FLOW_RANGE) {
         // 幅優先探索用のキュー。
         std::queue<Pos2D> que;
-        que.push(p_pos);
+        que.push(center);
 
         /* Now process the queue */
         while (!que.empty()) {
@@ -791,7 +769,7 @@ void update_flow(PlayerType *player_ptr)
                 const auto pos_neighbor = pos + d.vec();
 
                 /* Ignore player's grid */
-                if (pos_neighbor == p_pos) {
+                if (pos_neighbor == center) {
                     continue;
                 }
 
@@ -840,7 +818,7 @@ void update_flow(PlayerType *player_ptr)
                     dist_neighbor = n;
                 }
 
-                if (n == monster_flow_depth) {
+                if (n == MONSTER_FLOW_DEPTH) {
                     continue;
                 }
 
@@ -848,6 +826,69 @@ void update_flow(PlayerType *player_ptr)
             }
         }
     }
+}
+
+/*!
+ * @brief モンスターがプレイヤーを追跡するための経路情報を更新する
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @details プレイヤーの位置から幅優先探索を行い、到達できるグリッドに、移動の種類 (GridFlow) ごとの
+ * コスト (閉じた扉は余分にかかる) と距離を記録する。探索は MONSTER_FLOW_DEPTH マスで打ち切る。
+ */
+void update_flow(PlayerType *player_ptr)
+{
+    auto &floor = *player_ptr->current_floor_ptr;
+
+    /* The last way-point is on the map */
+    if (player_ptr->running && floor.contains(flow_center, FloorBoundary::OUTER_WALL_EXCLUSIVE)) {
+        /* The way point is in sight - do not update.  (Speedup) */
+        if (floor.get_grid(flow_center).info & CAVE_VIEW) {
+            // 走行中のセーブを読み込んだ直後は、セーブしたときと同じく前回の位置から探索した結果にする
+            if (is_flow_pending_after_load) {
+                build_flow(floor, flow_center);
+                is_flow_pending_after_load = false;
+            }
+
+            return;
+        }
+    }
+
+    // 前回の探索で値を書いたのは、前回の中心から MONSTER_FLOW_DEPTH マス以内のグリッドだけなので、そこだけを消す。
+    // フロアの生成・読み込み時と forget_flow() では、フロア全体を消している。
+    const auto y_min = std::max(flow_center.y - MONSTER_FLOW_DEPTH, 0);
+    const auto y_max = std::min(flow_center.y + MONSTER_FLOW_DEPTH, floor.height - 1);
+    const auto x_min = std::max(flow_center.x - MONSTER_FLOW_DEPTH, 0);
+    const auto x_max = std::min(flow_center.x + MONSTER_FLOW_DEPTH, floor.width - 1);
+    for (auto y = y_min; y <= y_max; y++) {
+        for (auto x = x_min; x <= x_max; x++) {
+            auto &grid = floor.get_grid({ y, x });
+            grid.reset_costs();
+            grid.reset_dists();
+        }
+    }
+
+    flow_center = player_ptr->get_position();
+    build_flow(floor, flow_center);
+    is_flow_pending_after_load = false;
+}
+
+/*!
+ * @brief 前回 update_flow() で探索したときのプレイヤーの位置を返す
+ * @return 前回探索したときのプレイヤーの位置
+ */
+Pos2D get_flow_center()
+{
+    return flow_center;
+}
+
+/*!
+ * @brief 前回 update_flow() で探索したときのプレイヤーの位置を設定する (セーブの読み込みで使う)
+ * @param pos 前回探索したときのプレイヤーの位置
+ * @details 読み込んだフロアには探索した結果が無いので、次の update_flow() で探索し直させる。
+ */
+void set_flow_center(const Pos2D &pos)
+{
+    flow_center = pos;
+    is_flow_pending_after_load = true;
 }
 
 /*

@@ -29,7 +29,7 @@ constexpr std::string_view ROOT_VARIANT_NAME("Hengband");
 /*!
  * @brief セーブファイルのバージョン(3.0.0から導入)
  */
-constexpr uint32_t SAVEFILE_VERSION = 30;
+constexpr uint32_t SAVEFILE_VERSION = 31;
 
 /*!
  * @brief バージョンが開発版が安定版かを返す(廃止予定)

@@ -433,3 +433,25 @@ void run_step(PlayerType *player_ptr, const Direction &dir)
         disturb(player_ptr, false, false);
     }
 }
+
+/*!
+ * @brief 走っている途中の進み方を返す
+ * @return 走っている方向・来た方向と、壁の切れ目を探す状態
+ */
+RunningCourse get_running_course()
+{
+    return { find_current, find_prevdir, find_openarea, find_breakright, find_breakleft };
+}
+
+/*!
+ * @brief 走っている途中の進み方を設定する (セーブの読み込みで使う)
+ * @param course 走っている方向・来た方向と、壁の切れ目を探す状態
+ */
+void set_running_course(const RunningCourse &course)
+{
+    find_current = course.current;
+    find_prevdir = course.prevdir;
+    find_openarea = course.openarea;
+    find_breakright = course.breakright;
+    find_breakleft = course.breakleft;
+}

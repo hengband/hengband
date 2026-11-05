@@ -89,8 +89,8 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
     player_ptr->ambush_flag = false;
     health_track(player_ptr, 0);
 
-    // セーブを読み込んで再開したとき (load_game) は、セーブしている行動 (探索モード・休憩・釣り) とコマンドの繰り返しを続け、
-    // 続けた場合と同じにする。走りと移動は続きをセーブしていないので、読み込んだ時点で止まっている
+    // セーブを読み込んで再開したとき (load_game) は、セーブしている行動 (探索モード・休憩・釣り・走り・トラベル) と
+    // コマンドの繰り返しを続け、続けた場合と同じにする
     // (load_game は新規ゲームの最初の階でも真だが、そのときはどれも始まっていない)
     if (load_game) {
         if (flush_disturb) {

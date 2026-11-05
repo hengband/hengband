@@ -270,6 +270,49 @@ int Travel::get_cost(const Pos2D &pos) const
 }
 
 /*!
+ * @brief トラベルの状態を返す
+ * @return トラベルの状態
+ */
+TravelState Travel::get_state() const
+{
+    return this->state;
+}
+
+/*!
+ * @brief 前の 1 歩で進んだ方向を返す
+ * @return 前の 1 歩で進んだ方向 (目的地を決めた直後は、目的地のおおよその方向)
+ */
+const Direction &Travel::get_direction() const
+{
+    return this->dir;
+}
+
+/*!
+ * @brief セーブから読み込んだトラベルの状態を設定する
+ * @param goal 目的地
+ * @param travel_state トラベルの状態
+ * @param prev_dir 前の 1 歩で進んだ方向
+ * @details 目的地までの行程は消すので、続けるときは set_cost() で設定する
+ */
+void Travel::restore(const Pos2D &goal, TravelState travel_state, const Direction &prev_dir)
+{
+    this->pos_goal = goal;
+    this->state = travel_state;
+    this->dir = prev_dir;
+    this->forget_flow();
+}
+
+/*!
+ * @brief 目的地までの行程を 1 マス設定する (セーブの読み込みで、restore() の後に使う)
+ * @param pos 設定する位置
+ * @param cost その位置から目的地までの行程
+ */
+void Travel::set_cost(const Pos2D &pos, int cost)
+{
+    this->costs[pos.y][pos.x] = cost;
+}
+
+/*!
  * @brief トラベル機能の実装 /
  * Travel command
  * @param player_ptr	プレイヤーへの参照ポインタ

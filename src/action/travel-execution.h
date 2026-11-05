@@ -36,6 +36,10 @@ public:
     void stop();
     void step(PlayerType *player_ptr);
     int get_cost(const Pos2D &pos) const;
+    TravelState get_state() const;
+    const Direction &get_direction() const;
+    void restore(const Pos2D &goal, TravelState travel_state, const Direction &prev_dir);
+    void set_cost(const Pos2D &pos, int cost);
 
 private:
     Travel() = default;

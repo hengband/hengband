@@ -73,6 +73,8 @@ void print_bolt_pict(PlayerType *player_ptr, const Pos2D &pos_src, const Pos2D &
 void note_spot(PlayerType *player_ptr, const Pos2D &pos);
 void lite_spot(PlayerType *player_ptr, const Pos2D &pos);
 void update_flow(PlayerType *player_ptr);
+Pos2D get_flow_center();
+void set_flow_center(const Pos2D &pos);
 void cave_alter_feat(PlayerType *player_ptr, POSITION y, POSITION x, TerrainCharacteristics action);
 bool cave_monster_teleportable_bold(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION y, POSITION x, teleport_flags mode);
 bool cave_player_teleportable_bold(PlayerType *player_ptr, POSITION y, POSITION x, teleport_flags mode);

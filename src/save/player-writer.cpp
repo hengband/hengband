@@ -1,6 +1,9 @@
 #include "save/player-writer.h"
+#include "action/run-execution.h"
+#include "action/travel-execution.h"
 #include "floor/dungeon-feeling.h"
 #include "game-option/birth-options.h"
+#include "grid/grid.h"
 #include "io/input-key-requester.h"
 #include "market/arena-entry.h"
 #include "object/tval-types.h"
@@ -96,6 +99,55 @@ static void wr_continuous_actions(PlayerType *player_ptr)
     wr_bool(command_dir.is_targetting());
     wr_s16b(static_cast<int16_t>(panel_row_min));
     wr_s16b(static_cast<int16_t>(panel_col_min));
+}
+
+/*!
+ * @brief 走りとトラベルの続きを書き込む
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @details 走りは、残りの歩数・止まる位置・進み方と、モンスターの経路情報を前回探索した位置 (走っている間は
+ * 探索を省くことがある) を書く。トラベルは目的地と状態・方向を書き、続けている途中なら、目的地を決めたときに
+ * 作った行程を今のフロアの大きさの分だけ書く (歩くうちに分かった地形では作り直さないので、読み込みで作り直すと
+ * 道筋が変わることがある)。
+ */
+static void wr_running_and_travel(PlayerType *player_ptr)
+{
+    wr_s16b(player_ptr->running);
+    wr_s16b(static_cast<int16_t>(player_ptr->run_py));
+    wr_s16b(static_cast<int16_t>(player_ptr->run_px));
+    const auto course = get_running_course();
+    wr_byte(static_cast<uint8_t>(course.current.dir()));
+    wr_byte(static_cast<uint8_t>(course.prevdir.dir()));
+    wr_bool(course.openarea);
+    wr_bool(course.breakright);
+    wr_bool(course.breakleft);
+    wr_bool(ignore_avoid_run);
+    const auto flow_center = get_flow_center();
+    wr_s16b(static_cast<int16_t>(flow_center.y));
+    wr_s16b(static_cast<int16_t>(flow_center.x));
+
+    const auto &travel = Travel::get_instance();
+    const auto &goal = travel.get_goal();
+    wr_bool(goal.has_value());
+    if (!goal) {
+        return;
+    }
+
+    wr_s16b(static_cast<int16_t>(goal->y));
+    wr_s16b(static_cast<int16_t>(goal->x));
+    wr_byte(static_cast<uint8_t>(travel.get_state()));
+    wr_byte(static_cast<uint8_t>(travel.get_direction().dir()));
+    if (!travel.is_ongoing()) {
+        return;
+    }
+
+    const auto &floor = *player_ptr->current_floor_ptr;
+    wr_s16b(static_cast<int16_t>(floor.height));
+    wr_s16b(static_cast<int16_t>(floor.width));
+    for (auto y = 0; y < floor.height; y++) {
+        for (auto x = 0; x < floor.width; x++) {
+            wr_s16b(static_cast<int16_t>(travel.get_cost({ y, x })));
+        }
+    }
 }
 
 /*!
@@ -344,4 +396,5 @@ void wr_player(PlayerType *player_ptr)
     wr_s16b(player_ptr->riding_t_m_idx);
     wr_last_target();
     wr_continuous_actions(player_ptr);
+    wr_running_and_travel(player_ptr);
 }
