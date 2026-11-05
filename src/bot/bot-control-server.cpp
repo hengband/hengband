@@ -176,6 +176,10 @@ std::string_view input_kind_name(InputKind kind)
         return "birth";
     case InputKind::BROWSER:
         return "browser";
+    case InputKind::OPTION:
+        return "option";
+    case InputKind::AUTOPICK_EDITOR:
+        return "autopick_editor";
     }
 
     THROW_EXCEPTION(std::logic_error, "Invalid InputKind was specified!");

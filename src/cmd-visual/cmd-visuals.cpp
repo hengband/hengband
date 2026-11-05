@@ -6,7 +6,7 @@
 #include "flavor/object-flavor-types.h"
 #include "game-option/special-options.h"
 #include "io/files-util.h"
-#include "io/input-key-acceptor.h"
+#include "io/input-context.h"
 #include "io/read-pref-file.h"
 #include "knowledge/knowledge-features.h"
 #include "knowledge/knowledge-items.h"
@@ -77,6 +77,9 @@ static tl::optional<char> input_new_visual_character(int i, char initial_charact
     return static_cast<char>(*new_character);
 }
 
+//! メニューのプロンプト。選んだ項目の説明を続けて表示する
+constexpr auto VISUALS_COMMAND_PROMPT = _("コマンド: ", "Command: ");
+
 /*!
  * @brief キャラクタの変更メニュー表示
  * @param choice_msg 選択メッセージ
@@ -95,7 +98,7 @@ static void print_visuals_menu(concptr choice_msg)
     prt(_("(8) アイテムの   色/文字 を変更する (シンボルエディタ)", "(8) Change object attr/chars (visual mode)"), 11, 5);
     prt(_("(9) 地形の       色/文字 を変更する (シンボルエディタ)", "(9) Change feature attr/chars (visual mode)"), 12, 5);
     prt(_("(R) 画面表示方法の初期化", "(R) Reset visuals"), 13, 5);
-    prt(fmt::format(_("コマンド: {}", "Command: {}"), choice_msg ? choice_msg : _("", "")), 15, 0);
+    prt(std::string(VISUALS_COMMAND_PROMPT).append(choice_msg ? choice_msg : ""), 15, 0);
 }
 
 /*
@@ -115,7 +118,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
     while (true) {
         term_clear();
         print_visuals_menu(nullptr);
-        const auto key = inkey();
+        const auto key = input_key_with_context(InputKind::COMMAND_CHAR, VISUALS_COMMAND_PROMPT);
         if (key == ESCAPE) {
             break;
         }
@@ -123,8 +126,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
         switch (key) {
         case '0': {
             prt(_("コマンド: ユーザー設定ファイルのロード", "Command: Load a user pref file"), 15, 0);
-            prt(_("ファイル: ", "File: "), 17, 0);
-            const auto ask_result = askfor(70, initial_filename);
+            const auto ask_result = input_string_on_row(_("ファイル: ", "File: "), 17, 70, initial_filename);
             if (!ask_result) {
                 continue;
             }
@@ -135,8 +137,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
         }
         case '1': {
             prt(_("コマンド: モンスターの[色/文字]をファイルに書き出します", "Command: Dump monster attr/chars"), 15, 0);
-            prt(_("ファイル: ", "File: "), 17, 0);
-            const auto ask_result = askfor(70, initial_filename);
+            const auto ask_result = input_string_on_row(_("ファイル: ", "File: "), 17, 70, initial_filename);
             if (!ask_result) {
                 continue;
             }
@@ -160,8 +161,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
         }
         case '2': {
             prt(_("コマンド: アイテムの[色/文字]をファイルに書き出します", "Command: Dump object attr/chars"), 15, 0);
-            prt(_("ファイル: ", "File: "), 17, 0);
-            const auto ask_result = askfor(70, initial_filename);
+            const auto ask_result = input_string_on_row(_("ファイル: ", "File: "), 17, 70, initial_filename);
             if (!ask_result) {
                 continue;
             }
@@ -197,8 +197,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
         }
         case '3': {
             prt(_("コマンド: 地形の[色/文字]をファイルに書き出します", "Command: Dump feature attr/chars"), 15, 0);
-            prt(_("ファイル: ", "File: "), 17, 0);
-            const auto ask_result = askfor(70, initial_filename);
+            const auto ask_result = input_string_on_row(_("ファイル: ", "File: "), 17, 70, initial_filename);
             if (!ask_result) {
                 continue;
             }
@@ -234,7 +233,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
             auto &monraces = MonraceList::get_instance();
             static auto choice_msg = _("モンスターの[色/文字]を変更します", "Change monster attr/chars");
             static auto monrace_id = monraces.begin()->second->idx;
-            prt(fmt::format(_("コマンド: {}", "Command: {}"), choice_msg), 15, 0);
+            prt(std::string(VISUALS_COMMAND_PROMPT).append(choice_msg), 15, 0);
             while (true) {
                 auto &monrace = monraces.get_monrace(monrace_id);
                 int c;
@@ -247,8 +246,9 @@ void do_cmd_visuals(PlayerType *player_ptr)
                 term_putstr(10, 20, -1, TERM_WHITE, fmt::format(_("現在値  色 / 文字 = {:3} / {:3}", "Current attr/char = {:3} / {:3}"), symbol_config.color, static_cast<uint8_t>(symbol_config.character)));
                 term_putstr(40, 20, -1, TERM_WHITE, empty_symbol);
                 term_queue_bigchar(43, 20, { symbol_config, {} });
-                term_putstr(0, 22, -1, TERM_WHITE, _("コマンド (n/N/^N/a/A/^A/c/C/^C/v/V/^V): ", "Command (n/N/^N/a/A/^A/c/C/^C/v/V/^V): "));
-                const auto ch = inkey();
+                constexpr auto prompt = _("コマンド (n/N/^N/a/A/^A/c/C/^C/v/V/^V): ", "Command (n/N/^N/a/A/^A/c/C/^C/v/V/^V): ");
+                term_putstr(0, 22, -1, TERM_WHITE, prompt);
+                const auto ch = input_key_with_context(InputKind::COMMAND_CHAR, prompt);
                 if (ch == ESCAPE) {
                     break;
                 }
@@ -306,7 +306,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
         case '5': {
             static auto choice_msg = _("アイテムの[色/文字]を変更します", "Change object attr/chars");
             static short bi_id = 0;
-            prt(fmt::format(_("コマンド: {}", "Command: {}"), choice_msg), 15, 0);
+            prt(std::string(VISUALS_COMMAND_PROMPT).append(choice_msg), 15, 0);
             const auto &baseitems = BaseitemList::get_instance();
             const auto &baseitem_records = BaseitemRecords::get_instance();
             auto &baseitem_configs = BaseitemConfigs::get_instance();
@@ -326,9 +326,10 @@ void do_cmd_visuals(PlayerType *player_ptr)
                 term_putstr(10, 20, -1, TERM_WHITE, fmt::format(_("現在値  色 / 文字 = {:3} / {:3}", "Current attr/char = {:3} / {:3}"), baseitem_config.get_color(), static_cast<uint8_t>(baseitem_config.get_character())));
                 term_putstr(40, 20, -1, TERM_WHITE, empty_symbol);
                 term_queue_bigchar(43, 20, { baseitem_config.get_symbol(), {} });
-                term_putstr(0, 22, -1, TERM_WHITE, _("コマンド (n/N/^N/a/A/^A/c/C/^C/v/V/^V): ", "Command (n/N/^N/a/A/^A/c/C/^C/v/V/^V): "));
+                constexpr auto prompt = _("コマンド (n/N/^N/a/A/^A/c/C/^C/v/V/^V): ", "Command (n/N/^N/a/A/^A/c/C/^C/v/V/^V): ");
+                term_putstr(0, 22, -1, TERM_WHITE, prompt);
 
-                const auto ch = inkey();
+                const auto ch = input_key_with_context(InputKind::COMMAND_CHAR, prompt);
                 if (ch == ESCAPE) {
                     break;
                 }
@@ -394,7 +395,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
             static auto choice_msg = _("地形の[色/文字]を変更します", "Change feature attr/chars");
             static short terrain_id = 0;
             static short lighting_level = F_LIT_STANDARD;
-            prt(fmt::format(_("コマンド: {}", "Command: {}"), choice_msg), 15, 0);
+            prt(std::string(VISUALS_COMMAND_PROMPT).append(choice_msg), 15, 0);
             auto &terrains = TerrainList::get_instance();
             while (true) {
                 auto &terrain = terrains.get_terrain(terrain_id);
@@ -410,10 +411,10 @@ void do_cmd_visuals(PlayerType *player_ptr)
                 term_putstr(10, 20, -1, TERM_WHITE, fmt::format(_("現在値  色 / 文字 = {:3} / {:3}", "Current attr/char = {:3} / {:3}"), symbol_config.color, static_cast<uint8_t>(symbol_config.character)));
                 term_putstr(40, 20, -1, TERM_WHITE, empty_symbol);
                 term_queue_bigchar(43, 20, { symbol_config, {} });
-                term_putstr(0, 22, -1, TERM_WHITE,
-                    _("コマンド (n/N/^N/a/A/^A/c/C/^C/l/L/^L/d/D/^D/v/V/^V): ", "Command (n/N/^N/a/A/^A/c/C/^C/l/L/^L/d/D/^D/v/V/^V): "));
+                constexpr auto prompt = _("コマンド (n/N/^N/a/A/^A/c/C/^C/l/L/^L/d/D/^D/v/V/^V): ", "Command (n/N/^N/a/A/^A/c/C/^C/l/L/^L/d/D/^D/v/V/^V): ");
+                term_putstr(0, 22, -1, TERM_WHITE, prompt);
 
-                const auto ch = inkey();
+                const auto ch = input_key_with_context(InputKind::COMMAND_CHAR, prompt);
                 if (ch == ESCAPE) {
                     break;
                 }
