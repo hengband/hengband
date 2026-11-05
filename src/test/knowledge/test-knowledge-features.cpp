@@ -130,3 +130,26 @@ TEST_CASE("do_cmd_knowledge_features publishes the browser context while browsin
     IDX lighting_level = F_LIT_STANDARD;
     do_cmd_knowledge_features(&need_redraw, false, -1, &lighting_level);
 }
+
+TEST_CASE("do_cmd_knowledge_features restores every lighting level when cancelling a directly specified terrain")
+{
+    const auto restore = replace_terrains({ { "floor", 0 } });
+    auto &terrain = TerrainList::get_instance().get_terrain(0);
+    const TerrainSymbols symbols{ { { 1, '.' }, { 11, '*' }, { 2, '#' } } };
+    terrain.symbol_configs = symbols;
+    // キーの案内はクリップボードにシンボルがあるかで変わるので、空にしておく
+    auto &clipboard = DisplaySymbolsClipboard::get_instance();
+    const auto restore_clipboard = test::scoped_restore(clipboard.symbol, clipboard.symbols);
+    clipboard.symbol = {};
+    clipboard.reset_symbols();
+    test::ScopedInputTerm term;
+
+    // 番号を指定すると明色のシンボルの編集から始まる。6 で明色の文字を変え、d でほかの段階も標準色から求め直してから、
+    // ESC で取り消して閉じる。どの明るさの段階も元のまま残る
+    term.expect({ InputKind::BROWSER, EDIT_KEY_GUIDE, {} }, "6d\x1b");
+    auto need_redraw = false;
+    IDX lighting_level = F_LIT_LITE;
+    do_cmd_knowledge_features(&need_redraw, true, 0, &lighting_level);
+
+    CHECK(terrain.symbol_configs == symbols);
+}

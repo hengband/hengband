@@ -118,12 +118,9 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
         auto &terrain = terrains.get_terrain(direct_f_idx);
         auto &symbol_config = terrain.symbol_configs.at(*lighting_level);
         feat_idx.push_back(static_cast<FEAT_IDX>(direct_f_idx));
+        symbols = terrain.symbol_configs;
         (void)visual_mode_command('v', &visual_list, browser_rows - 1, wid - max_length + 3, &attr_top, &char_left, &symbol_config.color,
             &symbol_config.character, need_redraw);
-
-        for (FEAT_IDX i = 0; i < F_LIT_MAX; i++) {
-            symbols[i] = symbol_config;
-        }
     }
 
     FEAT_IDX old_grp_cur = -1;
