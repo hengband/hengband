@@ -5,13 +5,14 @@
  */
 
 #include "knowledge/knowledge-items.h"
+#include "core/asking-player.h"
 #include "core/show-file.h"
 #include "core/window-redrawer.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "game-option/special-options.h"
 #include "io-dump/dump-util.h"
-#include "io/input-key-acceptor.h"
+#include "io/input-context.h"
 #include "io/temp-file.h"
 #include "knowledge/item-group-table.h"
 #include "perception/identification.h"
@@ -288,20 +289,15 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
             display_visual_list(max_length + 3, 7, browser_rows - 1, wid - (max_length + 3), attr_top, char_left);
         }
 
-#ifdef JP
-        prt(fmt::format("<方向>{}{}{}, ESC", (!visual_list && !visual_only) ? ", 'r'で詳細を見る" : "", visual_list ? ", ENTERで決定" : ", 'v'でシンボル変更", (symbols_cb.symbol != DisplaySymbol()) ? ", 'c', 'p'でペースト" : ", 'c'でコピー"),
-            hgt - 1, 0);
-#else
-        prt(fmt::format("<dir>{}{}{}, ESC", (!visual_list && !visual_only) ? ", 'r' to recall" : "", visual_list ? ", ENTER to accept" : ", 'v' for visuals", (symbols_cb.symbol != DisplaySymbol()) ? ", 'c', 'p' to paste" : ", 'c' to copy"),
-            hgt - 1, 0);
-#endif
+        const auto key_guide = fmt::format(_("<方向>{}{}{}, ESC", "<dir>{}{}{}, ESC"), (!visual_list && !visual_only) ? _(", 'r'で詳細を見る", ", 'r' to recall") : "", visual_list ? _(", ENTERで決定", ", ENTER to accept") : _(", 'v'でシンボル変更", ", 'v' for visuals"), (symbols_cb.symbol != DisplaySymbol()) ? _(", 'c', 'p'でペースト", ", 'c', 'p' to paste") : _(", 'c'でコピー", ", 'c' to copy"));
+        prt(key_guide, hgt - 1, 0);
 
         if (bi_ids.empty()) {
             if (!column) {
                 term_gotoxy(0, 6 + (grp_cur - grp_top));
             }
 
-            const auto ch = inkey();
+            const auto ch = input_key_with_context(InputKind::BROWSER, key_guide);
             switch (ch) {
             case ESCAPE: {
                 flag = true;
@@ -336,7 +332,7 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
             term_gotoxy(max_length + 3, 6 + (current_bi_id - top_bi_id));
         }
 
-        char ch = inkey();
+        char ch = input_key_with_context(InputKind::BROWSER, key_guide);
         const auto height = browser_rows - 1;
         if (visual_mode_command(ch, &visual_list, height, width, &attr_top, &char_left, &color, &character, need_redraw)) {
             flavor_config.set_symbol({ color, character });

@@ -174,6 +174,8 @@ std::string_view input_kind_name(InputKind kind)
         return "file";
     case InputKind::BIRTH:
         return "birth";
+    case InputKind::BROWSER:
+        return "browser";
     }
 
     THROW_EXCEPTION(std::logic_error, "Invalid InputKind was specified!");
