@@ -133,6 +133,7 @@
     <ClCompile Include="..\..\src\test\player-status\test-player-speed.cpp" />
     <ClCompile Include="..\..\src\test\player-status\test-player-status-base.cpp" />
     <ClCompile Include="..\..\src\test\player\test-player-skill.cpp" />
+    <ClCompile Include="..\..\src\test\player\test-player-status-flags.cpp" />
     <ClCompile Include="..\..\src\test\player\test-player-status-resist.cpp" />
     <ClCompile Include="..\..\src\test\player\test-process-name.cpp" />
     <ClCompile Include="..\..\src\test\racial\test-racial-android.cpp" />

@@ -1676,11 +1676,8 @@ bool has_two_handed_weapons(PlayerType *player_ptr)
 BIT_FLAGS has_lite(PlayerType *player_ptr)
 {
     BIT_FLAGS result = 0L;
-    if (PlayerClass(player_ptr).equals(PlayerClassType::NINJA)) {
-        return 0L;
-    }
-
-    if (player_ptr->ppersonality == PERSONALITY_MUNCHKIN) {
+    // ここで判定する発光のうち、忍者が得ないのはマンチキンの性格と吸血鬼 (種族・変身の表で除いている) の分だけ
+    if ((player_ptr->ppersonality == PERSONALITY_MUNCHKIN) && !PlayerClass(player_ptr).equals(PlayerClassType::NINJA)) {
         result |= FLAG_CAUSE_PERSONALITY;
     }
 
