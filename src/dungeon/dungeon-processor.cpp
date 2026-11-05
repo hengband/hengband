@@ -270,7 +270,7 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
             wild_regen--;
         }
 
-        WorldTurnProcessor(player_ptr).decide_auto_save();
+        WorldTurnProcessor(player_ptr).request_auto_save_if_due();
     }
 
     if ((inside_quest(quest_id)) && monrace_questor.kind_flags.has_not(MonsterKindType::UNIQUE)) {
