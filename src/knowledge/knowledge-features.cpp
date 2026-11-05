@@ -114,12 +114,13 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
     bool visual_list = false;
     byte char_left = 0;
     TERM_LEN browser_rows = hgt - 8;
+    const auto width = wid - static_cast<int>(max_length + 3);
     if (direct_f_idx >= 0) {
         auto &terrain = terrains.get_terrain(direct_f_idx);
         auto &symbol_config = terrain.symbol_configs.at(*lighting_level);
         feat_idx.push_back(static_cast<FEAT_IDX>(direct_f_idx));
         symbols = terrain.symbol_configs;
-        (void)visual_mode_command('v', &visual_list, browser_rows - 1, wid - max_length + 3, &attr_top, &char_left, &symbol_config.color,
+        (void)visual_mode_command('v', &visual_list, browser_rows - 1, width, &attr_top, &char_left, &symbol_config.color,
             &symbol_config.character, need_redraw);
     }
 
@@ -196,7 +197,7 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
         } else {
             feat_top = feat_cur;
             display_feature_list(max_length + 3, 6, 1, feat_idx, feat_cur, feat_top, visual_only, *lighting_level);
-            display_visual_list(max_length + 3, 7, browser_rows - 1, wid - max_length + 3, attr_top, char_left);
+            display_visual_list(max_length + 3, 7, browser_rows - 1, width, attr_top, char_left);
         }
 
         const auto key_guide = fmt::format(_("<方向>{}, 'd'で標準光源効果{}, ESC", "<dir>{}, 'd' for default lighting{}, ESC"), visual_list ? _(", ENTERで決定, 'a'で対象明度変更", ", ENTER to accept, 'a' for lighting level") : _(", 'v'でシンボル変更", ", 'v' for visuals"), (symbols_cb.symbol != DisplaySymbol()) ? _(", 'c', 'p'でペースト", ", 'c', 'p' to paste") : _(", 'c'でコピー", ", 'c' to copy"));
@@ -270,7 +271,7 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
             continue;
         }
 
-        if (visual_mode_command(ch, &visual_list, browser_rows - 1, wid - max_length + 3, &attr_top, &char_left, &symbol_orig.color, &symbol_orig.character, need_redraw)) {
+        if (visual_mode_command(ch, &visual_list, browser_rows - 1, width, &attr_top, &char_left, &symbol_orig.color, &symbol_orig.character, need_redraw)) {
             switch (ch) {
             case ESCAPE:
                 terrain.symbol_configs = symbols;
