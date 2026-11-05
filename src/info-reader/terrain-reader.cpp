@@ -11,7 +11,6 @@
 #include <algorithm>
 #include <cstdint>
 #include <nlohmann/json.hpp>
-#include <optional>
 #include <string>
 #include <string_view>
 #include <utility>
@@ -182,18 +181,6 @@ bool TerrainReader::grab_one_feat_flag(TerrainType &terrain, std::string_view wh
 
     msg_print(_("未知の地形フラグ '{}'。", "Unknown feature flag '{}'."), what);
     return false;
-}
-
-/*!
- * @brief テキストトークンを走査してフラグを一つ得る
- */
-static std::optional<TerrainCharacteristics> parse_terrain_action(std::string_view what)
-{
-    if (const auto value = info_get_const(f_info_flags, what)) {
-        return *value;
-    }
-
-    return std::nullopt;
 }
 
 /*!
@@ -536,7 +523,7 @@ tl::expected<void, ParseErrorType> TerrainReader::set_terrain_interactions(Terra
 
         const auto idx_state = static_cast<int>(std::distance(std::begin(terrain.state), state_it));
 
-        if (auto val = parse_terrain_action(action)) {
+        if (const auto val = info_get_const(f_info_flags, std::string_view(action))) {
             terrain.state[idx_state].action = *val;
             if (*val == TerrainCharacteristics::MAY_HAVE_GOLD) {
                 terrain.flags.set(TerrainCharacteristics::MAY_HAVE_GOLD);

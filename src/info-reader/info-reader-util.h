@@ -3,7 +3,6 @@
 #include "info-reader/parse-error-types.h"
 #include "system/h-type.h"
 #include <concepts>
-#include <cstdint>
 #include <limits>
 #include <nlohmann/json_fwd.hpp>
 #include <string_view>
@@ -53,24 +52,6 @@ tl::optional<typename Dict::mapped_type> info_get_const(const Dict &dict, Key &&
         return it->second;
     }
     return tl::nullopt;
-}
-
-/*!
- * @brief info文字列を定数に変換する
- * @param buf 格納変数
- * @param dict 定数文字列変換表
- * @param what 定数文字列
- * @return 見つけたらtrue
- */
-template <typename Key, DictIndexedBy<Key> Dict>
-bool info_grab_one_const(uint32_t &buf, const Dict &dict, Key &&what)
-{
-    auto val = info_get_const(dict, std::forward<Key>(what));
-    if (val) {
-        buf = static_cast<uint32_t>(*val);
-        return true;
-    }
-    return false;
 }
 
 /*!

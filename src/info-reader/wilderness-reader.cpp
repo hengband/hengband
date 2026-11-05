@@ -63,15 +63,8 @@ bool is_edge_closed(const WildernessMapDefinition &map, int width, int height)
  */
 tl::expected<void, ParseErrorType> read_localized_integer(const nlohmann::json &value, int &destination, const Range &range)
 {
-    if (!value.is_number_integer() && !value.is_object()) {
-        return tl::make_unexpected(value.is_null() ? ParseErrorType::TOO_FEW_ARGUMENTS : ParseErrorType::INVALID_TYPE);
-    }
-
     const auto &selected = value.is_object() ? get_json_value(value, _("ja", "en")) : value;
-    if (const auto result = info_set_integer(selected, destination, true, range); !result) {
-        return result;
-    }
-    return {};
+    return info_set_integer(selected, destination, true, range);
 }
 
 //! 荒野の定義ファイルを読み込めなかった理由
