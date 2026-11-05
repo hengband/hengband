@@ -352,6 +352,9 @@
     <ClCompile Include="..\..\src\test\player\test-player-skill.cpp">
       <Filter>player</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\test\player\test-player-status-flags.cpp">
+      <Filter>player</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\test\player\test-player-status-resist.cpp">
       <Filter>player</Filter>
     </ClCompile>
