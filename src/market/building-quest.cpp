@@ -1,7 +1,6 @@
 #include "market/building-quest.h"
 #include "core/asking-player.h"
 #include "dungeon/quest.h"
-#include "info-reader/fixed-map-parser.h"
 #include "market/building-util.h"
 #include "system/dungeon/quest-definition.h"
 #include "system/dungeon/quest-list.h"

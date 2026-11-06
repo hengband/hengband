@@ -5,7 +5,9 @@
 #include "floor/floor-object.h"
 #include "grid/object-placer.h"
 #include "info-reader/general-parser.h"
+#include "info-reader/legend-ego-validator.h"
 #include "info-reader/parse-error-types.h"
+#include "info-reader/quest-reader.h"
 #include "info-reader/random-grid-effect-types.h"
 #include "monster-floor/monster-generator.h"
 #include "monster-floor/monster-remover.h"
@@ -32,6 +34,7 @@
 #include "system/player-type-definition.h"
 #include "window/main-window-util.h"
 #include <algorithm>
+#include <cassert>
 
 qtwg_type *initialize_quest_generator_type(qtwg_type *qtwg_ptr, int ymin, int xmin, int ymax, int xmax, int *y, int *x)
 {
@@ -170,7 +173,15 @@ static void parse_qtw_D(PlayerType *player_ptr, qtwg_type *qtwg_ptr, std::string
                 item = floor.make_gold(item.bi_key);
             }
 
-            ItemMagicApplier(player_ptr, &item, floor.base_level, AM_NO_FIXED_ART | AM_GOOD).execute();
+            // この経路では罠を配置しない。
+            assert(validate_legend_ego(cell, false).has_value());
+            if (cell.ego != EgoType::NONE) {
+                ItemMagicApplier(player_ptr, &item, floor.base_level, AM_NO_FIXED_ART | AM_GOOD).execute_with_ego(cell.ego);
+            } else if (random & RANDOM_EGO) {
+                ItemMagicApplier(player_ptr, &item, floor.base_level, AM_NO_FIXED_ART | AM_GOOD).execute_with_random_ego();
+            } else {
+                ItemMagicApplier(player_ptr, &item, floor.base_level, AM_NO_FIXED_ART | AM_GOOD).execute();
+            }
             drop_here(floor, std::move(item), *qtwg_ptr->y, *qtwg_ptr->x);
         }
 
@@ -312,12 +323,7 @@ tl::expected<void, ParseErrorType> generate_quest_floor_from_json(PlayerType *pl
     // 2. このクエスト固有の凡例を letter[] に上書き (報酬は受託時 resolve_quest_reward で解決済み)
     for (const auto &[symbol, cell] : fixed_map.legend) {
         auto grid = cell.grid;
-        if (cell.object_is_quest_reward && quest.has_reward() && !quest.is_reward_instant_artifact()) {
-            grid.object = quest.get_reward_bi_id();
-        }
-        if (cell.artifact_is_quest_reward) {
-            grid.artifact = quest.get_reward().value_or(FixedArtifactId::NONE);
-        }
+        resolve_legend_reward(grid, cell, quest);
 
         fixed_map_letter_at(static_cast<unsigned char>(symbol)) = grid;
     }

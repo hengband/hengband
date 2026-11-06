@@ -2,6 +2,7 @@
 #include "artifact/fixed-art-types.h"
 #include "info-reader/json-reader-util.h"
 #include "info-reader/jsonc-document-loader.h"
+#include "info-reader/legend-ego-validator.h"
 #include "info-reader/quest-reader.h"
 #include "info-reader/random-grid-effect-types.h"
 #include "io/files-util.h"
@@ -175,7 +176,12 @@ void validate_quest_legend_references(const std::map<char, QuestLegendCell> &leg
         if (!(grid.random & RANDOM_OBJECT) && !cell.object_is_quest_reward && grid.object != 0) {
             require_reference(baseitems.is_valid(grid.object), "object", grid.object);
         }
-        // 配置側で使わないegoは、凡例の保持値として存在を照合しない。
+        const auto ego_result = validate_legend_ego(grid, cell.object_is_quest_reward);
+        if (!ego_result) {
+            constexpr auto fmt = _("クエストのエゴ指定が不正です ({}): {}.{}: {}", "Invalid quest ego ({}): {}.{}: {}");
+            const auto spec = describe_legend_ego_spec(grid, cell.object_is_quest_reward);
+            THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, file.string(), prefix, spec, describe_legend_ego_error(ego_result.error())));
+        }
         // 配置側はRANDOM_ARTIFACTでもidを固定Artifactとして参照する。
         if (!cell.artifact_is_quest_reward && grid.artifact != FixedArtifactId::NONE) {
             require_reference(artifacts.contains(grid.artifact), "artifact", enum2i(grid.artifact));
@@ -286,19 +292,17 @@ void QuestList::initialize()
 std::map<char, QuestLegendCell> QuestList::load_base_legend()
 {
     const auto path = path_build(ANGBAND_DIR_EDIT, "QuestPreferences.jsonc");
-    JsoncDocumentLoader loader(path);
-    if (!loader.is_open()) {
+    auto loaded = JsoncDocumentLoader::load(path);
+    if (!loaded && (loaded.error().kind == JsoncLoadErrorKind::CANNOT_OPEN)) {
         constexpr auto fmt = _("ベース凡例ファイルをオープンできません ({})", "Cannot open base legend file ({})");
         THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, path.string()));
     }
-
-    nlohmann::json data;
-    try {
-        data = loader.parse();
-    } catch (const std::exception &e) {
+    if (!loaded) {
         constexpr auto fmt = _("ベース凡例ファイルの解析に失敗しました ({}): {}", "Failed to parse base legend file ({}): {}");
-        THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, path.string(), e.what()));
+        THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, path.string(), loaded.error().message));
     }
+
+    auto &data = *loaded;
 
     const auto legend_it = data.find("legend");
     if ((legend_it == data.end()) || !legend_it->is_object()) {
@@ -314,18 +318,21 @@ std::map<char, QuestLegendCell> QuestList::load_base_legend()
             constexpr auto fmt = _("ベース凡例のキーが1文字ではありません ({}): '{}'", "Base legend key is not a single character ({}): '{}'");
             THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, path.string(), symbol));
         }
-        if (!is_fixed_map_symbol(static_cast<unsigned char>(symbol.front()))) {
+        const auto parsed_symbol = parse_fixed_map_symbol(symbol);
+        if (!parsed_symbol) {
             constexpr auto fmt = _("ベース凡例のキーが印字可能なASCIIではありません ({}): コード {}", "Base legend key is not printable ASCII ({}): code {}");
             THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, path.string(), static_cast<int>(static_cast<unsigned char>(symbol.front()))));
         }
 
         QuestLegendCell cell;
-        if (const auto result = parse_quest_legend_cell(cell_data, cell); !result) {
+        std::string cell_reason;
+        if (const auto result = parse_quest_legend_cell(cell_data, cell, cell_reason); !result) {
             constexpr auto fmt = _("ベース凡例 '{}' にエラーがあります ({}): コード {}", "Error in base legend '{}' ({}): code {}");
-            THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, symbol, path.string(), static_cast<int>(result.error())));
+            const auto reason = cell_reason.empty() ? std::string() : fmt::format(": {}", cell_reason);
+            THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, symbol, path.string(), static_cast<int>(result.error())) + reason);
         }
 
-        base_legend.insert_or_assign(symbol.front(), cell);
+        base_legend.insert_or_assign(*parsed_symbol, cell);
     }
 
     return base_legend;
@@ -381,19 +388,17 @@ void QuestList::load_json_quests(const std::filesystem::path &quests_dir, std::m
     std::vector<std::pair<QuestId, std::filesystem::path>> loaded_quests;
     loaded_quests.reserve(files.size());
     for (const auto &file : files) {
-        JsoncDocumentLoader loader(file);
-        if (!loader.is_open()) {
+        auto loaded = JsoncDocumentLoader::load(file);
+        if (!loaded && (loaded.error().kind == JsoncLoadErrorKind::CANNOT_OPEN)) {
             constexpr auto fmt = _("クエストファイルをオープンできません ({})", "Cannot open quest file ({})");
             THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, file.string()));
         }
-
-        nlohmann::json quest_data;
-        try {
-            quest_data = loader.parse();
-        } catch (const std::exception &e) {
+        if (!loaded) {
             constexpr auto fmt = _("クエストファイルの解析に失敗しました ({}): {}", "Failed to parse quest file ({}): {}");
-            THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, file.string(), e.what()));
+            THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, file.string(), loaded.error().message));
         }
+
+        auto &quest_data = *loaded;
 
         const auto id_it = quest_data.find("id");
         if ((id_it == quest_data.end()) || !id_it->is_number_integer()) {
@@ -415,9 +420,10 @@ void QuestList::load_json_quests(const std::filesystem::path &quests_dir, std::m
 
         QuestType quest;
         QuestFixedMap fixed_map;
-        if (const auto result = QuestReader(quest_data, quest, fixed_map).read(); !result) {
+        std::string reason;
+        if (const auto result = QuestReader(quest_data, quest, fixed_map).read(&reason); !result) {
             constexpr auto fmt = _("クエストファイルにエラーがあります ({}): コード {}", "Error in quest file ({}): code {}");
-            THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, file.string(), static_cast<int>(result.error())));
+            THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, file.string(), static_cast<int>(result.error())) + (reason.empty() ? std::string() : ": " + reason));
         }
 
         parsed_quests.emplace(quest_id, std::move(quest));

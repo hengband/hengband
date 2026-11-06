@@ -1,9 +1,6 @@
 #include "spell-realm/spells-song.h"
-#include "action/travel-execution.h"
 #include "core/disturbance.h"
-#include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
-#include "game-option/disturbance-options.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "player-base/player-class.h"
@@ -115,12 +112,8 @@ bool set_tim_stealth(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
         return false;
     }
 
-    if (disturb_state || Travel::get_instance().is_ongoing()) {
-        disturb(player_ptr, false, true);
-    }
-
     dur.set_flag(StatusRecalculatingFlag::BONUS);
-    handle_stuff(player_ptr);
+    finish_timed_effect_change(player_ptr);
     return true;
 }
 

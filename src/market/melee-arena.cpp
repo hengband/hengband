@@ -7,7 +7,7 @@
 #include "market/melee-arena.h"
 #include "core/asking-player.h"
 #include "floor/floor-mode-changer.h"
-#include "io/input-key-acceptor.h"
+#include "io/input-context.h"
 #include "main/sound-of-music.h"
 #include "market/building-util.h"
 #include "status/buff-setter.h"
@@ -25,6 +25,8 @@
 #include <string>
 
 namespace {
+constexpr auto BET_PROMPT = _("どれに賭けますか:", "Which monster: ");
+
 void display_gladiators()
 {
     prt(_("モンスター                                                     倍率", "Monsters                                                       Odds"), 4, 4);
@@ -36,7 +38,7 @@ void display_gladiators()
         prt(fmt::format(fmt, i + 1, fmt::bytes(names[i]), gladiator.odds / 100, gladiator.odds % 100), 5 + i, 1);
     }
 
-    prt(_("どれに賭けますか:", "Which monster: "), 0, 0);
+    prt(BET_PROMPT, 0, 0);
 }
 }
 
@@ -68,7 +70,7 @@ bool melee_arena_comm(PlayerType *player_ptr)
     display_gladiators();
     auto &melee_arena = MeleeArena::get_instance();
     while (true) {
-        const auto i = inkey();
+        const auto i = input_key_with_context(InputKind::COMMAND_CHAR, BET_PROMPT);
         if (i == ESCAPE) {
             screen_load();
             return false;

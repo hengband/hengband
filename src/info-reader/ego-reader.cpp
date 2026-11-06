@@ -1,20 +1,35 @@
 #include "info-reader/ego-reader.h"
 #include "artifact/random-art-effects.h"
 #include "floor/floor-base-definitions.h"
+#include "info-reader/activation-reader.h"
 #include "info-reader/baseitem-tokens-table.h"
-#include "info-reader/info-reader-util.h"
+#include "info-reader/item-flag-reader.h"
+#include "info-reader/item-reader-limits.h"
 #include "info-reader/json-reader-util.h"
 #include "info-reader/parse-error-types.h"
 #include "inventory/inventory-slot-types.h"
+#include "locale/language-switcher.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/tr-types.h"
-#include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
+#include "view/display-messages.h"
+#include <cstdint>
 #include <limits>
 #include <nlohmann/json.hpp>
 
-EgoReader::EgoReader(const nlohmann::json &ego_data)
+namespace {
+// 基本の修正値と最大の修正値は16ビットの範囲とする (ダメージの修正値は int で持つが、ほかの修正値と同じ範囲に揃える)。
+constexpr Range EGO_BONUS_RANGE(std::numeric_limits<int16_t>::min(), std::numeric_limits<int16_t>::max());
+}
+
+EgoReader::Session EgoReader::create_session(tl::optional<int> last_id)
+{
+    return Session(DefinitionIdOrder::UNIQUE, { 1, MAX_EGO_ID }, _("エゴ", "ego"), last_id);
+}
+
+EgoReader::EgoReader(const nlohmann::json &ego_data, Session &session)
     : ego_data(ego_data)
+    , session(session)
 {
 }
 
@@ -30,9 +45,9 @@ tl::expected<void, ParseErrorType> EgoReader::validate_root(const nlohmann::json
 }
 
 /*!
- * @brief エゴ1件の数値・参照を検証し、成功した場合にだけ定義とerror_idxを公開する
+ * @brief エゴ1件の数値・参照を検証し、成功した場合にだけ定義を公開する
  * @return 成功時は空の値、失敗時は解析エラーコード
- * @details 失敗時は既存のegos_infoとerror_idxを保持する。文書のversion検証は呼び出し側が先に行う。
+ * @details 失敗時は既存のegos_infoを保持する。文書のversion検証は呼び出し側が先に行う。
  */
 tl::expected<void, ParseErrorType> EgoReader::read() const
 {
@@ -40,13 +55,11 @@ tl::expected<void, ParseErrorType> EgoReader::read() const
         return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
     }
 
-    int id = 0;
-    if (const auto result = info_set_integer(get_json_value(this->ego_data, "id"), id, true, Range(1, std::numeric_limits<byte>::max())); !result) {
-        return result;
+    const auto id_result = this->session.read_and_report(get_json_value(this->ego_data, "id"));
+    if (!id_result) {
+        return tl::unexpected(id_result.error());
     }
-    if (egos_info.contains(i2enum<EgoType>(id))) {
-        return tl::make_unexpected(ParseErrorType::NON_SEQUENTIAL_RECORDS);
-    }
+    const auto id = *id_result;
 
     EgoItemDefinition ego;
     ego.idx = i2enum<EgoType>(id);
@@ -67,7 +80,7 @@ tl::expected<void, ParseErrorType> EgoReader::read() const
     if (const auto result = info_set_integer(get_json_value(this->ego_data, "rarity"), ego.rarity, true, Range(0, 255)); !result) {
         return result;
     }
-    if (const auto result = info_set_integer(get_json_value(this->ego_data, "cost"), ego.cost, true, Range(0, std::numeric_limits<PRICE>::max() / 32)); !result) {
+    if (const auto result = info_set_integer(get_json_value(this->ego_data, "cost"), ego.cost, true, Range(0, ITEM_COST_MAX)); !result) {
         return result;
     }
 
@@ -76,13 +89,13 @@ tl::expected<void, ParseErrorType> EgoReader::read() const
         if (!base.is_object()) {
             return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
         }
-        if (const auto result = info_set_integer(get_json_value(base, "to_hit"), ego.base_to_h, true, Range(-32768, 32767)); !result) {
+        if (const auto result = info_set_integer(get_json_value(base, "to_hit"), ego.base_to_h, true, EGO_BONUS_RANGE); !result) {
             return result;
         }
-        if (const auto result = info_set_integer(get_json_value(base, "to_damage"), ego.base_to_d, true, Range(-32768, 32767)); !result) {
+        if (const auto result = info_set_integer(get_json_value(base, "to_damage"), ego.base_to_d, true, EGO_BONUS_RANGE); !result) {
             return result;
         }
-        if (const auto result = info_set_integer(get_json_value(base, "to_ac"), ego.base_to_a, true, Range(-32768, 32767)); !result) {
+        if (const auto result = info_set_integer(get_json_value(base, "to_ac"), ego.base_to_a, true, EGO_BONUS_RANGE); !result) {
             return result;
         }
     }
@@ -92,16 +105,16 @@ tl::expected<void, ParseErrorType> EgoReader::read() const
         if (!maximum.is_object()) {
             return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
         }
-        if (const auto result = info_set_integer(get_json_value(maximum, "to_hit"), ego.max_to_h, true, Range(-32768, 32767)); !result) {
+        if (const auto result = info_set_integer(get_json_value(maximum, "to_hit"), ego.max_to_h, true, EGO_BONUS_RANGE); !result) {
             return result;
         }
-        if (const auto result = info_set_integer(get_json_value(maximum, "to_damage"), ego.max_to_d, true, Range(-32768, 32767)); !result) {
+        if (const auto result = info_set_integer(get_json_value(maximum, "to_damage"), ego.max_to_d, true, EGO_BONUS_RANGE); !result) {
             return result;
         }
-        if (const auto result = info_set_integer(get_json_value(maximum, "to_ac"), ego.max_to_a, true, Range(-32768, 32767)); !result) {
+        if (const auto result = info_set_integer(get_json_value(maximum, "to_ac"), ego.max_to_a, true, EGO_BONUS_RANGE); !result) {
             return result;
         }
-        if (const auto result = info_set_integer(get_json_value(maximum, "pval"), ego.max_pval, true, Range(-32768, 32767)); !result) {
+        if (const auto result = info_set_integer(get_json_value(maximum, "pval"), ego.max_pval, true, EGO_BONUS_RANGE); !result) {
             return result;
         }
     }
@@ -116,26 +129,25 @@ tl::expected<void, ParseErrorType> EgoReader::read() const
         return result;
     }
 
+    // エゴ定義は代入禁止のため、記録全体の検証後に既存の要素を置き換える。
+    egos_info.erase(ego.idx);
     egos_info.emplace(ego.idx, std::move(ego));
-    error_idx = id;
     return {};
+}
+
+namespace {
+// 未知のエゴ・フラグ名の表示の書式。flags と extra の flags で同じ文言を使う
+constexpr std::string_view UNKNOWN_EGO_FLAG_FORMAT = _("未知のエゴ・フラグ '{}'。", "Unknown ego flag '{}'.");
 }
 
 bool EgoReader::grab_one_flag(EgoItemDefinition &ego, const nlohmann::json &flag) const
 {
-    if (!flag.is_string()) {
-        return false;
-    }
     const auto &name = flag.get_ref<const std::string &>();
-    return TrFlags::grab_one_flag(ego.flags, baseitem_flags, name) ||
-           EnumClassFlagGroup<ItemGenerationTraitType>::grab_one_flag(ego.gen_flags, baseitem_geneneration_flags, name);
+    return grab_one_item_flag_or_report(ego.flags, ego.gen_flags, name, UNKNOWN_EGO_FLAG_FORMAT);
 }
 
 bool EgoReader::grab_one_extra_flag(ego_generate_type &extra, const nlohmann::json &flag) const
 {
-    if (!flag.is_string()) {
-        return false;
-    }
     const auto &name = flag.get_ref<const std::string &>();
     if (const auto it = baseitem_flags.find(name); it != baseitem_flags.end()) {
         extra.tr_flags.push_back(it->second);
@@ -145,6 +157,7 @@ bool EgoReader::grab_one_extra_flag(ego_generate_type &extra, const nlohmann::js
         extra.trg_flags.push_back(it->second);
         return true;
     }
+    msg_print(UNKNOWN_EGO_FLAG_FORMAT, name);
     return false;
 }
 
@@ -156,18 +169,10 @@ bool EgoReader::grab_one_extra_flag(ego_generate_type &extra, const nlohmann::js
 tl::expected<void, ParseErrorType> EgoReader::set_flags(EgoItemDefinition &ego) const
 {
     const auto &flags = get_json_value(this->ego_data, "flags");
-    if (!flags.is_array()) {
-        if (flags.is_null()) {
-            return {};
-        }
-        return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
+    if (flags.is_null()) {
+        return {};
     }
-    for (const auto &flag : flags) {
-        if (!this->grab_one_flag(ego, flag)) {
-            return tl::make_unexpected(flag.is_string() ? ParseErrorType::INVALID_FLAG : ParseErrorType::INVALID_TYPE);
-        }
-    }
-    return {};
+    return info_read_flag_array(flags, [this, &ego](const auto &flag) { return this->grab_one_flag(ego, flag); });
 }
 
 /*!
@@ -204,10 +209,8 @@ tl::expected<void, ParseErrorType> EgoReader::set_extra_flags(EgoItemDefinition 
         if (flags.empty()) {
             return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
         }
-        for (const auto &flag : flags) {
-            if (!this->grab_one_extra_flag(extra, flag)) {
-                return tl::make_unexpected(flag.is_string() ? ParseErrorType::INVALID_FLAG : ParseErrorType::INVALID_TYPE);
-            }
+        if (const auto result = info_read_flag_array(flags, [this, &extra](const auto &flag) { return this->grab_one_extra_flag(extra, flag); }); !result) {
+            return result;
         }
         ego.xtra_flags.push_back(std::move(extra));
     }
@@ -221,16 +224,13 @@ tl::expected<void, ParseErrorType> EgoReader::set_extra_flags(EgoItemDefinition 
  */
 tl::expected<void, ParseErrorType> EgoReader::set_activation(EgoItemDefinition &ego) const
 {
-    const auto &activation = get_json_value(this->ego_data, "activation");
-    if (activation.is_null()) {
+    const auto activation = read_activation(get_json_value(this->ego_data, "activation"));
+    if (!activation) {
+        return tl::unexpected(activation.error());
+    }
+    if (*activation == RandomArtActType::NONE) {
         return {};
     }
-    if (!activation.is_string()) {
-        return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
-    }
-    ego.act_idx = grab_one_activation_flag(activation.get<std::string>());
-    if (ego.act_idx <= RandomArtActType::NONE) {
-        return tl::make_unexpected(ParseErrorType::INVALID_FLAG);
-    }
+    ego.act_idx = *activation;
     return {};
 }

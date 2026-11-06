@@ -39,6 +39,7 @@ schema_files = \
 	schema/MonsterMessages.schema.json \
 	schema/Quest.schema.json \
 	schema/QuestPreferences.schema.json \
+	schema/common/MonsterFlag.schema.json \
 	schema/common/QuestGrid.schema.json \
 	schema/SpellDefinitions.schema.json \
 	schema/TerrainDefinitions.schema.json \
@@ -51,6 +52,8 @@ schema_files = \
 EXTRA_DIST = \
 	lib/edit/ClassSkillDefinitions.md \
 	lib/edit/VaultDefinitions.md \
+	AGENTS.md \
+	CLAUDE.md \
 	autopick.txt \
 	autopick_eng.txt \
 	bootstrap \

@@ -343,8 +343,7 @@ static void export_player_info(PlayerType *player_ptr)
     prt(_("キャラクターの記録をファイルに書き出すことができます。", "You may now dump a character record to one or more files."), 21, 0);
     prt(_("リターンキーでキャラクターを見ます。ESCで中断します。", "Then, hit RETURN to see the character, or ESC to abort."), 22, 0);
     while (true) {
-        put_str(_("ファイルネーム: ", "Filename: "), 23, 0);
-        const auto ask_result = askfor(60);
+        const auto ask_result = input_string_on_row(_("ファイルネーム: ", "Filename: "), 23, 60);
         if (!ask_result || ask_result->empty()) {
             return;
         }

@@ -26,6 +26,11 @@
 
 static MonsterSpellResult monspell_to_player_impl(PlayerType *player_ptr, MonsterAbilityType ms_type, POSITION y, POSITION x, MONSTER_IDX m_idx)
 {
+    const auto is_powerful = monster_is_powerful(*player_ptr->current_floor_ptr, m_idx);
+    if (const auto radius = get_monster_ball_radius(ms_type, is_powerful)) {
+        return MSpellBall(player_ptr, m_idx, ms_type, *radius, MONSTER_TO_PLAYER).shoot(y, x);
+    }
+
     // clang-format off
     switch (ms_type) {
     case MonsterAbilityType::SHRIEK: return spell_RF4_SHRIEK(m_idx, player_ptr, 0, MONSTER_TO_PLAYER); /* RF4_SHRIEK */
@@ -62,30 +67,6 @@ static MonsterSpellResult monspell_to_player_impl(PlayerType *player_ptr, Monste
     case MonsterAbilityType::BR_ABYSS:
      return spell_RF4_BREATH(player_ptr, ms_type, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_ABYSS */
     
-    case MonsterAbilityType::BA_ACID:
-    case MonsterAbilityType::BA_ELEC:
-    case MonsterAbilityType::BA_FIRE:
-    case MonsterAbilityType::BA_COLD:
-         {
-         auto rad = monster_is_powerful(*player_ptr->current_floor_ptr, m_idx) ? 4 : 2;
-         return MSpellBall(player_ptr, m_idx, ms_type, rad, MONSTER_TO_PLAYER).shoot(y, x);
-         }
-
-    case MonsterAbilityType::BA_POIS:
-    case MonsterAbilityType::BA_NETH:
-    case MonsterAbilityType::BA_NUKE:
-         return MSpellBall(player_ptr, m_idx, ms_type, 2, MONSTER_TO_PLAYER).shoot(y, x);
-
-    case MonsterAbilityType::BA_CHAO:
-    case MonsterAbilityType::BA_WATE:
-    case MonsterAbilityType::BA_MANA:
-    case MonsterAbilityType::BA_LITE:
-    case MonsterAbilityType::BA_DARK:
-    case MonsterAbilityType::BA_VOID:
-    case MonsterAbilityType::BA_ABYSS:
-    case MonsterAbilityType::BA_METEOR:
-         return MSpellBall(player_ptr, m_idx, ms_type, 4, MONSTER_TO_PLAYER).shoot(y, x);
-
     case MonsterAbilityType::DRAIN_MANA: return spell_RF5_DRAIN_MANA(player_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER);  /* RF5_DRAIN_MANA */
     case MonsterAbilityType::MIND_BLAST: return spell_RF5_MIND_BLAST(player_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER);  /* RF5_MIND_BLAST */
     case MonsterAbilityType::BRAIN_SMASH: return spell_RF5_BRAIN_SMASH(player_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_MIND_BLAST */
@@ -161,6 +142,11 @@ static MonsterSpellResult monspell_to_player_impl(PlayerType *player_ptr, Monste
 static MonsterSpellResult monspell_to_monster_impl(
     PlayerType *player_ptr, MonsterAbilityType ms_type, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, bool is_special_spell)
 {
+    const auto is_powerful = monster_is_powerful(*player_ptr->current_floor_ptr, m_idx);
+    if (const auto radius = get_monster_ball_radius(ms_type, is_powerful)) {
+        return MSpellBall(player_ptr, m_idx, t_idx, ms_type, *radius, MONSTER_TO_MONSTER).shoot(y, x);
+    }
+
     // clang-format off
     switch (ms_type) {
     case MonsterAbilityType::SHRIEK: return spell_RF4_SHRIEK(m_idx, player_ptr, t_idx, MONSTER_TO_MONSTER); /* RF4_SHRIEK */
@@ -197,30 +183,6 @@ static MonsterSpellResult monspell_to_monster_impl(
     case MonsterAbilityType::BR_ABYSS:
     return spell_RF4_BREATH(player_ptr, ms_type, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF4_BR_ABYSS */
     
-    case MonsterAbilityType::BA_ACID:
-    case MonsterAbilityType::BA_ELEC:
-    case MonsterAbilityType::BA_FIRE:
-    case MonsterAbilityType::BA_COLD:
-         {
-         auto rad = monster_is_powerful(*player_ptr->current_floor_ptr, m_idx) ? 4 : 2;
-         return MSpellBall(player_ptr, m_idx, t_idx, ms_type, rad, MONSTER_TO_MONSTER).shoot(y, x);
-         }
-         
-    case MonsterAbilityType::BA_POIS:
-    case MonsterAbilityType::BA_NETH:
-    case MonsterAbilityType::BA_NUKE:
-         return MSpellBall(player_ptr, m_idx, t_idx, ms_type, 2, MONSTER_TO_MONSTER).shoot(y, x);
-
-    case MonsterAbilityType::BA_CHAO:
-    case MonsterAbilityType::BA_WATE:
-    case MonsterAbilityType::BA_MANA:
-    case MonsterAbilityType::BA_LITE:
-    case MonsterAbilityType::BA_DARK:
-    case MonsterAbilityType::BA_VOID:
-    case MonsterAbilityType::BA_ABYSS:
-    case MonsterAbilityType::BA_METEOR:
-         return MSpellBall(player_ptr, m_idx, t_idx, ms_type, 4, MONSTER_TO_MONSTER).shoot(y, x);
-
     case MonsterAbilityType::DRAIN_MANA: return spell_RF5_DRAIN_MANA(player_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF5_DRAIN_MANA */
     case MonsterAbilityType::MIND_BLAST: return spell_RF5_MIND_BLAST(player_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF5_MIND_BLAST */
     case MonsterAbilityType::BRAIN_SMASH: return spell_RF5_BRAIN_SMASH(player_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF5_BRAIN_SMASH */

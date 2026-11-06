@@ -2,12 +2,13 @@
 #include "artifact/fixed-art-types.h"
 #include "combat/attack-accuracy.h"
 #include "combat/shoot.h"
+#include "core/asking-player.h"
 #include "core/stuff-handler.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/floor-object.h"
 #include "inventory/inventory-slot-types.h"
-#include "io/input-key-acceptor.h"
+#include "io/input-context.h"
 #include "market/building-util.h"
 #include "object-enchant/tr-types.h"
 #include "object-hook/hook-weapon.h"
@@ -336,18 +337,18 @@ PRICE compare_weapons(PlayerType *player_ptr, PRICE bcost)
         handle_stuff(player_ptr);
 
         world.character_xtra = old_character_xtra;
+        const auto prompt = fmt::format(_("[ 比較対象: 's'で変更 (${}) ]", "[ 's' Select secondary weapon(${}) ]"), cost);
+        put_str(prompt, 1, (wid + mgn));
 #ifdef JP
-        put_str(fmt::format("[ 比較対象: 's'で変更 (${}) ]", cost), 1, (wid + mgn));
         put_str("(一番高いダメージが適用されます。複数の倍打効果は足し算されません。)", row + 4, 0);
         prt("現在の技量から判断すると、あなたの武器は以下のような威力を発揮します:", 0, 0);
 #else
-        put_str(fmt::format("[ 's' Select secondary weapon(${}) ]", cost), 1, (wid + mgn));
         put_str("(Only highest damage applies per monster. Special damage not cumulative.)", row + 4, 0);
         prt("Based on your current abilities, here is what your weapons will do", 0, 0);
 #endif
 
         flush();
-        ch = inkey();
+        ch = input_key_with_context(InputKind::COMMAND_CHAR, prompt);
         if (ch != 's') {
             break;
         }

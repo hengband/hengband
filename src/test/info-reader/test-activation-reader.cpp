@@ -1,9 +1,10 @@
 #include "artifact/fixed-art-types.h"
 #include "artifact/random-art-effects.h"
+#include "info-reader/activation-reader.h"
 #include "info-reader/artifact-reader.h"
 #include "info-reader/baseitem-reader.h"
 #include "info-reader/ego-reader.h"
-#include "info-reader/info-reader-util.h"
+#include "info-reader/json-reader-util.h"
 #include "info-reader/parse-error-types.h"
 #include "object-enchant/activation-info-table.h"
 #include "object-enchant/object-ego.h"
@@ -14,20 +15,23 @@
 #include "system/baseitem/baseitem-list.h"
 #include "test/info-reader/parse-result-helpers.h"
 #include "test/info-reader/scoped-reader-state.h"
+#include "test/scoped-ego-list.h"
+#include "test/scoped-vector-wrapper.h"
 #include "test/system/artifact-list-test-access.h"
 #include "util/enum-converter.h"
+#include "view/display-messages.h"
 #include <array>
 #include <doctest/doctest.h>
 #include <limits>
-#include <map>
 #include <memory>
 #include <nlohmann/json.hpp>
 #include <set>
 #include <string>
 #include <utility>
-#include <vector>
 
 namespace {
+using test::read_record;
+
 constexpr auto unused_activation_ranges = std::array{
     std::pair{ 43, 48 },
     std::pair{ 61, 64 },
@@ -69,45 +73,17 @@ nlohmann::json make_item_with_activation(const nlohmann::json &activation)
     return data;
 }
 
-class ActivationStateGuard {
-public:
-    /*!
-     * @brief 基本アイテムとエゴを退避し、発動を検証する各readerの読込先を初期化する
-     */
-    ActivationStateGuard()
-    {
-        auto &baseitems = BaseitemList::get_instance();
-        for (auto &baseitem : baseitems) {
-            this->saved_baseitems.push_back(std::move(baseitem));
-        }
-        baseitems.resize(0);
-        this->saved_egos.swap(egos_info);
-    }
-
-    ActivationStateGuard(const ActivationStateGuard &) = delete;
-    ActivationStateGuard &operator=(const ActivationStateGuard &) = delete;
-
-    /*!
-     * @brief 一時的な定義を置き換え、検証前の基本アイテムとエゴを復元する
-     */
-    ~ActivationStateGuard()
-    {
-        auto &baseitems = BaseitemList::get_instance();
-        baseitems.resize(this->saved_baseitems.size());
-        auto target = baseitems.begin();
-        for (auto &baseitem : this->saved_baseitems) {
-            std::destroy_at(std::addressof(*target));
-            std::construct_at(std::addressof(*target), std::move(baseitem));
-            ++target;
-        }
-        egos_info.swap(this->saved_egos);
-    }
-
-private:
-    std::vector<BaseitemDefinition> saved_baseitems;
-    std::map<EgoType, EgoItemDefinition> saved_egos;
+struct ActivationStateGuard {
     test::ScopedReaderState reader_state;
     test::ArtifactListTestAccess artifacts;
+    test::ScopedVectorWrapper<BaseitemList> baseitems{ BaseitemList::get_instance() };
+    test::ScopedEgoList egos;
+
+    ActivationStateGuard() = default;
+    ActivationStateGuard(const ActivationStateGuard &) = delete;
+    ActivationStateGuard(ActivationStateGuard &&) = delete;
+    ActivationStateGuard &operator=(const ActivationStateGuard &) = delete;
+    ActivationStateGuard &operator=(ActivationStateGuard &&) = delete;
 };
 
 /*!
@@ -121,11 +97,9 @@ void check_rejected_by_all_readers(const std::string &token)
     CHECK(grab_one_activation_flag(token) == RandomArtActType::NONE);
 
     const auto data = make_item_with_activation(token);
-    CHECK(test::to_error_code(BaseitemReader(data).read()) == ParseErrorType::INVALID_FLAG);
-    error_idx = -1;
-    CHECK(test::to_error_code(ArtifactReader(data).read()) == ParseErrorType::INVALID_FLAG);
-    error_idx = -1;
-    CHECK(test::to_error_code(EgoReader(data).read()) == ParseErrorType::INVALID_FLAG);
+    CHECK(test::to_error_code(read_record<BaseitemReader>(data)) == ParseErrorType::INVALID_FLAG);
+    CHECK(test::to_error_code(read_record<ArtifactReader>(data)) == ParseErrorType::INVALID_FLAG);
+    CHECK(test::to_error_code(read_record<EgoReader>(data)) == ParseErrorType::INVALID_FLAG);
     CHECK(egos_info.empty());
 }
 
@@ -139,17 +113,15 @@ void check_accepted_by_all_readers(const std::string &token, RandomArtActType ex
     ActivationStateGuard guard;
     CHECK(grab_one_activation_flag(token) == expected);
     const auto data = make_item_with_activation(token);
-    REQUIRE(BaseitemReader(data).read().has_value());
+    REQUIRE(read_record<BaseitemReader>(data).has_value());
     const auto &baseitem = BaseitemList::get_instance().get_baseitem(1);
     CHECK(baseitem.act_idx == expected);
     CHECK(baseitem.flags.has(TR_ACTIVATE));
-    error_idx = -1;
-    REQUIRE(ArtifactReader(data).read().has_value());
+    REQUIRE(read_record<ArtifactReader>(data).has_value());
     const auto &artifact = ArtifactList::get_instance().get_artifact(i2enum<FixedArtifactId>(1));
     CHECK(artifact.act_idx == expected);
     CHECK(artifact.flags.has(TR_ACTIVATE));
-    error_idx = -1;
-    REQUIRE(EgoReader(data).read().has_value());
+    REQUIRE(read_record<EgoReader>(data).has_value());
     CHECK(egos_info.at(i2enum<EgoType>(1)).act_idx == expected);
 }
 }
@@ -230,10 +202,9 @@ TEST_CASE("Activation readers preserve missing activation and non-string errors"
         ActivationStateGuard guard;
         const auto data = make_item_with_activation(value);
         const auto expected = value.is_null() ? ParseErrorType::NONE : ParseErrorType::INVALID_TYPE;
-        CHECK(test::to_error_code(BaseitemReader(data).read()) == expected);
-        error_idx = -1;
-        CHECK(test::to_error_code(ArtifactReader(data).read()) == expected);
-        CHECK(test::to_error_code(EgoReader(data).read()) == expected);
+        CHECK(test::to_error_code(read_record<BaseitemReader>(data)) == expected);
+        CHECK(test::to_error_code(read_record<ArtifactReader>(data)) == expected);
+        CHECK(test::to_error_code(read_record<EgoReader>(data)) == expected);
     }
 }
 
@@ -254,9 +225,8 @@ TEST_CASE("Activation reader guard restores existing artifact definitions")
         auto data = make_item();
         data["activate"] = "BA_FIRE_4";
         // アーティファクトの元のベースアイテムは、先に読み込まれていなければならない。
-        REQUIRE(BaseitemReader(data).read().has_value());
-        error_idx = -1;
-        REQUIRE(ArtifactReader(data).read().has_value());
+        REQUIRE(read_record<BaseitemReader>(data).has_value());
+        REQUIRE(read_record<ArtifactReader>(data).has_value());
         CHECK(artifacts.size() == 1);
     }
     REQUIRE(artifacts.size() == 1);
@@ -265,4 +235,33 @@ TEST_CASE("Activation reader guard restores existing artifact definitions")
     CHECK(restored.name == "Existing");
     CHECK(restored.act_idx == RandomArtActType::CRIMSON);
     CHECK(restored.flags.has(TR_ACTIVATE));
+}
+
+TEST_CASE("read_activation preserves absent null invalid and unknown values")
+{
+    ScopedMessageCapture capture;
+    const auto missing = nlohmann::json::object();
+    REQUIRE(read_activation(get_json_value(missing, "activate")) == RandomArtActType::NONE);
+    REQUIRE(read_activation(nullptr) == RandomArtActType::NONE);
+    CHECK(capture.messages().empty());
+    for (const auto &value : { nlohmann::json(1), nlohmann::json(true), nlohmann::json::array(), nlohmann::json::object() }) {
+        CHECK(read_activation(value).error() == ParseErrorType::INVALID_TYPE);
+        CHECK(capture.messages().empty());
+    }
+    const auto result = read_activation("UNKNOWN_ACTIVATION");
+    REQUIRE_FALSE(result);
+    CHECK(result.error() == ParseErrorType::INVALID_FLAG);
+    REQUIRE(capture.messages().size() == 1);
+    CHECK(capture.messages().front() == fmt::format(_("未知の発動・フラグ '{}'。", "Unknown activation flag '{}'."), "UNKNOWN_ACTIVATION"));
+}
+
+TEST_CASE("read_activation accepts every registered name without diagnostics")
+{
+    ScopedMessageCapture capture;
+    for (const auto &activation : activation_info) {
+        CAPTURE(activation.flag);
+        REQUIRE(activation.index > RandomArtActType::NONE);
+        CHECK(read_activation(activation.flag) == activation.index);
+    }
+    CHECK(capture.messages().empty());
 }

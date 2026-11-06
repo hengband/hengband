@@ -18,6 +18,7 @@
 #include "core/asking-player.h"
 #include "game-option/birth-options.h"
 #include "game-option/game-option-page.h"
+#include "io/input-context.h"
 #include "io/input-key-acceptor.h"
 #include "locale/japanese.h"
 #include "main/sound-definitions-table.h"
@@ -46,6 +47,7 @@
 #include "world/world.h"
 #include <fmt/format.h>
 #include <sstream>
+#include <string>
 
 static void display_initial_birth_message(PlayerType *player_ptr)
 {
@@ -120,7 +122,7 @@ static bool get_player_sex(PlayerType *player_ptr)
 
         const auto buf = fmt::format(_("性別を選んで下さい ({:c}-{:c}) ('='初期オプション設定): ", "Choose a sex ({:c}-{:c}) ('=' for options): "), I2A(0), I2A(1));
         put_str(buf, 10, 10);
-        char c = inkey();
+        const auto c = input_key_with_context({ InputKind::BIRTH, buf, BirthInputDetails{ BirthStep::SEX } });
         if (c == 'Q') {
             birth_quit();
         }
@@ -443,24 +445,20 @@ static bool display_auto_roller_result(PlayerType *player_ptr, bool prev, char *
         player_ptr->chp = player_ptr->mhp;
         player_ptr->csp = player_ptr->msp;
         (void)display_player(player_ptr, mode);
-        term_gotoxy(2, 23);
-        const char b1 = '[';
-        term_addch({ TERM_WHITE, b1 });
-        term_addstr(-1, TERM_WHITE, _("'r' 次の数値", "'r'eroll"));
+        std::string prompt = _("['r' 次の数値", "['r'eroll");
         if (prev) {
-            term_addstr(-1, TERM_WHITE, _(", 'p' 前の数値", ", 'p'revious"));
+            prompt.append(_(", 'p' 前の数値", ", 'p'revious"));
         }
 
         if (mode) {
-            term_addstr(-1, TERM_WHITE, _(", 'h' その他の情報", ", 'h' Misc."));
+            prompt.append(_(", 'h' その他の情報", ", 'h' Misc."));
         } else {
-            term_addstr(-1, TERM_WHITE, _(", 'h' 生い立ちを表示", ", 'h'istory"));
+            prompt.append(_(", 'h' 生い立ちを表示", ", 'h'istory"));
         }
 
-        term_addstr(-1, TERM_WHITE, _(", Enter この数値に決定", ", or Enter to accept"));
-        const char b2 = ']';
-        term_addch({ TERM_WHITE, b2 });
-        *c = inkey();
+        prompt.append(_(", Enter この数値に決定]", ", or Enter to accept]"));
+        term_putstr(2, 23, -1, TERM_WHITE, prompt);
+        *c = input_key_with_context({ InputKind::BIRTH, prompt, BirthInputDetails{ BirthStep::ROLL_RESULT } });
         if (*c == 'Q') {
             birth_quit();
         }
@@ -558,7 +556,6 @@ static void set_name_history(PlayerType *player_ptr)
     edit_history(player_ptr);
     get_max_stats(player_ptr);
     initialize_virtues(player_ptr);
-    prt(_("[ 'Q' 中断, 'S' 初めから, Enter ゲーム開始 ]", "['Q'uit, 'S'tart over, or Enter to continue]"), 23, _(14, 10));
 }
 
 /*!
@@ -607,7 +604,9 @@ bool player_birth_wizard(PlayerType *player_ptr)
     }
 
     set_name_history(player_ptr);
-    char c = inkey();
+    constexpr auto prompt = _("[ 'Q' 中断, 'S' 初めから, Enter ゲーム開始 ]", "['Q'uit, 'S'tart over, or Enter to continue]");
+    prt(prompt, 23, _(14, 10));
+    const auto c = input_key_with_context({ InputKind::BIRTH, prompt, BirthInputDetails{ BirthStep::START } });
     if (c == 'Q') {
         birth_quit();
     }

@@ -1,6 +1,7 @@
 #include "birth/birth-select-class.h"
 #include "birth/birth-util.h"
-#include "io/input-key-acceptor.h"
+#include "core/asking-player.h"
+#include "io/input-context.h"
 #include "player-info/class-info.h"
 #include "player-info/race-info.h"
 #include "system/inner-game-data.h"
@@ -141,7 +142,7 @@ static bool select_class(PlayerType *player_ptr, concptr sym, int *k)
         const auto buf = fmt::format(_("職業を選んで下さい ({:c}-{:c}) ('='初期オプション設定, 灰色:勝利済): ", "Choose a class ({:c}-{:c}) ('=' for options, Gray is winner): "), sym[0], sym[PLAYER_CLASS_TYPE_MAX - 1]);
 
         put_str(buf, 10, 6);
-        char c = inkey();
+        const auto c = input_key_with_context({ InputKind::BIRTH, buf, BirthInputDetails{ BirthStep::CLASS } });
         if (c == 'Q') {
             birth_quit();
         }

@@ -19,8 +19,6 @@
 #include "io/report.h"
 #include "io/uid-checker.h"
 #include "locale/character-encoding.h"
-#include "monster/monster-compaction.h"
-#include "player/player-status.h"
 #include "save/artifact-record-writer.h"
 #include "save/floor-writer.h"
 #include "save/info-writer.h"
@@ -33,7 +31,6 @@
 #include "system/artifact/artifact-record.h"
 #include "system/dungeon/quest-definition.h"
 #include "system/dungeon/quest-list.h"
-#include "system/floor/floor-info.h"
 #include "system/floor/town-list.h"
 #include "system/floor/wilderness-grid.h"
 #include "system/inner-game-data.h"
@@ -54,8 +51,6 @@
  */
 static bool wr_savefile_new(PlayerType *player_ptr)
 {
-    compact_monsters(player_ptr, 0);
-
     save_xor_byte = 0;
     auto variant_length = VARIANT_NAME.length();
     wr_byte(static_cast<byte>(variant_length));
@@ -226,7 +221,6 @@ static bool wr_savefile_new(PlayerType *player_ptr)
  * @brief セーブデータ書き込みのサブルーチン
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param path セーブデータのフルパス
- * @param type セーブ後の処理種別
  * @return セーブの成功可否
  */
 static bool save_player_aux(PlayerType *player_ptr, const std::filesystem::path &path)
@@ -280,7 +274,7 @@ static bool save_player_aux(PlayerType *player_ptr, const std::filesystem::path 
  * 3. hoge.new をhoge にリネームする
  * 4. hoge.old を削除する
  */
-bool save_player(PlayerType *player_ptr, SaveType type)
+bool save_player(PlayerType *player_ptr)
 {
     std::stringstream ss_new;
     ss_new << savefile.string() << ".new";
@@ -304,13 +298,6 @@ bool save_player(PlayerType *player_ptr, SaveType type)
         safe_setuid_drop();
         world.character_loaded = true;
         result = true;
-    }
-
-    if (type != SaveType::CLOSE_GAME) {
-        world.is_loading_now = false;
-        update_creature(player_ptr);
-        player_ptr->current_floor_ptr->reset_mproc();
-        world.is_loading_now = true;
     }
 
     return result;

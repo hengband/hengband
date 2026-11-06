@@ -125,7 +125,7 @@ class DefinitionIntegerValidationTest(unittest.TestCase):
             (root / "src/info-reader").mkdir(parents=True)
             (root / "src/player-info/class-types.h").write_text(
                 'enum class PlayerClassType : short { WARRIOR = 4, MAGE, MAX };', encoding="utf-8")
-            (root / "src/info-reader/magic-reader.cpp").write_text(
+            (root / "src/info-reader/magic-info-tokens-table.cpp").write_text(
                 '{ "MAGE", PlayerClassType::MAGE },\n{ "FIGHTER", PlayerClassType::WARRIOR },', encoding="utf-8")
             self.assertEqual(load_class_ids(root), {"MAGE": 5, "FIGHTER": 4})
 

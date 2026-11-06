@@ -1,6 +1,7 @@
 #include "info-reader/info-reader-util.h"
 #include "info-reader/message-reader.h"
 #include "info-reader/parse-error-types.h"
+#include "locale/character-encoding.h"
 #include "system/enums/monrace/monrace-id.h"
 #include "system/monrace/monrace-list.h"
 #include "system/monrace/monrace-message.h"
@@ -13,8 +14,8 @@
 #include <doctest/doctest.h>
 #include <limits>
 #include <nlohmann/json.hpp>
+#include <string>
 #include <string_view>
-#include <utility>
 #include <vector>
 
 namespace {
@@ -27,7 +28,6 @@ nlohmann::json make_message(std::string_view action, const nlohmann::json &texts
  * @brief id_list から参照する種族ID 4 と 5 だけを定義した状態にする
  */
 struct DefinedMonracesGuard {
-    // Monraceのfixtureはerror_idxも変更するため、他のreaderの状態より先に置く。
     test::MonraceListTestAccess monraces;
 
     DefinedMonracesGuard()
@@ -70,6 +70,7 @@ TEST_CASE("MessageReader preserves existing messages after a late parse error")
     {
         invalid["message"]["ja"][1] = 7;
         invalid["message"]["en"][1] = 7;
+        expected = ParseErrorType::INVALID_TYPE;
     }
     SUBCASE("unknown later action")
     {
@@ -78,6 +79,7 @@ TEST_CASE("MessageReader preserves existing messages after a late parse error")
     SUBCASE("invalid later chance")
     {
         invalid["chance"] = 101;
+        expected = ParseErrorType::INVALID_VALUE;
     }
     SUBCASE("null later string")
     {
@@ -93,6 +95,7 @@ TEST_CASE("MessageReader preserves existing messages after a late parse error")
     {
         invalid = skipped;
         invalid["chance"] = 101;
+        expected = ParseErrorType::INVALID_VALUE;
     }
     SUBCASE("invalid boolean without selected language")
     {
@@ -156,7 +159,6 @@ TEST_CASE("MessageReader publishes successful groups and skips messages missing 
         has_later = true;
     }
     REQUIRE(MessageReader(data).read().has_value());
-    CHECK(error_idx == -1);
     auto &messages = MonraceMessageList::get_instance();
     CHECK(messages.get_message(4, "", MonsterMessageType::SPEAK_ALL) == "accepted");
     CHECK(messages.get_message(5, "", MonsterMessageType::SPEAK_ALL) == "accepted");
@@ -214,7 +216,7 @@ TEST_CASE("MessageReader accepts monster IDs up to one below the MonraceId stora
     CHECK(state.message_count(max_id, MonsterMessageType::SPEAK_ALL) == 1);
 
     const nlohmann::json over = { { "id_list", { 4, max_id + 1 } }, { "message", { message } } };
-    CHECK(test::to_error_code(MessageReader(over).read()) == ParseErrorType::INVALID_FLAG);
+    CHECK(test::to_error_code(MessageReader(over).read()) == ParseErrorType::INVALID_VALUE);
 }
 
 TEST_CASE("MessageReader requires arrays for localized message lists")
@@ -245,7 +247,7 @@ TEST_CASE("MessageReader propagates ID helper errors without publishing messages
     const DefinedMonracesGuard monraces;
     test::MonraceMessageListTestAccess state;
     const auto rng = test::scoped_rng();
-    const test::ScopedReaderState reader_state(73);
+    const test::ScopedReaderState reader_state;
     auto &messages = MonraceMessageList::get_instance();
     messages.emplace(4, MonsterMessageType::SPEAK_ALL, 1, false, "original");
     messages.emplace_default(MonsterMessageType::SPEAK_ALL, 1, false, "default");
@@ -257,20 +259,19 @@ TEST_CASE("MessageReader propagates ID helper errors without publishing messages
         { nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
         { 1, ParseErrorType::TOO_FEW_ARGUMENTS },
         { nlohmann::json::object(), ParseErrorType::TOO_FEW_ARGUMENTS },
-        { nlohmann::json::array({ nullptr }), ParseErrorType::INVALID_FLAG },
-        { nlohmann::json::array({ true }), ParseErrorType::INVALID_FLAG },
+        { nlohmann::json::array({ nullptr }), ParseErrorType::INVALID_TYPE },
+        { nlohmann::json::array({ true }), ParseErrorType::INVALID_TYPE },
         { nlohmann::json::array({ 4.0 }), ParseErrorType::INVALID_TYPE },
-        { nlohmann::json::array({ 0 }), ParseErrorType::INVALID_FLAG },
-        { nlohmann::json::array({ 32767 }), ParseErrorType::INVALID_FLAG },
-        { nlohmann::json::array({ std::numeric_limits<uint64_t>::max() }), ParseErrorType::INVALID_FLAG },
+        { nlohmann::json::array({ 0 }), ParseErrorType::INVALID_VALUE },
+        { nlohmann::json::array({ 32767 }), ParseErrorType::INVALID_VALUE },
+        { nlohmann::json::array({ std::numeric_limits<uint64_t>::max() }), ParseErrorType::INVALID_VALUE },
         { nlohmann::json::array({ 4, 6 }), ParseErrorType::INVALID_VALUE },
-        { nlohmann::json::array({ 4, 5, 32767 }), ParseErrorType::INVALID_FLAG },
+        { nlohmann::json::array({ 4, 5, 32767 }), ParseErrorType::INVALID_VALUE },
     };
     for (const auto &invalid : invalid_ids) {
         CAPTURE(invalid.value.dump());
         const nlohmann::json data = { { "id_list", invalid.value }, { "message", { make_message("SPEAK_ALL", nlohmann::json::array({ "new" })) } } };
         CHECK(test::to_error_code(MessageReader(data).read()) == invalid.error);
-        CHECK(error_idx == 73);
         CHECK(state.message_count(4, MonsterMessageType::SPEAK_ALL) == 1);
         CHECK(state.message_count(5, MonsterMessageType::SPEAK_ALL) == 0);
         CHECK(state.default_message_count(MonsterMessageType::SPEAK_ALL) == 1);
@@ -287,7 +288,7 @@ TEST_CASE("MessageReader propagates message helper errors and keeps validation o
     const DefinedMonracesGuard monraces;
     test::MonraceMessageListTestAccess state;
     const auto rng = test::scoped_rng();
-    const test::ScopedReaderState reader_state(73);
+    const test::ScopedReaderState reader_state;
     auto &messages = MonraceMessageList::get_instance();
     messages.emplace(4, MonsterMessageType::SPEAK_ALL, 1, false, "original");
     messages.emplace_default(MonsterMessageType::SPEAK_ALL, 1, false, "default");
@@ -304,22 +305,21 @@ TEST_CASE("MessageReader propagates message helper errors and keeps validation o
         { "/message", nlohmann::json::object(), ParseErrorType::TOO_FEW_ARGUMENTS },
         { "/message/1", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
         { "/message/1/action", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
-        { "/message/1/action", 1, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/message/1/action", 1, ParseErrorType::INVALID_TYPE },
         { "/message/1/action", "UNKNOWN", ParseErrorType::INVALID_FLAG },
         { "/message/1/chance", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
         { "/message/1/chance", true, ParseErrorType::TOO_FEW_ARGUMENTS },
         { "/message/1/chance", 0.5, ParseErrorType::INVALID_TYPE },
-        { "/message/1/chance", 0, ParseErrorType::INVALID_FLAG },
-        { "/message/1/chance", 101, ParseErrorType::INVALID_FLAG },
+        { "/message/1/chance", 0, ParseErrorType::INVALID_VALUE },
+        { "/message/1/chance", 101, ParseErrorType::INVALID_VALUE },
         { "/message/1/message", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
         { "/message/1/message", nlohmann::json::object(), ParseErrorType::TOO_FEW_ARGUMENTS },
         { "/message/1/message", { { "ja", "text" }, { "en", "text" } }, ParseErrorType::INVALID_TYPE },
         { "/message/1/message", { { "ja", nlohmann::json::array({ nullptr }) }, { "en", nlohmann::json::array({ nullptr }) } }, ParseErrorType::TOO_FEW_ARGUMENTS },
-        { "/message/1/message", { { "ja", nlohmann::json::array({ 7 }) }, { "en", nlohmann::json::array({ 7 }) } }, ParseErrorType::INVALID_FLAG },
+        { "/message/1/message", { { "ja", nlohmann::json::array({ 7 }) }, { "en", nlohmann::json::array({ 7 }) } }, ParseErrorType::INVALID_TYPE },
     };
     const auto check_unchanged = [&](const nlohmann::json &data, ParseErrorType expected) {
         CHECK(test::to_error_code(MessageReader(data).read()) == expected);
-        CHECK(error_idx == 73);
         CHECK(state.message_count(4, MonsterMessageType::SPEAK_ALL) == 1);
         CHECK(state.message_count(5, MonsterMessageType::SPEAK_ALL) == 0);
         CHECK(state.message_count(4, MonsterMessageType::SPEAK_BATTLE) == 0);
@@ -356,14 +356,12 @@ TEST_CASE("MessageReader propagates message helper errors and keeps validation o
     data = original;
     data["id_list"] = nlohmann::json::array();
     CHECK(MessageReader(data).read().has_value());
-    CHECK(error_idx == 73);
     CHECK(state.message_count(4, MonsterMessageType::SPEAK_ALL) == 1);
     CHECK(state.message_count(5, MonsterMessageType::SPEAK_ALL) == 0);
     CHECK(state.default_message_count(MonsterMessageType::SPEAK_ALL) == 1);
     data["id_list"] = { 4, 5 };
     data["message"] = nlohmann::json::array();
     CHECK(MessageReader(data).read().has_value());
-    CHECK(error_idx == 73);
     CHECK(state.message_count(4, MonsterMessageType::SPEAK_ALL) == 1);
     CHECK(state.message_count(5, MonsterMessageType::SPEAK_ALL) == 0);
 }
@@ -383,5 +381,31 @@ TEST_CASE("MessageReader rejects non-boolean use_name without publishing")
         CHECK(test::to_error_code(MessageReader(data).read()) == ParseErrorType::INVALID_TYPE);
         CHECK(state.default_message_count(MonsterMessageType::SPEAK_ALL) == 1);
         CHECK(messages.get_message(6, "", MonsterMessageType::SPEAK_ALL) == "original");
+    }
+}
+
+#ifdef JP
+TEST_CASE("MessageReader reports a message which cannot be converted to the system encoding as an invalid value")
+{
+    test::MonraceMessageListTestAccess state;
+    const test::ScopedReaderState reader_state;
+    // 途中に '\0' を含む文字列は、どの環境でもシステムの文字コードに変換しない
+    const std::string text("a\0b", 3);
+    REQUIRE_FALSE(utf8_to_sys(text).has_value());
+    const nlohmann::json data = { { "name", "DEFAULT" }, { "message", { make_message("SPEAK_ALL", nlohmann::json::array({ text })) } } };
+    CHECK(test::to_error_code(MessageReader(data).read()) == ParseErrorType::INVALID_VALUE);
+}
+#endif
+
+TEST_CASE("MessageReader reports non-string actions as invalid types")
+{
+    const test::ScopedReaderState reader_state;
+    test::MonraceMessageListTestAccess state;
+    for (const auto &value : { nlohmann::json(1), nlohmann::json(true), nlohmann::json::array(), nlohmann::json::object() }) {
+        auto message = make_message("SPEAK_ALL", nlohmann::json::array({ "test" }));
+        message["action"] = value;
+        const nlohmann::json data = { { "name", "DEFAULT" }, { "message", nlohmann::json::array({ message }) } };
+        CHECK(test::to_error_code(MessageReader(data).read()) == ParseErrorType::INVALID_TYPE);
+        CHECK(state.default_message_count(MonsterMessageType::SPEAK_ALL) == 0);
     }
 }

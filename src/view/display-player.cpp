@@ -10,7 +10,6 @@
 #include "dungeon/quest.h"
 #include "floor/floor-util.h"
 #include "game-option/text-display-options.h"
-#include "info-reader/fixed-map-parser.h"
 #include "inventory/inventory-slot-types.h"
 #include "knowledge/knowledge-mutations.h"
 #include "locale/japanese.h"

@@ -9,7 +9,6 @@
 #include "floor/object-scanner.h"
 #include "game-option/input-options.h"
 #include "grid/grid.h"
-#include "info-reader/fixed-map-parser.h"
 #include "io/cursor.h"
 #include "io/input-key-acceptor.h"
 #include "monster/monster-describer.h"

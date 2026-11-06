@@ -1,6 +1,5 @@
 #include "info-reader/vault-reader.h"
 #include "floor/floor-base-definitions.h"
-#include "info-reader/info-reader-util.h"
 #include "info-reader/json-reader-util.h"
 #include "locale/character-encoding.h"
 #include "locale/language-switcher.h"
@@ -11,29 +10,15 @@
 #include <limits>
 #include <utility>
 
-VaultReader::VaultReader(const nlohmann::json &data)
-    : data(data)
+VaultReader::Session VaultReader::create_session(tl::optional<int> last_id)
 {
+    return Session(DefinitionIdOrder::STRICTLY_INCREASING, { 0, MAX_VAULT_ID }, _("Vault", "vault"), last_id);
 }
 
-const std::optional<VaultReadError> &VaultReader::error() const
+VaultReader::VaultReader(const nlohmann::json &data, Session &session)
+    : RecordDiagnostic(session)
+    , data(data)
 {
-    return this->diagnostic;
-}
-
-tl::expected<void, ParseErrorType> VaultReader::fail(ParseErrorType code, std::string_view path, std::string_view reason)
-{
-    const auto id = this->data.is_object() && this->data.contains("id") ? this->data["id"].dump() : "<unknown>";
-    this->diagnostic = VaultReadError{ id, std::string(path), std::string(reason) };
-    return tl::unexpected(code);
-}
-
-tl::expected<void, ParseErrorType> VaultReader::read_integer(std::string_view key, int &value, int minimum, int maximum)
-{
-    if (const auto result = info_set_integer(this->data[key], value, true, Range(minimum, maximum)); !result) {
-        return this->fail(result.error(), fmt::format("$.{}", key), fmt::format(_("{}以上{}以下の整数が必要です", "expected an integer in [{}, {}]"), minimum, maximum));
-    }
-    return {};
 }
 
 /*!
@@ -43,28 +28,17 @@ tl::expected<void, ParseErrorType> VaultReader::read_integer(std::string_view ke
  */
 tl::expected<void, ParseErrorType> VaultReader::read()
 {
-    this->diagnostic.reset();
-    if (!this->data.is_object()) {
-        return this->fail(ParseErrorType::INVALID_TYPE, "$", _("オブジェクトが必要です", "expected an object"));
-    }
+    this->begin_read(this->data);
     constexpr auto keys = std::to_array<std::string_view>({ "id", "name", "type", "rating", "height", "width", "layout" });
-    for (const auto key : keys) {
-        if (!this->data.contains(key)) {
-            return this->fail(ParseErrorType::TOO_FEW_ARGUMENTS, fmt::format("$.{}", key), _("必須項目がありません", "missing required field"));
-        }
-    }
-    for (const auto &entry : this->data.items()) {
-        if (std::find(keys.begin(), keys.end(), entry.key()) == keys.end()) {
-            return this->fail(ParseErrorType::UNDEFINED_DIRECTIVE, fmt::format("$.{}", entry.key()), _("未知の項目です", "unknown field"));
-        }
-    }
-    int id;
-    if (const auto result = this->read_integer("id", id, 0, std::numeric_limits<short>::max()); !result) {
+    if (const auto result = this->check_keys(this->data, "$", keys); !result) {
         return result;
     }
-    if (id <= error_idx) {
-        return this->fail(ParseErrorType::NON_SEQUENTIAL_RECORDS, "$.id", _("IDは重複せず昇順に並べてください", "IDs must be unique and in increasing order"));
+    const auto id_result = this->session.read(get_json_value(this->data, "id"));
+    if (!id_result) {
+        return this->fail(id_result.error().code, "$.id", id_result.error().reason);
     }
+    const auto id = *id_result;
+
     vault_type vault;
     vault.idx = static_cast<short>(id);
     if (!this->data["name"].is_string() || this->data["name"].get_ref<const std::string &>().empty()) {
@@ -76,7 +50,7 @@ tl::expected<void, ParseErrorType> VaultReader::read()
     }
     vault.name = std::move(*name);
     int type;
-    if (const auto result = this->read_integer("type", type, 0, 255); !result) {
+    if (const auto result = this->read_integer(this->data["type"], type, 0, 255, "$.type"); !result) {
         return result;
     }
     if (type != 7 && type != 8 && type != 17) {
@@ -84,13 +58,13 @@ tl::expected<void, ParseErrorType> VaultReader::read()
     }
     vault.typ = static_cast<uint8_t>(type);
     // rating はゲーム中で参照しない（未使用）。定義の形を保つため、読み込んで保持だけする。
-    if (const auto result = this->read_integer("rating", vault.rat, 0, std::numeric_limits<int>::max()); !result) {
+    if (const auto result = this->read_integer(this->data["rating"], vault.rat, 0, std::numeric_limits<int>::max(), "$.rating"); !result) {
         return result;
     }
-    if (const auto result = this->read_integer("height", vault.hgt, 1, MAX_HGT); !result) {
+    if (const auto result = this->read_integer(this->data["height"], vault.hgt, 1, MAX_HGT, "$.height"); !result) {
         return result;
     }
-    if (const auto result = this->read_integer("width", vault.wid, 1, MAX_WID); !result) {
+    if (const auto result = this->read_integer(this->data["width"], vault.wid, 1, MAX_WID, "$.width"); !result) {
         return result;
     }
     const auto &layout = this->data["layout"];
@@ -111,11 +85,10 @@ tl::expected<void, ParseErrorType> VaultReader::read()
         }
         vault.text += row;
     }
-    // Publish only a fully validated record; failed reads leave global state intact.
+    // 検証を完了したレコードだけを公開し、失敗時は既存の状態を保持する。
     if (static_cast<size_t>(id) >= vaults_info.size()) {
         vaults_info.resize(id + 1);
     }
     vaults_info[id] = std::move(vault);
-    error_idx = id;
     return {};
 }

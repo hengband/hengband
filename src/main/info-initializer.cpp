@@ -10,7 +10,6 @@
 #include "info-reader/definition-hash-data.h"
 #include "info-reader/dungeon-reader.h"
 #include "info-reader/ego-reader.h"
-#include "info-reader/fixed-map-parser.h"
 #include "info-reader/info-reader-util.h"
 #include "info-reader/json-reader-util.h"
 #include "info-reader/jsonc-document-loader.h"
@@ -45,6 +44,7 @@
 #include "system/terrain/terrain-list.h"
 #include "util/angband-files.h"
 #include "view/display-messages.h"
+#include <concepts>
 #include <fmt/format.h>
 #include <functional>
 #include <nlohmann/json.hpp>
@@ -57,6 +57,12 @@
 #endif
 
 namespace {
+
+template <typename Reader>
+concept HasReadSession = requires(typename Reader::Session &session) {
+    { Reader::create_session() } -> std::same_as<typename Reader::Session>;
+    session.commit();
+};
 
 template <typename T>
 concept HasShrinkToFit = requires(T t) {
@@ -79,17 +85,15 @@ template <typename DefinitionList>
 void init_json(std::string_view filename, std::string_view keyname, DefinitionHashDataType dhdt, DefinitionList &definition_list, std::function<tl::expected<void, ParseErrorType>(nlohmann::json &)> json_parser, std::function<void()> retouch = nullptr, bool allow_empty = true, std::function<tl::expected<void, ParseErrorType>(const nlohmann::json &)> validate_root = nullptr)
 {
     const auto path = path_build(ANGBAND_DIR_EDIT, filename);
-    JsoncDocumentLoader loader(path);
-    if (!loader.is_open()) {
-        quit(fmt::format(_("'{}'ファイルをオープンできません。", "Cannot open '{}' file."), filename));
+    auto loaded = JsoncDocumentLoader::load(path);
+    if (!loaded) {
+        if (loaded.error().kind == JsoncLoadErrorKind::CANNOT_OPEN) {
+            quit(fmt::format(_("'{}'ファイルをオープンできません。", "Cannot open '{}' file."), filename));
+        }
+        quit(format_json_syntax_error(filename, loaded.error().message));
     }
 
-    nlohmann::json json_object;
-    try {
-        json_object = loader.parse();
-    } catch (const nlohmann::json::exception &e) {
-        quit(format_json_syntax_error(filename, e.what()));
-    }
+    auto &json_object = *loaded;
 
     if (const auto result = info_validate_json_array(json_object, keyname, allow_empty); !result) {
         if (result.error() == ParseErrorType::INVALID_VALUE) {
@@ -101,8 +105,6 @@ void init_json(std::string_view filename, std::string_view keyname, DefinitionHa
     if (validate_root && !validate_root(json_object)) {
         quit(fmt::format(_("{}: 定義形式のversionが不正です", "{}: invalid definition version"), filename));
     }
-
-    error_idx = -1;
 
     auto &elements = json_object[keyname];
     for (size_t index = 0; index < elements.size(); ++index) {
@@ -136,9 +138,43 @@ void init_json(std::string_view filename, std::string_view keyname, DefinitionHa
 template <typename Reader, typename DefinitionList>
 void init_json_reader(std::string_view filename, std::string_view keyname, DefinitionHashDataType dhdt, DefinitionList &definition_list, std::function<void()> retouch = nullptr, bool allow_empty = true, std::function<tl::expected<void, ParseErrorType>(const nlohmann::json &)> validate_root = nullptr)
 {
-    auto parser = [](nlohmann::json &element) { return Reader(element).read(); };
-    init_json(filename, keyname, dhdt, definition_list, parser, retouch, allow_empty, validate_root);
+    if constexpr (HasReadSession<Reader>) {
+        auto session = Reader::create_session();
+        auto parser = [&session](nlohmann::json &element) {
+            auto result = Reader(element, session).read();
+            if (result) {
+                session.commit();
+            }
+            return result;
+        };
+        init_json(filename, keyname, dhdt, definition_list, parser, retouch, allow_empty, validate_root);
+    } else {
+        auto parser = [](nlohmann::json &element) { return Reader(element).read(); };
+        init_json(filename, keyname, dhdt, definition_list, parser, retouch, allow_empty, validate_root);
+    }
 }
+
+/*!
+ * @brief 構造化診断を返す Reader の解析、診断表示と成功時の確定を共通化する。
+ */
+template <typename Reader, typename DefinitionList>
+void init_diagnostic_reader(std::string_view filename, std::string_view keyname, DefinitionHashDataType dhdt, DefinitionList &definition_list, typename Reader::Session &session, fmt::format_string<const std::string &, const std::string &, const std::string &> label_format, std::function<void()> retouch = nullptr, bool allow_empty = true)
+{
+    auto parser = [&session, filename, label_format](nlohmann::json &element) {
+        Reader reader(element, session);
+        const auto result = reader.read();
+        if (!result) {
+            const auto &diagnostic = reader.error().value();
+            msg_print("{}: {}", filename, fmt::format(label_format, diagnostic.id, diagnostic.path, diagnostic.reason));
+        }
+        if (result) {
+            session.commit();
+        }
+        return result;
+    };
+    init_json(filename, keyname, dhdt, definition_list, parser, retouch, allow_empty);
+}
+
 }
 
 /*!
@@ -174,18 +210,10 @@ void init_class_magics_info()
 void init_class_skills_info()
 {
     class_skills_info.assign(PLAYER_CLASS_TYPE_MAX, {});
-    auto parser = [](nlohmann::json &element) {
-        SkillReader reader(element);
-        const auto result = reader.read();
-        if (!result) {
-            const auto &diagnostic = reader.error().value();
-            msg_print(_("ClassSkillDefinitions.jsonc: 職業{}の{}: {}", "ClassSkillDefinitions.jsonc: class {} at {}: {}"), diagnostic.class_id, diagnostic.path, diagnostic.reason);
-        }
-        return result;
-    };
-    init_json("ClassSkillDefinitions.jsonc", "classes", DefinitionHashDataType::CLASS_SKILLS, class_skills_info, parser, [] {
-        if (error_idx != PLAYER_CLASS_TYPE_MAX - 1) {
-            quit(fmt::format(_("ClassSkillDefinitions.jsonc: 職業{}の$.classes: 職業レコードが不足しています", "ClassSkillDefinitions.jsonc: class {} at $.classes: missing class records"), error_idx + 1));
+    auto session = SkillReader::create_session();
+    init_diagnostic_reader<SkillReader>("ClassSkillDefinitions.jsonc", "classes", DefinitionHashDataType::CLASS_SKILLS, class_skills_info, session, _("職業{}の{}: {}", "class {} at {}: {}"), [&session] {
+        if (session.last_id() != PLAYER_CLASS_TYPE_MAX - 1) {
+            quit(fmt::format(_("ClassSkillDefinitions.jsonc: 職業{}の$.classes: 職業レコードが不足しています", "ClassSkillDefinitions.jsonc: class {} at $.classes: missing class records"), session.last_id().value_or(-1) + 1));
         }
     });
 }
@@ -213,9 +241,7 @@ void init_egos_info()
 void init_terrains_info()
 {
     auto &terrains = TerrainList::get_instance();
-    TerrainReader::Session session;
-    auto parser = [&session](nlohmann::json &element) { return TerrainReader(element, session).read(); };
-    init_json("TerrainDefinitions.jsonc", "terrains", DefinitionHashDataType::TERRAINS, terrains, parser, [&terrains] { terrains.retouch(); });
+    init_json_reader<TerrainReader>("TerrainDefinitions.jsonc", "terrains", DefinitionHashDataType::TERRAINS, terrains, [&terrains] { terrains.retouch(); });
 }
 
 /*!
@@ -269,16 +295,8 @@ void init_spell_info()
  */
 void init_vaults_info()
 {
-    auto parser = [](nlohmann::json &element) {
-        VaultReader reader(element);
-        const auto result = reader.read();
-        if (!result) {
-            const auto &diagnostic = reader.error().value();
-            msg_print(_("VaultDefinitions.jsonc: Vault{}の{}: {}", "VaultDefinitions.jsonc: vault {} at {}: {}"), diagnostic.id, diagnostic.path, diagnostic.reason);
-        }
-        return result;
-    };
-    init_json("VaultDefinitions.jsonc", "vaults", DefinitionHashDataType::VAULTS, vaults_info, parser, nullptr, false);
+    auto session = VaultReader::create_session();
+    init_diagnostic_reader<VaultReader>("VaultDefinitions.jsonc", "vaults", DefinitionHashDataType::VAULTS, vaults_info, session, _("Vault{}の{}: {}", "vault {} at {}: {}"), nullptr, false);
 }
 
 /*!

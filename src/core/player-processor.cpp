@@ -54,6 +54,7 @@
 #include "tracking/health-bar-tracker.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
+#include "view/original-tiles.h"
 #include "world/world-turn-processor.h"
 #include <fmt/format.h>
 
@@ -94,13 +95,28 @@ bool continuous_action_running(PlayerType *player_ptr)
 }
 
 /*!
- * @brief プレイヤーの行動処理 / Process the player
- * @note
- * Notice the annoying code to handle "pack overflow", which\n
- * must come first just in case somebody manages to corrupt\n
- * the savefiles by clever use of menu commands or something.\n
+ * @brief プレイヤーの手番の始めに、時刻を表示し、画面の描き方を入力待ちに合わせる
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
-void process_player(PlayerType *player_ptr)
+static void prepare_turn_display(PlayerType *player_ptr)
+{
+    if (!command_rep) {
+        WorldTurnProcessor(player_ptr).print_time();
+    }
+
+    if (fresh_once && (continuous_action_running(player_ptr) || !command_rep)) {
+        stop_term_fresh();
+    }
+}
+
+/*!
+ * @brief プレイヤーの手番の頭の処理 (行動力の充填と、手番ごとの効果の経過)
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @return プレイヤーの手番が来たら true
+ * @details 突然変異の獲得・太古の怨念の発動と、闘技場の観戦中のモンスターの表示は、
+ * 行動力を充填する前に呼ばれるたびに行う。手番が来なければ、その後の処理は行わずに false を返す。
+ */
+static bool start_player_turn(PlayerType *player_ptr)
 {
     if (player_ptr->hack_mutation) {
         msg_print(_("何か変わった気がする！", "You feel different!"));
@@ -128,20 +144,15 @@ void process_player(PlayerType *player_ptr)
         }
 
         WorldTurnProcessor(player_ptr).print_time();
-    } else if (!(load && player_ptr->energy_need <= 0)) {
+    } else {
         player_ptr->energy_need -= speed_to_energy(player_ptr->pspeed);
     }
 
     if (player_ptr->energy_need > 0) {
-        return;
-    }
-    if (!command_rep) {
-        WorldTurnProcessor(player_ptr).print_time();
+        return false;
     }
 
-    if (fresh_once && (continuous_action_running(player_ptr) || !command_rep)) {
-        stop_term_fresh();
-    }
+    prepare_turn_display(player_ptr);
 
     if (player_ptr->resting < 0) {
         if (player_ptr->resting == COMMAND_ARG_REST_FULL_HEALING) {
@@ -208,7 +219,6 @@ void process_player(PlayerType *player_ptr)
         handle_stuff(player_ptr);
     }
 
-    load = false;
     if (player_ptr->lightspeed) {
         set_lightspeed(player_ptr, player_ptr->lightspeed - 1, true);
     }
@@ -246,6 +256,33 @@ void process_player(PlayerType *player_ptr)
             dur.set_flag(MainWindowRedrawingFlag::MP);
         }
     }
+
+    return true;
+}
+
+/*!
+ * @brief プレイヤーの行動処理 / Process the player
+ * @details セーブを読み込んだ直後に行動力が残っていれば、^S など手番の途中でセーブしている。
+ * 手番の頭の処理はセーブの前に済んでいるので、もう一度行わずに入力待ちから再開する。
+ * @note
+ * Notice the annoying code to handle "pack overflow", which\n
+ * must come first just in case somebody manages to corrupt\n
+ * the savefiles by clever use of menu commands or something.\n
+ */
+void process_player(PlayerType *player_ptr)
+{
+    // 闘技場の観戦中は、読み込むと process_dungeon() が行動力を 0 にする (手番の途中のセーブではない)
+    const auto &system = AngbandSystem::get_instance();
+    const auto resumes_turn = load && (player_ptr->energy_need <= 0) && !system.is_phase_out();
+    load = false;
+    if (resumes_turn) {
+        prepare_turn_display(player_ptr);
+    } else if (!start_player_turn(player_ptr)) {
+        return;
+    }
+
+    const auto effects = player_ptr->effects();
+    auto &dur = DeferredUpdateRequests::get_instance();
 
     /*** Handle actual user input ***/
     while (player_ptr->energy_need <= 0) {
@@ -335,6 +372,7 @@ void process_player(PlayerType *player_ptr)
             // 感知の印は下で行動ごとに外すので、途切れないよう外す前に感知し直すか、印を保つ
             check_emission(player_ptr);
             keep_detection_song_marks(player_ptr);
+            original_tiles::advance_liquid_animation(*player_ptr);
             for (MONSTER_IDX m_idx = 1; m_idx < player_ptr->current_floor_ptr->m_max; m_idx++) {
                 auto &monster = player_ptr->current_floor_ptr->m_list[m_idx];
                 if (!monster.is_valid()) {
@@ -428,7 +466,7 @@ void process_player(PlayerType *player_ptr)
  */
 void process_upkeep_with_speed(PlayerType *player_ptr)
 {
-    if (!load && player_ptr->enchant_energy_need > 0 && !player_ptr->leaving) {
+    if (player_ptr->enchant_energy_need > 0 && !player_ptr->leaving) {
         player_ptr->enchant_energy_need -= speed_to_energy(player_ptr->pspeed);
     }
 
@@ -437,23 +475,11 @@ void process_upkeep_with_speed(PlayerType *player_ptr)
     }
 
     while (player_ptr->enchant_energy_need <= 0) {
-        if (!load) {
-            check_music(player_ptr);
-        }
-
-        if (!load) {
-            check_demigod(player_ptr);
-        }
-
+        check_music(player_ptr);
+        check_demigod(player_ptr);
         SpellHex spell_hex(player_ptr);
-        if (!load) {
-            spell_hex.decrease_mana();
-        }
-
-        if (!load) {
-            spell_hex.continue_revenge();
-        }
-
+        spell_hex.decrease_mana();
+        spell_hex.continue_revenge();
         player_ptr->enchant_energy_need += ENERGY_NEED();
     }
 }

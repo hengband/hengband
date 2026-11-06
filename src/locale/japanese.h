@@ -14,7 +14,8 @@ enum class JVerbConjugationType {
 std::string conjugate_jverb(std::string_view in, JVerbConjugationType type);
 
 std::string sindarin_to_kana(std::string_view sindarin);
-bool is_kinsoku(std::string_view ch);
+bool is_line_start_kinsoku(std::string_view ch);
+bool is_line_end_kinsoku(std::string_view ch);
 
 int lb_to_kg_integer(int x);
 int lb_to_kg_fraction(int x);
@@ -40,7 +41,12 @@ constexpr int lb_to_kg(int lb)
 
 #else
 
-constexpr bool is_kinsoku(std::string_view)
+constexpr bool is_line_start_kinsoku(std::string_view)
+{
+    return false;
+}
+
+constexpr bool is_line_end_kinsoku(std::string_view)
 {
     return false;
 }

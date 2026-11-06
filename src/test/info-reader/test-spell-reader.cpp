@@ -1,4 +1,3 @@
-#include "info-reader/info-reader-util.h"
 #include "info-reader/parse-error-types.h"
 #include "info-reader/spell-reader.h"
 #include "system/spell-info-list.h"
@@ -132,7 +131,7 @@ TEST_CASE("SpellReader commits all books only after the whole realm succeeds")
     SUBCASE("a spell in a later book is invalid")
     {
         data["books"][1]["spells"][0]["spell_id"] = 32;
-        CHECK(test::to_error_code(SpellReader(data, spells, session).read()) == ParseErrorType::INVALID_FLAG);
+        CHECK(test::to_error_code(SpellReader(data, spells, session).read()) == ParseErrorType::INVALID_VALUE);
         check_unchanged();
     }
     SUBCASE("a later book has an invalid spells container")
@@ -197,14 +196,14 @@ TEST_CASE("SpellReader propagates helper errors without publishing staged spells
     const std::vector<InvalidField> invalid_fields = {
         { "", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
         { "/name", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
-        { "/name", "UNKNOWN_REALM", ParseErrorType::OUT_OF_BOUNDS },
+        { "/name", "UNKNOWN_REALM", ParseErrorType::INVALID_FLAG },
         { "/books", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
         { "/books", nlohmann::json::object(), ParseErrorType::INVALID_TYPE },
         { "/books/1/spells", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
         { "/books/1/spells", nlohmann::json::object(), ParseErrorType::INVALID_TYPE },
         { "/books/1/spells/0", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
         { "/books/1/spells/0/spell_id", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
-        { "/books/1/spells/0/spell_id", 32, ParseErrorType::INVALID_FLAG },
+        { "/books/1/spells/0/spell_id", 32, ParseErrorType::INVALID_VALUE },
         { "/books/1/spells/0/spell_id", true, ParseErrorType::INVALID_TYPE },
         { "/books/1/spells/0/spell_tag", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
         { "/books/1/spells/0/name", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
@@ -217,9 +216,7 @@ TEST_CASE("SpellReader propagates helper errors without publishing staged spells
         CAPTURE(invalid.value.dump());
         auto candidate = replacement;
         candidate[nlohmann::json::json_pointer(invalid.path)] = invalid.value;
-        error_idx = 4;
         CHECK(test::to_error_code(SpellReader(candidate, spells, session).read()) == invalid.error);
-        CHECK(error_idx == 5);
         CHECK(spells.get_spell_id(RealmType::LIFE, "old-zero") == 0);
         CHECK(spells.get_spell_id(RealmType::LIFE, "old-eight") == 8);
         CHECK_FALSE(spells.get_spell_id(RealmType::LIFE, "new-zero"));
@@ -230,7 +227,6 @@ TEST_CASE("SpellReader propagates helper errors without publishing staged spells
     }
     SpellReader::Session reload_session;
     REQUIRE(SpellReader(replacement, spells, reload_session).read().has_value());
-    CHECK(error_idx == 6);
     CHECK(spells.get_spell_id(RealmType::LIFE, "new-zero") == 0);
     CHECK(spells.get_spell_id(RealmType::LIFE, "new-eight") == 8);
     CHECK(spells.get_spell_id(RealmType::SORCERY, "other-realm") == 3);
@@ -334,4 +330,21 @@ TEST_CASE("SpellReader allows the same ID and tag in different realms and a new 
     REQUIRE(SpellReader(data, spells, reload_session).read().has_value());
     CHECK(spells.get_spell_info(RealmType::LIFE, 0).description == "replacement");
     CHECK(spells.get_spell_info(RealmType::SORCERY, 0).description == "shared description");
+}
+
+TEST_CASE("SpellReader reports non-string realm names and tags as invalid types")
+{
+    const test::ScopedReaderState reader_state;
+    const test::SpellInfoListTestAccess spell_state;
+    auto &spells = SpellInfoList::get_instance();
+    for (const auto *path : { "/name", "/books/0/spells/0/spell_tag" }) {
+        for (const auto &value : { nlohmann::json(1), nlohmann::json(true), nlohmann::json::array(), nlohmann::json::object() }) {
+            CAPTURE(path);
+            auto data = make_realm("LIFE", nlohmann::json::array({ make_spell(0, "first") }), nlohmann::json::array());
+            data[nlohmann::json::json_pointer(path)] = value;
+            SpellReader::Session session;
+            CHECK(test::to_error_code(SpellReader(data, spells, session).read()) == ParseErrorType::INVALID_TYPE);
+            CHECK_FALSE(spells.get_spell_id(RealmType::LIFE, "first"));
+        }
+    }
 }

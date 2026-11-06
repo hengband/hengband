@@ -17,27 +17,6 @@ namespace {
 constexpr size_t RECORD_IDENTIFIER_MAX_CHARS = 40;
 
 /*!
- * エラーメッセージの名称定義 / Standard error message text
- * @details 外からは describe_parse_error() を通して引く
- */
-concptr err_str[enum2i(ParseErrorType::MAX)] = {
-    nullptr,
-    _("文法エラー", "parse error"),
-    _("古いファイル", "obsolete file"),
-    _("記録ヘッダがない", "missing record header"),
-    _("不連続レコード", "non-sequential records"),
-    _("おかしなフラグ存在", "invalid flag specification"),
-    _("未定義命令", "undefined directive"),
-    _("メモリ不足", "out of memory"),
-    _("座標範囲外", "coordinates out of bounds"),
-    _("引数不足", "too few arguments"),
-    _("未定義地形タグ", "undefined terrain tag"),
-    _("不正なpval値", "invalid pval"),
-    _("不正な値", "invalid value"),
-    _("不正な型", "invalid type"),
-};
-
-/*!
  * @brief UTF-8の文字列をシステムの文字コードに変換する
  * @param utf8 変換する文字列
  * @return 変換した文字列 (変換できなければ ASCII 以外のバイトを '?' に置き換えた文字列)
@@ -107,15 +86,39 @@ std::string format_definition_load_error(std::span<const std::string> diagnostic
 /*!
  * @brief 解析エラーの名称を返す
  * @param err 解析エラーの種類
- * @return エラーの名称 (エラーでない値や範囲外の値には「不明なエラー」)
+ * @return エラーの名称 (エラーでない値や欠番・範囲外の値には「不明なエラー」)
+ * @details 種類の番号には欠番があるため、番号で引く配列ではなく種類ごとに名称を返す。
+ * 種類を追加したときにコンパイラの警告で気づけるよう、default は置かずにすべての種類を列挙する。
  */
 std::string_view describe_parse_error(ParseErrorType err)
 {
-    const auto code = enum2i(err);
-    if ((code <= enum2i(ParseErrorType::NONE)) || (code >= enum2i(ParseErrorType::MAX)) || (err_str[code] == nullptr)) {
-        return _("不明なエラー", "unknown error");
+    switch (err) {
+    case ParseErrorType::GENERIC:
+        return _("文法エラー", "parse error");
+    case ParseErrorType::NON_SEQUENTIAL_RECORDS:
+        return _("不連続レコード", "non-sequential records");
+    case ParseErrorType::INVALID_FLAG:
+        return _("おかしなフラグ存在", "invalid flag specification");
+    case ParseErrorType::UNDEFINED_DIRECTIVE:
+        return _("未定義命令", "undefined directive");
+    case ParseErrorType::OUT_OF_BOUNDS:
+        return _("座標範囲外", "coordinates out of bounds");
+    case ParseErrorType::TOO_FEW_ARGUMENTS:
+        return _("引数不足", "too few arguments");
+    case ParseErrorType::UNDEFINED_TERRAIN_TAG:
+        return _("未定義地形タグ", "undefined terrain tag");
+    case ParseErrorType::INVALID_PVAL:
+        return _("不正なpval値", "invalid pval");
+    case ParseErrorType::INVALID_VALUE:
+        return _("不正な値", "invalid value");
+    case ParseErrorType::INVALID_TYPE:
+        return _("不正な型", "invalid type");
+    case ParseErrorType::NONE:
+    case ParseErrorType::MAX:
+        break;
     }
-    return err_str[code];
+
+    return _("不明なエラー", "unknown error");
 }
 
 /*!

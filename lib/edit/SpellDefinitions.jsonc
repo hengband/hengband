@@ -5255,7 +5255,7 @@
               "spell_tag": "Anti_teleport_barrier",
               "name": {
                 "ja": "反テレポート結界",
-                "en": "Anti teleport barrier",
+                "en": "Anti-teleport barrier",
               },
               "description": {
                 "ja": "視界内のモンスターのテレポートを阻害するバリアを張る。",
@@ -5379,7 +5379,7 @@
               "spell_tag": "Anti_multiply_barrier",
               "name": {
                 "ja": "反増殖結界",
-                "en": "Anti multiply barrier",
+                "en": "Anti-multiply barrier",
               },
               "description": {
                 "ja": "その階の増殖するモンスターの増殖を阻止する。",

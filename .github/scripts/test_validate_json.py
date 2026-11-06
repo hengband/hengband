@@ -10,8 +10,14 @@ from unittest.mock import patch
 from json_validation_test_helper import baseitem_id_schema_maximum, validate_document
 from jsonschema import ValidationError
 from jsonschema.validators import validator_for
-from validate_json import (build_schema_registry, build_validation_pairs, load_all_schemas, load_jsonc, validate_one,
-                           validate_town_map_semantics, validate_town_preferences_semantics)
+from validate_json import (BUILDING_MEMBERSHIP_FIELD_MAXIMUMS, REPOSITORY_ROOT, build_schema_registry, build_validation_pairs,
+                           is_fixed_map_symbol, is_town_map_symbol, load_all_schemas, load_cpp_constant, load_jsonc,
+                           load_magic_realm_count, validate_one, validate_quest_layout_semantics, validate_quest_semantics,
+                           validate_town_map_semantics, validate_town_preferences_semantics, validate_vault_semantics,
+                           validate_wilderness_semantics)
+
+# 町のマップの地物の記号が不正な時の文言。':' '/' '\' も印字できる1文字なので、使えない記号を挙げる。
+TOWN_FEATURE_SYMBOL_MESSAGE = "feature symbol must be exactly one printable ASCII character other than ':', '/' and '\\'"
 
 
 class QuestGridValidationTest(unittest.TestCase):
@@ -64,6 +70,15 @@ class QuestGridValidationTest(unittest.TestCase):
                 ok, message = self.validate({"monster": 5, "special": 1}, schema_name)
                 self.assertTrue(ok, message)
 
+    def test_object_branch_failure_does_not_report_type_error(self):
+        for schema_name in ("Quest", "QuestPreferences"):
+            with self.subTest(schema=schema_name):
+                ok, message = self.validate({"monster": {"random": True, "bogus": 1}}, schema_name)
+                self.assertFalse(ok, message)
+                self.assertIn("is not valid under any of the given schemas", message)
+                self.assertNotIn("is not of type", message)
+                self.assertIn("Location: ['legend', '#', 'monster']", message)
+
     def test_shared_schema_is_not_a_data_schema(self):
         shared_path = self.schema_dir / "common/QuestGrid.schema.json"
         self.assertIn(shared_path, self.loaded)
@@ -78,16 +93,22 @@ class QuestGridValidationTest(unittest.TestCase):
         makefile = (self.schema_dir.parent / "Makefile.am").read_text(encoding="utf-8")
         schema_files = makefile.split("schema_files =", 1)[1].split("\n\n", 1)[0]
         extra_dist = makefile.split("EXTRA_DIST =", 1)[1].split("\n\n", 1)[0]
-        self.assertIn("\tschema/common/QuestGrid.schema.json \\", schema_files)
+        shared_schemas = sorted((self.schema_dir / "common").glob("*.schema.json"))
+        self.assertTrue(shared_schemas)
+        for shared_schema in shared_schemas:
+            with self.subTest(schema=shared_schema.name):
+                self.assertIn(f"\tschema/common/{shared_schema.name} \\", schema_files)
         self.assertIn("$(schema_files)", extra_dist)
 
     def test_shared_grid_contract(self):
         cases = (
             ({}, True),
             ({"terrain": "*", "caveInfo": ["GLOW", "MARK"], "special": -1}, True),
-            ({"monster": 1, "object": 1, "ego": 1, "artifact": 1, "trap": "TRAP_PIT"}, True),
+            ({"monster": 1, "artifact": 1, "trap": "TRAP_PIT"}, True),
+            ({"object": 42, "ego": 65}, True),
+            ({"object": 42, "ego": {"random": True}}, True),
             ({"monster": {"random": True, "oodLevel": 0}, "object": {"random": True, "oodLevel": 0},
-              "ego": {"random": True, "id": 1}, "artifact": {"random": True, "id": 1}, "trap": {"random": True}}, True),
+              "artifact": {"random": True, "id": 1}, "trap": {"random": True}}, True),
             ({"monster": {"cloneOf": 1}, "object": {"questReward": True}, "artifact": {"questReward": True}}, True),
             ({"terrain": 1}, False),
             ({"caveInfo": ["GLOW", "GLOW"]}, False),
@@ -103,6 +124,9 @@ class QuestGridValidationTest(unittest.TestCase):
                   ({"object": {"random": True, "oodLevel": -1}}, False),
                   ({"monster": {"cloneOf": 0}}, False),
                   ({"ego": {"random": True, "id": 0}}, False),
+                  ({"ego": {"random": True, "id": 65}}, False),
+                  ({"ego": {"random": False, "id": 65}}, False),
+                  ({"ego": {"id": 65}}, False),
                   ({"artifact": {"random": True, "id": 0}}, False))
         for schema_name in ("Quest", "QuestPreferences"):
             # Recreate the former inlined graph and compare acceptance as well
@@ -207,6 +231,15 @@ class VaultValidationTest(unittest.TestCase):
         second = {**self.record, "id": 3}
         ok, message = self.validate({"vaults": [self.record, second]})
         self.assertTrue(ok, message)
+
+    def test_id_upper_bound(self):
+        # schema の上限と C++ の定数を照合するため、ID の上限はソースから読む。
+        maximum = load_cpp_constant(REPOSITORY_ROOT / "src/info-reader/info-reader-util.h", "MAX_VAULT_ID")
+        for value, accepted in ((maximum, True), (maximum + 1, False)):
+            with self.subTest(value=value):
+                record = {**self.record, "id": value}
+                ok, message = self.validate({"vaults": [record]})
+                self.assertEqual(ok, accepted, message)
 
     def test_invalid_roots(self):
         for root in (None, [], {}, {"vaults": None}, {"vaults": {}}, {"vaults": []}):
@@ -590,6 +623,22 @@ class TownPreferencesValidationTest(unittest.TestCase):
         with self.assertRaisesRegex(ValidationError, "legend symbol must be exactly one printable ASCII character"):
             validate_town_preferences_semantics(data, self.schema_path)
 
+    def test_legend_symbol_follows_town_map_symbol_rule(self):
+        # TownPreferencesReader は TownMapReader の地物の記号と同じく、空白を含む固定マップの記号のうち : / \ を除いたものを受け付ける。
+        for symbol, accepted in ((" ", True), ("!", True), ("~", True), (":", False), ("/", False), ("\\", False),
+                                 ("\x1f", False), ("\x7f", False), ("é", False)):
+            with self.subTest(symbol=symbol):
+                data = {"version": 1, "legend": {symbol: {"terrain": "ENTRANCE", "caveInfo": ["MARK"]}}}
+                ok, message = self.validate(data)
+                self.assertEqual(ok, accepted, message)
+                if accepted:
+                    validate_town_preferences_semantics(data, self.schema_path)
+                else:
+                    self.assertIn("['legend']", message)
+                    # schema を通さない意味検証だけでも同じ記号を拒否する。
+                    with self.assertRaisesRegex(ValidationError, "legend symbol"):
+                        validate_town_preferences_semantics(data, self.schema_path)
+
     def test_terrain_tags_match_runtime_definitions(self):
         for terrain, valid in (("ENTRANCE", True), ("*", True), ("NOT_A_TERRAIN", False)):
             with self.subTest(terrain=terrain):
@@ -640,6 +689,15 @@ class TownDefinitionListValidationTest(unittest.TestCase):
                 self.assertFalse(ok)
                 self.assertIn("town map file does not exist", message)
 
+    def test_object_branch_missing_modes_does_not_report_type_error(self):
+        invalid = copy.deepcopy(self.data)
+        invalid["towns"]["2"] = {"lite": "towns/a.jsonc"}
+        ok, message = self.validate(invalid)
+        self.assertFalse(ok, message)
+        self.assertIn("is not valid under any of the given schemas", message)
+        self.assertNotIn("is not of type", message)
+        self.assertIn("Location: ['towns', '2']", message)
+
     def test_invalid_map_mode_and_path(self):
         for replacement in ({"normal": "towns/01_Outpost_Full.txt"}, "../outside.txt"):
             with self.subTest(replacement=replacement):
@@ -660,17 +718,14 @@ class TownMapValidationTest(unittest.TestCase):
         self.schema_path = Path(__file__).resolve().parents[2] / "schema/TownMap.schema.json"
         self.schema = load_jsonc(self.schema_path)
         self.data = {
-            "version": 2,
+            "version": 3,
             "featureRules": [
                 {
                     "when": "[EQU $QUEST1 1]",
                     "symbol": "#",
                     "definition": {
                         "terrain": "PERMANENT",
-                        "caveInfo": 3,
-                        "monster": "0",
-                        "object": "0",
-                        "artifact": "0",
+                        "caveInfo": ["MARK", "GLOW"],
                         "trap": "NONE",
                         "special": 0,
                     },
@@ -689,14 +744,15 @@ class TownMapValidationTest(unittest.TestCase):
         self.assertTrue(ok, message)
 
     def test_optional_ego_and_positive_byte_ids(self):
-        # 省略はエゴなし。ランダム指定のIDも同じ範囲で検証する。
-        for token in ("1", "255", "0001", "*", "*1", "*255", "*000255"):
+        # 固定の装備品に、定義済みのよいエゴかランダムエゴを指定する。
+        for token in (65, {"random": True}):
             with self.subTest(token=token):
                 data = copy.deepcopy(self.data)
                 data["featureRules"][0]["definition"]["ego"] = token
+                data["featureRules"][0]["definition"]["object"] = 42
                 ok, message = self.validate(data)
                 self.assertTrue(ok, message)
-        for token in ("0", "-0", "0000", "256", "-1", "-2147483648", "*0", "*256", "*-1", "**", "+1", "*+1", "!", "c1", None, 1):
+        for token in ("0", "-0", "0000", "256", "-1", "-2147483648", "*0", "*256", "*-1", "**", "+1", "*+1", "!", "c1", None, 0, 256, -1, {"random": True, "id": 1}):
             with self.subTest(token=token):
                 data = copy.deepcopy(self.data)
                 data["featureRules"][0]["when"] = "0"
@@ -704,30 +760,56 @@ class TownMapValidationTest(unittest.TestCase):
                 ok, message = self.validate(data)
                 self.assertFalse(ok, message)
 
-    def test_ego_semantics_matches_schema_range(self):
-        # スキーマのpatternを通らなくても、意味検証が同じ範囲を強制する。
-        for token, accepted in (("1", True), ("255", True), ("*", True), ("*255", True),
-                                ("0", False), ("256", False), ("-1", False), ("*0", False), ("*256", False)):
-            with self.subTest(token=token):
+    def test_ego_validation_ignores_when_and_rejects_unplaced_objects(self):
+        for cell in (
+            {"object": 42, "ego": 1}, {"object": 42, "ego": 102}, {"ego": 65},
+            {"object": {"random": True}, "ego": 65},
+            {"object": {"questReward": True}, "ego": 65},
+        ):
+            with self.subTest(cell=cell):
                 data = copy.deepcopy(self.data)
-                data["featureRules"][0]["definition"]["ego"] = token
-                if accepted:
-                    validate_town_map_semantics(data, self.schema_path)
-                else:
-                    with self.assertRaises(ValidationError):
-                        validate_town_map_semantics(data, self.schema_path)
+                data["featureRules"][0]["when"] = "0"
+                data["featureRules"][0]["definition"].update(cell)
+                ok, message = self.validate(data)
+                self.assertFalse(ok, message)
+                self.assertIn("ego", message)
 
-    def test_cave_info_fits_16_bit_flags(self):
-        # CAVE_* のフラグは16ビットに収まり、セーブでも16ビットで書く。
-        valid = copy.deepcopy(self.data)
-        valid["featureRules"][0]["definition"]["caveInfo"] = 65535
-        ok, message = self.validate(valid)
-        self.assertTrue(ok, message)
-        invalid = copy.deepcopy(self.data)
-        invalid["featureRules"][0]["definition"]["caveInfo"] = 65536
-        ok, message = self.validate(invalid)
-        self.assertFalse(ok)
-        self.assertIn("Location: ['featureRules', 0, 'definition', 'caveInfo']", message)
+    def test_v3_constraints_and_positions(self):
+        cases = (
+            ("caveInfo", 3), ("caveInfo", ["MARK", "MARK"]), ("caveInfo", ["UNKNOWN"]),
+            ("trap", "*"), ("trap", ""), ("terrain", ""), ("unknown", 1),
+            ("monster", {}), ("monster", {"oodLevel": 1}),
+            ("monster", {"random": False}), ("monster", {"random": True, "cloneOf": 1}),
+            ("object", {"questReward": False}), ("ego", {"random": True, "id": 1}),
+            ("object", 0), ("artifact", 32768), ("special", -32769),
+        )
+        for field, value in cases:
+            with self.subTest(field=field, value=value):
+                data = copy.deepcopy(self.data)
+                data["featureRules"][0]["definition"][field] = value
+                ok, message = self.validate(data)
+                self.assertFalse(ok, message)
+                self.assertIn("['featureRules', 0, 'definition'", message)
+
+    def test_all_fields_optional_and_common_modes(self):
+        for definition in ({}, {"monster": {"cloneOf": 32767}},
+                           {"object": {"random": True, "oodLevel": 0}},
+                           {"artifact": {"random": True, "id": 32767}},
+                           {"trap": {"random": True}},
+                           {"object": {"questReward": True}, "artifact": {"questReward": True}}):
+            data = copy.deepcopy(self.data)
+            data["featureRules"][0]["definition"] = definition
+            ok, message = self.validate(data)
+            self.assertTrue(ok, message)
+
+    def test_only_integer_version_three(self):
+        for version in (2, 4, 3.0, True, None, "3"):
+            data = copy.deepcopy(self.data)
+            data["version"] = version
+            self.assertFalse(self.validate(data)[0])
+        data = copy.deepcopy(self.data)
+        del data["version"]
+        self.assertFalse(self.validate(data)[0])
 
     def test_start_must_be_inside_layout(self):
         invalid = copy.deepcopy(self.data)
@@ -769,7 +851,7 @@ class TownMapValidationTest(unittest.TestCase):
         self.assertFalse(ok, message)
         self.assertIn("['featureRules', 0, 'symbol']", message)
         # schema の長さの制約が弾く。意味検証も同じ値を保険として拒否する。
-        with self.assertRaisesRegex(ValidationError, "feature symbol must be exactly one printable ASCII character"):
+        with self.assertRaisesRegex(ValidationError, re.escape(TOWN_FEATURE_SYMBOL_MESSAGE)):
             validate_town_map_semantics(invalid, self.schema_path)
 
     def test_rows_reject_trailing_newline(self):
@@ -816,7 +898,7 @@ class TownMapValidationTest(unittest.TestCase):
         self.assertFalse(self.validate(invalid)[0])
 
     def test_too_many_building_membership_fields_are_rejected(self):
-        for command, maximum in (("C", 29), ("M", 10), ("R", 38)):
+        for command, maximum in BUILDING_MEMBERSHIP_FIELD_MAXIMUMS.items():
             with self.subTest(command=command):
                 invalid = copy.deepcopy(self.data)
                 invalid["buildingRules"][0].update(command=command, fields=["0"] * (maximum + 1))
@@ -871,10 +953,13 @@ class TownMapValidationTest(unittest.TestCase):
 
     def test_integer_representation_matches_reader(self):
         cases = {
-            "version": lambda data: data.update(version=2.0),
+            "version": lambda data: data.update(version=3.0),
             "starting position y": lambda data: data["startingPositions"][0].update(y=1.0),
             "starting position x": lambda data: data["startingPositions"][0].update(x=1.0),
-            "caveInfo": lambda data: data["featureRules"][0]["definition"].update(caveInfo=3.0),
+            "monster": lambda data: data["featureRules"][0]["definition"].update(monster=5.0),
+            "oodLevel": lambda data: data["featureRules"][0]["definition"].update(object={"random": True, "oodLevel": 5.0}),
+            "id": lambda data: data["featureRules"][0]["definition"].update(artifact={"random": True, "id": 5.0}),
+            "cloneOf": lambda data: data["featureRules"][0]["definition"].update(monster={"cloneOf": 5.0}),
             "special": lambda data: data["featureRules"][0]["definition"].update(special=0.0),
             "building index": lambda data: data["buildingRules"][0].update(index=0.0),
         }
@@ -972,6 +1057,63 @@ class TownMapValidationTest(unittest.TestCase):
                 self.assertFalse(self.validate(invalid)[0])
 
 
+class LegendObjectTrapValidationTest(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.root = Path(__file__).resolve().parents[2]
+        cls.loaded, cls.schema_map = load_all_schemas(cls.root / "schema")
+        cls.registry = build_schema_registry(cls.loaded)
+
+    def test_all_legend_readers_reject_dropped_placements(self):
+        cases = (
+            ({"object": 1, "trap": "TRAP_PIT"}, False),
+            ({"object": {"questReward": True}, "trap": "TRAP_PIT"}, False),
+            ({"object": {"questReward": True}, "trap": {"random": True}}, False),
+            ({"object": {"questReward": True}, "trap": "NONE"}, True),
+            ({"object": {"random": True}, "trap": "TRAP_PIT"}, False),
+            ({"object": 1, "trap": {"random": True}}, False),
+            ({"object": {"random": True}, "trap": {"random": True}}, True),
+            ({"object": 1, "trap": "NONE"}, True),
+            ({"object": {"random": True}, "trap": "NONE"}, True),
+            ({"artifact": 1, "trap": "TRAP_PIT"}, True),
+            ({"artifact": 1, "trap": {"random": True}}, True),
+            # エゴは固定の品に付くので、罠と同じマスなら品と罠の組み合わせとして拒否する。
+            ({"object": 42, "ego": 65, "trap": "TRAP_PIT"}, False),
+            ({"object": 42, "ego": {"random": True}, "trap": {"random": True}}, False),
+        )
+        for schema_name in ("Quest", "QuestPreferences", "TownMap", "TownPreferences"):
+            for cell, accepted in cases:
+                with self.subTest(schema=schema_name, cell=cell):
+                    cell = {"terrain": "NONE", "caveInfo": [], **cell}
+                    if schema_name == "TownMap":
+                        data = {"version": 3, "featureRules": [{"symbol": "#", "when": "0", "definition": cell}],
+                                "buildingRules": [], "mapVariants": [{"rows": ["#"]}],
+                                "startingPositions": [{"y": 0, "x": 0}]}
+                        path = ["featureRules", 0, "definition", "trap"]
+                    else:
+                        data = {"version": 1, "legend": {"#": cell}}
+                        if schema_name == "Quest":
+                            data.update(id=1, name={"ja": "Test", "en": "Test"},
+                                        definition={"type": "KILL_ALL", "level": 1})
+                        path = ["legend", "#", "trap"]
+                    schema_path = self.schema_map[schema_name]
+                    if schema_name == "TownPreferences":
+                        # スキーマは品・罠欄を許可しないが、実行時の追加欄と同じ意味検証も直接確かめる。
+                        if accepted:
+                            validate_town_preferences_semantics(data, schema_path)
+                        else:
+                            with self.assertRaisesRegex(ValidationError, "silently ignores one placement") as caught:
+                                validate_town_preferences_semantics(data, schema_path)
+                            self.assertEqual(list(caught.exception.path), path)
+                        continue
+                    ok, message = validate_document(data, schema_path, self.loaded[schema_path], self.registry,
+                                                    filename="Test.jsonc")
+                    self.assertEqual(ok, accepted, message)
+                    if not accepted:
+                        self.assertIn("silently ignores one placement", message)
+                        self.assertIn(f"Location: {path}", message)
+
+
 class DefinitionVersionValidationTest(unittest.TestCase):
     """reader が読まない version もほかの定義と同じく 1 に限る。"""
 
@@ -1009,6 +1151,217 @@ class DefinitionVersionValidationTest(unittest.TestCase):
                 ok, message = validate_document(document, schema_path, self.loaded[schema_path], self.registry)
                 self.assertFalse(ok, message)
                 self.assertIn(f"Location: {[key]}", message)
+
+
+class CppConstantLoaderTest(unittest.TestCase):
+    """C++ の定数を読む load_cpp_constant() が値を読み、読めないときは黙らずに失敗することを確かめる。"""
+
+    def setUp(self):
+        folder = tempfile.TemporaryDirectory()
+        self.addCleanup(folder.cleanup)
+        self.root = Path(folder.name)
+        (self.root / "src/system").mkdir(parents=True)
+        (self.root / "src/system/h-type.h").write_text("""typedef int32_t PRICE; /*!< 金額 */
+typedef int16_t SMALL;
+""", encoding="utf-8")
+
+    def header(self, text, name="src/limits.h"):
+        path = self.root / name
+        path.write_text(text, encoding="utf-8")
+        return path
+
+    def test_literal_and_expressions_are_read(self):
+        path = self.header("""#pragma once
+// constexpr int COMMENTED = 1;
+constexpr int MAX_HGT = 66; // 高さ
+constexpr auto MAX_EGO_ID = std::numeric_limits<uint8_t>::max();
+constexpr auto ITEM_COST_MAX = std::numeric_limits<PRICE>::max() / 32;
+constexpr auto SMALL_MIN = std::numeric_limits<SMALL>::min();
+constexpr int NEGATIVE = -7 / 2;
+constexpr size_t VALID_TOWNS = 6; /*!< 町の数 */
+""")
+        for name, expected in (("MAX_HGT", 66), ("MAX_EGO_ID", 255), ("ITEM_COST_MAX", (2**31 - 1) // 32),
+                               ("SMALL_MIN", -32768), ("NEGATIVE", -3), ("VALID_TOWNS", 6)):
+            with self.subTest(name=name):
+                self.assertEqual(load_cpp_constant(path, name), expected)
+
+    def test_enumerator_reference_is_read(self):
+        enum_path = self.header("""enum class PlayerRaceType {
+    HUMAN = 0,
+    ELF, // 妖精
+    MAX,
+};
+""", "src/race-types.h")
+        path = self.header("""constexpr auto MAX_RACES = enum2i(PlayerRaceType::MAX);
+constexpr auto CLASS_MAX = static_cast<short>(PlayerRaceType::MAX);
+""")
+        for name in ("MAX_RACES", "CLASS_MAX"):
+            with self.subTest(name=name):
+                self.assertEqual(load_cpp_constant(path, name, {"PlayerRaceType": enum_path}), 2)
+        with self.assertRaisesRegex(ValueError, "MAX_RACES.*no location given for enum PlayerRaceType"):
+            load_cpp_constant(path, "MAX_RACES")
+
+    def test_missing_constant_raises_with_file_and_name(self):
+        path = self.header("""// constexpr int MAX_HGT = 66;
+constexpr int MAX_HGT_OTHER = 1;
+""")
+        with self.assertRaises(ValueError) as raised:
+            load_cpp_constant(path, "MAX_HGT")
+        self.assertIn("MAX_HGT not found", str(raised.exception))
+        self.assertIn(str(path), str(raised.exception))
+
+    def test_duplicate_or_unsupported_definition_raises(self):
+        path = self.header("""constexpr int TWICE = 1;
+constexpr int TWICE = 2;
+constexpr int SUFFIX = 1024U;
+constexpr auto CALL = std::ssize(TABLE);
+constexpr auto UNKNOWN_TYPE = std::numeric_limits<unknown_t>::max();
+constexpr int UNDEFINED_ENUM = enum2i(PlayerRaceType::NOTHING);
+""")
+        enum_path = self.header("""enum class PlayerRaceType {
+    HUMAN,
+    MAX,
+};
+""", "src/race-types.h")
+        for name, reason in (("TWICE", "defined more than once"), ("SUFFIX", "Cannot evaluate"), ("CALL", "Cannot evaluate"),
+                             ("UNKNOWN_TYPE", "Unknown integer type unknown_t"), ("UNDEFINED_ENUM", "PlayerRaceType::NOTHING not found")):
+            with self.subTest(name=name):
+                with self.assertRaisesRegex(ValueError, reason) as raised:
+                    load_cpp_constant(path, name, {"PlayerRaceType": enum_path})
+                self.assertIn(name, str(raised.exception))
+                self.assertIn(str(path), str(raised.exception))
+
+    def test_magic_realm_count_follows_the_range(self):
+        (self.root / "src/realm").mkdir()
+        realm_path = self.root / "src/realm/realm-types.h"
+        definition = """enum class RealmType {
+    NONE = 0,
+    LIFE = 1,
+    SORCERY = 2,
+    CRUSADE = 10,
+    MAX,
+};
+
+constexpr auto MAGIC_REALM_RANGE = EnumRangeInclusive(RealmType::LIFE, RealmType::CRUSADE);
+constexpr auto MAX_MAGIC = std::ssize(MAGIC_REALM_RANGE);
+"""
+        realm_path.write_text(definition, encoding="utf-8")
+        self.assertEqual(load_magic_realm_count(self.root), 10)
+        realm_path.write_text(definition.replace("std::ssize(MAGIC_REALM_RANGE)", "10"), encoding="utf-8")
+        with self.assertRaisesRegex(ValueError, "MAX_MAGIC"):
+            load_magic_realm_count(self.root)
+        realm_path.write_text(definition.replace("RealmType::CRUSADE)", "RealmType::HEX)"), encoding="utf-8")
+        with self.assertRaisesRegex(ValueError, "undefined RealmType"):
+            load_magic_realm_count(self.root)
+
+
+class FixedMapSymbolSiteTest(unittest.TestCase):
+    """固定マップの記号を確かめる箇所が、どれも is_fixed_map_symbol() で判定することを確かめる。"""
+
+    def setUp(self):
+        self.town_map_schema_path = REPOSITORY_ROOT / "schema/TownMap.schema.json"
+
+    def vault(self, row):
+        return {"vaults": [{"id": 0, "name": "Test", "type": 7, "rating": 5, "height": 1, "width": len(row), "layout": [row]}]}
+
+    def wilderness(self, symbol):
+        letters = [{"symbol": "#", "terrain": 0}, {"symbol": symbol, "terrain": 1}]
+        maps = {"letters": letters, "layout": ["###", "###", "###"], "starting_position": {"x": 1, "y": 1}}
+        towns = [{"id": 1, "name": {"ja": "街", "en": "Town"}, "alias": {"ja": "街", "en": "Town"}}]
+        towns += [{"id": town_id, "name": {"ja": "街", "en": "Town"}} for town_id in range(2, 6)]
+        return {"version": 1, "width": 3, "height": 3, "towns": towns, "maps": {"normal": maps}}
+
+    def town_map(self, symbol="#", row="###"):
+        return {
+            "version": 3,
+            "featureRules": [{"symbol": symbol, "definition": {"terrain": "PERMANENT"}}],
+            "mapVariants": [{"rows": [row]}],
+            "buildingRules": [],
+            "startingPositions": [],
+        }
+
+    def sites(self, character):
+        """記号を1か所に置いた文書を、その検証と組で返す。"""
+        return (
+            ("vault layout", lambda: validate_vault_semantics(self.vault(f"#{character}#"))),
+            ("wilderness symbol", lambda: validate_wilderness_semantics(self.wilderness(character))),
+            ("town map row", lambda: validate_town_map_semantics(self.town_map(row=f"#{character}#"), self.town_map_schema_path)),
+            ("town map feature symbol", lambda: validate_town_map_semantics(self.town_map(symbol=character, row=f"#{character}#"),
+                                                                            self.town_map_schema_path)),
+            ("quest map row", lambda: validate_quest_layout_semantics({"map": [f"#{character}#"]})),
+        )
+
+    def test_boundaries_follow_general_parser(self):
+        # general-parser.h の is_fixed_map_symbol() と同じく、空白から '~' までの印字可能な ASCII を受け付ける。
+        for character, accepted in ((" ", True), ("~", True), ("\x1f", False), ("\x7f", False), ("é", False)):
+            for site, check in self.sites(character):
+                with self.subTest(site=site, character=character):
+                    if accepted:
+                        check()
+                    else:
+                        with self.assertRaises(ValidationError):
+                            check()
+
+    def test_helper_accepts_exactly_one_character(self):
+        # general-parser.h の is_fixed_map_symbol() は1文字を受け取る。範囲内の文字を並べた文字列や空の文字列は記号ではない。
+        for symbol, accepted in ((" ", True), ("A", True), ("~", True), ("", False), ("AB", False), ("  ", False), ("~~", False),
+                                 ("A\x7f", False)):
+            with self.subTest(symbol=symbol):
+                self.assertEqual(is_fixed_map_symbol(symbol), accepted)
+
+    def test_quest_legend_symbol_must_be_one_character(self):
+        # QuestReader は凡例のキーを parse_fixed_map_symbol() で1文字ちょうどに限る。
+        for symbol, accepted in (("A", True), (" ", True), ("", False), ("AB", False)):
+            with self.subTest(symbol=symbol):
+                document = {"legend": {symbol: {}}}
+                if accepted:
+                    validate_quest_semantics(document)
+                else:
+                    with self.assertRaisesRegex(ValidationError, "legend symbol"):
+                        validate_quest_semantics(document)
+
+    def test_every_site_uses_the_helper(self):
+        # 判定を差し替えると、どの箇所も同じ文字を拒否する（それぞれに範囲を書き写していない）。
+        for site, check in self.sites("A"):
+            with self.subTest(site=site):
+                check()
+                with patch("validate_json.is_fixed_map_symbol", lambda character: character != "A"):
+                    with self.assertRaises(ValidationError):
+                        check()
+
+    def test_town_symbol_helper_matches_readers(self):
+        # TownMapReader・TownPreferencesReader と同じく、固定マップの記号から : / \ を除く。
+        for symbol in map(chr, range(0x20, 0x7f)):
+            with self.subTest(symbol=symbol):
+                self.assertEqual(is_town_map_symbol(symbol), symbol not in ":/\\")
+        for symbol in ("", "AB", "\x1f", "\x7f", "é"):
+            with self.subTest(symbol=symbol):
+                self.assertFalse(is_town_map_symbol(symbol))
+
+    def test_town_symbol_sites_use_the_helper(self):
+        # 判定を差し替えると、町の地図の地物の記号と共通の凡例のキーの両方が同じ記号を拒否する。
+        preferences_path = REPOSITORY_ROOT / "schema/TownPreferences.schema.json"
+        preferences = {"version": 1, "legend": {"A": {"terrain": "ENTRANCE", "caveInfo": ["MARK"]}}}
+        sites = (
+            ("town map feature symbol", lambda: validate_town_map_semantics(self.town_map(symbol="A", row="AAA"),
+                                                                            self.town_map_schema_path)),
+            ("town preferences legend", lambda: validate_town_preferences_semantics(preferences, preferences_path)),
+        )
+        for site, check in sites:
+            with self.subTest(site=site):
+                check()
+                with patch("validate_json.is_town_map_symbol", lambda symbol: symbol != "A"):
+                    with self.assertRaises(ValidationError):
+                        check()
+
+    def test_town_map_feature_symbol_rejects_legacy_delimiters(self):
+        # TownMapReader は地物の記号に旧形式の区切りの文字を使わせない。schema を通さずに意味検証だけでも拒否する。
+        for symbol in (":", "/", "\\"):
+            with self.subTest(symbol=symbol):
+                with self.assertRaises(ValidationError) as caught:
+                    validate_town_map_semantics(self.town_map(symbol=symbol), self.town_map_schema_path)
+                # 印字できる1文字でも拒否されるため、文言は使えない記号を挙げる。
+                self.assertEqual(caught.exception.message, TOWN_FEATURE_SYMBOL_MESSAGE)
 
 
 if __name__ == "__main__":

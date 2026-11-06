@@ -24,6 +24,7 @@
 #include "system/player-type-definition.h"
 #include "system/services/dungeon-monrace-service.h"
 #include "system/terrain/terrain-definition.h"
+#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "wizard/monrace-filter-debug-info.h"
 #include <algorithm>
@@ -104,12 +105,19 @@ bool restrict_monster_to_dungeon(const DungeonDefinition &dungeon, int floor_lev
         return true;
     }
 
+    // 読み込み (r_info_sex) と同じ値で比べるため、種族の性別をそのまま立てる。性別の無い種族は空のまま。
+    EnumClassFlagGroup<MonsterSex> sex_flags;
+    if (const auto sex = monrace.get_sex(); sex != MonsterSex::NONE) {
+        sex_flags.set(sex);
+    }
+
     switch (dungeon.mode) {
     case DungeonMode::NONE:
         return true;
     case DungeonMode::AND:
     case DungeonMode::NAND: {
         std::vector<bool> is_possible = {
+            is_possible_monster_and(sex_flags, dungeon.mon_sex),
             is_possible_monster_and(monrace.ability_flags, dungeon.mon_ability_flags),
             is_possible_monster_and(monrace.aura_flags, dungeon.mon_aura_flags),
             is_possible_monster_and(monrace.visual_flags, dungeon.mon_visual_flags),
@@ -133,6 +141,7 @@ bool restrict_monster_to_dungeon(const DungeonDefinition &dungeon, int floor_lev
     case DungeonMode::OR:
     case DungeonMode::NOR: {
         std::vector<bool> is_possible = {
+            is_possible_monster_or(sex_flags, dungeon.mon_sex),
             is_possible_monster_or(monrace.ability_flags, dungeon.mon_ability_flags),
             is_possible_monster_or(monrace.aura_flags, dungeon.mon_aura_flags),
             is_possible_monster_or(monrace.visual_flags, dungeon.mon_visual_flags),

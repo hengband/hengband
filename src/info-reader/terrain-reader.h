@@ -1,6 +1,6 @@
 #pragma once
 
-#include "info-reader/parse-error-types.h"
+#include "info-reader/definition-id-checker.h"
 #include <nlohmann/json_fwd.hpp>
 #include <string>
 #include <string_view>
@@ -14,9 +14,18 @@ public:
     //! 1回の地形定義の読み込み (init_json の呼び出し) ごとに所有し、登録済みのID・タグを保持する
     class Session {
         friend class TerrainReader;
-        std::unordered_set<int> ids;
+
+    public:
+        Session();
+        void commit();
+
+    private:
+        DefinitionIdChecker ids;
         std::unordered_set<std::string> keys;
+        tl::optional<std::string> pending_key;
     };
+
+    static Session create_session();
 
     TerrainReader(const nlohmann::json &terrain_data, Session &session);
     TerrainReader(nlohmann::json &&, Session &) = delete;

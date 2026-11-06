@@ -9,7 +9,6 @@
 #include "system/monrace/monrace-message.h"
 #include "util/enum-converter.h"
 #include "view/display-messages.h"
-#include <fmt/format.h>
 #include <nlohmann/json.hpp>
 #include <string>
 #include <utility>
@@ -49,7 +48,7 @@ static tl::expected<void, ParseErrorType> set_id_list(const nlohmann::json &id_l
 
     for (const auto &id_data : id_list_data) {
         if (!id_data.is_number()) {
-            return tl::make_unexpected(ParseErrorType::INVALID_FLAG);
+            return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
         }
         int id = 0;
         if (const auto result = info_set_integer(id_data, id, true, Range(1, MAX_MONRACE_ID)); !result) {
@@ -119,14 +118,9 @@ tl::expected<void, ParseErrorType> MessageReader::set_mon_message() const
     }
 
     for (const auto &message : message_array) {
-        const auto action_iter = message.find("action");
-        if (action_iter == message.end() || !action_iter->is_string()) {
-            return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
-        }
-        const auto &action_data = action_iter.value();
-        const auto action = r_info_message_flags.find(action_data.get<std::string>());
-        if (action == r_info_message_flags.end()) {
-            return tl::make_unexpected(ParseErrorType::INVALID_FLAG);
+        const auto action = info_read_token(get_json_value(message, "action"), r_info_message_flags);
+        if (!action) {
+            return tl::make_unexpected(action.error());
         }
 
         const auto chance_iter = message.find("chance");
@@ -186,13 +180,13 @@ tl::expected<void, ParseErrorType> MessageReader::set_mon_message() const
                 return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
             }
             if (!message_str.is_string()) {
-                return tl::make_unexpected(ParseErrorType::INVALID_FLAG);
+                return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
             }
             auto str_test = utf8_to_sys(message_str.get<std::string>());
             if (!str_test) {
-                return tl::make_unexpected(ParseErrorType::INVALID_FLAG);
+                return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
             }
-            pending_messages.push_back({ action->second, chance, use_name, std::move(*str_test) });
+            pending_messages.push_back({ *action, chance, use_name, std::move(*str_test) });
         }
     }
     publish();

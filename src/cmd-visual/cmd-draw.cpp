@@ -4,6 +4,7 @@
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "io/files-util.h"
+#include "io/input-context.h"
 #include "io/input-key-acceptor.h"
 #include "main/sound-of-music.h"
 #include "player-base/player-race.h"
@@ -22,6 +23,7 @@
 #include "view/display-player.h"
 #include "world/world.h"
 #include <fmt/format.h>
+#include <string_view>
 #include <tl/optional.hpp>
 
 /*!
@@ -77,9 +79,16 @@ void do_cmd_redraw(PlayerType *player_ptr)
     }
 }
 
-static tl::optional<int> input_status_command(PlayerType *player_ptr, int page)
+/*!
+ * @brief キャラクター情報の画面のキーを待ち、押したキーの処理をする
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param page 表示しているページ
+ * @param prompt 呼び出し元が画面の下に表示したキーの案内
+ * @return 次に表示するページ。画面を閉じるなら tl::nullopt
+ */
+static tl::optional<int> input_status_command(PlayerType *player_ptr, int page, std::string_view prompt)
 {
-    auto c = inkey();
+    const auto c = input_key_with_context(InputKind::COMMAND_CHAR, prompt);
     switch (c) {
     case 'c':
         get_name(player_ptr);
@@ -132,7 +141,7 @@ void do_cmd_player_status(PlayerType *player_ptr)
         }
 
         term_putstr(2, 23, -1, TERM_WHITE, prompt);
-        auto next_page = input_status_command(player_ptr, page);
+        auto next_page = input_status_command(player_ptr, page, prompt);
         if (!next_page) {
             break;
         }
@@ -290,9 +299,11 @@ void do_cmd_messages(int num_now)
 
         constexpr auto fmt = _("以前のメッセージ {}-{} 全部で({})", "Message Recall ({}-{} of {})");
         prt(fmt::format(fmt, base_msg_num, base_msg_num + displayed_msg_count - 1, message_num()), 0, 0);
-        prt(_("[ 'p' で更に古いもの, 'n' で更に新しいもの, '/' で検索, ESC で中断 ]", "[Press 'p' for older, 'n' for newer, ..., or ESCAPE]"), hgt - 1, 0);
+        constexpr auto key_guide = _("[ 'p' で更に古いもの, 'n' で更に新しいもの, '/' で検索, ESC で中断 ]", "[Press 'p' for older, 'n' for newer, ..., or ESCAPE]");
+        prt(key_guide, hgt - 1, 0);
 
-        const auto skey = inkey_special(true);
+        const auto skey = input_special_key_with_context(InputKind::FILE_VIEW, key_guide);
+
         if (skey == ESCAPE) {
             break;
         }
@@ -300,8 +311,7 @@ void do_cmd_messages(int num_now)
         const auto prev_base_msg_num = base_msg_num;
         switch (skey) {
         case '=': {
-            prt(_("強調: ", "Show: "), hgt - 1, 0);
-            const auto ask_result = askfor(80, shower_str);
+            const auto ask_result = input_string_on_row(_("強調: ", "Show: "), hgt - 1, 80, shower_str);
             if (ask_result) {
                 shower = *ask_result;
                 shower_str = *ask_result;
@@ -311,8 +321,7 @@ void do_cmd_messages(int num_now)
         }
         case '/':
         case KTRL('s'): {
-            prt(_("検索: ", "Find: "), hgt - 1, 0);
-            const auto ask_result = askfor(80, finder_str);
+            const auto ask_result = input_string_on_row(_("検索: ", "Find: "), hgt - 1, 80, finder_str);
             if (!ask_result) {
                 continue;
             }

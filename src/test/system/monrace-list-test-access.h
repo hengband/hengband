@@ -8,7 +8,7 @@ class MonraceListTestAccess {
 public:
     MonraceListTestAccess()
         : monraces(MonraceList::get_instance())
-        , reader_state(0)
+        , reader_state()
     {
         monraces.monraces.swap(saved_monraces);
         monraces.monraces_by_id.swap(saved_monraces_by_id);

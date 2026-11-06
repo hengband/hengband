@@ -5,10 +5,11 @@
  */
 
 #include "knowledge/knowledge-features.h"
+#include "core/asking-player.h"
 #include "core/show-file.h"
 #include "game-option/special-options.h"
 #include "io-dump/dump-util.h"
-#include "io/input-key-acceptor.h"
+#include "io/input-context.h"
 #include "knowledge/lighting-level-table.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/player-type-definition.h"
@@ -201,12 +202,12 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
             display_visual_list(max_length + 3, 7, browser_rows - 1, wid - max_length + 3, attr_top, char_left);
         }
 
-        prt(fmt::format(_("<方向>{}, 'd'で標準光源効果{}, ESC", "<dir>{}, 'd' for default lighting{}, ESC"), visual_list ? _(", ENTERで決定, 'a'で対象明度変更", ", ENTER to accept, 'a' for lighting level") : _(", 'v'でシンボル変更", ", 'v' for visuals"), (symbols_cb.symbol != DisplaySymbol()) ? _(", 'c', 'p'でペースト", ", 'c', 'p' to paste") : _(", 'c'でコピー", ", 'c' to copy")),
-            hgt - 1, 0);
+        const auto key_guide = fmt::format(_("<方向>{}, 'd'で標準光源効果{}, ESC", "<dir>{}, 'd' for default lighting{}, ESC"), visual_list ? _(", ENTERで決定, 'a'で対象明度変更", ", ENTER to accept, 'a' for lighting level") : _(", 'v'でシンボル変更", ", 'v' for visuals"), (symbols_cb.symbol != DisplaySymbol()) ? _(", 'c', 'p'でペースト", ", 'c', 'p' to paste") : _(", 'c'でコピー", ", 'c' to copy"));
+        prt(key_guide, hgt - 1, 0);
 
         // 一覧に載る地形が無ければ、地形を引かずに ESC だけを受け付ける
         if (feat_idx.empty()) {
-            if (inkey() == ESCAPE) {
+            if (input_key_with_context(InputKind::BROWSER, key_guide) == ESCAPE) {
                 flag = true;
             }
 
@@ -223,7 +224,7 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
             term_gotoxy(max_length + 3, 6 + (feat_cur - feat_top));
         }
 
-        ch = inkey();
+        ch = input_key_with_context(InputKind::BROWSER, key_guide);
         if (visual_list && ((ch == 'A') || (ch == 'a'))) {
             int prev_lighting_level = *lighting_level;
             if (ch == 'A') {

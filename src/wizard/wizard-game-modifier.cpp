@@ -6,7 +6,6 @@
 #include "wizard/wizard-game-modifier.h"
 #include "core/asking-player.h"
 #include "dungeon/quest.h"
-#include "info-reader/fixed-map-parser.h"
 #include "io/input-key-requester.h"
 #include "player-info/self-info.h"
 #include "system/building-type-definition.h"

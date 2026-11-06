@@ -6,11 +6,14 @@
 
 #include "system/baseitem/baseitem-allocation.h"
 #include "floor/floor-base-definitions.h"
+#include "locale/language-switcher.h"
 #include "object-enchant/item-apply-magic.h"
+#include "system/angband-exceptions.h"
 #include "system/baseitem/baseitem-definition.h"
 #include "system/baseitem/baseitem-list.h"
 #include "system/baseitem/baseitem-service.h"
 #include "system/system-variables.h"
+#include "util/bit-flags-calculator.h"
 #include <array>
 
 BaseitemAllocationEntry::BaseitemAllocationEntry(short index, int level, short prob1, short prob2)

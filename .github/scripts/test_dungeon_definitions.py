@@ -4,8 +4,9 @@ import re
 from pathlib import Path
 import unittest
 
-from json_validation_test_helper import fixed_artifact_id_schema_maximum, monrace_id_schema_maximum, validate_document
-from validate_json import build_schema_registry, load_all_schemas, load_cpp_map_keys, load_jsonc
+from json_validation_test_helper import (fixed_artifact_id_schema_maximum, monrace_id_schema_maximum, race_info_table_keys,
+                                         reader_token_tables, schema_enum_values, validate_document)
+from validate_json import build_schema_registry, load_all_schemas, load_cpp_constant, load_jsonc
 
 
 class DungeonValidationTest(unittest.TestCase):
@@ -28,30 +29,74 @@ class DungeonValidationTest(unittest.TestCase):
     def validate(self, document, *, companions=None):
         return validate_document(document, self.schema_path, self.schema, self.registry, companions=companions)
 
-    def test_aura_flags_match_the_reader_token_table(self):
-        tokens = load_cpp_map_keys(self.root / "src/info-reader/race-info-tokens-table.cpp", "r_info_aura_flags")
-        schema_tokens = set(self.schema["$defs"]["monsterFlag"]["enum"])
-        self.assertEqual({token for token in schema_tokens if token.startswith("AURA_")}, tokens)
-        for token in sorted(tokens):
+    def reader_token_tables(self, function):
+        """DungeonReaderの指定関数が照合する r_info_* の辞書名を、照合の順に読む。"""
+        return reader_token_tables("src/info-reader/dungeon-reader.cpp", "DungeonReader::" + function)
+
+    def reader_tokens(self, function):
+        tokens = set()
+        for table in self.reader_token_tables(function):
+            keys = race_info_table_keys(table)
+            # NONEは種族の性別未設定を表し、DungeonReaderも条件フラグとしては拒否する。
+            tokens.update(set(keys) - {"NONE"} if table == "r_info_sex" else keys)
+        return tokens
+
+    def schema_tokens(self, definition):
+        # monsterFlag は共通の定義 (schema/common/MonsterFlag.schema.json) を参照するため、参照先もたどって読む。
+        return schema_enum_values(self.schema["$defs"][definition], self.schema_path, self.loaded)
+
+    def test_monster_flags_match_the_reader_token_tables(self):
+        # flags には grab_one_basic_monster_flag が照合する辞書のトークンをすべて書け、それ以外は書けない。
+        self.assertEqual(self.schema_tokens("monsterFlag"), self.reader_tokens("grab_one_basic_monster_flag"))
+
+    def test_monster_spells_match_the_reader_token_tables(self):
+        # spells には grab_one_spell_monster_flag が照合する辞書のトークンをすべて書け、それ以外は書けない。
+        self.assertEqual(self.schema_tokens("monsterSpell"), self.reader_tokens("grab_one_spell_monster_flag"))
+
+    def test_every_reader_token_is_accepted(self):
+        for field, function in (("flags", "grab_one_basic_monster_flag"), ("spells", "grab_one_spell_monster_flag")):
+            with self.subTest(field=field):
+                document = self.sample()
+                document["dungeons"][0]["monsters"][field] = sorted(self.reader_tokens(function))
+                ok, diagnostic = self.validate(document)
+                self.assertTrue(ok, diagnostic)
+
+    def test_tokens_of_tables_the_reader_does_not_consult_are_rejected(self):
+        # 発言の辞書 (r_info_message_flags) だけにある WALK_* などや、flags と spells の取り違えは読み込みが拒否する。
+        cases = (("flags", "WALK_CLOSERANGE"), ("flags", "MESSAGE_STALKER"), ("flags", "BR_FIRE"), ("spells", "UNIQUE"))
+        for field, token in cases:
+            with self.subTest(field=field, token=token):
+                document = self.sample()
+                document["dungeons"][0]["monsters"][field] = [token]
+                ok, diagnostic = self.validate(document)
+                self.assertFalse(ok, diagnostic)
+                self.assertIn(f"Location: ['dungeons', 0, 'monsters', '{field}', 0]", diagnostic)
+
+    def test_monster_sex_flags_are_accepted(self):
+        self.assertIn("r_info_sex", self.reader_token_tables("grab_one_basic_monster_flag"))
+        for flags in (["MALE"], ["FEMALE"], ["MALE", "FEMALE"]):
+            with self.subTest(flags=flags):
+                document = self.sample()
+                document["dungeons"][0]["monsters"]["flags"] = flags
+                ok, diagnostic = self.validate(document)
+                self.assertTrue(ok, diagnostic)
+
+    def test_unknown_sex_flags_are_rejected(self):
+        for token in ("NONE", "SEX_UNKNOWN"):
             with self.subTest(token=token):
                 document = self.sample()
                 document["dungeons"][0]["monsters"]["flags"] = [token]
                 ok, diagnostic = self.validate(document)
-                self.assertTrue(ok, diagnostic)
+                self.assertFalse(ok, diagnostic)
+                self.assertIn("Location: ['dungeons', 0, 'monsters', 'flags', 0]", diagnostic)
 
-    def test_visual_and_special_flags_match_the_reader_token_tables(self):
-        schema_tokens = set(self.schema["$defs"]["monsterFlag"]["enum"])
-        for table in ("r_info_visual_flags", "r_info_special_flags"):
-            tokens = load_cpp_map_keys(self.root / "src/info-reader/race-info-tokens-table.cpp", table)
-            with self.subTest(table=table):
-                self.assertTrue(tokens)
-                self.assertLessEqual(tokens, schema_tokens)
-            for token in sorted(tokens):
-                with self.subTest(token=token):
-                    document = self.sample()
-                    document["dungeons"][0]["monsters"]["flags"] = [token]
-                    ok, diagnostic = self.validate(document)
-                    self.assertTrue(ok, diagnostic)
+    def test_non_string_monster_flags_report_type_error(self):
+        document = self.sample()
+        document["dungeons"][0]["monsters"]["flags"] = [5]
+        ok, diagnostic = self.validate(document)
+        self.assertFalse(ok, diagnostic)
+        self.assertIn("Reason: 5 is not of type 'string'", diagnostic)
+        self.assertIn("Location: ['dungeons', 0, 'monsters', 'flags', 0]", diagnostic)
 
     def test_unknown_aura_flags_are_rejected(self):
         document = self.sample()
@@ -59,11 +104,17 @@ class DungeonValidationTest(unittest.TestCase):
         ok, diagnostic = self.validate(document)
         self.assertFalse(ok, diagnostic)
         self.assertIn("Location: ['dungeons', 0, 'monsters', 'flags', 1]", diagnostic)
+        # 共通の列挙と性別の列挙を足し合わせた候補を示す。
+        self.assertIn("Reason: 'AURA_UNKNOWN' is not one of [", diagnostic)
+        self.assertIn("'AURA_FIRE'", diagnostic)
+        self.assertIn("'FEMALE'", diagnostic)
 
     def numeric_cases(self):
+        # schema の上限と C++ の定数を照合するため、入口の座標の上限はソースから読む。
+        entrance_coord_max = load_cpp_constant(self.root / "src/info-reader/dungeon-reader.cpp", "DUNGEON_ENTRANCE_COORD_MAX")
         return ((["id"], 0, 20),
-                (["position", "wild_y"], 0, 32766),
-                (["position", "wild_x"], 0, 32766),
+                (["position", "wild_y"], 0, entrance_coord_max),
+                (["position", "wild_x"], 0, entrance_coord_max),
                 (["generation", "minDepth"], 0, 32767),
                 (["generation", "maxDepth"], 0, 32767),
                 (["generation", "minPlayerLevel"], 0, 50),

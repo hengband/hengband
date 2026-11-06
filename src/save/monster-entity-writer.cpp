@@ -2,6 +2,7 @@
 #include "load/old/monster-flag-types-savefile50.h"
 #include "save/save-util.h"
 #include "system/monster-entity.h"
+#include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
 
 MonsterEntityWriter::MonsterEntityWriter(const MonsterEntity &monster)
@@ -108,6 +109,14 @@ uint32_t MonsterEntityWriter::write_monster_flags() const
         set_bits(flags, SaveDataMonsterFlagType::PARENT);
     }
 
+    if (this->monster.mflag.any()) {
+        set_bits(flags, SaveDataMonsterFlagType::MFLAG);
+    }
+
+    if (this->monster.ml) {
+        set_bits(flags, SaveDataMonsterFlagType::VISIBLE);
+    }
+
     wr_u32b(flags);
     return flags;
 }
@@ -171,5 +180,9 @@ void MonsterEntityWriter::write_monster_info(uint32_t flags) const
 
     if (any_bits(flags, SaveDataMonsterFlagType::PARENT)) {
         wr_s16b(this->monster.parent_m_idx);
+    }
+
+    if (any_bits(flags, SaveDataMonsterFlagType::MFLAG)) {
+        wr_FlagGroup(this->monster.mflag, wr_byte);
     }
 }

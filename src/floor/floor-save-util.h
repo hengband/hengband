@@ -14,6 +14,8 @@ struct saved_floor_type {
     uint32_t visit_mark; /* Older has always smaller mark. */
     FLOOR_IDX upper_floor_id; /* a floor connected with level teleportation */
     FLOOR_IDX lower_floor_id; /* a floor connected with level tel. and trap door */
+
+    bool operator==(const saved_floor_type &) const = default;
 };
 
 extern uint32_t saved_floor_file_sign;

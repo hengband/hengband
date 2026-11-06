@@ -132,7 +132,7 @@ class TownDeclarationPolicyTest(unittest.TestCase):
         definitions = selected_definitions(document, symbol, values)
         self.assertTrue(definitions)
         reward = definitions[-1]
-        self.assertEqual((reward["terrain"], reward["object"], reward["artifact"]),
+        self.assertEqual((reward["terrain"], reward.get("object", 0), reward.get("artifact", 0)),
                          ("FLOOR", *expected))
 
     def assert_full_start_order(self, document):
@@ -142,7 +142,7 @@ class TownDeclarationPolicyTest(unittest.TestCase):
         self.assertEqual({path.stem for path in TOWN_DIR.glob("*.jsonc")}, set(TOWN_NAMES))
         for name, document in self.documents.items():
             with self.subTest(town=name):
-                self.assertEqual(document["version"], 2)
+                self.assertEqual(document["version"], 3)
                 self.assertEqual(len(document["mapVariants"]), 2 if name == "06_Rlyeh_Obsoleted" else 1)
                 height, width = (22, 66) if name == "01_Outpost_OnlyAngband" else (66, 198)
                 for variant in document["mapVariants"]:
@@ -212,25 +212,25 @@ class TownDeclarationPolicyTest(unittest.TestCase):
     def test_outpost_quest1_mode_specific_rewards(self):
         full = self.documents["01_Outpost_Full"]
         lite = self.documents["01_Outpost_Lite"]
-        expected = {"Warrior": "42", "Elementalist": "126", "Mage": "618",
-                    "High-Mage": "618", "Blue-Mage": "618", "Sorcerer": "618", "Mirror-Master": "618"}
+        expected = {"Warrior": 42, "Elementalist": 126, "Mage": 618,
+                    "High-Mage": 618, "Blue-Mage": 618, "Sorcerer": 618, "Mirror-Master": 618}
         for class_name, lite_object in expected.items():
             with self.subTest(class_name=class_name):
                 values = state(QUEST1=3, CLASS=class_name)
-                self.assert_reward(full, "!", values, ("42", "0"))
-                self.assert_reward(lite, "!", values, (lite_object, "0"))
+                self.assert_reward(full, "!", values, (42, 0))
+                self.assert_reward(lite, "!", values, (lite_object, 0))
         # The fallback precedes the class override, not just a set of rewards.
         definitions = selected_definitions(lite, "!", state(QUEST1=3, CLASS="Elementalist"))
-        self.assertEqual([definition["object"] for definition in definitions][-2:], ["42", "126"])
+        self.assertEqual([definition.get("object", 0) for definition in definitions][-2:], [42, 126])
 
     def test_outpost_quest27_mode_specific_rewards(self):
-        for class_name, full_artifact, lite_artifact in (("Cavalry", "255", "163"),
-                                                       ("Bard", "251", "15"),
-                                                       ("Elementalist", "15", "80")):
+        for class_name, full_artifact, lite_artifact in (("Cavalry", 255, 163),
+                                                       ("Bard", 251, 15),
+                                                       ("Elementalist", 15, 80)):
             with self.subTest(class_name=class_name):
                 values = state(QUEST27=3, CLASS=class_name)
-                self.assert_reward(self.documents["01_Outpost_Full"], "@", values, ("0", full_artifact))
-                self.assert_reward(self.documents["01_Outpost_Lite"], "!", values, ("0", lite_artifact))
+                self.assert_reward(self.documents["01_Outpost_Full"], "@", values, (0, full_artifact))
+                self.assert_reward(self.documents["01_Outpost_Lite"], "!", values, (0, lite_artifact))
 
     def test_outpost_progression_and_ironman_override(self):
         chains = {
@@ -325,18 +325,18 @@ class TownDeclarationPolicyTest(unittest.TestCase):
     def test_real_data_override_mutations_are_detected(self):
         values = state(QUEST1=3, CLASS="Elementalist")
         lite = copy.deepcopy(self.documents["01_Outpost_Lite"])
-        selected_definitions(lite, "!", values)[-1]["object"] = "42"
+        selected_definitions(lite, "!", values)[-1]["object"] = 42
         with self.assertRaises(AssertionError):
-            self.assert_reward(lite, "!", values, ("126", "0"))
+            self.assert_reward(lite, "!", values, (126, 0))
         lite = copy.deepcopy(self.documents["01_Outpost_Lite"])
         lite["featureRules"].reverse()
         with self.assertRaises(AssertionError):
-            self.assert_reward(lite, "!", values, ("126", "0"))
+            self.assert_reward(lite, "!", values, (126, 0))
         full = copy.deepcopy(self.documents["01_Outpost_Full"])
         values = state(QUEST27=3, CLASS="Cavalry")
-        selected_definitions(full, "@", values)[-1]["artifact"] = "163"
+        selected_definitions(full, "@", values)[-1]["artifact"] = 163
         with self.assertRaises(AssertionError):
-            self.assert_reward(full, "@", values, ("0", "255"))
+            self.assert_reward(full, "@", values, (0, 255))
         full["startingPositions"].reverse()
         with self.assertRaises(AssertionError):
             self.assert_full_start_order(full)

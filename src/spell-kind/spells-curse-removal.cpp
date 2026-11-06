@@ -28,13 +28,14 @@ static int exe_curse_removal(PlayerType *player_ptr, int all)
             continue;
         }
 
+        // 永遠の呪いそのものは解けないが、ほかの呪いの性質 (反感・AC 低下など) は消えるので、どちらでも能力が変わる
+        dur.set_flag(StatusRecalculatingFlag::BONUS);
         if (o_ptr->curse_flags.has(CurseTraitType::PERMA_CURSE)) {
             o_ptr->curse_flags &= { CurseTraitType::CURSED, CurseTraitType::HEAVY_CURSE, CurseTraitType::PERMA_CURSE };
             continue;
         }
 
         o_ptr->remove_curses();
-        dur.set_flag(StatusRecalculatingFlag::BONUS);
         count++;
     }
 

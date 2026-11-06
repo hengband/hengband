@@ -144,7 +144,7 @@ static void handle_signal_abort(int sig)
 
     signals_ignore_tstp();
 
-    if (save_player(p_ptr, SaveType::CLOSE_GAME)) {
+    if (save_player(p_ptr)) {
         term_putstr(45, hgt - 1, -1, TERM_RED, _("緊急セーブ成功！", "Panic save succeeded!"));
     } else {
         term_putstr(45, hgt - 1, -1, TERM_RED, _("緊急セーブ失敗！", "Panic save failed!"));

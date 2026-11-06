@@ -18,6 +18,9 @@
 #include "view/display-map.h"
 #include "view/display-symbol.h"
 #include "view/map-info-cache.h"
+#include "view/map-tile-layout.h"
+#include "view/original-player-tiles.h"
+#include "view/original-tiles.h"
 #include "window/overview-map-cache.h"
 #include "window/shrunk-overview-map.h"
 #include "world/world.h"
@@ -93,12 +96,8 @@ void print_map(PlayerType *player_ptr)
     POSITION ymin = (0 < panel_row_min) ? panel_row_min : 0;
     POSITION ymax = (floor.height - 1 > panel_row_max) ? panel_row_max : floor.height - 1;
 
-    for (auto y = 1; y <= ymin - panel_row_prt; y++) {
-        term_erase(COL_MAP, y, wid);
-    }
-
-    for (auto y = ymax - panel_row_prt; y <= hgt; y++) {
-        term_erase(COL_MAP, y, wid);
+    for (auto y = 1; y <= hgt; y++) {
+        term_erase(COL_MAP + 1, y, wid);
     }
 
     const auto monochrome_color = get_monochrome_display_color(player_ptr);
@@ -108,7 +107,7 @@ void print_map(PlayerType *player_ptr)
             map_info_cache.store({ y, x }, symbol_pair);
             symbol_pair.symbol_foreground.color = monochrome_color.value_or(symbol_pair.symbol_foreground.color);
 
-            term_queue_bigchar(panel_col_of(x), y - panel_row_prt, symbol_pair);
+            original_tiles::queue_map_tile(panel_col_of(x), panel_row_of(y), symbol_pair);
         }
     }
 
@@ -250,7 +249,7 @@ DisplaySymbol set_term_color(PlayerType *player_ptr, const Pos2D &pos, const Dis
 
     feat_priority = 31;
     const auto &monrace = MonraceList::get_instance().get_monrace(MonraceId::PLAYER);
-    return monrace.symbol_config;
+    return original_tiles::player_symbol(*player_ptr, monrace.symbol_config);
 }
 
 /*
@@ -259,8 +258,11 @@ DisplaySymbol set_term_color(PlayerType *player_ptr, const Pos2D &pos, const Dis
 int panel_col_of(int col)
 {
     col -= panel_col_min;
-    if (use_bigtile) {
-        col *= 2;
-    }
+    col *= original_tiles::map_tile_columns();
     return col + 13;
+}
+
+int panel_row_of(int row)
+{
+    return (row - panel_row_prt - 1) * original_tiles::map_tile_rows() + ROW_MAP + 1;
 }

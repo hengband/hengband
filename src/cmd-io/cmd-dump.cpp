@@ -16,7 +16,7 @@
 #include "io-dump/dump-remover.h"
 #include "io-dump/dump-util.h"
 #include "io/files-util.h"
-#include "io/input-key-acceptor.h"
+#include "io/input-context.h"
 #include "io/interpret-pref-file.h"
 #include "io/read-pref-file.h"
 #include "locale/english.h"
@@ -74,8 +74,9 @@ void do_cmd_colors(PlayerType *player_ptr)
         prt(_("(1) ユーザー設定ファイルのロード", "(1) Load a user pref file"), 4, 5);
         prt(_("(2) カラーの設定をファイルに書き出す", "(2) Dump colors"), 5, 5);
         prt(_("(3) カラーの設定を変更する", "(3) Modify colors"), 6, 5);
-        prt(_("コマンド: ", "Command: "), 8, 0);
-        const auto key = inkey();
+        constexpr auto prompt = _("コマンド: ", "Command: ");
+        prt(prompt, 8, 0);
+        const auto key = input_key_with_context(InputKind::COMMAND_CHAR, prompt);
         if (key == ESCAPE) {
             break;
         }
@@ -83,8 +84,7 @@ void do_cmd_colors(PlayerType *player_ptr)
         switch (key) {
         case '1': {
             prt(_("コマンド: ユーザー設定ファイルをロードします", "Command: Load a user pref file"), 8, 0);
-            prt(_("ファイル: ", "File: "), 10, 0);
-            const auto ask_result = askfor(70, initial_filename);
+            const auto ask_result = input_string_on_row(_("ファイル: ", "File: "), 10, 70, initial_filename);
             if (!ask_result) {
                 continue;
             }
@@ -97,8 +97,7 @@ void do_cmd_colors(PlayerType *player_ptr)
         case '2': {
             constexpr auto mark = "Colors";
             prt(_("コマンド: カラーの設定をファイルに書き出します", "Command: Dump colors"), 8, 0);
-            prt(_("ファイル: ", "File: "), 10, 0);
-            const auto ask_result = askfor(70, initial_filename);
+            const auto ask_result = input_string_on_row(_("ファイル: ", "File: "), 10, 70, initial_filename);
             if (!ask_result) {
                 continue;
             }
@@ -149,8 +148,9 @@ void do_cmd_colors(PlayerType *player_ptr)
                 term_putstr(5, 10, -1, TERM_WHITE, fmt::format(_("カラー = {}, 名前 = {}", "Color = {}, Name = {}"), a, name));
                 term_putstr(5, 12, -1, TERM_WHITE,
                     fmt::format("K = 0x{:02x} / R,G,B = 0x{:02x},0x{:02x},0x{:02x}", angband_color_table[a][0], angband_color_table[a][1], angband_color_table[a][2], angband_color_table[a][3]));
-                term_putstr(0, 14, -1, TERM_WHITE, _("コマンド (n/N/k/K/r/R/g/G/b/B): ", "Command (n/N/k/K/r/R/g/G/b/B): "));
-                auto ch = inkey();
+                constexpr auto color_prompt = _("コマンド (n/N/k/K/r/R/g/G/b/B): ", "Command (n/N/k/K/r/R/g/G/b/B): ");
+                term_putstr(0, 14, -1, TERM_WHITE, color_prompt);
+                auto ch = input_key_with_context(InputKind::COMMAND_CHAR, color_prompt);
                 if (ch == ESCAPE) {
                     break;
                 }

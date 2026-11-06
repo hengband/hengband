@@ -951,6 +951,9 @@
     <ClCompile Include="..\..\src\hpmp\hp-mp-regenerator.cpp">
       <Filter>hpmp</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\info-reader\activation-reader.cpp">
+      <Filter>info-reader</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\info-reader\artifact-reader.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>
@@ -961,6 +964,9 @@
       <Filter>info-reader</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\info-reader\definition-hash-data.cpp">
+      <Filter>info-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\info-reader\definition-id-checker.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\info-reader\dungeon-info-tokens-table.cpp">
@@ -981,7 +987,7 @@
     <ClCompile Include="..\..\src\info-reader\general-parser.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\info-reader\info-reader-util.cpp">
+    <ClCompile Include="..\..\src\info-reader\item-flag-reader.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\info-reader\json-reader-util.cpp">
@@ -990,10 +996,22 @@
     <ClCompile Include="..\..\src\info-reader\jsonc-document-loader.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\info-reader\legend-ego-validator.cpp">
+      <Filter>info-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\info-reader\legend-object-trap-validator.cpp">
+      <Filter>info-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\info-reader\magic-info-tokens-table.cpp">
+      <Filter>info-reader</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\info-reader\magic-reader.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\info-reader\message-reader.cpp">
+      <Filter>info-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\info-reader\monster-flag-reader.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\info-reader\parse-error-messages.cpp">
@@ -1006,6 +1024,9 @@
       <Filter>info-reader</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\info-reader\race-reader.cpp">
+      <Filter>info-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\info-reader\record-diagnostic.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\info-reader\skill-reader.cpp">
@@ -2097,6 +2118,9 @@
     <ClCompile Include="..\..\src\player\player-damage.cpp">
       <Filter>player</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\player\player-known-flags.cpp">
+      <Filter>player</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\player\player-move.cpp">
       <Filter>player</Filter>
     </ClCompile>
@@ -2861,6 +2885,18 @@
       <Filter>view</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\view\object-describer.cpp">
+      <Filter>view</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\view\original-item-tiles.cpp">
+      <Filter>view</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\view\original-monster-tiles.cpp">
+      <Filter>view</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\view\original-player-tiles.cpp">
+      <Filter>view</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\view\original-tiles.cpp">
       <Filter>view</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\view\status-bars-table.cpp">
@@ -3651,6 +3687,9 @@
     <ClInclude Include="..\..\src\hpmp\hp-mp-regenerator.h">
       <Filter>hpmp</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\info-reader\activation-reader.h">
+      <Filter>info-reader</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\src\info-reader\artifact-reader.h">
       <Filter>info-reader</Filter>
     </ClInclude>
@@ -3661,6 +3700,9 @@
       <Filter>info-reader</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\info-reader\definition-hash-data.h">
+      <Filter>info-reader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\info-reader\definition-id-checker.h">
       <Filter>info-reader</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\info-reader\dungeon-info-tokens-table.h">
@@ -3684,6 +3726,9 @@
     <ClInclude Include="..\..\src\info-reader\info-reader-util.h">
       <Filter>info-reader</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\info-reader\item-flag-reader.h">
+      <Filter>info-reader</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\src\info-reader\item-reader-limits.h">
       <Filter>info-reader</Filter>
     </ClInclude>
@@ -3693,10 +3738,22 @@
     <ClInclude Include="..\..\src\info-reader\jsonc-document-loader.h">
       <Filter>info-reader</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\info-reader\legend-ego-validator.h">
+      <Filter>info-reader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\info-reader\legend-object-trap-validator.h">
+      <Filter>info-reader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\info-reader\magic-info-tokens-table.h">
+      <Filter>info-reader</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\src\info-reader\magic-reader.h">
       <Filter>info-reader</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\info-reader\message-reader.h">
+      <Filter>info-reader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\info-reader\monster-flag-reader.h">
       <Filter>info-reader</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\info-reader\parse-error-messages.h">
@@ -3717,10 +3774,19 @@
     <ClInclude Include="..\..\src\info-reader\random-grid-effect-types.h">
       <Filter>info-reader</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\info-reader\range.h">
+      <Filter>info-reader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\info-reader\record-diagnostic.h">
+      <Filter>info-reader</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\src\info-reader\skill-reader.h">
       <Filter>info-reader</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\info-reader\spell-reader.h">
+      <Filter>info-reader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\info-reader\symbol-reader-util.h">
       <Filter>info-reader</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\info-reader\terrain-reader.h">
@@ -5007,6 +5073,9 @@
     <ClInclude Include="..\..\src\player\player-damage.h">
       <Filter>player</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\player\player-known-flags.h">
+      <Filter>player</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\src\player\player-move.h">
       <Filter>player</Filter>
     </ClInclude>
@@ -5806,6 +5875,9 @@
     <ClInclude Include="..\..\src\term\term-color-types.h">
       <Filter>term</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\term\tile-layout.h">
+      <Filter>term</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\src\term\z-rand.h">
       <Filter>term</Filter>
     </ClInclude>
@@ -5875,6 +5947,9 @@
     <ClInclude Include="..\..\src\util\int-char-converter.h">
       <Filter>util</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\util\menu-column-switcher.h">
+      <Filter>util</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\src\util\object-sort.h">
       <Filter>util</Filter>
     </ClInclude>
@@ -5895,6 +5970,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\util\type-concepts.h">
       <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\view\actor-readability.h">
+      <Filter>view</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\view\display-birth.h">
       <Filter>view</Filter>
@@ -5959,7 +6037,25 @@
     <ClInclude Include="..\..\src\view\map-info-cache.h">
       <Filter>view</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\view\map-tile-layout.h">
+      <Filter>view</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\src\view\object-describer.h">
+      <Filter>view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\view\original-item-catalog.h">
+      <Filter>view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\view\original-monster-catalog.h">
+      <Filter>view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\view\original-player-tiles.h">
+      <Filter>view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\view\original-symbol-tiles.h">
+      <Filter>view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\view\original-tiles.h">
       <Filter>view</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\view\status-bars-table.h">
@@ -6055,5 +6151,22 @@
     <ClInclude Include="..\..\src\world\world.h">
       <Filter>world</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\src\view\original-catalog-artifacts.inc">
+      <Filter>view</Filter>
+    </None>
+    <None Include="..\..\src\view\original-catalog-base.inc">
+      <Filter>view</Filter>
+    </None>
+    <None Include="..\..\src\view\original-catalog-colors.inc">
+      <Filter>view</Filter>
+    </None>
+    <None Include="..\..\src\view\original-monster-catalog.inc">
+      <Filter>view</Filter>
+    </None>
+    <None Include="..\..\src\view\original-tile-supplement.inc">
+      <Filter>view</Filter>
+    </None>
   </ItemGroup>
 </Project>

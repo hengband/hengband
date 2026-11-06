@@ -7,7 +7,7 @@ import unittest
 
 from json_validation_test_helper import (dungeon_id_maximum, fixed_artifact_id_schema_maximum, monrace_id_schema_maximum,
                                          quest_id_schema_maximum, validate_document)
-from validate_json import MAX_EGO_ID, build_schema_registry, load_all_schemas, load_jsonc, validate_one
+from validate_json import MAX_EGO_ID, MAX_HGT, MAX_WID, build_schema_registry, load_all_schemas, load_jsonc, validate_one
 
 
 class QuestInt16RangeTest(unittest.TestCase):
@@ -70,10 +70,9 @@ class QuestInt16RangeTest(unittest.TestCase):
         shared = self.loaded[next(path for path in self.loaded if path.name == "QuestGrid.schema.json")]
         plain, random = shared["$defs"]["egoSpec"]["oneOf"]
         self.assertEqual((plain["minimum"], plain["maximum"]), (1, MAX_EGO_ID))
-        self.assertEqual((random["properties"]["id"]["minimum"], random["properties"]["id"]["maximum"]), (1, MAX_EGO_ID))
+        self.assertNotIn("id", random["properties"])
         cases = (
             lambda value: {"ego": value},
-            lambda value: {"ego": {"random": True, "id": value}},
         )
         for make_cell in cases:
             for schema_name in ("Quest", "QuestPreferences"):
@@ -131,6 +130,16 @@ class QuestInt16RangeTest(unittest.TestCase):
         schema = self.loaded[self.schema_map["Quest"]]
         self.assertEqual(schema["$defs"]["definition"]["properties"]["dungeon"]["maximum"], dungeon_id_maximum())
         self.assertEqual(schema["$defs"]["startVariant"]["properties"]["leavingQuest"]["maximum"], quest_id_schema_maximum())
+
+    def test_map_limits_follow_floor_size(self):
+        # QuestReader は地図を MAX_HGT 行・MAX_WID 列までに限るため、schema の上限を C++ の定数と揃える。
+        definitions = self.loaded[self.schema_map["Quest"]]["$defs"]
+        self.assertEqual(definitions["mapRows"]["maxItems"], MAX_HGT)
+        self.assertEqual(definitions["mapRows"]["items"]["maxLength"], MAX_WID)
+        for name in ("position", "startVariant"):
+            with self.subTest(name=name):
+                self.assertEqual(definitions[name]["properties"]["y"]["maximum"], MAX_HGT - 1)
+                self.assertEqual(definitions[name]["properties"]["x"]["maximum"], MAX_WID - 1)
 
     def test_other_integers_follow_reader_ranges(self):
         # QuestReader は int に収まらない値を拒否し、開始位置は地図（最大 66 行 198 列）の中に限る。
@@ -293,10 +302,10 @@ class QuestEditDirTestCase(unittest.TestCase):
             "name": {"ja": "試験", "en": "Test"},
             "definition": {"type": "KILL_ALL", "level": 1, "monster": 1, "dungeon": 1, "reward": {"artifact": 1}},
             "legend": {
-                "#": {"terrain": "FLOOR", "trap": "CLOSED_DOOR", "monster": 1, "object": 1, "artifact": 1},
+                "#": {"terrain": "FLOOR", "trap": "NONE", "monster": 1, "object": 1, "artifact": 1},
                 "c": {"monster": {"cloneOf": 1}, "artifact": {"random": True, "id": 1}},
                 "r": {"terrain": "*", "trap": {"random": True}, "monster": {"random": True, "oodLevel": 32767},
-                      "object": {"random": True, "oodLevel": 32767}, "artifact": {"questReward": True}, "ego": 255},
+                      "object": {"random": True, "oodLevel": 32767}, "artifact": {"questReward": True}},
             },
             "map": ["#cr"],
         }
@@ -330,6 +339,33 @@ class QuestEditDirTestCase(unittest.TestCase):
 
 class QuestReferenceTest(QuestEditDirTestCase):
     """CI が QuestList と同じくクエストの参照を照合することを確かめる。"""
+
+    def test_legend_ego_validation_in_local_and_shared_legends(self):
+        cases = [
+            ({"object": 42, "ego": 65}, True),
+            ({"object": 42, "ego": {"random": True}}, True),
+            ({"object": 42, "ego": 1}, False),
+            ({"object": 42, "ego": 255}, False),
+            ({"object": 42, "ego": 102}, False),
+            ({"ego": 65}, False),
+            ({"object": {"random": True}, "ego": 65}, False),
+            ({"object": {"questReward": True}, "ego": 65}, False),
+            ({"object": 42, "ego": 65, "trap": "CLOSED_DOOR"}, False),
+            ({"object": 42, "ego": {"random": True}, "trap": {"random": True}}, False),
+        ]
+        gold = next(item["id"] for item in self.bundled("BaseitemDefinitions")["baseitems"]
+                    if item["itemkind"]["type_value"] == 127)
+        cases.append(({"object": gold, "ego": 65}, False))
+        for cell, accepted in cases:
+            for shared in (False, True):
+                with self.subTest(cell=cell, shared=shared):
+                    document = self.quest()
+                    document["legend"]["#"] = cell
+                    extra = {"QuestPreferences.jsonc": {"version": 1, "legend": {"#": cell}}}
+                    schema = "QuestPreferences" if shared else "Quest"
+                    target = "QuestPreferences.jsonc" if shared else "001.jsonc"
+                    ok, message = self.validate_in_edit_dir({"001.jsonc": document}, target, extra, schema)
+                    self.assertEqual(ok, accepted, message)
 
     def test_defined_references_are_accepted(self):
         ok, message = self.validate_in_edit_dir({"001.jsonc": self.quest()}, "001.jsonc")
@@ -472,6 +508,40 @@ class QuestMapSymbolTest(QuestEditDirTestCase):
         quests = broken | {"001.jsonc": self.quest(startVariants=[{"leavingQuest": 3, "y": 0, "x": 0}])}
         ok, message = self.validate_in_edit_dir(quests, "001.jsonc", raw_quests={"004.jsonc": "{\"id\": 4,"})
         self.assertTrue(ok, message)
+
+
+class LegendEgoSemanticsTest(unittest.TestCase):
+    def test_ego_structure_and_attributes(self):
+        from jsonschema.exceptions import ValidationError
+        from validate_json import validate_legend_ego, extract_baseitem_attributes, extract_ego_attributes
+        baseitems = extract_baseitem_attributes({
+            "baseitems": [
+                {"id": 42, "name": {"ja": "Sword", "en": "Sword"}, "itemkind": {"type_value": 23}},
+                {"id": 56, "name": {"ja": "Gold", "en": "Gold"}, "itemkind": {"type_value": 127}},
+            ]})
+        egos = extract_ego_attributes({"egos": [
+            {"id": 65, "rating": 10},
+            {"id": 102, "rating": 0},
+            {"id": 4, "rating": 30, "flags": ["CURSED"]},
+            {"id": 5, "rating": 30, "flags": ["HEAVY_CURSE"]},
+            {"id": 6, "rating": 30, "flags": ["PERMA_CURSE"]},
+        ]})
+        # 罠との同居は品と罠の判定 (validate_legend_object_trap) で拒否するので、エゴの判定では受け付ける。
+        accepted = ({}, {"object": 42, "ego": 65}, {"object": 42, "ego": {"random": True}, "trap": "NONE"},
+                    {"object": 42, "ego": 65, "trap": "TRAP_PIT"},
+                    {"object": 42, "ego": {"random": True}, "trap": {"random": True}})
+        rejected = (
+            {"object": 42, "ego": 1}, {"object": 42, "ego": 255},
+            *({"object": 42, "ego": ego} for ego in (102, 4, 5, 6)),
+            {"ego": 65}, {"object": {"random": True}, "ego": 65},
+            {"object": {"questReward": True}, "ego": 65},
+            {"object": 56, "ego": 65},
+        )
+        for cell in accepted:
+            validate_legend_ego(cell, baseitems, egos, ["legend", "#"])
+        for cell in rejected:
+            with self.subTest(cell=cell), self.assertRaises(ValidationError):
+                validate_legend_ego(cell, baseitems, egos, ["legend", "#"])
 
 
 if __name__ == "__main__":

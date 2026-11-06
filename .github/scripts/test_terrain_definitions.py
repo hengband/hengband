@@ -5,7 +5,7 @@ import unittest
 from jsonschema import ValidationError, validate
 
 from json_validation_test_helper import terrain_id_schema_maximum, validate_document
-from validate_json import build_schema_registry, load_all_schemas, load_jsonc
+from validate_json import build_schema_registry, load_all_schemas, load_jsonc, validate_terrain_semantics
 
 
 class TerrainValidationTest(unittest.TestCase):
@@ -280,6 +280,19 @@ class TerrainValidationTest(unittest.TestCase):
                 invalid["interactions"] = {action: "FLOOR"}
                 with self.assertRaises(ValidationError):
                     validate({"version": 1, "terrains": [invalid]}, self.schema)
+
+    def test_drop_gold_semantics_require_positive_dice(self):
+        for dice, accepted in (("0d0", False), ("0d1", False), ("1d0", False), ("-1d2", False), ("1d-2", False), ("1d1", True)):
+            with self.subTest(dice=dice):
+                terrain = self.terrain()
+                terrain["interactions"] = {"DROP_GOLD": dice}
+                document = {"terrains": [terrain]}
+                if accepted:
+                    validate_terrain_semantics(document, self.schema_path)
+                else:
+                    with self.assertRaises(ValidationError) as caught:
+                        validate_terrain_semantics(document, self.schema_path)
+                    self.assertEqual(list(caught.exception.path), ["terrains", 0, "interactions", "DROP_GOLD"])
 
     def test_drop_gold_schema_requires_complete_dice_string(self):
         for dice, accepted in (("1d2", True), ("001d002", True), ("1d2\n", False), ("1d2\r\n", False), ("1d2junk", False)):

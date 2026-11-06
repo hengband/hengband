@@ -177,7 +177,7 @@ static std::string describe_bow_power(PlayerType *player_ptr, const ItemEntity &
     }
 
     const auto fire_rate = item.get_bow_energy() / num_fire;
-    ss << fmt::format(" ({}.{}turn)", fire_rate / 100, fire_rate % 100);
+    ss << fmt::format(" ({}.{:02}turn)", fire_rate / 100, fire_rate % 100);
 
     return ss.str();
 }

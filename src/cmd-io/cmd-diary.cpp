@@ -3,7 +3,7 @@
 #include "core/show-file.h"
 #include "game-option/play-record-options.h"
 #include "io/files-util.h"
-#include "io/input-key-acceptor.h"
+#include "io/input-context.h"
 #include "io/record-play-movie.h"
 #include "io/write-diary.h"
 #include "main/sound-of-music.h"
@@ -117,8 +117,9 @@ void do_cmd_diary(PlayerType *player_ptr)
         prt(_("(3) 直前に入手又は鑑定したものを記録する", "(3) Record the last item you got or identified"), 6, 5);
         prt(_("(4) 記録を消去する", "(4) Delete your record"), 7, 5);
         prt(_("(R) プレイ動画を記録する/中止する", "(R) Record playing movie / or stop it"), 9, 5);
-        prt(_("コマンド:", "Command: "), 18, 0);
-        int i = inkey();
+        constexpr auto prompt = _("コマンド:", "Command: ");
+        prt(prompt, 18, 0);
+        const auto i = input_key_with_context(InputKind::COMMAND_CHAR, prompt);
         if (i == ESCAPE) {
             break;
         }

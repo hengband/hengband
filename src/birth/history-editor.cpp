@@ -1,4 +1,6 @@
 #include "birth/history-editor.h"
+#include "core/asking-player.h"
+#include "io/input-context.h"
 #include "io/input-key-acceptor.h"
 #include "io/read-pref-file.h"
 #include "locale/character-encoding.h"
@@ -35,7 +37,8 @@ void edit_history(PlayerType *player_ptr)
 
     (void)display_player(player_ptr, 1);
     c_put_str(TERM_L_GREEN, _("(キャラクターの生い立ち - 編集モード)", "(Character Background - Edit Mode)"), 11, 20);
-    put_str(_("[ カーソルキーで移動、Enterで終了、Ctrl-Aでファイル読み込み ]", "[ Cursor key for Move, Enter for End, Ctrl-A for Read pref ]"), 17, 10);
+    constexpr auto prompt = _("[ カーソルキーで移動、Enterで終了、Ctrl-Aでファイル読み込み ]", "[ Cursor key for Move, Enter for End, Ctrl-A for Read pref ]");
+    put_str(prompt, 17, 10);
     TERM_LEN y = 0;
     TERM_LEN x = 0;
     while (true) {
@@ -52,7 +55,7 @@ void edit_history(PlayerType *player_ptr)
         c_put_str(TERM_L_BLUE, std::string_view(&player_ptr->history[y][x], char_len), y + 12, x + 10);
 
         term_gotoxy(x + 10, y + 12);
-        int skey = inkey_special(true);
+        const auto skey = input_special_key_with_context({ InputKind::BIRTH, prompt, BirthInputDetails{ BirthStep::HISTORY } });
         if (!(skey & SKEY_MASK)) {
             c = (char)skey;
         } else {

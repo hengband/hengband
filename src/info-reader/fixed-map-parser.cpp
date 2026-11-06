@@ -58,6 +58,7 @@
 #include <type_traits>
 #include <utility>
 #include <variant>
+#include <vector>
 
 static concptr variant = "ZANGBAND";
 
@@ -172,20 +173,11 @@ tl::expected<void, ParseErrorType> apply_town_map_feature(const FloorType &floor
     auto grid = feature.cell.grid;
     grid.set_terrain_id(TerrainTag::NONE);
     grid.set_trap_id(TerrainTag::NONE);
-    const auto &terrains = TerrainList::get_instance();
-    try {
-        if (feature.terrain == "*") {
-            grid.random |= RANDOM_FEATURE;
-        } else {
-            grid.feature = terrains.get_terrain_id(feature.terrain);
-        }
-        if (feature.trap == "*") {
-            grid.random |= RANDOM_TRAP;
-        } else {
-            grid.trap = terrains.get_terrain_id(feature.trap);
-        }
-    } catch (const std::exception &) {
-        return tl::make_unexpected(ParseErrorType::UNDEFINED_TERRAIN_TAG);
+    if (const auto result = resolve_legend_terrain(feature.terrain, grid.feature, grid.random, RANDOM_FEATURE); !result) {
+        return result;
+    }
+    if (const auto result = resolve_legend_terrain(feature.trap, grid.trap, grid.random, RANDOM_TRAP); !result) {
+        return result;
     }
 
     try {
@@ -199,12 +191,7 @@ tl::expected<void, ParseErrorType> apply_town_map_feature(const FloorType &floor
             if (reward && !ArtifactList::get_instance().contains(*reward)) {
                 return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
             }
-            if (feature.cell.object_is_quest_reward && quest.has_reward() && !quest.is_reward_instant_artifact()) {
-                grid.object = quest.get_reward_bi_id();
-            }
-            if (feature.cell.artifact_is_quest_reward) {
-                grid.artifact = reward.value_or(FixedArtifactId::NONE);
-            }
+            resolve_legend_reward(grid, feature.cell, quest);
         }
     } catch (const std::exception &) {
         // 報酬解決に失敗した場合は、地形テンプレートを変更せず解析エラーとして返す。
@@ -214,21 +201,30 @@ tl::expected<void, ParseErrorType> apply_town_map_feature(const FloorType &floor
     return {};
 }
 
+/*!
+ * @brief JSONC ファイルを読み込めなかった理由を町の読み込みのエラーコードに変える
+ * @param error 読み込めなかった理由
+ * @return 開けない時は GENERIC、解析器の例外は INVALID_VALUE（例外の文言は使わない）
+ */
+static ParseErrorType to_town_load_error(const JsoncLoadError &error)
+{
+    return error.kind == JsoncLoadErrorKind::CANNOT_OPEN ? ParseErrorType::GENERIC : ParseErrorType::INVALID_VALUE;
+}
+
 static tl::expected<void, ParseErrorType> load_town_preferences()
 {
     if (init_flags & INIT_ONLY_BUILDINGS) {
         return {};
     }
 
-    JsoncDocumentLoader loader(path_build(ANGBAND_DIR_EDIT, TOWN_PREFERENCES));
-    if (!loader.is_open()) {
-        return tl::make_unexpected(ParseErrorType::GENERIC);
+    const auto data = JsoncDocumentLoader::load(path_build(ANGBAND_DIR_EDIT, TOWN_PREFERENCES));
+    if (!data) {
+        return tl::make_unexpected(to_town_load_error(data.error()));
     }
 
     try {
-        const auto data = loader.parse();
         TownPreferencesLegend legend;
-        if (const auto result = TownPreferencesReader(data).read(legend, parse_quest_legend_cell); !result) {
+        if (const auto result = TownPreferencesReader(*data).read(legend, parse_quest_legend_cell); !result) {
             return result;
         }
 
@@ -247,16 +243,15 @@ static tl::expected<void, ParseErrorType> load_town_preferences()
  */
 static tl::expected<std::string, ParseErrorType> load_town_definition_file()
 {
-    JsoncDocumentLoader loader(path_build(ANGBAND_DIR_EDIT, TOWN_DEFINITION_LIST));
-    if (!loader.is_open()) {
-        return tl::make_unexpected(ParseErrorType::GENERIC);
+    const auto data = JsoncDocumentLoader::load(path_build(ANGBAND_DIR_EDIT, TOWN_DEFINITION_LIST));
+    if (!data) {
+        return tl::make_unexpected(to_town_load_error(data.error()));
     }
 
     try {
-        const auto data = loader.parse();
         const auto mode = vanilla_town ? TownMapMode::NONE : (lite_town ? TownMapMode::LITE : TownMapMode::NORMAL);
         std::string map_file;
-        if (const auto result = TownDefinitionListReader(data).read(AngbandWorld::get_instance().get_town_index(), mode, map_file); !result) {
+        if (const auto result = TownDefinitionListReader(*data).read(AngbandWorld::get_instance().get_town_index(), mode, map_file); !result) {
             return tl::make_unexpected(result.error());
         }
         return map_file;
@@ -392,15 +387,14 @@ static tl::expected<void, ParseErrorType> apply_town_rules(PlayerType *player_pt
 
 static tl::expected<void, ParseErrorType> parse_town_map_jsonc(PlayerType *player_ptr, std::string_view name)
 {
-    JsoncDocumentLoader loader(path_build(ANGBAND_DIR_EDIT, name));
-    if (!loader.is_open()) {
-        return tl::make_unexpected(ParseErrorType::GENERIC);
+    const auto data = JsoncDocumentLoader::load(path_build(ANGBAND_DIR_EDIT, name));
+    if (!data) {
+        return tl::make_unexpected(to_town_load_error(data.error()));
     }
     try {
-        const auto data = loader.parse();
         TownMapDefinition definition;
         const bool only_buildings = (init_flags & INIT_ONLY_BUILDINGS) != 0;
-        if (const auto result = TownMapReader(data).read(definition, MAX_HGT, MAX_WID, only_buildings); !result) {
+        if (const auto result = TownMapReader(*data).read(definition, MAX_HGT, MAX_WID, only_buildings); !result) {
             return result;
         }
         auto y = 0;
@@ -449,20 +443,19 @@ static tl::expected<void, ParseErrorType> parse_town_map_jsonc(PlayerType *playe
 }
 
 /*!
- * @brief 町の固定マップの読み込みエラーを表示する
+ * @brief 町の固定マップの読み込みエラーを捕捉先へ報告する
  * @param err エラーコード
  * @param filename 読み込んでいたファイルの名前
  */
 static void report_load_error(ParseErrorType err, std::string_view filename)
 {
     msg_print("Error {} ({}) loading '{}'.", enum2i(err), describe_parse_error(err), filename);
-    msg_erase();
 }
 
 /*!
  * @brief 町の定義から現在の町の固定マップを読み込んで生成し、失敗はエラーコードで返す (load_town_map() の本体)
  * @param player_ptr プレイヤーへの参照ポインタ
- * @return 成功、またはエラーコード。失敗した場合はエラーを表示済み
+ * @return 成功、またはエラーコード。失敗した場合は診断をメッセージの出力先（捕捉中は捕捉先）へ出力済み
  */
 static tl::expected<void, ParseErrorType> generate_town_map(PlayerType *player_ptr)
 {
@@ -488,12 +481,25 @@ static tl::expected<void, ParseErrorType> generate_town_map(PlayerType *player_p
 
 /*!
  * @brief 町の定義 (TownDefinitionList.jsonc) から現在の町の固定マップを読み込んでフロア全体に生成し、失敗したら終了する
- * @details 町を生成できないとゲームを続けられないので、読み込みに失敗した場合は、他のデータの読み込みと同じく終了する
+ * @details 町を生成できないとゲームを続けられないので、読み込みに失敗した場合は、他のデータの読み込みと同じく終了する。
+ * 起動時 (ゲーム開始前) はメッセージごとに入力を待つため、読み込みと生成の間のメッセージは捕捉する。
+ * 失敗した場合は捕捉した診断を終了の理由にまとめて表示し、成功した場合は捕捉を終えてから表示し直す。
+ * 失敗の報告の経路にメッセージの消去など入力を待つ処理を足さないこと。
  * @param player_ptr プレイヤーへの参照ポインタ
  */
 void load_town_map(PlayerType *player_ptr)
 {
-    if (!generate_town_map(player_ptr)) {
-        quit(_("町の定義の読み込みに失敗しました", "Failed to load the town definition"));
+    std::vector<std::string> messages;
+    {
+        // 起動時・町への移動時とも、致命的な診断で入力を待たず終了理由にまとめる。
+        ScopedMessageCapture diagnostics;
+        if (!generate_town_map(player_ptr)) {
+            quit(format_definition_load_error(diagnostics.messages(), _("町の定義の読み込みに失敗しました", "Failed to load the town definition")));
+        }
+        messages = diagnostics.messages();
+    }
+    // 生成に成功した場合の通常メッセージは、捕捉を終えてから表示する。
+    for (const auto &message : messages) {
+        msg_print(message);
     }
 }

@@ -2,7 +2,6 @@
 
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trg-types.h"
-#include "system/angband.h"
 #include <string_view>
 #include <unordered_map>
 

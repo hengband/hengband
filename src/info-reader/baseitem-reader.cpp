@@ -9,12 +9,14 @@
 #include "cmd-action/cmd-spell.h"
 #include "floor/floor-base-definitions.h"
 #include "grid/trap.h"
-#include "info-reader/baseitem-tokens-table.h"
+#include "info-reader/activation-reader.h"
 #include "info-reader/info-reader-util.h"
+#include "info-reader/item-flag-reader.h"
 #include "info-reader/item-reader-limits.h"
 #include "info-reader/json-reader-util.h"
 #include "info-reader/parse-error-types.h"
-#include "locale/japanese.h"
+#include "info-reader/symbol-reader-util.h"
+#include "locale/language-switcher.h"
 #include "object-enchant/tr-types.h"
 #include "object/tval-types.h"
 #include "player/digestion-processor.h"
@@ -25,15 +27,9 @@
 #include "system/baseitem/baseitem-definition.h"
 #include "system/baseitem/baseitem-list.h"
 #include "system/gamevalue.h"
-#include "term/gameterm.h"
-#include "util/bit-flags-calculator.h"
-#include "util/enum-converter.h"
 #include "view/display-messages.h"
 #include <algorithm>
-#include <array>
 #include <iterator>
-#include <limits>
-#include <memory>
 #include <nlohmann/json.hpp>
 #include <utility>
 
@@ -43,8 +39,7 @@ constexpr auto EQUIPMENT_PVAL_MAX = 128;
 constexpr auto DEVICE_CHARGES_MAX = 127;
 // ロッドは重ねる数を充填時間から制限する。定義の充填時間は仕様として 1,000 までとする。
 constexpr auto ROD_PVAL_MAX = 1000;
-// エゴと同じ価格上限に揃え、金貨は生成時の額 (最大で基本価格の9倍) を十分小さく保つ。
-constexpr auto BASEITEM_COST_MAX = std::numeric_limits<PRICE>::max() / 32;
+// 金貨は生成時の額 (最大で基本価格の9倍) を十分小さく保つ。
 constexpr auto GOLD_COST_MAX = 1024;
 
 // ItemKindType の列挙子だけを受け付け、空き番号を定義として使わせない。
@@ -140,12 +135,14 @@ Range pval_range(const BaseitemKey &key)
     }
 }
 
+}
+
 /*!
  * @brief ベースアイテムの種別ごとの副種別の上限を返す
  * @param key ベースアイテムのキー (種別だけを見る)
  * @return 受け付ける副種別の上限 (下限は 0)
  */
-int subtype_max(const BaseitemKey &key)
+int item_subtype_max(const BaseitemKey &key)
 {
     if (key.is_weapon()) {
         // 武器熟練度の種別ごとの配列を副種別で引く。
@@ -164,13 +161,18 @@ int subtype_max(const BaseitemKey &key)
     case ItemKindType::ROD:
         return SV_ROD_MAX - 1;
     default:
-        return 128;
+        return ITEM_SUBTYPE_DEFAULT_MAX;
     }
 }
+
+BaseitemReader::Session BaseitemReader::create_session(tl::optional<int> last_id)
+{
+    return Session(DefinitionIdOrder::STRICTLY_INCREASING, { 0, MAX_BASEITEM_ID }, _("ベースアイテム", "baseitem"), last_id);
 }
 
-BaseitemReader::BaseitemReader(const nlohmann::json &baseitem_data)
+BaseitemReader::BaseitemReader(const nlohmann::json &baseitem_data, Session &session)
     : baseitem_data(baseitem_data)
+    , session(session)
 {
 }
 
@@ -185,117 +187,94 @@ tl::expected<void, ParseErrorType> BaseitemReader::read() const
         return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
     }
 
-    const auto &id_data = get_json_value(this->baseitem_data, "id");
-    if (id_data.is_null()) {
-        msg_print(_("ベースアイテムIDの読込失敗。", "Failed to load baseitem ID."));
-        return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
-    }
-    if (!id_data.is_number_integer()) {
-        msg_print(_("ベースアイテムIDの読込失敗。", "Failed to load baseitem ID."));
-        return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
-    }
-
-    const auto validate_id = [](const auto id) -> tl::expected<void, ParseErrorType> {
-        if (std::cmp_less_equal(id, error_idx)) {
-            msg_print(_("ベースアイテムIDが非連番です。ID: '{}'、直前ID: '{}'。", "Baseitem ID is not sequential. ID: '{}', previous ID: '{}'."), id, error_idx);
-            return tl::make_unexpected(ParseErrorType::NON_SEQUENTIAL_RECORDS);
-        }
-        if (std::cmp_less(id, 0) || std::cmp_greater(id, MAX_BASEITEM_ID)) {
-            msg_print(_("ベースアイテムIDが範囲外です。ID: '{}'。", "Baseitem ID is out of bounds. ID: '{}'."), id);
-            return tl::make_unexpected(ParseErrorType::OUT_OF_BOUNDS);
-        }
-        return {};
-    };
-    const auto id_result = id_data.is_number_unsigned() ? validate_id(id_data.get<nlohmann::json::number_unsigned_t>()) : validate_id(id_data.get<nlohmann::json::number_integer_t>());
+    const auto id_result = this->session.read_and_report(get_json_value(this->baseitem_data, "id"));
     if (!id_result) {
-        return id_result;
+        return tl::unexpected(id_result.error());
     }
-    const auto item_id = id_data.get<int>();
+    const auto item_id = *id_result;
 
     auto &baseitems = BaseitemList::get_instance();
-    error_idx = item_id;
     const short short_id = static_cast<short>(item_id);
     auto baseitem = item_id < static_cast<int>(baseitems.size()) ? baseitems.get_baseitem(short_id).clone_without_required_fields() : BaseitemDefinition{};
     if (const auto result = info_set_string(get_json_value(this->baseitem_data, "name"), baseitem.name, true); !result) {
-        msg_print(_("アイテムの名称読込失敗。ID: '{}'。", "Failed to load item name. ID: '{}'."), error_idx);
+        msg_print(_("アイテムの名称読込失敗。", "Failed to load item name."));
         return result;
     }
     if (const auto result = info_set_string(get_json_value(this->baseitem_data, "flavor_name"), baseitem.flavor_name, false); !result) {
-        msg_print(_("アイテム未識別名の読込失敗。ID: '{}'。", "Failed to load item unidentified name. ID: '{}'."), error_idx);
+        msg_print(_("アイテム未識別名の読込失敗。", "Failed to load item unidentified name."));
         return result;
     }
     if (const auto result = info_set_string(get_json_value(this->baseitem_data, "flavor"), baseitem.text, false); !result) {
-        msg_print(_("アイテムのフレーバーテキスト読込失敗。ID: '{}'。", "Failed to load flavor text of item. ID: '{}'."), error_idx);
+        msg_print(_("アイテムのフレーバーテキスト読込失敗。", "Failed to load flavor text of item."));
         return result;
     }
     if (const auto result = this->set_baseitem_symbol(baseitem); !result) {
-        msg_print(_("アイテムのシンボル読込失敗。ID: '{}'。", "Failed to load symbol of item. ID: '{}'."), error_idx);
+        msg_print(_("アイテムのシンボル読込失敗。", "Failed to load symbol of item."));
         return result;
     }
     if (const auto result = this->set_baseitem_kind(baseitem); !result) {
-        msg_print(_("アイテム種別の読込失敗。ID: '{}'。", "Failed to load kind of item. ID: '{}'."), error_idx);
+        msg_print(_("アイテム種別の読込失敗。", "Failed to load kind of item."));
         return result;
     }
     if (const auto result = this->set_baseitem_parameter_value(baseitem); !result) {
-        msg_print(_("アイテムのパラメータ値読込失敗。ID: '{}'。", "Failed to load parameter value of item. ID: '{}'."), error_idx);
+        msg_print(_("アイテムのパラメータ値読込失敗。", "Failed to load parameter value of item."));
         return result;
     }
     // level は基本の生成階 (発動の基本難易度などにも使う) で、たどり着ける最深の階 (MAX_DEPTH - 1) までとする。
     if (const auto result = info_set_integer(get_json_value(this->baseitem_data, "level"), baseitem.level, true, Range(0, MAX_DEPTH - 1)); !result) {
-        msg_print(_("アイテムのレベル読込失敗。ID: '{}'。", "Failed to load level of item. ID: '{}'."), error_idx);
+        msg_print(_("アイテムのレベル読込失敗。", "Failed to load level of item."));
         return result;
     }
-    if (const auto result = info_set_integer(get_json_value(this->baseitem_data, "weight"), baseitem.weight, true, Range(0, 9999)); !result) {
-        msg_print(_("アイテムの重量読込失敗。ID: '{}'。", "Failed to load weight of item. ID: '{}'."), error_idx);
+    if (const auto result = info_set_integer(get_json_value(this->baseitem_data, "weight"), baseitem.weight, true, Range(0, ITEM_WEIGHT_MAX)); !result) {
+        msg_print(_("アイテムの重量読込失敗。", "Failed to load weight of item."));
         return result;
     }
-    const auto cost_max = baseitem.bi_key.tval() == ItemKindType::GOLD ? GOLD_COST_MAX : BASEITEM_COST_MAX;
+    const auto cost_max = baseitem.bi_key.tval() == ItemKindType::GOLD ? GOLD_COST_MAX : ITEM_COST_MAX;
     if (const auto result = info_set_integer(get_json_value(this->baseitem_data, "cost"), baseitem.cost, true, Range(0, cost_max)); !result) {
-        msg_print(_("アイテムの売値読込失敗。ID: '{}'。", "Failed to load cost of item. ID: '{}'."), error_idx);
+        msg_print(_("アイテムの売値読込失敗。", "Failed to load cost of item."));
         return result;
     }
     if (const auto result = info_set_integer(get_json_value(this->baseitem_data, "base_ac"), baseitem.ac, false, Range(0, ITEM_BASE_AC_MAX)); !result) {
-        msg_print(_("アイテムのベースAC読込失敗。ID: '{}'。", "Failed to load base AC of item. ID: '{}'."), error_idx);
+        msg_print(_("アイテムのベースAC読込失敗。", "Failed to load base AC of item."));
         return result;
     }
-    // セーブではダイスの個数・面数をそれぞれ1バイトで書くため、0〜255に限る。
-    if (const auto result = info_set_dice(get_json_value(this->baseitem_data, "base_dice"), baseitem.damage_dice, false, Range(0, 255)); !result) {
-        msg_print(_("アイテムのベースダイス読込失敗。ID: '{}'。", "Failed to load base dice of item. ID: '{}'."), error_idx);
+    if (const auto result = info_set_dice(get_json_value(this->baseitem_data, "base_dice"), baseitem.damage_dice, false, Range(0, ITEM_DICE_MAX)); !result) {
+        msg_print(_("アイテムのベースダイス読込失敗。", "Failed to load base dice of item."));
         return result;
     }
     if (const auto result = info_set_integer(get_json_value(this->baseitem_data, "hit_bonus"), baseitem.to_h, false, Range(-ITEM_BONUS_MAX, ITEM_BONUS_MAX)); !result) {
-        msg_print(_("アイテムの命中補正値読込失敗。ID: '{}'。", "Failed to load hit bonus of item. ID: '{}'."), error_idx);
+        msg_print(_("アイテムの命中補正値読込失敗。", "Failed to load hit bonus of item."));
         return result;
     }
     if (const auto result = info_set_integer(get_json_value(this->baseitem_data, "damage_bonus"), baseitem.to_d, false, Range(-ITEM_BONUS_MAX, ITEM_BONUS_MAX)); !result) {
-        msg_print(_("アイテムのダメージ補正値読込失敗。ID: '{}'。", "Failed to load damage bonus of item. ID: '{}'."), error_idx);
+        msg_print(_("アイテムのダメージ補正値読込失敗。", "Failed to load damage bonus of item."));
         return result;
     }
     if (const auto result = info_set_integer(get_json_value(this->baseitem_data, "ac_bonus"), baseitem.to_a, false, Range(-ITEM_BONUS_MAX, ITEM_BONUS_MAX)); !result) {
-        msg_print(_("アイテムのAC補正値読込失敗。ID: '{}'。", "Failed to load AC bonus of item. ID: '{}'."), error_idx);
+        msg_print(_("アイテムのAC補正値読込失敗。", "Failed to load AC bonus of item."));
         return result;
     }
     if (const auto result = this->set_baseitem_allocations(baseitem); !result) {
-        msg_print(_("アイテムの生成情報読込失敗。ID: '{}'。", "Failed to load generation info of item. ID: '{}'."), error_idx);
+        msg_print(_("アイテムの生成情報読込失敗。", "Failed to load generation info of item."));
         return result;
     }
     if (const auto result = this->set_baseitem_activate(baseitem); !result) {
-        msg_print(_("アイテムの発動能力読込失敗。ID: '{}'。", "Failed to load activation of item. ID: '{}'."), error_idx);
+        msg_print(_("アイテムの発動能力読込失敗。", "Failed to load activation of item."));
         return result;
     }
     if (const auto result = this->set_baseitem_flags(baseitem); !result) {
-        msg_print(_("アイテムのフラグ読込失敗。ID: '{}'。", "Failed to load flags of item. ID: '{}'."), error_idx);
+        msg_print(_("アイテムのフラグ読込失敗。", "Failed to load flags of item."));
         return result;
     }
     if (const auto result = this->set_baseitem_natural_generation(baseitem); !result) {
-        msg_print(_("アイテムの自然生成の指定の読込失敗。ID: '{}'。", "Failed to load natural generation of item. ID: '{}'."), error_idx);
+        msg_print(_("アイテムの自然生成の指定の読込失敗。", "Failed to load natural generation of item."));
         return result;
     }
 
     // 自然生成しないベースアイテムは生成テーブルを持たない (生成の側は natural_generation を見ず、生成テーブルの有無だけで決まる)。
     // 同じ ID を読み直したときに引き継いだ生成テーブルも含めて判定するため、読み込んだ後の定義で確かめる。
     if (!baseitem.natural_generation && baseitem.has_allocation()) {
-        msg_print(_("自然生成しないアイテムに生成情報がある。ID: '{}'。", "Item without natural generation has generation info. ID: '{}'."), error_idx);
+        msg_print(_("自然生成しないアイテムに生成情報がある。", "Item without natural generation has generation info."));
         return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
     }
 
@@ -308,7 +287,7 @@ tl::expected<void, ParseErrorType> BaseitemReader::read() const
         });
         if (duplicated != previous_end) {
             const auto duplicated_id = std::distance(baseitems.begin(), duplicated);
-            msg_print(_("ベースアイテムの種別・副種別が重複している。ID: '{}'、重複先ID: '{}'。", "Duplicated kind of baseitem. ID: '{}', duplicated ID: '{}'."), error_idx, duplicated_id);
+            msg_print(_("ベースアイテムの種別・副種別が重複している。重複先ID: '{}'。", "Duplicated kind of baseitem. duplicated ID: '{}'."), duplicated_id);
             return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
         }
     }
@@ -321,26 +300,6 @@ tl::expected<void, ParseErrorType> BaseitemReader::read() const
 }
 
 /*!
- * @brief テキストトークンを走査してフラグを一つ得る(ベースアイテム用)
- * @param baseitem 保管先ベースアイテムへの参照
- * @param what 参照元の文字列
- * @return 見つけたらtrue
- */
-bool BaseitemReader::grab_one_baseitem_flag(BaseitemDefinition &baseitem, std::string_view what) const
-{
-    if (TrFlags::grab_one_flag(baseitem.flags, baseitem_flags, what)) {
-        return true;
-    }
-
-    if (EnumClassFlagGroup<ItemGenerationTraitType>::grab_one_flag(baseitem.gen_flags, baseitem_geneneration_flags, what)) {
-        return true;
-    }
-
-    msg_print(_("未知のアイテム・フラグ '{}'。", "Unknown object flag '{}'."), what);
-    return false;
-}
-
-/*!
  * @brief JSON Objectからベースアイテムのシンボルをセットする
  * @note BaseitemReader が保持する baseitem_data を参照する
  * @param baseitem 保管先のベースアイテム情報インスタンス
@@ -348,37 +307,11 @@ bool BaseitemReader::grab_one_baseitem_flag(BaseitemDefinition &baseitem, std::s
  */
 tl::expected<void, ParseErrorType> BaseitemReader::set_baseitem_symbol(BaseitemDefinition &baseitem) const
 {
-    const auto &symbol_data = get_json_value(this->baseitem_data, "symbol");
-    if (symbol_data.is_null()) {
-        return tl::unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
+    const auto symbol = info_read_symbol(get_json_value(this->baseitem_data, "symbol"));
+    if (!symbol) {
+        return tl::unexpected(symbol.error());
     }
-    if (!symbol_data.is_object()) {
-        return tl::unexpected(ParseErrorType::INVALID_TYPE);
-    }
-
-    const auto &character_obj = get_json_value(symbol_data, "character");
-    if (!character_obj.is_string()) {
-        return tl::unexpected(character_obj.is_null() ? ParseErrorType::TOO_FEW_ARGUMENTS : ParseErrorType::INVALID_TYPE);
-    }
-    const auto &character = character_obj.get_ref<const std::string &>();
-    if (character.size() != 1) {
-        return tl::unexpected(ParseErrorType::INVALID_VALUE);
-    }
-
-    const auto &color_obj = get_json_value(symbol_data, "color");
-    if (!color_obj.is_string()) {
-        return tl::unexpected(color_obj.is_null() ? ParseErrorType::TOO_FEW_ARGUMENTS : ParseErrorType::INVALID_TYPE);
-    }
-
-    const auto color = color_list.find(color_obj.get<std::string>());
-    if (color == color_list.end()) {
-        return tl::unexpected(ParseErrorType::INVALID_FLAG);
-    }
-    if (color->second > 127) {
-        return tl::unexpected(ParseErrorType::GENERIC);
-    }
-
-    baseitem.init_symbol(DisplaySymbol(color->second, character.front()));
+    baseitem.init_symbol(*symbol);
     return {};
 }
 
@@ -401,14 +334,14 @@ tl::expected<void, ParseErrorType> BaseitemReader::set_baseitem_kind(BaseitemDef
     // 失敗時は直後に返るが、gcc の最適化で未初期化と誤検出されないよう初期化しておく。
     ItemKindType type_value{};
     // 種別をそのまま添え字にする色の表は128要素。
-    if (const auto result = info_set_integer(get_json_value(itemkind_data, "type_value"), type_value, true, Range(0, 127)); !result) {
+    if (const auto result = info_set_integer(get_json_value(itemkind_data, "type_value"), type_value, true, Range(0, ITEM_TYPE_MAX)); !result) {
         return result;
     }
     if (std::find(std::begin(DEFINED_ITEM_KINDS), std::end(DEFINED_ITEM_KINDS), type_value) == std::end(DEFINED_ITEM_KINDS)) {
         return tl::unexpected(ParseErrorType::INVALID_VALUE);
     }
     int subtype_value = 0;
-    if (const auto result = info_set_integer(get_json_value(itemkind_data, "subtype_value"), subtype_value, true, Range(0, subtype_max({ type_value, 0 }))); !result) {
+    if (const auto result = info_set_integer(get_json_value(itemkind_data, "subtype_value"), subtype_value, true, Range(0, item_subtype_max({ type_value, 0 }))); !result) {
         return result;
     }
 
@@ -457,7 +390,7 @@ tl::expected<void, ParseErrorType> BaseitemReader::set_baseitem_allocations(Base
 
     for (auto i = 0U; const auto &alloc : allocations_data) {
         if (i >= baseitem.alloc_tables.size()) {
-            return tl::unexpected(ParseErrorType::OUT_OF_BOUNDS);
+            return tl::unexpected(ParseErrorType::INVALID_VALUE);
         }
 
         if (!alloc.is_object()) {
@@ -487,20 +420,15 @@ tl::expected<void, ParseErrorType> BaseitemReader::set_baseitem_allocations(Base
  */
 tl::expected<void, ParseErrorType> BaseitemReader::set_baseitem_activate(BaseitemDefinition &baseitem) const
 {
-    const auto &act_data = get_json_value(this->baseitem_data, "activate");
-    if (act_data.is_null()) {
+    const auto activation = read_activation(get_json_value(this->baseitem_data, "activate"));
+    if (!activation) {
+        return tl::unexpected(activation.error());
+    }
+    if (*activation == RandomArtActType::NONE) {
         return {};
     }
-    if (!act_data.is_string()) {
-        return tl::unexpected(ParseErrorType::INVALID_TYPE);
-    }
 
-    const auto activation = grab_one_activation_flag(act_data.get<std::string>());
-    if (activation <= RandomArtActType::NONE) {
-        return tl::unexpected(ParseErrorType::INVALID_FLAG);
-    }
-
-    baseitem.act_idx = activation;
+    baseitem.act_idx = *activation;
     baseitem.flags.set(tr_type::TR_ACTIVATE);
     return {};
 }
@@ -538,17 +466,8 @@ tl::expected<void, ParseErrorType> BaseitemReader::set_baseitem_flags(BaseitemDe
     if (flag_data.is_null()) {
         return {};
     }
-    if (!flag_data.is_array()) {
-        return tl::unexpected(ParseErrorType::INVALID_TYPE);
-    }
-
-    for (auto &flag : flag_data) {
-        if (!flag.is_string()) {
-            return tl::unexpected(ParseErrorType::INVALID_TYPE);
-        }
-        if (!this->grab_one_baseitem_flag(baseitem, flag.get<std::string>())) {
-            return tl::unexpected(ParseErrorType::INVALID_FLAG);
-        }
-    }
-    return {};
+    return info_read_flag_array(flag_data, [&baseitem](const auto &flag) {
+        const auto what = flag.template get<std::string>();
+        return grab_one_item_flag_or_report(baseitem.flags, baseitem.gen_flags, what, _("未知のアイテム・フラグ '{}'。", "Unknown object flag '{}'."));
+    });
 }

@@ -58,6 +58,9 @@
     <Filter Include="mspell">
       <UniqueIdentifier>{f4dbdb43-4dbe-4518-b1ac-3429da4d19b8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="mspell\mspell-attack">
+      <UniqueIdentifier>{b4dae038-9e98-5928-969f-c721bf9482a2}</UniqueIdentifier>
+    </Filter>
     <Filter Include="mutation">
       <UniqueIdentifier>{e71c27bf-0eb8-4347-a040-6bc021a1c19b}</UniqueIdentifier>
     </Filter>
@@ -181,6 +184,9 @@
     <ClCompile Include="..\..\src\test\info-reader\test-baseitem-reader.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\test\info-reader\test-definition-id-checker.cpp">
+      <Filter>info-reader</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\test\info-reader\test-dungeon-reader.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>
@@ -190,7 +196,13 @@
     <ClCompile Include="..\..\src\test\info-reader\test-fixed-map-parser.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\test\info-reader\test-general-parser.cpp">
+      <Filter>info-reader</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\test\info-reader\test-info-reader-util.cpp">
+      <Filter>info-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\info-reader\test-item-flag-reader.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\test\info-reader\test-json-reader-util.cpp">
@@ -199,10 +211,19 @@
     <ClCompile Include="..\..\src\test\info-reader\test-jsonc-document-loader.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\test\info-reader\test-legend-ego-validator.cpp">
+      <Filter>info-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\info-reader\test-legend-object-trap-validator.cpp">
+      <Filter>info-reader</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\test\info-reader\test-magic-reader.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\test\info-reader\test-message-reader.cpp">
+      <Filter>info-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\info-reader\test-monster-flag-reader.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\test\info-reader\test-parse-error-messages.cpp">
@@ -212,6 +233,9 @@
       <Filter>info-reader</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\test\info-reader\test-race-reader.cpp">
+      <Filter>info-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\info-reader\test-record-diagnostic.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\test\info-reader\test-skill-reader.cpp">
@@ -271,7 +295,13 @@
     <ClCompile Include="..\..\src\test\load\test-angband-version-comparer.cpp">
       <Filter>load</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\test\load\test-floor-loader.cpp">
+      <Filter>load</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\test\locale\test-character-encoding.cpp">
+      <Filter>locale</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\locale\test-japanese.cpp">
       <Filter>locale</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\test\lore\test-monster-lore-snapshot.cpp">
@@ -282,6 +312,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\test\monster-race\test-race-ability-mask.cpp">
       <Filter>monster-race</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\mspell\mspell-attack\test-mspell-ball.cpp">
+      <Filter>mspell\mspell-attack</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\test\mspell\test-mspell-projection-table.cpp">
       <Filter>mspell</Filter>
@@ -319,6 +352,12 @@
     <ClCompile Include="..\..\src\test\player\test-player-skill.cpp">
       <Filter>player</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\test\player\test-player-status-flags.cpp">
+      <Filter>player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\player\test-player-status-resist.cpp">
+      <Filter>player</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\test\player\test-process-name.cpp">
       <Filter>player</Filter>
     </ClCompile>
@@ -326,6 +365,9 @@
       <Filter>racial</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\test\save\test-item-writer.cpp">
+      <Filter>save</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\save\test-monster-entity-writer.cpp">
       <Filter>save</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\test\spell-realm\test-spells-hex.cpp">
@@ -382,6 +424,9 @@
     <ClCompile Include="..\..\src\test\target\test-target-getter.cpp">
       <Filter>target</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\test\term\test-screen-processor.cpp">
+      <Filter>term</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\test\term\test-z-rand.cpp">
       <Filter>term</Filter>
     </ClCompile>
@@ -413,6 +458,9 @@
     <ClCompile Include="..\..\src\test\util\test-int-char-converter.cpp">
       <Filter>util</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\test\util\test-menu-column-switcher.cpp">
+      <Filter>util</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\test\util\test-probability-table.cpp">
       <Filter>util</Filter>
     </ClCompile>
@@ -425,6 +473,9 @@
     <ClCompile Include="..\..\src\test\util\test-temporary-json-files.cpp">
       <Filter>util</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\test\view\test-display-lore.cpp">
+      <Filter>view</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\test\view\test-display-messages.cpp">
       <Filter>view</Filter>
     </ClCompile>
@@ -432,6 +483,9 @@
       <Filter>view</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\test\view\test-map-terrain-visibility.cpp">
+      <Filter>view</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\view\test-original-tiles.cpp">
       <Filter>view</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\test\view\test-screen-parity-helpers.cpp">
@@ -449,6 +503,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\stdafx.h" />
+    <ClInclude Include="..\..\src\test\info-reader\dungeon-grid-checks.h">
+      <Filter>info-reader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\test\info-reader\legend-ego-fixture.h">
+      <Filter>info-reader</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\src\test\info-reader\parse-result-helpers.h">
       <Filter>info-reader</Filter>
     </ClInclude>
@@ -458,6 +518,7 @@
     <ClInclude Include="..\..\src\test\save\scoped-save-io.h">
       <Filter>save</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\test\scoped-ego-list.h" />
     <ClInclude Include="..\..\src\test\scoped-input-term.h" />
     <ClInclude Include="..\..\src\test\scoped-redrawing-flags.h" />
     <ClInclude Include="..\..\src\test\scoped-restore.h" />
@@ -489,5 +550,19 @@
       <Filter>system</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\test\temporary-json-files.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\src\test\view\original-terrain-coverage.inc">
+      <Filter>view</Filter>
+    </None>
+    <None Include="..\..\src\test\view\original-item-coverage.inc">
+      <Filter>view</Filter>
+    </None>
+    <None Include="..\..\src\test\view\original-monster-coverage.inc">
+      <Filter>view</Filter>
+    </None>
+    <None Include="..\..\src\test\view\original-symbol-coverage.inc">
+      <Filter>view</Filter>
+    </None>
   </ItemGroup>
 </Project>

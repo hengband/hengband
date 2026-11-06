@@ -1,6 +1,7 @@
 #include "core/show-file.h"
 #include "core/asking-player.h"
 #include "io/files-util.h"
+#include "io/input-context.h"
 #include "io/input-key-acceptor.h"
 #include "main/sound-of-music.h"
 #include "system/angband-exceptions.h"
@@ -315,21 +316,24 @@ bool FileDisplayer::try_display(bool show_version, std::string_view name_with_ta
             prt(fmt::format(title, caption_str, line, size), 0, 0);
         }
 
+        std::string_view key_guide;
         if (size <= rows) {
-            prt(_("[キー:(?)ヘルプ (ESC)終了]", "[Press ESC to exit.]"), hgt - 1, 0);
+            key_guide = _("[キー:(?)ヘルプ (ESC)終了]", "[Press ESC to exit.]");
         } else {
 #ifdef JP
             if (reverse) {
-                prt("[キー:(RET/スペース)↑ (-)↓ (?)ヘルプ (ESC)終了]", hgt - 1, 0);
+                key_guide = "[キー:(RET/スペース)↑ (-)↓ (?)ヘルプ (ESC)終了]";
             } else {
-                prt("[キー:(RET/スペース)↓ (-)↑ (?)ヘルプ (ESC)終了]", hgt - 1, 0);
+                key_guide = "[キー:(RET/スペース)↓ (-)↑ (?)ヘルプ (ESC)終了]";
             }
 #else
-            prt("[Press Return, Space, -, =, /, |, or ESC to exit.]", hgt - 1, 0);
+            key_guide = "[Press Return, Space, -, =, /, |, or ESC to exit.]";
 #endif
         }
 
-        skey = inkey_special(true);
+        prt(key_guide, hgt - 1, 0);
+        skey = input_special_key_with_context(InputKind::FILE_VIEW, key_guide);
+
         switch (skey) {
         case '?':
             if (name != _("jhelpinfo.txt", "helpinfo.txt")) {
@@ -338,8 +342,7 @@ bool FileDisplayer::try_display(bool show_version, std::string_view name_with_ta
 
             break;
         case '=': {
-            prt(_("強調: ", "Show: "), hgt - 1, 0);
-            auto ask_result = askfor(80, shower_str);
+            auto ask_result = input_string_on_row(_("強調: ", "Show: "), hgt - 1, 80, shower_str);
             if (!ask_result) {
                 break;
             }
@@ -355,8 +358,7 @@ bool FileDisplayer::try_display(bool show_version, std::string_view name_with_ta
         }
         case '/':
         case KTRL('s'): {
-            prt(_("検索: ", "Find: "), hgt - 1, 0);
-            auto ask_result = askfor(80, finder_str);
+            auto ask_result = input_string_on_row(_("検索: ", "Find: "), hgt - 1, 80, finder_str);
             if (!ask_result) {
                 break;
             }
@@ -375,10 +377,10 @@ bool FileDisplayer::try_display(bool show_version, std::string_view name_with_ta
             break;
         }
         case '#': {
-            prt(_("行: ", "Goto Line: "), hgt - 1, 0);
+            std::string_view prompt = _("行: ", "Goto Line: ");
             constexpr auto initial_goto = "0";
             while (true) {
-                const auto ask_result = askfor(10, initial_goto);
+                const auto ask_result = input_string_on_row(prompt, hgt - 1, 10, initial_goto);
                 if (!ask_result) {
                     break;
                 }
@@ -387,9 +389,9 @@ bool FileDisplayer::try_display(bool show_version, std::string_view name_with_ta
                     line = std::stoi(*ask_result);
                     break;
                 } catch (std::invalid_argument const &) {
-                    prt(_("数値を入力して下さい。", "Please input numeric value."), hgt - 1, 0);
+                    prompt = _("数値を入力して下さい。", "Please input numeric value.");
                 } catch (std::out_of_range const &) {
-                    prt(_("入力可能な数値の範囲を超えています。", "Input value overflows the maximum number."), hgt - 1, 0);
+                    prompt = _("入力可能な数値の範囲を超えています。", "Input value overflows the maximum number.");
                 }
             }
 
@@ -402,10 +404,10 @@ bool FileDisplayer::try_display(bool show_version, std::string_view name_with_ta
             line = ((size - 1) / rows) * rows;
             break;
         case '%': {
-            prt(_("ファイル・ネーム: ", "Goto File: "), hgt - 1, 0);
+            std::string_view prompt = _("ファイル・ネーム: ", "Goto File: ");
             std::string initial_file(_("jhelp.hlp", "help.hlp"));
             while (true) {
-                const auto ask_result = askfor(80, initial_file);
+                const auto ask_result = input_string_on_row(prompt, hgt - 1, 80, initial_file);
                 if (!ask_result) {
                     break;
                 }
@@ -421,7 +423,7 @@ bool FileDisplayer::try_display(bool show_version, std::string_view name_with_ta
 
                 // 入力欄は見出しの直後から始まるため、見出しにファイル名を含めると名前が長いほど入力欄が狭くなる。
                 // 名前は入力欄の初期値として残るので、見出しは最初の入力の見出し以下の長さの決まった文言にする
-                prt(_("見つかりません: ", "Not found: "), hgt - 1, 0);
+                prompt = _("見つかりません: ", "Not found: ");
                 initial_file = *ask_result;
             }
 
@@ -484,8 +486,9 @@ bool FileDisplayer::try_display(bool show_version, std::string_view name_with_ta
             if ((key > -1) && hook[key][0]) {
                 // リンク先が無いのはヘルプの誤りだが、異常終了はさせずに知らせて元のファイルの表示を続ける
                 if (!this->try_display(true, hook[key], 0, mode)) {
-                    prt(make_open_error_message(hook[key]), hgt - 1, 0);
-                    (void)inkey();
+                    const auto error_message = make_open_error_message(hook[key]);
+                    prt(error_message, hgt - 1, 0);
+                    (void)input_key_with_context(InputKind::ANY_KEY, error_message);
                 } else if (this->is_terminated) {
                     skey = 'q';
                 }

@@ -59,7 +59,7 @@
                                 "type": "integer",
                                 "description": "ベースアイテムカテゴリ",
                                 "minimum": 1,
-                                "maximum": 128
+                                "maximum": 127
                             },
                             "subtype_value": {
                                 "type": "integer",
@@ -97,7 +97,7 @@
                         "type": "integer",
                         "description": "売値",
                         "minimum": 0,
-                        "maximum": 99999999
+                        "maximum": 67108863
                     },
                     "base_ac": {
                         "$comment": "maximum = ITEM_BASE_AC_MAX in src/info-reader/item-reader-limits.h (a small number from 0 to 255; sums over all equipment slots are estimated to stay within 16 bits up to about 1,000)",
@@ -500,7 +500,155 @@
                             }
                         }
                     }
-                }
+                },
+                "allOf": [
+                    {
+                        "if": {
+                            "properties": {
+                                "base_item": {
+                                    "properties": {
+                                        "type_value": {
+                                            "enum": [
+                                                19,
+                                                20,
+                                                21,
+                                                22,
+                                                23
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "then": {
+                            "properties": {
+                                "base_item": {
+                                    "properties": {
+                                        "subtype_value": {
+                                            "maximum": 63
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "if": {
+                            "properties": {
+                                "base_item": {
+                                    "properties": {
+                                        "type_value": {
+                                            "enum": [
+                                                90,
+                                                91,
+                                                92,
+                                                93,
+                                                94,
+                                                95,
+                                                96,
+                                                97,
+                                                98,
+                                                99,
+                                                105,
+                                                106,
+                                                107
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "then": {
+                            "properties": {
+                                "base_item": {
+                                    "properties": {
+                                        "subtype_value": {
+                                            "maximum": 3
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "if": {
+                            "properties": {
+                                "base_item": {
+                                    "properties": {
+                                        "type_value": {
+                                            "enum": [
+                                                55
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "then": {
+                            "properties": {
+                                "base_item": {
+                                    "properties": {
+                                        "subtype_value": {
+                                            "maximum": 32
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "if": {
+                            "properties": {
+                                "base_item": {
+                                    "properties": {
+                                        "type_value": {
+                                            "enum": [
+                                                65
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "then": {
+                            "properties": {
+                                "base_item": {
+                                    "properties": {
+                                        "subtype_value": {
+                                            "maximum": 31
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "if": {
+                            "properties": {
+                                "base_item": {
+                                    "properties": {
+                                        "type_value": {
+                                            "enum": [
+                                                66
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "then": {
+                            "properties": {
+                                "base_item": {
+                                    "properties": {
+                                        "subtype_value": {
+                                            "maximum": 30
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                ]
             }
         }
     },

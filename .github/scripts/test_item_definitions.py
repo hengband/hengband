@@ -4,10 +4,13 @@ import re
 from pathlib import Path
 import unittest
 from jsonschema import ValidationError
+from jsonschema.validators import validator_for
 
 from json_validation_test_helper import baseitem_id_schema_maximum, fixed_artifact_id_schema_maximum, validate_document
-from validate_json import (build_schema_registry, load_all_schemas, load_cpp_enum_values, load_cpp_tokens, load_jsonc,
-                           load_rod_type_value, validate_baseitem_semantics)
+import validate_json
+from validate_json import (baseitem_subtype_max, build_schema_registry, collect_valid_baseitem_keys, item_kind, item_kinds, load_all_schemas,
+                           load_cpp_enum_values, load_cpp_tokens, load_jsonc, load_rod_type_value, validate_baseitem_semantics,
+                           validate_artifact_semantics)
 
 
 class BaseitemDefinitionValidationTest(unittest.TestCase):
@@ -152,6 +155,31 @@ class BaseitemDefinitionValidationTest(unittest.TestCase):
         source = (root / "src/info-reader/baseitem-reader.cpp").read_text(encoding="utf-8")
         table = source.split("DEFINED_ITEM_KINDS[] = {", 1)[1].split("};", 1)[0]
         self.assertEqual(set(re.findall(r"ItemKindType::([A-Z_]+)", table)), set(kinds))
+
+    def test_kind_tables_resolve_to_pinned_numbers(self):
+        # 列挙子の名前で書いた種別の表が、番号で書いていた時と同じ値になることを固定する。
+        self.assertEqual(validate_json.EQUIPMENT_KINDS, {*range(16, 24), *range(30, 41), 45, 50})
+        self.assertEqual(validate_json.WEAPON_KINDS, set(range(19, 24)))
+        self.assertEqual(validate_json.BOOK_KINDS, {*range(90, 100), 105, 106, 107})
+        self.assertEqual(validate_json.ITEM_KIND_GOLD, 127)
+        self.assertEqual(validate_json.BASEITEM_PVAL_RANGES, {
+            55: (1, validate_json.DEVICE_CHARGES_MAX), 65: (1, validate_json.DEVICE_CHARGES_MAX), 66: (1, validate_json.ROD_PVAL_MAX),
+            80: (0, validate_json.PY_FOOD_FULL), 75: (-validate_json.PY_FOOD_FULL, validate_json.PY_FOOD_FULL),
+            77: (1, validate_json.FUEL_LAMP), 7: (0, 63),
+        })
+        self.assertEqual(validate_json.BASEITEM_SUBTYPE_MAX, {
+            **dict.fromkeys(range(19, 24), 63), **dict.fromkeys({*range(90, 100), 105, 106, 107}, 3), 55: 32, 65: 31, 66: 30,
+        })
+
+    def test_unknown_kind_name_is_rejected(self):
+        with self.assertRaises(ValueError):
+            item_kinds("SWORD", "NO_SUCH_KIND")
+
+    def test_unknown_single_kind_name_is_rejected_like_item_kinds(self):
+        # 1つの種別を引く表も、item_kinds() と同じ分かりやすい例外で止まることを固定する。
+        with self.assertRaisesRegex(ValueError, r"ItemKindType::NO_SUCH_KIND not found"):
+            item_kind("NO_SUCH_KIND")
+        self.assertEqual(item_kind("STAFF"), 55)
 
     def test_subtype_boundaries_per_kind(self):
         limits = {**dict.fromkeys((19, 20, 21, 22, 23), 63),
@@ -340,7 +368,10 @@ class ArtifactDefinitionValidationTest(unittest.TestCase):
         for field, value in (("type_value", 128), ("subtype_value", 128)):
             with self.subTest(field=field):
                 base_item = {**self.sample["base_item"], field: value}
-                self.check({**self.sample, "base_item": base_item}, False, ["artifacts", 0, "base_item"], "Reason: base item must be a valid baseitem")
+                if field == "type_value":
+                    self.check({**self.sample, "base_item": base_item}, False, ["artifacts", 0, "base_item", field])
+                else:
+                    self.check({**self.sample, "base_item": base_item}, False, ["artifacts", 0, "base_item"], "Reason: base item must be a valid baseitem")
 
         key = self.sample["base_item"]
         baseitem = next(item for item in self.baseitem_document["baseitems"]
@@ -364,6 +395,68 @@ class ArtifactDefinitionValidationTest(unittest.TestCase):
         english_only = {**baseitem, "id": 2, "name": {**baseitem["name"], "ja": "異常アイテム"}}
         ok, message = self.validate_with_baseitems(self.sample, [japanese_only, english_only])
         self.assertTrue(ok, message)
+
+    def test_cost_cap_matches_baseitems_and_egos(self):
+        maximum = (2**31 - 1) // 32
+        for cost in (0, maximum, maximum + 1):
+            with self.subTest(cost=cost):
+                record = {**self.sample, "cost": cost}
+                self.check(record, cost <= maximum, None if cost <= maximum else ["artifacts", 0, "cost"])
+                if cost <= maximum:
+                    validate_artifact_semantics({"artifacts": [record]})
+                else:
+                    with self.assertRaises(ValidationError):
+                        validate_artifact_semantics({"artifacts": [record]})
+
+    def test_base_item_type_and_subtype_boundaries(self):
+        for kind, maximum in ((127, 128), (128, 128), (1, 128), (19, 63), (23, 63),
+                              (90, 3), (107, 3), (55, 32), (65, 31), (66, 30)):
+            for subtype in (maximum, maximum + 1):
+                with self.subTest(kind=kind, subtype=subtype):
+                    record = {**self.sample, "base_item": {"type_value": kind, "subtype_value": subtype}}
+                    document = {"artifacts": [record]}
+                    if kind <= 127 and subtype <= maximum:
+                        validate_artifact_semantics(document, {(kind, subtype)})
+                    else:
+                        with self.assertRaises(ValidationError):
+                            validate_artifact_semantics(document, {(kind, subtype)})
+
+    def test_schema_subtype_limits_per_kind_match_baseitems(self):
+        # アーティファクトの副種別の上限は、ベースアイテムの schema と同じ種別ごとの if/then を持つ。
+        def subtype_limits(schema_name, array, key):
+            limits = {}
+            for block in self.loaded[self.schema_map[schema_name]]["properties"][array]["items"]["allOf"]:
+                then = block["then"].get("properties", {}).get(key, {}).get("properties", {}).get("subtype_value")
+                if then is not None:
+                    for kind in block["if"]["properties"][key]["properties"]["type_value"]["enum"]:
+                        limits[kind] = then["maximum"]
+            return limits
+
+        artifact_limits = subtype_limits("ArtifactDefinitions", "artifacts", "base_item")
+        self.assertEqual(artifact_limits, subtype_limits("BaseitemDefinitions", "baseitems", "itemkind"))
+        self.assertEqual(artifact_limits, {kind: baseitem_subtype_max(kind) for kind in artifact_limits})
+
+    def test_schema_rejects_subtype_over_the_limit_of_its_kind(self):
+        schema = self.loaded[self.schema_map["ArtifactDefinitions"]]
+        for kind, maximum in ((19, 63), (23, 63), (90, 3), (107, 3), (55, 32), (65, 31), (66, 30), (1, 128), (127, 128)):
+            for subtype in (maximum, maximum + 1):
+                with self.subTest(kind=kind, subtype=subtype):
+                    record = {**self.sample, "base_item": {"type_value": kind, "subtype_value": subtype}}
+                    errors = list(validator_for(schema)(schema).iter_errors({"version": 1, "artifacts": [record]}))
+                    if subtype <= maximum:
+                        self.assertEqual(errors, [])
+                    else:
+                        self.assertEqual([list(error.path) for error in errors], [["artifacts", 0, "base_item", "subtype_value"]])
+
+    def test_type_value_starts_at_one_like_the_schema(self):
+        # 種別 0 の有効なベースアイテムは同梱の定義に無く、ArtifactReader も読み込めないため、CI は schema と同じく 1 から受け付ける。
+        self.assertNotIn(0, {kind for kind, _ in collect_valid_baseitem_keys(self.baseitem_document)})
+        self.assertEqual(self.loaded[self.schema_map["ArtifactDefinitions"]]["properties"]["artifacts"]["items"]["properties"]
+                         ["base_item"]["properties"]["type_value"]["minimum"], 1)
+        record = {**self.sample, "base_item": {"type_value": 0, "subtype_value": 0}}
+        self.check(record, False, ["artifacts", 0, "base_item", "type_value"])
+        with self.assertRaisesRegex(ValidationError, r"type_value must be in 1\.\."):
+            validate_artifact_semantics({"artifacts": [record]}, {(0, 0)})
 
     def test_monrace_validation_checks_artifact_companion(self):
         # モンスター定義の検証は、参照先のアーティファクト定義にも同じ意味検証をかける。
@@ -416,12 +509,14 @@ class ItemBonusLimitTest(unittest.TestCase):
         # schema の範囲が item-reader-limits.h の定数と合っていることを確かめる。
         root = Path(__file__).resolve().parents[2]
         header = (root / "src/info-reader/item-reader-limits.h").read_text(encoding="utf-8")
-        limits = {name: int(value) for name, value in re.findall(r"constexpr int (ITEM_BASE_AC_MAX|ITEM_BONUS_MAX) = (\d+);", header)}
-        self.assertEqual(set(limits), {"ITEM_BASE_AC_MAX", "ITEM_BONUS_MAX"}, "ITEM_BASE_AC_MAX / ITEM_BONUS_MAX not found in item-reader-limits.h")
+        limits = {name: int(value) for name, value in re.findall(r"constexpr int (ITEM_WEIGHT_MAX|ITEM_BASE_AC_MAX|ITEM_BONUS_MAX) = (\d+);", header)}
+        self.assertEqual(set(limits), {"ITEM_WEIGHT_MAX", "ITEM_BASE_AC_MAX", "ITEM_BONUS_MAX"},
+                         "ITEM_WEIGHT_MAX / ITEM_BASE_AC_MAX / ITEM_BONUS_MAX not found in item-reader-limits.h")
         loaded, schema_map = load_all_schemas(root / "schema")
         for name, key in (("BaseitemDefinitions", "baseitems"), ("ArtifactDefinitions", "artifacts")):
             properties = loaded[schema_map[name]]["properties"][key]["items"]["properties"]
             with self.subTest(name=name):
+                self.assertEqual((properties["weight"]["minimum"], properties["weight"]["maximum"]), (0, limits["ITEM_WEIGHT_MAX"]))
                 self.assertEqual((properties["base_ac"]["minimum"], properties["base_ac"]["maximum"]), (0, limits["ITEM_BASE_AC_MAX"]))
                 for field in ("hit_bonus", "damage_bonus", "ac_bonus"):
                     self.assertEqual((properties[field]["minimum"], properties[field]["maximum"]), (-limits["ITEM_BONUS_MAX"], limits["ITEM_BONUS_MAX"]))

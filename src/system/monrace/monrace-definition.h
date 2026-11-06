@@ -153,6 +153,7 @@ public:
     bool is_valid() const;
     bool is_male() const;
     bool is_female() const;
+    MonsterSex get_sex() const;
     bool has_living_flag() const;
     bool has_demon_flag() const;
     bool has_undead_flag() const;

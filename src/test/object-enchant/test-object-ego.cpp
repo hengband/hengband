@@ -7,9 +7,9 @@
 #include "sv-definition/sv-protector-types.h"
 #include "sv-definition/sv-weapon-types.h"
 #include "system/item/item-entity.h"
+#include "test/scoped-ego-list.h"
 #include "test/scoped-rng.h"
 #include "util/enum-converter.h"
-#include "util/finalizer.h"
 #include <array>
 #include <doctest/doctest.h>
 #include <limits>
@@ -21,9 +21,7 @@
 TEST_CASE("apply_ego skips probability rolls at zero and certain percent")
 {
     for (const auto chance : { 0, 100 }) {
-        auto saved_egos = std::move(egos_info);
-        const auto restore = util::make_finalizer([&saved_egos] { egos_info.swap(saved_egos); });
-        egos_info.clear();
+        test::ScopedEgoList saved_egos;
         auto &ego = egos_info.try_emplace(EgoType::A_MORGUL).first->second;
         ego.cost = 12345;
         const auto rng_guard = test::scoped_rng();
@@ -48,9 +46,7 @@ TEST_CASE("apply_ego skips probability rolls at zero and certain percent")
  */
 TEST_CASE("apply_ego saturates composed bonuses to save storage")
 {
-    auto saved_egos = std::move(egos_info);
-    const auto restore = util::make_finalizer([&saved_egos] { egos_info.swap(saved_egos); });
-    egos_info.clear();
+    test::ScopedEgoList saved_egos;
     auto &ego = egos_info.try_emplace(EgoType::A_MORGUL).first->second;
     ego.cost = 12345;
     const auto rng_guard = test::scoped_rng();
@@ -77,9 +73,7 @@ TEST_CASE("apply_ego saturates composed bonuses to save storage")
  */
 TEST_CASE("apply_ego bounds extra attacks at wizard wilderness generation levels")
 {
-    auto saved_egos = std::move(egos_info);
-    const auto restore = util::make_finalizer([&saved_egos] { egos_info.swap(saved_egos); });
-    egos_info.clear();
+    test::ScopedEgoList saved_egos;
     auto &ego = egos_info.try_emplace(EgoType::ATTACKS).first->second;
     ego.cost = 1;
     ego.max_pval = 32767;
@@ -107,9 +101,7 @@ TEST_CASE("is_worthless_ego detects zero rating and each curse flag")
 
 TEST_CASE("can_apply_ego checks slots, kind exclusions and undefined IDs")
 {
-    auto saved_egos = std::move(egos_info);
-    const auto restore = util::make_finalizer([&saved_egos] { egos_info.swap(saved_egos); });
-    egos_info.clear();
+    test::ScopedEgoList saved_egos;
     const auto add = [](EgoType id, INVENTORY_IDX slot) {
         auto &ego = egos_info.try_emplace(id).first->second;
         ego.idx = id;

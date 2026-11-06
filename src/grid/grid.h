@@ -37,6 +37,7 @@ public:
     short special;
     uint16_t occurrence;
 
+    static BIT_FLAGS to_saved_info(BIT_FLAGS info);
     bool matches(const Grid &grid) const;
 };
 

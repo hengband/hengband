@@ -30,6 +30,12 @@ enum class InputKind {
     POINT, //!< 場所の指定 (テレポートの行き先など)
     ANY_KEY, //!< 何かキーを押す待ち (どのキーでも先へ進む)
     SPELL, //!< 呪文・技・特殊能力・ペットのコマンドなどを一覧から選ぶ待ち
+    BUILDING, //!< 建物 (宿屋・闘技場など) の中で、利用するサービスを選ぶ待ち
+    FILE_VIEW, //!< ヘルプや知識メニューの結果などのファイルの表示と、メッセージのログで、ページを送る待ち
+    BIRTH, //!< キャラクター作成で、性別・種族・職業などを選び、能力値を決めて、ゲームを始めるまでの待ち
+    BROWSER, //!< 知識メニューと表示の設定で、モンスター・アイテム・地形の一覧を閲覧し、シンボルを変える待ち
+    OPTION, //!< オプションの設定で、項目を選んで値を切り替える待ち (初期オプション・自動セーブ・ウィンドウ・フラグを含む)
+    AUTOPICK_EDITOR, //!< 自動拾いエディタで、文字の入力や編集のコマンドを待つ
 };
 
 /*!
@@ -132,8 +138,36 @@ struct SpellInputDetails {
     bool operator==(const SpellInputDetails &) const = default;
 };
 
+/*!
+ * @brief キャラクター作成の段階
+ * @details 入力の文脈がキャラクター作成の処理に依存しないよう、ヘルプの選択に使う birth/birth-util.h の BirthKind とは別に持つ。
+ */
+enum class BirthStep {
+    SEX, //!< 性別
+    RACE, //!< 種族
+    CLASS, //!< 職業
+    FIRST_REALM, //!< 1つ目の魔法の領域
+    SECOND_REALM, //!< 2つ目の魔法の領域
+    ELEMENT_REALM, //!< 元素使いの領域
+    PERSONALITY, //!< 性格
+    STAT_LIMITS, //!< オートローラーで得たい能力値の最低値
+    CHARA_LIMITS, //!< オートローラーで得たい年齢・身長・体重・社会的地位の範囲
+    ROLL_RESULT, //!< 能力値の結果を決めるか振り直すか
+    HISTORY, //!< 生い立ちの編集
+    START, //!< 名前と生い立ちを決めた後の、ゲームを始めるかの確認
+};
+
+/*!
+ * @brief キャラクター作成の待ちの詳細
+ */
+struct BirthInputDetails {
+    BirthStep step; //!< 段階
+
+    bool operator==(const BirthInputDetails &) const = default;
+};
+
 //! 入力の種類ごとの詳細。詳細を持たない入力では std::monostate
-using InputDetails = std::variant<std::monostate, StringInputDetails, QuantityInputDetails, CommandInputDetails, ItemInputDetails, DirectionInputDetails, TargetInputDetails, PointInputDetails, SpellInputDetails>;
+using InputDetails = std::variant<std::monostate, StringInputDetails, QuantityInputDetails, CommandInputDetails, ItemInputDetails, DirectionInputDetails, TargetInputDetails, PointInputDetails, SpellInputDetails, BirthInputDetails>;
 
 /*!
  * @brief 現在待っている入力の種類と、画面に表示したプロンプト

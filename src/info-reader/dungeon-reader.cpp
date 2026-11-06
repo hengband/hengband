@@ -3,8 +3,10 @@
 #include "info-reader/dungeon-info-tokens-table.h"
 #include "info-reader/info-reader-util.h"
 #include "info-reader/json-reader-util.h"
+#include "info-reader/monster-flag-reader.h"
 #include "info-reader/parse-error-types.h"
 #include "info-reader/race-info-tokens-table.h"
+#include "locale/language-switcher.h"
 #include "system/artifact/artifact-definition.h"
 #include "system/artifact/artifact-list.h"
 #include "system/baseitem/baseitem-definition.h"
@@ -23,12 +25,22 @@
 #include <cstdint>
 #include <exception>
 #include <limits>
-#include <memory>
 #include <nlohmann/json.hpp>
-#include <span>
+#include <utility>
 
-DungeonReader::DungeonReader(const nlohmann::json &dungeon_data)
+namespace {
+//! 入口の座標 (wild_y・wild_x) の上限。読み込んだ荒野の大きさに収まるかは validate_wilderness_positions() で確かめる。
+constexpr int DUNGEON_ENTRANCE_COORD_MAX = 32766;
+}
+
+DungeonReader::Session DungeonReader::create_session(tl::optional<int> last_id)
+{
+    return Session(DefinitionIdOrder::STRICTLY_INCREASING, { 0, enum2i(DungeonId::MAX) - 1 }, _("ダンジョン", "dungeon"), last_id);
+}
+
+DungeonReader::DungeonReader(const nlohmann::json &dungeon_data, Session &session)
     : dungeon_data(dungeon_data)
+    , session(session)
 {
 }
 
@@ -43,14 +55,11 @@ tl::expected<void, ParseErrorType> DungeonReader::read() const
         return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
     }
 
-    int id = 0;
-    if (const auto result = info_set_integer(get_json_value(element, "id"), id, true, Range(0, enum2i(DungeonId::MAX) - 1)); !result) {
-        return result;
+    const auto id_result = this->session.read_and_report(get_json_value(element, "id"));
+    if (!id_result) {
+        return tl::unexpected(id_result.error());
     }
-    if (id <= error_idx) {
-        return tl::make_unexpected(ParseErrorType::NON_SEQUENTIAL_RECORDS);
-    }
-    error_idx = id;
+    const auto id = *id_result;
 
     DungeonDefinition dungeon;
     if (const auto result = info_set_string(get_json_value(element, "name"), dungeon.name, true); !result) {
@@ -66,10 +75,10 @@ tl::expected<void, ParseErrorType> DungeonReader::read() const
     }
     int wild_y = 0;
     int wild_x = 0;
-    if (const auto result = info_set_integer(get_json_value(position_obj, "wild_y"), wild_y, true, Range(0, 32766)); !result) {
+    if (const auto result = info_set_integer(get_json_value(position_obj, "wild_y"), wild_y, true, Range(0, DUNGEON_ENTRANCE_COORD_MAX)); !result) {
         return result;
     }
-    if (const auto result = info_set_integer(get_json_value(position_obj, "wild_x"), wild_x, true, Range(0, 32766)); !result) {
+    if (const auto result = info_set_integer(get_json_value(position_obj, "wild_x"), wild_x, true, Range(0, DUNGEON_ENTRANCE_COORD_MAX)); !result) {
         return result;
     }
     dungeon.initialize_position({ wild_y, wild_x });
@@ -132,29 +141,11 @@ tl::expected<void, ParseErrorType> DungeonReader::validate_wilderness_positions(
  */
 bool DungeonReader::grab_one_dungeon_flag(DungeonDefinition &dungeon, std::string_view what) const
 {
-    if (EnumClassFlagGroup<DungeonFeatureType>::grab_one_flag(dungeon.flags, dungeon_flags, what)) {
+    if (info_grab_one_flag(dungeon.flags, dungeon_flags, what)) {
         return true;
     }
 
     msg_print(_("未知のダンジョン・フラグ '{}'。", "Unknown dungeon type flag '{}'."), what);
-    return false;
-}
-
-/*!
- * @brief テキストトークンを走査してモンスター生成条件フラグの結合モードを得る
- * @param dungeon ダンジョンへの参照
- * @param what 参照元の文字列
- * @return 見つけたらtrue
- */
-bool DungeonReader::grab_one_dungeon_mode(DungeonDefinition &dungeon, std::string_view what) const
-{
-    const auto it = dungeon_modes.find(what);
-    if (it != dungeon_modes.end()) {
-        dungeon.mode = it->second;
-        return true;
-    }
-
-    msg_print(_("未知のダンジョン・モンスター生成モード '{}'。", "Unknown dungeon monster generation mode '{}'."), what);
     return false;
 }
 
@@ -171,94 +162,55 @@ template <typename Enum>
 static tl::expected<void, ParseErrorType> info_set_enum_flag_group(const nlohmann::json &obj, std::string_view key, EnumClassFlagGroup<Enum> &flags, const std::unordered_map<std::string_view, Enum> &tokens, std::string_view label)
 {
     const auto it = obj.find(key);
-    if (it == obj.end() || it->is_null() || !it->is_array()) {
+    if (it == obj.end() || it->is_null()) {
         return tl::unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
     }
 
     const auto &array_obj = *it;
 
-    for (const auto &flag_obj : array_obj) {
-        if (!flag_obj.is_string()) {
-            return tl::unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
-        }
-
+    return info_read_flag_array(array_obj, [&](const nlohmann::json &flag_obj) {
         const auto token = flag_obj.get<std::string_view>();
         if (token.empty()) {
-            continue;
+            return true;
         }
-
-        if (EnumClassFlagGroup<Enum>::grab_one_flag(flags, tokens, token)) {
-            continue;
+        if (info_grab_one_flag(flags, tokens, token)) {
+            return true;
         }
-
         msg_print(_("未知のダンジョン{}種別 '{}'。", "Unknown dungeon {} kind '{}'."), label, token);
-        return tl::unexpected(ParseErrorType::INVALID_FLAG);
-    }
-
-    return {};
+        return false; });
 }
 
 /*!
  * @brief テキストトークンを走査してフラグを一つ得る(モンスターのダンジョン出現条件用1)
+ * @details 性別を先に探し、見つからなければ grab_one_monster_basic_flag() で基本フラグの表を探す。
  * @param dungeon ダンジョンへの参照
  * @param what 参照元の文字列
  * @return 見つけたらtrue
  */
 bool DungeonReader::grab_one_basic_monster_flag(DungeonDefinition &dungeon, std::string_view what) const
 {
-    if (EnumClassFlagGroup<MonsterAuraType>::grab_one_flag(dungeon.mon_aura_flags, r_info_aura_flags, what)) {
+    // NONEは種族の性別未設定を表す値であり、出現条件のフラグにはしない。
+    if (what != "NONE" && info_grab_one_flag(dungeon.mon_sex, r_info_sex, what)) {
         return true;
     }
 
-    if (EnumClassFlagGroup<MonsterResistanceType>::grab_one_flag(dungeon.mon_resistance_flags, r_info_flagsr, what)) {
-        return true;
-    }
-
-    if (EnumClassFlagGroup<MonsterBehaviorType>::grab_one_flag(dungeon.mon_behavior_flags, r_info_behavior_flags, what)) {
-        return true;
-    }
-
-    if (EnumClassFlagGroup<MonsterVisualType>::grab_one_flag(dungeon.mon_visual_flags, r_info_visual_flags, what)) {
-        return true;
-    }
-
-    if (EnumClassFlagGroup<MonsterKindType>::grab_one_flag(dungeon.mon_kind_flags, r_info_kind_flags, what)) {
-        return true;
-    }
-
-    if (EnumClassFlagGroup<MonsterDropType>::grab_one_flag(dungeon.mon_drop_flags, r_info_drop_flags, what)) {
-        return true;
-    }
-
-    if (EnumClassFlagGroup<MonsterWildernessType>::grab_one_flag(dungeon.mon_wilderness_flags, r_info_wilderness_flags, what)) {
-        return true;
-    }
-
-    if (EnumClassFlagGroup<MonsterFeatureType>::grab_one_flag(dungeon.mon_feature_flags, r_info_feature_flags, what)) {
-        return true;
-    }
-
-    if (EnumClassFlagGroup<MonsterPopulationType>::grab_one_flag(dungeon.mon_population_flags, r_info_population_flags, what)) {
-        return true;
-    }
-
-    if (EnumClassFlagGroup<MonsterSpeakType>::grab_one_flag(dungeon.mon_speak_flags, r_info_speak_flags, what)) {
-        return true;
-    }
-
-    if (EnumClassFlagGroup<MonsterBrightnessType>::grab_one_flag(dungeon.mon_brightness_flags, r_info_brightness_flags, what)) {
-        return true;
-    }
-
-    if (EnumClassFlagGroup<MonsterSpecialType>::grab_one_flag(dungeon.mon_special_flags, r_info_special_flags, what)) {
-        return true;
-    }
-    if (EnumClassFlagGroup<MonsterMiscType>::grab_one_flag(dungeon.mon_misc_flags, r_info_misc_flags, what)) {
-        return true;
-    }
-
-    msg_print(_("未知のモンスター・フラグ '{}'。", "Unknown monster flag '{}'."), what);
-    return false;
+    return grab_one_monster_basic_flag(
+        {
+            dungeon.mon_resistance_flags,
+            dungeon.mon_aura_flags,
+            dungeon.mon_behavior_flags,
+            dungeon.mon_visual_flags,
+            dungeon.mon_kind_flags,
+            dungeon.mon_drop_flags,
+            dungeon.mon_wilderness_flags,
+            dungeon.mon_feature_flags,
+            dungeon.mon_population_flags,
+            dungeon.mon_speak_flags,
+            dungeon.mon_brightness_flags,
+            dungeon.mon_special_flags,
+            dungeon.mon_misc_flags,
+        },
+        what);
 }
 
 /*!
@@ -269,25 +221,21 @@ bool DungeonReader::grab_one_basic_monster_flag(DungeonDefinition &dungeon, std:
  */
 bool DungeonReader::grab_one_spell_monster_flag(DungeonDefinition &dungeon, std::string_view what) const
 {
-    if (EnumClassFlagGroup<MonsterAbilityType>::grab_one_flag(dungeon.mon_ability_flags, r_info_ability_flags, what)) {
-        return true;
-    }
-
-    msg_print(_("未知のモンスター・フラグ '{}'。", "Unknown monster flag '{}'."), what);
-    return false;
+    return grab_one_monster_spell_flag(dungeon.mon_ability_flags, what);
 }
 
 /*!
  * @brief 床・壁の地形の抽選表を読み込む。
  * @param tiles_obj 地形と重みの配列
  * @param section 診断に表示する節の名前 (floor / wall)
- * @return 抽選表。地形や重みの書式が不正なら UNDEFINED_TERRAIN_TAG、重みの合計が100でなければ INVALID_VALUE
+ * @return 抽選表。配列や地形・重みが無ければ TOO_FEW_ARGUMENTS、型が誤っていれば INVALID_TYPE、未知の地形なら UNDEFINED_TERRAIN_TAG、
+ * 重みが範囲外か重みの合計が100でなければ INVALID_VALUE
  * @details 重みは百分率で、各0～100・合計はちょうど100とする。重みが0の地形は抽選表に登録しない。
  */
 static tl::expected<ProbabilityTable<short>, ParseErrorType> parse_terrain_probability(const nlohmann::json &tiles_obj, std::string_view section)
 {
-    if (tiles_obj.is_null() || !tiles_obj.is_array()) {
-        return tl::unexpected(ParseErrorType::UNDEFINED_TERRAIN_TAG);
+    if (!tiles_obj.is_array()) {
+        return tl::unexpected(tiles_obj.is_null() ? ParseErrorType::TOO_FEW_ARGUMENTS : ParseErrorType::INVALID_TYPE);
     }
 
     constexpr auto total_percent = 100;
@@ -295,21 +243,28 @@ static tl::expected<ProbabilityTable<short>, ParseErrorType> parse_terrain_proba
     ProbabilityTable<short> prob_table;
     int total_probability = 0;
     for (const auto &tile_obj : tiles_obj) {
-        if (!tile_obj.is_object() || !get_json_value(tile_obj, "type").is_string() || !get_json_value(tile_obj, "rate").is_number_integer()) {
-            return tl::unexpected(ParseErrorType::UNDEFINED_TERRAIN_TAG);
+        if (!tile_obj.is_object()) {
+            return tl::unexpected(ParseErrorType::INVALID_TYPE);
+        }
+        const auto &type_obj = get_json_value(tile_obj, "type");
+        if (!type_obj.is_string()) {
+            return tl::unexpected(type_obj.is_null() ? ParseErrorType::TOO_FEW_ARGUMENTS : ParseErrorType::INVALID_TYPE);
+        }
+        const auto &rate_obj = get_json_value(tile_obj, "rate");
+        if (!rate_obj.is_number_integer()) {
+            return tl::unexpected(rate_obj.is_null() ? ParseErrorType::TOO_FEW_ARGUMENTS : ParseErrorType::INVALID_TYPE);
         }
 
         int prob = 0;
-        const auto &rate_obj = get_json_value(tile_obj, "rate");
         if (!info_set_integer(rate_obj, prob, true, Range(0, total_percent))) {
-            msg_print(_("DungeonDefinitions.jsonc: ダンジョンID '{}' の{}.tiles の rate '{}' が0～100の範囲外です (百分率で指定してください)。",
-                          "DungeonDefinitions.jsonc: dungeon ID '{}' {}.tiles rate '{}' is outside 0 to 100 (they are percentages)."),
-                error_idx, section, rate_obj.dump());
-            return tl::unexpected(ParseErrorType::UNDEFINED_TERRAIN_TAG);
+            msg_print(_("DungeonDefinitions.jsonc: {}.tiles の rate '{}' が0～100の範囲外です (百分率で指定してください)。",
+                          "DungeonDefinitions.jsonc: {}.tiles rate '{}' is outside 0 to 100 (they are percentages)."),
+                section, rate_obj.dump());
+            return tl::unexpected(ParseErrorType::INVALID_VALUE);
         }
 
         try {
-            const auto terrain_id = terrains.get_terrain_id(get_json_value(tile_obj, "type").get<std::string>());
+            const auto terrain_id = terrains.get_terrain_id(type_obj.get<std::string>());
             prob_table.entry_item(terrain_id, prob);
         } catch (const std::exception &) {
             return tl::unexpected(ParseErrorType::UNDEFINED_TERRAIN_TAG);
@@ -323,15 +278,15 @@ static tl::expected<ProbabilityTable<short>, ParseErrorType> parse_terrain_proba
     }
 
     if (total_probability > total_percent) {
-        msg_print(_("DungeonDefinitions.jsonc: ダンジョンID '{}' の{}.tiles の rate の合計が '{}' となり100を超えています (百分率で指定してください)。",
-                      "DungeonDefinitions.jsonc: dungeon ID '{}' {}.tiles rates reach a total of '{}', exceeding 100 (they are percentages)."),
-            error_idx, section, total_probability);
+        msg_print(_("DungeonDefinitions.jsonc: {}.tiles の rate の合計が '{}' となり100を超えています (百分率で指定してください)。",
+                      "DungeonDefinitions.jsonc: {}.tiles rates reach a total of '{}', exceeding 100 (they are percentages)."),
+            section, total_probability);
         return tl::unexpected(ParseErrorType::INVALID_VALUE);
     }
     if (total_probability != total_percent) {
-        msg_print(_("DungeonDefinitions.jsonc: ダンジョンID '{}' の{}.tiles の rate の合計 '{}' が100ではありません (百分率で指定してください)。",
-                      "DungeonDefinitions.jsonc: dungeon ID '{}' {}.tiles rates total '{}', not 100 (they are percentages)."),
-            error_idx, section, total_probability);
+        msg_print(_("DungeonDefinitions.jsonc: {}.tiles の rate の合計 '{}' が100ではありません (百分率で指定してください)。",
+                      "DungeonDefinitions.jsonc: {}.tiles rates total '{}', not 100 (they are percentages)."),
+            section, total_probability);
         return tl::unexpected(ParseErrorType::INVALID_VALUE);
     }
 
@@ -365,9 +320,9 @@ tl::expected<void, ParseErrorType> DungeonReader::set_dungeon_generation(Dungeon
     }
     // 保存形式は符号付き16bit。最浅階が最深階を超える定義も拒否する。
     if (dungeon.mindepth > dungeon.maxdepth) {
-        msg_print(_("DungeonDefinitions.jsonc: ダンジョンID '{}' のminDepth '{}' がmaxDepth '{}' を超えています。",
-                      "DungeonDefinitions.jsonc: dungeon ID '{}' minDepth '{}' exceeds maxDepth '{}'."),
-            error_idx, dungeon.mindepth, dungeon.maxdepth);
+        msg_print(_("DungeonDefinitions.jsonc: minDepth '{}' がmaxDepth '{}' を超えています。",
+                      "DungeonDefinitions.jsonc: minDepth '{}' exceeds maxDepth '{}'."),
+            dungeon.mindepth, dungeon.maxdepth);
         return tl::unexpected(ParseErrorType::INVALID_VALUE);
     }
     if (const auto result = info_set_integer(get_json_value(generation_obj, "minPlayerLevel"), dungeon.min_plev, true, Range(0, PY_MAX_LEVEL)); !result) {
@@ -464,11 +419,19 @@ tl::expected<void, ParseErrorType> DungeonReader::set_dungeon_wall(DungeonDefini
     dungeon.prob_table_wall = std::move(*prob_table);
 
     const auto &terrains = TerrainList::get_instance();
-    try {
-        dungeon.outer_wall = terrains.get_terrain_id(get_json_value(wall_obj, "outer").get<std::string>());
-        dungeon.inner_wall = terrains.get_terrain_id(get_json_value(wall_obj, "inner").get<std::string>());
-    } catch (const std::exception &) {
-        return tl::unexpected(ParseErrorType::UNDEFINED_TERRAIN_TAG);
+    for (const auto &[key, wall_id] : { std::pair{ "outer", &dungeon.outer_wall }, std::pair{ "inner", &dungeon.inner_wall } }) {
+        const auto &terrain_obj = get_json_value(wall_obj, key);
+        if (terrain_obj.is_null()) {
+            return tl::unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
+        }
+        if (!terrain_obj.is_string()) {
+            return tl::unexpected(ParseErrorType::INVALID_TYPE);
+        }
+        try {
+            *wall_id = terrains.get_terrain_id(terrain_obj.get<std::string>());
+        } catch (const std::exception &) {
+            return tl::unexpected(ParseErrorType::UNDEFINED_TERRAIN_TAG);
+        }
     }
 
     return this->set_dungeon_streams(get_json_value(wall_obj, "streams"), dungeon);
@@ -480,26 +443,9 @@ tl::expected<void, ParseErrorType> DungeonReader::set_dungeon_flags(DungeonDefin
     if (flags_obj.is_null()) {
         return {};
     }
-    if (!flags_obj.is_array()) {
-        return tl::unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
-    }
-
-    for (const auto &f_obj : flags_obj) {
-        if (!f_obj.is_string()) {
-            return tl::unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
-        }
-
-        const auto f = f_obj.get<std::string>();
-        if (f.empty()) {
-            continue;
-        }
-
-        if (!this->grab_one_dungeon_flag(dungeon, f)) {
-            return tl::unexpected(ParseErrorType::INVALID_FLAG);
-        }
-    }
-
-    return {};
+    return info_read_flag_array(flags_obj, [this, &dungeon](const nlohmann::json &flag) {
+        const auto token = flag.get<std::string>();
+        return token.empty() || this->grab_one_dungeon_flag(dungeon, token); });
 }
 
 template <typename Enum, typename Validator>
@@ -507,18 +453,14 @@ static tl::expected<void, ParseErrorType> info_set_enum_from_integer_checked(con
 {
     Enum enum_value{};
     if (const auto result = info_set_integer(json, enum_value, true, range); !result) {
-        if (result.error() == ParseErrorType::INVALID_FLAG) {
+        if (result.error() == ParseErrorType::INVALID_VALUE) {
             msg_print(_("{} ID '{}' は範囲外です。", "{} ID '{}' is out of range."), label, json.dump());
-            return tl::unexpected(ParseErrorType::OUT_OF_BOUNDS);
         }
         return result;
     }
 
     const auto value = enum2i(enum_value);
-    if (value < 0) {
-        msg_print(_("{} ID '{}' は範囲外です。", "{} ID '{}' is out of range."), label, value);
-        return tl::unexpected(ParseErrorType::OUT_OF_BOUNDS);
-    }
+
     if (!validator(enum_value)) {
         msg_print(_("不正な{} ID '{}'。", "Invalid {} ID '{}'."), label, value);
         return tl::unexpected(ParseErrorType::INVALID_VALUE);
@@ -595,26 +537,9 @@ tl::expected<void, ParseErrorType> DungeonReader::set_dungeon_monster_flags(cons
     if (flags_obj.is_null()) {
         return {};
     }
-    if (!flags_obj.is_array()) {
-        return tl::unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
-    }
-
-    for (const auto &f_obj : flags_obj) {
-        if (!f_obj.is_string()) {
-            return tl::unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
-        }
-
-        const auto f = f_obj.get<std::string>();
-        if (f.empty()) {
-            continue;
-        }
-
-        if (!this->grab_one_basic_monster_flag(dungeon, f)) {
-            return tl::unexpected(ParseErrorType::INVALID_FLAG);
-        }
-    }
-
-    return {};
+    return info_read_flag_array(flags_obj, [this, &dungeon](const nlohmann::json &flag) {
+        const auto token = flag.get<std::string>();
+        return token.empty() || this->grab_one_basic_monster_flag(dungeon, token); });
 }
 
 tl::expected<void, ParseErrorType> DungeonReader::set_dungeon_monster_symbols(const nlohmann::json &symbols_obj, DungeonDefinition &dungeon) const
@@ -636,7 +561,7 @@ tl::expected<void, ParseErrorType> DungeonReader::set_dungeon_monster_symbols(co
             continue;
         }
         if (symbol.size() != 1) {
-            return tl::unexpected(ParseErrorType::INVALID_FLAG);
+            return tl::unexpected(ParseErrorType::INVALID_VALUE);
         }
 
         dungeon.r_chars.push_back(symbol[0]);
@@ -650,26 +575,9 @@ tl::expected<void, ParseErrorType> DungeonReader::set_dungeon_monster_spells(con
     if (spells_obj.is_null()) {
         return {};
     }
-    if (!spells_obj.is_array()) {
-        return tl::unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
-    }
-
-    for (const auto &s_obj : spells_obj) {
-        if (!s_obj.is_string()) {
-            return tl::unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
-        }
-
-        const auto s = s_obj.get<std::string>();
-        if (s.empty()) {
-            continue;
-        }
-
-        if (!this->grab_one_spell_monster_flag(dungeon, s)) {
-            return tl::unexpected(ParseErrorType::INVALID_FLAG);
-        }
-    }
-
-    return {};
+    return info_read_flag_array(spells_obj, [this, &dungeon](const nlohmann::json &flag) {
+        const auto token = flag.get<std::string>();
+        return token.empty() || this->grab_one_spell_monster_flag(dungeon, token); });
 }
 
 /*!
@@ -697,13 +605,14 @@ tl::expected<void, ParseErrorType> DungeonReader::set_dungeon_monsters(DungeonDe
     }
 
     const auto &flags_mode_obj = get_json_value(monsters_obj, "flagsMode");
-    if (!flags_mode_obj.is_string()) {
-        return tl::unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
+    const auto mode = info_read_token(flags_mode_obj, dungeon_modes);
+    if (!mode) {
+        if (mode.error() == ParseErrorType::INVALID_FLAG) {
+            msg_print(_("未知のダンジョン・モンスター生成モード '{}'。", "Unknown dungeon monster generation mode '{}'."), flags_mode_obj.get<std::string>());
+        }
+        return tl::make_unexpected(mode.error());
     }
-    const auto mode = flags_mode_obj.get<std::string>();
-    if (!this->grab_one_dungeon_mode(dungeon, mode)) {
-        return tl::unexpected(ParseErrorType::INVALID_FLAG);
-    }
+    dungeon.mode = *mode;
 
     if (auto it = monsters_obj.find("flags"); it != monsters_obj.end()) {
         if (const auto result = this->set_dungeon_monster_flags(*it, dungeon); !result) {

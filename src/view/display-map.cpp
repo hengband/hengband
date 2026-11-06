@@ -21,6 +21,9 @@
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-symbol.h"
+#include "view/original-monster-catalog.h"
+#include "view/original-symbol-tiles.h"
+#include "view/original-tiles.h"
 #include "window/main-window-util.h"
 #include "world/world.h"
 #include <algorithm>
@@ -44,7 +47,7 @@ const std::string image_monsters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQR
 DisplaySymbol image_object(xso::rng32 &rng)
 {
     if (use_graphics) {
-        return BaseitemService::pick_one_at_random(rng).get_symbol();
+        return original_tiles::item_symbol_fallback(BaseitemService::pick_one_at_random(rng).get_symbol());
     }
 
     const auto color = randnum1<uint8_t>(rng, 15);
@@ -62,7 +65,7 @@ DisplaySymbol image_monster(xso::rng32 &rng)
     if (use_graphics) {
         const auto &monraces = MonraceList::get_instance();
         const auto &monrace = monraces.pick_monrace_at_random(rng);
-        return monrace.symbol_config;
+        return original_tiles::monster_catalog_symbol(static_cast<int>(monrace.idx), monrace.symbol_config);
     }
 
     const auto color = randnum1<uint8_t>(rng, 15);
@@ -242,6 +245,9 @@ int decide_map_terrain_lighting(const PlayerType &player, const Pos2D &pos, tl::
     }
 
     const auto lighting = decide_visible_terrain_lighting(player, grid, terrain, pos);
+    if (original_tiles::is_enabled()) {
+        return lighting;
+    }
     const auto &symbols = terrain.symbol_configs;
     const auto &displayed = symbols.at(lighting);
     for (auto candidate = F_LIT_STANDARD; candidate < lighting; ++candidate) {
@@ -260,7 +266,7 @@ int decide_map_terrain_lighting(const PlayerType &player, const Pos2D &pos, tl::
  * @param pos 階の中の座標
  * @return 前景・背景のシンボルと色
  */
-DisplaySymbolPair map_info(PlayerType *player_ptr, const Pos2D &pos)
+static DisplaySymbolPair map_info_impl(PlayerType *player_ptr, const Pos2D &pos)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
     const auto &grid = floor.get_grid(pos);
@@ -271,6 +277,7 @@ DisplaySymbolPair map_info(PlayerType *player_ptr, const Pos2D &pos)
     const auto &terrain_shown = is_visible ? terrain_mimic : terrains.get_terrain(tag_unsafe);
     const auto lighting = is_visible ? decide_visible_terrain_lighting(*player_ptr, grid, terrain_mimic, pos) : F_LIT_STANDARD;
     auto symbol_config = terrain_shown.symbol_configs.at(lighting);
+    symbol_config = original_tiles::terrain_symbol(*player_ptr, pos, terrain_shown, lighting, symbol_config);
     if (feat_priority == -1) {
         feat_priority = terrain_shown.priority;
     }
@@ -318,6 +325,8 @@ DisplaySymbolPair map_info(PlayerType *player_ptr, const Pos2D &pos)
         feat_priority = 20;
         if (is_hallucinated) {
             symbol_pair.symbol_foreground = image_object(get_display_rng());
+        } else {
+            symbol_pair.symbol_foreground = original_tiles::item_symbol(item, symbol_pair.symbol_foreground);
         }
 
         break;
@@ -335,6 +344,13 @@ DisplaySymbolPair map_info(PlayerType *player_ptr, const Pos2D &pos)
     }
 
     const auto &monrace_ap = monster.get_apparent_monrace();
+    const auto monster_symbol = [&](DisplaySymbol symbol) {
+        const auto appearance_color = monrace_ap.visual_flags.has(MonsterVisualType::SHAPECHANGER) ? symbol.color : monrace_ap.symbol_config.color;
+        if (original_tiles::monster_catalog_available && !monrace_ap.visual_flags.has(MonsterVisualType::SHAPECHANGER)) {
+            return original_tiles::monster_catalog_symbol(static_cast<int>(monrace_ap.idx), symbol);
+        }
+        return original_tiles::monster_symbol(symbol, appearance_color);
+    };
     feat_priority = 30;
     if (is_hallucinated) {
         if (!monrace_ap.visual_flags.has_all_of({ MonsterVisualType::CLEAR, MonsterVisualType::CLEAR_COLOR })) {
@@ -346,8 +362,9 @@ DisplaySymbolPair map_info(PlayerType *player_ptr, const Pos2D &pos)
     }
 
     symbol_config = monrace_ap.symbol_config;
+    const auto use_ascii_monster_colors = !use_graphics || (original_tiles::is_enabled() && symbol_config.is_ascii_graphics());
     if (monrace_ap.visual_flags.has_none_of({ MonsterVisualType::CLEAR, MonsterVisualType::SHAPECHANGER, MonsterVisualType::CLEAR_COLOR, MonsterVisualType::MULTI_COLOR, MonsterVisualType::RANDOM_COLOR })) {
-        symbol_pair.symbol_foreground = set_term_color(player_ptr, pos, symbol_config);
+        symbol_pair.symbol_foreground = set_term_color(player_ptr, pos, monster_symbol(symbol_config));
         return symbol_pair;
     }
 
@@ -358,7 +375,7 @@ DisplaySymbolPair map_info(PlayerType *player_ptr, const Pos2D &pos)
 
     if (monrace_ap.visual_flags.has(MonsterVisualType::CLEAR_COLOR) && (symbol_pair.symbol_foreground.color != TERM_DARK) && !use_graphics) {
         /* Do nothing */
-    } else if (monrace_ap.visual_flags.has(MonsterVisualType::MULTI_COLOR) && !use_graphics) {
+    } else if (monrace_ap.visual_flags.has(MonsterVisualType::MULTI_COLOR) && use_ascii_monster_colors) {
         if (monrace_ap.visual_flags.has(MonsterVisualType::ANY_COLOR)) {
             symbol_pair.symbol_foreground.color = randnum1<uint8_t>(get_display_rng(), 15);
         } else {
@@ -374,7 +391,7 @@ DisplaySymbolPair map_info(PlayerType *player_ptr, const Pos2D &pos)
 
             symbol_pair.symbol_foreground.color = rand_choice(get_display_rng(), colors);
         }
-    } else if (monrace_ap.visual_flags.has(MonsterVisualType::RANDOM_COLOR) && !use_graphics) {
+    } else if (monrace_ap.visual_flags.has(MonsterVisualType::RANDOM_COLOR) && use_ascii_monster_colors) {
         symbol_pair.symbol_foreground.color = grid.m_idx % 15 + 1;
     } else {
         symbol_pair.symbol_foreground.color = symbol_config.color;
@@ -395,12 +412,17 @@ DisplaySymbolPair map_info(PlayerType *player_ptr, const Pos2D &pos)
             symbol_pair.symbol_foreground.character = one_in_(rng, 25) ? rand_choice(rng, image_objects) : rand_choice(rng, image_monsters);
         }
 
-        symbol_pair.symbol_foreground = set_term_color(player_ptr, pos, symbol_pair.symbol_foreground);
+        symbol_pair.symbol_foreground = set_term_color(player_ptr, pos, monster_symbol(symbol_pair.symbol_foreground));
         return symbol_pair;
     }
 
-    symbol_pair.symbol_foreground = set_term_color(player_ptr, pos, { symbol_pair.symbol_foreground.color, symbol_config.character });
+    symbol_pair.symbol_foreground = set_term_color(player_ptr, pos, monster_symbol({ symbol_pair.symbol_foreground.color, symbol_config.character }));
     return symbol_pair;
+}
+
+DisplaySymbolPair map_info(PlayerType *player_ptr, const Pos2D &pos)
+{
+    return original_tiles::encode_foreground(*player_ptr, pos, map_info_impl(player_ptr, pos));
 }
 
 /*!

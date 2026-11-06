@@ -27,6 +27,7 @@
 #include "system/monster-entity.h"
 #include "target/projection-path-calculator.h"
 #include "timed-effect/timed-effects.h"
+#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include <string>
 

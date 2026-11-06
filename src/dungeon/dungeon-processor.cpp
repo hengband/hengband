@@ -7,6 +7,7 @@
 #include "core/turn-compensator.h"
 #include "dungeon/quest.h"
 #include "floor/floor-leaver.h"
+#include "game-option/disturbance-options.h"
 #include "game-option/map-screen-options.h"
 #include "game-option/play-record-options.h"
 #include "hpmp/hp-mp-regenerator.h"
@@ -32,6 +33,8 @@
 #include "system/floor/wilderness-grid.h"
 #include "system/monrace/monrace-definition.h"
 #include "target/target-checker.h"
+#include "term/screen-processor.h"
+#include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "world/world-turn-processor.h"
@@ -83,18 +86,23 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
     world.is_loading_now = false;
     player_ptr->leaving = false;
 
-    command_cmd = 0;
-    command_rep = 0;
-    command_arg = 0;
-    command_dir = Direction::none();
-
-    Target::clear_last_target();
-    player_ptr->pet_t_m_idx = 0;
-    player_ptr->riding_t_m_idx = 0;
     player_ptr->ambush_flag = false;
     health_track(player_ptr, 0);
 
-    disturb(player_ptr, true, true);
+    // セーブを読み込んで再開したとき (load_game) は、セーブしている行動 (探索モード・休憩・釣り) とコマンドの繰り返しを続け、
+    // 続けた場合と同じにする。走りと移動は続きをセーブしていないので、読み込んだ時点で止まっている
+    // (load_game は新規ゲームの最初の階でも真だが、そのときはどれも始まっていない)
+    if (load_game) {
+        if (flush_disturb) {
+            flush();
+        }
+    } else {
+        command_cmd = 0;
+        command_rep = 0;
+        command_arg = 0;
+        command_dir = Direction::none();
+        disturb(player_ptr, true, true);
+    }
     const auto quest_id = floor.get_quest_id();
     auto &quests = QuestList::get_instance();
     auto &monrace_questor = quests.get_quest(quest_id).get_bounty();
@@ -185,7 +193,7 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
     floor.monster_level = floor.base_level;
     floor.object_level = floor.base_level;
     world.is_loading_now = true;
-    if (player_ptr->energy_need > 0 && !is_watching && (floor.is_underground() || floor.is_leaving_dungeon() || floor.inside_arena)) {
+    if (!load_game && player_ptr->energy_need > 0 && !is_watching && (floor.is_underground() || floor.is_leaving_dungeon() || floor.inside_arena)) {
         player_ptr->energy_need = 0;
     }
 
@@ -261,6 +269,8 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
         if (wild_regen) {
             wild_regen--;
         }
+
+        WorldTurnProcessor(player_ptr).decide_auto_save();
     }
 
     if ((inside_quest(quest_id)) && monrace_questor.kind_flags.has_not(MonsterKindType::UNIQUE)) {

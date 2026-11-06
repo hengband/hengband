@@ -77,17 +77,24 @@
     <ClCompile Include="..\..\src\test\info-reader\test-activation-reader.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-artifact-reader.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-baseitem-reader.cpp" />
+    <ClCompile Include="..\..\src\test\info-reader\test-definition-id-checker.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-dungeon-reader.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-ego-reader.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-fixed-map-parser.cpp" />
+    <ClCompile Include="..\..\src\test\info-reader\test-general-parser.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-info-reader-util.cpp" />
+    <ClCompile Include="..\..\src\test\info-reader\test-item-flag-reader.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-json-reader-util.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-jsonc-document-loader.cpp" />
+    <ClCompile Include="..\..\src\test\info-reader\test-legend-ego-validator.cpp" />
+    <ClCompile Include="..\..\src\test\info-reader\test-legend-object-trap-validator.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-magic-reader.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-message-reader.cpp" />
+    <ClCompile Include="..\..\src\test\info-reader\test-monster-flag-reader.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-parse-error-messages.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-quest-reader.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-race-reader.cpp" />
+    <ClCompile Include="..\..\src\test\info-reader\test-record-diagnostic.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-skill-reader.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-spell-reader.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-terrain-reader.cpp" />
@@ -107,10 +114,13 @@
     <ClCompile Include="..\..\src\test\io\test-tokenizer.cpp" />
     <ClCompile Include="..\..\src\test\knowledge\test-knowledge-features.cpp" />
     <ClCompile Include="..\..\src\test\load\test-angband-version-comparer.cpp" />
+    <ClCompile Include="..\..\src\test\load\test-floor-loader.cpp" />
     <ClCompile Include="..\..\src\test\locale\test-character-encoding.cpp" />
+    <ClCompile Include="..\..\src\test\locale\test-japanese.cpp" />
     <ClCompile Include="..\..\src\test\lore\test-monster-lore-snapshot.cpp" />
     <ClCompile Include="..\..\src\test\market\test-building-recharger.cpp" />
     <ClCompile Include="..\..\src\test\monster-race\test-race-ability-mask.cpp" />
+    <ClCompile Include="..\..\src\test\mspell\mspell-attack\test-mspell-ball.cpp" />
     <ClCompile Include="..\..\src\test\mspell\test-mspell-projection-table.cpp" />
     <ClCompile Include="..\..\src\test\mutation\test-mutation-roll-table.cpp" />
     <ClCompile Include="..\..\src\test\object-activation\test-activation-util.cpp" />
@@ -123,9 +133,12 @@
     <ClCompile Include="..\..\src\test\player-status\test-player-speed.cpp" />
     <ClCompile Include="..\..\src\test\player-status\test-player-status-base.cpp" />
     <ClCompile Include="..\..\src\test\player\test-player-skill.cpp" />
+    <ClCompile Include="..\..\src\test\player\test-player-status-flags.cpp" />
+    <ClCompile Include="..\..\src\test\player\test-player-status-resist.cpp" />
     <ClCompile Include="..\..\src\test\player\test-process-name.cpp" />
     <ClCompile Include="..\..\src\test\racial\test-racial-android.cpp" />
     <ClCompile Include="..\..\src\test\save\test-item-writer.cpp" />
+    <ClCompile Include="..\..\src\test\save\test-monster-entity-writer.cpp" />
     <ClCompile Include="..\..\src\test\spell-realm\test-spells-hex.cpp" />
     <ClCompile Include="..\..\src\test\spell\test-spell-info.cpp" />
     <ClCompile Include="..\..\src\test\store\test-pricing.cpp" />
@@ -144,6 +157,7 @@
     <ClCompile Include="..\..\src\test\system\test-dungeon-record.cpp" />
     <ClCompile Include="..\..\src\test\system\test-quest-list.cpp" />
     <ClCompile Include="..\..\src\test\target\test-target-getter.cpp" />
+    <ClCompile Include="..\..\src\test\term\test-screen-processor.cpp" />
     <ClCompile Include="..\..\src\test\term\test-z-rand.cpp" />
     <ClCompile Include="..\..\src\test\test-main.cpp" />
     <ClCompile Include="..\..\src\test\timed-effect\test-player-cut.cpp" />
@@ -155,13 +169,16 @@
     <ClCompile Include="..\..\src\test\util\test-finalizer.cpp" />
     <ClCompile Include="..\..\src\test\util\test-flag-group.cpp" />
     <ClCompile Include="..\..\src\test\util\test-int-char-converter.cpp" />
+    <ClCompile Include="..\..\src\test\util\test-menu-column-switcher.cpp" />
     <ClCompile Include="..\..\src\test\util\test-probability-table.cpp" />
     <ClCompile Include="..\..\src\test\util\test-sha256.cpp" />
     <ClCompile Include="..\..\src\test\util\test-string-processor.cpp" />
     <ClCompile Include="..\..\src\test\util\test-temporary-json-files.cpp" />
+    <ClCompile Include="..\..\src\test\view\test-display-lore.cpp" />
     <ClCompile Include="..\..\src\test\view\test-display-messages.cpp" />
     <ClCompile Include="..\..\src\test\view\test-map-info-cache.cpp" />
     <ClCompile Include="..\..\src\test\view\test-map-terrain-visibility.cpp" />
+    <ClCompile Include="..\..\src\test\view\test-original-tiles.cpp" />
     <ClCompile Include="..\..\src\test\view\test-screen-parity-helpers.cpp" />
     <ClCompile Include="..\..\src\test\window\test-overview-map-cache.cpp" />
     <ClCompile Include="..\..\src\test\window\test-shrunk-overview-map.cpp" />
@@ -169,9 +186,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\stdafx.h" />
+    <ClInclude Include="..\..\src\test\info-reader\dungeon-grid-checks.h" />
+    <ClInclude Include="..\..\src\test\info-reader\legend-ego-fixture.h" />
     <ClInclude Include="..\..\src\test\info-reader\parse-result-helpers.h" />
     <ClInclude Include="..\..\src\test\info-reader\scoped-reader-state.h" />
     <ClInclude Include="..\..\src\test\save\scoped-save-io.h" />
+    <ClInclude Include="..\..\src\test\scoped-ego-list.h" />
     <ClInclude Include="..\..\src\test\scoped-input-term.h" />
     <ClInclude Include="..\..\src\test\scoped-redrawing-flags.h" />
     <ClInclude Include="..\..\src\test\scoped-restore.h" />
@@ -187,6 +207,12 @@
     <ClInclude Include="..\..\src\test\system\spell-info-list-test-access.h" />
     <ClInclude Include="..\..\src\test\system\terrain-list-test-access.h" />
     <ClInclude Include="..\..\src\test\temporary-json-files.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\src\test\view\original-terrain-coverage.inc" />
+    <None Include="..\..\src\test\view\original-item-coverage.inc" />
+    <None Include="..\..\src\test\view\original-monster-coverage.inc" />
+    <None Include="..\..\src\test\view\original-symbol-coverage.inc" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="HengbandCore.vcxproj">

@@ -5,13 +5,21 @@
  */
 
 #include "info-reader/parse-error-types.h"
+#include "info-reader/range.h"
 #include "system/dungeon/quest-fixed-map.h"
 #include <nlohmann/json_fwd.hpp>
 #include <string>
+#include <string_view>
 #include <tl/expected.hpp>
 
+// 凡例のセルの値の範囲（両端を含む）。値は quest-reader.cpp で ID の型から決める。
+extern const Range LEGEND_SHORT_RANGE;
+extern const Range LEGEND_MONSTER_RANGE;
+extern const Range LEGEND_EGO_RANGE;
+
+bool is_legend_cave_flag(std::string_view name);
+
 class QuestType;
-struct QuestDescriptionBlock;
 
 /*!
  * @brief 固定クエスト JSONC 読み込みクラス
@@ -29,13 +37,13 @@ public:
     QuestReader &operator=(const QuestReader &) = delete;
     QuestReader &operator=(QuestReader &&) = delete;
 
-    tl::expected<void, ParseErrorType> read() const;
+    tl::expected<void, ParseErrorType> read(std::string *reason = nullptr) const;
 
 private:
     tl::expected<void, ParseErrorType> set_name(std::string &name) const;
     tl::expected<void, ParseErrorType> set_definition(QuestFixedMap &parsed) const;
     tl::expected<void, ParseErrorType> set_descriptions(QuestFixedMap &parsed) const;
-    tl::expected<void, ParseErrorType> set_legend(QuestFixedMap &parsed) const;
+    tl::expected<void, ParseErrorType> set_legend(QuestFixedMap &parsed, std::string *reason) const;
     tl::expected<void, ParseErrorType> set_maps(QuestFixedMap &parsed) const;
     tl::expected<void, ParseErrorType> set_starts(QuestFixedMap &parsed) const;
 
@@ -45,6 +53,7 @@ private:
 };
 
 tl::expected<void, ParseErrorType> parse_quest_legend_cell(const nlohmann::json &cell_data, QuestLegendCell &out);
+tl::expected<void, ParseErrorType> parse_quest_legend_cell(const nlohmann::json &cell_data, QuestLegendCell &out, std::string &reason);
 
 /*! @brief 地形・罠を未解決のタグとして保持する凡例セル。地形・罠の数値欄は0、対応するランダムビットは未設定。 */
 struct DeferredQuestLegendCell {
@@ -54,3 +63,9 @@ struct DeferredQuestLegendCell {
 };
 
 tl::expected<void, ParseErrorType> parse_quest_legend_cell_deferred(const nlohmann::json &cell_data, DeferredQuestLegendCell &out);
+
+tl::expected<void, ParseErrorType> parse_quest_legend_cell_deferred(const nlohmann::json &cell_data, DeferredQuestLegendCell &out, std::string &reason);
+
+tl::expected<void, ParseErrorType> resolve_legend_terrain(std::string_view tag, short &terrain, int &random, int random_flag);
+
+void resolve_legend_reward(dungeon_grid &grid, const QuestLegendCell &cell, const QuestType &quest);

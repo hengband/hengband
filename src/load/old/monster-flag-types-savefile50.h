@@ -17,4 +17,6 @@ enum class SaveDataMonsterFlagType {
     MFLAG2 = 0x00002000,
     NICKNAME = 0x00004000,
     PARENT = 0x00008000,
+    MFLAG = 0x00010000,
+    VISIBLE = 0x00020000, //!< 見えている (ml)。後に続くデータは無いので、古い版でも読める
 };

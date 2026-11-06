@@ -1,5 +1,9 @@
 #pragma once
 
+/*!
+ * @brief モンスター個体の一時的なフラグ
+ * @details 値はセーブデータに書かれるので、新しいフラグは末尾 (MAX の前) に足し、並べ替えない。
+ */
 enum class MonsterTemporaryFlagType {
     VIEW = 0, /* Monster is in line of sight */
     LOS = 1, /* Monster is marked for project_all_los(player_ptr, ) */

@@ -168,6 +168,18 @@ std::string_view input_kind_name(InputKind kind)
         return "any_key";
     case InputKind::SPELL:
         return "spell";
+    case InputKind::BUILDING:
+        return "building";
+    case InputKind::FILE_VIEW:
+        return "file";
+    case InputKind::BIRTH:
+        return "birth";
+    case InputKind::BROWSER:
+        return "browser";
+    case InputKind::OPTION:
+        return "option";
+    case InputKind::AUTOPICK_EDITOR:
+        return "autopick_editor";
     }
 
     THROW_EXCEPTION(std::logic_error, "Invalid InputKind was specified!");
@@ -190,6 +202,43 @@ std::string_view item_selection_area_name(ItemSelectionArea area)
     }
 
     THROW_EXCEPTION(std::logic_error, "Invalid ItemSelectionArea was specified!");
+}
+
+/*!
+ * @brief キャラクター作成の段階を応答で使う名前へ変換する
+ * @param step キャラクター作成の段階
+ * @return 応答の input_context.step に入れる名前
+ */
+std::string_view birth_step_name(BirthStep step)
+{
+    switch (step) {
+    case BirthStep::SEX:
+        return "sex";
+    case BirthStep::RACE:
+        return "race";
+    case BirthStep::CLASS:
+        return "class";
+    case BirthStep::FIRST_REALM:
+        return "first_realm";
+    case BirthStep::SECOND_REALM:
+        return "second_realm";
+    case BirthStep::ELEMENT_REALM:
+        return "element_realm";
+    case BirthStep::PERSONALITY:
+        return "personality";
+    case BirthStep::STAT_LIMITS:
+        return "stat_limits";
+    case BirthStep::CHARA_LIMITS:
+        return "chara_limits";
+    case BirthStep::ROLL_RESULT:
+        return "roll_result";
+    case BirthStep::HISTORY:
+        return "history";
+    case BirthStep::START:
+        return "start";
+    }
+
+    THROW_EXCEPTION(std::logic_error, "Invalid BirthStep was specified!");
 }
 
 /*!
@@ -274,6 +323,11 @@ public:
             { "browse", details.browse },
             { "menu", details.menu },
         };
+    }
+
+    nlohmann::json operator()(const BirthInputDetails &details) const
+    {
+        return { { "step", birth_step_name(details.step) } };
     }
 };
 

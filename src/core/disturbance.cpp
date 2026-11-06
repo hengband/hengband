@@ -1,5 +1,6 @@
 #include "core/disturbance.h"
 #include "action/travel-execution.h"
+#include "core/stuff-handler.h"
 #include "game-option/disturbance-options.h"
 #include "game-option/map-screen-options.h"
 #include "io/input-key-requester.h"
@@ -68,4 +69,21 @@ void disturb(PlayerType *player_ptr, bool stop_search, bool stop_travel)
     if (flush_disturb) {
         flush();
     }
+}
+
+/*!
+ * @brief 時限効果が掛かった・切れたときの後始末を行う
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @details 設定 (disturb_state) が有効かトラベル中なら行動とトラベルを止め、予約されている更新をすぐに反映する。
+ * 加速・一時耐性・祝福など、この決まりで止める setter が使う。時限効果の setter には、トラベル中かどうかによらず
+ * 設定が有効なときだけ止めるもの (悪い状態異常・光速移動・ESP など) もあり、それらは使わない。
+ * 能力の再計算などの要求は、呼び出し元で先に行う。
+ */
+void finish_timed_effect_change(PlayerType *player_ptr)
+{
+    if (disturb_state || Travel::get_instance().is_ongoing()) {
+        disturb(player_ptr, false, true);
+    }
+
+    handle_stuff(player_ptr);
 }

@@ -269,18 +269,13 @@ static void decide_racial_command(rc_type *rc_ptr)
         rc_ptr->choice = 'a';
     }
 
-    if (!isalpha(rc_ptr->choice)) {
-        rc_ptr->ask = false;
-        rc_ptr->command_code = rc_ptr->choice - '0' + 26;
-        return;
-    }
-
-    rc_ptr->ask = (isupper(rc_ptr->choice));
+    // 大文字のラベルは、使う前に確認する
+    rc_ptr->ask = ('A' <= rc_ptr->choice) && (rc_ptr->choice <= 'Z');
     if (rc_ptr->ask) {
-        rc_ptr->choice = (char)tolower(rc_ptr->choice);
+        rc_ptr->choice = static_cast<char>(rc_ptr->choice - 'A' + 'a');
     }
 
-    rc_ptr->command_code = (islower(rc_ptr->choice) ? A2I(rc_ptr->choice) : -1);
+    rc_ptr->command_code = static_cast<COMMAND_CODE>(AD2I(rc_ptr->choice));
 }
 
 static bool ask_invoke_racial_power(rc_type *rc_ptr)

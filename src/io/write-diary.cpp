@@ -6,7 +6,6 @@
 
 #include "io/write-diary.h"
 #include "dungeon/quest.h"
-#include "info-reader/fixed-map-parser.h"
 #include "io/files-util.h"
 #include "market/arena-entry.h"
 #include "player/player-status.h"

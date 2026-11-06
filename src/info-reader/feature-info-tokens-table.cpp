@@ -1,12 +1,17 @@
 /*!
- * @brief 地形特性トークン辞書実装
+ * @brief 地形定義トークン辞書実装
  * @author Hourier
  * @date 2024/12/08
  */
 
 #include "info-reader/feature-info-tokens-table.h"
+#include "system/enums/store-sale-type.h"
+#include "system/enums/terrain/building-type.h"
+#include "system/enums/terrain/pattern-tile-type.h"
 #include "system/enums/terrain/terrain-characteristics.h"
+#include "system/enums/terrain/terrain-conversion-type.h"
 #include "system/enums/terrain/terrain-tag.h"
+#include "system/enums/terrain/trap.h"
 
 /*!
  * @brief 地形属性トークンの定義 / Feature info flags
@@ -256,4 +261,112 @@ const std::unordered_map<std::string_view, TerrainTag> terrain_tags = {
     { "QUARTZ_VEIN_ON_DEEP_WATER", TerrainTag::QUARTZ_VEIN_ON_DEEP_WATER },
     { "GRANITE_ON_DEEP_WATER", TerrainTag::GRANITE_ON_DEEP_WATER },
     { "GLASS_WALL_ON_DEEP_WATER", TerrainTag::GLASS_WALL_ON_DEEP_WATER },
+};
+
+/*!
+ * @brief 地形の変化の種類のトークンの定義
+ */
+const std::unordered_map<std::string_view, TerrainConversionType> f_info_conversion_types = {
+    { "FLOOR", TerrainConversionType::FLOOR },
+    { "WALL", TerrainConversionType::WALL },
+    { "INNER", TerrainConversionType::INNER },
+    { "OUTER", TerrainConversionType::OUTER },
+    { "SOLID", TerrainConversionType::SOLID },
+    { "STREAM", TerrainConversionType::STREAM },
+};
+
+/*!
+ * @brief 罠の種類のトークンの定義
+ */
+const std::unordered_map<std::string_view, TrapType> f_info_trap_types = {
+    { "TRAPDOOR", TrapType::TRAPDOOR },
+    { "PIT", TrapType::PIT },
+    { "SPIKED_PIT", TrapType::SPIKED_PIT },
+    { "POISON_PIT", TrapType::POISON_PIT },
+    { "TY_CURSE", TrapType::TY_CURSE },
+    { "TELEPORT", TrapType::TELEPORT },
+    { "FIRE", TrapType::FIRE },
+    { "ACID", TrapType::ACID },
+    { "SLOW", TrapType::SLOW },
+    { "LOSE_STR", TrapType::LOSE_STR },
+    { "LOSE_DEX", TrapType::LOSE_DEX },
+    { "LOSE_CON", TrapType::LOSE_CON },
+    { "BLIND", TrapType::BLIND },
+    { "CONFUSE", TrapType::CONFUSE },
+    { "POISON", TrapType::POISON },
+    { "SLEEP", TrapType::SLEEP },
+    { "TRAPS", TrapType::TRAPS },
+    { "ALARM", TrapType::ALARM },
+    { "OPEN", TrapType::OPEN },
+    { "ARMAGEDDON", TrapType::ARMAGEDDON },
+    { "PIRANHA", TrapType::PIRANHA },
+};
+
+/*!
+ * @brief 模様の種類のトークンの定義
+ */
+const std::unordered_map<std::string_view, PatternTileType> f_info_pattern_types = {
+    { "START", PatternTileType::START },
+    { "TILE_1", PatternTileType::TILE_1 },
+    { "TILE_2", PatternTileType::TILE_2 },
+    { "TILE_3", PatternTileType::TILE_3 },
+    { "TILE_4", PatternTileType::TILE_4 },
+    { "END", PatternTileType::END },
+    { "OLD", PatternTileType::OLD },
+    { "TELEPORT", PatternTileType::TELEPORT },
+    { "WRECKED", PatternTileType::WRECKED },
+};
+
+/*!
+ * @brief 店の種類のトークンの定義
+ */
+const std::unordered_map<std::string_view, StoreSaleType> f_info_store_types = {
+    { "GENERAL", StoreSaleType::GENERAL },
+    { "ARMOURY", StoreSaleType::ARMOURY },
+    { "WEAPON", StoreSaleType::WEAPON },
+    { "TEMPLE", StoreSaleType::TEMPLE },
+    { "ALCHEMIST", StoreSaleType::ALCHEMIST },
+    { "MAGIC", StoreSaleType::MAGIC },
+    { "BLACK", StoreSaleType::BLACK },
+    { "HOME", StoreSaleType::HOME },
+    { "BOOK", StoreSaleType::BOOK },
+    { "MUSEUM", StoreSaleType::MUSEUM },
+};
+
+/*!
+ * @brief 建物の種類のトークンの定義
+ */
+const std::unordered_map<std::string_view, BuildingType> f_info_building_types = {
+    { "BUILDING_00", BuildingType::BUILDING_00 },
+    { "BUILDING_01", BuildingType::BUILDING_01 },
+    { "BUILDING_02", BuildingType::BUILDING_02 },
+    { "BUILDING_03", BuildingType::BUILDING_03 },
+    { "BUILDING_04", BuildingType::BUILDING_04 },
+    { "BUILDING_05", BuildingType::BUILDING_05 },
+    { "BUILDING_06", BuildingType::BUILDING_06 },
+    { "BUILDING_07", BuildingType::BUILDING_07 },
+    { "BUILDING_08", BuildingType::BUILDING_08 },
+    { "BUILDING_09", BuildingType::BUILDING_09 },
+    { "BUILDING_10", BuildingType::BUILDING_10 },
+    { "BUILDING_11", BuildingType::BUILDING_11 },
+    { "BUILDING_12", BuildingType::BUILDING_12 },
+    { "BUILDING_13", BuildingType::BUILDING_13 },
+    { "BUILDING_14", BuildingType::BUILDING_14 },
+    { "BUILDING_15", BuildingType::BUILDING_15 },
+    { "BUILDING_16", BuildingType::BUILDING_16 },
+    { "BUILDING_17", BuildingType::BUILDING_17 },
+    { "BUILDING_18", BuildingType::BUILDING_18 },
+    { "BUILDING_19", BuildingType::BUILDING_19 },
+    { "BUILDING_20", BuildingType::BUILDING_20 },
+    { "BUILDING_21", BuildingType::BUILDING_21 },
+    { "BUILDING_22", BuildingType::BUILDING_22 },
+    { "BUILDING_23", BuildingType::BUILDING_23 },
+    { "BUILDING_24", BuildingType::BUILDING_24 },
+    { "BUILDING_25", BuildingType::BUILDING_25 },
+    { "BUILDING_26", BuildingType::BUILDING_26 },
+    { "BUILDING_27", BuildingType::BUILDING_27 },
+    { "BUILDING_28", BuildingType::BUILDING_28 },
+    { "BUILDING_29", BuildingType::BUILDING_29 },
+    { "BUILDING_30", BuildingType::BUILDING_30 },
+    { "BUILDING_31", BuildingType::BUILDING_31 },
 };

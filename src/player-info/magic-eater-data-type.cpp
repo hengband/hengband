@@ -5,6 +5,10 @@
 #include "sv-definition/sv-wand-types.h"
 #include "system/baseitem/baseitem-definition.h"
 #include "system/baseitem/baseitem-list.h"
+#include "util/int-char-converter.h"
+
+// 取り込んだ魔道具は一覧のラベルで選ぶので、種類ごとに AD_LABEL_COUNT 個まで
+static_assert((SV_STAFF_MAX <= AD_LABEL_COUNT) && (SV_WAND_MAX <= AD_LABEL_COUNT) && (SV_ROD_MAX <= AD_LABEL_COUNT));
 
 MagicEaterDataList::MagicEaterDataList()
     : staves(SV_STAFF_MAX)

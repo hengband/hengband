@@ -2,8 +2,9 @@
 #include "birth/birth-stat.h"
 #include "birth/birth-util.h"
 #include "cmd-io/cmd-gameoption.h"
+#include "core/asking-player.h"
 #include "game-option/game-option-page.h"
-#include "io/input-key-acceptor.h"
+#include "io/input-context.h"
 #include "locale/japanese.h"
 #include "main/sound-of-music.h"
 #include "player-info/class-info.h"
@@ -216,7 +217,8 @@ bool get_stat_limits(PlayerType *player_ptr)
 {
     clear_from(10);
     put_str(_("能力値を抽選します。最低限得たい能力値を設定して下さい。", "Set minimum stats for picking up your charactor."), 10, 10);
-    put_str(_("2/8で項目選択、4/6で値の増減、Enterで次へ", "2/8 for Select, 4/6 for Change value, Enter for Goto next"), 11, 10);
+    constexpr auto prompt = _("2/8で項目選択、4/6で値の増減、Enterで次へ", "2/8 for Select, 4/6 for Change value, Enter for Goto next");
+    put_str(prompt, 11, 10);
     put_str(_("         基本値  種族 職業 性格     合計値  最大値", "           Base   Rac  Cla  Per      Total  Maximum"), 13, 10);
 
     int cval[A_MAX]{};
@@ -251,7 +253,7 @@ bool get_stat_limits(PlayerType *player_ptr)
             os = cs;
         }
 
-        char c = inkey();
+        char c = input_key_with_context({ InputKind::BIRTH, prompt, BirthInputDetails{ BirthStep::STAT_LIMITS } });
         switch (c) {
         case 'Q':
             birth_quit();
@@ -369,7 +371,8 @@ bool get_chara_limits(PlayerType *player_ptr, chara_limit_type *chara_limit_ptr)
 {
     static const std::vector<std::string> item_names = { _("年齢", "age"), _("身長(cm)", "height"), _("体重(kg)", "weight"), _("社会的地位", "social class") };
     clear_from(10);
-    put_str(_("2/4/6/8で項目選択、+/-で値の増減、Enterで次へ", "2/4/6/8 for Select, +/- for Change value, Enter for Goto next"), 11, 10);
+    constexpr auto prompt = _("2/4/6/8で項目選択、+/-で値の増減、Enterで次へ", "2/4/6/8 for Select, +/- for Change value, Enter for Goto next");
+    put_str(prompt, 11, 10);
     put_str(
         _("注意：身長と体重の最大値/最小値ぎりぎりの値は非常に出現確率が低くなります。", "Caution: Values near minimum or maximum are extremely rare."), 23, 2);
 
@@ -480,7 +483,7 @@ bool get_chara_limits(PlayerType *player_ptr, chara_limit_type *chara_limit_ptr)
             os = cs;
         }
 
-        char c = inkey();
+        char c = input_key_with_context({ InputKind::BIRTH, prompt, BirthInputDetails{ BirthStep::CHARA_LIMITS } });
         switch (c) {
         case 'Q':
             birth_quit();

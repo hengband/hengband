@@ -32,6 +32,7 @@
 #include "util/bit-flags-calculator.h"
 #include "view/display-map.h"
 #include "view/display-messages.h"
+#include "view/map-tile-layout.h"
 #include "window/main-window-util.h"
 #include "world/world.h"
 
@@ -83,9 +84,8 @@ std::pair<int, int> get_screen_size()
     auto [width, height] = term_get_size();
     height -= ROW_MAP + 2;
     width -= COL_MAP + 2;
-    if (use_bigtile) {
-        width /= 2;
-    }
+    width /= original_tiles::map_tile_columns();
+    height /= original_tiles::map_tile_rows();
 
     return { width, height };
 }
