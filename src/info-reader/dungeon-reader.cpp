@@ -162,12 +162,10 @@ namespace {
 template <typename Enum>
 tl::expected<void, ParseErrorType> info_set_enum_flag_group(const nlohmann::json &obj, std::string_view key, EnumClassFlagGroup<Enum> &flags, const std::unordered_map<std::string_view, Enum> &tokens, std::string_view label)
 {
-    const auto it = obj.find(key);
-    if (it == obj.end() || it->is_null()) {
+    const auto &array_obj = get_json_value(obj, key);
+    if (array_obj.is_null()) {
         return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
     }
-
-    const auto &array_obj = *it;
 
     return info_read_flag_array(array_obj, [&](const nlohmann::json &flag_obj) {
         const auto token = flag_obj.get<std::string_view>();
@@ -682,22 +680,16 @@ tl::expected<void, ParseErrorType> DungeonReader::set_dungeon_monsters(DungeonDe
     }
     dungeon.mode = *mode;
 
-    if (auto it = monsters_obj.find("flags"); it != monsters_obj.end()) {
-        if (const auto result = this->set_dungeon_monster_flags(*it, dungeon); !result) {
-            return result;
-        }
+    if (const auto result = this->set_dungeon_monster_flags(get_json_value(monsters_obj, "flags"), dungeon); !result) {
+        return result;
     }
 
-    if (auto it = monsters_obj.find("symbols"); it != monsters_obj.end()) {
-        if (const auto result = this->set_dungeon_monster_symbols(*it, dungeon); !result) {
-            return result;
-        }
+    if (const auto result = this->set_dungeon_monster_symbols(get_json_value(monsters_obj, "symbols"), dungeon); !result) {
+        return result;
     }
 
-    if (auto it = monsters_obj.find("spells"); it != monsters_obj.end()) {
-        if (const auto result = this->set_dungeon_monster_spells(*it, dungeon); !result) {
-            return result;
-        }
+    if (const auto result = this->set_dungeon_monster_spells(get_json_value(monsters_obj, "spells"), dungeon); !result) {
+        return result;
     }
 
     return {};

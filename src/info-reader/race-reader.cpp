@@ -506,24 +506,23 @@ tl::expected<void, ParseErrorType> RaceReader::set_mon_skills(MonraceDefinition 
     }
     monrace.freq_spell = 100 / denominator;
 
-    const auto &shoot_dice = skill_data.find("shoot");
-    const auto shoot = (shoot_dice != skill_data.end());
+    const auto shoot = skill_data.contains("shoot");
     if (shoot) {
-        if (const auto result = info_set_monrace_dice(*shoot_dice, monrace.shoot_damage_dice, true); !result) {
+        if (const auto result = info_set_monrace_dice(get_json_value(skill_data, "shoot"), monrace.shoot_damage_dice, true); !result) {
             return result;
         }
         monrace.ability_flags.set(MonsterAbilityType::SHOOT);
     }
 
-    const auto &skill_list = skill_data.find("list");
-    if ((skill_list == skill_data.end()) || skill_list->is_null()) {
+    const auto &skill_list = get_json_value(skill_data, "list");
+    if (skill_list.is_null()) {
         if (!shoot) {
             return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
         }
         return {};
     }
 
-    return info_read_flag_array(*skill_list, [this, &monrace](const nlohmann::json &flag) { return this->grab_one_spell_flag(monrace, flag.get<std::string>()); });
+    return info_read_flag_array(skill_list, [this, &monrace](const nlohmann::json &flag) { return this->grab_one_spell_flag(monrace, flag.get<std::string>()); });
 }
 
 /*!
@@ -589,12 +588,8 @@ tl::expected<void, ParseErrorType> RaceReader::set_mon_message(MonraceMessage &m
         }
 
         bool use_name = true;
-        const auto use_name_iter = message.find("use_name");
-        if (use_name_iter != message.end()) {
-            const auto &use_name_data = use_name_iter.value();
-            if (const auto result = info_set_bool(use_name_data, use_name, false); !result) {
-                return result;
-            }
+        if (const auto result = info_set_bool(get_json_value(message, "use_name"), use_name, false); !result) {
+            return result;
         }
 
         std::string str;

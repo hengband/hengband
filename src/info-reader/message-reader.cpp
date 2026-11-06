@@ -92,8 +92,7 @@ tl::expected<void, ParseErrorType> MessageReader::set_mon_message() const
     };
     std::vector<PendingMessage> pending_messages;
 
-    const auto id_list_iter = group_data.find("id_list");
-    const auto has_id_list = (id_list_iter != group_data.end());
+    const auto has_id_list = group_data.contains("id_list");
     const auto publish = [&] {
         for (const auto &message : pending_messages) {
             if (has_id_list) {
@@ -107,7 +106,7 @@ tl::expected<void, ParseErrorType> MessageReader::set_mon_message() const
     };
 
     if (has_id_list) {
-        if (const auto result = set_id_list(id_list_iter.value(), id_list); !result) {
+        if (const auto result = set_id_list(get_json_value(group_data, "id_list"), id_list); !result) {
             return result;
         }
     } else {
@@ -128,23 +127,18 @@ tl::expected<void, ParseErrorType> MessageReader::set_mon_message() const
             return tl::make_unexpected(action.error());
         }
 
-        const auto chance_iter = message.find("chance");
-        if (chance_iter == message.end() || !chance_iter->is_number()) {
+        const auto &chance_data = get_json_value(message, "chance");
+        if (!chance_data.is_number()) {
             return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
         }
-        const auto &chance_data = chance_iter.value();
         int chance = 0;
         if (const auto result = info_set_integer(chance_data, chance, true, Range(1, 100)); !result) {
             return result;
         }
 
         bool use_name = true;
-        const auto use_name_iter = message.find("use_name");
-        if (use_name_iter != message.end()) {
-            const auto &use_name_data = use_name_iter.value();
-            if (const auto result = info_set_bool(use_name_data, use_name, false); !result) {
-                return result;
-            }
+        if (const auto result = info_set_bool(get_json_value(message, "use_name"), use_name, false); !result) {
+            return result;
         }
 
         const auto &language_list = get_json_value(message, "message");
