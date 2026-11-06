@@ -94,4 +94,5 @@ void PlayerClassSpecificDataWriter::operator()(const std::shared_ptr<spell_hex_d
     wr_s32b(spell_hex_data->revenge_power);
     wr_byte(enum2i(spell_hex_data->revenge_type));
     wr_byte(spell_hex_data->revenge_turn);
+    wr_FlagGroup(spell_hex_data->interrupting_spells, wr_byte);
 }

@@ -210,4 +210,9 @@ void PlayerClassSpecificDataLoader::operator()(std::shared_ptr<spell_hex_data_ty
         spell_hex_data->revenge_type = i2enum<SpellHexRevengeType>(rd_byte());
         spell_hex_data->revenge_turn = rd_byte();
     }
+
+    // 中断して再開を待っている呪術は古いセーブには無いので、無いものとする
+    if (!loading_savefile_version_is_older_than(31)) {
+        rd_FlagGroup(spell_hex_data->interrupting_spells, rd_byte);
+    }
 }
