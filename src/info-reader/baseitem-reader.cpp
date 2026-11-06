@@ -189,7 +189,7 @@ tl::expected<void, ParseErrorType> BaseitemReader::read() const
 
     const auto id_result = this->session.read_and_report(get_json_value(this->baseitem_data, "id"));
     if (!id_result) {
-        return tl::unexpected(id_result.error());
+        return tl::make_unexpected(id_result.error());
     }
     const auto item_id = *id_result;
 
@@ -309,7 +309,7 @@ tl::expected<void, ParseErrorType> BaseitemReader::set_baseitem_symbol(BaseitemD
 {
     const auto symbol = info_read_symbol(get_json_value(this->baseitem_data, "symbol"));
     if (!symbol) {
-        return tl::unexpected(symbol.error());
+        return tl::make_unexpected(symbol.error());
     }
     baseitem.init_symbol(*symbol);
     return {};
@@ -335,7 +335,7 @@ tl::expected<void, ParseErrorType> BaseitemReader::set_baseitem_kind(BaseitemDef
         return result;
     }
     if (std::find(std::begin(DEFINED_ITEM_KINDS), std::end(DEFINED_ITEM_KINDS), type_value) == std::end(DEFINED_ITEM_KINDS)) {
-        return tl::unexpected(ParseErrorType::INVALID_VALUE);
+        return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
     }
     int subtype_value = 0;
     if (const auto result = info_set_integer(get_json_value(itemkind_data, "subtype_value"), subtype_value, true, Range(0, item_subtype_max({ type_value, 0 }))); !result) {
@@ -362,7 +362,7 @@ tl::expected<void, ParseErrorType> BaseitemReader::set_baseitem_parameter_value(
     }
     // 省略・nullでは既存の値（新規なら0）を保つため、種別を変えた再読込もここで検査する。
     if (pval < range.first || pval > range.second) {
-        return tl::unexpected(ParseErrorType::INVALID_PVAL);
+        return tl::make_unexpected(ParseErrorType::INVALID_PVAL);
     }
 
     baseitem.pval = static_cast<short>(pval);
@@ -382,16 +382,16 @@ tl::expected<void, ParseErrorType> BaseitemReader::set_baseitem_allocations(Base
         return {};
     }
     if (!allocations_data.is_array()) {
-        return tl::unexpected(ParseErrorType::INVALID_TYPE);
+        return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
     }
 
     for (auto i = 0U; const auto &alloc : allocations_data) {
         if (i >= baseitem.alloc_tables.size()) {
-            return tl::unexpected(ParseErrorType::INVALID_VALUE);
+            return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
         }
 
         if (!alloc.is_object()) {
-            return tl::unexpected(ParseErrorType::INVALID_TYPE);
+            return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
         }
 
         auto &table = baseitem.alloc_tables[i];
@@ -419,7 +419,7 @@ tl::expected<void, ParseErrorType> BaseitemReader::set_baseitem_activate(Baseite
 {
     const auto activation = read_activation(get_json_value(this->baseitem_data, "activate"));
     if (!activation) {
-        return tl::unexpected(activation.error());
+        return tl::make_unexpected(activation.error());
     }
     if (*activation == RandomArtActType::NONE) {
         return {};
@@ -444,7 +444,7 @@ tl::expected<void, ParseErrorType> BaseitemReader::set_baseitem_natural_generati
         return {};
     }
     if (!natural_generation_data.is_boolean()) {
-        return tl::unexpected(ParseErrorType::INVALID_TYPE);
+        return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
     }
 
     baseitem.natural_generation = natural_generation_data.get<bool>();

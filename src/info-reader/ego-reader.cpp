@@ -57,7 +57,7 @@ tl::expected<void, ParseErrorType> EgoReader::read() const
 
     const auto id_result = this->session.read_and_report(get_json_value(this->ego_data, "id"));
     if (!id_result) {
-        return tl::unexpected(id_result.error());
+        return tl::make_unexpected(id_result.error());
     }
     const auto id = *id_result;
 
@@ -226,7 +226,7 @@ tl::expected<void, ParseErrorType> EgoReader::set_activation(EgoItemDefinition &
 {
     const auto activation = read_activation(get_json_value(this->ego_data, "activation"));
     if (!activation) {
-        return tl::unexpected(activation.error());
+        return tl::make_unexpected(activation.error());
     }
     if (*activation == RandomArtActType::NONE) {
         return {};

@@ -260,32 +260,32 @@ tl::expected<DisplaySymbol, ParseErrorType> info_read_symbol(const nlohmann::jso
 {
     const auto monster = policy == SymbolReadPolicy::MONSTER_COLOR_FIRST;
     if (json.is_null()) {
-        return tl::unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
+        return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
     }
     if (!json.is_object()) {
-        return tl::unexpected(monster ? ParseErrorType::TOO_FEW_ARGUMENTS : ParseErrorType::INVALID_TYPE);
+        return tl::make_unexpected(monster ? ParseErrorType::TOO_FEW_ARGUMENTS : ParseErrorType::INVALID_TYPE);
     }
 
     const auto &character_obj = get_json_value(json, "character");
     if (!character_obj.is_string()) {
-        return tl::unexpected(monster || character_obj.is_null() ? ParseErrorType::TOO_FEW_ARGUMENTS : ParseErrorType::INVALID_TYPE);
+        return tl::make_unexpected(monster || character_obj.is_null() ? ParseErrorType::TOO_FEW_ARGUMENTS : ParseErrorType::INVALID_TYPE);
     }
     const auto &character = character_obj.get_ref<const std::string &>();
     if (!monster && character.size() != 1) {
-        return tl::unexpected(ParseErrorType::INVALID_VALUE);
+        return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
     }
 
     const auto &color_obj = get_json_value(json, "color");
     if (!color_obj.is_string()) {
-        return tl::unexpected(monster || color_obj.is_null() ? ParseErrorType::TOO_FEW_ARGUMENTS : ParseErrorType::INVALID_TYPE);
+        return tl::make_unexpected(monster || color_obj.is_null() ? ParseErrorType::TOO_FEW_ARGUMENTS : ParseErrorType::INVALID_TYPE);
     }
     // 文字列であることは確かめたので、ここで返るエラーは未知の色の INVALID_FLAG だけになる
     const auto color = info_read_token(color_obj, color_list);
     if (!color) {
-        return tl::unexpected(color.error());
+        return tl::make_unexpected(color.error());
     }
     if (character.size() != 1) {
-        return tl::unexpected(ParseErrorType::INVALID_VALUE);
+        return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
     }
 
     return DisplaySymbol(*color, character.front());

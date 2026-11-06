@@ -72,7 +72,7 @@ tl::expected<void, ParseErrorType> TerrainReader::read() const
     auto &terrains = TerrainList::get_instance();
 
     if (const auto result = this->session.ids.check_and_report(id); !result) {
-        return tl::unexpected(result.error());
+        return tl::make_unexpected(result.error());
     }
     if (this->session.keys.contains(key)) {
         msg_print(_("地形タグ '{}' が重複しています。", "Duplicate terrain tag '{}'."), key);
@@ -208,7 +208,7 @@ tl::expected<void, ParseErrorType> TerrainReader::set_terrain_symbol(TerrainType
         if (symbol.error() == ParseErrorType::INVALID_FLAG) {
             msg_print(_("未知の色 '{}'。", "Unknown color '{}'."), color_obj.get<std::string>());
         }
-        return tl::unexpected(symbol.error());
+        return tl::make_unexpected(symbol.error());
     }
 
     terrain.symbol_definitions[F_LIT_STANDARD] = *symbol;

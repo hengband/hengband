@@ -217,7 +217,7 @@ TEST_CASE("report_id_check_result passes IDs through and prints each failure rea
         CAPTURE(static_cast<int>(code));
         const auto count = capture.messages().size();
         const auto reason = fmt::format("reason {}", static_cast<int>(code));
-        const auto result = report_id_check_result(tl::unexpected(IdCheckFailure{ code, reason }));
+        const auto result = report_id_check_result(tl::make_unexpected(IdCheckFailure{ code, reason }));
         REQUIRE_FALSE(result);
         CHECK(result.error() == code);
         REQUIRE(capture.messages().size() == count + 1);
