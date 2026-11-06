@@ -54,6 +54,11 @@ tl::expected<void, ParseErrorType> SkillReader::read()
     return {};
 }
 
+/*!
+ * @brief 武器の種類ごとの熟練度の初期値と上限を読み込む
+ * @param skills 読み込み先の技能表
+ * @return 成功、またはエラーコード
+ */
 tl::expected<void, ParseErrorType> SkillReader::read_weapons(skill_table &skills)
 {
     const auto &weapons = this->class_data["weapons"];
@@ -100,6 +105,11 @@ tl::expected<void, ParseErrorType> SkillReader::read_weapons(skill_table &skills
     return {};
 }
 
+/*!
+ * @brief 技能ごとの経験値の初期値と上限を読み込む
+ * @param skills 読み込み先の技能表
+ * @return 成功、またはエラーコード
+ */
 tl::expected<void, ParseErrorType> SkillReader::read_skills(skill_table &skills)
 {
     const auto &data = this->class_data["skills"];

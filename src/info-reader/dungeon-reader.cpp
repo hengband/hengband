@@ -294,6 +294,11 @@ tl::expected<ProbabilityTable<short>, ParseErrorType> parse_terrain_probability(
 }
 }
 
+/*!
+ * @brief ダンジョンの説明文を読み込む
+ * @param dungeon 読み込み先のダンジョン
+ * @return 成功、またはエラーコード
+ */
 tl::expected<void, ParseErrorType> DungeonReader::set_dungeon_description(DungeonDefinition &dungeon) const
 {
     if (const auto result = info_set_string(get_json_value(this->dungeon_data, "description"), dungeon.text, false); !result) {
@@ -347,6 +352,11 @@ tl::expected<void, ParseErrorType> DungeonReader::set_dungeon_generation(Dungeon
     return {};
 }
 
+/*!
+ * @brief 床の地形の抽選表と通路の生成率を読み込む
+ * @param dungeon 読み込み先のダンジョン
+ * @return 成功、またはエラーコード
+ */
 tl::expected<void, ParseErrorType> DungeonReader::set_dungeon_floor(DungeonDefinition &dungeon) const
 {
     const auto &floor_obj = get_json_value(this->dungeon_data, "floor");
@@ -366,6 +376,12 @@ tl::expected<void, ParseErrorType> DungeonReader::set_dungeon_floor(DungeonDefin
     return {};
 }
 
+/*!
+ * @brief 壁の鉱脈の地形・本数・生成率・優先度を読み込む
+ * @param streams_obj 鉱脈の配列（無ければ null）
+ * @param dungeon 読み込み先のダンジョン
+ * @return 成功、またはエラーコード
+ */
 tl::expected<void, ParseErrorType> DungeonReader::set_dungeon_streams(const nlohmann::json &streams_obj, DungeonDefinition &dungeon) const
 {
     if (streams_obj.is_null()) {
@@ -407,6 +423,11 @@ tl::expected<void, ParseErrorType> DungeonReader::set_dungeon_streams(const nloh
     return {};
 }
 
+/*!
+ * @brief 壁の地形の抽選表と、外壁・内壁などの地形、鉱脈を読み込む
+ * @param dungeon 読み込み先のダンジョン
+ * @return 成功、またはエラーコード
+ */
 tl::expected<void, ParseErrorType> DungeonReader::set_dungeon_wall(DungeonDefinition &dungeon) const
 {
     const auto &wall_obj = get_json_value(this->dungeon_data, "wall");
@@ -439,6 +460,11 @@ tl::expected<void, ParseErrorType> DungeonReader::set_dungeon_wall(DungeonDefini
     return this->set_dungeon_streams(get_json_value(wall_obj, "streams"), dungeon);
 }
 
+/*!
+ * @brief ダンジョンのフラグを読み込む
+ * @param dungeon 読み込み先のダンジョン
+ * @return 成功、またはエラーコード
+ */
 tl::expected<void, ParseErrorType> DungeonReader::set_dungeon_flags(DungeonDefinition &dungeon) const
 {
     const auto &flags_obj = get_json_value(this->dungeon_data, "flags");
@@ -451,6 +477,15 @@ tl::expected<void, ParseErrorType> DungeonReader::set_dungeon_flags(DungeonDefin
 }
 
 namespace {
+/*!
+ * @brief 範囲内の整数を読み込み、ID として有効な場合だけ列挙型の値で格納する
+ * @param json 読み込む値
+ * @param data 格納先
+ * @param label 診断に表示する項目名
+ * @param range 受け付ける整数の範囲
+ * @param validator ID が有効かを判定する関数
+ * @return 成功、またはエラーコード。範囲外や無効な ID は INVALID_VALUE
+ */
 template <typename Enum, typename Validator>
 tl::expected<void, ParseErrorType> info_set_enum_from_integer_checked(const nlohmann::json &json, Enum &data, std::string_view label, Range range, Validator validator)
 {
@@ -473,6 +508,12 @@ tl::expected<void, ParseErrorType> info_set_enum_from_integer_checked(const nloh
     return {};
 }
 
+/*!
+ * @brief 最下層で手に入るベースアイテムの ID を読み込み、定義済みの場合だけ格納する
+ * @param json 読み込む値
+ * @param dungeon 読み込み先のダンジョン
+ * @return 成功、またはエラーコード。未定義の ID は INVALID_VALUE
+ */
 tl::expected<void, ParseErrorType> info_set_baseitem_id_checked(const nlohmann::json &json, DungeonDefinition &dungeon)
 {
     int value{};
@@ -493,6 +534,11 @@ tl::expected<void, ParseErrorType> info_set_baseitem_id_checked(const nlohmann::
 }
 }
 
+/*!
+ * @brief 最下層の守護者と、最下層で手に入るベースアイテム・アーティファクトを読み込む
+ * @param dungeon 読み込み先のダンジョン
+ * @return 成功、またはエラーコード
+ */
 tl::expected<void, ParseErrorType> DungeonReader::set_dungeon_final_floor(DungeonDefinition &dungeon) const
 {
     const auto &final_floor_obj = get_json_value(this->dungeon_data, "final_floor");
@@ -536,6 +582,12 @@ tl::expected<void, ParseErrorType> DungeonReader::set_dungeon_final_floor(Dungeo
     return {};
 }
 
+/*!
+ * @brief モンスターの出現条件のうち、基本のフラグを読み込む
+ * @param flags_obj フラグの配列（無ければ null）
+ * @param dungeon 読み込み先のダンジョン
+ * @return 成功、またはエラーコード
+ */
 tl::expected<void, ParseErrorType> DungeonReader::set_dungeon_monster_flags(const nlohmann::json &flags_obj, DungeonDefinition &dungeon) const
 {
     if (flags_obj.is_null()) {
@@ -546,6 +598,12 @@ tl::expected<void, ParseErrorType> DungeonReader::set_dungeon_monster_flags(cons
         return token.empty() || this->grab_one_basic_monster_flag(dungeon, token); });
 }
 
+/*!
+ * @brief モンスターの出現条件のうち、表示文字を読み込む
+ * @param symbols_obj 1 文字の文字列の配列（無ければ null）
+ * @param dungeon 読み込み先のダンジョン
+ * @return 成功、またはエラーコード
+ */
 tl::expected<void, ParseErrorType> DungeonReader::set_dungeon_monster_symbols(const nlohmann::json &symbols_obj, DungeonDefinition &dungeon) const
 {
     if (symbols_obj.is_null()) {
@@ -574,6 +632,12 @@ tl::expected<void, ParseErrorType> DungeonReader::set_dungeon_monster_symbols(co
     return {};
 }
 
+/*!
+ * @brief モンスターの出現条件のうち、魔法のフラグを読み込む
+ * @param spells_obj 魔法のフラグの配列（無ければ null）
+ * @param dungeon 読み込み先のダンジョン
+ * @return 成功、またはエラーコード
+ */
 tl::expected<void, ParseErrorType> DungeonReader::set_dungeon_monster_spells(const nlohmann::json &spells_obj, DungeonDefinition &dungeon) const
 {
     if (spells_obj.is_null()) {

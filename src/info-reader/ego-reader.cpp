@@ -140,12 +140,24 @@ namespace {
 constexpr std::string_view UNKNOWN_EGO_FLAG_FORMAT = _("未知のエゴ・フラグ '{}'。", "Unknown ego flag '{}'.");
 }
 
+/*!
+ * @brief フラグ名を走査してエゴのフラグを一つ得る
+ * @param ego 読み込み先のエゴ
+ * @param flag フラグ名
+ * @return 見つけたらtrue（見つからなければ診断を出力する）
+ */
 bool EgoReader::grab_one_ego_flag(EgoItemDefinition &ego, const nlohmann::json &flag) const
 {
     const auto &name = flag.get_ref<const std::string &>();
     return grab_one_item_flag_or_report(ego.flags, ego.gen_flags, name, UNKNOWN_EGO_FLAG_FORMAT);
 }
 
+/*!
+ * @brief フラグ名を走査してエゴの追加フラグを一つ得る
+ * @param extra 読み込み先の追加フラグ
+ * @param flag フラグ名
+ * @return 見つけたらtrue（見つからなければ診断を出力する）
+ */
 bool EgoReader::grab_one_ego_extra_flag(ego_generate_type &extra, const nlohmann::json &flag) const
 {
     const auto &name = flag.get_ref<const std::string &>();

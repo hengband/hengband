@@ -26,7 +26,6 @@ public:
     TownPreferencesReader &operator=(const TownPreferencesReader &) = delete;
     TownPreferencesReader &operator=(TownPreferencesReader &&) = delete;
 
-    /*! @brief 全件成功した場合に限り出力を置き換える。 */
     tl::expected<void, ParseErrorType> read(TownPreferencesLegend &legend, TownPreferencesCellParser parse_cell) const;
 
 private:
