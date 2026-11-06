@@ -119,13 +119,13 @@ tl::expected<void, ParseErrorType> EgoReader::read() const
         }
     }
 
-    if (const auto result = this->set_activation(ego); !result) {
+    if (const auto result = this->set_ego_activation(ego); !result) {
         return result;
     }
-    if (const auto result = this->set_flags(ego); !result) {
+    if (const auto result = this->set_ego_flags(ego); !result) {
         return result;
     }
-    if (const auto result = this->set_extra_flags(ego); !result) {
+    if (const auto result = this->set_ego_extra_flags(ego); !result) {
         return result;
     }
 
@@ -140,13 +140,13 @@ namespace {
 constexpr std::string_view UNKNOWN_EGO_FLAG_FORMAT = _("未知のエゴ・フラグ '{}'。", "Unknown ego flag '{}'.");
 }
 
-bool EgoReader::grab_one_flag(EgoItemDefinition &ego, const nlohmann::json &flag) const
+bool EgoReader::grab_one_ego_flag(EgoItemDefinition &ego, const nlohmann::json &flag) const
 {
     const auto &name = flag.get_ref<const std::string &>();
     return grab_one_item_flag_or_report(ego.flags, ego.gen_flags, name, UNKNOWN_EGO_FLAG_FORMAT);
 }
 
-bool EgoReader::grab_one_extra_flag(ego_generate_type &extra, const nlohmann::json &flag) const
+bool EgoReader::grab_one_ego_extra_flag(ego_generate_type &extra, const nlohmann::json &flag) const
 {
     const auto &name = flag.get_ref<const std::string &>();
     if (const auto it = baseitem_flags.find(name); it != baseitem_flags.end()) {
@@ -166,13 +166,13 @@ bool EgoReader::grab_one_extra_flag(ego_generate_type &extra, const nlohmann::js
  * @param ego 読み込み途中のエゴ定義
  * @return 成功時は空の値、失敗時は解析エラーコード
  */
-tl::expected<void, ParseErrorType> EgoReader::set_flags(EgoItemDefinition &ego) const
+tl::expected<void, ParseErrorType> EgoReader::set_ego_flags(EgoItemDefinition &ego) const
 {
     const auto &flags = get_json_value(this->ego_data, "flags");
     if (flags.is_null()) {
         return {};
     }
-    return info_read_flag_array(flags, [this, &ego](const auto &flag) { return this->grab_one_flag(ego, flag); });
+    return info_read_flag_array(flags, [this, &ego](const auto &flag) { return this->grab_one_ego_flag(ego, flag); });
 }
 
 /*!
@@ -181,7 +181,7 @@ tl::expected<void, ParseErrorType> EgoReader::set_flags(EgoItemDefinition &ego) 
  * @return 成功時は空の値、失敗時は解析エラーコード
  * @details extra_flagsの省略は許可する。旧分数形式・新旧混在、0～100以外の確率を拒否する。
  */
-tl::expected<void, ParseErrorType> EgoReader::set_extra_flags(EgoItemDefinition &ego) const
+tl::expected<void, ParseErrorType> EgoReader::set_ego_extra_flags(EgoItemDefinition &ego) const
 {
     const auto &extras = get_json_value(this->ego_data, "extra_flags");
     if (!extras.is_array()) {
@@ -209,7 +209,7 @@ tl::expected<void, ParseErrorType> EgoReader::set_extra_flags(EgoItemDefinition 
         if (flags.empty()) {
             return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
         }
-        if (const auto result = info_read_flag_array(flags, [this, &extra](const auto &flag) { return this->grab_one_extra_flag(extra, flag); }); !result) {
+        if (const auto result = info_read_flag_array(flags, [this, &extra](const auto &flag) { return this->grab_one_ego_extra_flag(extra, flag); }); !result) {
             return result;
         }
         ego.xtra_flags.push_back(std::move(extra));
@@ -222,7 +222,7 @@ tl::expected<void, ParseErrorType> EgoReader::set_extra_flags(EgoItemDefinition 
  * @param ego 読み込み途中のエゴ定義
  * @return 成功時は空の値、失敗時は解析エラーコード
  */
-tl::expected<void, ParseErrorType> EgoReader::set_activation(EgoItemDefinition &ego) const
+tl::expected<void, ParseErrorType> EgoReader::set_ego_activation(EgoItemDefinition &ego) const
 {
     const auto activation = read_activation(get_json_value(this->ego_data, "activation"));
     if (!activation) {

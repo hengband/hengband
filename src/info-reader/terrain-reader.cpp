@@ -130,7 +130,7 @@ tl::expected<void, ParseErrorType> TerrainReader::read() const
     }
     if (const auto result = info_read_flag_array(flags_obj, [this, &terrain](const nlohmann::json &flag) {
             const auto token = flag.get<std::string>();
-            return token.empty() || this->grab_one_feat_flag(terrain, token); }); !result) {
+            return token.empty() || this->grab_one_terrain_flag(terrain, token); }); !result) {
         return result;
     }
     if (const auto result = this->set_terrain_door(terrain); !result) {
@@ -173,7 +173,7 @@ tl::expected<void, ParseErrorType> TerrainReader::read() const
 /*!
  * @brief テキストトークンを走査してフラグを一つ得る
  */
-bool TerrainReader::grab_one_feat_flag(TerrainType &terrain, std::string_view what) const
+bool TerrainReader::grab_one_terrain_flag(TerrainType &terrain, std::string_view what) const
 {
     if (info_grab_one_flag(terrain.flags, f_info_flags, what)) {
         return true;
