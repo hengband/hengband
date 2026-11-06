@@ -149,10 +149,10 @@ ParseErrorType validate_town_cell(const nlohmann::json &fields)
     return ParseErrorType::NONE;
 }
 
-tl::expected<std::optional<std::string>, ParseErrorType> read_condition(const nlohmann::json &data)
+tl::expected<tl::optional<std::string>, ParseErrorType> read_condition(const nlohmann::json &data)
 {
     if (!data.contains("when")) {
-        return std::optional<std::string>{};
+        return tl::optional<std::string>{};
     }
     if (!data["when"].is_string() || data["when"].get_ref<const std::string &>().empty()) {
         return tl::make_unexpected(ParseErrorType::INVALID_TYPE);

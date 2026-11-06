@@ -4,15 +4,15 @@
 #include "system/enums/terrain/wilderness-terrain.h"
 #include "util/point-2d.h"
 #include <nlohmann/json_fwd.hpp>
-#include <optional>
 #include <string>
 #include <tl/expected.hpp>
+#include <tl/optional.hpp>
 #include <vector>
 
 struct WildernessTownDefinition {
     int id = 0;
     std::string name;
-    std::optional<std::string> alias;
+    tl::optional<std::string> alias;
 };
 
 struct WildernessLetterDefinition {

@@ -345,7 +345,7 @@ ExpressionVariableResult resolve_town_map_variable(PlayerType *player_ptr, std::
  * @return 条件の成立状態。町変数の数値不正・未定義Quest参照は解析エラー
  * @details 未知の変数や式自体のエラーは、従来どおり条件不成立とする。
  */
-tl::expected<bool, ConditionExpressionFailure> is_town_map_condition_met(PlayerType *player_ptr, const std::optional<std::string> &condition)
+tl::expected<bool, ConditionExpressionFailure> is_town_map_condition_met(PlayerType *player_ptr, const tl::optional<std::string> &condition)
 {
     if (!condition) {
         return true;

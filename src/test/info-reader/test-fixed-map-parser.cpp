@@ -55,7 +55,7 @@ void check_invalid(PlayerType &player, const std::string &expression)
 TEST_CASE("TownMapCondition preserves absent conditions and ordinary evaluation")
 {
     PlayerType player;
-    const auto absent = is_town_map_condition_met(&player, std::nullopt);
+    const auto absent = is_town_map_condition_met(&player, tl::nullopt);
     REQUIRE(absent);
     CHECK(*absent);
     player.lev = 17;

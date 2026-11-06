@@ -609,11 +609,11 @@ tl::expected<void, ParseErrorType> RaceReader::set_mon_message(MonraceMessage &m
 
 /*!
  * @brief 読み込んだ全モンスター種族の参照先が定義されているかを検証する
- * @return 未定義の参照があればその説明、無ければ std::nullopt
+ * @return 未定義の参照があればその説明、無ければ tl::nullopt
  * @details 進化先・護衛・死亡時召喚は後ろのIDも参照できるため、全種族を読み込んだ後に呼ぶ。
  * 固定アーティファクトはモンスター種族より先に読み込まれている。
  */
-std::optional<std::string> RaceReader::validate_references()
+tl::optional<std::string> RaceReader::validate_references()
 {
     const auto &monraces = MonraceList::get_instance();
     const auto &artifacts = ArtifactList::get_instance();
@@ -642,5 +642,5 @@ std::optional<std::string> RaceReader::validate_references()
         }
     }
 
-    return std::nullopt;
+    return tl::nullopt;
 }

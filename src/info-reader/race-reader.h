@@ -3,10 +3,10 @@
 #include "info-reader/definition-id-checker.h"
 #include "info-reader/parse-error-types.h"
 #include <nlohmann/json_fwd.hpp>
-#include <optional>
 #include <string>
 #include <string_view>
 #include <tl/expected.hpp>
+#include <tl/optional.hpp>
 
 class MonraceDefinition;
 class MonraceMessage;
@@ -24,7 +24,7 @@ public:
     RaceReader &operator=(RaceReader &&) = delete;
 
     tl::expected<void, ParseErrorType> read() const;
-    static std::optional<std::string> validate_references();
+    static tl::optional<std::string> validate_references();
 
 private:
     bool grab_one_basic_flag(MonraceDefinition &monrace, std::string_view what) const;
