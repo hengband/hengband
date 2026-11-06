@@ -33,6 +33,7 @@ tl::expected<void, ParseErrorType> MessageReader::read() const
     return {};
 }
 
+namespace {
 /*!
  * @brief JSON Objectからid群をセットする
  * @param id_list_data id群情報の格納されたJSON Object
@@ -40,7 +41,7 @@ tl::expected<void, ParseErrorType> MessageReader::read() const
  * @return 成功時は空の値、失敗時は解析エラーコード
  * @details モンスター種族の定義を読み込んだ後に呼ぶ。未定義の種族IDは ParseErrorType::INVALID_VALUE を返す。
  */
-static tl::expected<void, ParseErrorType> set_id_list(const nlohmann::json &id_list_data, std::vector<int> &id_list)
+tl::expected<void, ParseErrorType> set_id_list(const nlohmann::json &id_list_data, std::vector<int> &id_list)
 {
     if (const auto result = info_require_array(id_list_data); !result) {
         return result;
@@ -62,6 +63,7 @@ static tl::expected<void, ParseErrorType> set_id_list(const nlohmann::json &id_l
         id_list.push_back(id);
     }
     return {};
+}
 }
 
 /*!

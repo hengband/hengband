@@ -149,6 +149,7 @@ bool DungeonReader::grab_one_dungeon_flag(DungeonDefinition &dungeon, std::strin
     return false;
 }
 
+namespace {
 /*!
  * @brief JSON配列からEnumClassFlagGroupを読み込む
  * @param obj JSONオブジェクト
@@ -159,7 +160,7 @@ bool DungeonReader::grab_one_dungeon_flag(DungeonDefinition &dungeon, std::strin
  * @return 成功、またはパースエラー
  */
 template <typename Enum>
-static tl::expected<void, ParseErrorType> info_set_enum_flag_group(const nlohmann::json &obj, std::string_view key, EnumClassFlagGroup<Enum> &flags, const std::unordered_map<std::string_view, Enum> &tokens, std::string_view label)
+tl::expected<void, ParseErrorType> info_set_enum_flag_group(const nlohmann::json &obj, std::string_view key, EnumClassFlagGroup<Enum> &flags, const std::unordered_map<std::string_view, Enum> &tokens, std::string_view label)
 {
     const auto it = obj.find(key);
     if (it == obj.end() || it->is_null()) {
@@ -178,6 +179,7 @@ static tl::expected<void, ParseErrorType> info_set_enum_flag_group(const nlohman
         }
         msg_print(_("未知のダンジョン{}種別 '{}'。", "Unknown dungeon {} kind '{}'."), label, token);
         return false; });
+}
 }
 
 /*!
@@ -224,6 +226,7 @@ bool DungeonReader::grab_one_spell_monster_flag(DungeonDefinition &dungeon, std:
     return grab_one_monster_spell_flag(dungeon.mon_ability_flags, what);
 }
 
+namespace {
 /*!
  * @brief 床・壁の地形の抽選表を読み込む。
  * @param tiles_obj 地形と重みの配列
@@ -232,7 +235,7 @@ bool DungeonReader::grab_one_spell_monster_flag(DungeonDefinition &dungeon, std:
  * 重みが範囲外か重みの合計が100でなければ INVALID_VALUE
  * @details 重みは百分率で、各0～100・合計はちょうど100とする。重みが0の地形は抽選表に登録しない。
  */
-static tl::expected<ProbabilityTable<short>, ParseErrorType> parse_terrain_probability(const nlohmann::json &tiles_obj, std::string_view section)
+tl::expected<ProbabilityTable<short>, ParseErrorType> parse_terrain_probability(const nlohmann::json &tiles_obj, std::string_view section)
 {
     constexpr auto total_percent = 100;
     const auto &terrains = TerrainList::get_instance();
@@ -288,6 +291,7 @@ static tl::expected<ProbabilityTable<short>, ParseErrorType> parse_terrain_proba
     }
 
     return prob_table;
+}
 }
 
 tl::expected<void, ParseErrorType> DungeonReader::set_dungeon_description(DungeonDefinition &dungeon) const
@@ -446,8 +450,9 @@ tl::expected<void, ParseErrorType> DungeonReader::set_dungeon_flags(DungeonDefin
         return token.empty() || this->grab_one_dungeon_flag(dungeon, token); });
 }
 
+namespace {
 template <typename Enum, typename Validator>
-static tl::expected<void, ParseErrorType> info_set_enum_from_integer_checked(const nlohmann::json &json, Enum &data, std::string_view label, Range range, Validator validator)
+tl::expected<void, ParseErrorType> info_set_enum_from_integer_checked(const nlohmann::json &json, Enum &data, std::string_view label, Range range, Validator validator)
 {
     Enum enum_value{};
     if (const auto result = info_set_integer(json, enum_value, true, range); !result) {
@@ -468,7 +473,7 @@ static tl::expected<void, ParseErrorType> info_set_enum_from_integer_checked(con
     return {};
 }
 
-static tl::expected<void, ParseErrorType> info_set_baseitem_id_checked(const nlohmann::json &json, DungeonDefinition &dungeon)
+tl::expected<void, ParseErrorType> info_set_baseitem_id_checked(const nlohmann::json &json, DungeonDefinition &dungeon)
 {
     int value{};
     if (const auto result = info_set_integer(json, value, true, Range(1, std::numeric_limits<short>::max())); !result) {
@@ -485,6 +490,7 @@ static tl::expected<void, ParseErrorType> info_set_baseitem_id_checked(const nlo
 
     dungeon.final_object = value_short;
     return {};
+}
 }
 
 tl::expected<void, ParseErrorType> DungeonReader::set_dungeon_final_floor(DungeonDefinition &dungeon) const

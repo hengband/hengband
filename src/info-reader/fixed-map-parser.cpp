@@ -60,7 +60,9 @@
 #include <variant>
 #include <vector>
 
-static concptr variant = "ZANGBAND";
+namespace {
+concptr variant = "ZANGBAND";
+}
 
 /*!
  * @brief 条件評価済みの建物宣言を文字コード変換し、対象言語の建物へ適用する。
@@ -201,17 +203,18 @@ tl::expected<void, ParseErrorType> apply_town_map_feature(const FloorType &floor
     return {};
 }
 
+namespace {
 /*!
  * @brief JSONC ファイルを読み込めなかった理由を町の読み込みのエラーコードに変える
  * @param error 読み込めなかった理由
  * @return 開けない時は GENERIC、解析器の例外は INVALID_VALUE（例外の文言は使わない）
  */
-static ParseErrorType to_town_load_error(const JsoncLoadError &error)
+ParseErrorType to_town_load_error(const JsoncLoadError &error)
 {
     return error.kind == JsoncLoadErrorKind::CANNOT_OPEN ? ParseErrorType::GENERIC : ParseErrorType::INVALID_VALUE;
 }
 
-static tl::expected<void, ParseErrorType> load_town_preferences()
+tl::expected<void, ParseErrorType> load_town_preferences()
 {
     if (init_flags & INIT_ONLY_BUILDINGS) {
         return {};
@@ -241,7 +244,7 @@ static tl::expected<void, ParseErrorType> load_town_preferences()
  * @brief 町の定義の一覧から、現在の町のマップのファイル名を読む
  * @return マップのファイル名（一覧に現在の町が無ければ空文字列）、またはエラーコード
  */
-static tl::expected<std::string, ParseErrorType> load_town_definition_file()
+tl::expected<std::string, ParseErrorType> load_town_definition_file()
 {
     const auto data = JsoncDocumentLoader::load(path_build(ANGBAND_DIR_EDIT, TOWN_DEFINITION_LIST));
     if (!data) {
@@ -266,7 +269,7 @@ static tl::expected<std::string, ParseErrorType> load_town_definition_file()
  * @param name 先頭の「$」を除いた変数名
  * @return 変数の値。知らない変数ならtl::nullopt、数値不正・未定義Questなら解析エラー
  */
-static ExpressionVariableResult resolve_town_map_variable(PlayerType *player_ptr, std::string_view name)
+ExpressionVariableResult resolve_town_map_variable(PlayerType *player_ptr, std::string_view name)
 {
     if (name == "TOWN") {
         return std::to_string(AngbandWorld::get_instance().get_town_index());
@@ -333,6 +336,7 @@ static ExpressionVariableResult resolve_town_map_variable(PlayerType *player_ptr
 
     return resolve_common_expression_variable(player_ptr, name);
 }
+}
 
 /*!
  * @brief 町の条件を判定し、変数名の数値不正を条件不成立と区別する
@@ -364,9 +368,10 @@ std::string format_town_map_condition_error(std::string_view filename, std::stri
     return fmt::format("Invalid condition in '{}', {}: '{}' (variable '${}').", filename, location, expression, variable_name);
 }
 
+namespace {
 /*! @brief 町の各規則の条件を評価し、不正な変数は位置を示して解析エラーにする。 */
 template <typename Rules, typename Apply>
-static tl::expected<void, ParseErrorType> apply_town_rules(PlayerType *player_ptr, std::string_view filename, std::string_view array_name, const Rules &rules, Apply apply)
+tl::expected<void, ParseErrorType> apply_town_rules(PlayerType *player_ptr, std::string_view filename, std::string_view array_name, const Rules &rules, Apply apply)
 {
     for (size_t i = 0; i < rules.size(); ++i) {
         const auto &rule = rules[i];
@@ -385,7 +390,7 @@ static tl::expected<void, ParseErrorType> apply_town_rules(PlayerType *player_pt
     return {};
 }
 
-static tl::expected<void, ParseErrorType> parse_town_map_jsonc(PlayerType *player_ptr, std::string_view name)
+tl::expected<void, ParseErrorType> parse_town_map_jsonc(PlayerType *player_ptr, std::string_view name)
 {
     const auto data = JsoncDocumentLoader::load(path_build(ANGBAND_DIR_EDIT, name));
     if (!data) {
@@ -447,7 +452,7 @@ static tl::expected<void, ParseErrorType> parse_town_map_jsonc(PlayerType *playe
  * @param err エラーコード
  * @param filename 読み込んでいたファイルの名前
  */
-static void report_load_error(ParseErrorType err, std::string_view filename)
+void report_load_error(ParseErrorType err, std::string_view filename)
 {
     msg_print("Error {} ({}) loading '{}'.", enum2i(err), describe_parse_error(err), filename);
 }
@@ -457,7 +462,7 @@ static void report_load_error(ParseErrorType err, std::string_view filename)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return 成功、またはエラーコード。失敗した場合は診断をメッセージの出力先（捕捉中は捕捉先）へ出力済み
  */
-static tl::expected<void, ParseErrorType> generate_town_map(PlayerType *player_ptr)
+tl::expected<void, ParseErrorType> generate_town_map(PlayerType *player_ptr)
 {
     if (const auto result = load_town_preferences(); !result) {
         report_load_error(result.error(), TOWN_PREFERENCES);
@@ -477,6 +482,7 @@ static tl::expected<void, ParseErrorType> generate_town_map(PlayerType *player_p
         report_load_error(result.error(), *map_file);
     }
     return result;
+}
 }
 
 /*!
