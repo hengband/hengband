@@ -329,7 +329,6 @@ bool process_warning(PlayerType *player_ptr, const Pos2D &pos)
 {
     constexpr auto warning_aware_range = 12;
     int dam_max = 0;
-    static int old_damage = 0;
 
     auto &floor = *player_ptr->current_floor_ptr;
     const auto &dungeon = floor.get_dungeon_definition();
@@ -498,8 +497,8 @@ bool process_warning(PlayerType *player_ptr, const Pos2D &pos)
     }
 
     /* Prevent excessive warning */
-    if (dam_max > old_damage) {
-        old_damage = dam_max * 3 / 2;
+    if (dam_max > player_ptr->warning_damage) {
+        player_ptr->warning_damage = dam_max * 3 / 2;
 
         if (dam_max > player_ptr->chp / 2) {
             const auto &item = choose_warning_item(player_ptr);
@@ -516,7 +515,7 @@ bool process_warning(PlayerType *player_ptr, const Pos2D &pos)
             return input_check(_("本当にこのまま進むか？", "Really want to go ahead? "));
         }
     } else {
-        old_damage = old_damage / 2;
+        player_ptr->warning_damage /= 2;
     }
 
     auto is_warning = (!easy_disarm || floor.get_grid(pos).mimic) && floor.has_trap_at(pos);

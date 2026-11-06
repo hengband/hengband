@@ -276,6 +276,9 @@ public:
     MONSTER_IDX pet_t_m_idx{};
     MONSTER_IDX riding_t_m_idx{};
 
+    int riding_pinch{}; /*!< 乗っているモンスターが傷の痛さで束縛から逃れようとした回数 */
+    int warning_damage{}; /*!< 警告を抑える目安のダメージ。周囲の敵の最大ダメージがこれを超えたときだけ、警告するかを判定する */
+
     /*** Extracted fields ***/
 
     int16_t running{}; /* Current counter for running, if any */

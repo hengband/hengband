@@ -99,21 +99,19 @@ bool runaway_monster(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MONSTER
         return false;
     }
 
-    static int riding_pinch = 0;
-
     if (monster.hp >= monster.maxhp / 3) {
         /* Reset the counter */
         if (turn_flags_ptr->is_riding_mon) {
-            riding_pinch = 0;
+            player_ptr->riding_pinch = 0;
         }
 
         return false;
     }
 
     const auto m_name = monster_desc(player_ptr, monster, 0);
-    if (turn_flags_ptr->is_riding_mon && riding_pinch < 2) {
+    if (turn_flags_ptr->is_riding_mon && player_ptr->riding_pinch < 2) {
         msg_print(_("{}は傷の痛さの余りあなたの束縛から逃れようとしている。", "{} seems to be in so much pain and tries to escape from your restriction."), str_upcase_first(m_name));
-        riding_pinch++;
+        player_ptr->riding_pinch++;
         disturb(player_ptr, true, true);
         return false;
     }

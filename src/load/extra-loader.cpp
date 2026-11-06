@@ -6,6 +6,7 @@
  */
 
 #include "load/extra-loader.h"
+#include "hpmp/hp-mp-regenerator.h"
 #include "io/input-key-requester.h"
 #include "load/angband-version-comparer.h"
 #include "load/dummy-loader.h"
@@ -16,6 +17,7 @@
 #include "target/target.h"
 #include "window/main-window-util.h"
 #include "world/world.h"
+#include <algorithm>
 
 /*!
  * @brief 最後にターゲットしたものを読み込む
@@ -73,6 +75,25 @@ static void rd_continuous_actions(PlayerType *player_ptr)
 }
 
 /*!
+ * @brief 次の行動に影響する一時的な状態を読み込む
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @details 古いセーブには無いので、起動したときの値のままにする
+ */
+static void rd_transient_states(PlayerType *player_ptr)
+{
+    if (loading_savefile_version_is_older_than(31)) {
+        return;
+    }
+
+    player_ptr->dtrap = rd_bool();
+    player_ptr->suppress_multi_reward = rd_bool();
+    // 壊れたセーブで負の値などが入っても、ゲームの中で取りうる範囲に収める
+    player_ptr->riding_pinch = std::clamp(rd_s32b(), 0, 2);
+    player_ptr->warning_damage = rd_s32b();
+    wild_regen = std::clamp(rd_s32b(), 0, 20);
+}
+
+/*!
  * @brief その他の情報を読み込む / Read the "extra" information
  * @param player_ptr プレイヤーへの参照ポインタ
  */
@@ -114,4 +135,5 @@ void rd_extra(PlayerType *player_ptr)
     }
 
     rd_continuous_actions(player_ptr);
+    rd_transient_states(player_ptr);
 }
