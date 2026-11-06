@@ -1952,6 +1952,22 @@ errr term_key_push(int k)
 }
 
 /*!
+ * @brief キューに積まれているキーの数を数える
+ * @param term 数える端末
+ * @return 積まれているキーの数
+ * @details キューは循環しているので、先頭が末尾より前にあることもある。
+ */
+int term_key_queue_pending(const term_type &term)
+{
+    const auto size = term.key_size;
+    if (size == 0) {
+        return 0;
+    }
+
+    return (term.key_head + size - term.key_tail) % size;
+}
+
+/*!
  * @brief キューにあと何個キーを積めるか数える
  * @return 積めるキーの数
  * @details
@@ -1966,8 +1982,7 @@ int term_key_queue_room()
         return 0;
     }
 
-    const auto pending = (game_term->key_head + size - game_term->key_tail) % size;
-    return size - 1 - pending;
+    return size - 1 - term_key_queue_pending(*game_term);
 }
 
 /*!

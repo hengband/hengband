@@ -430,6 +430,9 @@
     <ClCompile Include="..\..\src\test\term\test-z-rand.cpp">
       <Filter>term</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\test\term\test-z-term.cpp">
+      <Filter>term</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\test\test-main.cpp" />
     <ClCompile Include="..\..\src\test\timed-effect\test-player-cut.cpp">
       <Filter>timed-effect</Filter>

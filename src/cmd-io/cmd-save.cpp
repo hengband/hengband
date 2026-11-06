@@ -10,6 +10,11 @@
 #include "world/world.h"
 
 /*!
+ * @brief 一定ターン毎の自動セーブを要求されていて、まだセーブしていないか
+ */
+static bool is_auto_save_requested = false;
+
+/*!
  * @brief セーブするコマンドのメインルーチン
  * Save the game
  * @param player_ptr プレイヤーへの参照ポインタ
@@ -18,6 +23,8 @@
  */
 void do_cmd_save_game(PlayerType *player_ptr, int is_autosave)
 {
+    // どのセーブでも、要求されていた自動セーブの分を兼ねる
+    is_auto_save_requested = false;
     if (is_autosave) {
         msg_print(_("自動セーブ中", "Autosaving the game..."));
     }
@@ -48,4 +55,27 @@ void do_cmd_save_and_exit(PlayerType *player_ptr)
     player_ptr->playing = false;
     player_ptr->leaving = true;
     exe_write_diary(*player_ptr->current_floor_ptr, DiaryKind::GAMESTART, 0, _("----ゲーム中断----", "--- Saved and Exited Game ---"));
+}
+
+/*!
+ * @brief 一定ターン毎の自動セーブを要求する
+ * @details 次にコマンドの入力を待つところで do_requested_auto_save() がセーブする
+ */
+void request_auto_save()
+{
+    is_auto_save_requested = true;
+}
+
+/*!
+ * @brief 要求されている一定ターン毎の自動セーブを行う
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @details コマンドの入力を待つところで呼ぶ (process_player())。読み込むと、^S でセーブしたときと同じく手番の途中から再開する。
+ */
+void do_requested_auto_save(PlayerType *player_ptr)
+{
+    if (!is_auto_save_requested) {
+        return;
+    }
+
+    do_cmd_save_game(player_ptr, true);
 }

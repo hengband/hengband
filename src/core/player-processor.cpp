@@ -2,6 +2,7 @@
 #include "action/run-execution.h"
 #include "action/travel-execution.h"
 #include "bot/bot-json-output.h"
+#include "cmd-io/cmd-save.h"
 #include "core/disturbance.h"
 #include "core/special-internal-keys.h"
 #include "core/speed-table.h"
@@ -340,6 +341,17 @@ void process_player(PlayerType *player_ptr)
             mark_monsters_present(player_ptr);
             process_command(player_ptr);
         } else {
+            // 一定ターン毎の自動セーブは、時刻になったら要求だけを記録し、ここ (コマンドの入力待ち) で行う。
+            // 休憩・走り・トラベル・コマンドの繰り返し・釣りの途中や、麻痺・気絶している間はここに来ないので、終わるまで後回しになり、
+            // 途中の状態 (走りの進み方やトラベルの行程など) をセーブに残さない。キーマップやマクロの残りのキーや、店に入るなど
+            // 次のコマンドが決まっているときも、セーブされず読み込むと失われるので、決まっていない入力待ちまで後回しにする。
+            // ただし、入力を捨てる予約 (inkey_xtra) があるときは、残りのキーも次の入力の前に捨てられるので後回しにしない。
+            // 自動セーブはゲームの状態を変えないので、後回しにしても以後の展開は変わらない
+            const auto has_pending_keys = !inkey_xtra && ((inkey_next && *inkey_next) || macro_running());
+            if (!command_new && !has_pending_keys) {
+                do_requested_auto_save(player_ptr);
+            }
+
             move_cursor_relative(player_ptr->y, player_ptr->x);
 
             static constexpr auto flags = {

@@ -237,6 +237,7 @@ DisplaySymbol term_what(int x, int y, const DisplaySymbol &ds);
 
 void term_flush();
 errr term_key_push(int k);
+int term_key_queue_pending(const term_type &term);
 int term_key_queue_room();
 errr term_keys_push(std::string_view keys);
 char term_inkey(bool wait, bool take);

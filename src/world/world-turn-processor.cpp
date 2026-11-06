@@ -210,12 +210,10 @@ void WorldTurnProcessor::process_monster_arena_draw()
 }
 
 /*!
- * @brief 一定ターン毎の自動セーブを行う
- * @details 読み込むとメインループの頭から再開するので、ゲームターンの処理の途中ではなく、
- * メインループの切れ目 (ゲームターンを進めた後) で呼ぶ。途中でセーブすると、再開したときに
- * そのゲームターンのプレイヤーとモンスターの処理がもう一度行われる。
+ * @brief 一定ターン毎の自動セーブを要求する
+ * @details セーブはコマンドの入力を待つところで行う。いつ行うかは process_player() で do_requested_auto_save() を呼ぶところのコメントを参照。
  */
-void WorldTurnProcessor::decide_auto_save()
+void WorldTurnProcessor::request_auto_save_if_due()
 {
     if (autosave_freq == 0) {
         return;
@@ -225,7 +223,7 @@ void WorldTurnProcessor::decide_auto_save()
     should_save &= !AngbandSystem::get_instance().is_phase_out();
     should_save &= AngbandWorld::get_instance().game_turn % ((int32_t)autosave_freq * TURNS_PER_TICK) == 0;
     if (should_save) {
-        do_cmd_save_game(this->player_ptr, true);
+        request_auto_save();
     }
 }
 

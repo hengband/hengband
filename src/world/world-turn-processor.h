@@ -7,7 +7,7 @@ public:
     virtual ~WorldTurnProcessor() = default;
     void process_world();
     void print_time();
-    void decide_auto_save();
+    void request_auto_save_if_due();
 
 private:
     PlayerType *player_ptr;
