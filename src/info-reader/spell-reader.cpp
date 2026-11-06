@@ -127,27 +127,10 @@ tl::expected<void, ParseErrorType> SpellReader::set_spell_data(const nlohmann::j
 tl::expected<void, ParseErrorType> SpellReader::set_book_data(std::vector<SpellInfo> &spells) const
 {
     const auto &book_obj = get_json_value(this->realm_data, "books");
-    if (book_obj.is_null()) {
-        return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
-    }
-    if (!book_obj.is_array()) {
-        return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
-    }
-
-    for (const auto &book : book_obj) {
+    return info_read_object_array(book_obj, [this, &spells](const nlohmann::json &book) -> tl::expected<void, ParseErrorType> {
         const auto &spells_obj = get_json_value(book, "spells");
-        if (spells_obj.is_null()) {
-            return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
-        }
-        if (!spells_obj.is_array()) {
-            return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
-        }
-
-        for (const auto &spell : spells_obj) {
-            if (const auto result = this->set_spell_data(spell, spells); !result) {
-                return result;
-            }
-        }
-    }
-    return {};
+        return info_read_object_array(spells_obj, [this, &spells](const nlohmann::json &spell) -> tl::expected<void, ParseErrorType> {
+            return this->set_spell_data(spell, spells);
+        });
+    });
 }

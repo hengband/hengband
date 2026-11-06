@@ -51,8 +51,8 @@ tl::expected<void, ParseErrorType> TerrainReader::read() const
 {
     this->session.pending_key.reset();
     const auto &element = this->terrain_data;
-    if (element.is_null() || !element.is_object()) {
-        return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
+    if (const auto result = info_require_object(element); !result) {
+        return result;
     }
 
     int id = 0;
@@ -191,8 +191,8 @@ bool TerrainReader::grab_one_feat_flag(TerrainType &terrain, std::string_view wh
 tl::expected<void, ParseErrorType> TerrainReader::set_terrain_symbol(TerrainType &terrain) const
 {
     const auto &symbol_obj = get_json_value(this->terrain_data, "symbol");
-    if (symbol_obj.is_null() || !symbol_obj.is_object()) {
-        return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
+    if (const auto result = info_require_object(symbol_obj); !result) {
+        return result;
     }
 
     const auto &ch_obj = get_json_value(symbol_obj, "character");
@@ -238,7 +238,7 @@ tl::expected<void, ParseErrorType> TerrainReader::set_terrain_conversion(Terrain
         return {};
     }
     if (!convert_obj.is_object()) {
-        return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
+        return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
     }
 
     const auto &type_obj = get_json_value(convert_obj, "type");
@@ -275,20 +275,11 @@ tl::expected<void, ParseErrorType> TerrainReader::set_terrain_generation(Terrain
         return {};
     }
     if (!generation_obj.is_object()) {
-        return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
-    }
-
-    const auto &changes_obj = get_json_value(generation_obj, "changes");
-    if (!changes_obj.is_array()) {
-        return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
+        return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
     }
 
     auto probability_sum = 0;
-    for (const auto &change_obj : changes_obj) {
-        if (!change_obj.is_object()) {
-            return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
-        }
-
+    return info_read_object_array(get_json_value(generation_obj, "changes"), [&terrain, &probability_sum](const nlohmann::json &change_obj) -> tl::expected<void, ParseErrorType> {
         const auto &terrain_obj = get_json_value(change_obj, "terrain");
         if (!terrain_obj.is_string()) {
             return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
@@ -310,9 +301,8 @@ tl::expected<void, ParseErrorType> TerrainReader::set_terrain_generation(Terrain
         }
 
         terrain.generation_changes.push_back(change);
-    }
-
-    return {};
+        return {};
+    });
 }
 
 /*!
@@ -346,7 +336,7 @@ static tl::expected<void, ParseErrorType> set_powered_terrain_feature(const nloh
         return {};
     }
     if (!feature_obj.is_object()) {
-        return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
+        return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
     }
 
     terrain.flags.set(flag);
@@ -371,7 +361,7 @@ static tl::expected<void, ParseErrorType> set_typed_terrain_feature(const nlohma
         return {};
     }
     if (!feature_obj.is_object()) {
-        return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
+        return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
     }
 
     const auto type = info_read_token(get_json_value(feature_obj, "type"), types);
@@ -398,7 +388,7 @@ tl::expected<void, ParseErrorType> TerrainReader::set_terrain_trap(TerrainType &
         return {};
     }
     if (!trap_obj.is_object()) {
-        return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
+        return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
     }
 
     const auto &type_obj = get_json_value(trap_obj, "type");
@@ -482,7 +472,7 @@ tl::expected<void, ParseErrorType> TerrainReader::set_terrain_interactions(Terra
         return {};
     }
     if (!interactions_obj.is_object()) {
-        return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
+        return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
     }
 
     for (auto it = interactions_obj.begin(); it != interactions_obj.end(); ++it) {

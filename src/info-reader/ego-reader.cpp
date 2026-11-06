@@ -203,8 +203,8 @@ tl::expected<void, ParseErrorType> EgoReader::set_extra_flags(EgoItemDefinition 
             return result;
         }
         const auto &flags = get_json_value(extra_data, "flags");
-        if (!flags.is_array()) {
-            return tl::make_unexpected(flags.is_null() ? ParseErrorType::TOO_FEW_ARGUMENTS : ParseErrorType::INVALID_TYPE);
+        if (const auto result = info_require_array(flags); !result) {
+            return result;
         }
         if (flags.empty()) {
             return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);

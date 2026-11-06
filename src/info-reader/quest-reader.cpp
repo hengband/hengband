@@ -436,8 +436,8 @@ tl::expected<void, ParseErrorType> QuestReader::read(std::string *reason) const
     if (reason != nullptr) {
         reason->clear();
     }
-    if (!this->quest_data.is_object()) {
-        return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
+    if (const auto result = info_require_object(this->quest_data); !result) {
+        return result;
     }
 
     std::string name;
@@ -478,8 +478,8 @@ tl::expected<void, ParseErrorType> QuestReader::set_name(std::string &name) cons
 tl::expected<void, ParseErrorType> QuestReader::set_definition(QuestFixedMap &parsed) const
 {
     const auto &definition = get_json_value(this->quest_data, "definition");
-    if (!definition.is_object()) {
-        return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
+    if (const auto result = info_require_object(definition); !result) {
+        return result;
     }
 
     auto &meta = parsed.metadata;

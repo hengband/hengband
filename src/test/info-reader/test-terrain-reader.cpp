@@ -293,43 +293,46 @@ TEST_CASE("TerrainReader propagates helper errors without publishing staged terr
     };
     const std::vector<InvalidField> invalid_fields = {
         { "/symbol", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/symbol", false, ParseErrorType::INVALID_TYPE },
         { "/symbol/character", "", ParseErrorType::INVALID_VALUE },
         { "/symbol/character", "..", ParseErrorType::INVALID_VALUE },
         { "/symbol/color", "UNKNOWN", ParseErrorType::INVALID_FLAG },
         { "/symbol/lit", 1, ParseErrorType::TOO_FEW_ARGUMENTS },
-        { "/door", false, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/door", false, ParseErrorType::INVALID_TYPE },
         { "/door", nlohmann::json::object(), ParseErrorType::TOO_FEW_ARGUMENTS },
         { "/door/power", false, ParseErrorType::INVALID_TYPE },
         { "/door/power", 256, ParseErrorType::INVALID_VALUE },
-        { "/tunnel", false, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/tunnel", false, ParseErrorType::INVALID_TYPE },
         { "/tunnel/power", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
         { "/tunnel/power", -1, ParseErrorType::INVALID_VALUE },
-        { "/trap", false, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/trap", false, ParseErrorType::INVALID_TYPE },
         { "/trap", { { "power", 1 } }, ParseErrorType::TOO_FEW_ARGUMENTS },
         { "/trap", { { "type", "PIT" } }, ParseErrorType::TOO_FEW_ARGUMENTS },
         { "/trap", { { "type", "UNKNOWN" }, { "power", 1 } }, ParseErrorType::INVALID_FLAG },
-        { "/pattern", false, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/pattern", false, ParseErrorType::INVALID_TYPE },
         { "/pattern/type", 1, ParseErrorType::INVALID_TYPE },
         { "/pattern/type", "UNKNOWN", ParseErrorType::INVALID_FLAG },
-        { "/store", false, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/store", false, ParseErrorType::INVALID_TYPE },
         { "/store/type", 1, ParseErrorType::INVALID_TYPE },
         { "/store/type", "UNKNOWN", ParseErrorType::INVALID_FLAG },
-        { "/building", false, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/building", false, ParseErrorType::INVALID_TYPE },
         { "/building/type", 1, ParseErrorType::INVALID_TYPE },
         { "/building/type", "UNKNOWN", ParseErrorType::INVALID_FLAG },
-        { "/convert", false, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/convert", false, ParseErrorType::INVALID_TYPE },
         { "/convert/type", 1, ParseErrorType::INVALID_TYPE },
         { "/convert/type", "UNKNOWN", ParseErrorType::INVALID_FLAG },
         { "/convert", { { "type", "STREAM" } }, ParseErrorType::TOO_FEW_ARGUMENTS },
         { "/convert", { { "type", "STREAM" }, { "stream_index", 255 } }, ParseErrorType::INVALID_VALUE },
-        { "/generation", false, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/generation", false, ParseErrorType::INVALID_TYPE },
         { "/generation/changes", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
-        { "/generation/changes/0", false, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/generation/changes", false, ParseErrorType::INVALID_TYPE },
+        { "/generation/changes/0", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/generation/changes/0", false, ParseErrorType::INVALID_TYPE },
         { "/generation/changes/0/terrain", "", ParseErrorType::TOO_FEW_ARGUMENTS },
         { "/generation/changes/0/probability", false, ParseErrorType::INVALID_TYPE },
         { "/generation/changes/0/probability", 0, ParseErrorType::INVALID_VALUE },
         { "/generation/changes/1/probability", 100, ParseErrorType::INVALID_VALUE },
-        { "/interactions", false, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/interactions", false, ParseErrorType::INVALID_TYPE },
         { "/interactions/DESTROYED", 1, ParseErrorType::TOO_FEW_ARGUMENTS },
         { "/interactions/OPEN", "", ParseErrorType::TOO_FEW_ARGUMENTS },
         { "/interactions/DROP_GOLD", "bad", ParseErrorType::INVALID_VALUE },
@@ -642,10 +645,10 @@ TEST_CASE("TerrainReader preserves symbol error codes and validation precedence"
     };
     const InvalidSymbol cases[] = {
         { R"(null)", ParseErrorType::TOO_FEW_ARGUMENTS },
-        { R"(42)", ParseErrorType::TOO_FEW_ARGUMENTS },
-        { R"([])", ParseErrorType::TOO_FEW_ARGUMENTS },
-        { R"(true)", ParseErrorType::TOO_FEW_ARGUMENTS },
-        { R"("bad")", ParseErrorType::TOO_FEW_ARGUMENTS },
+        { R"(42)", ParseErrorType::INVALID_TYPE },
+        { R"([])", ParseErrorType::INVALID_TYPE },
+        { R"(true)", ParseErrorType::INVALID_TYPE },
+        { R"("bad")", ParseErrorType::INVALID_TYPE },
         { R"({"lit": false})", ParseErrorType::TOO_FEW_ARGUMENTS },
         { R"({"character": null, "color": "White", "lit": false})", ParseErrorType::TOO_FEW_ARGUMENTS },
         { R"({"character": 42, "color": "White", "lit": false})", ParseErrorType::TOO_FEW_ARGUMENTS },
@@ -676,6 +679,18 @@ TEST_CASE("TerrainReader preserves symbol error codes and validation precedence"
     auto data = make_terrain();
     data.erase("symbol");
     CHECK(test::to_error_code(test::read_and_commit(TerrainReader(data, session), session)) == ParseErrorType::TOO_FEW_ARGUMENTS);
+}
+
+TEST_CASE("TerrainReader separates a missing record from a record of a wrong type")
+{
+    TerrainStateGuard guard;
+    auto session = TerrainReader::create_session();
+    const nlohmann::json missing;
+    CHECK(test::to_error_code(test::read_and_commit(TerrainReader(missing, session), session)) == ParseErrorType::TOO_FEW_ARGUMENTS);
+    for (const auto &value : { nlohmann::json(1), nlohmann::json("terrain"), nlohmann::json::array() }) {
+        CAPTURE(value);
+        CHECK(test::to_error_code(test::read_and_commit(TerrainReader(value, session), session)) == ParseErrorType::INVALID_TYPE);
+    }
 }
 
 TEST_CASE("TerrainReader checks lit type before symbol length and color")

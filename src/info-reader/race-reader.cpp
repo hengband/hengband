@@ -98,8 +98,8 @@ RaceReader::RaceReader(const nlohmann::json &monrace_data, Session &session)
  */
 tl::expected<void, ParseErrorType> RaceReader::read() const
 {
-    if (!this->monrace_data.is_object()) {
-        return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
+    if (const auto result = info_require_object(this->monrace_data); !result) {
+        return result;
     }
 
     const auto id_result = this->session.read_and_report(get_json_value(this->monrace_data, "id"));
@@ -369,11 +369,7 @@ tl::expected<void, ParseErrorType> RaceReader::set_mon_artifacts(MonraceDefiniti
     if (artifact_data.is_null()) {
         return {};
     }
-    if (!artifact_data.is_array()) {
-        return tl::unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
-    }
-
-    for (const auto &artifact : artifact_data) {
+    return info_read_object_array(artifact_data, [&monrace](const nlohmann::json &artifact) -> tl::expected<void, ParseErrorType> {
         FixedArtifactId fa_id{};
         if (const auto result = info_set_integer(get_json_value(artifact, "drop_artifact_id"), fa_id, true, Range(1, MAX_FIXED_ARTIFACT_ID)); !result) {
             return result;
@@ -384,8 +380,8 @@ tl::expected<void, ParseErrorType> RaceReader::set_mon_artifacts(MonraceDefiniti
         }
 
         monrace.emplace_drop_artifact(fa_id, chance);
-    }
-    return {};
+        return {};
+    });
 }
 
 /*!
@@ -399,11 +395,7 @@ tl::expected<void, ParseErrorType> RaceReader::set_mon_escorts(MonraceDefinition
     if (escort_data.is_null()) {
         return {};
     }
-    if (!escort_data.is_array()) {
-        return tl::unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
-    }
-
-    for (const auto &escort : escort_data) {
+    return info_read_object_array(escort_data, [&monrace](const nlohmann::json &escort) -> tl::expected<void, ParseErrorType> {
         MonraceId monrace_id{};
         if (const auto result = info_set_integer(get_json_value(escort, "escorts_id"), monrace_id, true, Range(1, MAX_MONRACE_ID)); !result) {
             return result;
@@ -415,8 +407,8 @@ tl::expected<void, ParseErrorType> RaceReader::set_mon_escorts(MonraceDefinition
         }
 
         monrace.emplace_reinforce(monrace_id, dice);
-    }
-    return {};
+        return {};
+    });
 }
 
 /*!
@@ -431,11 +423,9 @@ tl::expected<void, ParseErrorType> RaceReader::set_mon_blows(MonraceDefinition &
         monrace.behavior_flags.set(MonsterBehaviorType::NEVER_BLOW);
         return {};
     }
-    if (!blow_data.is_array()) {
-        return tl::unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
-    }
 
-    for (auto blow_num = 0; const auto &blow : blow_data) {
+    auto blow_num = 0;
+    return info_read_object_array(blow_data, [&monrace, &blow_num](const nlohmann::json &blow) -> tl::expected<void, ParseErrorType> {
         if (blow_num >= MAX_NUM_BLOWS) {
             return tl::unexpected(ParseErrorType::INVALID_VALUE);
         }
@@ -466,8 +456,8 @@ tl::expected<void, ParseErrorType> RaceReader::set_mon_blows(MonraceDefinition &
         }
 
         blow_num++;
-    }
-    return {};
+        return {};
+    });
 }
 
 /*!
@@ -496,7 +486,7 @@ tl::expected<void, ParseErrorType> RaceReader::set_mon_skills(MonraceDefinition 
         return {};
     }
     if (!skill_data.is_object()) {
-        return tl::unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
+        return tl::unexpected(ParseErrorType::INVALID_TYPE);
     }
 
     const auto &prob = get_json_value(skill_data, "probability");
@@ -547,12 +537,12 @@ tl::expected<void, ParseErrorType> RaceReader::set_mon_final_summons(MonraceDefi
     if (summon_data.is_null()) {
         return {};
     }
-    if (!summon_data.is_array()) {
-        return tl::unexpected(ParseErrorType::INVALID_TYPE);
-    }
-
-    for (auto &summon_item : summon_data) {
-        int id, probability, min_num, max_num, radius;
+    return info_read_object_array(summon_data, [&monrace](const nlohmann::json &summon_item) -> tl::expected<void, ParseErrorType> {
+        int id = 0;
+        int probability = 0;
+        int min_num = 0;
+        int max_num = 0;
+        int radius = 0;
         if (const auto result = info_set_integer(get_json_value(summon_item, "id"), id, true, Range(1, MAX_MONRACE_ID)); !result) {
             return result;
         }
@@ -572,8 +562,8 @@ tl::expected<void, ParseErrorType> RaceReader::set_mon_final_summons(MonraceDefi
             return result;
         }
         monrace.emplace_final_summon(i2enum<MonraceId>(id), probability, min_num, max_num, radius);
-    }
-    return {};
+        return {};
+    });
 }
 
 /*!
@@ -587,11 +577,7 @@ tl::expected<void, ParseErrorType> RaceReader::set_mon_message(MonraceMessage &m
     if (message_data.is_null()) {
         return {};
     }
-    if (!message_data.is_array()) {
-        return tl::unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
-    }
-
-    for (const auto &message : message_data) {
+    return info_read_object_array(message_data, [&messages](const nlohmann::json &message) -> tl::expected<void, ParseErrorType> {
         const auto action = info_read_token(get_json_value(message, "action"), r_info_message_flags);
         if (!action) {
             return tl::make_unexpected(action.error());
@@ -617,8 +603,8 @@ tl::expected<void, ParseErrorType> RaceReader::set_mon_message(MonraceMessage &m
         }
 
         messages.emplace(*action, chance, use_name, str);
-    }
-    return {};
+        return {};
+    });
 }
 
 /*!
