@@ -153,7 +153,7 @@ bool EgoReader::grab_one_extra_flag(ego_generate_type &extra, const nlohmann::js
         extra.tr_flags.push_back(it->second);
         return true;
     }
-    if (const auto it = baseitem_geneneration_flags.find(name); it != baseitem_geneneration_flags.end()) {
+    if (const auto it = baseitem_generation_flags.find(name); it != baseitem_generation_flags.end()) {
         extra.trg_flags.push_back(it->second);
         return true;
     }

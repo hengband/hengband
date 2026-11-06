@@ -6,4 +6,4 @@
 #include <unordered_map>
 
 extern const std::unordered_map<std::string_view, tr_type> baseitem_flags;
-extern const std::unordered_map<std::string_view, ItemGenerationTraitType> baseitem_geneneration_flags;
+extern const std::unordered_map<std::string_view, ItemGenerationTraitType> baseitem_generation_flags;

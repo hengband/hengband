@@ -60,7 +60,7 @@ MonsterBasicFlagGroups::MonsterBasicFlagGroups(
  */
 bool grab_one_monster_basic_flag(const MonsterBasicFlagGroups &groups, std::string_view what)
 {
-    if (info_grab_one_flag(groups.resistance_flags, r_info_flagsr, what)) {
+    if (info_grab_one_flag(groups.resistance_flags, r_info_resistance_flags, what)) {
         return true;
     }
 
