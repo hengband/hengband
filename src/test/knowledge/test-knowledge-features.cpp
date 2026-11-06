@@ -2,11 +2,13 @@
  * @brief 地形の知識の一覧に載せる地形を集める処理と、一覧の閲覧の入力待ちの文脈のテスト
  */
 
+#include "game-option/special-options.h"
 #include "io-dump/dump-util.h"
 #include "io/input-context.h"
 #include "knowledge/knowledge-features.h"
 #include "system/terrain/terrain-definition.h"
 #include "system/terrain/terrain-list.h"
+#include "term/z-term.h"
 #include "test/scoped-input-term.h"
 #include "test/scoped-restore.h"
 #include "util/finalizer.h"
@@ -129,4 +131,79 @@ TEST_CASE("do_cmd_knowledge_features publishes the browser context while browsin
     auto need_redraw = false;
     IDX lighting_level = F_LIT_STANDARD;
     do_cmd_knowledge_features(&need_redraw, false, -1, &lighting_level);
+}
+
+TEST_CASE("do_cmd_knowledge_features restores every lighting level when cancelling a directly specified terrain")
+{
+    const auto restore = replace_terrains({ { "floor", 0 } });
+    auto &terrain = TerrainList::get_instance().get_terrain(0);
+    const TerrainSymbols symbols{ { { 1, '.' }, { 11, '*' }, { 2, '#' } } };
+    terrain.symbol_configs = symbols;
+    // キーの案内はクリップボードにシンボルがあるかで変わるので、空にしておく
+    auto &clipboard = DisplaySymbolsClipboard::get_instance();
+    const auto restore_clipboard = test::scoped_restore(clipboard.symbol, clipboard.symbols);
+    clipboard.symbol = {};
+    clipboard.reset_symbols();
+    test::ScopedInputTerm term;
+
+    // 番号を指定すると明色のシンボルの編集から始まる。6 で明色の文字を変え、d でほかの段階も標準色から求め直してから、
+    // ESC で取り消して閉じる。どの明るさの段階も元のまま残る
+    term.expect({ InputKind::BROWSER, EDIT_KEY_GUIDE, {} }, "6d\x1b");
+    auto need_redraw = false;
+    IDX lighting_level = F_LIT_LITE;
+    do_cmd_knowledge_features(&need_redraw, true, 0, &lighting_level);
+
+    CHECK(terrain.symbol_configs == symbols);
+}
+
+TEST_CASE("do_cmd_knowledge_features scrolls the visual list within the terminal width")
+{
+    const auto restore = replace_terrains({ { "floor", 0 } });
+    auto &terrain = TerrainList::get_instance().get_terrain(0);
+    terrain.symbol_configs = { { { 1, '.' }, { 11, '.' }, { 2, '.' } } };
+    // 表の幅は 2 マスのタイルかで変わるので、1 マスにしておく
+    const auto restore_bigtile = test::scoped_restore(use_bigtile);
+    use_bigtile = false;
+    // キーの案内はクリップボードにシンボルがあるかで変わるので、空にしておく
+    auto &clipboard = DisplaySymbolsClipboard::get_instance();
+    const auto restore_clipboard = test::scoped_restore(clipboard.symbol, clipboard.symbols);
+    clipboard.symbol = {};
+    clipboard.reset_symbols();
+    test::ScopedInputTerm term;
+
+    // 明色の文字を 6 で '.' から 70 文字ぶん右の 't' へ送ってから、ESC で閉じる
+    term.expect({ InputKind::BROWSER, EDIT_KEY_GUIDE, {} }, std::string(70, '6') + "\x1b");
+    auto need_redraw = false;
+    IDX lighting_level = F_LIT_LITE;
+    do_cmd_knowledge_features(&need_redraw, true, 0, &lighting_level);
+
+    // 表は 11 桁目から端末の右端までの 69 文字ぶんとして送られ、表の左端 (7 行目の 11 桁目) は '9' になる。
+    // 幅を 6 文字広く求めていると、送りが遅れて '3' になる
+    CHECK(game_term->scr->c[7][11] == '9');
+}
+
+TEST_CASE("do_cmd_knowledge_features scrolls the visual list back when 'd' resets the edited symbol")
+{
+    const auto restore = replace_terrains({ { "floor", 0 } });
+    auto &terrain = TerrainList::get_instance().get_terrain(0);
+    terrain.symbol_configs = { { { 1, '.' }, { 11, '.' }, { 2, '.' } } };
+    // 表とカーソルの桁は 2 マスのタイルかで変わるので、1 マスにしておく
+    const auto restore_bigtile = test::scoped_restore(use_bigtile);
+    use_bigtile = false;
+    // キーの案内はクリップボードにシンボルがあるかで変わるので、空にしておく
+    auto &clipboard = DisplaySymbolsClipboard::get_instance();
+    const auto restore_clipboard = test::scoped_restore(clipboard.symbol, clipboard.symbols);
+    clipboard.symbol = {};
+    clipboard.reset_symbols();
+    test::ScopedInputTerm term;
+
+    // 明色の文字を 6 で 70 文字ぶん右へ送って表を送らせてから、d で '.' に戻して ESC で閉じる
+    term.expect({ InputKind::BROWSER, EDIT_KEY_GUIDE, {} }, std::string(70, '6') + "d\x1b");
+    auto need_redraw = false;
+    IDX lighting_level = F_LIT_LITE;
+    do_cmd_knowledge_features(&need_redraw, true, 0, &lighting_level);
+
+    // 表の左端 (7 行目の 11 桁目) は、戻した '.' の 10 文字手前の '$' まで送り戻され、カーソルは表の中の '.' の桁にある
+    CHECK(game_term->scr->c[7][11] == '$');
+    CHECK(term_locate().first == 11 + 10);
 }
