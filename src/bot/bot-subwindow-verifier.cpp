@@ -207,7 +207,7 @@ nlohmann::json verify_bot_subwindows(PlayerType *player_ptr)
         return { { "consistent", true }, { "terms", std::move(terms) } };
     }
 
-    // 入力待ちで描き直すとき (all_term_fresh()) と同じく、描き直しでずれたメイン画面のカーソルを後で戻す
+    // 調べた後にメイン画面のカーソルが入力待ちの位置からずれないよう、描き直す前の位置を覚えておいて戻す
     auto *old_term = game_term;
     term_activate(angband_terms[0]);
     const auto cursor = term_locate();
