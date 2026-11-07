@@ -31,6 +31,21 @@ void move_cursor_relative(int row, int col)
 }
 
 /*!
+ * @brief print_path() で描いた軌跡を消す
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param path_grids print_path() で*を描いたグリッド。描き直した後に空にする
+ * @details 地図全体ではなく、*を描いたグリッドだけを描き直す。
+ */
+void erase_path(PlayerType *player_ptr, std::vector<Pos2D> &path_grids)
+{
+    for (const auto &pos : path_grids) {
+        erase_overlay_spot(player_ptr, pos);
+    }
+
+    path_grids.clear();
+}
+
+/*!
  * @brief 矢などの軌跡を*で表示する / print project path
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param pos 目標地点の座標
@@ -40,11 +55,7 @@ void move_cursor_relative(int row, int col)
  */
 void print_path(PlayerType *player_ptr, const Pos2D &pos, std::vector<Pos2D> &path_grids)
 {
-    for (const auto &prev_pos : path_grids) {
-        erase_overlay_spot(player_ptr, prev_pos);
-    }
-
-    path_grids.clear();
+    erase_path(player_ptr, path_grids);
     if (!display_path || (project_length == -1)) {
         return;
     }
