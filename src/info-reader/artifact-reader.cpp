@@ -38,7 +38,7 @@ tl::expected<void, ParseErrorType> ArtifactReader::read() const
 {
     const auto id_result = this->session.read_and_report(get_json_value(this->art_data, "id"));
     if (!id_result) {
-        return tl::unexpected(id_result.error());
+        return tl::make_unexpected(id_result.error());
     }
     const auto int_id = *id_result;
     const auto artifact_id = i2enum<FixedArtifactId>(int_id);
@@ -134,7 +134,7 @@ tl::expected<void, ParseErrorType> ArtifactReader::set_art_baseitem(ArtifactDefi
 {
     const auto &baseitem_data = get_json_value(this->art_data, "base_item");
     if (baseitem_data.is_null()) {
-        return tl::unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
+        return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
     }
 
     // 失敗時は直後に返るが、gcc の最適化で未初期化と誤検出されないよう初期化しておく。
@@ -161,7 +161,7 @@ tl::expected<void, ParseErrorType> ArtifactReader::set_art_activate(ArtifactDefi
 {
     const auto activation = read_activation(get_json_value(this->art_data, "activate"));
     if (!activation) {
-        return tl::unexpected(activation.error());
+        return tl::make_unexpected(activation.error());
     }
     if (*activation == RandomArtActType::NONE) {
         return {};

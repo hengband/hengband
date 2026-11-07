@@ -2,11 +2,11 @@
 
 #include "info-reader/definition-id-checker.h"
 #include <nlohmann/json_fwd.hpp>
-#include <optional>
 #include <span>
 #include <string>
 #include <string_view>
 #include <tl/expected.hpp>
+#include <tl/optional.hpp>
 
 struct RecordReadError {
     std::string id;
@@ -23,7 +23,7 @@ public:
     RecordDiagnostic &operator=(RecordDiagnostic &&) = delete;
 
     void begin_read(const nlohmann::json &data);
-    const std::optional<RecordReadError> &error() const;
+    const tl::optional<RecordReadError> &error() const;
     tl::expected<void, ParseErrorType> fail(ParseErrorType code, std::string_view path, std::string_view reason);
     tl::expected<void, ParseErrorType> check_keys(const nlohmann::json &data, std::string_view path, std::span<const std::string_view> keys);
     tl::expected<void, ParseErrorType> read_integer(const nlohmann::json &data, int &value, int minimum, int maximum, std::string_view path);
@@ -33,5 +33,5 @@ protected:
 
 private:
     std::string record_id;
-    std::optional<RecordReadError> diagnostic;
+    tl::optional<RecordReadError> diagnostic;
 };

@@ -34,11 +34,11 @@ tl::expected<RandomArtActType, ParseErrorType> read_activation(const nlohmann::j
         return RandomArtActType::NONE;
     }
     if (!activation_json.is_string()) {
-        return tl::unexpected(ParseErrorType::INVALID_TYPE);
+        return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
     }
     const auto activation = grab_one_activation_flag(activation_json.get<std::string>());
     if (activation == RandomArtActType::NONE) {
-        return tl::unexpected(ParseErrorType::INVALID_FLAG);
+        return tl::make_unexpected(ParseErrorType::INVALID_FLAG);
     }
     return activation;
 }

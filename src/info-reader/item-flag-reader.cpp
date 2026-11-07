@@ -17,7 +17,7 @@ bool grab_one_item_flag(TrFlags &flags, EnumClassFlagGroup<ItemGenerationTraitTy
         return true;
     }
 
-    return info_grab_one_flag(gen_flags, baseitem_geneneration_flags, what);
+    return info_grab_one_flag(gen_flags, baseitem_generation_flags, what);
 }
 
 /*!

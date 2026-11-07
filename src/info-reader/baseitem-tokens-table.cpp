@@ -180,7 +180,7 @@ const std::unordered_map<std::string_view, tr_type> baseitem_flags = {
  * オブジェクト生成特性トークンの定義 /
  * Object flags
  */
-const std::unordered_map<std::string_view, ItemGenerationTraitType> baseitem_geneneration_flags = {
+const std::unordered_map<std::string_view, ItemGenerationTraitType> baseitem_generation_flags = {
     { "INSTA_ART", ItemGenerationTraitType::INSTA_ART },
     { "QUESTITEM", ItemGenerationTraitType::QUESTITEM },
     { "XTRA_POWER", ItemGenerationTraitType::XTRA_POWER },

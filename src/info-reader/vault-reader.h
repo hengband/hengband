@@ -3,10 +3,10 @@
 #include "info-reader/definition-id-checker.h"
 #include "info-reader/record-diagnostic.h"
 #include <nlohmann/json_fwd.hpp>
-#include <optional>
 #include <string>
 #include <string_view>
 #include <tl/expected.hpp>
+#include <tl/optional.hpp>
 
 class VaultReader : private RecordDiagnostic {
 public:

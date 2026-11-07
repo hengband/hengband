@@ -1745,7 +1745,7 @@ TEST_CASE("TownMapReader bundled v3 cells preserve all v2 letter values")
             const auto &row = expected_rows[i];
             const auto &feature = definition.features[i];
             CHECK(std::string(1, feature.symbol) == row[0].get<std::string>());
-            CHECK(feature.condition == (row[1].is_null() ? std::optional<std::string>{} : std::optional<std::string>{ row[1].get<std::string>() }));
+            CHECK(feature.condition == (row[1].is_null() ? tl::optional<std::string>{} : tl::optional<std::string>{ row[1].get<std::string>() }));
             CHECK(feature.terrain == row[2].get<std::string>());
             CHECK(feature.trap == row[3].get<std::string>());
             CHECK(feature.cell.grid.feature == 0);

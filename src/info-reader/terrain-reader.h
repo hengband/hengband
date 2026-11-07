@@ -37,7 +37,7 @@ public:
     tl::expected<void, ParseErrorType> read() const;
 
 private:
-    bool grab_one_feat_flag(TerrainType &terrain, std::string_view what) const;
+    bool grab_one_terrain_flag(TerrainType &terrain, std::string_view what) const;
     tl::expected<void, ParseErrorType> set_terrain_symbol(TerrainType &terrain) const;
     tl::expected<void, ParseErrorType> set_terrain_conversion(TerrainType &terrain) const;
     tl::expected<void, ParseErrorType> set_terrain_generation(TerrainType &terrain) const;

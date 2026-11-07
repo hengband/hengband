@@ -18,7 +18,7 @@ void RecordDiagnostic::begin_read(const nlohmann::json &data)
     this->record_id = data.is_object() && data.contains("id") ? data["id"].dump() : "<unknown>";
 }
 
-const std::optional<RecordReadError> &RecordDiagnostic::error() const
+const tl::optional<RecordReadError> &RecordDiagnostic::error() const
 {
     return this->diagnostic;
 }
@@ -26,7 +26,7 @@ const std::optional<RecordReadError> &RecordDiagnostic::error() const
 tl::expected<void, ParseErrorType> RecordDiagnostic::fail(ParseErrorType code, std::string_view path, std::string_view reason)
 {
     this->diagnostic = RecordReadError{ this->record_id, std::string(path), std::string(reason) };
-    return tl::unexpected(code);
+    return tl::make_unexpected(code);
 }
 
 /*!

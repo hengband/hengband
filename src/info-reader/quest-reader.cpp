@@ -466,6 +466,11 @@ tl::expected<void, ParseErrorType> QuestReader::read(std::string *reason) const
     return {};
 }
 
+/*!
+ * @brief クエストの名前を読み込む
+ * @param name 読み込み先
+ * @return 成功、またはエラーコード
+ */
 tl::expected<void, ParseErrorType> QuestReader::set_name(std::string &name) const
 {
     // info_set_string は {ja, en} オブジェクトを受け取り、ビルド言語に応じた文字列を格納する
@@ -475,6 +480,11 @@ tl::expected<void, ParseErrorType> QuestReader::set_name(std::string &name) cons
     return {};
 }
 
+/*!
+ * @brief クエストの種類・階・目標などの定義を読み込む
+ * @param parsed 読み込み先の固定マップ
+ * @return 成功、またはエラーコード
+ */
 tl::expected<void, ParseErrorType> QuestReader::set_definition(QuestFixedMap &parsed) const
 {
     const auto &definition = get_json_value(this->quest_data, "definition");
@@ -551,6 +561,11 @@ tl::expected<void, ParseErrorType> QuestReader::set_definition(QuestFixedMap &pa
     return {};
 }
 
+/*!
+ * @brief クエストの説明文を読み込む
+ * @param parsed 読み込み先の固定マップ
+ * @return 成功、またはエラーコード
+ */
 tl::expected<void, ParseErrorType> QuestReader::set_descriptions(QuestFixedMap &parsed) const
 {
     const auto &descriptions = get_json_value(this->quest_data, "descriptions");
@@ -618,6 +633,12 @@ tl::expected<void, ParseErrorType> QuestReader::set_descriptions(QuestFixedMap &
     return {};
 }
 
+/*!
+ * @brief 固定マップの凡例を読み込む
+ * @param parsed 読み込み先の固定マップ
+ * @param reason 失敗した理由の格納先（不要なら nullptr）
+ * @return 成功、またはエラーコード
+ */
 tl::expected<void, ParseErrorType> QuestReader::set_legend(QuestFixedMap &parsed, std::string *reason) const
 {
     const auto &legend = get_json_value(this->quest_data, "legend");
@@ -648,6 +669,11 @@ tl::expected<void, ParseErrorType> QuestReader::set_legend(QuestFixedMap &parsed
     return {};
 }
 
+/*!
+ * @brief 固定マップの行を読み込む
+ * @param parsed 読み込み先の固定マップ
+ * @return 成功、またはエラーコード
+ */
 tl::expected<void, ParseErrorType> QuestReader::set_maps(QuestFixedMap &parsed) const
 {
     const auto &map = get_json_value(this->quest_data, "map");
@@ -683,6 +709,11 @@ tl::expected<void, ParseErrorType> QuestReader::set_maps(QuestFixedMap &parsed) 
     return {};
 }
 
+/*!
+ * @brief プレイヤーの開始位置を読み込む
+ * @param parsed 読み込み先の固定マップ
+ * @return 成功、またはエラーコード
+ */
 tl::expected<void, ParseErrorType> QuestReader::set_starts(QuestFixedMap &parsed) const
 {
     const auto &start = get_json_value(this->quest_data, "start");
