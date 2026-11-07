@@ -430,7 +430,7 @@ tl::expected<int, std::string> find_term_index(const nlohmann::json &request)
 }
 
 /*!
- * @brief infoリクエストに対する端末情報とビルド情報を生成する
+ * @brief infoリクエストに対する端末情報とビルド情報と、stateのfieldsで選べる項目を生成する
  * @return レスポンスのJSONオブジェクト
  * @details
  * 端末の数と大きさはフロントエンドが決めるため、クライアントは画面を読む前に
@@ -464,6 +464,8 @@ nlohmann::json make_info_response()
         { "japanese", false },
 #endif
         { "terms", terms },
+        // state の fields で選べる項目。このキーが無い版の本体は fields を受け付けない
+        { "state_fields", make_bot_snapshot_field_names_json() },
     };
 }
 
@@ -657,6 +659,7 @@ nlohmann::json handle_resize_request(const nlohmann::json &id, const nlohmann::j
  * キャラクターが生成される前は内部状態を構築できないためエラーを返す。
  * grid_mapはフロア全域を走査して生成し、出力量は既知の地形に依存する。
  * 地図が要らないクライアントは生成・転送を省略できる。
+ * fields で最上位の項目を選ぶと、選ばなかった項目は生成しない。
  */
 nlohmann::json handle_state_request(const nlohmann::json &id, const nlohmann::json &request)
 {
@@ -670,7 +673,13 @@ nlohmann::json handle_state_request(const nlohmann::json &id, const nlohmann::js
         return make_error_response(id, "\"map\" must be a boolean");
     }
 
-    auto state = make_bot_json_snapshot(p_ptr, *include_map);
+    // fields が無いときは null と同じく扱い、すべての項目にするかどうかは parse_bot_snapshot_fields() だけで決める
+    const auto fields = parse_bot_snapshot_fields(request.value("fields", nlohmann::json()));
+    if (!fields) {
+        return make_error_response(id, fields.error());
+    }
+
+    auto state = make_bot_json_snapshot(p_ptr, *include_map, *fields);
     state["input_context"] = make_input_context_json();
     return make_ok_response(id, std::move(state));
 }

@@ -50,6 +50,7 @@
 #include "store/store-util.h"
 #include "store/store.h"
 #include "sv-definition/sv-bow-types.h"
+#include "system/angband-exceptions.h"
 #include "system/artifact/artifact-definition.h"
 #include "system/artifact/artifact-list.h"
 #include "system/artifact/artifact-record.h"
@@ -90,6 +91,7 @@
 #include "timed-effect/timed-effects.h"
 #include "tracking/health-bar-tracker.h"
 #include "util/enum-converter.h"
+#include "util/enum-range.h"
 #include "view/display-characteristic.h"
 #include "view/display-map.h"
 #include "view/display-messages.h"
@@ -111,7 +113,9 @@
 #include <nlohmann/json.hpp>
 #include <range/v3/algorithm.hpp>
 #include <stdexcept>
+#include <string>
 #include <string_view>
+#include <tl/expected.hpp>
 #include <unordered_map>
 #include <utility>
 #include <vector>
@@ -1594,21 +1598,118 @@ enum class BotSnapshotMessages {
 };
 
 /*!
- * @brief スナップショット本体を組み立てる
- * @param include_map grid_map を含めるか
- * @param messages_source messages に載せるメッセージの選び方
- * @details grid_map はフロア全域を走査して作る処理で、
- * 出力量は既知の地形に依存する。地図を出さない呼び出し
- * （店内スナップショット）では作ってから消すのではなく最初から作らない。
+ * @brief スナップショットの player を作る
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @return player のJSONオブジェクト
  */
-nlohmann::json make_snapshot(PlayerType *player_ptr, bool include_map, BotSnapshotMessages messages_source)
+nlohmann::json make_snapshot_player_json(PlayerType *player_ptr)
 {
     const auto &player = *player_ptr;
-    const auto &floor = *player.current_floor_ptr;
+    const auto known_flags = collect_player_known_flags(player_ptr);
+    const auto [main_to_h, main_to_d] = calc_displayed_melee_bonus(player_ptr, 0);
+    const auto [sub_to_h, sub_to_d] = calc_displayed_melee_bonus(player_ptr, 1);
+    const auto displayed_blows = calc_displayed_melee_blows(player_ptr);
+    return {
+        { "y", player.y },
+        { "x", player.x },
+        { "can_see_own_grid", !no_lite(player_ptr) },
+        { "light_radius", player.cur_lite },
+        { "level", player.lev },
+        { "hp", player.chp },
+        { "max_hp", player.mhp },
+        { "mp", player.csp },
+        { "max_mp", player.msp },
+        { "exp", player.exp },
+        // The main screen marks drained experience ("x経験" / yellow)
+        // and a drained level ("xレベル" / yellow); the character sheet
+        // prints the maximum experience and the next-level threshold.
+        { "max_exp", player.max_exp },
+        { "exp_drained", player.exp < player.max_exp },
+        { "max_level", player.max_plv },
+        { "level_drained", player.lev < player.max_plv },
+        { "exp_to_advance", calc_exp_to_advance(player_ptr) },
+        { "title", to_json_utf8(get_player_title(player_ptr)) },
+        { "race_title", to_json_utf8(get_displayed_race_title(player_ptr)) },
+        { "mimic_form", enum2i(player.mimic_form) },
+        { "gold", player.au },
+        { "food_state", food_state(player) },
+        { "speed", player.pspeed },
+        { "speed_display", make_speed_display_json(player_ptr) },
+        { "action", make_action_state_json(player_ptr) },
+        { "study", make_study_indicator_json(player_ptr) },
+        { "status_bar", make_status_bar_json(player_ptr) },
+        { "recalling", player.word_recall != 0 },
+        { "food_type", enum2i(PlayerRace(player_ptr).food()) },
+        { "class_id", enum2i(player.pclass) },
+        { "race_id", enum2i(player.prace) },
+        { "personality_id", enum2i(player.ppersonality) },
+        { "ac", player.dis_ac + player.dis_to_a },
+        // Protocol 3: the raw skill numbers are replaced by the ratings the
+        // character sheet prints (numbers only under show_actual_value).
+        // The two-weapon / shield proficiencies moved to knowledge "skill_exp".
+        { "skill_ratings", make_skill_ratings_json(player_ptr) },
+        // Hit/damage bonuses are the displayed totals, not the
+        // internal components that could reveal raw skill values.
+        { "melee", {
+                       { "main_hand_blows", displayed_blows[0] },
+                       { "sub_hand_blows", displayed_blows[1] },
+                       { "mutation_blows", displayed_blows[2] },
+                       { "main_hand_to_h", can_attack_with_main_hand(player_ptr) ? nlohmann::json(main_to_h) : nlohmann::json(nullptr) },
+                       { "sub_hand_to_h", can_attack_with_sub_hand(player_ptr) ? nlohmann::json(sub_to_h) : nlohmann::json(nullptr) },
+                       { "main_hand_to_d", can_attack_with_main_hand(player_ptr) ? nlohmann::json(main_to_d) : nlohmann::json(nullptr) },
+                       { "sub_hand_to_d", can_attack_with_sub_hand(player_ptr) ? nlohmann::json(sub_to_d) : nlohmann::json(nullptr) },
+                   } },
+        { "status", make_player_status_json(*player.effects()) },
+        { "stats", make_player_stats_json(player) },
+        { "ability_sources", make_bot_player_ability_sources_json(known_flags) },
+        { "immunities", make_player_immunities_json(player_ptr, known_flags) },
+        { "vulnerabilities", make_player_vulnerabilities_json(player_ptr, known_flags) },
+    };
+}
+
+/*!
+ * @brief スナップショットの floor を作る
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @return floor のJSONオブジェクト
+ */
+nlohmann::json make_snapshot_floor_json(PlayerType *player_ptr)
+{
+    const auto &floor = *player_ptr->current_floor_ptr;
     const auto &world = AngbandWorld::get_instance();
+    return {
+        { "dungeon_id", enum2i(floor.dungeon_id) },
+        // The map name printed at the bottom right (town, wilderness, dungeon or quest).
+        { "dungeon_name", to_json_utf8(map_name(player_ptr)) },
+        { "level", floor.dun_level },
+        // The grade is player-visible: it selects the depth-display
+        // color, and Ctrl-F reports the distinct grade message.
+        { "feeling", DungeonFeeling::get_instance().get_feeling() },
+        { "width", floor.width },
+        { "height", floor.height },
+        { "inside_arena", floor.inside_arena },
+        { "quest_id", enum2i(floor.quest_number) },
+        { "town_id", world.is_in_any_town() ? enum2i(to_town_id(world.get_town_index())) : -1 },
+        { "town_index", world.is_in_any_town() ? static_cast<int>(world.get_town_index()) : 0 },
+        // True only while standing ON an actual town tile. Gate on
+        // dun_level == 0: is_in_any_town() (current_town_index > 0)
+        // is NOT cleared on entering a dungeon, so on its own it
+        // reads true in the dungeon too. On the surface it still
+        // separates the town from the open, out-of-depth wilderness
+        // tile (both share dungeon_id 0 / level 0).
+        { "in_town", floor.dun_level == 0 && world.is_in_any_town() },
+    };
+}
+
+/*!
+ * @brief スナップショットの progress を作る
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @return progress のJSONオブジェクト
+ */
+nlohmann::json make_snapshot_progress_json(PlayerType *player_ptr)
+{
+    const auto &player = *player_ptr;
     const auto &dungeons = DungeonList::get_instance();
     const auto &dungeon_records = DungeonRecords::get_instance();
-    const auto known_flags = collect_player_known_flags(player_ptr);
     auto entered_dungeon_ids = nlohmann::json::array();
     auto dungeon_recall_depths = nlohmann::json::object();
     auto conquered_dungeon_ids = nlohmann::json::array();
@@ -1626,143 +1727,153 @@ nlohmann::json make_snapshot(PlayerType *player_ptr, bool include_map, BotSnapsh
             conquered_dungeon_ids.push_back(enum2i(dungeon_id));
         }
     }
-    const auto [main_to_h, main_to_d] = calc_displayed_melee_bonus(player_ptr, 0);
-    const auto [sub_to_h, sub_to_d] = calc_displayed_melee_bonus(player_ptr, 1);
-    const auto displayed_blows = calc_displayed_melee_blows(player_ptr);
-    auto snapshot = nlohmann::json{
-        { "type", "player_turn" },
-        { "protocol_version", BOT_JSON_PROTOCOL_VERSION },
+    return {
+        { "recall_dungeon_id", enum2i(player.recall_dungeon) },
+        { "entered_dungeon_ids", std::move(entered_dungeon_ids) },
+        { "dungeon_recall_depths", std::move(dungeon_recall_depths) },
+        { "conquered_dungeon_ids", std::move(conquered_dungeon_ids) },
+        // Deepest level reached in the recall-target dungeon: this
+        // is exactly where Word of Recall lands and what the player
+        // sees on the character screen, so it reveals nothing hidden.
+        // The bot uses it to seed its deepest-level watermark, which
+        // otherwise resets to 1 on every restart.
+        { "recall_depth", dungeon_records.get_record(player.recall_dungeon).get_max_level() },
+        { "yeek_cave_conquered", dungeons.get_dungeon(DungeonId::GALGALS).is_conquered() },
+        // Whether the player can Word-of-Recall into Angband. A
+        // dungeon becomes recallable once its record has a max
+        // level (> 0): set either by physically entering it, or
+        // by hearing its rumor at the inn, which calls
+        // set_max_level(mindepth) and tells the player "You can
+        // recall to Angband." has_entered() alone does not cover
+        // the rumor-unlock case. This is player-visible state,
+        // not hidden information.
+        { "angband_recall_unlocked", dungeon_records.get_record(DungeonId::ANGBAND).get_max_level() > 0 },
+        // Towns the player knows the way to: marked visited by
+        // physically entering them or by hearing the town's rumor
+        // at the inn ("You know the way to ..."). The inn's
+        // "Teleport to other town" menu lists exactly these towns,
+        // so this mirrors player-visible state. IDs follow the
+        // floor.town_id convention (TownId; see to_town_id()).
+        { "visited_town_ids", [] {
+             std::vector<int> ids;
+             const auto &records = TownRecords::get_instance();
+             for (size_t i = 0; i < records.size(); i++) {
+                 if (records.has_visited(i2enum<TownId>(i))) {
+                     ids.push_back(static_cast<int>(i));
+                 }
+             }
+             return ids;
+         }() },
+        { "quests", make_disclosed_quests_json() },
+    };
+}
+
+/*!
+ * @brief スナップショットの最上位の項目の名前
+ */
+constexpr std::array<std::string_view, enum2i(BotSnapshotField::MAX)> SNAPSHOT_FIELD_NAMES{ {
+    "turn",
+    "clock",
+    "player",
+    "floor",
+    "progress",
+    "health_bar",
+    "riding_health_bar",
+    "visible_monsters",
+    "detected_monsters",
+    "messages",
+    "inventory",
+    "equipment",
+} };
+static_assert(
+    [] {
+        for (auto i = 0U; i < SNAPSHOT_FIELD_NAMES.size(); ++i) {
+            if (SNAPSHOT_FIELD_NAMES[i].empty()) {
+                return false;
+            }
+
+            for (auto j = i + 1; j < SNAPSHOT_FIELD_NAMES.size(); ++j) {
+                if (SNAPSHOT_FIELD_NAMES[i] == SNAPSHOT_FIELD_NAMES[j]) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }(),
+    "every snapshot field must have a unique name");
+
+/*!
+ * @brief スナップショットの最上位の項目を 1 つ作る
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param field 作る項目
+ * @param messages_source messages に載せるメッセージの選び方
+ * @return 項目の値
+ * @details 項目を足したときに作り忘れないよう、default を置かずにすべての項目を挙げる
+ * (挙げ忘れるとコンパイラが -Wswitch で警告する)。
+ */
+nlohmann::json make_snapshot_field_json(PlayerType *player_ptr, BotSnapshotField field, BotSnapshotMessages messages_source)
+{
+    switch (field) {
+    case BotSnapshotField::TURN:
         // Documented exception to the fair-play rule (user decision 2026-09-22,
         // "例外として残す"): the exact game turn is not printed anywhere, but the
         // bot uses it only for decision boundaries and log alignment. The
         // human-visible day and clock are in "clock".
-        { "turn", world.game_turn },
-        { "clock", make_clock_json() },
-        { "player", {
-                        { "y", player.y },
-                        { "x", player.x },
-                        { "can_see_own_grid", !no_lite(player_ptr) },
-                        { "light_radius", player.cur_lite },
-                        { "level", player.lev },
-                        { "hp", player.chp },
-                        { "max_hp", player.mhp },
-                        { "mp", player.csp },
-                        { "max_mp", player.msp },
-                        { "exp", player.exp },
-                        // The main screen marks drained experience ("x経験" / yellow)
-                        // and a drained level ("xレベル" / yellow); the character sheet
-                        // prints the maximum experience and the next-level threshold.
-                        { "max_exp", player.max_exp },
-                        { "exp_drained", player.exp < player.max_exp },
-                        { "max_level", player.max_plv },
-                        { "level_drained", player.lev < player.max_plv },
-                        { "exp_to_advance", calc_exp_to_advance(player_ptr) },
-                        { "title", to_json_utf8(get_player_title(player_ptr)) },
-                        { "race_title", to_json_utf8(get_displayed_race_title(player_ptr)) },
-                        { "mimic_form", enum2i(player.mimic_form) },
-                        { "gold", player.au },
-                        { "food_state", food_state(player) },
-                        { "speed", player.pspeed },
-                        { "speed_display", make_speed_display_json(player_ptr) },
-                        { "action", make_action_state_json(player_ptr) },
-                        { "study", make_study_indicator_json(player_ptr) },
-                        { "status_bar", make_status_bar_json(player_ptr) },
-                        { "recalling", player.word_recall != 0 },
-                        { "food_type", enum2i(PlayerRace(player_ptr).food()) },
-                        { "class_id", enum2i(player.pclass) },
-                        { "race_id", enum2i(player.prace) },
-                        { "personality_id", enum2i(player.ppersonality) },
-                        { "ac", player.dis_ac + player.dis_to_a },
-                        // Protocol 3: the raw skill numbers are replaced by the ratings the
-                        // character sheet prints (numbers only under show_actual_value).
-                        // The two-weapon / shield proficiencies moved to knowledge "skill_exp".
-                        { "skill_ratings", make_skill_ratings_json(player_ptr) },
-                        // Hit/damage bonuses are the displayed totals, not the
-                        // internal components that could reveal raw skill values.
-                        { "melee", {
-                                       { "main_hand_blows", displayed_blows[0] },
-                                       { "sub_hand_blows", displayed_blows[1] },
-                                       { "mutation_blows", displayed_blows[2] },
-                                       { "main_hand_to_h", can_attack_with_main_hand(player_ptr) ? nlohmann::json(main_to_h) : nlohmann::json(nullptr) },
-                                       { "sub_hand_to_h", can_attack_with_sub_hand(player_ptr) ? nlohmann::json(sub_to_h) : nlohmann::json(nullptr) },
-                                       { "main_hand_to_d", can_attack_with_main_hand(player_ptr) ? nlohmann::json(main_to_d) : nlohmann::json(nullptr) },
-                                       { "sub_hand_to_d", can_attack_with_sub_hand(player_ptr) ? nlohmann::json(sub_to_d) : nlohmann::json(nullptr) },
-                                   } },
-                        { "status", make_player_status_json(*player.effects()) },
-                        { "stats", make_player_stats_json(player) },
-                        { "ability_sources", make_bot_player_ability_sources_json(known_flags) },
-                        { "immunities", make_player_immunities_json(player_ptr, known_flags) },
-                        { "vulnerabilities", make_player_vulnerabilities_json(player_ptr, known_flags) },
-                    } },
-        { "floor", {
-                       { "dungeon_id", enum2i(floor.dungeon_id) },
-                       // The map name printed at the bottom right (town, wilderness, dungeon or quest).
-                       { "dungeon_name", to_json_utf8(map_name(player_ptr)) },
-                       { "level", floor.dun_level },
-                       // The grade is player-visible: it selects the depth-display
-                       // color, and Ctrl-F reports the distinct grade message.
-                       { "feeling", DungeonFeeling::get_instance().get_feeling() },
-                       { "width", floor.width },
-                       { "height", floor.height },
-                       { "inside_arena", floor.inside_arena },
-                       { "quest_id", enum2i(floor.quest_number) },
-                       { "town_id", world.is_in_any_town() ? enum2i(to_town_id(world.get_town_index())) : -1 },
-                       { "town_index", world.is_in_any_town() ? static_cast<int>(world.get_town_index()) : 0 },
-                       // True only while standing ON an actual town tile. Gate on
-                       // dun_level == 0: is_in_any_town() (current_town_index > 0)
-                       // is NOT cleared on entering a dungeon, so on its own it
-                       // reads true in the dungeon too. On the surface it still
-                       // separates the town from the open, out-of-depth wilderness
-                       // tile (both share dungeon_id 0 / level 0).
-                       { "in_town", floor.dun_level == 0 && world.is_in_any_town() },
-                   } },
-        { "progress", {
-                          { "recall_dungeon_id", enum2i(player.recall_dungeon) },
-                          { "entered_dungeon_ids", std::move(entered_dungeon_ids) },
-                          { "dungeon_recall_depths", std::move(dungeon_recall_depths) },
-                          { "conquered_dungeon_ids", std::move(conquered_dungeon_ids) },
-                          // Deepest level reached in the recall-target dungeon: this
-                          // is exactly where Word of Recall lands and what the player
-                          // sees on the character screen, so it reveals nothing hidden.
-                          // The bot uses it to seed its deepest-level watermark, which
-                          // otherwise resets to 1 on every restart.
-                          { "recall_depth", dungeon_records.get_record(player.recall_dungeon).get_max_level() },
-                          { "yeek_cave_conquered", dungeons.get_dungeon(DungeonId::GALGALS).is_conquered() },
-                          // Whether the player can Word-of-Recall into Angband. A
-                          // dungeon becomes recallable once its record has a max
-                          // level (> 0): set either by physically entering it, or
-                          // by hearing its rumor at the inn, which calls
-                          // set_max_level(mindepth) and tells the player "You can
-                          // recall to Angband." has_entered() alone does not cover
-                          // the rumor-unlock case. This is player-visible state,
-                          // not hidden information.
-                          { "angband_recall_unlocked", dungeon_records.get_record(DungeonId::ANGBAND).get_max_level() > 0 },
-                          // Towns the player knows the way to: marked visited by
-                          // physically entering them or by hearing the town's rumor
-                          // at the inn ("You know the way to ..."). The inn's
-                          // "Teleport to other town" menu lists exactly these towns,
-                          // so this mirrors player-visible state. IDs follow the
-                          // floor.town_id convention (TownId; see to_town_id()).
-                          { "visited_town_ids", [] {
-                               std::vector<int> ids;
-                               const auto &records = TownRecords::get_instance();
-                               for (size_t i = 0; i < records.size(); i++) {
-                                   if (records.has_visited(i2enum<TownId>(i))) {
-                                       ids.push_back(static_cast<int>(i));
-                                   }
-                               }
-                               return ids;
-                           }() },
-                          { "quests", make_disclosed_quests_json() },
-                      } },
-        { "health_bar", make_health_bar_json(player_ptr, false) },
-        { "riding_health_bar", make_health_bar_json(player_ptr, true) },
-        { "visible_monsters", make_visible_monsters_json(player) },
-        { "detected_monsters", make_detected_monsters_json(player) },
-        { "messages", (messages_source == BotSnapshotMessages::HISTORY) ? make_message_history_json(BOT_JSON_MAX_MESSAGES) : make_recent_messages_json() },
-        { "inventory", make_inventory_json(player_ptr) },
-        { "equipment", make_equipment_json(player_ptr) },
+        return AngbandWorld::get_instance().game_turn;
+    case BotSnapshotField::CLOCK:
+        return make_clock_json();
+    case BotSnapshotField::PLAYER:
+        return make_snapshot_player_json(player_ptr);
+    case BotSnapshotField::FLOOR:
+        return make_snapshot_floor_json(player_ptr);
+    case BotSnapshotField::PROGRESS:
+        return make_snapshot_progress_json(player_ptr);
+    case BotSnapshotField::HEALTH_BAR:
+        return make_health_bar_json(player_ptr, false);
+    case BotSnapshotField::RIDING_HEALTH_BAR:
+        return make_health_bar_json(player_ptr, true);
+    case BotSnapshotField::VISIBLE_MONSTERS:
+        return make_visible_monsters_json(*player_ptr);
+    case BotSnapshotField::DETECTED_MONSTERS:
+        return make_detected_monsters_json(*player_ptr);
+    case BotSnapshotField::MESSAGES:
+        return (messages_source == BotSnapshotMessages::HISTORY) ? make_message_history_json(BOT_JSON_MAX_MESSAGES) : make_recent_messages_json();
+    case BotSnapshotField::INVENTORY:
+        return make_inventory_json(player_ptr);
+    case BotSnapshotField::EQUIPMENT:
+        return make_equipment_json(player_ptr);
+    case BotSnapshotField::MAX:
+        break;
+    }
+
+    THROW_EXCEPTION(std::logic_error, "Invalid snapshot field was specified!");
+}
+
+/*!
+ * @brief スナップショット本体を組み立てる
+ * @param include_map grid_map を含めるか
+ * @param messages_source messages に載せるメッセージの選び方
+ * @param fields 載せる最上位の項目 (type と protocol_version は常に載せる)
+ * @details grid_map はフロア全域を走査して作る処理で、
+ * 出力量は既知の地形に依存する。地図を出さない呼び出し
+ * （店内スナップショット）では作ってから消すのではなく最初から作らない。
+ * fields に無い項目も、作ってから消すのではなく最初から作らない。
+ */
+nlohmann::json make_snapshot(PlayerType *player_ptr, bool include_map, BotSnapshotMessages messages_source, const BotSnapshotFields &fields)
+{
+    // JSONL の messages は前回からの差分で、作るたびに差分の位置を進める。作らずに飛ばすと、次に作ったときに古いメッセージを載せてしまう
+    assert((messages_source != BotSnapshotMessages::RECENT_DIFF) || fields.has(BotSnapshotField::MESSAGES));
+    auto snapshot = nlohmann::json{
+        { "type", "player_turn" },
+        { "protocol_version", BOT_JSON_PROTOCOL_VERSION },
     };
+    for (const auto field : EnumRange(BotSnapshotField::TURN, BotSnapshotField::MAX)) {
+        if (fields.has(field)) {
+            snapshot.emplace(std::string(SNAPSHOT_FIELD_NAMES[enum2i(field)]), make_snapshot_field_json(player_ptr, field, messages_source));
+        }
+    }
+
     if (include_map) {
         snapshot["grid_map"] = make_grid_map_json(player_ptr);
     }
@@ -2714,12 +2825,13 @@ const BotScreen *current_bot_screen = nullptr; //!< 開いている画面 (BotSc
  * @param screen 画面の情報を足すときはその画面、ふだんのスナップショットなら nullptr
  * @param include_map grid_mapを含めるか (画面が地図を省くときは含めない)
  * @param messages_source messagesに載せるメッセージ
+ * @param fields 載せる最上位の項目 (画面の情報は fields によらず載せる)
  * @return スナップショットのJSONオブジェクト
  */
-nlohmann::json make_screen_snapshot(PlayerType *player_ptr, const BotScreen *screen, bool include_map, BotSnapshotMessages messages_source)
+nlohmann::json make_screen_snapshot(PlayerType *player_ptr, const BotScreen *screen, bool include_map, BotSnapshotMessages messages_source, const BotSnapshotFields &fields)
 {
     const auto should_include_map = include_map && ((screen == nullptr) || screen->include_map);
-    auto snapshot = make_snapshot(player_ptr, should_include_map, messages_source);
+    auto snapshot = make_snapshot(player_ptr, should_include_map, messages_source, fields);
     if (screen != nullptr) {
         screen->add_to_snapshot(snapshot, player_ptr);
     }
@@ -2729,9 +2841,78 @@ nlohmann::json make_screen_snapshot(PlayerType *player_ptr, const BotScreen *scr
 }
 
 /*!
+ * @brief スナップショットの最上位の項目をすべて選んだものを返す
+ * @return すべての項目
+ */
+BotSnapshotFields make_all_bot_snapshot_fields()
+{
+    return BotSnapshotFields(EnumRange(BotSnapshotField::TURN, BotSnapshotField::MAX));
+}
+
+/*!
+ * @brief スナップショットの最上位の項目を名前から探す
+ * @param name 項目の名前 (スナップショットのキー)
+ * @return 項目 (選べる項目の名前でなければ tl::nullopt)
+ */
+tl::optional<BotSnapshotField> find_bot_snapshot_field(std::string_view name)
+{
+    const auto it = ranges::find(SNAPSHOT_FIELD_NAMES, name);
+    if (it == ranges::end(SNAPSHOT_FIELD_NAMES)) {
+        return tl::nullopt;
+    }
+
+    return i2enum<BotSnapshotField>(ranges::distance(ranges::begin(SNAPSHOT_FIELD_NAMES), it));
+}
+
+/*!
+ * @brief 制御サーバの state の fields から、載せる最上位の項目を読む
+ * @param names fields の値 (null ならすべての項目)
+ * @return 載せる項目。読めなければエラーの内容
+ * @details 打ち間違いに気づけるよう、選べない項目の名前はエラーにする。
+ */
+tl::expected<BotSnapshotFields, std::string> parse_bot_snapshot_fields(const nlohmann::json &names)
+{
+    if (names.is_null()) {
+        return make_all_bot_snapshot_fields();
+    }
+
+    if (!names.is_array()) {
+        return tl::make_unexpected("\"fields\" must be an array of strings");
+    }
+
+    BotSnapshotFields fields;
+    for (auto i = 0U; i < names.size(); ++i) {
+        const auto &name = names[i];
+        if (!name.is_string()) {
+            return tl::make_unexpected("\"fields\"[" + std::to_string(i) + "] must be a string");
+        }
+
+        const auto &name_str = name.get_ref<const std::string &>();
+        const auto field = find_bot_snapshot_field(name_str);
+        if (!field) {
+            return tl::make_unexpected("unknown field \"" + name_str + "\" in \"fields\"");
+        }
+
+        fields.set(*field);
+    }
+
+    return fields;
+}
+
+/*!
+ * @brief 選べるスナップショットの最上位の項目の名前の一覧を返す
+ * @return 名前の配列
+ */
+nlohmann::json make_bot_snapshot_field_names_json()
+{
+    return SNAPSHOT_FIELD_NAMES;
+}
+
+/*!
  * @brief ゲームの内部状態のスナップショットをJSONで生成する
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param include_map grid_mapを含めるか (登録された画面が地図を省くときは含めない)
+ * @param fields 載せる最上位の項目 (登録された画面の情報は fields によらず載せる)
  * @pre player_ptrとplayer_ptr->current_floor_ptrがnullptrでないことを呼び出し側が保証すること
  * @return スナップショットのJSONオブジェクト
  * @details
@@ -2739,9 +2920,9 @@ nlohmann::json make_screen_snapshot(PlayerType *player_ptr, const BotScreen *scr
  * messagesは差分ではなく履歴を載せる。リクエストの度に差分を進めると、
  * --bot-json-outputと併用した際にJSONL側からメッセージが失われるためである。
  */
-nlohmann::json make_bot_json_snapshot(PlayerType *player_ptr, bool include_map)
+nlohmann::json make_bot_json_snapshot(PlayerType *player_ptr, bool include_map, const BotSnapshotFields &fields)
 {
-    return make_screen_snapshot(player_ptr, current_bot_screen, include_map, BotSnapshotMessages::HISTORY);
+    return make_screen_snapshot(player_ptr, current_bot_screen, include_map, BotSnapshotMessages::HISTORY, fields);
 }
 
 /*!
@@ -2898,7 +3079,7 @@ void write_bot_json_snapshot(PlayerType *player_ptr, const BotScreen *screen, Bo
         return;
     }
 
-    const auto snapshot = make_screen_snapshot(player_ptr, screen, true, BotSnapshotMessages::RECENT_DIFF);
+    const auto snapshot = make_screen_snapshot(player_ptr, screen, true, BotSnapshotMessages::RECENT_DIFF, make_all_bot_snapshot_fields());
     write_snapshot(snapshot, elapsed_microseconds(build_started));
 }
 }
