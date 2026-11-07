@@ -31,8 +31,6 @@
  */
 FloorType floor_info;
 
-static int scent_when = 0;
-
 /*
  * Characters leave scent trails for perceptive monsters to track.
  *
@@ -60,14 +58,14 @@ void update_smell(FloorType &floor, const Pos2D &p_pos)
         { -1, 0, 0, 0, -1 },
     };
 
-    if (++scent_when == 254) {
+    if (++floor.scent_when == 254) {
         for (const auto &pos : floor.get_area()) {
             auto &grid = floor.get_grid(pos);
             int w = grid.when;
             grid.when = (w > 128) ? (w - 128) : 0;
         }
 
-        scent_when = 126;
+        floor.scent_when = 126;
     }
 
     for (auto y = 0; y < 5; y++) {
@@ -85,7 +83,7 @@ void update_smell(FloorType &floor, const Pos2D &p_pos)
                 continue;
             }
 
-            grid.when = scent_when + scent_adjust[y][x];
+            grid.when = floor.scent_when + scent_adjust[y][x];
         }
     }
 }

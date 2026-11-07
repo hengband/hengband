@@ -30,6 +30,7 @@
 #include "system/player-type-definition.h"
 #include "util/angband-files.h"
 #include "util/finalizer.h"
+#include <algorithm>
 #include <cstdio>
 
 /*!
@@ -48,6 +49,34 @@ saved_floor_type rd_saved_floor_header()
     sf.upper_floor_id = rd_s16b();
     sf.lower_floor_id = rd_s16b();
     return sf;
+}
+
+/*!
+ * @brief 匂いの付いたグリッドを読み込む
+ * @param floor 読み込み先のフロア (大きさと scent_when は読み込み済み)
+ * @return エラーコード (数や位置がフロアに収まらなければ 171)
+ * @details 匂いは scent_when に周りの補正の 2 までを足して付くので、壊れたセーブでそれより新しい匂いがあれば、その範囲に収める
+ */
+static errr rd_scented_grids(FloorType &floor)
+{
+    const auto num_scented_grids = rd_u16b();
+    if (num_scented_grids > floor.height * floor.width) {
+        return 171;
+    }
+
+    for (auto i = 0; i < num_scented_grids; i++) {
+        const auto y = rd_byte();
+        const auto x = rd_byte();
+        const auto when = rd_byte();
+        const Pos2D pos(y, x);
+        if (!floor.contains(pos, FloorBoundary::OUTER_WALL_INCLUSIVE)) {
+            return 171;
+        }
+
+        floor.get_grid(pos).when = static_cast<byte>(std::min<int>(when, floor.scent_when + 2));
+    }
+
+    return 0;
 }
 
 /*!
@@ -199,6 +228,12 @@ errr rd_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
         auto &grid = floor.get_grid(monster.get_position());
         grid.m_idx = m_idx;
         monster.get_real_monrace().increment_current_numbers();
+    }
+
+    if (!loading_savefile_version_is_older_than(32)) {
+        if (const auto err = rd_scented_grids(floor); err != 0) {
+            return err;
+        }
     }
 
     return 0;

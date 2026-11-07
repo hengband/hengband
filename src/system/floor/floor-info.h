@@ -63,6 +63,7 @@ public:
     POSITION width = 0; /*!< Current dungeon width */
     POSITION height = 0; /*!< Current dungeon height */
     MONSTER_NUMBER num_repro = 0; /*!< Current reproducer count */
+    int scent_when = 0; /*!< 今の匂いの時刻 (grid.when と比べる)。階を移っても戻さない */
 
     GAME_TURN generated_turn = 0; /* Turn when level began */
 

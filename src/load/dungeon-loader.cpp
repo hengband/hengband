@@ -15,6 +15,7 @@
 #include "util/bit-flags-calculator.h"
 #include "util/enum-range.h"
 #include "world/world.h"
+#include <algorithm>
 
 /*!
  * @brief 保存されたフロアを読み込む / Read the dungeon
@@ -41,6 +42,13 @@ static errr rd_dungeon(PlayerType *player_ptr)
 
     max_floor_id = rd_s16b();
     floor.set_dungeon_index(i2enum<DungeonId>(rd_byte())); // @todo セーブデータの方を16ビットにするかdungeon_idxの定義を8ビットにした方が良い.
+    if (loading_savefile_version_is_older_than(32)) {
+        floor.scent_when = 0;
+    } else {
+        // 254 になったら 126 に戻すので、それ以上の値は壊れたセーブ。254 を飛び越して古い匂いを薄める処理が起きなくならないよう、読み込みは続けて範囲に収める
+        floor.scent_when = std::min<int>(rd_byte(), 253);
+    }
+
     auto num = rd_byte();
     if (num == 0) {
         err = rd_saved_floor(player_ptr, nullptr);
