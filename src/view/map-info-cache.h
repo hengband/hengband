@@ -16,6 +16,7 @@
 #include <cstdint>
 #include <vector>
 
+class MapVisibilityContext;
 class PlayerType;
 class MapInfoCache {
 public:
@@ -30,7 +31,7 @@ public:
     void invalidate_all();
     bool store(const Pos2D &pos, const DisplaySymbolPair &symbol_pair);
     void prepare(const PlayerType &player);
-    DisplaySymbolPair get(PlayerType *player_ptr, const Pos2D &pos);
+    DisplaySymbolPair get(PlayerType *player_ptr, const MapVisibilityContext &context, const Pos2D &pos);
 
 private:
     MapInfoCache() = default;

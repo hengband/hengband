@@ -127,20 +127,19 @@ bool is_revealed_wall(const FloorType &floor, const Grid &grid, const TerrainTyp
 
 /*!
  * @brief 通常の地図描画で地形自体を表示するか判定する (色や重ね描きの前)
- * @param player プレイヤー情報
+ * @param context マスによらない判定の材料
  * @param grid 判定するグリッド
  * @param terrain グリッドの地形 (MIMIC)
  * @param pos 階の中の座標
  * @return 不明地形や未調査マークに置き換えず地形を表示するならtrue
  */
-bool is_terrain_visible_on_map(const PlayerType &player, const Grid &grid, const TerrainType &terrain, const Pos2D &pos)
+bool is_terrain_visible_on_map(const MapVisibilityContext &context, const Grid &grid, const TerrainType &terrain, const Pos2D &pos)
 {
-    const auto &floor = *player.current_floor_ptr;
-    const auto is_blind = player.effects()->blindness().is_active();
-    const auto has_nocto = player.see_nocto != 0;
-    const auto is_darkened = !AngbandWorld::get_instance().is_wild_mode() && !has_nocto && grid.is_darkened();
+    const auto is_blind = context.is_blind;
+    const auto has_nocto = context.has_nocto;
+    const auto is_darkened = !context.is_wild_mode && !has_nocto && grid.is_darkened();
     if (terrain.flags.has(TerrainCharacteristics::REMEMBER)) {
-        return grid.is_mark() && is_revealed_wall(floor, grid, terrain, pos) && !(is_darkened && !is_blind && terrain.flags.has_all_of({ TerrainCharacteristics::LOS, TerrainCharacteristics::PROJECTION }));
+        return grid.is_mark() && is_revealed_wall(context.floor, grid, terrain, pos) && !(is_darkened && !is_blind && terrain.flags.has_all_of({ TerrainCharacteristics::LOS, TerrainCharacteristics::PROJECTION }));
     }
 
     const auto is_visible = any_bits(grid.info, CAVE_MARK | CAVE_LITE | CAVE_MNLT);
@@ -150,20 +149,18 @@ bool is_terrain_visible_on_map(const PlayerType &player, const Grid &grid, const
 
 /*!
  * @brief 表示すると判定済みの地形を、どの照明状態の記号で描くかを決める
- * @param player プレイヤー情報
+ * @param context マスによらない判定の材料
  * @param grid 判定するグリッド
  * @param terrain グリッドの地形 (MIMIC)
  * @param pos 階の中の座標
  * @return 地形記号の照明状態 (F_LIT_STANDARD / F_LIT_LITE / F_LIT_DARK)
  */
-int decide_visible_terrain_lighting(const PlayerType &player, const Grid &grid, const TerrainType &terrain, const Pos2D &pos)
+int decide_visible_terrain_lighting(const MapVisibilityContext &context, const Grid &grid, const TerrainType &terrain, const Pos2D &pos)
 {
-    const auto &floor = *player.current_floor_ptr;
-    const auto &world = AngbandWorld::get_instance();
-    const auto is_wild_mode = world.is_wild_mode();
+    const auto is_wild_mode = context.is_wild_mode;
     if (terrain.flags.has_not(TerrainCharacteristics::REMEMBER)) {
         if (is_wild_mode) {
-            if (view_special_lite && !world.is_daytime()) {
+            if (view_special_lite && !context.is_daytime) {
                 return F_LIT_DARK;
             }
         } else if (view_special_lite) {
@@ -183,11 +180,11 @@ int decide_visible_terrain_lighting(const PlayerType &player, const Grid &grid, 
         return F_LIT_STANDARD;
     }
 
-    const auto is_blind = player.effects()->blindness().is_active();
-    const auto has_nocto = player.see_nocto != 0;
+    const auto is_blind = context.is_blind;
+    const auto has_nocto = context.has_nocto;
     const auto is_darkened = !has_nocto && grid.is_darkened();
     if (is_wild_mode) {
-        if (view_granite_lite && (is_blind || !world.is_daytime())) {
+        if (view_granite_lite && (is_blind || !context.is_daytime)) {
             return F_LIT_DARK;
         }
     } else if (is_darkened && !is_blind) {
@@ -206,7 +203,7 @@ int decide_visible_terrain_lighting(const PlayerType &player, const Grid &grid, 
                 return F_LIT_DARK;
             } else if ((grid.info & (CAVE_GLOW | CAVE_MNDK)) != CAVE_GLOW) {
                 return F_LIT_DARK;
-            } else if (terrain.flags.has_not(TerrainCharacteristics::LOS) && !floor.is_illuminated_at(player.get_position(), pos)) {
+            } else if (terrain.flags.has_not(TerrainCharacteristics::LOS) && !context.floor.is_illuminated_at(context.player.get_position(), pos)) {
                 return F_LIT_DARK;
             }
         }
@@ -217,34 +214,60 @@ int decide_visible_terrain_lighting(const PlayerType &player, const Grid &grid, 
 }
 
 /*!
+ * @brief マスによらない判定の材料を求める
+ * @param player プレイヤー情報
+ */
+MapVisibilityContext::MapVisibilityContext(const PlayerType &player)
+    : player(player)
+    , floor(*player.current_floor_ptr)
+    , is_blind(player.effects()->blindness().is_active())
+    , has_nocto(player.see_nocto != 0)
+    , is_wild_mode(AngbandWorld::get_instance().is_wild_mode())
+    , is_daytime(AngbandWorld::get_instance().is_daytime())
+{
+}
+
+/*!
+ * @brief 通常の地図描画で地形自体を表示するか判定する (色や重ね描きの前)
+ * @param context マスによらない判定の材料
+ * @param pos 階の中の座標
+ * @return 不明地形や未調査マークに置き換えず地形を表示するならtrue
+ */
+bool is_map_terrain_visible(const MapVisibilityContext &context, const Pos2D &pos)
+{
+    const auto &grid = context.floor.get_grid(pos);
+    return is_terrain_visible_on_map(context, grid, grid.get_terrain(TerrainKind::MIMIC), pos);
+}
+
+/*!
  * @brief 通常の地図描画で地形自体を表示するか判定する (色や重ね描きの前)
  * @param player プレイヤー情報
  * @param pos 階の中の座標
  * @return 不明地形や未調査マークに置き換えず地形を表示するならtrue
+ * @details 多くのマスを判定するときは、MapVisibilityContext を 1 回だけ作って渡す版を使う。
  */
 bool is_map_terrain_visible(const PlayerType &player, const Pos2D &pos)
 {
-    const auto &grid = player.current_floor_ptr->get_grid(pos);
-    return is_terrain_visible_on_map(player, grid, grid.get_terrain(TerrainKind::MIMIC), pos);
+    return is_map_terrain_visible(MapVisibilityContext(player), pos);
 }
 
 /*!
  * @brief 通常の地図描画で地形をどの照明状態の記号で描くかを返す
- * @param player プレイヤー情報
+ * @param context マスによらない判定の材料
  * @param pos 階の中の座標
  * @param monochrome 通常マップの最終描画で色を上書きする場合の色
  * @return 地形記号の照明状態 (F_LIT_STANDARD / F_LIT_LITE / F_LIT_DARK)。地形を表示しない座標は F_LIT_STANDARD
  * @details 同じ色と文字を描く照明状態は最小の添字に統合し、表示で区別できない内部状態を公開しない。
  */
-int decide_map_terrain_lighting(const PlayerType &player, const Pos2D &pos, tl::optional<uint8_t> monochrome)
+int decide_map_terrain_lighting(const MapVisibilityContext &context, const Pos2D &pos, tl::optional<uint8_t> monochrome)
 {
-    const auto &grid = player.current_floor_ptr->get_grid(pos);
+    const auto &grid = context.floor.get_grid(pos);
     const auto &terrain = grid.get_terrain(TerrainKind::MIMIC);
-    if (!is_terrain_visible_on_map(player, grid, terrain, pos) || monochrome == TERM_DARK) {
+    if (!is_terrain_visible_on_map(context, grid, terrain, pos) || monochrome == TERM_DARK) {
         return F_LIT_STANDARD;
     }
 
-    const auto lighting = decide_visible_terrain_lighting(player, grid, terrain, pos);
+    const auto lighting = decide_visible_terrain_lighting(context, grid, terrain, pos);
     if (original_tiles::is_enabled()) {
         return lighting;
     }
@@ -261,23 +284,37 @@ int decide_map_terrain_lighting(const PlayerType &player, const Pos2D &pos, tl::
 }
 
 /*!
+ * @brief 通常の地図描画で地形をどの照明状態の記号で描くかを返す
+ * @param player プレイヤー情報
+ * @param pos 階の中の座標
+ * @param monochrome 通常マップの最終描画で色を上書きする場合の色
+ * @return 地形記号の照明状態 (F_LIT_STANDARD / F_LIT_LITE / F_LIT_DARK)。地形を表示しない座標は F_LIT_STANDARD
+ * @details 多くのマスを判定するときは、MapVisibilityContext を 1 回だけ作って渡す版を使う。
+ */
+int decide_map_terrain_lighting(const PlayerType &player, const Pos2D &pos, tl::optional<uint8_t> monochrome)
+{
+    return decide_map_terrain_lighting(MapVisibilityContext(player), pos, monochrome);
+}
+
+/*!
  * @brief 指定した座標の地形・物体・モンスターの表示属性を取得する
  * @param player_ptr プレイヤー情報への参照ポインタ
+ * @param context マスによらない判定の材料
  * @param pos 階の中の座標
  * @return 前景・背景のシンボルと色
  */
-static DisplaySymbolPair map_info_impl(PlayerType *player_ptr, const Pos2D &pos)
+static DisplaySymbolPair map_info_impl(PlayerType *player_ptr, const MapVisibilityContext &context, const Pos2D &pos)
 {
-    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto &floor = context.floor;
     const auto &grid = floor.get_grid(pos);
     const auto &terrains = TerrainList::get_instance();
     const auto tag_unsafe = (view_unsafe_grids && (grid.info & CAVE_UNSAFE)) ? TerrainTag::UNDETECTED : TerrainTag::NONE;
     const auto &terrain_mimic = grid.get_terrain(TerrainKind::MIMIC);
-    const auto is_visible = is_terrain_visible_on_map(*player_ptr, grid, terrain_mimic, pos);
+    const auto is_visible = is_terrain_visible_on_map(context, grid, terrain_mimic, pos);
     const auto &terrain_shown = is_visible ? terrain_mimic : terrains.get_terrain(tag_unsafe);
-    const auto lighting = is_visible ? decide_visible_terrain_lighting(*player_ptr, grid, terrain_mimic, pos) : F_LIT_STANDARD;
+    const auto lighting = is_visible ? decide_visible_terrain_lighting(context, grid, terrain_mimic, pos) : F_LIT_STANDARD;
     auto symbol_config = terrain_shown.symbol_configs.at(lighting);
-    symbol_config = original_tiles::terrain_symbol(*player_ptr, pos, terrain_shown, lighting, symbol_config);
+    symbol_config = original_tiles::terrain_symbol(context, pos, terrain_shown, lighting, symbol_config);
     if (feat_priority == -1) {
         feat_priority = terrain_shown.priority;
     }
@@ -420,9 +457,28 @@ static DisplaySymbolPair map_info_impl(PlayerType *player_ptr, const Pos2D &pos)
     return symbol_pair;
 }
 
+/*!
+ * @brief 指定した座標の地形・物体・モンスターの表示属性を取得する
+ * @param player_ptr プレイヤー情報への参照ポインタ
+ * @param context マスによらない判定の材料 (player_ptr から作ったもの)
+ * @param pos 階の中の座標
+ * @return 前景・背景のシンボルと色
+ */
+DisplaySymbolPair map_info(PlayerType *player_ptr, const MapVisibilityContext &context, const Pos2D &pos)
+{
+    return original_tiles::encode_foreground(context, pos, map_info_impl(player_ptr, context, pos));
+}
+
+/*!
+ * @brief 指定した座標の地形・物体・モンスターの表示属性を取得する
+ * @param player_ptr プレイヤー情報への参照ポインタ
+ * @param pos 階の中の座標
+ * @return 前景・背景のシンボルと色
+ * @details 多くのマスを求めるときは、MapVisibilityContext を 1 回だけ作って渡す版を使う。
+ */
 DisplaySymbolPair map_info(PlayerType *player_ptr, const Pos2D &pos)
 {
-    return original_tiles::encode_foreground(*player_ptr, pos, map_info_impl(player_ptr, pos));
+    return map_info(player_ptr, MapVisibilityContext(*player_ptr), pos);
 }
 
 /*!

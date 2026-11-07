@@ -1,5 +1,6 @@
 #include "game-option/map-screen-options.h"
 #include "system/floor/floor-info.h"
+#include "system/gamevalue.h"
 #include "system/grid-type-definition.h"
 #include "system/item/item-entity.h"
 #include "system/monster-entity.h"
@@ -136,6 +137,32 @@ TEST_CASE("Map terrain observations do not disclose stale knowledge or darkness"
         grid.info = 0;
         CHECK_FALSE(is_map_terrain_visible(player, pos));
         CHECK(decide_map_terrain_lighting(player, pos) == F_LIT_STANDARD);
+    }
+    SUBCASE("Wilderness lighting follows the time of day and blindness")
+    {
+        const auto restore_turn = test::scoped_restore(world.game_turn);
+        constexpr auto turns_per_day = TURNS_PER_TICK * TOWN_DAWN;
+        plain.symbol_configs[F_LIT_STANDARD] = { TERM_WHITE, '.' };
+        plain.symbol_configs[F_LIT_DARK] = { TERM_SLATE, '.' };
+        wall.symbol_configs[F_LIT_STANDARD] = { TERM_WHITE, '#' };
+        wall.symbol_configs[F_LIT_DARK] = { TERM_SLATE, '#' };
+        view_special_lite = true;
+        view_granite_lite = true;
+        world.set_wild_mode(true);
+        grid.info = CAVE_MARK;
+        world.game_turn = 0;
+        CHECK(decide_map_terrain_lighting(player, pos) == F_LIT_STANDARD);
+        world.game_turn = turns_per_day / 2;
+        CHECK(decide_map_terrain_lighting(player, pos) == F_LIT_DARK);
+
+        grid.feat = wall_id;
+        world.game_turn = 0;
+        CHECK(decide_map_terrain_lighting(player, pos) == F_LIT_STANDARD);
+        player.effects()->blindness().set(10);
+        CHECK(decide_map_terrain_lighting(player, pos) == F_LIT_DARK);
+        player.effects()->blindness().set(0);
+        world.game_turn = turns_per_day / 2;
+        CHECK(decide_map_terrain_lighting(player, pos) == F_LIT_DARK);
     }
     SUBCASE("Indistinguishable lighting symbols do not expose internal illumination")
     {
