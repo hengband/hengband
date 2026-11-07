@@ -197,4 +197,23 @@ TEST_CASE("Map terrain observations do not disclose stale knowledge or darkness"
         CHECK(decide_map_terrain_lighting(player, pos, TERM_WHITE) == F_LIT_LITE);
         CHECK(decide_map_terrain_lighting(player, pos, TERM_DARK) == F_LIT_STANDARD);
     }
+    SUBCASE("Lighting of a grid known to be visible matches the full lighting decision")
+    {
+        plain.symbol_configs[F_LIT_STANDARD] = { TERM_WHITE, '.' };
+        plain.symbol_configs[F_LIT_LITE] = { TERM_YELLOW, '.' };
+        plain.symbol_configs[F_LIT_DARK] = { TERM_SLATE, '.' };
+        view_special_lite = true;
+        view_yellow_lite = true;
+        view_bright_lite = true;
+        view_granite_lite = true;
+        const auto &terrain = grid.get_terrain(TerrainKind::MIMIC);
+        for (const auto info : { CAVE_MARK | CAVE_VIEW | CAVE_GLOW, CAVE_MARK | CAVE_VIEW | CAVE_LITE, CAVE_MARK | CAVE_GLOW, CAVE_MARK }) {
+            grid.info = info;
+            const MapVisibilityContext context(player);
+            REQUIRE(is_map_terrain_visible(context, grid, terrain, pos));
+            for (const auto monochrome : { tl::optional<uint8_t>{}, tl::optional<uint8_t>{ TERM_WHITE }, tl::optional<uint8_t>{ TERM_DARK } }) {
+                CHECK(decide_visible_map_terrain_lighting(context, grid, terrain, pos, monochrome) == decide_map_terrain_lighting(player, pos, monochrome));
+            }
+        }
+    }
 }
