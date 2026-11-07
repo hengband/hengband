@@ -5,6 +5,7 @@
 #include "effect/spells-effect-util.h"
 #include "game-option/map-screen-options.h"
 #include "game-option/special-options.h"
+#include "grid/grid.h"
 #include "io/screen-util.h"
 #include "player/player-status.h"
 #include "system/angband-system.h"
@@ -29,25 +30,33 @@ void move_cursor_relative(int row, int col)
     term_gotoxy(panel_col_of(col), panel_row_of(row));
 }
 
-/*
+/*!
  * @brief 矢などの軌跡を*で表示する / print project path
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param y 目標地点のY座標
- * @param x 目標地点のX座標
+ * @param pos 目標地点の座標
+ * @param path_grids 前回この関数で*を描いたグリッド。今回*を描いたグリッドに置き換える
+ * @details 前回の軌跡は、地図全体ではなく描いたグリッドだけを描き直して消す。
+ * 画面を動かしたときは地図全体が描き直されているので、前回のグリッドを描き直しても表示は変わらない。
  */
-void print_path(PlayerType *player_ptr, POSITION y, POSITION x)
+void print_path(PlayerType *player_ptr, const Pos2D &pos, std::vector<Pos2D> &path_grids)
 {
-    uint8_t default_color = TERM_SLATE;
-    const Pos2D pos(y, x);
+    for (const auto &prev_pos : path_grids) {
+        lite_spot(player_ptr, prev_pos);
+    }
+
+    path_grids.clear();
     if (!display_path || (project_length == -1)) {
         return;
     }
 
+    uint8_t default_color = TERM_SLATE;
     const auto &floor = *player_ptr->current_floor_ptr;
     const auto p_pos = player_ptr->get_position();
     const auto range = project_length != 0 ? project_length : AngbandSystem::get_instance().get_max_range();
     ProjectionPath path_g(floor, range, p_pos, p_pos, pos, PROJECT_PATH | PROJECT_THRU);
-    DeferredUpdateRequests::get_instance().request_map_redrawing();
+
+    // 積まれているメイン画面の描き直しの要求を、射線を描く前に済ませておく
+    // (後で地図全体が描き直されると、描いた射線が消えてしまうため)
     redraw_stuff(player_ptr);
     const auto monochrome_color = get_monochrome_display_color(player_ptr);
     for (const auto &pos_path : path_g) {
@@ -69,6 +78,7 @@ void print_path(PlayerType *player_ptr, POSITION y, POSITION x)
             symbol_pair.symbol_foreground.color = monochrome_color.value_or(symbol_pair.symbol_foreground.color);
             symbol_pair.symbol_foreground.character = '*';
             original_tiles::queue_map_tile(panel_col_of(pos_path.x), panel_row_of(pos_path.y), symbol_pair);
+            path_grids.push_back(pos_path);
         }
 
         if (grid.is_mark() && !grid.has(TerrainCharacteristics::PROJECTION)) {
