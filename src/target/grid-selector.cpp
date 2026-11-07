@@ -178,7 +178,7 @@ void tgt_pt_info::move_to_symbol(PlayerType *player_ptr)
         this->n = 0;
         this->pos = player_ptr->get_position();
         verify_panel(player_ptr);
-        DeferredUpdateRequests::get_instance().request_monster_update_and_map_redrawing();
+        DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
         handle_stuff(player_ptr);
     } else {
         const auto cx = (panel_col_min + panel_col_max) / 2;
@@ -322,7 +322,7 @@ tl::optional<Pos2D> point_target(PlayerType *player_ptr)
 
     prt("", 0, 0);
     verify_panel(player_ptr);
-    DeferredUpdateRequests::get_instance().request_monster_update_and_map_redrawing();
+    DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
     handle_stuff(player_ptr);
     return pos_target;
 }
