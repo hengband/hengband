@@ -173,6 +173,37 @@ TEST_CASE("Original tiles zoom blocks repaint and erase safely from every covere
     CHECK(terminal.scr->c[3][4] == ' ');
 }
 
+TEST_CASE("Terminals remember whether they have drawn zoomed tiles")
+{
+    const auto restore = test::scoped_restore(game_term, angband_terms, use_bigtile, use_graphics, ANGBAND_GRAF, original_tiles::double_map_size);
+    term_type terminal;
+    term_init(&terminal, 16, 6, 16);
+    game_term = &terminal;
+    angband_terms[0] = &terminal;
+    use_bigtile = use_graphics = true;
+    ANGBAND_GRAF = "original32";
+    const DisplaySymbolPair tile{ original_tiles::player_tile_symbol(0, 1), original_tiles::tile_symbol(0, 0) };
+
+    // 拡大しないタイルや文字を書いても印は立たない
+    original_tiles::double_map_size = false;
+    original_tiles::queue_map_tile(4, 2, tile);
+    term_putstr(0, 0, 1, 1, "L");
+    CHECK_FALSE(terminal.has_drawn_zoom_tiles);
+
+    // 拡大タイルを書くと印が立ち、続きのセルに書けば拡大タイルが消える
+    original_tiles::double_map_size = true;
+    original_tiles::queue_map_tile(4, 2, tile);
+    CHECK(terminal.has_drawn_zoom_tiles);
+    CHECK(term_tile_block_at(*terminal.scr, 4, 2).zoomed());
+    term_putstr(6, 3, 1, 1, "X");
+    CHECK_FALSE(term_tile_block_at(*terminal.scr, 4, 2).zoomed());
+
+    // 拡大をやめても印は戻らない
+    original_tiles::double_map_size = false;
+    original_tiles::queue_map_tile(4, 2, tile);
+    CHECK(terminal.has_drawn_zoom_tiles);
+}
+
 TEST_CASE("Original tiles keep pending text separate across the lower zoom row")
 {
     const auto restore = test::scoped_restore(game_term, angband_terms, use_bigtile, use_graphics, ANGBAND_GRAF, original_tiles::double_map_size);
