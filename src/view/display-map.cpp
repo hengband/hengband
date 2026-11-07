@@ -117,11 +117,13 @@ bool is_revealed_wall(const FloorType &floor, const Grid &grid, const TerrainTyp
         return true;
     }
 
-    // 周りに壁でないマス (フロアの外は壁とみなす) が 1 つでもあれば表示する。
+    // 周りに壁でないマス (外周とフロアの外は壁とみなす) が 1 つでもあれば表示する。
+    // 外周から 2 マス以上内側のマスは、周りのマスがすべて外周より内側にあるので、フロアの中にあるかを確かめない
+    const auto is_away_from_outer_wall = (pos.y >= 2) && (pos.x >= 2) && (pos.y < floor.height - 2) && (pos.x < floor.width - 2);
     const auto dirs = Direction::directions_8();
-    return std::any_of(dirs.begin(), dirs.end(), [&floor, &pos](const auto &d) {
+    return std::any_of(dirs.begin(), dirs.end(), [&floor, &pos, is_away_from_outer_wall](const auto &d) {
         const auto pos_neighbor = pos + d.vec();
-        return floor.contains(pos_neighbor, FloorBoundary::OUTER_WALL_EXCLUSIVE) && floor.get_grid(pos_neighbor).get_terrain().flags.has_not(TerrainCharacteristics::WALL);
+        return (is_away_from_outer_wall || floor.contains(pos_neighbor, FloorBoundary::OUTER_WALL_EXCLUSIVE)) && floor.get_grid(pos_neighbor).get_terrain().flags.has_not(TerrainCharacteristics::WALL);
     });
 }
 
