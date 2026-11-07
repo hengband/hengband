@@ -44,7 +44,7 @@ public:
 private:
     tl::optional<int> pick_nearest_interest_target(const Pos2D &pos, const Direction &dir);
     bool can_target_monster_at_cursor() const;
-    void scroll_to_cursor() const;
+    void scroll_to_cursor();
     std::string build_key_guide(bool can_target) const;
     char examine_target_grid(const std::string &info, bool free_mode, bool can_target) const;
     void change_interest_index(int amount);
@@ -62,6 +62,7 @@ private:
     bool done = false;
     std::vector<Pos2D> pos_interests; // "interesting" な座標一覧を記録する配列
     tl::optional<int> interest_index = 0; // "interesting" な座標一覧のうち現在ターゲットしているもののインデックス
+    std::vector<Pos2D> path_grids; // 射線の*を描いたグリッド (次に射線を描くときに元に戻す)
     Target target = Target::none();
 };
 
@@ -200,11 +201,11 @@ bool TargetSetter::can_target_monster_at_cursor() const
  * @brief カーソルのマスが見えるよう画面を動かし、ターゲットの選択ではカーソルのマスへの射線を表示する
  * @details 画面を動かすとモンスターの情報を更新するので、ターゲットにできるかはこの後で求める
  */
-void TargetSetter::scroll_to_cursor() const
+void TargetSetter::scroll_to_cursor()
 {
     change_panel_xy(this->player_ptr, this->pos_target);
     if ((this->mode & TARGET_LOOK) == 0) {
-        print_path(this->player_ptr, this->pos_target.y, this->pos_target.x);
+        print_path(this->player_ptr, this->pos_target, this->path_grids);
     }
 }
 
@@ -569,7 +570,7 @@ void TargetSetter::sweep_target_grids()
         }
 
         if ((this->mode & TARGET_LOOK) == 0) {
-            print_path(this->player_ptr, this->pos_target.y, this->pos_target.x);
+            print_path(this->player_ptr, this->pos_target, this->path_grids);
         }
 
         fix_floor_item_list(this->player_ptr, this->pos_target);

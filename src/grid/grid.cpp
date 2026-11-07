@@ -474,6 +474,32 @@ void note_spot(PlayerType *player_ptr, const Pos2D &pos)
     grid.info |= (CAVE_KNOWN);
 }
 
+namespace {
+/*!
+ * @brief メイン画面のグリッドを描き直した結果
+ */
+struct SpotDrawResult {
+    bool is_main_window_changed; //!< メイン画面の表示が変わったか
+    bool is_cache_changed; //!< 覚えていた map_info() の結果と違うか (覚えていた結果が無効だったときを含む)
+};
+}
+
+/*!
+ * @brief メイン画面のグリッドを map_info() で求めた表示で描き直す
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param pos メイン画面に入っているグリッドの座標
+ * @return 描き直した結果
+ */
+static SpotDrawResult draw_spot_on_main_window(PlayerType *player_ptr, const Pos2D &pos)
+{
+    // メイン画面の表示が変わらなくても、覚える結果は変わることがある (単色表示で色だけ変わったときなど) ので、必ず覚える
+    auto symbol_pair = map_info(player_ptr, pos);
+    const auto is_cache_changed = MapInfoCache::get_instance().store(pos, symbol_pair);
+    symbol_pair.symbol_foreground.color = get_monochrome_display_color(player_ptr).value_or(symbol_pair.symbol_foreground.color);
+    const auto is_main_window_changed = original_tiles::queue_map_tile(panel_col_of(pos.x), panel_row_of(pos.y), symbol_pair);
+    return { is_main_window_changed, is_cache_changed };
+}
+
 /*
  * Redraw (on the screen) a given MAP location
  *
@@ -488,29 +514,48 @@ static void lite_spot_one(PlayerType *player_ptr, const Pos2D &pos)
     // 全体図は表示のオプションが違うので、ここでは印を付けるだけにする。
     // 描き直すかは、サブウィンドウを描くときに印を付けたグリッドを求め直して決める
     OverviewMapCache::get_instance().mark_dirty(pos);
-    auto &map_info_cache = MapInfoCache::get_instance();
     if (!panel_contains(pos)) {
         // メイン画面の外のグリッドは表示が変わったか分からないので、自分の周囲を描き直す
-        map_info_cache.invalidate(pos);
+        MapInfoCache::get_instance().invalidate(pos);
         DeferredUpdateRequests::get_instance().set_flag(SubWindowRedrawingFlag::DUNGEON);
         return;
     }
 
-    // メイン画面の表示が変わらなくても、覚える結果は変わることがある (単色表示で色だけ変わったときなど) ので、必ず覚える
-    auto symbol_pair = map_info(player_ptr, pos);
-    const auto is_cache_changed = map_info_cache.store(pos, symbol_pair);
-    symbol_pair.symbol_foreground.color = get_monochrome_display_color(player_ptr).value_or(symbol_pair.symbol_foreground.color);
-
     // 自分の周囲は、メイン画面の表示が変わったときと、覚えていた結果 (表示しているかもしれない) と違うときに描き直す
-    const auto is_main_window_changed = original_tiles::queue_map_tile(panel_col_of(pos.x), panel_row_of(pos.y), symbol_pair);
-    if (is_main_window_changed || is_cache_changed) {
+    const auto result = draw_spot_on_main_window(player_ptr, pos);
+    if (result.is_main_window_changed || result.is_cache_changed) {
         DeferredUpdateRequests::get_instance().set_flag(SubWindowRedrawingFlag::DUNGEON);
     }
 }
 
-void lite_spot(PlayerType *player_ptr, const Pos2D &pos)
+/*!
+ * @brief メイン画面に重ねて描いた印を消すために、グリッドを描き直す (1 グリッド分)
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param pos グリッドの座標
+ * @details グリッドの表示そのものは変わっていないので、全体図には印を付けない。
+ * メイン画面の外のグリッドには何も描いていないので、何もしない。
+ */
+static void erase_overlay_spot_one(PlayerType *player_ptr, const Pos2D &pos)
 {
-    lite_spot_one(player_ptr, pos);
+    if (!player_ptr->current_floor_ptr->contains(pos, FloorBoundary::OUTER_WALL_INCLUSIVE) || !panel_contains(pos)) {
+        return;
+    }
+
+    // 重ねて描いた印はサブウィンドウには出ていないので、自分の周囲は覚えていた結果と違うときだけ描き直す
+    if (draw_spot_on_main_window(player_ptr, pos).is_cache_changed) {
+        DeferredUpdateRequests::get_instance().set_flag(SubWindowRedrawingFlag::DUNGEON);
+    }
+}
+
+/*!
+ * @brief グリッドを描き、タイルで隣の表示に関わるグリッドも描き直す
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param pos グリッドの座標
+ * @param draw 1 グリッド分を描く関数
+ */
+static void draw_spot_with_neighbors(PlayerType *player_ptr, const Pos2D &pos, void (*draw)(PlayerType *, const Pos2D &))
+{
+    draw(player_ptr, pos);
     if (!original_tiles::is_enabled()) {
         return;
     }
@@ -518,9 +563,26 @@ void lite_spot(PlayerType *player_ptr, const Pos2D &pos)
     for (const auto &direction : Direction::directions_8()) {
         const auto neighbor = pos + direction.vec();
         if (floor.contains(neighbor, FloorBoundary::OUTER_WALL_INCLUSIVE) && original_tiles::needs_neighbor_redraw(*player_ptr, neighbor)) {
-            lite_spot_one(player_ptr, neighbor);
+            draw(player_ptr, neighbor);
         }
     }
+}
+
+void lite_spot(PlayerType *player_ptr, const Pos2D &pos)
+{
+    draw_spot_with_neighbors(player_ptr, pos, lite_spot_one);
+}
+
+/*!
+ * @brief メイン画面に重ねて描いた印 (射線の * など) を消す
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param pos 印を描いたグリッドの座標
+ * @details lite_spot() と同じくグリッドを描き直すが、グリッドの表示そのものは変わっていないので、
+ * サブウィンドウの描き直しは覚えていた結果と違うときだけ要求する。
+ */
+void erase_overlay_spot(PlayerType *player_ptr, const Pos2D &pos)
+{
+    draw_spot_with_neighbors(player_ptr, pos, erase_overlay_spot_one);
 }
 
 /*
