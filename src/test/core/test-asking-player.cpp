@@ -92,7 +92,7 @@ TEST_CASE("input_key_with_context publishes the given context while waiting for 
     CHECK(input_key_with_context(InputKind::CONFIRM, "Really? [y/n/Auto]") == 'A');
 }
 
-TEST_CASE("input_key_with_context publishes the any-key context also when all terms are refreshed")
+TEST_CASE("input_key_with_context publishes the any-key context also when the main screen is redrawn")
 {
     test::ScopedInputTerm term;
     term.expect({ InputKind::ANY_KEY, "Hit any key.", {} }, " ");

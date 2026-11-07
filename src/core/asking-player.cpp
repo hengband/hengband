@@ -400,7 +400,7 @@ tl::optional<char> input_spell_choice(std::string_view prompt, const SpellInputD
  * @brief 入力待ちの文脈を公開して、キーを1つ待つ
  * @param kind 入力の種類
  * @param prompt 公開するプロンプト (表示は呼び出し元が行う)
- * @param do_all_term_refresh true なら inkey() と同じく、待つ前に全ての端末を描き直す
+ * @param do_all_term_refresh true なら inkey() と同じく、待つ前にメイン画面の描き直しの要求も処理する
  * @return 入力したキー
  * @details 独自に表示した選択肢や確認に答えるキーや、何かキーを押す待ちのキーを読む処理に使う。
  */
@@ -412,7 +412,7 @@ char input_key_with_context(InputKind kind, std::string_view prompt, bool do_all
 /*!
  * @brief 入力待ちの文脈を指定して公開し、キーを1つ待つ
  * @param input_context 入力待ちの間に公開する文脈 (表示は呼び出し元が行う)
- * @param do_all_term_refresh true なら inkey() と同じく、待つ前に全ての端末を描き直す
+ * @param do_all_term_refresh true なら inkey() と同じく、待つ前にメイン画面の描き直しの要求も処理する
  * @return 入力したキー
  * @details input_key_with_context(InputKind, std::string_view, bool) のうち、種類ごとの詳細も公開したいものに使う。
  */

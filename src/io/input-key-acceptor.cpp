@@ -64,12 +64,12 @@ void fresh_all_terms()
 }
 
 /*!
- * @brief メイン画面とサブウィンドウの描き直しの要求を処理し、全ての端末に反映する
+ * @brief 入力を待つ前に、メイン画面の描き直しの要求を処理する
  * @details
- * サブウィンドウは、表示が変わる箇所で要求されたものだけを描き直す。
- * カーソル位置がずれるので戻す。
+ * 描き直しでメイン画面のカーソル位置がずれるので戻す。
+ * サブウィンドウの描き直しと画面への反映は、呼び出し元の inkey() がほかの入力待ちと共通に行う。
  */
-static void all_term_fresh()
+static void redraw_main_screen_before_input()
 {
     term_activate(angband_terms[0]);
     auto [x, y] = term_locate();
@@ -80,11 +80,9 @@ static void all_term_fresh()
         request_message_redraw_if_color_changed();
     }
     redraw_stuff(p_ptr);
-    window_stuff_including_deferred(p_ptr);
 
     term_activate(angband_terms[0]);
     term_gotoxy(x, y);
-    fresh_all_terms();
 }
 
 /*
@@ -211,10 +209,13 @@ static char inkey_aux()
     return 0;
 }
 
-/*
+/*!
  * @brief キー入力を受け付けるメインルーチン / Get a keypress from the user.
- * @param do_all_term_refresh trueであれば、入力を待つ前にメイン画面とサブウィンドウの描き直しの要求を処理して、全ての端末に反映する。デフォルト false
- * return キーを表すコード
+ * @param do_all_term_refresh trueであれば、入力を待つ前にメイン画面の描き直しの要求も処理する。デフォルト false
+ * @return キーを表すコード
+ * @details
+ * do_all_term_refresh に関わらず、入力を待つ前に、ダンジョンに入った後ならサブウィンドウの描き直しの要求を処理する。
+ * 全ての端末への反映は常に行う。
  */
 char inkey(bool do_all_term_refresh)
 {
@@ -255,15 +256,16 @@ char inkey(bool do_all_term_refresh)
             if (const auto key = term_inkey(false, false); key == '\0') {
                 start_term_fresh();
                 if (do_all_term_refresh) {
-                    all_term_fresh();
-                } else {
-                    // -more- や確認などで入力を待つ前にも、残っているサブウィンドウの再描画の要求を処理して最新にする
-                    if (world.character_dungeon) {
-                        window_stuff_including_deferred(p_ptr);
-                    }
-
-                    fresh_all_terms();
+                    redraw_main_screen_before_input();
                 }
+
+                // 入力待ちの種類 (コマンド・-more-・確認など) に関わらず、残っているサブウィンドウの描き直しの要求を処理して最新にする。
+                // サブウィンドウは、表示が変わる箇所で要求されたものだけを描き直す
+                if (world.character_dungeon) {
+                    window_stuff_including_deferred(p_ptr);
+                }
+
+                fresh_all_terms();
 
                 world.character_saved = false;
                 signal_count = 0;
