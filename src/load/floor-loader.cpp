@@ -51,6 +51,33 @@ saved_floor_type rd_saved_floor_header()
 }
 
 /*!
+ * @brief 匂いの付いたグリッドを読み込む
+ * @param floor 読み込み先のフロア (大きさは読み込み済み)
+ * @return エラーコード (数や位置がフロアに収まらなければ 171)
+ */
+static errr rd_scented_grids(FloorType &floor)
+{
+    const auto num_scented_grids = rd_u16b();
+    if (num_scented_grids > floor.height * floor.width) {
+        return 171;
+    }
+
+    for (auto i = 0; i < num_scented_grids; i++) {
+        const auto y = rd_byte();
+        const auto x = rd_byte();
+        const auto when = rd_byte();
+        const Pos2D pos(y, x);
+        if (!floor.contains(pos, FloorBoundary::OUTER_WALL_INCLUSIVE)) {
+            return 171;
+        }
+
+        floor.get_grid(pos).when = when;
+    }
+
+    return 0;
+}
+
+/*!
  * @brief 保存されたフロアを読み込む / Read the saved floor
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param sf_ptr 最後に保存されたフロアへの参照ポインタ
@@ -199,6 +226,12 @@ errr rd_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
         auto &grid = floor.get_grid(monster.get_position());
         grid.m_idx = m_idx;
         monster.get_real_monrace().increment_current_numbers();
+    }
+
+    if (!loading_savefile_version_is_older_than(32)) {
+        if (const auto err = rd_scented_grids(floor); err != 0) {
+            return err;
+        }
     }
 
     return 0;
