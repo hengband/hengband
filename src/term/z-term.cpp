@@ -57,7 +57,7 @@ TermTileBlock term_tile_block_at(const term_win &screen, int x, int y)
     if (ax < 0 || ay < 0 || ay + 1 >= height || ax + 3 >= static_cast<int>(screen.a[ay].size()) || ax + 3 >= static_cast<int>(screen.a[ay + 1].size())) {
         return normal;
     }
-    if (!(screen.a[ay][ax] & 0x80) || !(screen.c[ay][ax] & 0x80) || term_is_tile_continuation({ screen.a[ay][ax], screen.c[ay][ax] })) {
+    if (!(screen.a[ay][ax] & AF_TILE1) || !(screen.c[ay][ax] & 0x80) || term_is_tile_continuation({ screen.a[ay][ax], screen.c[ay][ax] })) {
         return normal;
     }
     for (auto dy = 0; dy < 2; ++dy) {
@@ -85,7 +85,14 @@ static void mark_tile_block(const TermTileBlock &block)
 
 static bool clear_zoom_tile_at(int x, int y)
 {
-    const auto block = term_tile_block_at(*game_term->scr, x, y);
+    // 拡大タイルの範囲のセルは、左上 (タイル) も続きのセル (0xf0) も属性の最上位ビットが立っている。
+    // 立っていないセル (文字のセル) は拡大タイルに含まれないので、範囲を求めずに抜ける
+    auto &screen = *game_term->scr;
+    if ((y < 0) || (y >= static_cast<int>(screen.a.size())) || (x < 0) || (x >= static_cast<int>(screen.a[y].size())) || !(screen.a[y][x] & AF_TILE1)) {
+        return false;
+    }
+
+    const auto block = term_tile_block_at(screen, x, y);
     if (!block.zoomed()) {
         return false;
     }
@@ -93,10 +100,10 @@ static bool clear_zoom_tile_at(int x, int y)
         for (auto dx = 0; dx < 4; ++dx) {
             const auto xx = block.x + dx;
             const auto yy = block.y + dy;
-            game_term->scr->a[yy][xx] = game_term->attr_blank;
-            game_term->scr->c[yy][xx] = game_term->char_blank;
-            game_term->scr->ta[yy][xx] = 0;
-            game_term->scr->tc[yy][xx] = 0;
+            screen.a[yy][xx] = game_term->attr_blank;
+            screen.c[yy][xx] = game_term->char_blank;
+            screen.ta[yy][xx] = 0;
+            screen.tc[yy][xx] = 0;
         }
     }
     mark_tile_block(block);
