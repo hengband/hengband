@@ -278,7 +278,10 @@ TEST_CASE("Original tiles distinguish permanent glass walls from permanent rock"
     const auto restore = test::scoped_restore(use_graphics, ANGBAND_GRAF);
     use_graphics = true;
     ANGBAND_GRAF = "original32";
+    // terrain_symbol() は MapVisibilityContext を作るので、プレイヤーにフロアを持たせておく
+    auto floor = std::make_unique<FloorType>();
     auto player = std::make_unique<PlayerType>();
+    player->current_floor_ptr = floor.get();
     TerrainType terrain;
     for (auto lighting = 0; lighting < 3; ++lighting) {
         for (auto x = 0; x < 64; ++x) {
@@ -301,7 +304,10 @@ TEST_CASE("Original tiles keep stair directions and shaft palettes in separate s
     const auto restore = test::scoped_restore(use_graphics, ANGBAND_GRAF);
     use_graphics = true;
     ANGBAND_GRAF = "original32";
+    // terrain_symbol() は MapVisibilityContext を作るので、プレイヤーにフロアを持たせておく
+    auto floor = std::make_unique<FloorType>();
     auto player = std::make_unique<PlayerType>();
+    player->current_floor_ptr = floor.get();
     TerrainType terrain;
     auto errors = 0;
     for (auto lighting = 0; lighting < 3; ++lighting) {

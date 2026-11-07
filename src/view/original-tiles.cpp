@@ -9,7 +9,6 @@
 #include "term/gameterm.h"
 #include "term/tile-layout.h"
 #include "term/z-term.h"
-#include "timed-effect/timed-effects.h"
 #include "view/display-map.h"
 #include "view/map-tile-layout.h"
 #include <array>
@@ -140,13 +139,13 @@ namespace {
         return -1;
     }
 
-    bool is_known_pit(const PlayerType &player, const Pos2D &pos)
+    bool is_known_pit(const MapVisibilityContext &context, const Pos2D &pos)
     {
-        const auto &floor = *player.current_floor_ptr;
-        return floor.contains(pos, FloorBoundary::OUTER_WALL_INCLUSIVE) && is_map_terrain_visible(player, pos) && floor.get_grid(pos).get_terrain(TerrainKind::MIMIC).tag == "DARK_PIT";
+        const auto &floor = context.floor;
+        return floor.contains(pos, FloorBoundary::OUTER_WALL_INCLUSIVE) && is_map_terrain_visible(context, pos) && floor.get_grid(pos).get_terrain(TerrainKind::MIMIC).tag == "DARK_PIT";
     }
 
-    int pit_tile(const PlayerType &player, const Pos2D &pos)
+    int pit_tile(const MapVisibilityContext &context, const Pos2D &pos)
     {
         constexpr std::array<std::pair<Pos2DVec, int>, 8> neighbors = { {
             { { -1, 0 }, 1 },
@@ -160,7 +159,7 @@ namespace {
         } };
         auto mask = 0;
         for (const auto &[offset, bit] : neighbors) {
-            if (is_known_pit(player, pos + offset)) {
+            if (is_known_pit(context, pos + offset)) {
                 mask |= bit;
             }
         }
@@ -203,17 +202,22 @@ int liquid_variant(const Pos2D &pos, uint32_t frame)
     return static_cast<int>(coordinate_hash(pos.x, pos.y, frame) % 8);
 }
 
-bool is_liquid_animation_visible(const PlayerType &player, const Pos2D &pos)
+bool is_liquid_animation_visible(const MapVisibilityContext &context, const Pos2D &pos)
 {
-    const auto &floor = *player.current_floor_ptr;
-    if (!floor.contains(pos, FloorBoundary::OUTER_WALL_INCLUSIVE) || player.effects()->blindness().is_active()) {
+    const auto &floor = context.floor;
+    if (!floor.contains(pos, FloorBoundary::OUTER_WALL_INCLUSIVE) || context.is_blind) {
         return false;
     }
     const auto &grid = floor.get_grid(pos);
-    if (!grid.is_view() || !is_map_terrain_visible(player, pos) || (!player.see_nocto && grid.is_darkened())) {
+    if (!grid.is_view() || !is_map_terrain_visible(context, pos) || (!context.has_nocto && grid.is_darkened())) {
         return false;
     }
-    return player.see_nocto || (grid.info & (CAVE_LITE | CAVE_MNLT)) || (grid.info & (CAVE_GLOW | CAVE_MNDK)) == CAVE_GLOW;
+    return context.has_nocto || (grid.info & (CAVE_LITE | CAVE_MNLT)) || (grid.info & (CAVE_GLOW | CAVE_MNDK)) == CAVE_GLOW;
+}
+
+bool is_liquid_animation_visible(const PlayerType &player, const Pos2D &pos)
+{
+    return is_liquid_animation_visible(MapVisibilityContext(player), pos);
 }
 
 void advance_liquid_animation(PlayerType &player)
@@ -223,11 +227,12 @@ void advance_liquid_animation(PlayerType &player)
     }
     ++liquid_animation_frame;
     const auto &floor = *player.current_floor_ptr;
+    const MapVisibilityContext context(player);
     for (POSITION y = 0; y < floor.height; ++y) {
         for (POSITION x = 0; x < floor.width; ++x) {
             const Pos2D pos{ y, x };
             const auto &grid = floor.get_grid(pos);
-            if (grid.is_view() && is_animated_liquid(grid.get_terrain(TerrainKind::MIMIC).tag) && is_liquid_animation_visible(player, pos)) {
+            if (grid.is_view() && is_animated_liquid(grid.get_terrain(TerrainKind::MIMIC).tag) && is_liquid_animation_visible(context, pos)) {
                 lite_spot(&player, pos);
             }
         }
@@ -401,13 +406,14 @@ DisplaySymbol tile_symbol(int index, int lighting)
     return { static_cast<uint8_t>(0x80 + index / COLUMNS + lighting * LIGHTING_ROWS), static_cast<char>(0x80 + index % COLUMNS) };
 }
 
-DisplaySymbol terrain_symbol(const PlayerType &player, const Pos2D &pos, const TerrainType &terrain, int lighting, DisplaySymbol fallback)
+DisplaySymbol terrain_symbol(const MapVisibilityContext &context, const Pos2D &pos, const TerrainType &terrain, int lighting, DisplaySymbol fallback)
 {
     if (!is_enabled()) {
         return fallback;
     }
+    const auto &player = context.player;
     const auto hash = coordinate_hash(pos.x, pos.y, 0);
-    const auto variant = is_animated_liquid(terrain.tag) && is_liquid_animation_visible(player, pos)
+    const auto variant = is_animated_liquid(terrain.tag) && is_liquid_animation_visible(context, pos)
                              ? liquid_variant(pos, liquid_animation_frame)
                              : static_cast<int>(hash % 8);
     if (terrain.tag == "FLOOR") {
@@ -431,7 +437,7 @@ DisplaySymbol terrain_symbol(const PlayerType &player, const Pos2D &pos, const T
         return tile_symbol(23 * 8 + 4 + variant % 4, lighting);
     }
     if (terrain.tag == "DARK_PIT") {
-        return tile_symbol(pit_tile(player, pos), lighting);
+        return tile_symbol(pit_tile(context, pos), lighting);
     }
     if (terrain.tag == "MAGMA_VEIN_ON_DEEP_WATER") {
         return tile_symbol(272 + variant, lighting);
@@ -452,7 +458,12 @@ DisplaySymbol terrain_symbol(const PlayerType &player, const Pos2D &pos, const T
     return tile_symbol(row * 8 + selected, lighting);
 }
 
-DisplaySymbolPair encode_foreground(const PlayerType &player, const Pos2D &pos, DisplaySymbolPair symbols)
+DisplaySymbol terrain_symbol(const PlayerType &player, const Pos2D &pos, const TerrainType &terrain, int lighting, DisplaySymbol fallback)
+{
+    return terrain_symbol(MapVisibilityContext(player), pos, terrain, lighting, fallback);
+}
+
+DisplaySymbolPair encode_foreground(const MapVisibilityContext &context, const Pos2D &pos, DisplaySymbolPair symbols)
 {
     if (!is_enabled()) {
         return symbols;
@@ -467,7 +478,7 @@ DisplaySymbolPair encode_foreground(const PlayerType &player, const Pos2D &pos, 
             }
             background = {};
         } else {
-            background = tile_symbol(0, decide_map_terrain_lighting(player, pos));
+            background = tile_symbol(0, decide_map_terrain_lighting(context, pos));
         }
     }
     if (!foreground.is_ascii_graphics()) {
@@ -480,5 +491,10 @@ DisplaySymbolPair encode_foreground(const PlayerType &player, const Pos2D &pos, 
         symbols.symbol_foreground = { static_cast<uint8_t>(0x80 + GLYPH_ROW + (foreground.color & 15)), static_cast<char>(0x80 | (foreground.character & 0x7f)) };
     }
     return symbols;
+}
+
+DisplaySymbolPair encode_foreground(const PlayerType &player, const Pos2D &pos, DisplaySymbolPair symbols)
+{
+    return encode_foreground(MapVisibilityContext(player), pos, symbols);
 }
 }

@@ -83,7 +83,7 @@ TEST_CASE("MapInfoCache recomputes only the grids invalidated")
     player_ptr->x = 100;
 
     const auto character_at = [&cache, &player_ptr](const Pos2D &pos) {
-        return cache.get(player_ptr.get(), pos).symbol_foreground.character;
+        return cache.get(player_ptr.get(), MapVisibilityContext(*player_ptr), pos).symbol_foreground.character;
     };
     cache.prepare(*player_ptr);
     REQUIRE(character_at({ 1, 2 }) == '.');
@@ -108,7 +108,7 @@ TEST_CASE("MapInfoCache recomputes only the grids invalidated")
 
     SUBCASE("store() reports whether the stored result differs from a valid one")
     {
-        const auto symbol_pair = cache.get(player_ptr.get(), { 1, 2 });
+        const auto symbol_pair = cache.get(player_ptr.get(), MapVisibilityContext(*player_ptr), { 1, 2 });
         CHECK_FALSE(cache.store({ 1, 2 }, symbol_pair));
         CHECK(cache.store({ 1, 2 }, { { TERM_WHITE, 'X' }, {} }));
         cache.invalidate({ 1, 2 });
