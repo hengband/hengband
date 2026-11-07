@@ -1594,21 +1594,118 @@ enum class BotSnapshotMessages {
 };
 
 /*!
- * @brief スナップショット本体を組み立てる
- * @param include_map grid_map を含めるか
- * @param messages_source messages に載せるメッセージの選び方
- * @details grid_map はフロア全域を走査して作る処理で、
- * 出力量は既知の地形に依存する。地図を出さない呼び出し
- * （店内スナップショット）では作ってから消すのではなく最初から作らない。
+ * @brief スナップショットの player を作る
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @return player のJSONオブジェクト
  */
-nlohmann::json make_snapshot(PlayerType *player_ptr, bool include_map, BotSnapshotMessages messages_source)
+nlohmann::json make_snapshot_player_json(PlayerType *player_ptr)
 {
     const auto &player = *player_ptr;
-    const auto &floor = *player.current_floor_ptr;
+    const auto known_flags = collect_player_known_flags(player_ptr);
+    const auto [main_to_h, main_to_d] = calc_displayed_melee_bonus(player_ptr, 0);
+    const auto [sub_to_h, sub_to_d] = calc_displayed_melee_bonus(player_ptr, 1);
+    const auto displayed_blows = calc_displayed_melee_blows(player_ptr);
+    return {
+        { "y", player.y },
+        { "x", player.x },
+        { "can_see_own_grid", !no_lite(player_ptr) },
+        { "light_radius", player.cur_lite },
+        { "level", player.lev },
+        { "hp", player.chp },
+        { "max_hp", player.mhp },
+        { "mp", player.csp },
+        { "max_mp", player.msp },
+        { "exp", player.exp },
+        // The main screen marks drained experience ("x経験" / yellow)
+        // and a drained level ("xレベル" / yellow); the character sheet
+        // prints the maximum experience and the next-level threshold.
+        { "max_exp", player.max_exp },
+        { "exp_drained", player.exp < player.max_exp },
+        { "max_level", player.max_plv },
+        { "level_drained", player.lev < player.max_plv },
+        { "exp_to_advance", calc_exp_to_advance(player_ptr) },
+        { "title", to_json_utf8(get_player_title(player_ptr)) },
+        { "race_title", to_json_utf8(get_displayed_race_title(player_ptr)) },
+        { "mimic_form", enum2i(player.mimic_form) },
+        { "gold", player.au },
+        { "food_state", food_state(player) },
+        { "speed", player.pspeed },
+        { "speed_display", make_speed_display_json(player_ptr) },
+        { "action", make_action_state_json(player_ptr) },
+        { "study", make_study_indicator_json(player_ptr) },
+        { "status_bar", make_status_bar_json(player_ptr) },
+        { "recalling", player.word_recall != 0 },
+        { "food_type", enum2i(PlayerRace(player_ptr).food()) },
+        { "class_id", enum2i(player.pclass) },
+        { "race_id", enum2i(player.prace) },
+        { "personality_id", enum2i(player.ppersonality) },
+        { "ac", player.dis_ac + player.dis_to_a },
+        // Protocol 3: the raw skill numbers are replaced by the ratings the
+        // character sheet prints (numbers only under show_actual_value).
+        // The two-weapon / shield proficiencies moved to knowledge "skill_exp".
+        { "skill_ratings", make_skill_ratings_json(player_ptr) },
+        // Hit/damage bonuses are the displayed totals, not the
+        // internal components that could reveal raw skill values.
+        { "melee", {
+                       { "main_hand_blows", displayed_blows[0] },
+                       { "sub_hand_blows", displayed_blows[1] },
+                       { "mutation_blows", displayed_blows[2] },
+                       { "main_hand_to_h", can_attack_with_main_hand(player_ptr) ? nlohmann::json(main_to_h) : nlohmann::json(nullptr) },
+                       { "sub_hand_to_h", can_attack_with_sub_hand(player_ptr) ? nlohmann::json(sub_to_h) : nlohmann::json(nullptr) },
+                       { "main_hand_to_d", can_attack_with_main_hand(player_ptr) ? nlohmann::json(main_to_d) : nlohmann::json(nullptr) },
+                       { "sub_hand_to_d", can_attack_with_sub_hand(player_ptr) ? nlohmann::json(sub_to_d) : nlohmann::json(nullptr) },
+                   } },
+        { "status", make_player_status_json(*player.effects()) },
+        { "stats", make_player_stats_json(player) },
+        { "ability_sources", make_bot_player_ability_sources_json(known_flags) },
+        { "immunities", make_player_immunities_json(player_ptr, known_flags) },
+        { "vulnerabilities", make_player_vulnerabilities_json(player_ptr, known_flags) },
+    };
+}
+
+/*!
+ * @brief スナップショットの floor を作る
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @return floor のJSONオブジェクト
+ */
+nlohmann::json make_snapshot_floor_json(PlayerType *player_ptr)
+{
+    const auto &floor = *player_ptr->current_floor_ptr;
     const auto &world = AngbandWorld::get_instance();
+    return {
+        { "dungeon_id", enum2i(floor.dungeon_id) },
+        // The map name printed at the bottom right (town, wilderness, dungeon or quest).
+        { "dungeon_name", to_json_utf8(map_name(player_ptr)) },
+        { "level", floor.dun_level },
+        // The grade is player-visible: it selects the depth-display
+        // color, and Ctrl-F reports the distinct grade message.
+        { "feeling", DungeonFeeling::get_instance().get_feeling() },
+        { "width", floor.width },
+        { "height", floor.height },
+        { "inside_arena", floor.inside_arena },
+        { "quest_id", enum2i(floor.quest_number) },
+        { "town_id", world.is_in_any_town() ? enum2i(to_town_id(world.get_town_index())) : -1 },
+        { "town_index", world.is_in_any_town() ? static_cast<int>(world.get_town_index()) : 0 },
+        // True only while standing ON an actual town tile. Gate on
+        // dun_level == 0: is_in_any_town() (current_town_index > 0)
+        // is NOT cleared on entering a dungeon, so on its own it
+        // reads true in the dungeon too. On the surface it still
+        // separates the town from the open, out-of-depth wilderness
+        // tile (both share dungeon_id 0 / level 0).
+        { "in_town", floor.dun_level == 0 && world.is_in_any_town() },
+    };
+}
+
+/*!
+ * @brief スナップショットの progress を作る
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @return progress のJSONオブジェクト
+ */
+nlohmann::json make_snapshot_progress_json(PlayerType *player_ptr)
+{
+    const auto &player = *player_ptr;
     const auto &dungeons = DungeonList::get_instance();
     const auto &dungeon_records = DungeonRecords::get_instance();
-    const auto known_flags = collect_player_known_flags(player_ptr);
     auto entered_dungeon_ids = nlohmann::json::array();
     auto dungeon_recall_depths = nlohmann::json::object();
     auto conquered_dungeon_ids = nlohmann::json::array();
@@ -1626,9 +1723,59 @@ nlohmann::json make_snapshot(PlayerType *player_ptr, bool include_map, BotSnapsh
             conquered_dungeon_ids.push_back(enum2i(dungeon_id));
         }
     }
-    const auto [main_to_h, main_to_d] = calc_displayed_melee_bonus(player_ptr, 0);
-    const auto [sub_to_h, sub_to_d] = calc_displayed_melee_bonus(player_ptr, 1);
-    const auto displayed_blows = calc_displayed_melee_blows(player_ptr);
+    return {
+        { "recall_dungeon_id", enum2i(player.recall_dungeon) },
+        { "entered_dungeon_ids", std::move(entered_dungeon_ids) },
+        { "dungeon_recall_depths", std::move(dungeon_recall_depths) },
+        { "conquered_dungeon_ids", std::move(conquered_dungeon_ids) },
+        // Deepest level reached in the recall-target dungeon: this
+        // is exactly where Word of Recall lands and what the player
+        // sees on the character screen, so it reveals nothing hidden.
+        // The bot uses it to seed its deepest-level watermark, which
+        // otherwise resets to 1 on every restart.
+        { "recall_depth", dungeon_records.get_record(player.recall_dungeon).get_max_level() },
+        { "yeek_cave_conquered", dungeons.get_dungeon(DungeonId::GALGALS).is_conquered() },
+        // Whether the player can Word-of-Recall into Angband. A
+        // dungeon becomes recallable once its record has a max
+        // level (> 0): set either by physically entering it, or
+        // by hearing its rumor at the inn, which calls
+        // set_max_level(mindepth) and tells the player "You can
+        // recall to Angband." has_entered() alone does not cover
+        // the rumor-unlock case. This is player-visible state,
+        // not hidden information.
+        { "angband_recall_unlocked", dungeon_records.get_record(DungeonId::ANGBAND).get_max_level() > 0 },
+        // Towns the player knows the way to: marked visited by
+        // physically entering them or by hearing the town's rumor
+        // at the inn ("You know the way to ..."). The inn's
+        // "Teleport to other town" menu lists exactly these towns,
+        // so this mirrors player-visible state. IDs follow the
+        // floor.town_id convention (TownId; see to_town_id()).
+        { "visited_town_ids", [] {
+             std::vector<int> ids;
+             const auto &records = TownRecords::get_instance();
+             for (size_t i = 0; i < records.size(); i++) {
+                 if (records.has_visited(i2enum<TownId>(i))) {
+                     ids.push_back(static_cast<int>(i));
+                 }
+             }
+             return ids;
+         }() },
+        { "quests", make_disclosed_quests_json() },
+    };
+}
+
+/*!
+ * @brief スナップショット本体を組み立てる
+ * @param include_map grid_map を含めるか
+ * @param messages_source messages に載せるメッセージの選び方
+ * @details grid_map はフロア全域を走査して作る処理で、
+ * 出力量は既知の地形に依存する。地図を出さない呼び出し
+ * （店内スナップショット）では作ってから消すのではなく最初から作らない。
+ */
+nlohmann::json make_snapshot(PlayerType *player_ptr, bool include_map, BotSnapshotMessages messages_source)
+{
+    const auto &player = *player_ptr;
+    const auto &world = AngbandWorld::get_instance();
     auto snapshot = nlohmann::json{
         { "type", "player_turn" },
         { "protocol_version", BOT_JSON_PROTOCOL_VERSION },
@@ -1638,123 +1785,9 @@ nlohmann::json make_snapshot(PlayerType *player_ptr, bool include_map, BotSnapsh
         // human-visible day and clock are in "clock".
         { "turn", world.game_turn },
         { "clock", make_clock_json() },
-        { "player", {
-                        { "y", player.y },
-                        { "x", player.x },
-                        { "can_see_own_grid", !no_lite(player_ptr) },
-                        { "light_radius", player.cur_lite },
-                        { "level", player.lev },
-                        { "hp", player.chp },
-                        { "max_hp", player.mhp },
-                        { "mp", player.csp },
-                        { "max_mp", player.msp },
-                        { "exp", player.exp },
-                        // The main screen marks drained experience ("x経験" / yellow)
-                        // and a drained level ("xレベル" / yellow); the character sheet
-                        // prints the maximum experience and the next-level threshold.
-                        { "max_exp", player.max_exp },
-                        { "exp_drained", player.exp < player.max_exp },
-                        { "max_level", player.max_plv },
-                        { "level_drained", player.lev < player.max_plv },
-                        { "exp_to_advance", calc_exp_to_advance(player_ptr) },
-                        { "title", to_json_utf8(get_player_title(player_ptr)) },
-                        { "race_title", to_json_utf8(get_displayed_race_title(player_ptr)) },
-                        { "mimic_form", enum2i(player.mimic_form) },
-                        { "gold", player.au },
-                        { "food_state", food_state(player) },
-                        { "speed", player.pspeed },
-                        { "speed_display", make_speed_display_json(player_ptr) },
-                        { "action", make_action_state_json(player_ptr) },
-                        { "study", make_study_indicator_json(player_ptr) },
-                        { "status_bar", make_status_bar_json(player_ptr) },
-                        { "recalling", player.word_recall != 0 },
-                        { "food_type", enum2i(PlayerRace(player_ptr).food()) },
-                        { "class_id", enum2i(player.pclass) },
-                        { "race_id", enum2i(player.prace) },
-                        { "personality_id", enum2i(player.ppersonality) },
-                        { "ac", player.dis_ac + player.dis_to_a },
-                        // Protocol 3: the raw skill numbers are replaced by the ratings the
-                        // character sheet prints (numbers only under show_actual_value).
-                        // The two-weapon / shield proficiencies moved to knowledge "skill_exp".
-                        { "skill_ratings", make_skill_ratings_json(player_ptr) },
-                        // Hit/damage bonuses are the displayed totals, not the
-                        // internal components that could reveal raw skill values.
-                        { "melee", {
-                                       { "main_hand_blows", displayed_blows[0] },
-                                       { "sub_hand_blows", displayed_blows[1] },
-                                       { "mutation_blows", displayed_blows[2] },
-                                       { "main_hand_to_h", can_attack_with_main_hand(player_ptr) ? nlohmann::json(main_to_h) : nlohmann::json(nullptr) },
-                                       { "sub_hand_to_h", can_attack_with_sub_hand(player_ptr) ? nlohmann::json(sub_to_h) : nlohmann::json(nullptr) },
-                                       { "main_hand_to_d", can_attack_with_main_hand(player_ptr) ? nlohmann::json(main_to_d) : nlohmann::json(nullptr) },
-                                       { "sub_hand_to_d", can_attack_with_sub_hand(player_ptr) ? nlohmann::json(sub_to_d) : nlohmann::json(nullptr) },
-                                   } },
-                        { "status", make_player_status_json(*player.effects()) },
-                        { "stats", make_player_stats_json(player) },
-                        { "ability_sources", make_bot_player_ability_sources_json(known_flags) },
-                        { "immunities", make_player_immunities_json(player_ptr, known_flags) },
-                        { "vulnerabilities", make_player_vulnerabilities_json(player_ptr, known_flags) },
-                    } },
-        { "floor", {
-                       { "dungeon_id", enum2i(floor.dungeon_id) },
-                       // The map name printed at the bottom right (town, wilderness, dungeon or quest).
-                       { "dungeon_name", to_json_utf8(map_name(player_ptr)) },
-                       { "level", floor.dun_level },
-                       // The grade is player-visible: it selects the depth-display
-                       // color, and Ctrl-F reports the distinct grade message.
-                       { "feeling", DungeonFeeling::get_instance().get_feeling() },
-                       { "width", floor.width },
-                       { "height", floor.height },
-                       { "inside_arena", floor.inside_arena },
-                       { "quest_id", enum2i(floor.quest_number) },
-                       { "town_id", world.is_in_any_town() ? enum2i(to_town_id(world.get_town_index())) : -1 },
-                       { "town_index", world.is_in_any_town() ? static_cast<int>(world.get_town_index()) : 0 },
-                       // True only while standing ON an actual town tile. Gate on
-                       // dun_level == 0: is_in_any_town() (current_town_index > 0)
-                       // is NOT cleared on entering a dungeon, so on its own it
-                       // reads true in the dungeon too. On the surface it still
-                       // separates the town from the open, out-of-depth wilderness
-                       // tile (both share dungeon_id 0 / level 0).
-                       { "in_town", floor.dun_level == 0 && world.is_in_any_town() },
-                   } },
-        { "progress", {
-                          { "recall_dungeon_id", enum2i(player.recall_dungeon) },
-                          { "entered_dungeon_ids", std::move(entered_dungeon_ids) },
-                          { "dungeon_recall_depths", std::move(dungeon_recall_depths) },
-                          { "conquered_dungeon_ids", std::move(conquered_dungeon_ids) },
-                          // Deepest level reached in the recall-target dungeon: this
-                          // is exactly where Word of Recall lands and what the player
-                          // sees on the character screen, so it reveals nothing hidden.
-                          // The bot uses it to seed its deepest-level watermark, which
-                          // otherwise resets to 1 on every restart.
-                          { "recall_depth", dungeon_records.get_record(player.recall_dungeon).get_max_level() },
-                          { "yeek_cave_conquered", dungeons.get_dungeon(DungeonId::GALGALS).is_conquered() },
-                          // Whether the player can Word-of-Recall into Angband. A
-                          // dungeon becomes recallable once its record has a max
-                          // level (> 0): set either by physically entering it, or
-                          // by hearing its rumor at the inn, which calls
-                          // set_max_level(mindepth) and tells the player "You can
-                          // recall to Angband." has_entered() alone does not cover
-                          // the rumor-unlock case. This is player-visible state,
-                          // not hidden information.
-                          { "angband_recall_unlocked", dungeon_records.get_record(DungeonId::ANGBAND).get_max_level() > 0 },
-                          // Towns the player knows the way to: marked visited by
-                          // physically entering them or by hearing the town's rumor
-                          // at the inn ("You know the way to ..."). The inn's
-                          // "Teleport to other town" menu lists exactly these towns,
-                          // so this mirrors player-visible state. IDs follow the
-                          // floor.town_id convention (TownId; see to_town_id()).
-                          { "visited_town_ids", [] {
-                               std::vector<int> ids;
-                               const auto &records = TownRecords::get_instance();
-                               for (size_t i = 0; i < records.size(); i++) {
-                                   if (records.has_visited(i2enum<TownId>(i))) {
-                                       ids.push_back(static_cast<int>(i));
-                                   }
-                               }
-                               return ids;
-                           }() },
-                          { "quests", make_disclosed_quests_json() },
-                      } },
+        { "player", make_snapshot_player_json(player_ptr) },
+        { "floor", make_snapshot_floor_json(player_ptr) },
+        { "progress", make_snapshot_progress_json(player_ptr) },
         { "health_bar", make_health_bar_json(player_ptr, false) },
         { "riding_health_bar", make_health_bar_json(player_ptr, true) },
         { "visible_monsters", make_visible_monsters_json(player) },
