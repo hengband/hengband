@@ -83,20 +83,21 @@ void MapInfoCache::prepare(const PlayerType &player)
 /*!
  * @brief グリッドの表示を返す
  * @param player_ptr プレイヤーへの参照ポインタ
+ * @param context マスによらない判定の材料 (player_ptr から作ったもの)
  * @param pos グリッドの座標
  * @return グリッドの表示。覚えていなければ map_info() で求めて覚える
  * @details 先に prepare() を呼んで、覚えている結果が使えるか確かめておくこと。
  * 自動拾いの対象を表示している間は、覚えずに毎回求める。
  */
-DisplaySymbolPair MapInfoCache::get(PlayerType *player_ptr, const Pos2D &pos)
+DisplaySymbolPair MapInfoCache::get(PlayerType *player_ptr, const MapVisibilityContext &context, const Pos2D &pos)
 {
     if (display_autopick.any() || !this->contains(pos)) {
-        return map_info(player_ptr, pos);
+        return map_info(player_ptr, context, pos);
     }
 
     auto &entry = this->entries[this->index_of(pos)];
     if (entry.generation != this->generation) {
-        entry = { map_info(player_ptr, pos), this->generation };
+        entry = { map_info(player_ptr, context, pos), this->generation };
     }
 
     return entry.symbol_pair;

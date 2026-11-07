@@ -5,6 +5,7 @@
 #include <string_view>
 #include <tl/optional.hpp>
 
+class MapVisibilityContext;
 class PlayerType;
 class TerrainType;
 class ItemEntity;
@@ -68,6 +69,7 @@ int floor_variant(const Pos2D &pos, uint32_t seed);
 int supplemental_tile_index(std::string_view tag);
 bool is_animated_liquid(std::string_view tag);
 int liquid_variant(const Pos2D &pos, uint32_t frame);
+bool is_liquid_animation_visible(const MapVisibilityContext &context, const Pos2D &pos);
 bool is_liquid_animation_visible(const PlayerType &player, const Pos2D &pos);
 void advance_liquid_animation(PlayerType &player);
 int standalone_floor_variant(const Pos2D &pos, uint32_t seed);
@@ -78,6 +80,8 @@ tl::optional<FloorConnections> decode_connected_floor(DisplaySymbol symbol);
 int connected_floor_tile_index(const FloorConnections &connections);
 bool needs_neighbor_redraw(const PlayerType &player, const Pos2D &pos);
 DisplaySymbol tile_symbol(int index, int lighting);
+DisplaySymbol terrain_symbol(const MapVisibilityContext &context, const Pos2D &pos, const TerrainType &terrain, int lighting, DisplaySymbol fallback);
 DisplaySymbol terrain_symbol(const PlayerType &player, const Pos2D &pos, const TerrainType &terrain, int lighting, DisplaySymbol fallback);
+DisplaySymbolPair encode_foreground(const MapVisibilityContext &context, const Pos2D &pos, DisplaySymbolPair symbols);
 DisplaySymbolPair encode_foreground(const PlayerType &player, const Pos2D &pos, DisplaySymbolPair symbols);
 }

@@ -539,13 +539,14 @@ struct GridSignatureHash {
 
 /*!
  * @brief grid_map の palette の 1 要素になる、マスの見た目の組を作る
- * @param player プレイヤー情報
+ * @param context マスによらない判定の材料
+ * @param grid マスのグリッド (地形を表示すると判定済みのもの)
  * @param pos マスの座標
  * @param terrain マスの地形 (Grid::get_terrain(TerrainKind::MIMIC))
  * @param monochrome get_monochrome_display_color() の値 (マスによらないので呼び出し側で 1 回だけ求める)
  * @return 地形 ID・照明記号番号・地形のフラグのビット列・予約値の組
  */
-GridSignature make_grid_signature(const PlayerType &player, const Pos2D &pos, const TerrainType &terrain, tl::optional<uint8_t> monochrome)
+GridSignature make_grid_signature(const MapVisibilityContext &context, const Grid &grid, const Pos2D &pos, const TerrainType &terrain, tl::optional<uint8_t> monochrome)
 {
     // Wire bit positions are append-only; keep tools/bot/README.md in sync.
     const auto has_terrain = [&terrain](TerrainCharacteristics flag) { return terrain.flags.has(flag); };
@@ -572,7 +573,7 @@ GridSignature make_grid_signature(const PlayerType &player, const Pos2D &pos, co
     // Protocol 3 exposes only distinguishable lighting symbols. Variants that
     // draw the same configured colour and character share a canonical index,
     // so the selection cannot reveal otherwise invisible CAVE_* state.
-    const auto flag_bits = static_cast<std::int64_t>(decide_map_terrain_lighting(player, pos, monochrome));
+    const auto flag_bits = static_cast<std::int64_t>(decide_visible_map_terrain_lighting(context, grid, terrain, pos, monochrome));
     auto terrain_bits = std::int64_t{ 0 };
     for (std::size_t i = 0; i < terrain_flags.size(); ++i) {
         terrain_bits |= static_cast<std::int64_t>(has_terrain(terrain_flags[i])) << i;
@@ -632,6 +633,7 @@ nlohmann::json make_grid_map_json(PlayerType *player_ptr)
 
     const auto monochrome = get_monochrome_display_color(player_ptr);
     const auto is_hallucinated = player.effects()->hallucination().is_active();
+    const MapVisibilityContext context(player);
     // Emit the player's entire memorised map (marked tiles) plus the current
     // view — not just a small window. The town is fully known from the start
     // (so the bot can see the dungeon entrance immediately, like the player),
@@ -640,7 +642,8 @@ nlohmann::json make_grid_map_json(PlayerType *player_ptr)
     // their own observation history rather than treating omission as deletion.
     for (const auto &pos : floor.get_area()) {
         const auto &source_grid = floor.get_grid(pos);
-        const auto is_known = is_map_terrain_visible(player, pos);
+        const auto &terrain = source_grid.get_terrain(TerrainKind::MIMIC);
+        const auto is_known = is_map_terrain_visible(context, source_grid, terrain, pos);
         // 空の nlohmann::json::array() も確保を伴うので、品の無いマス (大半のマス) で
         // 確保しない std::vector に集め、行や cell を作るときに JSON にする
         auto found_item_count = 0;
@@ -697,9 +700,8 @@ nlohmann::json make_grid_map_json(PlayerType *player_ptr)
             continue;
         }
 
-        const auto &terrain = source_grid.get_terrain(TerrainKind::MIMIC);
         const auto has_terrain = [&terrain](TerrainCharacteristics flag) { return terrain.flags.has(flag); };
-        const auto signature = make_grid_signature(player, pos, terrain, monochrome);
+        const auto signature = make_grid_signature(context, source_grid, pos, terrain, monochrome);
         // 隣り合うマスは同じ組のことが多いので、直前に見えたマスと同じならハッシュ表を引かない
         if ((previous_palette == nullptr) || (previous_palette->first != signature)) {
             const auto next_palette_index = palette_indices.size();

@@ -101,9 +101,10 @@ void print_map(PlayerType *player_ptr)
     }
 
     const auto monochrome_color = get_monochrome_display_color(player_ptr);
+    const MapVisibilityContext context(*player_ptr);
     for (auto y = ymin; y <= ymax; y++) {
         for (auto x = xmin; x <= xmax; x++) {
-            auto symbol_pair = map_info(player_ptr, { y, x });
+            auto symbol_pair = map_info(player_ptr, context, { y, x });
             map_info_cache.store({ y, x }, symbol_pair);
             symbol_pair.symbol_foreground.color = monochrome_color.value_or(symbol_pair.symbol_foreground.color);
 
