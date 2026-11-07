@@ -1623,6 +1623,7 @@ hengband_test_SOURCES = \
 	test/system/baseitem/test-baseitem-definition.cpp \
 	test/save/test-item-writer.cpp \
 	test/save/test-monster-entity-writer.cpp \
+	test/save/test-player-class-specific-data-writer.cpp \
 	test/system/baseitem/test-baseitem-allocation.cpp \
 	test/system/baseitem/test-baseitem-list.cpp \
 	test/system/floor/test-floor-info.cpp \

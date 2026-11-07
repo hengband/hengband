@@ -1,6 +1,7 @@
 #include "save/player-writer.h"
 #include "floor/dungeon-feeling.h"
 #include "game-option/birth-options.h"
+#include "hpmp/hp-mp-regenerator.h"
 #include "io/input-key-requester.h"
 #include "market/arena-entry.h"
 #include "object/tval-types.h"
@@ -96,6 +97,21 @@ static void wr_continuous_actions(PlayerType *player_ptr)
     wr_bool(command_dir.is_targetting());
     wr_s16b(static_cast<int16_t>(panel_row_min));
     wr_s16b(static_cast<int16_t>(panel_col_min));
+}
+
+/*!
+ * @brief 次の行動に影響する一時的な状態を書き込む
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @details トラップ感知の範囲内にいるか、パトロンの報酬を受け取った直後か、乗っているモンスターが逃れようとした回数、
+ * 警告を抑える目安のダメージ、広域マップでの自然回復の間隔を書く
+ */
+static void wr_transient_states(PlayerType *player_ptr)
+{
+    wr_bool(player_ptr->dtrap);
+    wr_bool(player_ptr->suppress_multi_reward);
+    wr_s32b(player_ptr->riding_pinch);
+    wr_s32b(player_ptr->warning_damage);
+    wr_s32b(wild_regen);
 }
 
 /*!
@@ -344,4 +360,5 @@ void wr_player(PlayerType *player_ptr)
     wr_s16b(player_ptr->riding_t_m_idx);
     wr_last_target();
     wr_continuous_actions(player_ptr);
+    wr_transient_states(player_ptr);
 }
