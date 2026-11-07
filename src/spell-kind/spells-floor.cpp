@@ -87,8 +87,8 @@ void wiz_lite(PlayerType *player_ptr, bool ninja)
 
             /* Perma-lit grids (newly and previously) */
             else if (grid_neighbor.info & CAVE_GLOW) {
-                /* Normally, memorize floors (see above) */
-                if (view_perma_grids && !view_torch_grids) {
+                /* 光っているマスを覚えるオプションがあれば、床も覚える */
+                if (view_perma_grids) {
                     /* Memorize the grid */
                     grid_neighbor.info |= (CAVE_MARK);
                 }
