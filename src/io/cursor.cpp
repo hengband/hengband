@@ -41,7 +41,7 @@ void move_cursor_relative(int row, int col)
 void print_path(PlayerType *player_ptr, const Pos2D &pos, std::vector<Pos2D> &path_grids)
 {
     for (const auto &prev_pos : path_grids) {
-        lite_spot(player_ptr, prev_pos);
+        erase_overlay_spot(player_ptr, prev_pos);
     }
 
     path_grids.clear();
