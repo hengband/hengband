@@ -246,7 +246,7 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
             }
 
             if (symbol_previous.character != symbol_lightning.character) {
-                char_left = std::max<int8_t>(0, symbol_lightning.character - 10);
+                char_left = calc_visual_list_char_left(symbol_lightning.character);
             }
 
             continue;
@@ -262,7 +262,7 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
                 }
 
                 if (symbol_previous.character != symbol_current.character) {
-                    char_left = std::max<int8_t>(0, symbol_current.character - 10);
+                    char_left = calc_visual_list_char_left(symbol_current.character);
                 }
             } else {
                 *need_redraw = true;

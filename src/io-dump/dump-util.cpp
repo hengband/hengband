@@ -8,6 +8,7 @@
 #include "util/angband-files.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
+#include <algorithm>
 #include <fmt/format.h>
 
 DisplaySymbolsClipboard DisplaySymbolsClipboard::instance{};
@@ -25,6 +26,17 @@ void DisplaySymbolsClipboard::reset_symbols()
 void DisplaySymbolsClipboard::set_symbol(const TerrainSymbols &symbol_configs)
 {
     this->symbols = symbol_configs;
+}
+
+/*!
+ * @brief シンボルの一覧の左端の文字を、選んでいる文字の 10 文字手前に合わせて求める
+ * @param character 選んでいる文字
+ * @return 一覧の左端の文字。選んでいる文字が 10 未満なら 0
+ * @details グラフィックのタイル (0x80 以上の文字) でも負の値として扱わないよう、符号なしにしてから引く。
+ */
+byte calc_visual_list_char_left(char character)
+{
+    return static_cast<byte>(std::max(0, static_cast<uint8_t>(character) - 10));
 }
 
 /*!
@@ -77,7 +89,7 @@ bool visual_mode_command(char ch, bool *visual_list_ptr,
 
         *visual_list_ptr = true;
         *attr_top_ptr = std::max<int8_t>(0, (*cur_attr_ptr & 0x7f) - 5);
-        *char_left_ptr = std::max<int8_t>(0, *cur_char_ptr - 10);
+        *char_left_ptr = calc_visual_list_char_left(*cur_char_ptr);
         attr_old = *cur_attr_ptr;
         char_old = *cur_char_ptr;
         return true;
@@ -102,7 +114,7 @@ bool visual_mode_command(char ch, bool *visual_list_ptr,
         if (has_character) {
             /* Set the char */
             *cur_char_ptr = symbols.character;
-            *char_left_ptr = std::max<int8_t>(0, *cur_char_ptr - 10);
+            *char_left_ptr = calc_visual_list_char_left(*cur_char_ptr);
             if (!*visual_list_ptr) {
                 *need_redraw = true;
             }

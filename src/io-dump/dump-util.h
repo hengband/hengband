@@ -30,6 +30,7 @@ private:
     static DisplaySymbolsClipboard instance;
 };
 
+byte calc_visual_list_char_left(char character);
 bool visual_mode_command(char ch, bool *visual_list_ptr, int height, int width,
     TERM_COLOR *attr_top_ptr, byte *char_left_ptr,
     TERM_COLOR *cur_attr_ptr, char *cur_char_ptr, bool *need_redraw);
