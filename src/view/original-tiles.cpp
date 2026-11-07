@@ -142,7 +142,14 @@ namespace {
     bool is_known_pit(const MapVisibilityContext &context, const Pos2D &pos)
     {
         const auto &floor = context.floor;
-        return floor.contains(pos, FloorBoundary::OUTER_WALL_INCLUSIVE) && is_map_terrain_visible(context, pos) && floor.get_grid(pos).get_terrain(TerrainKind::MIMIC).tag == "DARK_PIT";
+        if (!floor.contains(pos, FloorBoundary::OUTER_WALL_INCLUSIVE)) {
+            return false;
+        }
+
+        // 表示するかの判定 (壁なら周りのマスも調べる) より軽い地形の名前を先に確かめる
+        const auto &grid = floor.get_grid(pos);
+        const auto &terrain = grid.get_terrain(TerrainKind::MIMIC);
+        return (terrain.tag == "DARK_PIT") && is_map_terrain_visible(context, grid, terrain, pos);
     }
 
     int pit_tile(const MapVisibilityContext &context, const Pos2D &pos)
@@ -209,7 +216,7 @@ bool is_liquid_animation_visible(const MapVisibilityContext &context, const Pos2
         return false;
     }
     const auto &grid = floor.get_grid(pos);
-    if (!grid.is_view() || !is_map_terrain_visible(context, pos) || (!context.has_nocto && grid.is_darkened())) {
+    if (!grid.is_view() || !is_map_terrain_visible(context, grid, grid.get_terrain(TerrainKind::MIMIC), pos) || (!context.has_nocto && grid.is_darkened())) {
         return false;
     }
     return context.has_nocto || (grid.info & (CAVE_LITE | CAVE_MNLT)) || (grid.info & (CAVE_GLOW | CAVE_MNDK)) == CAVE_GLOW;

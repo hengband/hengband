@@ -10,7 +10,9 @@ extern EnumClassFlagGroup<AutopickMethod> display_autopick;
 
 class DisplaySymbolPair;
 class FloorType;
+class Grid;
 class PlayerType;
+class TerrainType;
 
 /*!
  * @brief 地図のマスの地形を表示するかの判定に使う、マスによらない値の組
@@ -33,7 +35,8 @@ public:
     const bool is_daytime; //!< 昼間か
 };
 
-bool is_map_terrain_visible(const MapVisibilityContext &context, const Pos2D &pos);
+bool is_map_terrain_visible(const MapVisibilityContext &context, const Grid &grid, const TerrainType &terrain, const Pos2D &pos);
+int decide_visible_map_terrain_lighting(const MapVisibilityContext &context, const Grid &grid, const TerrainType &terrain, const Pos2D &pos, tl::optional<uint8_t> monochrome = tl::nullopt);
 bool is_map_terrain_visible(const PlayerType &player, const Pos2D &pos);
 int decide_map_terrain_lighting(const MapVisibilityContext &context, const Pos2D &pos, tl::optional<uint8_t> monochrome = tl::nullopt);
 int decide_map_terrain_lighting(const PlayerType &player, const Pos2D &pos, tl::optional<uint8_t> monochrome = tl::nullopt);

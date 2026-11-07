@@ -126,28 +126,6 @@ bool is_revealed_wall(const FloorType &floor, const Grid &grid, const TerrainTyp
 }
 
 /*!
- * @brief 通常の地図描画で地形自体を表示するか判定する (色や重ね描きの前)
- * @param context マスによらない判定の材料
- * @param grid 判定するグリッド
- * @param terrain グリッドの地形 (MIMIC)
- * @param pos 階の中の座標
- * @return 不明地形や未調査マークに置き換えず地形を表示するならtrue
- */
-bool is_terrain_visible_on_map(const MapVisibilityContext &context, const Grid &grid, const TerrainType &terrain, const Pos2D &pos)
-{
-    const auto is_blind = context.is_blind;
-    const auto has_nocto = context.has_nocto;
-    const auto is_darkened = !context.is_wild_mode && !has_nocto && grid.is_darkened();
-    if (terrain.flags.has(TerrainCharacteristics::REMEMBER)) {
-        return grid.is_mark() && is_revealed_wall(context.floor, grid, terrain, pos) && !(is_darkened && !is_blind && terrain.flags.has_all_of({ TerrainCharacteristics::LOS, TerrainCharacteristics::PROJECTION }));
-    }
-
-    const auto is_visible = any_bits(grid.info, CAVE_MARK | CAVE_LITE | CAVE_MNLT);
-    const auto is_glowing = match_bits(grid.info, CAVE_GLOW | CAVE_MNDK, CAVE_GLOW);
-    return !is_blind && !is_darkened && (is_visible || (grid.is_view() && (is_glowing || has_nocto)));
-}
-
-/*!
  * @brief 表示すると判定済みの地形を、どの照明状態の記号で描くかを決める
  * @param context マスによらない判定の材料
  * @param grid 判定するグリッド
@@ -230,13 +208,23 @@ MapVisibilityContext::MapVisibilityContext(const PlayerType &player)
 /*!
  * @brief 通常の地図描画で地形自体を表示するか判定する (色や重ね描きの前)
  * @param context マスによらない判定の材料
+ * @param grid 判定するグリッド (pos のグリッド)
+ * @param terrain グリッドの地形 (Grid::get_terrain(TerrainKind::MIMIC))
  * @param pos 階の中の座標
  * @return 不明地形や未調査マークに置き換えず地形を表示するならtrue
  */
-bool is_map_terrain_visible(const MapVisibilityContext &context, const Pos2D &pos)
+bool is_map_terrain_visible(const MapVisibilityContext &context, const Grid &grid, const TerrainType &terrain, const Pos2D &pos)
 {
-    const auto &grid = context.floor.get_grid(pos);
-    return is_terrain_visible_on_map(context, grid, grid.get_terrain(TerrainKind::MIMIC), pos);
+    const auto is_blind = context.is_blind;
+    const auto has_nocto = context.has_nocto;
+    const auto is_darkened = !context.is_wild_mode && !has_nocto && grid.is_darkened();
+    if (terrain.flags.has(TerrainCharacteristics::REMEMBER)) {
+        return grid.is_mark() && is_revealed_wall(context.floor, grid, terrain, pos) && !(is_darkened && !is_blind && terrain.flags.has_all_of({ TerrainCharacteristics::LOS, TerrainCharacteristics::PROJECTION }));
+    }
+
+    const auto is_visible = any_bits(grid.info, CAVE_MARK | CAVE_LITE | CAVE_MNLT);
+    const auto is_glowing = match_bits(grid.info, CAVE_GLOW | CAVE_MNDK, CAVE_GLOW);
+    return !is_blind && !is_darkened && (is_visible || (grid.is_view() && (is_glowing || has_nocto)));
 }
 
 /*!
@@ -248,22 +236,25 @@ bool is_map_terrain_visible(const MapVisibilityContext &context, const Pos2D &po
  */
 bool is_map_terrain_visible(const PlayerType &player, const Pos2D &pos)
 {
-    return is_map_terrain_visible(MapVisibilityContext(player), pos);
+    const auto &grid = player.current_floor_ptr->get_grid(pos);
+    return is_map_terrain_visible(MapVisibilityContext(player), grid, grid.get_terrain(TerrainKind::MIMIC), pos);
 }
 
 /*!
- * @brief 通常の地図描画で地形をどの照明状態の記号で描くかを返す
+ * @brief 地形を表示すると判定済みのマスについて、通常の地図描画でどの照明状態の記号で描くかを返す
  * @param context マスによらない判定の材料
+ * @param grid 判定するグリッド (pos のグリッド)
+ * @param terrain グリッドの地形 (Grid::get_terrain(TerrainKind::MIMIC))
  * @param pos 階の中の座標
  * @param monochrome 通常マップの最終描画で色を上書きする場合の色
- * @return 地形記号の照明状態 (F_LIT_STANDARD / F_LIT_LITE / F_LIT_DARK)。地形を表示しない座標は F_LIT_STANDARD
- * @details 同じ色と文字を描く照明状態は最小の添字に統合し、表示で区別できない内部状態を公開しない。
+ * @return 地形記号の照明状態 (F_LIT_STANDARD / F_LIT_LITE / F_LIT_DARK)
+ * @details is_map_terrain_visible() が真のマスに使う。表示するかを判定し直さないので、表示しないマスに使うと
+ * decide_map_terrain_lighting() と結果が食い違う。
+ * 同じ色と文字を描く照明状態は最小の添字に統合し、表示で区別できない内部状態を公開しない。
  */
-int decide_map_terrain_lighting(const MapVisibilityContext &context, const Pos2D &pos, tl::optional<uint8_t> monochrome)
+int decide_visible_map_terrain_lighting(const MapVisibilityContext &context, const Grid &grid, const TerrainType &terrain, const Pos2D &pos, tl::optional<uint8_t> monochrome)
 {
-    const auto &grid = context.floor.get_grid(pos);
-    const auto &terrain = grid.get_terrain(TerrainKind::MIMIC);
-    if (!is_terrain_visible_on_map(context, grid, terrain, pos) || monochrome == TERM_DARK) {
+    if (monochrome == TERM_DARK) {
         return F_LIT_STANDARD;
     }
 
@@ -281,6 +272,25 @@ int decide_map_terrain_lighting(const MapVisibilityContext &context, const Pos2D
     }
 
     return lighting;
+}
+
+/*!
+ * @brief 通常の地図描画で地形をどの照明状態の記号で描くかを返す
+ * @param context マスによらない判定の材料
+ * @param pos 階の中の座標
+ * @param monochrome 通常マップの最終描画で色を上書きする場合の色
+ * @return 地形記号の照明状態 (F_LIT_STANDARD / F_LIT_LITE / F_LIT_DARK)。地形を表示しない座標は F_LIT_STANDARD
+ * @details 同じ色と文字を描く照明状態は最小の添字に統合し、表示で区別できない内部状態を公開しない。
+ */
+int decide_map_terrain_lighting(const MapVisibilityContext &context, const Pos2D &pos, tl::optional<uint8_t> monochrome)
+{
+    const auto &grid = context.floor.get_grid(pos);
+    const auto &terrain = grid.get_terrain(TerrainKind::MIMIC);
+    if (!is_map_terrain_visible(context, grid, terrain, pos)) {
+        return F_LIT_STANDARD;
+    }
+
+    return decide_visible_map_terrain_lighting(context, grid, terrain, pos, monochrome);
 }
 
 /*!
@@ -310,7 +320,7 @@ static DisplaySymbolPair map_info_impl(PlayerType *player_ptr, const MapVisibili
     const auto &terrains = TerrainList::get_instance();
     const auto tag_unsafe = (view_unsafe_grids && (grid.info & CAVE_UNSAFE)) ? TerrainTag::UNDETECTED : TerrainTag::NONE;
     const auto &terrain_mimic = grid.get_terrain(TerrainKind::MIMIC);
-    const auto is_visible = is_terrain_visible_on_map(context, grid, terrain_mimic, pos);
+    const auto is_visible = is_map_terrain_visible(context, grid, terrain_mimic, pos);
     const auto &terrain_shown = is_visible ? terrain_mimic : terrains.get_terrain(tag_unsafe);
     const auto lighting = is_visible ? decide_visible_terrain_lighting(context, grid, terrain_mimic, pos) : F_LIT_STANDARD;
     auto symbol_config = terrain_shown.symbol_configs.at(lighting);
