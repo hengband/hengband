@@ -85,6 +85,11 @@ static void mark_tile_block(const TermTileBlock &block)
 
 static bool clear_zoom_tile_at(int x, int y)
 {
+    // 拡大タイルを描いたことの無い端末には、拡大タイルの範囲のセルは無い
+    if (!game_term->has_drawn_zoom_tiles) {
+        return false;
+    }
+
     // 拡大タイルの範囲のセルは、左上 (タイル) も続きのセル (0xf0) も属性の最上位ビットが立っている。
     // 立っていないセル (文字のセル) は拡大タイルに含まれないので、範囲を求めずに抜ける
     auto &screen = *game_term->scr;
@@ -423,6 +428,10 @@ bool term_queue_scaled_bigchar(int x, int y, const DisplaySymbolPair &symbols, i
         return false;
     }
     const auto graphic = (symbols.symbol_foreground.color & 0x80) && (symbols.symbol_foreground.character & 0x80);
+    if (graphic) {
+        game_term->has_drawn_zoom_tiles = true;
+    }
+
     auto changed = false;
     for (auto dy = 0; dy < 2; ++dy) {
         for (auto dx = 0; dx < 4; ++dx) {
