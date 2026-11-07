@@ -537,10 +537,17 @@ struct GridSignatureHash {
     }
 };
 
-GridSignature make_grid_signature(PlayerType *player_ptr, const Pos2D &pos, const Grid &source_grid)
+/*!
+ * @brief grid_map の palette の 1 要素になる、マスの見た目の組を作る
+ * @param player プレイヤー情報
+ * @param pos マスの座標
+ * @param terrain マスの地形 (Grid::get_terrain(TerrainKind::MIMIC))
+ * @param monochrome get_monochrome_display_color() の値 (マスによらないので呼び出し側で 1 回だけ求める)
+ * @return 地形 ID・照明記号番号・地形のフラグのビット列・予約値の組
+ */
+GridSignature make_grid_signature(const PlayerType &player, const Pos2D &pos, const TerrainType &terrain, tl::optional<uint8_t> monochrome)
 {
     // Wire bit positions are append-only; keep tools/bot/README.md in sync.
-    const auto &terrain = source_grid.get_terrain(TerrainKind::MIMIC);
     const auto has_terrain = [&terrain](TerrainCharacteristics flag) { return terrain.flags.has(flag); };
     constexpr std::array<TerrainCharacteristics, 18> terrain_flags{ {
         TerrainCharacteristics::BLDG,
@@ -565,13 +572,23 @@ GridSignature make_grid_signature(PlayerType *player_ptr, const Pos2D &pos, cons
     // Protocol 3 exposes only distinguishable lighting symbols. Variants that
     // draw the same configured colour and character share a canonical index,
     // so the selection cannot reveal otherwise invisible CAVE_* state.
-    const auto flag_bits = static_cast<std::int64_t>(decide_map_terrain_lighting(*player_ptr, pos, get_monochrome_display_color(player_ptr)));
+    const auto flag_bits = static_cast<std::int64_t>(decide_map_terrain_lighting(player, pos, monochrome));
     auto terrain_bits = std::int64_t{ 0 };
     for (std::size_t i = 0; i < terrain_flags.size(); ++i) {
         terrain_bits |= static_cast<std::int64_t>(has_terrain(terrain_flags[i])) << i;
     }
-    return { { source_grid.get_terrain_id(TerrainKind::MIMIC), flag_bits, terrain_bits, 1 } };
+    return { { terrain.idx, flag_bits, terrain_bits, 1 } };
 }
+
+/*!
+ * @brief grid_map の runs の 1 要素 (同じ行で隣り合い、同じパレットのマスの並び)
+ */
+struct GridMapRun {
+    int y;
+    int x;
+    int length;
+    std::size_t palette_index;
+};
 
 nlohmann::json make_unsafe_rows_json(const FloorType &floor)
 {
@@ -602,18 +619,18 @@ nlohmann::json make_grid_map_json(PlayerType *player_ptr)
     const auto &player = *player_ptr;
     const auto &floor = *player.current_floor_ptr;
     auto palette = nlohmann::json::array();
-    auto runs = nlohmann::json::array();
+    // 並びは JSON の値を通さずに数え、最後にまとめて JSON にする
+    std::vector<GridMapRun> runs;
     auto cells = nlohmann::json::array();
     auto found_items = nlohmann::json::array();
     auto found_item_names = nlohmann::json::array();
     auto found_item_ids = nlohmann::json::array();
     auto unsafe_rows = make_unsafe_rows_json(floor);
     std::unordered_map<GridSignature, std::size_t, GridSignatureHash> palette_indices;
+    // 直前に見えたマスのパレットの要素 (unordered_map の要素への参照は再ハッシュでも無効にならない)
+    const std::pair<const GridSignature, std::size_t> *previous_palette = nullptr;
 
-    auto previous_y = -1;
-    auto previous_x = -2;
-    std::size_t previous_palette_index = 0;
-    auto has_previous_run = false;
+    const auto monochrome = get_monochrome_display_color(player_ptr);
     const auto is_hallucinated = player.effects()->hallucination().is_active();
     // Emit the player's entire memorised map (marked tiles) plus the current
     // view — not just a small window. The town is fully known from the start
@@ -624,12 +641,14 @@ nlohmann::json make_grid_map_json(PlayerType *player_ptr)
     for (const auto &pos : floor.get_area()) {
         const auto &source_grid = floor.get_grid(pos);
         const auto is_known = is_map_terrain_visible(player, pos);
+        // 空の nlohmann::json::array() も確保を伴うので、品の無いマス (大半のマス) で
+        // 確保しない std::vector に集め、行や cell を作るときに JSON にする
         auto found_item_count = 0;
-        auto found_item_tvals = nlohmann::json::array();
-        auto found_item_name_list = nlohmann::json::array();
-        auto found_item_id_list = nlohmann::json::array();
+        std::vector<int> found_item_tvals;
+        std::vector<nlohmann::json> found_item_name_list;
+        std::vector<nlohmann::json> found_item_id_list;
         auto visible_object_count = 0;
-        auto visible_object_tvals = nlohmann::json::array();
+        std::vector<int> visible_object_tvals;
         for (const auto o_idx : source_grid.o_idx_list) {
             const auto &item = *floor.o_list[o_idx];
             if (!item.is_valid() || item.marked.has_not(OmType::FOUND)) {
@@ -658,8 +677,8 @@ nlohmann::json make_grid_map_json(PlayerType *player_ptr)
         }
         if (found_item_count != 0) {
             auto found_item_row = nlohmann::json::array({ pos.y, pos.x, found_item_count });
-            for (auto &tval : found_item_tvals) {
-                found_item_row.push_back(std::move(tval));
+            for (const auto tval : found_item_tvals) {
+                found_item_row.push_back(tval);
             }
             found_items.push_back(std::move(found_item_row));
             auto found_item_name_row = nlohmann::json::array({ pos.y, pos.x });
@@ -680,23 +699,25 @@ nlohmann::json make_grid_map_json(PlayerType *player_ptr)
 
         const auto &terrain = source_grid.get_terrain(TerrainKind::MIMIC);
         const auto has_terrain = [&terrain](TerrainCharacteristics flag) { return terrain.flags.has(flag); };
-        const auto signature = make_grid_signature(player_ptr, pos, source_grid);
-        const auto next_palette_index = palette_indices.size();
-        const auto [palette_it, inserted] = palette_indices.emplace(signature, next_palette_index);
-        if (inserted) {
-            palette.push_back(signature);
+        const auto signature = make_grid_signature(player, pos, terrain, monochrome);
+        // 隣り合うマスは同じ組のことが多いので、直前に見えたマスと同じならハッシュ表を引かない
+        if ((previous_palette == nullptr) || (previous_palette->first != signature)) {
+            const auto next_palette_index = palette_indices.size();
+            const auto [palette_it, inserted] = palette_indices.try_emplace(signature, next_palette_index);
+            if (inserted) {
+                palette.push_back(signature);
+            }
+            previous_palette = &*palette_it;
         }
-        const auto palette_index = palette_it->second;
+        const auto palette_index = previous_palette->second;
 
-        if (has_previous_run && pos.y == previous_y && pos.x == previous_x + 1 && palette_index == previous_palette_index) {
-            runs.back()[2] = runs.back()[2].get<int>() + 1;
+        // 同じ行で直前の並びのすぐ右にあり、同じパレットならその並びを伸ばす
+        auto *last_run = runs.empty() ? nullptr : &runs.back();
+        if ((last_run != nullptr) && (pos.y == last_run->y) && (pos.x == last_run->x + last_run->length) && (palette_index == last_run->palette_index)) {
+            ++last_run->length;
         } else {
             runs.push_back({ pos.y, pos.x, 1, palette_index });
-            has_previous_run = true;
         }
-        previous_y = pos.y;
-        previous_x = pos.x;
-        previous_palette_index = palette_index;
 
         short visible_monster_index = 0;
         if (source_grid.is_view() && source_grid.has_monster()) {
@@ -705,13 +726,15 @@ nlohmann::json make_grid_map_json(PlayerType *player_ptr)
                 visible_monster_index = source_grid.m_idx;
             }
         }
-        auto cell = nlohmann::json{ { "y", pos.y }, { "x", pos.x } };
+        // 追加の情報を足したときだけオブジェクトになり (null のままなら確保しない)、そのときだけ cells に載せる。
+        // オブジェクトのキーは名前の順に並ぶので、y と x を後から足しても出力は変わらない
+        nlohmann::json cell;
         if (visible_monster_index != 0) {
             cell["m"] = visible_monster_index;
         }
         if (visible_object_count != 0) {
             cell["o"] = visible_object_count;
-            cell["t"] = std::move(visible_object_tvals);
+            cell["t"] = visible_object_tvals;
         }
         // Sparse terrain metadata is kept in the same sidecar. These short keys
         // preserve the old record exactly without polluting the common palette.
@@ -728,16 +751,31 @@ nlohmann::json make_grid_map_json(PlayerType *player_ptr)
             cell["b"] = enum2i(terrain.building_type);
             cell["p"] = source_grid.special;
         }
-        if (cell.size() > 2) {
+        if (!cell.is_null()) {
+            cell["y"] = pos.y;
+            cell["x"] = pos.x;
             cells.push_back(std::move(cell));
         }
+    }
+
+    // nlohmann::json::array({ ... }) で作ると、初期化子リスト (json_ref) の要素を 1 つずつ複製するので、
+    // 要素を直に積む (callgrind で、地図を 1 回作る命令数の 4〜5% にあたる)
+    nlohmann::json::array_t runs_json;
+    runs_json.reserve(runs.size());
+    for (const auto &run : runs) {
+        auto &row = runs_json.emplace_back(nlohmann::json::array()).get_ref<nlohmann::json::array_t &>();
+        row.reserve(4);
+        row.emplace_back(run.y);
+        row.emplace_back(run.x);
+        row.emplace_back(run.length);
+        row.emplace_back(run.palette_index);
     }
 
     return {
         { "w", floor.width },
         { "h", floor.height },
         { "palette", std::move(palette) },
-        { "runs", std::move(runs) },
+        { "runs", std::move(runs_json) },
         { "cells", std::move(cells) },
         { "found_items", std::move(found_items) },
         { "found_item_names", std::move(found_item_names) },
