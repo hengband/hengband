@@ -61,6 +61,87 @@ TEST_CASE("find_bot_knowledge_category returns nullopt for keys without a list")
     CHECK_FALSE(find_bot_knowledge_category('A').has_value());
 }
 
+TEST_CASE("find_bot_snapshot_field maps the snapshot keys to fields")
+{
+    CHECK(find_bot_snapshot_field("turn") == BotSnapshotField::TURN);
+    CHECK(find_bot_snapshot_field("clock") == BotSnapshotField::CLOCK);
+    CHECK(find_bot_snapshot_field("player") == BotSnapshotField::PLAYER);
+    CHECK(find_bot_snapshot_field("floor") == BotSnapshotField::FLOOR);
+    CHECK(find_bot_snapshot_field("progress") == BotSnapshotField::PROGRESS);
+    CHECK(find_bot_snapshot_field("health_bar") == BotSnapshotField::HEALTH_BAR);
+    CHECK(find_bot_snapshot_field("riding_health_bar") == BotSnapshotField::RIDING_HEALTH_BAR);
+    CHECK(find_bot_snapshot_field("visible_monsters") == BotSnapshotField::VISIBLE_MONSTERS);
+    CHECK(find_bot_snapshot_field("detected_monsters") == BotSnapshotField::DETECTED_MONSTERS);
+    CHECK(find_bot_snapshot_field("messages") == BotSnapshotField::MESSAGES);
+    CHECK(find_bot_snapshot_field("inventory") == BotSnapshotField::INVENTORY);
+    CHECK(find_bot_snapshot_field("equipment") == BotSnapshotField::EQUIPMENT);
+}
+
+TEST_CASE("find_bot_snapshot_field rejects keys that are always or separately included")
+{
+    // 常に載せる項目と、map で決める grid_map は選べない
+    CHECK_FALSE(find_bot_snapshot_field("type").has_value());
+    CHECK_FALSE(find_bot_snapshot_field("protocol_version").has_value());
+    CHECK_FALSE(find_bot_snapshot_field("input_context").has_value());
+    CHECK_FALSE(find_bot_snapshot_field("grid_map").has_value());
+    CHECK_FALSE(find_bot_snapshot_field("store").has_value());
+    CHECK_FALSE(find_bot_snapshot_field("Player").has_value());
+    CHECK_FALSE(find_bot_snapshot_field("").has_value());
+}
+
+TEST_CASE("make_bot_snapshot_field_names_json lists every field once")
+{
+    const auto names = make_bot_snapshot_field_names_json();
+    REQUIRE(names.is_array());
+    CHECK(names.size() == static_cast<size_t>(enum2i(BotSnapshotField::MAX)));
+    BotSnapshotFields found;
+    for (const auto &name : names) {
+        const auto field = find_bot_snapshot_field(name.get<std::string>());
+        REQUIRE(field.has_value());
+        CHECK_FALSE(found.has(*field));
+        found.set(*field);
+    }
+
+    CHECK(found == make_all_bot_snapshot_fields());
+}
+
+TEST_CASE("parse_bot_snapshot_fields selects all fields for null")
+{
+    const auto fields = parse_bot_snapshot_fields(nullptr);
+    REQUIRE(fields.has_value());
+    CHECK(*fields == make_all_bot_snapshot_fields());
+}
+
+TEST_CASE("parse_bot_snapshot_fields selects only the listed fields")
+{
+    const auto fields = parse_bot_snapshot_fields(nlohmann::json{ "player", "floor", "player" });
+    REQUIRE(fields.has_value());
+    CHECK(*fields == BotSnapshotFields({ BotSnapshotField::PLAYER, BotSnapshotField::FLOOR }));
+
+    const auto empty = parse_bot_snapshot_fields(nlohmann::json::array());
+    REQUIRE(empty.has_value());
+    CHECK(empty->none());
+}
+
+TEST_CASE("parse_bot_snapshot_fields rejects malformed or unknown fields")
+{
+    const auto not_array = parse_bot_snapshot_fields("player");
+    REQUIRE_FALSE(not_array.has_value());
+    CHECK(not_array.error() == R"("fields" must be an array of strings)");
+
+    const auto not_string = parse_bot_snapshot_fields(nlohmann::json{ "player", 1 });
+    REQUIRE_FALSE(not_string.has_value());
+    CHECK(not_string.error() == R"("fields"[1] must be a string)");
+
+    const auto unknown = parse_bot_snapshot_fields(nlohmann::json{ "player", "grid_map" });
+    REQUIRE_FALSE(unknown.has_value());
+    CHECK(unknown.error() == R"(unknown field "grid_map" in "fields")");
+
+    const auto empty_name = parse_bot_snapshot_fields(nlohmann::json{ "player", "" });
+    REQUIRE_FALSE(empty_name.has_value());
+    CHECK(empty_name.error() == R"(unknown field "" in "fields")");
+}
+
 namespace {
 constexpr short POTION_A_ID = 1;
 constexpr short POTION_B_ID = 2;

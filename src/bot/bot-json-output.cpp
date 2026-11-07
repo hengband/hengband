@@ -50,6 +50,7 @@
 #include "store/store-util.h"
 #include "store/store.h"
 #include "sv-definition/sv-bow-types.h"
+#include "system/angband-exceptions.h"
 #include "system/artifact/artifact-definition.h"
 #include "system/artifact/artifact-list.h"
 #include "system/artifact/artifact-record.h"
@@ -90,6 +91,7 @@
 #include "timed-effect/timed-effects.h"
 #include "tracking/health-bar-tracker.h"
 #include "util/enum-converter.h"
+#include "util/enum-range.h"
 #include "view/display-characteristic.h"
 #include "view/display-map.h"
 #include "view/display-messages.h"
@@ -111,7 +113,9 @@
 #include <nlohmann/json.hpp>
 #include <range/v3/algorithm.hpp>
 #include <stdexcept>
+#include <string>
 #include <string_view>
+#include <tl/expected.hpp>
 #include <unordered_map>
 #include <utility>
 #include <vector>
@@ -1765,37 +1769,111 @@ nlohmann::json make_snapshot_progress_json(PlayerType *player_ptr)
 }
 
 /*!
- * @brief スナップショット本体を組み立てる
- * @param include_map grid_map を含めるか
- * @param messages_source messages に載せるメッセージの選び方
- * @details grid_map はフロア全域を走査して作る処理で、
- * 出力量は既知の地形に依存する。地図を出さない呼び出し
- * （店内スナップショット）では作ってから消すのではなく最初から作らない。
+ * @brief スナップショットの最上位の項目の名前
  */
-nlohmann::json make_snapshot(PlayerType *player_ptr, bool include_map, BotSnapshotMessages messages_source)
+constexpr std::array<std::string_view, enum2i(BotSnapshotField::MAX)> SNAPSHOT_FIELD_NAMES{ {
+    "turn",
+    "clock",
+    "player",
+    "floor",
+    "progress",
+    "health_bar",
+    "riding_health_bar",
+    "visible_monsters",
+    "detected_monsters",
+    "messages",
+    "inventory",
+    "equipment",
+} };
+static_assert(
+    [] {
+        for (auto i = 0U; i < SNAPSHOT_FIELD_NAMES.size(); ++i) {
+            if (SNAPSHOT_FIELD_NAMES[i].empty()) {
+                return false;
+            }
+
+            for (auto j = i + 1; j < SNAPSHOT_FIELD_NAMES.size(); ++j) {
+                if (SNAPSHOT_FIELD_NAMES[i] == SNAPSHOT_FIELD_NAMES[j]) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }(),
+    "every snapshot field must have a unique name");
+
+/*!
+ * @brief スナップショットの最上位の項目を 1 つ作る
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param field 作る項目
+ * @param messages_source messages に載せるメッセージの選び方
+ * @return 項目の値
+ * @details 項目を足したときに作り忘れないよう、default を置かずにすべての項目を挙げる
+ * (挙げ忘れるとコンパイラが -Wswitch で警告する)。
+ */
+nlohmann::json make_snapshot_field_json(PlayerType *player_ptr, BotSnapshotField field, BotSnapshotMessages messages_source)
 {
-    const auto &player = *player_ptr;
-    const auto &world = AngbandWorld::get_instance();
-    auto snapshot = nlohmann::json{
-        { "type", "player_turn" },
-        { "protocol_version", BOT_JSON_PROTOCOL_VERSION },
+    switch (field) {
+    case BotSnapshotField::TURN:
         // Documented exception to the fair-play rule (user decision 2026-09-22,
         // "例外として残す"): the exact game turn is not printed anywhere, but the
         // bot uses it only for decision boundaries and log alignment. The
         // human-visible day and clock are in "clock".
-        { "turn", world.game_turn },
-        { "clock", make_clock_json() },
-        { "player", make_snapshot_player_json(player_ptr) },
-        { "floor", make_snapshot_floor_json(player_ptr) },
-        { "progress", make_snapshot_progress_json(player_ptr) },
-        { "health_bar", make_health_bar_json(player_ptr, false) },
-        { "riding_health_bar", make_health_bar_json(player_ptr, true) },
-        { "visible_monsters", make_visible_monsters_json(player) },
-        { "detected_monsters", make_detected_monsters_json(player) },
-        { "messages", (messages_source == BotSnapshotMessages::HISTORY) ? make_message_history_json(BOT_JSON_MAX_MESSAGES) : make_recent_messages_json() },
-        { "inventory", make_inventory_json(player_ptr) },
-        { "equipment", make_equipment_json(player_ptr) },
+        return AngbandWorld::get_instance().game_turn;
+    case BotSnapshotField::CLOCK:
+        return make_clock_json();
+    case BotSnapshotField::PLAYER:
+        return make_snapshot_player_json(player_ptr);
+    case BotSnapshotField::FLOOR:
+        return make_snapshot_floor_json(player_ptr);
+    case BotSnapshotField::PROGRESS:
+        return make_snapshot_progress_json(player_ptr);
+    case BotSnapshotField::HEALTH_BAR:
+        return make_health_bar_json(player_ptr, false);
+    case BotSnapshotField::RIDING_HEALTH_BAR:
+        return make_health_bar_json(player_ptr, true);
+    case BotSnapshotField::VISIBLE_MONSTERS:
+        return make_visible_monsters_json(*player_ptr);
+    case BotSnapshotField::DETECTED_MONSTERS:
+        return make_detected_monsters_json(*player_ptr);
+    case BotSnapshotField::MESSAGES:
+        return (messages_source == BotSnapshotMessages::HISTORY) ? make_message_history_json(BOT_JSON_MAX_MESSAGES) : make_recent_messages_json();
+    case BotSnapshotField::INVENTORY:
+        return make_inventory_json(player_ptr);
+    case BotSnapshotField::EQUIPMENT:
+        return make_equipment_json(player_ptr);
+    case BotSnapshotField::MAX:
+        break;
+    }
+
+    THROW_EXCEPTION(std::logic_error, "Invalid snapshot field was specified!");
+}
+
+/*!
+ * @brief スナップショット本体を組み立てる
+ * @param include_map grid_map を含めるか
+ * @param messages_source messages に載せるメッセージの選び方
+ * @param fields 載せる最上位の項目 (type と protocol_version は常に載せる)
+ * @details grid_map はフロア全域を走査して作る処理で、
+ * 出力量は既知の地形に依存する。地図を出さない呼び出し
+ * （店内スナップショット）では作ってから消すのではなく最初から作らない。
+ * fields に無い項目も、作ってから消すのではなく最初から作らない。
+ */
+nlohmann::json make_snapshot(PlayerType *player_ptr, bool include_map, BotSnapshotMessages messages_source, const BotSnapshotFields &fields)
+{
+    // JSONL の messages は前回からの差分で、作るたびに差分の位置を進める。作らずに飛ばすと、次に作ったときに古いメッセージを載せてしまう
+    assert((messages_source != BotSnapshotMessages::RECENT_DIFF) || fields.has(BotSnapshotField::MESSAGES));
+    auto snapshot = nlohmann::json{
+        { "type", "player_turn" },
+        { "protocol_version", BOT_JSON_PROTOCOL_VERSION },
     };
+    for (const auto field : EnumRange(BotSnapshotField::TURN, BotSnapshotField::MAX)) {
+        if (fields.has(field)) {
+            snapshot.emplace(std::string(SNAPSHOT_FIELD_NAMES[enum2i(field)]), make_snapshot_field_json(player_ptr, field, messages_source));
+        }
+    }
+
     if (include_map) {
         snapshot["grid_map"] = make_grid_map_json(player_ptr);
     }
@@ -2747,12 +2825,13 @@ const BotScreen *current_bot_screen = nullptr; //!< 開いている画面 (BotSc
  * @param screen 画面の情報を足すときはその画面、ふだんのスナップショットなら nullptr
  * @param include_map grid_mapを含めるか (画面が地図を省くときは含めない)
  * @param messages_source messagesに載せるメッセージ
+ * @param fields 載せる最上位の項目 (画面の情報は fields によらず載せる)
  * @return スナップショットのJSONオブジェクト
  */
-nlohmann::json make_screen_snapshot(PlayerType *player_ptr, const BotScreen *screen, bool include_map, BotSnapshotMessages messages_source)
+nlohmann::json make_screen_snapshot(PlayerType *player_ptr, const BotScreen *screen, bool include_map, BotSnapshotMessages messages_source, const BotSnapshotFields &fields)
 {
     const auto should_include_map = include_map && ((screen == nullptr) || screen->include_map);
-    auto snapshot = make_snapshot(player_ptr, should_include_map, messages_source);
+    auto snapshot = make_snapshot(player_ptr, should_include_map, messages_source, fields);
     if (screen != nullptr) {
         screen->add_to_snapshot(snapshot, player_ptr);
     }
@@ -2762,9 +2841,78 @@ nlohmann::json make_screen_snapshot(PlayerType *player_ptr, const BotScreen *scr
 }
 
 /*!
+ * @brief スナップショットの最上位の項目をすべて選んだものを返す
+ * @return すべての項目
+ */
+BotSnapshotFields make_all_bot_snapshot_fields()
+{
+    return BotSnapshotFields(EnumRange(BotSnapshotField::TURN, BotSnapshotField::MAX));
+}
+
+/*!
+ * @brief スナップショットの最上位の項目を名前から探す
+ * @param name 項目の名前 (スナップショットのキー)
+ * @return 項目 (選べる項目の名前でなければ tl::nullopt)
+ */
+tl::optional<BotSnapshotField> find_bot_snapshot_field(std::string_view name)
+{
+    const auto it = ranges::find(SNAPSHOT_FIELD_NAMES, name);
+    if (it == ranges::end(SNAPSHOT_FIELD_NAMES)) {
+        return tl::nullopt;
+    }
+
+    return i2enum<BotSnapshotField>(ranges::distance(ranges::begin(SNAPSHOT_FIELD_NAMES), it));
+}
+
+/*!
+ * @brief 制御サーバの state の fields から、載せる最上位の項目を読む
+ * @param names fields の値 (null ならすべての項目)
+ * @return 載せる項目。読めなければエラーの内容
+ * @details 打ち間違いに気づけるよう、選べない項目の名前はエラーにする。
+ */
+tl::expected<BotSnapshotFields, std::string> parse_bot_snapshot_fields(const nlohmann::json &names)
+{
+    if (names.is_null()) {
+        return make_all_bot_snapshot_fields();
+    }
+
+    if (!names.is_array()) {
+        return tl::make_unexpected("\"fields\" must be an array of strings");
+    }
+
+    BotSnapshotFields fields;
+    for (auto i = 0U; i < names.size(); ++i) {
+        const auto &name = names[i];
+        if (!name.is_string()) {
+            return tl::make_unexpected("\"fields\"[" + std::to_string(i) + "] must be a string");
+        }
+
+        const auto &name_str = name.get_ref<const std::string &>();
+        const auto field = find_bot_snapshot_field(name_str);
+        if (!field) {
+            return tl::make_unexpected("unknown field \"" + name_str + "\" in \"fields\"");
+        }
+
+        fields.set(*field);
+    }
+
+    return fields;
+}
+
+/*!
+ * @brief 選べるスナップショットの最上位の項目の名前の一覧を返す
+ * @return 名前の配列
+ */
+nlohmann::json make_bot_snapshot_field_names_json()
+{
+    return SNAPSHOT_FIELD_NAMES;
+}
+
+/*!
  * @brief ゲームの内部状態のスナップショットをJSONで生成する
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param include_map grid_mapを含めるか (登録された画面が地図を省くときは含めない)
+ * @param fields 載せる最上位の項目 (登録された画面の情報は fields によらず載せる)
  * @pre player_ptrとplayer_ptr->current_floor_ptrがnullptrでないことを呼び出し側が保証すること
  * @return スナップショットのJSONオブジェクト
  * @details
@@ -2772,9 +2920,9 @@ nlohmann::json make_screen_snapshot(PlayerType *player_ptr, const BotScreen *scr
  * messagesは差分ではなく履歴を載せる。リクエストの度に差分を進めると、
  * --bot-json-outputと併用した際にJSONL側からメッセージが失われるためである。
  */
-nlohmann::json make_bot_json_snapshot(PlayerType *player_ptr, bool include_map)
+nlohmann::json make_bot_json_snapshot(PlayerType *player_ptr, bool include_map, const BotSnapshotFields &fields)
 {
-    return make_screen_snapshot(player_ptr, current_bot_screen, include_map, BotSnapshotMessages::HISTORY);
+    return make_screen_snapshot(player_ptr, current_bot_screen, include_map, BotSnapshotMessages::HISTORY, fields);
 }
 
 /*!
@@ -2931,7 +3079,7 @@ void write_bot_json_snapshot(PlayerType *player_ptr, const BotScreen *screen, Bo
         return;
     }
 
-    const auto snapshot = make_screen_snapshot(player_ptr, screen, true, BotSnapshotMessages::RECENT_DIFF);
+    const auto snapshot = make_screen_snapshot(player_ptr, screen, true, BotSnapshotMessages::RECENT_DIFF, make_all_bot_snapshot_fields());
     write_snapshot(snapshot, elapsed_microseconds(build_started));
 }
 }

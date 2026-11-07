@@ -186,6 +186,7 @@ python3 tools/bot/hbctl.py screen --attrs --json  # 色属性込みの生JSON
 python3 tools/bot/hbctl.py keys 'jjj'      # キーを送り、処理後の画面を表示
 python3 tools/bot/hbctl.py keys '\e' --quiet      # 画面を表示しない
 python3 tools/bot/hbctl.py state           # ゲームの内部状態 (JSON)
+python3 tools/bot/hbctl.py state --no-map --fields player,floor  # 地図なしで、player と floor だけ
 python3 tools/bot/hbctl.py messages 30     # 直近のメッセージ履歴
 python3 tools/bot/hbctl.py resize 120 40   # 端末の大きさを変える (ヘッドレス実行のみ)
 python3 tools/bot/hbctl.py --term 1 resize 60 20  # 副端末の大きさを変える
@@ -211,16 +212,16 @@ python3 tools/bot/hbctl.py quit            # ゲームを終了
 {"id": 2, "ok": false, "error": "the term index is out of range"}
 ```
 
-| op                  | 主なパラメータ                       | 内容                                       |
-| ------------------- | ------------------------------------ | ------------------------------------------ |
-| `info`              | —                                    | プロトコル版・ビルド情報・端末の一覧       |
-| `screen`            | `term` (既定 0), `attrs` (既定 true) | 画面内容                                   |
-| `keys`              | `keys`                               | キー列を注入する。積めたキー数を返す       |
-| `state`             | `map` (既定 true)                    | ゲームの内部状態のスナップショット         |
-| `messages`          | `count` (既定 20)                    | 直近のメッセージ履歴を古い順に返す         |
-| `resize`            | `term` (既定 0), `width`, `height`   | 端末の大きさを変える（ヘッドレス実行のみ） |
-| `verify_subwindows` | —                                    | サブウィンドウの描き直しの漏れを調べる     |
-| `quit`              | —                                    | ゲームを終了する（**セーブしません**）     |
+| op                  | 主なパラメータ                            | 内容                                                                   |
+| ------------------- | ----------------------------------------- | ---------------------------------------------------------------------- |
+| `info`              | —                                         | プロトコル版・ビルド情報・端末の一覧・`state` の `fields` で選べる項目 |
+| `screen`            | `term` (既定 0), `attrs` (既定 true)      | 画面内容                                                               |
+| `keys`              | `keys`                                    | キー列を注入する。積めたキー数を返す                                   |
+| `state`             | `map` (既定 true), `fields` (既定 すべて) | ゲームの内部状態のスナップショット                                     |
+| `messages`          | `count` (既定 20)                         | 直近のメッセージ履歴を古い順に返す                                     |
+| `resize`            | `term` (既定 0), `width`, `height`        | 端末の大きさを変える（ヘッドレス実行のみ）                             |
+| `verify_subwindows` | —                                         | サブウィンドウの描き直しの漏れを調べる                                 |
+| `quit`              | —                                         | ゲームを終了する（**セーブしません**）                                 |
 
 `state` の `result.type` は通常 `player_turn` です。店（我が家・博物館を含む）の画面を開いている間は、
 JSONL の店のスナップショットと同じく `store` になり、`result.store` に在庫などを載せます。
@@ -444,6 +445,28 @@ ESC・`<` で閉じます（リンク先や `%` で重ねて開いたときは�
 
 `state` の `grid_map`（プレイヤーが記憶している地図）はフロア全域を走査します。
 地図が要らない場合は `map` に `false` を指定してください（`hbctl.py state --no-map`）。
+
+### state の項目を選ぶ（fields）
+
+`state` の `fields` に最上位の項目の名前の配列を渡すと、その項目だけを作って返します。
+選ばなかった項目は、作ってから消すのではなく最初から作らないので、応答が軽くなります。
+とくに `inventory`・`equipment`（品の名前の組み立て）と `progress`（クエストの一覧）、`player`（既知の能力の集計）が重い項目です。
+
+```json
+{"op": "state", "map": false, "fields": ["player", "floor", "visible_monsters", "detected_monsters"]}
+```
+
+- 選べる項目は `turn`・`clock`・`player`・`floor`・`progress`・`health_bar`・`riding_health_bar`・
+  `visible_monsters`・`detected_monsters`・`messages`・`inventory`・`equipment` です。
+  項目の中の一部（`player.hp` など）は選べません。
+- `fields` を省いたとき（`null` を含む）は、今までどおりすべての項目を返します。空の配列なら、選べる項目を何も載せません。
+- `type`・`protocol_version`・`input_context` と、店などの画面の情報（`store`・`character` など、`type` で決まる項目）は、
+  `fields` によらず常に載せます。`grid_map` は今までどおり `map` で決めます（`fields` には入れられません）。
+  `fields` だけを付けても地図は省かれないので、地図が要らなければ `map` に `false` も指定してください。
+- 選べない名前（打ち間違いや `grid_map` など）が入っているとエラーになります。
+- `fields` を受け付ける本体は、`info` の `state_fields` に選べる項目の名前の配列を返します。
+  このキーが無い本体は `fields` を受け付けないので（黙って無視し、すべての項目を返します）、送る前に確かめてください。
+  スナップショットのキーは変わらないので、プロトコル版は `4` のままです。
 
 ### 圧縮地図と情報の範囲（版2〜版4）
 
