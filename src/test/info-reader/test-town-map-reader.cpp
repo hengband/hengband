@@ -1,5 +1,5 @@
 #include "artifact/fixed-art-types.h"
-#include "info-reader/general-parser.h"
+#include "info-reader/dungeon-grid.h"
 #include "info-reader/jsonc-document-loader.h"
 #include "info-reader/legend-object-trap-validator.h"
 #include "info-reader/quest-reader.h"

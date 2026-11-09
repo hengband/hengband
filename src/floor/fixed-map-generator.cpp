@@ -4,7 +4,7 @@
 #include "dungeon/quest.h"
 #include "floor/floor-object.h"
 #include "grid/object-placer.h"
-#include "info-reader/general-parser.h"
+#include "info-reader/dungeon-grid.h"
 #include "info-reader/legend-ego-validator.h"
 #include "info-reader/parse-error-types.h"
 #include "info-reader/quest-reader.h"

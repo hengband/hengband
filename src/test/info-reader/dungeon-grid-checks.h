@@ -1,6 +1,6 @@
 #pragma once
 
-#include "info-reader/general-parser.h"
+#include "info-reader/dungeon-grid.h"
 #include <doctest/doctest.h>
 
 namespace test {

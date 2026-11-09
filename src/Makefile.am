@@ -621,12 +621,12 @@ libhengband_a_SOURCES = \
 	info-reader/baseitem-tokens-table.cpp info-reader/baseitem-tokens-table.h \
 	info-reader/definition-hash-data.cpp info-reader/definition-hash-data.h \
 	info-reader/definition-id-checker.cpp info-reader/definition-id-checker.h \
+	info-reader/dungeon-grid.cpp info-reader/dungeon-grid.h \
 	info-reader/dungeon-info-tokens-table.cpp info-reader/dungeon-info-tokens-table.h \
 	info-reader/dungeon-reader.cpp info-reader/dungeon-reader.h \
 	info-reader/ego-reader.cpp info-reader/ego-reader.h \
 	info-reader/wilderness-reader.cpp info-reader/wilderness-reader.h \
 	info-reader/feature-info-tokens-table.cpp info-reader/feature-info-tokens-table.h \
-	info-reader/general-parser.cpp info-reader/general-parser.h \
 	info-reader/info-reader-util.h \
 	info-reader/item-flag-reader.cpp info-reader/item-flag-reader.h \
 	info-reader/item-reader-limits.h \
@@ -1552,6 +1552,7 @@ hengband_test_SOURCES = \
 	test/info-reader/test-artifact-reader.cpp \
 	test/info-reader/test-baseitem-reader.cpp \
 	test/info-reader/test-definition-id-checker.cpp \
+	test/info-reader/test-dungeon-grid.cpp \
 	test/info-reader/test-dungeon-reader.cpp \
 	test/info-reader/test-ego-reader.cpp \
 	test/floor/test-floor-events.cpp \
@@ -1581,7 +1582,6 @@ hengband_test_SOURCES = \
 	test/info-reader/test-spell-reader.cpp \
 	test/info-reader/test-terrain-reader.cpp \
 	test/info-reader/test-town-definition-list-reader.cpp \
-	test/info-reader/test-general-parser.cpp \
 	test/info-reader/test-town-map-condition.cpp \
 	test/info-reader/test-town-map-loader.cpp \
 	test/info-reader/test-town-map-reader.cpp \

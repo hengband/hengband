@@ -12,7 +12,7 @@
 #include "floor/fixed-map-generator.h"
 #include "floor/floor-base-definitions.h"
 #include "game-option/birth-options.h"
-#include "info-reader/general-parser.h"
+#include "info-reader/dungeon-grid.h"
 #include "info-reader/jsonc-document-loader.h"
 #include "info-reader/parse-error-messages.h"
 #include "info-reader/parse-error-types.h"

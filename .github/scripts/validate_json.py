@@ -640,7 +640,7 @@ def validate_quest_semantics(data: dict) -> None:
 
 
 def is_fixed_map_symbol(character: str) -> bool:
-    """固定マップの記号（印字可能なASCIIの1文字）か。general-parser.h の is_fixed_map_symbol と揃える。"""
+    """固定マップの記号（印字可能なASCIIの1文字）か。dungeon-grid.h の is_fixed_map_symbol と揃える。"""
     # C++ は1文字（unsigned char）を受け取る。文字列どうしの比較では "AB" なども範囲に入るため、1文字に限る。
     return len(character) == 1 and " " <= character <= "~"
 

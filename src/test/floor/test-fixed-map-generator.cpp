@@ -1,7 +1,7 @@
 #include "dungeon/quest.h"
 #include "floor/fixed-map-generator.h"
 #include "game-option/birth-options.h"
-#include "info-reader/general-parser.h"
+#include "info-reader/dungeon-grid.h"
 #include "info-reader/parse-error-types.h"
 #include "info-reader/quest-reader.h"
 #include "info-reader/town-map-loader.h"
