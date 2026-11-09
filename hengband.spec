@@ -1,4 +1,4 @@
-%define version 3.0.2.6
+%define version 3.0.2.7
 %define release 1
 
 Summary: hengband %{version}
@@ -150,10 +150,16 @@ exit 0
 %{_datadir}/games/%{name}/lib/help/*.txt
 %{_datadir}/games/%{name}/lib/pref/*.prf
 %{_datadir}/games/%{name}/lib/xtra/graf/8x8.bmp
+%{_datadir}/games/%{name}/lib/xtra/graf/original32.png
+%{_datadir}/games/%{name}/lib/xtra/graf/original32.LICENSE.txt
+%{_datadir}/games/%{name}/lib/xtra/graf/original32.README.txt
 %doc readme.md readme_angband readme-eng.md autopick.txt autopick_eng.txt
 %license lib/help/jlicense.txt THIRD-PARTY-NOTICES.txt
 
 %changelog
+* Mon Nov 9 2026 whitehara <white@vx-xv.com>
+- hengband RPM 3.0.2.7(Beta)
+
 * Tue Oct 27 2026 whitehara <white@vx-xv.com>
 - hengband RPM 3.0.2.6(Beta)
 
