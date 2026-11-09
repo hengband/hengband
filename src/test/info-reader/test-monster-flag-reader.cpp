@@ -107,7 +107,7 @@ TEST_CASE("grab_one_monster_basic_flag sets a flag found in a basic flag table")
 
 TEST_CASE("grab_one_monster_basic_flag sets every name only in the group of its table")
 {
-    check_every_name_sets_only_its_group(r_info_flagsr, &BasicFlagStore::resistance_flags);
+    check_every_name_sets_only_its_group(r_info_resistance_flags, &BasicFlagStore::resistance_flags);
     check_every_name_sets_only_its_group(r_info_aura_flags, &BasicFlagStore::aura_flags);
     check_every_name_sets_only_its_group(r_info_behavior_flags, &BasicFlagStore::behavior_flags);
     check_every_name_sets_only_its_group(r_info_visual_flags, &BasicFlagStore::visual_flags);
@@ -126,7 +126,7 @@ TEST_CASE("monster basic flag tables and the sex table share no name")
 {
     // 名前が重ならないので、表を探す順序 (ダンジョンの出現条件では性別を先に探す) は結果に影響しない
     std::multiset<std::string_view> names;
-    insert_names(names, r_info_flagsr);
+    insert_names(names, r_info_resistance_flags);
     insert_names(names, r_info_aura_flags);
     insert_names(names, r_info_behavior_flags);
     insert_names(names, r_info_visual_flags);

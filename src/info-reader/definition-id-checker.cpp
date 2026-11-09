@@ -16,7 +16,7 @@ tl::expected<int, ParseErrorType> report_id_check_result(const tl::expected<int,
 {
     if (!result) {
         msg_print(result.error().reason);
-        return tl::unexpected(result.error().code);
+        return tl::make_unexpected(result.error().code);
     }
     return *result;
 }
@@ -43,7 +43,7 @@ tl::expected<int, IdCheckFailure> DefinitionIdChecker::read(const nlohmann::json
         } else {
             reason = this->range_error_reason(id_json.dump());
         }
-        return tl::unexpected(IdCheckFailure{ result.error(), std::move(reason) });
+        return tl::make_unexpected(IdCheckFailure{ result.error(), std::move(reason) });
     }
     return this->check(id);
 }
@@ -63,7 +63,7 @@ tl::expected<int, IdCheckFailure> DefinitionIdChecker::check(int id)
 {
     this->pending.reset();
     if (id < this->bounds.first || id > this->bounds.second) {
-        return tl::unexpected(IdCheckFailure{ ParseErrorType::INVALID_VALUE,
+        return tl::make_unexpected(IdCheckFailure{ ParseErrorType::INVALID_VALUE,
             this->range_error_reason(std::to_string(id)) });
     }
     std::string reason;
@@ -90,7 +90,7 @@ tl::expected<int, IdCheckFailure> DefinitionIdChecker::check(int id)
         break;
     }
     if (!reason.empty()) {
-        return tl::unexpected(IdCheckFailure{ ParseErrorType::NON_SEQUENTIAL_RECORDS, std::move(reason) });
+        return tl::make_unexpected(IdCheckFailure{ ParseErrorType::NON_SEQUENTIAL_RECORDS, std::move(reason) });
     }
     this->pending = id;
     return id;

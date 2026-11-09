@@ -72,7 +72,7 @@ tl::expected<void, ParseErrorType> TerrainReader::read() const
     auto &terrains = TerrainList::get_instance();
 
     if (const auto result = this->session.ids.check_and_report(id); !result) {
-        return tl::unexpected(result.error());
+        return tl::make_unexpected(result.error());
     }
     if (this->session.keys.contains(key)) {
         msg_print(_("地形タグ '{}' が重複しています。", "Duplicate terrain tag '{}'."), key);
@@ -130,7 +130,7 @@ tl::expected<void, ParseErrorType> TerrainReader::read() const
     }
     if (const auto result = info_read_flag_array(flags_obj, [this, &terrain](const nlohmann::json &flag) {
             const auto token = flag.get<std::string>();
-            return token.empty() || this->grab_one_feat_flag(terrain, token); }); !result) {
+            return token.empty() || this->grab_one_terrain_flag(terrain, token); }); !result) {
         return result;
     }
     if (const auto result = this->set_terrain_door(terrain); !result) {
@@ -173,7 +173,7 @@ tl::expected<void, ParseErrorType> TerrainReader::read() const
 /*!
  * @brief テキストトークンを走査してフラグを一つ得る
  */
-bool TerrainReader::grab_one_feat_flag(TerrainType &terrain, std::string_view what) const
+bool TerrainReader::grab_one_terrain_flag(TerrainType &terrain, std::string_view what) const
 {
     if (info_grab_one_flag(terrain.flags, f_info_flags, what)) {
         return true;
@@ -208,7 +208,7 @@ tl::expected<void, ParseErrorType> TerrainReader::set_terrain_symbol(TerrainType
         if (symbol.error() == ParseErrorType::INVALID_FLAG) {
             msg_print(_("未知の色 '{}'。", "Unknown color '{}'."), color_obj.get<std::string>());
         }
-        return tl::unexpected(symbol.error());
+        return tl::make_unexpected(symbol.error());
     }
 
     terrain.symbol_definitions[F_LIT_STANDARD] = *symbol;
@@ -305,6 +305,7 @@ tl::expected<void, ParseErrorType> TerrainReader::set_terrain_generation(Terrain
     });
 }
 
+namespace {
 /*!
  * @brief 地形の用途別強度をJSON定義から設定する
  * @param power_obj 強度値を表すJSON値
@@ -312,7 +313,7 @@ tl::expected<void, ParseErrorType> TerrainReader::set_terrain_generation(Terrain
  * @param is_required trueなら未定義時にエラーとする
  * @return 成功時は空の値、失敗時は解析エラーコード
  */
-static tl::expected<void, ParseErrorType> set_terrain_power(const nlohmann::json &power_obj, uint8_t &power, bool is_required = false)
+tl::expected<void, ParseErrorType> set_terrain_power(const nlohmann::json &power_obj, uint8_t &power, bool is_required = false)
 {
     if (const auto result = info_set_integer(power_obj, power, is_required, Range(0, 255)); !result) {
         return result;
@@ -329,7 +330,7 @@ static tl::expected<void, ParseErrorType> set_terrain_power(const nlohmann::json
  * @param power 設定先の強度
  * @return 成功時は空の値、失敗時は解析エラーコード
  */
-static tl::expected<void, ParseErrorType> set_powered_terrain_feature(const nlohmann::json &terrain_data, std::string_view key, TerrainCharacteristics flag, TerrainType &terrain, uint8_t &power)
+tl::expected<void, ParseErrorType> set_powered_terrain_feature(const nlohmann::json &terrain_data, std::string_view key, TerrainCharacteristics flag, TerrainType &terrain, uint8_t &power)
 {
     const auto &feature_obj = get_json_value(terrain_data, key);
     if (feature_obj.is_null()) {
@@ -354,7 +355,7 @@ static tl::expected<void, ParseErrorType> set_powered_terrain_feature(const nloh
  * @return 成功時は空の値、失敗時は解析エラーコード
  */
 template <typename Table, typename Type>
-static tl::expected<void, ParseErrorType> set_typed_terrain_feature(const nlohmann::json &terrain_data, std::string_view key, const Table &types, TerrainCharacteristics flag, TerrainType &terrain, bool (TerrainType::*init_type)(Type))
+tl::expected<void, ParseErrorType> set_typed_terrain_feature(const nlohmann::json &terrain_data, std::string_view key, const Table &types, TerrainCharacteristics flag, TerrainType &terrain, bool (TerrainType::*init_type)(Type))
 {
     const auto &feature_obj = get_json_value(terrain_data, key);
     if (feature_obj.is_null()) {
@@ -374,6 +375,7 @@ static tl::expected<void, ParseErrorType> set_typed_terrain_feature(const nlohma
         return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
     }
     return {};
+}
 }
 
 /*!

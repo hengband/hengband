@@ -212,7 +212,7 @@ const std::unordered_map<std::string_view, MonsterAbilityType> r_info_ability_fl
  * モンスター特性トークンの定義R(耐性) /
  * Monster race flags
  */
-const std::unordered_map<std::string_view, MonsterResistanceType> r_info_flagsr = {
+const std::unordered_map<std::string_view, MonsterResistanceType> r_info_resistance_flags = {
     { "RES_ALL", MonsterResistanceType::RESIST_ALL },
     { "HURT_ACID", MonsterResistanceType::HURT_ACID },
     { "RES_ACID", MonsterResistanceType::RESIST_ACID },

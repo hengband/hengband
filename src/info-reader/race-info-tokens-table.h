@@ -25,7 +25,7 @@ enum class RaceBlowMethodType;
 extern const std::unordered_map<std::string_view, RaceBlowMethodType> r_info_blow_method;
 extern const std::unordered_map<std::string_view, RaceBlowEffectType> r_info_blow_effect;
 extern const std::unordered_map<std::string_view, MonsterAbilityType> r_info_ability_flags;
-extern const std::unordered_map<std::string_view, MonsterResistanceType> r_info_flagsr;
+extern const std::unordered_map<std::string_view, MonsterResistanceType> r_info_resistance_flags;
 extern const std::unordered_map<std::string_view, MonsterAuraType> r_info_aura_flags;
 extern const std::unordered_map<std::string_view, MonsterBehaviorType> r_info_behavior_flags;
 extern const std::unordered_map<std::string_view, MonsterVisualType> r_info_visual_flags;

@@ -149,10 +149,15 @@ ParseErrorType validate_town_cell(const nlohmann::json &fields)
     return ParseErrorType::NONE;
 }
 
-tl::expected<std::optional<std::string>, ParseErrorType> read_condition(const nlohmann::json &data)
+/*!
+ * @brief 規則の適用条件 (when) を読み込む
+ * @param data 規則のオブジェクト
+ * @return 条件の式（when が無ければ空）、または空文字列や文字列以外なら INVALID_TYPE
+ */
+tl::expected<tl::optional<std::string>, ParseErrorType> read_condition(const nlohmann::json &data)
 {
     if (!data.contains("when")) {
-        return std::optional<std::string>{};
+        return tl::optional<std::string>{};
     }
     if (!data["when"].is_string() || data["when"].get_ref<const std::string &>().empty()) {
         return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
@@ -205,6 +210,11 @@ tl::expected<void, ParseErrorType> TownMapReader::read(TownMapDefinition &defini
     return {};
 }
 
+/*!
+ * @brief 地形の宣言を型付きデータへ解析する。
+ * @param definition 読み込み先の町の定義
+ * @return 成功、またはエラーコード
+ */
 tl::expected<void, ParseErrorType> TownMapReader::read_features(TownMapDefinition &definition) const
 {
     for (const auto &[index, rule] : this->data["featureRules"].items()) {
@@ -345,6 +355,13 @@ tl::expected<void, ParseErrorType> TownMapReader::read_buildings(TownMapDefiniti
     return {};
 }
 
+/*!
+ * @brief マップの候補を型付きデータへ解析する。
+ * @param definition 読み込み先の町の定義
+ * @param maximum_height マップの高さの上限
+ * @param maximum_width マップの幅の上限
+ * @return 成功、またはエラーコード
+ */
 tl::expected<void, ParseErrorType> TownMapReader::read_maps(TownMapDefinition &definition, int maximum_height, int maximum_width) const
 {
     for (const auto &variant : this->data["mapVariants"]) {
@@ -387,6 +404,11 @@ tl::expected<void, ParseErrorType> TownMapReader::read_maps(TownMapDefinition &d
     return {};
 }
 
+/*!
+ * @brief 開始位置の候補を型付きデータへ解析する。
+ * @param definition 読み込み先の町の定義
+ * @return 成功、またはエラーコード
+ */
 tl::expected<void, ParseErrorType> TownMapReader::read_starts(TownMapDefinition &definition) const
 {
     for (const auto &start : this->data["startingPositions"]) {

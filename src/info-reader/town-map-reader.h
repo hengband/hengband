@@ -3,9 +3,9 @@
 #include "info-reader/parse-error-types.h"
 #include "system/dungeon/quest-fixed-map.h"
 #include <nlohmann/json_fwd.hpp>
-#include <optional>
 #include <string>
 #include <tl/expected.hpp>
+#include <tl/optional.hpp>
 #include <variant>
 #include <vector>
 
@@ -14,7 +14,7 @@ struct TownMapFeatureRule {
     std::string terrain; //!< 条件が成立したときにのみ地形タグを解決する。
     std::string trap; //!< 建物専用モードでも地形データの初期化を要求しない。
     QuestLegendCell cell;
-    std::optional<std::string> condition;
+    tl::optional<std::string> condition;
 };
 
 struct TownMapBuildingNames {
@@ -51,18 +51,18 @@ struct TownMapBuildingRule {
     int index = 0;
     bool english = false;
     std::variant<TownMapBuildingNames, TownMapBuildingAction, TownMapBuildingMembership, TownMapBuildingNoop> directive;
-    std::optional<std::string> condition;
+    tl::optional<std::string> condition;
 };
 
 struct TownMapVariant {
     std::vector<std::string> rows;
-    std::optional<std::string> condition;
+    tl::optional<std::string> condition;
 };
 
 struct TownMapStartingPosition {
     int y = 0;
     int x = 0;
-    std::optional<std::string> condition;
+    tl::optional<std::string> condition;
 };
 
 struct TownMapDefinition {

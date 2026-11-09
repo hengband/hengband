@@ -17,6 +17,12 @@ TownPreferencesReader::TownPreferencesReader(const nlohmann::json &data)
 {
 }
 
+/*!
+ * @brief 町の共通凡例を読み込み、全件成功した場合に限り出力を置き換える。
+ * @param legend 読み込んだ凡例の格納先
+ * @param parse_cell 凡例の 1 セルを読み取る関数
+ * @return 成功、またはエラーコード
+ */
 tl::expected<void, ParseErrorType> TownPreferencesReader::read(TownPreferencesLegend &legend, TownPreferencesCellParser parse_cell) const
 {
     if (const auto result = info_validate_version(this->data, 1); !result) {

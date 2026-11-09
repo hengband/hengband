@@ -6,6 +6,12 @@
 
 dungeon_grid letter[255];
 
+/*!
+ * @brief 検証済みの固定マップ記号で letter[] を参照する。
+ * @param symbol 固定マップの記号
+ * @return 記号に対応する letter[] の要素
+ * @details 印字可能な ASCII 以外の記号を渡すと std::out_of_range を投げる。
+ */
 dungeon_grid &fixed_map_letter_at(unsigned char symbol)
 {
     if (!is_fixed_map_symbol(symbol)) {
