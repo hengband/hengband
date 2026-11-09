@@ -1,9 +1,11 @@
 #pragma once
 
+#include "util/flag-group.h"
 #include <functional>
 #include <nlohmann/json_fwd.hpp>
 #include <string>
 #include <string_view>
+#include <tl/expected.hpp>
 #include <tl/optional.hpp>
 #include <vector>
 
@@ -20,6 +22,29 @@ enum class MonraceId : short;
  * @details 版ごとの追加・変更・削除キーは tools/bot/README.md の「版4での変更」「版3での変更」などに記載する。
  */
 inline constexpr auto BOT_JSON_PROTOCOL_VERSION = 4;
+
+/*!
+ * @brief 制御サーバの state で選んで載せられる、スナップショットの最上位の項目
+ * @details type・protocol_version と画面の情報 (store など) は常に載せ、grid_map は map の指定で決める。
+ * 制御サーバが state の応答に足す input_context も常に載せる。
+ */
+enum class BotSnapshotField {
+    TURN,
+    CLOCK,
+    PLAYER,
+    FLOOR,
+    PROGRESS,
+    HEALTH_BAR,
+    RIDING_HEALTH_BAR,
+    VISIBLE_MONSTERS,
+    DETECTED_MONSTERS,
+    MESSAGES,
+    INVENTORY,
+    EQUIPMENT,
+    MAX,
+};
+
+using BotSnapshotFields = EnumClassFlagGroup<BotSnapshotField>;
 
 enum class BotKnowledgeCategory {
     ARTIFACTS_KNOWN,
@@ -146,7 +171,11 @@ nlohmann::json make_bot_item_identity_json(const ItemEntity &item, bool store_id
 nlohmann::json make_bot_found_item_identity_json(const ItemEntity &item, bool is_hallucinated);
 nlohmann::json make_bot_pet_row_json(int index, const MonsterEntity &monster, bool is_hallucinated);
 nlohmann::json make_bot_player_ability_sources_json(const PlayerKnownFlags &flags);
-nlohmann::json make_bot_json_snapshot(PlayerType *player_ptr, bool include_map = true);
+BotSnapshotFields make_all_bot_snapshot_fields();
+tl::optional<BotSnapshotField> find_bot_snapshot_field(std::string_view name);
+tl::expected<BotSnapshotFields, std::string> parse_bot_snapshot_fields(const nlohmann::json &names);
+nlohmann::json make_bot_snapshot_field_names_json();
+nlohmann::json make_bot_json_snapshot(PlayerType *player_ptr, bool include_map, const BotSnapshotFields &fields);
 void output_bot_json_snapshot(PlayerType *player_ptr);
 void output_bot_json_screen_snapshot(PlayerType *player_ptr);
 void output_bot_json_spell_list_snapshot(PlayerType *player_ptr, int realm_id, const std::vector<BotSpellListRow> &rows);

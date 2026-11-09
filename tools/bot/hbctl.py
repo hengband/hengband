@@ -200,7 +200,12 @@ def command_resize(args: argparse.Namespace) -> int:
 
 def command_state(args: argparse.Namespace) -> int:
     """ゲームの内部状態をJSONで表示する。"""
-    print_json(request(args, {"op": "state", "map": not args.no_map}))
+    payload = {"op": "state", "map": not args.no_map}
+    if args.fields is not None:
+        # 空の名前 ("player,,floor" など) は除かずに送り、本体のエラーで打ち間違いに気づけるようにする
+        names = args.fields.split(",") if args.fields else []
+        payload["fields"] = [name.strip() for name in names]
+    print_json(request(args, payload))
     return 0
 
 
@@ -392,6 +397,10 @@ def build_parser() -> argparse.ArgumentParser:
         "--no-map",
         action="store_true",
         help="grid_map を省く (地図の生成・転送を省略して応答を軽くする)",
+    )
+    state_parser.add_argument(
+        "--fields",
+        help="載せる最上位の項目をカンマ区切りで選ぶ (例: player,floor。空文字列なら選べる項目を何も載せない)",
     )
     state_parser.set_defaults(func=command_state)
 
