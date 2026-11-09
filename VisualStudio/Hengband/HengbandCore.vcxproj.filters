@@ -1041,6 +1041,9 @@
     <ClCompile Include="..\..\src\info-reader\town-definition-list-reader.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\info-reader\town-map-condition.cpp">
+      <Filter>info-reader</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\info-reader\town-map-reader.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>

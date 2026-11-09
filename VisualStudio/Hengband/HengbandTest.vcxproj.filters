@@ -250,6 +250,9 @@
     <ClCompile Include="..\..\src\test\info-reader\test-town-definition-list-reader.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\test\info-reader\test-town-map-condition.cpp">
+      <Filter>info-reader</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\test\info-reader\test-town-map-reader.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>

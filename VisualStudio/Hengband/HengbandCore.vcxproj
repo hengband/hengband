@@ -285,6 +285,7 @@
     <ClCompile Include="..\..\src\info-reader\spell-reader.cpp" />
     <ClCompile Include="..\..\src\info-reader\terrain-reader.cpp" />
     <ClCompile Include="..\..\src\info-reader\town-definition-list-reader.cpp" />
+    <ClCompile Include="..\..\src\info-reader\town-map-condition.cpp" />
     <ClCompile Include="..\..\src\info-reader\town-map-reader.cpp" />
     <ClCompile Include="..\..\src\info-reader\town-preferences-reader.cpp" />
     <ClCompile Include="..\..\src\info-reader\vault-reader.cpp" />
