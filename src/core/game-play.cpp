@@ -35,7 +35,7 @@
 #include "game-option/input-options.h"
 #include "game-option/play-record-options.h"
 #include "game-option/runtime-arguments.h"
-#include "info-reader/fixed-map-parser.h"
+#include "info-reader/town-map-loader.h"
 #include "info-reader/wilderness-reader.h"
 #include "io/files-util.h"
 #include "io/input-context.h"

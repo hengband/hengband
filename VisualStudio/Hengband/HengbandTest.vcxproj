@@ -80,7 +80,6 @@
     <ClCompile Include="..\..\src\test\info-reader\test-definition-id-checker.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-dungeon-reader.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-ego-reader.cpp" />
-    <ClCompile Include="..\..\src\test\info-reader\test-fixed-map-parser.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-general-parser.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-info-reader-util.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-item-flag-reader.cpp" />
@@ -100,6 +99,7 @@
     <ClCompile Include="..\..\src\test\info-reader\test-terrain-reader.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-town-definition-list-reader.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-town-map-condition.cpp" />
+    <ClCompile Include="..\..\src\test\info-reader\test-town-map-loader.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-town-map-reader.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-town-preferences-reader.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-vault-reader.cpp" />

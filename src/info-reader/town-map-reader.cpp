@@ -174,7 +174,7 @@ TownMapReader::TownMapReader(const nlohmann::json &data)
 /*!
  * @brief 町の宣言全体を検証し、成功時のみ型付き定義へ置き換える。
  * @details 宣言の配列内順序と条件式・UTF-8文字列を保持する。条件の評価、報酬解決、
- * 地形・建物への適用はfixed-map-parser側で行う。建物専用モードでも凡例と建物は
+ * 地形・建物への適用はtown-map-loader側で行う。建物専用モードでも凡例と建物は
  * 全件検証し、マップと開始位置の読み取りだけを省略する。
  */
 tl::expected<void, ParseErrorType> TownMapReader::read(TownMapDefinition &definition, int maximum_height, int maximum_width, bool only_buildings) const

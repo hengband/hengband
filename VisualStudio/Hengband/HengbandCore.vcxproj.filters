@@ -981,9 +981,6 @@
     <ClCompile Include="..\..\src\info-reader\feature-info-tokens-table.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\info-reader\fixed-map-parser.cpp">
-      <Filter>info-reader</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\info-reader\general-parser.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>
@@ -1042,6 +1039,9 @@
       <Filter>info-reader</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\info-reader\town-map-condition.cpp">
+      <Filter>info-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\info-reader\town-map-loader.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\info-reader\town-map-reader.cpp">
@@ -3720,9 +3720,6 @@
     <ClInclude Include="..\..\src\info-reader\feature-info-tokens-table.h">
       <Filter>info-reader</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\info-reader\fixed-map-parser.h">
-      <Filter>info-reader</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\info-reader\general-parser.h">
       <Filter>info-reader</Filter>
     </ClInclude>
@@ -3799,6 +3796,9 @@
       <Filter>info-reader</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\info-reader\town-map-condition.h">
+      <Filter>info-reader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\info-reader\town-map-loader.h">
       <Filter>info-reader</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\info-reader\town-map-reader.h">

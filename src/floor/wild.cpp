@@ -12,7 +12,7 @@
 #include "core/asking-player.h"
 #include "game-option/birth-options.h"
 #include "game-option/map-screen-options.h"
-#include "info-reader/fixed-map-parser.h"
+#include "info-reader/town-map-loader.h"
 #include "info-reader/wilderness-reader.h"
 #include "market/building-initializer.h"
 #include "monster-floor/monster-generator.h"

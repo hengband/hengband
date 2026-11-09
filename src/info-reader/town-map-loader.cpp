@@ -6,7 +6,7 @@
  * 2014 Deskull rearranged comment for Doxygen
  */
 
-#include "info-reader/fixed-map-parser.h"
+#include "info-reader/town-map-loader.h"
 #include "artifact/fixed-art-types.h"
 #include "dungeon/quest.h"
 #include "floor/fixed-map-generator.h"

@@ -265,7 +265,6 @@
     <ClCompile Include="..\..\src\info-reader\dungeon-reader.cpp" />
     <ClCompile Include="..\..\src\info-reader\ego-reader.cpp" />
     <ClCompile Include="..\..\src\info-reader\feature-info-tokens-table.cpp" />
-    <ClCompile Include="..\..\src\info-reader\fixed-map-parser.cpp" />
     <ClCompile Include="..\..\src\info-reader\general-parser.cpp" />
     <ClCompile Include="..\..\src\info-reader\item-flag-reader.cpp" />
     <ClCompile Include="..\..\src\info-reader\json-reader-util.cpp" />
@@ -286,6 +285,7 @@
     <ClCompile Include="..\..\src\info-reader\terrain-reader.cpp" />
     <ClCompile Include="..\..\src\info-reader\town-definition-list-reader.cpp" />
     <ClCompile Include="..\..\src\info-reader\town-map-condition.cpp" />
+    <ClCompile Include="..\..\src\info-reader\town-map-loader.cpp" />
     <ClCompile Include="..\..\src\info-reader\town-map-reader.cpp" />
     <ClCompile Include="..\..\src\info-reader\town-preferences-reader.cpp" />
     <ClCompile Include="..\..\src\info-reader\vault-reader.cpp" />
@@ -1182,7 +1182,6 @@
     <ClInclude Include="..\..\src\info-reader\dungeon-reader.h" />
     <ClInclude Include="..\..\src\info-reader\ego-reader.h" />
     <ClInclude Include="..\..\src\info-reader\feature-info-tokens-table.h" />
-    <ClInclude Include="..\..\src\info-reader\fixed-map-parser.h" />
     <ClInclude Include="..\..\src\info-reader\general-parser.h" />
     <ClInclude Include="..\..\src\info-reader\info-reader-util.h" />
     <ClInclude Include="..\..\src\info-reader\item-flag-reader.h" />
@@ -1209,6 +1208,7 @@
     <ClInclude Include="..\..\src\info-reader\terrain-reader.h" />
     <ClInclude Include="..\..\src\info-reader\town-definition-list-reader.h" />
     <ClInclude Include="..\..\src\info-reader\town-map-condition.h" />
+    <ClInclude Include="..\..\src\info-reader\town-map-loader.h" />
     <ClInclude Include="..\..\src\info-reader\town-map-reader.h" />
     <ClInclude Include="..\..\src\info-reader\town-preferences-reader.h" />
     <ClInclude Include="..\..\src\info-reader\vault-reader.h" />

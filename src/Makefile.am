@@ -626,7 +626,6 @@ libhengband_a_SOURCES = \
 	info-reader/ego-reader.cpp info-reader/ego-reader.h \
 	info-reader/wilderness-reader.cpp info-reader/wilderness-reader.h \
 	info-reader/feature-info-tokens-table.cpp info-reader/feature-info-tokens-table.h \
-	info-reader/fixed-map-parser.cpp info-reader/fixed-map-parser.h \
 	info-reader/general-parser.cpp info-reader/general-parser.h \
 	info-reader/info-reader-util.h \
 	info-reader/item-flag-reader.cpp info-reader/item-flag-reader.h \
@@ -655,6 +654,7 @@ libhengband_a_SOURCES = \
 	info-reader/terrain-reader.cpp info-reader/terrain-reader.h \
 	info-reader/town-definition-list-reader.cpp info-reader/town-definition-list-reader.h \
 	info-reader/town-map-condition.cpp info-reader/town-map-condition.h \
+	info-reader/town-map-loader.cpp info-reader/town-map-loader.h \
 	info-reader/town-map-reader.cpp info-reader/town-map-reader.h \
 	info-reader/town-preferences-reader.cpp info-reader/town-preferences-reader.h \
 	info-reader/vault-reader.cpp info-reader/vault-reader.h \
@@ -1581,9 +1581,9 @@ hengband_test_SOURCES = \
 	test/info-reader/test-spell-reader.cpp \
 	test/info-reader/test-terrain-reader.cpp \
 	test/info-reader/test-town-definition-list-reader.cpp \
-	test/info-reader/test-fixed-map-parser.cpp \
 	test/info-reader/test-general-parser.cpp \
 	test/info-reader/test-town-map-condition.cpp \
+	test/info-reader/test-town-map-loader.cpp \
 	test/info-reader/test-town-map-reader.cpp \
 	test/info-reader/test-town-preferences-reader.cpp \
 	test/info-reader/test-vault-reader.cpp \
