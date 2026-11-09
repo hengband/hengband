@@ -105,7 +105,7 @@ bool restrict_monster_to_dungeon(const DungeonDefinition &dungeon, int floor_lev
         return true;
     }
 
-    // 読み込み (r_info_sex) と同じ値で比べるため、種族の性別をそのまま立てる。性別の無い種族は空のまま。
+    // 読み込み (monrace_sex) と同じ値で比べるため、種族の性別をそのまま立てる。性別の無い種族は空のまま。
     EnumClassFlagGroup<MonsterSex> sex_flags;
     if (const auto sex = monrace.get_sex(); sex != MonsterSex::NONE) {
         sex_flags.set(sex);

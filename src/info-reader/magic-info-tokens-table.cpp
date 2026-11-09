@@ -6,7 +6,7 @@
 /*!
  * @brief 魔法タイプ名とtvalの対応表
  */
-const std::unordered_map<std::string_view, ItemKindType> magic_info_spelltype_to_tval = {
+const std::unordered_map<std::string_view, ItemKindType> magic_spelltype_to_tval = {
     { "SORCERY", ItemKindType::SORCERY_BOOK },
     { "LIFE", ItemKindType::LIFE_BOOK },
     { "MUSIC", ItemKindType::MUSIC_BOOK },
@@ -17,7 +17,7 @@ const std::unordered_map<std::string_view, ItemKindType> magic_info_spelltype_to
 /*!
  * @brief 魔法必須能力とenumの対応表
  */
-const std::unordered_map<std::string_view, int> magic_info_name_to_stat = {
+const std::unordered_map<std::string_view, int> magic_name_to_stat = {
     { "STR", A_STR },
     { "INT", A_INT },
     { "WIS", A_WIS },
@@ -29,7 +29,7 @@ const std::unordered_map<std::string_view, int> magic_info_name_to_stat = {
 /*!
  * @brief 職業名とenumの対応表
  */
-const std::unordered_map<std::string_view, PlayerClassType> magic_info_class_list = {
+const std::unordered_map<std::string_view, PlayerClassType> magic_class_list = {
     { "WARRIOR", PlayerClassType::WARRIOR },
     { "MAGE", PlayerClassType::MAGE },
     { "PRIEST", PlayerClassType::PRIEST },

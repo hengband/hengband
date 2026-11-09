@@ -60,55 +60,55 @@ MonsterBasicFlagGroups::MonsterBasicFlagGroups(
  */
 bool grab_one_monster_basic_flag(const MonsterBasicFlagGroups &groups, std::string_view what)
 {
-    if (info_grab_one_flag(groups.resistance_flags, r_info_resistance_flags, what)) {
+    if (info_grab_one_flag(groups.resistance_flags, monrace_resistance_flags, what)) {
         return true;
     }
 
-    if (info_grab_one_flag(groups.aura_flags, r_info_aura_flags, what)) {
+    if (info_grab_one_flag(groups.aura_flags, monrace_aura_flags, what)) {
         return true;
     }
 
-    if (info_grab_one_flag(groups.behavior_flags, r_info_behavior_flags, what)) {
+    if (info_grab_one_flag(groups.behavior_flags, monrace_behavior_flags, what)) {
         return true;
     }
 
-    if (info_grab_one_flag(groups.visual_flags, r_info_visual_flags, what)) {
+    if (info_grab_one_flag(groups.visual_flags, monrace_visual_flags, what)) {
         return true;
     }
 
-    if (info_grab_one_flag(groups.kind_flags, r_info_kind_flags, what)) {
+    if (info_grab_one_flag(groups.kind_flags, monrace_kind_flags, what)) {
         return true;
     }
 
-    if (info_grab_one_flag(groups.drop_flags, r_info_drop_flags, what)) {
+    if (info_grab_one_flag(groups.drop_flags, monrace_drop_flags, what)) {
         return true;
     }
 
-    if (info_grab_one_flag(groups.wilderness_flags, r_info_wilderness_flags, what)) {
+    if (info_grab_one_flag(groups.wilderness_flags, monrace_wilderness_flags, what)) {
         return true;
     }
 
-    if (info_grab_one_flag(groups.feature_flags, r_info_feature_flags, what)) {
+    if (info_grab_one_flag(groups.feature_flags, monrace_feature_flags, what)) {
         return true;
     }
 
-    if (info_grab_one_flag(groups.population_flags, r_info_population_flags, what)) {
+    if (info_grab_one_flag(groups.population_flags, monrace_population_flags, what)) {
         return true;
     }
 
-    if (info_grab_one_flag(groups.speak_flags, r_info_speak_flags, what)) {
+    if (info_grab_one_flag(groups.speak_flags, monrace_speak_flags, what)) {
         return true;
     }
 
-    if (info_grab_one_flag(groups.brightness_flags, r_info_brightness_flags, what)) {
+    if (info_grab_one_flag(groups.brightness_flags, monrace_brightness_flags, what)) {
         return true;
     }
 
-    if (info_grab_one_flag(groups.special_flags, r_info_special_flags, what)) {
+    if (info_grab_one_flag(groups.special_flags, monrace_special_flags, what)) {
         return true;
     }
 
-    if (info_grab_one_flag(groups.misc_flags, r_info_misc_flags, what)) {
+    if (info_grab_one_flag(groups.misc_flags, monrace_misc_flags, what)) {
         return true;
     }
 
@@ -125,7 +125,7 @@ bool grab_one_monster_basic_flag(const MonsterBasicFlagGroups &groups, std::stri
  */
 bool grab_one_monster_spell_flag(EnumClassFlagGroup<MonsterAbilityType> &ability_flags, std::string_view what)
 {
-    if (info_grab_one_flag(ability_flags, r_info_ability_flags, what)) {
+    if (info_grab_one_flag(ability_flags, monrace_ability_flags, what)) {
         return true;
     }
 

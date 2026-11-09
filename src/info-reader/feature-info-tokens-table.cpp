@@ -16,7 +16,7 @@
 /*!
  * @brief 地形属性トークンの定義 / Feature info flags
  */
-const std::unordered_map<std::string_view, TerrainCharacteristics> f_info_flags = {
+const std::unordered_map<std::string_view, TerrainCharacteristics> terrain_flags = {
     { "LOS", TerrainCharacteristics::LOS },
     { "PROJECTION", TerrainCharacteristics::PROJECTION },
     { "MOVE", TerrainCharacteristics::MOVE },
@@ -266,7 +266,7 @@ const std::unordered_map<std::string_view, TerrainTag> terrain_tags = {
 /*!
  * @brief 地形の変化の種類のトークンの定義
  */
-const std::unordered_map<std::string_view, TerrainConversionType> f_info_conversion_types = {
+const std::unordered_map<std::string_view, TerrainConversionType> terrain_conversion_types = {
     { "FLOOR", TerrainConversionType::FLOOR },
     { "WALL", TerrainConversionType::WALL },
     { "INNER", TerrainConversionType::INNER },
@@ -278,7 +278,7 @@ const std::unordered_map<std::string_view, TerrainConversionType> f_info_convers
 /*!
  * @brief 罠の種類のトークンの定義
  */
-const std::unordered_map<std::string_view, TrapType> f_info_trap_types = {
+const std::unordered_map<std::string_view, TrapType> terrain_trap_types = {
     { "TRAPDOOR", TrapType::TRAPDOOR },
     { "PIT", TrapType::PIT },
     { "SPIKED_PIT", TrapType::SPIKED_PIT },
@@ -305,7 +305,7 @@ const std::unordered_map<std::string_view, TrapType> f_info_trap_types = {
 /*!
  * @brief 模様の種類のトークンの定義
  */
-const std::unordered_map<std::string_view, PatternTileType> f_info_pattern_types = {
+const std::unordered_map<std::string_view, PatternTileType> terrain_pattern_types = {
     { "START", PatternTileType::START },
     { "TILE_1", PatternTileType::TILE_1 },
     { "TILE_2", PatternTileType::TILE_2 },
@@ -320,7 +320,7 @@ const std::unordered_map<std::string_view, PatternTileType> f_info_pattern_types
 /*!
  * @brief 店の種類のトークンの定義
  */
-const std::unordered_map<std::string_view, StoreSaleType> f_info_store_types = {
+const std::unordered_map<std::string_view, StoreSaleType> terrain_store_types = {
     { "GENERAL", StoreSaleType::GENERAL },
     { "ARMOURY", StoreSaleType::ARMOURY },
     { "WEAPON", StoreSaleType::WEAPON },
@@ -336,7 +336,7 @@ const std::unordered_map<std::string_view, StoreSaleType> f_info_store_types = {
 /*!
  * @brief 建物の種類のトークンの定義
  */
-const std::unordered_map<std::string_view, BuildingType> f_info_building_types = {
+const std::unordered_map<std::string_view, BuildingType> terrain_building_types = {
     { "BUILDING_00", BuildingType::BUILDING_00 },
     { "BUILDING_01", BuildingType::BUILDING_01 },
     { "BUILDING_02", BuildingType::BUILDING_02 },

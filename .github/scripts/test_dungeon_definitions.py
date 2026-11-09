@@ -30,7 +30,7 @@ class DungeonValidationTest(unittest.TestCase):
         return validate_document(document, self.schema_path, self.schema, self.registry, companions=companions)
 
     def reader_token_tables(self, function):
-        """DungeonReaderの指定関数が照合する r_info_* の辞書名を、照合の順に読む。"""
+        """DungeonReaderの指定関数が照合する monrace_* の辞書名を、照合の順に読む。"""
         return reader_token_tables("src/info-reader/dungeon-reader.cpp", "DungeonReader::" + function)
 
     def reader_tokens(self, function):
@@ -38,7 +38,7 @@ class DungeonValidationTest(unittest.TestCase):
         for table in self.reader_token_tables(function):
             keys = race_info_table_keys(table)
             # NONEは種族の性別未設定を表し、DungeonReaderも条件フラグとしては拒否する。
-            tokens.update(set(keys) - {"NONE"} if table == "r_info_sex" else keys)
+            tokens.update(set(keys) - {"NONE"} if table == "monrace_sex" else keys)
         return tokens
 
     def schema_tokens(self, definition):
@@ -62,7 +62,7 @@ class DungeonValidationTest(unittest.TestCase):
                 self.assertTrue(ok, diagnostic)
 
     def test_tokens_of_tables_the_reader_does_not_consult_are_rejected(self):
-        # 発言の辞書 (r_info_message_flags) だけにある WALK_* などや、flags と spells の取り違えは読み込みが拒否する。
+        # 発言の辞書 (monrace_message_flags) だけにある WALK_* などや、flags と spells の取り違えは読み込みが拒否する。
         cases = (("flags", "WALK_CLOSERANGE"), ("flags", "MESSAGE_STALKER"), ("flags", "BR_FIRE"), ("spells", "UNIQUE"))
         for field, token in cases:
             with self.subTest(field=field, token=token):
@@ -73,7 +73,7 @@ class DungeonValidationTest(unittest.TestCase):
                 self.assertIn(f"Location: ['dungeons', 0, 'monsters', '{field}', 0]", diagnostic)
 
     def test_monster_sex_flags_are_accepted(self):
-        self.assertIn("r_info_sex", self.reader_token_tables("grab_one_basic_monster_flag"))
+        self.assertIn("monrace_sex", self.reader_token_tables("grab_one_basic_monster_flag"))
         for flags in (["MALE"], ["FEMALE"], ["MALE", "FEMALE"]):
             with self.subTest(flags=flags):
                 document = self.sample()

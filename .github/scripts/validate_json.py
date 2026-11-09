@@ -1162,7 +1162,7 @@ def load_cpp_map_keys(path: Path, table: str) -> set[str]:
 def validate_terrain_semantics(data: dict, schema_path: Path) -> None:
     """地形の整数・表示・参照・状態数を確認する。重複定義はCIで拒否する。"""
     repository_root = schema_path.resolve().parent.parent
-    flags = load_cpp_map_keys(repository_root / "src/info-reader/feature-info-tokens-table.cpp", "f_info_flags")
+    flags = load_cpp_map_keys(repository_root / "src/info-reader/feature-info-tokens-table.cpp", "terrain_flags")
     colors = load_cpp_map_keys(repository_root / "src/term/gameterm.cpp", "color_list")
     ids = set()
     tags = set()

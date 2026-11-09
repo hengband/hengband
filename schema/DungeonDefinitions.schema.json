@@ -341,7 +341,7 @@
       ]
     },
     "monsterFlag": {
-      "description": "共通のモンスターフラグに加え、性別 (r_info_sex の MALE/FEMALE) も条件にできる",
+      "description": "共通のモンスターフラグに加え、性別 (monrace_sex の MALE/FEMALE) も条件にできる",
       "anyOf": [
         { "$ref": "common/MonsterFlag.schema.json#/$defs/monsterFlag" },
         { "type": "string", "enum": ["MALE", "FEMALE"] }

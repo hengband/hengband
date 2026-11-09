@@ -134,7 +134,7 @@ class MonraceValidationTest(unittest.TestCase):
     def reader_flag_tokens(self):
         tables = reader_token_tables("src/info-reader/race-reader.cpp", "RaceReader::grab_one_basic_flag")
         # 性別は sex の項目で別に読むため、flags の辞書には含まれない。
-        self.assertNotIn("r_info_sex", tables)
+        self.assertNotIn("monrace_sex", tables)
         return set().union(*(race_info_table_keys(table) for table in tables))
 
     def test_monster_flags_match_the_reader_token_tables(self):

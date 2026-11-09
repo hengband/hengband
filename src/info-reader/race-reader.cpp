@@ -350,7 +350,7 @@ tl::expected<void, ParseErrorType> RaceReader::set_mon_sex(MonraceDefinition &mo
     if (sex_data.is_null()) {
         return {};
     }
-    const auto sex = info_read_token(sex_data, r_info_sex);
+    const auto sex = info_read_token(sex_data, monrace_sex);
     if (!sex) {
         return tl::make_unexpected(sex.error());
     }
@@ -439,11 +439,11 @@ tl::expected<void, ParseErrorType> RaceReader::set_mon_blows(MonraceDefinition &
             return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
         }
 
-        const auto rbm = info_read_token(blow_method, r_info_blow_method);
+        const auto rbm = info_read_token(blow_method, monrace_blow_method);
         if (!rbm) {
             return tl::make_unexpected(rbm.error());
         }
-        const auto rbe = info_read_token(blow_effect, r_info_blow_effect);
+        const auto rbe = info_read_token(blow_effect, monrace_blow_effect);
         if (!rbe) {
             return tl::make_unexpected(rbe.error());
         }
@@ -577,7 +577,7 @@ tl::expected<void, ParseErrorType> RaceReader::set_mon_message(MonraceMessage &m
         return {};
     }
     return info_read_object_array(message_data, [&messages](const nlohmann::json &message) -> tl::expected<void, ParseErrorType> {
-        const auto action = info_read_token(get_json_value(message, "action"), r_info_message_flags);
+        const auto action = info_read_token(get_json_value(message, "action"), monrace_message_flags);
         if (!action) {
             return tl::make_unexpected(action.error());
         }

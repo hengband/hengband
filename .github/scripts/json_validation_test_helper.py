@@ -118,7 +118,7 @@ def reader_token_tables(relative_path, function):
     if match is None:
         raise AssertionError(f"{function} not found in {relative_path}")
     shared_calls = "|".join(re.escape(name) for name in SHARED_MONSTER_FLAG_FUNCTIONS)
-    pattern = r"grab_one_flag\(\s*\*?[\w.]+\s*,\s*(r_info_\w+)\s*,|\b(" + shared_calls + r")\("
+    pattern = r"grab_one_flag\(\s*\*?[\w.]+\s*,\s*(monrace_\w+)\s*,|\b(" + shared_calls + r")\("
     tables = []
     for table, shared in re.findall(pattern, match[1]):
         if table:

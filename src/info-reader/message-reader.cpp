@@ -122,7 +122,7 @@ tl::expected<void, ParseErrorType> MessageReader::set_mon_message() const
     }
 
     const auto read_result = info_read_object_array(message_array, [&pending_messages](const nlohmann::json &message) -> tl::expected<void, ParseErrorType> {
-        const auto action = info_read_token(get_json_value(message, "action"), r_info_message_flags);
+        const auto action = info_read_token(get_json_value(message, "action"), monrace_message_flags);
         if (!action) {
             return tl::make_unexpected(action.error());
         }

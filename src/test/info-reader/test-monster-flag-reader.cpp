@@ -107,39 +107,39 @@ TEST_CASE("grab_one_monster_basic_flag sets a flag found in a basic flag table")
 
 TEST_CASE("grab_one_monster_basic_flag sets every name only in the group of its table")
 {
-    check_every_name_sets_only_its_group(r_info_resistance_flags, &BasicFlagStore::resistance_flags);
-    check_every_name_sets_only_its_group(r_info_aura_flags, &BasicFlagStore::aura_flags);
-    check_every_name_sets_only_its_group(r_info_behavior_flags, &BasicFlagStore::behavior_flags);
-    check_every_name_sets_only_its_group(r_info_visual_flags, &BasicFlagStore::visual_flags);
-    check_every_name_sets_only_its_group(r_info_kind_flags, &BasicFlagStore::kind_flags);
-    check_every_name_sets_only_its_group(r_info_drop_flags, &BasicFlagStore::drop_flags);
-    check_every_name_sets_only_its_group(r_info_wilderness_flags, &BasicFlagStore::wilderness_flags);
-    check_every_name_sets_only_its_group(r_info_feature_flags, &BasicFlagStore::feature_flags);
-    check_every_name_sets_only_its_group(r_info_population_flags, &BasicFlagStore::population_flags);
-    check_every_name_sets_only_its_group(r_info_speak_flags, &BasicFlagStore::speak_flags);
-    check_every_name_sets_only_its_group(r_info_brightness_flags, &BasicFlagStore::brightness_flags);
-    check_every_name_sets_only_its_group(r_info_special_flags, &BasicFlagStore::special_flags);
-    check_every_name_sets_only_its_group(r_info_misc_flags, &BasicFlagStore::misc_flags);
+    check_every_name_sets_only_its_group(monrace_resistance_flags, &BasicFlagStore::resistance_flags);
+    check_every_name_sets_only_its_group(monrace_aura_flags, &BasicFlagStore::aura_flags);
+    check_every_name_sets_only_its_group(monrace_behavior_flags, &BasicFlagStore::behavior_flags);
+    check_every_name_sets_only_its_group(monrace_visual_flags, &BasicFlagStore::visual_flags);
+    check_every_name_sets_only_its_group(monrace_kind_flags, &BasicFlagStore::kind_flags);
+    check_every_name_sets_only_its_group(monrace_drop_flags, &BasicFlagStore::drop_flags);
+    check_every_name_sets_only_its_group(monrace_wilderness_flags, &BasicFlagStore::wilderness_flags);
+    check_every_name_sets_only_its_group(monrace_feature_flags, &BasicFlagStore::feature_flags);
+    check_every_name_sets_only_its_group(monrace_population_flags, &BasicFlagStore::population_flags);
+    check_every_name_sets_only_its_group(monrace_speak_flags, &BasicFlagStore::speak_flags);
+    check_every_name_sets_only_its_group(monrace_brightness_flags, &BasicFlagStore::brightness_flags);
+    check_every_name_sets_only_its_group(monrace_special_flags, &BasicFlagStore::special_flags);
+    check_every_name_sets_only_its_group(monrace_misc_flags, &BasicFlagStore::misc_flags);
 }
 
 TEST_CASE("monster basic flag tables and the sex table share no name")
 {
     // 名前が重ならないので、表を探す順序 (ダンジョンの出現条件では性別を先に探す) は結果に影響しない
     std::multiset<std::string_view> names;
-    insert_names(names, r_info_resistance_flags);
-    insert_names(names, r_info_aura_flags);
-    insert_names(names, r_info_behavior_flags);
-    insert_names(names, r_info_visual_flags);
-    insert_names(names, r_info_kind_flags);
-    insert_names(names, r_info_drop_flags);
-    insert_names(names, r_info_wilderness_flags);
-    insert_names(names, r_info_feature_flags);
-    insert_names(names, r_info_population_flags);
-    insert_names(names, r_info_speak_flags);
-    insert_names(names, r_info_brightness_flags);
-    insert_names(names, r_info_special_flags);
-    insert_names(names, r_info_misc_flags);
-    insert_names(names, r_info_sex);
+    insert_names(names, monrace_resistance_flags);
+    insert_names(names, monrace_aura_flags);
+    insert_names(names, monrace_behavior_flags);
+    insert_names(names, monrace_visual_flags);
+    insert_names(names, monrace_kind_flags);
+    insert_names(names, monrace_drop_flags);
+    insert_names(names, monrace_wilderness_flags);
+    insert_names(names, monrace_feature_flags);
+    insert_names(names, monrace_population_flags);
+    insert_names(names, monrace_speak_flags);
+    insert_names(names, monrace_brightness_flags);
+    insert_names(names, monrace_special_flags);
+    insert_names(names, monrace_misc_flags);
+    insert_names(names, monrace_sex);
     for (const auto name : names) {
         CAPTURE(std::string(name));
         CHECK(names.count(name) == 1);

@@ -26,7 +26,7 @@ enum class TestFlag {
     LARGE = 0x40000000,
 };
 
-//! 実際のトークン辞書 (f_info_flags など) と同じ形の辞書
+//! 実際のトークン辞書 (terrain_flags など) と同じ形の辞書
 const std::unordered_map<std::string_view, TestFlag> TEST_FLAGS = {
     { "FIRST", TestFlag::FIRST },
     { "SECOND", TestFlag::SECOND },
