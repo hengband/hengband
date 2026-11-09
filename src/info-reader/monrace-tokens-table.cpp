@@ -1,4 +1,4 @@
-#include "info-reader/race-info-tokens-table.h"
+#include "info-reader/monrace-tokens-table.h"
 #include "monster-attack/monster-attack-effect.h"
 #include "monster-attack/monster-attack-table.h"
 #include "monster-race/monster-aura-types.h"

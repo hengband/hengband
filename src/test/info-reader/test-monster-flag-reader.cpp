@@ -4,8 +4,8 @@
  * 各読み込み処理からの呼び出しは、test-race-reader.cpp・test-dungeon-reader.cpp で扱う。
  */
 
+#include "info-reader/monrace-tokens-table.h"
 #include "info-reader/monster-flag-reader.h"
-#include "info-reader/race-info-tokens-table.h"
 #include "monster-race/race-ability-flags.h"
 #include "monster-race/race-sex.h"
 #include "util/flag-group.h"

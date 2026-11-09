@@ -622,19 +622,19 @@ libhengband_a_SOURCES = \
 	info-reader/definition-hash-data.cpp info-reader/definition-hash-data.h \
 	info-reader/definition-id-checker.cpp info-reader/definition-id-checker.h \
 	info-reader/dungeon-grid.cpp info-reader/dungeon-grid.h \
-	info-reader/dungeon-info-tokens-table.cpp info-reader/dungeon-info-tokens-table.h \
+	info-reader/dungeon-tokens-table.cpp info-reader/dungeon-tokens-table.h \
 	info-reader/dungeon-reader.cpp info-reader/dungeon-reader.h \
 	info-reader/ego-reader.cpp info-reader/ego-reader.h \
 	info-reader/wilderness-reader.cpp info-reader/wilderness-reader.h \
-	info-reader/feature-info-tokens-table.cpp info-reader/feature-info-tokens-table.h \
 	info-reader/info-reader-util.h \
 	info-reader/item-flag-reader.cpp info-reader/item-flag-reader.h \
 	info-reader/item-reader-limits.h \
 	info-reader/json-reader-util.cpp info-reader/json-reader-util.h \
 	info-reader/jsonc-document-loader.cpp info-reader/jsonc-document-loader.h \
-	info-reader/magic-info-tokens-table.cpp info-reader/magic-info-tokens-table.h \
+	info-reader/magic-tokens-table.cpp info-reader/magic-tokens-table.h \
 	info-reader/magic-reader.cpp info-reader/magic-reader.h \
 	info-reader/message-reader.cpp info-reader/message-reader.h \
+	info-reader/monrace-tokens-table.cpp info-reader/monrace-tokens-table.h \
 	info-reader/monster-flag-reader.cpp info-reader/monster-flag-reader.h \
 	info-reader/parse-error-messages.cpp info-reader/parse-error-messages.h \
 	info-reader/parse-error-types.h \
@@ -643,7 +643,6 @@ libhengband_a_SOURCES = \
 	info-reader/legend-object-trap-validator.cpp \
 	info-reader/legend-object-trap-validator.h \
 	info-reader/quest-reader.cpp info-reader/quest-reader.h \
-	info-reader/race-info-tokens-table.cpp info-reader/race-info-tokens-table.h \
 	info-reader/race-reader.cpp info-reader/race-reader.h \
 	info-reader/random-grid-effect-types.h \
 	info-reader/range.h \
@@ -652,6 +651,7 @@ libhengband_a_SOURCES = \
 	info-reader/spell-reader.cpp info-reader/spell-reader.h \
 	info-reader/symbol-reader-util.h \
 	info-reader/terrain-reader.cpp info-reader/terrain-reader.h \
+	info-reader/terrain-tokens-table.cpp info-reader/terrain-tokens-table.h \
 	info-reader/town-definition-list-reader.cpp info-reader/town-definition-list-reader.h \
 	info-reader/town-map-condition.cpp info-reader/town-map-condition.h \
 	info-reader/town-map-loader.cpp info-reader/town-map-loader.h \

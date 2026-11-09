@@ -130,6 +130,6 @@ def reader_token_tables(relative_path, function):
     return tables
 
 
-def race_info_table_keys(table):
-    """race-info-tokens-table.cpp の指定した辞書のトークンを読む。"""
-    return load_cpp_map_keys(REPOSITORY_ROOT / "src/info-reader/race-info-tokens-table.cpp", table)
+def monrace_table_keys(table):
+    """monrace-tokens-table.cpp の指定した辞書のトークンを読む。"""
+    return load_cpp_map_keys(REPOSITORY_ROOT / "src/info-reader/monrace-tokens-table.cpp", table)

@@ -1,6 +1,6 @@
 #include "info-reader/magic-reader.h"
 #include "info-reader/json-reader-util.h"
-#include "info-reader/magic-info-tokens-table.h"
+#include "info-reader/magic-tokens-table.h"
 #include "info-reader/parse-error-types.h"
 #include "locale/language-switcher.h"
 #include "player-info/class-info.h"

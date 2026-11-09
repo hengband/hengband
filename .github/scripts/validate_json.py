@@ -1162,7 +1162,7 @@ def load_cpp_map_keys(path: Path, table: str) -> set[str]:
 def validate_terrain_semantics(data: dict, schema_path: Path) -> None:
     """地形の整数・表示・参照・状態数を確認する。重複定義はCIで拒否する。"""
     repository_root = schema_path.resolve().parent.parent
-    flags = load_cpp_map_keys(repository_root / "src/info-reader/feature-info-tokens-table.cpp", "terrain_flags")
+    flags = load_cpp_map_keys(repository_root / "src/info-reader/terrain-tokens-table.cpp", "terrain_flags")
     colors = load_cpp_map_keys(repository_root / "src/term/gameterm.cpp", "color_list")
     ids = set()
     tags = set()
@@ -1233,7 +1233,7 @@ def validate_terrain_semantics(data: dict, schema_path: Path) -> None:
 def load_class_ids(repository_root: Path) -> dict[str, int]:
     """Read the class magic tokens table and PlayerClassType values, not map order."""
     enum_ids = load_cpp_enum_values(repository_root / "src/player-info/class-types.h", "PlayerClassType")
-    reader_path = repository_root / "src/info-reader/magic-info-tokens-table.cpp"
+    reader_path = repository_root / "src/info-reader/magic-tokens-table.cpp"
     tokens = re.findall(r'\{\s*"([A-Z][A-Z0-9_]*)"\s*,\s*PlayerClassType::([A-Z][A-Z0-9_]*)\s*\}',
                         reader_path.read_text(encoding="utf-8"))
     if not tokens or any(name not in enum_ids for _, name in tokens):

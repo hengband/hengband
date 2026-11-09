@@ -4,7 +4,7 @@ import re
 from pathlib import Path
 import unittest
 
-from json_validation_test_helper import (fixed_artifact_id_schema_maximum, monrace_id_schema_maximum, race_info_table_keys,
+from json_validation_test_helper import (fixed_artifact_id_schema_maximum, monrace_id_schema_maximum, monrace_table_keys,
                                          reader_token_tables, schema_enum_values, validate_document)
 from validate_json import build_schema_registry, load_all_schemas, load_cpp_constant, load_jsonc
 
@@ -36,7 +36,7 @@ class DungeonValidationTest(unittest.TestCase):
     def reader_tokens(self, function):
         tokens = set()
         for table in self.reader_token_tables(function):
-            keys = race_info_table_keys(table)
+            keys = monrace_table_keys(table)
             # NONEは種族の性別未設定を表し、DungeonReaderも条件フラグとしては拒否する。
             tokens.update(set(keys) - {"NONE"} if table == "monrace_sex" else keys)
         return tokens

@@ -4,7 +4,7 @@
  * @date 2024/12/08
  */
 
-#include "info-reader/feature-info-tokens-table.h"
+#include "info-reader/terrain-tokens-table.h"
 #include "system/enums/store-sale-type.h"
 #include "system/enums/terrain/building-type.h"
 #include "system/enums/terrain/pattern-tile-type.h"

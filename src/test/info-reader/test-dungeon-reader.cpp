@@ -1,7 +1,7 @@
 #include "artifact/fixed-art-types.h"
 #include "info-reader/dungeon-reader.h"
+#include "info-reader/monrace-tokens-table.h"
 #include "info-reader/parse-error-types.h"
-#include "info-reader/race-info-tokens-table.h"
 #include "monster/monster-util.h"
 #include "system/artifact/artifact-definition.h"
 #include "system/artifact/artifact-list.h"

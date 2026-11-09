@@ -1,4 +1,4 @@
-#include "info-reader/magic-info-tokens-table.h"
+#include "info-reader/magic-tokens-table.h"
 #include "object/tval-types.h"
 #include "player-ability/player-ability-types.h"
 #include "player-info/class-types.h"

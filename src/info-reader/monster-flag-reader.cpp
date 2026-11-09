@@ -1,6 +1,6 @@
 #include "info-reader/monster-flag-reader.h"
 #include "info-reader/info-reader-util.h"
-#include "info-reader/race-info-tokens-table.h"
+#include "info-reader/monrace-tokens-table.h"
 #include "locale/language-switcher.h"
 #include "view/display-messages.h"
 

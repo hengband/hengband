@@ -5,7 +5,7 @@
  */
 
 #include "system/terrain/terrain-list.h"
-#include "info-reader/feature-info-tokens-table.h"
+#include "info-reader/terrain-tokens-table.h"
 #include "system/enums/terrain/terrain-tag.h"
 #include "system/terrain/terrain-definition.h"
 #include "util/enum-converter.h"

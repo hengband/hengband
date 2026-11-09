@@ -1,4 +1,4 @@
-#include "info-reader/dungeon-info-tokens-table.h"
+#include "info-reader/dungeon-tokens-table.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "room/pit-nest-util.h"
 #include "system/dungeon/dungeon-definition.h"
