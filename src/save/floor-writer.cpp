@@ -15,6 +15,7 @@
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
 #include "util/angband-files.h"
+#include <range/v3/algorithm.hpp>
 #include <range/v3/view.hpp>
 
 namespace {
@@ -151,6 +152,15 @@ void wr_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
     for (int i = 1; i < floor.m_max; i++) {
         MonsterEntityWriter(floor.m_list[i]).write_to_savedata();
     }
+
+    // 匂いの付いたグリッドは足跡のまわりだけなので、付いているものだけを書く
+    const auto is_scented = [&floor](const Pos2D &pos) { return floor.get_grid(pos).when != 0; };
+    wr_u16b(static_cast<uint16_t>(ranges::count_if(floor.get_area(), is_scented)));
+    for (const auto &pos : floor.get_area() | ranges::views::filter(is_scented)) {
+        wr_byte(static_cast<uint8_t>(pos.y));
+        wr_byte(static_cast<uint8_t>(pos.x));
+        wr_byte(floor.get_grid(pos).when);
+    }
 }
 
 /*!
@@ -164,6 +174,7 @@ bool wr_dungeon(PlayerType *player_ptr)
     const auto &floor = *player_ptr->current_floor_ptr;
     wr_s16b(max_floor_id);
     wr_byte(static_cast<uint8_t>(floor.dungeon_id));
+    wr_byte(static_cast<uint8_t>(floor.scent_when));
     if (!player_ptr->in_saved_floor()) {
         /* No array elements */
         wr_byte(0);

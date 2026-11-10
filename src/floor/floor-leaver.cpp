@@ -2,6 +2,7 @@
 #include "floor/floor-mode-changer.h"
 #include "floor/floor-save-util.h"
 #include "floor/floor-save.h"
+#include "floor/floor-util.h"
 #include "floor/line-of-sight.h"
 #include "game-option/birth-options.h"
 #include "game-option/play-record-options.h"
@@ -437,6 +438,10 @@ static void exe_leave_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
         monster.mflag.clear();
         monster.ml = false;
     }
+
+    // 匂いもこの階にいる間だけのもの。保存したフロアを読み込むと消えていたので、戻ったときに残らないよう消してから保存する
+    // (一緒に消える flow のコストと距離はセーブされない)
+    forget_flow(floor);
 
     if (save_floor(player_ptr, sf_ptr, 0)) {
         return;
