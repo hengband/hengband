@@ -140,10 +140,6 @@ void do_cmd_go_up(PlayerType *player_ptr)
 
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
 
-    if (autosave_l) {
-        do_cmd_save_game(player_ptr, true);
-    }
-
     const auto quest_number = floor.quest_number;
     auto &quest = quests.get_quest(quest_number);
 
@@ -192,6 +188,9 @@ void do_cmd_go_up(PlayerType *player_ptr)
     }
 
     sound(SoundKind::STAIRWAY);
+    if (autosave_l) {
+        request_auto_save();
+    }
 
     player_ptr->leaving = true;
 }
@@ -281,10 +280,6 @@ void do_cmd_go_down(PlayerType *player_ptr)
     }
 
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
-    if (autosave_l) {
-        do_cmd_save_game(player_ptr, true);
-    }
-
     auto down_num = 0;
     if (terrain.flags.has(TerrainCharacteristics::SHAFT)) {
         down_num += 2;
@@ -321,6 +316,10 @@ void do_cmd_go_down(PlayerType *player_ptr)
         }
 
         sound(SoundKind::STAIRWAY);
+    }
+
+    if (autosave_l) {
+        request_auto_save();
     }
 
     player_ptr->leaving = true;

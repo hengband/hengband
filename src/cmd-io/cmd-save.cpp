@@ -10,7 +10,7 @@
 #include "world/world.h"
 
 /*!
- * @brief 一定ターン毎の自動セーブを要求されていて、まだセーブしていないか
+ * @brief 自動セーブを要求されていて、まだセーブしていないか
  */
 static bool is_auto_save_requested = false;
 
@@ -58,8 +58,9 @@ void do_cmd_save_and_exit(PlayerType *player_ptr)
 }
 
 /*!
- * @brief 一定ターン毎の自動セーブを要求する
- * @details 次にコマンドの入力を待つところで do_requested_auto_save() がセーブする
+ * @brief 自動セーブ (一定ターン毎・新しい階に入るとき) を要求する
+ * @details 次にコマンドの入力を待つところで do_requested_auto_save() がセーブする。
+ * 階を移る処理 (階段・テレポート・レベル・帰還の発動など) の途中で要求したときは、移った先の階でセーブする
  */
 void request_auto_save()
 {
@@ -67,7 +68,7 @@ void request_auto_save()
 }
 
 /*!
- * @brief 要求されている一定ターン毎の自動セーブを行う
+ * @brief 要求されている自動セーブを行う
  * @param player_ptr プレイヤーへの参照ポインタ
  * @details コマンドの入力を待つところで呼ぶ (process_player())。読み込むと、^S でセーブしたときと同じく手番の途中から再開する。
  */
