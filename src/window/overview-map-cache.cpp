@@ -11,15 +11,16 @@ namespace {
 /*!
  * @brief グリッドの表示を map_info() で求める
  * @param player_ptr プレイヤーへの参照ポインタ
+ * @param context マスによらない判定の材料 (player_ptr から作ったもの)
  * @param pos グリッドの座標
  * @return グリッドの表示
  */
-OverviewMapGrid make_grid(PlayerType *player_ptr, const Pos2D &pos)
+OverviewMapGrid make_grid(PlayerType *player_ptr, const MapVisibilityContext &context, const Pos2D &pos)
 {
     match_autopick = -1;
     autopick_obj = nullptr;
     feat_priority = -1;
-    const auto symbol_pair = map_info(player_ptr, pos);
+    const auto symbol_pair = map_info(player_ptr, context, pos);
     tl::optional<OverviewMapAutopick> autopick;
     if (match_autopick != -1) {
         autopick = OverviewMapAutopick{ match_autopick, autopick_obj };
@@ -104,10 +105,11 @@ void OverviewMapCache::update(PlayerType *player_ptr)
     view_special_lite = false;
     view_granite_lite = false;
 
+    const MapVisibilityContext context(*player_ptr);
     if (this->is_all_dirty) {
         for (auto y = 0; y < this->height; y++) {
             for (auto x = 0; x < this->width; x++) {
-                this->grids[this->index_of({ y, x })] = make_grid(player_ptr, { y, x });
+                this->grids[this->index_of({ y, x })] = make_grid(player_ptr, context, { y, x });
             }
         }
 
@@ -122,7 +124,7 @@ void OverviewMapCache::update(PlayerType *player_ptr)
     for (const auto &pos : this->dirty_positions) {
         const auto index = this->index_of(pos);
         // 縮小するときは優先度で記号を選ぶので、記号が同じでも優先度が変われば全体図の表示が変わることがある
-        const auto grid = make_grid(player_ptr, pos);
+        const auto grid = make_grid(player_ptr, context, pos);
         auto &cached_grid = this->grids[index];
         if (cached_grid != grid) {
             this->is_changed = true;

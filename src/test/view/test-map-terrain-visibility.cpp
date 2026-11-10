@@ -1,5 +1,6 @@
 #include "game-option/map-screen-options.h"
 #include "system/floor/floor-info.h"
+#include "system/gamevalue.h"
 #include "system/grid-type-definition.h"
 #include "system/item/item-entity.h"
 #include "system/monster-entity.h"
@@ -54,6 +55,14 @@ TEST_CASE("Map terrain observations do not disclose stale knowledge or darkness"
     }
     const Pos2D pos{ 2, 2 };
     auto &grid = floor.get_grid(pos);
+    // 全マスを、覚えている壁にする
+    const auto fill_with_marked_walls = [&floor, wall_id] {
+        for (const auto &pos_fill : floor.get_area()) {
+            auto &grid_fill = floor.get_grid(pos_fill);
+            grid_fill.feat = wall_id;
+            grid_fill.info = CAVE_MARK;
+        }
+    };
 
     SUBCASE("Observation, leaving torchlight, and observing again")
     {
@@ -108,6 +117,44 @@ TEST_CASE("Map terrain observations do not disclose stale knowledge or darkness"
         }
         CHECK_FALSE(is_map_terrain_visible(player, pos));
     }
+    SUBCASE("Walls next to the outer wall count only open grids inside it")
+    {
+        fill_with_marked_walls();
+        // 外周より内側のマスで、外周に接しているもの
+        const Pos2D pos_edge{ 1, 1 };
+        CHECK_FALSE(is_map_terrain_visible(player, pos_edge));
+        // 外周のマスが開いていても見せない
+        floor.get_grid({ 0, 0 }).feat = floor_id;
+        floor.get_grid({ 0, 2 }).feat = floor_id;
+        floor.get_grid({ 2, 0 }).feat = floor_id;
+        CHECK_FALSE(is_map_terrain_visible(player, pos_edge));
+        // 外周より内側のマスが開いていれば見せる
+        floor.get_grid({ 2, 2 }).feat = floor_id;
+        CHECK(is_map_terrain_visible(player, pos_edge));
+        // 外周のマス自体の判定でも、フロアの外と外周のマスは開いているとみなさない
+        floor.get_grid({ 2, 2 }).feat = wall_id;
+        CHECK_FALSE(is_map_terrain_visible(player, { 0, 1 }));
+        floor.get_grid({ 1, 2 }).feat = floor_id;
+        CHECK(is_map_terrain_visible(player, { 0, 1 }));
+    }
+    SUBCASE("Walls on both sides of the inner area boundary count the right neighbours")
+    {
+        fill_with_marked_walls();
+        // 外周から 2 マス以上内側のマス (5x5 では中央だけ)
+        const Pos2D pos_inner{ 2, 2 };
+        CHECK_FALSE(is_map_terrain_visible(player, pos_inner));
+        floor.get_grid({ 1, 1 }).feat = floor_id;
+        CHECK(is_map_terrain_visible(player, pos_inner));
+        floor.get_grid({ 1, 1 }).feat = wall_id;
+        // 右下で外周に接しているマスは、開いている外周のマスを数えない
+        const Pos2D pos_edge{ 3, 3 };
+        for (const auto &pos_outer : { Pos2D{ 4, 2 }, Pos2D{ 4, 3 }, Pos2D{ 4, 4 }, Pos2D{ 3, 4 }, Pos2D{ 2, 4 } }) {
+            floor.get_grid(pos_outer).feat = floor_id;
+        }
+        CHECK_FALSE(is_map_terrain_visible(player, pos_edge));
+        floor.get_grid({ 2, 2 }).feat = floor_id;
+        CHECK(is_map_terrain_visible(player, pos_edge));
+    }
     SUBCASE("Terrain lighting follows the map's lit / torch-lit / dark variants")
     {
         plain.symbol_configs[F_LIT_STANDARD] = { TERM_WHITE, '.' };
@@ -136,6 +183,32 @@ TEST_CASE("Map terrain observations do not disclose stale knowledge or darkness"
         grid.info = 0;
         CHECK_FALSE(is_map_terrain_visible(player, pos));
         CHECK(decide_map_terrain_lighting(player, pos) == F_LIT_STANDARD);
+    }
+    SUBCASE("Wilderness lighting follows the time of day and blindness")
+    {
+        const auto restore_turn = test::scoped_restore(world.game_turn);
+        constexpr auto turns_per_day = TURNS_PER_TICK * TOWN_DAWN;
+        plain.symbol_configs[F_LIT_STANDARD] = { TERM_WHITE, '.' };
+        plain.symbol_configs[F_LIT_DARK] = { TERM_SLATE, '.' };
+        wall.symbol_configs[F_LIT_STANDARD] = { TERM_WHITE, '#' };
+        wall.symbol_configs[F_LIT_DARK] = { TERM_SLATE, '#' };
+        view_special_lite = true;
+        view_granite_lite = true;
+        world.set_wild_mode(true);
+        grid.info = CAVE_MARK;
+        world.game_turn = 0;
+        CHECK(decide_map_terrain_lighting(player, pos) == F_LIT_STANDARD);
+        world.game_turn = turns_per_day / 2;
+        CHECK(decide_map_terrain_lighting(player, pos) == F_LIT_DARK);
+
+        grid.feat = wall_id;
+        world.game_turn = 0;
+        CHECK(decide_map_terrain_lighting(player, pos) == F_LIT_STANDARD);
+        player.effects()->blindness().set(10);
+        CHECK(decide_map_terrain_lighting(player, pos) == F_LIT_DARK);
+        player.effects()->blindness().set(0);
+        world.game_turn = turns_per_day / 2;
+        CHECK(decide_map_terrain_lighting(player, pos) == F_LIT_DARK);
     }
     SUBCASE("Indistinguishable lighting symbols do not expose internal illumination")
     {
@@ -169,5 +242,24 @@ TEST_CASE("Map terrain observations do not disclose stale knowledge or darkness"
         plain.symbol_configs[F_LIT_LITE].character = '*';
         CHECK(decide_map_terrain_lighting(player, pos, TERM_WHITE) == F_LIT_LITE);
         CHECK(decide_map_terrain_lighting(player, pos, TERM_DARK) == F_LIT_STANDARD);
+    }
+    SUBCASE("Lighting of a grid known to be visible matches the full lighting decision")
+    {
+        plain.symbol_configs[F_LIT_STANDARD] = { TERM_WHITE, '.' };
+        plain.symbol_configs[F_LIT_LITE] = { TERM_YELLOW, '.' };
+        plain.symbol_configs[F_LIT_DARK] = { TERM_SLATE, '.' };
+        view_special_lite = true;
+        view_yellow_lite = true;
+        view_bright_lite = true;
+        view_granite_lite = true;
+        const auto &terrain = grid.get_terrain(TerrainKind::MIMIC);
+        for (const auto info : { CAVE_MARK | CAVE_VIEW | CAVE_GLOW, CAVE_MARK | CAVE_VIEW | CAVE_LITE, CAVE_MARK | CAVE_GLOW, CAVE_MARK }) {
+            grid.info = info;
+            const MapVisibilityContext context(player);
+            REQUIRE(is_map_terrain_visible(context, grid, terrain, pos));
+            for (const auto monochrome : { tl::optional<uint8_t>{}, tl::optional<uint8_t>{ TERM_WHITE }, tl::optional<uint8_t>{ TERM_DARK } }) {
+                CHECK(decide_visible_map_terrain_lighting(context, grid, terrain, pos, monochrome) == decide_map_terrain_lighting(player, pos, monochrome));
+            }
+        }
     }
 }
