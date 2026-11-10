@@ -21,6 +21,7 @@
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
+#include <limits>
 #include <queue>
 #include <vector>
 
@@ -234,7 +235,6 @@ void Travel::set_goal(PlayerType *player_ptr, const Pos2D &pos)
         }
     }
 
-    this->forget_flow();
     this->update_flow(player_ptr);
     this->state = TravelState::STANDBY_TO_EXECUTE;
 }
@@ -276,6 +276,12 @@ int Travel::get_cost(const Pos2D &pos) const
  */
 void Travel::step(PlayerType *player_ptr)
 {
+    // 行程は前回の探索で自分がいたマスまでしか確定していないので、そこから外れていたら求め直す
+    const auto p_pos = player_ptr->get_position();
+    if (this->costs[p_pos.y][p_pos.x] > this->settled_cost_limit) {
+        this->update_flow(player_ptr);
+    }
+
     this->dir = decide_travel_step_dir(player_ptr, this->dir, this->costs);
     if (!this->dir) {
         if (this->state != TravelState::EXECUTING) {
@@ -304,14 +310,20 @@ void Travel::step(PlayerType *player_ptr)
 /*!
  * @brief トラベルの目標到達地点までの行程を得る
  * @param player_ptr プレイヤーへの参照ポインタ
+ * @details 目的地から行程の短い順に確定させ、自分のいるマスが確定したら探索をやめる。
+ * 自分より行程の短いマスはすべて確定しているので、行程の短いほうへ進む限り、フロア全体を求めたときと同じ道筋になる。
+ * 自分のマスまで行けないときは、フロア全体を求める。
  */
 void Travel::update_flow(PlayerType *player_ptr)
 {
+    this->forget_flow();
+    this->settled_cost_limit = std::numeric_limits<int>::max();
     if (!this->pos_goal) {
         return;
     }
 
-    const auto &terrain = player_ptr->current_floor_ptr->get_grid(player_ptr->get_position()).get_terrain();
+    const auto p_pos = player_ptr->get_position();
+    const auto &terrain = player_ptr->current_floor_ptr->get_grid(p_pos).get_terrain();
     const auto wall = terrain.flags.has(TerrainCharacteristics::MOVE);
 
     using CostAndPos = std::pair<int, Pos2D>;
@@ -326,6 +338,10 @@ void Travel::update_flow(PlayerType *player_ptr)
         const auto cost = pq.top().first;
         const auto pos = pq.top().second;
         pq.pop();
+        if (pos == p_pos) {
+            this->settled_cost_limit = cost;
+            return;
+        }
 
         for (const auto &d : Direction::directions_8()) {
             const auto pos_neighbor = pos + d.vec();
@@ -341,11 +357,13 @@ void Travel::update_flow(PlayerType *player_ptr)
 
 /*!
  * @brief トラベル処理の記憶配列を初期化する Hack: forget the "flow" information
- * @param player_ptr	プレイヤーへの参照ポインタ
+ * @details 確定している行程も無くなるので、次の step() では行程を求め直す
  */
 void Travel::forget_flow()
 {
     for (auto &row : this->costs) {
         row.fill(MAX_SHORT);
     }
+
+    this->settled_cost_limit = 0;
 }
