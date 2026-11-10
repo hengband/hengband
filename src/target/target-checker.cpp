@@ -32,12 +32,8 @@ POSITION target_row;
 /*!
  * @brief マップ描画のフォーカスを当てるべき座標を更新する
  * @param player_ptr プレイヤーへの参照ポインタ
- * @details
- * Given an row (y) and col (x), this routine detects when a move
- * off the screen has occurred and figures new borders. -RAK-
- * "Update" forces a "full update" to take place.
- * The map is reprinted if necessary, and "TRUE" is returned.
- * @return 実際に再描画が必要だった場合TRUEを返す
+ * @details プレイヤーが画面の端に近づいたとき (center_player なら、走っている間は center_running のときだけ、中心に来るように) 画面を動かす。
+ * 画面を動かしたときだけ、モンスターの表示状態の更新と地図全体の描き直しを要求する。
  */
 void verify_panel(PlayerType *player_ptr)
 {

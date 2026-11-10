@@ -62,7 +62,7 @@ private:
     bool done = false;
     std::vector<Pos2D> pos_interests; // "interesting" な座標一覧を記録する配列
     tl::optional<int> interest_index = 0; // "interesting" な座標一覧のうち現在ターゲットしているもののインデックス
-    std::vector<Pos2D> path_grids; // 射線の*を描いたグリッド (次に射線を描くときに元に戻す)
+    std::vector<Pos2D> path_grids; // 射線の*を描いたグリッド (射線を描き直すときと、照準を終えるときに元に戻す)
     Target target = Target::none();
 };
 
@@ -321,8 +321,9 @@ Direction TargetSetter::switch_target_input()
         this->change_interest_index(-1);
         return Direction::none();
     case 'p': {
+        // 射線は次の print_path() で消える
         verify_panel(this->player_ptr);
-        DeferredUpdateRequests::get_instance().request_monster_update_and_map_redrawing();
+        DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
         handle_stuff(this->player_ptr);
         this->pos_interests = target_set_prepare(this->player_ptr, this->mode);
         this->pos_target = this->player_ptr->get_position();
@@ -488,8 +489,9 @@ tl::optional<std::pair<Direction, bool>> TargetSetter::switch_next_grid_command(
         this->done = true;
         return tl::nullopt;
     case 'p': {
+        // 射線は次の print_path() で消える
         verify_panel(this->player_ptr);
-        DeferredUpdateRequests::get_instance().request_monster_update_and_map_redrawing();
+        DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
         handle_stuff(this->player_ptr);
         this->pos_interests = target_set_prepare(this->player_ptr, this->mode);
         this->pos_target = this->player_ptr->get_position();
@@ -580,6 +582,8 @@ void TargetSetter::sweep_target_grids()
             this->decide_change_panel(dir, move_fast);
         }
     }
+
+    erase_path(this->player_ptr, this->path_grids);
 }
 
 /*
@@ -590,9 +594,10 @@ Target target_set(PlayerType *player_ptr, target_type mode)
     TargetSetter ts(player_ptr, mode);
     ts.sweep_target_grids();
     prt("", 0, 0);
+    // 射線は sweep_target_grids() で消してある
     verify_panel(player_ptr);
     auto &dur = DeferredUpdateRequests::get_instance();
-    dur.request_monster_update_and_map_redrawing();
+    dur.set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
     dur.set_flag(SubWindowRedrawingFlag::FLOOR_ITEMS);
     handle_stuff(player_ptr);
     Target::set_last_target(ts.get_target());
