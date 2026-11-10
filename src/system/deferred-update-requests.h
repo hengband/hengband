@@ -65,7 +65,7 @@ enum class StatusRecalculatingFlag {
     MONSTER_LITE, /*!< モンスターの光源範囲 */
     DELAY_VISIBILITY, /*!< 視界の追加更新 */
     MONSTER_STATUSES, /*!< モンスターのステータス */
-    DISTANCE, /*!< プレイヤーとモンスターの距離 */
+    DISTANCE, /*!< プレイヤーとモンスターの距離 (求め直した後、モンスターの光を求めてから MONSTER_STATUSES で見えるかを判定する) */
     FLOW, /*!< プレイヤーから各マスへの到達距離 */
     MAX,
 };
