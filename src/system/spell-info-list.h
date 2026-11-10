@@ -1,6 +1,7 @@
 #pragma once
 
 #include "realm/realm-types.h"
+#include "spell/magic-type.h"
 #include "system/angband.h"
 #include <string>
 #include <string_view>
@@ -37,6 +38,7 @@ public:
     std::string name; /*!< 呪文名 */
     std::string description; /*!< 呪文説明 */
     std::string tag; /*!< 呪文タグ() */
+    magic_type base{}; /*!< 基準値 (職業ごとの補正を掛ける前の習得レベル・消費MP・難易度・初回経験値倍率) */
 };
 
 namespace test {

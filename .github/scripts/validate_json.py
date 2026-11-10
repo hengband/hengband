@@ -1308,8 +1308,13 @@ def validate_class_skill_semantics(data: dict) -> None:
                 raise ValidationError("start experience must not exceed maximum experience", path=skill_path + ["start_exp"])
 
 
+SPELL_BASE_FIELDS = ("learn_level", "mana_cost", "difficulty", "first_cast_exp_rate")
+
+
 def validate_spell_semantics(data: dict) -> None:
     """Reject strict integer failures, overwrites and ambiguous tag lookups."""
+    # info_validate_version は 2.0 を整数として受け付けない。
+    require_integer(data["version"], ["version"])
     realm_ids = {}
     realm_tags = {}
     for realm_index, realm in enumerate(data["realms"]):
@@ -1326,6 +1331,8 @@ def validate_spell_semantics(data: dict) -> None:
                 if spell["spell_tag"] in tags:
                     raise ValidationError("spell tags must be unique within each realm", path=tag_path)
                 tags.add(spell["spell_tag"])
+                for field in SPELL_BASE_FIELDS:
+                    require_integer(spell[field], path[:-1] + [field])
 
 
 # 小さなID集合だけを保持し、一時候補の検証を繰り返しても保持件数を制限する。

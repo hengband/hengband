@@ -39,7 +39,19 @@ nlohmann::json make_spell(int id, const std::string &tag)
         { "spell_tag", tag },
         { "name", { { "ja", tag }, { "en", tag } } },
         { "description", { { "ja", tag + " description" }, { "en", tag + " description" } } },
+        { "learn_level", 10 },
+        { "mana_cost", 20 },
+        { "difficulty", 30 },
+        { "first_cast_exp_rate", 40 },
     };
+}
+
+void check_same_base(const SpellInfo &actual, const SpellInfo &expected)
+{
+    CHECK(actual.base.slevel == expected.base.slevel);
+    CHECK(actual.base.smana == expected.base.smana);
+    CHECK(actual.base.sfail == expected.base.sfail);
+    CHECK(actual.base.sexp == expected.base.sexp);
 }
 
 nlohmann::json make_realm(const std::string &name, const nlohmann::json &first, const nlohmann::json &second)
@@ -70,6 +82,7 @@ void check_spells_unchanged(const SpellInfoList &spells, const std::vector<Spell
         CHECK(actual[i].tag == saved[i].tag);
         CHECK(actual[i].name == saved[i].name);
         CHECK(actual[i].description == saved[i].description);
+        check_same_base(actual[i], saved[i]);
     }
 }
 }
@@ -110,6 +123,7 @@ TEST_CASE("SpellReader commits all books only after the whole realm succeeds")
                 CHECK(actual.tag == expected.tag);
                 CHECK(actual.name == expected.name);
                 CHECK(actual.description == expected.description);
+                check_same_base(actual, expected);
             }
         }
         CHECK(spells.get_spell_id(RealmType::LIFE, "old-zero") == 0);
@@ -213,6 +227,14 @@ TEST_CASE("SpellReader propagates helper errors without publishing staged spells
         { "/books/1/spells/0/name", 7, ParseErrorType::INVALID_TYPE },
         { "/books/1/spells/0/description", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
         { "/books/1/spells/0/description", 7, ParseErrorType::INVALID_TYPE },
+        { "/books/1/spells/0/learn_level", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/books/1/spells/0/learn_level", 0, ParseErrorType::INVALID_VALUE },
+        { "/books/1/spells/0/mana_cost", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/books/1/spells/0/mana_cost", "5", ParseErrorType::INVALID_TYPE },
+        { "/books/1/spells/0/difficulty", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/books/1/spells/0/difficulty", 101, ParseErrorType::INVALID_VALUE },
+        { "/books/1/spells/0/first_cast_exp_rate", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/books/1/spells/0/first_cast_exp_rate", 1.5, ParseErrorType::INVALID_TYPE },
     };
     for (const auto &invalid : invalid_fields) {
         CAPTURE(invalid.path);
@@ -350,4 +372,81 @@ TEST_CASE("SpellReader reports non-string realm names and tags as invalid types"
             CHECK_FALSE(spells.get_spell_id(RealmType::LIFE, "first"));
         }
     }
+}
+
+TEST_CASE("SpellReader stores the base values of each spell")
+{
+    const test::ScopedReaderState reader_state;
+    const test::SpellInfoListTestAccess spell_state;
+    auto &spells = SpellInfoList::get_instance();
+    SpellReader::Session session;
+    auto first = make_spell(0, "first");
+    first["learn_level"] = 1;
+    first["mana_cost"] = 2;
+    first["difficulty"] = 3;
+    first["first_cast_exp_rate"] = 4;
+    auto second = make_spell(8, "second");
+    second["learn_level"] = 45;
+    second["mana_cost"] = 90;
+    second["difficulty"] = 85;
+    second["first_cast_exp_rate"] = 250;
+    const auto data = make_realm("LIFE", nlohmann::json::array({ first }), nlohmann::json::array({ second }));
+    REQUIRE(SpellReader(data, spells, session).read().has_value());
+
+    const auto &base_first = spells.get_spell_info(RealmType::LIFE, 0).base;
+    CHECK(base_first.slevel == 1);
+    CHECK(base_first.smana == 2);
+    CHECK(base_first.sfail == 3);
+    CHECK(base_first.sexp == 4);
+    const auto &base_second = spells.get_spell_info(RealmType::LIFE, 8).base;
+    CHECK(base_second.slevel == 45);
+    CHECK(base_second.smana == 90);
+    CHECK(base_second.sfail == 85);
+    CHECK(base_second.sexp == 250);
+}
+
+TEST_CASE("SpellReader accepts base values only within their ranges")
+{
+    const test::ScopedReaderState reader_state;
+    const test::SpellInfoListTestAccess spell_state;
+    auto &spells = SpellInfoList::get_instance();
+
+    struct BaseRange {
+        const char *field;
+        int minimum;
+        int maximum;
+    };
+    const std::vector<BaseRange> ranges = {
+        { "learn_level", 1, 50 },
+        { "mana_cost", 1, 2047 },
+        { "difficulty", 0, 100 },
+        { "first_cast_exp_rate", 0, 2047 },
+    };
+    for (const auto &range : ranges) {
+        CAPTURE(range.field);
+        for (const auto value : { range.minimum, range.maximum }) {
+            CAPTURE(value);
+            auto spell = make_spell(0, "edge");
+            spell[range.field] = value;
+            SpellReader::Session session;
+            const auto data = make_realm("LIFE", nlohmann::json::array({ spell }), nlohmann::json::array());
+            CHECK(SpellReader(data, spells, session).read().has_value());
+        }
+        for (const auto value : { range.minimum - 1, range.maximum + 1 }) {
+            CAPTURE(value);
+            auto spell = make_spell(1, "outside");
+            spell[range.field] = value;
+            SpellReader::Session session;
+            const auto data = make_realm("LIFE", nlohmann::json::array({ spell }), nlohmann::json::array());
+            CHECK(test::to_error_code(SpellReader(data, spells, session).read()) == ParseErrorType::INVALID_VALUE);
+            CHECK_FALSE(spells.get_spell_id(RealmType::LIFE, "outside"));
+        }
+    }
+
+    // 習得不可を表す 99 は職業ごとの値 (ClassMagicDefinitions) だけのもので、基準値には書けない。
+    auto unlearnable = make_spell(2, "unlearnable");
+    unlearnable["learn_level"] = 99;
+    SpellReader::Session session;
+    const auto data = make_realm("LIFE", nlohmann::json::array({ unlearnable }), nlohmann::json::array());
+    CHECK(test::to_error_code(SpellReader(data, spells, session).read()) == ParseErrorType::INVALID_VALUE);
 }
