@@ -184,14 +184,16 @@ static um_type *initialize_um_type(PlayerType *player_ptr, um_type *um_ptr, MONS
     return um_ptr;
 }
 
-static POSITION decide_updated_distance(PlayerType *player_ptr, um_type *um_ptr)
+/*!
+ * @brief モンスターのプレイヤーからの距離 (cdis) を求め直す
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param monster 対象のモンスター
+ * @return 求め直した距離
+ */
+static POSITION update_distance(PlayerType *player_ptr, MonsterEntity &monster)
 {
-    if (!um_ptr->full) {
-        return um_ptr->m_ptr->cdis;
-    }
-
-    int dy = (player_ptr->y > um_ptr->fy) ? (player_ptr->y - um_ptr->fy) : (um_ptr->fy - player_ptr->y);
-    int dx = (player_ptr->x > um_ptr->fx) ? (player_ptr->x - um_ptr->fx) : (um_ptr->fx - player_ptr->x);
+    int dy = (player_ptr->y > monster.fy) ? (player_ptr->y - monster.fy) : (monster.fy - player_ptr->y);
+    int dx = (player_ptr->x > monster.fx) ? (player_ptr->x - monster.fx) : (monster.fx - player_ptr->x);
     POSITION distance = (dy > dx) ? (dy + (dx >> 1)) : (dx + (dy >> 1));
     if (distance > 255) {
         distance = 255;
@@ -201,8 +203,17 @@ static POSITION decide_updated_distance(PlayerType *player_ptr, um_type *um_ptr)
         distance = 1;
     }
 
-    um_ptr->m_ptr->cdis = distance;
+    monster.cdis = distance;
     return distance;
+}
+
+static POSITION decide_updated_distance(PlayerType *player_ptr, um_type *um_ptr)
+{
+    if (!um_ptr->full) {
+        return um_ptr->m_ptr->cdis;
+    }
+
+    return update_distance(player_ptr, *um_ptr->m_ptr);
 }
 
 static void update_smart_stupid_flags(MonraceDefinition &monrace)
@@ -591,10 +602,10 @@ void update_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool full)
 /*!
  * @param player_ptr プレイヤーへの参照ポインタ
  * @brief 単純に生存している全モンスターの更新処理を行う / This function simply updates all the (non-dead) monsters (see above).
- * @param full 距離更新を行うならtrue
+ * @details 距離 (cdis) は求め直さない。求め直すなら先に update_monster_distances() を呼ぶ
  * @todo モンスターの感知状況しか更新していないように見える。関数名変更を検討する
  */
-void update_monsters(PlayerType *player_ptr, bool full)
+void update_monsters(PlayerType *player_ptr)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
     for (MONSTER_IDX i = 1; i < floor.m_max; i++) {
@@ -603,7 +614,26 @@ void update_monsters(PlayerType *player_ptr, bool full)
             continue;
         }
 
-        update_monster(player_ptr, i, full);
+        update_monster(player_ptr, i, false);
+    }
+}
+
+/*!
+ * @brief 生存している全モンスターのプレイヤーからの距離だけを求め直す
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @details 見えるかどうかは判定しない (update_monsters() で判定する)。
+ * モンスターの光 (update_mon_lite()) は距離で範囲を絞るので、見えるかを判定する前に光を求めるときに使う。
+ */
+void update_monster_distances(PlayerType *player_ptr)
+{
+    auto &floor = *player_ptr->current_floor_ptr;
+    for (MONSTER_IDX i = 1; i < floor.m_max; i++) {
+        auto &monster = floor.m_list[i];
+        if (!monster.is_valid()) {
+            continue;
+        }
+
+        update_distance(player_ptr, monster);
     }
 }
 

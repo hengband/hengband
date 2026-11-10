@@ -2654,9 +2654,13 @@ void update_creature(PlayerType *player_ptr)
         update_flow(player_ptr);
     }
 
+    // モンスターの光は距離で範囲を絞るので、距離を先に求める。見えるかの判定は光を求め直してから (MONSTER_STATUSES で) 行う。
+    // 光の印が無いまま判定すると (光の印をセーブしないので、読み込んだ直後など)、その光だけで見えているモンスターが
+    // いったん見えなくなってから見え直し、新たに見えた扱いで disturb() などが起きる
     if (dur.has(StatusRecalculatingFlag::DISTANCE)) {
         dur.reset_flag(StatusRecalculatingFlag::DISTANCE);
-        update_monsters(player_ptr, true);
+        update_monster_distances(player_ptr);
+        dur.set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
     }
 
     if (dur.has(StatusRecalculatingFlag::MONSTER_LITE)) {
@@ -2671,7 +2675,7 @@ void update_creature(PlayerType *player_ptr)
 
     if (dur.has(StatusRecalculatingFlag::MONSTER_STATUSES)) {
         dur.reset_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
-        update_monsters(player_ptr, false);
+        update_monsters(player_ptr);
     }
 }
 
