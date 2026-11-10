@@ -5460,6 +5460,9 @@
     <ClInclude Include="..\..\src\spell-realm\spells-trump.h">
       <Filter>spell-realm</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\spell\magic-type.h">
+      <Filter>spell</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\src\spell\range-calc.h">
       <Filter>spell</Filter>
     </ClInclude>
