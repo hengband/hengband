@@ -1331,71 +1331,23 @@ static errr term_pict_win(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *ap, c
             RECT cell = { x2, y2, x2 + tw2, y2 + h2 };
             FillRect(hdc, &cell, static_cast<HBRUSH>(GetStockObject(BLACK_BRUSH)));
             const auto draw_tile = [&](TERM_COLOR color, char character) {
-                const auto monster_catalog = original_tiles::decode_monster_catalog_tile({ color, character });
-                if (monster_catalog && original_tiles::monster_catalog_available) {
-                    TransparentBlt(hdc, x2, y2, tw2, h2, hdcSrc, (*monster_catalog % original_tiles::COLUMNS) * w1,
-                        (original_tiles::MONSTER_CATALOG_BASE_ROW + *monster_catalog / original_tiles::COLUMNS) * h1, w1, h1, RGB(255, 0, 255));
+                const auto source = original_tiles::tile_source({ color, character });
+                if (!source) {
                     return;
                 }
-                const auto catalog = original_tiles::decode_catalog_tile({ color, character });
-                if (catalog && original_tiles::catalog_available) {
-                    TransparentBlt(hdc, x2, y2, tw2, h2, hdcSrc, (*catalog % original_tiles::COLUMNS) * w1,
-                        (original_tiles::CATALOG_BASE_ROW + *catalog / original_tiles::COLUMNS) * h1, w1, h1, RGB(255, 0, 255));
-                    return;
-                }
-                const auto player_index = original_tiles::decode_player_tile({ color, character });
-                if (player_index) {
-                    const auto source_x = (*player_index % original_tiles::COLUMNS) * w1;
-                    const auto source_y = (original_tiles::PLAYER_BASE_ROW + *player_index / original_tiles::COLUMNS) * h1;
+                const auto source_x = source->column * w1;
+                const auto source_y = source->row * h1;
+                if (source->transparent) {
                     TransparentBlt(hdc, x2, y2, tw2, h2, hdcSrc, source_x, source_y, w1, h1, RGB(255, 0, 255));
-                    return;
-                }
-                const auto monster_index = original_tiles::decode_monster_tile({ color, character });
-                if (monster_index) {
-                    const auto source_x = (*monster_index % original_tiles::COLUMNS) * w1;
-                    const auto source_y = (original_tiles::MONSTER_BASE_ROW + *monster_index / original_tiles::COLUMNS) * h1;
-                    TransparentBlt(hdc, x2, y2, tw2, h2, hdcSrc, source_x, source_y, w1, h1, RGB(255, 0, 255));
-                    return;
-                }
-                const auto item_index = original_tiles::decode_item_tile({ color, character });
-                if (item_index) {
-                    const auto source_x = (*item_index % original_tiles::COLUMNS) * w1;
-                    const auto source_y = (original_tiles::ITEM_BASE_ROW + *item_index / original_tiles::COLUMNS) * h1;
-                    TransparentBlt(hdc, x2, y2, tw2, h2, hdcSrc, source_x, source_y, w1, h1, RGB(255, 0, 255));
-                    return;
-                }
-                if ((color & 0x80) && (character & 0x80) && (color & 0x7f) >= original_tiles::SUPPLEMENT_ROW && (color & 0x7f) <= original_tiles::SUPPLEMENT_ROW + (original_tiles::SUPPLEMENT_TILES * 3 - 1) / 128) {
-                    const auto index = ((color & 0x7f) - original_tiles::SUPPLEMENT_ROW) * 128 + (character & 0x7f);
-                    if (index < original_tiles::SUPPLEMENT_TILES * 3) {
-                        StretchBlt(hdc, x2, y2, tw2, h2, hdcSrc, (index % original_tiles::COLUMNS) * w1, (original_tiles::SUPPLEMENT_BASE_ROW + index / original_tiles::COLUMNS) * h1, w1, h1, SRCCOPY);
-                    }
-                    return;
-                }
-                if ((color & 0x80) && (character & 0x80) && (color & 0x7f) >= original_tiles::EXPANDED_FLOOR_ROW && (color & 0x7f) <= original_tiles::EXPANDED_FLOOR_ROW + (original_tiles::EXPANDED_FLOOR_TILES * 3 - 1) / 128) {
-                    const auto index = ((color & 0x7f) - original_tiles::EXPANDED_FLOOR_ROW) * 128 + (character & 0x7f);
-                    if (index < original_tiles::EXPANDED_FLOOR_TILES * 3) {
-                        StretchBlt(hdc, x2, y2, tw2, h2, hdcSrc, (index % original_tiles::COLUMNS) * w1, (original_tiles::EXPANDED_FLOOR_BASE_ROW + index / original_tiles::COLUMNS) * h1, w1, h1, SRCCOPY);
-                    }
-                    return;
-                }
-                const auto connected = original_tiles::decode_connected_floor({ color, character });
-                if (connected) {
-                    const auto index = original_tiles::connected_floor_tile_index(*connected);
-                    const auto source_x = (index % original_tiles::COLUMNS) * w1;
-                    const auto source_y = (original_tiles::CRACK_TILE_BASE_ROW + index / original_tiles::COLUMNS) * h1;
+                } else {
                     StretchBlt(hdc, x2, y2, tw2, h2, hdcSrc, source_x, source_y, w1, h1, SRCCOPY);
-                    return;
-                }
-                const auto row = color & 0x7f;
-                if ((color & 0x80) && (character & 0x80) && row < original_tiles::LIGHTING_ROWS * 3 && (character & 0x7f) < original_tiles::COLUMNS) {
-                    StretchBlt(hdc, x2, y2, tw2, h2, hdcSrc, (character & 0x7f) * w1, row * h1, w1, h1, SRCCOPY);
                 }
             };
             draw_tile(tap[i], tcp[i]);
-            const auto row = ap[i] & 0x7f;
+            const auto glyph_color = original_tiles::decode_glyph_color({ ap[i], cp[i] });
             if (original_tiles::monster_catalog_available && original_tiles::decode_monster_catalog_tile({ ap[i], cp[i] })) {
                 draw_tile(ap[i], cp[i]);
-            } else if ((ap[i] & 0x80) && row >= original_tiles::GLYPH_ROW && row < original_tiles::GLYPH_ROW + 16) {
+            } else if (glyph_color) {
                 char character = cp[i] & 0x7f;
                 SetTextColor(hdc, RGB(0, 0, 0));
                 for (const auto &offset : { POINT{ -1, 0 }, POINT{ 1, 0 }, POINT{ 0, -1 }, POINT{ 0, 1 } }) {
@@ -1403,7 +1355,7 @@ static errr term_pict_win(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *ap, c
                     OffsetRect(&shadow, offset.x, offset.y);
                     DrawTextA(hdc, &character, 1, &shadow, DT_CENTER | DT_VCENTER | DT_SINGLELINE | DT_NOPREFIX);
                 }
-                SetTextColor(hdc, win_clr[row - original_tiles::GLYPH_ROW]);
+                SetTextColor(hdc, win_clr[*glyph_color]);
                 DrawTextA(hdc, &character, 1, &cell, DT_CENTER | DT_VCENTER | DT_SINGLELINE | DT_NOPREFIX);
             } else if (ap[i] != tap[i] || cp[i] != tcp[i]) {
                 draw_tile(ap[i], cp[i]);

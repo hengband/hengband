@@ -9,8 +9,12 @@
 #include "term/gameterm.h"
 #include "term/tile-layout.h"
 #include "term/z-term.h"
+#include "view/actor-readability.h"
 #include "view/display-map.h"
 #include "view/map-tile-layout.h"
+#include "view/original-item-catalog.h"
+#include "view/original-monster-catalog.h"
+#include "view/original-player-tiles.h"
 #include <array>
 #include <cmath>
 #include <cstdint>
@@ -184,6 +188,121 @@ namespace {
 bool is_enabled()
 {
     return use_graphics && ANGBAND_GRAF == "original32";
+}
+
+/*!
+ * @brief 端末に書かれた記号から、描くタイルの画像上の位置を求める
+ * @param symbol 端末のセルの属性と文字
+ * @return タイルの位置。何も描かない記号なら tl::nullopt
+ * @details フロントエンドの違いによらず同じタイルを描くため、Windows 版と X11 版で共用する。
+ */
+tl::optional<TileSource> tile_source(DisplaySymbol symbol)
+{
+    const auto at = [](int base_row, int index, bool transparent) {
+        return TileSource{ index % COLUMNS, base_row + index / COLUMNS, transparent };
+    };
+    if (monster_catalog_available) {
+        if (const auto index = decode_monster_catalog_tile(symbol)) {
+            return at(MONSTER_CATALOG_BASE_ROW, *index, true);
+        }
+    }
+    if (catalog_available) {
+        if (const auto index = decode_catalog_tile(symbol)) {
+            return at(CATALOG_BASE_ROW, *index, true);
+        }
+    }
+    if (const auto index = decode_player_tile(symbol)) {
+        return at(PLAYER_BASE_ROW, *index, true);
+    }
+    if (const auto index = decode_monster_tile(symbol)) {
+        return at(MONSTER_BASE_ROW, *index, true);
+    }
+    if (const auto index = decode_item_tile(symbol)) {
+        return at(ITEM_BASE_ROW, *index, true);
+    }
+
+    const auto color = symbol.color;
+    const auto character = static_cast<unsigned char>(symbol.character);
+    if (!(color & 0x80) || !(character & 0x80)) {
+        return tl::nullopt;
+    }
+    const auto row = color & 0x7f;
+    const auto column = character & 0x7f;
+    if (row >= SUPPLEMENT_ROW && row <= SUPPLEMENT_ROW + (SUPPLEMENT_TILES * 3 - 1) / 128) {
+        const auto index = (row - SUPPLEMENT_ROW) * 128 + column;
+        return index < SUPPLEMENT_TILES * 3 ? tl::make_optional(at(SUPPLEMENT_BASE_ROW, index, false)) : tl::nullopt;
+    }
+    if (row >= EXPANDED_FLOOR_ROW && row <= EXPANDED_FLOOR_ROW + (EXPANDED_FLOOR_TILES * 3 - 1) / 128) {
+        const auto index = (row - EXPANDED_FLOOR_ROW) * 128 + column;
+        return index < EXPANDED_FLOOR_TILES * 3 ? tl::make_optional(at(EXPANDED_FLOOR_BASE_ROW, index, false)) : tl::nullopt;
+    }
+    if (const auto connected = decode_connected_floor(symbol)) {
+        return at(CRACK_TILE_BASE_ROW, connected_floor_tile_index(*connected), false);
+    }
+    if (row < LIGHTING_ROWS * 3 && column < COLUMNS) {
+        return TileSource{ column, row, false };
+    }
+    return tl::nullopt;
+}
+
+/*!
+ * @brief 実際のフォントで描く文字の記号から、文字の色を取り出す
+ * @param symbol 端末のセルの属性と文字
+ * @return 文字の色 (0〜15)。文字の記号でなければ tl::nullopt
+ */
+tl::optional<int> decode_glyph_color(DisplaySymbol symbol)
+{
+    const auto row = symbol.color & 0x7f;
+    if (!(symbol.color & 0x80) || row < GLYPH_ROW || row >= GLYPH_ROW + 16) {
+        return tl::nullopt;
+    }
+    return row - GLYPH_ROW;
+}
+
+/*!
+ * @brief 読み込んだ画像の大きさから、追加のアイテム画像とモンスター画像を使えるかを決める
+ * @param width 画像の幅 (画素)
+ * @param height 画像の高さ (画素)
+ */
+void detect_catalogs(int width, int height)
+{
+    catalog_available = width == 512 && height >= CATALOG_NATIVE_HEIGHT;
+    monster_catalog_available = catalog_available && height >= MONSTER_CATALOG_NATIVE_HEIGHT;
+}
+
+/*!
+ * @brief 読み込んだ画像のモンスターとプレイヤーの画素を見やすく補正する
+ * @param pixels 画像の画素 (0x00RRGGBB、上の行から順)
+ * @param width 画像の幅 (画素)
+ * @param height 画像の高さ (画素)
+ * @return 補正できたか
+ * @details 画像の読み込み時に一度だけ呼び、地形とアイテムの画素は変えない。
+ * 先に detect_catalogs() で追加画像の有無を決めておくこと。
+ */
+bool make_image_readable(std::span<uint32_t> pixels, int width, int height)
+{
+    if (!make_actor_region_readable(pixels, width, height, MONSTER_BASE_ROW, MONSTER_TILES, false, true) ||
+        !make_actor_region_readable(pixels, width, height, PLAYER_BASE_ROW, PLAYER_TILES, true) ||
+        (monster_catalog_available && !make_actor_region_readable(pixels, width, height, MONSTER_CATALOG_BASE_ROW, MONSTER_CATALOG_FRAMES, false))) {
+        return false;
+    }
+    if (monster_catalog_available) {
+        // 古いPNGの未使用枠は透明色なので、追加画像がない種族は汎用画像へ戻す。
+        for (auto frame = 0; frame < MONSTER_CATALOG_FRAMES; ++frame) {
+            auto missing = true;
+            for (auto y = 0; y < 32 && missing; ++y) {
+                for (auto x = 0; x < 32; ++x) {
+                    const auto pixel = pixels[(MONSTER_CATALOG_BASE_ROW * 32 + frame / 16 * 32 + y) * width + frame % 16 * 32 + x] & 0x00ffffffU;
+                    if (pixel != ACTOR_TRANSPARENT) {
+                        missing = false;
+                        break;
+                    }
+                }
+            }
+            monster_catalog_missing_frames[frame] = missing;
+        }
+    }
+    return true;
 }
 
 int supplemental_tile_index(std::string_view tag)

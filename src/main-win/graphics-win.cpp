@@ -8,10 +8,8 @@
 #include "main-win/main-win-utils.h"
 #include "system/system-variables.h"
 #include "util/angband-files.h"
-#include "view/actor-readability.h"
 #include "view/original-item-catalog.h"
 #include "view/original-monster-catalog.h"
-#include "view/original-player-tiles.h"
 #include "view/original-tiles.h"
 #include <cstring>
 #include <fmt/format.h>
@@ -93,27 +91,9 @@ static HBITMAP readable_actor_bitmap(HBITMAP original)
     }
     std::vector<uint32_t> pixels(static_cast<size_t>(width) * static_cast<size_t>(height));
     if (GetDIBits(dc, original, 0, static_cast<UINT>(height), pixels.data(), &info, DIB_RGB_COLORS) != height ||
-        !original_tiles::make_actor_region_readable(pixels, width, height, original_tiles::MONSTER_BASE_ROW, original_tiles::MONSTER_TILES, false, true) ||
-        !original_tiles::make_actor_region_readable(pixels, width, height, original_tiles::PLAYER_BASE_ROW, original_tiles::PLAYER_TILES, true) ||
-        (original_tiles::monster_catalog_available && !original_tiles::make_actor_region_readable(pixels, width, height, original_tiles::MONSTER_CATALOG_BASE_ROW, original_tiles::MONSTER_CATALOG_FRAMES, false))) {
+        !original_tiles::make_image_readable(pixels, width, height)) {
         ReleaseDC(nullptr, dc);
         return nullptr;
-    }
-    if (original_tiles::monster_catalog_available) {
-        // 古いPNGの未使用枠は透明色なので、追加画像がない種族は汎用画像へ戻す。
-        for (auto frame = 0; frame < original_tiles::MONSTER_CATALOG_FRAMES; ++frame) {
-            auto missing = true;
-            for (auto y = 0; y < 32 && missing; ++y) {
-                for (auto x = 0; x < 32; ++x) {
-                    const auto pixel = pixels[(original_tiles::MONSTER_CATALOG_BASE_ROW * 32 + frame / 16 * 32 + y) * width + frame % 16 * 32 + x] & 0x00ffffffU;
-                    if (pixel != original_tiles::ACTOR_TRANSPARENT) {
-                        missing = false;
-                        break;
-                    }
-                }
-            }
-            original_tiles::monster_catalog_missing_frames[frame] = missing;
-        }
     }
     void *bits = nullptr;
     const auto result = CreateDIBSection(dc, &info, DIB_RGB_COLORS, &bits, nullptr, 0);
@@ -192,10 +172,13 @@ graphics_mode change_graphics(graphics_mode arg)
     }
 
     if (arg == graphics_mode::GRAPHICS_ORIGINAL_TERRAIN) {
+        // 大きさを取れなければ追加画像は無いものとする
         BITMAP dimensions{};
-        original_tiles::catalog_available = GetObject(infGraph.hBitmap, static_cast<int>(sizeof(dimensions)), &dimensions) == static_cast<int>(sizeof(dimensions)) &&
-                                            dimensions.bmWidth == 512 && dimensions.bmHeight >= original_tiles::CATALOG_NATIVE_HEIGHT;
-        original_tiles::monster_catalog_available = original_tiles::catalog_available && dimensions.bmHeight >= original_tiles::MONSTER_CATALOG_NATIVE_HEIGHT;
+        if (GetObject(infGraph.hBitmap, static_cast<int>(sizeof(dimensions)), &dimensions) == static_cast<int>(sizeof(dimensions))) {
+            original_tiles::detect_catalogs(dimensions.bmWidth, dimensions.bmHeight);
+        } else {
+            original_tiles::detect_catalogs(0, 0);
+        }
         if (const auto readable = readable_actor_bitmap(static_cast<HBITMAP>(infGraph.hBitmap))) {
             DeleteObject(infGraph.hBitmap);
             infGraph.hBitmap = readable;

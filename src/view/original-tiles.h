@@ -2,6 +2,8 @@
 
 #include "util/point-2d.h"
 #include "view/display-symbol.h"
+#include <cstdint>
+#include <span>
 #include <string_view>
 #include <tl/optional.hpp>
 
@@ -55,7 +57,20 @@ struct FloorConnections {
     int variant;
 };
 
+/*!
+ * @brief 記号に対応するタイルの画像上の位置 (タイル単位)
+ */
+struct TileSource {
+    int column; //!< 画像上の列
+    int row; //!< 画像上の行
+    bool transparent; //!< 透過色 (マゼンタ) の画素を描かずに重ねるか
+};
+
 bool is_enabled();
+tl::optional<TileSource> tile_source(DisplaySymbol symbol);
+tl::optional<int> decode_glyph_color(DisplaySymbol symbol);
+void detect_catalogs(int width, int height);
+bool make_image_readable(std::span<uint32_t> pixels, int width, int height);
 int item_tile_index(ItemKindType type, int subtype, int appearance);
 DisplaySymbol item_tile_symbol(int icon, int color);
 tl::optional<int> decode_item_tile(DisplaySymbol symbol);
