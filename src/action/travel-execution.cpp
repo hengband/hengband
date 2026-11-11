@@ -21,6 +21,8 @@
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
+#include <algorithm>
+#include <limits>
 #include <queue>
 #include <vector>
 
@@ -76,47 +78,66 @@ int travel_flow_cost(PlayerType *player_ptr, const Pos2D &pos)
     return cost;
 }
 
+constexpr auto ENTRY_COST_UNKNOWN = -1; //!< マスに入るコストをまだ求めていない
+constexpr auto ENTRY_COST_BLOCKED = -2; //!< マスに入れない
+constexpr auto ENTRY_COST_WALL = -3; //!< 壁扱いのマス (壁の中から続けてだけ入れる)
+
 /*!
- * @brief 隣接するマスのコストを計算する
- * @param player_ptr	プレイヤーへの参照ポインタ
- * @param pos 隣接するマスの座標
- * @param current_cost 現在のマスのコスト
- * @param wall プレイヤーが壁の中にいるならばTRUE
- * @return 隣接するマスのコスト。移動不可ならばtl::nullopt
+ * @brief マスに入るコストを求める
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param pos マスの座標
+ * @return 地形に応じたコスト。入れないマスは ENTRY_COST_BLOCKED、壁扱いのマスは ENTRY_COST_WALL
+ * @details どのマスから入るかによらないので、1 回の探索ではマスごとに 1 度だけ求める
  */
-tl::optional<int> travel_flow_aux(PlayerType *player_ptr, const Pos2D pos, int current_cost, bool wall)
+int decide_entry_cost(PlayerType *player_ptr, const Pos2D &pos)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
+    if (!floor.contains(pos, FloorBoundary::OUTER_WALL_EXCLUSIVE)) {
+        return ENTRY_COST_BLOCKED;
+    }
+
     const auto &grid = floor.get_grid(pos);
     const auto &terrain = grid.get_terrain();
-    if (!floor.contains(pos, FloorBoundary::OUTER_WALL_EXCLUSIVE)) {
-        return tl::nullopt;
-    }
-
     if (floor.is_underground() && !(grid.info & CAVE_KNOWN)) {
-        return tl::nullopt;
+        return ENTRY_COST_BLOCKED;
     }
 
-    const auto from_wall = (current_cost / TRAVEL_UNABLE);
     auto is_wall = terrain.flags.has_any_of({ TerrainCharacteristics::WALL, TerrainCharacteristics::CAN_DIG });
     is_wall |= terrain.flags.has(TerrainCharacteristics::DOOR) && (grid.mimic > 0);
     auto can_move = terrain.flags.has_not(TerrainCharacteristics::MOVE);
     can_move &= terrain.flags.has(TerrainCharacteristics::CAN_FLY);
     can_move &= !player_ptr->levitation;
-
-    auto add_cost = 1;
     if (is_wall || can_move) {
+        return ENTRY_COST_WALL;
+    }
+
+    return travel_flow_cost(player_ptr, pos);
+}
+
+/*!
+ * @brief 隣接するマスのコストを計算する
+ * @param entry_cost 隣接するマスに入るコスト (decide_entry_cost() の結果。ENTRY_COST_UNKNOWN は渡さない)
+ * @param current_cost 現在のマスのコスト
+ * @param wall プレイヤーが壁の中にいるならばTRUE
+ * @return 隣接するマスのコスト。移動不可ならばtl::nullopt
+ */
+tl::optional<int> travel_flow_aux(int entry_cost, int current_cost, bool wall)
+{
+    if (entry_cost == ENTRY_COST_BLOCKED) {
+        return tl::nullopt;
+    }
+
+    const auto from_wall = (current_cost / TRAVEL_UNABLE);
+    const auto base_cost = (current_cost % TRAVEL_UNABLE);
+    if (entry_cost == ENTRY_COST_WALL) {
         if (!wall || !from_wall) {
             return tl::nullopt;
         }
 
-        add_cost += TRAVEL_UNABLE;
-    } else {
-        add_cost = travel_flow_cost(player_ptr, pos);
+        return base_cost + 1 + TRAVEL_UNABLE;
     }
 
-    const auto base_cost = (current_cost % TRAVEL_UNABLE);
-    return base_cost + add_cost;
+    return base_cost + entry_cost;
 }
 
 /*!
@@ -234,7 +255,6 @@ void Travel::set_goal(PlayerType *player_ptr, const Pos2D &pos)
         }
     }
 
-    this->forget_flow();
     this->update_flow(player_ptr);
     this->state = TravelState::STANDBY_TO_EXECUTE;
 }
@@ -276,6 +296,12 @@ int Travel::get_cost(const Pos2D &pos) const
  */
 void Travel::step(PlayerType *player_ptr)
 {
+    // 行程は前回の探索で自分がいたマスまでしか確定していないので、そこから外れていたら求め直す
+    const auto p_pos = player_ptr->get_position();
+    if (this->costs[p_pos.y][p_pos.x] > this->settled_cost_limit) {
+        this->update_flow(player_ptr);
+    }
+
     this->dir = decide_travel_step_dir(player_ptr, this->dir, this->costs);
     if (!this->dir) {
         if (this->state != TravelState::EXECUTING) {
@@ -304,20 +330,33 @@ void Travel::step(PlayerType *player_ptr)
 /*!
  * @brief トラベルの目標到達地点までの行程を得る
  * @param player_ptr プレイヤーへの参照ポインタ
+ * @details 目的地から行程の短い順に確定させ、自分のいるマスが確定したら探索をやめる。
+ * 自分より行程の短いマスはすべて確定しているので、行程の短いほうへ進む限り、フロア全体を求めたときと同じ道筋になる。
+ * 自分のマスまで行けないときは、フロア全体を求める。
  */
 void Travel::update_flow(PlayerType *player_ptr)
 {
+    this->forget_flow();
+    this->settled_cost_limit = std::numeric_limits<int>::max();
     if (!this->pos_goal) {
         return;
     }
 
-    const auto &terrain = player_ptr->current_floor_ptr->get_grid(player_ptr->get_position()).get_terrain();
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto p_pos = player_ptr->get_position();
+    const auto &terrain = floor.get_grid(p_pos).get_terrain();
     const auto wall = terrain.flags.has(TerrainCharacteristics::MOVE);
 
     using CostAndPos = std::pair<int, Pos2D>;
     auto compare = [](const auto &a, const auto &b) { return a.first > b.first; }; // costが小さいものを優先
     std::priority_queue<CostAndPos, std::vector<CostAndPos>, decltype(compare)> pq(compare);
 
+    for (auto y = 0; y < floor.height; y++) {
+        std::fill_n(this->entry_costs[y].begin(), floor.width, ENTRY_COST_UNKNOWN);
+    }
+
+    // 外周の内側のマスの隣はフロアに収まる。外周のマスを取り出すのは目的地だけなので、そのときだけフロアの外の隣を調べない
+    const auto is_goal_on_outer_wall = !floor.contains(*this->pos_goal, FloorBoundary::OUTER_WALL_EXCLUSIVE);
     this->costs[this->pos_goal->y][this->pos_goal->x] = 1;
     pq.emplace(1, *this->pos_goal);
 
@@ -326,11 +365,25 @@ void Travel::update_flow(PlayerType *player_ptr)
         const auto cost = pq.top().first;
         const auto pos = pq.top().second;
         pq.pop();
+        if (pos == p_pos) {
+            this->settled_cost_limit = cost;
+            return;
+        }
 
+        const auto is_outer_goal = is_goal_on_outer_wall && (pos == *this->pos_goal);
         for (const auto &d : Direction::directions_8()) {
             const auto pos_neighbor = pos + d.vec();
+            if (is_outer_goal && !floor.contains(pos_neighbor, FloorBoundary::OUTER_WALL_INCLUSIVE)) {
+                continue;
+            }
+
             auto &cost_neighbor = this->costs[pos_neighbor.y][pos_neighbor.x];
-            const auto new_cost = travel_flow_aux(player_ptr, pos_neighbor, cost, wall);
+            auto &entry_cost = this->entry_costs[pos_neighbor.y][pos_neighbor.x];
+            if (entry_cost == ENTRY_COST_UNKNOWN) {
+                entry_cost = decide_entry_cost(player_ptr, pos_neighbor);
+            }
+
+            const auto new_cost = travel_flow_aux(entry_cost, cost, wall);
             if (new_cost && *new_cost < cost_neighbor) {
                 cost_neighbor = *new_cost;
                 pq.emplace(cost_neighbor, pos_neighbor);
@@ -341,11 +394,13 @@ void Travel::update_flow(PlayerType *player_ptr)
 
 /*!
  * @brief トラベル処理の記憶配列を初期化する Hack: forget the "flow" information
- * @param player_ptr	プレイヤーへの参照ポインタ
+ * @details 確定している行程も無くなるので、次の step() では行程を求め直す
  */
 void Travel::forget_flow()
 {
     for (auto &row : this->costs) {
         row.fill(MAX_SHORT);
     }
+
+    this->settled_cost_limit = 0;
 }

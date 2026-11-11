@@ -47,4 +47,6 @@ private:
     TravelState state = TravelState::STOP;
     Direction dir = Direction::none(); /* Running direction */
     std::array<std::array<int, MAX_WID>, MAX_HGT> costs{};
+    std::array<std::array<int, MAX_WID>, MAX_HGT> entry_costs{}; ///< 探索中に求めた、マスに入るコスト
+    int settled_cost_limit = 0; ///< この値以下の costs は目的地までの最小の行程と確定している (自分のマスまで行けずフロア全体を求めたときは int の最大、forget_flow() の後は 0)
 };
