@@ -105,13 +105,19 @@
 #include "system/system-variables.h"
 #include "term/gameterm.h"
 #include "term/term-color-types.h"
+#include "term/tile-layout.h"
 #include "util/angband-files.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
 #include "util/enum-range.h"
 #include "util/int-char-converter.h"
 #include "util/string-processor.h"
+#include "view/actor-readability.h"
 #include "view/display-symbol.h"
+#include "view/map-tile-layout.h"
+#include "view/original-monster-catalog.h"
+#include "view/original-symbol-tiles.h"
+#include "view/original-tiles.h"
 #include <algorithm>
 #include <filesystem>
 #include <fmt/format.h>
@@ -119,6 +125,7 @@
 #include <memory>
 #include <span>
 #include <string>
+#include <utility>
 /*
  * Available graphic modes
  */
@@ -127,6 +134,7 @@ enum : byte {
     GRAPHICS_ORIGINAL = 1,
     GRAPHICS_ADAM_BOLT = 2,
     GRAPHICS_HENGBAND = 3,
+    GRAPHICS_ORIGINAL_TERRAIN = 4,
 };
 
 #ifdef USE_X11
@@ -1042,6 +1050,7 @@ struct term_data {
 #ifndef USE_XFT
     XImage *tiles;
     XImage *TmpImage;
+    XImage *original32_canvas; //!< Original32 のタイルを拡大・合成する作業用の画像
 #endif
 };
 }
@@ -2099,17 +2108,28 @@ static errr game_term_curs_x11(int x, int y)
 static errr game_term_bigcurs_x11(int x, int y)
 {
     if (use_graphics) {
+        // 地図を拡大したタイル (4 セル × 2 行) の中なら、そのブロック全体を囲む (Windows 版と同じ)
+        const auto block = term_tile_block_at(*game_term->scr, x, y);
+        int width = Infofnt->twid;
+        int height = Infofnt->hgt;
+        if (block.zoomed()) {
+            x = block.x;
+            y = block.y;
+            width = Infofnt->wid * block.width;
+            height = Infofnt->hgt * block.height;
+        }
+
+        const auto left = x * Infofnt->wid + Infowin->ox;
+        const auto top = y * Infofnt->hgt + Infowin->oy;
 #ifdef USE_XFT
         if (use_xft_runtime) {
-            XftDrawRect(Infowin->draw, &xor_->fg.xft, x * Infofnt->wid + Infowin->ox, y * Infofnt->hgt + Infowin->oy, Infofnt->twid - 1, Infofnt->hgt - 1);
-            XftDrawRect(Infowin->draw, &xor_->fg.xft, x * Infofnt->wid + Infowin->ox + 1, y * Infofnt->hgt + Infowin->oy + 1, Infofnt->twid - 3, Infofnt->hgt - 3);
+            XftDrawRect(Infowin->draw, &xor_->fg.xft, left, top, width - 1, height - 1);
+            XftDrawRect(Infowin->draw, &xor_->fg.xft, left + 1, top + 1, width - 3, height - 3);
             return 0;
         }
 #endif
-        XDrawRectangle(
-            Metadpy->dpy, Infowin->win, xor_->gc, x * Infofnt->wid + Infowin->ox, y * Infofnt->hgt + Infowin->oy, Infofnt->twid - 1, Infofnt->hgt - 1);
-        XDrawRectangle(
-            Metadpy->dpy, Infowin->win, xor_->gc, x * Infofnt->wid + Infowin->ox + 1, y * Infofnt->hgt + Infowin->oy + 1, Infofnt->twid - 3, Infofnt->hgt - 3);
+        XDrawRectangle(Metadpy->dpy, Infowin->win, xor_->gc, left, top, width - 1, height - 1);
+        XDrawRectangle(Metadpy->dpy, Infowin->win, xor_->gc, left + 1, top + 1, width - 3, height - 3);
     } else {
         Infoclr_set(xor_.get());
         draw_cursor(x, y, 2);
@@ -2197,6 +2217,203 @@ static errr game_term_pict_x11(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *
             }
 
             XPutImage(Metadpy->dpy, td->win->win, clr[0]->gc, td->TmpImage, 0, 0, x, y, td->fnt->twid, td->fnt->hgt);
+        }
+    }
+
+    s_ptr->drawn = false;
+    return 0;
+}
+#endif
+
+#if !defined(USE_XFT) && defined(HAVE_LIBPNG)
+namespace {
+/*!
+ * @brief TrueColor の画面で、0x00RRGGBB の色を X の画素値に変える
+ */
+class TrueColorConverter {
+public:
+    explicit TrueColorConverter(const Visual &visual)
+        : red(visual.red_mask)
+        , green(visual.green_mask)
+        , blue(visual.blue_mask)
+    {
+    }
+
+    unsigned long to_pixel(uint32_t rgb) const
+    {
+        return this->red.place((rgb >> 16) & 0xff) | this->green.place((rgb >> 8) & 0xff) | this->blue.place(rgb & 0xff);
+    }
+
+private:
+    class Channel {
+    public:
+        explicit Channel(unsigned long mask)
+        {
+            while ((mask != 0) && !((mask >> this->shift) & 1)) {
+                ++this->shift;
+            }
+            while ((mask >> (this->shift + this->bits)) & 1) {
+                ++this->bits;
+            }
+        }
+
+        unsigned long place(uint32_t value) const
+        {
+            const auto scaled = this->bits >= 8 ? static_cast<unsigned long>(value) << (this->bits - 8) : static_cast<unsigned long>(value) >> (8 - this->bits);
+            return scaled << this->shift;
+        }
+
+    private:
+        int shift = 0;
+        int bits = 0;
+    };
+
+    Channel red;
+    Channel green;
+    Channel blue;
+};
+
+tl::optional<RgbImage> original32_image;
+tl::optional<TrueColorConverter> original32_converter;
+
+/*!
+ * @brief Original32 の画像を読み込み、見やすく補正する
+ * @param path 画像のパス
+ * @return 読み込めたか
+ */
+bool load_original32(const std::filesystem::path &path)
+{
+    auto *visual = DefaultVisual(Metadpy->dpy, DefaultScreen(Metadpy->dpy));
+    if (visual->c_class != TrueColor) {
+        plog(_("Original32 のタイルは TrueColor の画面でしか使えません。", "Original32 tiles require a TrueColor display."));
+        return false;
+    }
+    auto image = read_png(path);
+    if (!image) {
+        plog(fmt::format(_("画像 '{}' を読み込めません。", "Cannot read image file '{}'"), path.string()));
+        return false;
+    }
+    original_tiles::detect_catalogs(image->width, image->height);
+    // 補正できないのは、幅が違うかモンスターやプレイヤーの画像の範囲が無い画像なので、文字の表示に戻す
+    if (!original_tiles::make_image_readable(image->pixels, image->width, image->height)) {
+        original_tiles::detect_catalogs(0, 0);
+        plog(fmt::format(_("画像 '{}' は Original32 のタイルの画像ではありません。", "Image file '{}' is not an Original32 tile image."), path.string()));
+        return false;
+    }
+    original32_image = std::move(image);
+    original32_converter.emplace(*visual);
+    return true;
+}
+
+/*!
+ * @brief 拡大タイルの大きさまで描ける作業用の画像を作る
+ * @param dpy ディスプレイ
+ * @param width 幅 (画素)
+ * @param height 高さ (画素)
+ * @return 作った画像。作れなければ nullptr
+ */
+XImage *create_original32_canvas(Display *dpy, int width, int height)
+{
+    auto *image = XCreateImage(dpy, DefaultVisual(dpy, DefaultScreen(dpy)), DefaultDepth(dpy, DefaultScreen(dpy)), ZPixmap, 0, nullptr, width, height, 32, 0);
+    if (image == nullptr) {
+        return nullptr;
+    }
+    image->data = static_cast<char *>(malloc(static_cast<size_t>(image->bytes_per_line) * height));
+    if (image->data == nullptr) {
+        XDestroyImage(image);
+        return nullptr;
+    }
+    return image;
+}
+
+/*!
+ * @brief 記号に対応するタイルを、作業用の画像に拡大して描く
+ * @param canvas 作業用の画像
+ * @param width 描く幅 (画素)
+ * @param height 描く高さ (画素)
+ * @param symbol 端末のセルの属性と文字
+ * @details Windows 版の StretchBlt (COLORONCOLOR) と同じく最近傍で拡大し、透過するタイルは透過色の画素を描かない。
+ */
+void paint_original32_tile(XImage *canvas, int width, int height, DisplaySymbol symbol)
+{
+    const auto source = original_tiles::tile_source(symbol);
+    if (!source) {
+        return;
+    }
+    const auto &image = *original32_image;
+    const auto source_x = source->column * 32;
+    const auto source_y = source->row * 32;
+    if ((source_x + 32 > image.width) || (source_y + 32 > image.height)) {
+        return;
+    }
+    for (auto y = 0; y < height; ++y) {
+        const auto *row = &image.pixels[static_cast<size_t>(source_y + y * 32 / height) * image.width + source_x];
+        for (auto x = 0; x < width; ++x) {
+            const auto pixel = row[x * 32 / width] & 0x00ffffffU;
+            if (source->transparent && (pixel == original_tiles::ACTOR_TRANSPARENT)) {
+                continue;
+            }
+            XPutPixel(canvas, x, y, original32_converter->to_pixel(pixel));
+        }
+    }
+}
+
+/*!
+ * @brief タイルの上に実際のフォントで文字を描く (黒い縁取り付き)
+ * @param td 端末
+ * @param x 描く範囲の左端 (画素)
+ * @param y 描く範囲の上端 (画素)
+ * @param width 描く範囲の幅 (画素)
+ * @param height 描く範囲の高さ (画素)
+ * @param character 文字
+ * @param color 文字の色
+ */
+void draw_original32_glyph(const term_data &td, int x, int y, int width, int height, char character, int color)
+{
+    const auto &font = *td.fnt;
+    const auto text_x = x + (width - font.wid) / 2;
+    const auto text_y = y + (height - font.hgt) / 2 + font.asc;
+    for (const auto &[dx, dy] : { std::pair{ -1, 0 }, std::pair{ 1, 0 }, std::pair{ 0, -1 }, std::pair{ 0, 1 } }) {
+        XmbDrawString(Metadpy->dpy, td.win->win, font.fontset_info, clr[TERM_DARK]->gc, text_x + dx, text_y + dy, &character, 1);
+    }
+    XmbDrawString(Metadpy->dpy, td.win->win, font.fontset_info, clr[color]->gc, text_x, text_y, &character, 1);
+}
+}
+
+/*!
+ * @brief Original32 のタイルを描く
+ * @details Windows 版の term_pict_win() の Original32 の描画と同じ順で、地形の上にアクターやアイテムを重ねる。
+ */
+static errr game_term_pict_original32_x11(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *ap, const char *cp, const TERM_COLOR *tap, const char *tcp)
+{
+    auto *td = static_cast<term_data *>(game_term->data);
+    auto *canvas = td->original32_canvas;
+    const auto black = original32_converter->to_pixel(0);
+    auto px = x * td->fnt->wid + td->win->ox;
+    const auto py = y * td->fnt->hgt + td->win->oy;
+    for (auto i = 0; i < n; ++i, px += td->fnt->wid) {
+        // 一括描画には、左側のタイルで描画済みの右半分が含まれることがある。
+        if (original_tiles::is_bigtile_continuation({ ap[i], cp[i] })) {
+            continue;
+        }
+        const auto block = term_tile_block_at(term_pict_buffer(), x + i, y);
+        const auto width = std::min(td->fnt->wid * block.width, canvas->width);
+        const auto height = std::min(td->fnt->hgt * block.height, canvas->height);
+        for (auto yy = 0; yy < height; ++yy) {
+            for (auto xx = 0; xx < width; ++xx) {
+                XPutPixel(canvas, xx, yy, black);
+            }
+        }
+        paint_original32_tile(canvas, width, height, { tap[i], tcp[i] });
+        const DisplaySymbol foreground{ ap[i], cp[i] };
+        const auto is_catalog_monster = original_tiles::monster_catalog_available && original_tiles::decode_monster_catalog_tile(foreground).has_value();
+        const auto glyph_color = is_catalog_monster ? tl::optional<int>{} : original_tiles::decode_glyph_color(foreground);
+        if (is_catalog_monster || (!glyph_color && ((ap[i] != tap[i]) || (cp[i] != tcp[i])))) {
+            paint_original32_tile(canvas, width, height, foreground);
+        }
+        XPutImage(Metadpy->dpy, td->win->win, clr[0]->gc, canvas, 0, 0, px, py, width, height);
+        if (glyph_color) {
+            draw_original32_glyph(*td, px, py, width, height, static_cast<char>(cp[i] & 0x7f), *glyph_color);
         }
     }
 
@@ -2599,6 +2816,16 @@ errr init_x11(int argc, char *argv[])
             arg_graphics = GRAPHICS_ORIGINAL;
             continue;
         }
+
+        if (prefix(argv[i], "-t")) {
+            arg_graphics = GRAPHICS_ORIGINAL_TERRAIN;
+            continue;
+        }
+
+        if (prefix(argv[i], "-z")) {
+            original_tiles::double_map_size = true;
+            continue;
+        }
 #endif
 
         if (prefix(argv[i], "-b")) {
@@ -2730,7 +2957,49 @@ errr init_x11(int argc, char *argv[])
         }
         break;
     }
+    case GRAPHICS_ORIGINAL_TERRAIN: {
+#ifdef HAVE_LIBPNG
+        if (load_original32(path_build(ANGBAND_DIR_XTRA, "graf/original32.png"))) {
+            use_graphics = true;
+            ANGBAND_GRAF = "original32";
+        }
+#else
+        plog(_("このビルドでは Original32 のタイルを使えません (libpng が要ります)。", "Original32 tiles are not available in this build (libpng is required)."));
+#endif
+        break;
     }
+    }
+
+#ifdef HAVE_LIBPNG
+    if (use_graphics && (ANGBAND_GRAF == "original32")) {
+        for (i = 0; i < num_term; i++) {
+            auto &td = data[i];
+            // 拡大した地図のタイル (4 セル × 2 行) まで描ける大きさにする
+            td.original32_canvas = create_original32_canvas(Metadpy->dpy, td.fnt->wid * 4, td.fnt->hgt * 2);
+            if (td.original32_canvas == nullptr) {
+                plog(_("Original32 のタイルの作業用の画像を作れません。", "Cannot create a work image for Original32 tiles."));
+                use_graphics = false;
+                ANGBAND_GRAF = "ascii";
+                return 0;
+            }
+        }
+        for (i = 0; i < num_term; i++) {
+            auto &t = data[i].t;
+            t.pict_hook = game_term_pict_original32_x11;
+            t.higher_pict = true;
+        }
+
+        // 地図の拡大は 2 倍幅のタイルを前提とする。実際に Original32 へ切り替わったときだけ有効にする (Windows 版と同じ)
+        if (original_tiles::double_map_size && !use_bigtile) {
+            arg_bigtile = use_bigtile = true;
+            for (i = 0; i < num_term; i++) {
+                auto &fnt = *data[i].fnt;
+                fnt.twid = static_cast<int16_t>(fnt.wid * 2);
+            }
+        }
+        return 0;
+    }
+#endif
 
     if (use_graphics) {
         Display *dpy = Metadpy->dpy;

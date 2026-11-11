@@ -56,6 +56,7 @@ To run in the graphical mode:
 ./hengband -g -- -n <number of windows> # 8x8 Tiles
 ./hengband -g -- -b -n <number of windows> ## double width size tiles
 ./hengband -g -- -a -n <number of windows> ## 16x16 tiles (tiles of this size are not provided)
+./hengband -g -- -t -b -n<number of windows> ## Original32 32x32 tiles (needs libpng and a build without --enable-xft; add -z to double the map size)
 ```
 
 ### Sound effects, music and tiles

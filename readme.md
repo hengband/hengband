@@ -64,6 +64,12 @@
   ./hengband -g -- -b -n<ウィンドウ数>
   ```
 
+* **オリジナル地形 32x32 タイルモード:** (libpng を入れ、`--enable-xft` を付けずにビルドする必要がある。`-z` を足すとマップを 2 倍に拡大)
+
+  ```bash
+  ./hengband -g -- -t -b -n<ウィンドウ数>
+  ```
+
 **効果音・BGM・タイル:** 効果音、BGM (mp3)、8x8 のタイルは、`lib/xtra` サブモジュールの [hengband.xtra](https://github.com/hengband/hengband.xtra) にあります。git でクローンした場合は `git submodule update --init lib/xtra` で入手できます。GitHub が自動で作るソースのアーカイブ (Source code) では `lib/xtra` が空のディレクトリになり、`make dist` で作ったアーカイブには容量の都合で BGM が含まれません。その場合は hengband.xtra を入手し、中身を `lib/xtra` に置いてください。setgid でインストールする場合 (`./configure --with-setgid=games` の後に `make install`) は、`./configure` の前に置いてください。
 
 ## 🎮 遊び方ガイド
@@ -243,6 +249,7 @@ Windows/Macではメニューから、Linuxでは起動オプションでグラ�
 * **8x8タイル:** `-g`
 * **16x16タイル:** `-g -- -a` (別途タイルセットの配置が必要)
 * **2倍幅タイル:** `-g -- -b` (タイルが大きく表示されます)
+* **オリジナル地形 32x32 タイル:** `-g -- -t -b` (libpng を入れ、`--enable-xft` を付けずにビルドする必要がある。`-z` を足すとマップを 2 倍に拡大)
 * **大画面表示:** ウィンドウサイズをマウスで変更すると、マップの表示領域が広がります。
 
 ## 🌐 コミュニティと貢献
