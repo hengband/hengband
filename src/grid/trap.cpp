@@ -321,9 +321,9 @@ void hit_trap(PlayerType *player_ptr, bool break_trap)
             return;
         }
 
-        /* Still alive and autosave enabled */
+        // 落とし戸で死んだときは要求しない (ウィザードモードなどで死を断ると生き返って続くが、そのときはセーブしない)
         if (autosave_l && (player_ptr->chp >= 0)) {
-            do_cmd_save_game(player_ptr, true);
+            request_auto_save();
         }
 
         exe_write_diary(floor, DiaryKind::DESCRIPTION, 0, _("落とし戸に落ちた", "fell through a trap door!"));

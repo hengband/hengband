@@ -737,15 +737,14 @@ these options:
 ***** <autosave_l>
 Autosave when entering new levels    [autosave_l]
         If this option is set, the program will attempt to save your
-        character every time before creating a new dungeon level.
-        Useful if you experience hangups in level generation (although
-        these should have been eliminated in 2.1.0).
+        character every time you enter a new level.  The game is
+        saved on the new level, so it resumes there when you load it.
 
 ***** <autosave_t>
 Timed autosave    [autosave_t]
         If this option is set, the program will attempt to save your
         character every n game turns, where n is the "frequency".  To
-        set frequency press n: it will increase the frequency to the
+        set frequency press f: it will increase the frequency to the
         next category (and from 25000 to 0), the categories being
         every 50, 100, 250, 500, 1000, 2500, 5000, 10000 and 25000
         turns. Note that the frequency must be higher than 0 and the

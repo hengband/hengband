@@ -49,7 +49,7 @@ bool activate_escape(PlayerType *player_ptr)
         }
 
         if (autosave_l) {
-            do_cmd_save_game(player_ptr, true);
+            request_auto_save();
         }
 
         player_ptr->leaving = true;

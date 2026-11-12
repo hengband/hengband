@@ -78,7 +78,7 @@ void pattern_teleport(PlayerType *player_ptr)
 
     msg_print(_("{} 階にテレポートしました。", "You teleport to dungeon level {}."), command_arg);
     if (autosave_l) {
-        do_cmd_save_game(player_ptr, true);
+        request_auto_save();
     }
 
     floor.dun_level = command_arg;

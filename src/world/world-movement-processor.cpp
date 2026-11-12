@@ -58,9 +58,6 @@ void check_random_quest_auto_failure(PlayerType *player_ptr)
  * @brief 10ゲームターンが進行するごとに帰還の残り時間カウントダウンと発動を処理する。
  * / Handle involuntary movement once every 10 game turns
  * @param player_ptr プレイヤーへの参照ポインタ
- * @details
- * Autosave BEFORE resetting the recall counter (rr9)
- * The player is yanked up/down as soon as he loads the autosaved game.
  */
 void execute_recall(PlayerType *player_ptr)
 {
@@ -68,14 +65,14 @@ void execute_recall(PlayerType *player_ptr)
         return;
     }
 
-    if (autosave_l && (player_ptr->word_recall == 1) && !AngbandSystem::get_instance().is_phase_out()) {
-        do_cmd_save_game(player_ptr, true);
-    }
-
     player_ptr->word_recall--;
     DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     if (player_ptr->word_recall != 0) {
         return;
+    }
+
+    if (autosave_l && !AngbandSystem::get_instance().is_phase_out()) {
+        request_auto_save();
     }
 
     disturb(player_ptr, false, true);
@@ -152,10 +149,6 @@ void execute_floor_reset(PlayerType *player_ptr)
         return;
     }
 
-    if (autosave_l && (player_ptr->alter_reality == 1) && !AngbandSystem::get_instance().is_phase_out()) {
-        do_cmd_save_game(player_ptr, true);
-    }
-
     player_ptr->alter_reality--;
     DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     if (player_ptr->alter_reality != 0) {
@@ -164,6 +157,10 @@ void execute_floor_reset(PlayerType *player_ptr)
 
     disturb(player_ptr, false, true);
     if (!inside_quest(floor.get_quest_id()) && floor.is_underground()) {
+        if (autosave_l && !AngbandSystem::get_instance().is_phase_out()) {
+            request_auto_save();
+        }
+
         msg_print(_("世界が変わった！", "The world changes!"));
         FloorChangeModesStore::get_instace()->set(FloorChangeMode::FIRST_FLOOR);
         player_ptr->leaving = true;
