@@ -15,7 +15,6 @@
 #include "object/item-use-flags.h"
 #include "perception/object-perception.h"
 #include "system/angband.h"
-#include "system/deferred-update-requests.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/item/item-entity.h"
@@ -135,7 +134,6 @@ bool create_ammo(PlayerType *player_ptr)
         }
 
         cave_alter_feat(player_ptr, pos.y, pos.x, TerrainCharacteristics::STONE);
-        DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::FLOW);
         return true;
     }
     case AMMO_ARROW: {

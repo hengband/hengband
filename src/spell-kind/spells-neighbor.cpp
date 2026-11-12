@@ -66,9 +66,7 @@ bool wall_stone(PlayerType *player_ptr)
 {
     BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_HIDE;
     bool dummy = project(player_ptr, 0, 1, player_ptr->y, player_ptr->x, 0, AttributeType::STONE_WALL, flg).notice;
-    auto &dur = DeferredUpdateRequests::get_instance();
-    dur.set_flag(StatusRecalculatingFlag::FLOW);
-    dur.request_map_redrawing();
+    DeferredUpdateRequests::get_instance().request_map_redrawing();
     return dummy;
 }
 

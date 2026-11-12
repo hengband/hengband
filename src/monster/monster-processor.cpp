@@ -252,7 +252,6 @@ void process_monster(PlayerType *player_ptr, MONSTER_IDX m_idx)
         }
     }
 
-    update_flow_flags(turn_flags_ptr);
     update_lite_flags(turn_flags_ptr, monrace);
     update_monster_race_flags(player_ptr, turn_flags_ptr, monster);
 

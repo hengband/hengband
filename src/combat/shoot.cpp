@@ -631,7 +631,6 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
                     static constexpr auto flags = {
                         StatusRecalculatingFlag::VIEW,
                         StatusRecalculatingFlag::LITE,
-                        StatusRecalculatingFlag::FLOW,
                         StatusRecalculatingFlag::MONSTER_LITE,
                     };
                     DeferredUpdateRequests::get_instance().set_flags(flags);

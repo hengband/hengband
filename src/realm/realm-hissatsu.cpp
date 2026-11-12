@@ -306,7 +306,6 @@ tl::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX sp
 
             /* Destroy the feature */
             cave_alter_feat(player_ptr, pos.y, pos.x, TerrainCharacteristics::STONE);
-            DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::FLOW);
         }
         break;
 
