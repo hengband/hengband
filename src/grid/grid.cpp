@@ -84,8 +84,13 @@ void set_terrain_id_to_grid(PlayerType *player_ptr, const Pos2D &pos, TerrainTag
     set_terrain_id_to_grid(player_ptr, pos, TerrainList::get_instance().get_terrain_id(tag));
 }
 
-/*
- * Change the "feat" flag for a grid, and notice/redraw the grid
+/*!
+ * @brief グリッドの地形を変え、表示と再計算を要求する
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param pos グリッドの座標
+ * @param terrain_id 新しい地形のID
+ * @details ゲームの進行中 (フロアの生成中でない) なら、モンスターの経路 (FLOW) の計算し直しを要求する。
+ * 視界を遮るかが変わったときは、視界・明るさ・モンスターの光と見え方の計算し直しも要求する。
  */
 void set_terrain_id_to_grid(PlayerType *player_ptr, const Pos2D &pos, short terrain_id)
 {
@@ -128,6 +133,9 @@ void set_terrain_id_to_grid(PlayerType *player_ptr, const Pos2D &pos, short terr
     if (terrain.flags.has_not(TerrainCharacteristics::REMEMBER)) {
         grid.info &= ~(CAVE_MARK);
     }
+
+    // モンスターの経路 (update_flow()) は地形 (通れるか・閉じた扉か) で決まるので、計算し直す
+    DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::FLOW);
 
     if (grid.has_monster()) {
         update_monster(player_ptr, grid.m_idx, false);
