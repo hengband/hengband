@@ -15,8 +15,10 @@
 #ifdef USE_XFT
 #include <X11/Xft/Xft.h>
 XftColor create_pixel(Display *dpy, uint8_t red, uint8_t green, uint8_t blue);
+void free_pixel(Display *dpy, XftColor color);
 #else
 unsigned long create_pixel(Display *dpy, uint8_t red, uint8_t green, uint8_t blue);
+void free_pixel(Display *dpy, unsigned long color);
 #endif
 extern bool smoothRescaling;
 XImage *ReadBMP(Display *dpy, char *Name);

@@ -129,6 +129,26 @@ unsigned long create_pixel(Display *dpy, uint8_t red, uint8_t green, uint8_t blu
 }
 
 /*!
+ * @brief create_pixel() で確保した色を解放する
+ * @param dpy ディスプレイ
+ * @param color 解放する色
+ * @details TrueColor の画面ではサーバに何も確保していないので、XftColorFree() は何もしない。
+ * PseudoColor などの画面では、XAllocColor() で確保したカラーマップのセルを返す。
+ */
+#ifdef USE_XFT
+void free_pixel(Display *dpy, XftColor color)
+{
+    const auto screen = DefaultScreenOfDisplay(dpy);
+    XftColorFree(dpy, DefaultVisualOfScreen(screen), DefaultColormapOfScreen(screen), &color);
+}
+#else
+void free_pixel(Display *dpy, unsigned long color)
+{
+    XFreeColors(dpy, DefaultColormapOfScreen(DefaultScreenOfDisplay(dpy)), &color, 1, 0);
+}
+#endif
+
+/*!
  * @brief RGB の値を X の画素値に変える
  * @param dpy ディスプレイ
  * @param red 赤 (0〜255)

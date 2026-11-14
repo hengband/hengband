@@ -2015,8 +2015,15 @@ static errr game_term_xtra_x11_react(void)
 #else
                 pixel.pixel = create_pixel(Metadpy->dpy, color_table[i][1], color_table[i][2], color_table[i][3]);
 #endif
+                // カラーの画面では、前景色は初期化のときもここでも create_pixel() で確保したものなので、使わなくなった側を解放する
+                const auto old_pixel = clr[i]->fg;
                 Infoclr_set(clr[i].get());
-                Infoclr_change_fg(pixel);
+                const auto &unused_pixel = (Infoclr_change_fg(pixel) == 0) ? old_pixel : pixel;
+#ifdef USE_XFT
+                free_pixel(Metadpy->dpy, unused_pixel.xft);
+#else
+                free_pixel(Metadpy->dpy, unused_pixel.pixel);
+#endif
             }
         }
     }
@@ -2465,12 +2472,13 @@ static void IMInstantiateCallback(Display *display, XPointer unused1, XPointer u
             break;
         }
     }
-    if (i >= xim_styles->count_styles) {
+    const auto is_supported = i < xim_styles->count_styles;
+    XFree(xim_styles);
+    if (!is_supported) {
         fmt::println("Sorry, your IM does not support 'Root' preedit style...");
         XCloseIM(xim);
         return;
     }
-    XFree(xim_styles);
 
     Metadpy->xim = xim;
 
@@ -3022,6 +3030,9 @@ errr init_x11(int argc, char *argv[])
             t->higher_pict = true;
             td->tiles = ResizeImage(dpy, tiles_raw, pict_wid, pict_hgt, td->fnt->twid, td->fnt->hgt);
         }
+
+        // 端末ごとに拡大・縮小した画像を作ったので、読み込んだ元の画像はもう使わない
+        XDestroyImage(tiles_raw);
 
         for (i = 0; i < num_term; i++) {
             term_data *td = &data[i];
