@@ -73,10 +73,10 @@
     <ClCompile Include="..\..\src\test\definitions-reader\test-artifact-reader.cpp" />
     <ClCompile Include="..\..\src\test\definitions-reader\test-baseitem-reader.cpp" />
     <ClCompile Include="..\..\src\test\definitions-reader\test-definition-id-checker.cpp" />
+    <ClCompile Include="..\..\src\test\definitions-reader\test-definitions-reader-util.cpp" />
     <ClCompile Include="..\..\src\test\definitions-reader\test-dungeon-grid.cpp" />
     <ClCompile Include="..\..\src\test\definitions-reader\test-dungeon-reader.cpp" />
     <ClCompile Include="..\..\src\test\definitions-reader\test-ego-reader.cpp" />
-    <ClCompile Include="..\..\src\test\definitions-reader\test-info-reader-util.cpp" />
     <ClCompile Include="..\..\src\test\definitions-reader\test-item-flag-reader.cpp" />
     <ClCompile Include="..\..\src\test\definitions-reader\test-json-reader-util.cpp" />
     <ClCompile Include="..\..\src\test\definitions-reader\test-jsonc-document-loader.cpp" />

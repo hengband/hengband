@@ -1,6 +1,6 @@
 #include "definitions-reader/item-flag-reader.h"
 #include "definitions-reader/baseitem-tokens-table.h"
-#include "definitions-reader/info-reader-util.h"
+#include "definitions-reader/definitions-reader-util.h"
 #include "view/display-messages.h"
 
 /*!

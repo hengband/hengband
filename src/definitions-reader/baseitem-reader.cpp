@@ -8,7 +8,7 @@
 #include "artifact/random-art-effects.h"
 #include "cmd-action/cmd-spell.h"
 #include "definitions-reader/activation-reader.h"
-#include "definitions-reader/info-reader-util.h"
+#include "definitions-reader/definitions-reader-util.h"
 #include "definitions-reader/item-flag-reader.h"
 #include "definitions-reader/item-reader-limits.h"
 #include "definitions-reader/json-reader-util.h"

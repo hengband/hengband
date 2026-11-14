@@ -1,5 +1,5 @@
 #include "definitions-reader/message-reader.h"
-#include "definitions-reader/info-reader-util.h"
+#include "definitions-reader/definitions-reader-util.h"
 #include "definitions-reader/json-reader-util.h"
 #include "definitions-reader/monrace-tokens-table.h"
 #include "definitions-reader/parse-error-types.h"

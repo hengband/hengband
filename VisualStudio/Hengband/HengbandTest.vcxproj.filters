@@ -172,6 +172,9 @@
     <ClCompile Include="..\..\src\test\definitions-reader\test-definition-id-checker.cpp">
       <Filter>definitions-reader</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\test\definitions-reader\test-definitions-reader-util.cpp">
+      <Filter>definitions-reader</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\test\definitions-reader\test-dungeon-grid.cpp">
       <Filter>definitions-reader</Filter>
     </ClCompile>
@@ -179,9 +182,6 @@
       <Filter>definitions-reader</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\test\definitions-reader\test-ego-reader.cpp">
-      <Filter>definitions-reader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\test\definitions-reader\test-info-reader-util.cpp">
       <Filter>definitions-reader</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\test\definitions-reader\test-item-flag-reader.cpp">

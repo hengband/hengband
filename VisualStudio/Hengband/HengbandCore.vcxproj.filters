@@ -3453,6 +3453,9 @@
     <ClInclude Include="..\..\src\definitions-reader\definition-id-checker.h">
       <Filter>definitions-reader</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\definitions-reader\definitions-reader-util.h">
+      <Filter>definitions-reader</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\src\definitions-reader\dungeon-grid.h">
       <Filter>definitions-reader</Filter>
     </ClInclude>
@@ -3463,9 +3466,6 @@
       <Filter>definitions-reader</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\definitions-reader\ego-reader.h">
-      <Filter>definitions-reader</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\definitions-reader\info-reader-util.h">
       <Filter>definitions-reader</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\definitions-reader\item-flag-reader.h">

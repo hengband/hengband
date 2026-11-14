@@ -7,7 +7,7 @@
  * 発動の名前を読む grab_one_activation_flag は activation-reader.h にあり、test-activation-reader.cpp で扱う。
  */
 
-#include "definitions-reader/info-reader-util.h"
+#include "definitions-reader/definitions-reader-util.h"
 #include "util/flag-group.h"
 
 #include <doctest/doctest.h>

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "definitions-reader/info-reader-util.h"
+#include "definitions-reader/definitions-reader-util.h"
 #include "definitions-reader/parse-error-types.h"
 #include "definitions-reader/range.h"
 #include "util/type-concepts.h"

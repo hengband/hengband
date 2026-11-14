@@ -1,5 +1,5 @@
 #include "definitions-reader/terrain-reader.h"
-#include "definitions-reader/info-reader-util.h"
+#include "definitions-reader/definitions-reader-util.h"
 #include "definitions-reader/json-reader-util.h"
 #include "definitions-reader/parse-error-types.h"
 #include "definitions-reader/symbol-reader-util.h"

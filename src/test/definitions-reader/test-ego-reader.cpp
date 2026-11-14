@@ -1,6 +1,6 @@
 #include "artifact/random-art-effects.h"
+#include "definitions-reader/definitions-reader-util.h"
 #include "definitions-reader/ego-reader.h"
-#include "definitions-reader/info-reader-util.h"
 #include "definitions-reader/parse-error-types.h"
 #include "floor/floor-base-definitions.h"
 #include "locale/character-encoding.h"

@@ -1,4 +1,4 @@
-#include "definitions-reader/info-reader-util.h"
+#include "definitions-reader/definitions-reader-util.h"
 #include "definitions-reader/parse-error-types.h"
 #include "definitions-reader/race-reader.h"
 #include "locale/character-encoding.h"

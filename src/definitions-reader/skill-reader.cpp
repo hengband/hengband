@@ -1,5 +1,5 @@
 #include "definitions-reader/skill-reader.h"
-#include "definitions-reader/info-reader-util.h"
+#include "definitions-reader/definitions-reader-util.h"
 #include "definitions-reader/json-reader-util.h"
 #include "locale/language-switcher.h"
 #include "object/tval-types.h"

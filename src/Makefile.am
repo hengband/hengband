@@ -186,12 +186,12 @@ libhengband_a_SOURCES = \
 	definitions-reader/baseitem-tokens-table.cpp definitions-reader/baseitem-tokens-table.h \
 	definitions-reader/definition-hash-data.cpp definitions-reader/definition-hash-data.h \
 	definitions-reader/definition-id-checker.cpp definitions-reader/definition-id-checker.h \
+	definitions-reader/definitions-reader-util.h \
 	definitions-reader/dungeon-grid.cpp definitions-reader/dungeon-grid.h \
 	definitions-reader/dungeon-tokens-table.cpp definitions-reader/dungeon-tokens-table.h \
 	definitions-reader/dungeon-reader.cpp definitions-reader/dungeon-reader.h \
 	definitions-reader/ego-reader.cpp definitions-reader/ego-reader.h \
 	definitions-reader/wilderness-reader.cpp definitions-reader/wilderness-reader.h \
-	definitions-reader/info-reader-util.h \
 	definitions-reader/item-flag-reader.cpp definitions-reader/item-flag-reader.h \
 	definitions-reader/item-reader-limits.h \
 	definitions-reader/json-reader-util.cpp definitions-reader/json-reader-util.h \
@@ -1548,11 +1548,11 @@ hengband_test_SOURCES = \
 	test/definitions-reader/test-artifact-reader.cpp \
 	test/definitions-reader/test-baseitem-reader.cpp \
 	test/definitions-reader/test-definition-id-checker.cpp \
+	test/definitions-reader/test-definitions-reader-util.cpp \
 	test/definitions-reader/test-dungeon-grid.cpp \
 	test/definitions-reader/test-dungeon-reader.cpp \
 	test/definitions-reader/test-ego-reader.cpp \
 	test/definitions-reader/test-wilderness-reader.cpp \
-	test/definitions-reader/test-info-reader-util.cpp \
 	test/definitions-reader/test-item-flag-reader.cpp \
 	test/definitions-reader/test-json-reader-util.cpp \
 	test/definitions-reader/test-jsonc-document-loader.cpp \

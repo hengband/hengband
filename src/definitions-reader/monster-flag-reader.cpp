@@ -1,5 +1,5 @@
 #include "definitions-reader/monster-flag-reader.h"
-#include "definitions-reader/info-reader-util.h"
+#include "definitions-reader/definitions-reader-util.h"
 #include "definitions-reader/monrace-tokens-table.h"
 #include "locale/language-switcher.h"
 #include "view/display-messages.h"

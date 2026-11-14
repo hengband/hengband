@@ -1,7 +1,7 @@
 #include "definitions-reader/dungeon-reader.h"
 #include "artifact/fixed-art-types.h"
+#include "definitions-reader/definitions-reader-util.h"
 #include "definitions-reader/dungeon-tokens-table.h"
-#include "definitions-reader/info-reader-util.h"
 #include "definitions-reader/json-reader-util.h"
 #include "definitions-reader/monrace-tokens-table.h"
 #include "definitions-reader/monster-flag-reader.h"

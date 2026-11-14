@@ -1093,11 +1093,11 @@
     <ClInclude Include="..\..\src\definitions-reader\baseitem-tokens-table.h" />
     <ClInclude Include="..\..\src\definitions-reader\definition-hash-data.h" />
     <ClInclude Include="..\..\src\definitions-reader\definition-id-checker.h" />
+    <ClInclude Include="..\..\src\definitions-reader\definitions-reader-util.h" />
     <ClInclude Include="..\..\src\definitions-reader\dungeon-grid.h" />
     <ClInclude Include="..\..\src\definitions-reader\dungeon-reader.h" />
     <ClInclude Include="..\..\src\definitions-reader\dungeon-tokens-table.h" />
     <ClInclude Include="..\..\src\definitions-reader\ego-reader.h" />
-    <ClInclude Include="..\..\src\definitions-reader\info-reader-util.h" />
     <ClInclude Include="..\..\src\definitions-reader\item-flag-reader.h" />
     <ClInclude Include="..\..\src\definitions-reader\item-reader-limits.h" />
     <ClInclude Include="..\..\src\definitions-reader\json-reader-util.h" />

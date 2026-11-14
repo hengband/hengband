@@ -1,7 +1,7 @@
 /*!
  * @brief 職業技能JSON Readerの境界値・原子性テスト
  */
-#include "definitions-reader/info-reader-util.h"
+#include "definitions-reader/definitions-reader-util.h"
 #include "definitions-reader/parse-error-types.h"
 #include "definitions-reader/skill-reader.h"
 #include "locale/language-switcher.h"

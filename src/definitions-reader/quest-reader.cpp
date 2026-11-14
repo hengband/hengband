@@ -1,6 +1,6 @@
 #include "definitions-reader/quest-reader.h"
 #include "artifact/fixed-art-types.h"
-#include "definitions-reader/info-reader-util.h"
+#include "definitions-reader/definitions-reader-util.h"
 #include "definitions-reader/json-reader-util.h"
 #include "definitions-reader/legend-object-trap-validator.h"
 #include "definitions-reader/parse-error-types.h"
