@@ -9,7 +9,7 @@
  * 読み込んで保持するための構造体群である。
  */
 
-#include "info-reader/dungeon-grid.h" // dungeon_grid
+#include "definitions-reader/dungeon-grid.h" // dungeon_grid
 #include <cstdint>
 #include <map>
 #include <string>

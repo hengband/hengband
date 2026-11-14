@@ -1,0 +1,74 @@
+#pragma once
+
+#include "definitions-reader/parse-error-types.h"
+#include "system/h-type.h"
+#include <concepts>
+#include <limits>
+#include <nlohmann/json_fwd.hpp>
+#include <string_view>
+#include <tl/expected.hpp>
+#include <tl/optional.hpp>
+#include <type_traits>
+#include <utility>
+
+enum class FixedArtifactId : short;
+enum class MonraceId : short;
+enum class QuestId : short;
+
+/*
+ * 定義のIDの上限は、IDを格納する型の上限−1とする。
+ * IDの最大値+1になる件数（種族の数など）も同じ型に収まるようにするため。
+ */
+constexpr int MAX_BASEITEM_ID = std::numeric_limits<short>::max() - 1; //!< ベースアイテムIDの上限 (BaseitemList は short でIDを扱う)
+constexpr int MAX_MONRACE_ID = std::numeric_limits<std::underlying_type_t<MonraceId>>::max() - 1; //!< モンスター種族IDの上限
+constexpr int MAX_FIXED_ARTIFACT_ID = std::numeric_limits<std::underlying_type_t<FixedArtifactId>>::max() - 1; //!< 固定アーティファクトIDの上限
+constexpr int MAX_TERRAIN_ID = std::numeric_limits<FEAT_IDX>::max() - 1; //!< 地形IDの上限
+constexpr int MAX_QUEST_ID = std::numeric_limits<std::underlying_type_t<QuestId>>::max() - 1; //!< クエストIDの上限
+constexpr int MAX_VAULT_ID = std::numeric_limits<short>::max() - 1; //!< VaultのIDの上限 (vault_type は short でIDを持つ)
+
+/*!
+ * @brief 型Keyをキーとして持つような連想配列型のコンセプト
+ * std::mapやstd::unordered_mapなどが該当する
+ */
+template <typename T, typename Key>
+concept DictIndexedBy = requires(T t, Key k) {
+    requires std::is_constructible_v<typename T::key_type, std::remove_cvref_t<Key>>;
+    typename T::mapped_type;
+    { t.find(k) } -> std::same_as<typename T::iterator>;
+    { t.find(k)->second } -> std::convertible_to<typename T::mapped_type>;
+    { t.end() } -> std::same_as<typename T::iterator>;
+};
+
+/*!
+ * @brief info文字列から定数を取得し、それを返す
+ * @param dict 文字列辞書
+ * @param what 文字列
+ * @return 見つけたら定数を返す。見つからなければnulloptを返す
+ */
+template <typename Key, DictIndexedBy<Key> Dict>
+tl::optional<typename Dict::mapped_type> info_get_const(const Dict &dict, Key &&what)
+{
+    if (auto it = dict.find(what); it != dict.end()) {
+        return it->second;
+    }
+    return tl::nullopt;
+}
+
+/*!
+ * @brief info文字列からフラグを探し、フラグ集合にセットする
+ * @param fg フラグをセットするフラグ集合 (FlagGroup など)
+ * @param dict 文字列からフラグへの変換表
+ * @param what 検索する文字列
+ * @return 見つけてセットしたらtrue。見つからなければフラグ集合を変えずにfalse
+ */
+template <typename FlagGroupT, typename Key, DictIndexedBy<Key> Dict>
+    requires requires(FlagGroupT &fg, const typename Dict::mapped_type &flag) { fg.set(flag); }
+bool info_grab_one_flag(FlagGroupT &fg, const Dict &dict, Key &&what)
+{
+    auto val = info_get_const(dict, std::forward<Key>(what));
+    if (val) {
+        fg.set(*val);
+        return true;
+    }
+    return false;
+}

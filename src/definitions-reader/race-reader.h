@@ -1,0 +1,47 @@
+#pragma once
+
+#include "definitions-reader/definition-id-checker.h"
+#include "definitions-reader/parse-error-types.h"
+#include <nlohmann/json_fwd.hpp>
+#include <string>
+#include <string_view>
+#include <tl/expected.hpp>
+#include <tl/optional.hpp>
+
+class MonraceDefinition;
+class MonraceMessage;
+
+class RaceReader {
+public:
+    using Session = DefinitionIdChecker;
+    static Session create_session(tl::optional<int> last_id = tl::nullopt);
+
+    RaceReader(const nlohmann::json &monrace_data, Session &session);
+    RaceReader(nlohmann::json &&, Session &) = delete;
+    RaceReader(const RaceReader &) = delete;
+    RaceReader(RaceReader &&) = delete;
+    RaceReader &operator=(const RaceReader &) = delete;
+    RaceReader &operator=(RaceReader &&) = delete;
+
+    tl::expected<void, ParseErrorType> read() const;
+    static tl::optional<std::string> validate_references();
+
+private:
+    bool grab_one_basic_flag(MonraceDefinition &monrace, std::string_view what) const;
+    bool grab_one_spell_flag(MonraceDefinition &monrace, std::string_view what) const;
+    tl::expected<void, ParseErrorType> set_mon_name(MonraceDefinition &monrace) const;
+    tl::expected<void, ParseErrorType> set_mon_symbol(MonraceDefinition &monrace) const;
+    tl::expected<void, ParseErrorType> set_mon_speed(MonraceDefinition &monrace) const;
+    tl::expected<void, ParseErrorType> set_mon_evolve(MonraceDefinition &monrace) const;
+    tl::expected<void, ParseErrorType> set_mon_sex(MonraceDefinition &monrace) const;
+    tl::expected<void, ParseErrorType> set_mon_artifacts(MonraceDefinition &monrace) const;
+    tl::expected<void, ParseErrorType> set_mon_escorts(MonraceDefinition &monrace) const;
+    tl::expected<void, ParseErrorType> set_mon_blows(MonraceDefinition &monrace) const;
+    tl::expected<void, ParseErrorType> set_mon_flags(MonraceDefinition &monrace) const;
+    tl::expected<void, ParseErrorType> set_mon_skills(MonraceDefinition &monrace) const;
+    tl::expected<void, ParseErrorType> set_mon_final_summons(MonraceDefinition &monrace) const;
+    tl::expected<void, ParseErrorType> set_mon_message(MonraceMessage &messages) const;
+
+    const nlohmann::json &monrace_data;
+    Session &session;
+};

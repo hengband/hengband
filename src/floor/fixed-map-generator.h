@@ -1,6 +1,6 @@
 #pragma once
 
-#include "info-reader/parse-error-types.h"
+#include "definitions-reader/parse-error-types.h"
 #include "system/angband.h"
 #include <string_view>
 #include <tl/expected.hpp>

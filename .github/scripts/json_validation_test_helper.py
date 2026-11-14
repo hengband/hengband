@@ -103,8 +103,8 @@ def schema_enum_values(node, schema_path, loaded_schemas):
 
 # 種族とダンジョンの読み込みが共有する、モンスターのフラグ名を照合する関数と、その定義のあるファイル。
 SHARED_MONSTER_FLAG_FUNCTIONS = {
-    "grab_one_monster_basic_flag": "src/info-reader/monster-flag-reader.cpp",
-    "grab_one_monster_spell_flag": "src/info-reader/monster-flag-reader.cpp",
+    "grab_one_monster_basic_flag": "src/definitions-reader/monster-flag-reader.cpp",
+    "grab_one_monster_spell_flag": "src/definitions-reader/monster-flag-reader.cpp",
 }
 
 
@@ -132,4 +132,4 @@ def reader_token_tables(relative_path, function):
 
 def monrace_table_keys(table):
     """monrace-tokens-table.cpp の指定した辞書のトークンを読む。"""
-    return load_cpp_map_keys(REPOSITORY_ROOT / "src/info-reader/monrace-tokens-table.cpp", table)
+    return load_cpp_map_keys(REPOSITORY_ROOT / "src/definitions-reader/monrace-tokens-table.cpp", table)

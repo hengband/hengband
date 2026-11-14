@@ -10,10 +10,10 @@
 
 #include "floor/wild.h"
 #include "core/asking-player.h"
+#include "definitions-reader/town-map-loader.h"
+#include "definitions-reader/wilderness-reader.h"
 #include "game-option/birth-options.h"
 #include "game-option/map-screen-options.h"
-#include "info-reader/town-map-loader.h"
-#include "info-reader/wilderness-reader.h"
 #include "market/building-initializer.h"
 #include "monster-floor/monster-generator.h"
 #include "monster-floor/monster-remover.h"

@@ -16,6 +16,9 @@
     <Filter Include="core">
       <UniqueIdentifier>{4d7c328f-7398-52cb-9b9c-78920b0c1e67}</UniqueIdentifier>
     </Filter>
+    <Filter Include="definitions-reader">
+      <UniqueIdentifier>{4280637d-7c55-5a27-b948-6f3d706d1ade}</UniqueIdentifier>
+    </Filter>
     <Filter Include="flavor">
       <UniqueIdentifier>{740c8771-89d8-44fe-bd2c-adcff9c2cfea}</UniqueIdentifier>
     </Filter>
@@ -24,9 +27,6 @@
     </Filter>
     <Filter Include="game-option">
       <UniqueIdentifier>{ce56653b-fbe2-4e12-af06-489721a95644}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="info-reader">
-      <UniqueIdentifier>{5a5d0f27-6c1e-4c8b-9f34-2b7d8e1a6c40}</UniqueIdentifier>
     </Filter>
     <Filter Include="inventory">
       <UniqueIdentifier>{de11ae39-4fd8-50a4-bd7a-b91bb4e6e009}</UniqueIdentifier>
@@ -160,6 +160,96 @@
     <ClCompile Include="..\..\src\test\core\test-asking-player.cpp">
       <Filter>core</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\test\definitions-reader\test-activation-reader.cpp">
+      <Filter>definitions-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\definitions-reader\test-artifact-reader.cpp">
+      <Filter>definitions-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\definitions-reader\test-baseitem-reader.cpp">
+      <Filter>definitions-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\definitions-reader\test-definition-id-checker.cpp">
+      <Filter>definitions-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\definitions-reader\test-definitions-reader-util.cpp">
+      <Filter>definitions-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\definitions-reader\test-dungeon-grid.cpp">
+      <Filter>definitions-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\definitions-reader\test-dungeon-reader.cpp">
+      <Filter>definitions-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\definitions-reader\test-ego-reader.cpp">
+      <Filter>definitions-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\definitions-reader\test-item-flag-reader.cpp">
+      <Filter>definitions-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\definitions-reader\test-json-reader-util.cpp">
+      <Filter>definitions-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\definitions-reader\test-jsonc-document-loader.cpp">
+      <Filter>definitions-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\definitions-reader\test-legend-ego-validator.cpp">
+      <Filter>definitions-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\definitions-reader\test-legend-object-trap-validator.cpp">
+      <Filter>definitions-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\definitions-reader\test-magic-reader.cpp">
+      <Filter>definitions-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\definitions-reader\test-message-reader.cpp">
+      <Filter>definitions-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\definitions-reader\test-monster-flag-reader.cpp">
+      <Filter>definitions-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\definitions-reader\test-parse-error-messages.cpp">
+      <Filter>definitions-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\definitions-reader\test-quest-reader.cpp">
+      <Filter>definitions-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\definitions-reader\test-race-reader.cpp">
+      <Filter>definitions-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\definitions-reader\test-record-diagnostic.cpp">
+      <Filter>definitions-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\definitions-reader\test-skill-reader.cpp">
+      <Filter>definitions-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\definitions-reader\test-spell-reader.cpp">
+      <Filter>definitions-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\definitions-reader\test-terrain-reader.cpp">
+      <Filter>definitions-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\definitions-reader\test-town-definition-list-reader.cpp">
+      <Filter>definitions-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\definitions-reader\test-town-map-condition.cpp">
+      <Filter>definitions-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\definitions-reader\test-town-map-loader.cpp">
+      <Filter>definitions-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\definitions-reader\test-town-map-reader.cpp">
+      <Filter>definitions-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\definitions-reader\test-town-preferences-reader.cpp">
+      <Filter>definitions-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\definitions-reader\test-vault-reader.cpp">
+      <Filter>definitions-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\definitions-reader\test-wilderness-reader.cpp">
+      <Filter>definitions-reader</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\test\flavor\test-flavor-util.cpp">
       <Filter>flavor</Filter>
     </ClCompile>
@@ -174,96 +264,6 @@
     </ClCompile>
     <ClCompile Include="..\..\src\test\game-option\test-runtime-arguments.cpp">
       <Filter>game-option</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\test\info-reader\test-activation-reader.cpp">
-      <Filter>info-reader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\test\info-reader\test-artifact-reader.cpp">
-      <Filter>info-reader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\test\info-reader\test-baseitem-reader.cpp">
-      <Filter>info-reader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\test\info-reader\test-definition-id-checker.cpp">
-      <Filter>info-reader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\test\info-reader\test-dungeon-grid.cpp">
-      <Filter>info-reader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\test\info-reader\test-dungeon-reader.cpp">
-      <Filter>info-reader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\test\info-reader\test-ego-reader.cpp">
-      <Filter>info-reader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\test\info-reader\test-info-reader-util.cpp">
-      <Filter>info-reader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\test\info-reader\test-item-flag-reader.cpp">
-      <Filter>info-reader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\test\info-reader\test-json-reader-util.cpp">
-      <Filter>info-reader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\test\info-reader\test-jsonc-document-loader.cpp">
-      <Filter>info-reader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\test\info-reader\test-legend-ego-validator.cpp">
-      <Filter>info-reader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\test\info-reader\test-legend-object-trap-validator.cpp">
-      <Filter>info-reader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\test\info-reader\test-magic-reader.cpp">
-      <Filter>info-reader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\test\info-reader\test-message-reader.cpp">
-      <Filter>info-reader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\test\info-reader\test-monster-flag-reader.cpp">
-      <Filter>info-reader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\test\info-reader\test-parse-error-messages.cpp">
-      <Filter>info-reader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\test\info-reader\test-quest-reader.cpp">
-      <Filter>info-reader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\test\info-reader\test-race-reader.cpp">
-      <Filter>info-reader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\test\info-reader\test-record-diagnostic.cpp">
-      <Filter>info-reader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\test\info-reader\test-skill-reader.cpp">
-      <Filter>info-reader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\test\info-reader\test-spell-reader.cpp">
-      <Filter>info-reader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\test\info-reader\test-terrain-reader.cpp">
-      <Filter>info-reader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\test\info-reader\test-town-definition-list-reader.cpp">
-      <Filter>info-reader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\test\info-reader\test-town-map-condition.cpp">
-      <Filter>info-reader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\test\info-reader\test-town-map-loader.cpp">
-      <Filter>info-reader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\test\info-reader\test-town-map-reader.cpp">
-      <Filter>info-reader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\test\info-reader\test-town-preferences-reader.cpp">
-      <Filter>info-reader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\test\info-reader\test-vault-reader.cpp">
-      <Filter>info-reader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\test\info-reader\test-wilderness-reader.cpp">
-      <Filter>info-reader</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\test\inventory\test-floor-item-getter.cpp">
       <Filter>inventory</Filter>
@@ -512,17 +512,17 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\stdafx.h" />
-    <ClInclude Include="..\..\src\test\info-reader\dungeon-grid-checks.h">
-      <Filter>info-reader</Filter>
+    <ClInclude Include="..\..\src\test\definitions-reader\dungeon-grid-checks.h">
+      <Filter>definitions-reader</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\test\info-reader\legend-ego-fixture.h">
-      <Filter>info-reader</Filter>
+    <ClInclude Include="..\..\src\test\definitions-reader\legend-ego-fixture.h">
+      <Filter>definitions-reader</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\test\info-reader\parse-result-helpers.h">
-      <Filter>info-reader</Filter>
+    <ClInclude Include="..\..\src\test\definitions-reader\parse-result-helpers.h">
+      <Filter>definitions-reader</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\test\info-reader\scoped-reader-state.h">
-      <Filter>info-reader</Filter>
+    <ClInclude Include="..\..\src\test\definitions-reader\scoped-reader-state.h">
+      <Filter>definitions-reader</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\test\save\scoped-save-io.h">
       <Filter>save</Filter>
