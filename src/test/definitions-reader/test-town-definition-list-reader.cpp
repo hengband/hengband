@@ -1,0 +1,146 @@
+#include "definitions-reader/town-definition-list-reader.h"
+#include "test/definitions-reader/parse-result-helpers.h"
+#include <doctest/doctest.h>
+#include <nlohmann/json.hpp>
+#include <string>
+#include <utility>
+
+namespace {
+nlohmann::json make_town_definition_list()
+{
+    return {
+        { "version", 1 },
+        { "towns", {
+                       { "1", { { "lite", "towns/Lite.jsonc" }, { "normal", "towns/Normal.jsonc" }, { "none", "towns/None.jsonc" } } },
+                       { "2", "towns/Town2.jsonc" },
+                   } },
+    };
+}
+}
+
+TEST_CASE("TownDefinitionListReader selects each mode and a direct map file")
+{
+    const auto data = nlohmann::json::parse(make_town_definition_list().dump());
+    REQUIRE(data["version"].is_number_unsigned());
+    TownDefinitionListReader reader(data);
+    std::string map_file = "old";
+    for (const auto &[mode, expected] : {
+             std::pair{ TownMapMode::NORMAL, "towns/Normal.jsonc" },
+             std::pair{ TownMapMode::LITE, "towns/Lite.jsonc" },
+             std::pair{ TownMapMode::NONE, "towns/None.jsonc" },
+         }) {
+        CAPTURE(std::string(expected));
+        REQUIRE(reader.read(1, mode, map_file).has_value());
+        CHECK(map_file == expected);
+    }
+    for (const auto mode : { TownMapMode::NORMAL, TownMapMode::LITE, TownMapMode::NONE }) {
+        CHECK(reader.read(2, mode, map_file).has_value());
+        CHECK(map_file == "towns/Town2.jsonc");
+    }
+}
+
+/*!
+ * @brief 一覧に無い町は、町の外（町番号が1未満）なら成功、町なら失敗として、どちらも出力を保持する
+ * @details 町が一覧に無いまま成功すると、店の無い町が黙ってできる。
+ */
+TEST_CASE("TownDefinitionListReader rejects an absent town but not the outside of towns")
+{
+    const auto data = make_town_definition_list();
+    std::string map_file = "previous";
+    TownDefinitionListReader reader(data);
+    CHECK(test::to_error_code(reader.read(3, TownMapMode::NORMAL, map_file)) == ParseErrorType::INVALID_VALUE);
+    CHECK(map_file == "previous");
+    for (const auto town_index : { 0, -1 }) {
+        CAPTURE(town_index);
+        CHECK(reader.read(town_index, TownMapMode::LITE, map_file).has_value());
+        CHECK(map_file == "previous");
+    }
+}
+
+TEST_CASE("TownDefinitionListReader validates the root and preserves output")
+{
+    for (const auto &root : { nlohmann::json(nullptr), nlohmann::json::array(), nlohmann::json::object() }) {
+        std::string map_file = "previous";
+        CHECK(test::to_error_code(TownDefinitionListReader(root).read(1, TownMapMode::NORMAL, map_file)) == (root.is_object() ? ParseErrorType::TOO_FEW_ARGUMENTS : ParseErrorType::INVALID_TYPE));
+        CHECK(map_file == "previous");
+    }
+    for (const auto &version : { nlohmann::json(0), nlohmann::json(1.0), nlohmann::json("1") }) {
+        auto data = make_town_definition_list();
+        data["version"] = version;
+        std::string map_file = "previous";
+        const auto expected = version.is_number_integer() ? ParseErrorType::INVALID_VALUE : ParseErrorType::INVALID_TYPE;
+        CHECK(test::to_error_code(TownDefinitionListReader(data).read(1, TownMapMode::NORMAL, map_file)) == expected);
+        CHECK(map_file == "previous");
+    }
+    for (const auto &towns : { nlohmann::json(nullptr), nlohmann::json::array(), nlohmann::json::object() }) {
+        auto data = make_town_definition_list();
+        data["towns"] = towns;
+        std::string map_file = "previous";
+        CHECK(test::to_error_code(TownDefinitionListReader(data).read(1, TownMapMode::NORMAL, map_file)) == ParseErrorType::INVALID_TYPE);
+        CHECK(map_file == "previous");
+    }
+}
+
+TEST_CASE("TownDefinitionListReader validates the selected town and mode")
+{
+    for (const auto &selected : { nlohmann::json(nullptr), nlohmann::json::array(), nlohmann::json(2) }) {
+        auto data = make_town_definition_list();
+        data["towns"]["1"] = selected;
+        std::string map_file = "previous";
+        CHECK(test::to_error_code(TownDefinitionListReader(data).read(1, TownMapMode::NORMAL, map_file)) == ParseErrorType::INVALID_TYPE);
+        CHECK(map_file == "previous");
+    }
+    auto data = make_town_definition_list();
+    data["towns"]["1"].erase("lite");
+    std::string map_file = "previous";
+    CHECK(test::to_error_code(TownDefinitionListReader(data).read(1, TownMapMode::LITE, map_file)) == ParseErrorType::INVALID_TYPE);
+    CHECK(map_file == "previous");
+    CHECK(TownDefinitionListReader(data).read(1, TownMapMode::NORMAL, map_file).has_value());
+    CHECK(map_file == "towns/Normal.jsonc");
+    map_file = "previous";
+    CHECK(test::to_error_code(TownDefinitionListReader(data).read(1, static_cast<TownMapMode>(999), map_file)) == ParseErrorType::INVALID_VALUE);
+    CHECK(map_file == "previous");
+}
+
+TEST_CASE("TownDefinitionListReader rejects invalid map paths without replacing output")
+{
+    for (const auto *path : { "", "towns/Map.txt", "../towns/Map.jsonc", "towns/../Map.jsonc", "towns\\Map.jsonc", "Map.jsonc" }) {
+        CAPTURE(std::string(path));
+        auto data = make_town_definition_list();
+        data["towns"]["1"]["normal"] = path;
+        std::string map_file = "previous";
+        CHECK(test::to_error_code(TownDefinitionListReader(data).read(1, TownMapMode::NORMAL, map_file)) == ParseErrorType::INVALID_VALUE);
+        CHECK(map_file == "previous");
+    }
+    auto data = make_town_definition_list();
+    data["towns"]["1"]["normal"] = nullptr;
+    std::string map_file = "previous";
+    CHECK(test::to_error_code(TownDefinitionListReader(data).read(1, TownMapMode::NORMAL, map_file)) == ParseErrorType::INVALID_TYPE);
+    CHECK(map_file == "previous");
+    data["towns"]["2"] = "towns/../Map.jsonc";
+    CHECK(test::to_error_code(TownDefinitionListReader(data).read(2, TownMapMode::NORMAL, map_file)) == ParseErrorType::INVALID_VALUE);
+    CHECK(map_file == "previous");
+}
+
+TEST_CASE("TownDefinitionListReader only checks the selected entry as before")
+{
+    auto data = make_town_definition_list();
+    data["towns"]["2"] = nullptr;
+    std::string map_file = "previous";
+    CHECK(TownDefinitionListReader(data).read(1, TownMapMode::NORMAL, map_file).has_value());
+    CHECK(map_file == "towns/Normal.jsonc");
+    map_file = "previous";
+    CHECK(test::to_error_code(TownDefinitionListReader(data).read(3, TownMapMode::NORMAL, map_file)) == ParseErrorType::INVALID_VALUE);
+    CHECK(map_file == "previous");
+}
+
+TEST_CASE("TownDefinitionListReader classifies missing and null versions")
+{
+    auto data = make_town_definition_list();
+    std::string map_file = "previous";
+    data.erase("version");
+    CHECK(test::to_error_code(TownDefinitionListReader(data).read(1, TownMapMode::NORMAL, map_file)) == ParseErrorType::TOO_FEW_ARGUMENTS);
+    data["version"] = nullptr;
+    CHECK(test::to_error_code(TownDefinitionListReader(data).read(1, TownMapMode::NORMAL, map_file)) == ParseErrorType::TOO_FEW_ARGUMENTS);
+    CHECK(map_file == "previous");
+}

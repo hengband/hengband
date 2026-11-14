@@ -119,7 +119,7 @@
  * @dir floor フロア生成/管理処理
  * @dir game-option 詐欺モードも含めたゲームオプション
  * @dir grid グリッド(各マス)に関する処理
- * @dir info-reader *_info.txtの読み込み処理
+ * @dir definitions-reader 定義ファイル (lib/edit/ の JSONC) の読み込み処理
  * @dir inventory 所持品に関する処理(フロアからの取得/呪いの品/攻撃による損壊/所持状態の記述/所持数表記/アイテムスロット/ザック溢れ/選択処理/自然充填)
  * @dir store 店舗処理
  */

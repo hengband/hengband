@@ -310,7 +310,7 @@ TEST_CASE("VaultReader keeps the existing vaults on a parse error")
 }
 ```
 
-新しい `Session` で 1 件だけ読むときは、`test/info-reader/parse-result-helpers.h` の `test::read_record<VaultReader>(data)` を使ってください。
+新しい `Session` で 1 件だけ読むときは、`test/definitions-reader/parse-result-helpers.h` の `test::read_record<VaultReader>(data)` を使ってください。
 `Session` を作って `read_and_commit()` を呼ぶところまでをまとめて行います。上の例のように `Session` を自分で作るのは、
 同じ `Session` で続けて読むときや、`Session` の状態を確かめるときだけにします。
 
@@ -325,7 +325,7 @@ TEST_CASE("VaultReader keeps the existing vaults on a parse error")
 `test::scoped_restore_redrawing_flags<Flag>()` で、フラグの型ごとにすべてのフラグを退避して元へ戻せます。
 これも戻り値は必ず変数で受けてください。
 
-データの読み込み処理（`info-reader/`）のテストでは、`test/info-reader/scoped-reader-state.h` の
+データの読み込み処理（`definitions-reader/`）のテストでは、`test/definitions-reader/scoped-reader-state.h` の
 `test::ScopedReaderState` を使ってください。端末が無くてもメッセージを
 出さないようにして、スコープを抜けるときに元へ戻します。
 

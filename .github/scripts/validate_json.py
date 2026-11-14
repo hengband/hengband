@@ -166,14 +166,14 @@ MAX_EGO_ID = load_cpp_constant(REPOSITORY_ROOT / "src/object-enchant/object-ego.
 MAX_HGT = load_cpp_constant(REPOSITORY_ROOT / "src/floor/floor-base-definitions.h", "MAX_HGT")
 MAX_WID = load_cpp_constant(REPOSITORY_ROOT / "src/floor/floor-base-definitions.h", "MAX_WID")
 # ベースアイテム・アーティファクトの種別・副種別・価格の上限。
-ITEM_TYPE_MAX = load_cpp_constant(REPOSITORY_ROOT / "src/info-reader/item-reader-limits.h", "ITEM_TYPE_MAX")
-ITEM_SUBTYPE_DEFAULT_MAX = load_cpp_constant(REPOSITORY_ROOT / "src/info-reader/item-reader-limits.h", "ITEM_SUBTYPE_DEFAULT_MAX")
-ITEM_COST_MAX = load_cpp_constant(REPOSITORY_ROOT / "src/info-reader/item-reader-limits.h", "ITEM_COST_MAX")
+ITEM_TYPE_MAX = load_cpp_constant(REPOSITORY_ROOT / "src/definitions-reader/item-reader-limits.h", "ITEM_TYPE_MAX")
+ITEM_SUBTYPE_DEFAULT_MAX = load_cpp_constant(REPOSITORY_ROOT / "src/definitions-reader/item-reader-limits.h", "ITEM_SUBTYPE_DEFAULT_MAX")
+ITEM_COST_MAX = load_cpp_constant(REPOSITORY_ROOT / "src/definitions-reader/item-reader-limits.h", "ITEM_COST_MAX")
 # BaseitemReader の pval_range() と金貨の価格の上限。
-GOLD_COST_MAX = load_cpp_constant(REPOSITORY_ROOT / "src/info-reader/baseitem-reader.cpp", "GOLD_COST_MAX")
-EQUIPMENT_PVAL_MAX = load_cpp_constant(REPOSITORY_ROOT / "src/info-reader/baseitem-reader.cpp", "EQUIPMENT_PVAL_MAX")
-DEVICE_CHARGES_MAX = load_cpp_constant(REPOSITORY_ROOT / "src/info-reader/baseitem-reader.cpp", "DEVICE_CHARGES_MAX")
-ROD_PVAL_MAX = load_cpp_constant(REPOSITORY_ROOT / "src/info-reader/baseitem-reader.cpp", "ROD_PVAL_MAX")
+GOLD_COST_MAX = load_cpp_constant(REPOSITORY_ROOT / "src/definitions-reader/baseitem-reader.cpp", "GOLD_COST_MAX")
+EQUIPMENT_PVAL_MAX = load_cpp_constant(REPOSITORY_ROOT / "src/definitions-reader/baseitem-reader.cpp", "EQUIPMENT_PVAL_MAX")
+DEVICE_CHARGES_MAX = load_cpp_constant(REPOSITORY_ROOT / "src/definitions-reader/baseitem-reader.cpp", "DEVICE_CHARGES_MAX")
+ROD_PVAL_MAX = load_cpp_constant(REPOSITORY_ROOT / "src/definitions-reader/baseitem-reader.cpp", "ROD_PVAL_MAX")
 PY_FOOD_FULL = load_cpp_constant(REPOSITORY_ROOT / "src/player/digestion-processor.h", "PY_FOOD_FULL")
 FUEL_LAMP = load_cpp_constant(REPOSITORY_ROOT / "src/system/gamevalue.h", "FUEL_LAMP")
 # ItemKindType の列挙子の名前から値を引く表。種別は番号ではなく列挙子の名前で書く。
@@ -197,7 +197,7 @@ def item_kind(name: str) -> int:
 # 金貨の種別（ItemKindType::GOLD）。凡例のエゴは金貨に付けられない。
 ITEM_KIND_GOLD = item_kind("GOLD")
 # RaceReader は最大の出目（個数×面数）を捕獲したモンスターのHPを持つ short に収める。
-MAX_MONRACE_DICE_ROLL = load_cpp_constant(REPOSITORY_ROOT / "src/info-reader/race-reader.cpp", "MAX_MONRACE_DICE_ROLL")
+MAX_MONRACE_DICE_ROLL = load_cpp_constant(REPOSITORY_ROOT / "src/definitions-reader/race-reader.cpp", "MAX_MONRACE_DICE_ROLL")
 # TownList::is_all_initialized() が名前を求める町（1〜VALID_TOWNS-1）。町1には別名も要る。
 REQUIRED_TOWN_IDS = range(1, load_cpp_constant(REPOSITORY_ROOT / "src/system/floor/town-list.h", "VALID_TOWNS"))
 # TownMapReader の C・M・R の欄の数の上限（PLAYER_CLASS_TYPE_MAX・MAX_MAGIC・MAX_RACES）。
@@ -325,7 +325,7 @@ def load_cpp_tokens(path: Path) -> set[str]:
 def validate_ego_semantics(data: dict, schema_path: Path) -> None:
     """Check unique IDs, strict integers and integer-percent probabilities."""
     repository_root = schema_path.resolve().parent.parent
-    valid_flags = load_cpp_tokens(repository_root / "src/info-reader/baseitem-tokens-table.cpp")
+    valid_flags = load_cpp_tokens(repository_root / "src/definitions-reader/baseitem-tokens-table.cpp")
     valid_activations = load_cpp_tokens(repository_root / "src/object-enchant/activation-info-table.cpp")
     require_integer(data["version"], ["version"])
     ids = set()
@@ -372,7 +372,7 @@ def require_reader_dice(value: str, path: list, minimum: int = INT_MIN, maximum:
 
 
 # セーブではアイテムのダイスの個数・面数をそれぞれ1バイトで書くため、BaseitemReader・ArtifactReaderは0〜255に限る。
-ITEM_DICE_RANGE = (0, load_cpp_constant(REPOSITORY_ROOT / "src/info-reader/item-reader-limits.h", "ITEM_DICE_MAX"))
+ITEM_DICE_RANGE = (0, load_cpp_constant(REPOSITORY_ROOT / "src/definitions-reader/item-reader-limits.h", "ITEM_DICE_MAX"))
 
 
 INVALID_BASEITEM_NAMES = {"ja": "異常アイテム", "en": "Invalid item"}
@@ -1162,7 +1162,7 @@ def load_cpp_map_keys(path: Path, table: str) -> set[str]:
 def validate_terrain_semantics(data: dict, schema_path: Path) -> None:
     """地形の整数・表示・参照・状態数を確認する。重複定義はCIで拒否する。"""
     repository_root = schema_path.resolve().parent.parent
-    flags = load_cpp_map_keys(repository_root / "src/info-reader/terrain-tokens-table.cpp", "terrain_flags")
+    flags = load_cpp_map_keys(repository_root / "src/definitions-reader/terrain-tokens-table.cpp", "terrain_flags")
     colors = load_cpp_map_keys(repository_root / "src/term/gameterm.cpp", "color_list")
     ids = set()
     tags = set()
@@ -1233,7 +1233,7 @@ def validate_terrain_semantics(data: dict, schema_path: Path) -> None:
 def load_class_ids(repository_root: Path) -> dict[str, int]:
     """Read the class magic tokens table and PlayerClassType values, not map order."""
     enum_ids = load_cpp_enum_values(repository_root / "src/player-info/class-types.h", "PlayerClassType")
-    reader_path = repository_root / "src/info-reader/magic-tokens-table.cpp"
+    reader_path = repository_root / "src/definitions-reader/magic-tokens-table.cpp"
     tokens = re.findall(r'\{\s*"([A-Z][A-Z0-9_]*)"\s*,\s*PlayerClassType::([A-Z][A-Z0-9_]*)\s*\}',
                         reader_path.read_text(encoding="utf-8"))
     if not tokens or any(name not in enum_ids for _, name in tokens):

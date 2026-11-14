@@ -43,6 +43,9 @@
     <Filter Include="core">
       <UniqueIdentifier>{cbc72021-c88c-4625-b89b-ef126e300cf8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="definitions-reader">
+      <UniqueIdentifier>{8422239c-db47-5155-8858-549ea4d9a732}</UniqueIdentifier>
+    </Filter>
     <Filter Include="dungeon">
       <UniqueIdentifier>{b37a544f-cca2-4c1f-b069-f109a6b6b119}</UniqueIdentifier>
     </Filter>
@@ -72,9 +75,6 @@
     </Filter>
     <Filter Include="hpmp">
       <UniqueIdentifier>{fb766b4b-8783-4d07-9474-059259afe7c6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="info-reader">
-      <UniqueIdentifier>{149ff96c-b8c9-4df9-845d-d0618427d100}</UniqueIdentifier>
     </Filter>
     <Filter Include="inventory">
       <UniqueIdentifier>{060db85f-39b1-48fd-8b5f-7409eb6209b2}</UniqueIdentifier>
@@ -723,6 +723,111 @@
     <ClCompile Include="..\..\src\core\window-redrawer.cpp">
       <Filter>core</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\definitions-reader\activation-reader.cpp">
+      <Filter>definitions-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\definitions-reader\artifact-reader.cpp">
+      <Filter>definitions-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\definitions-reader\baseitem-reader.cpp">
+      <Filter>definitions-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\definitions-reader\baseitem-tokens-table.cpp">
+      <Filter>definitions-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\definitions-reader\definition-hash-data.cpp">
+      <Filter>definitions-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\definitions-reader\definition-id-checker.cpp">
+      <Filter>definitions-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\definitions-reader\dungeon-grid.cpp">
+      <Filter>definitions-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\definitions-reader\dungeon-reader.cpp">
+      <Filter>definitions-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\definitions-reader\dungeon-tokens-table.cpp">
+      <Filter>definitions-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\definitions-reader\ego-reader.cpp">
+      <Filter>definitions-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\definitions-reader\item-flag-reader.cpp">
+      <Filter>definitions-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\definitions-reader\json-reader-util.cpp">
+      <Filter>definitions-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\definitions-reader\jsonc-document-loader.cpp">
+      <Filter>definitions-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\definitions-reader\legend-ego-validator.cpp">
+      <Filter>definitions-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\definitions-reader\legend-object-trap-validator.cpp">
+      <Filter>definitions-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\definitions-reader\magic-reader.cpp">
+      <Filter>definitions-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\definitions-reader\magic-tokens-table.cpp">
+      <Filter>definitions-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\definitions-reader\message-reader.cpp">
+      <Filter>definitions-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\definitions-reader\monrace-tokens-table.cpp">
+      <Filter>definitions-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\definitions-reader\monster-flag-reader.cpp">
+      <Filter>definitions-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\definitions-reader\parse-error-messages.cpp">
+      <Filter>definitions-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\definitions-reader\quest-reader.cpp">
+      <Filter>definitions-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\definitions-reader\race-reader.cpp">
+      <Filter>definitions-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\definitions-reader\record-diagnostic.cpp">
+      <Filter>definitions-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\definitions-reader\skill-reader.cpp">
+      <Filter>definitions-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\definitions-reader\spell-reader.cpp">
+      <Filter>definitions-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\definitions-reader\terrain-reader.cpp">
+      <Filter>definitions-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\definitions-reader\terrain-tokens-table.cpp">
+      <Filter>definitions-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\definitions-reader\town-definition-list-reader.cpp">
+      <Filter>definitions-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\definitions-reader\town-map-condition.cpp">
+      <Filter>definitions-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\definitions-reader\town-map-loader.cpp">
+      <Filter>definitions-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\definitions-reader\town-map-reader.cpp">
+      <Filter>definitions-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\definitions-reader\town-preferences-reader.cpp">
+      <Filter>definitions-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\definitions-reader\vault-reader.cpp">
+      <Filter>definitions-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\definitions-reader\wilderness-reader.cpp">
+      <Filter>definitions-reader</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\dungeon\dungeon-processor.cpp">
       <Filter>dungeon</Filter>
     </ClCompile>
@@ -950,111 +1055,6 @@
     </ClCompile>
     <ClCompile Include="..\..\src\hpmp\hp-mp-regenerator.cpp">
       <Filter>hpmp</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\info-reader\activation-reader.cpp">
-      <Filter>info-reader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\info-reader\artifact-reader.cpp">
-      <Filter>info-reader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\info-reader\baseitem-reader.cpp">
-      <Filter>info-reader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\info-reader\baseitem-tokens-table.cpp">
-      <Filter>info-reader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\info-reader\definition-hash-data.cpp">
-      <Filter>info-reader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\info-reader\definition-id-checker.cpp">
-      <Filter>info-reader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\info-reader\dungeon-grid.cpp">
-      <Filter>info-reader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\info-reader\dungeon-reader.cpp">
-      <Filter>info-reader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\info-reader\dungeon-tokens-table.cpp">
-      <Filter>info-reader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\info-reader\ego-reader.cpp">
-      <Filter>info-reader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\info-reader\item-flag-reader.cpp">
-      <Filter>info-reader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\info-reader\json-reader-util.cpp">
-      <Filter>info-reader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\info-reader\jsonc-document-loader.cpp">
-      <Filter>info-reader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\info-reader\legend-ego-validator.cpp">
-      <Filter>info-reader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\info-reader\legend-object-trap-validator.cpp">
-      <Filter>info-reader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\info-reader\magic-reader.cpp">
-      <Filter>info-reader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\info-reader\magic-tokens-table.cpp">
-      <Filter>info-reader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\info-reader\message-reader.cpp">
-      <Filter>info-reader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\info-reader\monrace-tokens-table.cpp">
-      <Filter>info-reader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\info-reader\monster-flag-reader.cpp">
-      <Filter>info-reader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\info-reader\parse-error-messages.cpp">
-      <Filter>info-reader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\info-reader\quest-reader.cpp">
-      <Filter>info-reader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\info-reader\race-reader.cpp">
-      <Filter>info-reader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\info-reader\record-diagnostic.cpp">
-      <Filter>info-reader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\info-reader\skill-reader.cpp">
-      <Filter>info-reader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\info-reader\spell-reader.cpp">
-      <Filter>info-reader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\info-reader\terrain-reader.cpp">
-      <Filter>info-reader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\info-reader\terrain-tokens-table.cpp">
-      <Filter>info-reader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\info-reader\town-definition-list-reader.cpp">
-      <Filter>info-reader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\info-reader\town-map-condition.cpp">
-      <Filter>info-reader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\info-reader\town-map-loader.cpp">
-      <Filter>info-reader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\info-reader\town-map-reader.cpp">
-      <Filter>info-reader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\info-reader\town-preferences-reader.cpp">
-      <Filter>info-reader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\info-reader\vault-reader.cpp">
-      <Filter>info-reader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\info-reader\wilderness-reader.cpp">
-      <Filter>info-reader</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\inventory\floor-item-getter.cpp">
       <Filter>inventory</Filter>
@@ -3435,6 +3435,129 @@
     <ClInclude Include="..\..\src\core\window-redrawer.h">
       <Filter>core</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\definitions-reader\activation-reader.h">
+      <Filter>definitions-reader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\definitions-reader\artifact-reader.h">
+      <Filter>definitions-reader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\definitions-reader\baseitem-reader.h">
+      <Filter>definitions-reader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\definitions-reader\baseitem-tokens-table.h">
+      <Filter>definitions-reader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\definitions-reader\definition-hash-data.h">
+      <Filter>definitions-reader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\definitions-reader\definition-id-checker.h">
+      <Filter>definitions-reader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\definitions-reader\dungeon-grid.h">
+      <Filter>definitions-reader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\definitions-reader\dungeon-reader.h">
+      <Filter>definitions-reader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\definitions-reader\dungeon-tokens-table.h">
+      <Filter>definitions-reader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\definitions-reader\ego-reader.h">
+      <Filter>definitions-reader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\definitions-reader\info-reader-util.h">
+      <Filter>definitions-reader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\definitions-reader\item-flag-reader.h">
+      <Filter>definitions-reader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\definitions-reader\item-reader-limits.h">
+      <Filter>definitions-reader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\definitions-reader\json-reader-util.h">
+      <Filter>definitions-reader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\definitions-reader\jsonc-document-loader.h">
+      <Filter>definitions-reader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\definitions-reader\legend-ego-validator.h">
+      <Filter>definitions-reader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\definitions-reader\legend-object-trap-validator.h">
+      <Filter>definitions-reader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\definitions-reader\magic-reader.h">
+      <Filter>definitions-reader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\definitions-reader\magic-tokens-table.h">
+      <Filter>definitions-reader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\definitions-reader\message-reader.h">
+      <Filter>definitions-reader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\definitions-reader\monrace-tokens-table.h">
+      <Filter>definitions-reader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\definitions-reader\monster-flag-reader.h">
+      <Filter>definitions-reader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\definitions-reader\parse-error-messages.h">
+      <Filter>definitions-reader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\definitions-reader\parse-error-types.h">
+      <Filter>definitions-reader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\definitions-reader\quest-reader.h">
+      <Filter>definitions-reader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\definitions-reader\race-reader.h">
+      <Filter>definitions-reader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\definitions-reader\random-grid-effect-types.h">
+      <Filter>definitions-reader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\definitions-reader\range.h">
+      <Filter>definitions-reader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\definitions-reader\record-diagnostic.h">
+      <Filter>definitions-reader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\definitions-reader\skill-reader.h">
+      <Filter>definitions-reader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\definitions-reader\spell-reader.h">
+      <Filter>definitions-reader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\definitions-reader\symbol-reader-util.h">
+      <Filter>definitions-reader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\definitions-reader\terrain-reader.h">
+      <Filter>definitions-reader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\definitions-reader\terrain-tokens-table.h">
+      <Filter>definitions-reader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\definitions-reader\town-definition-list-reader.h">
+      <Filter>definitions-reader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\definitions-reader\town-map-condition.h">
+      <Filter>definitions-reader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\definitions-reader\town-map-loader.h">
+      <Filter>definitions-reader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\definitions-reader\town-map-reader.h">
+      <Filter>definitions-reader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\definitions-reader\town-preferences-reader.h">
+      <Filter>definitions-reader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\definitions-reader\vault-reader.h">
+      <Filter>definitions-reader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\definitions-reader\wilderness-reader.h">
+      <Filter>definitions-reader</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\src\dungeon\dungeon-flag-mask.h">
       <Filter>dungeon</Filter>
     </ClInclude>
@@ -3689,129 +3812,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\hpmp\hp-mp-regenerator.h">
       <Filter>hpmp</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\info-reader\activation-reader.h">
-      <Filter>info-reader</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\info-reader\artifact-reader.h">
-      <Filter>info-reader</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\info-reader\baseitem-reader.h">
-      <Filter>info-reader</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\info-reader\baseitem-tokens-table.h">
-      <Filter>info-reader</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\info-reader\definition-hash-data.h">
-      <Filter>info-reader</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\info-reader\definition-id-checker.h">
-      <Filter>info-reader</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\info-reader\dungeon-grid.h">
-      <Filter>info-reader</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\info-reader\dungeon-reader.h">
-      <Filter>info-reader</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\info-reader\dungeon-tokens-table.h">
-      <Filter>info-reader</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\info-reader\ego-reader.h">
-      <Filter>info-reader</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\info-reader\info-reader-util.h">
-      <Filter>info-reader</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\info-reader\item-flag-reader.h">
-      <Filter>info-reader</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\info-reader\item-reader-limits.h">
-      <Filter>info-reader</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\info-reader\json-reader-util.h">
-      <Filter>info-reader</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\info-reader\jsonc-document-loader.h">
-      <Filter>info-reader</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\info-reader\legend-ego-validator.h">
-      <Filter>info-reader</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\info-reader\legend-object-trap-validator.h">
-      <Filter>info-reader</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\info-reader\magic-reader.h">
-      <Filter>info-reader</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\info-reader\magic-tokens-table.h">
-      <Filter>info-reader</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\info-reader\message-reader.h">
-      <Filter>info-reader</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\info-reader\monrace-tokens-table.h">
-      <Filter>info-reader</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\info-reader\monster-flag-reader.h">
-      <Filter>info-reader</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\info-reader\parse-error-messages.h">
-      <Filter>info-reader</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\info-reader\parse-error-types.h">
-      <Filter>info-reader</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\info-reader\quest-reader.h">
-      <Filter>info-reader</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\info-reader\race-reader.h">
-      <Filter>info-reader</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\info-reader\random-grid-effect-types.h">
-      <Filter>info-reader</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\info-reader\range.h">
-      <Filter>info-reader</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\info-reader\record-diagnostic.h">
-      <Filter>info-reader</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\info-reader\skill-reader.h">
-      <Filter>info-reader</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\info-reader\spell-reader.h">
-      <Filter>info-reader</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\info-reader\symbol-reader-util.h">
-      <Filter>info-reader</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\info-reader\terrain-reader.h">
-      <Filter>info-reader</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\info-reader\terrain-tokens-table.h">
-      <Filter>info-reader</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\info-reader\town-definition-list-reader.h">
-      <Filter>info-reader</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\info-reader\town-map-condition.h">
-      <Filter>info-reader</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\info-reader\town-map-loader.h">
-      <Filter>info-reader</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\info-reader\town-map-reader.h">
-      <Filter>info-reader</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\info-reader\town-preferences-reader.h">
-      <Filter>info-reader</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\info-reader\vault-reader.h">
-      <Filter>info-reader</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\info-reader\wilderness-reader.h">
-      <Filter>info-reader</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\inventory\floor-item-getter.h">
       <Filter>inventory</Filter>

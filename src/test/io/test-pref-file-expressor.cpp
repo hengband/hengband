@@ -17,7 +17,7 @@
 #include "io/interpret-pref-file.h"
 #include "io/read-pref-file.h"
 #include "system/player-type-definition.h"
-#include "test/info-reader/scoped-reader-state.h"
+#include "test/definitions-reader/scoped-reader-state.h"
 #include "test/temporary-json-files.h"
 #include "util/angband-files.h"
 #include "util/finalizer.h"

@@ -86,9 +86,9 @@ class MonraceValidationTest(unittest.TestCase):
         self.assert_valid([self.monster(armor_class=0), self.monster(2, armor_class=10000)])
         self.assert_invalid([self.monster(armor_class=10001)], ["monsters", 0, "armor_class"])
         self.assert_invalid([self.monster(armor_class=-1)], ["monsters", 0, "armor_class"])
-        source = (Path(__file__).resolve().parents[2] / "src/info-reader/race-reader.cpp").read_text(encoding="utf-8")
+        source = (Path(__file__).resolve().parents[2] / "src/definitions-reader/race-reader.cpp").read_text(encoding="utf-8")
         match = re.search(r"constexpr int MONRACE_AC_MAX = (\d+);", source)
-        self.assertIsNotNone(match, "MONRACE_AC_MAX not found in src/info-reader/race-reader.cpp")
+        self.assertIsNotNone(match, "MONRACE_AC_MAX not found in src/definitions-reader/race-reader.cpp")
         limit = int(match.group(1))
         schema = self.loaded[self.schema_path]["properties"]["monsters"]["items"]["properties"]["armor_class"]
         self.assertEqual(schema["maximum"], limit)
@@ -113,7 +113,7 @@ class MonraceValidationTest(unittest.TestCase):
                                      self.monster(2)], ["monsters", 0, "evolve", "need_exp"])
 
     def test_legacy_range_constants_match_schema(self):
-        source = (self.root / "src/info-reader/race-reader.cpp").read_text(encoding="utf-8")
+        source = (self.root / "src/definitions-reader/race-reader.cpp").read_text(encoding="utf-8")
         properties = self.loaded[self.schema_path]["properties"]["monsters"]["items"]["properties"]
         for constant, schema, bound in (
             ("MONRACE_ODDS_CORRECTION_RATIO_MAX", properties["odds_correction_ratio"], "maximum"),
@@ -132,7 +132,7 @@ class MonraceValidationTest(unittest.TestCase):
         return self.loaded[self.schema_path]["properties"]["monsters"]["items"]["properties"]["flags"]["items"]
 
     def reader_flag_tokens(self):
-        tables = reader_token_tables("src/info-reader/race-reader.cpp", "RaceReader::grab_one_basic_flag")
+        tables = reader_token_tables("src/definitions-reader/race-reader.cpp", "RaceReader::grab_one_basic_flag")
         # 性別は sex の項目で別に読むため、flags の辞書には含まれない。
         self.assertNotIn("monrace_sex", tables)
         return set().union(*(monrace_table_keys(table) for table in tables))

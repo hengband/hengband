@@ -1,0 +1,134 @@
+#include "definitions-reader/monster-flag-reader.h"
+#include "definitions-reader/info-reader-util.h"
+#include "definitions-reader/monrace-tokens-table.h"
+#include "locale/language-switcher.h"
+#include "view/display-messages.h"
+
+namespace {
+/*!
+ * @brief 探した表に無かったフラグ名を、未知のモンスター・フラグとして表示する
+ * @param what フラグ名
+ */
+void print_unknown_monster_flag(std::string_view what)
+{
+    msg_print(_("未知のモンスター・フラグ '{}'。", "Unknown monster flag '{}'."), what);
+}
+}
+
+/*!
+ * @brief 基本フラグの格納先を、13 個すべて受け取って束ねる
+ * @details 引数は MonsterBasicFlagGroups の各メンバーと同じ順・同じ名前で、それぞれのフラグの格納先を表す。
+ */
+MonsterBasicFlagGroups::MonsterBasicFlagGroups(
+    EnumClassFlagGroup<MonsterResistanceType> &resistance_flags,
+    EnumClassFlagGroup<MonsterAuraType> &aura_flags,
+    EnumClassFlagGroup<MonsterBehaviorType> &behavior_flags,
+    EnumClassFlagGroup<MonsterVisualType> &visual_flags,
+    EnumClassFlagGroup<MonsterKindType> &kind_flags,
+    EnumClassFlagGroup<MonsterDropType> &drop_flags,
+    EnumClassFlagGroup<MonsterWildernessType> &wilderness_flags,
+    EnumClassFlagGroup<MonsterFeatureType> &feature_flags,
+    EnumClassFlagGroup<MonsterPopulationType> &population_flags,
+    EnumClassFlagGroup<MonsterSpeakType> &speak_flags,
+    EnumClassFlagGroup<MonsterBrightnessType> &brightness_flags,
+    EnumClassFlagGroup<MonsterSpecialType> &special_flags,
+    EnumClassFlagGroup<MonsterMiscType> &misc_flags)
+    : resistance_flags(resistance_flags)
+    , aura_flags(aura_flags)
+    , behavior_flags(behavior_flags)
+    , visual_flags(visual_flags)
+    , kind_flags(kind_flags)
+    , drop_flags(drop_flags)
+    , wilderness_flags(wilderness_flags)
+    , feature_flags(feature_flags)
+    , population_flags(population_flags)
+    , speak_flags(speak_flags)
+    , brightness_flags(brightness_flags)
+    , special_flags(special_flags)
+    , misc_flags(misc_flags)
+{
+}
+
+/*!
+ * @brief フラグ名をモンスターの基本フラグの表で探し、見つかった表のフラグを1つ立てる
+ * @details 耐性・オーラ・習性・シンボル・種族・ドロップ・荒野・地形・出現数・セリフ・明暗・特殊・その他の順に探す。
+ * 見つからなかったときはどのフラグも変えず、未知のモンスター・フラグとして表示する。
+ * 性別はモンスターの定義では別の項目で読み込み、ダンジョンの出現条件では呼び出し側で先に探すため、ここでは扱わない。
+ * @param groups 基本フラグの格納先
+ * @param what フラグ名
+ * @return 見つけたら true
+ */
+bool grab_one_monster_basic_flag(const MonsterBasicFlagGroups &groups, std::string_view what)
+{
+    if (info_grab_one_flag(groups.resistance_flags, monrace_resistance_flags, what)) {
+        return true;
+    }
+
+    if (info_grab_one_flag(groups.aura_flags, monrace_aura_flags, what)) {
+        return true;
+    }
+
+    if (info_grab_one_flag(groups.behavior_flags, monrace_behavior_flags, what)) {
+        return true;
+    }
+
+    if (info_grab_one_flag(groups.visual_flags, monrace_visual_flags, what)) {
+        return true;
+    }
+
+    if (info_grab_one_flag(groups.kind_flags, monrace_kind_flags, what)) {
+        return true;
+    }
+
+    if (info_grab_one_flag(groups.drop_flags, monrace_drop_flags, what)) {
+        return true;
+    }
+
+    if (info_grab_one_flag(groups.wilderness_flags, monrace_wilderness_flags, what)) {
+        return true;
+    }
+
+    if (info_grab_one_flag(groups.feature_flags, monrace_feature_flags, what)) {
+        return true;
+    }
+
+    if (info_grab_one_flag(groups.population_flags, monrace_population_flags, what)) {
+        return true;
+    }
+
+    if (info_grab_one_flag(groups.speak_flags, monrace_speak_flags, what)) {
+        return true;
+    }
+
+    if (info_grab_one_flag(groups.brightness_flags, monrace_brightness_flags, what)) {
+        return true;
+    }
+
+    if (info_grab_one_flag(groups.special_flags, monrace_special_flags, what)) {
+        return true;
+    }
+
+    if (info_grab_one_flag(groups.misc_flags, monrace_misc_flags, what)) {
+        return true;
+    }
+
+    print_unknown_monster_flag(what);
+    return false;
+}
+
+/*!
+ * @brief フラグ名を能力フラグ(魔法・ブレス)の表で探し、見つかったフラグを1つ立てる
+ * @details 見つからなかったときはフラグを変えず、未知のモンスター・フラグとして表示する。
+ * @param ability_flags 能力フラグの格納先
+ * @param what フラグ名
+ * @return 見つけたら true
+ */
+bool grab_one_monster_spell_flag(EnumClassFlagGroup<MonsterAbilityType> &ability_flags, std::string_view what)
+{
+    if (info_grab_one_flag(ability_flags, monrace_ability_flags, what)) {
+        return true;
+    }
+
+    print_unknown_monster_flag(what);
+    return false;
+}

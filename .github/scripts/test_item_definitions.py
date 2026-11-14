@@ -152,7 +152,7 @@ class BaseitemDefinitionValidationTest(unittest.TestCase):
     def test_reader_kind_table_matches_cpp_enum(self):
         root = Path(__file__).resolve().parents[2]
         kinds = load_cpp_enum_values(root / "src/object/tval-types.h", "ItemKindType")
-        source = (root / "src/info-reader/baseitem-reader.cpp").read_text(encoding="utf-8")
+        source = (root / "src/definitions-reader/baseitem-reader.cpp").read_text(encoding="utf-8")
         table = source.split("DEFINED_ITEM_KINDS[] = {", 1)[1].split("};", 1)[0]
         self.assertEqual(set(re.findall(r"ItemKindType::([A-Z_]+)", table)), set(kinds))
 
@@ -508,7 +508,7 @@ class ItemBonusLimitTest(unittest.TestCase):
     def test_schema_matches_reader_limits(self):
         # schema の範囲が item-reader-limits.h の定数と合っていることを確かめる。
         root = Path(__file__).resolve().parents[2]
-        header = (root / "src/info-reader/item-reader-limits.h").read_text(encoding="utf-8")
+        header = (root / "src/definitions-reader/item-reader-limits.h").read_text(encoding="utf-8")
         limits = {name: int(value) for name, value in re.findall(r"constexpr int (ITEM_WEIGHT_MAX|ITEM_BASE_AC_MAX|ITEM_BONUS_MAX) = (\d+);", header)}
         self.assertEqual(set(limits), {"ITEM_WEIGHT_MAX", "ITEM_BASE_AC_MAX", "ITEM_BONUS_MAX"},
                          "ITEM_WEIGHT_MAX / ITEM_BASE_AC_MAX / ITEM_BONUS_MAX not found in item-reader-limits.h")
@@ -526,7 +526,7 @@ class ItemTokenListTest(unittest.TestCase):
     def test_schema_token_lists_match_reader_tables(self):
         # フラグと発動の一覧は、BaseitemReader・ArtifactReader が使う C++ の表と同じにする。
         root = Path(__file__).resolve().parents[2]
-        flags = load_cpp_tokens(root / "src/info-reader/baseitem-tokens-table.cpp")
+        flags = load_cpp_tokens(root / "src/definitions-reader/baseitem-tokens-table.cpp")
         activations = load_cpp_tokens(root / "src/object-enchant/activation-info-table.cpp")
         for name, array in (("BaseitemDefinitions", "baseitems"), ("ArtifactDefinitions", "artifacts")):
             with self.subTest(name=name):

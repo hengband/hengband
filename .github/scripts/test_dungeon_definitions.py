@@ -31,7 +31,7 @@ class DungeonValidationTest(unittest.TestCase):
 
     def reader_token_tables(self, function):
         """DungeonReaderの指定関数が照合する monrace_* の辞書名を、照合の順に読む。"""
-        return reader_token_tables("src/info-reader/dungeon-reader.cpp", "DungeonReader::" + function)
+        return reader_token_tables("src/definitions-reader/dungeon-reader.cpp", "DungeonReader::" + function)
 
     def reader_tokens(self, function):
         tokens = set()
@@ -111,7 +111,7 @@ class DungeonValidationTest(unittest.TestCase):
 
     def numeric_cases(self):
         # schema の上限と C++ の定数を照合するため、入口の座標の上限はソースから読む。
-        entrance_coord_max = load_cpp_constant(self.root / "src/info-reader/dungeon-reader.cpp", "DUNGEON_ENTRANCE_COORD_MAX")
+        entrance_coord_max = load_cpp_constant(self.root / "src/definitions-reader/dungeon-reader.cpp", "DUNGEON_ENTRANCE_COORD_MAX")
         return ((["id"], 0, 20),
                 (["position", "wild_y"], 0, entrance_coord_max),
                 (["position", "wild_x"], 0, entrance_coord_max),

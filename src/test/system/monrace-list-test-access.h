@@ -1,7 +1,7 @@
 #pragma once
 
 #include "system/monrace/monrace-list.h"
-#include "test/info-reader/scoped-reader-state.h"
+#include "test/definitions-reader/scoped-reader-state.h"
 
 namespace test {
 class MonraceListTestAccess {

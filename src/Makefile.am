@@ -180,6 +180,50 @@ libhengband_a_SOURCES = \
 	core/visuals-reseter.cpp core/visuals-reseter.h \
 	core/window-redrawer.cpp core/window-redrawer.h \
 	\
+	definitions-reader/activation-reader.cpp definitions-reader/activation-reader.h \
+	definitions-reader/artifact-reader.cpp definitions-reader/artifact-reader.h \
+	definitions-reader/baseitem-reader.cpp definitions-reader/baseitem-reader.h \
+	definitions-reader/baseitem-tokens-table.cpp definitions-reader/baseitem-tokens-table.h \
+	definitions-reader/definition-hash-data.cpp definitions-reader/definition-hash-data.h \
+	definitions-reader/definition-id-checker.cpp definitions-reader/definition-id-checker.h \
+	definitions-reader/dungeon-grid.cpp definitions-reader/dungeon-grid.h \
+	definitions-reader/dungeon-tokens-table.cpp definitions-reader/dungeon-tokens-table.h \
+	definitions-reader/dungeon-reader.cpp definitions-reader/dungeon-reader.h \
+	definitions-reader/ego-reader.cpp definitions-reader/ego-reader.h \
+	definitions-reader/wilderness-reader.cpp definitions-reader/wilderness-reader.h \
+	definitions-reader/info-reader-util.h \
+	definitions-reader/item-flag-reader.cpp definitions-reader/item-flag-reader.h \
+	definitions-reader/item-reader-limits.h \
+	definitions-reader/json-reader-util.cpp definitions-reader/json-reader-util.h \
+	definitions-reader/jsonc-document-loader.cpp definitions-reader/jsonc-document-loader.h \
+	definitions-reader/magic-tokens-table.cpp definitions-reader/magic-tokens-table.h \
+	definitions-reader/magic-reader.cpp definitions-reader/magic-reader.h \
+	definitions-reader/message-reader.cpp definitions-reader/message-reader.h \
+	definitions-reader/monrace-tokens-table.cpp definitions-reader/monrace-tokens-table.h \
+	definitions-reader/monster-flag-reader.cpp definitions-reader/monster-flag-reader.h \
+	definitions-reader/parse-error-messages.cpp definitions-reader/parse-error-messages.h \
+	definitions-reader/parse-error-types.h \
+	definitions-reader/legend-ego-validator.cpp \
+	definitions-reader/legend-ego-validator.h \
+	definitions-reader/legend-object-trap-validator.cpp \
+	definitions-reader/legend-object-trap-validator.h \
+	definitions-reader/quest-reader.cpp definitions-reader/quest-reader.h \
+	definitions-reader/race-reader.cpp definitions-reader/race-reader.h \
+	definitions-reader/random-grid-effect-types.h \
+	definitions-reader/range.h \
+	definitions-reader/record-diagnostic.cpp definitions-reader/record-diagnostic.h \
+	definitions-reader/skill-reader.cpp definitions-reader/skill-reader.h \
+	definitions-reader/spell-reader.cpp definitions-reader/spell-reader.h \
+	definitions-reader/symbol-reader-util.h \
+	definitions-reader/terrain-reader.cpp definitions-reader/terrain-reader.h \
+	definitions-reader/terrain-tokens-table.cpp definitions-reader/terrain-tokens-table.h \
+	definitions-reader/town-definition-list-reader.cpp definitions-reader/town-definition-list-reader.h \
+	definitions-reader/town-map-condition.cpp definitions-reader/town-map-condition.h \
+	definitions-reader/town-map-loader.cpp definitions-reader/town-map-loader.h \
+	definitions-reader/town-map-reader.cpp definitions-reader/town-map-reader.h \
+	definitions-reader/town-preferences-reader.cpp definitions-reader/town-preferences-reader.h \
+	definitions-reader/vault-reader.cpp definitions-reader/vault-reader.h \
+	\
 	dungeon/dungeon-flag-mask.h \
 	dungeon/dungeon-flag-types.h \
 	dungeon/dungeon-processor.cpp dungeon/dungeon-processor.h \
@@ -614,50 +658,6 @@ libhengband_a_SOURCES = \
 	\
 	hpmp/hp-mp-processor.cpp hpmp/hp-mp-processor.h \
 	hpmp/hp-mp-regenerator.cpp hpmp/hp-mp-regenerator.h \
-	\
-	info-reader/activation-reader.cpp info-reader/activation-reader.h \
-	info-reader/artifact-reader.cpp info-reader/artifact-reader.h \
-	info-reader/baseitem-reader.cpp info-reader/baseitem-reader.h \
-	info-reader/baseitem-tokens-table.cpp info-reader/baseitem-tokens-table.h \
-	info-reader/definition-hash-data.cpp info-reader/definition-hash-data.h \
-	info-reader/definition-id-checker.cpp info-reader/definition-id-checker.h \
-	info-reader/dungeon-grid.cpp info-reader/dungeon-grid.h \
-	info-reader/dungeon-tokens-table.cpp info-reader/dungeon-tokens-table.h \
-	info-reader/dungeon-reader.cpp info-reader/dungeon-reader.h \
-	info-reader/ego-reader.cpp info-reader/ego-reader.h \
-	info-reader/wilderness-reader.cpp info-reader/wilderness-reader.h \
-	info-reader/info-reader-util.h \
-	info-reader/item-flag-reader.cpp info-reader/item-flag-reader.h \
-	info-reader/item-reader-limits.h \
-	info-reader/json-reader-util.cpp info-reader/json-reader-util.h \
-	info-reader/jsonc-document-loader.cpp info-reader/jsonc-document-loader.h \
-	info-reader/magic-tokens-table.cpp info-reader/magic-tokens-table.h \
-	info-reader/magic-reader.cpp info-reader/magic-reader.h \
-	info-reader/message-reader.cpp info-reader/message-reader.h \
-	info-reader/monrace-tokens-table.cpp info-reader/monrace-tokens-table.h \
-	info-reader/monster-flag-reader.cpp info-reader/monster-flag-reader.h \
-	info-reader/parse-error-messages.cpp info-reader/parse-error-messages.h \
-	info-reader/parse-error-types.h \
-	info-reader/legend-ego-validator.cpp \
-	info-reader/legend-ego-validator.h \
-	info-reader/legend-object-trap-validator.cpp \
-	info-reader/legend-object-trap-validator.h \
-	info-reader/quest-reader.cpp info-reader/quest-reader.h \
-	info-reader/race-reader.cpp info-reader/race-reader.h \
-	info-reader/random-grid-effect-types.h \
-	info-reader/range.h \
-	info-reader/record-diagnostic.cpp info-reader/record-diagnostic.h \
-	info-reader/skill-reader.cpp info-reader/skill-reader.h \
-	info-reader/spell-reader.cpp info-reader/spell-reader.h \
-	info-reader/symbol-reader-util.h \
-	info-reader/terrain-reader.cpp info-reader/terrain-reader.h \
-	info-reader/terrain-tokens-table.cpp info-reader/terrain-tokens-table.h \
-	info-reader/town-definition-list-reader.cpp info-reader/town-definition-list-reader.h \
-	info-reader/town-map-condition.cpp info-reader/town-map-condition.h \
-	info-reader/town-map-loader.cpp info-reader/town-map-loader.h \
-	info-reader/town-map-reader.cpp info-reader/town-map-reader.h \
-	info-reader/town-preferences-reader.cpp info-reader/town-preferences-reader.h \
-	info-reader/vault-reader.cpp info-reader/vault-reader.h \
 	\
 	inventory/floor-item-getter.cpp inventory/floor-item-getter.h \
 	inventory/inventory-curse.cpp inventory/inventory-curse.h \
@@ -1525,9 +1525,9 @@ hengband_test_SOURCES = \
 	test/scoped-ego-list.h \
 	test/string-helpers.h \
 	test/temporary-json-files.h \
-	test/info-reader/dungeon-grid-checks.h \
-	test/info-reader/parse-result-helpers.h \
-	test/info-reader/scoped-reader-state.h \
+	test/definitions-reader/dungeon-grid-checks.h \
+	test/definitions-reader/parse-result-helpers.h \
+	test/definitions-reader/scoped-reader-state.h \
 	test/system/artifact-list-test-access.h \
 	test/system/dungeon-list-test-access.h \
 	test/system/monrace-list-test-access.h \
@@ -1544,17 +1544,41 @@ hengband_test_SOURCES = \
 	test/cmd-io/test-cmd-autopick.cpp \
 	test/cmd-item/test-cmd-item.cpp \
 	test/core/test-asking-player.cpp \
+	test/definitions-reader/test-activation-reader.cpp \
+	test/definitions-reader/test-artifact-reader.cpp \
+	test/definitions-reader/test-baseitem-reader.cpp \
+	test/definitions-reader/test-definition-id-checker.cpp \
+	test/definitions-reader/test-dungeon-grid.cpp \
+	test/definitions-reader/test-dungeon-reader.cpp \
+	test/definitions-reader/test-ego-reader.cpp \
+	test/definitions-reader/test-wilderness-reader.cpp \
+	test/definitions-reader/test-info-reader-util.cpp \
+	test/definitions-reader/test-item-flag-reader.cpp \
+	test/definitions-reader/test-json-reader-util.cpp \
+	test/definitions-reader/test-jsonc-document-loader.cpp \
+	test/definitions-reader/test-magic-reader.cpp \
+	test/definitions-reader/test-message-reader.cpp \
+	test/definitions-reader/test-monster-flag-reader.cpp \
+	test/definitions-reader/test-parse-error-messages.cpp \
+	test/definitions-reader/legend-ego-fixture.h \
+	test/definitions-reader/test-legend-ego-validator.cpp \
+	test/definitions-reader/test-legend-object-trap-validator.cpp \
+	test/definitions-reader/test-quest-reader.cpp \
+	test/definitions-reader/test-race-reader.cpp \
+	test/definitions-reader/test-record-diagnostic.cpp \
+	test/definitions-reader/test-skill-reader.cpp \
+	test/definitions-reader/test-spell-reader.cpp \
+	test/definitions-reader/test-terrain-reader.cpp \
+	test/definitions-reader/test-town-definition-list-reader.cpp \
+	test/definitions-reader/test-town-map-condition.cpp \
+	test/definitions-reader/test-town-map-loader.cpp \
+	test/definitions-reader/test-town-map-reader.cpp \
+	test/definitions-reader/test-town-preferences-reader.cpp \
+	test/definitions-reader/test-vault-reader.cpp \
 	test/flavor/test-flavor-util.cpp \
 	test/floor/test-fixed-map-generator.cpp \
 	test/floor/test-floor-changer.cpp \
 	test/game-option/test-runtime-arguments.cpp \
-	test/info-reader/test-activation-reader.cpp \
-	test/info-reader/test-artifact-reader.cpp \
-	test/info-reader/test-baseitem-reader.cpp \
-	test/info-reader/test-definition-id-checker.cpp \
-	test/info-reader/test-dungeon-grid.cpp \
-	test/info-reader/test-dungeon-reader.cpp \
-	test/info-reader/test-ego-reader.cpp \
 	test/floor/test-floor-events.cpp \
 	test/object-activation/test-activation-util.cpp \
 	test/object-enchant/test-item-feeling.cpp \
@@ -1563,30 +1587,6 @@ hengband_test_SOURCES = \
 	test/object/test-object-value.cpp \
 	test/racial/test-racial-android.cpp \
 	test/system/item/test-item-entity.cpp \
-	test/info-reader/test-wilderness-reader.cpp \
-	test/info-reader/test-info-reader-util.cpp \
-	test/info-reader/test-item-flag-reader.cpp \
-	test/info-reader/test-json-reader-util.cpp \
-	test/info-reader/test-jsonc-document-loader.cpp \
-	test/info-reader/test-magic-reader.cpp \
-	test/info-reader/test-message-reader.cpp \
-	test/info-reader/test-monster-flag-reader.cpp \
-	test/info-reader/test-parse-error-messages.cpp \
-	test/info-reader/legend-ego-fixture.h \
-	test/info-reader/test-legend-ego-validator.cpp \
-	test/info-reader/test-legend-object-trap-validator.cpp \
-	test/info-reader/test-quest-reader.cpp \
-	test/info-reader/test-race-reader.cpp \
-	test/info-reader/test-record-diagnostic.cpp \
-	test/info-reader/test-skill-reader.cpp \
-	test/info-reader/test-spell-reader.cpp \
-	test/info-reader/test-terrain-reader.cpp \
-	test/info-reader/test-town-definition-list-reader.cpp \
-	test/info-reader/test-town-map-condition.cpp \
-	test/info-reader/test-town-map-loader.cpp \
-	test/info-reader/test-town-map-reader.cpp \
-	test/info-reader/test-town-preferences-reader.cpp \
-	test/info-reader/test-vault-reader.cpp \
 	test/inventory/test-floor-item-getter.cpp \
 	test/io-dump/test-dump-util.cpp \
 	test/io/test-condition-expression.cpp \
