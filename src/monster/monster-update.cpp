@@ -99,21 +99,6 @@ bool update_riding_monster(PlayerType *player_ptr, turn_flags *turn_flags_ptr, M
 }
 
 /*!
- * @brief モンスターが地形を変えたときに、モンスターの経路の計算し直しを要求する
- * @param turn_flags_ptr ターン経過処理フラグへの参照ポインタ
- * @details 地図のサブウィンドウ (ダンジョン全体図・自分の周囲) は、地形を変えたグリッドで呼ぶ lite_spot() を通じて、
- * 表示が変わったときに描き直される。
- */
-void update_flow_flags(turn_flags *turn_flags_ptr)
-{
-    if (!turn_flags_ptr->do_view) {
-        return;
-    }
-
-    DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::FLOW);
-}
-
-/*!
  * @brief モンスターの光源フラグに基づいてフロアの光源状態更新フラグをセットする
  * @param turn_flags_ptr ターン経過処理フラグへの参照ポインタ
  * @param r_ptr モンスター種族への参照ポインタ

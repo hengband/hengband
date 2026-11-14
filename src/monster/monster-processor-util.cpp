@@ -23,7 +23,6 @@ turn_flags *init_turn_flags(bool is_riding, turn_flags *turn_flags_ptr)
     turn_flags_ptr->is_riding_mon = is_riding;
     turn_flags_ptr->do_turn = false;
     turn_flags_ptr->do_move = false;
-    turn_flags_ptr->do_view = false;
     turn_flags_ptr->must_alter_to_move = false;
     turn_flags_ptr->did_open_door = false;
     turn_flags_ptr->did_bash_door = false;

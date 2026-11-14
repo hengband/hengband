@@ -17,7 +17,6 @@ struct turn_flags {
     bool is_riding_mon;
     bool do_turn;
     bool do_move;
-    bool do_view;
     bool do_take;
     bool must_alter_to_move;
 

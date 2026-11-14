@@ -301,7 +301,6 @@ void set_redrawing_flags()
     auto &dur = DeferredUpdateRequests::get_instance();
     dur.request_monster_update_and_map_redrawing();
     dur.request_sight_recalculation();
-    dur.set_flag(StatusRecalculatingFlag::FLOW);
     static constexpr auto flags_mwrf = {
         MainWindowRedrawingFlag::HEALTH,
         MainWindowRedrawingFlag::UHEALTH,

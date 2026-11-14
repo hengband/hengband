@@ -421,7 +421,6 @@ void wiz_create_feature(PlayerType *player_ptr)
 
     note_spot(player_ptr, *pos);
     lite_spot(player_ptr, *pos);
-    DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::FLOW);
 }
 
 /*!

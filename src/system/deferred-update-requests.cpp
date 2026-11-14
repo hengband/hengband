@@ -95,7 +95,8 @@ void DeferredUpdateRequests::request_monster_update_and_map_redrawing()
  * @brief 視界と明るさの計算し直しを予約する
  * @details 視界と明るさの印をいったん全て消してから計算し直し (前の視界や明るさの印が残らないように)、モンスターの光も計算し直す。
  * 目が見えなくなる・見えるようになる、地図を忘れる、地形が大きく変わる (地震・破壊・壁の消滅) ときに呼ぶ。
- * 地形が変わるときは、モンスターの経路 (FLOW) の計算し直しを別に要求する。
+ * モンスターの経路 (FLOW) は、set_terrain_id_to_grid() で地形を変えれば要求される。地形を直接書き換えたときや
+ * forget_flow() で経路を消したときは、別に要求する。
  */
 void DeferredUpdateRequests::request_sight_recalculation()
 {
