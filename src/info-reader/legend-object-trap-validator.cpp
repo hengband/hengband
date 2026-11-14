@@ -1,5 +1,5 @@
 #include "info-reader/legend-object-trap-validator.h"
-#include "info-reader/general-parser.h"
+#include "info-reader/dungeon-grid.h"
 #include "info-reader/quest-reader.h"
 #include "info-reader/random-grid-effect-types.h"
 #include "locale/language-switcher.h"

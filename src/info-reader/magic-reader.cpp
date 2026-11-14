@@ -1,6 +1,6 @@
 #include "info-reader/magic-reader.h"
 #include "info-reader/json-reader-util.h"
-#include "info-reader/magic-info-tokens-table.h"
+#include "info-reader/magic-tokens-table.h"
 #include "info-reader/parse-error-types.h"
 #include "locale/language-switcher.h"
 #include "player-info/class-info.h"
@@ -94,7 +94,7 @@ tl::expected<void, ParseErrorType> MagicReader::read() const
 tl::expected<int, ParseErrorType> MagicReader::read_class_id() const
 {
     const auto &classname_obj = get_json_value(this->class_data, "name");
-    const auto player_class = info_read_token(classname_obj, magic_info_class_list);
+    const auto player_class = info_read_token(classname_obj, magic_class_list);
     if (!player_class) {
         if (player_class.error() == ParseErrorType::INVALID_FLAG) {
             msg_print(_("未知の職業名 '{}'。", "Unknown class name '{}'."), classname_obj.get<std::string>());
@@ -114,7 +114,7 @@ tl::expected<int, ParseErrorType> MagicReader::read_class_id() const
 tl::expected<void, ParseErrorType> MagicReader::set_spell_type(player_magic &magics_info) const
 {
     const auto &spell_book = get_json_value(this->class_data, "spell_type");
-    const auto tval = info_read_token(spell_book, magic_info_spelltype_to_tval);
+    const auto tval = info_read_token(spell_book, magic_spelltype_to_tval);
     if (!tval) {
         return tl::make_unexpected(tval.error());
     }
@@ -130,7 +130,7 @@ tl::expected<void, ParseErrorType> MagicReader::set_spell_type(player_magic &mag
 tl::expected<void, ParseErrorType> MagicReader::set_magic_status(player_magic &magics_info) const
 {
     const auto &magic_status = get_json_value(this->class_data, "magic_status");
-    const auto status = info_read_token(magic_status, magic_info_name_to_stat);
+    const auto status = info_read_token(magic_status, magic_name_to_stat);
     if (!status) {
         return tl::make_unexpected(status.error());
     }

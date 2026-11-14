@@ -187,16 +187,13 @@
     <ClCompile Include="..\..\src\test\info-reader\test-definition-id-checker.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\test\info-reader\test-dungeon-grid.cpp">
+      <Filter>info-reader</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\test\info-reader\test-dungeon-reader.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\test\info-reader\test-ego-reader.cpp">
-      <Filter>info-reader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\test\info-reader\test-fixed-map-parser.cpp">
-      <Filter>info-reader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\test\info-reader\test-general-parser.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\test\info-reader\test-info-reader-util.cpp">
@@ -248,6 +245,12 @@
       <Filter>info-reader</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\test\info-reader\test-town-definition-list-reader.cpp">
+      <Filter>info-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\info-reader\test-town-map-condition.cpp">
+      <Filter>info-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\info-reader\test-town-map-loader.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\test\info-reader\test-town-map-reader.cpp">

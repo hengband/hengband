@@ -1,5 +1,5 @@
 #include "info-reader/town-preferences-reader.h"
-#include "info-reader/general-parser.h"
+#include "info-reader/dungeon-grid.h"
 #include "info-reader/json-reader-util.h"
 #include "info-reader/legend-ego-validator.h"
 #include "info-reader/legend-object-trap-validator.h"

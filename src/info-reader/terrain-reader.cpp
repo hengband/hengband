@@ -1,9 +1,9 @@
 #include "info-reader/terrain-reader.h"
-#include "info-reader/feature-info-tokens-table.h"
 #include "info-reader/info-reader-util.h"
 #include "info-reader/json-reader-util.h"
 #include "info-reader/parse-error-types.h"
 #include "info-reader/symbol-reader-util.h"
+#include "info-reader/terrain-tokens-table.h"
 #include "system/terrain/terrain-definition.h"
 #include "system/terrain/terrain-list.h"
 #include "util/dice.h"
@@ -175,7 +175,7 @@ tl::expected<void, ParseErrorType> TerrainReader::read() const
  */
 bool TerrainReader::grab_one_terrain_flag(TerrainType &terrain, std::string_view what) const
 {
-    if (info_grab_one_flag(terrain.flags, f_info_flags, what)) {
+    if (info_grab_one_flag(terrain.flags, terrain_flags, what)) {
         return true;
     }
 
@@ -242,7 +242,7 @@ tl::expected<void, ParseErrorType> TerrainReader::set_terrain_conversion(Terrain
     }
 
     const auto &type_obj = get_json_value(convert_obj, "type");
-    const auto type = info_read_token(type_obj, f_info_conversion_types);
+    const auto type = info_read_token(type_obj, terrain_conversion_types);
     if (!type) {
         return tl::make_unexpected(type.error());
     }
@@ -394,7 +394,7 @@ tl::expected<void, ParseErrorType> TerrainReader::set_terrain_trap(TerrainType &
     }
 
     const auto &type_obj = get_json_value(trap_obj, "type");
-    const auto type = info_read_token(type_obj, f_info_trap_types);
+    const auto type = info_read_token(type_obj, terrain_trap_types);
     if (!type && type.error() != ParseErrorType::INVALID_FLAG) {
         return tl::make_unexpected(type.error());
     }
@@ -439,7 +439,7 @@ tl::expected<void, ParseErrorType> TerrainReader::set_terrain_tunnel(TerrainType
  */
 tl::expected<void, ParseErrorType> TerrainReader::set_terrain_pattern(TerrainType &terrain) const
 {
-    return set_typed_terrain_feature(this->terrain_data, "pattern", f_info_pattern_types, TerrainCharacteristics::PATTERN, terrain, &TerrainType::init_pattern_tile_type);
+    return set_typed_terrain_feature(this->terrain_data, "pattern", terrain_pattern_types, TerrainCharacteristics::PATTERN, terrain, &TerrainType::init_pattern_tile_type);
 }
 
 /*!
@@ -449,7 +449,7 @@ tl::expected<void, ParseErrorType> TerrainReader::set_terrain_pattern(TerrainTyp
  */
 tl::expected<void, ParseErrorType> TerrainReader::set_terrain_store(TerrainType &terrain) const
 {
-    return set_typed_terrain_feature(this->terrain_data, "store", f_info_store_types, TerrainCharacteristics::STORE, terrain, &TerrainType::init_store_sale_type);
+    return set_typed_terrain_feature(this->terrain_data, "store", terrain_store_types, TerrainCharacteristics::STORE, terrain, &TerrainType::init_store_sale_type);
 }
 
 /*!
@@ -459,7 +459,7 @@ tl::expected<void, ParseErrorType> TerrainReader::set_terrain_store(TerrainType 
  */
 tl::expected<void, ParseErrorType> TerrainReader::set_terrain_building(TerrainType &terrain) const
 {
-    return set_typed_terrain_feature(this->terrain_data, "building", f_info_building_types, TerrainCharacteristics::BLDG, terrain, &TerrainType::init_building_type);
+    return set_typed_terrain_feature(this->terrain_data, "building", terrain_building_types, TerrainCharacteristics::BLDG, terrain, &TerrainType::init_building_type);
 }
 
 /*!
@@ -515,7 +515,7 @@ tl::expected<void, ParseErrorType> TerrainReader::set_terrain_interactions(Terra
 
         const auto idx_state = static_cast<int>(std::distance(std::begin(terrain.state), state_it));
 
-        if (const auto val = info_get_const(f_info_flags, std::string_view(action))) {
+        if (const auto val = info_get_const(terrain_flags, std::string_view(action))) {
             terrain.state[idx_state].action = *val;
             if (*val == TerrainCharacteristics::MAY_HAVE_GOLD) {
                 terrain.flags.set(TerrainCharacteristics::MAY_HAVE_GOLD);

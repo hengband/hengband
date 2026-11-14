@@ -118,7 +118,7 @@ def reader_token_tables(relative_path, function):
     if match is None:
         raise AssertionError(f"{function} not found in {relative_path}")
     shared_calls = "|".join(re.escape(name) for name in SHARED_MONSTER_FLAG_FUNCTIONS)
-    pattern = r"grab_one_flag\(\s*\*?[\w.]+\s*,\s*(r_info_\w+)\s*,|\b(" + shared_calls + r")\("
+    pattern = r"grab_one_flag\(\s*\*?[\w.]+\s*,\s*(monrace_\w+)\s*,|\b(" + shared_calls + r")\("
     tables = []
     for table, shared in re.findall(pattern, match[1]):
         if table:
@@ -130,6 +130,6 @@ def reader_token_tables(relative_path, function):
     return tables
 
 
-def race_info_table_keys(table):
-    """race-info-tokens-table.cpp の指定した辞書のトークンを読む。"""
-    return load_cpp_map_keys(REPOSITORY_ROOT / "src/info-reader/race-info-tokens-table.cpp", table)
+def monrace_table_keys(table):
+    """monrace-tokens-table.cpp の指定した辞書のトークンを読む。"""
+    return load_cpp_map_keys(REPOSITORY_ROOT / "src/info-reader/monrace-tokens-table.cpp", table)

@@ -1,7 +1,7 @@
 #include "artifact/fixed-art-types.h"
 #include "info-reader/dungeon-reader.h"
+#include "info-reader/monrace-tokens-table.h"
 #include "info-reader/parse-error-types.h"
-#include "info-reader/race-info-tokens-table.h"
 #include "monster/monster-util.h"
 #include "system/artifact/artifact-definition.h"
 #include "system/artifact/artifact-list.h"
@@ -105,7 +105,7 @@ TEST_CASE("DungeonReader reads floor and wall probabilities")
 
 TEST_CASE("DungeonReader stores every supported aura token")
 {
-    for (const auto &[token, aura] : r_info_aura_flags) {
+    for (const auto &[token, aura] : monrace_aura_flags) {
         CAPTURE(token);
         DungeonReaderStateGuard guard;
         auto data = make_dungeon();
@@ -278,7 +278,7 @@ TEST_CASE("DungeonReader special restrictions participate in every monster filte
 
 TEST_CASE("DungeonReader stores every supported sex token")
 {
-    for (const auto &[token, sex] : r_info_sex) {
+    for (const auto &[token, sex] : monrace_sex) {
         if (sex == MonsterSex::NONE) {
             continue;
         }

@@ -1,4 +1,4 @@
-#include "info-reader/race-info-tokens-table.h"
+#include "info-reader/monrace-tokens-table.h"
 #include "monster-attack/monster-attack-effect.h"
 #include "monster-attack/monster-attack-table.h"
 #include "monster-race/monster-aura-types.h"
@@ -21,7 +21,7 @@
  * モンスターの打撃手段トークンの定義 /
  * Monster Blow Methods
  */
-const std::unordered_map<std::string_view, RaceBlowMethodType> r_info_blow_method = {
+const std::unordered_map<std::string_view, RaceBlowMethodType> monrace_blow_method = {
     { "HIT", RaceBlowMethodType::HIT },
     { "TOUCH", RaceBlowMethodType::TOUCH },
     { "PUNCH", RaceBlowMethodType::PUNCH },
@@ -52,7 +52,7 @@ const std::unordered_map<std::string_view, RaceBlowMethodType> r_info_blow_metho
  * モンスターの打撃属性トークンの定義 /
  * Monster Blow Effects
  */
-const std::unordered_map<std::string_view, RaceBlowEffectType> r_info_blow_effect = {
+const std::unordered_map<std::string_view, RaceBlowEffectType> monrace_blow_effect = {
     { "HURT", RaceBlowEffectType::HURT },
     { "POISON", RaceBlowEffectType::POISON },
     { "UN_BONUS", RaceBlowEffectType::UN_BONUS },
@@ -97,7 +97,7 @@ const std::unordered_map<std::string_view, RaceBlowEffectType> r_info_blow_effec
  * モンスター特性トークン (発動型能力) /
  * Monster race flags
  */
-const std::unordered_map<std::string_view, MonsterAbilityType> r_info_ability_flags = {
+const std::unordered_map<std::string_view, MonsterAbilityType> monrace_ability_flags = {
     { "SHRIEK", MonsterAbilityType::SHRIEK },
     { "XXX1", MonsterAbilityType::XXX1 },
     { "DISPEL", MonsterAbilityType::DISPEL },
@@ -212,7 +212,7 @@ const std::unordered_map<std::string_view, MonsterAbilityType> r_info_ability_fl
  * モンスター特性トークンの定義R(耐性) /
  * Monster race flags
  */
-const std::unordered_map<std::string_view, MonsterResistanceType> r_info_resistance_flags = {
+const std::unordered_map<std::string_view, MonsterResistanceType> monrace_resistance_flags = {
     { "RES_ALL", MonsterResistanceType::RESIST_ALL },
     { "HURT_ACID", MonsterResistanceType::HURT_ACID },
     { "RES_ACID", MonsterResistanceType::RESIST_ACID },
@@ -273,7 +273,7 @@ const std::unordered_map<std::string_view, MonsterResistanceType> r_info_resista
     { "NO_INSTANTLY_DEATH", MonsterResistanceType::NO_INSTANTLY_DEATH }
 };
 
-const std::unordered_map<std::string_view, MonsterAuraType> r_info_aura_flags = {
+const std::unordered_map<std::string_view, MonsterAuraType> monrace_aura_flags = {
     { "AURA_FIRE", MonsterAuraType::FIRE },
     { "AURA_COLD", MonsterAuraType::COLD },
     { "AURA_ELEC", MonsterAuraType::ELEC },
@@ -300,7 +300,7 @@ const std::unordered_map<std::string_view, MonsterAuraType> r_info_aura_flags = 
     { "AURA_ABYSS", MonsterAuraType::ABYSS },
 };
 
-const std::unordered_map<std::string_view, MonsterBehaviorType> r_info_behavior_flags = {
+const std::unordered_map<std::string_view, MonsterBehaviorType> monrace_behavior_flags = {
     { "NEVER_MOVE", MonsterBehaviorType::NEVER_MOVE },
     { "OPEN_DOOR", MonsterBehaviorType::OPEN_DOOR },
     { "BASH_DOOR", MonsterBehaviorType::BASH_DOOR },
@@ -315,7 +315,7 @@ const std::unordered_map<std::string_view, MonsterBehaviorType> r_info_behavior_
     { "FRIENDLY", MonsterBehaviorType::FRIENDLY },
 };
 
-const std::unordered_map<std::string_view, MonsterVisualType> r_info_visual_flags = {
+const std::unordered_map<std::string_view, MonsterVisualType> monrace_visual_flags = {
     { "CHAR_CLEAR", MonsterVisualType::CLEAR },
     { "SHAPECHANGER", MonsterVisualType::SHAPECHANGER },
     { "ATTR_CLEAR", MonsterVisualType::CLEAR_COLOR },
@@ -324,7 +324,7 @@ const std::unordered_map<std::string_view, MonsterVisualType> r_info_visual_flag
     { "ATTR_ANY", MonsterVisualType::ANY_COLOR },
 };
 
-const std::unordered_map<std::string_view, MonsterKindType> r_info_kind_flags = {
+const std::unordered_map<std::string_view, MonsterKindType> monrace_kind_flags = {
     { "UNIQUE", MonsterKindType::UNIQUE },
     { "HUMAN", MonsterKindType::HUMAN },
     { "QUANTUM", MonsterKindType::QUANTUM },
@@ -342,7 +342,7 @@ const std::unordered_map<std::string_view, MonsterKindType> r_info_kind_flags = 
     { "ANGEL", MonsterKindType::ANGEL },
 };
 
-const std::unordered_map<std::string_view, MonsterDropType> r_info_drop_flags = {
+const std::unordered_map<std::string_view, MonsterDropType> monrace_drop_flags = {
     { "ONLY_GOLD", MonsterDropType::ONLY_GOLD },
     { "ONLY_ITEM", MonsterDropType::ONLY_ITEM },
     { "DROP_GOOD", MonsterDropType::DROP_GOOD },
@@ -369,7 +369,7 @@ const std::unordered_map<std::string_view, MonsterDropType> r_info_drop_flags = 
     { "DROP_OBSIDIAN", MonsterDropType::DROP_OBSIDIAN },
 };
 
-const std::unordered_map<std::string_view, MonsterWildernessType> r_info_wilderness_flags = {
+const std::unordered_map<std::string_view, MonsterWildernessType> monrace_wilderness_flags = {
     { "WILD_ONLY", MonsterWildernessType::WILD_ONLY },
     { "WILD_TOWN", MonsterWildernessType::WILD_TOWN },
     { "WILD_SHORE", MonsterWildernessType::WILD_SHORE },
@@ -383,7 +383,7 @@ const std::unordered_map<std::string_view, MonsterWildernessType> r_info_wildern
     { "WILD_ALL", MonsterWildernessType::WILD_ALL },
 };
 
-const std::unordered_map<std::string_view, MonsterFeatureType> r_info_feature_flags = {
+const std::unordered_map<std::string_view, MonsterFeatureType> monrace_feature_flags = {
     { "PASS_WALL", MonsterFeatureType::PASS_WALL },
     { "KILL_WALL", MonsterFeatureType::KILL_WALL },
     { "AQUATIC", MonsterFeatureType::AQUATIC },
@@ -391,13 +391,13 @@ const std::unordered_map<std::string_view, MonsterFeatureType> r_info_feature_fl
     { "CAN_FLY", MonsterFeatureType::CAN_FLY },
 };
 
-const std::unordered_map<std::string_view, MonsterPopulationType> r_info_population_flags = {
+const std::unordered_map<std::string_view, MonsterPopulationType> monrace_population_flags = {
     { "NAZGUL", MonsterPopulationType::NAZGUL },
     { "ONLY_ONE", MonsterPopulationType::ONLY_ONE },
     { "BUNBUN_STRIKER", MonsterPopulationType::BUNBUN_STRIKER },
 };
 
-const std::unordered_map<std::string_view, MonsterSpeakType> r_info_speak_flags = {
+const std::unordered_map<std::string_view, MonsterSpeakType> monrace_speak_flags = {
     { "SPEAK_ALL", MonsterSpeakType::SPEAK_ALL },
     { "SPEAK_BATTLE", MonsterSpeakType::SPEAK_BATTLE },
     { "SPEAK_FEAR", MonsterSpeakType::SPEAK_FEAR },
@@ -406,7 +406,7 @@ const std::unordered_map<std::string_view, MonsterSpeakType> r_info_speak_flags 
     { "SPEAK_SPAWN", MonsterSpeakType::SPEAK_SPAWN },
 };
 
-const std::unordered_map<std::string_view, MonsterMessageType> r_info_message_flags = {
+const std::unordered_map<std::string_view, MonsterMessageType> monrace_message_flags = {
     { "SPEAK_ALL", MonsterMessageType::SPEAK_ALL },
     { "SPEAK_BATTLE", MonsterMessageType::SPEAK_BATTLE },
     { "SPEAK_FEAR", MonsterMessageType::SPEAK_FEAR },
@@ -427,7 +427,7 @@ const std::unordered_map<std::string_view, MonsterMessageType> r_info_message_fl
     { "MESSAGE_DETECT_UNIQUE", MonsterMessageType::MESSAGE_DETECT_UNIQUE },
 };
 
-const std::unordered_map<std::string_view, MonsterBrightnessType> r_info_brightness_flags = {
+const std::unordered_map<std::string_view, MonsterBrightnessType> monrace_brightness_flags = {
     { "HAS_LITE_1", MonsterBrightnessType::HAS_LITE_1 },
     { "SELF_LITE_1", MonsterBrightnessType::SELF_LITE_1 },
     { "HAS_LITE_2", MonsterBrightnessType::HAS_LITE_2 },
@@ -438,7 +438,7 @@ const std::unordered_map<std::string_view, MonsterBrightnessType> r_info_brightn
     { "SELF_DARK_2", MonsterBrightnessType::SELF_DARK_2 },
 };
 
-const std::unordered_map<std::string_view, MonsterMiscType> r_info_misc_flags = {
+const std::unordered_map<std::string_view, MonsterMiscType> monrace_misc_flags = {
     { "FORCE_DEPTH", MonsterMiscType::FORCE_DEPTH },
     { "FORCE_MAXHP", MonsterMiscType::FORCE_MAXHP },
     { "FRIENDS", MonsterMiscType::HAS_FRIENDS },
@@ -462,12 +462,12 @@ const std::unordered_map<std::string_view, MonsterMiscType> r_info_misc_flags = 
     { "STALKER", MonsterMiscType::STALKER },
 };
 
-const std::unordered_map<std::string_view, MonsterSex> r_info_sex = {
+const std::unordered_map<std::string_view, MonsterSex> monrace_sex = {
     { "NONE", MonsterSex::NONE },
     { "MALE", MonsterSex::MALE },
     { "FEMALE", MonsterSex::FEMALE },
 };
 
-const std::unordered_map<std::string_view, MonsterSpecialType> r_info_special_flags = {
+const std::unordered_map<std::string_view, MonsterSpecialType> monrace_special_flags = {
     { "DIMINISH_MAX_DAMAGE", MonsterSpecialType::DIMINISH_MAX_DAMAGE },
 };

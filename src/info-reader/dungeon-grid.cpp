@@ -1,4 +1,4 @@
-#include "info-reader/general-parser.h"
+#include "info-reader/dungeon-grid.h"
 #include "system/terrain/terrain-definition.h"
 #include "system/terrain/terrain-list.h"
 #include <algorithm>

@@ -1,4 +1,4 @@
-#include "info-reader/general-parser.h"
+#include "info-reader/dungeon-grid.h"
 #include "info-reader/legend-ego-validator.h"
 #include "info-reader/random-grid-effect-types.h"
 #include "object-enchant/trg-types.h"

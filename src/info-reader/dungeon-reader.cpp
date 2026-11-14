@@ -1,11 +1,11 @@
 #include "info-reader/dungeon-reader.h"
 #include "artifact/fixed-art-types.h"
-#include "info-reader/dungeon-info-tokens-table.h"
+#include "info-reader/dungeon-tokens-table.h"
 #include "info-reader/info-reader-util.h"
 #include "info-reader/json-reader-util.h"
+#include "info-reader/monrace-tokens-table.h"
 #include "info-reader/monster-flag-reader.h"
 #include "info-reader/parse-error-types.h"
-#include "info-reader/race-info-tokens-table.h"
 #include "locale/language-switcher.h"
 #include "system/artifact/artifact-definition.h"
 #include "system/artifact/artifact-list.h"
@@ -190,7 +190,7 @@ tl::expected<void, ParseErrorType> info_set_enum_flag_group(const nlohmann::json
 bool DungeonReader::grab_one_basic_monster_flag(DungeonDefinition &dungeon, std::string_view what) const
 {
     // NONEは種族の性別未設定を表す値であり、出現条件のフラグにはしない。
-    if (what != "NONE" && info_grab_one_flag(dungeon.mon_sex, r_info_sex, what)) {
+    if (what != "NONE" && info_grab_one_flag(dungeon.mon_sex, monrace_sex, what)) {
         return true;
     }
 
