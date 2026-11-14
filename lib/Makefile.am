@@ -8,7 +8,10 @@ SUBDIRS = apex bone data edit file help info pref save script user
 ## 配布物には必ず含めるため EXTRA_DIST は条件なしとし、サブモジュールが無いと make dist は失敗する。
 
 xtra_graf_files = \
-	xtra/graf/8x8.bmp
+	xtra/graf/8x8.bmp \
+	xtra/graf/original32.png \
+	xtra/graf/original32.README.txt \
+	xtra/graf/original32.LICENSE.txt
 
 ## BGM (xtra/music/*.mp3) は容量が大きいため配布物に含めず、music.cfg だけを含める。
 ## mp3 は hengband.xtra から別途入手する。

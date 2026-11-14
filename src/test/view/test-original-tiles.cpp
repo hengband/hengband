@@ -33,6 +33,7 @@
 #include <memory>
 #include <set>
 #include <string>
+#include <string_view>
 
 TEST_CASE("Original tiles zoom the main map without changing text or subwindows")
 {
@@ -1268,4 +1269,70 @@ TEST_CASE("Original tiles keep unseen pit neighbors private and preserve glyphs"
     CHECK(original_tiles::terrain_symbol(*player, pos, terrains.get_terrain(floor_id), 0, fallback) == fallback);
     const DisplaySymbolPair original{ { 12, 'o' }, fallback };
     CHECK(original_tiles::encode_foreground(*player, pos, original) == original);
+}
+
+TEST_CASE("Original tiles locate the source tile of each encoded symbol")
+{
+    const auto restore = test::scoped_restore(original_tiles::catalog_available, original_tiles::monster_catalog_available);
+    // 追加画像の記号は通常の記号と同じ値を使うので、まず追加画像の無い状態で確かめる
+    original_tiles::catalog_available = original_tiles::monster_catalog_available = false;
+    const auto check_source = [](std::string_view label, DisplaySymbol symbol, int base_row, int index, bool transparent) {
+        INFO(label);
+        const auto source = original_tiles::tile_source(symbol);
+        REQUIRE(source.has_value());
+        CHECK(source->column == index % original_tiles::COLUMNS);
+        CHECK(source->row == base_row + index / original_tiles::COLUMNS);
+        CHECK(source->transparent == transparent);
+    };
+
+    // 地形は明るさごとの行から不透明で描く
+    for (auto lighting = 0; lighting < 3; ++lighting) {
+        check_source("terrain", original_tiles::tile_symbol(37, lighting), lighting * original_tiles::LIGHTING_ROWS, 37, false);
+    }
+
+    // アクターとアイテムは透過色を抜いて重ねる
+    const auto monster = original_tiles::monster_tile_symbol(5, 3);
+    check_source("monster", monster, original_tiles::MONSTER_BASE_ROW, *original_tiles::decode_monster_tile(monster), true);
+    const auto item = original_tiles::item_tile_symbol(7, 2);
+    check_source("item", item, original_tiles::ITEM_BASE_ROW, *original_tiles::decode_item_tile(item), true);
+    const auto player = original_tiles::player_tile_symbol(4, 1);
+    check_source("player", player, original_tiles::PLAYER_BASE_ROW, *original_tiles::decode_player_tile(player), true);
+
+    // 接続床は割れ目のタイルの行から描く
+    const auto connected = original_tiles::connected_floor_symbol(0x22, 2, 1);
+    check_source("connected floor", connected, original_tiles::CRACK_TILE_BASE_ROW, original_tiles::connected_floor_tile_index(*original_tiles::decode_connected_floor(connected)), false);
+
+    // 補助の地形と広い床は、範囲外の番号なら何も描かない
+    check_source("supplement", { static_cast<uint8_t>(0x80 + original_tiles::SUPPLEMENT_ROW), static_cast<char>(0x80 + 5) }, original_tiles::SUPPLEMENT_BASE_ROW, 5, false);
+    const auto supplement_end = original_tiles::SUPPLEMENT_TILES * 3;
+    CHECK_FALSE(original_tiles::tile_source({ static_cast<uint8_t>(0x80 + original_tiles::SUPPLEMENT_ROW + supplement_end / 128), static_cast<char>(0x80 + supplement_end % 128) }));
+    check_source("expanded floor", { static_cast<uint8_t>(0x80 + original_tiles::EXPANDED_FLOOR_ROW), static_cast<char>(0x80 + 9) }, original_tiles::EXPANDED_FLOOR_BASE_ROW, 9, false);
+
+    // 文字の記号と普通の文字にはタイルが無い
+    CHECK_FALSE(original_tiles::tile_source({ static_cast<uint8_t>(0x80 + original_tiles::GLYPH_ROW + 4), static_cast<char>(0x80 | 'x') }));
+    CHECK_FALSE(original_tiles::tile_source({ 1, '#' }));
+
+    // 追加画像があれば、追加画像の記号はその行から透過して描く
+    const auto catalog = original_tiles::catalog_tile_symbol(11, 6);
+    original_tiles::catalog_available = true;
+    check_source("item catalog", catalog, original_tiles::CATALOG_BASE_ROW, *original_tiles::decode_catalog_tile(catalog), true);
+    const auto monster_catalog = original_tiles::monster_catalog_tile_symbol(13, 9);
+    original_tiles::monster_catalog_available = true;
+    check_source("monster catalog", monster_catalog, original_tiles::MONSTER_CATALOG_BASE_ROW, *original_tiles::decode_monster_catalog_tile(monster_catalog), true);
+}
+
+TEST_CASE("Original tiles decode the color of real-font glyphs")
+{
+    const auto restore = test::scoped_restore(use_graphics, ANGBAND_GRAF);
+    use_graphics = true;
+    ANGBAND_GRAF = "original32";
+    auto floor = std::make_unique<FloorType>();
+    auto player = std::make_unique<PlayerType>();
+    player->current_floor_ptr = floor.get();
+    const DisplaySymbolPair symbols{ { 12, 'o' }, original_tiles::tile_symbol(0, 0) };
+    const auto encoded = original_tiles::encode_foreground(*player, { 1, 1 }, symbols);
+    CHECK(original_tiles::decode_glyph_color(encoded.symbol_foreground) == 12);
+    CHECK(static_cast<char>(encoded.symbol_foreground.character & 0x7f) == 'o');
+    CHECK_FALSE(original_tiles::decode_glyph_color(original_tiles::tile_symbol(0, 0)));
+    CHECK_FALSE(original_tiles::decode_glyph_color({ 12, 'o' }));
 }

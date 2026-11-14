@@ -100,6 +100,7 @@ jobs:
             libx11-dev
             libxext-dev
             libxft-dev
+            libpng-dev
             nkf
             g++-16
             libc++-21-dev

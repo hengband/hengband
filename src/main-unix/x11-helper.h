@@ -7,6 +7,9 @@
 #pragma once
 
 #include <cstdint>
+#include <filesystem>
+#include <tl/optional.hpp>
+#include <vector>
 #ifdef USE_X11
 #include <X11/Xlib.h>
 #ifdef USE_XFT
@@ -17,6 +20,18 @@ extern bool smoothRescaling;
 unsigned long create_pixel(Display *dpy, uint8_t red, uint8_t green, uint8_t blue);
 XImage *ReadBMP(Display *dpy, char *Name);
 XImage *ResizeImage(Display *dpy, XImage *Im, int ix, int iy, int ox, int oy);
+#ifdef HAVE_LIBPNG
+/*!
+ * @brief PNG から読み込んだ画像 (画素は 0x00RRGGBB、上の行から順)
+ */
+struct RgbImage {
+    int width;
+    int height;
+    std::vector<uint32_t> pixels;
+};
+
+tl::optional<RgbImage> read_png(const std::filesystem::path &path);
+#endif
 #endif
 #endif
 

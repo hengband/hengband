@@ -218,6 +218,8 @@ static void display_usage(const char *program)
     puts("  -- -ft   Use TrueType fonts");
     puts("  -- -o    Request old 8x8 tile graphics");
     puts("  -- -a    Request Adam Bolt 16x16 tile graphics");
+    puts("  -- -t    Request Original32 32x32 tile graphics (needs libpng, not with --enable-xft)");
+    puts("  -- -z    Double the map size with Original32 (implies -b)");
     puts("  -- -b    Request Bigtile graphics mode");
     puts("  -- -s    Turn off smoothscaling graphics");
     puts("  -- -n#   Number of terms to use");

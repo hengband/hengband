@@ -23,6 +23,9 @@
 #include <X11/Xutil.h>
 #include <fmt/format.h>
 #include <math.h>
+#ifdef HAVE_LIBPNG
+#include <png.h>
+#endif
 
 /*
  * This file defines some "XImage" manipulation functions for X11.
@@ -774,6 +777,38 @@ XImage *ResizeImage(Display *dpy, XImage *Im, int ix, int iy, int ox, int oy)
 
     return Tmp;
 }
+
+#ifdef HAVE_LIBPNG
+/*!
+ * @brief PNG を読み込む
+ * @param path 画像のパス
+ * @return 読み込んだ画像。読み込めなければ tl::nullopt
+ * @details 半透明の画素は黒に重ねた色にする (Windows 版の GDI+ での読み込みと揃える)。
+ */
+tl::optional<RgbImage> read_png(const std::filesystem::path &path)
+{
+    png_image image{};
+    image.version = PNG_IMAGE_VERSION;
+    if (!png_image_begin_read_from_file(&image, path.string().data())) {
+        return tl::nullopt;
+    }
+
+    image.format = PNG_FORMAT_RGB;
+    std::vector<png_byte> buffer(PNG_IMAGE_SIZE(image));
+    const png_color background{ 0, 0, 0 };
+    if (!png_image_finish_read(&image, &background, buffer.data(), 0, nullptr)) {
+        png_image_free(&image);
+        return tl::nullopt;
+    }
+
+    RgbImage result{ static_cast<int>(image.width), static_cast<int>(image.height), {} };
+    result.pixels.resize(static_cast<size_t>(image.width) * image.height);
+    for (size_t i = 0; i < result.pixels.size(); ++i) {
+        result.pixels[i] = (uint32_t{ buffer[i * 3] } << 16) | (uint32_t{ buffer[i * 3 + 1] } << 8) | buffer[i * 3 + 2];
+    }
+    return result;
+}
+#endif
 
 #endif /* !USE_XFT */
 
