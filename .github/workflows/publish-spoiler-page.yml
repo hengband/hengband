@@ -12,7 +12,8 @@ permissions:
 jobs:
   create_spoilers:
     name: Create auto generate spoiler files
-    runs-on: ubuntu-24.04
+    # ほかのビルドと同じランナーとコンパイラを使う
+    runs-on: ubuntu-26.04
     steps:
       - uses: actions/checkout@v7
         with:
@@ -22,8 +23,13 @@ jobs:
       - name: Install required packages
         run: |
           sudo apt-get update
-          sudo apt-get install \
+          sudo apt-get install -y \
+            autoconf \
+            automake \
+            pkg-config \
+            libncurses-dev \
             nkf \
+            g++-16
 
       - name: Generate configure
         run: ./bootstrap
@@ -31,6 +37,7 @@ jobs:
       - name: Configuration for Japanese version
         run: ./configure --disable-net
         env:
+          CXX: g++-16
           CFLAGS: "-pipe"
 
       - name: Build Japanese version
