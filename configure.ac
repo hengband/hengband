@@ -170,7 +170,7 @@ if test "x$enable_lto" = xyes; then
 fi
 saved_CXXFLAGS="$CXXFLAGS"
 CXXFLAGS=$(echo "$CXXFLAGS" | sed 's/-Werror[[^ ]]*//g')
-AX_CXX_COMPILE_STDCXX(20, [noext], [mandatory])
+AX_CXX_COMPILE_STDCXX(23, [noext], [mandatory])
 CXXFLAGS="$saved_CXXFLAGS"
 PKG_PROG_PKG_CONFIG
 
