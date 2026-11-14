@@ -86,7 +86,6 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
     world.is_loading_now = false;
     player_ptr->leaving = false;
 
-    player_ptr->ambush_flag = false;
     health_track(player_ptr, 0);
 
     // セーブを読み込んで再開したとき (load_game) は、セーブしている行動 (探索モード・休憩・釣り) とコマンドの繰り返しを続け、
