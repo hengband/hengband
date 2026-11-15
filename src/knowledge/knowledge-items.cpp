@@ -15,6 +15,7 @@
 #include "io/input-context.h"
 #include "io/temp-file.h"
 #include "knowledge/item-group-table.h"
+#include "locale/multibyte-char.h"
 #include "perception/identification.h"
 #include "system/angband-exceptions.h"
 #include "system/artifact/artifact-definition.h"
@@ -170,8 +171,8 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
     std::vector<short> bi_ids;
 
     const auto max_element = std::max_element(ITEM_KIND_NAMES_GROUP.begin(), ITEM_KIND_NAMES_GROUP.end(),
-        [](auto x, auto y) { return x.length() < y.length(); });
-    const int max_length = max_element->length();
+        [](auto x, auto y) { return str_display_width(x) < str_display_width(y); });
+    const int max_length = str_display_width(*max_element);
     const auto width = wid - (max_length + 3);
     if (bi_id < 0) {
         EnumClassFlagGroup<BaseitemCollectionMode> bcm{ BaseitemCollectionMode::CHECK_CHANCE };

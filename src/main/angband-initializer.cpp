@@ -18,6 +18,7 @@
 #include "io/files-util.h"
 #include "io/read-pref-file.h"
 #include "io/uid-checker.h"
+#include "locale/multibyte-char.h"
 #include "main/game-data-initializer.h"
 #include "main/info-initializer.h"
 #include "market/building-initializer.h"
@@ -111,7 +112,8 @@ static void init_angband_aux(const std::string &why)
 static void put_title()
 {
     const auto title = AngbandSystem::get_instance().build_version_expression(VersionExpression::FULL);
-    const auto col = (title.length() <= MAIN_TERM_MIN_COLS) ? (MAIN_TERM_MIN_COLS - title.length()) / 2 : 0;
+    const auto title_width = static_cast<int>(str_display_width(title));
+    const auto col = (title_width <= MAIN_TERM_MIN_COLS) ? (MAIN_TERM_MIN_COLS - title_width) / 2 : 0;
     constexpr auto row_version_info = 3; //!< タイトル表記(行)
     prt(title, row_version_info, col);
 }

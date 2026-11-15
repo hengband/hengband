@@ -4,6 +4,7 @@
 #include "inventory/inventory-util.h"
 #include "io/input-key-requester.h"
 #include "locale/japanese.h"
+#include "locale/multibyte-char.h"
 #include "object/item-tester-hooker.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
@@ -106,7 +107,7 @@ COMMAND_CODE show_floor_items(PlayerType *player_ptr, int target_item, POSITION 
         const auto tval = item.bi_key.tval();
         out_color[k] = tval_to_attr[enum2i(tval) & 0x7F];
         descriptions[k] = item_name;
-        l = descriptions[k].length() + 5;
+        l = str_display_width(descriptions[k]) + 5;
         if (show_weights) {
             l += 9;
         }

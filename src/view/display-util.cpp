@@ -1,7 +1,10 @@
 #include "view/display-util.h"
+#include "locale/multibyte-char.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/buffer-shaper.h"
+#include <algorithm>
+#include <fmt/format.h>
 #include <string>
 #include <vector>
 
@@ -72,7 +75,7 @@ const std::vector<disp_player_line> disp_player_lines = {
 void display_player_one_line(int entry, std::string_view val, TERM_COLOR attr)
 {
     auto head = disp_player_lines[entry].header;
-    auto head_len = strlen(head);
+    auto head_len = str_display_width(head);
     auto row = disp_player_lines[entry].row;
     auto col = disp_player_lines[entry].col;
     auto len = disp_player_lines[entry].len;
@@ -83,13 +86,9 @@ void display_player_one_line(int entry, std::string_view val, TERM_COLOR attr)
         return;
     }
 
-    int val_len = len - head_len;
-    std::string str;
-    if (val_len > static_cast<int>(val.length())) {
-        str.append(val_len - val.length(), ' ');
-    }
-    str.append(val);
-    term_putstr(col + head_len, row, -1, attr, str);
+    // 値は残りの桁数で右寄せにする
+    const int val_len = len - head_len;
+    term_putstr(col + head_len, row, -1, attr, fmt::format("{:>{}}", val, std::max(val_len, 0)));
 }
 
 /*!

@@ -411,11 +411,11 @@ void print_health(PlayerType *player_ptr, bool riding)
         if (row_offset > extra_line_count) {
             break;
         }
-        if (col_offset + info.label.length() > max_width) { // 改行が必要かどうかチェック
+        if (col_offset + str_display_width(info.label) > max_width) { // 改行が必要かどうかチェック
             col_offset = 0;
             row_offset++;
         }
         term_putstr(col + col_offset, row + row_offset, max_width, info.color, info.label);
-        col_offset += info.label.length() + 1; // 文字数と空白の分だけoffsetを加算
+        col_offset += str_display_width(info.label) + 1; // 文字数と空白の分だけoffsetを加算
     }
 }

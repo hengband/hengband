@@ -3,13 +3,13 @@
 #include "autopick/autopick-util.h"
 #include "core/asking-player.h"
 #include "io/input-context.h"
+#include "locale/multibyte-char.h"
 #include "system/deferred-update-requests.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "view/display-map.h"
 #include "window/main-window-util.h"
 #include "world/world.h"
-#include <string_view>
 
 /*
  * Display a "small-scale" map of the dungeon for the player
@@ -29,7 +29,7 @@ void do_cmd_view_map(PlayerType *player_ptr)
     if (autopick_list.empty() || AngbandWorld::get_instance().is_wild_mode()) {
         const auto &[wid, hgt] = term_get_size();
         constexpr auto msg = _("何かキーを押すとゲームに戻ります", "Hit any key to continue");
-        const auto center_x = (wid - std::string_view(msg).length()) / 2;
+        const auto center_x = (wid - static_cast<int>(str_display_width(msg))) / 2;
         put_str(msg, hgt - 1, center_x);
         move_cursor(cy, cx);
         (void)input_key_with_context(InputKind::ANY_KEY, msg, true);

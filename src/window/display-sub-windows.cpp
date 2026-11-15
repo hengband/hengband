@@ -352,7 +352,6 @@ static void display_equipment(PlayerType *player_ptr, const ItemTester &item_tes
             attr = tval_to_attr[enum2i(item.bi_key.tval()) % 128];
         }
 
-        int n = item_name.length();
         if (item.timeout) {
             attr = TERM_L_DARK;
         }
@@ -367,7 +366,7 @@ static void display_equipment(PlayerType *player_ptr, const ItemTester &item_tes
             cur_col += 2;
         }
 
-        term_putstr(cur_col, cur_row, n, attr, item_name);
+        term_putstr(cur_col, cur_row, -1, attr, item_name);
         if (show_weights) {
             int wgt = item.weight * item.number;
             tmp_val = fmt::format(_("{:3}.{:1} kg", "{:3}.{:1} lb"), _(lb_to_kg_integer(wgt), wgt / 10), _(lb_to_kg_fraction(wgt), wgt % 10));

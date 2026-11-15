@@ -709,7 +709,7 @@ void print_status(PlayerType *player_ptr)
     TERM_LEN col = 0, num = 0;
     for (int i = 0; stat_bars[i].sstr; i++) {
         if (bar_flags.test(i)) {
-            col += strlen(stat_bars[i].lstr) + 1;
+            col += str_display_width(stat_bars[i].lstr) + 1;
             num++;
         }
     }
@@ -721,7 +721,7 @@ void print_status(PlayerType *player_ptr)
 
         for (int i = 0; stat_bars[i].sstr; i++) {
             if (bar_flags.test(i)) {
-                col += strlen(stat_bars[i].sstr);
+                col += str_display_width(stat_bars[i].sstr);
             }
         }
 
@@ -745,7 +745,7 @@ void print_status(PlayerType *player_ptr)
         }
 
         c_put_str(stat_bars[i].attr, str, row_statbar, col);
-        col += strlen(str);
+        col += str_display_width(str);
         if (space > 0) {
             col++;
         }

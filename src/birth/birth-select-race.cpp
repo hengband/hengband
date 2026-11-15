@@ -2,6 +2,7 @@
 #include "birth/birth-util.h"
 #include "core/asking-player.h"
 #include "io/input-context.h"
+#include "locale/multibyte-char.h"
 #include "player-info/race-info.h"
 #include "player/race-info-table.h"
 #include "system/player-type-definition.h"
@@ -56,7 +57,7 @@ static std::string display_race_stat(int cs, int *os, const std::string &cur, co
         rp_ptr = &race_info[cs];
         c_put_str(TERM_L_BLUE, rp_ptr->title, 3, 40);
         put_str(_("腕力 知能 賢さ 器用 耐久 魅力 経験 ", "Str  Int  Wis  Dex  Con  Chr   EXP "), 4, 40);
-        put_str(_("の種族修正", ": Race modification"), 3, 40 + rp_ptr->title->length());
+        put_str(_("の種族修正", ": Race modification"), 3, 40 + str_display_width(rp_ptr->title));
 
         const auto stats = fmt::format("{:+3}  {:+3}  {:+3}  {:+3}  {:+3}  {:+3} {:+4}% ", rp_ptr->r_adj[0], rp_ptr->r_adj[1], rp_ptr->r_adj[2], rp_ptr->r_adj[3], rp_ptr->r_adj[4], rp_ptr->r_adj[5], (rp_ptr->r_exp - 100));
         c_put_str(TERM_L_BLUE, stats, 5, 40);

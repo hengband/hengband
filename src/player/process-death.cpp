@@ -58,9 +58,7 @@ constexpr auto GRAVE_DEAD_DATETIME_ROW = 17;
  */
 static void show_tomb_line(std::string_view str, int row)
 {
-    const auto head = GRAVE_LINE_WIDTH / 2 - str.length() / 2;
-    const auto tail = GRAVE_LINE_WIDTH - str.length() - head;
-    put_str(std::string(head, ' ').append(str).append(tail, ' '), row, GRAVE_LINE_START_COL);
+    put_str(fmt::format("{:^{}}", str, GRAVE_LINE_WIDTH), row, GRAVE_LINE_START_COL);
 }
 
 /*!
@@ -111,8 +109,7 @@ static int show_killing_monster(PlayerType *player_ptr)
 
     if (const auto start_pos = lines[0].find("『");
         (start_pos != std::string::npos) && suffix(lines[1], "』")) {
-        if (lines[0].length() + lines[1].length() - start_pos <= GRAVE_LINE_WIDTH) {
-            const auto name = lines[0].substr(start_pos) + lines[1];
+        if (const auto name = lines[0].substr(start_pos) + lines[1]; str_display_width(name) <= GRAVE_LINE_WIDTH) {
             std::string_view title(lines[0].data(), start_pos);
             show_tomb_line(title, GRAVE_KILLER_NAME_ROW);
             show_tomb_line(name, GRAVE_KILLER_NAME_ROW + 1);

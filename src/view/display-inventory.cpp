@@ -6,6 +6,7 @@
 #include "inventory/inventory-util.h"
 #include "io/input-key-requester.h"
 #include "locale/japanese.h"
+#include "locale/multibyte-char.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
 #include "object/object-info.h"
@@ -60,7 +61,7 @@ COMMAND_CODE show_inventory(PlayerType *player_ptr, int target_item, BIT_FLAGS m
         }
 
         out_desc[k] = describe_flavor(player_ptr, item, 0);
-        l = out_desc[k].length() + 5;
+        l = str_display_width(out_desc[k]) + 5;
         if (show_weights) {
             l += 9;
         }
@@ -179,7 +180,7 @@ void display_inventory(PlayerType *player_ptr, const ItemTester &item_tester)
             cur_col += 2;
         }
 
-        term_putstr(cur_col, i, item_name.length(), attr, item_name);
+        term_putstr(cur_col, i, -1, attr, item_name);
 
         if (show_weights) {
             const auto wgt = item.weight * item.number;
