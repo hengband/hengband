@@ -1764,6 +1764,7 @@
     <ClInclude Include="..\..\src\spell-realm\spells-song.h" />
     <ClInclude Include="..\..\src\spell-realm\spells-sorcery.h" />
     <ClInclude Include="..\..\src\spell-realm\spells-trump.h" />
+    <ClInclude Include="..\..\src\spell\magic-type.h" />
     <ClInclude Include="..\..\src\spell\range-calc.h" />
     <ClInclude Include="..\..\src\spell\spell-info.h" />
     <ClInclude Include="..\..\src\spell\spells-describer.h" />

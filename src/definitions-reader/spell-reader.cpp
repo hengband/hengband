@@ -2,10 +2,17 @@
 #include "definitions-reader/json-reader-util.h"
 #include "definitions-reader/parse-error-types.h"
 #include "system/spell-info-list.h"
+#include "system/system-variables.h"
 #include "view/display-messages.h"
+#include <limits>
 #include <nlohmann/json.hpp>
 #include <utility>
 #include <vector>
+
+namespace {
+//! 基準の消費MP・初回経験値倍率の上限。職業魔法 (ClassMagicDefinitions) の上限と同じ値にする。
+constexpr auto MAX_SPELL_BASE_VALUE = std::numeric_limits<short>::max() / 16;
+}
 
 SpellReader::SpellReader(const nlohmann::json &realm_data, SpellInfoList &spell_info_list, Session &session)
     : realm_data(realm_data)
@@ -112,6 +119,22 @@ tl::expected<void, ParseErrorType> SpellReader::set_spell_data(const nlohmann::j
     }
     if (const auto result = info_set_string(get_json_value(spell_data, "description"), info.description, true); !result) {
         msg_print(_("呪文説明読込失敗。", "Failed to load spell description."));
+        return result;
+    }
+    if (const auto result = info_set_integer(get_json_value(spell_data, "learn_level"), info.base.slevel, true, Range(1, PY_MAX_LEVEL)); !result) {
+        msg_print(_("呪文の基準習得レベル読込失敗。", "Failed to load spell base learn_level."));
+        return result;
+    }
+    if (const auto result = info_set_integer(get_json_value(spell_data, "mana_cost"), info.base.smana, true, Range(1, MAX_SPELL_BASE_VALUE)); !result) {
+        msg_print(_("呪文の基準コスト読込失敗。", "Failed to load spell base mana_cost."));
+        return result;
+    }
+    if (const auto result = info_set_integer(get_json_value(spell_data, "difficulty"), info.base.sfail, true, Range(0, 100)); !result) {
+        msg_print(_("呪文の基準難易度読込失敗。", "Failed to load spell base difficulty."));
+        return result;
+    }
+    if (const auto result = info_set_integer(get_json_value(spell_data, "first_cast_exp_rate"), info.base.sexp, true, Range(0, MAX_SPELL_BASE_VALUE)); !result) {
+        msg_print(_("呪文の基準詠唱ボーナスEXP読込失敗。", "Failed to load spell base first_cast_exp_rate."));
         return result;
     }
     spells.push_back(std::move(info));

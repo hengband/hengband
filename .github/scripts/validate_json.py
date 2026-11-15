@@ -1241,10 +1241,14 @@ def load_class_ids(repository_root: Path) -> dict[str, int]:
     return {token: enum_ids[name] for token, name in tokens}
 
 
-def load_spell_tags(schema_path: Path, data_path: Path, registry: Registry) -> dict[str, set[str]]:
+def load_spell_definitions(schema_path: Path, data_path: Path, registry: Registry) -> dict:
     """Use adjacent candidate definitions, or the schema repository's bundled data."""
-    spells = load_validated_companion(schema_path, data_path, registry,
-                                     "SpellDefinitions", "spell", validate_spell_semantics)
+    return load_validated_companion(schema_path, data_path, registry,
+                                    "SpellDefinitions", "spell", validate_spell_semantics)
+
+
+def collect_spell_tags(spells: dict) -> dict[str, set[str]]:
+    """領域ごとに、職業魔法の定義から参照できる呪文タグを集める。"""
     tag_ids = {}
     for realm in spells["realms"]:
         realm_tag_ids = tag_ids.setdefault(realm["name"], {})
@@ -1264,7 +1268,9 @@ def load_spell_tags(schema_path: Path, data_path: Path, registry: Registry) -> d
 def validate_class_magic_semantics(data: dict, schema_path: Path, data_path: Path, registry: Registry) -> None:
     """Check MagicReader's strict integers, class order and realm spell references."""
     class_ids = load_class_ids(schema_path.resolve().parent.parent)
-    spell_tags = load_spell_tags(schema_path, data_path, registry)
+    spells = load_spell_definitions(schema_path, data_path, registry)
+    spell_tags = collect_spell_tags(spells)
+    spell_base_values = collect_spell_base_values(spells)
     previous_id = -1
     for class_index, record in enumerate(data["classes"]):
         path = ["classes", class_index]
@@ -1283,6 +1289,13 @@ def validate_class_magic_semantics(data: dict, schema_path: Path, data_path: Pat
                     raise ValidationError("unknown spell tag in this realm", path=spell_path + ["spell_tag"])
                 for field in ("learn_level", "mana_cost", "difficulty", "first_cast_exp_rate"):
                     require_integer(spell[field], spell_path + [field])
+                if record["name"] == SPELL_BASE_CLASS:
+                    # #5905 の移行の間だけの検査。職業ごとの値を基準値から導く形にしたら消す。
+                    base_values = spell_base_values[realm["name"], spell["spell_tag"]]
+                    for field, base_value in zip(SPELL_BASE_FIELDS, base_values):
+                        if spell[field] != base_value:
+                            raise ValidationError(f"{SPELL_BASE_CLASS} must have the base value {base_value} of SpellDefinitions.jsonc",
+                                                  path=spell_path + [field])
 
 
 def validate_class_skill_semantics(data: dict) -> None:
@@ -1308,8 +1321,54 @@ def validate_class_skill_semantics(data: dict) -> None:
                 raise ValidationError("start experience must not exceed maximum experience", path=skill_path + ["start_exp"])
 
 
+SPELL_BASE_FIELDS = ("learn_level", "mana_cost", "difficulty", "first_cast_exp_rate")
+# 基準値の出どころ。魔法領域はこの職業の値、歌・武芸・呪術は technic_info (この順に 32 件ずつ) と同じにしてある。
+# どちらも #5905 の移行の間だけ値が二重にあるので、食い違いをここで止める。
+SPELL_BASE_CLASS = "MAGE"
+TECHNIC_REALMS = ("MUSIC", "HISSATSU", "HEX")
+SPELLS_IN_REALM = 32
+
+
+def collect_spell_base_values(spells: dict) -> dict[tuple[str, str], tuple[int, ...]]:
+    """(領域, 呪文タグ) から基準値の 4 つ組を引く表を作る。"""
+    return {(realm["name"], spell["spell_tag"]): tuple(spell[field] for field in SPELL_BASE_FIELDS)
+            for realm in spells["realms"] for book in realm["books"] for spell in book["spells"]}
+
+
+def load_technic_info(repository_root: Path) -> dict[str, list[tuple[int, ...]]]:
+    """technic_info の 4 つ組を、領域ごとに呪文 ID の順で返す。"""
+    path = repository_root / "src/spell/technic-info-table.cpp"
+    rows = [tuple(int(value) for value in row)
+            for row in re.findall(r"\{\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\}", path.read_text(encoding="utf-8"))]
+    if len(rows) != len(TECHNIC_REALMS) * SPELLS_IN_REALM:
+        raise ValueError(f"Invalid technic_info table in {path}")
+    return {realm: rows[index * SPELLS_IN_REALM:(index + 1) * SPELLS_IN_REALM] for index, realm in enumerate(TECHNIC_REALMS)}
+
+
+def validate_spell_base_matches_technic_info(data: dict, schema_path: Path) -> None:
+    """歌・武芸・呪術の基準値が technic_info と同じであることを確かめる。
+
+    #5905 の移行の間だけの検査。technic_info を消して基準値から引く形にしたら消す。
+    """
+    if not any(realm["name"] in TECHNIC_REALMS for realm in data["realms"]):
+        return
+    technic_info = load_technic_info(schema_path.resolve().parent.parent)
+    for realm_index, realm in enumerate(data["realms"]):
+        if realm["name"] not in TECHNIC_REALMS:
+            continue
+        for book_index, book in enumerate(realm["books"]):
+            for spell_index, spell in enumerate(book["spells"]):
+                expected = technic_info[realm["name"]][spell["spell_id"]]
+                for field, value in zip(SPELL_BASE_FIELDS, expected):
+                    if spell[field] != value:
+                        raise ValidationError(f"base value must be {value} to match technic_info",
+                                              path=["realms", realm_index, "books", book_index, "spells", spell_index, field])
+
+
 def validate_spell_semantics(data: dict) -> None:
     """Reject strict integer failures, overwrites and ambiguous tag lookups."""
+    # info_validate_version は 2.0 を整数として受け付けない。
+    require_integer(data["version"], ["version"])
     realm_ids = {}
     realm_tags = {}
     for realm_index, realm in enumerate(data["realms"]):
@@ -1326,6 +1385,8 @@ def validate_spell_semantics(data: dict) -> None:
                 if spell["spell_tag"] in tags:
                     raise ValidationError("spell tags must be unique within each realm", path=tag_path)
                 tags.add(spell["spell_tag"])
+                for field in SPELL_BASE_FIELDS:
+                    require_integer(spell[field], path[:-1] + [field])
 
 
 # 小さなID集合だけを保持し、一時候補の検証を繰り返しても保持件数を制限する。
@@ -1497,7 +1558,8 @@ def validate_one(pair: tuple[Path, Path, dict], registry: Registry | None = None
             "MonraceDefinitions.schema.json": lambda: validate_monrace_semantics(data, schema_path, data_path, registry),
             "ClassMagicDefinitions.schema.json": lambda: validate_class_magic_semantics(data, schema_path, data_path, registry),
             "ClassSkillDefinitions.schema.json": lambda: validate_class_skill_semantics(data),
-            "SpellDefinitions.schema.json": lambda: validate_spell_semantics(data),
+            "SpellDefinitions.schema.json": lambda: (validate_spell_semantics(data),
+                                                     validate_spell_base_matches_technic_info(data, schema_path)),
             "MonsterMessages.schema.json": lambda: validate_monster_message_semantics(data, schema_path, data_path, registry),
             "Quest.schema.json": lambda: validate_quest_file_semantics(data, schema_path, data_path, registry),
             "QuestPreferences.schema.json": lambda: validate_quest_preferences_semantics(data, schema_path, data_path, registry),

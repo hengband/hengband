@@ -4,6 +4,7 @@
 #include "object/tval-types.h"
 #include "player-info/class-info.h"
 #include "realm/realm-types.h"
+#include "spell/technic-info-table.h"
 #include "system/angband-exceptions.h"
 #include "system/player-type-definition.h"
 #include "system/spell-info-list.h"

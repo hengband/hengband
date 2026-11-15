@@ -19,7 +19,8 @@ class DefinitionIntegerValidationTest(unittest.TestCase):
             for name in ("ClassMagicDefinitions", "ClassSkillDefinitions", "SpellDefinitions")
         }
         magic = copy.deepcopy(cls.documents["ClassMagicDefinitions"])
-        magic["classes"] = magic["classes"][1:2]
+        # 値を自由に変えられる職業を見本にする (MAGE の値は SpellDefinitions の基準値と同じでなければならない)。
+        magic["classes"] = [record for record in magic["classes"] if record["name"] == "PRIEST"]
         magic["classes"][0]["realms"] = magic["classes"][0]["realms"][:1]
         magic["classes"][0]["realms"][0]["spells_info"] = magic["classes"][0]["realms"][0]["spells_info"][:1]
         spell = copy.deepcopy(cls.documents["SpellDefinitions"])
@@ -79,6 +80,82 @@ class DefinitionIntegerValidationTest(unittest.TestCase):
 
     def test_spell_integer_id(self):
         self.check_value("SpellDefinitions", ["realms", 0, "books", 0, "spells", 0, "spell_id"], 1.0, False, "integer JSON value")
+
+    def test_spell_integer_base_values(self):
+        spell_path = ["realms", 0, "books", 0, "spells", 0]
+        for field in ("learn_level", "mana_cost", "difficulty", "first_cast_exp_rate"):
+            with self.subTest(field=field):
+                self.check_value("SpellDefinitions", spell_path + [field], 1.0, False, "integer JSON value")
+                for value in (True, "1", None, 1.5):
+                    self.check_value("SpellDefinitions", spell_path + [field], value, False)
+
+    def test_spell_base_value_boundaries(self):
+        spell_path = ["realms", 0, "books", 0, "spells", 0]
+        fields = (("learn_level", 1, 50), ("mana_cost", 1, 2047), ("difficulty", 0, 100), ("first_cast_exp_rate", 0, 2047))
+        for field, minimum, maximum in fields:
+            for value, valid in ((minimum, True), (maximum, True), (minimum - 1, False), (maximum + 1, False)):
+                with self.subTest(field=field, value=value):
+                    self.check_value("SpellDefinitions", spell_path + [field], value, valid)
+
+    def test_spell_base_values_are_required(self):
+        for field in ("learn_level", "mana_cost", "difficulty", "first_cast_exp_rate"):
+            with self.subTest(field=field):
+                document = copy.deepcopy(self.samples["SpellDefinitions"])
+                del document["realms"][0]["books"][0]["spells"][0][field]
+                ok, message = self.validate("SpellDefinitions", document)
+                self.assertFalse(ok, message)
+
+    def test_mage_values_must_match_spell_base_values(self):
+        fields = ("learn_level", "mana_cost", "difficulty", "first_cast_exp_rate")
+        mage_index = next(index for index, record in enumerate(self.documents["ClassMagicDefinitions"]["classes"])
+                          if record["name"] == "MAGE")
+        for field in fields:
+            with self.subTest(field=field):
+                document = copy.deepcopy(self.documents["ClassMagicDefinitions"])
+                spell = document["classes"][mage_index]["realms"][0]["spells_info"][0]
+                spell[field] += 1
+                ok, message = self.validate("ClassMagicDefinitions", document)
+                self.assertFalse(ok, message)
+                self.assertIn("MAGE must have the base value", message)
+                self.assertIn(f"Location: ['classes', {mage_index}, 'realms', 0, 'spells_info', 0, '{field}']", message)
+
+    def test_spell_base_values_must_match_mage_values(self):
+        # 基準値の側を変えても、MAGE の値との食い違いとして止まる。
+        spells = copy.deepcopy(self.documents["SpellDefinitions"])
+        spells["realms"][0]["books"][0]["spells"][0]["mana_cost"] += 1
+        ok, message = self.validate("ClassMagicDefinitions", self.documents["ClassMagicDefinitions"], spells)
+        self.assertFalse(ok, message)
+        self.assertIn("MAGE must have the base value", message)
+
+    def test_other_class_values_may_differ_from_spell_base_values(self):
+        document = copy.deepcopy(self.samples["ClassMagicDefinitions"])
+        document["classes"][0]["realms"][0]["spells_info"][0]["mana_cost"] += 1
+        ok, message = self.validate("ClassMagicDefinitions", document)
+        self.assertTrue(ok, message)
+
+    def test_technic_base_values_must_match_technic_info(self):
+        realms = self.documents["SpellDefinitions"]["realms"]
+        for name in ("MUSIC", "HISSATSU", "HEX"):
+            realm_index = next(index for index, realm in enumerate(realms) if realm["name"] == name)
+            for field in ("learn_level", "mana_cost", "difficulty", "first_cast_exp_rate"):
+                with self.subTest(realm=name, field=field):
+                    document = copy.deepcopy(self.documents["SpellDefinitions"])
+                    # 各領域の 2 巻目の先頭は、どの項目も 1 足して範囲に収まる。
+                    document["realms"][realm_index]["books"][1]["spells"][0][field] += 1
+                    ok, message = self.validate("SpellDefinitions", document)
+                    self.assertFalse(ok, message)
+                    self.assertIn("to match technic_info", message)
+                    self.assertIn(f"Location: ['realms', {realm_index}, 'books', 1, 'spells', 0, '{field}']", message)
+
+    def test_spell_version_must_be_integer_two(self):
+        for value, valid in ((2, True), (2.0, False), (1, False), (1.0, False), (3, False), ("2", False)):
+            with self.subTest(value=value):
+                document = copy.deepcopy(self.samples["SpellDefinitions"])
+                document["version"] = value
+                ok, message = self.validate("SpellDefinitions", document)
+                self.assertEqual(ok, valid, message)
+                if not valid:
+                    self.assertIn("Location: ['version']", message)
 
     def test_other_noninteger_values_still_fail(self):
         fields = (
@@ -235,7 +312,8 @@ class DefinitionIntegerValidationTest(unittest.TestCase):
         self.check_value("SpellDefinitions", ["realms", 0, "books", 0, "spells"], [], True)
 
     def test_version_policy_is_unchanged(self):
-        for name in self.samples:
+        # SpellDefinitions は reader が version を確かめる (test_spell_version_must_be_integer_two)。
+        for name in ("ClassMagicDefinitions", "ClassSkillDefinitions"):
             with self.subTest(name=name):
                 self.check_value(name, ["version"], 1.0, True)
 

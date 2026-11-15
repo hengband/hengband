@@ -1121,7 +1121,6 @@ class DefinitionVersionValidationTest(unittest.TestCase):
         "ArtifactDefinitions": "version",
         "BaseitemDefinitions": "version",
         "ClassMagicDefinitions": "version",
-        "SpellDefinitions": "version",
         "TerrainDefinitions": "version",
         "MonraceDefinitions": "versions",
         "MonsterMessages": "versions",

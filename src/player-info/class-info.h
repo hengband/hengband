@@ -4,7 +4,7 @@
 #include "object/tval-types.h"
 #include "player-info/class-types.h"
 #include "realm/realm-types.h"
-#include "spell/technic-info-table.h"
+#include "spell/magic-type.h"
 #include "system/angband.h"
 #include <map>
 #include <string>

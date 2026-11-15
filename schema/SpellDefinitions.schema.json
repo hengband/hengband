@@ -4,7 +4,7 @@
     "description": "呪文情報の定義",
     "properties": {
         "version": {
-            "const": 1,
+            "const": 2,
             "description": "Version情報"
         },
         "realms": {
@@ -78,7 +78,11 @@
                                             "spell_id",
                                             "spell_tag",
                                             "name",
-                                            "description"
+                                            "description",
+                                            "learn_level",
+                                            "mana_cost",
+                                            "difficulty",
+                                            "first_cast_exp_rate"
                                         ],
                                         "properties": {
                                             "spell_id": {
@@ -127,6 +131,30 @@
                                                         "description": "English Spell Description"
                                                     }
                                                 }
+                                            },
+                                            "learn_level": {
+                                                "type": "integer",
+                                                "description": "基準の習得レベル。整数1～50",
+                                                "minimum": 1,
+                                                "maximum": 50
+                                            },
+                                            "mana_cost": {
+                                                "type": "integer",
+                                                "description": "基準の消費MP。整数1～2047",
+                                                "minimum": 1,
+                                                "maximum": 2047
+                                            },
+                                            "difficulty": {
+                                                "type": "integer",
+                                                "description": "基準の難易度。整数0～100",
+                                                "minimum": 0,
+                                                "maximum": 100
+                                            },
+                                            "first_cast_exp_rate": {
+                                                "type": "integer",
+                                                "description": "基準の初回経験値倍率。初回詠唱成功時の経験値は、この倍率×呪文習得レベル。整数0～2047",
+                                                "minimum": 0,
+                                                "maximum": 2047
                                             }
                                         }
                                     }
