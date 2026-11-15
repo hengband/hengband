@@ -61,9 +61,9 @@ TEST_CASE("Original tiles zoom the main map without changing text or subwindows"
     CHECK(primary.scr->cx == 73);
     CHECK(primary.scr->cy == 21);
     term_putstr(0, 0, 3, 1, "ABC");
-    CHECK(primary.scr->c[0][0] == 'A');
-    CHECK(primary.scr->c[0][1] == 'B');
-    CHECK(primary.scr->c[0][2] == 'C');
+    CHECK(primary.scr->c[0][0].front() == 'A');
+    CHECK(primary.scr->c[0][1].front() == 'B');
+    CHECK(primary.scr->c[0][2].front() == 'C');
     game_term = &secondary;
     CHECK(original_tiles::map_tile_scale() == 1);
     CHECK(get_screen_size() == std::pair<int, int>{ 33, 22 });
@@ -155,13 +155,13 @@ TEST_CASE("Original tiles zoom blocks repaint and erase safely from every covere
     term_set_cursor(false);
     term_putstr(6, 3, 1, 1, "X");
     CHECK_FALSE(term_tile_block_at(*terminal.scr, 4, 2).zoomed());
-    CHECK(terminal.scr->c[3][6] == 'X');
-    CHECK(terminal.scr->c[2][3] == 'L');
+    CHECK(terminal.scr->c[3][6].front() == 'X');
+    CHECK(terminal.scr->c[2][3].front() == 'L');
     original_tiles::queue_map_tile(4, 2, tile);
     term_erase(7, 3, 1);
     CHECK_FALSE(term_tile_block_at(*terminal.scr, 4, 2).zoomed());
-    CHECK(terminal.scr->c[2][4] == ' ');
-    CHECK(terminal.scr->c[2][3] == 'L');
+    CHECK(terminal.scr->c[2][4].front() == ' ');
+    CHECK(terminal.scr->c[2][3].front() == 'L');
     const auto before = terminal.scr->clone();
     CHECK_FALSE(original_tiles::queue_map_tile(13, 2, tile));
     CHECK_FALSE(original_tiles::queue_map_tile(4, 5, tile));
@@ -171,7 +171,7 @@ TEST_CASE("Original tiles zoom blocks repaint and erase safely from every covere
     original_tiles::double_map_size = false;
     original_tiles::queue_map_tile(4, 2, tile);
     CHECK_FALSE(term_tile_block_at(*terminal.scr, 4, 2).zoomed());
-    CHECK(terminal.scr->c[3][4] == ' ');
+    CHECK(terminal.scr->c[3][4].front() == ' ');
 }
 
 TEST_CASE("Terminals remember whether they have drawn zoomed tiles")
@@ -645,11 +645,11 @@ TEST_CASE("Original tiles survive incremental terminal refresh without continuat
     CHECK(terminal.x1[1] == 4);
     term_fresh();
     term_putstr(4, 1, 1, 1, "X");
-    CHECK(terminal.scr->c[1][3] == 'L');
+    CHECK(terminal.scr->c[1][3].front() == 'L');
     CHECK(terminal.scr->a[1][3] == 1);
     term_putstr(4, 1, 2, 1, "あ");
     term_putstr(5, 1, 1, 1, "X");
-    CHECK(terminal.scr->c[1][4] == ' ');
+    CHECK(terminal.scr->c[1][4].front() == ' ');
 #endif
 }
 

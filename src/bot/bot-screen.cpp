@@ -15,6 +15,8 @@
 #include <nlohmann/json.hpp>
 
 namespace {
+constexpr uint8_t WIDE_LEAD_ATTR_FLAG = 0x10; //!< 全角文字の左のセルを表す属性のビット
+constexpr uint8_t WIDE_TRAIL_ATTR_FLAG = 0x20; //!< 全角文字の右のセルを表す属性のビット
 
 /*!
  * @brief 画面バッファの1行分の属性を16進文字列に変換する
@@ -23,8 +25,8 @@ namespace {
  * @param width 桁数
  * @return 1セルあたり16進2桁を並べた文字列
  * @details
- * 日本語版では全角文字のセルの属性に色以外のビット(z-term.cppのAF_KANJI1: 0x10 / AF_KANJI2: 0x20)が
- * 乗るが、全角文字の1バイト目と2バイト目をクライアント側で判別できるよう、意図的にマスクせず生値を返す。
+ * 全角文字の左のセルには 0x10、右のセルには 0x20 のビットを色に加えて返す。
+ * 全角文字の左右のセルをクライアント側で判別できるようにするためである。
  * 色だけが必要な場合はクライアント側で0x0fとの論理積を取る。
  */
 std::string make_line_attrs(const term_win &win, int y, int width)
@@ -32,7 +34,13 @@ std::string make_line_attrs(const term_win &win, int y, int width)
     std::string attrs;
     attrs.reserve(static_cast<size_t>(width) * 2);
     for (auto x = 0; x < width; x++) {
-        const auto attr = static_cast<uint8_t>(win.a[y][x]);
+        auto attr = static_cast<uint8_t>(win.a[y][x]);
+        if (win.c[y][x].is_wide_lead()) {
+            attr |= WIDE_LEAD_ATTR_FLAG;
+        } else if (win.c[y][x].is_wide_trail()) {
+            attr |= WIDE_TRAIL_ATTR_FLAG;
+        }
+
         attrs.push_back(hexify_upper(attr));
         attrs.push_back(hexify_lower(attr));
     }

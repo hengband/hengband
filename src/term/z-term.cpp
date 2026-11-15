@@ -16,21 +16,23 @@
 #include "term/term-color-types.h"
 #include "term/tile-layout.h"
 #include "view/display-symbol.h"
+#include <algorithm>
+#include <string>
 
 //! Special flags in the attr data
 constexpr auto AF_BIGTILE2 = 0xf0;
 constexpr auto AF_TILE1 = 0x80;
 
-#ifdef JP
 /*!
- * 全角文字対応。
- * 属性に全角文字の1バイト目、2バイト目も記憶。
- * By FIRST
+ * @brief マスがタイル (属性と文字の最上位ビットが立っている) かを返す
+ * @param a マスの属性
+ * @param ch マスの文字
+ * @return タイルなら true。全角文字は属性の最上位ビットが立っていてもタイルとしない
  */
-constexpr auto AF_KANJI1 = 0x10;
-constexpr auto AF_KANJI2 = 0x20;
-constexpr auto AF_KANJIC = 0x0f;
-#endif
+static bool is_tile_cell(TERM_COLOR a, const TermChar &ch)
+{
+    return (a & AF_TILE1) && !ch.is_wide_lead() && (ch.front() & 0x80);
+}
 
 //! The current "term"
 term_type *game_term = nullptr;
@@ -50,15 +52,15 @@ TermTileBlock term_tile_block_at(const term_win &screen, int x, int y)
     }
     auto ax = x;
     auto ay = y;
-    if (term_is_zoom_continuation({ screen.a[y][x], screen.c[y][x] })) {
-        const auto offset = static_cast<unsigned char>(screen.c[y][x]) & 7;
+    if (term_is_zoom_continuation({ screen.a[y][x], screen.c[y][x].front() })) {
+        const auto offset = static_cast<unsigned char>(screen.c[y][x].front()) & 7;
         ax -= offset & 3;
         ay -= offset >> 2;
     }
     if (ax < 0 || ay < 0 || ay + 1 >= height || ax + 3 >= static_cast<int>(screen.a[ay].size()) || ax + 3 >= static_cast<int>(screen.a[ay + 1].size())) {
         return normal;
     }
-    if (!(screen.a[ay][ax] & AF_TILE1) || !(screen.c[ay][ax] & 0x80) || term_is_tile_continuation({ screen.a[ay][ax], screen.c[ay][ax] })) {
+    if (!(screen.a[ay][ax] & AF_TILE1) || !(screen.c[ay][ax].front() & 0x80) || term_is_tile_continuation({ screen.a[ay][ax], screen.c[ay][ax].front() })) {
         return normal;
     }
     for (auto dy = 0; dy < 2; ++dy) {
@@ -66,7 +68,7 @@ TermTileBlock term_tile_block_at(const term_win &screen, int x, int y)
             if (dx == 0 && dy == 0) {
                 continue;
             }
-            if (screen.a[ay + dy][ax + dx] != 0xf0 || static_cast<unsigned char>(screen.c[ay + dy][ax + dx]) != (0x80 | (dy << 2) | dx)) {
+            if (screen.a[ay + dy][ax + dx] != 0xf0 || static_cast<unsigned char>(screen.c[ay + dy][ax + dx].front()) != (0x80 | (dy << 2) | dx)) {
                 return normal;
             }
         }
@@ -107,7 +109,7 @@ static bool clear_zoom_tile_at(int x, int y)
             const auto xx = block.x + dx;
             const auto yy = block.y + dy;
             screen.a[yy][xx] = game_term->attr_blank;
-            screen.c[yy][xx] = game_term->char_blank;
+            screen.c[yy][xx] = TermChar::from_byte(game_term->char_blank);
             screen.ta[yy][xx] = 0;
             screen.tc[yy][xx] = 0;
         }
@@ -201,7 +203,7 @@ TermCenteredOffsetSetter::~TermCenteredOffsetSetter()
  */
 term_win::term_win(TERM_LEN w, TERM_LEN h)
     : a(h, std::vector<TERM_COLOR>(w))
-    , c(h, std::vector<char>(w))
+    , c(h, std::vector<TermChar>(w))
     , ta(h, std::vector<TERM_COLOR>(w))
     , tc(h, std::vector<char>(w))
 {
@@ -232,13 +234,18 @@ void term_win::resize(TERM_LEN w, TERM_LEN h)
     }
 
     this->a.resize(h, std::vector<TERM_COLOR>(w));
-    this->c.resize(h, std::vector<char>(w));
+    this->c.resize(h, std::vector<TermChar>(w));
     this->ta.resize(h, std::vector<TERM_COLOR>(w));
     this->tc.resize(h, std::vector<char>(w));
 
     for (TERM_LEN y = 0; y < h; y++) {
         this->a[y].resize(w);
         this->c[y].resize(w);
+        // 幅を縮めて右のマスが無くなった2マス幅の文字は空白にする
+        if ((w > 0) && this->c[y].back().is_wide_lead()) {
+            this->c[y].back() = TermChar::from_byte(' ');
+        }
+
         this->ta[y].resize(w);
         this->tc[y].resize(w);
     }
@@ -257,41 +264,10 @@ void term_win::resize(TERM_LEN w, TERM_LEN h)
  * @param x 桁
  * @param y 行
  * @return マスの色と文字。全角文字は左のマスで文字全体を返し、右のマスでは文字を持たない
- * @details 画面の内容を読み戻す処理は、全角文字を2マスのバイトから組み立てずにこれで読む。
  */
 TermCellSymbol term_win::get_cell(int x, int y) const
 {
-    const auto color = this->a[y][x];
-    const auto ch = this->c[y][x];
-#ifdef JP
-    if (color & AF_TILE1) {
-        return { color, TermChar::from_byte(ch) };
-    }
-
-    // 全角文字の左右のマスには属性に印が付いている。c_roff() は1バイトの文字のマスにも左のマスの印を付けるので、文字も確かめる。
-    // 1バイトの文字で全角文字の片側だけを上書きすると、もう片側に印が残るので、左右の印がそろっているときだけ全角文字とする
-    const auto is_lead = [this, y](int col) {
-        const auto lead_color = this->a[y][col];
-        return !(lead_color & AF_TILE1) && (lead_color & AF_KANJI1) && is_mb_char_lead(this->c[y][col]);
-    };
-    const auto is_trail = [this, y](int col) {
-        const auto trail_color = this->a[y][col];
-        return !(trail_color & AF_TILE1) && (trail_color & AF_KANJI2);
-    };
-    const auto char_color = static_cast<TERM_COLOR>(color & AF_KANJIC);
-    const auto width = std::ssize(this->c[y]);
-    if ((x + 1 < width) && is_lead(x) && is_trail(x + 1)) {
-        return { char_color, TermChar::wide(std::string_view(&this->c[y][x], 2)) };
-    }
-
-    if ((x > 0) && is_lead(x - 1) && is_trail(x)) {
-        return { char_color, TermChar::wide_trail() };
-    }
-
-    return { char_color, TermChar::from_byte(ch) };
-#else
-    return { color, TermChar::from_byte(ch) };
-#endif
+    return { this->a[y][x], this->c[y][x] };
 }
 
 /*** External hooks ***/
@@ -384,11 +360,54 @@ static errr term_pict_hack(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *ap, 
 /*** Efficient routines ***/
 
 /*!
- * Mentally draw an attr/char at a given location
- * Assumes given location and values are valid.
+ * @brief マスが書き換えられたことを記録する
+ * @param x 書き換えたマスの桁
+ * @param y 書き換えたマスの行
+ */
+static void term_mark_changed(TERM_LEN x, TERM_LEN y)
+{
+    game_term->y1 = std::min(game_term->y1, y);
+    game_term->y2 = std::max(game_term->y2, y);
+    game_term->x1[y] = std::min(game_term->x1[y], x);
+    game_term->x2[y] = std::max(game_term->x2[y], x);
+}
+
+/*!
+ * @brief マスを書き換える前に、そのマスにかかる2マス幅の文字の、もう片方のマスを空白にする
+ * @param x 書き換えるマスの桁
+ * @param y 書き換えるマスの行
+ * @param keeps_left 左隣のマスを空白にしないなら true (2マス幅の文字の右のマスを書く場合)
+ * @details 2マス幅の文字の片方だけが残ると、残ったマスに文字の一部が描かれてしまうため。
+ */
+static void term_break_wide_char(TERM_LEN x, TERM_LEN y, bool keeps_left)
+{
+    auto &scr_cc = game_term->scr->c[y];
+    if (scr_cc[x].is_wide_trail()) {
+        if (!keeps_left && (x > 0)) {
+            scr_cc[x - 1] = TermChar::from_byte(' ');
+            term_mark_changed(x - 1, y);
+        }
+
+        return;
+    }
+
+    if (scr_cc[x].is_wide_lead() && (x + 1 < game_term->wid)) {
+        scr_cc[x + 1] = TermChar::from_byte(' ');
+        term_mark_changed(x + 1, y);
+    }
+}
+
+/*!
+ * @brief 1マスに色と文字を置く
+ * @param x マスの桁
+ * @param y マスの行
+ * @param a 文字の色
+ * @param ch 文字
+ * @param background 背景のタイル
+ * @param preserve_zoom 拡大タイルを消さないなら true
  * @return 画面の内容が変わったならtrue
  */
-static bool term_queue_char_aux(TERM_LEN x, TERM_LEN y, const DisplaySymbolPair &symbol_pair, bool preserve_zoom = false)
+static bool term_queue_cell(TERM_LEN x, TERM_LEN y, TERM_COLOR a, const TermChar &ch, const DisplaySymbol &background, bool preserve_zoom = false)
 {
     if ((x < 0) || (x >= game_term->wid)) {
         return false;
@@ -398,66 +417,86 @@ static bool term_queue_char_aux(TERM_LEN x, TERM_LEN y, const DisplaySymbolPair 
     }
     const auto cleared_zoom = !preserve_zoom && clear_zoom_tile_at(x, y);
 
-    const auto &scrn = game_term->scr;
-
-    TERM_COLOR *scr_aa = &scrn->a[y][x];
-    char *scr_cc = &scrn->c[y][x];
-
-    TERM_COLOR *scr_taa = &scrn->ta[y][x];
-    char *scr_tcc = &scrn->tc[y][x];
-
-    const auto &symbol_foreground = symbol_pair.symbol_foreground;
-    const auto &symbol_background = symbol_pair.symbol_background;
-    auto should_ignore = *scr_aa == symbol_foreground.color;
-    should_ignore &= *scr_cc == symbol_foreground.character;
-    should_ignore &= *scr_taa == symbol_background.color;
-    should_ignore &= *scr_tcc == symbol_background.character;
+    auto &scrn = *game_term->scr;
+    auto should_ignore = scrn.a[y][x] == a;
+    should_ignore &= scrn.c[y][x] == ch;
+    should_ignore &= scrn.ta[y][x] == background.color;
+    should_ignore &= scrn.tc[y][x] == background.character;
     if (should_ignore) {
         return cleared_zoom;
     }
 
-    /* Save the "literal" information */
-    *scr_aa = symbol_foreground.color;
-    *scr_cc = symbol_foreground.character;
+    term_break_wide_char(x, y, ch.is_wide_trail());
 
-    *scr_taa = symbol_background.color;
-    *scr_tcc = symbol_background.character;
+    scrn.a[y][x] = a;
+    scrn.c[y][x] = ch;
 
-    /* Check for new min/max row info */
-    if (y < game_term->y1) {
-        game_term->y1 = y;
-    }
-    if (y > game_term->y2) {
-        game_term->y2 = y;
-    }
+    scrn.ta[y][x] = background.color;
+    scrn.tc[y][x] = background.character;
 
-    /* Check for new min/max col info for this row */
-    if (x < game_term->x1[y]) {
-        game_term->x1[y] = x;
-    }
-    if (x > game_term->x2[y]) {
-        game_term->x2[y] = x;
-    }
+    term_mark_changed(x, y);
 
     // 行頭には左隣が無いので、変更範囲を広げない (x1 が負になり、後の描画で範囲外を読むのを防ぐ)
-    if (term_is_zoom_continuation({ *scr_aa, *scr_cc })) {
-        const auto offset = static_cast<unsigned char>(*scr_cc) & 7;
+    if (term_is_zoom_continuation({ a, ch.front() })) {
+        const auto offset = static_cast<unsigned char>(ch.front()) & 7;
         const auto ax = x - (offset & 3);
         const auto ay = y - (offset >> 2);
         if (ax >= 0 && ay >= 0 && ax + 3 < game_term->wid && ay + 1 < game_term->hgt) {
             mark_tile_block({ ax, ay, 4, 2 });
         }
-    } else
-#ifdef JP
-        if ((x > 0) && (((scrn->a[y][x] & AF_BIGTILE2) == AF_BIGTILE2) || (!(scrn->a[y][x] & AF_TILE1) && (scrn->a[y][x] & AF_KANJI2))))
-#else
-        if ((x > 0) && ((scrn->a[y][x] & AF_BIGTILE2) == AF_BIGTILE2))
-#endif
-        if ((x - 1) < game_term->x1[y]) {
-            game_term->x1[y]--;
-        }
+    } else if ((x > 0) && (((a & AF_BIGTILE2) == AF_BIGTILE2) || ch.is_wide_trail())) {
+        // 大きなタイルや2マス幅の文字の右のマスは、左のマスと一緒に描き直す
+        term_mark_changed(x - 1, y);
+    }
 
     return true;
+}
+
+/*!
+ * Mentally draw an attr/char at a given location
+ * Assumes given location and values are valid.
+ * @return 画面の内容が変わったならtrue
+ */
+static bool term_queue_char_aux(TERM_LEN x, TERM_LEN y, const DisplaySymbolPair &symbol_pair, bool preserve_zoom = false)
+{
+    const auto &symbol_foreground = symbol_pair.symbol_foreground;
+    return term_queue_cell(x, y, symbol_foreground.color, TermChar::from_byte(symbol_foreground.character), symbol_pair.symbol_background, preserve_zoom);
+}
+
+/*!
+ * @brief 描画するマスの範囲の文字を並べた文字列を作る
+ * @param win 画面
+ * @param x 範囲の先頭の桁
+ * @param y 行
+ * @param n 範囲のマス数
+ * @return text_hook に渡す文字列 (次に呼ぶまで有効)
+ * @details 描画のたびに確保しないよう、バッファを使い回す。文字の並べ方は term_win::append_text() を参照。
+ */
+static const std::string &make_cells_text(const term_win &win, TERM_LEN x, TERM_LEN y, int n)
+{
+    static std::string text;
+    text.clear();
+    win.append_text(x, y, n, text);
+    return text;
+}
+
+/*!
+ * @brief pict_hook に渡す、マスごとの文字の先頭バイトを並べた配列を作る
+ * @param cc 1行分のマスの文字
+ * @param x 範囲の先頭の桁
+ * @param n 範囲のマス数
+ * @return マスごとの文字の先頭バイト (2マス幅の文字の右のマスは '\0')。次に呼ぶまで有効
+ * @details 描画のたびに確保しないよう、バッファを使い回す。
+ */
+static const std::string &make_cells_front_bytes(const std::vector<TermChar> &cc, TERM_LEN x, int n)
+{
+    static std::string bytes;
+    bytes.clear();
+    for (auto i = x; i < x + n; i++) {
+        bytes.push_back(cc[i].front());
+    }
+
+    return bytes;
 }
 
 bool term_queue_scaled_bigchar(int x, int y, const DisplaySymbolPair &symbols, int scale)
@@ -491,6 +530,36 @@ void term_queue_char(TERM_LEN x, TERM_LEN y, const DisplaySymbolPair &symbol_pai
     term_queue_char_aux(x + game_term->offset_x, y + game_term->offset_y, symbol_pair);
 }
 
+#ifdef JP
+/*!
+ * @brief ASCII の文字に対応する全角文字を返す
+ * @param ch ASCII の印字可能な文字 (' ' から 0x7f まで)
+ * @return 全角文字 (2マス幅の文字の左のマス)
+ * @details 0x7f (DEL) には「■」を対応させ、二倍幅豆腐の内部コードに使う。
+ */
+static const TermChar &ascii_to_zenkaku(char ch)
+{
+    static const auto zenkaku_chars = [] {
+        std::vector<TermChar> chars;
+        std::string_view str = "　！”＃＄％＆’（）＊＋，－．／"
+                               "０１２３４５６７８９：；＜＝＞？"
+                               "＠ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯ"
+                               "ＰＱＲＳＴＵＶＷＸＹＺ［＼］＾＿"
+                               "‘ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏ"
+                               "ｐｑｒｓｔｕｖｗｘｙｚ｛｜｝～■";
+        while (!str.empty()) {
+            const auto zenkaku_char = mb_first_char(str);
+            chars.push_back(TermChar::wide(zenkaku_char));
+            str.remove_prefix(zenkaku_char.length());
+        }
+
+        return chars;
+    }();
+
+    return zenkaku_chars[ch - ' '];
+}
+#endif
+
 /*!
  * Bigtile version of term_queue_char().
  * If use_bigtile is FALSE, simply call term_queue_char().
@@ -500,21 +569,6 @@ void term_queue_char(TERM_LEN x, TERM_LEN y, const DisplaySymbolPair &symbol_pai
  */
 bool term_queue_bigchar(TERM_LEN x, TERM_LEN y, const DisplaySymbolPair &symbol_pair_initial)
 {
-#ifdef JP
-    /*
-     * A table which relates each ascii character to a multibyte
-     * character.
-     *
-     * 「■」は二倍幅豆腐の内部コードに使用。
-     */
-    static char ascii_to_zenkaku[] = "　！”＃＄％＆’（）＊＋，－．／"
-                                     "０１２３４５６７８９：；＜＝＞？"
-                                     "＠ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯ"
-                                     "ＰＱＲＳＴＵＶＷＸＹＺ［＼］＾＿"
-                                     "‘ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏ"
-                                     "ｐｑｒｓｔｕｖｗｘｙｚ｛｜｝～■";
-#endif
-
     const auto ch_x = x + game_term->offset_x;
     const auto ch_y = y + game_term->offset_y;
 
@@ -524,18 +578,19 @@ bool term_queue_bigchar(TERM_LEN x, TERM_LEN y, const DisplaySymbolPair &symbol_
     }
 
     /* A tile becomes a Bigtile */
-    DisplaySymbolPair symbol_pair = symbol_pair_initial;
-    uint8_t color;
-    char character;
-    if ((symbol_pair_initial.symbol_foreground.color & AF_TILE1) && (symbol_pair_initial.symbol_foreground.character & 0x80)) {
-        /* Mark it as a Bigtile */
-        color = AF_BIGTILE2;
-        character = -1;
+    const auto &symbol_foreground = symbol_pair_initial.symbol_foreground;
+    if ((symbol_foreground.color & AF_TILE1) && (symbol_foreground.character & 0x80)) {
+        auto symbol_pair = symbol_pair_initial;
 
         /* Ignore non-tile background */
         if (!((symbol_pair_initial.symbol_background.color & AF_TILE1) && (symbol_pair_initial.symbol_background.character & 0x80))) {
             symbol_pair.symbol_background = {};
         }
+
+        // 右のマスには大きなタイルの印を置く
+        const auto is_changed_left = term_queue_char_aux(ch_x, ch_y, symbol_pair);
+        const auto is_changed_right = term_queue_char_aux(ch_x + 1, ch_y, { { AF_BIGTILE2, -1 }, {} });
+        return is_changed_left || is_changed_right;
     }
 
 #ifdef JP
@@ -543,26 +598,19 @@ bool term_queue_bigchar(TERM_LEN x, TERM_LEN y, const DisplaySymbolPair &symbol_
      * Use a multibyte character instead of a dirty pair of ASCII
      * characters.
      */
-    else if (' ' <= symbol_pair_initial.symbol_foreground.character) /* isprint(c) */
-    {
-        character = ascii_to_zenkaku[2 * (symbol_pair_initial.symbol_foreground.character - ' ') + 1];
-        symbol_pair.symbol_foreground.character = ascii_to_zenkaku[2 * (symbol_pair_initial.symbol_foreground.character - ' ')];
-
-        /* Mark it as a Kanji */
-        color = symbol_pair_initial.symbol_foreground.color | AF_KANJI2;
-        symbol_pair.symbol_foreground.color |= AF_KANJI1;
+    // 右のマスが画面の外なら、全角文字を置けないので1バイトの文字のまま置く
+    const auto ch = static_cast<unsigned char>(symbol_foreground.character);
+    if ((' ' <= ch) && (ch <= 0x7f) && (ch_x + 1 < game_term->wid)) {
+        const auto &wide_char = ascii_to_zenkaku(symbol_foreground.character);
+        const auto is_changed_left = term_queue_cell(ch_x, ch_y, symbol_foreground.color, wide_char, symbol_pair_initial.symbol_background);
+        const auto is_changed_right = term_queue_cell(ch_x + 1, ch_y, symbol_foreground.color, TermChar::wide_trail(), {});
+        return is_changed_left || is_changed_right;
     }
 #endif
 
-    else {
-        /* Dirty pair of ASCII characters */
-        color = TERM_WHITE;
-        character = ' ';
-    }
-
-    /* Display pair of attr/char */
-    const auto is_changed_left = term_queue_char_aux(ch_x, ch_y, symbol_pair);
-    const auto is_changed_right = term_queue_char_aux(ch_x + 1, ch_y, { { color, character }, {} });
+    // 1バイトの文字と空白を置く
+    const auto is_changed_left = term_queue_char_aux(ch_x, ch_y, symbol_pair_initial);
+    const auto is_changed_right = term_queue_char_aux(ch_x + 1, ch_y, { { TERM_WHITE, ' ' }, {} });
     return is_changed_left || is_changed_right;
 }
 
@@ -576,139 +624,111 @@ bool term_queue_bigchar(TERM_LEN x, TERM_LEN y, const DisplaySymbolPair &symbol_
  */
 static void term_queue_chars(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, std::string_view sv)
 {
-    TERM_LEN x1 = -1, x2 = -1;
-    for (auto offset = 0; offset < n && x + offset < game_term->wid && static_cast<size_t>(offset) < sv.size(); ++offset) {
-        clear_zoom_tile_at(x + offset, y);
-    }
+    // 全角文字の片側のマスを上書きしたときに、もう片側を空白にするのは term_queue_cell() が行う
+    // タイルの番号は最上位ビットが立っていても1マスに1バイトを置く (属性の最上位ビットで見分ける)
+    const auto is_tile = (a & AF_TILE1) != 0;
+    while ((n > 0) && !sv.empty()) {
+        const auto ch = is_tile ? sv.substr(0, 1) : mb_first_char(sv);
+        sv.remove_prefix(ch.length());
 
-    auto &scr_aa = game_term->scr->a[y];
-#ifdef JP
-    auto &scr_cc = game_term->scr->c[y];
+        if (!is_tile && is_mb_char_lead(ch.front())) {
+            // 後半を描く余地が無いか (n や画面の幅が足りない)、文字が途中で切れている (view の終端か NUL) なら、前半だけでは描かずに終える
+            const auto is_truncated = !is_multibyte_char_at(ch) || (ch.find('\0') != std::string_view::npos);
+            if ((n < 2) || (x + 1 >= game_term->wid) || is_truncated) {
+                // 既存の全角文字の右のマスから書き始めて何も置けなかったときも、その全角文字は空白にする
+                if (game_term->scr->c[y][x].is_wide_trail()) {
+                    term_queue_cell(x, y, game_term->scr->a[y][x], TermChar::from_byte(' '), {});
+                }
 
-    auto &scr_taa = game_term->scr->ta[y];
-    auto &scr_tcc = game_term->scr->tc[y];
-#else
-    auto &scr_cc = game_term->scr->c[y];
-
-    auto &scr_taa = game_term->scr->ta[y];
-    auto &scr_tcc = game_term->scr->tc[y];
-#endif
-
-#ifdef JP
-    /* 表示文字なし */
-    if (n == 0 || sv.empty()) {
-        return;
-    }
-    /*
-     * 全角文字の右半分から文字を表示する場合、
-     * 重なった文字の左部分を消去。
-     * 行頭には左隣が無いので何もしない。
-     */
-    if ((x > 0) && !(scr_aa[x] & AF_TILE1) && (scr_aa[x] & AF_KANJI2)) {
-        scr_cc[x - 1] = ' ';
-        scr_aa[x - 1] &= AF_KANJIC;
-        x1 = x2 = x - 1;
-    }
-#endif
-    /* Queue the attr/chars */
-    for (auto s = sv.begin(); (n > 0) && (s != sv.end()); x++, s++, n--) {
-#ifdef JP
-        /* 特殊文字としてMSBが立っている可能性がある */
-        /* その場合attrのMSBも立っているのでこれで識別する */
-        /* check */
-        if (!(a & AF_TILE1) && iskanji(*s)) {
-            char nc1 = *s++;
-
-            // 後半バイトを描く余地が無いか、文字列が前半バイトで終わっている (view の終端か NUL) なら、前半バイトだけでは描かずに終える
-            if ((--n == 0) || (s == sv.end()) || (*s == '\0')) {
                 break;
             }
 
-            char nc2 = *s;
-            byte na1 = (a | AF_KANJI1);
-            byte na2 = (a | AF_KANJI2);
-
-            if (scr_aa[x++] == na1 && scr_aa[x] == na2 && scr_cc[x - 1] == nc1 && scr_cc[x] == nc2 && (scr_taa[x - 1] == 0) && (scr_taa[x] == 0) && (scr_tcc[x - 1] == 0) && (scr_tcc[x] == 0)) {
-                continue;
-            }
-
-            scr_aa[x - 1] = na1;
-            scr_aa[x] = na2;
-            scr_cc[x - 1] = nc1;
-            scr_cc[x] = nc2;
-
-            if (x1 < 0) {
-                x1 = x - 1;
-            }
-            x2 = x;
-        } else {
-#endif
-            TERM_COLOR oa = scr_aa[x];
-            char oc = scr_cc[x];
-
-            TERM_COLOR ota = scr_taa[x];
-            char otc = scr_tcc[x];
-
-            /* Ignore non-changes */
-            if ((oa == a) && (oc == *s) && (ota == 0) && (otc == 0)) {
-                continue;
-            }
-
-            /* Save the "literal" information */
-            scr_aa[x] = a;
-            scr_cc[x] = *s;
-
-            scr_taa[x] = 0;
-            scr_tcc[x] = 0;
-
-            /* Note the "range" of window updates */
-            if (x1 < 0) {
-                x1 = x;
-            }
-            x2 = x;
-#ifdef JP
-        }
-#endif
-    }
-
-#ifdef JP
-    /*
-     * 全角文字の左半分で表示を終了する場合、
-     * 重なった文字の右部分を消去。
-     * (条件追加：タイルの1文字目でない事を確かめるように。)
-     */
-    {
-        if ((x < game_term->wid) && !(scr_aa[x] & AF_TILE1) && (scr_aa[x] & AF_KANJI2)) {
-            scr_cc[x] = ' ';
-            scr_aa[x] &= AF_KANJIC;
-            if (x1 < 0) {
-                x1 = x;
-            }
-            x2 = x;
-        }
-    }
-#endif
-    /* Expand the "change area" as needed */
-    if (x1 >= 0) {
-        /* Check for new min/max row info */
-        if (y < game_term->y1) {
-            game_term->y1 = y;
-        }
-        if (y > game_term->y2) {
-            game_term->y2 = y;
+            term_queue_cell(x, y, a, TermChar::wide(ch), {});
+            term_queue_cell(x + 1, y, a, TermChar::wide_trail(), {});
+            x += 2;
+            n -= 2;
+            continue;
         }
 
-        /* Check for new min/max col info in this row */
-        if (x1 < game_term->x1[y]) {
-            game_term->x1[y] = x1;
-        }
-        if (x2 > game_term->x2[y]) {
-            game_term->x2[y] = x2;
-        }
+        term_queue_cell(x, y, a, TermChar::from_byte(ch.front()), {});
+        x++;
+        n--;
     }
 }
 
 /*** Refresh routines ***/
+
+/*!
+ * @brief 描き直す範囲の先頭が2マス幅の文字の右のマスなら、左のマスから描き直すよう範囲を広げる
+ * @param y 行
+ * @param x1 描き直す範囲の先頭の桁
+ * @return 広げた範囲の先頭の桁
+ */
+static TERM_LEN expand_fresh_start(TERM_LEN y, TERM_LEN x1)
+{
+    if ((x1 > 0) && (game_term->old->c[y][x1].is_wide_trail() || game_term->scr->c[y][x1].is_wide_trail())) {
+        return x1 - 1;
+    }
+
+    return x1;
+}
+
+/*!
+ * @brief 描き直すマスの文字の幅を返す
+ * @param cc 1行分のマスの文字
+ * @param x 桁
+ * @return 2マス幅の文字の左のマスなら2 (右のマスと一緒に扱う)、それ以外は1
+ */
+static int fresh_cell_width(const std::vector<TermChar> &cc, TERM_LEN x)
+{
+    return (cc[x].is_wide_lead() && (x + 1 < game_term->wid)) ? 2 : 1;
+}
+
+/*!
+ * @brief 描いたマスと描くマスが同じかを返す
+ * @param y 行
+ * @param x 先頭の桁
+ * @param width マス数
+ * @param compares_tiles 背景のタイルも比べるなら true
+ * @return 範囲のマスがすべて同じなら true
+ */
+static bool is_fresh_cells_unchanged(TERM_LEN y, TERM_LEN x, int width, bool compares_tiles)
+{
+    const auto &old = *game_term->old;
+    const auto &scr = *game_term->scr;
+    for (auto i = x; i < x + width; i++) {
+        if ((scr.a[y][i] != old.a[y][i]) || (scr.c[y][i] != old.c[y][i])) {
+            return false;
+        }
+
+        if (compares_tiles && ((scr.ta[y][i] != old.ta[y][i]) || (scr.tc[y][i] != old.tc[y][i]))) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+/*!
+ * @brief 描くマスを、描いたマスとして覚える
+ * @param y 行
+ * @param x 先頭の桁
+ * @param width マス数
+ * @param saves_tiles 背景のタイルも覚えるなら true
+ */
+static void save_fresh_cells(TERM_LEN y, TERM_LEN x, int width, bool saves_tiles)
+{
+    auto &old = *game_term->old;
+    const auto &scr = *game_term->scr;
+    for (auto i = x; i < x + width; i++) {
+        old.a[y][i] = scr.a[y][i];
+        old.c[y][i] = scr.c[y][i];
+        if (saves_tiles) {
+            old.ta[y][i] = scr.ta[y][i];
+            old.tc[y][i] = scr.tc[y][i];
+        }
+    }
+}
 
 /*!
  * Flush a row of the current window (see "term_fresh")
@@ -716,116 +736,68 @@ static void term_queue_chars(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, std::s
  */
 static void term_fresh_row_pict(TERM_LEN y, TERM_LEN x1, TERM_LEN x2)
 {
-    auto &old_aa = game_term->old->a[y];
-    auto &old_cc = game_term->old->c[y];
-
     const auto &scr_aa = game_term->scr->a[y];
     const auto &scr_cc = game_term->scr->c[y];
-
-    auto &old_taa = game_term->old->ta[y];
-    auto &old_tcc = game_term->old->tc[y];
-
     const auto &scr_taa = game_term->scr->ta[y];
     const auto &scr_tcc = game_term->scr->tc[y];
 
-    TERM_COLOR ota;
-    char otc;
-
-    TERM_COLOR nta;
-    char ntc;
-
-    /* Pending length */
+    // まとめて描くマスの数と先頭の桁
     TERM_LEN fn = 0;
-
-    /* Pending start */
     TERM_LEN fx = 0;
 
-    TERM_COLOR oa;
-    char oc;
+    const auto flush = [&] {
+        if (fn == 0) {
+            return;
+        }
 
-    TERM_COLOR na;
-    char nc;
+        const auto &chars = make_cells_front_bytes(scr_cc, fx, fn);
+        (void)((*game_term->pict_hook)(fx, y, fn, &scr_aa[fx], chars.data(), &scr_taa[fx], &scr_tcc[fx]));
+        fn = 0;
+    };
 
-#ifdef JP
-    /* 全角文字の２バイト目かどうか */
-    int kanji = 0;
-#endif
-    /* Scan "modified" columns */
-    for (TERM_LEN x = x1; x <= x2; x++) {
-        /* See what is currently here */
-        oa = old_aa[x];
-        oc = old_cc[x];
-
-        /* See what is desired there */
-        na = scr_aa[x];
-        nc = scr_cc[x];
-
-#ifdef JP
-        if (kanji) {
-            /* 全角文字２バイト目 */
-            kanji = 0;
-            old_aa[x] = na;
-            old_cc[x] = nc;
-            fn++;
+    for (TERM_LEN x = expand_fresh_start(y, x1); x <= x2; x++) {
+        // 2マス幅の文字は左右のマスをまとめて扱う
+        const auto width = fresh_cell_width(scr_cc, x);
+        if (is_fresh_cells_unchanged(y, x, width, true)) {
+            flush();
+            x += width - 1;
             continue;
         }
-        /* 特殊文字としてMSBが立っている可能性がある */
-        /* その場合attrのMSBも立っているのでこれで識別する */
-        /* check */
-        kanji = (iskanji(nc) && !(na & AF_TILE1));
-#endif
 
-        ota = old_taa[x];
-        otc = old_tcc[x];
-
-        nta = scr_taa[x];
-        ntc = scr_tcc[x];
-
-        /* Handle unchanged grids */
-#ifdef JP
-        if ((na == oa) && (nc == oc) && (nta == ota) && (ntc == otc) && (!kanji || (scr_aa[x + 1] == old_aa[x + 1] && scr_cc[x + 1] == old_cc[x + 1] && scr_taa[x + 1] == old_taa[x + 1] && scr_tcc[x + 1] == old_tcc[x + 1])))
-#else
-        if ((na == oa) && (nc == oc) && (nta == ota) && (ntc == otc))
-#endif
-        {
-            /* Flush */
-            if (fn) {
-                /* Draw pending attr/char pairs */
-                (void)((*game_term->pict_hook)(fx, y, fn, &scr_aa[fx], &scr_cc[fx], &scr_taa[fx], &scr_tcc[fx]));
-
-                /* Forget */
-                fn = 0;
-            }
-
-#ifdef JP
-            /* 全角文字の時は再開位置は＋１ */
-            if (kanji) {
-                x++;
-                fx++;
-                kanji = 0;
-            }
-#endif
-            /* Skip */
-            continue;
-        }
-        /* Save new contents */
-        old_aa[x] = na;
-        old_cc[x] = nc;
-
-        old_taa[x] = nta;
-        old_tcc[x] = ntc;
-
-        /* Restart and Advance */
-        if (fn++ == 0) {
+        save_fresh_cells(y, x, width, true);
+        if (fn == 0) {
             fx = x;
         }
+
+        fn += width;
+        x += width - 1;
     }
 
-    /* Flush */
-    if (fn) {
-        /* Draw pending attr/char pairs */
-        (void)((*game_term->pict_hook)(fx, y, fn, &scr_aa[fx], &scr_cc[fx], &scr_taa[fx], &scr_tcc[fx]));
+    flush();
+}
+
+/*!
+ * @brief 描き直す文字を text_hook で描くか、wipe_hook で消す
+ * @param x 先頭の桁
+ * @param y 行
+ * @param n マス数
+ * @param a 色
+ * @param win 画面
+ */
+static void term_fresh_text(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, const term_win &win)
+{
+    if (n == 0) {
+        return;
     }
+
+    // 色が黒 (0) なら、always_text でない限り文字を描かずに消す
+    if (a || game_term->always_text) {
+        const auto &text = make_cells_text(win, x, y, n);
+        (void)((*game_term->text_hook)(x, y, n, a, text.data()));
+        return;
+    }
+
+    (void)((*game_term->wipe_hook)(x, y, n));
 }
 
 /*!
@@ -836,207 +808,64 @@ static void term_fresh_row_pict(TERM_LEN y, TERM_LEN x1, TERM_LEN x2)
  */
 static void term_fresh_row_both(TERM_LEN y, int x1, int x2)
 {
-    auto &old_aa = game_term->old->a[y];
-    auto &old_cc = game_term->old->c[y];
-
     const auto &scr_aa = game_term->scr->a[y];
     const auto &scr_cc = game_term->scr->c[y];
-
-    auto &old_taa = game_term->old->ta[y];
-    auto &old_tcc = game_term->old->tc[y];
     const auto &scr_taa = game_term->scr->ta[y];
     const auto &scr_tcc = game_term->scr->tc[y];
 
-    TERM_COLOR ota;
-    char otc;
-    TERM_COLOR nta;
-    char ntc;
-
-    /* The "always_text" flag */
-    int always_text = game_term->always_text;
-
-    /* Pending length */
+    // まとめて描くマスの数・先頭の桁・色
     int fn = 0;
-
-    /* Pending start */
     int fx = 0;
-
-    /* Pending attr */
     byte fa = game_term->attr_blank;
 
-    TERM_COLOR oa;
-    char oc;
+    const auto flush = [&] {
+        term_fresh_text(fx, y, fn, fa, *game_term->scr);
+        fn = 0;
+    };
 
-    TERM_COLOR na;
-    char nc;
-
-#ifdef JP
-    /* 全角文字の２バイト目かどうか */
-    int kanji = 0;
-#endif
-    /* Scan "modified" columns */
-    for (TERM_LEN x = x1; x <= x2; x++) {
-        /* See what is currently here */
-        oa = old_aa[x];
-        oc = old_cc[x];
-
-        /* See what is desired there */
-        na = scr_aa[x];
-        nc = scr_cc[x];
-
-#ifdef JP
-        if (kanji) {
-            /* 全角文字２バイト目 */
-            kanji = 0;
-            old_aa[x] = na;
-            old_cc[x] = nc;
-            fn++;
-            continue;
-        }
-        /* 特殊文字としてMSBが立っている可能性がある */
-        /* その場合attrのMSBも立っているのでこれで識別する */
-        /* check */
-        /*		kanji = (iskanji(nc));  */
-        kanji = (iskanji(nc) && !(na & AF_TILE1));
-#endif
-
-        ota = old_taa[x];
-        otc = old_tcc[x];
-
-        nta = scr_taa[x];
-        ntc = scr_tcc[x];
-
-        /* Handle unchanged grids */
-#ifdef JP
-        if ((na == oa) && (nc == oc) && (nta == ota) && (ntc == otc) && (!kanji || (scr_aa[x + 1] == old_aa[x + 1] && scr_cc[x + 1] == old_cc[x + 1] && scr_taa[x + 1] == old_taa[x + 1] && scr_tcc[x + 1] == old_tcc[x + 1])))
-#else
-        if ((na == oa) && (nc == oc) && (nta == ota) && (ntc == otc))
-#endif
-        {
-            /* Flush */
-            if (fn) {
-                /* Draw pending chars (normal) */
-                if (fa || always_text) {
-                    (void)((*game_term->text_hook)(fx, y, fn, fa, &scr_cc[fx]));
-                }
-
-                /* Draw pending chars (black) */
-                else {
-                    (void)((*game_term->wipe_hook)(fx, y, fn));
-                }
-
-                /* Forget */
-                fn = 0;
-            }
-
-#ifdef JP
-            /* 全角文字の時は再開位置は＋１ */
-            if (kanji) {
-                x++;
-                fx++;
-                kanji = 0;
-            }
-#endif
-            /* Skip */
+    for (TERM_LEN x = expand_fresh_start(y, x1); x <= x2; x++) {
+        // 2マス幅の文字は左右のマスをまとめて扱う
+        const auto width = fresh_cell_width(scr_cc, x);
+        if (is_fresh_cells_unchanged(y, x, width, true)) {
+            flush();
+            x += width - 1;
             continue;
         }
 
-        /* Save new contents */
-        old_aa[x] = na;
-        old_cc[x] = nc;
+        save_fresh_cells(y, x, width, true);
 
-        old_taa[x] = nta;
-        old_tcc[x] = ntc;
-
-        /* 2nd byte of bigtile */
+        auto na = scr_aa[x];
         if ((na & AF_BIGTILE2) == AF_BIGTILE2) {
-            // 拡大タイルの下段には起点がないため、継続セルの手前で保留を区切る。
-            if (fn) {
-                if (fa || always_text) {
-                    (void)((*game_term->text_hook)(fx, y, fn, fa, &scr_cc[fx]));
-                } else {
-                    (void)((*game_term->wipe_hook)(fx, y, fn));
-                }
-                fn = 0;
-            }
+            // 大きなタイルの右のマス (拡大タイルの下段には起点がない) は描かないので、手前でまとめて描く
+            flush();
             continue;
         }
 
-        /* Handle high-bit attr/chars */
-        if ((na & AF_TILE1) && (nc & 0x80)) {
-            /* Flush */
-            if (fn) {
-                /* Draw pending chars (normal) */
-                if (fa || always_text) {
-                    (void)((*game_term->text_hook)(fx, y, fn, fa, &scr_cc[fx]));
-                }
-
-                /* Draw pending chars (black) */
-                else {
-                    (void)((*game_term->wipe_hook)(fx, y, fn));
-                }
-
-                /* Forget */
-                fn = 0;
-            }
-
-            /* Draw the special attr/char pair */
+        // タイル (属性と文字の最上位ビットが立っている) は pict_hook で描く
+        if (is_tile_cell(na, scr_cc[x])) {
+            flush();
+            auto nc = scr_cc[x].front();
+            auto nta = scr_taa[x];
+            auto ntc = scr_tcc[x];
             (void)((*game_term->pict_hook)(x, y, 1, &na, &nc, &nta, &ntc));
-
-            /* Skip */
             continue;
         }
 
-        /* Notice new color */
-#ifdef JP
-        if (fa != (na & AF_KANJIC))
-#else
-        if (fa != na)
-#endif
-
-        {
-            /* Flush */
-            if (fn) {
-                /* Draw the pending chars */
-                if (fa || always_text) {
-                    (void)((*game_term->text_hook)(fx, y, fn, fa, &scr_cc[fx]));
-                }
-
-                /* Erase "leading" spaces */
-                else {
-                    (void)((*game_term->wipe_hook)(fx, y, fn));
-                }
-
-                /* Forget */
-                fn = 0;
-            }
-
-            /* Save the new color */
-#ifdef JP
-            fa = (na & AF_KANJIC);
-#else
-            fa = na;
-#endif
+        // 色が変わったら、それまでのマスを描く。日本語版では色の上位4ビットを使わない
+        if (const byte color = _(na & 0x0f, na); fa != color) {
+            flush();
+            fa = color;
         }
 
-        /* Restart and Advance */
-        if (fn++ == 0) {
+        if (fn == 0) {
             fx = x;
         }
+
+        fn += width;
+        x += width - 1;
     }
 
-    /* Flush */
-    if (fn) {
-        /* Draw pending chars (normal) */
-        if (fa || always_text) {
-            (void)((*game_term->text_hook)(fx, y, fn, fa, &scr_cc[fx]));
-        }
-
-        /* Draw pending chars (black) */
-        else {
-            (void)((*game_term->wipe_hook)(fx, y, fn));
-        }
-    }
+    flush();
 }
 
 /*!
@@ -1046,159 +875,45 @@ static void term_fresh_row_both(TERM_LEN y, int x1, int x2)
  */
 static void term_fresh_row_text(TERM_LEN y, TERM_LEN x1, TERM_LEN x2)
 {
-    auto &old_aa = game_term->old->a[y];
-    auto &old_cc = game_term->old->c[y];
-
     const auto &scr_aa = game_term->scr->a[y];
     const auto &scr_cc = game_term->scr->c[y];
 
-    /* The "always_text" flag */
-    int always_text = game_term->always_text;
-
-    /* Pending length */
+    // まとめて描くマスの数・先頭の桁・色
     int fn = 0;
-
-    /* Pending start */
     int fx = 0;
-
-    /* Pending attr */
     byte fa = game_term->attr_blank;
 
-    TERM_COLOR oa;
-    char oc;
+    const auto flush = [&] {
+        term_fresh_text(fx, y, fn, fa, *game_term->scr);
+        fn = 0;
+    };
 
-    TERM_COLOR na;
-    char nc;
-
-#ifdef JP
-    /* 全角文字の２バイト目かどうか */
-    int kanji = 0;
-
-    for (TERM_LEN x = 0; x < x1; x++) {
-        if (!(old_aa[x] & AF_TILE1) && iskanji(old_cc[x])) {
-            if (x == x1 - 1) {
-                x1--;
-                break;
-            } else {
-                x++;
-            }
-        }
-    }
-#endif
-    /* Scan "modified" columns */
-    for (TERM_LEN x = x1; x <= x2; x++) {
-        /* See what is currently here */
-        oa = old_aa[x];
-        oc = old_cc[x];
-
-        /* See what is desired there */
-        na = scr_aa[x];
-        nc = scr_cc[x];
-
-#ifdef JP
-        if (kanji) {
-            /* 全角文字２バイト目 */
-            kanji = 0;
-            old_aa[x] = na;
-            old_cc[x] = nc;
-            fn++;
-            continue;
-        }
-        /* 特殊文字としてMSBが立っている可能性がある */
-        /* その場合attrのMSBも立っているのでこれで識別する */
-        /* check */
-        kanji = (iskanji(nc) && !(na & AF_TILE1));
-#endif
-        /* Handle unchanged grids */
-#ifdef JP
-        if ((na == oa) && (nc == oc) && (!kanji || (scr_aa[x + 1] == old_aa[x + 1] && scr_cc[x + 1] == old_cc[x + 1])))
-#else
-        if ((na == oa) && (nc == oc))
-#endif
-
-        {
-            /* Flush */
-            if (fn) {
-                /* Draw pending chars (normal) */
-                if (fa || always_text) {
-                    (void)((*game_term->text_hook)(fx, y, fn, fa, &scr_cc[fx]));
-                }
-
-                /* Draw pending chars (black) */
-                else {
-                    (void)((*game_term->wipe_hook)(fx, y, fn));
-                }
-
-                /* Forget */
-                fn = 0;
-            }
-
-#ifdef JP
-            /* 全角文字の時は再開位置は＋１ */
-            if (kanji) {
-                x++;
-                fx++;
-                kanji = 0;
-            }
-#endif
-            /* Skip */
+    for (TERM_LEN x = expand_fresh_start(y, x1); x <= x2; x++) {
+        // 2マス幅の文字は左右のマスをまとめて扱う。背景のタイルは使わないので比べない
+        const auto width = fresh_cell_width(scr_cc, x);
+        if (is_fresh_cells_unchanged(y, x, width, false)) {
+            flush();
+            x += width - 1;
             continue;
         }
 
-        /* Save new contents */
-        old_aa[x] = na;
-        old_cc[x] = nc;
+        save_fresh_cells(y, x, width, false);
 
-        /* Notice new color */
-#ifdef JP
-        if (fa != (na & AF_KANJIC))
-#else
-        if (fa != na)
-#endif
-
-        {
-            /* Flush */
-            if (fn) {
-                /* Draw the pending chars */
-                if (fa || always_text) {
-                    (void)((*game_term->text_hook)(fx, y, fn, fa, &scr_cc[fx]));
-                }
-
-                /* Erase "leading" spaces */
-                else {
-                    (void)((*game_term->wipe_hook)(fx, y, fn));
-                }
-
-                /* Forget */
-                fn = 0;
-            }
-
-            /* Save the new color */
-#ifdef JP
-            fa = (na & AF_KANJIC);
-#else
-            fa = na;
-#endif
+        // 色が変わったら、それまでのマスを描く。日本語版では色の上位4ビットを使わない
+        if (const byte color = _(scr_aa[x] & 0x0f, scr_aa[x]); fa != color) {
+            flush();
+            fa = color;
         }
 
-        /* Restart and Advance */
-        if (fn++ == 0) {
+        if (fn == 0) {
             fx = x;
         }
+
+        fn += width;
+        x += width - 1;
     }
 
-    /* Flush */
-    if (fn) {
-        /* Draw pending chars (normal) */
-        if (fa || always_text) {
-            (void)((*game_term->text_hook)(fx, y, fn, fa, &scr_cc[fx]));
-        }
-
-        /* Draw pending chars (black) */
-        else {
-            (void)((*game_term->wipe_hook)(fx, y, fn));
-        }
-    }
+    flush();
 }
 
 /*!
@@ -1257,7 +972,7 @@ void term_fresh()
             for (auto x = 0; x < w; x++) {
                 /* Wipe each grid */
                 aa[x] = na;
-                cc[x] = nc;
+                cc[x] = TermChar::from_byte(nc);
 
                 taa[x] = na;
                 tcc[x] = nc;
@@ -1290,26 +1005,29 @@ void term_fresh()
                 ty = old_block.y;
             }
 
+            // カーソルが全角文字の右のマスにあったなら、左のマスから文字全体を描き直す
+            if ((tx > 0) && old->c[ty][tx].is_wide_trail()) {
+                tx--;
+            }
+
             const auto &old_aa = old->a[ty];
             const auto &old_cc = old->c[ty];
 
             const auto &old_taa = old->ta[ty];
             const auto &old_tcc = old->tc[ty];
             pict_source = old.get();
-            auto csize = 1;
-#ifdef JP
-            if (tx + 1 < game_term->wid && !(old_aa[tx] & AF_TILE1) && iskanji(old_cc[tx])) {
-                csize = 2;
-            }
-#endif
+            const auto csize = fresh_cell_width(old_cc, tx);
+
             /* Use "term_pict()" always */
             if (game_term->always_pict) {
-                (void)((*game_term->pict_hook)(tx, ty, csize, &old_aa[tx], &old_cc[tx], &old_taa[tx], &old_tcc[tx]));
+                const auto &chars = make_cells_front_bytes(old_cc, tx, csize);
+                (void)((*game_term->pict_hook)(tx, ty, csize, &old_aa[tx], chars.data(), &old_taa[tx], &old_tcc[tx]));
             }
 
             /* Use "term_pict()" sometimes */
-            else if (game_term->higher_pict && (old_aa[tx] & AF_TILE1) && (old_cc[tx] & 0x80)) {
-                (void)((*game_term->pict_hook)(tx, ty, 1, &old_aa[tx], &old_cc[tx], &old_taa[tx], &old_tcc[tx]));
+            else if (game_term->higher_pict && is_tile_cell(old_aa[tx], old_cc[tx])) {
+                auto pict_char = old_cc[tx].front();
+                (void)((*game_term->pict_hook)(tx, ty, 1, &old_aa[tx], &pict_char, &old_taa[tx], &old_tcc[tx]));
             }
 
             /*
@@ -1319,13 +1037,14 @@ void term_fresh()
              * wipe_hook でカーソルを消去して text_hook で書き直す。
              */
             else if (old_aa[tx] || game_term->always_text) {
-                (void)((*game_term->wipe_hook)(tx, ty, 1));
-                (void)((*game_term->text_hook)(tx, ty, csize, (unsigned char)(old_aa[tx] & 0xf), &old_cc[tx]));
+                (void)((*game_term->wipe_hook)(tx, ty, csize));
+                const auto &text = make_cells_text(*old, tx, ty, csize);
+                (void)((*game_term->text_hook)(tx, ty, csize, (unsigned char)(old_aa[tx] & 0xf), text.data()));
             }
 
             /* Erase the grid */
             else {
-                (void)((*game_term->wipe_hook)(tx, ty, 1));
+                (void)((*game_term->wipe_hook)(tx, ty, csize));
             }
         }
     }
@@ -1348,6 +1067,11 @@ void term_fresh()
                 if (game_term->x2[h - 1] > w - 2) {
                     /* Avoid the corner */
                     game_term->x2[h - 1] = w - 2;
+                }
+
+                // 隅の左隣に2マス幅の文字の左のマスがあると、右のマス (隅) と一緒に描いてしまうので、その文字も描かない
+                if ((w >= 3) && (game_term->x2[h - 1] == w - 2) && scr->c[h - 1][w - 2].is_wide_lead()) {
+                    game_term->x2[h - 1] = w - 3;
                 }
             }
         }
@@ -1397,12 +1121,7 @@ void term_fresh()
     if (game_term->soft_cursor) {
         /* Draw the cursor */
         if (!scr->cu && scr->cv) {
-#ifdef JP
-            if ((scr->cx + 1 < w) && ((old->a[scr->cy][scr->cx + 1] & AF_BIGTILE2) == AF_BIGTILE2 || (!(old->a[scr->cy][scr->cx] & AF_TILE1) && iskanji(old->c[scr->cy][scr->cx]))))
-#else
-            if ((scr->cx + 1 < w) && (old->a[scr->cy][scr->cx + 1] & AF_BIGTILE2) == AF_BIGTILE2)
-#endif
-            {
+            if ((scr->cx + 1 < w) && ((old->a[scr->cy][scr->cx + 1] & AF_BIGTILE2) == AF_BIGTILE2 || old->c[scr->cy][scr->cx].is_wide_lead())) {
                 /* Double width cursor for the Bigtile mode */
                 (void)((*game_term->bigcurs_hook)(scr->cx, scr->cy));
             } else {
@@ -1681,7 +1400,7 @@ void term_erase(int x, int y, tl::optional<int> n_opt)
 {
     const auto w = game_term->wid;
     const auto na = game_term->attr_blank;
-    const auto nc = game_term->char_blank;
+    const auto nc = TermChar::from_byte(game_term->char_blank);
     auto x1 = -1;
     auto x2 = -1;
 
@@ -1710,47 +1429,33 @@ void term_erase(int x, int y, tl::optional<int> n_opt)
     auto &scr_taa = game_term->scr->ta[y];
     auto &scr_tcc = game_term->scr->tc[y];
 
-#ifdef JP
-    /*
-     * 全角文字の右半分から文字を表示する場合、
-     * 重なった文字の左部分を消去。
-     * 行頭には左隣が無いので何もしない。
-     */
-    if (n > 0 && x > 0 && (((scr_aa[x] & AF_KANJI2) && !(scr_aa[x] & AF_TILE1)) || (scr_aa[x] & AF_BIGTILE2) == AF_BIGTILE2))
-#else
-    /* 大きなタイルの右半分から消去する場合は左半分も消去する。行頭には左隣が無いので何もしない */
-    if (n > 0 && x > 0 && (scr_aa[x] & AF_BIGTILE2) == AF_BIGTILE2)
-#endif
-    {
+    /* 2マス幅の文字や大きなタイルの右半分から消去する場合は左半分も消去する。行頭には左隣が無いので何もしない */
+    if (n > 0 && x > 0 && (scr_cc[x].is_wide_trail() || (scr_aa[x] & AF_BIGTILE2) == AF_BIGTILE2)) {
         x--;
         n++;
     }
 
     /* Scan every column */
     for (int i = 0; i < n; i++, x++) {
-        int oa = scr_aa[x];
-        int oc = scr_cc[x];
-
         /* Ignore "non-changes" */
-        if ((oa == na) && (oc == nc)) {
+        if ((scr_aa[x] == na) && (scr_cc[x] == nc)) {
             continue;
         }
 
-#ifdef JP
         /*
-         * 全角文字の左半分で表示を終了する場合、
+         * 2マス幅の文字の左半分で表示を終了する場合、
          * 重なった文字の右部分を消去。
          *
          * 2001/04/29 -- Habu
          * 行の右端の場合はこの処理をしないように修正。
          */
-        if ((oa & AF_KANJI1) && (i + 1) == n && x != w - 1) {
+        if (scr_cc[x].is_wide_lead() && (i + 1) == n && x != w - 1) {
             n++;
         }
-#endif
+
         /* Save the "literal" information */
-        scr_aa[x] = (byte)na;
-        scr_cc[x] = (char)nc;
+        scr_aa[x] = na;
+        scr_cc[x] = nc;
 
         scr_taa[x] = 0;
         scr_tcc[x] = 0;
@@ -1812,7 +1517,7 @@ void term_clear()
         /* Wipe each column */
         for (auto x = 0; x < w; x++) {
             scr_aa[x] = ds.color;
-            scr_cc[x] = ds.character;
+            scr_cc[x] = TermChar::from_byte(ds.character);
 
             scr_taa[x] = 0;
             scr_tcc[x] = 0;
@@ -1892,20 +1597,16 @@ void term_redraw_section(int x1, int y1, int x2, int y2)
         auto x1j = x1;
         auto x2j = x2;
         if (x1j > 0) {
-            auto right_half = (game_term->scr->a[i][x1j] & AF_BIGTILE2) == AF_BIGTILE2 && !term_is_zoom_continuation({ game_term->scr->a[i][x1j], game_term->scr->c[i][x1j] });
-#ifdef JP
-            right_half |= !(game_term->scr->a[i][x1j] & AF_TILE1) && (game_term->scr->a[i][x1j] & AF_KANJI2);
-#endif
+            auto right_half = (game_term->scr->a[i][x1j] & AF_BIGTILE2) == AF_BIGTILE2 && !term_is_zoom_continuation({ game_term->scr->a[i][x1j], game_term->scr->c[i][x1j].front() });
+            right_half |= game_term->scr->c[i][x1j].is_wide_trail();
             if (right_half) {
                 x1j--;
             }
         }
 
         if (x2j < game_term->wid - 1) {
-            auto left_half = (game_term->scr->a[i][x2j + 1] & AF_BIGTILE2) == AF_BIGTILE2 && !term_is_zoom_continuation({ game_term->scr->a[i][x2j + 1], game_term->scr->c[i][x2j + 1] });
-#ifdef JP
-            left_half |= !(game_term->scr->a[i][x2j] & AF_TILE1) && (game_term->scr->a[i][x2j] & AF_KANJI1);
-#endif
+            auto left_half = (game_term->scr->a[i][x2j + 1] & AF_BIGTILE2) == AF_BIGTILE2 && !term_is_zoom_continuation({ game_term->scr->a[i][x2j + 1], game_term->scr->c[i][x2j + 1].front() });
+            left_half |= game_term->scr->c[i][x2j].is_wide_lead();
             if (left_half) {
                 x2j++;
             }
@@ -1917,7 +1618,7 @@ void term_redraw_section(int x1, int y1, int x2, int y2)
         auto &g_ptr = game_term->old->c[i];
         for (auto j = x1j; j <= x2j; j++) {
             /* Hack - set the old character to "none" */
-            g_ptr[j] = 0;
+            g_ptr[j] = TermChar();
         }
     }
 
@@ -1953,30 +1654,11 @@ std::pair<int, int> term_locate()
 }
 
 /*!
- * At a given location, determine the "current" attr and char
- * Note that this refers to what will be on the window after the
- * next call to "term_fresh()".  It may or may not already be there.
- */
-DisplaySymbol term_what(int x, int y, const DisplaySymbol &ds)
-{
-    const auto width = game_term->wid;
-    const auto height = game_term->hgt;
-    x += game_term->offset_x;
-    y += game_term->offset_y;
-
-    if ((x < 0) || (x >= width) || (y < 0) || (y >= height)) {
-        return ds;
-    }
-
-    return { game_term->scr->a[y][x], game_term->scr->c[y][x] };
-}
-
-/*!
  * @brief 現在の端末の1マスの色と文字を返す
  * @param x 桁 (端末のオフセットを加える前)
  * @param y 行 (端末のオフセットを加える前)
  * @return マスの色と文字 (term_win::get_cell() を参照)。画面の外なら tl::nullopt
- * @details term_what() と同じく、次の term_fresh() の後に画面に出る内容を返す。
+ * @details 次の term_fresh() の後に画面に出る内容を返す (まだ画面に出ているとは限らない)。
  */
 tl::optional<TermCellSymbol> term_what_cell(int x, int y)
 {
@@ -2000,16 +1682,17 @@ tl::optional<TermCellSymbol> term_what_cell(int x, int y)
  */
 void term_win::append_text(int x, int y, int n, std::string &text) const
 {
+    const auto &cc = this->c[y];
     for (auto i = x; i < x + n; i++) {
-        const auto ch = this->get_cell(i, y).character;
+        const auto &ch = cc[i];
         if (ch.is_wide_lead()) {
-            const auto has_trail = (i + 1 < x + n) && this->get_cell(i + 1, y).character.is_wide_trail();
+            const auto has_trail = (i + 1 < x + n) && cc[i + 1].is_wide_trail();
             text.append(has_trail ? ch.view() : " ");
             continue;
         }
 
         if (ch.is_wide_trail()) {
-            const auto has_lead = (i > x) && this->get_cell(i - 1, y).character.is_wide_lead();
+            const auto has_lead = (i > x) && cc[i - 1].is_wide_lead();
             if (!has_lead) {
                 text.push_back(' ');
             }

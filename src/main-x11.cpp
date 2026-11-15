@@ -123,7 +123,6 @@
 #include <fmt/format.h>
 #include <map>
 #include <memory>
-#include <span>
 #include <string>
 #include <string_view>
 #include <tl/optional.hpp>
@@ -1293,8 +1292,9 @@ static void sort_co_ord(co_ord *min, co_ord *max, const co_ord *b, const co_ord 
 #ifdef USE_XFT
 static void draw_cursor_xft(int x, int y, int len)
 {
-    // term_what() では中央寄せ時に座標がずれるので直接取得
-    const std::span<const char> cursor_chars(&game_term->scr->c[y][x], len);
+    // term_what_cell() では中央寄せ時に座標がずれるので直接取得する。全角文字の片側のマスだけにかかるなら空白を描く
+    std::string cursor_chars;
+    game_term->scr->append_text(x, y, std::min(len, game_term->wid - x), cursor_chars);
 
 #ifdef JP
     char utf8_buf[16];
@@ -1303,7 +1303,7 @@ static void draw_cursor_xft(int x, int y, int len)
         return;
     }
 #endif
-    Infofnt_text_std_xft(x, y, len, Infoclr->bg.xft, Infoclr->fg.xft, _(utf8_buf, cursor_chars.data()), _(utf8_len, len));
+    Infofnt_text_std_xft(x, y, len, Infoclr->bg.xft, Infoclr->fg.xft, _(utf8_buf, cursor_chars.data()), _(utf8_len, static_cast<int>(cursor_chars.size())));
 }
 #endif
 
@@ -1596,9 +1596,11 @@ static bool paste_x11_send_text(XSelectionRequestEvent *rq)
 #ifdef JP
         char utf8_buf[2048];
         const int len = euc_to_utf8(line.data(), line.length(), utf8_buf, sizeof(utf8_buf));
+#else
+        const auto len = static_cast<int>(line.size());
 #endif
-        if (_(len, std::ssize(line)) > 0) {
-            XChangeProperty(DPY, rq->requestor, rq->property, xa_utf8, 8, PropModeAppend, (unsigned char *)_(utf8_buf, line.data()), _(len, std::ssize(line)));
+        if (len > 0) {
+            XChangeProperty(DPY, rq->requestor, rq->property, xa_utf8, 8, PropModeAppend, (unsigned char *)_(utf8_buf, line.data()), len);
         }
     }
 

@@ -12,7 +12,6 @@
 #include "test/scoped-input-term.h"
 #include "test/string-helpers.h"
 #include "util/string-processor.h"
-#include "view/display-symbol.h"
 
 #include <doctest/doctest.h>
 
@@ -38,9 +37,8 @@ std::string read_screen_line(int y)
     const auto &[wid, hgt] = term_get_size();
     std::string line;
     for (auto x = 0; x < wid; x++) {
-        DisplaySymbol ds;
-        ds = term_what(x, y, ds);
-        line.push_back(ds.character);
+        // 全角文字は左のマスに文字全体があり、右のマスは文字を持たない
+        line.append(term_what_cell(x, y)->character.view());
     }
 
     return str_rtrim(line);

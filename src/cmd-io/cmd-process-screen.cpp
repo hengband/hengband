@@ -10,6 +10,7 @@
 #include "core/visuals-reseter.h"
 #include "io/files-util.h"
 #include "io/input-context.h"
+#include "locale/multibyte-char.h"
 #include "system/angband-exceptions.h"
 #include "system/player-type-definition.h"
 #include "term/gameterm.h"
@@ -294,7 +295,6 @@ static bool check_screen_text_can_open(FILE *fff, const std::string_view filenam
  */
 static void do_cmd_save_screen_text(int wid, int hgt)
 {
-    DisplaySymbol ds(0, ' ');
     const auto path = path_build(ANGBAND_DIR_USER, "dump.txt");
     auto *fff = angband_fopen(path, FileOpenMode::WRITE);
     if (!check_screen_text_can_open(fff, path.string())) {
@@ -323,12 +323,17 @@ static void do_cmd_save_screen_text(int wid, int hgt)
     }
 
     fmt::print(fff, "\n");
+    TERM_COLOR color = 0;
     for (TERM_LEN y = 0; y < hgt; y++) {
         TERM_LEN x;
         char buf[1024]{};
         for (x = 0; x < wid; x++) {
-            ds = term_what(x, y, ds);
-            buf[x] = hack[ds.color & 0x0F];
+            // 画面の外のマスは直前のマスの色にする
+            if (const auto cell = term_what_cell(x, y)) {
+                color = cell->color;
+            }
+
+            buf[x] = hack[color & 0x0F];
         }
 
         buf[x] = '\0';
@@ -391,12 +396,21 @@ static bool draw_white_characters(FILE *fff, int wid, int hgt)
             continue;
         }
 
-        for (TERM_LEN x = 0; x < wid; x++) {
-            if (buf[x] == '\n' || buf[x] == '\0') {
-                break;
+        std::string_view line(buf);
+        line = line.substr(0, line.find('\n'));
+        for (TERM_LEN x = 0; (x < wid) && !line.empty();) {
+            // 全角文字は2マスに文字全体を書く
+            const auto ch = mb_first_char(line);
+            line.remove_prefix(ch.length());
+            if (is_multibyte_char_at(ch)) {
+                term_putstr(x, y, 2, TERM_WHITE, ch);
+                x += 2;
+                continue;
             }
 
-            term_draw(x, y, { TERM_WHITE, buf[x] });
+            // 途中で切れた全角文字は、前半のバイトだけを置かずに空白にする
+            term_draw(x, y, { TERM_WHITE, is_mb_char_lead(ch.front()) ? ' ' : ch.front() });
+            x++;
         }
     }
 
@@ -413,7 +427,7 @@ static bool draw_white_characters(FILE *fff, int wid, int hgt)
  */
 static void draw_colored_characters(FILE *fff, int wid, int hgt, bool okay)
 {
-    DisplaySymbol ds(TERM_DARK, ' ');
+    TermCellSymbol cell{ TERM_DARK, TermChar::from_byte(' ') };
     for (auto y = 0; okay; y++) {
         char buf[1024]{};
         if (!fgets(buf, sizeof(buf), fff)) {
@@ -432,14 +446,19 @@ static void draw_colored_characters(FILE *fff, int wid, int hgt, bool okay)
                 break;
             }
 
-            ds = term_what(x, y, ds);
+            cell = term_what_cell(x, y).value_or(cell);
             for (uint8_t i = 0; i < 16; i++) {
                 if (hack[i] == buf[x]) {
-                    ds.color = i;
+                    cell.color = i;
                 }
             }
 
-            term_draw(x, y, ds);
+            // 全角文字は左のマスの色で文字全体を書き直す
+            if (cell.character.is_wide_lead()) {
+                term_putstr(x, y, 2, cell.color, cell.character.view());
+            } else if (!cell.character.is_wide_trail()) {
+                term_draw(x, y, { cell.color, cell.character.front() });
+            }
         }
     }
 }

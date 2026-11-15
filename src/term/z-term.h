@@ -23,7 +23,7 @@
  * @brief 画面の1マスの色と文字
  */
 struct TermCellSymbol {
-    TERM_COLOR color; //!< 色 (全角文字の印を除いた属性)
+    TERM_COLOR color; //!< 色
     TermChar character; //!< 文字。全角文字は左のマスに文字全体を持ち、右のマスは文字を持たない
 };
 
@@ -42,7 +42,7 @@ public:
     TERM_LEN cx{}, cy{}; //!< Cursor Location (see "Useless")
 
     std::vector<std::vector<TERM_COLOR>> a; //!< Array[h*w] -- Attribute array
-    std::vector<std::vector<char>> c; //!< Array[h*w] -- Character array
+    std::vector<std::vector<TermChar>> c; //!< Array[h*w] -- Character array (全角文字は左のマスに文字全体を持つ)
 
     std::vector<std::vector<TERM_COLOR>> ta; //!< Note that the attr pair at(x, y) is a[y][x]
     std::vector<std::vector<char>> tc; //!< Note that the char pair at(x, y) is c[y][x]
@@ -115,7 +115,12 @@ struct term_type {
     errr (*curs_hook)(TERM_LEN x, TERM_LEN y){}; //!< カーソル描画実装部 / Hook for placing the cursor
     errr (*bigcurs_hook)(TERM_LEN x, TERM_LEN y){}; //!< 大型タイル時カーソル描画実装部 / Hook for placing the cursor on bigtile mode
     errr (*wipe_hook)(TERM_LEN x, TERM_LEN y, int n){}; //!< 指定座標テキスト消去実装部 / Hook for drawing some blank spaces
-    errr (*text_hook)(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, concptr s){}; //!< テキスト描画実装部 / Hook for drawing a string of chars using an attr
+    /*!
+     * @brief テキスト描画実装部 / Hook for drawing a string of chars using an attr
+     * @details n は描画するマス数。s は n マスの文字を並べた文字列で、2マス幅の文字は1文字で2マスを占める。
+     * 内部文字コードが EUC-JP・Shift_JIS の間は、s のバイト数は n と等しい。
+     */
+    errr (*text_hook)(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, concptr s){};
     void (*resize_hook)(){}; //!< 画面リサイズ実装部
     errr (*pict_hook)(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *ap, concptr cp, const TERM_COLOR *tap,
         concptr tcp){}; //!< タイル描画実装部 / Hook for drawing a sequence of special attr / char pairs
@@ -246,7 +251,6 @@ void term_redraw_section(int x1, int y1, int x2, int y2);
 int term_get_cursor();
 std::pair<int, int> term_get_size();
 std::pair<int, int> term_locate();
-DisplaySymbol term_what(int x, int y, const DisplaySymbol &ds);
 tl::optional<TermCellSymbol> term_what_cell(int x, int y);
 
 void term_flush();
