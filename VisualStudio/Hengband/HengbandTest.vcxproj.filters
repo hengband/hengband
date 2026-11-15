@@ -436,6 +436,9 @@
     <ClCompile Include="..\..\src\test\term\test-screen-processor.cpp">
       <Filter>term</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\test\term\test-term-char.cpp">
+      <Filter>term</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\test\term\test-z-rand.cpp">
       <Filter>term</Filter>
     </ClCompile>

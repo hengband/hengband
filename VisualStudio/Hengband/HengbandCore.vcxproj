@@ -1903,6 +1903,7 @@
     <ClInclude Include="..\..\src\target\target.h" />
     <ClInclude Include="..\..\src\term\gameterm.h" />
     <ClInclude Include="..\..\src\term\screen-processor.h" />
+    <ClInclude Include="..\..\src\term\term-char.h" />
     <ClInclude Include="..\..\src\term\term-color-types.h" />
     <ClInclude Include="..\..\src\term\tile-layout.h" />
     <ClInclude Include="..\..\src\term\z-rand.h" />

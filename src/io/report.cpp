@@ -167,52 +167,52 @@ std::string make_screen_dump(PlayerType *player_ptr)
 
         /* Dump each row */
         uint8_t old_a = 0;
-        DisplaySymbol ds(0, ' ');
+        TermCellSymbol cell{ 0, TermChar::from_byte(' ') };
         for (int x = 0; x < wid; x++) {
-            int rv, gv, bv;
-            concptr cc = nullptr;
-            ds = term_what(x, y, ds);
+            cell = term_what_cell(x, y).value_or(cell);
 
-            switch (ds.character) {
+            // 全角文字は左のマスで文字全体を書く
+            if (cell.character.is_wide_trail()) {
+                continue;
+            }
+
+            std::string_view ch = cell.character.view();
+            switch (cell.character.front()) {
             case '&':
-                cc = "&amp;";
+                ch = "&amp;";
                 break;
             case '<':
-                cc = "&lt;";
+                ch = "&lt;";
                 break;
             case '>':
-                cc = "&gt;";
+                ch = "&gt;";
                 break;
             case '"':
-                cc = "&quot;";
+                ch = "&quot;";
                 break;
             case '\'':
-                cc = "&#39;";
+                ch = "&#39;";
                 break;
 #ifdef _WIN32
             case 0x1f:
-                ds.character = '.';
+                ch = ".";
                 break;
             case 0x7f:
-                ds.character = (ds.color == 0x09) ? '%' : '#';
+                ch = (cell.color == 0x09) ? "%" : "#";
                 break;
 #endif
             }
 
-            ds.color = ds.color & 0x0F;
-            if (((y == 0) && (x == 0)) || (ds.color != old_a)) {
-                rv = angband_color_table[ds.color][1];
-                gv = angband_color_table[ds.color][2];
-                bv = angband_color_table[ds.color][3];
+            const auto color = static_cast<uint8_t>(cell.color & 0x0F);
+            if (((y == 0) && (x == 0)) || (color != old_a)) {
+                int rv = angband_color_table[color][1];
+                int gv = angband_color_table[color][2];
+                int bv = angband_color_table[color][3];
                 screen_ss << fmt::format("{}<font color=\"#{:02x}{:02x}{:02x}\">", ((y == 0 && x == 0) ? "" : "</font>"), rv, gv, bv);
-                old_a = ds.color;
+                old_a = color;
             }
 
-            if (cc) {
-                screen_ss << cc;
-            } else {
-                screen_ss << ds.character;
-            }
+            screen_ss << ch;
         }
     }
 

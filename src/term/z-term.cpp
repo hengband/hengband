@@ -11,6 +11,7 @@
 #include "game-option/map-screen-options.h"
 #include "game-option/runtime-arguments.h"
 #include "game-option/special-options.h"
+#include "locale/multibyte-char.h"
 #include "term/gameterm.h"
 #include "term/term-color-types.h"
 #include "term/tile-layout.h"
@@ -249,6 +250,48 @@ void term_win::resize(TERM_LEN w, TERM_LEN h)
     if (this->cy >= h) {
         this->cu = 1;
     }
+}
+
+/*!
+ * @brief 1マスの色と文字を返す
+ * @param x 桁
+ * @param y 行
+ * @return マスの色と文字。全角文字は左のマスで文字全体を返し、右のマスでは文字を持たない
+ * @details 画面の内容を読み戻す処理は、全角文字を2マスのバイトから組み立てずにこれで読む。
+ */
+TermCellSymbol term_win::get_cell(int x, int y) const
+{
+    const auto color = this->a[y][x];
+    const auto ch = this->c[y][x];
+#ifdef JP
+    if (color & AF_TILE1) {
+        return { color, TermChar::from_byte(ch) };
+    }
+
+    // 全角文字の左右のマスには属性に印が付いている。c_roff() は1バイトの文字のマスにも左のマスの印を付けるので、文字も確かめる。
+    // 1バイトの文字で全角文字の片側だけを上書きすると、もう片側に印が残るので、左右の印がそろっているときだけ全角文字とする
+    const auto is_lead = [this, y](int col) {
+        const auto lead_color = this->a[y][col];
+        return !(lead_color & AF_TILE1) && (lead_color & AF_KANJI1) && is_mb_char_lead(this->c[y][col]);
+    };
+    const auto is_trail = [this, y](int col) {
+        const auto trail_color = this->a[y][col];
+        return !(trail_color & AF_TILE1) && (trail_color & AF_KANJI2);
+    };
+    const auto char_color = static_cast<TERM_COLOR>(color & AF_KANJIC);
+    const auto width = std::ssize(this->c[y]);
+    if ((x + 1 < width) && is_lead(x) && is_trail(x + 1)) {
+        return { char_color, TermChar::wide(std::string_view(&this->c[y][x], 2)) };
+    }
+
+    if ((x > 0) && is_lead(x - 1) && is_trail(x)) {
+        return { char_color, TermChar::wide_trail() };
+    }
+
+    return { char_color, TermChar::from_byte(ch) };
+#else
+    return { color, TermChar::from_byte(ch) };
+#endif
 }
 
 /*** External hooks ***/
@@ -1926,6 +1969,56 @@ DisplaySymbol term_what(int x, int y, const DisplaySymbol &ds)
     }
 
     return { game_term->scr->a[y][x], game_term->scr->c[y][x] };
+}
+
+/*!
+ * @brief 現在の端末の1マスの色と文字を返す
+ * @param x 桁 (端末のオフセットを加える前)
+ * @param y 行 (端末のオフセットを加える前)
+ * @return マスの色と文字 (term_win::get_cell() を参照)。画面の外なら tl::nullopt
+ * @details term_what() と同じく、次の term_fresh() の後に画面に出る内容を返す。
+ */
+tl::optional<TermCellSymbol> term_what_cell(int x, int y)
+{
+    x += game_term->offset_x;
+    y += game_term->offset_y;
+    if ((x < 0) || (x >= game_term->wid) || (y < 0) || (y >= game_term->hgt)) {
+        return tl::nullopt;
+    }
+
+    return game_term->scr->get_cell(x, y);
+}
+
+/*!
+ * @brief 1行のマスの範囲の文字を並べて文字列に加える
+ * @param x 範囲の先頭の桁
+ * @param y 行
+ * @param n 範囲のマス数
+ * @param text 加える先の文字列
+ * @details 全角文字は左のマスで文字全体を加える。範囲の端で分断された全角文字や、片側のマスしか無い全角文字は空白にする。
+ * そのため、内部文字コードが EUC-JP・Shift_JIS の間は n バイトを加える。
+ */
+void term_win::append_text(int x, int y, int n, std::string &text) const
+{
+    for (auto i = x; i < x + n; i++) {
+        const auto ch = this->get_cell(i, y).character;
+        if (ch.is_wide_lead()) {
+            const auto has_trail = (i + 1 < x + n) && this->get_cell(i + 1, y).character.is_wide_trail();
+            text.append(has_trail ? ch.view() : " ");
+            continue;
+        }
+
+        if (ch.is_wide_trail()) {
+            const auto has_lead = (i > x) && this->get_cell(i - 1, y).character.is_wide_lead();
+            if (!has_lead) {
+                text.push_back(' ');
+            }
+
+            continue;
+        }
+
+        text.append(ch.view());
+    }
 }
 
 /*** Input routines ***/

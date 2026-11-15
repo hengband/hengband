@@ -115,8 +115,7 @@ void prt(std::string_view sv, TERM_LEN row, TERM_LEN col)
  * @brief c_roff() が書いた行から、指定した桁で終わる文字を取り出す
  * @param end_col 文字の次の桁
  * @param y 行
- * @return 文字 (全角文字なら2バイト。行の先頭なら空)
- * @details 全角文字の後半のマスには、c_roff() が属性に 0x20 の印を付けている。
+ * @return 文字 (全角文字なら文字全体。行の先頭なら空)
  */
 static std::string get_char_before(int end_col, int y)
 {
@@ -124,12 +123,18 @@ static std::string get_char_before(int end_col, int y)
         return {};
     }
 
-    const auto last = term_what(end_col - 1, y, {});
-    if (((last.color & 0x20) == 0) || (end_col < 2)) {
-        return std::string(1, last.character);
+    const auto last = term_what_cell(end_col - 1, y);
+    if (!last) {
+        return {};
     }
 
-    return { term_what(end_col - 2, y, {}).character, last.character };
+    // 全角文字の右のマスなら、左のマスが文字全体を持つ
+    if (last->character.is_wide_trail() && (end_col >= 2)) {
+        const auto lead = term_what_cell(end_col - 2, y);
+        return lead ? std::string(lead->character.view()) : std::string();
+    }
+
+    return std::string(last->character.view());
 }
 
 /*!
@@ -145,11 +150,13 @@ static std::string get_char_before(int end_col, int y)
  * 語の切れ目が無いか行の前半にしか無ければ、語の途中で折り返す。どちらも無ければ x で折り返す。
  * 送ったマスと ch で次の行の最終桁に達する桁は選ばない (最終桁には書かない)。
  * 語の切れ目が行の前半か後半かは、shape_buffer() と同じく、語の切れ目の前の空白を除いた桁で決める。
- * 全角文字の後半のマスには、c_roff() が属性に 0x20 の印を付けている。
  */
 static int find_wrap_column(int x, int y, int w, std::string_view ch)
 {
-    const auto is_second_half = [y](int col) { return (term_what(col, y, {}).color & 0x20) != 0; };
+    const auto is_second_half = [y](int col) {
+        const auto cell = term_what_cell(col, y);
+        return cell && cell->character.is_wide_trail();
+    };
     const auto needs_backtrack = needs_line_break_backtrack(get_char_before(x, y), ch);
     // 前が空白だけの桁では、空白だけの行ができるので折り返さない
     auto first_text_col = 0;

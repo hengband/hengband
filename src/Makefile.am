@@ -1397,6 +1397,7 @@ libhengband_a_SOURCES = \
 	\
 	term/gameterm.cpp term/gameterm.h \
 	term/screen-processor.cpp term/screen-processor.h \
+	term/term-char.h \
 	term/term-color-types.h \
 	term/z-rand.cpp term/z-rand.h \
 	term/z-term.cpp term/z-term.h term/z-util.cpp term/z-util.h \
@@ -1638,6 +1639,7 @@ hengband_test_SOURCES = \
 	test/system/test-building-type-definition.cpp \
 	test/target/test-target-getter.cpp \
 	test/term/test-screen-processor.cpp \
+	test/term/test-term-char.cpp \
 	test/term/test-z-rand.cpp \
 	test/term/test-z-term.cpp \
 	test/timed-effect/test-player-cut.cpp \

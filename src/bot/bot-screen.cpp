@@ -11,6 +11,7 @@
 #include "bot/bot-json-output.h"
 #include "term/z-term.h"
 #include "util/string-processor.h"
+#include <algorithm>
 #include <nlohmann/json.hpp>
 
 namespace {
@@ -52,11 +53,10 @@ std::string make_bot_screen_line_text(const term_win &win, int y, int width)
 {
     std::string line;
     line.reserve(static_cast<size_t>(width));
-    for (auto x = 0; x < width; x++) {
-        const auto ch = win.c[y][x];
-        // 未描画セルにNULが残っている場合があるため空白に読み替える
-        line.push_back((ch == '\0') ? ' ' : ch);
-    }
+    win.append_text(0, y, width, line);
+
+    // 未描画セルにNULが残っている場合があるため空白に読み替える
+    std::replace(line.begin(), line.end(), '\0', ' ');
 
     return to_json_utf8(line);
 }

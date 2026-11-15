@@ -10,12 +10,22 @@
 
 #include "system/angband.h"
 #include "system/h-basic.h"
+#include "term/term-char.h"
 #include <memory>
 #include <stack>
+#include <string>
 #include <string_view>
 #include <tl/optional.hpp>
 #include <utility>
 #include <vector>
+
+/*!
+ * @brief 画面の1マスの色と文字
+ */
+struct TermCellSymbol {
+    TERM_COLOR color; //!< 色 (全角文字の印を除いた属性)
+    TermChar character; //!< 文字。全角文字は左のマスに文字全体を持ち、右のマスは文字を持たない
+};
 
 /*!
  * @brief A term_win is a "window" for a Term
@@ -25,6 +35,8 @@ public:
     static std::unique_ptr<term_win> create(TERM_LEN w, TERM_LEN h);
     std::unique_ptr<term_win> clone() const;
     void resize(TERM_LEN w, TERM_LEN h);
+    TermCellSymbol get_cell(int x, int y) const;
+    void append_text(int x, int y, int n, std::string &text) const;
 
     bool cu{}, cv{}; //!< Cursor Useless / Visible codes
     TERM_LEN cx{}, cy{}; //!< Cursor Location (see "Useless")
@@ -235,6 +247,7 @@ int term_get_cursor();
 std::pair<int, int> term_get_size();
 std::pair<int, int> term_locate();
 DisplaySymbol term_what(int x, int y, const DisplaySymbol &ds);
+tl::optional<TermCellSymbol> term_what_cell(int x, int y);
 
 void term_flush();
 errr term_key_push(int k);

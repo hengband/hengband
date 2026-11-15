@@ -84,44 +84,46 @@ static void read_temporary_file(FILE *fff, FILE *tmpfff, int num_tag)
 static void screen_dump_one_line(int wid, int y, FILE *fff)
 {
     uint8_t old_a = 0;
-    DisplaySymbol ds(0, ' ');
+    TermCellSymbol cell{ 0, TermChar::from_byte(' ') };
     for (TERM_LEN x = 0; x < wid; x++) {
-        concptr cc = nullptr;
-        ds = term_what(x, y, ds);
-        switch (ds.character) {
+        cell = term_what_cell(x, y).value_or(cell);
+
+        // 全角文字は左のマスで文字全体を書く
+        if (cell.character.is_wide_trail()) {
+            continue;
+        }
+
+        std::string_view ch = cell.character.view();
+        switch (cell.character.front()) {
         case '&':
-            cc = "&amp;";
+            ch = "&amp;";
             break;
         case '<':
-            cc = "&lt;";
+            ch = "&lt;";
             break;
         case '>':
-            cc = "&gt;";
+            ch = "&gt;";
             break;
 #ifdef _WIN32
         case 0x1f:
-            ds.character = '.';
+            ch = ".";
             break;
         case 0x7f:
-            ds.character = (ds.color == 0x09) ? '%' : '#';
+            ch = (cell.color == 0x09) ? "%" : "#";
             break;
 #endif
         }
 
-        ds.color = ds.color & 0x0F;
-        if (((y == 0) && (x == 0)) || (ds.color != old_a)) {
-            int rv = angband_color_table[ds.color][1];
-            int gv = angband_color_table[ds.color][2];
-            int bv = angband_color_table[ds.color][3];
+        const auto color = static_cast<uint8_t>(cell.color & 0x0F);
+        if (((y == 0) && (x == 0)) || (color != old_a)) {
+            int rv = angband_color_table[color][1];
+            int gv = angband_color_table[color][2];
+            int bv = angband_color_table[color][3];
             fmt::print(fff, "{}<font color=\"#{:02x}{:02x}{:02x}\">", ((y == 0 && x == 0) ? "" : "</font>"), rv, gv, bv);
-            old_a = ds.color;
+            old_a = color;
         }
 
-        if (cc) {
-            fmt::print(fff, "{}", cc);
-        } else {
-            fmt::print(fff, "{:c}", ds.character);
-        }
+        fmt::print(fff, "{}", ch);
     }
 }
 
@@ -301,15 +303,23 @@ static void do_cmd_save_screen_text(int wid, int hgt)
 
     screen_save();
     for (TERM_LEN y = 0; y < hgt; y++) {
-        TERM_LEN x;
-        char buf[1024]{};
-        for (x = 0; x < wid; x++) {
-            ds = term_what(x, y, ds);
-            buf[x] = ds.character;
+        std::string line;
+        for (TERM_LEN x = 0; x < wid; x++) {
+            const auto cell = term_what_cell(x, y);
+            if (!cell) {
+                continue;
+            }
+
+            // 全角文字は左のマスで文字全体を書く。NUL のマスがあればそこで行を終える
+            const auto ch = cell->character.view();
+            if (!ch.empty() && (ch.front() == '\0')) {
+                break;
+            }
+
+            line.append(ch);
         }
 
-        buf[x] = '\0';
-        fmt::println(fff, "{}", buf);
+        fmt::println(fff, "{}", line);
     }
 
     fmt::print(fff, "\n");

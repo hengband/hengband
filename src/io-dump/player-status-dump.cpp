@@ -1,6 +1,6 @@
 #include "io-dump/player-status-dump.h"
+#include "term/z-term.h"
 #include "view/display-player.h"
-#include "view/display-symbol.h"
 
 /*!
  * @brief 画面番号を指定してダンプする
@@ -16,28 +16,25 @@
 static void dump_player_status_with_screen_num(PlayerType *player_ptr, FILE *fff,
     const int mode, const TERM_LEN start_y, const TERM_LEN tmp_end_y, const bool change_color)
 {
-    char buf[1024]{};
     auto num_lines = display_player(player_ptr, mode);
     auto end_y = tmp_end_y + num_lines.value_or(0);
     for (auto y = start_y; y < end_y; y++) {
-        TERM_LEN x;
-        for (x = 0; x < 79; x++) {
-            DisplaySymbol ds;
-            ds = term_what(x, y, ds);
-            if (!change_color) {
-                buf[x] = ds.character;
-                continue;
-            }
+        constexpr auto line_width = 79;
+        std::string line;
+        for (TERM_LEN x = 0; x < line_width; x++) {
+            const auto cell = term_what_cell(x, y).value_or(TermCellSymbol{ 0, TermChar::from_byte('\0') });
 
-            buf[x] = ds.color < 128 ? ds.character : ' ';
+            // 全角文字は左のマスで文字全体を書く。右のマスが行の範囲の外にはみ出す全角文字は空白にする
+            const auto is_cut_off = cell.character.is_wide_lead() && (x + 1 >= line_width);
+            line.append((is_cut_off || (change_color && (cell.color >= 128))) ? std::string_view(" ") : cell.character.view());
         }
 
-        buf[x] = '\0';
-        while ((x > 0) && (buf[x - 1] == ' ')) {
-            buf[--x] = '\0';
+        // 末尾の空白を除いた後、NUL のマスがあればそこで行を終える
+        while (line.ends_with(' ')) {
+            line.pop_back();
         }
 
-        fmt::println(fff, "{}", buf);
+        fmt::println(fff, "{}", line.substr(0, line.find('\0')));
     }
 }
 
