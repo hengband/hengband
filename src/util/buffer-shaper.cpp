@@ -141,18 +141,19 @@ bool needs_line_break_backtrack(std::string_view prev, std::string_view next)
  *   行頭禁則文字が続く場合や、前が半角の単語や空白の場合は、その前の語の切れ目までさかのぼって分割する。
  *   語の切れ目が行の前半にしか無ければ、それより後ろの半角の単語の途中で分割する。
  *   同じく、分割前の末尾の文字が行末禁則文字 (is_line_end_kinsoku()、始め括弧) にならないようにする。（行末禁則処理）
- * - 終端文字('\\0')の領域を残すため、分割後の文字列の長さは最大 maxlen - 1 バイトになるように分割する。
+ * - 分割後の文字列の表示幅 (str_display_width()) が最大 maxlen - 1 桁になるように分割する。
+ *   (かつては終端文字('\\0')の領域を残すため、バイト数で maxlen - 1 としていた名残り)
  *   但し、1文字も収まらない場合 (maxlen が 1 以下、日本語の全角文字では 2 以下) でも、各行に少なくとも1文字は入れる。
  *   1文字も入れずに分割すると、文字列を読み進められず空の行を際限なく追加してしまうため。
  *
  * @param sv 分割する文字列
- * @param maxlen 分割する最大長
+ * @param maxlen 分割する最大の表示幅 + 1
  * @return std::vector<std::string> 分割後の文字列を要素とする配列
  */
 std::vector<std::string> shape_buffer(std::string_view sv, size_t maxlen)
 {
     // 1 行に収まる文字列 (メッセージの多く) は、1 文字ずつ組み立てずにそのまま返す
-    if (!sv.empty() && (sv.length() < maxlen) && is_printable_as_is(sv)) {
+    if (!sv.empty() && (str_display_width(sv) < maxlen) && is_printable_as_is(sv)) {
         std::vector<std::string> one_line;
         one_line.emplace_back(sv);
         return one_line;
@@ -160,6 +161,7 @@ std::vector<std::string> shape_buffer(std::string_view sv, size_t maxlen)
 
     std::vector<std::string> result;
     std::string line;
+    size_t line_width = 0; // line の表示幅
     while (line.length() < sv.length()) {
         auto ch = mb_first_char(sv.substr(line.length()));
         const auto is_newline = ch[0] == '\n';
@@ -168,7 +170,7 @@ std::vector<std::string> shape_buffer(std::string_view sv, size_t maxlen)
             ch = " ";
         }
 
-        if ((!line.empty() && (line.length() + ch.length() >= maxlen)) || is_newline) {
+        if ((!line.empty() && (line_width + str_display_width(ch) >= maxlen)) || is_newline) {
             auto split_pos = line.length();
             auto drops_space = false; // 分ける位置の前の空白を、前の行に残さないか
             // 空白で分けると空白の後ろの行頭禁則文字が次の行の先頭に来るときも、行頭禁則文字と同じく前で分ける
@@ -184,7 +186,7 @@ std::vector<std::string> shape_buffer(std::string_view sv, size_t maxlen)
                 // 語の切れ目の前の空白は前の行に残さないので、空白を除いた長さで前半か後半かを決める
                 const auto has_space_before_break = (word_break > 0) && (line[word_break - 1] == ' ');
                 const auto word_break_line_length = has_space_before_break ? word_break - 1 : word_break;
-                if (line.length() < word_break_line_length * 2) {
+                if (line_width < str_display_width(std::string_view(line).substr(0, word_break_line_length)) * 2) {
                     split_pos = word_break;
                 } else if (needs_backtrack || is_before_kinsoku) {
                     // 語の切れ目が行の前半にしか無ければ、それより後ろの語の途中で分ける
@@ -204,10 +206,12 @@ std::vector<std::string> shape_buffer(std::string_view sv, size_t maxlen)
 
             result.push_back(std::move(line));
             line.clear();
+            line_width = 0;
             continue;
         }
 
         line.append(ch);
+        line_width += str_display_width(ch);
     }
 
     if (!line.empty()) {

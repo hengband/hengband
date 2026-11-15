@@ -97,7 +97,7 @@ SpoilerOutputResultType spoil_mon_desc(std::string_view filename, std::function<
             continue;
         }
 
-        // shape_buffer() は終端文字の分を除いた maxlen - 1 バイトごとに区切るので、名前の欄の幅 + 1 を渡す
+        // shape_buffer() は表示幅 maxlen - 1 桁ごとに区切るので、名前の欄の幅 + 1 を渡す
         const auto name = shape_buffer(monrace.name, 40 + 1);
         std::string nam;
         if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {

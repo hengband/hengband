@@ -142,7 +142,7 @@ static std::string get_char_before(int end_col, int y)
  * @param x 次の文字を置く桁
  * @param y 行
  * @param w 端末の幅
- * @param ch 次に置く文字 (全角文字なら2バイト)
+ * @param ch 次に置く文字
  * @return 折り返す桁。この桁から x の手前までのマスを次の行へ送る (x なら何も送らない)
  * @details 文字の境目のうち、classify_line_break() で語の切れ目になるもっとも右のものを選ぶ。
  * 前が空白だけの桁は、空白だけの行ができるので選ばない。
@@ -169,8 +169,9 @@ static int find_wrap_column(int x, int y, int w, std::string_view ch)
     }
 
     auto mid_word_col = 0;
+    const auto ch_width = static_cast<int>(str_display_width(ch));
     for (auto col = x; col > first_text_col; col--) {
-        if (x - col + std::ssize(ch) > w - 1) {
+        if (x - col + ch_width > w - 1) {
             break;
         }
 
@@ -203,7 +204,7 @@ static int find_wrap_column(int x, int y, int w, std::string_view ch)
  * @param x 次の文字を置く桁
  * @param y 行
  * @param w 端末の幅
- * @param ch 次に置く文字 (全角文字なら2バイト)
+ * @param ch 次に置く文字
  * @return 次の行へ送るマス (2マス幅の文字の右のマスも含む)
  */
 static std::vector<TermCellSymbol> c_roff_wrap(int x, int y, int w, std::string_view ch)
@@ -241,10 +242,10 @@ void c_roff(TERM_COLOR a, std::string_view str)
         return;
     }
 
-    for (auto s = str.begin(); s != str.end(); ++s) {
-        const auto is_kanji = is_multibyte_char_at(std::string_view(s, str.end()));
-
-        if (*s == '\n') {
+    for (auto rest = str; !rest.empty();) {
+        auto ch = mb_first_char(rest);
+        rest.remove_prefix(ch.length());
+        if (ch.front() == '\n') {
             if (y + 1 < hgt) {
                 term_erase(0, y + 1);
             }
@@ -252,10 +253,15 @@ void c_roff(TERM_COLOR a, std::string_view str)
             return;
         }
 
-        const auto ch = (is_kanji || isprint(*s)) ? *s : ' ';
+        // 全角文字は文字全体を、1バイトの文字は表示できなければ空白を置く
+        if (!is_multibyte_char_at(ch) && !isprint(static_cast<unsigned char>(ch.front()))) {
+            ch = " ";
+        }
 
-        if ((x >= ((is_kanji) ? wid - 2 : wid - 1)) && (ch != ' ')) {
-            const auto wrap_chars = c_roff_wrap(x, y, wid, std::string_view(s, std::next(s, is_kanji ? 2 : 1)));
+        const auto char_width = static_cast<int>(str_display_width(ch));
+
+        if ((x >= wid - char_width) && (ch != " ")) {
+            const auto wrap_chars = c_roff_wrap(x, y, wid, ch);
 
             y++;
             if (y == hgt) {
@@ -272,17 +278,8 @@ void c_roff(TERM_COLOR a, std::string_view str)
             x = wrap_chars.size();
         }
 
-        if (is_kanji) {
-            term_addstr(2, a, std::string_view(s, std::next(s, 2)));
-            s++;
-            x++;
-        } else {
-            term_addstr(1, a, std::string_view(&ch, 1));
-        }
-
-        if (++x > wid) {
-            x = wid;
-        }
+        term_addstr(char_width, a, ch);
+        x = std::min(x + char_width, wid);
     }
 }
 

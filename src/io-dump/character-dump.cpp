@@ -375,7 +375,7 @@ static void dump_aux_monsters(FILE *fff)
             defeat_info = fmt::format(fmt, defeat_level, defeat_hour, max_hour_digits, defeat_minute, defeat_second);
         }
 
-        // shape_buffer() は終端文字の分を除いた maxlen - 1 バイトごとに区切るので、名前の欄の幅 + 1 を渡す
+        // shape_buffer() は表示幅 maxlen - 1 桁ごとに区切るので、名前の欄の幅 + 1 を渡す
         const auto names = shape_buffer(monrace.name, 40 + 1);
         fmt::println(fff, _("  {:<40} (レベル{:3}){}", "  {:<40} (level {:3}){}"), names.front(), monrace.level, defeat_info);
         for (const auto &name : names | ranges::views::drop(1)) {
