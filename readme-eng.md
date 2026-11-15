@@ -42,6 +42,7 @@ make install
 
  * Replace `x.x.x` with the downloaded version's number.
  * `--disable-japanese` is required to build English version, remove it if you want to build Japanese version.
+ * When building the X11 version, TrueType fonts are enabled automatically if Xft (e.g. the `libxft-dev` package) is found. Add `--disable-xft` to build without them, or `--enable-xft` to make `configure` fail if Xft is not found. Xft is not checked when X11 itself is not found (e.g. with `--without-x`).
  * Add `--enable-lto` to enable link time optimization. The game runs faster (in our measurements, 10-25% fewer instructions in typical play), but building takes longer, and rebuilding after changing a source file becomes much slower. It is recommended when you build the game to play, not while developing. `gcc-ar` and `gcc-ranlib` (GCC) or `llvm-ar` and `llvm-ranlib` (Clang) are used if available. If `configure` reports that LTO cannot be used, specify an archiver that supports LTO with `AR=` and `RANLIB=`.
 
 To run in ASCII mode:
@@ -82,19 +83,18 @@ See `./configure --help` for more information about changing the installation lo
 
 ### Configuring display
 
+When the game is built with Xft, TrueType fonts are used by default. The default fonts of the English version are `monospace-24:lang=en:spacing=90` for the main window and `sans-serif-16:lang=en` for the sub windows.
 
-The default font used in the main window is:
+With `-- -fb`, or when the game is built without Xft, bitmap fonts are used. The default fonts of the English version are `-*-*-medium-r-normal--24-*-*-*-*-*-iso8859-1` for the main window and `-*-*-medium-r-normal--16-*-*-*-*-*-iso8859-1` for the sub windows.
 
->  "-*-*-medium-r-normal--24-*-*-*-*-*-iso8859-1,-*-*-medium-r-normal--24-*-*-*-*-*-jisx0208.1983-0"
-
-The default font used in the sub windows is:
-
-> "-*-*-medium-r-normal--16-*-*-*-*-*-iso8859-1,-*-*-medium-r-normal--16-*-*-*-*-*-jisx0208.1983-0"
+The Japanese version uses `lang=ja` instead of `lang=en` for TrueType fonts, and `12x24,-*-*-medium-r-normal--24-*-*-*-*-*-jisx0208.1983-0` (main window) and `8x16,-*-*-medium-r-normal--16-*-*-*-*-*-jisx0208.1983-0` (sub windows) for bitmap fonts.
 
 These can be controlled by setting environment variables:
 
  * `ANGBAND_X11_FONT_<?>` - Sets the font for a specific window, from 0 to 7, eg `ANGBAND_X11_FONT_0`
  * `ANGBAND_X11_FONT` - Sets the font for all the remaining windows
+
+The font names must match the font type in use: a fontconfig pattern for TrueType fonts, or an X logical font description (XLFD) for bitmap fonts.
 
 You can also change other window properties:
 

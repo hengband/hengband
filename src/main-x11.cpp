@@ -85,7 +85,8 @@
  * setenv ANGBAND_X11_GAMMA 142
  *
  * # Launch Angband
- * ./src/angband -mx11 -- -n6 &
+ * # 上のフォント名はビットマップフォントのものなので、Xft 版でも -fb でビットマップフォントを使う
+ * ./src/hengband -mx11 -- -fb -n6 &
  *
  */
 

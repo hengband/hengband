@@ -39,6 +39,9 @@ permissions:
 jobs:
   build:
     runs-on: ${{ inputs.runner }}
+    env:
+      # 入れるパッケージの判定と、configure の結果の検証の両方で使う
+      DISABLE_XFT: ${{ contains(format(' {0} ', inputs.configure-opts), ' --disable-xft ') }}
     steps:
       # サブモジュール (lib/xtra と Visual Studio 用の libcurl) はビルドに不要で、make dist のときだけ必要になる
       - uses: actions/checkout@v7
@@ -83,6 +86,7 @@ jobs:
       # Ubuntu のミラーが極端に遅いことがあるので、ダウンロードしたパッケージをキャッシュする。
       # キャッシュは全ジョブで共有し、全ジョブで使うパッケージの和集合を入れておく。各ジョブはそのうち要るものだけを入れる。
       # --disable-net では、ネットワークの機能の外から curl のヘッダを読んでいないことを確かめるため、libcurl を入れない
+      # --disable-xft も同じく、USE_XFT の外から Xft に頼っていないことを確かめるため、libxft-dev を入れない
       - id: apt-packages
         name: Decide packages to install (Ubuntu)
         if: ${{ steps.os.outputs.family == 'linux' }}
@@ -99,7 +103,6 @@ jobs:
             libncurses-dev
             libx11-dev
             libxext-dev
-            libxft-dev
             libpng-dev
             nkf
             g++-16
@@ -111,6 +114,11 @@ jobs:
             skipped+=(libcurl4-openssl-dev)
           else
             packages+=(libcurl4-openssl-dev)
+          fi
+          if [ "${DISABLE_XFT}" = true ]; then
+            skipped+=(libxft-dev)
+          else
+            packages+=(libxft-dev)
           fi
           if [ "${USE_CCACHE}" = true ]; then
             packages+=(ccache)
@@ -274,15 +282,17 @@ jobs:
                 tail -n 80 config.log || true
                 exit 1
               fi
-              if echo " ${{ inputs.configure-opts }} " | grep -q -- ' --enable-xft '; then
-                if ! has_macro USE_XFT; then
-                  echo "USE_XFT must be enabled when --enable-xft is given" >&2
+              # --disable-xft でなければ libxft-dev を入れているので、自動で有効になるはず
+              if [ "${DISABLE_XFT}" = true ]; then
+                if has_macro USE_XFT; then
+                  echo "USE_XFT must stay disabled when --disable-xft is given" >&2
                   tail -n 80 config.log || true
                   exit 1
                 fi
               else
-                if has_macro USE_XFT; then
-                  echo "USE_XFT must stay disabled unless --enable-xft is given" >&2
+                if ! has_macro USE_XFT; then
+                  echo "USE_XFT must be enabled unless --disable-xft is given" >&2
+                  tail -n 80 config.log || true
                   exit 1
                 fi
               fi
