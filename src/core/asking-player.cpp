@@ -28,7 +28,7 @@
 #include <variant>
 
 /*!
- * @brief 入力欄の開始位置と画面幅に合わせて文字列のバイト上限を求める
+ * @brief 入力欄の開始位置と画面幅に合わせて文字列の表示幅の上限を求める
  */
 static int get_input_length(int len, int x)
 {
@@ -74,7 +74,7 @@ tl::optional<std::string> askfor(int len, std::string_view initial_value, bool n
     while (true) {
         term_erase(x, y);
         term_putstr(x, y, -1, color, buf);
-        term_gotoxy(x + pos, y);
+        term_gotoxy(x + static_cast<int>(str_display_width(std::string_view(buf).substr(0, pos))), y);
         const auto skey = inkey_special(numpad_cursor);
         switch (skey) {
         case SKEY_LEFT:
@@ -146,13 +146,13 @@ tl::optional<std::string> askfor(int len, std::string_view initial_value, bool n
 
             if (is_mb_char_lead(c)) {
                 const auto ch = inkey_multibyte_char(c);
-                if (std::cmp_less_equal(buf.length() + ch.length(), len)) {
+                if (std::cmp_less_equal(str_display_width(buf) + str_display_width(ch), len)) {
                     buf.insert(pos, ch);
                     pos += static_cast<int>(ch.length());
                     break;
                 }
             } else if (is_printable_single_byte_char(c)) {
-                if (std::cmp_less(buf.length(), len)) {
+                if (std::cmp_less(str_display_width(buf), len)) {
                     buf.insert(pos++, 1, c);
                     break;
                 }
@@ -167,7 +167,7 @@ tl::optional<std::string> askfor(int len, std::string_view initial_value, bool n
 
 /*!
  * @brief 文字列の入力の文脈を作る
- * @details バイト上限は入力欄の位置に合わせて askfor_with_context() で求め直す。
+ * @details 表示幅の上限は入力欄の位置に合わせて askfor_with_context() で求め直す。
  */
 static InputContext make_string_input_context(std::string_view prompt, int len, std::string_view initial_value)
 {
@@ -176,7 +176,7 @@ static InputContext make_string_input_context(std::string_view prompt, int len, 
 
 /*!
  * @brief 指定した文脈を公開して、カーソルの位置から文字列の入力を待つ
- * @details 文字列の入力では、文脈のバイト上限を入力欄の位置に合わせる。
+ * @details 文字列の入力では、文脈の表示幅の上限を入力欄の位置に合わせる。
  * 数量入力も同じ編集処理を利用するが、公開する文脈は数量のまま保つ。
  */
 static tl::optional<std::string> askfor_with_context(InputContext input_context, int len, std::string_view initial_value, bool numpad_cursor)
@@ -221,7 +221,7 @@ tl::optional<std::string> input_string(std::string_view prompt, int len, std::st
  * @brief 指定した行にプロンプトを表示して、続けて文字列の入力を待つ
  * @param prompt プロンプト
  * @param row プロンプトを表示する行
- * @param len 入力できる文字列のバイト数の上限
+ * @param len 入力できる文字列の表示幅の上限
  * @param initial_value 初期文字列
  * @param numpad_cursor テンキーでカーソルを動かすか
  * @return 入力した文字列。ESCで中断したらnullopt

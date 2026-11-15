@@ -96,14 +96,14 @@ AutopickSearch get_string_for_search(PlayerType *player_ptr, const AutopickSearc
 {
     AutopickSearch as = as_initial;
     std::string buf = as.search_str;
-    constexpr auto max_len = 80;
+    constexpr auto max_len = 80; // 入力できる表示幅の上限
     uint8_t color = TERM_YELLOW;
     if (as.item) {
         color = TERM_L_GREEN;
     }
 
     const std::string prompt(_("検索(^I:持ち物 ^L:破壊された物): ", "Search key(^I:inven ^L:destroyed): "));
-    const auto col = prompt.length();
+    const auto col = static_cast<int>(str_display_width(prompt));
     prt(prompt, 0, 0);
     const InputContextScope context_scope({ InputKind::STRING, prompt, StringInputDetails{ max_len, buf } });
     int pos = 0;
@@ -111,7 +111,7 @@ AutopickSearch get_string_for_search(PlayerType *player_ptr, const AutopickSearc
         bool back = false;
         term_erase(col, 0);
         term_putstr(col, 0, -1, color, buf);
-        term_gotoxy(col + pos, 0);
+        term_gotoxy(col + static_cast<int>(str_display_width(std::string_view(buf).substr(0, pos))), 0);
 
         int skey = inkey_special(true);
         switch (skey) {
@@ -202,13 +202,13 @@ AutopickSearch get_string_for_search(PlayerType *player_ptr, const AutopickSearc
 
             if (is_mb_char_lead(c)) {
                 const auto ch = inkey_multibyte_char(c);
-                if (std::cmp_less_equal(buf.length() + ch.length(), max_len)) {
+                if (std::cmp_less_equal(str_display_width(buf) + str_display_width(ch), max_len)) {
                     buf.insert(pos, ch);
                     pos += static_cast<int>(ch.length());
                     break;
                 }
             } else if (is_printable_single_byte_char(c)) {
-                if (std::cmp_less(buf.length(), max_len)) {
+                if (std::cmp_less(str_display_width(buf), max_len)) {
                     buf.insert(pos++, 1, c);
                     break;
                 }
