@@ -1,5 +1,6 @@
 #include "window/main-window-stat-poster.h"
 #include "io/input-key-requester.h"
+#include "locale/multibyte-char.h"
 #include "mind/stances-table.h"
 #include "monster/monster-status.h"
 #include "player-base/player-class.h"
@@ -24,7 +25,6 @@
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "timed-effect/timed-effects.h"
-#include "util/string-processor.h"
 #include "view/status-bars-table.h"
 #include "window/main-window-row-column.h"
 #include "world/world.h"
@@ -155,7 +155,7 @@ std::pair<std::string, TERM_COLOR> describe_player_state(PlayerType *player_ptr)
             text = fmt::format("  {:2}", command_rep);
         }
 
-        auto state = fmt::format("{:>5}", str_substr(text, 0, 5));
+        auto state = fmt::format("{:>5}", str_prefix_by_width(text, 5));
         return { std::move(state), attr };
     }
 
@@ -237,7 +237,7 @@ std::pair<std::string, TERM_COLOR> describe_player_state(PlayerType *player_ptr)
     }
     }
 
-    auto state = fmt::format("{:>5}", str_substr(text, 0, 5));
+    auto state = fmt::format("{:>5}", str_prefix_by_width(text, 5));
     return { std::move(state), attr };
 }
 

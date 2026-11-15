@@ -2,6 +2,7 @@
 #include "floor/dungeon-feeling.h"
 #include "game-option/special-options.h"
 #include "game-option/text-display-options.h"
+#include "locale/multibyte-char.h"
 #include "player-base/player-race.h"
 #include "player-info/class-info.h"
 #include "player-info/mimic-info-table.h"
@@ -14,7 +15,6 @@
 #include "term/screen-processor.h"
 #include "timed-effect/timed-effects.h"
 #include "tracking/health-bar-tracker.h"
-#include "util/string-processor.h"
 #include "window/main-window-row-column.h"
 #include "window/main-window-stat-poster.h"
 #include "window/main-window-util.h"
@@ -251,7 +251,7 @@ void print_depth(PlayerType *player_ptr)
  */
 void print_frame_basic(PlayerType *player_ptr)
 {
-    print_field(str_substr(get_displayed_race_title(player_ptr), 0, 12), ROW_RACE, COL_RACE);
+    print_field(str_prefix_by_width(get_displayed_race_title(player_ptr), 12), ROW_RACE, COL_RACE);
     print_title(player_ptr);
     print_level(player_ptr);
     print_exp(player_ptr);

@@ -63,6 +63,7 @@
 #include "io/command-repeater.h"
 #include "io/input-context.h"
 #include "io/input-key-requester.h"
+#include "locale/multibyte-char.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "player-base/player-class.h"
@@ -80,7 +81,6 @@
 #include "timed-effect/timed-effects.h"
 #include "util/int-char-converter.h"
 #include "util/menu-column-switcher.h"
-#include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "view/display-util.h"
 #include <algorithm>
@@ -284,13 +284,13 @@ static tl::optional<BaseitemKey> select_magic_eater(PlayerType *player_ptr, bool
                 if (tval == ItemKindType::ROD) {
                     constexpr auto fmt = _(" {:<22} 充填:{:2}/{:2}{:3}%", " {:<22}   ({:2}/{:2}) {:3}%");
                     const auto charge = item.charge > 0 ? (item.charge - 1) / (EATER_ROD_CHARGE * baseitem.pval) + 1 : 0;
-                    dummy.append(fmt::format(fmt, str_substr(baseitem.name, 0, 22), charge, item.count, chance));
+                    dummy.append(fmt::format(fmt, str_prefix_by_width(baseitem.name, 22), charge, item.count, chance));
                     if (item.charge > baseitem.pval * (item.count - 1) * EATER_ROD_CHARGE) {
                         col = TERM_RED;
                     }
                 } else {
                     constexpr auto fmt = " {:<22}    {:2}/{:2} {:3}%";
-                    dummy.append(fmt::format(fmt, str_substr(baseitem.name, 0, 22), static_cast<int16_t>(item.charge / EATER_CHARGE), item.count, chance));
+                    dummy.append(fmt::format(fmt, str_prefix_by_width(baseitem.name, 22), static_cast<int16_t>(item.charge / EATER_CHARGE), item.count, chance));
                     if (item.charge < EATER_CHARGE) {
                         col = TERM_RED;
                     }

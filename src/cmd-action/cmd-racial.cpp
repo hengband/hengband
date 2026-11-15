@@ -15,6 +15,7 @@
 #include "io/command-repeater.h"
 #include "io/input-context.h"
 #include "io/input-key-requester.h"
+#include "locale/multibyte-char.h"
 #include "main/sound-of-music.h"
 #include "mutation/mutation-flag-types.h"
 #include "player-base/player-class.h"
@@ -35,7 +36,6 @@
 #include "term/screen-processor.h"
 #include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"
-#include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "view/display-util.h"
 #include "world/world.h"
@@ -85,7 +85,7 @@ static void racial_power_display_list(PlayerType *player_ptr, rc_type *rc_ptr)
         }
 
         auto &rpi = rc_ptr->power_desc[ctr];
-        dummy.append(fmt::format("{:<30} {:2} {:4} {:3}% {}", str_substr(rpi.racial_name, 0, 30), rpi.min_level, rpi.cost, 100 - racial_chance(player_ptr, &rc_ptr->power_desc[ctr]), rpi.info));
+        dummy.append(fmt::format("{:<30} {:2} {:4} {:3}% {}", str_prefix_by_width(rpi.racial_name, 30), rpi.min_level, rpi.cost, 100 - racial_chance(player_ptr, &rc_ptr->power_desc[ctr]), rpi.info));
 
         prt(dummy, 2 + y, x);
     }

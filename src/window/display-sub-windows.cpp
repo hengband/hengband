@@ -7,6 +7,7 @@
 #include "inventory/inventory-slot-types.h"
 #include "inventory/inventory-util.h"
 #include "locale/japanese.h"
+#include "locale/multibyte-char.h"
 #include "lore/monster-lore-snapshot.h"
 #include "main/sound-of-music.h"
 #include "mind/mind-elementalist.h"
@@ -46,7 +47,6 @@
 #include "util/buffer-shaper.h"
 #include "util/int-char-converter.h"
 #include "util/object-sort.h"
-#include "util/string-processor.h"
 #include "view/display-lore.h"
 #include "view/display-map.h"
 #include "view/display-messages.h"
@@ -957,7 +957,7 @@ static void display_spell_list(PlayerType *player_ptr)
             }
 
             m[j] = y + n;
-            term_putstr(x, m[j], -1, a, fmt::format("{:c}/{:c}) {:<20}", I2A(n / 8), I2A(n % 8), str_substr(name, 0, 20)));
+            term_putstr(x, m[j], -1, a, fmt::format("{:c}/{:c}) {:<20}", I2A(n / 8), I2A(n % 8), str_prefix_by_width(name, 20)));
             n++;
         }
     }

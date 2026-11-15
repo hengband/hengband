@@ -13,6 +13,7 @@
 #include "game-option/text-display-options.h"
 #include "grid/trap.h"
 #include "inventory/inventory-slot-types.h"
+#include "locale/multibyte-char.h"
 #include "mind/mind-sniper.h"
 #include "mind/mind-weaponsmith.h"
 #include "object-enchant/object-ego.h"
@@ -615,6 +616,7 @@ static describe_option_type decide_describe_option(const ItemEntity &item, BIT_F
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr 特性短縮表記を得たいオブジェクト構造体の参照ポインタ
  * @param mode 表記に関するオプション指定
+ * @param max_length 表記の表示幅の上限 (桁数)。超える分は多バイト文字を分断せずに切り詰める
  * @return modeに応じたオブジェクトの表記
  */
 std::string describe_flavor(PlayerType *player_ptr, const ItemEntity &item, BIT_FLAGS mode, const size_t max_length)
@@ -624,7 +626,7 @@ std::string describe_flavor(PlayerType *player_ptr, const ItemEntity &item, BIT_
     ss << describe_named_item(player_ptr, item, opt);
 
     if (any_bits(mode, OD_NAME_ONLY) || !item.is_valid()) {
-        return str_substr(ss.str(), 0, max_length);
+        return str_prefix_by_width(ss.str(), max_length);
     }
 
     ss << describe_chest(item, opt)
@@ -643,14 +645,14 @@ std::string describe_flavor(PlayerType *player_ptr, const ItemEntity &item, BIT_
 
     ss << describe_ac(item, opt);
     if (any_bits(mode, OD_NAME_AND_ENCHANT)) {
-        return str_substr(ss.str(), 0, max_length);
+        return str_prefix_by_width(ss.str(), max_length);
     }
 
     ss << describe_remaining(item, opt);
     if (any_bits(mode, OD_OMIT_INSCRIPTION)) {
-        return str_substr(ss.str(), 0, max_length);
+        return str_prefix_by_width(ss.str(), max_length);
     }
 
     ss << describe_inscription(item, opt);
-    return str_substr(ss.str(), 0, max_length);
+    return str_prefix_by_width(ss.str(), max_length);
 }

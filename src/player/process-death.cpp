@@ -14,6 +14,7 @@
 #include "inventory/inventory-slot-types.h"
 #include "io/files-util.h"
 #include "io/input-context.h"
+#include "locale/multibyte-char.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
 #include "perception/object-perception.h"
@@ -27,7 +28,6 @@
 #include "term/screen-processor.h"
 #include "util/buffer-shaper.h"
 #include "util/int-char-converter.h"
-#include "util/string-processor.h"
 #include "view/display-inventory.h"
 #include "view/display-messages.h"
 #include "view/display-player.h"
@@ -104,7 +104,7 @@ static int show_killing_monster(PlayerType *player_ptr)
         //!< 文末を2文字削る文字数は日英で異なる.
         //!< @todo 英語版は関数ごとプリプロで呼び分けているが、後で統一する.
         const auto omit = _(2, 3);
-        const auto buf = fmt::format(_("{}…", "{}..."), str_substr(lines[1], 0, GRAVE_LINE_WIDTH - omit));
+        const auto buf = fmt::format(_("{}…", "{}..."), str_prefix_by_width(lines[1], GRAVE_LINE_WIDTH - omit));
         show_tomb_line(buf, GRAVE_KILLER_NAME_ROW + 1);
         return 1;
     }

@@ -90,6 +90,19 @@ TEST_CASE("str_display_width counts an ASCII character as one column")
     CHECK(str_display_width("abc"sv) == 3);
 }
 
+TEST_CASE("str_prefix_by_width returns the prefix that fits in the width")
+{
+    CHECK(str_prefix_by_width("abcdef"sv, 3) == "abc"sv);
+    CHECK(str_prefix_by_width("ab"sv, 3) == "ab"sv);
+    CHECK(str_prefix_by_width("abc"sv, 0).empty());
+}
+
+TEST_CASE("str_prefix_by_width shrinks a temporary string and returns it")
+{
+    const std::string result = str_prefix_by_width(std::string("abcdef"), 3);
+    CHECK(result == "abc");
+}
+
 TEST_CASE("fmt pads strings by str_display_width")
 {
     // UTF-8 としても正しい 2 バイト (U+0122) だが、内部文字コードでは 2 桁の文字列
@@ -107,6 +120,22 @@ TEST_CASE("str_display_width counts a multibyte character as two columns")
     using test::KANJI_KAN;
     CHECK(str_display_width(test::cat("a", KANJI_KAN, test::KANJI_JI)) == 5);
     CHECK(fmt::format("{:<6}|", KANJI_KAN) == test::cat(KANJI_KAN, "    |"));
+}
+
+TEST_CASE("str_prefix_by_width does not split a multibyte character")
+{
+    using test::KANJI_KAN;
+    const auto str = test::cat("a", KANJI_KAN, "b");
+    CHECK(str_prefix_by_width(str, 1) == "a"sv);
+    CHECK(str_prefix_by_width(str, 2) == "a"sv);
+    CHECK(str_prefix_by_width(str, 3) == test::cat("a", KANJI_KAN));
+    CHECK(str_prefix_by_width(str, 4) == str);
+}
+
+TEST_CASE("str_prefix_by_width drops a truncated character at the end")
+{
+    const auto str = test::cat("a", test::KANJI_KAN.substr(0, 1));
+    CHECK(str_prefix_by_width(str, 10) == "a"sv);
 }
 
 TEST_CASE("str_display_width counts a truncated character as one column")
