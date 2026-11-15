@@ -218,21 +218,33 @@ static SpoilerOutputResultType spoil_player_spell()
             continue;
         }
 
-        const auto choices = PlayerRealm::get_realm1_choices(pclass) | PlayerRealm::get_realm2_choices(pclass);
+        const auto spoil_realm_table = [pclass](RealmType realm, RealmPosition position, const char *suffix) {
+            spoil_out(fmt::format("[Realm: {}{}]\n", PlayerRealm::get_name(realm), suffix));
+            spoil_out("Name                     Lv  Cst Dif  Exp\n");
+            for (SPELL_IDX i = 0; i < 32; i++) {
+                const auto &spell = PlayerRealm::get_spell_info(realm, i, position, pclass);
+                const auto &spell_name = PlayerRealm::get_spell_name(realm, i);
+                spoil_out(fmt::format("{:<24} {:2} {:4} {:3} {:4}\n", spell_name, spell.slevel, spell.smana, spell.sfail, spell.sexp));
+            }
+            spoil_out("\n");
+        };
+
+        const auto realm1_choices = PlayerRealm::get_realm1_choices(pclass);
+        const auto realm2_choices = PlayerRealm::get_realm2_choices(pclass);
+        const auto choices = realm1_choices | realm2_choices;
         const auto is_every_magic = pclass == PlayerClassType::SORCERER || pclass == PlayerClassType::RED_MAGE;
         for (const auto realm : EnumRange(RealmType::LIFE, RealmType::MAX)) {
             if (!(is_every_magic && PlayerRealm::is_magic(realm)) && choices.has_not(realm)) {
                 continue;
             }
 
-            spoil_out(fmt::format("[Realm: {}]\n", PlayerRealm::get_name(realm)));
-            spoil_out("Name                     Lv  Cst Dif  Exp\n");
-            for (SPELL_IDX i = 0; i < 32; i++) {
-                const auto &spell = PlayerRealm::get_spell_info(realm, i, RealmPosition::FIRST, pclass);
-                const auto &spell_name = PlayerRealm::get_spell_name(realm, i);
-                spoil_out(fmt::format("{:<24} {:2} {:4} {:3} {:4}\n", spell_name, spell.slevel, spell.smana, spell.sfail, spell.sexp));
+            spoil_realm_table(realm, RealmPosition::FIRST, "");
+
+            // 第一領域にも第二領域にも選べる領域で、第二領域として選んだときの値が違えば、その表も出す
+            const auto is_either_position = PlayerRealm::is_magic(realm) && realm1_choices.has(realm) && realm2_choices.has(realm);
+            if (is_either_position && magic_ptr->has_distinct_second(realm)) {
+                spoil_realm_table(realm, RealmPosition::SECOND, _("（第二領域）", " (second realm)"));
             }
-            spoil_out("\n");
         }
     }
 
