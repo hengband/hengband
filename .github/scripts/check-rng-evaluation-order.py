@@ -79,7 +79,7 @@ MAX_ARGS = 16
 EXCLUDED_PREFIXES = ("src/main-", "src/external-lib/")
 
 # configure の代わりに、解析に要るものだけを定義する
-COMPILE_ARGS = ["-std=c++20", "-DHAVE_SYS_TIME_H", "-Isrc", "-isystem", "src/external-lib/include"]
+COMPILE_ARGS = ["-std=c++23", "-DHAVE_SYS_TIME_H", "-Isrc", "-isystem", "src/external-lib/include"]
 JAPANESE_ARGS = ("-DJP", "-DEUC")
 ENGLISH_ARGS = ()
 
