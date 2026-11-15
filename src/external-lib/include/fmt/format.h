@@ -124,6 +124,9 @@
 #  define FMT_NOINLINE
 #endif
 
+// 変愚蛮怒: 文字列の表示幅を数える関数 (locale/multibyte-char.cpp)。compute_width() で使う
+std::size_t str_display_width(std::string_view str);
+
 namespace std {
 template <typename T> struct iterator_traits<fmt::basic_appender<T>> {
   using iterator_category = output_iterator_tag;
@@ -640,39 +643,11 @@ inline auto compute_width(basic_string_view<Char> s) -> size_t {
   return s.size();
 }
 
-// Computes approximate display width of a UTF-8 string.
-FMT_CONSTEXPR inline auto compute_width(string_view s) -> size_t {
-  size_t num_code_points = 0;
-  // It is not a lambda for compatibility with C++14.
-  struct count_code_points {
-    size_t* count;
-    FMT_CONSTEXPR auto operator()(uint32_t cp, string_view) const -> bool {
-      *count += to_unsigned(
-          1 +
-          (cp >= 0x1100 &&
-           (cp <= 0x115f ||  // Hangul Jamo init. consonants
-            cp == 0x2329 ||  // LEFT-POINTING ANGLE BRACKET
-            cp == 0x232a ||  // RIGHT-POINTING ANGLE BRACKET
-            // CJK ... Yi except IDEOGRAPHIC HALF FILL SPACE:
-            (cp >= 0x2e80 && cp <= 0xa4cf && cp != 0x303f) ||
-            (cp >= 0xac00 && cp <= 0xd7a3) ||    // Hangul Syllables
-            (cp >= 0xf900 && cp <= 0xfaff) ||    // CJK Compatibility Ideographs
-            (cp >= 0xfe10 && cp <= 0xfe19) ||    // Vertical Forms
-            (cp >= 0xfe30 && cp <= 0xfe6f) ||    // CJK Compatibility Forms
-            (cp >= 0xff00 && cp <= 0xff60) ||    // Fullwidth Forms
-            (cp >= 0xffe0 && cp <= 0xffe6) ||    // Fullwidth Forms
-            (cp >= 0x20000 && cp <= 0x2fffd) ||  // CJK
-            (cp >= 0x30000 && cp <= 0x3fffd) ||
-            // Miscellaneous Symbols and Pictographs + Emoticons:
-            (cp >= 0x1f300 && cp <= 0x1f64f) ||
-            // Supplemental Symbols and Pictographs:
-            (cp >= 0x1f900 && cp <= 0x1f9ff))));
-      return true;
-    }
-  };
-  // We could avoid branches by using utf8_decode directly.
-  for_each_codepoint(s, count_code_points{&num_code_points});
-  return num_code_points;
+// 変愚蛮怒: 文字列の表示幅は、UTF-8 とみなして数えずに変愚蛮怒の規則 (str_display_width()) で数える。
+// 内部文字コードが EUC-JP・Shift_JIS の文字列も、幅指定 ({:<20} など) で表示の桁がそろう。
+// 別の翻訳単位の関数を呼ぶので constexpr ではなく、幅指定のある文字列はコンパイル時には整形できない。
+inline auto compute_width(string_view s) -> size_t {
+  return ::str_display_width(std::string_view(s.data(), s.size()));
 }
 
 template <typename Char>

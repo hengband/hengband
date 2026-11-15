@@ -157,3 +157,23 @@ size_t mb_prev_char_pos(std::string_view str, size_t pos)
 
     return prev;
 }
+
+/*!
+ * @brief 文字列の表示幅を返す
+ * @param str 文字列
+ * @return 表示幅 (桁数)
+ * @details 多バイト文字は 2 桁、1 バイトの文字 (後続のバイトが欠けた先頭バイトを含む) は 1 桁と数える。
+ * 内部文字コードが EUC-JP・Shift_JIS の間は、文字列のバイト数と等しい。
+ * 同梱の fmt も、書式の幅指定 ({:<20} など) をこの関数で数える (fmt/format.h の compute_width())。
+ */
+size_t str_display_width(std::string_view str)
+{
+    size_t width = 0;
+    for (size_t pos = 0; pos < str.size();) {
+        const auto char_length = mb_char_length_at(str, pos);
+        width += (char_length > 1) ? 2 : 1;
+        pos += char_length;
+    }
+
+    return width;
+}

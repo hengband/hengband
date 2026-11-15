@@ -47,3 +47,4 @@ size_t mb_char_start_pos(std::string_view str, size_t pos);
 bool is_mb_char_boundary(std::string_view str, size_t pos);
 size_t mb_next_char_boundary(std::string_view str, size_t pos);
 size_t mb_prev_char_pos(std::string_view str, size_t pos);
+size_t str_display_width(std::string_view str);
