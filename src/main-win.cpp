@@ -84,7 +84,6 @@
 #include "io/screen-util.h"
 #include "io/signal-handlers.h"
 #include "io/write-diary.h"
-#include "locale/character-encoding.h"
 #include "main-win/commandline-win.h"
 #include "main-win/graphics-win.h"
 #include "main-win/main-win-bg.h"
@@ -2493,37 +2492,19 @@ static LRESULT PASCAL angband_window_procedure(HWND hWnd, UINT uMsg, WPARAM wPar
 
         auto global_lock = static_cast<LPSTR>(GlobalLock(window_size));
         for (auto i = 0; (i < dy) && (global_lock != NULL); i++) {
+            // 選択範囲の端で分断された全角文字は空白になるので、dx バイトになる
+            std::string s;
+            data[0].t.scr->append_text(ox, oy + i, dx, s);
+
 #ifdef JP
-            const auto &scr = data[0].t.scr->c;
-            const auto *row = scr[oy + i].data();
-
-            std::vector<char> s(dx + 1);
-            strncpy(s.data(), &row[ox], dx);
-
-            // 全角文字の後半バイトは前半バイトと同じ値を取り得るため、行頭から文字の区切りをたどって判定する
-            if (ox > 0) {
-                if (iskanji2(row, ox - 1)) {
-                    s[0] = ' ';
-                }
-            }
-
-            if (ox + dx < data[0].cols) {
-                if (iskanji2(row, ox + dx - 1)) {
-                    s[dx - 1] = ' ';
-                }
-            }
-
-            for (int j = 0; j < dx; j++) {
-                if (s[j] == 127) {
-                    s[j] = '#';
-                }
-                *global_lock++ = s[j];
-            }
-#else
-            for (int j = 0; j < dx; j++) {
-                *global_lock++ = data[0].t.scr->c[oy + i][ox + j];
+            // NUL の後ろは NUL で埋める
+            if (const auto nul_pos = s.find('\0'); nul_pos != std::string::npos) {
+                std::fill(s.begin() + nul_pos, s.end(), '\0');
             }
 #endif
+            for (const auto c : s) {
+                *global_lock++ = _((c == 127) ? '#' : c, c);
+            }
             if (dy > 1) {
                 *global_lock++ = '\r';
                 *global_lock++ = '\n';

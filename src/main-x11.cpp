@@ -124,7 +124,6 @@
 #include <fmt/format.h>
 #include <map>
 #include <memory>
-#include <span>
 #include <string>
 #include <string_view>
 #include <tl/optional.hpp>
@@ -1297,8 +1296,9 @@ static void sort_co_ord(co_ord *min, co_ord *max, const co_ord *b, const co_ord 
 #ifdef USE_XFT
 static void draw_cursor_xft(int x, int y, int len)
 {
-    // term_what() では中央寄せ時に座標がずれるので直接取得
-    const std::span<const char> cursor_chars(&game_term->scr->c[y][x], len);
+    // term_what_cell() では中央寄せ時に座標がずれるので直接取得する。全角文字の片側のマスだけにかかるなら空白を描く
+    std::string cursor_chars;
+    game_term->scr->append_text(x, y, std::min(len, game_term->wid - x), cursor_chars);
 
 #ifdef JP
     char utf8_buf[16];
@@ -1307,7 +1307,7 @@ static void draw_cursor_xft(int x, int y, int len)
         return;
     }
 #endif
-    Infofnt_text_std_xft(x, y, len, Infoclr->bg.xft, Infoclr->fg.xft, _(utf8_buf, cursor_chars.data()), _(utf8_len, len));
+    Infofnt_text_std_xft(x, y, len, Infoclr->bg.xft, Infoclr->fg.xft, _(utf8_buf, cursor_chars.data()), _(utf8_len, static_cast<int>(cursor_chars.size())));
 }
 #endif
 
@@ -1564,21 +1564,13 @@ static void paste_x11_accept(const XSelectionEvent *ptr)
  */
 static bool paste_x11_send_text(XSelectionRequestEvent *rq)
 {
-    char buf[1024];
     co_ord max, min;
-    TERM_LEN x, y;
-    int l;
-    DisplaySymbol ds;
-
     sort_co_ord(&min, &max, &s_ptr->init, &s_ptr->cur);
     if (XGetSelectionOwner(DPY, XA_PRIMARY) != WIN) {
         return false;
     }
 
-    for (y = 0; y < game_term->hgt; y++) {
-#ifdef JP
-        int kanji = 0;
-#endif
+    for (TERM_LEN y = 0; y < game_term->hgt; y++) {
         if (y < min.y) {
             continue;
         }
@@ -1586,66 +1578,33 @@ static bool paste_x11_send_text(XSelectionRequestEvent *rq)
             break;
         }
 
-        for (l = 0, x = 0; x < game_term->wid; x++) {
-#ifdef JP
-            if (x > max.x) {
-                break;
-            }
-
-            ds = term_what(x, y, ds);
-            if (1 == kanji) {
-                kanji = 2;
-            } else if (iskanji(ds.character)) {
-                kanji = 1;
-            } else {
-                kanji = 0;
-            }
-
-            if (x < min.x) {
-                continue;
-            }
-
-            /*
-             * A single kanji character was divided in two...
-             * Delete the garbage.
-             */
-            if ((2 == kanji && x == min.x) || (1 == kanji && x == max.x)) {
-                ds.character = ' ';
-            }
-#else
-            if (x > max.x) {
-                break;
-            }
-            if (x < min.x) {
-                continue;
-            }
-
-            ds = term_what(x, y, ds);
-#endif
-
-            buf[l] = ds.character;
-            l++;
+        // 選択範囲の端で分断された全角文字は空白にする。座標は term_what_cell() と同じく端末のオフセットを加えて読む
+        std::string line;
+        const auto term_y = y + game_term->offset_y;
+        const auto term_x_begin = std::max(min.x + game_term->offset_x, 0);
+        const auto term_x_end = std::min(std::min(max.x, game_term->wid - 1) + game_term->offset_x, game_term->wid - 1);
+        if ((term_y >= 0) && (term_y < game_term->hgt) && (term_x_begin <= term_x_end)) {
+            game_term->scr->append_text(term_x_begin, term_y, term_x_end - term_x_begin + 1, line);
         }
 
         // 末尾の空白を削る。
-        while (l >= 1 && buf[l - 1] == ' ') {
-            l--;
+        while (line.ends_with(' ')) {
+            line.pop_back();
         }
 
         // 複数行の場合、各行末に改行を付加。
         if (min.y != max.y) {
-            buf[l] = '\n';
-            l++;
+            line.push_back('\n');
         }
-
-        buf[l] = '\0';
 
 #ifdef JP
         char utf8_buf[2048];
-        const int len = euc_to_utf8(buf, l, utf8_buf, sizeof(utf8_buf));
+        const int len = euc_to_utf8(line.data(), line.length(), utf8_buf, sizeof(utf8_buf));
+#else
+        const auto len = static_cast<int>(line.size());
 #endif
-        if (_(len, l) > 0) {
-            XChangeProperty(DPY, rq->requestor, rq->property, xa_utf8, 8, PropModeAppend, (unsigned char *)_(utf8_buf, buf), _(len, l));
+        if (len > 0) {
+            XChangeProperty(DPY, rq->requestor, rq->property, xa_utf8, 8, PropModeAppend, (unsigned char *)_(utf8_buf, line.data()), len);
         }
     }
 

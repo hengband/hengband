@@ -179,7 +179,7 @@ TEST_CASE("do_cmd_knowledge_features scrolls the visual list within the terminal
 
     // 表は 11 桁目から端末の右端までの 69 文字ぶんとして送られ、表の左端 (7 行目の 11 桁目) は '9' になる。
     // 幅を 6 文字広く求めていると、送りが遅れて '3' になる
-    CHECK(game_term->scr->c[7][11] == '9');
+    CHECK(game_term->scr->c[7][11].front() == '9');
 }
 
 TEST_CASE("do_cmd_knowledge_features scrolls the visual list back when 'd' resets the edited symbol")
@@ -204,6 +204,6 @@ TEST_CASE("do_cmd_knowledge_features scrolls the visual list back when 'd' reset
     do_cmd_knowledge_features(&need_redraw, true, 0, &lighting_level);
 
     // 表の左端 (7 行目の 11 桁目) は、戻した '.' の 10 文字手前の '$' まで送り戻され、カーソルは表の中の '.' の桁にある
-    CHECK(game_term->scr->c[7][11] == '$');
+    CHECK(game_term->scr->c[7][11].front() == '$');
     CHECK(term_locate().first == 11 + 10);
 }

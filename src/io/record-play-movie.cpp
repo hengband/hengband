@@ -557,6 +557,52 @@ static void update_term_size(int x, int y, int len)
     }
 }
 
+/*!
+ * @brief 受け取った文字列を画面のマスに書き込む (描画はしない)
+ * @param x 書き込み始めるマスの桁
+ * @param y 書き込むマスの行
+ * @param len 書き込むマス数
+ * @param col 文字の色
+ * @param mesg 文字列。通信上の文字コードでは、バイト数がマス数と等しい
+ */
+static void store_text_to_screen(int x, int y, int len, uint8_t col, std::string_view mesg)
+{
+    auto &scr_aa = game_term->scr->a[y];
+    auto &scr_cc = game_term->scr->c[y];
+    const auto end = std::min<int>(x + len, std::ssize(scr_cc));
+
+    // 全角文字の右のマスから書き始めるなら、左のマスを空白にする
+    if ((x > 0) && (x < end) && scr_cc[x].is_wide_trail()) {
+        scr_cc[x - 1] = TermChar::from_byte(' ');
+    }
+
+    auto i = x;
+    while ((i < end) && !mesg.empty()) {
+        const auto ch = mb_first_char(mesg);
+        mesg.remove_prefix(ch.length());
+        // 途中に NUL がある文字は全角文字として置かない
+        if (is_multibyte_char_at(ch) && (ch.find('\0') == std::string_view::npos) && (i + 1 < end)) {
+            scr_cc[i] = TermChar::wide(ch);
+            scr_cc[i + 1] = TermChar::wide_trail();
+            i += 2;
+            continue;
+        }
+
+        // 収まらない全角文字は、前半のバイトだけを残さずに空白にする
+        scr_cc[i] = TermChar::from_byte(is_mb_char_lead(ch.front()) ? ' ' : ch.front());
+        i++;
+    }
+
+    // 全角文字の左のマスで書き終えるなら、残った右のマスを空白にする
+    if ((i > x) && (i < std::ssize(scr_cc)) && scr_cc[i].is_wide_trail()) {
+        scr_cc[i] = TermChar::from_byte(' ');
+    }
+
+    for (auto col_x = x; col_x < end; col_x++) {
+        scr_aa[col_x] = col;
+    }
+}
+
 static bool flush_ringbuf_client()
 {
     /* 書くデータなし */
@@ -605,10 +651,7 @@ static bool flush_ringbuf_client()
 #endif
             update_term_size(x, y, len);
             (void)((*angband_terms[0]->text_hook)(x, y, len, (byte)col, mesg));
-            std::copy_n(mesg, len, &game_term->scr->c[y][x]);
-            for (auto i = x; i < x + len; i++) {
-                game_term->scr->a[y][i] = col;
-            }
+            store_text_to_screen(x, y, len, col, { mesg, static_cast<size_t>(len) });
 
             break;
         case 'n': /* 繰り返し */
@@ -623,10 +666,7 @@ static bool flush_ringbuf_client()
 
             update_term_size(x, y, len);
             (void)((*angband_terms[0]->text_hook)(x, y, len, (byte)col, mesg));
-            std::copy_n(mesg, len, &game_term->scr->c[y][x]);
-            for (auto i = x; i < x + len; i++) {
-                game_term->scr->a[y][i] = col;
-            }
+            store_text_to_screen(x, y, len, col, { mesg, static_cast<size_t>(len) });
 
             break;
         case 'o':
@@ -635,8 +675,7 @@ static bool flush_ringbuf_client()
         case 's': /* 一文字 */
             update_term_size(x, y, 1);
             (void)((*angband_terms[0]->text_hook)(x, y, 1, (byte)col, mesg));
-            std::copy_n(mesg, 1, &game_term->scr->c[y][x]);
-            game_term->scr->a[y][x] = col;
+            store_text_to_screen(x, y, 1, col, { mesg, 1 });
             break;
         case 'w':
             update_term_size(x, y, len);

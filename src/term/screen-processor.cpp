@@ -2,9 +2,9 @@
 #include "io/input-key-acceptor.h"
 #include "locale/multibyte-char.h"
 #include "term/term-color-types.h"
+#include "term/z-term.h"
 #include "util/buffer-shaper.h"
 #include "view/display-messages.h"
-#include "view/display-symbol.h"
 #include "world/world.h"
 #include <string>
 
@@ -115,8 +115,7 @@ void prt(std::string_view sv, TERM_LEN row, TERM_LEN col)
  * @brief c_roff() が書いた行から、指定した桁で終わる文字を取り出す
  * @param end_col 文字の次の桁
  * @param y 行
- * @return 文字 (全角文字なら2バイト。行の先頭なら空)
- * @details 全角文字の後半のマスには、c_roff() が属性に 0x20 の印を付けている。
+ * @return 文字 (全角文字なら文字全体。行の先頭なら空)
  */
 static std::string get_char_before(int end_col, int y)
 {
@@ -124,12 +123,18 @@ static std::string get_char_before(int end_col, int y)
         return {};
     }
 
-    const auto last = term_what(end_col - 1, y, {});
-    if (((last.color & 0x20) == 0) || (end_col < 2)) {
-        return std::string(1, last.character);
+    const auto last = term_what_cell(end_col - 1, y);
+    if (!last) {
+        return {};
     }
 
-    return { term_what(end_col - 2, y, {}).character, last.character };
+    // 全角文字の右のマスなら、左のマスが文字全体を持つ
+    if (last->character.is_wide_trail() && (end_col >= 2)) {
+        const auto lead = term_what_cell(end_col - 2, y);
+        return lead ? std::string(lead->character.view()) : std::string();
+    }
+
+    return std::string(last->character.view());
 }
 
 /*!
@@ -145,15 +150,21 @@ static std::string get_char_before(int end_col, int y)
  * 語の切れ目が無いか行の前半にしか無ければ、語の途中で折り返す。どちらも無ければ x で折り返す。
  * 送ったマスと ch で次の行の最終桁に達する桁は選ばない (最終桁には書かない)。
  * 語の切れ目が行の前半か後半かは、shape_buffer() と同じく、語の切れ目の前の空白を除いた桁で決める。
- * 全角文字の後半のマスには、c_roff() が属性に 0x20 の印を付けている。
  */
 static int find_wrap_column(int x, int y, int w, std::string_view ch)
 {
-    const auto is_second_half = [y](int col) { return (term_what(col, y, {}).color & 0x20) != 0; };
+    const auto is_second_half = [y](int col) {
+        const auto cell = term_what_cell(col, y);
+        return cell && cell->character.is_wide_trail();
+    };
     const auto needs_backtrack = needs_line_break_backtrack(get_char_before(x, y), ch);
     // 前が空白だけの桁では、空白だけの行ができるので折り返さない
     auto first_text_col = 0;
-    while ((first_text_col < x) && (term_what(first_text_col, y, {}).character == ' ')) {
+    const auto is_space = [y](int col) {
+        const auto cell = term_what_cell(col, y);
+        return cell && (cell->character == TermChar::from_byte(' '));
+    };
+    while ((first_text_col < x) && is_space(first_text_col)) {
         first_text_col++;
     }
 
@@ -187,13 +198,21 @@ static int find_wrap_column(int x, int y, int w, std::string_view ch)
     return (needs_backtrack && (mid_word_col > 0)) ? mid_word_col : x;
 }
 
-static std::vector<DisplaySymbol> c_roff_wrap(int x, int y, int w, std::string_view ch)
+/*!
+ * @brief c_roff() で右端に達したときに、次の行へ送るマスを取り出して消す
+ * @param x 次の文字を置く桁
+ * @param y 行
+ * @param w 端末の幅
+ * @param ch 次に置く文字 (全角文字なら2バイト)
+ * @return 次の行へ送るマス (2マス幅の文字の右のマスも含む)
+ */
+static std::vector<TermCellSymbol> c_roff_wrap(int x, int y, int w, std::string_view ch)
 {
     // 最終桁に空白を書いた後 (x が幅に達している) も、禁則で分けられなければ (行頭禁則文字の前か行末禁則文字の後ろ) 前の語の切れ目までさかのぼる
     const auto wrap_col = find_wrap_column(x, y, w, ch);
-    std::vector<DisplaySymbol> wrap_chars;
+    std::vector<TermCellSymbol> wrap_chars;
     for (auto col = wrap_col; col < x; col++) {
-        wrap_chars.push_back(term_what(col, y, {}));
+        wrap_chars.push_back(term_what_cell(col, y).value_or(TermCellSymbol{ 0, TermChar::from_byte(' ') }));
     }
 
     term_erase(wrap_col, y);
@@ -244,17 +263,21 @@ void c_roff(TERM_COLOR a, std::string_view str)
             }
 
             term_erase(0, y);
-            for (const auto &symbol : wrap_chars) {
-                term_addch(symbol);
+            for (const auto &[color, wrap_char] : wrap_chars) {
+                // 2マス幅の文字は左のマスで文字全体を書く
+                if (!wrap_char.is_wide_trail()) {
+                    term_addstr(-1, color, wrap_char.view());
+                }
             }
             x = wrap_chars.size();
         }
 
-        term_addch({ static_cast<uint8_t>(_(a | 0x10, a)), ch });
         if (is_kanji) {
+            term_addstr(2, a, std::string_view(s, std::next(s, 2)));
             s++;
             x++;
-            term_addch({ static_cast<uint8_t>(a | 0x20), *s });
+        } else {
+            term_addstr(1, a, std::string_view(&ch, 1));
         }
 
         if (++x > wid) {
