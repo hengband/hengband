@@ -1302,6 +1302,9 @@
     <ClCompile Include="..\..\src\locale\localized-string.cpp">
       <Filter>locale</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\locale\multibyte-char.cpp">
+      <Filter>locale</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\lore\combat-types-setter.cpp">
       <Filter>lore</Filter>
     </ClCompile>
@@ -4084,6 +4087,9 @@
       <Filter>locale</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\locale\localized-string.h">
+      <Filter>locale</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\locale\multibyte-char.h">
       <Filter>locale</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\lore\combat-types-setter.h">

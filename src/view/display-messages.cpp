@@ -8,6 +8,7 @@
 #include "io/input-context.h"
 #include "io/input-key-acceptor.h"
 #include "load/load-util.h"
+#include "locale/multibyte-char.h"
 #include "main/sound-of-music.h"
 #include "save/save-util.h"
 #include "system/deferred-update-requests.h"
@@ -309,17 +310,11 @@ static int split_length(std::string_view sv, int max)
     auto split = max;
 
 #ifdef JP
-    auto k_flag = false;
     auto wordlen = 0;
     for (auto check = 0; check < max; check++) {
-        if (k_flag) {
-            k_flag = false;
-            continue;
-        }
-
-        if (iskanji(sv[check])) {
-            k_flag = true;
+        if (is_mb_char_lead(sv[check])) {
             split = check;
+            check += static_cast<int>(mb_char_byte_length(sv[check])) - 1;
         } else if (sv[check] == ' ') {
             split = check;
             wordlen = 0;

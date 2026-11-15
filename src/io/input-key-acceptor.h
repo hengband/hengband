@@ -32,6 +32,7 @@ extern int num_more;
 extern concptr inkey_next;
 
 char inkey(bool do_all_term_refresh = false);
+std::string inkey_multibyte_char(char lead);
 int inkey_special(bool numpad_cursor);
 std::string inkey_macro_trigger();
 void fresh_all_terms();

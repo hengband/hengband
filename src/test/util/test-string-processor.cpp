@@ -23,7 +23,6 @@
 #include <doctest/doctest.h>
 
 #include <cstdint>
-#include <set>
 #include <string>
 #include <string_view>
 #include <vector>
@@ -33,14 +32,6 @@ using namespace test;
 //
 // 文字コードに依存しないテスト
 //
-
-TEST_CASE("is_multibyte_char_at returns false for ASCII strings")
-{
-    CHECK_FALSE(is_multibyte_char_at("ab"));
-    CHECK_FALSE(is_multibyte_char_at(std::string_view("ab"), 0));
-    CHECK_FALSE(is_multibyte_char_at(""));
-    CHECK_FALSE(is_multibyte_char_at(std::string_view(), 0));
-}
 
 TEST_CASE("str_to_num converts a decimal string")
 {
@@ -591,33 +582,6 @@ TEST_CASE("str_upcase_first leaves a leading two byte character as it is")
     CHECK(str_upcase_first(str) == str);
 }
 
-TEST_CASE("is_multibyte_char_at finds a two byte character with its trailing byte")
-{
-    const auto str = cat("a", KANJI_KAN);
-    CHECK_FALSE(is_multibyte_char_at(str));
-    CHECK(is_multibyte_char_at(str, 1));
-    CHECK(is_multibyte_char_at(KANJI_KAN));
-    CHECK(is_multibyte_char_at(str.data() + 1));
-}
-
-TEST_CASE("is_multibyte_char_at rejects a leading byte without its trailing byte")
-{
-    const auto str = cat("a", KANJI_KAN.substr(0, 1));
-    CHECK_FALSE(is_multibyte_char_at(str, 1));
-    CHECK_FALSE(is_multibyte_char_at(str.data() + 1));
-
-    // 範囲外の位置は2バイト文字の先頭ではない
-    CHECK_FALSE(is_multibyte_char_at(str, 2));
-    CHECK_FALSE(is_multibyte_char_at(str, std::string_view::npos));
-}
-
-TEST_CASE("str_find_all_multibyte_chars returns the index of each leading byte")
-{
-    const std::set<int> expected = { 1, 4 };
-    CHECK(str_find_all_multibyte_chars(cat("a", KANJI_KAN, "b", KANJI_JI)) == expected);
-    CHECK(str_find_all_multibyte_chars("abc").empty());
-}
-
 TEST_CASE("string-processor accepts a two byte character which lacks its trailing byte")
 {
     // 前半バイトだけで終わる壊れた文字列を渡しても、範囲外を読まずに処理を終える
@@ -637,9 +601,6 @@ TEST_CASE("string-processor accepts a two byte character which lacks its trailin
     CHECK(angband_strchr(str.data(), 'x') == nullptr);
     CHECK(angband_strstr(str.data(), "x") == nullptr);
     CHECK(angband_strchr(str.data(), 'a') == str.data());
-
-    const std::set<int> expected = { 1 };
-    CHECK(str_find_all_multibyte_chars(str) == expected);
 }
 
 #endif
@@ -705,18 +666,6 @@ TEST_CASE("str_substr does not split a two byte character whose trailing byte is
     const auto str = cat(DAME_SO, DAME_HYOU);
     CHECK(str_substr(std::string_view(str), 0, 3) == DAME_SO);
     CHECK(str_substr(std::string_view(str), 1, 3) == DAME_HYOU);
-}
-
-TEST_CASE("is_multibyte_char_at finds a character whose trailing byte is ASCII")
-{
-    CHECK(is_multibyte_char_at(DAME_SO));
-    CHECK(is_multibyte_char_at(cat(DAME_SO, "a").data()));
-}
-
-TEST_CASE("str_find_all_multibyte_chars finds a character whose trailing byte is ASCII")
-{
-    const std::set<int> expected = { 0, 2, 4 };
-    CHECK(str_find_all_multibyte_chars(cat(DAME_SO, DAME_CHOON, DAME_KANA_A)) == expected);
 }
 
 #endif

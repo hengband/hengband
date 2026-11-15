@@ -1,5 +1,6 @@
 #include "flavor/flavor-util.h"
 #include "flavor/flag-inscriptions-table.h"
+#include "locale/multibyte-char.h"
 #include "object-enchant/tr-flags.h"
 #include "object-enchant/tr-types.h"
 #include "object/tval-types.h"
@@ -7,7 +8,6 @@
 #include "system/artifact/artifact-definition.h"
 #include "system/baseitem/baseitem-definition.h"
 #include "system/item/item-entity.h"
-#include "util/string-processor.h"
 #include <sstream>
 
 static bool has_lite_flag(const TrFlags &flags)
@@ -231,11 +231,10 @@ std::string get_inscription(const ItemEntity &item)
             if (ss.tellp() > MAX_INSCRIPTION - 1) {
                 break;
             }
-            if (is_multibyte_char_at(sv)) {
-                ss << sv.front();
-                sv.remove_prefix(1);
-            }
-            ss << sv.front();
+            // 最後のバイトはループの末尾で読み進める
+            const auto ch = mb_first_char(sv);
+            ss << ch;
+            sv.remove_prefix(ch.length() - 1);
         }
 
         return ss.str();

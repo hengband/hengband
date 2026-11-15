@@ -130,12 +130,12 @@ void AutopickTextBody::update_cursor_column_record(EditorCommandId com_id)
 }
 
 /*!
- * @brief カーソルが2バイト文字の2バイト目にあるかどうかを判定する
- * @return カーソルのある行で、カーソルの位置が2バイト文字の2バイト目であれば true
+ * @brief カーソルが多バイト文字の途中にあるかどうかを判定する
+ * @return カーソルのある行で、カーソルの位置が多バイト文字の後続のバイトであれば true
  */
-bool AutopickTextBody::is_cursor_on_second_byte_of_kanji() const
+bool AutopickTextBody::is_cursor_inside_multibyte_char() const
 {
-    return is_second_byte_of_kanji(this->lines[this->cy].line, this->cx);
+    return is_inside_multibyte_char(this->lines[this->cy].line, this->cx);
 }
 
 /*!

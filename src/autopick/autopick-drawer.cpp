@@ -12,10 +12,10 @@
 #include "autopick/autopick-util.h"
 #include "io/pref-file-expressor.h"
 #include "io/read-pref-file.h"
+#include "locale/multibyte-char.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
-#include "util/string-processor.h"
 #include "view/display-util.h"
 #include <algorithm>
 #include <fmt/format.h>
@@ -94,13 +94,11 @@ void draw_text_editor(PlayerType *player_ptr, AutopickTextBody *tb)
      */
     tb->hgt -= 2 + DESCRIPT_HGT;
 
-    // カーソルを2バイト文字の2バイト目に置かないよう、左右どちらかの文字の境界へ動かす
-    if (tb->is_cursor_on_second_byte_of_kanji()) {
-        if (tb->cx & 1) {
-            tb->cx--;
-        } else {
-            tb->cx++;
-        }
+    // カーソルを多バイト文字の途中に置かないよう、左右どちらかの文字の境界へ動かす
+    if (tb->is_cursor_inside_multibyte_char()) {
+        const auto &line = tb->lines[tb->cy].line;
+        const auto boundary = (tb->cx & 1) ? mb_char_start_pos(line, tb->cx) : mb_next_char_boundary(line, tb->cx);
+        tb->cx = static_cast<int>(boundary);
     }
     if (tb->cy < tb->upper || tb->upper + tb->hgt <= tb->cy) {
         tb->upper = tb->cy - (tb->hgt) / 2;
@@ -169,10 +167,9 @@ void draw_text_editor(PlayerType *player_ptr, AutopickTextBody *tb)
                 leftcol = 1;
                 break;
             }
-            if (is_multibyte_char_at(msg)) {
-                msg.remove_prefix(1);
-                j++;
-            }
+            const auto trail_length = mb_first_char(msg).length() - 1;
+            msg.remove_prefix(trail_length);
+            j += static_cast<int>(trail_length);
 #endif
         }
 
@@ -198,14 +195,8 @@ void draw_text_editor(PlayerType *player_ptr, AutopickTextBody *tb)
              */
             const std::string_view line(tb->lines[y].line);
             const auto x0 = line.length() - msg.length();
-            auto bx1 = std::max<size_t>(std::min(tb->mx, tb->cx), x0);
-            if (is_second_byte_of_kanji(line, static_cast<int>(bx1))) {
-                bx1--;
-            }
-            auto bx2 = std::clamp<size_t>(std::max(tb->mx, tb->cx), bx1, line.length());
-            if (is_second_byte_of_kanji(line, static_cast<int>(bx2))) {
-                bx2++;
-            }
+            const auto bx1 = mb_char_start_pos(line, std::max<size_t>(std::min(tb->mx, tb->cx), x0));
+            const auto bx2 = mb_next_char_boundary(line, std::clamp<size_t>(std::max(tb->mx, tb->cx), bx1, line.length()));
 
             term_gotoxy(leftcol, i + 1);
             term_addstr(-1, color, line.substr(x0, bx1 - x0));

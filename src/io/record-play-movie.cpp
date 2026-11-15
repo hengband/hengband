@@ -11,10 +11,10 @@
 #include "io/files-util.h"
 #include "io/signal-handlers.h"
 #include "locale/character-encoding.h"
+#include "locale/multibyte-char.h"
 #include "system/player-type-definition.h"
 #include "term/gameterm.h"
 #include "util/angband-files.h"
-#include "util/string-processor.h"
 #include "view/display-messages.h"
 #include <algorithm>
 #include <fmt/format.h>

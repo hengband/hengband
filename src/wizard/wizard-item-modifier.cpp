@@ -14,6 +14,7 @@
 #include "inventory/inventory-slot-types.h"
 #include "io/input-key-acceptor.h"
 #include "io/input-key-requester.h"
+#include "locale/multibyte-char.h"
 #include "object-enchant/item-apply-magic.h"
 #include "object-enchant/item-magic-applier.h"
 #include "object-enchant/object-ego.h"
@@ -862,7 +863,7 @@ static int is_slot_able_to_be_ego(PlayerType *player_ptr, ItemEntity *o_ptr)
 
 /*!
  * @brief 願いの 1 文字が空白かを判定する
- * @param ch 1 文字 (2 バイト文字は 2 バイト)
+ * @param ch 1 文字 (多バイト文字は文字全体)
  * @return 半角の空白・タブ (日本語版は全角空白も) なら true
  */
 static bool is_wish_space(std::string_view ch)
@@ -884,7 +885,7 @@ static std::string ltrim_wish(std::string_view str)
 {
     size_t pos = 0;
     while (pos < str.length()) {
-        const size_t len = is_multibyte_char_at(str, pos) ? 2 : 1;
+        const auto len = mb_char_length_at(str, pos);
         if (!is_wish_space(str.substr(pos, len))) {
             break;
         }
@@ -899,13 +900,13 @@ static std::string ltrim_wish(std::string_view str)
  * @brief 願いの文字列の右端の空白を取り除く
  * @param str 願いの文字列
  * @return 右端の空白 (日本語版は全角空白も) を取り除いた文字列
- * @details 2 バイト文字の後半バイトと続く 1 バイト文字を全角空白と取り違えないよう、文字の境界を先頭からたどる
+ * @details 多バイト文字の後続のバイトと続く 1 バイト文字を全角空白と取り違えないよう、文字の境界を先頭からたどる
  */
 static std::string rtrim_wish(std::string_view str)
 {
     size_t end = 0;
     for (size_t pos = 0; pos < str.length();) {
-        const size_t len = is_multibyte_char_at(str, pos) ? 2 : 1;
+        const auto len = mb_char_length_at(str, pos);
         if (!is_wish_space(str.substr(pos, len))) {
             end = pos + len;
         }

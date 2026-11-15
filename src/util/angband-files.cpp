@@ -1,5 +1,6 @@
 #include "util/angband-files.h"
 #include "locale/character-encoding.h"
+#include "locale/multibyte-char.h"
 #include "system/angband-exceptions.h"
 #include "util/string-processor.h"
 #ifdef _WIN32
@@ -84,15 +85,7 @@ void user_name(char *buf, int id)
     if ((pw = getpwuid(id))) {
         // ユーザー名は16バイトまでに切り詰める (NUL終端の分を含めて17バイト)
         constexpr auto name_bufsize = 17;
-        angband_strcpy(buf, pw->pw_name, name_bufsize);
-
-#ifdef JP
-        if (!iskanji(buf[0]))
-#endif
-            if (islower(buf[0])) {
-                buf[0] = toupper(buf[0]);
-            }
-
+        angband_strcpy(buf, str_upcase_first(pw->pw_name), name_bufsize);
         return;
     }
 
@@ -351,7 +344,7 @@ static tl::optional<std::string> read_line(FILE *fp)
  *
  * 日本語版ではさらに以下の処理も行う。
  * - 文字コードをシステムの文字コードに変換する
- * - マルチバイト文字の前半のみが残らないようにする
+ * - 多バイト文字の先頭バイトだけが残らないようにする
  *
  * 読み込んだ行で上記の変換を行いn-1バイトを超えた分は読み捨てられる。
  *
@@ -373,8 +366,11 @@ tl::optional<std::string> angband_fgets(FILE *fp, size_t n)
 
     std::string str;
 
-    for (const auto *s = line->data(); *s; s++) {
-        if (*s == '\t') {
+    // 途中に NUL があればそこで行を終える
+    const std::string_view sv(line->data());
+    for (size_t i = 0; i < sv.length();) {
+        const auto c = sv[i];
+        if (c == '\t') {
             constexpr auto tab_width = 8;
             if (str.length() + tab_width >= n) {
                 break;
@@ -382,23 +378,20 @@ tl::optional<std::string> angband_fgets(FILE *fp, size_t n)
 
             const auto space_count = tab_width - (str.length() % tab_width);
             str.append(space_count, ' ');
-        }
-#ifdef JP
-        else if (iskanji(*s)) {
-            if (str.length() + 1 >= n || s[1] == '\0') {
+            i++;
+        } else if (is_mb_char_lead(c)) {
+            // 後続のバイトが欠けた文字や、n バイトに収まらない文字は取り込まずに終える
+            const auto char_length = mb_char_length_at(sv, i);
+            if ((char_length == 1) || (str.length() + char_length > n)) {
                 break;
             }
-            str.push_back(*s++);
-            str.push_back(*s);
-        } else if (iskana(*s)) {
-            /* 半角かなに対応 */
-            str.push_back(*s);
-        }
-#endif
-        else if (isprint((unsigned char)*s)) {
-            str.push_back(*s);
+
+            str.append(sv.substr(i, char_length));
+            i += char_length;
         } else {
-            str.push_back('?');
+            // 表示できない 1 バイトの文字は ? に置き換える (Shift_JIS の半角カナは表示できる文字として取り込む)
+            str.push_back(is_printable_single_byte_char(c) ? c : '?');
+            i++;
         }
 
         if (str.length() >= n) {

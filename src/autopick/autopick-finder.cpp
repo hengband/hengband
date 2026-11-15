@@ -15,6 +15,7 @@
 #include "floor/floor-object.h"
 #include "io/input-context.h"
 #include "io/input-key-acceptor.h"
+#include "locale/multibyte-char.h"
 #include "main/sound-of-music.h"
 #include "object/item-use-flags.h"
 #include "system/item/item-entity.h"
@@ -121,8 +122,7 @@ AutopickSearch get_string_for_search(PlayerType *player_ptr, const AutopickSearc
                 break;
             }
 
-            const auto mb_chars = str_find_all_multibyte_chars(buf);
-            pos = mb_chars.contains(pos - 2) ? pos - 2 : pos - 1;
+            pos = static_cast<int>(mb_prev_char_pos(buf, pos));
             break;
         }
         case SKEY_RIGHT:
@@ -132,8 +132,7 @@ AutopickSearch get_string_for_search(PlayerType *player_ptr, const AutopickSearc
                 break;
             }
 
-            const auto mb_chars = str_find_all_multibyte_chars(buf);
-            pos = mb_chars.contains(pos) ? pos + 2 : pos + 1;
+            pos += static_cast<int>(mb_char_length_at(buf, pos));
             break;
         }
         case ESCAPE:
@@ -168,10 +167,9 @@ AutopickSearch get_string_for_search(PlayerType *player_ptr, const AutopickSearc
                 break;
             }
 
-            const auto mb_chars = str_find_all_multibyte_chars(buf);
-            const auto delete_bytes = mb_chars.contains(pos - 2) ? 2 : 1;
-            pos -= delete_bytes;
-            buf.erase(pos, delete_bytes);
+            const auto prev_pos = static_cast<int>(mb_prev_char_pos(buf, pos));
+            buf.erase(prev_pos, pos - prev_pos);
+            pos = prev_pos;
             break;
         }
         case 0x7F: // Delete
@@ -181,9 +179,7 @@ AutopickSearch get_string_for_search(PlayerType *player_ptr, const AutopickSearc
                 break;
             }
 
-            const auto mb_chars = str_find_all_multibyte_chars(buf);
-            const auto delete_bytes = mb_chars.contains(pos) ? 2 : 1;
-            buf.erase(pos, delete_bytes);
+            buf.erase(pos, mb_char_length_at(buf, pos));
             break;
         }
 
@@ -204,19 +200,14 @@ AutopickSearch get_string_for_search(PlayerType *player_ptr, const AutopickSearc
                 color = TERM_WHITE;
             }
 
-#ifdef JP
-            if (iskanji(c)) {
-                inkey_base = true;
-                const auto next = inkey();
-                if (std::cmp_less(buf.length(), max_len - 1)) {
-                    buf.insert(pos++, 1, c);
-                    buf.insert(pos++, 1, next);
+            if (is_mb_char_lead(c)) {
+                const auto ch = inkey_multibyte_char(c);
+                if (std::cmp_less_equal(buf.length() + ch.length(), max_len)) {
+                    buf.insert(pos, ch);
+                    pos += static_cast<int>(ch.length());
                     break;
                 }
-            } else if (isprint(c) || iskana(c)) {
-#else
-            if (isprint(c)) {
-#endif
+            } else if (is_printable_single_byte_char(c)) {
                 if (std::cmp_less(buf.length(), max_len)) {
                     buf.insert(pos++, 1, c);
                     break;

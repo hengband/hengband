@@ -372,6 +372,7 @@
     <ClCompile Include="..\..\src\locale\english.cpp" />
     <ClCompile Include="..\..\src\locale\japanese.cpp" />
     <ClCompile Include="..\..\src\locale\localized-string.cpp" />
+    <ClCompile Include="..\..\src\locale\multibyte-char.cpp" />
     <ClCompile Include="..\..\src\lore\combat-types-setter.cpp" />
     <ClCompile Include="..\..\src\lore\lore-calculator.cpp" />
     <ClCompile Include="..\..\src\lore\lore-util.cpp" />
@@ -1304,6 +1305,7 @@
     <ClInclude Include="..\..\src\locale\japanese.h" />
     <ClInclude Include="..\..\src\locale\language-switcher.h" />
     <ClInclude Include="..\..\src\locale\localized-string.h" />
+    <ClInclude Include="..\..\src\locale\multibyte-char.h" />
     <ClInclude Include="..\..\src\lore\combat-types-setter.h" />
     <ClInclude Include="..\..\src\lore\lore-calculator.h" />
     <ClInclude Include="..\..\src\lore\lore-util.h" />

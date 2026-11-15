@@ -5,6 +5,7 @@
 #include "game-option/map-screen-options.h"
 #include "io/macro-configurations-store.h"
 #include "io/signal-handlers.h"
+#include "locale/multibyte-char.h"
 #include "system/player-type-definition.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
@@ -323,6 +324,23 @@ char inkey(bool do_all_term_refresh)
     term_activate(old);
     term_set_cursor(v != 0);
     inkey_base = inkey_xtra = inkey_flag = inkey_scan = false;
+    return ch;
+}
+
+/*!
+ * @brief 多バイト文字の先頭バイトに続くバイトを読み、文字全体を返す
+ * @param lead 入力済みの文字の先頭バイト
+ * @return lead に続けて、文字のバイト数になるまで inkey() で読んだバイトをつなげた文字列。
+ *         lead が多バイト文字の先頭でなければ lead だけ
+ */
+std::string inkey_multibyte_char(char lead)
+{
+    std::string ch(1, lead);
+    while (ch.length() < mb_char_byte_length(lead)) {
+        inkey_base = true;
+        ch.push_back(inkey());
+    }
+
     return ch;
 }
 

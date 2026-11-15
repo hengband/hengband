@@ -6,6 +6,7 @@
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/floor-object.h"
+#include "locale/multibyte-char.h"
 #include "object-enchant/item-feeling.h"
 #include "object-enchant/object-ego.h"
 #include "object-hook/hook-weapon.h"
@@ -136,9 +137,9 @@ bool autopick_new_entry(autopick_type *entry, std::string_view line_input, bool 
     std::string inscription;
     std::stringstream ss;
     while (!line.empty()) {
-        if (is_multibyte_char_at(line)) {
-            ss << line.substr(0, 2);
-            line.remove_prefix(2);
+        if (const auto ch = mb_first_char(line); ch.length() > 1) {
+            ss << ch;
+            line.remove_prefix(ch.length());
             continue;
         }
 

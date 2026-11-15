@@ -54,7 +54,7 @@ AutopickTextBody make_text_body_with_line(std::string_view line, int cx)
 }
 
 #ifdef JP
-//! 行末に2バイト文字の1バイト目だけが残った行
+//! 行末に多バイト文字の先頭バイトだけが残った行
 const std::string LINE_WITH_LONE_LEAD_BYTE = cat("ab", KANJI_KAN.substr(0, 1));
 #endif
 
@@ -90,11 +90,11 @@ TEST_CASE("add_empty_line does not append a line when the last line is empty")
     CHECK_FALSE(tb.changed);
 }
 
-TEST_CASE("is_second_byte_of_kanji is false for single-byte characters")
+TEST_CASE("is_inside_multibyte_char is false for single-byte characters")
 {
     for (auto pos = 0; pos <= 3; pos++) {
         CAPTURE(pos);
-        CHECK_FALSE(is_second_byte_of_kanji("abc", pos));
+        CHECK_FALSE(is_inside_multibyte_char("abc", pos));
     }
 }
 
@@ -276,28 +276,28 @@ TEST_CASE("auto_inscribe_item sets inscription when empty and returns true")
 }
 
 #ifdef JP
-TEST_CASE("is_second_byte_of_kanji detects the second byte of a double-byte character")
+TEST_CASE("is_inside_multibyte_char detects a trailing byte of a multibyte character")
 {
     const auto line = cat(KANJI_KAN, "a");
 
-    CHECK_FALSE(is_second_byte_of_kanji(line, 0));
-    CHECK(is_second_byte_of_kanji(line, 1));
-    CHECK_FALSE(is_second_byte_of_kanji(line, 2));
+    CHECK_FALSE(is_inside_multibyte_char(line, 0));
+    CHECK(is_inside_multibyte_char(line, 1));
+    CHECK_FALSE(is_inside_multibyte_char(line, 2));
 }
 
-TEST_CASE("is_second_byte_of_kanji does not treat the end of a line after a lone lead byte as the second byte")
+TEST_CASE("is_inside_multibyte_char does not treat the end of a line after a lone lead byte as inside a character")
 {
-    CHECK_FALSE(is_second_byte_of_kanji(LINE_WITH_LONE_LEAD_BYTE, 3));
+    CHECK_FALSE(is_inside_multibyte_char(LINE_WITH_LONE_LEAD_BYTE, 3));
 }
 
-TEST_CASE("is_cursor_on_second_byte_of_kanji checks the cursor position on the cursor line")
+TEST_CASE("is_cursor_inside_multibyte_char checks the cursor position on the cursor line")
 {
     const auto line = cat(KANJI_KAN, "a");
 
-    CHECK_FALSE(make_text_body_with_line(line, 0).is_cursor_on_second_byte_of_kanji());
-    CHECK(make_text_body_with_line(line, 1).is_cursor_on_second_byte_of_kanji());
-    CHECK_FALSE(make_text_body_with_line(line, 2).is_cursor_on_second_byte_of_kanji());
-    CHECK_FALSE(make_text_body_with_line(line, 10).is_cursor_on_second_byte_of_kanji());
+    CHECK_FALSE(make_text_body_with_line(line, 0).is_cursor_inside_multibyte_char());
+    CHECK(make_text_body_with_line(line, 1).is_cursor_inside_multibyte_char());
+    CHECK_FALSE(make_text_body_with_line(line, 2).is_cursor_inside_multibyte_char());
+    CHECK_FALSE(make_text_body_with_line(line, 10).is_cursor_inside_multibyte_char());
 }
 
 TEST_CASE("insert_return_code does not split a double-byte character")

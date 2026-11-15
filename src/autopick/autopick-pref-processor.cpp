@@ -1,6 +1,7 @@
 #include "autopick/autopick-pref-processor.h"
 #include "autopick/autopick-entry.h"
 #include "autopick/autopick-util.h"
+#include "locale/multibyte-char.h"
 #include "system/angband.h"
 
 /*!
@@ -12,12 +13,11 @@ void process_autopick_file_command(std::string_view buf)
     size_t pos = 0;
     for (; pos < buf.length(); pos++) {
         const uint8_t c = buf[pos];
-#ifdef JP
-        if (iskanji(c)) {
-            pos++;
+        if (is_mb_char_lead(buf[pos])) {
+            pos += mb_char_byte_length(buf[pos]) - 1;
             continue;
         }
-#endif
+
         if (iswspace(c) && c != ' ') {
             break;
         }

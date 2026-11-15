@@ -758,6 +758,7 @@ libhengband_a_SOURCES = \
 	locale/english.cpp locale/english.h \
 	locale/japanese.cpp locale/japanese.h \
 	locale/localized-string.cpp locale/localized-string.h \
+	locale/multibyte-char.cpp locale/multibyte-char.h \
 	locale/language-switcher.h \
 	\
 	lore/combat-types-setter.cpp lore/combat-types-setter.h \
@@ -1601,6 +1602,7 @@ hengband_test_SOURCES = \
 	test/load/test-floor-loader.cpp \
 	test/locale/test-character-encoding.cpp \
 	test/locale/test-japanese.cpp \
+	test/locale/test-multibyte-char.cpp \
 	test/lore/test-monster-lore-snapshot.cpp \
 	test/market/test-building-recharger.cpp \
 	test/monster-race/test-race-ability-mask.cpp \

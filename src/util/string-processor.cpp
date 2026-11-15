@@ -15,6 +15,7 @@
  */
 
 #include "util/string-processor.h"
+#include "locale/multibyte-char.h"
 #include "system/h-basic.h"
 #include <algorithm>
 #include <array>
@@ -30,33 +31,12 @@ constexpr auto trim_front = ranges::views::drop_while([](char c) { return c == '
 constexpr auto trim_back = ranges::views::reverse | trim_front | ranges::views::reverse;
 
 /*!
- * @brief 位置 i から始まる文字のバイト数を返す
- * @param sv 対象の文字列
- * @param i 文字の開始位置(バイト)。sv の範囲内であること
- * @return 2バイト文字の前半バイトなら2、そうでなければ1
- * @details
- * 文字列の末尾が2バイト文字の前半バイトだけで終わっている場合も2を返す。
- * 戻り値を足した位置が文字列の長さを超えうるため、添字を進める用途では
- * ループの継続条件で範囲を確かめること。
- * 前半バイトだけで終わる場合に false を返す is_multibyte_char_at() とは意図して扱いを変えている。
- * str_substr() が前半バイトだけの末尾を部分文字列に含めないことなどは、この仕様を前提にしている。
- */
-size_t char_byte_length([[maybe_unused]] std::string_view sv, [[maybe_unused]] size_t i)
-{
-#ifdef JP
-    return iskanji(sv[i]) ? 2 : 1;
-#else
-    return 1;
-#endif
-}
-
-/*!
  * @brief 1バイト文字だけに変換関数を適用した文字列を作る
  * @param str 変換元の文字列
  * @param convert 1バイト文字に適用する変換関数
  * @return 変換後の文字列
  * @details
- * 2バイト文字は変換せずそのまま通す。後半バイトを欠いている場合も同じ。
+ * 多バイト文字は変換せずそのまま通す。後続のバイトを欠いている場合も同じ。
  */
 template <typename F>
 std::string convert_each_char(std::string_view str, F convert)
@@ -65,7 +45,7 @@ std::string convert_each_char(std::string_view str, F convert)
     result.reserve(str.length());
 
     for (size_t i = 0; i < str.length();) {
-        const auto char_length = char_byte_length(str, i);
+        const auto char_length = mb_char_byte_length(str[i]);
         if (char_length > 1) {
             result.append(str.substr(i, char_length));
             i += char_length;
@@ -80,14 +60,14 @@ std::string convert_each_char(std::string_view str, F convert)
 }
 
 /*!
- * @brief 2バイト文字を分断しないように部分文字列の範囲を補正する
+ * @brief 多バイト文字を分断しないように部分文字列の範囲を補正する
  * @param sv 対象の文字列
  * @param pos 補正前の開始位置(バイト)
  * @param n 補正前の長さ(バイト)
  * @return 補正後の開始位置と長さの組
  * @details
- * 開始位置が2バイト文字の後半バイトを指す場合は次のバイトまで進め、
- * 終了位置が2バイト文字の前半バイトを指す場合は手前のバイトまで戻す。
+ * 開始位置が多バイト文字の後続のバイトを指す場合は次の文字の先頭まで進め、
+ * 終了位置が多バイト文字の途中を指す場合はその文字の先頭まで戻す。
  * pos や pos + n が文字列の長さを超える場合は、文字列の末尾に丸める。
  */
 std::pair<size_t, size_t> adjust_substr_pos(std::string_view sv, size_t pos, size_t n)
@@ -96,16 +76,18 @@ std::pair<size_t, size_t> adjust_substr_pos(std::string_view sv, size_t pos, siz
     const auto end = n == std::string_view::npos ? sv.length() : std::min(pos + n, sv.length());
 
 #ifdef JP
-    // 開始位置が2バイト文字の後半バイトを指す場合は、次の文字の先頭まで進める
+    // 開始位置が多バイト文字の後続のバイトを指す場合は、次の文字の先頭まで進める
     size_t mb_pos = 0;
     while (mb_pos < start) {
-        mb_pos = std::min(mb_pos + char_byte_length(sv, mb_pos), sv.length());
+        mb_pos = std::min(mb_pos + mb_char_byte_length(sv[mb_pos]), sv.length());
     }
 
-    // 2バイト文字は後半バイトまで範囲に収まる場合だけ含める
+    // 多バイト文字は後続のバイトまで範囲に収まる場合だけ含める。
+    // 文字のバイト数は先頭バイトだけで決める (mb_char_length_at() は使わない) ので、
+    // 文字列の末尾に残った後続のバイトが欠けた先頭バイトも範囲に含めない
     auto mb_end = mb_pos;
     while (mb_end < end) {
-        const auto char_length = char_byte_length(sv, mb_end);
+        const auto char_length = mb_char_byte_length(sv[mb_end]);
         if (mb_end + char_length > end) {
             break;
         }
@@ -130,7 +112,7 @@ std::pair<size_t, size_t> adjust_substr_pos(std::string_view sv, size_t pos, siz
  * 戻り値と bufsize を比較することで切り詰めが起きたかどうかを判定できる。
  * 例: if (angband_strcpy(buf, src, sizeof(buf)) >= sizeof(buf)) ...
  *
- * 日本語版では2バイト文字を途中で切り詰めないよう、後半バイトまで収まらない場合は
+ * 日本語版では多バイト文字を途中で切り詰めないよう、後続のバイトまで収まらない場合は
  * その文字ごとコピーしない。
  */
 size_t angband_strcpy(char *buf, std::string_view src, size_t bufsize)
@@ -139,7 +121,7 @@ size_t angband_strcpy(char *buf, std::string_view src, size_t bufsize)
         return src.length();
     }
 
-    // NUL終端の分を除いた範囲に収まるよう、2バイト文字を分断しない位置で切り詰める
+    // NUL終端の分を除いた範囲に収まるよう、多バイト文字を分断しない位置で切り詰める
     const auto len = adjust_substr_pos(src, 0, bufsize - 1).second;
     src.copy(buf, len);
     buf[len] = '\0';
@@ -172,12 +154,12 @@ size_t angband_strcat(char *buf, std::string_view src, size_t bufsize)
 }
 
 /*!
- * @brief 2バイト文字を考慮しつつ文字列を検索し、見つかった位置を返す
+ * @brief 多バイト文字を考慮しつつ文字列を検索し、見つかった位置を返す
  * @param haystack 検索対象の文字列
  * @param needle 検索する文字列
  * @return 最初に見つかった位置。見つからなければ std::string_view::npos
  * @details
- * 2バイト文字の後半バイトから始まる位置にはマッチしない。
+ * 多バイト文字の後続のバイトから始まる位置にはマッチしない。
  * needle が空文字列の場合は 0 を返す。
  */
 size_t str_find_position(std::string_view haystack, std::string_view needle)
@@ -187,7 +169,7 @@ size_t str_find_position(std::string_view haystack, std::string_view needle)
     }
 
     const auto last_pos = haystack.length() - needle.length();
-    for (size_t i = 0; i <= last_pos; i += char_byte_length(haystack, i)) {
+    for (size_t i = 0; i <= last_pos; i += mb_char_byte_length(haystack[i])) {
         if (haystack.substr(i).starts_with(needle)) {
             return i;
         }
@@ -197,16 +179,16 @@ size_t str_find_position(std::string_view haystack, std::string_view needle)
 }
 
 /*!
- * @brief 2バイト文字を考慮しつつ文字を検索し、見つかった位置を返す
+ * @brief 多バイト文字を考慮しつつ文字を検索し、見つかった位置を返す
  * @param str 検索対象の文字列
  * @param ch 検索する文字
  * @return 最初に見つかった位置。見つからなければ std::string_view::npos
  * @details
- * 2バイト文字の後半バイトにはマッチしない。
+ * 多バイト文字の後続のバイトにはマッチしない。
  */
 size_t str_find_position(std::string_view str, char ch)
 {
-    for (size_t i = 0; i < str.length(); i += char_byte_length(str, i)) {
+    for (size_t i = 0; i < str.length(); i += mb_char_byte_length(str[i])) {
         if (str[i] == ch) {
             return i;
         }
@@ -216,12 +198,12 @@ size_t str_find_position(std::string_view str, char ch)
 }
 
 /*!
- * @brief 2バイト文字を考慮しつつ文字列を検索する (ANSIのstrstr相当)
+ * @brief 多バイト文字を考慮しつつ文字列を検索する (ANSIのstrstr相当)
  * @param haystack 検索対象のNUL終端された文字列
  * @param needle 検索する文字列
  * @return 最初に見つかった位置へのポインタ。見つからなければnullptr
  * @details
- * 2バイト文字の後半バイトから始まる位置にはマッチしない。
+ * 多バイト文字の後続のバイトから始まる位置にはマッチしない。
  * needle が空文字列の場合は haystack の先頭を返す。
  */
 char *angband_strstr(const char *haystack, std::string_view needle)
@@ -231,12 +213,12 @@ char *angband_strstr(const char *haystack, std::string_view needle)
 }
 
 /*!
- * @brief 2バイト文字を考慮しつつ文字を検索する (ANSIのstrchr相当)
+ * @brief 多バイト文字を考慮しつつ文字を検索する (ANSIのstrchr相当)
  * @param ptr 検索対象のNUL終端された文字列
  * @param ch 検索する文字
  * @return 最初に見つかった位置へのポインタ。見つからなければnullptr
  * @details
- * 2バイト文字の後半バイトにはマッチしない。
+ * 多バイト文字の後続のバイトにはマッチしない。
  * strchrと異なり、終端のNUL文字は検索できない(nullptrを返す)。
  */
 char *angband_strchr(const char *ptr, char ch)
@@ -246,12 +228,12 @@ char *angband_strchr(const char *ptr, char ch)
 }
 
 /*!
- * @brief 2バイト文字を考慮しつつ文字列が含まれるかどうかを調べる
+ * @brief 多バイト文字を考慮しつつ文字列が含まれるかどうかを調べる
  * @param src 検索対象の文字列
  * @param find 検索する文字列
  * @return src に find が含まれるならtrue
  * @details
- * 2バイト文字の後半バイトから始まる位置にはマッチしない。
+ * 多バイト文字の後続のバイトから始まる位置にはマッチしない。
  * src・find には正しい長さを持つ文字列を渡すこと。NUL終端されていない char の配列や
  * char 単体のアドレスを渡すと、std::string_view への変換で範囲外を読む。
  */
@@ -270,7 +252,7 @@ bool str_find(std::string_view src, std::string_view find)
  * @param str 操作の対象とする文字列
  * @return std::string strの両端の空白を削除した文字列
  * @details
- * 2バイト文字の後半バイトが 0x20 や 0x09 になる文字コードは無いため、2バイト文字を壊すことはない。
+ * 多バイト文字の後続のバイトが 0x20 や 0x09 になる文字コードは無いため、多バイト文字を壊すことはない。
  */
 std::string str_trim(std::string_view str)
 {
@@ -287,7 +269,7 @@ std::string str_trim(std::string_view str)
  * @param str 操作の対象とする文字列
  * @return std::string strの右端の空白を削除した文字列
  * @details
- * 2バイト文字の扱いは str_trim() と同じ。
+ * 多バイト文字の扱いは str_trim() と同じ。
  */
 std::string str_rtrim(std::string_view str)
 {
@@ -304,7 +286,7 @@ std::string str_rtrim(std::string_view str)
  * @param str 操作の対象とする文字列
  * @return std::string strの左端の空白を削除した文字列
  * @details
- * 2バイト文字の扱いは str_trim() と同じ。
+ * 多バイト文字の扱いは str_trim() と同じ。
  */
 std::string str_ltrim(std::string_view str)
 {
@@ -327,8 +309,8 @@ std::string str_ltrim(std::string_view str)
  * 区切り文字が先頭・末尾にある場合や連続する場合は、その分だけ空文字列の要素が生まれる。
  * num は領域確保のヒントに過ぎず、戻り値の要素数を num に揃えるものではない。
  *
- * 2バイト文字の後半バイトは読み飛ばすため、delim にダメ文字と重なる文字を指定しても
- * 2バイト文字の途中で分割することはない。
+ * 多バイト文字の後続のバイトは読み飛ばすため、delim にダメ文字と重なる文字を指定しても
+ * 多バイト文字の途中で分割することはない。
  */
 std::vector<std::string> str_split(std::string_view str, char delim, bool trim, int num)
 {
@@ -396,16 +378,16 @@ std::vector<std::string> str_separate(std::string_view str, size_t len)
  * @param erase_chars 削除する文字を指定する文字列。1バイト文字の集合として扱う
  * @return std::string 指定した文字をすべて削除した文字列
  * @details
- * str 中の2バイト文字は前半バイト・後半バイトのどちらも削除の対象にしない。
- * erase_chars にダメ文字と重なる文字や2バイト文字を指定しても、2バイト文字を壊すことはない。
- * 裏を返せば、erase_chars に2バイト文字を指定しても、その文字は削除されない。
+ * str 中の多バイト文字は先頭バイト・後続のバイトのどちらも削除の対象にしない。
+ * erase_chars にダメ文字と重なる文字や多バイト文字を指定しても、多バイト文字を壊すことはない。
+ * 裏を返せば、erase_chars に多バイト文字を指定しても、その文字は削除されない。
  */
 std::string str_erase(std::string str, std::string_view erase_chars)
 {
     for (size_t i = 0; i < str.length();) {
-        const auto char_length = char_byte_length(str, i);
+        const auto char_length = mb_char_byte_length(str[i]);
 
-        // 2バイト文字は、前半バイトが erase_chars のバイト列と一致しても削除しない
+        // 多バイト文字は、先頭バイトが erase_chars のバイト列と一致しても削除しない
         if ((char_length == 1) && (erase_chars.find(str[i]) != std::string_view::npos)) {
             str.erase(i, 1);
             continue;
@@ -427,7 +409,7 @@ std::string str_erase(std::string str, std::string_view erase_chars)
  * @param new_str 置き換え後の文字列
  * @return std::string old_str をすべて new_str で置き換えた文字列
  * @details
- * 2バイト文字の後半バイトから始まる位置にはマッチしない。
+ * 多バイト文字の後続のバイトから始まる位置にはマッチしない。
  */
 std::string str_replace(std::string_view str, std::string_view old_str, std::string_view new_str)
 {
@@ -435,12 +417,12 @@ std::string str_replace(std::string_view str, std::string_view old_str, std::str
         return std::string(str);
     }
 
-    // 文字境界は置き換え前の文字列から決める。置き換えで2バイト文字が崩れた場合も、
-    // 残った後半バイトを新たな文字の先頭と見なして誤って置き換えることがない
-    const auto mb_char_indexes = str_find_all_multibyte_chars(str);
+    // 文字境界は置き換え前の文字列から決める。置き換えで多バイト文字が崩れた場合も、
+    // 残った後続のバイトを新たな文字の先頭と見なして誤って置き換えることがない
     std::string result;
     result.reserve(str.length());
 
+    size_t char_pos = 0; // 一致した位置より前で最後の文字の境界から、文字単位で読み進める
     for (size_t start_pos = 0;;) {
         const auto found_pos = str.find(old_str, start_pos);
         if (found_pos == std::string_view::npos) {
@@ -448,8 +430,12 @@ std::string str_replace(std::string_view str, std::string_view old_str, std::str
             return result;
         }
 
-        if ((found_pos > 0) && mb_char_indexes.contains(found_pos - 1)) {
-            // 2バイト文字の後半バイトから始まる位置に一致したので、置き換えずに読み進める
+        while (char_pos < found_pos) {
+            char_pos += mb_char_byte_length(str[char_pos]);
+        }
+
+        if (char_pos != found_pos) {
+            // 多バイト文字の後続のバイトから始まる位置に一致したので、置き換えずに読み進める
             result.append(str.substr(start_pos, found_pos + 1 - start_pos));
             start_pos = found_pos + 1;
             continue;
@@ -461,12 +447,12 @@ std::string str_replace(std::string_view str, std::string_view old_str, std::str
 }
 
 /*!
- * @brief 2バイト文字を考慮して部分文字列を取得する
+ * @brief 多バイト文字を考慮して部分文字列を取得する
  *
  * 引数で与えられた文字列の pos バイト目から n バイトの部分文字列を取得する。
- * 但し、以下の通り2バイト文字の途中で分断されないようにする。
- * - 開始位置 pos バイト目が2バイト文字の後半バイトの場合は pos+1 バイト目を開始位置とする。
- * - 終了位置 pos+n バイト目が2バイト文字の前半バイトの場合は pos+n-1 バイト目を終了位置とする。
+ * 但し、以下の通り多バイト文字の途中で分断されないようにする。
+ * - 開始位置 pos バイト目が多バイト文字の後続のバイトの場合は、次の文字の先頭を開始位置とする。
+ * - 終了位置 pos+n バイト目が多バイト文字の途中の場合は、その文字の先頭を終了位置とする。
  *
  * @param sv 文字列
  * @param pos 部分文字列の開始位置(バイト)
@@ -483,7 +469,7 @@ std::string str_substr(std::string_view sv, size_t pos, size_t n)
 }
 
 /*!
- * @brief 2バイト文字を考慮して部分文字列を取得する (ムーブ版)
+ * @brief 多バイト文字を考慮して部分文字列を取得する (ムーブ版)
  *
  * 引数で与えられた文字列を pos バイト目から n バイトの部分文字列にして返す。
  * 範囲の補正の仕方は std::string_view を取る版と同じ。
@@ -504,7 +490,7 @@ std::string str_substr(std::string &&str, size_t pos, size_t n)
 }
 
 /*!
- * @brief 2バイト文字を考慮して部分文字列を取得する (const char * 版)
+ * @brief 多バイト文字を考慮して部分文字列を取得する (const char * 版)
  * @details
  * const char * は std::string_view にも std::string にも同じだけの変換で到達できるため、
  * このオーバーロードが無いと std::string_view 版と std::string && 版の解決が曖昧になる。
@@ -521,7 +507,7 @@ std::string str_substr(const char *str, size_t pos, size_t n)
  * @return 大文字に変換した文字列
  * @details
  * 変換は1バイトずつ行い、英字以外の文字は変換されない。
- * 日本語版では2バイト文字を変換の対象とせず、そのまま通す。
+ * 日本語版では多バイト文字を変換の対象とせず、そのまま通す。
  */
 std::string str_toupper(std::string_view str)
 {
@@ -534,7 +520,7 @@ std::string str_toupper(std::string_view str)
  * @return 小文字に変換した文字列
  * @details
  * 変換は1バイトずつ行い、英字以外の文字は変換されない。
- * 日本語版では2バイト文字を変換の対象とせず、そのまま通す。
+ * 日本語版では多バイト文字を変換の対象とせず、そのまま通す。
  */
 std::string str_tolower(std::string_view str)
 {
@@ -548,7 +534,7 @@ std::string str_tolower(std::string_view str)
  * @return 変換後の文字列
  * @details
  * 最初の文字が英字でない場合は何も変換しない。空文字列を渡した場合は空文字列を返す。
- * 日本語版では最初の文字が2バイト文字の場合も変換しない。
+ * 日本語版では最初の文字が多バイト文字の場合も変換しない。
  */
 std::string str_upcase_first(std::string_view str)
 {
@@ -559,78 +545,16 @@ std::string str_upcase_first(std::string_view str)
     std::string result_str(str);
 
     const auto first_char = static_cast<unsigned char>(result_str[0]);
-#ifdef JP
-    // 2バイト文字の前半バイトをロケール依存の変換にかけない
-    if (iskanji(first_char)) {
+    // 多バイト文字の先頭バイトをロケール依存の変換にかけない
+    if (is_mb_char_lead(result_str[0])) {
         return result_str;
     }
-#endif
 
     if (isalpha(first_char)) {
         result_str[0] = static_cast<char>(toupper(first_char));
     }
 
     return result_str;
-}
-
-/*!
- * @brief 文字列に含まれるすべての2バイト文字の位置を取得する
- *
- * @param str 文字列
- * @return std::set<int> 2バイト文字の前半バイトのインデックスの集合
- * @details
- * 英語版では常に空の集合を返す。
- * 文字列の末尾が2バイト文字の前半バイトだけで終わっている場合も、その位置を集合に含める。
- */
-std::set<int> str_find_all_multibyte_chars([[maybe_unused]] std::string_view str)
-{
-#ifdef JP
-    std::set<int> mb_chars;
-    for (size_t i = 0; i < str.length();) {
-        const auto char_length = char_byte_length(str, i);
-        if (char_length > 1) {
-            mb_chars.insert(mb_chars.end(), static_cast<int>(i));
-        }
-
-        i += char_length;
-    }
-
-    return mb_chars;
-#else
-    return {};
-#endif
-}
-
-/*!
- * @brief 文字列の指定した位置から、後半バイトまでそろった2バイト文字が始まるかを返す
- * @param sv 文字列
- * @param pos 位置(バイト)
- * @return pos が2バイト文字の前半バイトを指し、その後ろに後半バイトがあれば true (英語版では常に false)
- * @details
- * 2バイト文字の後半バイトは前半バイトと同じ範囲の値もとるため、pos は文字の先頭を指していること。
- */
-bool is_multibyte_char_at([[maybe_unused]] std::string_view sv, [[maybe_unused]] size_t pos)
-{
-#ifdef JP
-    // pos + 1 は pos が大きいと桁あふれするので、残りの長さで確かめる
-    return (pos < sv.length()) && (sv.length() - pos >= 2) && iskanji(sv[pos]);
-#else
-    return false;
-#endif
-}
-
-/*!
- * @brief NUL 終端の文字列の先頭が、後半バイトまでそろった2バイト文字かを返す
- * @param s NUL 終端の文字列
- * @return s が2バイト文字の前半バイトを指し、その後ろに後半バイトがあれば true (英語版では常に false)
- */
-bool is_multibyte_char_at([[maybe_unused]] const char *s)
-{
-#ifdef JP
-    return iskanji(s[0]) && (s[1] != '\0');
-#else
-    return false;
-#endif
 }
 
 /*!

@@ -5,6 +5,7 @@
 #include "flavor/tval-description-switcher.h"
 #include "game-option/text-display-options.h"
 #include "locale/english.h"
+#include "locale/multibyte-char.h"
 #include "mind/mind-weaponsmith.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/tr-types.h"
@@ -352,13 +353,12 @@ static std::string describe_body(const ItemEntity &item, [[maybe_unused]] const 
             break;
 #endif
 
-        default:
-            ss << *it;
-            if (is_multibyte_char_at(std::string_view(it, it_end))) {
-                ++it;
-                ss << *it;
-            }
+        default: {
+            const auto ch = mb_first_char(std::string_view(it, it_end));
+            ss << ch;
+            it += ch.length() - 1;
             break;
+        }
         }
     }
 

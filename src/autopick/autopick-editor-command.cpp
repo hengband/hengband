@@ -24,6 +24,7 @@
 #include "io/input-context.h"
 #include "io/macro-configurations-store.h"
 #include "locale/language-switcher.h"
+#include "locale/multibyte-char.h"
 #include "player-info/class-info.h"
 #include "player-info/race-info.h"
 #include "system/player-type-definition.h"
@@ -96,9 +97,7 @@ ape_quittance do_editor_command(PlayerType *player_ptr, AutopickTextBody *tb, Ed
                 tb->cx = len;
             }
 
-            if (tb->is_cursor_on_second_byte_of_kanji()) {
-                tb->cx--;
-            }
+            tb->cx = static_cast<int>(mb_char_start_pos(tb->lines[tb->cy].line, tb->cx));
         } else if (tb->cy > 0) {
             tb->cy--;
             tb->cx = tb->lines[tb->cy].line.length();
@@ -123,10 +122,7 @@ ape_quittance do_editor_command(PlayerType *player_ptr, AutopickTextBody *tb, Ed
         break;
     case EditorCommandId::RIGHT: {
         const int len = tb->lines[tb->cy].line.length();
-        if (is_multibyte_char_at(tb->lines[tb->cy].line, tb->cx)) {
-            tb->cx++;
-        }
-        tb->cx++;
+        tb->cx += static_cast<int>(mb_char_length_at(tb->lines[tb->cy].line, tb->cx));
 
         if (len < tb->cx) {
             tb->cx = len;
@@ -258,7 +254,7 @@ ape_quittance do_editor_command(PlayerType *player_ptr, AutopickTextBody *tb, Ed
 
         for (auto i = 0U; i < tb->yank.size(); ++i) {
             const std::string_view line(tb->lines[tb->cy].line);
-            // 行の上限を超える分は、2バイト文字を分断しないように切り詰める
+            // 行の上限を超える分は、多バイト文字を分断しないように切り詰める
             auto buf = str_substr(std::string(line.substr(0, tb->cx)) + tb->yank[i], 0, MAX_LINELEN - 1);
 
             const auto is_last_yank_line = i + 1 == tb->yank.size();
@@ -346,12 +342,7 @@ ape_quittance do_editor_command(PlayerType *player_ptr, AutopickTextBody *tb, Ed
             tb->dirty_flags |= DIRTY_ALL;
         }
 
-#ifdef JP
-        if (iskanji(tb->lines[tb->cy].line[tb->cx])) {
-            tb->cx++;
-        }
-#endif
-        tb->cx++;
+        tb->cx += static_cast<int>(mb_char_length_at(tb->lines[tb->cy].line, tb->cx));
         const int len = tb->lines[tb->cy].line.length();
         if (len >= tb->cx) {
             do_editor_command(player_ptr, tb, EditorCommandId::BACKSPACE);
@@ -394,9 +385,9 @@ ape_quittance do_editor_command(PlayerType *player_ptr, AutopickTextBody *tb, Ed
             break;
         }
 
-        const auto delete_bytes = is_second_byte_of_kanji(tb->lines[tb->cy].line, tb->cx - 1) ? 2 : 1;
-        tb->cx -= delete_bytes;
-        tb->lines[tb->cy].line.erase(tb->cx, delete_bytes);
+        const auto prev_cx = static_cast<int>(mb_prev_char_pos(tb->lines[tb->cy].line, tb->cx));
+        tb->lines[tb->cy].line.erase(prev_cx, tb->cx - prev_cx);
+        tb->cx = prev_cx;
         tb->dirty_line = tb->cy;
         check_expression_line(tb, tb->cy);
         tb->changed = true;

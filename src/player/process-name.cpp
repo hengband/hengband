@@ -3,6 +3,7 @@
 #include "core/asking-player.h"
 #include "game-option/birth-options.h"
 #include "io/files-util.h"
+#include "locale/multibyte-char.h"
 #include "player/player-personality.h"
 #include "system/deferred-update-requests.h"
 #include "system/player-type-definition.h"
@@ -35,17 +36,17 @@ std::string make_player_base_name(std::string_view name)
     std::string base_name;
     for (size_t i = 0; i < name.length(); i++) {
         const auto c = static_cast<unsigned char>(name[i]);
-#ifdef JP
-        if (iskanji(c)) {
-            if (i + 1 >= name.length()) {
+        if (is_mb_char_lead(name[i])) {
+            // 後続のバイトが欠けた文字は取り込まずに終える
+            const auto char_length = mb_char_length_at(name, i);
+            if (char_length == 1) {
                 break;
             }
 
-            base_name.append(name.substr(i, 2));
-            i++;
+            base_name.append(name.substr(i, char_length));
+            i += char_length - 1;
             continue;
         }
-#endif
 
 #if defined(JP) && defined(SJIS)
         if (iskana(c)) {
@@ -86,7 +87,7 @@ std::string make_player_base_name(std::string_view name)
  * @return 空白と「[」「]」を「_」に置き換えた名前 (例: "[ Temp ]" なら "__Temp__")
  * @details
  * これらの文字は条件式の区切りに使われるため置き換える。
- * 2バイト文字の後半バイトは置き換えない (Shift_JIS では後半バイトが「[」「]」と同じ値になる文字がある)。
+ * 多バイト文字の後続のバイトは置き換えない (Shift_JIS では後続のバイトが「[」「]」と同じ値になる文字がある)。
  */
 std::string make_player_name_for_expression(std::string_view name)
 {
@@ -114,12 +115,10 @@ void process_player_name(PlayerType *player_ptr, bool is_new_savefile)
 
     const std::string_view name(player_ptr->name);
     for (size_t i = 0; i < name.length(); i++) {
-#ifdef JP
-        if (iskanji(name[i])) {
-            i++;
+        if (is_mb_char_lead(name[i])) {
+            i += mb_char_byte_length(name[i]) - 1;
             continue;
         }
-#endif
 
         if (iscntrl(static_cast<unsigned char>(name[i]))) {
             quit(fmt::format(_("'{}' という名前は不正なコントロールコードを含んでいます。", "The name '{}' contains control chars!"), player_ptr->name));

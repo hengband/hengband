@@ -4,6 +4,7 @@
 #include "autopick/autopick-flags-table.h"
 #include "autopick/autopick-methods-table.h"
 #include "autopick/autopick-util.h"
+#include "locale/multibyte-char.h"
 #include "util/string-processor.h"
 #include <cstdlib>
 #include <utility>
@@ -267,19 +268,19 @@ void copy_text_to_yank(AutopickTextBody *tb)
 }
 
 /*!
- * @brief 行の指定の位置が2バイト文字の2バイト目かどうかを判定する
+ * @brief 行の指定の位置が多バイト文字の途中 (先頭バイトより後ろ) かどうかを判定する
  * @param line 行
  * @param pos 位置 (バイト)
- * @return pos の直前から2バイト文字が始まり、pos がその2バイト目であれば true
+ * @return pos より前から多バイト文字が始まり、pos がその文字の後続のバイトであれば true
  * @details
- * 行末に2バイト文字の1バイト目だけが残っている場合、その直後 (行の長さの位置) は2バイト目とみなさない。
+ * 行末に後続のバイトが欠けた文字が残っている場合、その直後 (行の長さの位置) は文字の途中とみなさない。
  * 英語版では常に false を返す。
  */
-bool is_second_byte_of_kanji(std::string_view line, int pos)
+bool is_inside_multibyte_char(std::string_view line, int pos)
 {
     if ((pos <= 0) || std::cmp_greater_equal(pos, line.length())) {
         return false;
     }
 
-    return str_find_all_multibyte_chars(line).contains(pos - 1);
+    return !is_mb_char_boundary(line, pos);
 }

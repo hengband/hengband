@@ -6,6 +6,7 @@
 
 #include "system/baseitem/baseitem-definition.h"
 #include "locale/language-switcher.h"
+#include "locale/multibyte-char.h"
 #include "util/string-processor.h"
 #include <numeric>
 #include <string>
@@ -103,9 +104,9 @@ std::string BaseitemDefinition::stripped_name() const
             offset++;
         }
 
-        // 末尾のバイトが2バイト文字の後半なら、'~' や '#' と同じ値でも取り除かない。
-        // 後半バイトは先頭バイトと同じ範囲の値もとるため、2バイト文字の位置は先頭から数えて求める
-        const auto ends_with_trail_byte = str_find_all_multibyte_chars(token).contains(static_cast<int>(endpos) - 2);
+        // 末尾のバイトが多バイト文字の後続のバイトなら、'~' や '#' と同じ値でも取り除かない。
+        // 後続のバイトは先頭バイトと同じ範囲の値もとるため、文字の境界は先頭から数えて求める
+        const auto ends_with_trail_byte = !is_mb_char_boundary(token, endpos - 1);
         if (!ends_with_trail_byte && (token[endpos - 1] == '~' || token[endpos - 1] == '#')) {
             endpos--;
         }

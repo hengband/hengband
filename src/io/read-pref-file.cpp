@@ -12,6 +12,7 @@
 #include "io/files-util.h"
 #include "io/interpret-pref-file.h"
 #include "io/pref-file-expressor.h"
+#include "locale/multibyte-char.h"
 #include "player-info/class-info.h"
 #include "player-info/race-info.h"
 #include "player/player-realm.h"
@@ -77,12 +78,9 @@ static errr process_pref_file_aux(PlayerType *player_ptr, const std::filesystem:
             continue;
         }
 
-#ifdef JP
-        if (!iskanji(line_str->front()))
-#endif
-            if (iswspace(line_str->front())) {
-                continue;
-            }
+        if (!is_mb_char_lead(line_str->front()) && iswspace(static_cast<unsigned char>(line_str->front()))) {
+            continue;
+        }
 
         if (line_str->starts_with('#')) {
             continue;

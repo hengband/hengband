@@ -67,6 +67,9 @@ bool research_mon(PlayerType *player_ptr)
 
         monster_name = *monster_name_opt;
         buf = fmt::format(_("名前:{}にマッチ", "Monsters' names with \"{}\""), monster_name);
+
+        // 多バイト文字はそのまま、1 バイトの英字だけを小文字にして比べる
+        monster_name = str_tolower(monster_name);
     } else if (ident_info[ident_i]) {
         buf = fmt::format("{:c} - {}.", *sym, ident_info[ident_i] + 2);
     } else {
@@ -93,24 +96,7 @@ bool research_mon(PlayerType *player_ptr)
 
         /* 名前検索 */
         if (!monster_name.empty()) {
-            for (size_t xx = 0; (xx < monster_name.length()); xx++) {
-#ifdef JP
-                if (iskanji(monster_name[xx])) {
-                    xx++;
-                    continue;
-                }
-#endif
-                if (isupper(monster_name[xx])) {
-                    monster_name[xx] = (char)tolower(monster_name[xx]);
-                }
-            }
-
-            std::string temp2 = monrace->name.en_string();
-            for (auto &ch : temp2) {
-                if (isupper(ch)) {
-                    ch = static_cast<char>(tolower(ch));
-                }
-            }
+            const auto temp2 = str_tolower(monrace->name.en_string());
 
 #ifdef JP
             if (str_find(temp2, monster_name) || str_find(monrace->name.string(), monster_name))

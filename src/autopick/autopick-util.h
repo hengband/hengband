@@ -64,7 +64,7 @@ public:
 
     void adjust_cursor_column();
     void update_cursor_column_record(EditorCommandId com_id);
-    bool is_cursor_on_second_byte_of_kanji() const;
+    bool is_cursor_inside_multibyte_char() const;
     bool has_line(int y) const;
     bool is_last_line(int y) const;
     void set_lines(std::vector<std::string> new_lines);

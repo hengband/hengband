@@ -5,6 +5,7 @@
  */
 
 #include "locale/japanese.h"
+#include "locale/multibyte-char.h"
 #include "util/enum-converter.h"
 #include <set>
 #include <sstream>
@@ -65,10 +66,7 @@ std::string sindarin_to_kana(std::string_view sindarin)
                 kana.replace(i, len, pat2);
                 i += strlen(pat2);
             } else {
-                if (iskanji(kana[i])) {
-                    ++i;
-                }
-                ++i;
+                i += mb_char_byte_length(kana[i]);
             }
         }
     }

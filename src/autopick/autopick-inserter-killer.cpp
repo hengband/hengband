@@ -8,6 +8,7 @@
 #include "io/input-key-acceptor.h"
 #include "io/input-key-requester.h"
 #include "io/macro-configurations-store.h"
+#include "locale/multibyte-char.h"
 #include "main/sound-of-music.h"
 #include "term/screen-processor.h"
 #include "util/enum-converter.h"
@@ -31,12 +32,9 @@ void check_expression_line(AutopickTextBody *tb, int y)
  */
 void insert_return_code(AutopickTextBody *tb)
 {
-    // 2バイト文字の途中では分けず、その文字の後ろで分ける
+    // 多バイト文字の途中では分けず、その文字の後ろで分ける
     auto &line = tb->lines[tb->cy].line;
-    auto split_pos = std::min(tb->cx, static_cast<int>(line.length()));
-    if (is_second_byte_of_kanji(line, split_pos)) {
-        split_pos++;
-    }
+    const auto split_pos = mb_next_char_boundary(line, std::min<size_t>(tb->cx, line.length()));
 
     // 挿入すると line の参照が無効になるので、先に分ける
     auto rest = line.substr(split_pos);
@@ -115,27 +113,22 @@ void insert_single_letter(AutopickTextBody *tb, int key)
     const auto head_len = std::min<size_t>(tb->cx, line.length());
     auto buf = line.substr(0, head_len);
 
-#ifdef JP
-    if (iskanji(key)) {
-        inkey_base = true;
-        const auto next = inkey();
-        if (buf.size() + 2 < MAX_LINELEN) {
-            buf.push_back(static_cast<char>(key));
-            buf.push_back(next);
-            tb->cx += 2;
+    if (is_mb_char_lead(static_cast<char>(key))) {
+        const auto ch = inkey_multibyte_char(static_cast<char>(key));
+        if (buf.size() + ch.length() < MAX_LINELEN) {
+            buf.append(ch);
+            tb->cx += static_cast<int>(ch.length());
         } else {
             bell();
         }
-    } else
-#endif
-    {
+    } else {
         if (buf.size() + 1 < MAX_LINELEN) {
             buf.push_back(static_cast<char>(key));
         }
         tb->cx++;
     }
 
-    // 行の上限を超える分は、2バイト文字を分断しないように切り詰める
+    // 行の上限を超える分は、多バイト文字を分断しないように切り詰める
     buf.append(line, head_len);
     tb->lines[tb->cy].line = str_substr(std::move(buf), 0, MAX_LINELEN - 1);
     const int len = tb->lines[tb->cy].line.length();

@@ -1,6 +1,6 @@
 #include "util/buffer-shaper.h"
 #include "locale/japanese.h"
-#include "util/string-processor.h"
+#include "locale/multibyte-char.h"
 #include <algorithm>
 
 namespace {
@@ -8,14 +8,14 @@ namespace {
  * @brief 文字列を分割せずにそのまま 1 行にできるか
  * @param sv 調べる文字列
  * @return 改行も表示できない文字 (空白に置き換える文字) も無ければ true
- * @details shape_buffer() と同じく全角文字は 2 バイトをまとめて見る。前半バイトで終わっている文字列は、
- * その前半バイトを 1 バイトの文字として表示できるかで判断する (shape_buffer() と同じ)
+ * @details shape_buffer() と同じく全角文字は文字全体をまとめて見る。後続のバイトが欠けた文字で終わっている文字列は、
+ * その先頭バイトを 1 バイトの文字として表示できるかで判断する (shape_buffer() と同じ)
  */
 bool is_printable_as_is(std::string_view sv)
 {
-    for (auto i = 0U; i < sv.length(); i++) {
-        if (is_multibyte_char_at(sv, i)) {
-            i++;
+    for (size_t i = 0; i < sv.length(); i++) {
+        if (const auto char_length = mb_char_length_at(sv, i); char_length > 1) {
+            i += char_length - 1;
             continue;
         }
 
@@ -45,7 +45,7 @@ struct SeparatePositions {
  * @details 分割できるかは classify_line_break() で決める。前が空白だけの位置は、空白だけの行ができるので候補にしない。
  * 行の末尾で語の途中までさかのぼってよいか (needs_backtrack) は needs_line_break_backtrack() で決める。
  * 行の末尾は、ch が全角文字か、行の末尾が空白のときだけ候補にする (全角文字の直後の半角文字なら、これまでどおり全角文字の前で分ける)。
- * 全角文字は shape_buffer() と同じく、前半バイトの後に 1 バイト以上続くときに 2 バイトをまとめて見る。
+ * 全角文字は shape_buffer() と同じく、後続のバイトがそろっているときに文字全体をまとめて見る。
  */
 SeparatePositions find_separate_positions(std::string_view line, std::string_view ch)
 {
@@ -54,8 +54,8 @@ SeparatePositions find_separate_positions(std::string_view line, std::string_vie
     auto has_text = false; // 分ける位置より前に空白でない文字があるか (空白だけの行を作らない)
     for (size_t pos = 0; pos <= line.length();) {
         const auto is_end = pos == line.length();
-        const auto is_full_width = is_end ? (ch.length() == 2) : is_multibyte_char_at(line, pos);
-        const auto next_char = is_end ? ch : line.substr(pos, is_full_width ? 2 : 1);
+        const auto next_char = is_end ? ch : line.substr(pos, mb_char_length_at(line, pos));
+        const auto is_full_width = is_multibyte_char_at(next_char);
         const auto kind = classify_line_break(prev_char, next_char);
         if (is_end) {
             positions.needs_backtrack = needs_line_break_backtrack(prev_char, next_char);
@@ -85,8 +85,8 @@ SeparatePositions find_separate_positions(std::string_view line, std::string_vie
 
 /*!
  * @brief 2 つの文字の間で行を分けられるかを決める
- * @param prev 前の文字 (全角文字なら2バイト。行の先頭なら空)
- * @param next 後ろの文字 (全角文字なら2バイト)
+ * @param prev 前の文字 (全角文字なら文字全体。行の先頭なら空)
+ * @param next 後ろの文字 (全角文字なら文字全体)
  * @return 分けられないか、語の切れ目か、語の途中か
  * @details 行の先頭 (前の文字が空)、後ろの文字が空か空白か行頭禁則文字の前、前の文字が行末禁則文字 (始め括弧) の後ろでは分けられない。
  * 前後のどちらかが全角文字か、前が空白なら語の切れ目になる。
@@ -99,7 +99,7 @@ LineBreakKind classify_line_break(std::string_view prev, std::string_view next)
         return LineBreakKind::NONE;
     }
 
-    if ((prev.length() == 2) || (next.length() == 2) || (prev == " ")) {
+    if (is_multibyte_char_at(prev) || is_multibyte_char_at(next) || (prev == " ")) {
         return LineBreakKind::WORD_BREAK;
     }
 
@@ -109,8 +109,8 @@ LineBreakKind classify_line_break(std::string_view prev, std::string_view next)
 
 /*!
  * @brief 2 つの文字の間で行を分けられないとき、その前の語の途中までさかのぼって分けてよいか
- * @param prev 前の文字 (全角文字なら2バイト)
- * @param next 後ろの文字 (全角文字なら2バイト)
+ * @param prev 前の文字 (全角文字なら文字全体)
+ * @param next 後ろの文字 (全角文字なら文字全体)
  * @return 分けられず、後ろが全角文字 (行頭禁則文字) か前が行末禁則文字 (始め括弧) なら true (行の先頭か、後ろの文字が空なら false)
  * @details 半角文字の後ろの半角の閉じ括弧・句読点の前で分けられないときは、これまでどおりさかのぼらない (英語版の分け方を変えない)。
  * ただし前が行末禁則文字 (半角の「(」など) なら、後ろが半角の閉じ括弧でもさかのぼる。
@@ -122,7 +122,7 @@ bool needs_line_break_backtrack(std::string_view prev, std::string_view next)
         return false;
     }
 
-    return (classify_line_break(prev, next) == LineBreakKind::NONE) && ((next.length() == 2) || is_line_end_kinsoku(prev));
+    return (classify_line_break(prev, next) == LineBreakKind::NONE) && (is_multibyte_char_at(next) || is_line_end_kinsoku(prev));
 }
 
 /*!
@@ -161,11 +161,10 @@ std::vector<std::string> shape_buffer(std::string_view sv, size_t maxlen)
     std::vector<std::string> result;
     std::string line;
     while (line.length() < sv.length()) {
-        const auto is_kanji = _(iskanji(sv[line.length()]), false);
-        auto ch = sv.substr(line.length(), is_kanji ? 2 : 1);
+        auto ch = mb_first_char(sv.substr(line.length()));
         const auto is_newline = ch[0] == '\n';
 
-        if ((ch.length() == 1) && !isprint(static_cast<unsigned char>(ch[0]))) {
+        if (!is_multibyte_char_at(ch) && !isprint(static_cast<unsigned char>(ch[0]))) {
             ch = " ";
         }
 
@@ -177,7 +176,7 @@ std::vector<std::string> shape_buffer(std::string_view sv, size_t maxlen)
             if (ch[0] == ' ') {
                 const auto rest = sv.substr(line.length());
                 const auto next_pos = rest.find_first_not_of(' ');
-                is_before_kinsoku = (next_pos != std::string_view::npos) && is_line_start_kinsoku(rest.substr(next_pos, 2));
+                is_before_kinsoku = (next_pos != std::string_view::npos) && is_line_start_kinsoku(mb_first_char(rest.substr(next_pos)));
             }
 
             if (!is_newline && ((ch[0] != ' ') || is_before_kinsoku)) {
@@ -194,7 +193,7 @@ std::vector<std::string> shape_buffer(std::string_view sv, size_t maxlen)
                 }
 
                 // 全角文字の前で行の末尾で分けるときは、これまでどおり空白を残す
-                drops_space = (split_pos == word_break) && has_space_before_break && ((split_pos < line.length()) || (ch.length() == 1));
+                drops_space = (split_pos == word_break) && has_space_before_break && ((split_pos < line.length()) || !is_multibyte_char_at(ch));
             }
 
             line.erase(drops_space ? split_pos - 1 : split_pos);

@@ -3,6 +3,7 @@
  */
 
 #include "io/condition-expression.h"
+#include "locale/multibyte-char.h"
 #include "system/h-basic.h"
 #include "util/string-processor.h"
 #include <cctype>
@@ -15,15 +16,14 @@ constexpr auto CLOSE_BRACKET = ']';
 
 /*!
  * @brief 語に含める文字かを返す
- * @details 空白と括弧以外の表示できる文字。日本語版では2バイト文字の前半バイトも含める
+ * @details 空白と括弧以外の表示できる文字。日本語版では多バイト文字の先頭バイトも含める
  */
 bool is_word_char(char c)
 {
-#ifdef JP
-    if (iskanji(c)) {
+    if (is_mb_char_lead(c)) {
         return true;
     }
-#endif
+
     return isprint(static_cast<unsigned char>(c)) && (std::string_view(" []").find(c) == std::string_view::npos);
 }
 
@@ -211,13 +211,13 @@ std::string ConditionExpressionEvaluator::evaluate_operator()
 
 /*!
  * @brief 語を1つ切り出して評価する
- * @details 2バイト文字は、後半バイトが空白や括弧と同じ値でも語に含める
+ * @details 多バイト文字は、後続のバイトが空白や括弧と同じ値でも語に含める
  */
 std::string ConditionExpressionEvaluator::evaluate_word()
 {
     size_t length = 0;
     while ((length < this->rest.length()) && is_word_char(this->rest[length])) {
-        length += is_multibyte_char_at(this->rest, length) ? 2 : 1;
+        length += mb_char_length_at(this->rest, length);
     }
 
     const auto word = this->rest.substr(0, length);
