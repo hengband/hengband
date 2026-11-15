@@ -15,6 +15,37 @@
 const player_magic *mp_ptr;
 std::vector<player_magic> class_magics_info;
 
+/*!
+ * @brief 領域の位置に応じた表から魔法 1 つの値を返す
+ * @param realm 魔法領域
+ * @param spell_id 呪文ID (0〜31)
+ * @param position その領域を第一領域・第二領域のどちらとして選んでいるか
+ * @return 習得レベル・消費MP・難易度・初回経験値倍率
+ */
+const magic_type &player_magic::spell_info(RealmType realm, int spell_id, RealmPosition position) const
+{
+    const auto *table = (position == RealmPosition::SECOND) ? this->info_second : this->info;
+    return table[enum2i(realm)][spell_id];
+}
+
+/*!
+ * @brief 第二領域として選んだときの値が第一領域のときと違う領域かどうか
+ * @param realm 魔法領域
+ * @return 32 件のどれかの値が違えば true
+ */
+bool player_magic::has_distinct_second(RealmType realm) const
+{
+    const auto &first = this->info[enum2i(realm)];
+    const auto &second = this->info_second[enum2i(realm)];
+    for (auto i = 0; i < 32; i++) {
+        if ((first[i].slevel != second[i].slevel) || (first[i].smana != second[i].smana) || (first[i].sfail != second[i].sfail) || (first[i].sexp != second[i].sexp)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 const player_class_info *cp_ptr;
 
 /*!

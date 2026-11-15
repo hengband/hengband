@@ -117,7 +117,15 @@ std::string_view PlayerRealm::get_subinfo(RealmType realm)
     THROW_EXCEPTION(std::invalid_argument, fmt::format("Invalid realm: {}", enum2i(realm)));
 }
 
-const magic_type &PlayerRealm::get_spell_info(RealmType realm, int spell_id, tl::optional<PlayerClassType> pclass)
+/*!
+ * @brief 職業別の魔法の値を取得する
+ * @param realm 領域
+ * @param spell_id 呪文ID (0〜31)
+ * @param position その領域を第一領域・第二領域のどちらとして選んでいるか (魔法領域だけ区別する)
+ * @param pclass 職業。省略時はプレイヤーの職業 (mp_ptr)
+ * @return 習得レベル・消費MP・難易度・初回経験値倍率
+ */
+const magic_type &PlayerRealm::get_spell_info(RealmType realm, int spell_id, RealmPosition position, tl::optional<PlayerClassType> pclass)
 {
     if (spell_id < 0 || 32 <= spell_id) {
         THROW_EXCEPTION(std::invalid_argument, fmt::format("Invalid spell id: {}", spell_id));
@@ -125,9 +133,9 @@ const magic_type &PlayerRealm::get_spell_info(RealmType realm, int spell_id, tl:
 
     if (is_magic(realm)) {
         if (pclass) {
-            return class_magics_info.at(enum2i(*pclass)).info[enum2i(realm)][spell_id];
+            return class_magics_info.at(enum2i(*pclass)).spell_info(realm, spell_id, position);
         }
-        return mp_ptr->info[enum2i(realm)][spell_id];
+        return mp_ptr->spell_info(realm, spell_id, position);
     }
     if (is_technic(realm)) {
         return technic_info[enum2i(realm) - MIN_TECHNIC][spell_id];

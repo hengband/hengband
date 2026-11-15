@@ -1,6 +1,9 @@
 #include "definitions-reader/magic-reader.h"
 #include "definitions-reader/parse-error-types.h"
 #include "player-info/class-info.h"
+#include "player-info/class-types.h"
+#include "player/player-realm.h"
+#include "realm/realm-types.h"
 #include "system/spell-info-list.h"
 #include "test/definitions-reader/parse-result-helpers.h"
 #include "test/definitions-reader/scoped-reader-state.h"
@@ -348,4 +351,33 @@ TEST_CASE("MagicReader reports non-string tokens as invalid types")
             CHECK_FALSE(session.last_id());
         }
     }
+}
+
+/*!
+ * @brief 第一領域用と第二領域用の表に同じ値が入り、位置で引き分けられる
+ */
+TEST_CASE("MagicReader fills the second-realm table with the same values")
+{
+    const MagicNumericState state;
+    auto session = MagicReader::create_session();
+    auto data = make_magic_numeric_data(SpellInfoList::get_instance());
+    REQUIRE(test::read_and_commit(MagicReader(data, session), session).has_value());
+
+    const auto &magic = class_magics_info[0];
+    const auto realm = enum2i(RealmType::LIFE);
+    for (auto spell_id = 0; spell_id < 2; spell_id++) {
+        CHECK(magic.info_second[realm][spell_id].slevel == magic.info[realm][spell_id].slevel);
+        CHECK(magic.info_second[realm][spell_id].smana == magic.info[realm][spell_id].smana);
+        CHECK(magic.info_second[realm][spell_id].sfail == magic.info[realm][spell_id].sfail);
+        CHECK(magic.info_second[realm][spell_id].sexp == magic.info[realm][spell_id].sexp);
+    }
+    CHECK(magic.info[realm][1].slevel == 3);
+    CHECK_FALSE(magic.has_distinct_second(RealmType::LIFE));
+    CHECK(&magic.spell_info(RealmType::LIFE, 1, RealmPosition::FIRST) == &magic.info[realm][1]);
+    CHECK(&magic.spell_info(RealmType::LIFE, 1, RealmPosition::SECOND) == &magic.info_second[realm][1]);
+    CHECK(&PlayerRealm::get_spell_info(RealmType::LIFE, 1, RealmPosition::SECOND, PlayerClassType::WARRIOR) == &magic.info_second[realm][1]);
+
+    // 第二領域用の値を変えると「違う」と判定される
+    class_magics_info[0].info_second[realm][1].slevel = 10;
+    CHECK(class_magics_info[0].has_distinct_second(RealmType::LIFE));
 }
