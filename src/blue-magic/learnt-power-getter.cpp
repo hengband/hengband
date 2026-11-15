@@ -447,7 +447,7 @@ static void describe_blue_magic_name(PlayerType *player_ptr, const BluemageData 
     put_str(_("MP 失率 効果", "SP Fail Info"), y_base, x_base + 33);
     if (page_context.max_page > 1) {
         const auto page_text = fmt::format(_("頁 {}/{}", "Page {}/{}"), page_context.page + 1, page_context.max_page);
-        put_str(fmt::format("{:>10}", fmt::bytes(page_text)), y_base, x_base + 50);
+        put_str(fmt::format("{:>10}", page_text), y_base, x_base + 50);
     }
 
     const auto begin = page_context.page * page_context.page_size;
@@ -464,7 +464,7 @@ static void describe_blue_magic_name(PlayerType *player_ptr, const BluemageData 
         auto chance = calculate_blue_magic_failure_probability(player_ptr, mp, need_mana);
         const auto header = close_blue_magic_name(i, menu_line);
         const auto info = learnt_info(player_ptr, spell);
-        const auto psi_desc = fmt::format("{} {:<26} {:3} {:3}%{}", header, fmt::bytes(mp.name), need_mana, chance, info);
+        const auto psi_desc = fmt::format("{} {:<26} {:3} {:3}%{}", header, mp.name, need_mana, chance, info);
         prt(psi_desc, row, x_base);
     }
 }

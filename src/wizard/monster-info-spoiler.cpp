@@ -121,7 +121,7 @@ SpoilerOutputResultType spoil_mon_desc(std::string_view filename, std::function<
         }
 
         const auto symbol = fmt::format("{} '{:c}'", attr_to_text(monrace), monrace.symbol_definition.character);
-        const auto line = fmt::format(fmt_line, fmt::bytes(str_substr(nam, 0, 45)), lev, rar, spd, hp, ac, fmt::bytes(str_substr(symbol, 0, 19)));
+        const auto line = fmt::format(fmt_line, str_substr(nam, 0, 45), lev, rar, spd, hp, ac, str_substr(symbol, 0, 19));
         ofs << line;
 
         for (auto i = 1U; i < name.size(); ++i) {

@@ -277,7 +277,7 @@ void MindPowerGetter::display_each_mind_chance(bool only_browse)
             psi_desc = fmt::format("  {:c}) ", I2A(this->index));
         }
 
-        psi_desc.append(fmt::format("{:<30}{:2} {:4}{} {:3}%{}", fmt::bytes(this->spell->name), this->spell->min_lev, mana_cost, (((this->use_mind == MindKindType::MINDCRAFTER) && (this->index == 13)) ? _("～", "~ ") : "  "), chance, comment));
+        psi_desc.append(fmt::format("{:<30}{:2} {:4}{} {:3}%{}", this->spell->name, this->spell->min_lev, mana_cost, (((this->use_mind == MindKindType::MINDCRAFTER) && (this->index == 13)) ? _("～", "~ ") : "  "), chance, comment));
         prt(psi_desc, y + this->index + 1, x);
         bot_rows.push_back({ I2A(this->index), 0, this->spell->name, this->spell->min_lev, mana_cost, chance, comment });
     }

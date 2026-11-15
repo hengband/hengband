@@ -71,7 +71,7 @@ static void display_essence(PlayerType *player_ptr)
         for (auto num = 0U, ei = page * essence_num_per_page; (num < essence_num_per_page) && (ei < essences.size()); ++num, ++ei) {
             auto name = Smith::get_essence_name(essences[ei]);
             auto amount = smith.get_essence_num_of_posessions(essences[ei]);
-            prt(fmt::format("{:<11} {:5}", fmt::bytes(name), amount), 2 + num % row_count, 8 + (num / row_count) * column_width);
+            prt(fmt::format("{:<11} {:5}", name, amount), 2 + num % row_count, 8 + (num / row_count) * column_width);
         }
 
         const auto prompt = fmt::format(_("現在所持しているエッセンス {}/{}", "List of all essences you have. {}/{}"), (page + 1), page_max);
@@ -257,9 +257,9 @@ static void display_smith_effect_list(const Smith &smith, const std::vector<Smit
     }
 
 #ifdef JP
-    prt(fmt::format("   {:<45} {:>6}/{}", fmt::bytes("能力(必要エッセンス)"), fmt::bytes("所持数"), "必要数"), 1, x);
+    prt(fmt::format("   {:<45} {:>6}/{}", "能力(必要エッセンス)", "所持数", "必要数"), 1, x);
 #else
-    prt(fmt::format("   {:<44} {:>7}/{}", fmt::bytes("Ability (needed essence)"), fmt::bytes("Possess"), "Needs"), 1, x);
+    prt(fmt::format("   {:<44} {:>7}/{}", "Ability (needed essence)", "Possess", "Needs"), 1, x);
 #endif
 
     for (int ctr = 0U, ei = start_idx; ctr < line_max && ei < static_cast<int>(smith_effect_list.size()); ++ctr, ++ei) {
@@ -286,9 +286,9 @@ static void display_smith_effect_list(const Smith &smith, const std::vector<Smit
         if (need_essences.size() == 1) {
             auto essence = need_essences.front();
             auto amount = smith.get_essence_num_of_posessions(essence);
-            str = fmt::format("{:<49} {:5}/{}", fmt::bytes(title.str()), amount, consumption);
+            str = fmt::format("{:<49} {:5}/{}", title.str(), amount, consumption);
         } else {
-            str = fmt::format("{:<49}  (\?\?)/{}", fmt::bytes(title.str()), consumption);
+            str = fmt::format("{:<49}  (\?\?)/{}", title.str(), consumption);
         }
 
         auto col = (smith.get_addable_count(effect) > 0) ? TERM_WHITE : TERM_RED;

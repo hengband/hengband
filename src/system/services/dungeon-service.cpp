@@ -83,13 +83,13 @@ std::vector<std::string> DungeonService::build_known_dungeons(DungeonMessageForm
         std::string known_dungeon;
         switch (dmf) {
         case DungeonMessageFormat::DUMP:
-            known_dungeon = fmt::format(_("   {:c}{:<12}: {:3} 階\n", "   {:c}{:<16}: level {:3}\n"), mark, fmt::bytes(dungeon.name), max_level);
+            known_dungeon = fmt::format(_("   {:c}{:<12}: {:3} 階\n", "   {:c}{:<16}: level {:3}\n"), mark, dungeon.name, max_level);
             break;
         case DungeonMessageFormat::KNOWLEDGE:
-            known_dungeon = fmt::format(_("{:c}{:<12} :  {:3} 階\n", "{:c}{:<16} :  level {:3}\n"), mark, fmt::bytes(dungeon.name), max_level);
+            known_dungeon = fmt::format(_("{:c}{:<12} :  {:3} 階\n", "{:c}{:<16} :  level {:3}\n"), mark, dungeon.name, max_level);
             break;
         case DungeonMessageFormat::RECALL:
-            known_dungeon = fmt::format(_("      {:c}) {:c}{:<12} : 最大 {} 階", "      {:c}) {:c}{:<16} : Max level {}"), 'a' + num_entered, mark, fmt::bytes(dungeon.name), max_level);
+            known_dungeon = fmt::format(_("      {:c}) {:c}{:<12} : 最大 {} 階", "      {:c}) {:c}{:<16} : Max level {}"), 'a' + num_entered, mark, dungeon.name, max_level);
             num_entered++;
             break;
         default:

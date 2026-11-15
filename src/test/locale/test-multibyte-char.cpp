@@ -5,6 +5,7 @@
 #include "locale/multibyte-char.h"
 #include "test/string-helpers.h"
 #include <doctest/doctest.h>
+#include <fmt/format.h>
 #include <string>
 #include <string_view>
 
@@ -83,7 +84,36 @@ TEST_CASE("mb_prev_char_pos returns the start of the previous ASCII character")
     CHECK(mb_prev_char_pos("abc"sv, 10) == 2);
 }
 
+TEST_CASE("str_display_width counts an ASCII character as one column")
+{
+    CHECK(str_display_width(""sv) == 0);
+    CHECK(str_display_width("abc"sv) == 3);
+}
+
+TEST_CASE("fmt pads strings by str_display_width")
+{
+    // UTF-8 としても正しい 2 バイト (U+0122) だが、内部文字コードでは 2 桁の文字列
+    // (EUC-JP では 1 文字の漢字、Shift_JIS では 2 文字の半角カナ、英語版では 2 文字の 1 バイトの文字)
+    const auto str = "\xc4\xa2"sv;
+    CHECK(str_display_width(str) == 2);
+    CHECK(fmt::format("{:<4}|", str) == test::cat(str, "  |"));
+    CHECK(fmt::format("{:>4}|", str) == test::cat("  ", str, "|"));
+    CHECK(fmt::format("{:<{}}|", str, 3) == test::cat(str, " |"));
+}
+
 #ifdef JP
+TEST_CASE("str_display_width counts a multibyte character as two columns")
+{
+    using test::KANJI_KAN;
+    CHECK(str_display_width(test::cat("a", KANJI_KAN, test::KANJI_JI)) == 5);
+    CHECK(fmt::format("{:<6}|", KANJI_KAN) == test::cat(KANJI_KAN, "    |"));
+}
+
+TEST_CASE("str_display_width counts a truncated character as one column")
+{
+    CHECK(str_display_width(test::cat("a", test::KANJI_KAN.substr(0, 1))) == 2);
+}
+
 TEST_CASE("mb_char_byte_length returns 2 for multibyte characters")
 {
     using test::KANJI_KAN;

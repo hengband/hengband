@@ -35,7 +35,7 @@ void display_gladiators()
     for (auto i = 0; i < NUM_GLADIATORS; i++) {
         constexpr auto fmt = _("{}) {:<58}  {:4}.{:02}倍", "{}) {:<58}  {:4}.{:02}");
         const auto &gladiator = melee_arena.get_gladiator(i);
-        prt(fmt::format(fmt, i + 1, fmt::bytes(names[i]), gladiator.odds / 100, gladiator.odds % 100), 5 + i, 1);
+        prt(fmt::format(fmt, i + 1, names[i], gladiator.odds / 100, gladiator.odds % 100), 5 + i, 1);
     }
 
     prt(BET_PROMPT, 0, 0);

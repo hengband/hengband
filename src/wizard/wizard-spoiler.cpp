@@ -230,7 +230,7 @@ static SpoilerOutputResultType spoil_player_spell()
             for (SPELL_IDX i = 0; i < 32; i++) {
                 const auto &spell = PlayerRealm::get_spell_info(realm, i, pclass);
                 const auto &spell_name = PlayerRealm::get_spell_name(realm, i);
-                spoil_out(fmt::format("{:<24} {:2} {:4} {:3} {:4}\n", fmt::bytes(spell_name), spell.slevel, spell.smana, spell.sfail, spell.sexp));
+                spoil_out(fmt::format("{:<24} {:2} {:4} {:3} {:4}\n", spell_name, spell.slevel, spell.smana, spell.sfail, spell.sexp));
             }
             spoil_out("\n");
         }

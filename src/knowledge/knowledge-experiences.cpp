@@ -47,7 +47,7 @@ void do_cmd_knowledge_weapon_exp(PlayerType *player_ptr)
 
                 SUB_EXP weapon_exp = player_ptr->weapon_exp[tval][num];
                 SUB_EXP weapon_max = player_ptr->weapon_exp_max[tval][num];
-                fmt::print(fff, "{:<25} ", fmt::bytes(baseitem.stripped_name()));
+                fmt::print(fff, "{:<25} ", baseitem.stripped_name());
                 if (show_actual_value) {
                     fmt::print(fff, "{:4}/{:4} ", weapon_exp, weapon_max);
                 }
@@ -97,7 +97,7 @@ void do_cmd_knowledge_spell_exp(PlayerType *player_ptr)
             SUB_EXP spell_exp = player_ptr->spell_exp[i];
             auto skill_rank = PlayerSkill::spell_skill_rank(spell_exp);
             const auto &spell_name = pr.realm1().get_spell_name(i);
-            fmt::print(fff, "{:<25} ", fmt::bytes(spell_name));
+            fmt::print(fff, "{:<25} ", spell_name);
             if (pr.realm1().equals(RealmType::HISSATSU)) {
                 if (show_actual_value) {
                     fmt::print(fff, "----/---- ");
@@ -134,7 +134,7 @@ void do_cmd_knowledge_spell_exp(PlayerType *player_ptr)
             SUB_EXP spell_exp = player_ptr->spell_exp[i + 32];
             auto skill_rank = PlayerSkill::spell_skill_rank(spell_exp);
             const auto spell_name = pr.realm2().get_spell_name(i);
-            fmt::print(fff, "{:<25} ", fmt::bytes(spell_name));
+            fmt::print(fff, "{:<25} ", spell_name);
             if (show_actual_value) {
                 fmt::print(fff, "{:4}/{:4} ", spell_exp, PlayerSkill::spell_exp_at(PlayerSkillRank::MASTER));
             }
@@ -171,7 +171,7 @@ void do_cmd_knowledge_skill_exp(PlayerType *player_ptr)
     for (auto i : PLAYER_SKILL_KIND_TYPE_RANGE) {
         SUB_EXP skill_exp = player_ptr->skill_exp[i];
         SUB_EXP skill_max = class_skills_info[enum2i(player_ptr->pclass)].s_max[i];
-        fmt::print(fff, "{:<20} ", fmt::bytes(PlayerSkill::skill_name(i)));
+        fmt::print(fff, "{:<20} ", PlayerSkill::skill_name(i));
         if (show_actual_value) {
             fmt::print(fff, "{:4}/{:4} ", std::min(skill_exp, skill_max), skill_max);
         }

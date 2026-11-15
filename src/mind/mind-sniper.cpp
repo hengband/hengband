@@ -218,7 +218,7 @@ void display_snipe_list(PlayerType *player_ptr)
             continue;
         }
 
-        const auto psi_desc = fmt::format("  {:c}) {:<30}{:2} {:4}", I2A(i), fmt::bytes(spell.name), spell.min_lev, spell.mana_cost);
+        const auto psi_desc = fmt::format("  {:c}) {:<30}{:2} {:4}", I2A(i), spell.name, spell.min_lev, spell.mana_cost);
 
         TERM_COLOR tcol = (spell.mana_cost > sniper_data->concent) ? TERM_SLATE : TERM_WHITE;
         term_putstr(x, y + i + 1, -1, tcol, psi_desc);
@@ -333,7 +333,7 @@ static int get_snipe_power(PlayerType *player_ptr, COMMAND_CODE *sn, bool only_b
                         tcol = TERM_L_BLUE;
                     }
                     term_putstr(x, y + i + 1, -1, tcol, (spell.min_lev > plev) ? "   ) " : fmt::format("  {:c}) ", I2A(i)));
-                    term_putstr(x + 5, y + i + 1, -1, tcol, fmt::format("{:<30}{:2} {:4}", fmt::bytes(spell.name), spell.min_lev, spell.mana_cost));
+                    term_putstr(x + 5, y + i + 1, -1, tcol, fmt::format("{:<30}{:2} {:4}", spell.name, spell.min_lev, spell.mana_cost));
                 }
 
                 /* Clear the bottom line */

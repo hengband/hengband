@@ -175,7 +175,7 @@ static bool do_cmd_knowledge_quests_aux(PlayerType *, FILE *fff, QuestId q_idx)
     if (is_fixed_quest || !quest.get_bounty().is_valid()) {
         const auto name = shape_buffer(quest.name, name_maxlen);
         constexpr auto mes = _("  {:<35} (危険度:{:3}階相当) - レベル{:2} - {}\n", "  {:<35} (Danger  level: {:3}) - level {:2} - {}\n");
-        fmt::print(fff, mes, fmt::bytes(name.front()), (int)quest.level, quest.complev, playtime_str);
+        fmt::print(fff, mes, name.front(), (int)quest.level, quest.complev, playtime_str);
         fputs_name_remain(name);
         return true;
     }
@@ -183,13 +183,13 @@ static bool do_cmd_knowledge_quests_aux(PlayerType *, FILE *fff, QuestId q_idx)
     const auto name = shape_buffer(quest.get_bounty().name, name_maxlen);
     if (quest.complev == 0) {
         constexpr auto mes = _("  {:<35} ({:3}階)            -   不戦勝 - {}\n", "  {:<35} (Dungeon level: {:3}) - Unearned - {}\n");
-        fmt::print(fff, mes, fmt::bytes(name.front()), (int)quest.level, playtime_str);
+        fmt::print(fff, mes, name.front(), (int)quest.level, playtime_str);
         fputs_name_remain(name);
         return true;
     }
 
     constexpr auto mes = _("  {:<35} ({:3}階)            - レベル{:2} - {}\n", "  {:<35} (Dungeon level: {:3}) - level {:2} - {}\n");
-    fmt::print(fff, mes, fmt::bytes(name.front()), (int)quest.level, quest.complev, playtime_str);
+    fmt::print(fff, mes, name.front(), (int)quest.level, quest.complev, playtime_str);
     fputs_name_remain(name);
     return true;
 }

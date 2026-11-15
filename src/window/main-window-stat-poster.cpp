@@ -155,7 +155,7 @@ std::pair<std::string, TERM_COLOR> describe_player_state(PlayerType *player_ptr)
             text = fmt::format("  {:2}", command_rep);
         }
 
-        auto state = fmt::format("{:>5}", fmt::bytes(str_substr(text, 0, 5)));
+        auto state = fmt::format("{:>5}", str_substr(text, 0, 5));
         return { std::move(state), attr };
     }
 
@@ -237,7 +237,7 @@ std::pair<std::string, TERM_COLOR> describe_player_state(PlayerType *player_ptr)
     }
     }
 
-    auto state = fmt::format("{:>5}", fmt::bytes(str_substr(text, 0, 5)));
+    auto state = fmt::format("{:>5}", str_substr(text, 0, 5));
     return { std::move(state), attr };
 }
 
@@ -251,7 +251,7 @@ void print_speed(PlayerType *player_ptr)
     auto col_speed = wid + COL_SPEED;
     auto row_speed = hgt + ROW_SPEED;
     const auto &[buf, attr] = describe_player_speed(player_ptr);
-    c_put_str(attr, fmt::format("{:<9}", fmt::bytes(buf)), row_speed, col_speed);
+    c_put_str(attr, fmt::format("{:<9}", buf), row_speed, col_speed);
 }
 
 /*!

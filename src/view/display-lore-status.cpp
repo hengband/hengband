@@ -638,7 +638,7 @@ struct ResistGroupDef {
 
 static void roff_cell(byte color, std::string_view s, int width)
 {
-    hook_c_roff(color, fmt::format("{:<{}}", fmt::bytes(s), width));
+    hook_c_roff(color, fmt::format("{:<{}}", s, width));
 }
 
 static constexpr byte RES_UNKNOWN_COLOR = TERM_SLATE; // ??? の灰色

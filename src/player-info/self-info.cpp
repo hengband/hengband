@@ -432,7 +432,7 @@ void report_magics(PlayerType *player_ptr)
     auto k = 2;
     for (int j = 0; j < size; j++) {
         constexpr auto fmt = _("{:<28} : 期間 - {} ", "{} {}.");
-        const auto mes = fmt::format(fmt, fmt::bytes(info[j].second), report_magic_durations[info[j].first]);
+        const auto mes = fmt::format(fmt, info[j].second, report_magic_durations[info[j].first]);
         prt(mes, k++, 15);
 
         /* Every 20 entries (lines 2 to 21), start over */

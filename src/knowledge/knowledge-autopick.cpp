@@ -59,7 +59,7 @@ void do_cmd_knowledge_autopick(PlayerType *player_ptr)
         }
 
         const auto command_str = entry.action.has(AutopickMethod::DISPLAY) ? fmt::format("[{}]", command) : fmt::format("({})", command);
-        fmt::print(fff, "{:>11}", fmt::bytes(command_str));
+        fmt::print(fff, "{:>11}", command_str);
         const auto line = autopick_line_from_entry(entry);
         fmt::println(fff, " {}", line);
     }

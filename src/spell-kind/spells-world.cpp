@@ -284,7 +284,7 @@ bool tele_town(PlayerType *player_ptr)
             continue;
         }
 
-        const auto buf = fmt::format("{:c}) {:<20}", I2A(i - 1), fmt::bytes(towns.get_town(i).get_name()));
+        const auto buf = fmt::format("{:c}) {:<20}", I2A(i - 1), towns.get_town(i).get_name());
         prt(buf, 5 + i, 5);
         num++;
     }

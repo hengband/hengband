@@ -384,7 +384,7 @@ bool choose_samurai_stance(PlayerType *player_ptr)
     prt(_(" a) 型を崩す", " a) No Form"), 2, 20);
     for (auto i = 0U; i < samurai_stances.size(); i++) {
         if (player_ptr->lev >= samurai_stances[i].min_level) {
-            const auto buf = fmt::format(_(" {:c}) {}の型    {}", " {:c}) Stance of {:<12}  {}"), I2A(i + 1), fmt::bytes(samurai_stances[i].desc), samurai_stances[i].info);
+            const auto buf = fmt::format(_(" {:c}) {}の型    {}", " {:c}) Stance of {:<12}  {}"), I2A(i + 1), samurai_stances[i].desc, samurai_stances[i].info);
             prt(buf, 3 + i, 20);
         }
     }

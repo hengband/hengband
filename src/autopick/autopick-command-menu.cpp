@@ -9,6 +9,7 @@
 #include "autopick/autopick-menu-data-table.h"
 #include "core/asking-player.h"
 #include "io/input-context.h"
+#include "locale/multibyte-char.h"
 #include "system/angband.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
@@ -56,7 +57,7 @@ static uint8_t redraw_edit_command_menu(bool redraw, size_t menu_depth, size_t s
             com_key << '^' << static_cast<char>(*menu_datum.key + '@');
         }
 
-        const auto str = fmt::format("| {}) {:<{}} {:2} | ", static_cast<char>(menu_key + 'a'), fmt::bytes(menu_datum.name), max_length, com_key.str());
+        const auto str = fmt::format("| {}) {:<{}} {:2} | ", static_cast<char>(menu_key + 'a'), menu_datum.name, max_length, com_key.str());
         term_putstr(col0, row1++, -1, TERM_WHITE, str);
         menu_key++;
     }
@@ -84,7 +85,7 @@ EditorCommandId do_command_menu(size_t menu_depth, size_t start)
             continue;
         }
 
-        const auto length = menu_datum.name.length();
+        const auto length = str_display_width(menu_datum.name);
         if (length > max_length) {
             max_length = length;
         }

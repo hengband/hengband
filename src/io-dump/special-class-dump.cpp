@@ -55,7 +55,7 @@ static void dump_magic_eater(PlayerType *player_ptr, FILE *fff)
             }
 
             const auto &baseitem = baseitems.lookup_baseitem({ tval, i });
-            const auto buf = fmt::format("{:>23} ({:2})", fmt::bytes(baseitem.name), item.count);
+            const auto buf = fmt::format("{:>23} ({:2})", baseitem.name, item.count);
             desc_list.emplace_back(buf);
         }
 
@@ -99,12 +99,12 @@ static void dump_smith(PlayerType *player_ptr, FILE *fff)
     auto row = n / 3 + 1;
     for (auto i = 0U; i < row; i++) {
         fmt::print(fff, "\n");
-        fmt::print(fff, "{:<11} {:5}     ", fmt::bytes(Smith::get_essence_name(essences[i])), amounts[i]);
+        fmt::print(fff, "{:<11} {:5}     ", Smith::get_essence_name(essences[i]), amounts[i]);
         if (i + row < n) {
-            fmt::print(fff, "{:<11} {:5}     ", fmt::bytes(Smith::get_essence_name(essences[i + row])), amounts[i + row]);
+            fmt::print(fff, "{:<11} {:5}     ", Smith::get_essence_name(essences[i + row]), amounts[i + row]);
         }
         if (i + row * 2 < n) {
-            fmt::print(fff, "{:<11} {:5}", fmt::bytes(Smith::get_essence_name(essences[i + row * 2])), amounts[i + row * 2]);
+            fmt::print(fff, "{:<11} {:5}", Smith::get_essence_name(essences[i + row * 2]), amounts[i + row * 2]);
         }
     }
 

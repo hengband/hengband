@@ -195,7 +195,7 @@ void print_depth(PlayerType *player_ptr)
     const auto row_depth = hgt + ROW_DEPTH;
     const auto &floor = *player_ptr->current_floor_ptr;
     if (!floor.is_underground()) {
-        c_prt(attr, fmt::format("{:>7}", fmt::bytes(_("地上", "Surf."))), row_depth, col_depth);
+        c_prt(attr, fmt::format("{:>7}", _("地上", "Surf.")), row_depth, col_depth);
         return;
     }
 
@@ -242,7 +242,7 @@ void print_depth(PlayerType *player_ptr)
         break; /* Boring place */
     }
 
-    c_prt(attr, fmt::format("{:>7}", fmt::bytes(depths)), row_depth, col_depth);
+    c_prt(attr, fmt::format("{:>7}", depths), row_depth, col_depth);
 }
 
 /*!
