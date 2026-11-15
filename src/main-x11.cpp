@@ -550,11 +550,14 @@ static errr Infowin_prepare(Window xid)
     XGetGeometry(Metadpy->dpy, xid, &tmp_win, &x, &y, &w, &h, &b, &d);
 
 #ifdef USE_XFT
-    Visual *vis = DefaultVisualOfScreen(Metadpy->screen);
-    if (vis->c_class != TrueColor) {
-        quit("Display does not support truecolor.\n");
+    // TrueColor の画面が要るのは TrueType フォントで描くときだけで、ビットマップフォントなら要らない
+    if (use_xft_runtime) {
+        Visual *vis = DefaultVisualOfScreen(Metadpy->screen);
+        if (vis->c_class != TrueColor) {
+            quit("Display does not support truecolor. Use \"-- -fb\" to use bitmap fonts.\n");
+        }
+        iwin->draw = XftDrawCreate(Metadpy->dpy, iwin->win, vis, Metadpy->cmap);
     }
-    iwin->draw = XftDrawCreate(Metadpy->dpy, iwin->win, vis, Metadpy->cmap);
 #endif
 
     iwin->x = x;
