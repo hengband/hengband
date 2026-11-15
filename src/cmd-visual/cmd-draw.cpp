@@ -6,6 +6,7 @@
 #include "io/files-util.h"
 #include "io/input-context.h"
 #include "io/input-key-acceptor.h"
+#include "locale/multibyte-char.h"
 #include "main/sound-of-music.h"
 #include "player-base/player-race.h"
 #include "player-info/race-types.h"
@@ -247,9 +248,9 @@ static int display_message_history(int base_msg_num, int num_now, int num_lines,
                     break;
                 }
 
-                const auto len = shower.length();
-                term_putstr(str - line.data(), y, len, TERM_YELLOW, shower);
-                str += len;
+                const auto x = static_cast<int>(str_display_width(std::string_view(line.data(), str - line.data())));
+                term_putstr(x, y, -1, TERM_YELLOW, shower);
+                str += shower.length();
             }
         }
     }
