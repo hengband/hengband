@@ -2060,15 +2060,10 @@ static errr game_term_xtra_x11(int n, int v)
     case TERM_XTRA_SCENE: {
         return game_term_xtra_x11_scene(v) ? 0 : 1;
     }
-#ifdef USE_XFT
     case TERM_XTRA_FRESH:
-        Metadpy_update(1, 1, 0);
+        // TrueType フォントで描くときだけ X サーバとの同期を待ち、ビットマップフォントなら送るだけにする
+        Metadpy_update(1, use_xft_runtime, 0);
         return 0;
-#else
-    case TERM_XTRA_FRESH:
-        Metadpy_update(1, 0, 0);
-        return 0;
-#endif
     case TERM_XTRA_BORED:
         return CheckEvent(0);
     case TERM_XTRA_EVENT:
