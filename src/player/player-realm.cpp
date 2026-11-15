@@ -4,7 +4,6 @@
 #include "object/tval-types.h"
 #include "player-info/class-info.h"
 #include "realm/realm-types.h"
-#include "spell/technic-info-table.h"
 #include "system/angband-exceptions.h"
 #include "system/player-type-definition.h"
 #include "system/spell-info-list.h"
@@ -132,17 +131,16 @@ const magic_type &PlayerRealm::get_spell_info(RealmType realm, int spell_id, Rea
         THROW_EXCEPTION(std::invalid_argument, fmt::format("Invalid spell id: {}", spell_id));
     }
 
-    if (is_magic(realm)) {
-        if (pclass) {
-            return class_magics_info.at(enum2i(*pclass)).spell_info(realm, spell_id, position);
-        }
-        return mp_ptr->spell_info(realm, spell_id, position);
-    }
-    if (is_technic(realm)) {
-        return technic_info[enum2i(realm) - MIN_TECHNIC][spell_id];
+    if (!is_magic(realm) && !is_technic(realm)) {
+        THROW_EXCEPTION(std::invalid_argument, fmt::format("Invalid realm: {}", enum2i(realm)));
     }
 
-    THROW_EXCEPTION(std::invalid_argument, fmt::format("Invalid realm: {}", enum2i(realm)));
+    // 技能領域は表が 1 つなので、位置によらず第一領域用の表を引く
+    const auto table_position = is_magic(realm) ? position : RealmPosition::FIRST;
+    if (pclass) {
+        return class_magics_info.at(enum2i(*pclass)).spell_info(realm, spell_id, table_position);
+    }
+    return mp_ptr->spell_info(realm, spell_id, table_position);
 }
 
 const std::string &PlayerRealm::get_spell_name(RealmType realm, int spell_id)

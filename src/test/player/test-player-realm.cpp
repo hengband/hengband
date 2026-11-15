@@ -2,6 +2,7 @@
  * @brief プレイヤーの魔法領域 (PlayerRealm) のテスト
  *
  * player/player-realm.cpp の、第一領域・第二領域の位置の判定と、位置ごとの魔法の表の引き分けを確かめる。
+ * 技能領域の表に基準値を写す player_magic::set_technic_base_values() もここで確かめる。
  */
 
 #include "player-info/class-info.h"
@@ -9,9 +10,13 @@
 #include "player/player-realm.h"
 #include "realm/realm-types.h"
 #include "system/player-type-definition.h"
+#include "system/spell-info-list.h"
+#include "system/system-variables.h"
 #include "test/scoped-restore.h"
+#include "test/system/spell-info-list-test-access.h"
 #include "util/enum-converter.h"
 #include <doctest/doctest.h>
+#include <utility>
 
 TEST_CASE("PlayerRealm tells the position of each chosen realm")
 {
@@ -60,4 +65,44 @@ TEST_CASE("PlayerRealm reads the spell table of the realm position")
     // 位置を渡さなければ第一領域用の表 (職業を指定しても同じ)
     CHECK(PlayerRealm::get_spell_info(RealmType::DEATH, 3).slevel == 10);
     CHECK(PlayerRealm::get_spell_info(RealmType::DEATH, 3, RealmPosition::SECOND, PlayerClassType::WARRIOR).slevel == 20);
+}
+
+TEST_CASE("PlayerRealm reads technic spells from the base values copied to the class table")
+{
+    const test::SpellInfoListTestAccess spell_state;
+    auto &spells = SpellInfoList::get_instance();
+    SpellInfo song;
+    song.idx = 2;
+    song.tag = "song";
+    song.base = { 7, 9, 35, 50 };
+    spells.set_spell_info(RealmType::MUSIC, 2, std::move(song));
+
+    const auto restore = test::scoped_restore(class_magics_info, mp_ptr);
+    class_magics_info.assign(1, {});
+    auto &magic = class_magics_info[0];
+    magic.set_technic_base_values();
+    mp_ptr = &magic;
+
+    const auto check_song = [](const magic_type &spell) {
+        CHECK(spell.slevel == 7);
+        CHECK(spell.smana == 9);
+        CHECK(spell.sfail == 35);
+        CHECK(spell.sexp == 50);
+    };
+    check_song(magic.info[enum2i(RealmType::MUSIC)][2]);
+    check_song(magic.info_second[enum2i(RealmType::MUSIC)][2]);
+    CHECK_FALSE(magic.has_distinct_second(RealmType::MUSIC));
+
+    // 技能領域は職業によらない表なので、位置を渡しても同じ値
+    check_song(PlayerRealm::get_spell_info(RealmType::MUSIC, 2));
+    check_song(PlayerRealm::get_spell_info(RealmType::MUSIC, 2, RealmPosition::SECOND));
+    check_song(PlayerRealm::get_spell_info(RealmType::MUSIC, 2, RealmPosition::FIRST, PlayerClassType::WARRIOR));
+
+    // 魔法の定義に無い枠は、習得も使用もできない値になる
+    for (const auto *table : { magic.info, magic.info_second }) {
+        const auto &missing = table[enum2i(RealmType::MUSIC)][3];
+        CHECK(missing.slevel == 99);
+        CHECK(missing.slevel > PY_MAX_LEVEL);
+        CHECK(missing.smana == 0);
+    }
 }
