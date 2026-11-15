@@ -80,8 +80,8 @@ const std::map<PlayerClassType, RealmChoices> realm2_choices = {
 
 PlayerRealm::PlayerRealm(PlayerType *player_ptr)
     : player_ptr(player_ptr)
-    , realm1_(player_ptr->realm1)
-    , realm2_(player_ptr->realm2)
+    , realm1_(player_ptr->realm1, RealmPosition::FIRST)
+    , realm2_(player_ptr->realm2, RealmPosition::SECOND)
 {
 }
 
@@ -118,7 +118,15 @@ std::string_view PlayerRealm::get_subinfo(RealmType realm)
     THROW_EXCEPTION(std::invalid_argument, fmt::format("Invalid realm: {}", enum2i(realm)));
 }
 
-const magic_type &PlayerRealm::get_spell_info(RealmType realm, int spell_id, tl::optional<PlayerClassType> pclass)
+/*!
+ * @brief 職業別の魔法の値を取得する
+ * @param realm 領域
+ * @param spell_id 呪文ID (0〜31)
+ * @param position その領域を第一領域・第二領域のどちらとして選んでいるか (魔法領域だけ区別する)
+ * @param pclass 職業。省略時はプレイヤーの職業 (mp_ptr)
+ * @return 習得レベル・消費MP・難易度・初回経験値倍率
+ */
+const magic_type &PlayerRealm::get_spell_info(RealmType realm, int spell_id, RealmPosition position, tl::optional<PlayerClassType> pclass)
 {
     if (spell_id < 0 || 32 <= spell_id) {
         THROW_EXCEPTION(std::invalid_argument, fmt::format("Invalid spell id: {}", spell_id));
@@ -126,9 +134,9 @@ const magic_type &PlayerRealm::get_spell_info(RealmType realm, int spell_id, tl:
 
     if (is_magic(realm)) {
         if (pclass) {
-            return class_magics_info.at(enum2i(*pclass)).info[enum2i(realm)][spell_id];
+            return class_magics_info.at(enum2i(*pclass)).spell_info(realm, spell_id, position);
         }
-        return mp_ptr->info[enum2i(realm)][spell_id];
+        return mp_ptr->spell_info(realm, spell_id, position);
     }
     if (is_technic(realm)) {
         return technic_info[enum2i(realm) - MIN_TECHNIC][spell_id];
@@ -244,13 +252,33 @@ void PlayerRealm::set_(RealmType realm1, RealmType realm2)
 {
     this->player_ptr->realm1 = realm1;
     this->player_ptr->realm2 = realm2;
-    this->realm1_ = Realm(realm1);
-    this->realm2_ = Realm(realm2);
+    this->realm1_ = Realm(realm1, RealmPosition::FIRST);
+    this->realm2_ = Realm(realm2, RealmPosition::SECOND);
 }
 
-PlayerRealm::Realm::Realm(RealmType realm)
-    : realm_(realm)
+/*!
+ * @brief 指定した領域を第一領域・第二領域のどちらとして選んでいるかを返す
+ * @param realm 領域
+ * @return 第二領域として選んでいれば SECOND。第一領域、選んでいない領域 (全領域職の詠唱)、技能領域は FIRST
+ */
+RealmPosition PlayerRealm::position_of(RealmType realm) const
 {
+    return (realm != RealmType::NONE) && this->realm2_.equals(realm) ? RealmPosition::SECOND : RealmPosition::FIRST;
+}
+
+PlayerRealm::Realm::Realm(RealmType realm, RealmPosition position)
+    : realm_(realm)
+    , position_(position)
+{
+}
+
+/*!
+ * @brief この領域を第一領域・第二領域のどちらとして選んでいるかを返す
+ * @return 領域の位置
+ */
+RealmPosition PlayerRealm::Realm::position() const
+{
+    return this->position_;
 }
 
 const LocalizedString &PlayerRealm::Realm::get_name() const
@@ -270,7 +298,7 @@ std::string_view PlayerRealm::Realm::get_subinfo() const
 
 const magic_type &PlayerRealm::Realm::get_spell_info(int spell_id) const
 {
-    return PlayerRealm::get_spell_info(this->realm_, spell_id);
+    return PlayerRealm::get_spell_info(this->realm_, spell_id, this->position_);
 }
 
 const std::string &PlayerRealm::Realm::get_spell_name(int spell_id) const

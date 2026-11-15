@@ -380,7 +380,7 @@ void PlayerSkill::gain_spell_skill_exp(RealmType realm, int spell_idx)
     constexpr GainAmountList gain_amount_list_second{ { 60, 8, 2, 0 } };
 
     const auto is_first_realm = pr.realm1().equals(realm);
-    const auto &spell = PlayerRealm::get_spell_info(realm, spell_idx);
+    const auto &spell = PlayerRealm::get_spell_info(realm, spell_idx, pr.position_of(realm));
 
     gain_spell_skill_exp_aux(this->player_ptr, this->player_ptr->spell_exp[spell_idx + (is_first_realm ? 0 : 32)],
         (is_first_realm ? gain_amount_list_first : gain_amount_list_second), spell.slevel);

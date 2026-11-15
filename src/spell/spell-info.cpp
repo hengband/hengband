@@ -140,7 +140,8 @@ PERCENTAGE spell_chance(PlayerType *player_ptr, SPELL_IDX spell_id, RealmType us
         return 0;
     }
 
-    const auto &spell = PlayerRealm::get_spell_info(use_realm, spell_id);
+    PlayerRealm pr(player_ptr);
+    const auto &spell = PlayerRealm::get_spell_info(use_realm, spell_id, pr.position_of(use_realm));
 
     PERCENTAGE chance = spell.sfail;
     chance -= 3 * (player_ptr->lev - spell.slevel);
@@ -156,7 +157,6 @@ PERCENTAGE spell_chance(PlayerType *player_ptr, SPELL_IDX spell_id, RealmType us
     }
 
     PlayerClass pc(player_ptr);
-    PlayerRealm pr(player_ptr);
     if (!pr.realm1().equals(use_realm) && (pc.equals(PlayerClassType::MAGE) || pc.equals(PlayerClassType::PRIEST))) {
         chance += 5;
     }
@@ -271,7 +271,7 @@ void print_spells(PlayerType *player_ptr, SPELL_IDX target_spell_id, const SPELL
     std::vector<BotSpellListRow> bot_rows;
     for (i = 0; i < num; i++) {
         const auto spell_id = spell_ids[i];
-        const auto &spell = PlayerRealm::get_spell_info(use_realm, spell_id);
+        const auto &spell = PlayerRealm::get_spell_info(use_realm, spell_id, pr.position_of(use_realm));
 
         MANA_POINT need_mana;
         if (use_realm == RealmType::HISSATSU) {

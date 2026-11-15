@@ -1613,6 +1613,7 @@ hengband_test_SOURCES = \
 	test/object/test-object-info.cpp \
 	test/object-use/quaff/test-quaff-execution.cpp \
 	test/player-status/test-player-status-base.cpp \
+	test/player/test-player-realm.cpp \
 	test/player/test-player-skill.cpp \
 	test/player/test-player-status-flags.cpp \
 	test/player/test-player-status-resist.cpp \

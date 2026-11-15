@@ -268,7 +268,8 @@ std::string info_weight(WEIGHT weight)
 static bool spell_okay(PlayerType *player_ptr, int spell_id, bool learned, bool study_pray, RealmType use_realm)
 {
     /* Access the spell */
-    const auto &spell = PlayerRealm::get_spell_info(use_realm, spell_id);
+    PlayerRealm pr(player_ptr);
+    const auto &spell = PlayerRealm::get_spell_info(use_realm, spell_id, pr.position_of(use_realm));
 
     /* Spell is illegal */
     if (spell.slevel > player_ptr->lev) {
@@ -276,7 +277,6 @@ static bool spell_okay(PlayerType *player_ptr, int spell_id, bool learned, bool 
     }
 
     /* Spell is forgotten */
-    PlayerRealm pr(player_ptr);
     PlayerSpellStatus pss(player_ptr);
     const auto realm_status = pr.realm2().equals(use_realm) ? pss.realm2() : pss.realm1();
     if (realm_status.is_forgotten(spell_id)) {
@@ -976,7 +976,7 @@ bool do_cmd_cast(PlayerType *player_ptr)
     const auto tval = item->bi_key.tval();
     const auto sval = *item->bi_key.sval();
     const auto use_realm = PlayerRealm::get_realm_of_book(tval);
-    if (!is_every_magic && PlayerRealm(player_ptr).realm2().equals(use_realm)) {
+    if (!is_every_magic && pr.realm2().equals(use_realm)) {
         increment = 32;
     }
 
@@ -1012,7 +1012,7 @@ bool do_cmd_cast(PlayerType *player_ptr)
         }
     }
 
-    const auto &spell = PlayerRealm::get_spell_info(use_realm, spell_id);
+    const auto &spell = PlayerRealm::get_spell_info(use_realm, spell_id, pr.position_of(use_realm));
 
     /* Extract mana consumption rate */
     need_mana = mod_need_mana(player_ptr, spell.smana, spell_id, use_realm);

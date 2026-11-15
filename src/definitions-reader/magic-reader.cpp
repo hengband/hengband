@@ -171,6 +171,8 @@ tl::expected<void, ParseErrorType> MagicReader::set_spell_data(const nlohmann::j
         return result;
     }
 
+    // 第二領域として選んだときの値は、今は第一領域と同じ (位置ごとの値は定義ファイルにまだ無い)
+    magics_info.info_second[enum2i(realm)][*spell_id] = info;
     return {};
 }
 
