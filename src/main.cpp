@@ -214,8 +214,13 @@ static void display_usage(const char *program)
     puts("  -mx11    To use X11");
     puts("  --       Sub options");
     puts("  -- -d    Set display name");
+#ifdef USE_XFT
     puts("  -- -fb   Use bitmap fonts");
-    puts("  -- -ft   Use TrueType fonts");
+    puts("  -- -ft   Use TrueType fonts (default)");
+#else
+    puts("  -- -fb   Use bitmap fonts (default)");
+    puts("  -- -ft   Use TrueType fonts (not available in this build)");
+#endif
     puts("  -- -o    Request old 8x8 tile graphics");
     puts("  -- -a    Request Adam Bolt 16x16 tile graphics");
     puts("  -- -t    Request Original32 32x32 tile graphics (needs libpng)");

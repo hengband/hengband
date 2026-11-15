@@ -85,7 +85,8 @@
  * setenv ANGBAND_X11_GAMMA 142
  *
  * # Launch Angband
- * ./src/angband -mx11 -- -n6 &
+ * # 上のフォント名はビットマップフォントのものなので、Xft 版でも -fb でビットマップフォントを使う
+ * ./src/hengband -mx11 -- -fb -n6 &
  *
  */
 
@@ -550,11 +551,14 @@ static errr Infowin_prepare(Window xid)
     XGetGeometry(Metadpy->dpy, xid, &tmp_win, &x, &y, &w, &h, &b, &d);
 
 #ifdef USE_XFT
-    Visual *vis = DefaultVisualOfScreen(Metadpy->screen);
-    if (vis->c_class != TrueColor) {
-        quit("Display does not support truecolor.\n");
+    // TrueColor の画面が要るのは TrueType フォントで描くときだけで、ビットマップフォントなら要らない
+    if (use_xft_runtime) {
+        Visual *vis = DefaultVisualOfScreen(Metadpy->screen);
+        if (vis->c_class != TrueColor) {
+            quit("Display does not support truecolor. Use \"-- -fb\" to use bitmap fonts.\n");
+        }
+        iwin->draw = XftDrawCreate(Metadpy->dpy, iwin->win, vis, Metadpy->cmap);
     }
-    iwin->draw = XftDrawCreate(Metadpy->dpy, iwin->win, vis, Metadpy->cmap);
 #endif
 
     iwin->x = x;
@@ -2057,15 +2061,10 @@ static errr game_term_xtra_x11(int n, int v)
     case TERM_XTRA_SCENE: {
         return game_term_xtra_x11_scene(v) ? 0 : 1;
     }
-#ifdef USE_XFT
     case TERM_XTRA_FRESH:
-        Metadpy_update(1, 1, 0);
+        // TrueType フォントで描くときだけ X サーバとの同期を待ち、ビットマップフォントなら送るだけにする
+        Metadpy_update(1, use_xft_runtime, 0);
         return 0;
-#else
-    case TERM_XTRA_FRESH:
-        Metadpy_update(1, 0, 0);
-        return 0;
-#endif
     case TERM_XTRA_BORED:
         return CheckEvent(0);
     case TERM_XTRA_EVENT:

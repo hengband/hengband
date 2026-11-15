@@ -21,7 +21,7 @@ CI は両方でビルドとテストを行う。片方の環境でしか作業�
 ## ビルド（Unix 系: autotools）
 
 依存パッケージは CI の `.github/workflows/build-with-autotools.yml` を参照（macOS の環境変数の設定もここにある）。
-Ubuntu/Debian の最小構成は次のとおり（X11 版には `libx11-dev` なども要る）。
+Ubuntu/Debian の最小構成は次のとおり（X11 版には `libx11-dev` など、TrueType フォントを使うには `libxft-dev` も要る）。
 
 ```bash
 sudo apt-get install build-essential autoconf automake pkg-config libncurses-dev libcurl4-openssl-dev nkf

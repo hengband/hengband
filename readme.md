@@ -38,6 +38,8 @@
 
 * [Ubuntu Linux でソースコードからビルドして実行する](https://github.com/hengband/hengband/wiki/Ubuntu-Linux-%E3%81%A7%E3%82%BD%E3%83%BC%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%89%E3%81%8B%E3%82%89%E3%83%93%E3%83%AB%E3%83%89%E3%81%97%E3%81%A6%E5%AE%9F%E8%A1%8C%E3%81%99%E3%82%8B)
 
+**フォント:** Xft (Ubuntu では `libxft-dev` パッケージ) があれば、`./configure` が自動で TrueType フォントを使えるようにし、起動時の既定も TrueType フォントになります。ビットマップフォントを使うには、起動時に `-- -fb` を付けるか、`./configure --disable-xft` でビルドしてください。
+
 **ゲームの起動例:**
 
 * **ASCIIモード:**
