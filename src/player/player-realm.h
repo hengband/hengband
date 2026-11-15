@@ -35,7 +35,8 @@ public:
 
     class Realm {
     public:
-        Realm(RealmType realm);
+        Realm(RealmType realm, RealmPosition position = RealmPosition::FIRST);
+        RealmPosition position() const;
         const LocalizedString &get_name() const;
         std::string_view get_explanation() const;
         std::string_view get_subinfo() const;
@@ -50,10 +51,12 @@ public:
 
     private:
         RealmType realm_;
+        RealmPosition position_;
     };
 
     const Realm &realm1() const;
     const Realm &realm2() const;
+    RealmPosition position_of(RealmType realm) const;
     bool is_realm_hex() const;
     void reset();
     void set(RealmType realm1, RealmType realm2 = RealmType::NONE);
