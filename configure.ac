@@ -50,6 +50,27 @@ dnl Checks for programs.
 AC_LANG(C++)
 AC_PROG_CXX
 
+dnl 前提は GCC 16 以上、または Clang 21 以上
+AC_MSG_CHECKING([whether the compiler meets the minimum version requirement])
+AC_COMPILE_IFELSE(
+  [AC_LANG_SOURCE([[
+#if defined(__clang__)
+#  if __clang_major__ < 21
+#    error "Clang 21 or later is required"
+#  endif
+#elif defined(__GNUC__)
+#  if __GNUC__ < 16
+#    error "GCC 16 or later is required"
+#  endif
+#else
+#  error "Unsupported compiler"
+#endif
+int main() { return 0; }
+  ]])],
+  [AC_MSG_RESULT([yes])],
+  [AC_MSG_ERROR([Compiler too old. GCC 16 or later, or Clang 21 or later is required.])]
+)
+
 dnl Detect macOS host
 AC_CANONICAL_HOST
 is_macos=no
