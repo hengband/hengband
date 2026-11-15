@@ -12,6 +12,7 @@
 #include "core/asking-player.h"
 #include "definitions-reader/town-map-loader.h"
 #include "definitions-reader/wilderness-reader.h"
+#include "floor/floor-mode-changer.h"
 #include "game-option/birth-options.h"
 #include "game-option/map-screen-options.h"
 #include "market/building-initializer.h"
@@ -348,15 +349,15 @@ static void generate_area(PlayerType *player_ptr, const Pos2D &pos, bool is_bord
 /*!
  * @brief 地上マップにモンスターを生成する
  * @param player_ptr プレイヤーへの参照ポインタ
+ * @param should_ambush 襲撃の階ならtrue
  * @details '>' キーで普通に入った時と、襲撃を受けた時でモンスター数は異なる.
  * また、集団生成や護衛は、最初に生成された1体だけがカウント対象である.
  * よって、実際に生成されるモンスターは、コードの見た目より多くなる.
  */
-static void generate_wild_monsters(PlayerType *player_ptr)
+static void generate_wild_monsters(PlayerType *player_ptr, bool should_ambush)
 {
     constexpr auto num_ambush_monsters = 40;
     constexpr auto num_normal_monsters = 8;
-    const auto should_ambush = WildernessGrids::get_instance().should_ambush();
     const auto lim = should_ambush ? num_ambush_monsters : num_normal_monsters;
     const auto &world = AngbandWorld::get_instance();
     for (auto i = 0; i < lim; i++) {
@@ -533,10 +534,9 @@ void wilderness_gen(PlayerType *player_ptr)
         return;
     }
 
-    generate_wild_monsters(player_ptr);
-    if (wilderness.should_ambush()) {
-        player_ptr->ambush_flag = true;
-    }
+    const auto should_ambush = FloorChangeModesStore::get_instace()->has(FloorChangeMode::AMBUSH);
+    generate_wild_monsters(player_ptr, should_ambush);
+    player_ptr->ambush_flag = should_ambush;
 
     auto &quests = QuestList::get_instance();
     for (auto &[quest_id, quest] : quests) {
@@ -648,15 +648,13 @@ void init_wilderness_terrains()
 }
 
 /*!
- * @brief 荒野から広域マップへの切り替え処理 /
- * Initialize arrays for wilderness terrains
+ * @brief 荒野と広域マップを切り替える
  * @param encount 襲撃時TRUE
  * @return 切り替えが行われた場合はTRUEを返す。
+ * @details 襲撃で広域マップから荒野に入るときは、FloorChangeMode::AMBUSH を立てて、次の change_floor() で作る荒野を襲撃の階にする。
  */
 bool change_wild_mode(PlayerType *player_ptr, bool encount)
 {
-    auto &wilderness = WildernessGrids::get_instance();
-    wilderness.set_ambushes(encount);
     if (player_ptr->leaving) {
         return false;
     }
@@ -668,7 +666,8 @@ bool change_wild_mode(PlayerType *player_ptr, bool encount)
 
     auto &world = AngbandWorld::get_instance();
     if (world.is_wild_mode()) {
-        wilderness.set_player_position(player_ptr->get_position());
+        WildernessGrids::get_instance().set_player_position(player_ptr->get_position());
+        FloorChangeModesStore::get_instace()->set(FloorChangeMode::AMBUSH, encount);
         player_ptr->energy_need = 0;
         world.set_wild_mode(false);
         player_ptr->leaving = true;

@@ -252,16 +252,6 @@ void WildernessGrids::set_reinitialization(bool state)
     this->reinitialization_flag = state;
 }
 
-bool WildernessGrids::should_ambush() const
-{
-    return this->ambushes_flag;
-}
-
-void WildernessGrids::set_ambushes(bool state)
-{
-    this->ambushes_flag = state;
-}
-
 WildernessLetters WildernessLetters::instance{};
 
 WildernessLetters &WildernessLetters::get_instance()

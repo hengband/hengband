@@ -12,6 +12,7 @@ enum class FloorChangeMode : short {
     SAVE_FLOORS, //!< 保存済フロアに移動する.
     NO_RETURN, //!< 帰還などで移動元に戻らない.
     FIRST_FLOOR, //!< 荒野からダンジョンの一番浅い階層に移動する.
+    AMBUSH, //!< 広域マップで襲撃され、移動先の荒野が襲撃の階になる.
     MAX,
 };
 

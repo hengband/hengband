@@ -35,7 +35,6 @@
 #include "system/enums/dungeon/dungeon-id.h"
 #include "system/enums/terrain/terrain-tag.h"
 #include "system/floor/floor-info.h"
-#include "system/floor/wilderness-grid.h"
 #include "system/grid-type-definition.h"
 #include "system/item/item-entity.h"
 #include "system/monrace/monrace-definition.h"
@@ -473,9 +472,6 @@ void change_floor(PlayerType *player_ptr)
     player_ptr->pet_t_m_idx = 0;
     player_ptr->riding_t_m_idx = 0;
     update_floor(player_ptr);
-
-    // 襲撃の予約は荒野を作るときにだけ使うので、作った階によらずここで消し、後の階に持ち越さない
-    WildernessGrids::get_instance().set_ambushes(false);
     place_pet(player_ptr);
     Travel::get_instance().reset_goal();
     auto &floor = *player_ptr->current_floor_ptr;

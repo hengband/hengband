@@ -335,7 +335,6 @@ tl::expected<void, std::string> initialize_wilderness_definition()
     wilderness.initialize_width(definition->width);
     wilderness.initialize_height(definition->height);
     wilderness.initialize_grids();
-    wilderness.set_ambushes(false);
     return {};
 }
 
