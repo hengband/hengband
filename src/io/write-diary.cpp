@@ -89,7 +89,7 @@ static std::pair<QuestId, std::string> write_floor(const FloorType &floor)
  */
 static void print_entry_prefix(FILE *fff, int hour, int min, std::string_view note_level)
 {
-    fmt::print(fff, " {:2}:{:02} {:>20} ", hour, min, fmt::bytes(note_level));
+    fmt::print(fff, " {:2}:{:02} {:>20} ", hour, min, note_level);
 }
 
 /*!

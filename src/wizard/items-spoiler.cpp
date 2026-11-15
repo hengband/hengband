@@ -173,7 +173,7 @@ SpoilerOutputResultType spoil_obj_desc()
             const auto dam_or_ac = describe_dam_or_ac(item);
             const auto weight = describe_weight(item);
             const auto chance = describe_chance(item);
-            const auto line = fmt::format("  {:<35}{:>8}{:>7}{:5} {:<40}{:9}\n", fmt::bytes(item_name), fmt::bytes(dam_or_ac), fmt::bytes(weight), depth, fmt::bytes(chance), price);
+            const auto line = fmt::format("  {:<35}{:>8}{:>7}{:5} {:<40}{:9}\n", item_name, dam_or_ac, weight, depth, chance, price);
             ofs << line;
         }
     }

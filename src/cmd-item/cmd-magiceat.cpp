@@ -284,13 +284,13 @@ static tl::optional<BaseitemKey> select_magic_eater(PlayerType *player_ptr, bool
                 if (tval == ItemKindType::ROD) {
                     constexpr auto fmt = _(" {:<22} 充填:{:2}/{:2}{:3}%", " {:<22}   ({:2}/{:2}) {:3}%");
                     const auto charge = item.charge > 0 ? (item.charge - 1) / (EATER_ROD_CHARGE * baseitem.pval) + 1 : 0;
-                    dummy.append(fmt::format(fmt, fmt::bytes(str_substr(baseitem.name, 0, 22)), charge, item.count, chance));
+                    dummy.append(fmt::format(fmt, str_substr(baseitem.name, 0, 22), charge, item.count, chance));
                     if (item.charge > baseitem.pval * (item.count - 1) * EATER_ROD_CHARGE) {
                         col = TERM_RED;
                     }
                 } else {
                     constexpr auto fmt = " {:<22}    {:2}/{:2} {:3}%";
-                    dummy.append(fmt::format(fmt, fmt::bytes(str_substr(baseitem.name, 0, 22)), static_cast<int16_t>(item.charge / EATER_CHARGE), item.count, chance));
+                    dummy.append(fmt::format(fmt, str_substr(baseitem.name, 0, 22), static_cast<int16_t>(item.charge / EATER_CHARGE), item.count, chance));
                     if (item.charge < EATER_CHARGE) {
                         col = TERM_RED;
                     }

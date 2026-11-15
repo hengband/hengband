@@ -151,7 +151,7 @@ static void print_monster_line(TERM_LEN x, TERM_LEN y, const MonsterEntity &mons
 
     std::string buf;
     if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
-        buf = fmt::format(_("{:>3}(覚{:2})", "{:>3}({:2})"), fmt::bytes(monrace.is_bounty(true) ? "  W" : "  U"), n_awake);
+        buf = fmt::format(_("{:>3}(覚{:2})", "{:>3}({:2})"), monrace.is_bounty(true) ? "W" : "U", n_awake);
     } else {
         buf = fmt::format(_("{:3}(覚{:2})", "{:3}({:2})"), n_same, n_awake);
     }
@@ -917,7 +917,7 @@ static void display_spell_list(PlayerType *player_ptr)
 
             const auto comment = mindcraft_info(player_ptr, use_mind, i);
             constexpr auto fmt = "  {:c}) {:<30}{:2} {:4} {:3}%{}";
-            term_putstr(x, y + i + 1, -1, a, fmt::format(fmt, I2A(i), fmt::bytes(spell.name), spell.min_lev, spell.mana_cost, chance, comment));
+            term_putstr(x, y + i + 1, -1, a, fmt::format(fmt, I2A(i), spell.name, spell.min_lev, spell.mana_cost, chance, comment));
         }
 
         return;
@@ -957,7 +957,7 @@ static void display_spell_list(PlayerType *player_ptr)
             }
 
             m[j] = y + n;
-            term_putstr(x, m[j], -1, a, fmt::format("{:c}/{:c}) {:<20}", I2A(n / 8), I2A(n % 8), fmt::bytes(str_substr(name, 0, 20))));
+            term_putstr(x, m[j], -1, a, fmt::format("{:c}/{:c}) {:<20}", I2A(n / 8), I2A(n % 8), str_substr(name, 0, 20)));
             n++;
         }
     }

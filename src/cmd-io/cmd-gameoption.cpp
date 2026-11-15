@@ -109,7 +109,7 @@ static void do_cmd_options_autosave(PlayerType *player_ptr, std::string_view inf
             }
 
             const auto &autosave = autosave_info[i];
-            c_prt(a, fmt::format("{:<48}: {} ({})", fmt::bytes(autosave.description), (*autosave.value ? _("はい  ", "yes") : _("いいえ", "no ")), autosave.text), i + 2, 0);
+            c_prt(a, fmt::format("{:<48}: {} ({})", autosave.description, (*autosave.value ? _("はい  ", "yes") : _("いいえ", "no ")), autosave.text), i + 2, 0);
         }
 
         prt(fmt::format(_("自動セーブの頻度： {} ターン毎", "Timed autosave frequency: every {} turns"), autosave_freq), 5, 0);
@@ -349,7 +349,7 @@ static void do_cmd_options_cheat(const FloorType &floor, std::string_view player
 
             const auto &cheat = cheat_info[i];
             const auto yesno = *cheat.value ? _("はい  ", "yes") : _("いいえ", "no ");
-            c_prt(enum2i(a), fmt::format("{:<48}: {} ({})", fmt::bytes(cheat.description), yesno, cheat.text), i + 2, 0);
+            c_prt(enum2i(a), fmt::format("{:<48}: {} ({})", cheat.description, yesno, cheat.text), i + 2, 0);
         }
 
         move_cursor(k + 2, 50);
@@ -686,7 +686,7 @@ void do_cmd_options_aux(PlayerType *player_ptr, GameOptionPage page, std::string
 
             const auto &option = option_info[opt[i]];
             const auto reply = *option.value ? _("はい  ", "yes") : _("いいえ", "no ");
-            const auto label = fmt::format("{:<48}: {} ({})", fmt::bytes(option.description), reply, str_substr(option.text, 0, 19));
+            const auto label = fmt::format("{:<48}: {} ({})", option.description, reply, str_substr(option.text, 0, 19));
             if ((page == GameOptionPage::AUTODESTROY) && i > 2) {
                 c_prt(a, label, i + 5, 0);
             } else {

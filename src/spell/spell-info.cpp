@@ -316,7 +316,7 @@ void print_spells(PlayerType *player_ptr, SPELL_IDX target_spell_id, const SPELL
         BotSpellListRow bot_row{};
         bot_row.spell_id = spell_id;
         if (spell.slevel >= 99) {
-            out_val.append(fmt::format("{:<30}", fmt::bytes(_("(判読不能)", "(illegible)"))));
+            out_val.append(fmt::format("{:<30}", _("(判読不能)", "(illegible)")));
             c_prt(TERM_L_DARK, out_val, y + i + 1, x);
             bot_row.status = "illegible";
             bot_rows.push_back(std::move(bot_row));
@@ -362,10 +362,10 @@ void print_spells(PlayerType *player_ptr, SPELL_IDX target_spell_id, const SPELL
         bot_row.level = spell.slevel;
         bot_row.mana = need_mana;
         if (use_realm == RealmType::HISSATSU) {
-            out_val.append(fmt::format("{:<25} {:2} {:4}", fmt::bytes(spell_name), spell.slevel, need_mana));
+            out_val.append(fmt::format("{:<25} {:2} {:4}", spell_name, spell.slevel, need_mana));
         } else {
             const auto chance = spell_chance(player_ptr, spell_id, use_realm);
-            out_val.append(fmt::format("{:<25}{:c}{:<4} {:2} {:4} {:3}% {}", fmt::bytes(spell_name), (max ? '!' : ' '), fmt::bytes(ryakuji), spell.slevel, need_mana, chance, comment));
+            out_val.append(fmt::format("{:<25}{:c}{:<4} {:2} {:4} {:3}% {}", spell_name, (max ? '!' : ' '), ryakuji, spell.slevel, need_mana, chance, comment));
             bot_row.fail = chance;
             bot_row.proficiency = ryakuji;
             bot_row.proficiency_mark = max;

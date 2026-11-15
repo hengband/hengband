@@ -989,7 +989,7 @@ void display_element_spell_list(PlayerType *player_ptr, int y, int x)
         const auto comment = get_element_effect_info(player_ptr, i);
 
         constexpr auto fmt = "  {:c}) {:<30}{:2} {:4} {:3}%{}";
-        const auto info_str = fmt::format(fmt, I2A(i), fmt::bytes(name), spell.min_lev, mana_cost, chance, comment);
+        const auto info_str = fmt::format(fmt, I2A(i), name, spell.min_lev, mana_cost, chance, comment);
         const auto color = mana_cost > player_ptr->csp ? TERM_ORANGE : TERM_WHITE;
         c_prt(color, info_str, y + i + 1, x);
     }

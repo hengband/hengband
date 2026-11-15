@@ -118,7 +118,7 @@ static void display_uniques(UniqueList *unique_list_ptr, FILE *fff)
 
         // shape_buffer() は終端文字の分を除いた maxlen - 1 バイトごとに区切るので、名前の欄の幅 + 1 を渡す
         const auto name = shape_buffer(monrace.name, 40 + 1);
-        fmt::println(fff, _("     {:<40} (レベル{:3}){}", "     {:<40} (level {:3}){}"), fmt::bytes(name.front()), (int)monrace.level, details);
+        fmt::println(fff, _("     {:<40} (レベル{:3}){}", "     {:<40} (level {:3}){}"), name.front(), (int)monrace.level, details);
         for (auto i = 1U; i < name.size(); ++i) {
             fmt::println(fff, "     {}", name[i]);
         }

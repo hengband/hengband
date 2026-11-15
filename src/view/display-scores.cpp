@@ -127,10 +127,10 @@ void display_scores(int from, int to, int note, high_score *score)
             std::string out_val;
             const auto pclass = i2enum<PlayerClassType>(pc);
 #ifdef JP
-            out_val = fmt::format("{:3}.{:>9}  {}{}{} - {}{} (レベル {})", place, fmt::bytes(the_score.pts), personality_info[pa].title, (personality_info[pa].no ? "の" : ""), the_score.who, race_info[pr].title, class_info.at(pclass).title, clev);
+            out_val = fmt::format("{:3}.{:>9}  {}{}{} - {}{} (レベル {})", place, the_score.pts, personality_info[pa].title, (personality_info[pa].no ? "の" : ""), the_score.who, race_info[pr].title, class_info.at(pclass).title, clev);
 
 #else
-            out_val = fmt::format("{:3}.{:>9}  {} {} the {} {}, Level {}", place, fmt::bytes(the_score.pts), personality_info[pa].title, the_score.who, race_info[pr].title, class_info.at(pclass).title, clev);
+            out_val = fmt::format("{:3}.{:>9}  {} {} the {} {}, Level {}", place, the_score.pts, personality_info[pa].title, the_score.who, race_info[pr].title, class_info.at(pclass).title, clev);
 #endif
             if (mlev > clev) {
                 out_val.append(fmt::format(_(" (最高{})", " (Max {})"), mlev));

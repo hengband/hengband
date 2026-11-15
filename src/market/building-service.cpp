@@ -87,7 +87,7 @@ void display_building_service(PlayerType *player_ptr, const building_type &bldg)
     byte action_color;
 
     term_clear();
-    prt(fmt::format("{} ({}) {:>35}", bldg.owner_name, bldg.owner_race, fmt::bytes(bldg.name)), 2, 1);
+    prt(fmt::format("{} ({}) {:>35}", bldg.owner_name, bldg.owner_race, bldg.name), 2, 1);
 
     for (int i = 0; i < 8; i++) {
         if (!bldg.letters[i]) {

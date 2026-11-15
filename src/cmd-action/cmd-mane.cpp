@@ -246,7 +246,7 @@ static int get_mane_power(PlayerType *player_ptr, int *sn, bool baigaesi)
                     const auto comment = mane_info(player_ptr, mane.spell, (baigaesi ? mane.damage * 2 : mane.damage));
 
                     /* Dump the spell --(-- */
-                    prt(fmt::format("  {}) {:<30} {:3}%{}", I2A(i), fmt::bytes(spell.name), chance, comment), y + i + 1, x);
+                    prt(fmt::format("  {}) {:<30} {:3}%{}", I2A(i), spell.name, chance, comment), y + i + 1, x);
                 }
 
                 /* Clear the bottom line */

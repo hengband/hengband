@@ -188,7 +188,7 @@ static std::string cursor_of_adjusted_stat(const int *cval, int cs)
         inp = fmt::format("{:2}", m);
     }
 
-    return fmt::format("{:>6}       {:2}   {:+3}  {:+3}  {:+3}  =  {:>6}  {:>6}", fmt::bytes(stat_names[cs]), cval[cs], rp_ptr->r_adj[cs], cp_ptr->c_adj[cs], ap_ptr->a_adj[cs], fmt::bytes(inp), fmt::bytes(maxv));
+    return fmt::format("{:>6}       {:2}   {:+3}  {:+3}  {:+3}  =  {:>6}  {:>6}", stat_names[cs], cval[cs], rp_ptr->r_adj[cs], cp_ptr->c_adj[cs], ap_ptr->a_adj[cs], inp, maxv);
 }
 
 /*!
@@ -453,7 +453,7 @@ bool get_chara_limits(PlayerType *player_ptr, chara_limit_type *chara_limit_ptr)
     }
 
     for (int i = 0; i < 4; i++) {
-        auto buf = fmt::format("{:<12} ({:3} - {:3})", fmt::bytes(item_names[i]), mval[i * 2], mval[i * 2 + 1]);
+        auto buf = fmt::format("{:<12} ({:3} - {:3})", item_names[i], mval[i * 2], mval[i * 2 + 1]);
         put_str(buf, 14 + i, 20);
         for (int j = 0; j < 2; j++) {
             buf = fmt::format("     {:3}", cval[i * 2 + j]);

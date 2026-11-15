@@ -239,7 +239,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                 int c;
                 const auto &symbol_definition = monrace.symbol_definition;
                 auto &symbol_config = monrace.symbol_config;
-                term_putstr(5, 17, -1, TERM_WHITE, fmt::format(_("モンスター = {}, 名前 = {:<40}", "Monster = {}, Name = {:<40}"), enum2i(monrace_id), fmt::bytes(str_substr(monrace.name, 0, 40))));
+                term_putstr(5, 17, -1, TERM_WHITE, fmt::format(_("モンスター = {}, 名前 = {:<40}", "Monster = {}, Name = {:<40}"), enum2i(monrace_id), str_substr(monrace.name, 0, 40)));
                 term_putstr(10, 19, -1, TERM_WHITE, fmt::format(_("初期値  色 / 文字 = {:3} / {:3}", "Default attr/char = {:3} / {:3}"), symbol_definition.color, static_cast<uint8_t>(symbol_definition.character)));
                 term_putstr(40, 19, -1, TERM_WHITE, empty_symbol);
                 term_queue_bigchar(43, 19, { symbol_definition, {} });
@@ -318,7 +318,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                 auto &baseitem_config = baseitem_configs.get_config(bi_id);
                 constexpr auto fmt_title = _("アイテム = {}, 名前 = {:<40}", "Object = {}, Name = {:<40}");
                 const auto &baseitem_name = baseitem_record.is_apparent() ? baseitem.flavor_name : baseitem.name;
-                const auto title = fmt::format(fmt_title, bi_id, fmt::bytes(str_substr(baseitem_name, 0, 40)));
+                const auto title = fmt::format(fmt_title, bi_id, str_substr(baseitem_name, 0, 40));
                 term_putstr(5, 17, -1, TERM_WHITE, title);
                 term_putstr(10, 19, -1, TERM_WHITE, fmt::format(_("初期値  色 / 文字 = {:3} / {:3}", "Default attr/char = {:3} / {:3}"), symbol_definition.color, static_cast<uint8_t>(symbol_definition.character)));
                 term_putstr(40, 19, -1, TERM_WHITE, empty_symbol);
