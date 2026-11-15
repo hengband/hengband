@@ -535,7 +535,7 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
             str2 = angband_strstr(str, " ");
             size_t len = (str2 == nullptr) ? strlen(str) : str2 - str;
             if (len != 0) {
-                term_putstr_v(w * 3 / 4 - 2 - msg_positions[i].x * 2, msg_positions[i].y, len, TERM_WHITE, str);
+                term_putstr_v(w * 3 / 4 - 2 - msg_positions[i].x * 2, msg_positions[i].y, TERM_WHITE, { str, len });
                 if (str2 == nullptr) {
                     break;
                 }

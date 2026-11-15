@@ -270,7 +270,7 @@ void term_activate(term_type *t);
 void term_init(term_type *t, int w, int h, int k);
 
 #ifdef JP
-void term_putstr_v(int x, int y_initial, size_t n, uint8_t color, std::string_view sv);
+void term_putstr_v(int x, int y_initial, uint8_t color, std::string_view sv);
 #endif
 
 #ifndef _WIN32
