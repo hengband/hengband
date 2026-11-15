@@ -63,15 +63,16 @@ public:
     AutopickTextBody(int cx, int cy); // 画面表示はX→Yの順番であることが多いので一応揃える.
 
     void adjust_cursor_column();
-    void update_cursor_column_record(EditorCommandId com_id);
+    void update_cursor_column_record(EditorCommandId com_id, int cx_before, int column_before);
     bool is_cursor_inside_multibyte_char() const;
+    int get_cursor_column() const;
     bool has_line(int y) const;
     bool is_last_line(int y) const;
     void set_lines(std::vector<std::string> new_lines);
 
     int cx;
     int cy;
-    int rec_cx = 0;
+    int rec_cx = 0; //!< 上下に移動する間に覚えておくカーソルの表示桁 (0 なら覚えていない)
     int wid = 0;
     int hgt = 0;
     int upper = 0;

@@ -2,6 +2,7 @@
  * @brief 自動拾いエディタのカーソル列補正のテスト
  */
 
+#include "autopick/autopick-commands-table.h"
 #include "autopick/autopick-editor-util.h"
 #include "autopick/autopick-methods-table.h"
 #include "autopick/autopick-util.h"
@@ -64,6 +65,41 @@ TEST_CASE("adjust_cursor_column keeps the mark column within the line shortened 
 
     CHECK(tb.mx == 4);
     CHECK(tb.cx == 4);
+}
+
+TEST_CASE("adjust_cursor_column puts the cursor at the recorded column within the line")
+{
+    auto tb = make_text_body({ "aaaaaa" });
+
+    tb.rec_cx = 3;
+    tb.adjust_cursor_column();
+    CHECK(tb.cx == 3);
+
+    tb.rec_cx = 10;
+    tb.adjust_cursor_column();
+    CHECK(tb.cx == 6);
+}
+
+TEST_CASE("update_cursor_column_record keeps the widest column while moving up and down")
+{
+    auto tb = make_text_body({ "aaaaaa" });
+
+    tb.update_cursor_column_record(EditorCommandId::UP, 0, 4);
+    CHECK(tb.rec_cx == 4);
+    tb.update_cursor_column_record(EditorCommandId::DOWN, 0, 2);
+    CHECK(tb.rec_cx == 4);
+    tb.update_cursor_column_record(EditorCommandId::LEFT, 0, 4);
+    CHECK(tb.rec_cx == 0);
+}
+
+TEST_CASE("update_cursor_column_record records the column after the command when the command moves the cursor")
+{
+    auto tb = make_text_body({ "aaaaaa" });
+
+    // BOTTOM はカーソルを行頭へ移すので、移す前の桁は覚えない
+    tb.cx = 0;
+    tb.update_cursor_column_record(EditorCommandId::BOTTOM, 4, 4);
+    CHECK(tb.rec_cx == 0);
 }
 
 TEST_CASE("set_lines replaces all the lines")
