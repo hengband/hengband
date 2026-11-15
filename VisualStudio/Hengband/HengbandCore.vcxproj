@@ -775,7 +775,6 @@
     <ClCompile Include="..\..\src\spell\spells-staff-only.cpp" />
     <ClCompile Include="..\..\src\spell\spells-status.cpp" />
     <ClCompile Include="..\..\src\spell\spells-summon.cpp" />
-    <ClCompile Include="..\..\src\spell\technic-info-table.cpp" />
     <ClCompile Include="..\..\src\status\action-setter.cpp" />
     <ClCompile Include="..\..\src\status\bad-status-setter.cpp" />
     <ClCompile Include="..\..\src\status\base-status.cpp" />
@@ -1776,7 +1775,6 @@
     <ClInclude Include="..\..\src\spell\spells-summon.h" />
     <ClInclude Include="..\..\src\spell\spells-util.h" />
     <ClInclude Include="..\..\src\spell\summon-types.h" />
-    <ClInclude Include="..\..\src\spell\technic-info-table.h" />
     <ClInclude Include="..\..\src\status\action-setter.h" />
     <ClInclude Include="..\..\src\status\bad-status-setter.h" />
     <ClInclude Include="..\..\src\status\base-status.h" />

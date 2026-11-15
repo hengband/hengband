@@ -84,7 +84,6 @@
 #include "spell/spells-describer.h"
 #include "spell/spells-execution.h"
 #include "spell/spells-status.h"
-#include "spell/technic-info-table.h"
 #include "status/action-setter.h"
 #include "status/base-status.h"
 #include "sv-definition/sv-lite-types.h"
