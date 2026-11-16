@@ -1,4 +1,5 @@
 #include "wizard/spoiler-util.h"
+#include "locale/multibyte-char.h"
 #include "system/item/item-entity.h"
 #include "util/buffer-shaper.h"
 #include <algorithm>
@@ -64,7 +65,7 @@ void spoiler_blanklines(int n, std::ofstream &ofs)
 void spoiler_underline(std::string_view str, std::ofstream &ofs)
 {
     ofs << str << '\n';
-    spoiler_out_n_chars(str.length(), '-', ofs);
+    ofs << std::string(str_display_width(str), '-');
     ofs << '\n';
 }
 
