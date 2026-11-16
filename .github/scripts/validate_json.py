@@ -1298,7 +1298,11 @@ def validate_class_magic_semantics(data: dict, schema_path: Path, data_path: Pat
             raise ValidationError("class IDs must be in strictly increasing order", path=path + ["name"])
         previous_id = class_id
         for field in ("first_spell_level", "armour_weight_limit"):
-            require_integer(record[field], path + [field])
+            if field in record:
+                require_integer(record[field], path + [field])
+        # 魔法書を使う職業は MP と覚えられる魔法の数を求めるのに使うので省略できない (魔法を使わない職業は省略する)
+        if record["spell_type"] != "NONE" and "first_spell_level" not in record:
+            raise ValidationError("first_spell_level is required for classes with spellbooks", path=path)
         for realm_index, realm in enumerate(record["realms"]):
             realm_path = path + ["realms", realm_index]
             max_book = realm.get("max_book", MAX_BOOKS_IN_REALM)

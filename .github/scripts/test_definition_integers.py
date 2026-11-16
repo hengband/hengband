@@ -357,7 +357,7 @@ class DefinitionIntegerValidationTest(unittest.TestCase):
 
     def test_integer_boundaries_still_follow_schema(self):
         fields = (
-            ("ClassMagicDefinitions", ["classes", 0, "first_spell_level"], 99),
+            ("ClassMagicDefinitions", ["classes", 0, "first_spell_level"], 50),
             ("ClassMagicDefinitions", ["classes", 0, "armour_weight_limit"], 2047),
             ("ClassMagicDefinitions", ["classes", 0, "realms", 0, "spells_info", 0, "mana_cost"], 2047),
             ("ClassMagicDefinitions", ["classes", 0, "realms", 0, "spells_info", 0, "difficulty"], 100),
@@ -375,6 +375,19 @@ class DefinitionIntegerValidationTest(unittest.TestCase):
         for value, valid in ((1, True), (50, True), (0, False), (51, False), (99, False)):
             with self.subTest(value=value):
                 self.check_value("ClassMagicDefinitions", path, value, valid)
+
+    def test_magic_first_spell_level_is_omitted_only_without_spellbooks(self):
+        document = copy.deepcopy(self.samples["ClassMagicDefinitions"])
+        del document["classes"][0]["first_spell_level"]
+        ok, message = self.validate("ClassMagicDefinitions", document, self.samples["SpellDefinitions"])
+        self.assertFalse(ok, message)
+        self.assertIn("first_spell_level is required for classes with spellbooks", message)
+        self.assertIn("Location: ['classes', 0]", message)
+        # 魔法を使わない職業は省略する
+        document["classes"][0]["spell_type"] = "NONE"
+        document["classes"][0]["realms"] = []
+        ok, message = self.validate("ClassMagicDefinitions", document)
+        self.assertTrue(ok, message)
 
     def test_nested_records_must_be_objects(self):
         fields = (

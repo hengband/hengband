@@ -86,9 +86,20 @@ tl::expected<void, ParseErrorType> MagicReader::read() const
         msg_print(_("呪文訓練可能性読込失敗。", "Failed to load spell_trainability."));
         return result;
     }
-    if (const auto result = info_set_integer(get_json_value(this->class_data, "first_spell_level"), magics_info.spell_first, true, Range(0, 99)); !result) {
-        msg_print(_("呪文行使開始レベル読込失敗。", "Failed to load spell-first level."));
-        return result;
+    // 魔法を使わない職業は省略する
+    magics_info.spell_first = tl::nullopt;
+    if (const auto &first_spell_level = get_json_value(this->class_data, "first_spell_level"); !first_spell_level.is_null()) {
+        int spell_first{};
+        if (const auto result = info_set_integer(first_spell_level, spell_first, true, Range(0, PY_MAX_LEVEL)); !result) {
+            msg_print(_("呪文行使開始レベル読込失敗。", "Failed to load spell-first level."));
+            return result;
+        }
+        magics_info.spell_first = spell_first;
+    }
+    // 魔法書を使う職業は、MP と覚えられる魔法の数を最初の魔法のレベルから求めるので省略できない
+    if ((magics_info.spell_book != ItemKindType::NONE) && !magics_info.spell_first) {
+        msg_print(_("魔法書を使う職業は呪文行使開始レベルを省略できません。", "A class that uses spellbooks requires first_spell_level."));
+        return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
     }
     if (const auto result = info_set_integer(get_json_value(this->class_data, "armour_weight_limit"), magics_info.spell_weight, true, Range(0, MAX_CLASS_MAGIC_VALUE)); !result) {
         msg_print(_("MP重量制限値読込失敗。", "Failed to load spell-weight value."));

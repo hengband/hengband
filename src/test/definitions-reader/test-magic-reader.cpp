@@ -33,14 +33,13 @@ TEST_CASE("MagicReader preserves an existing class on a later parse error")
         { "has_glove_mp_penalty", false },
         { "has_magic_fail_rate_cap", false },
         { "is_spell_trainable", false },
-        { "first_spell_level", 99 },
         { "armour_weight_limit", 0 },
         { "realms", nlohmann::json::array() },
     };
     REQUIRE(test::read_and_commit(MagicReader(data, session), session).has_value());
     CHECK(session.last_id().value_or(-1) == 0);
     CHECK(class_magics_info[0].spell_book == ItemKindType::NONE);
-    CHECK(class_magics_info[0].spell_first == 99);
+    CHECK_FALSE(class_magics_info[0].spell_first);
 
     data["spell_type"] = "LIFE";
     data["magic_status"] = "WIS";
@@ -51,7 +50,7 @@ TEST_CASE("MagicReader preserves an existing class on a later parse error")
     CHECK(test::to_error_code(test::read_and_commit(MagicReader(data, session), session)) == ParseErrorType::INVALID_TYPE);
     CHECK(class_magics_info[0].spell_book == ItemKindType::NONE);
     CHECK(class_magics_info[0].has_glove_mp_penalty == false);
-    CHECK(class_magics_info[0].spell_first == 99);
+    CHECK_FALSE(class_magics_info[0].spell_first);
     CHECK_FALSE(session.last_id());
 }
 
@@ -320,6 +319,9 @@ TEST_CASE("MagicReader propagates helper errors without publishing partial data"
         { "/realms/0/spells_info/1/learn_level", 0, ParseErrorType::INVALID_VALUE },
         { "/realms/0/spells_info/1/learn_level", 51, ParseErrorType::INVALID_VALUE },
         { "/realms/0/spells_info/1/learn_level", 99, ParseErrorType::INVALID_VALUE },
+        { "/first_spell_level", -1, ParseErrorType::INVALID_VALUE },
+        { "/first_spell_level", 51, ParseErrorType::INVALID_VALUE },
+        { "/first_spell_level", 99, ParseErrorType::INVALID_VALUE },
         { "/realms/0/unlearnable", nlohmann::json::object(), ParseErrorType::INVALID_TYPE },
         { "/realms/0/unlearnable", nlohmann::json::array({ 1 }), ParseErrorType::INVALID_TYPE },
         { "/realms/0/unlearnable", nlohmann::json::array({ "unknown-tag" }), ParseErrorType::INVALID_FLAG },
@@ -442,6 +444,27 @@ TEST_CASE("PlayerRealm returns four books for technic realms")
     for (const auto realm : { RealmType::MUSIC, RealmType::HISSATSU, RealmType::HEX }) {
         CHECK(PlayerRealm::get_max_book(realm, PlayerClassType::WARRIOR) == MAX_BOOKS_IN_REALM);
     }
+}
+
+/*!
+ * @brief 魔法を使わない職業は最初の魔法のレベルを省略でき、魔法書を使う職業は省略できない
+ */
+TEST_CASE("MagicReader requires first_spell_level only for classes with spellbooks")
+{
+    const MagicNumericState state;
+    auto data = make_magic_numeric_data(SpellInfoList::get_instance());
+    REQUIRE(test::read_record<MagicReader>(data).has_value());
+    CHECK(class_magics_info[0].spell_first == 1);
+
+    data.erase("first_spell_level");
+    auto session = MagicReader::create_session();
+    CHECK(test::to_error_code(test::read_and_commit(MagicReader(data, session), session)) == ParseErrorType::TOO_FEW_ARGUMENTS);
+    CHECK(class_magics_info[0].spell_first == 1);
+
+    // 魔法書を使わない職業は省略でき、読み直すと前の値は残らない
+    data["spell_type"] = "NONE";
+    REQUIRE(test::read_record<MagicReader>(data).has_value());
+    CHECK_FALSE(class_magics_info[0].spell_first);
 }
 
 namespace {
