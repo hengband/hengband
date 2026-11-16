@@ -21,6 +21,7 @@
 #include "player-info/class-info.h"
 #include "player-info/mimic-info-table.h"
 #include "player/patron.h"
+#include "player/player-history.h"
 #include "player/player-personality.h"
 #include "player/player-realm.h"
 #include "player/player-sex.h"
@@ -282,7 +283,7 @@ tl::optional<int> display_player(PlayerType *player_ptr, const int tmp_mode)
     }
 
     put_str(_("(キャラクターの生い立ち)", "(Character Background)"), 11, 25);
-    for (auto i = 0; i < 4; i++) {
+    for (auto i = 0; i < PLAYER_HISTORY_LINES; i++) {
         put_str(player_ptr->history[i], i + 12, 10);
     }
 

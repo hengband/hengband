@@ -2,9 +2,6 @@
 #include "birth/history.h"
 #include "player-info/race-types.h"
 #include "system/player-type-definition.h"
-#include "util/buffer-shaper.h"
-#include "util/string-processor.h"
-#include <algorithm>
 #include <sstream>
 #include <string>
 
@@ -126,16 +123,5 @@ static std::string decide_social_class(PlayerType *player_ptr)
  */
 void get_history(PlayerType *player_ptr)
 {
-    constexpr auto lines = 4;
-    for (int i = 0; i < lines; i++) {
-        player_ptr->history[i][0] = '\0';
-    }
-
-    auto social_class = decide_social_class(player_ptr);
-    constexpr auto max_line_len = sizeof(player_ptr->history[0]);
-    const auto history_lines = shape_buffer(social_class.data(), max_line_len);
-    const auto max_lines = std::min<int>(lines, history_lines.size());
-    for (auto i = 0; i < max_lines; ++i) {
-        angband_strcpy(player_ptr->history[i], history_lines[i], max_line_len);
-    }
+    player_ptr->history = shape_player_history(decide_social_class(player_ptr));
 }

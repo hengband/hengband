@@ -125,8 +125,8 @@ void wr_player(PlayerType *player_ptr)
     wr_string(player_ptr->last_message);
 
     save_quick_start();
-    for (int i = 0; i < 4; i++) {
-        wr_string(player_ptr->history[i]);
+    for (const auto &line : player_ptr->history) {
+        wr_string(line);
     }
 
     wr_byte((byte)player_ptr->prace);

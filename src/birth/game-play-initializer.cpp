@@ -48,9 +48,6 @@ void player_wipe_without_name(PlayerType *player_ptr)
 
     // TODO: キャラ作成からゲーム開始までに  current_floor_ptr を参照しなければならない処理は今後整理して外す。
     player_ptr->current_floor_ptr = &FloorList::get_instance().get_floor(0);
-    for (int i = 0; i < 4; i++) {
-        player_ptr->history[i][0] = '\0';
-    }
 
     QuestList::get_instance().reset_all();
     player_ptr->inven_cnt = 0;

@@ -646,6 +646,7 @@
     <ClCompile Include="..\..\src\player\patron.cpp" />
     <ClCompile Include="..\..\src\player\permanent-resistances.cpp" />
     <ClCompile Include="..\..\src\player\player-damage.cpp" />
+    <ClCompile Include="..\..\src\player\player-history.cpp" />
     <ClCompile Include="..\..\src\player\player-known-flags.cpp" />
     <ClCompile Include="..\..\src\player\player-move.cpp" />
     <ClCompile Include="..\..\src\player\player-personality.cpp" />
@@ -1635,6 +1636,7 @@
     <ClInclude Include="..\..\src\player\patron.h" />
     <ClInclude Include="..\..\src\player\permanent-resistances.h" />
     <ClInclude Include="..\..\src\player\player-damage.h" />
+    <ClInclude Include="..\..\src\player\player-history.h" />
     <ClInclude Include="..\..\src\player\player-known-flags.h" />
     <ClInclude Include="..\..\src\player\player-move.h" />
     <ClInclude Include="..\..\src\player\player-personality-types.h" />

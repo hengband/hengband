@@ -4,12 +4,31 @@
 #include "io/input-key-acceptor.h"
 #include "io/read-pref-file.h"
 #include "locale/character-encoding.h"
+#include "locale/multibyte-char.h"
+#include "player/player-history.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/int-char-converter.h"
-#include "util/string-processor.h"
 #include "view/display-player.h" // 暫定。後で消す.
+
+namespace {
+/*!
+ * @brief 生い立ちの各行を表示幅 PLAYER_HISTORY_WIDTH 桁まで空白で埋める
+ * @param history 生い立ち
+ * @details 編集中はどの桁にも文字があるように埋めておく。
+ */
+void pad_history_lines(PlayerHistory &history)
+{
+    constexpr auto max_width = static_cast<size_t>(PLAYER_HISTORY_WIDTH);
+    for (auto &line : history) {
+        const auto width = str_display_width(line);
+        if (width < max_width) {
+            line.append(max_width - width, ' ');
+        }
+    }
+}
+}
 
 /*!
  * @brief 生い立ちメッセージを編集する。/Character background edit-mode
@@ -17,23 +36,8 @@
  */
 void edit_history(PlayerType *player_ptr)
 {
-    std::string old_history[4];
-    for (int i = 0; i < 4; i++) {
-        old_history[i] = player_ptr->history[i];
-    }
-
-    for (int i = 0; i < 4; i++) {
-        /* loop */
-        int j;
-        for (j = 0; player_ptr->history[i][j]; j++) {
-            ;
-        }
-
-        for (; j < 59; j++) {
-            player_ptr->history[i][j] = ' ';
-        }
-        player_ptr->history[i][59] = '\0';
-    }
+    const auto old_history = player_ptr->history;
+    pad_history_lines(player_ptr->history);
 
     (void)display_player(player_ptr, 1);
     c_put_str(TERM_L_GREEN, _("(キャラクターの生い立ち - 編集モード)", "(Character Background - Edit Mode)"), 11, 20);
@@ -44,11 +48,11 @@ void edit_history(PlayerType *player_ptr)
     while (true) {
         char c;
 
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < PLAYER_HISTORY_LINES; i++) {
             put_str(player_ptr->history[i], i + 12, 10);
         }
 #ifdef JP
-        const auto char_len = iskanji2(player_ptr->history[y], x) ? 2 : 1;
+        const auto char_len = iskanji2(player_ptr->history[y].data(), x) ? 2 : 1;
 #else
         const auto char_len = 1;
 #endif
@@ -68,7 +72,7 @@ void edit_history(PlayerType *player_ptr)
                 y = 3;
             }
 #ifdef JP
-            if ((x > 0) && (iskanji2(player_ptr->history[y], x - 1))) {
+            if ((x > 0) && (iskanji2(player_ptr->history[y].data(), x - 1))) {
                 x--;
             }
 #endif
@@ -78,13 +82,13 @@ void edit_history(PlayerType *player_ptr)
                 y = 0;
             }
 #ifdef JP
-            if ((x > 0) && (iskanji2(player_ptr->history[y], x - 1))) {
+            if ((x > 0) && (iskanji2(player_ptr->history[y].data(), x - 1))) {
                 x--;
             }
 #endif
         } else if (skey == SKEY_RIGHT || c == KTRL('f')) {
 #ifdef JP
-            if (iskanji2(player_ptr->history[y], x)) {
+            if (iskanji2(player_ptr->history[y].data(), x)) {
                 x++;
             }
 #endif
@@ -107,7 +111,7 @@ void edit_history(PlayerType *player_ptr)
             }
 
 #ifdef JP
-            if ((x > 0) && (iskanji2(player_ptr->history[y], x - 1))) {
+            if ((x > 0) && (iskanji2(player_ptr->history[y].data(), x - 1))) {
                 x--;
             }
 #endif
@@ -119,16 +123,17 @@ void edit_history(PlayerType *player_ptr)
         } else if (c == ESCAPE) {
             clear_from(11);
             put_str(_("(キャラクターの生い立ち)", "(Character Background)"), 11, 25);
-            for (int i = 0; i < 4; i++) {
-                angband_strcpy(player_ptr->history[i], old_history[i], sizeof(player_ptr->history[i]));
+            player_ptr->history = old_history;
+            for (int i = 0; i < PLAYER_HISTORY_LINES; i++) {
                 put_str(player_ptr->history[i], i + 12, 10);
             }
 
             break;
         } else if (c == KTRL('A')) {
             if (read_histpref(player_ptr)) {
+                pad_history_lines(player_ptr->history);
 #ifdef JP
-                if ((x > 0) && (iskanji2(player_ptr->history[y], x - 1))) {
+                if ((x > 0) && (iskanji2(player_ptr->history[y].data(), x - 1))) {
                     x--;
                 }
 #endif
@@ -146,7 +151,7 @@ void edit_history(PlayerType *player_ptr)
 
             player_ptr->history[y][x] = ' ';
 #ifdef JP
-            if ((x > 0) && (iskanji2(player_ptr->history[y], x - 1))) {
+            if ((x > 0) && (iskanji2(player_ptr->history[y].data(), x - 1))) {
                 x--;
                 player_ptr->history[y][x] = ' ';
             }
@@ -159,7 +164,18 @@ void edit_history(PlayerType *player_ptr)
 #endif
         {
 #ifdef JP
-            if (iskanji2(player_ptr->history[y], x)) {
+            auto trail = '\0';
+            if (iskanji(c)) {
+                // 後続のバイトに ASCII の制御文字が来たら (入力が途中で切れたなど)、行に NUL などを入れないよう文字ごと捨てる。
+                // iscntrl() は Windows の日本語のロケールで Shift_JIS の後続のバイトの 0x80 も制御文字とみなすので使わない
+                trail = inkey();
+                const auto trail_byte = static_cast<unsigned char>(trail);
+                if ((trail_byte < 0x20) || (trail_byte == 0x7f)) {
+                    continue;
+                }
+            }
+
+            if (iskanji2(player_ptr->history[y].data(), x)) {
                 player_ptr->history[y][x + 1] = ' ';
             }
 
@@ -172,13 +188,13 @@ void edit_history(PlayerType *player_ptr)
                     }
                 }
 
-                if (iskanji2(player_ptr->history[y], x + 1)) {
+                if (iskanji2(player_ptr->history[y].data(), x + 1)) {
                     player_ptr->history[y][x + 2] = ' ';
                 }
 
                 player_ptr->history[y][x++] = c;
 
-                c = inkey();
+                c = trail;
             }
 #endif
             player_ptr->history[y][x++] = c;

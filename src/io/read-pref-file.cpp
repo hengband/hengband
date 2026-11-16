@@ -15,10 +15,10 @@
 #include "locale/multibyte-char.h"
 #include "player-info/class-info.h"
 #include "player-info/race-info.h"
+#include "player/player-history.h"
 #include "player/player-realm.h"
 #include "system/player-type-definition.h"
 #include "util/angband-files.h"
-#include "util/buffer-shaper.h"
 #include "util/finalizer.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
@@ -356,30 +356,6 @@ bool read_histpref(PlayerType *player_ptr)
         return false;
     }
 
-    for (auto i = 0; i < 4; i++) {
-        player_ptr->history[i][0] = '\0';
-    }
-
-    histpref_buf = str_trim(*histpref_buf);
-    constexpr auto max_line_len = sizeof(player_ptr->history[0]);
-    const auto history_lines = shape_buffer(*histpref_buf, max_line_len);
-    const auto max_lines = std::min<int>(4, history_lines.size());
-    for (auto l = 0; l < max_lines; ++l) {
-        angband_strcpy(player_ptr->history[l], history_lines[l], max_line_len);
-    }
-
-    for (auto i = 0; i < 4; i++) {
-        /* loop */
-        int j;
-        for (j = 0; player_ptr->history[i][j]; j++) {
-            ;
-        }
-
-        for (; j < 59; j++) {
-            player_ptr->history[i][j] = ' ';
-        }
-        player_ptr->history[i][59] = '\0';
-    }
-
+    player_ptr->history = shape_player_history(str_trim(*histpref_buf));
     return true;
 }

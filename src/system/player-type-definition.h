@@ -6,6 +6,7 @@
 #include "player-info/class-specific-data.h"
 #include "player-info/class-types.h"
 #include "player-info/race-types.h"
+#include "player/player-history.h"
 #include "player/player-personality-types.h"
 #include "player/player-sex.h"
 #include "system/angband.h"
@@ -195,7 +196,7 @@ public:
     int player_hp[PY_MAX_LEVEL]{};
     std::string died_from{}; /* What killed the player */
     std::string last_message = ""; /* Last message on death or retirement */
-    char history[4][60]{}; /* Textual "history" for the Player */
+    PlayerHistory history{}; //!< 生い立ち
 
     bool is_dead{}; /* Player is dead */
     bool now_damaged{};
