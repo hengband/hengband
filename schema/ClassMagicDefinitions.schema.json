@@ -138,6 +138,12 @@
                                         "CRUSADE"
                                     ]
                                 },
+                                "max_book": {
+                                    "type": "integer",
+                                    "description": "習得できる巻数。省略時は4 (省略と同じ4は書かない)。この巻より後ろの魔法書は使えず、その巻の魔法の learn_level は 99 にする",
+                                    "minimum": 1,
+                                    "maximum": 4
+                                },
                                 "spells_info": {
                                     "type": "array",
                                     "description": "呪文情報",

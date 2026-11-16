@@ -1265,12 +1265,30 @@ def collect_spell_tags(spells: dict) -> dict[str, set[str]]:
     return tags
 
 
+SPELLS_IN_BOOK = 8
+MAX_BOOKS_IN_REALM = 4
+UNLEARNABLE_LEVEL = 99
+
+
+def collect_spell_books(spells: dict) -> dict[tuple[str, str], int]:
+    """(領域, 呪文タグ) から呪文の載っている巻 (1〜4) を引く表を作る。同じタグは get_spell_id と同じく ID の小さい方を採る。"""
+    books = {}
+    for realm in spells["realms"]:
+        for book in realm["books"]:
+            for spell in book["spells"]:
+                key = (realm["name"], spell["spell_tag"])
+                spell_book = spell["spell_id"] // SPELLS_IN_BOOK + 1
+                books[key] = min(books.get(key, spell_book), spell_book)
+    return books
+
+
 def validate_class_magic_semantics(data: dict, schema_path: Path, data_path: Path, registry: Registry) -> None:
     """Check MagicReader's strict integers, class order and realm spell references."""
     class_ids = load_class_ids(schema_path.resolve().parent.parent)
     spells = load_spell_definitions(schema_path, data_path, registry)
     spell_tags = collect_spell_tags(spells)
     spell_base_values = collect_spell_base_values(spells)
+    spell_books = collect_spell_books(spells)
     previous_id = -1
     for class_index, record in enumerate(data["classes"]):
         path = ["classes", class_index]
@@ -1283,12 +1301,21 @@ def validate_class_magic_semantics(data: dict, schema_path: Path, data_path: Pat
         for field in ("first_spell_level", "armour_weight_limit"):
             require_integer(record[field], path + [field])
         for realm_index, realm in enumerate(record["realms"]):
+            realm_path = path + ["realms", realm_index]
+            max_book = realm.get("max_book", MAX_BOOKS_IN_REALM)
+            if "max_book" in realm:
+                require_integer(max_book, realm_path + ["max_book"])
+                if max_book == MAX_BOOKS_IN_REALM:
+                    raise ValidationError(f"max_book {MAX_BOOKS_IN_REALM} is the default and must be omitted", path=realm_path + ["max_book"])
             for spell_index, spell in enumerate(realm["spells_info"]):
-                spell_path = path + ["realms", realm_index, "spells_info", spell_index]
+                spell_path = realm_path + ["spells_info", spell_index]
                 if spell["spell_tag"] not in spell_tags.get(realm["name"], set()):
                     raise ValidationError("unknown spell tag in this realm", path=spell_path + ["spell_tag"])
                 for field in ("learn_level", "mana_cost", "difficulty", "first_cast_exp_rate"):
                     require_integer(spell[field], spell_path + [field])
+                # #5905 の移行の間だけの検査。習得レベルを max_book から導く形にしたら消す。
+                if spell_books[realm["name"], spell["spell_tag"]] > max_book and spell["learn_level"] != UNLEARNABLE_LEVEL:
+                    raise ValidationError(f"spells after book {max_book} must have learn_level {UNLEARNABLE_LEVEL}", path=spell_path + ["learn_level"])
                 if record["name"] == SPELL_BASE_CLASS:
                     # #5905 の移行の間だけの検査。職業ごとの値を基準値から導く形にしたら消す。
                     base_values = spell_base_values[realm["name"], spell["spell_tag"]]
