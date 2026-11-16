@@ -66,7 +66,6 @@
 #include "racial/racial-android.h"
 #include "save/save.h"
 #include "spell/spells-status.h"
-#include "spell/technic-info-table.h"
 #include "status/buff-setter.h"
 #include "store/home.h"
 #include "store/store-util.h"

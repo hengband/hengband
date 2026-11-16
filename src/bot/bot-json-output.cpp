@@ -43,7 +43,6 @@
 #include "player/player-status-flags.h"
 #include "player/player-status-table.h"
 #include "player/race-info-table.h"
-#include "spell/technic-info-table.h"
 #include "store/pricing.h"
 #include "store/store-owners.h"
 #include "store/store-screen.h"

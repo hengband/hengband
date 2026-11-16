@@ -1322,47 +1322,15 @@ def validate_class_skill_semantics(data: dict) -> None:
 
 
 SPELL_BASE_FIELDS = ("learn_level", "mana_cost", "difficulty", "first_cast_exp_rate")
-# 基準値の出どころ。魔法領域はこの職業の値、歌・武芸・呪術は technic_info (この順に 32 件ずつ) と同じにしてある。
-# どちらも #5905 の移行の間だけ値が二重にあるので、食い違いをここで止める。
+# 魔法領域の基準値はこの職業の値と同じにしてある。#5905 の移行の間だけ値が二重にあるので、食い違いをここで止める。
+# 歌・武芸・呪術は基準値そのものをゲームが使うので、照合はしない。
 SPELL_BASE_CLASS = "MAGE"
-TECHNIC_REALMS = ("MUSIC", "HISSATSU", "HEX")
-SPELLS_IN_REALM = 32
 
 
 def collect_spell_base_values(spells: dict) -> dict[tuple[str, str], tuple[int, ...]]:
     """(領域, 呪文タグ) から基準値の 4 つ組を引く表を作る。"""
     return {(realm["name"], spell["spell_tag"]): tuple(spell[field] for field in SPELL_BASE_FIELDS)
             for realm in spells["realms"] for book in realm["books"] for spell in book["spells"]}
-
-
-def load_technic_info(repository_root: Path) -> dict[str, list[tuple[int, ...]]]:
-    """technic_info の 4 つ組を、領域ごとに呪文 ID の順で返す。"""
-    path = repository_root / "src/spell/technic-info-table.cpp"
-    rows = [tuple(int(value) for value in row)
-            for row in re.findall(r"\{\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\}", path.read_text(encoding="utf-8"))]
-    if len(rows) != len(TECHNIC_REALMS) * SPELLS_IN_REALM:
-        raise ValueError(f"Invalid technic_info table in {path}")
-    return {realm: rows[index * SPELLS_IN_REALM:(index + 1) * SPELLS_IN_REALM] for index, realm in enumerate(TECHNIC_REALMS)}
-
-
-def validate_spell_base_matches_technic_info(data: dict, schema_path: Path) -> None:
-    """歌・武芸・呪術の基準値が technic_info と同じであることを確かめる。
-
-    #5905 の移行の間だけの検査。technic_info を消して基準値から引く形にしたら消す。
-    """
-    if not any(realm["name"] in TECHNIC_REALMS for realm in data["realms"]):
-        return
-    technic_info = load_technic_info(schema_path.resolve().parent.parent)
-    for realm_index, realm in enumerate(data["realms"]):
-        if realm["name"] not in TECHNIC_REALMS:
-            continue
-        for book_index, book in enumerate(realm["books"]):
-            for spell_index, spell in enumerate(book["spells"]):
-                expected = technic_info[realm["name"]][spell["spell_id"]]
-                for field, value in zip(SPELL_BASE_FIELDS, expected):
-                    if spell[field] != value:
-                        raise ValidationError(f"base value must be {value} to match technic_info",
-                                              path=["realms", realm_index, "books", book_index, "spells", spell_index, field])
 
 
 def validate_spell_semantics(data: dict) -> None:
@@ -1558,8 +1526,7 @@ def validate_one(pair: tuple[Path, Path, dict], registry: Registry | None = None
             "MonraceDefinitions.schema.json": lambda: validate_monrace_semantics(data, schema_path, data_path, registry),
             "ClassMagicDefinitions.schema.json": lambda: validate_class_magic_semantics(data, schema_path, data_path, registry),
             "ClassSkillDefinitions.schema.json": lambda: validate_class_skill_semantics(data),
-            "SpellDefinitions.schema.json": lambda: (validate_spell_semantics(data),
-                                                     validate_spell_base_matches_technic_info(data, schema_path)),
+            "SpellDefinitions.schema.json": lambda: validate_spell_semantics(data),
             "MonsterMessages.schema.json": lambda: validate_monster_message_semantics(data, schema_path, data_path, registry),
             "Quest.schema.json": lambda: validate_quest_file_semantics(data, schema_path, data_path, registry),
             "QuestPreferences.schema.json": lambda: validate_quest_preferences_semantics(data, schema_path, data_path, registry),

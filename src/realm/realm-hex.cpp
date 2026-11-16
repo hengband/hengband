@@ -37,7 +37,6 @@
 #include "spell-realm/spells-hex.h"
 #include "spell/spells-execution.h"
 #include "spell/spells-status.h"
-#include "spell/technic-info-table.h"
 #include "status/action-setter.h"
 #include "system/deferred-update-requests.h"
 #include "system/floor/floor-info.h"

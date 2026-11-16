@@ -133,7 +133,8 @@ class DefinitionIntegerValidationTest(unittest.TestCase):
         ok, message = self.validate("ClassMagicDefinitions", document)
         self.assertTrue(ok, message)
 
-    def test_technic_base_values_must_match_technic_info(self):
+    def test_technic_base_values_may_be_changed(self):
+        # 歌・武芸・呪術は基準値そのものをゲームが使うので、範囲内なら変えてよい。
         realms = self.documents["SpellDefinitions"]["realms"]
         for name in ("MUSIC", "HISSATSU", "HEX"):
             realm_index = next(index for index, realm in enumerate(realms) if realm["name"] == name)
@@ -143,9 +144,7 @@ class DefinitionIntegerValidationTest(unittest.TestCase):
                     # 各領域の 2 巻目の先頭は、どの項目も 1 足して範囲に収まる。
                     document["realms"][realm_index]["books"][1]["spells"][0][field] += 1
                     ok, message = self.validate("SpellDefinitions", document)
-                    self.assertFalse(ok, message)
-                    self.assertIn("to match technic_info", message)
-                    self.assertIn(f"Location: ['realms', {realm_index}, 'books', 1, 'spells', 0, '{field}']", message)
+                    self.assertTrue(ok, message)
 
     def test_spell_version_must_be_integer_two(self):
         for value, valid in ((2, True), (2.0, False), (1, False), (1.0, False), (3, False), ("2", False)):

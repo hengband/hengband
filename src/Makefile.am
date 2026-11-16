@@ -1228,7 +1228,6 @@ libhengband_a_SOURCES = \
 	spell/spells-status.cpp spell/spells-status.h \
 	spell/spells-util.h \
 	spell/summon-types.h \
-	spell/technic-info-table.cpp spell/technic-info-table.h \
 	\
 	spell-class/spells-mirror-master.cpp spell-class/spells-mirror-master.h \
 	\

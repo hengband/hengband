@@ -28,7 +28,7 @@
 #include "spell-kind/spells-perception.h"
 #include "spell-kind/spells-sight.h"
 #include "spell-kind/spells-teleport.h"
-#include "spell/technic-info-table.h"
+#include "spell/magic-type.h"
 #include "status/bad-status-setter.h"
 #include "system/deferred-update-requests.h"
 #include "system/dungeon/dungeon-definition.h"

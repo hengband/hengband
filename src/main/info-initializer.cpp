@@ -201,6 +201,10 @@ void init_baseitems_info()
 void init_class_magics_info()
 {
     class_magics_info.assign(PLAYER_CLASS_TYPE_MAX, {});
+    // 技能領域の値は職業によらず魔法の定義の基準値 (SpellDefinitions を先に読んでおく)
+    for (auto &magic : class_magics_info) {
+        magic.set_technic_base_values();
+    }
     init_json_reader<MagicReader>("ClassMagicDefinitions.jsonc", "classes", DefinitionHashDataType::CLASS_MAGICS, class_magics_info);
 }
 

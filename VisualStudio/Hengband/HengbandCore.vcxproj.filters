@@ -2511,9 +2511,6 @@
     <ClCompile Include="..\..\src\spell\spells-summon.cpp">
       <Filter>spell</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\spell\technic-info-table.cpp">
-      <Filter>spell</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\status\action-setter.cpp">
       <Filter>status</Filter>
     </ClCompile>
@@ -5500,9 +5497,6 @@
       <Filter>spell</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\spell\summon-types.h">
-      <Filter>spell</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\spell\technic-info-table.h">
       <Filter>spell</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\status\action-setter.h">
