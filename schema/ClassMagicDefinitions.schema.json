@@ -140,13 +140,22 @@
                                 },
                                 "max_book": {
                                     "type": "integer",
-                                    "description": "習得できる巻数。省略時は4 (省略と同じ4は書かない)。この巻より後ろの魔法書は使えず、その巻の魔法の learn_level は 99 にする",
+                                    "description": "習得できる巻数。省略時は4 (省略と同じ4は書かない)。この巻より後ろの魔法書は使えず、その巻の魔法は習得できない (spells_info にも unlearnable にも書かない)",
                                     "minimum": 1,
                                     "maximum": 4
                                 },
+                                "unlearnable": {
+                                    "type": "array",
+                                    "description": "習得できる巻にあるが習得できない魔法の呪文タグ。習得できる巻の魔法は、spells_info と unlearnable のどちらか一方に書く",
+                                    "uniqueItems": true,
+                                    "items": {
+                                        "type": "string",
+                                        "description": "呪文タグ"
+                                    }
+                                },
                                 "spells_info": {
                                     "type": "array",
-                                    "description": "呪文情報",
+                                    "description": "習得できる魔法の情報",
                                     "items": {
                                         "type": "object",
                                         "description": "呪文情報",
@@ -165,9 +174,9 @@
                                             },
                                             "learn_level": {
                                                 "type": "integer",
-                                                "description": "呪文習得可能レベル",
-                                                "minimum": 0,
-                                                "maximum": 99
+                                                "description": "呪文習得可能レベル。習得できない魔法は unlearnable に書く",
+                                                "minimum": 1,
+                                                "maximum": 50
                                             },
                                             "mana_cost": {
                                                 "type": "integer",

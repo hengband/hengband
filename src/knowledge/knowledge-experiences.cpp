@@ -90,7 +90,7 @@ void do_cmd_knowledge_spell_exp(PlayerType *player_ptr)
         for (SPELL_IDX i = 0; i < 32; i++) {
             const auto &spell = pr.realm1().get_spell_info(i);
 
-            if (spell.slevel >= 99) {
+            if (!spell.is_learnable()) {
                 continue;
             }
             SUB_EXP spell_exp = player_ptr->spell_exp[i];
@@ -126,7 +126,7 @@ void do_cmd_knowledge_spell_exp(PlayerType *player_ptr)
         for (SPELL_IDX i = 0; i < 32; i++) {
             const auto &spell = pr.realm2().get_spell_info(i);
 
-            if (spell.slevel >= 99) {
+            if (!spell.is_learnable()) {
                 continue;
             }
 

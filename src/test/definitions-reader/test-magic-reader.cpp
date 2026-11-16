@@ -5,6 +5,7 @@
 #include "player/player-realm.h"
 #include "realm/realm-types.h"
 #include "system/spell-info-list.h"
+#include "system/system-variables.h"
 #include "test/definitions-reader/parse-result-helpers.h"
 #include "test/definitions-reader/scoped-reader-state.h"
 #include "test/scoped-restore.h"
@@ -316,7 +317,12 @@ TEST_CASE("MagicReader propagates helper errors without publishing partial data"
         { "/realms/0/spells_info/1", 1, ParseErrorType::INVALID_TYPE },
         { "/realms/0/spells_info/1/spell_tag", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
         { "/realms/0/spells_info/1/spell_tag", "unknown-tag", ParseErrorType::INVALID_FLAG },
-        { "/realms/0/spells_info/1/learn_level", 100, ParseErrorType::INVALID_VALUE },
+        { "/realms/0/spells_info/1/learn_level", 0, ParseErrorType::INVALID_VALUE },
+        { "/realms/0/spells_info/1/learn_level", 51, ParseErrorType::INVALID_VALUE },
+        { "/realms/0/spells_info/1/learn_level", 99, ParseErrorType::INVALID_VALUE },
+        { "/realms/0/unlearnable", nlohmann::json::object(), ParseErrorType::INVALID_TYPE },
+        { "/realms/0/unlearnable", nlohmann::json::array({ 1 }), ParseErrorType::INVALID_TYPE },
+        { "/realms/0/unlearnable", nlohmann::json::array({ "unknown-tag" }), ParseErrorType::INVALID_FLAG },
     };
     for (const auto &invalid : invalid_fields) {
         CAPTURE(invalid.path);
@@ -436,4 +442,128 @@ TEST_CASE("PlayerRealm returns four books for technic realms")
     for (const auto realm : { RealmType::MUSIC, RealmType::HISSATSU, RealmType::HEX }) {
         CHECK(PlayerRealm::get_max_book(realm, PlayerClassType::WARRIOR) == MAX_BOOKS_IN_REALM);
     }
+}
+
+namespace {
+/*!
+ * @brief 習得できない魔法の検証用に、1 巻目の 2 呪文と 2 巻目の 1 呪文を基準値つきで登録した職業の入力を作る
+ * @details 1 巻目は "first" (ID 0)・"second" (ID 1)、2 巻目は "ninth" (ID 8)。
+ */
+nlohmann::json make_unlearnable_data(SpellInfoList &spells)
+{
+    auto data = make_magic_numeric_data(spells);
+    for (const auto id : { short{ 0 }, short{ 1 }, short{ 8 } }) {
+        SpellInfo info;
+        info.idx = id;
+        info.tag = (id == 0) ? "first" : (id == 1) ? "second"
+                                                   : "ninth";
+        info.base = { 1, 1, 0, 0 };
+        spells.set_spell_info(RealmType::LIFE, id, std::move(info));
+    }
+    data["realms"][0]["spells_info"].push_back({ { "spell_tag", "ninth" }, { "learn_level", 20 }, { "mana_cost", 9 }, { "difficulty", 30 }, { "first_cast_exp_rate", 2 } });
+    return data;
+}
+}
+
+/*!
+ * @brief unlearnable に書いた魔法は習得レベルが値なしになり、習得できない
+ */
+TEST_CASE("MagicReader marks spells listed in unlearnable as not learnable")
+{
+    const MagicNumericState state;
+    auto data = make_unlearnable_data(SpellInfoList::get_instance());
+    REQUIRE(test::read_record<MagicReader>(data).has_value());
+    const auto realm = enum2i(RealmType::LIFE);
+    CHECK(class_magics_info[0].info[realm][1].slevel == 3);
+    CHECK(class_magics_info[0].info[realm][1].can_learn_at(3));
+    CHECK_FALSE(class_magics_info[0].info[realm][1].can_learn_at(2));
+
+    data["realms"][0]["spells_info"].erase(1);
+    data["realms"][0]["unlearnable"] = nlohmann::json::array({ "second" });
+    REQUIRE(test::read_record<MagicReader>(data).has_value());
+    for (const auto *table : { class_magics_info[0].info, class_magics_info[0].info_second }) {
+        const auto &spell = table[realm][1];
+        CHECK_FALSE(spell.is_learnable());
+        CHECK_FALSE(spell.can_learn_at(PY_MAX_LEVEL));
+        CHECK(spell.smana == 0);
+        CHECK(spell.sfail == 0);
+        CHECK(spell.sexp == 0);
+    }
+    CHECK(class_magics_info[0].info[realm][0].is_learnable());
+    CHECK(class_magics_info[0].info[realm][8].slevel == 20);
+}
+
+/*!
+ * @brief 習得できる巻数より後ろの巻の魔法は、書かなくても習得できず、書くとエラーになる
+ */
+TEST_CASE("MagicReader makes spells after max_book unlearnable")
+{
+    const MagicNumericState state;
+    auto data = make_unlearnable_data(SpellInfoList::get_instance());
+    REQUIRE(test::read_record<MagicReader>(data).has_value());
+    const auto realm = enum2i(RealmType::LIFE);
+    REQUIRE(class_magics_info[0].info[realm][8].is_learnable());
+
+    // 2 巻目の魔法を spells_info に書いたまま max_book を 1 にするとエラー
+    data["realms"][0]["max_book"] = 1;
+    auto session = MagicReader::create_session();
+    CHECK(test::to_error_code(test::read_and_commit(MagicReader(data, session), session)) == ParseErrorType::INVALID_VALUE);
+    CHECK(class_magics_info[0].info[realm][8].slevel == 20);
+
+    // unlearnable に書いてもエラー (書かなくても習得できない)
+    auto redundant = data;
+    redundant["realms"][0]["spells_info"].erase(2);
+    redundant["realms"][0]["unlearnable"] = nlohmann::json::array({ "ninth" });
+    session = MagicReader::create_session();
+    CHECK(test::to_error_code(test::read_and_commit(MagicReader(redundant, session), session)) == ParseErrorType::INVALID_VALUE);
+
+    // どちらにも書かなければ習得できない
+    data["realms"][0]["spells_info"].erase(2);
+    REQUIRE(test::read_record<MagicReader>(data).has_value());
+    CHECK_FALSE(class_magics_info[0].info[realm][8].is_learnable());
+    CHECK_FALSE(class_magics_info[0].info_second[realm][8].is_learnable());
+    CHECK(class_magics_info[0].info[realm][0].slevel == 1);
+}
+
+/*!
+ * @brief 同じ魔法を 2 度書く・どちらにも書かない魔法があるのはエラー
+ */
+TEST_CASE("MagicReader rejects spells listed twice or not listed")
+{
+    const MagicNumericState state;
+    auto session = MagicReader::create_session();
+    const auto original = make_unlearnable_data(SpellInfoList::get_instance());
+    REQUIRE(test::read_and_commit(MagicReader(original, session), session).has_value());
+    const auto realm = enum2i(RealmType::LIFE);
+
+    struct Case {
+        const char *name;
+        nlohmann::json unlearnable;
+        bool erase_second;
+        ParseErrorType error;
+    };
+    const std::vector<Case> cases = {
+        { "both spells_info and unlearnable", nlohmann::json::array({ "second" }), false, ParseErrorType::INVALID_VALUE },
+        { "twice in unlearnable", nlohmann::json::array({ "second", "second" }), true, ParseErrorType::INVALID_VALUE },
+        { "not listed", nullptr, true, ParseErrorType::TOO_FEW_ARGUMENTS },
+    };
+    for (const auto &c : cases) {
+        CAPTURE(c.name);
+        auto data = original;
+        if (c.erase_second) {
+            data["realms"][0]["spells_info"].erase(1);
+        }
+        if (!c.unlearnable.is_null()) {
+            data["realms"][0]["unlearnable"] = c.unlearnable;
+        }
+        session = MagicReader::create_session();
+        CHECK(test::to_error_code(test::read_and_commit(MagicReader(data, session), session)) == c.error);
+        CHECK(class_magics_info[0].info[realm][1].slevel == 3);
+    }
+
+    // spells_info に同じ魔法を 2 度書くのもエラー
+    auto twice = original;
+    twice["realms"][0]["spells_info"].push_back(original["realms"][0]["spells_info"][0]);
+    session = MagicReader::create_session();
+    CHECK(test::to_error_code(test::read_and_commit(MagicReader(twice, session), session)) == ParseErrorType::INVALID_VALUE);
 }

@@ -121,10 +121,12 @@ tl::expected<void, ParseErrorType> SpellReader::set_spell_data(const nlohmann::j
         msg_print(_("呪文説明読込失敗。", "Failed to load spell description."));
         return result;
     }
-    if (const auto result = info_set_integer(get_json_value(spell_data, "learn_level"), info.base.slevel, true, Range(1, PY_MAX_LEVEL)); !result) {
+    PLAYER_LEVEL learn_level{};
+    if (const auto result = info_set_integer(get_json_value(spell_data, "learn_level"), learn_level, true, Range(1, PY_MAX_LEVEL)); !result) {
         msg_print(_("呪文の基準習得レベル読込失敗。", "Failed to load spell base learn_level."));
         return result;
     }
+    info.base.slevel = learn_level;
     if (const auto result = info_set_integer(get_json_value(spell_data, "mana_cost"), info.base.smana, true, Range(1, MAX_SPELL_BASE_VALUE)); !result) {
         msg_print(_("呪文の基準コスト読込失敗。", "Failed to load spell base mana_cost."));
         return result;

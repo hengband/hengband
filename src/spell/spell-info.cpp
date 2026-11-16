@@ -142,9 +142,12 @@ PERCENTAGE spell_chance(PlayerType *player_ptr, SPELL_IDX spell_id, RealmType us
 
     PlayerRealm pr(player_ptr);
     const auto &spell = PlayerRealm::get_spell_info(use_realm, spell_id, pr.position_of(use_realm));
+    if (!spell.is_learnable()) {
+        return 100;
+    }
 
     PERCENTAGE chance = spell.sfail;
-    chance -= 3 * (player_ptr->lev - spell.slevel);
+    chance -= 3 * (player_ptr->lev - *spell.slevel);
     chance -= 3 * (adj_mag_stat[player_ptr->stat_index[mp_ptr->spell_stat]] - 1);
     if (player_ptr->riding) {
         const auto &riding_monrace = player_ptr->current_floor_ptr->m_list[player_ptr->riding].get_monrace();
@@ -280,7 +283,7 @@ void print_spells(PlayerType *player_ptr, SPELL_IDX target_spell_id, const SPELL
             auto exp = PlayerSkill(player_ptr).exp_of_spell(use_realm, spell_id);
             need_mana = mod_need_mana(player_ptr, spell.smana, spell_id, use_realm);
             PlayerSkillRank skill_rank;
-            if ((increment == 64) || (spell.slevel >= 99)) {
+            if ((increment == 64) || !spell.is_learnable()) {
                 skill_rank = PlayerSkillRank::UNSKILLED;
             } else {
                 skill_rank = PlayerSkill::spell_skill_rank(exp);
@@ -291,7 +294,7 @@ void print_spells(PlayerType *player_ptr, SPELL_IDX target_spell_id, const SPELL
                 max = true;
             } else if ((increment == 32) && (skill_rank >= PlayerSkillRank::EXPERT)) {
                 max = true;
-            } else if (spell.slevel >= 99) {
+            } else if (!spell.is_learnable()) {
                 max = true;
             } else if (pc.equals(PlayerClassType::RED_MAGE) && (skill_rank >= PlayerSkillRank::SKILLED)) {
                 max = true;
@@ -315,7 +318,7 @@ void print_spells(PlayerType *player_ptr, SPELL_IDX target_spell_id, const SPELL
 
         BotSpellListRow bot_row{};
         bot_row.spell_id = spell_id;
-        if (spell.slevel >= 99) {
+        if (!spell.is_learnable()) {
             out_val.append(fmt::format("{:<30}", _("(判読不能)", "(illegible)")));
             c_prt(TERM_L_DARK, out_val, y + i + 1, x);
             bot_row.status = "illegible";
@@ -330,11 +333,11 @@ void print_spells(PlayerType *player_ptr, SPELL_IDX target_spell_id, const SPELL
         PlayerSpellStatus pss(player_ptr);
         const auto realm_status = pr.realm1().equals(use_realm) ? pss.realm1() : pss.realm2();
         if (pc.is_every_magic()) {
-            if (spell.slevel > player_ptr->max_plv) {
+            if (!spell.can_learn_at(player_ptr->max_plv)) {
                 comment = _("未知", "unknown");
                 line_attr = TERM_L_BLUE;
                 bot_row.status = "unknown";
-            } else if (spell.slevel > player_ptr->lev) {
+            } else if (!spell.can_learn_at(player_ptr->lev)) {
                 comment = _("忘却", "forgotten");
                 line_attr = TERM_YELLOW;
                 bot_row.status = "forgotten";
@@ -359,13 +362,13 @@ void print_spells(PlayerType *player_ptr, SPELL_IDX target_spell_id, const SPELL
 
         const auto &spell_name = PlayerRealm::get_spell_name(use_realm, spell_id);
         bot_row.name = spell_name;
-        bot_row.level = spell.slevel;
+        bot_row.level = *spell.slevel;
         bot_row.mana = need_mana;
         if (use_realm == RealmType::HISSATSU) {
-            out_val.append(fmt::format("{:<25} {:2} {:4}", spell_name, spell.slevel, need_mana));
+            out_val.append(fmt::format("{:<25} {:2} {:4}", spell_name, *spell.slevel, need_mana));
         } else {
             const auto chance = spell_chance(player_ptr, spell_id, use_realm);
-            out_val.append(fmt::format("{:<25}{:c}{:<4} {:2} {:4} {:3}% {}", spell_name, (max ? '!' : ' '), ryakuji, spell.slevel, need_mana, chance, comment));
+            out_val.append(fmt::format("{:<25}{:c}{:<4} {:2} {:4} {:3}% {}", spell_name, (max ? '!' : ' '), ryakuji, *spell.slevel, need_mana, chance, comment));
             bot_row.fail = chance;
             bot_row.proficiency = ryakuji;
             bot_row.proficiency_mark = max;

@@ -443,7 +443,7 @@ TEST_CASE("SpellReader accepts base values only within their ranges")
         }
     }
 
-    // 習得不可を表す 99 は職業ごとの値 (ClassMagicDefinitions) だけのもので、基準値には書けない。
+    // 習得できない魔法は職業ごとの定義の unlearnable で表し、基準値の習得レベルは最大レベルまで。
     auto unlearnable = make_spell(2, "unlearnable");
     unlearnable["learn_level"] = 99;
     SpellReader::Session session;
