@@ -2,7 +2,6 @@
 #include "locale/multibyte-char.h"
 #include "system/item/item-entity.h"
 #include "util/buffer-shaper.h"
-#include <algorithm>
 #include <fmt/format.h>
 #include <fstream>
 #include <string>
@@ -78,12 +77,13 @@ void spoiler_underline(std::string_view str, std::ofstream &ofs)
  */
 void spoil_out(std::string_view sv, bool flush_buffer)
 {
+    constexpr size_t line_width_max = 75; //!< 1 行の表示幅の上限
+    constexpr size_t space_wrap_width = 73; //!< 空白を置く前にこの表示幅に達していたら折り返す
     static std::string line; //!< 書き出し待ちの行
     static auto break_pos = std::string::npos; //!< 行の中で折り返せる位置
     static tl::optional<std::string> waiting_line; //!< 後ろに空白しか続かないため、書き出しを保留している行
 #ifdef JP
-    static std::string prev_char; //!< 行に最後に足した文字 (2バイト文字ならまとめて。行末禁則の判定に使う)
-    bool iskanji_flag = false;
+    static std::string prev_char; //!< 行に最後に足した文字 (行末禁則の判定に使う)
 #endif
 
     if (flush_buffer) {
@@ -108,26 +108,19 @@ void spoil_out(std::string_view sv, bool flush_buffer)
         return;
     }
 
-    for (size_t i = 0; i < sv.length(); ++i) {
-        char ch = sv[i];
-#ifdef JP
-        const auto k_flag = iskanji(static_cast<unsigned char>(ch));
-#endif
-        bool wrap = (ch == '\n');
-        bool defer = false; //!< 折り返した行の後ろに空白しか続かず、書き出しを保留するか
-
-#ifdef JP
-        if (!isprint(static_cast<unsigned char>(ch)) && !k_flag && !iskanji_flag) {
-            ch = ' ';
+    // 全角文字と表示できる1バイトの文字のほかは空白とみなす (後続のバイトが欠けた多バイト文字の先頭バイトも空白にする)。
+    // Shift_JIS の半角カナは、これまでの出力に合わせて空白にする (is_printable_single_byte_char() とは扱いが違う)
+    const auto is_visible = [](std::string_view ch) { return is_multibyte_char_at(ch) || isprint(static_cast<unsigned char>(ch.front())); };
+    for (auto rest = sv; !rest.empty();) {
+        auto ch = mb_first_char(rest);
+        rest.remove_prefix(ch.length());
+        auto wrap = ch.front() == '\n';
+        auto defer = false; //!< 折り返した行の後ろに空白しか続かず、書き出しを保留するか
+        if (!is_visible(ch)) {
+            ch = " ";
         }
 
-        const auto is_second_byte = iskanji_flag;
-        iskanji_flag = k_flag && !iskanji_flag;
-#else
-        if (!isprint(ch)) {
-            ch = ' ';
-        }
-#endif
+        const auto is_wide = is_multibyte_char_at(ch);
 
         if (waiting_line) {
             fmt::print(spoiler_file, "{}", *waiting_line);
@@ -138,58 +131,32 @@ void spoil_out(std::string_view sv, bool flush_buffer)
             waiting_line.reset();
         }
 
+        const auto char_width = str_display_width(ch);
         if (!wrap) {
-#ifdef JP
-            if (line.length() >= (iskanji_flag ? 74U : 75U)) {
-                wrap = true;
-            } else if ((ch == ' ') && (line.length() >= (iskanji_flag ? 72U : 73U))) {
-                wrap = true;
-            }
-#else
-            if (line.length() >= 75U) {
-                wrap = true;
-            } else if ((ch == ' ') && (line.length() >= 73U)) {
-                wrap = true;
-            }
-#endif
-
+            const auto line_width = str_display_width(line);
+            wrap = (line_width + char_width > line_width_max) || ((ch == " ") && (line_width >= space_wrap_width));
             if (wrap) {
-#ifdef JP
-                bool k_flag_local;
-                bool iskanji_flag_local = false;
-                auto tail = std::min(i + (iskanji_flag ? 2 : 1), sv.length());
-#else
-                auto tail = i + 1;
-#endif
-
-                for (; tail < sv.length(); tail++) {
-                    if (sv[tail] == ' ') {
-                        continue;
-                    }
-
-#ifdef JP
-                    k_flag_local = iskanji(static_cast<unsigned char>(sv[tail]));
-                    if (isprint(static_cast<unsigned char>(sv[tail])) || k_flag_local || iskanji_flag_local) {
+                // 後ろに空白と表示できない文字しか続かなければ、書き出しを保留する。
+                // ただし今の文字が全角文字なら保留しない (これまで1バイトずつ処理していたとき、後半バイトで保留をすぐに解いていたのと同じ)
+                auto tail = rest;
+                while (!tail.empty()) {
+                    const auto next = mb_first_char(tail);
+                    if ((next != " ") && is_visible(next)) {
                         break;
                     }
 
-                    iskanji_flag_local = k_flag_local && !iskanji_flag_local;
-#else
-                    if (isprint(sv[tail])) {
-                        break;
-                    }
-#endif
+                    tail.remove_prefix(next.length());
                 }
 
-                defer = (tail >= sv.length());
+                defer = tail.empty() && !is_wide;
             }
         }
 
         if (wrap) {
             // 折り返せる位置があれば、その位置で切って後ろを次の行へ送る (今の文字が空白なら行全体を書き出す)。
-            // 折り返せる位置の文字は、空白なら捨て、空白でなければ (「(」や2バイト文字の前半バイト) 次の行の先頭に置く
+            // 折り返せる位置の文字は、空白なら捨て、空白でなければ (「(」や全角文字) 次の行の先頭に置く
             std::string next_line;
-            if ((break_pos != std::string::npos) && (ch != ' ')) {
+            if ((break_pos != std::string::npos) && (ch != " ")) {
                 next_line = line.substr(break_pos + ((line[break_pos] == ' ') ? 1 : 0));
                 line.erase(break_pos);
             }
@@ -203,9 +170,8 @@ void spoil_out(std::string_view sv, bool flush_buffer)
             break_pos = std::string::npos;
             line = std::move(next_line);
 
-            // 次の行へ送った部分と今の文字が幅に収まらなければ (送った部分に折り返す位置が無い)、送った部分もそのまま書き出す。
-            // 2バイト文字の前半バイトを足した後に、後半バイトで改めて幅に達して文字を行の間で分けてしまうのを防ぐ
-            if (line.length() >= _((iskanji_flag ? 74U : 75U), 75U)) {
+            // 次の行へ送った部分と今の文字が幅に収まらなければ (送った部分に折り返す位置が無い)、送った部分もそのまま書き出す
+            if (str_display_width(line) + char_width > line_width_max) {
                 if (waiting_line) {
                     fmt::print(spoiler_file, "{}\n", *waiting_line);
                     waiting_line.reset();
@@ -216,7 +182,7 @@ void spoil_out(std::string_view sv, bool flush_buffer)
             }
         }
 
-        if (line.empty() && (ch == ' ')) {
+        if (line.empty() && (ch == " ")) {
             continue;
         }
 
@@ -224,26 +190,22 @@ void spoil_out(std::string_view sv, bool flush_buffer)
         // 「(」と全角文字の前で折り返してよいかは、画面の折り返しと同じ classify_line_break() で決める
         // (行頭禁則文字の前、行末禁則文字の後ろでは折り返さない)。折り返す位置が無いときに語の途中までさかのぼる処理は持たない。
         // 行の先頭は、そこで折り返すと空の行を書き出すので、折り返す位置にしない
-        if (!k_flag) {
-            if ((ch == ' ') || ((ch == '(') && !line.empty() && (classify_line_break(prev_char, "(") != LineBreakKind::NONE))) {
+        if (!is_wide) {
+            if ((ch == " ") || ((ch == "(") && !line.empty() && (classify_line_break(prev_char, "(") != LineBreakKind::NONE))) {
                 break_pos = line.length();
             }
-        } else {
-            if (iskanji_flag && !line.empty() && (classify_line_break(prev_char, sv.substr(i, 2)) != LineBreakKind::NONE)) {
-                break_pos = line.length();
-            }
+        } else if (!line.empty() && (classify_line_break(prev_char, ch) != LineBreakKind::NONE)) {
+            break_pos = line.length();
         }
 
-        if (!is_second_byte) {
-            prev_char = iskanji_flag ? std::string(sv.substr(i, 2)) : std::string(1, ch);
-        }
+        prev_char = ch;
 #else
-        if (ch == ' ') {
+        if (ch == " ") {
             break_pos = line.length();
         }
 #endif
 
-        line.push_back(ch);
+        line.append(ch);
     }
 }
 

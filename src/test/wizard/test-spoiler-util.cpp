@@ -25,8 +25,10 @@ using namespace test;
 namespace {
 #if defined(JP) && defined(SJIS)
 constexpr std::string_view SOKUON = "\x82\xc1"; //!< っ
+constexpr std::string_view KUTEN = "\x81\x42"; //!< 。
 #elif defined(JP)
 constexpr std::string_view SOKUON = "\xa4\xc3"; //!< っ
+constexpr std::string_view KUTEN = "\xa1\xa3"; //!< 。
 #endif
 
 /*!
@@ -94,7 +96,7 @@ TEST_CASE("spoil_out wraps a long text at a space")
 #ifdef JP
 TEST_CASE("spoil_out wraps a long Japanese text without splitting a 2-byte character")
 {
-    // 2バイト文字は1行に36文字 (72バイト) まで
+    // 全角文字は1行に36文字 (72桁) まで
     const auto expected = cat(repeat(KANJI_KAN, 36), "\n", repeat(KANJI_KAN, 14), "\n\n");
     CHECK(capture_spoil_out({ repeat(KANJI_KAN, 50) }) == expected);
 }
@@ -129,5 +131,19 @@ TEST_CASE("spoil_out does not split a multibyte character when the moved part of
     const auto text = cat("a", std::string(74, '('), KANJI_KAN, KANJI_JI);
     const auto expected = cat("a\n", std::string(74, '('), "\n", KANJI_KAN, KANJI_JI, "\n\n");
     CHECK(capture_spoil_out({ text }) == expected);
+}
+
+TEST_CASE("spoil_out replaces a lead byte without its trail byte at the end of the text with a space")
+{
+    CHECK(capture_spoil_out({ cat("ab", KANJI_KAN.substr(0, 1)), "c" }) == "ab c\n\n");
+}
+
+TEST_CASE("spoil_out does not defer the wrapped line when the text ends with a wide character")
+{
+    // 行頭禁則文字「。」の前では折り返さないので、前の文字と「。」が次の行へ移る。「。」で文字列が終わっても、折り返した行は保留せずに書き出す
+    const auto first = cat(std::string(69, 'x'), KANJI_KAN, KANJI_KAN);
+    const auto expected = cat(first, "\n", KANJI_KAN, KUTEN, "\n\n");
+    CHECK(capture_spoil_out({ cat(first, KANJI_KAN, KUTEN) }) == expected);
+    CHECK(capture_spoil_out({ cat(first, KANJI_KAN), KUTEN }) == expected);
 }
 #endif
