@@ -11,6 +11,7 @@
 
 #include "system/h-basic.h"
 #include <cstddef>
+#include <string>
 #include <string_view>
 
 /*!
@@ -48,3 +49,6 @@ bool is_mb_char_boundary(std::string_view str, size_t pos);
 size_t mb_next_char_boundary(std::string_view str, size_t pos);
 size_t mb_prev_char_pos(std::string_view str, size_t pos);
 size_t str_display_width(std::string_view str);
+std::string_view str_prefix_by_width(std::string_view str, size_t width);
+std::string str_prefix_by_width(std::string &&str, size_t width);
+std::string_view str_prefix_by_width(const char *str, size_t width);

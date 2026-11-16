@@ -170,7 +170,7 @@ static bool do_cmd_knowledge_quests_aux(PlayerType *, FILE *fff, QuestId q_idx)
         }
     };
 
-    // shape_buffer() は終端文字の分を除いた maxlen - 1 バイトごとに区切るので、名前の欄の幅 + 1 を渡す
+    // shape_buffer() は表示幅 maxlen - 1 桁ごとに区切るので、名前の欄の幅 + 1 を渡す
     constexpr auto name_maxlen = 35 + 1;
     if (is_fixed_quest || !quest.get_bounty().is_valid()) {
         const auto name = shape_buffer(quest.name, name_maxlen);

@@ -11,6 +11,7 @@
 #include "io-dump/dump-util.h"
 #include "io/input-context.h"
 #include "knowledge/lighting-level-table.h"
+#include "locale/multibyte-char.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/player-type-definition.h"
 #include "system/services/dungeon-service.h"
@@ -69,7 +70,7 @@ static void display_feature_list(int col, int row, int per_page, const std::vect
         attr = ((i + feat_top == feat_cur) ? TERM_L_BLUE : TERM_WHITE);
         c_prt(attr, terrain.name.data(), row_i, col);
         if (per_page == 1) {
-            c_prt(attr, fmt::format("({})", lighting_level_str[lighting_level]), row_i, col + 1 + terrain.name.size());
+            c_prt(attr, fmt::format("({})", lighting_level_str[lighting_level]), row_i, col + 1 + str_display_width(terrain.name));
             const auto &symbol_config = terrain.symbol_configs.at(lighting_level);
             c_prt(attr, fmt::format("{:02x}/{:02x}", symbol_config.color, static_cast<uint8_t>(symbol_config.character)), row_i,
                 f_idx_col - ((is_wizard || visual_only) ? 6 : 2));
@@ -109,7 +110,7 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
     std::vector<FEAT_IDX> feat_idx;
 
     const std::string terrain_group(_("地形    ", "Terrains")); //!< @details 他と合わせるためgroupと呼ぶ.
-    const auto max_length = terrain_group.length();
+    const auto max_length = str_display_width(terrain_group);
     TERM_COLOR attr_top = 0;
     bool visual_list = false;
     byte char_left = 0;

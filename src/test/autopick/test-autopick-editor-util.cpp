@@ -360,4 +360,40 @@ TEST_CASE("EditorCommandId::LEFT moves back one byte over a lone lead byte at th
     do_editor_command(nullptr, &tb, EditorCommandId::LEFT);
     CHECK(tb.cx == 2);
 }
+
+TEST_CASE("adjust_cursor_column puts the cursor at the recorded display column")
+{
+    const auto line = cat("a", KANJI_KAN, "b");
+    auto tb = make_text_body_with_line(line, 0);
+
+    SUBCASE("the column is on a character boundary")
+    {
+        tb.rec_cx = 3;
+        tb.adjust_cursor_column();
+        CHECK(tb.cx == static_cast<int>(1 + KANJI_KAN.length()));
+    }
+
+    SUBCASE("the column is the right half of a double-byte character on an even column")
+    {
+        tb.rec_cx = 2;
+        tb.adjust_cursor_column();
+        CHECK(tb.cx == static_cast<int>(1 + KANJI_KAN.length()));
+    }
+
+    SUBCASE("the column is the right half of a double-byte character on an odd column")
+    {
+        tb.lines[0].line = cat("ab", KANJI_KAN);
+        tb.rec_cx = 3;
+        tb.adjust_cursor_column();
+        CHECK(tb.cx == 2);
+    }
+}
+
+TEST_CASE("get_cursor_column counts the display width before the cursor")
+{
+    const auto line = cat("a", KANJI_KAN, "b");
+    CHECK(make_text_body_with_line(line, 0).get_cursor_column() == 0);
+    CHECK(make_text_body_with_line(line, static_cast<int>(1 + KANJI_KAN.length())).get_cursor_column() == 3);
+    CHECK(make_text_body_with_line(line, 100).get_cursor_column() == 4);
+}
 #endif

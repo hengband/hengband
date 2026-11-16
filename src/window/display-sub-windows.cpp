@@ -7,6 +7,7 @@
 #include "inventory/inventory-slot-types.h"
 #include "inventory/inventory-util.h"
 #include "locale/japanese.h"
+#include "locale/multibyte-char.h"
 #include "lore/monster-lore-snapshot.h"
 #include "main/sound-of-music.h"
 #include "mind/mind-elementalist.h"
@@ -46,7 +47,6 @@
 #include "util/buffer-shaper.h"
 #include "util/int-char-converter.h"
 #include "util/object-sort.h"
-#include "util/string-processor.h"
 #include "view/display-lore.h"
 #include "view/display-map.h"
 #include "view/display-messages.h"
@@ -352,7 +352,6 @@ static void display_equipment(PlayerType *player_ptr, const ItemTester &item_tes
             attr = tval_to_attr[enum2i(item.bi_key.tval()) % 128];
         }
 
-        int n = item_name.length();
         if (item.timeout) {
             attr = TERM_L_DARK;
         }
@@ -367,7 +366,7 @@ static void display_equipment(PlayerType *player_ptr, const ItemTester &item_tes
             cur_col += 2;
         }
 
-        term_putstr(cur_col, cur_row, n, attr, item_name);
+        term_putstr(cur_col, cur_row, -1, attr, item_name);
         if (show_weights) {
             int wgt = item.weight * item.number;
             tmp_val = fmt::format(_("{:3}.{:1} kg", "{:3}.{:1} lb"), _(lb_to_kg_integer(wgt), wgt / 10), _(lb_to_kg_fraction(wgt), wgt % 10));
@@ -957,7 +956,7 @@ static void display_spell_list(PlayerType *player_ptr)
             }
 
             m[j] = y + n;
-            term_putstr(x, m[j], -1, a, fmt::format("{:c}/{:c}) {:<20}", I2A(n / 8), I2A(n % 8), str_substr(name, 0, 20)));
+            term_putstr(x, m[j], -1, a, fmt::format("{:c}/{:c}) {:<20}", I2A(n / 8), I2A(n % 8), str_prefix_by_width(name, 20)));
             n++;
         }
     }

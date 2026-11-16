@@ -13,7 +13,7 @@ TEST_CASE("input_string publishes the string context and accepts the initial tex
     CHECK(input_string("Text: ", 20, "seed", false) == "seed");
 }
 
-TEST_CASE("input_string publishes the byte limit that fits the input field")
+TEST_CASE("input_string publishes the display width limit that fits the input field")
 {
     test::ScopedInputTerm term;
     const std::string long_prompt(75, 'P');
@@ -28,7 +28,7 @@ TEST_CASE("input_string clears the context when cancelled")
     CHECK_FALSE(input_string("Cancel: ", 20, "seed", false));
 }
 
-TEST_CASE("input_string_on_row publishes the byte limit that fits the input field after the prompt")
+TEST_CASE("input_string_on_row publishes the display width limit that fits the input field after the prompt")
 {
     test::ScopedInputTerm term;
     const std::string long_prompt(75, 'P');

@@ -158,6 +158,18 @@ size_t mb_prev_char_pos(std::string_view str, size_t pos)
     return prev;
 }
 
+namespace {
+/*!
+ * @brief 1 文字の表示幅を返す
+ * @param char_length 文字のバイト数
+ * @return 多バイト文字なら 2、1 バイトの文字なら 1
+ */
+size_t char_display_width(size_t char_length)
+{
+    return (char_length > 1) ? 2 : 1;
+}
+}
+
 /*!
  * @brief 文字列の表示幅を返す
  * @param str 文字列
@@ -171,9 +183,61 @@ size_t str_display_width(std::string_view str)
     size_t width = 0;
     for (size_t pos = 0; pos < str.size();) {
         const auto char_length = mb_char_length_at(str, pos);
-        width += (char_length > 1) ? 2 : 1;
+        width += char_display_width(char_length);
         pos += char_length;
     }
 
     return width;
+}
+
+/*!
+ * @brief 文字列の先頭から、指定した表示幅に収まる部分を返す
+ * @param str 文字列
+ * @param width 表示幅 (桁数) の上限
+ * @return 多バイト文字を分断せずに width 桁に収まる、最も長い先頭の部分
+ * @details 表示幅は str_display_width() と同じく数える。収まらない多バイト文字と、
+ * 後続のバイトが欠けた多バイト文字の先頭バイトは含めない (str_substr() と同じ)。
+ * 内部文字コードが EUC-JP・Shift_JIS の間は、str_substr(str, 0, width) と同じ部分を返す。
+ */
+std::string_view str_prefix_by_width(std::string_view str, size_t width)
+{
+    size_t pos = 0;
+    size_t used = 0;
+    while (pos < str.size()) {
+        const auto char_length = mb_char_byte_length(str[pos]);
+        const auto char_width = char_display_width(char_length);
+        if ((pos + char_length > str.size()) || (used + char_width > width)) {
+            break;
+        }
+
+        pos += char_length;
+        used += char_width;
+    }
+
+    return str.substr(0, pos);
+}
+
+/*!
+ * @brief 文字列の先頭から、指定した表示幅に収まる部分を返す (ムーブ版)
+ * @param str 文字列。中身はムーブされる
+ * @param width 表示幅 (桁数) の上限
+ * @return 収まる部分。切り出す範囲は std::string_view を取る版と同じ
+ * @details 引数の文字列を縮めて返すため、新たな領域を確保しない。一時オブジェクトを渡したときに、
+ * 解放された領域を指す std::string_view を返さないためにも使う。
+ */
+std::string str_prefix_by_width(std::string &&str, size_t width)
+{
+    str.resize(str_prefix_by_width(std::string_view(str), width).length());
+    return std::move(str);
+}
+
+/*!
+ * @brief 文字列の先頭から、指定した表示幅に収まる部分を返す (C 文字列版)
+ * @param str NUL で終わる文字列
+ * @param width 表示幅 (桁数) の上限
+ * @return 収まる部分。切り出す範囲は std::string_view を取る版と同じ
+ */
+std::string_view str_prefix_by_width(const char *str, size_t width)
+{
+    return str_prefix_by_width(std::string_view(str), width);
 }

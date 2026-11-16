@@ -2,6 +2,7 @@
 #include "floor/dungeon-feeling.h"
 #include "game-option/special-options.h"
 #include "game-option/text-display-options.h"
+#include "locale/multibyte-char.h"
 #include "player-base/player-race.h"
 #include "player-info/class-info.h"
 #include "player-info/mimic-info-table.h"
@@ -14,7 +15,6 @@
 #include "term/screen-processor.h"
 #include "timed-effect/timed-effects.h"
 #include "tracking/health-bar-tracker.h"
-#include "util/string-processor.h"
 #include "window/main-window-row-column.h"
 #include "window/main-window-stat-poster.h"
 #include "window/main-window-util.h"
@@ -251,7 +251,7 @@ void print_depth(PlayerType *player_ptr)
  */
 void print_frame_basic(PlayerType *player_ptr)
 {
-    print_field(str_substr(get_displayed_race_title(player_ptr), 0, 12), ROW_RACE, COL_RACE);
+    print_field(str_prefix_by_width(get_displayed_race_title(player_ptr), 12), ROW_RACE, COL_RACE);
     print_title(player_ptr);
     print_level(player_ptr);
     print_exp(player_ptr);
@@ -411,11 +411,11 @@ void print_health(PlayerType *player_ptr, bool riding)
         if (row_offset > extra_line_count) {
             break;
         }
-        if (col_offset + info.label.length() > max_width) { // 改行が必要かどうかチェック
+        if (col_offset + str_display_width(info.label) > max_width) { // 改行が必要かどうかチェック
             col_offset = 0;
             row_offset++;
         }
         term_putstr(col + col_offset, row + row_offset, max_width, info.color, info.label);
-        col_offset += info.label.length() + 1; // 文字数と空白の分だけoffsetを加算
+        col_offset += str_display_width(info.label) + 1; // 文字数と空白の分だけoffsetを加算
     }
 }

@@ -1314,23 +1314,14 @@ void term_add_bigch(const DisplaySymbol &symbol)
 }
 
 /*!
- * At the current location, using an attr, add a string
- *
- * We also take a length "n", using negative values to imply
- * the largest possible value, and then we use the minimum of
- * this length and the "actual" length of the string as the
- * actual number of characters to attempt to display, never
- * displaying more characters than will actually fit, since
- * we do NOT attempt to "wrap" the cursor at the screen edge.
- *
- * We return "-1" if the cursor is currently unusable.
- * We return "N" if we were "only" able to write "N" chars,
- * even if all of the given characters fit on the screen,
- * and mark the cursor as unusable for future attempts.
- *
- * So when this function, or the preceding one, return a
- * positive value, future calls to either function will
- * return negative ones.
+ * @brief カーソルの位置に文字列を置き、カーソルを進める
+ * @param n 置く最大の表示幅 (マス数)。負なら画面の右端まで
+ * @param a 色
+ * @param sv 文字列
+ * @return カーソルが使えなければ -1。画面の右端に達して途中までしか置けなかったら置いたマス数
+ * (以後カーソルは使えなくなる)。それ以外は 0
+ * @details 文字列の表示幅と n の小さいほうのマス数を置き、カーソルをそのマス数だけ進める。
+ * 画面の右端で折り返さない。属性がタイルなら、1バイトを1マスとして数える。
  */
 errr term_addstr(int n, TERM_COLOR a, std::string_view sv)
 {
@@ -1345,8 +1336,9 @@ errr term_addstr(int n, TERM_COLOR a, std::string_view sv)
     /* Obtain maximal length */
     const auto max_len = (n < 0) ? (w + 1) : n;
 
-    /* Obtain the usable string length */
-    auto len = std::min<int>(max_len, sv.length());
+    // 置くマス数。タイルの番号は1バイトを1マスに置く
+    const auto str_width = (a & AF_TILE1) ? sv.length() : str_display_width(sv);
+    auto len = std::min<int>(max_len, str_width);
 
     /* React to reaching the edge of the screen */
     if (game_term->scr->cx + len >= w) {
@@ -2080,36 +2072,25 @@ void term_init(term_type *t, int w, int h, int k)
 
 #ifdef JP
 /*!
- * Move to a location and, using an attr, add a string vertically
+ * @brief 文字列を縦書きで置く
+ * @param x 桁
+ * @param y_initial 先頭の文字を置く行
+ * @param color 色
+ * @param sv 文字列。NUL があればそこで終える
+ * @details 1文字ずつ下の行に置く。画面の右端や下端に達したら、そこで終える。
  */
-void term_putstr_v(int x, int y_initial, size_t n, uint8_t color, std::string_view sv)
+void term_putstr_v(int x, int y_initial, uint8_t color, std::string_view sv)
 {
-    auto y = y_initial;
-    for (size_t i = 0; (i < n) && (i < sv.length()); i++) {
-        /* Move first */
-        if (const auto res = term_gotoxy(x, y); (res != 0)) {
+    for (auto y = y_initial; !sv.empty() && (sv.front() != '\0'); y++) {
+        if (term_gotoxy(x, y) != 0) {
             return;
         }
 
-        if (iskanji(sv[i])) {
-            if (const auto res = term_addstr(2, color, sv.substr(i)); (res != 0)) {
-                return;
-            }
-
-            i++;
-            y++;
-            if ((i >= sv.length()) || (sv[i] == '\0')) {
-                break;
-            }
-
-            continue;
-        }
-
-        if (const auto res = term_addstr(1, color, sv.substr(i)); (res != 0)) {
+        const auto ch = mb_first_char(sv);
+        sv.remove_prefix(ch.length());
+        if (term_addstr(-1, color, ch) != 0) {
             return;
         }
-
-        y++;
     }
 }
 #endif

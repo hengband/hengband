@@ -2,6 +2,7 @@
 #include "birth/birth-util.h"
 #include "core/asking-player.h"
 #include "io/input-context.h"
+#include "locale/multibyte-char.h"
 #include "mind/mind-elementalist.h"
 #include "player-base/player-class.h"
 #include "player/player-realm.h"
@@ -89,7 +90,7 @@ static void move_birth_realm_cursor(birth_realm_type *birth_realm_ptr)
         const auto &realm_name = PlayerRealm::get_name(realm);
         birth_realm_ptr->cur = fmt::format("{:c}{:c} {}", birth_realm_ptr->sym[birth_realm_ptr->cs], birth_realm_ptr->p2, realm_name);
         c_put_str(TERM_L_BLUE, realm_name, 3, 40);
-        prt(_("の特徴", ": Characteristic"), 3, 40 + realm_name->length());
+        prt(_("の特徴", ": Characteristic"), 3, 40 + str_display_width(realm_name));
         prt(PlayerRealm::get_subinfo(realm), 4, 40);
     }
 

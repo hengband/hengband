@@ -7,6 +7,7 @@
 #include "floor/floor-util.h"
 #include "game-option/map-screen-options.h"
 #include "game-option/option-flags.h"
+#include "locale/multibyte-char.h"
 #include "object/item-tester-hooker.h"
 #include "player-base/player-class.h"
 #include "player-info/race-info.h"
@@ -63,7 +64,7 @@ static void print_dungeon(PlayerType *player_ptr)
 
     c_put_str(TERM_WHITE, "             ", hgt + ROW_DUNGEON, COL_DUNGEON);
     const auto dungeon_name = map_name(player_ptr);
-    TERM_LEN col = COL_DUNGEON + 6 - dungeon_name.length() / 2;
+    TERM_LEN col = COL_DUNGEON + 6 - str_display_width(dungeon_name) / 2;
     if (col < 0) {
         col = 0;
     }

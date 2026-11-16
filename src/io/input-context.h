@@ -42,7 +42,7 @@ enum class InputKind {
  * @brief 文字列の入力の詳細
  */
 struct StringInputDetails {
-    int max_length; //!< 入力欄の位置と画面幅に合わせて調整した、内部文字コードでのバイト上限
+    int max_length; //!< 入力欄の位置と画面幅に合わせて調整した、文字列の表示幅 (桁数) の上限
     std::string initial; //!< 初期文字列 (max_length に合わせた切り詰めはしない)
 
     bool operator==(const StringInputDetails &) const = default;

@@ -90,6 +90,43 @@ TEST_CASE("term_putstr puts a full-width character into two cells")
     CHECK(term_locate().first == 4);
 }
 
+TEST_CASE("term_putstr limits the string by the display width")
+{
+    test::ScopedInputTerm term;
+    term_clear();
+
+    SUBCASE("the limit ends after a full-width character")
+    {
+        term_putstr(0, 0, 3, TERM_WHITE, std::string("a").append(KANJI_A).append("b"));
+        const auto cells = read_cells(0, 4);
+        CHECK(cells[1] == TermChar::wide(KANJI_A));
+        CHECK(cells[3] == TermChar::from_byte(' '));
+        CHECK(term_locate().first == 3);
+    }
+
+    SUBCASE("the limit ends in the middle of a full-width character")
+    {
+        term_putstr(0, 0, 2, TERM_WHITE, std::string("a").append(KANJI_A));
+        const auto cells = read_cells(0, 3);
+        CHECK(cells[0] == TermChar::from_byte('a'));
+        CHECK(cells[1] == TermChar::from_byte(' '));
+        CHECK(cells[2] == TermChar::from_byte(' '));
+    }
+}
+
+TEST_CASE("term_putstr_v puts one character per row")
+{
+    test::ScopedInputTerm term;
+    term_clear();
+    term_putstr_v(2, 1, TERM_WHITE, std::string(KANJI_A).append("a").append(KANJI_A));
+    CHECK(term_what_cell(2, 1)->character == TermChar::wide(KANJI_A));
+    CHECK(term_what_cell(3, 1)->character.is_wide_trail());
+    CHECK(term_what_cell(2, 2)->character == TermChar::from_byte('a'));
+    CHECK(term_what_cell(3, 2)->character == TermChar::from_byte(' '));
+    CHECK(term_what_cell(2, 3)->character == TermChar::wide(KANJI_A));
+    CHECK(term_what_cell(2, 4)->character == TermChar::from_byte(' '));
+}
+
 TEST_CASE("term_putstr does not put a full-width character truncated at the end of the string")
 {
     test::ScopedInputTerm term;

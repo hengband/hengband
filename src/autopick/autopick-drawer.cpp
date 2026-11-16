@@ -106,8 +106,9 @@ void draw_text_editor(PlayerType *player_ptr, AutopickTextBody *tb)
     if (tb->upper < 0) {
         tb->upper = 0;
     }
-    if ((tb->cx < tb->left + 10 && tb->left > 0) || tb->left + tb->wid - 5 <= tb->cx) {
-        tb->left = tb->cx - (tb->wid) * 2 / 3;
+    const auto cursor_column = tb->get_cursor_column();
+    if ((cursor_column < tb->left + 10 && tb->left > 0) || tb->left + tb->wid - 5 <= cursor_column) {
+        tb->left = cursor_column - (tb->wid) * 2 / 3;
     }
     if (tb->left < 0) {
         tb->left = 0;
@@ -145,7 +146,6 @@ void draw_text_editor(PlayerType *player_ptr, AutopickTextBody *tb)
 
     int i;
     for (i = 0; i < tb->hgt; i++) {
-        int leftcol = 0;
         byte color;
         int y = tb->upper + i;
 
@@ -157,21 +157,16 @@ void draw_text_editor(PlayerType *player_ptr, AutopickTextBody *tb)
             break;
         }
 
+        // 表示を始める桁より左の文字を除く。全角文字がその桁にまたがるときは、その文字も除いて1桁右から描く
         std::string_view msg(tb->lines[y].line);
-        for (auto j = 0; !msg.empty(); msg.remove_prefix(1), j++) {
-            if (j == tb->left) {
-                break;
-            }
-#ifdef JP
-            if (j > tb->left) {
-                leftcol = 1;
-                break;
-            }
-            const auto trail_length = mb_first_char(msg).length() - 1;
-            msg.remove_prefix(trail_length);
-            j += static_cast<int>(trail_length);
-#endif
+        auto skipped_width = 0;
+        while (!msg.empty() && (skipped_width < tb->left)) {
+            const auto ch = mb_first_char(msg);
+            msg.remove_prefix(ch.length());
+            skipped_width += static_cast<int>(str_display_width(ch));
         }
+
+        const auto leftcol = (skipped_width > tb->left) ? 1 : 0;
 
         term_erase(0, i + 1, tb->wid);
         if (tb->lines[y].state.has(AutopickEntryStatus::AUTOREGISTER)) {

@@ -16,6 +16,7 @@
 #include "io-dump/dump-util.h"
 #include "io/input-context.h"
 #include "knowledge/monster-group-table.h"
+#include "locale/multibyte-char.h"
 #include "lore/lore-util.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
@@ -274,8 +275,8 @@ void do_cmd_knowledge_monsters(PlayerType *player_ptr, bool *need_redraw, bool v
     std::vector<IDX> grp_idx;
 
     const auto max_element = std::max_element(MONSTER_KINDS_GROUP.begin(), MONSTER_KINDS_GROUP.end(),
-        [](const auto &x, const auto &y) { return x.length() < y.length(); });
-    const int max = max_element->length();
+        [](const auto &x, const auto &y) { return str_display_width(x) < str_display_width(y); });
+    const int max = str_display_width(*max_element);
     bool visual_list = false;
     TERM_COLOR color_top = 0;
     byte character_left = 0;

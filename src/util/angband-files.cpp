@@ -338,7 +338,7 @@ static tl::optional<std::string> read_line(FILE *fp)
  * @brief ファイルから1行読み込む
  *
  * ファイルから1行読み込み、読み込んだ文字列に以下の処理を行い最大n-1バイトまでの文字列を返す。
- * - タブをスペースに変換する
+ * - タブをスペースに変換する (表示幅で 8 桁ごとにそろえる)
  * - プリント可能文字以外を'?'に変換する
  * - 行末の改行を削除する
  *
@@ -365,6 +365,7 @@ tl::optional<std::string> angband_fgets(FILE *fp, size_t n)
     }
 
     std::string str;
+    size_t width = 0; // str の表示幅。タブは表示幅で 8 桁ごとにそろえる
 
     // 途中に NUL があればそこで行を終える
     const std::string_view sv(line->data());
@@ -376,8 +377,9 @@ tl::optional<std::string> angband_fgets(FILE *fp, size_t n)
                 break;
             }
 
-            const auto space_count = tab_width - (str.length() % tab_width);
+            const auto space_count = tab_width - (width % tab_width);
             str.append(space_count, ' ');
+            width += space_count;
             i++;
         } else if (is_mb_char_lead(c)) {
             // 後続のバイトが欠けた文字や、n バイトに収まらない文字は取り込まずに終える
@@ -386,11 +388,14 @@ tl::optional<std::string> angband_fgets(FILE *fp, size_t n)
                 break;
             }
 
-            str.append(sv.substr(i, char_length));
+            const auto ch = sv.substr(i, char_length);
+            str.append(ch);
+            width += str_display_width(ch);
             i += char_length;
         } else {
             // 表示できない 1 バイトの文字は ? に置き換える (Shift_JIS の半角カナは表示できる文字として取り込む)
             str.push_back(is_printable_single_byte_char(c) ? c : '?');
+            width++;
             i++;
         }
 

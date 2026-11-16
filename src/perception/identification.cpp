@@ -5,6 +5,7 @@
 #include "flavor/object-flavor-types.h"
 #include "game-option/special-options.h"
 #include "io/input-context.h"
+#include "locale/multibyte-char.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trc-types.h"
@@ -777,7 +778,7 @@ bool screen_object(PlayerType *player_ptr, const ItemEntity &item, BIT_FLAGS mod
 
     if (!is_fake_object && (bi_key == BaseitemKey(ItemKindType::STATUE, SV_PHOTO))) {
         const auto &monrace = item.get_monrace();
-        const auto name_length = monrace.name->length();
+        const auto name_length = str_display_width(monrace.name);
         prt(fmt::format("{}: '", monrace.name), 1, 15);
         term_queue_bigchar(18 + name_length, 1, { monrace.symbol_config, {} });
         prt("'", 1, (use_bigtile ? 20 : 19) + name_length);

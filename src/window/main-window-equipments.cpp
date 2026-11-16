@@ -7,6 +7,7 @@
 #include "inventory/inventory-util.h"
 #include "io/input-key-requester.h"
 #include "locale/japanese.h"
+#include "locale/multibyte-char.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
 #include "object/object-info.h"
@@ -65,7 +66,7 @@ COMMAND_CODE show_equipment(PlayerType *player_ptr, int target_item, BIT_FLAGS m
         if (item.timeout) {
             out_color[k] = TERM_L_DARK;
         }
-        l = out_desc[k].length() + (2 + _(1, 3));
+        l = str_display_width(out_desc[k]) + (2 + _(1, 3));
 
         if (show_labels) {
             l += (_(7, 14) + 2);

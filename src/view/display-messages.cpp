@@ -241,8 +241,11 @@ static void erase_msg_line()
  */
 static void put_msg_line(int x, std::string_view str)
 {
-    term_putstr(x, 0, std::ssize(str), TERM_WHITE, str);
-    msg_line.resize(x, ' ');
+    term_putstr(x, 0, -1, TERM_WHITE, str);
+
+    // 覚えている行の内容を x 桁にそろえてから加える
+    msg_line.resize(str_prefix_by_width(msg_line, x).length());
+    msg_line.append(x - str_display_width(msg_line), ' ');
     msg_line.append(str);
 }
 
@@ -254,7 +257,7 @@ static void put_msg_line(int x, std::string_view str)
 static void put_more_prompt(int x)
 {
     const auto &[wid, hgt] = term_get_size();
-    term_putstr(std::min<int>(x, wid - std::ssize(MORE_PROMPT)), 0, -1, TERM_L_BLUE, MORE_PROMPT);
+    term_putstr(std::min<int>(x, wid - static_cast<int>(str_display_width(MORE_PROMPT))), 0, -1, TERM_L_BLUE, MORE_PROMPT);
 }
 
 /*
@@ -305,30 +308,47 @@ static void msg_flush(PlayerType *player_ptr, int x)
     erase_msg_line();
 }
 
-static int split_length(std::string_view sv, int max)
+//! 長いメッセージを分ける位置
+struct MessageSplit {
+    size_t pos; //!< 分ける位置 (バイト)
+    int col; //!< 分ける位置の桁
+};
+
+/*!
+ * @brief 長いメッセージを分ける位置を決める
+ * @param sv メッセージ (表示幅が max を超える)
+ * @param max 1行に表示する最大の桁数
+ * @return 分ける位置。全角文字の前、空白の前、20 文字を超える半角の語の途中のうち、max 桁までで最も右のもの
+ */
+static MessageSplit split_length(std::string_view sv, int max)
 {
-    auto split = max;
+    const auto prefix = str_prefix_by_width(sv, max);
+    MessageSplit split{ prefix.length(), static_cast<int>(str_display_width(prefix)) };
 
 #ifdef JP
     auto wordlen = 0;
-    for (auto check = 0; check < max; check++) {
-        if (is_mb_char_lead(sv[check])) {
-            split = check;
-            check += static_cast<int>(mb_char_byte_length(sv[check])) - 1;
-        } else if (sv[check] == ' ') {
-            split = check;
+    auto col = 0;
+    for (size_t pos = 0; (col < max) && (pos < sv.length());) {
+        const auto ch = mb_first_char(sv.substr(pos));
+        if (is_mb_char_lead(ch.front())) {
+            split = { pos, col };
+        } else if (ch.front() == ' ') {
+            split = { pos, col };
             wordlen = 0;
         } else {
             wordlen++;
             if (wordlen > 20) {
-                split = check;
+                split = { pos, col };
             }
         }
+
+        pos += ch.length();
+        col += static_cast<int>(str_display_width(ch));
     }
 #else
     for (auto check = 40; check < 72; check++) {
         if (sv[check] == ' ') {
-            split = check;
+            split = { static_cast<size_t>(check), check };
         }
     }
 #endif
@@ -390,7 +410,7 @@ void msg_print(std::string_view msg)
         return wid - 8;
     };
 
-    if ((msg_head_pos > 0) && ((msg_head_pos + std::ssize(msg)) > get_split_width())) {
+    if ((msg_head_pos > 0) && ((msg_head_pos + static_cast<int>(str_display_width(msg))) > get_split_width())) {
         msg_flush(p_ptr, msg_head_pos);
         msg_flag = false;
         msg_head_pos = 0;
@@ -404,11 +424,11 @@ void msg_print(std::string_view msg)
         message_add(msg);
     }
 
-    for (auto split_width = get_split_width(); std::ssize(msg) > split_width; split_width = get_split_width()) {
-        auto split = split_length(msg, split_width);
-        put_msg_line(0, msg.substr(0, split));
-        msg_flush(p_ptr, split + 1);
-        msg.remove_prefix(split);
+    for (auto split_width = get_split_width(); static_cast<int>(str_display_width(msg)) > split_width; split_width = get_split_width()) {
+        const auto split = split_length(msg, split_width);
+        put_msg_line(0, msg.substr(0, split.pos));
+        msg_flush(p_ptr, split.col + 1);
+        msg.remove_prefix(split.pos);
     }
 
     put_msg_line(msg_head_pos, msg);
@@ -416,7 +436,7 @@ void msg_print(std::string_view msg)
     window_stuff(p_ptr);
 
     msg_flag = true;
-    msg_head_pos += msg.size() + _(0, 1);
+    msg_head_pos += str_display_width(msg) + _(0, 1);
 
     if (fresh_message) {
         term_fresh_force();

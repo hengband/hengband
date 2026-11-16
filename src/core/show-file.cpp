@@ -3,6 +3,7 @@
 #include "io/files-util.h"
 #include "io/input-context.h"
 #include "io/input-key-acceptor.h"
+#include "locale/multibyte-char.h"
 #include "main/sound-of-music.h"
 #include "system/angband-exceptions.h"
 #include "system/angband-system.h"
@@ -56,15 +57,16 @@ static void show_file_aux_line(std::string_view str, int cy, std::string_view sh
         const auto bracketcol = in_tag ? str_find_position(rest, in_tag) : str_find_position(rest, tag_str);
         const auto endcol = std::min({ rest.length(), showercol, bracketcol });
 
-        term_addstr(static_cast<int>(endcol), color, rest);
-        cx += endcol;
+        const auto text = rest.substr(0, endcol);
+        term_addstr(-1, color, text);
+        cx += str_display_width(text);
         i += endcol;
 
         if (endcol == showercol) {
-            const auto showerlen = shower.length();
-            term_addstr(showerlen, focuscolor, str.substr(i));
-            cx += showerlen;
-            i += showerlen;
+            const auto focused = str.substr(i, shower.length());
+            term_addstr(-1, focuscolor, focused);
+            cx += str_display_width(focused);
+            i += focused.length();
             continue;
         }
 

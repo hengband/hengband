@@ -22,7 +22,6 @@
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
 #include <fmt/format.h>
-#include <sstream>
 #include <string>
 #include <string_view>
 
@@ -110,15 +109,8 @@ static void display_identified_resistances_flag(const ItemEntity &item, FILE *ff
 static void do_cmd_knowledge_inventory_aux(PlayerType *player_ptr, FILE *fff, const ItemEntity &item, std::string_view where)
 {
     constexpr auto max_item_length = 26;
-    std::stringstream ss;
-    ss << describe_flavor(player_ptr, item, OD_NAME_ONLY, max_item_length);
-    const int item_length = ss.tellp();
-    constexpr auto max_display_length = 28;
-    for (auto i = item_length; i < max_display_length; i++) {
-        ss << ' ';
-    }
-
-    fmt::print(fff, "{} {}", where, ss.str());
+    const auto item_name = describe_flavor(player_ptr, item, OD_NAME_ONLY, max_item_length);
+    fmt::print(fff, "{} {:<28}", where, item_name);
     if (!item.is_fully_known()) {
         fmt::println(fff, _("-------不明--------------- -------不明---------", "-------unknown------------ -------unknown------"));
         return;

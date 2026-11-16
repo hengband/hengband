@@ -9,6 +9,7 @@
 #include "view/display-characteristic.h"
 #include "flavor/flavor-util.h"
 #include "inventory/inventory-slot-types.h"
+#include "locale/multibyte-char.h"
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trc-types.h"
 #include "perception/object-perception.h"
@@ -297,7 +298,7 @@ static void process_one_characteristic(PlayerType *player_ptr, TERM_LEN row, TER
     }
 
     c_put_str(row_clr, header, row, col);
-    col += header.length() + 1;
+    col += str_display_width(header) + 1;
 
     for (auto s : char_stat.syms) {
         auto clr = row_clr;

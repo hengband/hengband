@@ -14,6 +14,7 @@
 #include "inventory/inventory-slot-types.h"
 #include "io/files-util.h"
 #include "io/input-context.h"
+#include "locale/multibyte-char.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
 #include "perception/object-perception.h"
@@ -27,7 +28,6 @@
 #include "term/screen-processor.h"
 #include "util/buffer-shaper.h"
 #include "util/int-char-converter.h"
-#include "util/string-processor.h"
 #include "view/display-inventory.h"
 #include "view/display-messages.h"
 #include "view/display-player.h"
@@ -58,9 +58,7 @@ constexpr auto GRAVE_DEAD_DATETIME_ROW = 17;
  */
 static void show_tomb_line(std::string_view str, int row)
 {
-    const auto head = GRAVE_LINE_WIDTH / 2 - str.length() / 2;
-    const auto tail = GRAVE_LINE_WIDTH - str.length() - head;
-    put_str(std::string(head, ' ').append(str).append(tail, ' '), row, GRAVE_LINE_START_COL);
+    put_str(fmt::format("{:^{}}", str, GRAVE_LINE_WIDTH), row, GRAVE_LINE_START_COL);
 }
 
 /*!
@@ -104,15 +102,14 @@ static int show_killing_monster(PlayerType *player_ptr)
         //!< 文末を2文字削る文字数は日英で異なる.
         //!< @todo 英語版は関数ごとプリプロで呼び分けているが、後で統一する.
         const auto omit = _(2, 3);
-        const auto buf = fmt::format(_("{}…", "{}..."), str_substr(lines[1], 0, GRAVE_LINE_WIDTH - omit));
+        const auto buf = fmt::format(_("{}…", "{}..."), str_prefix_by_width(lines[1], GRAVE_LINE_WIDTH - omit));
         show_tomb_line(buf, GRAVE_KILLER_NAME_ROW + 1);
         return 1;
     }
 
     if (const auto start_pos = lines[0].find("『");
         (start_pos != std::string::npos) && suffix(lines[1], "』")) {
-        if (lines[0].length() + lines[1].length() - start_pos <= GRAVE_LINE_WIDTH) {
-            const auto name = lines[0].substr(start_pos) + lines[1];
+        if (const auto name = lines[0].substr(start_pos) + lines[1]; str_display_width(name) <= GRAVE_LINE_WIDTH) {
             std::string_view title(lines[0].data(), start_pos);
             show_tomb_line(title, GRAVE_KILLER_NAME_ROW);
             show_tomb_line(name, GRAVE_KILLER_NAME_ROW + 1);

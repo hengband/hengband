@@ -1,11 +1,11 @@
 #include "wizard/monster-info-spoiler.h"
 #include "io/files-util.h"
+#include "locale/multibyte-char.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
 #include "util/angband-files.h"
 #include "util/buffer-shaper.h"
 #include "util/enum-converter.h"
-#include "util/string-processor.h"
 #include "view/display-lore.h"
 #include "wizard/spoiler-util.h"
 #include <algorithm>
@@ -97,7 +97,7 @@ SpoilerOutputResultType spoil_mon_desc(std::string_view filename, std::function<
             continue;
         }
 
-        // shape_buffer() は終端文字の分を除いた maxlen - 1 バイトごとに区切るので、名前の欄の幅 + 1 を渡す
+        // shape_buffer() は表示幅 maxlen - 1 桁ごとに区切るので、名前の欄の幅 + 1 を渡す
         const auto name = shape_buffer(monrace.name, 40 + 1);
         std::string nam;
         if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
@@ -121,7 +121,7 @@ SpoilerOutputResultType spoil_mon_desc(std::string_view filename, std::function<
         }
 
         const auto symbol = fmt::format("{} '{:c}'", attr_to_text(monrace), monrace.symbol_definition.character);
-        const auto line = fmt::format(fmt_line, str_substr(nam, 0, 45), lev, rar, spd, hp, ac, str_substr(symbol, 0, 19));
+        const auto line = fmt::format(fmt_line, str_prefix_by_width(nam, 45), lev, rar, spd, hp, ac, str_prefix_by_width(symbol, 19));
         ofs << line;
 
         for (auto i = 1U; i < name.size(); ++i) {
