@@ -371,7 +371,8 @@ static int get_spell(PlayerType *player_ptr, SPELL_IDX *sn, std::string_view pro
     if (is_every_magic && !PlayerRealm::is_magic(use_realm)) {
         return false;
     }
-    if (pc.equals(PlayerClassType::RED_MAGE) && ((use_realm) != RealmType::ARCANE) && (sval > 1)) {
+    // 習得できる巻数より後ろの魔法書は使えない (sval は 0 始まりの巻の番号)
+    if (PlayerRealm::is_magic(use_realm) && (sval >= PlayerRealm::get_max_book(use_realm))) {
         return false;
     }
 
