@@ -42,6 +42,13 @@ TEST_CASE("mb_char_length_at returns 1 for ASCII and out-of-range positions")
     CHECK(mb_char_length_at("abc"sv, 3) == 1);
 }
 
+TEST_CASE("mb_valid_char_length_at returns 1 for ASCII and out-of-range positions")
+{
+    CHECK(mb_valid_char_length_at("ab"sv, 0) == 1);
+    CHECK(mb_valid_char_length_at("ab"sv, 2) == 1);
+    CHECK(mb_valid_char_length_at("ab"sv, 5) == 1);
+}
+
 TEST_CASE("mb_first_char returns empty for an empty string")
 {
     CHECK(mb_first_char(""sv).empty());
@@ -164,6 +171,20 @@ TEST_CASE("mb_char_length_at treats a truncated character as one byte")
     CHECK(mb_char_length_at(str, 1) == 1);
 }
 
+TEST_CASE("mb_valid_char_length_at returns the length of a valid multibyte character")
+{
+    const auto str = test::cat("a", test::KANJI_KAN, "b");
+    CHECK(mb_valid_char_length_at(str, 1) == 2);
+    CHECK(mb_valid_char_length_at(str, 3) == 1);
+}
+
+TEST_CASE("mb_valid_char_length_at treats a truncated or invalid sequence as one byte")
+{
+    const auto lead = test::KANJI_KAN.substr(0, 1);
+    CHECK(mb_valid_char_length_at(lead, 0) == 1);
+    CHECK(mb_valid_char_length_at(test::cat(lead, ":"), 0) == 1);
+}
+
 TEST_CASE("is_multibyte_char_at finds a two byte character with its trailing byte")
 {
     const auto str = test::cat("a", test::KANJI_KAN);
@@ -275,5 +296,42 @@ TEST_CASE("mb_char_start_pos does not treat an ASCII-valued trailing byte as a c
     CHECK(mb_char_start_pos(str, 3) == 2);
     CHECK(mb_char_start_pos(str, 5) == 4);
     CHECK(mb_prev_char_pos(str, 4) == 2);
+}
+
+TEST_CASE("mb_valid_char_length_at accepts an ASCII-valued trailing byte in Shift_JIS")
+{
+    CHECK(mb_valid_char_length_at(test::DAME_SO, 0) == 2);
+    CHECK(mb_valid_char_length_at("\xb1:", 0) == 1); // 半角の「ア」は 1 バイトの文字
+}
+
+TEST_CASE("mb_valid_char_length_at checks the range of a Shift_JIS trailing byte")
+{
+    CHECK(mb_valid_char_length_at("\x83\x40", 0) == 2);
+    CHECK(mb_valid_char_length_at("\x83\x7e", 0) == 2);
+    CHECK(mb_valid_char_length_at("\x83\x80", 0) == 2);
+    CHECK(mb_valid_char_length_at("\x83\xfc", 0) == 2);
+    CHECK(mb_valid_char_length_at("\x83\x3f", 0) == 1);
+    CHECK(mb_valid_char_length_at("\x83\x7f", 0) == 1);
+    CHECK(mb_valid_char_length_at("\x83\xfd", 0) == 1);
+    CHECK(mb_valid_char_length_at("\x83\x1f", 0) == 1);
+}
+#elif defined(JP)
+TEST_CASE("mb_valid_char_length_at handles EUC-JP three byte and half-width katakana sequences")
+{
+    CHECK(mb_valid_char_length_at("\x8f\xa1\xa1", 0) == 3); // JIS X 0212 の文字
+    CHECK(mb_valid_char_length_at("\x8f\xa1:", 0) == 1);
+    CHECK(mb_valid_char_length_at("\x8f\xa1", 0) == 1);
+    CHECK(mb_valid_char_length_at("\x8f\xa1\xa0", 0) == 1);
+    CHECK(mb_valid_char_length_at("\x8e\xb1", 0) == 2); // 半角の「ア」
+    CHECK(mb_valid_char_length_at("\x8e\xa1\xa1", 0) == 2);
+    CHECK(mb_valid_char_length_at("\x8e\xe0", 0) == 1);
+}
+
+TEST_CASE("mb_valid_char_length_at checks the range of an EUC-JP trailing byte")
+{
+    CHECK(mb_valid_char_length_at("\xa1\xa1", 0) == 2);
+    CHECK(mb_valid_char_length_at("\xa1\xfe", 0) == 2);
+    CHECK(mb_valid_char_length_at("\xa1\xa0", 0) == 1);
+    CHECK(mb_valid_char_length_at("\xa1\xff", 0) == 1);
 }
 #endif
