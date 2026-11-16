@@ -1,5 +1,6 @@
 #include "wizard/fixed-artifacts-spoiler.h"
 #include "io/files-util.h"
+#include "locale/multibyte-char.h"
 #include "system/angband-system.h"
 #include "system/artifact/artifact-definition.h"
 #include "system/artifact/artifact-list.h"
@@ -41,14 +42,13 @@ void spoiler_outlist(std::string_view header, const std::vector<std::string> &de
         }
 
         const auto element_str = element.str();
-        const int line_length = line.tellp();
         constexpr auto max_line_length = 75;
-        if (line_length + element_str.length() <= max_line_length) {
+        const auto line_str = line.str();
+        if (str_display_width(line_str) + str_display_width(element_str) <= max_line_length) {
             line << element_str;
             continue;
         }
 
-        const auto line_str = line.str();
         if (line_str.ends_with(last_separator)) {
             ofs << std::string_view(line_str).substr(0, line_str.length() - 2) << '\n';
             line.str("");

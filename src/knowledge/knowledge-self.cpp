@@ -11,6 +11,7 @@
 #include "definitions-reader/wilderness-reader.h"
 #include "flavor/flavor-describer.h"
 #include "io-dump/dump-util.h"
+#include "locale/multibyte-char.h"
 #include "player-info/alignment.h"
 #include "player-info/class-info.h"
 #include "player/player-personality.h"
@@ -112,7 +113,7 @@ static void dump_winner_classes(FILE *fff)
         return;
     }
 
-    size_t max_len = 75;
+    constexpr size_t max_len = 75; // 1 行の表示幅の上限
     std::string s = "";
     std::string l = "";
     for (int c = 0; c < PLAYER_CLASS_TYPE_MAX; c++) {
@@ -127,17 +128,17 @@ static void dump_winner_classes(FILE *fff)
             t = "(" + t + ")";
         }
 
-        if (l.size() + t.size() + 2 > max_len) {
+        if (str_display_width(l) + str_display_width(t) + 2 > max_len) {
             fmt::println(fff, " {}", str_rtrim(l));
             l = "";
         }
-        if (l.size() > 0) {
+        if (!l.empty()) {
             l += ", ";
         }
         l += t;
     }
 
-    if (l.size() > 0) {
+    if (!l.empty()) {
         fmt::println(fff, " {}", str_rtrim(l));
     }
 }

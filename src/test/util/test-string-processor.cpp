@@ -330,9 +330,9 @@ TEST_CASE("str_separate returns an empty vector for an empty string")
     CHECK(parts.empty());
 }
 
-TEST_CASE("str_separate gives up when it cannot take even one byte")
+TEST_CASE("str_separate gives up when it cannot take even one character")
 {
-    // 幅0では1バイトも取り出せない。無限ループせずに打ち切る
+    // 幅0では1文字も取り出せない。無限ループせずに打ち切る
     const auto parts = str_separate("abc", 0);
     CHECK(parts.empty());
 }

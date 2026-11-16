@@ -334,20 +334,20 @@ std::vector<std::string> str_split(std::string_view str, char delim, bool trim, 
 }
 
 /*!
- * @brief 文字列を指定したバイト数ごとに分割する
+ * @brief 文字列を指定した表示幅ごとに分割する
  *
- * 文字列 str を len バイトずつに分割し、分割した文字列を要素とする配列を
+ * 文字列 str を表示幅 len 桁ずつに分割し、分割した文字列を要素とする配列を
  * std::vector<std::string> 型のオブジェクトとして返す。
  *
  * @param str 操作の対象とする文字列
- * @param len 分割するバイト数。全角文字を含む文字列には2以上を指定すること
+ * @param len 分割する表示幅 (桁数)。全角文字を含む文字列には2以上を指定すること
  * @return std::vector<std::string> 分割した文字列を要素とする配列
  * @details
- * 全角文字は2バイトを占める。分割位置に全角文字がかかる場合はその手前で区切るため、
- * 各要素が len バイトちょうどになるとは限らない。
+ * 全角文字は2桁を占める。分割位置に全角文字がかかる場合はその手前で区切るため、
+ * 各要素が len 桁ちょうどになるとは限らない。
  * str が空文字列の場合は空の配列を返す。
  *
- * len が 0 の場合や、len が 1 で分割位置に全角文字が来る場合は1バイトも取り出せず
+ * len が 0 の場合や、len が 1 で分割位置に全角文字が来る場合は1文字も取り出せず
  * 分割が進まないため、そこで打ち切る(残りの文字列は戻り値に含まれない)。
  */
 std::vector<std::string> str_separate(std::string_view str, size_t len)
@@ -355,14 +355,14 @@ std::vector<std::string> str_separate(std::string_view str, size_t len)
     std::vector<std::string> result;
 
     while (!str.empty()) {
-        auto separated = str_substr(str, 0, len);
+        const auto separated = str_prefix_by_width(str, len);
         if (separated.empty()) {
             // len が小さすぎて1文字も取り出せない。これ以上分割できないので打ち切る
             break;
         }
 
         str.remove_prefix(separated.size());
-        result.push_back(std::move(separated));
+        result.emplace_back(separated);
     }
 
     return result;

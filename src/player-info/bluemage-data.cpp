@@ -1,6 +1,7 @@
 #include "player-info/bluemage-data.h"
 #include "blue-magic/blue-magic-checker.h"
 #include "locale/language-switcher.h"
+#include "locale/multibyte-char.h"
 #include <iterator>
 #include <map>
 #include <string_view>
@@ -172,7 +173,7 @@ std::vector<std::string> BluemageData::build_learnt_magics_info() const
         std::string current_line = "       ";
         for (size_t i = 0; i < learnt_spells.size(); ++i) {
             const auto &spell_name = monster_powers_short.at(learnt_spells[i]);
-            if (current_line.length() + spell_name.length() >= 75) {
+            if (str_display_width(current_line) + str_display_width(spell_name) >= 75) {
                 lines.push_back(current_line.append("\n"));
                 current_line = "       ";
             }
