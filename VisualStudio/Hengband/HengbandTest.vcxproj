@@ -70,6 +70,7 @@
     <ClCompile Include="..\..\src\test\cmd-io\test-cmd-autopick.cpp" />
     <ClCompile Include="..\..\src\test\cmd-item\test-cmd-item.cpp" />
     <ClCompile Include="..\..\src\test\core\test-asking-player.cpp" />
+    <ClCompile Include="..\..\src\test\core\test-score-file.cpp" />
     <ClCompile Include="..\..\src\test\core\test-score-util.cpp" />
     <ClCompile Include="..\..\src\test\definitions-reader\test-activation-reader.cpp" />
     <ClCompile Include="..\..\src\test\definitions-reader\test-artifact-reader.cpp" />

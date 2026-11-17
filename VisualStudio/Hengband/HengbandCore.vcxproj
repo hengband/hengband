@@ -171,6 +171,7 @@
     <ClCompile Include="..\..\src\core\magic-effects-timeout-reducer.cpp" />
     <ClCompile Include="..\..\src\core\object-compressor.cpp" />
     <ClCompile Include="..\..\src\core\player-processor.cpp" />
+    <ClCompile Include="..\..\src\core\score-file.cpp" />
     <ClCompile Include="..\..\src\core\score-util.cpp" />
     <ClCompile Include="..\..\src\core\scores.cpp" />
     <ClCompile Include="..\..\src\core\show-file.cpp" />
@@ -1079,6 +1080,7 @@
     <ClInclude Include="..\..\src\core\magic-effects-timeout-reducer.h" />
     <ClInclude Include="..\..\src\core\object-compressor.h" />
     <ClInclude Include="..\..\src\core\player-processor.h" />
+    <ClInclude Include="..\..\src\core\score-file.h" />
     <ClInclude Include="..\..\src\core\score-util.h" />
     <ClInclude Include="..\..\src\core\scores.h" />
     <ClInclude Include="..\..\src\core\show-file.h" />

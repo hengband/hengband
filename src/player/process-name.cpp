@@ -159,9 +159,8 @@ void process_player_name(PlayerType *player_ptr, bool is_new_savefile)
 /*!
  * @brief プレイヤーの名前を変更する
  * @param player_ptr プレイヤーへの参照ポインタ
- * @details PlayerType::name は32バイトで定義されているが、
- * スコアファイル（lib/apex/scores.raw）に保存されているプレイヤー名が最大16バイト (ヌル文字含)となっている
- * このため最大値を16バイトに制限する
+ * @details 入力できる名前は最大 15 桁とする (前の版のスコアファイル scores.raw の名前の欄が 15 バイトだった名残)。
+ * 15 桁 (全角 7 文字) は UTF-8 でも 21 バイトなので、PlayerType::name (32 バイト) に入る
  */
 void get_name(PlayerType *player_ptr)
 {

@@ -70,7 +70,7 @@
 #include "cmd-visual/cmd-draw.h"
 #include "core/game-play.h"
 #include "core/player-processor.h"
-#include "core/score-util.h"
+#include "core/score-file.h"
 #include "core/scores.h"
 #include "core/special-internal-keys.h"
 #include "core/stuff-handler.h"
@@ -1778,16 +1778,13 @@ static void process_menus(PlayerType *player_ptr, WORD wCmd)
         break;
     }
     case IDM_FILE_SCORE: {
-        const auto path = path_build(ANGBAND_DIR_APEX, "scores.raw");
-        highscore_fd = fd_open(path, O_RDONLY);
-        if (highscore_fd < 0) {
+        const auto scores = read_score_file();
+        if (!scores) {
             msg_print("Score file unavailable.");
         } else {
             screen_save();
             term_clear();
-            display_scores(0, MAX_HISCORES, -1, nullptr);
-            (void)fd_close(highscore_fd);
-            highscore_fd = -1;
+            display_scores(*scores, 0, MAX_HISCORES, -1, nullptr);
             screen_load();
             term_fresh();
         }

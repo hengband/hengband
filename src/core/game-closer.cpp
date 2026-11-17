@@ -8,15 +8,13 @@
 #include "core/game-closer.h"
 #include "cmd-io/cmd-save.h"
 #include "core/asking-player.h"
-#include "core/score-util.h"
+#include "core/score-file.h"
 #include "core/scores.h"
 #include "core/stuff-handler.h"
 #include "floor/floor-save.h"
 #include "game-option/cheat-options.h"
-#include "io/files-util.h"
 #include "io/input-context.h"
 #include "io/signal-handlers.h"
-#include "io/uid-checker.h"
 #include "io/write-diary.h"
 #include "main/music-definitions-table.h"
 #include "main/sound-of-music.h"
@@ -28,7 +26,6 @@
 #include "system/player-type-definition.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
-#include "util/angband-files.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
 #include "view/display-player.h"
@@ -38,8 +35,6 @@
 
 static void clear_floor(PlayerType *player_ptr)
 {
-    (void)fd_close(highscore_fd);
-    highscore_fd = -1;
     clear_saved_floor_files(player_ptr);
     signals_handle_tstp();
 }
@@ -155,11 +150,6 @@ void close_game(PlayerType *player_ptr)
 
     auto &world = AngbandWorld::get_instance();
     world.character_icky_depth = 1;
-    const auto path = path_build(ANGBAND_DIR_APEX, "scores.raw");
-    safe_setuid_grab();
-    highscore_fd = fd_open(path, O_RDWR);
-    safe_setuid_drop();
-
     if (!check_death(player_ptr)) {
         return;
     }
@@ -191,8 +181,8 @@ void close_game(PlayerType *player_ptr)
         if (!AngbandSystem::get_instance().is_awaiting_report_status()) {
             (void)top_twenty(player_ptr);
         }
-    } else if (highscore_fd >= 0) {
-        display_scores(0, 10, -1, nullptr);
+    } else if (const auto scores = read_score_file(); scores) {
+        display_scores(*scores, 0, 10, -1, nullptr);
     }
 
     clear_floor(player_ptr);

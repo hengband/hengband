@@ -170,6 +170,7 @@ libhengband_a_SOURCES = \
 	core/magic-effects-timeout-reducer.cpp core/magic-effects-timeout-reducer.h \
 	core/object-compressor.cpp core/object-compressor.h \
 	core/player-processor.cpp core/player-processor.h \
+	core/score-file.cpp core/score-file.h \
 	core/score-util.cpp core/score-util.h \
 	core/scores.cpp core/scores.h \
 	core/show-file.cpp core/show-file.h \
@@ -1548,6 +1549,7 @@ hengband_test_SOURCES = \
 	test/cmd-io/test-cmd-autopick.cpp \
 	test/cmd-item/test-cmd-item.cpp \
 	test/core/test-asking-player.cpp \
+	test/core/test-score-file.cpp \
 	test/core/test-score-util.cpp \
 	test/definitions-reader/test-activation-reader.cpp \
 	test/definitions-reader/test-artifact-reader.cpp \

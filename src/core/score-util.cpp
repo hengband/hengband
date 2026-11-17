@@ -1,46 +1,20 @@
 #include "core/score-util.h"
+#include "locale/character-encoding.h"
+#include "locale/multibyte-char.h"
 #include "player/player-status.h"
 #include "system/angband-version.h"
 #include "system/dungeon/dungeon-record.h"
 #include "system/floor/floor-info.h"
 #include "system/inner-game-data.h"
 #include "system/player-type-definition.h"
-#include "util/angband-files.h"
 #include "util/enum-converter.h"
-#include "util/string-processor.h"
 #include "world/world.h"
 #include <algorithm>
 #include <cstdlib>
 #include <fmt/format.h>
-#include <string_view>
 #ifdef SET_UID
 #include "main-unix/unix-user-ids.h"
 #endif
-
-/*
- * The "highscore" file descriptor, if available.
- */
-int highscore_fd = -1;
-
-/*!
- * @brief i番目のスコア情報にバッファ位置をシークする / Seek score 'i' in the highscore file
- * @param i スコア情報ID
- * @return 問題がなければ0を返す
- */
-int highscore_seek(int i)
-{
-    return fd_seek(highscore_fd, (ulong)(i) * sizeof(high_score));
-}
-
-/*!
- * @brief 所定ポインタからスコア情報を読み取る / Read one score from the highscore file
- * @param score スコア情報参照ポインタ
- * @return エラーコード
- */
-errr highscore_read(high_score *score)
-{
-    return fd_read(highscore_fd, (char *)(score), sizeof(high_score));
-}
 
 /*!
  * @brief プレイヤーの今の状態からスコアの記録を作る
@@ -54,7 +28,8 @@ HighScore HighScore::create(PlayerType *player_ptr)
     score.points = calc_score(player_ptr);
     score.gold = player_ptr->au;
     score.turns = InnerGameData::get_instance().get_real_turns(AngbandWorld::get_instance().game_turn);
-    score.name = player_ptr->name;
+    // 前の版のスコアファイルと同じく 15 桁までにする (-u で起動すると、入力の上限より長い名前になることがある)
+    score.name = from_sys(str_prefix_by_width(player_ptr->name, 15));
 #ifdef SET_UID
     score.uid = UnixUserIds::get_instance().get_user_id();
 #endif
@@ -71,57 +46,23 @@ HighScore HighScore::create(PlayerType *player_ptr)
 }
 
 /*!
- * @brief スコアの記録を scores.raw の 1 件の形にする
- * @param score スコアの記録
- * @return scores.raw の 1 件。数値の欄は右寄せで空白を詰め、欄に入りきらない文字列は切る
+ * @brief 内部の文字コードの文字列を、記録の文字列 (UTF-8) にする
+ * @param str 内部の文字コードの文字列
+ * @return UTF-8 の文字列。変換できないときは "?"
  */
-high_score high_score::from_score(const HighScore &score)
+std::string HighScore::from_sys(std::string_view str)
 {
-    high_score raw{};
-    angband_strcpy(raw.what, score.version, sizeof(raw.what));
-    angband_strcpy(raw.pts, fmt::format("{:9}", score.points), sizeof(raw.pts));
-    angband_strcpy(raw.gold, fmt::format("{:9}", score.gold), sizeof(raw.gold));
-    angband_strcpy(raw.turns, fmt::format("{:9}", score.turns), sizeof(raw.turns));
-    angband_strcpy(raw.day, score.date, sizeof(raw.day));
+    return sys_to_utf8(str).value_or("?");
+}
 
-    // 15 バイトで切ると 2 バイト文字が途中で切れるときは、前半の 1 バイトの代わりに空白を置く
-    auto name = str_substr(score.name, 0, 15);
-    if (name.length() < std::min<size_t>(score.name.length(), 15)) {
-        name.push_back(' ');
-    }
-
-    std::copy_n(name.begin(), name.length(), raw.who);
-    const auto uid = fmt::format("{:7}", static_cast<unsigned int>(score.uid));
-    std::copy_n(uid.begin(), uid.length(), raw.uid);
-    if (!score.sex.empty()) {
-        raw.sex[0] = score.sex.front();
-    }
-
-    const auto copy_number = [](int value, size_t width, char *field) {
-        const auto str = fmt::format("{:{}}", value, width);
-        std::copy_n(str.begin(), str.length(), field);
-    };
-    copy_number(score.race, 2, raw.p_r);
-    copy_number(score.pclass, 2, raw.p_c);
-    copy_number(score.personality, 2, raw.p_a);
-    copy_number(score.level, 3, raw.cur_lev);
-    copy_number(score.dungeon_level, 3, raw.cur_dun);
-    copy_number(score.max_level, 3, raw.max_lev);
-    copy_number(score.max_dungeon_level, 3, raw.max_dun);
-
-    if (score.died_from.size() >= sizeof(raw.how)) {
-#ifdef JP
-        angband_strcpy(raw.how, score.died_from, sizeof(raw.how) - 2);
-        angband_strcat(raw.how, "…", sizeof(raw.how));
-#else
-        angband_strcpy(raw.how, score.died_from, sizeof(raw.how) - 3);
-        angband_strcat(raw.how, "...", sizeof(raw.how));
-#endif
-    } else {
-        angband_strcpy(raw.how, score.died_from, sizeof(raw.how));
-    }
-
-    return raw;
+/*!
+ * @brief 記録の文字列 (UTF-8) を、表示するために内部の文字コードにする
+ * @param str UTF-8 の文字列
+ * @return 内部の文字コードの文字列。変換できないときは "?"
+ */
+std::string HighScore::to_sys(std::string_view str)
+{
+    return utf8_to_sys(str).value_or("?");
 }
 
 /*!

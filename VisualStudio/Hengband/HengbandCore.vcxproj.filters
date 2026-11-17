@@ -699,6 +699,9 @@
     <ClCompile Include="..\..\src\core\player-processor.cpp">
       <Filter>core</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\core\score-file.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\core\score-util.cpp">
       <Filter>core</Filter>
     </ClCompile>
@@ -3409,6 +3412,9 @@
       <Filter>core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\core\player-processor.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\score-file.h">
       <Filter>core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\core\score-util.h">

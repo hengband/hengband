@@ -55,6 +55,7 @@ int fd_make(const std::filesystem::path &path, bool can_write_group = false);
 int fd_open(const std::filesystem::path &path, int mode);
 errr fd_lock(int fd, int what);
 errr fd_seek(int fd, ulong n);
+tl::optional<ulong> fd_size(int fd);
 errr fd_read(int fd, char *buf, ulong n);
 errr fd_write(int fd, concptr buf, ulong n);
 errr fd_close(int fd);

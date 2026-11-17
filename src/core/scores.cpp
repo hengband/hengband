@@ -13,15 +13,14 @@
 #include "core/scores.h"
 #include "cmd-io/cmd-dump.h"
 #include "core/asking-player.h"
+#include "core/score-file.h"
 #include "core/score-util.h"
 #include "core/turn-compensator.h"
 #include "game-option/birth-options.h"
 #include "game-option/game-play-options.h"
-#include "io/files-util.h"
 #include "io/input-context.h"
 #include "io/report.h"
 #include "io/signal-handlers.h"
-#include "io/uid-checker.h"
 #include "locale/japanese.h"
 #include "player-base/player-race.h"
 #include "player-info/class-info.h"
@@ -31,108 +30,13 @@
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
-#include "util/angband-files.h"
 #include "util/enum-converter.h"
 #include "util/int-char-converter.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "view/display-scores.h"
 #include "world/world.h"
-
-/*!
- * @brief 所定ポインタへスコア情報を書き込む / Write one score to the highscore file
- * @param score スコア情報参照ポインタ
- * @return エラーコード(問題がなければ0を返す)
- */
-static int highscore_write(high_score *score)
-{
-    /* Write the record, note failure */
-    return fd_write(highscore_fd, (char *)(score), sizeof(high_score));
-}
-
-/*!
- * @brief スコア情報を全て得るまで繰り返し取得する / Just determine where a new score *would* be placed
- * @param score スコア情報参照ポインタ
- * @return 正常ならば(MAX_HISCORES - 1)、問題があれば-1を返す
- */
-static int highscore_where(int64_t points)
-{
-    /* Paranoia -- it may not have opened */
-    if (highscore_fd < 0) {
-        return -1;
-    }
-
-    /* Go to the start of the highscore file */
-    if (highscore_seek(0)) {
-        return -1;
-    }
-
-    /* Read until we get to a higher score */
-    high_score the_score;
-    for (int i = 0; i < MAX_HISCORES; i++) {
-        if (highscore_read(&the_score)) {
-            return i;
-        }
-
-        if (points > the_score.to_score().points) {
-            return i;
-        }
-    }
-
-    /* The "last" entry is always usable */
-    return MAX_HISCORES - 1;
-}
-
-/*!
- * @brief スコア情報をバッファの末尾に追加する / Actually place an entry into the high score file
- * @param score スコア情報参照ポインタ
- * @return 正常ならば書き込んだスロット位置、問題があれば-1を返す / Return the location (0 is best) or -1 on "failure"
- */
-static int highscore_add(high_score *score)
-{
-    /* Paranoia -- it may not have opened */
-    if (highscore_fd < 0) {
-        return -1;
-    }
-
-    /* Determine where the score should go */
-    int slot = highscore_where(score->to_score().points);
-
-    /* Hack -- Not on the list */
-    if (slot < 0) {
-        return -1;
-    }
-
-    /* Hack -- prepare to dump the new score */
-    high_score the_score = (*score);
-
-    /* Slide all the scores down one */
-    bool done = false;
-    high_score tmpscore;
-    for (int i = slot; !done && (i < MAX_HISCORES); i++) {
-        /* Read the old guy, note errors */
-        if (highscore_seek(i)) {
-            return -1;
-        }
-        if (highscore_read(&tmpscore)) {
-            done = true;
-        }
-
-        /* Back up and dump the score we were holding */
-        if (highscore_seek(i)) {
-            return -1;
-        }
-        if (highscore_write(&the_score)) {
-            return -1;
-        }
-
-        /* Hack -- Save the old score, for the next pass */
-        the_score = tmpscore;
-    }
-
-    /* Return location used */
-    return slot;
-}
+#include <algorithm>
 
 /*!
  * @brief スコアサーバへの転送処理
@@ -186,34 +90,30 @@ errr top_twenty(PlayerType *player_ptr)
 {
     auto score = HighScore::create(player_ptr);
     auto ct = time((time_t *)0);
-    char date[10]{};
-    strftime(date, sizeof(date), "@%Y%m%d", localtime(&ct));
-    score.date = date;
-    score.died_from = player_ptr->died_from;
-    auto the_score = high_score::from_score(score);
-
-    safe_setuid_grab();
-    auto err = fd_lock(highscore_fd, F_WRLCK);
-    safe_setuid_drop();
-    if (err) {
-        return 1;
+    char date[11]{};
+    // 日付を求められないときは、空の日付で記録する
+    if (const auto *tm = localtime(&ct); (tm == nullptr) || (strftime(date, sizeof(date), "%Y-%m-%d", tm) == 0)) {
+        date[0] = '\0';
     }
 
-    auto j = highscore_add(&the_score);
-    safe_setuid_grab();
-    err = fd_lock(highscore_fd, F_UNLCK);
-    safe_setuid_drop();
-    if (err) {
+    score.date = date;
+    score.died_from = HighScore::from_sys(player_ptr->died_from);
+
+    auto j = -1;
+    const auto scores = add_score_to_file(score, j);
+    if (!scores) {
+        msg_print(_("スコア・ファイルに記録できません。", "Failed to record the score."));
+        msg_erase();
         return 1;
     }
 
     if (j < 10) {
-        display_scores(0, 15, j, nullptr);
+        display_scores(*scores, 0, 15, j, nullptr);
         return 0;
     }
 
-    display_scores(0, 5, j, nullptr);
-    display_scores(j - 2, j + 7, j, nullptr);
+    display_scores(*scores, 0, 5, j, nullptr);
+    display_scores(*scores, j - 2, j + 7, j, nullptr);
     return 0;
 }
 
@@ -224,23 +124,24 @@ errr top_twenty(PlayerType *player_ptr)
  */
 errr predict_score(PlayerType *player_ptr)
 {
-    if (highscore_fd < 0) {
+    const auto scores = read_score_file();
+    if (!scores) {
         msg_print(_("スコア・ファイルが使用できません。", "Score file unavailable."));
         msg_erase();
         return 0;
     }
 
     auto the_score = HighScore::create(player_ptr);
-    the_score.date = _("今日", "TODAY");
+    the_score.date = HighScore::from_sys(_("今日", "TODAY"));
     the_score.died_from = _("yet", "nobody (yet!)");
-    auto j = highscore_where(the_score.points);
+    auto j = find_score_rank(*scores, the_score.points);
     if (j < 10) {
-        display_scores(0, 15, j, &the_score);
+        display_scores(*scores, 0, 15, j, &the_score);
         return 0;
     }
 
-    display_scores(0, 5, -1, nullptr);
-    display_scores(j - 2, j + 7, j, &the_score);
+    display_scores(*scores, 0, 5, -1, nullptr);
+    display_scores(*scores, j - 2, j + 7, j, &the_score);
     return 0;
 }
 
@@ -251,57 +152,30 @@ errr predict_score(PlayerType *player_ptr)
 void show_highclass(PlayerType *player_ptr)
 {
     screen_save();
-    const auto path = path_build(ANGBAND_DIR_APEX, "scores.raw");
-    highscore_fd = fd_open(path, O_RDONLY);
-    if (highscore_fd < 0) {
+    const auto scores = read_score_file();
+    if (!scores) {
         msg_print(_("スコア・ファイルが使用できません。", "Score file unavailable."));
         msg_erase();
         return;
     }
 
-    if (highscore_seek(0)) {
-        return;
-    }
-
-    high_score the_score;
-    for (int i = 0; i < MAX_HISCORES; i++) {
-        if (highscore_read(&the_score)) {
-            break;
-        }
-    }
-
-    int m = 0;
-    int j = 0;
-    PLAYER_LEVEL clev = 0;
-    int pr;
-    while ((m < 9) && (j < MAX_HISCORES)) {
-        if (highscore_seek(j)) {
-            break;
-        }
-        if (highscore_read(&the_score)) {
-            break;
-        }
-        const auto score = the_score.to_score();
-        pr = score.race;
-        clev = static_cast<PLAYER_LEVEL>(score.level);
-
+    const auto count = std::min(static_cast<int>(scores->size()), 9);
+    for (auto i = 0; i < count; i++) {
+        const auto &score = (*scores)[i];
+        const auto clev = static_cast<PLAYER_LEVEL>(score.level);
         constexpr auto fmt = _("   {0:3}) {2}の{1} (レベル {3:2})", "{0:3}) {1} the {2} (Level {3:2})");
-        prt(fmt::format(fmt, m + 1, score.name, race_info[pr].title, clev), m + 7, 0);
-        m++;
-        j++;
+        prt(fmt::format(fmt, i + 1, HighScore::to_sys(score.name), race_info[score.race].title, clev), i + 7, 0);
     }
 
     constexpr auto fmt = _("あなた) {1}の{0} (レベル {2:2})", "You) {0} the {1} (Level {2:2})");
-    prt(fmt::format(fmt, player_ptr->name, race_info[enum2i(player_ptr->prace)].title, player_ptr->lev), m + 8, 0);
+    prt(fmt::format(fmt, player_ptr->name, race_info[enum2i(player_ptr->prace)].title, player_ptr->lev), count + 8, 0);
 
-    (void)fd_close(highscore_fd);
-    highscore_fd = -1;
     constexpr auto prompt = _("何かキーを押すとゲームに戻ります", "Hit any key to continue");
     prt(prompt, 0, 0);
 
     (void)input_key_with_context(InputKind::ANY_KEY, prompt);
 
-    for (j = 5; j < 18; j++) {
+    for (auto j = 5; j < 18; j++) {
         prt("", j, 0);
     }
     screen_load();
@@ -310,56 +184,25 @@ void show_highclass(PlayerType *player_ptr)
 /*!
  * @brief スコアランキングの簡易表示(種族毎)サブルーチン /
  * Race Legends -KMW-
+ * @param scores スコアファイルの記録 (スコアの高い順)
  * @param race_num 種族ID
  */
-void race_score(PlayerType *player_ptr, int race_num)
+static void race_score(PlayerType *player_ptr, const std::vector<HighScore> &scores, int race_num)
 {
-    int i = 0, j, m = 0;
-    int pr, clev;
-    high_score the_score;
+    auto m = 0;
     auto lastlev = 0;
 
     /* rr9: TODO - pluralize the race */
     prt(std::string(_("最高の", "The Greatest of all the ")).append(race_info[race_num].title), 5, 15);
-    const auto path = path_build(ANGBAND_DIR_APEX, "scores.raw");
-    highscore_fd = fd_open(path, O_RDONLY);
-    if (highscore_fd < 0) {
-        msg_print(_("スコア・ファイルが使用できません。", "Score file unavailable."));
-        msg_erase();
-        return;
-    }
-
-    if (highscore_seek(0)) {
-        return;
-    }
-
-    for (i = 0; i < MAX_HISCORES; i++) {
-        if (highscore_read(&the_score)) {
-            break;
+    for (const auto &score : scores) {
+        if (score.race != race_num) {
+            continue;
         }
-    }
 
-    m = 0;
-    j = 0;
-
-    while ((m < 10) || (j < MAX_HISCORES)) {
-        if (highscore_seek(j)) {
-            break;
-        }
-        if (highscore_read(&the_score)) {
-            break;
-        }
-        const auto score = the_score.to_score();
-        pr = score.race;
-        clev = score.level;
-
-        if (pr == race_num) {
-            constexpr auto fmt = _("   {0:3}) {2}の{1} (レベル {3:2})", "{0:3}) {1} the {2} (Level {3:3})");
-            prt(fmt::format(fmt, m + 1, score.name, race_info[pr].title, clev), m + 7, 0);
-            m++;
-            lastlev = clev;
-        }
-        j++;
+        constexpr auto fmt = _("   {0:3}) {2}の{1} (レベル {3:2})", "{0:3}) {1} the {2} (Level {3:3})");
+        prt(fmt::format(fmt, m + 1, HighScore::to_sys(score.name), race_info[score.race].title, score.level), m + 7, 0);
+        m++;
+        lastlev = score.level;
     }
 
     /* add player if qualified */
@@ -367,9 +210,6 @@ void race_score(PlayerType *player_ptr, int race_num)
         constexpr auto fmt = _("あなた) {1}の{0} (レベル {2:2})", "You) {0} the {1} (Level {2:3})");
         prt(fmt::format(fmt, player_ptr->name, race_info[enum2i(player_ptr->prace)].title, player_ptr->lev), m + 8, 0);
     }
-
-    (void)fd_close(highscore_fd);
-    highscore_fd = -1;
 }
 
 /*!
@@ -378,8 +218,16 @@ void race_score(PlayerType *player_ptr, int race_num)
  */
 void race_legends(PlayerType *player_ptr)
 {
+    // 種族ごとに読み直さないよう、スコアファイルは 1 回だけ読む
+    const auto scores = read_score_file();
+    if (!scores) {
+        msg_print(_("スコア・ファイルが使用できません。", "Score file unavailable."));
+        msg_erase();
+        return;
+    }
+
     for (int i = 0; i < MAX_RACES; i++) {
-        race_score(player_ptr, i);
+        race_score(player_ptr, *scores, i);
         msg_print(_("何かキーを押すとゲームに戻ります", "Hit any key to continue"));
         msg_erase();
         for (int j = 5; j < 19; j++) {
@@ -396,8 +244,8 @@ bool check_score(PlayerType *player_ptr)
 {
     term_clear();
 
-    /* No score file */
-    if (highscore_fd < 0) {
+    // 前の版と同じく、記録できない (読めても書けない) ときはワールドスコアにも送らない
+    if (!can_add_score_to_file()) {
         msg_print(_("スコア・ファイルが使用できません。", "Score file unavailable."));
         msg_erase();
         return false;
