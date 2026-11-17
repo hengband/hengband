@@ -1,7 +1,7 @@
 ## Makefile.am -- Process this file with automake to process Makefile.in
 
 angband_files = \
-	h_scores.raw readme.txt
+	h_scores.json readme.txt
 
 EXTRA_DIST = \
   $(angband_files)
@@ -15,7 +15,7 @@ endif
 
 install-data-hook:
 if SET_GID
-	touch "$(DESTDIR)$(angbanddir)/scores.raw"
+	touch "$(DESTDIR)$(angbanddir)/scores.json"
 	chown -R root.@GAMEGROUP@ "$(DESTDIR)$(angbanddir)"
 	chmod -R g+w "$(DESTDIR)$(angbanddir)"
 endif

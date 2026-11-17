@@ -91,8 +91,7 @@ function BuildPackage ($msbuild, $package_name, $package_unique_files, $build_co
         # 必要なファイルをコピーして、その中で不要になりえるものを削除
         Copy-Item -Verbose -Path .\Hengband.exe, .\Hengband.pdb, .\readme_angband, .\THIRD-PARTY-NOTICES.txt -Destination $hengbandDir
         Copy-Item -Verbose -Path $package_unique_files -Destination $hengbandDir
-        Copy-Item -Verbose -Recurse -Path .\lib -Destination $hengbandDir -Exclude Makefile.am, *.raw, .gitattributes
-        Copy-Item -Verbose -Path .\lib\apex\h_scores.raw -Destination (Join-Path $hengbandDir 'lib\apex')
+        Copy-Item -Verbose -Recurse -Path .\lib -Destination $hengbandDir -Exclude Makefile.am, *.raw, scores.json, .gitattributes
         Remove-Item -Verbose -Exclude delete.me -Recurse -Path (Join-Path $hengbandDirEsc 'lib\save\*'), (Join-Path $hengbandDirEsc 'lib\user\*')
         Remove-Item -Verbose -Exclude music.cfg, readme.txt, *.mp3 -Path (Join-Path $hengbandDirEsc 'lib\xtra\music\*')
 

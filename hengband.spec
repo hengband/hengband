@@ -102,6 +102,7 @@ find %{buildroot}/%{_datadir}/games/%{name}/ -type f -name "delete.me*" -exec rm
 find %{buildroot}/%{_datadir}/games/%{name}/ -name ".git*" -exec rm -rf {} \;
 rm -rf %{buildroot}/%{_datadir}/games/%{name}/lib/xtra/{sound,music}
 touch %{buildroot}/%{_datadir}/games/%{name}/lib/apex/scores.raw
+touch %{buildroot}/%{_datadir}/games/%{name}/lib/apex/scores.json
 
 %clean
 rm -rf %{buildroot}
@@ -137,9 +138,11 @@ exit 0
 %dir %{_datadir}/games/%{name}/lib/user
 %dir %{_datadir}/games/%{name}/lib/xtra
 %dir %{_datadir}/games/%{name}/lib/xtra/graf
-%{_datadir}/games/%{name}/lib/apex/h_scores.raw
+%{_datadir}/games/%{name}/lib/apex/h_scores.json
 %{_datadir}/games/%{name}/lib/apex/readme.txt
+# 前の版のスコアファイル。更新したときに消えると scores.json に記録を移せないので残す
 %attr(664 root,games) %config(noreplace) %{_datadir}/games/%{name}/lib/apex/scores.raw
+%attr(664 root,games) %config(noreplace) %{_datadir}/games/%{name}/lib/apex/scores.json
 %{_datadir}/games/%{name}/lib/edit/*.jsonc
 %{_datadir}/games/%{name}/lib/edit/*.md
 %{_datadir}/games/%{name}/lib/edit/quests/*.jsonc

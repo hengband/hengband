@@ -71,12 +71,11 @@ or "NNN" where "UUU" is the userid of the player (on "multiuser" systems),
 and "NNN" is the name of the "character" in the savefile.  Note that only
 "multiuser" platforms use the "UUU.NNN" form, and the "period" is required.
 
-Angband 2.8.X uses a platform independant (?) file format for the binary
-file used to store the high score list.  This file may be moved between
-platforms (if needed) or copied from older versions (Angband 2.7.4 or later).
-Angband 2.8.X uses a high score file called "scores.raw", which is kept in
-the "lib/apex" directory.  Older versions kept the "scores.raw" file in the
-"lib/data" directory, along with several other version specific files.
+Hengband stores the high score list in a UTF-8 JSON file called "scores.json",
+which is kept in the "lib/apex" directory.  This file may be moved between
+platforms (if needed).  Older versions used a binary file called "scores.raw"
+instead.  If "scores.json" is missing or empty, the records in "scores.raw" are
+copied into it when the game starts, and "scores.raw" is no longer read.
 
 Angband 2.8.X uses a platform independant file format for the ascii files
 used to store information about dead players, which is used to help create
@@ -123,12 +122,11 @@ The "lib" directory contains all of Angband's special sub-directories.
 
 The "lib/apex" directory contains the "high score" files.
 
-The "scores.raw" file contains the "high score" table, in a "semi-binary" form,
-that is, all the bytes in the file are normal ascii values, but this includes
-the special "nul" or "zero" byte, which is used to separate and pad records.
-You should probably not attempt to modify this file with a normal text editor.
-This file should be (more or less) portable between different platforms.  It
-must be present (or creatable) for the game to run correctly.
+The "scores.json" file contains the "high score" table, as a UTF-8 JSON file.
+This file should be portable between different platforms.  It must be present
+(or creatable) for the game to run correctly.  The "scores.raw" file, if any,
+contains the "high score" table of older versions, which is copied into
+"scores.json" once.
 
 
 === Directory "lib/bone" ===
