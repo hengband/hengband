@@ -195,8 +195,8 @@ void save_quick_start(void)
         wr_s16b(enum2i(previous_char.vir_types[i]));
     }
 
-    for (int i = 0; i < 4; i++) {
-        wr_string(previous_char.history[i]);
+    for (const auto &line : previous_char.history) {
+        wr_string(line);
     }
 
     /* UNUSED : Was number of random quests */

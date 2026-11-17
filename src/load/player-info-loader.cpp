@@ -9,6 +9,7 @@
 #include "load/player-class-specific-data-loader.h"
 #include "load/savedata-old-flag-types.h"
 #include "load/world-loader.h"
+#include "locale/multibyte-char.h"
 #include "market/arena-entry.h"
 #include "mind/mind-elementalist.h"
 #include "monster-race/race-ability-flags.h"
@@ -18,6 +19,7 @@
 #include "player-info/mane-data-type.h"
 #include "player-info/sniper-data-type.h"
 #include "player/attack-defense-types.h"
+#include "player/player-history.h"
 #include "player/player-realm.h"
 #include "player/player-skill.h"
 #include "spell-realm/spells-song.h"
@@ -72,11 +74,8 @@ void rd_base_info(PlayerType *player_ptr)
     }
 
     load_quick_start();
-    const int max_history_lines = 4;
-    for (int i = 0; i < max_history_lines; i++) {
-        const auto history = rd_string();
-        const auto history_len = history.copy(player_ptr->history[i], sizeof(player_ptr->history[i]) - 1);
-        player_ptr->history[i][history_len] = '\0';
+    for (auto &line : player_ptr->history) {
+        line = str_prefix_by_width(rd_string(), PLAYER_HISTORY_WIDTH);
     }
 
     player_ptr->prace = i2enum<PlayerRaceType>(rd_byte());

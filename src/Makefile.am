@@ -1068,6 +1068,7 @@ libhengband_a_SOURCES = \
 	player/temporary-resistances.cpp player/temporary-resistances.h \
 	player/digestion-processor.cpp player/digestion-processor.h \
 	player/player-damage.cpp player/player-damage.h \
+	player/player-history.cpp player/player-history.h \
 	player/player-known-flags.cpp player/player-known-flags.h \
 	player/player-move.cpp player/player-move.h \
 	player/player-personality.cpp player/player-personality.h \
@@ -1542,6 +1543,7 @@ hengband_test_SOURCES = \
 	test/autopick/test-autopick-editor-util.cpp \
 	test/autopick/test-autopick-finder.cpp \
 	test/autopick/test-autopick-reader-writer.cpp \
+	test/birth/test-history-editor.cpp \
 	test/bot/test-bot-json-output.cpp \
 	test/cmd-io/test-cmd-autopick.cpp \
 	test/cmd-item/test-cmd-item.cpp \

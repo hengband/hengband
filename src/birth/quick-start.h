@@ -2,6 +2,7 @@
 
 #include "player-info/class-types.h"
 #include "player-info/race-types.h"
+#include "player/player-history.h"
 #include "player/player-personality-types.h"
 #include "player/player-sex.h"
 #include "system/angband.h"
@@ -34,7 +35,7 @@ struct birther {
 
     Virtue vir_types[8]{};
 
-    char history[4][60]{};
+    PlayerHistory history{};
 
     bool quick_ok{};
 };

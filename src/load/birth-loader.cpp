@@ -2,7 +2,9 @@
 #include "birth/quick-start.h"
 #include "load/angband-version-comparer.h"
 #include "load/load-util.h"
+#include "locale/multibyte-char.h"
 #include "player-ability/player-ability-types.h"
+#include "player/player-history.h"
 #include "system/angband.h"
 #include "system/system-variables.h"
 
@@ -46,10 +48,8 @@ void load_quick_start(void)
         previous_char.vir_types[i] = i2enum<Virtue>(rd_s16b());
     }
 
-    for (int i = 0; i < 4; i++) {
-        const auto history = rd_string();
-        const auto len = history.copy(previous_char.history[i], sizeof(previous_char.history[i]) - 1);
-        previous_char.history[i][len] = '\0';
+    for (auto &line : previous_char.history) {
+        line = str_prefix_by_width(rd_string(), PLAYER_HISTORY_WIDTH);
     }
 
     strip_bytes(1);

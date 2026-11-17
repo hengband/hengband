@@ -4,6 +4,9 @@
     <Filter Include="autopick">
       <UniqueIdentifier>{6fc1c33a-bcb9-4de8-ac91-81321f97c33c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="birth">
+      <UniqueIdentifier>{c7d36128-61c0-57fa-aec4-3eb7b83cf2bc}</UniqueIdentifier>
+    </Filter>
     <Filter Include="bot">
       <UniqueIdentifier>{5425de57-8156-52fb-8eb1-8d6913285c6c}</UniqueIdentifier>
     </Filter>
@@ -147,6 +150,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\test\autopick\test-autopick-reader-writer.cpp">
       <Filter>autopick</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\birth\test-history-editor.cpp">
+      <Filter>birth</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\test\bot\test-bot-json-output.cpp">
       <Filter>bot</Filter>
