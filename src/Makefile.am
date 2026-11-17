@@ -1548,6 +1548,7 @@ hengband_test_SOURCES = \
 	test/cmd-io/test-cmd-autopick.cpp \
 	test/cmd-item/test-cmd-item.cpp \
 	test/core/test-asking-player.cpp \
+	test/core/test-score-util.cpp \
 	test/definitions-reader/test-activation-reader.cpp \
 	test/definitions-reader/test-artifact-reader.cpp \
 	test/definitions-reader/test-baseitem-reader.cpp \

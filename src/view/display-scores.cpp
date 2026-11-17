@@ -29,7 +29,7 @@
  * Mega-Hack -- allow "fake" entry at the given position.
  * </pre>
  */
-void display_scores(int from, int to, int note, high_score *score)
+void display_scores(int from, int to, int note, const HighScore *score)
 {
     if (highscore_fd < 0) {
         return;
@@ -52,9 +52,9 @@ void display_scores(int from, int to, int note, high_score *score)
     }
 
     auto num_scores = 0;
-    high_score the_score;
+    high_score raw_score;
     for (; num_scores < MAX_HISCORES; num_scores++) {
-        if (highscore_read(&the_score)) {
+        if (highscore_read(&raw_score)) {
             break;
         }
     }
@@ -79,58 +79,44 @@ void display_scores(int from, int to, int note, high_score *score)
 
         for (auto n = 0, j = k; (j < num_scores) && (n < per_screen); place++, j++, n++) {
             auto attr = (j == note) ? TERM_YELLOW : TERM_WHITE;
+            HighScore the_score;
             if ((note == j) && score) {
                 the_score = (*score);
                 attr = TERM_L_GREEN;
                 score = nullptr;
                 note = -1;
                 j--;
-            } else if (highscore_seek(j) || highscore_read(&the_score)) {
+            } else if (highscore_seek(j) || highscore_read(&raw_score)) {
                 break;
+            } else {
+                the_score = raw_score.to_score();
             }
 
-            auto pr = atoi(the_score.p_r);
-            auto pc = atoi(the_score.p_c);
-            auto pa = atoi(the_score.p_a);
+            const auto pr = the_score.race;
+            const auto pc = the_score.pclass;
+            const auto pa = the_score.personality;
 
-            auto clev = atoi(the_score.cur_lev);
-            auto mlev = atoi(the_score.max_lev);
-            auto cdun = atoi(the_score.cur_dun);
-            auto mdun = atoi(the_score.max_dun);
+            const auto clev = the_score.level;
+            const auto mlev = the_score.max_level;
+            const auto cdun = the_score.dungeon_level;
+            const auto mdun = the_score.max_dungeon_level;
 
-            concptr user;
-            for (user = the_score.uid; iswspace(*user); user++) { /* loop */
-                ;
-            }
-
-            concptr when;
-            for (when = the_score.day; iswspace(*when); when++) { /* loop */
-                ;
-            }
-
-            concptr gold;
-            for (gold = the_score.gold; iswspace(*gold); gold++) { /* loop */
-                ;
-            }
-
-            concptr aged;
-            for (aged = the_score.turns; iswspace(*aged); aged++) { /* loop */
-                ;
-            }
-
-            std::string alt_when;
-            if ((*when == '@') && strlen(when) == 9) {
-                alt_when = fmt::format("{}-{}-{}", std::string_view(when + 1, 4), std::string_view(when + 5, 2), std::string_view(when + 7, 2));
-                when = alt_when.data();
+            const auto user = the_score.uid;
+            const auto gold = the_score.gold;
+            const auto aged = the_score.turns;
+            const auto when_begin = the_score.date.find_first_not_of(" \t\n\v\f\r");
+            auto when = (when_begin == std::string::npos) ? std::string() : the_score.date.substr(when_begin);
+            if (when.starts_with('@') && (when.length() == 9)) {
+                when = fmt::format("{}-{}-{}", when.substr(1, 4), when.substr(5, 2), when.substr(7, 2));
             }
 
             std::string out_val;
             const auto pclass = i2enum<PlayerClassType>(pc);
 #ifdef JP
-            out_val = fmt::format("{:3}.{:>9}  {}{}{} - {}{} (レベル {})", place, the_score.pts, personality_info[pa].title, (personality_info[pa].no ? "の" : ""), the_score.who, race_info[pr].title, class_info.at(pclass).title, clev);
+            out_val = fmt::format("{:3}.{:>9}  {}{}{} - {}{} (レベル {})", place, the_score.points, personality_info[pa].title, (personality_info[pa].no ? "の" : ""), the_score.name, race_info[pr].title, class_info.at(pclass).title, clev);
 
 #else
-            out_val = fmt::format("{:3}.{:>9}  {} {} the {} {}, Level {}", place, the_score.pts, personality_info[pa].title, the_score.who, race_info[pr].title, class_info.at(pclass).title, clev);
+            out_val = fmt::format("{:3}.{:>9}  {} {} the {} {}, Level {}", place, the_score.points, personality_info[pa].title, the_score.name, race_info[pr].title, class_info.at(pclass).title, clev);
 #endif
             if (mlev > clev) {
                 out_val.append(fmt::format(_(" (最高{})", " (Max {})"), mlev));
@@ -145,25 +131,25 @@ void display_scores(int from, int to, int note, high_score *score)
             }
 
             /* 死亡原因をオリジナルより細かく表示 */
-            if (streq(the_score.how, "yet")) {
+            if (the_score.died_from == "yet") {
                 out_val.append(fmt::format("  まだ生きている ({}{})", cdun, "階"));
-            } else if (streq(the_score.how, "ripe")) {
+            } else if (the_score.died_from == "ripe") {
                 out_val.append(fmt::format("  勝利の後に引退 ({}{})", cdun, "階"));
-            } else if (streq(the_score.how, "Seppuku")) {
+            } else if (the_score.died_from == "Seppuku") {
                 out_val.append(fmt::format("  勝利の後に切腹 ({}{})", cdun, "階"));
             } else {
-                codeconv(the_score.how);
+                codeconv(the_score.died_from.data());
                 if (!cdun) {
-                    out_val.append(fmt::format("  地上で{}に殺された", the_score.how));
+                    out_val.append(fmt::format("  地上で{}に殺された", the_score.died_from));
                 } else {
-                    out_val.append(fmt::format("  {}階で{}に殺された", cdun, the_score.how));
+                    out_val.append(fmt::format("  {}階で{}に殺された", cdun, the_score.died_from));
                 }
             }
 #else
             if (!cdun) {
-                out_val = fmt::format("               Killed by {} on the surface", the_score.how);
+                out_val = fmt::format("               Killed by {} on the surface", the_score.died_from);
             } else {
-                out_val = fmt::format("               Killed by {} on {} {}", the_score.how, "Dungeon Level", cdun);
+                out_val = fmt::format("               Killed by {} on {} {}", the_score.died_from, "Dungeon Level", cdun);
             }
 
             if (mdun > cdun) {
@@ -173,9 +159,8 @@ void display_scores(int from, int to, int note, high_score *score)
             c_put_str(attr, out_val, n * 4 + 3, 0);
 #ifdef JP
             /* 日付を 19yy/mm/dd の形式に変更する */
-            if (strlen(when) == 8 && when[2] == '/' && when[5] == '/') {
-                alt_when = fmt::format("{}{}/{}", 19 + (when[6] < '8'), when + 6, std::string_view(when, 5));
-                when = alt_when.data();
+            if ((when.length() == 8) && (when[2] == '/') && (when[5] == '/')) {
+                when = fmt::format("{}{}/{}", 19 + (when[6] < '8'), when.substr(6), when.substr(0, 5));
             }
 
             out_val = fmt::format("        (ユーザー:{}, 日付:{}, 所持金:{}, ターン:{})", user, when, gold, aged);

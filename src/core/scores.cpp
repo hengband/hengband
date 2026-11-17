@@ -26,9 +26,7 @@
 #include "player-base/player-race.h"
 #include "player-info/class-info.h"
 #include "player/player-personality.h"
-#include "player/player-status.h"
 #include "player/race-info-table.h"
-#include "system/angband-version.h"
 #include "system/inner-game-data.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
@@ -57,7 +55,7 @@ static int highscore_write(high_score *score)
  * @param score スコア情報参照ポインタ
  * @return 正常ならば(MAX_HISCORES - 1)、問題があれば-1を返す
  */
-static int highscore_where(high_score *score)
+static int highscore_where(int64_t points)
 {
     /* Paranoia -- it may not have opened */
     if (highscore_fd < 0) {
@@ -71,14 +69,12 @@ static int highscore_where(high_score *score)
 
     /* Read until we get to a higher score */
     high_score the_score;
-    int my_score = atoi(score->pts);
     for (int i = 0; i < MAX_HISCORES; i++) {
-        int old_score;
         if (highscore_read(&the_score)) {
             return i;
         }
-        old_score = atoi(the_score.pts);
-        if (my_score > old_score) {
+
+        if (points > the_score.to_score().points) {
             return i;
         }
     }
@@ -100,7 +96,7 @@ static int highscore_add(high_score *score)
     }
 
     /* Determine where the score should go */
-    int slot = highscore_where(score);
+    int slot = highscore_where(score->to_score().points);
 
     /* Hack -- Not on the list */
     if (slot < 0) {
@@ -188,30 +184,13 @@ bool send_world_score(PlayerType *player_ptr, bool do_send)
  */
 errr top_twenty(PlayerType *player_ptr)
 {
-    high_score the_score = {};
-    angband_strcpy(the_score.what, fmt::format("{}.{}.{}", H_VER_MAJOR, H_VER_MINOR, H_VER_PATCH), sizeof(the_score.what));
-    angband_strcpy(the_score.pts, fmt::format("{:9}", calc_score(player_ptr)), sizeof(the_score.pts));
-
-    angband_strcpy(the_score.gold, fmt::format("{:9}", player_ptr->au), sizeof(the_score.gold));
-
-    const auto &igd = InnerGameData::get_instance();
-    angband_strcpy(the_score.turns, fmt::format("{:9}", igd.get_real_turns(AngbandWorld::get_instance().game_turn)), sizeof(the_score.turns));
-
+    auto score = HighScore::create(player_ptr);
     auto ct = time((time_t *)0);
-
-    strftime(the_score.day, 10, "@%Y%m%d", localtime(&ct));
-    the_score.copy_info(*player_ptr);
-    if (player_ptr->died_from.size() >= sizeof(the_score.how)) {
-#ifdef JP
-        angband_strcpy(the_score.how, player_ptr->died_from, sizeof(the_score.how) - 2);
-        angband_strcat(the_score.how, "…", sizeof(the_score.how));
-#else
-        angband_strcpy(the_score.how, player_ptr->died_from, sizeof(the_score.how) - 3);
-        angband_strcat(the_score.how, "...", sizeof(the_score.how));
-#endif
-    } else {
-        angband_strcpy(the_score.how, player_ptr->died_from, sizeof(the_score.how));
-    }
+    char date[10]{};
+    strftime(date, sizeof(date), "@%Y%m%d", localtime(&ct));
+    score.date = date;
+    score.died_from = player_ptr->died_from;
+    auto the_score = high_score::from_score(score);
 
     safe_setuid_grab();
     auto err = fd_lock(highscore_fd, F_WRLCK);
@@ -245,22 +224,16 @@ errr top_twenty(PlayerType *player_ptr)
  */
 errr predict_score(PlayerType *player_ptr)
 {
-    high_score the_score;
     if (highscore_fd < 0) {
         msg_print(_("スコア・ファイルが使用できません。", "Score file unavailable."));
         msg_erase();
         return 0;
     }
 
-    const auto &igd = InnerGameData::get_instance();
-    angband_strcpy(the_score.what, fmt::format("{}.{}.{}", H_VER_MAJOR, H_VER_MINOR, H_VER_PATCH), sizeof(the_score.what));
-    angband_strcpy(the_score.pts, fmt::format("{:9}", calc_score(player_ptr)), sizeof(the_score.pts));
-    angband_strcpy(the_score.gold, fmt::format("{:9}", player_ptr->au), sizeof(the_score.gold));
-    angband_strcpy(the_score.turns, fmt::format("{:9}", igd.get_real_turns(AngbandWorld::get_instance().game_turn)), sizeof(the_score.turns));
-    angband_strcpy(the_score.day, _("今日", "TODAY"), sizeof(the_score.day));
-    the_score.copy_info(*player_ptr);
-    strcpy(the_score.how, _("yet", "nobody (yet!)"));
-    auto j = highscore_where(&the_score);
+    auto the_score = HighScore::create(player_ptr);
+    the_score.date = _("今日", "TODAY");
+    the_score.died_from = _("yet", "nobody (yet!)");
+    auto j = highscore_where(the_score.points);
     if (j < 10) {
         display_scores(0, 15, j, &the_score);
         return 0;
@@ -308,11 +281,12 @@ void show_highclass(PlayerType *player_ptr)
         if (highscore_read(&the_score)) {
             break;
         }
-        pr = atoi(the_score.p_r);
-        clev = (PLAYER_LEVEL)atoi(the_score.cur_lev);
+        const auto score = the_score.to_score();
+        pr = score.race;
+        clev = static_cast<PLAYER_LEVEL>(score.level);
 
         constexpr auto fmt = _("   {0:3}) {2}の{1} (レベル {3:2})", "{0:3}) {1} the {2} (Level {3:2})");
-        prt(fmt::format(fmt, m + 1, the_score.who, race_info[pr].title, clev), m + 7, 0);
+        prt(fmt::format(fmt, m + 1, score.name, race_info[pr].title, clev), m + 7, 0);
         m++;
         j++;
     }
@@ -375,12 +349,13 @@ void race_score(PlayerType *player_ptr, int race_num)
         if (highscore_read(&the_score)) {
             break;
         }
-        pr = atoi(the_score.p_r);
-        clev = atoi(the_score.cur_lev);
+        const auto score = the_score.to_score();
+        pr = score.race;
+        clev = score.level;
 
         if (pr == race_num) {
             constexpr auto fmt = _("   {0:3}) {2}の{1} (レベル {3:2})", "{0:3}) {1} the {2} (Level {3:3})");
-            prt(fmt::format(fmt, m + 1, the_score.who, race_info[pr].title, clev), m + 7, 0);
+            prt(fmt::format(fmt, m + 1, score.name, race_info[pr].title, clev), m + 7, 0);
             m++;
             lastlev = clev;
         }

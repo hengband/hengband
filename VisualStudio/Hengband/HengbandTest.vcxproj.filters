@@ -166,6 +166,9 @@
     <ClCompile Include="..\..\src\test\core\test-asking-player.cpp">
       <Filter>core</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\test\core\test-score-util.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\test\definitions-reader\test-activation-reader.cpp">
       <Filter>definitions-reader</Filter>
     </ClCompile>
