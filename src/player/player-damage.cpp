@@ -531,23 +531,21 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
             *str2 = '\0';
         }
 
+        // 残りが空になったら終わる (括弧の中が空の句は最初から空なので何も書かない)
         auto i = 0;
-        while (i < 9) {
+        while ((i < 9) && (*str != '\0')) {
             str2 = angband_strstr(str, " ");
             size_t len = (str2 == nullptr) ? strlen(str) : str2 - str;
             if (len != 0) {
                 term_putstr_v(w * 3 / 4 - 2 - msg_positions[i].x * 2, msg_positions[i].y, TERM_WHITE, { str, len });
-                if (str2 == nullptr) {
-                    break;
-                }
-
                 i++;
             }
 
-            str = str2 + 1;
-            if (*str == 0) {
+            if (str2 == nullptr) {
                 break;
             }
+
+            str = str2 + 1;
         }
 
         term_putstr(w - 1, h - 1, 1, TERM_WHITE, " ");
