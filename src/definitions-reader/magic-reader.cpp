@@ -192,6 +192,14 @@ tl::expected<void, ParseErrorType> MagicReader::set_realm_data(player_magic &mag
         }
 
         const auto realm_id = *realm_name;
+        // 省略時は全巻を習得できる
+        auto &max_book = magics_info.max_book[enum2i(realm_id)];
+        max_book = MAX_BOOKS_IN_REALM;
+        if (const auto result = info_set_integer(get_json_value(realm, "max_book"), max_book, false, Range(1, MAX_BOOKS_IN_REALM)); !result) {
+            msg_print(_("習得できる巻数読込失敗。", "Failed to load max_book."));
+            return result;
+        }
+
         const auto &spells_info_obj = get_json_value(realm, "spells_info");
         return info_read_object_array(spells_info_obj, [this, &magics_info, realm_id](const nlohmann::json &spell) -> tl::expected<void, ParseErrorType> {
             return this->set_spell_data(spell, magics_info, realm_id);

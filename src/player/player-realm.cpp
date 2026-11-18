@@ -143,6 +143,25 @@ const magic_type &PlayerRealm::get_spell_info(RealmType realm, int spell_id, Rea
     return mp_ptr->spell_info(realm, spell_id, table_position);
 }
 
+/*!
+ * @brief 領域の魔法書のうち習得できる巻数を返す
+ * @param realm 領域
+ * @param pclass 職業 (省略時はプレイヤーの職業)
+ * @return 習得できる巻数 (1〜4)。技能領域は職業によらず4
+ */
+int PlayerRealm::get_max_book(RealmType realm, tl::optional<PlayerClassType> pclass)
+{
+    if (is_technic(realm)) {
+        return MAX_BOOKS_IN_REALM;
+    }
+    if (!is_magic(realm)) {
+        THROW_EXCEPTION(std::invalid_argument, fmt::format("Invalid realm: {}", enum2i(realm)));
+    }
+
+    const auto &magic = pclass ? class_magics_info.at(enum2i(*pclass)) : *mp_ptr;
+    return magic.max_book[enum2i(realm)];
+}
+
 const std::string &PlayerRealm::get_spell_name(RealmType realm, int spell_id)
 {
     if (spell_id < 0 || 32 <= spell_id) {

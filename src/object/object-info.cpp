@@ -111,18 +111,19 @@ bool check_book_realm(PlayerType *player_ptr, const BaseitemKey &bi_key)
 
     const auto tval = bi_key.tval();
     const auto book_realm = PlayerRealm::get_realm_of_book(tval);
-    PlayerClass pc(player_ptr);
-    if (pc.equals(PlayerClassType::SORCERER)) {
-        return PlayerRealm::is_magic(book_realm);
-    } else if (pc.equals(PlayerClassType::RED_MAGE)) {
+    if (PlayerClass(player_ptr).is_every_magic()) {
         if (!PlayerRealm::is_magic(book_realm)) {
             return false;
         }
-        return ((book_realm == RealmType::ARCANE) || (bi_key.sval() < 2));
+    } else {
+        PlayerRealm pr(player_ptr);
+        if (!pr.realm1().equals(book_realm) && !pr.realm2().equals(book_realm)) {
+            return false;
+        }
     }
 
-    PlayerRealm pr(player_ptr);
-    return pr.realm1().equals(book_realm) || pr.realm2().equals(book_realm);
+    // 習得できる巻数より後ろの魔法書は読めない (sval は 0 始まりの巻の番号)
+    return !PlayerRealm::is_magic(book_realm) || (*bi_key.sval() < PlayerRealm::get_max_book(book_realm));
 }
 
 /*!

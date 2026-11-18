@@ -117,9 +117,11 @@ void display_koff(PlayerType *player_ptr)
         if (!PlayerRealm::is_magic(use_realm)) {
             return;
         }
-        if (pc.equals(PlayerClassType::RED_MAGE) && (use_realm != RealmType::ARCANE) && (sval > 1)) {
-            return;
-        }
+    }
+
+    // 習得できる巻数より後ろの魔法書は一覧を出さない (sval は 0 始まりの巻の番号)
+    if (PlayerRealm::is_magic(use_realm) && (sval >= PlayerRealm::get_max_book(use_realm))) {
+        return;
     }
 
     auto num = 0;

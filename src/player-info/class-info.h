@@ -6,12 +6,17 @@
 #include "realm/realm-types.h"
 #include "spell/magic-type.h"
 #include "system/angband.h"
+#include "util/enum-converter.h"
+#include <array>
 #include <map>
 #include <string>
 #include <vector>
 
 /** ClassMagicDefinitions.txtでMPの無い職業に設定される */
 constexpr auto SPELL_FIRST_NO_SPELL = 99;
+
+/** 1 つの領域の魔法書の巻数 (習得できる巻数を省略したときの値) */
+constexpr auto MAX_BOOKS_IN_REALM = 4;
 
 /*
  * Information about the player's "magic"
@@ -33,9 +38,20 @@ struct player_magic {
     magic_type info[enum2i(RealmType::MAX)][32]{}; /* The available spells (第一領域として選んだときの値。技能領域の行も持つ) */
     magic_type info_second[enum2i(RealmType::MAX)][32]{}; /* 第二領域として選んだときの値 */
 
+    /* 領域ごとの習得できる巻数 (1〜4。この巻より後ろの魔法書は使えない) */
+    std::array<int, enum2i(RealmType::MAX)> max_book = make_default_max_book();
+
     const magic_type &spell_info(RealmType realm, int spell_id, RealmPosition position) const;
     bool has_distinct_second(RealmType realm) const;
     void set_technic_base_values();
+
+private:
+    static constexpr std::array<int, enum2i(RealmType::MAX)> make_default_max_book()
+    {
+        std::array<int, enum2i(RealmType::MAX)> books{};
+        books.fill(MAX_BOOKS_IN_REALM);
+        return books;
+    }
 };
 
 extern std::vector<player_magic> class_magics_info;

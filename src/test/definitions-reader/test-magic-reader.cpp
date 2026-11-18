@@ -381,3 +381,59 @@ TEST_CASE("MagicReader fills the second-realm table with the same values")
     class_magics_info[0].info_second[realm][1].slevel = 10;
     CHECK(class_magics_info[0].has_distinct_second(RealmType::LIFE));
 }
+
+/*!
+ * @brief 領域の習得できる巻数を読み、省略時は4にする
+ */
+TEST_CASE("MagicReader reads max_book and defaults it to four")
+{
+    const MagicNumericState state;
+    auto data = make_magic_numeric_data(SpellInfoList::get_instance());
+    REQUIRE(test::read_record<MagicReader>(data).has_value());
+    CHECK(class_magics_info[0].max_book[enum2i(RealmType::LIFE)] == MAX_BOOKS_IN_REALM);
+    CHECK(class_magics_info[0].max_book[enum2i(RealmType::SORCERY)] == MAX_BOOKS_IN_REALM);
+
+    for (const auto max_book : { 1, 2, 4 }) {
+        CAPTURE(max_book);
+        data["realms"][0]["max_book"] = max_book;
+        REQUIRE(test::read_record<MagicReader>(data).has_value());
+        CHECK(class_magics_info[0].max_book[enum2i(RealmType::LIFE)] == max_book);
+        CHECK(PlayerRealm::get_max_book(RealmType::LIFE, PlayerClassType::WARRIOR) == max_book);
+    }
+
+    // 読み直しで省略すると4に戻る
+    data["realms"][0].erase("max_book");
+    REQUIRE(test::read_record<MagicReader>(data).has_value());
+    CHECK(class_magics_info[0].max_book[enum2i(RealmType::LIFE)] == MAX_BOOKS_IN_REALM);
+}
+
+/*!
+ * @brief 範囲外・非整数の習得できる巻数を拒否し、既存定義を保持する
+ */
+TEST_CASE("MagicReader rejects invalid max_book without publishing partial data")
+{
+    const MagicNumericState state;
+    auto session = MagicReader::create_session();
+    auto data = make_magic_numeric_data(SpellInfoList::get_instance());
+    data["realms"][0]["max_book"] = 2;
+    REQUIRE(test::read_and_commit(MagicReader(data, session), session).has_value());
+    for (const auto &value : std::vector<nlohmann::json>{ 0, 5, -1, 2.0, "2", true }) {
+        CAPTURE(value.dump());
+        data["realms"][0]["max_book"] = value;
+        const auto expected = value.is_number_integer() ? ParseErrorType::INVALID_VALUE : ParseErrorType::INVALID_TYPE;
+        session = MagicReader::create_session();
+        CHECK(test::to_error_code(test::read_and_commit(MagicReader(data, session), session)) == expected);
+        CHECK(class_magics_info[0].max_book[enum2i(RealmType::LIFE)] == 2);
+    }
+}
+
+/*!
+ * @brief 技能領域の習得できる巻数は職業によらず4
+ */
+TEST_CASE("PlayerRealm returns four books for technic realms")
+{
+    const MagicNumericState state;
+    for (const auto realm : { RealmType::MUSIC, RealmType::HISSATSU, RealmType::HEX }) {
+        CHECK(PlayerRealm::get_max_book(realm, PlayerClassType::WARRIOR) == MAX_BOOKS_IN_REALM);
+    }
+}

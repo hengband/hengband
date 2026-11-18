@@ -241,6 +241,51 @@ class DefinitionIntegerValidationTest(unittest.TestCase):
                 self.assertIn("Invalid spell definitions", message)
                 self.assertIn("SpellDefinitions.jsonc", message)
 
+    def red_mage_realm(self, document, name):
+        record_index = next(index for index, record in enumerate(document["classes"]) if record["name"] == "RED_MAGE")
+        realm_index = next(index for index, realm in enumerate(document["classes"][record_index]["realms"]) if realm["name"] == name)
+        return ["classes", record_index, "realms", realm_index], document["classes"][record_index]["realms"][realm_index]
+
+    def test_magic_max_book_range(self):
+        path = ["classes", 0, "realms", 0, "max_book"]
+        for value, accepted in ((0, False), (1, True), (3, True), (5, False), (1.0, False), ("2", False)):
+            with self.subTest(value=value):
+                self.check_value("ClassMagicDefinitions", path, value, accepted)
+
+    def test_magic_max_book_default_must_be_omitted(self):
+        self.check_value("ClassMagicDefinitions", ["classes", 0, "realms", 0, "max_book"], 4, False, "must be omitted")
+
+    def test_magic_spells_after_max_book_must_be_unlearnable(self):
+        document = copy.deepcopy(self.documents["ClassMagicDefinitions"])
+        realm_path, realm = self.red_mage_realm(document, "SORCERY")
+        self.assertEqual(realm["max_book"], 2)
+        # 3 冊目の先頭 (呪文 ID 16) を習得できる値にすると止まる
+        spell_index = next(index for index, spell in enumerate(realm["spells_info"])
+                           if spell["spell_tag"] == self.spell_tag("SORCERY", 16))
+        realm["spells_info"][spell_index]["learn_level"] = 50
+        ok, message = self.validate("ClassMagicDefinitions", document)
+        self.assertFalse(ok, message)
+        self.assertIn("spells after book 2 must have learn_level 99", message)
+        self.assertIn(f"Location: {realm_path + ['spells_info', spell_index, 'learn_level']}", message)
+
+    def test_magic_max_book_allows_learnable_spells_up_to_the_book(self):
+        document = copy.deepcopy(self.documents["ClassMagicDefinitions"])
+        _, realm = self.red_mage_realm(document, "ARCANE")
+        # 秘術は 4 冊目まで値があるので、3 冊目までにするとはみ出す。4 冊目を全部 99 にすれば通る
+        realm["max_book"] = 3
+        ok, message = self.validate("ClassMagicDefinitions", document)
+        self.assertFalse(ok, message)
+        book4_tags = {self.spell_tag("ARCANE", spell_id) for spell_id in range(24, 32)}
+        for spell in realm["spells_info"]:
+            if spell["spell_tag"] in book4_tags:
+                spell["learn_level"] = 99
+        ok, message = self.validate("ClassMagicDefinitions", document)
+        self.assertTrue(ok, message)
+
+    def spell_tag(self, realm_name, spell_id):
+        realm = next(realm for realm in self.documents["SpellDefinitions"]["realms"] if realm["name"] == realm_name)
+        return next(spell["spell_tag"] for book in realm["books"] for spell in book["spells"] if spell["spell_id"] == spell_id)
+
     def test_skill_start_rank_exceeds_maximum(self):
         document = copy.deepcopy(self.samples["ClassSkillDefinitions"])
         weapon = document["classes"][0]["weapons"]["SWORD"]

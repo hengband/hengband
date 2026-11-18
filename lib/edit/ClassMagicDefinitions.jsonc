@@ -16711,6 +16711,7 @@
       "realms": [
         {
           "name": "LIFE",
+          "max_book": 2,
           "spells_info": [
             {
               "spell_tag": "Cure_Light_Wounds",
@@ -16940,6 +16941,7 @@
         },
         {
           "name": "SORCERY",
+          "max_book": 2,
           "spells_info": [
             {
               "spell_tag": "Detect_Monsters",
@@ -17169,6 +17171,7 @@
         },
         {
           "name": "NATURE",
+          "max_book": 2,
           "spells_info": [
             {
               "spell_tag": "Detect_Creatures",
@@ -17398,6 +17401,7 @@
         },
         {
           "name": "CHAOS",
+          "max_book": 2,
           "spells_info": [
             {
               "spell_tag": "Magic_Missile",
@@ -17627,6 +17631,7 @@
         },
         {
           "name": "DEATH",
+          "max_book": 2,
           "spells_info": [
             {
               "spell_tag": "Detect_Unlife",
@@ -17856,6 +17861,7 @@
         },
         {
           "name": "TRUMP",
+          "max_book": 2,
           "spells_info": [
             {
               "spell_tag": "Phase_Door",
@@ -18314,6 +18320,7 @@
         },
         {
           "name": "CRAFT",
+          "max_book": 2,
           "spells_info": [
             {
               "spell_tag": "Infravision",
@@ -18543,6 +18550,7 @@
         },
         {
           "name": "DEMON",
+          "max_book": 2,
           "spells_info": [
             {
               "spell_tag": "Magic_Missile",
@@ -18772,6 +18780,7 @@
         },
         {
           "name": "CRUSADE",
+          "max_book": 2,
           "spells_info": [
             {
               "spell_tag": "Drip_of_Light",
