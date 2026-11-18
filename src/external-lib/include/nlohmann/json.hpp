@@ -19867,7 +19867,8 @@ template <class Key, class T, class IgnoredLess = std::less<Key>,
             }
         }
         Container::emplace_back(key, std::forward<T>(t));
-        return {std::prev(this->end()), true};
+        // hengband: 波括弧の初期化子の中で一時オブジェクトを作ると MSVC の Debug 構成が C4868 を出すので、make_pair で返す
+        return std::make_pair(std::prev(this->end()), true);
     }
 
     template<class KeyType, detail::enable_if_t<
@@ -19882,7 +19883,8 @@ template <class Key, class T, class IgnoredLess = std::less<Key>,
             }
         }
         Container::emplace_back(std::forward<KeyType>(key), std::forward<T>(t));
-        return {std::prev(this->end()), true};
+        // hengband: 波括弧の初期化子の中で一時オブジェクトを作ると MSVC の Debug 構成が C4868 を出すので、make_pair で返す
+        return std::make_pair(std::prev(this->end()), true);
     }
 
     T& operator[](const key_type& key)
