@@ -520,9 +520,10 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
             term_putstr(x, y, 2, TERM_VIOLET, "υ");
         }
 
+        constexpr std::string_view open_quote = "「";
         auto str = death_message.data();
-        if (strncmp(str, "「", 2) == 0) {
-            str += 2;
+        if (death_message.starts_with(open_quote)) {
+            str += open_quote.length();
         }
 
         auto *str2 = angband_strstr(str, "」");

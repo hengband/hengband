@@ -4,6 +4,7 @@
  * @details
  * 文字列の位置を扱う関数は、後続のバイトが欠けた多バイト文字を、先頭バイトだけの 1 バイトの文字とみなす
  * (mb_char_length_at() の扱いにそろえる)。
+ * ただし mb_valid_char_length_at() は後続のバイトの値まで確かめる別の判定で、ほかの関数と文字の区切りが一致しないことがある。
  */
 
 #include "locale/multibyte-char.h"
@@ -43,6 +44,47 @@ size_t mb_char_length_at(std::string_view str, size_t pos)
     // pos + char_length は pos が大きいと桁あふれするので、残りの長さで確かめる
     const auto char_length = mb_char_byte_length(str[pos]);
     return (str.size() - pos >= char_length) ? char_length : 1;
+}
+
+/*!
+ * @brief 指定した位置から始まる文字のバイト数を、後続のバイトの値まで確かめて返す
+ * @param str 文字列
+ * @param pos 文字の先頭の位置 (バイト)
+ * @return 後続のバイトが内部文字コードの範囲の値でそろった多バイト文字ならそのバイト数。
+ *         1 バイトの文字、不正な並び、後続のバイトが欠けた文字、pos が範囲外のときは 1 (英語版では常に 1)
+ * @details mb_char_length_at() は先頭バイトだけで長さを決めるが、こちらは後続のバイトの値も確かめる。
+ * 設定ファイルの区切り (':' や '/') を探すときのように、不正な並びのために後ろの文字を読み飛ばしてはいけない処理で使う。
+ * EUC-JP の 0x8f で始まる 3 バイトの文字 (JIS X 0212) は、こちらでは 3 バイトの 1 文字とみなすが、
+ * mb_char_length_at() などほかの関数では 0x8f を 1 バイトの文字とみなす (iskanji() が 0x8f を含まない)。
+ */
+size_t mb_valid_char_length_at([[maybe_unused]] std::string_view str, [[maybe_unused]] size_t pos)
+{
+#ifdef JP
+    if ((pos >= str.size()) || (str.size() - pos < 2)) {
+        return 1;
+    }
+
+    const auto lead = static_cast<unsigned char>(str[pos]);
+    const auto trail = static_cast<unsigned char>(str[pos + 1]);
+#ifdef SJIS
+    const auto valid_trail = ((trail >= 0x40) && (trail <= 0x7e)) || ((trail >= 0x80) && (trail <= 0xfc));
+    return (iskanji(lead) && valid_trail) ? 2 : 1;
+#else
+    const auto is_valid_byte = [](unsigned char byte) { return (byte >= 0xa1) && (byte <= 0xfe); };
+    if (lead == 0x8f) {
+        return ((str.size() - pos >= 3) && is_valid_byte(trail) && is_valid_byte(static_cast<unsigned char>(str[pos + 2]))) ? 3 : 1;
+    }
+
+    if (lead == 0x8e) {
+        return ((trail >= 0xa1) && (trail <= 0xdf)) ? 2 : 1;
+    }
+
+    // iskanji() は 0x8e も含むので、0x8e の判定より後に置く
+    return (iskanji(lead) && is_valid_byte(trail)) ? 2 : 1;
+#endif
+#else
+    return 1;
+#endif
 }
 
 /*!

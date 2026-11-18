@@ -110,7 +110,7 @@ static std::string describe_unique_name_before_body_ja(const ItemEntity &item, c
     if (item.is_fixed_artifact() && item.get_flags().has_not(TR_FULL_NAME)) {
         const auto &artifact = item.get_fixed_artifact();
         /* '『' から始まらない伝説のアイテムの名前は最初に付加する */
-        if (artifact.name.find("『", 0, 2) != 0) {
+        if (!artifact.name.starts_with("『")) {
             return artifact.name;
         }
 
@@ -185,7 +185,7 @@ static std::string describe_unique_name_after_body_ja(const ItemEntity &item, co
 
     if (item.is_fixed_artifact()) {
         const auto &artifact = item.get_fixed_artifact();
-        if (artifact.name.find("『", 0, 2) == 0) {
+        if (artifact.name.starts_with("『")) {
             return artifact.name;
         }
 
