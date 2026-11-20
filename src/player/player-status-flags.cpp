@@ -745,14 +745,14 @@ void check_no_flowed(PlayerType *player_ptr)
     PlayerClass pc(player_ptr);
     if (has_sw && (pr.realm1().equals(RealmType::NATURE) || pr.realm2().equals(RealmType::NATURE) || pc.equals(PlayerClassType::SORCERER))) {
         const auto &spell = PlayerRealm::get_spell_info(RealmType::NATURE, SPELL_SW, pr.position_of(RealmType::NATURE));
-        if (player_ptr->lev >= spell.slevel) {
+        if (spell.can_learn_at(player_ptr->lev)) {
             player_ptr->no_flowed = true;
         }
     }
 
     if (has_kabe && (pr.realm1().equals(RealmType::CRAFT) || pr.realm2().equals(RealmType::CRAFT) || pc.equals(PlayerClassType::SORCERER))) {
         const auto &spell = PlayerRealm::get_spell_info(RealmType::CRAFT, SPELL_WALL, pr.position_of(RealmType::CRAFT));
-        if (player_ptr->lev >= spell.slevel) {
+        if (spell.can_learn_at(player_ptr->lev)) {
             player_ptr->no_flowed = true;
         }
     }

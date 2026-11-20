@@ -153,7 +153,7 @@ void print_hp(PlayerType *player_ptr)
  */
 void print_sp(PlayerType *player_ptr)
 {
-    if ((mp_ptr->spell_book == ItemKindType::NONE) && mp_ptr->spell_first == SPELL_FIRST_NO_SPELL) {
+    if (!mp_ptr->spell_first) {
         return;
     }
 

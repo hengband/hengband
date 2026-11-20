@@ -74,7 +74,7 @@ static int get_hissatsu_power(PlayerType *player_ptr, SPELL_IDX *sn)
     if (const auto code = repeat_pull(); code) {
         *sn = *code;
         /* Verify the spell */
-        if (0 <= *sn && *sn < 32 && PlayerRealm::get_spell_info(RealmType::HISSATSU, *sn).slevel <= plev) {
+        if (0 <= *sn && *sn < 32 && PlayerRealm::get_spell_info(RealmType::HISSATSU, *sn).can_learn_at(plev)) {
             /* Success */
             return true;
         }
@@ -86,7 +86,7 @@ static int get_hissatsu_power(PlayerType *player_ptr, SPELL_IDX *sn)
     int i;
     int selections[32]{};
     for (i = 0; i < 32; i++) {
-        if (PlayerRealm::get_spell_info(RealmType::HISSATSU, i).slevel <= PY_MAX_LEVEL) {
+        if (PlayerRealm::get_spell_info(RealmType::HISSATSU, i).is_learnable()) {
             selections[num] = i;
             num++;
         }
@@ -186,13 +186,13 @@ static int get_hissatsu_power(PlayerType *player_ptr, SPELL_IDX *sn)
                 for (i = 0, line = 0; i < 32; i++) {
                     const auto &spell = PlayerRealm::get_spell_info(RealmType::HISSATSU, i);
 
-                    if (spell.slevel > PY_MAX_LEVEL) {
+                    if (!spell.is_learnable()) {
                         continue;
                     }
                     line++;
 
                     /* Access the spell */
-                    if (spell.slevel > plev) {
+                    if (!spell.can_learn_at(plev)) {
                         continue;
                     }
                     if (!realm_status.is_learned(i)) {
@@ -212,7 +212,7 @@ static int get_hissatsu_power(PlayerType *player_ptr, SPELL_IDX *sn)
 
                     /* Dump the spell --(-- */
                     const auto &spell_name = PlayerRealm::get_spell_name(RealmType::HISSATSU, i);
-                    psi_desc.append(fmt::format(" {:<18}{:2} {:3}", spell_name, spell.slevel, spell.smana));
+                    psi_desc.append(fmt::format(" {:<18}{:2} {:3}", spell_name, *spell.slevel, spell.smana));
                     prt(psi_desc, y + (line % 17) + (line >= 17), x + (line / 17) * 30);
                     prt("", y + (line % 17) + (line >= 17) + 1, x + (line / 17) * 30);
                 }
@@ -359,7 +359,7 @@ void do_cmd_gain_hissatsu(PlayerType *player_ptr)
             continue;
         }
 
-        if (PlayerRealm::get_spell_info(RealmType::HISSATSU, i).slevel > player_ptr->lev) {
+        if (!PlayerRealm::get_spell_info(RealmType::HISSATSU, i).can_learn_at(player_ptr->lev)) {
             continue;
         }
 

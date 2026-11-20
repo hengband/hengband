@@ -101,8 +101,8 @@ TEST_CASE("PlayerRealm reads technic spells from the base values copied to the c
     // 魔法の定義に無い枠は、習得も使用もできない値になる
     for (const auto *table : { magic.info, magic.info_second }) {
         const auto &missing = table[enum2i(RealmType::MUSIC)][3];
-        CHECK(missing.slevel == 99);
-        CHECK(missing.slevel > PY_MAX_LEVEL);
+        CHECK_FALSE(missing.is_learnable());
+        CHECK_FALSE(missing.can_learn_at(PY_MAX_LEVEL));
         CHECK(missing.smana == 0);
     }
 }

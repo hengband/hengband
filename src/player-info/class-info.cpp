@@ -10,11 +10,6 @@
 #include "system/item/item-entity.h"
 #include "system/spell-info-list.h"
 
-namespace {
-//! 習得できない魔法の習得レベル (職業魔法の定義で learn_level 99 と書くのと同じ)
-constexpr auto UNLEARNABLE_SPELL_LEVEL = 99;
-}
-
 /*
  * The magic info
  */
@@ -55,19 +50,14 @@ bool player_magic::has_distinct_second(RealmType realm) const
 /*!
  * @brief 技能領域 (歌・武芸・呪術) の表に、魔法の定義の基準値をそのまま写す
  * @details 技能領域の値は職業によらない。第一領域用・第二領域用の両方に同じ値を入れる。
- * 魔法の定義に無い枠は、習得も使用もできないように習得レベルを 99 にする。
+ * 魔法の定義に無い枠は基準値の習得レベルが値なしなので、習得も使用もできない枠として写る。
  */
 void player_magic::set_technic_base_values()
 {
     const auto &spells = SpellInfoList::get_instance();
     for (const auto realm : TECHNIC_REALM_RANGE) {
         for (auto spell_id = 0; spell_id < SPELLS_IN_REALM; spell_id++) {
-            auto base = spells.get_spell_info(realm, spell_id).base;
-            // 読み込みは習得レベル 1 以上しか受け付けないので、0 のままの枠は定義が無い
-            if (base.slevel == 0) {
-                base = { UNLEARNABLE_SPELL_LEVEL, 0, 0, 0 };
-            }
-
+            const auto &base = spells.get_spell_info(realm, spell_id).base;
             this->info[enum2i(realm)][spell_id] = base;
             this->info_second[enum2i(realm)][spell_id] = base;
         }

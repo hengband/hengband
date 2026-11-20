@@ -2429,7 +2429,7 @@ nlohmann::json make_knowledge_json(PlayerType *player_ptr, BotKnowledgeCategory 
             }
             for (auto spell_id = 0; spell_id < 32; ++spell_id) {
                 const auto &spell = realm.get_spell_info(spell_id);
-                if (spell.slevel >= 99) {
+                if (!spell.is_learnable()) {
                     continue;
                 }
                 const auto exp = player_ptr->spell_exp[offset + spell_id];

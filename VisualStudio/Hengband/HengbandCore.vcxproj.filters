@@ -2487,6 +2487,9 @@
     <ClCompile Include="..\..\src\spell-realm\spells-trump.cpp">
       <Filter>spell-realm</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\spell\magic-type.cpp">
+      <Filter>spell</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\spell\range-calc.cpp">
       <Filter>spell</Filter>
     </ClCompile>

@@ -10,10 +10,8 @@
 #include <array>
 #include <map>
 #include <string>
+#include <tl/optional.hpp>
 #include <vector>
-
-/** ClassMagicDefinitions.txtでMPの無い職業に設定される */
-constexpr auto SPELL_FIRST_NO_SPELL = 99;
 
 /** 1 つの領域の魔法書の巻数 (習得できる巻数を省略したときの値) */
 constexpr auto MAX_BOOKS_IN_REALM = 4;
@@ -32,7 +30,7 @@ struct player_magic {
 
     int spell_stat{}; /* Stat for spells (if any)  */
 
-    int spell_first{}; /* Level of first spell */
+    tl::optional<int> spell_first; /* 最初の魔法を使えるレベル (魔法を使わない職業は値なし) */
     int spell_weight{}; /* Weight that hurts spells */
 
     magic_type info[enum2i(RealmType::MAX)][32]{}; /* The available spells (第一領域として選んだときの値。技能領域の行も持つ) */

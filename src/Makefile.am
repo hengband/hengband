@@ -1217,7 +1217,7 @@ libhengband_a_SOURCES = \
 	specific-object/toragoroshi.cpp specific-object/toragoroshi.h \
 	specific-object/torch.cpp specific-object/torch.h \
 	\
-	spell/magic-type.h \
+	spell/magic-type.cpp spell/magic-type.h \
 	spell/range-calc.cpp spell/range-calc.h \
 	spell/spells-describer.cpp spell/spells-describer.h \
 	spell/spells-diceroll.cpp spell/spells-diceroll.h \

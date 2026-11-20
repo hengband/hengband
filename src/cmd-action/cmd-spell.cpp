@@ -272,7 +272,7 @@ static bool spell_okay(PlayerType *player_ptr, int spell_id, bool learned, bool 
     const auto &spell = PlayerRealm::get_spell_info(use_realm, spell_id, pr.position_of(use_realm));
 
     /* Spell is illegal */
-    if (spell.slevel > player_ptr->lev) {
+    if (!spell.can_learn_at(player_ptr->lev)) {
         return false;
     }
 
@@ -1139,7 +1139,7 @@ bool do_cmd_cast(PlayerType *player_ptr)
             /* The spell worked */
             realm_status.set_worked(spell_id);
 
-            gain_exp(player_ptr, e * spell.slevel);
+            gain_exp(player_ptr, e * *spell.slevel);
 
             switch (use_realm) {
             case RealmType::LIFE:

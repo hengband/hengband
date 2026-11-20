@@ -496,7 +496,7 @@ static void update_num_of_spells(PlayerType *player_ptr)
     }
 
     const auto spell_category = spell_category_name(mp_ptr->spell_book);
-    int levels = player_ptr->lev - mp_ptr->spell_first + 1;
+    int levels = player_ptr->lev - *mp_ptr->spell_first + 1;
     if (levels < 0) {
         levels = 0;
     }
@@ -544,7 +544,7 @@ static void update_num_of_spells(PlayerType *player_ptr)
         const auto &realm = is_realm1 ? pr.realm1() : pr.realm2();
         const auto &spell = realm.get_spell_info(spell_id);
 
-        if (spell.slevel <= player_ptr->lev) {
+        if (spell.can_learn_at(player_ptr->lev)) {
             continue;
         }
 
@@ -596,7 +596,7 @@ static void update_num_of_spells(PlayerType *player_ptr)
         const auto &realm = is_realm1 ? pr.realm1() : pr.realm2();
         const auto &spell = realm.get_spell_info(spell_id);
 
-        if (spell.slevel > player_ptr->lev) {
+        if (!spell.can_learn_at(player_ptr->lev)) {
             continue;
         }
 
@@ -618,7 +618,7 @@ static void update_num_of_spells(PlayerType *player_ptr)
         for (int j = 0; j < 32; j++) {
             const auto &spell = pr.realm1().get_spell_info(j);
 
-            if (spell.slevel > player_ptr->lev) {
+            if (!spell.can_learn_at(player_ptr->lev)) {
                 continue;
             }
 
@@ -671,7 +671,7 @@ static void update_num_of_spells(PlayerType *player_ptr)
  */
 static void update_max_mana(PlayerType *player_ptr)
 {
-    if ((mp_ptr->spell_book == ItemKindType::NONE) && mp_ptr->spell_first == SPELL_FIRST_NO_SPELL) {
+    if (!mp_ptr->spell_first) {
         return;
     }
 
@@ -684,13 +684,13 @@ static void update_max_mana(PlayerType *player_ptr)
     if (use_direct_level) {
         levels = player_ptr->lev;
     } else {
-        if (mp_ptr->spell_first > player_ptr->lev) {
+        if (*mp_ptr->spell_first > player_ptr->lev) {
             player_ptr->msp = 0;
             DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::MP);
             return;
         }
 
-        levels = (player_ptr->lev - mp_ptr->spell_first) + 1;
+        levels = (player_ptr->lev - *mp_ptr->spell_first) + 1;
     }
 
     int msp;

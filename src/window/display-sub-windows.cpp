@@ -944,7 +944,7 @@ static void display_spell_list(PlayerType *player_ptr)
             const auto &spell_name = realm.get_spell_name(spell_id);
             auto name = spell_name.data();
 
-            if (spell.slevel >= 99) {
+            if (!spell.is_learnable()) {
                 name = _("(判読不能)", "(illegible)");
                 a = TERM_L_DARK;
             } else if (realm_status.is_forgotten(spell_id)) {

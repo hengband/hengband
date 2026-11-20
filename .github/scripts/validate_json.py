@@ -1267,7 +1267,6 @@ def collect_spell_tags(spells: dict) -> dict[str, set[str]]:
 
 SPELLS_IN_BOOK = 8
 MAX_BOOKS_IN_REALM = 4
-UNLEARNABLE_LEVEL = 99
 
 
 def collect_spell_books(spells: dict) -> dict[tuple[str, str], int]:
@@ -1299,7 +1298,11 @@ def validate_class_magic_semantics(data: dict, schema_path: Path, data_path: Pat
             raise ValidationError("class IDs must be in strictly increasing order", path=path + ["name"])
         previous_id = class_id
         for field in ("first_spell_level", "armour_weight_limit"):
-            require_integer(record[field], path + [field])
+            if field in record:
+                require_integer(record[field], path + [field])
+        # 魔法書を使う職業は MP と覚えられる魔法の数を求めるのに使うので省略できない (魔法を使わない職業は省略する)
+        if record["spell_type"] != "NONE" and "first_spell_level" not in record:
+            raise ValidationError("first_spell_level is required for classes with spellbooks", path=path)
         for realm_index, realm in enumerate(record["realms"]):
             realm_path = path + ["realms", realm_index]
             max_book = realm.get("max_book", MAX_BOOKS_IN_REALM)
@@ -1307,15 +1310,23 @@ def validate_class_magic_semantics(data: dict, schema_path: Path, data_path: Pat
                 require_integer(max_book, realm_path + ["max_book"])
                 if max_book == MAX_BOOKS_IN_REALM:
                     raise ValidationError(f"max_book {MAX_BOOKS_IN_REALM} is the default and must be omitted", path=realm_path + ["max_book"])
+            listed = set()
+
+            def check_listed_spell(tag: str, tag_path: list) -> None:
+                """spells_info と unlearnable に書いた魔法が、この領域の習得できる巻に 1 度だけあることを確かめる"""
+                if tag not in spell_tags.get(realm["name"], set()):
+                    raise ValidationError("unknown spell tag in this realm", path=tag_path)
+                if tag in listed:
+                    raise ValidationError("spell is listed twice in spells_info or unlearnable", path=tag_path)
+                if spell_books[realm["name"], tag] > max_book:
+                    raise ValidationError(f"spells after book {max_book} are unlearnable and must not be listed", path=tag_path)
+                listed.add(tag)
+
             for spell_index, spell in enumerate(realm["spells_info"]):
                 spell_path = realm_path + ["spells_info", spell_index]
-                if spell["spell_tag"] not in spell_tags.get(realm["name"], set()):
-                    raise ValidationError("unknown spell tag in this realm", path=spell_path + ["spell_tag"])
+                check_listed_spell(spell["spell_tag"], spell_path + ["spell_tag"])
                 for field in ("learn_level", "mana_cost", "difficulty", "first_cast_exp_rate"):
                     require_integer(spell[field], spell_path + [field])
-                # #5905 の移行の間だけの検査。習得レベルを max_book から導く形にしたら消す。
-                if spell_books[realm["name"], spell["spell_tag"]] > max_book and spell["learn_level"] != UNLEARNABLE_LEVEL:
-                    raise ValidationError(f"spells after book {max_book} must have learn_level {UNLEARNABLE_LEVEL}", path=spell_path + ["learn_level"])
                 if record["name"] == SPELL_BASE_CLASS:
                     # #5905 の移行の間だけの検査。職業ごとの値を基準値から導く形にしたら消す。
                     base_values = spell_base_values[realm["name"], spell["spell_tag"]]
@@ -1323,6 +1334,11 @@ def validate_class_magic_semantics(data: dict, schema_path: Path, data_path: Pat
                         if spell[field] != base_value:
                             raise ValidationError(f"{SPELL_BASE_CLASS} must have the base value {base_value} of SpellDefinitions.jsonc",
                                                   path=spell_path + [field])
+            for tag_index, tag in enumerate(realm.get("unlearnable", [])):
+                check_listed_spell(tag, realm_path + ["unlearnable", tag_index])
+            for (realm_name, tag), book in spell_books.items():
+                if realm_name == realm["name"] and tag and book <= max_book and tag not in listed:
+                    raise ValidationError(f"spell {tag} must be listed in spells_info or unlearnable", path=realm_path)
 
 
 def validate_class_skill_semantics(data: dict) -> None:
