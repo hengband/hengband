@@ -122,8 +122,7 @@ bool check_book_realm(PlayerType *player_ptr, const BaseitemKey &bi_key)
         }
     }
 
-    // 習得できる巻数より後ろの魔法書は読めない (sval は 0 始まりの巻の番号)
-    return !PlayerRealm::is_magic(book_realm) || (*bi_key.sval() < PlayerRealm::get_max_book(book_realm));
+    return PlayerRealm::can_use_book(book_realm, *bi_key.sval());
 }
 
 /*!

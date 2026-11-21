@@ -162,6 +162,23 @@ int PlayerRealm::get_max_book(RealmType realm, tl::optional<PlayerClassType> pcl
     return magic.max_book[enum2i(realm)];
 }
 
+/*!
+ * @brief 習得できる巻数の制限のうえで、領域の魔法書のその巻を使えるか
+ * @param realm 領域
+ * @param sval 魔法書の巻の番号 (0 始まり)
+ * @param pclass 職業 (省略時はプレイヤーの職業)
+ * @return 習得できる巻数より前の巻なら true。巻数の制限の無い領域 (魔法領域でないもの) は常に true
+ * @details 領域を選んでいるかどうかは見ない。習得できる巻数より後ろの魔法書は、読むことも学ぶことも唱えることもできない。
+ */
+bool PlayerRealm::can_use_book(RealmType realm, int sval, tl::optional<PlayerClassType> pclass)
+{
+    if (!is_magic(realm)) {
+        return true;
+    }
+
+    return sval < get_max_book(realm, pclass);
+}
+
 const std::string &PlayerRealm::get_spell_name(RealmType realm, int spell_id)
 {
     if (spell_id < 0 || 32 <= spell_id) {
