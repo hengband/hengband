@@ -18,6 +18,14 @@ constexpr auto DE_TARGET = "\x82\xc5\x83\x5e\x81\x5b\x83\x51\x83\x62\x83\x67"; /
 constexpr auto SENTAKU = "\x91\x49\x91\xf0"; // 選択
 constexpr auto HE = "\x82\xd6"; // へ
 constexpr auto SAI = "\x8d\xc4"; // 再
+#elif defined(UTF8)
+constexpr auto HOUKOU = "\xe6\x96\xb9\xe5\x90\x91"; // 方向
+constexpr auto ESC_DE_CHUUDAN = "ESC\xe3\x81\xa7\xe4\xb8\xad\xe6\x96\xad"; // ESCで中断
+constexpr auto ASHIMOTO = "\xe8\xb6\xb3\xe5\x85\x83"; // 足元
+constexpr auto DE_TARGET = "\xe3\x81\xa7\xe3\x82\xbf\xe3\x83\xbc\xe3\x82\xb2\xe3\x83\x83\xe3\x83\x88"; // でターゲット
+constexpr auto SENTAKU = "\xe9\x81\xb8\xe6\x8a\x9e"; // 選択
+constexpr auto HE = "\xe3\x81\xb8"; // へ
+constexpr auto SAI = "\xe5\x86\x8d"; // 再
 #else
 constexpr auto HOUKOU = "\xca\xfd\xb8\xfe"; // 方向
 constexpr auto ESC_DE_CHUUDAN = "ESC\xa4\xc7\xc3\xe6\xc3\xc7"; // ESCで中断

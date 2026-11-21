@@ -217,7 +217,7 @@ TEST_CASE("str_find_position does not match the trailing byte of a 2-byte charac
     const auto trail_byte = KANJI_KAN.substr(1, 1);
     CHECK(str_find_position(KANJI_KAN, trail_byte) == std::string_view::npos);
     CHECK(str_find_position(KANJI_KAN, trail_byte[0]) == std::string_view::npos);
-    CHECK(str_find_position(cat("a", KANJI_KAN, "b"), "b") == 3);
+    CHECK(str_find_position(cat("a", KANJI_KAN, "b"), "b") == 1 + KANJI_KAN.length());
 }
 #endif
 
@@ -523,10 +523,11 @@ TEST_CASE("is_numeric accepts only the ASCII digits")
 
 TEST_CASE("angband_strcpy does not truncate in the middle of a two byte character")
 {
-    // 「漢」しか入らない大きさのバッファに「漢字」を書き込む
-    char buf[4] = {};
-    CHECK(angband_strcpy(buf, cat(KANJI_KAN, KANJI_JI), sizeof(buf)) == 4);
-    CHECK(std::string_view(buf) == KANJI_KAN);
+    // 「漢」と「字」の途中までしか入らない大きさのバッファに「漢字」を書き込む
+    const auto str = cat(KANJI_KAN, KANJI_JI);
+    std::string buf(str.length(), '\0');
+    CHECK(angband_strcpy(buf.data(), str, buf.size()) == str.length());
+    CHECK(std::string_view(buf.data()) == KANJI_KAN);
 }
 
 TEST_CASE("angband_strcpy drops a two byte character which lacks its trailing byte")
@@ -540,11 +541,11 @@ TEST_CASE("str_substr does not split a two byte character")
 {
     const auto str = cat(KANJI_KAN, KANJI_JI);
 
-    // 終了位置が2バイト文字の前半バイトなので手前で区切る
-    CHECK(str_substr(std::string_view(str), 0, 3) == KANJI_KAN);
+    // 終了位置が2バイト文字の途中なので手前で区切る
+    CHECK(str_substr(std::string_view(str), 0, KANJI_KAN.length() + 1) == KANJI_KAN);
 
-    // 開始位置が2バイト文字の後半バイトなので次のバイトから始める
-    CHECK(str_substr(std::string_view(str), 1, 3) == KANJI_JI);
+    // 開始位置が2バイト文字の途中なので次の文字から始める
+    CHECK(str_substr(std::string_view(str), 1, str.length() - 1) == KANJI_JI);
 }
 
 TEST_CASE("str_separate does not split a two byte character")

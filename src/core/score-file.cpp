@@ -217,7 +217,7 @@ std::string migrate_date(std::string_view date)
     return fmt::format("{}-{}-{}", trimmed.substr(1, 4), trimmed.substr(5, 2), trimmed.substr(7, 2));
 }
 
-#ifdef JP
+#if defined(JP) && !defined(UTF8)
 /*!
  * @brief 文字列のうち、内部の文字コードとして欠けた文字や不正な並びを含まずに読める長さを返す
  * @param str 文字列
@@ -251,7 +251,7 @@ tl::optional<size_t> complete_sys_text_length(std::string_view str)
  * @param prefer_system_encoding 内部の文字コードとして正しく読めるなら、文字コードを推定しないか
  * @return UTF-8 の文字列。変換できないときは "?"
  * @details
- * 日本語版では、Windows 版と Unix 系の間で受け渡したファイルのために、codeconv() で文字コードを推定する。
+ * 日本語版では、Windows 版と Unix 系の間で受け渡したファイルのために、guess_legacy_encoding() で文字コードを推定する。
  * ただし推定は半角カナの並びなどを別の文字コードと取り違えることがあるので、名前は前の版の表示と同じく
  * 内部の文字コードとして正しく読めるならそのまま変換し、読めないときだけ推定する (prefer_system_encoding)。
  * 死因は前の版の表示と同じく先に推定する。
@@ -260,22 +260,68 @@ tl::optional<size_t> complete_sys_text_length(std::string_view str)
  * scores.raw は移した後は読まず、欄全体を "?" にすると元に戻せないので、末尾の半端なバイト (2 バイトまで) を落として変換する。
  * Windows 版の変換は半端なバイトを置き換えて成功してしまうので、変換の成否ではなく、
  * 文字コードを推定できたか、内部の文字コードとして末尾の文字だけが欠けているかで、落とす長さを決める。
+ *
+ * 内部の文字コードが UTF-8 のときは、scores.raw を書いた旧版の Unix 版の文字コード (EUC-JP) を「内部の文字コード」とみなす。
+ * EUC-JP として読めるかは iconv で変換できるかで決め、末尾の文字が欠けて変換できなければ末尾を落としてから変換する。
  */
 std::string migrate_text(std::string_view str, [[maybe_unused]] bool prefer_system_encoding)
 {
     const auto max_cut = std::min(2, static_cast<int>(str.length()));
     const auto prefix = [str](int cut) { return str.substr(0, str.length() - cut); };
-#ifdef JP
+#if defined(JP) && defined(UTF8)
+    // 落とすバイトが、EUC-JP の文字の途中で切れた先頭の部分 (2 バイトの文字の先頭バイト、3 バイトの文字の先頭の 2 バイト) か
+    const auto is_cut_lead = [](std::string_view dropped) {
+        const auto is_euc_byte = [](unsigned char c) { return (c >= 0xa1) && (c <= 0xfe); };
+        const auto lead = dropped.empty() ? static_cast<unsigned char>(0) : static_cast<unsigned char>(dropped[0]);
+        switch (dropped.length()) {
+        case 0:
+            return true;
+        case 1:
+            return is_euc_byte(lead) || (lead == 0x8e) || (lead == 0x8f);
+        default:
+            return (lead == 0x8f) && is_euc_byte(static_cast<unsigned char>(dropped[1]));
+        }
+    };
+    const auto convert_complete = [&]() -> tl::optional<std::string> {
+        if (auto utf8 = legacy_to_sys(str, CharacterEncoding::EUC_JP)) {
+            return utf8;
+        }
+
+        // 全体が Shift_JIS と推定できるなら、末尾を落とさずに推定に任せる (「将」の 8F AB を EUC-JP の欠けた文字とみなして空にしない)
+        if (guess_legacy_encoding(str) == CharacterEncoding::SHIFT_JIS) {
+            return tl::nullopt;
+        }
+
+        for (auto cut = 1; cut <= max_cut; cut++) {
+            if (!is_cut_lead(str.substr(str.length() - cut))) {
+                continue;
+            }
+
+            if (auto utf8 = legacy_to_sys(prefix(cut), CharacterEncoding::EUC_JP)) {
+                return utf8;
+            }
+        }
+
+        return tl::nullopt;
+    };
+#elif defined(JP)
     const auto convert_complete = [str]() -> tl::optional<std::string> {
         const auto length = complete_sys_text_length(str);
         return length ? sys_to_utf8(str.substr(0, *length)) : tl::nullopt;
     };
+#endif
+#ifdef JP
     const auto convert_guessed = [&]() -> tl::optional<std::string> {
         for (auto cut = 0; cut <= max_cut; cut++) {
-            std::string buf(prefix(cut));
-            // codeconv() は 2 バイトの文字を 2 バイトに置き換えるだけで、長さは変わらない
-            if (codeconv(buf.data()) != CharacterEncoding::UNKNOWN) {
-                return sys_to_utf8(buf);
+            const auto text = prefix(cut);
+            const auto encoding = guess_legacy_encoding(text);
+            if (encoding == CharacterEncoding::UNKNOWN) {
+                continue;
+            }
+
+            // 推定できても変換に失敗することがある (内部の文字コードが UTF-8 なら iconv で変換するため) ので、そのときは短くして推定し直す
+            if (auto utf8 = legacy_to_sys(text, encoding).and_then([](const std::string &sys_text) { return sys_to_utf8(sys_text); })) {
+                return utf8;
             }
         }
 

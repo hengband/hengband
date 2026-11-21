@@ -150,6 +150,8 @@ TEST_CASE("BaseitemDefinition::stripped_name removes a hash following a multibyt
      */
 #ifdef SJIS
     const std::string ru = "\x83\x8b"; // ル (Shift_JIS)
+#elif defined(UTF8)
+    const std::string ru = "\xe3\x83\xab"; // ル (UTF-8)
 #else
     const std::string ru = "\xa5\xeb"; // ル (EUC-JP)
 #endif

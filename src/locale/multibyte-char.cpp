@@ -8,6 +8,7 @@
  */
 
 #include "locale/multibyte-char.h"
+#include "locale/character-encoding.h"
 #include <algorithm>
 #include <cctype>
 
@@ -56,10 +57,18 @@ size_t mb_char_length_at(std::string_view str, size_t pos)
  * 設定ファイルの区切り (':' や '/') を探すときのように、不正な並びのために後ろの文字を読み飛ばしてはいけない処理で使う。
  * EUC-JP の 0x8f で始まる 3 バイトの文字 (JIS X 0212) は、こちらでは 3 バイトの 1 文字とみなすが、
  * mb_char_length_at() などほかの関数では 0x8f を 1 バイトの文字とみなす (iskanji() が 0x8f を含まない)。
+ * UTF-8 では、utf8_next_char_byte_length() が UTF-8 として正しいとする多バイト文字 (冗長な表現やサロゲートを除く) をその長さの 1 文字とみなす。
  */
 size_t mb_valid_char_length_at([[maybe_unused]] std::string_view str, [[maybe_unused]] size_t pos)
 {
-#ifdef JP
+#if defined(JP) && defined(UTF8)
+    if (pos >= str.size()) {
+        return 1;
+    }
+
+    const auto length = utf8_next_char_byte_length(str.substr(pos));
+    return (length > 1) ? static_cast<size_t>(length) : 1;
+#elif defined(JP)
     if ((pos >= str.size()) || (str.size() - pos < 2)) {
         return 1;
     }

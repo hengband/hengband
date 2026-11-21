@@ -179,22 +179,14 @@ static bool string_is_repeat(concptr str, int len)
     if (len < 2) {
         return false;
     }
-#ifdef JP
-    if (iskanji(c)) {
+    if (is_mb_char_lead(c)) {
         return false;
     }
-#endif
 
     for (i = 1; i < len; i++) {
-#ifdef JP
-        if (c != str[i] || iskanji(str[i])) {
+        if (c != str[i] || is_mb_char_lead(str[i])) {
             return false;
         }
-#else
-        if (c != str[i]) {
-            return false;
-        }
-#endif
     }
 
     return true;

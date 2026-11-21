@@ -1018,7 +1018,10 @@ TEST_CASE("TownMapReader typed building application preserves N A C R M Z contra
         repeated_name += town;
     }
     // 日本語版は2バイト文字を分断せず9文字で止め、英語版はUTF-8の19バイトを保持する。
-#ifdef JP
+    // 内部の文字コードが UTF-8 なら、3 バイトの文字を分断せず 6 文字 (18 バイト) で止める。
+#if defined(JP) && defined(UTF8)
+    const auto truncated_name = utf8_to_sys(repeated_name.substr(0, 18));
+#elif defined(JP)
     const auto truncated_name = utf8_to_sys(repeated_name.substr(0, 27));
 #else
     const auto truncated_name = utf8_to_sys(repeated_name.substr(0, 19));

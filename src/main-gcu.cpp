@@ -721,11 +721,11 @@ static errr game_term_xtra_gcu_event(int v)
 
         *bp = '\0';
 #ifdef JP
-        auto euc = utf8_to_euc(buf);
-        if (!euc) {
+        auto sys_str = utf8_to_sys(buf);
+        if (!sys_str) {
             return -1;
         }
-        term_string_push(euc->data());
+        term_string_push(sys_str->data());
 #else
         term_string_push(buf);
 #endif
@@ -803,11 +803,11 @@ static errr game_term_xtra_gcu_event(int v)
 
         bp[0] = '\0';
 #ifdef JP
-        auto euc = utf8_to_euc(buf);
-        if (!euc) {
+        auto sys_str = utf8_to_sys(buf);
+        if (!sys_str) {
             return -1;
         }
-        term_string_push(euc->data());
+        term_string_push(sys_str->data());
 #else
         term_string_push(buf);
 #endif
@@ -1073,7 +1073,7 @@ static void game_term_acs_text_gcu(int x, int y, int n, byte a, concptr s)
 /*
  * Place some text on the screen using an attribute
  */
-static errr game_term_text_gcu(int x, int y, int n, byte a, concptr s)
+static errr game_term_text_gcu(int x, int y, [[maybe_unused]] int n, byte a, concptr s)
 {
     term_data *td = (term_data *)(game_term->data);
 
@@ -1097,11 +1097,14 @@ static errr game_term_text_gcu(int x, int y, int n, byte a, concptr s)
 #endif
 
 #ifdef JP
-    char text[1024];
-    int text_len = euc_to_utf8(s, n, text, sizeof(text));
-    if (text_len < 0) {
+    // n はマス数なので、変換する長さは文字列から求める
+    const auto utf8 = sys_to_utf8(s);
+    if (!utf8) {
         return -1;
     }
+
+    const auto *text = utf8->data();
+    const auto text_len = static_cast<int>(utf8->length());
 
 #ifdef MACOS_TERMINAL_UTF8
     char corrected_text[2048];
