@@ -67,6 +67,7 @@
     <ClCompile Include="..\..\src\test\autopick\test-autopick-reader-writer.cpp" />
     <ClCompile Include="..\..\src\test\birth\test-history-editor.cpp" />
     <ClCompile Include="..\..\src\test\bot\test-bot-json-output.cpp" />
+    <ClCompile Include="..\..\src\test\cmd-action\test-cmd-hissatsu.cpp" />
     <ClCompile Include="..\..\src\test\cmd-io\test-cmd-autopick.cpp" />
     <ClCompile Include="..\..\src\test\cmd-item\test-cmd-item.cpp" />
     <ClCompile Include="..\..\src\test\core\test-asking-player.cpp" />

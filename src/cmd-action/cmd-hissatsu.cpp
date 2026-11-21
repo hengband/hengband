@@ -38,6 +38,32 @@
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 #include <fmt/format.h>
+#include <iterator>
+#include <vector>
+
+/*!
+ * @brief 必殺剣の一覧で選んだものから、技の ID を引く
+ * @param selections 定義のある技の ID を、ID の小さい順に詰めた一覧
+ * @param is_menu メニュー表示で選んだか
+ * @param choice メニュー表示なら選んだ行の技の ID、そうでなければ一覧の記号の添字 (a が 0)
+ * @return 技の ID。範囲外を選んだときは値なし
+ * @details メニュー表示はカーソルが技の ID を指し、記号は定義のある技を詰めた一覧の添字を指す。
+ * 定義に抜けた枠があると両者はずれるので、取り違えないようにここで引き分ける。
+ */
+tl::optional<int> hissatsu_spell_id_of_choice(std::span<const int> selections, bool is_menu, int choice)
+{
+    if (is_menu) {
+        if ((choice < 0) || (choice >= 32)) {
+            return tl::nullopt;
+        }
+        return choice;
+    }
+
+    if ((choice < 0) || (choice >= std::ssize(selections))) {
+        return tl::nullopt;
+    }
+    return selections[choice];
+}
 
 /*!
  * @brief 使用可能な剣術を選択する /
@@ -84,10 +110,10 @@ static int get_hissatsu_power(PlayerType *player_ptr, SPELL_IDX *sn)
     auto redraw = false;
 
     int i;
-    int selections[32]{};
+    std::vector<int> selections;
     for (i = 0; i < 32; i++) {
         if (PlayerRealm::get_spell_info(RealmType::HISSATSU, i).is_learnable()) {
-            selections[num] = i;
+            selections.push_back(i);
             num++;
         }
     }
@@ -233,13 +259,14 @@ static int get_hissatsu_power(PlayerType *player_ptr, SPELL_IDX *sn)
             i = AD2I(choice);
         }
 
-        /* Totally Illegal */
-        if ((i < 0) || (i >= 32) || !realm_status.is_learned(selections[i])) {
+        // 習得済みで、今のレベルで使える技だけを選べる
+        const auto spell_id = hissatsu_spell_id_of_choice(selections, use_menu, i);
+        if (!spell_id || !realm_status.is_learned(*spell_id) || !PlayerRealm::get_spell_info(RealmType::HISSATSU, *spell_id).can_learn_at(plev)) {
             bell();
             continue;
         }
 
-        j = selections[i];
+        j = *spell_id;
 
         /* Stop the loop */
         flag = true;

@@ -10,6 +10,9 @@
     <Filter Include="bot">
       <UniqueIdentifier>{5425de57-8156-52fb-8eb1-8d6913285c6c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="cmd-action">
+      <UniqueIdentifier>{29551d52-3134-550d-b7b4-e31d69fd59ce}</UniqueIdentifier>
+    </Filter>
     <Filter Include="cmd-io">
       <UniqueIdentifier>{050a79fd-58ab-48f3-a881-f83ff7a488b7}</UniqueIdentifier>
     </Filter>
@@ -156,6 +159,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\test\bot\test-bot-json-output.cpp">
       <Filter>bot</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\cmd-action\test-cmd-hissatsu.cpp">
+      <Filter>cmd-action</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\test\cmd-io\test-cmd-autopick.cpp">
       <Filter>cmd-io</Filter>

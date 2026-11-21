@@ -1547,6 +1547,7 @@ hengband_test_SOURCES = \
 	test/autopick/test-autopick-reader-writer.cpp \
 	test/birth/test-history-editor.cpp \
 	test/bot/test-bot-json-output.cpp \
+	test/cmd-action/test-cmd-hissatsu.cpp \
 	test/cmd-io/test-cmd-autopick.cpp \
 	test/cmd-item/test-cmd-item.cpp \
 	test/core/test-asking-player.cpp \
