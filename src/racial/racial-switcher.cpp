@@ -497,6 +497,11 @@ bool switch_race_racial_execution(PlayerType *player_ptr, const int32_t command)
         return true;
     case PlayerRaceType::ANDROID:
         return android_inside_weapon(player_ptr);
+    case PlayerRaceType::MERFOLK: {
+        msg_print(_("あなたは水流を呼び寄せた！", "You have summoned a stream of water!"));
+        fire_ball_hide(player_ptr, AttributeType::WATER_FLOW, 0, 3, 5);
+        return true;
+    }
     default:
         msg_print(_("この種族は特殊な能力を持っていません。", "This race has no bonus power."));
         PlayerEnergy(player_ptr).reset_player_turn();
