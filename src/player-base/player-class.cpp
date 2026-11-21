@@ -356,11 +356,24 @@ bool PlayerClass::is_martial_arts_pro() const
     return is_martial_arts_pro;
 }
 
+/*!
+ * @brief プレイヤーの職業が、領域を選ばずに魔法の全領域を使う職業かどうか
+ * @return 全領域を使う職業なら true
+ */
 bool PlayerClass::is_every_magic() const
 {
-    auto is_every_magic = this->equals(PlayerClassType::SORCERER);
-    is_every_magic |= this->equals(PlayerClassType::RED_MAGE);
-    return is_every_magic;
+    return is_every_magic(this->player_ptr->pclass);
+}
+
+/*!
+ * @brief 領域を選ばずに魔法の全領域を使う職業かどうか
+ * @param pclass 職業
+ * @return ソーサラーか赤魔道師なら true
+ * @details 職業魔法の定義の読み込みと CI (validate_json.py) も、この関数を見て全領域を使う職業を決める。
+ */
+bool PlayerClass::is_every_magic(PlayerClassType pclass)
+{
+    return (pclass == PlayerClassType::SORCERER) || (pclass == PlayerClassType::RED_MAGE);
 }
 
 /*!

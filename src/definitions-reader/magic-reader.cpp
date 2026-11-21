@@ -3,6 +3,7 @@
 #include "definitions-reader/magic-tokens-table.h"
 #include "definitions-reader/parse-error-types.h"
 #include "locale/language-switcher.h"
+#include "player-base/player-class.h"
 #include "player-info/class-info.h"
 #include "player-info/class-types.h"
 #include "player/player-realm.h"
@@ -324,7 +325,7 @@ tl::expected<void, ParseErrorType> MagicReader::check_realm_choices(PlayerClassT
 {
     const auto realm1_choices = PlayerRealm::get_realm1_choices(pclass);
     const auto realm2_choices = PlayerRealm::get_realm2_choices(pclass);
-    const auto is_every_magic = (pclass == PlayerClassType::SORCERER) || (pclass == PlayerClassType::RED_MAGE);
+    const auto is_every_magic = PlayerClass::is_every_magic(pclass);
     for (const auto realm : EnumRange(RealmType::LIFE, RealmType::MAX)) {
         if (!PlayerRealm::is_magic(realm)) {
             if (listed[enum2i(realm)]) {

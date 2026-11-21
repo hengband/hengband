@@ -1270,7 +1270,7 @@ def load_realm_choices(repository_root: Path) -> tuple[dict[str, tuple[set[str],
                 realm_tokens.add(realm_names[realm_name])
             choices.setdefault(class_names[class_name], (set(), set()))[position].update(realm_tokens)
     class_path = repository_root / "src/player-base/player-class.cpp"
-    every_magic = re.search(r"bool PlayerClass::is_every_magic\(\) const\s*\{(.*?)\n\}",
+    every_magic = re.search(r"bool PlayerClass::is_every_magic\(PlayerClassType pclass\)\s*\{(.*?)\n\}",
                             strip_cpp_comments(class_path.read_text(encoding="utf-8")), re.DOTALL)
     if every_magic is None:
         raise ValueError(f"PlayerClass::is_every_magic is not found in {class_path}")

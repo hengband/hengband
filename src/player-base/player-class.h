@@ -30,6 +30,7 @@ public:
     bool is_tough() const;
     bool is_martial_arts_pro() const;
     bool is_every_magic() const;
+    static bool is_every_magic(PlayerClassType pclass);
     bool has_number_of_spells_learned() const;
 
     bool lose_balance();

@@ -1624,6 +1624,7 @@ hengband_test_SOURCES = \
 	test/player/test-player-status-flags.cpp \
 	test/player/test-player-status-resist.cpp \
 	test/player/test-process-name.cpp \
+	test/player-base/test-player-class.cpp \
 	test/player-status/test-player-speed.cpp \
 	test/spell/test-magic-aptitude.cpp \
 	test/spell/test-spell-info.cpp \

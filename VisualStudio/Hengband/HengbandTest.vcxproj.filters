@@ -85,6 +85,9 @@
     <Filter Include="player">
       <UniqueIdentifier>{9d3e0b2a-7c41-4f58-b6ad-2e1c5f80a4d7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="player-base">
+      <UniqueIdentifier>{cd8952a4-fd50-5dce-8483-248a407afb30}</UniqueIdentifier>
+    </Filter>
     <Filter Include="player-status">
       <UniqueIdentifier>{7efa8aa2-e95f-51fc-a755-3cd80e7e70bf}</UniqueIdentifier>
     </Filter>
@@ -360,6 +363,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\test\object\test-object-value.cpp">
       <Filter>object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\player-base\test-player-class.cpp">
+      <Filter>player-base</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\test\player-status\test-player-speed.cpp">
       <Filter>player-status</Filter>
