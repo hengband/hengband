@@ -134,7 +134,10 @@ TEST_CASE("MagicReader rejects a repeated class without changing its definition"
         for (int spell = 0; spell < 32; ++spell) {
             CAPTURE(realm);
             CAPTURE(spell);
-            CHECK(actual.info[realm][spell] == original.info[realm][spell]);
+            CHECK(actual.info[realm][spell].is_learnable() == original.info[realm][spell].is_learnable());
+            if (actual.info[realm][spell].is_learnable() && original.info[realm][spell].is_learnable()) {
+                CHECK(actual.info[realm][spell].get_learn_level() == original.info[realm][spell].get_learn_level());
+            }
             CHECK(actual.info[realm][spell].smana == original.info[realm][spell].smana);
             CHECK(actual.info[realm][spell].sfail == original.info[realm][spell].sfail);
             CHECK(actual.info[realm][spell].sexp == original.info[realm][spell].sexp);
@@ -374,7 +377,10 @@ TEST_CASE("MagicReader fills the second-realm table with the same values")
     const auto &magic = class_magics_info[0];
     const auto realm = enum2i(RealmType::LIFE);
     for (auto spell_id = 0; spell_id < 2; spell_id++) {
-        CHECK(magic.info_second[realm][spell_id] == magic.info[realm][spell_id]);
+        CHECK(magic.info_second[realm][spell_id].is_learnable() == magic.info[realm][spell_id].is_learnable());
+        if (magic.info_second[realm][spell_id].is_learnable() && magic.info[realm][spell_id].is_learnable()) {
+            CHECK(magic.info_second[realm][spell_id].get_learn_level() == magic.info[realm][spell_id].get_learn_level());
+        }
         CHECK(magic.info_second[realm][spell_id].smana == magic.info[realm][spell_id].smana);
         CHECK(magic.info_second[realm][spell_id].sfail == magic.info[realm][spell_id].sfail);
         CHECK(magic.info_second[realm][spell_id].sexp == magic.info[realm][spell_id].sexp);

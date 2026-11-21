@@ -48,7 +48,10 @@ nlohmann::json make_spell(int id, const std::string &tag)
 
 void check_same_base(const SpellInfo &actual, const SpellInfo &expected)
 {
-    CHECK(actual.base == expected.base);
+    CHECK(actual.base.is_learnable() == expected.base.is_learnable());
+    if (actual.base.is_learnable() && expected.base.is_learnable()) {
+        CHECK(actual.base.get_learn_level() == expected.base.get_learn_level());
+    }
     CHECK(actual.base.smana == expected.base.smana);
     CHECK(actual.base.sfail == expected.base.sfail);
     CHECK(actual.base.sexp == expected.base.sexp);
