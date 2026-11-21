@@ -4,8 +4,38 @@
     "description": "職業に関する魔法の定義",
     "properties": {
         "version": {
-            "const": 1,
+            "const": 2,
             "description": "Version情報"
+        },
+        "aptitude_steps": {
+            "type": "object",
+            "description": "得意さの段階 1 つあたりの、職業別の値の動き",
+            "additionalProperties": false,
+            "required": [
+                "learn_level_percent",
+                "mana_cost_percent",
+                "difficulty"
+            ],
+            "properties": {
+                "learn_level_percent": {
+                    "type": "integer",
+                    "description": "習得レベルの動き。基準 × (50 − 基準) / 50 に対する百分率。整数0～100",
+                    "minimum": 0,
+                    "maximum": 100
+                },
+                "mana_cost_percent": {
+                    "type": "integer",
+                    "description": "消費MPの倍率の動き (百分率)。整数0～50",
+                    "minimum": 0,
+                    "maximum": 50
+                },
+                "difficulty": {
+                    "type": "integer",
+                    "description": "難易度の動き。整数0～20",
+                    "minimum": 0,
+                    "maximum": 20
+                }
+            }
         },
         "classes": {
             "type": "array",
@@ -111,14 +141,13 @@
                     },
                     "realms": {
                         "type": "array",
-                        "description": "各領域の呪文情報",
+                        "description": "各領域の得意さの段階と例外",
                         "items": {
                             "type": "object",
-                            "description": "各領域の呪文情報",
+                            "description": "各領域の得意さの段階と例外。魔法ごとの値は、魔法の基準値 (SpellDefinitions) からこの段階で求める",
                             "additionalProperties": false,
                             "required": [
-                                "name",
-                                "spells_info"
+                                "name"
                             ],
                             "properties": {
                                 "name": {
@@ -137,63 +166,54 @@
                                         "CRUSADE"
                                     ]
                                 },
+                                "aptitude": {
+                                    "type": "integer",
+                                    "description": "得意さの段階。正が得意、負が不得意。省略時は0 (基準値のまま)。整数-9～9",
+                                    "minimum": -9,
+                                    "maximum": 9
+                                },
+                                "aptitude_as_second": {
+                                    "type": "integer",
+                                    "description": "第二領域として選んだときの段階。省略時は aptitude と同じ (aptitude と同じ値は書かない)。整数-9～9",
+                                    "minimum": -9,
+                                    "maximum": 9
+                                },
                                 "max_book": {
                                     "type": "integer",
-                                    "description": "習得できる巻数。省略時は4 (省略と同じ4は書かない)。この巻より後ろの魔法書は使えず、その巻の魔法は習得できない (spells_info にも unlearnable にも書かない)",
+                                    "description": "習得できる巻数。省略時は4 (省略と同じ4は書かない)。この巻より後ろの魔法書は使えず、その巻の魔法は習得できない (unlearnable にも overrides にも書かない)",
                                     "minimum": 1,
                                     "maximum": 4
                                 },
                                 "unlearnable": {
                                     "type": "array",
-                                    "description": "習得できる巻にあるが習得できない魔法の呪文タグ。習得できる巻の魔法は、spells_info と unlearnable のどちらか一方に書く",
+                                    "description": "習得できる巻にあるが習得できない魔法の呪文タグ",
                                     "uniqueItems": true,
                                     "items": {
                                         "type": "string",
                                         "description": "呪文タグ"
                                     }
                                 },
-                                "spells_info": {
+                                "overrides": {
                                     "type": "array",
-                                    "description": "習得できる魔法の情報",
+                                    "description": "領域の段階の代わりに別の段階を使う魔法。第一領域用・第二領域用の両方に効く。習得できない魔法には書かない",
                                     "items": {
                                         "type": "object",
-                                        "description": "呪文情報",
+                                        "description": "魔法ごとの段階",
                                         "additionalProperties": false,
                                         "required": [
                                             "spell_tag",
-                                            "learn_level",
-                                            "mana_cost",
-                                            "difficulty",
-                                            "first_cast_exp_rate"
+                                            "aptitude"
                                         ],
                                         "properties": {
                                             "spell_tag": {
                                                 "type": "string",
                                                 "description": "呪文タグ"
                                             },
-                                            "learn_level": {
+                                            "aptitude": {
                                                 "type": "integer",
-                                                "description": "呪文習得可能レベル。習得できない魔法は unlearnable に書く",
-                                                "minimum": 1,
-                                                "maximum": 50
-                                            },
-                                            "mana_cost": {
-                                                "type": "integer",
-                                                "description": "補正前の消費MP。整数0～2047",
-                                                "minimum": 0,
-                                                "maximum": 2047
-                                            },
-                                            "difficulty": {
-                                                "type": "integer",
-                                                "description": "レベル・能力値等の補正前の呪文難易度。整数0～100。最終失敗率の上限とは異なる",
-                                                "minimum": 0,
-                                                "maximum": 100
-                                            },
-                                            "first_cast_exp_rate": {
-                                                "type": "integer",
-                                                "description": "初回詠唱成功時の経験値は、この倍率×呪文習得レベル。倍率は整数0～2047",
-                                                "minimum": 0,
-                                                "maximum": 2047
+                                                "description": "この魔法の得意さの段階。領域の段階 (第一・第二の両方) と同じ値は書かない。整数-9～9",
+                                                "minimum": -9,
+                                                "maximum": 9
                                             }
                                         }
                                     }
@@ -207,6 +227,7 @@
     },
     "required": [
         "version",
+        "aptitude_steps",
         "classes"
     ]
 }

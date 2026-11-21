@@ -15,7 +15,6 @@
 #include <doctest/doctest.h>
 #include <limits>
 #include <nlohmann/json.hpp>
-#include <string_view>
 #include <utility>
 #include <vector>
 
@@ -55,16 +54,19 @@ TEST_CASE("MagicReader preserves an existing class on a later parse error")
 }
 
 namespace {
-// 数値境界テストの準備をまとめ、終了時に既存の定義とreaderの状態を戻す。
-class MagicNumericState {
+//! 初期データの傾き (習得レベル 30、消費MP 15、難易度 3)
+constexpr AptitudeSteps DEFAULT_STEPS{ 30, 15, 3 };
+
+// 職業魔法の読み込みテストの準備をまとめ、終了時に既存の定義とreaderの状態を戻す。
+class MagicReaderState {
 public:
-    MagicNumericState()
+    MagicReaderState()
     {
-        class_magics_info.assign(1, {});
+        class_magics_info.assign(PLAYER_CLASS_TYPE_MAX, {});
     }
 
-    MagicNumericState(const MagicNumericState &) = delete;
-    MagicNumericState &operator=(const MagicNumericState &) = delete;
+    MagicReaderState(const MagicReaderState &) = delete;
+    MagicReaderState &operator=(const MagicReaderState &) = delete;
 
 private:
     test::ScopedReaderState reader_state;
@@ -73,18 +75,44 @@ private:
 };
 
 /*!
- * @brief 数値の境界検証で参照する2呪文を登録し、職業の入力を作る
+ * @brief 生命領域に基準値つきの 3 呪文を登録する
+ * @details 1 巻目は "first" (ID 0、基準 1/2/7/4)・"second" (ID 1、基準 3/5/8/6)、2 巻目は "ninth" (ID 8、基準 20/9/30/2)。
  */
-nlohmann::json make_magic_numeric_data(SpellInfoList &spells)
+void register_spells(SpellInfoList &spells)
 {
-    for (short id = 0; id < 2; ++id) {
+    struct Base {
+        short id;
+        const char *tag;
+        PLAYER_LEVEL level;
+        MANA_POINT mana;
+        PERCENTAGE difficulty;
+        EXP exp;
+    };
+    for (const auto &base : { Base{ 0, "first", 1, 2, 7, 4 }, Base{ 1, "second", 3, 5, 8, 6 }, Base{ 8, "ninth", 20, 9, 30, 2 } }) {
         SpellInfo info;
-        info.idx = id;
-        info.tag = id == 0 ? "first" : "second";
-        spells.set_spell_info(RealmType::LIFE, id, std::move(info));
+        info.idx = base.id;
+        info.tag = base.tag;
+        info.base.set_learn_level(base.level);
+        info.base.smana = base.mana;
+        info.base.sfail = base.difficulty;
+        info.base.sexp = base.exp;
+        spells.set_spell_info(RealmType::LIFE, base.id, std::move(info));
+    }
+}
+
+/*!
+ * @brief メイジの入力を作る (呪文も登録する)
+ * @details 領域は魔法の 10 領域をすべて段階 0 で書く。先頭が生命領域。
+ */
+nlohmann::json make_magic_data(SpellInfoList &spells)
+{
+    register_spells(spells);
+    auto realms = nlohmann::json::array();
+    for (const auto *name : { "LIFE", "SORCERY", "NATURE", "CHAOS", "DEATH", "TRUMP", "ARCANE", "CRAFT", "DEMON", "CRUSADE" }) {
+        realms.push_back({ { "name", name } });
     }
     return {
-        { "name", "WARRIOR" },
+        { "name", "MAGE" },
         { "spell_type", "SORCERY" },
         { "magic_status", "INT" },
         { "has_glove_mp_penalty", true },
@@ -92,174 +120,91 @@ nlohmann::json make_magic_numeric_data(SpellInfoList &spells)
         { "is_spell_trainable", true },
         { "first_spell_level", 1 },
         { "armour_weight_limit", 430 },
-        { "realms", nlohmann::json::array({ {
-                        { "name", "LIFE" },
-                        { "spells_info", nlohmann::json::array({
-                                             { { "spell_tag", "first" }, { "learn_level", 1 }, { "mana_cost", 2 }, { "difficulty", 7 }, { "first_cast_exp_rate", 4 } },
-                                             { { "spell_tag", "second" }, { "learn_level", 3 }, { "mana_cost", 5 }, { "difficulty", 8 }, { "first_cast_exp_rate", 6 } },
-                                         }) },
-                    } }) },
+        { "realms", std::move(realms) },
     };
 }
+
+/*!
+ * @brief 段階 1 つあたりの動きを指定して 1 職業を読み、成功したら確定する
+ */
+tl::expected<void, ParseErrorType> read_with_steps(const nlohmann::json &data, const AptitudeSteps &steps = DEFAULT_STEPS)
+{
+    auto session = MagicReader::create_session();
+    return test::read_and_commit(MagicReader(data, session, steps), session);
+}
+
+/*!
+ * @brief 魔法の値が期待どおりかを確かめる
+ */
+void check_spell(const magic_type &spell, PLAYER_LEVEL level, MANA_POINT mana, PERCENTAGE difficulty, EXP exp)
+{
+    REQUIRE(spell.is_learnable());
+    CHECK(spell.get_learn_level() == level);
+    CHECK(spell.smana == mana);
+    CHECK(spell.sfail == difficulty);
+    CHECK(spell.sexp == exp);
+}
+
+/*!
+ * @brief 魔法が習得できない (値がすべて空) ことを確かめる
+ */
+void check_unlearnable(const magic_type &spell)
+{
+    CHECK_FALSE(spell.is_learnable());
+    CHECK_FALSE(spell.can_learn_at(PY_MAX_LEVEL));
+    CHECK(spell.smana == 0);
+    CHECK(spell.sfail == 0);
+    CHECK(spell.sexp == 0);
+}
+
+const auto LIFE = enum2i(RealmType::LIFE);
+const auto MAGE = enum2i(PlayerClassType::MAGE);
 }
 
 TEST_CASE("MagicReader rejects a repeated class without changing its definition")
 {
-    const MagicNumericState state;
+    const MagicReaderState state;
     auto session = MagicReader::create_session();
-    auto data = make_magic_numeric_data(SpellInfoList::get_instance());
-    REQUIRE(test::read_and_commit(MagicReader(data, session), session).has_value());
-    const auto original = class_magics_info[0];
+    auto data = make_magic_data(SpellInfoList::get_instance());
+    REQUIRE(test::read_and_commit(MagicReader(data, session, DEFAULT_STEPS), session).has_value());
+    CHECK(session.last_id().value_or(-1) == MAGE);
 
     data["spell_type"] = "LIFE";
     data["magic_status"] = "WIS";
-    data["has_glove_mp_penalty"] = false;
-    data["has_magic_fail_rate_cap"] = true;
-    data["is_spell_trainable"] = false;
     data["first_spell_level"] = 5;
     data["armour_weight_limit"] = 450;
-    data["realms"][0]["spells_info"][0]["mana_cost"] = 100;
-    CHECK(test::to_error_code(test::read_and_commit(MagicReader(data, session), session)) == ParseErrorType::NON_SEQUENTIAL_RECORDS);
-    CHECK(session.last_id().value_or(-1) == 0);
-    REQUIRE(class_magics_info.size() == 1);
-    const auto &actual = class_magics_info[0];
-    CHECK(actual.spell_book == original.spell_book);
-    CHECK(actual.spell_stat == original.spell_stat);
-    CHECK(actual.has_glove_mp_penalty == original.has_glove_mp_penalty);
-    CHECK(actual.has_magic_fail_rate_cap == original.has_magic_fail_rate_cap);
-    CHECK(actual.is_spell_trainable == original.is_spell_trainable);
-    CHECK(actual.spell_first == original.spell_first);
-    CHECK(actual.spell_weight == original.spell_weight);
-    for (int realm = 0; realm <= MAX_MAGIC; ++realm) {
-        for (int spell = 0; spell < 32; ++spell) {
-            CAPTURE(realm);
-            CAPTURE(spell);
-            CHECK(actual.info[realm][spell].is_learnable() == original.info[realm][spell].is_learnable());
-            if (actual.info[realm][spell].is_learnable() && original.info[realm][spell].is_learnable()) {
-                CHECK(actual.info[realm][spell].get_learn_level() == original.info[realm][spell].get_learn_level());
-            }
-            CHECK(actual.info[realm][spell].smana == original.info[realm][spell].smana);
-            CHECK(actual.info[realm][spell].sfail == original.info[realm][spell].sfail);
-            CHECK(actual.info[realm][spell].sexp == original.info[realm][spell].sexp);
-        }
-    }
+    data["realms"][0]["aptitude"] = 2;
+    CHECK(test::to_error_code(test::read_and_commit(MagicReader(data, session, DEFAULT_STEPS), session)) == ParseErrorType::NON_SEQUENTIAL_RECORDS);
+    CHECK(session.last_id().value_or(-1) == MAGE);
+    const auto &actual = class_magics_info[MAGE];
+    CHECK(actual.spell_book == ItemKindType::SORCERY_BOOK);
+    CHECK(actual.spell_first == 1);
+    CHECK(actual.spell_weight == 430);
+    check_spell(actual.info[LIFE][1], 3, 5, 8, 6);
 }
 
 TEST_CASE("MagicReader accepts a gap between classes")
 {
-    const MagicNumericState state;
+    const MagicReaderState state;
     auto session = MagicReader::create_session();
-    class_magics_info.assign(3, {});
-    session = MagicReader::create_session();
-    auto data = make_magic_numeric_data(SpellInfoList::get_instance());
+    auto data = make_magic_data(SpellInfoList::get_instance());
     REQUIRE(test::read_and_commit(MagicReader(data, session), session).has_value());
-    CHECK(session.last_id().value_or(-1) == 0);
+    CHECK(session.last_id().value_or(-1) == MAGE);
 
-    data["name"] = "PRIEST";
+    // 戦士 (ID 0) の後のメイジ (ID 1) を読み、プリースト (ID 2) を飛ばして盗賊 (ID 3) を読む
+    data["name"] = "ROGUE";
     data["first_spell_level"] = 5;
+    data["realms"] = nlohmann::json::array();
+    for (const auto *name : { "SORCERY", "DEATH", "TRUMP", "ARCANE", "CRAFT" }) {
+        data["realms"].push_back({ { "name", name } });
+    }
     REQUIRE(test::read_and_commit(MagicReader(data, session), session).has_value());
-    CHECK(session.last_id().value_or(-1) == 2);
-    CHECK(class_magics_info[0].spell_first == 1);
-    CHECK(class_magics_info[2].spell_first == 5);
-    CHECK(class_magics_info[2].info[enum2i(RealmType::LIFE)][0].smana == 2);
-}
-
-/*!
- * @brief 補正前の難易度の0・100を受理し、符号なしの境界値も維持する
- */
-TEST_CASE("MagicReader accepts difficulty from zero through one hundred")
-{
-    const MagicNumericState state;
-    auto &spells = SpellInfoList::get_instance();
-    auto data = make_magic_numeric_data(spells);
-    for (const auto &difficulty : std::vector<nlohmann::json>{ 0, 95, 100, 100u }) {
-        CAPTURE(difficulty.dump());
-        data["realms"][0]["spells_info"][1]["difficulty"] = difficulty;
-        REQUIRE(test::read_record<MagicReader>(data).has_value());
-        CHECK(class_magics_info[0].info[enum2i(RealmType::LIFE)][0].sfail == 7);
-        CHECK(class_magics_info[0].info[enum2i(RealmType::LIFE)][1].sfail == difficulty.get<int>());
-    }
-}
-
-/*!
- * @brief 後続呪文の範囲外・非整数難易度を拒否し、職業の既存定義を保持する
- */
-TEST_CASE("MagicReader rejects invalid difficulty without publishing partial data")
-{
-    const MagicNumericState state;
-    auto session = MagicReader::create_session();
-    auto &spells = SpellInfoList::get_instance();
-    auto data = make_magic_numeric_data(spells);
-    REQUIRE(test::read_and_commit(MagicReader(data, session), session).has_value());
-    data["first_spell_level"] = 5;
-    data["armour_weight_limit"] = 450;
-    data["realms"][0]["spells_info"][0]["difficulty"] = 20;
-    for (const auto &difficulty : std::vector<nlohmann::json>{ -1, 101, 999, std::numeric_limits<uint64_t>::max(), 1.0, true }) {
-        CAPTURE(difficulty.dump());
-        data["realms"][0]["spells_info"][1]["difficulty"] = difficulty;
-        const auto expected = difficulty.is_number_integer() ? ParseErrorType::INVALID_VALUE : ParseErrorType::INVALID_TYPE;
-        session = MagicReader::create_session();
-        CHECK(test::to_error_code(test::read_and_commit(MagicReader(data, session), session)) == expected);
-        CHECK(class_magics_info[0].spell_first == 1);
-        CHECK(class_magics_info[0].spell_weight == 430);
-        CHECK(class_magics_info[0].info[enum2i(RealmType::LIFE)][0].sfail == 7);
-        CHECK(class_magics_info[0].info[enum2i(RealmType::LIFE)][1].sfail == 8);
-        CHECK_FALSE(session.last_id());
-    }
-}
-
-/*!
- * @brief 消費MP・初回経験値倍率・重量閾値のSHRT_MAX/16境界を受理する
- */
-TEST_CASE("MagicReader accepts configured maximum for mana experience and armour weight")
-{
-    const MagicNumericState state;
-    auto &spells = SpellInfoList::get_instance();
-    auto data = make_magic_numeric_data(spells);
-    for (const auto &value : std::vector<nlohmann::json>{ 0, 999, 1000, 2047, 2047u }) {
-        CAPTURE(value.dump());
-        data["armour_weight_limit"] = value;
-        data["realms"][0]["spells_info"][1]["mana_cost"] = value;
-        data["realms"][0]["spells_info"][1]["first_cast_exp_rate"] = value;
-        REQUIRE(test::read_record<MagicReader>(data).has_value());
-        CHECK(class_magics_info[0].spell_weight == value.get<int>());
-        CHECK(class_magics_info[0].info[enum2i(RealmType::LIFE)][1].smana == value.get<int>());
-        CHECK(class_magics_info[0].info[enum2i(RealmType::LIFE)][1].sexp == value.get<int>());
-    }
-}
-
-/*!
- * @brief 3項目の範囲外・非整数を拒否し、既存定義を保持する
- */
-TEST_CASE("MagicReader rejects invalid bounded fields without publishing partial data")
-{
-    const MagicNumericState state;
-    auto session = MagicReader::create_session();
-    auto &spells = SpellInfoList::get_instance();
-    const auto original = make_magic_numeric_data(spells);
-    REQUIRE(test::read_and_commit(MagicReader(original, session), session).has_value());
-    for (const auto *field : { "armour_weight_limit", "mana_cost", "first_cast_exp_rate" }) {
-        for (const auto &value : std::vector<nlohmann::json>{ -1, 2048, std::numeric_limits<uint64_t>::max(), 1.0, true }) {
-            CAPTURE(field);
-            CAPTURE(value.dump());
-            auto data = original;
-            data["first_spell_level"] = 5;
-            data["realms"][0]["spells_info"][0]["mana_cost"] = 1000;
-            if (std::string_view(field) == "armour_weight_limit") {
-                data[field] = value;
-            } else {
-                data["realms"][0]["spells_info"][1][field] = value;
-            }
-            const auto expected = value.is_number_integer() ? ParseErrorType::INVALID_VALUE : ParseErrorType::INVALID_TYPE;
-            session = MagicReader::create_session();
-            CHECK(test::to_error_code(test::read_and_commit(MagicReader(data, session), session)) == expected);
-            CHECK(class_magics_info[0].spell_first == 1);
-            CHECK(class_magics_info[0].spell_weight == 430);
-            CHECK(class_magics_info[0].info[enum2i(RealmType::LIFE)][0].smana == 2);
-            CHECK(class_magics_info[0].info[enum2i(RealmType::LIFE)][1].smana == 5);
-            CHECK(class_magics_info[0].info[enum2i(RealmType::LIFE)][1].sexp == 6);
-        }
-    }
+    const auto rogue = enum2i(PlayerClassType::ROGUE);
+    CHECK(session.last_id().value_or(-1) == rogue);
+    CHECK(class_magics_info[MAGE].spell_first == 1);
+    CHECK(class_magics_info[rogue].spell_first == 5);
+    check_spell(class_magics_info[MAGE].info[LIFE][0], 1, 2, 7, 4);
+    CHECK_FALSE(class_magics_info[rogue].info[LIFE][0].is_learnable());
 }
 
 TEST_CASE("MagicReader numeric fixture restores existing spell definitions")
@@ -274,9 +219,8 @@ TEST_CASE("MagicReader numeric fixture restores existing spell definitions")
     spells.set_spell_info(RealmType::SORCERY, 7, std::move(original));
     const auto *original_info = &spells.get_spell_info(RealmType::SORCERY, 7);
     {
-        const MagicNumericState state;
-        auto session = MagicReader::create_session();
-        make_magic_numeric_data(spells);
+        const MagicReaderState state;
+        make_magic_data(spells);
         CHECK_FALSE(spells.get_spell_id(RealmType::SORCERY, "existing-tag"));
     }
     CHECK(&spells.get_spell_info(RealmType::SORCERY, 7) == original_info);
@@ -286,13 +230,318 @@ TEST_CASE("MagicReader numeric fixture restores existing spell definitions")
 }
 
 /*!
+ * @brief 段階 0 の領域は、魔法の基準値がそのまま職業別の値になる
+ */
+TEST_CASE("MagicReader copies the base values at aptitude zero")
+{
+    const MagicReaderState state;
+    const auto data = make_magic_data(SpellInfoList::get_instance());
+    REQUIRE(read_with_steps(data).has_value());
+    const auto &magic = class_magics_info[MAGE];
+    for (const auto *table : { magic.info, magic.info_second }) {
+        check_spell(table[LIFE][0], 1, 2, 7, 4);
+        check_spell(table[LIFE][1], 3, 5, 8, 6);
+        check_spell(table[LIFE][8], 20, 9, 30, 2);
+        // 魔法の定義に無い枠は習得できない
+        check_unlearnable(table[LIFE][2]);
+    }
+    CHECK_FALSE(magic.has_distinct_second(RealmType::LIFE));
+}
+
+/*!
+ * @brief 領域の段階から、習得レベル・消費MP・難易度を求める (初回経験値倍率は基準のまま)
+ */
+TEST_CASE("MagicReader derives the class values from the realm aptitude")
+{
+    const MagicReaderState state;
+    auto data = make_magic_data(SpellInfoList::get_instance());
+    data["realms"][0]["aptitude"] = -1;
+    REQUIRE(read_with_steps(data).has_value());
+    const auto &magic = class_magics_info[MAGE];
+    // 基準 3: 3 × 47 × 30 / 5000 = 0.846 は 1 動く。消費MP 5 × 115% = 5.75 は 6。難易度 8 + 3
+    check_spell(magic.info[LIFE][1], 4, 6, 11, 6);
+    // 基準 20: 20 × 30 × 30 / 5000 = 3.6 は 4 動く。消費MP 9 × 115% = 10.35 は 10。難易度 30 + 3
+    check_spell(magic.info[LIFE][8], 24, 10, 33, 2);
+
+    data["realms"][0]["aptitude"] = 2;
+    REQUIRE(read_with_steps(data).has_value());
+    // 基準 20: 20 × 30 × 60 / 5000 = 7.2 は 7 動く。消費MP 9 × 70% = 6.3 は 6。難易度 30 − 6
+    check_spell(magic.info[LIFE][8], 13, 6, 24, 2);
+    check_spell(magic.info_second[LIFE][8], 13, 6, 24, 2);
+
+    // 傾きがすべて 0 なら、段階によらず基準値のまま
+    REQUIRE(read_with_steps(data, AptitudeSteps{}).has_value());
+    check_spell(magic.info[LIFE][8], 20, 9, 30, 2);
+}
+
+/*!
+ * @brief 第二領域として選んだときの段階で、第二領域用の表を求める
+ */
+TEST_CASE("MagicReader derives the second-realm table from aptitude_as_second")
+{
+    const MagicReaderState state;
+    auto data = make_magic_data(SpellInfoList::get_instance());
+    data["realms"][0]["aptitude"] = 2;
+    data["realms"][0]["aptitude_as_second"] = -1;
+    REQUIRE(read_with_steps(data).has_value());
+    const auto &magic = class_magics_info[MAGE];
+    check_spell(magic.info[LIFE][8], 13, 6, 24, 2);
+    check_spell(magic.info_second[LIFE][8], 24, 10, 33, 2);
+    CHECK(magic.has_distinct_second(RealmType::LIFE));
+    CHECK(&magic.spell_info(RealmType::LIFE, 8, RealmPosition::FIRST) == &magic.info[LIFE][8]);
+    CHECK(&magic.spell_info(RealmType::LIFE, 8, RealmPosition::SECOND) == &magic.info_second[LIFE][8]);
+    CHECK(&PlayerRealm::get_spell_info(RealmType::LIFE, 8, RealmPosition::SECOND, PlayerClassType::MAGE) == &magic.info_second[LIFE][8]);
+
+    // aptitude と同じ値は書かない
+    data["realms"][0]["aptitude_as_second"] = 2;
+    CHECK(test::to_error_code(read_with_steps(data)) == ParseErrorType::INVALID_VALUE);
+    check_spell(magic.info_second[LIFE][8], 24, 10, 33, 2);
+
+    // 省略すると第一領域と同じ段階になる
+    data["realms"][0].erase("aptitude_as_second");
+    REQUIRE(read_with_steps(data).has_value());
+    check_spell(magic.info_second[LIFE][8], 13, 6, 24, 2);
+    CHECK_FALSE(magic.has_distinct_second(RealmType::LIFE));
+}
+
+/*!
+ * @brief 魔法ごとの上書きは、第一領域用・第二領域用の両方の表に効く
+ */
+TEST_CASE("MagicReader applies spell overrides to both tables")
+{
+    const MagicReaderState state;
+    auto data = make_magic_data(SpellInfoList::get_instance());
+    data["realms"][0]["aptitude"] = -1;
+    data["realms"][0]["aptitude_as_second"] = 1;
+    data["realms"][0]["overrides"] = nlohmann::json::array({ { { "spell_tag", "ninth" }, { "aptitude", 2 } } });
+    REQUIRE(read_with_steps(data).has_value());
+    const auto &magic = class_magics_info[MAGE];
+    check_spell(magic.info[LIFE][8], 13, 6, 24, 2);
+    check_spell(magic.info_second[LIFE][8], 13, 6, 24, 2);
+    check_spell(magic.info[LIFE][1], 4, 6, 11, 6);
+
+    // 第一・第二のどちらか一方と同じ段階なら意味があるので書ける
+    data["realms"][0]["overrides"][0]["aptitude"] = -1;
+    REQUIRE(read_with_steps(data).has_value());
+    check_spell(magic.info[LIFE][8], 24, 10, 33, 2);
+    check_spell(magic.info_second[LIFE][8], 24, 10, 33, 2);
+}
+
+/*!
+ * @brief 上書きの誤りを拒否し、既存定義を保持する
+ */
+TEST_CASE("MagicReader rejects invalid spell overrides")
+{
+    const MagicReaderState state;
+    auto data = make_magic_data(SpellInfoList::get_instance());
+    data["realms"][0]["aptitude"] = -1;
+    REQUIRE(read_with_steps(data).has_value());
+
+    struct Case {
+        const char *name;
+        nlohmann::json overrides;
+        nlohmann::json unlearnable;
+        tl::optional<int> max_book;
+        ParseErrorType error;
+    };
+    const auto override_of = [](nlohmann::json tag, nlohmann::json aptitude) {
+        nlohmann::json override_obj = nlohmann::json::object();
+        if (!tag.is_null()) {
+            override_obj["spell_tag"] = std::move(tag);
+        }
+        if (!aptitude.is_null()) {
+            override_obj["aptitude"] = std::move(aptitude);
+        }
+        return override_obj;
+    };
+    const std::vector<Case> cases = {
+        { "same as the realm", nlohmann::json::array({ override_of("ninth", -1) }), nullptr, tl::nullopt, ParseErrorType::INVALID_VALUE },
+        { "listed twice", nlohmann::json::array({ override_of("ninth", 1), override_of("ninth", 2) }), nullptr, tl::nullopt, ParseErrorType::INVALID_VALUE },
+        { "unlearnable spell", nlohmann::json::array({ override_of("second", 1) }), nlohmann::json::array({ "second" }), tl::nullopt, ParseErrorType::INVALID_VALUE },
+        { "after max_book", nlohmann::json::array({ override_of("ninth", 1) }), nullptr, 1, ParseErrorType::INVALID_VALUE },
+        { "unknown tag", nlohmann::json::array({ override_of("unknown-tag", 1) }), nullptr, tl::nullopt, ParseErrorType::INVALID_FLAG },
+        { "missing tag", nlohmann::json::array({ override_of(nullptr, 1) }), nullptr, tl::nullopt, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "missing aptitude", nlohmann::json::array({ override_of("ninth", nullptr) }), nullptr, tl::nullopt, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "aptitude out of range", nlohmann::json::array({ override_of("ninth", 10) }), nullptr, tl::nullopt, ParseErrorType::INVALID_VALUE },
+        { "non-integer aptitude", nlohmann::json::array({ override_of("ninth", 1.0) }), nullptr, tl::nullopt, ParseErrorType::INVALID_TYPE },
+        { "not an array", nlohmann::json::object(), nullptr, tl::nullopt, ParseErrorType::INVALID_TYPE },
+        { "non-object element", nlohmann::json::array({ 1 }), nullptr, tl::nullopt, ParseErrorType::INVALID_TYPE },
+    };
+    for (const auto &c : cases) {
+        CAPTURE(c.name);
+        auto candidate = data;
+        candidate["realms"][0]["overrides"] = c.overrides;
+        if (!c.unlearnable.is_null()) {
+            candidate["realms"][0]["unlearnable"] = c.unlearnable;
+        }
+        if (c.max_book) {
+            candidate["realms"][0]["max_book"] = *c.max_book;
+        }
+        CHECK(test::to_error_code(read_with_steps(candidate)) == c.error);
+        check_spell(class_magics_info[MAGE].info[LIFE][8], 24, 10, 33, 2);
+    }
+}
+
+/*!
+ * @brief 範囲外・非整数の段階と、範囲外の値になる段階を拒否する
+ */
+TEST_CASE("MagicReader rejects invalid realm aptitudes")
+{
+    const MagicReaderState state;
+    auto data = make_magic_data(SpellInfoList::get_instance());
+    REQUIRE(read_with_steps(data).has_value());
+    for (const auto *field : { "aptitude", "aptitude_as_second" }) {
+        for (const auto &value : std::vector<nlohmann::json>{ 10, -10, 1.0, "1", true }) {
+            CAPTURE(field);
+            CAPTURE(value.dump());
+            auto candidate = data;
+            candidate["realms"][0][field] = value;
+            const auto expected = value.is_number_integer() ? ParseErrorType::INVALID_VALUE : ParseErrorType::INVALID_TYPE;
+            CHECK(test::to_error_code(read_with_steps(candidate)) == expected);
+            check_spell(class_magics_info[MAGE].info[LIFE][8], 20, 9, 30, 2);
+        }
+    }
+
+    // 段階 7 は消費MP の倍率が 100 − 15 × 7 = −5% になり、値を求められない
+    data["realms"][0]["aptitude"] = 7;
+    CHECK(test::to_error_code(read_with_steps(data)) == ParseErrorType::INVALID_VALUE);
+    data["realms"][0]["aptitude"] = 6;
+    REQUIRE(read_with_steps(data).has_value());
+    CHECK(class_magics_info[MAGE].info[LIFE][8].smana == 1);
+}
+
+/*!
+ * @brief 同じ職業に同じ領域を 2 度書くのはエラー
+ */
+TEST_CASE("MagicReader rejects a realm listed twice")
+{
+    const MagicReaderState state;
+    auto data = make_magic_data(SpellInfoList::get_instance());
+    data["realms"].push_back({ { "name", "LIFE" }, { "aptitude", 1 } });
+    CHECK(test::to_error_code(read_with_steps(data)) == ParseErrorType::INVALID_VALUE);
+    CHECK_FALSE(class_magics_info[MAGE].info[LIFE][0].is_learnable());
+}
+
+/*!
+ * @brief 職業が選べる魔法領域は、過不足なく書く
+ */
+TEST_CASE("MagicReader requires exactly the realms that the class can choose")
+{
+    const MagicReaderState state;
+    const auto mage = make_magic_data(SpellInfoList::get_instance());
+
+    // 選べる領域が 1 つでも欠けるとエラー
+    auto missing = mage;
+    missing["realms"].erase(9);
+    CHECK(test::to_error_code(read_with_steps(missing)) == ParseErrorType::TOO_FEW_ARGUMENTS);
+
+    // 混沌の戦士はカオスと悪魔だけを選べる
+    auto chaos_warrior = mage;
+    chaos_warrior["name"] = "CHAOS_WARRIOR";
+    chaos_warrior["realms"] = nlohmann::json::array({ { { "name", "CHAOS" } }, { { "name", "DEMON" } } });
+    REQUIRE(read_with_steps(chaos_warrior).has_value());
+    auto extra = chaos_warrior;
+    extra["realms"].push_back({ { "name", "LIFE" } });
+    CHECK(test::to_error_code(read_with_steps(extra)) == ParseErrorType::INVALID_VALUE);
+
+    // 全領域を使う職業 (ソーサラー) は 10 領域すべて
+    auto sorcerer = mage;
+    sorcerer["name"] = "SORCERER";
+    REQUIRE(read_with_steps(sorcerer).has_value());
+    sorcerer["realms"].erase(0);
+    CHECK(test::to_error_code(read_with_steps(sorcerer)) == ParseErrorType::TOO_FEW_ARGUMENTS);
+
+    // 魔法を使わない職業は書かない
+    auto warrior = mage;
+    warrior["name"] = "WARRIOR";
+    warrior["spell_type"] = "NONE";
+    CHECK(test::to_error_code(read_with_steps(warrior)) == ParseErrorType::INVALID_VALUE);
+    warrior["realms"] = nlohmann::json::array();
+    REQUIRE(read_with_steps(warrior).has_value());
+}
+
+/*!
+ * @brief aptitude_as_second は、第一領域にも第二領域にも選べる領域にだけ書ける
+ */
+TEST_CASE("MagicReader allows aptitude_as_second only for realms of both positions")
+{
+    const MagicReaderState state;
+    auto data = make_magic_data(SpellInfoList::get_instance());
+    data["name"] = "CHAOS_WARRIOR";
+    data["realms"] = nlohmann::json::array({ { { "name", "CHAOS" }, { "aptitude_as_second", 1 } }, { { "name", "DEMON" } } });
+    CHECK(test::to_error_code(read_with_steps(data)) == ParseErrorType::INVALID_VALUE);
+
+    // プリーストは暗黒を第一・第二の両方に選べるが、仙術は第二領域だけ
+    data["name"] = "PRIEST";
+    data["realms"] = make_magic_data(SpellInfoList::get_instance())["realms"];
+    data["realms"][4]["aptitude_as_second"] = 1;
+    REQUIRE(data["realms"][4]["name"] == "DEATH");
+    REQUIRE(read_with_steps(data).has_value());
+    data["realms"][1]["aptitude_as_second"] = 1;
+    REQUIRE(data["realms"][1]["name"] == "SORCERY");
+    CHECK(test::to_error_code(read_with_steps(data)) == ParseErrorType::INVALID_VALUE);
+}
+
+/*!
+ * @brief ルートの版と段階 1 つあたりの動きを読む
+ */
+TEST_CASE("MagicReader reads aptitude_steps from the root")
+{
+    const test::ScopedReaderState reader_state;
+    nlohmann::json root = {
+        { "version", 2 },
+        { "aptitude_steps", { { "learn_level_percent", 30 }, { "mana_cost_percent", 15 }, { "difficulty", 3 } } },
+        { "classes", nlohmann::json::array() },
+    };
+    const auto steps = MagicReader::read_aptitude_steps(root);
+    REQUIRE(steps.has_value());
+    CHECK(steps->learn_level_percent == 30);
+    CHECK(steps->mana_cost_percent == 15);
+    CHECK(steps->difficulty == 3);
+
+    struct Case {
+        const char *path;
+        nlohmann::json value;
+        ParseErrorType error;
+    };
+    const std::vector<Case> cases = {
+        { "/version", 1, ParseErrorType::INVALID_VALUE },
+        { "/version", 2.0, ParseErrorType::INVALID_TYPE },
+        { "/version", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/aptitude_steps", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/aptitude_steps", 1, ParseErrorType::INVALID_TYPE },
+        { "/aptitude_steps/learn_level_percent", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
+        { "/aptitude_steps/learn_level_percent", 101, ParseErrorType::INVALID_VALUE },
+        { "/aptitude_steps/learn_level_percent", -1, ParseErrorType::INVALID_VALUE },
+        { "/aptitude_steps/mana_cost_percent", 51, ParseErrorType::INVALID_VALUE },
+        { "/aptitude_steps/mana_cost_percent", 15.0, ParseErrorType::INVALID_TYPE },
+        { "/aptitude_steps/difficulty", 21, ParseErrorType::INVALID_VALUE },
+        { "/aptitude_steps/difficulty", "3", ParseErrorType::INVALID_TYPE },
+    };
+    for (const auto &c : cases) {
+        CAPTURE(c.path);
+        CAPTURE(c.value.dump());
+        auto candidate = root;
+        if (c.value.is_null()) {
+            const nlohmann::json::json_pointer pointer(c.path);
+            candidate[pointer.parent_pointer()].erase(pointer.back());
+        } else {
+            candidate[nlohmann::json::json_pointer(c.path)] = c.value;
+        }
+        const auto result = MagicReader::read_aptitude_steps(candidate);
+        REQUIRE_FALSE(result.has_value());
+        CHECK(result.error() == c.error);
+    }
+}
+
+/*!
  * @brief 内部解析の各エラーを公開APIへ伝播し、後続解析で変更した既存定義を保持する
  */
 TEST_CASE("MagicReader propagates helper errors without publishing partial data")
 {
-    const MagicNumericState state;
+    const MagicReaderState state;
     auto session = MagicReader::create_session();
-    auto data = make_magic_numeric_data(SpellInfoList::get_instance());
+    auto data = make_magic_data(SpellInfoList::get_instance());
     REQUIRE(test::read_and_commit(MagicReader(data, session), session).has_value());
 
     struct InvalidField {
@@ -313,15 +562,6 @@ TEST_CASE("MagicReader propagates helper errors without publishing partial data"
         { "/realms/0", 1, ParseErrorType::INVALID_TYPE },
         { "/realms/0/name", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
         { "/realms/0/name", "UNKNOWN_REALM", ParseErrorType::INVALID_FLAG },
-        { "/realms/0/spells_info", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
-        { "/realms/0/spells_info", nlohmann::json::object(), ParseErrorType::INVALID_TYPE },
-        { "/realms/0/spells_info/1", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
-        { "/realms/0/spells_info/1", 1, ParseErrorType::INVALID_TYPE },
-        { "/realms/0/spells_info/1/spell_tag", nullptr, ParseErrorType::TOO_FEW_ARGUMENTS },
-        { "/realms/0/spells_info/1/spell_tag", "unknown-tag", ParseErrorType::INVALID_FLAG },
-        { "/realms/0/spells_info/1/learn_level", 0, ParseErrorType::INVALID_VALUE },
-        { "/realms/0/spells_info/1/learn_level", 51, ParseErrorType::INVALID_VALUE },
-        { "/realms/0/spells_info/1/learn_level", 99, ParseErrorType::INVALID_VALUE },
         { "/first_spell_level", -1, ParseErrorType::INVALID_VALUE },
         { "/first_spell_level", 51, ParseErrorType::INVALID_VALUE },
         { "/first_spell_level", 99, ParseErrorType::INVALID_VALUE },
@@ -335,23 +575,22 @@ TEST_CASE("MagicReader propagates helper errors without publishing partial data"
         auto candidate = data;
         candidate["spell_type"] = "LIFE";
         candidate["first_spell_level"] = 5;
-        candidate["realms"][0]["spells_info"][0]["mana_cost"] = 100;
+        candidate["realms"][0]["aptitude"] = 1;
         candidate[nlohmann::json::json_pointer(invalid.path)] = invalid.value;
         session = MagicReader::create_session();
-        CHECK(test::to_error_code(test::read_and_commit(MagicReader(candidate, session), session)) == invalid.error);
+        CHECK(test::to_error_code(test::read_and_commit(MagicReader(candidate, session, DEFAULT_STEPS), session)) == invalid.error);
         CHECK_FALSE(session.last_id());
-        CHECK(class_magics_info[0].spell_book == ItemKindType::SORCERY_BOOK);
-        CHECK(class_magics_info[0].spell_first == 1);
-        CHECK(class_magics_info[0].info[enum2i(RealmType::LIFE)][0].smana == 2);
-        CHECK(class_magics_info[0].info[enum2i(RealmType::LIFE)][1].get_learn_level() == 3);
+        CHECK(class_magics_info[MAGE].spell_book == ItemKindType::SORCERY_BOOK);
+        CHECK(class_magics_info[MAGE].spell_first == 1);
+        check_spell(class_magics_info[MAGE].info[LIFE][8], 20, 9, 30, 2);
     }
 }
 
 TEST_CASE("MagicReader reports non-string tokens as invalid types")
 {
-    const MagicNumericState state;
-    const auto original = make_magic_numeric_data(SpellInfoList::get_instance());
-    for (const auto *path : { "/name", "/spell_type", "/magic_status", "/realms/0/name", "/realms/0/spells_info/0/spell_tag" }) {
+    const MagicReaderState state;
+    const auto original = make_magic_data(SpellInfoList::get_instance());
+    for (const auto *path : { "/name", "/spell_type", "/magic_status", "/realms/0/name" }) {
         for (const auto &value : { nlohmann::json(1), nlohmann::json(true), nlohmann::json::array(), nlohmann::json::object() }) {
             CAPTURE(path);
             CAPTURE(value.dump());
@@ -365,35 +604,25 @@ TEST_CASE("MagicReader reports non-string tokens as invalid types")
 }
 
 /*!
- * @brief 第一領域用と第二領域用の表に同じ値が入り、位置で引き分けられる
+ * @brief 装備重量閾値の SHRT_MAX/16 境界を受理し、範囲外・非整数を拒否する
  */
-TEST_CASE("MagicReader fills the second-realm table with the same values")
+TEST_CASE("MagicReader checks the bounds of armour_weight_limit")
 {
-    const MagicNumericState state;
-    auto session = MagicReader::create_session();
-    auto data = make_magic_numeric_data(SpellInfoList::get_instance());
-    REQUIRE(test::read_and_commit(MagicReader(data, session), session).has_value());
-
-    const auto &magic = class_magics_info[0];
-    const auto realm = enum2i(RealmType::LIFE);
-    for (auto spell_id = 0; spell_id < 2; spell_id++) {
-        CHECK(magic.info_second[realm][spell_id].is_learnable() == magic.info[realm][spell_id].is_learnable());
-        if (magic.info_second[realm][spell_id].is_learnable() && magic.info[realm][spell_id].is_learnable()) {
-            CHECK(magic.info_second[realm][spell_id].get_learn_level() == magic.info[realm][spell_id].get_learn_level());
-        }
-        CHECK(magic.info_second[realm][spell_id].smana == magic.info[realm][spell_id].smana);
-        CHECK(magic.info_second[realm][spell_id].sfail == magic.info[realm][spell_id].sfail);
-        CHECK(magic.info_second[realm][spell_id].sexp == magic.info[realm][spell_id].sexp);
+    const MagicReaderState state;
+    auto data = make_magic_data(SpellInfoList::get_instance());
+    for (const auto &value : std::vector<nlohmann::json>{ 0, 999, 2047, 2047u }) {
+        CAPTURE(value.dump());
+        data["armour_weight_limit"] = value;
+        REQUIRE(test::read_record<MagicReader>(data).has_value());
+        CHECK(class_magics_info[MAGE].spell_weight == value.get<int>());
     }
-    CHECK(magic.info[realm][1].get_learn_level() == 3);
-    CHECK_FALSE(magic.has_distinct_second(RealmType::LIFE));
-    CHECK(&magic.spell_info(RealmType::LIFE, 1, RealmPosition::FIRST) == &magic.info[realm][1]);
-    CHECK(&magic.spell_info(RealmType::LIFE, 1, RealmPosition::SECOND) == &magic.info_second[realm][1]);
-    CHECK(&PlayerRealm::get_spell_info(RealmType::LIFE, 1, RealmPosition::SECOND, PlayerClassType::WARRIOR) == &magic.info_second[realm][1]);
-
-    // 第二領域用の値を変えると「違う」と判定される
-    class_magics_info[0].info_second[realm][1].set_learn_level(10);
-    CHECK(class_magics_info[0].has_distinct_second(RealmType::LIFE));
+    for (const auto &value : std::vector<nlohmann::json>{ -1, 2048, std::numeric_limits<uint64_t>::max(), 1.0, true }) {
+        CAPTURE(value.dump());
+        data["armour_weight_limit"] = value;
+        const auto expected = value.is_number_integer() ? ParseErrorType::INVALID_VALUE : ParseErrorType::INVALID_TYPE;
+        CHECK(test::to_error_code(test::read_record<MagicReader>(data)) == expected);
+        CHECK(class_magics_info[MAGE].spell_weight == 2047);
+    }
 }
 
 /*!
@@ -401,24 +630,24 @@ TEST_CASE("MagicReader fills the second-realm table with the same values")
  */
 TEST_CASE("MagicReader reads max_book and defaults it to four")
 {
-    const MagicNumericState state;
-    auto data = make_magic_numeric_data(SpellInfoList::get_instance());
+    const MagicReaderState state;
+    auto data = make_magic_data(SpellInfoList::get_instance());
     REQUIRE(test::read_record<MagicReader>(data).has_value());
-    CHECK(class_magics_info[0].max_book[enum2i(RealmType::LIFE)] == MAX_BOOKS_IN_REALM);
-    CHECK(class_magics_info[0].max_book[enum2i(RealmType::SORCERY)] == MAX_BOOKS_IN_REALM);
+    CHECK(class_magics_info[MAGE].max_book[LIFE] == MAX_BOOKS_IN_REALM);
+    CHECK(class_magics_info[MAGE].max_book[enum2i(RealmType::SORCERY)] == MAX_BOOKS_IN_REALM);
 
     for (const auto max_book : { 1, 2, 4 }) {
         CAPTURE(max_book);
         data["realms"][0]["max_book"] = max_book;
         REQUIRE(test::read_record<MagicReader>(data).has_value());
-        CHECK(class_magics_info[0].max_book[enum2i(RealmType::LIFE)] == max_book);
-        CHECK(PlayerRealm::get_max_book(RealmType::LIFE, PlayerClassType::WARRIOR) == max_book);
+        CHECK(class_magics_info[MAGE].max_book[LIFE] == max_book);
+        CHECK(PlayerRealm::get_max_book(RealmType::LIFE, PlayerClassType::MAGE) == max_book);
     }
 
     // 読み直しで省略すると4に戻る
     data["realms"][0].erase("max_book");
     REQUIRE(test::read_record<MagicReader>(data).has_value());
-    CHECK(class_magics_info[0].max_book[enum2i(RealmType::LIFE)] == MAX_BOOKS_IN_REALM);
+    CHECK(class_magics_info[MAGE].max_book[LIFE] == MAX_BOOKS_IN_REALM);
 }
 
 /*!
@@ -426,9 +655,9 @@ TEST_CASE("MagicReader reads max_book and defaults it to four")
  */
 TEST_CASE("MagicReader rejects invalid max_book without publishing partial data")
 {
-    const MagicNumericState state;
+    const MagicReaderState state;
     auto session = MagicReader::create_session();
-    auto data = make_magic_numeric_data(SpellInfoList::get_instance());
+    auto data = make_magic_data(SpellInfoList::get_instance());
     data["realms"][0]["max_book"] = 2;
     REQUIRE(test::read_and_commit(MagicReader(data, session), session).has_value());
     for (const auto &value : std::vector<nlohmann::json>{ 0, 5, -1, 2.0, "2", true }) {
@@ -437,7 +666,7 @@ TEST_CASE("MagicReader rejects invalid max_book without publishing partial data"
         const auto expected = value.is_number_integer() ? ParseErrorType::INVALID_VALUE : ParseErrorType::INVALID_TYPE;
         session = MagicReader::create_session();
         CHECK(test::to_error_code(test::read_and_commit(MagicReader(data, session), session)) == expected);
-        CHECK(class_magics_info[0].max_book[enum2i(RealmType::LIFE)] == 2);
+        CHECK(class_magics_info[MAGE].max_book[LIFE] == 2);
     }
 }
 
@@ -446,9 +675,9 @@ TEST_CASE("MagicReader rejects invalid max_book without publishing partial data"
  */
 TEST_CASE("PlayerRealm returns four books for technic realms")
 {
-    const MagicNumericState state;
+    const MagicReaderState state;
     for (const auto realm : { RealmType::MUSIC, RealmType::HISSATSU, RealmType::HEX }) {
-        CHECK(PlayerRealm::get_max_book(realm, PlayerClassType::WARRIOR) == MAX_BOOKS_IN_REALM);
+        CHECK(PlayerRealm::get_max_book(realm, PlayerClassType::MAGE) == MAX_BOOKS_IN_REALM);
     }
 }
 
@@ -457,42 +686,20 @@ TEST_CASE("PlayerRealm returns four books for technic realms")
  */
 TEST_CASE("MagicReader requires first_spell_level only for classes with spellbooks")
 {
-    const MagicNumericState state;
-    auto data = make_magic_numeric_data(SpellInfoList::get_instance());
+    const MagicReaderState state;
+    auto data = make_magic_data(SpellInfoList::get_instance());
     REQUIRE(test::read_record<MagicReader>(data).has_value());
-    CHECK(class_magics_info[0].spell_first == 1);
+    CHECK(class_magics_info[MAGE].spell_first == 1);
 
     data.erase("first_spell_level");
     auto session = MagicReader::create_session();
     CHECK(test::to_error_code(test::read_and_commit(MagicReader(data, session), session)) == ParseErrorType::TOO_FEW_ARGUMENTS);
-    CHECK(class_magics_info[0].spell_first == 1);
+    CHECK(class_magics_info[MAGE].spell_first == 1);
 
     // 魔法書を使わない職業は省略でき、読み直すと前の値は残らない
     data["spell_type"] = "NONE";
     REQUIRE(test::read_record<MagicReader>(data).has_value());
-    CHECK_FALSE(class_magics_info[0].spell_first);
-}
-
-namespace {
-/*!
- * @brief 習得できない魔法の検証用に、1 巻目の 2 呪文と 2 巻目の 1 呪文を基準値つきで登録した職業の入力を作る
- * @details 1 巻目は "first" (ID 0)・"second" (ID 1)、2 巻目は "ninth" (ID 8)。
- */
-nlohmann::json make_unlearnable_data(SpellInfoList &spells)
-{
-    auto data = make_magic_numeric_data(spells);
-    for (const auto id : { short{ 0 }, short{ 1 }, short{ 8 } }) {
-        SpellInfo info;
-        info.idx = id;
-        info.tag = (id == 0) ? "first" : (id == 1) ? "second"
-                                                   : "ninth";
-        info.base.set_learn_level(1);
-        info.base.smana = 1;
-        spells.set_spell_info(RealmType::LIFE, id, std::move(info));
-    }
-    data["realms"][0]["spells_info"].push_back({ { "spell_tag", "ninth" }, { "learn_level", 20 }, { "mana_cost", 9 }, { "difficulty", 30 }, { "first_cast_exp_rate", 2 } });
-    return data;
-}
+    CHECK_FALSE(class_magics_info[MAGE].spell_first);
 }
 
 /*!
@@ -500,100 +707,43 @@ nlohmann::json make_unlearnable_data(SpellInfoList &spells)
  */
 TEST_CASE("MagicReader marks spells listed in unlearnable as not learnable")
 {
-    const MagicNumericState state;
-    auto data = make_unlearnable_data(SpellInfoList::get_instance());
+    const MagicReaderState state;
+    auto data = make_magic_data(SpellInfoList::get_instance());
     REQUIRE(test::read_record<MagicReader>(data).has_value());
-    const auto realm = enum2i(RealmType::LIFE);
-    CHECK(class_magics_info[0].info[realm][1].get_learn_level() == 3);
-    CHECK(class_magics_info[0].info[realm][1].can_learn_at(3));
-    CHECK_FALSE(class_magics_info[0].info[realm][1].can_learn_at(2));
+    CHECK(class_magics_info[MAGE].info[LIFE][1].can_learn_at(3));
+    CHECK_FALSE(class_magics_info[MAGE].info[LIFE][1].can_learn_at(2));
 
-    data["realms"][0]["spells_info"].erase(1);
     data["realms"][0]["unlearnable"] = nlohmann::json::array({ "second" });
     REQUIRE(test::read_record<MagicReader>(data).has_value());
-    for (const auto *table : { class_magics_info[0].info, class_magics_info[0].info_second }) {
-        const auto &spell = table[realm][1];
-        CHECK_FALSE(spell.is_learnable());
-        CHECK_FALSE(spell.can_learn_at(PY_MAX_LEVEL));
-        CHECK(spell.smana == 0);
-        CHECK(spell.sfail == 0);
-        CHECK(spell.sexp == 0);
-    }
-    CHECK(class_magics_info[0].info[realm][0].is_learnable());
-    CHECK(class_magics_info[0].info[realm][8].get_learn_level() == 20);
+    check_unlearnable(class_magics_info[MAGE].info[LIFE][1]);
+    check_unlearnable(class_magics_info[MAGE].info_second[LIFE][1]);
+    check_spell(class_magics_info[MAGE].info[LIFE][0], 1, 2, 7, 4);
+    check_spell(class_magics_info[MAGE].info[LIFE][8], 20, 9, 30, 2);
+
+    // 読み直しで一覧から外すと、また習得できる
+    data["realms"][0].erase("unlearnable");
+    REQUIRE(test::read_record<MagicReader>(data).has_value());
+    check_spell(class_magics_info[MAGE].info[LIFE][1], 3, 5, 8, 6);
+
+    // 同じ魔法を 2 度書くのはエラー
+    data["realms"][0]["unlearnable"] = nlohmann::json::array({ "second", "second" });
+    CHECK(test::to_error_code(test::read_record<MagicReader>(data)) == ParseErrorType::INVALID_VALUE);
+    check_spell(class_magics_info[MAGE].info[LIFE][1], 3, 5, 8, 6);
 }
 
 /*!
- * @brief 習得できる巻数より後ろの巻の魔法は、書かなくても習得できず、書くとエラーになる
+ * @brief 習得できる巻数より後ろの巻の魔法は、書かなくても習得できず、unlearnable に書くとエラーになる
  */
 TEST_CASE("MagicReader makes spells after max_book unlearnable")
 {
-    const MagicNumericState state;
-    auto data = make_unlearnable_data(SpellInfoList::get_instance());
-    REQUIRE(test::read_record<MagicReader>(data).has_value());
-    const auto realm = enum2i(RealmType::LIFE);
-    REQUIRE(class_magics_info[0].info[realm][8].is_learnable());
-
-    // 2 巻目の魔法を spells_info に書いたまま max_book を 1 にするとエラー
+    const MagicReaderState state;
+    auto data = make_magic_data(SpellInfoList::get_instance());
     data["realms"][0]["max_book"] = 1;
-    auto session = MagicReader::create_session();
-    CHECK(test::to_error_code(test::read_and_commit(MagicReader(data, session), session)) == ParseErrorType::INVALID_VALUE);
-    CHECK(class_magics_info[0].info[realm][8].get_learn_level() == 20);
-
-    // unlearnable に書いてもエラー (書かなくても習得できない)
-    auto redundant = data;
-    redundant["realms"][0]["spells_info"].erase(2);
-    redundant["realms"][0]["unlearnable"] = nlohmann::json::array({ "ninth" });
-    session = MagicReader::create_session();
-    CHECK(test::to_error_code(test::read_and_commit(MagicReader(redundant, session), session)) == ParseErrorType::INVALID_VALUE);
-
-    // どちらにも書かなければ習得できない
-    data["realms"][0]["spells_info"].erase(2);
     REQUIRE(test::read_record<MagicReader>(data).has_value());
-    CHECK_FALSE(class_magics_info[0].info[realm][8].is_learnable());
-    CHECK_FALSE(class_magics_info[0].info_second[realm][8].is_learnable());
-    CHECK(class_magics_info[0].info[realm][0].get_learn_level() == 1);
-}
+    check_unlearnable(class_magics_info[MAGE].info[LIFE][8]);
+    check_unlearnable(class_magics_info[MAGE].info_second[LIFE][8]);
+    check_spell(class_magics_info[MAGE].info[LIFE][0], 1, 2, 7, 4);
 
-/*!
- * @brief 同じ魔法を 2 度書く・どちらにも書かない魔法があるのはエラー
- */
-TEST_CASE("MagicReader rejects spells listed twice or not listed")
-{
-    const MagicNumericState state;
-    auto session = MagicReader::create_session();
-    const auto original = make_unlearnable_data(SpellInfoList::get_instance());
-    REQUIRE(test::read_and_commit(MagicReader(original, session), session).has_value());
-    const auto realm = enum2i(RealmType::LIFE);
-
-    struct Case {
-        const char *name;
-        nlohmann::json unlearnable;
-        bool erase_second;
-        ParseErrorType error;
-    };
-    const std::vector<Case> cases = {
-        { "both spells_info and unlearnable", nlohmann::json::array({ "second" }), false, ParseErrorType::INVALID_VALUE },
-        { "twice in unlearnable", nlohmann::json::array({ "second", "second" }), true, ParseErrorType::INVALID_VALUE },
-        { "not listed", nullptr, true, ParseErrorType::TOO_FEW_ARGUMENTS },
-    };
-    for (const auto &c : cases) {
-        CAPTURE(c.name);
-        auto data = original;
-        if (c.erase_second) {
-            data["realms"][0]["spells_info"].erase(1);
-        }
-        if (!c.unlearnable.is_null()) {
-            data["realms"][0]["unlearnable"] = c.unlearnable;
-        }
-        session = MagicReader::create_session();
-        CHECK(test::to_error_code(test::read_and_commit(MagicReader(data, session), session)) == c.error);
-        CHECK(class_magics_info[0].info[realm][1].get_learn_level() == 3);
-    }
-
-    // spells_info に同じ魔法を 2 度書くのもエラー
-    auto twice = original;
-    twice["realms"][0]["spells_info"].push_back(original["realms"][0]["spells_info"][0]);
-    session = MagicReader::create_session();
-    CHECK(test::to_error_code(test::read_and_commit(MagicReader(twice, session), session)) == ParseErrorType::INVALID_VALUE);
+    data["realms"][0]["unlearnable"] = nlohmann::json::array({ "ninth" });
+    CHECK(test::to_error_code(test::read_record<MagicReader>(data)) == ParseErrorType::INVALID_VALUE);
 }

@@ -1120,7 +1120,6 @@ class DefinitionVersionValidationTest(unittest.TestCase):
     VERSION_KEYS = {
         "ArtifactDefinitions": "version",
         "BaseitemDefinitions": "version",
-        "ClassMagicDefinitions": "version",
         "TerrainDefinitions": "version",
         "MonraceDefinitions": "versions",
         "MonsterMessages": "versions",

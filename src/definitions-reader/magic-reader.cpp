@@ -4,19 +4,24 @@
 #include "definitions-reader/parse-error-types.h"
 #include "locale/language-switcher.h"
 #include "player-info/class-info.h"
+#include "player-info/class-types.h"
+#include "player/player-realm.h"
 #include "system/spell-info-list.h"
 #include "system/system-variables.h"
 #include "util/enum-converter.h"
+#include "util/enum-range.h"
 #include "view/display-messages.h"
-#include <algorithm>
-#include <iterator>
 #include <limits>
 #include <nlohmann/json.hpp>
 #include <utility>
 
 namespace {
-//! 消費MP・初回経験値倍率・装備重量閾値の上限。
+//! 装備重量閾値の上限。
 constexpr auto MAX_CLASS_MAGIC_VALUE = std::numeric_limits<short>::max() / 16;
+
+//! 得意さの段階の範囲
+constexpr auto MIN_APTITUDE = -9;
+constexpr auto MAX_APTITUDE = 9;
 
 //! 魔法書 1 巻に載っている魔法の数
 constexpr auto SPELLS_IN_BOOK = 8;
@@ -37,9 +42,53 @@ MagicReader::Session MagicReader::create_session(tl::optional<int> last_id)
     return Session(DefinitionIdOrder::STRICTLY_INCREASING, { 0, static_cast<int>(class_magics_info.size()) - 1 }, _("職業魔法", "class magic"), last_id);
 }
 
-MagicReader::MagicReader(const nlohmann::json &class_data, Session &session)
+/*!
+ * @brief ClassMagicDefinitions のルートの版と、段階 1 つあたりの動き (aptitude_steps) を読む
+ * @param root ClassMagicDefinitions のルートの JSON Object
+ * @return 段階 1 つあたりの動き。版が 2 でないか、aptitude_steps が無いか範囲外ならエラーコード
+ */
+tl::expected<AptitudeSteps, ParseErrorType> MagicReader::read_aptitude_steps(const nlohmann::json &root)
+{
+    if (const auto result = info_validate_version(root, 2); !result) {
+        msg_print(_("職業魔法の定義形式の版が不正です。", "Invalid version of class magic definitions."));
+        return tl::make_unexpected(result.error());
+    }
+
+    const auto &steps_obj = get_json_value(root, "aptitude_steps");
+    if (steps_obj.is_null()) {
+        msg_print(_("aptitude_steps がありません。", "aptitude_steps is missing."));
+        return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
+    }
+    if (!steps_obj.is_object()) {
+        return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
+    }
+
+    AptitudeSteps steps;
+    if (const auto result = info_set_integer(get_json_value(steps_obj, "learn_level_percent"), steps.learn_level_percent, true, Range(0, 100)); !result) {
+        msg_print(_("段階 1 つあたりの習得レベルの動き読込失敗。", "Failed to load aptitude_steps.learn_level_percent."));
+        return tl::make_unexpected(result.error());
+    }
+    if (const auto result = info_set_integer(get_json_value(steps_obj, "mana_cost_percent"), steps.mana_cost_percent, true, Range(0, 50)); !result) {
+        msg_print(_("段階 1 つあたりの消費MPの動き読込失敗。", "Failed to load aptitude_steps.mana_cost_percent."));
+        return tl::make_unexpected(result.error());
+    }
+    if (const auto result = info_set_integer(get_json_value(steps_obj, "difficulty"), steps.difficulty, true, Range(0, 20)); !result) {
+        msg_print(_("段階 1 つあたりの難易度の動き読込失敗。", "Failed to load aptitude_steps.difficulty."));
+        return tl::make_unexpected(result.error());
+    }
+    return steps;
+}
+
+/*!
+ * @brief コンストラクタ
+ * @param class_data 職業 1 つの JSON Object
+ * @param session 職業IDの並びを確かめるセッション
+ * @param steps 段階 1 つあたりの動き (省略時はすべて 0 で、どの段階でも基準値のまま)
+ */
+MagicReader::MagicReader(const nlohmann::json &class_data, Session &session, const AptitudeSteps &steps)
     : class_data(class_data)
     , session(session)
+    , steps(steps)
 {
 }
 
@@ -105,7 +154,7 @@ tl::expected<void, ParseErrorType> MagicReader::read() const
         msg_print(_("MP重量制限値読込失敗。", "Failed to load spell-weight value."));
         return result;
     }
-    if (const auto result = this->set_realm_data(magics_info); !result) {
+    if (const auto result = this->set_realm_data(magics_info, i2enum<PlayerClassType>(class_id)); !result) {
         msg_print(_("呪文データ読込失敗。", "Failed to load spell data."));
         return result;
     }
@@ -166,54 +215,14 @@ tl::expected<void, ParseErrorType> MagicReader::set_magic_status(player_magic &m
 }
 
 /*!
- * @brief JSON Objectから各呪文の詳細を取得する
- * @param spell_data 各呪文情報の格納されたJSON Object
- * @param magics_info 保存先の魔法情報構造体
- * @param realm 呪文の領域
- * @param listed 領域の魔法ごとに、定義に書かれたかどうか (書かれた魔法の分を立てる)
- * @return 成功時は空の値、失敗時はエラーコード
- */
-tl::expected<void, ParseErrorType> MagicReader::set_spell_data(const nlohmann::json &spell_data, player_magic &magics_info, RealmType realm, SpellListedFlags &listed) const
-{
-    const auto spell_id = read_listed_spell(get_json_value(spell_data, "spell_tag"), magics_info, realm, listed);
-    if (!spell_id) {
-        return tl::make_unexpected(spell_id.error());
-    }
-    auto &info = magics_info.info[enum2i(realm)][*spell_id];
-
-    PLAYER_LEVEL learn_level{};
-    if (const auto result = info_set_integer(get_json_value(spell_data, "learn_level"), learn_level, true, Range(1, PY_MAX_LEVEL)); !result) {
-        msg_print(_("呪文学習レベル読込失敗。", "Failed to load spell learn_level."));
-        return result;
-    }
-    info.set_learn_level(learn_level);
-    if (const auto result = info_set_integer(get_json_value(spell_data, "mana_cost"), info.smana, true, Range(0, MAX_CLASS_MAGIC_VALUE)); !result) {
-        msg_print(_("呪文コスト読込失敗。", "Failed to load spell mana_cost."));
-        return result;
-    }
-    if (const auto result = info_set_integer(get_json_value(spell_data, "difficulty"), info.sfail, true, Range(0, 100)); !result) {
-        msg_print(_("呪文難易度読込失敗。", "Failed to load spell difficulty."));
-        return result;
-    }
-    if (const auto result = info_set_integer(get_json_value(spell_data, "first_cast_exp_rate"), info.sexp, true, Range(0, MAX_CLASS_MAGIC_VALUE)); !result) {
-        msg_print(_("呪文詠唱ボーナスEXP読込失敗。", "Failed to load spell first_cast_exp_rate."));
-        return result;
-    }
-
-    // 第二領域として選んだときの値は、今は第一領域と同じ (位置ごとの値は定義ファイルにまだ無い)
-    magics_info.info_second[enum2i(realm)][*spell_id] = info;
-    return {};
-}
-
-/*!
  * @brief 職業魔法の定義に書かれた魔法の名前を読み、書いてよい魔法かを確かめる
  * @param spell_tag_obj 魔法の名前 (呪文タグ)
- * @param magics_info 保存先の魔法情報構造体 (習得できる巻数を見る)
+ * @param max_book 領域の習得できる巻数
  * @param realm 呪文の領域
- * @param listed 領域の魔法ごとに、定義に書かれたかどうか (読んだ魔法の分を立てる)
+ * @param listed 領域の魔法ごとに、unlearnable か overrides に書かれたかどうか (読んだ魔法の分を立てる)
  * @return 呪文ID。名前が無い・知らない名前ならそのエラー、同じ魔法を 2 度書いたか習得できる巻数より後ろの魔法なら INVALID_VALUE
  */
-tl::expected<int, ParseErrorType> MagicReader::read_listed_spell(const nlohmann::json &spell_tag_obj, const player_magic &magics_info, RealmType realm, SpellListedFlags &listed)
+tl::expected<int, ParseErrorType> MagicReader::read_listed_spell(const nlohmann::json &spell_tag_obj, int max_book, RealmType realm, SpellListedFlags &listed)
 {
     const auto spell_id = info_read_token(spell_tag_obj, [realm](const std::string &name) { return SpellInfoList::get_instance().get_spell_id(realm, name); });
     if (!spell_id) {
@@ -226,7 +235,7 @@ tl::expected<int, ParseErrorType> MagicReader::read_listed_spell(const nlohmann:
         return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
     }
     // 習得できる巻数より後ろの巻の魔法は、書かなくても習得できない
-    if (book_of_spell(*spell_id) > magics_info.max_book[enum2i(realm)]) {
+    if (book_of_spell(*spell_id) > max_book) {
         msg_print(_("魔法 '{}' は習得できる巻数より後ろの巻にあります。", "Spell '{}' is in a book after max_book."), tag);
         return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
     }
@@ -238,13 +247,13 @@ tl::expected<int, ParseErrorType> MagicReader::read_listed_spell(const nlohmann:
 /*!
  * @brief JSON Arrayから習得できない魔法の一覧を読む
  * @param unlearnable_obj 習得できない魔法の名前 (呪文タグ) の配列。省略してよい
- * @param magics_info 保存先の魔法情報構造体
+ * @param max_book 領域の習得できる巻数
  * @param realm 呪文の領域
- * @param listed 領域の魔法ごとに、定義に書かれたかどうか (読んだ魔法の分を立てる)
+ * @param listed 領域の魔法ごとに、unlearnable か overrides に書かれたかどうか (読んだ魔法の分を立てる)
+ * @param unlearnable 領域の魔法ごとに、習得できない魔法かどうか (読んだ魔法の分を立てる)
  * @return 成功時は空の値、失敗時はエラーコード
- * @details 習得できない魔法の値は、領域を読み始めるときに空 (習得レベルが値なし) にしてあるので、ここでは書き換えない。
  */
-tl::expected<void, ParseErrorType> MagicReader::set_unlearnable_spells(const nlohmann::json &unlearnable_obj, const player_magic &magics_info, RealmType realm, SpellListedFlags &listed)
+tl::expected<void, ParseErrorType> MagicReader::read_unlearnable_spells(const nlohmann::json &unlearnable_obj, int max_book, RealmType realm, SpellListedFlags &listed, SpellListedFlags &unlearnable)
 {
     if (unlearnable_obj.is_null()) {
         return {};
@@ -253,47 +262,107 @@ tl::expected<void, ParseErrorType> MagicReader::set_unlearnable_spells(const nlo
         return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
     }
     for (const auto &spell_tag_obj : unlearnable_obj) {
-        if (const auto spell_id = read_listed_spell(spell_tag_obj, magics_info, realm, listed); !spell_id) {
+        const auto spell_id = read_listed_spell(spell_tag_obj, max_book, realm, listed);
+        if (!spell_id) {
             return tl::make_unexpected(spell_id.error());
         }
+        unlearnable[*spell_id] = true;
     }
     return {};
 }
 
 /*!
- * @brief 習得できる巻の魔法がすべて、習得できる魔法か習得できない魔法のどちらかとして書かれているかを確かめる
+ * @brief JSON Arrayから魔法ごとの段階の上書きを読む
+ * @param overrides_obj 上書き (呪文タグと段階) の配列。省略してよい
+ * @param max_book 領域の習得できる巻数
  * @param realm 呪文の領域
- * @param max_book 習得できる巻数
- * @param listed 領域の魔法ごとに、定義に書かれたかどうか
- * @return すべて書かれていれば空の値、書かれていない魔法があれば TOO_FEW_ARGUMENTS
- * @details 魔法の定義 (SpellDefinitions) に無い枠は数えない。
+ * @param aptitude 領域の段階 (第一領域として選んだとき)
+ * @param aptitude_as_second 領域の段階 (第二領域として選んだとき)
+ * @param listed 領域の魔法ごとに、unlearnable か overrides に書かれたかどうか (読んだ魔法の分を立てる)
+ * @param overrides 領域の魔法ごとの上書きの段階 (読んだ魔法の分を書く)
+ * @return 成功時は空の値、失敗時はエラーコード
+ * @details 習得できない魔法への上書きは、unlearnable と同じ魔法を 2 度書いたものとしてエラーにする。
+ * 第一・第二の両方の段階と同じ段階の上書きは、書かなくても同じ値になるのでエラーにする。
  */
-tl::expected<void, ParseErrorType> MagicReader::check_all_spells_listed(RealmType realm, int max_book, const SpellListedFlags &listed)
+tl::expected<void, ParseErrorType> MagicReader::read_overrides(const nlohmann::json &overrides_obj, int max_book, RealmType realm, int aptitude, int aptitude_as_second, SpellListedFlags &listed, SpellAptitudes &overrides)
 {
-    const auto &spells = SpellInfoList::get_instance();
-    for (auto spell_id = 0; spell_id < SPELLS_IN_REALM; spell_id++) {
-        if ((book_of_spell(spell_id) > max_book) || listed[spell_id]) {
+    if (overrides_obj.is_null()) {
+        return {};
+    }
+    return info_read_object_array(overrides_obj, [max_book, realm, aptitude, aptitude_as_second, &listed, &overrides](const nlohmann::json &override_obj) -> tl::expected<void, ParseErrorType> {
+        const auto &spell_tag_obj = get_json_value(override_obj, "spell_tag");
+        const auto spell_id = read_listed_spell(spell_tag_obj, max_book, realm, listed);
+        if (!spell_id) {
+            return tl::make_unexpected(spell_id.error());
+        }
+
+        auto spell_aptitude = 0;
+        if (const auto result = info_set_integer(get_json_value(override_obj, "aptitude"), spell_aptitude, true, Range(MIN_APTITUDE, MAX_APTITUDE)); !result) {
+            msg_print(_("魔法ごとの段階読込失敗。", "Failed to load spell aptitude."));
+            return result;
+        }
+        if ((spell_aptitude == aptitude) && (spell_aptitude == aptitude_as_second)) {
+            msg_print(_("魔法 '{}' の段階は領域の段階と同じです (書かない)。", "Aptitude of spell '{}' is the same as the realm (omit it)."), spell_tag_obj.get_ref<const std::string &>());
+            return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
+        }
+
+        overrides[*spell_id] = spell_aptitude;
+        return {};
+    });
+}
+
+/*!
+ * @brief 職業が選べる魔法領域が、過不足なく定義に書かれているかを確かめる
+ * @param pclass 職業
+ * @param listed 領域ごとに、定義に書かれたかどうか
+ * @param has_second 領域ごとに、aptitude_as_second が書かれたかどうか
+ * @return 過不足が無ければ空の値。選べる領域が無ければ TOO_FEW_ARGUMENTS、選べない領域があるか、
+ * 第一・第二の両方には選べない領域に aptitude_as_second があれば INVALID_VALUE
+ * @details 全領域を使う職業 (ソーサラー・赤魔道師) は魔法の 10 領域すべてを書く。技能領域は書かない。
+ */
+tl::expected<void, ParseErrorType> MagicReader::check_realm_choices(PlayerClassType pclass, const RealmListedFlags &listed, const RealmListedFlags &has_second)
+{
+    const auto realm1_choices = PlayerRealm::get_realm1_choices(pclass);
+    const auto realm2_choices = PlayerRealm::get_realm2_choices(pclass);
+    const auto is_every_magic = (pclass == PlayerClassType::SORCERER) || (pclass == PlayerClassType::RED_MAGE);
+    for (const auto realm : EnumRange(RealmType::LIFE, RealmType::MAX)) {
+        if (!PlayerRealm::is_magic(realm)) {
+            if (listed[enum2i(realm)]) {
+                msg_print(_("技能領域 '{}' は書きません。", "Technic realm '{}' must not be listed."), PlayerRealm::get_name(realm).string());
+                return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
+            }
             continue;
         }
 
-        const auto &spell = spells.get_spell_info(realm, spell_id);
-        if (spell.base.is_learnable()) {
-            msg_print(_("魔法 '{}' が spells_info にも unlearnable にもありません。", "Spell '{}' is in neither spells_info nor unlearnable."), spell.tag);
+        const auto is_choosable = is_every_magic || realm1_choices.has(realm) || realm2_choices.has(realm);
+        if (is_choosable && !listed[enum2i(realm)]) {
+            msg_print(_("職業が選べる領域 '{}' が書かれていません。", "Realm '{}' that the class can choose is not listed."), PlayerRealm::get_name(realm).string());
             return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
+        }
+        if (!is_choosable && listed[enum2i(realm)]) {
+            msg_print(_("職業が選べない領域 '{}' が書かれています。", "Realm '{}' that the class cannot choose is listed."), PlayerRealm::get_name(realm).string());
+            return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
+        }
+        if (has_second[enum2i(realm)] && !(realm1_choices.has(realm) && realm2_choices.has(realm))) {
+            msg_print(_("領域 '{}' は第一・第二の両方には選べないので、第二領域としての段階は書けません。", "Realm '{}' cannot be both the first and the second realm, so aptitude_as_second is not allowed."), PlayerRealm::get_name(realm).string());
+            return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
         }
     }
     return {};
 }
 
 /*!
- * @brief JSON Objectから職業毎に定義された各呪文の詳細を取得する
+ * @brief JSON Objectから職業毎に定義された各領域の段階を取得する
  * @param magics_info 保存先の魔法情報構造体
+ * @param pclass 職業
  * @return 成功時は空の値、失敗時はエラーコード
  */
-tl::expected<void, ParseErrorType> MagicReader::set_realm_data(player_magic &magics_info) const
+tl::expected<void, ParseErrorType> MagicReader::set_realm_data(player_magic &magics_info, PlayerClassType pclass) const
 {
+    RealmListedFlags realm_listed{};
+    RealmListedFlags has_second{};
     const auto &realms_data = get_json_value(this->class_data, "realms");
-    return info_read_object_array(realms_data, [this, &magics_info](const nlohmann::json &realm) -> tl::expected<void, ParseErrorType> {
+    const auto result = info_read_object_array(realms_data, [this, &magics_info, &realm_listed, &has_second](const nlohmann::json &realm) -> tl::expected<void, ParseErrorType> {
         const auto &realm_name_obj = get_json_value(realm, "name");
         const auto realm_name = info_read_token(realm_name_obj, realms_list);
         if (!realm_name) {
@@ -301,31 +370,90 @@ tl::expected<void, ParseErrorType> MagicReader::set_realm_data(player_magic &mag
         }
 
         const auto realm_id = *realm_name;
-        // 省略時は全巻を習得できる
-        auto &max_book = magics_info.max_book[enum2i(realm_id)];
-        max_book = MAX_BOOKS_IN_REALM;
-        if (const auto result = info_set_integer(get_json_value(realm, "max_book"), max_book, false, Range(1, MAX_BOOKS_IN_REALM)); !result) {
-            msg_print(_("習得できる巻数読込失敗。", "Failed to load max_book."));
-            return result;
+        if (realm_listed[enum2i(realm_id)]) {
+            msg_print(_("領域 '{}' が 2 度書かれています。", "Realm '{}' is listed twice."), realm_name_obj.get_ref<const std::string &>());
+            return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
         }
-
-        // 読み直したときに前の値が残らないよう、領域の魔法をすべて習得できない状態にしてから読む
-        std::fill(std::begin(magics_info.info[enum2i(realm_id)]), std::end(magics_info.info[enum2i(realm_id)]), magic_type{});
-        std::fill(std::begin(magics_info.info_second[enum2i(realm_id)]), std::end(magics_info.info_second[enum2i(realm_id)]), magic_type{});
-
-        SpellListedFlags listed{};
-        const auto &spells_info_obj = get_json_value(realm, "spells_info");
-        if (const auto result = info_read_object_array(spells_info_obj, [this, &magics_info, realm_id, &listed](const nlohmann::json &spell) -> tl::expected<void, ParseErrorType> {
-                return this->set_spell_data(spell, magics_info, realm_id, listed);
-            });
-            !result) {
-            return result;
-        }
-        if (const auto result = set_unlearnable_spells(get_json_value(realm, "unlearnable"), magics_info, realm_id, listed); !result) {
-            msg_print(_("習得できない魔法の一覧読込失敗。", "Failed to load unlearnable spells."));
-            return result;
-        }
-
-        return check_all_spells_listed(realm_id, max_book, listed);
+        realm_listed[enum2i(realm_id)] = true;
+        return this->set_realm_spells(realm, magics_info, realm_id, has_second[enum2i(realm_id)]);
     });
+    if (!result) {
+        return result;
+    }
+    return check_realm_choices(pclass, realm_listed, has_second);
+}
+
+/*!
+ * @brief 領域の段階と例外を読み、職業別の魔法の値を基準値から求める
+ * @param realm_data 領域の JSON Object
+ * @param magics_info 保存先の魔法情報構造体
+ * @param realm 呪文の領域
+ * @param has_second aptitude_as_second が書かれていれば true にする
+ * @return 成功時は空の値、失敗時はエラーコード
+ * @details 第一領域用の表は aptitude、第二領域用の表は aptitude_as_second (省略時は aptitude) の段階で求める。
+ * 魔法ごとの上書きは両方の表に効く。習得できる巻数より後ろの巻の魔法と unlearnable の魔法は習得できない。
+ */
+tl::expected<void, ParseErrorType> MagicReader::set_realm_spells(const nlohmann::json &realm_data, player_magic &magics_info, RealmType realm, bool &has_second) const
+{
+    // 省略時は全巻を習得できる
+    auto &max_book = magics_info.max_book[enum2i(realm)];
+    max_book = MAX_BOOKS_IN_REALM;
+    if (const auto result = info_set_integer(get_json_value(realm_data, "max_book"), max_book, false, Range(1, MAX_BOOKS_IN_REALM)); !result) {
+        msg_print(_("習得できる巻数読込失敗。", "Failed to load max_book."));
+        return result;
+    }
+
+    // 省略時は段階 0 (基準値のまま)
+    auto aptitude = 0;
+    if (const auto result = info_set_integer(get_json_value(realm_data, "aptitude"), aptitude, false, Range(MIN_APTITUDE, MAX_APTITUDE)); !result) {
+        msg_print(_("領域の段階読込失敗。", "Failed to load realm aptitude."));
+        return result;
+    }
+    auto aptitude_as_second = aptitude;
+    if (const auto &second_obj = get_json_value(realm_data, "aptitude_as_second"); !second_obj.is_null()) {
+        if (const auto result = info_set_integer(second_obj, aptitude_as_second, true, Range(MIN_APTITUDE, MAX_APTITUDE)); !result) {
+            msg_print(_("第二領域としての段階読込失敗。", "Failed to load aptitude_as_second."));
+            return result;
+        }
+        if (aptitude_as_second == aptitude) {
+            msg_print(_("第二領域としての段階が第一領域と同じです (書かない)。", "aptitude_as_second is the same as aptitude (omit it)."));
+            return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
+        }
+        has_second = true;
+    }
+
+    SpellListedFlags listed{};
+    SpellListedFlags unlearnable{};
+    if (const auto result = read_unlearnable_spells(get_json_value(realm_data, "unlearnable"), max_book, realm, listed, unlearnable); !result) {
+        msg_print(_("習得できない魔法の一覧読込失敗。", "Failed to load unlearnable spells."));
+        return result;
+    }
+    SpellAptitudes overrides{};
+    if (const auto result = read_overrides(get_json_value(realm_data, "overrides"), max_book, realm, aptitude, aptitude_as_second, listed, overrides); !result) {
+        msg_print(_("魔法ごとの段階の一覧読込失敗。", "Failed to load spell overrides."));
+        return result;
+    }
+
+    const auto &spells = SpellInfoList::get_instance();
+    for (auto spell_id = 0; spell_id < SPELLS_IN_REALM; spell_id++) {
+        auto &first = magics_info.info[enum2i(realm)][spell_id];
+        auto &second = magics_info.info_second[enum2i(realm)][spell_id];
+        // 読み直したときに前の値が残らないよう、習得できない状態から組み立てる
+        first = magic_type{};
+        second = magic_type{};
+        if ((book_of_spell(spell_id) > max_book) || unlearnable[spell_id]) {
+            continue;
+        }
+
+        const auto &spell = spells.get_spell_info(realm, spell_id);
+        const auto derived_first = derive_magic_by_aptitude(spell.base, this->steps, overrides[spell_id].value_or(aptitude));
+        const auto derived_second = derive_magic_by_aptitude(spell.base, this->steps, overrides[spell_id].value_or(aptitude_as_second));
+        if (!derived_first || !derived_second) {
+            msg_print(_("魔法 '{}' の職業別の値が範囲外です。", "Derived values of spell '{}' are out of range."), spell.tag);
+            return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
+        }
+        first = *derived_first;
+        second = *derived_second;
+    }
+    return {};
 }

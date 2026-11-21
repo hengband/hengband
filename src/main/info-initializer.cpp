@@ -102,8 +102,12 @@ void init_json(std::string_view filename, std::string_view keyname, DefinitionHa
         quit(fmt::format(_("{}: ルートオブジェクトに配列 '{}' が必要です", "{}: expected a root object containing array '{}'"), filename, keyname));
     }
 
-    if (validate_root && !validate_root(json_object)) {
-        quit(fmt::format(_("{}: 定義形式のversionが不正です", "{}: invalid definition version"), filename));
+    if (validate_root) {
+        // ルートの検証で出した診断 (版以外の項目の誤りなど) も、終了のメッセージに添える
+        ScopedMessageCapture diagnostics;
+        if (!validate_root(json_object)) {
+            quit(format_definition_load_error(diagnostics.messages(), fmt::format(_("{}: 定義形式のversionが不正です", "{}: invalid definition version"), filename)));
+        }
     }
 
     auto &elements = json_object[keyname];
@@ -205,7 +209,25 @@ void init_class_magics_info()
     for (auto &magic : class_magics_info) {
         magic.set_technic_base_values();
     }
-    init_json_reader<MagicReader>("ClassMagicDefinitions.jsonc", "classes", DefinitionHashDataType::CLASS_MAGICS, class_magics_info);
+    // 段階 1 つあたりの動きはルートに 1 つだけあり、職業の定義を読む前に読む
+    AptitudeSteps steps;
+    const auto validate_root = [&steps](const nlohmann::json &root) -> tl::expected<void, ParseErrorType> {
+        const auto result = MagicReader::read_aptitude_steps(root);
+        if (!result) {
+            return tl::make_unexpected(result.error());
+        }
+        steps = *result;
+        return {};
+    };
+    auto session = MagicReader::create_session();
+    auto parser = [&session, &steps](nlohmann::json &element) {
+        auto result = MagicReader(element, session, steps).read();
+        if (result) {
+            session.commit();
+        }
+        return result;
+    };
+    init_json("ClassMagicDefinitions.jsonc", "classes", DefinitionHashDataType::CLASS_MAGICS, class_magics_info, parser, nullptr, true, validate_root);
 }
 
 /*!
