@@ -171,17 +171,17 @@ void euc2sjis(char *str)
 }
 
 /*!
- * @brief strを環境に合った文字コードに変換し、変換前の文字コードを返す。strの長さに制限はない。
- * @param str 変換する文字列のポインタ
- * @return 変換前の文字コード
+ * @brief 旧版のデータの文字列の文字コード (EUC-JP か Shift_JIS か) を推定する
+ * @param str 推定する文字列
+ * @return 推定した文字コード
  *         ASCII と EUC-JP/Shift_JIS のどちらとも解釈できる文字のみの文字列や、壊れた文字列など、
  *         文字コードを判定できなかった場合は UNKNOWN
  *         (ASCII は判定に使わないので US_ASCII を返すことはない)
  */
-CharacterEncoding codeconv(char *str)
+CharacterEncoding guess_legacy_encoding(std::string_view str)
 {
     auto encoding = CharacterEncoding::UNKNOWN;
-    for (auto i = 0; str[i]; i++) {
+    for (size_t i = 0; i < str.size(); i++) {
         /* First byte */
         const auto c1 = static_cast<unsigned char>(str[i]);
 
@@ -190,9 +190,9 @@ CharacterEncoding codeconv(char *str)
             continue;
         }
 
-        /* Second byte */
+        /* Second byte (文字列の末尾で欠けていれば 0 とみなし、壊れた文字列として扱う) */
         i++;
-        const auto c2 = static_cast<unsigned char>(str[i]);
+        const auto c2 = (i < str.size()) ? static_cast<unsigned char>(str[i]) : static_cast<unsigned char>(0);
 
         /*
          * Shift_JIS の1バイト目 F0-FC (ユーザー定義文字・IBM 拡張文字) は sjis2euc() で
@@ -227,45 +227,36 @@ CharacterEncoding codeconv(char *str)
         return CharacterEncoding::UNKNOWN;
     }
 
+    return encoding;
+}
+
+/*!
+ * @brief 旧版のデータの文字列を、内部の文字コードに変換する
+ * @param str 変換する文字列
+ * @param encoding str の文字コード (guess_legacy_encoding() で推定したものなど)
+ * @return 内部の文字コードに変換した文字列。encoding が EUC-JP・Shift_JIS のどちらでもないときは、変換せずに返す
+ * @details 内部の文字コードが EUC-JP・Shift_JIS の間は、2 バイトの文字を 2 バイトに置き換えるだけなので、長さは変わらない。
+ */
+tl::optional<std::string> legacy_to_sys(std::string_view str, CharacterEncoding encoding)
+{
+    std::string converted(str);
     switch (encoding) {
 #ifdef EUC
     case CharacterEncoding::SHIFT_JIS:
-        sjis2euc(str);
+        sjis2euc(converted.data());
         break;
 #endif
 
 #ifdef SJIS
     case CharacterEncoding::EUC_JP:
-        euc2sjis(str);
+        euc2sjis(converted.data());
         break;
 #endif
     default:
         break;
     }
 
-    return encoding;
-}
-
-/*!
- * @brief 文字列sのxバイト目が漢字の1バイト目かどうか判定する
- * @param s 判定する文字列のポインタ
- * @param x 判定する位置(バイト)
- * @return 漢字の1バイト目ならばTRUE
- */
-bool iskanji2(const char *s, int x)
-{
-    int i;
-
-    for (i = 0; i < x; i++) {
-        if (iskanji(s[i])) {
-            i++;
-        }
-    }
-    if ((x == i) && iskanji(s[x])) {
-        return true;
-    }
-
-    return false;
+    return converted;
 }
 
 /*!

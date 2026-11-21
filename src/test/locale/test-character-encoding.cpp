@@ -62,124 +62,103 @@ constexpr std::string_view HALFWIDTH_KATAKANA_SYS = "\xb1\xb2\xb3"; //!< ｱｲ�
 
 }
 
-TEST_CASE("codeconv detects EUC-JP followed by ASCII")
+TEST_CASE("guess_legacy_encoding detects EUC-JP followed by ASCII")
 {
-    auto str = cat(NIHON_EUC, "abc");
-    CHECK(codeconv(str.data()) == CharacterEncoding::EUC_JP);
-    CHECK(str == cat(NIHON_SYS, "abc"));
+    const auto str = cat(NIHON_EUC, "abc");
+    CHECK(guess_legacy_encoding(str) == CharacterEncoding::EUC_JP);
+    CHECK(legacy_to_sys(str, CharacterEncoding::EUC_JP) == cat(NIHON_SYS, "abc"));
 }
 
-TEST_CASE("codeconv detects Shift_JIS followed by ASCII")
+TEST_CASE("guess_legacy_encoding detects Shift_JIS followed by ASCII")
 {
-    auto str = cat(NIHON_SJIS, "abc");
-    CHECK(codeconv(str.data()) == CharacterEncoding::SHIFT_JIS);
-    CHECK(str == cat(NIHON_SYS, "abc"));
+    const auto str = cat(NIHON_SJIS, "abc");
+    CHECK(guess_legacy_encoding(str) == CharacterEncoding::SHIFT_JIS);
+    CHECK(legacy_to_sys(str, CharacterEncoding::SHIFT_JIS) == cat(NIHON_SYS, "abc"));
 }
 
-TEST_CASE("codeconv detects EUC-JP surrounded by ASCII")
+TEST_CASE("guess_legacy_encoding detects EUC-JP surrounded by ASCII")
 {
-    auto str = cat("abc", NIHON_EUC, "def");
-    CHECK(codeconv(str.data()) == CharacterEncoding::EUC_JP);
-    CHECK(str == cat("abc", NIHON_SYS, "def"));
+    const auto str = cat("abc", NIHON_EUC, "def");
+    CHECK(guess_legacy_encoding(str) == CharacterEncoding::EUC_JP);
+    CHECK(legacy_to_sys(str, CharacterEncoding::EUC_JP) == cat("abc", NIHON_SYS, "def"));
 }
 
-TEST_CASE("codeconv rejects EUC-JP and Shift_JIS mixed with ASCII between them")
+TEST_CASE("guess_legacy_encoding rejects EUC-JP and Shift_JIS mixed with ASCII between them")
 {
-    const auto original = cat(NIHON_EUC, "abc", NIHON_SJIS);
-    auto str = original;
-    CHECK(codeconv(str.data()) == CharacterEncoding::UNKNOWN);
-    CHECK(str == original);
+    CHECK(guess_legacy_encoding(cat(NIHON_EUC, "abc", NIHON_SJIS)) == CharacterEncoding::UNKNOWN);
 }
 
-TEST_CASE("codeconv detects Shift_JIS whose second byte is 0x80-0xA0 after a lead byte of 0xE0 or above")
+TEST_CASE("guess_legacy_encoding detects Shift_JIS whose second byte is 0x80-0xA0 after a lead byte of 0xE0 or above")
 {
-    auto str = cat(KANJI_SEN_SJIS, "abc");
-    CHECK(codeconv(str.data()) == CharacterEncoding::SHIFT_JIS);
-    CHECK(str == cat(KANJI_SEN_SYS, "abc"));
+    const auto str = cat(KANJI_SEN_SJIS, "abc");
+    CHECK(guess_legacy_encoding(str) == CharacterEncoding::SHIFT_JIS);
+    CHECK(legacy_to_sys(str, CharacterEncoding::SHIFT_JIS) == cat(KANJI_SEN_SYS, "abc"));
 }
 
-TEST_CASE("codeconv detects EUC-JP whose second byte is 0xFD or above after a lead byte of 0xE0 or above")
+TEST_CASE("guess_legacy_encoding detects EUC-JP whose second byte is 0xFD or above after a lead byte of 0xE0 or above")
 {
-    auto str = cat(KANJI_YOU_EUC, "abc");
-    CHECK(codeconv(str.data()) == CharacterEncoding::EUC_JP);
-    CHECK(str == cat(KANJI_YOU_SYS, "abc"));
+    const auto str = cat(KANJI_YOU_EUC, "abc");
+    CHECK(guess_legacy_encoding(str) == CharacterEncoding::EUC_JP);
+    CHECK(legacy_to_sys(str, CharacterEncoding::EUC_JP) == cat(KANJI_YOU_SYS, "abc"));
 }
 
-TEST_CASE("codeconv defers ambiguous characters and decides by a following Shift_JIS character")
+TEST_CASE("guess_legacy_encoding defers ambiguous characters and decides by a following Shift_JIS character")
 {
-    auto str = cat(KANJI_SHAKU_SJIS, KANJI_YOU_SJIS, KANJI_SEN_SJIS);
-    CHECK(codeconv(str.data()) == CharacterEncoding::SHIFT_JIS);
-    CHECK(str == cat(KANJI_SHAKU_SYS, KANJI_YOU_SYS, KANJI_SEN_SYS));
+    const auto str = cat(KANJI_SHAKU_SJIS, KANJI_YOU_SJIS, KANJI_SEN_SJIS);
+    CHECK(guess_legacy_encoding(str) == CharacterEncoding::SHIFT_JIS);
+    CHECK(legacy_to_sys(str, CharacterEncoding::SHIFT_JIS) == cat(KANJI_SHAKU_SYS, KANJI_YOU_SYS, KANJI_SEN_SYS));
 }
 
-TEST_CASE("codeconv defers ambiguous characters and decides by a following EUC-JP character")
+TEST_CASE("guess_legacy_encoding defers ambiguous characters and decides by a following EUC-JP character")
 {
-    auto str = cat(KANJI_SEN_EUC, KANJI_SHAKU_EUC, NIHON_EUC);
-    CHECK(codeconv(str.data()) == CharacterEncoding::EUC_JP);
-    CHECK(str == cat(KANJI_SEN_SYS, KANJI_SHAKU_SYS, NIHON_SYS));
+    const auto str = cat(KANJI_SEN_EUC, KANJI_SHAKU_EUC, NIHON_EUC);
+    CHECK(guess_legacy_encoding(str) == CharacterEncoding::EUC_JP);
+    CHECK(legacy_to_sys(str, CharacterEncoding::EUC_JP) == cat(KANJI_SEN_SYS, KANJI_SHAKU_SYS, NIHON_SYS));
 }
 
-TEST_CASE("codeconv detects EUC-JP whose lead byte is 0xF0 or above")
+TEST_CASE("guess_legacy_encoding detects EUC-JP whose lead byte is 0xF0 or above")
 {
-    auto str = cat(KANJI_SEN2_EUC, "abc");
-    CHECK(codeconv(str.data()) == CharacterEncoding::EUC_JP);
-    CHECK(str == cat(KANJI_SEN2_SYS, "abc"));
+    const auto str = cat(KANJI_SEN2_EUC, "abc");
+    CHECK(guess_legacy_encoding(str) == CharacterEncoding::EUC_JP);
+    CHECK(legacy_to_sys(str, CharacterEncoding::EUC_JP) == cat(KANJI_SEN2_SYS, "abc"));
 }
 
-TEST_CASE("codeconv does not treat Shift_JIS user-defined characters as Shift_JIS")
+TEST_CASE("guess_legacy_encoding does not treat Shift_JIS user-defined characters as Shift_JIS")
 {
-    // 1バイト目が F0 以上の Shift_JIS は sjis2euc() で EUC-JP に変換できないため、変換しない
-    const auto original = cat(NIHON_SJIS, "\xf0\x40");
-    auto str = original;
-    CHECK(codeconv(str.data()) == CharacterEncoding::UNKNOWN);
-    CHECK(str == original);
+    // 1バイト目が F0 以上の Shift_JIS は sjis2euc() で EUC-JP に変換できないため、Shift_JIS とみなさない
+    CHECK(guess_legacy_encoding(cat(NIHON_SJIS, "\xf0\x40")) == CharacterEncoding::UNKNOWN);
 }
 
-TEST_CASE("codeconv treats lead byte 0xF0 or above with second byte 0xA1 or above as EUC-JP")
+TEST_CASE("guess_legacy_encoding treats lead byte 0xF0 or above with second byte 0xA1 or above as EUC-JP")
 {
     // Shift_JIS のユーザー定義文字とも読めるが EUC-JP とみなすので、後に Shift_JIS が続くと壊れた文字列になる
-    const auto original = cat(KANJI_SEN2_EUC, KANJI_SEN2_SJIS);
-    auto str = original;
-    CHECK(codeconv(str.data()) == CharacterEncoding::UNKNOWN);
-    CHECK(str == original);
+    CHECK(guess_legacy_encoding(cat(KANJI_SEN2_EUC, KANJI_SEN2_SJIS)) == CharacterEncoding::UNKNOWN);
 }
 
-TEST_CASE("codeconv does not treat Shift_JIS IBM extended characters as EUC-JP")
+TEST_CASE("guess_legacy_encoding does not treat Shift_JIS IBM extended characters as EUC-JP")
 {
     // 髙 (Shift_JIS の IBM 拡張文字 FB FC) の1バイト目は EUC-JP の JIS X 0208 の範囲外なので、EUC-JP とみなさない
-    const auto original = cat("\xfb\xfc", KANJI_SEN_EUC);
-    auto str = original;
-    CHECK(codeconv(str.data()) == CharacterEncoding::UNKNOWN);
-    CHECK(str == original);
+    CHECK(guess_legacy_encoding(cat("\xfb\xfc", KANJI_SEN_EUC)) == CharacterEncoding::UNKNOWN);
 }
 
-TEST_CASE("codeconv returns UNKNOWN for string with ambiguous characters only")
+TEST_CASE("guess_legacy_encoding returns UNKNOWN for string with ambiguous characters only")
 {
-    const auto original = cat(KANJI_SEN_EUC, "abc", KANJI_SHAKU_EUC);
-    auto str = original;
-    CHECK(codeconv(str.data()) == CharacterEncoding::UNKNOWN);
-    CHECK(str == original);
+    CHECK(guess_legacy_encoding(cat(KANJI_SEN_EUC, "abc", KANJI_SHAKU_EUC)) == CharacterEncoding::UNKNOWN);
 }
 
-TEST_CASE("codeconv returns UNKNOWN for string ending with a lead byte")
+TEST_CASE("guess_legacy_encoding returns UNKNOWN for string ending with a lead byte")
 {
-    const auto original = cat(NIHON_EUC, "\xc6");
-    auto str = original;
-    CHECK(codeconv(str.data()) == CharacterEncoding::UNKNOWN);
-    CHECK(str == original);
+    CHECK(guess_legacy_encoding(cat(NIHON_EUC, "\xc6")) == CharacterEncoding::UNKNOWN);
 }
 
-TEST_CASE("codeconv returns UNKNOWN for ASCII-only string")
+TEST_CASE("guess_legacy_encoding returns UNKNOWN for ASCII-only string")
 {
-    std::string str = "abc";
-    CHECK(codeconv(str.data()) == CharacterEncoding::UNKNOWN);
-    CHECK(str == "abc");
+    CHECK(guess_legacy_encoding("abc") == CharacterEncoding::UNKNOWN);
 }
 
-TEST_CASE("codeconv returns UNKNOWN for empty string")
+TEST_CASE("guess_legacy_encoding returns UNKNOWN for empty string")
 {
-    std::string str;
-    CHECK(codeconv(str.data()) == CharacterEncoding::UNKNOWN);
+    CHECK(guess_legacy_encoding("") == CharacterEncoding::UNKNOWN);
 }
 
 TEST_CASE("utf8_to_sys converts fullwidth tilde and hyphen-minus")

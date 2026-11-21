@@ -251,7 +251,7 @@ tl::optional<size_t> complete_sys_text_length(std::string_view str)
  * @param prefer_system_encoding 内部の文字コードとして正しく読めるなら、文字コードを推定しないか
  * @return UTF-8 の文字列。変換できないときは "?"
  * @details
- * 日本語版では、Windows 版と Unix 系の間で受け渡したファイルのために、codeconv() で文字コードを推定する。
+ * 日本語版では、Windows 版と Unix 系の間で受け渡したファイルのために、guess_legacy_encoding() で文字コードを推定する。
  * ただし推定は半角カナの並びなどを別の文字コードと取り違えることがあるので、名前は前の版の表示と同じく
  * 内部の文字コードとして正しく読めるならそのまま変換し、読めないときだけ推定する (prefer_system_encoding)。
  * 死因は前の版の表示と同じく先に推定する。
@@ -272,10 +272,10 @@ std::string migrate_text(std::string_view str, [[maybe_unused]] bool prefer_syst
     };
     const auto convert_guessed = [&]() -> tl::optional<std::string> {
         for (auto cut = 0; cut <= max_cut; cut++) {
-            std::string buf(prefix(cut));
-            // codeconv() は 2 バイトの文字を 2 バイトに置き換えるだけで、長さは変わらない
-            if (codeconv(buf.data()) != CharacterEncoding::UNKNOWN) {
-                return sys_to_utf8(buf);
+            const auto text = prefix(cut);
+            const auto encoding = guess_legacy_encoding(text);
+            if (encoding != CharacterEncoding::UNKNOWN) {
+                return legacy_to_sys(text, encoding).and_then([](const std::string &sys_text) { return sys_to_utf8(sys_text); });
             }
         }
 

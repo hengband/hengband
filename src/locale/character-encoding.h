@@ -20,8 +20,8 @@ bool is_utf8_str(std::string_view str);
 
 void sjis2euc(char *str);
 void euc2sjis(char *str);
-CharacterEncoding codeconv(char *str);
-bool iskanji2(const char *s, int x);
+CharacterEncoding guess_legacy_encoding(std::string_view str);
+tl::optional<std::string> legacy_to_sys(std::string_view str, CharacterEncoding encoding);
 tl::optional<std::string> sys_to_utf8(std::string_view str);
 tl::optional<std::string> utf8_to_sys(std::string_view utf8_str);
 size_t guess_convert_to_system_encoding(char *strbuf, int buflen);

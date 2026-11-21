@@ -123,31 +123,18 @@ std::string rd_string()
     }
 
 #ifdef JP
-    switch (loading_character_encoding) {
-#ifdef SJIS
-    case CharacterEncoding::EUC_JP:
-        euc2sjis(str.data());
-        break;
-#endif
-
-#ifdef EUC
-    case CharacterEncoding::SHIFT_JIS:
-        sjis2euc(str.data());
-        break;
-#endif
-
-    case CharacterEncoding::UNKNOWN: {
-        const auto code = codeconv(str.data());
+    auto encoding = loading_character_encoding;
+    if (encoding == CharacterEncoding::UNKNOWN) {
+        encoding = guess_legacy_encoding(str);
 
         /* 漢字コードが判明したら、それを記録 */
-        if (code != CharacterEncoding::UNKNOWN) {
-            loading_character_encoding = code;
+        if (encoding != CharacterEncoding::UNKNOWN) {
+            loading_character_encoding = encoding;
         }
-
-        break;
     }
-    default:
-        break;
+
+    if (auto converted = legacy_to_sys(str, encoding)) {
+        str = std::move(*converted);
     }
 #endif
 

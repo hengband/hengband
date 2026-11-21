@@ -539,7 +539,7 @@ TEST_CASE("migrate_raw_score converts a name that cannot be read in the system e
 
 TEST_CASE("migrate_raw_score keeps a name that can be read in the system encoding")
 {
-    // 半角カナの並びは、codeconv() が別の文字コードの漢字と取り違えることがある
+    // 半角カナの並びは、guess_legacy_encoding() が別の文字コードの漢字と取り違えることがある
     high_score raw{};
     set_field(raw.who, HANKAKU_AI);
     CHECK(migrate_raw_score(raw).name == "\xef\xbd\xb1\xef\xbd\xb2");
