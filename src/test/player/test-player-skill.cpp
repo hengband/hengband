@@ -86,7 +86,7 @@ TEST_CASE("PlayerSkill::gain_spell_skill_exp requests redrawing the spell info o
     dur.reset_flag(SubWindowRedrawingFlag::ITEM_KNOWLEDGE);
 
     player_magic magic;
-    magic.info[enum2i(RealmType::LIFE)][0].slevel = 1;
+    magic.info[enum2i(RealmType::LIFE)][0].set_learn_level(1);
     mp_ptr = &magic;
     FloorType floor;
     PlayerType player;

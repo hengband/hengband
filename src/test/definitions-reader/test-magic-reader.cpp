@@ -134,7 +134,7 @@ TEST_CASE("MagicReader rejects a repeated class without changing its definition"
         for (int spell = 0; spell < 32; ++spell) {
             CAPTURE(realm);
             CAPTURE(spell);
-            CHECK(actual.info[realm][spell].slevel == original.info[realm][spell].slevel);
+            CHECK(actual.info[realm][spell] == original.info[realm][spell]);
             CHECK(actual.info[realm][spell].smana == original.info[realm][spell].smana);
             CHECK(actual.info[realm][spell].sfail == original.info[realm][spell].sfail);
             CHECK(actual.info[realm][spell].sexp == original.info[realm][spell].sexp);
@@ -340,7 +340,7 @@ TEST_CASE("MagicReader propagates helper errors without publishing partial data"
         CHECK(class_magics_info[0].spell_book == ItemKindType::SORCERY_BOOK);
         CHECK(class_magics_info[0].spell_first == 1);
         CHECK(class_magics_info[0].info[enum2i(RealmType::LIFE)][0].smana == 2);
-        CHECK(class_magics_info[0].info[enum2i(RealmType::LIFE)][1].slevel == 3);
+        CHECK(class_magics_info[0].info[enum2i(RealmType::LIFE)][1].get_learn_level() == 3);
     }
 }
 
@@ -374,19 +374,19 @@ TEST_CASE("MagicReader fills the second-realm table with the same values")
     const auto &magic = class_magics_info[0];
     const auto realm = enum2i(RealmType::LIFE);
     for (auto spell_id = 0; spell_id < 2; spell_id++) {
-        CHECK(magic.info_second[realm][spell_id].slevel == magic.info[realm][spell_id].slevel);
+        CHECK(magic.info_second[realm][spell_id] == magic.info[realm][spell_id]);
         CHECK(magic.info_second[realm][spell_id].smana == magic.info[realm][spell_id].smana);
         CHECK(magic.info_second[realm][spell_id].sfail == magic.info[realm][spell_id].sfail);
         CHECK(magic.info_second[realm][spell_id].sexp == magic.info[realm][spell_id].sexp);
     }
-    CHECK(magic.info[realm][1].slevel == 3);
+    CHECK(magic.info[realm][1].get_learn_level() == 3);
     CHECK_FALSE(magic.has_distinct_second(RealmType::LIFE));
     CHECK(&magic.spell_info(RealmType::LIFE, 1, RealmPosition::FIRST) == &magic.info[realm][1]);
     CHECK(&magic.spell_info(RealmType::LIFE, 1, RealmPosition::SECOND) == &magic.info_second[realm][1]);
     CHECK(&PlayerRealm::get_spell_info(RealmType::LIFE, 1, RealmPosition::SECOND, PlayerClassType::WARRIOR) == &magic.info_second[realm][1]);
 
     // 第二領域用の値を変えると「違う」と判定される
-    class_magics_info[0].info_second[realm][1].slevel = 10;
+    class_magics_info[0].info_second[realm][1].set_learn_level(10);
     CHECK(class_magics_info[0].has_distinct_second(RealmType::LIFE));
 }
 
@@ -480,7 +480,8 @@ nlohmann::json make_unlearnable_data(SpellInfoList &spells)
         info.idx = id;
         info.tag = (id == 0) ? "first" : (id == 1) ? "second"
                                                    : "ninth";
-        info.base = { 1, 1, 0, 0 };
+        info.base.set_learn_level(1);
+        info.base.smana = 1;
         spells.set_spell_info(RealmType::LIFE, id, std::move(info));
     }
     data["realms"][0]["spells_info"].push_back({ { "spell_tag", "ninth" }, { "learn_level", 20 }, { "mana_cost", 9 }, { "difficulty", 30 }, { "first_cast_exp_rate", 2 } });
@@ -497,7 +498,7 @@ TEST_CASE("MagicReader marks spells listed in unlearnable as not learnable")
     auto data = make_unlearnable_data(SpellInfoList::get_instance());
     REQUIRE(test::read_record<MagicReader>(data).has_value());
     const auto realm = enum2i(RealmType::LIFE);
-    CHECK(class_magics_info[0].info[realm][1].slevel == 3);
+    CHECK(class_magics_info[0].info[realm][1].get_learn_level() == 3);
     CHECK(class_magics_info[0].info[realm][1].can_learn_at(3));
     CHECK_FALSE(class_magics_info[0].info[realm][1].can_learn_at(2));
 
@@ -513,7 +514,7 @@ TEST_CASE("MagicReader marks spells listed in unlearnable as not learnable")
         CHECK(spell.sexp == 0);
     }
     CHECK(class_magics_info[0].info[realm][0].is_learnable());
-    CHECK(class_magics_info[0].info[realm][8].slevel == 20);
+    CHECK(class_magics_info[0].info[realm][8].get_learn_level() == 20);
 }
 
 /*!
@@ -531,7 +532,7 @@ TEST_CASE("MagicReader makes spells after max_book unlearnable")
     data["realms"][0]["max_book"] = 1;
     auto session = MagicReader::create_session();
     CHECK(test::to_error_code(test::read_and_commit(MagicReader(data, session), session)) == ParseErrorType::INVALID_VALUE);
-    CHECK(class_magics_info[0].info[realm][8].slevel == 20);
+    CHECK(class_magics_info[0].info[realm][8].get_learn_level() == 20);
 
     // unlearnable に書いてもエラー (書かなくても習得できない)
     auto redundant = data;
@@ -545,7 +546,7 @@ TEST_CASE("MagicReader makes spells after max_book unlearnable")
     REQUIRE(test::read_record<MagicReader>(data).has_value());
     CHECK_FALSE(class_magics_info[0].info[realm][8].is_learnable());
     CHECK_FALSE(class_magics_info[0].info_second[realm][8].is_learnable());
-    CHECK(class_magics_info[0].info[realm][0].slevel == 1);
+    CHECK(class_magics_info[0].info[realm][0].get_learn_level() == 1);
 }
 
 /*!
@@ -581,7 +582,7 @@ TEST_CASE("MagicReader rejects spells listed twice or not listed")
         }
         session = MagicReader::create_session();
         CHECK(test::to_error_code(test::read_and_commit(MagicReader(data, session), session)) == c.error);
-        CHECK(class_magics_info[0].info[realm][1].slevel == 3);
+        CHECK(class_magics_info[0].info[realm][1].get_learn_level() == 3);
     }
 
     // spells_info に同じ魔法を 2 度書くのもエラー

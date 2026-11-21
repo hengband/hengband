@@ -186,7 +186,7 @@ tl::expected<void, ParseErrorType> MagicReader::set_spell_data(const nlohmann::j
         msg_print(_("呪文学習レベル読込失敗。", "Failed to load spell learn_level."));
         return result;
     }
-    info.slevel = learn_level;
+    info.set_learn_level(learn_level);
     if (const auto result = info_set_integer(get_json_value(spell_data, "mana_cost"), info.smana, true, Range(0, MAX_CLASS_MAGIC_VALUE)); !result) {
         msg_print(_("呪文コスト読込失敗。", "Failed to load spell mana_cost."));
         return result;

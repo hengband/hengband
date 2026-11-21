@@ -147,7 +147,7 @@ PERCENTAGE spell_chance(PlayerType *player_ptr, SPELL_IDX spell_id, RealmType us
     }
 
     PERCENTAGE chance = spell.sfail;
-    chance -= 3 * (player_ptr->lev - *spell.slevel);
+    chance -= 3 * (player_ptr->lev - spell.get_learn_level());
     chance -= 3 * (adj_mag_stat[player_ptr->stat_index[mp_ptr->spell_stat]] - 1);
     if (player_ptr->riding) {
         const auto &riding_monrace = player_ptr->current_floor_ptr->m_list[player_ptr->riding].get_monrace();
@@ -362,13 +362,13 @@ void print_spells(PlayerType *player_ptr, SPELL_IDX target_spell_id, const SPELL
 
         const auto &spell_name = PlayerRealm::get_spell_name(use_realm, spell_id);
         bot_row.name = spell_name;
-        bot_row.level = *spell.slevel;
+        bot_row.level = spell.get_learn_level();
         bot_row.mana = need_mana;
         if (use_realm == RealmType::HISSATSU) {
-            out_val.append(fmt::format("{:<25} {:2} {:4}", spell_name, *spell.slevel, need_mana));
+            out_val.append(fmt::format("{:<25} {:2} {:4}", spell_name, spell.get_learn_level(), need_mana));
         } else {
             const auto chance = spell_chance(player_ptr, spell_id, use_realm);
-            out_val.append(fmt::format("{:<25}{:c}{:<4} {:2} {:4} {:3}% {}", spell_name, (max ? '!' : ' '), ryakuji, *spell.slevel, need_mana, chance, comment));
+            out_val.append(fmt::format("{:<25}{:c}{:<4} {:2} {:4} {:3}% {}", spell_name, (max ? '!' : ' '), ryakuji, spell.get_learn_level(), need_mana, chance, comment));
             bot_row.fail = chance;
             bot_row.proficiency = ryakuji;
             bot_row.proficiency_mark = max;

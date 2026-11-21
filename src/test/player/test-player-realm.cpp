@@ -44,8 +44,8 @@ TEST_CASE("PlayerRealm reads the spell table of the realm position")
     class_magics_info.assign(1, {});
     auto &magic = class_magics_info[0];
     const auto realm = enum2i(RealmType::DEATH);
-    magic.info[realm][3].slevel = 10;
-    magic.info_second[realm][3].slevel = 20;
+    magic.info[realm][3].set_learn_level(10);
+    magic.info_second[realm][3].set_learn_level(20);
     mp_ptr = &magic;
 
     PlayerType player;
@@ -54,17 +54,17 @@ TEST_CASE("PlayerRealm reads the spell table of the realm position")
 
     // 第一領域として選んだときは第一領域用の表
     pr.set(RealmType::DEATH, RealmType::LIFE);
-    CHECK(pr.realm1().get_spell_info(3).slevel == 10);
-    CHECK(PlayerRealm::get_spell_info(RealmType::DEATH, 3, pr.position_of(RealmType::DEATH)).slevel == 10);
+    CHECK(pr.realm1().get_spell_info(3).get_learn_level() == 10);
+    CHECK(PlayerRealm::get_spell_info(RealmType::DEATH, 3, pr.position_of(RealmType::DEATH)).get_learn_level() == 10);
 
     // 第二領域として選んだときは第二領域用の表
     pr.set(RealmType::LIFE, RealmType::DEATH);
-    CHECK(pr.realm2().get_spell_info(3).slevel == 20);
-    CHECK(PlayerRealm::get_spell_info(RealmType::DEATH, 3, pr.position_of(RealmType::DEATH)).slevel == 20);
+    CHECK(pr.realm2().get_spell_info(3).get_learn_level() == 20);
+    CHECK(PlayerRealm::get_spell_info(RealmType::DEATH, 3, pr.position_of(RealmType::DEATH)).get_learn_level() == 20);
 
     // 位置を渡さなければ第一領域用の表 (職業を指定しても同じ)
-    CHECK(PlayerRealm::get_spell_info(RealmType::DEATH, 3).slevel == 10);
-    CHECK(PlayerRealm::get_spell_info(RealmType::DEATH, 3, RealmPosition::SECOND, PlayerClassType::WARRIOR).slevel == 20);
+    CHECK(PlayerRealm::get_spell_info(RealmType::DEATH, 3).get_learn_level() == 10);
+    CHECK(PlayerRealm::get_spell_info(RealmType::DEATH, 3, RealmPosition::SECOND, PlayerClassType::WARRIOR).get_learn_level() == 20);
 }
 
 TEST_CASE("PlayerRealm reads technic spells from the base values copied to the class table")
@@ -74,7 +74,10 @@ TEST_CASE("PlayerRealm reads technic spells from the base values copied to the c
     SpellInfo song;
     song.idx = 2;
     song.tag = "song";
-    song.base = { 7, 9, 35, 50 };
+    song.base.set_learn_level(7);
+    song.base.smana = 9;
+    song.base.sfail = 35;
+    song.base.sexp = 50;
     spells.set_spell_info(RealmType::MUSIC, 2, std::move(song));
 
     const auto restore = test::scoped_restore(class_magics_info, mp_ptr);
@@ -84,7 +87,7 @@ TEST_CASE("PlayerRealm reads technic spells from the base values copied to the c
     mp_ptr = &magic;
 
     const auto check_song = [](const magic_type &spell) {
-        CHECK(spell.slevel == 7);
+        CHECK(spell.get_learn_level() == 7);
         CHECK(spell.smana == 9);
         CHECK(spell.sfail == 35);
         CHECK(spell.sexp == 50);

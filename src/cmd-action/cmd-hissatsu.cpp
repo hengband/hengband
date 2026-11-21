@@ -212,7 +212,7 @@ static int get_hissatsu_power(PlayerType *player_ptr, SPELL_IDX *sn)
 
                     /* Dump the spell --(-- */
                     const auto &spell_name = PlayerRealm::get_spell_name(RealmType::HISSATSU, i);
-                    psi_desc.append(fmt::format(" {:<18}{:2} {:3}", spell_name, *spell.slevel, spell.smana));
+                    psi_desc.append(fmt::format(" {:<18}{:2} {:3}", spell_name, spell.get_learn_level(), spell.smana));
                     prt(psi_desc, y + (line % 17) + (line >= 17), x + (line / 17) * 30);
                     prt("", y + (line % 17) + (line >= 17) + 1, x + (line / 17) * 30);
                 }
