@@ -40,6 +40,10 @@ make -j$(getconf _NPROCESSORS_ONLN)          # src/hengband が生成される
 - `CXXFLAGS` には最低限 `-Wall -Wextra` を付ける。プリコンパイル済みヘッダは `--disable-pch` で無効にできる。
 - 日本語版は `-fexec-charset=euc-jp-ms` で文字列リテラルを EUC-JP に変換してビルドされる（ソースは UTF-8。
   Windows 版は SJIS）。
+- 内部の文字コードを UTF-8 にする移行中（#6140）は、日本語版に `--enable-utf8-internal` を足すと内部の文字コードが
+  UTF-8 になる（`UTF8` が定義され、`EUC` は定義されない）。CI もこの構成でビルドとテストを行うので、文字コードに
+  関わるコード（`#ifdef EUC`・`#ifdef SJIS`、マルチバイト文字の処理、テストの期待するバイト列）を変えたときは
+  この構成でも確かめる。移行を終えたら撤去する。
 
 ccache を使うと日英の切り替えが速くなる。`CXX` は configure 時に `src/Makefile` へ焼き込まれるため、
 **`make` ではなく `configure` に渡す**（configure を回し直すたびに必要）。
