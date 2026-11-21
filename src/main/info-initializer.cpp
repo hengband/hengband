@@ -103,10 +103,10 @@ void init_json(std::string_view filename, std::string_view keyname, DefinitionHa
     }
 
     if (validate_root) {
-        // ルートの検証で出した診断 (版以外の項目の誤りなど) も、終了のメッセージに添える
+        // 何が誤っているか (版、版以外のルートの項目) は、ルートの検証が診断として出す
         ScopedMessageCapture diagnostics;
         if (!validate_root(json_object)) {
-            quit(format_definition_load_error(diagnostics.messages(), fmt::format(_("{}: 定義形式のversionが不正です", "{}: invalid definition version"), filename)));
+            quit(format_definition_load_error(diagnostics.messages(), fmt::format(_("{}: ルートの定義が不正です", "{}: invalid root definition"), filename)));
         }
     }
 
@@ -311,7 +311,13 @@ void init_spell_info()
         return SpellReader(spell_data, spell_info_list, session).read();
     };
     // 基準値 (習得レベル・消費MP・難易度・初回経験値倍率) を持たない旧形式は読み込まない。
-    const auto validate_root = [](const nlohmann::json &root) { return info_validate_version(root, 2); };
+    const auto validate_root = [](const nlohmann::json &root) -> tl::expected<void, ParseErrorType> {
+        if (const auto result = info_validate_version(root, 2); !result) {
+            msg_print(_("定義形式のversionが不正です。", "Invalid definition version."));
+            return result;
+        }
+        return {};
+    };
     init_json("SpellDefinitions.jsonc", "realms", DefinitionHashDataType::SPELLS, spell_info_list, parser, nullptr, true, validate_root);
 }
 

@@ -200,6 +200,7 @@ TEST_CASE("EgoReader rejects invalid percentages and preserves published records
 
 TEST_CASE("EgoReader validates the percent document version")
 {
+    const test::ScopedReaderState reader_state;
     auto session = EgoReader::create_session();
     const nlohmann::json valid{ { "version", 2 } };
     CHECK(EgoReader::validate_root(valid).has_value());
