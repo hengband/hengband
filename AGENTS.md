@@ -6,7 +6,7 @@
 
 ## プロジェクト概要
 
-変愚蛮怒 (Hengband) は Moria/Angband 系ローグライクゲームの C++20 バリアント。Zangband から派生し、100 階層のダンジョンを探索してラストボスを撃破することが目標。
+変愚蛮怒 (Hengband) は Moria/Angband 系ローグライクゲームの C++23 バリアント。Zangband から派生し、100 階層のダンジョンを探索してラストボスを撃破することが目標。
 
 本家のリポジトリは <https://github.com/hengband/hengband> で、開発ブランチは `develop`。
 フォークで作業する場合、作業ブランチはフォークの `develop`（遅れていることがある）ではなく
@@ -22,9 +22,20 @@ CI は両方でビルドとテストを行う。片方の環境でしか作業�
 
 依存パッケージは CI の `.github/workflows/build-with-autotools.yml` を参照（macOS の環境変数の設定もここにある）。
 Ubuntu/Debian の最小構成は次のとおり（X11 版には `libx11-dev` など、TrueType フォントを使うには `libxft-dev` も要る）。
+ビルドには GCC 16 以降のバージョンが必要である。
 
+Ubuntu 26.04用 (推奨)：
 ```bash
 sudo apt-get install build-essential autoconf automake pkg-config libncurses-dev libcurl4-openssl-dev nkf
+```
+
+Ubuntu 24.04用 (非推奨だが禁止ではない)：
+```bash
+sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+sudo apt-get update
+sudo apt-get install build-essential autoconf automake pkg-config libncurses-dev libcurl4-openssl-dev nkf gcc-16 g++-16
+sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-16 60
+sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-16 60
 ```
 
 ビルド手順:
@@ -132,11 +143,14 @@ MSVC の Debug 構成（`/ZI`）では、失敗した行（`__LINE__`）がず�
 - ranges のアルゴリズムやビューは、標準ライブラリのもの（`std::ranges::lower_bound`、`std::views` など）が
   環境によって使えないことがあるため、同梱の range-v3（`#include <range/v3/algorithm.hpp>`、
   `ranges::lower_bound` など）を使う。`std::ranges::forward_range` などのコンセプトや、
-  `std::map::contains` のような C++20 の機能は使ってよい。
+  `std::map::contains` のような C++20 以降の機能は使ってよい。
+- `std::optional` と `std::expected` を使ってはならない。代わりに `tl::optional` と `tl::expected` を使うこと。
+  なお `tl::expected::error_or()` を独自に追加しているので、必要に応じて使うこと。
 - **1 つの式の中で乱数を 2 回以上引かない。** 関数・コンストラクタの引数の評価順や、多くの二項演算子の
   両辺の評価順は規定されておらず（GCC は右から、clang は左から評価する）、コンパイラによってゲームの進行が
   食い違う。`Pos2D(randint0(h), randint0(w))` は一時変数に分けるか、左から順に評価される波括弧の初期化
   `Pos2D{ randint0(h), randint0(w) }` にする。CI の `check-rng-evaluation-order.py` が検出する。
+- C言語由来の `fprintf()` , `printf()` , `snprintf()` を使ってはならない。代わりに `fmt` ライブラリを使うこと。
 - コード内のコメントは日本語で書く。
 
 ### MSVC だけで失敗する警告
