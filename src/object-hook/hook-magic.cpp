@@ -80,8 +80,7 @@ bool item_tester_learn_spell(PlayerType *player_ptr, const ItemEntity *o_ptr)
         return false;
     }
 
-    // 習得できる巻数より後ろの魔法書は学べない (sval は 0 始まりの巻の番号)
-    if (*o_ptr->bi_key.sval() >= PlayerRealm::get_max_book(book_realm)) {
+    if (!PlayerRealm::can_use_book(book_realm, *o_ptr->bi_key.sval())) {
         return false;
     }
 

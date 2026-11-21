@@ -119,8 +119,7 @@ void display_koff(PlayerType *player_ptr)
         }
     }
 
-    // 習得できる巻数より後ろの魔法書は一覧を出さない (sval は 0 始まりの巻の番号)
-    if (PlayerRealm::is_magic(use_realm) && (sval >= PlayerRealm::get_max_book(use_realm))) {
+    if (!PlayerRealm::can_use_book(use_realm, sval)) {
         return;
     }
 

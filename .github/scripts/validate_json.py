@@ -1241,6 +1241,45 @@ def load_class_ids(repository_root: Path) -> dict[str, int]:
     return {token: enum_ids[name] for token, name in tokens}
 
 
+# 魔法の 10 領域 (ClassMagicDefinitions に書く領域。歌・武芸・呪術の技能領域は書かない)
+MAGIC_REALM_TOKENS = ("LIFE", "SORCERY", "NATURE", "CHAOS", "DEATH", "TRUMP", "ARCANE", "CRAFT", "DEMON", "CRUSADE")
+
+
+def load_realm_choices(repository_root: Path) -> tuple[dict[str, tuple[set[str], set[str]]], set[str]]:
+    """職業ごとの第一・第二領域の選択肢と、全領域を使う職業を C++ のソースから読む (MagicReader::check_realm_choices と同じ表)。"""
+    class_names = {name: token for token, name in re.findall(
+        r'\{\s*"([A-Z][A-Z0-9_]*)"\s*,\s*PlayerClassType::([A-Z][A-Z0-9_]*)\s*\}',
+        (repository_root / "src/definitions-reader/magic-tokens-table.cpp").read_text(encoding="utf-8"))}
+    realm_names = {name: token for token, name in re.findall(
+        r'\{\s*"([A-Z][A-Z0-9_]*)"\s*,\s*RealmType::([A-Z][A-Z0-9_]*)\s*\}',
+        (repository_root / "src/system/spell-info-list.h").read_text(encoding="utf-8"))}
+    realm_path = repository_root / "src/player/player-realm.cpp"
+    realm_source = strip_cpp_comments(realm_path.read_text(encoding="utf-8"))
+    choices = {}
+    for position, table in enumerate(("realm1_choices", "realm2_choices")):
+        block = re.search(rf"std::map<PlayerClassType,\s*RealmChoices>\s+{table}\s*=\s*\{{(.*?)\n\}};", realm_source, re.DOTALL)
+        if block is None:
+            raise ValueError(f"{table} is not found in {realm_path}")
+        for class_name, realms in re.findall(r"\{\s*PlayerClassType::(\w+)\s*,\s*\{([^}]*)\}\s*\}", block.group(1)):
+            if class_name not in class_names:
+                raise ValueError(f"Unknown class {class_name} in {table} of {realm_path}")
+            realm_tokens = set()
+            for realm_name in re.findall(r"RealmType::(\w+)", realms):
+                if realm_name not in realm_names:
+                    raise ValueError(f"Unknown realm {realm_name} in {table} of {realm_path}")
+                realm_tokens.add(realm_names[realm_name])
+            choices.setdefault(class_names[class_name], (set(), set()))[position].update(realm_tokens)
+    class_path = repository_root / "src/player-base/player-class.cpp"
+    every_magic = re.search(r"bool PlayerClass::is_every_magic\(\) const\s*\{(.*?)\n\}",
+                            strip_cpp_comments(class_path.read_text(encoding="utf-8")), re.DOTALL)
+    if every_magic is None:
+        raise ValueError(f"PlayerClass::is_every_magic is not found in {class_path}")
+    every_magic_classes = {class_names[name] for name in re.findall(r"PlayerClassType::(\w+)", every_magic.group(1))}
+    if not every_magic_classes:
+        raise ValueError(f"No class in PlayerClass::is_every_magic of {class_path}")
+    return choices, every_magic_classes
+
+
 def load_spell_definitions(schema_path: Path, data_path: Path, registry: Registry) -> dict:
     """Use adjacent candidate definitions, or the schema repository's bundled data."""
     return load_validated_companion(schema_path, data_path, registry,
@@ -1281,13 +1320,46 @@ def collect_spell_books(spells: dict) -> dict[tuple[str, str], int]:
     return books
 
 
+MAX_CLASS_MAGIC_MANA_COST = 2047
+PY_MAX_LEVEL = 50
+
+
+def round_half_away_from_zero(numerator: int, denominator: int) -> int:
+    """符号つきの割り算を 0 から遠い側へ四捨五入する (magic-aptitude.cpp と同じ)。"""
+    quotient = (abs(numerator) * 2 + denominator) // (denominator * 2)
+    return quotient if numerator >= 0 else -quotient
+
+
+def derive_magic_by_aptitude(base: tuple[int, ...], steps: dict, aptitude: int) -> tuple[int, ...] | None:
+    """基準値 (習得レベル・消費MP・難易度・初回経験値倍率) と段階から職業別の値を求める。範囲外なら None (MagicReader の読み込みエラー)。"""
+    learn_level, mana_cost, difficulty, exp_rate = base
+    mana_percent = 100 - steps["mana_cost_percent"] * aptitude
+    if mana_percent < 1:
+        return None
+    derived_mana = max(1, (mana_cost * mana_percent + 50) // 100)
+    if derived_mana > MAX_CLASS_MAGIC_MANA_COST:
+        return None
+    move = round_half_away_from_zero(learn_level * (PY_MAX_LEVEL - learn_level) * steps["learn_level_percent"] * aptitude, PY_MAX_LEVEL * 100)
+    derived_level = min(PY_MAX_LEVEL, max(1, learn_level - move))
+    derived_difficulty = min(100, max(0, difficulty - steps["difficulty"] * aptitude))
+    return derived_level, derived_mana, derived_difficulty, exp_rate
+
+
 def validate_class_magic_semantics(data: dict, schema_path: Path, data_path: Path, registry: Registry) -> None:
-    """Check MagicReader's strict integers, class order and realm spell references."""
+    """Check MagicReader's strict integers, class order, realm spell references and derived values."""
+    # info_validate_version は 2.0 を整数として受け付けない。
+    require_integer(data["version"], ["version"])
+    steps = data["aptitude_steps"]
+    for field, value in steps.items():
+        require_integer(value, ["aptitude_steps", field])
     class_ids = load_class_ids(schema_path.resolve().parent.parent)
+    realm_choices, every_magic_classes = load_realm_choices(schema_path.resolve().parent.parent)
     spells = load_spell_definitions(schema_path, data_path, registry)
     spell_tags = collect_spell_tags(spells)
-    spell_base_values = collect_spell_base_values(spells)
     spell_books = collect_spell_books(spells)
+    # 呪文タグが空の魔法も値を求めるので、(領域, 呪文ID) で基準値を引く
+    spell_entries = [(realm["name"], spell["spell_id"], spell["spell_tag"], tuple(spell[field] for field in SPELL_BASE_FIELDS))
+                     for realm in spells["realms"] for book in realm["books"] for spell in book["spells"]]
     previous_id = -1
     for class_index, record in enumerate(data["classes"]):
         path = ["classes", class_index]
@@ -1303,42 +1375,69 @@ def validate_class_magic_semantics(data: dict, schema_path: Path, data_path: Pat
         # 魔法書を使う職業は MP と覚えられる魔法の数を求めるのに使うので省略できない (魔法を使わない職業は省略する)
         if record["spell_type"] != "NONE" and "first_spell_level" not in record:
             raise ValidationError("first_spell_level is required for classes with spellbooks", path=path)
+        # 職業が選べる魔法領域 (全領域を使う職業は 10 領域すべて) を過不足なく書く
+        first_choices, second_choices = realm_choices.get(record["name"], (set(), set()))
+        if record["name"] in every_magic_classes:
+            choosable = set(MAGIC_REALM_TOKENS)
+        else:
+            choosable = (first_choices | second_choices) & set(MAGIC_REALM_TOKENS)
+        realm_names = set()
         for realm_index, realm in enumerate(record["realms"]):
             realm_path = path + ["realms", realm_index]
+            if realm["name"] in realm_names:
+                raise ValidationError("realm is listed twice in the class", path=realm_path + ["name"])
+            realm_names.add(realm["name"])
+            if realm["name"] not in choosable:
+                raise ValidationError(f"realm {realm['name']} cannot be chosen by {record['name']}", path=realm_path + ["name"])
+            if "aptitude_as_second" in realm and not (realm["name"] in first_choices and realm["name"] in second_choices):
+                raise ValidationError(f"aptitude_as_second is allowed only for realms that can be both the first and the second realm",
+                                      path=realm_path + ["aptitude_as_second"])
             max_book = realm.get("max_book", MAX_BOOKS_IN_REALM)
             if "max_book" in realm:
                 require_integer(max_book, realm_path + ["max_book"])
                 if max_book == MAX_BOOKS_IN_REALM:
                     raise ValidationError(f"max_book {MAX_BOOKS_IN_REALM} is the default and must be omitted", path=realm_path + ["max_book"])
+            aptitude = realm.get("aptitude", 0)
+            if "aptitude" in realm:
+                require_integer(aptitude, realm_path + ["aptitude"])
+            aptitude_as_second = realm.get("aptitude_as_second", aptitude)
+            if "aptitude_as_second" in realm:
+                require_integer(aptitude_as_second, realm_path + ["aptitude_as_second"])
+                if aptitude_as_second == aptitude:
+                    raise ValidationError("aptitude_as_second is the same as aptitude and must be omitted", path=realm_path + ["aptitude_as_second"])
             listed = set()
 
             def check_listed_spell(tag: str, tag_path: list) -> None:
-                """spells_info と unlearnable に書いた魔法が、この領域の習得できる巻に 1 度だけあることを確かめる"""
+                """unlearnable と overrides に書いた魔法が、この領域の習得できる巻に 1 度だけあることを確かめる"""
                 if tag not in spell_tags.get(realm["name"], set()):
                     raise ValidationError("unknown spell tag in this realm", path=tag_path)
                 if tag in listed:
-                    raise ValidationError("spell is listed twice in spells_info or unlearnable", path=tag_path)
+                    raise ValidationError("spell is listed twice in unlearnable or overrides", path=tag_path)
                 if spell_books[realm["name"], tag] > max_book:
                     raise ValidationError(f"spells after book {max_book} are unlearnable and must not be listed", path=tag_path)
                 listed.add(tag)
 
-            for spell_index, spell in enumerate(realm["spells_info"]):
-                spell_path = realm_path + ["spells_info", spell_index]
-                check_listed_spell(spell["spell_tag"], spell_path + ["spell_tag"])
-                for field in ("learn_level", "mana_cost", "difficulty", "first_cast_exp_rate"):
-                    require_integer(spell[field], spell_path + [field])
-                if record["name"] == SPELL_BASE_CLASS:
-                    # #5905 の移行の間だけの検査。職業ごとの値を基準値から導く形にしたら消す。
-                    base_values = spell_base_values[realm["name"], spell["spell_tag"]]
-                    for field, base_value in zip(SPELL_BASE_FIELDS, base_values):
-                        if spell[field] != base_value:
-                            raise ValidationError(f"{SPELL_BASE_CLASS} must have the base value {base_value} of SpellDefinitions.jsonc",
-                                                  path=spell_path + [field])
+            unlearnable = set(realm.get("unlearnable", []))
             for tag_index, tag in enumerate(realm.get("unlearnable", [])):
                 check_listed_spell(tag, realm_path + ["unlearnable", tag_index])
-            for (realm_name, tag), book in spell_books.items():
-                if realm_name == realm["name"] and tag and book <= max_book and tag not in listed:
-                    raise ValidationError(f"spell {tag} must be listed in spells_info or unlearnable", path=realm_path)
+            overrides = {}
+            for override_index, override in enumerate(realm.get("overrides", [])):
+                override_path = realm_path + ["overrides", override_index]
+                check_listed_spell(override["spell_tag"], override_path + ["spell_tag"])
+                require_integer(override["aptitude"], override_path + ["aptitude"])
+                if override["aptitude"] == aptitude and override["aptitude"] == aptitude_as_second:
+                    raise ValidationError("aptitude of the spell is the same as the realm and must be omitted", path=override_path + ["aptitude"])
+                overrides[override["spell_tag"]] = override["aptitude"]
+            # MagicReader と同じ式で職業別の値を求め、範囲外になる段階を読み込みの前に止める
+            for realm_name, spell_id, tag, base_values in spell_entries:
+                if realm_name != realm["name"] or spell_id // SPELLS_IN_BOOK + 1 > max_book or tag in unlearnable:
+                    continue
+                for spell_aptitude in {overrides.get(tag, aptitude), overrides.get(tag, aptitude_as_second)}:
+                    if derive_magic_by_aptitude(base_values, steps, spell_aptitude) is None:
+                        raise ValidationError(f"derived values of spell {spell_id} ({tag}) are out of range at aptitude {spell_aptitude}", path=realm_path)
+        missing = sorted(choosable - realm_names, key=MAGIC_REALM_TOKENS.index)
+        if missing:
+            raise ValidationError(f"realm {missing[0]} that {record['name']} can choose must be listed", path=path + ["realms"])
 
 
 def validate_class_skill_semantics(data: dict) -> None:
@@ -1365,15 +1464,6 @@ def validate_class_skill_semantics(data: dict) -> None:
 
 
 SPELL_BASE_FIELDS = ("learn_level", "mana_cost", "difficulty", "first_cast_exp_rate")
-# 魔法領域の基準値はこの職業の値と同じにしてある。#5905 の移行の間だけ値が二重にあるので、食い違いをここで止める。
-# 歌・武芸・呪術は基準値そのものをゲームが使うので、照合はしない。
-SPELL_BASE_CLASS = "MAGE"
-
-
-def collect_spell_base_values(spells: dict) -> dict[tuple[str, str], tuple[int, ...]]:
-    """(領域, 呪文タグ) から基準値の 4 つ組を引く表を作る。"""
-    return {(realm["name"], spell["spell_tag"]): tuple(spell[field] for field in SPELL_BASE_FIELDS)
-            for realm in spells["realms"] for book in realm["books"] for spell in book["spells"]}
 
 
 def validate_spell_semantics(data: dict) -> None:
