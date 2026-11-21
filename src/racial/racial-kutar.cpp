@@ -4,6 +4,7 @@
 #include "main/sound-of-music.h"
 #include "system/deferred-update-requests.h"
 #include "system/player-type-definition.h"
+#include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 
 /*!
@@ -22,24 +23,25 @@ bool set_leveling(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
         return false;
     }
 
+    const auto effects = player_ptr->effects();
     if (v) {
-        if (player_ptr->tsubureru && !do_dec) {
-            if (player_ptr->tsubureru > v) {
+        if (effects->expand().is_active() && !do_dec) {
+            if (effects->expand().current() > v) {
                 return false;
             }
-        } else if (!player_ptr->tsubureru) {
+        } else if (!effects->expand().is_active()) {
             msg_print(_("横に伸びた。", "Your body expands horizontally."));
             notice = true;
         }
     } else {
-        if (player_ptr->tsubureru) {
+        if (effects->expand().is_active()) {
             msg_print(_("もう横に伸びていない。", "Your body returns to normal."));
             sound(SoundKind::BUFF_EXPIRE);
             notice = true;
         }
     }
 
-    player_ptr->tsubureru = v;
+    effects->expand().set(v);
     auto &dur = DeferredUpdateRequests::get_instance();
     dur.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     if (!notice) {
