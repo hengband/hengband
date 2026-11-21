@@ -39,7 +39,7 @@ bool player_magic::has_distinct_second(RealmType realm) const
     const auto &first = this->info[enum2i(realm)];
     const auto &second = this->info_second[enum2i(realm)];
     for (auto i = 0; i < 32; i++) {
-        if ((first[i].slevel != second[i].slevel) || (first[i].smana != second[i].smana) || (first[i].sfail != second[i].sfail) || (first[i].sexp != second[i].sexp)) {
+        if (first[i] != second[i]) {
             return true;
         }
     }

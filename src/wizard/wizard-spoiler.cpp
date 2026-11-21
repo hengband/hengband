@@ -225,7 +225,7 @@ static SpoilerOutputResultType spoil_player_spell()
                 const auto &spell = PlayerRealm::get_spell_info(realm, i, position, pclass);
                 const auto &spell_name = PlayerRealm::get_spell_name(realm, i);
                 // 習得できない魔法は習得レベルを "--" と書く
-                const auto level = spell.slevel ? fmt::format("{:2}", *spell.slevel) : std::string("--");
+                const auto level = spell.is_learnable() ? fmt::format("{:2}", spell.get_learn_level()) : std::string("--");
                 spoil_out(fmt::format("{:<24} {} {:4} {:3} {:4}\n", spell_name, level, spell.smana, spell.sfail, spell.sexp));
             }
             spoil_out("\n");

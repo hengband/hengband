@@ -48,7 +48,7 @@ nlohmann::json make_spell(int id, const std::string &tag)
 
 void check_same_base(const SpellInfo &actual, const SpellInfo &expected)
 {
-    CHECK(actual.base.slevel == expected.base.slevel);
+    CHECK(actual.base == expected.base);
     CHECK(actual.base.smana == expected.base.smana);
     CHECK(actual.base.sfail == expected.base.sfail);
     CHECK(actual.base.sexp == expected.base.sexp);
@@ -394,12 +394,12 @@ TEST_CASE("SpellReader stores the base values of each spell")
     REQUIRE(SpellReader(data, spells, session).read().has_value());
 
     const auto &base_first = spells.get_spell_info(RealmType::LIFE, 0).base;
-    CHECK(base_first.slevel == 1);
+    CHECK(base_first.get_learn_level() == 1);
     CHECK(base_first.smana == 2);
     CHECK(base_first.sfail == 3);
     CHECK(base_first.sexp == 4);
     const auto &base_second = spells.get_spell_info(RealmType::LIFE, 8).base;
-    CHECK(base_second.slevel == 45);
+    CHECK(base_second.get_learn_level() == 45);
     CHECK(base_second.smana == 90);
     CHECK(base_second.sfail == 85);
     CHECK(base_second.sexp == 250);

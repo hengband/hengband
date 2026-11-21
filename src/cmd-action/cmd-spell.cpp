@@ -1139,7 +1139,7 @@ bool do_cmd_cast(PlayerType *player_ptr)
             /* The spell worked */
             realm_status.set_worked(spell_id);
 
-            gain_exp(player_ptr, e * *spell.slevel);
+            gain_exp(player_ptr, e * spell.get_learn_level());
 
             switch (use_realm) {
             case RealmType::LIFE:
