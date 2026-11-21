@@ -109,3 +109,23 @@ TEST_CASE("PlayerRealm reads technic spells from the base values copied to the c
         CHECK(missing.smana == 0);
     }
 }
+
+TEST_CASE("PlayerRealm tells whether a book is within max_book")
+{
+    const auto restore = test::scoped_restore(class_magics_info, mp_ptr);
+    class_magics_info.assign(1, {});
+    auto &magic = class_magics_info[0];
+    magic.max_book[enum2i(RealmType::LIFE)] = 2;
+    mp_ptr = &magic;
+
+    // sval は 0 始まりの巻の番号なので、習得できる巻数 2 なら 2 冊目 (sval 1) までを使える
+    CHECK(PlayerRealm::can_use_book(RealmType::LIFE, 0));
+    CHECK(PlayerRealm::can_use_book(RealmType::LIFE, 1));
+    CHECK_FALSE(PlayerRealm::can_use_book(RealmType::LIFE, 2));
+    CHECK_FALSE(PlayerRealm::can_use_book(RealmType::LIFE, 3));
+    CHECK(PlayerRealm::can_use_book(RealmType::DEATH, 3));
+
+    // 技能領域と、領域なしは巻数で制限しない
+    CHECK(PlayerRealm::can_use_book(RealmType::MUSIC, 3));
+    CHECK(PlayerRealm::can_use_book(RealmType::NONE, 3));
+}

@@ -397,6 +397,9 @@
     <ClCompile Include="..\..\src\test\spell-realm\test-spells-hex.cpp">
       <Filter>spell-realm</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\test\spell\test-magic-aptitude.cpp">
+      <Filter>spell</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\test\spell\test-spell-info.cpp">
       <Filter>spell</Filter>
     </ClCompile>

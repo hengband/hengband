@@ -19,10 +19,8 @@ class DefinitionIntegerValidationTest(unittest.TestCase):
             for name in ("ClassMagicDefinitions", "ClassSkillDefinitions", "SpellDefinitions")
         }
         magic = copy.deepcopy(cls.documents["ClassMagicDefinitions"])
-        # 値を自由に変えられる職業を見本にする (MAGE の値は SpellDefinitions の基準値と同じでなければならない)。
+        # 生命領域を第一・第二の両方に選べる職業を見本にする (選べる領域はすべて書く決まりなので、領域は減らさない)。
         magic["classes"] = [record for record in magic["classes"] if record["name"] == "PRIEST"]
-        magic["classes"][0]["realms"] = magic["classes"][0]["realms"][:1]
-        magic["classes"][0]["realms"][0]["spells_info"] = magic["classes"][0]["realms"][0]["spells_info"][:1]
         spell = copy.deepcopy(cls.documents["SpellDefinitions"])
         spell["realms"] = spell["realms"][:1]
         spell["realms"][0]["books"] = spell["realms"][0]["books"][:1]
@@ -32,9 +30,12 @@ class DefinitionIntegerValidationTest(unittest.TestCase):
             "ClassSkillDefinitions": cls.documents["ClassSkillDefinitions"],
             "SpellDefinitions": spell,
         }
-        # 習得できる巻の魔法はすべて書く決まりなので、見本の職業魔法は見本の魔法の定義と組で検査する
-        assert magic["classes"][0]["realms"][0]["name"] == spell["realms"][0]["name"]
-        assert magic["classes"][0]["realms"][0]["spells_info"][0]["spell_tag"] == spell["realms"][0]["books"][0]["spells"][0]["spell_tag"]
+        # 見本の職業魔法は見本の魔法の定義と組で検査する。先頭の領域の段階を (2, 1) にし、見本の魔法に段階の上書きを 1 つ書いておく
+        realm = magic["classes"][0]["realms"][0]
+        assert realm["name"] == spell["realms"][0]["name"]
+        realm["aptitude"] = 2
+        realm["aptitude_as_second"] = 1
+        realm["overrides"] = [{"spell_tag": spell["realms"][0]["books"][0]["spells"][0]["spell_tag"], "aptitude": 0}]
 
     def validate(self, name, document, spell_definitions=None):
         schema_path = self.schema_map[name]
@@ -63,13 +64,14 @@ class DefinitionIntegerValidationTest(unittest.TestCase):
 
     def test_magic_integer_fields(self):
         class_path = ["classes", 0]
-        spell_path = class_path + ["realms", 0, "spells_info", 0]
+        realm_path = class_path + ["realms", 0]
         paths = [(class_path + [field]) for field in ("first_spell_level", "armour_weight_limit")]
-        paths += [(spell_path + [field]) for field in ("learn_level", "mana_cost", "difficulty", "first_cast_exp_rate")]
+        paths += [(realm_path + [field]) for field in ("aptitude", "aptitude_as_second")]
+        paths += [realm_path + ["overrides", 0, "aptitude"]]
+        paths += [["aptitude_steps", field] for field in ("learn_level_percent", "mana_cost_percent", "difficulty")]
         for path in paths:
             with self.subTest(path=path):
                 self.check_value("ClassMagicDefinitions", path, 1.0, False, "integer JSON value")
-
     def test_skill_integer_fields(self):
         paths = [["classes", 0, "id"]]
         for weapon in ("BOW", "DIGGING", "HAFTED", "POLEARM", "SWORD"):
@@ -109,32 +111,11 @@ class DefinitionIntegerValidationTest(unittest.TestCase):
                 ok, message = self.validate("SpellDefinitions", document)
                 self.assertFalse(ok, message)
 
-    def test_mage_values_must_match_spell_base_values(self):
-        fields = ("learn_level", "mana_cost", "difficulty", "first_cast_exp_rate")
-        mage_index = next(index for index, record in enumerate(self.documents["ClassMagicDefinitions"]["classes"])
-                          if record["name"] == "MAGE")
-        for field in fields:
-            with self.subTest(field=field):
-                document = copy.deepcopy(self.documents["ClassMagicDefinitions"])
-                spell = document["classes"][mage_index]["realms"][0]["spells_info"][0]
-                spell[field] += 1
-                ok, message = self.validate("ClassMagicDefinitions", document)
-                self.assertFalse(ok, message)
-                self.assertIn("MAGE must have the base value", message)
-                self.assertIn(f"Location: ['classes', {mage_index}, 'realms', 0, 'spells_info', 0, '{field}']", message)
-
-    def test_spell_base_values_must_match_mage_values(self):
-        # 基準値の側を変えても、MAGE の値との食い違いとして止まる。
+    def test_spell_base_values_may_be_changed(self):
+        # 職業別の値は基準値から求めるので、基準値を変えても職業魔法の定義はそのまま通る。
         spells = copy.deepcopy(self.documents["SpellDefinitions"])
         spells["realms"][0]["books"][0]["spells"][0]["mana_cost"] += 1
         ok, message = self.validate("ClassMagicDefinitions", self.documents["ClassMagicDefinitions"], spells)
-        self.assertFalse(ok, message)
-        self.assertIn("MAGE must have the base value", message)
-
-    def test_other_class_values_may_differ_from_spell_base_values(self):
-        document = copy.deepcopy(self.samples["ClassMagicDefinitions"])
-        document["classes"][0]["realms"][0]["spells_info"][0]["mana_cost"] += 1
-        ok, message = self.validate("ClassMagicDefinitions", document, self.samples["SpellDefinitions"])
         self.assertTrue(ok, message)
 
     def test_technic_base_values_may_be_changed(self):
@@ -159,6 +140,11 @@ class DefinitionIntegerValidationTest(unittest.TestCase):
                 self.assertEqual(ok, valid, message)
                 if not valid:
                     self.assertIn("Location: ['version']", message)
+
+    def test_magic_version_must_be_integer_two(self):
+        for value, valid in ((2, True), (2.0, False), (1, False), (1.0, False), (3, False), ("2", False)):
+            with self.subTest(value=value):
+                self.check_value("ClassMagicDefinitions", ["version"], value, valid)
 
     def test_other_noninteger_values_still_fail(self):
         fields = (
@@ -210,9 +196,14 @@ class DefinitionIntegerValidationTest(unittest.TestCase):
             self.assertEqual(load_class_ids(root), {"MAGE": 5, "FIGHTER": 4})
 
     def test_magic_unknown_spell_tag(self):
-        self.check_value("ClassMagicDefinitions", ["classes", 0, "realms", 0, "spells_info", 0, "spell_tag"],
-                         "NO_SUCH_TAG", False, "unknown spell tag in this realm")
-
+        for field, path in (("overrides", ["overrides", 0, "spell_tag"]), ("unlearnable", ["unlearnable", 0])):
+            with self.subTest(field=field):
+                document = copy.deepcopy(self.samples["ClassMagicDefinitions"])
+                document["classes"][0]["realms"][0][field] = [{"spell_tag": "NO_SUCH_TAG", "aptitude": 0}] if field == "overrides" else ["NO_SUCH_TAG"]
+                ok, message = self.validate("ClassMagicDefinitions", document, self.samples["SpellDefinitions"])
+                self.assertFalse(ok, message)
+                self.assertIn("unknown spell tag in this realm", message)
+                self.assertIn(f"Location: {['classes', 0, 'realms', 0] + path}", message)
     def test_magic_tag_from_another_realm_is_rejected(self):
         magic_realm = self.samples["ClassMagicDefinitions"]["classes"][0]["realms"][0]
         spells = self.documents["SpellDefinitions"]["realms"]
@@ -220,7 +211,7 @@ class DefinitionIntegerValidationTest(unittest.TestCase):
                     for book in realm["books"] for spell in book["spells"]}
         foreign_tag = next(spell["spell_tag"] for realm in spells if realm["name"] != magic_realm["name"]
                            for book in realm["books"] for spell in book["spells"] if spell["spell_tag"] not in own_tags)
-        self.check_value("ClassMagicDefinitions", ["classes", 0, "realms", 0, "spells_info", 0, "spell_tag"],
+        self.check_value("ClassMagicDefinitions", ["classes", 0, "realms", 0, "overrides", 0, "spell_tag"],
                          foreign_tag, False, "unknown spell tag in this realm")
 
     def test_magic_uses_adjacent_candidate_spell_definitions(self):
@@ -229,7 +220,7 @@ class DefinitionIntegerValidationTest(unittest.TestCase):
         spells["realms"][0]["name"] = magic["classes"][0]["realms"][0]["name"]
         spell = spells["realms"][0]["books"][0]["spells"][0]
         spell["spell_tag"] = "CANDIDATE_ONLY_TAG"
-        magic["classes"][0]["realms"][0]["spells_info"][0]["spell_tag"] = spell["spell_tag"]
+        magic["classes"][0]["realms"][0]["overrides"][0]["spell_tag"] = spell["spell_tag"]
         ok, message = self.validate("ClassMagicDefinitions", magic, spells)
         self.assertTrue(ok, message)
         spell["spell_tag"] = "REPLACED_TAG"
@@ -260,16 +251,16 @@ class DefinitionIntegerValidationTest(unittest.TestCase):
         self.check_value("ClassMagicDefinitions", ["classes", 0, "realms", 0, "max_book"], 4, False, "must be omitted")
 
     def test_magic_spells_after_max_book_must_not_be_listed(self):
-        # 赤魔道師の仙術は 2 冊目まで。3 冊目の先頭 (呪文 ID 16) は spells_info にも unlearnable にも書けない
+        # 赤魔道師の仙術は 2 冊目まで。3 冊目の先頭 (呪文 ID 16) は overrides にも unlearnable にも書けない
         book3_tag = self.spell_tag("SORCERY", 16)
-        for field in ("spells_info", "unlearnable"):
+        for field in ("overrides", "unlearnable"):
             with self.subTest(field=field):
                 document = copy.deepcopy(self.documents["ClassMagicDefinitions"])
                 realm_path, realm = self.red_mage_realm(document, "SORCERY")
                 self.assertEqual(realm["max_book"], 2)
-                if field == "spells_info":
-                    realm["spells_info"].append({"spell_tag": book3_tag, "learn_level": 50, "mana_cost": 1, "difficulty": 0, "first_cast_exp_rate": 0})
-                    location = realm_path + ["spells_info", len(realm["spells_info"]) - 1, "spell_tag"]
+                if field == "overrides":
+                    realm["overrides"] = [{"spell_tag": book3_tag, "aptitude": 0}]
+                    location = realm_path + ["overrides", 0, "spell_tag"]
                 else:
                     realm["unlearnable"] = [book3_tag]
                     location = realm_path + ["unlearnable", 0]
@@ -277,19 +268,13 @@ class DefinitionIntegerValidationTest(unittest.TestCase):
                 self.assertFalse(ok, message)
                 self.assertIn("spells after book 2 are unlearnable and must not be listed", message)
                 self.assertIn(f"Location: {location}", message)
-
-    def test_magic_max_book_allows_learnable_spells_up_to_the_book(self):
+    def test_magic_max_book_needs_no_spell_list(self):
+        # 習得できる巻の魔法は書かなくても基準値から求めるので、巻数を変えるだけで通る
         document = copy.deepcopy(self.documents["ClassMagicDefinitions"])
         _, realm = self.red_mage_realm(document, "ARCANE")
-        # 秘術は 4 冊目まで書いてあるので、3 冊目までにするとはみ出す。4 冊目を消せば通る
         realm["max_book"] = 3
         ok, message = self.validate("ClassMagicDefinitions", document)
-        self.assertFalse(ok, message)
-        book4_tags = {self.spell_tag("ARCANE", spell_id) for spell_id in range(24, 32)}
-        realm["spells_info"] = [spell for spell in realm["spells_info"] if spell["spell_tag"] not in book4_tags]
-        ok, message = self.validate("ClassMagicDefinitions", document)
         self.assertTrue(ok, message)
-
     def rogue_sorcery(self, document):
         record_index = next(index for index, record in enumerate(document["classes"]) if record["name"] == "ROGUE")
         realm_index = next(index for index, realm in enumerate(document["classes"][record_index]["realms"]) if realm["name"] == "SORCERY")
@@ -298,12 +283,9 @@ class DefinitionIntegerValidationTest(unittest.TestCase):
     def test_magic_unlearnable_spells_are_listed_once(self):
         _, realm = self.rogue_sorcery(self.documents["ClassMagicDefinitions"])
         self.assertEqual(realm["unlearnable"], ["Globe_of_Invulnerability"])
-        learnable_tag = realm["spells_info"][0]["spell_tag"]
         cases = (
-            ("in both", ["Globe_of_Invulnerability", learnable_tag], ["unlearnable", 1], "spell is listed twice"),
             ("twice", ["Globe_of_Invulnerability", "Globe_of_Invulnerability"], ["unlearnable"], "non-unique elements"),
             ("unknown", ["Globe_of_Invulnerability", "Unknown_Spell"], ["unlearnable", 1], "unknown spell tag in this realm"),
-            ("not listed", [], [], "spell Globe_of_Invulnerability must be listed in spells_info or unlearnable"),
         )
         for name, unlearnable, location, reason in cases:
             with self.subTest(name=name):
@@ -315,15 +297,148 @@ class DefinitionIntegerValidationTest(unittest.TestCase):
                 self.assertIn(reason, message)
                 self.assertIn(f"Location: {realm_path + location}", message)
 
-    def test_magic_spells_info_spell_listed_twice(self):
+        # 習得できない魔法に段階の上書きは書けない
+        document = copy.deepcopy(self.documents["ClassMagicDefinitions"])
+        realm_path, realm = self.rogue_sorcery(document)
+        realm["overrides"] = [{"spell_tag": "Globe_of_Invulnerability", "aptitude": 0}]
+        ok, message = self.validate("ClassMagicDefinitions", document)
+        self.assertFalse(ok, message)
+        self.assertIn("spell is listed twice", message)
+        self.assertIn(f"Location: {realm_path + ['overrides', 0, 'spell_tag']}", message)
+
+        # 一覧を空にすると、その魔法も基準値から求めて習得できる
+        document = copy.deepcopy(self.documents["ClassMagicDefinitions"])
+        _, realm = self.rogue_sorcery(document)
+        del realm["unlearnable"]
+        ok, message = self.validate("ClassMagicDefinitions", document)
+        self.assertTrue(ok, message)
+    def test_magic_override_listed_twice(self):
         document = copy.deepcopy(self.samples["ClassMagicDefinitions"])
-        spells_info = document["classes"][0]["realms"][0]["spells_info"]
-        spells_info.append(copy.deepcopy(spells_info[0]))
+        overrides = document["classes"][0]["realms"][0]["overrides"]
+        overrides.append({"spell_tag": overrides[0]["spell_tag"], "aptitude": -1})
         ok, message = self.validate("ClassMagicDefinitions", document, self.samples["SpellDefinitions"])
         self.assertFalse(ok, message)
         self.assertIn("spell is listed twice", message)
-        self.assertIn(f"Location: ['classes', 0, 'realms', 0, 'spells_info', {len(spells_info) - 1}, 'spell_tag']", message)
+        self.assertIn("Location: ['classes', 0, 'realms', 0, 'overrides', 1, 'spell_tag']", message)
 
+    def test_magic_redundant_aptitudes_are_rejected(self):
+        realm_path = ["classes", 0, "realms", 0]
+        # 第二領域の段階が第一領域と同じなら書かない
+        self.check_value("ClassMagicDefinitions", realm_path + ["aptitude_as_second"], 2, False, "must be omitted")
+        # 上書きの段階が第一・第二の両方と同じなら書かない (どちらか一方と同じなら意味がある)
+        document = copy.deepcopy(self.samples["ClassMagicDefinitions"])
+        document["classes"][0]["realms"][0]["aptitude_as_second"] = 0
+        ok, message = self.validate("ClassMagicDefinitions", document, self.samples["SpellDefinitions"])
+        self.assertTrue(ok, message)
+        del document["classes"][0]["realms"][0]["aptitude_as_second"]
+        document["classes"][0]["realms"][0]["aptitude"] = 0
+        ok, message = self.validate("ClassMagicDefinitions", document, self.samples["SpellDefinitions"])
+        self.assertFalse(ok, message)
+        self.assertIn("same as the realm and must be omitted", message)
+        self.assertIn(f"Location: {realm_path + ['overrides', 0, 'aptitude']}", message)
+
+    def test_magic_realm_listed_twice(self):
+        document = copy.deepcopy(self.samples["ClassMagicDefinitions"])
+        realms = document["classes"][0]["realms"]
+        realms.append({"name": realms[0]["name"], "aptitude": -1})
+        ok, message = self.validate("ClassMagicDefinitions", document, self.samples["SpellDefinitions"])
+        self.assertFalse(ok, message)
+        self.assertIn("realm is listed twice", message)
+        self.assertIn(f"Location: {['classes', 0, 'realms', len(realms) - 1, 'name']}", message)
+
+    def test_magic_realms_must_match_the_class_choices(self):
+        cases = (
+            # プリーストから選べる領域を消す
+            ("PRIEST", lambda realms: realms.pop(0), "realm LIFE that PRIEST can choose must be listed", []),
+            # 混沌の戦士はカオスと悪魔だけを選べる
+            ("CHAOS_WARRIOR", lambda realms: realms.append({"name": "LIFE"}), "realm LIFE cannot be chosen by CHAOS_WARRIOR", [2, "name"]),
+            # 全領域を使う職業は 10 領域すべて
+            ("SORCERER", lambda realms: realms.pop(), "realm CRUSADE that SORCERER can choose must be listed", []),
+            # 魔法を使わない職業は書かない
+            ("WARRIOR", lambda realms: realms.append({"name": "LIFE"}), "realm LIFE cannot be chosen by WARRIOR", [0, "name"]),
+        )
+        for name, change, reason, location in cases:
+            with self.subTest(name=name):
+                document = copy.deepcopy(self.documents["ClassMagicDefinitions"])
+                class_index = next(index for index, record in enumerate(document["classes"]) if record["name"] == name)
+                change(document["classes"][class_index]["realms"])
+                ok, message = self.validate("ClassMagicDefinitions", document)
+                self.assertFalse(ok, message)
+                self.assertIn(reason, message)
+                self.assertIn(f"Location: {['classes', class_index, 'realms'] + location}", message)
+
+    def test_magic_aptitude_as_second_needs_both_positions(self):
+        # レンジャーの自然は第一領域だけ、プリーストの生命は第一・第二の両方に選べる
+        document = copy.deepcopy(self.documents["ClassMagicDefinitions"])
+        class_index = next(index for index, record in enumerate(document["classes"]) if record["name"] == "RANGER")
+        realms = document["classes"][class_index]["realms"]
+        realm_index = next(index for index, realm in enumerate(realms) if realm["name"] == "NATURE")
+        realms[realm_index]["aptitude_as_second"] = realms[realm_index].get("aptitude", 0) + 1
+        ok, message = self.validate("ClassMagicDefinitions", document)
+        self.assertFalse(ok, message)
+        self.assertIn("aptitude_as_second is allowed only for realms that can be both", message)
+        self.assertIn(f"Location: {['classes', class_index, 'realms', realm_index, 'aptitude_as_second']}", message)
+
+    def test_magic_derived_values_of_spells_with_empty_tags(self):
+        # 呪文タグが空の魔法も値を求める (段階 7 では消費MP の倍率が負になる)
+        spells = copy.deepcopy(self.samples["SpellDefinitions"])
+        spells["realms"][0]["books"][0]["spells"][0]["spell_tag"] = ""
+        document = copy.deepcopy(self.samples["ClassMagicDefinitions"])
+        realm = document["classes"][0]["realms"][0]
+        del realm["overrides"]
+        realm["aptitude"] = 7
+        ok, message = self.validate("ClassMagicDefinitions", document, spells)
+        self.assertFalse(ok, message)
+        self.assertIn("derived values of spell 0 () are out of range at aptitude 7", message)
+
+    def test_magic_aptitude_ranges(self):
+        # 消費MP を動かさない傾きで、段階の範囲 (-9〜9) だけを確かめる
+        for field in ("aptitude", "aptitude_as_second"):
+            for value, valid in ((-9, True), (9, True), (-10, False), (10, False)):
+                with self.subTest(field=field, value=value):
+                    document = copy.deepcopy(self.samples["ClassMagicDefinitions"])
+                    document["aptitude_steps"]["mana_cost_percent"] = 0
+                    realm = document["classes"][0]["realms"][0]
+                    realm[field] = value
+                    if realm["aptitude"] == realm["aptitude_as_second"]:
+                        realm["aptitude_as_second"] = 0 if value != 0 else 1
+                    ok, message = self.validate("ClassMagicDefinitions", document, self.samples["SpellDefinitions"])
+                    self.assertEqual(ok, valid, message)
+
+    def test_magic_aptitude_steps_ranges(self):
+        for field, maximum in (("learn_level_percent", 100), ("mana_cost_percent", 50), ("difficulty", 20)):
+            for value, valid in ((0, True), (maximum, True), (-1, False), (maximum + 1, False)):
+                with self.subTest(field=field, value=value):
+                    document = copy.deepcopy(self.samples["ClassMagicDefinitions"])
+                    document["aptitude_steps"][field] = value
+                    ok, message = self.validate("ClassMagicDefinitions", document, self.samples["SpellDefinitions"])
+                    self.assertEqual(ok, valid, message)
+        document = copy.deepcopy(self.samples["ClassMagicDefinitions"])
+        del document["aptitude_steps"]
+        ok, message = self.validate("ClassMagicDefinitions", document, self.samples["SpellDefinitions"])
+        self.assertFalse(ok, message)
+
+    def test_magic_derived_values_out_of_range(self):
+        # 段階 7 は消費MP の倍率が 100 - 15 × 7 = -5% になり、MagicReader は値を求められない
+        # (見本の魔法は上書きで段階 0 にしてあるので、上書きを外して領域の段階を効かせる)
+        for aptitude, valid in ((7, False), (6, True)):
+            with self.subTest(aptitude=aptitude):
+                document = copy.deepcopy(self.samples["ClassMagicDefinitions"])
+                realm = document["classes"][0]["realms"][0]
+                del realm["overrides"]
+                realm["aptitude"] = aptitude
+                ok, message = self.validate("ClassMagicDefinitions", document, self.samples["SpellDefinitions"])
+                self.assertEqual(ok, valid, message)
+                if not valid:
+                    self.assertIn("out of range at aptitude 7", message)
+        # 消費MP が上限 2047 を超える基準値と段階の組
+        spells = copy.deepcopy(self.samples["SpellDefinitions"])
+        spells["realms"][0]["books"][0]["spells"][0]["mana_cost"] = 2047
+        document = copy.deepcopy(self.samples["ClassMagicDefinitions"])
+        document["classes"][0]["realms"][0]["overrides"][0]["aptitude"] = -1
+        ok, message = self.validate("ClassMagicDefinitions", document, spells)
+        self.assertFalse(ok, message)
+        self.assertIn("out of range at aptitude -1", message)
     def spell_tag(self, realm_name, spell_id):
         realm = next(realm for realm in self.documents["SpellDefinitions"]["realms"] if realm["name"] == realm_name)
         return next(spell["spell_tag"] for book in realm["books"] for spell in book["spells"] if spell["spell_id"] == spell_id)
@@ -359,22 +474,12 @@ class DefinitionIntegerValidationTest(unittest.TestCase):
         fields = (
             ("ClassMagicDefinitions", ["classes", 0, "first_spell_level"], 50),
             ("ClassMagicDefinitions", ["classes", 0, "armour_weight_limit"], 2047),
-            ("ClassMagicDefinitions", ["classes", 0, "realms", 0, "spells_info", 0, "mana_cost"], 2047),
-            ("ClassMagicDefinitions", ["classes", 0, "realms", 0, "spells_info", 0, "difficulty"], 100),
-            ("ClassMagicDefinitions", ["classes", 0, "realms", 0, "spells_info", 0, "first_cast_exp_rate"], 2047),
             ("SpellDefinitions", ["realms", 0, "books", 0, "spells", 0, "spell_id"], 31),
         )
         for name, path, maximum in fields:
             for value, valid in ((0, True), (maximum, True), (-1, False), (maximum + 1, False)):
                 with self.subTest(name=name, path=path, value=value):
                     self.check_value(name, path, value, valid)
-
-    def test_magic_learn_level_boundaries(self):
-        # 習得できない魔法は unlearnable に書くので、習得レベルは 1〜50 だけ
-        path = ["classes", 0, "realms", 0, "spells_info", 0, "learn_level"]
-        for value, valid in ((1, True), (50, True), (0, False), (51, False), (99, False)):
-            with self.subTest(value=value):
-                self.check_value("ClassMagicDefinitions", path, value, valid)
 
     def test_magic_first_spell_level_is_omitted_only_without_spellbooks(self):
         document = copy.deepcopy(self.samples["ClassMagicDefinitions"])
@@ -383,7 +488,8 @@ class DefinitionIntegerValidationTest(unittest.TestCase):
         self.assertFalse(ok, message)
         self.assertIn("first_spell_level is required for classes with spellbooks", message)
         self.assertIn("Location: ['classes', 0]", message)
-        # 魔法を使わない職業は省略する
+        # 魔法を使わない職業は省略する (戦士は選べる領域が無いので、領域も書かない)
+        document["classes"][0]["name"] = "WARRIOR"
         document["classes"][0]["spell_type"] = "NONE"
         document["classes"][0]["realms"] = []
         ok, message = self.validate("ClassMagicDefinitions", document)
@@ -392,7 +498,7 @@ class DefinitionIntegerValidationTest(unittest.TestCase):
     def test_nested_records_must_be_objects(self):
         fields = (
             ("ClassMagicDefinitions", ["classes", 0, "realms", 0]),
-            ("ClassMagicDefinitions", ["classes", 0, "realms", 0, "spells_info", 0]),
+            ("ClassMagicDefinitions", ["classes", 0, "realms", 0, "overrides", 0]),
             ("SpellDefinitions", ["realms", 0, "books", 0]),
             ("SpellDefinitions", ["realms", 0, "books", 0, "spells", 0]),
         )
@@ -403,7 +509,7 @@ class DefinitionIntegerValidationTest(unittest.TestCase):
 
     def test_reader_accepted_empty_arrays_and_strings(self):
         magic = copy.deepcopy(self.samples["ClassMagicDefinitions"])
-        magic["classes"][0]["realms"][0]["spells_info"] = []
+        magic["classes"][0]["realms"][0]["overrides"] = []
         spell = copy.deepcopy(self.samples["SpellDefinitions"])
         record = spell["realms"][0]["books"][0]["spells"][0]
         record["spell_tag"] = ""
@@ -414,13 +520,14 @@ class DefinitionIntegerValidationTest(unittest.TestCase):
             with self.subTest(name=name):
                 ok, message = self.validate(name, document, companion)
                 self.assertTrue(ok, message)
-        self.check_value("ClassMagicDefinitions", ["classes", 0, "realms"], [], True)
+        # プリーストは選べる領域をすべて書くので、空の一覧は通らない
+        self.check_value("ClassMagicDefinitions", ["classes", 0, "realms"], [], False, "realm LIFE that PRIEST can choose must be listed")
         self.check_value("SpellDefinitions", ["realms", 0, "books"], [], True)
         self.check_value("SpellDefinitions", ["realms", 0, "books", 0, "spells"], [], True)
 
     def test_version_policy_is_unchanged(self):
-        # SpellDefinitions は reader が version を確かめる (test_spell_version_must_be_integer_two)。
-        for name in ("ClassMagicDefinitions", "ClassSkillDefinitions"):
+        # SpellDefinitions と ClassMagicDefinitions は reader が version を確かめる (test_*_version_must_be_integer_two)。
+        for name in ("ClassSkillDefinitions",):
             with self.subTest(name=name):
                 self.check_value(name, ["version"], 1.0, True)
 
@@ -501,7 +608,7 @@ class DefinitionIntegerValidationTest(unittest.TestCase):
         spells = copy.deepcopy(self.samples["SpellDefinitions"])
         spells["realms"][0]["name"] = magic["classes"][0]["realms"][0]["name"]
         records = spells["realms"][0]["books"][0]["spells"]
-        magic["classes"][0]["realms"][0]["spells_info"][0]["spell_tag"] = records[0]["spell_tag"]
+        magic["classes"][0]["realms"][0]["overrides"][0]["spell_tag"] = records[0]["spell_tag"]
         ok, message = self.validate("ClassMagicDefinitions", magic, spells)
         self.assertTrue(ok, message)
         records.append(copy.deepcopy(records[0]))
@@ -521,13 +628,13 @@ class DefinitionIntegerValidationTest(unittest.TestCase):
                 spell = spells["realms"][0]["books"][0]["spells"][0]
                 spell["spell_id"] = spell_id
                 spell["spell_tag"] = ""
-                magic["classes"][0]["realms"][0]["spells_info"][0]["spell_tag"] = ""
+                magic["classes"][0]["realms"][0]["overrides"][0]["spell_tag"] = ""
                 ok, message = self.validate("SpellDefinitions", spells)
                 self.assertTrue(ok, message)
                 ok, message = self.validate("ClassMagicDefinitions", magic, spells)
                 self.assertFalse(ok)
                 self.assertIn("unknown spell tag in this realm", message)
-                self.assertIn("Location: ['classes', 0, 'realms', 0, 'spells_info', 0, 'spell_tag']", message)
+                self.assertIn("Location: ['classes', 0, 'realms', 0, 'overrides', 0, 'spell_tag']", message)
 
     def test_magic_empty_tag_without_undefined_lower_ids_is_accepted(self):
         for spell_id in (0, 2):
@@ -546,7 +653,7 @@ class DefinitionIntegerValidationTest(unittest.TestCase):
                     lower["spell_id"] = lower_id
                     lower["spell_tag"] = f"LOWER_{lower_id}"
                     books[-1]["spells"].append(lower)
-                magic["classes"][0]["realms"][0]["spells_info"][0]["spell_tag"] = ""
+                magic["classes"][0]["realms"][0]["overrides"][0]["spell_tag"] = ""
                 magic["classes"][0]["realms"][0]["unlearnable"] = [f"LOWER_{lower_id}" for lower_id in range(spell_id)]
                 ok, message = self.validate("ClassMagicDefinitions", magic, spells)
                 self.assertTrue(ok, message)
@@ -566,7 +673,7 @@ class DefinitionIntegerValidationTest(unittest.TestCase):
             lower["spell_id"] = lower_id
             lower["spell_tag"] = f"LOWER_{lower_id}"
             lower_spells.append(lower)
-        magic["classes"][0]["realms"][0]["spells_info"][0]["spell_tag"] = ""
+        magic["classes"][0]["realms"][0]["overrides"][0]["spell_tag"] = ""
         magic["classes"][0]["realms"][0]["unlearnable"] = ["LOWER_0", "LOWER_1"]
         ok, message = self.validate("ClassMagicDefinitions", magic, spells)
         self.assertTrue(ok, message)
@@ -587,7 +694,7 @@ class DefinitionIntegerValidationTest(unittest.TestCase):
 
     def test_required_and_unknown_field_policy_is_unchanged(self):
         records = (
-            ("ClassMagicDefinitions", ["classes", 0, "realms", 0, "spells_info", 0], "learn_level"),
+            ("ClassMagicDefinitions", ["classes", 0, "realms", 0, "overrides", 0], "aptitude"),
             ("ClassSkillDefinitions", ["classes", 0, "skills", "SHIELD"], "start_exp"),
             ("SpellDefinitions", ["realms", 0, "books", 0, "spells", 0], "spell_id"),
         )

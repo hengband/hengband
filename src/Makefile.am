@@ -1218,6 +1218,7 @@ libhengband_a_SOURCES = \
 	specific-object/toragoroshi.cpp specific-object/toragoroshi.h \
 	specific-object/torch.cpp specific-object/torch.h \
 	\
+	spell/magic-aptitude.cpp spell/magic-aptitude.h \
 	spell/magic-type.cpp spell/magic-type.h \
 	spell/range-calc.cpp spell/range-calc.h \
 	spell/spells-describer.cpp spell/spells-describer.h \
@@ -1624,6 +1625,7 @@ hengband_test_SOURCES = \
 	test/player/test-player-status-resist.cpp \
 	test/player/test-process-name.cpp \
 	test/player-status/test-player-speed.cpp \
+	test/spell/test-magic-aptitude.cpp \
 	test/spell/test-spell-info.cpp \
 	test/spell-realm/test-spells-hex.cpp \
 	test/store/test-pricing.cpp \

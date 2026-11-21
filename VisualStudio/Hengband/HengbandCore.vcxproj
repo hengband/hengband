@@ -768,6 +768,7 @@
     <ClCompile Include="..\..\src\spell-realm\spells-song.cpp" />
     <ClCompile Include="..\..\src\spell-realm\spells-sorcery.cpp" />
     <ClCompile Include="..\..\src\spell-realm\spells-trump.cpp" />
+    <ClCompile Include="..\..\src\spell\magic-aptitude.cpp" />
     <ClCompile Include="..\..\src\spell\magic-type.cpp" />
     <ClCompile Include="..\..\src\spell\range-calc.cpp" />
     <ClCompile Include="..\..\src\spell\spell-info.cpp" />
@@ -1768,6 +1769,7 @@
     <ClInclude Include="..\..\src\spell-realm\spells-song.h" />
     <ClInclude Include="..\..\src\spell-realm\spells-sorcery.h" />
     <ClInclude Include="..\..\src\spell-realm\spells-trump.h" />
+    <ClInclude Include="..\..\src\spell\magic-aptitude.h" />
     <ClInclude Include="..\..\src\spell\magic-type.h" />
     <ClInclude Include="..\..\src\spell\range-calc.h" />
     <ClInclude Include="..\..\src\spell\spell-info.h" />

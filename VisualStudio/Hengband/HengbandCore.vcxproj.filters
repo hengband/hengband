@@ -2490,6 +2490,9 @@
     <ClCompile Include="..\..\src\spell-realm\spells-trump.cpp">
       <Filter>spell-realm</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\spell\magic-aptitude.cpp">
+      <Filter>spell</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\spell\magic-type.cpp">
       <Filter>spell</Filter>
     </ClCompile>
@@ -5477,6 +5480,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\spell-realm\spells-trump.h">
       <Filter>spell-realm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell\magic-aptitude.h">
+      <Filter>spell</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\spell\magic-type.h">
       <Filter>spell</Filter>

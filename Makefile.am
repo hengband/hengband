@@ -50,6 +50,7 @@ schema_files = \
 	schema/WildernessDefinition.schema.json
 
 EXTRA_DIST = \
+	lib/edit/ClassMagicDefinitions.md \
 	lib/edit/ClassSkillDefinitions.md \
 	lib/edit/VaultDefinitions.md \
 	AGENTS.md \
