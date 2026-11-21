@@ -1027,11 +1027,14 @@ static errr Infofnt_text_std(int x, int y, concptr str, int len)
 
     if (!Infofnt->mono) {
 #ifdef JP
-        char utf8_buf[1024];
-        int utf8_len = euc_to_utf8(str, len, utf8_buf, sizeof(utf8_buf));
-        if (utf8_len < 0) {
+        // len はマス数なので、変換する長さは文字列から求める
+        const auto utf8 = sys_to_utf8(str);
+        if (!utf8) {
             return -1;
         }
+
+        const auto *utf8_buf = utf8->data();
+        const auto utf8_len = static_cast<int>(utf8->length());
 #endif
 
         if (use_xft_runtime) {
@@ -1198,11 +1201,11 @@ static void react_keypress(XKeyEvent *xev)
 #ifdef USE_XIM
     if (!valid_keysym) { /* XIMからの入力時のみ false になる */
 #ifdef JP
-        const auto euc = utf8_to_euc(buf);
-        if (!euc) {
+        const auto sys_str = utf8_to_sys(buf);
+        if (!sys_str) {
             return;
         }
-        send_keys(euc->data());
+        send_keys(sys_str->data());
 #else
         send_keys(buf);
 #endif
@@ -1301,13 +1304,16 @@ static void draw_cursor_xft(int x, int y, int len)
     game_term->scr->append_text(x, y, std::min(len, game_term->wid - x), cursor_chars);
 
 #ifdef JP
-    char utf8_buf[16];
-    const auto utf8_len = euc_to_utf8(cursor_chars.data(), cursor_chars.size(), utf8_buf, sizeof(utf8_buf));
-    if (utf8_len < 0) {
+    const auto utf8 = sys_to_utf8(cursor_chars);
+    if (!utf8) {
         return;
     }
+
+    const auto &text = *utf8;
+#else
+    const auto &text = cursor_chars;
 #endif
-    Infofnt_text_std_xft(x, y, len, Infoclr->bg.xft, Infoclr->fg.xft, _(utf8_buf, cursor_chars.data()), _(utf8_len, static_cast<int>(cursor_chars.size())));
+    Infofnt_text_std_xft(x, y, len, Infoclr->bg.xft, Infoclr->fg.xft, text.data(), static_cast<int>(text.size()));
 }
 #endif
 
@@ -1598,13 +1604,17 @@ static bool paste_x11_send_text(XSelectionRequestEvent *rq)
         }
 
 #ifdef JP
-        char utf8_buf[2048];
-        const int len = euc_to_utf8(line.data(), line.length(), utf8_buf, sizeof(utf8_buf));
+        const auto utf8 = sys_to_utf8(line);
+        if (!utf8) {
+            continue;
+        }
+
+        const auto &text = *utf8;
 #else
-        const auto len = static_cast<int>(line.size());
+        const auto &text = line;
 #endif
-        if (len > 0) {
-            XChangeProperty(DPY, rq->requestor, rq->property, xa_utf8, 8, PropModeAppend, (unsigned char *)_(utf8_buf, line.data()), len);
+        if (!text.empty()) {
+            XChangeProperty(DPY, rq->requestor, rq->property, xa_utf8, 8, PropModeAppend, reinterpret_cast<const unsigned char *>(text.data()), static_cast<int>(text.size()));
         }
     }
 
