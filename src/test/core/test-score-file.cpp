@@ -505,10 +505,17 @@ TEST_CASE("add_score_to_file does not overwrite a score file that cannot be read
 #ifdef JP
 namespace {
 constexpr std::string_view UTF8_KAN = "\xe6\xbc\xa2"; //!< 漢
+// LEGACY_KAN は scores.raw を書いた旧版の内部の文字コード (内部の文字コードが UTF-8 なら、旧版の Unix 版の EUC-JP) の「漢」
 #ifdef SJIS
+constexpr auto LEGACY_KAN = test::KANJI_KAN;
 constexpr std::string_view OTHER_KAN = "\xb4\xc1"; //!< EUC-JP の「漢」
 constexpr std::string_view HANKAKU_AI = "\xb1\xb2"; //!< ｱｲ
+#elif defined(UTF8)
+constexpr std::string_view LEGACY_KAN = "\xb4\xc1"; //!< EUC-JP の「漢」
+constexpr std::string_view OTHER_KAN = "\x8a\xbf"; //!< Shift_JIS の「漢」
+constexpr std::string_view HANKAKU_AI = "\x8e\xb1\x8e\xb2"; //!< ｱｲ (EUC-JP)
 #else
+constexpr auto LEGACY_KAN = test::KANJI_KAN;
 constexpr std::string_view OTHER_KAN = "\x8a\xbf"; //!< Shift_JIS の「漢」
 constexpr std::string_view HANKAKU_AI = "\x8e\xb1\x8e\xb2"; //!< ｱｲ
 #endif
@@ -517,18 +524,18 @@ constexpr std::string_view HANKAKU_AI = "\x8e\xb1\x8e\xb2"; //!< ｱｲ
 TEST_CASE("migrate_raw_score converts names and causes of death to UTF-8")
 {
     // 「漢」の Shift_JIS (8A BF) と EUC-JP (B4 C1) は、どちらも UTF-8 の「漢」(E6 BC A2) になる
-    for (const auto bytes : { test::KANJI_KAN, OTHER_KAN }) {
+    for (const auto bytes : { LEGACY_KAN, OTHER_KAN }) {
         high_score raw{};
         set_field(raw.how, bytes);
         CHECK(migrate_raw_score(raw).died_from == UTF8_KAN);
     }
 
     high_score raw{};
-    set_field(raw.who, test::KANJI_KAN);
+    set_field(raw.who, LEGACY_KAN);
     CHECK(migrate_raw_score(raw).name == UTF8_KAN);
 }
 
-#ifdef EUC
+#if defined(EUC) || defined(UTF8)
 TEST_CASE("migrate_raw_score converts a name that cannot be read in the system encoding")
 {
     high_score raw{};
@@ -536,6 +543,14 @@ TEST_CASE("migrate_raw_score converts a name that cannot be read in the system e
     CHECK(migrate_raw_score(raw).name == UTF8_KAN);
 }
 #endif
+
+TEST_CASE("migrate_raw_score converts a Shift_JIS name which is also a cut EUC-JP character")
+{
+    // 「将」の Shift_JIS (8F AB) は、EUC-JP の 3 バイトの文字の先頭の 2 バイトとも読める
+    high_score raw{};
+    set_field(raw.who, "\x8f\xab");
+    CHECK(migrate_raw_score(raw).name == "\xe5\xb0\x86");
+}
 
 TEST_CASE("migrate_raw_score keeps a name that can be read in the system encoding")
 {
@@ -548,16 +563,16 @@ TEST_CASE("migrate_raw_score keeps a name that can be read in the system encodin
 TEST_CASE("migrate_raw_score drops a character cut in the middle at the end")
 {
     // 前の版はバイト数で切ったので、末尾に「漢」の先頭のバイトだけが残ることがある
-    const auto lead = test::KANJI_KAN.substr(0, 1);
+    const auto lead = LEGACY_KAN.substr(0, 1);
     const auto utf8_kan_kan = test::cat(UTF8_KAN, UTF8_KAN);
-    for (const auto bytes : { test::KANJI_KAN, OTHER_KAN }) {
+    for (const auto bytes : { LEGACY_KAN, OTHER_KAN }) {
         high_score raw{};
         set_field(raw.how, test::cat(bytes, bytes, bytes.substr(0, 1)));
         CHECK(migrate_raw_score(raw).died_from == utf8_kan_kan);
     }
 
     high_score raw{};
-    set_field(raw.who, test::cat(test::KANJI_KAN, test::KANJI_KAN, lead));
+    set_field(raw.who, test::cat(LEGACY_KAN, LEGACY_KAN, lead));
     CHECK(migrate_raw_score(raw).name == utf8_kan_kan);
 
     // 文字コードを推定できない文字列でも、欠けた文字は落とす

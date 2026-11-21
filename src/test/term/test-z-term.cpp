@@ -59,6 +59,8 @@ TEST_CASE("term_key_queue_pending counts keys in the circular key queue")
 namespace {
 #ifdef SJIS
 constexpr std::string_view KANJI_A = "\x88\x9f"; //!< 亜
+#elif defined(UTF8)
+constexpr std::string_view KANJI_A = "\xe4\xba\x9c"; //!< 亜
 #else
 constexpr std::string_view KANJI_A = "\xb0\xa1"; //!< 亜
 #endif

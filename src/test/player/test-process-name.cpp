@@ -64,8 +64,9 @@ TEST_CASE("make_player_base_name truncates a long name to fit the base name")
 #ifdef JP
 TEST_CASE("make_player_base_name does not split a double-byte character at the length limit")
 {
-    // 16文字 (32バイト) のうち、31バイトに収まる15文字 (30バイト) までを残す
-    CHECK(make_player_base_name(repeat(KANJI_KAN, 16)) == repeat(KANJI_KAN, 15));
+    // 基本名の上限の 31 バイトに収まる文字までを残す (EUC-JP・Shift_JIS では 16 文字のうち 15 文字)
+    const auto fit_count = static_cast<int>(31 / KANJI_KAN.length());
+    CHECK(make_player_base_name(repeat(KANJI_KAN, fit_count + 1)) == repeat(KANJI_KAN, fit_count));
 }
 
 TEST_CASE("make_player_base_name drops a lone lead byte at the end")

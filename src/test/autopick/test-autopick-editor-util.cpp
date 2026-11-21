@@ -282,7 +282,7 @@ TEST_CASE("is_inside_multibyte_char detects a trailing byte of a multibyte chara
 
     CHECK_FALSE(is_inside_multibyte_char(line, 0));
     CHECK(is_inside_multibyte_char(line, 1));
-    CHECK_FALSE(is_inside_multibyte_char(line, 2));
+    CHECK_FALSE(is_inside_multibyte_char(line, static_cast<int>(KANJI_KAN.length())));
 }
 
 TEST_CASE("is_inside_multibyte_char does not treat the end of a line after a lone lead byte as inside a character")
@@ -296,7 +296,7 @@ TEST_CASE("is_cursor_inside_multibyte_char checks the cursor position on the cur
 
     CHECK_FALSE(make_text_body_with_line(line, 0).is_cursor_inside_multibyte_char());
     CHECK(make_text_body_with_line(line, 1).is_cursor_inside_multibyte_char());
-    CHECK_FALSE(make_text_body_with_line(line, 2).is_cursor_inside_multibyte_char());
+    CHECK_FALSE(make_text_body_with_line(line, static_cast<int>(KANJI_KAN.length())).is_cursor_inside_multibyte_char());
     CHECK_FALSE(make_text_body_with_line(line, 10).is_cursor_inside_multibyte_char());
 }
 
@@ -322,10 +322,10 @@ TEST_CASE("insert_return_code splits a line ending with a lone lead byte at its 
 
 TEST_CASE("EditorCommandId::LEFT moves back one double-byte character at a time")
 {
-    auto tb = make_text_body_with_line(cat(KANJI_KAN, KANJI_JI), 4);
+    auto tb = make_text_body_with_line(cat(KANJI_KAN, KANJI_JI), static_cast<int>(KANJI_KAN.length() + KANJI_JI.length()));
 
     do_editor_command(nullptr, &tb, EditorCommandId::LEFT);
-    CHECK(tb.cx == 2);
+    CHECK(tb.cx == static_cast<int>(KANJI_KAN.length()));
     do_editor_command(nullptr, &tb, EditorCommandId::LEFT);
     CHECK(tb.cx == 0);
 }
@@ -333,23 +333,27 @@ TEST_CASE("EditorCommandId::LEFT moves back one double-byte character at a time"
 TEST_CASE("insert_single_letter does not split a double-byte character pushed past the line limit")
 {
     // 行の上限 (MAX_LINELEN - 1 バイト) ちょうどの行の先頭に1文字入れると、末尾の「漢」は丸ごと押し出される
-    const auto line = "a" + repeat(KANJI_KAN, (MAX_LINELEN - 2) / 2);
+    const int count = (MAX_LINELEN - 2) / static_cast<int>(KANJI_KAN.length());
+    const std::string padding(MAX_LINELEN - 1 - count * KANJI_KAN.length(), 'a');
+    const auto line = padding + repeat(KANJI_KAN, count);
     REQUIRE(line.length() == MAX_LINELEN - 1);
     auto tb = make_text_body_with_line(line, 0);
 
     insert_single_letter(&tb, 'x');
-    CHECK(tb.lines[0].line == "xa" + repeat(KANJI_KAN, (MAX_LINELEN - 2) / 2 - 1));
+    CHECK(tb.lines[0].line == "x" + padding + repeat(KANJI_KAN, count - 1));
 }
 
 TEST_CASE("EditorCommandId::PASTE does not split a double-byte character pushed past the line limit")
 {
-    const auto line = "a" + repeat(KANJI_KAN, (MAX_LINELEN - 4) / 2);
+    const int count = (MAX_LINELEN - 4) / static_cast<int>(KANJI_KAN.length());
+    const std::string padding(MAX_LINELEN - 3 - count * KANJI_KAN.length(), 'a');
+    const auto line = padding + repeat(KANJI_KAN, count);
     REQUIRE(line.length() == MAX_LINELEN - 3);
     auto tb = make_text_body_with_line(line, 0);
     tb.yank = { "xyz" };
 
     do_editor_command(nullptr, &tb, EditorCommandId::PASTE);
-    CHECK(tb.lines[0].line == "xyza" + repeat(KANJI_KAN, (MAX_LINELEN - 4) / 2 - 1));
+    CHECK(tb.lines[0].line == "xyz" + padding + repeat(KANJI_KAN, count - 1));
     CHECK(tb.cx == 3);
 }
 

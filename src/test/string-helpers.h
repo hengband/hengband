@@ -5,7 +5,8 @@
  *
  * 2バイト文字のテストデータは必ず16進エスケープで書くこと。
  * 日本語版のビルドはソースの文字列リテラルを変換する (autotoolsは gcc-wrap が nkf で
- * EUC-JPへ、MSVCは /execution-charset:shift-jis でShift_JISへ) が、英語版では変換されない。
+ * EUC-JPへ、MSVCは /execution-charset:shift-jis でShift_JISへ) が、英語版と、内部の文字コードを
+ * UTF-8 にする構成 (--enable-utf8-internal) では変換されない。
  * ソースに日本語をそのまま書くと、ビルド構成によってバイト列が変わってしまう。
  */
 
@@ -45,6 +46,10 @@ inline std::string repeat(std::string_view str, int count)
 inline constexpr std::string_view KANJI_KAN = "\x8a\xbf"; //!< 漢
 inline constexpr std::string_view KANJI_JI = "\x8e\x9a"; //!< 字
 inline constexpr std::string_view KAKKO_OPEN = "\x81\x75"; //!< 「 (行末禁則文字)
+#elif defined(JP) && defined(UTF8)
+inline constexpr std::string_view KANJI_KAN = "\xe6\xbc\xa2"; //!< 漢
+inline constexpr std::string_view KANJI_JI = "\xe5\xad\x97"; //!< 字
+inline constexpr std::string_view KAKKO_OPEN = "\xe3\x80\x8c"; //!< 「 (行末禁則文字)
 #elif defined(JP)
 inline constexpr std::string_view KANJI_KAN = "\xb4\xc1"; //!< 漢
 inline constexpr std::string_view KANJI_JI = "\xbb\xfa"; //!< 字

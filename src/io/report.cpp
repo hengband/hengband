@@ -58,6 +58,9 @@ static constexpr auto get_score_content_type()
 #ifdef EUC
     return "text/plain; charset=EUC-JP";
 #endif
+#ifdef UTF8
+    return "text/plain; charset=UTF-8";
+#endif
 #else
     return "text/plain; charset=ASCII";
 #endif

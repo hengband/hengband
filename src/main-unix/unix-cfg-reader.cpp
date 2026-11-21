@@ -10,6 +10,7 @@
 #include "term/z-rand.h"
 #include "term/z-term.h"
 #include "util/angband-files.h"
+#include "util/string-processor.h"
 #include <cstring>
 #include <ctype.h>
 #include <simpleini/SimpleIni.h>
@@ -154,12 +155,12 @@ CfgData CfgReader::read_sections(std::initializer_list<cfg_section> sections) co
             if (value.empty()) {
                 continue;
             }
-            // value は UTF-8 なので、2 バイト文字を考慮する angband_strcpy() ではなくバイト単位でコピーする (buf はゼロ初期化済み)
-            value.copy(buf, sizeof(buf) - 1);
 #ifdef JP
-            // .cfg (UTF-8) to Shift-JIS
-            guess_convert_to_system_encoding(buf, MAIN_WIN_MAX_PATH);
+            // .cfg (UTF-8) を内部の文字コードにする。UTF-8 の構成で旧版の文字コードから変換すると長くなるので、バッファに写す前に変換する
+            value = guess_convert_to_system_encoding(std::move(value));
 #endif
+            // 長すぎる値は、内部の文字コードの文字を途中で切らないようにコピーする
+            angband_strcpy(buf, value, sizeof(buf));
             char *tokens[SAMPLE_MAX]{};
             const int num = tokenize_whitespace(buf, SAMPLE_MAX, tokens);
 

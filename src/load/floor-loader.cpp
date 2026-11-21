@@ -307,16 +307,7 @@ bool load_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mode
      * Temporary files are always written in system depended kanji
      * code.
      */
-#ifdef JP
-#ifdef EUC
-    loading_character_encoding = CharacterEncoding::EUC_JP;
-#endif
-#ifdef SJIS
-    loading_character_encoding = CharacterEncoding::SHIFT_JIS;
-#endif
-#else
-    loading_character_encoding = CharacterEncoding::US_ASCII;
-#endif
+    loading_character_encoding = SYSTEM_CHARACTER_ENCODING;
 
     FILE *old_fff = nullptr;
     byte old_xor_byte = 0;

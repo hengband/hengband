@@ -133,8 +133,9 @@ std::string rd_string()
         }
     }
 
-    if (auto converted = legacy_to_sys(str, encoding)) {
-        str = std::move(*converted);
+    // 内部の文字コードで書いたセーブ (今の版のセーブや一時ファイル) は変換しない
+    if (encoding != SYSTEM_CHARACTER_ENCODING) {
+        str = legacy_to_sys_replacing_invalid(str, encoding);
     }
 #endif
 
