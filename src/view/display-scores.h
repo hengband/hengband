@@ -1,7 +1,9 @@
 #pragma once
 
-struct high_score;
-void display_scores(int from, int to, int note, high_score *score);
+#include <vector>
+
+struct HighScore;
+void display_scores(const std::vector<HighScore> &scores, int from, int to, int note, const HighScore *score);
 
 #ifndef _WIN32
 void display_scores(int from, int to);

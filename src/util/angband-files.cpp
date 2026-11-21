@@ -505,6 +505,26 @@ errr fd_seek(int fd, ulong n)
     return 0;
 }
 
+/*!
+ * @brief ファイル記述子の指すファイルの大きさを求める
+ * @param fd ファイル記述子
+ * @return 大きさ (バイト数)。求められないときは tl::nullopt
+ * @details ファイルの位置は末尾に移るので、読み書きする前に fd_seek() で戻す
+ */
+tl::optional<ulong> fd_size(int fd)
+{
+    if (fd < 0) {
+        return tl::nullopt;
+    }
+
+    const auto size = FD_SYS_LSEEK(fd, 0, SEEK_END);
+    if (size < 0) {
+        return tl::nullopt;
+    }
+
+    return static_cast<ulong>(size);
+}
+
 /*
  * Hack -- attempt to read data from a file descriptor
  */

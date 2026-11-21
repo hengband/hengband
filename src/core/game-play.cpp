@@ -19,7 +19,6 @@
 #include "core/disturbance.h"
 #include "core/game-closer.h"
 #include "core/player-processor.h"
-#include "core/score-util.h"
 #include "core/scores.h"
 #include "core/speed-table.h"
 #include "core/stuff-handler.h"
@@ -86,7 +85,6 @@
 #include "target/target-checker.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
-#include "util/angband-files.h"
 #include "view/display-messages.h"
 #include "view/display-player.h"
 #include "window/main-window-util.h"
@@ -128,9 +126,6 @@ static void send_waiting_record(PlayerType *player_ptr)
     world.play_time.pause();
     signals_ignore_tstp();
     world.character_icky_depth = 1;
-    const auto path = path_build(ANGBAND_DIR_APEX, "scores.raw");
-    highscore_fd = fd_open(path, O_RDWR);
-
     /* 町名消失バグ対策(#38205)のためここで世界マップ情報を読み出す */
     (void)apply_wilderness_definition();
     bool success = send_world_score(player_ptr, true);
@@ -146,8 +141,6 @@ static void send_waiting_record(PlayerType *player_ptr)
         }
     }
 
-    (void)fd_close(highscore_fd);
-    highscore_fd = -1;
     signals_handle_tstp();
     quit("");
 }

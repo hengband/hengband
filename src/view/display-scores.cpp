@@ -1,9 +1,8 @@
 #include "view/display-scores.h"
 #include "core/asking-player.h"
-#include "core/score-util.h"
-#include "io/files-util.h"
+#include "core/score-file.h"
 #include "io/input-context.h"
-#include "locale/character-encoding.h"
+#include "locale/multibyte-char.h"
 #include "player-info/class-info.h"
 #include "player/player-personality.h"
 #include "player/race-info-table.h"
@@ -11,30 +10,41 @@
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
-#include "util/angband-files.h"
 #include "util/int-char-converter.h"
 #include <fmt/format.h>
 
 /*!
+ * @brief 死因が長すぎるときに切る
+ * @param died_from 死因
+ * @return 死因。行が画面からはみ出さないよう、前の版のスコアファイルの欄に入った 39 桁までにし、切ったときは末尾に省略の記号を付ける
+ */
+static std::string shorten_died_from(std::string &&died_from)
+{
+    constexpr size_t max_width = 39;
+    constexpr std::string_view ellipsis = _("…", "...");
+    if (str_display_width(died_from) <= max_width) {
+        return std::move(died_from);
+    }
+
+    return str_prefix_by_width(std::move(died_from), max_width - str_display_width(ellipsis)).append(ellipsis);
+}
+
+/*!
  * @brief 指定された順位範囲でスコアを並べて表示する / Display the scores in a given range.
+ * @param scores スコアファイルの記録 (スコアの高い順)
  * @param from 順位先頭
  * @param to 順位末尾
  * @param note 黄色表示でハイライトする順位
- * @param score スコア配列参照ポインタ
+ * @param score note の順位に差し込んで表示する記録 (スコアの予想)。無ければ nullptr
  * @details
  * <pre>
- * Assumes the high score list is already open.
  * Only five entries per line, too much info.
  *
  * Mega-Hack -- allow "fake" entry at the given position.
  * </pre>
  */
-void display_scores(int from, int to, int note, high_score *score)
+void display_scores(const std::vector<HighScore> &scores, int from, int to, int note, const HighScore *score)
 {
-    if (highscore_fd < 0) {
-        return;
-    }
-
     if (from < 0) {
         from = 0;
     }
@@ -47,17 +57,7 @@ void display_scores(int from, int to, int note, high_score *score)
         to = MAX_HISCORES;
     }
 
-    if (highscore_seek(0)) {
-        return;
-    }
-
-    auto num_scores = 0;
-    high_score the_score;
-    for (; num_scores < MAX_HISCORES; num_scores++) {
-        if (highscore_read(&the_score)) {
-            break;
-        }
-    }
+    auto num_scores = std::min(static_cast<int>(scores.size()), MAX_HISCORES);
 
     if ((note == num_scores) && score) {
         num_scores++;
@@ -79,58 +79,44 @@ void display_scores(int from, int to, int note, high_score *score)
 
         for (auto n = 0, j = k; (j < num_scores) && (n < per_screen); place++, j++, n++) {
             auto attr = (j == note) ? TERM_YELLOW : TERM_WHITE;
+            const HighScore *the_score_ptr = nullptr;
             if ((note == j) && score) {
-                the_score = (*score);
+                the_score_ptr = score;
                 attr = TERM_L_GREEN;
                 score = nullptr;
                 note = -1;
                 j--;
-            } else if (highscore_seek(j) || highscore_read(&the_score)) {
+            } else if (j < std::ssize(scores)) {
+                the_score_ptr = &scores[j];
+            } else {
                 break;
             }
 
-            auto pr = atoi(the_score.p_r);
-            auto pc = atoi(the_score.p_c);
-            auto pa = atoi(the_score.p_a);
+            const auto &the_score = *the_score_ptr;
 
-            auto clev = atoi(the_score.cur_lev);
-            auto mlev = atoi(the_score.max_lev);
-            auto cdun = atoi(the_score.cur_dun);
-            auto mdun = atoi(the_score.max_dun);
+            const auto pr = the_score.race;
+            const auto pc = the_score.pclass;
+            const auto pa = the_score.personality;
 
-            concptr user;
-            for (user = the_score.uid; iswspace(*user); user++) { /* loop */
-                ;
-            }
+            const auto clev = the_score.level;
+            const auto mlev = the_score.max_level;
+            const auto cdun = the_score.dungeon_level;
+            const auto mdun = the_score.max_dungeon_level;
 
-            concptr when;
-            for (when = the_score.day; iswspace(*when); when++) { /* loop */
-                ;
-            }
-
-            concptr gold;
-            for (gold = the_score.gold; iswspace(*gold); gold++) { /* loop */
-                ;
-            }
-
-            concptr aged;
-            for (aged = the_score.turns; iswspace(*aged); aged++) { /* loop */
-                ;
-            }
-
-            std::string alt_when;
-            if ((*when == '@') && strlen(when) == 9) {
-                alt_when = fmt::format("{}-{}-{}", std::string_view(when + 1, 4), std::string_view(when + 5, 2), std::string_view(when + 7, 2));
-                when = alt_when.data();
-            }
+            const auto user = the_score.uid;
+            const auto gold = the_score.gold;
+            const auto aged = the_score.turns;
+            auto when = HighScore::to_sys(the_score.date);
+            const auto name = HighScore::to_sys(the_score.name);
+            const auto died_from = shorten_died_from(HighScore::to_sys(the_score.died_from));
 
             std::string out_val;
             const auto pclass = i2enum<PlayerClassType>(pc);
 #ifdef JP
-            out_val = fmt::format("{:3}.{:>9}  {}{}{} - {}{} (レベル {})", place, the_score.pts, personality_info[pa].title, (personality_info[pa].no ? "の" : ""), the_score.who, race_info[pr].title, class_info.at(pclass).title, clev);
+            out_val = fmt::format("{:3}.{:>9}  {}{}{} - {}{} (レベル {})", place, the_score.points, personality_info[pa].title, (personality_info[pa].no ? "の" : ""), name, race_info[pr].title, class_info.at(pclass).title, clev);
 
 #else
-            out_val = fmt::format("{:3}.{:>9}  {} {} the {} {}, Level {}", place, the_score.pts, personality_info[pa].title, the_score.who, race_info[pr].title, class_info.at(pclass).title, clev);
+            out_val = fmt::format("{:3}.{:>9}  {} {} the {} {}, Level {}", place, the_score.points, personality_info[pa].title, name, race_info[pr].title, class_info.at(pclass).title, clev);
 #endif
             if (mlev > clev) {
                 out_val.append(fmt::format(_(" (最高{})", " (Max {})"), mlev));
@@ -145,25 +131,24 @@ void display_scores(int from, int to, int note, high_score *score)
             }
 
             /* 死亡原因をオリジナルより細かく表示 */
-            if (streq(the_score.how, "yet")) {
+            if (the_score.died_from == "yet") {
                 out_val.append(fmt::format("  まだ生きている ({}{})", cdun, "階"));
-            } else if (streq(the_score.how, "ripe")) {
+            } else if (the_score.died_from == "ripe") {
                 out_val.append(fmt::format("  勝利の後に引退 ({}{})", cdun, "階"));
-            } else if (streq(the_score.how, "Seppuku")) {
+            } else if (the_score.died_from == "Seppuku") {
                 out_val.append(fmt::format("  勝利の後に切腹 ({}{})", cdun, "階"));
             } else {
-                codeconv(the_score.how);
                 if (!cdun) {
-                    out_val.append(fmt::format("  地上で{}に殺された", the_score.how));
+                    out_val.append(fmt::format("  地上で{}に殺された", died_from));
                 } else {
-                    out_val.append(fmt::format("  {}階で{}に殺された", cdun, the_score.how));
+                    out_val.append(fmt::format("  {}階で{}に殺された", cdun, died_from));
                 }
             }
 #else
             if (!cdun) {
-                out_val = fmt::format("               Killed by {} on the surface", the_score.how);
+                out_val = fmt::format("               Killed by {} on the surface", died_from);
             } else {
-                out_val = fmt::format("               Killed by {} on {} {}", the_score.how, "Dungeon Level", cdun);
+                out_val = fmt::format("               Killed by {} on {} {}", died_from, "Dungeon Level", cdun);
             }
 
             if (mdun > cdun) {
@@ -173,9 +158,8 @@ void display_scores(int from, int to, int note, high_score *score)
             c_put_str(attr, out_val, n * 4 + 3, 0);
 #ifdef JP
             /* 日付を 19yy/mm/dd の形式に変更する */
-            if (strlen(when) == 8 && when[2] == '/' && when[5] == '/') {
-                alt_when = fmt::format("{}{}/{}", 19 + (when[6] < '8'), when + 6, std::string_view(when, 5));
-                when = alt_when.data();
+            if ((when.length() == 8) && (when[2] == '/') && (when[5] == '/')) {
+                when = fmt::format("{}{}/{}", 19 + (when[6] < '8'), when.substr(6), when.substr(0, 5));
             }
 
             out_val = fmt::format("        (ユーザー:{}, 日付:{}, 所持金:{}, ターン:{})", user, when, gold, aged);
@@ -208,17 +192,14 @@ void display_scores(int from, int to, int note, high_score *score)
  */
 void display_scores(int from, int to)
 {
-    const auto path = path_build(ANGBAND_DIR_APEX, "scores.raw");
-    const auto filename = path.string();
-    highscore_fd = fd_open(filename, O_RDONLY);
-    if (highscore_fd < 0) {
+    // ゲームの初期化より前に呼ばれるので、scores.raw からの移し替えをここでも行う
+    const auto scores = prepare_score_file() ? read_score_file() : tl::nullopt;
+    if (!scores) {
         quit(_("スコア・ファイルが使用できません。", "Score file unavailable."));
     }
 
     term_clear();
-    display_scores(from, to, -1, nullptr);
-    (void)fd_close(highscore_fd);
-    highscore_fd = -1;
+    display_scores(*scores, from, to, -1, nullptr);
     quit("");
 }
 #endif
