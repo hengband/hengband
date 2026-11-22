@@ -122,9 +122,7 @@ void DefinitionIdChecker::commit()
     if (!this->pending) {
         throw std::logic_error("No definition ID to commit");
     }
-    if (this->order == DefinitionIdOrder::UNIQUE) {
-        this->defined.insert(*this->pending);
-    }
+    this->defined.insert(*this->pending);
     this->last = this->pending;
     this->pending.reset();
 }
@@ -133,4 +131,14 @@ void DefinitionIdChecker::commit()
 tl::optional<int> DefinitionIdChecker::last_id() const
 {
     return this->last;
+}
+
+/*!
+ * @brief ID の記録が確定しているかを返す
+ * @param id 確かめる ID
+ * @return 記録全体の読み込みに成功して確定した ID なら true
+ */
+bool DefinitionIdChecker::is_defined(int id) const
+{
+    return this->defined.contains(id);
 }

@@ -31,6 +31,7 @@ public:
     tl::expected<int, ParseErrorType> check_and_report(int id);
     void commit();
     tl::optional<int> last_id() const;
+    bool is_defined(int id) const;
 
 private:
     std::string range_error_reason(std::string_view id_text) const;

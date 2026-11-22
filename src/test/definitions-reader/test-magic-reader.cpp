@@ -664,6 +664,44 @@ TEST_CASE("MagicReader checks the bounds of armour_weight_limit")
 }
 
 /*!
+ * @brief 全職業の職業魔法がそろっていなければ、抜けた職業の名前を出して拒否する
+ */
+TEST_CASE("MagicReader::validate_all_defined requires every class")
+{
+    const MagicReaderState state;
+    auto session = MagicReader::create_session();
+    {
+        ScopedMessageCapture diagnostics;
+        CHECK(test::to_error_code(MagicReader::validate_all_defined(session)) == ParseErrorType::TOO_FEW_ARGUMENTS);
+        REQUIRE_FALSE(diagnostics.messages().empty());
+        CHECK(diagnostics.messages()[0] == _("職業 'WARRIOR' の職業魔法が定義されていません。", "Class magic of 'WARRIOR' is not defined."));
+    }
+
+    // メイジだけを抜いておく
+    for (auto class_id = 0; class_id < PLAYER_CLASS_TYPE_MAX; class_id++) {
+        if (class_id == MAGE) {
+            continue;
+        }
+        REQUIRE(session.check(class_id));
+        session.commit();
+    }
+    {
+        ScopedMessageCapture diagnostics;
+        CHECK(test::to_error_code(MagicReader::validate_all_defined(session)) == ParseErrorType::TOO_FEW_ARGUMENTS);
+        REQUIRE_FALSE(diagnostics.messages().empty());
+        CHECK(diagnostics.messages()[0] == _("職業 'MAGE' の職業魔法が定義されていません。", "Class magic of 'MAGE' is not defined."));
+    }
+
+    // 全職業がそろうと通る
+    session = MagicReader::create_session();
+    for (auto class_id = 0; class_id < PLAYER_CLASS_TYPE_MAX; class_id++) {
+        REQUIRE(session.check(class_id));
+        session.commit();
+    }
+    CHECK(MagicReader::validate_all_defined(session).has_value());
+}
+
+/*!
  * @brief 領域の習得できる巻数を読み、省略時は4にする
  */
 TEST_CASE("MagicReader reads max_book and defaults it to four")

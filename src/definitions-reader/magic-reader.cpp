@@ -12,8 +12,10 @@
 #include "util/enum-converter.h"
 #include "util/enum-range.h"
 #include "view/display-messages.h"
+#include <algorithm>
 #include <limits>
 #include <nlohmann/json.hpp>
+#include <string>
 #include <utility>
 
 namespace {
@@ -33,6 +35,27 @@ int book_of_spell(int spell_id)
 {
     return spell_id / SPELLS_IN_BOOK + 1;
 }
+}
+
+/*!
+ * @brief 全職業の職業魔法が定義されたかを確かめる
+ * @param session 読み込みに使った ID の検査
+ * @return 全職業のレコードがあれば空の値。抜けがあれば TOO_FEW_ARGUMENTS
+ * @details 定義されなかった職業は、魔法を使えない初期値のまま黙って扱われてしまうので、読み込みの最後に確かめる。
+ */
+tl::expected<void, ParseErrorType> MagicReader::validate_all_defined(const Session &session)
+{
+    for (const auto pclass : EnumRange(PlayerClassType::WARRIOR, PlayerClassType::MAX)) {
+        if (session.is_defined(enum2i(pclass))) {
+            continue;
+        }
+
+        const auto it = std::find_if(magic_class_list.begin(), magic_class_list.end(), [pclass](const auto &entry) { return entry.second == pclass; });
+        const auto name = (it != magic_class_list.end()) ? std::string(it->first) : std::to_string(enum2i(pclass));
+        msg_print(_("職業 '{}' の職業魔法が定義されていません。", "Class magic of '{}' is not defined."), name);
+        return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
+    }
+    return {};
 }
 
 MagicReader::Session MagicReader::create_session(tl::optional<int> last_id)

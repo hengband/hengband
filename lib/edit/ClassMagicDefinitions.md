@@ -13,7 +13,7 @@
   - `learn_level_percent`（0〜100）: 習得レベルの動き。
   - `mana_cost_percent`（0〜50）: 消費MPの倍率の動き（百分率）。
   - `difficulty`（0〜20）: 難易度の動き。
-- `classes`: 職業の定義。`PlayerClassType` の ID 順に書きます。
+- `classes`: 職業の定義。`PlayerClassType` の ID 順に、魔法を使わない職業も含めて全職業を書きます。
 
 ## 領域（`classes[].realms[]`）
 
