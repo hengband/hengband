@@ -113,7 +113,7 @@ static errr process_pref_file_aux(PlayerType *player_ptr, const std::filesystem:
             file.remove_prefix(2);
             if (conditions_only) {
                 try {
-                    err = process_pref_file_aux(player_ptr, path_build(ANGBAND_DIR_USER, file), PREF_TYPE_AUTOPICK, true);
+                    err = process_pref_file_aux(player_ptr, path_build_inheriting_legacy_name(ANGBAND_DIR_USER, file), PREF_TYPE_AUTOPICK, true);
                 } catch (const std::runtime_error &) {
                     // 読めない取り込み先だけを無視し、親の後続条件式は確認する。
                     err = -1;
@@ -176,7 +176,7 @@ errr check_autopick_file_conditions(PlayerType *player_ptr, std::string_view nam
     const auto restore_depth = util::make_finalizer([depth = pref_include_depth] { pref_include_depth = depth; });
     pref_include_depth++;
     try {
-        return process_pref_file_aux(player_ptr, path_build(ANGBAND_DIR_USER, name), PREF_TYPE_AUTOPICK, true);
+        return process_pref_file_aux(player_ptr, path_build_inheriting_legacy_name(ANGBAND_DIR_USER, name), PREF_TYPE_AUTOPICK, true);
     } catch (const std::runtime_error &) {
         // 編集中の不完全なパスや読めないファイルでエディタを終了させない。
         return -1;
@@ -208,7 +208,7 @@ errr process_pref_file(PlayerType *player_ptr, std::string_view name, bool only_
         }
     }
 
-    const auto path = path_build(ANGBAND_DIR_USER, name);
+    const auto path = path_build_inheriting_legacy_name(ANGBAND_DIR_USER, name);
     errr err2 = process_pref_file_aux(player_ptr, path, PREF_TYPE_NORMAL);
     if (err2 < 0 && !err1) {
         return -2;
@@ -225,7 +225,7 @@ errr process_pref_file(PlayerType *player_ptr, std::string_view name, bool only_
  */
 errr process_autopick_file(PlayerType *player_ptr, std::string_view name)
 {
-    const auto path = path_build(ANGBAND_DIR_USER, name);
+    const auto path = path_build_inheriting_legacy_name(ANGBAND_DIR_USER, name);
     return process_pref_file_aux(player_ptr, path, PREF_TYPE_AUTOPICK);
 }
 
@@ -241,7 +241,7 @@ errr process_histpref_file(PlayerType *player_ptr, std::string_view name)
 {
     auto &world = AngbandWorld::get_instance();
     const auto old_character_xtra = world.character_xtra;
-    const auto path = path_build(ANGBAND_DIR_USER, name);
+    const auto path = path_build_inheriting_legacy_name(ANGBAND_DIR_USER, name);
     world.character_xtra = true;
     errr err = process_pref_file_aux(player_ptr, path, PREF_TYPE_HISTPREF);
     world.character_xtra = old_character_xtra;

@@ -20,6 +20,7 @@
 #include <fmt/format.h>
 #include <sstream>
 #include <string>
+#include <system_error>
 
 #ifdef _WIN32
 namespace {
@@ -220,6 +221,31 @@ std::filesystem::path path_build(const std::filesystem::path &path, std::string_
     }
 
     return path_ret;
+#endif
+}
+
+/*!
+ * @brief ファイルのパスを作る。旧版の名前のファイルしか無ければ、今の名前に付け替えてからパスを返す
+ * @param path ディレクトリのパス
+ * @param file ファイル名
+ * @return 読み書きに使うファイルのパス
+ * @details プレイヤー名や種族名などから名前を作るユーザーファイルを開くときに使う。
+ * 内部の文字コードが UTF-8 の構成では、旧版の EUC-JP の名前のファイル (旧名) しか無ければ rename_legacy_named_file() で付け替え、
+ * 付け替えられなければ旧名のファイルのパスを返す。ほかの構成では path_build() と同じ。
+ */
+std::filesystem::path path_build_inheriting_legacy_name(const std::filesystem::path &path, std::string_view file)
+{
+    const auto built = path_build(path, file);
+#if defined(JP) && defined(UTF8)
+    // 「~」で始まるパスは開くときに展開されるので、旧名も展開したパスで探す。展開できなければ付け替えない
+    const auto parsed = path_parse(built);
+    if (parsed.empty()) {
+        return built;
+    }
+
+    return rename_legacy_named_file(parsed).value_or(built);
+#else
+    return built;
 #endif
 }
 
@@ -590,3 +616,53 @@ errr fd_close(int fd)
     (void)FD_SYS_CLOSE(fd);
     return 0;
 }
+
+#if defined(JP) && defined(UTF8)
+/*!
+ * @brief 旧版の名前のファイルを、今の名前に付け替える
+ * @param path 今の名前のファイルのパス
+ * @return 旧名のファイルを引き継いだときは、読み書きに使うファイルのパス (付け替えたら path、付け替えに失敗したら旧名のファイルのパス。
+ * 付け替えに失敗した後に今の名前のファイルができていれば path)。
+ * 旧名のファイルが無いとき、今の名前のファイルがあるとき、それを確かめられないときは tl::nullopt
+ * @details 内部の文字コードが EUC-JP の版は、プレイヤー名から作るファイル (セーブファイル・日記) の名前に、
+ * 名前を EUC-JP にしたバイト列を使っていた。path のファイルが無く、名前を EUC-JP にしたファイル (旧名) があれば、
+ * 旧名のファイルを path に付け替える。旧名を作る変換は、EUC-JP の版が UTF-8 の入力から名前を作る変換 (utf8_to_euc()) と同じにする。
+ */
+tl::optional<std::filesystem::path> rename_legacy_named_file(const std::filesystem::path &path)
+{
+    const auto filename = path.filename().string();
+    const auto legacy_filename = utf8_to_euc(filename);
+    if (!legacy_filename || (*legacy_filename == filename)) {
+        return tl::nullopt;
+    }
+
+    // 今の名前のファイルがあるか確かめられなければ、上書きしないよう付け替えない
+    std::error_code ec;
+    const auto path_exists = std::filesystem::exists(path, ec);
+    if (ec || path_exists) {
+        return tl::nullopt;
+    }
+
+    const auto legacy_path = path.parent_path() / *legacy_filename;
+    if (!std::filesystem::exists(legacy_path, ec)) {
+        return tl::nullopt;
+    }
+
+    std::filesystem::rename(legacy_path, path, ec);
+    if (!ec) {
+        return path;
+    }
+
+    // 同じ名前で動いている別のプロセスが先に付け替えたこともあるので、付け替えに失敗したら確かめ直す。
+    // 今の名前のファイルがあればそれを使い、旧名のファイルが残っているときだけ旧名のファイルを使う
+    if (std::filesystem::exists(path, ec)) {
+        return path;
+    }
+
+    if (std::filesystem::exists(legacy_path, ec)) {
+        return legacy_path;
+    }
+
+    return tl::nullopt;
+}
+#endif

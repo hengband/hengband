@@ -4,6 +4,7 @@
 #include "autopick/autopick-util.h"
 #include "io/files-util.h"
 #include "io/read-pref-file.h"
+#include "locale/character-encoding.h"
 #include "system/angband-exceptions.h"
 #include "system/player-type-definition.h"
 #include "util/angband-files.h"
@@ -51,7 +52,7 @@ std::filesystem::path search_pickpref_path(std::string_view player_base_name)
 {
     for (const auto filename_mode : { PickType::WITH_PNAME, PickType::DEFAULT }) {
         const auto filename = pickpref_filename(player_base_name, filename_mode);
-        const auto path = path_build(ANGBAND_DIR_USER, filename);
+        const auto path = path_build_inheriting_legacy_name(ANGBAND_DIR_USER, filename);
         if (std::filesystem::exists(path)) {
             return path;
         }
@@ -87,7 +88,7 @@ std::string pickpref_filename(std::string_view player_base_name, PickType filena
  */
 static tl::optional<std::vector<std::string>> read_text_lines(std::string_view filename)
 {
-    const auto path = path_build(ANGBAND_DIR_USER, filename);
+    const auto path = path_build_inheriting_legacy_name(ANGBAND_DIR_USER, filename);
     auto ifs = std::ifstream(path);
     if (!ifs) {
         return tl::nullopt;
@@ -96,6 +97,10 @@ static tl::optional<std::vector<std::string>> read_text_lines(std::string_view f
     std::vector<std::string> lines;
     std::string line;
     while (std::getline(ifs, line)) {
+#ifdef JP
+        // ゲームが設定ファイルを読むとき (angband_fgets()) と同じく、内部の文字コードでない行は推定して変換する
+        line = guess_convert_to_system_encoding(std::move(line));
+#endif
         lines.push_back(std::move(line));
     }
 
