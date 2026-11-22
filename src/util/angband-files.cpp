@@ -327,11 +327,11 @@ static tl::optional<std::string> read_line(FILE *fp)
     }
 
 #ifdef JP
-    const int len = guess_convert_to_system_encoding(line_buf.data(), line_buf.size());
-    line_buf.erase(len);
-#endif
-
+    // 内部の文字コードが UTF-8 なら、旧版の文字コードから変換すると長くなるので、バッファを書き換えずに変換した文字列を返す
+    return guess_convert_to_system_encoding(std::move(line_buf));
+#else
     return line_buf;
+#endif
 }
 
 /*!

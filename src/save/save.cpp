@@ -74,16 +74,7 @@ static bool wr_savefile_new(PlayerType *player_ptr)
     wr_u16b(0);
     wr_byte(0);
 
-#ifdef JP
-#ifdef EUC
-    wr_byte(enum2i(CharacterEncoding::EUC_JP));
-#endif
-#ifdef SJIS
-    wr_byte(enum2i(CharacterEncoding::SHIFT_JIS));
-#endif
-#else
-    wr_byte(enum2i(CharacterEncoding::US_ASCII));
-#endif
+    wr_byte(enum2i(SYSTEM_CHARACTER_ENCODING));
 
     wr_randomizer();
     wr_options();

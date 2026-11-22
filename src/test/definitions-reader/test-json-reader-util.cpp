@@ -508,8 +508,12 @@ TEST_CASE("info_set_string converts the UTF-8 string into the system encoding")
     REQUIRE(info_set_string(json, data, true).has_value());
 
     // 日本語版のシステム文字コード(EUC-JP/Shift_JIS)はUTF-8と異なるので、
-    // 変換されていれば元のバイト列とは一致しない
+    // 変換されていれば元のバイト列とは一致しない (内部の文字コードが UTF-8 なら変換しないので一致する)
+#ifdef UTF8
+    CHECK(data == UTF8_TEST_STRING);
+#else
     CHECK(data != UTF8_TEST_STRING);
+#endif
 
     // 変換結果の内容まで確かめる。期待するバイト列はEUC-JPとShift_JISで異なるため、
     // UTF-8へ戻して元の文字列と一致することを見る

@@ -79,8 +79,11 @@ constexpr auto MAINTAINER = "echizen@users.sourceforge.jp";
     #ifdef EUC
       #define iskanji(x) (iseuckanji(x))
       #define iskana(x) (0)
+    #elif defined(UTF8)
+      /* UTF-8 では文字のバイト数を multibyte-char.h の関数で求めるので、iskanji() は定義しない */
+      #define iskana(x) (0)
     #else
-      #error Oops! Please define "EUC" for kanji-code of your system.
+      #error Oops! Please define "EUC" or "UTF8" for kanji-code of your system.
     #endif
   #endif
   

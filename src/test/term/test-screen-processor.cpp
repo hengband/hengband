@@ -23,6 +23,8 @@ using namespace test;
 namespace {
 #if defined(JP) && defined(SJIS)
 constexpr std::string_view TOUTEN = "\x81\x41"; //!< 、
+#elif defined(JP) && defined(UTF8)
+constexpr std::string_view TOUTEN = "\xe3\x80\x81"; //!< 、
 #elif defined(JP)
 constexpr std::string_view TOUTEN = "\xa1\xa2"; //!< 、
 #endif
