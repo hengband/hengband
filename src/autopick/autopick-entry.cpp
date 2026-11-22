@@ -444,7 +444,7 @@ void autopick_entry_from_object(PlayerType *player_ptr, autopick_type *entry, co
     }
 
     PlayerClass pc(player_ptr);
-    auto realm_except_class = pc.equals(PlayerClassType::SORCERER) || pc.equals(PlayerClassType::RED_MAGE);
+    const auto realm_except_class = pc.is_every_magic();
 
     PlayerRealm pr(player_ptr);
     if ((pr.realm1().get_book() == tval) && !realm_except_class) {

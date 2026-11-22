@@ -315,7 +315,7 @@ bool is_autopick_match(PlayerType *player_ptr, const ItemEntity *o_ptr, const au
     }
 
     PlayerClass pc(player_ptr);
-    auto realm_except_class = pc.equals(PlayerClassType::SORCERER) || pc.equals(PlayerClassType::RED_MAGE);
+    const auto realm_except_class = pc.is_every_magic();
 
     PlayerRealm pr(player_ptr);
     if (entry.has(FLG_REALM1) && ((pr.realm1().get_book() != tval) || realm_except_class)) {
