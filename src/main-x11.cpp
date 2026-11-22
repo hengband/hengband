@@ -3239,23 +3239,20 @@ errr init_x11(int argc, char *argv[])
     char filename[1024]{};
     switch (arg_graphics) {
     case GRAPHICS_ORIGINAL: {
+        // 読み込めるかは ReadBMP() で確かめ、読み込めなければ文字の表示に戻す
         const auto &path = path_build(ANGBAND_DIR_XTRA, "graf/8x8.bmp");
-        if (0 == fd_close(fd_open(path, O_RDONLY))) {
-            use_graphics = true;
-            pict_wid = pict_hgt = 8;
-            ANGBAND_GRAF = "old";
-            angband_strcpy(filename, path.string().data(), sizeof(filename));
-        }
+        use_graphics = true;
+        pict_wid = pict_hgt = 8;
+        ANGBAND_GRAF = "old";
+        angband_strcpy(filename, path.string().data(), sizeof(filename));
         break;
     }
     case GRAPHICS_ADAM_BOLT: {
         const auto &path = path_build(ANGBAND_DIR_XTRA, "graf/16x16.bmp");
-        if (0 == fd_close(fd_open(path, O_RDONLY))) {
-            use_graphics = true;
-            pict_wid = pict_hgt = 16;
-            ANGBAND_GRAF = "new";
-            angband_strcpy(filename, path.string().data(), sizeof(filename));
-        }
+        use_graphics = true;
+        pict_wid = pict_hgt = 16;
+        ANGBAND_GRAF = "new";
+        angband_strcpy(filename, path.string().data(), sizeof(filename));
         break;
     }
     case GRAPHICS_ORIGINAL_TERRAIN: {
@@ -3306,6 +3303,12 @@ errr init_x11(int argc, char *argv[])
         Display *dpy = Metadpy->dpy;
         XImage *tiles_raw;
         tiles_raw = ReadBMP(dpy, filename);
+        if (tiles_raw == nullptr) {
+            plog(fmt::format(_("画像 '{}' を読み込めません。", "Cannot read image file '{}'"), filename));
+            use_graphics = false;
+            ANGBAND_GRAF = "ascii";
+            return 0;
+        }
         for (i = 0; i < num_term; i++) {
             term_data *td = &data[i];
             term_type *t = &td->t;
