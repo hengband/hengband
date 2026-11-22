@@ -674,7 +674,7 @@ TEST_CASE("MagicReader reads max_book and defaults it to four")
     CHECK(class_magics_info[MAGE].max_book[LIFE] == MAX_BOOKS_IN_REALM);
     CHECK(class_magics_info[MAGE].max_book[enum2i(RealmType::SORCERY)] == MAX_BOOKS_IN_REALM);
 
-    for (const auto max_book : { 1, 2, 4 }) {
+    for (const auto max_book : { 1, 2, 3 }) {
         CAPTURE(max_book);
         data["realms"][0]["max_book"] = max_book;
         REQUIRE(test::read_record<MagicReader>(data).has_value());
@@ -689,7 +689,7 @@ TEST_CASE("MagicReader reads max_book and defaults it to four")
 }
 
 /*!
- * @brief 範囲外・非整数の習得できる巻数を拒否し、既存定義を保持する
+ * @brief 範囲外・非整数・省略時と同じ値の習得できる巻数を拒否し、既存定義を保持する
  */
 TEST_CASE("MagicReader rejects invalid max_book without publishing partial data")
 {
@@ -698,7 +698,8 @@ TEST_CASE("MagicReader rejects invalid max_book without publishing partial data"
     auto data = make_magic_data(SpellInfoList::get_instance());
     data["realms"][0]["max_book"] = 2;
     REQUIRE(test::read_and_commit(MagicReader(data, session), session).has_value());
-    for (const auto &value : std::vector<nlohmann::json>{ 0, 5, -1, 2.0, "2", true }) {
+    // 4 は範囲内だが、省略時と同じ値なので書かない
+    for (const auto &value : std::vector<nlohmann::json>{ 0, 4, 5, -1, 2.0, "2", true }) {
         CAPTURE(value.dump());
         data["realms"][0]["max_book"] = value;
         const auto expected = value.is_number_integer() ? ParseErrorType::INVALID_VALUE : ParseErrorType::INVALID_TYPE;
@@ -706,6 +707,14 @@ TEST_CASE("MagicReader rejects invalid max_book without publishing partial data"
         CHECK(test::to_error_code(test::read_and_commit(MagicReader(data, session), session)) == expected);
         CHECK(class_magics_info[MAGE].max_book[LIFE] == 2);
     }
+
+    // 省略時と同じ 4 は、その理由を出す
+    data["realms"][0]["max_book"] = MAX_BOOKS_IN_REALM;
+    ScopedMessageCapture diagnostics;
+    session = MagicReader::create_session();
+    CHECK(test::to_error_code(test::read_and_commit(MagicReader(data, session), session)) == ParseErrorType::INVALID_VALUE);
+    REQUIRE_FALSE(diagnostics.messages().empty());
+    CHECK(diagnostics.messages()[0] == _("習得できる巻数が省略時と同じ 4 です (書かない)。", "max_book is 4, the same as the default (omit it)."));
 }
 
 /*!

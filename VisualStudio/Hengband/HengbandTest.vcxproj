@@ -195,6 +195,7 @@
     <ClCompile Include="..\..\src\test\window\test-overview-map-cache.cpp" />
     <ClCompile Include="..\..\src\test\window\test-shrunk-overview-map.cpp" />
     <ClCompile Include="..\..\src\test\wizard\test-spoiler-util.cpp" />
+    <ClCompile Include="..\..\src\test\wizard\test-wizard-spoiler.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\stdafx.h" />
