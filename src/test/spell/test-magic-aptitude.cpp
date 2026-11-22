@@ -15,17 +15,17 @@ constexpr AptitudeSteps DEFAULT_STEPS{ 30, 15, 3 };
 //! 消費MP を動かさない傾き (段階 ±9 では消費MP の倍率が 1% 未満になるので、習得レベルだけを確かめるときに使う)
 constexpr AptitudeSteps LEVEL_ONLY_STEPS{ 30, 0, 3 };
 
-magic_type make_base(PLAYER_LEVEL level, MANA_POINT mana, PERCENTAGE difficulty, EXP exp)
+magic_type make_base(int level, int mana, int difficulty, int exp)
 {
     magic_type base;
-    base.set_learn_level(level);
+    base.set_learn_level(static_cast<short>(level));
     base.smana = mana;
     base.sfail = difficulty;
     base.sexp = exp;
     return base;
 }
 
-PLAYER_LEVEL derive_level(PLAYER_LEVEL base_level, int aptitude, const AptitudeSteps &steps = DEFAULT_STEPS)
+int derive_level(int base_level, int aptitude, const AptitudeSteps &steps = DEFAULT_STEPS)
 {
     const auto derived = derive_magic_by_aptitude(make_base(base_level, 10, 50, 1), steps, aptitude);
     REQUIRE(derived.has_value());
@@ -48,7 +48,7 @@ TEST_CASE("derive_magic_by_aptitude keeps the base values at aptitude 0")
 TEST_CASE("derive_magic_by_aptitude moves the learn level most around level 25")
 {
     // 仕様の早見表 (段階 -3〜+3)
-    constexpr std::array<std::pair<PLAYER_LEVEL, std::array<PLAYER_LEVEL, 7>>, 6> table{ {
+    constexpr std::array<std::pair<int, std::array<int, 7>>, 6> player_level_table{ {
         { 5, { 9, 8, 6, 5, 4, 2, 1 } },
         { 10, { 17, 15, 12, 10, 8, 5, 3 } },
         { 20, { 31, 27, 24, 20, 16, 13, 9 } },
@@ -56,17 +56,18 @@ TEST_CASE("derive_magic_by_aptitude moves the learn level most around level 25")
         { 40, { 47, 45, 42, 40, 38, 35, 33 } },
         { 45, { 49, 48, 46, 45, 44, 42, 41 } },
     } };
-    for (const auto &[base_level, expected] : table) {
+
+    for (const auto &[base_level, expected] : player_level_table) {
         for (auto aptitude = -3; aptitude <= 3; aptitude++) {
             CAPTURE(base_level);
             CAPTURE(aptitude);
-            CHECK(derive_level(base_level, aptitude) == expected[aptitude + 3]);
+            CHECK_EQ(derive_level(base_level, aptitude), expected[aptitude + 3]);
         }
     }
 
     // 基準が 50 の魔法は段階によらず動かない
-    CHECK(derive_level(50, -9, LEVEL_ONLY_STEPS) == 50);
-    CHECK(derive_level(50, 9, LEVEL_ONLY_STEPS) == 50);
+    CHECK_EQ(50, derive_level(50, -9, LEVEL_ONLY_STEPS));
+    CHECK_EQ(50, derive_level(50, 9, LEVEL_ONLY_STEPS));
 }
 
 TEST_CASE("derive_magic_by_aptitude rounds the learn level move half away from zero")
@@ -94,7 +95,7 @@ TEST_CASE("derive_magic_by_aptitude clamps the learn level and the difficulty")
 
 TEST_CASE("derive_magic_by_aptitude rounds the mana cost and keeps it at least 1")
 {
-    const auto check_mana = [](MANA_POINT base_mana, int aptitude, MANA_POINT expected) {
+    const auto check_mana = [](int base_mana, int aptitude, int expected) {
         CAPTURE(base_mana);
         CAPTURE(aptitude);
         const auto derived = derive_magic_by_aptitude(make_base(10, base_mana, 50, 1), DEFAULT_STEPS, aptitude);
