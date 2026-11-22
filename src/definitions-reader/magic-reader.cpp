@@ -225,6 +225,9 @@ tl::expected<int, ParseErrorType> MagicReader::read_listed_spell(const nlohmann:
 {
     const auto spell_id = info_read_token(spell_tag_obj, [realm](const std::string &name) { return SpellInfoList::get_instance().get_spell_id(realm, name); });
     if (!spell_id) {
+        if (spell_id.error() == ParseErrorType::INVALID_FLAG) {
+            msg_print(_("魔法 '{}' は領域の魔法の定義にありません。", "Spell '{}' is not defined in the realm."), spell_tag_obj.get_ref<const std::string &>());
+        }
         return tl::make_unexpected(spell_id.error());
     }
 
@@ -365,6 +368,9 @@ tl::expected<void, ParseErrorType> MagicReader::set_realm_data(player_magic &mag
         const auto &realm_name_obj = get_json_value(realm, "name");
         const auto realm_name = info_read_token(realm_name_obj, realms_list);
         if (!realm_name) {
+            if (realm_name.error() == ParseErrorType::INVALID_FLAG) {
+                msg_print(_("領域 '{}' を知りません。", "Unknown realm '{}'."), realm_name_obj.get_ref<const std::string &>());
+            }
             return tl::make_unexpected(realm_name.error());
         }
 
@@ -374,7 +380,12 @@ tl::expected<void, ParseErrorType> MagicReader::set_realm_data(player_magic &mag
             return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
         }
         realm_listed[enum2i(realm_id)] = true;
-        return this->set_realm_spells(realm, magics_info, realm_id, has_second[enum2i(realm_id)]);
+        const auto spells_result = this->set_realm_spells(realm, magics_info, realm_id, has_second[enum2i(realm_id)]);
+        if (!spells_result) {
+            // 領域の中の診断 (段階、巻数、魔法の名前など) がどの領域のものかを示す
+            msg_print(_("領域 '{}' の読込失敗。", "Failed to load realm '{}'."), realm_name_obj.get_ref<const std::string &>());
+        }
+        return spells_result;
     });
     if (!result) {
         return result;

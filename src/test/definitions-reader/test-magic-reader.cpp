@@ -1,5 +1,6 @@
 #include "definitions-reader/magic-reader.h"
 #include "definitions-reader/parse-error-types.h"
+#include "locale/language-switcher.h"
 #include "player-info/class-info.h"
 #include "player-info/class-types.h"
 #include "player/player-realm.h"
@@ -11,6 +12,7 @@
 #include "test/scoped-restore.h"
 #include "test/system/spell-info-list-test-access.h"
 #include "util/enum-converter.h"
+#include "view/display-messages.h"
 #include <cstdint>
 #include <doctest/doctest.h>
 #include <limits>
@@ -379,6 +381,42 @@ TEST_CASE("MagicReader rejects invalid spell overrides")
         }
         CHECK(test::to_error_code(read_with_steps(candidate)) == c.error);
         check_spell(class_magics_info[MAGE].info[LIFE][8], 24, 10, 33, 2);
+    }
+}
+
+/*!
+ * @brief 職業魔法の定義の誤りの診断に、領域名と魔法の名前を出す
+ */
+TEST_CASE("MagicReader names the realm and the spell in its diagnostics")
+{
+    const MagicReaderState state;
+    auto data = make_magic_data(SpellInfoList::get_instance());
+
+    SUBCASE("an unknown spell tag names the tag and the realm")
+    {
+        data["realms"][0]["unlearnable"] = { "no-such-spell" };
+        ScopedMessageCapture diagnostics;
+        CHECK(test::to_error_code(read_with_steps(data)) == ParseErrorType::INVALID_FLAG);
+        REQUIRE(diagnostics.messages().size() >= 3);
+        CHECK(diagnostics.messages()[0] == _("魔法 'no-such-spell' は領域の魔法の定義にありません。", "Spell 'no-such-spell' is not defined in the realm."));
+        CHECK(diagnostics.messages()[1] == _("習得できない魔法の一覧読込失敗。", "Failed to load unlearnable spells."));
+        CHECK(diagnostics.messages()[2] == _("領域 'LIFE' の読込失敗。", "Failed to load realm 'LIFE'."));
+    }
+    SUBCASE("an invalid aptitude names the realm")
+    {
+        data["realms"][1]["aptitude"] = 100;
+        ScopedMessageCapture diagnostics;
+        CHECK(test::to_error_code(read_with_steps(data)) == ParseErrorType::INVALID_VALUE);
+        REQUIRE(diagnostics.messages().size() >= 2);
+        CHECK(diagnostics.messages()[1] == _("領域 'SORCERY' の読込失敗。", "Failed to load realm 'SORCERY'."));
+    }
+    SUBCASE("an unknown realm name is echoed")
+    {
+        data["realms"][2]["name"] = "NO_SUCH_REALM";
+        ScopedMessageCapture diagnostics;
+        CHECK(test::to_error_code(read_with_steps(data)) == ParseErrorType::INVALID_FLAG);
+        REQUIRE_FALSE(diagnostics.messages().empty());
+        CHECK(diagnostics.messages()[0] == _("領域 'NO_SUCH_REALM' を知りません。", "Unknown realm 'NO_SUCH_REALM'."));
     }
 }
 
