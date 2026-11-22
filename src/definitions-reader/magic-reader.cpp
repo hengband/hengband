@@ -408,9 +408,15 @@ tl::expected<void, ParseErrorType> MagicReader::set_realm_spells(const nlohmann:
     // 省略時は全巻を習得できる
     auto &max_book = magics_info.max_book[enum2i(realm)];
     max_book = MAX_BOOKS_IN_REALM;
-    if (const auto result = info_set_integer(get_json_value(realm_data, "max_book"), max_book, false, Range(1, MAX_BOOKS_IN_REALM)); !result) {
-        msg_print(_("習得できる巻数読込失敗。", "Failed to load max_book."));
-        return result;
+    if (const auto &max_book_obj = get_json_value(realm_data, "max_book"); !max_book_obj.is_null()) {
+        if (const auto result = info_set_integer(max_book_obj, max_book, true, Range(1, MAX_BOOKS_IN_REALM)); !result) {
+            msg_print(_("習得できる巻数読込失敗。", "Failed to load max_book."));
+            return result;
+        }
+        if (max_book == MAX_BOOKS_IN_REALM) {
+            msg_print(_("習得できる巻数が省略時と同じ {} です (書かない)。", "max_book is {}, the same as the default (omit it)."), MAX_BOOKS_IN_REALM);
+            return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
+        }
     }
 
     // 省略時は段階 0 (基準値のまま)
