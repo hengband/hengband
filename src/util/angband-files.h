@@ -59,3 +59,6 @@ tl::optional<ulong> fd_size(int fd);
 errr fd_read(int fd, char *buf, ulong n);
 errr fd_write(int fd, concptr buf, ulong n);
 errr fd_close(int fd);
+#if defined(JP) && defined(UTF8)
+tl::optional<std::filesystem::path> rename_legacy_named_file(const std::filesystem::path &path);
+#endif

@@ -11,14 +11,20 @@
  * 例外を投げず開けないパスとして扱うことを検証する。
  *
  * angband_fgets() は、'\0' を含む行をその '\0' で切った1行として返すことを検証する。
+ *
+ * 内部の文字コードが UTF-8 の構成では、rename_legacy_named_file() が旧版の EUC-JP の名前のファイルを
+ * 今の名前に付け替えることを検証する。
  */
 
 #include "test/string-helpers.h"
+#include "test/temporary-json-files.h"
 #include "util/angband-files.h"
 #include "util/finalizer.h"
 #include <cstdio>
 #include <doctest/doctest.h>
 #include <filesystem>
+#include <fstream>
+#include <iterator>
 #include <string>
 #include <string_view>
 #include <vector>
@@ -145,3 +151,80 @@ TEST_CASE("angband_fgets keeps empty lines and the last line without a newline")
 {
     CHECK(read_all_lines("abc\n\nxyz") == std::vector<std::string>{ "abc", "", "xyz" });
 }
+
+#if defined(JP) && defined(UTF8)
+using namespace test;
+
+// テストのファイルは、同時に走るほかのテストと重ならない一時ディレクトリ (TemporaryJsonFiles) に作る
+namespace {
+constexpr std::string_view NIHON_UTF8 = "\xe6\x97\xa5\xe6\x9c\xac"; //!< 日本 (UTF-8)
+constexpr std::string_view NIHON_EUC = "\xc6\xfc\xcb\xdc"; //!< 日本 (EUC-JP)
+
+std::string read_file(const std::filesystem::path &path)
+{
+    std::ifstream ifs(path, std::ios::binary);
+    return std::string(std::istreambuf_iterator<char>(ifs), std::istreambuf_iterator<char>());
+}
+
+/*!
+ * @brief 旧名 (EUC-JP) のファイルを作る
+ * @return 作れたら true
+ * @details UTF-8 として正しくない名前のファイルを作れないファイルシステム (macOS の APFS など) では、
+ * 旧名のセーブファイルもできないので、作れなければテストを省く。
+ */
+bool write_legacy_file(const TemporaryJsonFiles &dir, const std::filesystem::path &name, std::string_view data)
+{
+    try {
+        dir.write_raw(name, data);
+        return true;
+    } catch (const std::ios_base::failure &) {
+        MESSAGE("Skipped: the file system cannot create a file whose name is not valid UTF-8.");
+        return false;
+    }
+}
+}
+
+TEST_CASE("rename_legacy_named_file renames a file named in EUC-JP")
+{
+    const TemporaryJsonFiles dir;
+    const auto path = dir.directory / cat("1000.", NIHON_UTF8);
+    const auto legacy_path = dir.directory / cat("1000.", NIHON_EUC);
+    if (!write_legacy_file(dir, legacy_path.filename(), "legacy")) {
+        return;
+    }
+
+    // 付け替えたら、今の名前のパスを返す
+    CHECK(rename_legacy_named_file(path) == path);
+    CHECK(read_file(path) == "legacy");
+    CHECK_FALSE(std::filesystem::exists(legacy_path));
+}
+
+TEST_CASE("rename_legacy_named_file keeps both files when the file already exists")
+{
+    const TemporaryJsonFiles dir;
+    const auto path = dir.directory / cat("1000.", NIHON_UTF8);
+    const auto legacy_path = dir.directory / cat("1000.", NIHON_EUC);
+    dir.write_raw(path.filename(), "current");
+    if (!write_legacy_file(dir, legacy_path.filename(), "legacy")) {
+        return;
+    }
+
+    CHECK_FALSE(rename_legacy_named_file(path).has_value());
+    CHECK(read_file(path) == "current");
+    CHECK(read_file(legacy_path) == "legacy");
+}
+
+TEST_CASE("rename_legacy_named_file does nothing without a file named in EUC-JP")
+{
+    const TemporaryJsonFiles dir;
+    const auto path = dir.directory / cat("1000.", NIHON_UTF8);
+    CHECK_FALSE(rename_legacy_named_file(path).has_value());
+    CHECK_FALSE(std::filesystem::exists(path));
+
+    // ASCII だけの名前は旧名も同じなので、引き継がない
+    const auto ascii_path = dir.directory / "1000.Frodo";
+    dir.write_raw(ascii_path.filename(), "ascii");
+    CHECK_FALSE(rename_legacy_named_file(ascii_path).has_value());
+    CHECK(read_file(ascii_path) == "ascii");
+}
+#endif
