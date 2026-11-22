@@ -61,6 +61,7 @@ tl::expected<AptitudeSteps, ParseErrorType> MagicReader::read_aptitude_steps(con
         return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
     }
     if (!steps_obj.is_object()) {
+        msg_print(_("aptitude_steps はオブジェクトである必要があります。", "aptitude_steps must be an object."));
         return tl::make_unexpected(ParseErrorType::INVALID_TYPE);
     }
 
