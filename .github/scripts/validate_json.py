@@ -1346,8 +1346,13 @@ def derive_magic_by_aptitude(base: tuple[int, ...], steps: dict, aptitude: int) 
     return derived_level, derived_mana, derived_difficulty, exp_rate
 
 
-def validate_class_magic_semantics(data: dict, schema_path: Path, data_path: Path, registry: Registry) -> None:
-    """Check MagicReader's strict integers, class order, realm spell references and derived values."""
+def validate_class_magic_semantics(data: dict, schema_path: Path, data_path: Path, registry: Registry,
+                                   require_all_classes: bool = True) -> None:
+    """Check MagicReader's strict integers, class order, realm spell references and derived values.
+
+    require_all_classes が真なら、全職業のレコードがそろっていることも確かめる。
+    読み込みは、抜けた職業があると起動時にエラーにする (MagicReader::validate_all_defined)。
+    """
     # info_validate_version は 2.0 を整数として受け付けない。
     require_integer(data["version"], ["version"])
     steps = data["aptitude_steps"]
@@ -1362,6 +1367,7 @@ def validate_class_magic_semantics(data: dict, schema_path: Path, data_path: Pat
     spell_entries = [(realm["name"], spell["spell_id"], spell["spell_tag"], tuple(spell[field] for field in SPELL_BASE_FIELDS))
                      for realm in spells["realms"] for book in realm["books"] for spell in book["spells"]]
     previous_id = -1
+    defined_ids = set()
     for class_index, record in enumerate(data["classes"]):
         path = ["classes", class_index]
         class_id = class_ids.get(record["name"])
@@ -1370,6 +1376,7 @@ def validate_class_magic_semantics(data: dict, schema_path: Path, data_path: Pat
         if class_id <= previous_id:
             raise ValidationError("class IDs must be in strictly increasing order", path=path + ["name"])
         previous_id = class_id
+        defined_ids.add(class_id)
         for field in ("first_spell_level", "armour_weight_limit"):
             if field in record:
                 require_integer(record[field], path + [field])
@@ -1439,6 +1446,13 @@ def validate_class_magic_semantics(data: dict, schema_path: Path, data_path: Pat
         missing = sorted(choosable - realm_names, key=MAGIC_REALM_TOKENS.index)
         if missing:
             raise ValidationError(f"realm {missing[0]} that {record['name']} can choose must be listed", path=path + ["realms"])
+    if require_all_classes:
+        # 読み込みと同じく、名前の表ではなく PlayerClassType の全値を見る (名前の表に無い職業は番号で出す)
+        enum_ids = load_cpp_enum_values(schema_path.resolve().parent.parent / "src/player-info/class-types.h", "PlayerClassType")
+        tokens = {class_id: token for token, class_id in class_ids.items()}
+        missing_ids = sorted(class_id for name, class_id in enum_ids.items() if name != "MAX" and class_id not in defined_ids)
+        if missing_ids:
+            raise ValidationError(f"class {tokens.get(missing_ids[0], missing_ids[0])} must be defined", path=["classes"])
 
 
 def validate_class_skill_semantics(data: dict) -> None:
@@ -1658,8 +1672,12 @@ def spell_realm_names(schema: dict) -> list[str]:
 
 
 def validate_one(pair: tuple[Path, Path, dict], registry: Registry | None = None, *,
-                 partial_spell_definitions: bool = False) -> tuple[bool, str]:
-    """定義 1 つを検査する。partial_spell_definitions は、一部の魔法だけを書いた SpellDefinitions を通すテスト用。"""
+                 partial_definitions: bool = False) -> tuple[bool, str]:
+    """定義 1 つを検査する。
+
+    partial_definitions は、一部だけを書いた見本 (一部の魔法だけの SpellDefinitions、一部の職業だけの
+    ClassMagicDefinitions) を通すテスト用。
+    """
     data_path, schema_path, schema = pair
     try:
         data = load_jsonc(data_path)
@@ -1681,10 +1699,11 @@ def validate_one(pair: tuple[Path, Path, dict], registry: Registry | None = None
             "TownDefinitionList.schema.json": lambda: validate_town_definition_list_semantics(data, schema_path, data_path, registry),
             "TownMap.schema.json": lambda: validate_town_map_semantics(data, schema_path),
             "MonraceDefinitions.schema.json": lambda: validate_monrace_semantics(data, schema_path, data_path, registry),
-            "ClassMagicDefinitions.schema.json": lambda: validate_class_magic_semantics(data, schema_path, data_path, registry),
+            "ClassMagicDefinitions.schema.json": lambda: validate_class_magic_semantics(
+                data, schema_path, data_path, registry, require_all_classes=not partial_definitions),
             "ClassSkillDefinitions.schema.json": lambda: validate_class_skill_semantics(data),
             "SpellDefinitions.schema.json": lambda: validate_spell_semantics(
-                data, None if partial_spell_definitions else spell_realm_names(schema)),
+                data, None if partial_definitions else spell_realm_names(schema)),
             "MonsterMessages.schema.json": lambda: validate_monster_message_semantics(data, schema_path, data_path, registry),
             "Quest.schema.json": lambda: validate_quest_file_semantics(data, schema_path, data_path, registry),
             "QuestPreferences.schema.json": lambda: validate_quest_preferences_semantics(data, schema_path, data_path, registry),

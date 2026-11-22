@@ -227,7 +227,15 @@ void init_class_magics_info()
         }
         return result;
     };
-    init_json("ClassMagicDefinitions.jsonc", "classes", DefinitionHashDataType::CLASS_MAGICS, class_magics_info, parser, nullptr, true, validate_root);
+    // 定義の無い職業は魔法を使えない初期値のまま動いてしまうので、全職業がそろっていることを確かめる。
+    const auto check_all_defined = [&session] {
+        constexpr std::string_view filename = "ClassMagicDefinitions.jsonc";
+        ScopedMessageCapture diagnostics;
+        if (!MagicReader::validate_all_defined(session)) {
+            quit(format_definition_load_error(diagnostics.messages(), fmt::format(_("{}: 職業魔法の定義がそろっていません", "{}: class magic definitions are incomplete"), filename)));
+        }
+    };
+    init_json("ClassMagicDefinitions.jsonc", "classes", DefinitionHashDataType::CLASS_MAGICS, class_magics_info, parser, check_all_defined, true, validate_root);
 }
 
 /*!

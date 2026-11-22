@@ -49,6 +49,24 @@ TEST_CASE("DefinitionIdChecker increasing and unordered IDs")
     CHECK(unique.check(10).error().reason == fmt::format(_("{}の ID '{}' は重複しています", "{} ID '{}' is duplicated"), "terrain", 10));
 }
 
+TEST_CASE("DefinitionIdChecker remembers committed IDs in every order")
+{
+    for (const auto order : { DefinitionIdOrder::SEQUENTIAL, DefinitionIdOrder::STRICTLY_INCREASING, DefinitionIdOrder::UNIQUE }) {
+        CAPTURE(static_cast<int>(order));
+        DefinitionIdChecker checker(order, { 0, 3 }, "class");
+        // 確定する前の ID は、定義されたものとして扱わない
+        REQUIRE(checker.check(0));
+        CHECK_FALSE(checker.is_defined(0));
+        checker.commit();
+        CHECK(checker.is_defined(0));
+        REQUIRE(checker.check(1));
+        checker.commit();
+        CHECK(checker.is_defined(1));
+        CHECK_FALSE(checker.is_defined(2));
+        CHECK_FALSE(checker.is_defined(3));
+    }
+}
+
 TEST_CASE("DefinitionIdChecker rejects invalid IDs and clears pending")
 {
     DefinitionIdChecker checker(DefinitionIdOrder::STRICTLY_INCREASING, { 0, 32766 }, "item");

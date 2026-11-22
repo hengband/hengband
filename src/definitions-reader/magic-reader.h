@@ -19,6 +19,7 @@ public:
     using Session = DefinitionIdChecker;
     static Session create_session(tl::optional<int> last_id = tl::nullopt);
     static tl::expected<AptitudeSteps, ParseErrorType> read_aptitude_steps(const nlohmann::json &root);
+    static tl::expected<void, ParseErrorType> validate_all_defined(const Session &session);
 
     MagicReader(const nlohmann::json &class_data, Session &session, const AptitudeSteps &steps = {});
     MagicReader(nlohmann::json &&, Session &, const AptitudeSteps & = {}) = delete;

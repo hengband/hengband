@@ -37,11 +37,11 @@ class DefinitionIntegerValidationTest(unittest.TestCase):
         realm["aptitude_as_second"] = 1
         realm["overrides"] = [{"spell_tag": spell["realms"][0]["books"][0]["spells"][0]["spell_tag"], "aptitude": 0}]
 
-    def validate(self, name, document, spell_definitions=None, *, partial_spell_definitions=True):
+    def validate(self, name, document, spell_definitions=None, *, partial_definitions=True):
         schema_path = self.schema_map[name]
         companions = {"SpellDefinitions.jsonc": spell_definitions} if spell_definitions is not None else None
         return validate_document(document, schema_path, self.loaded[schema_path], self.registry, companions=companions,
-                                 partial_spell_definitions=partial_spell_definitions)
+                                 partial_definitions=partial_definitions)
 
     def check_value(self, name, path, value, accepted, reason=None):
         document = copy.deepcopy(self.samples[name])
@@ -60,13 +60,13 @@ class DefinitionIntegerValidationTest(unittest.TestCase):
     def test_bundled_definitions(self):
         for name, document in self.documents.items():
             with self.subTest(name=name):
-                # 同梱の SpellDefinitions は、CI と同じく全魔法がそろっていることまで確かめる
-                ok, message = self.validate(name, document, partial_spell_definitions=False)
+                # 同梱の定義は、CI と同じく全魔法・全職業がそろっていることまで確かめる
+                ok, message = self.validate(name, document, partial_definitions=False)
                 self.assertTrue(ok, message)
 
     def test_spell_definitions_must_define_every_spell(self):
         def validate(document):
-            return self.validate("SpellDefinitions", document, partial_spell_definitions=False)
+            return self.validate("SpellDefinitions", document, partial_definitions=False)
 
         # 一部の魔法だけを書いた見本は、そろっているかの検査を通らない
         ok, message = validate(self.samples["SpellDefinitions"])
@@ -98,7 +98,7 @@ class DefinitionIntegerValidationTest(unittest.TestCase):
         document = copy.deepcopy(self.documents["SpellDefinitions"])
         books = document["realms"][0]["books"]
         books[3]["spells"].append(books[0]["spells"].pop(0))
-        ok, message = self.validate("SpellDefinitions", document, partial_spell_definitions=False)
+        ok, message = self.validate("SpellDefinitions", document, partial_definitions=False)
         self.assertFalse(ok, message)
         self.assertIn("spell ID 0 must be listed in book 1 of the realm", message)
         self.assertIn("Location: ['realms', 0, 'books', 3, 'spells', 8, 'spell_id']", message)
@@ -225,10 +225,30 @@ class DefinitionIntegerValidationTest(unittest.TestCase):
         self.assertIn("Location: ['classes', 1, 'name']", message)
 
     def test_magic_gaps_are_accepted(self):
+        # 並びの検査は飛び飛びの ID を許す。全職業がそろっているかは別の検査で、テストの見本では既定で外す
         document = copy.deepcopy(self.documents["ClassMagicDefinitions"])
         document["classes"] = [document["classes"][1], document["classes"][3]]
         ok, message = self.validate("ClassMagicDefinitions", document)
         self.assertTrue(ok, message)
+
+    def test_magic_must_define_every_class(self):
+        def validate(document):
+            return self.validate("ClassMagicDefinitions", document, partial_definitions=False)
+
+        # 途中の職業 (メイジ) を抜くと、その職業の名前を出して拒否する
+        document = copy.deepcopy(self.documents["ClassMagicDefinitions"])
+        document["classes"] = [record for record in document["classes"] if record["name"] != "MAGE"]
+        ok, message = validate(document)
+        self.assertFalse(ok)
+        self.assertIn("class MAGE must be defined", message)
+        self.assertIn("Location: ['classes']", message)
+
+        # 末尾の職業を抜いても拒否する
+        document = copy.deepcopy(self.documents["ClassMagicDefinitions"])
+        last = document["classes"].pop()
+        ok, message = validate(document)
+        self.assertFalse(ok)
+        self.assertIn(f"class {last['name']} must be defined", message)
 
     def test_magic_repeated_class_is_rejected(self):
         document = copy.deepcopy(self.documents["ClassMagicDefinitions"])
