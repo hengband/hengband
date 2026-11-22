@@ -178,6 +178,32 @@ static SpoilerOutputResultType spoil_categorized_mon_desc()
     return status;
 }
 
+/*!
+ * @brief 魔法のスポイラーに出す、職業と領域の魔法の表を返す
+ * @param pclass 職業
+ * @param magic 職業の魔法の定義
+ * @param realm 領域
+ * @return 出す表の位置 (第一領域用、第二領域用の順)。その職業が使えない領域なら空
+ * @details 第一領域用の表は、職業が選べる領域 (全領域職はすべての魔法領域) に出す。
+ * 第一領域にも第二領域にも選べる領域で、第二領域として選んだときの値が違えば、第二領域用の表も出す。
+ */
+std::vector<RealmPosition> spoiler_realm_positions(PlayerClassType pclass, const player_magic &magic, RealmType realm)
+{
+    const auto realm1_choices = PlayerRealm::get_realm1_choices(pclass);
+    const auto realm2_choices = PlayerRealm::get_realm2_choices(pclass);
+    const auto is_every_magic = PlayerClass::is_every_magic(pclass);
+    if (!(is_every_magic && PlayerRealm::is_magic(realm)) && (realm1_choices | realm2_choices).has_not(realm)) {
+        return {};
+    }
+
+    std::vector<RealmPosition> positions{ RealmPosition::FIRST };
+    const auto is_either_position = PlayerRealm::is_magic(realm) && realm1_choices.has(realm) && realm2_choices.has(realm);
+    if (is_either_position && magic.has_distinct_second(realm)) {
+        positions.push_back(RealmPosition::SECOND);
+    }
+    return positions;
+}
+
 static SpoilerOutputResultType spoil_player_spell()
 {
     const auto path = path_build(ANGBAND_DIR_USER, "spells.txt");
@@ -232,21 +258,10 @@ static SpoilerOutputResultType spoil_player_spell()
             spoil_out("\n");
         };
 
-        const auto realm1_choices = PlayerRealm::get_realm1_choices(pclass);
-        const auto realm2_choices = PlayerRealm::get_realm2_choices(pclass);
-        const auto choices = realm1_choices | realm2_choices;
-        const auto is_every_magic = PlayerClass::is_every_magic(pclass);
         for (const auto realm : EnumRange(RealmType::LIFE, RealmType::MAX)) {
-            if (!(is_every_magic && PlayerRealm::is_magic(realm)) && choices.has_not(realm)) {
-                continue;
-            }
-
-            spoil_realm_table(realm, RealmPosition::FIRST, "");
-
-            // 第一領域にも第二領域にも選べる領域で、第二領域として選んだときの値が違えば、その表も出す
-            const auto is_either_position = PlayerRealm::is_magic(realm) && realm1_choices.has(realm) && realm2_choices.has(realm);
-            if (is_either_position && magic_ptr->has_distinct_second(realm)) {
-                spoil_realm_table(realm, RealmPosition::SECOND, _("（第二領域）", " (second realm)"));
+            for (const auto position : spoiler_realm_positions(pclass, *magic_ptr, realm)) {
+                const auto *suffix = (position == RealmPosition::SECOND) ? _("（第二領域）", " (second realm)") : "";
+                spoil_realm_table(realm, position, suffix);
             }
         }
     }

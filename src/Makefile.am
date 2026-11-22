@@ -1674,7 +1674,8 @@ hengband_test_SOURCES = \
 	test/view/test-screen-parity-helpers.cpp \
 	test/window/test-overview-map-cache.cpp \
 	test/window/test-shrunk-overview-map.cpp \
-	test/wizard/test-spoiler-util.cpp
+	test/wizard/test-spoiler-util.cpp \
+	test/wizard/test-wizard-spoiler.cpp
 
 # VPATHビルドでも同じソースツリーの同梱データを参照する。
 AM_TESTS_ENVIRONMENT = HENGBAND_TEST_SOURCE_DIR='$(abs_top_srcdir)'; export HENGBAND_TEST_SOURCE_DIR;
