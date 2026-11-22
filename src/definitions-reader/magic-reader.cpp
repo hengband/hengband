@@ -24,9 +24,6 @@ constexpr auto MAX_CLASS_MAGIC_VALUE = std::numeric_limits<short>::max() / 16;
 constexpr auto MIN_APTITUDE = -9;
 constexpr auto MAX_APTITUDE = 9;
 
-//! 魔法書 1 巻に載っている魔法の数
-constexpr auto SPELLS_IN_BOOK = 8;
-
 /*!
  * @brief 魔法の載っている巻を返す
  * @param spell_id 呪文ID (0〜31)

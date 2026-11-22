@@ -10,6 +10,8 @@
 #include <vector>
 
 constexpr int SPELLS_IN_REALM = 32;
+//! 魔法書 1 冊に載る魔法の数。呪文ID を SPELLS_IN_BOOK で割った商が、領域の中の何冊目か (0 始まり) になる
+constexpr int SPELLS_IN_BOOK = 8;
 /*!
  * @brief 魔法領域名とintの対応表
  */

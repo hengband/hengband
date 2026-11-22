@@ -12,14 +12,20 @@ REPOSITORY_ROOT = Path(__file__).resolve().parents[2]
 CPP_INTEGER_MAXIMUMS = {"short": 32767, "int16_t": 32767}
 
 
-def validate_document(document, schema_path, schema, registry=None, *, filename=None, companions=None):
+def validate_document(document, schema_path, schema, registry=None, *, filename=None, companions=None,
+                      partial_spell_definitions=True):
+    """一時ファイルに書いた文書を CI の入口で検査する。
+
+    SpellDefinitions の見本は一部の魔法だけを書くので、全魔法がそろっているかの検査は既定で外す。
+    その検査を確かめるテストは partial_spell_definitions=False を渡す。
+    """
     with tempfile.TemporaryDirectory() as folder:
         directory = Path(folder)
         target = directory / (filename or schema_path.name.removesuffix(".schema.json") + ".jsonc")
         target.write_text(json.dumps(document), encoding="utf-8")
         for name, data in (companions or {}).items():
             (directory / name).write_text(json.dumps(data), encoding="utf-8")
-        return validate_one((target, schema_path, schema), registry)
+        return validate_one((target, schema_path, schema), registry, partial_spell_definitions=partial_spell_definitions)
 
 
 def cpp_storage_maximum(relative_path, pattern):

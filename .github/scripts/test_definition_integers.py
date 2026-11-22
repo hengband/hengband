@@ -37,10 +37,11 @@ class DefinitionIntegerValidationTest(unittest.TestCase):
         realm["aptitude_as_second"] = 1
         realm["overrides"] = [{"spell_tag": spell["realms"][0]["books"][0]["spells"][0]["spell_tag"], "aptitude": 0}]
 
-    def validate(self, name, document, spell_definitions=None):
+    def validate(self, name, document, spell_definitions=None, *, partial_spell_definitions=True):
         schema_path = self.schema_map[name]
         companions = {"SpellDefinitions.jsonc": spell_definitions} if spell_definitions is not None else None
-        return validate_document(document, schema_path, self.loaded[schema_path], self.registry, companions=companions)
+        return validate_document(document, schema_path, self.loaded[schema_path], self.registry, companions=companions,
+                                 partial_spell_definitions=partial_spell_definitions)
 
     def check_value(self, name, path, value, accepted, reason=None):
         document = copy.deepcopy(self.samples[name])
@@ -59,8 +60,61 @@ class DefinitionIntegerValidationTest(unittest.TestCase):
     def test_bundled_definitions(self):
         for name, document in self.documents.items():
             with self.subTest(name=name):
-                ok, message = self.validate(name, document)
+                # 同梱の SpellDefinitions は、CI と同じく全魔法がそろっていることまで確かめる
+                ok, message = self.validate(name, document, partial_spell_definitions=False)
                 self.assertTrue(ok, message)
+
+    def test_spell_definitions_must_define_every_spell(self):
+        def validate(document):
+            return self.validate("SpellDefinitions", document, partial_spell_definitions=False)
+
+        # 一部の魔法だけを書いた見本は、そろっているかの検査を通らない
+        ok, message = validate(self.samples["SpellDefinitions"])
+        self.assertFalse(ok, message)
+        self.assertIn("must define every spell ID", message)
+
+        document = copy.deepcopy(self.documents["SpellDefinitions"])
+        realm = document["realms"][0]
+        removed = realm["books"][0]["spells"].pop(5)
+        ok, message = validate(document)
+        self.assertFalse(ok, message)
+        self.assertIn(f"realm {realm['name']} must define every spell ID; missing: [{removed['spell_id']}]", message)
+        self.assertIn("Location: ['realms']", message)
+
+        document = copy.deepcopy(self.documents["SpellDefinitions"])
+        removed_realm = document["realms"].pop()
+        ok, message = validate(document)
+        self.assertFalse(ok, message)
+        self.assertIn(f"realm {removed_realm['name']} must define every spell ID", message)
+
+    def test_spell_must_be_listed_in_the_book_of_its_id(self):
+        spell_path = ["realms", 0, "books", 0, "spells", 0, "spell_id"]
+        for value, valid in ((0, True), (7, True), (8, False), (31, False)):
+            with self.subTest(value=value):
+                reason = None if valid else f"spell ID {value} must be listed in book {value // 8 + 1} of the realm"
+                self.check_value("SpellDefinitions", spell_path, value, valid, reason)
+
+        # 同梱の定義で、魔法を別の魔法書へ移すと通らない
+        document = copy.deepcopy(self.documents["SpellDefinitions"])
+        books = document["realms"][0]["books"]
+        books[3]["spells"].append(books[0]["spells"].pop(0))
+        ok, message = self.validate("SpellDefinitions", document, partial_spell_definitions=False)
+        self.assertFalse(ok, message)
+        self.assertIn("spell ID 0 must be listed in book 1 of the realm", message)
+        self.assertIn("Location: ['realms', 0, 'books', 3, 'spells', 8, 'spell_id']", message)
+
+    def test_realm_has_at_most_four_books(self):
+        document = copy.deepcopy(self.samples["SpellDefinitions"])
+        books = document["realms"][0]["books"]
+        empty_book = copy.deepcopy(books[0])
+        empty_book["spells"] = []
+        books.extend(copy.deepcopy(empty_book) for _ in range(3))
+        ok, message = self.validate("SpellDefinitions", document)
+        self.assertTrue(ok, message)
+        books.append(copy.deepcopy(empty_book))
+        ok, message = self.validate("SpellDefinitions", document)
+        self.assertFalse(ok, message)
+        self.assertIn("Location: ['realms', 0, 'books']", message)
 
     def test_magic_integer_fields(self):
         class_path = ["classes", 0]
@@ -474,12 +528,24 @@ class DefinitionIntegerValidationTest(unittest.TestCase):
         fields = (
             ("ClassMagicDefinitions", ["classes", 0, "first_spell_level"], 50),
             ("ClassMagicDefinitions", ["classes", 0, "armour_weight_limit"], 2047),
-            ("SpellDefinitions", ["realms", 0, "books", 0, "spells", 0, "spell_id"], 31),
         )
         for name, path, maximum in fields:
             for value, valid in ((0, True), (maximum, True), (-1, False), (maximum + 1, False)):
                 with self.subTest(name=name, path=path, value=value):
                     self.check_value(name, path, value, valid)
+        # 呪文ID の上限 31 は、4 冊目の魔法書に書いた魔法で確かめる (魔法書は呪文ID で決まる)
+        document = copy.deepcopy(self.samples["SpellDefinitions"])
+        books = document["realms"][0]["books"]
+        empty_book = copy.deepcopy(books[0])
+        empty_book["spells"] = []
+        last_book = copy.deepcopy(books[0])
+        last_book["spells"][0]["spell_tag"] = "LAST_SPELL"
+        books.extend([copy.deepcopy(empty_book), copy.deepcopy(empty_book), last_book])
+        for value, valid in ((24, True), (31, True), (-1, False), (32, False)):
+            with self.subTest(name="SpellDefinitions", value=value):
+                last_book["spells"][0]["spell_id"] = value
+                ok, message = self.validate("SpellDefinitions", document)
+                self.assertEqual(ok, valid, message)
 
     def test_magic_first_spell_level_is_omitted_only_without_spellbooks(self):
         document = copy.deepcopy(self.samples["ClassMagicDefinitions"])
@@ -620,7 +686,8 @@ class DefinitionIntegerValidationTest(unittest.TestCase):
         self.assertIn("Location: ['realms', 0, 'books', 0, 'spells', 1, 'spell_tag']", message)
 
     def test_magic_empty_tag_with_undefined_lower_id_is_rejected(self):
-        for spell_id in (1, 31):
+        # 見本の魔法は 1 冊目に書くので、呪文ID は 1 冊目の範囲 (0〜7) で確かめる
+        for spell_id in (1, 7):
             with self.subTest(spell_id=spell_id):
                 magic = copy.deepcopy(self.samples["ClassMagicDefinitions"])
                 spells = copy.deepcopy(self.samples["SpellDefinitions"])
@@ -646,13 +713,11 @@ class DefinitionIntegerValidationTest(unittest.TestCase):
                 spell = books[0]["spells"][0]
                 spell["spell_id"] = spell_id
                 spell["spell_tag"] = ""
-                books.append(copy.deepcopy(books[0]))
-                books[-1]["spells"] = []
                 for lower_id in range(spell_id):
                     lower = copy.deepcopy(spell)
                     lower["spell_id"] = lower_id
                     lower["spell_tag"] = f"LOWER_{lower_id}"
-                    books[-1]["spells"].append(lower)
+                    books[0]["spells"].append(lower)
                 magic["classes"][0]["realms"][0]["overrides"][0]["spell_tag"] = ""
                 magic["classes"][0]["realms"][0]["unlearnable"] = [f"LOWER_{lower_id}" for lower_id in range(spell_id)]
                 ok, message = self.validate("ClassMagicDefinitions", magic, spells)

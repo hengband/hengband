@@ -1306,6 +1306,7 @@ def collect_spell_tags(spells: dict) -> dict[str, set[str]]:
 
 SPELLS_IN_BOOK = 8
 MAX_BOOKS_IN_REALM = 4
+SPELLS_IN_REALM = SPELLS_IN_BOOK * MAX_BOOKS_IN_REALM
 
 
 def collect_spell_books(spells: dict) -> dict[tuple[str, str], int]:
@@ -1466,8 +1467,12 @@ def validate_class_skill_semantics(data: dict) -> None:
 SPELL_BASE_FIELDS = ("learn_level", "mana_cost", "difficulty", "first_cast_exp_rate")
 
 
-def validate_spell_semantics(data: dict) -> None:
-    """Reject strict integer failures, overwrites and ambiguous tag lookups."""
+def validate_spell_semantics(data: dict, required_realms: list[str] | None = None) -> None:
+    """Reject strict integer failures, overwrites, ambiguous tag lookups and spells outside the book of their ID.
+
+    required_realms を渡すと、その領域すべてに全魔法 (呪文ID 0〜31) がそろっていることも確かめる。
+    読み込みは、定義の無い枠があると起動時にエラーにする (SpellReader::validate_all_defined)。
+    """
     # info_validate_version は 2.0 を整数として受け付けない。
     require_integer(data["version"], ["version"])
     realm_ids = {}
@@ -1476,6 +1481,9 @@ def validate_spell_semantics(data: dict) -> None:
         ids = realm_ids.setdefault(realm["name"], set())
         tags = realm_tags.setdefault(realm["name"], set())
         for book_index, book in enumerate(realm["books"]):
+            if book_index >= MAX_BOOKS_IN_REALM:
+                raise ValidationError(f"a realm has at most {MAX_BOOKS_IN_REALM} books",
+                                      path=["realms", realm_index, "books", book_index])
             for spell_index, spell in enumerate(book["spells"]):
                 path = ["realms", realm_index, "books", book_index, "spells", spell_index, "spell_id"]
                 require_integer(spell["spell_id"], path)
@@ -1486,8 +1494,17 @@ def validate_spell_semantics(data: dict) -> None:
                 if spell["spell_tag"] in tags:
                     raise ValidationError("spell tags must be unique within each realm", path=tag_path)
                 tags.add(spell["spell_tag"])
+                # 魔法がどの魔法書に載るかは呪文ID で決まる (呪文ID を SPELLS_IN_BOOK で割った商)
+                if spell["spell_id"] // SPELLS_IN_BOOK != book_index:
+                    raise ValidationError(
+                        f"spell ID {spell['spell_id']} must be listed in book {spell['spell_id'] // SPELLS_IN_BOOK + 1} of the realm",
+                        path=path)
                 for field in SPELL_BASE_FIELDS:
                     require_integer(spell[field], path[:-1] + [field])
+    for realm_name in required_realms or []:
+        missing = sorted(set(range(SPELLS_IN_REALM)) - realm_ids.get(realm_name, set()))
+        if missing:
+            raise ValidationError(f"realm {realm_name} must define every spell ID; missing: {missing}", path=["realms"])
 
 
 # 小さなID集合だけを保持し、一時候補の検証を繰り返しても保持件数を制限する。
@@ -1635,7 +1652,14 @@ def validate_monrace_semantics(data: dict, schema_path: Path, data_path: Path, r
             require_integer(message["chance"], path + ["message", message_index, "chance"])
 
 
-def validate_one(pair: tuple[Path, Path, dict], registry: Registry | None = None) -> tuple[bool, str]:
+def spell_realm_names(schema: dict) -> list[str]:
+    """SpellDefinitions のスキーマから、定義できる領域名の一覧を読む。"""
+    return schema["properties"]["realms"]["items"]["properties"]["name"]["enum"]
+
+
+def validate_one(pair: tuple[Path, Path, dict], registry: Registry | None = None, *,
+                 partial_spell_definitions: bool = False) -> tuple[bool, str]:
+    """定義 1 つを検査する。partial_spell_definitions は、一部の魔法だけを書いた SpellDefinitions を通すテスト用。"""
     data_path, schema_path, schema = pair
     try:
         data = load_jsonc(data_path)
@@ -1659,7 +1683,8 @@ def validate_one(pair: tuple[Path, Path, dict], registry: Registry | None = None
             "MonraceDefinitions.schema.json": lambda: validate_monrace_semantics(data, schema_path, data_path, registry),
             "ClassMagicDefinitions.schema.json": lambda: validate_class_magic_semantics(data, schema_path, data_path, registry),
             "ClassSkillDefinitions.schema.json": lambda: validate_class_skill_semantics(data),
-            "SpellDefinitions.schema.json": lambda: validate_spell_semantics(data),
+            "SpellDefinitions.schema.json": lambda: validate_spell_semantics(
+                data, None if partial_spell_definitions else spell_realm_names(schema)),
             "MonsterMessages.schema.json": lambda: validate_monster_message_semantics(data, schema_path, data_path, registry),
             "Quest.schema.json": lambda: validate_quest_file_semantics(data, schema_path, data_path, registry),
             "QuestPreferences.schema.json": lambda: validate_quest_preferences_semantics(data, schema_path, data_path, registry),
