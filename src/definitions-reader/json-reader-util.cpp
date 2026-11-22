@@ -4,6 +4,7 @@
 #include "locale/language-switcher.h"
 #include "term/gameterm.h"
 #include "util/dice.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief フラグの文字列配列を先頭から読み込み、各トークンを呼び出し元へ渡す。
@@ -304,4 +305,19 @@ tl::expected<void, ParseErrorType> info_validate_version(const nlohmann::json &r
     }
     auto version = 0;
     return info_set_integer(get_json_value(root, "version"), version, true, Range(supported, supported));
+}
+
+/*!
+ * @brief JSON文書の整数バージョンを検証し、不正なら診断を出す。
+ * @param root JSON文書のルート
+ * @param supported 対応するバージョン
+ * @return info_validate_version() と同じ。失敗時は「定義形式のversionが不正です。」を表示する。
+ */
+tl::expected<void, ParseErrorType> info_validate_version_with_message(const nlohmann::json &root, int supported)
+{
+    const auto result = info_validate_version(root, supported);
+    if (!result) {
+        msg_print(_("定義形式のversionが不正です。", "Invalid definition version."));
+    }
+    return result;
 }

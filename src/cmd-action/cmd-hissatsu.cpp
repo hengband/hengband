@@ -85,7 +85,6 @@ tl::optional<int> hissatsu_spell_id_of_choice(std::span<const int> selections, b
 static int get_hissatsu_power(PlayerType *player_ptr, SPELL_IDX *sn)
 {
     int j = 0;
-    int num = 0;
     POSITION y = 1;
     POSITION x = 15;
     PLAYER_LEVEL plev = player_ptr->lev;
@@ -114,13 +113,12 @@ static int get_hissatsu_power(PlayerType *player_ptr, SPELL_IDX *sn)
     for (i = 0; i < 32; i++) {
         if (PlayerRealm::get_spell_info(RealmType::HISSATSU, i).is_learnable()) {
             selections.push_back(i);
-            num++;
         }
     }
 
     constexpr auto fmt = _("({} {:c}-{:c}, '*'で一覧, ESC) どの{}を使いますか？", "({}s {:c}-{:c}, *=List, ESC=exit) Use which {}? ");
     const auto first_label = I2A(0);
-    const auto last_label = I2AD(num - 1);
+    const auto last_label = I2AD(static_cast<int>(std::ssize(selections)) - 1);
     const auto prompt = fmt::format(fmt, str_upcase_first(p), first_label, last_label, p);
 
     if (use_menu) {

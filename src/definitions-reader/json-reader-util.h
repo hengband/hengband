@@ -116,3 +116,4 @@ tl::expected<void, ParseErrorType> info_set_integer(const nlohmann::json &json, 
 }
 
 tl::expected<void, ParseErrorType> info_validate_version(const nlohmann::json &root, int supported);
+tl::expected<void, ParseErrorType> info_validate_version_with_message(const nlohmann::json &root, int supported);
