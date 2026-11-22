@@ -31,6 +31,7 @@
 #include "system/inner-game-data.h"
 #include "system/player-type-definition.h"
 #include "timed-effect/timed-effects.h"
+#include "util/string-processor.h"
 #include "world/world.h"
 
 /*!
@@ -65,9 +66,8 @@ static void rd_realms(PlayerType *player_ptr)
  */
 void rd_base_info(PlayerType *player_ptr)
 {
-    const auto player_name = rd_string();
-    const auto player_name_len = player_name.copy(player_ptr->name, sizeof(player_ptr->name) - 1);
-    player_ptr->name[player_name_len] = '\0';
+    // 旧版の名前を UTF-8 に変換して長くなっても、文字の途中で切らない
+    angband_strcpy(player_ptr->name, rd_string(), sizeof(player_ptr->name));
     player_ptr->died_from = rd_string();
     if (!h_older_than(1, 7, 0, 1)) {
         player_ptr->last_message = rd_string();

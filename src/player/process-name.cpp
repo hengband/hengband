@@ -161,9 +161,9 @@ tl::optional<std::filesystem::path> rename_legacy_named_file(const std::filesyst
 void process_player_name(PlayerType *player_ptr, bool is_new_savefile)
 {
     const auto &world = AngbandWorld::get_instance();
-    char old_player_base[32] = "";
+    std::string old_player_base;
     if (world.character_generated) {
-        strcpy(old_player_base, player_ptr->base_name);
+        old_player_base = player_ptr->base_name;
     }
 
     const std::string_view name(player_ptr->name);
@@ -224,7 +224,7 @@ void process_player_name(PlayerType *player_ptr, bool is_new_savefile)
     }
 #endif
 
-    if (world.character_generated && !streq(old_player_base, player_ptr->base_name)) {
+    if (world.character_generated && (old_player_base != player_ptr->base_name)) {
         autopick_load_pref(player_ptr, false);
     }
 }
@@ -233,7 +233,7 @@ void process_player_name(PlayerType *player_ptr, bool is_new_savefile)
  * @brief プレイヤーの名前を変更する
  * @param player_ptr プレイヤーへの参照ポインタ
  * @details 入力できる名前は最大 15 桁とする (前の版のスコアファイル scores.raw の名前の欄が 15 バイトだった名残)。
- * 15 桁 (全角 7 文字) は UTF-8 でも 21 バイトなので、PlayerType::name (32 バイト) に入る
+ * 15 桁 (全角 7 文字) は UTF-8 でも 29 バイト以下なので、PlayerType::name に入る
  */
 void get_name(PlayerType *player_ptr)
 {
