@@ -388,11 +388,21 @@ int main(int argc, char *argv[])
                 break;
             }
 
-            // Unix 版のフロントエンドは端末の入出力を UTF-8 として扱うので、引数も UTF-8 とみなしてシステムの文字コードに変換してから切り詰める。
-            // UTF-8 として不正なバイト列は変換できないので、これまでどおりそのまま使う。
-            // 内部の文字コードによらず前の版と同じ名前が入るよう、バイト数ではなく表示幅で切り詰める
-            angband_strcpy(p_ptr->name, str_prefix_by_width(utf8_to_sys(&argv[i][2]).value_or(&argv[i][2]), PLAYER_NAME_MAX_WIDTH), sizeof(p_ptr->name));
-            break;
+            {
+                // 内部の文字コードによらず前の版と同じ名前が入るよう、バイト数ではなく表示幅で切り詰める
+                const std::string_view arg(&argv[i][2]);
+#ifdef UTF8
+                // UTF-8 として正しくないバイト列は旧版の文字コードとみなして推定し、読めないバイトは置き換えて変換する
+                // 端末を作る前なので、変換に失敗すると警告を表示する guess_convert_to_system_encoding() は使わない
+                const auto name = is_utf8_str(arg) ? std::string(arg) : legacy_to_sys_replacing_invalid(arg, guess_legacy_encoding(arg));
+#else
+                // Unix 版のフロントエンドは端末の入出力を UTF-8 として扱うので、引数も UTF-8 とみなしてシステムの文字コードに変換してから切り詰める。
+                // UTF-8 として不正なバイト列は変換できないので、これまでどおりそのまま使う。
+                const auto name = utf8_to_sys(arg).value_or(std::string(arg));
+#endif
+                angband_strcpy(p_ptr->name, str_prefix_by_width(name, PLAYER_NAME_MAX_WIDTH), sizeof(p_ptr->name));
+                break;
+            }
         case 'm':
             if (!argv[i][2]) {
                 is_usage_needed = true;

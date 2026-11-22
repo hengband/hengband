@@ -32,10 +32,44 @@ TEST_CASE("get_inscription keeps 2-byte characters in the inscription of an unid
 
 TEST_CASE("get_inscription does not read past the end of an inscription ending with a lead byte")
 {
-    // 前半バイトだけを書き出して終える
+    // 後続のバイトが欠けた前半バイトは書き出さない
     const auto lead_byte = KANJI_KAN.substr(0, 1);
     ItemEntity item;
     item.inscription = cat("ab", lead_byte);
-    CHECK(get_inscription(item) == cat("ab", lead_byte));
+    CHECK(get_inscription(item) == "ab");
+}
+
+TEST_CASE("get_inscription cuts the inscription of an unidentified item by display width")
+{
+    // 全角文字は 2 桁なので、MAX_INSCRIPTION (76) 桁に入るのは 38 文字
+    std::string inscription;
+    std::string expected;
+    for (auto i = 0; i < 40; i++) {
+        inscription.append(KANJI_KAN);
+        if (i < 38) {
+            expected.append(KANJI_KAN);
+        }
+    }
+
+    ItemEntity item;
+    item.inscription = inscription;
+    CHECK(get_inscription(item) == expected);
+}
+
+TEST_CASE("get_inscription does not add a 2-byte character exceeding the display width limit")
+{
+    // 半角 1 文字と全角 37 文字で 75 桁になり、次の全角文字は 77 桁になるので足さない
+    std::string inscription("a");
+    std::string expected("a");
+    for (auto i = 0; i < 38; i++) {
+        inscription.append(KANJI_KAN);
+        if (i < 37) {
+            expected.append(KANJI_KAN);
+        }
+    }
+
+    ItemEntity item;
+    item.inscription = inscription;
+    CHECK(get_inscription(item) == expected);
 }
 #endif

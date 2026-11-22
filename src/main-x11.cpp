@@ -346,9 +346,6 @@ struct infoclr {
  *	- The default character height
  *	- The default character ascent
  *
- *	- Byte: Pixel offset used during fake mono
- *
- *	- Flag: Force monospacing via 'wid'
  *	- Flag: Nuke info when done
  */
 struct infofnt {
@@ -366,9 +363,6 @@ struct infofnt {
     int16_t ink_left;
     int16_t ink_right;
 
-    byte off;
-
-    uint mono : 1;
     uint nuke : 1;
 };
 
@@ -1154,38 +1148,26 @@ static errr Infofnt_text_std(int x, int y, concptr str, int len)
         Infowin_mark_dirty(x - Infofnt->ink_left, y - Infofnt->asc, len * Infofnt->wid + Infofnt->ink_left + Infofnt->ink_right, Infofnt->hgt);
     }
 
-    if (Infofnt->mono) {
-        if (!use_xft_runtime) {
-            int i;
-            for (i = 0; i < len; ++i) {
-                XDrawImageString(Metadpy->dpy, Infowin->drawable, Infoclr->gc, x + i * Infofnt->wid + Infofnt->off, y, str + i, 1);
-            }
-            return 0;
-        }
+#ifdef JP
+    // len はマス数なので、変換する長さは文字列から求める
+    const auto utf8 = sys_to_utf8(str);
+    if (!utf8) {
+        return -1;
     }
 
-    if (!Infofnt->mono) {
-#ifdef JP
-        // len はマス数なので、変換する長さは文字列から求める
-        const auto utf8 = sys_to_utf8(str);
-        if (!utf8) {
-            return -1;
-        }
-
-        const auto *utf8_buf = utf8->data();
-        const auto utf8_len = static_cast<int>(utf8->length());
+    const auto *utf8_buf = utf8->data();
+    const auto utf8_len = static_cast<int>(utf8->length());
 #endif
 
-        if (use_xft_runtime) {
+    if (use_xft_runtime) {
 #ifdef USE_XFT
-            Infofnt_text_std_xft(x, y, len, Infoclr->fg.xft, Infoclr->bg.xft, _(utf8_buf, str), _(utf8_len, len));
+        Infofnt_text_std_xft(x, y, len, Infoclr->fg.xft, Infoclr->bg.xft, _(utf8_buf, str), _(utf8_len, len));
 #else
-            /* unreachable when XFT not compiled */
+        /* unreachable when XFT not compiled */
 #endif
-        } else {
-            fill_text_background(x, y - Infofnt->asc, len * Infofnt->wid);
-            XmbDrawString(Metadpy->dpy, Infowin->drawable, Infofnt->fontset_info, Infoclr->gc, x, y, _(utf8_buf, str), _(utf8_len, len));
-        }
+    } else {
+        fill_text_background(x, y - Infofnt->asc, len * Infofnt->wid);
+        XmbDrawString(Metadpy->dpy, Infowin->drawable, Infofnt->fontset_info, Infoclr->gc, x, y, _(utf8_buf, str), _(utf8_len, len));
     }
 
     return 0;

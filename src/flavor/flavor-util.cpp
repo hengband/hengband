@@ -224,20 +224,9 @@ std::string get_inscription(const ItemEntity &item)
     std::stringstream ss;
 
     if (!item.is_fully_known()) {
-        for (std::string_view sv = *item.inscription; !sv.empty(); sv.remove_prefix(1)) {
-            if (sv.front() == '#') {
-                break;
-            }
-            if (ss.tellp() > MAX_INSCRIPTION - 1) {
-                break;
-            }
-            // 最後のバイトはループの末尾で読み進める
-            const auto ch = mb_first_char(sv);
-            ss << ch;
-            sv.remove_prefix(ch.length() - 1);
-        }
-
-        return ss.str();
+        // '#' より前を、銘を刻むときの入力と同じく表示幅で切り詰める ('#' は多バイト文字の 2 バイト目に現れない)
+        const std::string_view inscription = *item.inscription;
+        return std::string(str_prefix_by_width(inscription.substr(0, inscription.find('#')), MAX_INSCRIPTION));
     }
 
     for (std::string_view sv = *item.inscription; !sv.empty(); sv.remove_prefix(1)) {

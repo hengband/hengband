@@ -292,7 +292,8 @@ if test "$have_x" = yes; then
   if test "$use_fontset" = yes || test "$use_xim" = yes; then
     AC_DEFINE(USE_LOCALE, 1, [Support Locale])
     if test "$use_japanese" != no; then
-      AC_DEFINE(DEFAULT_LOCALE, "ja_JP.eucJP", Default Japanese Locale)
+      dnl X11 版は内部の文字コードによらず、UTF-8 で描画し、入力を受け取る
+      AC_DEFINE(DEFAULT_LOCALE, "ja_JP.UTF-8", Default Japanese Locale)
     fi
     AC_CHECK_LIB(X11, _Xsetlocale, AC_DEFINE(X_LOCALE, 1, [Use XLocale]))
     AC_CHECK_LIB(xpg4, setlocale, LIBS="$LIBS -lxpg4")
