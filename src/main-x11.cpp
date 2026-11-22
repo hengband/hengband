@@ -127,6 +127,7 @@
 #include <string>
 #include <string_view>
 #include <tl/optional.hpp>
+#include <tuple>
 #include <utility>
 #include <vector>
 /*
@@ -1232,6 +1233,19 @@ static std::unique_ptr<infoclr> clr[256];
 static byte color_table[256][4];
 
 namespace {
+/*!
+ * @brief 描く大きさに拡大して X サーバに置いた、Original32 のタイル 1 枚
+ */
+struct Original32Tile {
+    Pixmap pixmap; //!< タイルの画像
+    GC mask_gc; //!< 透過するタイルなら、透過色でない画素を 1 にしたマスクをクリップマスクにした GC。透過しなければ nullptr
+};
+
+/*!
+ * @brief Original32 のタイルを探すための、描く幅・高さと、画像上の列・行・透過するか
+ */
+using Original32TileKey = std::tuple<int, int, int, int, bool>;
+
 /*
  * A structure for each "term"
  */
@@ -1243,7 +1257,8 @@ struct term_data {
     GC tiles_mask_gc; //!< 重ねるタイルの透過しない画素を 1 にしたマスクを、クリップマスクにした GC
     int tiles_width; //!< タイルの画像の幅 (画素)
     int tiles_height; //!< タイルの画像の高さ (画素)
-    XImage *original32_canvas; //!< Original32 のタイルを拡大・合成する作業用の画像
+    XImage *original32_canvas; //!< Original32 のタイルを拡大して X の画素値に変える作業用の画像
+    std::map<Original32TileKey, Original32Tile> original32_tiles; //!< これまでに使った Original32 のタイル
 };
 }
 
@@ -2370,6 +2385,53 @@ static errr game_term_pict_x11(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *
     return 0;
 }
 
+namespace {
+/*!
+ * @brief 写す画素を 1 にしたクリップマスクを組み立てる
+ * @details XBM の形式 (1 行ごとにバイトの境目に揃え、下位のビットから左の画素) で持つ。
+ */
+class ClipMaskBits {
+public:
+    ClipMaskBits(int w, int h)
+        : width(w)
+        , height(h)
+        , bytes_per_line((w + 7) / 8)
+        , bits(static_cast<size_t>(this->bytes_per_line) * h)
+    {
+    }
+
+    void set(int x, int y)
+    {
+        this->bits[static_cast<size_t>(y) * this->bytes_per_line + x / 8] |= static_cast<char>(1 << (x % 8));
+    }
+
+    /*!
+     * @brief このマスクをクリップマスクにした GC を作る
+     * @param drawable GC を使う描画先 (深さを揃える)
+     * @return 作った GC
+     */
+    GC create_gc(Drawable drawable) const
+    {
+        auto *dpy = Metadpy->dpy;
+        const auto mask = XCreateBitmapFromData(dpy, Metadpy->root, this->bits.data(), this->width, this->height);
+        XGCValues gcv{};
+        gcv.graphics_exposures = False;
+        gcv.clip_mask = mask;
+        auto *gc = XCreateGC(dpy, drawable, GCGraphicsExposures | GCClipMask, &gcv);
+
+        // GC が参照している間は X サーバの中でマスクが保たれるので、ここで手放してよい
+        XFreePixmap(dpy, mask);
+        return gc;
+    }
+
+private:
+    int width;
+    int height;
+    int bytes_per_line;
+    std::vector<char> bits;
+};
+}
+
 /*!
  * @brief タイルの画像を X サーバに置く
  * @param td 端末
@@ -2387,26 +2449,16 @@ static void upload_tiles(term_data &td, XImage *image)
     td.tiles = XCreatePixmap(dpy, Metadpy->root, width, height, image->depth);
     XPutImage(dpy, td.tiles, plain_gc(), image, 0, 0, 0, 0, width, height);
 
-    // XBM の形式 (1 行ごとにバイトの境目に揃え、下位のビットから左の画素) で作る
-    const auto bytes_per_line = (width + 7) / 8;
-    std::vector<char> bits(bytes_per_line * height);
+    ClipMaskBits mask(width, height);
     const auto blank = XGetPixel(image, 0, td.fnt->hgt * 6);
     for (auto y = 0; y < height; ++y) {
         for (auto x = 0; x < width; ++x) {
             if (XGetPixel(image, x, y) != blank) {
-                bits[y * bytes_per_line + x / 8] |= static_cast<char>(1 << (x % 8));
+                mask.set(x, y);
             }
         }
     }
-    const auto mask = XCreateBitmapFromData(dpy, Metadpy->root, bits.data(), width, height);
-
-    XGCValues gcv{};
-    gcv.graphics_exposures = False;
-    gcv.clip_mask = mask;
-    td.tiles_mask_gc = XCreateGC(dpy, td.tiles, GCGraphicsExposures | GCClipMask, &gcv);
-
-    // GC が参照している間は X サーバの中でマスクが保たれるので、ここで手放してよい
-    XFreePixmap(dpy, mask);
+    td.tiles_mask_gc = mask.create_gc(td.tiles);
 }
 
 #ifdef HAVE_LIBPNG
@@ -2511,35 +2563,54 @@ XImage *create_original32_canvas(Display *dpy, int width, int height)
 }
 
 /*!
- * @brief 記号に対応するタイルを、作業用の画像に拡大して描く
- * @param canvas 作業用の画像
+ * @brief 記号に対応するタイルを、描く大きさに拡大して X サーバに置いたものを得る
+ * @param td 端末
  * @param width 描く幅 (画素)
  * @param height 描く高さ (画素)
  * @param symbol 端末のセルの属性と文字
- * @details Windows 版の StretchBlt (COLORONCOLOR) と同じく最近傍で拡大し、透過するタイルは透過色の画素を描かない。
+ * @return タイル。記号に対応するタイルが無ければ nullptr
+ * @details 大きさとタイルの組み合わせを初めて使うときだけ、Windows 版の StretchBlt (COLORONCOLOR) と同じく最近傍で拡大し、
+ * X の画素値に変えて X サーバへ送る。透過するタイルは、透過色の画素を写さないようマスクも作る。
  */
-void paint_original32_tile(XImage *canvas, int width, int height, DisplaySymbol symbol)
+const Original32Tile *find_original32_tile(term_data &td, int width, int height, DisplaySymbol symbol)
 {
     const auto source = original_tiles::tile_source(symbol);
     if (!source) {
-        return;
+        return nullptr;
     }
     const auto &image = *original32_image;
     const auto source_x = source->column * 32;
     const auto source_y = source->row * 32;
     if ((source_x + 32 > image.width) || (source_y + 32 > image.height)) {
-        return;
+        return nullptr;
+    }
+    const Original32TileKey key{ width, height, source->column, source->row, source->transparent };
+    if (const auto it = td.original32_tiles.find(key); it != td.original32_tiles.end()) {
+        return &it->second;
+    }
+
+    auto *canvas = td.original32_canvas;
+    tl::optional<ClipMaskBits> mask;
+    if (source->transparent) {
+        mask.emplace(width, height);
     }
     for (auto y = 0; y < height; ++y) {
         const auto *row = &image.pixels[static_cast<size_t>(source_y + y * 32 / height) * image.width + source_x];
         for (auto x = 0; x < width; ++x) {
             const auto pixel = row[x * 32 / width] & 0x00ffffffU;
-            if (source->transparent && (pixel == original_tiles::ACTOR_TRANSPARENT)) {
-                continue;
-            }
             XPutPixel(canvas, x, y, original32_converter->to_pixel(pixel));
+            if (mask && (pixel != original_tiles::ACTOR_TRANSPARENT)) {
+                mask->set(x, y);
+            }
         }
     }
+    Original32Tile tile{};
+    tile.pixmap = XCreatePixmap(Metadpy->dpy, Metadpy->root, width, height, canvas->depth);
+    XPutImage(Metadpy->dpy, tile.pixmap, plain_gc(), canvas, 0, 0, 0, 0, width, height);
+    if (mask) {
+        tile.mask_gc = mask->create_gc(tile.pixmap);
+    }
+    return &td.original32_tiles.emplace(key, tile).first->second;
 }
 
 /*!
@@ -2600,7 +2671,7 @@ void draw_original32_glyph(const term_data &td, int x, int y, int width, int hei
 static errr game_term_pict_original32_x11(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *ap, const char *cp, const TERM_COLOR *tap, const char *tcp)
 {
     auto *td = static_cast<term_data *>(game_term->data);
-    auto *canvas = td->original32_canvas;
+    const auto *canvas = td->original32_canvas;
     const auto black = original32_converter->to_pixel(0);
     auto px = x * td->fnt->wid + td->win->ox;
     const auto py = y * td->fnt->hgt + td->win->oy;
@@ -2612,19 +2683,29 @@ static errr game_term_pict_original32_x11(TERM_LEN x, TERM_LEN y, int n, const T
         const auto block = term_tile_block_at(term_pict_buffer(), x + i, y);
         const auto width = std::min(td->fnt->wid * block.width, canvas->width);
         const auto height = std::min(td->fnt->hgt * block.height, canvas->height);
-        for (auto yy = 0; yy < height; ++yy) {
-            for (auto xx = 0; xx < width; ++xx) {
-                XPutPixel(canvas, xx, yy, black);
+        const auto copy_tile = [&](const Original32Tile *tile) {
+            if (tile == nullptr) {
+                return;
             }
+            auto *gc = plain_gc();
+            if (tile->mask_gc != nullptr) {
+                gc = tile->mask_gc;
+                XSetClipOrigin(Metadpy->dpy, gc, px, py);
+            }
+            XCopyArea(Metadpy->dpy, tile->pixmap, td->win->drawable, gc, 0, 0, width, height, px, py);
+        };
+        // 透過しない地形のタイルは描く範囲をすべて覆うので、黒く塗るのはタイルが無いか透過するときだけでよい
+        const auto *terrain = find_original32_tile(*td, width, height, { tap[i], tcp[i] });
+        if ((terrain == nullptr) || (terrain->mask_gc != nullptr)) {
+            fill_rectangle(td->win->drawable, black, px, py, width, height);
         }
-        paint_original32_tile(canvas, width, height, { tap[i], tcp[i] });
+        copy_tile(terrain);
         const DisplaySymbol foreground{ ap[i], cp[i] };
         const auto is_catalog_monster = original_tiles::monster_catalog_available && original_tiles::decode_monster_catalog_tile(foreground).has_value();
         const auto glyph_color = is_catalog_monster ? tl::optional<int>{} : original_tiles::decode_glyph_color(foreground);
         if (is_catalog_monster || (!glyph_color && ((ap[i] != tap[i]) || (cp[i] != tcp[i])))) {
-            paint_original32_tile(canvas, width, height, foreground);
+            copy_tile(find_original32_tile(*td, width, height, foreground));
         }
-        XPutImage(Metadpy->dpy, td->win->drawable, clr[0]->gc, canvas, 0, 0, px, py, width, height);
         Infowin_mark_dirty(px, py, width, height);
         if (glyph_color) {
             draw_original32_glyph(*td, px, py, width, height, static_cast<char>(cp[i] & 0x7f), *glyph_color);
@@ -2757,6 +2838,12 @@ static void game_term_nuke_x11(term_type *)
         if (data[i].tiles != None) {
             XFreeGC(Metadpy->dpy, data[i].tiles_mask_gc);
             XFreePixmap(Metadpy->dpy, data[i].tiles);
+        }
+        for (const auto &[key, tile] : data[i].original32_tiles) {
+            if (tile.mask_gc != nullptr) {
+                XFreeGC(Metadpy->dpy, tile.mask_gc);
+            }
+            XFreePixmap(Metadpy->dpy, tile.pixmap);
         }
         angband_terms[i] = nullptr;
     }
