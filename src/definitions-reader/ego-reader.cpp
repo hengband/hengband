@@ -40,12 +40,7 @@ EgoReader::EgoReader(const nlohmann::json &ego_data, Session &session)
  */
 tl::expected<void, ParseErrorType> EgoReader::validate_root(const nlohmann::json &root)
 {
-    int version = 0;
-    if (const auto result = info_set_integer(get_json_value(root, "version"), version, true, Range(FORMAT_VERSION, FORMAT_VERSION)); !result) {
-        msg_print(_("定義形式のversionが不正です。", "Invalid definition version."));
-        return result;
-    }
-    return {};
+    return info_validate_version_with_message(root, FORMAT_VERSION);
 }
 
 /*!

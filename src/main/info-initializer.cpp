@@ -311,12 +311,8 @@ void init_spell_info()
         return SpellReader(spell_data, spell_info_list, session).read();
     };
     // 基準値 (習得レベル・消費MP・難易度・初回経験値倍率) を持たない旧形式は読み込まない。
-    const auto validate_root = [](const nlohmann::json &root) -> tl::expected<void, ParseErrorType> {
-        if (const auto result = info_validate_version(root, 2); !result) {
-            msg_print(_("定義形式のversionが不正です。", "Invalid definition version."));
-            return result;
-        }
-        return {};
+    const auto validate_root = [](const nlohmann::json &root) {
+        return info_validate_version_with_message(root, 2);
     };
     init_json("SpellDefinitions.jsonc", "realms", DefinitionHashDataType::SPELLS, spell_info_list, parser, nullptr, true, validate_root);
 }
