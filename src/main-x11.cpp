@@ -1410,8 +1410,10 @@ static void react_keypress(XKeyEvent *xev)
  */
 static void pixel_to_square(int *const x, int *const y, const int ox, const int oy)
 {
-    (*x) = (ox - Infowin->ox) / Infofnt->wid;
-    (*y) = (oy - Infowin->oy) / Infofnt->hgt;
+    // ウィンドウはセルの境目に揃わないので、右端と下端の余白やウィンドウの外はセルの範囲に収める。
+    // Infowin と game_term は、イベントが届いたウィンドウのものにしてから呼ぶこと
+    (*x) = std::clamp((ox - Infowin->ox) / Infofnt->wid, 0, game_term->wid - 1);
+    (*y) = std::clamp((oy - Infowin->oy) / Infofnt->hgt, 0, game_term->hgt - 1);
 }
 
 /*
@@ -1554,8 +1556,6 @@ static void copy_x11_start(int x, int y)
  */
 static void copy_x11_cont(int x, int y, unsigned int buttons)
 {
-    x = MIN(MAX(x, 0), game_term->wid - 1);
-    y = MIN(MAX(y, 0), game_term->hgt - 1);
     if (~buttons & Button1Mask) {
         return;
     }
@@ -1964,6 +1964,12 @@ static errr CheckEvent(bool wait)
         break;
     }
     case ConfigureNotify: {
+        // 引き伸ばしている間は大きさの変更が続けて届く。途中の大きさごとに描き直すと、とくにメインの
+        // ウィンドウでは画面全体を描き直すため追従が遅れるので、たまっている分は読み捨てて最後の大きさだけ扱う
+        while (XCheckTypedWindowEvent(Metadpy->dpy, iwin->win, ConfigureNotify, xev)) {
+            ;
+        }
+
         int cols, rows, wid, hgt;
         int ox = Infowin->ox;
         int oy = Infowin->oy;
@@ -2005,9 +2011,15 @@ static errr CheckEvent(bool wait)
         if ((game_term->wid != old_cols) || (game_term->hgt != old_rows)) {
             term_fresh();
         }
-        if ((Infowin->w != wid) || (Infowin->h != hgt)) {
+
+        // 最小の大きさ (メインのウィンドウは MAIN_TERM_MIN_COLS×MAIN_TERM_MIN_ROWS、サブウィンドウは 1 セル) より
+        // 縮められたときだけ戻す。セルの境目に揃えて戻すと、大きさの変更の単位
+        // (WM_NORMAL_HINTS の PResizeInc) に従わないウィンドウマネージャ (WSLg など) では、
+        // 引き伸ばしている間に戻した大きさが遅れて届き、ウィンドウが引き戻され続ける。
+        // セルに満たない端は余白として残す
+        if ((Infowin->w < wid) || (Infowin->h < hgt)) {
             Infowin_set(td->win.get());
-            Infowin_resize(wid, hgt);
+            Infowin_resize(std::max<int>(Infowin->w, wid), std::max<int>(Infowin->h, hgt));
         }
 
         break;
