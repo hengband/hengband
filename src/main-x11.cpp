@@ -2358,15 +2358,14 @@ static errr game_term_pict_x11(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *
     for (i = 0; i < n; ++i, x += td->fnt->wid) {
         a = *ap++;
         c = *cp++;
+        ta = *tap++;
+        tc = *tcp++;
         x1 = (c & 0x7F) * td->fnt->twid;
         y1 = (a & 0x7F) * td->fnt->hgt;
         if (td->tiles_width < x1 + td->fnt->wid || td->tiles_height < y1 + td->fnt->hgt) {
             XFillRectangle(Metadpy->dpy, td->win->drawable, clr[0]->gc, x, y, td->fnt->twid, td->fnt->hgt);
             continue;
         }
-
-        ta = *tap++;
-        tc = *tcp++;
 
         x2 = (tc & 0x7F) * td->fnt->twid;
         y2 = (ta & 0x7F) * td->fnt->hgt;
