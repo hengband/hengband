@@ -12,8 +12,15 @@
 #define NOMINMAX
 #include <windows.h>
 
+//! 内部の文字コードのコードページ (内部の文字コードを UTF-8 にした構成では UTF-8、ほかは CP932)
+#ifdef UTF8
+constexpr UINT SYSTEM_CODE_PAGE = CP_UTF8;
+#else
+constexpr UINT SYSTEM_CODE_PAGE = 932;
+#endif
+
 /*!
- * @brief マルチバイト文字列(CP932)をワイド文字列へ変換するクラス
+ * @brief マルチバイト文字列(内部の文字コード)をワイド文字列へ変換するクラス
  */
 class to_wchar {
 public:
@@ -23,10 +30,10 @@ public:
             return;
         }
 
-        const auto size = ::MultiByteToWideChar(932, 0, src.data(), src.length(), NULL, 0);
+        const auto size = ::MultiByteToWideChar(SYSTEM_CODE_PAGE, 0, src.data(), src.length(), NULL, 0);
         if (size > 0) {
             this->buf = std::vector<WCHAR>(size + 1);
-            if (::MultiByteToWideChar(932, 0, src.data(), src.length(), this->buf->data(), this->buf->size()) == 0) {
+            if (::MultiByteToWideChar(SYSTEM_CODE_PAGE, 0, src.data(), src.length(), this->buf->data(), this->buf->size()) == 0) {
                 // fail
                 this->buf = tl::nullopt;
             }
@@ -48,7 +55,7 @@ protected:
 };
 
 /*!
- * @brief ワイド文字列をマルチバイト文字列(CP932)へ変換するクラス
+ * @brief ワイド文字列をマルチバイト文字列(内部の文字コード)へ変換するクラス
  */
 class to_multibyte {
 public:
@@ -58,10 +65,10 @@ public:
             return;
         }
 
-        const auto size = ::WideCharToMultiByte(932, 0, src, -1, NULL, 0, NULL, NULL);
+        const auto size = ::WideCharToMultiByte(SYSTEM_CODE_PAGE, 0, src, -1, NULL, 0, NULL, NULL);
         if (size > 0) {
             this->buf = std::vector<char>(size + 1);
-            if (::WideCharToMultiByte(932, 0, src, -1, this->buf->data(), this->buf->size(), NULL, NULL) == 0) {
+            if (::WideCharToMultiByte(SYSTEM_CODE_PAGE, 0, src, -1, this->buf->data(), this->buf->size(), NULL, NULL) == 0) {
                 // fail
                 this->buf = tl::nullopt;
             }

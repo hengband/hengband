@@ -1628,7 +1628,8 @@ FMT_CONSTEXPR void parse_format_string(basic_string_view<Char> fmt,
   auto begin = fmt.data(), end = begin + fmt.size();
   auto p = begin;
   while (p != end) {
-#ifdef _WIN32
+    // 内部の文字コードを UTF-8 にした構成 (UTF8) では、UTF-8 の後続バイトを Shift_JIS の先頭バイトと取り違えるので読み飛ばさない
+#if defined(_WIN32) && !defined(UTF8)
     if (is_sjis_multibyte_char(*p)) {
       p += 2;
       continue;

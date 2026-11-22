@@ -153,7 +153,7 @@ void process_player_name(PlayerType *player_ptr, bool is_new_savefile)
 #endif
     }
 
-#if defined(JP) && defined(UTF8)
+#if defined(JP) && defined(UTF8) && !defined(_WIN32)
     if (is_modified) {
         // 旧名のファイルを付け替える。キャラクターの作成で名前を入れたときにも付け替えるが、作成をやめても中身は失われず、
         // 旧版でも同じ名前なら同じファイルに書いていた。付け替えられずに旧名のセーブファイルを使うときも、

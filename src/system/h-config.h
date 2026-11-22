@@ -33,8 +33,15 @@ constexpr auto MAINTAINER = "echizen@users.sourceforge.jp";
 #ifdef _WIN32
   #define PATH_SEP "\\"
   #ifdef JP
-    #define iskanji(x) ((0x81 <= (unsigned char)(x) && (unsigned char)(x) <= 0x9f) || (0xe0 <= (unsigned char)(x) && (unsigned char)(x) <= 0xfc))
-    #define iskana(x) (((unsigned char)(x) >= 0xA0) && ((unsigned char)(x) <= 0xDF))
+    #ifdef SJIS
+      #define iskanji(x) ((0x81 <= (unsigned char)(x) && (unsigned char)(x) <= 0x9f) || (0xe0 <= (unsigned char)(x) && (unsigned char)(x) <= 0xfc))
+      #define iskana(x) (((unsigned char)(x) >= 0xA0) && ((unsigned char)(x) <= 0xDF))
+    #elif defined(UTF8)
+      /* UTF-8 では文字のバイト数を multibyte-char.h の関数で求めるので、iskanji() は定義しない */
+      #define iskana(x) (0)
+    #else
+      #error Oops! Please define "SJIS" or "UTF8" for kanji-code of your system.
+    #endif
   #endif
 #else
   #define PATH_SEP "/"

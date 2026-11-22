@@ -4,6 +4,7 @@
  * Windows 日本語版ではファイル名が Shift_JIS のため、std::filesystem::path へ
  * 渡す前に CP932 → UTF-16 へ変換する。相対パスだけでなく、'\\' 始まりの
  * 早期 return 経路でも同じ変換が必要なことを検証する。
+ * 内部の文字コードを UTF-8 にした Windows 版では、UTF-8 から UTF-16 へ変換することを検証する。
  *
  * 2バイト文字のテストデータは16進エスケープで書く (src/test/README.md を参照)。
  *
@@ -12,7 +13,7 @@
  *
  * angband_fgets() は、'\0' を含む行をその '\0' で切った1行として返すことを検証する。
  *
- * 内部の文字コードが UTF-8 の構成では、rename_legacy_named_file() が旧版の EUC-JP の名前のファイルを
+ * 内部の文字コードが UTF-8 の Unix 系の構成では、rename_legacy_named_file() が旧版の EUC-JP の名前のファイルを
  * 今の名前に付け替えることを検証する。
  */
 
@@ -71,6 +72,31 @@ TEST_CASE("path_build converts a Shift_JIS path when the directory argument is e
     CHECK(built.wstring() == L"\u65e5\u672c.prf");
 }
 
+#endif
+
+#if defined(_WIN32) && defined(JP) && defined(UTF8)
+namespace {
+constexpr std::string_view NIHON_UTF8 = "\xe6\x97\xa5\xe6\x9c\xac"; //!< 日本 (UTF-8)
+}
+
+TEST_CASE("path_build appends a UTF-8 file name as UTF-16 on Windows")
+{
+    const auto built = path_build(std::filesystem::path(L"pref"), NIHON_UTF8);
+    CHECK(built.filename().wstring() == L"\u65e5\u672c");
+}
+
+TEST_CASE("path_build converts a root-relative UTF-8 path on the early-return path")
+{
+    const auto built = path_build(std::filesystem::path(L"ignored"), test::cat("\\", NIHON_UTF8, "\\file.prf"));
+    CHECK(built.wstring() == L"\\\u65e5\u672c\\file.prf");
+}
+
+TEST_CASE("std::filesystem::path converts std::string as UTF-8 when the active code page is UTF-8")
+{
+    // UTF-8 の構成は、マニフェストで ANSI のコードページを UTF-8 にするので、std::string とパスの変換も UTF-8 で行われる
+    CHECK(std::filesystem::path(std::string(NIHON_UTF8)).wstring() == L"\u65e5\u672c");
+    CHECK(std::filesystem::path(L"\u65e5\u672c").string() == NIHON_UTF8);
+}
 #endif
 
 #ifndef _WIN32
@@ -152,7 +178,7 @@ TEST_CASE("angband_fgets keeps empty lines and the last line without a newline")
     CHECK(read_all_lines("abc\n\nxyz") == std::vector<std::string>{ "abc", "", "xyz" });
 }
 
-#if defined(JP) && defined(UTF8)
+#if defined(JP) && defined(UTF8) && !defined(_WIN32)
 using namespace test;
 
 // テストのファイルは、同時に走るほかのテストと重ならない一時ディレクトリ (TemporaryJsonFiles) に作る

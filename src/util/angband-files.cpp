@@ -24,7 +24,12 @@
 
 #ifdef _WIN32
 namespace {
-std::filesystem::path path_from_sjis(std::string_view src)
+/*!
+ * @brief 内部の文字コードのパスを、UTF-16 に変換して std::filesystem::path にする
+ * @param src 内部の文字コードのパス
+ * @return パス。変換に失敗した場合は空のパス
+ */
+std::filesystem::path path_from_sys(std::string_view src)
 {
     to_wchar wide(src);
     const auto *wstr = wide.wc_str();
@@ -191,7 +196,7 @@ std::filesystem::path path_build(const std::filesystem::path &path, std::string_
 
     if ((file[0] == '~') || prefix(file, PATH_SEP) || path.empty()) {
 #ifdef _WIN32
-        return path_from_sjis(file);
+        return path_from_sys(file);
 #else
         return std::filesystem::path(file);
 #endif
@@ -205,9 +210,9 @@ std::filesystem::path path_build(const std::filesystem::path &path, std::string_
     }
 
 #ifdef _WIN32
-    // システムロケールがUTF-8の場合、appendによるUTF-16への変換時に
-    // Shift-JISをUTF-8とみなしてしまい変換に失敗するので、自前でUTF-16に変換してからappendする
-    const std::filesystem::path path_ret = parsed_path.append(path_from_sjis(file).native());
+    // append() は std::string を ANSI のコードページで UTF-16 に変換する。ANSI のコードページと内部の文字コードは
+    // 同じとは限らない (システムロケールが UTF-8 の Windows で Shift_JIS の版を動かすなど) ので、自前で UTF-16 に変換してから append する
+    const std::filesystem::path path_ret = parsed_path.append(path_from_sys(file).native());
     if (path_ret.native().size() > max_path_length) {
         THROW_EXCEPTION(std::runtime_error, "Path is too long!");
     }
@@ -230,13 +235,14 @@ std::filesystem::path path_build(const std::filesystem::path &path, std::string_
  * @param file ファイル名
  * @return 読み書きに使うファイルのパス
  * @details プレイヤー名や種族名などから名前を作るユーザーファイルを開くときに使う。
- * 内部の文字コードが UTF-8 の構成では、旧版の EUC-JP の名前のファイル (旧名) しか無ければ rename_legacy_named_file() で付け替え、
+ * 内部の文字コードが UTF-8 の Unix 系の構成では、旧版の EUC-JP の名前のファイル (旧名) しか無ければ rename_legacy_named_file() で付け替え、
  * 付け替えられなければ旧名のファイルのパスを返す。ほかの構成では path_build() と同じ。
+ * Windows のファイル名は UTF-16 なので、旧版 (Shift_JIS) と UTF-8 の構成で同じ名前になり、付け替えは要らない。
  */
 std::filesystem::path path_build_inheriting_legacy_name(const std::filesystem::path &path, std::string_view file)
 {
     const auto built = path_build(path, file);
-#if defined(JP) && defined(UTF8)
+#if defined(JP) && defined(UTF8) && !defined(_WIN32)
     // 「~」で始まるパスは開くときに展開されるので、旧名も展開したパスで探す。展開できなければ付け替えない
     const auto parsed = path_parse(built);
     if (parsed.empty()) {
@@ -617,7 +623,7 @@ errr fd_close(int fd)
     return 0;
 }
 
-#if defined(JP) && defined(UTF8)
+#if defined(JP) && defined(UTF8) && !defined(_WIN32)
 /*!
  * @brief 旧版の名前のファイルを、今の名前に付け替える
  * @param path 今の名前のファイルのパス
