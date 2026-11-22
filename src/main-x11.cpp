@@ -283,6 +283,11 @@ struct infowin {
 #ifdef USE_XFT
     XftDraw *draw;
 #endif
+    Drawable drawable; //!< 文字やタイルを描く先。ウィンドウ以上の大きさのオフスクリーン
+    int16_t buffer_w, buffer_h; //!< オフスクリーンの大きさ (ウィンドウを縮めても小さくしない)
+
+    //! オフスクリーンでまだウィンドウへ写していない範囲 (画素。right・bottom は含まない)。空なら left >= right
+    int16_t dirty_left, dirty_top, dirty_right, dirty_bottom;
 
     long mask;
 
@@ -355,6 +360,9 @@ struct infofnt {
     int16_t twid;
     int16_t hgt;
     int16_t asc;
+    //! 文字がセルの外へはみ出しうる幅 (画素)。斜体のフォントなどで、文字の一部が左右のセルにかかる
+    int16_t ink_left;
+    int16_t ink_right;
 
     byte off;
 
@@ -518,6 +526,122 @@ static errr Metadpy_do_beep(void)
     return 0;
 }
 
+/*!
+ * @brief 前景色だけを変えて使う、GraphicsExpose を起こさない GC を返す
+ * @return GC
+ * @details オフスクリーンからウィンドウへ写すときに GraphicsExpose や NoExpose のイベントが届かないよう、
+ * graphics_exposures を切ってある。
+ */
+static GC plain_gc()
+{
+    static GC gc = nullptr;
+    if (gc == nullptr) {
+        XGCValues gcv{};
+        gcv.graphics_exposures = False;
+        gc = XCreateGC(Metadpy->dpy, Metadpy->root, GCGraphicsExposures, &gcv);
+    }
+    return gc;
+}
+
+/*!
+ * @brief 矩形を 1 色で塗る
+ * @param drawable 塗る先
+ * @param pixel 色の画素値
+ * @param x 左端 (画素)
+ * @param y 上端 (画素)
+ * @param w 幅 (画素)
+ * @param h 高さ (画素)
+ */
+static void fill_rectangle(Drawable drawable, unsigned long pixel, int x, int y, int w, int h)
+{
+    auto *gc = plain_gc();
+    XSetForeground(Metadpy->dpy, gc, pixel);
+    XFillRectangle(Metadpy->dpy, drawable, gc, x, y, w, h);
+}
+
+/*!
+ * @brief Infowin のオフスクリーンの、まだウィンドウへ写していない範囲を広げる
+ * @param x 左端 (画素)
+ * @param y 上端 (画素)
+ * @param w 幅 (画素)
+ * @param h 高さ (画素)
+ */
+static void Infowin_mark_dirty(int x, int y, int w, int h)
+{
+    auto *iwin = Infowin;
+    const auto left = static_cast<int16_t>(std::max(x, 0));
+    const auto top = static_cast<int16_t>(std::max(y, 0));
+    const auto right = static_cast<int16_t>(std::min(x + w, static_cast<int>(iwin->buffer_w)));
+    const auto bottom = static_cast<int16_t>(std::min(y + h, static_cast<int>(iwin->buffer_h)));
+    if ((left >= right) || (top >= bottom)) {
+        return;
+    }
+    if (iwin->dirty_left >= iwin->dirty_right) {
+        iwin->dirty_left = left;
+        iwin->dirty_top = top;
+        iwin->dirty_right = right;
+        iwin->dirty_bottom = bottom;
+        return;
+    }
+    iwin->dirty_left = std::min(iwin->dirty_left, left);
+    iwin->dirty_top = std::min(iwin->dirty_top, top);
+    iwin->dirty_right = std::max(iwin->dirty_right, right);
+    iwin->dirty_bottom = std::max(iwin->dirty_bottom, bottom);
+}
+
+/*!
+ * @brief Infowin のオフスクリーンの指定した範囲をウィンドウへ写す
+ * @param x 左端 (画素)
+ * @param y 上端 (画素)
+ * @param w 幅 (画素)
+ * @param h 高さ (画素)
+ */
+static void Infowin_present_area(int x, int y, int w, int h)
+{
+    XCopyArea(Metadpy->dpy, Infowin->drawable, Infowin->win, plain_gc(), x, y, w, h, x, y);
+}
+
+/*!
+ * @brief Infowin のオフスクリーンのうち、書き換えてまだ写していない範囲をウィンドウへ写す
+ */
+static void Infowin_present()
+{
+    auto *iwin = Infowin;
+    if (iwin->dirty_left >= iwin->dirty_right) {
+        return;
+    }
+    Infowin_present_area(iwin->dirty_left, iwin->dirty_top, iwin->dirty_right - iwin->dirty_left, iwin->dirty_bottom - iwin->dirty_top);
+    iwin->dirty_left = iwin->dirty_right = 0;
+}
+
+/*!
+ * @brief Infowin のオフスクリーンを、指定した大きさで作る (作り直す)
+ * @param w 幅 (画素)
+ * @param h 高さ (画素)
+ * @details 新しいオフスクリーンは背景色で塗り、作り直すときは古いオフスクリーンの重なる部分を引き継ぐ。
+ * ウィンドウへはまだ写さず、まだ写していない範囲も引き継ぐ。
+ */
+static void Infowin_create_buffer(int w, int h)
+{
+    auto *iwin = Infowin;
+    w = std::max(w, 1);
+    h = std::max(h, 1);
+    const auto pixmap = XCreatePixmap(Metadpy->dpy, iwin->win, w, h, Metadpy->depth);
+    fill_rectangle(pixmap, Metadpy->bg.pixel, 0, 0, w, h);
+    if (iwin->drawable != None) {
+        XCopyArea(Metadpy->dpy, iwin->drawable, pixmap, plain_gc(), 0, 0, std::min(w, static_cast<int>(iwin->buffer_w)), std::min(h, static_cast<int>(iwin->buffer_h)), 0, 0);
+        XFreePixmap(Metadpy->dpy, iwin->drawable);
+    }
+    iwin->drawable = pixmap;
+    iwin->buffer_w = static_cast<int16_t>(w);
+    iwin->buffer_h = static_cast<int16_t>(h);
+#ifdef USE_XFT
+    if (iwin->draw) {
+        XftDrawChange(iwin->draw, pixmap);
+    }
+#endif
+}
+
 /*
  * Set the name (in the title bar) of Infowin
  */
@@ -549,6 +673,10 @@ static errr Infowin_prepare(Window xid)
     iwin->win = xid;
     XGetGeometry(Metadpy->dpy, xid, &tmp_win, &x, &y, &w, &h, &b, &d);
 
+    // 書き換えの途中が見えないよう、オフスクリーンに描いてから TERM_XTRA_FRESH などでウィンドウへ写す
+    iwin->drawable = None;
+    Infowin_create_buffer(w, h);
+
 #ifdef USE_XFT
     // TrueColor の画面が要るのは TrueType フォントで描くときだけで、ビットマップフォントなら要らない
     if (use_xft_runtime) {
@@ -556,7 +684,7 @@ static errr Infowin_prepare(Window xid)
         if (vis->c_class != TrueColor) {
             quit("Display does not support truecolor. Use \"-- -fb\" to use bitmap fonts.\n");
         }
-        iwin->draw = XftDrawCreate(Metadpy->dpy, iwin->win, vis, Metadpy->cmap);
+        iwin->draw = XftDrawCreate(Metadpy->dpy, iwin->drawable, vis, Metadpy->cmap);
     }
 #endif
 
@@ -651,7 +779,8 @@ static errr Infowin_resize(int w, int h)
  */
 static errr Infowin_wipe(void)
 {
-    XClearWindow(Metadpy->dpy, Infowin->win);
+    fill_rectangle(Infowin->drawable, Metadpy->bg.pixel, 0, 0, Infowin->buffer_w, Infowin->buffer_h);
+    Infowin_mark_dirty(0, 0, Infowin->buffer_w, Infowin->buffer_h);
     return 0;
 }
 
@@ -877,6 +1006,19 @@ static errr Infofnt_prepare_fontset(XFontSet info)
     ifnt->hgt = ascent + descent;
     ifnt->wid = width;
 
+    // 文字がセルの外へはみ出しうる幅を、各フォントで最も左右に出る文字から求める。
+    // 多バイト文字は 2 セルの幅に対して測る
+    auto ink_left = 0;
+    auto ink_right = 0;
+    n_fonts = XFontsOfFontSet(info, &fontinfo, &fontname);
+    for (auto i = 0; i < n_fonts; ++i) {
+        const auto cell_width = (fontinfo[i]->max_byte1 > 0) ? width * 2 : width;
+        ink_left = std::max<int>(ink_left, -fontinfo[i]->min_bounds.lbearing);
+        ink_right = std::max<int>(ink_right, fontinfo[i]->max_bounds.rbearing - cell_width);
+    }
+    ifnt->ink_left = static_cast<int16_t>(ink_left);
+    ifnt->ink_right = static_cast<int16_t>(ink_right);
+
     return 0;
 }
 
@@ -969,6 +1111,7 @@ static void Infofnt_text_std_xft(int x, int y, int len, const XftColor &fg, cons
     XRectangle r{ 0, 0, static_cast<unsigned short>(Infofnt->wid * len), static_cast<unsigned short>(Infofnt->hgt) };
     XftDrawSetClipRectangles(draw, px, py - Infofnt->asc, &r, 1);
     XftDrawRect(draw, &bg, px, py - Infofnt->asc, r.width, r.height);
+    Infowin_mark_dirty(px, py - Infofnt->asc, r.width, r.height);
     Infofnt_text_std_xft_draw_str(px, py, fg, str, str + utf8_len);
     XftDrawSetClip(draw, 0);
 }
@@ -986,14 +1129,7 @@ static void Infofnt_text_std_xft(int x, int y, int len, const XftColor &fg, cons
  */
 static void fill_text_background(int x, int y, int width)
 {
-    static GC gc = nullptr;
-    if (gc == nullptr) {
-        XGCValues gcv{};
-        gcv.graphics_exposures = False;
-        gc = XCreateGC(Metadpy->dpy, Metadpy->root, GCGraphicsExposures, &gcv);
-    }
-    XSetForeground(Metadpy->dpy, gc, Infoclr->bg.pixel);
-    XFillRectangle(Metadpy->dpy, Infowin->win, gc, x, y, width, Infofnt->hgt);
+    fill_rectangle(Infowin->drawable, Infoclr->bg.pixel, x, y, width, Infofnt->hgt);
 }
 
 /*
@@ -1013,13 +1149,14 @@ static errr Infofnt_text_std(int x, int y, concptr str, int len)
     if (!use_xft_runtime) {
         y = (y * Infofnt->hgt) + Infofnt->asc + Infowin->oy;
         x = (x * Infofnt->wid) + Infowin->ox;
+        Infowin_mark_dirty(x - Infofnt->ink_left, y - Infofnt->asc, len * Infofnt->wid + Infofnt->ink_left + Infofnt->ink_right, Infofnt->hgt);
     }
 
     if (Infofnt->mono) {
         if (!use_xft_runtime) {
             int i;
             for (i = 0; i < len; ++i) {
-                XDrawImageString(Metadpy->dpy, Infowin->win, Infoclr->gc, x + i * Infofnt->wid + Infofnt->off, y, str + i, 1);
+                XDrawImageString(Metadpy->dpy, Infowin->drawable, Infoclr->gc, x + i * Infofnt->wid + Infofnt->off, y, str + i, 1);
             }
             return 0;
         }
@@ -1045,7 +1182,7 @@ static errr Infofnt_text_std(int x, int y, concptr str, int len)
 #endif
         } else {
             fill_text_background(x, y - Infofnt->asc, len * Infofnt->wid);
-            XmbDrawString(Metadpy->dpy, Infowin->win, Infofnt->fontset_info, Infoclr->gc, x, y, _(utf8_buf, str), _(utf8_len, len));
+            XmbDrawString(Metadpy->dpy, Infowin->drawable, Infofnt->fontset_info, Infoclr->gc, x, y, _(utf8_buf, str), _(utf8_len, len));
         }
     }
 
@@ -1068,7 +1205,8 @@ static errr Infofnt_text_non(int x, int y, concptr str, int len)
     y = y * h + Infowin->oy;
 
     // TrueType フォントのときも GC の前景は XftColor と同じ画素値なので、同じく GC で塗る
-    XFillRectangle(Metadpy->dpy, Infowin->win, Infoclr->gc, x, y, w, h);
+    XFillRectangle(Metadpy->dpy, Infowin->drawable, Infoclr->gc, x, y, w, h);
+    Infowin_mark_dirty(x, y, w, h);
 
     return 0;
 }
@@ -1329,7 +1467,8 @@ static void draw_cursor(int x, int y, int len)
     square_to_pixel(&x, &y, x, y);
     const auto width = Infofnt->wid * len;
     const auto height = Infofnt->hgt;
-    XFillRectangle(Metadpy->dpy, Infowin->win, Infoclr->gc, x, y, width, height);
+    XFillRectangle(Metadpy->dpy, Infowin->drawable, Infoclr->gc, x, y, width, height);
+    Infowin_mark_dirty(x, y, width, height);
 }
 
 /*
@@ -1349,7 +1488,8 @@ static void mark_selection_mark(int x1, int y1, int x2, int y2)
 {
     square_to_pixel(&x1, &y1, x1, y1);
     square_to_pixel(&x2, &y2, x2, y2);
-    XDrawRectangle(Metadpy->dpy, Infowin->win, clr[TERM_SLATE]->gc, x1, y1, x2 - x1 + Infofnt->wid - 1, y2 - y1 + Infofnt->hgt - 1);
+    XDrawRectangle(Metadpy->dpy, Infowin->drawable, clr[TERM_SLATE]->gc, x1, y1, x2 - x1 + Infofnt->wid - 1, y2 - y1 + Infofnt->hgt - 1);
+    Infowin_mark_dirty(x1, y1, x2 - x1 + Infofnt->wid, y2 - y1 + Infofnt->hgt);
 }
 
 /*
@@ -1373,6 +1513,9 @@ static void mark_selection(void)
         sort_co_ord(&min, &max, &s_ptr->init, &s_ptr->cur);
         mark_selection_mark(min.x, min.y, max.x, max.y);
     }
+
+    // 枠を描いた分は TERM_XTRA_FRESH を経ないので、ここでウィンドウへ写す
+    Infowin_present();
 
     if (s_ptr->t != old) {
         term_activate(old);
@@ -1787,19 +1930,17 @@ static errr CheckEvent(bool wait)
         break;
     }
     case Expose: {
-        int x1, x2, y1, y2;
-        x1 = (xev->xexpose.x - Infowin->ox) / Infofnt->wid;
-        x2 = (xev->xexpose.x + xev->xexpose.width - Infowin->ox) / Infofnt->wid;
-
-        y1 = (xev->xexpose.y - Infowin->oy) / Infofnt->hgt;
-        y2 = (xev->xexpose.y + xev->xexpose.height - Infowin->oy) / Infofnt->hgt;
-
-        term_redraw_section(x1, y1, x2, y2);
+        // オフスクリーンは常に画面の内容を保っているので、描き直さずに写すだけでよい
+        Infowin_present_area(xev->xexpose.x, xev->xexpose.y, xev->xexpose.width, xev->xexpose.height);
         break;
     }
     case MapNotify: {
         Infowin->mapped = 1;
         game_term->mapped_flag = true;
+
+        // 閉じていた間は term_fresh() が何もしないので、オフスクリーンは閉じる前のままになっている。
+        // 以前は続く Expose での描き直しがこれを兼ねていたが、Expose では写すだけになったので、ここで描く
+        term_fresh();
         break;
     }
     case UnmapNotify: {
@@ -1830,6 +1971,11 @@ static errr CheckEvent(bool wait)
         Infowin->y = xev->xconfigure.y;
         Infowin->w = xev->xconfigure.width;
         Infowin->h = xev->xconfigure.height;
+        // オフスクリーンは広げるだけにする。メインのウィンドウは最小の大きさより縮めても下で元に戻されるので、
+        // 縮めて作り直すと、端末の大きさは変わらず描き直されないまま、はみ出した部分の内容を失ってしまう
+        if ((Infowin->w > Infowin->buffer_w) || (Infowin->h > Infowin->buffer_h)) {
+            Infowin_create_buffer(std::max(Infowin->w, Infowin->buffer_w), std::max(Infowin->h, Infowin->buffer_h));
+        }
         cols = ((Infowin->w - (ox + ox)) / td->fnt->wid);
         rows = ((Infowin->h - (oy + oy)) / td->fnt->hgt);
         if (cols < 1) {
@@ -1850,7 +1996,15 @@ static errr CheckEvent(bool wait)
 
         wid = cols * td->fnt->wid + (ox + ox);
         hgt = rows * td->fnt->hgt + (oy + oy);
+        const auto old_cols = game_term->wid;
+        const auto old_rows = game_term->hgt;
         term_resize(cols, rows);
+
+        // 以前は続く Expose での描き直しが、大きさを変えた端末の描き直しを兼ねていた。
+        // Expose ではオフスクリーンを写すだけになったので、大きさが変わったときはここで描き直す
+        if ((game_term->wid != old_cols) || (game_term->hgt != old_rows)) {
+            term_fresh();
+        }
         if ((Infowin->w != wid) || (Infowin->h != hgt)) {
             Infowin_set(td->win.get());
             Infowin_resize(wid, hgt);
@@ -2031,6 +2185,7 @@ static errr game_term_xtra_x11(int n, int v)
         return game_term_xtra_x11_scene(v) ? 0 : 1;
     }
     case TERM_XTRA_FRESH:
+        Infowin_present();
         // TrueType フォントで描くときだけ X サーバとの同期を待ち、ビットマップフォントなら送るだけにする
         Metadpy_update(1, use_xft_runtime, 0);
         return 0;
@@ -2073,8 +2228,9 @@ static void draw_tile_cursor(int x, int y, int width, int height)
     int left;
     int top;
     square_to_pixel(&left, &top, x, y);
-    XDrawRectangle(Metadpy->dpy, Infowin->win, xor_->gc, left, top, width - 1, height - 1);
-    XDrawRectangle(Metadpy->dpy, Infowin->win, xor_->gc, left + 1, top + 1, width - 3, height - 3);
+    XDrawRectangle(Metadpy->dpy, Infowin->drawable, xor_->gc, left, top, width - 1, height - 1);
+    XDrawRectangle(Metadpy->dpy, Infowin->drawable, xor_->gc, left + 1, top + 1, width - 3, height - 3);
+    Infowin_mark_dirty(left, top, width, height);
 }
 
 /*
@@ -2167,13 +2323,15 @@ static errr game_term_pict_x11(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *
 
     y += Infowin->oy;
     x += Infowin->ox;
+    // 最後のタイルは 2 倍幅で描くことがある
+    Infowin_mark_dirty(x, y, (n - 1) * td->fnt->wid + td->fnt->twid, td->fnt->hgt);
     for (i = 0; i < n; ++i, x += td->fnt->wid) {
         a = *ap++;
         c = *cp++;
         x1 = (c & 0x7F) * td->fnt->twid;
         y1 = (a & 0x7F) * td->fnt->hgt;
         if (td->tiles->width < x1 + td->fnt->wid || td->tiles->height < y1 + td->fnt->hgt) {
-            XFillRectangle(Metadpy->dpy, td->win->win, clr[0]->gc, x, y, td->fnt->twid, td->fnt->hgt);
+            XFillRectangle(Metadpy->dpy, td->win->drawable, clr[0]->gc, x, y, td->fnt->twid, td->fnt->hgt);
             continue;
         }
 
@@ -2184,7 +2342,7 @@ static errr game_term_pict_x11(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *
         y2 = (ta & 0x7F) * td->fnt->hgt;
 
         if (((x1 == x2) && (y1 == y2)) || !(((byte)ta & 0x80) && ((byte)tc & 0x80)) || td->tiles->width < x2 + td->fnt->wid || td->tiles->height < y2 + td->fnt->hgt) {
-            XPutImage(Metadpy->dpy, td->win->win, clr[0]->gc, td->tiles, x1, y1, x, y, td->fnt->twid, td->fnt->hgt);
+            XPutImage(Metadpy->dpy, td->win->drawable, clr[0]->gc, td->tiles, x1, y1, x, y, td->fnt->twid, td->fnt->hgt);
         } else {
             blank = XGetPixel(td->tiles, 0, td->fnt->hgt * 6);
             for (k = 0; k < td->fnt->twid; k++) {
@@ -2197,7 +2355,7 @@ static errr game_term_pict_x11(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *
                 }
             }
 
-            XPutImage(Metadpy->dpy, td->win->win, clr[0]->gc, td->TmpImage, 0, 0, x, y, td->fnt->twid, td->fnt->hgt);
+            XPutImage(Metadpy->dpy, td->win->drawable, clr[0]->gc, td->TmpImage, 0, 0, x, y, td->fnt->twid, td->fnt->hgt);
         }
     }
 
@@ -2361,12 +2519,31 @@ void draw_original32_glyph(const term_data &td, int x, int y, int width, int hei
             return;
         }
 #endif
-        XmbDrawString(Metadpy->dpy, td.win->win, font.fontset_info, iclr.gc, text_x + dx, text_y + dy, &character, 1);
+        XmbDrawString(Metadpy->dpy, td.win->drawable, font.fontset_info, iclr.gc, text_x + dx, text_y + dy, &character, 1);
     };
     for (const auto &[dx, dy] : { std::pair{ -1, 0 }, std::pair{ 1, 0 }, std::pair{ 0, -1 }, std::pair{ 0, 1 } }) {
         draw(dx, dy, *clr[TERM_DARK]);
     }
     draw(0, 0, *clr[color]);
+
+    auto left = text_x - font.ink_left;
+    auto top = text_y - font.asc;
+    auto right = text_x + font.wid + font.ink_right;
+    auto bottom = top + font.hgt;
+#ifdef USE_XFT
+    if (use_xft_runtime) {
+        // TrueType の字形は送り幅の外へはみ出すことがあるので、実際に描く範囲も含める
+        XGlyphInfo extents;
+        XftTextExtents8(Metadpy->dpy, font.xft_info, reinterpret_cast<const FcChar8 *>(&character), 1, &extents);
+        left = std::min(left, text_x - extents.x);
+        top = std::min(top, text_y - extents.y);
+        right = std::max(right, text_x - extents.x + extents.width);
+        bottom = std::max(bottom, text_y - extents.y + extents.height);
+    }
+#endif
+
+    // 縁取りは上下左右に 1 画素ずらして描くので、1 セルのタイルではタイルの外へ出る
+    Infowin_mark_dirty(left - 1, top - 1, right - left + 2, bottom - top + 2);
 }
 }
 
@@ -2401,7 +2578,8 @@ static errr game_term_pict_original32_x11(TERM_LEN x, TERM_LEN y, int n, const T
         if (is_catalog_monster || (!glyph_color && ((ap[i] != tap[i]) || (cp[i] != tcp[i])))) {
             paint_original32_tile(canvas, width, height, foreground);
         }
-        XPutImage(Metadpy->dpy, td->win->win, clr[0]->gc, canvas, 0, 0, px, py, width, height);
+        XPutImage(Metadpy->dpy, td->win->drawable, clr[0]->gc, canvas, 0, 0, px, py, width, height);
+        Infowin_mark_dirty(px, py, width, height);
         if (glyph_color) {
             draw_original32_glyph(*td, px, py, width, height, static_cast<char>(cp[i] & 0x7f), *glyph_color);
         }
@@ -2527,6 +2705,9 @@ static void game_term_nuke_x11(term_type *)
             XftDrawDestroy(iwin->draw);
         }
 #endif
+        if (iwin && (iwin->drawable != None)) {
+            XFreePixmap(Metadpy->dpy, iwin->drawable);
+        }
         angband_terms[i] = nullptr;
     }
 
