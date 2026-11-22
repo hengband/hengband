@@ -361,11 +361,19 @@ TEST_CASE("guess_convert_to_system_encoding keeps UTF-8 and converts a legacy en
     CHECK(guess_convert_to_system_encoding(euc) == cat("a", NIHON_SYS));
     CHECK(guess_convert_to_system_encoding(cat("a", NIHON_SYS)) == cat("a", NIHON_SYS));
 
+#ifdef _WIN32
+    // 旧版の Windows 版と同じく、Shift_JIS として読める文字列は推定せずに Shift_JIS として読む
+    // (EUC-JP の「澄」(C0 A1) も、半角カナの「ﾀ｡」になる)
+    CHECK(guess_convert_to_system_encoding(std::string("\xc0\xa1")) == "\xef\xbe\x80\xef\xbd\xa1"sv);
+    CHECK(guess_convert_to_system_encoding(std::string("\xb1\xb2")) == "\xef\xbd\xb1\xef\xbd\xb2"sv); // ｱｲ
+    CHECK(guess_convert_to_system_encoding(cat(KANJI_SHAKU_SJIS, "abc", KANJI_YOU_SJIS)) == cat(KANJI_SHAKU_SYS, "abc", KANJI_YOU_SYS));
+#else
     // EUC-JP の「澄」(C0 A1) は UTF-8 とみなさずに変換する
     CHECK(guess_convert_to_system_encoding(std::string("\xc0\xa1")) == "\xe6\xbe\x84"sv);
 
     // 推定できない文字列は EUC-JP として読む
     CHECK(guess_convert_to_system_encoding(cat(KANJI_SEN_EUC, "abc", KANJI_SHAKU_EUC)) == cat(KANJI_SEN_SYS, "abc", KANJI_SHAKU_SYS));
+#endif
 }
 
 TEST_CASE("legacy_to_sys_replacing_invalid replaces bytes which cannot be read with question marks")
@@ -391,12 +399,18 @@ TEST_CASE("legacy_to_sys_replacing_invalid replaces bytes which cannot be read w
     CHECK(legacy_to_sys_replacing_invalid("\xc0\xa1"sv, CharacterEncoding::US_ASCII) == "??");
 }
 
-TEST_CASE("legacy_to_sys_replacing_invalid reads a string in an unknown encoding as EUC-JP")
+TEST_CASE("legacy_to_sys_replacing_invalid reads a string in an unknown encoding as the encoding of the old versions")
 {
-    // EUC-JP とも Shift_JIS とも読める文字列は、旧版の Unix 版の文字コード (EUC-JP) として読む
+    // EUC-JP とも Shift_JIS とも読める文字列は、旧版の内部の文字コード (Windows 版は Shift_JIS、Unix 系は EUC-JP) として読む
+#ifdef _WIN32
+    const auto str = cat(KANJI_SHAKU_SJIS, "abc", KANJI_YOU_SJIS);
+    const auto expected = cat(KANJI_SHAKU_SYS, "abc", KANJI_YOU_SYS);
+#else
     const auto str = cat(KANJI_SEN_EUC, "abc", KANJI_SHAKU_EUC);
+    const auto expected = cat(KANJI_SEN_SYS, "abc", KANJI_SHAKU_SYS);
+#endif
     REQUIRE(guess_legacy_encoding(str) == CharacterEncoding::UNKNOWN);
-    CHECK(legacy_to_sys_replacing_invalid(str, CharacterEncoding::UNKNOWN) == cat(KANJI_SEN_SYS, "abc", KANJI_SHAKU_SYS));
+    CHECK(legacy_to_sys_replacing_invalid(str, CharacterEncoding::UNKNOWN) == expected);
 }
 
 TEST_CASE("legacy_to_sys returns a string in an unknown encoding as is")

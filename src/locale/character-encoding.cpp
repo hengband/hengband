@@ -648,7 +648,8 @@ tl::optional<std::string> legacy_to_sys(std::string_view str, CharacterEncoding 
  * @param encoding str の文字コード (guess_legacy_encoding() で推定したものなど)
  * @return 内部の文字コードに変換した文字列
  * @details 内部の文字コードが UTF-8 のときは、読めないバイト (末尾で欠けた文字など) を '?' に置き換える。
- * encoding が UNKNOWN なら、旧版の Unix 版の文字コード (EUC-JP) として読む (EUC-JP の構成が、推定できない文字列を内部の文字コードのまま扱うのと同じ)。
+ * encoding が UNKNOWN なら、旧版の内部の文字コード (LEGACY_CHARACTER_ENCODING。Windows 版は Shift_JIS、Unix 系は EUC-JP) として読む
+ * (旧版の構成が、推定できない文字列を内部の文字コードのまま扱うのと同じ)。
  * US_ASCII・UTF_8 なら、UTF-8 として読めないバイトを '?' に置き換える。
  * 内部の文字コードが EUC-JP・Shift_JIS のときは legacy_to_sys() と同じで、置き換えない。
  * ただし UTF_8 (内部の文字コードを UTF-8 にした構成で書いたセーブ) は、UTF-8 から変換し、内部の文字コードに無い文字と読めないバイトは '?' に置き換える。
@@ -656,8 +657,8 @@ tl::optional<std::string> legacy_to_sys(std::string_view str, CharacterEncoding 
 std::string legacy_to_sys_replacing_invalid(std::string_view str, CharacterEncoding encoding)
 {
 #ifdef UTF8
-    // 文字コードが分からなければ EUC-JP として読む
-    const auto legacy_encoding = (encoding == CharacterEncoding::UNKNOWN) ? CharacterEncoding::EUC_JP : encoding;
+    // 文字コードが分からなければ旧版の内部の文字コードとして読む
+    const auto legacy_encoding = (encoding == CharacterEncoding::UNKNOWN) ? LEGACY_CHARACTER_ENCODING : encoding;
     if ((legacy_encoding == CharacterEncoding::EUC_JP) || (legacy_encoding == CharacterEncoding::SHIFT_JIS)) {
         // 変換できなければ (iconv がその文字コードを扱えないときなど)、UTF-8 として読めないバイトを置き換えるだけにする
         if (auto utf8 = legacy_to_utf8(str, legacy_encoding, true)) {
@@ -986,10 +987,19 @@ static bool is_system_encoding_text(std::string_view str)
  * @return 内部の文字コードに変換した文字列。変換に失敗した場合は tl::nullopt
  * @details 内部の文字コードが UTF-8 なら、旧版の文字コードとみなして推定する。推定できない文字列や読めないバイトを含む文字列も、
  * 不正な UTF-8 を持ち込まないよう置き換えて変換するので、失敗しない。EUC-JP・Shift_JIS なら UTF-8 から変換する。
+ * Windows の UTF-8 の構成では、Shift_JIS として読める文字列は推定せずに Shift_JIS として読む。
+ * 旧版の Windows 版は UTF-8 として読めない文字列をすべて Shift_JIS として扱っていたので、それと同じにし、
+ * 半角カナの並び (EUC-JP の 2 バイトの文字とも読める) を EUC-JP と推定して取り違えないようにする。
  */
 static tl::optional<std::string> convert_to_system_encoding(std::string_view str)
 {
 #ifdef UTF8
+#ifdef _WIN32
+    if (auto utf8 = legacy_to_sys(str, LEGACY_CHARACTER_ENCODING)) {
+        return utf8;
+    }
+#endif
+
     return legacy_to_sys_replacing_invalid(str, guess_legacy_encoding(str));
 #else
     return utf8_to_sys(str);
