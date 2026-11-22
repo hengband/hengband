@@ -170,21 +170,20 @@ static bool insert_ringbuf(std::string_view header, std::string_view payload = {
     return true;
 }
 
-/* strが同じ文字の繰り返しかどうか調べる */
+/*!
+ * @brief 送る文字列が同じ ASCII の文字の繰り返しかどうか調べる
+ * @param str 送る文字列 (通信上の文字コード)
+ * @param len バイト数
+ * @details 通信上の文字コードは EUC-JP で、ASCII でないバイトは全角文字の一部なので、繰り返しとみなさない
+ */
 static bool string_is_repeat(concptr str, int len)
 {
-    char c = str[0];
-    int i;
-
-    if (len < 2) {
-        return false;
-    }
-    if (is_mb_char_lead(c)) {
+    if ((len < 2) || (static_cast<unsigned char>(str[0]) >= 0x80)) {
         return false;
     }
 
-    for (i = 1; i < len; i++) {
-        if (c != str[i] || is_mb_char_lead(str[i])) {
+    for (auto i = 1; i < len; i++) {
+        if (str[i] != str[0]) {
             return false;
         }
     }
@@ -197,7 +196,7 @@ static bool string_is_repeat(concptr str, int len)
 static int find_split(concptr str, int len)
 {
     /*
-     * SJIS が定義されている場合でも、str は常に EUC-JP としてエンコードされます。
+     * 内部の文字コードが Shift_JIS・UTF-8 の場合でも、str は常に EUC-JP としてエンコードされます。
      * 他の場所で行われているような 3 バイトのエンコーディングは想定していません。
      */
     int last_split = 0, i = 0;
@@ -235,27 +234,51 @@ static void send_offset_update(const TERM_LEN x, const TERM_LEN y, bool force_up
 
 static errr send_text_to_chuukei_server(TERM_LEN x, TERM_LEN y, int len, TERM_COLOR col, concptr str)
 {
+    // 通信上の文字コードは EUC-JP で、全角文字を 2 バイトとして扱う。送る文字列のバイト数はマス数 len と等しくなる
+#if defined(SJIS) && defined(JP)
+    std::string buffer = str; // strは書き換わって欲しくないのでコピーする.
+    // sjis2euc() は半角カナを扱えず、次のバイトと組にして NUL などに変えてしまうので、'?' にしておく
+    for (size_t i = 0; i < buffer.length(); i++) {
+        if (is_mb_char_lead(buffer[i])) {
+            i++;
+        } else if (static_cast<unsigned char>(buffer[i]) >= 0x80) {
+            buffer[i] = '?';
+        }
+    }
+    sjis2euc(buffer.data());
+    const auto *payload = buffer.data();
+#elif defined(UTF8) && defined(JP)
+    // UTF-8 として正しくないバイトを含む文字列では、マスへの分け方と変換した後のバイト数がずれることがあるので、len バイトにそろえる
+    // 右端の桁の全角文字のように、末尾で途中から切れる全角文字は空白にする
+    auto buffer = utf8_to_euc_keeping_width(str);
+    buffer.resize(len, ' ');
+    std::fill(buffer.begin() + find_split(buffer.data(), len), buffer.end(), ' ');
+    const auto *payload = buffer.data();
+#else
+    const auto *payload = str;
+#endif
+
     if (len == 1) {
         send_offset_update(x, y);
-        insert_ringbuf(fmt::format("s{:c}{:c}{:c}{:c}", (x % SPLIT_SIZE) + 1, (y % SPLIT_SIZE) + 1, col, *str));
+        insert_ringbuf(fmt::format("s{:c}{:c}{:c}{:c}", (x % SPLIT_SIZE) + 1, (y % SPLIT_SIZE) + 1, col, *payload));
         return (*old_text_hook)(x, y, len, col, str);
     }
 
-    if (string_is_repeat(str, len)) {
+    if (string_is_repeat(payload, len)) {
         auto rb_x = x;
         auto rb_len = len;
         while (rb_len > SPLIT_MAX) {
             send_offset_update(rb_x, y);
-            insert_ringbuf(fmt::format("n{:c}{:c}{:c}{:c}{:c}", (rb_x % SPLIT_SIZE) + 1, (y % SPLIT_SIZE) + 1, SPLIT_MAX, col, *str));
+            insert_ringbuf(fmt::format("n{:c}{:c}{:c}{:c}{:c}", (rb_x % SPLIT_SIZE) + 1, (y % SPLIT_SIZE) + 1, SPLIT_MAX, col, *payload));
             rb_x += SPLIT_MAX;
             rb_len -= SPLIT_MAX;
         }
 
         std::string formatted_text;
         if (rb_len > 1) {
-            formatted_text = fmt::format("n{:c}{:c}{:c}{:c}{:c}", (rb_x % SPLIT_SIZE) + 1, (y % SPLIT_SIZE) + 1, rb_len, col, *str);
+            formatted_text = fmt::format("n{:c}{:c}{:c}{:c}{:c}", (rb_x % SPLIT_SIZE) + 1, (y % SPLIT_SIZE) + 1, rb_len, col, *payload);
         } else {
-            formatted_text = fmt::format("s{:c}{:c}{:c}{:c}", (rb_x % SPLIT_SIZE) + 1, (y % SPLIT_SIZE) + 1, col, *str);
+            formatted_text = fmt::format("s{:c}{:c}{:c}{:c}", (rb_x % SPLIT_SIZE) + 1, (y % SPLIT_SIZE) + 1, col, *payload);
         }
 
         send_offset_update(rb_x, y);
@@ -263,13 +286,6 @@ static errr send_text_to_chuukei_server(TERM_LEN x, TERM_LEN y, int len, TERM_CO
         return (*old_text_hook)(x, y, len, col, str);
     }
 
-#if defined(SJIS) && defined(JP)
-    std::string buffer = str; // strは書き換わって欲しくないのでコピーする.
-    auto *payload = buffer.data();
-    sjis2euc(payload);
-#else
-    const auto *payload = str;
-#endif
     auto rb_x = x;
     auto rb_len = len;
     while (rb_len > SPLIT_MAX) {
@@ -555,7 +571,7 @@ static void update_term_size(int x, int y, int len)
  * @param y 書き込むマスの行
  * @param len 書き込むマス数
  * @param col 文字の色
- * @param mesg 文字列。通信上の文字コードでは、バイト数がマス数と等しい
+ * @param mesg 内部の文字コードの文字列 ('t' は通信上の文字コードから変換したもの、'n'・'s' は ASCII の文字)
  */
 static void store_text_to_screen(int x, int y, int len, uint8_t col, std::string_view mesg)
 {
@@ -635,17 +651,31 @@ static bool flush_ringbuf_client()
 #ifndef _WIN32
         win2unix(col, mesg);
 #endif
+#if defined(UTF8) && defined(JP)
+        // 1 文字と繰り返しで送るのは 1 マスの文字 (ASCII) だが、前の版の Shift_JIS の版は半角カナの繰り返しを Shift_JIS のまま送っていた。
+        // UTF-8 として正しくないバイトを画面に書かないよう、ASCII でなければ '?' にする
+        if (((id == 'n') || (id == 's')) && (static_cast<unsigned char>(mesg[0]) >= 0x80)) {
+            mesg[0] = '?';
+        }
+#endif
 
         switch (id) {
-        case 't': /* 通常 */
+        case 't': { /* 通常 */
 #if defined(SJIS) && defined(JP)
             euc2sjis(mesg);
+            const std::string_view text(mesg, len);
+#elif defined(UTF8) && defined(JP)
+            // 通信上の文字コード (EUC-JP) から内部の文字コードに変換する。全角文字は 2 マスのままなので、マス数は変わらない
+            const auto text = legacy_to_sys_replacing_invalid(std::string_view(mesg, len), CharacterEncoding::EUC_JP);
+#else
+            const std::string_view text(mesg, len);
 #endif
             update_term_size(x, y, len);
-            (void)((*angband_terms[0]->text_hook)(x, y, len, (byte)col, mesg));
-            store_text_to_screen(x, y, len, col, { mesg, static_cast<size_t>(len) });
+            (void)((*angband_terms[0]->text_hook)(x, y, len, (byte)col, text.data()));
+            store_text_to_screen(x, y, len, col, text);
 
             break;
+        }
         case 'n': /* 繰り返し */
             for (auto i = 1; i < len + 1; i++) {
                 if (i == len) {
