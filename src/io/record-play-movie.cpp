@@ -170,21 +170,20 @@ static bool insert_ringbuf(std::string_view header, std::string_view payload = {
     return true;
 }
 
-/* strが同じ文字の繰り返しかどうか調べる */
+/*!
+ * @brief 送る文字列が同じ ASCII の文字の繰り返しかどうか調べる
+ * @param str 送る文字列 (通信上の文字コード)
+ * @param len バイト数
+ * @details 通信上の文字コードは EUC-JP で、ASCII でないバイトは全角文字の一部なので、繰り返しとみなさない
+ */
 static bool string_is_repeat(concptr str, int len)
 {
-    char c = str[0];
-    int i;
-
-    if (len < 2) {
-        return false;
-    }
-    if (is_mb_char_lead(c)) {
+    if ((len < 2) || (static_cast<unsigned char>(str[0]) >= 0x80)) {
         return false;
     }
 
-    for (i = 1; i < len; i++) {
-        if (c != str[i] || is_mb_char_lead(str[i])) {
+    for (auto i = 1; i < len; i++) {
+        if (str[i] != str[0]) {
             return false;
         }
     }
@@ -235,27 +234,44 @@ static void send_offset_update(const TERM_LEN x, const TERM_LEN y, bool force_up
 
 static errr send_text_to_chuukei_server(TERM_LEN x, TERM_LEN y, int len, TERM_COLOR col, concptr str)
 {
+    // 通信上の文字コードは EUC-JP で、全角文字を 2 バイトとして扱う。送る文字列のバイト数はマス数 len と等しくなる
+#if defined(SJIS) && defined(JP)
+    std::string buffer = str; // strは書き換わって欲しくないのでコピーする.
+    // sjis2euc() は半角カナを扱えず、次のバイトと組にして NUL などに変えてしまうので、'?' にしておく
+    for (size_t i = 0; i < buffer.length(); i++) {
+        if (is_mb_char_lead(buffer[i])) {
+            i++;
+        } else if (static_cast<unsigned char>(buffer[i]) >= 0x80) {
+            buffer[i] = '?';
+        }
+    }
+    sjis2euc(buffer.data());
+    const auto *payload = buffer.data();
+#else
+    const auto *payload = str;
+#endif
+
     if (len == 1) {
         send_offset_update(x, y);
-        insert_ringbuf(fmt::format("s{:c}{:c}{:c}{:c}", (x % SPLIT_SIZE) + 1, (y % SPLIT_SIZE) + 1, col, *str));
+        insert_ringbuf(fmt::format("s{:c}{:c}{:c}{:c}", (x % SPLIT_SIZE) + 1, (y % SPLIT_SIZE) + 1, col, *payload));
         return (*old_text_hook)(x, y, len, col, str);
     }
 
-    if (string_is_repeat(str, len)) {
+    if (string_is_repeat(payload, len)) {
         auto rb_x = x;
         auto rb_len = len;
         while (rb_len > SPLIT_MAX) {
             send_offset_update(rb_x, y);
-            insert_ringbuf(fmt::format("n{:c}{:c}{:c}{:c}{:c}", (rb_x % SPLIT_SIZE) + 1, (y % SPLIT_SIZE) + 1, SPLIT_MAX, col, *str));
+            insert_ringbuf(fmt::format("n{:c}{:c}{:c}{:c}{:c}", (rb_x % SPLIT_SIZE) + 1, (y % SPLIT_SIZE) + 1, SPLIT_MAX, col, *payload));
             rb_x += SPLIT_MAX;
             rb_len -= SPLIT_MAX;
         }
 
         std::string formatted_text;
         if (rb_len > 1) {
-            formatted_text = fmt::format("n{:c}{:c}{:c}{:c}{:c}", (rb_x % SPLIT_SIZE) + 1, (y % SPLIT_SIZE) + 1, rb_len, col, *str);
+            formatted_text = fmt::format("n{:c}{:c}{:c}{:c}{:c}", (rb_x % SPLIT_SIZE) + 1, (y % SPLIT_SIZE) + 1, rb_len, col, *payload);
         } else {
-            formatted_text = fmt::format("s{:c}{:c}{:c}{:c}", (rb_x % SPLIT_SIZE) + 1, (y % SPLIT_SIZE) + 1, col, *str);
+            formatted_text = fmt::format("s{:c}{:c}{:c}{:c}", (rb_x % SPLIT_SIZE) + 1, (y % SPLIT_SIZE) + 1, col, *payload);
         }
 
         send_offset_update(rb_x, y);
@@ -263,13 +279,6 @@ static errr send_text_to_chuukei_server(TERM_LEN x, TERM_LEN y, int len, TERM_CO
         return (*old_text_hook)(x, y, len, col, str);
     }
 
-#if defined(SJIS) && defined(JP)
-    std::string buffer = str; // strは書き換わって欲しくないのでコピーする.
-    auto *payload = buffer.data();
-    sjis2euc(payload);
-#else
-    const auto *payload = str;
-#endif
     auto rb_x = x;
     auto rb_len = len;
     while (rb_len > SPLIT_MAX) {
