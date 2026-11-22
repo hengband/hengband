@@ -1964,6 +1964,12 @@ static errr CheckEvent(bool wait)
         break;
     }
     case ConfigureNotify: {
+        // 引き伸ばしている間は大きさの変更が続けて届く。途中の大きさごとに描き直すと、とくにメインの
+        // ウィンドウでは画面全体を描き直すため追従が遅れるので、たまっている分は読み捨てて最後の大きさだけ扱う
+        while (XCheckTypedWindowEvent(Metadpy->dpy, iwin->win, ConfigureNotify, xev)) {
+            ;
+        }
+
         int cols, rows, wid, hgt;
         int ox = Infowin->ox;
         int oy = Infowin->oy;
