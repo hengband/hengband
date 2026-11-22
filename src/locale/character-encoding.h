@@ -56,6 +56,7 @@ constexpr auto SYSTEM_CHARACTER_ENCODING = CharacterEncoding::US_ASCII;
 void sjis2euc(char *str);
 void euc2sjis(char *str);
 CharacterEncoding guess_legacy_encoding(std::string_view str);
+size_t legacy_lead_byte_length(char lead, CharacterEncoding encoding);
 tl::optional<std::string> legacy_to_sys(std::string_view str, CharacterEncoding encoding);
 std::string legacy_to_sys_replacing_invalid(std::string_view str, CharacterEncoding encoding);
 tl::optional<std::string> sys_to_utf8(std::string_view str);

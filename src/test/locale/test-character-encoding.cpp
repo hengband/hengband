@@ -299,6 +299,16 @@ TEST_CASE("utf8_to_sys rejects invalid UTF-8")
 
 #endif
 
+// Windows の 20932 と macOS の libiconv は C1 制御文字を EUC-JP に変換できず、utf8_to_euc() が失敗するので、glibc の iconv だけで確かめる
+#if (defined(EUC) || defined(UTF8)) && defined(__GLIBC__)
+TEST_CASE("utf8_to_euc keeps C1 control characters which iconv converts into one byte")
+{
+    // glibc の iconv の EUC-JP は U+0085 を 1 バイトの 85 にする。後ろの文字を 2 バイト目とみなして '?' にしない
+    CHECK(utf8_to_euc(cat("\xc2\x85"sv, "a")) == "\x85\x61"sv); // 61 は 'a'
+    CHECK(utf8_to_euc("\xc2\x85\xe6\x97\xa5\xe6\x9c\xac"sv) == cat("\x85"sv, NIHON_EUC)); // U+0085 と「日本」
+}
+#endif
+
 #ifdef UTF8
 
 TEST_CASE("utf8_to_sys and sys_to_utf8 reject invalid UTF-8 when the system encoding is UTF-8")
@@ -325,6 +335,13 @@ TEST_CASE("legacy_to_sys fails on a string broken in the given encoding")
     // EUC-JP の 80-A0 (8E・8F を除く) は C1 制御文字として変換せず、失敗とする
     CHECK_FALSE(legacy_to_sys("\x8a"sv, CharacterEncoding::EUC_JP).has_value());
     CHECK_FALSE(legacy_to_sys("a\xa0"sv, CharacterEncoding::EUC_JP).has_value());
+
+    // EUC-JP の 3 バイトの文字の先頭 (8F) で終わる文字列と、Shift_JIS の 80 は、C1 制御文字として変換せず、失敗とする
+    CHECK_FALSE(legacy_to_sys(cat(NIHON_EUC, "\x8f"), CharacterEncoding::EUC_JP).has_value());
+    CHECK_FALSE(legacy_to_sys(cat(NIHON_SJIS, "\x80"), CharacterEncoding::SHIFT_JIS).has_value());
+
+    // EUC-JP の 2 バイト目が A1 未満の並びは、JIS X 0212 の文字として読まず、失敗とする
+    CHECK_FALSE(legacy_to_sys(cat(NIHON_EUC, "\xc6:"), CharacterEncoding::EUC_JP).has_value());
 }
 
 TEST_CASE("guess_convert_to_system_encoding keeps UTF-8 and converts a legacy encoding when the system encoding is UTF-8")
@@ -359,6 +376,14 @@ TEST_CASE("legacy_to_sys_replacing_invalid replaces bytes which cannot be read w
 
     // EUC-JP の 80-A0 (8E・8F を除く) は読めないバイトとし、後ろの文字は変換を続ける
     CHECK(legacy_to_sys_replacing_invalid(cat("\x8a", NIHON_EUC), CharacterEncoding::EUC_JP) == cat("?", NIHON_SYS));
+    CHECK(legacy_to_sys_replacing_invalid(cat("\x8f", "a", NIHON_EUC), CharacterEncoding::EUC_JP) == cat("?a", NIHON_SYS));
+    CHECK(legacy_to_sys_replacing_invalid(cat("\x80", NIHON_SJIS), CharacterEncoding::SHIFT_JIS) == cat("?", NIHON_SYS));
+    CHECK(legacy_to_sys_replacing_invalid(cat(NIHON_EUC, "\xc6:"), CharacterEncoding::EUC_JP) == cat(NIHON_SYS, "?:"));
+
+#ifdef _WIN32
+    // Windows の 20932 は JIS X 0212 の文字 (8F B0 A1 の「丂」) を読めないので、3 バイトを 1 つの '?' にする
+    CHECK(legacy_to_sys_replacing_invalid(cat("\x8f\xb0\xa1", NIHON_EUC), CharacterEncoding::EUC_JP) == cat("?", NIHON_SYS));
+#endif
 
     // UTF-8 の文字列は、UTF-8 として読めないバイトを置き換える
     CHECK(legacy_to_sys_replacing_invalid(cat(NIHON_SYS, "\xff\xe6"), CharacterEncoding::UTF_8) == cat(NIHON_SYS, "??"));
