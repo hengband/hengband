@@ -16,6 +16,7 @@
 #include "io/files-util.h"
 #include "io/input-key-acceptor.h"
 #include "main/sound-of-music.h"
+#include "player-base/player-class.h"
 #include "player-info/class-info.h"
 #include "player/player-realm.h"
 #include "spell/spells-execution.h"
@@ -234,7 +235,7 @@ static SpoilerOutputResultType spoil_player_spell()
         const auto realm1_choices = PlayerRealm::get_realm1_choices(pclass);
         const auto realm2_choices = PlayerRealm::get_realm2_choices(pclass);
         const auto choices = realm1_choices | realm2_choices;
-        const auto is_every_magic = pclass == PlayerClassType::SORCERER || pclass == PlayerClassType::RED_MAGE;
+        const auto is_every_magic = PlayerClass::is_every_magic(pclass);
         for (const auto realm : EnumRange(RealmType::LIFE, RealmType::MAX)) {
             if (!(is_every_magic && PlayerRealm::is_magic(realm)) && choices.has_not(realm)) {
                 continue;
