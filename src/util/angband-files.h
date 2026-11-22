@@ -45,6 +45,7 @@ enum class FileOpenMode {
 
 std::filesystem::path path_parse(const std::filesystem::path &path);
 std::filesystem::path path_build(const std::filesystem::path &path, std::string_view file);
+std::filesystem::path path_build_inheriting_legacy_name(const std::filesystem::path &path, std::string_view file);
 FILE *angband_fopen(const std::filesystem::path &path, const FileOpenMode mode, const bool is_binary = false);
 FILE *angband_fopen_temp(char *buf, int max);
 tl::optional<std::string> angband_fgets(FILE *fp, size_t n = std::string::npos);

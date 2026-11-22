@@ -51,7 +51,7 @@ std::filesystem::path search_pickpref_path(std::string_view player_base_name)
 {
     for (const auto filename_mode : { PickType::WITH_PNAME, PickType::DEFAULT }) {
         const auto filename = pickpref_filename(player_base_name, filename_mode);
-        const auto path = path_build(ANGBAND_DIR_USER, filename);
+        const auto path = path_build_inheriting_legacy_name(ANGBAND_DIR_USER, filename);
         if (std::filesystem::exists(path)) {
             return path;
         }
@@ -87,7 +87,7 @@ std::string pickpref_filename(std::string_view player_base_name, PickType filena
  */
 static tl::optional<std::vector<std::string>> read_text_lines(std::string_view filename)
 {
-    const auto path = path_build(ANGBAND_DIR_USER, filename);
+    const auto path = path_build_inheriting_legacy_name(ANGBAND_DIR_USER, filename);
     auto ifs = std::ifstream(path);
     if (!ifs) {
         return tl::nullopt;

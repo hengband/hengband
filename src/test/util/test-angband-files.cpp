@@ -227,4 +227,22 @@ TEST_CASE("rename_legacy_named_file does nothing without a file named in EUC-JP"
     CHECK_FALSE(rename_legacy_named_file(ascii_path).has_value());
     CHECK(read_file(ascii_path) == "ascii");
 }
+
+TEST_CASE("path_build_inheriting_legacy_name returns the renamed path of a file named in EUC-JP")
+{
+    const TemporaryJsonFiles dir;
+    const auto file = cat("picktype-", NIHON_UTF8, ".prf");
+    const auto legacy_path = dir.directory / cat("picktype-", NIHON_EUC, ".prf");
+    if (!write_legacy_file(dir, legacy_path.filename(), "legacy")) {
+        return;
+    }
+
+    const auto path = path_build_inheriting_legacy_name(dir.directory, file);
+    CHECK(path == path_build(dir.directory, file));
+    CHECK(read_file(path) == "legacy");
+    CHECK_FALSE(std::filesystem::exists(legacy_path));
+
+    // 旧名のファイルが無ければ、path_build() と同じパスを返す
+    CHECK(path_build_inheriting_legacy_name(dir.directory, "picktype.prf") == path_build(dir.directory, "picktype.prf"));
+}
 #endif

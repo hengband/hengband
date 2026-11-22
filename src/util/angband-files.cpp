@@ -224,6 +224,31 @@ std::filesystem::path path_build(const std::filesystem::path &path, std::string_
 #endif
 }
 
+/*!
+ * @brief ファイルのパスを作る。旧版の名前のファイルしか無ければ、今の名前に付け替えてからパスを返す
+ * @param path ディレクトリのパス
+ * @param file ファイル名
+ * @return 読み書きに使うファイルのパス
+ * @details プレイヤー名や種族名などから名前を作るユーザーファイルを開くときに使う。
+ * 内部の文字コードが UTF-8 の構成では、旧版の EUC-JP の名前のファイル (旧名) しか無ければ rename_legacy_named_file() で付け替え、
+ * 付け替えられなければ旧名のファイルのパスを返す。ほかの構成では path_build() と同じ。
+ */
+std::filesystem::path path_build_inheriting_legacy_name(const std::filesystem::path &path, std::string_view file)
+{
+    const auto built = path_build(path, file);
+#if defined(JP) && defined(UTF8)
+    // 「~」で始まるパスは開くときに展開されるので、旧名も展開したパスで探す。展開できなければ付け替えない
+    const auto parsed = path_parse(built);
+    if (parsed.empty()) {
+        return built;
+    }
+
+    return rename_legacy_named_file(parsed).value_or(built);
+#else
+    return built;
+#endif
+}
+
 static std::string make_file_mode(const FileOpenMode mode, const bool is_binary)
 {
     std::stringstream ss;
