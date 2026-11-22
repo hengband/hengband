@@ -3309,18 +3309,40 @@ errr init_x11(int argc, char *argv[])
             ANGBAND_GRAF = "ascii";
             return 0;
         }
+        // 端末ごとにフォントの大きさへ拡大・縮小する。1 つでも作れなければ、どの端末もタイルを使わない。
+        // X サーバに置く前にすべて作っておくので、途中で失敗しても X サーバ側の後始末は要らない
+        // (その代わり、拡大・縮小した画像を端末の数だけ同時に持つ)
+        std::vector<XImage *> resized_tiles;
+        resized_tiles.reserve(num_term);
+        for (i = 0; i < num_term; i++) {
+            const auto &fnt = *data[i].fnt;
+            auto *tiles = ResizeImage(dpy, tiles_raw, pict_wid, pict_hgt, fnt.twid, fnt.hgt);
+            if (tiles == nullptr) {
+                break;
+            }
+            resized_tiles.push_back(tiles);
+        }
+
+        // 拡大・縮小した画像を作ったので、読み込んだ元の画像はもう使わない
+        XDestroyImage(tiles_raw);
+        if (std::ssize(resized_tiles) < num_term) {
+            for (auto *tiles : resized_tiles) {
+                XDestroyImage(tiles);
+            }
+            plog(fmt::format(_("画像 '{}' をフォントの大きさに拡大・縮小できません。", "Cannot resize image file '{}' to the font size"), filename));
+            use_graphics = false;
+            ANGBAND_GRAF = "ascii";
+            return 0;
+        }
+
         for (i = 0; i < num_term; i++) {
             term_data *td = &data[i];
             term_type *t = &td->t;
             t->pict_hook = game_term_pict_x11;
             t->higher_pict = true;
-            auto *tiles = ResizeImage(dpy, tiles_raw, pict_wid, pict_hgt, td->fnt->twid, td->fnt->hgt);
-            upload_tiles(*td, tiles);
-            XDestroyImage(tiles);
+            upload_tiles(*td, resized_tiles[i]);
+            XDestroyImage(resized_tiles[i]);
         }
-
-        // 端末ごとに拡大・縮小した画像を作ったので、読み込んだ元の画像はもう使わない
-        XDestroyImage(tiles_raw);
     }
     return 0;
 }

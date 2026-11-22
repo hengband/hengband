@@ -670,16 +670,33 @@ static void ScaleIcon(XImage *ImIn, XImage *ImOut, int x1, int y1, int x2, int y
     }
 }
 
+/*!
+ * @brief 拡大・縮小した画像を書き込む空の画像を作る
+ * @param dpy ディスプレイ
+ * @param Im 元の画像 (深さと画素のビット数を揃える)
+ * @param width 幅 (画素)
+ * @param height 高さ (画素)
+ * @return 作った画像。画素の領域や画像を作れなければ nullptr
+ */
+static XImage *create_resized_image(Display *dpy, const XImage *Im, int width, int height)
+{
+    auto *data = static_cast<char *>(malloc(static_cast<size_t>(width) * height * Im->bits_per_pixel / 8));
+    if (data == nullptr) {
+        return nullptr;
+    }
+    auto *image = XCreateImage(dpy, DefaultVisual(dpy, DefaultScreen(dpy)), Im->depth, ZPixmap, 0, data, width, height, 32, 0);
+    if (image == nullptr) {
+        free(data);
+    }
+    return image;
+}
+
 static XImage *ResizeImageSmooth(Display *dpy, XImage *Im, int ix, int iy, int ox, int oy)
 {
-    Visual *visual = DefaultVisual(dpy, DefaultScreen(dpy));
-
     int width1, height1, width2, height2;
     int x1, x2, y1, y2;
 
     XImage *Tmp;
-
-    char *Data;
 
     width1 = Im->width;
     height1 = Im->height;
@@ -687,9 +704,10 @@ static XImage *ResizeImageSmooth(Display *dpy, XImage *Im, int ix, int iy, int o
     width2 = ox * width1 / ix;
     height2 = oy * height1 / iy;
 
-    Data = (char *)malloc(width2 * height2 * Im->bits_per_pixel / 8);
-
-    Tmp = XCreateImage(dpy, visual, Im->depth, ZPixmap, 0, Data, width2, height2, 32, 0);
+    Tmp = create_resized_image(dpy, Im, width2, height2);
+    if (Tmp == nullptr) {
+        return nullptr;
+    }
 
     /* compute values for decomposing pixel into color values: */
     redMask = Im->red_mask;
@@ -721,8 +739,15 @@ static XImage *ResizeImageSmooth(Display *dpy, XImage *Im, int ix, int iy, int o
     return Tmp;
 }
 
-/*
- * Resize an image.
+/*!
+ * @brief 画像をタイルごとに拡大・縮小する
+ * @param dpy ディスプレイ
+ * @param Im 元の画像
+ * @param ix 元のタイルの幅 (画素)
+ * @param iy 元のタイルの高さ (画素)
+ * @param ox 拡大・縮小したタイルの幅 (画素)
+ * @param oy 拡大・縮小したタイルの高さ (画素)
+ * @return 拡大・縮小した画像。画素の領域や画像を作れなければ nullptr
  */
 XImage *ResizeImage(Display *dpy, XImage *Im, int ix, int iy, int ox, int oy)
 {
@@ -734,8 +759,6 @@ XImage *ResizeImage(Display *dpy, XImage *Im, int ix, int iy, int ox, int oy)
 
     XImage *Tmp;
 
-    char *Data;
-
     if (smoothRescaling && (ix != ox || iy != oy) && visual->c_class == TrueColor) {
         return ResizeImageSmooth(dpy, Im, ix, iy, ox, oy);
     }
@@ -746,9 +769,10 @@ XImage *ResizeImage(Display *dpy, XImage *Im, int ix, int iy, int ox, int oy)
     width2 = ox * width1 / ix;
     height2 = oy * height1 / iy;
 
-    Data = (char *)malloc(width2 * height2 * Im->bits_per_pixel / 8);
-
-    Tmp = XCreateImage(dpy, visual, Im->depth, ZPixmap, 0, Data, width2, height2, 32, 0);
+    Tmp = create_resized_image(dpy, Im, width2, height2);
+    if (Tmp == nullptr) {
+        return nullptr;
+    }
 
     if (ix > ox) {
         dx1 = ix;
