@@ -2,7 +2,7 @@
 
 #include "system/angband.h"
 
-constexpr auto MAX_INSCRIPTION = _(76, 69); /*!< Maximum length of object's inscription */
+constexpr auto MAX_INSCRIPTION = _(76, 69); /*!< 銘の表示幅の上限 */
 
 struct describe_option_type {
     BIT_FLAGS mode;
