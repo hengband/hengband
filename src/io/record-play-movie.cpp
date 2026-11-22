@@ -196,7 +196,7 @@ static bool string_is_repeat(concptr str, int len)
 static int find_split(concptr str, int len)
 {
     /*
-     * SJIS が定義されている場合でも、str は常に EUC-JP としてエンコードされます。
+     * 内部の文字コードが Shift_JIS・UTF-8 の場合でも、str は常に EUC-JP としてエンコードされます。
      * 他の場所で行われているような 3 バイトのエンコーディングは想定していません。
      */
     int last_split = 0, i = 0;
@@ -246,6 +246,13 @@ static errr send_text_to_chuukei_server(TERM_LEN x, TERM_LEN y, int len, TERM_CO
         }
     }
     sjis2euc(buffer.data());
+    const auto *payload = buffer.data();
+#elif defined(UTF8) && defined(JP)
+    // UTF-8 として正しくないバイトを含む文字列では、マスへの分け方と変換した後のバイト数がずれることがあるので、len バイトにそろえる
+    // 右端の桁の全角文字のように、末尾で途中から切れる全角文字は空白にする
+    auto buffer = utf8_to_euc_keeping_width(str);
+    buffer.resize(len, ' ');
+    std::fill(buffer.begin() + find_split(buffer.data(), len), buffer.end(), ' ');
     const auto *payload = buffer.data();
 #else
     const auto *payload = str;
@@ -564,7 +571,7 @@ static void update_term_size(int x, int y, int len)
  * @param y 書き込むマスの行
  * @param len 書き込むマス数
  * @param col 文字の色
- * @param mesg 文字列。通信上の文字コードでは、バイト数がマス数と等しい
+ * @param mesg 内部の文字コードの文字列 ('t' は通信上の文字コードから変換したもの、'n'・'s' は ASCII の文字)
  */
 static void store_text_to_screen(int x, int y, int len, uint8_t col, std::string_view mesg)
 {
@@ -644,17 +651,31 @@ static bool flush_ringbuf_client()
 #ifndef _WIN32
         win2unix(col, mesg);
 #endif
+#if defined(UTF8) && defined(JP)
+        // 1 文字と繰り返しで送るのは 1 マスの文字 (ASCII) だが、前の版の Shift_JIS の版は半角カナの繰り返しを Shift_JIS のまま送っていた。
+        // UTF-8 として正しくないバイトを画面に書かないよう、ASCII でなければ '?' にする
+        if (((id == 'n') || (id == 's')) && (static_cast<unsigned char>(mesg[0]) >= 0x80)) {
+            mesg[0] = '?';
+        }
+#endif
 
         switch (id) {
-        case 't': /* 通常 */
+        case 't': { /* 通常 */
 #if defined(SJIS) && defined(JP)
             euc2sjis(mesg);
+            const std::string_view text(mesg, len);
+#elif defined(UTF8) && defined(JP)
+            // 通信上の文字コード (EUC-JP) から内部の文字コードに変換する。全角文字は 2 マスのままなので、マス数は変わらない
+            const auto text = legacy_to_sys_replacing_invalid(std::string_view(mesg, len), CharacterEncoding::EUC_JP);
+#else
+            const std::string_view text(mesg, len);
 #endif
             update_term_size(x, y, len);
-            (void)((*angband_terms[0]->text_hook)(x, y, len, (byte)col, mesg));
-            store_text_to_screen(x, y, len, col, { mesg, static_cast<size_t>(len) });
+            (void)((*angband_terms[0]->text_hook)(x, y, len, (byte)col, text.data()));
+            store_text_to_screen(x, y, len, col, text);
 
             break;
+        }
         case 'n': /* 繰り返し */
             for (auto i = 1; i < len + 1; i++) {
                 if (i == len) {

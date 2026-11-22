@@ -573,6 +573,43 @@ tl::optional<std::string> utf8_to_euc(std::string_view utf8_str)
     euc.resize(euc_len);
     return euc;
 }
+
+#ifdef UTF8
+/*!
+ * @brief 文字列の文字コードを UTF-8 から EUC-JP に、表示幅とバイト数が等しくなるよう変換する
+ * @param utf8_str 変換元の文字列
+ * @return EUC-JP に変換した文字列。バイト数は utf8_str の表示幅 (ASCII は 1 桁、ほかは 2 桁) と等しい
+ * @details EUC-JP の版と同じく、全角文字を 2 バイトとして扱う通信 (ムービーなど) に使う。
+ * EUC-JP の 2 バイトの文字にならない文字 (EUC-JP に無い文字、JIS X 0212 の文字) は「？」に、
+ * UTF-8 として読めないバイトは 1 バイトずつ '?' に置き換える。
+ */
+std::string utf8_to_euc_keeping_width(std::string_view utf8_str)
+{
+    constexpr std::string_view fullwidth_question = "\xa1\xa9"; //!< ？ (EUC-JP)
+    std::string euc;
+    while (!utf8_str.empty()) {
+        const auto char_length = utf8_next_char_byte_length(utf8_str);
+        if (char_length == 0) {
+            // ASCII は utf8_next_char_byte_length() が 1 を返すので、ここに来るのは読めないバイトだけ
+            euc.push_back('?');
+            utf8_str.remove_prefix(1);
+            continue;
+        }
+
+        const auto ch = utf8_str.substr(0, char_length);
+        utf8_str.remove_prefix(char_length);
+        if (char_length == 1) {
+            euc.append(ch);
+            continue;
+        }
+
+        const auto converted = utf8_to_euc(ch);
+        euc.append((converted && (converted->length() == 2)) ? *converted : fullwidth_question);
+    }
+
+    return euc;
+}
+#endif
 #endif
 
 #ifdef EUC

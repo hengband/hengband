@@ -388,6 +388,22 @@ TEST_CASE("legacy_to_sys reads EUC-JP as EUC-JP-MS like the old versions built w
     CHECK(legacy_to_sys(MS_SYMBOLS_EUC, CharacterEncoding::EUC_JP) == MS_SYMBOLS_UTF8);
 }
 
+TEST_CASE("utf8_to_euc_keeping_width converts each character into as many EUC-JP bytes as its display width")
+{
+    CHECK(utf8_to_euc_keeping_width(cat("a", NIHON_SYS)) == cat("a", NIHON_EUC));
+
+    // 半角カナは EUC-JP でも 2 バイト (8E xx)、全角チルダは EUC-JP の波ダッシュ (A1 C1) になる
+    CHECK(utf8_to_euc_keeping_width(HALFWIDTH_KATAKANA_UTF8) == "\x8e\xb1\x8e\xb2\x8e\xb3"sv);
+    CHECK(utf8_to_euc_keeping_width("\xef\xbd\x9e"sv) == "\xa1\xc1"sv);
+
+    // EUC-JP に無い文字 (U+1F600) と JIS X 0212 の文字 (é) は、2 桁のまま「？」(A1 A9) にする
+    CHECK(utf8_to_euc_keeping_width("\xf0\x9f\x98\x80"sv) == "\xa1\xa9"sv);
+    CHECK(utf8_to_euc_keeping_width(cat("a", "\xc3\xa9", "b")) == cat("a", "\xa1\xa9", "b"));
+
+    // UTF-8 として読めないバイトは 1 バイトずつ '?' にする
+    CHECK(utf8_to_euc_keeping_width("a\xff\xe3\x81"sv) == "a???"sv);
+}
+
 #endif
 
 #else
