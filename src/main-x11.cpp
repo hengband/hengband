@@ -128,6 +128,7 @@
 #include <string_view>
 #include <tl/optional.hpp>
 #include <utility>
+#include <vector>
 /*
  * Available graphic modes
  */
@@ -1238,8 +1239,10 @@ struct term_data {
     term_type t;
     std::unique_ptr<infofnt> fnt;
     std::unique_ptr<infowin> win;
-    XImage *tiles;
-    XImage *TmpImage;
+    Pixmap tiles; //!< セルの大きさに拡大したタイルの画像。描くたびに画素を送らずに済むよう X サーバに置く
+    GC tiles_mask_gc; //!< 重ねるタイルの透過しない画素を 1 にしたマスクを、クリップマスクにした GC
+    int tiles_width; //!< タイルの画像の幅 (画素)
+    int tiles_height; //!< タイルの画像の高さ (画素)
     XImage *original32_canvas; //!< Original32 のタイルを拡大・合成する作業用の画像
 };
 }
@@ -2324,9 +2327,6 @@ static errr game_term_pict_x11(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *
     char tc;
 
     int x2, y2;
-    int k, l;
-
-    unsigned long pixel, blank;
 
     term_data *td = (term_data *)(game_term->data);
 
@@ -2337,12 +2337,15 @@ static errr game_term_pict_x11(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *
     x += Infowin->ox;
     // 最後のタイルは 2 倍幅で描くことがある
     Infowin_mark_dirty(x, y, (n - 1) * td->fnt->wid + td->fnt->twid, td->fnt->hgt);
+    const auto copy_tile = [&](GC gc, int src_x, int src_y) {
+        XCopyArea(Metadpy->dpy, td->tiles, td->win->drawable, gc, src_x, src_y, td->fnt->twid, td->fnt->hgt, x, y);
+    };
     for (i = 0; i < n; ++i, x += td->fnt->wid) {
         a = *ap++;
         c = *cp++;
         x1 = (c & 0x7F) * td->fnt->twid;
         y1 = (a & 0x7F) * td->fnt->hgt;
-        if (td->tiles->width < x1 + td->fnt->wid || td->tiles->height < y1 + td->fnt->hgt) {
+        if (td->tiles_width < x1 + td->fnt->wid || td->tiles_height < y1 + td->fnt->hgt) {
             XFillRectangle(Metadpy->dpy, td->win->drawable, clr[0]->gc, x, y, td->fnt->twid, td->fnt->hgt);
             continue;
         }
@@ -2353,26 +2356,57 @@ static errr game_term_pict_x11(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *
         x2 = (tc & 0x7F) * td->fnt->twid;
         y2 = (ta & 0x7F) * td->fnt->hgt;
 
-        if (((x1 == x2) && (y1 == y2)) || !(((byte)ta & 0x80) && ((byte)tc & 0x80)) || td->tiles->width < x2 + td->fnt->wid || td->tiles->height < y2 + td->fnt->hgt) {
-            XPutImage(Metadpy->dpy, td->win->drawable, clr[0]->gc, td->tiles, x1, y1, x, y, td->fnt->twid, td->fnt->hgt);
+        if (((x1 == x2) && (y1 == y2)) || !(((byte)ta & 0x80) && ((byte)tc & 0x80)) || td->tiles_width < x2 + td->fnt->wid || td->tiles_height < y2 + td->fnt->hgt) {
+            copy_tile(plain_gc(), x1, y1);
         } else {
-            blank = XGetPixel(td->tiles, 0, td->fnt->hgt * 6);
-            for (k = 0; k < td->fnt->twid; k++) {
-                for (l = 0; l < td->fnt->hgt; l++) {
-                    if ((pixel = XGetPixel(td->tiles, x1 + k, y1 + l)) == blank) {
-                        pixel = XGetPixel(td->tiles, x2 + k, y2 + l);
-                    }
-
-                    XPutPixel(td->TmpImage, k, l, pixel);
-                }
-            }
-
-            XPutImage(Metadpy->dpy, td->win->drawable, clr[0]->gc, td->TmpImage, 0, 0, x, y, td->fnt->twid, td->fnt->hgt);
+            // 地形を写した上に、重ねるタイルを透過しない画素だけ写す
+            copy_tile(plain_gc(), x2, y2);
+            XSetClipOrigin(Metadpy->dpy, td->tiles_mask_gc, x - x1, y - y1);
+            copy_tile(td->tiles_mask_gc, x1, y1);
         }
     }
 
     s_ptr->drawn = false;
     return 0;
+}
+
+/*!
+ * @brief タイルの画像を X サーバに置く
+ * @param td 端末
+ * @param image セルの大きさに拡大したタイルの画像
+ * @details 重ねるタイルの透過する色は、画像の (0, セルの高さ × 6) の画素の色とする。
+ * その色でない画素を 1 にしたマスクも作り、重ねるタイルはこのマスクで切り抜いて写す。
+ */
+static void upload_tiles(term_data &td, XImage *image)
+{
+    auto *dpy = Metadpy->dpy;
+    const auto width = image->width;
+    const auto height = image->height;
+    td.tiles_width = width;
+    td.tiles_height = height;
+    td.tiles = XCreatePixmap(dpy, Metadpy->root, width, height, image->depth);
+    XPutImage(dpy, td.tiles, plain_gc(), image, 0, 0, 0, 0, width, height);
+
+    // XBM の形式 (1 行ごとにバイトの境目に揃え、下位のビットから左の画素) で作る
+    const auto bytes_per_line = (width + 7) / 8;
+    std::vector<char> bits(bytes_per_line * height);
+    const auto blank = XGetPixel(image, 0, td.fnt->hgt * 6);
+    for (auto y = 0; y < height; ++y) {
+        for (auto x = 0; x < width; ++x) {
+            if (XGetPixel(image, x, y) != blank) {
+                bits[y * bytes_per_line + x / 8] |= static_cast<char>(1 << (x % 8));
+            }
+        }
+    }
+    const auto mask = XCreateBitmapFromData(dpy, Metadpy->root, bits.data(), width, height);
+
+    XGCValues gcv{};
+    gcv.graphics_exposures = False;
+    gcv.clip_mask = mask;
+    td.tiles_mask_gc = XCreateGC(dpy, td.tiles, GCGraphicsExposures | GCClipMask, &gcv);
+
+    // GC が参照している間は X サーバの中でマスクが保たれるので、ここで手放してよい
+    XFreePixmap(dpy, mask);
 }
 
 #ifdef HAVE_LIBPNG
@@ -2720,6 +2754,10 @@ static void game_term_nuke_x11(term_type *)
         if (iwin && (iwin->drawable != None)) {
             XFreePixmap(Metadpy->dpy, iwin->drawable);
         }
+        if (data[i].tiles != None) {
+            XFreeGC(Metadpy->dpy, data[i].tiles_mask_gc);
+            XFreePixmap(Metadpy->dpy, data[i].tiles);
+        }
         angband_terms[i] = nullptr;
     }
 
@@ -2961,8 +2999,6 @@ errr init_x11(int argc, char *argv[])
     int pict_wid = 0;
     int pict_hgt = 0;
 
-    char *TmpData;
-
     for (i = 1; i < argc; i++) {
         if (prefix(argv[i], "-d")) {
             dpy_name = &argv[i][2];
@@ -3189,27 +3225,13 @@ errr init_x11(int argc, char *argv[])
             term_type *t = &td->t;
             t->pict_hook = game_term_pict_x11;
             t->higher_pict = true;
-            td->tiles = ResizeImage(dpy, tiles_raw, pict_wid, pict_hgt, td->fnt->twid, td->fnt->hgt);
+            auto *tiles = ResizeImage(dpy, tiles_raw, pict_wid, pict_hgt, td->fnt->twid, td->fnt->hgt);
+            upload_tiles(*td, tiles);
+            XDestroyImage(tiles);
         }
 
         // 端末ごとに拡大・縮小した画像を作ったので、読み込んだ元の画像はもう使わない
         XDestroyImage(tiles_raw);
-
-        for (i = 0; i < num_term; i++) {
-            term_data *td = &data[i];
-            int ii, jj;
-            int depth = DefaultDepth(dpy, DefaultScreen(dpy));
-            Visual *visual = DefaultVisual(dpy, DefaultScreen(dpy));
-            int total;
-            ii = 1;
-            jj = (depth - 1) >> 2;
-            while (jj >>= 1) {
-                ii <<= 1;
-            }
-            total = td->fnt->twid * td->fnt->hgt * ii;
-            TmpData = (char *)malloc(total);
-            td->TmpImage = XCreateImage(dpy, visual, depth, ZPixmap, 0, TmpData, td->fnt->twid, td->fnt->hgt, 8, 0);
-        }
     }
     return 0;
 }
