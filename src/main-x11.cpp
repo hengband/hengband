@@ -283,6 +283,7 @@ struct infowin {
 #ifdef USE_XFT
     XftDraw *draw;
 #endif
+    Drawable drawable; //!< 文字やタイルを描く先
 
     long mask;
 
@@ -547,6 +548,7 @@ static errr Infowin_prepare(Window xid)
     int x, y;
     unsigned int w, h, b, d;
     iwin->win = xid;
+    iwin->drawable = xid;
     XGetGeometry(Metadpy->dpy, xid, &tmp_win, &x, &y, &w, &h, &b, &d);
 
 #ifdef USE_XFT
@@ -556,7 +558,7 @@ static errr Infowin_prepare(Window xid)
         if (vis->c_class != TrueColor) {
             quit("Display does not support truecolor. Use \"-- -fb\" to use bitmap fonts.\n");
         }
-        iwin->draw = XftDrawCreate(Metadpy->dpy, iwin->win, vis, Metadpy->cmap);
+        iwin->draw = XftDrawCreate(Metadpy->dpy, iwin->drawable, vis, Metadpy->cmap);
     }
 #endif
 
@@ -993,7 +995,7 @@ static void fill_text_background(int x, int y, int width)
         gc = XCreateGC(Metadpy->dpy, Metadpy->root, GCGraphicsExposures, &gcv);
     }
     XSetForeground(Metadpy->dpy, gc, Infoclr->bg.pixel);
-    XFillRectangle(Metadpy->dpy, Infowin->win, gc, x, y, width, Infofnt->hgt);
+    XFillRectangle(Metadpy->dpy, Infowin->drawable, gc, x, y, width, Infofnt->hgt);
 }
 
 /*
@@ -1019,7 +1021,7 @@ static errr Infofnt_text_std(int x, int y, concptr str, int len)
         if (!use_xft_runtime) {
             int i;
             for (i = 0; i < len; ++i) {
-                XDrawImageString(Metadpy->dpy, Infowin->win, Infoclr->gc, x + i * Infofnt->wid + Infofnt->off, y, str + i, 1);
+                XDrawImageString(Metadpy->dpy, Infowin->drawable, Infoclr->gc, x + i * Infofnt->wid + Infofnt->off, y, str + i, 1);
             }
             return 0;
         }
@@ -1045,7 +1047,7 @@ static errr Infofnt_text_std(int x, int y, concptr str, int len)
 #endif
         } else {
             fill_text_background(x, y - Infofnt->asc, len * Infofnt->wid);
-            XmbDrawString(Metadpy->dpy, Infowin->win, Infofnt->fontset_info, Infoclr->gc, x, y, _(utf8_buf, str), _(utf8_len, len));
+            XmbDrawString(Metadpy->dpy, Infowin->drawable, Infofnt->fontset_info, Infoclr->gc, x, y, _(utf8_buf, str), _(utf8_len, len));
         }
     }
 
@@ -1068,7 +1070,7 @@ static errr Infofnt_text_non(int x, int y, concptr str, int len)
     y = y * h + Infowin->oy;
 
     // TrueType フォントのときも GC の前景は XftColor と同じ画素値なので、同じく GC で塗る
-    XFillRectangle(Metadpy->dpy, Infowin->win, Infoclr->gc, x, y, w, h);
+    XFillRectangle(Metadpy->dpy, Infowin->drawable, Infoclr->gc, x, y, w, h);
 
     return 0;
 }
@@ -1329,7 +1331,7 @@ static void draw_cursor(int x, int y, int len)
     square_to_pixel(&x, &y, x, y);
     const auto width = Infofnt->wid * len;
     const auto height = Infofnt->hgt;
-    XFillRectangle(Metadpy->dpy, Infowin->win, Infoclr->gc, x, y, width, height);
+    XFillRectangle(Metadpy->dpy, Infowin->drawable, Infoclr->gc, x, y, width, height);
 }
 
 /*
@@ -1349,7 +1351,7 @@ static void mark_selection_mark(int x1, int y1, int x2, int y2)
 {
     square_to_pixel(&x1, &y1, x1, y1);
     square_to_pixel(&x2, &y2, x2, y2);
-    XDrawRectangle(Metadpy->dpy, Infowin->win, clr[TERM_SLATE]->gc, x1, y1, x2 - x1 + Infofnt->wid - 1, y2 - y1 + Infofnt->hgt - 1);
+    XDrawRectangle(Metadpy->dpy, Infowin->drawable, clr[TERM_SLATE]->gc, x1, y1, x2 - x1 + Infofnt->wid - 1, y2 - y1 + Infofnt->hgt - 1);
 }
 
 /*
@@ -2073,8 +2075,8 @@ static void draw_tile_cursor(int x, int y, int width, int height)
     int left;
     int top;
     square_to_pixel(&left, &top, x, y);
-    XDrawRectangle(Metadpy->dpy, Infowin->win, xor_->gc, left, top, width - 1, height - 1);
-    XDrawRectangle(Metadpy->dpy, Infowin->win, xor_->gc, left + 1, top + 1, width - 3, height - 3);
+    XDrawRectangle(Metadpy->dpy, Infowin->drawable, xor_->gc, left, top, width - 1, height - 1);
+    XDrawRectangle(Metadpy->dpy, Infowin->drawable, xor_->gc, left + 1, top + 1, width - 3, height - 3);
 }
 
 /*
@@ -2173,7 +2175,7 @@ static errr game_term_pict_x11(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *
         x1 = (c & 0x7F) * td->fnt->twid;
         y1 = (a & 0x7F) * td->fnt->hgt;
         if (td->tiles->width < x1 + td->fnt->wid || td->tiles->height < y1 + td->fnt->hgt) {
-            XFillRectangle(Metadpy->dpy, td->win->win, clr[0]->gc, x, y, td->fnt->twid, td->fnt->hgt);
+            XFillRectangle(Metadpy->dpy, td->win->drawable, clr[0]->gc, x, y, td->fnt->twid, td->fnt->hgt);
             continue;
         }
 
@@ -2184,7 +2186,7 @@ static errr game_term_pict_x11(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *
         y2 = (ta & 0x7F) * td->fnt->hgt;
 
         if (((x1 == x2) && (y1 == y2)) || !(((byte)ta & 0x80) && ((byte)tc & 0x80)) || td->tiles->width < x2 + td->fnt->wid || td->tiles->height < y2 + td->fnt->hgt) {
-            XPutImage(Metadpy->dpy, td->win->win, clr[0]->gc, td->tiles, x1, y1, x, y, td->fnt->twid, td->fnt->hgt);
+            XPutImage(Metadpy->dpy, td->win->drawable, clr[0]->gc, td->tiles, x1, y1, x, y, td->fnt->twid, td->fnt->hgt);
         } else {
             blank = XGetPixel(td->tiles, 0, td->fnt->hgt * 6);
             for (k = 0; k < td->fnt->twid; k++) {
@@ -2197,7 +2199,7 @@ static errr game_term_pict_x11(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *
                 }
             }
 
-            XPutImage(Metadpy->dpy, td->win->win, clr[0]->gc, td->TmpImage, 0, 0, x, y, td->fnt->twid, td->fnt->hgt);
+            XPutImage(Metadpy->dpy, td->win->drawable, clr[0]->gc, td->TmpImage, 0, 0, x, y, td->fnt->twid, td->fnt->hgt);
         }
     }
 
@@ -2361,7 +2363,7 @@ void draw_original32_glyph(const term_data &td, int x, int y, int width, int hei
             return;
         }
 #endif
-        XmbDrawString(Metadpy->dpy, td.win->win, font.fontset_info, iclr.gc, text_x + dx, text_y + dy, &character, 1);
+        XmbDrawString(Metadpy->dpy, td.win->drawable, font.fontset_info, iclr.gc, text_x + dx, text_y + dy, &character, 1);
     };
     for (const auto &[dx, dy] : { std::pair{ -1, 0 }, std::pair{ 1, 0 }, std::pair{ 0, -1 }, std::pair{ 0, 1 } }) {
         draw(dx, dy, *clr[TERM_DARK]);
@@ -2401,7 +2403,7 @@ static errr game_term_pict_original32_x11(TERM_LEN x, TERM_LEN y, int n, const T
         if (is_catalog_monster || (!glyph_color && ((ap[i] != tap[i]) || (cp[i] != tcp[i])))) {
             paint_original32_tile(canvas, width, height, foreground);
         }
-        XPutImage(Metadpy->dpy, td->win->win, clr[0]->gc, canvas, 0, 0, px, py, width, height);
+        XPutImage(Metadpy->dpy, td->win->drawable, clr[0]->gc, canvas, 0, 0, px, py, width, height);
         if (glyph_color) {
             draw_original32_glyph(*td, px, py, width, height, static_cast<char>(cp[i] & 0x7f), *glyph_color);
         }
