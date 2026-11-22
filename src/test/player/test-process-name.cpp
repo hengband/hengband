@@ -14,10 +14,15 @@
 #include "player/process-name.h"
 
 #include "system/h-basic.h"
+#include "system/player-type-definition.h"
 #include "test/string-helpers.h"
+#include "test/temporary-json-files.h"
 
 #include <doctest/doctest.h>
 
+#include <filesystem>
+#include <fstream>
+#include <iterator>
 #include <string>
 #include <string_view>
 
@@ -57,15 +62,16 @@ TEST_CASE("make_player_base_name does not read past a trailing path separator")
 
 TEST_CASE("make_player_base_name truncates a long name to fit the base name")
 {
-    const std::string name(40, 'a');
-    CHECK(make_player_base_name(name) == std::string(31, 'a'));
+    constexpr auto max_length = sizeof(PlayerType::base_name) - 1;
+    const std::string name(max_length + 10, 'a');
+    CHECK(make_player_base_name(name) == std::string(max_length, 'a'));
 }
 
 #ifdef JP
 TEST_CASE("make_player_base_name does not split a double-byte character at the length limit")
 {
-    // 基本名の上限の 31 バイトに収まる文字までを残す (EUC-JP・Shift_JIS では 16 文字のうち 15 文字)
-    const auto fit_count = static_cast<int>(31 / KANJI_KAN.length());
+    // 基本名の上限のバイト数に収まる文字までを残す
+    const auto fit_count = static_cast<int>((sizeof(PlayerType::base_name) - 1) / KANJI_KAN.length());
     CHECK(make_player_base_name(repeat(KANJI_KAN, fit_count + 1)) == repeat(KANJI_KAN, fit_count));
 }
 
@@ -106,5 +112,80 @@ TEST_CASE("make_player_name_for_expression keeps a lone lead byte at the end")
 TEST_CASE("make_player_name_for_expression does not replace a trail byte that equals a bracket")
 {
     CHECK(make_player_name_for_expression(DAME_CHOON) == DAME_CHOON);
+}
+#endif
+
+#if defined(JP) && defined(UTF8)
+// テストのファイルは、同時に走るほかのテストと重ならない一時ディレクトリ (TemporaryJsonFiles) に作る
+namespace {
+constexpr std::string_view NIHON_UTF8 = "\xe6\x97\xa5\xe6\x9c\xac"; //!< 日本 (UTF-8)
+constexpr std::string_view NIHON_EUC = "\xc6\xfc\xcb\xdc"; //!< 日本 (EUC-JP)
+
+std::string read_file(const std::filesystem::path &path)
+{
+    std::ifstream ifs(path, std::ios::binary);
+    return std::string(std::istreambuf_iterator<char>(ifs), std::istreambuf_iterator<char>());
+}
+
+/*!
+ * @brief 旧名 (EUC-JP) のファイルを作る
+ * @return 作れたら true
+ * @details UTF-8 として正しくない名前のファイルを作れないファイルシステム (macOS の APFS など) では、
+ * 旧名のセーブファイルもできないので、作れなければテストを省く。
+ */
+bool write_legacy_file(const TemporaryJsonFiles &dir, const std::filesystem::path &name, std::string_view data)
+{
+    try {
+        dir.write_raw(name, data);
+        return true;
+    } catch (const std::ios_base::failure &) {
+        MESSAGE("Skipped: the file system cannot create a file whose name is not valid UTF-8.");
+        return false;
+    }
+}
+}
+
+TEST_CASE("rename_legacy_named_file renames a file named in EUC-JP")
+{
+    const TemporaryJsonFiles dir;
+    const auto path = dir.directory / cat("1000.", NIHON_UTF8);
+    const auto legacy_path = dir.directory / cat("1000.", NIHON_EUC);
+    if (!write_legacy_file(dir, legacy_path.filename(), "legacy")) {
+        return;
+    }
+
+    // 付け替えたら、今の名前のパスを返す
+    CHECK(rename_legacy_named_file(path) == path);
+    CHECK(read_file(path) == "legacy");
+    CHECK_FALSE(std::filesystem::exists(legacy_path));
+}
+
+TEST_CASE("rename_legacy_named_file keeps both files when the file already exists")
+{
+    const TemporaryJsonFiles dir;
+    const auto path = dir.directory / cat("1000.", NIHON_UTF8);
+    const auto legacy_path = dir.directory / cat("1000.", NIHON_EUC);
+    dir.write_raw(path.filename(), "current");
+    if (!write_legacy_file(dir, legacy_path.filename(), "legacy")) {
+        return;
+    }
+
+    CHECK_FALSE(rename_legacy_named_file(path).has_value());
+    CHECK(read_file(path) == "current");
+    CHECK(read_file(legacy_path) == "legacy");
+}
+
+TEST_CASE("rename_legacy_named_file does nothing without a file named in EUC-JP")
+{
+    const TemporaryJsonFiles dir;
+    const auto path = dir.directory / cat("1000.", NIHON_UTF8);
+    CHECK_FALSE(rename_legacy_named_file(path).has_value());
+    CHECK_FALSE(std::filesystem::exists(path));
+
+    // ASCII だけの名前は旧名も同じなので、引き継がない
+    const auto ascii_path = dir.directory / "1000.Frodo";
+    dir.write_raw(ascii_path.filename(), "ascii");
+    CHECK_FALSE(rename_legacy_named_file(ascii_path).has_value());
+    CHECK(read_file(ascii_path) == "ascii");
 }
 #endif

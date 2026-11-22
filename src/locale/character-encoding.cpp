@@ -484,7 +484,8 @@ static bool is_ascii_str(std::string_view str)
 }
 #endif
 
-#ifdef EUC
+// 内部の文字コードが UTF-8 の構成でも、旧版のファイルの名前を作るために使う
+#if defined(EUC) || defined(UTF8)
 
 namespace {
 /*!
@@ -572,6 +573,9 @@ tl::optional<std::string> utf8_to_euc(std::string_view utf8_str)
     euc.resize(euc_len);
     return euc;
 }
+#endif
+
+#ifdef EUC
 
 /*!
  * @brief 文字列の文字コードをEUC-JPからUTF-8に変換する

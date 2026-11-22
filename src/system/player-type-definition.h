@@ -39,6 +39,14 @@ constexpr auto COMMAND_ARG_REST_FULL_HEALING = -1; /*!<休憩コマンド引数 
 constexpr auto KNOW_STAT = 0x01; /*!< 自分の能力値を知っている (PlayerType::knowledge) */
 constexpr auto KNOW_HPRATE = 0x02; /*!< 自分の体力ランクを知っている (PlayerType::knowledge) */
 
+/*!
+ * @brief コマンドライン (-u) で指定できるプレイヤー名の表示幅の上限
+ * @details 前の版は名前の欄が 32 バイトで、31 バイトまでの名前が入った。EUC-JP では表示幅とバイト数が一致する
+ * (ASCII は 1 桁 1 バイト、全角文字と半角カナは 2 桁 2 バイト) ので、どの文字コードでも前の版と同じ名前が入るよう表示幅で 31 桁とする。
+ * 31 桁は UTF-8 で最大 61 バイト (4 バイトの全角文字 15 文字と ASCII 1 文字) なので、名前の欄は 64 バイトにしている。
+ */
+constexpr size_t PLAYER_NAME_MAX_WIDTH = 31;
+
 class PlayerType {
 public:
     PlayerType();
@@ -386,8 +394,8 @@ public:
 
     POSITION y{}; /*!< ダンジョンの現在Y座標 / Player location in dungeon */
     POSITION x{}; /*!< ダンジョンの現在X座標 / Player location in dungeon */
-    GAME_TEXT name[32]{}; /*!< 現在のプレイヤー名 / Current player's character name */
-    char base_name[32]{}; /*!< Stripped version of "player_name" */
+    GAME_TEXT name[64]{}; /*!< 現在のプレイヤー名 (表示幅 PLAYER_NAME_MAX_WIDTH 桁まで) / Current player's character name */
+    char base_name[64]{}; /*!< Stripped version of "player_name" */
 
     void ride_monster(MONSTER_IDX m_idx);
     void dismount();

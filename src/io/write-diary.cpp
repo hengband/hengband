@@ -22,9 +22,17 @@
 #include "view/display-messages.h"
 #include "world/world.h"
 #include <fmt/format.h>
-#include <sstream>
 
 bool write_level; //!< @todo *抹殺* したい…
+
+/*!
+ * @brief 日記ファイルのパスを返す
+ * @return ユーザーディレクトリの、セーブファイルの名前から作った日記ファイルのパス
+ */
+std::filesystem::path get_diary_path()
+{
+    return path_build(ANGBAND_DIR_USER, fmt::format(_("playrecord-{}.txt", "playrec-{}.txt"), savefile_base.string()));
+}
 
 /*!
  * @brief 日記ファイルを開く
@@ -35,9 +43,7 @@ bool write_level; //!< @todo *抹殺* したい…
  */
 static bool open_diary_file(FILE **fff, bool *disable_diary)
 {
-    std::stringstream ss;
-    ss << _("playrecord-", "playrec-") << savefile_base.string() << ".txt";
-    const auto path = path_build(ANGBAND_DIR_USER, ss.str());
+    const auto path = get_diary_path();
     *fff = angband_fopen(path, FileOpenMode::APPEND);
     if (*fff) {
         return true;
