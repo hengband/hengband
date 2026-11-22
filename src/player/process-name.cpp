@@ -3,6 +3,9 @@
 #include "core/asking-player.h"
 #include "game-option/birth-options.h"
 #include "io/files-util.h"
+#include "io/uid-checker.h"
+#include "io/write-diary.h"
+#include "locale/character-encoding.h"
 #include "locale/multibyte-char.h"
 #include "player/player-personality.h"
 #include "system/deferred-update-requests.h"
@@ -96,6 +99,56 @@ std::string make_player_name_for_expression(std::string_view name)
     return str_replace(result, "]", "_");
 }
 
+#if defined(JP) && defined(UTF8)
+/*!
+ * @brief 旧版の名前のファイルを、今の名前に付け替える
+ * @param path 今の名前のファイルのパス
+ * @return 旧名のファイルを引き継いだときは、読み書きに使うファイルのパス (付け替えたら path、付け替えに失敗したら旧名のファイルのパス。
+ * 付け替えに失敗した後に今の名前のファイルができていれば path)。
+ * 旧名のファイルが無いとき、今の名前のファイルがあるとき、それを確かめられないときは tl::nullopt
+ * @details 内部の文字コードが EUC-JP の版は、プレイヤー名から作るファイル (セーブファイル・日記) の名前に、
+ * 名前を EUC-JP にしたバイト列を使っていた。path のファイルが無く、名前を EUC-JP にしたファイル (旧名) があれば、
+ * 旧名のファイルを path に付け替える。旧名を作る変換は、EUC-JP の版が UTF-8 の入力から名前を作る変換 (utf8_to_euc()) と同じにする。
+ */
+tl::optional<std::filesystem::path> rename_legacy_named_file(const std::filesystem::path &path)
+{
+    const auto filename = path.filename().string();
+    const auto legacy_filename = utf8_to_euc(filename);
+    if (!legacy_filename || (*legacy_filename == filename)) {
+        return tl::nullopt;
+    }
+
+    // 今の名前のファイルがあるか確かめられなければ、上書きしないよう付け替えない
+    std::error_code ec;
+    const auto path_exists = std::filesystem::exists(path, ec);
+    if (ec || path_exists) {
+        return tl::nullopt;
+    }
+
+    const auto legacy_path = path.parent_path() / *legacy_filename;
+    if (!std::filesystem::exists(legacy_path, ec)) {
+        return tl::nullopt;
+    }
+
+    std::filesystem::rename(legacy_path, path, ec);
+    if (!ec) {
+        return path;
+    }
+
+    // 同じ名前で動いている別のプロセスが先に付け替えたこともあるので、付け替えに失敗したら確かめ直す。
+    // 今の名前のファイルがあればそれを使い、旧名のファイルが残っているときだけ旧名のファイルを使う
+    if (std::filesystem::exists(path, ec)) {
+        return path;
+    }
+
+    if (std::filesystem::exists(legacy_path, ec)) {
+        return legacy_path;
+    }
+
+    return tl::nullopt;
+}
+#endif
+
 /*!
  * @brief プレイヤーの名前をチェックして修正する
  * Process the player name.
@@ -150,6 +203,26 @@ void process_player_name(PlayerType *player_ptr, bool is_new_savefile)
         savefile_base = savefile.filename();
 #endif
     }
+
+#if defined(JP) && defined(UTF8)
+    if (is_modified) {
+        // 旧名のファイルを付け替える。キャラクターの作成で名前を入れたときにも付け替えるが、作成をやめても中身は失われず、
+        // 旧版でも同じ名前なら同じファイルに書いていた。付け替えられずに旧名のセーブファイルを使うときも、
+        // 日記などに使う savefile_base は内部の文字コードのままにするため、savefile_base を決めた後で付け替える。
+        // セーブファイルのディレクトリは setgid で動くときにだけ書けることがあるので、権限を得てから付け替える
+        safe_setuid_grab();
+        const auto inherited_savefile = rename_legacy_named_file(savefile);
+        safe_setuid_drop();
+
+        // 旧名のセーブファイルを引き継いだときだけ、日記も付け替える。
+        // セーブファイルと関係なく付け替えると、旧名の日記だけが残っている別のキャラクターの記録をつないでしまう。
+        // 日記はユーザーディレクトリにあるので、権限は要らない。付け替えられなければ、新しい名前の日記に書く
+        if (inherited_savefile) {
+            savefile = *inherited_savefile;
+            (void)rename_legacy_named_file(get_diary_path());
+        }
+    }
+#endif
 
     if (world.character_generated && !streq(old_player_base, player_ptr->base_name)) {
         autopick_load_pref(player_ptr, false);
