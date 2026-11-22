@@ -1,11 +1,14 @@
 #include "definitions-reader/spell-reader.h"
 #include "definitions-reader/json-reader-util.h"
 #include "definitions-reader/parse-error-types.h"
+#include "player-info/class-info.h"
 #include "system/spell-info-list.h"
 #include "system/system-variables.h"
 #include "view/display-messages.h"
 #include <limits>
+#include <map>
 #include <nlohmann/json.hpp>
+#include <string_view>
 #include <utility>
 #include <vector>
 
@@ -148,14 +151,65 @@ tl::expected<void, ParseErrorType> SpellReader::set_spell_data(const nlohmann::j
  * @brief JSON Objectから各呪文の詳細を呪文書単位で取得する
  * @param spells 解析結果の一時保存先
  * @return 成功時は空の値、失敗時はエラーコード
+ * @details 魔法書は領域の 1 冊目から順に書く。魔法がどの魔法書に載るかは呪文ID で決まるので
+ * (呪文ID を SPELLS_IN_BOOK で割った商)、書かれた位置と食い違う魔法や、多すぎる魔法書は INVALID_VALUE にする。
  */
 tl::expected<void, ParseErrorType> SpellReader::set_book_data(std::vector<SpellInfo> &spells) const
 {
     const auto &book_obj = get_json_value(this->realm_data, "books");
-    return info_read_object_array(book_obj, [this, &spells](const nlohmann::json &book) -> tl::expected<void, ParseErrorType> {
+    auto book_index = 0;
+    return info_read_object_array(book_obj, [this, &spells, &book_index](const nlohmann::json &book) -> tl::expected<void, ParseErrorType> {
+        if (book_index >= MAX_BOOKS_IN_REALM) {
+            msg_print(_("魔法書が {} 冊より多く書かれています。", "More than {} books are listed."), MAX_BOOKS_IN_REALM);
+            return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
+        }
+
+        const auto first_in_book = spells.size();
         const auto &spells_obj = get_json_value(book, "spells");
-        return info_read_object_array(spells_obj, [this, &spells](const nlohmann::json &spell) -> tl::expected<void, ParseErrorType> {
+        const auto result = info_read_object_array(spells_obj, [this, &spells](const nlohmann::json &spell) -> tl::expected<void, ParseErrorType> {
             return this->set_spell_data(spell, spells);
         });
+        if (!result) {
+            return result;
+        }
+
+        for (auto i = first_in_book; i < spells.size(); i++) {
+            if (spells[i].idx / SPELLS_IN_BOOK != book_index) {
+                msg_print(_("呪文ID '{}' は {} 冊目の魔法書の魔法ではありません。", "Spell ID '{}' does not belong to book {}."), spells[i].idx, book_index + 1);
+                return tl::make_unexpected(ParseErrorType::INVALID_VALUE);
+            }
+        }
+        book_index++;
+        return {};
     });
+}
+
+/*!
+ * @brief 全領域の魔法が抜けなく定義されたかを確かめる
+ * @param session 呪文定義の読み込みで登録した呪文ID を持つセッション
+ * @return 全領域の全魔法が定義されていれば空の値。抜けがあれば TOO_FEW_ARGUMENTS
+ * @details 定義されなかった枠は、全職業で習得できない魔法として黙って扱われてしまうので、読み込みの最後に確かめる。
+ */
+tl::expected<void, ParseErrorType> SpellReader::validate_all_defined(const Session &session)
+{
+    // エラーにする領域が実行のたびに変わらないよう、領域の番号の順に見る
+    std::map<RealmType, std::string_view> realm_names;
+    for (const auto &[name, realm] : realms_list) {
+        realm_names.emplace(realm, name);
+    }
+
+    for (const auto &[realm, name] : realm_names) {
+        const auto it = session.realms.find(realm);
+        if (it == session.realms.end()) {
+            msg_print(_("領域 '{}' が定義されていません。", "Realm '{}' is not defined."), name);
+            return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
+        }
+        for (auto spell_id = 0; spell_id < SPELLS_IN_REALM; spell_id++) {
+            if (!it->second.ids.contains(static_cast<short>(spell_id))) {
+                msg_print(_("領域 '{}' の呪文ID '{}' が定義されていません。", "Realm '{}': spell ID '{}' is not defined."), name, spell_id);
+                return tl::make_unexpected(ParseErrorType::TOO_FEW_ARGUMENTS);
+            }
+        }
+    }
+    return {};
 }

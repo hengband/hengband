@@ -38,6 +38,34 @@ TEST_CASE("PlayerRealm tells the position of each chosen realm")
     CHECK(pr.position_of(RealmType::NONE) == RealmPosition::FIRST);
 }
 
+TEST_CASE("PlayerRealm treats an unchosen realm as the position it can be chosen in")
+{
+    PlayerType player;
+    PlayerRealm pr(&player);
+
+    // 第二領域を変える前に魔法書を読むときは、選んだ後に使う第二領域用の表を見る
+    player.pclass = PlayerClassType::PRIEST;
+    pr.set(RealmType::LIFE, RealmType::SORCERY);
+    CHECK(pr.position_of(RealmType::LIFE) == RealmPosition::FIRST);
+    CHECK(pr.position_of(RealmType::SORCERY) == RealmPosition::SECOND);
+    CHECK(pr.position_of(RealmType::CRUSADE) == RealmPosition::SECOND);
+    CHECK(pr.position_of(RealmType::HISSATSU) == RealmPosition::FIRST);
+
+    // 全領域職は領域を選ばず、どの領域も第一領域用の表
+    for (const auto pclass : { PlayerClassType::SORCERER, PlayerClassType::RED_MAGE }) {
+        player.pclass = pclass;
+        pr.reset();
+        CHECK(pr.position_of(RealmType::CRUSADE) == RealmPosition::FIRST);
+        CHECK(pr.position_of(RealmType::ARCANE) == RealmPosition::FIRST);
+    }
+
+    // 第二領域を持たない職業は、選べない領域も第一領域用の表
+    player.pclass = PlayerClassType::PALADIN;
+    pr.set(RealmType::CRUSADE);
+    CHECK(pr.position_of(RealmType::CRUSADE) == RealmPosition::FIRST);
+    CHECK(pr.position_of(RealmType::DEATH) == RealmPosition::FIRST);
+}
+
 TEST_CASE("PlayerRealm reads the spell table of the realm position")
 {
     const auto restore = test::scoped_restore(class_magics_info, mp_ptr);

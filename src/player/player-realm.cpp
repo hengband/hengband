@@ -2,6 +2,7 @@
 #include "birth/birth-explanations-table.h"
 #include "locale/localized-string.h"
 #include "object/tval-types.h"
+#include "player-base/player-class.h"
 #include "player-info/class-info.h"
 #include "realm/realm-types.h"
 #include "system/angband-exceptions.h"
@@ -291,13 +292,30 @@ void PlayerRealm::set_(RealmType realm1, RealmType realm2)
 }
 
 /*!
- * @brief 指定した領域を第一領域・第二領域のどちらとして選んでいるかを返す
+ * @brief 指定した領域を第一領域・第二領域のどちらとして扱うかを返す
  * @param realm 領域
- * @return 第二領域として選んでいれば SECOND。第一領域、選んでいない領域 (全領域職の詠唱)、技能領域は FIRST
+ * @return 第二領域として選んでいるか、まだ選んでいないが第二領域に選べる領域なら SECOND。
+ * 第一領域、全領域職の詠唱、第二領域に選べない領域、技能領域は FIRST
+ * @details 選んでいない領域の魔法書を読むとき (第二領域を変える前の下見) は、選んだ後に使う第二領域用の表を見せる。
+ * 第一領域は選び直せないので、選んでいない領域を第一領域として使うことはない。
  */
 RealmPosition PlayerRealm::position_of(RealmType realm) const
 {
-    return (realm != RealmType::NONE) && this->realm2_.equals(realm) ? RealmPosition::SECOND : RealmPosition::FIRST;
+    if (realm == RealmType::NONE) {
+        return RealmPosition::FIRST;
+    }
+    if (this->realm2_.equals(realm)) {
+        return RealmPosition::SECOND;
+    }
+    if (this->realm1_.equals(realm)) {
+        return RealmPosition::FIRST;
+    }
+
+    const auto pclass = this->player_ptr->pclass;
+    if (PlayerClass::is_every_magic(pclass)) {
+        return RealmPosition::FIRST;
+    }
+    return get_realm2_choices(pclass).has(realm) ? RealmPosition::SECOND : RealmPosition::FIRST;
 }
 
 PlayerRealm::Realm::Realm(RealmType realm, RealmPosition position)

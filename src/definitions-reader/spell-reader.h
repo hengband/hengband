@@ -33,6 +33,7 @@ public:
     SpellReader &operator=(SpellReader &&) = delete;
 
     tl::expected<void, ParseErrorType> read() const;
+    static tl::expected<void, ParseErrorType> validate_all_defined(const Session &session);
 
 private:
     tl::expected<RealmType, ParseErrorType> read_realm() const;

@@ -39,6 +39,7 @@
                     },
                     "books": {
                         "type": "array",
+                        "maxItems": 4,
                         "description": "呪文書別の呪文情報",
                         "additionalProperties": false,
                         "items": {

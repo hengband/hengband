@@ -314,7 +314,15 @@ void init_spell_info()
     const auto validate_root = [](const nlohmann::json &root) {
         return info_validate_version_with_message(root, 2);
     };
-    init_json("SpellDefinitions.jsonc", "realms", DefinitionHashDataType::SPELLS, spell_info_list, parser, nullptr, true, validate_root);
+    // 定義の無い枠は全職業で習得できない魔法になってしまうので、全領域の全魔法がそろっていることを確かめる。
+    const auto check_all_defined = [&session] {
+        constexpr std::string_view filename = "SpellDefinitions.jsonc";
+        ScopedMessageCapture diagnostics;
+        if (!SpellReader::validate_all_defined(session)) {
+            quit(format_definition_load_error(diagnostics.messages(), fmt::format(_("{}: 魔法の定義がそろっていません", "{}: spell definitions are incomplete"), filename)));
+        }
+    };
+    init_json("SpellDefinitions.jsonc", "realms", DefinitionHashDataType::SPELLS, spell_info_list, parser, check_all_defined, true, validate_root);
 }
 
 /*!
