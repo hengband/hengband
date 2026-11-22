@@ -1,5 +1,6 @@
 #pragma once
 
+#include <filesystem>
 #include <string_view>
 #ifdef JP
 #else
@@ -54,5 +55,6 @@ extern bool write_level;
 class FloorType;
 class PlayerType;
 enum class QuestId : short;
+std::filesystem::path get_diary_path();
 int exe_write_diary_quest(PlayerType *player_ptr, DiaryKind dk, QuestId quest_id);
 void exe_write_diary(const FloorType &floor, DiaryKind dk, int num, std::string_view note = "");
