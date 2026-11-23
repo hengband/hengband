@@ -28,7 +28,6 @@ jobs:
             automake \
             pkg-config \
             libncurses-dev \
-            nkf \
             g++-16
 
       - name: Generate configure
@@ -45,9 +44,6 @@ jobs:
 
       - name: Output spoilers
         run: src/hengband --output-spoilers
-
-      - name: Convert encoding to UTF-8
-        run: nkf -w --in-place ~/.angband/Hengband/*.txt
 
       - name: Upload spoilers
         uses: actions/upload-artifact@v7
