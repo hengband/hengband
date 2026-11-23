@@ -7,6 +7,7 @@
  * 呪文の熟練度は能力の計算に使わないので、増えても能力の再計算を要求せず、呪文の情報だけ描き直す。
  */
 
+#include "locale/multibyte-char.h"
 #include "object/tval-types.h"
 #include "player-info/class-info.h"
 #include "player/player-skill.h"
@@ -23,6 +24,8 @@
 #include "util/enum-converter.h"
 #include "util/finalizer.h"
 #include <doctest/doctest.h>
+#include <string>
+#include <string_view>
 
 TEST_CASE("PlayerSkill::gain_melee_weapon_exp requests recalculating the bonuses only when the proficiency increases")
 {
@@ -115,4 +118,34 @@ TEST_CASE("PlayerSkill::gain_spell_skill_exp requests redrawing the spell info o
     }
 
     CHECK_FALSE(dur.has(StatusRecalculatingFlag::BONUS));
+}
+
+/*!
+ * @brief 魔法の一覧の熟練度の略記が、表記の先頭の 3 桁を ']' で閉じたものになることを確かめる
+ * @details 以前はバイト数で切っていたため、内部の文字コードが UTF-8 の日本語版では漢字の途中で切れ、
+ * 一覧の行が表示されなかった (#6190)。
+ */
+TEST_CASE("PlayerSkill::skill_rank_abbrev keeps whole characters within 3 columns and closes with a bracket")
+{
+    for (const auto rank : { PlayerSkillRank::UNSKILLED, PlayerSkillRank::BEGINNER, PlayerSkillRank::SKILLED, PlayerSkillRank::EXPERT, PlayerSkillRank::MASTER }) {
+        CAPTURE(static_cast<int>(rank));
+        const std::string_view rank_str = PlayerSkill::skill_rank_str(rank);
+        const auto abbrev = PlayerSkill::skill_rank_abbrev(rank);
+        const auto body_length = abbrev.size() - 1;
+        CHECK(str_display_width(abbrev) == 4);
+        CHECK(abbrev.back() == ']');
+        CHECK(rank_str.starts_with(std::string_view(abbrev).substr(0, body_length)));
+        CHECK(is_mb_char_boundary(rank_str, body_length));
+    }
+
+#if defined(JP) && defined(SJIS)
+    CHECK(PlayerSkill::skill_rank_abbrev(PlayerSkillRank::UNSKILLED) == "[\x8f\x89]"); // [初]
+#elif defined(JP) && defined(UTF8)
+    CHECK(PlayerSkill::skill_rank_abbrev(PlayerSkillRank::UNSKILLED) == "[\xe5\x88\x9d]"); // [初]
+#elif defined(JP)
+    CHECK(PlayerSkill::skill_rank_abbrev(PlayerSkillRank::UNSKILLED) == "[\xbd\xe9]"); // [初]
+#else
+    CHECK(PlayerSkill::skill_rank_abbrev(PlayerSkillRank::UNSKILLED) == "[Un]");
+    CHECK(PlayerSkill::skill_rank_abbrev(PlayerSkillRank::MASTER) == "[Ma]");
+#endif
 }

@@ -59,6 +59,7 @@ public:
     static PlayerSkillRank spell_skill_rank(int spell_exp);
     static concptr skill_name(PlayerSkillKindType skill);
     static concptr skill_rank_str(PlayerSkillRank rank);
+    static std::string skill_rank_abbrev(PlayerSkillRank rank);
 
     void gain_melee_weapon_exp(const ItemEntity *o_ptr);
     void gain_range_weapon_exp(const ItemEntity *o_ptr);

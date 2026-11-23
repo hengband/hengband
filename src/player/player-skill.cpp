@@ -1,4 +1,5 @@
 #include "player/player-skill.h"
+#include "locale/multibyte-char.h"
 #include "player-base/player-class.h"
 #include "player-base/player-race.h"
 #include "player-info/class-info.h"
@@ -245,6 +246,19 @@ concptr PlayerSkill::skill_rank_str(PlayerSkillRank rank)
     }
 
     return _("[不明]", "[Unknown]");
+}
+
+/*!
+ * @brief 魔法の一覧に出す熟練度の略記を返す
+ * @param rank 熟練度
+ * @return 熟練度の表記の先頭の 3 桁を ']' で閉じたもの (「[初]」「[Un]」など)
+ * @details 表示幅で切り、内部の文字コードが UTF-8 でも多バイト文字を分断しない。
+ */
+std::string PlayerSkill::skill_rank_abbrev(PlayerSkillRank rank)
+{
+    std::string abbrev(str_prefix_by_width(skill_rank_str(rank), 3));
+    abbrev.push_back(']');
+    return abbrev;
 }
 
 void PlayerSkill::gain_melee_weapon_exp(const ItemEntity *o_ptr)

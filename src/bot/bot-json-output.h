@@ -83,7 +83,7 @@ struct BotSpellListRow {
     int level = 0; //!< 習得レベル
     int mana = 0; //!< 消費MP
     tl::optional<int> fail; //!< 失敗率 (%)
-    std::string proficiency; //!< 熟練度の略記 ("[初心]" 等の画面表記)
+    std::string proficiency; //!< 熟練度の略記 ("[初]" 等の画面表記)
     bool proficiency_mark = false; //!< 熟練度の前の '!'
     std::string info; //!< 効果欄 (未知・忘却・未経験の場合はその表記)
 };
