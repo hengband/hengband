@@ -316,6 +316,41 @@ bool replace_invalid_euc_bytes(std::string &str, bool replace_invalid)
     return true;
 }
 
+#ifndef _WIN32
+/*!
+ * @brief EUC-JP の文字列で、先頭バイトの後ろに文字の続きとして読めないバイトが続く位置を探す
+ * @param str 探す文字列
+ * @param pos 探し始める位置 (文字の境界)
+ * @return 見つけた先頭バイトの位置と true。見つからなければ、探し終えた位置 (文字の境界) と false
+ * @details 続きとして読めるのは、8E (半角カナ) では A1-DF、ほかの先頭バイト (A1-FE・8F) では A1-FE である。
+ * glibc の iconv はこの並びを読めないとするが、macOS の iconv は 2 バイト目が A1 未満の並び (C6 3A など) や
+ * 8F の後ろの ASCII を別の文字として読んでしまうので、iconv に渡す前に見つける。
+ * 文字列の末尾で欠けた文字は iconv が読めないとするので、ここでは扱わない。
+ * 読めないバイトの後ろから探し直すたびに残り全体を探さないよう、一度に探すのは 256 バイトほどにする。
+ */
+std::pair<size_t, bool> find_broken_euc_char(std::string_view str, size_t pos)
+{
+    constexpr size_t SEARCH_LENGTH = 256;
+    const auto search_end = std::min(str.length(), pos + SEARCH_LENGTH);
+    while (pos < search_end) {
+        const auto lead = static_cast<unsigned char>(str[pos]);
+        const auto char_len = std::min(legacy_lead_byte_length(str[pos], CharacterEncoding::EUC_JP), str.length() - pos);
+        const unsigned char trail_max = (lead == 0x8e) ? 0xdf : 0xfe;
+        const auto is_trail_byte = [trail_max](char c) {
+            const auto trail = static_cast<unsigned char>(c);
+            return (trail >= 0xa1) && (trail <= trail_max);
+        };
+        if (!ranges::all_of(str.substr(pos + 1, char_len - 1), is_trail_byte)) {
+            return { pos, true };
+        }
+
+        pos += char_len;
+    }
+
+    return { pos, false };
+}
+#endif
+
 /*!
  * @brief EUC-JP を EUC-JP-MS でなく EUC-JP として読んだ文字列の、EUC-JP-MS と対応が違う文字を、EUC-JP-MS で読んだ文字に戻す
  * @param utf8 EUC-JP から UTF-8 に変換した文字列
@@ -470,14 +505,29 @@ tl::optional<std::string> legacy_to_utf8(std::string_view str, CharacterEncoding
     char *in = input.data();
     char *out = utf8.data();
     while (inlen_left > 0) {
+        // EUC-JP は、続きとして読めないバイトが続く先頭バイトの手前までを変換する。
+        // iconv が読めないバイトの次から読み直した位置から探し直すので、iconv と同じ文字の境界で探せる
+        const auto pos = static_cast<size_t>(in - input.data());
+        const auto [chunk_end, is_broken] = (encoding == CharacterEncoding::EUC_JP) ? find_broken_euc_char(input, pos) : std::make_pair(input.length(), false);
+        const auto chunk_len = chunk_end - pos;
+        auto chunk_left = chunk_len;
+
         // 前の呼び出しや前の読めないバイトで途中になった変換の状態を引き継がないよう、初期状態に戻す
         iconv(cd, nullptr, nullptr, nullptr, nullptr);
-        if (iconv(cd, &in, &inlen_left, &out, &outlen_left) != static_cast<size_t>(-1)) {
+        const auto is_converted = iconv(cd, &in, &chunk_left, &out, &outlen_left) != static_cast<size_t>(-1);
+        inlen_left -= chunk_len - chunk_left;
+        if (inlen_left == 0) {
             break;
         }
 
-        // 不正な並び (EILSEQ) と末尾で欠けた文字 (EINVAL) は、置き換えるなら 1 バイトを '?' にして次のバイトから続ける
-        if (!replace_invalid || (errno == E2BIG)) {
+        // 探した範囲を読めないバイトなしで変換できたら、続きを探す
+        if (is_converted && !is_broken) {
+            continue;
+        }
+
+        // 不正な並び (EILSEQ)、末尾で欠けた文字 (EINVAL)、続きとして読めないバイトが続く先頭バイトは、
+        // 置き換えるなら 1 バイトを '?' にして次のバイトから続ける
+        if (!replace_invalid || (!is_converted && (errno == E2BIG))) {
             return tl::nullopt;
         }
 
