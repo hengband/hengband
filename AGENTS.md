@@ -84,7 +84,7 @@ $msbuild = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere
   内部の文字コードが UTF-8 になる。中間ファイルとテストの出力先は `<構成>-UTF8`、exe はリポジトリのトップの
   `Hengband-UTF8.exe`（ini は `Hengband-UTF8.INI`）で、既定の構成と混ざらない。移行を終えたら撤去する。
 - CI（`.github/workflows/build-test-with-msvc.yml`）は `-warnAsError /t:Rebuild` で `Release` と
-  `English-Debug` をビルドする。差分ビルドでは変更のないファイルがコンパイルされず、前回の警告が出ないので、
+  `English-Debug`、UTF-8 の構成の `Debug` をビルドする。差分ビルドでは変更のないファイルがコンパイルされず、前回の警告が出ないので、
   プッシュ前の最終確認は CI と同じく `-warnAsError /t:Rebuild` で行う。
 - `Hengband.exe`（UTF-8 の構成では `Hengband-UTF8.exe`）は全構成で同じパス（リポジトリのトップ）に出力されるため、
   構成を切り替えると差分ビルドでリンクされず、前の構成の exe が残ることがある。構成を切り替えたら exe を削除してからビルドする。
