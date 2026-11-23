@@ -83,6 +83,7 @@
 #include "io/record-play-movie.h"
 #include "io/screen-util.h"
 #include "io/signal-handlers.h"
+#include "io/temp-file.h"
 #include "io/write-diary.h"
 #include "locale/multibyte-char.h"
 #include "main-win/commandline-win.h"
@@ -134,9 +135,11 @@
 #include <iterator>
 #include <locale>
 #include <map>
+#include <memory>
 #include <string>
 #include <string_view>
 #include <system_error>
+#include <tl/optional.hpp>
 #include <utility>
 #include <vector>
 
@@ -470,6 +473,137 @@ static BOOL CALLBACK monitor_enum_procedure([[maybe_unused]] HMONITOR hMon, [[ma
 }
 
 #ifdef UTF8
+constexpr std::string_view UTF16LE_BOM = "\xff\xfe"; //!< UTF-16LE の BOM
+constexpr std::string_view UTF16BE_BOM = "\xfe\xff"; //!< UTF-16BE の BOM
+constexpr std::string_view UTF8_BOM = "\xef\xbb\xbf"; //!< UTF-8 の BOM
+
+//! ini を UTF-16LE にした結果
+struct PreparedIniFile {
+    PreparedIniFile() = default;
+    explicit PreparedIniFile(bool is_utf16, std::unique_ptr<TempFile> reading_copy = nullptr)
+        : is_utf16(is_utf16)
+        , reading_copy(std::move(reading_copy))
+    {
+    }
+
+    PreparedIniFile(const PreparedIniFile &) = delete;
+    PreparedIniFile(PreparedIniFile &&) = default;
+    PreparedIniFile &operator=(const PreparedIniFile &) = delete;
+    PreparedIniFile &operator=(PreparedIniFile &&) = default;
+
+    bool is_utf16 = false; //!< ini が UTF-16LE になっていれば true
+    std::unique_ptr<TempFile> reading_copy; //!< UTF-16LE にできなかった ini を読むための、一時フォルダの写し (無ければ nullptr。消えるときに写しも消す)
+};
+
+/*!
+ * @brief ini ファイルの中身を読む
+ * @param path ini ファイルのパス
+ * @return ini の中身。ini が無ければ空。ini があっても読めなければ (ほかのプロセスが開いているなど) tl::nullopt
+ */
+static tl::optional<std::string> read_ini_bytes(const std::filesystem::path &path)
+{
+    std::error_code ec;
+    if (!std::filesystem::exists(path, ec)) {
+        if (ec) {
+            return tl::nullopt;
+        }
+
+        return std::string();
+    }
+
+    std::ifstream ifs(path, std::ios::binary);
+    if (!ifs) {
+        return tl::nullopt;
+    }
+
+    std::string bytes(std::istreambuf_iterator<char>(ifs), {});
+    if (ifs.bad()) {
+        return tl::nullopt;
+    }
+
+    return bytes;
+}
+
+/*!
+ * @brief ini ファイルの中身を UTF-16 に変換する
+ * @param text ini の中身 (BOM を除く)
+ * @param code_page text のコードページ
+ * @param flags MultiByteToWideChar() のフラグ
+ * @return UTF-16 の中身。変換できない・NUL を含む (壊れている) なら tl::nullopt
+ * @details 変換した文字列は NUL で切れるので、NUL の後ろを失って元の ini を上書きしないよう、NUL を含む ini は変換しない。
+ */
+static tl::optional<std::wstring> decode_ini_text(std::string_view text, UINT code_page, DWORD flags)
+{
+    if (text.empty()) {
+        return std::wstring();
+    }
+
+    if (text.find('\0') != std::string_view::npos) {
+        return tl::nullopt;
+    }
+
+    to_wchar wide_text(text, code_page, flags);
+    if (wide_text.wc_str() == nullptr) {
+        return tl::nullopt;
+    }
+
+    return std::wstring(wide_text.wc_str());
+}
+
+/*!
+ * @brief UTF-16LE (BOM 付き) の ini ファイルを書く
+ * @param path 書くファイルのパス
+ * @param wide ini の中身
+ * @return 書けたら true
+ */
+static bool write_utf16_ini_file(const std::filesystem::path &path, std::wstring_view wide)
+{
+    std::ofstream ofs(path, std::ios::binary | std::ios::trunc);
+    ofs.write(UTF16LE_BOM.data(), UTF16LE_BOM.length());
+    ofs.write(reinterpret_cast<const char *>(wide.data()), wide.length() * sizeof(wchar_t));
+    ofs.close();
+    return !ofs.fail();
+}
+
+/*!
+ * @brief ini ファイルを UTF-16LE の中身で置き換える
+ * @param path ini ファイルのパス
+ * @param wide ini の中身
+ * @return 置き換えられたら true
+ * @details 失敗したときに設定を失わないよう、一時ファイルに書いてから置き換える。
+ */
+static bool replace_with_utf16_ini_file(const std::filesystem::path &path, std::wstring_view wide)
+{
+    auto tmp_path = path;
+    tmp_path += L".tmp";
+    std::error_code ec;
+    if (!write_utf16_ini_file(tmp_path, wide) || !MoveFileExW(tmp_path.c_str(), path.c_str(), MOVEFILE_REPLACE_EXISTING)) {
+        std::filesystem::remove(tmp_path, ec);
+        return false;
+    }
+
+    return true;
+}
+
+/*!
+ * @brief UTF-16LE にできなかった ini を読むための写しを、一時フォルダに作る
+ * @param wide ini の中身
+ * @return 写し。中身が空か、作れなければ nullptr
+ */
+static std::unique_ptr<TempFile> make_ini_reading_copy(std::wstring_view wide)
+{
+    if (wide.empty()) {
+        return nullptr;
+    }
+
+    auto copy = std::make_unique<TempFile>();
+    if (copy->get_error_message() || !write_utf16_ini_file(copy->get_path(), wide)) {
+        return nullptr;
+    }
+
+    return copy;
+}
+
 /*!
  * @brief ini ファイルを UTF-16LE (BOM 付き) にする
  * @param path ini ファイルのパス
@@ -482,79 +616,53 @@ static BOOL CALLBACK monitor_enum_procedure([[maybe_unused]] HMONITOR hMon, [[ma
  * (旧版の日本語版は、ANSI のコードページが CP932 の日本語の Windows を前提にしていた)。
  * BOM の無い ini を UTF-8 として読めるかで決めないのは、CP932 の半角カナの並び (「ﾃｩ」の C3 A9 など) が UTF-8 としても読めるため。
  * 読めないバイトのある ini は、置き換えて元のバイト列を失わないよう、変換せずに残す (MB_ERR_INVALID_CHARS)。
- * 変換に失敗したときに設定を失わないよう、一時ファイルに書いてから置き換える。
- * @return ini が UTF-16LE になっていれば true。読めない・変換できないなどで UTF-16LE にできなければ false
+ * UTF-16LE にできなかった ini (読めないバイトがある、読み取り専用で置き換えられないなど) は、
+ * A 版の API で UTF-8 として読むとフォント名などが化けるので、UTF-16LE に変換した写しを一時フォルダに作って読む
+ * (読めないバイトは置き換える)。
+ * @return ini を UTF-16LE にできたか、と読むための写し。ini を開けない・UTF-16BE (エディタで保存したもの)・NUL を含むなら、写しを作らずに残す
  */
-static bool prepare_utf16_ini_file(const std::filesystem::path &path)
+static PreparedIniFile prepare_utf16_ini_file(const std::filesystem::path &path)
 {
-    constexpr std::string_view utf16le_bom = "\xff\xfe";
-    constexpr std::string_view utf16be_bom = "\xfe\xff";
-    constexpr std::string_view utf8_bom = "\xef\xbb\xbf";
-    std::error_code ec;
-    std::string bytes;
-    if (std::filesystem::exists(path, ec)) {
-        // ini があっても読めなければ (ほかのプロセスが開いているなど)、設定を消さないよう何もしない
-        std::ifstream ifs(path, std::ios::binary);
-        if (!ifs) {
-            return false;
-        }
-
-        bytes.assign(std::istreambuf_iterator<char>(ifs), {});
-        if (ifs.bad()) {
-            return false;
-        }
-    } else if (ec) {
-        return false;
+    // ini があっても読めなければ (ほかのプロセスが開いているなど)、設定を消さないよう何もしない
+    const auto bytes = read_ini_bytes(path);
+    if (!bytes) {
+        return {};
     }
 
-    if (bytes.starts_with(utf16le_bom)) {
-        return true;
+    if (bytes->starts_with(UTF16LE_BOM)) {
+        return PreparedIniFile(true);
     }
 
     // UTF-16BE の ini はエディタで保存したもので、プロファイルの API では読めないが、読み替えずに残す
-    if (bytes.starts_with(utf16be_bom)) {
-        return false;
+    if (bytes->starts_with(UTF16BE_BOM)) {
+        return {};
     }
 
-    const auto is_utf8 = bytes.starts_with(utf8_bom);
-    const auto text = std::string_view(bytes).substr(is_utf8 ? utf8_bom.length() : 0);
-    // 読めないバイトを置き換えて元の ini を上書きしないよう、読めないバイトがあれば変換しない
-    to_wchar wide_text(text, is_utf8 ? CP_UTF8 : SHIFT_JIS_CODE_PAGE, MB_ERR_INVALID_CHARS);
-    if (!text.empty() && (wide_text.wc_str() == nullptr)) {
-        return false;
+    const auto is_utf8 = bytes->starts_with(UTF8_BOM);
+    const auto text = std::string_view(*bytes).substr(is_utf8 ? UTF8_BOM.length() : 0);
+    const auto code_page = is_utf8 ? CP_UTF8 : SHIFT_JIS_CODE_PAGE;
+    if (const auto wide = decode_ini_text(text, code_page, MB_ERR_INVALID_CHARS)) {
+        if (replace_with_utf16_ini_file(path, *wide)) {
+            return PreparedIniFile(true);
+        }
+
+        return PreparedIniFile(false, make_ini_reading_copy(*wide));
     }
 
-    const std::wstring_view wide(text.empty() ? L"" : wide_text.wc_str());
-    auto tmp_path = path;
-    tmp_path += L".tmp";
-    std::ofstream ofs(tmp_path, std::ios::binary | std::ios::trunc);
-    ofs.write(utf16le_bom.data(), utf16le_bom.length());
-    ofs.write(reinterpret_cast<const char *>(wide.data()), wide.length() * sizeof(wchar_t));
-    ofs.close();
-    if (!ofs) {
-        std::filesystem::remove(tmp_path, ec);
-        return false;
-    }
-
-    if (!MoveFileExW(tmp_path.c_str(), path.c_str(), MOVEFILE_REPLACE_EXISTING)) {
-        std::filesystem::remove(tmp_path, ec);
-        return false;
-    }
-
-    return true;
+    // 読めないバイトのある ini は、元の ini を上書きしないよう変換せずに残し、置き換えを許した写しを読む
+    const auto wide = decode_ini_text(text, code_page, 0);
+    return PreparedIniFile(false, wide ? make_ini_reading_copy(*wide) : nullptr);
 }
 #endif
 
 /*!
  * @brief Load the "prefs" for a single term
  */
-static void load_prefs_aux(int i)
+static void load_prefs_aux(int i, const char *ini_file)
 {
     term_data *td = &data[i];
     GAME_TEXT sec_name[128];
     wsprintfA(sec_name, "Term-%d", i);
-    const auto &str_ini_file = path_ini_file.string();
-    const auto *ini_file = str_ini_file.data();
     if (i > 0) {
         td->visible = (GetPrivateProfileIntA(sec_name, "Visible", td->visible, ini_file) != 0);
     }
@@ -604,9 +712,12 @@ static void load_prefs_aux(int i)
 static void load_prefs()
 {
 #ifdef UTF8
-    is_ini_utf16 = prepare_utf16_ini_file(path_ini_file);
-#endif
+    const auto prepared_ini = prepare_utf16_ini_file(path_ini_file);
+    is_ini_utf16 = prepared_ini.is_utf16;
+    const auto &str_ini_file = (prepared_ini.reading_copy ? prepared_ini.reading_copy->get_path() : path_ini_file).string();
+#else
     const auto &str_ini_file = path_ini_file.string();
+#endif
     const auto *ini_file = str_ini_file.data();
     arg_graphics = (byte)GetPrivateProfileIntA("Angband", "Graphics", enum2i(graphics_mode::GRAPHICS_NONE), ini_file);
     arg_bigtile = (GetPrivateProfileIntA("Angband", "Bigtile", false, ini_file) != 0);
@@ -633,7 +744,7 @@ static void load_prefs()
 
     keep_subwindows = (GetPrivateProfileIntA("Angband", "KeepSubwindows", 0, ini_file) != 0);
     for (int i = 0; i < MAX_TERM_DATA; ++i) {
-        load_prefs_aux(i);
+        load_prefs_aux(i, ini_file);
     }
 }
 
