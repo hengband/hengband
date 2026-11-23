@@ -26,6 +26,7 @@
 #include <cstdint>
 #include <fmt/format.h>
 #include <limits>
+#include <string>
 #include <vector>
 
 /*!
@@ -269,7 +270,7 @@ void print_spells(PlayerType *player_ptr, SPELL_IDX target_spell_id, const SPELL
     }
 
     int i;
-    char ryakuji[5];
+    std::string ryakuji;
     bool max = false;
     std::vector<BotSpellListRow> bot_rows;
     for (i = 0; i < num; i++) {
@@ -300,9 +301,7 @@ void print_spells(PlayerType *player_ptr, SPELL_IDX target_spell_id, const SPELL
                 max = true;
             }
 
-            strncpy(ryakuji, PlayerSkill::skill_rank_str(skill_rank), 4);
-            ryakuji[3] = ']';
-            ryakuji[4] = '\0';
+            ryakuji = PlayerSkill::skill_rank_abbrev(skill_rank);
         }
 
         std::string out_val;
