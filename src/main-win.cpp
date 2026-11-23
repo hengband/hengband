@@ -126,11 +126,15 @@
 #include <cstdio>
 #include <cstdlib>
 #include <direct.h>
+#include <filesystem>
 #include <fmt/format.h>
+#include <fstream>
+#include <iterator>
 #include <locale>
 #include <map>
 #include <string>
 #include <string_view>
+#include <system_error>
 #include <vector>
 
 #pragma comment(lib, "Msimg32.lib")
@@ -390,12 +394,23 @@ static void save_prefs_aux(int i)
     }
 }
 
+#ifdef UTF8
+//! ini を UTF-16LE にできたか。できなければ、BOM の無い ini に UTF-8 を書き込んで CP932 と混ぜないよう、設定を保存しない
+static bool is_ini_utf16 = false;
+#endif
+
 /*!
  * @brief Write the "prefs"
  * We assume that the windows have all been initialized
  */
 static void save_prefs()
 {
+#ifdef UTF8
+    if (!is_ini_utf16) {
+        return;
+    }
+
+#endif
     const auto &str_ini_file = path_ini_file.string();
     const auto *ini_file = str_ini_file.data();
     char buf[128];
@@ -450,6 +465,82 @@ static BOOL CALLBACK monitor_enum_procedure([[maybe_unused]] HMONITOR hMon, [[ma
     *result = true;
     return false;
 }
+
+#ifdef UTF8
+/*!
+ * @brief ini ファイルを UTF-16LE (BOM 付き) にする
+ * @param path ini ファイルのパス
+ * @details 内部の文字コードが UTF-8 の構成は、マニフェストで ANSI のコードページを UTF-8 にしているので、
+ * A 版のプロファイルの API は BOM の無い ini の中身も UTF-8 として読み書きする。
+ * そのままでは、旧版や Shift_JIS の構成が CP932 で書いた ini (フォント名など) を読めず、UTF-8 で書いた ini を旧版で読めない。
+ * UTF-16LE の ini なら、A 版の API は ini の中身とプロセスの ANSI のコードページの間で変換するので、どちらの構成でも読み書きできる。
+ * そこで、ini が無ければ BOM だけの ini を作り、BOM の無い ini は UTF-16LE に一度だけ変換する。
+ * UTF-8 の BOM の付いた ini (エディタで UTF-8 で保存したもの) は UTF-8 として、BOM の無い ini は CP932 として読む
+ * (旧版の日本語版は、ANSI のコードページが CP932 の日本語の Windows を前提にしていた)。
+ * BOM の無い ini を UTF-8 として読めるかで決めないのは、CP932 の半角カナの並び (「ﾃｩ」の C3 A9 など) が UTF-8 としても読めるため。
+ * 読めないバイトのある ini は、置き換えて元のバイト列を失わないよう、変換せずに残す (MB_ERR_INVALID_CHARS)。
+ * 変換に失敗したときに設定を失わないよう、一時ファイルに書いてから置き換える。
+ * @return ini が UTF-16LE になっていれば true。読めない・変換できないなどで UTF-16LE にできなければ false
+ */
+static bool prepare_utf16_ini_file(const std::filesystem::path &path)
+{
+    constexpr std::string_view utf16le_bom = "\xff\xfe";
+    constexpr std::string_view utf16be_bom = "\xfe\xff";
+    constexpr std::string_view utf8_bom = "\xef\xbb\xbf";
+    std::error_code ec;
+    std::string bytes;
+    if (std::filesystem::exists(path, ec)) {
+        // ini があっても読めなければ (ほかのプロセスが開いているなど)、設定を消さないよう何もしない
+        std::ifstream ifs(path, std::ios::binary);
+        if (!ifs) {
+            return false;
+        }
+
+        bytes.assign(std::istreambuf_iterator<char>(ifs), {});
+        if (ifs.bad()) {
+            return false;
+        }
+    } else if (ec) {
+        return false;
+    }
+
+    if (bytes.starts_with(utf16le_bom)) {
+        return true;
+    }
+
+    // UTF-16BE の ini はエディタで保存したもので、プロファイルの API では読めないが、読み替えずに残す
+    if (bytes.starts_with(utf16be_bom)) {
+        return false;
+    }
+
+    const auto is_utf8 = bytes.starts_with(utf8_bom);
+    const auto text = std::string_view(bytes).substr(is_utf8 ? utf8_bom.length() : 0);
+    // 読めないバイトを置き換えて元の ini を上書きしないよう、読めないバイトがあれば変換しない
+    to_wchar wide_text(text, is_utf8 ? CP_UTF8 : SHIFT_JIS_CODE_PAGE, MB_ERR_INVALID_CHARS);
+    if (!text.empty() && (wide_text.wc_str() == nullptr)) {
+        return false;
+    }
+
+    const std::wstring_view wide(text.empty() ? L"" : wide_text.wc_str());
+    auto tmp_path = path;
+    tmp_path += L".tmp";
+    std::ofstream ofs(tmp_path, std::ios::binary | std::ios::trunc);
+    ofs.write(utf16le_bom.data(), utf16le_bom.length());
+    ofs.write(reinterpret_cast<const char *>(wide.data()), wide.length() * sizeof(wchar_t));
+    ofs.close();
+    if (!ofs) {
+        std::filesystem::remove(tmp_path, ec);
+        return false;
+    }
+
+    if (!MoveFileExW(tmp_path.c_str(), path.c_str(), MOVEFILE_REPLACE_EXISTING)) {
+        std::filesystem::remove(tmp_path, ec);
+        return false;
+    }
+
+    return true;
+}
+#endif
 
 /*!
  * @brief Load the "prefs" for a single term
@@ -509,6 +600,9 @@ static void load_prefs_aux(int i)
  */
 static void load_prefs()
 {
+#ifdef UTF8
+    is_ini_utf16 = prepare_utf16_ini_file(path_ini_file);
+#endif
     const auto &str_ini_file = path_ini_file.string();
     const auto *ini_file = str_ini_file.data();
     arg_graphics = (byte)GetPrivateProfileIntA("Angband", "Graphics", enum2i(graphics_mode::GRAPHICS_NONE), ini_file);
