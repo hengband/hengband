@@ -51,11 +51,24 @@ constexpr auto SYSTEM_CHARACTER_ENCODING = CharacterEncoding::UTF_8;
 constexpr auto SYSTEM_CHARACTER_ENCODING = CharacterEncoding::US_ASCII;
 #endif
 
+#if defined(JP) && defined(UTF8)
+/*!
+ * @brief 旧版の内部の文字コード (内部の文字コードを UTF-8 にする前に、同じプラットフォームの版が使っていた文字コード)
+ * @details 旧版のデータは Windows 版なら Shift_JIS、Unix 系なら EUC-JP で書かれているので、文字コードを推定できない文字列はこれで読む
+ */
+#ifdef _WIN32
+constexpr auto LEGACY_CHARACTER_ENCODING = CharacterEncoding::SHIFT_JIS;
+#else
+constexpr auto LEGACY_CHARACTER_ENCODING = CharacterEncoding::EUC_JP;
+#endif
+#endif
+
 #ifdef JP
 
 void sjis2euc(char *str);
 void euc2sjis(char *str);
 CharacterEncoding guess_legacy_encoding(std::string_view str);
+size_t legacy_lead_byte_length(char lead, CharacterEncoding encoding);
 tl::optional<std::string> legacy_to_sys(std::string_view str, CharacterEncoding encoding);
 std::string legacy_to_sys_replacing_invalid(std::string_view str, CharacterEncoding encoding);
 tl::optional<std::string> sys_to_utf8(std::string_view str);

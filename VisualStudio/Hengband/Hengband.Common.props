@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <IntDir>$(Configuration)\$(ProjectName)\</IntDir>
-    <IntDir Condition="'$(HengbandIntermediateRoot)'!=''">$(HengbandIntermediateRoot)$(Configuration)\$(ProjectName)\</IntDir>
+    <IntDir>$(HengbandConfigurationDir)\$(ProjectName)\</IntDir>
+    <IntDir Condition="'$(HengbandIntermediateRoot)'!=''">$(HengbandIntermediateRoot)$(HengbandConfigurationDir)\$(ProjectName)\</IntDir>
     <LinkIncremental Condition="'$(HengbandDebugBuild)'!='true'">false</LinkIncremental>
     <ExternalIncludePath>..\..\src\external-lib\include;libcurl\include;$(ExternalIncludePath)</ExternalIncludePath>
   </PropertyGroup>
@@ -15,7 +15,7 @@
       <ExceptionHandling>SyncCThrow</ExceptionHandling>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <ForcedIncludeFiles>stdafx.h</ForcedIncludeFiles>
-      <AdditionalOptions>/source-charset:utf-8 /execution-charset:shift-jis %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/source-charset:utf-8 /execution-charset:$(HengbandExecutionCharset) %(AdditionalOptions)</AdditionalOptions>
       <StructMemberAlignment>16Bytes</StructMemberAlignment>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <WarningLevel>EnableAllWarnings</WarningLevel>
@@ -26,10 +26,10 @@
       <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
       <DisableAnalyzeExternal>true</DisableAnalyzeExternal>
 
-      <!-- JP;SJIS;WORLD_SCORE は日本語版のみ、WIN_DEBUG はデバッグ構成のみ -->
-      <PreprocessorDefinitions Condition="'$(HengbandDebugBuild)'=='true' and '$(HengbandJapanese)'=='true'">_CRT_SECURE_NO_WARNINGS;HAVE_STDINT_H;JP;SJIS;WORLD_SCORE;WIN_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <!-- JP;SJIS (UTF-8 の構成では JP;UTF8);WORLD_SCORE は日本語版のみ、WIN_DEBUG はデバッグ構成のみ -->
+      <PreprocessorDefinitions Condition="'$(HengbandDebugBuild)'=='true' and '$(HengbandJapanese)'=='true'">_CRT_SECURE_NO_WARNINGS;HAVE_STDINT_H;JP;$(HengbandJapaneseEncoding);WORLD_SCORE;WIN_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(HengbandDebugBuild)'=='true' and '$(HengbandJapanese)'!='true'">_CRT_SECURE_NO_WARNINGS;HAVE_STDINT_H;WIN_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PreprocessorDefinitions Condition="'$(HengbandDebugBuild)'!='true' and '$(HengbandJapanese)'=='true'">_CRT_SECURE_NO_WARNINGS;HAVE_STDINT_H;JP;SJIS;WORLD_SCORE;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(HengbandDebugBuild)'!='true' and '$(HengbandJapanese)'=='true'">_CRT_SECURE_NO_WARNINGS;HAVE_STDINT_H;JP;$(HengbandJapaneseEncoding);WORLD_SCORE;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(HengbandDebugBuild)'!='true' and '$(HengbandJapanese)'!='true'">_CRT_SECURE_NO_WARNINGS;HAVE_STDINT_H;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
 
       <DisableSpecificWarnings Condition="'$(HengbandDebugBuild)'=='true'">4061;4127;4244;4365;4514;4710;4820;4996;5045;%(DisableSpecificWarnings)</DisableSpecificWarnings>
@@ -60,6 +60,10 @@
       <EnableCOMDATFolding Condition="'$(HengbandDebugBuild)'!='true'">true</EnableCOMDATFolding>
       <LinkTimeCodeGeneration Condition="'$(HengbandDebugBuild)'!='true'">UseFastLinkTimeCodeGeneration</LinkTimeCodeGeneration>
     </Link>
+    <!-- UTF-8 の構成では、ナローの文字列を扱う API (A 版の API、std::filesystem::path の変換、fopen など) のコードページを UTF-8 にする -->
+    <Manifest Condition="'$(HengbandUtf8Build)'=='true'">
+      <AdditionalManifestFiles>$(MSBuildThisFileDirectory)utf8-code-page.manifest;%(AdditionalManifestFiles)</AdditionalManifestFiles>
+    </Manifest>
     <ResourceCompile Condition="'$(HengbandJapanese)'=='true'">
       <Culture>0x0411</Culture>
       <PreprocessorDefinitions>JP</PreprocessorDefinitions>

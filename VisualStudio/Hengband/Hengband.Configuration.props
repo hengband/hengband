@@ -4,6 +4,19 @@
     <HengbandDebugBuild Condition="$(Configuration.EndsWith('Debug'))">true</HengbandDebugBuild>
     <HengbandJapanese Condition="!$(Configuration.StartsWith('English'))">true</HengbandJapanese>
   </PropertyGroup>
+  <!--
+    内部の文字コードを UTF-8 にした日本語版の仮の構成 (Issue #6140)。/p:HengbandUtf8Internal=true で選ぶ (英語版では無視する)。
+    中間ファイルとテストの出力先は、既定の構成と混ざらないよう「構成名-UTF8」に分ける。
+  -->
+  <PropertyGroup Label="UserMacros">
+    <HengbandUtf8Build Condition="'$(HengbandJapanese)'=='true' and '$(HengbandUtf8Internal)'=='true'">true</HengbandUtf8Build>
+    <HengbandJapaneseEncoding Condition="'$(HengbandUtf8Build)'=='true'">UTF8</HengbandJapaneseEncoding>
+    <HengbandJapaneseEncoding Condition="'$(HengbandUtf8Build)'!='true'">SJIS</HengbandJapaneseEncoding>
+    <HengbandExecutionCharset Condition="'$(HengbandUtf8Build)'=='true'">utf-8</HengbandExecutionCharset>
+    <HengbandExecutionCharset Condition="'$(HengbandUtf8Build)'!='true'">shift-jis</HengbandExecutionCharset>
+    <HengbandConfigurationDir Condition="'$(HengbandUtf8Build)'=='true'">$(Configuration)-UTF8</HengbandConfigurationDir>
+    <HengbandConfigurationDir Condition="'$(HengbandUtf8Build)'!='true'">$(Configuration)</HengbandConfigurationDir>
+  </PropertyGroup>
   <PropertyGroup Label="Configuration">
     <PlatformToolset>v145</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>

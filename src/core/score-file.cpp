@@ -261,34 +261,37 @@ tl::optional<size_t> complete_sys_text_length(std::string_view str)
  * Windows 版の変換は半端なバイトを置き換えて成功してしまうので、変換の成否ではなく、
  * 文字コードを推定できたか、内部の文字コードとして末尾の文字だけが欠けているかで、落とす長さを決める。
  *
- * 内部の文字コードが UTF-8 のときは、scores.raw を書いた旧版の Unix 版の文字コード (EUC-JP) を「内部の文字コード」とみなす。
- * EUC-JP として読めるかは iconv で変換できるかで決め、末尾の文字が欠けて変換できなければ末尾を落としてから変換する。
+ * 内部の文字コードが UTF-8 のときは、scores.raw を書いた旧版の内部の文字コード (LEGACY_CHARACTER_ENCODING。Windows 版は Shift_JIS、
+ * Unix 系は EUC-JP) を「内部の文字コード」とみなす。その文字コードとして読めるかは変換できるかで決め、
+ * 末尾の文字が欠けて変換できなければ末尾を落としてから変換する。
  */
 std::string migrate_text(std::string_view str, [[maybe_unused]] bool prefer_system_encoding)
 {
     const auto max_cut = std::min(2, static_cast<int>(str.length()));
     const auto prefix = [str](int cut) { return str.substr(0, str.length() - cut); };
 #if defined(JP) && defined(UTF8)
-    // 落とすバイトが、EUC-JP の文字の途中で切れた先頭の部分 (2 バイトの文字の先頭バイト、3 バイトの文字の先頭の 2 バイト) か
+    // 落とすバイトが、旧版の内部の文字コードの文字の途中で切れた先頭の部分か
+    // (EUC-JP は 2 バイトの文字の先頭バイトと 3 バイトの文字の先頭の 2 バイト、Shift_JIS は 2 バイトの文字の先頭バイト)
     const auto is_cut_lead = [](std::string_view dropped) {
-        const auto is_euc_byte = [](unsigned char c) { return (c >= 0xa1) && (c <= 0xfe); };
-        const auto lead = dropped.empty() ? static_cast<unsigned char>(0) : static_cast<unsigned char>(dropped[0]);
-        switch (dropped.length()) {
-        case 0:
+        if (dropped.empty()) {
             return true;
-        case 1:
-            return is_euc_byte(lead) || (lead == 0x8e) || (lead == 0x8f);
-        default:
-            return (lead == 0x8f) && is_euc_byte(static_cast<unsigned char>(dropped[1]));
         }
+
+        // 3 バイトの文字の先頭の 2 バイトなら、2 バイト目も EUC-JP の文字のバイトであること
+        const auto second = (dropped.length() < 2) ? 0xa1 : static_cast<unsigned char>(dropped[1]);
+        const auto is_euc_second = (second >= 0xa1) && (second <= 0xfe);
+        return (dropped.length() < legacy_lead_byte_length(dropped[0], LEGACY_CHARACTER_ENCODING)) && is_euc_second;
     };
     const auto convert_complete = [&]() -> tl::optional<std::string> {
-        if (auto utf8 = legacy_to_sys(str, CharacterEncoding::EUC_JP)) {
+        if (auto utf8 = legacy_to_sys(str, LEGACY_CHARACTER_ENCODING)) {
             return utf8;
         }
 
-        // 全体が Shift_JIS と推定できるなら、末尾を落とさずに推定に任せる (「将」の 8F AB を EUC-JP の欠けた文字とみなして空にしない)
-        if (guess_legacy_encoding(str) == CharacterEncoding::SHIFT_JIS) {
+        // 全体がもう一方の文字コードと推定できるなら、末尾を落とさずに推定に任せる
+        // (旧版の内部の文字コードが EUC-JP なら、「将」の Shift_JIS の 8F AB を EUC-JP の欠けた文字とみなして空にしない。
+        // Shift_JIS なら、EUC-JP の文字列の末尾を Shift_JIS の欠けた文字とみなして落とさない)
+        constexpr auto other_encoding = (LEGACY_CHARACTER_ENCODING == CharacterEncoding::EUC_JP) ? CharacterEncoding::SHIFT_JIS : CharacterEncoding::EUC_JP;
+        if (guess_legacy_encoding(str) == other_encoding) {
             return tl::nullopt;
         }
 
@@ -297,7 +300,7 @@ std::string migrate_text(std::string_view str, [[maybe_unused]] bool prefer_syst
                 continue;
             }
 
-            if (auto utf8 = legacy_to_sys(prefix(cut), CharacterEncoding::EUC_JP)) {
+            if (auto utf8 = legacy_to_sys(prefix(cut), LEGACY_CHARACTER_ENCODING)) {
                 return utf8;
             }
         }

@@ -60,6 +60,7 @@ tl::optional<ulong> fd_size(int fd);
 errr fd_read(int fd, char *buf, ulong n);
 errr fd_write(int fd, concptr buf, ulong n);
 errr fd_close(int fd);
-#if defined(JP) && defined(UTF8)
+// Windows のファイル名は UTF-16 で、旧版 (Shift_JIS) と同じ名前になるので、旧名のファイルを付け替えない
+#if defined(JP) && defined(UTF8) && !defined(_WIN32)
 tl::optional<std::filesystem::path> rename_legacy_named_file(const std::filesystem::path &path);
 #endif
