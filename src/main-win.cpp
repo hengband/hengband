@@ -136,6 +136,7 @@
 #include <string>
 #include <string_view>
 #include <system_error>
+#include <utility>
 #include <vector>
 
 #pragma comment(lib, "Msimg32.lib")
@@ -2477,6 +2478,46 @@ static bool handle_window_resize(term_data *td, UINT uMsg, WPARAM wParam, LPARAM
 }
 
 /*!
+ * @brief WM_CHAR で受け取った文字を、内部の文字コードにしてキー入力に積む
+ * @param wc 受け取った文字 (UTF-16 の 1 単位)
+ * @details 内部の文字コードが UTF-8 の構成では、サロゲートペアの文字 (絵文字など) が上位と下位の 2 回の WM_CHAR に分かれて届く。
+ * 上位サロゲートを覚えておき、続く下位サロゲートと合わせて変換する (片方だけでは UTF-8 にできない)。
+ * Shift_JIS の構成では、サロゲートペアの文字はどのみち変換できないので、これまでどおり 1 単位ずつ変換する。
+ * キーダウンで処理したキーの WM_CHAR (term_no_press) は捨てる。
+ */
+static void keypress_wm_char(WCHAR wc)
+{
+#ifdef UTF8
+    // 覚えていた上位サロゲートは、この文字が対になる下位サロゲートでなければ捨てる
+    static WCHAR high_surrogate = L'\0';
+    const auto prev_high_surrogate = std::exchange(high_surrogate, L'\0');
+#endif
+    if (term_no_press) {
+        term_no_press = false;
+        return;
+    }
+
+#ifdef UTF8
+    if (IS_HIGH_SURROGATE(wc)) {
+        high_surrogate = wc;
+        return;
+    }
+
+    if (IS_LOW_SURROGATE(wc)) {
+        // 対になる上位サロゲートの無い下位サロゲートは UTF-8 にできない (U+FFFD になる) ので捨てる
+        if (prev_high_surrogate != L'\0') {
+            const WCHAR pair[] = { prev_high_surrogate, wc, L'\0' };
+            term_keypress(to_multibyte(pair).c_str());
+        }
+
+        return;
+    }
+#endif
+    const WCHAR str[] = { wc, L'\0' };
+    term_keypress(to_multibyte(str).c_str());
+}
+
+/*!
  * @brief メインウインドウ用ウインドウプロシージャ
  */
 static LRESULT PASCAL angband_window_procedure(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
@@ -2527,12 +2568,7 @@ static LRESULT PASCAL angband_window_procedure(HWND hWnd, UINT uMsg, WPARAM wPar
     }
     case WM_CHAR: {
         // wParam is WCHAR because using RegisterClassW
-        if (term_no_press) {
-            term_no_press = false;
-        } else {
-            WCHAR wc[2] = { (WCHAR)wParam, '\0' };
-            term_keypress(to_multibyte(wc).c_str());
-        }
+        keypress_wm_char(static_cast<WCHAR>(wParam));
         return 0;
     }
     case WM_LBUTTONDOWN: {
@@ -2772,12 +2808,7 @@ static LRESULT PASCAL AngbandListProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARA
     }
     case WM_CHAR: {
         // wParam is WCHAR because using RegisterClassW
-        if (term_no_press) {
-            term_no_press = false;
-        } else {
-            WCHAR wc[2] = { (WCHAR)wParam, '\0' };
-            term_keypress(to_multibyte(wc).c_str());
-        }
+        keypress_wm_char(static_cast<WCHAR>(wParam));
         return 0;
     }
     case WM_NCLBUTTONDOWN: {
