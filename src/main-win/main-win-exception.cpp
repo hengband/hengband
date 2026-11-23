@@ -18,9 +18,9 @@ void handle_unexpected_exception(const std::exception &e)
 
     std::string msg = e.what();
 #ifdef JP
-    // 例外メッセージがUTF-8の場合一旦SJISに変換する(SJISの場合はそのまま)
-    const auto msg_len = guess_convert_to_system_encoding(msg.data(), msg.size());
-    msg.erase(msg_len);
+    // 例外メッセージ (UTF-8 など) を内部の文字コードに変換する (内部の文字コードとして読めればそのまま)。
+    // 変換で長くなることがあるので、std::string で受ける形を使う
+    msg = guess_convert_to_system_encoding(msg);
 #endif
 
     const auto first_line = msg.substr(0, msg.find('\n'));

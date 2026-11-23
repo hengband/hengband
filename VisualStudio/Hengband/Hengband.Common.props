@@ -26,7 +26,7 @@
       <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
       <DisableAnalyzeExternal>true</DisableAnalyzeExternal>
 
-      <!-- JP;SJIS (UTF-8 の構成では JP;UTF8);WORLD_SCORE は日本語版のみ、WIN_DEBUG はデバッグ構成のみ -->
+      <!-- JP;UTF8 (Shift_JIS の構成では JP;SJIS);WORLD_SCORE は日本語版のみ、WIN_DEBUG はデバッグ構成のみ -->
       <PreprocessorDefinitions Condition="'$(HengbandDebugBuild)'=='true' and '$(HengbandJapanese)'=='true'">_CRT_SECURE_NO_WARNINGS;HAVE_STDINT_H;JP;$(HengbandJapaneseEncoding);WORLD_SCORE;WIN_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(HengbandDebugBuild)'=='true' and '$(HengbandJapanese)'!='true'">_CRT_SECURE_NO_WARNINGS;HAVE_STDINT_H;WIN_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(HengbandDebugBuild)'!='true' and '$(HengbandJapanese)'=='true'">_CRT_SECURE_NO_WARNINGS;HAVE_STDINT_H;JP;$(HengbandJapaneseEncoding);WORLD_SCORE;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>

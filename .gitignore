@@ -26,7 +26,14 @@ Hengband.exe.lastcodeanalysissucceeded
 [Ee]nglish-[Dd]ebug/
 [Ee]nglish-[Rr]elease/
 
-# UTF-8 internal encoding build result by Visual Studio (/p:HengbandUtf8Internal=true)
+# Shift_JIS internal encoding build result by Visual Studio (/p:HengbandUtf8Internal=false)
+[Dd]ebug-SJIS/
+[Rr]elease-SJIS/
+Hengband-SJIS.exe
+Hengband-SJIS.exe.lastcodeanalysissucceeded
+Hengband-SJIS.INI
+
+# Former UTF-8 internal encoding build result by Visual Studio (before UTF-8 became the default)
 [Dd]ebug-UTF8/
 [Rr]elease-UTF8/
 Hengband-UTF8.exe

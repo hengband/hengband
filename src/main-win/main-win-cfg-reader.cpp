@@ -96,7 +96,7 @@ CfgData CfgReader::read_sections(std::initializer_list<cfg_section> sections) co
             }
 
 #ifdef JP
-            // .cfg (UTF-8) to Shift-JIS
+            // .cfg (UTF-8) を内部の文字コードに変換する
             guess_convert_to_system_encoding(buf, MAIN_WIN_MAX_PATH);
 #endif
             char *tokens[SAMPLE_MAX]{};
