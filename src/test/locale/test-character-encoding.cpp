@@ -326,6 +326,9 @@ TEST_CASE("legacy_to_sys converts Shift_JIS half-width katakana into UTF-8")
 TEST_CASE("legacy_to_sys converts EUC-JP half-width katakana into UTF-8")
 {
     CHECK(legacy_to_sys("\x8e\xb1\x8e\xb2\x8e\xb3"sv, CharacterEncoding::EUC_JP) == HALFWIDTH_KATAKANA_UTF8);
+
+    // 半角カナの範囲の両端 (8E A1 の「｡」と 8E DF の「ﾟ」)
+    CHECK(legacy_to_sys("\x8e\xa1\x8e\xdf"sv, CharacterEncoding::EUC_JP) == "\xef\xbd\xa1\xef\xbe\x9f"sv);
 }
 
 TEST_CASE("legacy_to_sys fails on a string broken in the given encoding")
@@ -387,6 +390,24 @@ TEST_CASE("legacy_to_sys_replacing_invalid replaces bytes which cannot be read w
     CHECK(legacy_to_sys_replacing_invalid(cat("\x8f", "a", NIHON_EUC), CharacterEncoding::EUC_JP) == cat("?a", NIHON_SYS));
     CHECK(legacy_to_sys_replacing_invalid(cat("\x80", NIHON_SJIS), CharacterEncoding::SHIFT_JIS) == cat("?", NIHON_SYS));
     CHECK(legacy_to_sys_replacing_invalid(cat(NIHON_EUC, "\xc6:"), CharacterEncoding::EUC_JP) == cat(NIHON_SYS, "?:"));
+    CHECK(legacy_to_sys_replacing_invalid("\x8f\xb0:"sv, CharacterEncoding::EUC_JP) == "??:");
+
+    // 8E の後ろが半角カナ (A1-DF) でなければ 8E だけを読めないバイトとし、後ろの 2 バイト (E0 A1 の「燹」) は文字として読む
+    CHECK(legacy_to_sys_replacing_invalid("\x8e\xe0\xa1:"sv, CharacterEncoding::EUC_JP) == "?\xe7\x87\xb9:"sv);
+
+    // 割り当ての無い 2 バイト (A9 B0) は先頭の 1 バイトだけを読めないバイトとし、次のバイトから読み直す (B0 A1 の「亜」)
+    CHECK(legacy_to_sys_replacing_invalid("\xa9\xb0\xa1:"sv, CharacterEncoding::EUC_JP) == "?\xe4\xba\x9c:"sv);
+
+    // 長い文字列も、途中で区切って調べた境界で文字を取り違えずに変換する
+    std::string long_euc;
+    std::string long_sys;
+    for (auto i = 0; i < 300; i++) {
+        long_euc.append(cat("a", NIHON_EUC));
+        long_sys.append(cat("a", NIHON_SYS));
+    }
+
+    CHECK(legacy_to_sys(long_euc, CharacterEncoding::EUC_JP) == long_sys);
+    CHECK(legacy_to_sys_replacing_invalid(cat(long_euc, "\xc6:"), CharacterEncoding::EUC_JP) == cat(long_sys, "?:"));
 
 #ifdef _WIN32
     // Windows の 20932 は JIS X 0212 の文字 (8F B0 A1 の「丂」) を読めないので、3 バイトを 1 つの '?' にする
