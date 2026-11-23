@@ -12,28 +12,30 @@
 #define NOMINMAX
 #include <windows.h>
 
+constexpr UINT SHIFT_JIS_CODE_PAGE = 932; //!< Shift_JIS (CP932) のコードページ
+
 //! 内部の文字コードのコードページ (内部の文字コードを UTF-8 にした構成では UTF-8、ほかは CP932)
 #ifdef UTF8
 constexpr UINT SYSTEM_CODE_PAGE = CP_UTF8;
 #else
-constexpr UINT SYSTEM_CODE_PAGE = 932;
+constexpr UINT SYSTEM_CODE_PAGE = SHIFT_JIS_CODE_PAGE;
 #endif
 
 /*!
- * @brief マルチバイト文字列(内部の文字コード)をワイド文字列へ変換するクラス
+ * @brief マルチバイト文字列(既定では内部の文字コード)をワイド文字列へ変換するクラス
  */
 class to_wchar {
 public:
-    to_wchar(std::string_view src)
+    explicit to_wchar(std::string_view src, UINT code_page = SYSTEM_CODE_PAGE, DWORD flags = 0)
     {
         if (src.empty()) {
             return;
         }
 
-        const auto size = ::MultiByteToWideChar(SYSTEM_CODE_PAGE, 0, src.data(), src.length(), NULL, 0);
+        const auto size = ::MultiByteToWideChar(code_page, flags, src.data(), src.length(), NULL, 0);
         if (size > 0) {
             this->buf = std::vector<WCHAR>(size + 1);
-            if (::MultiByteToWideChar(SYSTEM_CODE_PAGE, 0, src.data(), src.length(), this->buf->data(), this->buf->size()) == 0) {
+            if (::MultiByteToWideChar(code_page, flags, src.data(), src.length(), this->buf->data(), this->buf->size()) == 0) {
                 // fail
                 this->buf = tl::nullopt;
             }

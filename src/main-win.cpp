@@ -84,6 +84,7 @@
 #include "io/screen-util.h"
 #include "io/signal-handlers.h"
 #include "io/write-diary.h"
+#include "locale/multibyte-char.h"
 #include "main-win/commandline-win.h"
 #include "main-win/graphics-win.h"
 #include "main-win/main-win-bg.h"
@@ -125,12 +126,18 @@
 #include <commdlg.h>
 #include <cstdio>
 #include <cstdlib>
+#include <cstring>
 #include <direct.h>
+#include <filesystem>
 #include <fmt/format.h>
+#include <fstream>
+#include <iterator>
 #include <locale>
 #include <map>
 #include <string>
 #include <string_view>
+#include <system_error>
+#include <utility>
 #include <vector>
 
 #pragma comment(lib, "Msimg32.lib")
@@ -390,12 +397,23 @@ static void save_prefs_aux(int i)
     }
 }
 
+#ifdef UTF8
+//! ini を UTF-16LE にできたか。できなければ、BOM の無い ini に UTF-8 を書き込んで CP932 と混ぜないよう、設定を保存しない
+static bool is_ini_utf16 = false;
+#endif
+
 /*!
  * @brief Write the "prefs"
  * We assume that the windows have all been initialized
  */
 static void save_prefs()
 {
+#ifdef UTF8
+    if (!is_ini_utf16) {
+        return;
+    }
+
+#endif
     const auto &str_ini_file = path_ini_file.string();
     const auto *ini_file = str_ini_file.data();
     char buf[128];
@@ -450,6 +468,82 @@ static BOOL CALLBACK monitor_enum_procedure([[maybe_unused]] HMONITOR hMon, [[ma
     *result = true;
     return false;
 }
+
+#ifdef UTF8
+/*!
+ * @brief ini ファイルを UTF-16LE (BOM 付き) にする
+ * @param path ini ファイルのパス
+ * @details 内部の文字コードが UTF-8 の構成は、マニフェストで ANSI のコードページを UTF-8 にしているので、
+ * A 版のプロファイルの API は BOM の無い ini の中身も UTF-8 として読み書きする。
+ * そのままでは、旧版や Shift_JIS の構成が CP932 で書いた ini (フォント名など) を読めず、UTF-8 で書いた ini を旧版で読めない。
+ * UTF-16LE の ini なら、A 版の API は ini の中身とプロセスの ANSI のコードページの間で変換するので、どちらの構成でも読み書きできる。
+ * そこで、ini が無ければ BOM だけの ini を作り、BOM の無い ini は UTF-16LE に一度だけ変換する。
+ * UTF-8 の BOM の付いた ini (エディタで UTF-8 で保存したもの) は UTF-8 として、BOM の無い ini は CP932 として読む
+ * (旧版の日本語版は、ANSI のコードページが CP932 の日本語の Windows を前提にしていた)。
+ * BOM の無い ini を UTF-8 として読めるかで決めないのは、CP932 の半角カナの並び (「ﾃｩ」の C3 A9 など) が UTF-8 としても読めるため。
+ * 読めないバイトのある ini は、置き換えて元のバイト列を失わないよう、変換せずに残す (MB_ERR_INVALID_CHARS)。
+ * 変換に失敗したときに設定を失わないよう、一時ファイルに書いてから置き換える。
+ * @return ini が UTF-16LE になっていれば true。読めない・変換できないなどで UTF-16LE にできなければ false
+ */
+static bool prepare_utf16_ini_file(const std::filesystem::path &path)
+{
+    constexpr std::string_view utf16le_bom = "\xff\xfe";
+    constexpr std::string_view utf16be_bom = "\xfe\xff";
+    constexpr std::string_view utf8_bom = "\xef\xbb\xbf";
+    std::error_code ec;
+    std::string bytes;
+    if (std::filesystem::exists(path, ec)) {
+        // ini があっても読めなければ (ほかのプロセスが開いているなど)、設定を消さないよう何もしない
+        std::ifstream ifs(path, std::ios::binary);
+        if (!ifs) {
+            return false;
+        }
+
+        bytes.assign(std::istreambuf_iterator<char>(ifs), {});
+        if (ifs.bad()) {
+            return false;
+        }
+    } else if (ec) {
+        return false;
+    }
+
+    if (bytes.starts_with(utf16le_bom)) {
+        return true;
+    }
+
+    // UTF-16BE の ini はエディタで保存したもので、プロファイルの API では読めないが、読み替えずに残す
+    if (bytes.starts_with(utf16be_bom)) {
+        return false;
+    }
+
+    const auto is_utf8 = bytes.starts_with(utf8_bom);
+    const auto text = std::string_view(bytes).substr(is_utf8 ? utf8_bom.length() : 0);
+    // 読めないバイトを置き換えて元の ini を上書きしないよう、読めないバイトがあれば変換しない
+    to_wchar wide_text(text, is_utf8 ? CP_UTF8 : SHIFT_JIS_CODE_PAGE, MB_ERR_INVALID_CHARS);
+    if (!text.empty() && (wide_text.wc_str() == nullptr)) {
+        return false;
+    }
+
+    const std::wstring_view wide(text.empty() ? L"" : wide_text.wc_str());
+    auto tmp_path = path;
+    tmp_path += L".tmp";
+    std::ofstream ofs(tmp_path, std::ios::binary | std::ios::trunc);
+    ofs.write(utf16le_bom.data(), utf16le_bom.length());
+    ofs.write(reinterpret_cast<const char *>(wide.data()), wide.length() * sizeof(wchar_t));
+    ofs.close();
+    if (!ofs) {
+        std::filesystem::remove(tmp_path, ec);
+        return false;
+    }
+
+    if (!MoveFileExW(tmp_path.c_str(), path.c_str(), MOVEFILE_REPLACE_EXISTING)) {
+        std::filesystem::remove(tmp_path, ec);
+        return false;
+    }
+
+    return true;
+}
+#endif
 
 /*!
  * @brief Load the "prefs" for a single term
@@ -509,6 +603,9 @@ static void load_prefs_aux(int i)
  */
 static void load_prefs()
 {
+#ifdef UTF8
+    is_ini_utf16 = prepare_utf16_ini_file(path_ini_file);
+#endif
     const auto &str_ini_file = path_ini_file.string();
     const auto *ini_file = str_ini_file.data();
     arg_graphics = (byte)GetPrivateProfileIntA("Angband", "Graphics", enum2i(graphics_mode::GRAPHICS_NONE), ini_file);
@@ -1157,61 +1254,47 @@ static errr term_text_win(int x, int y, int n, TERM_COLOR a, concptr s)
     rc.top += ((td->tile_hgt - td->font_hgt) / 2);
     rc.bottom = rc.top + td->font_hgt;
 
-    for (int i = 0; i < n; i++) {
-#ifdef JP
-        if (use_bigtile && *(s + i) == "■"[0] && *(s + i + 1) == "■"[1]) {
+    // s は n マスの文字を並べた文字列で、2 マスの文字 (多バイト文字) は文字全体が 1 度だけ現れる。
+    // 英語版と Shift_JIS の版では s は n バイトだが、UTF-8 の多バイト文字は 2〜4 バイトなので n バイト以上になる
+#ifdef UTF8
+    const std::string_view text(s);
+#else
+    const std::string_view text(s, n);
+#endif
+    for (size_t pos = 0; pos < text.length();) {
+        // z-term が文字列を 2 マスの文字に分けるとき (term_queue_chars()) と同じく、先頭バイトで文字の長さを決める (英語版では常に 1)
+        const auto ch = text.substr(pos, mb_char_length_at(text, pos));
+        pos += ch.length();
+        const auto is_wide = ch.length() > 1;
+        if (is_wide) {
             rc.right += td->font_wid;
+        }
+
+        if ((use_bigtile && (ch == "■")) || (ch.front() == 127)) {
             oldBrush = static_cast<HBRUSH>(SelectObject(hdc, myBrush));
             oldPen = static_cast<HPEN>(SelectObject(hdc, GetStockObject(NULL_PEN)));
             Rectangle(hdc, rc.left, rc.top, rc.right + 1, rc.bottom + 1);
             SelectObject(hdc, oldBrush);
             SelectObject(hdc, oldPen);
-            rc.right -= td->font_wid;
-            i++;
-            rc.left += 2 * td->tile_wid;
-            rc.right += 2 * td->tile_wid;
-        } else if (iskanji(*(s + i))) /* 2バイト文字 */
-        {
-            to_wchar wc({ s + i, 2 });
+        } else if (is_wide) {
+            to_wchar wc(ch);
             const auto *buf = wc.wc_str();
-            rc.right += td->font_wid;
             if (buf == NULL) {
-                ExtTextOutA(hdc, rc.left, rc.top, ETO_CLIPPED, &rc, s + i, 2, NULL);
+                ExtTextOutA(hdc, rc.left, rc.top, ETO_CLIPPED, &rc, ch.data(), static_cast<UINT>(ch.length()), NULL);
             } else {
                 ExtTextOutW(hdc, rc.left, rc.top, ETO_CLIPPED, &rc, buf, wcslen(buf), NULL);
             }
+        } else {
+            ExtTextOutA(hdc, rc.left, rc.top, ETO_CLIPPED, &rc, ch.data(), 1, NULL);
+        }
+
+        if (is_wide) {
             rc.right -= td->font_wid;
-            i++;
-            rc.left += 2 * td->tile_wid;
-            rc.right += 2 * td->tile_wid;
-        } else if (*(s + i) == 127) {
-            oldBrush = static_cast<HBRUSH>(SelectObject(hdc, myBrush));
-            oldPen = static_cast<HPEN>(SelectObject(hdc, GetStockObject(NULL_PEN)));
-            Rectangle(hdc, rc.left, rc.top, rc.right + 1, rc.bottom + 1);
-            SelectObject(hdc, oldBrush);
-            SelectObject(hdc, oldPen);
-            rc.left += td->tile_wid;
-            rc.right += td->tile_wid;
-        } else {
-            ExtTextOutA(hdc, rc.left, rc.top, ETO_CLIPPED, &rc, s + i, 1, NULL);
-            rc.left += td->tile_wid;
-            rc.right += td->tile_wid;
         }
-#else
-        if (*(s + i) == 127) {
-            oldBrush = static_cast<HBRUSH>(SelectObject(hdc, myBrush));
-            oldPen = static_cast<HPEN>(SelectObject(hdc, GetStockObject(NULL_PEN)));
-            Rectangle(hdc, rc.left, rc.top, rc.right + 1, rc.bottom + 1);
-            SelectObject(hdc, oldBrush);
-            SelectObject(hdc, oldPen);
-            rc.left += td->tile_wid;
-            rc.right += td->tile_wid;
-        } else {
-            ExtTextOutA(hdc, rc.left, rc.top, ETO_CLIPPED, &rc, s + i, 1, NULL);
-            rc.left += td->tile_wid;
-            rc.right += td->tile_wid;
-        }
-#endif
+
+        const auto cells = is_wide ? 2 : 1;
+        rc.left += cells * td->tile_wid;
+        rc.right += cells * td->tile_wid;
     }
 
     rc.left = rc_start.left;
@@ -2396,6 +2479,46 @@ static bool handle_window_resize(term_data *td, UINT uMsg, WPARAM wParam, LPARAM
 }
 
 /*!
+ * @brief WM_CHAR で受け取った文字を、内部の文字コードにしてキー入力に積む
+ * @param wc 受け取った文字 (UTF-16 の 1 単位)
+ * @details 内部の文字コードが UTF-8 の構成では、サロゲートペアの文字 (絵文字など) が上位と下位の 2 回の WM_CHAR に分かれて届く。
+ * 上位サロゲートを覚えておき、続く下位サロゲートと合わせて変換する (片方だけでは UTF-8 にできない)。
+ * Shift_JIS の構成では、サロゲートペアの文字はどのみち変換できないので、これまでどおり 1 単位ずつ変換する。
+ * キーダウンで処理したキーの WM_CHAR (term_no_press) は捨てる。
+ */
+static void keypress_wm_char(WCHAR wc)
+{
+#ifdef UTF8
+    // 覚えていた上位サロゲートは、この文字が対になる下位サロゲートでなければ捨てる
+    static WCHAR high_surrogate = L'\0';
+    const auto prev_high_surrogate = std::exchange(high_surrogate, L'\0');
+#endif
+    if (term_no_press) {
+        term_no_press = false;
+        return;
+    }
+
+#ifdef UTF8
+    if (IS_HIGH_SURROGATE(wc)) {
+        high_surrogate = wc;
+        return;
+    }
+
+    if (IS_LOW_SURROGATE(wc)) {
+        // 対になる上位サロゲートの無い下位サロゲートは UTF-8 にできない (U+FFFD になる) ので捨てる
+        if (prev_high_surrogate != L'\0') {
+            const WCHAR pair[] = { prev_high_surrogate, wc, L'\0' };
+            term_keypress(to_multibyte(pair).c_str());
+        }
+
+        return;
+    }
+#endif
+    const WCHAR str[] = { wc, L'\0' };
+    term_keypress(to_multibyte(str).c_str());
+}
+
+/*!
  * @brief メインウインドウ用ウインドウプロシージャ
  */
 static LRESULT PASCAL angband_window_procedure(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
@@ -2446,12 +2569,7 @@ static LRESULT PASCAL angband_window_procedure(HWND hWnd, UINT uMsg, WPARAM wPar
     }
     case WM_CHAR: {
         // wParam is WCHAR because using RegisterClassW
-        if (term_no_press) {
-            term_no_press = false;
-        } else {
-            WCHAR wc[2] = { (WCHAR)wParam, '\0' };
-            term_keypress(to_multibyte(wc).c_str());
-        }
+        keypress_wm_char(static_cast<WCHAR>(wParam));
         return 0;
     }
     case WM_LBUTTONDOWN: {
@@ -2477,19 +2595,9 @@ static LRESULT PASCAL angband_window_procedure(HWND hWnd, UINT uMsg, WPARAM wPar
         mouse_down = false;
         paint_rect = false;
 
-#ifdef JP
-        int sz = (dx + 3) * dy;
-#else
-        int sz = (dx + 2) * dy;
-#endif
-        const auto window_size = GlobalAlloc(GHND, sz + 1);
-        if (window_size == NULL) {
-            return 0;
-        }
-
-        auto global_lock = static_cast<LPSTR>(GlobalLock(window_size));
-        for (auto i = 0; (i < dy) && (global_lock != NULL); i++) {
-            // 選択範囲の端で分断された全角文字は空白になるので、dx バイトになる
+        std::string text;
+        for (auto i = 0; i < dy; i++) {
+            // 選択範囲の端で分断された全角文字は空白になる
             std::string s;
             data[0].t.scr->append_text(ox, oy + i, dx, s);
 
@@ -2500,22 +2608,50 @@ static LRESULT PASCAL angband_window_procedure(HWND hWnd, UINT uMsg, WPARAM wPar
             }
 #endif
             for (const auto c : s) {
-                *global_lock++ = _((c == 127) ? '#' : c, c);
+                text.push_back(_((c == 127) ? '#' : c, c));
             }
             if (dy > 1) {
-                *global_lock++ = '\r';
-                *global_lock++ = '\n';
+                text.append("\r\n");
             }
         }
 
+#ifdef UTF8
+        // CF_TEXT はシステムのロケールのコードページ (日本語の Windows では CP932) で読まれるので、UTF-16 にして CF_UNICODETEXT で渡す
+        constexpr auto clipboard_format = CF_UNICODETEXT;
+        to_wchar wide_text(text);
+        if (wide_text.wc_str() == nullptr) {
+            // 変換できなければ、クリップボードの今の中身を消さずに残す
+            return 0;
+        }
+
+        const std::wstring_view clipboard_text(wide_text.wc_str());
+#else
+        constexpr auto clipboard_format = CF_TEXT;
+        const std::string_view clipboard_text(text);
+#endif
+        const auto clipboard_size = (clipboard_text.length() + 1) * sizeof(clipboard_text[0]);
+        const auto window_size = GlobalAlloc(GHND, clipboard_size);
+        if (window_size == NULL) {
+            return 0;
+        }
+
+        // 終端の NUL も写す。写せなければ、クリップボードの今の中身を消さずに残す
+        auto *global_lock = GlobalLock(window_size);
+        if (global_lock == NULL) {
+            GlobalFree(window_size);
+            return 0;
+        }
+
+        std::memcpy(global_lock, clipboard_text.data(), clipboard_size);
         GlobalUnlock(window_size);
+
         if (!OpenClipboard(hWnd)) {
             GlobalFree(window_size);
             return 0;
         }
 
         EmptyClipboard();
-        if (SetClipboardData(CF_TEXT, window_size) == NULL) {
+        if (SetClipboardData(clipboard_format, window_size) == NULL) {
             CloseClipboard();
             GlobalFree(window_size);
             return 0;
@@ -2691,12 +2827,7 @@ static LRESULT PASCAL AngbandListProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARA
     }
     case WM_CHAR: {
         // wParam is WCHAR because using RegisterClassW
-        if (term_no_press) {
-            term_no_press = false;
-        } else {
-            WCHAR wc[2] = { (WCHAR)wParam, '\0' };
-            term_keypress(to_multibyte(wc).c_str());
-        }
+        keypress_wm_char(static_cast<WCHAR>(wParam));
         return 0;
     }
     case WM_NCLBUTTONDOWN: {
@@ -2978,11 +3109,32 @@ static int run_headless_game()
  */
 static int WINAPI game_main(_In_ HINSTANCE hInst)
 {
+#ifdef UTF8
+    // C ランタイムのナローの文字列 (ctype・mbstowcs など) も内部の文字コードの UTF-8 にする (言語と地域は Shift_JIS の構成と同じく日本)
+    if (setlocale(LC_ALL, "ja_JP.UTF-8") == nullptr) {
+        setlocale(LC_ALL, ".UTF-8");
+    }
+#else
     setlocale(LC_ALL, "ja_JP");
+#endif
     hInstance = hInst;
     // コマンドライン引数の解釈中に出力し得る診断メッセージに名前を付けるため、
     // plog()/quit()を呼び得る処理より先に設定する
     program_name = VARIANT_NAME;
+#ifdef UTF8
+    // ANSI のコードページを UTF-8 にするマニフェストは Windows 10 1903 より前では効かず、
+    // ファイル名や A 版の API の文字列を取り違えるので、起動しない
+    if (GetACP() != CP_UTF8) {
+        if (is_headless_launch_requested()) {
+            attach_console();
+            quit("This version of Hengband requires Windows 10 version 1903 or later.");
+        }
+
+        constexpr auto mes = L"このバージョンの変愚蛮怒は Windows 10 バージョン 1903 以降で動きます。";
+        MessageBoxW(NULL, mes, L"エラー！", MB_ICONEXCLAMATION | MB_OK | MB_ICONSTOP);
+        return 1;
+    }
+#endif
     if (is_already_running()) {
         if (is_headless_launch_requested()) {
             // モーダルダイアログは非対話環境で応答不能のままハングするため、
