@@ -29,6 +29,9 @@ Hengband.exe.lastcodeanalysissucceeded
 # UTF-8 internal encoding build result by Visual Studio (/p:HengbandUtf8Internal=true)
 [Dd]ebug-UTF8/
 [Rr]elease-UTF8/
+Hengband-UTF8.exe
+Hengband-UTF8.exe.lastcodeanalysissucceeded
+Hengband-UTF8.INI
 
 # game data files auto generated
 Hengband.INI

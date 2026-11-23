@@ -80,12 +80,15 @@ $msbuild = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere
 
 - 英語版は `Configuration=English-Debug` などにする。特定のプロジェクトだけなら `/t:HengbandTest` などを足す
   （依存する `HengbandCore` も合わせてビルドされる）。
+- 内部の文字コードを UTF-8 にする移行中（#6140）は、日本語版の構成に `/p:HengbandUtf8Internal=true` を足すと
+  内部の文字コードが UTF-8 になる。中間ファイルとテストの出力先は `<構成>-UTF8`、exe はリポジトリのトップの
+  `Hengband-UTF8.exe`（ini は `Hengband-UTF8.INI`）で、既定の構成と混ざらない。移行を終えたら撤去する。
 - CI（`.github/workflows/build-test-with-msvc.yml`）は `-warnAsError /t:Rebuild` で `Release` と
   `English-Debug` をビルドする。差分ビルドでは変更のないファイルがコンパイルされず、前回の警告が出ないので、
   プッシュ前の最終確認は CI と同じく `-warnAsError /t:Rebuild` で行う。
-- `Hengband.exe` は全構成で同じパス（リポジトリのトップ）に出力されるため、構成を切り替えると差分ビルドで
-  リンクされず、前の構成の exe が残ることがある。構成を切り替えたら `Hengband.exe` を削除してからビルドする。
-- `Hengband.exe` を起動したままだとリンクが失敗する（出力ファイルを上書きできない）。ビルド前に終了させる。
+- `Hengband.exe`（UTF-8 の構成では `Hengband-UTF8.exe`）は全構成で同じパス（リポジトリのトップ）に出力されるため、
+  構成を切り替えると差分ビルドでリンクされず、前の構成の exe が残ることがある。構成を切り替えたら exe を削除してからビルドする。
+- exe を起動したままだとリンクが失敗する（出力ファイルを上書きできない）。ビルド前に終了させる。
 - Debug 構成はリンカの `LinkVerbose` が有効で、リンク時に大量のログが出る。結果だけ見たいときは
   `| Select-Object -Last 15` などで末尾に絞る。エラーの有無は `error` を含む行で判断する。
 
