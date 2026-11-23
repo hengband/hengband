@@ -126,6 +126,7 @@
 #include <commdlg.h>
 #include <cstdio>
 #include <cstdlib>
+#include <cstring>
 #include <direct.h>
 #include <filesystem>
 #include <fmt/format.h>
@@ -2594,19 +2595,9 @@ static LRESULT PASCAL angband_window_procedure(HWND hWnd, UINT uMsg, WPARAM wPar
         mouse_down = false;
         paint_rect = false;
 
-#ifdef JP
-        int sz = (dx + 3) * dy;
-#else
-        int sz = (dx + 2) * dy;
-#endif
-        const auto window_size = GlobalAlloc(GHND, sz + 1);
-        if (window_size == NULL) {
-            return 0;
-        }
-
-        auto global_lock = static_cast<LPSTR>(GlobalLock(window_size));
-        for (auto i = 0; (i < dy) && (global_lock != NULL); i++) {
-            // 選択範囲の端で分断された全角文字は空白になるので、dx バイトになる
+        std::string text;
+        for (auto i = 0; i < dy; i++) {
+            // 選択範囲の端で分断された全角文字は空白になる
             std::string s;
             data[0].t.scr->append_text(ox, oy + i, dx, s);
 
@@ -2617,22 +2608,50 @@ static LRESULT PASCAL angband_window_procedure(HWND hWnd, UINT uMsg, WPARAM wPar
             }
 #endif
             for (const auto c : s) {
-                *global_lock++ = _((c == 127) ? '#' : c, c);
+                text.push_back(_((c == 127) ? '#' : c, c));
             }
             if (dy > 1) {
-                *global_lock++ = '\r';
-                *global_lock++ = '\n';
+                text.append("\r\n");
             }
         }
 
+#ifdef UTF8
+        // CF_TEXT はシステムのロケールのコードページ (日本語の Windows では CP932) で読まれるので、UTF-16 にして CF_UNICODETEXT で渡す
+        constexpr auto clipboard_format = CF_UNICODETEXT;
+        to_wchar wide_text(text);
+        if (wide_text.wc_str() == nullptr) {
+            // 変換できなければ、クリップボードの今の中身を消さずに残す
+            return 0;
+        }
+
+        const std::wstring_view clipboard_text(wide_text.wc_str());
+#else
+        constexpr auto clipboard_format = CF_TEXT;
+        const std::string_view clipboard_text(text);
+#endif
+        const auto clipboard_size = (clipboard_text.length() + 1) * sizeof(clipboard_text[0]);
+        const auto window_size = GlobalAlloc(GHND, clipboard_size);
+        if (window_size == NULL) {
+            return 0;
+        }
+
+        // 終端の NUL も写す。写せなければ、クリップボードの今の中身を消さずに残す
+        auto *global_lock = GlobalLock(window_size);
+        if (global_lock == NULL) {
+            GlobalFree(window_size);
+            return 0;
+        }
+
+        std::memcpy(global_lock, clipboard_text.data(), clipboard_size);
         GlobalUnlock(window_size);
+
         if (!OpenClipboard(hWnd)) {
             GlobalFree(window_size);
             return 0;
         }
 
         EmptyClipboard();
-        if (SetClipboardData(CF_TEXT, window_size) == NULL) {
+        if (SetClipboardData(clipboard_format, window_size) == NULL) {
             CloseClipboard();
             GlobalFree(window_size);
             return 0;
