@@ -3109,11 +3109,32 @@ static int run_headless_game()
  */
 static int WINAPI game_main(_In_ HINSTANCE hInst)
 {
+#ifdef UTF8
+    // C ランタイムのナローの文字列 (ctype・mbstowcs など) も内部の文字コードの UTF-8 にする (言語と地域は Shift_JIS の構成と同じく日本)
+    if (setlocale(LC_ALL, "ja_JP.UTF-8") == nullptr) {
+        setlocale(LC_ALL, ".UTF-8");
+    }
+#else
     setlocale(LC_ALL, "ja_JP");
+#endif
     hInstance = hInst;
     // コマンドライン引数の解釈中に出力し得る診断メッセージに名前を付けるため、
     // plog()/quit()を呼び得る処理より先に設定する
     program_name = VARIANT_NAME;
+#ifdef UTF8
+    // ANSI のコードページを UTF-8 にするマニフェストは Windows 10 1903 より前では効かず、
+    // ファイル名や A 版の API の文字列を取り違えるので、起動しない
+    if (GetACP() != CP_UTF8) {
+        if (is_headless_launch_requested()) {
+            attach_console();
+            quit("This version of Hengband requires Windows 10 version 1903 or later.");
+        }
+
+        constexpr auto mes = L"このバージョンの変愚蛮怒は Windows 10 バージョン 1903 以降で動きます。";
+        MessageBoxW(NULL, mes, L"エラー！", MB_ICONEXCLAMATION | MB_OK | MB_ICONSTOP);
+        return 1;
+    }
+#endif
     if (is_already_running()) {
         if (is_headless_launch_requested()) {
             // モーダルダイアログは非対話環境で応答不能のままハングするため、
