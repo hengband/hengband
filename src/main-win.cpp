@@ -84,6 +84,7 @@
 #include "io/screen-util.h"
 #include "io/signal-handlers.h"
 #include "io/write-diary.h"
+#include "locale/multibyte-char.h"
 #include "main-win/commandline-win.h"
 #include "main-win/graphics-win.h"
 #include "main-win/main-win-bg.h"
@@ -1251,61 +1252,47 @@ static errr term_text_win(int x, int y, int n, TERM_COLOR a, concptr s)
     rc.top += ((td->tile_hgt - td->font_hgt) / 2);
     rc.bottom = rc.top + td->font_hgt;
 
-    for (int i = 0; i < n; i++) {
-#ifdef JP
-        if (use_bigtile && *(s + i) == "■"[0] && *(s + i + 1) == "■"[1]) {
+    // s は n マスの文字を並べた文字列で、2 マスの文字 (多バイト文字) は文字全体が 1 度だけ現れる。
+    // 英語版と Shift_JIS の版では s は n バイトだが、UTF-8 の多バイト文字は 2〜4 バイトなので n バイト以上になる
+#ifdef UTF8
+    const std::string_view text(s);
+#else
+    const std::string_view text(s, n);
+#endif
+    for (size_t pos = 0; pos < text.length();) {
+        // z-term が文字列を 2 マスの文字に分けるとき (term_queue_chars()) と同じく、先頭バイトで文字の長さを決める (英語版では常に 1)
+        const auto ch = text.substr(pos, mb_char_length_at(text, pos));
+        pos += ch.length();
+        const auto is_wide = ch.length() > 1;
+        if (is_wide) {
             rc.right += td->font_wid;
+        }
+
+        if ((use_bigtile && (ch == "■")) || (ch.front() == 127)) {
             oldBrush = static_cast<HBRUSH>(SelectObject(hdc, myBrush));
             oldPen = static_cast<HPEN>(SelectObject(hdc, GetStockObject(NULL_PEN)));
             Rectangle(hdc, rc.left, rc.top, rc.right + 1, rc.bottom + 1);
             SelectObject(hdc, oldBrush);
             SelectObject(hdc, oldPen);
-            rc.right -= td->font_wid;
-            i++;
-            rc.left += 2 * td->tile_wid;
-            rc.right += 2 * td->tile_wid;
-        } else if (iskanji(*(s + i))) /* 2バイト文字 */
-        {
-            to_wchar wc({ s + i, 2 });
+        } else if (is_wide) {
+            to_wchar wc(ch);
             const auto *buf = wc.wc_str();
-            rc.right += td->font_wid;
             if (buf == NULL) {
-                ExtTextOutA(hdc, rc.left, rc.top, ETO_CLIPPED, &rc, s + i, 2, NULL);
+                ExtTextOutA(hdc, rc.left, rc.top, ETO_CLIPPED, &rc, ch.data(), static_cast<UINT>(ch.length()), NULL);
             } else {
                 ExtTextOutW(hdc, rc.left, rc.top, ETO_CLIPPED, &rc, buf, wcslen(buf), NULL);
             }
+        } else {
+            ExtTextOutA(hdc, rc.left, rc.top, ETO_CLIPPED, &rc, ch.data(), 1, NULL);
+        }
+
+        if (is_wide) {
             rc.right -= td->font_wid;
-            i++;
-            rc.left += 2 * td->tile_wid;
-            rc.right += 2 * td->tile_wid;
-        } else if (*(s + i) == 127) {
-            oldBrush = static_cast<HBRUSH>(SelectObject(hdc, myBrush));
-            oldPen = static_cast<HPEN>(SelectObject(hdc, GetStockObject(NULL_PEN)));
-            Rectangle(hdc, rc.left, rc.top, rc.right + 1, rc.bottom + 1);
-            SelectObject(hdc, oldBrush);
-            SelectObject(hdc, oldPen);
-            rc.left += td->tile_wid;
-            rc.right += td->tile_wid;
-        } else {
-            ExtTextOutA(hdc, rc.left, rc.top, ETO_CLIPPED, &rc, s + i, 1, NULL);
-            rc.left += td->tile_wid;
-            rc.right += td->tile_wid;
         }
-#else
-        if (*(s + i) == 127) {
-            oldBrush = static_cast<HBRUSH>(SelectObject(hdc, myBrush));
-            oldPen = static_cast<HPEN>(SelectObject(hdc, GetStockObject(NULL_PEN)));
-            Rectangle(hdc, rc.left, rc.top, rc.right + 1, rc.bottom + 1);
-            SelectObject(hdc, oldBrush);
-            SelectObject(hdc, oldPen);
-            rc.left += td->tile_wid;
-            rc.right += td->tile_wid;
-        } else {
-            ExtTextOutA(hdc, rc.left, rc.top, ETO_CLIPPED, &rc, s + i, 1, NULL);
-            rc.left += td->tile_wid;
-            rc.right += td->tile_wid;
-        }
-#endif
+
+        const auto cells = is_wide ? 2 : 1;
+        rc.left += cells * td->tile_wid;
+        rc.right += cells * td->tile_wid;
     }
 
     rc.left = rc_start.left;
