@@ -176,15 +176,15 @@ PKG_PROG_PKG_CONFIG
 
 AC_ARG_ENABLE(japanese,
 [  --disable-japanese      build english version], [use_japanese=$enableval], [use_japanese=yes])
-dnl 内部の文字コードを UTF-8 にする移行のための仮の構成。日本語版だけで意味を持ち、移行を終えたら撤去する
+dnl 内部の文字コードを UTF-8 にする移行のための仮の構成。日本語版だけで意味を持ち、既定は UTF-8。移行を終えたら撤去する
 AC_ARG_ENABLE([utf8-internal],
-	AS_HELP_STRING([--enable-utf8-internal], [use UTF-8 instead of EUC-JP as the internal character encoding of the Japanese version (experimental)]),
-	[use_utf8_internal=$enableval], [use_utf8_internal=no])
+	AS_HELP_STRING([--disable-utf8-internal], [use EUC-JP instead of UTF-8 as the internal character encoding of the Japanese version (deprecated, to be removed)]),
+	[use_utf8_internal=$enableval], [use_utf8_internal=yes])
 dnl use_euc_literals は、文字列リテラルを EUC-JP に変換してビルドするか
 use_euc_literals=no
 if test "$use_japanese" != no; then
   AC_DEFINE(JP, 1, [Enable Japanese])
-  if test "$use_utf8_internal" = yes; then
+  if test "$use_utf8_internal" != no; then
     AC_DEFINE(UTF8, 1, [Use UTF-8 as the internal character encoding])
   else
     AC_DEFINE(EUC, 1, [Use Extended Unix Code])

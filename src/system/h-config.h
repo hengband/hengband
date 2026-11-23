@@ -19,9 +19,9 @@ constexpr auto MAINTAINER = "echizen@users.sourceforge.jp";
 
 /*
  * @details
- * WindowsはShift-JIS (ひらがなや漢字が全て2バイト/文字)で定義されていることとする.
- * Unix系はEUC (ひらがなや漢字が全て2バイト/文字)で定義されていることとする.
- * これらは、このゲームがUTF系の可変長文字列に非対応であるためである.
+ * 日本語版の内部の文字コードは、Unix系はUTF-8 (UTF8)、WindowsはShift-JIS (SJIS) で定義されていることとする.
+ * 内部の文字コードを UTF-8 にする移行中 (#6140) は、Unix系の --disable-utf8-internal で EUC-JP (EUC)、
+ * Windows の UTF-8 の構成で UTF-8 (UTF8) にもなる.
  * Unix系は、マルチユーザ対応としてSET_UIDを定義する.
  * フォントやデフォルトのlibパス等も定義する.
  * HAVE_CONFIG_Hは、autoconfによりコンパイラスイッチ「-DHAVE_CONFIG_H」が付加される.

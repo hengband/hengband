@@ -80,7 +80,7 @@ EXCLUDED_PREFIXES = ("src/main-", "src/external-lib/")
 
 # configure の代わりに、解析に要るものだけを定義する
 COMPILE_ARGS = ["-std=c++20", "-DHAVE_SYS_TIME_H", "-Isrc", "-isystem", "src/external-lib/include"]
-JAPANESE_ARGS = ("-DJP", "-DEUC")
+JAPANESE_ARGS = ("-DJP", "-DUTF8")
 ENGLISH_ARGS = ()
 
 # 取り込む .cpp が無いヘッダを単独で解析するときの引数

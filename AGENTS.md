@@ -24,8 +24,11 @@ CI は両方でビルドとテストを行う。片方の環境でしか作業�
 Ubuntu/Debian の最小構成は次のとおり（X11 版には `libx11-dev` など、TrueType フォントを使うには `libxft-dev` も要る）。
 
 ```bash
-sudo apt-get install build-essential autoconf automake pkg-config libncurses-dev libcurl4-openssl-dev nkf
+sudo apt-get install build-essential autoconf automake pkg-config libncurses-dev libcurl4-openssl-dev
 ```
+
+内部の文字コードを EUC-JP にした日本語版（後述の `--disable-utf8-internal`）を、`-fexec-charset=euc-jp-ms` を使えない
+コンパイラ（clang など）でビルドするときは `nkf` も要る。
 
 ビルド手順:
 
@@ -38,12 +41,12 @@ make -j$(getconf _NPROCESSORS_ONLN)          # src/hengband が生成される
 - **`make` には必ず `-j` で並列数を付ける。** `.cpp` が 900 を超え、並列化しないと非常に時間がかかる。
   `getconf _NPROCESSORS_ONLN` は Linux でも macOS でも CPU の数を返す（macOS には `nproc` が無い）。
 - `CXXFLAGS` には最低限 `-Wall -Wextra` を付ける。プリコンパイル済みヘッダは `--disable-pch` で無効にできる。
-- 日本語版は `-fexec-charset=euc-jp-ms` で文字列リテラルを EUC-JP に変換してビルドされる（ソースは UTF-8。
-  Windows 版は SJIS）。
-- 内部の文字コードを UTF-8 にする移行中（#6140）は、日本語版に `--enable-utf8-internal` を足すと内部の文字コードが
-  UTF-8 になる（`UTF8` が定義され、`EUC` は定義されない）。CI もこの構成でビルドとテストを行うので、文字コードに
-  関わるコード（`#ifdef EUC`・`#ifdef SJIS`、マルチバイト文字の処理、テストの期待するバイト列）を変えたときは
-  この構成でも確かめる。移行を終えたら撤去する。
+- 日本語版の内部の文字コードは UTF-8 で（`JP` と `UTF8` が定義される）、文字列リテラルはソースの UTF-8 のままビルドされる
+  （Windows 版は SJIS）。
+- 内部の文字コードを UTF-8 にする移行中（#6140）は、日本語版に `--disable-utf8-internal` を足すと、これまでの EUC-JP の構成になる
+  （`EUC` が定義され、`UTF8` は定義されない。文字列リテラルは `-fexec-charset=euc-jp-ms` か nkf で EUC-JP に変換する）。
+  CI もこの構成でビルドとテストを行うので、文字コードに関わるコード（`#ifdef EUC`・`#ifdef SJIS`、マルチバイト文字の処理、
+  テストの期待するバイト列）を変えたときはこの構成でも確かめる。移行を終えたら撤去する。
 
 ccache を使うと日英の切り替えが速くなる。`CXX` は configure 時に `src/Makefile` へ焼き込まれるため、
 **`make` ではなく `configure` に渡す**（configure を回し直すたびに必要）。

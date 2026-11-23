@@ -4,9 +4,8 @@
  * @brief 文字列を扱うテストで共通に使うヘルパーと、2バイト文字のテストデータ
  *
  * 2バイト文字のテストデータは必ず16進エスケープで書くこと。
- * 日本語版のビルドはソースの文字列リテラルを変換する (autotoolsは gcc-wrap が nkf で
- * EUC-JPへ、MSVCは /execution-charset:shift-jis でShift_JISへ) が、英語版と、内部の文字コードを
- * UTF-8 にする構成 (--enable-utf8-internal) では変換されない。
+ * ソースの文字列リテラルを変換するのは、autotools の --disable-utf8-internal (-fexec-charset か gcc-wrap の nkf で
+ * EUC-JPへ) と、MSVC の Shift_JIS の日本語版 (/execution-charset:shift-jis で Shift_JISへ) だけで、ほかの構成では変換されない。
  * ソースに日本語をそのまま書くと、ビルド構成によってバイト列が変わってしまう。
  */
 

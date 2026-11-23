@@ -72,7 +72,7 @@ const tl::optional<std::string> &TempFile::get_error_message() const
 }
 
 /*!
- * @details 日本語版ならばシフトJIS or EUC-JPでエンコードされた文字列しか書き込まないはずなので、再び読み込む時は何もしない.
+ * @details 内部の文字コードでエンコードされた文字列しか書き込まないはずなので、再び読み込む時は何もしない.
  */
 std::vector<std::string> TempFile::read_all()
 {

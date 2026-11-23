@@ -941,7 +941,7 @@ static tl::optional<std::pair<int, int>> measure_fontset_vertical_extents(XFontS
     // 日本語版は ASCII・漢字・半角カナに加え、ロケールによって別のフォントで描かれうる文字も測る。
     // 日本でだけ使う漢字 (込) は KSC5601・GB2312 のフォントに無く、ギリシャ文字・キリル文字は
     // en_US.UTF-8 などでは ISO8859-7・KOI8-R などのフォントで描かれる。
-    // -fexec-charset の無いコンパイラではソースを EUC-JP に変換してからビルドするので、
+    // --disable-utf8-internal の構成を -fexec-charset の無いコンパイラでビルドするときはソースを EUC-JP に変換するので、
     // ASCII 以外の文字はユニバーサル文字名で書く ("A漢込αЖｱ")
     constexpr std::u8string_view sample = _(u8"A\u6F22\u8FBC\u03B1\u0416\uFF71", u8"A");
 
