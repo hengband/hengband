@@ -15,9 +15,8 @@
       <ExceptionHandling>SyncCThrow</ExceptionHandling>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <ForcedIncludeFiles>stdafx.h</ForcedIncludeFiles>
-      <!-- 日本語版は文字列リテラルを UTF-8 のままにする (Issue #6140)。英語版はこれまでどおり Shift_JIS で変換する -->
-      <AdditionalOptions Condition="'$(HengbandJapanese)'=='true'">/source-charset:utf-8 /execution-charset:utf-8 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalOptions Condition="'$(HengbandJapanese)'!='true'">/source-charset:utf-8 /execution-charset:shift-jis %(AdditionalOptions)</AdditionalOptions>
+      <!-- 文字列リテラルは日英とも UTF-8 のままにする (Issue #6140) -->
+      <AdditionalOptions>/source-charset:utf-8 /execution-charset:utf-8 %(AdditionalOptions)</AdditionalOptions>
       <StructMemberAlignment>16Bytes</StructMemberAlignment>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <WarningLevel>EnableAllWarnings</WarningLevel>

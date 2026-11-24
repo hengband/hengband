@@ -15,6 +15,8 @@
 constexpr UINT SHIFT_JIS_CODE_PAGE = 932; //!< Shift_JIS (CP932) のコードページ
 
 //! 内部の文字コードのコードページ (日本語版の内部の文字コードは UTF-8、英語版は CP932 として扱う)
+//! 英語版の文字列は ASCII だけを前提にしている。文字列リテラルは日英とも UTF-8 でビルドするので、
+//! 英語版で表示する文字列に非 ASCII の文字を書くと、UTF-8 のバイト列を CP932 として変換して化ける
 #ifdef JP
 constexpr UINT SYSTEM_CODE_PAGE = CP_UTF8;
 #else

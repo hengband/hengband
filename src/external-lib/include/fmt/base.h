@@ -1617,25 +1617,12 @@ FMT_CONSTEXPR FMT_INLINE auto parse_replacement_field(const Char* begin,
   return begin + 1;
 }
 
-FMT_CONSTEXPR bool is_sjis_multibyte_char(char c) {
-  const auto ch = static_cast<unsigned char>(c);
-  return (0x81 <= ch && ch <= 0x9f) || (0xe0 <= ch && ch <= 0xfc);
-}
-
 template <typename Char, typename Handler>
 FMT_CONSTEXPR void parse_format_string(basic_string_view<Char> fmt,
                                        Handler&& handler) {
   auto begin = fmt.data(), end = begin + fmt.size();
   auto p = begin;
   while (p != end) {
-    // 英語版の Windows 版は文字列リテラルを Shift_JIS でビルドするので、使わない日本語の書式も Shift_JIS になる。
-    // 「マ」(83 7D) のように 2 バイト目が '{' '}' と同じ値の文字を書式の区切りと取り違えないよう読み飛ばす
-#if defined(_WIN32) && !defined(JP)
-    if (is_sjis_multibyte_char(*p)) {
-      p += 2;
-      continue;
-    }
-#endif
     auto c = *p++;
     if (c == '{') {
       handler.on_text(begin, p - 1);
