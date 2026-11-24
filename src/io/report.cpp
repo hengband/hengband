@@ -52,12 +52,6 @@ constexpr auto SCORE_POST_URL = "https://score.hengband.net/scores"; /*!< スコ
 static constexpr auto get_score_content_type()
 {
 #ifdef JP
-#ifdef SJIS
-    return "text/plain; charset=SHIFT_JIS";
-#endif
-#ifdef EUC
-    return "text/plain; charset=EUC-JP";
-#endif
 #ifdef UTF8
     return "text/plain; charset=UTF-8";
 #endif

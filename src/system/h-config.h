@@ -24,23 +24,15 @@ constexpr auto MAINTAINER = "echizen@users.sourceforge.jp";
  * フォントやデフォルトのlibパス等も定義する.
  * HAVE_CONFIG_Hは、autoconfによりコンパイラスイッチ「-DHAVE_CONFIG_H」が付加される.
  */
+#if defined(JP) && !defined(UTF8)
+#error Oops! Please define "UTF8" for kanji-code of your system.
+#endif
 #ifdef JP
 #define iseuckanji(x) (((unsigned char)(x) >= 0xa1 && (unsigned char)(x) <= 0xfe) || (unsigned char)(x) == 0x8e)
 #endif
 #undef PATH_SEP
 #ifdef _WIN32
   #define PATH_SEP "\\"
-  #ifdef JP
-    #ifdef SJIS
-      #define iskanji(x) ((0x81 <= (unsigned char)(x) && (unsigned char)(x) <= 0x9f) || (0xe0 <= (unsigned char)(x) && (unsigned char)(x) <= 0xfc))
-      #define iskana(x) (((unsigned char)(x) >= 0xA0) && ((unsigned char)(x) <= 0xDF))
-    #elif defined(UTF8)
-      /* UTF-8 では文字のバイト数を multibyte-char.h の関数で求めるので、iskanji() は定義しない */
-      #define iskana(x) (0)
-    #else
-      #error Oops! Please define "SJIS" or "UTF8" for kanji-code of your system.
-    #endif
-  #endif
 #else
   #define PATH_SEP "/"
   #define SET_UID
@@ -77,18 +69,6 @@ constexpr auto MAINTAINER = "echizen@users.sourceforge.jp";
     #else
       #define DEFAULT_X11_FONT_TRUETYPE "monospace-24:lang=en:spacing=90"
       #define DEFAULT_X11_FONT_TRUETYPE_SUB "sans-serif-16:lang=en"
-    #endif
-  #endif
-  
-  #ifdef JP
-    #ifdef EUC
-      #define iskanji(x) (iseuckanji(x))
-      #define iskana(x) (0)
-    #elif defined(UTF8)
-      /* UTF-8 では文字のバイト数を multibyte-char.h の関数で求めるので、iskanji() は定義しない */
-      #define iskana(x) (0)
-    #else
-      #error Oops! Please define "EUC" or "UTF8" for kanji-code of your system.
     #endif
   #endif
   

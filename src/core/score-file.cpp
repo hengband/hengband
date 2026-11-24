@@ -2,7 +2,6 @@
 #include "io/files-util.h"
 #include "io/uid-checker.h"
 #include "locale/character-encoding.h"
-#include "locale/multibyte-char.h"
 #include "player-info/class-types.h"
 #include "player-info/race-types.h"
 #include "player/player-personality-types.h"
@@ -217,34 +216,6 @@ std::string migrate_date(std::string_view date)
     return fmt::format("{}-{}-{}", trimmed.substr(1, 4), trimmed.substr(5, 2), trimmed.substr(7, 2));
 }
 
-#if defined(JP) && !defined(UTF8)
-/*!
- * @brief 文字列のうち、内部の文字コードとして欠けた文字や不正な並びを含まずに読める長さを返す
- * @param str 文字列
- * @return 文字列の長さ。末尾の文字だけが途中で切れているときは、その文字の前までの長さ。
- * 途中に不正な並びがあるときは tl::nullopt
- */
-tl::optional<size_t> complete_sys_text_length(std::string_view str)
-{
-    for (size_t pos = 0; pos < str.size();) {
-        const auto length = mb_valid_char_length_at(str, pos);
-        const auto c = str[pos];
-        if ((length > 1) || ((static_cast<unsigned char>(c) & 0x80) == 0) || iskana(c)) {
-            pos += length;
-            continue;
-        }
-
-        if (is_mb_char_lead(c) && (pos + mb_char_byte_length(c) > str.size())) {
-            return pos;
-        }
-
-        return tl::nullopt;
-    }
-
-    return str.size();
-}
-#endif
-
 /*!
  * @brief scores.raw の文字列の欄を UTF-8 にする
  * @param str 文字列の欄
@@ -261,7 +232,7 @@ tl::optional<size_t> complete_sys_text_length(std::string_view str)
  * Windows 版の変換は半端なバイトを置き換えて成功してしまうので、変換の成否ではなく、
  * 文字コードを推定できたか、内部の文字コードとして末尾の文字だけが欠けているかで、落とす長さを決める。
  *
- * 内部の文字コードが UTF-8 のときは、scores.raw を書いた旧版の内部の文字コード (LEGACY_CHARACTER_ENCODING。Windows 版は Shift_JIS、
+ * 内部の文字コードは UTF-8 なので、scores.raw を書いた旧版の内部の文字コード (LEGACY_CHARACTER_ENCODING。Windows 版は Shift_JIS、
  * Unix 系は EUC-JP) を「内部の文字コード」とみなす。その文字コードとして読めるかは変換できるかで決め、
  * 末尾の文字が欠けて変換できなければ末尾を落としてから変換する。
  */
@@ -307,11 +278,6 @@ std::string migrate_text(std::string_view str, [[maybe_unused]] bool prefer_syst
 
         return tl::nullopt;
     };
-#elif defined(JP)
-    const auto convert_complete = [str]() -> tl::optional<std::string> {
-        const auto length = complete_sys_text_length(str);
-        return length ? sys_to_utf8(str.substr(0, *length)) : tl::nullopt;
-    };
 #endif
 #ifdef JP
     const auto convert_guessed = [&]() -> tl::optional<std::string> {
@@ -322,8 +288,8 @@ std::string migrate_text(std::string_view str, [[maybe_unused]] bool prefer_syst
                 continue;
             }
 
-            // 推定できても変換に失敗することがある (内部の文字コードが UTF-8 なら iconv で変換するため) ので、そのときは短くして推定し直す
-            if (auto utf8 = legacy_to_sys(text, encoding).and_then([](const std::string &sys_text) { return sys_to_utf8(sys_text); })) {
+            // 推定できても変換に失敗することがある (iconv などで変換するため) ので、そのときは短くして推定し直す
+            if (auto utf8 = legacy_to_sys(text, encoding)) {
                 return utf8;
             }
         }

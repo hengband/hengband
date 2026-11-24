@@ -50,13 +50,6 @@ std::string make_player_base_name(std::string_view name)
             continue;
         }
 
-#if defined(JP) && defined(SJIS)
-        if (iskana(c)) {
-            base_name.push_back(name[i]);
-            continue;
-        }
-#endif
-
         if (name.substr(i).starts_with(path_sep)) {
             base_name.push_back('_');
             // ループの i++ と合わせて、区切り文字の直後の1文字も読み飛ばす (従来の挙動)
@@ -89,7 +82,6 @@ std::string make_player_base_name(std::string_view name)
  * @return 空白と「[」「]」を「_」に置き換えた名前 (例: "[ Temp ]" なら "__Temp__")
  * @details
  * これらの文字は条件式の区切りに使われるため置き換える。
- * 多バイト文字の後続のバイトは置き換えない (Shift_JIS では後続のバイトが「[」「]」と同じ値になる文字がある)。
  */
 std::string make_player_name_for_expression(std::string_view name)
 {

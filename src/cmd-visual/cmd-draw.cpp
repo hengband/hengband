@@ -240,7 +240,6 @@ static int display_message_history(int base_msg_num, int num_now, int num_lines,
             /// もともとメッセージ履歴自体を折り返して保存していた時も同様の問題があった。
             /// あまり使われていない機能と思われ、処理が複雑になるので、現状はそのままとしている。
 
-            /// @note ダメ文字対策でstringを使わない.
             const auto *str = line.data();
             while (true) {
                 str = angband_strstr(str, shower);
@@ -335,7 +334,6 @@ void do_cmd_messages(int num_now)
 
             shower = finder_str;
             for (auto msg_num = base_msg_num + 1; msg_num < message_num(); msg_num++) {
-                // @details ダメ文字対策でstringを使わない.
                 const auto msg = message_str(msg_num);
                 if (str_find(*msg, finder_str)) {
                     base_msg_num = msg_num;

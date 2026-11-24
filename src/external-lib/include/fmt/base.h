@@ -1628,8 +1628,9 @@ FMT_CONSTEXPR void parse_format_string(basic_string_view<Char> fmt,
   auto begin = fmt.data(), end = begin + fmt.size();
   auto p = begin;
   while (p != end) {
-    // 内部の文字コードを UTF-8 にした構成 (UTF8) では、UTF-8 の後続バイトを Shift_JIS の先頭バイトと取り違えるので読み飛ばさない
-#if defined(_WIN32) && !defined(UTF8)
+    // 英語版の Windows 版は文字列リテラルを Shift_JIS でビルドするので、使わない日本語の書式も Shift_JIS になる。
+    // 「マ」(83 7D) のように 2 バイト目が '{' '}' と同じ値の文字を書式の区切りと取り違えないよう読み飛ばす
+#if defined(_WIN32) && !defined(JP)
     if (is_sjis_multibyte_char(*p)) {
       p += 2;
       continue;

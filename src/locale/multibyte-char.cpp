@@ -15,16 +15,10 @@
 /*!
  * @brief 1 バイトの文字が表示できる文字かどうかを返す
  * @param c 文字
- * @return ASCII の表示できる文字か、Shift_JIS の半角カナ (1 バイトの文字) なら true
+ * @return ASCII の表示できる文字なら true
  */
 bool is_printable_single_byte_char(char c)
 {
-#ifdef JP
-    if (iskana(c)) {
-        return true;
-    }
-#endif
-
     return isprint(static_cast<unsigned char>(c)) != 0;
 }
 
@@ -55,9 +49,7 @@ size_t mb_char_length_at(std::string_view str, size_t pos)
  *         1 バイトの文字、不正な並び、後続のバイトが欠けた文字、pos が範囲外のときは 1 (英語版では常に 1)
  * @details mb_char_length_at() は先頭バイトだけで長さを決めるが、こちらは後続のバイトの値も確かめる。
  * 設定ファイルの区切り (':' や '/') を探すときのように、不正な並びのために後ろの文字を読み飛ばしてはいけない処理で使う。
- * EUC-JP の 0x8f で始まる 3 バイトの文字 (JIS X 0212) は、こちらでは 3 バイトの 1 文字とみなすが、
- * mb_char_length_at() などほかの関数では 0x8f を 1 バイトの文字とみなす (iskanji() が 0x8f を含まない)。
- * UTF-8 では、utf8_next_char_byte_length() が UTF-8 として正しいとする多バイト文字 (冗長な表現やサロゲートを除く) をその長さの 1 文字とみなす。
+ * utf8_next_char_byte_length() が UTF-8 として正しいとする多バイト文字 (冗長な表現やサロゲートを除く) をその長さの 1 文字とみなす。
  */
 size_t mb_valid_char_length_at([[maybe_unused]] std::string_view str, [[maybe_unused]] size_t pos)
 {
@@ -68,29 +60,6 @@ size_t mb_valid_char_length_at([[maybe_unused]] std::string_view str, [[maybe_un
 
     const auto length = utf8_next_char_byte_length(str.substr(pos));
     return (length > 1) ? static_cast<size_t>(length) : 1;
-#elif defined(JP)
-    if ((pos >= str.size()) || (str.size() - pos < 2)) {
-        return 1;
-    }
-
-    const auto lead = static_cast<unsigned char>(str[pos]);
-    const auto trail = static_cast<unsigned char>(str[pos + 1]);
-#ifdef SJIS
-    const auto valid_trail = ((trail >= 0x40) && (trail <= 0x7e)) || ((trail >= 0x80) && (trail <= 0xfc));
-    return (iskanji(lead) && valid_trail) ? 2 : 1;
-#else
-    const auto is_valid_byte = [](unsigned char byte) { return (byte >= 0xa1) && (byte <= 0xfe); };
-    if (lead == 0x8f) {
-        return ((str.size() - pos >= 3) && is_valid_byte(trail) && is_valid_byte(static_cast<unsigned char>(str[pos + 2]))) ? 3 : 1;
-    }
-
-    if (lead == 0x8e) {
-        return ((trail >= 0xa1) && (trail <= 0xdf)) ? 2 : 1;
-    }
-
-    // iskanji() は 0x8e も含むので、0x8e の判定より後に置く
-    return (iskanji(lead) && is_valid_byte(trail)) ? 2 : 1;
-#endif
 #else
     return 1;
 #endif
@@ -226,7 +195,6 @@ size_t char_display_width(size_t char_length)
  * @param str 文字列
  * @return 表示幅 (桁数)
  * @details 多バイト文字は 2 桁、1 バイトの文字 (後続のバイトが欠けた先頭バイトを含む) は 1 桁と数える。
- * 内部文字コードが EUC-JP・Shift_JIS の間は、文字列のバイト数と等しい。
  * 同梱の fmt も、書式の幅指定 ({:<20} など) をこの関数で数える (fmt/format.h の compute_width())。
  */
 size_t str_display_width(std::string_view str)
@@ -248,7 +216,6 @@ size_t str_display_width(std::string_view str)
  * @return 多バイト文字を分断せずに width 桁に収まる、最も長い先頭の部分
  * @details 表示幅は str_display_width() と同じく数える。収まらない多バイト文字と、
  * 後続のバイトが欠けた多バイト文字の先頭バイトは含めない (str_substr() と同じ)。
- * 内部文字コードが EUC-JP・Shift_JIS の間は、str_substr(str, 0, width) と同じ部分を返す。
  */
 std::string_view str_prefix_by_width(std::string_view str, size_t width)
 {

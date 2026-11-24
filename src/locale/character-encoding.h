@@ -41,11 +41,7 @@ int utf8_next_char_byte_length(std::string_view str);
 bool is_utf8_str(std::string_view str);
 
 //! 内部の文字コード (セーブファイルに記録する値)
-#if defined(JP) && defined(EUC)
-constexpr auto SYSTEM_CHARACTER_ENCODING = CharacterEncoding::EUC_JP;
-#elif defined(JP) && defined(SJIS)
-constexpr auto SYSTEM_CHARACTER_ENCODING = CharacterEncoding::SHIFT_JIS;
-#elif defined(JP) && defined(UTF8)
+#if defined(JP) && defined(UTF8)
 constexpr auto SYSTEM_CHARACTER_ENCODING = CharacterEncoding::UTF_8;
 #else
 constexpr auto SYSTEM_CHARACTER_ENCODING = CharacterEncoding::US_ASCII;
@@ -65,8 +61,6 @@ constexpr auto LEGACY_CHARACTER_ENCODING = CharacterEncoding::EUC_JP;
 
 #ifdef JP
 
-void sjis2euc(char *str);
-void euc2sjis(char *str);
 CharacterEncoding guess_legacy_encoding(std::string_view str);
 size_t legacy_lead_byte_length(char lead, CharacterEncoding encoding);
 tl::optional<std::string> legacy_to_sys(std::string_view str, CharacterEncoding encoding);
@@ -76,16 +70,9 @@ tl::optional<std::string> utf8_to_sys(std::string_view utf8_str);
 std::string guess_convert_to_system_encoding(std::string str);
 size_t guess_convert_to_system_encoding(char *strbuf, int buflen);
 
-#if defined(EUC) || defined(UTF8)
-tl::optional<std::string> utf8_to_euc(std::string_view utf8_str);
-#endif
-
 #ifdef UTF8
+tl::optional<std::string> utf8_to_euc(std::string_view utf8_str);
 std::string utf8_to_euc_keeping_width(std::string_view utf8_str);
-#endif
-
-#ifdef EUC
-int euc_to_utf8(const char *euc_str, size_t euc_str_len, char *utf8_buf, size_t utf8_buf_len);
 #endif
 
 #else

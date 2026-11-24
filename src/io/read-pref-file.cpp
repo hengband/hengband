@@ -255,7 +255,7 @@ errr process_histpref_file(PlayerType *player_ptr, std::string_view name)
  */
 void auto_dump_print(FILE *auto_dump_stream, std::string_view str)
 {
-    // '\n'はSJISのマルチバイト文字のコードに含まれないため、ダメ文字を考慮する必要はない
+    // '\n' は UTF-8 の多バイト文字のバイトに含まれないので、バイト単位で数えてよい
     auto_dump_line_num += std::count(str.begin(), str.end(), '\n');
 
     fmt::print(auto_dump_stream, "{}", str);
