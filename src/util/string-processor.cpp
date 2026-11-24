@@ -2,16 +2,10 @@
  * @file string-processor.cpp
  * @brief 文字列処理の汎用ユーティリティ
  * @details
- * 日本語版が扱う内部の文字コードは、構成によって UTF-8・EUC-JP・Shift_JIS のどれかである (h-config.h を参照)。
- * Shift_JISでは2バイト文字の後半バイトがASCIIの範囲(0x40-0x7e)と重なるため、
- * 単純にバイト単位で検索すると、2バイト文字の後半バイトを独立した文字と誤認する。
- * 後半バイトが 0x5c (バックスラッシュ)になる「ソ」「表」などがその代表で、
- * いわゆるダメ文字と呼ばれる。
- *
- * このファイルの関数のうち文字や文字列を検索・分割するものは、文字列を先頭から
- * 1文字ずつ走査して2バイト文字の後半バイトを読み飛ばすことで、この問題を回避する。
- * UTF-8 と EUC-JP は後続バイトがASCIIの範囲と重ならないため同じ問題は起きないが、
- * 処理は文字コードによらず共通である。
+ * 日本語版の内部の文字コードは UTF-8 である。
+ * このファイルの関数のうち文字や文字列を検索・分割するものは、文字列を先頭から 1 文字ずつ走査し、
+ * 多バイト文字の後続のバイトを読み飛ばす。UTF-8 の後続のバイトは ASCII の範囲と重ならないが、
+ * 多バイト文字を途中で分割しないよう、文字単位で扱う。
  */
 
 #include "util/string-processor.h"
@@ -309,8 +303,7 @@ std::string str_ltrim(std::string_view str)
  * 区切り文字が先頭・末尾にある場合や連続する場合は、その分だけ空文字列の要素が生まれる。
  * num は領域確保のヒントに過ぎず、戻り値の要素数を num に揃えるものではない。
  *
- * 多バイト文字の後続のバイトは読み飛ばすため、delim にダメ文字と重なる文字を指定しても
- * 多バイト文字の途中で分割することはない。
+ * 多バイト文字の後続のバイトは読み飛ばすため、多バイト文字の途中で分割することはない。
  */
 std::vector<std::string> str_split(std::string_view str, char delim, bool trim, int num)
 {
@@ -379,7 +372,7 @@ std::vector<std::string> str_separate(std::string_view str, size_t len)
  * @return std::string 指定した文字をすべて削除した文字列
  * @details
  * str 中の多バイト文字は先頭バイト・後続のバイトのどちらも削除の対象にしない。
- * erase_chars にダメ文字と重なる文字や多バイト文字を指定しても、多バイト文字を壊すことはない。
+ * erase_chars に多バイト文字を指定しても、多バイト文字を壊すことはない。
  * 裏を返せば、erase_chars に多バイト文字を指定しても、その文字は削除されない。
  */
 std::string str_erase(std::string str, std::string_view erase_chars)
@@ -564,7 +557,6 @@ std::string str_upcase_first(std::string_view str)
  * @return 見つかった位置から末尾までの部分文字列。見つからなければtl::nullopt
  * @details
  * 戻り値は str の一部を指すビューであり、str より長生きさせてはならない。
- * 現時点ではシフトJISのダメ文字は考慮しない (必要に応じて拡張する)。
  */
 tl::optional<std::string_view> extract_suffix(std::string_view str, char find)
 {
@@ -582,7 +574,6 @@ tl::optional<std::string_view> extract_suffix(std::string_view str, char find)
  * @return 見つかった位置から末尾までの部分文字列。見つからなければtl::nullopt
  * @details
  * 戻り値は str の一部を指すビューであり、str より長生きさせてはならない。
- * 現時点ではシフトJISのダメ文字は考慮しない (必要に応じて拡張する)。
  */
 tl::optional<std::string_view> extract_suffix(std::string_view str, std::string_view find)
 {

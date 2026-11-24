@@ -2,7 +2,7 @@
  * @file multibyte-char.h
  * @brief 内部文字コードの文字単位の処理
  * @details
- * 内部文字コード (構成ごとの文字コードは h-config.h を参照) の文字列を、
+ * 内部文字コード (日本語版は UTF-8、英語版は ASCII) の文字列を、
  * バイト単位ではなく文字単位で扱うための関数をまとめる。
  * 文字のバイト数と文字の境界を問い合わせる処理をここに集約し、文字コードごとの判定を呼び出し元に書かないようにする。
  */
@@ -27,8 +27,6 @@ constexpr size_t mb_char_byte_length([[maybe_unused]] char lead)
     // UTF-8 の後続のバイト (80-BF) と、先頭に現れない不正なバイト (C0・C1・F5-FF) は 1 バイトの文字とみなす
     const auto length = utf8_lead_byte_length(static_cast<unsigned char>(lead));
     return (length > 0) ? static_cast<size_t>(length) : 1;
-#elif defined(JP)
-    return iskanji(lead) ? 2 : 1;
 #else
     return 1;
 #endif

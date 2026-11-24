@@ -118,7 +118,6 @@ struct term_type {
     /*!
      * @brief テキスト描画実装部 / Hook for drawing a string of chars using an attr
      * @details n は描画するマス数。s は n マスの文字を並べた文字列で、2マス幅の文字は1文字で2マスを占める。
-     * 内部文字コードが EUC-JP・Shift_JIS の間は、s のバイト数は n と等しい。
      */
     errr (*text_hook)(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, concptr s){};
     void (*resize_hook)(){}; //!< 画面リサイズ実装部

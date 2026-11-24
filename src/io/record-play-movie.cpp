@@ -196,7 +196,7 @@ static bool string_is_repeat(concptr str, int len)
 static int find_split(concptr str, int len)
 {
     /*
-     * 内部の文字コードが Shift_JIS・UTF-8 の場合でも、str は常に EUC-JP としてエンコードされます。
+     * 内部の文字コードは UTF-8 だが、str は常に通信上の文字コード (EUC-JP) としてエンコードされます。
      * 他の場所で行われているような 3 バイトのエンコーディングは想定していません。
      */
     int last_split = 0, i = 0;
@@ -235,19 +235,7 @@ static void send_offset_update(const TERM_LEN x, const TERM_LEN y, bool force_up
 static errr send_text_to_chuukei_server(TERM_LEN x, TERM_LEN y, int len, TERM_COLOR col, concptr str)
 {
     // 通信上の文字コードは EUC-JP で、全角文字を 2 バイトとして扱う。送る文字列のバイト数はマス数 len と等しくなる
-#if defined(SJIS) && defined(JP)
-    std::string buffer = str; // strは書き換わって欲しくないのでコピーする.
-    // sjis2euc() は半角カナを扱えず、次のバイトと組にして NUL などに変えてしまうので、'?' にしておく
-    for (size_t i = 0; i < buffer.length(); i++) {
-        if (is_mb_char_lead(buffer[i])) {
-            i++;
-        } else if (static_cast<unsigned char>(buffer[i]) >= 0x80) {
-            buffer[i] = '?';
-        }
-    }
-    sjis2euc(buffer.data());
-    const auto *payload = buffer.data();
-#elif defined(UTF8) && defined(JP)
+#if defined(UTF8) && defined(JP)
     // UTF-8 として正しくないバイトを含む文字列では、マスへの分け方と変換した後のバイト数がずれることがあるので、len バイトにそろえる
     // 右端の桁の全角文字のように、末尾で途中から切れる全角文字は空白にする
     auto buffer = utf8_to_euc_keeping_width(str);
@@ -661,10 +649,7 @@ static bool flush_ringbuf_client()
 
         switch (id) {
         case 't': { /* 通常 */
-#if defined(SJIS) && defined(JP)
-            euc2sjis(mesg);
-            const std::string_view text(mesg, len);
-#elif defined(UTF8) && defined(JP)
+#if defined(UTF8) && defined(JP)
             // 通信上の文字コード (EUC-JP) から内部の文字コードに変換する。全角文字は 2 マスのままなので、マス数は変わらない
             const auto text = legacy_to_sys_replacing_invalid(std::string_view(mesg, len), CharacterEncoding::EUC_JP);
 #else

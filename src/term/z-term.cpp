@@ -1670,7 +1670,6 @@ tl::optional<TermCellSymbol> term_what_cell(int x, int y)
  * @param n 範囲のマス数
  * @param text 加える先の文字列
  * @details 全角文字は左のマスで文字全体を加える。範囲の端で分断された全角文字や、片側のマスしか無い全角文字は空白にする。
- * そのため、内部文字コードが EUC-JP・Shift_JIS の間は n バイトを加える。
  */
 void term_win::append_text(int x, int y, int n, std::string &text) const
 {

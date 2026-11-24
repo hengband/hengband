@@ -644,7 +644,7 @@ inline auto compute_width(basic_string_view<Char> s) -> size_t {
 }
 
 // 変愚蛮怒: 文字列の表示幅は、UTF-8 とみなして数えずに変愚蛮怒の規則 (str_display_width()) で数える。
-// 内部文字コードが EUC-JP・Shift_JIS の文字列も、幅指定 ({:<20} など) で表示の桁がそろう。
+// 多バイト文字は 2 桁と数えるので、幅指定 ({:<20} など) で表示の桁がそろう。
 // 別の翻訳単位の関数を呼ぶので constexpr ではなく、幅指定のある文字列はコンパイル時には整形できない。
 inline auto compute_width(string_view s) -> size_t {
   return ::str_display_width(std::string_view(s.data(), s.size()));

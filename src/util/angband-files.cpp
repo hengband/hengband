@@ -211,7 +211,7 @@ std::filesystem::path path_build(const std::filesystem::path &path, std::string_
 
 #ifdef _WIN32
     // append() は std::string を ANSI のコードページで UTF-16 に変換する。ANSI のコードページと内部の文字コードは
-    // 同じとは限らない (システムロケールが UTF-8 の Windows で Shift_JIS の版を動かすなど) ので、自前で UTF-16 に変換してから append する
+    // 同じとは限らない (日本語の Windows の ANSI のコードページは CP932 だが、内部の文字コードは UTF-8 など) ので、自前で UTF-16 に変換してから append する
     const std::filesystem::path path_ret = parsed_path.append(path_from_sys(file).native());
     if (path_ret.native().size() > max_path_length) {
         THROW_EXCEPTION(std::runtime_error, "Path is too long!");
@@ -425,7 +425,7 @@ tl::optional<std::string> angband_fgets(FILE *fp, size_t n)
             width += str_display_width(ch);
             i += char_length;
         } else {
-            // 表示できない 1 バイトの文字は ? に置き換える (Shift_JIS の半角カナは表示できる文字として取り込む)
+            // 表示できない 1 バイトの文字は ? に置き換える
             str.push_back(is_printable_single_byte_char(c) ? c : '?');
             width++;
             i++;

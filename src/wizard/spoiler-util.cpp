@@ -108,9 +108,8 @@ void spoil_out(std::string_view sv, bool flush_buffer)
         return;
     }
 
-    // 全角文字と表示できる1バイトの文字のほかは空白とみなす (後続のバイトが欠けた多バイト文字の先頭バイトも空白にする)。
-    // Shift_JIS の半角カナは、これまでの出力に合わせて空白にする (is_printable_single_byte_char() とは扱いが違う)
-    const auto is_visible = [](std::string_view ch) { return is_multibyte_char_at(ch) || isprint(static_cast<unsigned char>(ch.front())); };
+    // 全角文字と表示できる1バイトの文字のほかは空白とみなす (後続のバイトが欠けた多バイト文字の先頭バイトも空白にする)
+    const auto is_visible = [](std::string_view ch) { return is_multibyte_char_at(ch) || is_printable_single_byte_char(ch.front()); };
     for (auto rest = sv; !rest.empty();) {
         auto ch = mb_first_char(rest);
         rest.remove_prefix(ch.length());

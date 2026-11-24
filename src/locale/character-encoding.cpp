@@ -12,7 +12,6 @@
 #include <algorithm>
 #include <array>
 #include <utility>
-#include <vector>
 #ifdef _WIN32
 #define NOMINMAX
 #include <windows.h>
@@ -110,82 +109,7 @@ bool is_utf8_str(std::string_view str)
 
 #ifdef JP
 
-/*!
- * @brief 文字コードをSJISからEUCに変換する / Convert SJIS string to EUC string
- * @details 上位ビットの立ったバイトはすべて2バイト文字の1バイト目として扱い、JIS X 0208 の文字だけを変換できる。
- *          半角カナ (1バイトの A1-DF) と、1バイト目が F0 以上の文字 (ユーザー定義文字・IBM 拡張文字) は正しく変換できない。
- * @param str 変換する文字列のポインタ
- */
-void sjis2euc(char *str)
-{
-    int i;
-    unsigned char c1, c2;
-
-    int len = strlen(str);
-
-    std::vector<char> tmp(len + 1);
-
-    for (i = 0; i < len; i++) {
-        c1 = str[i];
-        if (c1 & 0x80) {
-            i++;
-            c2 = str[i];
-            if (c2 >= 0x9f) {
-                c1 = c1 * 2 - (c1 >= 0xe0 ? 0xe0 : 0x60);
-                c2 += 2;
-            } else {
-                c1 = c1 * 2 - (c1 >= 0xe0 ? 0xe1 : 0x61);
-                c2 += 0x60 + (c2 < 0x7f);
-            }
-            tmp[i - 1] = c1;
-            tmp[i] = c2;
-        } else {
-            tmp[i] = c1;
-        }
-    }
-    tmp[len] = 0;
-    strcpy(str, tmp.data());
-}
-
-/*!
- * @brief 文字コードをEUCからSJISに変換する / Convert EUC string to SJIS string
- * @details 上位ビットの立ったバイトはすべて2バイト文字の1バイト目として扱い、JIS X 0208 の文字だけを変換できる。
- *          半角カナ (8E xx) と JIS X 0212 の文字 (8F xx xx) は正しく変換できない。
- * @param str 変換する文字列のポインタ
- */
-void euc2sjis(char *str)
-{
-    int i;
-    unsigned char c1, c2;
-
-    int len = strlen(str);
-
-    std::vector<char> tmp(len + 1);
-
-    for (i = 0; i < len; i++) {
-        c1 = str[i];
-        if (c1 & 0x80) {
-            i++;
-            c2 = str[i];
-            if (c1 % 2) {
-                c1 = (c1 >> 1) + (c1 < 0xdf ? 0x31 : 0x71);
-                c2 -= 0x60 + (c2 < 0xe0);
-            } else {
-                c1 = (c1 >> 1) + (c1 < 0xdf ? 0x30 : 0x70);
-                c2 -= 2;
-            }
-
-            tmp[i - 1] = c1;
-            tmp[i] = c2;
-        } else {
-            tmp[i] = c1;
-        }
-    }
-    tmp[len] = 0;
-    strcpy(str, tmp.data());
-}
-
-#if defined(EUC) || defined(UTF8)
+#ifdef UTF8
 namespace {
 /*!
  * @brief 文字列の中の文字を、対応表に従ってすべて置き換える
@@ -256,26 +180,6 @@ tl::optional<std::string> from_utf16(std::wstring_view str, UINT code_page, DWOR
     return converted;
 }
 
-#ifdef SJIS
-/*!
- * @brief 文字列のコードページを、UTF-16 を経由して変換する (Windows 版)
- * @details 半角カナが CP932 の1バイトから UTF-8 の3バイトになるなど、変換後の長さは一定の倍率に収まらないので、
- *          MultiByteToWideChar() と WideCharToMultiByte() に必要な長さを問い合わせてから変換する
- * @param str 変換元の文字列
- * @param from_code_page 変換元のコードページ (CP_UTF8、932 など)
- * @param to_code_page 変換先のコードページ
- * @return 変換した文字列。変換に失敗した場合はtl::nullopt
- */
-tl::optional<std::string> convert_code_page(std::string_view str, UINT from_code_page, UINT to_code_page)
-{
-    const auto utf16_str = to_utf16(str, from_code_page, 0);
-    if (!utf16_str) {
-        return tl::nullopt;
-    }
-
-    return from_utf16(*utf16_str, to_code_page, 0, nullptr);
-}
-#endif
 }
 #endif
 
@@ -617,8 +521,8 @@ CharacterEncoding guess_legacy_encoding(std::string_view str)
         const auto c2 = (i < str.size()) ? static_cast<unsigned char>(str[i]) : static_cast<unsigned char>(0);
 
         /*
-         * Shift_JIS の1バイト目 F0-FC (ユーザー定義文字・IBM 拡張文字) は sjis2euc() で
-         * EUC-JP に変換できない (1バイト目が 0x00 や制御文字になる) ため、Shift_JIS とはみなさない。
+         * Shift_JIS の1バイト目 F0-FC (ユーザー定義文字・IBM 拡張文字) は、内部の文字コードが EUC-JP だった旧版が
+         * Shift_JIS のデータを読むのに使っていた変換で EUC-JP にできなかった (1バイト目が 0x00 や制御文字になる) ため、Shift_JIS とはみなさない。
          * EUC-JP の1バイト目 F5-FE には JIS X 0208 の文字が無いため、EUC-JP ともみなさない。
          * これで、髙 (FB FC) などの IBM 拡張文字を EUC-JP と誤判定しなくなる。
          */
@@ -657,8 +561,7 @@ CharacterEncoding guess_legacy_encoding(std::string_view str)
  * @param str 変換する文字列
  * @param encoding str の文字コード (guess_legacy_encoding() で推定したものなど)
  * @return 内部の文字コードに変換した文字列。encoding が EUC-JP・Shift_JIS のどちらでもないときは、変換せずに返す
- * @details 内部の文字コードが EUC-JP・Shift_JIS のときは、2 バイトの文字を 2 バイトに置き換えるだけなので、長さは変わらない。
- * 内部の文字コードが UTF-8 のときは、変換に失敗すると tl::nullopt を返す。
+ * @details 変換に失敗すると tl::nullopt を返す。
  */
 tl::optional<std::string> legacy_to_sys(std::string_view str, CharacterEncoding encoding)
 {
@@ -670,25 +573,6 @@ tl::optional<std::string> legacy_to_sys(std::string_view str, CharacterEncoding 
     default:
         return std::string(str);
     }
-#else
-    std::string converted(str);
-    switch (encoding) {
-#ifdef EUC
-    case CharacterEncoding::SHIFT_JIS:
-        sjis2euc(converted.data());
-        break;
-#endif
-
-#ifdef SJIS
-    case CharacterEncoding::EUC_JP:
-        euc2sjis(converted.data());
-        break;
-#endif
-    default:
-        break;
-    }
-
-    return converted;
 #endif
 }
 
@@ -697,12 +581,10 @@ tl::optional<std::string> legacy_to_sys(std::string_view str, CharacterEncoding 
  * @param str 変換する文字列
  * @param encoding str の文字コード (guess_legacy_encoding() で推定したものなど)
  * @return 内部の文字コードに変換した文字列
- * @details 内部の文字コードが UTF-8 のときは、読めないバイト (末尾で欠けた文字など) を '?' に置き換える。
+ * @details 読めないバイト (末尾で欠けた文字など) を '?' に置き換える。
  * encoding が UNKNOWN なら、旧版の内部の文字コード (LEGACY_CHARACTER_ENCODING。Windows 版は Shift_JIS、Unix 系は EUC-JP) として読む
  * (旧版の構成が、推定できない文字列を内部の文字コードのまま扱うのと同じ)。
  * US_ASCII・UTF_8 なら、UTF-8 として読めないバイトを '?' に置き換える。
- * 内部の文字コードが EUC-JP・Shift_JIS のときは legacy_to_sys() と同じで、置き換えない。
- * ただし UTF_8 (内部の文字コードを UTF-8 にした構成で書いたセーブ) は、UTF-8 から変換し、内部の文字コードに無い文字と読めないバイトは '?' に置き換える。
  */
 std::string legacy_to_sys_replacing_invalid(std::string_view str, CharacterEncoding encoding)
 {
@@ -717,45 +599,11 @@ std::string legacy_to_sys_replacing_invalid(std::string_view str, CharacterEncod
     }
 
     return replace_invalid_utf8(str);
-#else
-    // 移行の間は同じ版で両方の構成を行き来することがあるので、UTF-8 の構成で書いたセーブも読めるようにする
-    if (encoding == CharacterEncoding::UTF_8) {
-        if (auto sys_str = utf8_to_sys(str)) {
-            return std::move(*sys_str);
-        }
-
-        // 内部の文字コードに無い文字や読めないバイトがあれば、1 文字ずつ変換し、変換できないものは '?' にする
-        std::string sys_str;
-        for (size_t pos = 0; pos < str.length();) {
-            const auto length = std::max(utf8_next_char_byte_length(str.substr(pos)), 1);
-            sys_str.append(utf8_to_sys(str.substr(pos, length)).value_or("?"));
-            pos += length;
-        }
-
-        return sys_str;
-    }
-
-    return *legacy_to_sys(str, encoding);
 #endif
 }
 
-#ifndef UTF8
-/*!
- * @brief 文字列の文字コードがASCIIかどうかを判定する
- * @param str 判定する文字列
- * @return 文字列の文字コードがASCIIならTRUE、そうでなければFALSE
- */
-static bool is_ascii_str(std::string_view str)
-{
-    return ranges::all_of(str, [](char ch) {
-        const auto byte = static_cast<unsigned char>(ch);
-        return (0x00 < byte) && (byte <= 0x7f);
-    });
-}
-#endif
-
-// 内部の文字コードが UTF-8 の構成でも、旧版のファイルの名前を作るために使う
-#if defined(EUC) || defined(UTF8)
+// 旧版のファイルの名前を作るためと、ムービーの通信のために使う
+#ifdef UTF8
 
 namespace {
 /*!
@@ -873,8 +721,7 @@ void replace_jis_x_0212_characters(std::string &euc)
  * @brief 文字列の文字コードをUTF-8からEUC-JPに変換する
  * @details 変愚蛮怒は全角文字を2バイト固定として扱うため、EUC-JP で3バイトになる JIS X 0212 の文字
  *          (8F xx xx、é など) を正しく表示できない。そうした文字は '?' に置き換える
- *          (Windows の UTF-8 の構成で使う 20932 は、JIS X 0212 の文字を 2 バイト目が 21-7E の 2 バイトにするので、これも '?' にする。
- *          Shift_JIS の構成でも CP932 に無い文字は '?' などに置き換わる)。
+ *          (Windows 版で使う 20932 は、JIS X 0212 の文字を 2 バイト目が 21-7E の 2 バイトにするので、これも '?' にする)。
  * @param utf8_str 変換元の文字列
  * @return EUC-JPに変換した文字列。変換に失敗した場合はtl::nullopt
  */
@@ -934,38 +781,6 @@ std::string utf8_to_euc_keeping_width(std::string_view utf8_str)
 #endif
 #endif
 
-#ifdef EUC
-
-/*!
- * @brief 文字列の文字コードをEUC-JPからUTF-8に変換する
- * @param euc_str 変換元の文字列へのポインタ
- * @param euc_str_len 変換元の文字列の長さ(文字数ではなくバイト数)
- * @param utf8_buf 変換した文字列を格納するバッファへのポインタ
- * @param utf8_buf_len 変換した文字列を格納するバッファのサイズ
- * @return 変換に成功した場合変換後の文字列の長さを返す
- *         変換に失敗した場合-1を返す
- */
-int euc_to_utf8(const char *euc_str, size_t euc_str_len, char *utf8_buf, size_t utf8_buf_len)
-{
-    static const auto cd = iconv_open("UTF-8", "EUC-JP");
-    if (cd == reinterpret_cast<iconv_t>(-1)) {
-        return -1;
-    }
-
-    size_t inlen_left = euc_str_len;
-    size_t outlen_left = utf8_buf_len;
-    const char *in = euc_str;
-    char *out = utf8_buf;
-
-    // iconv は入力バッファを書き換えないのでキャストで const を外してよい
-    if (iconv(cd, (char **)&in, &inlen_left, &out, &outlen_left) == (size_t)-1) {
-        return -1;
-    }
-
-    return utf8_buf_len - outlen_left;
-}
-#endif
-
 /*!
  * @brief システムの文字コードからUTF-8に変換する
  * @param str システムの文字コードの文字列
@@ -974,15 +789,8 @@ int euc_to_utf8(const char *euc_str, size_t euc_str_len, char *utf8_buf, size_t 
  */
 tl::optional<std::string> sys_to_utf8(std::string_view str)
 {
-#if defined(EUC)
-    std::string utf8str(str.length() * 2 + 1, '\0');
-    const auto len = euc_to_utf8(str.data(), str.length(), utf8str.data(), utf8str.size());
-
-    return (len >= 0) ? tl::make_optional(std::move(utf8str.erase(len))) : tl::nullopt;
-#elif defined(SJIS) && defined(_WIN32)
-    return convert_code_page(str, 932, CP_UTF8);
-#elif defined(UTF8)
-    // 内部の文字コードが UTF-8 なら変換しない。ほかの文字コードと同じく、不正な並びは変換に失敗したものとする
+#ifdef UTF8
+    // 内部の文字コードは UTF-8 なので変換しない。不正な並びは変換に失敗したものとする
     return is_utf8_str(str) ? tl::make_optional<std::string>(str) : tl::nullopt;
 #else
     return tl::nullopt;
@@ -1004,11 +812,7 @@ tl::optional<std::string> utf8_to_sys(std::string_view str)
         return tl::nullopt;
     }
 
-#if defined(EUC)
-    return utf8_to_euc(str);
-#elif defined(SJIS) && defined(_WIN32)
-    return convert_code_page(str, CP_UTF8, 932);
-#elif defined(UTF8)
+#ifdef UTF8
     return is_utf8_str(str) ? tl::make_optional<std::string>(str) : tl::nullopt;
 #else
     return tl::nullopt;
@@ -1019,15 +823,12 @@ tl::optional<std::string> utf8_to_sys(std::string_view str)
  * @brief 文字列が内部の文字コードのままでよく、変換が要らないかを返す
  * @param str 文字列
  * @return 変換が要らなければ true
- * @details 内部の文字コードが UTF-8 なら、UTF-8 として読める文字列 (ASCII だけのものを含む) は変換しない。
- * EUC-JP・Shift_JIS なら、ASCII だけの文字列と、UTF-8 として読めない文字列 (内部の文字コードとみなす) は変換しない。
+ * @details UTF-8 として読める文字列 (ASCII だけのものを含む) は変換しない。
  */
 static bool is_system_encoding_text(std::string_view str)
 {
 #ifdef UTF8
     return is_utf8_str(str);
-#else
-    return is_ascii_str(str) || !is_utf8_str(str);
 #endif
 }
 
@@ -1035,9 +836,9 @@ static bool is_system_encoding_text(std::string_view str)
  * @brief 内部の文字コードではない文字列の文字コードを推定し、内部の文字コードに変換する
  * @param str 変換する文字列 (is_system_encoding_text() が false のもの)
  * @return 内部の文字コードに変換した文字列。変換に失敗した場合は tl::nullopt
- * @details 内部の文字コードが UTF-8 なら、旧版の文字コードとみなして推定する。推定できない文字列や読めないバイトを含む文字列も、
- * 不正な UTF-8 を持ち込まないよう置き換えて変換するので、失敗しない。EUC-JP・Shift_JIS なら UTF-8 から変換する。
- * Windows の UTF-8 の構成では、Shift_JIS として読める文字列は推定せずに Shift_JIS として読む。
+ * @details 旧版の文字コードとみなして推定する。推定できない文字列や読めないバイトを含む文字列も、
+ * 不正な UTF-8 を持ち込まないよう置き換えて変換するので、失敗しない。
+ * Windows 版では、Shift_JIS として読める文字列は推定せずに Shift_JIS として読む。
  * 旧版の Windows 版は UTF-8 として読めない文字列をすべて Shift_JIS として扱っていたので、それと同じにし、
  * 半角カナの並び (EUC-JP の 2 バイトの文字とも読める) を EUC-JP と推定して取り違えないようにする。
  */
@@ -1051,8 +852,6 @@ static tl::optional<std::string> convert_to_system_encoding(std::string_view str
 #endif
 
     return legacy_to_sys_replacing_invalid(str, guess_legacy_encoding(str));
-#else
-    return utf8_to_sys(str);
 #endif
 }
 
