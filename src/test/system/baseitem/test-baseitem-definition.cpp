@@ -148,9 +148,7 @@ TEST_CASE("BaseitemDefinition::stripped_name removes a hash following a multibyt
      * 多バイト文字 (ル) の後続のバイトを読み飛ばしたうえで、その直後の '#' を空白にすることを確かめる。
      * テストデータは16進エスケープで書く (src/test/README.md を参照)。
      */
-#ifdef UTF8
     const std::string ru = "\xe3\x83\xab"; // ル (UTF-8)
-#endif
     BaseitemDefinition baseitem;
     baseitem.name = ru + "#";
     CHECK(baseitem.stripped_name() == ru + " ");

@@ -503,9 +503,7 @@ TEST_CASE("info_set_string stores the UTF-8 string as is")
     REQUIRE(info_set_string(json, data, true).has_value());
 
     // 内部の文字コードは UTF-8 なので、変換せずに元のバイト列のまま格納する
-#ifdef UTF8
     CHECK(data == UTF8_TEST_STRING);
-#endif
 }
 #endif
 

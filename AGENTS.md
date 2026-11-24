@@ -38,7 +38,7 @@ make -j$(getconf _NPROCESSORS_ONLN)          # src/hengband が生成される
 - **`make` には必ず `-j` で並列数を付ける。** `.cpp` が 900 を超え、並列化しないと非常に時間がかかる。
   `getconf _NPROCESSORS_ONLN` は Linux でも macOS でも CPU の数を返す（macOS には `nproc` が無い）。
 - `CXXFLAGS` には最低限 `-Wall -Wextra` を付ける。プリコンパイル済みヘッダは `--disable-pch` で無効にできる。
-- 日本語版の内部の文字コードは UTF-8 で（`JP` と `UTF8` が定義される）、文字列リテラルはソースの UTF-8 のままビルドされる
+- 日本語版の内部の文字コードは UTF-8 で（`JP` が定義される）、文字列リテラルはソースの UTF-8 のままビルドされる
   （Windows 版も同じ）。
 
 ccache を使うと日英の切り替えが速くなる。`CXX` は configure 時に `src/Makefile` へ焼き込まれるため、
@@ -76,7 +76,7 @@ $msbuild = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere
 
 - 英語版は `Configuration=English-Debug` などにする。特定のプロジェクトだけなら `/t:HengbandTest` などを足す
   （依存する `HengbandCore` も合わせてビルドされる）。
-- 日本語版の内部の文字コードは UTF-8 で、`JP` と `UTF8` が定義される。
+- 日本語版の内部の文字コードは UTF-8 で、`JP` が定義される。
 - CI（`.github/workflows/build-test-with-msvc.yml`）は `-warnAsError /t:Rebuild` で `Release` と
   `English-Debug` をビルドする。差分ビルドでは変更のないファイルがコンパイルされず、前回の警告が出ないので、
   プッシュ前の最終確認は CI と同じく `-warnAsError /t:Rebuild` で行う。

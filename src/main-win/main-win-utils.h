@@ -14,8 +14,8 @@
 
 constexpr UINT SHIFT_JIS_CODE_PAGE = 932; //!< Shift_JIS (CP932) のコードページ
 
-//! 内部の文字コードのコードページ (内部の文字コードを UTF-8 にした構成では UTF-8、ほかは CP932)
-#ifdef UTF8
+//! 内部の文字コードのコードページ (日本語版の内部の文字コードは UTF-8、英語版は CP932 として扱う)
+#ifdef JP
 constexpr UINT SYSTEM_CODE_PAGE = CP_UTF8;
 #else
 constexpr UINT SYSTEM_CODE_PAGE = SHIFT_JIS_CODE_PAGE;

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 内部の文字コードを UTF-8 にした構成で、プロセスのコードページ (GetACP()) を UTF-8 にする。Windows 10 1903 以降で有効 -->
+<!-- 日本語版 (内部の文字コードは UTF-8) で、プロセスのコードページ (GetACP()) を UTF-8 にする。Windows 10 1903 以降で有効 -->
 <assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
   <application>
     <windowsSettings>

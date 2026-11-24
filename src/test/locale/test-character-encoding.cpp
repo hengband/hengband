@@ -11,7 +11,7 @@
 #include <string>
 #include <string_view>
 #include <utility>
-#if defined(UTF8) && !defined(_WIN32)
+#if defined(JP) && !defined(_WIN32)
 // _LIBICONV_VERSION (GNU libiconv の判定に使う) を参照するため
 #include <iconv.h>
 #endif
@@ -68,19 +68,15 @@ constexpr std::string_view FULLWIDTH_TILDE_UTF8 = "\xef\xbd\x9e"; //!< ～ (U+FF
 constexpr std::string_view FULLWIDTH_HYPHEN_MINUS_UTF8 = "\xef\xbc\x8d"; //!< － (U+FF0D)
 constexpr std::string_view HALFWIDTH_KATAKANA_UTF8 = "\xef\xbd\xb1\xef\xbd\xb2\xef\xbd\xb3"; //!< ｱｲｳ (UTF-8 では1文字3バイト)
 constexpr std::string_view MS_SYMBOLS_UTF8 = "\xe2\x88\xa5\xef\xbf\xa0\xef\xbf\xa1\xef\xbf\xa2"; //!< ∥￠￡￢ (U+2225・U+FFE0・U+FFE1・U+FFE2)
-#if defined(UTF8)
 constexpr std::string_view MS_SYMBOLS_EUC = "\xa1\xc2\xa1\xf1\xa1\xf2\xa2\xcc"; //!< ∥￠￡￢ (EUC-JP)
 constexpr std::string_view WAVE_DASH_EUC = "\xa1\xc1"; //!< 〜 (EUC-JP。全角チルダ (～) を EUC-JP にしたもの)
 constexpr std::string_view MINUS_SIGN_EUC = "\xa1\xdd"; //!< − (EUC-JP。全角ハイフン (－) を EUC-JP にしたもの)
-#endif
 
-#if defined(UTF8)
-constexpr std::string_view NIHON_SYS = "\xe6\x97\xa5\xe6\x9c\xac"; //!< 日本 (UTF-8)
-constexpr std::string_view KANJI_SEN_SYS = "\xe7\x87\xb9"; //!< 燹 (UTF-8)
-constexpr std::string_view KANJI_SHAKU_SYS = "\xe7\x88\x8d"; //!< 爍 (UTF-8)
-constexpr std::string_view KANJI_YOU_SYS = "\xe7\x8f\xb1"; //!< 珱 (UTF-8)
-constexpr std::string_view KANJI_SEN2_SYS = "\xe9\x99\x9d"; //!< 陝 (UTF-8)
-#endif
+constexpr std::string_view NIHON_UTF8 = "\xe6\x97\xa5\xe6\x9c\xac"; //!< 日本 (UTF-8)
+constexpr std::string_view KANJI_SEN_UTF8 = "\xe7\x87\xb9"; //!< 燹 (UTF-8)
+constexpr std::string_view KANJI_SHAKU_UTF8 = "\xe7\x88\x8d"; //!< 爍 (UTF-8)
+constexpr std::string_view KANJI_YOU_UTF8 = "\xe7\x8f\xb1"; //!< 珱 (UTF-8)
+constexpr std::string_view KANJI_SEN2_UTF8 = "\xe9\x99\x9d"; //!< 陝 (UTF-8)
 
 }
 
@@ -88,21 +84,21 @@ TEST_CASE("guess_legacy_encoding detects EUC-JP followed by ASCII")
 {
     const auto str = cat(NIHON_EUC, "abc");
     CHECK(guess_legacy_encoding(str) == CharacterEncoding::EUC_JP);
-    CHECK(legacy_to_sys(str, CharacterEncoding::EUC_JP) == cat(NIHON_SYS, "abc"));
+    CHECK(legacy_to_sys(str, CharacterEncoding::EUC_JP) == cat(NIHON_UTF8, "abc"));
 }
 
 TEST_CASE("guess_legacy_encoding detects Shift_JIS followed by ASCII")
 {
     const auto str = cat(NIHON_SJIS, "abc");
     CHECK(guess_legacy_encoding(str) == CharacterEncoding::SHIFT_JIS);
-    CHECK(legacy_to_sys(str, CharacterEncoding::SHIFT_JIS) == cat(NIHON_SYS, "abc"));
+    CHECK(legacy_to_sys(str, CharacterEncoding::SHIFT_JIS) == cat(NIHON_UTF8, "abc"));
 }
 
 TEST_CASE("guess_legacy_encoding detects EUC-JP surrounded by ASCII")
 {
     const auto str = cat("abc", NIHON_EUC, "def");
     CHECK(guess_legacy_encoding(str) == CharacterEncoding::EUC_JP);
-    CHECK(legacy_to_sys(str, CharacterEncoding::EUC_JP) == cat("abc", NIHON_SYS, "def"));
+    CHECK(legacy_to_sys(str, CharacterEncoding::EUC_JP) == cat("abc", NIHON_UTF8, "def"));
 }
 
 TEST_CASE("guess_legacy_encoding rejects EUC-JP and Shift_JIS mixed with ASCII between them")
@@ -114,35 +110,35 @@ TEST_CASE("guess_legacy_encoding detects Shift_JIS whose second byte is 0x80-0xA
 {
     const auto str = cat(KANJI_SEN_SJIS, "abc");
     CHECK(guess_legacy_encoding(str) == CharacterEncoding::SHIFT_JIS);
-    CHECK(legacy_to_sys(str, CharacterEncoding::SHIFT_JIS) == cat(KANJI_SEN_SYS, "abc"));
+    CHECK(legacy_to_sys(str, CharacterEncoding::SHIFT_JIS) == cat(KANJI_SEN_UTF8, "abc"));
 }
 
 TEST_CASE("guess_legacy_encoding detects EUC-JP whose second byte is 0xFD or above after a lead byte of 0xE0 or above")
 {
     const auto str = cat(KANJI_YOU_EUC, "abc");
     CHECK(guess_legacy_encoding(str) == CharacterEncoding::EUC_JP);
-    CHECK(legacy_to_sys(str, CharacterEncoding::EUC_JP) == cat(KANJI_YOU_SYS, "abc"));
+    CHECK(legacy_to_sys(str, CharacterEncoding::EUC_JP) == cat(KANJI_YOU_UTF8, "abc"));
 }
 
 TEST_CASE("guess_legacy_encoding defers ambiguous characters and decides by a following Shift_JIS character")
 {
     const auto str = cat(KANJI_SHAKU_SJIS, KANJI_YOU_SJIS, KANJI_SEN_SJIS);
     CHECK(guess_legacy_encoding(str) == CharacterEncoding::SHIFT_JIS);
-    CHECK(legacy_to_sys(str, CharacterEncoding::SHIFT_JIS) == cat(KANJI_SHAKU_SYS, KANJI_YOU_SYS, KANJI_SEN_SYS));
+    CHECK(legacy_to_sys(str, CharacterEncoding::SHIFT_JIS) == cat(KANJI_SHAKU_UTF8, KANJI_YOU_UTF8, KANJI_SEN_UTF8));
 }
 
 TEST_CASE("guess_legacy_encoding defers ambiguous characters and decides by a following EUC-JP character")
 {
     const auto str = cat(KANJI_SEN_EUC, KANJI_SHAKU_EUC, NIHON_EUC);
     CHECK(guess_legacy_encoding(str) == CharacterEncoding::EUC_JP);
-    CHECK(legacy_to_sys(str, CharacterEncoding::EUC_JP) == cat(KANJI_SEN_SYS, KANJI_SHAKU_SYS, NIHON_SYS));
+    CHECK(legacy_to_sys(str, CharacterEncoding::EUC_JP) == cat(KANJI_SEN_UTF8, KANJI_SHAKU_UTF8, NIHON_UTF8));
 }
 
 TEST_CASE("guess_legacy_encoding detects EUC-JP whose lead byte is 0xF0 or above")
 {
     const auto str = cat(KANJI_SEN2_EUC, "abc");
     CHECK(guess_legacy_encoding(str) == CharacterEncoding::EUC_JP);
-    CHECK(legacy_to_sys(str, CharacterEncoding::EUC_JP) == cat(KANJI_SEN2_SYS, "abc"));
+    CHECK(legacy_to_sys(str, CharacterEncoding::EUC_JP) == cat(KANJI_SEN2_UTF8, "abc"));
 }
 
 TEST_CASE("guess_legacy_encoding does not treat Shift_JIS user-defined characters as Shift_JIS")
@@ -212,7 +208,6 @@ TEST_CASE("utf8_to_sys rejects a string with an embedded NUL")
     CHECK_FALSE(utf8_to_sys("a\0b"sv).has_value());
 }
 
-#ifdef UTF8
 // utf8_to_euc() は、旧版のファイルの名前とムービーの通信 (EUC-JP) に使う
 TEST_CASE("utf8_to_euc converts fullwidth tilde and hyphen-minus to wave dash and minus sign")
 {
@@ -254,7 +249,7 @@ TEST_CASE("utf8_to_euc rejects a character missing from EUC-JP and converts the 
 {
     // EUC-JP に無い文字 (U+1F600) は変換の失敗とし、失敗の後も次の変換はできる
     CHECK_FALSE(utf8_to_euc("\xf0\x9f\x98\x80"sv).has_value());
-    CHECK(utf8_to_euc(NIHON_SYS) == NIHON_EUC);
+    CHECK(utf8_to_euc(NIHON_UTF8) == NIHON_EUC);
 }
 #endif
 
@@ -263,10 +258,9 @@ TEST_CASE("utf8_to_euc replaces JIS X 0212 characters with question marks")
     // é (UTF-8 で2バイト) は EUC-JP では JIS X 0212 の3バイト (8F AB B1) になり、正しく表示できないので '?' に置き換える
     CHECK(utf8_to_euc(cat("a\xc3\xa9"sv, "b")) == "a?b"sv);
 }
-#endif
 
 // Windows の 20932 と macOS の libiconv は C1 制御文字を EUC-JP に変換できず、utf8_to_euc() が失敗するので、glibc の iconv だけで確かめる
-#if defined(UTF8) && defined(__GLIBC__)
+#ifdef __GLIBC__
 TEST_CASE("utf8_to_euc keeps C1 control characters which iconv converts into one byte")
 {
     // glibc の iconv の EUC-JP は U+0085 を 1 バイトの 85 にする。後ろの文字を 2 バイト目とみなして '?' にしない
@@ -274,8 +268,6 @@ TEST_CASE("utf8_to_euc keeps C1 control characters which iconv converts into one
     CHECK(utf8_to_euc("\xc2\x85\xe6\x97\xa5\xe6\x9c\xac"sv) == cat("\x85"sv, NIHON_EUC)); // U+0085 と「日本」
 }
 #endif
-
-#ifdef UTF8
 
 TEST_CASE("utf8_to_sys and sys_to_utf8 reject invalid UTF-8 when the system encoding is UTF-8")
 {
@@ -315,47 +307,47 @@ TEST_CASE("legacy_to_sys fails on a string broken in the given encoding")
 
 TEST_CASE("guess_convert_to_system_encoding keeps UTF-8 and converts a legacy encoding when the system encoding is UTF-8")
 {
-    auto utf8 = cat("a", NIHON_SYS);
+    auto utf8 = cat("a", NIHON_UTF8);
     CHECK(guess_convert_to_system_encoding(utf8.data(), static_cast<int>(utf8.size() + 1)) == utf8.length());
-    CHECK(utf8 == cat("a", NIHON_SYS));
+    CHECK(utf8 == cat("a", NIHON_UTF8));
 
     // 変換で長くなるので、変換後の長さが収まるバッファを用意する
     std::string buf(16, '\0');
     const auto euc = cat("a", NIHON_EUC);
     std::copy(euc.begin(), euc.end(), buf.begin());
     CHECK(guess_convert_to_system_encoding(buf.data(), static_cast<int>(buf.size())) == 7);
-    CHECK(std::string_view(buf.data()) == cat("a", NIHON_SYS));
+    CHECK(std::string_view(buf.data()) == cat("a", NIHON_UTF8));
 
     // std::string で受ける形は、変換で長くなってもバッファの大きさに縛られない
-    CHECK(guess_convert_to_system_encoding(euc) == cat("a", NIHON_SYS));
-    CHECK(guess_convert_to_system_encoding(cat("a", NIHON_SYS)) == cat("a", NIHON_SYS));
+    CHECK(guess_convert_to_system_encoding(euc) == cat("a", NIHON_UTF8));
+    CHECK(guess_convert_to_system_encoding(cat("a", NIHON_UTF8)) == cat("a", NIHON_UTF8));
 
 #ifdef _WIN32
     // 旧版の Windows 版と同じく、Shift_JIS として読める文字列は推定せずに Shift_JIS として読む
     // (EUC-JP の「澄」(C0 A1) も、半角カナの「ﾀ｡」になる)
     CHECK(guess_convert_to_system_encoding(std::string("\xc0\xa1")) == "\xef\xbe\x80\xef\xbd\xa1"sv);
     CHECK(guess_convert_to_system_encoding(std::string("\xb1\xb2")) == "\xef\xbd\xb1\xef\xbd\xb2"sv); // ｱｲ
-    CHECK(guess_convert_to_system_encoding(cat(KANJI_SHAKU_SJIS, "abc", KANJI_YOU_SJIS)) == cat(KANJI_SHAKU_SYS, "abc", KANJI_YOU_SYS));
+    CHECK(guess_convert_to_system_encoding(cat(KANJI_SHAKU_SJIS, "abc", KANJI_YOU_SJIS)) == cat(KANJI_SHAKU_UTF8, "abc", KANJI_YOU_UTF8));
 #else
     // EUC-JP の「澄」(C0 A1) は UTF-8 とみなさずに変換する
     CHECK(guess_convert_to_system_encoding(std::string("\xc0\xa1")) == "\xe6\xbe\x84"sv);
 
     // 推定できない文字列は EUC-JP として読む
-    CHECK(guess_convert_to_system_encoding(cat(KANJI_SEN_EUC, "abc", KANJI_SHAKU_EUC)) == cat(KANJI_SEN_SYS, "abc", KANJI_SHAKU_SYS));
+    CHECK(guess_convert_to_system_encoding(cat(KANJI_SEN_EUC, "abc", KANJI_SHAKU_EUC)) == cat(KANJI_SEN_UTF8, "abc", KANJI_SHAKU_UTF8));
 #endif
 }
 
 TEST_CASE("legacy_to_sys_replacing_invalid replaces bytes which cannot be read with question marks")
 {
     // 末尾で欠けた文字
-    CHECK(legacy_to_sys_replacing_invalid(cat(NIHON_EUC, "\xc6"), CharacterEncoding::EUC_JP) == cat(NIHON_SYS, "?"));
-    CHECK(legacy_to_sys_replacing_invalid(cat(NIHON_SJIS, "\x93"), CharacterEncoding::SHIFT_JIS) == cat(NIHON_SYS, "?"));
+    CHECK(legacy_to_sys_replacing_invalid(cat(NIHON_EUC, "\xc6"), CharacterEncoding::EUC_JP) == cat(NIHON_UTF8, "?"));
+    CHECK(legacy_to_sys_replacing_invalid(cat(NIHON_SJIS, "\x93"), CharacterEncoding::SHIFT_JIS) == cat(NIHON_UTF8, "?"));
 
     // EUC-JP の 80-A0 (8E・8F を除く) は読めないバイトとし、後ろの文字は変換を続ける
-    CHECK(legacy_to_sys_replacing_invalid(cat("\x8a", NIHON_EUC), CharacterEncoding::EUC_JP) == cat("?", NIHON_SYS));
-    CHECK(legacy_to_sys_replacing_invalid(cat("\x8f", "a", NIHON_EUC), CharacterEncoding::EUC_JP) == cat("?a", NIHON_SYS));
-    CHECK(legacy_to_sys_replacing_invalid(cat("\x80", NIHON_SJIS), CharacterEncoding::SHIFT_JIS) == cat("?", NIHON_SYS));
-    CHECK(legacy_to_sys_replacing_invalid(cat(NIHON_EUC, "\xc6:"), CharacterEncoding::EUC_JP) == cat(NIHON_SYS, "?:"));
+    CHECK(legacy_to_sys_replacing_invalid(cat("\x8a", NIHON_EUC), CharacterEncoding::EUC_JP) == cat("?", NIHON_UTF8));
+    CHECK(legacy_to_sys_replacing_invalid(cat("\x8f", "a", NIHON_EUC), CharacterEncoding::EUC_JP) == cat("?a", NIHON_UTF8));
+    CHECK(legacy_to_sys_replacing_invalid(cat("\x80", NIHON_SJIS), CharacterEncoding::SHIFT_JIS) == cat("?", NIHON_UTF8));
+    CHECK(legacy_to_sys_replacing_invalid(cat(NIHON_EUC, "\xc6:"), CharacterEncoding::EUC_JP) == cat(NIHON_UTF8, "?:"));
     CHECK(legacy_to_sys_replacing_invalid("\x8f\xb0:"sv, CharacterEncoding::EUC_JP) == "??:");
 
     // 8E の後ろが半角カナ (A1-DF) でなければ 8E だけを読めないバイトとし、後ろの 2 バイト (E0 A1 の「燹」) は文字として読む
@@ -369,7 +361,7 @@ TEST_CASE("legacy_to_sys_replacing_invalid replaces bytes which cannot be read w
     std::string long_sys;
     for (auto i = 0; i < 300; i++) {
         long_euc.append(cat("a", NIHON_EUC));
-        long_sys.append(cat("a", NIHON_SYS));
+        long_sys.append(cat("a", NIHON_UTF8));
     }
 
     CHECK(legacy_to_sys(long_euc, CharacterEncoding::EUC_JP) == long_sys);
@@ -377,12 +369,12 @@ TEST_CASE("legacy_to_sys_replacing_invalid replaces bytes which cannot be read w
 
 #ifdef _WIN32
     // Windows の 20932 は JIS X 0212 の文字 (8F B0 A1 の「丂」) を読めないので、3 バイトを 1 つの '?' にする
-    CHECK(legacy_to_sys_replacing_invalid(cat("\x8f\xb0\xa1", NIHON_EUC), CharacterEncoding::EUC_JP) == cat("?", NIHON_SYS));
+    CHECK(legacy_to_sys_replacing_invalid(cat("\x8f\xb0\xa1", NIHON_EUC), CharacterEncoding::EUC_JP) == cat("?", NIHON_UTF8));
 #endif
 
     // UTF-8 の文字列は、UTF-8 として読めないバイトを置き換える
-    CHECK(legacy_to_sys_replacing_invalid(cat(NIHON_SYS, "\xff\xe6"), CharacterEncoding::UTF_8) == cat(NIHON_SYS, "??"));
-    CHECK(legacy_to_sys_replacing_invalid(NIHON_SYS, CharacterEncoding::UTF_8) == NIHON_SYS);
+    CHECK(legacy_to_sys_replacing_invalid(cat(NIHON_UTF8, "\xff\xe6"), CharacterEncoding::UTF_8) == cat(NIHON_UTF8, "??"));
+    CHECK(legacy_to_sys_replacing_invalid(NIHON_UTF8, CharacterEncoding::UTF_8) == NIHON_UTF8);
     CHECK(legacy_to_sys_replacing_invalid("\xc0\xa1"sv, CharacterEncoding::US_ASCII) == "??");
 }
 
@@ -391,10 +383,10 @@ TEST_CASE("legacy_to_sys_replacing_invalid reads a string in an unknown encoding
     // EUC-JP とも Shift_JIS とも読める文字列は、旧版の内部の文字コード (Windows 版は Shift_JIS、Unix 系は EUC-JP) として読む
 #ifdef _WIN32
     const auto str = cat(KANJI_SHAKU_SJIS, "abc", KANJI_YOU_SJIS);
-    const auto expected = cat(KANJI_SHAKU_SYS, "abc", KANJI_YOU_SYS);
+    const auto expected = cat(KANJI_SHAKU_UTF8, "abc", KANJI_YOU_UTF8);
 #else
     const auto str = cat(KANJI_SEN_EUC, "abc", KANJI_SHAKU_EUC);
-    const auto expected = cat(KANJI_SEN_SYS, "abc", KANJI_SHAKU_SYS);
+    const auto expected = cat(KANJI_SEN_UTF8, "abc", KANJI_SHAKU_UTF8);
 #endif
     REQUIRE(guess_legacy_encoding(str) == CharacterEncoding::UNKNOWN);
     CHECK(legacy_to_sys_replacing_invalid(str, CharacterEncoding::UNKNOWN) == expected);
@@ -416,7 +408,7 @@ TEST_CASE("legacy_to_sys reads EUC-JP as EUC-JP-MS like the old versions built w
 
 TEST_CASE("utf8_to_euc_keeping_width converts each character into as many EUC-JP bytes as its display width")
 {
-    CHECK(utf8_to_euc_keeping_width(cat("a", NIHON_SYS)) == cat("a", NIHON_EUC));
+    CHECK(utf8_to_euc_keeping_width(cat("a", NIHON_UTF8)) == cat("a", NIHON_EUC));
 
     // 半角カナは EUC-JP でも 2 バイト (8E xx)、全角チルダは EUC-JP の波ダッシュ (A1 C1) になる
     CHECK(utf8_to_euc_keeping_width(HALFWIDTH_KATAKANA_UTF8) == "\x8e\xb1\x8e\xb2\x8e\xb3"sv);
@@ -429,8 +421,6 @@ TEST_CASE("utf8_to_euc_keeping_width converts each character into as many EUC-JP
     // UTF-8 として読めないバイトは 1 バイトずつ '?' にする
     CHECK(utf8_to_euc_keeping_width("a\xff\xe3\x81"sv) == "a???"sv);
 }
-
-#endif
 
 #else
 

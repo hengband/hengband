@@ -21,7 +21,7 @@
 using namespace test;
 
 namespace {
-#if defined(JP) && defined(UTF8)
+#ifdef JP
 constexpr std::string_view TOUTEN = "\xe3\x80\x81"; //!< 、
 #endif
 

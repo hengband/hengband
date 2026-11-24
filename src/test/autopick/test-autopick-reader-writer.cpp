@@ -87,9 +87,7 @@ TEST_CASE("read_pickpref_text_lines converts lines in another encoding to the sy
 {
     // ゲームが設定ファイルを読むとき (angband_fgets()) と同じく、内部の文字コード (UTF-8) でない行は推定して変換する。
     // ここでは旧版の EUC-JP の行を変換する
-#ifdef UTF8
     constexpr std::string_view other_kanji = "\xb4\xc1\xbb\xfa"; //!< 漢字 (EUC-JP)
-#endif
     test::TemporaryJsonFiles files;
     const auto restore = test::scoped_restore(ANGBAND_DIR_USER);
     ANGBAND_DIR_USER = files.directory;

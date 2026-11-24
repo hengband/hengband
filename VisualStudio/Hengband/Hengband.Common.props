@@ -28,10 +28,10 @@
       <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
       <DisableAnalyzeExternal>true</DisableAnalyzeExternal>
 
-      <!-- JP;UTF8;WORLD_SCORE は日本語版のみ、WIN_DEBUG はデバッグ構成のみ -->
-      <PreprocessorDefinitions Condition="'$(HengbandDebugBuild)'=='true' and '$(HengbandJapanese)'=='true'">_CRT_SECURE_NO_WARNINGS;HAVE_STDINT_H;JP;UTF8;WORLD_SCORE;WIN_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <!-- JP;WORLD_SCORE は日本語版のみ、WIN_DEBUG はデバッグ構成のみ -->
+      <PreprocessorDefinitions Condition="'$(HengbandDebugBuild)'=='true' and '$(HengbandJapanese)'=='true'">_CRT_SECURE_NO_WARNINGS;HAVE_STDINT_H;JP;WORLD_SCORE;WIN_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(HengbandDebugBuild)'=='true' and '$(HengbandJapanese)'!='true'">_CRT_SECURE_NO_WARNINGS;HAVE_STDINT_H;WIN_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PreprocessorDefinitions Condition="'$(HengbandDebugBuild)'!='true' and '$(HengbandJapanese)'=='true'">_CRT_SECURE_NO_WARNINGS;HAVE_STDINT_H;JP;UTF8;WORLD_SCORE;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(HengbandDebugBuild)'!='true' and '$(HengbandJapanese)'=='true'">_CRT_SECURE_NO_WARNINGS;HAVE_STDINT_H;JP;WORLD_SCORE;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(HengbandDebugBuild)'!='true' and '$(HengbandJapanese)'!='true'">_CRT_SECURE_NO_WARNINGS;HAVE_STDINT_H;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
 
       <DisableSpecificWarnings Condition="'$(HengbandDebugBuild)'=='true'">4061;4127;4244;4365;4514;4710;4820;4996;5045;%(DisableSpecificWarnings)</DisableSpecificWarnings>

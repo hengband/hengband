@@ -109,7 +109,6 @@ bool is_utf8_str(std::string_view str)
 
 #ifdef JP
 
-#ifdef UTF8
 namespace {
 /*!
  * @brief 文字列の中の文字を、対応表に従ってすべて置き換える
@@ -125,11 +124,8 @@ void replace_characters(std::string &str, const std::array<std::pair<std::string
         }
     }
 }
-}
-#endif
 
 #ifdef _WIN32
-namespace {
 /*!
  * @brief 文字列を UTF-16 に変換する (Windows 版)
  * @param str 変換元の文字列
@@ -180,12 +176,6 @@ tl::optional<std::string> from_utf16(std::wstring_view str, UINT code_page, DWOR
     return converted;
 }
 
-}
-#endif
-
-#ifdef UTF8
-namespace {
-#ifdef _WIN32
 /*!
  * @brief Windows で EUC-JP の変換に使うコードページ
  * @details EUC-JP-MS に当たる 51932 は MultiByteToWideChar() で使えないので、20932 を使う。
@@ -474,7 +464,6 @@ std::string replace_invalid_utf8(std::string_view str)
     return replaced;
 }
 }
-#endif
 
 /*!
  * @brief 旧版の文字コードの文字の先頭バイトから、その文字のバイト数を返す
@@ -565,7 +554,6 @@ CharacterEncoding guess_legacy_encoding(std::string_view str)
  */
 tl::optional<std::string> legacy_to_sys(std::string_view str, CharacterEncoding encoding)
 {
-#ifdef UTF8
     switch (encoding) {
     case CharacterEncoding::EUC_JP:
     case CharacterEncoding::SHIFT_JIS:
@@ -573,7 +561,6 @@ tl::optional<std::string> legacy_to_sys(std::string_view str, CharacterEncoding 
     default:
         return std::string(str);
     }
-#endif
 }
 
 /*!
@@ -583,12 +570,11 @@ tl::optional<std::string> legacy_to_sys(std::string_view str, CharacterEncoding 
  * @return 内部の文字コードに変換した文字列
  * @details 読めないバイト (末尾で欠けた文字など) を '?' に置き換える。
  * encoding が UNKNOWN なら、旧版の内部の文字コード (LEGACY_CHARACTER_ENCODING。Windows 版は Shift_JIS、Unix 系は EUC-JP) として読む
- * (旧版の構成が、推定できない文字列を内部の文字コードのまま扱うのと同じ)。
+ * (旧版が、推定できない文字列を内部の文字コードのまま扱っていたのと同じ)。
  * US_ASCII・UTF_8 なら、UTF-8 として読めないバイトを '?' に置き換える。
  */
 std::string legacy_to_sys_replacing_invalid(std::string_view str, CharacterEncoding encoding)
 {
-#ifdef UTF8
     // 文字コードが分からなければ旧版の内部の文字コードとして読む
     const auto legacy_encoding = (encoding == CharacterEncoding::UNKNOWN) ? LEGACY_CHARACTER_ENCODING : encoding;
     if ((legacy_encoding == CharacterEncoding::EUC_JP) || (legacy_encoding == CharacterEncoding::SHIFT_JIS)) {
@@ -599,17 +585,14 @@ std::string legacy_to_sys_replacing_invalid(std::string_view str, CharacterEncod
     }
 
     return replace_invalid_utf8(str);
-#endif
 }
 
 // 旧版のファイルの名前を作るためと、ムービーの通信のために使う
-#ifdef UTF8
-
 namespace {
 /*!
  * @brief UTF-8 から EUC-JP に変換する前に置き換える文字 (置き換え前, 置き換え後) の UTF-8 のバイト列
  * @details EUC-JP-MS (CP932) と EUC-JP で対応の違う文字を、iconv の EUC-JP (Windows では 20932) が受け付ける文字にする
- * (内部の文字コードを UTF-8 にした構成は、旧版の EUC-JP を EUC-JP-MS として読むので、置き換え前の文字になる)。
+ * (旧版の EUC-JP は EUC-JP-MS として読むので、置き換え前の文字になる)。
  * 置き換え前の文字の先頭バイトは継続バイトにならず、置き換え後のバイト列は置き換え前のどの文字も含まない。
  * そのため、文字の途中から誤って一致したり、置き換えた結果がまた一致したりすることはない。
  */
@@ -743,7 +726,6 @@ tl::optional<std::string> utf8_to_euc(std::string_view utf8_str)
     return euc;
 }
 
-#ifdef UTF8
 /*!
  * @brief 文字列の文字コードを UTF-8 から EUC-JP に、表示幅とバイト数が等しくなるよう変換する
  * @param utf8_str 変換元の文字列
@@ -778,8 +760,6 @@ std::string utf8_to_euc_keeping_width(std::string_view utf8_str)
 
     return euc;
 }
-#endif
-#endif
 
 /*!
  * @brief システムの文字コードからUTF-8に変換する
@@ -789,12 +769,8 @@ std::string utf8_to_euc_keeping_width(std::string_view utf8_str)
  */
 tl::optional<std::string> sys_to_utf8(std::string_view str)
 {
-#ifdef UTF8
     // 内部の文字コードは UTF-8 なので変換しない。不正な並びは変換に失敗したものとする
     return is_utf8_str(str) ? tl::make_optional<std::string>(str) : tl::nullopt;
-#else
-    return tl::nullopt;
-#endif
 }
 
 /*!
@@ -812,29 +788,12 @@ tl::optional<std::string> utf8_to_sys(std::string_view str)
         return tl::nullopt;
     }
 
-#ifdef UTF8
     return is_utf8_str(str) ? tl::make_optional<std::string>(str) : tl::nullopt;
-#else
-    return tl::nullopt;
-#endif
-}
-
-/*!
- * @brief 文字列が内部の文字コードのままでよく、変換が要らないかを返す
- * @param str 文字列
- * @return 変換が要らなければ true
- * @details UTF-8 として読める文字列 (ASCII だけのものを含む) は変換しない。
- */
-static bool is_system_encoding_text(std::string_view str)
-{
-#ifdef UTF8
-    return is_utf8_str(str);
-#endif
 }
 
 /*!
  * @brief 内部の文字コードではない文字列の文字コードを推定し、内部の文字コードに変換する
- * @param str 変換する文字列 (is_system_encoding_text() が false のもの)
+ * @param str 変換する文字列 (UTF-8 として読めないもの)
  * @return 内部の文字コードに変換した文字列。変換に失敗した場合は tl::nullopt
  * @details 旧版の文字コードとみなして推定する。推定できない文字列や読めないバイトを含む文字列も、
  * 不正な UTF-8 を持ち込まないよう置き換えて変換するので、失敗しない。
@@ -844,7 +803,6 @@ static bool is_system_encoding_text(std::string_view str)
  */
 static tl::optional<std::string> convert_to_system_encoding(std::string_view str)
 {
-#ifdef UTF8
 #ifdef _WIN32
     if (auto utf8 = legacy_to_sys(str, LEGACY_CHARACTER_ENCODING)) {
         return utf8;
@@ -852,7 +810,6 @@ static tl::optional<std::string> convert_to_system_encoding(std::string_view str
 #endif
 
     return legacy_to_sys_replacing_invalid(str, guess_legacy_encoding(str));
-#endif
 }
 
 /*!
@@ -871,7 +828,7 @@ static void warn_conversion_failure()
  */
 std::string guess_convert_to_system_encoding(std::string str)
 {
-    if (is_system_encoding_text(str)) {
+    if (is_utf8_str(str)) {
         return str;
     }
 
@@ -894,7 +851,7 @@ std::string guess_convert_to_system_encoding(std::string str)
 size_t guess_convert_to_system_encoding(char *strbuf, int buflen)
 {
     const std::string_view str(strbuf);
-    if (is_system_encoding_text(str)) {
+    if (is_utf8_str(str)) {
         return str.length();
     }
 

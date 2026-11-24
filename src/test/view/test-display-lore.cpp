@@ -27,7 +27,7 @@ void capture_roff(TERM_COLOR, std::string_view str)
     captured_text.append(str);
 }
 
-#if defined(JP) && defined(UTF8)
+#ifdef JP
 const auto TAG_UNIQUE = test::cat("[", "\xe3\x83\xa6\xe3\x83\x8b\xe3\x83\xbc\xe3\x82\xaf", "]"); //!< [ユニーク]
 const auto TAG_MALE = test::cat("[", "\xe7\x94\xb7\xe6\x80\xa7", "]"); //!< [男性]
 const auto TAG_FEMALE = test::cat("[", "\xe5\xa5\xb3\xe6\x80\xa7", "]"); //!< [女性]

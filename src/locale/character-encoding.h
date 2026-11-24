@@ -41,13 +41,13 @@ int utf8_next_char_byte_length(std::string_view str);
 bool is_utf8_str(std::string_view str);
 
 //! 内部の文字コード (セーブファイルに記録する値)
-#if defined(JP) && defined(UTF8)
+#ifdef JP
 constexpr auto SYSTEM_CHARACTER_ENCODING = CharacterEncoding::UTF_8;
 #else
 constexpr auto SYSTEM_CHARACTER_ENCODING = CharacterEncoding::US_ASCII;
 #endif
 
-#if defined(JP) && defined(UTF8)
+#ifdef JP
 /*!
  * @brief 旧版の内部の文字コード (内部の文字コードを UTF-8 にする前に、同じプラットフォームの版が使っていた文字コード)
  * @details 旧版のデータは Windows 版なら Shift_JIS、Unix 系なら EUC-JP で書かれているので、文字コードを推定できない文字列はこれで読む
@@ -70,10 +70,8 @@ tl::optional<std::string> utf8_to_sys(std::string_view utf8_str);
 std::string guess_convert_to_system_encoding(std::string str);
 size_t guess_convert_to_system_encoding(char *strbuf, int buflen);
 
-#ifdef UTF8
 tl::optional<std::string> utf8_to_euc(std::string_view utf8_str);
 std::string utf8_to_euc_keeping_width(std::string_view utf8_str);
-#endif
 
 #else
 
