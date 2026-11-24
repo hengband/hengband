@@ -203,8 +203,8 @@ for (const auto &test : TEST_VECTORS) {
 
 内部の文字コードを EUC-JP にした日本語版のビルド (`--disable-utf8-internal`) では、ソース中の文字列リテラルを UTF-8 から EUC-JP に変換します。
 テストケース名に日本語を使うと、UTF-8 の端末でテスト結果が文字化けします。
-MSVC の日本語版構成も同様に、文字列リテラルを Shift_JIS に変換 (`/execution-charset:shift-jis`)
-するため文字化けします (内部の文字コードを UTF-8 にした構成では変換しませんが、ほかの構成のために ASCII で書きます)。
+MSVC の日本語版でも、文字列リテラルは内部の文字コード（既定は UTF-8。`/p:HengbandUtf8Internal=false` の Shift_JIS の構成では
+`/execution-charset:shift-jis` で Shift_JIS に変換）になるため、文字コードの合わないコンソール（日本語の Windows の既定は CP932）で文字化けします。
 
 **コメントはこれまでどおり日本語で構いません。** 制約を受けるのは実行時に出力される文字列（テストケース名、
 `CAPTURE` する文字列など）だけです。
@@ -221,7 +221,7 @@ MSVC の日本語版構成も同様に、文字列リテラルを Shift_JIS に�
 | `test::cat()` | 文字列を連結する（16進エスケープの後に文字を続けるときはリテラルを隣接させずにこれを使う） |
 | `test::repeat()` | 文字列を指定回数繰り返す |
 | `test::KANJI_KAN` など | 2バイト文字（日本語版のみ） |
-| `test::DAME_SO` など | ダメ文字（Shift_JIS で後半バイトが ASCII と同じ値になる2バイト文字。Windows の日本語版のみ） |
+| `test::DAME_SO` など | ダメ文字（Shift_JIS で後半バイトが ASCII と同じ値になる2バイト文字。Windows の日本語版の Shift_JIS の構成のみ） |
 | `test::UTF8_LOOKALIKE` | UTF-8 としても正しいバイト列になる2バイト文字の並び（日本語版のみ） |
 
 ```cpp

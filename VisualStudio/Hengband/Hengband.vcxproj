@@ -38,9 +38,9 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <OutDir>..\..\</OutDir>
-    <TargetName Condition="'$(HengbandUtf8Build)'!='true'">Hengband</TargetName>
-    <!-- 内部の文字コードを UTF-8 にした構成は、既定の構成の exe (と exe の名前から作る ini) を上書きしないよう、別の名前にする -->
-    <TargetName Condition="'$(HengbandUtf8Build)'=='true'">Hengband-UTF8</TargetName>
+    <TargetName>Hengband</TargetName>
+    <!-- 日本語版の Shift_JIS の構成は、既定の構成の exe (と exe の名前から作る ini) を上書きしないよう、別の名前にする -->
+    <TargetName Condition="'$(HengbandSjisBuild)'=='true'">Hengband-SJIS</TargetName>
   </PropertyGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\main-win.cpp">

@@ -21,11 +21,11 @@ jobs:
           - Release
           - English-Debug
         include:
-          # 内部の文字コードを UTF-8 にする移行のための仮の構成 (#6140)。日本語版の Release と互い違いに Debug を試す。
+          # 内部の文字コードを UTF-8 にする移行のための仮の構成 (#6140)。日本語版の Shift_JIS の構成を、Release と互い違いに Debug で試す。
           # 移行を終えたら撤去する
           - configuration: Debug
-            msbuild-opts: /p:HengbandUtf8Internal=true
-            output-dir: Debug-UTF8
+            msbuild-opts: /p:HengbandUtf8Internal=false
+            output-dir: Debug-SJIS
 
     steps:
       - uses: actions/checkout@v7
