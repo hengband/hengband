@@ -1710,7 +1710,6 @@ TESTS = $(check_PROGRAMS)
 EXTRA_DIST = \
 	$(top_srcdir)/tools/tests/arena-status-probe.cpp \
 	$(top_srcdir)/tools/tests/main-window-wipe-probe.cpp \
-	gcc-wrap \
 	test/README.md
 
 DEFAULT_INCLUDES = \
@@ -1719,28 +1718,11 @@ DEFAULT_INCLUDES = \
 CPPFLAGS += $(XFT_CFLAGS) $(LIBPNG_CFLAGS) $(libcurl_CFLAGS)
 LIBS += $(XFT_LIBS) $(LIBPNG_LIBS) $(libcurl_LIBS)
 
-AM_CXXFLAGS =
-
-if COMPILER_HAVE_EXEC_CHARSET_EUC_JP_MS
-AM_CXXFLAGS += -fexec-charset=euc-jp-ms
-endif
-
-if USE_NKF
-CXXCOMPILE_WRAPPER = $(srcdir)/gcc-wrap
-DEFAULT_INCLUDES += -I$(top_builddir)/src -isystem $(top_builddir)/src/external-lib/include
-if COMPILER_IS_CLANG
-AM_CXXFLAGS += -Wno-invalid-source-encoding
-endif
-if PCH
-PCH_INCLUDES = -include $(top_builddir)/src/stdafx.h
-endif
-else
 if PCH
 PCH_INCLUDES = -include $(srcdir)/stdafx.h
 endif
-endif
 
-CXXCOMPILE = $(strip $(CXXCOMPILE_WRAPPER) $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) $(PCH_INCLUDES))
+CXXCOMPILE = $(strip $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) $(PCH_INCLUDES))
 
 if PCH
 ## clang は既定で取り込んだヘッダの mtime を PCH に埋め込むため、チェックアウトし直すたびに
@@ -1778,4 +1760,3 @@ endif
 
 clean-local:
 	-rm stdafx.h.gch stdafx.h.gch.sum stdafx.h.gch.d
-	-rm -rf ../build

@@ -37,7 +37,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
-    <OutDir>$(HengbandConfigurationDir)\</OutDir>
+    <OutDir>$(Configuration)\</OutDir>
     <TargetName>hengband-test</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup>

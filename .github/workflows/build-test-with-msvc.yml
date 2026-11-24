@@ -10,8 +10,6 @@ permissions:
 
 jobs:
   build:
-    # ジョブの名前は出力先のディレクトリの名前 (既定の構成では構成名と同じ) にする
-    name: build (${{ matrix.output-dir || matrix.configuration }})
     runs-on: windows-2025-vs2026
     strategy:
       fail-fast: false
@@ -20,12 +18,6 @@ jobs:
         configuration:
           - Release
           - English-Debug
-        include:
-          # 内部の文字コードを UTF-8 にする移行のための仮の構成 (#6140)。日本語版の Shift_JIS の構成を、Release と互い違いに Debug で試す。
-          # 移行を終えたら撤去する
-          - configuration: Debug
-            msbuild-opts: /p:HengbandUtf8Internal=false
-            output-dir: Debug-SJIS
 
     steps:
       - uses: actions/checkout@v7
@@ -38,10 +30,10 @@ jobs:
 
       - name: Run build test
         run: |
-          MSBuild -warnAsError .\VisualStudio\Hengband.sln /t:Rebuild /p:Configuration=${{ matrix.configuration }} /p:Platform=Win32 ${{ matrix.msbuild-opts }}
+          MSBuild -warnAsError .\VisualStudio\Hengband.sln /t:Rebuild /p:Configuration=${{ matrix.configuration }} /p:Platform=Win32
 
       # 上のビルドで HengbandTest プロジェクトも生成される。
       # doctest はテストが失敗すると非ゼロの終了コードを返す
       - name: Run unit tests
         run: |
-          .\VisualStudio\Hengband\${{ matrix.output-dir || matrix.configuration }}\hengband-test.exe
+          .\VisualStudio\Hengband\${{ matrix.configuration }}\hengband-test.exe
