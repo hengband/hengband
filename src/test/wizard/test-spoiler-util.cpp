@@ -5,7 +5,7 @@
  * spoil_out() は書き出し先をグローバルの spoiler_file で受け取り、行バッファを static に持つので、
  * 各テストでは一時ファイルに向けて書き出し、最後に flush_buffer を指定して行バッファを空にする。
  *
- * 2バイト文字のテストデータは16進エスケープで書く (src/test/README.md を参照)。
+ * 多バイト文字のテストデータは16進エスケープで書く (src/test/README.md を参照)。
  */
 
 #include "wizard/spoiler-util.h"
@@ -23,15 +23,9 @@
 using namespace test;
 
 namespace {
-#if defined(JP) && defined(SJIS)
-constexpr std::string_view SOKUON = "\x82\xc1"; //!< っ
-constexpr std::string_view KUTEN = "\x81\x42"; //!< 。
-#elif defined(JP) && defined(UTF8)
+#if defined(JP) && defined(UTF8)
 constexpr std::string_view SOKUON = "\xe3\x81\xa3"; //!< っ
 constexpr std::string_view KUTEN = "\xe3\x80\x82"; //!< 。
-#elif defined(JP)
-constexpr std::string_view SOKUON = "\xa4\xc3"; //!< っ
-constexpr std::string_view KUTEN = "\xa1\xa3"; //!< 。
 #endif
 
 /*!

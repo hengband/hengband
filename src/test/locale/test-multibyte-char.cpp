@@ -112,8 +112,8 @@ TEST_CASE("str_prefix_by_width shrinks a temporary string and returns it")
 
 TEST_CASE("fmt pads strings by str_display_width")
 {
-    // UTF-8 としても正しい 2 バイト (U+0122) だが、内部文字コードでは 2 桁の文字列
-    // (EUC-JP では 1 文字の漢字、Shift_JIS では 2 文字の半角カナ、英語版では 2 文字の 1 バイトの文字)
+    // UTF-8 として正しい 2 バイト (U+0122) で、内部文字コードでは 2 桁の文字列
+    // (日本語版では 2 桁の 1 文字、英語版では 2 文字の 1 バイトの文字)
     const auto str = "\xc4\xa2"sv;
     CHECK(str_display_width(str) == 2);
     CHECK(fmt::format("{:<4}|", str) == test::cat(str, "  |"));
@@ -291,46 +291,7 @@ TEST_CASE("mb_prev_char_pos treats a truncated character at the end as one chara
 }
 #endif
 
-#if defined(JP) && defined(SJIS)
-TEST_CASE("is_printable_single_byte_char accepts half-width katakana")
-{
-    CHECK(is_printable_single_byte_char('\xb1')); // 半角の「ア」
-}
-
-TEST_CASE("is_multibyte_char_at finds a character whose trailing byte is ASCII")
-{
-    CHECK(is_multibyte_char_at(test::DAME_SO));
-    CHECK(is_multibyte_char_at(test::cat(test::DAME_SO, "a").data()));
-}
-
-TEST_CASE("mb_char_start_pos does not treat an ASCII-valued trailing byte as a character start")
-{
-    // ダメ文字の後半バイトは ASCII の文字と同じ値なので、文字の境界は先頭から数えて求める
-    const auto str = test::cat(test::DAME_SO, test::DAME_CHOON, test::DAME_KANA_A);
-    CHECK(mb_char_start_pos(str, 1) == 0);
-    CHECK(mb_char_start_pos(str, 3) == 2);
-    CHECK(mb_char_start_pos(str, 5) == 4);
-    CHECK(mb_prev_char_pos(str, 4) == 2);
-}
-
-TEST_CASE("mb_valid_char_length_at accepts an ASCII-valued trailing byte in Shift_JIS")
-{
-    CHECK(mb_valid_char_length_at(test::DAME_SO, 0) == 2);
-    CHECK(mb_valid_char_length_at("\xb1:", 0) == 1); // 半角の「ア」は 1 バイトの文字
-}
-
-TEST_CASE("mb_valid_char_length_at checks the range of a Shift_JIS trailing byte")
-{
-    CHECK(mb_valid_char_length_at("\x83\x40", 0) == 2);
-    CHECK(mb_valid_char_length_at("\x83\x7e", 0) == 2);
-    CHECK(mb_valid_char_length_at("\x83\x80", 0) == 2);
-    CHECK(mb_valid_char_length_at("\x83\xfc", 0) == 2);
-    CHECK(mb_valid_char_length_at("\x83\x3f", 0) == 1);
-    CHECK(mb_valid_char_length_at("\x83\x7f", 0) == 1);
-    CHECK(mb_valid_char_length_at("\x83\xfd", 0) == 1);
-    CHECK(mb_valid_char_length_at("\x83\x1f", 0) == 1);
-}
-#elif defined(JP) && defined(UTF8)
+#if defined(JP) && defined(UTF8)
 TEST_CASE("mb_char_byte_length reads the length from a UTF-8 lead byte")
 {
     CHECK(mb_char_byte_length('\xc3') == 2);
@@ -362,24 +323,5 @@ TEST_CASE("str_display_width counts every non-ASCII UTF-8 character as two colum
     CHECK(str_display_width("a\xc3\xa9"sv) == 3); // é
     CHECK(str_display_width("\xef\xbd\xb1"sv) == 2); // 半角の「ア」も 2 桁
     CHECK(str_display_width("\xf0\x9f\x98\x80"sv) == 2); // U+1F600
-}
-#elif defined(JP)
-TEST_CASE("mb_valid_char_length_at handles EUC-JP three byte and half-width katakana sequences")
-{
-    CHECK(mb_valid_char_length_at("\x8f\xa1\xa1", 0) == 3); // JIS X 0212 の文字
-    CHECK(mb_valid_char_length_at("\x8f\xa1:", 0) == 1);
-    CHECK(mb_valid_char_length_at("\x8f\xa1", 0) == 1);
-    CHECK(mb_valid_char_length_at("\x8f\xa1\xa0", 0) == 1);
-    CHECK(mb_valid_char_length_at("\x8e\xb1", 0) == 2); // 半角の「ア」
-    CHECK(mb_valid_char_length_at("\x8e\xa1\xa1", 0) == 2);
-    CHECK(mb_valid_char_length_at("\x8e\xe0", 0) == 1);
-}
-
-TEST_CASE("mb_valid_char_length_at checks the range of an EUC-JP trailing byte")
-{
-    CHECK(mb_valid_char_length_at("\xa1\xa1", 0) == 2);
-    CHECK(mb_valid_char_length_at("\xa1\xfe", 0) == 2);
-    CHECK(mb_valid_char_length_at("\xa1\xa0", 0) == 1);
-    CHECK(mb_valid_char_length_at("\xa1\xff", 0) == 1);
 }
 #endif

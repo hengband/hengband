@@ -17,7 +17,6 @@
 #include "util/dice.h"
 
 #ifdef JP
-#include "locale/character-encoding.h"
 #endif
 
 #include <doctest/doctest.h>
@@ -31,11 +30,6 @@
 #include <string>
 #include <unordered_map>
 #include <vector>
-
-#if defined(JP) && defined(EUC)
-// _LIBICONV_VERSION (GNU libiconv の判定に使う) を参照するため
-#include <iconv.h>
-#endif
 
 TEST_CASE("JSON definition roots require an object containing the named array")
 {
@@ -469,10 +463,9 @@ TEST_CASE("info_set_string leaves malformed UTF-8 handling to the existing conve
     for (const auto is_required : { false, true }) {
         std::string data = "unchanged";
 #ifdef JP
-        // Windows may replace invalid UTF-8, while iconv can reject it. Do not add a stricter policy here.
-        const auto converted = utf8_to_sys(value);
-        CHECK(test::to_error_code(info_set_string(json, data, is_required)) == (converted ? ParseErrorType::NONE : ParseErrorType::INVALID_VALUE));
-        CHECK(data == (converted ? *converted : "unchanged"));
+        // 内部の文字コードは UTF-8 なので、UTF-8 として読めない文字列は不正な値として格納しない
+        CHECK(test::to_error_code(info_set_string(json, data, is_required)) == ParseErrorType::INVALID_VALUE);
+        CHECK(data == "unchanged");
 #else
         CHECK(info_set_string(json, data, is_required).has_value());
         CHECK(data == value);
@@ -501,7 +494,7 @@ TEST_CASE("info_set_string rejects all non-string selected values without changi
 }
 
 #ifdef JP
-TEST_CASE("info_set_string converts the UTF-8 string into the system encoding")
+TEST_CASE("info_set_string stores the UTF-8 string as is")
 {
     nlohmann::json json;
     json["ja"] = UTF8_TEST_STRING;
@@ -509,51 +502,10 @@ TEST_CASE("info_set_string converts the UTF-8 string into the system encoding")
     std::string data;
     REQUIRE(info_set_string(json, data, true).has_value());
 
-    // 日本語版のシステム文字コード(EUC-JP/Shift_JIS)はUTF-8と異なるので、
-    // 変換されていれば元のバイト列とは一致しない (内部の文字コードが UTF-8 なら変換しないので一致する)
+    // 内部の文字コードは UTF-8 なので、変換せずに元のバイト列のまま格納する
 #ifdef UTF8
     CHECK(data == UTF8_TEST_STRING);
-#else
-    CHECK(data != UTF8_TEST_STRING);
 #endif
-
-    // 変換結果の内容まで確かめる。期待するバイト列はEUC-JPとShift_JISで異なるため、
-    // UTF-8へ戻して元の文字列と一致することを見る
-    const auto restored = sys_to_utf8(data);
-    REQUIRE(restored.has_value());
-    CHECK(*restored == UTF8_TEST_STRING);
-}
-#endif
-
-#if defined(JP) && defined(EUC) && (defined(__GLIBC__) || defined(_LIBICONV_VERSION))
-TEST_CASE("info_set_string cannot convert a character missing from EUC-JP")
-{
-    // U+1F600 (GRINNING FACE)。EUC-JPに対応する文字がないため変換に失敗する。
-    // Windows版(Shift_JIS)は MultiByteToWideChar/WideCharToMultiByte をエラー指定なしで
-    // 呼ぶので置換文字になって成功してしまう。そのためEUC版限定のテストとする。
-    // さらに、変換不能文字でiconvがエラーを返すのは glibc/GNU libiconv での挙動で、
-    // musl のiconvは '*' に置換して成功扱いにする。そのため glibc (__GLIBC__) か
-    // GNU libiconv (_LIBICONV_VERSION) のときに限定し、musl 系ではこのテストごと除外する
-    nlohmann::json json;
-    json["ja"] = "\xf0\x9f\x98\x80";
-
-    std::string data = "unchanged";
-
-    // 変換失敗は必須かどうかによらずエラーになり、格納先は書き換えない
-    CHECK(test::to_error_code(info_set_string(json, data, true)) == ParseErrorType::INVALID_VALUE);
-    CHECK(test::to_error_code(info_set_string(json, data, false)) == ParseErrorType::INVALID_VALUE);
-
-    CHECK(data == "unchanged");
-
-    // 変換に失敗しても後続の変換に影響しないことを確かめる。
-    // utf8_to_euc の iconv_t は関数内staticで、変換失敗後にリセットされないため
-    nlohmann::json valid_json;
-    valid_json["ja"] = UTF8_TEST_STRING;
-
-    REQUIRE(info_set_string(valid_json, data, true).has_value());
-    const auto restored = sys_to_utf8(data);
-    REQUIRE(restored.has_value());
-    CHECK(*restored == UTF8_TEST_STRING);
 }
 #endif
 

@@ -11,6 +11,10 @@
 #include <string>
 #include <string_view>
 #include <utility>
+#if defined(UTF8) && !defined(_WIN32)
+// _LIBICONV_VERSION (GNU libiconv の判定に使う) を参照するため
+#include <iconv.h>
+#endif
 
 using namespace test;
 
@@ -64,8 +68,10 @@ constexpr std::string_view FULLWIDTH_TILDE_UTF8 = "\xef\xbd\x9e"; //!< ～ (U+FF
 constexpr std::string_view FULLWIDTH_HYPHEN_MINUS_UTF8 = "\xef\xbc\x8d"; //!< － (U+FF0D)
 constexpr std::string_view HALFWIDTH_KATAKANA_UTF8 = "\xef\xbd\xb1\xef\xbd\xb2\xef\xbd\xb3"; //!< ｱｲｳ (UTF-8 では1文字3バイト)
 constexpr std::string_view MS_SYMBOLS_UTF8 = "\xe2\x88\xa5\xef\xbf\xa0\xef\xbf\xa1\xef\xbf\xa2"; //!< ∥￠￡￢ (U+2225・U+FFE0・U+FFE1・U+FFE2)
-#if defined(UTF8) || defined(EUC)
+#if defined(UTF8)
 constexpr std::string_view MS_SYMBOLS_EUC = "\xa1\xc2\xa1\xf1\xa1\xf2\xa2\xcc"; //!< ∥￠￡￢ (EUC-JP)
+constexpr std::string_view WAVE_DASH_EUC = "\xa1\xc1"; //!< 〜 (EUC-JP。全角チルダ (～) を EUC-JP にしたもの)
+constexpr std::string_view MINUS_SIGN_EUC = "\xa1\xdd"; //!< − (EUC-JP。全角ハイフン (－) を EUC-JP にしたもの)
 #endif
 
 #if defined(UTF8)
@@ -74,30 +80,6 @@ constexpr std::string_view KANJI_SEN_SYS = "\xe7\x87\xb9"; //!< 燹 (UTF-8)
 constexpr std::string_view KANJI_SHAKU_SYS = "\xe7\x88\x8d"; //!< 爍 (UTF-8)
 constexpr std::string_view KANJI_YOU_SYS = "\xe7\x8f\xb1"; //!< 珱 (UTF-8)
 constexpr std::string_view KANJI_SEN2_SYS = "\xe9\x99\x9d"; //!< 陝 (UTF-8)
-constexpr auto FULLWIDTH_TILDE_SYS = FULLWIDTH_TILDE_UTF8; //!< ～ (UTF-8 では変換しない)
-constexpr auto FULLWIDTH_HYPHEN_MINUS_SYS = FULLWIDTH_HYPHEN_MINUS_UTF8; //!< － (UTF-8 では変換しない)
-constexpr auto HALFWIDTH_KATAKANA_SYS = HALFWIDTH_KATAKANA_UTF8; //!< ｱｲｳ (UTF-8 では変換しない)
-constexpr auto MS_SYMBOLS_SYS = MS_SYMBOLS_UTF8; //!< ∥￠￡￢ (UTF-8 では変換しない)
-#elif defined(EUC)
-constexpr auto NIHON_SYS = NIHON_EUC;
-constexpr auto KANJI_SEN_SYS = KANJI_SEN_EUC;
-constexpr auto KANJI_SHAKU_SYS = KANJI_SHAKU_EUC;
-constexpr auto KANJI_YOU_SYS = KANJI_YOU_EUC;
-constexpr auto KANJI_SEN2_SYS = KANJI_SEN2_EUC;
-constexpr std::string_view FULLWIDTH_TILDE_SYS = "\xa1\xc1"; //!< ～ (EUC-JP では波ダッシュに置き換える)
-constexpr std::string_view FULLWIDTH_HYPHEN_MINUS_SYS = "\xa1\xdd"; //!< － (EUC-JP ではマイナス記号に置き換える)
-constexpr std::string_view HALFWIDTH_KATAKANA_SYS = "\x8e\xb1\x8e\xb2\x8e\xb3"; //!< ｱｲｳ (EUC-JP)
-constexpr auto MS_SYMBOLS_SYS = MS_SYMBOLS_EUC; //!< ∥￠￡￢ (EUC-JP)
-#else
-constexpr auto NIHON_SYS = NIHON_SJIS;
-constexpr auto KANJI_SEN_SYS = KANJI_SEN_SJIS;
-constexpr auto KANJI_SHAKU_SYS = KANJI_SHAKU_SJIS;
-constexpr auto KANJI_YOU_SYS = KANJI_YOU_SJIS;
-constexpr auto KANJI_SEN2_SYS = KANJI_SEN2_SJIS;
-constexpr std::string_view FULLWIDTH_TILDE_SYS = "\x81\x60"; //!< ～ (CP932)
-constexpr std::string_view FULLWIDTH_HYPHEN_MINUS_SYS = "\x81\x7c"; //!< － (CP932)
-constexpr std::string_view HALFWIDTH_KATAKANA_SYS = "\xb1\xb2\xb3"; //!< ｱｲｳ (CP932 では1文字1バイト)
-constexpr std::string_view MS_SYMBOLS_SYS = "\x81\x61\x81\x91\x81\x92\x81\xca"; //!< ∥￠￡￢ (CP932)
 #endif
 
 }
@@ -165,7 +147,8 @@ TEST_CASE("guess_legacy_encoding detects EUC-JP whose lead byte is 0xF0 or above
 
 TEST_CASE("guess_legacy_encoding does not treat Shift_JIS user-defined characters as Shift_JIS")
 {
-    // 1バイト目が F0 以上の Shift_JIS は sjis2euc() で EUC-JP に変換できないため、Shift_JIS とみなさない
+    // 1バイト目が F0 以上の Shift_JIS (ユーザー定義文字・IBM 拡張文字) は、内部の文字コードが EUC-JP だった旧版が
+    // Shift_JIS のデータを読むのに使っていた変換で EUC-JP にできなかったので、Shift_JIS とみなさない (guess_legacy_encoding() を参照)
     CHECK(guess_legacy_encoding(cat(NIHON_SJIS, "\xf0\x40")) == CharacterEncoding::UNKNOWN);
 }
 
@@ -201,39 +184,26 @@ TEST_CASE("guess_legacy_encoding returns UNKNOWN for empty string")
     CHECK(guess_legacy_encoding("") == CharacterEncoding::UNKNOWN);
 }
 
-TEST_CASE("legacy_to_sys_replacing_invalid converts a string saved in UTF-8")
-{
-    // 内部の文字コードを UTF-8 にした構成で書いたセーブの文字列は、どの構成でも内部の文字コードにする
-    CHECK(legacy_to_sys_replacing_invalid("a\xe6\x97\xa5\xe6\x9c\xac"sv, CharacterEncoding::UTF_8) == cat("a", NIHON_SYS));
-}
-
-#ifdef EUC
-TEST_CASE("legacy_to_sys_replacing_invalid replaces characters which cannot be converted from a string saved in UTF-8")
-{
-    // EUC-JP に無い文字 (U+1F600) と読めないバイトは '?' にし、ほかの文字は変換する
-    CHECK(legacy_to_sys_replacing_invalid("\xe6\x97\xa5\xf0\x9f\x98\x80\xff\xe6\x9c\xac"sv, CharacterEncoding::UTF_8) == cat(NIHON_EUC.substr(0, 2), "??", NIHON_EUC.substr(2)));
-}
-#endif
-
-TEST_CASE("utf8_to_sys converts the characters which EUC-JP-MS and EUC-JP map differently")
+TEST_CASE("utf8_to_sys keeps the characters which EUC-JP-MS and EUC-JP map differently")
 {
     // ∥￠￡￢ (EUC-JP-MS で読んだ旧版の EUC-JP の A1C2・A1F1・A1F2・A2CC)
-    CHECK(utf8_to_sys(MS_SYMBOLS_UTF8) == MS_SYMBOLS_SYS);
+    CHECK(utf8_to_sys(MS_SYMBOLS_UTF8) == MS_SYMBOLS_UTF8);
 }
 
-TEST_CASE("utf8_to_sys converts fullwidth tilde and hyphen-minus")
+TEST_CASE("utf8_to_sys keeps fullwidth tilde and hyphen-minus")
 {
-    CHECK(utf8_to_sys(cat(FULLWIDTH_TILDE_UTF8, FULLWIDTH_HYPHEN_MINUS_UTF8)) == cat(FULLWIDTH_TILDE_SYS, FULLWIDTH_HYPHEN_MINUS_SYS));
+    CHECK(utf8_to_sys(cat(FULLWIDTH_TILDE_UTF8, FULLWIDTH_HYPHEN_MINUS_UTF8)) == cat(FULLWIDTH_TILDE_UTF8, FULLWIDTH_HYPHEN_MINUS_UTF8));
 }
 
-TEST_CASE("sys_to_utf8 converts half-width katakana")
+TEST_CASE("sys_to_utf8 keeps half-width katakana")
 {
-    CHECK(sys_to_utf8(HALFWIDTH_KATAKANA_SYS) == HALFWIDTH_KATAKANA_UTF8);
+    CHECK(sys_to_utf8(HALFWIDTH_KATAKANA_UTF8) == HALFWIDTH_KATAKANA_UTF8);
 }
 
-TEST_CASE("sys_to_utf8 converts an empty string to an empty string")
+TEST_CASE("sys_to_utf8 and utf8_to_sys convert an empty string to an empty string")
 {
     CHECK(sys_to_utf8(""sv) == ""sv);
+    CHECK(utf8_to_sys(""sv) == ""sv);
 }
 
 TEST_CASE("utf8_to_sys rejects a string with an embedded NUL")
@@ -242,23 +212,22 @@ TEST_CASE("utf8_to_sys rejects a string with an embedded NUL")
     CHECK_FALSE(utf8_to_sys("a\0b"sv).has_value());
 }
 
-#ifdef EUC
-
+#ifdef UTF8
+// utf8_to_euc() は、旧版のファイルの名前とムービーの通信 (EUC-JP) に使う
 TEST_CASE("utf8_to_euc converts fullwidth tilde and hyphen-minus to wave dash and minus sign")
 {
-    CHECK(utf8_to_euc(cat(FULLWIDTH_TILDE_UTF8, FULLWIDTH_HYPHEN_MINUS_UTF8)) == cat(FULLWIDTH_TILDE_SYS, FULLWIDTH_HYPHEN_MINUS_SYS));
+    CHECK(utf8_to_euc(cat(FULLWIDTH_TILDE_UTF8, FULLWIDTH_HYPHEN_MINUS_UTF8)) == cat(WAVE_DASH_EUC, MINUS_SIGN_EUC));
 }
 
 TEST_CASE("utf8_to_euc converts fullwidth tilde after an embedded NUL")
 {
     // 途中に '\0' があっても、文字列の長さの範囲はすべて置き換えてから変換する
-    CHECK(utf8_to_euc(cat("a\0"sv, FULLWIDTH_TILDE_UTF8)) == "a\0\xa1\xc1"sv);
+    CHECK(utf8_to_euc(cat("a\0"sv, FULLWIDTH_TILDE_UTF8)) == cat("a\0"sv, WAVE_DASH_EUC));
 }
 
-TEST_CASE("utf8_to_euc and utf8_to_sys convert an empty string to an empty string")
+TEST_CASE("utf8_to_euc converts an empty string to an empty string")
 {
     CHECK(utf8_to_euc(""sv) == ""sv);
-    CHECK(utf8_to_sys(""sv) == ""sv);
 }
 
 TEST_CASE("utf8_to_euc rejects a truncated UTF-8 character")
@@ -279,28 +248,25 @@ TEST_CASE("utf8_to_euc rejects a truncated UTF-8 character")
     }
 }
 
-TEST_CASE("utf8_to_sys replaces JIS X 0212 characters with question marks")
+// musl の iconv は EUC-JP に無い文字を '*' にして成功するので、失敗する iconv (glibc・GNU libiconv) と Windows の 20932 だけで確かめる
+#if defined(_WIN32) || defined(__GLIBC__) || defined(_LIBICONV_VERSION)
+TEST_CASE("utf8_to_euc rejects a character missing from EUC-JP and converts the next string")
 {
-    // é (UTF-8 で2バイト) は EUC-JP では JIS X 0212 の3バイト (8F AB B1) になり、正しく表示できないので '?' に置き換える
-    CHECK(utf8_to_sys("caf\xc3\xa9"sv) == "caf?"sv);
-    CHECK(utf8_to_sys("\xc3\xa9\xc3\xa9\xc3\xa9"sv) == "???"sv);
-    CHECK(utf8_to_sys("\xe6\x97\xa5\xe6\x9c\xac\xc3\xa9"sv) == cat(NIHON_EUC, "?"));
+    // EUC-JP に無い文字 (U+1F600) は変換の失敗とし、失敗の後も次の変換はできる
+    CHECK_FALSE(utf8_to_euc("\xf0\x9f\x98\x80"sv).has_value());
+    CHECK(utf8_to_euc(NIHON_SYS) == NIHON_EUC);
 }
+#endif
 
 TEST_CASE("utf8_to_euc replaces JIS X 0212 characters with question marks")
 {
+    // é (UTF-8 で2バイト) は EUC-JP では JIS X 0212 の3バイト (8F AB B1) になり、正しく表示できないので '?' に置き換える
     CHECK(utf8_to_euc(cat("a\xc3\xa9"sv, "b")) == "a?b"sv);
 }
-
-TEST_CASE("utf8_to_sys rejects invalid UTF-8")
-{
-    CHECK_FALSE(utf8_to_sys("\xff"sv).has_value());
-}
-
 #endif
 
 // Windows の 20932 と macOS の libiconv は C1 制御文字を EUC-JP に変換できず、utf8_to_euc() が失敗するので、glibc の iconv だけで確かめる
-#if (defined(EUC) || defined(UTF8)) && defined(__GLIBC__)
+#if defined(UTF8) && defined(__GLIBC__)
 TEST_CASE("utf8_to_euc keeps C1 control characters which iconv converts into one byte")
 {
     // glibc の iconv の EUC-JP は U+0085 を 1 バイトの 85 にする。後ろの文字を 2 バイト目とみなして '?' にしない
@@ -443,8 +409,8 @@ TEST_CASE("legacy_to_sys reads EUC-JP as EUC-JP-MS like the old versions built w
 {
     // 旧版は文字列リテラルを euc-jp-ms で変換したので、全角チルダ (～) は A1 C1、全角ハイフンマイナス (－) は A1 DD になっている。
     // iconv が EUC-JP-MS を持たない環境でも、EUC-JP-MS で読んだ文字になる
-    CHECK(legacy_to_sys("\xa1\xc1"sv, CharacterEncoding::EUC_JP) == FULLWIDTH_TILDE_UTF8);
-    CHECK(legacy_to_sys("\xa1\xdd"sv, CharacterEncoding::EUC_JP) == FULLWIDTH_HYPHEN_MINUS_UTF8);
+    CHECK(legacy_to_sys(WAVE_DASH_EUC, CharacterEncoding::EUC_JP) == FULLWIDTH_TILDE_UTF8);
+    CHECK(legacy_to_sys(MINUS_SIGN_EUC, CharacterEncoding::EUC_JP) == FULLWIDTH_HYPHEN_MINUS_UTF8);
     CHECK(legacy_to_sys(MS_SYMBOLS_EUC, CharacterEncoding::EUC_JP) == MS_SYMBOLS_UTF8);
 }
 
@@ -454,7 +420,7 @@ TEST_CASE("utf8_to_euc_keeping_width converts each character into as many EUC-JP
 
     // 半角カナは EUC-JP でも 2 バイト (8E xx)、全角チルダは EUC-JP の波ダッシュ (A1 C1) になる
     CHECK(utf8_to_euc_keeping_width(HALFWIDTH_KATAKANA_UTF8) == "\x8e\xb1\x8e\xb2\x8e\xb3"sv);
-    CHECK(utf8_to_euc_keeping_width("\xef\xbd\x9e"sv) == "\xa1\xc1"sv);
+    CHECK(utf8_to_euc_keeping_width(FULLWIDTH_TILDE_UTF8) == WAVE_DASH_EUC);
 
     // EUC-JP に無い文字 (U+1F600) と JIS X 0212 の文字 (é) は、2 桁のまま「？」(A1 A9) にする
     CHECK(utf8_to_euc_keeping_width("\xf0\x9f\x98\x80"sv) == "\xa1\xa9"sv);

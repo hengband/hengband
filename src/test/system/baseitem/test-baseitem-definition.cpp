@@ -145,27 +145,15 @@ TEST_CASE("BaseitemDefinition::stripped_name keeps spaces between words")
 TEST_CASE("BaseitemDefinition::stripped_name removes a hash following a multibyte character")
 {
     /*
-     * 日本語版のビルドでは文字列リテラルの文字コードが変換されるため、2バイト文字はエスケープで書く。
-     * 「ル」は後半バイトも2バイト文字の先頭バイトと同じ範囲の値をとる。
+     * 多バイト文字 (ル) の後続のバイトを読み飛ばしたうえで、その直後の '#' を空白にすることを確かめる。
+     * テストデータは16進エスケープで書く (src/test/README.md を参照)。
      */
-#ifdef SJIS
-    const std::string ru = "\x83\x8b"; // ル (Shift_JIS)
-#elif defined(UTF8)
+#ifdef UTF8
     const std::string ru = "\xe3\x83\xab"; // ル (UTF-8)
-#else
-    const std::string ru = "\xa5\xeb"; // ル (EUC-JP)
 #endif
     BaseitemDefinition baseitem;
     baseitem.name = ru + "#";
     CHECK(baseitem.stripped_name() == ru + " ");
 }
 
-#ifdef SJIS
-TEST_CASE("BaseitemDefinition::stripped_name keeps a trail byte equal to tilde")
-{
-    BaseitemDefinition baseitem;
-    baseitem.name = "\x83\x7e"; // ミ (Shift_JIS、後半バイトが '~')
-    CHECK(baseitem.stripped_name() == "\x83\x7e ");
-}
-#endif
 #endif

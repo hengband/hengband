@@ -1,12 +1,10 @@
 /*!
  * @brief path_build() のテスト
  *
- * Windows 日本語版ではファイル名が Shift_JIS のため、std::filesystem::path へ
- * 渡す前に CP932 → UTF-16 へ変換する。相対パスだけでなく、'\\' 始まりの
- * 早期 return 経路でも同じ変換が必要なことを検証する。
- * 内部の文字コードを UTF-8 にした Windows 版では、UTF-8 から UTF-16 へ変換することを検証する。
+ * Windows 日本語版では、std::filesystem::path へ渡す前にファイル名を UTF-8 から UTF-16 へ変換する。
+ * 相対パスだけでなく、'\\' 始まりの早期 return 経路でも同じ変換が必要なことを検証する。
  *
- * 2バイト文字のテストデータは16進エスケープで書く (src/test/README.md を参照)。
+ * 多バイト文字のテストデータは16進エスケープで書く (src/test/README.md を参照)。
  *
  * また、Unix 版の path_parse() がパスの先頭の「~」を展開できない場合に、
  * 例外を投げず開けないパスとして扱うことを検証する。
@@ -30,50 +28,6 @@
 #include <string_view>
 #include <vector>
 
-#if defined(_WIN32) && defined(JP) && defined(SJIS)
-using namespace test;
-
-namespace {
-constexpr std::string_view KANJI_NI = "\x93\xfa"; //!< 日
-constexpr std::string_view KANJI_HON = "\x96\x7b"; //!< 本
-}
-
-TEST_CASE("path_build appends a Shift_JIS file name as UTF-16 on Windows")
-{
-    const auto file = cat(KANJI_NI, KANJI_HON);
-    const auto built = path_build(std::filesystem::path(L"pref"), file);
-    CHECK(built.filename().wstring() == L"\u65e5\u672c");
-}
-
-TEST_CASE("path_build converts a root-relative Shift_JIS path on the early-return path")
-{
-    const auto file = cat("\\", KANJI_NI, KANJI_HON, "\\file.prf");
-    const auto built = path_build(std::filesystem::path(L"ignored"), file);
-    CHECK(built.wstring() == L"\\\u65e5\u672c\\file.prf");
-}
-
-TEST_CASE("path_build converts a Shift_JIS path whose second byte is 0x5c")
-{
-    const auto file = cat(DAME_SO, ".prf");
-    const auto built = path_build(std::filesystem::path(L"pref"), file);
-    CHECK(built.filename().wstring() == L"\u30bd.prf");
-}
-
-TEST_CASE("path_build converts a Shift_JIS path that is also valid UTF-8")
-{
-    const auto built = path_build(std::filesystem::path(L"pref"), std::string(UTF8_LOOKALIKE));
-    CHECK(built.filename().wstring() == L"\u71ff\u221a\uff41");
-}
-
-TEST_CASE("path_build converts a Shift_JIS path when the directory argument is empty")
-{
-    const auto file = cat(KANJI_NI, KANJI_HON, ".prf");
-    const auto built = path_build({}, file);
-    CHECK(built.wstring() == L"\u65e5\u672c.prf");
-}
-
-#endif
-
 #if defined(_WIN32) && defined(JP) && defined(UTF8)
 namespace {
 constexpr std::string_view NIHON_UTF8 = "\xe6\x97\xa5\xe6\x9c\xac"; //!< 日本 (UTF-8)
@@ -89,6 +43,12 @@ TEST_CASE("path_build converts a root-relative UTF-8 path on the early-return pa
 {
     const auto built = path_build(std::filesystem::path(L"ignored"), test::cat("\\", NIHON_UTF8, "\\file.prf"));
     CHECK(built.wstring() == L"\\\u65e5\u672c\\file.prf");
+}
+
+TEST_CASE("path_build converts a UTF-8 path when the directory argument is empty")
+{
+    const auto built = path_build({}, test::cat(NIHON_UTF8, ".prf"));
+    CHECK(built.wstring() == L"\u65e5\u672c.prf");
 }
 
 TEST_CASE("std::filesystem::path converts std::string as UTF-8 when the active code page is UTF-8")

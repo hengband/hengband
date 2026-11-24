@@ -3,16 +3,11 @@
  *
  * util/string-processor.h で宣言されている関数を検証する。
  *
- * 日本語版では2バイト文字を含む文字列の扱いが加わるため、テストを3層に分けている。
+ * 日本語版では多バイト文字を含む文字列の扱いが加わるため、テストを2層に分けている。
  * - 文字コードに依存しないもの (全ビルドで実行する)
- * - 2バイト文字を分断しないことの検証 (#ifdef JP。EUC-JPでもShift_JISでも成立する)
- * - ダメ文字の検証 (#if defined(JP) && defined(SJIS)。Windows版でのみ実行する)
+ * - 多バイト文字を分断しないことの検証 (#ifdef JP)
  *
- * ダメ文字とは、Shift_JISの2バイト文字のうち後半バイトがASCIIの範囲と重なるものを指す。
- * EUC-JPでは後半バイトがASCIIの範囲と重ならないため、Linux/macOSのビルドでは再現できない。
- * ダメ文字のテストはMSVCのCI (Debug構成は JP + SJIS) で実行される。
- *
- * 2バイト文字のテストデータは test/string-helpers.h の定数を使う。
+ * 多バイト文字のテストデータは test/string-helpers.h の定数を使う。
  */
 
 #include "util/string-processor.h"
@@ -518,10 +513,10 @@ TEST_CASE("is_numeric accepts only the ASCII digits")
 #ifdef JP
 
 //
-// 2バイト文字を分断しないことのテスト (EUC-JP / Shift_JIS 共通)
+// 多バイト文字を分断しないことのテスト
 //
 
-TEST_CASE("angband_strcpy does not truncate in the middle of a two byte character")
+TEST_CASE("angband_strcpy does not truncate in the middle of a multibyte character")
 {
     // 「漢」と「字」の途中までしか入らない大きさのバッファに「漢字」を書き込む
     const auto str = cat(KANJI_KAN, KANJI_JI);
@@ -530,25 +525,25 @@ TEST_CASE("angband_strcpy does not truncate in the middle of a two byte characte
     CHECK(std::string_view(buf.data()) == KANJI_KAN);
 }
 
-TEST_CASE("angband_strcpy drops a two byte character which lacks its trailing byte")
+TEST_CASE("angband_strcpy drops a multibyte character which lacks its trailing bytes")
 {
     char buf[16] = {};
     CHECK(angband_strcpy(buf, cat("a", KANJI_KAN.substr(0, 1)), sizeof(buf)) == 2);
     CHECK(std::string_view(buf) == "a");
 }
 
-TEST_CASE("str_substr does not split a two byte character")
+TEST_CASE("str_substr does not split a multibyte character")
 {
     const auto str = cat(KANJI_KAN, KANJI_JI);
 
-    // 終了位置が2バイト文字の途中なので手前で区切る
+    // 終了位置が多バイト文字の途中なので手前で区切る
     CHECK(str_substr(std::string_view(str), 0, KANJI_KAN.length() + 1) == KANJI_KAN);
 
-    // 開始位置が2バイト文字の途中なので次の文字から始める
+    // 開始位置が多バイト文字の途中なので次の文字から始める
     CHECK(str_substr(std::string_view(str), 1, str.length() - 1) == KANJI_JI);
 }
 
-TEST_CASE("str_separate does not split a two byte character")
+TEST_CASE("str_separate does not split a multibyte character")
 {
     const auto parts = str_separate(cat(KANJI_KAN, KANJI_JI, "ab"), 3);
     REQUIRE(parts.size() == 3);
@@ -557,38 +552,38 @@ TEST_CASE("str_separate does not split a two byte character")
     CHECK(parts[2] == "b");
 }
 
-TEST_CASE("str_separate gives up when the width is too small for a two byte character")
+TEST_CASE("str_separate gives up when the width is too small for a multibyte character")
 {
     CHECK(str_separate(KANJI_KAN, 1).empty());
 }
 
-TEST_CASE("str_toupper and str_tolower leave a two byte character as it is")
+TEST_CASE("str_toupper and str_tolower leave a multibyte character as it is")
 {
     CHECK(str_tolower(cat(KANJI_KAN, "ABC")) == cat(KANJI_KAN, "abc"));
     CHECK(str_toupper(cat(KANJI_KAN, "abc")) == cat(KANJI_KAN, "ABC"));
 }
 
-TEST_CASE("str_erase does not erase a two byte character")
+TEST_CASE("str_erase does not erase a multibyte character")
 {
-    // erase_chars は1バイト文字の集合として扱うため、2バイト文字は削除されない
+    // erase_chars は1バイト文字の集合として扱うため、多バイト文字は削除されない
     const auto str = cat(KANJI_KAN, "a");
 
     CHECK(str_erase(str, KANJI_KAN) == str);
     CHECK(str_erase(str, "a") == KANJI_KAN);
 }
 
-TEST_CASE("str_upcase_first leaves a leading two byte character as it is")
+TEST_CASE("str_upcase_first leaves a leading multibyte character as it is")
 {
     const auto str = cat(KANJI_KAN, "abc");
     CHECK(str_upcase_first(str) == str);
 }
 
-TEST_CASE("string-processor accepts a two byte character which lacks its trailing byte")
+TEST_CASE("string-processor accepts a multibyte character which lacks its trailing bytes")
 {
     // 前半バイトだけで終わる壊れた文字列を渡しても、範囲外を読まずに処理を終える
     const auto str = cat("a", KANJI_KAN.substr(0, 1));
 
-    // 欠けた前半バイトも2バイト文字の一部として扱い、変換の対象にしない
+    // 欠けた前半バイトも多バイト文字の一部として扱い、変換の対象にしない
     CHECK(str_toupper(str) == cat("A", KANJI_KAN.substr(0, 1)));
     CHECK(str_tolower(str) == str);
 
@@ -602,71 +597,6 @@ TEST_CASE("string-processor accepts a two byte character which lacks its trailin
     CHECK(angband_strchr(str.data(), 'x') == nullptr);
     CHECK(angband_strstr(str.data(), "x") == nullptr);
     CHECK(angband_strchr(str.data(), 'a') == str.data());
-}
-
-#endif
-
-#if defined(JP) && defined(SJIS)
-
-//
-// ダメ文字のテスト (Shift_JISのみ)
-//
-
-TEST_CASE("angband_strchr does not match the trailing byte of a two byte character")
-{
-    const auto str = cat(DAME_SO, "a");
-    CHECK(angband_strchr(str.data(), '\\') == nullptr);
-    CHECK(angband_strchr(str.data(), 'a') == str.data() + 2);
-}
-
-TEST_CASE("angband_strstr does not match from the trailing byte of a two byte character")
-{
-    // 単純なバイト列としては "\\a" が一致するが、2バイト文字の途中なのでマッチしない
-    const auto str = cat(DAME_SO, "a");
-    CHECK(angband_strstr(str.data(), "\\a") == nullptr);
-}
-
-TEST_CASE("str_find does not match from the trailing byte of a two byte character")
-{
-    const auto str = cat(DAME_SO, "a");
-
-    CHECK_FALSE(str_find(str, "\\a"));
-    CHECK(str_find(str, "a"));
-}
-
-TEST_CASE("str_split does not split at the trailing byte of a two byte character")
-{
-    // 全角スペースの後半バイトは '@' と同じ 0x40
-    const auto str = cat("a", DAME_SPACE, "b");
-    const auto tokens = str_split(str, '@');
-    REQUIRE(tokens.size() == 1);
-    CHECK(tokens[0] == str);
-}
-
-TEST_CASE("str_replace does not replace the trailing byte of a two byte character")
-{
-    const auto str = cat("a", DAME_SO, "b");
-    CHECK(str_replace(str, "\\", "X") == str);
-
-    // 2バイト文字の一部でない '\' は置き換えられる
-    CHECK(str_replace(cat("\\", DAME_SO), "\\", "X") == cat("X", DAME_SO));
-}
-
-TEST_CASE("str_erase does not break a two byte character")
-{
-    const auto str = cat("a", DAME_SO, "b");
-    CHECK(str_erase(str, "\\") == str);
-    CHECK(str_erase(cat(DAME_KANA_A, "A"), "A") == DAME_KANA_A);
-
-    // 「ソ」の前半バイトは「ア」の前半バイトと同じ 0x83 だが、前半バイトだけを削除しない
-    CHECK(str_erase(cat(DAME_KANA_A, "b"), DAME_SO) == cat(DAME_KANA_A, "b"));
-}
-
-TEST_CASE("str_substr does not split a two byte character whose trailing byte is ASCII")
-{
-    const auto str = cat(DAME_SO, DAME_HYOU);
-    CHECK(str_substr(std::string_view(str), 0, 3) == DAME_SO);
-    CHECK(str_substr(std::string_view(str), 1, 3) == DAME_HYOU);
 }
 
 #endif

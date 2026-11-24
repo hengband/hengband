@@ -138,12 +138,8 @@ TEST_CASE("PlayerSkill::skill_rank_abbrev keeps whole characters within 3 column
         CHECK(is_mb_char_boundary(rank_str, body_length));
     }
 
-#if defined(JP) && defined(SJIS)
-    CHECK(PlayerSkill::skill_rank_abbrev(PlayerSkillRank::UNSKILLED) == "[\x8f\x89]"); // [初]
-#elif defined(JP) && defined(UTF8)
+#if defined(JP) && defined(UTF8)
     CHECK(PlayerSkill::skill_rank_abbrev(PlayerSkillRank::UNSKILLED) == "[\xe5\x88\x9d]"); // [初]
-#elif defined(JP)
-    CHECK(PlayerSkill::skill_rank_abbrev(PlayerSkillRank::UNSKILLED) == "[\xbd\xe9]"); // [初]
 #else
     CHECK(PlayerSkill::skill_rank_abbrev(PlayerSkillRank::UNSKILLED) == "[Un]");
     CHECK(PlayerSkill::skill_rank_abbrev(PlayerSkillRank::MASTER) == "[Ma]");

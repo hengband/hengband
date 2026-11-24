@@ -85,12 +85,10 @@ TEST_CASE("read_pickpref_text_lines reads an existing empty file without falling
 #ifdef JP
 TEST_CASE("read_pickpref_text_lines converts lines in another encoding to the system encoding")
 {
-    // ゲームが設定ファイルを読むとき (angband_fgets()) と同じく、内部の文字コードでない行は推定して変換する。
-    // 内部の文字コードが UTF-8 なら旧版の EUC-JP の行を、EUC-JP・Shift_JIS なら UTF-8 の行を変換する
+    // ゲームが設定ファイルを読むとき (angband_fgets()) と同じく、内部の文字コード (UTF-8) でない行は推定して変換する。
+    // ここでは旧版の EUC-JP の行を変換する
 #ifdef UTF8
     constexpr std::string_view other_kanji = "\xb4\xc1\xbb\xfa"; //!< 漢字 (EUC-JP)
-#else
-    constexpr std::string_view other_kanji = "\xe6\xbc\xa2\xe5\xad\x97"; //!< 漢字 (UTF-8)
 #endif
     test::TemporaryJsonFiles files;
     const auto restore = test::scoped_restore(ANGBAND_DIR_USER);
