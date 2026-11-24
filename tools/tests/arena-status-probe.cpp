@@ -38,6 +38,7 @@
 #include "term/gameterm.h"
 #include "term/term-color-types.h"
 #include "term/z-term.h"
+#include "timed-effect/timed-effects.h"
 #include "util/enum-converter.h"
 #include "view/display-messages.h"
 #include "world/world.h"
@@ -235,9 +236,9 @@ int main(int argc, char **argv)
         check(player.action == ACTION_NONE, "Hex action ended");
         check(count_message(_(u8"稲妻のオーラが消え去った。", u8"The electrical aura disappeared.")) == ((mode == "hex-interrupted") || (mode == "hex-dispel") ? 0 : 1), "real Hex STOP runs exactly once");
     } else if (mode == "dispel-invuln") {
-        player.invuln = 20;
+        player.effects()->invulnerability().set(20);
         dispel();
-        check(player.invuln == 0 && player.energy_need > 42, "normal dispel retains invulnerability ending energy penalty");
+        check(!player.effects()->invulnerability().is_active() && player.energy_need > 42, "normal dispel retains invulnerability ending energy penalty");
     } else if ((mode == "song-active") || (mode == "song-interrupted")) {
         player.pclass = PlayerClassType::BARD;
         auto data = std::make_shared<bard_data_type>();
@@ -253,7 +254,8 @@ int main(int argc, char **argv)
         check(data->singing_song == MUSIC_NONE && data->interrputing_song == MUSIC_NONE && data->singing_song_spell_idx == 0, "song and restart discarded");
         check(count_message(_(u8"高潔な気分が消え失せた。", u8"The prayer has expired.")) == (mode == "song-active" ? 1 : 0), "real song STOP runs exactly once");
     } else if ((mode == "ordinary") || (mode == "tsuyoshi") || (mode == "arena-normal") || (mode == "arena-silent") || (mode == "arena-metal") || (mode == "arena-cancel") || (mode == "arena-watch")) {
-        player.hero = player.berserk = player.shield = player.blessed = player.invuln = player.tsubureru = 20;
+        player.hero = player.berserk = player.shield = player.blessed = player.tsubureru = 20;
+        player.effects()->invulnerability().set(20);
         player.oppose_acid = player.oppose_elec = player.oppose_fire = player.oppose_cold = player.oppose_pois = 20;
         player.tsuyoshi = ((mode == "ordinary") || (mode == "arena-silent")) ? 0 : 20;
         const auto sequence = message_sequence();
@@ -281,7 +283,7 @@ int main(int argc, char **argv)
         if (mode == "arena-cancel") {
             check(player.tsuyoshi == 20 && player.hero == 20 && player.stat_max[A_STR] == 18 && player.virtues[0] == 0, "cancel preserves buffs and stats");
         } else {
-            check(player.hero == 0 && player.berserk == 0 && player.shield == 0 && player.blessed == 0 && player.invuln == 0 && player.tsubureru == 0, "ordinary timed buffs cleared");
+            check(player.hero == 0 && player.berserk == 0 && player.shield == 0 && player.blessed == 0 && !player.effects()->invulnerability().is_active() && player.tsubureru == 0, "ordinary timed buffs cleared");
             check(player.oppose_acid == 0 && player.oppose_elec == 0 && player.oppose_fire == 0 && player.oppose_cold == 0 && player.oppose_pois == 0, "resistances cleared");
             check(player.energy_need == 42, "no invulnerability ending energy penalty");
             if ((mode == "ordinary") || (mode == "arena-silent")) {
