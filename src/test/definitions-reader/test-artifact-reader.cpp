@@ -28,13 +28,9 @@
 #include <vector>
 
 namespace {
-// 無効なベースアイテムの名前（「異常アイテム」）。2バイト文字のテストデータは16進エスケープで書く。
-#if defined(JP) && defined(SJIS)
-constexpr std::string_view INVALID_ITEM_NAME = "\x88\xd9\x8f\xed\x83\x41\x83\x43\x83\x65\x83\x80";
-#elif defined(JP) && defined(UTF8)
+// 無効なベースアイテムの名前（「異常アイテム」）。多バイト文字のテストデータは16進エスケープで書く。
+#if defined(JP) && defined(UTF8)
 constexpr std::string_view INVALID_ITEM_NAME = "\xe7\x95\xb0\xe5\xb8\xb8\xe3\x82\xa2\xe3\x82\xa4\xe3\x83\x86\xe3\x83\xa0";
-#elif defined(JP)
-constexpr std::string_view INVALID_ITEM_NAME = "\xb0\xdb\xbe\xef\xa5\xa2\xa5\xa4\xa5\xc6\xa5\xe0";
 #endif
 
 /*!

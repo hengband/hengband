@@ -8,14 +8,10 @@
 #include <string>
 
 namespace {
-// メッセージの後に表示する -続く- (英語版は -more-)。2バイト文字は16進エスケープで書く
+// メッセージの後に表示する -続く- (英語版は -more-)。多バイト文字は16進エスケープで書く
 #ifdef JP
-#ifdef SJIS
-constexpr auto EXPECTED_MORE_PROMPT = "-\x91\xb1\x82\xad-";
-#elif defined(UTF8)
+#ifdef UTF8
 constexpr auto EXPECTED_MORE_PROMPT = "-\xe7\xb6\x9a\xe3\x81\x8f-";
-#else
-constexpr auto EXPECTED_MORE_PROMPT = "-\xc2\xb3\xa4\xaf-";
 #endif
 #else
 constexpr auto EXPECTED_MORE_PROMPT = "-more-";

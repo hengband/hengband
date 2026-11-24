@@ -1,7 +1,7 @@
 /*!
  * @brief 生い立ちの編集で、行の表示桁を扱う処理のテスト
  *
- * 2バイト文字のテストデータは16進エスケープで書く (src/test/README.md を参照)。
+ * 多バイト文字のテストデータは16進エスケープで書く (src/test/README.md を参照)。
  */
 
 #include "birth/history-editor.h"

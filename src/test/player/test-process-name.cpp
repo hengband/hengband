@@ -4,11 +4,11 @@
  * player/process-name.h の make_player_base_name() と make_player_name_for_expression() を検証する。
  * 基本名はセーブファイルや設定ファイルの名前に使われるため、従来の変換結果を変えないことと、
  * 名前の範囲外を読まずに PlayerType::base_name に収まる長さまでで打ち切ることを確かめる。
- * 条件式の $PLAYER で使う名前は、区切りに使われる文字を置き換えつつ、2バイト文字を壊さず、
+ * 条件式の $PLAYER で使う名前は、区切りに使われる文字を置き換えつつ、多バイト文字を壊さず、
  * 名前の範囲外を読まないことを確かめる。
  *
  * 区切り文字 (PATH_SEP) は Unix 版と Windows 版で異なるため、テストデータでも PATH_SEP を使う。
- * 2バイト文字のテストデータは src/test/string-helpers.h の定数を使う。
+ * 多バイト文字のテストデータは src/test/string-helpers.h の定数を使う。
  */
 
 #include "player/process-name.h"
@@ -101,12 +101,5 @@ TEST_CASE("make_player_name_for_expression keeps a lone lead byte at the end")
     const auto buffer = cat("a ", KANJI_KAN.substr(0, 1), "XYZ");
     const std::string_view name(buffer.data(), 3);
     CHECK(make_player_name_for_expression(name) == cat("a_", KANJI_KAN.substr(0, 1)));
-}
-#endif
-
-#if defined(JP) && defined(SJIS)
-TEST_CASE("make_player_name_for_expression does not replace a trail byte that equals a bracket")
-{
-    CHECK(make_player_name_for_expression(DAME_CHOON) == DAME_CHOON);
 }
 #endif

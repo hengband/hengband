@@ -2,7 +2,7 @@
  * @brief 画面への文字列の書き出しのテスト
  *
  * c_roff() が端末の右端で折り返すときの、折り返す位置と行頭禁則を検証する。
- * 2バイト文字のテストデータは16進エスケープで書く (src/test/README.md を参照)。
+ * 多バイト文字のテストデータは16進エスケープで書く (src/test/README.md を参照)。
  */
 
 #include "term/screen-processor.h"
@@ -21,12 +21,8 @@
 using namespace test;
 
 namespace {
-#if defined(JP) && defined(SJIS)
-constexpr std::string_view TOUTEN = "\x81\x41"; //!< 、
-#elif defined(JP) && defined(UTF8)
+#if defined(JP) && defined(UTF8)
 constexpr std::string_view TOUTEN = "\xe3\x80\x81"; //!< 、
-#elif defined(JP)
-constexpr std::string_view TOUTEN = "\xa1\xa2"; //!< 、
 #endif
 
 /*!

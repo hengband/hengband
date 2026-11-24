@@ -18,15 +18,9 @@ namespace {
 
 using Lines = std::vector<std::string>;
 
-#if defined(JP) && defined(SJIS)
-constexpr std::string_view KUTEN = "\x81\x42"; //!< 。
-constexpr std::string_view CHOON = "\x81\x5b"; //!< ー
-#elif defined(JP) && defined(UTF8)
+#if defined(JP) && defined(UTF8)
 constexpr std::string_view KUTEN = "\xe3\x80\x82"; //!< 。
 constexpr std::string_view CHOON = "\xe3\x83\xbc"; //!< ー
-#elif defined(JP)
-constexpr std::string_view KUTEN = "\xa1\xa3"; //!< 。
-constexpr std::string_view CHOON = "\xa1\xbc"; //!< ー
 #endif
 
 }

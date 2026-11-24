@@ -321,26 +321,18 @@ TEST_CASE("evaluate_condition_expression does not read past a word ending with a
     CHECK(evaluate(cat("[EQU ", word)) == "0");
 }
 
-TEST_CASE("evaluate_condition_expression reads a word containing a two-byte character")
+TEST_CASE("evaluate_condition_expression reads a word containing a multibyte character")
 {
     CHECK(evaluate(cat("ab", KANJI_KAN)) == cat("ab", KANJI_KAN));
     CHECK(evaluate(cat("[EQU ", KANJI_KAN, " ", KANJI_KAN, "]")) == "1");
 }
 
-TEST_CASE("evaluate_condition_expression reads a bracket after a lead byte as a trail byte")
+TEST_CASE("evaluate_condition_expression reads a bracket after a lead byte by the byte length of the lead byte")
 {
-    // 前半バイトの次の1バイトは、値にかかわらず後半バイトとして語に含める
+    // 文字のバイト数は先頭バイトだけで決める (mb_char_length_at())。残りが文字のバイト数に足りなければ先頭バイトを 1 バイトの文字とし、
+    // 足りれば後続のバイトを値にかかわらず文字の続きとして語に含める
     CHECK(evaluate(cat("[EQU a", KANJI_KAN.substr(0, 1), "]")) == "0");
     CHECK(evaluate(cat("[EQU a", KANJI_KAN.substr(0, 1), "] a]")) == "0");
-}
-#endif
-
-#if defined(JP) && defined(SJIS)
-TEST_CASE("evaluate_condition_expression reads a two-byte character whose trail byte is a bracket")
-{
-    CHECK(evaluate(cat("[EQU ", DAME_KANA_ZO, " ", DAME_KANA_ZO, "]")) == "1");
-    CHECK(evaluate(cat("[EQU ", DAME_CHOON, " ", DAME_CHOON, "]")) == "1");
-    CHECK(evaluate(cat("a", DAME_KANA_ZO, "b")) == cat("a", DAME_KANA_ZO, "b"));
 }
 #endif
 

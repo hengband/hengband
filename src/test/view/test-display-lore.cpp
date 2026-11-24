@@ -27,18 +27,10 @@ void capture_roff(TERM_COLOR, std::string_view str)
     captured_text.append(str);
 }
 
-#if defined(JP) && defined(SJIS)
-const auto TAG_UNIQUE = test::cat("[", "\x83\x86\x83\x6a\x81\x5b\x83\x4e", "]"); //!< [ユニーク]
-const auto TAG_MALE = test::cat("[", "\x92\x6a\x90\xab", "]"); //!< [男性]
-const auto TAG_FEMALE = test::cat("[", "\x8f\x97\x90\xab", "]"); //!< [女性]
-#elif defined(JP) && defined(UTF8)
+#if defined(JP) && defined(UTF8)
 const auto TAG_UNIQUE = test::cat("[", "\xe3\x83\xa6\xe3\x83\x8b\xe3\x83\xbc\xe3\x82\xaf", "]"); //!< [ユニーク]
 const auto TAG_MALE = test::cat("[", "\xe7\x94\xb7\xe6\x80\xa7", "]"); //!< [男性]
 const auto TAG_FEMALE = test::cat("[", "\xe5\xa5\xb3\xe6\x80\xa7", "]"); //!< [女性]
-#elif defined(JP)
-const auto TAG_UNIQUE = test::cat("[", "\xa5\xe6\xa5\xcb\xa1\xbc\xa5\xaf", "]"); //!< [ユニーク]
-const auto TAG_MALE = test::cat("[", "\xc3\xcb\xc0\xad", "]"); //!< [男性]
-const auto TAG_FEMALE = test::cat("[", "\xbd\xf7\xc0\xad", "]"); //!< [女性]
 #else
 const std::string TAG_UNIQUE = "[UNIQ]";
 const std::string TAG_MALE = "[male]";

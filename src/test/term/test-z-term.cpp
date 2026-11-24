@@ -2,7 +2,7 @@
  * @brief 端末のテスト
  *
  * キーのキューと、画面のマスに置く全角文字の扱いを検証する。
- * 2バイト文字のテストデータは16進エスケープで書く (src/test/README.md を参照)。
+ * 多バイト文字のテストデータは16進エスケープで書く (src/test/README.md を参照)。
  */
 
 #include "term/z-term.h"
@@ -57,12 +57,8 @@ TEST_CASE("term_key_queue_pending counts keys in the circular key queue")
 
 #ifdef JP
 namespace {
-#ifdef SJIS
-constexpr std::string_view KANJI_A = "\x88\x9f"; //!< 亜
-#elif defined(UTF8)
+#ifdef UTF8
 constexpr std::string_view KANJI_A = "\xe4\xba\x9c"; //!< 亜
-#else
-constexpr std::string_view KANJI_A = "\xb0\xa1"; //!< 亜
 #endif
 
 /*!

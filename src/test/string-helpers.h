@@ -1,9 +1,9 @@
 #pragma once
 
 /*!
- * @brief 文字列を扱うテストで共通に使うヘルパーと、2バイト文字のテストデータ
+ * @brief 文字列を扱うテストで共通に使うヘルパーと、多バイト文字のテストデータ
  *
- * 2バイト文字のテストデータは必ず16進エスケープで書くこと。
+ * 多バイト文字のテストデータは必ず16進エスケープで書くこと。
  * 日本語版ではソースの文字列リテラルは変換されずに UTF-8 のままビルドされるが、旧版の文字コード (EUC-JP・Shift_JIS) のバイト列は
  * 文字では書けないので、どの文字コードのデータも16進エスケープで書き、期待するバイト列を明示する。
  */
@@ -40,35 +40,10 @@ inline std::string repeat(std::string_view str, int count)
     return result;
 }
 
-#if defined(JP) && defined(SJIS)
-inline constexpr std::string_view KANJI_KAN = "\x8a\xbf"; //!< 漢
-inline constexpr std::string_view KANJI_JI = "\x8e\x9a"; //!< 字
-inline constexpr std::string_view KAKKO_OPEN = "\x81\x75"; //!< 「 (行末禁則文字)
-#elif defined(JP) && defined(UTF8)
+#if defined(JP) && defined(UTF8)
 inline constexpr std::string_view KANJI_KAN = "\xe6\xbc\xa2"; //!< 漢
 inline constexpr std::string_view KANJI_JI = "\xe5\xad\x97"; //!< 字
 inline constexpr std::string_view KAKKO_OPEN = "\xe3\x80\x8c"; //!< 「 (行末禁則文字)
-#elif defined(JP)
-inline constexpr std::string_view KANJI_KAN = "\xb4\xc1"; //!< 漢
-inline constexpr std::string_view KANJI_JI = "\xbb\xfa"; //!< 字
-inline constexpr std::string_view KAKKO_OPEN = "\xa1\xd6"; //!< 「 (行末禁則文字)
-#endif
-
-// ダメ文字 (Shift_JIS で後半バイトが ASCII の文字と同じ値になる2バイト文字)
-#if defined(JP) && defined(SJIS)
-inline constexpr std::string_view DAME_SO = "\x83\x5c"; //!< ソ (後半バイトが 0x5c、ASCIIの '\')
-inline constexpr std::string_view DAME_HYOU = "\x95\x5c"; //!< 表 (後半バイトが 0x5c、ASCIIの '\')
-inline constexpr std::string_view DAME_KANA_A = "\x83\x41"; //!< ア (後半バイトが 0x41、ASCIIの 'A')
-inline constexpr std::string_view DAME_KANA_ZO = "\x83\x5d"; //!< ゾ (後半バイトが 0x5d、ASCIIの ']')
-inline constexpr std::string_view DAME_CHOON = "\x81\x5b"; //!< ー (後半バイトが 0x5b、ASCIIの '[')
-inline constexpr std::string_view DAME_SPACE = "\x81\x40"; //!< 全角スペース (後半バイトが 0x40、ASCIIの '@')
-#endif
-
-// UTF-8としても正しいバイト列になる2バイト文字の並び。バイト数とコードポイント数が異なる
-#if defined(JP) && defined(SJIS)
-inline constexpr std::string_view UTF8_LOOKALIKE = "\xe0\xa0\x81\xe3\x82\x81"; //!< 燿√ａ (UTF-8では U+0801 U+3081 の2コードポイント)
-#elif defined(JP)
-inline constexpr std::string_view UTF8_LOOKALIKE = "\xc2\xa3\xcd\xbf"; //!< 贈与 (UTF-8では U+00A3 U+037F の2コードポイント)
 #endif
 
 }

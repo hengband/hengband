@@ -505,12 +505,8 @@ TEST_CASE("add_score_to_file does not overwrite a score file that cannot be read
 #ifdef JP
 namespace {
 constexpr std::string_view UTF8_KAN = "\xe6\xbc\xa2"; //!< 漢
-// LEGACY_KAN は scores.raw を書いた旧版の内部の文字コード (内部の文字コードが UTF-8 なら、Windows 版は Shift_JIS、Unix 系は EUC-JP) の「漢」
-#ifdef SJIS
-constexpr auto LEGACY_KAN = test::KANJI_KAN;
-constexpr std::string_view OTHER_KAN = "\xb4\xc1"; //!< EUC-JP の「漢」
-constexpr std::string_view HANKAKU_AI = "\xb1\xb2"; //!< ｱｲ
-#elif defined(UTF8) && defined(_WIN32)
+// LEGACY_KAN は scores.raw を書いた旧版の内部の文字コード (Windows 版は Shift_JIS、Unix 系は EUC-JP) の「漢」
+#if defined(UTF8) && defined(_WIN32)
 constexpr std::string_view LEGACY_KAN = "\x8a\xbf"; //!< Shift_JIS の「漢」
 constexpr std::string_view OTHER_KAN = "\xb4\xc1"; //!< EUC-JP の「漢」
 constexpr std::string_view HANKAKU_AI = "\xb1\xb2"; //!< ｱｲ (Shift_JIS)
@@ -518,10 +514,6 @@ constexpr std::string_view HANKAKU_AI = "\xb1\xb2"; //!< ｱｲ (Shift_JIS)
 constexpr std::string_view LEGACY_KAN = "\xb4\xc1"; //!< EUC-JP の「漢」
 constexpr std::string_view OTHER_KAN = "\x8a\xbf"; //!< Shift_JIS の「漢」
 constexpr std::string_view HANKAKU_AI = "\x8e\xb1\x8e\xb2"; //!< ｱｲ (EUC-JP)
-#else
-constexpr auto LEGACY_KAN = test::KANJI_KAN;
-constexpr std::string_view OTHER_KAN = "\x8a\xbf"; //!< Shift_JIS の「漢」
-constexpr std::string_view HANKAKU_AI = "\x8e\xb1\x8e\xb2"; //!< ｱｲ
 #endif
 }
 
@@ -540,8 +532,8 @@ TEST_CASE("migrate_raw_score converts names and causes of death to UTF-8")
 }
 
 // 旧版の内部の文字コードが Shift_JIS なら、EUC-JP の「漢」(B4 C1) は Shift_JIS の半角カナ 2 文字として読めるので、確かめない
-#if defined(EUC) || (defined(UTF8) && !defined(_WIN32))
-TEST_CASE("migrate_raw_score converts a name that cannot be read in the system encoding")
+#if defined(UTF8) && !defined(_WIN32)
+TEST_CASE("migrate_raw_score converts a name that cannot be read in the encoding of the old versions")
 {
     high_score raw{};
     set_field(raw.who, OTHER_KAN);
