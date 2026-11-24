@@ -113,17 +113,6 @@ jobs:
       cxx-flags: "-pipe -O3 -Werror -Wall -Wextra -Winvalid-pch"
       use-ccache: true
 
-  build_test_gcc_japanese_euc_internal:
-    name: Build Japanese version with gcc 16 (with EUC-JP as the internal encoding, without using pre-compiled headers)
-    uses: ./.github/workflows/build-with-autotools.yml
-    with:
-      runner: ubuntu-26.04
-      cxx: g++-16
-      cxx-flags: "-pipe -O3 -Werror -Wall -Wextra"
-      # 内部の文字コードを UTF-8 にする移行のための仮の構成 (#6140)。既定の UTF-8 の代わりに、これまでの EUC-JP でビルドする。移行を終えたら撤去する
-      configure-opts: "--disable-pch --disable-utf8-internal"
-      use-ccache: true
-
   build_test_gcc_english:
     name: Build English version with gcc 16 (without using pre-compiled headers, with XFT)
     uses: ./.github/workflows/build-with-autotools.yml

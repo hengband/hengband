@@ -104,7 +104,6 @@ jobs:
             libx11-dev
             libxext-dev
             libpng-dev
-            nkf
             g++-16
             libc++-21-dev
             libc++abi-21-dev
@@ -204,7 +203,7 @@ jobs:
         shell: bash
         run: |
           brew update
-          brew install autoconf automake pkg-config nkf ncurses curl ${{ inputs.use-ccache && 'ccache' || '' }}
+          brew install autoconf automake pkg-config ncurses curl ${{ inputs.use-ccache && 'ccache' || '' }}
           echo "PKG_CONFIG_PATH=$(brew --prefix ncurses)/lib/pkgconfig:$(brew --prefix curl)/lib/pkgconfig:${PKG_CONFIG_PATH:-}" >> "$GITHUB_ENV"
           echo "LDFLAGS=-L$(brew --prefix ncurses)/lib -L$(brew --prefix curl)/lib ${LDFLAGS:-}" >> "$GITHUB_ENV"
           echo "CPPFLAGS=-I$(brew --prefix ncurses)/include -I$(brew --prefix curl)/include ${CPPFLAGS:-}" >> "$GITHUB_ENV"

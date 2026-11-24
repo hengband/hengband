@@ -20,8 +20,6 @@ constexpr auto MAINTAINER = "echizen@users.sourceforge.jp";
 /*
  * @details
  * 日本語版の内部の文字コードは、UTF-8 (UTF8) で定義されていることとする.
- * 内部の文字コードを UTF-8 にする移行中 (#6140) は、Unix系の --disable-utf8-internal で EUC-JP (EUC)、
- * Windows の /p:HengbandUtf8Internal=false で Shift-JIS (SJIS) にもなる.
  * Unix系は、マルチユーザ対応としてSET_UIDを定義する.
  * フォントやデフォルトのlibパス等も定義する.
  * HAVE_CONFIG_Hは、autoconfによりコンパイラスイッチ「-DHAVE_CONFIG_H」が付加される.

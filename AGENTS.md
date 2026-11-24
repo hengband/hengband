@@ -27,9 +27,6 @@ Ubuntu/Debian の最小構成は次のとおり（X11 版には `libx11-dev` な
 sudo apt-get install build-essential autoconf automake pkg-config libncurses-dev libcurl4-openssl-dev
 ```
 
-内部の文字コードを EUC-JP にした日本語版（後述の `--disable-utf8-internal`）を、`-fexec-charset=euc-jp-ms` を使えない
-コンパイラ（clang など）でビルドするときは `nkf` も要る。
-
 ビルド手順:
 
 ```bash
@@ -42,11 +39,7 @@ make -j$(getconf _NPROCESSORS_ONLN)          # src/hengband が生成される
   `getconf _NPROCESSORS_ONLN` は Linux でも macOS でも CPU の数を返す（macOS には `nproc` が無い）。
 - `CXXFLAGS` には最低限 `-Wall -Wextra` を付ける。プリコンパイル済みヘッダは `--disable-pch` で無効にできる。
 - 日本語版の内部の文字コードは UTF-8 で（`JP` と `UTF8` が定義される）、文字列リテラルはソースの UTF-8 のままビルドされる
-  （Windows 版も同じ。Shift_JIS の構成は後述）。
-- 内部の文字コードを UTF-8 にする移行中（#6140）は、日本語版に `--disable-utf8-internal` を足すと、これまでの EUC-JP の構成になる
-  （`EUC` が定義され、`UTF8` は定義されない。文字列リテラルは `-fexec-charset=euc-jp-ms` か nkf で EUC-JP に変換する）。
-  CI もこの構成でビルドとテストを行うので、文字コードに関わるコード（`#ifdef EUC`・`#ifdef SJIS`、マルチバイト文字の処理、
-  テストの期待するバイト列）を変えたときはこの構成でも確かめる。移行を終えたら撤去する。
+  （Windows 版も同じ）。
 
 ccache を使うと日英の切り替えが速くなる。`CXX` は configure 時に `src/Makefile` へ焼き込まれるため、
 **`make` ではなく `configure` に渡す**（configure を回し直すたびに必要）。
@@ -83,16 +76,13 @@ $msbuild = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere
 
 - 英語版は `Configuration=English-Debug` などにする。特定のプロジェクトだけなら `/t:HengbandTest` などを足す
   （依存する `HengbandCore` も合わせてビルドされる）。
-- 日本語版の内部の文字コードは UTF-8 で、`UTF8` が定義される。内部の文字コードを UTF-8 にする移行中（#6140）は、
-  日本語版の構成に `/p:HengbandUtf8Internal=false` を足すと、これまでの Shift_JIS の構成（`SJIS` が定義される）になる。
-  中間ファイルとテストの出力先は `<構成>-SJIS`、exe はリポジトリのトップの `Hengband-SJIS.exe`
-  （ini は `Hengband-SJIS.INI`）で、既定の構成と混ざらない。移行を終えたら撤去する。
+- 日本語版の内部の文字コードは UTF-8 で、`JP` と `UTF8` が定義される。
 - CI（`.github/workflows/build-test-with-msvc.yml`）は `-warnAsError /t:Rebuild` で `Release` と
-  `English-Debug`、Shift_JIS の構成の `Debug` をビルドする。差分ビルドでは変更のないファイルがコンパイルされず、前回の警告が出ないので、
+  `English-Debug` をビルドする。差分ビルドでは変更のないファイルがコンパイルされず、前回の警告が出ないので、
   プッシュ前の最終確認は CI と同じく `-warnAsError /t:Rebuild` で行う。
-- `Hengband.exe`（Shift_JIS の構成では `Hengband-SJIS.exe`）は全構成で同じパス（リポジトリのトップ）に出力されるため、
-  構成を切り替えると差分ビルドでリンクされず、前の構成の exe が残ることがある。構成を切り替えたら exe を削除してからビルドする。
-- exe を起動したままだとリンクが失敗する（出力ファイルを上書きできない）。ビルド前に終了させる。
+- `Hengband.exe` は全構成で同じパス（リポジトリのトップ）に出力されるため、構成を切り替えると差分ビルドでリンクされず、
+  前の構成の exe が残ることがある。構成を切り替えたら `Hengband.exe` を削除してからビルドする。
+- `Hengband.exe` を起動したままだとリンクが失敗する（出力ファイルを上書きできない）。ビルド前に終了させる。
 - Debug 構成はリンカの `LinkVerbose` が有効で、リンク時に大量のログが出る。結果だけ見たいときは
   `| Select-Object -Last 15` などで末尾に絞る。エラーの有無は `error` を含む行で判断する。
 
