@@ -5,5 +5,6 @@
  */
 
 #include "system/angband.h"
+#include <string_view>
 
-errr type_string(concptr str, uint len);
+errr type_string(std::string_view str);
