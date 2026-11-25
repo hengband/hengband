@@ -6,7 +6,7 @@
 
 ## プロジェクト概要
 
-変愚蛮怒 (Hengband) は Moria/Angband 系ローグライクゲームの C++20 バリアント。Zangband から派生し、100 階層のダンジョンを探索してラストボスを撃破することが目標。
+変愚蛮怒 (Hengband) は Moria/Angband 系ローグライクゲームの C++23 バリアント。Zangband から派生し、100 階層のダンジョンを探索してラストボスを撃破することが目標。
 
 本家のリポジトリは <https://github.com/hengband/hengband> で、開発ブランチは `develop`。
 フォークで作業する場合、作業ブランチはフォークの `develop`（遅れていることがある）ではなく
@@ -22,17 +22,32 @@ CI は両方でビルドとテストを行う。片方の環境でしか作業�
 
 依存パッケージは CI の `.github/workflows/build-with-autotools.yml` を参照（macOS の環境変数の設定もここにある）。
 Ubuntu/Debian の最小構成は次のとおり（X11 版には `libx11-dev` など、TrueType フォントを使うには `libxft-dev` も要る）。
+ビルドには GCC 16 以降、または Clang 21 以降のバージョンが必要である。
 
+Ubuntu 26.04用 (推奨)：
 ```bash
-sudo apt-get install build-essential autoconf automake pkg-config libncurses-dev libcurl4-openssl-dev
+sudo apt-get install build-essential autoconf automake pkg-config libncurses-dev libcurl4-openssl-dev gcc-16 g++-16
 ```
+
+Ubuntu 24.04用 (非推奨だが禁止ではない)：
+```bash
+sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+sudo apt-get update
+sudo apt-get install build-essential autoconf automake pkg-config libncurses-dev libcurl4-openssl-dev gcc-16 g++-16
+sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-16 60
+sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-16 60
+```
+
+その後の configure 時においては、システムデフォルトに依存しないよう GCC 16 を明示的に指定すること。
+update-alternatives で登録しても、以前手動で選んだ GCC 15 以前が残っている場合がある。
+Clang または macOS (Apple Clang) では、 CC と CXX を読み替えること。
 
 ビルド手順:
 
 ```bash
-./bootstrap                                  # configure スクリプトを生成
-./configure CXXFLAGS="-O2 -Wall -Wextra"     # 日本語版（デフォルト）。英語版は --disable-japanese を足す
-make -j$(getconf _NPROCESSORS_ONLN)          # src/hengband が生成される
+./bootstrap # configure スクリプトを生成
+CC=gcc-16 CXX=g++-16 ./configure CXXFLAGS="-O2 -Wall -Wextra" # 日本語版（デフォルト）。英語版は --disable-japanese を足す
+make -j$(getconf _NPROCESSORS_ONLN) # src/hengband が生成される
 ```
 
 - **`make` には必ず `-j` で並列数を付ける。** `.cpp` が 900 を超え、並列化しないと非常に時間がかかる。
@@ -41,12 +56,13 @@ make -j$(getconf _NPROCESSORS_ONLN)          # src/hengband が生成される
 - 日本語版の内部の文字コードは UTF-8 で（`JP` が定義される）、文字列リテラルは日本語版・英語版ともソースの UTF-8 のままビルドされる
   （Windows 版も同じ）。
 
-ccache を使うと日英の切り替えが速くなる。`CXX` は configure 時に `src/Makefile` へ焼き込まれるため、
-**`make` ではなく `configure` に渡す**（configure を回し直すたびに必要）。
+下記のコマンドにおいて、ccache を使うことで日英の切り替えが速くなる。
+`CXX` は configure 時に `src/Makefile` へ焼き込まれるため、**`make` ではなく `configure` に渡す**。
+(configure を回し直すたびに必要)
 
 ```bash
 # base_dir と -fdebug-prefix-map は、パスの違う git worktree 間でもキャッシュを共有するため
-CXX="ccache base_dir=$PWD g++" CXXFLAGS="-g -O2 -Wall -Wextra -fdebug-prefix-map=$PWD=." ./configure
+CXX="ccache base_dir=$PWD g++-16" CXXFLAGS="-g -O2 -Wall -Wextra -fdebug-prefix-map=$PWD=." ./configure
 # プリコンパイル済みヘッダのために要る設定（CI と同じ）
 ccache --set-config=sloppiness=pch_defines,time_macros,include_file_mtime,include_file_ctime
 ccache --set-config=pch_external_checksum=true
@@ -133,11 +149,14 @@ MSVC の Debug 構成（`/ZI`）では、失敗した行（`__LINE__`）がず�
 - ranges のアルゴリズムやビューは、標準ライブラリのもの（`std::ranges::lower_bound`、`std::views` など）が
   環境によって使えないことがあるため、同梱の range-v3（`#include <range/v3/algorithm.hpp>`、
   `ranges::lower_bound` など）を使う。`std::ranges::forward_range` などのコンセプトや、
-  `std::map::contains` のような C++20 の機能は使ってよい。
+  `std::map::contains` のような C++20 以降の機能は使ってよい。
+- `std::optional` と `std::expected` を使ってはならない。代わりに `tl::optional` と `tl::expected` を使うこと。
+  なお `tl::expected::error_or()` を独自に追加しているので、必要に応じて使うこと。
 - **1 つの式の中で乱数を 2 回以上引かない。** 関数・コンストラクタの引数の評価順や、多くの二項演算子の
   両辺の評価順は規定されておらず（GCC は右から、clang は左から評価する）、コンパイラによってゲームの進行が
   食い違う。`Pos2D(randint0(h), randint0(w))` は一時変数に分けるか、左から順に評価される波括弧の初期化
   `Pos2D{ randint0(h), randint0(w) }` にする。CI の `check-rng-evaluation-order.py` が検出する。
+- C言語由来の `fprintf()` , `printf()` , `snprintf()` を使ってはならない。代わりに `fmt` ライブラリを使うこと。
 - コード内のコメントは日本語で書く。
 
 ### MSVC だけで失敗する警告
