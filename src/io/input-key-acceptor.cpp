@@ -212,6 +212,14 @@ static char inkey_aux()
 }
 
 /*!
+ * @brief 次の inkey() がキーマップの動作の文字列 (inkey_next) から読むか
+ */
+static bool reads_keymap_action()
+{
+    return (inkey_next != nullptr) && (*inkey_next != '\0') && !inkey_xtra;
+}
+
+/*!
  * @brief キー入力を受け付けるメインルーチン / Get a keypress from the user.
  * @param do_all_term_refresh trueであれば、入力を待つ前にメイン画面の描き直しの要求も処理する。デフォルト false
  * @return キーを表すコード
@@ -225,7 +233,7 @@ char inkey(bool do_all_term_refresh)
     bool done = false;
     term_type *old = game_term;
 
-    if (inkey_next && *inkey_next && !inkey_xtra) {
+    if (reads_keymap_action()) {
         ch = *inkey_next++;
         inkey_base = inkey_xtra = inkey_flag = inkey_scan = false;
         return ch;
@@ -329,22 +337,64 @@ char inkey(bool do_all_term_refresh)
 }
 
 /*!
+ * @brief inkey() で読んだキーを、次の inkey() で読めるよう戻す
+ * @param key 戻すキー
+ * @param from_keymap キーマップの動作の文字列 (inkey_next) から読んだキーか
+ * @details inkey() はメイン画面の端末のキューから読むので、ほかの端末が有効でもメイン画面の端末のキューに戻す。
+ */
+static void unread_key(char key, bool from_keymap)
+{
+    if (from_keymap) {
+        inkey_next--;
+        return;
+    }
+
+    // キューに空きが無ければ積まずにこのキーだけを捨てる (term_keys_push() を参照)
+    auto *old = game_term;
+    term_activate(angband_terms[0]);
+    (void)term_keys_push(std::string_view(&key, 1));
+    term_activate(old);
+}
+
+/*!
  * @brief 多バイト文字の先頭バイトに続くバイトを読み、文字全体を返す
  * @param lead 入力済みの文字の先頭バイト
  * @return lead に続けて、文字のバイト数になるまで inkey() で読んだバイトをつなげた文字列。
- *         lead が多バイト文字の先頭でなければ lead だけ
- * @details 日本語版では、IME などが入れた波ダッシュ「〜」などを、同梱のデータと同じ全角チルダ「～」などにそろえる
+ *         lead が多バイト文字の先頭でなければ (1 バイトの文字や UTF-8 の先頭に来ないバイト、英語版のすべてのバイト) lead だけ。
+ *         続くバイトが UTF-8 の後続のバイトでないなど、UTF-8 の文字にならなければ tl::nullopt
+ * @details 続くバイトに後続のバイト (80-BF) でないキー (ESC・Enter などや、別の文字の先頭バイト) が来たら、
+ * 入力が途中で切れたとみなして文字を捨て、そのキーは読んだところ (キーマップの動作の文字列か、メイン画面の端末のキューの先頭) に戻す
+ * (NUL はキューに積めないので捨てる)。
+ * 呼び出し側の文字列に NUL や不正な UTF-8 を入れないため、またそのキーの操作を失わないためである。
+ * 日本語版では、IME などが入れた波ダッシュ「〜」などを、同梱のデータと同じ全角チルダ「～」などにそろえる
  * (normalize_to_ms_characters() を参照)。
  */
-std::string inkey_multibyte_char(char lead)
+tl::optional<std::string> inkey_multibyte_char(char lead)
 {
     std::string ch(1, lead);
-    while (ch.length() < mb_char_byte_length(lead)) {
+    const auto length = mb_char_byte_length(lead);
+    if (length == 1) {
+        return ch;
+    }
+
+    while (ch.length() < length) {
         inkey_base = true;
-        ch.push_back(inkey());
+        const auto from_keymap = reads_keymap_action();
+        const auto key = inkey();
+        if ((static_cast<unsigned char>(key) & 0xc0) != 0x80) {
+            unread_key(key, from_keymap);
+            return tl::nullopt;
+        }
+
+        ch.push_back(key);
     }
 
 #ifdef JP
+    // 後続のバイトがそろっても、冗長な表現やサロゲートの範囲などは UTF-8 の文字にならない
+    if (!is_utf8_str(ch)) {
+        return tl::nullopt;
+    }
+
     normalize_to_ms_characters(ch);
 #endif
     return ch;

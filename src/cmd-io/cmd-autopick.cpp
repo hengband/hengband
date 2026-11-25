@@ -311,11 +311,6 @@ void do_cmd_edit_autopick(PlayerType *player_ptr)
             com_id = do_command_menu(0, 0);
             tb->dirty_flags |= DIRTY_SCREEN;
         } else if (!iscntrl((unsigned char)key)) {
-            if (tb->marks.any()) {
-                tb->marks.clear();
-                tb->dirty_flags |= DIRTY_ALL;
-            }
-
             insert_single_letter(tb, key);
         } else {
             com_id = CommandMenuData::get_instance().get_com_id((char)key);

@@ -197,17 +197,13 @@ void edit_history(PlayerType *player_ptr)
             x = history_char_start_column(player_ptr->history[y], x);
             overwrite_history_char(player_ptr->history[y], x, " ");
         } else if (is_mb_char_lead(c) || isprint(static_cast<unsigned char>(c))) {
-            const auto ch = inkey_multibyte_char(c);
-
-            // 後続のバイトに ASCII の制御文字が来たら (入力が途中で切れたなど)、行に NUL などを入れないよう文字ごと捨てる。
-            // iscntrl() は Windows の日本語のロケールで Shift_JIS の後続のバイトの 0x80 も制御文字とみなすので使わない
-            const auto is_control = [](char byte) {
-                const auto value = static_cast<unsigned char>(byte);
-                return (value < 0x20) || (value == 0x7f);
-            };
-            if (std::any_of(ch.begin() + 1, ch.end(), is_control)) {
+            // 入力が途中で切れて文字にならなければ何も書かない
+            const auto ch_opt = inkey_multibyte_char(c);
+            if (!ch_opt) {
                 continue;
             }
+
+            const auto &ch = *ch_opt;
 
             const auto char_width = static_cast<int>(str_display_width(ch));
 
