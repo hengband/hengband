@@ -506,11 +506,11 @@ TEST_CASE("add_score_to_file does not overwrite a score file that cannot be read
 namespace {
 constexpr std::string_view UTF8_KAN = "\xe6\xbc\xa2"; //!< 漢
 // LEGACY_KAN は scores.raw を書いた旧版の内部の文字コード (Windows 版は Shift_JIS、Unix 系は EUC-JP) の「漢」
-#if defined(UTF8) && defined(_WIN32)
+#ifdef _WIN32
 constexpr std::string_view LEGACY_KAN = "\x8a\xbf"; //!< Shift_JIS の「漢」
 constexpr std::string_view OTHER_KAN = "\xb4\xc1"; //!< EUC-JP の「漢」
 constexpr std::string_view HANKAKU_AI = "\xb1\xb2"; //!< ｱｲ (Shift_JIS)
-#elif defined(UTF8)
+#else
 constexpr std::string_view LEGACY_KAN = "\xb4\xc1"; //!< EUC-JP の「漢」
 constexpr std::string_view OTHER_KAN = "\x8a\xbf"; //!< Shift_JIS の「漢」
 constexpr std::string_view HANKAKU_AI = "\x8e\xb1\x8e\xb2"; //!< ｱｲ (EUC-JP)
@@ -532,7 +532,7 @@ TEST_CASE("migrate_raw_score converts names and causes of death to UTF-8")
 }
 
 // 旧版の内部の文字コードが Shift_JIS なら、EUC-JP の「漢」(B4 C1) は Shift_JIS の半角カナ 2 文字として読めるので、確かめない
-#if defined(UTF8) && !defined(_WIN32)
+#ifndef _WIN32
 TEST_CASE("migrate_raw_score converts a name that cannot be read in the encoding of the old versions")
 {
     high_score raw{};
@@ -549,7 +549,7 @@ TEST_CASE("migrate_raw_score converts a Shift_JIS name which is also a cut EUC-J
     CHECK(migrate_raw_score(raw).name == "\xe5\xb0\x86");
 }
 
-TEST_CASE("migrate_raw_score keeps a name that can be read in the system encoding")
+TEST_CASE("migrate_raw_score converts a name that can be read in the encoding of the old versions without guessing")
 {
     // 半角カナの並びは、guess_legacy_encoding() が別の文字コードの漢字と取り違えることがある
     high_score raw{};

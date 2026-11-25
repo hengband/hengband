@@ -53,7 +53,7 @@ size_t mb_char_length_at(std::string_view str, size_t pos)
  */
 size_t mb_valid_char_length_at([[maybe_unused]] std::string_view str, [[maybe_unused]] size_t pos)
 {
-#if defined(JP) && defined(UTF8)
+#ifdef JP
     if (pos >= str.size()) {
         return 1;
     }

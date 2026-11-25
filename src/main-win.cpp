@@ -400,7 +400,7 @@ static void save_prefs_aux(int i)
     }
 }
 
-#ifdef UTF8
+#ifdef JP
 //! ini を UTF-16LE にできたか。できなければ、BOM の無い ini に UTF-8 を書き込んで CP932 と混ぜないよう、設定を保存しない
 static bool is_ini_utf16 = false;
 #endif
@@ -411,7 +411,7 @@ static bool is_ini_utf16 = false;
  */
 static void save_prefs()
 {
-#ifdef UTF8
+#ifdef JP
     if (!is_ini_utf16) {
         return;
     }
@@ -472,7 +472,7 @@ static BOOL CALLBACK monitor_enum_procedure([[maybe_unused]] HMONITOR hMon, [[ma
     return false;
 }
 
-#ifdef UTF8
+#ifdef JP
 constexpr std::string_view UTF16LE_BOM = "\xff\xfe"; //!< UTF-16LE の BOM
 constexpr std::string_view UTF16BE_BOM = "\xfe\xff"; //!< UTF-16BE の BOM
 constexpr std::string_view UTF8_BOM = "\xef\xbb\xbf"; //!< UTF-8 の BOM
@@ -607,10 +607,10 @@ static std::unique_ptr<TempFile> make_ini_reading_copy(std::wstring_view wide)
 /*!
  * @brief ini ファイルを UTF-16LE (BOM 付き) にする
  * @param path ini ファイルのパス
- * @details 内部の文字コードが UTF-8 の構成は、マニフェストで ANSI のコードページを UTF-8 にしているので、
+ * @details 日本語版は内部の文字コードが UTF-8 で、マニフェストで ANSI のコードページを UTF-8 にしているので、
  * A 版のプロファイルの API は BOM の無い ini の中身も UTF-8 として読み書きする。
- * そのままでは、旧版や Shift_JIS の構成が CP932 で書いた ini (フォント名など) を読めず、UTF-8 で書いた ini を旧版で読めない。
- * UTF-16LE の ini なら、A 版の API は ini の中身とプロセスの ANSI のコードページの間で変換するので、どちらの構成でも読み書きできる。
+ * そのままでは、旧版の日本語版が CP932 で書いた ini (フォント名など) を読めず、UTF-8 で書いた ini を旧版で読めない。
+ * UTF-16LE の ini なら、A 版の API は ini の中身とプロセスの ANSI のコードページの間で変換するので、旧版でも今の版でも読み書きできる。
  * そこで、ini が無ければ BOM だけの ini を作り、BOM の無い ini は UTF-16LE に一度だけ変換する。
  * UTF-8 の BOM の付いた ini (エディタで UTF-8 で保存したもの) は UTF-8 として、BOM の無い ini は CP932 として読む
  * (旧版の日本語版は、ANSI のコードページが CP932 の日本語の Windows を前提にしていた)。
@@ -711,7 +711,7 @@ static void load_prefs_aux(int i, const char *ini_file)
  */
 static void load_prefs()
 {
-#ifdef UTF8
+#ifdef JP
     const auto prepared_ini = prepare_utf16_ini_file(path_ini_file);
     is_ini_utf16 = prepared_ini.is_utf16;
     const auto &str_ini_file = (prepared_ini.reading_copy ? prepared_ini.reading_copy->get_path() : path_ini_file).string();
@@ -1366,8 +1366,8 @@ static errr term_text_win(int x, int y, int n, TERM_COLOR a, concptr s)
     rc.bottom = rc.top + td->font_hgt;
 
     // s は n マスの文字を並べた文字列で、2 マスの文字 (多バイト文字) は文字全体が 1 度だけ現れる。
-    // 英語版と Shift_JIS の版では s は n バイトだが、UTF-8 の多バイト文字は 2〜4 バイトなので n バイト以上になる
-#ifdef UTF8
+    // 英語版では s は n バイトだが、日本語版の UTF-8 の多バイト文字は 2〜4 バイトなので n バイト以上になる
+#ifdef JP
     const std::string_view text(s);
 #else
     const std::string_view text(s, n);
@@ -2592,14 +2592,14 @@ static bool handle_window_resize(term_data *td, UINT uMsg, WPARAM wParam, LPARAM
 /*!
  * @brief WM_CHAR で受け取った文字を、内部の文字コードにしてキー入力に積む
  * @param wc 受け取った文字 (UTF-16 の 1 単位)
- * @details 内部の文字コードが UTF-8 の構成では、サロゲートペアの文字 (絵文字など) が上位と下位の 2 回の WM_CHAR に分かれて届く。
+ * @details 日本語版 (内部の文字コードは UTF-8) では、サロゲートペアの文字 (絵文字など) が上位と下位の 2 回の WM_CHAR に分かれて届く。
  * 上位サロゲートを覚えておき、続く下位サロゲートと合わせて変換する (片方だけでは UTF-8 にできない)。
- * Shift_JIS の構成では、サロゲートペアの文字はどのみち変換できないので、これまでどおり 1 単位ずつ変換する。
+ * 英語版では、サロゲートペアの文字はどのみち変換できないので、これまでどおり 1 単位ずつ変換する。
  * キーダウンで処理したキーの WM_CHAR (term_no_press) は捨てる。
  */
 static void keypress_wm_char(WCHAR wc)
 {
-#ifdef UTF8
+#ifdef JP
     // 覚えていた上位サロゲートは、この文字が対になる下位サロゲートでなければ捨てる
     static WCHAR high_surrogate = L'\0';
     const auto prev_high_surrogate = std::exchange(high_surrogate, L'\0');
@@ -2609,7 +2609,7 @@ static void keypress_wm_char(WCHAR wc)
         return;
     }
 
-#ifdef UTF8
+#ifdef JP
     if (IS_HIGH_SURROGATE(wc)) {
         high_surrogate = wc;
         return;
@@ -2726,7 +2726,7 @@ static LRESULT PASCAL angband_window_procedure(HWND hWnd, UINT uMsg, WPARAM wPar
             }
         }
 
-#ifdef UTF8
+#ifdef JP
         // CF_TEXT はシステムのロケールのコードページ (日本語の Windows では CP932) で読まれるので、UTF-16 にして CF_UNICODETEXT で渡す
         constexpr auto clipboard_format = CF_UNICODETEXT;
         to_wchar wide_text(text);
@@ -3220,8 +3220,8 @@ static int run_headless_game()
  */
 static int WINAPI game_main(_In_ HINSTANCE hInst)
 {
-#ifdef UTF8
-    // C ランタイムのナローの文字列 (ctype・mbstowcs など) も内部の文字コードの UTF-8 にする (言語と地域は Shift_JIS の構成と同じく日本)
+#ifdef JP
+    // C ランタイムのナローの文字列 (ctype・mbstowcs など) も内部の文字コードの UTF-8 にする (言語と地域は旧版と同じく日本)
     if (setlocale(LC_ALL, "ja_JP.UTF-8") == nullptr) {
         setlocale(LC_ALL, ".UTF-8");
     }
@@ -3232,7 +3232,7 @@ static int WINAPI game_main(_In_ HINSTANCE hInst)
     // コマンドライン引数の解釈中に出力し得る診断メッセージに名前を付けるため、
     // plog()/quit()を呼び得る処理より先に設定する
     program_name = VARIANT_NAME;
-#ifdef UTF8
+#ifdef JP
     // ANSI のコードページを UTF-8 にするマニフェストは Windows 10 1903 より前では効かず、
     // ファイル名や A 版の API の文字列を取り違えるので、起動しない
     if (GetACP() != CP_UTF8) {

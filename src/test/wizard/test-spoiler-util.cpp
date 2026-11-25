@@ -23,7 +23,7 @@
 using namespace test;
 
 namespace {
-#if defined(JP) && defined(UTF8)
+#ifdef JP
 constexpr std::string_view SOKUON = "\xe3\x81\xa3"; //!< っ
 constexpr std::string_view KUTEN = "\xe3\x80\x82"; //!< 。
 #endif

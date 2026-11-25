@@ -19,14 +19,11 @@ constexpr auto MAINTAINER = "echizen@users.sourceforge.jp";
 
 /*
  * @details
- * 日本語版の内部の文字コードは、UTF-8 (UTF8) で定義されていることとする.
+ * 日本語版の内部の文字コードは UTF-8 とする.
  * Unix系は、マルチユーザ対応としてSET_UIDを定義する.
  * フォントやデフォルトのlibパス等も定義する.
  * HAVE_CONFIG_Hは、autoconfによりコンパイラスイッチ「-DHAVE_CONFIG_H」が付加される.
  */
-#if defined(JP) && !defined(UTF8)
-#error Oops! Please define "UTF8" for kanji-code of your system.
-#endif
 #ifdef JP
 #define iseuckanji(x) (((unsigned char)(x) >= 0xa1 && (unsigned char)(x) <= 0xfe) || (unsigned char)(x) == 0x8e)
 #endif

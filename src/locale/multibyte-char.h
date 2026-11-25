@@ -23,7 +23,7 @@
  */
 constexpr size_t mb_char_byte_length([[maybe_unused]] char lead)
 {
-#if defined(JP) && defined(UTF8)
+#ifdef JP
     // UTF-8 の後続のバイト (80-BF) と、先頭に現れない不正なバイト (C0・C1・F5-FF) は 1 バイトの文字とみなす
     const auto length = utf8_lead_byte_length(static_cast<unsigned char>(lead));
     return (length > 0) ? static_cast<size_t>(length) : 1;

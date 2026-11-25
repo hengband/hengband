@@ -178,7 +178,6 @@ AC_ARG_ENABLE(japanese,
 [  --disable-japanese      build english version], [use_japanese=$enableval], [use_japanese=yes])
 if test "$use_japanese" != no; then
   AC_DEFINE(JP, 1, [Enable Japanese])
-  AC_DEFINE(UTF8, 1, [Use UTF-8 as the internal character encoding])
 fi
 
 AC_ARG_ENABLE(xim,

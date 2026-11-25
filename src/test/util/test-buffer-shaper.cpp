@@ -18,7 +18,7 @@ namespace {
 
 using Lines = std::vector<std::string>;
 
-#if defined(JP) && defined(UTF8)
+#ifdef JP
 constexpr std::string_view KUTEN = "\xe3\x80\x82"; //!< 。
 constexpr std::string_view CHOON = "\xe3\x83\xbc"; //!< ー
 #endif

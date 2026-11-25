@@ -235,14 +235,14 @@ std::filesystem::path path_build(const std::filesystem::path &path, std::string_
  * @param file ファイル名
  * @return 読み書きに使うファイルのパス
  * @details プレイヤー名や種族名などから名前を作るユーザーファイルを開くときに使う。
- * 内部の文字コードが UTF-8 の Unix 系の構成では、旧版の EUC-JP の名前のファイル (旧名) しか無ければ rename_legacy_named_file() で付け替え、
- * 付け替えられなければ旧名のファイルのパスを返す。ほかの構成では path_build() と同じ。
- * Windows のファイル名は UTF-16 なので、旧版 (Shift_JIS) と UTF-8 の構成で同じ名前になり、付け替えは要らない。
+ * Unix 系の日本語版では、旧版の EUC-JP の名前のファイル (旧名) しか無ければ rename_legacy_named_file() で付け替え、
+ * 付け替えられなければ旧名のファイルのパスを返す。英語版と Windows 版では path_build() と同じ。
+ * Windows のファイル名は UTF-16 なので、旧版 (Shift_JIS) と今の版 (UTF-8) で同じ名前になり、付け替えは要らない。
  */
 std::filesystem::path path_build_inheriting_legacy_name(const std::filesystem::path &path, std::string_view file)
 {
     const auto built = path_build(path, file);
-#if defined(JP) && defined(UTF8) && !defined(_WIN32)
+#if defined(JP) && !defined(_WIN32)
     // 「~」で始まるパスは開くときに展開されるので、旧名も展開したパスで探す。展開できなければ付け替えない
     const auto parsed = path_parse(built);
     if (parsed.empty()) {
@@ -359,7 +359,7 @@ static tl::optional<std::string> read_line(FILE *fp)
     }
 
 #ifdef JP
-    // 内部の文字コードが UTF-8 なら、旧版の文字コードから変換すると長くなるので、バッファを書き換えずに変換した文字列を返す
+    // 旧版の文字コードから内部の文字コード (UTF-8) に変換すると長くなるので、バッファを書き換えずに変換した文字列を返す
     return guess_convert_to_system_encoding(std::move(line_buf));
 #else
     return line_buf;
@@ -623,7 +623,7 @@ errr fd_close(int fd)
     return 0;
 }
 
-#if defined(JP) && defined(UTF8) && !defined(_WIN32)
+#if defined(JP) && !defined(_WIN32)
 /*!
  * @brief 旧版の名前のファイルを、今の名前に付け替える
  * @param path 今の名前のファイルのパス

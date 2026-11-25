@@ -104,8 +104,8 @@ std::string BaseitemDefinition::stripped_name() const
             offset++;
         }
 
-        // 末尾のバイトが多バイト文字の後続のバイトなら、'~' や '#' と同じ値でも取り除かない。
-        // 後続のバイトは先頭バイトと同じ範囲の値もとるため、文字の境界は先頭から数えて求める
+        // 末尾のバイトが多バイト文字の途中なら、'~' や '#' と同じ値でも取り除かない。
+        // 文字の長さは先頭バイトだけで決まり、不正な並びでは ASCII のバイトも文字の途中になりうるので、文字の境界は先頭から数えて求める
         const auto ends_with_trail_byte = !is_mb_char_boundary(token, endpos - 1);
         if (!ends_with_trail_byte && (token[endpos - 1] == '~' || token[endpos - 1] == '#')) {
             endpos--;

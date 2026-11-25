@@ -116,9 +116,7 @@ TEST_CASE("input_special_key_with_context publishes the details of the given con
 TEST_CASE("pause_line publishes the any-key context")
 {
 #ifdef JP
-#ifdef UTF8
     constexpr auto prompt = "[ \xe4\xbd\x95\xe3\x81\x8b\xe3\x82\xad\xe3\x83\xbc\xe3\x82\x92\xe6\x8a\xbc\xe3\x81\x97\xe3\x81\xa6\xe4\xb8\x8b\xe3\x81\x95\xe3\x81\x84 ]"; // [ 何かキーを押して下さい ]
-#endif
 #else
     constexpr auto prompt = "[Press any key to continue]";
 #endif

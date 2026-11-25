@@ -10,9 +10,7 @@
 namespace {
 // メッセージの後に表示する -続く- (英語版は -more-)。多バイト文字は16進エスケープで書く
 #ifdef JP
-#ifdef UTF8
 constexpr auto EXPECTED_MORE_PROMPT = "-\xe7\xb6\x9a\xe3\x81\x8f-";
-#endif
 #else
 constexpr auto EXPECTED_MORE_PROMPT = "-more-";
 #endif

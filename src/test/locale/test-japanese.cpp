@@ -19,7 +19,6 @@ using namespace test;
 
 namespace {
 //! 行頭禁則文字の一覧のすべての文字
-#ifdef UTF8
 constexpr auto LINE_START_KINSOKU_CHARS = std::to_array<std::string_view>({
     "\xe3\x80\x81", // 、
     "\xe3\x80\x82", // 。
@@ -89,7 +88,6 @@ constexpr auto LINE_END_KINSOKU_CHARS = std::to_array<std::string_view>({
     "[",
     "{",
 });
-#endif
 }
 
 TEST_CASE("is_line_start_kinsoku returns true for characters prohibited at the head of a line")

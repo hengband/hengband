@@ -291,7 +291,7 @@ TEST_CASE("mb_prev_char_pos treats a truncated character at the end as one chara
 }
 #endif
 
-#if defined(JP) && defined(UTF8)
+#ifdef JP
 TEST_CASE("mb_char_byte_length reads the length from a UTF-8 lead byte")
 {
     CHECK(mb_char_byte_length('\xc3') == 2);

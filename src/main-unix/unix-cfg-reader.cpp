@@ -156,7 +156,7 @@ CfgData CfgReader::read_sections(std::initializer_list<cfg_section> sections) co
                 continue;
             }
 #ifdef JP
-            // .cfg (UTF-8) を内部の文字コードにする。UTF-8 の構成で旧版の文字コードから変換すると長くなるので、バッファに写す前に変換する
+            // .cfg (UTF-8) を内部の文字コードにする。旧版の文字コードから UTF-8 に変換すると長くなるので、バッファに写す前に変換する
             value = guess_convert_to_system_encoding(std::move(value));
 #endif
             // 長すぎる値は、内部の文字コードの文字を途中で切らないようにコピーする

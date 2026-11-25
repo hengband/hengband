@@ -391,7 +391,7 @@ int main(int argc, char *argv[])
             {
                 // 内部の文字コードによらず前の版と同じ名前が入るよう、バイト数ではなく表示幅で切り詰める
                 const std::string_view arg(&argv[i][2]);
-#ifdef UTF8
+#ifdef JP
                 // UTF-8 として正しくないバイト列は旧版の文字コードとみなして推定し、読めないバイトは置き換えて変換する
                 // 端末を作る前なので、変換に失敗すると警告を表示する guess_convert_to_system_encoding() は使わない
                 const auto name = is_utf8_str(arg) ? std::string(arg) : legacy_to_sys_replacing_invalid(arg, guess_legacy_encoding(arg));

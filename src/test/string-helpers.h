@@ -40,7 +40,7 @@ inline std::string repeat(std::string_view str, int count)
     return result;
 }
 
-#if defined(JP) && defined(UTF8)
+#ifdef JP
 inline constexpr std::string_view KANJI_KAN = "\xe6\xbc\xa2"; //!< 漢
 inline constexpr std::string_view KANJI_JI = "\xe5\xad\x97"; //!< 字
 inline constexpr std::string_view KAKKO_OPEN = "\xe3\x80\x8c"; //!< 「 (行末禁則文字)

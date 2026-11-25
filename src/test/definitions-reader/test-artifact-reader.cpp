@@ -29,7 +29,7 @@
 
 namespace {
 // 無効なベースアイテムの名前（「異常アイテム」）。多バイト文字のテストデータは16進エスケープで書く。
-#if defined(JP) && defined(UTF8)
+#ifdef JP
 constexpr std::string_view INVALID_ITEM_NAME = "\xe7\x95\xb0\xe5\xb8\xb8\xe3\x82\xa2\xe3\x82\xa4\xe3\x83\x86\xe3\x83\xa0";
 #endif
 

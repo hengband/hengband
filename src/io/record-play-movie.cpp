@@ -235,7 +235,7 @@ static void send_offset_update(const TERM_LEN x, const TERM_LEN y, bool force_up
 static errr send_text_to_chuukei_server(TERM_LEN x, TERM_LEN y, int len, TERM_COLOR col, concptr str)
 {
     // 通信上の文字コードは EUC-JP で、全角文字を 2 バイトとして扱う。送る文字列のバイト数はマス数 len と等しくなる
-#if defined(UTF8) && defined(JP)
+#ifdef JP
     // UTF-8 として正しくないバイトを含む文字列では、マスへの分け方と変換した後のバイト数がずれることがあるので、len バイトにそろえる
     // 右端の桁の全角文字のように、末尾で途中から切れる全角文字は空白にする
     auto buffer = utf8_to_euc_keeping_width(str);
@@ -639,7 +639,7 @@ static bool flush_ringbuf_client()
 #ifndef _WIN32
         win2unix(col, mesg);
 #endif
-#if defined(UTF8) && defined(JP)
+#ifdef JP
         // 1 文字と繰り返しで送るのは 1 マスの文字 (ASCII) だが、前の版の Shift_JIS の版は半角カナの繰り返しを Shift_JIS のまま送っていた。
         // UTF-8 として正しくないバイトを画面に書かないよう、ASCII でなければ '?' にする
         if (((id == 'n') || (id == 's')) && (static_cast<unsigned char>(mesg[0]) >= 0x80)) {
@@ -649,7 +649,7 @@ static bool flush_ringbuf_client()
 
         switch (id) {
         case 't': { /* 通常 */
-#if defined(UTF8) && defined(JP)
+#ifdef JP
             // 通信上の文字コード (EUC-JP) から内部の文字コードに変換する。全角文字は 2 マスのままなので、マス数は変わらない
             const auto text = legacy_to_sys_replacing_invalid(std::string_view(mesg, len), CharacterEncoding::EUC_JP);
 #else

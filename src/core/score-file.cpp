@@ -219,28 +219,25 @@ std::string migrate_date(std::string_view date)
 /*!
  * @brief scores.raw の文字列の欄を UTF-8 にする
  * @param str 文字列の欄
- * @param prefer_system_encoding 内部の文字コードとして正しく読めるなら、文字コードを推定しないか
+ * @param prefer_legacy_encoding 旧版の内部の文字コード (LEGACY_CHARACTER_ENCODING) として正しく読めるなら、文字コードを推定しないか
  * @return UTF-8 の文字列。変換できないときは "?"
  * @details
  * 日本語版では、Windows 版と Unix 系の間で受け渡したファイルのために、guess_legacy_encoding() で文字コードを推定する。
  * ただし推定は半角カナの並びなどを別の文字コードと取り違えることがあるので、名前は前の版の表示と同じく
- * 内部の文字コードとして正しく読めるならそのまま変換し、読めないときだけ推定する (prefer_system_encoding)。
+ * 旧版の内部の文字コード (LEGACY_CHARACTER_ENCODING。Windows 版は Shift_JIS、Unix 系は EUC-JP) として正しく読めるならそのまま変換し、
+ * 読めないときだけ推定する (prefer_legacy_encoding)。
  * 死因は前の版の表示と同じく先に推定する。
  *
  * 前の版は名前と死因をバイト数で切って書いたので、末尾の文字が途中で切れていることがある。
  * scores.raw は移した後は読まず、欄全体を "?" にすると元に戻せないので、末尾の半端なバイト (2 バイトまで) を落として変換する。
  * Windows 版の変換は半端なバイトを置き換えて成功してしまうので、変換の成否ではなく、
- * 文字コードを推定できたか、内部の文字コードとして末尾の文字だけが欠けているかで、落とす長さを決める。
- *
- * 内部の文字コードは UTF-8 なので、scores.raw を書いた旧版の内部の文字コード (LEGACY_CHARACTER_ENCODING。Windows 版は Shift_JIS、
- * Unix 系は EUC-JP) を「内部の文字コード」とみなす。その文字コードとして読めるかは変換できるかで決め、
- * 末尾の文字が欠けて変換できなければ末尾を落としてから変換する。
+ * 文字コードを推定できたか、旧版の内部の文字コードとして末尾の文字だけが欠けているかで、落とす長さを決める。
  */
-std::string migrate_text(std::string_view str, [[maybe_unused]] bool prefer_system_encoding)
+std::string migrate_text(std::string_view str, [[maybe_unused]] bool prefer_legacy_encoding)
 {
     const auto max_cut = std::min(2, static_cast<int>(str.length()));
     const auto prefix = [str](int cut) { return str.substr(0, str.length() - cut); };
-#if defined(JP) && defined(UTF8)
+#ifdef JP
     // 落とすバイトが、旧版の内部の文字コードの文字の途中で切れた先頭の部分か
     // (EUC-JP は 2 バイトの文字の先頭バイトと 3 バイトの文字の先頭の 2 バイト、Shift_JIS は 2 バイトの文字の先頭バイト)
     const auto is_cut_lead = [](std::string_view dropped) {
@@ -278,8 +275,7 @@ std::string migrate_text(std::string_view str, [[maybe_unused]] bool prefer_syst
 
         return tl::nullopt;
     };
-#endif
-#ifdef JP
+
     const auto convert_guessed = [&]() -> tl::optional<std::string> {
         for (auto cut = 0; cut <= max_cut; cut++) {
             const auto text = prefix(cut);
@@ -297,7 +293,7 @@ std::string migrate_text(std::string_view str, [[maybe_unused]] bool prefer_syst
         return tl::nullopt;
     };
 
-    const auto converted = prefer_system_encoding ? convert_complete().or_else(convert_guessed) : convert_guessed().or_else(convert_complete);
+    const auto converted = prefer_legacy_encoding ? convert_complete().or_else(convert_guessed) : convert_guessed().or_else(convert_complete);
     if (converted) {
         return *converted;
     }

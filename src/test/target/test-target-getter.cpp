@@ -10,7 +10,6 @@
 namespace {
 // 方向の入力のプロンプト。多バイト文字は16進エスケープで書く
 #ifdef JP
-#ifdef UTF8
 constexpr auto HOUKOU = "\xe6\x96\xb9\xe5\x90\x91"; // 方向
 constexpr auto ESC_DE_CHUUDAN = "ESC\xe3\x81\xa7\xe4\xb8\xad\xe6\x96\xad"; // ESCで中断
 constexpr auto ASHIMOTO = "\xe8\xb6\xb3\xe5\x85\x83"; // 足元
@@ -18,7 +17,6 @@ constexpr auto DE_TARGET = "\xe3\x81\xa7\xe3\x82\xbf\xe3\x83\xbc\xe3\x82\xb2\xe3
 constexpr auto SENTAKU = "\xe9\x81\xb8\xe6\x8a\x9e"; // 選択
 constexpr auto HE = "\xe3\x81\xb8"; // へ
 constexpr auto SAI = "\xe5\x86\x8d"; // 再
-#endif
 const auto DIRECTION_PROMPT = test::cat(HOUKOU, " (", ESC_DE_CHUUDAN, ")?");
 const auto DIRECTION_AT_FEET_PROMPT = test::cat(HOUKOU, " ('.'", ASHIMOTO, ", ", ESC_DE_CHUUDAN, ")?");
 const auto AIM_PROMPT = test::cat(HOUKOU, " ('*'", DE_TARGET, SENTAKU, ", ", ESC_DE_CHUUDAN, ")?");

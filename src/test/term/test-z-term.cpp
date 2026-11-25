@@ -57,9 +57,7 @@ TEST_CASE("term_key_queue_pending counts keys in the circular key queue")
 
 #ifdef JP
 namespace {
-#ifdef UTF8
 constexpr std::string_view KANJI_A = "\xe4\xba\x9c"; //!< 亜
-#endif
 
 /*!
  * @brief 端末の行の先頭から指定したマス数のマスを返す

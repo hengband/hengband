@@ -6,9 +6,7 @@
 
 namespace {
 #ifdef JP
-#ifdef UTF8
 constexpr auto INVENTORY_PROMPT = "\xe6\x8c\x81\xe3\x81\xa1\xe7\x89\xa9\xef\xbc\x9a \xe5\x90\x88\xe8\xa8\x88   0.0 kg (\xe9\x99\x90\xe7\x95\x8c\xe3\x81\xae\x30%) \xe3\x82\xb3\xe3\x83\x9e\xe3\x83\xb3\xe3\x83\x89:"; // 持ち物： 合計   0.0 kg (限界の0%) コマンド:
-#endif
 #else
 constexpr auto INVENTORY_PROMPT = "Inventory: carrying 0.0 pounds (0% of capacity). Command:";
 #endif
