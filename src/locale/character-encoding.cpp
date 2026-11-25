@@ -530,6 +530,9 @@ size_t legacy_lead_byte_length(char lead, CharacterEncoding encoding)
  *         ASCII と EUC-JP/Shift_JIS のどちらとも解釈できる文字のみの文字列や、壊れた文字列など、
  *         文字コードを判定できなかった場合は UNKNOWN
  *         (ASCII は判定に使わないので US_ASCII を返すことはない)
+ * @details Shift_JIS の半角カナ (A1-DF の 1 バイト) を 1 バイトの文字として扱わず、次のバイトと組にして読むので、
+ * 半角カナを含む Shift_JIS の文字列は、EUC-JP と推定するか、推定できない (UNKNOWN)。Shift_JIS とは推定しない。
+ * 旧版のデータで半角カナはまれなので、推定のしかたは改めていない。
  */
 CharacterEncoding guess_legacy_encoding(std::string_view str)
 {
@@ -839,6 +842,9 @@ tl::optional<std::string> utf8_to_sys(std::string_view str)
  * Windows 版では、Shift_JIS として読める文字列は推定せずに Shift_JIS として読む。
  * 旧版の Windows 版は UTF-8 として読めない文字列をすべて Shift_JIS として扱っていたので、それと同じにし、
  * 半角カナの並び (EUC-JP の 2 バイトの文字とも読める) を EUC-JP と推定して取り違えないようにする。
+ * 推定を誤ると化ける。Unix 系では、半角カナを含むか、両方の文字コードとして読める文字 (第 2 水準の漢字の多く) だけの
+ * Shift_JIS の文字列は、EUC-JP と推定するか推定できずに EUC-JP として読む (guess_legacy_encoding() を参照)。
+ * Windows 版では逆に、EUC-JP の文字列の多くは Shift_JIS としても読める (「澄」の C0 A1 は「ﾀ｡」になる) ので、Shift_JIS として読んで化ける。
  */
 static tl::optional<std::string> convert_to_system_encoding(std::string_view str)
 {
@@ -864,6 +870,12 @@ static void warn_conversion_failure()
  * @brief 受け取った文字列の文字コードを推定し、システムの文字コードへ変換する
  * @param str 変換する文字列
  * @return システムの文字コードに変換した文字列。変換が要らない場合と、変換に失敗した場合 (警告を表示する) は元の文字列を返す
+ * @details UTF-8 として読める文字列は変換しない。旧版の文字列でも、バイトの並びがたまたま UTF-8 として読めると、
+ * 変換されずに別の文字になる。EUC-JP の「竜」(CE B5) や Shift_JIS の半角カナの「ﾃｨ」(C3 A8) は UTF-8 の 2 バイトの文字に、
+ * EUC-JP の「筺や賢」(E4 A1 A4 E4 B8 AD) は文字の境目をまたいで UTF-8 の 3 バイトの文字 2 つに読める。
+ * ファイルを 1 行ずつ変換するときは、同じファイルのほかの行が旧版の文字コードでも避けられない。
+ * かなや記号の多い行ではまず起きないので、ファイル全体で推定することはしていない。
+ * UTF-8 として読めない文字列の推定の誤りは、convert_to_system_encoding() を参照。
  */
 std::string guess_convert_to_system_encoding(std::string str)
 {
@@ -886,6 +898,7 @@ std::string guess_convert_to_system_encoding(std::string str)
  *               変換した文字列がバッファに収まらない場合は変換せず、警告を表示する。
  * @param buflen バッファの長さ。
  * @return 変換後の文字列の長さ（終端文字は含まない）
+ * @details 推定が誤る場合は、std::string を受け取る版の説明を参照。
  */
 size_t guess_convert_to_system_encoding(char *strbuf, int buflen)
 {
