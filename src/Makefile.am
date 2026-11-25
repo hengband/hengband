@@ -1722,7 +1722,14 @@ if PCH
 PCH_INCLUDES = -include $(srcdir)/stdafx.h
 endif
 
-CXXCOMPILE = $(strip $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) $(PCH_INCLUDES))
+## configure が定義する JP などを、autoconf.h (system/h-basic.h が取り込む) を取り込まないソースや、
+## その前に読むヘッダでも使えるよう、どのソースにも取り込む (Windows 版はコンパイラのオプションで定義している)。
+## 取り込んだファイルは依存関係に入るので、configure し直して autoconf.h が変わればどのソースもコンパイルし直す
+## (依存関係を追跡するとき。--disable-dependency-tracking では、これまでどおりコンパイルし直されない)。
+## プリコンパイル済みヘッダは最初に取り込む必要があるので、その後に置く
+CONFIG_INCLUDES = -include $(builddir)/autoconf.h
+
+CXXCOMPILE = $(strip $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) $(PCH_INCLUDES) $(CONFIG_INCLUDES))
 
 if PCH
 ## clang は既定で取り込んだヘッダの mtime を PCH に埋め込むため、チェックアウトし直すたびに
