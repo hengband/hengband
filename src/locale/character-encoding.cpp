@@ -520,7 +520,8 @@ size_t legacy_lead_byte_length(char lead, CharacterEncoding encoding)
         return 3;
     }
 
-    return iseuckanji(byte) ? 2 : 1;
+    // 2 バイトの文字 (JIS X 0208) と半角カナ (8E xx)
+    return (((byte >= 0xa1) && (byte <= 0xfe)) || (byte == 0x8e)) ? 2 : 1;
 }
 
 /*!

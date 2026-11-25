@@ -24,9 +24,6 @@ constexpr auto MAINTAINER = "echizen@users.sourceforge.jp";
  * フォントやデフォルトのlibパス等も定義する.
  * HAVE_CONFIG_Hは、autoconfによりコンパイラスイッチ「-DHAVE_CONFIG_H」が付加される.
  */
-#ifdef JP
-#define iseuckanji(x) (((unsigned char)(x) >= 0xa1 && (unsigned char)(x) <= 0xfe) || (unsigned char)(x) == 0x8e)
-#endif
 #undef PATH_SEP
 #ifdef _WIN32
   #define PATH_SEP "\\"

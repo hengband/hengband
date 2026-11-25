@@ -195,23 +195,18 @@ static bool string_is_repeat(concptr str, int len)
 /* マルチバイト文字を分割せずに str を分割する長さを len 以下で返す */
 static int find_split(concptr str, int len)
 {
-    /*
-     * 内部の文字コードは UTF-8 だが、str は常に通信上の文字コード (EUC-JP) としてエンコードされます。
-     * 他の場所で行われているような 3 バイトのエンコーディングは想定していません。
-     */
-    int last_split = 0, i = 0;
+    // 内部の文字コードは UTF-8 だが、str は常に通信上の文字コード (EUC-JP) としてエンコードされる
+    auto i = 0;
     while (i < len) {
-        if (iseuckanji(str[i])) {
-            if (i < len - 1) {
-                last_split = i + 2;
-            }
-            i += 2;
-        } else {
-            last_split = i + 1;
-            ++i;
+        const auto char_length = static_cast<int>(legacy_lead_byte_length(str[i], CharacterEncoding::EUC_JP));
+        if (i + char_length > len) {
+            break;
         }
+
+        i += char_length;
     }
-    return last_split;
+
+    return i;
 }
 #endif
 
