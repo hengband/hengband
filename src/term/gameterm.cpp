@@ -3,7 +3,6 @@
 #include "system/system-variables.h"
 #include "term/term-color-types.h"
 #include "term/z-rand.h"
-#include "util/string-processor.h"
 #include "view/display-symbol.h"
 #include <span>
 #include <unordered_map>
@@ -381,12 +380,6 @@ const concptr ident_info[] = {
 std::array<term_type *, 8> angband_terms;
 
 /*!
- * スクリーン表示色キャラクタ /
- * Encode the screen colors
- */
-static const concptr color_char = "dwsorgbuDWvyRGBU";
-
-/*!
  * @brief ボルト射出の軌跡を表す色付きシンボルテーブル
  */
 std::array<DisplaySymbol, 256> ds_bolt{};
@@ -549,8 +542,6 @@ static TERM_COLOR spell_color(xso::rng32 &rng, AttributeType type)
     }
     /* Normal tiles or ASCII */
     else {
-        TERM_COLOR a;
-
         /* Lookup the default colors for this type */
         const auto &color = gf_colors[type];
 
@@ -558,19 +549,12 @@ static TERM_COLOR spell_color(xso::rng32 &rng, AttributeType type)
             return TERM_WHITE;
         }
 
-        /* Pick a random color */
-        auto c = rand_choice(rng, color);
-
-        /* Lookup this color */
-        a = angband_strchr(color_char, c) - color_char;
-
-        /* Invalid color (note check for < 0 removed, gave a silly
-         * warning because bytes are always >= 0 -- RG) */
+        // 設定ファイルの色の文字の並びから 1 文字を選ぶ。色の文字でなければ白にする
+        const auto a = color_char_to_attr(rand_choice(rng, color));
         if (a > 15) {
             return TERM_WHITE;
         }
 
-        /* Use this color */
         return a;
     }
 
