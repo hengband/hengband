@@ -27,7 +27,6 @@ struct pain_message_type {
  * @param characters 文字が含まれるか調べる文字列
  * @return 生成した関数オブジェクト(ラムダ式)
  * @details characters はモンスターのシンボルを並べた ASCII の文字列であること。
- * バイト単位で探すので、2バイト文字を含むと、その後半バイトに誤って一致することがある。
  */
 static auto d_char_is_any_of(std::string_view characters)
 {

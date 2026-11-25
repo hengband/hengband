@@ -145,16 +145,14 @@ size_t trigger_text_to_ascii(std::string &result, std::string_view sv, size_t po
     }
 
     if (trigger == max_macrotrigger) {
-        // 2バイト文字の後半バイトを「]」と誤認しないよう、angband_strchr() で探す
-        const std::string rest_str(rest);
-        const auto *close = angband_strchr(rest_str.data(), ']');
-        if (close == nullptr) {
+        const auto close = rest.find(']');
+        if (close == std::string_view::npos) {
             return pos + 1;
         }
 
         result.push_back(static_cast<char>(31));
         result.push_back('\r');
-        return cur + (close - rest_str.data()) + 1;
+        return cur + close + 1;
     }
 
     result.push_back(static_cast<char>(31));

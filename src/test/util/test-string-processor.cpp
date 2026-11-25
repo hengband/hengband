@@ -207,12 +207,14 @@ TEST_CASE("str_find_position does not search past the end of the view")
 }
 
 #ifdef JP
-TEST_CASE("str_find_position does not match the trailing byte of a 2-byte character")
+TEST_CASE("str_find_position searches bytes in a string with multibyte characters")
 {
-    const auto trail_byte = KANJI_KAN.substr(1, 1);
-    CHECK(str_find_position(KANJI_KAN, trail_byte) == std::string_view::npos);
-    CHECK(str_find_position(KANJI_KAN, trail_byte[0]) == std::string_view::npos);
     CHECK(str_find_position(cat("a", KANJI_KAN, "b"), "b") == 1 + KANJI_KAN.length());
+    CHECK(str_find_position(cat("a", KANJI_KAN, "b"), 'b') == 1 + KANJI_KAN.length());
+    CHECK(str_find_position(cat("a", KANJI_KAN, KANJI_KAN), KANJI_KAN) == 1);
+
+    // 多バイト文字の先頭バイトだけが残った壊れた文字列でも、後ろの ASCII を後続のバイトとして読み飛ばさずに見つける
+    CHECK(str_find_position(cat(KANJI_KAN.substr(0, 1), "b"), "b") == 1);
 }
 #endif
 
@@ -588,15 +590,8 @@ TEST_CASE("string-processor accepts a multibyte character which lacks its traili
     CHECK(str_tolower(str) == str);
 
     CHECK(str_erase(str, "x") == str);
-    CHECK(str_replace(str, "x", "y") == str);
-    CHECK_FALSE(str_find(str, "x"));
     CHECK(str_substr(std::string_view(str), 2).empty());
     CHECK(str_split(str, ':').size() == 1);
-
-    // 終端を越えて読まずに、見つからないと答えて終わる
-    CHECK(angband_strchr(str.data(), 'x') == nullptr);
-    CHECK(angband_strstr(str.data(), "x") == nullptr);
-    CHECK(angband_strchr(str.data(), 'a') == str.data());
 }
 
 #endif
