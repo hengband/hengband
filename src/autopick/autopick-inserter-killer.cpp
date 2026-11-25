@@ -106,24 +106,35 @@ bool insert_keymap_line(AutopickTextBody *tb)
 
 /*!
  * @brief Insert single letter at cursor position.
+ * @details 範囲の選択は、文字を入れるときに解く。多バイト文字の入力が途中で切れて文字にならなければ、何も入れず選択も残す。
  */
 void insert_single_letter(AutopickTextBody *tb, int key)
 {
+    const auto c = static_cast<char>(key);
+    const auto ch = inkey_multibyte_char(c);
+    if (!ch) {
+        return;
+    }
+
+    if (tb->marks.any()) {
+        tb->marks.clear();
+        tb->dirty_flags |= DIRTY_ALL;
+    }
+
     const auto &line = tb->lines[tb->cy].line;
     const auto head_len = std::min<size_t>(tb->cx, line.length());
     auto buf = line.substr(0, head_len);
 
-    if (is_mb_char_lead(static_cast<char>(key))) {
-        const auto ch = inkey_multibyte_char(static_cast<char>(key));
-        if (buf.size() + ch.length() < MAX_LINELEN) {
-            buf.append(ch);
-            tb->cx += static_cast<int>(ch.length());
+    if (is_mb_char_lead(c)) {
+        if (buf.size() + ch->length() < MAX_LINELEN) {
+            buf.append(*ch);
+            tb->cx += static_cast<int>(ch->length());
         } else {
             bell();
         }
     } else {
         if (buf.size() + 1 < MAX_LINELEN) {
-            buf.push_back(static_cast<char>(key));
+            buf.push_back(c);
         }
         tb->cx++;
     }

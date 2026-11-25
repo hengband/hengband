@@ -189,6 +189,13 @@ AutopickSearch get_string_for_search(PlayerType *player_ptr, const AutopickSearc
             }
 
             const auto c = static_cast<char>(skey);
+
+            // 入力が途中で切れて文字にならなければ、前の検索の文字列も残して何も入れない
+            const auto ch = inkey_multibyte_char(c);
+            if (!ch) {
+                break;
+            }
+
             if (color != TERM_WHITE) {
                 if (color == TERM_L_GREEN) {
                     as.item.reset();
@@ -201,10 +208,9 @@ AutopickSearch get_string_for_search(PlayerType *player_ptr, const AutopickSearc
             }
 
             if (is_mb_char_lead(c)) {
-                const auto ch = inkey_multibyte_char(c);
-                if (std::cmp_less_equal(str_display_width(buf) + str_display_width(ch), max_len)) {
-                    buf.insert(pos, ch);
-                    pos += static_cast<int>(ch.length());
+                if (std::cmp_less_equal(str_display_width(buf) + str_display_width(*ch), max_len)) {
+                    buf.insert(pos, *ch);
+                    pos += static_cast<int>(ch->length());
                     break;
                 }
             } else if (is_printable_single_byte_char(c)) {

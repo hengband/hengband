@@ -139,16 +139,22 @@ tl::optional<std::string> askfor(int len, std::string_view initial_value, bool n
             }
 
             const auto c = static_cast<char>(skey);
+
+            // 入力が途中で切れて文字にならなければ、初期値も残して何も入れない
+            const auto ch = inkey_multibyte_char(c);
+            if (!ch) {
+                break;
+            }
+
             if (color == TERM_YELLOW) {
                 buf = "";
                 color = TERM_WHITE;
             }
 
             if (is_mb_char_lead(c)) {
-                const auto ch = inkey_multibyte_char(c);
-                if (std::cmp_less_equal(str_display_width(buf) + str_display_width(ch), len)) {
-                    buf.insert(pos, ch);
-                    pos += static_cast<int>(ch.length());
+                if (std::cmp_less_equal(str_display_width(buf) + str_display_width(*ch), len)) {
+                    buf.insert(pos, *ch);
+                    pos += static_cast<int>(ch->length());
                     break;
                 }
             } else if (is_printable_single_byte_char(c)) {
