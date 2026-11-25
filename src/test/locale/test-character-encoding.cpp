@@ -353,8 +353,9 @@ TEST_CASE("legacy_to_sys_replacing_invalid replaces bytes which cannot be read w
     // 8E の後ろが半角カナ (A1-DF) でなければ 8E だけを読めないバイトとし、後ろの 2 バイト (E0 A1 の「燹」) は文字として読む
     CHECK(legacy_to_sys_replacing_invalid("\x8e\xe0\xa1:"sv, CharacterEncoding::EUC_JP) == "?\xe7\x87\xb9:"sv);
 
-    // 割り当ての無い 2 バイト (A9 B0) は先頭の 1 バイトだけを読めないバイトとし、次のバイトから読み直す (B0 A1 の「亜」)
-    CHECK(legacy_to_sys_replacing_invalid("\xa9\xb0\xa1:"sv, CharacterEncoding::EUC_JP) == "?\xe4\xba\x9c:"sv);
+    // 割り当ての無い 2 バイト (A9 B0) はまとめて 1 つの '?' にし、B0 を次の A1 と組んで「亜」(B0 A1) と読まない。
+    // 後ろの A1 は続きとして読めないバイトが続くので、A1 だけを '?' にする
+    CHECK(legacy_to_sys_replacing_invalid("\xa9\xb0\xa1:"sv, CharacterEncoding::EUC_JP) == "??:");
 
     // 長い文字列も、途中で区切って調べた境界で文字を取り違えずに変換する
     std::string long_euc;
@@ -371,6 +372,17 @@ TEST_CASE("legacy_to_sys_replacing_invalid replaces bytes which cannot be read w
     // Windows の 20932 は JIS X 0212 の文字 (8F B0 A1 の「丂」) を読めないので、3 バイトを 1 つの '?' にする
     CHECK(legacy_to_sys_replacing_invalid(cat("\x8f\xb0\xa1", NIHON_EUC), CharacterEncoding::EUC_JP) == cat("?", NIHON_UTF8));
 #endif
+
+    // 文字の割り当てられていない文字は、後ろのバイトを次の文字と組んで別の文字として読まないよう、文字全体を 1 つの '?' にする
+    // (JIS X 0212 の 8F A1 A1、JIS X 0208 の A9 A1、CP932 の 85 40)
+    CHECK(legacy_to_sys_replacing_invalid(cat("\x8f\xa1\xa1", NIHON_EUC), CharacterEncoding::EUC_JP) == cat("?", NIHON_UTF8));
+    CHECK(legacy_to_sys_replacing_invalid(cat("\xa9\xa1", NIHON_EUC), CharacterEncoding::EUC_JP) == cat("?", NIHON_UTF8));
+    CHECK(legacy_to_sys_replacing_invalid(cat("\x85\x40", NIHON_SJIS), CharacterEncoding::SHIFT_JIS) == cat("?", NIHON_UTF8));
+
+    // Shift_JIS の 2 バイト目は 40-7E (ASCII の文字と同じ値) のこともあるので、割り当てのない先頭バイトの後ろの "A" (41) も文字の一部とする
+    CHECK(legacy_to_sys_replacing_invalid("\x85"
+                                          "Abc"sv,
+              CharacterEncoding::SHIFT_JIS) == "?bc");
 
     // UTF-8 の文字列は、UTF-8 として読めないバイトを置き換える
     CHECK(legacy_to_sys_replacing_invalid(cat(NIHON_UTF8, "\xff\xe6"), CharacterEncoding::UTF_8) == cat(NIHON_UTF8, "??"));
