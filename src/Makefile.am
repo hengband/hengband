@@ -1683,7 +1683,7 @@ hengband_test_LDADD = libhengband.a
 
 ## 端末と入力待ちを使う共通描画の回帰プローブ。通常のユニットテストとは別に明示実行する。
 main-window-wipe-probe$(EXEEXT): $(top_srcdir)/tools/tests/main-window-wipe-probe.cpp libhengband.a
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) $(LDFLAGS) -o $@ $(top_srcdir)/tools/tests/main-window-wipe-probe.cpp libhengband.a $(LIBS)
+	$(CXXCOMPILE) $(LDFLAGS) -o $@ $(top_srcdir)/tools/tests/main-window-wipe-probe.cpp libhengband.a $(LIBS)
 
 .PHONY: check-main-window-wipe
 check-main-window-wipe: main-window-wipe-probe$(EXEEXT)
@@ -1693,7 +1693,7 @@ check-main-window-wipe: main-window-wipe-probe$(EXEEXT)
 
 ## 状態解除の終了処理・入力待ちを実際の端末で確認する独立プローブ。
 arena-status-probe$(EXEEXT): $(top_srcdir)/tools/tests/arena-status-probe.cpp libhengband.a
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) $(LDFLAGS) -o $@ $(top_srcdir)/tools/tests/arena-status-probe.cpp libhengband.a $(LIBS)
+	$(CXXCOMPILE) $(LDFLAGS) -o $@ $(top_srcdir)/tools/tests/arena-status-probe.cpp libhengband.a $(LIBS)
 
 .PHONY: check-arena-status
 check-arena-status: arena-status-probe$(EXEEXT)
@@ -1722,8 +1722,8 @@ if PCH
 PCH_INCLUDES = -include $(srcdir)/stdafx.h
 endif
 
-## configure が定義する JP などを、autoconf.h (system/h-basic.h が取り込む) を取り込まないソースや、
-## その前に読むヘッダでも使えるよう、どのソースにも取り込む (Windows 版はコンパイラのオプションで定義している)。
+## configure が定義する JP などを、どのソースやヘッダでも自分で取り込まずに使えるよう、どのソースにも取り込む
+## (Windows 版はコンパイラのオプションで定義している)。ソースやヘッダからは autoconf.h を取り込まない。
 ## 取り込んだファイルは依存関係に入るので、configure し直して autoconf.h が変わればどのソースもコンパイルし直す
 ## (依存関係を追跡するとき。--disable-dependency-tracking では、これまでどおりコンパイルし直されない)。
 ## プリコンパイル済みヘッダは最初に取り込む必要があるので、その後に置く

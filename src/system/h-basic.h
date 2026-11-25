@@ -9,10 +9,6 @@
  * 不明(変愚蛮怒スタッフ？)
  */
 
-#ifdef HAVE_CONFIG_H
-#include "autoconf.h"
-#endif /* HAVE_CONFIG_H */
-
 /* System Configuration */
 #include "system/h-config.h"
 
