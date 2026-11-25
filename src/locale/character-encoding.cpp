@@ -210,13 +210,56 @@ bool replace_invalid_euc_bytes(std::string &str, bool replace_invalid)
     return true;
 }
 
+/*!
+ * @brief 旧版の文字コードの文字の、先頭バイトの後ろのバイトがどれも文字の続きとして読めるかを返す
+ * @param chr 文字 (legacy_lead_byte_length() のバイト数で切り出したもの。文字列の末尾で欠けていれば短い。空でないこと)
+ * @param encoding chr の文字コード (EUC-JP か Shift_JIS)
+ * @return 続きとして読めないバイトが無ければ true
+ * @details 続きとして読めるのは、EUC-JP では 8E (半角カナ) の後ろが A1-DF、ほかの先頭バイト (A1-FE・8F) の後ろが A1-FE、
+ * Shift_JIS では 40-FC (7F を除く) である。
+ */
+bool has_legacy_trail_bytes(std::string_view chr, CharacterEncoding encoding)
+{
+    const auto lead = static_cast<unsigned char>(chr.front());
+    const auto is_trail_byte = [lead, encoding](char c) {
+        const int trail = static_cast<unsigned char>(c);
+        if (encoding == CharacterEncoding::SHIFT_JIS) {
+            return (trail >= 0x40) && (trail <= 0xfc) && (trail != 0x7f);
+        }
+
+        const auto trail_max = (lead == 0x8e) ? 0xdf : 0xfe;
+        return (trail >= 0xa1) && (trail <= trail_max);
+    };
+    return ranges::all_of(chr.substr(1), is_trail_byte);
+}
+
+/*!
+ * @brief 読めない文字を '?' に置き換えるときに、1 つの '?' にするバイト数を返す
+ * @param str 文字列
+ * @param pos 読めない文字の位置 (文字の境界)
+ * @param encoding str の文字コード (EUC-JP か Shift_JIS)
+ * @return 先頭バイトと続きのバイトの形がそろった文字 (文字が割り当てられていないものなど) なら文字のバイト数、そうでなければ 1
+ * @details 形のそろった文字を先頭の 1 バイトだけ置き換えると、残りのバイトを次の文字と組んで別の文字として読んでしまうので、
+ * 文字全体を 1 つの '?' にする。続きのバイトとして読めないバイトがある並びや末尾で欠けた文字は、
+ * 続くバイトが別の文字の先頭のこともあるので、先頭の 1 バイトだけを置き換える。
+ */
+size_t unreadable_char_length(std::string_view str, size_t pos, CharacterEncoding encoding)
+{
+    const auto char_len = legacy_lead_byte_length(str[pos], encoding);
+    if ((char_len == 1) || (pos + char_len > str.length())) {
+        return 1;
+    }
+
+    return has_legacy_trail_bytes(str.substr(pos, char_len), encoding) ? char_len : 1;
+}
+
 #ifndef _WIN32
 /*!
  * @brief EUC-JP の文字列で、先頭バイトの後ろに文字の続きとして読めないバイトが続く位置を探す
  * @param str 探す文字列
  * @param pos 探し始める位置 (文字の境界)
  * @return 見つけた先頭バイトの位置と true。見つからなければ、探し終えた位置 (文字の境界) と false
- * @details 続きとして読めるのは、8E (半角カナ) では A1-DF、ほかの先頭バイト (A1-FE・8F) では A1-FE である。
+ * @details 続きとして読めるバイトは has_legacy_trail_bytes() を参照。
  * glibc の iconv はこの並びを読めないとするが、macOS の iconv は 2 バイト目が A1 未満の並び (C6 3A など) や
  * 8F の後ろの ASCII を別の文字として読んでしまうので、iconv に渡す前に見つける。
  * 文字列の末尾で欠けた文字は iconv が読めないとするので、ここでは扱わない。
@@ -227,14 +270,8 @@ std::pair<size_t, bool> find_broken_euc_char(std::string_view str, size_t pos)
     constexpr size_t SEARCH_LENGTH = 256;
     const auto search_end = std::min(str.length(), pos + SEARCH_LENGTH);
     while (pos < search_end) {
-        const auto lead = static_cast<unsigned char>(str[pos]);
         const auto char_len = std::min(legacy_lead_byte_length(str[pos], CharacterEncoding::EUC_JP), str.length() - pos);
-        const unsigned char trail_max = (lead == 0x8e) ? 0xdf : 0xfe;
-        const auto is_trail_byte = [trail_max](char c) {
-            const auto trail = static_cast<unsigned char>(c);
-            return (trail >= 0xa1) && (trail <= trail_max);
-        };
-        if (!ranges::all_of(str.substr(pos + 1, char_len - 1), is_trail_byte)) {
+        if (!has_legacy_trail_bytes(str.substr(pos, char_len), CharacterEncoding::EUC_JP)) {
             return { pos, true };
         }
 
@@ -287,11 +324,11 @@ bool is_unreadable_legacy_char(std::string_view chr, CharacterEncoding encoding)
  * @brief 旧版のデータの文字列を UTF-8 に変換する (Windows 版)
  * @param str 変換する文字列
  * @param encoding str の文字コード (EUC-JP か Shift_JIS)
- * @param replace_invalid 読めないバイトを '?' に置き換えて変換を続けるか
+ * @param replace_invalid 読めない文字・バイトを '?' に置き換えて変換を続けるか
  * @return UTF-8 に変換した文字列。変換に失敗した場合は tl::nullopt
  * @details 旧版の EUC-JP は文字列リテラルを euc-jp-ms で変換してビルドしていたので、EUC-JP-MS で読んだ文字にする。
- * 読めない文字は、iconv の版と同じく先頭の 1 バイトを '?' にして、次のバイトから変換を続ける。
- * ただし、20932 で読めない JIS X 0212 の文字は 3 バイトを 1 つの '?' にする (iconv の版では読める)。
+ * 読めない文字は、iconv の版と同じく '?' にして、その後ろから変換を続ける (unreadable_char_length() を参照)。
+ * ただし、iconv で読める JIS X 0212 の文字 (8F xx xx) を 20932 は読めないので、'?' になる。
  */
 tl::optional<std::string> legacy_to_utf8(std::string_view str, CharacterEncoding encoding, bool replace_invalid)
 {
@@ -340,12 +377,8 @@ tl::optional<std::string> legacy_to_utf8(std::string_view str, CharacterEncoding
                 continue;
             }
 
-            // 読めない JIS X 0212 の文字 (8F と A1-FE の 2 バイト) は、後ろの 2 バイトを別の文字として読まないよう、まとめて 1 つの '?' にする
             utf8->push_back('?');
-            // 3 バイトの文字は EUC-JP の 8F xx xx だけ
-            const auto is_euc_byte = [](char c) { return static_cast<unsigned char>(c) >= 0xa1; };
-            const auto is_jis_x_0212_char = (chr.length() == 3) && is_euc_byte(chr[1]) && is_euc_byte(chr[2]);
-            pos += is_jis_x_0212_char ? chr.length() : 1;
+            pos += unreadable_char_length(input_view, pos, encoding);
         }
     }
 
@@ -360,10 +393,11 @@ tl::optional<std::string> legacy_to_utf8(std::string_view str, CharacterEncoding
  * @brief 旧版のデータの文字列を、iconv で UTF-8 に変換する
  * @param str 変換する文字列
  * @param encoding str の文字コード (EUC-JP か Shift_JIS)
- * @param replace_invalid 読めないバイトを '?' に置き換えて変換を続けるか
+ * @param replace_invalid 読めない文字・バイトを '?' に置き換えて変換を続けるか
  * @return UTF-8 に変換した文字列。変換に失敗した場合は tl::nullopt
  * @details 旧版の EUC-JP は文字列リテラルを euc-jp-ms で変換してビルドしていたので、使えれば EUC-JP-MS として読む。
  * 使えずに EUC-JP として読んだときは、全角チルダなど EUC-JP-MS と対応の違う文字を、EUC-JP-MS で読んだ文字に戻す。
+ * 読めない文字は '?' にして、その後ろから変換を続ける (unreadable_char_length() を参照)。
  */
 tl::optional<std::string> legacy_to_utf8(std::string_view str, CharacterEncoding encoding, bool replace_invalid)
 {
@@ -419,16 +453,17 @@ tl::optional<std::string> legacy_to_utf8(std::string_view str, CharacterEncoding
             continue;
         }
 
-        // 不正な並び (EILSEQ)、末尾で欠けた文字 (EINVAL)、続きとして読めないバイトが続く先頭バイトは、
-        // 置き換えるなら 1 バイトを '?' にして次のバイトから続ける
+        // 読めない文字 (EILSEQ)、末尾で欠けた文字 (EINVAL)、続きとして読めないバイトが続く先頭バイトは、
+        // 置き換えるなら '?' にして、その後ろから続ける (unreadable_char_length() を参照)
         if (!replace_invalid || (!is_converted && (errno == E2BIG))) {
             return tl::nullopt;
         }
 
+        const auto skip_len = unreadable_char_length(input, static_cast<size_t>(in - input.data()), encoding);
         *out++ = '?';
         outlen_left--;
-        in++;
-        inlen_left--;
+        in += skip_len;
+        inlen_left -= skip_len;
     }
 
     utf8.resize(utf8.length() - outlen_left);
@@ -568,7 +603,8 @@ tl::optional<std::string> legacy_to_sys(std::string_view str, CharacterEncoding 
  * @param str 変換する文字列
  * @param encoding str の文字コード (guess_legacy_encoding() で推定したものなど)
  * @return 内部の文字コードに変換した文字列
- * @details 読めないバイト (末尾で欠けた文字など) を '?' に置き換える。
+ * @details 読めない文字・バイト (末尾で欠けた文字など) を '?' に置き換える。
+ * 先頭バイトと続きのバイトの形がそろった読めない文字 (文字が割り当てられていないものなど) は、文字全体を 1 つの '?' にする。
  * encoding が UNKNOWN なら、旧版の内部の文字コード (LEGACY_CHARACTER_ENCODING。Windows 版は Shift_JIS、Unix 系は EUC-JP) として読む
  * (旧版が、推定できない文字列を内部の文字コードのまま扱っていたのと同じ)。
  * US_ASCII・UTF_8 なら、UTF-8 として読めないバイトを '?' に置き換える。
