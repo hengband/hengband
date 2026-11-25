@@ -69,6 +69,7 @@ tl::optional<std::string> sys_to_utf8(std::string_view str);
 tl::optional<std::string> utf8_to_sys(std::string_view utf8_str);
 std::string guess_convert_to_system_encoding(std::string str);
 size_t guess_convert_to_system_encoding(char *strbuf, int buflen);
+void normalize_to_ms_characters(std::string &utf8);
 
 tl::optional<std::string> utf8_to_euc(std::string_view utf8_str);
 std::string utf8_to_euc_keeping_width(std::string_view utf8_str);

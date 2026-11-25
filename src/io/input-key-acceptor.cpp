@@ -5,6 +5,7 @@
 #include "game-option/map-screen-options.h"
 #include "io/macro-configurations-store.h"
 #include "io/signal-handlers.h"
+#include "locale/character-encoding.h"
 #include "locale/multibyte-char.h"
 #include "system/player-type-definition.h"
 #include "term/gameterm.h"
@@ -332,6 +333,8 @@ char inkey(bool do_all_term_refresh)
  * @param lead 入力済みの文字の先頭バイト
  * @return lead に続けて、文字のバイト数になるまで inkey() で読んだバイトをつなげた文字列。
  *         lead が多バイト文字の先頭でなければ lead だけ
+ * @details 日本語版では、IME などが入れた波ダッシュ「〜」などを、同梱のデータと同じ全角チルダ「～」などにそろえる
+ * (normalize_to_ms_characters() を参照)。
  */
 std::string inkey_multibyte_char(char lead)
 {
@@ -341,6 +344,9 @@ std::string inkey_multibyte_char(char lead)
         ch.push_back(inkey());
     }
 
+#ifdef JP
+    normalize_to_ms_characters(ch);
+#endif
     return ch;
 }
 

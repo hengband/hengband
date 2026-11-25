@@ -340,6 +340,7 @@ FILE *angband_fopen_temp(char *buf, int max)
  * @details
  * 行の途中に '\0' があれば、そこで行を切り、その行の残りは読み捨てる。
  * '\0' で始まる行は空の行になる (読み飛ばさないので、行の数は変わらない)。
+ * 日本語版では、波ダッシュ「〜」なども同梱のデータと同じ全角チルダ「～」などにそろえる (normalize_to_ms_characters())。
  */
 static tl::optional<std::string> read_line(FILE *fp)
 {
@@ -360,7 +361,9 @@ static tl::optional<std::string> read_line(FILE *fp)
 
 #ifdef JP
     // 旧版の文字コードから内部の文字コード (UTF-8) に変換すると長くなるので、バッファを書き換えずに変換した文字列を返す
-    return guess_convert_to_system_encoding(std::move(line_buf));
+    auto line = guess_convert_to_system_encoding(std::move(line_buf));
+    normalize_to_ms_characters(line);
+    return line;
 #else
     return line_buf;
 #endif
@@ -376,6 +379,8 @@ static tl::optional<std::string> read_line(FILE *fp)
  *
  * 日本語版ではさらに以下の処理も行う。
  * - 文字コードをシステムの文字コードに変換する
+ * - 波ダッシュ「〜」などを、同梱のデータと同じ全角チルダ「～」などにそろえる (normalize_to_ms_characters())。
+ *   読んだ行を書き戻すと、コメントなどの行でもそろえた文字になる
  * - 多バイト文字の先頭バイトだけが残らないようにする
  *
  * 読み込んだ行で上記の変換を行いn-1バイトを超えた分は読み捨てられる。
