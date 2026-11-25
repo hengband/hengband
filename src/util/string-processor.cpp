@@ -3,9 +3,10 @@
  * @brief 文字列処理の汎用ユーティリティ
  * @details
  * 日本語版の内部の文字コードは UTF-8 である。
- * このファイルの関数のうち文字や文字列を検索・分割するものは、文字列を先頭から 1 文字ずつ走査し、
- * 多バイト文字の後続のバイトを読み飛ばす。UTF-8 の後続のバイトは ASCII の範囲と重ならないが、
- * 多バイト文字を途中で分割しないよう、文字単位で扱う。
+ * このファイルの関数のうち文字列を切り詰め・変換するもの (str_substr()・str_toupper() など) は、
+ * 多バイト文字を途中で分けないよう、文字列を先頭から 1 文字ずつ走査し、多バイト文字の後続のバイトを読み飛ばす。
+ * 検索・分割するもの (str_find_position()・str_split() など) は、UTF-8 の後続のバイトが ASCII や文字の先頭バイトと
+ * 重ならないので、ふつうにバイト列として探す。
  */
 
 #include "util/string-processor.h"
@@ -148,57 +149,39 @@ size_t angband_strcat(char *buf, std::string_view src, size_t bufsize)
 }
 
 /*!
- * @brief 多バイト文字を考慮しつつ文字列を検索し、見つかった位置を返す
+ * @brief 文字列を検索し、見つかった位置を返す
  * @param haystack 検索対象の文字列
  * @param needle 検索する文字列
  * @return 最初に見つかった位置。見つからなければ std::string_view::npos
  * @details
- * 多バイト文字の後続のバイトから始まる位置にはマッチしない。
+ * UTF-8 の後続のバイト (80-BF) は ASCII や文字の先頭バイトと重ならないので、
+ * 正しい UTF-8 の needle が多バイト文字の途中から一致することはなく、ふつうにバイト列として探せばよい。
  * needle が空文字列の場合は 0 を返す。
  */
 size_t str_find_position(std::string_view haystack, std::string_view needle)
 {
-    if (haystack.length() < needle.length()) {
-        return std::string_view::npos;
-    }
-
-    const auto last_pos = haystack.length() - needle.length();
-    for (size_t i = 0; i <= last_pos; i += mb_char_byte_length(haystack[i])) {
-        if (haystack.substr(i).starts_with(needle)) {
-            return i;
-        }
-    }
-
-    return std::string_view::npos;
+    return haystack.find(needle);
 }
 
 /*!
- * @brief 多バイト文字を考慮しつつ文字を検索し、見つかった位置を返す
+ * @brief 文字を検索し、見つかった位置を返す
  * @param str 検索対象の文字列
- * @param ch 検索する文字
+ * @param ch 検索する文字 (バイト)
  * @return 最初に見つかった位置。見つからなければ std::string_view::npos
- * @details
- * 多バイト文字の後続のバイトにはマッチしない。
+ * @details ch が ASCII なら多バイト文字のバイトと重ならないので、ふつうにバイトとして探せばよい
+ * (ASCII でなければ、同じ値のバイトに一致する)。
  */
 size_t str_find_position(std::string_view str, char ch)
 {
-    for (size_t i = 0; i < str.length(); i += mb_char_byte_length(str[i])) {
-        if (str[i] == ch) {
-            return i;
-        }
-    }
-
-    return std::string_view::npos;
+    return str.find(ch);
 }
 
 /*!
- * @brief 多バイト文字を考慮しつつ文字列を検索する (ANSIのstrstr相当)
+ * @brief 文字列を検索する (ANSIのstrstr相当)
  * @param haystack 検索対象のNUL終端された文字列
  * @param needle 検索する文字列
  * @return 最初に見つかった位置へのポインタ。見つからなければnullptr
- * @details
- * 多バイト文字の後続のバイトから始まる位置にはマッチしない。
- * needle が空文字列の場合は haystack の先頭を返す。
+ * @details needle が空文字列の場合は haystack の先頭を返す。
  */
 char *angband_strstr(const char *haystack, std::string_view needle)
 {
@@ -207,13 +190,11 @@ char *angband_strstr(const char *haystack, std::string_view needle)
 }
 
 /*!
- * @brief 多バイト文字を考慮しつつ文字を検索する (ANSIのstrchr相当)
+ * @brief 文字を検索する (ANSIのstrchr相当)
  * @param ptr 検索対象のNUL終端された文字列
- * @param ch 検索する文字
+ * @param ch 検索する文字 (バイト)
  * @return 最初に見つかった位置へのポインタ。見つからなければnullptr
- * @details
- * 多バイト文字の後続のバイトにはマッチしない。
- * strchrと異なり、終端のNUL文字は検索できない(nullptrを返す)。
+ * @details strchrと異なり、終端のNUL文字は検索できない(nullptrを返す)。
  */
 char *angband_strchr(const char *ptr, char ch)
 {
@@ -222,12 +203,11 @@ char *angband_strchr(const char *ptr, char ch)
 }
 
 /*!
- * @brief 多バイト文字を考慮しつつ文字列が含まれるかどうかを調べる
+ * @brief 文字列が含まれるかどうかを調べる
  * @param src 検索対象の文字列
  * @param find 検索する文字列
  * @return src に find が含まれるならtrue
  * @details
- * 多バイト文字の後続のバイトから始まる位置にはマッチしない。
  * src・find には正しい長さを持つ文字列を渡すこと。NUL終端されていない char の配列や
  * char 単体のアドレスを渡すと、std::string_view への変換で範囲外を読む。
  */
@@ -303,7 +283,7 @@ std::string str_ltrim(std::string_view str)
  * 区切り文字が先頭・末尾にある場合や連続する場合は、その分だけ空文字列の要素が生まれる。
  * num は領域確保のヒントに過ぎず、戻り値の要素数を num に揃えるものではない。
  *
- * 多バイト文字の後続のバイトは読み飛ばすため、多バイト文字の途中で分割することはない。
+ * delim は ASCII の文字で、UTF-8 の後続のバイトとは重ならないので、多バイト文字の途中で分割することはない。
  */
 std::vector<std::string> str_split(std::string_view str, char delim, bool trim, int num)
 {
@@ -401,8 +381,8 @@ std::string str_erase(std::string str, std::string_view erase_chars)
  * @param old_str 置き換える文字列。空文字列の場合は str をそのまま返す
  * @param new_str 置き換え後の文字列
  * @return std::string old_str をすべて new_str で置き換えた文字列
- * @details
- * 多バイト文字の後続のバイトから始まる位置にはマッチしない。
+ * @details 正しい UTF-8 の old_str は多バイト文字の途中から一致しないので、
+ * std::string_view::find() でふつうにバイト列として探す (ファイルの説明を参照)。
  */
 std::string str_replace(std::string_view str, std::string_view old_str, std::string_view new_str)
 {
@@ -410,28 +390,13 @@ std::string str_replace(std::string_view str, std::string_view old_str, std::str
         return std::string(str);
     }
 
-    // 文字境界は置き換え前の文字列から決める。置き換えで多バイト文字が崩れた場合も、
-    // 残った後続のバイトを新たな文字の先頭と見なして誤って置き換えることがない
     std::string result;
     result.reserve(str.length());
-
-    size_t char_pos = 0; // 一致した位置より前で最後の文字の境界から、文字単位で読み進める
     for (size_t start_pos = 0;;) {
         const auto found_pos = str.find(old_str, start_pos);
         if (found_pos == std::string_view::npos) {
             result.append(str.substr(start_pos));
             return result;
-        }
-
-        while (char_pos < found_pos) {
-            char_pos += mb_char_byte_length(str[char_pos]);
-        }
-
-        if (char_pos != found_pos) {
-            // 多バイト文字の後続のバイトから始まる位置に一致したので、置き換えずに読み進める
-            result.append(str.substr(start_pos, found_pos + 1 - start_pos));
-            start_pos = found_pos + 1;
-            continue;
         }
 
         result.append(str.substr(start_pos, found_pos - start_pos)).append(new_str);
