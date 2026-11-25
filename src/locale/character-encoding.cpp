@@ -282,24 +282,6 @@ std::pair<size_t, bool> find_broken_euc_char(std::string_view str, size_t pos)
 }
 #endif
 
-/*!
- * @brief EUC-JP を EUC-JP-MS でなく EUC-JP として読んだ文字列の、EUC-JP-MS と対応が違う文字を、EUC-JP-MS で読んだ文字に戻す
- * @param utf8 EUC-JP から UTF-8 に変換した文字列
- */
-void replace_jis_to_ms_characters(std::string &utf8)
-{
-    // EUC-JP と EUC-JP-MS で対応する文字が違うもの (EUC-JP で読んだ文字, EUC-JP-MS で読んだ文字)
-    constexpr std::array<std::pair<std::string_view, std::string_view>, 6> JIS_TO_MS_CHARACTERS = { {
-        { "\xe3\x80\x9c", "\xef\xbd\x9e" }, /* A1C1: WAVE DASH -> FULLWIDTH TILDE (波ダッシュ → 全角チルダ) */
-        { "\xe2\x80\x96", "\xe2\x88\xa5" }, /* A1C2: DOUBLE VERTICAL LINE -> PARALLEL TO (双柱 → 平行) */
-        { "\xe2\x88\x92", "\xef\xbc\x8d" }, /* A1DD: MINUS SIGN -> FULLWIDTH HYPHEN-MINUS (マイナス記号 → 全角ハイフンマイナス) */
-        { "\xc2\xa2", "\xef\xbf\xa0" }, /* A1F1: CENT SIGN -> FULLWIDTH CENT SIGN (セント記号 → 全角のセント記号) */
-        { "\xc2\xa3", "\xef\xbf\xa1" }, /* A1F2: POUND SIGN -> FULLWIDTH POUND SIGN (ポンド記号 → 全角のポンド記号) */
-        { "\xc2\xac", "\xef\xbf\xa2" }, /* A2CC: NOT SIGN -> FULLWIDTH NOT SIGN (否定記号 → 全角の否定記号) */
-    } };
-    replace_characters(utf8, JIS_TO_MS_CHARACTERS);
-}
-
 #ifdef _WIN32
 /*!
  * @brief 旧版のデータの文字を、Windows のコードページで変換せずに読めない文字とするかを返す
@@ -383,7 +365,7 @@ tl::optional<std::string> legacy_to_utf8(std::string_view str, CharacterEncoding
     }
 
     if (is_euc) {
-        replace_jis_to_ms_characters(*utf8);
+        normalize_to_ms_characters(*utf8);
     }
 
     return utf8;
@@ -468,7 +450,7 @@ tl::optional<std::string> legacy_to_utf8(std::string_view str, CharacterEncoding
 
     utf8.resize(utf8.length() - outlen_left);
     if ((encoding == CharacterEncoding::EUC_JP) && !is_euc_jp_ms) {
-        replace_jis_to_ms_characters(utf8);
+        normalize_to_ms_characters(utf8);
     }
 
     return utf8;
@@ -498,6 +480,27 @@ std::string replace_invalid_utf8(std::string_view str)
 
     return replaced;
 }
+}
+
+/*!
+ * @brief EUC-JP-MS (CP932) と EUC-JP で対応が違う文字を、EUC-JP-MS で読んだ文字にそろえる
+ * @param utf8 UTF-8 の文字列
+ * @details 同梱のデータは EUC-JP-MS (CP932) で読んだ文字 (全角チルダ「～」・全角ハイフンマイナス「－」など) で書かれている。
+ * 旧版の EUC-JP・Shift_JIS では対応する文字 (波ダッシュ「〜」・マイナス記号「−」など) と同じバイト列だったので区別が無かったが、
+ * UTF-8 では別の文字になる。旧版の EUC-JP を EUC-JP として読んだ文字列や、IME・エディタが入れた文字列をデータと一致させるためにそろえる。
+ */
+void normalize_to_ms_characters(std::string &utf8)
+{
+    // EUC-JP と EUC-JP-MS で対応する文字が違うもの (EUC-JP で読んだ文字, EUC-JP-MS で読んだ文字)
+    constexpr std::array<std::pair<std::string_view, std::string_view>, 6> JIS_TO_MS_CHARACTERS = { {
+        { "\xe3\x80\x9c", "\xef\xbd\x9e" }, /* A1C1: WAVE DASH -> FULLWIDTH TILDE (波ダッシュ → 全角チルダ) */
+        { "\xe2\x80\x96", "\xe2\x88\xa5" }, /* A1C2: DOUBLE VERTICAL LINE -> PARALLEL TO (双柱 → 平行) */
+        { "\xe2\x88\x92", "\xef\xbc\x8d" }, /* A1DD: MINUS SIGN -> FULLWIDTH HYPHEN-MINUS (マイナス記号 → 全角ハイフンマイナス) */
+        { "\xc2\xa2", "\xef\xbf\xa0" }, /* A1F1: CENT SIGN -> FULLWIDTH CENT SIGN (セント記号 → 全角のセント記号) */
+        { "\xc2\xa3", "\xef\xbf\xa1" }, /* A1F2: POUND SIGN -> FULLWIDTH POUND SIGN (ポンド記号 → 全角のポンド記号) */
+        { "\xc2\xac", "\xef\xbf\xa2" }, /* A2CC: NOT SIGN -> FULLWIDTH NOT SIGN (否定記号 → 全角の否定記号) */
+    } };
+    replace_characters(utf8, JIS_TO_MS_CHARACTERS);
 }
 
 /*!

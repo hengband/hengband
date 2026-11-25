@@ -418,6 +418,24 @@ TEST_CASE("legacy_to_sys reads EUC-JP as EUC-JP-MS like the old versions built w
     CHECK(legacy_to_sys(MS_SYMBOLS_EUC, CharacterEncoding::EUC_JP) == MS_SYMBOLS_UTF8);
 }
 
+TEST_CASE("normalize_to_ms_characters replaces characters which EUC-JP and EUC-JP-MS read differently")
+{
+    // 波ダッシュ (U+301C)・マイナス記号 (U+2212) は、同梱のデータと同じ全角チルダ・全角ハイフンマイナスにする
+    std::string str = cat("a", "\xe3\x80\x9c", NIHON_UTF8, "\xe2\x88\x92", "b");
+    normalize_to_ms_characters(str);
+    CHECK(str == cat("a", FULLWIDTH_TILDE_UTF8, NIHON_UTF8, FULLWIDTH_HYPHEN_MINUS_UTF8, "b"));
+
+    // 双柱 (U+2016)・セント記号・ポンド記号・否定記号は、∥￠￡￢ にする
+    std::string symbols = "\xe2\x80\x96\xc2\xa2\xc2\xa3\xc2\xac";
+    normalize_to_ms_characters(symbols);
+    CHECK(symbols == MS_SYMBOLS_UTF8);
+
+    // もともと EUC-JP-MS で読んだ文字は変えない
+    std::string ms = cat(FULLWIDTH_TILDE_UTF8, FULLWIDTH_HYPHEN_MINUS_UTF8, MS_SYMBOLS_UTF8);
+    normalize_to_ms_characters(ms);
+    CHECK(ms == cat(FULLWIDTH_TILDE_UTF8, FULLWIDTH_HYPHEN_MINUS_UTF8, MS_SYMBOLS_UTF8));
+}
+
 TEST_CASE("utf8_to_euc_keeping_width converts each character into as many EUC-JP bytes as its display width")
 {
     CHECK(utf8_to_euc_keeping_width(cat("a", NIHON_UTF8)) == cat("a", NIHON_EUC));

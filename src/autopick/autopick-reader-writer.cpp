@@ -98,8 +98,10 @@ static tl::optional<std::vector<std::string>> read_text_lines(std::string_view f
     std::string line;
     while (std::getline(ifs, line)) {
 #ifdef JP
-        // ゲームが設定ファイルを読むとき (angband_fgets()) と同じく、内部の文字コードでない行は推定して変換する
+        // ゲームが設定ファイルを読むとき (angband_fgets()) と同じく、内部の文字コードでない行は推定して変換し、
+        // 波ダッシュ「〜」なども全角チルダ「～」などにそろえる
         line = guess_convert_to_system_encoding(std::move(line));
+        normalize_to_ms_characters(line);
 #endif
         lines.push_back(std::move(line));
     }

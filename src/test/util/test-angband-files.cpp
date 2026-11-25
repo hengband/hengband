@@ -138,6 +138,14 @@ TEST_CASE("angband_fgets keeps empty lines and the last line without a newline")
     CHECK(read_all_lines("abc\n\nxyz") == std::vector<std::string>{ "abc", "", "xyz" });
 }
 
+#ifdef JP
+TEST_CASE("angband_fgets replaces a wave dash and a minus sign with the fullwidth forms used in the game data")
+{
+    // 波ダッシュ (〜 U+301C)・マイナス記号 (− U+2212) を、全角チルダ (～ U+FF5E)・全角ハイフンマイナス (－ U+FF0D) にする
+    CHECK(read_all_lines("a\xe3\x80\x9c\xe2\x88\x92\n"sv) == std::vector<std::string>{ "a\xef\xbd\x9e\xef\xbc\x8d" });
+}
+#endif
+
 #if defined(JP) && !defined(_WIN32)
 using namespace test;
 

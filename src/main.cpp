@@ -394,7 +394,11 @@ int main(int argc, char *argv[])
 #ifdef JP
                 // UTF-8 として正しくないバイト列は旧版の文字コードとみなして推定し、読めないバイトは置き換えて変換する
                 // 端末を作る前なので、変換に失敗すると警告を表示する guess_convert_to_system_encoding() は使わない
-                const auto name = is_utf8_str(arg) ? std::string(arg) : legacy_to_sys_replacing_invalid(arg, guess_legacy_encoding(arg));
+                auto name = is_utf8_str(arg) ? std::string(arg) : legacy_to_sys_replacing_invalid(arg, guess_legacy_encoding(arg));
+
+                // 端末が入れた波ダッシュ「〜」なども、ゲームの中で入力した名前と同じ全角チルダ「～」などにそろえる。
+                // 旧版の名前のセーブファイル (EUC-JP・Shift_JIS では同じバイト列) も、そろえた名前で引き継がれる
+                normalize_to_ms_characters(name);
 #else
                 // Unix 版のフロントエンドは端末の入出力を UTF-8 として扱うので、引数も UTF-8 とみなしてシステムの文字コードに変換してから切り詰める。
                 // UTF-8 として不正なバイト列は変換できないので、これまでどおりそのまま使う。
