@@ -157,9 +157,8 @@ static tl::optional<std::string> monster_key_at(int index)
  * @brief BGMの設定を読み込む。
  * @details
  * "music_debug.cfg"ファイルを優先して読み込む。無ければ"music.cfg"ファイルを読み込む。
- * この処理は複数回実行されることを想定していない。複数回実行した場合には前回読み込まれた設定のメモリは解放されない。
  */
-void load_music_prefs()
+static void load_music_prefs()
 {
     CfgReader reader(ANGBAND_DIR_XTRA_MUSIC, { "music_debug.cfg", "music.cfg" });
 
@@ -182,6 +181,13 @@ void load_music_prefs()
     }
 }
 
+/*!
+ * @brief BGM の設定のディレクトリを覚え、設定を読み込む
+ * @param music_path BGM の設定と曲を置いたディレクトリ
+ * @details
+ * 設定の読み込みはダンジョン・クエスト・町・モンスターの一覧を使うので、init_angband() の後に呼ぶこと。
+ * 読み直すことは想定していないので、呼び出し元で 1 回だけ呼ぶこと。
+ */
 void init_music(std::filesystem::path music_path)
 {
     ANGBAND_DIR_XTRA_MUSIC = music_path;

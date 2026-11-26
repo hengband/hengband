@@ -2119,35 +2119,42 @@ static errr game_term_xtra_x11_sound(int v)
 }
 
 /*!
- * @brief Initialize music
- * @detail this function called when music play requested first
- *  because it must be called after init_angband() and store the game data
+ * @brief BGM の設定をまだ読み込んでいなければ読み込む
+ * @details
+ * 設定の読み込みはダンジョンやモンスターの一覧を使うので、init_angband() の後でなければならない。
+ * そのため起動時ではなく、最初に BGM を求められたときに呼ぶ。
  */
 static void init_music()
 {
-    return unix_music::init_music(path_build(ANGBAND_DIR_XTRA, "music"));
+    static auto is_initialized = false;
+    if (is_initialized) {
+        return;
+    }
+
+    unix_music::init_music(path_build(ANGBAND_DIR_XTRA, "music"));
+    is_initialized = true;
 }
 
-/*
- * Hack -- play a music
+/*!
+ * @brief BGM を再生する
+ * @param n BGM の種類 (TERM_XTRA_MUSIC_*)
+ * @param v 種類ごとの BGM の番号
+ * @return BGM を使う設定で、unix_music::play_music() が成功を返したなら true
  */
-static auto is_musicplayer_initialized = false;
-
-static errr game_term_xtra_x11_music(int n, int v)
+static bool game_term_xtra_x11_music(int n, int v)
 {
     if (!use_music) {
         return false;
     }
 
-    if (!is_musicplayer_initialized) {
-        init_music();
-    }
-
+    init_music();
     return unix_music::play_music(n, v);
 }
 
 /*!
- * @brief Hack -- play a music matches a situation
+ * @brief 場面に合った BGM を再生する
+ * @param v 曲を選ぶ場面の表の番号 (get_scene_type_list() に渡す)
+ * @return BGM を使う設定なら true
  */
 static bool game_term_xtra_x11_scene(int v)
 {
@@ -2155,10 +2162,7 @@ static bool game_term_xtra_x11_scene(int v)
         return false;
     }
 
-    if (!is_musicplayer_initialized) {
-        init_music();
-    }
-
+    init_music();
     unix_music::play_music_scene(v);
     return true;
 }

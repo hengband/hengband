@@ -3,7 +3,6 @@
 #include <filesystem>
 
 namespace unix_music {
-void load_music_prefs();
 void init_music(std::filesystem::path music_path);
 void stop_music();
 bool play_music(int type, int val);
