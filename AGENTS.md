@@ -146,10 +146,9 @@ MSVC の Debug 構成（`/ZI`）では、失敗した行（`__LINE__`）がず�
   外部ライブラリ（`src/external-lib/include/`）とシステムヘッダを `<>` で書く。
 - 関数の Doxygen コメント（`@brief` / `@param` / `@return` / `@details`）は、ヘッダの宣言側ではなく
   **`.cpp` の定義側に書く。** ファイル全体の説明や、型・構造体・定数の説明はヘッダに書いてよい。
-- ranges のアルゴリズムやビューは、標準ライブラリのもの（`std::ranges::lower_bound`、`std::views` など）が
-  環境によって使えないことがあるため、同梱の range-v3（`#include <range/v3/algorithm.hpp>`、
-  `ranges::lower_bound` など）を使う。`std::ranges::forward_range` などのコンセプトや、
-  `std::map::contains` のような C++20 以降の機能は使ってよい。
+- ranges のアルゴリズムやビューは、標準ライブラリのもの（`std::ranges::lower_bound`、`std::views::filter`、
+  `std::ranges::to` など）を使う。`std::views::enumerate` は libc++ に無いので、
+  `std::views::zip(std::views::iota(0), 範囲)` で代える。
 - `std::optional` と `std::expected` を使ってはならない。代わりに `tl::optional` と `tl::expected` を使うこと。
   なお `tl::expected::error_or()` を独自に追加しているので、必要に応じて使うこと。
 - **1 つの式の中で乱数を 2 回以上引かない。** 関数・コンストラクタの引数の評価順や、多くの二項演算子の
@@ -236,7 +235,7 @@ README を補う注意点:
 
 - `src/` — C++ ソースコード。機能ドメインごとにサブディレクトリに分かれている（`ls src/` で一覧できる）。
   - `system/` — ゲーム全体の状態、`term/` — 端末の描画、`util/` — 汎用ユーティリティ
-  - `external-lib/` — 同梱の外部ライブラリ（range-v3、doctest、fmt など）
+  - `external-lib/` — 同梱の外部ライブラリ（doctest、fmt など）
   - フロントエンドは `main-gcu.cpp`（curses）、`main-x11.cpp`（X11）、`main-unix/`（Unix 系の補助）、
     `main-win.cpp` と `main-win/`（Windows）。エントリポイントは Unix 系が `main.cpp`、Windows が `main-win.cpp`
 - `lib/` — ゲームデータ。`edit/` のモンスター・アイテム・地形などの定義は JSON で、スキーマは `schema/` にある
