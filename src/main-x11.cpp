@@ -107,6 +107,7 @@
 #include "term/gameterm.h"
 #include "term/term-color-types.h"
 #include "term/tile-layout.h"
+#include "term/z-term.h"
 #include "util/angband-files.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
@@ -1277,19 +1278,10 @@ static x11_selection_type s_ptr[1];
 // ゲーム側へキーを送る
 static void send_key(const char key)
 {
-    // Windows ドライバと同様、自前でキューを操作する。
-    // 逆順に term_key_push() する方法だと長い日本語を入力したときにテキストの
-    // 順序が入れ替わってしまう。
-
-    // キーバッファが一杯なら入力を捨てる
-    const int head_nxt = game_term->key_head + 1 == game_term->key_size ? 0 : game_term->key_head + 1;
-    if (head_nxt == game_term->key_tail) {
+    // 打った順に読まれるよう、キューの末尾へ積む。キーバッファが一杯なら入力を捨てる
+    if (term_keys_append(std::string_view(&key, 1)) != 0) {
         plog(fmt::format("key buffer overflow, ignoring key 0x{:02X}", static_cast<uint8_t>(key)));
-        return;
     }
-
-    game_term->key_queue[game_term->key_head] = key;
-    game_term->key_head = head_nxt;
 }
 
 // ゲーム側へキー列を送る
@@ -1676,25 +1668,22 @@ static void paste_x11_accept(const XSelectionEvent *ptr)
     }
 
     if (request_target == xa_compound_text) {
-        char **list;
-        int count;
-
-        XmbTextPropertyToTextList(DPY, &xtextproperty, &list, &count);
-
-        if (list) {
-            int i;
-
-            for (i = 0; i < count; i++) {
-                err = type_string(list[i], 0);
-                if (err) {
-                    break;
-                }
+        char **list = nullptr;
+        auto count = 0;
+        if ((XmbTextPropertyToTextList(DPY, &xtextproperty, &list, &count) >= Success) && (list != nullptr)) {
+            // 一部だけを入力しないよう、つなげて一度に積む
+            std::string text;
+            for (auto i = 0; i < count; i++) {
+                text.append(list[i]);
             }
 
             XFreeStringList(list);
+            err = type_string(text);
+        } else {
+            plog("Paste failure (cannot convert the selection).");
         }
     } else {
-        err = type_string((char *)xtextproperty.value, xtextproperty.nitems);
+        err = type_string(std::string_view(reinterpret_cast<const char *>(xtextproperty.value), xtextproperty.nitems));
     }
 
     XFree(xtextproperty.value);

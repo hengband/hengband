@@ -55,6 +55,64 @@ TEST_CASE("term_key_queue_pending counts keys in the circular key queue")
     }
 }
 
+namespace {
+/*!
+ * @brief キューから読まれる順にキーを取り出す
+ */
+std::string pop_keys(term_type &term)
+{
+    std::string keys;
+    while (term.key_tail != term.key_head) {
+        keys.push_back(term.key_queue[term.key_tail]);
+        if (++term.key_tail == term.key_size) {
+            term.key_tail = 0;
+        }
+    }
+
+    return keys;
+}
+}
+
+TEST_CASE("term_keys_append appends keys after the pending keys in order")
+{
+    const auto restore = test::scoped_restore(game_term);
+    term_type term{};
+    term.key_size = 8;
+    term.key_queue.resize(term.key_size);
+    game_term = &term;
+
+    SUBCASE("keys are read in the given order after the pending keys")
+    {
+        REQUIRE(term_keys_append("ab") == 0);
+        REQUIRE(term_keys_append("cd") == 0);
+        CHECK(pop_keys(term) == "abcd");
+    }
+
+    SUBCASE("keys wrap around the end of the queue")
+    {
+        term.key_head = term.key_tail = 6;
+        REQUIRE(term_keys_append("abcd") == 0);
+        CHECK(term.key_head == 2);
+        CHECK(pop_keys(term) == "abcd");
+    }
+
+    SUBCASE("keys pushed to the front are read before the appended keys")
+    {
+        REQUIRE(term_keys_append("cd") == 0);
+        REQUIRE(term_keys_push("ab") == 0);
+        CHECK(pop_keys(term) == "abcd");
+    }
+
+    SUBCASE("nothing is appended when the keys do not fit")
+    {
+        REQUIRE(term_keys_append("abcde") == 0);
+        CHECK(term_keys_append("fgh") != 0);
+        CHECK(pop_keys(term) == "abcde");
+        CHECK(term_keys_append("abcdefg") == 0);
+        CHECK(term_keys_append("h") != 0);
+    }
+}
+
 #ifdef JP
 namespace {
 constexpr std::string_view KANJI_A = "\xe4\xba\x9c"; //!< 亜

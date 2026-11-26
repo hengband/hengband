@@ -1792,6 +1792,31 @@ errr term_keys_push(std::string_view keys)
 }
 
 /*!
+ * @brief キー列をキューの末尾へまとめて積む
+ * @param keys 積むキー列
+ * @return 全て積めた場合0、空きが足りず1つも積まなかった場合は非0
+ * @details
+ * 打鍵と同じく、すでに積まれているキーの後に、キー列の順のまま読まれるよう積む。
+ * 意味の異なる操作を実行させないよう、全て積めない場合は1つも積まない。
+ * term_key_push() と違い NUL も拒まずにそのまま積むので、要らなければ呼び出し側で除く。
+ */
+errr term_keys_append(std::string_view keys)
+{
+    if (std::cmp_greater(keys.size(), term_key_queue_room())) {
+        return 1;
+    }
+
+    for (const auto key : keys) {
+        game_term->key_queue[game_term->key_head] = key;
+        if (++game_term->key_head == game_term->key_size) {
+            game_term->key_head = 0;
+        }
+    }
+
+    return 0;
+}
+
+/*!
  * @brief 保留中のイベントを1件だけ取り出す
  * @return 取り出した場合0、保留中のイベントが無い場合または取り出せない場合は非0
  * @details
