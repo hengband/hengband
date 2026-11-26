@@ -51,7 +51,7 @@
 #include "target/target-getter.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
-#include <range/v3/algorithm.hpp>
+#include <algorithm>
 
 /*!
  * @brief 変わり身処理
@@ -416,7 +416,7 @@ bool cast_ninja_spell(PlayerType *player_ptr, MindNinjaType spell)
         return rush_attack(player_ptr, nullptr);
     case MindNinjaType::SYURIKEN_SPREADING: {
         for (int i = 0; i < 8; i++) {
-            const auto it = ranges::find_if(INVEN_PACK_SLOTS, [&](const auto s) {
+            const auto it = std::ranges::find_if(INVEN_PACK_SLOTS, [&](const auto s) {
                 return player_ptr->inventory[s]->bi_key.tval() == ItemKindType::SPIKE;
             });
 

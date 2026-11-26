@@ -4,12 +4,11 @@
  */
 
 #include "locale/character-encoding.h"
-#include <range/v3/algorithm.hpp>
+#include <algorithm>
 
 #ifdef JP
 #include "system/angband.h"
 #include "view/display-messages.h"
-#include <algorithm>
 #include <array>
 #include <utility>
 #ifdef _WIN32
@@ -82,7 +81,7 @@ int utf8_next_char_byte_length(std::string_view str)
     const auto trailing_bytes = str.substr(2, static_cast<size_t>(length - 2));
     const auto is_valid_trailing_byte = [](unsigned char c) { return (c & 0xc0) == 0x80; };
 
-    return ranges::all_of(trailing_bytes, is_valid_trailing_byte) ? length : 0;
+    return std::ranges::all_of(trailing_bytes, is_valid_trailing_byte) ? length : 0;
 }
 
 /*!
@@ -230,7 +229,7 @@ bool has_legacy_trail_bytes(std::string_view chr, CharacterEncoding encoding)
         const auto trail_max = (lead == 0x8e) ? 0xdf : 0xfe;
         return (trail >= 0xa1) && (trail <= trail_max);
     };
-    return ranges::all_of(chr.substr(1), is_trail_byte);
+    return std::ranges::all_of(chr.substr(1), is_trail_byte);
 }
 
 /*!

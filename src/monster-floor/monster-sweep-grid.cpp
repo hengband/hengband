@@ -21,8 +21,8 @@
 #include "system/player-type-definition.h"
 #include "target/projection-path-calculator.h"
 #include "util/bit-flags-calculator.h"
-#include <range/v3/algorithm.hpp>
-#include <range/v3/functional.hpp>
+#include <algorithm>
+#include <functional>
 #include <span>
 
 namespace {
@@ -142,7 +142,7 @@ public:
             pos_run_away_candidates.emplace_back(score, pos_neighbor);
         }
 
-        const auto pos_run_away = ranges::max_element(pos_run_away_candidates, ranges::less(), &ScoreAndPos::first);
+        const auto pos_run_away = std::ranges::max_element(pos_run_away_candidates, std::ranges::less(), &ScoreAndPos::first);
         return (pos_run_away != pos_run_away_candidates.end()) ? pos_run_away->second : pos_run_away_simple;
     }
 };

@@ -29,10 +29,10 @@
 #include "util/probability-table.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
+#include <algorithm>
 #include <fmt/format.h>
 #include <functional>
-#include <range/v3/algorithm.hpp>
-#include <range/v3/view.hpp>
+#include <ranges>
 #include <span>
 #include <vector>
 
@@ -44,8 +44,8 @@ std::vector<Pos2D> get_earthquake_area(FloorType &floor, const Pos2D &center, in
     };
 
     return Rect2D(center, Pos2DVec(radius, radius)) |
-           ranges::views::filter(is_eathquake_area) |
-           ranges::to<std::vector<Pos2D>>();
+           std::views::filter(is_eathquake_area) |
+           std::ranges::to<std::vector<Pos2D>>();
 }
 
 void reset_grid_info(FloorType &floor, std::span<const Pos2D> area)
@@ -69,12 +69,12 @@ std::vector<Pos2D> decide_collapse_positions(const FloorType &floor, std::span<c
         return monster.get_monrace().misc_flags.has(MonsterMiscType::QUESTOR);
     };
 
-    /// @note ranges::views::filterにevaluate_percentを渡しranges::toと組み合わせると
+    /// @note std::views::filterにevaluate_percentを渡しstd::ranges::toと組み合わせると
     /// 未定義動作となるのでevaluate_percentだけ単独で判定しpush_backで作成する
     /// (おそらくevalute_percentはposに対し結果が確定的でないのが原因)
     std::vector<Pos2D> pos_collapses;
-    for (const auto &pos : area | ranges::views::filter([&](const auto &pos) { return pos != center; }) |
-                               ranges::views::filter(std::not_fn(is_questor_position))) {
+    for (const auto &pos : area | std::views::filter([&](const auto &pos) { return pos != center; }) |
+                               std::views::filter(std::not_fn(is_questor_position))) {
         if (evaluate_percent(15)) {
             pos_collapses.push_back(pos);
         }
@@ -84,13 +84,13 @@ std::vector<Pos2D> decide_collapse_positions(const FloorType &floor, std::span<c
 
 tl::optional<Pos2D> decide_player_dodge_posistion(PlayerType *player_ptr, std::span<const Pos2D> pos_collapses)
 {
-    const auto is_collapsed_pos = [&](const auto &pos) { return ranges::contains(pos_collapses, pos); };
+    const auto is_collapsed_pos = [&](const auto &pos) { return std::ranges::contains(pos_collapses, pos); };
     const auto pos_candidates =
         Direction::directions_8() |
-        ranges::views::transform([&](const auto &d) { return player_ptr->get_neighbor(d); }) |
-        ranges::views::filter([&](const auto &pos) { return player_ptr->current_floor_ptr->is_empty_at(pos) && (pos != player_ptr->get_position()); }) |
-        ranges::views::filter(std::not_fn(is_collapsed_pos)) |
-        ranges::to<std::vector<Pos2D>>();
+        std::views::transform([&](const auto &d) { return player_ptr->get_neighbor(d); }) |
+        std::views::filter([&](const auto &pos) { return player_ptr->current_floor_ptr->is_empty_at(pos) && (pos != player_ptr->get_position()); }) |
+        std::views::filter(std::not_fn(is_collapsed_pos)) |
+        std::ranges::to<std::vector<Pos2D>>();
 
     return pos_candidates.empty() ? tl::nullopt : tl::make_optional(rand_choice(pos_candidates));
 }
@@ -136,7 +136,7 @@ void process_player_damage_dodged(PlayerType *player_ptr, int m_idx)
 
 void process_hit_to_player(PlayerType *player_ptr, std::span<const Pos2D> pos_collapses, int m_idx)
 {
-    const auto has_hit = ranges::contains(pos_collapses, player_ptr->get_position());
+    const auto has_hit = std::ranges::contains(pos_collapses, player_ptr->get_position());
     if (!has_hit || has_pass_wall(player_ptr) || has_kill_wall(player_ptr)) {
         return;
     }
@@ -162,7 +162,7 @@ bool can_monster_dodge_to(const FloorType &floor, const Pos2D &p_pos, const Pos2
     auto can_dodge = floor.is_empty_at(pos) && (pos != p_pos);
     can_dodge &= !grid.is_rune_protection() && !grid.is_rune_explosion();
     can_dodge &= !grid.has(TerrainCharacteristics::PATTERN);
-    can_dodge &= !ranges::contains(collapsing_positions, pos);
+    can_dodge &= !std::ranges::contains(collapsing_positions, pos);
     return can_dodge;
 }
 
@@ -174,9 +174,9 @@ tl::optional<Pos2D> decide_monster_dodge_position(const FloorType &floor, const 
 
     const auto pos_candidates =
         Direction::directions_8() |
-        ranges::views::transform([&](const auto &d) { return monster.get_position() + d.vec(); }) |
-        ranges::views::filter([&](const auto &pos) { return can_monster_dodge_to(floor, p_pos, pos, pos_collapses); }) |
-        ranges::to<std::vector<Pos2D>>();
+        std::views::transform([&](const auto &d) { return monster.get_position() + d.vec(); }) |
+        std::views::filter([&](const auto &pos) { return can_monster_dodge_to(floor, p_pos, pos, pos_collapses); }) |
+        std::ranges::to<std::vector<Pos2D>>();
 
     return pos_candidates.empty() ? tl::nullopt : tl::make_optional(rand_choice(pos_candidates));
 }
@@ -228,7 +228,7 @@ void process_hit_to_monsters(PlayerType *player_ptr, std::span<const Pos2D> pos_
 {
     auto &floor = *player_ptr->current_floor_ptr;
     const auto has_monster = [&](const auto &pos) { return floor.get_grid(pos).has_monster(); };
-    for (const auto &pos : pos_collapses | ranges::views::filter(has_monster)) {
+    for (const auto &pos : pos_collapses | std::views::filter(has_monster)) {
         auto &grid = floor.get_grid(pos);
         auto &monster = floor.m_list[grid.m_idx];
         if (monster.is_riding()) {
@@ -256,7 +256,7 @@ void destruct_earthquake_area(PlayerType *player_ptr, std::span<const Pos2D> pos
     pt.entry_item(TerrainTag::QUARTZ_VEIN, 50);
     pt.entry_item(TerrainTag::MAGMA_VEIN, 30);
 
-    for (const auto &pos : pos_collapses | ranges::views::filter(is_changeable)) {
+    for (const auto &pos : pos_collapses | std::views::filter(is_changeable)) {
         delete_all_items_from_floor(player_ptr, pos);
 
         if (floor.has_terrain_characteristics(pos, TerrainCharacteristics::PROJECTION)) {

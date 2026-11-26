@@ -26,7 +26,7 @@
 #include "view/display-messages.h"
 #include "window/main-window-util.h"
 #include <functional>
-#include <range/v3/view.hpp>
+#include <ranges>
 #include <unordered_map>
 #include <vector>
 
@@ -76,8 +76,8 @@ static tl::optional<Pos2D> select_building_pos(const FloorType &floor)
     };
     const auto pos_buildings =
         floor.get_area() |
-        ranges::views::filter(is_building_pos) |
-        ranges::to<std::vector>();
+        std::views::filter(is_building_pos) |
+        std::ranges::to<std::vector>();
 
     if (pos_buildings.size() <= 1) {
         return pos_buildings.empty() ? tl::nullopt : tl::make_optional(pos_buildings.front());

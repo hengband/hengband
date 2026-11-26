@@ -6,8 +6,9 @@
 #include "mutation/mutation-roll-table.h"
 #include "locale/language-switcher.h"
 #include "mutation/mutation-flag-types.h"
+#include <algorithm>
 #include <array>
-#include <range/v3/algorithm.hpp>
+#include <functional>
 
 namespace {
 /*!
@@ -114,7 +115,7 @@ constexpr std::array<MutationRollEntry, 96> MUTATION_ROLL_TABLE = { {
     { 193, PlayerMutationType::GOOD_LUCK, _("慈悲深い白いオーラがあなたをとりまいた...", "There is a benevolent white aura surrounding you..."), _("白いオーラは輝いて消えた。", "Your white aura shimmers and fades.") },
 } };
 
-static_assert(ranges::is_sorted(MUTATION_ROLL_TABLE, ranges::less{}, &MutationRollEntry::max_roll));
+static_assert(std::ranges::is_sorted(MUTATION_ROLL_TABLE, std::ranges::less{}, &MutationRollEntry::max_roll));
 static_assert(MUTATION_ROLL_TABLE.back().max_roll == MUTATION_ROLL_MAX);
 }
 
@@ -129,6 +130,6 @@ tl::optional<const MutationRollEntry &> find_mutation_by_roll(int roll)
         return tl::nullopt;
     }
 
-    const auto it = ranges::lower_bound(MUTATION_ROLL_TABLE, roll, ranges::less{}, &MutationRollEntry::max_roll);
+    const auto it = std::ranges::lower_bound(MUTATION_ROLL_TABLE, roll, std::ranges::less{}, &MutationRollEntry::max_roll);
     return *it;
 }

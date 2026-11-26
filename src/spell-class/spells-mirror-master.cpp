@@ -42,7 +42,8 @@
 #include "view/display-messages.h"
 #include <algorithm>
 #include <map>
-#include <range/v3/view.hpp>
+#include <ranges>
+#include <vector>
 
 SpellsMirrorMaster::SpellsMirrorMaster(PlayerType *player_ptr)
     : player_ptr(player_ptr)
@@ -213,7 +214,7 @@ Pos2D SpellsMirrorMaster::get_next_mirror_position(const Pos2D &pos_current) con
 {
     const auto &floor = *this->player_ptr->current_floor_ptr;
     const auto has_mirror = [&](const Pos2D &pos) { return floor.get_grid(pos).is_mirror(); };
-    const auto mirror_positions = floor.get_area() | ranges::views::filter(has_mirror) | ranges::to_vector;
+    const auto mirror_positions = floor.get_area() | std::views::filter(has_mirror) | std::ranges::to<std::vector>();
 
     if (!mirror_positions.empty()) {
         return rand_choice(mirror_positions);

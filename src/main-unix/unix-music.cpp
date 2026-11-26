@@ -46,7 +46,7 @@
 #include <cstring>
 #include <fmt/format.h>
 #include <limits>
-#include <range/v3/all.hpp>
+#include <ranges>
 #include <simpleini/SimpleIni.h>
 #include <spawn.h>
 #include <string>
@@ -261,9 +261,9 @@ bool play_music(int type, int val)
     }
 
     const std::string_view music_player = "./playmusic.sh";
-    auto argv_music_player_buf = music_player | ranges::to_vector;
+    auto argv_music_player_buf = music_player | std::ranges::to<std::vector>();
     argv_music_player_buf.push_back('\0');
-    auto argv_path_music_buf = path_music.string() | ranges::to_vector;
+    auto argv_path_music_buf = path_music.string() | std::ranges::to<std::vector>();
     argv_path_music_buf.push_back('\0');
     //  argv must has null end
     char *const argv[] = { argv_music_player_buf.data(), argv_path_music_buf.data(), nullptr };

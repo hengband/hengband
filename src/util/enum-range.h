@@ -2,7 +2,7 @@
 
 #include <concepts>
 #include <iterator>
-#include <range/v3/range/concepts.hpp>
+#include <ranges>
 #include <type_traits>
 
 /*!
@@ -252,7 +252,7 @@ private:
     EnumRange<EnumType> range{ EnumType{}, EnumType{} };
 };
 
-namespace ranges {
+namespace std::ranges {
 template <typename T>
 inline constexpr bool enable_view<EnumRange<T>> = true;
 template <typename T>

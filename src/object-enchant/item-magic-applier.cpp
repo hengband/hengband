@@ -19,8 +19,8 @@
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "world/world.h"
+#include <algorithm>
 #include <cassert>
-#include <range/v3/algorithm/any_of.hpp>
 
 /*!
  * @brief コンストラクタ
@@ -267,7 +267,7 @@ void ItemMagicApplier::execute_with_ego(EgoType ego)
  */
 void ItemMagicApplier::execute_with_random_ego()
 {
-    const auto can_apply = ranges::any_of(egos_info, [this](const auto &entry) { return can_apply_ego(this->o_ptr->bi_key, entry.first); });
+    const auto can_apply = std::ranges::any_of(egos_info, [this](const auto &entry) { return can_apply_ego(this->o_ptr->bi_key, entry.first); });
     assert(can_apply);
     if (!can_apply) {
         return;

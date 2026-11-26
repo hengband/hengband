@@ -36,7 +36,7 @@
 #include "wizard/wizard-spells.h"
 #include "wizard/wizard-spoiler.h"
 #include <algorithm>
-#include <range/v3/view.hpp>
+#include <ranges>
 #include <sstream>
 #include <string>
 #include <tuple>
@@ -256,7 +256,7 @@ bool exe_cmd_debug(PlayerType *player_ptr, char cmd)
         gain_exp(player_ptr, command_arg ? command_arg : (player_ptr->exp + 1));
         return true;
     case 'X':
-        for (const auto i_idx : INVEN_ALL_SLOTS | ranges::views::reverse) {
+        for (const auto i_idx : INVEN_ALL_SLOTS | std::views::reverse) {
             if (player_ptr->inventory[i_idx]->is_valid()) {
                 drop_from_inventory(player_ptr, i_idx, 999);
             }

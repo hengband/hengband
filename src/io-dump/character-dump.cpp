@@ -47,11 +47,12 @@
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#include <algorithm>
 #include <fmt/format.h>
 #include <numeric>
-#include <range/v3/algorithm.hpp>
-#include <range/v3/view.hpp>
+#include <ranges>
 #include <string>
+#include <vector>
 
 /*!
  * @brief プレイヤーのペット情報をファイルにダンプする
@@ -353,13 +354,13 @@ static void dump_aux_monsters(FILE *fff)
     fmt::println(fff, "You have defeated {} {} including {} unique monster{} in total.", norm_total, norm_total == 1 ? "enemy" : "enemies", uniq_total, (uniq_total == 1 ? "" : "s"));
 #endif
 
-    ranges::stable_sort(monrace_ids, [&monraces](auto x, auto y) { return monraces.order(x, y); });
-    ranges::reverse(monrace_ids);
+    std::ranges::stable_sort(monrace_ids, [&monraces](auto x, auto y) { return monraces.order(x, y); });
+    std::ranges::reverse(monrace_ids);
 
     const auto id_to_monrace = [&monraces](auto id) -> const MonraceDefinition & { return monraces.get_monrace(id); };
     const auto top_display_num = std::min(uniq_total, 10);
-    const auto top_monraces = monrace_ids | ranges::views::take(top_display_num) | ranges::views::transform(id_to_monrace);
-    const auto max_defeat_time = ranges::max(top_monraces | ranges::views::transform(&MonraceDefinition::defeat_time));
+    const auto top_monraces = monrace_ids | std::views::take(top_display_num) | std::views::transform(id_to_monrace);
+    const auto max_defeat_time = std::ranges::max(top_monraces | std::views::transform(&MonraceDefinition::defeat_time));
     const auto max_hour_digits = count_digits(max_defeat_time / (60 * 60));
 
     fmt::println(fff, _("\n《上位{}体のユニーク・モンスター》", "\n< Unique monsters top {} >"), top_display_num);
@@ -378,7 +379,7 @@ static void dump_aux_monsters(FILE *fff)
         // shape_buffer() は表示幅 maxlen - 1 桁ごとに区切るので、名前の欄の幅 + 1 を渡す
         const auto names = shape_buffer(monrace.name, 40 + 1);
         fmt::println(fff, _("  {:<40} (レベル{:3}){}", "  {:<40} (level {:3}){}"), names.front(), monrace.level, defeat_info);
-        for (const auto &name : names | ranges::views::drop(1)) {
+        for (const auto &name : names | std::views::drop(1)) {
             fmt::println(fff, "  {}", name);
         }
     }

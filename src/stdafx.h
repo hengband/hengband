@@ -20,7 +20,7 @@
 #include <ostream>
 #include <queue>
 #include <random>
-#include <range/v3/all.hpp>
+#include <ranges>
 #include <set>
 #include <span>
 #include <sstream>

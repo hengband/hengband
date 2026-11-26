@@ -47,7 +47,8 @@
 #include "world/world-movement-processor.h"
 #include "world/world.h"
 #include <fmt/format.h>
-#include <range/v3/view.hpp>
+#include <ranges>
+#include <vector>
 
 WorldTurnProcessor::WorldTurnProcessor(PlayerType *player_ptr)
     : player_ptr(player_ptr)
@@ -151,9 +152,9 @@ void WorldTurnProcessor::process_monster_arena()
     };
     const auto to_m_idx = [&](const Pos2D &pos) { return floor.get_grid(pos).m_idx; };
     const auto m_idxs = floor.get_area() |
-                        ranges::views::filter(monster_exists) |
-                        ranges::views::transform(to_m_idx) |
-                        ranges::to_vector;
+                        std::views::filter(monster_exists) |
+                        std::views::transform(to_m_idx) |
+                        std::ranges::to<std::vector>();
 
     if (m_idxs.empty()) {
         msg_print(_("相打ちに終わりました。", "Nothing survived."));

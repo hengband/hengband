@@ -36,11 +36,11 @@
 #include "window/display-sub-windows.h"
 #include "wizard/wizard-messages.h"
 #include "world/world.h"
+#include <algorithm>
 #include <fmt/format.h>
-#include <range/v3/algorithm.hpp>
-#include <range/v3/functional.hpp>
-#include <range/v3/range/conversion.hpp>
-#include <range/v3/view.hpp>
+#include <functional>
+#include <ranges>
+#include <vector>
 
 /*!
  * @brief デバッグ時にアイテム生成情報をメッセージに出力する / Cheat -- describe a created object for the user
@@ -247,7 +247,7 @@ void delete_object_idx(PlayerType *player_ptr, OBJECT_IDX o_idx)
     // 最後尾のアイテムを削除対象の要素に移動することで配列を詰める
     const auto back_i_idx = static_cast<OBJECT_IDX>(floor.o_list.size() - 1);
     auto &list = get_o_idx_list_contains(floor, back_i_idx);
-    ranges::replace(list, back_i_idx, o_idx);
+    std::ranges::replace(list, back_i_idx, o_idx);
     item_ptr = floor.o_list.back();
     floor.o_list.pop_back();
 
@@ -274,7 +274,7 @@ void excise_object_idx(FloorType &floor, OBJECT_IDX o_idx)
  */
 void delete_items(PlayerType *player_ptr, std::vector<OBJECT_IDX> delete_i_idx_list)
 {
-    ranges::sort(delete_i_idx_list, ranges::greater{});
+    std::ranges::sort(delete_i_idx_list, std::ranges::greater{});
 
     for (const auto delete_i_idx : delete_i_idx_list) {
         delete_object_idx(player_ptr, delete_i_idx);
@@ -288,7 +288,7 @@ void delete_items(PlayerType *player_ptr, std::vector<OBJECT_IDX> delete_i_idx_l
  */
 void delete_items(PlayerType *player_ptr, ObjectIndexList &o_idx_list)
 {
-    auto delete_i_idx_list = o_idx_list | ranges::to_vector;
+    auto delete_i_idx_list = o_idx_list | std::ranges::to<std::vector>();
     delete_items(player_ptr, std::move(delete_i_idx_list));
 }
 
@@ -408,7 +408,7 @@ short drop_near(PlayerType *player_ptr, ItemEntity &drop_item, const Pos2D &pos,
 
     if (!has_floor_space) {
         const auto can_drop = [&](const Pos2D &pos) { return floor.can_drop_item_at(pos); };
-        const auto pos_drop_candidates = floor.get_area(FloorBoundary::OUTER_WALL_EXCLUSIVE) | ranges::views::filter(can_drop) | ranges::to_vector;
+        const auto pos_drop_candidates = floor.get_area(FloorBoundary::OUTER_WALL_EXCLUSIVE) | std::views::filter(can_drop) | std::ranges::to<std::vector>();
 
         if (pos_drop_candidates.empty()) {
             handle_item_disappearance(player_ptr, drop_item, _("床スペースがない", "no floor space"));

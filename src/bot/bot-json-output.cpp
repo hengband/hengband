@@ -109,8 +109,8 @@
 #include <filesystem>
 #include <fstream>
 #include <iostream>
+#include <iterator>
 #include <nlohmann/json.hpp>
-#include <range/v3/algorithm.hpp>
 #include <stdexcept>
 #include <string>
 #include <string_view>
@@ -2857,12 +2857,12 @@ BotSnapshotFields make_all_bot_snapshot_fields()
  */
 tl::optional<BotSnapshotField> find_bot_snapshot_field(std::string_view name)
 {
-    const auto it = ranges::find(SNAPSHOT_FIELD_NAMES, name);
-    if (it == ranges::end(SNAPSHOT_FIELD_NAMES)) {
+    const auto it = std::ranges::find(SNAPSHOT_FIELD_NAMES, name);
+    if (it == std::ranges::end(SNAPSHOT_FIELD_NAMES)) {
         return tl::nullopt;
     }
 
-    return i2enum<BotSnapshotField>(ranges::distance(ranges::begin(SNAPSHOT_FIELD_NAMES), it));
+    return i2enum<BotSnapshotField>(std::ranges::distance(std::ranges::begin(SNAPSHOT_FIELD_NAMES), it));
 }
 
 /*!
@@ -2985,12 +2985,12 @@ BotScreen make_bot_character_screen()
  */
 tl::optional<BotKnowledgeCategory> find_bot_knowledge_category(int key)
 {
-    const auto it = ranges::find(KNOWLEDGE_MENU_KEYS, key);
-    if (it == ranges::end(KNOWLEDGE_MENU_KEYS)) {
+    const auto it = std::ranges::find(KNOWLEDGE_MENU_KEYS, key);
+    if (it == std::ranges::end(KNOWLEDGE_MENU_KEYS)) {
         return tl::nullopt;
     }
 
-    return i2enum<BotKnowledgeCategory>(ranges::distance(ranges::begin(KNOWLEDGE_MENU_KEYS), it));
+    return i2enum<BotKnowledgeCategory>(std::ranges::distance(std::ranges::begin(KNOWLEDGE_MENU_KEYS), it));
 }
 
 /*!

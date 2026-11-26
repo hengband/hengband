@@ -37,8 +37,10 @@
 #include "artifact/fixed-art-types.h"
 #include "flavor/flavor-util.h"
 #endif
+#include <algorithm>
 #include <fmt/format.h>
-#include <range/v3/all.hpp>
+#include <ranges>
+#include <vector>
 
 /*!
  * @brief 規定の処理にできるアイテムがプレイヤーの利用可能範囲内にあるかどうかを返す /
@@ -131,7 +133,7 @@ static void py_pickup_multiple_items(PlayerType *player_ptr, bool pickup)
 
     const auto tester = FuncItemTester(check_store_item_to_inventory, player_ptr);
     const auto can_pickup = [&](auto i_idx) { return tester.okay(floor.o_list.at(i_idx).get()); };
-    const auto count_of_pickable_items = ranges::count_if(grid.o_idx_list, can_pickup);
+    const auto count_of_pickable_items = std::ranges::count_if(grid.o_idx_list, can_pickup);
     if (count_of_pickable_items == 0) {
         msg_print(_("ザックには床にあるどのアイテムも入らない。", "You have no room for any of the objects on the floor."));
         return;
@@ -160,10 +162,10 @@ static void py_pickup_multiple_items(PlayerType *player_ptr, bool pickup)
 static void py_pickup_floor(PlayerType *player_ptr, bool pickup)
 {
     const auto &o_list = player_ptr->current_floor_ptr->o_list;
-    const auto exclude_marked_as_skip = ranges::views::remove_if([&](auto i_idx) { return o_list.at(i_idx)->marked.has(OmType::SUPRESS_MESSAGE); });
+    const auto exclude_marked_as_skip = std::views::filter([&](auto i_idx) { return o_list.at(i_idx)->marked.has_not(OmType::SUPRESS_MESSAGE); });
     const auto &grid = player_ptr->current_floor_ptr->get_grid(player_ptr->get_position());
 
-    const auto i_idx_list = grid.o_idx_list | exclude_marked_as_skip | ranges::to_vector;
+    const auto i_idx_list = grid.o_idx_list | exclude_marked_as_skip | std::ranges::to<std::vector>();
     const auto count_of_items = i_idx_list.size();
 
     for (const auto i_idx : grid.o_idx_list) {

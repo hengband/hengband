@@ -22,7 +22,7 @@
 #include "target/projection-path-calculator.h"
 #include "util/bit-flags-calculator.h"
 #include "world/world.h"
-#include <range/v3/view.hpp>
+#include <ranges>
 
 /*
  * The array of floor [MAX_WID][MAX_HGT].
@@ -114,7 +114,7 @@ void forget_flow(FloorType &floor)
  */
 void wipe_o_list(FloorType &floor)
 {
-    for (const auto &[i_idx, item_ptr] : floor.o_list | ranges::views::enumerate) {
+    for (const auto &[i_idx, item_ptr] : std::views::zip(std::views::iota(0), floor.o_list)) {
         if (!item_ptr->is_valid()) {
             continue;
         }

@@ -14,16 +14,16 @@
 #include "system/h-basic.h"
 #include <algorithm>
 #include <array>
-#include <range/v3/range/conversion.hpp>
-#include <range/v3/view/drop_while.hpp>
-#include <range/v3/view/reverse.hpp>
+#include <ranges>
+#include <string>
 #include <utility>
+#include <vector>
 
 namespace {
 constexpr std::array<char, 16> hex_symbol_table = { { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' } }; //!< 数値から16進数(8進数にも流用する)の文字への変換テーブル
 
-constexpr auto trim_front = ranges::views::drop_while([](char c) { return c == ' ' || c == '\t'; });
-constexpr auto trim_back = ranges::views::reverse | trim_front | ranges::views::reverse;
+constexpr auto trim_front = std::views::drop_while([](char c) { return c == ' ' || c == '\t'; });
+constexpr auto trim_back = std::views::reverse | trim_front | std::views::reverse;
 
 /*!
  * @brief 1バイト文字だけに変換関数を適用した文字列を作る
@@ -230,7 +230,7 @@ bool str_find(std::string_view src, std::string_view find)
  */
 std::string str_trim(std::string_view str)
 {
-    return str | trim_front | trim_back | ranges::to<std::string>();
+    return str | trim_front | trim_back | std::ranges::to<std::string>();
 }
 
 /*!
@@ -247,7 +247,7 @@ std::string str_trim(std::string_view str)
  */
 std::string str_rtrim(std::string_view str)
 {
-    return str | trim_back | ranges::to<std::string>();
+    return str | trim_back | std::ranges::to<std::string>();
 }
 
 /*!
@@ -264,7 +264,7 @@ std::string str_rtrim(std::string_view str)
  */
 std::string str_ltrim(std::string_view str)
 {
-    return str | trim_front | ranges::to<std::string>();
+    return str | trim_front | std::ranges::to<std::string>();
 }
 
 /*!

@@ -4,7 +4,7 @@
 #include "system/monrace/monrace-records.h"
 #include "system/player-type-definition.h"
 #include "world/world.h"
-#include <range/v3/algorithm/copy.hpp>
+#include <algorithm>
 
 /*!
  * @brief 思い出の表示を決める今の値を写す
@@ -43,5 +43,5 @@ MonsterLoreSnapshot::MonsterLoreSnapshot(const PlayerType &player, const Monrace
     , r_special_flags(monrace.r_special_flags)
     , r_misc_flags(monrace.r_misc_flags)
 {
-    ranges::copy(monrace.r_blows, this->r_blows.begin());
+    std::ranges::copy(monrace.r_blows, this->r_blows.begin());
 }

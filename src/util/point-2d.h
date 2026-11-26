@@ -5,7 +5,7 @@
 #include <concepts>
 #include <iterator>
 #include <numeric>
-#include <range/v3/range/concepts.hpp>
+#include <ranges>
 #include <type_traits>
 
 /**
@@ -282,7 +282,7 @@ struct Rectangle2D {
     }
 };
 
-namespace ranges {
+namespace std::ranges {
 template <typename T>
 inline constexpr bool enable_view<Rectangle2D<T>> = true;
 }

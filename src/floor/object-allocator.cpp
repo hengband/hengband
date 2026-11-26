@@ -15,7 +15,8 @@
 #include "system/terrain/terrain-definition.h"
 #include "system/terrain/terrain-list.h"
 #include "wizard/wizard-messages.h"
-#include <range/v3/view.hpp>
+#include <ranges>
+#include <vector>
 
 /*!
  * @brief 上下左右の外壁数をカウントする
@@ -101,8 +102,8 @@ bool alloc_stairs(PlayerType *player_ptr, FEAT_IDX feat, int num, int walls)
             const auto can_alloc_stair = [&](const Pos2D &pos) { return alloc_stairs_aux(player_ptr, pos, walls); };
             const auto pos_candidates =
                 floor.get_area(FloorBoundary::OUTER_WALL_INCLUSIVE) |
-                ranges::views::filter(can_alloc_stair) |
-                ranges::to_vector;
+                std::views::filter(can_alloc_stair) |
+                std::ranges::to<std::vector>();
 
             if (pos_candidates.empty()) {
                 if (walls <= 0) {

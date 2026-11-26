@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstdint>
+
 /*
  * Bit flags for apply_magic()
  */

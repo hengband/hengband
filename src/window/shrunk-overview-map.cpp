@@ -3,7 +3,6 @@
 #include "term/z-term.h"
 #include <algorithm>
 #include <map>
-#include <range/v3/algorithm.hpp>
 
 namespace {
 // 区画の周りがフロアの外のときは、フロアの外のマスと同じ空白のグリッドとして周り 8 マスの比較に数える (元の縮小マップの作り方と同じ)
@@ -32,7 +31,7 @@ ShrunkOverviewMap::ShrunkOverviewMap(int floor_height, int floor_width, int hgt,
     const auto area_width = this->xrat + 2;
     this->area_grids.resize(static_cast<size_t>((this->yrat + 2) * area_width));
     this->priorities.resize(this->area_grids.size());
-    ranges::transform(Direction::directions_8(), this->neighbor_offsets.begin(), [area_width](const auto &d) {
+    std::ranges::transform(Direction::directions_8(), this->neighbor_offsets.begin(), [area_width](const auto &d) {
         const auto vec = d.vec();
         return vec.y * area_width + vec.x;
     });
