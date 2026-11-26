@@ -167,6 +167,7 @@
     <ClCompile Include="..\..\src\test\system\test-dungeon-record.cpp" />
     <ClCompile Include="..\..\src\test\system\test-quest-list.cpp" />
     <ClCompile Include="..\..\src\test\target\test-target-getter.cpp" />
+    <ClCompile Include="..\..\src\test\term\test-gameterm.cpp" />
     <ClCompile Include="..\..\src\test\term\test-screen-processor.cpp" />
     <ClCompile Include="..\..\src\test\term\test-term-char.cpp" />
     <ClCompile Include="..\..\src\test\term\test-z-rand.cpp" />
