@@ -112,6 +112,7 @@
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
 #include "util/enum-range.h"
+#include "util/finalizer.h"
 #include "util/int-char-converter.h"
 #include "util/string-processor.h"
 #include "view/actor-readability.h"
@@ -432,6 +433,35 @@ static bool use_xft_runtime = true;
 static bool use_xft_runtime = false;
 #endif
 
+static XErrorHandler default_x_error_handler = nullptr; //!< Xlib の既定のエラーハンドラ (プロセスを終了させる)
+static bool is_replying_selection = false; //!< ほかのアプリへ選択範囲の返事を送っている間か
+static std::string selection_reply_error; //!< 選択範囲の返事を送る間に最初に起きたエラーの説明。起きていなければ空
+
+/*!
+ * @brief X のエラーを受け取る
+ * @param dpy エラーが起きたディスプレイ
+ * @param error エラーの内容
+ * @return 続ける場合は 0
+ * @details 選択範囲を求めた相手のウィンドウへの書き込みや通知は、相手が返事を待たずに
+ * ウィンドウを閉じたり、相手の要求が不正だったりすると失敗する。ゲームの続行には差し支えないので、
+ * 返事を送る間 (paste_x11_send()) のエラーは記録だけして続ける。
+ * それ以外のエラーは、これまでどおり Xlib の既定のハンドラに任せる (終了する)。
+ */
+static int handle_x_error(Display *dpy, XErrorEvent *error)
+{
+    if (!is_replying_selection) {
+        return default_x_error_handler(dpy, error);
+    }
+
+    if (selection_reply_error.empty()) {
+        char text[256]{};
+        XGetErrorText(dpy, error->error_code, text, sizeof(text));
+        selection_reply_error = text;
+    }
+
+    return 0;
+}
+
 /*
  * Init the current metadpy, with various initialization stuff.
  *
@@ -461,6 +491,9 @@ static errr Metadpy_init_2(Display *dpy, concptr name)
     }
 
     m->dpy = dpy;
+    if (default_x_error_handler == nullptr) {
+        default_x_error_handler = XSetErrorHandler(handle_x_error);
+    }
     m->screen = DefaultScreenOfDisplay(dpy);
     m->root = RootWindowOfScreen(m->screen);
     m->cmap = DefaultColormapOfScreen(m->screen);
@@ -1692,14 +1725,14 @@ static void paste_x11_accept(const XSelectionEvent *ptr)
     }
 }
 
-/*
- * Add a character to a string in preparation for sending it to another
- * client as a STRING.
- * This doesn't change anything, as clients tend not to have difficulty in
- * receiving this format (although the standard specifies a restricted set).
- * Strings do not have a colour.
+/*!
+ * @brief 選択範囲の文字列を UTF8_STRING として相手の書き込み先へ書き込む
+ * @param rq 相手の要求
+ * @param property 書き込み先
+ * @return 書き込んだら true、選択範囲を持っていないか、1 回の要求で送れない大きさなら false
+ * @details 行ごとに末尾の空白を削り、複数行なら各行の末尾に改行を付ける。
  */
-static bool paste_x11_send_text(XSelectionRequestEvent *rq)
+static bool paste_x11_send_text(XSelectionRequestEvent *rq, Atom property)
 {
     co_ord max, min;
     sort_co_ord(&min, &max, &s_ptr->init, &s_ptr->cur);
@@ -1707,6 +1740,8 @@ static bool paste_x11_send_text(XSelectionRequestEvent *rq)
         return false;
     }
 
+    // 書き込み先に前の内容が残っていても混ざらないよう、全体をまとめて置き換える
+    std::string selection;
     for (TERM_LEN y = 0; y < game_term->hgt; y++) {
         if (y < min.y) {
             continue;
@@ -1744,48 +1779,70 @@ static bool paste_x11_send_text(XSelectionRequestEvent *rq)
 #else
         const auto &text = line;
 #endif
-        if (!text.empty()) {
-            XChangeProperty(DPY, rq->requestor, rq->property, xa_utf8, 8, PropModeAppend, reinterpret_cast<const unsigned char *>(text.data()), static_cast<int>(text.size()));
-        }
+        selection.append(text);
     }
 
+    // 1 回の要求の上限 (4 バイト単位) を超えるなら断る。要求の頭 (BIG-REQUESTS で長さを広げると 28 バイト、
+    // そうでなければ 24 バイト) を除いた分が中身に使える
+    const auto extended_max_request = XExtendedMaxRequestSize(DPY);
+    const auto max_data = (extended_max_request > 0) ? extended_max_request * 4 - 28 : XMaxRequestSize(DPY) * 4 - 24;
+    if (std::cmp_greater(selection.size(), max_data)) {
+        plog("Failed to send the selection: too much text selected.");
+        return false;
+    }
+
+    XChangeProperty(DPY, rq->requestor, property, xa_utf8, 8, PropModeReplace, reinterpret_cast<const unsigned char *>(selection.data()), static_cast<int>(selection.size()));
     return true;
 }
 
-/*
- * Send some text requested by another X client.
+/*!
+ * @brief ほかのアプリが求めた選択範囲を返す
+ * @param rq 相手の要求
+ * @details UTF8_STRING と、使える形式の一覧 (TARGETS) にだけ答え、ほかの形式 (MULTIPLE を含む) は断る。
  */
 static void paste_x11_send(XSelectionRequestEvent *rq)
 {
     XEvent event;
     XSelectionEvent *ptr = &(event.xselection);
 
+    // 古いクライアントは書き込み先を指定しないので、ICCCM のとおり形式の名前を書き込み先にする
+    const auto property = (rq->property == None) ? rq->target : rq->property;
     ptr->type = SelectionNotify;
-    ptr->property = rq->property;
+    ptr->property = property;
     ptr->display = rq->display;
     ptr->requestor = rq->requestor;
     ptr->selection = rq->selection;
     ptr->target = rq->target;
     ptr->time = rq->time;
 
-    /*
-     * Paste the appropriate information for each target type.
-     * Note that this currently rejects MULTIPLE targets.
-     */
-
+    // 返事の間に起きたエラーだけを無視するよう、前に送った要求のエラーを先に受け取っておく
+    XSync(DPY, False);
+    is_replying_selection = true;
+    selection_reply_error.clear();
+    const auto finish_reply = util::make_finalizer([] { is_replying_selection = false; });
     if (rq->target == xa_utf8) {
-        if (!paste_x11_send_text(rq)) {
+        if (!paste_x11_send_text(rq, property)) {
             ptr->property = None;
         }
     } else if (rq->target == xa_targets) {
         Atom target_list[] = { xa_targets, xa_utf8 };
         XChangeProperty(
-            DPY, rq->requestor, rq->property, XA_ATOM, 32, PropModeReplace, (unsigned char *)target_list, (sizeof(target_list) / sizeof(target_list[0])));
+            DPY, rq->requestor, property, XA_ATOM, 32, PropModeReplace, (unsigned char *)target_list, (sizeof(target_list) / sizeof(target_list[0])));
     } else {
         ptr->property = None;
     }
 
+    // 書き込めなかったら、断ったことを知らせる
+    XSync(DPY, False);
+    if (!selection_reply_error.empty()) {
+        ptr->property = None;
+    }
+
     XSendEvent(DPY, rq->requestor, false, NoEventMask, &event);
+    XSync(DPY, False);
+    if (!selection_reply_error.empty()) {
+        plog(fmt::format("Failed to send the selection: {}", selection_reply_error));
+    }
 }
 
 /*
