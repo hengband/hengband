@@ -44,6 +44,7 @@ void reset_tim_flags(PlayerType *player_ptr)
     effects->cut().reset();
     effects->stun().reset();
     effects->protection().reset();
+    effects->expand().reset();
 
     player_ptr->invuln = 0; /* Timed -- Invulnerable */
     player_ptr->ult_res = 0;
@@ -65,7 +66,6 @@ void reset_tim_flags(PlayerType *player_ptr)
     player_ptr->magicdef = 0;
     player_ptr->resist_magic = 0;
     player_ptr->tsuyoshi = 0;
-    player_ptr->tsubureru = 0;
     player_ptr->tim_pass_wall = 0;
     player_ptr->tim_res_nether = 0;
     player_ptr->tim_res_lite = 0;

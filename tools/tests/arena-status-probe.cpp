@@ -38,6 +38,7 @@
 #include "term/gameterm.h"
 #include "term/term-color-types.h"
 #include "term/z-term.h"
+#include "timed-effect/timed-effects.h"
 #include "util/enum-converter.h"
 #include "view/display-messages.h"
 #include "world/world.h"
@@ -138,7 +139,7 @@ int main(int argc, char **argv)
     player.lev = 1;
     player.playing = true;
     player.energy_need = 42;
-    player.tsubureru = 20;
+    player.effects()->expand().set(20);
     for (auto i = 0; i < A_MAX; ++i) {
         player.stat_cur[i] = 18;
         player.stat_max[i] = 18;
@@ -180,7 +181,7 @@ int main(int argc, char **argv)
         data->ki = 200;
         if (mode == "timed-force") {
             reset_tim_flags(&player);
-            check(player.tsubureru == 0, "timed reset clears Kutar flattening");
+            check(!player.effects()->expand().is_active(), "timed reset clears Kutar flattening");
             check(data->ki == 200, "timed reset must leave ki alone");
         } else if (mode == "arena-force") {
             reset_arena_buffs(&player);
@@ -197,7 +198,7 @@ int main(int argc, char **argv)
         data->kawarimi = true;
         if (mode == "timed-ninja") {
             reset_tim_flags(&player);
-            check(player.tsubureru == 0, "timed reset clears Kutar flattening");
+            check(!player.effects()->expand().is_active(), "timed reset clears Kutar flattening");
             check(data->kawarimi, "timed reset must leave kawarimi alone");
         } else {
             if (mode == "arena-ninja") {
@@ -222,7 +223,7 @@ int main(int argc, char **argv)
         }
         if (mode == "hex-dispel") {
             dispel();
-            check(data->interrupting_spells.has(HEX_SHOCK_CLOAK) && data->revenge_turn == 3 && player.tsubureru == 20, "normal dispel preserves Hex restart, revenge and flattening");
+            check(data->interrupting_spells.has(HEX_SHOCK_CLOAK) && data->revenge_turn == 3 && player.effects()->expand().current() == 20, "normal dispel preserves Hex restart, revenge and flattening");
         } else if (mode == "hex-stop") {
             SpellHex(&player).stop_all_spells();
             check(data->revenge_turn == 3, "normal Hex stop preserves revenge");
@@ -253,7 +254,8 @@ int main(int argc, char **argv)
         check(data->singing_song == MUSIC_NONE && data->interrputing_song == MUSIC_NONE && data->singing_song_spell_idx == 0, "song and restart discarded");
         check(count_message(_(u8"高潔な気分が消え失せた。", u8"The prayer has expired.")) == (mode == "song-active" ? 1 : 0), "real song STOP runs exactly once");
     } else if ((mode == "ordinary") || (mode == "tsuyoshi") || (mode == "arena-normal") || (mode == "arena-silent") || (mode == "arena-metal") || (mode == "arena-cancel") || (mode == "arena-watch")) {
-        player.hero = player.berserk = player.shield = player.blessed = player.invuln = player.tsubureru = 20;
+        player.hero = player.berserk = player.shield = player.blessed = player.invuln = 20;
+        player.effects()->expand().set(20);
         player.oppose_acid = player.oppose_elec = player.oppose_fire = player.oppose_cold = player.oppose_pois = 20;
         player.tsuyoshi = ((mode == "ordinary") || (mode == "arena-silent")) ? 0 : 20;
         const auto sequence = message_sequence();
@@ -281,7 +283,7 @@ int main(int argc, char **argv)
         if (mode == "arena-cancel") {
             check(player.tsuyoshi == 20 && player.hero == 20 && player.stat_max[A_STR] == 18 && player.virtues[0] == 0, "cancel preserves buffs and stats");
         } else {
-            check(player.hero == 0 && player.berserk == 0 && player.shield == 0 && player.blessed == 0 && player.invuln == 0 && player.tsubureru == 0, "ordinary timed buffs cleared");
+            check(player.hero == 0 && player.berserk == 0 && player.shield == 0 && player.blessed == 0 && player.invuln == 0 && !player.effects()->expand().is_active(), "ordinary timed buffs cleared");
             check(player.oppose_acid == 0 && player.oppose_elec == 0 && player.oppose_fire == 0 && player.oppose_cold == 0 && player.oppose_pois == 0, "resistances cleared");
             check(player.energy_need == 42, "no invulnerability ending energy penalty");
             if ((mode == "ordinary") || (mode == "arena-silent")) {
