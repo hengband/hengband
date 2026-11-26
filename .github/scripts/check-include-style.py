@@ -6,6 +6,7 @@ C++ の #include ディレクティブで "" と <> が適切に使われてい�
   - 変愚蛮怒のソースヘッダ (src/ 配下、external-lib/ を除く) は ""
   - 外部ライブラリのヘッダ (src/external-lib/include/ 配下) は <>
   - システムヘッダは <>
+  - configure が生成する autoconf.h は、ビルドのときに -include で取り込むので取り込まない
 """
 
 import re
@@ -18,8 +19,8 @@ EXTERNAL_LIB_INCLUDE = SRC / "external-lib" / "include"
 
 INCLUDE_PATTERN = re.compile(r'^\s*#\s*include\s*([<"])(.*?)([>"])')
 
-# ./configure で生成されるヘッダ。ソースツリーに存在しないためチェック対象外とする
-GENERATED_HEADERS = {"autoconf.h"}
+# ./configure で生成されるヘッダ。ビルドのときに -include で取り込むので、ソースやヘッダからは取り込まない
+FORCE_INCLUDED_HEADERS = {"autoconf.h"}
 
 
 def check_file(path: Path) -> int:
@@ -38,7 +39,12 @@ def check_file(path: Path) -> int:
 
         open_q, include_path = m.group(1), m.group(2)
 
-        if include_path in GENERATED_HEADERS:
+        if include_path in FORCE_INCLUDED_HEADERS:
+            print(
+                f"{rel_path}:{lineno}: error: {include_path} is included by the build"
+                f" (-include), do not include it: #include {open_q}{include_path}{m.group(3)}"
+            )
+            error_count += 1
             continue
 
         candidate = SRC / include_path
