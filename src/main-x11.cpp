@@ -1617,7 +1617,7 @@ static void copy_x11_end(const Time time)
     }
 }
 
-static Atom xa_targets, xa_timestamp, xa_text, xa_compound_text, xa_utf8,
+static Atom xa_targets, xa_timestamp, xa_text, xa_compound_text, xa_utf8, xa_incr,
     xa_wm_protocols, xa_delete_window;
 
 /*
@@ -1630,6 +1630,7 @@ static void set_atoms(void)
     xa_text = XInternAtom(DPY, "TEXT", False);
     xa_compound_text = XInternAtom(DPY, "COMPOUND_TEXT", False);
     xa_utf8 = XInternAtom(DPY, "UTF8_STRING", False);
+    xa_incr = XInternAtom(DPY, "INCR", False);
     xa_wm_protocols = XInternAtom(DPY, "WM_PROTOCOLS", False);
     xa_delete_window = XInternAtom(DPY, "WM_DELETE_WINDOW", False);
 }
@@ -1644,20 +1645,43 @@ static void set_wm_protocols(Window xid)
 
 static Atom request_target = 0;
 
-/*
- * Send a message to request that the PRIMARY buffer be sent here.
+/*!
+ * @brief 選択範囲を求める形式のうち、相手に断られたときに次に求める形式を返す
+ * @param target 断られた形式
+ * @return 次に求める形式。もう無ければ None
+ * @details UTF8_STRING を持たない古いクライアントのために、COMPOUND_TEXT、STRING の順に求め直す。
  */
-static void paste_x11_request(Atom target, const Time time)
+static Atom next_paste_target(Atom target)
+{
+    if (target == xa_utf8) {
+        return xa_compound_text;
+    }
+
+    if (target == xa_compound_text) {
+        return XA_STRING;
+    }
+
+    return None;
+}
+
+/*!
+ * @brief PRIMARY の選択範囲を、指定した形式で送るよう持ち主に求める
+ * @param target 求める形式
+ * @param time 求めるきっかけになった操作の時刻
+ * @return 求めたら true、PRIMARY の持ち主がいなければ false
+ */
+static bool paste_x11_request(Atom target, const Time time)
 {
     Atom property = XInternAtom(DPY, "__COPY_TEXT", False);
     if (XGetSelectionOwner(DPY, XA_PRIMARY) == None) {
         /* No selection. */
         /* bell("No selection found."); */
-        return;
+        return false;
     }
 
     request_target = target;
     XConvertSelection(DPY, XA_PRIMARY, target, property, WIN, time);
+    return true;
 }
 
 /*
@@ -1674,49 +1698,75 @@ static void paste_x11_accept(const XSelectionEvent *ptr)
     XTextProperty xtextproperty;
     errr err = 0;
     Atom property = XInternAtom(DPY, "__COPY_TEXT", False);
+
+    // 続けて中ボタンを押したときなどに遅れて届いた、前の形式への返事は、今の要求への返事ではないので無視する。
+    // 書き込まれていれば、受け取った側が消すという ICCCM の決まりのとおり消しておく
+    if (ptr->target != request_target) {
+        if (ptr->property != None) {
+            XDeleteProperty(DPY, WIN, ptr->property);
+        }
+
+        return;
+    }
+
+    // この要求への返事を受けたので、後から届く同じ形式の返事は無視する。求め直すときは paste_x11_request() が入れ直す
+    const auto target = std::exchange(request_target, None);
+    if (ptr->selection != XA_PRIMARY) {
+        plog("Paste failure (remote client did not send primary selection).");
+        return;
+    }
+
     if (ptr->property == None) {
-        if (request_target == xa_compound_text) {
-            paste_x11_request(XA_STRING, ptr->time);
-        } else {
-            request_target = 0;
+        const auto next_target = next_paste_target(target);
+        if ((next_target == None) || !paste_x11_request(next_target, ptr->time)) {
             plog("Paste failure (remote client could not send).");
         }
 
         return;
     }
 
-    if (ptr->selection != XA_PRIMARY) {
-        plog("Paste failure (remote client did not send primary selection).");
-        return;
-    }
-
-    if (ptr->target != request_target) {
-        plog("Paste failure (selection in unknown format).");
-        return;
-    }
-
-    if (XGetWindowProperty(Metadpy->dpy, Infowin->win, property, offset, length, true, request_target, &xtextproperty.encoding, &xtextproperty.format,
+    // 求めた形式と違う型で書き込む持ち主もあるので型は問わずに読み、変換で実際の型 (encoding) を見る
+    if (XGetWindowProperty(Metadpy->dpy, Infowin->win, property, offset, length, true, AnyPropertyType, &xtextproperty.encoding, &xtextproperty.format,
             &xtextproperty.nitems, &left, &xtextproperty.value) != Success) {
+        plog("Paste failure (cannot read the selection).");
         return;
     }
 
-    if (request_target == xa_compound_text) {
-        char **list = nullptr;
-        auto count = 0;
-        if ((XmbTextPropertyToTextList(DPY, &xtextproperty, &list, &count) >= Success) && (list != nullptr)) {
-            // 一部だけを入力しないよう、つなげて一度に積む
-            std::string text;
-            for (auto i = 0; i < count; i++) {
-                text.append(list[i]);
-            }
+    if (xtextproperty.encoding == None) {
+        plog("Paste failure (remote client did not write the selection).");
+        return;
+    }
 
-            XFreeStringList(list);
-            err = type_string(text);
-        } else {
-            plog("Paste failure (cannot convert the selection).");
+    // 大きな選択範囲を分けて送る INCR には対応しない
+    if (xtextproperty.encoding == xa_incr) {
+        XFree(xtextproperty.value);
+        plog("Paste failure (too much text selected).");
+        return;
+    }
+
+    // UTF8_STRING・COMPOUND_TEXT・STRING (Latin-1) のどれで受け取っても、日本語版は内部の文字コードの UTF-8 に、
+    // 英語版はロケール (C) の ASCII に変換する。英語版で ASCII で表せない文字は、Xlib が既定の文字に置き換える
+    char **list = nullptr;
+    auto count = 0;
+#ifdef JP
+    const auto converted = Xutf8TextPropertyToTextList(DPY, &xtextproperty, &list, &count);
+#else
+    const auto converted = XmbTextPropertyToTextList(DPY, &xtextproperty, &list, &count);
+#endif
+    if (converted >= Success) {
+        // 一部だけを入力しないよう、つなげて一度に積む。空の選択範囲なら list が無く、何も積まない
+        std::string text;
+        for (auto i = 0; i < count; i++) {
+            text.append(list[i]);
         }
+
+        if (list != nullptr) {
+            XFreeStringList(list);
+        }
+
+        err = type_string(text);
     } else {
-        err = type_string(std::string_view(reinterpret_cast<const char *>(xtextproperty.value), xtextproperty.nitems));
+        plog("Paste failure (cannot convert the selection).");
     }
 
     XFree(xtextproperty.value);
@@ -1726,19 +1776,45 @@ static void paste_x11_accept(const XSelectionEvent *ptr)
 }
 
 /*!
- * @brief 選択範囲の文字列を UTF8_STRING として相手の書き込み先へ書き込む
+ * @brief 選択範囲の文字列として渡せる形式なら、Xlib で変換するときの形式を返す
+ * @param target 求められた形式
+ * @return 変換の形式。文字列の形式でなければ tl::nullopt
+ * @details TEXT は STRING で表せればそのまま、表せなければ COMPOUND_TEXT にする。
+ * STRING (Latin-1) で表せない文字は、Xlib が既定の文字に置き換える。
+ */
+static tl::optional<XICCEncodingStyle> selection_text_style(Atom target)
+{
+    if (target == xa_utf8) {
+        return XUTF8StringStyle;
+    }
+
+    if (target == xa_compound_text) {
+        return XCompoundTextStyle;
+    }
+
+    if (target == xa_text) {
+        return XStdICCTextStyle;
+    }
+
+    if (target == XA_STRING) {
+        return XStringStyle;
+    }
+
+    return tl::nullopt;
+}
+
+/*!
+ * @brief 選択範囲の文字列を、求められた形式で相手の書き込み先へ書き込む
  * @param rq 相手の要求
  * @param property 書き込み先
- * @return 書き込んだら true、選択範囲を持っていないか、1 回の要求で送れない大きさなら false
+ * @param style 変換の形式 (selection_text_style() で選んだもの)
+ * @return 書き込んだら true、変換できないか、1 回の要求で送れない大きさなら false
  * @details 行ごとに末尾の空白を削り、複数行なら各行の末尾に改行を付ける。
  */
-static bool paste_x11_send_text(XSelectionRequestEvent *rq, Atom property)
+static bool paste_x11_send_text(XSelectionRequestEvent *rq, Atom property, XICCEncodingStyle style)
 {
     co_ord max, min;
     sort_co_ord(&min, &max, &s_ptr->init, &s_ptr->cur);
-    if (XGetSelectionOwner(DPY, XA_PRIMARY) != WIN) {
-        return false;
-    }
 
     // 書き込み先に前の内容が残っていても混ざらないよう、全体をまとめて置き換える
     std::string selection;
@@ -1782,23 +1858,35 @@ static bool paste_x11_send_text(XSelectionRequestEvent *rq, Atom property)
         selection.append(text);
     }
 
+    char *list[] = { selection.data() };
+    XTextProperty text_property{};
+    if (Xutf8TextListToTextProperty(DPY, list, 1, style, &text_property) < Success) {
+        plog("Failed to send the selection: cannot convert the text.");
+        return false;
+    }
+
+    const auto type = text_property.encoding;
+    const std::string data(reinterpret_cast<const char *>(text_property.value), text_property.nitems);
+    XFree(text_property.value);
+
     // 1 回の要求の上限 (4 バイト単位) を超えるなら断る。要求の頭 (BIG-REQUESTS で長さを広げると 28 バイト、
     // そうでなければ 24 バイト) を除いた分が中身に使える
     const auto extended_max_request = XExtendedMaxRequestSize(DPY);
     const auto max_data = (extended_max_request > 0) ? extended_max_request * 4 - 28 : XMaxRequestSize(DPY) * 4 - 24;
-    if (std::cmp_greater(selection.size(), max_data)) {
+    if (std::cmp_greater(data.size(), max_data)) {
         plog("Failed to send the selection: too much text selected.");
         return false;
     }
 
-    XChangeProperty(DPY, rq->requestor, property, xa_utf8, 8, PropModeReplace, reinterpret_cast<const unsigned char *>(selection.data()), static_cast<int>(selection.size()));
+    XChangeProperty(DPY, rq->requestor, property, type, 8, PropModeReplace, reinterpret_cast<const unsigned char *>(data.data()), static_cast<int>(data.size()));
     return true;
 }
 
 /*!
  * @brief ほかのアプリが求めた選択範囲を返す
  * @param rq 相手の要求
- * @details UTF8_STRING と、使える形式の一覧 (TARGETS) にだけ答え、ほかの形式 (MULTIPLE を含む) は断る。
+ * @details 文字列の形式 (UTF8_STRING・COMPOUND_TEXT・TEXT・STRING)、使える形式の一覧 (TARGETS)、
+ * 選択範囲を持ち始めた時刻 (TIMESTAMP) に答え、ほかの形式 (MULTIPLE を含む) は断る。
  */
 static void paste_x11_send(XSelectionRequestEvent *rq)
 {
@@ -1820,14 +1908,20 @@ static void paste_x11_send(XSelectionRequestEvent *rq)
     is_replying_selection = true;
     selection_reply_error.clear();
     const auto finish_reply = util::make_finalizer([] { is_replying_selection = false; });
-    if (rq->target == xa_utf8) {
-        if (!paste_x11_send_text(rq, property)) {
+    if (XGetSelectionOwner(DPY, rq->selection) != WIN) {
+        // 選択範囲を手放した後に届いた要求には、形式の一覧も含めて答えない
+        ptr->property = None;
+    } else if (const auto style = selection_text_style(rq->target)) {
+        if (!paste_x11_send_text(rq, property, *style)) {
             ptr->property = None;
         }
     } else if (rq->target == xa_targets) {
-        Atom target_list[] = { xa_targets, xa_utf8 };
-        XChangeProperty(
-            DPY, rq->requestor, property, XA_ATOM, 32, PropModeReplace, (unsigned char *)target_list, (sizeof(target_list) / sizeof(target_list[0])));
+        Atom target_list[] = { xa_targets, xa_timestamp, xa_utf8, xa_compound_text, xa_text, XA_STRING };
+        XChangeProperty(DPY, rq->requestor, property, XA_ATOM, 32, PropModeReplace, reinterpret_cast<unsigned char *>(target_list), std::size(target_list));
+    } else if (rq->target == xa_timestamp) {
+        // 32 ビットの形式の値は、Xlib では long で渡す
+        const auto timestamp = static_cast<long>(s_ptr->time);
+        XChangeProperty(DPY, rq->requestor, property, XA_INTEGER, 32, PropModeReplace, reinterpret_cast<const unsigned char *>(&timestamp), 1);
     } else {
         ptr->property = None;
     }
@@ -1859,7 +1953,7 @@ static void handle_button(Time time, int x, int y, int button, bool press)
         copy_x11_end(time);
     }
     if (!press && button == 2) {
-        paste_x11_request(xa_compound_text, time);
+        paste_x11_request(xa_utf8, time);
     }
 }
 
