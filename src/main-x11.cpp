@@ -1304,9 +1304,13 @@ struct x11_selection_type {
     co_ord cur; /* The end co-ordinates (the current ones if still copying). */
     co_ord old; /* The previous end co-ordinates. */
     Time time; /* The time at which the selection was finalised. */
+    std::string text; //!< 選び終えたときに画面から読んだ文字列 (UTF-8)。PRIMARY と CLIPBOARD で渡す
 };
 
 static x11_selection_type s_ptr[1];
+
+static Atom xa_targets, xa_timestamp, xa_text, xa_compound_text, xa_utf8, xa_incr, xa_clipboard,
+    xa_wm_protocols, xa_delete_window;
 
 // ゲーム側へキーを送る
 static void send_key(const char key)
@@ -1590,15 +1594,76 @@ static void copy_x11_cont(int x, int y, unsigned int buttons)
         return;
     }
 
+    // クリックの間にマウスが少し動いただけで選んだことにならないよう、押したマスから出るまでは選び始めない。
+    // 選び始めた後は、押したマスに戻れば 1 マスを選べる
+    if (!s_ptr->select && (x == s_ptr->init.x) && (y == s_ptr->init.y)) {
+        return;
+    }
+
     s_ptr->select = true;
     s_ptr->cur.x = x;
     s_ptr->cur.y = y;
     mark_selection();
 }
 
-/*
- * Respond to release of the left mouse button by putting the selected text in
- * the primary buffer.
+/*!
+ * @brief 選択範囲の文字列を、今の画面から読む
+ * @return 選択範囲の文字列 (UTF-8)
+ * @details 行ごとに末尾の空白を削り、複数行なら各行の末尾に改行を付ける。
+ */
+static std::string read_selection_text()
+{
+    co_ord max, min;
+    sort_co_ord(&min, &max, &s_ptr->init, &s_ptr->cur);
+
+    std::string selection;
+    for (TERM_LEN y = 0; y < game_term->hgt; y++) {
+        if (y < min.y) {
+            continue;
+        }
+        if (y > max.y) {
+            break;
+        }
+
+        // 選択範囲の端で分断された全角文字は空白にする。座標は term_what_cell() と同じく端末のオフセットを加えて読む
+        std::string line;
+        const auto term_y = y + game_term->offset_y;
+        const auto term_x_begin = std::max(min.x + game_term->offset_x, 0);
+        const auto term_x_end = std::min(std::min(max.x, game_term->wid - 1) + game_term->offset_x, game_term->wid - 1);
+        if ((term_y >= 0) && (term_y < game_term->hgt) && (term_x_begin <= term_x_end)) {
+            game_term->scr->append_text(term_x_begin, term_y, term_x_end - term_x_begin + 1, line);
+        }
+
+        // 末尾の空白を削る。
+        while (line.ends_with(' ')) {
+            line.pop_back();
+        }
+
+        // 複数行の場合、各行末に改行を付加。
+        if (min.y != max.y) {
+            line.push_back('\n');
+        }
+
+#ifdef JP
+        const auto utf8 = sys_to_utf8(line);
+        if (!utf8) {
+            continue;
+        }
+
+        const auto &text = *utf8;
+#else
+        const auto &text = line;
+#endif
+        selection.append(text);
+    }
+
+    return selection;
+}
+
+/*!
+ * @brief 左ボタンを離したら、選んだ文字列を読んで PRIMARY と CLIPBOARD の両方の持ち主になる
+ * @param time 左ボタンを離した時刻
+ * @details 文字列はこのときに読んでおき、後で画面が変わったり別の場所をクリックしたりしても、同じ文字列を渡す。
  */
 static void copy_x11_end(const Time time)
 {
@@ -1610,15 +1675,14 @@ static void copy_x11_end(const Time time)
     }
 
     s_ptr->time = time;
-    XSetSelectionOwner(Metadpy->dpy, XA_PRIMARY, Infowin->win, time);
-    if (XGetSelectionOwner(Metadpy->dpy, XA_PRIMARY) != Infowin->win) {
+    s_ptr->text = read_selection_text();
+    XSetSelectionOwner(DPY, XA_PRIMARY, WIN, time);
+    XSetSelectionOwner(DPY, xa_clipboard, WIN, time);
+    if (XGetSelectionOwner(DPY, XA_PRIMARY) != WIN) {
         s_ptr->select = false;
         mark_selection();
     }
 }
-
-static Atom xa_targets, xa_timestamp, xa_text, xa_compound_text, xa_utf8, xa_incr,
-    xa_wm_protocols, xa_delete_window;
 
 /*
  * Set the required variable atoms at start-up to avoid errors later.
@@ -1631,6 +1695,7 @@ static void set_atoms(void)
     xa_compound_text = XInternAtom(DPY, "COMPOUND_TEXT", False);
     xa_utf8 = XInternAtom(DPY, "UTF8_STRING", False);
     xa_incr = XInternAtom(DPY, "INCR", False);
+    xa_clipboard = XInternAtom(DPY, "CLIPBOARD", False);
     xa_wm_protocols = XInternAtom(DPY, "WM_PROTOCOLS", False);
     xa_delete_window = XInternAtom(DPY, "WM_DELETE_WINDOW", False);
 }
@@ -1643,7 +1708,9 @@ static void set_wm_protocols(Window xid)
     XSetWMProtocols(DPY, xid, protocols, 1);
 }
 
-static Atom request_target = 0;
+// 返事を待っている要求の選択範囲と形式。待っていなければ形式は None
+static Atom request_selection = None;
+static Atom request_target = None;
 
 /*!
  * @brief 選択範囲を求める形式のうち、相手に断られたときに次に求める形式を返す
@@ -1665,30 +1732,30 @@ static Atom next_paste_target(Atom target)
 }
 
 /*!
- * @brief PRIMARY の選択範囲を、指定した形式で送るよう持ち主に求める
+ * @brief 選択範囲を、指定した形式で送るよう持ち主に求める
+ * @param selection 求める選択範囲 (PRIMARY か CLIPBOARD)
  * @param target 求める形式
  * @param time 求めるきっかけになった操作の時刻
- * @return 求めたら true、PRIMARY の持ち主がいなければ false
+ * @return 求めたら true、選択範囲の持ち主がいなければ false
  */
-static bool paste_x11_request(Atom target, const Time time)
+static bool paste_x11_request(Atom selection, Atom target, const Time time)
 {
-    Atom property = XInternAtom(DPY, "__COPY_TEXT", False);
-    if (XGetSelectionOwner(DPY, XA_PRIMARY) == None) {
-        /* No selection. */
-        /* bell("No selection found."); */
+    // 遅れて届いた別の選択範囲への返事を消すときに、今の要求の返事まで消さないよう、書き込み先は選択範囲ごとに分ける
+    const auto property = XInternAtom(DPY, (selection == XA_PRIMARY) ? "__COPY_TEXT_PRIMARY" : "__COPY_TEXT_CLIPBOARD", False);
+    if (XGetSelectionOwner(DPY, selection) == None) {
         return false;
     }
 
+    request_selection = selection;
     request_target = target;
-    XConvertSelection(DPY, XA_PRIMARY, target, property, WIN, time);
+    XConvertSelection(DPY, selection, target, property, WIN, time);
     return true;
 }
 
-/*
- * Add the contents of the PRIMARY buffer to the input queue.
- *
- * Hack - This doesn't use the "time" of the event, and so accepts anything a
- * client tries to send it.
+/*!
+ * @brief 求めた選択範囲 (PRIMARY か CLIPBOARD) の返事を受け、文字列を入力に積む
+ * @param ptr 持ち主からの返事
+ * @details 返事の時刻は見ないので、持ち主が送ってきたものは何でも受け取る。
  */
 static void paste_x11_accept(const XSelectionEvent *ptr)
 {
@@ -1697,11 +1764,10 @@ static void paste_x11_accept(const XSelectionEvent *ptr)
     const long length = 32000;
     XTextProperty xtextproperty;
     errr err = 0;
-    Atom property = XInternAtom(DPY, "__COPY_TEXT", False);
 
-    // 続けて中ボタンを押したときなどに遅れて届いた、前の形式への返事は、今の要求への返事ではないので無視する。
+    // 続けて中ボタンを押したときなどに遅れて届いた、前の選択範囲や形式への返事は、今の要求への返事ではないので無視する。
     // 書き込まれていれば、受け取った側が消すという ICCCM の決まりのとおり消しておく
-    if (ptr->target != request_target) {
+    if ((ptr->selection != request_selection) || (ptr->target != request_target)) {
         if (ptr->property != None) {
             XDeleteProperty(DPY, WIN, ptr->property);
         }
@@ -1711,14 +1777,10 @@ static void paste_x11_accept(const XSelectionEvent *ptr)
 
     // この要求への返事を受けたので、後から届く同じ形式の返事は無視する。求め直すときは paste_x11_request() が入れ直す
     const auto target = std::exchange(request_target, None);
-    if (ptr->selection != XA_PRIMARY) {
-        plog("Paste failure (remote client did not send primary selection).");
-        return;
-    }
 
     if (ptr->property == None) {
         const auto next_target = next_paste_target(target);
-        if ((next_target == None) || !paste_x11_request(next_target, ptr->time)) {
+        if ((next_target == None) || !paste_x11_request(ptr->selection, next_target, ptr->time)) {
             plog("Paste failure (remote client could not send).");
         }
 
@@ -1726,7 +1788,7 @@ static void paste_x11_accept(const XSelectionEvent *ptr)
     }
 
     // 求めた形式と違う型で書き込む持ち主もあるので型は問わずに読み、変換で実際の型 (encoding) を見る
-    if (XGetWindowProperty(Metadpy->dpy, Infowin->win, property, offset, length, true, AnyPropertyType, &xtextproperty.encoding, &xtextproperty.format,
+    if (XGetWindowProperty(Metadpy->dpy, Infowin->win, ptr->property, offset, length, true, AnyPropertyType, &xtextproperty.encoding, &xtextproperty.format,
             &xtextproperty.nitems, &left, &xtextproperty.value) != Success) {
         plog("Paste failure (cannot read the selection).");
         return;
@@ -1804,61 +1866,15 @@ static tl::optional<XICCEncodingStyle> selection_text_style(Atom target)
 }
 
 /*!
- * @brief 選択範囲の文字列を、求められた形式で相手の書き込み先へ書き込む
+ * @brief 選び終えたときに読んだ文字列を、求められた形式で相手の書き込み先へ書き込む
  * @param rq 相手の要求
  * @param property 書き込み先
  * @param style 変換の形式 (selection_text_style() で選んだもの)
  * @return 書き込んだら true、変換できないか、1 回の要求で送れない大きさなら false
- * @details 行ごとに末尾の空白を削り、複数行なら各行の末尾に改行を付ける。
  */
 static bool paste_x11_send_text(XSelectionRequestEvent *rq, Atom property, XICCEncodingStyle style)
 {
-    co_ord max, min;
-    sort_co_ord(&min, &max, &s_ptr->init, &s_ptr->cur);
-
-    // 書き込み先に前の内容が残っていても混ざらないよう、全体をまとめて置き換える
-    std::string selection;
-    for (TERM_LEN y = 0; y < game_term->hgt; y++) {
-        if (y < min.y) {
-            continue;
-        }
-        if (y > max.y) {
-            break;
-        }
-
-        // 選択範囲の端で分断された全角文字は空白にする。座標は term_what_cell() と同じく端末のオフセットを加えて読む
-        std::string line;
-        const auto term_y = y + game_term->offset_y;
-        const auto term_x_begin = std::max(min.x + game_term->offset_x, 0);
-        const auto term_x_end = std::min(std::min(max.x, game_term->wid - 1) + game_term->offset_x, game_term->wid - 1);
-        if ((term_y >= 0) && (term_y < game_term->hgt) && (term_x_begin <= term_x_end)) {
-            game_term->scr->append_text(term_x_begin, term_y, term_x_end - term_x_begin + 1, line);
-        }
-
-        // 末尾の空白を削る。
-        while (line.ends_with(' ')) {
-            line.pop_back();
-        }
-
-        // 複数行の場合、各行末に改行を付加。
-        if (min.y != max.y) {
-            line.push_back('\n');
-        }
-
-#ifdef JP
-        const auto utf8 = sys_to_utf8(line);
-        if (!utf8) {
-            continue;
-        }
-
-        const auto &text = *utf8;
-#else
-        const auto &text = line;
-#endif
-        selection.append(text);
-    }
-
-    char *list[] = { selection.data() };
+    char *list[] = { s_ptr->text.data() };
     XTextProperty text_property{};
     if (Xutf8TextListToTextProperty(DPY, list, 1, style, &text_property) < Success) {
         plog("Failed to send the selection: cannot convert the text.");
@@ -1952,8 +1968,11 @@ static void handle_button(Time time, int x, int y, int button, bool press)
     if (!press && button == 1) {
         copy_x11_end(time);
     }
+    // PRIMARY を貼り、PRIMARY の持ち主がいなければ CLIPBOARD を貼る
     if (!press && button == 2) {
-        paste_x11_request(xa_utf8, time);
+        if (!paste_x11_request(XA_PRIMARY, xa_utf8, time)) {
+            paste_x11_request(xa_clipboard, xa_utf8, time);
+        }
     }
 }
 
@@ -2056,8 +2075,13 @@ static errr CheckEvent(bool wait)
         break;
     }
     case SelectionClear: {
-        s_ptr->select = false;
-        mark_selection();
+        // CLIPBOARD を手放しても、PRIMARY を持っている間は選んだ範囲の枠を残す。
+        // 別のウィンドウで選び直したときに前のウィンドウへ届く知らせでも、新しく選んだ範囲の枠は残す
+        if ((xev->xselectionclear.selection == XA_PRIMARY) && (s_ptr->t == &td->t)) {
+            s_ptr->select = false;
+            mark_selection();
+        }
+
         break;
     }
     case KeyRelease: {
