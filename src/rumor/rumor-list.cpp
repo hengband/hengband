@@ -19,7 +19,8 @@
 #include "util/string-processor.h"
 #include <fmt/format.h>
 #include <fstream>
-#include <range/v3/view.hpp>
+#include <ranges>
+#include <vector>
 
 namespace {
 constexpr auto DEPTH_THRESHOLD = 30;
@@ -206,7 +207,7 @@ void RumorList::add_towns()
 void RumorList::add_shallow_dungeons()
 {
     auto &rumors = this->rumor_definitions.at(RumorRarity::MEDIUM).at(RumorType::SHALLOW_DUNGEON);
-    for (const auto &[id, dungeon] : DungeonList::get_instance() | ranges::views::drop(1)) {
+    for (const auto &[id, dungeon] : DungeonList::get_instance() | std::views::drop(1)) {
         if (0 < dungeon->mindepth && dungeon->mindepth <= DEPTH_THRESHOLD) {
             const auto dungeon_name = str_replace(this->type_template.at(RumorType::SHALLOW_DUNGEON), NAME_TEMPLATE, dungeon->name);
             rumors.emplace_back(std::make_shared<const RumorDefinition>(RumorType::SHALLOW_DUNGEON, id, dungeon_name));
@@ -246,7 +247,7 @@ void RumorList::add_shallow_artifacts()
 void RumorList::add_deep_dungeons()
 {
     auto &rumors = this->rumor_definitions.at(RumorRarity::HIGH).at(RumorType::DEEP_DUNGEON);
-    for (const auto &[id, dungeon] : DungeonList::get_instance() | ranges::views::drop(1)) {
+    for (const auto &[id, dungeon] : DungeonList::get_instance() | std::views::drop(1)) {
         if (dungeon->mindepth > DEPTH_THRESHOLD) {
             const auto dungeon_name = str_replace(this->type_template.at(RumorType::DEEP_DUNGEON), NAME_TEMPLATE, dungeon->name);
             rumors.emplace_back(std::make_shared<const RumorDefinition>(RumorType::DEEP_DUNGEON, id, dungeon_name));

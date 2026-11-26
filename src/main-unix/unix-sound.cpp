@@ -17,11 +17,12 @@
 #include <cstdlib>
 #include <filesystem>
 #include <queue>
-#include <range/v3/all.hpp>
+#include <ranges>
 #include <simpleini/SimpleIni.h>
 #include <spawn.h>
 #include <sys/wait.h>
 #include <tl/optional.hpp>
+#include <vector>
 
 extern char **environ;
 namespace unix_sound {
@@ -142,9 +143,9 @@ bool play_sound(int val)
     auto path = path_build(ANGBAND_DIR_XTRA_SOUND, *filename);
     auto sound_player_pid = 0;
 
-    auto argv_sound_player_buf = sound_player.string() | ranges::to_vector;
+    auto argv_sound_player_buf = sound_player.string() | std::ranges::to<std::vector>();
     argv_sound_player_buf.push_back('\0');
-    auto argv_path_sound_buf = path.string() | ranges::to_vector;
+    auto argv_path_sound_buf = path.string() | std::ranges::to<std::vector>();
     argv_path_sound_buf.push_back('\0');
     //  argv must has null end
     char *const argv[] = { argv_sound_player_buf.data(), argv_path_sound_buf.data(), nullptr };

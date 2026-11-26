@@ -37,8 +37,9 @@
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 #include <algorithm>
-#include <range/v3/view.hpp>
+#include <ranges>
 #include <sstream>
+#include <string>
 
 /*!
  * @brief ユニークの分離・合体処理
@@ -117,9 +118,9 @@ static MonsterSpellResult spell_RF6_SPECIAL_UNIFICATION(PlayerType *player_ptr, 
         const auto monrace_id_to_name = [&monraces](auto id) { return monraces.get_monrace(id).name.string(); };
         const auto separates_names =
             separates |
-            ranges::views::transform(monrace_id_to_name) |
-            ranges::views::join(_("と"sv, " and "sv)) |
-            ranges::to<std::string>;
+            std::views::transform(monrace_id_to_name) |
+            std::views::join_with(_("と"sv, " and "sv)) |
+            std::ranges::to<std::string>();
         msg_print(_("{}が合体した！", "{} combine into one!"), separates_names);
         return MonsterSpellResult::make_valid();
     }

@@ -10,7 +10,8 @@
 #include "util/enum-converter.h"
 #include "util/probability-table.h"
 #include <algorithm>
-#include <range/v3/view.hpp>
+#include <ranges>
+#include <vector>
 
 namespace {
 const std::set<MonraceId> DARK_ELF_RACES = {
@@ -468,7 +469,7 @@ const std::vector<std::pair<MonraceId, LocalizedString>> &MonraceList::get_norma
         return normal_monster_names;
     }
 
-    for (const auto &[id, monrace] : this->monraces | ranges::views::drop(1)) {
+    for (const auto &[id, monrace] : this->monraces | std::views::drop(1)) {
         if (monrace->kind_flags.has_not(MonsterKindType::UNIQUE) && monrace->population_flags.has_not(MonsterPopulationType::NAZGUL)) {
             normal_monster_names.emplace_back(id, monrace->name);
         }
@@ -484,7 +485,7 @@ const std::vector<std::pair<MonraceId, LocalizedString>> &MonraceList::get_uniqu
         return unique_monster_names;
     }
 
-    for (const auto &[id, monrace] : this->monraces | ranges::views::drop(1)) {
+    for (const auto &[id, monrace] : this->monraces | std::views::drop(1)) {
         if (monrace->kind_flags.has(MonsterKindType::UNIQUE) || monrace->population_flags.has(MonsterPopulationType::NAZGUL)) {
             unique_monster_names.emplace_back(id, monrace->name);
         }

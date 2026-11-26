@@ -15,10 +15,11 @@
 #include <fmt/format.h>
 #include <memory>
 #include <numeric>
-#include <range/v3/view.hpp>
+#include <ranges>
 #include <set>
 #include <span>
 #include <utility>
+#include <vector>
 
 namespace {
 constexpr auto INVALID_BI_ID_FORMAT = "Invalid Baseitem ID is specified! {}";
@@ -85,7 +86,7 @@ std::vector<short> BaseitemList::collect_valid_bi_ids() const
     }
 
     std::vector<short> bi_ids;
-    for (const auto &[bi_id, baseitem] : this->baseitems | ranges::views::enumerate) {
+    for (const auto &[bi_id, baseitem] : std::views::zip(std::views::iota(0), this->baseitems)) {
         if (baseitem.is_valid()) {
             bi_ids.push_back(static_cast<short>(bi_id));
         }

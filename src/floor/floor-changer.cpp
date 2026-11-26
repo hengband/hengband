@@ -50,7 +50,8 @@
 #include "world/world.h"
 #include <algorithm>
 #include <fmt/format.h>
-#include <range/v3/view.hpp>
+#include <ranges>
+#include <vector>
 
 /*!
  * @brief 階段移動先のフロアが生成できない時に簡単な行き止まりマップを作成する / Builds the dead end
@@ -322,7 +323,7 @@ static void allocate_loaded_floor(PlayerType *player_ptr, saved_floor_type *sf_p
     GAME_TURN absence_ticks = (world.game_turn - tmp_last_visit) / TURNS_PER_TICK;
     reset_unique_by_floor_change(player_ptr);
     std::vector<OBJECT_IDX> delete_i_idx_list;
-    for (const auto &[i_idx, item_ptr] : floor.o_list | ranges::views::enumerate) {
+    for (const auto &[i_idx, item_ptr] : std::views::zip(std::views::iota(0), floor.o_list)) {
         if (!item_ptr->is_valid() || !item_ptr->is_fixed_artifact()) {
             continue;
         }

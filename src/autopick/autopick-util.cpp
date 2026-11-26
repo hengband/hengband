@@ -8,7 +8,8 @@
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
-#include <range/v3/view.hpp>
+#include <ranges>
+#include <vector>
 
 /*!
  * @brief 自動拾い/破壊設定のリストに関する変数 / List for auto-picker/destroyer entries
@@ -53,5 +54,5 @@ bool auto_inscribe_item(ItemEntity &item, int idx)
 
 std::vector<std::string> AutopickTextBody::get_entry_lines() const
 {
-    return this->lines | ranges::views::transform(&AutopickEntryLine::line) | ranges::to<std::vector>();
+    return this->lines | std::views::transform(&AutopickEntryLine::line) | std::ranges::to<std::vector>();
 }

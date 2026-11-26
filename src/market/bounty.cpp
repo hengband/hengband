@@ -30,7 +30,8 @@
 #include "world/world.h"
 #include <algorithm>
 #include <fmt/format.h>
-#include <range/v3/view.hpp>
+#include <ranges>
+#include <vector>
 
 /*!
  * @brief 賞金首の引き換え処理 / Get prize
@@ -146,7 +147,7 @@ bool exchange_cash(PlayerType *player_ptr)
             continue;
         }
 
-        for (const auto i_idx : INVEN_PACK_SLOTS | ranges::views::reverse) {
+        for (const auto i_idx : INVEN_PACK_SLOTS | std::views::reverse) {
             auto &item = *player_ptr->inventory[i_idx];
             if ((item.bi_key.tval() != ItemKindType::MONSTER_REMAINS) || (item.get_monrace().idx != monrace_id)) {
                 continue;

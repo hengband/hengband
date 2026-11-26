@@ -22,7 +22,7 @@
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "world/world.h"
-#include <range/v3/view.hpp>
+#include <ranges>
 #include <vector>
 
 /*!
@@ -140,7 +140,8 @@ static int next_to_open(const FloorType &floor, const Pos2D &pos_center)
 {
     auto len = 0;
     auto blen = 0;
-    for (const auto cdir : ranges::views::iota(0, 8) | ranges::views::cycle | ranges::views::take(16)) {
+    // 1 周目の終わりから 2 周目の始めにまたがる並びも数えるため、周囲の 8 方向を 2 周たどる
+    for (const auto cdir : std::views::iota(0, 16) | std::views::transform([](int i) { return i % 8; })) {
         const auto pos = pos_center + Direction::from_cdir(cdir).vec();
         if (floor.has_los_terrain_at(pos)) {
             len++;

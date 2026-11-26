@@ -10,8 +10,9 @@
 #include "system/player-type-definition.h"
 #include "term/z-rand.h"
 #include "view/display-messages.h"
-#include <range/v3/view.hpp>
+#include <ranges>
 #include <utility>
+#include <vector>
 
 namespace {
 class ItemCompactionChecker {
@@ -82,7 +83,7 @@ void compact_objects(PlayerType *player_ptr, int size)
     for (auto deleted_num = 0, try_count = 1; deleted_num < size; try_count++) {
         const ItemCompactionChecker icc(player_ptr, try_count);
         std::vector<OBJECT_IDX> delete_i_idx_list;
-        for (const auto &[i_idx, item_ptr] : floor.o_list | ranges::views::enumerate) {
+        for (const auto &[i_idx, item_ptr] : std::views::zip(std::views::iota(0), floor.o_list)) {
             if (icc.can_delete_for_compaction(*item_ptr)) {
                 delete_i_idx_list.push_back(static_cast<OBJECT_IDX>(i_idx));
             }

@@ -8,7 +8,7 @@
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
 #include <algorithm>
-#include <range/v3/view.hpp>
+#include <ranges>
 
 MonraceAllocationEntry::MonraceAllocationEntry(MonraceId index, int level, short prob1, short prob2)
     : index(index)
@@ -82,7 +82,7 @@ void MonraceAllocationTable::initialize()
     const auto &monraces = MonraceList::get_instance();
     this->entries.reserve(monraces.size());
 
-    for (const auto &[id, monrace] : monraces | ranges::views::filter([](const auto &x) { return x.second->is_valid(); })) {
+    for (const auto &[id, monrace] : monraces | std::views::filter([](const auto &x) { return x.second->is_valid(); })) {
         const auto prob = static_cast<short>(100 / monrace->rarity);
         this->entries.emplace_back(id, monrace->level, prob, prob);
     }
