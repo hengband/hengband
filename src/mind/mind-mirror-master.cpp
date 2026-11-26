@@ -48,7 +48,7 @@
 #include "util/point-2d.h"
 #include "view/display-messages.h"
 #include "world/world.h"
-#include <range/v3/algorithm.hpp>
+#include <algorithm>
 
 /*
  * @brief Multishadow effects is determined by turn
@@ -340,7 +340,7 @@ bool set_dustrobe(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 static int number_of_mirrors(const FloorType &floor)
 {
     const auto has_mirror = [&](const Pos2D &pos) { return floor.get_grid(pos).is_mirror(); };
-    return ranges::count_if(floor.get_area(), has_mirror);
+    return std::ranges::count_if(floor.get_area(), has_mirror);
 }
 
 /*!

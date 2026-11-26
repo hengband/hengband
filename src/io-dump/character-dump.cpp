@@ -47,9 +47,9 @@
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#include <algorithm>
 #include <fmt/format.h>
 #include <numeric>
-#include <range/v3/algorithm.hpp>
 #include <range/v3/view.hpp>
 #include <string>
 
@@ -353,13 +353,13 @@ static void dump_aux_monsters(FILE *fff)
     fmt::println(fff, "You have defeated {} {} including {} unique monster{} in total.", norm_total, norm_total == 1 ? "enemy" : "enemies", uniq_total, (uniq_total == 1 ? "" : "s"));
 #endif
 
-    ranges::stable_sort(monrace_ids, [&monraces](auto x, auto y) { return monraces.order(x, y); });
-    ranges::reverse(monrace_ids);
+    std::ranges::stable_sort(monrace_ids, [&monraces](auto x, auto y) { return monraces.order(x, y); });
+    std::ranges::reverse(monrace_ids);
 
     const auto id_to_monrace = [&monraces](auto id) -> const MonraceDefinition & { return monraces.get_monrace(id); };
     const auto top_display_num = std::min(uniq_total, 10);
     const auto top_monraces = monrace_ids | ranges::views::take(top_display_num) | ranges::views::transform(id_to_monrace);
-    const auto max_defeat_time = ranges::max(top_monraces | ranges::views::transform(&MonraceDefinition::defeat_time));
+    const auto max_defeat_time = std::ranges::max(top_monraces | ranges::views::transform(&MonraceDefinition::defeat_time));
     const auto max_hour_digits = count_digits(max_defeat_time / (60 * 60));
 
     fmt::println(fff, _("\n《上位{}体のユニーク・モンスター》", "\n< Unique monsters top {} >"), top_display_num);

@@ -37,6 +37,7 @@
 #include "artifact/fixed-art-types.h"
 #include "flavor/flavor-util.h"
 #endif
+#include <algorithm>
 #include <fmt/format.h>
 #include <range/v3/all.hpp>
 
@@ -131,7 +132,7 @@ static void py_pickup_multiple_items(PlayerType *player_ptr, bool pickup)
 
     const auto tester = FuncItemTester(check_store_item_to_inventory, player_ptr);
     const auto can_pickup = [&](auto i_idx) { return tester.okay(floor.o_list.at(i_idx).get()); };
-    const auto count_of_pickable_items = ranges::count_if(grid.o_idx_list, can_pickup);
+    const auto count_of_pickable_items = std::ranges::count_if(grid.o_idx_list, can_pickup);
     if (count_of_pickable_items == 0) {
         msg_print(_("ザックには床にあるどのアイテムも入らない。", "You have no room for any of the objects on the floor."));
         return;

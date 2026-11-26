@@ -12,7 +12,6 @@
 #include <fmt/format.h>
 #include <functional>
 #include <nlohmann/json.hpp>
-#include <range/v3/algorithm.hpp>
 #include <system_error>
 #include <utility>
 
@@ -412,7 +411,7 @@ tl::optional<std::vector<HighScore>> scores_from_json(std::string_view text)
         }
 
         // 手で編集したファイルでも順位を求められるよう、スコアの高い順に並べる (同じスコアは元の順)
-        ranges::stable_sort(scores, std::greater<>{}, &HighScore::points);
+        std::ranges::stable_sort(scores, std::greater<>{}, &HighScore::points);
         return scores;
     } catch (const nlohmann::json::exception &) {
         return tl::nullopt;

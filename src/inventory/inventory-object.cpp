@@ -18,7 +18,6 @@
 #include "view/display-messages.h"
 #include "view/object-describer.h"
 #include <algorithm>
-#include <range/v3/algorithm.hpp>
 
 void vary_item(PlayerType *player_ptr, INVENTORY_IDX i_idx, ITEM_NUMBER num)
 {
@@ -312,7 +311,7 @@ int16_t store_item_to_inventory(PlayerType *player_ptr, ItemEntity *o_ptr)
 
     i = j;
     if (i < INVEN_PACK && n >= 0) {
-        const auto sort_it = ranges::find_if(INVEN_PACK_SLOTS, [&](const auto s) {
+        const auto sort_it = std::ranges::find_if(INVEN_PACK_SLOTS, [&](const auto s) {
             return object_sort_comp(player_ptr, *o_ptr, *player_ptr->inventory[s]);
         });
         i = enum2i(sort_it != INVEN_PACK_SLOTS.end() ? *sort_it : INVEN_PACK);

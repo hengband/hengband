@@ -29,9 +29,9 @@
 #include "util/probability-table.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
+#include <algorithm>
 #include <fmt/format.h>
 #include <functional>
-#include <range/v3/algorithm.hpp>
 #include <range/v3/view.hpp>
 #include <span>
 #include <vector>
@@ -84,7 +84,7 @@ std::vector<Pos2D> decide_collapse_positions(const FloorType &floor, std::span<c
 
 tl::optional<Pos2D> decide_player_dodge_posistion(PlayerType *player_ptr, std::span<const Pos2D> pos_collapses)
 {
-    const auto is_collapsed_pos = [&](const auto &pos) { return ranges::contains(pos_collapses, pos); };
+    const auto is_collapsed_pos = [&](const auto &pos) { return std::ranges::contains(pos_collapses, pos); };
     const auto pos_candidates =
         Direction::directions_8() |
         ranges::views::transform([&](const auto &d) { return player_ptr->get_neighbor(d); }) |
@@ -136,7 +136,7 @@ void process_player_damage_dodged(PlayerType *player_ptr, int m_idx)
 
 void process_hit_to_player(PlayerType *player_ptr, std::span<const Pos2D> pos_collapses, int m_idx)
 {
-    const auto has_hit = ranges::contains(pos_collapses, player_ptr->get_position());
+    const auto has_hit = std::ranges::contains(pos_collapses, player_ptr->get_position());
     if (!has_hit || has_pass_wall(player_ptr) || has_kill_wall(player_ptr)) {
         return;
     }
@@ -162,7 +162,7 @@ bool can_monster_dodge_to(const FloorType &floor, const Pos2D &p_pos, const Pos2
     auto can_dodge = floor.is_empty_at(pos) && (pos != p_pos);
     can_dodge &= !grid.is_rune_protection() && !grid.is_rune_explosion();
     can_dodge &= !grid.has(TerrainCharacteristics::PATTERN);
-    can_dodge &= !ranges::contains(collapsing_positions, pos);
+    can_dodge &= !std::ranges::contains(collapsing_positions, pos);
     return can_dodge;
 }
 

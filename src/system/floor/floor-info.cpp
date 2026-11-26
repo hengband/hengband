@@ -37,7 +37,6 @@
 #include <algorithm>
 #include <array>
 #include <fmt/format.h>
-#include <range/v3/algorithm.hpp>
 
 namespace {
 //!< @brief 最小面積ダンジョン(迷宮/金鉱)の大きさを「1ブロック×1ブロック」と定義した時の、1フロアのブロック数
@@ -66,7 +65,7 @@ FloorType::FloorType()
     , m_list(MAX_FLOOR_MONSTERS)
     , quest_number(QuestId::NONE)
 {
-    ranges::generate(this->o_list, [] { return std::make_shared<ItemEntity>(); });
+    std::ranges::generate(this->o_list, [] { return std::make_shared<ItemEntity>(); });
 
     for (const auto mte : MONSTER_TIMED_EFFECT_RANGE) {
         this->mproc_list[mte] = {};

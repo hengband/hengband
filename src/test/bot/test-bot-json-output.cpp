@@ -22,9 +22,9 @@
 #include "test/scoped-vector-wrapper.h"
 #include "test/system/monrace-list-test-access.h"
 #include "util/enum-converter.h"
+#include <algorithm>
 #include <doctest/doctest.h>
 #include <nlohmann/json.hpp>
-#include <range/v3/algorithm.hpp>
 #include <string>
 #include <utility>
 #include <vector>
@@ -215,7 +215,7 @@ TEST_CASE("make_bot_item_identity_json follows the flavor shuffle except for a f
         REQUIRE(ids.contains("flavor_id"));
         flavor_ids.push_back(ids["flavor_id"].get<short>());
     }
-    ranges::sort(flavor_ids);
+    std::ranges::sort(flavor_ids);
     CHECK(flavor_ids == std::vector<short>{ 1, 2, 3, 4, 5, 6, 7, 8 });
     CHECK(make_bot_item_identity_json(ItemEntity(FIXED_ID), false) == nlohmann::json{ { "flavor_id", FIXED_ID } });
 }

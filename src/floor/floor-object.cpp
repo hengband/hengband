@@ -36,9 +36,9 @@
 #include "window/display-sub-windows.h"
 #include "wizard/wizard-messages.h"
 #include "world/world.h"
+#include <algorithm>
 #include <fmt/format.h>
-#include <range/v3/algorithm.hpp>
-#include <range/v3/functional.hpp>
+#include <functional>
 #include <range/v3/range/conversion.hpp>
 #include <range/v3/view.hpp>
 
@@ -247,7 +247,7 @@ void delete_object_idx(PlayerType *player_ptr, OBJECT_IDX o_idx)
     // 最後尾のアイテムを削除対象の要素に移動することで配列を詰める
     const auto back_i_idx = static_cast<OBJECT_IDX>(floor.o_list.size() - 1);
     auto &list = get_o_idx_list_contains(floor, back_i_idx);
-    ranges::replace(list, back_i_idx, o_idx);
+    std::ranges::replace(list, back_i_idx, o_idx);
     item_ptr = floor.o_list.back();
     floor.o_list.pop_back();
 
@@ -274,7 +274,7 @@ void excise_object_idx(FloorType &floor, OBJECT_IDX o_idx)
  */
 void delete_items(PlayerType *player_ptr, std::vector<OBJECT_IDX> delete_i_idx_list)
 {
-    ranges::sort(delete_i_idx_list, ranges::greater{});
+    std::ranges::sort(delete_i_idx_list, std::ranges::greater{});
 
     for (const auto delete_i_idx : delete_i_idx_list) {
         delete_object_idx(player_ptr, delete_i_idx);

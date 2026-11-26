@@ -7,7 +7,7 @@
 #include "system/monrace/monrace-allocation.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
-#include <range/v3/algorithm.hpp>
+#include <algorithm>
 #include <range/v3/view.hpp>
 
 MonraceAllocationEntry::MonraceAllocationEntry(MonraceId index, int level, short prob1, short prob2)
@@ -87,7 +87,7 @@ void MonraceAllocationTable::initialize()
         this->entries.emplace_back(id, monrace->level, prob, prob);
     }
 
-    ranges::stable_sort(this->entries, {}, &MonraceAllocationEntry::level);
+    std::ranges::stable_sort(this->entries, {}, &MonraceAllocationEntry::level);
 }
 
 const MonraceAllocationEntry &MonraceAllocationTable::get_entry(int index) const

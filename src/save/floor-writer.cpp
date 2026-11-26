@@ -15,7 +15,7 @@
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
 #include "util/angband-files.h"
-#include <range/v3/algorithm.hpp>
+#include <algorithm>
 #include <range/v3/view.hpp>
 
 namespace {
@@ -155,7 +155,7 @@ void wr_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
 
     // 匂いの付いたグリッドは足跡のまわりだけなので、付いているものだけを書く
     const auto is_scented = [&floor](const Pos2D &pos) { return floor.get_grid(pos).when != 0; };
-    wr_u16b(static_cast<uint16_t>(ranges::count_if(floor.get_area(), is_scented)));
+    wr_u16b(static_cast<uint16_t>(std::ranges::count_if(floor.get_area(), is_scented)));
     for (const auto &pos : floor.get_area() | ranges::views::filter(is_scented)) {
         wr_byte(static_cast<uint8_t>(pos.y));
         wr_byte(static_cast<uint8_t>(pos.x));

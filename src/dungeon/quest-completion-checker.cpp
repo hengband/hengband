@@ -17,7 +17,6 @@
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include <algorithm>
-#include <range/v3/algorithm.hpp>
 
 QuestCompletionChecker::QuestCompletionChecker(PlayerType *player_ptr, const MonsterEntity &monster)
     : player_ptr(player_ptr)
@@ -209,7 +208,7 @@ int QuestCompletionChecker::count_all_hostile_monsters()
         return grid.has_monster() && floor.m_list[grid.m_idx].is_hostile();
     };
 
-    return ranges::count_if(floor.get_area(), hostile_monster_exists);
+    return std::ranges::count_if(floor.get_area(), hostile_monster_exists);
 }
 
 Pos2D QuestCompletionChecker::make_stairs(const bool create_stairs)

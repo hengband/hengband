@@ -11,7 +11,7 @@
 #include "system/monster-entity.h"
 #include "timed-effect/timed-effects.h"
 #include "world/world.h"
-#include <range/v3/algorithm.hpp>
+#include <algorithm>
 
 /*!
  * @brief プレイヤー構造体実体 / Static player info record
@@ -27,7 +27,7 @@ PlayerType::PlayerType()
     : inventory(INVEN_TOTAL)
     , timed_effects(std::make_shared<TimedEffects>())
 {
-    ranges::generate(this->inventory, [] { return std::make_shared<ItemEntity>(); });
+    std::ranges::generate(this->inventory, [] { return std::make_shared<ItemEntity>(); });
 }
 
 /*!
@@ -99,7 +99,7 @@ bool PlayerType::is_fully_healthy() const
  */
 bool PlayerType::is_wielding(FixedArtifactId fa_id) const
 {
-    return ranges::any_of(INVEN_WIELDING_SLOTS,
+    return std::ranges::any_of(INVEN_WIELDING_SLOTS,
         [&](auto slot) {
             const auto &item = this->inventory[slot];
             return item->is_valid() && item->is_specific_artifact(fa_id);

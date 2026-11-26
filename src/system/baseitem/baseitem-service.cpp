@@ -15,8 +15,8 @@
 #include "util/flag-group.h"
 #include "view/display-symbol.h"
 #include "world/world.h"
+#include <algorithm>
 #include <functional>
-#include <range/v3/algorithm/for_each.hpp>
 #include <range/v3/view.hpp>
 
 void BaseitemService::initialize_baseitem_records()
@@ -30,7 +30,7 @@ void BaseitemService::initialize_baseitem_configs()
     const auto &baseitems = BaseitemList::get_instance();
     auto &baseitem_configs = BaseitemConfigs::get_instance();
     const auto range = ranges::views::iota(0) | ranges::views::take(baseitems.size());
-    ranges::for_each(range, [&baseitems, &baseitem_configs](short bi_id) {
+    std::ranges::for_each(range, [&baseitems, &baseitem_configs](short bi_id) {
         const auto &baseitem = baseitems.get_baseitem(bi_id);
         baseitem_configs.emplace_back(baseitem.get_symbol());
     });
@@ -41,7 +41,7 @@ void BaseitemService::reset_all_visuals()
     const auto &baseitems = BaseitemList::get_instance();
     auto &baseitem_configs = BaseitemConfigs::get_instance();
     const auto range = ranges::views::iota(0) | ranges::views::take(baseitems.size());
-    ranges::for_each(range, [&baseitems, &baseitem_configs](short bi_id) {
+    std::ranges::for_each(range, [&baseitems, &baseitem_configs](short bi_id) {
         const auto &baseitem = baseitems.get_baseitem(bi_id);
         baseitem_configs.set_config(bi_id, baseitem.get_symbol());
     });
