@@ -24,8 +24,8 @@
 #include "object-activation/activation-util.h"
 #include "object-enchant/activation-info-table.h"
 #include "object-enchant/object-ego.h"
+#include "object-use/magic-device-chance.h"
 #include "object/object-info.h"
-#include "player-base/player-class.h"
 #include "player-status/player-energy.h"
 #include "racial/racial-android.h"
 #include "spell-kind/spells-launcher.h"
@@ -42,43 +42,12 @@
 #include "system/player-type-definition.h"
 #include "target/target-getter.h"
 #include "term/screen-processor.h"
-#include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 
-/*!
- * @brief 混乱による技能補正を適用し、発動の成功・失敗重みを設定する
- * @param player_ptr プレイヤーへの参照ポインタ
- * @param ae_ptr 発動情報への参照ポインタ
- */
-static void decide_chance_fail(PlayerType *player_ptr, ae_type *ae_ptr)
+static bool check_activation_success(bool success)
 {
-    auto skill = player_ptr->skill_dev;
-    if (player_ptr->effects()->confusion().is_active()) {
-        skill /= 2;
-    }
-
-    ae_ptr->decide_chance_fail(skill);
-}
-
-static void decide_activation_success(PlayerType *player_ptr, ae_type *ae_ptr)
-{
-    if (PlayerClass(player_ptr).equals(PlayerClassType::BERSERKER)) {
-        ae_ptr->success = false;
-        return;
-    }
-
-    if (ae_ptr->chance > ae_ptr->fail) {
-        ae_ptr->success = randint0(ae_ptr->chance * 2) >= ae_ptr->fail;
-        return;
-    }
-
-    ae_ptr->success = randint0(ae_ptr->fail * 2) < ae_ptr->chance;
-}
-
-static bool check_activation_success(ae_type *ae_ptr)
-{
-    if (ae_ptr->success) {
+    if (success) {
         return true;
     }
 
@@ -91,9 +60,9 @@ static bool check_activation_success(ae_type *ae_ptr)
     return false;
 }
 
-static bool check_activation_conditions(PlayerType *player_ptr, ae_type *ae_ptr)
+static bool check_activation_conditions(PlayerType *player_ptr, ae_type *ae_ptr, bool success)
 {
-    if (!check_activation_success(ae_ptr)) {
+    if (!check_activation_success(success)) {
         return false;
     }
 
@@ -171,13 +140,12 @@ void exe_activate(PlayerType *player_ptr, INVENTORY_IDX i_idx)
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
     ae_type ae(player_ptr, i_idx);
     ae.decide_activation_level();
-    decide_chance_fail(player_ptr, &ae);
     if (cmd_limit_time_walk(player_ptr)) {
         return;
     }
 
-    decide_activation_success(player_ptr, &ae);
-    if (!check_activation_conditions(player_ptr, &ae)) {
+    const auto success = try_zap_rod_or_activate(player_ptr, ae.lev);
+    if (!check_activation_conditions(player_ptr, &ae, success)) {
         return;
     }
 

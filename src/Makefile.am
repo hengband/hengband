@@ -716,6 +716,7 @@ libhengband_a_SOURCES = \
 	object-hook/hook-weapon.cpp object-hook/hook-weapon.h \
 	\
 	object-use/item-use-checker.cpp object-use/item-use-checker.h \
+	object-use/magic-device-chance.cpp object-use/magic-device-chance.h \
 	object-use/throw-execution.cpp object-use/throw-execution.h \
 	object-use/use-execution.cpp object-use/use-execution.h \
 	object-use/zaprod-execution.cpp object-use/zaprod-execution.h \
@@ -1270,7 +1271,6 @@ hengband_test_SOURCES = \
 	test/floor/test-floor-changer.cpp \
 	test/game-option/test-runtime-arguments.cpp \
 	test/floor/test-floor-events.cpp \
-	test/object-activation/test-activation-util.cpp \
 	test/object-enchant/test-item-feeling.cpp \
 	test/object-enchant/test-item-magic-applier.cpp \
 	test/object-enchant/test-object-ego.cpp \
@@ -1300,6 +1300,7 @@ hengband_test_SOURCES = \
 	test/mutation/test-mutation-roll-table.cpp \
 	test/object/test-object-info.cpp \
 	test/object-use/quaff/test-quaff-execution.cpp \
+	test/object-use/test-magic-device-chance.cpp \
 	test/player-status/test-player-status-base.cpp \
 	test/player/test-player-realm.cpp \
 	test/player/test-player-skill.cpp \
