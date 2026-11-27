@@ -790,6 +790,10 @@ bool do_cmd_mane(PlayerType *player_ptr, bool baigaesi)
 
     chance += player_ptr->to_m_chance;
 
+    if (player_ptr->is_wielding(FixedArtifactId::GOGO_PENDANT)) {
+        chance -= 10;
+    }
+
     /* Extract the minimum failure rate */
     minfail = adj_mag_fail[player_ptr->stat_index[spell.use_stat]];
 
