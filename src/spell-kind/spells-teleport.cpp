@@ -18,7 +18,6 @@
 #include "monster-race/race-brightness-mask.h"
 #include "monster/monster-info.h"
 #include "monster/monster-status-setter.h"
-#include "monster/monster-update.h"
 #include "monster/monster-util.h"
 #include "player-base/player-class.h"
 #include "player/player-move.h"
@@ -164,13 +163,8 @@ bool teleport_away(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION dis, tele
     }
 
     sound(SoundKind::TPOTHER);
-    floor.get_grid(m_pos_orig).m_idx = 0;
-    floor.get_grid(m_pos).m_idx = m_idx;
-    monster.set_position(m_pos);
     monster.reset_target();
-    update_monster(player_ptr, m_idx, true);
-    lite_spot(player_ptr, m_pos_orig);
-    lite_spot(player_ptr, m_pos);
+    move_monster_to(player_ptr, monster, m_pos);
 
     if (monster.get_monrace().brightness_flags.has_any_of(ld_mask)) {
         DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::MONSTER_LITE);
@@ -200,8 +194,7 @@ void teleport_monster_to(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION ty,
         return;
     }
 
-    const auto m_pos_orig = monster.get_position();
-    Pos2D m_pos = m_pos_orig;
+    auto m_pos = monster.get_position();
     auto dis = 2;
     auto min = dis / 2;
     auto attempts = 500;
@@ -241,12 +234,7 @@ void teleport_monster_to(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION ty,
     }
 
     sound(SoundKind::TPOTHER);
-    floor.get_grid(m_pos_orig).m_idx = 0;
-    floor.get_grid(m_pos).m_idx = m_idx;
-    monster.set_position(m_pos);
-    update_monster(player_ptr, m_idx, true);
-    lite_spot(player_ptr, m_pos_orig);
-    lite_spot(player_ptr, m_pos);
+    move_monster_to(player_ptr, monster, m_pos);
 
     if (monster.get_monrace().brightness_flags.has_any_of(ld_mask)) {
         DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::MONSTER_LITE);

@@ -2,12 +2,11 @@
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
 #include "floor/floor-util.h"
-#include "grid/grid.h"
 #include "monster-floor/monster-generator.h"
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
 #include "monster/monster-info.h"
-#include "monster/monster-update.h"
+#include "monster/monster-util.h"
 #include "mspell/mspell-checker.h"
 #include "mspell/mspell-util.h"
 #include "spell-kind/spells-launcher.h"
@@ -368,20 +367,12 @@ MONSTER_NUMBER summon_LAFFEY_II(PlayerType *player_ptr, const Pos2D &position, M
     if (!floor.inside_arena && real_num < MAX_BUNBUN_NUM) {
         for (auto &monster : floor.m_list) {
             if (monster.r_idx == MonraceId::BUNBUN_STRIKERS) {
-                const auto current_position = monster.get_position();
-                auto &current_grid = floor.get_grid(current_position);
-                auto target_m_idx = current_grid.m_idx;
                 const auto attract_position = mon_scatter(player_ptr, MonraceId::BUNBUN_STRIKERS, position, 2);
                 if (!attract_position) {
                     continue;
                 }
 
-                current_grid.m_idx = 0;
-                floor.get_grid(*attract_position).m_idx = target_m_idx;
-                monster.set_position(*attract_position);
-                update_monster(player_ptr, target_m_idx, true);
-                lite_spot(player_ptr, current_position);
-                lite_spot(player_ptr, *attract_position);
+                move_monster_to(player_ptr, monster, *attract_position);
 
                 count++;
             }
