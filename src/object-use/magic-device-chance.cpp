@@ -67,3 +67,40 @@ bool try_zap_rod_or_activate(PlayerType *player_ptr, int level)
 
     return randint0(weights.failure * 2) < weights.success;
 }
+
+/*!
+ * @brief 魔法棒・杖の使いやすさの判定に使うレベルを求める
+ * @param baseitem_level 魔法棒・杖のベースアイテムのレベル
+ * @return 50 を超える分を半分にしたレベル
+ * @details 成否判定のほか、初めて使って種類がわかったときの経験値にも使う。
+ */
+int calc_wand_staff_level(int baseitem_level)
+{
+    if (baseitem_level > 50) {
+        return 50 + (baseitem_level - 50) / 2;
+    }
+
+    return baseitem_level;
+}
+
+/*!
+ * @brief 魔法棒・杖を使えるかを抽選する
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param level calc_wand_staff_level() で求めたレベル
+ * @return 使えたら true
+ * @details 技能からレベルを引いた値で抽選する。値が USE_DEVICE に満たなくても、低い確率で USE_DEVICE として抽選し直す。
+ * バーサーカーは乱数を引いた後で必ず失敗する。
+ */
+bool try_use_wand_or_staff(PlayerType *player_ptr, int level)
+{
+    auto chance = calc_device_skill(player_ptr) - level;
+    if ((chance < USE_DEVICE) && one_in_(USE_DEVICE - chance + 1)) {
+        chance = USE_DEVICE;
+    }
+
+    if ((chance < USE_DEVICE) || (randint1(chance) < USE_DEVICE)) {
+        return false;
+    }
+
+    return !PlayerClass(player_ptr).equals(PlayerClassType::BERSERKER);
+}

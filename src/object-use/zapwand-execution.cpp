@@ -9,9 +9,9 @@
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "object-use/item-use-checker.h"
+#include "object-use/magic-device-chance.h"
 #include "object/object-info.h"
 #include "perception/object-perception.h"
-#include "player-base/player-class.h"
 #include "player-status/player-energy.h"
 #include "status/experience.h"
 #include "sv-definition/sv-wand-types.h"
@@ -20,7 +20,6 @@
 #include "system/player-type-definition.h"
 #include "target/target-getter.h"
 #include "term/screen-processor.h"
-#include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "view/object-describer.h"
@@ -60,22 +59,8 @@ void ObjectZapWandEntity::execute(INVENTORY_IDX i_idx)
         return;
     }
 
-    auto item_level = item->get_baseitem_level();
-    if (item_level > 50) {
-        item_level = 50 + (item_level - 50) / 2;
-    }
-
-    auto chance = this->player_ptr->skill_dev;
-    if (this->player_ptr->effects()->confusion().is_active()) {
-        chance = chance / 2;
-    }
-
-    chance = chance - item_level;
-    if ((chance < USE_DEVICE) && one_in_(USE_DEVICE - chance + 1)) {
-        chance = USE_DEVICE;
-    }
-
-    if ((chance < USE_DEVICE) || (randint1(chance) < USE_DEVICE) || PlayerClass(this->player_ptr).equals(PlayerClassType::BERSERKER)) {
+    const auto item_level = calc_wand_staff_level(item->get_baseitem_level());
+    if (!try_use_wand_or_staff(this->player_ptr, item_level)) {
         if (flush_failure) {
             flush();
         }

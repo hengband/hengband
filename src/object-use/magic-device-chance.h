@@ -19,3 +19,5 @@ struct RodActivationWeights {
 
 RodActivationWeights calc_rod_activation_weights(ACTION_SKILL_POWER skill, int level);
 bool try_zap_rod_or_activate(PlayerType *player_ptr, int level);
+int calc_wand_staff_level(int baseitem_level);
+bool try_use_wand_or_staff(PlayerType *player_ptr, int level);

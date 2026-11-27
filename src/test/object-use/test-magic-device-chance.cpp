@@ -28,3 +28,15 @@ TEST_CASE("Rod and activation weights preserve normal difficulty and domain boun
     CHECK(weights.success == 3);
     CHECK(weights.failure == 133);
 }
+
+/*!
+ * @brief 魔法棒・杖のレベルは 50 を超えた分だけ半分になることを確認する
+ */
+TEST_CASE("Wand and staff levels above 50 are halved for the excess")
+{
+    CHECK(calc_wand_staff_level(0) == 0);
+    CHECK(calc_wand_staff_level(50) == 50);
+    CHECK(calc_wand_staff_level(51) == 50);
+    CHECK(calc_wand_staff_level(52) == 51);
+    CHECK(calc_wand_staff_level(127) == 88);
+}
