@@ -716,7 +716,7 @@ void wiz_dump_options()
 {
     const auto path = path_build(ANGBAND_DIR_USER, "opt_info.txt");
     const auto &filename = path.string();
-    std::ofstream ofs(path);
+    std::ofstream ofs(path, std::ios::app);
     if (!ofs) {
         msg_print(_("ファイル {} を開けませんでした。", "Failed to open file {}."), filename);
         msg_erase();
