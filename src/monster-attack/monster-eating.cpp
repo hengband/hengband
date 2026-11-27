@@ -241,10 +241,7 @@ bool process_un_power(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
     recovery = std::min(recovery, monap_ptr->m_ptr->maxhp - monap_ptr->m_ptr->hp);
     monap_ptr->m_ptr->hp += recovery;
 
-    HealthBarTracker::get_instance().set_flag_if_tracking(monap_ptr->m_idx);
-    if (monap_ptr->m_ptr->is_riding()) {
-        DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::UHEALTH);
-    }
+    HealthBarTracker::get_instance().set_flags_if_shown(monap_ptr->m_idx, *monap_ptr->m_ptr);
 
     monap_ptr->o_ptr->pval = !is_magic_mastery || (monap_ptr->o_ptr->pval == 1) ? 0 : monap_ptr->o_ptr->pval - drain;
     DeferredUpdateRequests::get_instance().request_inventory_arrangement();
@@ -284,10 +281,7 @@ void process_drain_life(MonsterAttackPlayer *monap_ptr, const bool resist_drain)
         monap_ptr->m_ptr->hp = monap_ptr->m_ptr->maxhp;
     }
 
-    HealthBarTracker::get_instance().set_flag_if_tracking(monap_ptr->m_idx);
-    if (monap_ptr->m_ptr->is_riding()) {
-        DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::UHEALTH);
-    }
+    HealthBarTracker::get_instance().set_flags_if_shown(monap_ptr->m_idx, *monap_ptr->m_ptr);
 
     if (monap_ptr->m_ptr->ml && did_heal) {
         msg_print(_("{}は体力を回復したようだ。", "{} appears healthier."), str_upcase_first(monap_ptr->m_name));

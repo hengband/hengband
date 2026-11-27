@@ -92,10 +92,7 @@ bool set_monster_csleep(FloorType &floor, MONSTER_IDX m_idx, int v)
 
     auto &dur = DeferredUpdateRequests::get_instance();
     if (monster.ml) {
-        HealthBarTracker::get_instance().set_flag_if_tracking(m_idx);
-        if (monster.is_riding()) {
-            dur.set_flag(MainWindowRedrawingFlag::UHEALTH);
-        }
+        HealthBarTracker::get_instance().set_flags_if_shown(m_idx, monster);
     }
 
     if (monster.get_monrace().brightness_flags.has_any_of(has_ld_mask)) {
@@ -269,10 +266,7 @@ bool set_monster_monfear(FloorType &floor, MONSTER_IDX m_idx, int v)
     }
 
     if (monster.ml) {
-        HealthBarTracker::get_instance().set_flag_if_tracking(m_idx);
-        if (monster.is_riding()) {
-            DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::UHEALTH);
-        }
+        HealthBarTracker::get_instance().set_flags_if_shown(m_idx, monster);
     }
 
     return true;
@@ -313,10 +307,7 @@ bool set_monster_invulner(FloorType &floor, MONSTER_IDX m_idx, int v, bool energ
     }
 
     if (monster.ml) {
-        HealthBarTracker::get_instance().set_flag_if_tracking(m_idx);
-        if (monster.is_riding()) {
-            DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::UHEALTH);
-        }
+        HealthBarTracker::get_instance().set_flags_if_shown(m_idx, monster);
     }
 
     return true;

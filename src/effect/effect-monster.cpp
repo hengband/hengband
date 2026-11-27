@@ -37,7 +37,6 @@
 #include "spell-kind/spells-teleport.h"
 #include "sv-definition/sv-other-types.h"
 #include "system/angband-system.h"
-#include "system/deferred-update-requests.h"
 #include "system/enums/monrace/monrace-id.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
@@ -236,10 +235,7 @@ static bool deal_effect_damage_from_monster(PlayerType *player_ptr, EffectMonste
         return false;
     }
 
-    HealthBarTracker::get_instance().set_flag_if_tracking(em_ptr->g_ptr->m_idx);
-    if (em_ptr->m_ptr->is_riding()) {
-        DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::UHEALTH);
-    }
+    HealthBarTracker::get_instance().set_flags_if_shown(em_ptr->g_ptr->m_idx, *em_ptr->m_ptr);
 
     (void)set_monster_csleep(*player_ptr->current_floor_ptr, em_ptr->g_ptr->m_idx, 0);
     em_ptr->m_ptr->hp -= em_ptr->dam;

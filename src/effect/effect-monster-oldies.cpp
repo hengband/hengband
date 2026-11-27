@@ -6,7 +6,6 @@
 #include "monster/monster-status-setter.h"
 #include "monster/monster-status.h"
 #include "monster/monster-util.h"
-#include "system/deferred-update-requests.h"
 #include "system/enums/monrace/monrace-id.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
@@ -83,10 +82,7 @@ ProcessResult effect_monster_star_heal(PlayerType *player_ptr, EffectMonster *em
     }
 
     if (!em_ptr->dam) {
-        HealthBarTracker::get_instance().set_flag_if_tracking(em_ptr->g_ptr->m_idx);
-        if (em_ptr->m_ptr->is_riding()) {
-            DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::UHEALTH);
-        }
+        HealthBarTracker::get_instance().set_flags_if_shown(em_ptr->g_ptr->m_idx, *em_ptr->m_ptr);
 
         return ProcessResult::PROCESS_FALSE;
     }
@@ -173,10 +169,7 @@ ProcessResult effect_monster_old_heal(PlayerType *player_ptr, EffectMonster *em_
         }
     }
 
-    HealthBarTracker::get_instance().set_flag_if_tracking(em_ptr->g_ptr->m_idx);
-    if (em_ptr->m_ptr->is_riding()) {
-        DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::UHEALTH);
-    }
+    HealthBarTracker::get_instance().set_flags_if_shown(em_ptr->g_ptr->m_idx, *em_ptr->m_ptr);
 
     em_ptr->note = _("は体力を回復したようだ。", " looks healthier.");
     em_ptr->dam = 0;

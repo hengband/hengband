@@ -26,7 +26,6 @@
 #include "player/player-status-flags.h"
 #include "status/bad-status-setter.h"
 #include "status/base-status.h"
-#include "system/deferred-update-requests.h"
 #include "system/enums/monrace/monrace-id.h"
 #include "system/floor/floor-info.h"
 #include "system/monrace/monrace-definition.h"
@@ -603,10 +602,7 @@ MonsterSpellResult spell_RF6_HEAL(PlayerType *player_ptr, MONSTER_IDX m_idx, MON
     }
 
     monspell_message_base(player_ptr, m_idx, t_idx, msg, !seen, target_type);
-    HealthBarTracker::get_instance().set_flag_if_tracking(m_idx);
-    if (monster.is_riding()) {
-        DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::UHEALTH);
-    }
+    HealthBarTracker::get_instance().set_flags_if_shown(m_idx, monster);
 
     if (!monster.is_fearful()) {
         return res;

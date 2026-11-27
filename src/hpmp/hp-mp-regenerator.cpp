@@ -166,7 +166,6 @@ void regenmagic(PlayerType *player_ptr, int regen_amount)
 void regenerate_monsters(PlayerType *player_ptr)
 {
     auto &tracker = HealthBarTracker::get_instance();
-    auto &dur = DeferredUpdateRequests::get_instance();
     for (short i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
         auto &monster = player_ptr->current_floor_ptr->m_list[i];
         const auto &monrace = monster.get_monrace();
@@ -191,10 +190,7 @@ void regenerate_monsters(PlayerType *player_ptr)
                 monster.hp = monster.maxhp;
             }
 
-            tracker.set_flag_if_tracking(i);
-            if (monster.is_riding()) {
-                dur.set_flag(MainWindowRedrawingFlag::UHEALTH);
-            }
+            tracker.set_flags_if_shown(i, monster);
         }
     }
 }

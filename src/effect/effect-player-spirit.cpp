@@ -56,10 +56,7 @@ void effect_player_drain_mana(PlayerType *player_ptr, EffectPlayerType *ep_ptr)
         ep_ptr->m_ptr->hp = ep_ptr->m_ptr->maxhp;
     }
 
-    HealthBarTracker::get_instance().set_flag_if_tracking(ep_ptr->src_idx);
-    if (ep_ptr->src_ptr && ep_ptr->src_ptr->is_riding()) {
-        dur.set_flag(MainWindowRedrawingFlag::UHEALTH);
-    }
+    HealthBarTracker::get_instance().set_flags_if_shown(ep_ptr->src_idx, *ep_ptr->m_ptr);
 
     if (ep_ptr->m_ptr->ml) {
         msg_print(_("{}は気分が良さそうだ。", "{} appears healthier."), str_upcase_first(ep_ptr->m_name));
