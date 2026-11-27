@@ -3,6 +3,7 @@
 #include "core/window-redrawer.h"
 #include "effect/effect-player.h"
 #include "mind/mind-mirror-master.h"
+#include "monster/monster-status.h"
 #include "monster/monster-util.h"
 #include "player/player-damage.h"
 #include "player/player-status-flags.h"
@@ -11,7 +12,6 @@
 #include "system/deferred-update-requests.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
-#include "tracking/health-bar-tracker.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "world/world.h"
@@ -51,15 +51,7 @@ void effect_player_drain_mana(PlayerType *player_ptr, EffectPlayerType *ep_ptr)
         return;
     }
 
-    ep_ptr->m_ptr->hp += ep_ptr->dam;
-    if (ep_ptr->m_ptr->hp > ep_ptr->m_ptr->maxhp) {
-        ep_ptr->m_ptr->hp = ep_ptr->m_ptr->maxhp;
-    }
-
-    HealthBarTracker::get_instance().set_flag_if_tracking(ep_ptr->src_idx);
-    if (ep_ptr->src_ptr && ep_ptr->src_ptr->is_riding()) {
-        dur.set_flag(MainWindowRedrawingFlag::UHEALTH);
-    }
+    heal_monster(ep_ptr->src_idx, *ep_ptr->m_ptr, ep_ptr->dam);
 
     if (ep_ptr->m_ptr->ml) {
         msg_print(_("{}は気分が良さそうだ。", "{} appears healthier."), str_upcase_first(ep_ptr->m_name));

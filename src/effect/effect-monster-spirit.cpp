@@ -7,12 +7,10 @@
 #include "monster/monster-status-setter.h"
 #include "monster/monster-status.h"
 #include "monster/monster-util.h"
-#include "system/deferred-update-requests.h"
 #include "system/grid-type-definition.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
-#include "tracking/health-bar-tracker.h"
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
@@ -45,15 +43,7 @@ ProcessResult effect_monster_drain_mana(PlayerType *player_ptr, EffectMonster *e
         return ProcessResult::PROCESS_CONTINUE;
     }
 
-    em_ptr->m_caster_ptr->hp += em_ptr->dam;
-    if (em_ptr->m_caster_ptr->hp > em_ptr->m_caster_ptr->maxhp) {
-        em_ptr->m_caster_ptr->hp = em_ptr->m_caster_ptr->maxhp;
-    }
-
-    HealthBarTracker::get_instance().set_flag_if_tracking(em_ptr->src_idx);
-    if (em_ptr->m_caster_ptr->is_riding()) {
-        DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::UHEALTH);
-    }
+    heal_monster(em_ptr->src_idx, *em_ptr->m_caster_ptr, em_ptr->dam);
 
     if (em_ptr->see_s_msg) {
         angband_strcpy(em_ptr->killer, monster_desc(player_ptr, *em_ptr->m_caster_ptr, 0), sizeof(em_ptr->killer));

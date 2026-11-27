@@ -15,7 +15,6 @@
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
-#include "tracking/health-bar-tracker.h"
 
 /*!<広域マップ移動時の自然回復処理カウンタ（広域マップ1マス毎に20回処理を基本とする）*/
 int wild_regen = 20;
@@ -165,8 +164,6 @@ void regenmagic(PlayerType *player_ptr, int regen_amount)
  */
 void regenerate_monsters(PlayerType *player_ptr)
 {
-    auto &tracker = HealthBarTracker::get_instance();
-    auto &dur = DeferredUpdateRequests::get_instance();
     for (short i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
         auto &monster = player_ptr->current_floor_ptr->m_list[i];
         const auto &monrace = monster.get_monrace();
@@ -186,15 +183,7 @@ void regenerate_monsters(PlayerType *player_ptr)
                 frac *= 2;
             }
 
-            monster.hp += frac;
-            if (monster.hp > monster.maxhp) {
-                monster.hp = monster.maxhp;
-            }
-
-            tracker.set_flag_if_tracking(i);
-            if (monster.is_riding()) {
-                dur.set_flag(MainWindowRedrawingFlag::UHEALTH);
-            }
+            heal_monster(i, monster, frac);
         }
     }
 }

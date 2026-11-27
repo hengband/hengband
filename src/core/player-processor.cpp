@@ -418,10 +418,7 @@ void process_player(PlayerType *player_ptr)
                         monster.mflag2.reset(MonsterConstantFlagType::MARK);
                         monster.ml = false;
                         update_monster(player_ptr, m_idx, false);
-                        HealthBarTracker::get_instance().set_flag_if_tracking(m_idx);
-                        if (monster.is_riding()) {
-                            dur.set_flag(MainWindowRedrawingFlag::UHEALTH);
-                        }
+                        HealthBarTracker::get_instance().set_flags_if_shown(m_idx, monster);
 
                         lite_spot(player_ptr, monster.get_position());
                     }

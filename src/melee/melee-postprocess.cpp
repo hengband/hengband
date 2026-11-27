@@ -22,7 +22,6 @@
 #include "monster/monster-status-setter.h"
 #include "monster/monster-status.h"
 #include "pet/pet-fall-off.h"
-#include "system/deferred-update-requests.h"
 #include "system/floor/floor-info.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
@@ -67,10 +66,7 @@ static void prepare_redraw(mam_pp_type *mam_pp_ptr)
         return;
     }
 
-    HealthBarTracker::get_instance().set_flag_if_tracking(mam_pp_ptr->m_idx);
-    if (mam_pp_ptr->m_ptr->is_riding()) {
-        DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::UHEALTH);
-    }
+    HealthBarTracker::get_instance().set_flags_if_shown(mam_pp_ptr->m_idx, *mam_pp_ptr->m_ptr);
 }
 
 /*!

@@ -26,7 +26,6 @@
 #include "player/player-status.h"
 #include "spell-kind/spells-random.h"
 #include "status/experience.h"
-#include "system/deferred-update-requests.h"
 #include "system/enums/monrace/monrace-id.h"
 #include "system/floor/floor-info.h"
 #include "system/monrace/monrace-definition.h"
@@ -407,11 +406,8 @@ void MonsterDamageProcessor::get_exp_from_mon(const MonsterEntity &monster, int 
 
 void MonsterDamageProcessor::set_redraw()
 {
-    auto &monster = this->player_ptr->current_floor_ptr->m_list[this->m_idx];
-    HealthBarTracker::get_instance().set_flag_if_tracking(this->m_idx);
-    if (monster.is_riding()) {
-        DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::UHEALTH);
-    }
+    const auto &monster = this->player_ptr->current_floor_ptr->m_list[this->m_idx];
+    HealthBarTracker::get_instance().set_flags_if_shown(this->m_idx, monster);
 }
 
 void MonsterDamageProcessor::add_monster_fear()

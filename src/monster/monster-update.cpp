@@ -482,10 +482,7 @@ static void update_invisible_monster(PlayerType *player_ptr, um_type *um_ptr, MO
     monster.ml = true;
     lite_spot(player_ptr, um_ptr->get_position());
 
-    HealthBarTracker::get_instance().set_flag_if_tracking(m_idx);
-    if (monster.is_riding()) {
-        DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::UHEALTH);
-    }
+    HealthBarTracker::get_instance().set_flags_if_shown(m_idx, monster);
 
     if (!player_ptr->effects()->hallucination().is_active()) {
         if (monster.ap_r_idx == MonraceId::KAGE) {
@@ -521,10 +518,7 @@ static void update_visible_monster(PlayerType *player_ptr, um_type *um_ptr, MONS
     um_ptr->m_ptr->ml = false;
     lite_spot(player_ptr, um_ptr->get_position());
 
-    HealthBarTracker::get_instance().set_flag_if_tracking(m_idx);
-    if (um_ptr->m_ptr->is_riding()) {
-        DeferredUpdateRequests::get_instance().set_flag(MainWindowRedrawingFlag::UHEALTH);
-    }
+    HealthBarTracker::get_instance().set_flags_if_shown(m_idx, *um_ptr->m_ptr);
 
     if (um_ptr->do_disturb && (disturb_pets || um_ptr->m_ptr->is_hostile())) {
         disturb(player_ptr, true, true);

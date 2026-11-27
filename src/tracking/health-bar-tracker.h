@@ -1,5 +1,6 @@
 #pragma once
 
+class MonsterEntity;
 class HealthBarTracker {
 public:
     ~HealthBarTracker() = default;
@@ -14,6 +15,7 @@ public:
     short get_trackee() const;
     void set_trackee(short m_idx);
     void set_flag_if_tracking(short m_idx) const;
+    void set_flags_if_shown(short m_idx, const MonsterEntity &monster) const;
 
 private:
     HealthBarTracker() = default;
