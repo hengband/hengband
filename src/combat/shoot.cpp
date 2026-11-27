@@ -23,7 +23,6 @@
 #include "mind/snipe-types.h"
 #include "monster-floor/monster-death.h"
 #include "monster-floor/monster-move.h"
-#include "monster-race/race-brightness-mask.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-resistance-mask.h"
 #include "monster/monster-damage.h"
@@ -879,10 +878,6 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
                                 }
 
                                 move_monster_to(player_ptr, monster, pos_to);
-                                if (monster.get_monrace().brightness_flags.has_any_of(ld_mask)) {
-                                    DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::MONSTER_LITE);
-                                }
-
                                 if (delay_factor > 0) {
                                     term_fresh();
                                     term_xtra(TERM_XTRA_DELAY, delay_factor);

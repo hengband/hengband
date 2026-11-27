@@ -13,7 +13,6 @@
 #include "io/input-context.h"
 #include "io/input-key-requester.h"
 #include "mind/mind-ninja.h"
-#include "monster-race/race-brightness-mask.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-info.h"
 #include "monster/monster-util.h"
@@ -264,9 +263,6 @@ tl::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX sp
                     msg_print(_("{}を吹き飛ばした！", "You blow {} away!"), m_name);
                     monster.set_target(player_ptr->get_position());
                     move_monster_to(player_ptr, monster, pos_target);
-                    if (monster.get_monrace().brightness_flags.has_any_of(ld_mask)) {
-                        DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::MONSTER_LITE);
-                    }
                 }
             }
         }
@@ -539,9 +535,6 @@ tl::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX sp
                 }
 
                 move_monster_to(player_ptr, monster, pos_new);
-                if (monster.get_monrace().brightness_flags.has_any_of(ld_mask)) {
-                    DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::MONSTER_LITE);
-                }
 
                 /* Player can move forward? */
                 if (player_can_enter(player_ptr, grid.feat, 0)) {

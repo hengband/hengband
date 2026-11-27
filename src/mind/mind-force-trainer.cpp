@@ -13,7 +13,6 @@
 #include "mind/mind-numbers.h"
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
-#include "monster-race/race-brightness-mask.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-status.h"
 #include "monster/monster-update.h"
@@ -246,10 +245,6 @@ bool shock_power(PlayerType *player_ptr)
     msg_print(_("{}を吹き飛ばした！", "You blow {} away!"), m_name);
     monster.set_target(player_ptr->get_position());
     move_monster_to(player_ptr, monster, pos_target);
-
-    if (monrace.brightness_flags.has_any_of(ld_mask)) {
-        DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::MONSTER_LITE);
-    }
 
     return true;
 }

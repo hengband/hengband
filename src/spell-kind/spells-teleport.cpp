@@ -15,7 +15,6 @@
 #include "inventory/inventory-slot-types.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
-#include "monster-race/race-brightness-mask.h"
 #include "monster/monster-info.h"
 #include "monster/monster-status-setter.h"
 #include "monster/monster-util.h"
@@ -23,7 +22,6 @@
 #include "player/player-move.h"
 #include "player/player-status.h"
 #include "spell-kind/spells-launcher.h"
-#include "system/deferred-update-requests.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/item/item-entity.h"
@@ -165,11 +163,6 @@ bool teleport_away(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION dis, tele
     sound(SoundKind::TPOTHER);
     monster.reset_target();
     move_monster_to(player_ptr, monster, m_pos);
-
-    if (monster.get_monrace().brightness_flags.has_any_of(ld_mask)) {
-        DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::MONSTER_LITE);
-    }
-
     return true;
 }
 
@@ -235,10 +228,6 @@ void teleport_monster_to(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION ty,
 
     sound(SoundKind::TPOTHER);
     move_monster_to(player_ptr, monster, m_pos);
-
-    if (monster.get_monrace().brightness_flags.has_any_of(ld_mask)) {
-        DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::MONSTER_LITE);
-    }
 }
 
 /*!

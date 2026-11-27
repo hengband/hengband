@@ -3,7 +3,6 @@
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "grid/grid.h"
-#include "monster-race/race-brightness-mask.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-status-setter.h"
 #include "monster/monster-util.h"
@@ -144,9 +143,6 @@ bool fetch_monster(PlayerType *player_ptr)
 
     (void)set_monster_csleep(floor, m_idx, 0);
     move_monster_to(player_ptr, monster, pos_target);
-    if (monster.get_monrace().brightness_flags.has_any_of(ld_mask)) {
-        DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::MONSTER_LITE);
-    }
 
     if (monster.ml) {
         if (!player_ptr->effects()->hallucination().is_active()) {
