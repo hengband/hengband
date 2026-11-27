@@ -468,3 +468,24 @@ void place_room_inner_walls(PlayerType *player_ptr, const Rect2D &rectangle)
         place_grid(player_ptr, floor.get_grid(pos), GB_INNER);
     });
 }
+
+/*!
+ * @brief 範囲を囲む 4 辺のうち 1 つを乱数で選び、その辺の中央の位置を返す
+ * @param rectangle 範囲 (囲む辺を含まない)
+ * @return 選んだ辺の中央の位置 (範囲の 1 マス外側)
+ * @details 内側の部屋の扉を、上・下・左・右の壁のどれか 1 つの中央に付けるのに使う
+ */
+Pos2D select_random_side_center(const Rect2D &rectangle)
+{
+    const auto center = rectangle.center();
+    switch (randint1(4)) {
+    case 1:
+        return { rectangle.top_left.y - 1, center.x };
+    case 2:
+        return { rectangle.bottom_right.y + 1, center.x };
+    case 3:
+        return { center.y, rectangle.top_left.x - 1 };
+    default:
+        return { center.y, rectangle.bottom_right.x + 1 };
+    }
+}

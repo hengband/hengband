@@ -72,7 +72,7 @@ Rect2D generate_large_room(PlayerType *player_ptr, const Pos2D &center)
     return rectangle;
 }
 
-void generate_inner_room(PlayerType *player_ptr, const Pos2D &center, Rect2D &rectangle)
+void generate_inner_room(PlayerType *player_ptr, const Rect2D &rectangle)
 {
     auto &floor = *player_ptr->current_floor_ptr;
     const auto inner_rectangle = rectangle.resized(-2);
@@ -82,21 +82,7 @@ void generate_inner_room(PlayerType *player_ptr, const Pos2D &center, Rect2D &re
         floor.get_grid(pos).add_info(CAVE_NO_TELEPORT_DEST);
     }
 
-    /* Place a secret door */
-    switch (randint1(4)) {
-    case 1:
-        place_secret_door(player_ptr, { inner_rectangle.top_left.y - 1, center.x });
-        break;
-    case 2:
-        place_secret_door(player_ptr, { inner_rectangle.bottom_right.y + 1, center.x });
-        break;
-    case 3:
-        place_secret_door(player_ptr, { center.y, inner_rectangle.top_left.x - 1 });
-        break;
-    case 4:
-        place_secret_door(player_ptr, { center.y, inner_rectangle.bottom_right.x + 1 });
-        break;
-    }
+    place_secret_door(player_ptr, select_random_side_center(inner_rectangle));
 }
 
 void place_monsters_in_nest(PlayerType *player_ptr, const Pos2D &center, std::array<NestMonsterInfo, NUM_NEST_MON_TYPE> &nest_mon_info_list)
@@ -204,8 +190,8 @@ bool build_type5(PlayerType *player_ptr, DungeonData *dd_ptr)
         return false;
     }
 
-    auto rectangle = generate_large_room(player_ptr, *center);
-    generate_inner_room(player_ptr, *center, rectangle);
+    const auto rectangle = generate_large_room(player_ptr, *center);
+    generate_inner_room(player_ptr, rectangle);
 
     constexpr auto fmt_nest = _("モンスター部屋(nest)({}{})を生成します。", "Monster nest ({}{})");
     const auto &nest_filter = PitNestFilter::get_instance();

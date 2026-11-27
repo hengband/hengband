@@ -115,20 +115,7 @@ void place_pit_inner(PlayerType *player_ptr, const Pos2D &center)
         floor.get_grid(pos).add_info(CAVE_NO_TELEPORT_DEST);
     }
 
-    switch (randint1(4)) {
-    case 1:
-        place_secret_door(player_ptr, { rectangle.top_left.y - 1, center.x });
-        break;
-    case 2:
-        place_secret_door(player_ptr, { rectangle.bottom_right.y + 1, center.x });
-        break;
-    case 3:
-        place_secret_door(player_ptr, { center.y, rectangle.top_left.x - 1 });
-        break;
-    case 4:
-        place_secret_door(player_ptr, { center.y, rectangle.bottom_right.x + 1 });
-        break;
-    }
+    place_secret_door(player_ptr, select_random_side_center(rectangle));
 }
 }
 

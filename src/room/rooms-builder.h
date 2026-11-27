@@ -15,3 +15,4 @@ void place_room_floor(PlayerType *player_ptr, const Rect2D &rectangle, bool shou
 void place_room_outer_walls(PlayerType *player_ptr, const Rect2D &rectangle);
 void place_room_with_outer_walls(PlayerType *player_ptr, const Rect2D &rectangle, bool should_brighten = false);
 void place_room_inner_walls(PlayerType *player_ptr, const Rect2D &rectangle);
+Pos2D select_random_side_center(const Rect2D &rectangle);

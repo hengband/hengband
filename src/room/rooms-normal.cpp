@@ -270,20 +270,7 @@ bool build_type3(PlayerType *player_ptr, DungeonData *dd_ptr)
         place_room_inner_walls(player_ptr, vault);
 
         /* Place a secret door on the inner room */
-        switch (randint0(4)) {
-        case 0:
-            place_secret_door(player_ptr, { y1b, center->x });
-            break;
-        case 1:
-            place_secret_door(player_ptr, { y2b, center->x });
-            break;
-        case 2:
-            place_secret_door(player_ptr, { center->y, x1a });
-            break;
-        case 3:
-            place_secret_door(player_ptr, { center->y, x2a });
-            break;
-        }
+        place_secret_door(player_ptr, select_random_side_center(vault));
 
         /* Place a treasure in the vault */
         place_object(player_ptr, *center, 0);
@@ -394,21 +381,7 @@ bool build_type4(PlayerType *player_ptr, DungeonData *dd_ptr)
     switch (randint1(5)) {
         /* Just an inner room with a monster */
     case 1: {
-        /* Place a secret door */
-        switch (randint1(4)) {
-        case 1:
-            place_secret_door(player_ptr, { y1_inner - 1, center->x });
-            break;
-        case 2:
-            place_secret_door(player_ptr, { y2_inner + 1, center->x });
-            break;
-        case 3:
-            place_secret_door(player_ptr, { center->y, x1_inner - 1 });
-            break;
-        case 4:
-            place_secret_door(player_ptr, { center->y, x2_inner + 1 });
-            break;
-        }
+        place_secret_door(player_ptr, select_random_side_center(inner_rectangle));
 
         /* Place a monster in the room */
         vault_monsters(player_ptr, *center, 1);
@@ -418,41 +391,14 @@ bool build_type4(PlayerType *player_ptr, DungeonData *dd_ptr)
 
     /* Treasure Vault (with a door) */
     case 2: {
-        /* Place a secret door */
-        switch (randint1(4)) {
-        case 1:
-            place_secret_door(player_ptr, { y1_inner - 1, center->x });
-            break;
-        case 2:
-            place_secret_door(player_ptr, { y2_inner + 1, center->x });
-            break;
-        case 3:
-            place_secret_door(player_ptr, { center->y, x1_inner - 1 });
-            break;
-        case 4:
-            place_secret_door(player_ptr, { center->y, x2_inner + 1 });
-            break;
-        }
+        place_secret_door(player_ptr, select_random_side_center(inner_rectangle));
 
         /* Place another inner room */
         const Rect2D treasure_room(*center, *center);
         place_room_inner_walls(player_ptr, treasure_room);
 
         /* Place a locked door on the inner room */
-        switch (randint1(4)) {
-        case 1:
-            place_locked_door(player_ptr, *center + Pos2DVec(-1, 0));
-            break;
-        case 2:
-            place_locked_door(player_ptr, *center + Pos2DVec(1, 0));
-            break;
-        case 3:
-            place_locked_door(player_ptr, *center + Pos2DVec(0, -1));
-            break;
-        case 4:
-            place_locked_door(player_ptr, *center + Pos2DVec(0, 1));
-            break;
-        }
+        place_locked_door(player_ptr, select_random_side_center(treasure_room));
 
         /* Monsters to guard the "treasure" */
         vault_monsters(player_ptr, *center, randint1(3) + 2);
@@ -471,21 +417,7 @@ bool build_type4(PlayerType *player_ptr, DungeonData *dd_ptr)
 
     /* Inner pillar(s). */
     case 3: {
-        /* Place a secret door */
-        switch (randint1(4)) {
-        case 1:
-            place_secret_door(player_ptr, { y1_inner - 1, center->x });
-            break;
-        case 2:
-            place_secret_door(player_ptr, { y2_inner + 1, center->x });
-            break;
-        case 3:
-            place_secret_door(player_ptr, { center->y, x1_inner - 1 });
-            break;
-        case 4:
-            place_secret_door(player_ptr, { center->y, x2_inner + 1 });
-            break;
-        }
+        place_secret_door(player_ptr, select_random_side_center(inner_rectangle));
 
         /* Large Inner Pillar */
         for (auto y = center->y - 1; y <= center->y + 1; y++) {
@@ -546,21 +478,7 @@ bool build_type4(PlayerType *player_ptr, DungeonData *dd_ptr)
 
     /* Maze inside. */
     case 4: {
-        /* Place a secret door */
-        switch (randint1(4)) {
-        case 1:
-            place_secret_door(player_ptr, { y1_inner - 1, center->x });
-            break;
-        case 2:
-            place_secret_door(player_ptr, { y2_inner + 1, center->x });
-            break;
-        case 3:
-            place_secret_door(player_ptr, { center->y, x1_inner - 1 });
-            break;
-        case 4:
-            place_secret_door(player_ptr, { center->y, x2_inner + 1 });
-            break;
-        }
+        place_secret_door(player_ptr, select_random_side_center(inner_rectangle));
 
         /* Maze (really a checkerboard) */
         for (const auto &pos : inner_rectangle) {
