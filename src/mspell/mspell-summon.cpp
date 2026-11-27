@@ -583,6 +583,7 @@ MonsterSpellResult spell_RF6_S_ANGEL(PlayerType *player_ptr, POSITION y, POSITIO
     auto &floor = *player_ptr->current_floor_ptr;
     DEPTH rlev = monster_level_idx(floor, m_idx);
     bool mon_to_mon = (target_type == MONSTER_TO_MONSTER);
+    bool mon_to_player = (target_type == MONSTER_TO_PLAYER);
     bool see_either = see_monster(player_ptr, m_idx) || see_monster(player_ptr, t_idx);
     bool known = monster_near_player(floor, m_idx, t_idx);
 
@@ -606,11 +607,11 @@ MonsterSpellResult spell_RF6_S_ANGEL(PlayerType *player_ptr, POSITION y, POSITIO
 
     const auto is_blind = player_ptr->effects()->blindness().is_active();
     if (count < 2) {
-        if (is_blind && count) {
+        if (is_blind && count && mon_to_player) {
             msg_print(_("何かが間近に現れた音がする。", "You hear something appear nearby."));
         }
     } else {
-        if (is_blind) {
+        if (is_blind && mon_to_player) {
             msg_print(_("多くのものが間近に現れた音がする。", "You hear many things appear nearby."));
         }
     }
@@ -641,6 +642,7 @@ MonsterSpellResult spell_RF6_S_DEMON(PlayerType *player_ptr, POSITION y, POSITIO
     auto &floor = *player_ptr->current_floor_ptr;
     DEPTH rlev = monster_level_idx(floor, m_idx);
     bool mon_to_mon = (target_type == MONSTER_TO_MONSTER);
+    bool mon_to_player = (target_type == MONSTER_TO_PLAYER);
     bool see_either = see_monster(player_ptr, m_idx) || see_monster(player_ptr, t_idx);
     bool known = monster_near_player(floor, m_idx, t_idx);
 
@@ -656,7 +658,7 @@ MonsterSpellResult spell_RF6_S_DEMON(PlayerType *player_ptr, POSITION y, POSITIO
         count += summon_specific(player_ptr, y, x, rlev, SUMMON_DEMON, PM_ALLOW_GROUP, m_idx) ? 1 : 0;
     }
 
-    if (player_ptr->effects()->blindness().is_active() && count) {
+    if (player_ptr->effects()->blindness().is_active() && count && mon_to_player) {
         msg_print(_("何かが間近に現れた音がする。", "You hear something appear nearby."));
     }
 
@@ -686,6 +688,7 @@ MonsterSpellResult spell_RF6_S_UNDEAD(PlayerType *player_ptr, POSITION y, POSITI
     auto &floor = *player_ptr->current_floor_ptr;
     DEPTH rlev = monster_level_idx(floor, m_idx);
     bool mon_to_mon = (target_type == MONSTER_TO_MONSTER);
+    bool mon_to_player = (target_type == MONSTER_TO_PLAYER);
     bool see_either = see_monster(player_ptr, m_idx) || see_monster(player_ptr, t_idx);
     bool known = monster_near_player(floor, m_idx, t_idx);
 
@@ -701,7 +704,7 @@ MonsterSpellResult spell_RF6_S_UNDEAD(PlayerType *player_ptr, POSITION y, POSITI
         count += summon_specific(player_ptr, y, x, rlev, SUMMON_UNDEAD, PM_ALLOW_GROUP, m_idx) ? 1 : 0;
     }
 
-    if (player_ptr->effects()->blindness().is_active() && count) {
+    if (player_ptr->effects()->blindness().is_active() && count && mon_to_player) {
         msg_print(_("何かが間近に現れた音がする。", "You hear something appear nearby."));
     }
 
@@ -750,7 +753,7 @@ MonsterSpellResult spell_RF6_S_DRAGON(PlayerType *player_ptr, POSITION y, POSITI
         count += summon_specific(player_ptr, y, x, rlev, SUMMON_DRAGON, (PM_ALLOW_GROUP | monster_u_mode(floor, m_idx)), m_idx) ? 1 : 0;
     }
 
-    if (player_ptr->effects()->blindness().is_active() && count) {
+    if (player_ptr->effects()->blindness().is_active() && count && mon_to_player) {
         msg_print(_("何かが間近に現れた音がする。", "You hear something appear nearby."));
     }
 
