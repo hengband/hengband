@@ -716,8 +716,8 @@ void wiz_dump_options()
 {
     const auto path = path_build(ANGBAND_DIR_USER, "opt_info.txt");
     const auto &filename = path.string();
-    std::ofstream ofs(path);
-    if (ofs.bad()) {
+    std::ofstream ofs(path, std::ios::app);
+    if (!ofs) {
         msg_print(_("ファイル {} を開けませんでした。", "Failed to open file {}."), filename);
         msg_erase();
         return;
@@ -733,7 +733,7 @@ void wiz_dump_options()
         option_count++;
     }
 
-    ofs << "[Option bits usage on %s\n]", AngbandSystem::get_instance().build_version_expression(VersionExpression::FULL);
+    ofs << fmt::format("[Option bits usage on {}]\n\n", AngbandSystem::get_instance().build_version_expression(VersionExpression::FULL));
     ofs << "Set - Bit (Page) Option Name\n";
     ofs << "------------------------------------------------\n";
     for (auto i = 0; i < num_o_set; i++) {
