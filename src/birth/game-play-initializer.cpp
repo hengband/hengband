@@ -171,5 +171,4 @@ void init_turn(PlayerType *player_ptr)
 
     InnerGameData::get_instance().init_turn_limit();
     world.dungeon_turn = 1;
-    world.dungeon_turn_limit = TURNS_PER_DAY * (MAX_DAYS - 1) + TURNS_PER_DAY * 3 / 4;
 }
