@@ -9,8 +9,9 @@
 constexpr auto PENETRATE_INVULNERABILITY = 13; /*!< 無敵化が破られる確率(1/n) */
 constexpr auto FUEL_TORCH = 5000; /*!< 松明の基本寿命値 */
 constexpr auto FUEL_LAMP = 15000; /*!< ランタンの基本寿命値 */
-constexpr auto TOWN_DAWN = 10000; /*!< 1日分のターン */
+constexpr auto TOWN_DAWN = 10000; /*!< 1日分の時間経過処理の回数 */
 constexpr auto TURNS_PER_TICK = 10L; /*!< 時間経過処理を行うターン数の刻み */
+constexpr auto TURNS_PER_DAY = TURNS_PER_TICK * TOWN_DAWN; /*!< 1日分のゲームターン */
 constexpr auto MAX_DAYS = 20000; /*!< 内部処理中で保持される最大日数 */
 constexpr auto BTH_PLUS_ADJ = 3; /*!< 武器経験値及びプレイヤーの打撃/射撃能力に応じた修正値倍率 */
 constexpr auto MON_DRAIN_LIFE = 2; /*!< モンスターの打撃によるプレイヤーの経験値吸収基本倍率(%) */

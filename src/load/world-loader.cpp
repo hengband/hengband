@@ -110,7 +110,7 @@ static void rd_world_info(PlayerType *player_ptr)
     auto &igd = InnerGameData::get_instance();
     igd.init_turn_limit();
     auto &world = AngbandWorld::get_instance();
-    world.dungeon_turn_limit = TURNS_PER_TICK * TOWN_DAWN * (MAX_DAYS - 1) + TURNS_PER_TICK * TOWN_DAWN * 3 / 4;
+    world.dungeon_turn_limit = TURNS_PER_DAY * (MAX_DAYS - 1) + TURNS_PER_DAY * 3 / 4;
     auto &floor = *player_ptr->current_floor_ptr;
     floor.generated_turn = rd_s32b();
     auto &df = DungeonFeeling::get_instance();

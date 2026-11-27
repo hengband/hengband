@@ -187,7 +187,6 @@ TEST_CASE("Map terrain observations do not disclose stale knowledge or darkness"
     SUBCASE("Wilderness lighting follows the time of day and blindness")
     {
         const auto restore_turn = test::scoped_restore(world.game_turn);
-        constexpr auto turns_per_day = TURNS_PER_TICK * TOWN_DAWN;
         plain.symbol_configs[F_LIT_STANDARD] = { TERM_WHITE, '.' };
         plain.symbol_configs[F_LIT_DARK] = { TERM_SLATE, '.' };
         wall.symbol_configs[F_LIT_STANDARD] = { TERM_WHITE, '#' };
@@ -198,7 +197,7 @@ TEST_CASE("Map terrain observations do not disclose stale knowledge or darkness"
         grid.info = CAVE_MARK;
         world.game_turn = 0;
         CHECK(decide_map_terrain_lighting(player, pos) == F_LIT_STANDARD);
-        world.game_turn = turns_per_day / 2;
+        world.game_turn = TURNS_PER_DAY / 2;
         CHECK(decide_map_terrain_lighting(player, pos) == F_LIT_DARK);
 
         grid.feat = wall_id;
@@ -207,7 +206,7 @@ TEST_CASE("Map terrain observations do not disclose stale knowledge or darkness"
         player.effects()->blindness().set(10);
         CHECK(decide_map_terrain_lighting(player, pos) == F_LIT_DARK);
         player.effects()->blindness().set(0);
-        world.game_turn = turns_per_day / 2;
+        world.game_turn = TURNS_PER_DAY / 2;
         CHECK(decide_map_terrain_lighting(player, pos) == F_LIT_DARK);
     }
     SUBCASE("Indistinguishable lighting symbols do not expose internal illumination")

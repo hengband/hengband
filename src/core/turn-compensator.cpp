@@ -26,8 +26,8 @@ void prevent_turn_overflow(PlayerType *player_ptr)
         return;
     }
 
-    int rollback_days = 1 + (world.game_turn - game_turn_limit) / (TURNS_PER_TICK * TOWN_DAWN);
-    int32_t rollback_turns = TURNS_PER_TICK * TOWN_DAWN * rollback_days;
+    int rollback_days = 1 + (world.game_turn - game_turn_limit) / TURNS_PER_DAY;
+    int32_t rollback_turns = TURNS_PER_DAY * rollback_days;
 
     if (world.game_turn > rollback_turns) {
         world.game_turn -= rollback_turns;

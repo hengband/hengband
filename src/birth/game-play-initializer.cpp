@@ -164,12 +164,12 @@ void init_turn(PlayerType *player_ptr)
 {
     auto &world = AngbandWorld::get_instance();
     if (PlayerRace(player_ptr).life() == PlayerRaceLifeType::UNDEAD) {
-        world.game_turn = (TURNS_PER_TICK * 3 * TOWN_DAWN) / 4 + 1;
+        world.game_turn = TURNS_PER_DAY * 3 / 4 + 1;
     } else {
         world.game_turn = 1;
     }
 
     InnerGameData::get_instance().init_turn_limit();
     world.dungeon_turn = 1;
-    world.dungeon_turn_limit = TURNS_PER_TICK * TOWN_DAWN * (MAX_DAYS - 1) + TURNS_PER_TICK * TOWN_DAWN * 3 / 4;
+    world.dungeon_turn_limit = TURNS_PER_DAY * (MAX_DAYS - 1) + TURNS_PER_DAY * 3 / 4;
 }
