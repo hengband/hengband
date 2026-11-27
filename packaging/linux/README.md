@@ -24,6 +24,8 @@ PR ではビルドとチェックだけを行い、パッケージを成果物�
 | `hengband.desktop.in`                | デスクトップエントリのひな形 (`install-tree.sh` が版ごとに埋める)      |
 | `hengband.metainfo.xml.in`           | AppStream のメタデータのひな形 (版は `configure.ac` から入れる)        |
 | `hengband.png`                       | アイコン (`src/angband.ico` の 256x256 のもの)                         |
+| `fetch-takao-fonts.sh`               | 日本語版の AppImage に同梱する Takao ゴシックを、公式の配布物から取り出す |
+| `fonts.conf`                         | AppImage に同梱したフォントを fontconfig に見せる設定                  |
 
 ## 保存先
 
@@ -38,7 +40,28 @@ PR ではビルドとチェックだけを行い、パッケージを成果物�
 
 BGM と効果音は外部のプレイヤーに頼るため入れていない。タイルはサブモジュール `lib/xtra` があれば入れる。
 
-フォントはどちらもホストのものを使う。日本語版の表示には、ホストに日本語のフォント (Noto Sans CJK など) が要る。
+日本語版には Takao ゴシック (`TakaoGothic`) を同梱し、メインウィンドウの既定のフォントにする (次の節を参照)。
+サブウィンドウと英語版は、ホストのフォントを使う。
+
+## 同梱するフォントとライセンス
+
+日本語版の AppImage と Flatpak には、[Takao フォント](https://launchpad.net/takao-fonts) 15.03
+(`TakaoFonts_00303.01.tar.xz`) の `TakaoGothic.ttf` を同梱する。配布物の版と SHA-256 は
+`fetch-takao-fonts.sh` (AppImage) と `hengband-module.yml` (Flatpak) に書いてあり、ビルドのときに確かめる。
+
+Takao フォントは IPA フォントから派生したフォントで、
+IPA フォントライセンス v1.0 (IPA Font License Agreement v1.0) で配布されている。
+同梱は、契約書の第 3 条 2 項に従った「許諾プログラムの再配布」にあたるので、次を守る。
+
+- フォントの名前を変えない (ファイル名・フォント名とも `TakaoGothic` のまま)
+- フォントを改変しない (公式の配布物から取り出したファイルをそのまま入れる)
+- 使用許諾契約書の写しを添付する
+
+使用許諾契約書 (`IPA_Font_License_Agreement_v1.0.txt`) と、IPA フォントから派生した経緯を記した Takao フォントの
+`README` は、パッケージの中の `share/licenses/takao-fonts/` に置く
+(Flatpak では `/app/share/licenses/takao-fonts/`、AppImage では `usr/share/licenses/takao-fonts/`)。
+フォントは `share/fonts/takao/` に置く。Flatpak のサンドボックスはここを最初から探し、
+AppImage では起動スクリプトが `fonts.conf` を `FONTCONFIG_FILE` で渡して、ホストのフォントに加えて探させる。
 
 ## フォントとウィンドウの大きさを変える
 
@@ -51,6 +74,11 @@ Noto Sans Mono CJK JP に解決されるとメインウィンドウの高さが�
 ```bash
 fc-match "monospace-24:lang=ja:spacing=90"
 ```
+
+パッケージの日本語版では、これを避けるため、起動スクリプトがメインウィンドウの既定のフォントを同梱の
+`TakaoGothic-24:lang=ja:spacing=90` にする (96 DPI でメインウィンドウの高さは約 770px)。大きさは本体の既定の 24 のまま。
+`ANGBAND_X11_FONT_0` か `ANGBAND_X11_FONT` を指定したときは、そちらを使う。
+ビットマップフォントで描くとき (`-- -fb` を付けて起動したとき) は、このフォントを設定しない。
 
 フォントは、パッケージでも通常のビルドと同じく環境変数で変えられる (起動スクリプトはそのまま本体に渡す)。
 

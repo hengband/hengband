@@ -42,6 +42,33 @@ for f in "$libdir"/apex/*; do
     [ -e "$vardir/apex/${f##*/}" ] || cp "$f" "$vardir/apex/"
 done
 
+# AppImage に同梱したフォントは、ホストの fontconfig からは見えない。ホストの設定に同梱のフォントの
+# ディレクトリを足した設定ファイル (build-appimage.sh が置く) を使う。Flatpak では /app/share/fonts が最初から見える
+if [ -z "${FONTCONFIG_FILE:-}" ] && [ -f "$prefix/share/hengband/fonts.conf" ]; then
+    export FONTCONFIG_FILE="$prefix/share/hengband/fonts.conf"
+fi
+
+# 日本語版に Takao ゴシックを同梱したときは、メインウィンドウの既定のフォントにする。
+# 既定の monospace は環境によって行の高い日本語フォント (Noto Sans Mono CJK JP など) に解決され、
+# ウィンドウが画面に収まらないことがあるため。大きさは本体の既定 (24) のまま。利用者の指定があればそちらを使う。
+# フォント名は Xft の書式なので、TrueType フォントで描くときだけ設定する。描き方は "--" の後の -ft・-fb のうち
+# 最後のもので決まり、どちらも無ければ TrueType フォント (パッケージは Xft を有効にしてビルドする)
+use_xft=yes
+after_dashdash=no
+for arg in "$@"; do
+    if [ "$after_dashdash" = no ]; then
+        [ "$arg" = -- ] && after_dashdash=yes
+        continue
+    fi
+    case "$arg" in
+    -ft) use_xft=yes ;;
+    -fb) use_xft=no ;;
+    esac
+done
+if [ "$use_xft" = yes ] && [ -z "${ANGBAND_X11_FONT_0:-}" ] && [ -z "${ANGBAND_X11_FONT:-}" ] && [ -f "$prefix/share/fonts/takao/TakaoGothic.ttf" ]; then
+    export ANGBAND_X11_FONT_0="TakaoGothic-24:lang=ja:spacing=90"
+fi
+
 export ANGBAND_PATH="$libdir/"
 exec "$binary" \
     "-ds=$vardir/save" \

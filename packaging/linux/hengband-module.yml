@@ -1,5 +1,6 @@
 # 日本語版・英語版の Flatpak マニフェストで共通のモジュール。
-# 版ごとの configure のオプションは、マニフェストの build-options で HENGBAND_CONFIGURE_OPTS に渡す
+# 版ごとの configure のオプションは、マニフェストの build-options で HENGBAND_CONFIGURE_OPTS に渡す。
+# 日本語版は HENGBAND_FONT_DIR=takao-fonts を渡し、Takao ゴシックを同梱する (install-tree.sh を参照)
 name: hengband
 buildsystem: simple
 build-commands:
@@ -17,3 +18,9 @@ sources:
       - .flatpak-builder
       - build-flatpak
       - build-appimage
+  # 日本語版に同梱する Takao ゴシック (IPA フォントライセンス v1.0)。英語版では使わない。
+  # 版とハッシュは fetch-takao-fonts.sh と揃える
+  - type: archive
+    url: https://launchpad.net/takao-fonts/trunk/15.03/+download/TakaoFonts_00303.01.tar.xz
+    sha256: e9871f72ac69acb3e277aebbee7ca01fbebf54800733e29fafdc46133fc3552f
+    dest: takao-fonts

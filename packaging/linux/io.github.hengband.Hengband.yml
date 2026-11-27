@@ -11,5 +11,9 @@ finish-args:
   - --share=network
   # ユーザーディレクトリ (~/.angband/Hengband) をサンドボックスの中に保つ
   - --persist=.angband
+build-options:
+  env:
+    # 同梱する Takao ゴシックのディレクトリ (hengband-module.yml の sources を参照)
+    HENGBAND_FONT_DIR: takao-fonts
 modules:
   - hengband-module.yml

@@ -52,6 +52,8 @@ schema_files = \
 linux_packaging_files = \
 	packaging/linux/README.md \
 	packaging/linux/build-appimage.sh \
+	packaging/linux/fetch-takao-fonts.sh \
+	packaging/linux/fonts.conf \
 	packaging/linux/hengband-launcher.sh \
 	packaging/linux/hengband-module.yml \
 	packaging/linux/hengband.desktop.in \

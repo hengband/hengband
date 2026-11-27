@@ -6,6 +6,10 @@
 #   <app-id>  io.github.hengband.Hengband (日本語版) または io.github.hengband.HengbandEn (英語版)
 #
 # リポジトリのトップで、configure と make を済ませてから実行する。
+#
+# 日本語版では、環境変数 HENGBAND_FONT_DIR に Takao ゴシックのディレクトリ (fetch-takao-fonts.sh の出力先) を渡すと、
+# フォントを <prefix>/share/fonts/takao に、使用許諾契約書を <prefix>/share/licenses/takao-fonts に置く。
+# 起動スクリプトは、フォントが置いてあればメインウィンドウの既定のフォントにする。
 set -eu
 
 if [ $# -ne 2 ]; then
@@ -85,6 +89,14 @@ mkdir -p "$prefix/share/applications" "$prefix/share/metainfo"
 fill_template "$pkgdir/hengband.desktop.in" > "$prefix/share/applications/$app_id.desktop"
 fill_template "$pkgdir/hengband.metainfo.xml.in" > "$prefix/share/metainfo/$app_id.metainfo.xml"
 install -Dm644 "$pkgdir/hengband.png" "$prefix/share/icons/hicolor/256x256/apps/$app_id.png"
+
+# 同梱するフォント。IPA フォントライセンス v1.0 に従い、名前を変えず、改変せず、契約書の写しを添付する
+if [ "$variant" = hengband ] && [ -n "${HENGBAND_FONT_DIR:-}" ]; then
+    install -Dm644 "$HENGBAND_FONT_DIR/TakaoGothic.ttf" "$prefix/share/fonts/takao/TakaoGothic.ttf"
+    for f in IPA_Font_License_Agreement_v1.0.txt README; do
+        install -Dm644 "$HENGBAND_FONT_DIR/$f" "$prefix/share/licenses/takao-fonts/$f"
+    done
+fi
 
 for f in readme.md readme-eng.md readme_angband THIRD-PARTY-NOTICES.txt lib/help/jlicense.txt; do
     install -Dm644 "$f" "$prefix/share/doc/hengband/${f##*/}"

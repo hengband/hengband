@@ -38,7 +38,16 @@ arch=$(uname -m)
 appdir="build-appimage/$app_id.AppDir"
 
 rm -rf "$appdir"
+# 日本語版には Takao ゴシックを同梱する。HENGBAND_FONT_DIR が無ければ公式の配布物から取り出す
+if [ "$app_id" = io.github.hengband.Hengband ] && [ -z "${HENGBAND_FONT_DIR:-}" ]; then
+    sh "$pkgdir/fetch-takao-fonts.sh" build-appimage/takao-fonts
+    HENGBAND_FONT_DIR=build-appimage/takao-fonts
+    export HENGBAND_FONT_DIR
+fi
 sh "$pkgdir/install-tree.sh" "$appdir/usr" "$app_id"
+if [ -d "$appdir/usr/share/fonts" ]; then
+    install -Dm644 "$pkgdir/fonts.conf" "$appdir/usr/share/hengband/fonts.conf"
+fi
 # linuxdeploy は usr/bin のファイルをすべて ELF として扱い、シェルスクリプトがあると失敗する。
 # AppImage では起動スクリプトを AppRun として置き、usr/bin は使わない
 rm -rf "$appdir/usr/bin"
