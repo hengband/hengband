@@ -52,24 +52,6 @@ static bool check_store_general(const ItemEntity &item)
     }
 }
 
-static bool check_store_armoury(const ItemEntity &item)
-{
-    switch (item.bi_key.tval()) {
-    case ItemKindType::BOOTS:
-    case ItemKindType::GLOVES:
-    case ItemKindType::CROWN:
-    case ItemKindType::HELM:
-    case ItemKindType::SHIELD:
-    case ItemKindType::CLOAK:
-    case ItemKindType::SOFT_ARMOR:
-    case ItemKindType::HARD_ARMOR:
-    case ItemKindType::DRAG_ARMOR:
-        return true;
-    default:
-        return false;
-    }
-}
-
 static bool check_store_weapon(const ItemEntity &item)
 {
     switch (item.bi_key.tval()) {
@@ -165,23 +147,8 @@ static bool check_store_magic(const ItemEntity &item)
 
 static bool check_store_book(const ItemEntity &item)
 {
-    switch (item.bi_key.tval()) {
-    case ItemKindType::SORCERY_BOOK:
-    case ItemKindType::NATURE_BOOK:
-    case ItemKindType::CHAOS_BOOK:
-    case ItemKindType::DEATH_BOOK:
-    case ItemKindType::LIFE_BOOK:
-    case ItemKindType::TRUMP_BOOK:
-    case ItemKindType::ARCANE_BOOK:
-    case ItemKindType::CRAFT_BOOK:
-    case ItemKindType::DEMON_BOOK:
-    case ItemKindType::CRUSADE_BOOK:
-    case ItemKindType::MUSIC_BOOK:
-    case ItemKindType::HEX_BOOK:
-        return true;
-    default:
-        return false;
-    }
+    // 書店は剣術書 (武器屋で扱う) 以外のすべての魔法書を扱う
+    return item.is_spell_book() && (item.bi_key.tval() != ItemKindType::HISSATSU_BOOK);
 }
 
 static bool switch_store_check(const ItemEntity &item, StoreSaleType store_num)
@@ -190,7 +157,7 @@ static bool switch_store_check(const ItemEntity &item, StoreSaleType store_num)
     case StoreSaleType::GENERAL:
         return check_store_general(item);
     case StoreSaleType::ARMOURY:
-        return check_store_armoury(item);
+        return item.is_protector();
     case StoreSaleType::WEAPON:
         return check_store_weapon(item);
     case StoreSaleType::TEMPLE:
@@ -351,6 +318,10 @@ static int mass_magic_produce(const PRICE cost, StoreSaleType store_num)
 
 static int switch_mass_production(const ItemEntity &item, const PRICE cost, StoreSaleType store_num)
 {
+    if (item.is_spell_book()) {
+        return mass_book_produce(cost);
+    }
+
     switch (item.bi_key.tval()) {
     case ItemKindType::FOOD:
     case ItemKindType::FLASK:
@@ -359,20 +330,6 @@ static int switch_mass_production(const ItemEntity &item, const PRICE cost, Stor
     case ItemKindType::POTION:
     case ItemKindType::SCROLL:
         return mass_scroll_produce(item, cost);
-    case ItemKindType::LIFE_BOOK:
-    case ItemKindType::SORCERY_BOOK:
-    case ItemKindType::NATURE_BOOK:
-    case ItemKindType::CHAOS_BOOK:
-    case ItemKindType::DEATH_BOOK:
-    case ItemKindType::TRUMP_BOOK:
-    case ItemKindType::ARCANE_BOOK:
-    case ItemKindType::CRAFT_BOOK:
-    case ItemKindType::DEMON_BOOK:
-    case ItemKindType::CRUSADE_BOOK:
-    case ItemKindType::MUSIC_BOOK:
-    case ItemKindType::HISSATSU_BOOK:
-    case ItemKindType::HEX_BOOK:
-        return mass_book_produce(cost);
     case ItemKindType::SOFT_ARMOR:
     case ItemKindType::HARD_ARMOR:
     case ItemKindType::SHIELD:

@@ -311,31 +311,7 @@ void sense_inventory1(PlayerType *player_ptr)
             continue;
         }
 
-        auto okay = false;
-        switch (o_ptr->bi_key.tval()) {
-        case ItemKindType::SHOT:
-        case ItemKindType::ARROW:
-        case ItemKindType::BOLT:
-        case ItemKindType::BOW:
-        case ItemKindType::DIGGING:
-        case ItemKindType::HAFTED:
-        case ItemKindType::POLEARM:
-        case ItemKindType::SWORD:
-        case ItemKindType::BOOTS:
-        case ItemKindType::GLOVES:
-        case ItemKindType::HELM:
-        case ItemKindType::CROWN:
-        case ItemKindType::SHIELD:
-        case ItemKindType::CLOAK:
-        case ItemKindType::SOFT_ARMOR:
-        case ItemKindType::HARD_ARMOR:
-        case ItemKindType::DRAG_ARMOR:
-        case ItemKindType::CARD:
-            okay = true;
-            break;
-        default:
-            break;
-        }
+        const auto okay = o_ptr->is_weapon_armour_ammo() || (o_ptr->bi_key.tval() == ItemKindType::CARD);
 
         if (!okay) {
             continue;

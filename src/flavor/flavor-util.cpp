@@ -280,6 +280,11 @@ std::string describe_count_with_counter_suffix(const ItemEntity &item)
     std::stringstream ss;
     ss << item.number;
 
+    if (item.is_spell_book()) {
+        ss << "冊";
+        return ss.str();
+    }
+
     switch (item.bi_key.tval()) {
     case ItemKindType::BOLT:
     case ItemKindType::ARROW:
@@ -295,21 +300,6 @@ std::string describe_count_with_counter_suffix(const ItemEntity &item)
         break;
     case ItemKindType::POTION:
         ss << "服";
-        break;
-    case ItemKindType::LIFE_BOOK:
-    case ItemKindType::SORCERY_BOOK:
-    case ItemKindType::NATURE_BOOK:
-    case ItemKindType::CHAOS_BOOK:
-    case ItemKindType::DEATH_BOOK:
-    case ItemKindType::TRUMP_BOOK:
-    case ItemKindType::ARCANE_BOOK:
-    case ItemKindType::CRAFT_BOOK:
-    case ItemKindType::DEMON_BOOK:
-    case ItemKindType::CRUSADE_BOOK:
-    case ItemKindType::MUSIC_BOOK:
-    case ItemKindType::HISSATSU_BOOK:
-    case ItemKindType::HEX_BOOK:
-        ss << "冊";
         break;
     case ItemKindType::SOFT_ARMOR:
     case ItemKindType::HARD_ARMOR:

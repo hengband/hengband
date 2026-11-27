@@ -125,6 +125,7 @@ bool BaseitemKey::is_high_level_book() const
         return false;
     }
 
+    // 3 冊目以降の魔法書を高位として扱う
     return this->subtype_value >= 2;
 }
 
