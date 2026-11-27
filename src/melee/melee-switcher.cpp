@@ -86,6 +86,7 @@ void describe_melee_method(PlayerType *player_ptr, mam_type *mam_ptr)
     }
     case RaceBlowMethodType::SLASH: {
         mam_ptr->act = MonsterBlowFormat(_("{}を斬った。", "slashes {}."));
+        mam_ptr->touched = true;
         break;
     }
     case RaceBlowMethodType::BUTT: {
