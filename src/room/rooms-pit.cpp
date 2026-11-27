@@ -1,13 +1,11 @@
 #include "room/rooms-pit.h"
 #include "game-option/cheat-options.h"
 #include "game-option/cheat-types.h"
-#include "grid/door.h"
 #include "grid/grid.h"
 #include "monster-floor/monster-generator.h"
 #include "monster-floor/place-monster-types.h"
 #include "monster/monster-util.h"
 #include "room/pit-nest-util.h"
-#include "room/rooms-builder.h"
 #include "room/space-finder.h"
 #include "system/enums/dungeon/dungeon-id.h"
 #include "system/enums/terrain/terrain-tag.h"
@@ -23,7 +21,6 @@
 
 namespace {
 constexpr auto NUM_PIT_MONRACES = 16; //!< pit内に存在する最大モンスター種族数.
-constexpr Pos2DVec PIT_SIZE(4, 11);
 
 /*!
  * @brief 生成するPitの情報テーブル
@@ -101,22 +98,6 @@ tl::optional<std::array<MonraceId, NUM_PIT_MONRACES>> pick_pit_monraces(PlayerTy
     return whats;
 }
 
-void place_pit_outer(PlayerType *player_ptr, const Pos2D &center)
-{
-    place_room_with_outer_walls(player_ptr, Rect2D(center, PIT_SIZE));
-}
-
-void place_pit_inner(PlayerType *player_ptr, const Pos2D &center)
-{
-    auto &floor = *player_ptr->current_floor_ptr;
-    const auto rectangle = Rect2D(center, PIT_SIZE).resized(-2);
-    place_room_inner_walls(player_ptr, rectangle);
-    for (const auto &pos : rectangle) {
-        floor.get_grid(pos).add_info(CAVE_NO_TELEPORT_DEST);
-    }
-
-    place_secret_door(player_ptr, select_random_side_center(rectangle));
-}
 }
 
 /*!
@@ -179,8 +160,7 @@ bool build_type6(PlayerType *player_ptr, DungeonData *dd_ptr)
         return false;
     }
 
-    place_pit_outer(player_ptr, *center);
-    place_pit_inner(player_ptr, *center);
+    place_pit_nest_rooms(player_ptr, *center);
     const auto &monraces = MonraceList::get_instance();
     std::stable_sort(whats->begin(), whats->end(), [&monraces](const auto monrace_id1, const auto monrace_id2) {
         return monraces.order_level(monrace_id2, monrace_id1);

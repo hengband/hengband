@@ -1,10 +1,13 @@
 #include "room/pit-nest-util.h"
+#include "grid/door.h"
 #include "monster-floor/place-monster-types.h"
 #include "monster/monster-info.h"
 #include "monster/monster-list.h"
 #include "monster/monster-util.h"
+#include "room/rooms-builder.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/floor/floor-info.h"
+#include "system/grid-type-definition.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
 #include "system/player-type-definition.h"
@@ -241,4 +244,26 @@ tl::optional<MonraceId> select_pit_nest_monrace_id(PlayerType *player_ptr, Monst
     }
 
     return tl::nullopt;
+}
+
+/*!
+ * @brief pit と nest の部屋を作る
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param center 部屋の中心
+ * @details 外壁で囲んだ大きな部屋の中に、隠し扉を 1 つ付けた内壁の部屋を作る。
+ * 内側の部屋の中はテレポートの行き先にならない。
+ */
+void place_pit_nest_rooms(PlayerType *player_ptr, const Pos2D &center)
+{
+    const Rect2D rectangle(center, Pos2DVec(4, 11));
+    place_room_with_outer_walls(player_ptr, rectangle);
+
+    auto &floor = *player_ptr->current_floor_ptr;
+    const auto inner_rectangle = rectangle.resized(-2);
+    place_room_inner_walls(player_ptr, inner_rectangle);
+    for (const auto &pos : inner_rectangle) {
+        floor.get_grid(pos).add_info(CAVE_NO_TELEPORT_DEST);
+    }
+
+    place_secret_door(player_ptr, select_random_side_center(inner_rectangle));
 }

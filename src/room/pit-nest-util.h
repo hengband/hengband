@@ -2,6 +2,7 @@
 
 #include "monster-race/race-ability-flags.h"
 #include "util/flag-group.h"
+#include "util/point-2d.h"
 #include <map>
 #include <string>
 #include <tl/optional.hpp>
@@ -103,3 +104,4 @@ class MonsterEntity;
 tl::optional<NestKind> pick_nest_type(const FloorType &floor, const std::map<NestKind, nest_pit_type> &np_types);
 tl::optional<PitKind> pick_pit_type(const FloorType &floor, const std::map<PitKind, nest_pit_type> &np_types);
 tl::optional<MonraceId> select_pit_nest_monrace_id(PlayerType *player_ptr, MonsterEntity &align, int boost);
+void place_pit_nest_rooms(PlayerType *player_ptr, const Pos2D &center);

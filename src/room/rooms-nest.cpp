@@ -1,15 +1,11 @@
 #include "room/rooms-nest.h"
 #include "game-option/cheat-options.h"
 #include "game-option/cheat-types.h"
-#include "grid/door.h"
-#include "grid/grid.h"
 #include "monster-floor/monster-generator.h"
 #include "monster/monster-util.h"
 #include "room/pit-nest-util.h"
-#include "room/rooms-builder.h"
 #include "room/space-finder.h"
 #include "system/floor/floor-info.h"
-#include "system/grid-type-definition.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
 #include "system/monster-entity.h"
@@ -62,27 +58,6 @@ tl::optional<std::array<NestMonsterInfo, NUM_NEST_MON_TYPE>> pick_nest_monraces(
     }
 
     return nest_mon_info_list;
-}
-
-Rect2D generate_large_room(PlayerType *player_ptr, const Pos2D &center)
-{
-    constexpr Vector2D vec(4, 11);
-    const Rect2D rectangle(center, vec);
-    place_room_with_outer_walls(player_ptr, rectangle);
-    return rectangle;
-}
-
-void generate_inner_room(PlayerType *player_ptr, const Rect2D &rectangle)
-{
-    auto &floor = *player_ptr->current_floor_ptr;
-    const auto inner_rectangle = rectangle.resized(-2);
-    place_room_inner_walls(player_ptr, inner_rectangle);
-
-    for (const auto &pos : inner_rectangle) {
-        floor.get_grid(pos).add_info(CAVE_NO_TELEPORT_DEST);
-    }
-
-    place_secret_door(player_ptr, select_random_side_center(inner_rectangle));
 }
 
 void place_monsters_in_nest(PlayerType *player_ptr, const Pos2D &center, std::array<NestMonsterInfo, NUM_NEST_MON_TYPE> &nest_mon_info_list)
@@ -190,8 +165,7 @@ bool build_type5(PlayerType *player_ptr, DungeonData *dd_ptr)
         return false;
     }
 
-    const auto rectangle = generate_large_room(player_ptr, *center);
-    generate_inner_room(player_ptr, rectangle);
+    place_pit_nest_rooms(player_ptr, *center);
 
     constexpr auto fmt_nest = _("モンスター部屋(nest)({}{})を生成します。", "Monster nest ({}{})");
     const auto &nest_filter = PitNestFilter::get_instance();
