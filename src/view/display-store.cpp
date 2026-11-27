@@ -43,7 +43,7 @@ void display_entry(PlayerType *player_ptr, const StoreScreen &screen, int pos)
     const auto i = screen.get_page_position(pos);
 
     /* Label it, clear the line --(-- */
-    prt(fmt::format("{:c}) ", ((i > 25) ? toupper(I2A(i - 26)) : I2A(i))), i + 6, 0);
+    prt(fmt::format("{:c}) ", I2AU(i)), i + 6, 0);
 
     int cur_col = 3;
     if (show_item_graph) {

@@ -231,7 +231,7 @@ void store_purchase(PlayerType *player_ptr, StoreScreen &screen)
     COMMAND_CODE item_new;
     const auto purchased_item_name = describe_flavor(player_ptr, item, 0);
     const auto item_index = *item_num_opt;
-    const auto item_index_char = (item_index > 25) ? toupper(I2A(item_index - 26)) : I2A(item_index);
+    const auto item_index_char = I2AU(item_index);
 
     msg_print(_("{}({:c})を購入する。", "Buying {} ({:c})."), purchased_item_name, item_index_char);
     msg_erase();

@@ -59,6 +59,32 @@ constexpr int AD2I(char ch)
     return -1;
 }
 
+/*!
+ * @brief 一覧の位置をラベルの文字にする (a〜z の後は A〜Z で続ける)
+ * @details ラベルは a〜z・A〜Z の 52 個で、52 以上の位置は記号 ([ など) になり、AU2I() で位置に戻せない。
+ */
+constexpr char I2AU(int i)
+{
+    return (i < 26) ? I2A(i) : static_cast<char>(i - 26 + 'A');
+}
+
+/*!
+ * @brief ラベルの文字を一覧の位置にする (I2AU() の逆)
+ * @return a〜z なら 0〜25、A〜Z なら 26〜51、それ以外の文字なら -1
+ */
+constexpr int AU2I(char ch)
+{
+    if (('a' <= ch) && (ch <= 'z')) {
+        return A2I(ch);
+    }
+
+    if (('A' <= ch) && (ch <= 'Z')) {
+        return ch - 'A' + 26;
+    }
+
+    return -1;
+}
+
 template <typename T>
 constexpr T KTRL(T ch)
 {

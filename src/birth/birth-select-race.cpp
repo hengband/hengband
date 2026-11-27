@@ -30,11 +30,7 @@ static void enumerate_race_list(char *sym)
 {
     for (int n = 0; n < MAX_RACES; n++) {
         rp_ptr = &race_info[n];
-        if (n < 26) {
-            sym[n] = I2A(n);
-        } else {
-            sym[n] = ('A' + n - 26);
-        }
+        sym[n] = I2AU(n);
 
         put_str(birth_race_label(n, sym), 12 + (n / 5), 1 + 16 * (n % 5));
     }
@@ -147,19 +143,13 @@ static bool select_race(PlayerType *player_ptr, char *sym, int *k)
         }
 
         interpret_race_select_key_move(c, &cs);
-        *k = (islower(c) ? A2I(c) : -1);
+        *k = AU2I(c);
         if ((*k >= 0) && (*k < MAX_RACES)) {
             cs = *k;
             continue;
         }
 
-        *k = (isupper(c) ? (26 + c - 'A') : -1);
-        if ((*k >= 26) && (*k < MAX_RACES)) {
-            cs = *k;
-            continue;
-        } else {
-            *k = -1;
-        }
+        *k = -1;
 
         birth_help_option(player_ptr, c, BirthKind::RACE);
     }

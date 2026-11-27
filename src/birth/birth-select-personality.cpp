@@ -33,11 +33,7 @@ static void enumerate_personality_list(PlayerType *player_ptr, char *sym)
         }
 
         ap_ptr = &personality_info[n];
-        if (n < 26) {
-            sym[n] = I2A(n);
-        } else {
-            sym[n] = ('A' + n - 26);
-        }
+        sym[n] = I2AU(n);
 
         put_str(birth_personality_label(n, sym), 12 + (n / 4), 2 + 18 * (n % 4));
     }
@@ -209,7 +205,7 @@ static bool select_personality(PlayerType *player_ptr, int *k, concptr sym)
             continue;
         }
 
-        *k = (islower(c) ? A2I(c) : -1);
+        *k = AU2I(c);
         if ((*k >= 0) && (*k < MAX_PERSONALITIES)) {
             if ((personality_info[*k].sex == 0) || (personality_info[*k].sex == (player_ptr->psex + 1))) {
                 cs = *k;
@@ -217,15 +213,7 @@ static bool select_personality(PlayerType *player_ptr, int *k, concptr sym)
             }
         }
 
-        *k = (isupper(c) ? (26 + c - 'A') : -1);
-        if ((*k >= 26) && (*k < MAX_PERSONALITIES)) {
-            if ((personality_info[*k].sex == 0) || (personality_info[*k].sex == (player_ptr->psex + 1))) {
-                cs = *k;
-                continue;
-            }
-        } else {
-            *k = -1;
-        }
+        *k = -1;
 
         birth_help_option(player_ptr, c, BirthKind::PERSONALITY);
     }

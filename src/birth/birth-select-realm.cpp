@@ -67,7 +67,7 @@ static void analyze_realms(PlayerType *player_ptr, RealmType selecting_realm, co
             birth_realm_ptr->cs = birth_realm_ptr->n;
         }
 
-        birth_realm_ptr->sym[birth_realm_ptr->n] = I2A(birth_realm_ptr->n);
+        birth_realm_ptr->sym[birth_realm_ptr->n] = I2AU(birth_realm_ptr->n);
 
         const auto buf = fmt::format("{:c}{:c} {}", birth_realm_ptr->sym[birth_realm_ptr->n], birth_realm_ptr->p2, PlayerRealm::get_name(realm));
         put_str(buf, 12 + (birth_realm_ptr->n / 5), 2 + 15 * (birth_realm_ptr->n % 5));
@@ -162,19 +162,13 @@ static bool get_a_realm(PlayerType *player_ptr, birth_realm_type *birth_realm_pt
             break;
         }
 
-        birth_realm_ptr->k = (islower(c) ? A2I(c) : -1);
+        birth_realm_ptr->k = AU2I(c);
         if ((birth_realm_ptr->k >= 0) && (birth_realm_ptr->k < birth_realm_ptr->n)) {
             birth_realm_ptr->cs = birth_realm_ptr->k;
             continue;
         }
 
-        birth_realm_ptr->k = (isupper(c) ? (26 + c - 'A') : -1);
-        if ((birth_realm_ptr->k >= 26) && (birth_realm_ptr->k < birth_realm_ptr->n)) {
-            birth_realm_ptr->cs = birth_realm_ptr->k;
-            continue;
-        } else {
-            birth_realm_ptr->k = -1;
-        }
+        birth_realm_ptr->k = -1;
 
         birth_help_option(player_ptr, c, BirthKind::REALM);
     }

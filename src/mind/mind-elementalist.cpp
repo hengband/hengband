@@ -1124,7 +1124,7 @@ static void display_realm_cursor(int i, int n, term_color_type color)
         sym = '*';
         name = _("ランダム", "Random");
     } else {
-        sym = I2A(i);
+        sym = I2AU(i);
         name = element_types.at(i2enum<ElementRealmType>(i + 1)).title.data();
     }
 
@@ -1182,9 +1182,8 @@ static tl::optional<ElementRealmType> get_element_realm(PlayerType *player_ptr, 
 {
     int cs = std::max(0, enum2i(realm) - 1);
     int os = cs;
-    int k;
 
-    const auto buf = fmt::format(_("領域を選んで下さい({:c}-{:c}) ('='初期オプション設定): ", "Choose a realm ({:c}-{:c}) ('=' for options): "), I2A(0), I2A(n - 1));
+    const auto buf = fmt::format(_("領域を選んで下さい({:c}-{:c}) ('='初期オプション設定): ", "Choose a realm ({:c}-{:c}) ('=' for options): "), I2AU(0), I2AU(n - 1));
 
     while (true) {
         display_realm_cursor(os, n, TERM_WHITE);
@@ -1213,15 +1212,8 @@ static tl::optional<ElementRealmType> get_element_realm(PlayerType *player_ptr, 
             break;
         }
 
-        k = islower(c) ? A2I(c) : -1;
+        const auto k = AU2I(c);
         if (k >= 0 && k < n) {
-            display_realm_cursor(cs, n, TERM_WHITE);
-            cs = k;
-            break;
-        }
-
-        k = isupper(c) ? (26 + c - 'A') : -1;
-        if (k >= 26 && k < n) {
             display_realm_cursor(cs, n, TERM_WHITE);
             cs = k;
             break;
