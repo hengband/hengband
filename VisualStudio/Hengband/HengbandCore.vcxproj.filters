@@ -1932,6 +1932,9 @@
     <ClCompile Include="..\..\src\object-use\item-use-checker.cpp">
       <Filter>object-use</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\object-use\magic-device-chance.cpp">
+      <Filter>object-use</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\object-use\quaff\quaff-effects.cpp">
       <Filter>object-use\quaff</Filter>
     </ClCompile>
@@ -4840,6 +4843,9 @@
       <Filter>object-hook</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\object-use\item-use-checker.h">
+      <Filter>object-use</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-use\magic-device-chance.h">
       <Filter>object-use</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\object-use\quaff\quaff-effects.h">

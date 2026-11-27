@@ -12,9 +12,9 @@
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "object-use/item-use-checker.h"
+#include "object-use/magic-device-chance.h"
 #include "object/object-info.h"
 #include "perception/object-perception.h"
-#include "player-base/player-class.h"
 #include "player-status/player-energy.h"
 #include "status/experience.h"
 #include "sv-definition/sv-other-types.h"
@@ -24,7 +24,6 @@
 #include "system/player-type-definition.h"
 #include "target/target-getter.h"
 #include "term/screen-processor.h"
-#include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
@@ -64,36 +63,7 @@ void ObjectZapRodEntity::execute(INVENTORY_IDX i_idx)
     }
 
     const auto item_level = item->get_baseitem_level();
-    auto chance = this->player_ptr->skill_dev;
-    if (this->player_ptr->effects()->confusion().is_active()) {
-        chance = chance / 2;
-    }
-
-    auto fail = item_level + 5;
-    if (chance > fail) {
-        fail -= (chance - fail) * 2;
-    } else {
-        chance -= (fail - chance) * 2;
-    }
-
-    if (fail < USE_DEVICE) {
-        fail = USE_DEVICE;
-    }
-
-    if (chance < USE_DEVICE) {
-        chance = USE_DEVICE;
-    }
-
-    bool success;
-    if (PlayerClass(this->player_ptr).equals(PlayerClassType::BERSERKER)) {
-        success = false;
-    } else if (chance > fail) {
-        success = randint0(chance * 2) >= fail;
-    } else {
-        success = randint0(fail * 2) < chance;
-    }
-
-    if (!success) {
+    if (!try_zap_rod_or_activate(this->player_ptr, item_level)) {
         if (flush_failure) {
             flush();
         }
