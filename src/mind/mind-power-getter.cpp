@@ -9,16 +9,11 @@
 #include "io/input-key-requester.h"
 #include "main/sound-of-music.h"
 #include "mind/mind-explanations-table.h"
-#include "mind/mind-force-trainer.h"
 #include "mind/mind-info.h"
 #include "mind/mind-types.h"
-#include "player-info/class-info.h"
-#include "player-info/equipment-info.h"
-#include "player/player-status-table.h"
 #include "system/deferred-update-requests.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
-#include "timed-effect/timed-effects.h"
 #include "util/enum-converter.h"
 #include "util/int-char-converter.h"
 #include "util/string-processor.h"
@@ -255,8 +250,6 @@ bool MindPowerGetter::display_minds_chance(const bool only_browse)
 
 void MindPowerGetter::display_each_mind_chance(bool only_browse)
 {
-    const auto has_weapon_main = has_melee_weapon(this->player_ptr, INVEN_MAIN_HAND);
-    const auto has_weapon_sub = has_melee_weapon(this->player_ptr, INVEN_SUB_HAND);
     std::vector<BotPowerListRow> bot_rows;
     for (this->index = 0; this->index < std::ssize(mind_ptr->info); this->index++) {
         this->spell = &mind_ptr->info[this->index];
@@ -264,7 +257,7 @@ void MindPowerGetter::display_each_mind_chance(bool only_browse)
             break;
         }
 
-        calculate_mind_chance(has_weapon_main, has_weapon_sub);
+        const auto [chance, mana_cost] = calc_mind_power_chance(this->player_ptr, this->use_mind, this->index);
         const auto comment = mindcraft_info(this->player_ptr, this->use_mind, this->index);
         std::string psi_desc;
         if (use_menu) {
@@ -283,82 +276,6 @@ void MindPowerGetter::display_each_mind_chance(bool only_browse)
     }
 
     output_bot_json_power_list_snapshot(this->player_ptr, "mind", bot_rows, 0, only_browse);
-}
-
-void MindPowerGetter::calculate_mind_chance(bool has_weapon_main, bool has_weapon_sub)
-{
-    this->chance = this->spell->fail;
-    this->mana_cost = this->spell->mana_cost;
-    if (this->chance == 0) {
-        return;
-    }
-
-    this->chance -= 3 * (this->player_ptr->lev - this->spell->min_lev);
-    this->chance -= 3 * (adj_mag_stat[this->player_ptr->stat_index[mp_ptr->spell_stat]] - 1);
-    calculate_ki_chance(has_weapon_main, has_weapon_sub);
-    if ((this->use_mind != MindKindType::BERSERKER) && (this->use_mind != MindKindType::NINJUTSU) && (this->mana_cost > this->player_ptr->csp)) {
-        this->chance += 5 * (this->mana_cost - this->player_ptr->csp);
-    }
-
-    this->chance += this->player_ptr->to_m_chance;
-    PERCENTAGE minfail = adj_mag_fail[this->player_ptr->stat_index[mp_ptr->spell_stat]];
-    if (this->chance < minfail) {
-        this->chance = minfail;
-    }
-
-    this->chance += this->player_ptr->effects()->stun().get_magic_chance_penalty();
-    add_ki_chance();
-    if (this->chance > 95) {
-        this->chance = 95;
-    }
-}
-
-void MindPowerGetter::calculate_ki_chance(bool has_weapon_main, bool has_weapon_sub)
-{
-    if (this->use_mind != MindKindType::KI) {
-        return;
-    }
-
-    if (heavy_armor(this->player_ptr)) {
-        this->chance += 20;
-    }
-
-    if (this->player_ptr->is_icky_wield[0]) {
-        this->chance += 20;
-    } else if (has_weapon_main) {
-        this->chance += 10;
-    }
-
-    if (this->player_ptr->is_icky_wield[1]) {
-        chance += 20;
-    } else if (has_weapon_sub) {
-        this->chance += 10;
-    }
-
-    if (this->index == 5) {
-        for (auto j = 0; j < get_current_ki(this->player_ptr) / 50; j++) {
-            this->mana_cost += (j + 1) * 3 / 2;
-        }
-    }
-}
-
-void MindPowerGetter::add_ki_chance()
-{
-    if (this->use_mind != MindKindType::KI) {
-        return;
-    }
-
-    if (heavy_armor(this->player_ptr)) {
-        this->chance += 5;
-    }
-
-    if (this->player_ptr->is_icky_wield[0]) {
-        this->chance += 5;
-    }
-
-    if (this->player_ptr->is_icky_wield[1]) {
-        this->chance += 5;
-    }
 }
 
 void MindPowerGetter::make_choice_lower()

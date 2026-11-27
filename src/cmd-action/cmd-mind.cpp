@@ -21,13 +21,13 @@
 #include "game-option/disturbance-options.h"
 #include "game-option/input-options.h"
 #include "grid/grid.h"
-#include "inventory/inventory-slot-types.h"
 #include "io/input-context.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "mind/mind-berserker.h"
 #include "mind/mind-explanations-table.h"
 #include "mind/mind-force-trainer.h"
+#include "mind/mind-info.h"
 #include "mind/mind-mindcrafter.h"
 #include "mind/mind-mirror-master.h"
 #include "mind/mind-ninja.h"
@@ -35,11 +35,8 @@
 #include "mind/mind-power-getter.h"
 #include "mind/mind-types.h"
 #include "player-base/player-class.h"
-#include "player-info/class-info.h"
-#include "player-info/equipment-info.h"
 #include "player-status/player-energy.h"
 #include "player/player-damage.h"
-#include "player/player-status-table.h"
 #include "player/player-status.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell/spell-info.h"
@@ -50,7 +47,6 @@
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
-#include "timed-effect/timed-effects.h"
 #include "util/enum-converter.h"
 #include "view/display-messages.h"
 #include "view/display-util.h"
@@ -65,10 +61,8 @@ struct cm_type {
     SPELL_IDX n; //!< 職業種別毎ID
     int b; //!< 失敗時チャート用乱数
     PERCENTAGE chance; //!< 失敗率
-    PERCENTAGE minfail; //!< 最低失敗率
     PLAYER_LEVEL plev; //!< 取得レベル
     int old_csp; //!< 行使前のMP
-    mind_type spell; //!< 職業技能の基本設定構造体
     bool cast; //!< 行使の成否
     int mana_cost; //!< 最終算出消費MP
     bool on_mirror; //!< 鏡の上に乗っているどうかの判定
@@ -81,7 +75,6 @@ static cm_type *initialize_cm_type(PlayerType *player_ptr, cm_type *cm_ptr)
 {
     cm_ptr->n = 0;
     cm_ptr->b = 0;
-    cm_ptr->minfail = 0;
     cm_ptr->plev = player_ptr->lev;
     cm_ptr->old_csp = player_ptr->csp;
     cm_ptr->on_mirror = false;
@@ -121,35 +114,6 @@ static void switch_mind_kind(PlayerType *player_ptr, cm_type *cm_ptr)
     }
 }
 
-static void decide_mind_ki_chance(PlayerType *player_ptr, cm_type *cm_ptr)
-{
-    if (cm_ptr->use_mind != MindKindType::KI) {
-        return;
-    }
-
-    if (heavy_armor(player_ptr)) {
-        cm_ptr->chance += 20;
-    }
-
-    if (player_ptr->is_icky_wield[0]) {
-        cm_ptr->chance += 20;
-    } else if (has_melee_weapon(player_ptr, INVEN_MAIN_HAND)) {
-        cm_ptr->chance += 10;
-    }
-
-    if (player_ptr->is_icky_wield[1]) {
-        cm_ptr->chance += 20;
-    } else if (has_melee_weapon(player_ptr, INVEN_SUB_HAND)) {
-        cm_ptr->chance += 10;
-    }
-
-    if (cm_ptr->n == 5) {
-        for (int j = 0; j < get_current_ki(player_ptr) / 50; j++) {
-            cm_ptr->mana_cost += (j + 1) * 3 / 2;
-        }
-    }
-}
-
 static bool check_mind_hp_mp_sufficiency(PlayerType *player_ptr, cm_type *cm_ptr)
 {
     if ((cm_ptr->use_mind == MindKindType::BERSERKER) || (cm_ptr->use_mind == MindKindType::NINJUTSU)) {
@@ -171,42 +135,6 @@ static bool check_mind_hp_mp_sufficiency(PlayerType *player_ptr, cm_type *cm_ptr
     }
 
     return input_check(_("それでも挑戦しますか? ", "Attempt it anyway? "));
-}
-
-static void decide_mind_chance(PlayerType *player_ptr, cm_type *cm_ptr)
-{
-    if (cm_ptr->chance == 0) {
-        return;
-    }
-
-    cm_ptr->chance -= 3 * (cm_ptr->plev - cm_ptr->spell.min_lev);
-    cm_ptr->chance += player_ptr->to_m_chance;
-    cm_ptr->chance -= 3 * (adj_mag_stat[player_ptr->stat_index[mp_ptr->spell_stat]] - 1);
-    if ((cm_ptr->mana_cost > player_ptr->csp) && (cm_ptr->use_mind != MindKindType::BERSERKER) && (cm_ptr->use_mind != MindKindType::NINJUTSU)) {
-        cm_ptr->chance += 5 * (cm_ptr->mana_cost - player_ptr->csp);
-    }
-
-    cm_ptr->minfail = adj_mag_fail[player_ptr->stat_index[mp_ptr->spell_stat]];
-    if (cm_ptr->chance < cm_ptr->minfail) {
-        cm_ptr->chance = cm_ptr->minfail;
-    }
-
-    cm_ptr->chance += player_ptr->effects()->stun().get_magic_chance_penalty();
-    if (cm_ptr->use_mind != MindKindType::KI) {
-        return;
-    }
-
-    if (heavy_armor(player_ptr)) {
-        cm_ptr->chance += 5;
-    }
-
-    if (player_ptr->is_icky_wield[0]) {
-        cm_ptr->chance += 5;
-    }
-
-    if (player_ptr->is_icky_wield[1]) {
-        cm_ptr->chance += 5;
-    }
 }
 
 static void check_mind_mindcrafter(PlayerType *player_ptr, cm_type *cm_ptr)
@@ -415,17 +343,11 @@ void do_cmd_mind(PlayerType *player_ptr)
     }
 
     switch_mind_kind(player_ptr, cm_ptr);
-    cm_ptr->spell = mind_powers[enum2i(cm_ptr->use_mind)].info[cm_ptr->n];
-    cm_ptr->chance = cm_ptr->spell.fail;
-    cm_ptr->mana_cost = cm_ptr->spell.mana_cost;
-    decide_mind_ki_chance(player_ptr, cm_ptr);
+    const auto mind_chance = calc_mind_power_chance(player_ptr, cm_ptr->use_mind, cm_ptr->n);
+    cm_ptr->chance = mind_chance.chance;
+    cm_ptr->mana_cost = mind_chance.mana_cost;
     if (!check_mind_hp_mp_sufficiency(player_ptr, cm_ptr)) {
         return;
-    }
-
-    decide_mind_chance(player_ptr, cm_ptr);
-    if (cm_ptr->chance > 95) {
-        cm_ptr->chance = 95;
     }
 
     if (!judge_mind_chance(player_ptr, cm_ptr)) {

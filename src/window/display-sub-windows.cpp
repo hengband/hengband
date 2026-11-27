@@ -24,7 +24,6 @@
 #include "player/player-realm.h"
 #include "player/player-spell-status.h"
 #include "player/player-status-flags.h"
-#include "player/player-status-table.h"
 #include "player/player-status.h"
 #include "spell/spells-execution.h"
 #include "system/baseitem/baseitem-service.h"
@@ -845,9 +844,7 @@ static void display_spell_list(PlayerType *player_ptr)
     }
 
     if (pc.has_listed_magics()) {
-        PERCENTAGE minfail = 0;
         PLAYER_LEVEL plev = player_ptr->lev;
-        PERCENTAGE chance = 0;
         MindKindType use_mind;
         bool use_hp = false;
 
@@ -883,40 +880,24 @@ static void display_spell_list(PlayerType *player_ptr)
 
         const auto &mind_power = mind_powers[enum2i(use_mind)];
         for (int i = 0; i < std::ssize(mind_power.info); i++) {
-            byte a = TERM_WHITE;
             const auto &spell = mind_power.info[i];
             if (spell.min_lev > plev) {
                 break;
             }
 
-            chance = spell.fail;
-            chance -= 3 * (player_ptr->lev - spell.min_lev);
-            chance -= 3 * (adj_mag_stat[player_ptr->stat_index[mp_ptr->spell_stat]] - 1);
+            const auto [chance, mana_cost] = calc_mind_power_chance(player_ptr, use_mind, i);
+            byte a = TERM_WHITE;
             if (!use_hp) {
-                if (spell.mana_cost > player_ptr->csp) {
-                    chance += 5 * (spell.mana_cost - player_ptr->csp);
+                if (mana_cost > player_ptr->csp) {
                     a = TERM_ORANGE;
                 }
-            } else {
-                if (spell.mana_cost > player_ptr->chp) {
-                    chance += 100;
-                    a = TERM_RED;
-                }
-            }
-
-            minfail = adj_mag_fail[player_ptr->stat_index[mp_ptr->spell_stat]];
-            if (chance < minfail) {
-                chance = minfail;
-            }
-
-            chance += player_ptr->effects()->stun().get_magic_chance_penalty();
-            if (chance > 95) {
-                chance = 95;
+            } else if (mana_cost > player_ptr->chp) {
+                a = TERM_RED;
             }
 
             const auto comment = mindcraft_info(player_ptr, use_mind, i);
             constexpr auto fmt = "  {:c}) {:<30}{:2} {:4} {:3}%{}";
-            term_putstr(x, y + i + 1, -1, a, fmt::format(fmt, I2A(i), spell.name, spell.min_lev, spell.mana_cost, chance, comment));
+            term_putstr(x, y + i + 1, -1, a, fmt::format(fmt, I2A(i), spell.name, spell.min_lev, mana_cost, chance, comment));
         }
 
         return;
