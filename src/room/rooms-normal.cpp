@@ -14,6 +14,32 @@
 #include "system/player-type-definition.h"
 #include "util/dice.h"
 
+namespace {
+/*!
+ * @brief 重なった 2 つの部屋の床を敷き、外壁で囲む
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param room_a 1 つ目の部屋の範囲 (外壁を含まない)
+ * @param room_b 2 つ目の部屋の範囲 (外壁を含まない)
+ * @param should_brighten 明るい部屋にするか
+ * @details 両方の床を敷いてから外壁で囲み、もう一方の部屋に重なった外壁を床に敷き直す
+ */
+void place_overlapping_rooms(PlayerType *player_ptr, const Rect2D &room_a, const Rect2D &room_b, bool should_brighten)
+{
+    place_room_floor(player_ptr, room_a, should_brighten);
+    place_room_floor(player_ptr, room_b, should_brighten);
+    place_room_outer_walls(player_ptr, room_a);
+    place_room_outer_walls(player_ptr, room_b);
+    auto &floor = *player_ptr->current_floor_ptr;
+    for (const auto &pos : room_a) {
+        place_grid(player_ptr, floor.get_grid(pos), GB_FLOOR);
+    }
+
+    for (const auto &pos : room_b) {
+        place_grid(player_ptr, floor.get_grid(pos), GB_FLOOR);
+    }
+}
+}
+
 /*!
  * @brief タイプ1の部屋…通常可変長方形の部屋を生成する
  * @param player_ptr プレイヤーへの参照ポインタ
@@ -51,29 +77,7 @@ bool build_type1(PlayerType *player_ptr, DungeonData *dd_ptr)
     const auto left = center->x - width / 2;
     const auto bottom = center->y + (height - 1) / 2;
     const auto right = center->x + (width - 1) / 2;
-
-    /* Place a full floor under the room */
-    for (auto y = top - 1; y <= bottom + 1; y++) {
-        for (auto x = left - 1; x <= right + 1; x++) {
-            auto &grid = floor.get_grid({ y, x });
-            place_grid(player_ptr, grid, GB_FLOOR);
-            grid.info |= (CAVE_ROOM);
-            if (should_brighten) {
-                grid.info |= (CAVE_GLOW);
-            }
-        }
-    }
-
-    /* Walls around the room */
-    for (auto y = top - 1; y <= bottom + 1; y++) {
-        place_grid(player_ptr, floor.get_grid({ y, left - 1 }), GB_OUTER);
-        place_grid(player_ptr, floor.get_grid({ y, right + 1 }), GB_OUTER);
-    }
-
-    for (auto x = left - 1; x <= right + 1; x++) {
-        place_grid(player_ptr, floor.get_grid({ top - 1, x }), GB_OUTER);
-        place_grid(player_ptr, floor.get_grid({ bottom + 1, x }), GB_OUTER);
-    }
+    place_room_with_outer_walls(player_ptr, Rect2D(top, left, bottom, right), should_brighten);
 
     /* Hack -- Occasional curtained room */
     if (is_curtain && (bottom - top > 2) && (right - left > 2)) {
@@ -195,63 +199,7 @@ bool build_type2(PlayerType *player_ptr, DungeonData *dd_ptr)
     auto x1b = center->x - randint1(10);
     auto x2b = center->x + randint1(11);
 
-    /* Place a full floor for room "a" */
-    for (auto y = y1a - 1; y <= y2a + 1; y++) {
-        for (auto x = x1a - 1; x <= x2a + 1; x++) {
-            auto &grid = floor.get_grid({ y, x });
-            place_grid(player_ptr, grid, GB_FLOOR);
-            grid.info |= (CAVE_ROOM);
-            if (should_brighten) {
-                grid.info |= (CAVE_GLOW);
-            }
-        }
-    }
-
-    /* Place a full floor for room "b" */
-    for (auto y = y1b - 1; y <= y2b + 1; y++) {
-        for (auto x = x1b - 1; x <= x2b + 1; x++) {
-            auto &grid = floor.get_grid({ y, x });
-            place_grid(player_ptr, grid, GB_FLOOR);
-            grid.info |= (CAVE_ROOM);
-            if (should_brighten) {
-                grid.info |= (CAVE_GLOW);
-            }
-        }
-    }
-
-    /* Place the walls around room "a" */
-    for (auto y = y1a - 1; y <= y2a + 1; y++) {
-        place_grid(player_ptr, floor.get_grid({ y, x1a - 1 }), GB_OUTER);
-        place_grid(player_ptr, floor.get_grid({ y, x2a + 1 }), GB_OUTER);
-    }
-    for (auto x = x1a - 1; x <= x2a + 1; x++) {
-        place_grid(player_ptr, floor.get_grid({ y1a - 1, x }), GB_OUTER);
-        place_grid(player_ptr, floor.get_grid({ y2a + 1, x }), GB_OUTER);
-    }
-
-    /* Place the walls around room "b" */
-    for (auto y = y1b - 1; y <= y2b + 1; y++) {
-        place_grid(player_ptr, floor.get_grid({ y, x1b - 1 }), GB_OUTER);
-        place_grid(player_ptr, floor.get_grid({ y, x2b + 1 }), GB_OUTER);
-    }
-    for (auto x = x1b - 1; x <= x2b + 1; x++) {
-        place_grid(player_ptr, floor.get_grid({ y1b - 1, x }), GB_OUTER);
-        place_grid(player_ptr, floor.get_grid({ y2b + 1, x }), GB_OUTER);
-    }
-
-    /* Replace the floor for room "a" */
-    for (auto y = y1a; y <= y2a; y++) {
-        for (auto x = x1a; x <= x2a; x++) {
-            place_grid(player_ptr, floor.get_grid({ y, x }), GB_FLOOR);
-        }
-    }
-
-    /* Replace the floor for room "b" */
-    for (auto y = y1b; y <= y2b; y++) {
-        for (auto x = x1b; x <= x2b; x++) {
-            place_grid(player_ptr, floor.get_grid({ y, x }), GB_FLOOR);
-        }
-    }
+    place_overlapping_rooms(player_ptr, Rect2D(y1a, x1a, y2a, x2a), Rect2D(y1b, x1b, y2b, x2b), should_brighten);
 
     return true;
 }
@@ -303,63 +251,7 @@ bool build_type3(PlayerType *player_ptr, DungeonData *dd_ptr)
     auto x1b = center->x - dx;
     auto x2b = center->x + dx;
 
-    /* Place a full floor for room "a" */
-    for (auto y = y1a - 1; y <= y2a + 1; y++) {
-        for (auto x = x1a - 1; x <= x2a + 1; x++) {
-            auto &grid = floor.get_grid({ y, x });
-            place_grid(player_ptr, grid, GB_FLOOR);
-            grid.info |= (CAVE_ROOM);
-            if (should_brighten) {
-                grid.info |= (CAVE_GLOW);
-            }
-        }
-    }
-
-    /* Place a full floor for room "b" */
-    for (auto y = y1b - 1; y <= y2b + 1; y++) {
-        for (auto x = x1b - 1; x <= x2b + 1; x++) {
-            auto &grid = floor.get_grid({ y, x });
-            place_grid(player_ptr, grid, GB_FLOOR);
-            grid.info |= (CAVE_ROOM);
-            if (should_brighten) {
-                grid.info |= (CAVE_GLOW);
-            }
-        }
-    }
-
-    /* Place the walls around room "a" */
-    for (auto y = y1a - 1; y <= y2a + 1; y++) {
-        place_grid(player_ptr, floor.get_grid({ y, x1a - 1 }), GB_OUTER);
-        place_grid(player_ptr, floor.get_grid({ y, x2a + 1 }), GB_OUTER);
-    }
-    for (auto x = x1a - 1; x <= x2a + 1; x++) {
-        place_grid(player_ptr, floor.get_grid({ y1a - 1, x }), GB_OUTER);
-        place_grid(player_ptr, floor.get_grid({ y2a + 1, x }), GB_OUTER);
-    }
-
-    /* Place the walls around room "b" */
-    for (auto y = y1b - 1; y <= y2b + 1; y++) {
-        place_grid(player_ptr, floor.get_grid({ y, x1b - 1 }), GB_OUTER);
-        place_grid(player_ptr, floor.get_grid({ y, x2b + 1 }), GB_OUTER);
-    }
-    for (auto x = x1b - 1; x <= x2b + 1; x++) {
-        place_grid(player_ptr, floor.get_grid({ y1b - 1, x }), GB_OUTER);
-        place_grid(player_ptr, floor.get_grid({ y2b + 1, x }), GB_OUTER);
-    }
-
-    /* Replace the floor for room "a" */
-    for (auto y = y1a; y <= y2a; y++) {
-        for (auto x = x1a; x <= x2a; x++) {
-            place_grid(player_ptr, floor.get_grid({ y, x }), GB_FLOOR);
-        }
-    }
-
-    /* Replace the floor for room "b" */
-    for (auto y = y1b; y <= y2b; y++) {
-        for (auto x = x1b; x <= x2b; x++) {
-            place_grid(player_ptr, floor.get_grid({ y, x }), GB_FLOOR);
-        }
-    }
+    place_overlapping_rooms(player_ptr, Rect2D(y1a, x1a, y2a, x2a), Rect2D(y1b, x1b, y2b, x2b), should_brighten);
 
     const Rect2D rect_inner(y1b, x1a, y2b, x2a);
     /* Special features (3/4) */
@@ -374,10 +266,8 @@ bool build_type3(PlayerType *player_ptr, DungeonData *dd_ptr)
 
     /* Inner treasure vault */
     case 2: {
-        /* Build the vault */
-        rect_inner.each_edge([&](const auto &pos) {
-            place_grid(player_ptr, floor.get_grid(pos), GB_INNER);
-        });
+        const auto vault = rect_inner.resized(-1);
+        place_room_inner_walls(player_ptr, vault);
 
         /* Place a secret door on the inner room */
         switch (randint0(4)) {
@@ -490,47 +380,15 @@ bool build_type4(PlayerType *player_ptr, DungeonData *dd_ptr)
     const auto should_brighten = ((floor.dun_level <= randint1(25)) && dungeon.flags.has_not(DungeonFeatureType::DARKNESS));
 
     /* Large room */
-    const auto y1_outer = center->y - 4;
-    const auto y2_outer = center->y + 4;
-    const auto x1_outer = center->x - 11;
-    const auto x2_outer = center->x + 11;
+    const Rect2D outer_rectangle(*center, Pos2DVec(4, 11));
+    place_room_with_outer_walls(player_ptr, outer_rectangle, should_brighten);
 
-    /* Place a full floor under the room */
-    for (auto y = y1_outer - 1; y <= y2_outer + 1; y++) {
-        for (auto x = x1_outer - 1; x <= x2_outer + 1; x++) {
-            auto &grid = floor.get_grid({ y, x });
-            place_grid(player_ptr, grid, GB_FLOOR);
-            grid.info |= (CAVE_ROOM);
-            if (should_brighten) {
-                grid.info |= (CAVE_GLOW);
-            }
-        }
-    }
-
-    /* Outer Walls */
-    for (auto y = y1_outer - 1; y <= y2_outer + 1; y++) {
-        place_grid(player_ptr, floor.get_grid({ y, x1_outer - 1 }), GB_OUTER);
-        place_grid(player_ptr, floor.get_grid({ y, x2_outer + 1 }), GB_OUTER);
-    }
-    for (auto x = x1_outer - 1; x <= x2_outer + 1; x++) {
-        place_grid(player_ptr, floor.get_grid({ y1_outer - 1, x }), GB_OUTER);
-        place_grid(player_ptr, floor.get_grid({ y2_outer + 1, x }), GB_OUTER);
-    }
-
-    const auto y1_inner = y1_outer + 2;
-    const auto y2_inner = y2_outer - 2;
-    const auto x1_inner = x1_outer + 2;
-    const auto x2_inner = x2_outer - 2;
-
-    /* The inner walls */
-    for (auto y = y1_inner - 1; y <= y2_inner + 1; y++) {
-        place_grid(player_ptr, floor.get_grid({ y, x1_inner - 1 }), GB_INNER);
-        place_grid(player_ptr, floor.get_grid({ y, x2_inner + 1 }), GB_INNER);
-    }
-    for (auto x = x1_inner - 1; x <= x2_inner + 1; x++) {
-        place_grid(player_ptr, floor.get_grid({ y1_inner - 1, x }), GB_INNER);
-        place_grid(player_ptr, floor.get_grid({ y2_inner + 1, x }), GB_INNER);
-    }
+    const auto inner_rectangle = outer_rectangle.resized(-2);
+    place_room_inner_walls(player_ptr, inner_rectangle);
+    const auto y1_inner = inner_rectangle.top_left.y;
+    const auto y2_inner = inner_rectangle.bottom_right.y;
+    const auto x1_inner = inner_rectangle.top_left.x;
+    const auto x2_inner = inner_rectangle.bottom_right.x;
 
     /* Inner room variations */
     switch (randint1(5)) {
@@ -577,15 +435,8 @@ bool build_type4(PlayerType *player_ptr, DungeonData *dd_ptr)
         }
 
         /* Place another inner room */
-        for (auto y = center->y - 1; y <= center->y + 1; y++) {
-            for (auto x = center->x - 1; x <= center->x + 1; x++) {
-                if ((x == center->x) && (y == center->y)) {
-                    continue;
-                }
-
-                place_grid(player_ptr, floor.get_grid({ y, x }), GB_INNER);
-            }
-        }
+        const Rect2D treasure_room(*center, *center);
+        place_room_inner_walls(player_ptr, treasure_room);
 
         /* Place a locked door on the inner room */
         switch (randint1(4)) {
@@ -712,11 +563,9 @@ bool build_type4(PlayerType *player_ptr, DungeonData *dd_ptr)
         }
 
         /* Maze (really a checkerboard) */
-        for (auto y = y1_inner; y <= y2_inner; y++) {
-            for (auto x = x1_inner; x <= x2_inner; x++) {
-                if (0x1 & (x + y)) {
-                    place_grid(player_ptr, floor.get_grid({ y, x }), GB_INNER);
-                }
+        for (const auto &pos : inner_rectangle) {
+            if (0x1 & (pos.x + pos.y)) {
+                place_grid(player_ptr, floor.get_grid(pos), GB_INNER);
             }
         }
 

@@ -7,6 +7,7 @@
 #include "monster-floor/place-monster-types.h"
 #include "monster/monster-util.h"
 #include "room/pit-nest-util.h"
+#include "room/rooms-builder.h"
 #include "room/space-finder.h"
 #include "system/enums/dungeon/dungeon-id.h"
 #include "system/enums/terrain/terrain-tag.h"
@@ -102,45 +103,16 @@ tl::optional<std::array<MonraceId, NUM_PIT_MONRACES>> pick_pit_monraces(PlayerTy
 
 void place_pit_outer(PlayerType *player_ptr, const Pos2D &center)
 {
-    auto &floor = *player_ptr->current_floor_ptr;
-    const Rect2D rectangle(center, PIT_SIZE);
-    for (auto y = rectangle.top_left.y - 1; y <= rectangle.bottom_right.y + 1; y++) {
-        for (auto x = rectangle.top_left.x - 1; x <= rectangle.bottom_right.x + 1; x++) {
-            auto &grid = floor.get_grid({ y, x });
-            place_grid(player_ptr, grid, GB_FLOOR);
-            grid.add_info(CAVE_ROOM);
-        }
-    }
-
-    for (auto y = rectangle.top_left.y - 1; y <= rectangle.bottom_right.y + 1; y++) {
-        place_grid(player_ptr, floor.get_grid({ y, rectangle.top_left.x - 1 }), GB_OUTER);
-        place_grid(player_ptr, floor.get_grid({ y, rectangle.bottom_right.x + 1 }), GB_OUTER);
-    }
-
-    for (auto x = rectangle.top_left.x - 1; x <= rectangle.bottom_right.x + 1; x++) {
-        place_grid(player_ptr, floor.get_grid({ rectangle.top_left.y - 1, x }), GB_OUTER);
-        place_grid(player_ptr, floor.get_grid({ rectangle.bottom_right.y + 1, x }), GB_OUTER);
-    }
+    place_room_with_outer_walls(player_ptr, Rect2D(center, PIT_SIZE));
 }
 
 void place_pit_inner(PlayerType *player_ptr, const Pos2D &center)
 {
     auto &floor = *player_ptr->current_floor_ptr;
     const auto rectangle = Rect2D(center, PIT_SIZE).resized(-2);
-    for (auto y = rectangle.top_left.y - 1; y <= rectangle.bottom_right.y + 1; y++) {
-        place_grid(player_ptr, floor.get_grid({ y, rectangle.top_left.x - 1 }), GB_INNER);
-        place_grid(player_ptr, floor.get_grid({ y, rectangle.bottom_right.x + 1 }), GB_INNER);
-    }
-
-    for (auto x = rectangle.top_left.x - 1; x <= rectangle.bottom_right.x + 1; x++) {
-        place_grid(player_ptr, floor.get_grid({ rectangle.top_left.y - 1, x }), GB_INNER);
-        place_grid(player_ptr, floor.get_grid({ rectangle.bottom_right.y + 1, x }), GB_INNER);
-    }
-
-    for (auto y = rectangle.top_left.y; y <= rectangle.bottom_right.y; y++) {
-        for (auto x = rectangle.top_left.x; x <= rectangle.bottom_right.x; x++) {
-            floor.get_grid({ y, x }).add_info(CAVE_NO_TELEPORT_DEST);
-        }
+    place_room_inner_walls(player_ptr, rectangle);
+    for (const auto &pos : rectangle) {
+        floor.get_grid(pos).add_info(CAVE_NO_TELEPORT_DEST);
     }
 
     switch (randint1(4)) {

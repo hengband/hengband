@@ -6,6 +6,7 @@
 #include "monster-floor/monster-generator.h"
 #include "monster/monster-util.h"
 #include "room/pit-nest-util.h"
+#include "room/rooms-builder.h"
 #include "room/space-finder.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
@@ -65,19 +66,9 @@ tl::optional<std::array<NestMonsterInfo, NUM_NEST_MON_TYPE>> pick_nest_monraces(
 
 Rect2D generate_large_room(PlayerType *player_ptr, const Pos2D &center)
 {
-    auto &floor = *player_ptr->current_floor_ptr;
     constexpr Vector2D vec(4, 11);
     const Rect2D rectangle(center, vec);
-    for (const auto &pos : rectangle.resized(1)) {
-        auto &grid = floor.get_grid(pos);
-        place_grid(player_ptr, grid, GB_FLOOR);
-        grid.add_info(CAVE_ROOM);
-    }
-
-    rectangle.resized(1).each_edge([player_ptr, &floor](const Pos2D &pos) {
-        place_grid(player_ptr, floor.get_grid(pos), GB_OUTER);
-    });
-
+    place_room_with_outer_walls(player_ptr, rectangle);
     return rectangle;
 }
 
@@ -85,10 +76,7 @@ void generate_inner_room(PlayerType *player_ptr, const Pos2D &center, Rect2D &re
 {
     auto &floor = *player_ptr->current_floor_ptr;
     const auto inner_rectangle = rectangle.resized(-2);
-
-    inner_rectangle.resized(1).each_edge([player_ptr, &floor](const Pos2D &pos) {
-        place_grid(player_ptr, floor.get_grid(pos), GB_INNER);
-    });
+    place_room_inner_walls(player_ptr, inner_rectangle);
 
     for (const auto &pos : inner_rectangle) {
         floor.get_grid(pos).add_info(CAVE_NO_TELEPORT_DEST);

@@ -410,3 +410,61 @@ POSITION dist2(POSITION x1, POSITION y1, POSITION x2, POSITION y2, POSITION h1, 
 
     return ((dx + dy) * 128) / 181 + (dx * dx / (dy * h3) + dy * dy / (dx * h3)) * h4;
 }
+
+/*!
+ * @brief 部屋とその外周 1 マスに部屋の床を敷く
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param rectangle 部屋の範囲 (外壁を含まない)
+ * @param should_brighten 明るい部屋にするか
+ * @details 床の地形は乱数で選ぶので、上の行から順に敷く
+ */
+void place_room_floor(PlayerType *player_ptr, const Rect2D &rectangle, bool should_brighten)
+{
+    auto &floor = *player_ptr->current_floor_ptr;
+    for (const auto &pos : rectangle.resized(1)) {
+        auto &grid = floor.get_grid(pos);
+        place_grid(player_ptr, grid, GB_FLOOR);
+        grid.add_info(CAVE_ROOM);
+        if (should_brighten) {
+            grid.add_info(CAVE_GLOW);
+        }
+    }
+}
+
+/*!
+ * @brief 部屋の外周 1 マスを外壁にする
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param rectangle 部屋の範囲 (外壁を含まない)
+ */
+void place_room_outer_walls(PlayerType *player_ptr, const Rect2D &rectangle)
+{
+    auto &floor = *player_ptr->current_floor_ptr;
+    rectangle.resized(1).each_edge([player_ptr, &floor](const Pos2D &pos) {
+        place_grid(player_ptr, floor.get_grid(pos), GB_OUTER);
+    });
+}
+
+/*!
+ * @brief 部屋の床を敷き、外壁で囲む
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param rectangle 部屋の範囲 (外壁を含まない)
+ * @param should_brighten 明るい部屋にするか
+ */
+void place_room_with_outer_walls(PlayerType *player_ptr, const Rect2D &rectangle, bool should_brighten)
+{
+    place_room_floor(player_ptr, rectangle, should_brighten);
+    place_room_outer_walls(player_ptr, rectangle);
+}
+
+/*!
+ * @brief 内側の部屋の外周 1 マスを内壁にする
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param rectangle 内側の部屋の範囲 (内壁を含まない)
+ */
+void place_room_inner_walls(PlayerType *player_ptr, const Rect2D &rectangle)
+{
+    auto &floor = *player_ptr->current_floor_ptr;
+    rectangle.resized(1).each_edge([player_ptr, &floor](const Pos2D &pos) {
+        place_grid(player_ptr, floor.get_grid(pos), GB_INNER);
+    });
+}
