@@ -7,6 +7,7 @@
 struct mind_power;
 struct mind_type;
 class PlayerType;
+
 class MindPowerGetter {
 public:
     MindPowerGetter(PlayerType *player_ptr);
@@ -25,8 +26,6 @@ private:
     bool flag = false;
     bool redraw = false;
     const mind_power *mind_ptr = nullptr;
-    PERCENTAGE chance = 0;
-    int mana_cost = 0;
 
     PlayerType *player_ptr;
     MindKindType use_mind;
@@ -38,8 +37,5 @@ private:
     bool interpret_mind_key_input(const bool only_browse);
     bool display_minds_chance(const bool only_browse);
     void display_each_mind_chance(bool only_browse);
-    void calculate_mind_chance(bool has_weapon_main, bool has_weapon_sub);
-    void calculate_ki_chance(bool has_weapon_main, bool has_weapon_sub);
-    void add_ki_chance();
     void make_choice_lower();
 };

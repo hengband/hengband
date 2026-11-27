@@ -1,10 +1,16 @@
 #include "mind/mind-info.h"
 #include "cmd-action/cmd-spell.h"
+#include "inventory/inventory-slot-types.h"
 #include "locale/japanese.h"
+#include "mind/mind-explanations-table.h"
 #include "mind/mind-force-trainer.h"
 #include "mind/mind-types.h"
+#include "player-info/class-info.h"
 #include "player-info/equipment-info.h"
+#include "player/player-status-table.h"
 #include "system/player-type-definition.h"
+#include "timed-effect/timed-effects.h"
+#include "util/enum-converter.h"
 #include <fmt/format.h>
 
 static std::string switch_mind_mindcrafter(PlayerType *player_ptr, const PLAYER_LEVEL plev, const int power)
@@ -160,4 +166,63 @@ std::string mindcraft_info(PlayerType *player_ptr, MindKindType use_mind, int po
     default:
         return std::string();
     }
+}
+
+/*!
+ * @brief 特殊技能の失敗率と消費量を計算する
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param use_mind 特殊技能の種類
+ * @param index 特殊技能の番号
+ * @return 失敗率と消費量
+ * @details 技能を選ぶ一覧、実際の成否の判定、サブウィンドウの一覧で共用し、値をそろえる。
+ */
+MindPowerChance calc_mind_power_chance(PlayerType *player_ptr, MindKindType use_mind, int index)
+{
+    const auto &spell = mind_powers[enum2i(use_mind)].info[index];
+    PERCENTAGE chance = spell.fail;
+    auto mana_cost = spell.mana_cost;
+    if (chance == 0) {
+        return { chance, mana_cost };
+    }
+
+    chance -= 3 * (player_ptr->lev - spell.min_lev);
+    chance -= 3 * (adj_mag_stat[player_ptr->stat_index[mp_ptr->spell_stat]] - 1);
+    // 練気術師は重い鎧と扱いにくい武器で失敗率が上がり (最低失敗率の切り上げの前後の両方で足す)、
+    // ほかの武器でも少し上がる。衝波は溜めた気の量で消費が増える
+    auto ki_penalty_count = 0;
+    if (use_mind == MindKindType::KI) {
+        ki_penalty_count = (heavy_armor(player_ptr) ? 1 : 0) + (player_ptr->is_icky_wield[0] ? 1 : 0) + (player_ptr->is_icky_wield[1] ? 1 : 0);
+        chance += 20 * ki_penalty_count;
+        if (!player_ptr->is_icky_wield[0] && has_melee_weapon(player_ptr, INVEN_MAIN_HAND)) {
+            chance += 10;
+        }
+
+        if (!player_ptr->is_icky_wield[1] && has_melee_weapon(player_ptr, INVEN_SUB_HAND)) {
+            chance += 10;
+        }
+
+        if (index == 5) {
+            for (auto j = 0; j < get_current_ki(player_ptr) / 50; j++) {
+                mana_cost += (j + 1) * 3 / 2;
+            }
+        }
+    }
+
+    if ((use_mind != MindKindType::BERSERKER) && (use_mind != MindKindType::NINJUTSU) && (mana_cost > player_ptr->csp)) {
+        chance += 5 * (mana_cost - player_ptr->csp);
+    }
+
+    chance += player_ptr->to_m_chance;
+    const PERCENTAGE minfail = adj_mag_fail[player_ptr->stat_index[mp_ptr->spell_stat]];
+    if (chance < minfail) {
+        chance = minfail;
+    }
+
+    chance += player_ptr->effects()->stun().get_magic_chance_penalty();
+    chance += 5 * ki_penalty_count;
+    if (chance > 95) {
+        chance = 95;
+    }
+
+    return { chance, mana_cost };
 }
