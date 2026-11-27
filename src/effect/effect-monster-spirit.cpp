@@ -11,7 +11,6 @@
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
-#include "tracking/health-bar-tracker.h"
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
@@ -44,12 +43,7 @@ ProcessResult effect_monster_drain_mana(PlayerType *player_ptr, EffectMonster *e
         return ProcessResult::PROCESS_CONTINUE;
     }
 
-    em_ptr->m_caster_ptr->hp += em_ptr->dam;
-    if (em_ptr->m_caster_ptr->hp > em_ptr->m_caster_ptr->maxhp) {
-        em_ptr->m_caster_ptr->hp = em_ptr->m_caster_ptr->maxhp;
-    }
-
-    HealthBarTracker::get_instance().set_flags_if_shown(em_ptr->src_idx, *em_ptr->m_caster_ptr);
+    heal_monster(em_ptr->src_idx, *em_ptr->m_caster_ptr, em_ptr->dam);
 
     if (em_ptr->see_s_msg) {
         angband_strcpy(em_ptr->killer, monster_desc(player_ptr, *em_ptr->m_caster_ptr, 0), sizeof(em_ptr->killer));

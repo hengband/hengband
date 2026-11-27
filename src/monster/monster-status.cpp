@@ -26,6 +26,7 @@
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
+#include <algorithm>
 #include <fmt/format.h>
 #include <vector>
 #ifdef JP
@@ -304,6 +305,18 @@ void process_monsters_mtimed(PlayerType *player_ptr, MonsterTimedEffect mte)
         process_monsters_mtimed_aux(player_ptr, m_idx, mte);
         HealthBarTracker::get_instance().set_flag_if_tracking(m_idx);
     }
+}
+
+/*!
+ * @brief モンスターの HP を最大 HP を超えない範囲で回復し、ヘルスバーの描き直しを要求する
+ * @param m_idx モンスターのフロア内の番号
+ * @param monster モンスター
+ * @param amount 回復量
+ */
+void heal_monster(short m_idx, MonsterEntity &monster, int amount)
+{
+    monster.hp = std::min(monster.hp + amount, monster.maxhp);
+    HealthBarTracker::get_instance().set_flags_if_shown(m_idx, monster);
 }
 
 /*!

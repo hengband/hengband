@@ -11,6 +11,7 @@
 #include "inventory/inventory-object.h"
 #include "mind/mind-mirror-master.h"
 #include "monster-attack/monster-attack-player.h"
+#include "monster/monster-status.h"
 #include "object/object-info.h"
 #include "player-base/player-race.h"
 #include "player-info/race-info.h"
@@ -24,7 +25,6 @@
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
 #include "timed-effect/timed-effects.h"
-#include "tracking/health-bar-tracker.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 
@@ -238,10 +238,7 @@ bool process_un_power(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
         recovery *= monap_ptr->o_ptr->number;
     }
 
-    recovery = std::min(recovery, monap_ptr->m_ptr->maxhp - monap_ptr->m_ptr->hp);
-    monap_ptr->m_ptr->hp += recovery;
-
-    HealthBarTracker::get_instance().set_flags_if_shown(monap_ptr->m_idx, *monap_ptr->m_ptr);
+    heal_monster(monap_ptr->m_idx, *monap_ptr->m_ptr, recovery);
 
     monap_ptr->o_ptr->pval = !is_magic_mastery || (monap_ptr->o_ptr->pval == 1) ? 0 : monap_ptr->o_ptr->pval - drain;
     DeferredUpdateRequests::get_instance().request_inventory_arrangement();
@@ -276,12 +273,7 @@ void process_drain_life(MonsterAttackPlayer *monap_ptr, const bool resist_drain)
     }
 
     bool did_heal = monap_ptr->m_ptr->hp < monap_ptr->m_ptr->maxhp;
-    monap_ptr->m_ptr->hp += Dice::roll(4, monap_ptr->damage / 6);
-    if (monap_ptr->m_ptr->hp > monap_ptr->m_ptr->maxhp) {
-        monap_ptr->m_ptr->hp = monap_ptr->m_ptr->maxhp;
-    }
-
-    HealthBarTracker::get_instance().set_flags_if_shown(monap_ptr->m_idx, *monap_ptr->m_ptr);
+    heal_monster(monap_ptr->m_idx, *monap_ptr->m_ptr, Dice::roll(4, monap_ptr->damage / 6));
 
     if (monap_ptr->m_ptr->ml && did_heal) {
         msg_print(_("{}は体力を回復したようだ。", "{} appears healthier."), str_upcase_first(monap_ptr->m_name));
