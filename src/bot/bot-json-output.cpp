@@ -91,6 +91,7 @@
 #include "tracking/health-bar-tracker.h"
 #include "util/enum-converter.h"
 #include "util/enum-range.h"
+#include "util/int-char-converter.h"
 #include "view/display-characteristic.h"
 #include "view/display-map.h"
 #include "view/display-messages.h"
@@ -1356,9 +1357,7 @@ nlohmann::json make_store_json(PlayerType *player_ptr, const StoreScreen &screen
         // current page are selectable, so emit page-relative letters for the
         // current page only. Mirrors display_entry()'s labelling.
         const auto &item = *store.stock[page_top + page_pos];
-        const auto letter = (page_pos < 26)
-                                ? std::string(1, static_cast<char>('a' + page_pos))
-                                : std::string(1, static_cast<char>('A' + (page_pos - 26)));
+        const auto letter = std::string(1, I2AU(page_pos));
         if (is_personal_storage) {
             auto entry = make_item_json(player_ptr, item);
             entry["letter"] = letter;

@@ -180,8 +180,8 @@ tl::optional<short> input_stock(std::string_view fmt, int min, int max, [[maybe_
     }
 
     msg_erase();
-    const auto lo = I2A(min);
-    const auto hi = (max > 25) ? toupper(I2A(max - 26)) : I2A(max);
+    const auto lo = I2AU(min);
+    const auto hi = I2AU(max);
 #ifdef JP
     const auto title = (store_num == StoreSaleType::HOME) || (store_num == StoreSaleType::MUSEUM) ? "アイテム" : "商品";
     const auto prompt = fmt::format("({}:{:c}-{:c}, ESCで中断) {}", title, lo, hi, fmt);
@@ -196,15 +196,9 @@ tl::optional<short> input_stock(std::string_view fmt, int min, int max, [[maybe_
             break;
         }
 
-        tl::optional<int> command_num;
-        if (islower(*command_alpha)) {
-            command_num = A2I(*command_alpha);
-        } else if (isupper(*command_alpha)) {
-            command_num = A2I(tolower(*command_alpha)) + 26;
-        }
-
-        if (command_num && (*command_num >= min) && (*command_num <= max)) {
-            command = static_cast<short>(*command_num);
+        const auto command_num = AU2I(*command_alpha);
+        if ((command_num >= 0) && (command_num >= min) && (command_num <= max)) {
+            command = static_cast<short>(command_num);
             break;
         }
 

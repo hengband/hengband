@@ -40,11 +40,7 @@ static void enumerate_class_list(char *sym)
     for (auto n = 0; n < PLAYER_CLASS_TYPE_MAX; n++) {
         cp_ptr = &class_info.at(i2enum<PlayerClassType>(n));
         mp_ptr = &class_magics_info[n];
-        if (n < 26) {
-            sym[n] = I2A(n);
-        } else {
-            sym[n] = ('A' + n - 26);
-        }
+        sym[n] = I2AU(n);
 
         auto cs = i2enum<PlayerClassType>(n);
         c_put_str(InnerGameData::get_instance().get_birth_class_color(cs), birth_class_label(n, sym), 13 + (n / 4), 2 + 19 * (n % 4));
@@ -174,19 +170,13 @@ static bool select_class(PlayerType *player_ptr, concptr sym, int *k)
             continue;
         }
 
-        *k = (islower(c) ? A2I(c) : -1);
+        *k = AU2I(c);
         if ((*k >= 0) && (*k < PLAYER_CLASS_TYPE_MAX)) {
             cs = i2enum<PlayerClassType>(*k);
             continue;
         }
 
-        *k = (isupper(c) ? (26 + c - 'A') : -1);
-        if ((*k >= 26) && (*k < PLAYER_CLASS_TYPE_MAX)) {
-            cs = i2enum<PlayerClassType>(*k);
-            continue;
-        } else {
-            *k = -1;
-        }
+        *k = -1;
 
         birth_help_option(player_ptr, c, BirthKind::CLASS);
     }
