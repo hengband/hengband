@@ -1,10 +1,11 @@
 /*!
  * @brief 耐性によるダメージ倍率の計算のテスト
  *
- * player/player-status-resist.h のダメージ倍率が、耐性・免疫に応じて減ることを確かめる。
+ * player/player-status-resist.h のダメージ倍率が、耐性・一時耐性・免疫に応じて減り、弱点・突然変異に応じて増えることを確かめる。
  */
 
 #include "inventory/inventory-slot-types.h"
+#include "mutation/mutation-flag-types.h"
 #include "object-enchant/tr-types.h"
 #include "player/player-status-resist.h"
 #include "system/baseitem/baseitem-definition.h"
@@ -12,6 +13,7 @@
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
 #include "test/scoped-vector-wrapper.h"
+#include <array>
 #include <doctest/doctest.h>
 
 namespace {
@@ -92,5 +94,79 @@ TEST_CASE("the damage rates of the basic elements are zero with immunity even if
         CHECK(calc_cold_damage_rate(&player) == 133);
         wear_helm_with(player, TR_IM_COLD);
         CHECK(calc_cold_damage_rate(&player) == 0);
+    }
+}
+
+namespace {
+using DamageRateCalculator = PERCENTAGE (*)(PlayerType *);
+
+/*!
+ * @brief 基本 4 属性ごとの耐性・弱点の印・一時耐性とダメージ倍率の計算
+ */
+struct BasicElement {
+    const char *name;
+    tr_type resist;
+    tr_type vuln;
+    TIME_EFFECT PlayerType::*oppose;
+    DamageRateCalculator calc_damage_rate;
+};
+
+const std::array<BasicElement, 4> BASIC_ELEMENTS{ {
+    { "acid", TR_RES_ACID, TR_VUL_ACID, &PlayerType::oppose_acid, calc_acid_damage_rate },
+    { "elec", TR_RES_ELEC, TR_VUL_ELEC, &PlayerType::oppose_elec, calc_elec_damage_rate },
+    { "fire", TR_RES_FIRE, TR_VUL_FIRE, &PlayerType::oppose_fire, calc_fire_damage_rate },
+    { "cold", TR_RES_COLD, TR_VUL_COLD, &PlayerType::oppose_cold, calc_cold_damage_rate },
+} };
+}
+
+TEST_CASE("the damage rates of the basic elements combine resistance and vulnerability")
+{
+    test::ScopedVectorWrapper<BaseitemList> saved_items{ BaseitemList::get_instance() };
+    BaseitemList::get_instance().resize(2);
+    for (const auto &element : BASIC_ELEMENTS) {
+        CAPTURE(element.name);
+        PlayerType player;
+        CHECK(element.calc_damage_rate(&player) == 100);
+
+        // 耐性で 1/3 (切り上げ)、弱点で 4/3 倍してから耐性で 1/3
+        wear_helm_with(player, element.resist);
+        CHECK(element.calc_damage_rate(&player) == 34);
+        wear_helm_with(player, element.vuln);
+        CHECK(element.calc_damage_rate(&player) == 45);
+    }
+}
+
+TEST_CASE("the damage rates of the basic elements double with the mutation")
+{
+    test::ScopedVectorWrapper<BaseitemList> saved_items{ BaseitemList::get_instance() };
+    BaseitemList::get_instance().resize(2);
+    for (const auto &element : BASIC_ELEMENTS) {
+        CAPTURE(element.name);
+        PlayerType player;
+        player.muta.set(PlayerMutationType::VULN_ELEM);
+        CHECK(element.calc_damage_rate(&player) == 200);
+
+        // 兜の弱点で 4/3 倍、突然変異で 2 倍と、要因ごとに重なる
+        wear_helm_with(player, element.vuln);
+        CHECK(element.calc_damage_rate(&player) == 266);
+    }
+}
+
+TEST_CASE("temporary resistance reduces only the damage rate of its own basic element")
+{
+    test::ScopedVectorWrapper<BaseitemList> saved_items{ BaseitemList::get_instance() };
+    BaseitemList::get_instance().resize(2);
+    for (const auto &element : BASIC_ELEMENTS) {
+        CAPTURE(element.name);
+        PlayerType player;
+        player.*element.oppose = 10;
+        for (const auto &other : BASIC_ELEMENTS) {
+            CAPTURE(other.name);
+            CHECK(other.calc_damage_rate(&player) == (&other == &element ? 34 : 100));
+        }
+
+        // 一時耐性と耐性は重なる
+        wear_helm_with(player, element.resist);
+        CHECK(element.calc_damage_rate(&player) == 12);
     }
 }

@@ -57,20 +57,24 @@ PERCENTAGE randrate(int dice, int fix, rate_calc_type_mode mode)
 }
 
 /*!
- * @brief 酸属性攻撃に対するダメージ倍率計算
+ * @brief 酸・電撃・火炎・冷気の攻撃に対するダメージ倍率計算
+ * @param immune 免疫の要因のフラグ (FLAG_CAUSE_*)
+ * @param vuln 弱点の要因のフラグ (FLAG_CAUSE_*)
+ * @param resist 耐性の要因のフラグ (FLAG_CAUSE_*)
+ * @param oppose 一時耐性があるか
+ * @return ダメージ倍率 (%)
+ * @details 免疫があれば 0。弱点の要因ごとに、突然変異なら 2 倍、それ以外なら 4/3 倍する。
+ * その後、耐性と一時耐性でそれぞれ 1/3 にする (切り上げ)。
  */
-PERCENTAGE calc_acid_damage_rate(PlayerType *player_ptr)
+static PERCENTAGE calc_basic_element_damage_rate(BIT_FLAGS immune, BIT_FLAGS vuln, BIT_FLAGS resist, bool oppose)
 {
-    PERCENTAGE per = 100;
-
-    if (has_immune_acid(player_ptr)) {
+    if (immune) {
         return 0;
     }
 
-    BIT_FLAGS flags = has_vuln_acid(player_ptr);
-
+    PERCENTAGE per = 100;
     for (BIT_FLAGS check_flag = 0x01U; check_flag < FLAG_CAUSE_MAX; check_flag <<= 1) {
-        if (any_bits(flags, check_flag)) {
+        if (any_bits(vuln, check_flag)) {
             if (check_flag == FLAG_CAUSE_MUTATION) {
                 per *= 2;
             } else {
@@ -79,14 +83,22 @@ PERCENTAGE calc_acid_damage_rate(PlayerType *player_ptr)
         }
     }
 
-    if (has_resist_acid(player_ptr)) {
+    if (resist) {
         per = (per + 2) / 3;
     }
-    if (is_oppose_acid(player_ptr)) {
+    if (oppose) {
         per = (per + 2) / 3;
     }
 
     return per;
+}
+
+/*!
+ * @brief 酸属性攻撃に対するダメージ倍率計算
+ */
+PERCENTAGE calc_acid_damage_rate(PlayerType *player_ptr)
+{
+    return calc_basic_element_damage_rate(has_immune_acid(player_ptr), has_vuln_acid(player_ptr), has_resist_acid(player_ptr), is_oppose_acid(player_ptr));
 }
 
 /*!
@@ -94,31 +106,7 @@ PERCENTAGE calc_acid_damage_rate(PlayerType *player_ptr)
  */
 PERCENTAGE calc_elec_damage_rate(PlayerType *player_ptr)
 {
-    PERCENTAGE per = 100;
-
-    if (has_immune_elec(player_ptr)) {
-        return 0;
-    }
-
-    BIT_FLAGS flags = has_vuln_elec(player_ptr);
-    for (BIT_FLAGS check_flag = 0x01U; check_flag < FLAG_CAUSE_MAX; check_flag <<= 1) {
-        if (any_bits(flags, check_flag)) {
-            if (check_flag == FLAG_CAUSE_MUTATION) {
-                per *= 2;
-            } else {
-                per += per / 3;
-            }
-        }
-    }
-
-    if (has_resist_elec(player_ptr)) {
-        per = (per + 2) / 3;
-    }
-    if (is_oppose_elec(player_ptr)) {
-        per = (per + 2) / 3;
-    }
-
-    return per;
+    return calc_basic_element_damage_rate(has_immune_elec(player_ptr), has_vuln_elec(player_ptr), has_resist_elec(player_ptr), is_oppose_elec(player_ptr));
 }
 
 /*!
@@ -126,32 +114,7 @@ PERCENTAGE calc_elec_damage_rate(PlayerType *player_ptr)
  */
 PERCENTAGE calc_fire_damage_rate(PlayerType *player_ptr)
 {
-    PERCENTAGE per = 100;
-
-    if (has_immune_fire(player_ptr)) {
-        return 0;
-    }
-
-    BIT_FLAGS flags = has_vuln_fire(player_ptr);
-    for (BIT_FLAGS check_flag = 0x01U; check_flag < FLAG_CAUSE_MAX; check_flag <<= 1) {
-        if (any_bits(flags, check_flag)) {
-            if (check_flag == FLAG_CAUSE_MUTATION) {
-                per *= 2;
-            } else {
-                per += per / 3;
-            }
-        }
-    }
-
-    /* Resist the damage */
-    if (has_resist_fire(player_ptr)) {
-        per = (per + 2) / 3;
-    }
-    if (is_oppose_fire(player_ptr)) {
-        per = (per + 2) / 3;
-    }
-
-    return per;
+    return calc_basic_element_damage_rate(has_immune_fire(player_ptr), has_vuln_fire(player_ptr), has_resist_fire(player_ptr), is_oppose_fire(player_ptr));
 }
 
 /*!
@@ -159,31 +122,7 @@ PERCENTAGE calc_fire_damage_rate(PlayerType *player_ptr)
  */
 PERCENTAGE calc_cold_damage_rate(PlayerType *player_ptr)
 {
-    PERCENTAGE per = 100;
-
-    if (has_immune_cold(player_ptr)) {
-        return 0;
-    }
-
-    BIT_FLAGS flags = has_vuln_cold(player_ptr);
-    for (BIT_FLAGS check_flag = 0x01U; check_flag < FLAG_CAUSE_MAX; check_flag <<= 1) {
-        if (any_bits(flags, check_flag)) {
-            if (check_flag == FLAG_CAUSE_MUTATION) {
-                per *= 2;
-            } else {
-                per += per / 3;
-            }
-        }
-    }
-
-    if (has_resist_cold(player_ptr)) {
-        per = (per + 2) / 3;
-    }
-    if (is_oppose_cold(player_ptr)) {
-        per = (per + 2) / 3;
-    }
-
-    return per;
+    return calc_basic_element_damage_rate(has_immune_cold(player_ptr), has_vuln_cold(player_ptr), has_resist_cold(player_ptr), is_oppose_cold(player_ptr));
 }
 
 /*!
