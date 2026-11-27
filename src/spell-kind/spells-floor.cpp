@@ -396,17 +396,8 @@ bool destroy_area(PlayerType *player_ptr, const POSITION y1, const POSITION x1, 
                 continue;
             }
 
-            for (const auto &d : Direction::directions()) {
-                const auto pos_neighbor = pos + d.vec();
-                if (!floor.contains(pos_neighbor, FloorBoundary::OUTER_WALL_INCLUSIVE)) {
-                    continue;
-                }
-
-                const auto &grid_neighbor = floor.get_grid(pos_neighbor);
-                if (grid_neighbor.get_terrain(TerrainKind::MIMIC).flags.has(TerrainCharacteristics::GLOW)) {
-                    grid.info |= CAVE_GLOW;
-                    break;
-                }
+            if (floor.has_glowing_neighbor(pos)) {
+                grid.info |= CAVE_GLOW;
             }
         }
     }

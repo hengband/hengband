@@ -281,18 +281,8 @@ void glow_earthquake_area(auto &floor, std::span<const Pos2D> area)
     }
 
     for (const auto &pos : area) {
-        auto &grid = floor.get_grid(pos);
-        for (const auto &d : Direction::directions()) {
-            const auto pos_neighbor = pos + d.vec();
-            if (!floor.contains(pos_neighbor, FloorBoundary::OUTER_WALL_INCLUSIVE)) {
-                continue;
-            }
-
-            const auto &grid_neighbor = floor.get_grid(pos_neighbor);
-            if (grid_neighbor.get_terrain(TerrainKind::MIMIC).flags.has(TerrainCharacteristics::GLOW)) {
-                grid.info |= CAVE_GLOW;
-                break;
-            }
+        if (floor.has_glowing_neighbor(pos)) {
+            floor.get_grid(pos).info |= CAVE_GLOW;
         }
     }
 }

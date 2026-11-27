@@ -84,32 +84,16 @@ static void cave_temp_room_lite(PlayerType *player_ptr, const std::vector<Pos2D>
 static void cave_temp_room_unlite(PlayerType *player_ptr, const std::vector<Pos2D> &positions)
 {
     auto &floor = *player_ptr->current_floor_ptr;
-    const auto &world = AngbandWorld::get_instance();
+    const auto is_dark_time = floor.is_underground() || !AngbandWorld::get_instance().is_daytime();
     for (const auto &pos : positions) {
         auto &grid = floor.get_grid(pos);
-        auto do_dark = !grid.is_mirror();
         grid.info &= ~(CAVE_TEMP);
-        if (!do_dark) {
+        if (grid.is_mirror()) {
             continue;
         }
 
-        if (floor.is_underground() || !world.is_daytime()) {
-            for (const auto &d : Direction::directions()) {
-                const Pos2D pos_neighbor = pos + d.vec();
-                if (!floor.contains(pos_neighbor, FloorBoundary::OUTER_WALL_INCLUSIVE)) {
-                    continue;
-                }
-
-                const auto &grid_neighbor = floor.get_grid(pos_neighbor);
-                if (grid_neighbor.get_terrain(TerrainKind::MIMIC).flags.has(TerrainCharacteristics::GLOW)) {
-                    do_dark = false;
-                    break;
-                }
-            }
-
-            if (!do_dark) {
-                continue;
-            }
+        if (is_dark_time && floor.has_glowing_neighbor(pos)) {
+            continue;
         }
 
         grid.info &= ~(CAVE_GLOW);

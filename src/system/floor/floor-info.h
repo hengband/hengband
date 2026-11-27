@@ -101,6 +101,7 @@ public:
     bool has_marked_grid_at(const Pos2D &pos) const;
     bool has_closed_door_at(const Pos2D &pos, bool is_mimic = false) const;
     bool has_trap_at(const Pos2D &pos) const;
+    bool has_glowing_neighbor(const Pos2D &pos) const;
     std::pair<int, Direction> count_doors_traps(const Pos2D &p_pos, GridCountKind gck, bool under) const;
     bool check_terrain_state(const Pos2D &pos, GridCountKind gck) const;
     bool order_pet_whistle(short index1, short index2) const;

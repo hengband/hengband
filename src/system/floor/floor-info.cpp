@@ -252,6 +252,23 @@ bool FloorType::has_trap_at(const Pos2D &pos) const
 }
 
 /*!
+ * @brief 指定した座標とその周り 8 マス (計 9 マス) に、光る地形があるかを返す
+ * @param pos 調べる座標
+ * @return 9 マスのどれかの地形 (ミミックを含む) が GLOW を持てば true
+ */
+bool FloorType::has_glowing_neighbor(const Pos2D &pos) const
+{
+    return std::ranges::any_of(Direction::directions(), [&](const auto &d) {
+        const auto pos_neighbor = pos + d.vec();
+        if (!this->contains(pos_neighbor, FloorBoundary::OUTER_WALL_INCLUSIVE)) {
+            return false;
+        }
+
+        return this->get_grid(pos_neighbor).get_terrain(TerrainKind::MIMIC).flags.has(TerrainCharacteristics::GLOW);
+    });
+}
+
+/*!
  * @brief プレイヤーの周辺9マスに該当する地形がいくつあるかを返す
  * @param p_pos プレイヤーの現在位置
  * @param gck 判定条件
