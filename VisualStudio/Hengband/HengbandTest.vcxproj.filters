@@ -527,6 +527,9 @@
     <ClCompile Include="..\..\src\test\view\test-display-messages.cpp">
       <Filter>view</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\test\view\test-display-util.cpp">
+      <Filter>view</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\test\view\test-map-info-cache.cpp">
       <Filter>view</Filter>
     </ClCompile>

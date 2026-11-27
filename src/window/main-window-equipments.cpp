@@ -6,7 +6,6 @@
 #include "inventory/inventory-slot-types.h"
 #include "inventory/inventory-util.h"
 #include "io/input-key-requester.h"
-#include "locale/japanese.h"
 #include "locale/multibyte-char.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
@@ -21,6 +20,7 @@
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
 #include "view/display-symbol.h"
+#include "view/display-util.h"
 #include <array>
 #include <fmt/format.h>
 #include <vector>
@@ -132,9 +132,7 @@ COMMAND_CODE show_equipment(PlayerType *player_ptr, int target_item, BIT_FLAGS m
             continue;
         }
 
-        auto wgt = item.weight * item.number;
-        const auto weight = fmt::format(_("{:3}.{:1} kg", "{:3}.{} lb"), _(lb_to_kg_integer(wgt), wgt / 10), _(lb_to_kg_fraction(wgt), wgt % 10));
-        prt(weight, j + 1, wid - 9);
+        prt(format_item_weight(item.weight * item.number), j + 1, wid - 9);
     }
 
     if (j && (j < 23)) {

@@ -3,7 +3,6 @@
 #include "game-option/text-display-options.h"
 #include "inventory/inventory-util.h"
 #include "io/input-key-requester.h"
-#include "locale/japanese.h"
 #include "locale/multibyte-char.h"
 #include "object/item-tester-hooker.h"
 #include "system/floor/floor-info.h"
@@ -12,6 +11,7 @@
 #include "system/player-type-definition.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
+#include "view/display-util.h"
 #include <array>
 #include <fmt/format.h>
 
@@ -149,9 +149,7 @@ COMMAND_CODE show_floor_items(PlayerType *player_ptr, int target_item, POSITION 
         put_str(head, j + 1, col);
         c_put_str(out_color[j], descriptions[j], j + 1, col + 3);
         if (show_weights && (item.bi_key.tval() != ItemKindType::GOLD)) {
-            int wgt = item.weight * item.number;
-            const auto weight = fmt::format(_("{:3}.{} kg", "{:3}.{} lb"), _(lb_to_kg_integer(wgt), wgt / 10), _(lb_to_kg_fraction(wgt), wgt % 10));
-            prt(weight, j + 1, wid - 9);
+            prt(format_item_weight(item.weight * item.number), j + 1, wid - 9);
         }
     }
 
