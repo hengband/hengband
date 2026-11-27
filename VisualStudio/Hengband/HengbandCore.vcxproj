@@ -1066,6 +1066,7 @@
     <ClInclude Include="..\..\src\cmd-visual\cmd-draw.h" />
     <ClInclude Include="..\..\src\cmd-visual\cmd-map.h" />
     <ClInclude Include="..\..\src\cmd-visual\cmd-visuals.h" />
+    <ClInclude Include="..\..\src\combat\ac-damage-reduction.h" />
     <ClInclude Include="..\..\src\combat\attack-accuracy.h" />
     <ClInclude Include="..\..\src\combat\attack-criticality.h" />
     <ClInclude Include="..\..\src\combat\attack-power-table.h" />

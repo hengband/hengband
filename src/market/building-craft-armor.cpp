@@ -1,4 +1,5 @@
 #include "market/building-craft-armor.h"
+#include "combat/ac-damage-reduction.h"
 #include "core/asking-player.h"
 #include "io/input-context.h"
 #include "market/building-util.h"
@@ -39,7 +40,7 @@ bool eval_ac(short ac)
         ac = 0;
     }
 
-    const auto protection = 100 * std::min<short>(ac, 150) / 250;
+    const auto protection = 100 - reduce_damage_by_ac(100, ac);
     screen_save();
     clear_bldg(0, 22);
 

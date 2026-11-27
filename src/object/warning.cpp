@@ -1,4 +1,5 @@
 #include "object/warning.h"
+#include "combat/ac-damage-reduction.h"
 #include "core/asking-player.h"
 #include "core/disturbance.h"
 #include "flavor/flavor-describer.h"
@@ -267,14 +268,14 @@ static int blow_damcalc(const MonsterEntity &monster, PlayerType *player_ptr, co
     bool check_wraith_form = true;
     switch (blow.effect) {
     case RaceBlowEffectType::SUPERHURT: {
-        int tmp_dam = dam - (dam * ((ac < 150) ? ac : 150) / 250);
+        const auto tmp_dam = reduce_damage_by_ac(dam, ac);
         dam = std::max(dam, tmp_dam * 2);
         break;
     }
 
     case RaceBlowEffectType::HURT:
     case RaceBlowEffectType::SHATTER:
-        dam -= (dam * ((ac < 150) ? ac : 150) / 250);
+        dam = reduce_damage_by_ac(dam, ac);
         break;
 
     case RaceBlowEffectType::ACID:
