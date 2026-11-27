@@ -114,7 +114,8 @@ jobs:
       - if: ${{ inputs.upload }}
         uses: actions/upload-artifact@v7
         with:
-          name: appimage-${{ matrix.lang }}
+          # create-release.yml が linux-* をリリースに載せる
+          name: linux-appimage-${{ matrix.lang }}
           path: dist/*.AppImage
           if-no-files-found: error
           # 受け渡しと確認のためだけに置くので、すぐに消す。AppImage は圧縮済みなので、もう圧縮しない
@@ -133,8 +134,10 @@ jobs:
         include:
           - lang: ja
             app-id: io.github.hengband.Hengband
+            name: Hengband
           - lang: en
             app-id: io.github.hengband.HengbandEn
+            name: Hengband-en
     steps:
       - uses: actions/checkout@v7
         with:
@@ -150,13 +153,17 @@ jobs:
         run: |
           flatpak-builder --disable-rofiles-fuse --force-clean --repo=build-flatpak/repo \
             build-flatpak/build packaging/linux/${{ matrix.app-id }}.yml
+          # AppImage と同じく <名前>-<版>-<アーキテクチャ> の名前にする。
+          # ランタイムを入れていない環境でもバンドルから入れられるよう、ランタイムの取得先に Flathub を指定する
+          version=$(sed -n 's/^AC_INIT(hengband, *\([^)]*\))/\1/p' configure.ac)
           mkdir -p dist
-          flatpak build-bundle build-flatpak/repo dist/${{ matrix.app-id }}.flatpak ${{ matrix.app-id }}
+          flatpak build-bundle --runtime-repo=https://dl.flathub.org/repo/flathub.flatpakrepo \
+            build-flatpak/repo "dist/${{ matrix.name }}-$version-$(uname -m).flatpak" ${{ matrix.app-id }}
 
       - if: ${{ inputs.upload }}
         uses: actions/upload-artifact@v7
         with:
-          name: flatpak-${{ matrix.lang }}
+          name: linux-flatpak-${{ matrix.lang }}
           path: dist/*.flatpak
           if-no-files-found: error
           retention-days: 1
