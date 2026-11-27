@@ -452,3 +452,10 @@ Makefile
 # (the BOT_PLAY savefile and the --bot-json-output snapshot logs).
 /BOT_PLAY
 /bot-state*.jsonl
+
+# AppImage・Flatpak のビルド (packaging/linux)
+.flatpak-builder/
+build-flatpak/
+build-appimage/
+*.AppImage
+*.flatpak

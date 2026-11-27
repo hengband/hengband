@@ -49,6 +49,18 @@ schema_files = \
 	schema/VaultDefinitions.schema.json \
 	schema/WildernessDefinition.schema.json
 
+linux_packaging_files = \
+	packaging/linux/README.md \
+	packaging/linux/build-appimage.sh \
+	packaging/linux/hengband-launcher.sh \
+	packaging/linux/hengband-module.yml \
+	packaging/linux/hengband.desktop.in \
+	packaging/linux/hengband.metainfo.xml.in \
+	packaging/linux/hengband.png \
+	packaging/linux/install-tree.sh \
+	packaging/linux/io.github.hengband.Hengband.yml \
+	packaging/linux/io.github.hengband.HengbandEn.yml
+
 EXTRA_DIST = \
 	lib/edit/ClassMagicDefinitions.md \
 	lib/edit/ClassSkillDefinitions.md \
@@ -63,6 +75,7 @@ EXTRA_DIST = \
 	readme-eng.md \
 	THIRD-PARTY-NOTICES.txt \
 	hengband.spec \
+	$(linux_packaging_files) \
 	tools/bot/hbctl.py \
 	tools/bot/README.md \
 	tools/release/Build-Windows-Release-Package.ps1 \

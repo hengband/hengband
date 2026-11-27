@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>@APP_ID@</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>LicenseRef-proprietary=https://github.com/hengband/hengband/blob/develop/lib/help/jlicense.txt</project_license>
+  <name>@NAME@</name>
+  <name xml:lang="ja">@NAME_JA@</name>
+  <summary>A roguelike variant of Angband (@LANG@ version)</summary>
+  <summary xml:lang="ja">Angband 系のローグライクゲーム (@LANG_JA@版)</summary>
+  <description>
+    <p>Hengband is a Moria/Angband-style roguelike game derived from Zangband. Explore a 100-level dungeon and defeat the final boss.</p>
+    <p xml:lang="ja">変愚蛮怒は Zangband から派生した Moria/Angband 系のローグライクゲームです。100 階層のダンジョンを探索し、ラストボスの撃破を目指します。</p>
+  </description>
+  <launchable type="desktop-id">@APP_ID@.desktop</launchable>
+  <url type="homepage">https://hengband.github.io/</url>
+  <url type="bugtracker">https://github.com/hengband/hengband/issues</url>
+  <url type="vcs-browser">https://github.com/hengband/hengband</url>
+  <developer id="io.github.hengband">
+    <name>Hengband Development Team</name>
+  </developer>
+  <content_rating type="oars-1.1">
+    <content_attribute id="violence-fantasy">moderate</content_attribute>
+  </content_rating>
+  <categories>
+    <category>Game</category>
+    <category>RolePlaying</category>
+  </categories>
+  <releases>
+    <release version="@VERSION@" date="@DATE@" type="@RELEASE_TYPE@"/>
+  </releases>
+</component>

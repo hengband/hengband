@@ -1,0 +1,163 @@
+name: Build Linux Packages (AppImage / Flatpak)
+
+on:
+  # パッケージの定義やビルドに関わるものを変えたときに PR で確かめる。
+  # ソースの変更で壊れたことに、リリースのときに初めて気づくことがないよう、src/ の変更でも動かす
+  pull_request:
+    paths:
+      - packaging/linux/**
+      - .github/workflows/build-linux-packages.yml
+      - configure.ac
+      - Makefile.am
+      - src/**
+      - lib/**/Makefile.am
+  # 成果物のストレージには上限があるので、パッケージ (1 つ数十 MB) は求められたときだけ成果物に置く。
+  # PR ではビルドとチェックだけを行い、成果物に置かない
+  workflow_dispatch:
+    inputs:
+      upload:
+        description: パッケージを成果物に置く
+        type: boolean
+        default: true
+  # リリースのワークフローなどから呼べるようにする
+  workflow_call:
+    inputs:
+      upload:
+        description: パッケージを成果物に置く
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  appimage:
+    name: AppImage (${{ matrix.lang }})
+    # 動かせる環境を広げるため、glibc の古いものを使う
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - lang: ja
+            app-id: io.github.hengband.Hengband
+            configure-opts: ""
+          - lang: en
+            app-id: io.github.hengband.HengbandEn
+            configure-opts: --disable-japanese
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      # タイルだけを使う。Visual Studio 用の libcurl は要らない
+      - name: Checkout lib/xtra
+        run: git submodule update --init --depth 1 lib/xtra
+
+      - name: Install packages
+        run: |
+          sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            autoconf automake pkg-config g++-16 \
+            libncurses-dev libcurl4-openssl-dev libx11-dev libxext-dev libxft-dev libpng-dev \
+            file desktop-file-utils patchelf
+
+      # continuous は中身が入れ替わるので、版を固定してハッシュを確かめる。更新するときは版とハッシュを合わせて変える
+      - name: Install linuxdeploy
+        run: |
+          mkdir -p "$RUNNER_TEMP/bin"
+          cd "$RUNNER_TEMP/bin"
+          base=https://github.com/linuxdeploy
+          curl -fsSL -o linuxdeploy "$base/linuxdeploy/releases/download/1-alpha-20251107-1/linuxdeploy-x86_64.AppImage"
+          curl -fsSL -o linuxdeploy-plugin-appimage "$base/linuxdeploy-plugin-appimage/releases/download/1-alpha-20250213-1/linuxdeploy-plugin-appimage-x86_64.AppImage"
+          sha256sum -c - <<'SUMS'
+          c20cd71e3a4e3b80c3483cef793cda3f4e990aca14014d23c544ca3ce1270b4d  linuxdeploy
+          992d502a248e14ab185448ddf6f6e7d25558cb84d4623c354c3af350c25fccb3  linuxdeploy-plugin-appimage
+          SUMS
+          chmod +x linuxdeploy linuxdeploy-plugin-appimage
+          echo "$RUNNER_TEMP/bin" >> "$GITHUB_PATH"
+
+      - name: Build
+        # libstdc++ は GCC 16 のものが要り、利用者の環境には無いことが多いので静的にリンクする
+        run: |
+          ./bootstrap
+          CC=gcc-16 CXX=g++-16 ./configure --enable-xft ${{ matrix.configure-opts }} \
+            CXXFLAGS="-O2" LDFLAGS="-static-libstdc++ -static-libgcc"
+          make -j"$(getconf _NPROCESSORS_ONLN)"
+
+      - name: Build AppImage
+        env:
+          # GitHub Actions のランナーでは FUSE を使えないので、展開してから実行する
+          APPIMAGE_EXTRACT_AND_RUN: 1
+        run: sh packaging/linux/build-appimage.sh ${{ matrix.app-id }} dist
+
+      # 同梱したライブラリが、ホストのものより先に使われることを確かめる
+      - name: Check bundled libraries
+        run: |
+          cd "$RUNNER_TEMP"
+          "$GITHUB_WORKSPACE"/dist/*.AppImage --appimage-extract > /dev/null
+          readelf -d squashfs-root/usr/libexec/hengband/hengband | grep -E 'RPATH|RUNPATH'
+          ldd squashfs-root/usr/libexec/hengband/hengband | tee ldd.txt
+          # required はどの版もリンクするもの。optional は版によってリンクしないもの
+          # (英語版はワールドスコアの送信が無いので libcurl をリンクしない)。リンクしていれば、どちらも同梱から読むこと
+          required="libncursesw.so.6 libpng16.so.16"
+          optional="libcurl.so.4"
+          for lib in $required $optional; do
+            if ! grep -q "$lib" ldd.txt; then
+              case " $required " in *" $lib "*) echo "::error::$lib is not linked"; exit 1 ;; esac
+              continue
+            fi
+            grep -q "$lib => [^ ]*/squashfs-root/" ldd.txt || { echo "::error::$lib is not loaded from the AppImage: $(grep "$lib" ldd.txt)"; exit 1; }
+          done
+
+      - if: ${{ inputs.upload }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: appimage-${{ matrix.lang }}
+          path: dist/*.AppImage
+          if-no-files-found: error
+          # 受け渡しと確認のためだけに置くので、すぐに消す。AppImage は圧縮済みなので、もう圧縮しない
+          retention-days: 1
+          compression-level: 0
+
+  flatpak:
+    name: Flatpak (${{ matrix.lang }})
+    runs-on: ubuntu-24.04
+    container:
+      image: ghcr.io/flathub-infra/flatpak-github-actions:freedesktop-26.08
+      options: --privileged
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - lang: ja
+            app-id: io.github.hengband.Hengband
+          - lang: en
+            app-id: io.github.hengband.HengbandEn
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Checkout lib/xtra
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git submodule update --init --depth 1 lib/xtra
+
+      # コンテナには SDK が入っている。コンテナの中では FUSE を使えないので rofiles-fuse を使わない
+      - name: Build Flatpak
+        run: |
+          flatpak-builder --disable-rofiles-fuse --force-clean --repo=build-flatpak/repo \
+            build-flatpak/build packaging/linux/${{ matrix.app-id }}.yml
+          mkdir -p dist
+          flatpak build-bundle build-flatpak/repo dist/${{ matrix.app-id }}.flatpak ${{ matrix.app-id }}
+
+      - if: ${{ inputs.upload }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: flatpak-${{ matrix.lang }}
+          path: dist/*.flatpak
+          if-no-files-found: error
+          retention-days: 1
+          compression-level: 0

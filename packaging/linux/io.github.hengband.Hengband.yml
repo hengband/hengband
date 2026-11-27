@@ -1,0 +1,15 @@
+# 変愚蛮怒 (日本語版) の Flatpak マニフェスト。ビルド方法は packaging/linux/README.md を参照
+app-id: io.github.hengband.Hengband
+runtime: org.freedesktop.Platform
+runtime-version: '26.08'
+sdk: org.freedesktop.Sdk
+command: hengband
+finish-args:
+  - --socket=x11
+  - --share=ipc
+  # ワールドスコアの送信やエラーの報告に使う
+  - --share=network
+  # ユーザーディレクトリ (~/.angband/Hengband) をサンドボックスの中に保つ
+  - --persist=.angband
+modules:
+  - hengband-module.yml
