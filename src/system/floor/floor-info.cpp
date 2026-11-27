@@ -37,6 +37,7 @@
 #include <algorithm>
 #include <array>
 #include <fmt/format.h>
+#include <ranges>
 
 namespace {
 //!< @brief 最小面積ダンジョン(迷宮/金鉱)の大きさを「1ブロック×1ブロック」と定義した時の、1フロアのブロック数
@@ -266,6 +267,39 @@ bool FloorType::has_glowing_neighbor(const Pos2D &pos) const
 
         return this->get_grid(pos_neighbor).get_terrain(TerrainKind::MIMIC).flags.has(TerrainCharacteristics::GLOW);
     });
+}
+
+/*!
+ * @brief 中心からの距離が指定した値以内の座標を返す
+ * @param center 中心の座標
+ * @param distance 距離 (Grid::calc_distance() で測る)
+ * @return 外周の壁を除いたフロアの中で、中心からの距離が distance 以内の座標 (上の行から、行の中は左から順)
+ */
+std::vector<Pos2D> FloorType::get_positions_within_distance(const Pos2D &center, int distance) const
+{
+    const auto is_within = [&](const Pos2D &pos) {
+        return this->contains(pos, FloorBoundary::OUTER_WALL_EXCLUSIVE) && Grid::calc_distance(center, pos) <= distance;
+    };
+
+    return Rect2D(center, Pos2DVec(distance, distance)) |
+           std::views::filter(is_within) |
+           std::ranges::to<std::vector<Pos2D>>();
+}
+
+/*!
+ * @brief 明るさを消した範囲の、地形による明るさ (CAVE_GLOW) を付け直す
+ * @param area 付け直す範囲
+ * @details 鏡のマスは常に明るくする。暗いダンジョン (DARKNESS) でなければ、そのマスとその周り 8 マスのどれかに光る地形があるマスも明るくする。
+ */
+void FloorType::relight_area(std::span<const Pos2D> area)
+{
+    const auto is_dark_dungeon = this->get_dungeon_definition().flags.has(DungeonFeatureType::DARKNESS);
+    for (const auto &pos : area) {
+        auto &grid = this->get_grid(pos);
+        if (grid.is_mirror() || (!is_dark_dungeon && this->has_glowing_neighbor(pos))) {
+            grid.info |= CAVE_GLOW;
+        }
+    }
 }
 
 /*!

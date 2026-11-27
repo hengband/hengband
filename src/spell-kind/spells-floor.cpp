@@ -231,176 +231,134 @@ bool destroy_area(PlayerType *player_ptr, const POSITION y1, const POSITION x1, 
     /* Big area of affect */
     const auto &dungeon = floor.get_dungeon_definition();
     auto flag = false;
-    for (auto y = (y1 - r); y <= (y1 + r); y++) {
-        for (auto x = (x1 - r); x <= (x1 + r); x++) {
-            const Pos2D pos(y, x);
-            if (!floor.contains(pos, FloorBoundary::OUTER_WALL_EXCLUSIVE)) {
+    const auto area = floor.get_positions_within_distance(pos1, r);
+    for (const auto &pos : area) {
+        auto &grid = floor.get_grid(pos);
+
+        /* Lose room and vault */
+        grid.info &= ~(CAVE_ROOM | CAVE_NO_TELEPORT_DEST);
+
+        /* Lose light and knowledge */
+        grid.info &= ~(CAVE_MARK | CAVE_GLOW | CAVE_KNOWN);
+
+        if (!in_generate) /* Normal */
+        {
+            /* Lose unsafety */
+            grid.info &= ~(CAVE_UNSAFE);
+
+            /* Hack -- Notice player affect */
+            if (player_ptr->is_located_at(pos)) {
+                /* Hurt the player later */
+                flag = true;
+
+                /* Do not hurt this grid */
                 continue;
             }
+        }
 
-            /* Extract the distance */
-            auto k = Grid::calc_distance(pos1, pos);
+        /* Hack -- Skip the epicenter */
+        if (pos == pos1) {
+            continue;
+        }
 
-            /* Stay in the circle of death */
-            if (k > r) {
-                continue;
-            }
+        if (grid.has_monster()) {
+            auto &monster = floor.m_list[grid.m_idx];
+            auto &monrace = monster.get_monrace();
 
-            auto &grid = floor.get_grid(pos);
-
-            /* Lose room and vault */
-            grid.info &= ~(CAVE_ROOM | CAVE_NO_TELEPORT_DEST);
-
-            /* Lose light and knowledge */
-            grid.info &= ~(CAVE_MARK | CAVE_GLOW | CAVE_KNOWN);
-
-            if (!in_generate) /* Normal */
+            if (in_generate) /* In generation */
             {
-                /* Lose unsafety */
-                grid.info &= ~(CAVE_UNSAFE);
+                /* Delete the monster (if any) */
+                delete_monster(player_ptr, pos);
+            } else if (monrace.misc_flags.has(MonsterMiscType::QUESTOR)) {
+                /* Heal the monster */
+                monster.hp = monster.maxhp;
 
-                /* Hack -- Notice player affect */
-                if (player_ptr->is_located_at(pos)) {
-                    /* Hurt the player later */
-                    flag = true;
-
-                    /* Do not hurt this grid */
+                /* Try to teleport away quest monsters */
+                if (!teleport_away(player_ptr, grid.m_idx, (r * 2) + 1, TELEPORT_DEC_VALOUR)) {
                     continue;
                 }
-            }
-
-            /* Hack -- Skip the epicenter */
-            if (pos == pos1) {
-                continue;
-            }
-
-            if (grid.has_monster()) {
-                auto &monster = floor.m_list[grid.m_idx];
-                auto &monrace = monster.get_monrace();
-
-                if (in_generate) /* In generation */
-                {
-                    /* Delete the monster (if any) */
-                    delete_monster(player_ptr, pos);
-                } else if (monrace.misc_flags.has(MonsterMiscType::QUESTOR)) {
-                    /* Heal the monster */
-                    monster.hp = monster.maxhp;
-
-                    /* Try to teleport away quest monsters */
-                    if (!teleport_away(player_ptr, grid.m_idx, (r * 2) + 1, TELEPORT_DEC_VALOUR)) {
-                        continue;
-                    }
-                } else {
-                    if (record_named_pet && monster.is_named_pet()) {
-                        const auto m_name = monster_desc(player_ptr, monster, MD_INDEF_VISIBLE);
-                        exe_write_diary(floor, DiaryKind::NAMED_PET, RECORD_NAMED_PET_DESTROY, m_name);
-                    }
-
-                    /* Delete the monster (if any) */
-                    delete_monster(player_ptr, pos);
-                }
-            }
-
-            /* During generation, destroyed artifacts are "preserved" */
-            if (preserve_mode || in_generate) {
-                /* Scan all objects in the grid */
-                for (const auto this_o_idx : grid.o_idx_list) {
-                    auto &item = *floor.o_list[this_o_idx];
-                    if (item.is_fixed_artifact() && (!item.is_known() || in_generate)) {
-                        item.set_fixed_artifact_generated(false);
-
-                        if (in_generate && cheat_peek) {
-                            const auto fixed_artifact_name = item.get_fixed_artifact_name();
-                            msg_print(_("伝説のアイテム ({}) は生成中に*破壊*された。", "Artifact ({}) was *destroyed* during generation."), fixed_artifact_name);
-                        }
-                    } else if (in_generate && cheat_peek && item.is_random_artifact()) {
-                        msg_print(
-                            _("ランダム・アーティファクトの1つは生成中に*破壊*された。", "One of the random artifacts was *destroyed* during generation."));
-                    }
-                }
-            }
-
-            delete_all_items_from_floor(player_ptr, pos);
-
-            /* Destroy "non-permanent" grids */
-            if (grid.has(TerrainCharacteristics::PERMANENT)) {
-                continue;
-            }
-
-            /* Wall (or floor) type */
-            int t = randint0(200);
-
-            if (!in_generate) /* Normal */
-            {
-                if (t < 20) {
-                    /* Create granite wall */
-                    set_terrain_id_to_grid(player_ptr, pos, TerrainTag::GRANITE_WALL);
-                } else if (t < 70) {
-                    /* Create quartz vein */
-                    set_terrain_id_to_grid(player_ptr, pos, TerrainTag::QUARTZ_VEIN);
-                } else if (t < 100) {
-                    /* Create magma vein */
-                    set_terrain_id_to_grid(player_ptr, pos, TerrainTag::MAGMA_VEIN);
-                } else {
-                    /* Create floor */
-                    set_terrain_id_to_grid(player_ptr, pos, dungeon.select_floor_terrain_id());
+            } else {
+                if (record_named_pet && monster.is_named_pet()) {
+                    const auto m_name = monster_desc(player_ptr, monster, MD_INDEF_VISIBLE);
+                    exe_write_diary(floor, DiaryKind::NAMED_PET, RECORD_NAMED_PET_DESTROY, m_name);
                 }
 
-                continue;
+                /* Delete the monster (if any) */
+                delete_monster(player_ptr, pos);
             }
+        }
 
+        /* During generation, destroyed artifacts are "preserved" */
+        if (preserve_mode || in_generate) {
+            /* Scan all objects in the grid */
+            for (const auto this_o_idx : grid.o_idx_list) {
+                auto &item = *floor.o_list[this_o_idx];
+                if (item.is_fixed_artifact() && (!item.is_known() || in_generate)) {
+                    item.set_fixed_artifact_generated(false);
+
+                    if (in_generate && cheat_peek) {
+                        const auto fixed_artifact_name = item.get_fixed_artifact_name();
+                        msg_print(_("伝説のアイテム ({}) は生成中に*破壊*された。", "Artifact ({}) was *destroyed* during generation."), fixed_artifact_name);
+                    }
+                } else if (in_generate && cheat_peek && item.is_random_artifact()) {
+                    msg_print(
+                        _("ランダム・アーティファクトの1つは生成中に*破壊*された。", "One of the random artifacts was *destroyed* during generation."));
+                }
+            }
+        }
+
+        delete_all_items_from_floor(player_ptr, pos);
+
+        /* Destroy "non-permanent" grids */
+        if (grid.has(TerrainCharacteristics::PERMANENT)) {
+            continue;
+        }
+
+        /* Wall (or floor) type */
+        int t = randint0(200);
+
+        if (!in_generate) /* Normal */
+        {
             if (t < 20) {
                 /* Create granite wall */
-                place_grid(player_ptr, grid, GB_EXTRA);
+                set_terrain_id_to_grid(player_ptr, pos, TerrainTag::GRANITE_WALL);
             } else if (t < 70) {
                 /* Create quartz vein */
-                grid.set_terrain_id(TerrainTag::QUARTZ_VEIN);
+                set_terrain_id_to_grid(player_ptr, pos, TerrainTag::QUARTZ_VEIN);
             } else if (t < 100) {
                 /* Create magma vein */
-                grid.set_terrain_id(TerrainTag::MAGMA_VEIN);
+                set_terrain_id_to_grid(player_ptr, pos, TerrainTag::MAGMA_VEIN);
             } else {
                 /* Create floor */
-                place_grid(player_ptr, grid, GB_FLOOR);
+                set_terrain_id_to_grid(player_ptr, pos, dungeon.select_floor_terrain_id());
             }
 
-            /* Clear garbage of hidden trap or door */
-            grid.mimic = 0;
+            continue;
         }
+
+        if (t < 20) {
+            /* Create granite wall */
+            place_grid(player_ptr, grid, GB_EXTRA);
+        } else if (t < 70) {
+            /* Create quartz vein */
+            grid.set_terrain_id(TerrainTag::QUARTZ_VEIN);
+        } else if (t < 100) {
+            /* Create magma vein */
+            grid.set_terrain_id(TerrainTag::MAGMA_VEIN);
+        } else {
+            /* Create floor */
+            place_grid(player_ptr, grid, GB_FLOOR);
+        }
+
+        /* Clear garbage of hidden trap or door */
+        grid.mimic = 0;
     }
 
     if (in_generate) {
         return true;
     }
 
-    /* Process "re-glowing" */
-    for (auto y = (y1 - r); y <= (y1 + r); y++) {
-        for (auto x = (x1 - r); x <= (x1 + r); x++) {
-            const Pos2D pos(y, x);
-            if (!floor.contains(pos, FloorBoundary::OUTER_WALL_EXCLUSIVE)) {
-                continue;
-            }
-
-            /* Stay in the circle of death */
-            auto k = Grid::calc_distance(pos1, pos);
-            if (k > r) {
-                continue;
-            }
-
-            auto &grid = floor.get_grid(pos);
-            if (grid.is_mirror()) {
-                grid.info |= CAVE_GLOW;
-                continue;
-            }
-
-            if (floor.get_dungeon_definition().flags.has(DungeonFeatureType::DARKNESS)) {
-                continue;
-            }
-
-            if (floor.has_glowing_neighbor(pos)) {
-                grid.info |= CAVE_GLOW;
-            }
-        }
-    }
+    floor.relight_area(area);
 
     if (flag) {
         msg_print(_("燃えるような閃光が発生した！", "There is a searing blast of light!"));
