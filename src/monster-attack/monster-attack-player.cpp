@@ -235,6 +235,7 @@ bool MonsterAttackPlayer::process_monster_attack_hit()
 
     this->do_cut = 0;
     this->do_stun = 0;
+    this->touched = false;
     describe_monster_attack_method(this);
     this->describe_silly_attacks();
     this->obvious = true;
