@@ -411,6 +411,19 @@ bool ItemEntity::is_blessed() const
     return this->get_flags().has(TR_BLESSED);
 }
 
+/*!
+ * @brief 祝福されていない刃物 (剣・長柄武器) かを判定する
+ * @return 祝福されていない剣・長柄武器か否か
+ * @details プリーストが持つと罰 (呪文の失敗率の上昇、命中・ダメージの低下) を受ける武器の条件である。
+ * 鈍器などの刃物でない武器と、武器でないアイテムは、祝福が無くても偽を返す。
+ */
+bool ItemEntity::is_unblessed_edged_weapon() const
+{
+    const auto tval = this->bi_key.tval();
+    const auto is_edged_weapon = (tval == ItemKindType::SWORD) || (tval == ItemKindType::POLEARM);
+    return is_edged_weapon && !this->is_blessed();
+}
+
 bool ItemEntity::is_held_by_monster() const
 {
     return this->held_m_idx != 0;

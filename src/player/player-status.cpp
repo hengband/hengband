@@ -2042,8 +2042,7 @@ static short calc_to_damage(PlayerType *player_ptr, INVENTORY_IDX slot, bool is_
 
     damage -= player_ptr->effects()->stun().get_damage_penalty();
     PlayerClass pc(player_ptr);
-    const auto tval = o_ptr->bi_key.tval();
-    if (pc.equals(PlayerClassType::PRIEST) && (o_ptr->get_flags().has_not(TR_BLESSED)) && ((tval == ItemKindType::SWORD) || (tval == ItemKindType::POLEARM))) {
+    if (pc.equals(PlayerClassType::PRIEST) && o_ptr->is_unblessed_edged_weapon()) {
         damage -= 2;
     } else if (pc.equals(PlayerClassType::BERSERKER)) {
         damage += player_ptr->lev / 6;
@@ -2275,7 +2274,7 @@ static short calc_to_hit(PlayerType *player_ptr, INVENTORY_IDX slot, bool is_rea
         }
 
         /* Class penalties */
-        if (pc.equals(PlayerClassType::PRIEST) && (flags.has_not(TR_BLESSED)) && ((tval == ItemKindType::SWORD) || (tval == ItemKindType::POLEARM))) {
+        if (pc.equals(PlayerClassType::PRIEST) && o_ptr->is_unblessed_edged_weapon()) {
             hit -= 2;
         } else if (pc.equals(PlayerClassType::BERSERKER)) {
             hit += player_ptr->lev / 5;

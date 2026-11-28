@@ -319,3 +319,59 @@ TEST_CASE("ItemEntity is_blessed finds the blessing on the base item, the ego an
         CHECK(item.is_blessed());
     }
 }
+
+TEST_CASE("ItemEntity is_unblessed_edged_weapon is true only for a sword or a polearm without the blessing")
+{
+    test::ScopedVectorWrapper<BaseitemList> saved_items{ BaseitemList::get_instance() };
+    auto &items = BaseitemList::get_instance();
+    items.resize(2);
+    auto &base = items.get_baseitem(1);
+    base.name = "Test";
+    ItemEntity item;
+    item.bi_id = 1;
+
+    SUBCASE("a sword or a polearm is unsuitable until it is blessed")
+    {
+        for (const auto tval : { ItemKindType::SWORD, ItemKindType::POLEARM }) {
+            CAPTURE(static_cast<int>(tval));
+            base.bi_key = BaseitemKey(tval, 1);
+            item.bi_key = base.bi_key;
+            item.art_flags.clear();
+            CHECK(item.is_unblessed_edged_weapon());
+
+            item.art_flags.set(TR_BLESSED);
+            CHECK_FALSE(item.is_unblessed_edged_weapon());
+        }
+    }
+
+    SUBCASE("the blessing of the base item also makes an edged weapon suitable")
+    {
+        base.bi_key = BaseitemKey(ItemKindType::SWORD, 1);
+        base.flags.set(TR_BLESSED);
+        item.bi_key = base.bi_key;
+        CHECK_FALSE(item.is_unblessed_edged_weapon());
+    }
+
+    SUBCASE("an item that is not an edged weapon is never unsuitable")
+    {
+        // 鈍器、掘削具、射撃武器、矢、盾は、祝福が無くても罰の対象にならない
+        for (const auto tval : { ItemKindType::HAFTED, ItemKindType::DIGGING, ItemKindType::BOW, ItemKindType::ARROW, ItemKindType::SHIELD }) {
+            CAPTURE(static_cast<int>(tval));
+            base.bi_key = BaseitemKey(tval, 1);
+            item.bi_key = base.bi_key;
+            item.art_flags.clear();
+            CHECK_FALSE(item.is_unblessed_edged_weapon());
+
+            item.art_flags.set(TR_BLESSED);
+            CHECK_FALSE(item.is_unblessed_edged_weapon());
+        }
+    }
+
+    SUBCASE("an empty slot is not unsuitable")
+    {
+        // 何も持っていない手のアイテムは、ベースアイテムを引かずに偽を返す
+        const ItemEntity empty_item;
+        CHECK_FALSE(empty_item.is_valid());
+        CHECK_FALSE(empty_item.is_unblessed_edged_weapon());
+    }
+}
