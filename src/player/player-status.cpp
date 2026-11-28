@@ -2043,7 +2043,7 @@ static short calc_to_damage(PlayerType *player_ptr, INVENTORY_IDX slot, bool is_
 
     damage -= player_ptr->effects()->stun().get_damage_penalty();
     PlayerClass pc(player_ptr);
-    if (pc.equals(PlayerClassType::PRIEST) && o_ptr->is_unblessed_edged_weapon(get_priest_blessing(player_ptr))) {
+    if (pc.equals(PlayerClassType::PRIEST) && o_ptr->is_unsuitable_weapon_for_priest(get_priest_blessing(player_ptr))) {
         damage -= 2;
     } else if (pc.equals(PlayerClassType::BERSERKER)) {
         damage += player_ptr->lev / 6;
@@ -2275,7 +2275,7 @@ static short calc_to_hit(PlayerType *player_ptr, INVENTORY_IDX slot, bool is_rea
         }
 
         /* Class penalties */
-        if (pc.equals(PlayerClassType::PRIEST) && o_ptr->is_unblessed_edged_weapon(get_priest_blessing(player_ptr))) {
+        if (pc.equals(PlayerClassType::PRIEST) && o_ptr->is_unsuitable_weapon_for_priest(get_priest_blessing(player_ptr))) {
             hit -= 2;
         } else if (pc.equals(PlayerClassType::BERSERKER)) {
             hit += player_ptr->lev / 5;

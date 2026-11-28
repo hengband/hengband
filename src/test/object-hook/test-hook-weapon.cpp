@@ -70,9 +70,9 @@ TEST_CASE("object_is_favorite for a priest follows the blessing of the first rea
         sword.art_flags.set(TR_BLESSED);
         CHECK(object_is_favorite(&player, &sword));
 
-        // 両方の神の祝福を持つ剣も、自らの神の祝福があるのでふさわしい
+        // もう一方の神の祝福も持つ剣は、自らの神の祝福があってもふさわしくない
         sword.art_flags.set(TR_BLESSED_EVIL);
-        CHECK(object_is_favorite(&player, &sword));
+        CHECK_FALSE(object_is_favorite(&player, &sword));
     }
 
     SUBCASE("a priest of an evil realm favors a sword blessed by the gods of evil")
@@ -88,9 +88,9 @@ TEST_CASE("object_is_favorite for a priest follows the blessing of the first rea
         sword.art_flags.set(TR_BLESSED_EVIL);
         CHECK(object_is_favorite(&player, &sword));
 
-        // 両方の神の祝福を持つ剣も、自らの神の祝福があるのでふさわしい
+        // もう一方の神の祝福も持つ剣は、自らの神の祝福があってもふさわしくない
         sword.art_flags.set(TR_BLESSED);
-        CHECK(object_is_favorite(&player, &sword));
+        CHECK_FALSE(object_is_favorite(&player, &sword));
     }
 
     SUBCASE("a blessing the player does not know yet does not count")
@@ -103,17 +103,47 @@ TEST_CASE("object_is_favorite for a priest follows the blessing of the first rea
     }
 }
 
-TEST_CASE("object_is_favorite for a priest always favors a hafted weapon")
+TEST_CASE("object_is_favorite for a priest favors a hafted weapon unless the other gods blessed it")
 {
     test::ScopedVectorWrapper<BaseitemList> saved_baseitems{ BaseitemList::get_instance() };
     test::ScopedVectorWrapper<BaseitemRecords> saved_records{ BaseitemRecords::get_instance() };
     PlayerType player;
     player.pclass = PlayerClassType::PRIEST;
     PlayerRealm pr(&player);
-    const auto mace = make_fully_known_weapon(ItemKindType::HAFTED);
+    auto mace = make_fully_known_weapon(ItemKindType::HAFTED);
 
-    pr.set(RealmType::LIFE);
-    CHECK(object_is_favorite(&player, &mace));
-    pr.set(RealmType::DEATH);
-    CHECK(object_is_favorite(&player, &mace));
+    SUBCASE("a hafted weapon without a blessing is always favored")
+    {
+        pr.set(RealmType::LIFE);
+        CHECK(object_is_favorite(&player, &mace));
+        pr.set(RealmType::DEATH);
+        CHECK(object_is_favorite(&player, &mace));
+    }
+
+    SUBCASE("a hafted weapon blessed by the gods of good is not favored by a priest of an evil realm")
+    {
+        mace.art_flags.set(TR_BLESSED);
+        pr.set(RealmType::LIFE);
+        CHECK(object_is_favorite(&player, &mace));
+        pr.set(RealmType::DEATH);
+        CHECK_FALSE(object_is_favorite(&player, &mace));
+    }
+
+    SUBCASE("a hafted weapon blessed by the gods of evil is not favored by a priest of a good realm")
+    {
+        mace.art_flags.set(TR_BLESSED_EVIL);
+        pr.set(RealmType::LIFE);
+        CHECK_FALSE(object_is_favorite(&player, &mace));
+        pr.set(RealmType::DEATH);
+        CHECK(object_is_favorite(&player, &mace));
+    }
+
+    SUBCASE("a blessing of the other gods the player does not know yet does not count")
+    {
+        // *鑑定* していないアイテムの個別の特性は、プレイヤーにはまだ分からない
+        mace.art_flags.set(TR_BLESSED);
+        mace.reset_identification_flag(IdentificationFlag::FULL_KNOWN);
+        pr.set(RealmType::DEATH);
+        CHECK(object_is_favorite(&player, &mace));
+    }
 }

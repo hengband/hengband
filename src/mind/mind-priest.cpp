@@ -22,10 +22,22 @@
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return 第一領域が善の領域 (生命・破邪) なら善の神の祝福、そうでなければ (暗黒・悪魔) 邪の神の祝福
  * @details プリーストは、この祝福を持つ剣・長柄武器なら罰を受けずに持てる。
+ * もう一方の神の祝福 (get_other_blessing()) を持つ武器は、鈍器でも罰を受ける。
+ * 罰の条件は ItemEntity::is_unsuitable_weapon_for_priest() にある。
  */
 tr_type get_priest_blessing(PlayerType *player_ptr)
 {
     return PlayerRealm(player_ptr).realm1().is_good_attribute() ? TR_BLESSED : TR_BLESSED_EVIL;
+}
+
+/*!
+ * @brief もう一方の神の祝福の特性フラグを返す
+ * @param blessing 祝福 (TR_BLESSED か TR_BLESSED_EVIL)
+ * @return 善の神の祝福なら邪の神の祝福、邪の神の祝福なら善の神の祝福
+ */
+tr_type get_other_blessing(tr_type blessing)
+{
+    return (blessing == TR_BLESSED) ? TR_BLESSED_EVIL : TR_BLESSED;
 }
 
 /*!
@@ -45,7 +57,7 @@ BlessWeaponOutcome apply_blessing_to_weapon(ItemEntity &item, tr_type blessing)
 {
     BlessWeaponOutcome outcome{ BlessWeaponResult::BLESSED, false, false };
     const auto is_evil_blessing = blessing == TR_BLESSED_EVIL;
-    const auto other_blessing = is_evil_blessing ? TR_BLESSED : TR_BLESSED_EVIL;
+    const auto other_blessing = get_other_blessing(blessing);
     const auto item_flags = item.get_flags();
     if (item_flags.has(other_blessing)) {
         outcome.result = BlessWeaponResult::REJECTED;

@@ -72,6 +72,12 @@ TEST_CASE("get_priest_blessing ignores the second realm")
     CHECK(get_priest_blessing(&player) == TR_BLESSED_EVIL);
 }
 
+TEST_CASE("get_other_blessing returns the blessing of the other gods")
+{
+    CHECK(get_other_blessing(TR_BLESSED) == TR_BLESSED_EVIL);
+    CHECK(get_other_blessing(TR_BLESSED_EVIL) == TR_BLESSED);
+}
+
 TEST_CASE("apply_blessing_to_weapon always blesses a weapon that is neither an artifact nor an ego")
 {
     test::ScopedVectorWrapper<BaseitemList> saved_baseitems{ BaseitemList::get_instance() };

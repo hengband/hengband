@@ -320,7 +320,7 @@ TEST_CASE("ItemEntity is_blessed finds the blessing on the base item, the ego an
     }
 }
 
-TEST_CASE("ItemEntity is_unblessed_edged_weapon is true only for a sword or a polearm without the blessing")
+TEST_CASE("ItemEntity is_unsuitable_weapon_for_priest follows the kind of the weapon and its blessings")
 {
     test::ScopedVectorWrapper<BaseitemList> saved_items{ BaseitemList::get_instance() };
     auto &items = BaseitemList::get_instance();
@@ -337,10 +337,10 @@ TEST_CASE("ItemEntity is_unblessed_edged_weapon is true only for a sword or a po
             base.bi_key = BaseitemKey(tval, 1);
             item.bi_key = base.bi_key;
             item.art_flags.clear();
-            CHECK(item.is_unblessed_edged_weapon(TR_BLESSED));
+            CHECK(item.is_unsuitable_weapon_for_priest(TR_BLESSED));
 
             item.art_flags.set(TR_BLESSED);
-            CHECK_FALSE(item.is_unblessed_edged_weapon(TR_BLESSED));
+            CHECK_FALSE(item.is_unsuitable_weapon_for_priest(TR_BLESSED));
         }
     }
 
@@ -349,43 +349,79 @@ TEST_CASE("ItemEntity is_unblessed_edged_weapon is true only for a sword or a po
         base.bi_key = BaseitemKey(ItemKindType::SWORD, 1);
         base.flags.set(TR_BLESSED);
         item.bi_key = base.bi_key;
-        CHECK_FALSE(item.is_unblessed_edged_weapon(TR_BLESSED));
+        CHECK_FALSE(item.is_unsuitable_weapon_for_priest(TR_BLESSED));
     }
 
-    SUBCASE("only the requested blessing makes an edged weapon suitable")
+    SUBCASE("only the blessing of the gods of the priest makes an edged weapon suitable")
     {
-        // 邪の神の祝福が要るときは、善の神の祝福は祝福が無いのと同じに扱う (逆も同じ)
         base.bi_key = BaseitemKey(ItemKindType::SWORD, 1);
         item.bi_key = base.bi_key;
-        CHECK(item.is_unblessed_edged_weapon(TR_BLESSED_EVIL));
+        CHECK(item.is_unsuitable_weapon_for_priest(TR_BLESSED_EVIL));
 
         item.art_flags.set(TR_BLESSED);
-        CHECK_FALSE(item.is_unblessed_edged_weapon(TR_BLESSED));
-        CHECK(item.is_unblessed_edged_weapon(TR_BLESSED_EVIL));
+        CHECK_FALSE(item.is_unsuitable_weapon_for_priest(TR_BLESSED));
+        CHECK(item.is_unsuitable_weapon_for_priest(TR_BLESSED_EVIL));
 
         item.art_flags.clear();
         item.art_flags.set(TR_BLESSED_EVIL);
-        CHECK(item.is_unblessed_edged_weapon(TR_BLESSED));
-        CHECK_FALSE(item.is_unblessed_edged_weapon(TR_BLESSED_EVIL));
+        CHECK(item.is_unsuitable_weapon_for_priest(TR_BLESSED));
+        CHECK_FALSE(item.is_unsuitable_weapon_for_priest(TR_BLESSED_EVIL));
 
-        // 両方の祝福を持つ武器は、どちらの祝福が要るときもふさわしい
+        // もう一方の神の祝福を持つ武器は、自らの神の祝福を併せ持っていてもふさわしくない
         item.art_flags.set(TR_BLESSED);
-        CHECK_FALSE(item.is_unblessed_edged_weapon(TR_BLESSED));
-        CHECK_FALSE(item.is_unblessed_edged_weapon(TR_BLESSED_EVIL));
+        CHECK(item.is_unsuitable_weapon_for_priest(TR_BLESSED));
+        CHECK(item.is_unsuitable_weapon_for_priest(TR_BLESSED_EVIL));
     }
 
-    SUBCASE("an item that is not an edged weapon is never unsuitable")
+    SUBCASE("a melee weapon that is not edged is unsuitable only with the blessing of the other gods")
     {
-        // 鈍器、掘削具、射撃武器、矢、盾は、祝福が無くても罰の対象にならない
-        for (const auto tval : { ItemKindType::HAFTED, ItemKindType::DIGGING, ItemKindType::BOW, ItemKindType::ARROW, ItemKindType::SHIELD }) {
+        // 鈍器と掘削具は、祝福が無くても罰の対象にならない。もう一方の神の祝福があるときだけ罰の対象になる
+        for (const auto tval : { ItemKindType::HAFTED, ItemKindType::DIGGING }) {
             CAPTURE(static_cast<int>(tval));
             base.bi_key = BaseitemKey(tval, 1);
             item.bi_key = base.bi_key;
             item.art_flags.clear();
-            CHECK_FALSE(item.is_unblessed_edged_weapon(TR_BLESSED));
+            CHECK_FALSE(item.is_unsuitable_weapon_for_priest(TR_BLESSED));
+            CHECK_FALSE(item.is_unsuitable_weapon_for_priest(TR_BLESSED_EVIL));
 
             item.art_flags.set(TR_BLESSED);
-            CHECK_FALSE(item.is_unblessed_edged_weapon(TR_BLESSED));
+            CHECK_FALSE(item.is_unsuitable_weapon_for_priest(TR_BLESSED));
+            CHECK(item.is_unsuitable_weapon_for_priest(TR_BLESSED_EVIL));
+
+            item.art_flags.clear();
+            item.art_flags.set(TR_BLESSED_EVIL);
+            CHECK(item.is_unsuitable_weapon_for_priest(TR_BLESSED));
+            CHECK_FALSE(item.is_unsuitable_weapon_for_priest(TR_BLESSED_EVIL));
+
+            item.art_flags.set(TR_BLESSED);
+            CHECK(item.is_unsuitable_weapon_for_priest(TR_BLESSED));
+            CHECK(item.is_unsuitable_weapon_for_priest(TR_BLESSED_EVIL));
+        }
+    }
+
+    SUBCASE("the blessing of the other gods on the base item also makes a weapon unsuitable")
+    {
+        base.bi_key = BaseitemKey(ItemKindType::HAFTED, 1);
+        base.flags.set(TR_BLESSED);
+        item.bi_key = base.bi_key;
+        CHECK_FALSE(item.is_unsuitable_weapon_for_priest(TR_BLESSED));
+        CHECK(item.is_unsuitable_weapon_for_priest(TR_BLESSED_EVIL));
+    }
+
+    SUBCASE("an item that is not a melee weapon is never unsuitable")
+    {
+        // 射撃武器、矢、盾は、どちらの神の祝福があっても罰の対象にならない
+        for (const auto tval : { ItemKindType::BOW, ItemKindType::ARROW, ItemKindType::SHIELD }) {
+            CAPTURE(static_cast<int>(tval));
+            base.bi_key = BaseitemKey(tval, 1);
+            item.bi_key = base.bi_key;
+            item.art_flags.clear();
+            CHECK_FALSE(item.is_unsuitable_weapon_for_priest(TR_BLESSED));
+            CHECK_FALSE(item.is_unsuitable_weapon_for_priest(TR_BLESSED_EVIL));
+
+            item.art_flags.set(TR_BLESSED);
+            CHECK_FALSE(item.is_unsuitable_weapon_for_priest(TR_BLESSED));
+            CHECK_FALSE(item.is_unsuitable_weapon_for_priest(TR_BLESSED_EVIL));
         }
     }
 
@@ -394,6 +430,7 @@ TEST_CASE("ItemEntity is_unblessed_edged_weapon is true only for a sword or a po
         // 何も持っていない手のアイテムは、ベースアイテムを引かずに偽を返す
         const ItemEntity empty_item;
         CHECK_FALSE(empty_item.is_valid());
-        CHECK_FALSE(empty_item.is_unblessed_edged_weapon(TR_BLESSED));
+        CHECK_FALSE(empty_item.is_unsuitable_weapon_for_priest(TR_BLESSED));
+        CHECK_FALSE(empty_item.is_unsuitable_weapon_for_priest(TR_BLESSED_EVIL));
     }
 }

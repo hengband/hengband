@@ -25,8 +25,14 @@ bool object_is_favorite(PlayerType *player_ptr, const ItemEntity *o_ptr)
     const auto sval = *o_ptr->bi_key.sval();
     switch (player_ptr->pclass) {
     case PlayerClassType::PRIEST: {
+        // プレイヤーに分かっている特性で判定する。もう一方の神の祝福を持つ武器は、鈍器でも適正武器ではない
         const auto flags = o_ptr->get_flags_known();
-        return flags.has(get_priest_blessing(player_ptr)) || (tval == ItemKindType::HAFTED);
+        const auto blessing = get_priest_blessing(player_ptr);
+        if (flags.has(get_other_blessing(blessing))) {
+            return false;
+        }
+
+        return flags.has(blessing) || (tval == ItemKindType::HAFTED);
     }
     case PlayerClassType::MONK:
     case PlayerClassType::FORCETRAINER:

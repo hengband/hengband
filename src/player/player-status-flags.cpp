@@ -1742,7 +1742,7 @@ bool is_wielding_icky_weapon(PlayerType *player_ptr, int i)
     const auto *o_ptr = player_ptr->inventory[INVEN_MAIN_HAND + i].get();
     PlayerClass pc(player_ptr);
     if (pc.equals(PlayerClassType::PRIEST)) {
-        return o_ptr->is_unblessed_edged_weapon(get_priest_blessing(player_ptr));
+        return o_ptr->is_unsuitable_weapon_for_priest(get_priest_blessing(player_ptr));
     }
 
     const auto tval = o_ptr->bi_key.tval();

@@ -21,5 +21,6 @@ struct BlessWeaponOutcome {
 class ItemEntity;
 class PlayerType;
 tr_type get_priest_blessing(PlayerType *player_ptr);
+tr_type get_other_blessing(tr_type blessing);
 BlessWeaponOutcome apply_blessing_to_weapon(ItemEntity &item, tr_type blessing);
 bool bless_weapon(PlayerType *player_ptr);

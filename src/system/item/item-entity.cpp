@@ -413,18 +413,31 @@ bool ItemEntity::is_blessed() const
 }
 
 /*!
- * @brief 指定した祝福を持たない刃物 (剣・長柄武器) かを判定する
- * @param blessing 刃物に要る祝福 (TR_BLESSED か TR_BLESSED_EVIL)
- * @return 指定した祝福を持たない剣・長柄武器か否か
+ * @brief プリーストにふさわしくない武器かを判定する
+ * @param blessing プリーストの神の祝福 (TR_BLESSED か TR_BLESSED_EVIL)
+ * @return プリーストにふさわしくない武器か否か
  * @details プリーストが持つと罰 (呪文の失敗率の上昇、命中・ダメージの低下) を受ける武器の条件である。
- * プリーストに要る祝福は第一領域の善悪で決まり (get_priest_blessing())、もう一方の神の祝福は祝福が無いのと同じに扱う。
- * 鈍器などの刃物でない武器と、武器でないアイテムは、祝福が無くても偽を返す。
+ * プリーストの神の祝福は第一領域の善悪で決まる (get_priest_blessing())。
+ * - もう一方の神の祝福を持つ近接武器は、鈍器などの刃物でない武器でもふさわしくない。
+ *   プリーストの神の祝福を併せ持っていても同じである (両方の神の祝福を持つ武器は、通常のプレイでは作られない)。
+ * - 刃物 (剣・長柄武器) は、プリーストの神の祝福を持たなければふさわしくない。
+ * - それ以外の近接武器と、近接武器でないアイテムは、ふさわしくない武器ではない。
  */
-bool ItemEntity::is_unblessed_edged_weapon(tr_type blessing) const
+bool ItemEntity::is_unsuitable_weapon_for_priest(tr_type blessing) const
 {
+    if (!this->is_melee_weapon()) {
+        return false;
+    }
+
+    const auto flags = this->get_flags();
+    const auto other_blessing = (blessing == TR_BLESSED) ? TR_BLESSED_EVIL : TR_BLESSED;
+    if (flags.has(other_blessing)) {
+        return true;
+    }
+
     const auto tval = this->bi_key.tval();
     const auto is_edged_weapon = (tval == ItemKindType::SWORD) || (tval == ItemKindType::POLEARM);
-    return is_edged_weapon && this->get_flags().has_not(blessing);
+    return is_edged_weapon && flags.has_not(blessing);
 }
 
 bool ItemEntity::is_held_by_monster() const

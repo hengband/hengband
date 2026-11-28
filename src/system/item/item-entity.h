@@ -122,7 +122,7 @@ public:
     bool is_broken() const;
     bool is_cursed() const;
     bool is_blessed() const;
-    bool is_unblessed_edged_weapon(tr_type blessing) const;
+    bool is_unsuitable_weapon_for_priest(tr_type blessing) const;
     bool is_held_by_monster() const;
     bool is_known() const;
     bool is_fully_known() const;

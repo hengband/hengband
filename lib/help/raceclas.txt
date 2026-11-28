@@ -517,7 +517,8 @@ command("U"/"O").
     they cannot choose which ones they will learn.  Priests are
     familiar with magical devices which they believe act as foci for
     divine intervention in the natural order of things.  A priest
-    wielding an edged weapon will be so uncomfortable with it that
+    wielding an edged weapon, or any weapon blessed by the gods
+    opposed to his or her own, will be so uncomfortable with it that
     his or her fighting ability decreases.  A Priest's primary stat
     is Wisdom since this determines the success of the prayers to
     his or her deity.
@@ -538,7 +539,8 @@ command("U"/"O").
     freely wield only those blessed by his or her own gods.  The
     blessing of the gods of evil does not remove curses, but it can
     be given even to a cursed weapon.  A weapon already blessed by
-    the other gods rejects the blessing.
+    the other gods rejects the blessing, and a priest cannot freely
+    wield it even if it is not edged.
 
 
 ***** <Rogue>
