@@ -69,6 +69,43 @@ struct DetectionResult {
 };
 
 /*!
+ * @brief 効果範囲の中で条件に合う床のアイテムを感知する
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param range 効果範囲
+ * @param pred 感知するアイテムか
+ * @return 感知の結果
+ */
+template <typename Predicate>
+DetectionResult detect_objects_if(PlayerType *player_ptr, POSITION range, Predicate pred)
+{
+    auto &floor = *player_ptr->current_floor_ptr;
+    range = calc_detection_range(floor, range);
+    const auto p_pos = player_ptr->get_position();
+    DetectionResult result;
+    for (const auto &item_ptr : floor.o_list) {
+        if (!item_ptr->is_valid() || item_ptr->is_held_by_monster()) {
+            continue;
+        }
+
+        const auto i_pos = item_ptr->get_position();
+        if (Grid::calc_distance(p_pos, i_pos) > range) {
+            continue;
+        }
+
+        if (!pred(*item_ptr)) {
+            continue;
+        }
+
+        result.has_new |= item_ptr->marked.has_not(OmType::FOUND);
+        item_ptr->marked.set(OmType::FOUND);
+        lite_spot(player_ptr, i_pos);
+        result.detected = true;
+    }
+
+    return result;
+}
+
+/*!
  * @brief 効果範囲の中で条件に合うモンスターを感知する
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param range 効果範囲
@@ -242,43 +279,15 @@ bool detect_treasure(PlayerType *player_ptr, POSITION range)
  */
 bool detect_objects_gold(PlayerType *player_ptr, POSITION range, DetectionNotice notice)
 {
-    auto &floor = *player_ptr->current_floor_ptr;
-    const auto range2 = calc_detection_range(floor, range);
-
-    /* Scan objects */
-    auto detect = false;
-    auto is_newly_found = false;
-    for (const auto &item_ptr : floor.o_list) {
-        if (!item_ptr->is_valid()) {
-            continue;
-        }
-
-        if (item_ptr->is_held_by_monster()) {
-            continue;
-        }
-
-        const auto i_pos = item_ptr->get_position();
-        if (Grid::calc_distance(player_ptr->get_position(), i_pos) > range2) {
-            continue;
-        }
-
-        if (item_ptr->bi_key.tval() == ItemKindType::GOLD) {
-            is_newly_found |= item_ptr->marked.has_not(OmType::FOUND);
-            item_ptr->marked.set(OmType::FOUND);
-            lite_spot(player_ptr, i_pos);
-            detect = true;
-        }
-    }
-
-    if (should_notify(notice, detect, is_newly_found)) {
+    const auto result = detect_objects_if(player_ptr, range, [](const ItemEntity &item) {
+        return item.bi_key.tval() == ItemKindType::GOLD;
+    });
+    if (should_notify(notice, result.detected, result.has_new)) {
         msg_print(_("財宝の存在を感じとった！", "You sense the presence of treasure!"));
     }
 
-    if (detect_monsters_string(player_ptr, range, "$", notice)) {
-        detect = true;
-    }
-
-    return detect;
+    const auto detected_mimic = detect_monsters_string(player_ptr, range, "$", notice);
+    return result.detected || detected_mimic;
 }
 
 /*!
@@ -290,46 +299,21 @@ bool detect_objects_gold(PlayerType *player_ptr, POSITION range, DetectionNotice
  */
 bool detect_objects_normal(PlayerType *player_ptr, POSITION range, DetectionNotice notice)
 {
-    auto &floor = *player_ptr->current_floor_ptr;
-    const auto range2 = calc_detection_range(floor, range);
-
-    auto detect = false;
-    auto is_newly_found = false;
-    for (const auto &item_ptr : floor.o_list) {
-        if (!item_ptr->is_valid()) {
-            continue;
-        }
-        if (item_ptr->is_held_by_monster()) {
-            continue;
-        }
-
-        const auto i_pos = item_ptr->get_position();
-        if (Grid::calc_distance(player_ptr->get_position(), i_pos) > range2) {
-            continue;
-        }
-
-        if (item_ptr->bi_key.tval() != ItemKindType::GOLD) {
-            is_newly_found |= item_ptr->marked.has_not(OmType::FOUND);
-            item_ptr->marked.set(OmType::FOUND);
-            lite_spot(player_ptr, i_pos);
-            detect = true;
-        }
-    }
+    const auto result = detect_objects_if(player_ptr, range, [](const ItemEntity &item) {
+        return item.bi_key.tval() != ItemKindType::GOLD;
+    });
 
     // 歌い続けている間は毎ターン感知するので、新しく見つけたときだけ描き直す
-    if (is_newly_found) {
+    if (result.has_new) {
         DeferredUpdateRequests::get_instance().request_floor_item_lists_redrawing();
     }
 
-    if (should_notify(notice, detect, is_newly_found)) {
+    if (should_notify(notice, result.detected, result.has_new)) {
         msg_print(_("アイテムの存在を感じとった！", "You sense the presence of objects!"));
     }
 
-    if (detect_monsters_string(player_ptr, range, "!=?|/`", notice)) {
-        detect = true;
-    }
-
-    return detect;
+    const auto detected_mimic = detect_monsters_string(player_ptr, range, "!=?|/`", notice);
+    return result.detected || detected_mimic;
 }
 
 static bool is_object_magically(const ItemKindType tval)
@@ -357,40 +341,19 @@ static bool is_object_magically(const ItemKindType tval)
  */
 bool detect_objects_magic(PlayerType *player_ptr, POSITION range)
 {
-    auto &floor = *player_ptr->current_floor_ptr;
-    range = calc_detection_range(floor, range);
-
-    auto detect = false;
-    auto is_newly_found = false;
-    for (const auto &item_ptr : floor.o_list) {
-        if (!item_ptr->is_valid() || item_ptr->is_held_by_monster()) {
-            continue;
-        }
-
-        const auto i_pos = item_ptr->get_position();
-        if (Grid::calc_distance(player_ptr->get_position(), i_pos) > range) {
-            continue;
-        }
-
-        auto has_bonus = item_ptr->to_a > 0;
-        has_bonus |= item_ptr->to_h + item_ptr->to_d > 0;
-        if (item_ptr->is_fixed_or_random_artifact() || item_ptr->is_ego() || is_object_magically(item_ptr->bi_key.tval()) || item_ptr->is_spell_book() || has_bonus) {
-            is_newly_found |= item_ptr->marked.has_not(OmType::FOUND);
-            item_ptr->marked.set(OmType::FOUND);
-            lite_spot(player_ptr, i_pos);
-            detect = true;
-        }
-    }
-
-    if (is_newly_found) {
+    const auto result = detect_objects_if(player_ptr, range, [](const ItemEntity &item) {
+        const auto has_bonus = (item.to_a > 0) || (item.to_h + item.to_d > 0);
+        return item.is_fixed_or_random_artifact() || item.is_ego() || is_object_magically(item.bi_key.tval()) || item.is_spell_book() || has_bonus;
+    });
+    if (result.has_new) {
         DeferredUpdateRequests::get_instance().request_floor_item_lists_redrawing();
     }
 
-    if (detect) {
+    if (result.detected) {
         msg_print(_("魔法のアイテムの存在を感じとった！", "You sense the presence of magic objects!"));
     }
 
-    return detect;
+    return result.detected;
 }
 
 /*!
