@@ -67,93 +67,44 @@ static void process_blow_effect(PlayerType *player_ptr, mam_type *mam_ptr)
     }
 }
 
-static void aura_fire_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
-{
-    auto &monrace = mam_ptr->m_ptr->get_monrace();
-    auto &monrace_target = mam_ptr->t_ptr->get_monrace();
-    if (monrace_target.aura_flags.has_not(MonsterAuraType::FIRE) || !mam_ptr->m_ptr->is_valid()) {
-        return;
-    }
-
-    if (monrace.resistance_flags.has_any_of(RFR_EFF_IM_FIRE_MASK)) {
-        if (is_original_ap_and_seen(player_ptr, *mam_ptr->m_ptr)) {
-            monrace.r_resistance_flags.set(monrace.resistance_flags & RFR_EFF_IM_FIRE_MASK);
-        }
-
-        return;
-    }
-
-    if (mam_ptr->see_either) {
-        msg_print(_("{}は突然熱くなった！", "{} is suddenly very hot!"), str_upcase_first(mam_ptr->m_name));
-    }
-
-    if (mam_ptr->m_ptr->ml && is_original_ap_and_seen(player_ptr, *mam_ptr->t_ptr)) {
-        monrace_target.r_aura_flags.set(MonsterAuraType::FIRE);
-    }
-
-    const auto dam = Dice::roll(1 + ((monrace_target.level) / 26), 1 + ((monrace_target.level) / 17));
-    constexpr auto flags = PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED;
-    project(player_ptr, mam_ptr->t_idx, 0, mam_ptr->m_ptr->fy, mam_ptr->m_ptr->fx, dam, AttributeType::FIRE, flags);
-}
-
-static void aura_cold_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
+/*!
+ * @brief 乱闘で触れた相手のオーラによる反撃を受ける
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param mam_ptr 乱闘の情報
+ * @param aura オーラの種類
+ * @param immune_mask 反撃を受けない耐性
+ * @param message 反撃を受けたときのメッセージ (攻撃したモンスターの名前を埋め込む)
+ * @param attribute 反撃の属性
+ */
+static void aura_by_melee(PlayerType *player_ptr, mam_type *mam_ptr, MonsterAuraType aura, const EnumClassFlagGroup<MonsterResistanceType> &immune_mask,
+    fmt::format_string<std::string> message, AttributeType attribute)
 {
     const auto &monster = *mam_ptr->m_ptr;
     auto &monrace = monster.get_monrace();
     auto &monrace_target = mam_ptr->t_ptr->get_monrace();
-    if (monrace_target.aura_flags.has_not(MonsterAuraType::COLD) || !monster.is_valid()) {
+    if (monrace_target.aura_flags.has_not(aura) || !monster.is_valid()) {
         return;
     }
 
-    if (monrace.resistance_flags.has_any_of(RFR_EFF_IM_COLD_MASK)) {
+    if (monrace.resistance_flags.has_any_of(immune_mask)) {
         if (is_original_ap_and_seen(player_ptr, monster)) {
-            monrace.r_resistance_flags.set(monrace.resistance_flags & RFR_EFF_IM_COLD_MASK);
+            monrace.r_resistance_flags.set(monrace.resistance_flags & immune_mask);
         }
 
         return;
     }
 
     if (mam_ptr->see_either) {
-        msg_print(_("{}は突然寒くなった！", "{} is suddenly very cold!"), str_upcase_first(mam_ptr->m_name));
+        msg_print(message, str_upcase_first(mam_ptr->m_name));
     }
 
     if (monster.ml && is_original_ap_and_seen(player_ptr, *mam_ptr->t_ptr)) {
-        monrace_target.r_aura_flags.set(MonsterAuraType::COLD);
+        monrace_target.r_aura_flags.set(aura);
     }
 
     const auto dam = Dice::roll(1 + ((monrace_target.level) / 26), 1 + ((monrace_target.level) / 17));
     constexpr auto flags = PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED;
-    project(player_ptr, mam_ptr->t_idx, 0, monster.fy, monster.fx, dam, AttributeType::COLD, flags);
-}
-
-static void aura_elec_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
-{
-    const auto &monster = *mam_ptr->m_ptr;
-    auto &monrace = monster.get_monrace();
-    auto &monrace_target = mam_ptr->t_ptr->get_monrace();
-    if (monrace_target.aura_flags.has_not(MonsterAuraType::ELEC) || !monster.is_valid()) {
-        return;
-    }
-
-    if (monrace.resistance_flags.has_any_of(RFR_EFF_IM_ELEC_MASK)) {
-        if (is_original_ap_and_seen(player_ptr, monster)) {
-            monrace.r_resistance_flags.set(monrace.resistance_flags & RFR_EFF_IM_ELEC_MASK);
-        }
-
-        return;
-    }
-
-    if (mam_ptr->see_either) {
-        msg_print(_("{}は電撃を食らった！", "{} gets zapped!"), str_upcase_first(mam_ptr->m_name));
-    }
-
-    if (monster.ml && is_original_ap_and_seen(player_ptr, *mam_ptr->t_ptr)) {
-        monrace_target.r_aura_flags.set(MonsterAuraType::ELEC);
-    }
-
-    const auto dam = Dice::roll(1 + ((monrace_target.level) / 26), 1 + ((monrace_target.level) / 17));
-    constexpr auto flags = PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED;
-    project(player_ptr, mam_ptr->t_idx, 0, monster.fy, monster.fx, dam, AttributeType::ELEC, flags);
+    project(player_ptr, mam_ptr->t_idx, 0, monster.fy, monster.fx, dam, attribute, flags);
 }
 
 static bool check_same_monster(PlayerType *player_ptr, mam_type *mam_ptr)
@@ -221,9 +172,9 @@ static void process_monster_attack_effect(PlayerType *player_ptr, mam_type *mam_
         return;
     }
 
-    aura_fire_by_melee(player_ptr, mam_ptr);
-    aura_cold_by_melee(player_ptr, mam_ptr);
-    aura_elec_by_melee(player_ptr, mam_ptr);
+    aura_by_melee(player_ptr, mam_ptr, MonsterAuraType::FIRE, RFR_EFF_IM_FIRE_MASK, _("{}は突然熱くなった！", "{} is suddenly very hot!"), AttributeType::FIRE);
+    aura_by_melee(player_ptr, mam_ptr, MonsterAuraType::COLD, RFR_EFF_IM_COLD_MASK, _("{}は突然寒くなった！", "{} is suddenly very cold!"), AttributeType::COLD);
+    aura_by_melee(player_ptr, mam_ptr, MonsterAuraType::ELEC, RFR_EFF_IM_ELEC_MASK, _("{}は電撃を食らった！", "{} gets zapped!"), AttributeType::ELEC);
 }
 
 static void process_melee(PlayerType *player_ptr, mam_type *mam_ptr)
