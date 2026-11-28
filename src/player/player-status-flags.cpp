@@ -2,6 +2,7 @@
 #include "artifact/fixed-art-types.h"
 #include "inventory/inventory-slot-types.h"
 #include "mind/mind-elementalist.h"
+#include "mind/mind-priest.h"
 #include "mutation/mutation-flag-types.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/tr-types.h"
@@ -371,6 +372,7 @@ BIT_FLAGS get_player_flags(PlayerType *player_ptr, tr_type tr_flag)
     case TR_BLESSED:
         return has_bless_blade(player_ptr);
     case TR_BLESSED_EVIL:
+        return has_evil_bless_blade(player_ptr);
     case TR_XXX_94:
     case TR_KILL_GOOD:
     case TR_KILL_ANIMAL:
@@ -673,9 +675,24 @@ BIT_FLAGS has_esp_telepathy(PlayerType *player_ptr)
     return result;
 }
 
+/*!
+ * @brief 善の神に祝福された装備をしている要因を返す
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @return 要因となるフラグの集合
+ */
 BIT_FLAGS has_bless_blade(PlayerType *player_ptr)
 {
     return common_cause_flags(player_ptr, TR_BLESSED);
+}
+
+/*!
+ * @brief 邪の神に祝福された装備をしている要因を返す
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @return 要因となるフラグの集合
+ */
+BIT_FLAGS has_evil_bless_blade(PlayerType *player_ptr)
+{
+    return common_cause_flags(player_ptr, TR_BLESSED_EVIL);
 }
 
 BIT_FLAGS has_easy2_weapon(PlayerType *player_ptr)
@@ -1725,7 +1742,7 @@ bool is_wielding_icky_weapon(PlayerType *player_ptr, int i)
     const auto *o_ptr = player_ptr->inventory[INVEN_MAIN_HAND + i].get();
     PlayerClass pc(player_ptr);
     if (pc.equals(PlayerClassType::PRIEST)) {
-        return o_ptr->is_unblessed_edged_weapon();
+        return o_ptr->is_unsuitable_weapon_for_priest(get_priest_blessing(player_ptr));
     }
 
     const auto tval = o_ptr->bi_key.tval();

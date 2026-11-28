@@ -25,6 +25,7 @@
 #include "market/arena-entry.h"
 #include "mind/mind-force-trainer.h"
 #include "mind/mind-ninja.h"
+#include "mind/mind-priest.h"
 #include "monster-floor/monster-lite.h"
 #include "monster-floor/monster-remover.h"
 #include "monster/monster-update.h"
@@ -276,7 +277,7 @@ static void update_bonuses(PlayerType *player_ptr)
     player_ptr->esp_nonliving = has_esp_nonliving(player_ptr);
     player_ptr->esp_unique = has_esp_unique(player_ptr);
     player_ptr->telepathy = has_esp_telepathy(player_ptr);
-    player_ptr->bless_blade = has_bless_blade(player_ptr);
+    player_ptr->bless_blade = has_bless_blade(player_ptr) | has_evil_bless_blade(player_ptr);
     player_ptr->easy_2weapon = has_easy2_weapon(player_ptr);
     player_ptr->down_saving = has_down_saving(player_ptr);
     player_ptr->yoiyami = has_no_ac(player_ptr);
@@ -1079,7 +1080,7 @@ static ACTION_SKILL_POWER calc_device_ability(PlayerType *player_ptr)
  * * 職業と性格とレベルによる追加加算
  * * 変異MUT3_MAGIC_RESによる加算(15 + レベル / 5)
  * * 呪力耐性の装備による加算(30)
- * * 祝福された装備による加算(5 + レベル / 10)
+ * * 祝福された装備 (善の神・邪の神のどちらの祝福でも同じ) による加算(6 + (レベル - 1) / 10)
  * * 賢さによるadj_wis_savテーブル加算
  * * 呪力弱点の装備による減算(-10)
  * * 呪力弱点の装備が強力に呪われているときさらに減算(-20)
@@ -2042,7 +2043,7 @@ static short calc_to_damage(PlayerType *player_ptr, INVENTORY_IDX slot, bool is_
 
     damage -= player_ptr->effects()->stun().get_damage_penalty();
     PlayerClass pc(player_ptr);
-    if (pc.equals(PlayerClassType::PRIEST) && o_ptr->is_unblessed_edged_weapon()) {
+    if (pc.equals(PlayerClassType::PRIEST) && o_ptr->is_unsuitable_weapon_for_priest(get_priest_blessing(player_ptr))) {
         damage -= 2;
     } else if (pc.equals(PlayerClassType::BERSERKER)) {
         damage += player_ptr->lev / 6;
@@ -2274,7 +2275,7 @@ static short calc_to_hit(PlayerType *player_ptr, INVENTORY_IDX slot, bool is_rea
         }
 
         /* Class penalties */
-        if (pc.equals(PlayerClassType::PRIEST) && o_ptr->is_unblessed_edged_weapon()) {
+        if (pc.equals(PlayerClassType::PRIEST) && o_ptr->is_unsuitable_weapon_for_priest(get_priest_blessing(player_ptr))) {
             hit -= 2;
         } else if (pc.equals(PlayerClassType::BERSERKER)) {
             hit += player_ptr->lev / 5;

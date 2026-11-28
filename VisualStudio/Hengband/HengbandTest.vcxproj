@@ -125,7 +125,9 @@
     <ClCompile Include="..\..\src\test\locale\test-japanese.cpp" />
     <ClCompile Include="..\..\src\test\locale\test-multibyte-char.cpp" />
     <ClCompile Include="..\..\src\test\lore\test-monster-lore-snapshot.cpp" />
+    <ClCompile Include="..\..\src\test\market\test-building-craft-fix.cpp" />
     <ClCompile Include="..\..\src\test\market\test-building-recharger.cpp" />
+    <ClCompile Include="..\..\src\test\mind\test-mind-priest.cpp" />
     <ClCompile Include="..\..\src\test\monster-race\test-race-ability-mask.cpp" />
     <ClCompile Include="..\..\src\test\mspell\mspell-attack\test-mspell-ball.cpp" />
     <ClCompile Include="..\..\src\test\mspell\test-mspell-projection-table.cpp" />
@@ -133,9 +135,11 @@
     <ClCompile Include="..\..\src\test\object-enchant\test-item-feeling.cpp" />
     <ClCompile Include="..\..\src\test\object-enchant\test-item-magic-applier.cpp" />
     <ClCompile Include="..\..\src\test\object-enchant\test-object-ego.cpp" />
+    <ClCompile Include="..\..\src\test\object-hook\test-hook-weapon.cpp" />
     <ClCompile Include="..\..\src\test\object-use\quaff\test-quaff-execution.cpp" />
     <ClCompile Include="..\..\src\test\object-use\test-magic-device-chance.cpp" />
     <ClCompile Include="..\..\src\test\object\test-object-info.cpp" />
+    <ClCompile Include="..\..\src\test\object\test-object-value-calc.cpp" />
     <ClCompile Include="..\..\src\test\object\test-object-value.cpp" />
     <ClCompile Include="..\..\src\test\player-base\test-player-class.cpp" />
     <ClCompile Include="..\..\src\test\player-status\test-player-speed.cpp" />

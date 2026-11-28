@@ -9,6 +9,7 @@
 #include "inventory/inventory-object.h"
 #include "market/building-util.h"
 #include "object-enchant/object-boost.h"
+#include "object-enchant/tr-flags.h"
 #include "object-enchant/tr-types.h"
 #include "object-hook/hook-weapon.h"
 #include "object/item-tester-hooker.h"
@@ -32,15 +33,37 @@
 #include <vector>
 
 /*!
- * @brief 修復材料のオブジェクトから修復対象に特性を移植する。
- * @param to_ptr 修復対象オブジェクトの構造体の参照ポインタ。
- * @param from_ptr 修復材料オブジェクトの構造体の参照ポインタ。
- * @return 修復対象になるならTRUEを返す。
+ * @brief 移植しようとする祝福が、修復対象の持つ祝福とぶつかるかを返す
+ * @param tr_flag 移植しようとする特性
+ * @param to_flags 修復対象の特性
+ * @return 修復対象が、もう一方の神の祝福を持っているなら true
  */
-static void give_one_ability_of_object(ItemEntity *to_ptr, ItemEntity *from_ptr)
+static bool conflicts_with_blessing(tr_type tr_flag, const TrFlags &to_flags)
 {
-    const auto to_flags = to_ptr->get_flags();
-    const auto from_flags = from_ptr->get_flags();
+    if (tr_flag == TR_BLESSED) {
+        return to_flags.has(TR_BLESSED_EVIL);
+    }
+
+    if (tr_flag == TR_BLESSED_EVIL) {
+        return to_flags.has(TR_BLESSED);
+    }
+
+    return false;
+}
+
+/*!
+ * @brief 修復材料から修復対象へ移植できる特性の候補を集める
+ * @param to_item 修復対象のアイテム
+ * @param from_item 修復材料のアイテム
+ * @return 移植できる特性の一覧 (特性フラグの番号の昇順)
+ * @details 修復材料が持ち、修復対象が持たない特性のうち、移植の対象外のものを除いて返す。
+ * pval に連動する特性は、修復材料の pval が 1 以上のときだけ候補にする。
+ * 祝福は、修復対象がもう一方の神の祝福を持っていれば候補にしない (両方の神の祝福を持つ武器を作らない)。
+ */
+std::vector<tr_type> collect_transplantable_abilities(const ItemEntity &to_item, const ItemEntity &from_item)
+{
+    const auto to_flags = to_item.get_flags();
+    const auto from_flags = from_item.get_flags();
 
     std::vector<tr_type> candidates;
     for (int i = 0; i < TR_FLAG_MAX; i++) {
@@ -54,21 +77,33 @@ static void give_one_ability_of_object(ItemEntity *to_ptr, ItemEntity *from_ptr)
         case TR_THROW:
         case TR_SHOW_MODS:
         case TR_HIDE_TYPE:
-        case TR_BLESSED_EVIL:
         case TR_XXX_94:
         case TR_FULL_NAME:
         case TR_FIXED_FLAVOR:
             break;
         default:
             auto tr_flag = i2enum<tr_type>(i);
-            if (from_flags.has(tr_flag) && to_flags.has_not(tr_flag)) {
-                if (!(TR_PVAL_FLAG_MASK.has(tr_flag) && (from_ptr->pval < 1))) {
-                    candidates.push_back(tr_flag);
-                }
+            if (from_flags.has_not(tr_flag) || to_flags.has(tr_flag) || conflicts_with_blessing(tr_flag, to_flags)) {
+                break;
+            }
+
+            if (!(TR_PVAL_FLAG_MASK.has(tr_flag) && (from_item.pval < 1))) {
+                candidates.push_back(tr_flag);
             }
         }
     }
 
+    return candidates;
+}
+
+/*!
+ * @brief 修復材料のオブジェクトから修復対象に特性を移植する。
+ * @param to_ptr 修復対象オブジェクトの構造体の参照ポインタ。
+ * @param from_ptr 修復材料オブジェクトの構造体の参照ポインタ。
+ */
+static void give_one_ability_of_object(ItemEntity *to_ptr, ItemEntity *from_ptr)
+{
+    const auto candidates = collect_transplantable_abilities(*to_ptr, *from_ptr);
     if (candidates.empty()) {
         return;
     }

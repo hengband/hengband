@@ -1276,7 +1276,9 @@ hengband_test_SOURCES = \
 	test/object-enchant/test-item-feeling.cpp \
 	test/object-enchant/test-item-magic-applier.cpp \
 	test/object-enchant/test-object-ego.cpp \
+	test/object-hook/test-hook-weapon.cpp \
 	test/object/test-object-value.cpp \
+	test/object/test-object-value-calc.cpp \
 	test/racial/test-racial-android.cpp \
 	test/system/item/test-item-entity.cpp \
 	test/inventory/test-floor-item-getter.cpp \
@@ -1296,6 +1298,8 @@ hengband_test_SOURCES = \
 	test/locale/test-multibyte-char.cpp \
 	test/lore/test-monster-lore-snapshot.cpp \
 	test/market/test-building-recharger.cpp \
+	test/market/test-building-craft-fix.cpp \
+	test/mind/test-mind-priest.cpp \
 	test/monster-race/test-race-ability-mask.cpp \
 	test/mspell/mspell-attack/test-mspell-ball.cpp \
 	test/mspell/test-mspell-projection-table.cpp \
