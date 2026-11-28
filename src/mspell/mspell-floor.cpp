@@ -333,7 +333,7 @@ MonsterSpellResult spell_RF6_TELE_LEVEL(PlayerType *player_ptr, MONSTER_IDX m_id
 
     if (target_type == MONSTER_TO_PLAYER) {
         resist = (has_resist_nexus(player_ptr) != 0);
-        saving_throw = (randint0(100 + rlev / 2) < player_ptr->skill_sav);
+        saving_throw = player_ptr->try_saving_throw(rlev);
 
         mspell_cast_msg_bad_status_to_player msg(_("{}が何か奇妙な言葉をつぶやいた。", "{} mumbles strangely."),
             _("{}があなたの足を指さした。", "{} gestures at your feet."), _("しかし効果がなかった！", "You are unaffected!"),
@@ -354,7 +354,7 @@ MonsterSpellResult spell_RF6_TELE_LEVEL(PlayerType *player_ptr, MONSTER_IDX m_id
     }
 
     resist = monrace_target.resistance_flags.has_any_of(RFR_EFF_RESIST_NEXUS_MASK) || monrace_target.resistance_flags.has(MonsterResistanceType::RESIST_TELEPORT);
-    saving_throw = (monrace_target.misc_flags.has(MonsterMiscType::QUESTOR)) || (monrace_target.level > randint1((rlev - 10) < 1 ? 1 : (rlev - 10)) + 10);
+    saving_throw = monrace_target.misc_flags.has(MonsterMiscType::QUESTOR) || monrace_target.try_saving_throw(rlev);
 
     using DefaultFormat = mspell_cast_msg_bad_status_to_monster::DefaultFormat;
     const auto t_name = monster_name(player_ptr, t_idx);

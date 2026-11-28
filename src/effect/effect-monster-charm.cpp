@@ -254,7 +254,7 @@ static void effect_monster_domination_corrupted(PlayerType *player_ptr, EffectMo
     em_ptr->note = "";
     const auto poss = em_ptr->seen ? "'s" : "s";
     msg_print(_("{}の堕落した精神は攻撃を跳ね返した！", "{}{} corrupted mind backlashes your attack!"), str_upcase_first(em_ptr->m_name), poss);
-    if (randint0(100 + em_ptr->monrace->level / 2) < player_ptr->skill_sav) {
+    if (player_ptr->try_saving_throw(em_ptr->monrace->level)) {
         msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
         return;
     }

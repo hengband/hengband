@@ -150,7 +150,7 @@ static void effect_monster_psi_resist(PlayerType *player_ptr, EffectMonster *em_
     }
 
     /* プレイヤーの反射判定 */
-    if ((randint0(100 + em_ptr->monrace->level / 2) < player_ptr->skill_sav) && !check_multishadow(player_ptr)) {
+    if (player_ptr->try_saving_throw(em_ptr->monrace->level) && !check_multishadow(player_ptr)) {
         msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
         em_ptr->dam = 0;
         return;
@@ -243,7 +243,7 @@ static void effect_monster_psi_drain_resist(PlayerType *player_ptr, EffectMonste
     }
 
     /* プレイヤーの反射判定 */
-    if ((randint0(100 + em_ptr->monrace->level / 2) < player_ptr->skill_sav) && !check_multishadow(player_ptr)) {
+    if (player_ptr->try_saving_throw(em_ptr->monrace->level) && !check_multishadow(player_ptr)) {
         msg_print(_("あなたは効力を跳ね返した！", "You resist the effects!"));
         em_ptr->dam = 0;
         return;

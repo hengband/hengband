@@ -414,6 +414,7 @@ public:
     bool in_saved_floor() const;
     int calc_life_rating() const;
     bool try_resist_eldritch_horror() const;
+    bool try_saving_throw(int level) const;
 
 private:
     std::shared_ptr<TimedEffects> timed_effects;

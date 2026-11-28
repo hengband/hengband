@@ -159,6 +159,7 @@ public:
     bool has_undead_flag() const;
     bool is_explodable() const;
     bool is_angel_superficially() const;
+    bool try_saving_throw(int caster_level) const;
     bool symbol_char_is_any_of(std::string_view symbol_characters) const;
     std::string get_died_message() const;
     tl::optional<bool> order_level(const MonraceDefinition &other) const;

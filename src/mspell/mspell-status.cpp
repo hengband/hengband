@@ -161,17 +161,20 @@ MonsterSpellResult spell_RF5_DRAIN_MANA(PlayerType *player_ptr, POSITION y, POSI
 }
 
 /*!
- * @brief RF5_MIND_BLASTの処理。精神攻撃。 /
+ * @brief 精神攻撃・脳攻撃の共通の処理
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 対象の地点のy座標
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
  * @param target_type プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
+ * @param ability 唱える魔法 (ダメージの計算に使う)
+ * @param attribute 当てる属性
  *
  * プレイヤーに当たったらラーニング可。
  */
-MonsterSpellResult spell_RF5_MIND_BLAST(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int target_type)
+static MonsterSpellResult cast_mind_attack(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int target_type,
+    MonsterAbilityType ability, AttributeType attribute)
 {
     const auto &monster = player_ptr->current_floor_ptr->m_list[m_idx];
     bool seen = (!player_ptr->effects()->blindness().is_active() && monster.ml);
@@ -189,13 +192,29 @@ MonsterSpellResult spell_RF5_MIND_BLAST(PlayerType *player_ptr, POSITION y, POSI
         msg_print(_("{}は{}をじっと睨んだ。", "{} gazes intently at {}."), str_upcase_first(m_name), t_name);
     }
 
-    const auto dam = monspell_damage(player_ptr, MonsterAbilityType::MIND_BLAST, m_idx, DAM_ROLL);
-    const auto proj_res = pointed(player_ptr, y, x, m_idx, AttributeType::MIND_BLAST, dam, target_type);
+    const auto dam = monspell_damage(player_ptr, ability, m_idx, DAM_ROLL);
+    const auto proj_res = pointed(player_ptr, y, x, m_idx, attribute, dam, target_type);
 
     auto res = MonsterSpellResult::make_valid(dam);
     res.learnable = proj_res.affected_player;
 
     return res;
+}
+
+/*!
+ * @brief RF5_MIND_BLASTの処理。精神攻撃。 /
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param y 対象の地点のy座標
+ * @param x 対象の地点のx座標
+ * @param m_idx 呪文を唱えるモンスターID
+ * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
+ * @param target_type プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
+ *
+ * プレイヤーに当たったらラーニング可。
+ */
+MonsterSpellResult spell_RF5_MIND_BLAST(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int target_type)
+{
+    return cast_mind_attack(player_ptr, y, x, m_idx, t_idx, target_type, MonsterAbilityType::MIND_BLAST, AttributeType::MIND_BLAST);
 }
 
 /*!
@@ -211,29 +230,7 @@ MonsterSpellResult spell_RF5_MIND_BLAST(PlayerType *player_ptr, POSITION y, POSI
  */
 MonsterSpellResult spell_RF5_BRAIN_SMASH(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int target_type)
 {
-    const auto &monster = player_ptr->current_floor_ptr->m_list[m_idx];
-    bool seen = (!player_ptr->effects()->blindness().is_active() && monster.ml);
-    const auto m_name = monster_name(player_ptr, m_idx);
-    const auto t_name = monster_name(player_ptr, t_idx);
-
-    if (target_type == MONSTER_TO_PLAYER) {
-        disturb(player_ptr, true, true);
-        if (!seen) {
-            msg_print(_("何かがあなたの精神に念を放っているようだ。", "You feel something focusing on your mind."));
-        } else {
-            msg_print(_("{}があなたの瞳をじっとにらんでいる。", "{} gazes deep into your eyes."), str_upcase_first(m_name));
-        }
-    } else if (target_type == MONSTER_TO_MONSTER && see_monster(player_ptr, m_idx)) {
-        msg_print(_("{}は{}をじっと睨んだ。", "{} gazes intently at {}."), str_upcase_first(m_name), t_name);
-    }
-
-    const auto dam = monspell_damage(player_ptr, MonsterAbilityType::BRAIN_SMASH, m_idx, DAM_ROLL);
-    const auto proj_res = pointed(player_ptr, y, x, m_idx, AttributeType::BRAIN_SMASH, dam, target_type);
-
-    auto res = MonsterSpellResult::make_valid(dam);
-    res.learnable = proj_res.affected_player;
-
-    return res;
+    return cast_mind_attack(player_ptr, y, x, m_idx, t_idx, target_type, MonsterAbilityType::BRAIN_SMASH, AttributeType::BRAIN_SMASH);
 }
 
 /*!
@@ -257,7 +254,7 @@ MonsterSpellResult spell_RF5_SCARE(MONSTER_IDX m_idx, PlayerType *player_ptr, MO
 
     if (target_type == MONSTER_TO_PLAYER) {
         resist = (has_resist_fear(player_ptr) != 0);
-        saving_throw = (randint0(100 + rlev / 2) < player_ptr->skill_sav);
+        saving_throw = player_ptr->try_saving_throw(rlev);
 
         mspell_cast_msg_bad_status_to_player msg(_("{}が何かをつぶやくと、恐ろしげな音が聞こえた。", "{} mumbles, and you hear scary noises."),
             _("{}が恐ろしげな幻覚を作り出した。", "{} casts a fearful illusion."), _("しかし恐怖に侵されなかった。", "You refuse to be frightened."),
@@ -278,7 +275,7 @@ MonsterSpellResult spell_RF5_SCARE(MONSTER_IDX m_idx, PlayerType *player_ptr, MO
     }
 
     resist = (monrace_target.resistance_flags.has(MonsterResistanceType::NO_FEAR));
-    saving_throw = (monrace_target.level > randint1((rlev - 10) < 1 ? 1 : (rlev - 10)) + 10);
+    saving_throw = monrace_target.try_saving_throw(rlev);
 
     mspell_cast_msg_bad_status_to_monster msg(_("{}が恐ろしげな幻覚を作り出した。", "{} casts a fearful illusion in front of {}."),
         _("{}は恐怖を感じない。", "{} refuses to be frightened."), _("{}は恐怖を感じない。", "{} refuses to be frightened."),
@@ -314,7 +311,7 @@ MonsterSpellResult spell_RF5_BLIND(MONSTER_IDX m_idx, PlayerType *player_ptr, MO
 
     if (target_type == MONSTER_TO_PLAYER) {
         resist = (has_resist_blind(player_ptr) != 0);
-        saving_throw = (randint0(100 + rlev / 2) < player_ptr->skill_sav);
+        saving_throw = player_ptr->try_saving_throw(rlev);
 
         mspell_cast_msg_bad_status_to_player msg(_("{}が何かをつぶやいた。", "{} mumbles."),
             _("{}が呪文を唱えてあなたの目をくらました！", "{} casts a spell, burning your eyes!"), _("しかし効果がなかった！", "You are unaffected!"),
@@ -339,7 +336,7 @@ MonsterSpellResult spell_RF5_BLIND(MONSTER_IDX m_idx, PlayerType *player_ptr, MO
     const auto msg_default = (t_name == "it") ? DefaultFormat(_("{}は呪文を唱えて{}の目を焼き付かせた。", "{} casts a spell, burning {}s eyes.")) : DefaultFormat(_("{}は呪文を唱えて{}の目を焼き付かせた。", "{} casts a spell, burning {}'s eyes."));
 
     resist = (monrace_target.resistance_flags.has(MonsterResistanceType::NO_CONF));
-    saving_throw = (monrace_target.level > randint1((rlev - 10) < 1 ? 1 : (rlev - 10)) + 10);
+    saving_throw = monrace_target.try_saving_throw(rlev);
 
     mspell_cast_msg_bad_status_to_monster msg(msg_default, _("{}には効果がなかった。", "{} is unaffected."),
         _("{}には効果がなかった。", "{} is unaffected."), _("{}は目が見えなくなった！ ", "{} is blinded!"));
@@ -374,7 +371,7 @@ MonsterSpellResult spell_RF5_CONF(MONSTER_IDX m_idx, PlayerType *player_ptr, MON
 
     if (target_type == MONSTER_TO_PLAYER) {
         resist = (has_resist_conf(player_ptr) != 0);
-        saving_throw = (randint0(100 + rlev / 2) < player_ptr->skill_sav);
+        saving_throw = player_ptr->try_saving_throw(rlev);
 
         mspell_cast_msg_bad_status_to_player msg(_("{}が何かをつぶやくと、頭を悩ます音がした。", "{} mumbles, and you hear puzzling noises."),
             _("{}が誘惑的な幻覚を作り出した。", "{} creates a mesmerising illusion."),
@@ -396,7 +393,7 @@ MonsterSpellResult spell_RF5_CONF(MONSTER_IDX m_idx, PlayerType *player_ptr, MON
     }
 
     resist = (monrace_target.resistance_flags.has(MonsterResistanceType::NO_CONF));
-    saving_throw = (monrace_target.level > randint1((rlev - 10) < 1 ? 1 : (rlev - 10)) + 10);
+    saving_throw = monrace_target.try_saving_throw(rlev);
 
     mspell_cast_msg_bad_status_to_monster msg(_("{}が{}の前に幻惑的な幻をつくり出した。", "{} casts a mesmerizing illusion in front of {}."),
         _("{}は惑わされなかった。", "{} disbelieves the feeble spell."), _("{}は惑わされなかった。", "{} disbelieves the feeble spell."),
@@ -432,7 +429,7 @@ MonsterSpellResult spell_RF5_HOLD(MONSTER_IDX m_idx, PlayerType *player_ptr, MON
 
     if (target_type == MONSTER_TO_PLAYER) {
         resist = (player_ptr->free_act != 0);
-        saving_throw = (randint0(100 + rlev / 2) < player_ptr->skill_sav);
+        saving_throw = player_ptr->try_saving_throw(rlev);
 
         mspell_cast_msg_bad_status_to_player msg(_("{}が何かをつぶやいた。", "{} mumbles."),
             _("{}があなたの目をじっと見つめた！", "{} stares deep into your eyes!"), _("しかし効果がなかった！", "You are unaffected!"),
@@ -453,7 +450,7 @@ MonsterSpellResult spell_RF5_HOLD(MONSTER_IDX m_idx, PlayerType *player_ptr, MON
     }
 
     resist = (monrace_target.kind_flags.has(MonsterKindType::UNIQUE) || monrace_target.resistance_flags.has(MonsterResistanceType::NO_SLEEP));
-    saving_throw = (monrace_target.level > randint1((rlev - 10) < 1 ? 1 : (rlev - 10)) + 10);
+    saving_throw = monrace_target.try_saving_throw(rlev);
 
     mspell_cast_msg_bad_status_to_monster msg(_("{}は{}をじっと見つめた。", "{} stares intently at {}."),
         _("{}には効果がなかった。", "{} is unaffected."), _("{}には効果がなかった。", "{} is unaffected."), _("{}は麻痺した！", "{} is paralyzed!"));
@@ -519,7 +516,7 @@ MonsterSpellResult spell_RF5_SLOW(MONSTER_IDX m_idx, PlayerType *player_ptr, MON
 
     if (target_type == MONSTER_TO_PLAYER) {
         resist = (has_resist_conf(player_ptr) != 0);
-        saving_throw = (randint0(100 + rlev / 2) < player_ptr->skill_sav);
+        saving_throw = player_ptr->try_saving_throw(rlev);
 
         mspell_cast_msg_bad_status_to_player msg(_("{}があなたの筋力を吸い取ろうとした！", "{} drains power from your muscles!"),
             _("{}があなたの筋力を吸い取ろうとした！", "{} drains power from your muscles!"), _("しかし効果がなかった！", "You are unaffected!"),
@@ -544,7 +541,7 @@ MonsterSpellResult spell_RF5_SLOW(MONSTER_IDX m_idx, PlayerType *player_ptr, MON
     const auto msg_default = (t_name == "it") ? DefaultFormat(_("{}が{}の筋肉から力を吸いとった。", "{} drains power from {}s muscles.")) : DefaultFormat(_("{}が{}の筋肉から力を吸いとった。", "{} drains power from {}'s muscles."));
 
     resist = (monrace_target.kind_flags.has(MonsterKindType::UNIQUE));
-    saving_throw = (monrace_target.level > randint1((rlev - 10) < 1 ? 1 : (rlev - 10)) + 10);
+    saving_throw = monrace_target.try_saving_throw(rlev);
 
     mspell_cast_msg_bad_status_to_monster msg(msg_default, _("{}には効果がなかった。", "{} is unaffected."),
         _("{}には効果がなかった。", "{} is unaffected."), _("{}の動きが遅くなった。", "{} starts moving slower."));
@@ -678,7 +675,7 @@ MonsterSpellResult spell_RF6_FORGET(PlayerType *player_ptr, MONSTER_IDX m_idx)
 
     msg_print(_("{}があなたの記憶を消去しようとしている。", "{} tries to blank your mind."), str_upcase_first(m_name));
 
-    if (randint0(100 + rlev / 2) < player_ptr->skill_sav) {
+    if (player_ptr->try_saving_throw(rlev)) {
         msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
     } else if (lose_all_info(player_ptr)) {
         msg_print(_("記憶が薄れてしまった。", "Your memories fade away."));
