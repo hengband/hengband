@@ -26,16 +26,8 @@ void set_class_ability_info(PlayerType *player_ptr, self_info_type *self_ptr)
 
         break;
     case PlayerClassType::PRIEST:
-        if (PlayerRealm(player_ptr).realm1().is_good_attribute()) {
-            if (player_ptr->lev > 34) {
-                self_ptr->info_list.emplace_back(_("あなたは武器を祝福することができる。(70 MP)", "You can bless a weapon (cost 70)."));
-            }
-
-            break;
-        }
-
-        if (player_ptr->lev > 41) {
-            self_ptr->info_list.emplace_back(_("あなたは周りのすべてのモンスターを攻撃することができる。(40 MP)", "You can damage all monsters in sight (cost 40)."));
+        if (player_ptr->lev > 34) {
+            self_ptr->info_list.emplace_back(_("あなたは武器を祝福することができる。(70 MP)", "You can bless a weapon (cost 70)."));
         }
 
         break;

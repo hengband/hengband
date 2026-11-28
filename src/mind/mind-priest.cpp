@@ -31,18 +31,28 @@ tr_type get_priest_blessing(PlayerType *player_ptr)
 /*!
  * @brief 武器に祝福を与える (判定と、武器への適用)
  * @param item 祝福を与える武器
+ * @param blessing 与える祝福 (TR_BLESSED か TR_BLESSED_EVIL)
  * @return 結果と、その途中で武器に起きたこと
  * @details メッセージの表示やプレイヤーの状態の更新は行わない (呼び出し側の bless_weapon() が行う)。
- * - 呪われた武器は、強い呪いなどに邪魔されると祝福できない。邪魔されなければ呪いを解く。
- * - 既に祝福されていれば何もしない。
+ * - もう一方の神の祝福を受けた武器には拒まれる (両方の神の祝福を持つ武器は作らない)。
+ * - 善の神の祝福は呪いを解く。呪われた武器は、強い呪いなどに邪魔されると祝福できない。
+ * - 邪の神の祝福は呪いと共存する。呪いに邪魔されず、呪いも解かない。
+ * - 同じ祝福を既に受けていれば何もしない。
  * - アーティファクトとエゴは 3 分の 1 でだけ祝福でき、それ以外は抵抗されて修正値が下がる。
  *   (こうしないと、プリーストは見つけたアーティファクトの武器をすべて祝福してしまう)
  */
-BlessWeaponOutcome apply_blessing_to_weapon(ItemEntity &item)
+BlessWeaponOutcome apply_blessing_to_weapon(ItemEntity &item, tr_type blessing)
 {
     BlessWeaponOutcome outcome{ BlessWeaponResult::BLESSED, false, false };
+    const auto is_evil_blessing = blessing == TR_BLESSED_EVIL;
+    const auto other_blessing = is_evil_blessing ? TR_BLESSED : TR_BLESSED_EVIL;
     const auto item_flags = item.get_flags();
-    if (item.is_cursed()) {
+    if (item_flags.has(other_blessing)) {
+        outcome.result = BlessWeaponResult::REJECTED;
+        return outcome;
+    }
+
+    if (!is_evil_blessing && item.is_cursed()) {
         auto can_disturb_blessing = item.curse_flags.has(CurseTraitType::HEAVY_CURSE) && (randint1(100) < 33);
         can_disturb_blessing |= item_flags.has(TR_ADD_L_CURSE);
         can_disturb_blessing |= item_flags.has(TR_ADD_H_CURSE);
@@ -57,13 +67,13 @@ BlessWeaponOutcome apply_blessing_to_weapon(ItemEntity &item)
         outcome.is_curse_removed = true;
     }
 
-    if (item.is_blessed()) {
+    if (item_flags.has(blessing)) {
         outcome.result = BlessWeaponResult::ALREADY_BLESSED;
         return outcome;
     }
 
     if (!(item.is_fixed_or_random_artifact() || item.is_ego()) || one_in_(3)) {
-        item.art_flags.set(TR_BLESSED);
+        item.art_flags.set(blessing);
         item.discount = 99;
         return outcome;
     }
@@ -106,7 +116,9 @@ BlessWeaponOutcome apply_blessing_to_weapon(ItemEntity &item)
 /*!
  * @brief 武器の祝福処理 /
  * Bless a weapon
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return ターン消費を要する処理を行ったならばTRUEを返す
+ * @details 与える祝福は、プレイヤーの第一領域の善悪で決まる (get_priest_blessing())。
  */
 bool bless_weapon(PlayerType *player_ptr)
 {
@@ -119,7 +131,17 @@ bool bless_weapon(PlayerType *player_ptr)
     }
 
     const auto item_name = describe_flavor(player_ptr, *item, OD_OMIT_PREFIX | OD_NAME_ONLY);
-    const auto outcome = apply_blessing_to_weapon(*item);
+    const auto blessing = get_priest_blessing(player_ptr);
+    const auto outcome = apply_blessing_to_weapon(*item, blessing);
+    if (outcome.result == BlessWeaponResult::REJECTED) {
+#ifdef JP
+        msg_print("{}は別の神に祝福されており、あなたの祝福を拒んだ！", item_name);
+#else
+        msg_print("The gods who blessed {} {} reject your blessing!", ((i_idx >= 0) ? "your" : "the"), item_name);
+#endif
+        return true;
+    }
+
     if (outcome.result == BlessWeaponResult::DISTURBED) {
 #ifdef JP
         msg_print("{}を覆う黒いオーラは祝福を跳ね返した！", item_name);
@@ -151,10 +173,19 @@ bool bless_weapon(PlayerType *player_ptr)
     }
 
     if (outcome.result == BlessWeaponResult::BLESSED) {
+        const auto is_evil_blessing = blessing == TR_BLESSED_EVIL;
 #ifdef JP
-        msg_print("{}は輝いた！", item_name);
+        if (is_evil_blessing) {
+            msg_print("{}は妖しく輝いた！", item_name);
+        } else {
+            msg_print("{}は輝いた！", item_name);
+        }
 #else
-        msg_print("{} {} shine{}!", ((i_idx >= 0) ? "Your" : "The"), item_name, ((item->number > 1) ? "" : "s"));
+        if (is_evil_blessing) {
+            msg_print("{} {} glow{} ominously!", ((i_idx >= 0) ? "Your" : "The"), item_name, ((item->number > 1) ? "" : "s"));
+        } else {
+            msg_print("{} {} shine{}!", ((i_idx >= 0) ? "Your" : "The"), item_name, ((item->number > 1) ? "" : "s"));
+        }
 #endif
     } else {
         msg_print(_("その武器は祝福を嫌っている！", "The weapon resists your blessing!"));

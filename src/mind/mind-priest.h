@@ -4,6 +4,7 @@
 
 /*! 武器に祝福を与えようとした結果 */
 enum class BlessWeaponResult {
+    REJECTED, //!< もう一方の神の祝福を受けた武器に拒まれた
     DISTURBED, //!< 呪いに邪魔されて祝福できなかった
     ALREADY_BLESSED, //!< 既に祝福されていた
     BLESSED, //!< 祝福した
@@ -20,5 +21,5 @@ struct BlessWeaponOutcome {
 class ItemEntity;
 class PlayerType;
 tr_type get_priest_blessing(PlayerType *player_ptr);
-BlessWeaponOutcome apply_blessing_to_weapon(ItemEntity &item);
+BlessWeaponOutcome apply_blessing_to_weapon(ItemEntity &item, tr_type blessing);
 bool bless_weapon(PlayerType *player_ptr);

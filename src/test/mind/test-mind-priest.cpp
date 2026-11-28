@@ -77,7 +77,7 @@ TEST_CASE("apply_blessing_to_weapon always blesses a weapon that is neither an a
     test::ScopedVectorWrapper<BaseitemList> saved_baseitems{ BaseitemList::get_instance() };
     auto item = make_plain_sword();
 
-    const auto outcome = apply_blessing_to_weapon(item);
+    const auto outcome = apply_blessing_to_weapon(item, TR_BLESSED);
     CHECK(outcome.result == BlessWeaponResult::BLESSED);
     CHECK_FALSE(outcome.is_curse_removed);
     CHECK_FALSE(outcome.is_disenchanted);
@@ -93,7 +93,7 @@ TEST_CASE("apply_blessing_to_weapon leaves a blessed weapon as it is")
     auto item = make_plain_sword();
     item.art_flags.set(TR_BLESSED);
 
-    const auto outcome = apply_blessing_to_weapon(item);
+    const auto outcome = apply_blessing_to_weapon(item, TR_BLESSED);
     CHECK(outcome.result == BlessWeaponResult::ALREADY_BLESSED);
     CHECK(item.discount == 0);
 }
@@ -104,7 +104,7 @@ TEST_CASE("apply_blessing_to_weapon removes a light curse and then blesses the w
     auto item = make_plain_sword();
     item.curse_flags.set(CurseTraitType::CURSED);
 
-    const auto outcome = apply_blessing_to_weapon(item);
+    const auto outcome = apply_blessing_to_weapon(item, TR_BLESSED);
     CHECK(outcome.result == BlessWeaponResult::BLESSED);
     CHECK(outcome.is_curse_removed);
     CHECK_FALSE(item.is_cursed());
@@ -119,7 +119,7 @@ TEST_CASE("apply_blessing_to_weapon is disturbed by a curse that cannot be remov
         auto item = make_plain_sword();
         item.curse_flags.set({ CurseTraitType::CURSED, curse });
 
-        const auto outcome = apply_blessing_to_weapon(item);
+        const auto outcome = apply_blessing_to_weapon(item, TR_BLESSED);
         CHECK(outcome.result == BlessWeaponResult::DISTURBED);
         CHECK_FALSE(outcome.is_curse_removed);
         CHECK(item.curse_flags.has(curse));
@@ -140,7 +140,7 @@ TEST_CASE("apply_blessing_to_weapon is resisted by an ego weapon two times out o
         auto item = make_plain_sword();
         item.ego_idx = EgoType::A_MORGUL;
 
-        const auto outcome = apply_blessing_to_weapon(item);
+        const auto outcome = apply_blessing_to_weapon(item, TR_BLESSED);
         CAPTURE(seed);
         if (outcome.result == BlessWeaponResult::BLESSED) {
             blessed_count++;
@@ -160,6 +160,119 @@ TEST_CASE("apply_blessing_to_weapon is resisted by an ego weapon two times out o
     }
 
     // シードを固定しているので回数は毎回同じ。3 分の 1 (100 回) の前後であることだけを確かめる
+    CHECK(blessed_count > 70);
+    CHECK(blessed_count < 130);
+}
+
+TEST_CASE("apply_blessing_to_weapon gives the blessing of the gods of evil")
+{
+    test::ScopedVectorWrapper<BaseitemList> saved_baseitems{ BaseitemList::get_instance() };
+    auto item = make_plain_sword();
+
+    const auto outcome = apply_blessing_to_weapon(item, TR_BLESSED_EVIL);
+    CHECK(outcome.result == BlessWeaponResult::BLESSED);
+    CHECK(item.art_flags.has(TR_BLESSED_EVIL));
+    CHECK(item.art_flags.has_not(TR_BLESSED));
+    CHECK(item.discount == 99);
+
+    // 同じ祝福をもう一度与えても何も起きない
+    item.discount = 0;
+    const auto second_outcome = apply_blessing_to_weapon(item, TR_BLESSED_EVIL);
+    CHECK(second_outcome.result == BlessWeaponResult::ALREADY_BLESSED);
+    CHECK(item.discount == 0);
+}
+
+TEST_CASE("apply_blessing_to_weapon gives the blessing of the gods of evil without touching curses")
+{
+    test::ScopedVectorWrapper<BaseitemList> saved_baseitems{ BaseitemList::get_instance() };
+
+    // 善の神の祝福なら邪魔される呪いでも、邪の神の祝福は邪魔されず、呪いも解かない
+    for (const auto curse : { CurseTraitType::CURSED, CurseTraitType::HEAVY_CURSE, CurseTraitType::PERMA_CURSE, CurseTraitType::PERSISTENT_CURSE }) {
+        CAPTURE(static_cast<int>(curse));
+        auto item = make_plain_sword();
+        item.curse_flags.set({ CurseTraitType::CURSED, curse });
+
+        const auto outcome = apply_blessing_to_weapon(item, TR_BLESSED_EVIL);
+        CHECK(outcome.result == BlessWeaponResult::BLESSED);
+        CHECK_FALSE(outcome.is_curse_removed);
+        CHECK(item.curse_flags.has(CurseTraitType::CURSED));
+        CHECK(item.curse_flags.has(curse));
+        CHECK(item.art_flags.has(TR_BLESSED_EVIL));
+    }
+}
+
+TEST_CASE("apply_blessing_to_weapon is rejected by a weapon blessed by the other gods")
+{
+    test::ScopedVectorWrapper<BaseitemList> saved_baseitems{ BaseitemList::get_instance() };
+
+    SUBCASE("the gods of good do not bless a weapon of the gods of evil")
+    {
+        auto item = make_plain_sword();
+        item.art_flags.set(TR_BLESSED_EVIL);
+        item.curse_flags.set(CurseTraitType::CURSED);
+
+        const auto outcome = apply_blessing_to_weapon(item, TR_BLESSED);
+        CHECK(outcome.result == BlessWeaponResult::REJECTED);
+        // 拒まれたときは呪いも解かない
+        CHECK_FALSE(outcome.is_curse_removed);
+        CHECK(item.is_cursed());
+        CHECK(item.art_flags.has_not(TR_BLESSED));
+        CHECK(item.art_flags.has(TR_BLESSED_EVIL));
+        CHECK(item.discount == 0);
+    }
+
+    SUBCASE("the gods of evil do not bless a weapon of the gods of good")
+    {
+        auto item = make_plain_sword();
+        item.art_flags.set(TR_BLESSED);
+
+        const auto outcome = apply_blessing_to_weapon(item, TR_BLESSED_EVIL);
+        CHECK(outcome.result == BlessWeaponResult::REJECTED);
+        CHECK(item.art_flags.has_not(TR_BLESSED_EVIL));
+        CHECK(item.art_flags.has(TR_BLESSED));
+        CHECK(item.discount == 0);
+    }
+
+    SUBCASE("the blessing of the base item also rejects the other gods")
+    {
+        auto item = make_plain_sword();
+        BaseitemList::get_instance().get_baseitem(1).flags.set(TR_BLESSED);
+
+        const auto outcome = apply_blessing_to_weapon(item, TR_BLESSED_EVIL);
+        CHECK(outcome.result == BlessWeaponResult::REJECTED);
+        CHECK(item.art_flags.has_not(TR_BLESSED_EVIL));
+    }
+}
+
+TEST_CASE("apply_blessing_to_weapon of the gods of evil is also resisted by an ego weapon")
+{
+    test::ScopedVectorWrapper<BaseitemList> saved_baseitems{ BaseitemList::get_instance() };
+    test::ScopedEgoList saved_egos;
+    egos_info.try_emplace(EgoType::A_MORGUL);
+
+    constexpr auto trials = 300U;
+    auto blessed_count = 0;
+    for (auto seed = 1U; seed <= trials; seed++) {
+        const auto restore_rng = test::scoped_rng(seed);
+        auto item = make_plain_sword();
+        item.ego_idx = EgoType::A_MORGUL;
+
+        const auto outcome = apply_blessing_to_weapon(item, TR_BLESSED_EVIL);
+        CAPTURE(seed);
+        if (outcome.result == BlessWeaponResult::BLESSED) {
+            blessed_count++;
+            CHECK(item.art_flags.has(TR_BLESSED_EVIL));
+            continue;
+        }
+
+        REQUIRE(outcome.result == BlessWeaponResult::RESISTED);
+        CHECK(outcome.is_disenchanted);
+        CHECK(item.art_flags.has_not(TR_BLESSED_EVIL));
+        CHECK(item.to_h == 2);
+        CHECK(item.to_d == 2);
+    }
+
+    // 善の神の祝福と同じ 3 分の 1 (シードが同じなので回数も同じ)
     CHECK(blessed_count > 70);
     CHECK(blessed_count < 130);
 }

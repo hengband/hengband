@@ -104,13 +104,6 @@ bool switch_class_racial_execution(PlayerType *player_ptr, const int32_t command
     case PlayerClassType::SORCERER:
         return eat_magic(player_ptr, player_ptr->lev * 2);
     case PlayerClassType::PRIEST:
-        if (!PlayerRealm(player_ptr).realm1().is_good_attribute()) {
-            (void)dispel_monsters(player_ptr, player_ptr->lev * 4);
-            turn_monsters(player_ptr, player_ptr->lev * 4);
-            banish_monsters(player_ptr, player_ptr->lev * 4);
-            return true;
-        }
-
         return bless_weapon(player_ptr);
     case PlayerClassType::ROGUE:
         return hit_and_away(player_ptr);

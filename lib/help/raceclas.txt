@@ -529,12 +529,16 @@ command("U"/"O").
     as efficiently as mages.  However, when learning spells, priests
     cannot voluntarily decide which spells to study: they are rewarded
     with new prayers by their patron deities, with no money-back
-    satisfaction guarantee.  Priests which select Life realm or
-    Crusade realm have a class power - 'Bless Weapon' - which blesses
-    any edged weapon to be suitable for priests to wield.  Every
-    priest which select Death realm or Daemon realm have a class power
-    - 'Evocation' - which damages, scares and banish all monsters in
-    sight.
+    satisfaction guarantee.  Priests have a class power - 'Bless
+    Weapon' - which blesses an edged weapon to be suitable for them
+    to wield.  The blessing depends on the first realm: priests of
+    Life realm or Crusade realm give the blessing of the gods of
+    good, and priests of Death realm or Daemon realm give the
+    blessing of the gods of evil.  Among edged weapons, a priest can
+    freely wield only those blessed by his or her own gods.  The
+    blessing of the gods of evil does not remove curses, but it can
+    be given even to a cursed weapon.  A weapon already blessed by
+    the other gods rejects the blessing.
 
 
 ***** <Rogue>

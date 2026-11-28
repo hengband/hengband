@@ -44,25 +44,18 @@ void switch_class_racial(PlayerType *player_ptr, rc_type *rc_ptr)
         rc_ptr->add_power(rpi, RC_IDX_CLASS_0);
         break;
     case PlayerClassType::PRIEST:
+        rpi = rpi_type(_("武器祝福", "Bless Weapon"));
         if (PlayerRealm(player_ptr).realm1().is_good_attribute()) {
-            rpi = rpi_type(_("武器祝福", "Bless Weapon"));
-            rpi.text = _("武器を祝福する。抵抗されることがある。", "Blesses a weapon. Some weapons can resist it.");
-            rpi.min_level = 35;
-            rpi.cost = 70;
-            rpi.stat = A_WIS;
-            rpi.fail = 50;
-            rc_ptr->add_power(rpi, RC_IDX_CLASS_0);
+            rpi.text = _("武器に善なる神の祝福を与え、呪いを解く。抵抗されることがある。", "Gives a weapon the blessing of the gods of good and removes its curse. Some weapons can resist it.");
         } else {
-            rpi = rpi_type(_("召魂", "Evocation"));
-            rpi.info = fmt::format("{}{}", KWD_POWER, rc_ptr->lvl * 4);
-            rpi.text = _("視界内の全てのモンスターにダメージを与え、恐怖させ、遠くへ飛ばす。", "Deals damage to all monster in your sight, makes them scared and tereports then away.");
-            rpi.min_level = 42;
-            rpi.cost = 40;
-            rpi.stat = A_WIS;
-            rpi.fail = 35;
-            rc_ptr->add_power(rpi, RC_IDX_CLASS_0);
+            rpi.text = _("武器に邪悪な神の祝福を与える。呪いは解かない。抵抗されることがある。", "Gives a weapon the blessing of the gods of evil without removing its curse. Some weapons can resist it.");
         }
 
+        rpi.min_level = 35;
+        rpi.cost = 70;
+        rpi.stat = A_WIS;
+        rpi.fail = 50;
+        rc_ptr->add_power(rpi, RC_IDX_CLASS_0);
         break;
     case PlayerClassType::ROGUE:
         rpi = rpi_type(_("ヒット＆アウェイ", "Hit and Away"));
