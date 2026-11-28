@@ -5,7 +5,6 @@
 #include "inventory/inventory-slot-types.h"
 #include "inventory/inventory-util.h"
 #include "io/input-key-requester.h"
-#include "locale/japanese.h"
 #include "locale/multibyte-char.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
@@ -17,6 +16,7 @@
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/string-processor.h"
+#include "view/display-util.h"
 #include <fmt/format.h>
 
 /*!
@@ -114,9 +114,7 @@ COMMAND_CODE show_inventory(PlayerType *player_ptr, int target_item, BIT_FLAGS m
 
         c_put_str(out_color[j], out_desc[j], j + 1, cur_col);
         if (show_weights) {
-            const auto wgt = item.weight * item.number;
-            const auto weight = fmt::format(_("{:3}.{:1} kg", "{:3}.{:1} lb"), _(lb_to_kg_integer(wgt), wgt / 10), _(lb_to_kg_fraction(wgt), wgt % 10));
-            prt(weight, j + 1, wid - 9);
+            prt(format_item_weight(item.weight * item.number), j + 1, wid - 9);
         }
     }
 
@@ -183,9 +181,7 @@ void display_inventory(PlayerType *player_ptr, const ItemTester &item_tester)
         term_putstr(cur_col, i, -1, attr, item_name);
 
         if (show_weights) {
-            const auto wgt = item.weight * item.number;
-            const auto weight = fmt::format(_("{:3}.{:1} kg", "{:3}.{:1} lb"), _(lb_to_kg_integer(wgt), wgt / 10), _(lb_to_kg_fraction(wgt), wgt % 10));
-            prt(weight, i, wid - 9);
+            prt(format_item_weight(item.weight * item.number), i, wid - 9);
         }
     }
 

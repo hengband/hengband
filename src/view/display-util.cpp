@@ -1,4 +1,5 @@
 #include "view/display-util.h"
+#include "locale/japanese.h"
 #include "locale/multibyte-char.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
@@ -64,6 +65,20 @@ const std::vector<disp_player_line> disp_player_lines = {
     { 29, 16, 21, _("次レベル", "Const to Adv") },
     { 53, 19, -1, _("掘削      :", "Digging    : ") },
 };
+}
+
+/*!
+ * @brief アイテムの重量を一覧に表示する書式にする
+ * @param weight 重量 (0.1 ポンド単位)
+ * @param with_unit 単位 (日本語版は kg、英語版は lb) を付けるか
+ * @return 整数部を右寄せで最小 3 桁の幅にし、小数第 1 位まで書いた重量 (例: " 12.5 kg")
+ * @details 日本語版は kg に換算する。
+ */
+std::string format_item_weight(int weight, bool with_unit)
+{
+    const auto integer = _(lb_to_kg_integer(weight), weight / 10);
+    const auto fraction = _(lb_to_kg_fraction(weight), weight % 10);
+    return fmt::format("{:3}.{}{}", integer, fraction, with_unit ? _(" kg", " lb") : "");
 }
 
 /*!

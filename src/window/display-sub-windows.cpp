@@ -6,7 +6,6 @@
 #include "inventory/inventory-describer.h"
 #include "inventory/inventory-slot-types.h"
 #include "inventory/inventory-util.h"
-#include "locale/japanese.h"
 #include "locale/multibyte-char.h"
 #include "lore/monster-lore-snapshot.h"
 #include "main/sound-of-music.h"
@@ -50,6 +49,7 @@
 #include "view/display-map.h"
 #include "view/display-messages.h"
 #include "view/display-player.h"
+#include "view/display-util.h"
 #include "view/map-info-cache.h"
 #include "view/object-describer.h"
 #include "window/main-window-equipments.h"
@@ -367,9 +367,7 @@ static void display_equipment(PlayerType *player_ptr, const ItemTester &item_tes
 
         term_putstr(cur_col, cur_row, -1, attr, item_name);
         if (show_weights) {
-            int wgt = item.weight * item.number;
-            tmp_val = fmt::format(_("{:3}.{:1} kg", "{:3}.{:1} lb"), _(lb_to_kg_integer(wgt), wgt / 10), _(lb_to_kg_fraction(wgt), wgt % 10));
-            prt(tmp_val, cur_row, wid - (show_labels ? 28 : 9));
+            prt(format_item_weight(item.weight * item.number), cur_row, wid - (show_labels ? 28 : 9));
         }
 
         if (show_labels) {

@@ -2,7 +2,6 @@
 #include "flavor/flavor-describer.h"
 #include "game-option/special-options.h"
 #include "game-option/text-display-options.h"
-#include "locale/japanese.h"
 #include "player/race-info-table.h"
 #include "store/pricing.h"
 #include "store/store-owners.h"
@@ -14,6 +13,7 @@
 #include "term/screen-processor.h"
 #include "util/int-char-converter.h"
 #include "view/display-symbol.h"
+#include "view/display-util.h"
 #include <algorithm>
 #include <fmt/format.h>
 
@@ -67,8 +67,7 @@ void display_entry(PlayerType *player_ptr, const StoreScreen &screen, int pos)
         c_put_str(tval_to_attr[enum2i(item.bi_key.tval())], item_name, i + 6, cur_col);
 
         if (show_weights) {
-            const auto wgt = item.weight;
-            put_str(fmt::format(_("{:3}.{:1} kg", "{:3}.{} lb"), _(lb_to_kg_integer(wgt), wgt / 10), _(lb_to_kg_fraction(wgt), wgt % 10)), i + 6, _(67, 68));
+            put_str(format_item_weight(item.weight), i + 6, _(67, 68));
         }
 
         return;
@@ -83,8 +82,7 @@ void display_entry(PlayerType *player_ptr, const StoreScreen &screen, int pos)
     c_put_str(tval_to_attr[enum2i(item.bi_key.tval())], item_name, i + 6, cur_col);
 
     if (show_weights) {
-        const auto wgt = item.weight;
-        put_str(fmt::format("{:3}.{:1}", _(lb_to_kg_integer(wgt), wgt / 10), _(lb_to_kg_fraction(wgt), wgt % 10)), i + 6, _(60, 61));
+        put_str(format_item_weight(item.weight, false), i + 6, _(60, 61));
     }
 
     const auto price = price_item(player_ptr, item.calc_price(), store, StoreTradeType::PLAYER_BUYS);
