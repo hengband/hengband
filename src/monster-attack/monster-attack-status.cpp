@@ -57,7 +57,7 @@ void process_terrify_attack(PlayerType *player_ptr, MonsterAttackPlayer *monap_p
         return;
     }
 
-    if (randint0(100 + monrace.level / 2) < player_ptr->skill_sav) {
+    if (player_ptr->try_saving_throw(monrace.level)) {
         msg_print(_("しかし恐怖に侵されなかった！", "You stand your ground!"));
         monap_ptr->obvious = true;
         return;
@@ -81,7 +81,7 @@ void process_paralyze_attack(PlayerType *player_ptr, MonsterAttackPlayer *monap_
         return;
     }
 
-    if (randint0(100 + monrace.level / 2) < player_ptr->skill_sav) {
+    if (player_ptr->try_saving_throw(monrace.level)) {
         msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
         monap_ptr->obvious = true;
         return;

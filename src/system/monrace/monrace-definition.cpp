@@ -167,6 +167,16 @@ bool MonraceDefinition::is_angel_superficially() const
 }
 
 /*!
+ * @brief 状態異常の魔法などへのセーヴィングスローを行う
+ * @param caster_level 唱えたモンスター (またはプレイヤー) のレベル
+ * @return 抵抗したら true
+ */
+bool MonraceDefinition::try_saving_throw(int caster_level) const
+{
+    return this->level > randint1(std::max(1, caster_level - 10)) + 10;
+}
+
+/*!
  * @brief モンスターのシンボル文字が指定された文字列に含まれるかどうかを返す
  * @param candidate_chars シンボル文字の集合の文字列。"pht" のように複数の文字を指定可能。
  * @return モンスターのシンボル文字が candidate_chars に含まれるならばtrue

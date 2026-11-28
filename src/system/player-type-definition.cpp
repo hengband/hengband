@@ -248,3 +248,13 @@ bool PlayerType::try_resist_eldritch_horror() const
 {
     return evaluate_percent(this->skill_sav) || one_in_(2);
 }
+
+/*!
+ * @brief モンスターの魔法や打撃などへのセーヴィングスローを行う
+ * @param level 相手のモンスターのレベル
+ * @return 抵抗したら true
+ */
+bool PlayerType::try_saving_throw(int level) const
+{
+    return randint0(100 + level / 2) < this->skill_sav;
+}

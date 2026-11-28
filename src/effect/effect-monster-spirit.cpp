@@ -65,7 +65,7 @@ ProcessResult effect_monster_mind_blast(PlayerType *player_ptr, EffectMonster *e
 
     bool has_immute = em_ptr->monrace->kind_flags.has(MonsterKindType::UNIQUE);
     has_immute |= em_ptr->monrace->resistance_flags.has(MonsterResistanceType::NO_CONF);
-    has_immute |= (em_ptr->monrace->level > randint1(std::max(1, em_ptr->caster_lev - 10)) + 10);
+    has_immute |= em_ptr->monrace->try_saving_throw(em_ptr->caster_lev);
 
     if (has_immute) {
         if (em_ptr->monrace->resistance_flags.has(MonsterResistanceType::NO_CONF)) {
@@ -113,7 +113,7 @@ ProcessResult effect_monster_brain_smash(PlayerType *player_ptr, EffectMonster *
 
     bool has_immute = em_ptr->monrace->kind_flags.has(MonsterKindType::UNIQUE);
     has_immute |= em_ptr->monrace->resistance_flags.has(MonsterResistanceType::NO_CONF);
-    has_immute |= (em_ptr->monrace->level > randint1(std::max(1, em_ptr->caster_lev - 10)) + 10);
+    has_immute |= em_ptr->monrace->try_saving_throw(em_ptr->caster_lev);
 
     if (has_immute) {
         if (em_ptr->monrace->resistance_flags.has(MonsterResistanceType::NO_CONF)) {
