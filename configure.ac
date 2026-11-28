@@ -261,6 +261,15 @@ if test "$ac_cv_lib_ncursesw_initscr" != yes; then
   fi
 fi
 
+dnl ncurses を libncurses(w) と libtinfo(w) に分けてビルドした環境 (freedesktop SDK など) では、
+dnl cbreak() などが libtinfo(w) にあるので、それも合わせてリンクする。
+dnl ワイド版と通常版の libtinfo は別物なので、選んだ ncurses に合うものを探す (ワイド版でも tinfo だけの環境がある)
+if test "$ac_cv_lib_ncursesw_initscr" = yes; then
+  AC_SEARCH_LIBS([cbreak], [tinfow tinfo])
+elif test "$ac_cv_lib_ncurses_initscr" = yes; then
+  AC_SEARCH_LIBS([cbreak], [tinfo])
+fi
+
 AC_CHECK_LIB(iconv, iconv_open)
 
 if test "$use_net" = no; then

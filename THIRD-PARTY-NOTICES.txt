@@ -199,3 +199,19 @@ A copy of the CC0 1.0 Universal Public Domain Dedication can be found at
 https://creativecommons.org/publicdomain/zero/1.0/
 
 ---------------------------------------------------------
+
+Takao Fonts 15.03 (TakaoGothic) - IPA Font License Agreement v1.0
+https://launchpad.net/takao-fonts
+
+Bundled only in the Japanese version of the Linux packages (AppImage and
+Flatpak); not part of the source tree or the Windows packages.
+
+(c) 2010-2015 Takao Fonts Maintainers Team
+The Takao Fonts are a font family based on the IPA Fonts.
+
+TakaoGothic.ttf is redistributed as is, without modification and without
+changing its name. A copy of the IPA Font License Agreement v1.0 and the
+README of the Takao Fonts are attached in share/licenses/takao-fonts/ of
+the package.
+
+---------------------------------------------------------

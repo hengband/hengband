@@ -43,9 +43,20 @@ jobs:
           if-no-files-found: error
           overwrite: true
 
+  # Linux 向けの AppImage と Flatpak (日本語版・英語版)
+  build-linux-packages:
+    name: Build Linux Packages
+    permissions:
+      contents: read
+    uses: ./.github/workflows/build-linux-packages.yml
+    with:
+      upload: true
+
   publish-release-page:
     name: Publish Release Page
-    needs: build-release-package
+    needs: [build-release-package, build-linux-packages]
+    # Linux 向けのパッケージのビルドに失敗しても、Windows 版だけでリリースの下書きを作る
+    if: ${{ !cancelled() && needs.build-release-package.result == 'success' }}
     runs-on: windows-2025-vs2026
     permissions:
       contents: write
@@ -56,10 +67,38 @@ jobs:
           name: windows-release-package
           path: .
 
+      - name: Download Linux packages
+        if: ${{ needs.build-linux-packages.result == 'success' }}
+        uses: actions/download-artifact@v8
+        with:
+          pattern: linux-*
+          path: .
+          merge-multiple: true
+
+      # 載せるファイルを決める。Linux 向けは、ビルドに成功したときだけ載せる
+      - id: files
+        name: Decide release files
+        shell: bash
+        env:
+          LINUX_RESULT: ${{ needs.build-linux-packages.result }}
+        run: |
+          {
+            echo 'list<<EOF'
+            echo 'Hengband-*.zip'
+            if [ "$LINUX_RESULT" = success ]; then
+              echo 'Hengband-*.AppImage'
+              echo 'Hengband-*.flatpak'
+            fi
+            echo 'EOF'
+          } >> "$GITHUB_OUTPUT"
+          if [ "$LINUX_RESULT" != success ]; then
+            echo "::warning::Linux packages were not built (result: $LINUX_RESULT), so they are not attached to the release."
+          fi
+
       - name: Release
         uses: softprops/action-gh-release@v3
         with:
-          files: Hengband-*.zip
+          files: ${{ steps.files.outputs.list }}
           fail_on_unmatched_files: true
           name: ${{ needs.build-release-package.outputs.version }}
           tag_name: ${{ needs.build-release-package.outputs.version }}

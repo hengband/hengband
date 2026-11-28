@@ -1,0 +1,14 @@
+[Desktop Entry]
+Type=Application
+Name=@NAME@
+Name[ja]=@NAME_JA@
+GenericName=Roguelike Game
+GenericName[ja]=ローグライクゲーム
+Comment=A variant of Angband (@LANG@ version)
+Comment[ja]=Angband のバリアント (@LANG_JA@版)
+Exec=hengband
+Icon=@APP_ID@
+Terminal=false
+Categories=Game;RolePlaying;
+Keywords=roguelike;angband;zangband;
+StartupWMClass=Angband
