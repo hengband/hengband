@@ -68,6 +68,7 @@ BIT_FLAGS has_esp_nonliving(PlayerType *player_ptr);
 BIT_FLAGS has_esp_unique(PlayerType *player_ptr);
 BIT_FLAGS has_esp_telepathy(PlayerType *player_ptr);
 BIT_FLAGS has_bless_blade(PlayerType *player_ptr);
+BIT_FLAGS has_evil_bless_blade(PlayerType *player_ptr);
 BIT_FLAGS has_easy2_weapon(PlayerType *player_ptr);
 BIT_FLAGS has_down_saving(PlayerType *player_ptr);
 BIT_FLAGS has_no_ac(PlayerType *player_ptr);

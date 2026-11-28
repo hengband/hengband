@@ -372,6 +372,7 @@ BIT_FLAGS get_player_flags(PlayerType *player_ptr, tr_type tr_flag)
     case TR_BLESSED:
         return has_bless_blade(player_ptr);
     case TR_BLESSED_EVIL:
+        return has_evil_bless_blade(player_ptr);
     case TR_XXX_94:
     case TR_KILL_GOOD:
     case TR_KILL_ANIMAL:
@@ -674,9 +675,24 @@ BIT_FLAGS has_esp_telepathy(PlayerType *player_ptr)
     return result;
 }
 
+/*!
+ * @brief 善の神に祝福された装備をしている要因を返す
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @return 要因となるフラグの集合
+ */
 BIT_FLAGS has_bless_blade(PlayerType *player_ptr)
 {
     return common_cause_flags(player_ptr, TR_BLESSED);
+}
+
+/*!
+ * @brief 邪の神に祝福された装備をしている要因を返す
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @return 要因となるフラグの集合
+ */
+BIT_FLAGS has_evil_bless_blade(PlayerType *player_ptr)
+{
+    return common_cause_flags(player_ptr, TR_BLESSED_EVIL);
 }
 
 BIT_FLAGS has_easy2_weapon(PlayerType *player_ptr)

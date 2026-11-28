@@ -503,7 +503,7 @@ PRICE flag_cost(const ItemEntity *o_ptr, int plusses)
     if (flags.has(TR_AGGRAVATE)) {
         total -= 10000;
     }
-    if (flags.has(TR_BLESSED)) {
+    if (flags.has(TR_BLESSED) || flags.has(TR_BLESSED_EVIL)) {
         total += 750;
     }
     if (o_ptr->curse_flags.has(CurseTraitType::ADD_L_CURSE)) {

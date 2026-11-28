@@ -328,7 +328,7 @@ public:
     BIT_FLAGS esp_unique{};
 
     BIT_FLAGS slow_digest{}; /* Slower digestion */
-    BIT_FLAGS bless_blade{}; //!< 祝福された装備をしている / Blessed by inventory items
+    BIT_FLAGS bless_blade{}; //!< 祝福された装備をしている (善の神・邪の神のどちらの祝福でも) / Blessed by inventory items
     BIT_FLAGS xtra_might{}; /* Extra might bow */
     BIT_FLAGS impact{}; //!< クリティカル率を上げる装備をしている / Critical blows
     BIT_FLAGS earthquake{}; //!< 地震を起こす装備をしている / Earthquake blows

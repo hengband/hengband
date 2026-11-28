@@ -1277,6 +1277,7 @@ hengband_test_SOURCES = \
 	test/object-enchant/test-item-magic-applier.cpp \
 	test/object-enchant/test-object-ego.cpp \
 	test/object/test-object-value.cpp \
+	test/object/test-object-value-calc.cpp \
 	test/racial/test-racial-android.cpp \
 	test/system/item/test-item-entity.cpp \
 	test/inventory/test-floor-item-getter.cpp \
