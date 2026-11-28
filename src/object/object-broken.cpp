@@ -109,6 +109,10 @@ bool BreakerElec::hates(ItemEntity *o_ptr) const
  */
 bool BreakerFire::hates(ItemEntity *o_ptr) const
 {
+    if (o_ptr->is_spell_book()) {
+        return true;
+    }
+
     switch (o_ptr->bi_key.tval()) {
     case ItemKindType::LITE:
     case ItemKindType::ARROW:
@@ -119,19 +123,6 @@ bool BreakerFire::hates(ItemEntity *o_ptr) const
     case ItemKindType::GLOVES:
     case ItemKindType::CLOAK:
     case ItemKindType::SOFT_ARMOR:
-    case ItemKindType::LIFE_BOOK:
-    case ItemKindType::SORCERY_BOOK:
-    case ItemKindType::NATURE_BOOK:
-    case ItemKindType::CHAOS_BOOK:
-    case ItemKindType::DEATH_BOOK:
-    case ItemKindType::TRUMP_BOOK:
-    case ItemKindType::ARCANE_BOOK:
-    case ItemKindType::CRAFT_BOOK:
-    case ItemKindType::DEMON_BOOK:
-    case ItemKindType::CRUSADE_BOOK:
-    case ItemKindType::MUSIC_BOOK:
-    case ItemKindType::HISSATSU_BOOK:
-    case ItemKindType::HEX_BOOK:
     case ItemKindType::CHEST:
     case ItemKindType::STAFF:
     case ItemKindType::SCROLL:

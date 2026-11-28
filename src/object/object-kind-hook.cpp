@@ -16,9 +16,6 @@
 #include <sstream>
 #include <vector>
 
-// @brief 3冊目の魔法書からは上質アイテムとして扱う.
-static const int SV_BOOK_MIN_GOOD = 2;
-
 /*!
  * @brief オブジェクトがクロークかどうかを判定する /
  * @param bi_id 判定したいオブジェクトのベースアイテムID
@@ -131,54 +128,36 @@ bool kind_is_amulet(short bi_id)
 bool kind_is_good(short bi_id)
 {
     const auto &baseitem = BaseitemList::get_instance().get_baseitem(bi_id);
-    switch (baseitem.bi_key.tval()) {
-        /* Armor -- Good unless damaged */
-    case ItemKindType::HARD_ARMOR:
-    case ItemKindType::SOFT_ARMOR:
-    case ItemKindType::DRAG_ARMOR:
-    case ItemKindType::SHIELD:
-    case ItemKindType::CLOAK:
-    case ItemKindType::BOOTS:
-    case ItemKindType::GLOVES:
-    case ItemKindType::HELM:
-    case ItemKindType::CROWN:
+    const auto &bi_key = baseitem.bi_key;
+
+    // 防具は AC の修正値が負でなければ上質
+    if (bi_key.is_protector()) {
         return baseitem.to_a >= 0;
+    }
 
-    /* Weapons -- Good unless damaged */
-    case ItemKindType::BOW:
-    case ItemKindType::SWORD:
-    case ItemKindType::HAFTED:
-    case ItemKindType::POLEARM:
-    case ItemKindType::DIGGING:
+    // 武器は命中・ダメージの修正値が負でなければ上質
+    if (bi_key.is_weapon()) {
         return (baseitem.to_h >= 0) && (baseitem.to_d >= 0);
+    }
 
-    /* Ammo -- Arrows/Bolts are good */
+    // 魔法書は 3 冊目以降なら上質 (秘術の魔法書を除く)
+    if (bi_key.is_spell_book()) {
+        return bi_key.is_high_level_book();
+    }
+
+    switch (bi_key.tval()) {
+    // 矢弾は矢・ボルトなら上質
     case ItemKindType::BOLT:
     case ItemKindType::ARROW:
         return true;
 
-    /* Books -- High level books are good (except Arcane books) */
-    case ItemKindType::LIFE_BOOK:
-    case ItemKindType::SORCERY_BOOK:
-    case ItemKindType::NATURE_BOOK:
-    case ItemKindType::CHAOS_BOOK:
-    case ItemKindType::DEATH_BOOK:
-    case ItemKindType::TRUMP_BOOK:
-    case ItemKindType::CRAFT_BOOK:
-    case ItemKindType::DEMON_BOOK:
-    case ItemKindType::CRUSADE_BOOK:
-    case ItemKindType::MUSIC_BOOK:
-    case ItemKindType::HISSATSU_BOOK:
-    case ItemKindType::HEX_BOOK:
-        return baseitem.bi_key.sval() >= SV_BOOK_MIN_GOOD;
-
-    /* Rings -- Rings of Speed are good */
+    // 指輪はスピード・王者の加護の指輪なら上質
     case ItemKindType::RING:
-        return (baseitem.bi_key.sval() == SV_RING_SPEED) || (baseitem.bi_key.sval() == SV_RING_LORDLY);
+        return (bi_key.sval() == SV_RING_SPEED) || (bi_key.sval() == SV_RING_LORDLY);
 
-    /* Amulets -- Amulets of the Magi and Resistance are good */
+    // アミュレットは賢者・耐性のアミュレットなら上質
     case ItemKindType::AMULET:
-        return (baseitem.bi_key.sval() == SV_AMULET_THE_MAGI) || (baseitem.bi_key.sval() == SV_AMULET_RESISTANCE);
+        return (bi_key.sval() == SV_AMULET_THE_MAGI) || (bi_key.sval() == SV_AMULET_RESISTANCE);
     default:
         return false;
     }

@@ -60,15 +60,7 @@ static bool check_item_features(PlayerType *player_ptr, const autopick_type &ent
     }
 
     if (entry.has(FLG_JUNKS)) {
-        switch (tval) {
-        case ItemKindType::FLAVOR_SKELETON:
-        case ItemKindType::BOTTLE:
-        case ItemKindType::JUNK:
-        case ItemKindType::STATUE:
-            return true;
-        default:
-            return false;
-        }
+        return item.is_junk();
     }
 
     if (entry.has(FLG_CORPSES)) {

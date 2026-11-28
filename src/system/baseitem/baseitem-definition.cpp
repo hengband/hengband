@@ -132,20 +132,12 @@ bool BaseitemDefinition::order_cost(const BaseitemDefinition &other) const
  */
 void BaseitemDefinition::decide_easy_know()
 {
+    if (this->bi_key.is_spell_book()) {
+        this->easy_know = true;
+        return;
+    }
+
     switch (this->bi_key.tval()) {
-    case ItemKindType::LIFE_BOOK:
-    case ItemKindType::SORCERY_BOOK:
-    case ItemKindType::NATURE_BOOK:
-    case ItemKindType::CHAOS_BOOK:
-    case ItemKindType::DEATH_BOOK:
-    case ItemKindType::TRUMP_BOOK:
-    case ItemKindType::ARCANE_BOOK:
-    case ItemKindType::CRAFT_BOOK:
-    case ItemKindType::DEMON_BOOK:
-    case ItemKindType::CRUSADE_BOOK:
-    case ItemKindType::MUSIC_BOOK:
-    case ItemKindType::HISSATSU_BOOK:
-    case ItemKindType::HEX_BOOK:
     case ItemKindType::FLASK:
     case ItemKindType::JUNK:
     case ItemKindType::BOTTLE:
