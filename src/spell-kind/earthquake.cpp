@@ -37,17 +37,6 @@
 #include <vector>
 
 namespace {
-std::vector<Pos2D> get_earthquake_area(FloorType &floor, const Pos2D &center, int radius)
-{
-    const auto is_eathquake_area = [&](const Pos2D &pos) {
-        return floor.contains(pos, FloorBoundary::OUTER_WALL_EXCLUSIVE) && Grid::calc_distance(center, pos) <= radius;
-    };
-
-    return Rect2D(center, Pos2DVec(radius, radius)) |
-           std::views::filter(is_eathquake_area) |
-           std::ranges::to<std::vector<Pos2D>>();
-}
-
 void reset_grid_info(FloorType &floor, std::span<const Pos2D> area)
 {
     for (const auto &pos : area) {
@@ -267,36 +256,6 @@ void destruct_earthquake_area(PlayerType *player_ptr, std::span<const Pos2D> pos
     }
 }
 
-void glow_earthquake_area(auto &floor, std::span<const Pos2D> area)
-{
-    for (const auto &pos : area) {
-        auto &grid = floor.get_grid(pos);
-        if (grid.is_mirror()) {
-            grid.info |= CAVE_GLOW;
-        }
-    }
-
-    if (floor.get_dungeon_definition().flags.has(DungeonFeatureType::DARKNESS)) {
-        return;
-    }
-
-    for (const auto &pos : area) {
-        auto &grid = floor.get_grid(pos);
-        for (const auto &d : Direction::directions()) {
-            const auto pos_neighbor = pos + d.vec();
-            if (!floor.contains(pos_neighbor, FloorBoundary::OUTER_WALL_INCLUSIVE)) {
-                continue;
-            }
-
-            const auto &grid_neighbor = floor.get_grid(pos_neighbor);
-            if (grid_neighbor.get_terrain(TerrainKind::MIMIC).flags.has(TerrainCharacteristics::GLOW)) {
-                grid.info |= CAVE_GLOW;
-                break;
-            }
-        }
-    }
-}
-
 void set_redrawing_flags()
 {
     auto &dur = DeferredUpdateRequests::get_instance();
@@ -332,7 +291,7 @@ bool earthquake(PlayerType *player_ptr, const Pos2D &center, int radius, MONSTER
         radius = 15;
     }
 
-    const auto earthquake_area = get_earthquake_area(floor, center, radius);
+    const auto earthquake_area = floor.get_positions_within_distance(center, radius);
     reset_grid_info(floor, earthquake_area);
 
     auto pos_collapses = decide_collapse_positions(floor, earthquake_area, center);
@@ -343,7 +302,7 @@ bool earthquake(PlayerType *player_ptr, const Pos2D &center, int radius, MONSTER
     std::erase(pos_collapses, player_ptr->get_position());
 
     destruct_earthquake_area(player_ptr, pos_collapses);
-    glow_earthquake_area(floor, earthquake_area);
+    floor.relight_area(earthquake_area);
 
     set_redrawing_flags();
 

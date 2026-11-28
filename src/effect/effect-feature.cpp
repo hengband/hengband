@@ -340,28 +340,13 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
     case AttributeType::DARK_WEAK:
     case AttributeType::DARK:
     case AttributeType::ABYSS: {
-        auto do_dark = !AngbandSystem::get_instance().is_phase_out() && !grid.is_mirror();
-        if (!do_dark) {
+        if (AngbandSystem::get_instance().is_phase_out() || grid.is_mirror()) {
             break;
         }
 
-        if (floor.is_underground() || !AngbandWorld::get_instance().is_daytime()) {
-            for (const auto &d : Direction::directions()) {
-                const auto pos_neighbor = Pos2D(y, x) + d.vec();
-                if (!floor.contains(pos_neighbor, FloorBoundary::OUTER_WALL_INCLUSIVE)) {
-                    continue;
-                }
-
-                const auto &grid_neighbor = floor.get_grid(pos_neighbor);
-                if (grid_neighbor.get_terrain(TerrainKind::MIMIC).flags.has(TerrainCharacteristics::GLOW)) {
-                    do_dark = false;
-                    break;
-                }
-            }
-
-            if (!do_dark) {
-                break;
-            }
+        const auto is_dark_time = floor.is_underground() || !AngbandWorld::get_instance().is_daytime();
+        if (is_dark_time && floor.has_glowing_neighbor({ y, x })) {
+            break;
         }
 
         grid.info &= ~(CAVE_GLOW);
