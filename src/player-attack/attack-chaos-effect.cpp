@@ -176,30 +176,17 @@ static void attack_probe(PlayerType *player_ptr, player_attack_type *pa_ptr)
  */
 static bool judge_tereprt_resistance(PlayerType *player_ptr, player_attack_type *pa_ptr)
 {
-    auto &monrace = *pa_ptr->monrace;
-    if (monrace.resistance_flags.has_not(MonsterResistanceType::RESIST_TELEPORT)) {
-        return false;
-    }
-
-    if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
-        if (is_original_ap_and_seen(player_ptr, *pa_ptr->m_ptr)) {
-            monrace.r_resistance_flags.set(MonsterResistanceType::RESIST_TELEPORT);
-        }
-
+    switch (judge_teleport_resistance(player_ptr, *pa_ptr->m_ptr)) {
+    case TeleportResistance::IMMUNE:
         msg_print(_("{}には効果がなかった。", "{} is unaffected!"), str_upcase_first(pa_ptr->m_name));
         return true;
-    }
-
-    if (monrace.level > randint1(100)) {
-        if (is_original_ap_and_seen(player_ptr, *pa_ptr->m_ptr)) {
-            monrace.r_resistance_flags.set(MonsterResistanceType::RESIST_TELEPORT);
-        }
-
+    case TeleportResistance::RESISTED:
         msg_print(_("{}は抵抗力を持っている！", "{} resists!"), str_upcase_first(pa_ptr->m_name));
         return true;
+    case TeleportResistance::NONE:
+    default:
+        return false;
     }
-
-    return false;
 }
 
 /*!

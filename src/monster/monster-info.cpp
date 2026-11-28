@@ -195,6 +195,34 @@ bool is_original_ap_and_seen(PlayerType *player_ptr, const MonsterEntity &monste
 }
 
 /*!
+ * @brief モンスターがテレポートに耐えるかを判定する
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param monster テレポートさせるモンスター
+ * @return 判定の結果
+ * @details
+ * テレポート耐性を持つモンスターは、ユニークか、すべてに耐性を持てば必ず無効にし、そうでなければレベルに応じて抵抗する。
+ * 耐えたときは、テレポート耐性を思い出に記録する。
+ */
+TeleportResistance judge_teleport_resistance(PlayerType *player_ptr, const MonsterEntity &monster)
+{
+    auto &monrace = monster.get_monrace();
+    if (monrace.resistance_flags.has_not(MonsterResistanceType::RESIST_TELEPORT)) {
+        return TeleportResistance::NONE;
+    }
+
+    const auto is_immune = monrace.kind_flags.has(MonsterKindType::UNIQUE) || monrace.resistance_flags.has(MonsterResistanceType::RESIST_ALL);
+    if (!is_immune && (monrace.level <= randint1(100))) {
+        return TeleportResistance::NONE;
+    }
+
+    if (is_original_ap_and_seen(player_ptr, monster)) {
+        monrace.r_resistance_flags.set(MonsterResistanceType::RESIST_TELEPORT);
+    }
+
+    return is_immune ? TeleportResistance::IMMUNE : TeleportResistance::RESISTED;
+}
+
+/*!
  * @brief モンスターIDを取り、モンスター名をm_nameに代入する /
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx モンスターID

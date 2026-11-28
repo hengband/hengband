@@ -530,31 +530,18 @@ ProcessResult effect_monster_time(PlayerType *player_ptr, EffectMonster *em_ptr)
 
 static bool effect_monster_gravity_resist_teleport(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
-    if (em_ptr->monrace->resistance_flags.has_not(MonsterResistanceType::RESIST_TELEPORT)) {
-        em_ptr->obvious = true;
-        return false;
-    }
-
-    if (em_ptr->monrace->kind_flags.has(MonsterKindType::UNIQUE)) {
-        if (is_original_ap_and_seen(player_ptr, *em_ptr->m_ptr)) {
-            em_ptr->monrace->r_resistance_flags.set(MonsterResistanceType::RESIST_TELEPORT);
-        }
-
+    switch (judge_teleport_resistance(player_ptr, *em_ptr->m_ptr)) {
+    case TeleportResistance::IMMUNE:
         em_ptr->note = _("には効果がなかった。", " is unaffected!");
         return true;
-    }
-
-    if (em_ptr->monrace->level <= randint1(100)) {
+    case TeleportResistance::RESISTED:
+        em_ptr->note = _("には耐性がある！", " resists!");
+        return true;
+    case TeleportResistance::NONE:
+    default:
         em_ptr->obvious = true;
         return false;
     }
-
-    if (is_original_ap_and_seen(player_ptr, *em_ptr->m_ptr)) {
-        em_ptr->monrace->r_resistance_flags.set(MonsterResistanceType::RESIST_TELEPORT);
-    }
-
-    em_ptr->note = _("には耐性がある！", " resists!");
-    return true;
 }
 
 static void effect_monster_gravity_slow(PlayerType *player_ptr, EffectMonster *em_ptr)

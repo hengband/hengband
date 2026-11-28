@@ -478,25 +478,18 @@ static bool use_mane(PlayerType *player_ptr, MonsterAbilityType spell)
         }
 
         const auto &monster = floor.m_list[grid_target.m_idx];
-        auto &monrace = monster.get_monrace();
         const auto m_name = monster_desc(player_ptr, monster, 0);
-        if (monrace.resistance_flags.has(MonsterResistanceType::RESIST_TELEPORT)) {
-            if (monrace.kind_flags.has(MonsterKindType::UNIQUE) || monrace.resistance_flags.has(MonsterResistanceType::RESIST_ALL)) {
-                if (is_original_ap_and_seen(player_ptr, monster)) {
-                    monrace.r_resistance_flags.set(MonsterResistanceType::RESIST_TELEPORT);
-                }
-                msg_print(_("{}には効果がなかった！", "{} is unaffected!"), m_name);
-
-                break;
-            } else if (monrace.level > randint1(100)) {
-                if (is_original_ap_and_seen(player_ptr, monster)) {
-                    monrace.r_resistance_flags.set(MonsterResistanceType::RESIST_TELEPORT);
-                }
-                msg_print(_("{}には耐性がある！", "{} resists!"), m_name);
-
-                break;
-            }
+        const auto resistance = judge_teleport_resistance(player_ptr, monster);
+        if (resistance == TeleportResistance::IMMUNE) {
+            msg_print(_("{}には効果がなかった！", "{} is unaffected!"), m_name);
+            break;
         }
+
+        if (resistance == TeleportResistance::RESISTED) {
+            msg_print(_("{}には耐性がある！", "{} resists!"), m_name);
+            break;
+        }
+
         msg_print(_("{}を引き戻した。", "You command {} to return."), m_name);
 
         teleport_monster_to(player_ptr, grid_target.m_idx, player_ptr->y, player_ptr->x, 100, TELEPORT_PASSIVE);
