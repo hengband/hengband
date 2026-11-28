@@ -340,6 +340,9 @@
     <ClCompile Include="..\..\src\test\lore\test-monster-lore-snapshot.cpp">
       <Filter>lore</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\test\market\test-building-craft-fix.cpp">
+      <Filter>market</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\test\market\test-building-recharger.cpp">
       <Filter>market</Filter>
     </ClCompile>

@@ -1297,6 +1297,7 @@ hengband_test_SOURCES = \
 	test/locale/test-multibyte-char.cpp \
 	test/lore/test-monster-lore-snapshot.cpp \
 	test/market/test-building-recharger.cpp \
+	test/market/test-building-craft-fix.cpp \
 	test/mind/test-mind-priest.cpp \
 	test/monster-race/test-race-ability-mask.cpp \
 	test/mspell/mspell-attack/test-mspell-ball.cpp \
