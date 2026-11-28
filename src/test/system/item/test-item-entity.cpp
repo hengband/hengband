@@ -337,10 +337,10 @@ TEST_CASE("ItemEntity is_unblessed_edged_weapon is true only for a sword or a po
             base.bi_key = BaseitemKey(tval, 1);
             item.bi_key = base.bi_key;
             item.art_flags.clear();
-            CHECK(item.is_unblessed_edged_weapon());
+            CHECK(item.is_unblessed_edged_weapon(TR_BLESSED));
 
             item.art_flags.set(TR_BLESSED);
-            CHECK_FALSE(item.is_unblessed_edged_weapon());
+            CHECK_FALSE(item.is_unblessed_edged_weapon(TR_BLESSED));
         }
     }
 
@@ -349,7 +349,29 @@ TEST_CASE("ItemEntity is_unblessed_edged_weapon is true only for a sword or a po
         base.bi_key = BaseitemKey(ItemKindType::SWORD, 1);
         base.flags.set(TR_BLESSED);
         item.bi_key = base.bi_key;
-        CHECK_FALSE(item.is_unblessed_edged_weapon());
+        CHECK_FALSE(item.is_unblessed_edged_weapon(TR_BLESSED));
+    }
+
+    SUBCASE("only the requested blessing makes an edged weapon suitable")
+    {
+        // 邪の神の祝福が要るときは、善の神の祝福は祝福が無いのと同じに扱う (逆も同じ)
+        base.bi_key = BaseitemKey(ItemKindType::SWORD, 1);
+        item.bi_key = base.bi_key;
+        CHECK(item.is_unblessed_edged_weapon(TR_BLESSED_EVIL));
+
+        item.art_flags.set(TR_BLESSED);
+        CHECK_FALSE(item.is_unblessed_edged_weapon(TR_BLESSED));
+        CHECK(item.is_unblessed_edged_weapon(TR_BLESSED_EVIL));
+
+        item.art_flags.clear();
+        item.art_flags.set(TR_BLESSED_EVIL);
+        CHECK(item.is_unblessed_edged_weapon(TR_BLESSED));
+        CHECK_FALSE(item.is_unblessed_edged_weapon(TR_BLESSED_EVIL));
+
+        // 両方の祝福を持つ武器は、どちらの祝福が要るときもふさわしい
+        item.art_flags.set(TR_BLESSED);
+        CHECK_FALSE(item.is_unblessed_edged_weapon(TR_BLESSED));
+        CHECK_FALSE(item.is_unblessed_edged_weapon(TR_BLESSED_EVIL));
     }
 
     SUBCASE("an item that is not an edged weapon is never unsuitable")
@@ -360,10 +382,10 @@ TEST_CASE("ItemEntity is_unblessed_edged_weapon is true only for a sword or a po
             base.bi_key = BaseitemKey(tval, 1);
             item.bi_key = base.bi_key;
             item.art_flags.clear();
-            CHECK_FALSE(item.is_unblessed_edged_weapon());
+            CHECK_FALSE(item.is_unblessed_edged_weapon(TR_BLESSED));
 
             item.art_flags.set(TR_BLESSED);
-            CHECK_FALSE(item.is_unblessed_edged_weapon());
+            CHECK_FALSE(item.is_unblessed_edged_weapon(TR_BLESSED));
         }
     }
 
@@ -372,6 +394,6 @@ TEST_CASE("ItemEntity is_unblessed_edged_weapon is true only for a sword or a po
         // 何も持っていない手のアイテムは、ベースアイテムを引かずに偽を返す
         const ItemEntity empty_item;
         CHECK_FALSE(empty_item.is_valid());
-        CHECK_FALSE(empty_item.is_unblessed_edged_weapon());
+        CHECK_FALSE(empty_item.is_unblessed_edged_weapon(TR_BLESSED));
     }
 }

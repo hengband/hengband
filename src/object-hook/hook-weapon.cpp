@@ -1,4 +1,5 @@
 #include "object-hook/hook-weapon.h"
+#include "mind/mind-priest.h"
 #include "object-enchant/tr-types.h"
 #include "object-hook/hook-armor.h"
 #include "object/tval-types.h"
@@ -25,7 +26,7 @@ bool object_is_favorite(PlayerType *player_ptr, const ItemEntity *o_ptr)
     switch (player_ptr->pclass) {
     case PlayerClassType::PRIEST: {
         const auto flags = o_ptr->get_flags_known();
-        return flags.has(TR_BLESSED) || (tval == ItemKindType::HAFTED);
+        return flags.has(get_priest_blessing(player_ptr)) || (tval == ItemKindType::HAFTED);
     }
     case PlayerClassType::MONK:
     case PlayerClassType::FORCETRAINER:

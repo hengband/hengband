@@ -2,6 +2,7 @@
 #include "artifact/fixed-art-types.h"
 #include "inventory/inventory-slot-types.h"
 #include "mind/mind-elementalist.h"
+#include "mind/mind-priest.h"
 #include "mutation/mutation-flag-types.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/tr-types.h"
@@ -1725,7 +1726,7 @@ bool is_wielding_icky_weapon(PlayerType *player_ptr, int i)
     const auto *o_ptr = player_ptr->inventory[INVEN_MAIN_HAND + i].get();
     PlayerClass pc(player_ptr);
     if (pc.equals(PlayerClassType::PRIEST)) {
-        return o_ptr->is_unblessed_edged_weapon();
+        return o_ptr->is_unblessed_edged_weapon(get_priest_blessing(player_ptr));
     }
 
     const auto tval = o_ptr->bi_key.tval();

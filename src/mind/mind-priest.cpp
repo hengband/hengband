@@ -9,12 +9,24 @@
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
 #include "perception/simple-perception.h"
+#include "player/player-realm.h"
 #include "racial/racial-android.h"
 #include "system/deferred-update-requests.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
+
+/*!
+ * @brief プリーストにふさわしい祝福の特性フラグを返す
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @return 第一領域が善の領域 (生命・破邪) なら善の神の祝福、そうでなければ (暗黒・悪魔) 邪の神の祝福
+ * @details プリーストは、この祝福を持つ剣・長柄武器なら罰を受けずに持てる。
+ */
+tr_type get_priest_blessing(PlayerType *player_ptr)
+{
+    return PlayerRealm(player_ptr).realm1().is_good_attribute() ? TR_BLESSED : TR_BLESSED_EVIL;
+}
 
 /*!
  * @brief 武器の祝福処理 /
