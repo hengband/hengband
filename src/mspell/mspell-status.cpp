@@ -161,17 +161,20 @@ MonsterSpellResult spell_RF5_DRAIN_MANA(PlayerType *player_ptr, POSITION y, POSI
 }
 
 /*!
- * @brief RF5_MIND_BLASTの処理。精神攻撃。 /
+ * @brief 精神攻撃・脳攻撃の共通の処理
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 対象の地点のy座標
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
  * @param target_type プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
+ * @param ability 唱える魔法 (ダメージの計算に使う)
+ * @param attribute 当てる属性
  *
  * プレイヤーに当たったらラーニング可。
  */
-MonsterSpellResult spell_RF5_MIND_BLAST(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int target_type)
+static MonsterSpellResult cast_mind_attack(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int target_type,
+    MonsterAbilityType ability, AttributeType attribute)
 {
     const auto &monster = player_ptr->current_floor_ptr->m_list[m_idx];
     bool seen = (!player_ptr->effects()->blindness().is_active() && monster.ml);
@@ -189,13 +192,29 @@ MonsterSpellResult spell_RF5_MIND_BLAST(PlayerType *player_ptr, POSITION y, POSI
         msg_print(_("{}は{}をじっと睨んだ。", "{} gazes intently at {}."), str_upcase_first(m_name), t_name);
     }
 
-    const auto dam = monspell_damage(player_ptr, MonsterAbilityType::MIND_BLAST, m_idx, DAM_ROLL);
-    const auto proj_res = pointed(player_ptr, y, x, m_idx, AttributeType::MIND_BLAST, dam, target_type);
+    const auto dam = monspell_damage(player_ptr, ability, m_idx, DAM_ROLL);
+    const auto proj_res = pointed(player_ptr, y, x, m_idx, attribute, dam, target_type);
 
     auto res = MonsterSpellResult::make_valid(dam);
     res.learnable = proj_res.affected_player;
 
     return res;
+}
+
+/*!
+ * @brief RF5_MIND_BLASTの処理。精神攻撃。 /
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param y 対象の地点のy座標
+ * @param x 対象の地点のx座標
+ * @param m_idx 呪文を唱えるモンスターID
+ * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
+ * @param target_type プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
+ *
+ * プレイヤーに当たったらラーニング可。
+ */
+MonsterSpellResult spell_RF5_MIND_BLAST(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int target_type)
+{
+    return cast_mind_attack(player_ptr, y, x, m_idx, t_idx, target_type, MonsterAbilityType::MIND_BLAST, AttributeType::MIND_BLAST);
 }
 
 /*!
@@ -211,29 +230,7 @@ MonsterSpellResult spell_RF5_MIND_BLAST(PlayerType *player_ptr, POSITION y, POSI
  */
 MonsterSpellResult spell_RF5_BRAIN_SMASH(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int target_type)
 {
-    const auto &monster = player_ptr->current_floor_ptr->m_list[m_idx];
-    bool seen = (!player_ptr->effects()->blindness().is_active() && monster.ml);
-    const auto m_name = monster_name(player_ptr, m_idx);
-    const auto t_name = monster_name(player_ptr, t_idx);
-
-    if (target_type == MONSTER_TO_PLAYER) {
-        disturb(player_ptr, true, true);
-        if (!seen) {
-            msg_print(_("何かがあなたの精神に念を放っているようだ。", "You feel something focusing on your mind."));
-        } else {
-            msg_print(_("{}があなたの瞳をじっとにらんでいる。", "{} gazes deep into your eyes."), str_upcase_first(m_name));
-        }
-    } else if (target_type == MONSTER_TO_MONSTER && see_monster(player_ptr, m_idx)) {
-        msg_print(_("{}は{}をじっと睨んだ。", "{} gazes intently at {}."), str_upcase_first(m_name), t_name);
-    }
-
-    const auto dam = monspell_damage(player_ptr, MonsterAbilityType::BRAIN_SMASH, m_idx, DAM_ROLL);
-    const auto proj_res = pointed(player_ptr, y, x, m_idx, AttributeType::BRAIN_SMASH, dam, target_type);
-
-    auto res = MonsterSpellResult::make_valid(dam);
-    res.learnable = proj_res.affected_player;
-
-    return res;
+    return cast_mind_attack(player_ptr, y, x, m_idx, t_idx, target_type, MonsterAbilityType::BRAIN_SMASH, AttributeType::BRAIN_SMASH);
 }
 
 /*!
