@@ -54,7 +54,7 @@ static void give_one_ability_of_object(ItemEntity *to_ptr, ItemEntity *from_ptr)
         case TR_THROW:
         case TR_SHOW_MODS:
         case TR_HIDE_TYPE:
-        case TR_XXX_93:
+        case TR_BLESSED_EVIL:
         case TR_XXX_94:
         case TR_FULL_NAME:
         case TR_FIXED_FLAVOR:
