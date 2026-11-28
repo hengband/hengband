@@ -162,6 +162,32 @@ MonsterSpellResult spell_RF6_TPORT(PlayerType *player_ptr, MONSTER_IDX m_idx, in
 }
 
 /*!
+ * @brief モンスターの魔法でテレポートさせられるモンスターが耐えるかを判定し、耐えたらメッセージを出す
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param t_idx 呪文を受けるモンスターID
+ * @return 耐えたら true
+ */
+static bool resists_teleport_by_monster_spell(PlayerType *player_ptr, MONSTER_IDX t_idx)
+{
+    const auto &monster_target = player_ptr->current_floor_ptr->m_list[t_idx];
+    const auto resistance = judge_teleport_resistance(player_ptr, monster_target);
+    if (resistance == TeleportResistance::NONE) {
+        return false;
+    }
+
+    if (see_monster(player_ptr, t_idx)) {
+        const auto t_name = str_upcase_first(monster_name(player_ptr, t_idx));
+        if (resistance == TeleportResistance::IMMUNE) {
+            msg_print(_("{}には効果がなかった。", "{} is unaffected!"), t_name);
+        } else {
+            msg_print(_("{}は耐性を持っている！", "{} resists!"), t_name);
+        }
+    }
+
+    return true;
+}
+
+/*!
  * @brief RF6_TELE_TOの処理。テレポート・バック。 /
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx 呪文を唱えるモンスターID
@@ -178,7 +204,6 @@ MonsterSpellResult spell_RF6_TELE_TO(PlayerType *player_ptr, MONSTER_IDX m_idx, 
     const auto &floor = *player_ptr->current_floor_ptr;
     const auto &monster = floor.m_list[m_idx];
     const auto &monster_target = floor.m_list[t_idx];
-    auto &monrace_target = monster_target.get_monrace();
 
     mspell_cast_msg_simple msg(_("{}があなたを引き戻した。", "{} commands you to return."),
         _("{}が{}を引き戻した。", "{} commands {} to return."));
@@ -194,30 +219,7 @@ MonsterSpellResult spell_RF6_TELE_TO(PlayerType *player_ptr, MONSTER_IDX m_idx, 
         return res;
     }
 
-    bool resists_tele = false;
-    const auto t_name = monster_name(player_ptr, t_idx);
-
-    if (monrace_target.resistance_flags.has(MonsterResistanceType::RESIST_TELEPORT)) {
-        if (monrace_target.kind_flags.has(MonsterKindType::UNIQUE) || monrace_target.resistance_flags.has(MonsterResistanceType::RESIST_ALL)) {
-            if (is_original_ap_and_seen(player_ptr, monster_target)) {
-                monrace_target.r_resistance_flags.set(MonsterResistanceType::RESIST_TELEPORT);
-            }
-            if (see_monster(player_ptr, t_idx)) {
-                msg_print(_("{}には効果がなかった。", "{} is unaffected!"), str_upcase_first(t_name));
-            }
-            resists_tele = true;
-        } else if (monrace_target.level > randint1(100)) {
-            if (is_original_ap_and_seen(player_ptr, monster_target)) {
-                monrace_target.r_resistance_flags.set(MonsterResistanceType::RESIST_TELEPORT);
-            }
-            if (see_monster(player_ptr, t_idx)) {
-                msg_print(_("{}は耐性を持っている！", "{} resists!"), str_upcase_first(t_name));
-            }
-            resists_tele = true;
-        }
-    }
-
-    if (resists_tele) {
+    if (resists_teleport_by_monster_spell(player_ptr, t_idx)) {
         set_monster_csleep(*player_ptr->current_floor_ptr, t_idx, 0);
         return res;
     }
@@ -248,7 +250,6 @@ MonsterSpellResult spell_RF6_TELE_AWAY(PlayerType *player_ptr, MONSTER_IDX m_idx
 
     const auto &floor = *player_ptr->current_floor_ptr;
     const auto &monster_target = floor.m_list[t_idx];
-    auto &monrace_target = monster_target.get_monrace();
 
     mspell_cast_msg_simple msg(_("{}にテレポートさせられた。", "{} teleports you away."),
         _("{}は{}をテレポートさせた。", "{} teleports {} away."));
@@ -274,30 +275,7 @@ MonsterSpellResult spell_RF6_TELE_AWAY(PlayerType *player_ptr, MONSTER_IDX m_idx
         return res;
     }
 
-    bool resists_tele = false;
-    const auto t_name = monster_name(player_ptr, t_idx);
-
-    if (monrace_target.resistance_flags.has(MonsterResistanceType::RESIST_TELEPORT)) {
-        if (monrace_target.kind_flags.has(MonsterKindType::UNIQUE) || monrace_target.resistance_flags.has(MonsterResistanceType::RESIST_ALL)) {
-            if (is_original_ap_and_seen(player_ptr, monster_target)) {
-                monrace_target.r_resistance_flags.set(MonsterResistanceType::RESIST_TELEPORT);
-            }
-            if (see_monster(player_ptr, t_idx)) {
-                msg_print(_("{}には効果がなかった。", "{} is unaffected!"), str_upcase_first(t_name));
-            }
-            resists_tele = true;
-        } else if (monrace_target.level > randint1(100)) {
-            if (is_original_ap_and_seen(player_ptr, monster_target)) {
-                monrace_target.r_resistance_flags.set(MonsterResistanceType::RESIST_TELEPORT);
-            }
-            if (see_monster(player_ptr, t_idx)) {
-                msg_print(_("{}は耐性を持っている！", "{} resists!"), str_upcase_first(t_name));
-            }
-            resists_tele = true;
-        }
-    }
-
-    if (resists_tele) {
+    if (resists_teleport_by_monster_spell(player_ptr, t_idx)) {
         set_monster_csleep(*player_ptr->current_floor_ptr, t_idx, 0);
         return res;
     }

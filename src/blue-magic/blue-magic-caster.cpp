@@ -107,31 +107,18 @@ static tl::optional<std::string> exe_blue_teleport_back(PlayerType *player_ptr, 
     }
 
     const auto &monster = floor.m_list[grid.m_idx];
-    auto &monrace = monster.get_monrace();
     auto m_name = monster_desc(player_ptr, monster, 0);
-    if (monrace.resistance_flags.has_not(MonsterResistanceType::RESIST_TELEPORT)) {
-        return m_name;
-    }
-
-    if (monrace.kind_flags.has(MonsterKindType::UNIQUE) || monrace.resistance_flags.has(MonsterResistanceType::RESIST_ALL)) {
-        if (is_original_ap_and_seen(player_ptr, monster)) {
-            monrace.r_resistance_flags.set(MonsterResistanceType::RESIST_TELEPORT);
-        }
-
+    switch (judge_teleport_resistance(player_ptr, monster)) {
+    case TeleportResistance::IMMUNE:
         msg_print(_("{}には効果がなかった！", "{} is unaffected!"), m_name);
         return tl::nullopt;
-    }
-
-    if (monrace.level <= randint1(100)) {
+    case TeleportResistance::RESISTED:
+        msg_print(_("{}には耐性がある！", "{} resists!"), m_name);
+        return tl::nullopt;
+    case TeleportResistance::NONE:
+    default:
         return m_name;
     }
-
-    if (is_original_ap_and_seen(player_ptr, monster)) {
-        monrace.r_resistance_flags.set(MonsterResistanceType::RESIST_TELEPORT);
-    }
-
-    msg_print(_("{}には耐性がある！", "{} resists!"), m_name);
-    return tl::nullopt;
 }
 
 static bool cast_blue_teleport_back(PlayerType *player_ptr)
