@@ -402,9 +402,10 @@ bool ItemEntity::is_cursed() const
 }
 
 /*!
- * @brief 祝福されているかを判定する
- * @return 祝福されているか否か
+ * @brief 善の神に祝福されているかを判定する
+ * @return 善の神に祝福されているか否か
  * @details アイテムが実際に持つ特性 (get_flags()) で判定する。鑑定の状態は見ない。
+ * 邪の神の祝福 (TR_BLESSED_EVIL) は数えない。
  */
 bool ItemEntity::is_blessed() const
 {

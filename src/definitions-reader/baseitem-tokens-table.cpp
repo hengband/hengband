@@ -100,7 +100,7 @@ const std::unordered_map<std::string_view, tr_type> baseitem_flags = {
     { "TELEPORT", TR_TELEPORT },
     { "AGGRAVATE", TR_AGGRAVATE },
     { "BLESSED", TR_BLESSED },
-    /* { "XXX3", TR_XXX3 }, Fake flag for Smith */
+    { "BLESSED_EVIL", TR_BLESSED_EVIL },
     /* { "XXX4", TR_XXX4 }, Fake flag for Smith */
     { "KILL_GOOD", TR_KILL_GOOD },
 

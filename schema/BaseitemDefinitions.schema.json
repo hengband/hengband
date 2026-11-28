@@ -448,6 +448,7 @@
                                 "TELEPORT",
                                 "AGGRAVATE",
                                 "BLESSED",
+                                "BLESSED_EVIL",
                                 "KILL_GOOD",
                                 "KILL_ANIMAL",
                                 "KILL_EVIL",
