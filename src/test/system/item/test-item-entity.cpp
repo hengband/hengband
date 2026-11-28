@@ -1,6 +1,10 @@
+#include "artifact/fixed-art-types.h"
 #include "object-enchant/object-ego.h"
+#include "object-enchant/tr-types.h"
 #include "object/object-value.h"
 #include "object/tval-types.h"
+#include "system/artifact/artifact-definition.h"
+#include "system/artifact/artifact-list.h"
 #include "system/baseitem/baseitem-definition.h"
 #include "system/baseitem/baseitem-list.h"
 #include "system/baseitem/baseitem-record.h"
@@ -8,9 +12,11 @@
 #include "system/item/item-entity.h"
 #include "test/scoped-ego-list.h"
 #include "test/scoped-vector-wrapper.h"
+#include "test/system/artifact-list-test-access.h"
 #include <doctest/doctest.h>
 #include <initializer_list>
 #include <limits>
+#include <utility>
 
 /*!
  * @brief 対象モジュールの数値境界と通常値の計算結果を確認する
@@ -242,4 +248,130 @@ TEST_CASE("ItemEntity find_curse_feeling skips items whose feeling cannot change
     potion.bi_key = BaseitemKey(ItemKindType::POTION, 0);
     potion.curse_flags.set(CurseTraitType::CURSED);
     CHECK_FALSE(potion.find_curse_feeling().has_value());
+}
+
+TEST_CASE("ItemEntity is_blessed finds the blessing on the base item, the ego and the item itself")
+{
+    test::ScopedEgoList saved_egos;
+    auto &ego = egos_info.try_emplace(EgoType::A_MORGUL).first->second;
+    test::ScopedVectorWrapper<BaseitemList> saved_items{ BaseitemList::get_instance() };
+    auto &items = BaseitemList::get_instance();
+    items.resize(2);
+    auto &base = items.get_baseitem(1);
+    base.name = "Test";
+    base.bi_key = BaseitemKey(ItemKindType::SWORD, 1);
+    ItemEntity item;
+    item.bi_id = 1;
+    item.bi_key = base.bi_key;
+
+    SUBCASE("an item without the flag is not blessed")
+    {
+        // 祝福と関係のない特性は祝福として数えない
+        base.flags.set(TR_VORPAL);
+        item.art_flags.set(TR_SLAY_EVIL);
+        CHECK_FALSE(item.is_blessed());
+    }
+
+    SUBCASE("the blessing of the base item counts")
+    {
+        base.flags.set(TR_BLESSED);
+        CHECK(item.is_blessed());
+    }
+
+    SUBCASE("the blessing of the ego counts only for an item of that ego")
+    {
+        ego.flags.set(TR_BLESSED);
+        CHECK_FALSE(item.is_blessed());
+
+        item.ego_idx = EgoType::A_MORGUL;
+        CHECK(item.is_blessed());
+    }
+
+    SUBCASE("the blessing of the fixed artifact counts")
+    {
+        // 固定アーティファクトの特性は、ベースアイテムの特性を置き換える
+        test::ArtifactListTestAccess saved_artifacts;
+        ArtifactDefinition blessed_artifact;
+        blessed_artifact.flags.set(TR_BLESSED);
+        ArtifactList::get_instance().emplace(FixedArtifactId::JUDGE, std::move(blessed_artifact));
+        ArtifactList::get_instance().emplace(FixedArtifactId::POWER, ArtifactDefinition{});
+
+        item.fa_id = FixedArtifactId::JUDGE;
+        CHECK(item.is_blessed());
+
+        base.flags.set(TR_BLESSED);
+        item.fa_id = FixedArtifactId::POWER;
+        CHECK_FALSE(item.is_blessed());
+    }
+
+    SUBCASE("the blessing given to the item itself counts")
+    {
+        item.art_flags.set(TR_BLESSED);
+        CHECK(item.is_blessed());
+    }
+
+    SUBCASE("the blessing counts even on an unidentified item")
+    {
+        // 鑑定の状態は見ない (get_flags_known() ではなく get_flags() で判定する)
+        item.art_flags.set(TR_BLESSED);
+        CHECK(item.has_not_identification_flag(IdentificationFlag::KNOWN));
+        CHECK(item.has_not_identification_flag(IdentificationFlag::FULL_KNOWN));
+        CHECK(item.is_blessed());
+    }
+}
+
+TEST_CASE("ItemEntity is_unblessed_edged_weapon is true only for a sword or a polearm without the blessing")
+{
+    test::ScopedVectorWrapper<BaseitemList> saved_items{ BaseitemList::get_instance() };
+    auto &items = BaseitemList::get_instance();
+    items.resize(2);
+    auto &base = items.get_baseitem(1);
+    base.name = "Test";
+    ItemEntity item;
+    item.bi_id = 1;
+
+    SUBCASE("a sword or a polearm is unsuitable until it is blessed")
+    {
+        for (const auto tval : { ItemKindType::SWORD, ItemKindType::POLEARM }) {
+            CAPTURE(static_cast<int>(tval));
+            base.bi_key = BaseitemKey(tval, 1);
+            item.bi_key = base.bi_key;
+            item.art_flags.clear();
+            CHECK(item.is_unblessed_edged_weapon());
+
+            item.art_flags.set(TR_BLESSED);
+            CHECK_FALSE(item.is_unblessed_edged_weapon());
+        }
+    }
+
+    SUBCASE("the blessing of the base item also makes an edged weapon suitable")
+    {
+        base.bi_key = BaseitemKey(ItemKindType::SWORD, 1);
+        base.flags.set(TR_BLESSED);
+        item.bi_key = base.bi_key;
+        CHECK_FALSE(item.is_unblessed_edged_weapon());
+    }
+
+    SUBCASE("an item that is not an edged weapon is never unsuitable")
+    {
+        // 鈍器、掘削具、射撃武器、矢、盾は、祝福が無くても罰の対象にならない
+        for (const auto tval : { ItemKindType::HAFTED, ItemKindType::DIGGING, ItemKindType::BOW, ItemKindType::ARROW, ItemKindType::SHIELD }) {
+            CAPTURE(static_cast<int>(tval));
+            base.bi_key = BaseitemKey(tval, 1);
+            item.bi_key = base.bi_key;
+            item.art_flags.clear();
+            CHECK_FALSE(item.is_unblessed_edged_weapon());
+
+            item.art_flags.set(TR_BLESSED);
+            CHECK_FALSE(item.is_unblessed_edged_weapon());
+        }
+    }
+
+    SUBCASE("an empty slot is not unsuitable")
+    {
+        // 何も持っていない手のアイテムは、ベースアイテムを引かずに偽を返す
+        const ItemEntity empty_item;
+        CHECK_FALSE(empty_item.is_valid());
+        CHECK_FALSE(empty_item.is_unblessed_edged_weapon());
+    }
 }

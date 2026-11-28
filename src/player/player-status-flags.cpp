@@ -1723,17 +1723,13 @@ bool has_disable_two_handed_bonus(PlayerType *player_ptr, int i)
 bool is_wielding_icky_weapon(PlayerType *player_ptr, int i)
 {
     const auto *o_ptr = player_ptr->inventory[INVEN_MAIN_HAND + i].get();
-    const auto flags = o_ptr->get_flags();
+    PlayerClass pc(player_ptr);
+    if (pc.equals(PlayerClassType::PRIEST)) {
+        return o_ptr->is_unblessed_edged_weapon();
+    }
 
     const auto tval = o_ptr->bi_key.tval();
     const auto has_no_weapon = (tval == ItemKindType::NONE) || (tval == ItemKindType::SHIELD);
-    PlayerClass pc(player_ptr);
-    if (pc.equals(PlayerClassType::PRIEST)) {
-        auto is_suitable_weapon = flags.has(TR_BLESSED);
-        is_suitable_weapon |= (tval != ItemKindType::SWORD) && (tval != ItemKindType::POLEARM);
-        return !has_no_weapon && !is_suitable_weapon;
-    }
-
     if (pc.equals(PlayerClassType::SORCERER)) {
         auto is_suitable_weapon = o_ptr->bi_key == BaseitemKey(ItemKindType::HAFTED, SV_WIZSTAFF);
         is_suitable_weapon |= o_ptr->bi_key == BaseitemKey(ItemKindType::HAFTED, SV_NAMAKE_HAMMER);
