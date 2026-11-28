@@ -98,6 +98,50 @@ const std::unordered_set<MonsterAbilityType> AIMING_SPELLS = {
 static int damage;
 
 /*!
+ * @brief ものまねの失敗率を計算する
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param spell まねる能力
+ * @param mane_damage まねる能力の威力 (倍返しのときは 2 倍した値)
+ * @return 失敗率
+ * @details 一覧の表示と実際の成否の判定の両方で使い、両者の値をそろえる。
+ */
+static PERCENTAGE calc_mane_chance(PlayerType *player_ptr, const monster_power &spell, int mane_damage)
+{
+    PERCENTAGE chance = spell.manefail;
+
+    // レベルが能力のレベルを超えた分だけ失敗率を下げる
+    const auto plev = player_ptr->lev;
+    if (plev > spell.level) {
+        chance -= 3 * (plev - spell.level);
+    }
+
+    // 能力に対応する能力値と器用さで失敗率を下げる
+    chance -= 3 * (adj_mag_stat[player_ptr->stat_index[spell.use_stat]] + adj_mag_stat[player_ptr->stat_index[A_DEX]] - 2) / 2;
+
+    if (spell.manedam) {
+        chance = chance * mane_damage / spell.manedam;
+    }
+
+    chance += player_ptr->to_m_chance;
+
+    if (player_ptr->is_wielding(FixedArtifactId::GOGO_PENDANT)) {
+        chance -= 10;
+    }
+
+    const PERCENTAGE minfail = adj_mag_fail[player_ptr->stat_index[spell.use_stat]];
+    if (chance < minfail) {
+        chance = minfail;
+    }
+
+    chance += player_ptr->effects()->stun().get_magic_chance_penalty();
+    if (chance > 95) {
+        chance = 95;
+    }
+
+    return chance;
+}
+
+/*!
  * @brief 受け取ったパラメータに応じてものまねの効果情報をまとめたフォーマットを返す
  * @param power ものまねの効力の種類
  * @param dam ものまねの威力
@@ -154,9 +198,6 @@ static int get_mane_power(PlayerType *player_ptr, int *sn, bool baigaesi)
     int num = 0;
     TERM_LEN y = 1;
     TERM_LEN x = 18;
-    PERCENTAGE minfail = 0;
-    PLAYER_LEVEL plev = player_ptr->lev;
-    PERCENTAGE chance = 0;
     concptr p = _("能力", "power");
 
     monster_power spell;
@@ -209,41 +250,11 @@ static int get_mane_power(PlayerType *player_ptr, int *sn, bool baigaesi)
                     /* Access the spell */
                     spell = monster_powers.at(mane.spell);
 
-                    chance = spell.manefail;
-
-                    /* Reduce failure rate by "effective" level adjustment */
-                    if (plev > spell.level) {
-                        chance -= 3 * (plev - spell.level);
-                    }
-
-                    /* Reduce failure rate by INT/WIS adjustment */
-                    chance -= 3 * (adj_mag_stat[player_ptr->stat_index[spell.use_stat]] + adj_mag_stat[player_ptr->stat_index[A_DEX]] - 2) / 2;
-
-                    if (spell.manedam) {
-                        chance = chance * (baigaesi ? mane.damage * 2 : mane.damage) / spell.manedam;
-                    }
-
-                    chance += player_ptr->to_m_chance;
-
-                    if (player_ptr->is_wielding(FixedArtifactId::GOGO_PENDANT)) {
-                        chance -= 10;
-                    }
-
-                    /* Extract the minimum failure rate */
-                    minfail = adj_mag_fail[player_ptr->stat_index[spell.use_stat]];
-
-                    /* Minimum failure rate */
-                    if (chance < minfail) {
-                        chance = minfail;
-                    }
-
-                    chance += player_ptr->effects()->stun().get_magic_chance_penalty();
-                    if (chance > 95) {
-                        chance = 95;
-                    }
+                    const auto mane_damage = baigaesi ? mane.damage * 2 : mane.damage;
+                    const auto chance = calc_mane_chance(player_ptr, spell, mane_damage);
 
                     /* Get info */
-                    const auto comment = mane_info(player_ptr, mane.spell, (baigaesi ? mane.damage * 2 : mane.damage));
+                    const auto comment = mane_info(player_ptr, mane.spell, mane_damage);
 
                     /* Dump the spell --(-- */
                     prt(fmt::format("  {}) {:<30} {:3}%{}", I2A(i), spell.name, chance, comment), y + i + 1, x);
@@ -750,9 +761,6 @@ static bool use_mane(PlayerType *player_ptr, MonsterAbilityType spell)
 bool do_cmd_mane(PlayerType *player_ptr, bool baigaesi)
 {
     int n = 0;
-    PERCENTAGE chance;
-    PERCENTAGE minfail = 0;
-    PLAYER_LEVEL plev = player_ptr->lev;
     monster_power spell;
     bool cast;
 
@@ -773,35 +781,7 @@ bool do_cmd_mane(PlayerType *player_ptr, bool baigaesi)
 
     spell = monster_powers.at(mane_data->mane_list[n].spell);
 
-    /* Spell failure chance */
-    chance = spell.manefail;
-
-    /* Reduce failure rate by "effective" level adjustment */
-    if (plev > spell.level) {
-        chance -= 3 * (plev - spell.level);
-    }
-
-    /* Reduce failure rate by 1 stat and DEX adjustment */
-    chance -= 3 * (adj_mag_stat[player_ptr->stat_index[spell.use_stat]] + adj_mag_stat[player_ptr->stat_index[A_DEX]] - 2) / 2;
-
-    if (spell.manedam) {
-        chance = chance * damage / spell.manedam;
-    }
-
-    chance += player_ptr->to_m_chance;
-
-    /* Extract the minimum failure rate */
-    minfail = adj_mag_fail[player_ptr->stat_index[spell.use_stat]];
-
-    /* Minimum failure rate */
-    if (chance < minfail) {
-        chance = minfail;
-    }
-
-    chance += player_ptr->effects()->stun().get_magic_chance_penalty();
-    if (chance > 95) {
-        chance = 95;
-    }
+    const auto chance = calc_mane_chance(player_ptr, spell, damage);
 
     /* Failed spell */
     if (evaluate_percent(chance)) {
