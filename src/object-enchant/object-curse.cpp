@@ -2,7 +2,6 @@
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "inventory/inventory-slot-types.h"
-#include "object-enchant/tr-types.h"
 #include "object-enchant/trc-types.h"
 #include "object-hook/hook-armor.h"
 #include "object-hook/hook-weapon.h"
@@ -73,11 +72,10 @@ void curse_equipment(PlayerType *player_ptr, PERCENTAGE chance, PERCENTAGE heavy
         return;
     }
 
-    const auto oflags = item.get_flags();
     const auto item_name = describe_flavor(player_ptr, item, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
     /* Extra, biased saving throw for blessed items */
-    if (oflags.has(TR_BLESSED)) {
+    if (item.is_blessed()) {
 #ifdef JP
         msg_print("祝福された{}は呪いを跳ね返した！", item_name);
 #else

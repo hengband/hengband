@@ -1,5 +1,4 @@
 #include "store/service-checker.h"
-#include "object-enchant/tr-types.h"
 #include "object/object-value.h"
 #include "object/tval-types.h"
 #include "store/store-util.h"
@@ -12,16 +11,6 @@
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
-
-/*!
- * @brief オブジェクトが祝福されているかの判定を返す /
- * @param item_ptr 判定したいオブジェクト構造体の参照ポインタ
- * @return アイテムが祝福されたアイテムならばTRUEを返す
- */
-static bool is_blessed_item(const ItemEntity *item_ptr)
-{
-    return item_ptr->get_flags().has(TR_BLESSED);
-}
 
 static bool check_store_general(const ItemEntity &item)
 {
@@ -113,7 +102,7 @@ static bool check_store_temple(const ItemEntity &item)
         [[fallthrough]];
     case ItemKindType::POLEARM:
     case ItemKindType::SWORD:
-        if (is_blessed_item(&item)) {
+        if (item.is_blessed()) {
             return true;
         }
 

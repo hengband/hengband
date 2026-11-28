@@ -139,7 +139,7 @@ tl::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type sp
                 return "";
             }
 
-            if (!one_in_(3) && (item->is_fixed_or_random_artifact() || item->get_flags().has(TR_BLESSED))) {
+            if (!one_in_(3) && (item->is_fixed_or_random_artifact() || item->is_blessed())) {
                 msg_print(_("{} は呪いを跳ね返した。", "{} resists the effect."), item_name);
                 if (one_in_(3)) {
                     if (item->to_d > 0) {
@@ -395,7 +395,7 @@ tl::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type sp
                 return "";
             }
 
-            if (!one_in_(3) && (item->is_fixed_or_random_artifact() || item->get_flags().has(TR_BLESSED))) {
+            if (!one_in_(3) && (item->is_fixed_or_random_artifact() || item->is_blessed())) {
                 msg_print(_("{} は呪いを跳ね返した。", "{} resists the effect."), item_name);
                 if (one_in_(3)) {
                     if (item->to_d > 0) {

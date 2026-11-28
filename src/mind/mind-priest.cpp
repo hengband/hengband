@@ -68,7 +68,7 @@ bool bless_weapon(PlayerType *player_ptr)
      * artifact weapon they find. Ego weapons and normal weapons
      * can be blessed automatically.
      */
-    if (item_flags.has(TR_BLESSED)) {
+    if (item->is_blessed()) {
 #ifdef JP
         msg_print("{} は既に祝福されている。", item_name);
 #else

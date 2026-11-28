@@ -401,6 +401,16 @@ bool ItemEntity::is_cursed() const
     return this->curse_flags.any();
 }
 
+/*!
+ * @brief 祝福されているかを判定する
+ * @return 祝福されているか否か
+ * @details アイテムが実際に持つ特性 (get_flags()) で判定する。鑑定の状態は見ない。
+ */
+bool ItemEntity::is_blessed() const
+{
+    return this->get_flags().has(TR_BLESSED);
+}
+
 bool ItemEntity::is_held_by_monster() const
 {
     return this->held_m_idx != 0;
