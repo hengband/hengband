@@ -17,6 +17,21 @@
 
 namespace {
 /*!
+ * @brief 感知の効果範囲を求める
+ * @param floor フロアへの参照
+ * @param range 元の効果範囲
+ * @return 暗いダンジョン (DARKNESS) なら 1/3 にした効果範囲、そうでなければ元の効果範囲
+ */
+POSITION calc_detection_range(const FloorType &floor, POSITION range)
+{
+    if (floor.get_dungeon_definition().flags.has(DungeonFeatureType::DARKNESS)) {
+        return range / 3;
+    }
+
+    return range;
+}
+
+/*!
  * @brief 感知のメッセージを出すかを返す
  * @param notice メッセージを出す条件
  * @param detected 対象を 1 つでも感知したか
@@ -57,9 +72,7 @@ struct FeatDetectionResult {
 static FeatDetectionResult detect_feat_flag(PlayerType *player_ptr, POSITION range, TerrainCharacteristics flag, bool known)
 {
     auto &floor = *player_ptr->current_floor_ptr;
-    if (floor.get_dungeon_definition().flags.has(DungeonFeatureType::DARKNESS)) {
-        range /= 3;
-    }
+    range = calc_detection_range(floor, range);
 
     FeatDetectionResult result;
     for (const auto &pos : floor.get_area(FloorBoundary::OUTER_WALL_EXCLUSIVE)) {
@@ -185,10 +198,7 @@ bool detect_treasure(PlayerType *player_ptr, POSITION range)
 bool detect_objects_gold(PlayerType *player_ptr, POSITION range, DetectionNotice notice)
 {
     auto &floor = *player_ptr->current_floor_ptr;
-    POSITION range2 = range;
-    if (floor.get_dungeon_definition().flags.has(DungeonFeatureType::DARKNESS)) {
-        range2 /= 3;
-    }
+    const auto range2 = calc_detection_range(floor, range);
 
     /* Scan objects */
     auto detect = false;
@@ -236,10 +246,7 @@ bool detect_objects_gold(PlayerType *player_ptr, POSITION range, DetectionNotice
 bool detect_objects_normal(PlayerType *player_ptr, POSITION range, DetectionNotice notice)
 {
     auto &floor = *player_ptr->current_floor_ptr;
-    POSITION range2 = range;
-    if (floor.get_dungeon_definition().flags.has(DungeonFeatureType::DARKNESS)) {
-        range2 /= 3;
-    }
+    const auto range2 = calc_detection_range(floor, range);
 
     auto detect = false;
     auto is_newly_found = false;
@@ -306,9 +313,7 @@ static bool is_object_magically(const ItemKindType tval)
 bool detect_objects_magic(PlayerType *player_ptr, POSITION range)
 {
     auto &floor = *player_ptr->current_floor_ptr;
-    if (floor.get_dungeon_definition().flags.has(DungeonFeatureType::DARKNESS)) {
-        range /= 3;
-    }
+    range = calc_detection_range(floor, range);
 
     auto detect = false;
     auto is_newly_found = false;
@@ -353,9 +358,7 @@ bool detect_objects_magic(PlayerType *player_ptr, POSITION range)
 bool detect_monsters_normal(PlayerType *player_ptr, POSITION range, DetectionNotice notice)
 {
     auto &floor = *player_ptr->current_floor_ptr;
-    if (floor.get_dungeon_definition().flags.has(DungeonFeatureType::DARKNESS)) {
-        range /= 3;
-    }
+    range = calc_detection_range(floor, range);
 
     bool flag = false;
     auto has_new = false;
@@ -397,9 +400,7 @@ bool detect_monsters_normal(PlayerType *player_ptr, POSITION range, DetectionNot
 bool detect_monsters_invis(PlayerType *player_ptr, POSITION range, DetectionNotice notice)
 {
     auto &floor = *player_ptr->current_floor_ptr;
-    if (floor.get_dungeon_definition().flags.has(DungeonFeatureType::DARKNESS)) {
-        range /= 3;
-    }
+    range = calc_detection_range(floor, range);
 
     auto flag = false;
     auto has_new = false;
@@ -443,9 +444,7 @@ bool detect_monsters_invis(PlayerType *player_ptr, POSITION range, DetectionNoti
 bool detect_monsters_evil(PlayerType *player_ptr, POSITION range, DetectionNotice notice)
 {
     auto &floor = *player_ptr->current_floor_ptr;
-    if (floor.get_dungeon_definition().flags.has(DungeonFeatureType::DARKNESS)) {
-        range /= 3;
-    }
+    range = calc_detection_range(floor, range);
 
     auto flag = false;
     auto has_new = false;
@@ -494,9 +493,7 @@ bool detect_monsters_evil(PlayerType *player_ptr, POSITION range, DetectionNotic
 bool detect_monsters_nonliving(PlayerType *player_ptr, POSITION range)
 {
     auto &floor = *player_ptr->current_floor_ptr;
-    if (floor.get_dungeon_definition().flags.has(DungeonFeatureType::DARKNESS)) {
-        range /= 3;
-    }
+    range = calc_detection_range(floor, range);
 
     auto flag = false;
     for (MONSTER_IDX i = 1; i < floor.m_max; i++) {
@@ -534,9 +531,7 @@ bool detect_monsters_nonliving(PlayerType *player_ptr, POSITION range)
 bool detect_monsters_mind(PlayerType *player_ptr, POSITION range)
 {
     auto &floor = *player_ptr->current_floor_ptr;
-    if (floor.get_dungeon_definition().flags.has(DungeonFeatureType::DARKNESS)) {
-        range /= 3;
-    }
+    range = calc_detection_range(floor, range);
 
     auto flag = false;
     for (MONSTER_IDX i = 1; i < floor.m_max; i++) {
@@ -578,9 +573,7 @@ bool detect_monsters_mind(PlayerType *player_ptr, POSITION range)
 bool detect_monsters_string(PlayerType *player_ptr, POSITION range, concptr Match, DetectionNotice notice)
 {
     auto &floor = *player_ptr->current_floor_ptr;
-    if (floor.get_dungeon_definition().flags.has(DungeonFeatureType::DARKNESS)) {
-        range /= 3;
-    }
+    range = calc_detection_range(floor, range);
 
     auto flag = false;
     auto has_new = false;
@@ -657,9 +650,7 @@ bool detect_all(PlayerType *player_ptr, POSITION range)
 void keep_detected_monsters(PlayerType *player_ptr, POSITION range)
 {
     auto &floor = *player_ptr->current_floor_ptr;
-    if (floor.get_dungeon_definition().flags.has(DungeonFeatureType::DARKNESS)) {
-        range /= 3;
-    }
+    range = calc_detection_range(floor, range);
 
     const auto p_pos = player_ptr->get_position();
     for (MONSTER_IDX i = 1; i < floor.m_max; i++) {
