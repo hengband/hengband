@@ -2,7 +2,7 @@
 #include "dungeon/dungeon-flag-types.h"
 #include "floor/floor-generator.h"
 #include "game-option/cheat-types.h"
-#include "grid/grid.h"
+#include "room/rooms-builder.h"
 #include "room/space-finder.h"
 #include "system/dungeon/dungeon-data-definition.h"
 #include "system/dungeon/dungeon-definition.h"
@@ -46,28 +46,7 @@ bool build_type14(PlayerType *player_ptr, DungeonData *dd_ptr)
     const auto y2 = center->y + (ysize - 1) / 2;
     const auto x2 = center->x + (xsize - 1) / 2;
 
-    /* Place a full floor under the room */
-    for (auto y = y1 - 1; y <= y2 + 1; y++) {
-        for (auto x = x1 - 1; x <= x2 + 1; x++) {
-            auto &grid = floor.get_grid({ y, x });
-            place_grid(player_ptr, grid, GB_FLOOR);
-            grid.info |= (CAVE_ROOM);
-            if (light) {
-                grid.info |= (CAVE_GLOW);
-            }
-        }
-    }
-
-    /* Walls around the room */
-    for (auto y = y1 - 1; y <= y2 + 1; y++) {
-        place_grid(player_ptr, floor.get_grid({ y, x1 - 1 }), GB_OUTER);
-        place_grid(player_ptr, floor.get_grid({ y, x2 + 1 }), GB_OUTER);
-    }
-
-    for (auto x = x1 - 1; x <= x2 + 1; x++) {
-        place_grid(player_ptr, floor.get_grid({ y1 - 1, x }), GB_OUTER);
-        place_grid(player_ptr, floor.get_grid({ y2 + 1, x }), GB_OUTER);
-    }
+    place_room_with_outer_walls(player_ptr, Rect2D(y1, x1, y2, x2), light);
 
     const auto trap = floor.dun_level < 30 + randint1(30) ? TerrainTag::TRAP_PIRANHA : TerrainTag::TRAP_ARMAGEDDON;
     const auto trap_y = rand_spread(center->y, ysize / 4);

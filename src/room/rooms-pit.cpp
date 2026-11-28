@@ -1,7 +1,6 @@
 #include "room/rooms-pit.h"
 #include "game-option/cheat-options.h"
 #include "game-option/cheat-types.h"
-#include "grid/door.h"
 #include "grid/grid.h"
 #include "monster-floor/monster-generator.h"
 #include "monster-floor/place-monster-types.h"
@@ -22,7 +21,6 @@
 
 namespace {
 constexpr auto NUM_PIT_MONRACES = 16; //!< pit内に存在する最大モンスター種族数.
-constexpr Pos2DVec PIT_SIZE(4, 11);
 
 /*!
  * @brief 生成するPitの情報テーブル
@@ -100,64 +98,6 @@ tl::optional<std::array<MonraceId, NUM_PIT_MONRACES>> pick_pit_monraces(PlayerTy
     return whats;
 }
 
-void place_pit_outer(PlayerType *player_ptr, const Pos2D &center)
-{
-    auto &floor = *player_ptr->current_floor_ptr;
-    const Rect2D rectangle(center, PIT_SIZE);
-    for (auto y = rectangle.top_left.y - 1; y <= rectangle.bottom_right.y + 1; y++) {
-        for (auto x = rectangle.top_left.x - 1; x <= rectangle.bottom_right.x + 1; x++) {
-            auto &grid = floor.get_grid({ y, x });
-            place_grid(player_ptr, grid, GB_FLOOR);
-            grid.add_info(CAVE_ROOM);
-        }
-    }
-
-    for (auto y = rectangle.top_left.y - 1; y <= rectangle.bottom_right.y + 1; y++) {
-        place_grid(player_ptr, floor.get_grid({ y, rectangle.top_left.x - 1 }), GB_OUTER);
-        place_grid(player_ptr, floor.get_grid({ y, rectangle.bottom_right.x + 1 }), GB_OUTER);
-    }
-
-    for (auto x = rectangle.top_left.x - 1; x <= rectangle.bottom_right.x + 1; x++) {
-        place_grid(player_ptr, floor.get_grid({ rectangle.top_left.y - 1, x }), GB_OUTER);
-        place_grid(player_ptr, floor.get_grid({ rectangle.bottom_right.y + 1, x }), GB_OUTER);
-    }
-}
-
-void place_pit_inner(PlayerType *player_ptr, const Pos2D &center)
-{
-    auto &floor = *player_ptr->current_floor_ptr;
-    const auto rectangle = Rect2D(center, PIT_SIZE).resized(-2);
-    for (auto y = rectangle.top_left.y - 1; y <= rectangle.bottom_right.y + 1; y++) {
-        place_grid(player_ptr, floor.get_grid({ y, rectangle.top_left.x - 1 }), GB_INNER);
-        place_grid(player_ptr, floor.get_grid({ y, rectangle.bottom_right.x + 1 }), GB_INNER);
-    }
-
-    for (auto x = rectangle.top_left.x - 1; x <= rectangle.bottom_right.x + 1; x++) {
-        place_grid(player_ptr, floor.get_grid({ rectangle.top_left.y - 1, x }), GB_INNER);
-        place_grid(player_ptr, floor.get_grid({ rectangle.bottom_right.y + 1, x }), GB_INNER);
-    }
-
-    for (auto y = rectangle.top_left.y; y <= rectangle.bottom_right.y; y++) {
-        for (auto x = rectangle.top_left.x; x <= rectangle.bottom_right.x; x++) {
-            floor.get_grid({ y, x }).add_info(CAVE_NO_TELEPORT_DEST);
-        }
-    }
-
-    switch (randint1(4)) {
-    case 1:
-        place_secret_door(player_ptr, { rectangle.top_left.y - 1, center.x });
-        break;
-    case 2:
-        place_secret_door(player_ptr, { rectangle.bottom_right.y + 1, center.x });
-        break;
-    case 3:
-        place_secret_door(player_ptr, { center.y, rectangle.top_left.x - 1 });
-        break;
-    case 4:
-        place_secret_door(player_ptr, { center.y, rectangle.bottom_right.x + 1 });
-        break;
-    }
-}
 }
 
 /*!
@@ -220,8 +160,7 @@ bool build_type6(PlayerType *player_ptr, DungeonData *dd_ptr)
         return false;
     }
 
-    place_pit_outer(player_ptr, *center);
-    place_pit_inner(player_ptr, *center);
+    place_pit_nest_rooms(player_ptr, *center);
     const auto &monraces = MonraceList::get_instance();
     std::stable_sort(whats->begin(), whats->end(), [&monraces](const auto monrace_id1, const auto monrace_id2) {
         return monraces.order_level(monrace_id2, monrace_id1);
