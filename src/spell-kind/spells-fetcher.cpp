@@ -3,10 +3,8 @@
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "grid/grid.h"
-#include "monster-race/race-brightness-mask.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-status-setter.h"
-#include "monster/monster-update.h"
 #include "monster/monster-util.h"
 #include "system/deferred-update-requests.h"
 #include "system/enums/terrain/terrain-characteristics.h"
@@ -143,16 +141,8 @@ bool fetch_monster(PlayerType *player_ptr)
         }
     }
 
-    floor.get_grid(*pos).m_idx = 0;
-    floor.get_grid(pos_target).m_idx = m_idx;
-    monster.set_position(pos_target);
     (void)set_monster_csleep(floor, m_idx, 0);
-    update_monster(player_ptr, m_idx, true);
-    lite_spot(player_ptr, *pos);
-    lite_spot(player_ptr, pos_target);
-    if (monster.get_monrace().brightness_flags.has_any_of(ld_mask)) {
-        DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::MONSTER_LITE);
-    }
+    move_monster_to(player_ptr, monster, pos_target);
 
     if (monster.ml) {
         if (!player_ptr->effects()->hallucination().is_active()) {

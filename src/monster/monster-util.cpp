@@ -4,12 +4,14 @@
 #include "monster-floor/place-monster-types.h"
 #include "monster-race/monster-kind-mask.h"
 #include "monster-race/race-ability-mask.h"
+#include "monster-race/race-brightness-mask.h"
 #include "monster/monster-info.h"
 #include "monster/monster-update.h"
 #include "mspell/summon-checker.h"
 #include "room/pit-nest-util.h"
 #include "spell/summon-types.h"
 #include "system/angband-exceptions.h"
+#include "system/deferred-update-requests.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/dungeon/quest-definition.h"
 #include "system/enums/monrace/monrace-id.h"
@@ -728,6 +730,14 @@ bool is_monster(MONSTER_IDX m_idx)
     return m_idx > 0;
 }
 
+/*!
+ * @brief モンスターを指定の位置へ動かす
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param monster 動かすモンスター
+ * @param pos_to 移動先の位置
+ * @details マスのモンスターを付け替えて、モンスターの情報と移動元・移動先の表示を更新する。
+ * 光るモンスターなら、モンスターの光源の再計算も要求する。
+ */
 void move_monster_to(PlayerType *player_ptr, MonsterEntity &monster, const Pos2D &pos_to)
 {
     auto &floor = *player_ptr->current_floor_ptr;
@@ -739,4 +749,7 @@ void move_monster_to(PlayerType *player_ptr, MonsterEntity &monster, const Pos2D
     update_monster(player_ptr, grid_to.m_idx, true);
     lite_spot(player_ptr, pos_from);
     lite_spot(player_ptr, pos_to);
+    if (monster.get_monrace().brightness_flags.has_any_of(ld_mask)) {
+        DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::MONSTER_LITE);
+    }
 }

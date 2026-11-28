@@ -13,10 +13,8 @@
 #include "io/input-context.h"
 #include "io/input-key-requester.h"
 #include "mind/mind-ninja.h"
-#include "monster-race/race-brightness-mask.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-info.h"
-#include "monster/monster-update.h"
 #include "monster/monster-util.h"
 #include "player-info/equipment-info.h"
 #include "player/player-damage.h"
@@ -265,9 +263,6 @@ tl::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX sp
                     msg_print(_("{}を吹き飛ばした！", "You blow {} away!"), m_name);
                     monster.set_target(player_ptr->get_position());
                     move_monster_to(player_ptr, monster, pos_target);
-                    if (monster.get_monrace().brightness_flags.has_any_of(ld_mask)) {
-                        DeferredUpdateRequests::get_instance().set_flag(StatusRecalculatingFlag::MONSTER_LITE);
-                    }
                 }
             }
         }
@@ -528,8 +523,7 @@ tl::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX sp
                 }
 
                 const auto pos_new = pos + dir.vec();
-                const auto m_idx = grid.m_idx;
-                auto &monster = floor.m_list[m_idx];
+                auto &monster = floor.m_list[grid.m_idx];
 
                 /* Monster cannot move back? */
                 if (!monster_can_enter(player_ptr, pos_new.y, pos_new.x, monster.get_monrace(), 0)) {
@@ -540,18 +534,7 @@ tl::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX sp
                     continue;
                 }
 
-                grid.m_idx = 0;
-                floor.get_grid(pos_new).m_idx = m_idx;
-                monster.fy = pos_new.y;
-                monster.fx = pos_new.x;
-
-                update_monster(player_ptr, m_idx, true);
-
-                /* Redraw the old spot */
-                lite_spot(player_ptr, pos);
-
-                /* Redraw the new spot */
-                lite_spot(player_ptr, pos_new);
+                move_monster_to(player_ptr, monster, pos_new);
 
                 /* Player can move forward? */
                 if (player_can_enter(player_ptr, grid.feat, 0)) {
