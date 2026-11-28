@@ -155,6 +155,7 @@ libhengband_a_SOURCES = \
 	\
 	combat/attack-power-table.cpp combat/attack-power-table.h \
 	combat/aura-counterattack.cpp combat/aura-counterattack.h \
+	combat/ac-damage-reduction.h \
 	combat/hallucination-attacks-table.cpp combat/hallucination-attacks-table.h \
 	combat/martial-arts-table.cpp combat/martial-arts-table.h \
 	combat/attack-accuracy.cpp combat/attack-accuracy.h \
@@ -1232,6 +1233,7 @@ hengband_test_SOURCES = \
 	test/cmd-action/test-cmd-hissatsu.cpp \
 	test/cmd-io/test-cmd-autopick.cpp \
 	test/cmd-item/test-cmd-item.cpp \
+	test/combat/test-ac-damage-reduction.cpp \
 	test/core/test-asking-player.cpp \
 	test/core/test-score-file.cpp \
 	test/core/test-score-util.cpp \

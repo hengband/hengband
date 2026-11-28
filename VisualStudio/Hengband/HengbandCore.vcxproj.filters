@@ -3375,6 +3375,9 @@
     <ClInclude Include="..\..\src\cmd-visual\cmd-visuals.h">
       <Filter>cmd-visual</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\combat\ac-damage-reduction.h">
+      <Filter>combat</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\src\combat\attack-accuracy.h">
       <Filter>combat</Filter>
     </ClInclude>

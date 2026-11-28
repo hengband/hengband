@@ -5,6 +5,7 @@
  */
 
 #include "melee/melee-switcher.h"
+#include "combat/ac-damage-reduction.h"
 #include "core/disturbance.h"
 #include "effect/attribute-types.h"
 #include "melee/melee-util.h"
@@ -191,14 +192,14 @@ void decide_monster_attack_effect(PlayerType *player_ptr, mam_type *mam_ptr)
         break;
     case RaceBlowEffectType::SUPERHURT:
         if ((randint1(mam_ptr->rlev * 2 + 250) > (mam_ptr->ac + 200)) || one_in_(13)) {
-            int tmp_damage = mam_ptr->damage - (mam_ptr->damage * ((mam_ptr->ac < 150) ? mam_ptr->ac : 150) / 250);
+            const auto tmp_damage = reduce_damage_by_ac(mam_ptr->damage, mam_ptr->ac);
             mam_ptr->damage = std::max(mam_ptr->damage, tmp_damage * 2);
             break;
         }
 
         [[fallthrough]];
     case RaceBlowEffectType::HURT:
-        mam_ptr->damage -= (mam_ptr->damage * ((mam_ptr->ac < 150) ? mam_ptr->ac : 150) / 250);
+        mam_ptr->damage = reduce_damage_by_ac(mam_ptr->damage, mam_ptr->ac);
         break;
     case RaceBlowEffectType::POISON:
     case RaceBlowEffectType::DISEASE:
@@ -248,7 +249,7 @@ void decide_monster_attack_effect(PlayerType *player_ptr, mam_type *mam_ptr)
         mam_ptr->attribute = BlowEffectType::SLEEP;
         break;
     case RaceBlowEffectType::SHATTER:
-        mam_ptr->damage -= (mam_ptr->damage * ((mam_ptr->ac < 150) ? mam_ptr->ac : 150) / 250);
+        mam_ptr->damage = reduce_damage_by_ac(mam_ptr->damage, mam_ptr->ac);
         if (mam_ptr->damage > 23) {
             earthquake(player_ptr, mam_ptr->m_ptr->get_position(), 8, mam_ptr->m_idx);
         }
