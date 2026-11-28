@@ -963,6 +963,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
     auto ok_ego = evaluate_percent(50 + prob);
     auto must = prob < 0;
     auto blessed = false;
+    auto blessed_evil = false;
     auto fixed = false;
 
     std::string pray;
@@ -1007,7 +1008,9 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
     // 末尾の空白は冠詞を調べた後に取る (先に取ると「a  」が冠詞でなく「a」という名前になる)
     pray_chars = rtrim_wish(pray_chars);
 
-    if (consume_prefix(_("祝福された", "blessed"))) {
+    if (consume_prefix(_("邪神に祝福された", "unholy"))) {
+        blessed_evil = true;
+    } else if (consume_prefix(_("祝福された", "blessed"))) {
         blessed = true;
     }
 
@@ -1242,6 +1245,10 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
 
         if (blessed && wield_slot(player_ptr, item) != -1) {
             item.art_flags.set(TR_BLESSED);
+        }
+
+        if (blessed_evil && wield_slot(player_ptr, item) != -1) {
+            item.art_flags.set(TR_BLESSED_EVIL);
         }
 
         if (fixed && wield_slot(player_ptr, item) != -1) {

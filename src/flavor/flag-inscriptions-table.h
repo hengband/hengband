@@ -31,6 +31,7 @@ extern const std::vector<flag_insc_table> flag_insc_immune;
 extern const std::vector<flag_insc_table> flag_insc_vuln;
 extern const std::vector<flag_insc_table> flag_insc_resistance;
 extern const std::vector<flag_insc_table> flag_insc_misc;
+extern const std::vector<flag_insc_table> flag_insc_bless;
 extern const std::vector<flag_insc_table> flag_insc_aura;
 extern const std::vector<flag_insc_table> flag_insc_brand;
 extern const std::vector<flag_insc_table> flag_insc_kill;

@@ -8,7 +8,11 @@
 static void set_weapon_bless_info(self_info_type *self_ptr)
 {
     if (self_ptr->flags.has(TR_BLESSED)) {
-        self_ptr->info_list.emplace_back(_("あなたの武器は神の祝福を受けている。", "Your weapon has been blessed by the gods."));
+        self_ptr->info_list.emplace_back(_("あなたの武器は善なる神の祝福を受けている。", "Your weapon has been blessed by the gods of good."));
+    }
+
+    if (self_ptr->flags.has(TR_BLESSED_EVIL)) {
+        self_ptr->info_list.emplace_back(_("あなたの武器は邪悪な神の祝福を受けている。", "Your weapon has been blessed by the gods of evil."));
     }
 
     if (self_ptr->flags.has(TR_CHAOTIC)) {

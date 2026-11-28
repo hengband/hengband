@@ -98,13 +98,21 @@ const std::vector<flag_insc_table> flag_insc_misc = {
     { { "射", "Xs" }, TR_XTRA_SHOTS },
     { { "瞬", "Te" }, TR_TELEPORT },
     { { "怒", "Ag" }, TR_AGGRAVATE },
-    { { "祝", "Bs" }, TR_BLESSED },
     { { "忌", "Ty" }, TR_TY_CURSE },
     { { "呪", "C-" }, TR_ADD_L_CURSE },
     { { "詛", "C+" }, TR_ADD_H_CURSE },
     { { "焼", "F" }, TR_SELF_FIRE },
     { { "凍", "Co" }, TR_SELF_COLD },
     { { "電", "E" }, TR_SELF_ELEC },
+};
+
+/*!
+ * オブジェクトの特性表示記号テーブルの定義(祝福)
+ * どの神の祝福かを、祝福専用の区切りの後に書く
+ */
+const std::vector<flag_insc_table> flag_insc_bless = {
+    { { "善", "Good" }, TR_BLESSED },
+    { { "邪", "Evil" }, TR_BLESSED_EVIL },
 };
 
 /*! オブジェクトの特性表示記号テーブルの定義(オーラ) */

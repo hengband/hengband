@@ -594,7 +594,11 @@ bool screen_object(PlayerType *player_ptr, const ItemEntity &item, BIT_FLAGS mod
     }
 
     if (flags.has(TR_BLESSED)) {
-        info[i++] = _("それは神に祝福されている。", "It has been blessed by the gods.");
+        info[i++] = _("それは善なる神に祝福されている。", "It has been blessed by the gods of good.");
+    }
+
+    if (flags.has(TR_BLESSED_EVIL)) {
+        info[i++] = _("それは邪悪な神に祝福されている。", "It has been blessed by the gods of evil.");
     }
 
     if (item.is_cursed()) {

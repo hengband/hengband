@@ -156,6 +156,12 @@ std::string get_ability_abbreviation(const ItemEntity &item, bool is_kanji, bool
 
     ss << inscribe_flags_aux(flag_insc_misc, flags, is_kanji);
 
+    if (has_flag_of(flag_insc_bless, flags)) {
+        ss << '"';
+    }
+
+    ss << inscribe_flags_aux(flag_insc_bless, flags, is_kanji);
+
     if (has_flag_of(flag_insc_aura, flags)) {
         ss << '[';
     }

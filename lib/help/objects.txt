@@ -547,7 +547,8 @@ Xm : xtra might when shooting       |V : vampiric weapon
 Xs : xtra number of shots           |Q : weapon of quake
 Te : random teleportaion            |S : vorpal hit
 Ag : aggravate monsters             |M : weapon of the force
-Bs : blessed weapon
+"Good : weapon blessed by the gods of good
+"Evil : weapon blessed by the gods of evil
 
 /* : slay evil                      /X* : *slay* evil
 /p : slay human                     /Xp : *slay* human

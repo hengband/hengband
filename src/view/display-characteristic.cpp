@@ -483,7 +483,8 @@ static void display_tval_misc_info(
     row++;
     process_one_characteristic(player_ptr, row++, col, _("追加射撃    :", "Extra Shots :"), TR_XTRA_SHOTS, f, 0);
     process_one_characteristic(player_ptr, row++, col, _("投擲        :", "Throw       :"), TR_THROW, f, 0);
-    process_one_characteristic(player_ptr, row++, col, _("祝福        :", "Blessed     :"), TR_BLESSED, f, 0);
+    process_one_characteristic(player_ptr, row++, col, _("善の祝福    :", "Bless (Good):"), TR_BLESSED, f, 0);
+    process_one_characteristic(player_ptr, row++, col, _("邪の祝福    :", "Bless (Evil):"), TR_BLESSED_EVIL, f, 0);
     process_one_characteristic(player_ptr, row++, col, _("永遠光源    :", "Perm Lite   :"), TR_LITE_1, f, DP_LITE);
     process_one_characteristic(player_ptr, row++, col, _("消費魔力減少:", "Econom. Mana:"), TR_DEC_MANA, f, 0);
     process_one_characteristic(player_ptr, row++, col, _("魔法難度減少:", "Easy Spell  :"), TR_EASY_SPELL, f, 0);
