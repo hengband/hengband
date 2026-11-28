@@ -38,10 +38,10 @@ void InnerGameData::init_turn_limit()
     case PlayerRaceType::SKELETON:
     case PlayerRaceType::ZOMBIE:
     case PlayerRaceType::SPECTRE:
-        this->game_turn_limit = TURNS_PER_TICK * TOWN_DAWN * MAX_DAYS + TURNS_PER_TICK * TOWN_DAWN * 3 / 4;
+        this->game_turn_limit = TURNS_PER_DAY * MAX_DAYS + TURNS_PER_DAY * 3 / 4;
         return;
     default:
-        this->game_turn_limit = TURNS_PER_TICK * TOWN_DAWN * (MAX_DAYS - 1) + TURNS_PER_TICK * TOWN_DAWN * 3 / 4;
+        this->game_turn_limit = TURNS_PER_DAY * (MAX_DAYS - 1) + TURNS_PER_DAY * 3 / 4;
         return;
     }
 }
@@ -64,7 +64,7 @@ int InnerGameData::get_real_turns(int turns) const
     case PlayerRaceType::SKELETON:
     case PlayerRaceType::ZOMBIE:
     case PlayerRaceType::SPECTRE:
-        return turns - (TURNS_PER_TICK * TOWN_DAWN * 3 / 4);
+        return turns - (TURNS_PER_DAY * 3 / 4);
     default:
         return turns;
     }

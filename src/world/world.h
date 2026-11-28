@@ -2,6 +2,7 @@
 
 #include "market/bounty-type-definition.h"
 #include "system/angband.h"
+#include "system/gamevalue.h"
 #include "util/elapsed-time.h"
 #include <tuple>
 
@@ -25,7 +26,7 @@ public:
 
     GAME_TURN game_turn{}; /*!< 画面表示上のゲーム時間基準となるターン / Current game turn */
     GAME_TURN dungeon_turn{}; /*!< NASTY生成の計算に関わる内部ターン値 / Game turn in dungeon */
-    GAME_TURN dungeon_turn_limit{}; /*!< dungeon_turnの最大値 / Limit of game_turn in dungeon */
+    GAME_TURN dungeon_turn_limit = TURNS_PER_DAY * (MAX_DAYS - 1) + TURNS_PER_DAY * 3 / 4; /*!< dungeon_turnの最大値 / Limit of dungeon_turn */
     GAME_TURN arena_start_turn{}; /*!< 闘技場賭博の開始ターン値 */
     uint16_t total_winner{}; /* Total winner */
 

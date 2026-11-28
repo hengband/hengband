@@ -253,7 +253,7 @@ void do_cmd_edit_autopick(PlayerType *player_ptr)
     const auto unpauser = util::make_finalizer([&world]() { world.play_time.unpause(); });
     if (world.game_turn < old_autosave_turn) {
         while (old_autosave_turn > world.game_turn) {
-            old_autosave_turn -= TURNS_PER_TICK * TOWN_DAWN;
+            old_autosave_turn -= TURNS_PER_DAY;
         }
     }
 

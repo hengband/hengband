@@ -54,7 +54,7 @@ MonraceId get_mon_num(PlayerType *player_ptr, int min_level, int max_level, uint
 
     /* +1 per day after the base date */
     /* base dates : day5(1F), day18(10F,0F), day34(30F), day53(60F), day69(90F) */
-    const auto over_days = std::max<int>(0, AngbandWorld::get_instance().dungeon_turn / (TURNS_PER_TICK * 10000L) - delay / 20);
+    const auto over_days = std::max<int>(0, AngbandWorld::get_instance().dungeon_turn / TURNS_PER_DAY - delay / 20);
 
     /* Probability starts from 1/25, reaches 1/3 after 44days from a max_level dependent base date */
     /* Boost level starts from 0, reaches +25lv after 75days from a max_level dependent base date */

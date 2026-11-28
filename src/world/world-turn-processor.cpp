@@ -62,10 +62,9 @@ WorldTurnProcessor::WorldTurnProcessor(PlayerType *player_ptr)
  */
 void WorldTurnProcessor::process_world()
 {
-    const int a_day = TURNS_PER_TICK * TOWN_DAWN;
     const auto &world = AngbandWorld::get_instance();
-    const int prev_turn_in_today = ((world.game_turn - TURNS_PER_TICK) % a_day + a_day / 4) % a_day;
-    const int prev_min = (1440 * prev_turn_in_today / a_day) % 60;
+    const int prev_turn_in_today = ((world.game_turn - TURNS_PER_TICK) % TURNS_PER_DAY + TURNS_PER_DAY / 4) % TURNS_PER_DAY;
+    const int prev_min = (1440 * prev_turn_in_today / TURNS_PER_DAY) % 60;
     std::tie(std::ignore, this->hour, this->min) = world.extract_date_time(InnerGameData::get_instance().get_start_race());
     update_dungeon_feeling(this->player_ptr);
     process_downward();
@@ -233,8 +232,8 @@ void WorldTurnProcessor::process_change_daytime_night()
     const auto &floor = *this->player_ptr->current_floor_ptr;
     const auto &world = AngbandWorld::get_instance();
     if (!floor.is_underground() && !floor.is_in_quest() && !AngbandSystem::get_instance().is_phase_out() && !floor.inside_arena) {
-        if (!(world.game_turn % ((TURNS_PER_TICK * TOWN_DAWN) / 2))) {
-            auto dawn = world.game_turn % (TURNS_PER_TICK * TOWN_DAWN) == 0;
+        if (!(world.game_turn % (TURNS_PER_DAY / 2))) {
+            auto dawn = world.game_turn % TURNS_PER_DAY == 0;
             if (dawn) {
                 day_break(this->player_ptr);
             } else {
