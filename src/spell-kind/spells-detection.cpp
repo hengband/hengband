@@ -59,6 +59,51 @@ struct FeatDetectionResult {
     bool detected = false; //!< 対象の地形が 1 つでもあったか
     bool has_disclosed = false; //!< ほかの地形に見せかけていたものを暴いたか
 };
+
+/*!
+ * @brief 対象を感知した結果
+ */
+struct DetectionResult {
+    bool detected = false; //!< 対象を 1 つでも感知したか
+    bool has_new = false; //!< 新しく感知した対象があったか
+};
+
+/*!
+ * @brief 効果範囲の中で条件に合うモンスターを感知する
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param range 効果範囲
+ * @param pred 感知するモンスターか (感知したときの思い出への記録もここで行う)
+ * @return 感知の結果
+ */
+template <typename Predicate>
+DetectionResult detect_monsters_if(PlayerType *player_ptr, POSITION range, Predicate pred)
+{
+    auto &floor = *player_ptr->current_floor_ptr;
+    range = calc_detection_range(floor, range);
+    const auto p_pos = player_ptr->get_position();
+    DetectionResult result;
+    for (MONSTER_IDX i = 1; i < floor.m_max; i++) {
+        auto &monster = floor.m_list[i];
+        if (!monster.is_valid()) {
+            continue;
+        }
+
+        if (Grid::calc_distance(p_pos, monster.get_position()) > range) {
+            continue;
+        }
+
+        if (!pred(monster)) {
+            continue;
+        }
+
+        result.has_new |= monster.mflag2.has_not(MonsterConstantFlagType::MARK);
+        monster.mflag2.set({ MonsterConstantFlagType::MARK, MonsterConstantFlagType::SHOW });
+        update_monster(player_ptr, i, false);
+        result.detected = true;
+    }
+
+    return result;
+}
 }
 
 /*!
@@ -357,37 +402,15 @@ bool detect_objects_magic(PlayerType *player_ptr, POSITION range)
  */
 bool detect_monsters_normal(PlayerType *player_ptr, POSITION range, DetectionNotice notice)
 {
-    auto &floor = *player_ptr->current_floor_ptr;
-    range = calc_detection_range(floor, range);
-
-    bool flag = false;
-    auto has_new = false;
-    for (MONSTER_IDX i = 1; i < floor.m_max; i++) {
-        auto &monster = floor.m_list[i];
-        const auto &monrace = monster.get_monrace();
-        if (!monster.is_valid()) {
-            continue;
-        }
-
-        POSITION y = monster.fy;
-        POSITION x = monster.fx;
-        if (Grid::calc_distance(player_ptr->get_position(), { y, x }) > range) {
-            continue;
-        }
-
-        if (monrace.misc_flags.has_not(MonsterMiscType::INVISIBLE) || player_ptr->see_inv) {
-            has_new |= monster.mflag2.has_not(MonsterConstantFlagType::MARK);
-            monster.mflag2.set({ MonsterConstantFlagType::MARK, MonsterConstantFlagType::SHOW });
-            update_monster(player_ptr, i, false);
-            flag = true;
-        }
-    }
-
-    if (should_notify(notice, flag, has_new)) {
+    const auto see_inv = player_ptr->see_inv;
+    const auto result = detect_monsters_if(player_ptr, range, [see_inv](const MonsterEntity &monster) {
+        return monster.get_monrace().misc_flags.has_not(MonsterMiscType::INVISIBLE) || see_inv;
+    });
+    if (should_notify(notice, result.detected, result.has_new)) {
         msg_print(_("モンスターの存在を感じとった！", "You sense the presence of monsters!"));
     }
 
-    return flag;
+    return result.detected;
 }
 
 /*!
@@ -399,39 +422,14 @@ bool detect_monsters_normal(PlayerType *player_ptr, POSITION range, DetectionNot
  */
 bool detect_monsters_invis(PlayerType *player_ptr, POSITION range, DetectionNotice notice)
 {
-    auto &floor = *player_ptr->current_floor_ptr;
-    range = calc_detection_range(floor, range);
-
-    auto flag = false;
-    auto has_new = false;
-    for (MONSTER_IDX i = 1; i < floor.m_max; i++) {
-        auto &monster = floor.m_list[i];
-        const auto &monrace = monster.get_monrace();
-
-        if (!monster.is_valid()) {
-            continue;
-        }
-
-        POSITION y = monster.fy;
-        POSITION x = monster.fx;
-
-        if (Grid::calc_distance(player_ptr->get_position(), { y, x }) > range) {
-            continue;
-        }
-
-        if (monrace.misc_flags.has(MonsterMiscType::INVISIBLE)) {
-            has_new |= monster.mflag2.has_not(MonsterConstantFlagType::MARK);
-            monster.mflag2.set({ MonsterConstantFlagType::MARK, MonsterConstantFlagType::SHOW });
-            update_monster(player_ptr, i, false);
-            flag = true;
-        }
-    }
-
-    if (should_notify(notice, flag, has_new)) {
+    const auto result = detect_monsters_if(player_ptr, range, [](const MonsterEntity &monster) {
+        return monster.get_monrace().misc_flags.has(MonsterMiscType::INVISIBLE);
+    });
+    if (should_notify(notice, result.detected, result.has_new)) {
         msg_print(_("透明な生物の存在を感じとった！", "You sense the presence of invisible creatures!"));
     }
 
-    return flag;
+    return result.detected;
 }
 
 /*!
@@ -443,45 +441,23 @@ bool detect_monsters_invis(PlayerType *player_ptr, POSITION range, DetectionNoti
  */
 bool detect_monsters_evil(PlayerType *player_ptr, POSITION range, DetectionNotice notice)
 {
-    auto &floor = *player_ptr->current_floor_ptr;
-    range = calc_detection_range(floor, range);
-
-    auto flag = false;
-    auto has_new = false;
-    for (MONSTER_IDX i = 1; i < floor.m_max; i++) {
-        auto &monster = floor.m_list[i];
+    const auto result = detect_monsters_if(player_ptr, range, [](const MonsterEntity &monster) {
         auto &monrace = monster.get_monrace();
-        if (!monster.is_valid()) {
-            continue;
+        if (monrace.kind_flags.has_not(MonsterKindType::EVIL)) {
+            return false;
         }
 
-        POSITION y = monster.fy;
-        POSITION x = monster.fx;
-
-        if (Grid::calc_distance(player_ptr->get_position(), { y, x }) > range) {
-            continue;
+        if (monster.is_original_ap()) {
+            monrace.r_kind_flags.set(MonsterKindType::EVIL);
         }
 
-        if (monrace.kind_flags.has(MonsterKindType::EVIL)) {
-            if (monster.is_original_ap()) {
-                monrace.r_kind_flags.set(MonsterKindType::EVIL);
-            }
-
-            if (monster.mflag2.has_not(MonsterConstantFlagType::MARK)) {
-                has_new = true;
-            }
-
-            monster.mflag2.set({ MonsterConstantFlagType::MARK, MonsterConstantFlagType::SHOW });
-            update_monster(player_ptr, i, false);
-            flag = true;
-        }
-    }
-
-    if (should_notify(notice, flag, has_new)) {
+        return true;
+    });
+    if (should_notify(notice, result.detected, result.has_new)) {
         msg_print(_("邪悪なる生物の存在を感じとった！", "You sense the presence of evil creatures!"));
     }
 
-    return flag;
+    return result.detected;
 }
 
 /*!
@@ -492,34 +468,14 @@ bool detect_monsters_evil(PlayerType *player_ptr, POSITION range, DetectionNotic
  */
 bool detect_monsters_nonliving(PlayerType *player_ptr, POSITION range)
 {
-    auto &floor = *player_ptr->current_floor_ptr;
-    range = calc_detection_range(floor, range);
-
-    auto flag = false;
-    for (MONSTER_IDX i = 1; i < floor.m_max; i++) {
-        auto &monster = floor.m_list[i];
-        if (!monster.is_valid()) {
-            continue;
-        }
-
-        POSITION y = monster.fy;
-        POSITION x = monster.fx;
-        if (Grid::calc_distance(player_ptr->get_position(), { y, x }) > range) {
-            continue;
-        }
-
-        if (!monster.has_living_flag()) {
-            monster.mflag2.set({ MonsterConstantFlagType::MARK, MonsterConstantFlagType::SHOW });
-            update_monster(player_ptr, i, false);
-            flag = true;
-        }
-    }
-
-    if (flag) {
+    const auto detected = detect_monsters_if(player_ptr, range, [](const MonsterEntity &monster) {
+        return !monster.has_living_flag();
+    }).detected;
+    if (detected) {
         msg_print(_("自然でないモンスターの存在を感じた！", "You sense the presence of unnatural beings!"));
     }
 
-    return flag;
+    return detected;
 }
 
 /*!
@@ -530,36 +486,14 @@ bool detect_monsters_nonliving(PlayerType *player_ptr, POSITION range)
  */
 bool detect_monsters_mind(PlayerType *player_ptr, POSITION range)
 {
-    auto &floor = *player_ptr->current_floor_ptr;
-    range = calc_detection_range(floor, range);
-
-    auto flag = false;
-    for (MONSTER_IDX i = 1; i < floor.m_max; i++) {
-        auto &monster = floor.m_list[i];
-        const auto &monrace = monster.get_monrace();
-        if (!monster.is_valid()) {
-            continue;
-        }
-
-        POSITION y = monster.fy;
-        POSITION x = monster.fx;
-
-        if (Grid::calc_distance(player_ptr->get_position(), { y, x }) > range) {
-            continue;
-        }
-
-        if (monrace.misc_flags.has_not(MonsterMiscType::EMPTY_MIND)) {
-            monster.mflag2.set({ MonsterConstantFlagType::MARK, MonsterConstantFlagType::SHOW });
-            update_monster(player_ptr, i, false);
-            flag = true;
-        }
-    }
-
-    if (flag) {
+    const auto detected = detect_monsters_if(player_ptr, range, [](const MonsterEntity &monster) {
+        return monster.get_monrace().misc_flags.has_not(MonsterMiscType::EMPTY_MIND);
+    }).detected;
+    if (detected) {
         msg_print(_("殺気を感じとった！", "You sense the presence of someone's mind!"));
     }
 
-    return flag;
+    return detected;
 }
 
 /*!
@@ -572,38 +506,14 @@ bool detect_monsters_mind(PlayerType *player_ptr, POSITION range)
  */
 bool detect_monsters_string(PlayerType *player_ptr, POSITION range, concptr Match, DetectionNotice notice)
 {
-    auto &floor = *player_ptr->current_floor_ptr;
-    range = calc_detection_range(floor, range);
-
-    auto flag = false;
-    auto has_new = false;
-    for (MONSTER_IDX i = 1; i < floor.m_max; i++) {
-        auto &monster = floor.m_list[i];
-        const auto &monrace = monster.get_monrace();
-        if (!monster.is_valid()) {
-            continue;
-        }
-
-        POSITION y = monster.fy;
-        POSITION x = monster.fx;
-
-        if (Grid::calc_distance(player_ptr->get_position(), { y, x }) > range) {
-            continue;
-        }
-
-        if (angband_strchr(Match, monrace.symbol_definition.character)) {
-            has_new |= monster.mflag2.has_not(MonsterConstantFlagType::MARK);
-            monster.mflag2.set({ MonsterConstantFlagType::MARK, MonsterConstantFlagType::SHOW });
-            update_monster(player_ptr, i, false);
-            flag = true;
-        }
-    }
-
-    if (should_notify(notice, flag, has_new)) {
+    const auto result = detect_monsters_if(player_ptr, range, [Match](const MonsterEntity &monster) {
+        return angband_strchr(Match, monster.get_monrace().symbol_definition.character) != nullptr;
+    });
+    if (should_notify(notice, result.detected, result.has_new)) {
         msg_print(_("モンスターの存在を感じとった！", "You sense the presence of monsters!"));
     }
 
-    return flag;
+    return result.detected;
 }
 
 /*!
