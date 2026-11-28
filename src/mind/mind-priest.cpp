@@ -29,6 +29,81 @@ tr_type get_priest_blessing(PlayerType *player_ptr)
 }
 
 /*!
+ * @brief 武器に祝福を与える (判定と、武器への適用)
+ * @param item 祝福を与える武器
+ * @return 結果と、その途中で武器に起きたこと
+ * @details メッセージの表示やプレイヤーの状態の更新は行わない (呼び出し側の bless_weapon() が行う)。
+ * - 呪われた武器は、強い呪いなどに邪魔されると祝福できない。邪魔されなければ呪いを解く。
+ * - 既に祝福されていれば何もしない。
+ * - アーティファクトとエゴは 3 分の 1 でだけ祝福でき、それ以外は抵抗されて修正値が下がる。
+ *   (こうしないと、プリーストは見つけたアーティファクトの武器をすべて祝福してしまう)
+ */
+BlessWeaponOutcome apply_blessing_to_weapon(ItemEntity &item)
+{
+    BlessWeaponOutcome outcome{ BlessWeaponResult::BLESSED, false, false };
+    const auto item_flags = item.get_flags();
+    if (item.is_cursed()) {
+        auto can_disturb_blessing = item.curse_flags.has(CurseTraitType::HEAVY_CURSE) && (randint1(100) < 33);
+        can_disturb_blessing |= item_flags.has(TR_ADD_L_CURSE);
+        can_disturb_blessing |= item_flags.has(TR_ADD_H_CURSE);
+        can_disturb_blessing |= item.curse_flags.has(CurseTraitType::PERSISTENT_CURSE);
+        can_disturb_blessing |= item.curse_flags.has(CurseTraitType::PERMA_CURSE);
+        if (can_disturb_blessing) {
+            outcome.result = BlessWeaponResult::DISTURBED;
+            return outcome;
+        }
+
+        item.remove_curses();
+        outcome.is_curse_removed = true;
+    }
+
+    if (item.is_blessed()) {
+        outcome.result = BlessWeaponResult::ALREADY_BLESSED;
+        return outcome;
+    }
+
+    if (!(item.is_fixed_or_random_artifact() || item.is_ego()) || one_in_(3)) {
+        item.art_flags.set(TR_BLESSED);
+        item.discount = 99;
+        return outcome;
+    }
+
+    outcome.result = BlessWeaponResult::RESISTED;
+
+    /* Disenchant tohit */
+    if (item.to_h > 0) {
+        item.to_h--;
+        outcome.is_disenchanted = true;
+    }
+
+    if ((item.to_h > 5) && evaluate_percent(33)) {
+        item.to_h--;
+    }
+
+    /* Disenchant todam */
+    if (item.to_d > 0) {
+        item.to_d--;
+        outcome.is_disenchanted = true;
+    }
+
+    if ((item.to_d > 5) && evaluate_percent(33)) {
+        item.to_d--;
+    }
+
+    /* Disenchant toac */
+    if (item.to_a > 0) {
+        item.to_a--;
+        outcome.is_disenchanted = true;
+    }
+
+    if ((item.to_a > 5) && evaluate_percent(33)) {
+        item.to_a--;
+    }
+
+    return outcome;
+}
+
+/*!
  * @brief 武器の祝福処理 /
  * Bless a weapon
  * @return ターン消費を要する処理を行ったならばTRUEを返す
@@ -44,43 +119,29 @@ bool bless_weapon(PlayerType *player_ptr)
     }
 
     const auto item_name = describe_flavor(player_ptr, *item, OD_OMIT_PREFIX | OD_NAME_ONLY);
-    const auto item_flags = item->get_flags();
-    auto &dur = DeferredUpdateRequests::get_instance();
-    if (item->is_cursed()) {
-        auto can_disturb_blessing = item->curse_flags.has(CurseTraitType::HEAVY_CURSE) && (randint1(100) < 33);
-        can_disturb_blessing |= item_flags.has(TR_ADD_L_CURSE);
-        can_disturb_blessing |= item_flags.has(TR_ADD_H_CURSE);
-        can_disturb_blessing |= item->curse_flags.has(CurseTraitType::PERSISTENT_CURSE);
-        can_disturb_blessing |= item->curse_flags.has(CurseTraitType::PERMA_CURSE);
-        if (can_disturb_blessing) {
+    const auto outcome = apply_blessing_to_weapon(*item);
+    if (outcome.result == BlessWeaponResult::DISTURBED) {
 #ifdef JP
-            msg_print("{}を覆う黒いオーラは祝福を跳ね返した！", item_name);
+        msg_print("{}を覆う黒いオーラは祝福を跳ね返した！", item_name);
 #else
-            msg_print("The black aura on {} {} disrupts the blessing!", ((i_idx >= 0) ? "your" : "the"), item_name);
+        msg_print("The black aura on {} {} disrupts the blessing!", ((i_idx >= 0) ? "your" : "the"), item_name);
 #endif
-            sense_curse(player_ptr, i_idx);
-            return true;
-        }
+        sense_curse(player_ptr, i_idx);
+        return true;
+    }
 
+    auto &dur = DeferredUpdateRequests::get_instance();
+    if (outcome.is_curse_removed) {
 #ifdef JP
         msg_print("{} から邪悪なオーラが消えた。", item_name);
 #else
         msg_print("A malignant aura leaves {} {}.", ((i_idx >= 0) ? "your" : "the"), item_name);
 #endif
-        item->remove_curses();
         dur.set_flag(StatusRecalculatingFlag::BONUS);
         dur.request_item_lists_redrawing();
     }
 
-    /*
-     * Next, we try to bless it. Artifacts have a 1/3 chance of
-     * being blessed, otherwise, the operation simply disenchants
-     * them, godly power negating the magic. Ok, the explanation
-     * is silly, but otherwise priests would always bless every
-     * artifact weapon they find. Ego weapons and normal weapons
-     * can be blessed automatically.
-     */
-    if (item->is_blessed()) {
+    if (outcome.result == BlessWeaponResult::ALREADY_BLESSED) {
 #ifdef JP
         msg_print("{} は既に祝福されている。", item_name);
 #else
@@ -89,49 +150,15 @@ bool bless_weapon(PlayerType *player_ptr)
         return true;
     }
 
-    if (!(item->is_fixed_or_random_artifact() || item->is_ego()) || one_in_(3)) {
+    if (outcome.result == BlessWeaponResult::BLESSED) {
 #ifdef JP
         msg_print("{}は輝いた！", item_name);
 #else
         msg_print("{} {} shine{}!", ((i_idx >= 0) ? "Your" : "The"), item_name, ((item->number > 1) ? "" : "s"));
 #endif
-        item->art_flags.set(TR_BLESSED);
-        item->discount = 99;
     } else {
-        bool dis_happened = false;
         msg_print(_("その武器は祝福を嫌っている！", "The weapon resists your blessing!"));
-
-        /* Disenchant tohit */
-        if (item->to_h > 0) {
-            item->to_h--;
-            dis_happened = true;
-        }
-
-        if ((item->to_h > 5) && evaluate_percent(33)) {
-            item->to_h--;
-        }
-
-        /* Disenchant todam */
-        if (item->to_d > 0) {
-            item->to_d--;
-            dis_happened = true;
-        }
-
-        if ((item->to_d > 5) && evaluate_percent(33)) {
-            item->to_d--;
-        }
-
-        /* Disenchant toac */
-        if (item->to_a > 0) {
-            item->to_a--;
-            dis_happened = true;
-        }
-
-        if ((item->to_a > 5) && evaluate_percent(33)) {
-            item->to_a--;
-        }
-
-        if (dis_happened) {
+        if (outcome.is_disenchanted) {
             msg_print(_("周囲が凡庸な雰囲気で満ちた...", "There is a static feeling in the air..."));
 
 #ifdef JP
